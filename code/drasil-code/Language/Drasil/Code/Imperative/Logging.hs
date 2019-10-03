@@ -6,7 +6,7 @@ import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 
 import GOOL.Drasil (Label, RenderSym(..), BodySym(..), BlockSym(..), 
-  StateTypeSym(..), VariableSym(..), ValueSym(..), StatementSym(..))
+  TypeSym(..), VariableSym(..), ValueSym(..), StatementSym(..))
 
 import Data.Maybe (maybeToList)
 import Control.Applicative ((<$>))

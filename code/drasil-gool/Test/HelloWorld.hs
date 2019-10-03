@@ -4,7 +4,7 @@ module Test.HelloWorld (helloWorld) where
 
 import GOOL.Drasil (
   ProgramSym(..), RenderSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
+  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), 
   StatementSym(..), ControlStatementSym(..),  VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), FunctionSym(..), SelectorFunction(..), MethodSym(..), 
@@ -21,7 +21,7 @@ description :: String
 description = "Tests various GOOL functions. It should run without errors."
 
 helloWorldMain :: (RenderSym repr) => repr (Method repr)
-helloWorldMain = mainMethod "HelloWorld" (body [ helloInitVariables, 
+helloWorldMain = mainFunction (body [ helloInitVariables, 
     helloListSlice,
     block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
@@ -140,16 +140,19 @@ helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &
   (oneLiner (var "b" int &= litInt 0))
 
 helloForLoop :: (RenderSym repr) => repr (Statement repr)
-helloForLoop = forRange "i" (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn (valueOf $ var "i" int)))
+helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn 
+  (valueOf i)))
+  where i = var "i" int
 
 helloWhileLoop :: (RenderSym repr) => repr (Statement repr)
 helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements 
   [printStrLn "Hello", (&++) (var "a" int)]) 
 
 helloForEachLoop :: (RenderSym repr) => repr (Statement repr)
-helloForEachLoop = forEach "num" (valueOf $ listVar "myOtherList" static_ float) 
-  (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" float [valueOf $ 
-  iterVar "num" float, litFloat 1.0])))
+helloForEachLoop = forEach i (valueOf $ listVar "myOtherList" static_ float) 
+  (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" float [valueOf i, 
+  litFloat 1.0])))
+  where i = iterVar "num" float
 
 helloTryCatch :: (RenderSym repr) => repr (Statement repr)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))

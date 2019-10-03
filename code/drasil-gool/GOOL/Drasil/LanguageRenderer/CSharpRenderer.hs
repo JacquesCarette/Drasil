@@ -13,50 +13,55 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label,
   ProgramSym(..), RenderSym(..), InternalFile(..),
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import GOOL.Drasil.LanguageRenderer (addExt,
-  fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, multiStateDocD,
-  blockDocD, bodyDocD, printDoc, outDoc, printFileDocD, boolTypeDocD, 
-  intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
-  methodDocD, methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, 
-  ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, 
-  assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
-  listDecDocD, listDecDefDocD, objDecDefDocD, constDecDefDocD, statementDocD, 
-  returnDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', commentDocD, 
+import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD, 
+  enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, oneLinerD, 
+  outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
+  stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, 
+  voidDocD, constructDocD, paramDocD, paramListDocD, mkParam, methodDocD, 
+  methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, 
+  forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, checkStateD, 
+  notifyObserversD, varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, 
+  objDecDefDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, 
+  stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, 
+  multiAssignError, decrementD, incrementD, decrement1D, increment1D, 
+  constDecDefD, discardInputD, openFileRD, openFileWD, openFileAD, closeFileD, 
+  discardFileLineD, breakD, continueD, returnD, multiReturnError, valStateD, 
+  freeError, throwD, initStateD, changeStateD, initObserverListD, addObserverD, 
+  ifNoElseD, switchD, switchAsIfD, ifExistsD, forRangeD, tryCatchD, commentDocD,
   unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
-  mkVar, mkStaticVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
-  litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
-  classVarCheckStatic, classVarD, classVarDocD, objVarDocD, inlineIfD, 
-  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
-  funcDocD, castDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, 
-  castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, dot, new, blockCmtStart, blockCmtEnd, docCmtStart, 
-  observerListName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
-  setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
-import GOOL.Drasil.Data (Terminator(..),
-  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, OpData(..), 
+  mkVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
+  classVarD, classVarDocD, objVarDocD, inlineIfD, newObjDocD, varD, staticVarD, 
+  extVarD, selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
+  valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, 
+  objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
+  extFuncAppD, newObjD,notNullD, funcDocD, castDocD, listSetFuncDocD, 
+  castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, 
+  iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD, 
+  listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, 
+  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
+  blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc, moduleDoc, 
+  commentedModD, docFuncRepr, appendToBody, surroundBody, getterName, 
+  setterName, setMainMethod, filterOutObjs)
+import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
+  ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
-  ValData(..), updateValDoc, Binding(..), VarData(..), vard)
-import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
-  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
-  liftPair, liftPairFst, getInnerType, convType, checkParams)
+  ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
+import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftA7, 
+  liftList, lift1List, lift4Pair, liftPair, liftPairFst, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import qualified Data.Map as Map (fromList,lookup)
-import Data.Maybe (fromMaybe, maybeToList)
+import Data.Maybe (maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   semi, vcat, lbrace, rbrace, colon)
@@ -90,8 +95,7 @@ instance RenderSym CSharpCode where
   docMod d a dt m = commentedMod (docComment $ moduleDoc d a dt $ filePath 
     (unCSC m)) m
 
-  commentedMod cmt m = liftA2 updateFileMod (liftA2 updateModDoc
-    (liftA2 commentedItem cmt (fmap (modDoc . fileMod) m)) (fmap fileMod m)) m
+  commentedMod = liftA2 commentedModD
 
 instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
@@ -106,16 +110,15 @@ instance KeywordSym CSharpCode where
   inherit = return colon
 
   list _ = return $ text "List"
-  listObj = return new
 
   blockStart = return lbrace
   blockEnd = return rbrace
 
   ifBodyStart = blockStart
-  elseIf = return $ text "else if"
+  elseIf = return elseIfLabel
   
   iterForEachLabel = return $ text "foreach"
-  iterInLabel = return $ text "in"
+  iterInLabel = return inLabel
 
   commentStart = return doubleSlash
   blockCommentStart = return blockCmtStart
@@ -132,16 +135,20 @@ instance BodySym CSharpCode where
   type Body CSharpCode = Doc
   body = liftList bodyDocD
   bodyStatements = block
-  oneLiner s = bodyStatements [s]
+  oneLiner = oneLinerD
 
   addComments s = liftA2 (addCommentsDocD s) commentStart
+
+  bodyDoc = unCSC
 
 instance BlockSym CSharpCode where
   type Block CSharpCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
-instance StateTypeSym CSharpCode where
-  type StateType CSharpCode = TypeData
+  docBlock = return
+
+instance TypeSym CSharpCode where
+  type Type CSharpCode = TypeData
   bool = return boolTypeDocD
   int = return intTypeDocD
   float = return csFloatTypeDoc
@@ -150,10 +157,10 @@ instance StateTypeSym CSharpCode where
   infile = return csInfileTypeDoc
   outfile = return csOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
-  listInnerType t = fmap (getInnerType . cType) t >>= convType
+  listInnerType = listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
-  iterator _ = error "Iterator-type variables do not exist in C#"
+  iterator t = t
   void = return voidDocD
 
   getType = cType . unCSC
@@ -161,29 +168,9 @@ instance StateTypeSym CSharpCode where
   getTypeDoc = typeDoc . unCSC
 
 instance ControlBlockSym CSharpCode where
-  runStrategy l strats rv av = maybe
-    (strError l "RunStrategy called on non-existent strategy") 
-    (liftA2 (flip stratDocD) (state resultState)) 
-    (Map.lookup l (Map.fromList strats))
-    where resultState = maybe (return (mkStNoEnd empty)) asgState av
-          asgState v = maybe (strError l 
-            "Attempt to assign null return to a Value") (assign v) rv
-          strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
+  runStrategy = runStrategyD
 
-  listSlice vnew vold b e s = 
-    let l_temp = "temp"
-        var_temp = var l_temp (variableType vnew)
-        v_temp = valueOf var_temp
-        l_i = "i_temp"
-        var_i = var l_i int
-        v_i = valueOf var_i
-    in
-      block [
-        listDec 0 var_temp,
-        for (varDecDef var_i (fromMaybe (litInt 0) b)) 
-          (v_i ?< fromMaybe (listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
-          (oneLiner $ valState $ listAppend v_temp (listAccess vold v_i)),
-        vnew &= v_temp]
+  listSlice = listSliceD
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
@@ -222,19 +209,18 @@ instance BinaryOpSym CSharpCode where
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
-  var n t = liftA2 (mkVar n) t (return $ varDocD n) 
-  staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
+  var = varD
+  staticVar = staticVarD
   const = var
-  extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
-  self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
-  enumVar e en = var e (enumType en)
-  classVar c v = classVarCheckStatic (classVarD c v classVarDocD)
+  extVar = extVarD
+  self = selfD
+  enumVar = enumVarD
+  classVar = classVarD classVarDocD
   objVar = liftA2 csObjVar
-  objVarSelf l n t = liftA2 (mkVar $ "this." ++ n) t (liftA2 objVarDocD (self l)
-    (var n t))
-  listVar n p t = var n (listType p t)
-  n `listOf` t = listVar n static_ t
-  iterVar n t = var n (iterator t)
+  objVarSelf = objVarSelfD
+  listVar  = listVarD
+  listOf = listOfD 
+  iterVar = iterVarD
 
   ($->) = objVar
 
@@ -247,20 +233,20 @@ instance VariableSym CSharpCode where
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
-  litTrue = liftA2 mkVal bool (return litTrueD)
-  litFalse = liftA2 mkVal bool (return litFalseD)
-  litChar c = liftA2 mkVal char (return $ litCharD c)
-  litFloat v = liftA2 mkVal float (return $ litFloatD v)
-  litInt v = liftA2 mkVal int (return $ litIntD v)
-  litString s = liftA2 mkVal string (return $ litStringD s)
+  litTrue = litTrueD
+  litFalse = litFalseD
+  litChar = litCharD
+  litFloat = litFloatD
+  litInt = litIntD
+  litString = litStringD
 
   ($:) = enumElement
 
-  valueOf v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
-  arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
-  enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
+  valueOf = valueOfD
+  arg n = argD (litInt n) argsList
+  enumElement = enumElementD
   
-  argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
+  argsList = argsListD "args"
 
   valueType = fmap valType
   valueDoc = valDoc . unCSC
@@ -305,17 +291,14 @@ instance BooleanExpression CSharpCode where
   
 instance ValueExpression CSharpCode where
   inlineIf = liftA3 inlineIfD
-  funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
+  funcApp = funcAppD
   selfFuncApp = funcApp
-  extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t (liftList valList vs))
-  extStateObj _ = stateObj
-  listStateObj t vs = liftA2 mkVal t (liftA3 listStateObjDocD listObj t 
-    (liftList valList vs))
+  extFuncApp = extFuncAppD
+  newObj = newObjD newObjDocD
+  extNewObj _ = newObj
 
   exists = notNull
-  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf (var
-    "null" (fmap valType v))))
+  notNull = notNullD
 
 instance InternalValue CSharpCode where
   inputFunc = liftA2 mkVal string (return $ text "Console.ReadLine()")
@@ -325,73 +308,83 @@ instance InternalValue CSharpCode where
   printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "WriteLine") f)
   
   cast = csCast
+  
+  valFromData p t d = liftA2 (vd p) t (return d)
 
 instance Selector CSharpCode where
-  objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
+  objAccess = objAccessD
   ($.) = objAccess
 
-  objMethodCall t o f ps = objAccess o (func f t ps)
-  objMethodCallNoParams t o f = objMethodCall t o f []
+  objMethodCall = objMethodCallD
+  objMethodCallNoParams = objMethodCallNoParamsD
 
-  selfAccess l = objAccess (valueOf $ self l)
+  selfAccess = selfAccessD
 
-  listIndexExists l i = listSize l ?> i
+  listIndexExists = listIndexExistsD
   argExists i = listAccess argsList (litInt $ fromIntegral i)
-
-  indexOf l v = objAccess l (func "IndexOf" int [v])
+  
+  indexOf = indexOfD "IndexOf"
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
-  func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
+  func = funcD
 
-  get v vToGet = v $. getFunc vToGet
-  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+  get = getD
+  set = setD
 
-  listSize v = v $. listSizeFunc
-  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
-  listAppend v vToApp = v $. listAppendFunc vToApp
-  
-  iterBegin v = v $. iterBeginFunc (valueType v)
-  iterEnd v = v $. iterEndFunc (valueType v)
+  listSize = listSizeD
+  listAdd = listAddD
+  listAppend = listAppendD
+
+  iterBegin = iterBeginD
+  iterEnd = iterEndD
 
 instance SelectorFunction CSharpCode where
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (valueOf $ var l int)
+  listAccess = listAccessD
+  listSet = listSetD
+  at = listAccess
 
 instance InternalFunction CSharpCode where
-  getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+  getFunc = getFuncD
+  setFunc = setFuncD
 
-  listSizeFunc = liftA2 fd int (fmap funcDocD (valueOf (var "Count" int)))
-  listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
-  listAppendFunc v = func "Add" (fmap valType v) [v]
+  listSizeFunc = liftA2 fd int (return $ funcDocD (text "Count"))
+  listAddFunc _ = listAddFuncD "Insert"
+  listAppendFunc = listAppendFuncD "Add"
 
-  iterBeginFunc _ = error "Attempt to use iterBeginFunc in C#, but C# has no iterators"
-  iterEndFunc _ = error "Attempt to use iterEndFunc in C#, but C# has no iterators"
+  iterBeginFunc _ = error $ iterBeginError csName
+  iterEndFunc _ = error $ iterEndError csName
 
-  listAccessFunc t v = liftA2 fd t (listAccessFuncDocD <$> intValue v)
-  listSetFunc v i toVal = liftA2 fd (valueType v) 
-    (liftA2 listSetFuncDocD (intValue i) toVal)
+  listAccessFunc = listAccessFuncD
+  listSetFunc = listSetFuncD listSetFuncDocD 
+    
+  functionType = fmap funcType
+  functionDoc = funcDoc . unCSC
 
-  atFunc t l = listAccessFunc t (valueOf $ var l int)
+  funcFromData t d = liftA2 fd t (return d)
 
 instance InternalStatement CSharpCode where
-  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
+  printSt _ p v _ = printStD p v
+
+  state = stateD
+  loopState = loopStateD
+
+  emptyState = emptyStateD
+  statementDoc = fst . unCSC
+  statementTerm = snd . unCSC
   
-  state = fmap statementDocD
-  loopState = fmap (statementDocD . setEmpty)
+  stateFromData d t = return (d, t)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
-  assign vr vl = mkSt <$> liftA2 assignDocD vr vl
-  assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
-  multiAssign _ _ = error "No multiple assignment statements in C#"
+  assign = assignD Semi
+  assignToListIndex = assignToListIndexD
+  multiAssign _ _ = error $ multiAssignError csName
   (&=) = assign
-  (&-=) vr vl = vr &= (valueOf vr #- vl)
-  (&+=) vr vl = mkSt <$> liftA2 plusEqualsDocD vr vl
-  (&++) v = mkSt <$> fmap plusPlusDocD v
-  (&~-) v = v &= (valueOf v #- litInt 1)
+  (&-=) = decrementD
+  (&+=) = incrementD
+  (&++) = increment1D
+  (&~-) = decrement1D
 
   varDec v = csVarDec (variableBind v) $ mkSt <$> liftA3 varDecDocD v static_ 
     dynamic_ 
@@ -404,12 +397,12 @@ instance StatementSym CSharpCode where
   objDecDef v def = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
     def static_ dynamic_ 
   objDecNew v vs = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
-    (stateObj (variableType v) vs) static_ dynamic_ 
+    (newObj (variableType v) vs) static_ dynamic_ 
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
-    (stateObj (variableType v) []) static_ dynamic_ 
-  extObjDecNewVoid _ = objDecNewVoid
-  constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
+  objDecNewNoParams v = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
+    (newObj (variableType v) []) static_ dynamic_ 
+  extObjDecNewNoParams _ = objDecNewNoParams
+  constDecDef = constDecDefD
 
   print v = outDoc False printFunc v Nothing
   printLn v = outDoc True printLnFunc v Nothing
@@ -422,44 +415,42 @@ instance StatementSym CSharpCode where
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
   getInput v = v &= liftA2 csInput (variableType v) inputFunc
-  discardInput = mkSt <$> fmap csDiscardInput inputFunc
+  discardInput = discardInputD csDiscardInput
   getFileInput f v = v &= liftA2 csInput (variableType v) (fmap csFileInput f)
   discardFileInput f = valState $ fmap csFileInput f
 
-  openFileR f n = f &= liftA2 csOpenFileR n infile
-  openFileW f n = f &= liftA3 csOpenFileWorA n outfile litFalse
-  openFileA f n = f &= liftA3 csOpenFileWorA n outfile litTrue
-  closeFile f = valState $ objMethodCall void f "Close" []
+  openFileR = openFileRD csOpenFileR
+  openFileW = openFileWD csOpenFileWorA
+  openFileA = openFileAD csOpenFileWorA
+  closeFile = closeFileD "Close"
 
   getFileInputLine = getFileInput
-  discardFileLine f = valState $ fmap csFileInput f
-  stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic_ string) 
+  discardFileLine = discardFileLineD "ReadLine"
+  stringSplit d vnew s = assign vnew $ newObj (listType dynamic_ string) 
     [s $. func "Split" (listType static_ string) [litChar d]]
 
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = return (mkSt breakDocD)
-  continue = return (mkSt continueDocD)
+  break = breakD Semi
+  continue = continueD Semi
 
-  returnState v = mkSt <$> liftList returnDocD [v]
-  multiReturn _ = error "Cannot return multiple values in C#"
+  returnState = returnD Semi
+  multiReturn _ = error $ multiReturnError csName 
 
-  valState v = mkSt <$> fmap valDoc v
+  valState = valStateD Semi
 
   comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
-  free _ = error "Cannot free variables in C#" -- could set variable to null? Might be misleading.
+  free _ = error $ freeError csName -- could set variable to null? Might be misleading.
 
-  throw errMsg = mkSt <$> fmap csThrowDoc (litString errMsg)
+  throw = throwD csThrowDoc Semi
 
-  initState fsmName initialState = varDecDef (var fsmName string) (litString initialState)
-  changeState fsmName toState = var fsmName string &= litString toState
+  initState = initStateD
+  changeState = changeStateD
 
-  initObserverList t = listDecDef (var observerListName t)
-  addObserver o = valState $ listAdd obsList lastelem o
-    where obsList = valueOf $ observerListName `listOf` valueType o
-          lastelem = listSize obsList
+  initObserverList = initObserverListD
+  addObserver = addObserverD
 
   inOutCall = csInOutCall funcApp
   extInOutCall m = csInOutCall (extFuncApp m)
@@ -469,32 +460,23 @@ instance StatementSym CSharpCode where
 instance ControlStatementSym CSharpCode where
   ifCond bs b = mkStNoEnd <$> lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b
     bs
-  ifNoElse bs = ifCond bs $ body []
-  switch v cs c = mkStNoEnd <$> lift3Pair switchDocD (state break) v c cs
-  switchAsIf v cs = ifCond cases
-    where cases = map (\(l, b) -> (v ?== l, b)) cs
+  ifNoElse = ifNoElseD
+  switch = switchD
+  switchAsIf = switchAsIfD
 
-  ifExists v ifBody = ifCond [(notNull v, ifBody)]
+  ifExists = ifExistsD
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
-    (valueOf (var i int) ?< finalv) (var i int &+= stepv)
-  forEach l v b = mkStNoEnd <$> liftA7 (forEachDocD l) blockStart blockEnd 
-    iterForEachLabel iterInLabel (listInnerType $ valueType v) v b
+  forRange = forRangeD
+  forEach e v b = mkStNoEnd <$> liftA7 forEachDocD e blockStart blockEnd 
+    iterForEachLabel iterInLabel v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
-  tryCatch tb cb = mkStNoEnd <$> liftA2 csTryCatch tb cb
+  tryCatch = tryCatchD csTryCatch
 
-  checkState l = switch (valueOf $ var l string)
-  notifyObservers f t = for initv (v_index ?< listSize obsList) 
-    (var_index &++) notify
-    where obsList = valueOf $ observerListName `listOf` t
-          index = "observerIndex"
-          var_index = var index int
-          v_index = valueOf var_index
-          initv = varDecDef var_index $ litInt 0
-          notify = oneLiner $ valState $ at obsList index $. f
+  checkState = checkStateD
+  notifyObservers = notifyObserversD
 
   getFileInputAll f v = while ((f $. liftA2 fd bool (return $ text 
     ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (valueOf v) (fmap 
@@ -505,18 +487,15 @@ instance ScopeSym CSharpCode where
   private = return privateDocD
   public = return publicDocD
 
-instance InternalScope CSharpCode where
-  includeScope s = s
-
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
-  mState t = t
+  mType t = t
   construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym CSharpCode where
   type Parameter CSharpCode = ParamData
-  stateParam = fmap (mkParam stateParamDocD)
-  pointerParam = stateParam
+  param = fmap (mkParam paramDocD)
+  pointerParam = param
 
   parameterName = variableName . fmap paramVar
   parameterType = variableType . fmap paramVar
@@ -524,39 +503,38 @@ instance ParameterSym CSharpCode where
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
   method n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
-    (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
+    (liftA5 (methodDocD n) s p (mType t) (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
-    (mState $ variableType v) [] getBody
+    (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
-  setMethod c v = method (setterName $ variableName v) c public dynamic_ 
-    (mState void) [stateParam v] setBody
+  setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
+    [param v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
-  mainMethod c b = setMainMethod <$> method "Main" c public static_ 
-    (mState void) [liftA2 pd (var "args" (listType static_ string)) 
-    (return $ text "string[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
-  constructor n = method n n public dynamic_ (construct n)
+  constructor n = intMethod n n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in C#"
 
-  docMain c b = commentedFunc (docComment $ functionDoc 
+  docMain b = commentedFunc (docComment $ functionDox 
     "Controls the flow of the program" 
-    [("args", "List of command-line arguments")] []) (mainMethod c b)
-
-  function n = method n ""
+    [("args", "List of command-line arguments")] []) (mainFunction b)
+ 
+  function n s p t = intFunc n s p (mType t)
+  mainFunction b = setMainMethod <$> function "Main" public static_ void 
+    [liftA2 pd (var "args" (listType static_ string)) 
+    (return $ text "string[] args")] b
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
-  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
-    (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
-    valueOf v))
+  inOutFunc n s p ins [v] [] b = function n s p (variableType v) (map param ins)
+   (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
   inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
-    then mState void else mState $ variableType v) (map stateParam $ v : ins) 
+    then void else variableType v) (map param $ v : ins) 
     (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
     (returnState $ valueOf v))
-  inOutFunc n s p ins outs both b = function n s p (mState void) (map (fmap 
-    (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ 
-    map (fmap (updateParamDoc csOut) . stateParam) outs) b
+  inOutFunc n s p ins outs both b = function n s p void (map (fmap 
+    (updateParamDoc csRef) . param) both ++ map param ins ++ 
+    map (fmap (updateParamDoc csOut) . param) outs) b
 
   docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
     (inOutFunc n s p (map snd is) [snd o] [] b)
@@ -565,18 +543,22 @@ instance MethodSym CSharpCode where
     (inOutFunc n s p (map snd is) [] [snd both] b)
   docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst (is ++ os ++ 
     bs)) [] (inOutFunc n s p (map snd is) (map snd os) (map snd bs) b)
-
-  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
-    (liftA2 commentedItem cmt (fmap mthdDoc fn))
   
   parameters m = map return $ (mthdParams . unCSC) m
 
+instance InternalMethod CSharpCode where
+  intMethod n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps)
+    (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
+  intFunc n = intMethod n ""
+  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
+    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
-  stateVar _ s p v = liftA4 stateVarDocD (includeScope s) p v endStatement
-  stateVarDef _ _ s p vr vl = liftA3 stateVarDefDocD (includeScope s) p (fst <$>
+  stateVar _ s p v = liftA4 stateVarDocD s p v endStatement
+  stateVarDef _ _ s p vr vl = liftA3 stateVarDefDocD s p (fst <$>
     state (varDecDef vr vl))
-  constVar _ _ s vr vl = liftA3 stateVarDefDocD (includeScope s) (return empty) 
+  constVar _ _ s vr vl = liftA3 stateVarDefDocD s (return empty) 
     (fst <$> state (constDecDef vr vl))
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
@@ -611,6 +593,9 @@ instance BlockCommentSym CSharpCode where
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
   docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
 
+csName :: String
+csName = "C#"
+
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [
   inc <+> text "System" <> end,
@@ -627,27 +612,30 @@ csInfileTypeDoc = td File "StreamReader" (text "StreamReader")
 csOutfileTypeDoc :: TypeData
 csOutfileTypeDoc = td File "StreamWriter" (text "StreamWriter")
 
-csCast :: CSharpCode (StateType CSharpCode) -> CSharpCode (Value CSharpCode) -> 
+csCast :: CSharpCode (Type CSharpCode) -> CSharpCode (Value CSharpCode) -> 
   CSharpCode (Value CSharpCode)
 csCast t v = csCast' (getType t) (getType $ valueType v)
   where csCast' Float String = funcApp "Double.Parse" float [v]
         csCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
-csThrowDoc :: ValData -> Doc
+csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
-  parens (valDoc errMsg)
+  parens (valueDoc errMsg)
 
-csTryCatch :: Doc -> Doc -> Doc
-csTryCatch tb cb= vcat [
+csTryCatch :: (RenderSym repr) => repr (Body repr) -> repr (Body repr) -> Doc
+csTryCatch tb cb = vcat [
   text "try" <+> lbrace,
-  indent tb,
+  indent $ bodyDoc tb,
   rbrace <+> text "catch" <+> 
     lbrace,
-  indent cb,
+  indent $ bodyDoc cb,
   rbrace]
 
-csDiscardInput :: ValData -> Doc
-csDiscardInput = valDoc
+csDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
+csDiscardInput = valueDoc
+
+csFileInput :: ValData -> ValData
+csFileInput f = mkVal (valType f) (valDoc f <> dot <> text "ReadLine()")
 
 csInput :: TypeData -> ValData -> ValData
 csInput t inFn = mkVal t $ text (csInput' (cType t)) <> 
@@ -659,16 +647,15 @@ csInput t inFn = mkVal t $ text (csInput' (cType t)) <>
         csInput' Char = "Char.Parse"
         csInput' _ = error "Attempt to read value of unreadable type"
 
-csFileInput :: ValData -> ValData
-csFileInput f = mkVal (valType f) (valDoc f <> dot <> text "ReadLine()")
+csOpenFileR :: (RenderSym repr) => repr (Value repr) -> repr (Type repr) -> 
+  repr (Value repr)
+csOpenFileR n r = valFromData Nothing r $ new <+> getTypeDoc r <> 
+  parens (valueDoc n)
 
-csOpenFileR :: ValData -> TypeData -> ValData
-csOpenFileR n r = mkVal r $ new <+> typeDoc r <> 
-  parens (valDoc n)
-
-csOpenFileWorA :: ValData -> TypeData -> ValData -> ValData
-csOpenFileWorA n w a = mkVal w $ new <+> typeDoc w <> 
-  parens (valDoc n <> comma <+> valDoc a)
+csOpenFileWorA :: (RenderSym repr) => repr (Value repr) -> repr (Type repr) -> 
+  repr (Value repr) -> repr (Value repr)
+csOpenFileWorA n w a = valFromData Nothing w $ new <+> getTypeDoc w <> 
+  parens (valueDoc n <> comma <+> valueDoc a)
 
 csRef :: Doc -> Doc
 csRef p = text "ref" <+> p
@@ -676,7 +663,7 @@ csRef p = text "ref" <+> p
 csOut :: Doc -> Doc
 csOut p = text "out" <+> p
 
-csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) -> 
+csInOutCall :: (Label -> CSharpCode (Type CSharpCode) -> 
   [CSharpCode (Value CSharpCode)] -> CSharpCode (Value CSharpCode)) -> Label -> 
   [CSharpCode (Value CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
   [CSharpCode (Variable CSharpCode)] -> CSharpCode (Statement CSharpCode)
@@ -698,4 +685,4 @@ csObjVar o v = csObjVar' (varBind v)
   where csObjVar' Static = error 
           "Cannot use objVar to access static variables through an object in C#"
         csObjVar' Dynamic = mkVar (varName o ++ "." ++ varName v) 
-          (varType v) (objVarDocD o v)
+          (varType v) (objVarDocD (varDoc o) (varDoc v))

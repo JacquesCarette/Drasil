@@ -1,6 +1,7 @@
 module Language.Drasil.TeX.Print(genTeX, pExpr, pUnit, spec) where
 
 import Prelude hiding (print)
+import Data.Bifunctor (bimap)
 import Data.List (transpose, partition)
 import Text.PrettyPrint (integer, text, (<+>))
 import qualified Text.PrettyPrint as TP
@@ -64,7 +65,7 @@ lo (List l)               _ = toText $ makeList l
 lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (spec c) f wp
 lo (Bib bib)             sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)    _  = toText $ makeGraph
-  (map (\(a,b) -> (spec a, spec b)) ps)
+  (map (bimap spec spec) ps)
   (pure $ text $ maybe "" (\x -> "text width = " ++ show x ++ "em ,") w)
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
   (spec c) (spec l)

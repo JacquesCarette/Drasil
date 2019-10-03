@@ -626,7 +626,7 @@ in the family of interpreters. This suits GOOL's needs nicely, for GOOL
 requires multiple interpreters (one for each target language) of the same 
 language (GOOL).
 
-GOOL is a collection of these "symantic" type classes and instances. For 
+GOOL is a collection of these ``symantic'' type classes and instances. For 
 organizational purposes, the functions comprising GOOL's syntax are split 
 across many type classes, roughly based on the internal types upon which the 
 functions act. GOOL's internal types correspond to the types of code being 
@@ -1193,18 +1193,18 @@ OO programming.
 
 We divide the Related Work into the following categories
 \begin{itemize}
-\item cat 1
-\item cat 2
-\item cat 3
+\item General-purpose code generation
+\item Multi-language OO code generation
+\item Generation of code following design patterns
 \end{itemize}
 which we present in turn.
 
 Haxe is a general-purpose multi-paradigm language and cross-platform compiler. 
 It compiles to all of the languages GOOL does, in addition to many others. 
 However, it does not offer the high-level abstractions GOOL provides 
-\cite{Haxe} (better reference?). Also, the generated source code is not very 
-readable as Haxe generates a lot of ``noise'' and strips comments from the 
-original Haxe source code.
+\cite{Haxe} (better reference?). Also, Haxe strips comments and generates 
+source code around a custom framework which users would not be familiar with, 
+so the generated code is not very readable.
 
 Protokit's 2nd version is a DSL and code generator for Java and C++, where the 
 generator is designed to be capable of producing general-purpose imperative or 
@@ -1217,35 +1217,48 @@ and syntax for high-level tasks, on the other hand, helped it overcome
 differences between target languages.
 
 ThingML \cite{harrand2016thingml} is a DSL for model-driven engineering 
-targeting C, C++, Java, and 
-JavaScript. While it can be used in a broad range of application domains, they 
-all fall under the umbrella domain of distributed reactive systems, and so it 
-is not quite a general-purpose DSL, unlike GOOL. ThingML's modelling-related 
-syntax and abstractions are a contrast to GOOL's object-oriented syntax and 
-abstractions. The generated code lacks some of the pretty-printing provided by 
-GOOL, specifically indentation, which detracts from the readability.
+targeting C, C++, Java, and JavaScript. While it can be used in a broad range 
+of application domains, they all fall under the umbrella domain of distributed 
+reactive systems, and so it is not quite a general-purpose DSL, unlike GOOL. 
+ThingML's modelling-related syntax and abstractions are a contrast to GOOL's 
+object-oriented syntax and abstractions. The generated code lacks some of the 
+pretty-printing provided by GOOL, specifically indentation, which detracts from 
+the readability.
 
-IBM developed a DSL for automatic generation of OO code based on design 
-patterns \cite{budinsky1996automatic}. Their DSL was in the form of a visual 
-user interface rather than a programming language, and could only generate code 
-that followed a design pattern. It could not generate any general-purpose code.
+Moving on to OO-specific code generators with multiple target languages, there 
+are many examples of such DSLs, but for more restricted domains than GOOL. 
+Google protocol buffers is a DSL for serializing structured data, which can 
+then be compiled into Java, Python, Objective C, and C++ \cite{Protobuf}. 
+Thrift is a Facebook-developed tool for generating code in multiple languages 
+and even multiple paradigms based on language-neutral descriptions of data 
+types and interfaces \cite{slee2007thrift}. Clearwater is an approach for 
+implementing DSLs with multiple target languages for components of distributed 
+systems \cite{swint2005clearwater}. The Time Weaver tool uses a multi-language 
+code generator to generate ``glue'' code for real-time embedded systems 
+\cite{de2004glue}. The domain of mobile applications is host to a bevy of DSLs 
+with multiple target languages, of which MobDSL \cite{kramer2010mobdsl} and 
+XIS-Mobile \cite{ribeiro2014xis} are two examples. Conjure is a DSL for 
+generating APIs. It reads YML descriptions of APIs and can generate code in 
+Java, TypeScript, Python, and Rust \cite{Conjure} (include this?). All of these 
+are examples of multi-language code generation, but none of them generate 
+general-purpose code like GOOL does.
 
-There are many examples of DSLs with multiple OO target languages but for a 
-more restricted domain. Google protocol buffers is a DSL for serializing 
-structured data, which can then be compiled into Java, Python, Objective C, and 
-C++ \cite{Protobuf}. Thrift is a Facebook-developed tool for generating code in 
-multiple languages and even multiple paradigms based on language-neutral 
-descriptions of data types and interfaces \cite{slee2007thrift}. Clearwater is 
-an approach for implementing DSLs with multiple target languages for components 
-of distributed systems \cite{swint2005clearwater}. The Time Weaver tool uses a 
-multi-language code generator to generate ``glue'' code for real-time embedded 
-systems \cite{de2004glue}. The domain of mobile 
-applications is host to a bevy of DSLs with multiple target languages, of which 
-MobDSL \cite{kramer2010mobdsl} and XIS-Mobile \cite{ribeiro2014xis} are two 
-examples. Conjure is a DSL for generating APIs. It reads YML descriptions of 
-APIs and can generate code in Java, TypeScript, Python, and Rust 
-\cite{Conjure}. All of these are examples of multi-language code generation, 
-but none of them generate general-purpose code like GOOL does.
+A number of languages for modeling design patterns have been developed. The 
+Design Pattern Modeling Language (DPML) \cite{mapelsden2002design} is similar 
+to the Unified Modeling Language (UML) but designed specifically to overcome 
+UML's shortcomings to be able to model all design patterns. DPML consists of 
+both specification diagrams and instance diagrams for instantiations of design 
+patterns, but does not attempt to generate actual source code from the models. 
+The Role-Based Metamodeling Language \cite{kim2003uml} is also based on UML but 
+with changes to allow for better models of design patterns, with specifications 
+for the structure, interactions, and state-based behaviour in patterns. Again, 
+source code generation is not attempted. Another metamodel for design patterns 
+includes generation of Java code \cite{albin2001meta}, and IBM developed a DSL 
+for generation of OO code based on design patterns 
+\cite{budinsky1996automatic}. IBM's DSL was in the form of a visual user 
+interface rather than a programming or modeling language. The languages that 
+generate code do so only for design patterns, not for any general-purpose code 
+like GOOL does.
 
 \section{Future Work} \label{future}
 \section{Conclusion} \label{conclusions}

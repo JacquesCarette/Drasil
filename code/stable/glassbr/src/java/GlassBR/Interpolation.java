@@ -59,7 +59,7 @@ public class Interpolation {
         outfile.print("[");
         for (int list_i1 = 0; list_i1 < arr.size() - 1; list_i1++) {
             outfile.print(arr.get(list_i1));
-            outfile.print(", /f ");
+            outfile.print(", ");
         }
         if (arr.size() > 0) {
             outfile.print(arr.get(arr.size() - 1));
@@ -94,19 +94,19 @@ public class Interpolation {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < mat.get(list_i2).size() - 1; list_i1++) {
                 outfile.print(mat.get(list_i2).get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (mat.get(list_i2).size() > 0) {
                 outfile.print(mat.get(list_i2).get(mat.get(list_i2).size() - 1));
             }
             outfile.print("]");
-            outfile.print(", /f ");
+            outfile.print(", ");
         }
         if (mat.size() > 0) {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < mat.get(mat.size() - 1).size() - 1; list_i1++) {
                 outfile.print(mat.get(mat.size() - 1).get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (mat.get(mat.size() - 1).size() > 0) {
                 outfile.print(mat.get(mat.size() - 1).get(mat.get(mat.size() - 1).size() - 1));
@@ -173,7 +173,7 @@ public class Interpolation {
         outfile.print("[");
         for (int list_i1 = 0; list_i1 < x_z_1.size() - 1; list_i1++) {
             outfile.print(x_z_1.get(list_i1));
-            outfile.print(", /f ");
+            outfile.print(", ");
         }
         if (x_z_1.size() > 0) {
             outfile.print(x_z_1.get(x_z_1.size() - 1));
@@ -187,7 +187,7 @@ public class Interpolation {
         outfile.print("[");
         for (int list_i1 = 0; list_i1 < y_z_1.size() - 1; list_i1++) {
             outfile.print(y_z_1.get(list_i1));
-            outfile.print(", /f ");
+            outfile.print(", ");
         }
         if (y_z_1.size() > 0) {
             outfile.print(y_z_1.get(y_z_1.size() - 1));
@@ -201,7 +201,7 @@ public class Interpolation {
         outfile.print("[");
         for (int list_i1 = 0; list_i1 < x_z_2.size() - 1; list_i1++) {
             outfile.print(x_z_2.get(list_i1));
-            outfile.print(", /f ");
+            outfile.print(", ");
         }
         if (x_z_2.size() > 0) {
             outfile.print(x_z_2.get(x_z_2.size() - 1));
@@ -215,7 +215,7 @@ public class Interpolation {
         outfile.print("[");
         for (int list_i1 = 0; list_i1 < y_z_2.size() - 1; list_i1++) {
             outfile.print(y_z_2.get(list_i1));
-            outfile.print(", /f ");
+            outfile.print(", ");
         }
         if (y_z_2.size() > 0) {
             outfile.print(y_z_2.get(y_z_2.size() - 1));
@@ -294,7 +294,7 @@ public class Interpolation {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < x_z_1.size() - 1; list_i1++) {
                 outfile.print(x_z_1.get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (x_z_1.size() > 0) {
                 outfile.print(x_z_1.get(x_z_1.size() - 1));
@@ -308,7 +308,7 @@ public class Interpolation {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < y_z_1.size() - 1; list_i1++) {
                 outfile.print(y_z_1.get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (y_z_1.size() > 0) {
                 outfile.print(y_z_1.get(y_z_1.size() - 1));
@@ -322,7 +322,7 @@ public class Interpolation {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < x_z_2.size() - 1; list_i1++) {
                 outfile.print(x_z_2.get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (x_z_2.size() > 0) {
                 outfile.print(x_z_2.get(x_z_2.size() - 1));
@@ -336,7 +336,7 @@ public class Interpolation {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < y_z_2.size() - 1; list_i1++) {
                 outfile.print(y_z_2.get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (y_z_2.size() > 0) {
                 outfile.print(y_z_2.get(y_z_2.size() - 1));

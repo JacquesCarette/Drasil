@@ -10,16 +10,16 @@ module GOOL.Drasil.LanguageRenderer.CSharpRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label,
-  ProgramSym(..), RenderSym(..), InternalFile(..),
-  KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
+  InternalFile(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
+  BlockSym(..), ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), 
+  BinaryOpSym(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), InternalMethod(..), StateVarSym(..), ClassSym(..), 
+  ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD, 
   enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, oneLinerD, 
   outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
@@ -228,7 +228,8 @@ instance VariableSym CSharpCode where
   variableName = varName . unCSC
   variableType = fmap varType
   variableDoc = varDoc . unCSC
-  
+
+instance InternalVariable CSharpCode where
   varFromData b n t d = liftA2 (vard b n) t (return d)
 
 instance ValueSym CSharpCode where

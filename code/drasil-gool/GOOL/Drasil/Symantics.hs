@@ -7,12 +7,13 @@ module GOOL.Drasil.Symantics (
   ProgramSym(..), RenderSym(..), InternalFile(..),  KeywordSym(..), 
   PermanenceSym(..), BodySym(..), ControlBlockSym(..), BlockSym(..), 
   TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..)
+  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
+  InternalMethod(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -152,7 +153,7 @@ class BinaryOpSym repr where
   andOp          :: repr (BinaryOp repr)
   orOp           :: repr (BinaryOp repr)
 
-class (TypeSym repr) => VariableSym repr where
+class (TypeSym repr, InternalVariable repr) => VariableSym repr where
   type Variable repr
   var          :: Label -> repr (Type repr) -> repr (Variable repr)
   staticVar    :: Label -> repr (Type repr) -> repr (Variable repr)
@@ -179,6 +180,7 @@ class (TypeSym repr) => VariableSym repr where
   variableType :: repr (Variable repr) -> repr (Type repr)
   variableDoc  :: repr (Variable repr) -> Doc
 
+class InternalVariable repr where
   varFromData :: Binding -> String -> repr (Type repr) -> Doc -> 
     repr (Variable repr)
 

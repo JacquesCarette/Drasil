@@ -503,8 +503,7 @@ instance ParameterSym CSharpCode where
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
-  method n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
-    (liftA5 (methodDocD n) s p (mType t) (liftList paramListDocD ps) b)
+  method n l s p t = intMethod n l s p (mType t)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)

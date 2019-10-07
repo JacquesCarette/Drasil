@@ -186,7 +186,7 @@ printListDoc :: (RenderSym repr) => Integer -> repr (Value repr) ->
   repr (Statement repr)
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
   for (varDecDef i (litInt 0)) (valueOf i ?< (listSize v #- litInt 1))
-    (i &++) (bodyStatements [prFn (listAccess v (valueOf i)), prStrFn ", /f "]), 
+    (i &++) (bodyStatements [prFn (listAccess v (valueOf i)), prStrFn ", "]), 
   ifNoElse [(listSize v ?> litInt 0, oneLiner $
     prFn (listAccess v (listSize v #- litInt 1)))], 
   prLnFn "]"]
@@ -1234,10 +1234,10 @@ surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
 surroundBody p b a = prependToBody p (appendToBody b a)
 
 getterName :: String -> String
-getterName s = "Get" ++ capitalize s
+getterName s = "get" ++ capitalize s
 
 setterName :: String -> String
-setterName s = "Set" ++ capitalize s
+setterName s = "set" ++ capitalize s
 
 setMainMethod :: MethodData -> MethodData
 setMainMethod (MthD _ ps d) = MthD True ps d

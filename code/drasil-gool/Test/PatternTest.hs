@@ -6,7 +6,7 @@ import GOOL.Drasil (
   StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..),
   ValueExpression(..), FunctionSym(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
-import Test.Observer (observer)
+import Test.Observer (observer, x)
 
 patternTest :: (ProgramSym repr) => repr (Program repr)
 patternTest = prog "PatternTest" [fileDoc (buildModule "PatternTest" ["Observer"] [patternTestMainMethod] []), observer]
@@ -33,4 +33,6 @@ patternTestMainMethod = mainFunction (body [block [
   block [
     initObserverList (listType static_ (obj "Observer")) [valueOf $ var "obs1" (obj "Observer")], 
     addObserver (valueOf $ var "obs2" (obj "Observer")),
-    notifyObservers (func "printNum" void []) (listType static_ (obj "Observer"))]])
+    notifyObservers (func "printNum" void []) (listType static_ (obj "Observer")),
+    valState $ set (valueOf $ var "obs1" (obj "Observer")) x (litInt 10),
+    print(get (valueOf $ var "obs1" (obj "Observer")) x)]])

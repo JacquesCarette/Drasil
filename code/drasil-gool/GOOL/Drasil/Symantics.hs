@@ -163,8 +163,7 @@ class (TypeSym repr, InternalVariable repr) => VariableSym repr where
   self         :: Label -> repr (Variable repr)
   classVar     :: repr (Type repr) -> repr (Variable repr) -> repr (Variable repr)
   objVar       :: repr (Variable repr) -> repr (Variable repr) -> repr (Variable repr)
-  objVarSelf   :: Label -> Label -> repr (Type repr) -> 
-    repr (Variable repr)
+  objVarSelf   :: Label -> Label -> repr (Type repr) -> repr (Variable repr)
   enumVar      :: Label -> Label -> repr (Variable repr)
   listVar      :: Label -> repr (Permanence repr) -> repr (Type repr) -> 
     repr (Variable repr)

@@ -1,4 +1,4 @@
-module Test.Observer (observer) where
+module Test.Observer (observer, x) where
 
 import GOOL.Drasil.Symantics (
   RenderSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
@@ -11,9 +11,13 @@ observer = fileDoc (buildModule "Observer" [] [] [docClass
   "This is an arbitrary class acting as an Observer"
   helperClass])
 
+x :: (RenderSym repr) => repr (Variable repr)
+x = var "x" int
+
 helperClass :: (RenderSym repr) => repr (Class repr)
-helperClass = pubClass "Observer" Nothing [stateVar 0 public dynamic_ 
-  (var "x" int)] [observerConstructor, printNumMethod]
+helperClass = pubClass "Observer" Nothing [stateVar 0 public dynamic_ x]
+  [observerConstructor, printNumMethod, getMethod "Observer" x, 
+  setMethod "Observer" x]
 
 observerConstructor :: (RenderSym repr) => repr (Method repr)
 observerConstructor = constructor "Observer" [] (oneLiner (assign (objVarSelf "Observer" "x" int) (litInt 5)))

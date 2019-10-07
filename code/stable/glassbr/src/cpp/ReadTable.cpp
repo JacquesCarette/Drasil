@@ -26,7 +26,7 @@ void func_read_table(string filename, vector<double> &z_vector, vector<vector<do
     outfile << "[";
     for (int list_i1 = 0; list_i1 < (int)(z_vector.size()) - 1; list_i1++) {
         outfile << z_vector.at(list_i1);
-        outfile << ", /f ";
+        outfile << ", ";
     }
     if ((int)(z_vector.size()) > 0) {
         outfile << z_vector.at((int)(z_vector.size()) - 1);
@@ -39,19 +39,19 @@ void func_read_table(string filename, vector<double> &z_vector, vector<vector<do
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(x_matrix.at(list_i2).size()) - 1; list_i1++) {
             outfile << x_matrix.at(list_i2).at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(x_matrix.at(list_i2).size()) > 0) {
             outfile << x_matrix.at(list_i2).at((int)(x_matrix.at(list_i2).size()) - 1);
         }
         outfile << "]";
-        outfile << ", /f ";
+        outfile << ", ";
     }
     if ((int)(x_matrix.size()) > 0) {
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(x_matrix.at((int)(x_matrix.size()) - 1).size()) - 1; list_i1++) {
             outfile << x_matrix.at((int)(x_matrix.size()) - 1).at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(x_matrix.at((int)(x_matrix.size()) - 1).size()) > 0) {
             outfile << x_matrix.at((int)(x_matrix.size()) - 1).at((int)(x_matrix.at((int)(x_matrix.size()) - 1).size()) - 1);
@@ -66,19 +66,19 @@ void func_read_table(string filename, vector<double> &z_vector, vector<vector<do
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(y_matrix.at(list_i2).size()) - 1; list_i1++) {
             outfile << y_matrix.at(list_i2).at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(y_matrix.at(list_i2).size()) > 0) {
             outfile << y_matrix.at(list_i2).at((int)(y_matrix.at(list_i2).size()) - 1);
         }
         outfile << "]";
-        outfile << ", /f ";
+        outfile << ", ";
     }
     if ((int)(y_matrix.size()) > 0) {
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(y_matrix.at((int)(y_matrix.size()) - 1).size()) - 1; list_i1++) {
             outfile << y_matrix.at((int)(y_matrix.size()) - 1).at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(y_matrix.at((int)(y_matrix.size()) - 1).size()) > 0) {
             outfile << y_matrix.at((int)(y_matrix.size()) - 1).at((int)(y_matrix.at((int)(y_matrix.size()) - 1).size()) - 1);
@@ -110,7 +110,7 @@ void func_read_table(string filename, vector<double> &z_vector, vector<vector<do
     outfile << "[";
     for (int list_i1 = 0; list_i1 < (int)(z_vector.size()) - 1; list_i1++) {
         outfile << z_vector.at(list_i1);
-        outfile << ", /f ";
+        outfile << ", ";
     }
     if ((int)(z_vector.size()) > 0) {
         outfile << z_vector.at((int)(z_vector.size()) - 1);
@@ -146,19 +146,19 @@ void func_read_table(string filename, vector<double> &z_vector, vector<vector<do
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(x_matrix.at(list_i2).size()) - 1; list_i1++) {
             outfile << x_matrix.at(list_i2).at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(x_matrix.at(list_i2).size()) > 0) {
             outfile << x_matrix.at(list_i2).at((int)(x_matrix.at(list_i2).size()) - 1);
         }
         outfile << "]";
-        outfile << ", /f ";
+        outfile << ", ";
     }
     if ((int)(x_matrix.size()) > 0) {
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(x_matrix.at((int)(x_matrix.size()) - 1).size()) - 1; list_i1++) {
             outfile << x_matrix.at((int)(x_matrix.size()) - 1).at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(x_matrix.at((int)(x_matrix.size()) - 1).size()) > 0) {
             outfile << x_matrix.at((int)(x_matrix.size()) - 1).at((int)(x_matrix.at((int)(x_matrix.size()) - 1).size()) - 1);
@@ -175,19 +175,19 @@ void func_read_table(string filename, vector<double> &z_vector, vector<vector<do
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(y_matrix.at(list_i2).size()) - 1; list_i1++) {
             outfile << y_matrix.at(list_i2).at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(y_matrix.at(list_i2).size()) > 0) {
             outfile << y_matrix.at(list_i2).at((int)(y_matrix.at(list_i2).size()) - 1);
         }
         outfile << "]";
-        outfile << ", /f ";
+        outfile << ", ";
     }
     if ((int)(y_matrix.size()) > 0) {
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(y_matrix.at((int)(y_matrix.size()) - 1).size()) - 1; list_i1++) {
             outfile << y_matrix.at((int)(y_matrix.size()) - 1).at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(y_matrix.at((int)(y_matrix.size()) - 1).size()) > 0) {
             outfile << y_matrix.at((int)(y_matrix.size()) - 1).at((int)(y_matrix.at((int)(y_matrix.size()) - 1).size()) - 1);

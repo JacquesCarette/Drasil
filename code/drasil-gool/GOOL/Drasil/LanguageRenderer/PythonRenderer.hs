@@ -21,30 +21,32 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD', 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
-  floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, constructDocD, 
-  paramListDocD, mkParam, methodListDocD, stateVarListDocD, ifCondDocD, 
-  runStrategyD, checkStateD, multiAssignDoc, plusEqualsDocD', plusPlusDocD', 
-  returnDocD, commentDocD, mkStNoEnd, stringListVals', stringListLists', stateD,
-  loopStateD, emptyStateD, assignD, assignToListIndexD, decrementD, decrement1D,
-  closeFileD, discardFileLineD,breakD, continueD, returnD, valStateD, throwD, 
-  initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, 
-  switchAsIfD, ifExistsD, tryCatchD, unOpPrec, notOpDocD', negateOpDocD, 
-  sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', 
-  asinOpDocD', acosOpDocD', atanOpDocD', unExpr, unExpr', typeUnExpr, powerPrec,
-  multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
-  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
-  multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, 
-  litCharD, litFloatD, litIntD, litStringD, classVarD, newObjDocD', varD, 
-  staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, 
-  listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, 
-  objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
-  indexOfD, funcAppD, extFuncAppD, newObjD, listSetFuncDocD, castObjDocD, funcD,
-  getD, setD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, 
-  listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, 
-  iterEndError, listAccessFuncD, listSetFuncD, dynamicDocD, classDec,
-  dot, forLabel, inLabel, observerListName, commentedItem, addCommentsDocD, 
-  classDoc, moduleDoc, commentedModD, docFuncRepr, valList, surroundBody, 
-  getterName, setterName, filterOutObjs)
+  floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, 
+  paramListDocD, mkParam, methodListDocD, stateVarListDocD, 
+  ifCondDocD, runStrategyD, checkStateD, multiAssignDoc, plusEqualsDocD', 
+  plusPlusDocD', returnDocD, commentDocD, mkStNoEnd, stringListVals', 
+  stringListLists', stateD, loopStateD, emptyStateD, assignD, 
+  assignToListIndexD, decrementD, decrement1D, closeFileD, discardFileLineD,
+  breakD, continueD, returnD, valStateD, throwD, initStateD, changeStateD, 
+  initObserverListD, addObserverD, ifNoElseD, switchAsIfD, ifExistsD, tryCatchD,
+  unOpPrec, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', 
+  sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', 
+  unExpr, unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, 
+  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, litCharD, litFloatD, 
+  litIntD, litStringD, classVarD, newObjDocD', varD, staticVarD, extVarD, 
+  enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, 
+  valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, 
+  objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
+  extFuncAppD, newObjD, listSetFuncDocD, castObjDocD, funcD, getD, setD, 
+  listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, 
+  setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
+  listAccessFuncD, listSetFuncD, dynamicDocD, classDec, dot, forLabel, inLabel, 
+  observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
+  commentedModD, docFuncRepr, valList, surroundBody, getterName, setterName, 
+  filterOutObjs)
+import qualified GOOL.Drasil.Generic as G (construct, method)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), 
   ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
@@ -490,7 +492,7 @@ instance ScopeSym PythonCode where
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
   mType t = t
-  construct n = return $ td (Object n) n (constructDocD n)
+  construct = return . G.construct
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
@@ -502,7 +504,7 @@ instance ParameterSym PythonCode where
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
-  method n c s p t = intMethod n c s p (mType t)
+  method = G.method
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)

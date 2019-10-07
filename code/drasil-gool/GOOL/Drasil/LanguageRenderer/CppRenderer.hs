@@ -24,7 +24,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, 
-  listInnerTypeD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam, 
+  listInnerTypeD, voidDocD, paramDocD, paramListDocD, mkParam, 
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, alwaysDel, 
   ifCondDocD, forDocD, whileDocD, runStrategyD, listSliceD, notifyObserversD, 
   varDecDocD, varDecDefDocD, objDecDefDocD, commentDocD, freeDocD, mkSt, 
@@ -51,6 +51,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc,
   moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
   getterName, setterName, filterOutObjs)
+import qualified GOOL.Drasil.Generic as G (construct, method)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileData(..), srcFile, hdrFile, FuncData(..),
   fd, ModData(..), md, updateModDoc, OpData(..), od, ParamData(..), pd, 
@@ -1092,7 +1093,7 @@ instance ScopeSym CppSrcCode where
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
   mType t = t
-  construct n = return $ td (Object n) n (constructDocD n)
+  construct = return . G.construct
 
 instance ParameterSym CppSrcCode where
   type Parameter CppSrcCode = ParamData
@@ -1104,7 +1105,7 @@ instance ParameterSym CppSrcCode where
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
-  method n c s p t = intMethod n c s p (mType t)
+  method = G.method
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ objVarSelf c 
@@ -1629,7 +1630,7 @@ instance ScopeSym CppHdrCode where
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = TypeData
   mType t = t
-  construct n = return $ td (Object n) n (constructDocD n)
+  construct = return . G.construct
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
@@ -1641,7 +1642,7 @@ instance ParameterSym CppHdrCode where
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
-  method n c s p t = intMethod n c s p (mType t)
+  method = G.method
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] (return empty)
   setMethod c v = method (setterName $ variableName v) c public dynamic_ void 

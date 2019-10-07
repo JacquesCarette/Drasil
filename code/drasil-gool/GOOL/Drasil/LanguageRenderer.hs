@@ -10,8 +10,8 @@ module GOOL.Drasil.LanguageRenderer (
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, printDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
-  stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, 
-  constructDocD, paramDocD, paramListDocD, mkParam, methodDocD, 
+  stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD,
+  paramDocD, paramListDocD, mkParam, methodDocD, 
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, stateVarListDocD,
   alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
   tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
@@ -248,9 +248,6 @@ listInnerTypeD = convType . getInnerType . getType
 
 voidDocD :: TypeData
 voidDocD = td Void "void" (text "void")
-
-constructDocD :: Label -> Doc
-constructDocD _ = empty
 
 -- Parameters --
 

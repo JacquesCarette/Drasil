@@ -23,7 +23,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
 import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD, 
   classDocD, enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
   oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
-  typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, constructDocD,
+  typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD,
   paramDocD, paramListDocD, mkParam, methodListDocD, stateVarDocD, 
   stateVarDefDocD, stateVarListDocD, ifCondDocD, forDocD, forEachDocD, 
   whileDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, 
@@ -52,6 +52,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc,
   moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
   getterName, setterName, setMainMethod, intValue, filterOutObjs)
+import qualified GOOL.Drasil.Generic as G (construct, method)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), 
   ParamData(..), pd, ProgData(..), progD, TypeData(..), td, ValData(..), vd,
@@ -488,7 +489,7 @@ instance ScopeSym JavaCode where
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
   mType t = t
-  construct n = return $ td (Object n) n (constructDocD n)
+  construct = return . G.construct
 
 instance ParameterSym JavaCode where
   type Parameter JavaCode = ParamData
@@ -500,7 +501,7 @@ instance ParameterSym JavaCode where
 
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData
-  method n l s p t = intMethod n l s p (mType t)
+  method = G.method
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)

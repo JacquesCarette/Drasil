@@ -75,7 +75,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
         , Goals [S "the kinematic" +:+ plural property :+: S ", and" +:+ plural QP.force +:+
-                 S "including any" +:+ sParen (phrase CP.collision +:+ plural QP.force) +:+
+                 sParen (S "including any" +:+ phrase CP.collision +:+ plural QP.force) +:+
                  S "applied on a set of" +:+ plural CP.rigidBody]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -274,7 +274,7 @@ sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Determine if the" +:+ plural input_ +:+ S "and" +:+
     phrase simulation +:+ S "state satisfy the required" +:+
-    (phrase physical `sAnd` plural systemConstraint) +:+. S "(FIXME REF)",
+    (phrase physical `sAnd` plural systemConstraint) +:+. sParen(makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
   S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
     S "within the" +:+ phrase simulation +:+ S "at each" +:+
     phrase simulation +:+. S "step",

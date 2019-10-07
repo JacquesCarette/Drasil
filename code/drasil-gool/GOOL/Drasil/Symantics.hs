@@ -10,13 +10,13 @@ module GOOL.Drasil.Symantics (
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..)
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
-import GOOL.Drasil.Data (Boolean, Other, Binding, TypedType)
+import GOOL.Drasil.Data (Boolean, Other, Binding, Terminator, TypedType)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
@@ -80,9 +80,13 @@ class (BlockSym repr) => BodySym repr where
 
   addComments :: Label -> repr (Body repr) -> repr (Body repr)
 
+  bodyDoc :: repr (Body repr) -> Doc
+
 class (StatementSym repr) => BlockSym repr where
   type Block repr
   block   :: [repr (Statement repr)] -> repr (Block repr)
+
+  docBlock :: Doc -> repr (Block repr)
 
 class (PermanenceSym repr) => TypeSym repr where
   type Type repr :: * -> *
@@ -305,6 +309,9 @@ class (ValueExpression repr) => InternalValue repr where
   cast :: repr (Type repr a) -> repr (Value repr b) -> 
     repr (Value repr a)
 
+  valFromData :: Maybe Int -> repr (Type repr a) -> Doc -> repr (Value repr a)
+  toOtherValue :: repr (Value repr a) -> repr (Value repr Other)
+
 -- The cyclic constraints issue arises here too. I've constrained this by ValueExpression,
 -- but really one might want one of these values as part of an expression, so the
 -- constraint would have to go both ways. I'm not sure what the solution is for
@@ -355,11 +362,11 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
 class (ValueSym repr, InternalValue repr, FunctionSym repr, Selector repr) => 
   SelectorFunction repr where
   listAccess :: repr (Value repr Other) -> repr (Value repr Other) -> 
-    repr (Value repr a)
+    repr (Value repr Other)
   listSet    :: repr (Value repr Other) -> repr (Value repr Other) -> 
     repr (Value repr a) -> repr (Value repr Other)
   at         :: repr (Value repr Other) -> repr (Value repr Other) -> 
-    repr (Value repr a)
+    repr (Value repr Other)
 
 class (ValueSym repr, InternalValue repr) => InternalFunction repr where
   getFunc        :: repr (Variable repr a) -> repr (Function repr a)
@@ -374,10 +381,15 @@ class (ValueSym repr, InternalValue repr) => InternalFunction repr where
   iterBeginFunc :: repr (Type repr Other) -> repr (Function repr Other)
   iterEndFunc   :: repr (Type repr Other) -> repr (Function repr Other)
 
-  listAccessFunc :: repr (Type repr a) -> repr (Value repr Other) -> 
-    repr (Function repr a)
+  listAccessFunc :: repr (Type repr Other) -> repr (Value repr Other) -> 
+    repr (Function repr Other)
   listSetFunc    :: repr (Value repr Other) -> repr (Value repr Other) -> 
     repr (Value repr a) -> repr (Function repr Other)
+
+  functionType :: repr (Function repr a) -> repr (Type repr a)
+  functionDoc :: repr (Function repr a) -> Doc
+
+  funcFromData :: repr (Type repr a) -> Doc -> repr (Function repr a)
 
 class (Selector repr) => InternalStatement repr where
   -- newLn, printFunc, value to print, maybe a file to print to 
@@ -386,6 +398,12 @@ class (Selector repr) => InternalStatement repr where
 
   state     :: repr (Statement repr) -> repr (Statement repr)
   loopState :: repr (Statement repr) -> repr (Statement repr)
+
+  emptyState   :: repr (Statement repr)
+  statementDoc :: repr (Statement repr) -> Doc
+  statementTerm :: repr (Statement repr) -> Terminator
+
+  stateFromData :: Doc -> Terminator -> repr (Statement repr)
 
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
   InternalFunction repr, InternalStatement repr) => StatementSym repr where
@@ -537,9 +555,6 @@ class ScopeSym repr where
   private :: repr (Scope repr)
   public  :: repr (Scope repr)
 
-class (ScopeSym repr) => InternalScope repr where
-  includeScope :: repr (Scope repr) -> repr (Scope repr)
-
 class MethodTypeSym repr where
   type MethodType repr :: * -> *
   mType    :: repr (Type repr a) -> repr (MethodType repr a)
@@ -604,8 +619,8 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
     repr (Method repr)
   
 
-class (ScopeSym repr, InternalScope repr, PermanenceSym repr, TypeSym repr,
-  StatementSym repr) => StateVarSym repr where
+class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr) => 
+  StateVarSym repr where
   type StateVar repr
   stateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) ->
     repr (Variable repr a) -> repr (StateVar repr)

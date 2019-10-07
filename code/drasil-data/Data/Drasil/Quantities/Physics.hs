@@ -27,7 +27,7 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position,
   potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
   weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum, moment]
+  yPos, yVel, momentum, moment, moment2D]
 
 acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   constAccel, constAccelV, displacement, distance, energy, fSpeed, fVel, force,
@@ -35,7 +35,8 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   impulseV, ixPos, ixVel, iyPos, iyVel, kEnergy, linearAccel, linearDisplacement,
   linearVelocity, momentOfInertia, position, potEnergy, pressure, scalarAccel,
   scalarPos, speed, time, torque, velocity, weight, xAccel, xConstAccel, xDist,
-  xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment :: UnitalChunk
+  xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, 
+  moment2D :: UnitalChunk
 
 acceleration         = uc CP.acceleration (vec lA) accelU
 angularAccel         = uc CP.angAccel lAlpha angAccelU
@@ -59,6 +60,8 @@ linearVelocity       = uc CP.linVelo  (Concat [vec lV, Label "(", lT, Label ")"]
 momentOfInertia      = uc CP.momentOfInertia (vec cI) momtInertU
 momentum             = uc CP.momentum (vec cP) impulseU
 moment               = uc CP.moment   (vec cM) torqueU
+moment2D             = uc CP.moment   cM       torqueU
+-- FIXME: moment2D should eventually be a specialization of moment, not separately defined
 position             = uc CP.position (vec lP) metre
 potEnergy            = uc CP.potEnergy (Concat [cP, cE]) joule
 pressure             = uc CP.pressure lP pascal
@@ -66,7 +69,7 @@ speed                = uc CP.speed lV velU
 scalarAccel          = uc CP.scalarAccel lA accelU
 scalarPos            = uc CP.scalarPos lP metre
 time                 = uc CP.time lT second
-torque               = uc CP.torque lTau torqueU
+torque               = uc CP.torque (vec lTau) torqueU
 velocity             = uc CP.velocity (vec lV) velU
 weight               = uc CP.weight cW newton
 

@@ -3,7 +3,7 @@
 module Test.HelloWorld (helloWorld) where
 
 import GOOL.Drasil (
-  ProgramSym(..), RenderSym(..), PermanenceSym(..),
+  ProgramSym(..), RenderSym(..), PermanenceSym(..), ScopeSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), 
   StatementSym(..), ControlStatementSym(..),  VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
@@ -15,17 +15,37 @@ import Test.Helper (helper)
 helloWorld :: (ProgramSym repr) => repr (Program repr)
 helloWorld = prog "HelloWorld" [docMod description 
   ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" ["Helper"] 
-  [helloWorldMain] []), helper]
+  [applyDiscount, helloWorldMain] []), helper]
 
 description :: String
 description = "Tests various GOOL functions. It should run without errors."
+
+discount :: (RenderSym repr) => repr (Variable repr)
+price :: (RenderSym repr) => repr (Variable repr)
+isAffordable :: (RenderSym repr) => repr (Variable repr)
+discount = var "discount" int
+price = var "price" int
+isAffordable = var "isAffordable" bool
+
+applyDiscount :: (RenderSym repr) => repr (Method repr)
+applyDiscount = inOutFunc "applyDiscount" public static_
+  [discount] [isAffordable] [price]
+  (bodyStatements [
+    price &-= valueOf discount,
+    isAffordable &= valueOf price ?< litInt 20
+    ])
 
 helloWorldMain :: (RenderSym repr) => repr (Method repr)
 helloWorldMain = mainFunction (body [ helloInitVariables, 
     helloListSlice,
     block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
-    helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]])
+    helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch,
+    varDecDef price (litInt 25),
+    varDec isAffordable,
+    inOutCall "applyDiscount" [litInt 10] [isAffordable] [price],
+    print (valueOf isAffordable),
+    print (valueOf price)]])
 
 helloInitVariables :: (RenderSym repr) => repr (Block repr)
 helloInitVariables = block [comment "Initializing variables",

@@ -221,7 +221,7 @@ fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 propCorSolF :: (Quantity c, Constrained c) => [c] -> [Contents] -> Section
 propCorSolF []  [] = SRS.propCorSol [mkParagraph noPropsSent] []
 propCorSolF [] con = SRS.propCorSol con []
-propCorSolF c  con = SRS.propCorSol (propsIntro : (LlC $ outDataConstTbl c) : con) []
+propCorSolF c  con = SRS.propCorSol ([propsIntro, LlC $ outDataConstTbl c] ++ con) []
 
 noPropsSent :: Sentence
 noPropsSent = foldlSent [S "There are no", plural property, S "of a", phrase corSol]

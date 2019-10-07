@@ -54,7 +54,7 @@ public class Interpolation {
         outfile.Write("[");
         for (int list_i1 = 0; list_i1 < arr.Count - 1; list_i1++) {
             outfile.Write(arr[list_i1]);
-            outfile.Write(", /f ");
+            outfile.Write(", ");
         }
         if (arr.Count > 0) {
             outfile.Write(arr[arr.Count - 1]);
@@ -89,19 +89,19 @@ public class Interpolation {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < mat[list_i2].Count - 1; list_i1++) {
                 outfile.Write(mat[list_i2][list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (mat[list_i2].Count > 0) {
                 outfile.Write(mat[list_i2][mat[list_i2].Count - 1]);
             }
             outfile.Write("]");
-            outfile.Write(", /f ");
+            outfile.Write(", ");
         }
         if (mat.Count > 0) {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < mat[mat.Count - 1].Count - 1; list_i1++) {
                 outfile.Write(mat[mat.Count - 1][list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (mat[mat.Count - 1].Count > 0) {
                 outfile.Write(mat[mat.Count - 1][mat[mat.Count - 1].Count - 1]);
@@ -168,7 +168,7 @@ public class Interpolation {
         outfile.Write("[");
         for (int list_i1 = 0; list_i1 < x_z_1.Count - 1; list_i1++) {
             outfile.Write(x_z_1[list_i1]);
-            outfile.Write(", /f ");
+            outfile.Write(", ");
         }
         if (x_z_1.Count > 0) {
             outfile.Write(x_z_1[x_z_1.Count - 1]);
@@ -182,7 +182,7 @@ public class Interpolation {
         outfile.Write("[");
         for (int list_i1 = 0; list_i1 < y_z_1.Count - 1; list_i1++) {
             outfile.Write(y_z_1[list_i1]);
-            outfile.Write(", /f ");
+            outfile.Write(", ");
         }
         if (y_z_1.Count > 0) {
             outfile.Write(y_z_1[y_z_1.Count - 1]);
@@ -196,7 +196,7 @@ public class Interpolation {
         outfile.Write("[");
         for (int list_i1 = 0; list_i1 < x_z_2.Count - 1; list_i1++) {
             outfile.Write(x_z_2[list_i1]);
-            outfile.Write(", /f ");
+            outfile.Write(", ");
         }
         if (x_z_2.Count > 0) {
             outfile.Write(x_z_2[x_z_2.Count - 1]);
@@ -210,7 +210,7 @@ public class Interpolation {
         outfile.Write("[");
         for (int list_i1 = 0; list_i1 < y_z_2.Count - 1; list_i1++) {
             outfile.Write(y_z_2[list_i1]);
-            outfile.Write(", /f ");
+            outfile.Write(", ");
         }
         if (y_z_2.Count > 0) {
             outfile.Write(y_z_2[y_z_2.Count - 1]);
@@ -289,7 +289,7 @@ public class Interpolation {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < x_z_1.Count - 1; list_i1++) {
                 outfile.Write(x_z_1[list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (x_z_1.Count > 0) {
                 outfile.Write(x_z_1[x_z_1.Count - 1]);
@@ -303,7 +303,7 @@ public class Interpolation {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < y_z_1.Count - 1; list_i1++) {
                 outfile.Write(y_z_1[list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (y_z_1.Count > 0) {
                 outfile.Write(y_z_1[y_z_1.Count - 1]);
@@ -317,7 +317,7 @@ public class Interpolation {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < x_z_2.Count - 1; list_i1++) {
                 outfile.Write(x_z_2[list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (x_z_2.Count > 0) {
                 outfile.Write(x_z_2[x_z_2.Count - 1]);
@@ -331,7 +331,7 @@ public class Interpolation {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < y_z_2.Count - 1; list_i1++) {
                 outfile.Write(y_z_2[list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (y_z_2.Count > 0) {
                 outfile.Write(y_z_2[y_z_2.Count - 1]);

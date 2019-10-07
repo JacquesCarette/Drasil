@@ -10,16 +10,16 @@ module GOOL.Drasil.LanguageRenderer.JavaRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label,
-  ProgramSym(..), RenderSym(..), InternalFile(..), 
-  KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
+  InternalFile(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
+  BlockSym(..), ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), 
+  BinaryOpSym(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), InternalMethod(..), StateVarSym(..), ClassSym(..), 
+  ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD, 
   classDocD, enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
   oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
@@ -233,6 +233,7 @@ instance VariableSym JavaCode where
   variableType = fmap varToType
   variableDoc = varDoc . unJC
   
+instance InternalVariable JavaCode where
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym JavaCode where

@@ -49,18 +49,18 @@ import GOOL.Drasil.Symantics (Label, Library,
   TypeSym(Type, getTypedType, getType, getTypeString, getTypeDoc, bool, float, 
   string, infile, outfile, listType, listInnerType, obj, enumType, iterator, 
   void), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ParameterSym(..), MethodSym(..), 
-  InternalMethod(..), BlockCommentSym(..))
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..), 
-  fileD, updateFileMod, TypedFunc(..), funcDoc, ModData(..), updateModDoc, 
-  MethodData(..), OpData(..), od, ParamData(..), pd, TypeData(..), td, btd, 
-  TypedType(..), cType, typeString, typeDoc, TypedValue(..), valPrec, valDoc, 
-  Binding(..), TypedVar(..), getVarData, varBind, varType, varDoc, typeToVal, 
-  typeToVar, valToType)
+  fileD, updateFileMod, ModData(..), updateModDoc, MethodData(..), OpData(..), 
+  od, ParamData(..), pd, TypeData(..), td, btd, TypedType(..), cType, 
+  typeString, typeDoc, TypedValue(..), valPrec, valDoc, Binding(..), 
+  TypedVar(..), getVarData, varBind, varType, varDoc, typeToVal, typeToVar, 
+  valToType)
 import GOOL.Drasil.Helpers (angles, 
   doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getInnerType, 
   getNestDegree, convType)
@@ -192,9 +192,9 @@ printListDoc :: (RenderSym repr) => Integer -> repr (Value repr Other) ->
   repr (Statement repr)
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
   for (varDecDef i (litInt 0)) (valueOf i ?< (listSize v #- litInt 1))
-    (i &++) (bodyStatements [{-FIXME prFn (listAccess v (valueOf i)),-} prStrFn ", /f "]),
+    (i &++) (bodyStatements [{-FIXME prFn (listAccess v (valueOf i)),-} prStrFn ", "]), 
   {-ifNoElse [(listSize v ?> litInt 0, oneLiner $
-    prFn (listAccess v (listSize v #- litInt 1)))],-}
+    prFn (listAccess v (listSize v #- litInt 1)))],-} 
   prLnFn "]"]
   where l_i = "list_i" ++ show n
         i = var l_i S.int
@@ -1254,10 +1254,10 @@ surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
 surroundBody p b a = prependToBody p (appendToBody b a)
 
 getterName :: String -> String
-getterName s = "Get" ++ capitalize s
+getterName s = "get" ++ capitalize s
 
 setterName :: String -> String
-setterName s = "Set" ++ capitalize s
+setterName s = "set" ++ capitalize s
 
 setMainMethod :: MethodData -> MethodData
 setMainMethod (MthD _ ps d) = MthD True ps d

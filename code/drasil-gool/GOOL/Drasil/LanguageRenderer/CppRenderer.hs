@@ -11,16 +11,16 @@ module GOOL.Drasil.LanguageRenderer.CppRenderer (
 import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label,
-  ProgramSym(..), RenderSym(..), InternalFile(..),
-  KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..),
-  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
+  InternalFile(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
+  BlockSym(..), ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), 
+  BinaryOpSym(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), InternalMethod(..), StateVarSym(..), ClassSym(..), 
+  ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, 
@@ -242,6 +242,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
   variableDoc v = variableDoc $ pfst v
 
+instance (Pair p) => InternalVariable (p CppSrcCode CppHdrCode) where
   varFromData b n t d = pair (varFromData b n (pfst t) d) 
     (varFromData b n (psnd t) d)
 
@@ -805,7 +806,8 @@ instance VariableSym CppSrcCode where
     (getTypeString c ++ "::" ++ variableName v) (variableType v) 
     (cppClassVar (getTypeDoc c) (variableDoc v)))
   objVar = objVarD
-  objVarSelf _ = var
+  objVarSelf _ n t = liftA2 (mkVar ("this->"++n)) t (return $ text "this->" <> 
+    text n)
   listVar = listVarD
   listOf = listOfD
   iterVar l t = liftA2 (mkVar l) (iterator t) (return $ text $ "(*" ++ l ++ ")")
@@ -816,7 +818,8 @@ instance VariableSym CppSrcCode where
   variableName = varName . unCPPSC
   variableType = fmap varToType
   variableDoc = varDoc . unCPPSC
-  
+
+instance InternalVariable CppSrcCode where
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym CppSrcCode where
@@ -1113,10 +1116,12 @@ instance MethodSym CppSrcCode where
   method n c s p t = intMethod n c s p (mType t)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
-    where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
+    where getBody = oneLiner $ returnState (valueOf $ objVarSelf c 
+            (variableName v) (variableType v))
   setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
     [param v] setBody
-    where setBody = oneLiner $ (self c $-> v) &= valueOf v
+    where setBody = oneLiner $ objVarSelf c (variableName v) (variableType v) 
+            &= valueOf v
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = intMethod n n public dynamic_ (construct n)
@@ -1383,6 +1388,7 @@ instance VariableSym CppHdrCode where
   variableType = fmap varToType
   variableDoc = varDoc . unCPPHC
 
+instance InternalVariable CppHdrCode where
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym CppHdrCode where

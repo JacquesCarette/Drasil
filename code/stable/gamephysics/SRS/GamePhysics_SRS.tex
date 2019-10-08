@@ -77,6 +77,8 @@ ${\mathbf{a}_{i}}$ & The I-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2
 \\
 ${C_{\text{R}}}$ & Coefficient of restitution & --
 \\
+${d_{j}}$ & Distance Between the J-Th Particle and the Axis of Rotation & m
+\\
 $\mathbf{F}$ & Force & N
 \\
 ${\mathbf{F}_{1}}$ & Force exerted by the first body (on another body) & N
@@ -133,19 +135,17 @@ ${\mathbf{p}_{\text{CM}}}$ & Center of Mass & m
 \\
 ${\mathbf{p}_{j}}$ & Position Vector of the J-Th Particle & m
 \\
-${r_{j}}$ & Distance Between the J-Th Particle and the Axis of Rotation & m
-\\
-$\mathbf{r}$ & Displacement & m
-\\
-$\mathbf{r}\text{(}t\text{)}$ & Linear Displacement & m
-\\
-${\mathbf{r}_{\text{O}\text{B}}}$ & Displacement vector between the origin and point B & m
-\\
 $\mathbf{\hat{r}}$ & Unit vector directed from the center of the large mass to the center of the smaller mass & m
 \\
 $t$ & Time & s
 \\
 ${t_{\text{c}}}$ & Denotes the time at collision & s
+\\
+$\mathbf{u}$ & Displacement & m
+\\
+$\mathbf{u}\text{(}t\text{)}$ & Linear Displacement & m
+\\
+${\mathbf{u}_{\text{O}\text{B}}}$ & Displacement vector between the origin and point B & m
 \\
 $\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
@@ -177,9 +177,9 @@ $\text{||}\mathbf{n}\text{||}$ & Length of the Normal Vector & m
 \\
 $\text{||}\mathbf{r}\text{||}$ & Euclidean norm of the displacement & m
 \\
-$\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}$ & Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body A & m
+$\text{||}{\mathbf{u}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}$ & Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body A & m
 \\
-$\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}$ & Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body B & m
+$\text{||}{\mathbf{u}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}$ & Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body B & m
 \\
 ${\text{||}\mathbf{r}\text{||}^{2}}$ & Squared distance & $\text{m}^{2}$
 \\
@@ -433,7 +433,7 @@ Label & Newton's law of universal gravitation
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{F}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{r}\text{||}^{2}} \frac{\mathbf{r}}{\text{||}\mathbf{r}\text{||}}
+           \mathbf{F}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{r}\text{||}^{2}} \frac{\mathbf{u}}{\text{||}\mathbf{r}\text{||}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -443,12 +443,12 @@ Description & \begin{symbDescription}
               \item{${m_{2}}$ is the mass of the second body (kg)}
               \item{$\text{||}\mathbf{r}\text{||}$ is the Euclidean norm of the displacement (m)}
               \item{$\mathbf{\hat{r}}$ is the unit vector directed from the center of the large mass to the center of the smaller mass (m)}
-              \item{$\mathbf{r}$ is the displacement (m)}
+              \item{$\mathbf{u}$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$, and inversely proportional to the squared distance ${\text{||}\mathbf{r}\text{||}^{2}}$ between them.
         
-        The vector $\mathbf{r}$ is the displacement between the centres of the rigid bodies and $\text{||}\mathbf{r}\text{||}$ is the absolute distance between the two.
+        The vector $\mathbf{u}$ is the displacement between the centres of the rigid bodies and $\text{||}\mathbf{r}\text{||}$ is the absolute distance between the two.
         
         $\mathbf{\hat{r}}$ is equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above.
         
@@ -514,14 +514,22 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
+<<<<<<< HEAD
            \mathbf{g}=-\frac{G M}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}
+=======
+           \mathbf{g}=-\frac{G M}{\mathbf{u}^{2}} \mathbf{\hat{r}}
+>>>>>>> master
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$)}
               \item{$M$ is the mass of the larger rigid body (kg)}
+<<<<<<< HEAD
               \item{$\text{||}\mathbf{r}\text{||}$ is the Euclidean norm of the displacement (m)}
+=======
+              \item{$\mathbf{u}$ is the displacement (m)}
+>>>>>>> master
               \item{$\mathbf{\hat{r}}$ is the unit vector directed from the center of the large mass to the center of the smaller mass (m)}
               \end{symbDescription}
 \\ \midrule \\
@@ -578,7 +586,7 @@ Units & Ns
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}
+           j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{u}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{u}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -589,9 +597,9 @@ Description & \begin{symbDescription}
               \item{${m_{\text{A}}}$ is the mass of rigid body A (kg)}
               \item{${m_{\text{B}}}$ is the mass of rigid body B (kg)}
               \item{$\text{||}\mathbf{n}\text{||}$ is the length of the normal vector (m)}
-              \item{$\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}$ is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)}
+              \item{$\text{||}{\mathbf{u}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}$ is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)}
               \item{${\mathbf{I}_{\text{A}}}$ is the moment of inertia of rigid body A (kg$\text{m}^{2}$)}
-              \item{$\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}$ is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)}
+              \item{$\text{||}{\mathbf{u}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}$ is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)}
               \item{${\mathbf{I}_{\text{B}}}$ is the moment of inertia of rigid body B (kg$\text{m}^{2}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -666,18 +674,18 @@ RefBy & \hyperref[IM:transMot]{IM: transMot} and \hyperref[IM:col2D]{IM: col2D}
 Label & Linear Displacement
         
 \\ \midrule \\
-Symbol & $\mathbf{r}\text{(}t\text{)}$
+Symbol & $\mathbf{u}\text{(}t\text{)}$
          
 \\ \midrule \\
 Units & m
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{r}\text{(}t\text{)}=\frac{\,d\mathbf{p}\left(t\right)}{\,dt}
+           \mathbf{u}\text{(}t\text{)}=\frac{\,d\mathbf{p}\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\mathbf{r}\text{(}t\text{)}$ is the linear displacement (m)}
+              \item{$\mathbf{u}\text{(}t\text{)}$ is the linear displacement (m)}
               \item{$t$ is the time (s)}
               \item{$\mathbf{p}$ is the position (m)}
               \end{symbDescription}
@@ -712,13 +720,13 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{v}\text{(}t\text{)}=\frac{\,d\mathbf{r}\left(t\right)}{\,dt}
+           \mathbf{v}\text{(}t\text{)}=\frac{\,d\mathbf{u}\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{v}\text{(}t\text{)}$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (s)}
-              \item{$\mathbf{r}$ is the displacement (m)}
+              \item{$\mathbf{u}$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}).
@@ -907,17 +915,17 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{v}_{\text{B}}}={\mathbf{v}_{\text{O}}}+ω\times{\mathbf{r}_{\text{O}\text{B}}}
+           {\mathbf{v}_{\text{B}}}={\mathbf{v}_{\text{O}}}+ω\times{\mathbf{u}_{\text{O}\text{B}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${\mathbf{v}_{\text{B}}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
               \item{${\mathbf{v}_{\text{O}}}$ is the velocity at point origin ($\frac{\text{m}}{\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${\mathbf{r}_{\text{O}\text{B}}}$ is the displacement vector between the origin and point B (m)}
+              \item{${\mathbf{u}_{\text{O}\text{B}}}$ is the displacement vector between the origin and point B (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The linear velocity ${\mathbf{v}_{\text{B}}}$ of any point B in a rigid body is the sum of the linear velocity ${\mathbf{v}_{\text{O}}}$ of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ and the displacement vector between the origin and point B ${\mathbf{r}_{\text{O}\text{B}}}$.
+Notes & The linear velocity ${\mathbf{v}_{\text{B}}}$ of any point B in a rigid body is the sum of the linear velocity ${\mathbf{v}_{\text{O}}}$ of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ and the displacement vector between the origin and point B ${\mathbf{u}_{\text{O}\text{B}}}$.
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}).
         
@@ -948,12 +956,12 @@ Units & Nm
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{τ}=\mathbf{r}\times\mathbf{F}
+           \mathbf{τ}=\mathbf{u}\times\mathbf{F}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{τ}$ is the torque (Nm)}
-              \item{$\mathbf{r}$ is the displacement (m)}
+              \item{$\mathbf{u}$ is the displacement (m)}
               \item{$\mathbf{F}$ is the force (N)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1206,13 +1214,13 @@ Units & kg$\text{m}^{2}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{I}=\displaystyle\sum{{m_{j}} {r_{j}}^{2}}
+           \mathbf{I}=\displaystyle\sum{{m_{j}} {d_{j}}^{2}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
               \item{${m_{j}}$ is the mass of the j-th particle (kg)}
-              \item{${r_{j}}$ is the distance between the j-th particle and the axis of rotation (m)}
+              \item{${d_{j}}$ is the distance between the j-th particle and the axis of rotation (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The moment of inertia $\mathbf{I}$ of a body measures how much torque is needed for the body to achieve angular acceleration about the axis of rotation.

@@ -10,16 +10,16 @@ module GOOL.Drasil.LanguageRenderer.CSharpRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label,
-  ProgramSym(..), RenderSym(..), InternalFile(..),
-  KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
+  InternalFile(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
+  BlockSym(..), ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), 
+  BinaryOpSym(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), InternalMethod(..), StateVarSym(..), ClassSym(..), 
+  ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD, 
   enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, oneLinerD, 
   outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
@@ -228,7 +228,8 @@ instance VariableSym CSharpCode where
   variableName = varName . unCSC
   variableType = fmap varType
   variableDoc = varDoc . unCSC
-  
+
+instance InternalVariable CSharpCode where
   varFromData b n t d = liftA2 (vard b n) t (return d)
 
 instance ValueSym CSharpCode where
@@ -502,8 +503,7 @@ instance ParameterSym CSharpCode where
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
-  method n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
-    (liftA5 (methodDocD n) s p (mType t) (liftList paramListDocD ps) b)
+  method n l s p t = intMethod n l s p (mType t)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)

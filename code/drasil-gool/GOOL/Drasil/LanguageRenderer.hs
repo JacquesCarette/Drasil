@@ -48,11 +48,11 @@ import GOOL.Drasil.Symantics (Label, Library,
   RenderSym(..), BodySym(..), BlockSym(..), PermanenceSym(..),
   TypeSym(Type, getType, getTypeString, getTypeDoc, bool, float, string, infile,
     outfile, listType, listInnerType, obj, enumType, iterator, void), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ParameterSym(..), MethodSym(..), 
-  InternalMethod(..), BlockCommentSym(..))
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
   ModData(..), updateModDoc, MethodData(..), OpData(..), od, ParamData(..), pd, 
@@ -186,7 +186,7 @@ printListDoc :: (RenderSym repr) => Integer -> repr (Value repr) ->
   repr (Statement repr)
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
   for (varDecDef i (litInt 0)) (valueOf i ?< (listSize v #- litInt 1))
-    (i &++) (bodyStatements [prFn (listAccess v (valueOf i)), prStrFn ", /f "]), 
+    (i &++) (bodyStatements [prFn (listAccess v (valueOf i)), prStrFn ", "]), 
   ifNoElse [(listSize v ?> litInt 0, oneLiner $
     prFn (listAccess v (listSize v #- litInt 1)))], 
   prLnFn "]"]
@@ -1234,10 +1234,10 @@ surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
 surroundBody p b a = prependToBody p (appendToBody b a)
 
 getterName :: String -> String
-getterName s = "Get" ++ capitalize s
+getterName s = "get" ++ capitalize s
 
 setterName :: String -> String
-setterName s = "Set" ++ capitalize s
+setterName s = "set" ++ capitalize s
 
 setMainMethod :: MethodData -> MethodData
 setMainMethod (MthD _ ps d) = MthD True ps d

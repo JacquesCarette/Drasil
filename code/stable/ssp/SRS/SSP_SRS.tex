@@ -149,8 +149,6 @@ $\mathbf{R}$ & Resistive Shear Forces Without the Influence of Interslice Forces
 \\
 $r$ & Length of the Moment Arm: The distance between a force causing rotation and the axis of rotation. & m
 \\
-$\mathbf{r}$ & Displacement: The change in an object's location relative to a reference point. & m
-\\
 $S$ & Mobilized Shear Force: The shear force in the direction of potential motion. & N
 \\
 $\mathbf{S}$ & Mobilized Shear Forces: The mobilized shear forces per meter in the $z$-direction for each slice. & $\frac{\text{N}}{\text{m}}$
@@ -162,6 +160,8 @@ ${\mathbf{U}_{\text{b}}}$ & Base Hydrostatic Forces: The forces per meter in the
 ${\mathbf{U}_{\text{g}}}$ & Surface Hydrostatic Forces: The forces per meter in the $z$-direction from water pressure acting into each slice from standing water on the slope surface. & $\frac{\text{N}}{\text{m}}$
 \\
 $u$ & Pore Pressure: The pressure that comes from water within the soil. & Pa
+\\
+$\mathbf{u}$ & Displacement: The change in an object's location relative to a reference point. & m
 \\
 $V$ & Volume: The amount of space that a substance or object occupies. & $\text{m}^{3}$
 \\
@@ -1020,7 +1020,7 @@ RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}
 Moment is equal to torque, so the equation from \hyperref[DD:torque]{DD: torque} will be used to calculate moments:
 
 \begin{displaymath}
-\mathbf{τ}=\mathbf{r}\times\mathbf{F}
+\mathbf{τ}=\mathbf{u}\times\mathbf{F}
 \end{displaymath}
 Considering one dimension, with moments in the clockwise direction as positive and moments in the counterclockwise direction as negative, and replacing the torque symbol with the moment symbol, the equation simplifies to:
 
@@ -1714,12 +1714,12 @@ Units & Nm
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{τ}=\mathbf{r}\times\mathbf{F}
+           \mathbf{τ}=\mathbf{u}\times\mathbf{F}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{τ}$ is the torque (Nm)}
-              \item{$\mathbf{r}$ is the displacement (m)}
+              \item{$\mathbf{u}$ is the displacement (m)}
               \item{$\mathbf{F}$ is the force (N)}
               \end{symbDescription}
 \\ \midrule \\

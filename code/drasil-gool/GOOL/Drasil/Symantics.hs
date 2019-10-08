@@ -6,8 +6,8 @@ module GOOL.Drasil.Symantics (
   -- Typeclasses
   ProgramSym(..), RenderSym(..), InternalFile(..),  KeywordSym(..), 
   PermanenceSym(..), BodySym(..), ControlBlockSym(..), BlockSym(..), 
-  TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
-  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
@@ -89,7 +89,7 @@ class (StatementSym repr) => BlockSym repr where
 
   docBlock :: Doc -> repr (Block repr)
 
-class (PermanenceSym repr) => TypeSym repr where
+class (PermanenceSym repr, InternalType repr) => TypeSym repr where
   type Type repr
   bool          :: repr (Type repr)
   int           :: repr (Type repr)
@@ -108,6 +108,9 @@ class (PermanenceSym repr) => TypeSym repr where
   getType :: repr (Type repr) -> CodeType
   getTypeString :: repr (Type repr) -> String
   getTypeDoc :: repr (Type repr) -> Doc
+
+class InternalType repr where
+  typeFromData :: CodeType -> String -> Doc -> repr (Type repr)
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, repr (Body repr))] -> 
@@ -576,15 +579,14 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
 
 class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   BodySym repr, BlockCommentSym repr) => InternalMethod repr where
-  intMethod      :: Label -> Label -> repr (Scope repr) -> 
+  intMethod      :: Bool -> Label -> Label -> repr (Scope repr) -> 
     repr (Permanence repr) -> repr (MethodType repr) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
-  intFunc      :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
+  intFunc      :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
+    -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr)
   commentedFunc :: repr (BlockComment repr) -> repr (Method repr) -> 
     repr (Method repr)
-  
 
 class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr) => 
   StateVarSym repr where

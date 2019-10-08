@@ -12,19 +12,19 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), 
-  BinaryOpSym(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), InternalMethod(..), StateVarSym(..), ClassSym(..), 
-  ModuleSym(..), BlockCommentSym(..))
+  BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
+  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD, 
   enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, oneLinerD, 
   outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
   stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, 
-  voidDocD, paramDocD, paramListDocD, mkParam, 
+  voidDocD, destructorError, paramDocD, paramListDocD, mkParam, 
   methodDocD, methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, 
   ifCondDocD, forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, 
   checkStateD, notifyObserversD, varDecDocD, varDecDefDocD, listDecDocD, 
@@ -53,11 +53,14 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD,
   elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr, appendToBody, 
   surroundBody, getterName, setterName, setMainMethod, filterOutObjs)
-import qualified GOOL.Drasil.Generic as G (construct, method)
+import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
+  setMethod, privMethod, pubMethod, constructor, docMain, function, 
+  mainFunction, docFunc, docInOutFunc, intFunc)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
-  ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), 
-  ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
-  ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
+  ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
+  OpData(..), ParamData(..), pd, updateParamDoc, ProgData(..), progD, 
+  TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
+  vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftA7, 
   liftList, lift1List, lift4Pair, liftPair, liftPairFst, checkParams)
 
@@ -167,6 +170,9 @@ instance TypeSym CSharpCode where
   getType = cType . unCSC
   getTypeString = typeString . unCSC
   getTypeDoc = typeDoc . unCSC
+  
+instance InternalType CSharpCode where
+  typeFromData t s d = return $ td t s d
 
 instance ControlBlockSym CSharpCode where
   runStrategy = runStrategyD
@@ -505,27 +511,19 @@ instance ParameterSym CSharpCode where
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
   method = G.method
-  getMethod c v = method (getterName $ variableName v) c public dynamic_ 
-    (variableType v) [] getBody
-    where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
-  setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
-    [param v] setBody
-    where setBody = oneLiner $ (self c $-> v) &= valueOf v
-  privMethod n c = method n c private dynamic_
-  pubMethod n c = method n c public dynamic_
-  constructor n = intMethod n n public dynamic_ (construct n)
-  destructor _ _ = error "Destructors not allowed in C#"
+  getMethod = G.getMethod
+  setMethod = G.setMethod
+  privMethod = G.privMethod
+  pubMethod = G.pubMethod
+  constructor n = G.constructor n n
+  destructor _ _ = error $ destructorError csName
 
-  docMain b = commentedFunc (docComment $ functionDox 
-    "Controls the flow of the program" 
-    [("args", "List of command-line arguments")] []) (mainFunction b)
+  docMain = G.docMain
  
-  function n s p t = intFunc n s p (mType t)
-  mainFunction b = setMainMethod <$> function "Main" public static_ void 
-    [liftA2 pd (var "args" (listType static_ string)) 
-    (return $ text "string[] args")] b
+  function = G.function
+  mainFunction = G.mainFunction string "Main"
 
-  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
+  docFunc = G.docFunc
 
   inOutFunc n s p ins [v] [] b = function n s p (variableType v) (map param ins)
    (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
@@ -537,22 +535,15 @@ instance MethodSym CSharpCode where
     (updateParamDoc csRef) . param) both ++ map param ins ++ 
     map (fmap (updateParamDoc csOut) . param) outs) b
 
-  docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
-    (inOutFunc n s p (map snd is) [snd o] [] b)
-  docInOutFunc n s p desc is [] [both] b = docFuncRepr desc (map fst (both : 
-    is)) [fst both | not ((isObject . getType . variableType . snd) both)] 
-    (inOutFunc n s p (map snd is) [] [snd both] b)
-  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst (is ++ os ++ 
-    bs)) [] (inOutFunc n s p (map snd is) (map snd os) (map snd bs) b)
+  docInOutFunc = G.docInOutFunc
   
   parameters m = map return $ (mthdParams . unCSC) m
 
 instance InternalMethod CSharpCode where
-  intMethod n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps)
+  intMethod m n _ s p t ps b = liftA2 (mthd m) (checkParams n <$> sequence ps)
     (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
-  intFunc n = intMethod n ""
-  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
-    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+  intFunc = G.intFunc
+  commentedFunc cmt = liftA2 updateMthdDoc (fmap commentedItem cmt)
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc

@@ -11,17 +11,17 @@ import Utils.Drasil (blank, indent)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), 
-  BinaryOpSym(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), InternalMethod(..), StateVarSym(..), ClassSym(..), 
-  ModuleSym(..), BlockCommentSym(..))
+  BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
+  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD', 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
-  floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, 
+  floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, destructorError,
   paramListDocD, mkParam, methodListDocD, stateVarListDocD, 
   ifCondDocD, runStrategyD, checkStateD, multiAssignDoc, plusEqualsDocD', 
   plusPlusDocD', returnDocD, commentDocD, mkStNoEnd, stringListVals', 
@@ -46,11 +46,12 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD',
   observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
   commentedModD, docFuncRepr, valList, surroundBody, getterName, setterName, 
   filterOutObjs)
-import qualified GOOL.Drasil.Generic as G (construct, method)
+import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
+  setMethod, privMethod, pubMethod, constructor, function, docFunc)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
-  ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), 
-  ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
-  VarData(..), vard)
+  ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc,
+  OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
+  vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, 
   emptyIfEmpty, liftA4, liftA5, liftA6, liftList, lift1List, lift2Lists, 
   lift4Pair, liftPair, liftPairFst, checkParams)
@@ -161,6 +162,9 @@ instance TypeSym PythonCode where
   getType = cType . unPC
   getTypeString = typeString . unPC
   getTypeDoc = typeDoc . unPC
+
+instance InternalType PythonCode where
+  typeFromData t s d = return $ td t s d
 
 instance ControlBlockSym PythonCode where
   runStrategy = runStrategyD
@@ -505,23 +509,19 @@ instance ParameterSym PythonCode where
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
   method = G.method
-  getMethod c v = method (getterName $ variableName v) c public dynamic_ 
-    (variableType v) [] getBody
-    where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
-  setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
-    [param v] setBody
-    where setBody = oneLiner $ (self c $-> v) &= valueOf v
-  privMethod n c = method n c private dynamic_
-  pubMethod n c = method n c public dynamic_
-  constructor n = intMethod initName n public dynamic_ (construct n)
-  destructor _ _ = error "Destructors not allowed in Python"
+  getMethod = G.getMethod
+  setMethod = G.setMethod
+  privMethod = G.privMethod
+  pubMethod = G.pubMethod
+  constructor = G.constructor initName
+  destructor _ _ = error $ destructorError pyName
 
   docMain = mainFunction
 
-  function n s p t = intFunc n s p (mType t)
+  function = G.function
   mainFunction = fmap (mthd True [])
 
-  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
+  docFunc = G.docFunc
 
   inOutFunc n s p ins [] [] b = function n s p void (map param ins) b
   inOutFunc n s p ins outs both b = function n s p void (map 
@@ -537,12 +537,11 @@ instance MethodSym PythonCode where
   parameters m = map return $ (mthdParams . unPC) m
 
 instance InternalMethod PythonCode where
-  intMethod n l _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps)
+  intMethod m n l _ _ _ ps b = liftA2 (mthd m) (checkParams n <$> sequence ps)
     (liftA3 (pyMethod n) (self l) (liftList paramListDocD ps) b)
-  intFunc n _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
+  intFunc m n _ _ _ ps b = liftA2 (mthd m) (checkParams n <$> sequence ps) 
     (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
-  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
-    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+  commentedFunc cmt = liftA2 updateMthdDoc (fmap commentedItem cmt)
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc

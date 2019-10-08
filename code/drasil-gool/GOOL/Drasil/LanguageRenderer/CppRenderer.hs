@@ -13,14 +13,14 @@ import Utils.Drasil (blank, indent, indentList)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), 
-  BinaryOpSym(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), InternalMethod(..), StateVarSym(..), ClassSym(..), 
-  ModuleSym(..), BlockCommentSym(..))
+  BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
+  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, 
@@ -51,7 +51,9 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc,
   moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
   getterName, setterName, filterOutObjs)
-import qualified GOOL.Drasil.Generic as G (construct, method)
+import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
+  setMethod, privMethod, pubMethod, constructor, function, docFunc, 
+  docInOutFunc, intFunc)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileData(..), srcFile, hdrFile, FuncData(..),
   fd, ModData(..), md, updateModDoc, OpData(..), od, ParamData(..), pd, 
@@ -169,6 +171,9 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   getType s = getType $ pfst s
   getTypeString s = getTypeString $ pfst s
   getTypeDoc s = getTypeDoc $ pfst s
+  
+instance (Pair p) => InternalType (p CppSrcCode CppHdrCode) where
+  typeFromData t s d = pair (typeFromData t s d) (typeFromData t s d)
 
 instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
   runStrategy l strats rv av = pair (runStrategy l (map (mapPairSnd pfst) 
@@ -596,11 +601,12 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   parameters m = pairList (parameters $ pfst m) (parameters $ psnd m)
 
 instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
-  intMethod n c s p t ps b = pair (intMethod n c (pfst s) (pfst p) (pfst t) 
-    (map pfst ps) (pfst b)) (intMethod n c (psnd s) (psnd p) (psnd t) 
+  intMethod m n c s p t ps b = pair (intMethod m n c (pfst s) (pfst p) (pfst t) 
+    (map pfst ps) (pfst b)) (intMethod m n c (psnd s) (psnd p) (psnd t) 
     (map psnd ps) (psnd b))
-  intFunc n s p t ps b = pair (intFunc n (pfst s) (pfst p) (pfst t) (map pfst
-    ps) (pfst b)) (intFunc n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
+  intFunc m n s p t ps b = pair (intFunc m n (pfst s) (pfst p) (pfst t) (map 
+    pfst ps) (pfst b)) (intFunc m n (psnd s) (psnd p) (psnd t) (map psnd ps) 
+    (psnd b))
   commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
     (commentedFunc (psnd cmt) (psnd fn)) 
 
@@ -746,6 +752,9 @@ instance TypeSym CppSrcCode where
   getType = cType . unCPPSC
   getTypeString = typeString . unCPPSC
   getTypeDoc = typeDoc . unCPPSC
+  
+instance InternalType CppSrcCode where
+  typeFromData t s d = return $ td t s d
 
 instance ControlBlockSym CppSrcCode where
   runStrategy = runStrategyD
@@ -1106,17 +1115,11 @@ instance ParameterSym CppSrcCode where
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
   method = G.method
-  getMethod c v = method (getterName $ variableName v) c public dynamic_ 
-    (variableType v) [] getBody
-    where getBody = oneLiner $ returnState (valueOf $ objVarSelf c 
-            (variableName v) (variableType v))
-  setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
-    [param v] setBody
-    where setBody = oneLiner $ objVarSelf c (variableName v) (variableType v) 
-            &= valueOf v
-  privMethod n c = method n c private dynamic_
-  pubMethod n c = method n c public dynamic_
-  constructor n = intMethod n n public dynamic_ (construct n)
+  getMethod = G.getMethod
+  setMethod = G.setMethod
+  privMethod = G.privMethod
+  pubMethod = G.pubMethod
+  constructor n = G.constructor n n
   destructor n vs = 
     let i = var "i" int
         deleteStatements = map (fmap destructSts) vs
@@ -1131,7 +1134,7 @@ instance MethodSym CppSrcCode where
     [("argc", "Number of command-line arguments"),
     ("argv", "List of command-line arguments")] ["exit code"]) (mainFunction b)
 
-  function n s p t = intFunc n s p (mType t)
+  function = G.function
   mainFunction b = setMainMethod <$> function "main" public static_ int 
     [param $ var "argc" int, 
     liftA2 pd (var "argv" (listType static_ string)) 
@@ -1150,21 +1153,15 @@ instance MethodSym CppSrcCode where
   inOutFunc n s p ins outs both b = function n s p void (map pointerParam both 
     ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
-  docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
-    (inOutFunc n s p (map snd is) [snd o] [] b)
-  docInOutFunc n s p desc is [] [both] b = docFuncRepr desc (map fst $ both : 
-    is) [fst both | not ((isObject . getType . variableType . snd) both)]
-    (inOutFunc n s p (map snd is) [] [snd both] b)
-  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ 
-    os) [] (inOutFunc n s p (map snd is) (map snd os) (map snd bs) b)
+  docInOutFunc = G.docInOutFunc
 
   parameters m = map return $ (mthdParams . unCPPSC) m
 
 instance InternalMethod CppSrcCode where
-  intMethod n c s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n 
+  intMethod m n c s _ t ps b = liftA3 (mthd m) (fmap snd s) (checkParams n 
     <$> sequence ps) (liftA5 (cppsMethod n c) t (liftList paramListDocD ps) b 
     blockStart blockEnd)
-  intFunc n s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n <$> 
+  intFunc m n s _ t ps b = liftA3 (mthd m) (fmap snd s) (checkParams n <$> 
     sequence ps) (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b 
     blockStart blockEnd)
   commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
@@ -1316,6 +1313,9 @@ instance TypeSym CppHdrCode where
   getType = cType . unCPPHC
   getTypeString = typeString . unCPPHC
   getTypeDoc = typeDoc . unCPPHC
+  
+instance InternalType CppHdrCode where
+  typeFromData t s d = return $ td t s d
 
 instance ControlBlockSym CppHdrCode where
   runStrategy _ _ _ _ = return empty
@@ -1647,17 +1647,17 @@ instance MethodSym CppHdrCode where
     (variableType v) [] (return empty)
   setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
     [param v] (return empty)
-  privMethod n c = method n c private dynamic_
-  pubMethod n c = method n c public dynamic_
-  constructor n = intMethod n n public dynamic_ (construct n)
+  privMethod = G.privMethod
+  pubMethod = G.pubMethod
+  constructor n = G.constructor n n
   destructor n _ = pubMethod ('~':n) n void [] (return empty)
 
   docMain = mainFunction
 
-  function n s p t = intFunc n s p (mType t)
+  function = G.function
   mainFunction _ = return (mthd True Pub [] empty)
 
-  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
+  docFunc = G.docFunc
 
   inOutFunc n s p ins [v] [] b = function n s p (variableType v) 
     (map (fmap getParam) ins) b
@@ -1666,21 +1666,15 @@ instance MethodSym CppHdrCode where
   inOutFunc n s p ins outs both b = function n s p void (map pointerParam both 
     ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
-  docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
-    (inOutFunc n s p (map snd is) [snd o] [] b)
-  docInOutFunc n s p desc is [] [both] b = docFuncRepr desc (map fst $ both : 
-    is) [fst both | not ((isObject . getType . variableType . snd) both)] 
-    (inOutFunc n s p (map snd is) [] [snd both] b)
-  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ 
-    os) [] (inOutFunc n s p (map snd is) (map snd os) (map snd bs) b)
+  docInOutFunc = G.docInOutFunc
     
   parameters m = map return $ (mthdParams . unCPPHC) m
 
 instance InternalMethod CppHdrCode where
-  intMethod n _ s _ t ps _ = liftA3 (mthd False) (fmap snd s) (checkParams n <$>
+  intMethod m n _ s _ t ps _ = liftA3 (mthd m) (fmap snd s) (checkParams n <$>
     sequence ps) (liftA3 (cpphMethod n) t (liftList paramListDocD ps) 
     endStatement)
-  intFunc n = intMethod n ""
+  intFunc = G.intFunc
   commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

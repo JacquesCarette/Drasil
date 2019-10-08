@@ -12,18 +12,18 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), 
-  BinaryOpSym(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), InternalMethod(..), StateVarSym(..), ClassSym(..), 
-  ModuleSym(..), BlockCommentSym(..))
+  BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..),
+  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD, 
   classDocD, enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
   oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
-  typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD,
+  typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, destructorError,
   paramDocD, paramListDocD, mkParam, methodListDocD, stateVarDocD, 
   stateVarDefDocD, stateVarListDocD, ifCondDocD, forDocD, forEachDocD, 
   whileDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, 
@@ -52,11 +52,13 @@ import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc,
   moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
   getterName, setterName, setMainMethod, intValue, filterOutObjs)
-import qualified GOOL.Drasil.Generic as G (construct, method)
+import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
+  setMethod, privMethod, pubMethod, constructor, docMain, function, 
+  mainFunction, docFunc, intFunc)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
-  ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), 
-  ParamData(..), pd, ProgData(..), progD, TypeData(..), td, ValData(..), vd,
-  VarData(..), vard)
+  ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
+  OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), td, 
+  ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, liftA4, liftA5, liftA6, 
   liftA7, liftList, lift1List, lift4Pair, liftPair, liftPairFst, checkParams)
 
@@ -166,6 +168,9 @@ instance TypeSym JavaCode where
   getType = cType . unJC
   getTypeString = typeString . unJC
   getTypeDoc = typeDoc . unJC
+  
+instance InternalType JavaCode where
+  typeFromData t s d = return $ td t s d
 
 instance ControlBlockSym JavaCode where
   runStrategy = runStrategyD
@@ -502,27 +507,19 @@ instance ParameterSym JavaCode where
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData
   method = G.method
-  getMethod c v = method (getterName $ variableName v) c public dynamic_ 
-    (variableType v) [] getBody
-    where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
-  setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
-    [param v] setBody
-    where setBody = oneLiner $ (self c $-> v) &= valueOf v
-  privMethod n c = method n c private dynamic_
-  pubMethod n c = method n c public dynamic_
-  constructor n = intMethod n n public dynamic_ (construct n)
-  destructor _ _ = error "Destructors not allowed in Java"
+  getMethod = G.getMethod
+  setMethod = G.setMethod
+  privMethod = G.privMethod
+  pubMethod = G.pubMethod
+  constructor n = G.constructor n n
+  destructor _ _ = error $ destructorError jName
 
-  docMain b = commentedFunc (docComment $ functionDox 
-    "Controls the flow of the program" 
-    [("args", "List of command-line arguments")] []) (mainFunction b)
+  docMain = G.docMain
 
-  function n s p t = intFunc n s p (mType t)
-  mainFunction b = setMainMethod <$> function "main" public static_ void 
-    [liftA2 pd (var "args" (listType static_ string)) 
-    (return $ text "String[] args")] b
+  function = G.function
+  mainFunction = G.mainFunction string "main"
 
-  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
+  docFunc = G.docFunc
 
   inOutFunc n s p ins [] [] b = function n s p void (map param ins) b
   inOutFunc n s p ins [v] [] b = function n s p (variableType v) 
@@ -568,11 +565,10 @@ instance MethodSym JavaCode where
   parameters m = map return $ (mthdParams . unJC) m
 
 instance InternalMethod JavaCode where
-  intMethod n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps)
+  intMethod m n _ s p t ps b = liftA2 (mthd m) (checkParams n <$> sequence ps)
     (liftA5 (jMethod n) s p t (liftList paramListDocD ps) b)
-  intFunc n = intMethod n ""
-  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
-    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+  intFunc = G.intFunc
+  commentedFunc cmt = liftA2 updateMthdDoc (fmap commentedItem cmt)
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc

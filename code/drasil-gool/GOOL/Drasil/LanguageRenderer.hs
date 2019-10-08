@@ -12,7 +12,7 @@ module GOOL.Drasil.LanguageRenderer (
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
   stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, destructorError,
   paramDocD, paramListDocD, mkParam, methodDocD, 
-  methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, stateVarListDocD,
+  methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD,
   alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
   tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
   plusPlusDocD, plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, 
@@ -34,7 +34,7 @@ module GOOL.Drasil.LanguageRenderer (
   staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD,
   funcDocD, 
   castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
-  castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
+  castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, 
   privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr,
   valList, prependToBody, appendToBody, surroundBody, getterName, setterName, 
@@ -277,11 +277,8 @@ methodListDocD ms = vibcat methods
 
 -- StateVar --
 
-stateVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
-stateVarDocD s p v end = s <+> p <+> typeDoc (varType v) <+> varDoc v <> end
-
-stateVarDefDocD :: Doc -> Doc -> Doc -> Doc
-stateVarDefDocD s p dec = s <+> p <+> dec
+stateVarDocD :: Doc -> Doc -> Doc -> Doc
+stateVarDocD s p dec = s <+> p <+> dec
 
 constVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
 constVarDocD s p v end = s <+> p <+> text "const" <+> typeDoc (varType v) <+>
@@ -1136,6 +1133,9 @@ staticDocD = text "static"
 
 dynamicDocD :: Doc
 dynamicDocD = empty
+
+bindingError :: String -> String
+bindingError l = "Binding unimplemented in " ++ l
 
 -- Jumps --
 

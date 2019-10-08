@@ -12,20 +12,21 @@ import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
-  InternalFile(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
+  InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
+  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..),
   UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, 
   listInnerTypeD, voidDocD, paramDocD, paramListDocD, mkParam, 
-  methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, alwaysDel, 
+  methodListDocD, stateVarDocD, constVarDocD, alwaysDel, 
   ifCondDocD, forDocD, whileDocD, runStrategyD, listSliceD, notifyObserversD, 
   varDecDocD, varDecDefDocD, objDecDefDocD, commentDocD, freeDocD, mkSt, 
   mkStNoEnd, stringListVals', stringListLists', stateD, loopStateD, emptyStateD,
@@ -53,7 +54,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   getterName, setterName, filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, function, docFunc, 
-  docInOutFunc, intFunc)
+  docInOutFunc, intFunc, privMVar, pubMVar, pubGVar)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileData(..), srcFile, hdrFile, FuncData(..),
   fd, ModData(..), md, updateModDoc, OpData(..), od, ParamData(..), pd, 
@@ -133,6 +134,10 @@ instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
   type Permanence (p CppSrcCode CppHdrCode) = BindData
   static_ = pair static_ static_
   dynamic_ = pair dynamic_ dynamic_
+
+instance (Pair p) => InternalPerm (p CppSrcCode CppHdrCode) where
+  permDoc p = permDoc $ pfst p
+  binding p = binding $ pfst p
 
 instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
   type Body (p CppSrcCode CppHdrCode) = Doc
@@ -552,6 +557,9 @@ instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
   private = pair private private
   public = pair public public
 
+instance (Pair p) => InternalScope (p CppSrcCode CppHdrCode) where
+  scopeDoc s = scopeDoc $ pfst s
+
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
   type MethodType (p CppSrcCode CppHdrCode) = TypeData
   mType t = pair (mType $ pfst t) (mType $ psnd t)
@@ -621,6 +629,9 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   privMVar del v = pair (privMVar del $ pfst v) (privMVar del $ psnd v)
   pubMVar del v = pair (pubMVar del $ pfst v) (pubMVar del $ psnd v)
   pubGVar del v = pair (pubGVar del $ pfst v) (pubGVar del $ psnd v)
+
+instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
+  stateVarFromData d = pair (stateVarFromData d) (stateVarFromData d)
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   -- Bool is True if the class is a main class, False otherwise
@@ -716,6 +727,10 @@ instance PermanenceSym CppSrcCode where
   type Permanence CppSrcCode = BindData
   static_ = return $ bd Static staticDocD
   dynamic_ = return $ bd Dynamic dynamicDocD
+  
+instance InternalPerm CppSrcCode where
+  permDoc = bindDoc . unCPPSC
+  binding = bind . unCPPSC
 
 instance BodySym CppSrcCode where
   type Body CppSrcCode = Doc
@@ -1099,6 +1114,9 @@ instance ScopeSym CppSrcCode where
   private = return (privateDocD, Priv)
   public = return (publicDocD, Pub)
 
+instance InternalScope CppSrcCode where
+  scopeDoc = fst . unCPPSC
+
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
   mType t = t
@@ -1178,9 +1196,12 @@ instance StateVarSym CppSrcCode where
   constVar del n s vr vl = liftA3 svd (fmap snd s)
     (liftA4 (cppsStateVarDef n (text "const")) static_ vr vl endStatement)
     (if del < alwaysDel then return (mkStNoEnd empty) else cppDestruct vr)
-  privMVar del = stateVar del private dynamic_
-  pubMVar del = stateVar del public dynamic_
-  pubGVar del = stateVar del public static_
+  privMVar = G.privMVar
+  pubMVar = G.pubMVar
+  pubGVar = G.pubGVar
+
+instance InternalStateVar CppSrcCode where
+  stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppSrcCode where
   -- Bool is True if the class is a main class, False otherwise
@@ -1277,6 +1298,10 @@ instance PermanenceSym CppHdrCode where
   type Permanence CppHdrCode = BindData
   static_ = return $ bd Static staticDocD
   dynamic_ = return $ bd Dynamic dynamicDocD
+
+instance InternalPerm CppHdrCode where
+  permDoc = bindDoc . unCPPHC
+  binding = bind . unCPPHC
 
 instance BodySym CppHdrCode where
   type Body CppHdrCode = Doc
@@ -1537,7 +1562,8 @@ instance StatementSym CppHdrCode where
   (&++) _ = return (mkStNoEnd empty)
   (&~-) _ = return (mkStNoEnd empty)
 
-  varDec _ = return (mkStNoEnd empty)
+  varDec v = mkSt <$> liftA3 varDecDocD v (bindDoc <$> static_) 
+    (bindDoc <$> dynamic_) 
   varDecDef v def = mkSt <$> liftA4 varDecDefDocD v def (bindDoc <$> static_)
     (bindDoc <$> dynamic_) 
   listDec _ _ = return (mkStNoEnd empty)
@@ -1627,6 +1653,9 @@ instance ScopeSym CppHdrCode where
   private = return (privateDocD, Priv)
   public = return (publicDocD, Pub)
 
+instance InternalScope CppHdrCode where
+  scopeDoc = fst . unCPPHC
+
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = TypeData
   mType t = t
@@ -1681,16 +1710,18 @@ instance InternalMethod CppHdrCode where
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
-  stateVar _ s p v = liftA3 svd (fmap snd s) (liftA3 (stateVarDocD empty) 
-    (bindDoc <$> p) v endStatement) (return (mkStNoEnd empty))
-  stateVarDef _ _ s p vr vl = liftA3 svd (fmap snd s) (liftA4 (cpphStateVarDef 
-    empty) p vr (fst <$> state (varDecDef vr vl)) endStatement) 
-    (return (mkStNoEnd empty))
+  stateVar _ s p v = liftA3 svd (fmap snd s) (return $ stateVarDocD empty 
+    (permDoc p) (statementDoc (state $ varDec v))) (return (mkStNoEnd empty))
+  stateVarDef _ _ s p vr vl = liftA3 svd (fmap snd s) (return $ cpphStateVarDef 
+    empty p vr vl) (return (mkStNoEnd empty))
   constVar _ _ s v _ = liftA3 svd (fmap snd s) (liftA3 (constVarDocD empty) 
     (bindDoc <$> static_) v endStatement) (return (mkStNoEnd empty))
-  privMVar del = stateVar del private dynamic_
-  pubMVar del = stateVar del public dynamic_
-  pubGVar del = stateVar del public static_
+  privMVar = G.privMVar
+  pubMVar = G.pubMVar
+  pubGVar = G.pubGVar
+
+instance InternalStateVar CppHdrCode where
+  stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppHdrCode where
   -- Bool is True if the class is a main class, False otherwise
@@ -1893,9 +1924,10 @@ cppsStateVarDef n cns p vr vl end = if bind p == Static then cns <+> typeDoc
   (varType vr) <+> text (n ++ "::") <> varDoc vr <+> equals <+> valDoc vl <>
   end else empty
 
-cpphStateVarDef :: Doc -> BindData -> VarData -> Doc -> Doc -> Doc
-cpphStateVarDef s p v asg end = if bind p == Static then 
-  stateVarDocD s (bindDoc p) v end else stateVarDefDocD s (bindDoc p) asg
+cpphStateVarDef :: (RenderSym repr) => Doc -> repr (Permanence repr) -> 
+  repr (Variable repr) -> repr (Value repr) -> Doc
+cpphStateVarDef s p vr vl = stateVarDocD s (permDoc p) (statementDoc $ state $ 
+  if binding p == Static then varDec vr else varDecDef vr vl) 
 
 cppDestruct :: CppSrcCode (Variable CppSrcCode) -> 
   CppSrcCode (Statement CppSrcCode)

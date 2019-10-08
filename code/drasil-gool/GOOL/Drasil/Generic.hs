@@ -2,20 +2,24 @@
 
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.Generic (
-  construct, method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc
+  construct, method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar,
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label,
-  RenderSym(..), BodySym(..), PermanenceSym(..), TypeSym(..), InternalType(..), 
-  VariableSym(..), ValueSym(..), StatementSym(..), ScopeSym(..), 
-  MethodTypeSym(mType), ParameterSym(..), MethodTypeSym(MethodType), 
-  MethodSym(Method, inOutFunc), InternalMethod(intMethod, commentedFunc))
+  RenderSym(..), BodySym(..), PermanenceSym(..), InternalPerm(..), TypeSym(..), 
+  InternalType(..), VariableSym(..), ValueSym(..), InternalStatement(..), 
+  StatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(mType), 
+  ParameterSym(..), MethodTypeSym(MethodType), MethodSym(Method, inOutFunc), 
+  InternalMethod(intMethod, commentedFunc), StateVarSym(StateVar), 
+  InternalStateVar(..), BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (MethodTypeSym(construct), 
-  MethodSym(method, mainFunction), InternalMethod(intFunc))
+  MethodSym(method, mainFunction), InternalMethod(intFunc), 
+  StateVarSym(stateVar))
 import GOOL.Drasil.Data (TypeData(..), td)
-import GOOL.Drasil.LanguageRenderer (docFuncRepr, functionDox, getterName, 
-  setterName)
+import GOOL.Drasil.LanguageRenderer (stateVarDocD, docFuncRepr, functionDox, 
+  getterName, setterName)
 
 import Prelude hiding (break,print,last,mod,(<>))
 import Data.Maybe (maybeToList)
@@ -93,3 +97,30 @@ intFunc :: (RenderSym repr) => Bool -> Label -> repr (Scope repr) ->
   repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] 
   -> repr (Body repr) -> repr (Method repr)
 intFunc m n = intMethod m n ""
+
+stateVar :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) ->
+  repr (Variable repr) -> repr (StateVar repr)
+stateVar s p v = stateVarFromData $ stateVarDocD (scopeDoc s) (permDoc p) 
+  (statementDoc (state $ varDec v))
+
+stateVarDef :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) 
+  -> repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr)
+stateVarDef s p vr vl = stateVarFromData $ stateVarDocD (scopeDoc s) (permDoc p)
+  (statementDoc (state $ varDecDef vr vl))
+
+constVar :: (RenderSym repr) => Doc -> repr (Scope repr) ->
+  repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr)
+constVar p s vr vl = stateVarFromData $ stateVarDocD (scopeDoc s) p 
+  (statementDoc (state $ constDecDef vr vl))
+
+privMVar :: (RenderSym repr) => Int -> repr (Variable repr) -> 
+  repr (StateVar repr)
+privMVar del = S.stateVar del private dynamic_
+
+pubMVar :: (RenderSym repr) => Int -> repr (Variable repr) -> 
+  repr (StateVar repr)
+pubMVar del = S.stateVar del public dynamic_
+
+pubGVar :: (RenderSym repr) => Int -> repr (Variable repr) -> 
+  repr (StateVar repr)
+pubGVar del = S.stateVar del public static_

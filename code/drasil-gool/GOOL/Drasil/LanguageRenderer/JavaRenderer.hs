@@ -11,21 +11,22 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
-  InternalFile(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..),
+  InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
+  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..),
   UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..),
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD, 
   classDocD, enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
   oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
   typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, destructorError,
-  paramDocD, paramListDocD, mkParam, methodListDocD, stateVarDocD, 
-  stateVarDefDocD, stateVarListDocD, ifCondDocD, forDocD, forEachDocD, 
+  paramDocD, paramListDocD, mkParam, methodListDocD, stateVarListDocD, 
+  ifCondDocD, forDocD, forEachDocD, 
   whileDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, 
   varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, commentDocD, mkSt, 
   mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, 
@@ -47,14 +48,16 @@ import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD,
   notNullD, castDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, 
   listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, 
   listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
-  listAccessFuncD', staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
-  elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc,
-  moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
-  getterName, setterName, setMainMethod, intValue, filterOutObjs)
+  listAccessFuncD', staticDocD, dynamicDocD, bindingError, privateDocD, 
+  publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
+  docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr,
+  valList, appendToBody, surroundBody, getterName, setterName, setMainMethod, 
+  intValue, filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, intFunc)
+  mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
+  pubMVar, pubGVar)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), td, 
@@ -132,6 +135,10 @@ instance PermanenceSym JavaCode where
   type Permanence JavaCode = Doc
   static_ = return staticDocD
   dynamic_ = return dynamicDocD
+
+instance InternalPerm JavaCode where
+  permDoc = unJC
+  binding = error $ bindingError jName
 
 instance BodySym JavaCode where
   type Body JavaCode = Doc
@@ -491,6 +498,9 @@ instance ScopeSym JavaCode where
   private = return privateDocD
   public = return publicDocD
 
+instance InternalScope JavaCode where
+  scopeDoc = unJC
+
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
   mType t = t
@@ -572,14 +582,15 @@ instance InternalMethod JavaCode where
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
-  stateVar _ s p v = liftA4 stateVarDocD s p v endStatement
-  stateVarDef _ _ s p vr vl = liftA3 stateVarDefDocD s p (fst <$>
-    state (varDecDef vr vl))
-  constVar _ _ s vr vl = liftA3 stateVarDefDocD s static_ (fst 
-    <$> state (constDecDef vr vl))
-  privMVar del = stateVar del private dynamic_
-  pubMVar del = stateVar del public dynamic_
-  pubGVar del = stateVar del public static_
+  stateVar _ = G.stateVar
+  stateVarDef _ _ = G.stateVarDef
+  constVar _ _ = G.constVar (permDoc (static_ :: JavaCode (Permanence JavaCode)))
+  privMVar = G.privMVar
+  pubMVar = G.pubMVar
+  pubGVar = G.pubGVar
+
+instance InternalStateVar JavaCode where
+  stateVarFromData = return
 
 instance ClassSym JavaCode where
   -- Bool is True if the method is a main method, False otherwise

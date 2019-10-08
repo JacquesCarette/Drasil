@@ -11,21 +11,23 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
-  InternalFile(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
+  InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
+  BodySym(..), 
   BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
   UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD, 
   enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, oneLinerD, 
   outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
   stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, 
   voidDocD, destructorError, paramDocD, paramListDocD, mkParam, 
-  methodDocD, methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, 
+  methodDocD, methodListDocD, stateVarListDocD, 
   ifCondDocD, forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, 
   checkStateD, notifyObserversD, varDecDocD, varDecDefDocD, listDecDocD, 
   listDecDefDocD, objDecDefDocD, mkSt, mkStNoEnd, stringListVals', 
@@ -48,14 +50,16 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD,
   castDocD, listSetFuncDocD, castObjDocD, funcD, getD, setD, listSizeD, 
   listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, 
   setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
-  listAccessFuncD, listSetFuncD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, dot, new, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, 
-  elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr, appendToBody, 
-  surroundBody, getterName, setterName, setMainMethod, filterOutObjs)
+  listAccessFuncD, listSetFuncD, staticDocD, dynamicDocD, bindingError, 
+  privateDocD, publicDocD, dot, new, blockCmtStart, blockCmtEnd, docCmtStart, 
+  doubleSlash, elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr,
+  appendToBody, surroundBody, getterName, setterName, setMainMethod, 
+  filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, docInOutFunc, intFunc)
+  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
+  privMVar, pubMVar, pubGVar)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), pd, updateParamDoc, ProgData(..), progD, 
@@ -134,6 +138,10 @@ instance PermanenceSym CSharpCode where
   type Permanence CSharpCode = Doc
   static_ = return staticDocD
   dynamic_ = return dynamicDocD
+
+instance InternalPerm CSharpCode where
+  permDoc = unCSC
+  binding = error $ bindingError csName
 
 instance BodySym CSharpCode where
   type Body CSharpCode = Doc
@@ -495,6 +503,9 @@ instance ScopeSym CSharpCode where
   private = return privateDocD
   public = return publicDocD
 
+instance InternalScope CSharpCode where
+  scopeDoc = unCSC
+
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
   mType t = t
@@ -547,14 +558,15 @@ instance InternalMethod CSharpCode where
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
-  stateVar _ s p v = liftA4 stateVarDocD s p v endStatement
-  stateVarDef _ _ s p vr vl = liftA3 stateVarDefDocD s p (fst <$>
-    state (varDecDef vr vl))
-  constVar _ _ s vr vl = liftA3 stateVarDefDocD s (return empty) 
-    (fst <$> state (constDecDef vr vl))
-  privMVar del = stateVar del private dynamic_
-  pubMVar del = stateVar del public dynamic_
-  pubGVar del = stateVar del public static_
+  stateVar _ = G.stateVar
+  stateVarDef _ _ = G.stateVarDef
+  constVar _ _ = G.constVar empty
+  privMVar = G.privMVar
+  pubMVar = G.pubMVar
+  pubGVar = G.pubGVar
+
+instance InternalStateVar CSharpCode where
+  stateVarFromData = return
 
 instance ClassSym CSharpCode where
   -- Bool is True if the method is a main method, False otherwise

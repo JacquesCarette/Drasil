@@ -10,15 +10,16 @@ import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
-  InternalFile(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
+  InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
+  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..),
   UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD', 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, destructorError,
@@ -42,12 +43,13 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD',
   extFuncAppD, newObjD, listSetFuncDocD, castObjDocD, funcD, getD, setD, 
   listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, 
   setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
-  listAccessFuncD, listSetFuncD, dynamicDocD, classDec, dot, forLabel, inLabel, 
-  observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
-  commentedModD, docFuncRepr, valList, surroundBody, getterName, setterName, 
-  filterOutObjs)
+  listAccessFuncD, listSetFuncD, dynamicDocD, bindingError, classDec, dot, 
+  forLabel, inLabel, observerListName, commentedItem, addCommentsDocD, classDoc,
+  moduleDoc, commentedModD, docFuncRepr, valList, surroundBody, getterName, 
+  setterName, filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, function, docFunc)
+  setMethod, privMethod, pubMethod, constructor, function, docFunc, stateVarDef,
+  constVar, privMVar, pubMVar, pubGVar)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc,
   OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
@@ -126,6 +128,10 @@ instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
   static_ = return empty
   dynamic_ = return dynamicDocD
+
+instance InternalPerm PythonCode where
+  permDoc = unPC
+  binding = error $ bindingError pyName
 
 instance BodySym PythonCode where
   type Body PythonCode = Doc
@@ -493,6 +499,9 @@ instance ScopeSym PythonCode where
   private = return empty
   public = return empty
 
+instance InternalScope PythonCode where
+  scopeDoc = unPC
+
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
   mType t = t
@@ -546,11 +555,15 @@ instance InternalMethod PythonCode where
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ _ = return empty
-  stateVarDef _ _ _ _ vr vl = fst <$> state (varDecDef vr vl)
-  constVar _ _ _ vr vl = fst <$> state (constDecDef vr vl)
-  privMVar del = stateVar del private dynamic_
-  pubMVar del = stateVar del public dynamic_
-  pubGVar del = stateVar del public static_
+  stateVarDef _ _ = G.stateVarDef
+  constVar _ _ = G.constVar (permDoc 
+    (static_ :: PythonCode (Permanence PythonCode)))
+  privMVar = G.privMVar
+  pubMVar = G.pubMVar
+  pubGVar = G.pubGVar
+
+instance InternalStateVar PythonCode where
+  stateVarFromData = return
 
 instance ClassSym PythonCode where
   type Class PythonCode = (Doc, Bool)

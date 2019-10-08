@@ -5,15 +5,15 @@ module GOOL.Drasil.Symantics (
   Label, Library,
   -- Typeclasses
   ProgramSym(..), RenderSym(..), InternalFile(..),  KeywordSym(..), 
-  PermanenceSym(..), BodySym(..), ControlBlockSym(..), BlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  PermanenceSym(..), InternalPerm(..), BodySym(..), ControlBlockSym(..), 
+  BlockSym(..), TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
   VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  InternalMethod(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..)
+  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -68,10 +68,14 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   docCommentStart   :: repr (Keyword repr)
   docCommentEnd     :: repr (Keyword repr)
 
-class PermanenceSym repr where
+class (InternalPerm repr) => PermanenceSym repr where
   type Permanence repr
   static_  :: repr (Permanence repr)
   dynamic_ :: repr (Permanence repr)
+
+class InternalPerm repr where
+  permDoc :: repr (Permanence repr) -> Doc
+  binding :: repr (Permanence repr) -> Binding
 
 class (BlockSym repr) => BodySym repr where
   type Body repr
@@ -519,10 +523,13 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
   getFileInputAll  :: repr (Value repr) -> repr (Variable repr) -> 
     repr (Statement repr)
 
-class ScopeSym repr where
+class (InternalScope repr) => ScopeSym repr where
   type Scope repr
   private :: repr (Scope repr)
   public  :: repr (Scope repr)
+
+class InternalScope repr where
+  scopeDoc :: repr (Scope repr) -> Doc
 
 class MethodTypeSym repr where
   type MethodType repr
@@ -588,8 +595,8 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   commentedFunc :: repr (BlockComment repr) -> repr (Method repr) -> 
     repr (Method repr)
 
-class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr) => 
-  StateVarSym repr where
+class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr,
+  InternalStateVar repr) => StateVarSym repr where
   type StateVar repr
   stateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) ->
     repr (Variable repr) -> repr (StateVar repr)
@@ -600,6 +607,9 @@ class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr) =>
   privMVar :: Int -> repr (Variable repr) -> repr (StateVar repr)
   pubMVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
   pubGVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
+
+class InternalStateVar repr where
+  stateVarFromData :: Doc -> repr (StateVar repr)
 
 class (StateVarSym repr, MethodSym repr) => ClassSym repr where
   type Class repr

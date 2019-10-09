@@ -21,7 +21,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
   StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), BlockCommentSym(..))
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, 
@@ -55,7 +55,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, function, docFunc, 
   docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
-  docClass, commentedClass)
+  docClass, commentedClass, buildModule)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileData(..), srcFile, hdrFile, FuncData(..),
   fd, ModData(..), md, updateModDoc, OpData(..), od, ParamData(..), pd, 
@@ -665,6 +665,9 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
     (buildModule n l (map psnd ms) (map psnd cs))
 
   moduleName m = moduleName $ pfst m
+  
+instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
+  modFromData n m d = pair (modFromData n m d) (modFromData n m d)
 
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   type BlockComment (p CppSrcCode CppHdrCode) = Doc
@@ -1239,15 +1242,12 @@ instance InternalClass CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n l ms cs = fmap (md n (any isMainMethod ms)) (if all (isEmpty . 
-    classDoc) cs && all (isEmpty . methodDoc) ms then return empty else liftA5 
-    cppModuleDoc (liftList vcat (map include l)) (if not (null l) && any (not . 
-    isEmpty . classDoc) cs then return blank else return empty) (liftList 
-    methodListDocD (map (fmap mthdDoc) ms)) (if (any (not . isEmpty . classDoc) 
-    cs || (all (isEmpty . classDoc) cs && not (null l))) && any (not . isEmpty 
-    . methodDoc) ms then return blank else return empty) (liftList vibcat cs))
+  buildModule n ls = G.buildModule n (map include ls)
     
   moduleName m = name (unCPPSC m)
+
+instance InternalMod CppSrcCode where
+  modFromData n m d = return $ md n m d
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
@@ -1773,17 +1773,12 @@ instance InternalClass CppHdrCode where
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
-  buildModule n l ms cs = fmap (md n (any isMainMethod ms)) (if all 
-    (isEmpty . classDoc) cs && all (isEmpty . methodDoc) ms then return empty 
-    else liftA5 cppModuleDoc (liftList vcat (map include l)) (if not (null l) &&
-    any (not . isEmpty . classDoc) cs then return blank else return empty) 
-    (liftList methodListDocD methods) (if (any (not . isEmpty . classDoc) 
-    cs || (all (isEmpty . classDoc) cs && not (null l))) && any 
-    (not . isEmpty . methodDoc) ms then return blank else return empty)
-    (liftList vibcat cs))
-    where methods = map (fmap mthdDoc) ms
+  buildModule n ls = G.buildModule n (map include ls)
       
   moduleName m = name (unCPPHC m)
+
+instance InternalMod CppHdrCode where
+  modFromData n m d = return $ md n m d
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc

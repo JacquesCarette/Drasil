@@ -114,8 +114,9 @@ fileDoc' t m b = vibcat [
 
 -- Module --
 
-moduleDocD :: [Doc] -> Doc
-moduleDocD = vibcat
+moduleDocD :: Doc -> Doc -> Doc -> Doc
+moduleDocD ls fs cs = emptyIfEmpty (fs <> cs) (vcat (intersperse blank 
+  (filter (not . isEmpty) [ls, fs, cs])))
 
 -- Class --
 

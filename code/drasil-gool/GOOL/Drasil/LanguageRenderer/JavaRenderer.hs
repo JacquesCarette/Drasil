@@ -20,7 +20,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..),
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
   StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), BlockCommentSym(..))
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD, 
   classDocD, enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
   oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
@@ -58,7 +58,7 @@ import qualified GOOL.Drasil.Generic as G (construct, method, getMethod,
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
   pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass)
+  commentedClass, buildModule')
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), td, 
@@ -616,10 +616,12 @@ instance InternalClass JavaCode where
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
-  buildModule n _ ms cs = fmap (md n (any isMainMethod ms)) (liftList 
-    moduleDocD (if null ms then cs else pubClass n Nothing [] ms : cs))
+  buildModule n _ = G.buildModule' n 
 
   moduleName m = name (unJC m)
+  
+instance InternalMod JavaCode where
+  modFromData n m d = return $ md n m d
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc

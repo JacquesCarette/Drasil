@@ -5,7 +5,7 @@ module GOOL.Drasil.Generic (
   construct, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
   docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar,
   stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
-  privClass, pubClass, docClass, commentedClass
+  privClass, pubClass, docClass, commentedClass, buildModule, buildModule'
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
@@ -16,14 +16,16 @@ import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   ParameterSym(..), MethodTypeSym(MethodType), MethodSym(Method, inOutFunc), 
   InternalMethod(intMethod, commentedFunc, isMainMethod, methodDoc), 
   StateVarSym(StateVar), 
-  InternalStateVar(..), ClassSym(Class), InternalClass(..), BlockComment(..))
+  InternalStateVar(..), ClassSym(Class), InternalClass(..), ModuleSym(Module),
+  InternalMod(..), BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (MethodTypeSym(construct), 
   MethodSym(method, mainFunction), InternalMethod(intFunc), 
   StateVarSym(stateVar), ClassSym(buildClass, commentedClass))
 import GOOL.Drasil.Data (TypeData(..), td)
+import GOOL.Drasil.Helpers (vibcat)
 import GOOL.Drasil.LanguageRenderer (stateVarDocD, stateVarListDocD, 
-  methodListDocD, enumDocD, enumElementsDocD, docFuncRepr, commentedItem, 
-  functionDox, classDox, getterName, setterName)
+  methodListDocD, enumDocD, enumElementsDocD, moduleDocD, docFuncRepr, 
+  commentedItem, functionDox, classDox, getterName, setterName)
 
 import Prelude hiding (break,print,last,mod,(<>))
 import Data.Maybe (maybeToList)
@@ -157,3 +159,14 @@ commentedClass :: (RenderSym repr) => repr (BlockComment repr) ->
   repr (Class repr) -> repr (Class repr)
 commentedClass cmt cs = classFromData (commentedItem (blockCommentDoc cmt) 
   (classDoc cs))
+
+buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
+  [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)
+buildModule n ls ms cs = modFromData n (any isMainMethod ms) (moduleDocD 
+  (vcat $ map keyDoc ls) (methodListDocD $ map methodDoc ms) 
+  (vibcat $ map classDoc cs))
+
+buildModule' :: (RenderSym repr) => Label -> [repr (Method repr)] -> 
+  [repr (Class repr)] -> repr (Module repr)
+buildModule' n ms cs = modFromData n (any isMainMethod ms) (vibcat $ map 
+  classDoc $ if null ms then cs else pubClass n Nothing [] ms : cs)

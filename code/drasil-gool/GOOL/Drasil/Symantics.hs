@@ -13,7 +13,8 @@ module GOOL.Drasil.Symantics (
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
-  ClassSym(..), InternalClass(..), ModuleSym(..), BlockCommentSym(..)
+  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
+  BlockCommentSym(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -638,12 +639,15 @@ class InternalClass repr where
   classDoc :: repr (Class repr) -> Doc
   classFromData :: Doc -> repr (Class repr)
 
-class (ClassSym repr) => ModuleSym repr where
+class (ClassSym repr, InternalMod repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [Library] -> [repr (Method repr)] -> 
     [repr (Class repr)] -> repr (Module repr)
     
   moduleName :: repr (Module repr) -> String
+
+class InternalMod repr where
+  modFromData :: String -> Bool -> Doc -> repr (Module repr)
     
 class BlockCommentSym repr where
   type BlockComment repr

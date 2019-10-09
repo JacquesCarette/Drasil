@@ -19,7 +19,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
   StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), BlockCommentSym(..))
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD', 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, destructorError,
@@ -50,7 +50,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD',
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, function, docFunc, stateVarDef,
   constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, pubClass,
-  docClass, commentedClass)
+  docClass, commentedClass, buildModule)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc,
   OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
@@ -590,13 +590,12 @@ instance InternalClass PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n ls fs cs = fmap (md n (any isMainMethod fs)) (if all 
-    (isEmpty . classDoc) cs && all (isEmpty . methodDoc) fs then return empty 
-    else liftA3 pyModule (liftList pyModuleImportList (map include ls)) 
-    (liftList methodListDocD (map (fmap mthdDoc) fs)) (liftList 
-    pyModuleClassList cs))
+  buildModule n ls = G.buildModule n (map include ls)
 
   moduleName m = name (unPC m)
+
+instance InternalMod PythonCode where
+  modFromData n m d = return $ md n m d
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc

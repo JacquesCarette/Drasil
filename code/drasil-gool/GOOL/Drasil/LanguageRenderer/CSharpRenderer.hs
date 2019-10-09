@@ -20,7 +20,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
   StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), BlockCommentSym(..))
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD, 
   enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, oneLinerD, 
   outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
@@ -59,7 +59,7 @@ import qualified GOOL.Drasil.Generic as G (construct, method, getMethod,
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
   privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass,
-  commentedClass)
+  commentedClass, buildModule')
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), pd, updateParamDoc, ProgData(..), progD, 
@@ -591,10 +591,12 @@ instance InternalClass CSharpCode where
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n _ ms cs = fmap (md n (any isMainMethod ms)) (liftList 
-    moduleDocD (if null ms then cs else pubClass n Nothing [] ms : cs))
+  buildModule n _ = G.buildModule' n
     
   moduleName m = name (unCSC m)
+  
+instance InternalMod CSharpCode where
+  modFromData n m d = return $ md n m d
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc

@@ -13,7 +13,7 @@ module GOOL.Drasil.LanguageRenderer (
   stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, destructorError,
   paramDocD, paramListDocD, mkParam, methodDocD, 
   methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD,
-  alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
+  alwaysDel, switchDocD, 
   tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
   plusPlusDocD, plusPlusDocD', listDecDocD, 
   listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, 
@@ -290,26 +290,6 @@ alwaysDel = 4
 
 -- Controls --
 
-ifCondDocD :: Doc -> Doc -> Doc -> Doc -> [(ValData, Doc)] -> Doc
-ifCondDocD _ _ _ _ [] = error "if condition created with no cases"
-ifCondDocD ifStart elif bEnd elseBody (c:cs) = 
-  let ifSect (v, b) = vcat [
-        text "if" <+> parens (valDoc v) <+> ifStart,
-        indent b,
-        bEnd]
-      elseIfSect (v, b) = vcat [
-        elif <+> parens (valDoc v) <+> ifStart,
-        indent b,
-        bEnd]
-      elseSect = emptyIfEmpty elseBody $ vcat [
-        text "else" <+> ifStart,
-        indent elseBody,
-        bEnd]
-  in vcat [
-    ifSect c,
-    vmap elseIfSect cs,
-    elseSect]
-
 switchDocD :: (RenderSym repr) => repr (Statement repr) -> repr (Value repr) -> 
   repr (Body repr) -> [(repr (Value repr), repr (Body repr))] -> Doc
 switchDocD breakState v defBody cs = 
@@ -329,29 +309,6 @@ switchDocD breakState v defBody cs =
         vmap caseDoc cs,
         defaultSection],
       rbrace]
-
--- These signatures wont be quite so horrendous if/when we pass language options
--- (blockStart, etc.) in as shared environment
-forDocD :: Doc -> Doc -> (Doc, Terminator) -> ValData -> 
-  (Doc, Terminator) -> Doc -> Doc
-forDocD bStart bEnd sInit vGuard sUpdate b = vcat [
-  forLabel <+> parens (fst sInit <> semi <+> valDoc vGuard <> semi <+> 
-    fst sUpdate) <+> bStart,
-  indent b,
-  bEnd]
-
-forEachDocD :: VarData -> Doc -> Doc -> Doc -> Doc -> ValData -> Doc -> Doc
-forEachDocD e bStart bEnd forEachLabel inLbl v b =
-  vcat [forEachLabel <+> parens (typeDoc (varType e) <+> varDoc e <+> inLbl 
-    <+> valDoc v) <+> bStart,
-  indent b,
-  bEnd]
-
-whileDocD :: Doc -> Doc -> ValData -> Doc -> Doc
-whileDocD bStart bEnd v b = vcat [
-  text "while" <+> parens (valDoc v) <+> bStart,
-  indent b,
-  bEnd]
 
 tryCatchDocD :: Doc -> Doc -> Doc 
 tryCatchDocD tb cb = vcat [

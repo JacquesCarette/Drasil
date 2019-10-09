@@ -25,7 +25,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD',
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, destructorError,
   paramListDocD, mkParam, methodListDocD, stateVarListDocD, 
-  ifCondDocD, runStrategyD, checkStateD, multiAssignDoc, plusEqualsDocD', 
+  runStrategyD, checkStateD, multiAssignDoc, plusEqualsDocD', 
   plusPlusDocD', returnDocD, commentDocD, mkStNoEnd, stringListVals', 
   stringListLists', stateD, loopStateD, emptyStateD, assignD, 
   assignToListIndexD, decrementD, decrement1D, closeFileD, discardFileLineD,
@@ -48,11 +48,11 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD',
   forLabel, inLabel, observerListName, commentedItem, addCommentsDocD, classDox,
   moduleDox, commentedModD, docFuncRepr, valList, surroundBody, getterName, 
   setterName, filterOutObjs)
-import qualified GOOL.Drasil.Generic as G (block, objDecNew, objDecNewNoParams,
-  construct, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
-  function, docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, 
-  buildClass, privClass, pubClass, docClass, commentedClass, buildModule, 
-  fileDoc, docMod)
+import qualified GOOL.Drasil.Generic as G (block, comment, ifCond, objDecNew, 
+  objDecNewNoParams, construct, comment, method, getMethod, setMethod, 
+  privMethod, pubMethod, constructor, function, docFunc, stateVarDef, constVar, 
+  privMVar, pubMVar, pubGVar, buildClass, privClass, pubClass, docClass, 
+  commentedClass, buildModule, fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
@@ -454,7 +454,7 @@ instance StatementSym PythonCode where
 
   valState = valStateD Empty
 
-  comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
+  comment = G.comment commentStart
 
   free v = v &= valueOf (var "None" void)
 
@@ -472,8 +472,7 @@ instance StatementSym PythonCode where
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym PythonCode where
-  ifCond bs b = mkStNoEnd <$> lift4Pair ifCondDocD ifBodyStart elseIf blockEnd
-    b bs
+  ifCond = G.ifCond ifBodyStart elseIf blockEnd
   ifNoElse = ifNoElseD
   switch = switchAsIf
   switchAsIf = switchAsIfD

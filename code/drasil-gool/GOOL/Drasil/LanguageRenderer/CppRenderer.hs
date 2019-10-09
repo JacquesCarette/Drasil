@@ -28,7 +28,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, 
   listInnerTypeD, voidDocD, paramDocD, paramListDocD, mkParam, 
   methodListDocD, stateVarDocD, constVarDocD, alwaysDel, 
-  ifCondDocD, forDocD, whileDocD, runStrategyD, listSliceD, notifyObserversD, 
+  runStrategyD, listSliceD, notifyObserversD, 
   commentDocD, freeDocD, mkSt, 
   mkStNoEnd, stringListVals', stringListLists', stateD, loopStateD, emptyStateD,
   assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, 
@@ -54,10 +54,10 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   moduleDox, commentedModD, docFuncRepr, valList, valueList, appendToBody, 
   surroundBody, getterName, setterName, filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (block, varDec, varDecDef, listDec, 
-  listDecDef, objDecNew, objDecNewNoParams, construct, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, function, docFunc, 
-  docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
-  docClass, commentedClass, buildModule, fileDoc, docMod)
+  listDecDef, objDecNew, objDecNewNoParams, construct, comment, ifCond, for, 
+  while, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
+  function, docFunc, docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, 
+  privClass, pubClass, docClass, commentedClass, buildModule, fileDoc, docMod)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
@@ -1084,7 +1084,7 @@ instance StatementSym CppSrcCode where
 
   valState = valStateD Semi
 
-  comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
+  comment = G.comment commentStart
 
   free v = mkSt <$> fmap freeDocD v
 
@@ -1102,21 +1102,19 @@ instance StatementSym CppSrcCode where
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym CppSrcCode where
-  ifCond bs b = mkStNoEnd <$> lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b 
-    bs
+  ifCond = G.ifCond ifBodyStart elseIf blockEnd
   ifNoElse = ifNoElseD
   switch = switchD
   switchAsIf = switchAsIfD
 
   ifExists _ ifBody _ = mkStNoEnd <$> ifBody -- All variables are initialized in C++
 
-  for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
-    (loopState sInit) vGuard (loopState sUpdate) b
+  for = G.for blockStart blockEnd 
   forRange = forRangeD
   forEach i v = for (varDecDef e (iterBegin v)) (valueOf e ?!= iterEnd v) 
     (e &++)
     where e = toBasicVar i
-  while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
+  while = G.while blockStart blockEnd
 
   tryCatch = tryCatchD cppTryCatch
 

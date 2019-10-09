@@ -28,7 +28,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD,
   stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, 
   voidDocD, destructorError, paramDocD, paramListDocD, mkParam, 
   methodDocD, methodListDocD, stateVarListDocD, 
-  ifCondDocD, forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, 
+  runStrategyD, listSliceD, 
   checkStateD, notifyObserversD, listDecDocD, 
   listDecDefDocD, mkSt, mkStNoEnd, stringListVals', 
   stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, 
@@ -57,11 +57,11 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD,
   appendToBody, surroundBody, getterName, setterName, setMainMethod, 
   filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (block, varDec, varDecDef, listDec, 
-  listDecDef, objDecNew, objDecNewNoParams, construct, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
-  privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass,
-  commentedClass, buildModule', fileDoc, docMod)
+  listDecDef, objDecNew, objDecNewNoParams, construct, comment, ifCond, for,
+  forEach, while, method, getMethod, setMethod, privMethod, pubMethod, 
+  constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
+  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
+  privClass, pubClass, docClass, commentedClass, buildModule', fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), pd, updateParamDoc, ProgData(..), 
@@ -455,7 +455,7 @@ instance StatementSym CSharpCode where
 
   valState = valStateD Semi
 
-  comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
+  comment = G.comment commentStart
 
   free _ = error $ freeError csName -- could set variable to null? Might be misleading.
 
@@ -473,20 +473,17 @@ instance StatementSym CSharpCode where
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym CSharpCode where
-  ifCond bs b = mkStNoEnd <$> lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b
-    bs
+  ifCond = G.ifCond ifBodyStart elseIf blockEnd
   ifNoElse = ifNoElseD
   switch = switchD
   switchAsIf = switchAsIfD
 
   ifExists = ifExistsD
 
-  for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
-    (loopState sInit) vGuard (loopState sUpdate) b
+  for = G.for blockStart blockEnd
   forRange = forRangeD
-  forEach e v b = mkStNoEnd <$> liftA7 forEachDocD e blockStart blockEnd 
-    iterForEachLabel iterInLabel v b
-  while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
+  forEach = G.forEach blockStart blockEnd iterForEachLabel iterInLabel 
+  while = G.while blockStart blockEnd
 
   tryCatch = tryCatchD csTryCatch
 

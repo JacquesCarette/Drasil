@@ -3,12 +3,14 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.Generic (
   block, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
-  construct, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
-  docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar,
-  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
-  privClass, pubClass, docClass, commentedClass, buildModule, buildModule', 
-  fileDoc, docMod
+  comment, ifCond, for, forEach, while, construct, method, getMethod, setMethod,
+  privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
+  docInOutFunc, intFunc, stateVar,stateVarDef, constVar, privMVar, pubMVar, 
+  pubGVar, buildClass, enum, privClass, pubClass, docClass, commentedClass, 
+  buildModule, buildModule', fileDoc, docMod
 ) where
+
+import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, KeywordSym(..), 
@@ -29,11 +31,11 @@ import qualified GOOL.Drasil.Symantics as S (StatementSym(varDec, varDecDef),
   ClassSym(buildClass, commentedClass))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
   FileType)
-import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty)
-import GOOL.Drasil.LanguageRenderer (addExt, blockDocD, stateVarDocD, 
+import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty)
+import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD, 
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
-  fileDoc', docFuncRepr, commentedItem, functionDox, classDox, moduleDox, 
-  getterName, setterName)
+  fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
+  moduleDox, getterName, setterName)
 
 import Prelude hiding (break,print,last,mod,(<>))
 import Data.Maybe (maybeToList)
@@ -73,6 +75,61 @@ objDecNew v vs = S.varDecDef v (newObj (variableType v) vs)
 objDecNewNoParams :: (RenderSym repr) => repr (Variable repr) -> 
   repr (Statement repr)
 objDecNewNoParams v = objDecNew v []
+
+comment :: (RenderSym repr) => repr (Keyword repr) -> Label -> 
+  repr (Statement repr)
+comment cs c = stateFromData (commentDocD c (keyDoc cs)) Empty
+
+ifCond :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
+  repr (Keyword repr) -> [(repr (Value repr), repr (Body repr))] -> 
+  repr (Body repr) -> repr (Statement repr)
+ifCond _ _ _ [] _ = error "if condition created with no cases"
+ifCond ifst elseif blEnd (c:cs) eBody = 
+    let ifStart = keyDoc ifst
+        elif = keyDoc elseif
+        bEnd = keyDoc blEnd
+        elseBody = bodyDoc eBody
+        ifSect (v, b) = vcat [
+          text "if" <+> parens (valueDoc v) <+> ifStart,
+          indent $ bodyDoc b,
+          bEnd]
+        elseIfSect (v, b) = vcat [
+          elif <+> parens (valueDoc v) <+> ifStart,
+          indent $ bodyDoc b,
+          bEnd]
+        elseSect = emptyIfEmpty elseBody $ vcat [
+          text "else" <+> ifStart,
+          indent elseBody,
+          bEnd]
+    in stateFromData (vcat [
+      ifSect c,
+      vmap elseIfSect cs,
+      elseSect]) Empty
+
+for :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
+  repr (Statement repr) -> repr (Value repr) -> repr (Statement repr) -> 
+  repr (Body repr) -> repr (Statement repr)
+for bStart bEnd sInit vGuard sUpdate b = stateFromData (vcat [
+  forLabel <+> parens (statementDoc (loopState sInit) <> semi <+> valueDoc 
+    vGuard <> semi <+> statementDoc (loopState sUpdate)) <+> keyDoc bStart,
+  indent $ bodyDoc b,
+  keyDoc bEnd]) Empty
+
+forEach :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
+  repr (Keyword repr) -> repr (Keyword repr) -> repr (Variable repr) -> 
+  repr (Value repr) -> repr (Body repr) -> repr (Statement repr)
+forEach bStart bEnd forEachLabel inLbl e v b = stateFromData
+  (vcat [keyDoc forEachLabel <+> parens (getTypeDoc (variableType e) <+> 
+    variableDoc e <+> keyDoc inLbl <+> valueDoc v) <+> keyDoc bStart,
+  indent $ bodyDoc b,
+  keyDoc bEnd]) Empty
+
+while :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
+  repr (Value repr) -> repr (Body repr) -> repr (Statement repr)
+while bStart bEnd v b = stateFromData (vcat [
+  text "while" <+> parens (valueDoc v) <+> keyDoc bStart,
+  indent $ bodyDoc b,
+  keyDoc bEnd]) Empty
 
 construct :: Label -> TypeData
 construct n = td (Object n) n empty

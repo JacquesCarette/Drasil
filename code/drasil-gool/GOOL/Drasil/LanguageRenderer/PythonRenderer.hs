@@ -21,51 +21,48 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
   ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
   BlockCommentSym(..))
-import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD', 
-  multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
-  floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, destructorError,
-  paramListDocD, mkParam, methodListDocD, stateVarListDocD, 
-  runStrategyD, checkStateD, multiAssignDoc, plusEqualsDocD', 
-  plusPlusDocD', returnDocD, commentDocD, mkStNoEnd, stringListVals', 
-  stringListLists', stateD, loopStateD, emptyStateD, assignD, 
-  assignToListIndexD, decrementD, decrement1D, closeFileD, discardFileLineD,
-  breakD, continueD, returnD, valStateD, throwD, initStateD, changeStateD, 
-  initObserverListD, addObserverD, ifNoElseD, switchAsIfD, ifExistsD, tryCatchD,
-  unOpPrec, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', 
-  sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', 
-  unExpr, unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, 
-  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, litCharD, litFloatD, 
-  litIntD, litStringD, classVarD, newObjDocD', varD, staticVarD, extVarD, 
-  enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, 
-  valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, 
-  objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
-  extFuncAppD, newObjD, listSetFuncDocD, castObjDocD, funcD, getD, setD, 
-  listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, 
-  setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
-  listAccessFuncD, listSetFuncD, dynamicDocD, bindingError, classDec, dot, 
-  forLabel, inLabel, observerListName, commentedItem, addCommentsDocD, classDox,
-  moduleDox, commentedModD, docFuncRepr, valList, surroundBody, getterName, 
-  setterName, filterOutObjs)
+import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
+  bodyDocD, oneLinerD, outDoc, intTypeDocD, floatTypeDocD, typeDocD, 
+  enumTypeDocD, listInnerTypeD, destructorError, paramListDocD, mkParam, 
+  runStrategyD, checkStateD, multiAssignDoc, plusEqualsDocD', plusPlusDocD', 
+  returnDocD, mkStNoEnd, stringListVals', stringListLists', stateD, loopStateD, 
+  emptyStateD, assignD, assignToListIndexD, decrementD, decrement1D, closeFileD,
+  discardFileLineD, breakD, continueD, returnD, valStateD, throwD, initStateD, 
+  changeStateD, initObserverListD, addObserverD, ifNoElseD, switchAsIfD, 
+  ifExistsD, tryCatchD, unOpPrec, notOpDocD', negateOpDocD, sqrtOpDocD', 
+  absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', 
+  acosOpDocD', atanOpDocD', unExpr, unExpr', typeUnExpr, powerPrec, multPrec, 
+  andPrec, orPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, 
+  litCharD, litFloatD, litIntD, litStringD, classVarD, newObjDocD', varD, 
+  staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, 
+  listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, 
+  objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
+  indexOfD, funcAppD, extFuncAppD, newObjD, listSetFuncDocD, castObjDocD, funcD,
+  getD, setD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, 
+  listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, 
+  iterEndError, listAccessFuncD, listSetFuncD, dynamicDocD, bindingError, 
+  classDec, dot, forLabel, inLabel, observerListName, commentedItem, 
+  addCommentsDocD, commentedModD, docFuncRepr, valList, surroundBody, 
+  filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (block, comment, ifCond, objDecNew, 
   objDecNewNoParams, construct, comment, method, getMethod, setMethod, 
   privMethod, pubMethod, constructor, function, docFunc, stateVarDef, constVar, 
   privMVar, pubMVar, pubGVar, buildClass, privClass, pubClass, docClass, 
   commentedClass, buildModule, fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
-  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
-  td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (vibcat, 
-  emptyIfEmpty, liftA4, liftA5, liftA6, liftList, lift1List, lift2Lists, 
-  lift4Pair, liftPair, liftPairFst, checkParams)
+  FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
+  OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
+  vd, VarData(..), vard)
+import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftList, 
+  lift1List, lift2Lists, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Data.Maybe (fromMaybe, maybeToList)
+import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
-  equals, vcat, colon, brackets, isEmpty)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
+  vcat, colon, brackets, isEmpty)
 
 pyExt :: String
 pyExt = "py"
@@ -731,20 +728,6 @@ pyClass n pn s vs fs = vcat [
                 | isEmpty vs = fs
                 | isEmpty fs = vs
                 | otherwise = vcat [vs, blank, fs]
-
-pyModuleImportList :: [Doc] -> Doc
-pyModuleImportList = vcat
-
-pyModuleClassList :: [Doc] -> Doc
-pyModuleClassList = vibcat
-
-pyModule :: Doc -> Doc -> Doc -> Doc
-pyModule ls fs cs =
-  libs $+$
-  funcs $+$
-  cs
-  where libs = emptyIfEmpty ls $ ls $+$ blank
-        funcs = emptyIfEmpty fs $ fs $+$ blank
 
 pyInOutCall :: (Label -> PythonCode (Type PythonCode) -> 
   [PythonCode (Value PythonCode)] -> PythonCode (Value PythonCode)) -> Label -> 

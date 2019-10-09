@@ -22,38 +22,34 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
   ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
   BlockCommentSym(..))
-import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD, 
-  classDocD, enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
-  oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
-  typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, destructorError,
-  paramDocD, paramListDocD, mkParam, methodListDocD, stateVarListDocD, 
-  runStrategyD, listSliceD, checkStateD, notifyObserversD, 
-  listDecDocD, commentDocD, mkSt, 
-  mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, 
-  emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, 
-  incrementD, decrement1D, increment1D, discardInputD, discardFileInputD, 
-  openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, breakD, 
-  continueD, returnD, multiReturnError, valStateD, freeError, throwD, 
-  initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD,
-  switchAsIfD, ifExistsD, forRangeD, tryCatchD, unOpPrec, notOpDocD,
-  negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
-  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, classVarD, 
-  classVarDocD, inlineIfD, newObjDocD, varD, staticVarD, extVarD, selfD, 
-  enumVarD, classVarD, objVarD, listVarD, listOfD, iterVarD, valueOfD, argD, 
-  enumElementD, argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, 
-  selfAccessD, listIndexExistsD, indexOfD, funcAppD, extFuncAppD, newObjD, 
-  notNullD, castDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, 
-  listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, 
-  listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
-  listAccessFuncD', staticDocD, dynamicDocD, bindingError, privateDocD, 
-  publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
-  docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, classDox, moduleDox, commentedModD, docFuncRepr,
-  valList, valueList, appendToBody, surroundBody, getterName, setterName, 
-  setMainMethod, intValue, filterOutObjs)
+import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
+  bodyDocD, oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, 
+  charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, 
+  destructorError, paramDocD, paramListDocD, mkParam, runStrategyD, listSliceD, 
+  checkStateD, notifyObserversD, listDecDocD, mkSt, stringListVals', 
+  stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, 
+  assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, 
+  increment1D, discardInputD, discardFileInputD, openFileRD, openFileWD, 
+  openFileAD, closeFileD, discardFileLineD, breakD, continueD, returnD, 
+  multiReturnError, valStateD, freeError, throwD, initStateD, changeStateD, 
+  initObserverListD, addObserverD, ifNoElseD, switchD, switchAsIfD, ifExistsD, 
+  forRangeD, tryCatchD, unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', 
+  typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
+  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
+  litIntD, litStringD, classVarD, classVarDocD, inlineIfD, newObjDocD, varD, 
+  staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, listVarD, listOfD, 
+  iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD,
+  objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
+  extFuncAppD, newObjD, notNullD, castDocD, castObjDocD, funcD, getD, setD, 
+  listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD,
+  getFuncD, setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, 
+  iterBeginError, iterEndError, listAccessFuncD', staticDocD, dynamicDocD, 
+  bindingError, privateDocD, publicDocD, dot, new, elseIfLabel, forLabel, 
+  blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, 
+  commentedItem, addCommentsDocD, commentedModD, docFuncRepr, valueList, 
+  appendToBody, surroundBody, intValue, filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (block, varDec, varDecDef, listDec, 
   listDecDef, objDecNew, objDecNewNoParams, construct, comment, ifCond, for, 
   forEach, while, method, getMethod, setMethod, privMethod, pubMethod, 
@@ -61,15 +57,13 @@ import qualified GOOL.Drasil.Generic as G (block, varDec, varDecDef, listDec,
   stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
   privClass, pubClass, docClass, commentedClass, buildModule', fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
-  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  updateMthdDoc, OpData(..), ParamData(..), pd, ProgData(..), progD, 
-  TypeData(..), td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, emptyIfEmpty, emptyIfNull, liftA4, liftA5, 
-  liftA6, liftA7, liftList, lift1List, lift4Pair, liftPair, liftPairFst, 
-  checkParams)
+  FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
+  OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
+  vd, VarData(..), vard)
+import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
+  lift1List, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Data.Maybe (maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
   equals, semi, vcat, lbrace, rbrace, render, colon, comma, render)
@@ -632,9 +626,6 @@ instance BlockCommentSym JavaCode where
 
 jName :: String
 jName = "Java"
-
-enumsEqualInts :: Bool
-enumsEqualInts = False
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [

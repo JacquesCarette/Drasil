@@ -10,7 +10,7 @@ module GOOL.Drasil.LanguageRenderer.CppRenderer (
 
 import Utils.Drasil (blank, indent, indentList)
 
-import GOOL.Drasil.CodeType (CodeType(..), isObject)
+import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
@@ -23,18 +23,16 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
   ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
   BlockCommentSym(..))
-import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD, 
-  multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
-  charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, 
-  listInnerTypeD, voidDocD, paramDocD, paramListDocD, mkParam, 
-  methodListDocD, stateVarDocD, constVarDocD, alwaysDel, 
-  runStrategyD, listSliceD, notifyObserversD, 
-  commentDocD, freeDocD, mkSt, 
-  mkStNoEnd, stringListVals', stringListLists', stateD, loopStateD, emptyStateD,
-  assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, 
-  decrement1D, increment1D, constDecDefD, discardInputD, discardFileInputD, 
-  closeFileD, breakD, continueD, returnD, multiReturnError, valStateD, throwD, 
-  initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD,
+import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD, 
+  bodyDocD, oneLinerD, outDoc, intTypeDocD, charTypeDocD, stringTypeDocD, 
+  typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, paramDocD, 
+  paramListDocD, mkParam, stateVarDocD, constVarDocD, alwaysDel, runStrategyD, 
+  listSliceD, notifyObserversD, freeDocD, mkSt, mkStNoEnd, stringListVals', 
+  stringListLists', stateD, loopStateD, emptyStateD, assignD, 
+  assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, 
+  increment1D, constDecDefD, discardInputD, discardFileInputD, closeFileD, 
+  breakD, continueD, returnD, multiReturnError, valStateD, throwD, initStateD, 
+  changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD, 
   switchAsIfD, forRangeD, tryCatchD, unOpPrec, notOpDocD, negateOpDocD, 
   sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, asinOpDocD,
   acosOpDocD, atanOpDocD, unExpr, unExpr', typeUnExpr, equalOpDocD, 
@@ -50,9 +48,9 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   getFuncD, setFuncD, listSizeFuncD, listAppendFuncD, listAccessFuncD', 
   listSetFuncD, staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot,
   blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDox,
-  moduleDox, commentedModD, docFuncRepr, valList, valueList, appendToBody, 
-  surroundBody, getterName, setterName, filterOutObjs)
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, 
+  commentedModD, docFuncRepr, valueList, appendToBody, surroundBody, getterName,
+  setterName, filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (block, varDec, varDecDef, listDec, 
   listDecDef, objDecNew, objDecNewNoParams, construct, comment, ifCond, for, 
   while, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
@@ -60,12 +58,12 @@ import qualified GOOL.Drasil.Generic as G (block, varDec, varDecDef, listDec,
   privClass, pubClass, docClass, commentedClass, buildModule, fileDoc, docMod)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileType(..), FileData(..), fileD, 
-  FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
-  ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
-  TypeData(..), td, ValData(..), vd, VarData(..), vard)
+  FuncData(..), fd, ModData(..), md, OpData(..), od, ParamData(..), pd, 
+  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
+  ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
-  mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8, liftList, lift2Lists, 
-  lift1List, lift4Pair, liftPair, liftPairFst, checkParams)
+  mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
+  checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Data.Maybe (maybeToList)
@@ -2007,14 +2005,6 @@ cpphEnum n es bStart bEnd end = vcat [
   text "enum" <+> text n <+> bStart,
   indent es,
   bEnd <> end]
-
-cppModuleDoc :: Doc -> Doc -> Doc -> Doc -> Doc -> Doc
-cppModuleDoc ls blnk1 fs blnk2 cs = vcat [
-  ls,
-  blnk1,
-  cs,
-  blnk2,
-  fs]
 
 cppInOutCall :: (Label -> CppSrcCode (Type CppSrcCode) -> 
   [CppSrcCode (Value CppSrcCode)] -> CppSrcCode (Value CppSrcCode)) -> Label -> 

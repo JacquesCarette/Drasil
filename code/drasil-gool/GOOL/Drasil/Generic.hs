@@ -39,9 +39,8 @@ import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD,
 
 import Prelude hiding (break,print,last,mod,(<>))
 import Data.Maybe (maybeToList)
-import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
-  brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
-  integer, semi, equals, braces, int, comma, colon, hcat)
+import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
+  vcat, semi, equals)
 
 block :: (RenderSym repr) => repr (Keyword repr) -> [repr (Statement repr)] -> 
   repr (Block repr)

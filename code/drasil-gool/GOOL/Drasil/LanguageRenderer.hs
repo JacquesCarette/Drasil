@@ -8,36 +8,47 @@ module GOOL.Drasil.LanguageRenderer (
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
-  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, printDoc,
-  printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
-  stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, destructorError,
-  paramDocD, paramListDocD, mkParam, methodDocD, 
-  methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD,
-  alwaysDel, switchDocD, 
-  tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
-  plusPlusDocD, plusPlusDocD', listDecDocD, 
-  listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, 
-  mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, breakD, continueD, returnD, multiReturnError, valStateD, freeError, throwD, initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD, switchAsIfD, ifExistsD, forRangeD, tryCatchD, stratDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, unOpPrec, 
-  notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, 
-  absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD',
-  sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', 
-  asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', 
-  unOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, 
-  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
-  binExpr, binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, 
-  litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
-  selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarDocD,
-  objVarDocD, inlineIfD, funcAppDocD, newObjDocD, newObjDocD', constDecDefDocD, listIndexExistsDocD, varD, 
-  staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD,
-  funcDocD, 
-  castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
-  castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, 
-  privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, classDox, moduleDox, commentedModD, docFuncRepr,
-  valList, valueList, prependToBody, appendToBody, surroundBody, getterName, 
-  setterName, setMainMethod, setEmpty, intValue, filterOutObjs
+  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, 
+  printDoc, printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
+  charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, 
+  listTypeDocD, listInnerTypeD, voidDocD, destructorError, paramDocD, 
+  paramListDocD, mkParam, methodDocD, methodListDocD, stateVarDocD, 
+  constVarDocD, stateVarListDocD, alwaysDel, switchDocD, assignDocD, 
+  multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', 
+  listDecDocD, listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD,
+  mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, 
+  loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, 
+  decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
+  discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, 
+  discardFileLineD, breakD, continueD, returnD, multiReturnError, valStateD, 
+  freeError, throwD, initStateD, changeStateD, initObserverListD, addObserverD, 
+  ifNoElseD, switchD, switchAsIfD, ifExistsD, forRangeD, tryCatchD, stratDocD, 
+  runStrategyD, listSliceD, checkStateD, notifyObserversD, unOpPrec, notOpDocD, 
+  notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD',
+  expOpDocD, expOpDocD', sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', 
+  tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', 
+  atanOpDocD, atanOpDocD', unOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, 
+  multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, 
+  binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, mkVar,
+  mkStaticVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
+  varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, classVarCheckStatic, 
+  classVarDocD, objVarDocD, inlineIfD, funcAppDocD, newObjDocD, newObjDocD', 
+  constDecDefDocD, varD, staticVarD, extVarD, selfD, enumVarD, classVarD, 
+  objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, 
+  enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD, objAccessD,
+  objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
+  indexOfD, funcDocD, castDocD, listAccessFuncDocD, listSetFuncDocD, 
+  objAccessDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, 
+  listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, 
+  listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
+  listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDox,
+  moduleDox, commentedModD, docFuncRepr, valList, valueList, prependToBody, 
+  appendToBody, surroundBody, getterName, setterName, setEmpty, intValue, 
+  filterOutObjs
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -54,8 +65,8 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
   ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
-  ModData(..), updateModDoc, MethodData(..), OpData(..), od, ParamData(..), pd, 
-  TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard)
+  ModData(..), updateModDoc, OpData(..), od, ParamData(..), pd, TypeData(..), 
+  td, ValData(..), vd, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
   emptyIfEmpty, emptyIfNull, getInnerType, getNestDegree, convType)
 
@@ -310,15 +321,6 @@ switchDocD breakState v defBody cs =
         defaultSection],
       rbrace]
 
-tryCatchDocD :: Doc -> Doc -> Doc 
-tryCatchDocD tb cb = vcat [
-  text "try" <+> lbrace,
-  indent tb,
-  rbrace <+> text "catch" <+> parens (text "System.Exception" <+> text "exc") 
-    <+> lbrace,
-  indent cb,
-  rbrace]
-
 stratDocD :: Doc -> Doc -> Doc
 stratDocD b resultState = vcat [
   b,
@@ -415,10 +417,6 @@ commentDocD cmt cStart = cStart <+> text cmt
 
 freeDocD :: VarData -> Doc
 freeDocD v = text "delete" <+> varDoc v
-
-throwDocD :: Doc -> Doc
-throwDocD errMsg = text "throw new" <+> text "System.ApplicationException" <>
-  parens errMsg
 
 statementDocD :: (Doc, Terminator) -> (Doc, Terminator)
 statementDocD (s, t) = (s <> getTermDoc t, Empty)
@@ -631,18 +629,6 @@ absOpDocD = unOpPrec "fabs"
 
 absOpDocD' :: OpData
 absOpDocD' = unOpPrec "math.fabs"
-
-logOpDocD :: OpData
-logOpDocD = unOpPrec "log"
-
-logOpDocD' :: OpData
-logOpDocD' = unOpPrec "math.log"
-
-lnOpDocD :: OpData
-lnOpDocD = unOpPrec "ln"
-
-lnOpDocD' :: OpData
-lnOpDocD' = unOpPrec "math.ln"
 
 expOpDocD :: OpData
 expOpDocD = unOpPrec "exp"
@@ -868,10 +854,6 @@ newObjDocD st vs = new <+> newObjDocD' st vs
 newObjDocD' :: (RenderSym repr) => repr (Type repr) -> Doc -> Doc
 newObjDocD' st vs = getTypeDoc st <> parens vs
 
-listIndexExistsDocD :: OpData -> ValData -> ValData -> Doc
-listIndexExistsDocD greater lst index = parens (valDoc lst <> 
-  text ".Length" <+> opDoc greater <+> valDoc index) 
-
 varD :: (RenderSym repr) => Label -> repr (Type repr) -> repr (Variable repr)
 varD n t = varFromData Dynamic n t (varDocD n)
 
@@ -975,9 +957,6 @@ funcDocD fnApp = dot <> fnApp
 
 castDocD :: TypeData -> Doc
 castDocD t = parens $ typeDoc t
-
-sizeDocD :: Doc
-sizeDocD = dot <> text "Count"
 
 listAccessFuncDocD :: (RenderSym repr) => repr (Value repr) -> Doc
 listAccessFuncDocD v = brackets $ valueDoc v
@@ -1184,9 +1163,6 @@ getterName s = "get" ++ capitalize s
 
 setterName :: String -> String
 setterName s = "set" ++ capitalize s
-
-setMainMethod :: MethodData -> MethodData
-setMainMethod (MthD _ ps d) = MthD True ps d
 
 setEmpty :: (RenderSym repr) => repr (Statement repr) -> repr (Statement repr)
 setEmpty s = stateFromData (statementDoc s) Empty

@@ -6,7 +6,7 @@ import Utils.Drasil
 
 import Data.Drasil.IdeaDicts (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
-import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir, point)
+import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir, point, axis, cartesian)
 import Control.Lens((^.)) --need for parametrization hack
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.Citations (dampingSource)
@@ -21,7 +21,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
   rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
-  yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity]
+  yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec]
 
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
@@ -35,7 +35,7 @@ acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity, cohesion,
   pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos,
   space, speed, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum, moment, fOfGravity :: ConceptChunk
+  yPos, yVel, momentum, moment, fOfGravity, positionVec :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
@@ -97,9 +97,12 @@ momentum = dccWDS "momentum" (cn "momentum")
   ( S "the quantity of motion" `sOf` S "a moving body, measured as a product" `sOf` phrase QPP.mass `sAnd`
    phrase velocity)
 moment = dccWDS "moment" (cn' "moment")
-  (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `sOr` S "axis")
+  (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `sOr` phrase axis)
 position = dcc "position" (cn' "position")
   "an object's location relative to a reference point"
+positionVec = dccWDS " positionVec" (cn' "position vector")
+   (S "a vector from the origin" `ofThe` phrase cartesian +:+ S "defined"
+    `toThe` phrase point +:+ S "where the" +:+ phrase force +:+ S "is applied")
 potEnergy = dccWDS "potEnergy" (cn "potential energy")
   (S "measure" `ofThe` phrase energy +:+ S "held by an object because of its" +:+ phrase position)
 pressure = dccWDS "pressure" (cn' "pressure")

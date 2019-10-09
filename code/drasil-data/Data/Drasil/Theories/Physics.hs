@@ -13,7 +13,7 @@ import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
-  displacement, force, gravitationalAccel, height, pressure, torque, weight)
+  force, gravitationalAccel, height, pressure, torque, weight, positionVec)
 
 physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
@@ -128,7 +128,7 @@ torque :: QDefinition
 torque = mkQuantDef QP.torque torqueEqn
 
 torqueEqn :: Expr
-torqueEqn = cross (sy QP.displacement) (sy QP.force)
+torqueEqn = cross (sy QP.positionVec) (sy QP.force)
 
 torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", phrase torque, 

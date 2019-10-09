@@ -10,7 +10,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration, angularAcce
   final, force, gravitationalAccel, gravitationalConst, gravitationalConstValue,
   height, impulseS, impulseV, initial, kEnergy, linearAccel, linearDisplacement,
   linearVelocity, momentOfInertia, position, potEnergy, restitutionCoef, time,
-  torque, velocity, fOfGravity)
+  torque, velocity, fOfGravity, positionVec)
 
 import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, normalVect, 
   orientation, perpVect, pi_, unitVect)
@@ -49,7 +49,7 @@ symbols = map qw unitalChunks ++
 
 inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation, 
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
-  QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.fOfGravity] ++
+  QPP.len, QP.momentOfInertia, QP.torque, QP.kEnergy, QP.chgInVelocity, QP.potEnergy, QP.fOfGravity, QP.positionVec] ++
   [qw QP.restitutionCoef]
 
 outputSymbols = map qw [QP.position, QP.velocity, QM.orientation, 
@@ -66,7 +66,7 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
   contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
-  QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger, QP.fOfGravity]
+  QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger, QP.fOfGravity, QP.positionVec]
 
 -----------------------
 -- PARAMETRIZED HACK --

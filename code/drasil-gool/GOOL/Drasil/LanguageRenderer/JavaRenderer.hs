@@ -12,15 +12,16 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
-  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..),
-  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..),
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
+  BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
+  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
+  BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD, 
   classDocD, enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
   oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
@@ -51,18 +52,18 @@ import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD,
   listAccessFuncD', staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
   docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, classDox, moduleDoc, commentedModD, docFuncRepr,
+  addCommentsDocD, functionDox, classDox, moduleDox, commentedModD, docFuncRepr,
   valList, appendToBody, surroundBody, getterName, setterName, setMainMethod, 
   intValue, filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
   pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule')
-import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
-  ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
-  OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), td, 
-  ValData(..), vd, VarData(..), vard)
+  commentedClass, buildModule', fileDoc, docMod)
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
+  updateMthdDoc, OpData(..), ParamData(..), pd, ProgData(..), progD, 
+  TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, liftA4, liftA5, liftA6, 
   liftA7, liftList, lift1List, lift4Pair, liftPair, liftPairFst, checkParams)
 
@@ -93,19 +94,19 @@ instance ProgramSym JavaCode where
   prog n ms = liftList (progD n) (map (liftA2 (packageDocD n) endStatement) ms)
 
 instance RenderSym JavaCode where
-  type RenderFile JavaCode = FileData
-  fileDoc code = liftA2 file (fmap (addExt jExt . name) code) (liftA2 
-    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
-    (top code) (fmap modDoc code) bottom) code)
+  type RenderFile JavaCode = FileData 
+  fileDoc code = G.fileDoc Combined jExt (top code) bottom code
 
-  docMod d a dt m = commentedMod (docComment $ moduleDoc d a dt $ filePath 
-    (unJC m)) m
+  docMod = G.docMod
 
   commentedMod = liftA2 commentedModD
 
 instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
+  
+  getFilePath = filePath . unJC
+  fileFromData ft fp = fmap (fileD ft fp)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -157,6 +158,8 @@ instance BlockSym JavaCode where
   type Block JavaCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst .state) sts)
 
+instance InternalBlock JavaCode where
+  blockDoc = unJC
   docBlock = return
 
 instance TypeSym JavaCode where
@@ -621,6 +624,8 @@ instance ModuleSym JavaCode where
   moduleName m = name (unJC m)
   
 instance InternalMod JavaCode where
+  isMainModule = isMainMod . unJC
+  moduleDoc = modDoc . unJC
   modFromData n m d = return $ md n m d
 
 instance BlockCommentSym JavaCode where

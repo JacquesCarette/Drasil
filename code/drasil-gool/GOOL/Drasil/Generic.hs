@@ -5,27 +5,30 @@ module GOOL.Drasil.Generic (
   construct, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
   docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar,
   stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
-  privClass, pubClass, docClass, commentedClass, buildModule, buildModule'
+  privClass, pubClass, docClass, commentedClass, buildModule, buildModule', 
+  fileDoc, docMod
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, KeywordSym(..), 
-  RenderSym(..), BodySym(..), PermanenceSym(..), InternalPerm(..), TypeSym(..), 
-  InternalType(..), VariableSym(..), ValueSym(..), InternalStatement(..), 
-  StatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(mType), 
-  ParameterSym(..), MethodTypeSym(MethodType), MethodSym(Method, inOutFunc), 
+  RenderSym(RenderFile, commentedMod), InternalFile(..), BlockSym(..), 
+  InternalBlock(..), BodySym(..), PermanenceSym(..), InternalPerm(..), 
+  TypeSym(..), InternalType(..), VariableSym(..), ValueSym(..), 
+  InternalStatement(..), StatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(mType), ParameterSym(..), MethodTypeSym(MethodType), 
+  MethodSym(Method, inOutFunc), 
   InternalMethod(intMethod, commentedFunc, isMainMethod, methodDoc), 
-  StateVarSym(StateVar), 
-  InternalStateVar(..), ClassSym(Class), InternalClass(..), ModuleSym(Module),
-  InternalMod(..), BlockComment(..))
+  StateVarSym(StateVar), InternalStateVar(..), ClassSym(Class), 
+  InternalClass(..), ModuleSym(Module, moduleName), InternalMod(..), 
+  BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (MethodTypeSym(construct), 
   MethodSym(method, mainFunction), InternalMethod(intFunc), 
   StateVarSym(stateVar), ClassSym(buildClass, commentedClass))
-import GOOL.Drasil.Data (TypeData(..), td)
-import GOOL.Drasil.Helpers (vibcat)
-import GOOL.Drasil.LanguageRenderer (stateVarDocD, stateVarListDocD, 
-  methodListDocD, enumDocD, enumElementsDocD, moduleDocD, docFuncRepr, 
-  commentedItem, functionDox, classDox, getterName, setterName)
+import GOOL.Drasil.Data (TypeData(..), td, FileType)
+import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty)
+import GOOL.Drasil.LanguageRenderer (addExt, stateVarDocD, stateVarListDocD, 
+  methodListDocD, enumDocD, enumElementsDocD, moduleDocD, fileDoc', docFuncRepr,
+  commentedItem, functionDox, classDox, moduleDox, getterName, setterName)
 
 import Prelude hiding (break,print,last,mod,(<>))
 import Data.Maybe (maybeToList)
@@ -170,3 +173,13 @@ buildModule' :: (RenderSym repr) => Label -> [repr (Method repr)] ->
   [repr (Class repr)] -> repr (Module repr)
 buildModule' n ms cs = modFromData n (any isMainMethod ms) (vibcat $ map 
   classDoc $ if null ms then cs else pubClass n Nothing [] ms : cs)
+
+fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
+  repr (Block repr) -> repr (Module repr) -> repr (RenderFile repr)
+fileDoc ft ext topb botb m = fileFromData ft (addExt ext (moduleName m)) 
+  (modFromData (moduleName m) (isMainModule m) (emptyIfEmpty (moduleDoc m) 
+  (fileDoc' (blockDoc topb) (moduleDoc m) (blockDoc botb))))
+
+docMod :: (RenderSym repr) => String -> [String] -> String -> 
+  repr (RenderFile repr) -> repr (RenderFile repr)
+docMod d a dt m = commentedMod (docComment $ moduleDox d a dt $ getFilePath m) m

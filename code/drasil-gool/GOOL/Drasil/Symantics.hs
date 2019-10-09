@@ -6,19 +6,19 @@ module GOOL.Drasil.Symantics (
   -- Typeclasses
   ProgramSym(..), RenderSym(..), InternalFile(..),  KeywordSym(..), 
   PermanenceSym(..), InternalPerm(..), BodySym(..), ControlBlockSym(..), 
-  BlockSym(..), TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
-  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
-  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
-  BlockCommentSym(..)
+  BlockSym(..), InternalBlock(..), TypeSym(..), InternalType(..), 
+  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
-import GOOL.Drasil.Data (Binding, Terminator)
+import GOOL.Drasil.Data (Binding, Terminator, FileType)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
@@ -43,6 +43,10 @@ class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) =>
 class (ModuleSym repr) => InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
+
+  getFilePath :: repr (RenderFile repr) -> FilePath
+  fileFromData :: FileType -> FilePath -> repr (Module repr) -> 
+    repr (RenderFile repr)
 
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   type Keyword repr
@@ -90,10 +94,12 @@ class (BlockSym repr) => BodySym repr where
 
   bodyDoc :: repr (Body repr) -> Doc
 
-class (StatementSym repr) => BlockSym repr where
+class (StatementSym repr, InternalBlock repr) => BlockSym repr where
   type Block repr
   block   :: [repr (Statement repr)] -> repr (Block repr)
 
+class InternalBlock repr where
+  blockDoc :: repr (Block repr) -> Doc
   docBlock :: Doc -> repr (Block repr)
 
 class (PermanenceSym repr, InternalType repr) => TypeSym repr where
@@ -647,6 +653,8 @@ class (ClassSym repr, InternalMod repr) => ModuleSym repr where
   moduleName :: repr (Module repr) -> String
 
 class InternalMod repr where
+  isMainModule :: repr (Module repr) -> Bool
+  moduleDoc :: repr (Module repr) -> Doc
   modFromData :: String -> Bool -> Doc -> repr (Module repr)
     
 class BlockCommentSym repr where

@@ -13,15 +13,16 @@ import Utils.Drasil (blank, indent, indentList)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
-  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..),
-  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
+  BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..),
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
+  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
+  BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, 
@@ -50,17 +51,17 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   listSetFuncD, staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot,
   blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDox,
-  moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
+  moduleDox, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
   getterName, setterName, filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, function, docFunc, 
   docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
-  docClass, commentedClass, buildModule)
+  docClass, commentedClass, buildModule, fileDoc, docMod)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
-  Binding(..), BindData(..), bd, FileData(..), srcFile, hdrFile, FuncData(..),
-  fd, ModData(..), md, updateModDoc, OpData(..), od, ParamData(..), pd, 
-  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
-  ValData(..), vd, VarData(..), vard)
+  Binding(..), BindData(..), bd, FileType(..), FileData(..), fileD, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
+  ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
+  TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8, liftList, lift2Lists, 
   lift1List, lift4Pair, liftPair, liftPairFst, checkParams)
@@ -105,6 +106,10 @@ instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
+  
+  getFilePath f = getFilePath $ pfst f
+  fileFromData ft fp m = pair (fileFromData ft fp $ pfst m) 
+    (fileFromData ft fp $ psnd m)
 
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
@@ -157,6 +162,8 @@ instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
   type Block (p CppSrcCode CppHdrCode) = Doc
   block sts = pair (block $ map pfst sts) (block $ map psnd sts)
 
+instance (Pair p) => InternalBlock (p CppSrcCode CppHdrCode) where
+  blockDoc b = blockDoc $ pfst b
   docBlock d = pair (docBlock d) (docBlock d)
 
 instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
@@ -667,6 +674,8 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   moduleName m = moduleName $ pfst m
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
+  isMainModule m = isMainModule $ pfst m
+  moduleDoc m = moduleDoc $ pfst m
   modFromData n m d = pair (modFromData n m d) (modFromData n m d)
 
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
@@ -699,12 +708,9 @@ instance ProgramSym CppSrcCode where
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
-  fileDoc code = liftA2 srcFile (fmap (addExt cppSrcExt . name) code) (liftA2 
-    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
-    (top code) (fmap modDoc code) bottom) code)
+  fileDoc code = G.fileDoc Source cppSrcExt (top code) bottom code
 
-  docMod d a dt m = commentedMod (docComment $ moduleDoc d a dt $ filePath 
-    (unCPPSC m)) m
+  docMod = G.docMod
 
   commentedMod cmt m = if (isMainMod . fileMod . unCPPSC) m then liftA2 
     commentedModD cmt m else m 
@@ -712,6 +718,9 @@ instance RenderSym CppSrcCode where
 instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
+  
+  getFilePath = filePath . unCPPSC
+  fileFromData ft fp = fmap (fileD ft fp)
 
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -763,6 +772,8 @@ instance BlockSym CppSrcCode where
   type Block CppSrcCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
+instance InternalBlock CppSrcCode where
+  blockDoc = unCPPSC
   docBlock = return
 
 instance TypeSym CppSrcCode where
@@ -1247,6 +1258,8 @@ instance ModuleSym CppSrcCode where
   moduleName m = name (unCPPSC m)
 
 instance InternalMod CppSrcCode where
+  isMainModule = isMainMod . unCPPSC
+  moduleDoc = modDoc . unCPPSC
   modFromData n m d = return $ md n m d
 
 instance BlockCommentSym CppSrcCode where
@@ -1275,12 +1288,9 @@ instance Monad CppHdrCode where
 
 instance RenderSym CppHdrCode where
   type RenderFile CppHdrCode = FileData
-  fileDoc code = liftA2 hdrFile (fmap (addExt cppHdrExt . name) code) (liftA2 
-    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
-    (top code) (fmap modDoc code) bottom) code)
+  fileDoc code = G.fileDoc Header cppHdrExt (top code) bottom code
   
-  docMod d a dt m = commentedMod (docComment $ moduleDoc d a dt $ filePath 
-    (unCPPHC m)) m
+  docMod = G.docMod
 
   commentedMod cmt m = if (isMainMod . fileMod . unCPPHC) m then m else liftA2 
     commentedModD cmt m
@@ -1288,6 +1298,9 @@ instance RenderSym CppHdrCode where
 instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = return $ text "#endif"
+  
+  getFilePath = filePath . unCPPHC
+  fileFromData ft fp = fmap (fileD ft fp)
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
@@ -1339,6 +1352,8 @@ instance BlockSym CppHdrCode where
   type Block CppHdrCode = Doc
   block _ = return empty
 
+instance InternalBlock CppHdrCode where
+  blockDoc = unCPPHC
   docBlock = return
 
 instance TypeSym CppHdrCode where
@@ -1778,6 +1793,8 @@ instance ModuleSym CppHdrCode where
   moduleName m = name (unCPPHC m)
 
 instance InternalMod CppHdrCode where
+  isMainModule = isMainMod . unCPPHC
+  moduleDoc = modDoc . unCPPHC
   modFromData n m d = return $ md n m d
 
 instance BlockCommentSym CppHdrCode where

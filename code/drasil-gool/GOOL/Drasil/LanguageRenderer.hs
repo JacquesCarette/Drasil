@@ -36,7 +36,7 @@ module GOOL.Drasil.LanguageRenderer (
   castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
   castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, 
   privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, classDox, moduleDoc, commentedModD, docFuncRepr,
+  addCommentsDocD, functionDox, classDox, moduleDox, commentedModD, docFuncRepr,
   valList, prependToBody, appendToBody, surroundBody, getterName, setterName, 
   setMainMethod, setEmpty, intValue, filterOutObjs
 ) where
@@ -44,8 +44,8 @@ module GOOL.Drasil.LanguageRenderer (
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, Library,
-  RenderSym(..), BodySym(..), BlockSym(..), PermanenceSym(..),
+import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..), 
+  BlockSym(..), InternalBlock(..), PermanenceSym(..),
   TypeSym(Type, getType, getTypeString, getTypeDoc, bool, float, string, infile,
     outfile, listType, listInnerType, obj, enumType, iterator, void), 
   VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
@@ -103,10 +103,10 @@ packageDocD n end f = fileD (fileType f) (n ++ "/" ++ filePath f) (updateModDoc
   modDoc (fileMod f)])) (fileMod f))
 
 fileDoc' :: Doc -> Doc -> Doc -> Doc
-fileDoc' t m b = vibcat [
+fileDoc' t m b = vibcat (filter (not . isEmpty) [
   t,
   m,
-  b]
+  b])
 
 -----------------------------------------------
 -- 'Default' functions used in the renderers --
@@ -115,8 +115,8 @@ fileDoc' t m b = vibcat [
 -- Module --
 
 moduleDocD :: Doc -> Doc -> Doc -> Doc
-moduleDocD ls fs cs = emptyIfEmpty (fs <> cs) (vcat (intersperse blank 
-  (filter (not . isEmpty) [ls, fs, cs])))
+moduleDocD ls fs cs = emptyIfEmpty (fs <> cs) (vibcat (filter (not . isEmpty) 
+  [ls, fs, cs]))
 
 -- Class --
 
@@ -1195,8 +1195,8 @@ functionDox desc params returns = [doxBrief ++ desc | not (null desc)]
 classDox :: String -> [String]
 classDox desc = [doxBrief ++ desc | not (null desc)]
 
-moduleDoc :: String -> [String] -> String -> String -> [String]
-moduleDoc desc as date m = (doxFile ++ m) : 
+moduleDox :: String -> [String] -> String -> String -> [String]
+moduleDox desc as date m = (doxFile ++ m) : 
   [doxAuthor ++ stringList as | not (null as)] ++
   [doxDate ++ date | not (null date)] ++ 
   [doxBrief ++ desc | not (null desc)]

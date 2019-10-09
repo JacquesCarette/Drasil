@@ -12,15 +12,16 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
-  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..),
-  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
+  BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
+  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
+  BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD, 
   enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, oneLinerD, 
   outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
@@ -52,19 +53,19 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD,
   listAccessFuncD, listSetFuncD, staticDocD, dynamicDocD, bindingError, 
   privateDocD, publicDocD, dot, new, blockCmtStart, blockCmtEnd, docCmtStart, 
   doubleSlash, elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, classDox, moduleDoc, commentedModD, docFuncRepr,
+  addCommentsDocD, functionDox, classDox, moduleDox, commentedModD, docFuncRepr,
   appendToBody, surroundBody, getterName, setterName, setMainMethod, 
   filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
   privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass,
-  commentedClass, buildModule')
-import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
-  ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
-  OpData(..), ParamData(..), pd, updateParamDoc, ProgData(..), progD, 
-  TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
-  vard)
+  commentedClass, buildModule', fileDoc, docMod)
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
+  updateMthdDoc, OpData(..), ParamData(..), pd, updateParamDoc, ProgData(..), 
+  progD, TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), 
+  VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftA7, 
   liftList, lift1List, lift4Pair, liftPair, liftPairFst, checkParams)
 
@@ -96,18 +97,18 @@ instance ProgramSym CSharpCode where
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = FileData
-  fileDoc code = liftA2 file (fmap (addExt csExt . name) code) (liftA2 
-    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
-    (top code) (fmap modDoc code) bottom) code)
+  fileDoc code = G.fileDoc Combined csExt (top code) bottom code
 
-  docMod d a dt m = commentedMod (docComment $ moduleDoc d a dt $ filePath 
-    (unCSC m)) m
+  docMod = G.docMod
 
   commentedMod = liftA2 commentedModD
 
 instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
+
+  getFilePath = filePath . unCSC
+  fileFromData ft fp = fmap (fileD ft fp)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
@@ -159,6 +160,8 @@ instance BlockSym CSharpCode where
   type Block CSharpCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
+instance InternalBlock CSharpCode where
+  blockDoc = unCSC
   docBlock = return
 
 instance TypeSym CSharpCode where
@@ -596,6 +599,8 @@ instance ModuleSym CSharpCode where
   moduleName m = name (unCSC m)
   
 instance InternalMod CSharpCode where
+  isMainModule = isMainMod . unCSC
+  moduleDoc = modDoc . unCSC
   modFromData n m d = return $ md n m d
 
 instance BlockCommentSym CSharpCode where

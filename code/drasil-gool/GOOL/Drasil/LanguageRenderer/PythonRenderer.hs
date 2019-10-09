@@ -11,15 +11,16 @@ import Utils.Drasil (blank, indent)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
-  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..),
-  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
+  BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
+  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
+  BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD', 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, destructorError,
@@ -45,16 +46,16 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD',
   setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
   listAccessFuncD, listSetFuncD, dynamicDocD, bindingError, classDec, dot, 
   forLabel, inLabel, observerListName, commentedItem, addCommentsDocD, classDox,
-  moduleDoc, commentedModD, docFuncRepr, valList, surroundBody, getterName, 
+  moduleDox, commentedModD, docFuncRepr, valList, surroundBody, getterName, 
   setterName, filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, function, docFunc, stateVarDef,
   constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, pubClass,
-  docClass, commentedClass, buildModule)
-import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
-  ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc,
-  OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
-  vd, VarData(..), vard)
+  docClass, commentedClass, buildModule, fileDoc, docMod)
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
+  updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
+  td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, 
   emptyIfEmpty, liftA4, liftA5, liftA6, liftList, lift1List, lift2Lists, 
   lift4Pair, liftPair, liftPairFst, checkParams)
@@ -87,18 +88,18 @@ instance ProgramSym PythonCode where
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = FileData
-  fileDoc code = liftA2 file (fmap (addExt pyExt . name) code) (liftA2 
-    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
-    (top code) (fmap modDoc code) bottom) code)
+  fileDoc code = G.fileDoc Combined pyExt (top code) bottom code
 
-  docMod d a dt m = commentedMod (docComment $ moduleDoc d a dt $ filePath 
-    (unPC m)) m
+  docMod = G.docMod
 
   commentedMod = liftA2 commentedModD
 
 instance InternalFile PythonCode where
   top _ = return pytop
   bottom = return empty
+
+  getFilePath = filePath . unPC
+  fileFromData ft fp = fmap (fileD ft fp)
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
@@ -150,6 +151,8 @@ instance BlockSym PythonCode where
   type Block PythonCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
+instance InternalBlock PythonCode where
+  blockDoc = unPC
   docBlock = return
 
 instance TypeSym PythonCode where
@@ -595,6 +598,8 @@ instance ModuleSym PythonCode where
   moduleName m = name (unPC m)
 
 instance InternalMod PythonCode where
+  isMainModule = isMainMod . unPC
+  moduleDoc = modDoc . unPC
   modFromData n m d = return $ md n m d
 
 instance BlockCommentSym PythonCode where

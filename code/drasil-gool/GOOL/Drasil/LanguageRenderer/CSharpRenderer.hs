@@ -29,8 +29,8 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD,
   voidDocD, destructorError, paramDocD, paramListDocD, mkParam, 
   methodDocD, methodListDocD, stateVarListDocD, 
   ifCondDocD, forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, 
-  checkStateD, notifyObserversD, varDecDocD, varDecDefDocD, listDecDocD, 
-  listDecDefDocD, objDecDefDocD, mkSt, mkStNoEnd, stringListVals', 
+  checkStateD, notifyObserversD, listDecDocD, 
+  listDecDefDocD, mkSt, mkStNoEnd, stringListVals', 
   stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, 
   assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, 
   increment1D, constDecDefD, discardInputD, openFileRD, openFileWD, openFileAD, 
@@ -56,7 +56,8 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD,
   addCommentsDocD, functionDox, classDox, moduleDox, commentedModD, docFuncRepr,
   appendToBody, surroundBody, getterName, setterName, setMainMethod, 
   filterOutObjs)
-import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
+import qualified GOOL.Drasil.Generic as G (block, varDec, varDecDef, listDec, 
+  listDecDef, objDecNew, objDecNewNoParams, construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
   privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass,
@@ -158,7 +159,7 @@ instance BodySym CSharpCode where
 
 instance BlockSym CSharpCode where
   type Block CSharpCode = Doc
-  block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
+  block = G.block endStatement
 
 instance InternalBlock CSharpCode where
   blockDoc = unCSC
@@ -407,21 +408,14 @@ instance StatementSym CSharpCode where
   (&++) = increment1D
   (&~-) = decrement1D
 
-  varDec v = csVarDec (variableBind v) $ mkSt <$> liftA3 varDecDocD v static_ 
-    dynamic_ 
-  varDecDef v def = csVarDec (variableBind v) $mkSt <$> liftA4 varDecDefDocD v 
-    def static_ dynamic_ 
-  listDec n v = csVarDec (variableBind v) $ mkSt <$> liftA4 listDecDocD v 
-    (litInt n) static_ dynamic_
-  listDecDef v vs = csVarDec (variableBind v) $ mkSt <$> liftA4 listDecDefDocD 
-    v (sequence vs) static_ dynamic_ 
-  objDecDef v def = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
-    def static_ dynamic_ 
-  objDecNew v vs = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
-    (newObj (variableType v) vs) static_ dynamic_ 
+  varDec v = csVarDec (variableBind v) $ G.varDec static_ dynamic_ v
+  varDecDef = G.varDecDef
+  listDec n v = G.listDec (listDecDocD v) (litInt n) v
+  listDecDef v = G.listDecDef (listDecDefDocD v) v
+  objDecDef = varDecDef
+  objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew
-  objDecNewNoParams v = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
-    (newObj (variableType v) []) static_ dynamic_ 
+  objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef = constDecDefD
 

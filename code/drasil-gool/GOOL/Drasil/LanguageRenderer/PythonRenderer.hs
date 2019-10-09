@@ -48,10 +48,11 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD',
   forLabel, inLabel, observerListName, commentedItem, addCommentsDocD, classDox,
   moduleDox, commentedModD, docFuncRepr, valList, surroundBody, getterName, 
   setterName, filterOutObjs)
-import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, function, docFunc, stateVarDef,
-  constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, pubClass,
-  docClass, commentedClass, buildModule, fileDoc, docMod)
+import qualified GOOL.Drasil.Generic as G (block, objDecNew, objDecNewNoParams,
+  construct, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
+  function, docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, 
+  buildClass, privClass, pubClass, docClass, commentedClass, buildModule, 
+  fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
@@ -149,7 +150,7 @@ instance BodySym PythonCode where
 
 instance BlockSym PythonCode where
   type Block PythonCode = Doc
-  block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
+  block = G.block endStatement
 
 instance InternalBlock PythonCode where
   blockDoc = unPC
@@ -410,9 +411,9 @@ instance StatementSym PythonCode where
   listDec _ v = mkStNoEnd <$> fmap pyListDec v
   listDecDef v vs = mkStNoEnd <$> liftA2 pyListDecDef v (liftList valList vs)
   objDecDef = varDecDef
-  objDecNew v vs = varDecDef v (newObj (variableType v) vs)
+  objDecNew = G.objDecNew
   extObjDecNew lib v vs = varDecDef v (extNewObj lib (variableType v) vs)
-  objDecNewNoParams v = varDecDef v (newObj (variableType v) [])
+  objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams lib v = varDecDef v (extNewObj lib (variableType v) [])
   constDecDef = varDecDef
 

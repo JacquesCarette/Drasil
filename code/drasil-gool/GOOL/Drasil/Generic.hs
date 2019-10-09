@@ -2,6 +2,7 @@
 
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.Generic (
+  block, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
   construct, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
   docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar,
   stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
@@ -11,30 +12,67 @@ module GOOL.Drasil.Generic (
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, KeywordSym(..), 
-  RenderSym(RenderFile, commentedMod), InternalFile(..), BlockSym(..), 
+  RenderSym(RenderFile, commentedMod), InternalFile(..), BlockSym(Block), 
   InternalBlock(..), BodySym(..), PermanenceSym(..), InternalPerm(..), 
-  TypeSym(..), InternalType(..), VariableSym(..), ValueSym(..), 
-  InternalStatement(..), StatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(mType), ParameterSym(..), MethodTypeSym(MethodType), 
-  MethodSym(Method, inOutFunc), 
+  TypeSym(..), InternalType(..), VariableSym(..), ValueSym(..),
+  ValueExpression(..), InternalStatement(..), 
+  StatementSym(Statement, (&=), constDecDef, returnState), ScopeSym(..), 
+  InternalScope(..), MethodTypeSym(mType), ParameterSym(..), 
+  MethodTypeSym(MethodType), MethodSym(Method, inOutFunc), 
   InternalMethod(intMethod, commentedFunc, isMainMethod, methodDoc), 
   StateVarSym(StateVar), InternalStateVar(..), ClassSym(Class), 
   InternalClass(..), ModuleSym(Module, moduleName), InternalMod(..), 
   BlockComment(..))
-import qualified GOOL.Drasil.Symantics as S (MethodTypeSym(construct), 
-  MethodSym(method, mainFunction), InternalMethod(intFunc), 
-  StateVarSym(stateVar), ClassSym(buildClass, commentedClass))
-import GOOL.Drasil.Data (TypeData(..), td, FileType)
+import qualified GOOL.Drasil.Symantics as S (StatementSym(varDec, varDecDef), 
+  MethodTypeSym(construct), MethodSym(method, mainFunction), 
+  InternalMethod(intFunc), StateVarSym(stateVar), 
+  ClassSym(buildClass, commentedClass))
+import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
+  FileType)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty)
-import GOOL.Drasil.LanguageRenderer (addExt, stateVarDocD, stateVarListDocD, 
-  methodListDocD, enumDocD, enumElementsDocD, moduleDocD, fileDoc', docFuncRepr,
-  commentedItem, functionDox, classDox, moduleDox, getterName, setterName)
+import GOOL.Drasil.LanguageRenderer (addExt, blockDocD, stateVarDocD, 
+  stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
+  fileDoc', docFuncRepr, commentedItem, functionDox, classDox, moduleDox, 
+  getterName, setterName)
 
 import Prelude hiding (break,print,last,mod,(<>))
 import Data.Maybe (maybeToList)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
   integer, semi, equals, braces, int, comma, colon, hcat)
+
+block :: (RenderSym repr) => repr (Keyword repr) -> [repr (Statement repr)] -> 
+  repr (Block repr)
+block end sts = docBlock $ blockDocD (keyDoc end) (map (statementDoc . state) 
+  sts)
+
+varDec :: (RenderSym repr) => repr (Permanence repr) -> repr (Permanence repr) 
+  -> repr (Variable repr) -> repr (Statement repr)
+varDec s d v = stateFromData (permDoc (bind $ variableBind v) <+> getTypeDoc 
+  (variableType v) <+> variableDoc v) Semi
+  where bind Static = s
+        bind Dynamic = d
+
+varDecDef :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
+  repr (Statement repr)
+varDecDef vr vl = stateFromData (statementDoc (S.varDec vr) <+> equals 
+  <+> valueDoc vl) Semi
+
+listDec :: (RenderSym repr) => (repr (Value repr) -> Doc) -> 
+  repr (Value repr) -> repr (Variable repr) -> repr (Statement repr)
+listDec f sz v = stateFromData (statementDoc (S.varDec v) <> f sz) Semi
+
+listDecDef :: (RenderSym repr) => ([repr (Value repr)] -> Doc) -> 
+  repr (Variable repr) -> [repr (Value repr)] -> repr (Statement repr)
+listDecDef f v vs = stateFromData (statementDoc (S.varDec v) <> f vs) Semi
+
+objDecNew :: (RenderSym repr) => repr (Variable repr) -> [repr (Value repr)] -> 
+  repr (Statement repr)
+objDecNew v vs = S.varDecDef v (newObj (variableType v) vs)
+
+objDecNewNoParams :: (RenderSym repr) => repr (Variable repr) -> 
+  repr (Statement repr)
+objDecNewNoParams v = objDecNew v []
 
 construct :: Label -> TypeData
 construct n = td (Object n) n empty
@@ -110,12 +148,12 @@ intFunc m n = intMethod m n ""
 stateVar :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) ->
   repr (Variable repr) -> repr (StateVar repr)
 stateVar s p v = stateVarFromData $ stateVarDocD (scopeDoc s) (permDoc p) 
-  (statementDoc (state $ varDec v))
+  (statementDoc (state $ S.varDec v))
 
 stateVarDef :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) 
   -> repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr)
 stateVarDef s p vr vl = stateVarFromData $ stateVarDocD (scopeDoc s) (permDoc p)
-  (statementDoc (state $ varDecDef vr vl))
+  (statementDoc (state $ S.varDecDef vr vl))
 
 constVar :: (RenderSym repr) => Doc -> repr (Scope repr) ->
   repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr)

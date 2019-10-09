@@ -29,7 +29,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   listInnerTypeD, voidDocD, paramDocD, paramListDocD, mkParam, 
   methodListDocD, stateVarDocD, constVarDocD, alwaysDel, 
   ifCondDocD, forDocD, whileDocD, runStrategyD, listSliceD, notifyObserversD, 
-  varDecDocD, varDecDefDocD, objDecDefDocD, commentDocD, freeDocD, mkSt, 
+  commentDocD, freeDocD, mkSt, 
   mkStNoEnd, stringListVals', stringListLists', stateD, loopStateD, emptyStateD,
   assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, 
   decrement1D, increment1D, constDecDefD, discardInputD, discardFileInputD, 
@@ -51,9 +51,10 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   listSetFuncD, staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot,
   blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDox,
-  moduleDox, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
-  getterName, setterName, filterOutObjs)
-import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
+  moduleDox, commentedModD, docFuncRepr, valList, valueList, appendToBody, 
+  surroundBody, getterName, setterName, filterOutObjs)
+import qualified GOOL.Drasil.Generic as G (block, varDec, varDecDef, listDec, 
+  listDecDef, objDecNew, objDecNewNoParams, construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, function, docFunc, 
   docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
   docClass, commentedClass, buildModule, fileDoc, docMod)
@@ -770,7 +771,7 @@ instance BodySym CppSrcCode where
 
 instance BlockSym CppSrcCode where
   type Block CppSrcCode = Doc
-  block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
+  block = G.block endStatement
 
 instance InternalBlock CppSrcCode where
   blockDoc = unCPPSC
@@ -1023,21 +1024,14 @@ instance StatementSym CppSrcCode where
   (&++) = increment1D
   (&~-) = decrement1D
 
-  varDec v = mkSt <$> liftA3 varDecDocD v (bindDoc <$> static_) 
-    (bindDoc <$> dynamic_) 
-  varDecDef v def = mkSt <$> liftA4 varDecDefDocD v def (bindDoc <$> static_)
-    (bindDoc <$> dynamic_) 
-  listDec n v = mkSt <$> liftA4 cppListDecDoc v (litInt n) (bindDoc <$> static_)
-    (bindDoc <$> dynamic_) 
-  listDecDef v vs = mkSt <$> liftA4 cppListDecDefDoc v (liftList valList vs) 
-    (bindDoc <$> static_) (bindDoc <$> dynamic_) 
-  objDecDef v def = mkSt <$> liftA4 objDecDefDocD v def (bindDoc <$> static_) 
-    (bindDoc <$> dynamic_) 
-  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
-    vs) (bindDoc <$> static_) (bindDoc <$> dynamic_) 
+  varDec = G.varDec static_ dynamic_
+  varDecDef = G.varDecDef 
+  listDec n = G.listDec cppListDecDoc (litInt n)
+  listDecDef = G.listDecDef cppListDecDefDoc
+  objDecDef = varDecDef
+  objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew
-  objDecNewNoParams v = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
-    []) (bindDoc <$> static_) (bindDoc <$> dynamic_) 
+  objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef = constDecDefD
 
@@ -1599,10 +1593,8 @@ instance StatementSym CppHdrCode where
   (&++) _ = return (mkStNoEnd empty)
   (&~-) _ = return (mkStNoEnd empty)
 
-  varDec v = mkSt <$> liftA3 varDecDocD v (bindDoc <$> static_) 
-    (bindDoc <$> dynamic_) 
-  varDecDef v def = mkSt <$> liftA4 varDecDefDocD v def (bindDoc <$> static_)
-    (bindDoc <$> dynamic_) 
+  varDec = G.varDec static_ dynamic_
+  varDecDef = G.varDecDef
   listDec _ _ = return (mkStNoEnd empty)
   listDecDef _ _ = return (mkStNoEnd empty)
   objDecDef _ _ = return (mkStNoEnd empty)
@@ -1905,11 +1897,11 @@ cppCast t v = cppCast' (getType t) (getType $ valueType v)
 cppListSetDoc :: Doc -> Doc -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens i <+> equals <+> v
 
-cppListDecDoc :: VarData -> ValData -> Doc -> Doc -> Doc
-cppListDecDoc v n s d = varDecDocD v s d <> parens (valDoc n)
+cppListDecDoc :: (RenderSym repr) => repr (Value repr) -> Doc
+cppListDecDoc n = parens (valueDoc n)
 
-cppListDecDefDoc :: VarData -> Doc -> Doc -> Doc -> Doc
-cppListDecDefDoc v vs s d = varDecDocD v s d <> braces vs
+cppListDecDefDoc :: (RenderSym repr) => [repr (Value repr)] -> Doc
+cppListDecDefDoc vs = braces (valueList vs)
 
 cppPrint :: Bool -> ValData -> ValData -> Doc
 cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> val (valDoc v) <+> 

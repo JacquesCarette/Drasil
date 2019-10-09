@@ -15,7 +15,7 @@ module GOOL.Drasil.LanguageRenderer (
   methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD,
   alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
   tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
-  plusPlusDocD, plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, 
+  plusPlusDocD, plusPlusDocD', listDecDocD, 
   listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, 
   mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, breakD, continueD, returnD, multiReturnError, valStateD, freeError, throwD, initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD, switchAsIfD, ifExistsD, forRangeD, tryCatchD, stratDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, unOpPrec, 
   notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, 
@@ -29,16 +29,15 @@ module GOOL.Drasil.LanguageRenderer (
   binExpr, binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, 
   litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
   selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarDocD,
-  objVarDocD, inlineIfD, funcAppDocD, newObjDocD, newObjDocD',
-  objDecDefDocD, constDecDefDocD, listIndexExistsDocD, varD, 
+  objVarDocD, inlineIfD, funcAppDocD, newObjDocD, newObjDocD', constDecDefDocD, listIndexExistsDocD, varD, 
   staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD,
   funcDocD, 
   castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
   castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, 
   privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, functionDox, classDox, moduleDox, commentedModD, docFuncRepr,
-  valList, prependToBody, appendToBody, surroundBody, getterName, setterName, 
-  setMainMethod, setEmpty, intValue, filterOutObjs
+  valList, valueList, prependToBody, appendToBody, surroundBody, getterName, 
+  setterName, setMainMethod, setEmpty, intValue, filterOutObjs
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -67,7 +66,7 @@ import Data.Map as Map (lookup, fromList)
 import Data.Maybe (fromMaybe)
 import Prelude hiding (break,print,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
-  brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
+  space, brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
   integer, semi, equals, braces, int, comma, colon, hcat)
 
 ----------------------------------------
@@ -436,24 +435,15 @@ plusPlusDocD' :: VarData -> OpData -> Doc
 plusPlusDocD' v plusOp = varDoc v <+> equals <+> varDoc v <+> opDoc plusOp <+>
   int 1
 
-varDecDocD :: VarData -> Doc -> Doc -> Doc
-varDecDocD v s d = bind (varBind v) <+> typeDoc (varType v) <+> varDoc v
-  where bind Static = s
-        bind Dynamic = d
+listDecDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
+  Doc
+listDecDocD v n = space <> equals <+> new <+> getTypeDoc (variableType v) 
+  <> parens (valueDoc n)
 
-varDecDefDocD :: VarData -> ValData -> Doc -> Doc -> Doc
-varDecDefDocD v def s d = varDecDocD v s d <+> equals <+> valDoc def
-
-listDecDocD :: VarData -> ValData -> Doc -> Doc -> Doc
-listDecDocD v n s d = varDecDocD v s d <+> equals <+> new <+> 
-  typeDoc (varType v) <> parens (valDoc n)
-
-listDecDefDocD :: VarData -> [ValData] -> Doc -> Doc -> Doc
-listDecDefDocD v vs s d = varDecDocD v s d <+> equals <+> new <+> 
-  typeDoc (varType v) <+> braces (valList vs)
-
-objDecDefDocD :: VarData -> ValData -> Doc -> Doc -> Doc
-objDecDefDocD = varDecDefDocD
+listDecDefDocD :: (RenderSym repr) => repr (Variable repr) -> 
+  [repr (Value repr)] -> Doc
+listDecDefDocD v vs = space <> equals <+> new <+> getTypeDoc (variableType v) 
+  <+> braces (valueList vs)
 
 constDecDefDocD :: (RenderSym repr) => repr (Variable repr) -> 
   repr (Value repr) -> Doc

@@ -29,7 +29,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD,
   paramDocD, paramListDocD, mkParam, methodListDocD, stateVarListDocD, 
   ifCondDocD, forDocD, forEachDocD, 
   whileDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, 
-  varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, commentDocD, mkSt, 
+  listDecDocD, commentDocD, mkSt, 
   mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, 
   emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, 
   incrementD, decrement1D, increment1D, discardInputD, discardFileInputD, 
@@ -53,9 +53,10 @@ import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD,
   publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
   docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, functionDox, classDox, moduleDox, commentedModD, docFuncRepr,
-  valList, appendToBody, surroundBody, getterName, setterName, setMainMethod, 
-  intValue, filterOutObjs)
-import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
+  valList, valueList, appendToBody, surroundBody, getterName, setterName, 
+  setMainMethod, intValue, filterOutObjs)
+import qualified GOOL.Drasil.Generic as G (block, varDec, varDecDef, listDec, 
+  listDecDef, objDecNew, objDecNewNoParams, construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
   pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
@@ -64,14 +65,15 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), pd, ProgData(..), progD, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, emptyIfEmpty, liftA4, liftA5, liftA6, 
-  liftA7, liftList, lift1List, lift4Pair, liftPair, liftPairFst, checkParams)
+import GOOL.Drasil.Helpers (angles, emptyIfEmpty, emptyIfNull, liftA4, liftA5, 
+  liftA6, liftA7, liftList, lift1List, lift4Pair, liftPair, liftPairFst, 
+  checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
-  semi, vcat, lbrace, rbrace, render, colon, comma, render)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
+  equals, semi, vcat, lbrace, rbrace, render, colon, comma, render)
 
 jExt :: String
 jExt = "java"
@@ -156,7 +158,7 @@ instance BodySym JavaCode where
 
 instance BlockSym JavaCode where
   type Block JavaCode = Doc
-  block sts = lift1List blockDocD endStatement (map (fmap fst .state) sts)
+  block = G.block endStatement
 
 instance InternalBlock JavaCode where
   blockDoc = unJC
@@ -407,17 +409,14 @@ instance StatementSym JavaCode where
   (&++) = increment1D
   (&~-) = decrement1D
 
-  varDec v = mkSt <$> liftA3 varDecDocD v static_ dynamic_
-  varDecDef v def = mkSt <$> liftA4 varDecDefDocD v def static_ dynamic_
-  listDec n v = mkSt <$> liftA4 listDecDocD v (litInt n) static_ dynamic_ 
-  listDecDef v vs = mkSt <$> liftA4 jListDecDef v (liftList valList vs) static_ 
-    dynamic_ 
-  objDecDef v def = mkSt <$> liftA4 objDecDefDocD v def static_ dynamic_ 
-  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
-    vs) static_ dynamic_ 
+  varDec = G.varDec static_ dynamic_
+  varDecDef = G.varDecDef
+  listDec n v = G.listDec (listDecDocD v) (litInt n) v
+  listDecDef v = G.listDecDef (jListDecDef v) v
+  objDecDef = varDecDef
+  objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew
-  objDecNewNoParams v = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v)
-    []) static_ dynamic_ 
+  objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
 
@@ -686,10 +685,12 @@ jCast t v = jCast' (getType t) (getType $ valueType v)
         jCast' Integer (Enum _) = v $. func "ordinal" int []
         jCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
-jListDecDef :: VarData -> Doc -> Doc -> Doc -> Doc
-jListDecDef v vs s d = varDecDocD v s d <+> equals <+> new <+> 
-  typeDoc (varType v) <+> parens listElements
-  where listElements = emptyIfEmpty vs $ text "Arrays.asList" <> parens vs
+jListDecDef :: (RenderSym repr) => repr (Variable repr) -> [repr (Value repr)] 
+  -> Doc
+jListDecDef v vs = space <> equals <+> new <+> getTypeDoc (variableType v) <+> 
+  parens listElements
+  where listElements = emptyIfNull vs $ text "Arrays.asList" <> parens 
+          (valueList vs)
 
 jConstDecDef :: VarData -> ValData -> Doc
 jConstDecDef v def = text "final" <+> typeDoc (varType v) <+> varDoc v <+> 

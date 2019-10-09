@@ -20,8 +20,8 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..))
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, 
@@ -49,12 +49,13 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   getFuncD, setFuncD, listSizeFuncD, listAppendFuncD, listAccessFuncD', 
   listSetFuncD, staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot,
   blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc,
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDox,
   moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
   getterName, setterName, filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, function, docFunc, 
-  docInOutFunc, intFunc, privMVar, pubMVar, pubGVar)
+  docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
+  docClass, commentedClass)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileData(..), srcFile, hdrFile, FuncData(..),
   fd, ModData(..), md, updateModDoc, OpData(..), od, ParamData(..), pd, 
@@ -111,7 +112,7 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   endStatementLoop = pair endStatementLoop endStatementLoop
 
   include n = pair (include n) (include n)
-  inherit = pair inherit inherit
+  inherit n = pair (inherit n) (inherit n)
 
   list p = pair (list $ pfst p) (list $ psnd p)
 
@@ -129,6 +130,8 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   blockCommentEnd = pair blockCommentEnd blockCommentEnd
   docCommentStart = pair docCommentStart docCommentStart
   docCommentEnd = pair docCommentEnd docCommentEnd
+
+  keyDoc k = keyDoc $ pfst k
 
 instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
   type Permanence (p CppSrcCode CppHdrCode) = BindData
@@ -617,6 +620,9 @@ instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
     (psnd b))
   commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
     (commentedFunc (psnd cmt) (psnd fn)) 
+    
+  isMainMethod m = isMainMethod $ pfst m
+  methodDoc m = methodDoc $ pfst m
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
@@ -631,11 +637,11 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   pubGVar del v = pair (pubGVar del $ pfst v) (pubGVar del $ psnd v)
 
 instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
+  stateVarDoc v = stateVarDoc $ pfst v
   stateVarFromData d = pair (stateVarFromData d) (stateVarFromData d)
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
-  -- Bool is True if the class is a main class, False otherwise
-  type Class (p CppSrcCode CppHdrCode) = (Doc, Bool)
+  type Class (p CppSrcCode CppHdrCode) = Doc
   buildClass n p s vs fs = pair (buildClass n p (pfst s) (map pfst vs) 
     (map pfst fs)) (buildClass n p (psnd s) (map psnd vs) (map psnd fs))
   enum l ls s = pair (enum l ls $ pfst s) (enum l ls $ psnd s)
@@ -649,6 +655,10 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   commentedClass cmt cs = pair (commentedClass (pfst cmt) (pfst cs)) 
     (commentedClass (psnd cmt) (psnd cs))
 
+instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
+  classDoc c = classDoc $ pfst c
+  classFromData d = pair (classFromData d) (classFromData d)
+
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
   buildModule n l ms cs = pair (buildModule n l (map pfst ms) (map pfst cs)) 
@@ -660,6 +670,8 @@ instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   type BlockComment (p CppSrcCode CppHdrCode) = Doc
   blockComment lns = pair (blockComment lns) (blockComment lns)
   docComment lns = pair (docComment lns) (docComment lns)
+
+  blockCommentDoc c = blockCommentDoc $ pfst c
 
 -----------------
 -- Source File --
@@ -704,7 +716,7 @@ instance KeywordSym CppSrcCode where
   endStatementLoop = return empty
 
   include n = return $ text "#include" <+> doubleQuotedText (addExt cppHdrExt n)
-  inherit = return colon
+  inherit n = fmap (cppInherit n . fst) public
 
   list _ = return $ text "vector"
 
@@ -722,6 +734,8 @@ instance KeywordSym CppSrcCode where
   blockCommentEnd = return blockCmtEnd
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
+
+  keyDoc = unCPPSC
 
 instance PermanenceSym CppSrcCode where
   type Permanence CppSrcCode = BindData
@@ -1185,6 +1199,9 @@ instance InternalMethod CppSrcCode where
   commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn)) else fn
+ 
+  isMainMethod = isMainMthd . unCPPSC
+  methodDoc = mthdDoc . unCPPSC
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1201,33 +1218,34 @@ instance StateVarSym CppSrcCode where
   pubGVar = G.pubGVar
 
 instance InternalStateVar CppSrcCode where
+  stateVarDoc = stVarDoc . unCPPSC
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppSrcCode where
-  -- Bool is True if the class is a main class, False otherwise
-  type Class CppSrcCode = (Doc, Bool)
-  buildClass n _ _ vs fs = liftPairFst (lift2Lists cppsClass vs (fs ++ 
-    [destructor n vs]), any (isMainMthd . unCPPSC) fs)
-  enum _ _ _ = return (empty, False)
-  privClass n p = buildClass n p private
-  pubClass n p = buildClass n p public
-  
-  docClass d = commentedClass (docComment $ classDoc d)
+  type Class CppSrcCode = Doc
+  buildClass n _ _ vs fs = lift2Lists cppsClass vs (fs ++ 
+    [destructor n vs])
+  enum _ _ _ = return empty
+  privClass = G.privClass
+  pubClass = G.pubClass
+
+  docClass = G.docClass
 
   commentedClass _ cs = cs
 
+instance InternalClass CppSrcCode where
+  classDoc = unCPPSC
+  classFromData = return
+
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n l ms cs = fmap (md n (any (snd . unCPPSC) cs || 
-    any (isMainMthd . unCPPSC) ms)) (if all (isEmpty . fst . unCPPSC) cs && all 
-    (isEmpty . mthdDoc . unCPPSC) ms then return empty else
-    liftA5 cppModuleDoc (liftList vcat (map include l)) 
-    (if not (null l) && any (not . isEmpty . fst . unCPPSC) cs then
-    return blank else return empty) (liftList methodListDocD (map (fmap 
-    mthdDoc) ms)) (if (any (not . isEmpty . fst . unCPPSC) cs
-    || (all (isEmpty . fst . unCPPSC) cs && not (null l))) && 
-    any (not . isEmpty . mthdDoc . unCPPSC) ms then return blank else 
-    return empty) (liftList vibcat (map (fmap fst) cs)))
+  buildModule n l ms cs = fmap (md n (any isMainMethod ms)) (if all (isEmpty . 
+    classDoc) cs && all (isEmpty . methodDoc) ms then return empty else liftA5 
+    cppModuleDoc (liftList vcat (map include l)) (if not (null l) && any (not . 
+    isEmpty . classDoc) cs then return blank else return empty) (liftList 
+    methodListDocD (map (fmap mthdDoc) ms)) (if (any (not . isEmpty . classDoc) 
+    cs || (all (isEmpty . classDoc) cs && not (null l))) && any (not . isEmpty 
+    . methodDoc) ms then return blank else return empty) (liftList vibcat cs))
     
   moduleName m = name (unCPPSC m)
 
@@ -1235,6 +1253,8 @@ instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
   docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
+
+  blockCommentDoc = unCPPSC
 
 -----------------
 -- Header File --
@@ -1275,7 +1295,7 @@ instance KeywordSym CppHdrCode where
   endStatementLoop = return empty
 
   include n = return $ text "#include" <+> doubleQuotedText (addExt cppHdrExt n)
-  inherit = return colon
+  inherit n = fmap (cppInherit n . fst) public
 
   list _ = return $ text "vector"
 
@@ -1293,6 +1313,8 @@ instance KeywordSym CppHdrCode where
   blockCommentEnd = return blockCmtEnd
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
+
+  keyDoc = unCPPHC
 
 instance PermanenceSym CppHdrCode where
   type Permanence CppHdrCode = BindData
@@ -1708,6 +1730,9 @@ instance InternalMethod CppHdrCode where
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
 
+  isMainMethod = isMainMthd . unCPPHC
+  methodDoc = mthdDoc . unCPPHC
+
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar _ s p v = liftA3 svd (fmap snd s) (return $ stateVarDocD empty 
@@ -1721,38 +1746,41 @@ instance StateVarSym CppHdrCode where
   pubGVar = G.pubGVar
 
 instance InternalStateVar CppHdrCode where
+  stateVarDoc = stVarDoc . unCPPHC
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppHdrCode where
-  -- Bool is True if the class is a main class, False otherwise
-  type Class CppHdrCode = (Doc, Bool)
+  type Class CppHdrCode = Doc
   -- do this with a do? avoids liftA8...
-  buildClass n p _ vs fs = liftPairFst (liftA8 (cpphClass n p) (lift2Lists 
+  buildClass n p _ vs fs = liftA8 (cpphClass n) (lift2Lists 
     (cpphVarsFuncsList Pub) vs (fs ++ [destructor n vs])) (lift2Lists 
     (cpphVarsFuncsList Priv) vs (fs ++ [destructor n vs])) (fmap fst public)
-    (fmap fst private) inherit blockStart blockEnd endStatement, 
-    any (isMainMthd . unCPPHC) fs)
-  enum n es _ = liftPairFst (liftA4 (cpphEnum n) (return $ enumElementsDocD es 
-    enumsEqualInts) blockStart blockEnd endStatement, False)
-  privClass n p = buildClass n p private
-  pubClass n p = buildClass n p public
-  
-  docClass d = commentedClass (docComment $ classDoc d)
+    (fmap fst private) parent blockStart blockEnd endStatement
+    where parent = case p of Nothing -> return empty
+                             Just pn -> inherit pn
+  enum n es _ = liftA4 (cpphEnum n) (return $ enumElementsDocD es 
+    enumsEqualInts) blockStart blockEnd endStatement
+  privClass = G.privClass
+  pubClass = G.pubClass
 
-  commentedClass cmt cs = if snd (unCPPHC cs) then cs else 
-    liftPair (liftA2 commentedItem cmt (fmap fst cs), fmap snd cs)
+  docClass = G.docClass
+
+  commentedClass = G.commentedClass
+
+instance InternalClass CppHdrCode where
+  classDoc = unCPPHC
+  classFromData = return
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
-  buildModule n l ms cs = fmap (md n (any (snd . unCPPHC) cs || 
-    any (isMainMthd . unCPPHC) ms)) (if all (isEmpty . fst . unCPPHC) cs && all 
-    (isEmpty . mthdDoc . unCPPHC) ms then return empty else liftA5 cppModuleDoc
-    (liftList vcat (map include l)) (if not (null l) && any 
-    (not . isEmpty . fst . unCPPHC) cs then return blank else return empty) 
-    (liftList methodListDocD methods) (if (any (not . isEmpty . fst . unCPPHC) 
-    cs || (all (isEmpty . fst . unCPPHC) cs && not (null l))) && any 
-    (not . isEmpty . mthdDoc . unCPPHC) ms then return blank else return empty)
-    (liftList vibcat (map (fmap fst) cs)))
+  buildModule n l ms cs = fmap (md n (any isMainMethod ms)) (if all 
+    (isEmpty . classDoc) cs && all (isEmpty . methodDoc) ms then return empty 
+    else liftA5 cppModuleDoc (liftList vcat (map include l)) (if not (null l) &&
+    any (not . isEmpty . classDoc) cs then return blank else return empty) 
+    (liftList methodListDocD methods) (if (any (not . isEmpty . classDoc) 
+    cs || (all (isEmpty . classDoc) cs && not (null l))) && any 
+    (not . isEmpty . methodDoc) ms then return blank else return empty)
+    (liftList vibcat cs))
     where methods = map (fmap mthdDoc) ms
       
   moduleName m = name (unCPPHC m)
@@ -1761,6 +1789,8 @@ instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
   docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
+
+  blockCommentDoc = unCPPHC
 
 -- helpers
 toBasicVar :: CppSrcCode (Variable CppSrcCode) -> 
@@ -1831,6 +1861,9 @@ usingNameSpace :: Label -> Maybe Label -> Doc -> Doc
 usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <>
   text m <> end
 usingNameSpace n Nothing end = text "using namespace" <+> text n <> end
+
+cppInherit :: Label -> Doc -> Doc
+cppInherit n pub = colon <+> pub <+> text n
 
 cppBoolTypeDoc :: TypeData
 cppBoolTypeDoc = td Boolean "bool" (text "bool")
@@ -1955,20 +1988,17 @@ cppsClass vs fs = vcat $ vars ++ (if any (not . isEmpty) vars then blank else
   where vars = map stVarDoc vs
         funcs = map mthdDoc fs
 
-cpphClass :: Label -> Maybe Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> 
+cpphClass :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> 
   Doc -> Doc -> Doc
-cpphClass n p pubs privs pub priv inhrt bStart bEnd end =
-  let baseClass = case p of Nothing -> empty
-                            Just pn -> inhrt <+> pub <+> text pn
-  in vcat [
-      classDec <+> text n <+> baseClass <+> bStart,
-      indentList [
-        pub <> colon,
-        indent pubs,
-        blank,
-        priv <> colon,
-        indent privs],
-      bEnd <> end]
+cpphClass n pubs privs pub priv inhrt bStart bEnd end = vcat [
+  classDec <+> text n <+> inhrt <+> bStart,
+  indentList [
+    pub <> colon,
+    indent pubs,
+    blank,
+    priv <> colon,
+    indent privs],
+  bEnd <> end]
 
 cpphEnum :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 cpphEnum n es bStart bEnd end = vcat [

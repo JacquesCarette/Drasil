@@ -12,16 +12,15 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
-  BodySym(..), 
-  BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
+  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), InternalType(..),
   UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..))
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD, 
   enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, oneLinerD, 
   outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
@@ -53,13 +52,14 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD,
   listAccessFuncD, listSetFuncD, staticDocD, dynamicDocD, bindingError, 
   privateDocD, publicDocD, dot, new, blockCmtStart, blockCmtEnd, docCmtStart, 
   doubleSlash, elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr,
+  addCommentsDocD, functionDox, classDox, moduleDoc, commentedModD, docFuncRepr,
   appendToBody, surroundBody, getterName, setterName, setMainMethod, 
   filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
-  privMVar, pubMVar, pubGVar)
+  privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass,
+  commentedClass)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), pd, updateParamDoc, ProgData(..), progD, 
@@ -115,7 +115,7 @@ instance KeywordSym CSharpCode where
   endStatementLoop = return empty
 
   include _ = return $ text "using"
-  inherit = return colon
+  inherit n = return $ colon <+> text n
 
   list _ = return $ text "List"
 
@@ -133,6 +133,8 @@ instance KeywordSym CSharpCode where
   blockCommentEnd = return blockCmtEnd
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
+
+  keyDoc = unCSC
 
 instance PermanenceSym CSharpCode where
   type Permanence CSharpCode = Doc
@@ -555,6 +557,9 @@ instance InternalMethod CSharpCode where
     (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
   intFunc = G.intFunc
   commentedFunc cmt = liftA2 updateMthdDoc (fmap commentedItem cmt)
+  
+  isMainMethod = isMainMthd . unCSC
+  methodDoc = mthdDoc . unCSC
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
@@ -566,29 +571,28 @@ instance StateVarSym CSharpCode where
   pubGVar = G.pubGVar
 
 instance InternalStateVar CSharpCode where
+  stateVarDoc = unCSC
   stateVarFromData = return
 
 instance ClassSym CSharpCode where
-  -- Bool is True if the method is a main method, False otherwise
-  type Class CSharpCode = (Doc, Bool)
-  buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s 
-    (liftList stateVarListDocD vs) (liftList methodListDocD (map (fmap mthdDoc) 
-    fs)), any (isMainMthd . unCSC) fs)
-  enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ 
-    enumElementsDocD es False) s, False)
-  privClass n p = buildClass n p private
-  pubClass n p = buildClass n p public
+  type Class CSharpCode = Doc
+  buildClass = G.buildClass classDocD inherit
+  enum = G.enum
+  privClass = G.privClass
+  pubClass = G.pubClass
 
-  docClass d = commentedClass (docComment $ classDoc d)
+  docClass = G.docClass
 
-  commentedClass cmt cs = liftPair (liftA2 commentedItem cmt (fmap fst cs), 
-    fmap snd cs)
+  commentedClass = G.commentedClass
+
+instance InternalClass CSharpCode where
+  classDoc = unCSC
+  classFromData = return
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n _ ms cs = fmap (md n (any (isMainMthd . unCSC) ms || 
-    any (snd . unCSC) cs)) (liftList moduleDocD (if null ms then cs 
-    else pubClass n Nothing [] ms : cs))
+  buildModule n _ ms cs = fmap (md n (any isMainMethod ms)) (liftList 
+    moduleDocD (if null ms then cs else pubClass n Nothing [] ms : cs))
     
   moduleName m = name (unCSC m)
 
@@ -596,6 +600,8 @@ instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
   docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
+
+  blockCommentDoc = unCSC
 
 csName :: String
 csName = "C#"

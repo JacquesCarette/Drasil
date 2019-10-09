@@ -36,7 +36,7 @@ module GOOL.Drasil.LanguageRenderer (
   castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
   castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, 
   privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr,
+  addCommentsDocD, functionDox, classDox, moduleDoc, commentedModD, docFuncRepr,
   valList, prependToBody, appendToBody, surroundBody, getterName, setterName, 
   setMainMethod, setEmpty, intValue, filterOutObjs
 ) where
@@ -114,21 +114,19 @@ fileDoc' t m b = vibcat [
 
 -- Module --
 
-moduleDocD :: [(Doc, Bool)] -> Doc
-moduleDocD cs = vibcat (map fst cs)
+moduleDocD :: [Doc] -> Doc
+moduleDocD = vibcat
 
 -- Class --
 
-classDocD :: Label -> Maybe Label -> Doc -> Doc -> Doc -> Doc -> Doc
-classDocD n p inh s vs fs = vcat [
-  s <+> classDec <+> text n <+> baseClass <+> lbrace, 
+classDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
+classDocD n p s vs fs = vcat [
+  s <+> classDec <+> text n <+> p <+> lbrace, 
   indentList [
     vs,
     blank,
     fs],
   rbrace]
-  where baseClass = case p of Nothing -> empty
-                              Just pn -> inh <+> text pn
 
 enumDocD :: Label -> Doc -> Doc -> Doc
 enumDocD n es s = vcat [
@@ -1193,8 +1191,8 @@ functionDox desc params returns = [doxBrief ++ desc | not (null desc)]
   ++ map (\(v, vDesc) -> doxParam ++ v ++ " " ++ vDesc) params
   ++ map (doxReturn ++) returns
 
-classDoc :: String -> [String]
-classDoc desc = [doxBrief ++ desc | not (null desc)]
+classDox :: String -> [String]
+classDox desc = [doxBrief ++ desc | not (null desc)]
 
 moduleDoc :: String -> [String] -> String -> String -> [String]
 moduleDoc desc as date m = (doxFile ++ m) : 

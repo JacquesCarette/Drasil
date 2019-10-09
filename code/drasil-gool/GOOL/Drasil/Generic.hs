@@ -2,24 +2,28 @@
 
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.Generic (
-  construct, method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar,
-  stateVarDef, constVar, privMVar, pubMVar, pubGVar
+  construct, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
+  docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar,
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
+  privClass, pubClass, docClass, commentedClass
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label,
+import GOOL.Drasil.Symantics (Label, KeywordSym(..), 
   RenderSym(..), BodySym(..), PermanenceSym(..), InternalPerm(..), TypeSym(..), 
   InternalType(..), VariableSym(..), ValueSym(..), InternalStatement(..), 
   StatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(mType), 
   ParameterSym(..), MethodTypeSym(MethodType), MethodSym(Method, inOutFunc), 
-  InternalMethod(intMethod, commentedFunc), StateVarSym(StateVar), 
-  InternalStateVar(..), BlockComment(..))
+  InternalMethod(intMethod, commentedFunc, isMainMethod, methodDoc), 
+  StateVarSym(StateVar), 
+  InternalStateVar(..), ClassSym(Class), InternalClass(..), BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (MethodTypeSym(construct), 
   MethodSym(method, mainFunction), InternalMethod(intFunc), 
-  StateVarSym(stateVar))
+  StateVarSym(stateVar), ClassSym(buildClass, commentedClass))
 import GOOL.Drasil.Data (TypeData(..), td)
-import GOOL.Drasil.LanguageRenderer (stateVarDocD, docFuncRepr, functionDox, 
-  getterName, setterName)
+import GOOL.Drasil.LanguageRenderer (stateVarDocD, stateVarListDocD, 
+  methodListDocD, enumDocD, enumElementsDocD, docFuncRepr, commentedItem, 
+  functionDox, classDox, getterName, setterName)
 
 import Prelude hiding (break,print,last,mod,(<>))
 import Data.Maybe (maybeToList)
@@ -124,3 +128,32 @@ pubMVar del = S.stateVar del public dynamic_
 pubGVar :: (RenderSym repr) => Int -> repr (Variable repr) -> 
   repr (StateVar repr)
 pubGVar del = S.stateVar del public static_
+
+buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> 
+  (Label -> repr (Keyword repr)) -> Label -> Maybe Label -> repr (Scope repr) 
+  -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
+buildClass f i n p s vs fs = classFromData (f n parent (scopeDoc s) 
+  (stateVarListDocD (map stateVarDoc vs)) (methodListDocD (map methodDoc fs)))
+  where parent = case p of Nothing -> empty
+                           Just pn -> keyDoc $ i pn
+
+enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
+  repr (Class repr)
+enum n es s = classFromData (enumDocD n (enumElementsDocD es False) 
+  (scopeDoc s))
+
+privClass :: (RenderSym repr) => Label -> Maybe Label -> [repr (StateVar repr)] 
+  -> [repr (Method repr)] -> repr (Class repr)
+privClass n p = S.buildClass n p private
+
+pubClass :: (RenderSym repr) => Label -> Maybe Label -> [repr (StateVar repr)] 
+  -> [repr (Method repr)] -> repr (Class repr)
+pubClass n p = S.buildClass n p public
+
+docClass :: (RenderSym repr) => String -> repr (Class repr) -> repr (Class repr)
+docClass d = S.commentedClass (docComment $ classDox d)
+
+commentedClass :: (RenderSym repr) => repr (BlockComment repr) -> 
+  repr (Class repr) -> repr (Class repr)
+commentedClass cmt cs = classFromData (commentedItem (blockCommentDoc cmt) 
+  (classDoc cs))

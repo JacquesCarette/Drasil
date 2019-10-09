@@ -19,8 +19,8 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..),
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..))
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD, 
   classDocD, enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
   oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
@@ -51,13 +51,14 @@ import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD,
   listAccessFuncD', staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
   docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr,
+  addCommentsDocD, functionDox, classDox, moduleDoc, commentedModD, docFuncRepr,
   valList, appendToBody, surroundBody, getterName, setterName, setMainMethod, 
   intValue, filterOutObjs)
 import qualified GOOL.Drasil.Generic as G (construct, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
-  pubMVar, pubGVar)
+  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
+  commentedClass)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), td, 
@@ -112,7 +113,7 @@ instance KeywordSym JavaCode where
   endStatementLoop = return empty
 
   include _ = return $ text "import"
-  inherit = return $ text "extends"
+  inherit n = return $ text "extends" <+> text n
 
   list _ = return $ text "ArrayList"
 
@@ -130,6 +131,8 @@ instance KeywordSym JavaCode where
   blockCommentEnd = return blockCmtEnd
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
+
+  keyDoc = unJC
 
 instance PermanenceSym JavaCode where
   type Permanence JavaCode = Doc
@@ -579,6 +582,9 @@ instance InternalMethod JavaCode where
     (liftA5 (jMethod n) s p t (liftList paramListDocD ps) b)
   intFunc = G.intFunc
   commentedFunc cmt = liftA2 updateMthdDoc (fmap commentedItem cmt)
+  
+  isMainMethod = isMainMthd . unJC
+  methodDoc = mthdDoc . unJC
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
@@ -590,29 +596,28 @@ instance StateVarSym JavaCode where
   pubGVar = G.pubGVar
 
 instance InternalStateVar JavaCode where
+  stateVarDoc = unJC
   stateVarFromData = return
 
 instance ClassSym JavaCode where
-  -- Bool is True if the method is a main method, False otherwise
-  type Class JavaCode = (Doc, Bool)
-  buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s 
-    (liftList stateVarListDocD vs) (liftList methodListDocD (map (fmap mthdDoc) 
-    fs)), any (isMainMthd . unJC) fs)
-  enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ 
-    enumElementsDocD es enumsEqualInts) s, False)
-  privClass n p = buildClass n p private
-  pubClass n p = buildClass n p public
-  
-  docClass d = commentedClass (docComment $ classDoc d)
+  type Class JavaCode = Doc
+  buildClass = G.buildClass classDocD inherit
+  enum = G.enum
+  privClass = G.privClass
+  pubClass = G.pubClass
 
-  commentedClass cmt cs = liftPair (liftA2 commentedItem cmt (fmap fst cs), 
-    fmap snd cs)
+  docClass = G.docClass
+
+  commentedClass = G.commentedClass
+
+instance InternalClass JavaCode where
+  classDoc = unJC
+  classFromData = return
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
-  buildModule n _ ms cs = fmap (md n (any (isMainMthd . unJC) ms || 
-    any (snd . unJC) cs)) (liftList moduleDocD (if null ms then cs 
-    else pubClass n Nothing [] ms : cs))
+  buildModule n _ ms cs = fmap (md n (any isMainMethod ms)) (liftList 
+    moduleDocD (if null ms then cs else pubClass n Nothing [] ms : cs))
 
   moduleName m = name (unJC m)
 
@@ -620,6 +625,8 @@ instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
   docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd 
+
+  blockCommentDoc = unJC
 
 jName :: String
 jName = "Java"

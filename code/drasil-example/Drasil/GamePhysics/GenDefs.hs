@@ -6,10 +6,10 @@ import Utils.Drasil
 import Theory.Drasil (GenDefn, gd)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
- displacement, fOfGravity)
-import Drasil.GamePhysics.Unitals (mLarger, dispNorm, dispUnit, massA, massB,
+ fOfGravity)
+import Drasil.GamePhysics.Unitals (mLarger, dispNorm, dVect, massA, massB,
   momtInertA, momtInertB, normalLen, normalVect, perpLenA, perpLenB, initRelVel,
-  dispUnit, dispUnit, mass_1, mass_2, sqrDist)
+  mass_1, mass_2, sqrDist, distMass)
 import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
   rigidTwoDAssump)
 import Data.Drasil.Concepts.Math as CM (line, cartesian)
@@ -76,7 +76,7 @@ accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much lar
 
 accelGravityRel :: Relation
 accelGravityRel = sy QP.gravitationalAccel $= negate (sy QP.gravitationalConst * sy mLarger/
-                  (sy dispNorm $^ 2) * sy dispUnit)
+                  (sy dispNorm $^ 2) * sy dVect)
 
 accelGravitySrc :: Reference
 accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
@@ -103,7 +103,7 @@ accelGravityDerivSentence2 = [S "The above equation governs the gravitational at
         S "exerts on the lighter body.", S "Further" `sC` S "suppose that the", phrase cartesian `sIs`
         S "chosen such that this", phrase QP.force, S "acts on a", phrase line, 
         S "which lies along one of the principal axes.", 
-        S "Then our", getTandS dispUnit, S "for the x or y axes is"]
+        S "Then our", getTandS dVect, S "for the x or y axes is"]
 
 accelGravityDerivSentence3 :: [Sentence]
 accelGravityDerivSentence3 =  [S "Given the above assumptions" `sC` S "let", ch mLarger `sAnd` ch QPP.mass, 
@@ -122,21 +122,21 @@ accelGravityDerivSentence5 =  [S "and thus the negative sign indicates that the"
 
 accelGravityDerivEqn1 :: Expr
 accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst * (sy mass_1 *  sy mass_2)/
-                        sy sqrDist) * sy dispUnit 
+                        sy sqrDist) * sy dVect
 
 accelGravityDerivEqn2 :: Expr
-accelGravityDerivEqn2 = sy dispUnit $= (sy QP.displacement/ sy dispNorm)
+accelGravityDerivEqn2 = sy dVect $= (sy distMass/ sy dispNorm)
 
 accelGravityDerivEqn3 :: Expr
 accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst *
-                         (sy mLarger * sy QPP.mass / sy sqrDist) * sy dispUnit
+                         (sy mLarger * sy QPP.mass / sy sqrDist) * sy dVect
                          $= sy QPP.mass * sy QP.gravitationalAccel
 
 accelGravityDerivEqn4 :: Expr
-accelGravityDerivEqn4 = sy QP.gravitationalConst *  (sy mLarger / sy sqrDist) * sy dispUnit $= sy QP.gravitationalAccel
+accelGravityDerivEqn4 = sy QP.gravitationalConst *  (sy mLarger / sy sqrDist) * sy dVect $= sy QP.gravitationalAccel
                         
 accelGravityDerivEqn5 :: Expr
-accelGravityDerivEqn5 = sy QP.gravitationalAccel $= negate (sy QP.gravitationalConst *  (sy mLarger / sy sqrDist)) * sy dispUnit
+accelGravityDerivEqn5 = sy QP.gravitationalAccel $= negate (sy QP.gravitationalConst *  (sy mLarger / sy sqrDist)) * sy dVect
                       
 accelGravityDerivEqns :: [Expr]
 accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGravityDerivEqn3,

@@ -27,13 +27,13 @@ defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints ++
 
 unitSymbs :: [UnitaryConceptDict]
 unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
- force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
+ force_1, force_2, forceI, mass_1, mass_2, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP,
-  velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger]
+  velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger, distMass, dVect]
 
 ----------------------
 -- TABLE OF SYMBOLS --
@@ -62,11 +62,11 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   QP.time, QP.angularDisplacement, posCM, posI, massI, mTot, accI, velI,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
   perpLenA, perpLenB, forceI, torqueI, timeC, velA, velB, massA, massB,
-  angVelA, angVelB, force_1, force_2, mass_1, mass_2, dispUnit, 
+  angVelA, angVelB, force_1, force_2, mass_1, mass_2, 
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
   contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
-  QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger, QP.fOfGravity, QP.positionVec]
+  QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger, QP.fOfGravity, QP.positionVec, distMass, dVect]
 
 -----------------------
 -- PARAMETRIZED HACK --
@@ -129,13 +129,13 @@ velParam n w = ucs'
 -- CHUNKS WITH UNITS --
 -----------------------
 
-iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit, 
+iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
   posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel,
-  velAP, velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger :: UnitalChunk
+  velAP, velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger, distMass, dVect :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
@@ -146,12 +146,15 @@ normalVect  = ucs' (dccWDS "normalVect" (compoundPhrase' (cn "collision")
                    (QM.normalVect ^. term)) (phrase QM.normalVect)) 
                    (eqSymb QM.normalVect) Real metre
 
-dispUnit = ucs' (dccWDS "dispUnit" 
+dVect = ucs' (dccWDS "unitVect" 
           (cn "unit vector directed from the center of the large mass to the center of the smaller mass") 
-                   (phrase QM.unitVect)) (vec (hat lR)) Real metre
+                   (phrase QM.unitVect)) (vec (hat lD)) Real metre
 
-dispNorm = ucs' (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the displacement")
+dispNorm = ucs' (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the distance between the center of mass of two bodies")
                (phrase QM.euclidNorm) ) (eqSymb QM.euclidNorm) Real metre
+
+distMass = ucs' (dccWDS "distMass" (cn "distance between the center of mass of the rigid bodies") 
+                 (phrase QP.distance)) (vec lD) Real metre
 
 sqrDist = ucs' (dccWDS "euclideanNorm" (cn' "squared distance")
                (phrase QM.euclidNorm)) (sup (eqSymb QM.euclidNorm) 

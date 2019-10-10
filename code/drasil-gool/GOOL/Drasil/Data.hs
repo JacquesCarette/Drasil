@@ -6,7 +6,7 @@ module GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, Terminator(..),
   TypedFunc(..), funcType, funcDoc, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, OpData(..), od, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, emptyProg, 
-  StateVarData(..), svd, TypeData(..), td, btd, TypedType(..), cType, 
+  StateVarData(..), svd, TypeData(..), td, btd, ltd, TypedType(..), cType, 
   typeString, typeDoc, ValData(..), vd, updateValDoc, TypedValue(..), 
   otherVal, boolVal, valPrec, valType, valDoc, toOtherVal, Binding(..), 
   VarData(..), vard, TypedVar(..), getVarData, otherVar, varBind, varName, 
@@ -14,10 +14,10 @@ module GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, Terminator(..),
   valToType, varToType
 ) where
 
-import GOOL.Drasil.CodeType (CodeType)
+import GOOL.Drasil.CodeType (CodeType(..))
 
 import Control.Applicative (liftA2)
-import Prelude hiding ((<>))
+import Prelude hiding (LT,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 
 class Pair p where
@@ -165,12 +165,19 @@ td c s d = otherType (TD c s d)
 btd :: CodeType -> String -> Doc -> TypedType Boolean
 btd c s d = boolType (TD c s d)
 
+ltd :: TypedType a -> (String -> String) -> (Doc -> Doc) -> TypedType [a]
+ltd t sf df = listType $ updateTypedType t List sf df
+
 data TypedType a where
   BT :: TypeData -> TypedType Boolean
   OT :: TypeData -> TypedType Other
+  LT :: TypedType a -> TypedType [a]
 
 boolType :: TypeData -> TypedType Boolean
 boolType = BT
+
+listType :: TypedType a -> TypedType [a]
+listType = LT
 
 otherType :: TypeData -> TypedType Other
 otherType = OT
@@ -178,6 +185,7 @@ otherType = OT
 getTypeData :: TypedType a -> TypeData
 getTypeData (BT t) = t
 getTypeData (OT t) = t
+getTypeData (LT t) = getTypeData t
 
 cType :: TypedType a -> CodeType
 typeString :: TypedType a -> String
@@ -185,6 +193,16 @@ typeDoc :: TypedType a -> Doc
 cType = cdType . getTypeData
 typeString = tpString . getTypeData
 typeDoc = tpDoc . getTypeData
+
+updateTypedType :: TypedType a -> (CodeType -> CodeType) -> (String -> String) 
+  -> (Doc -> Doc) -> TypedType a
+updateTypedType (BT t) cf sf df = BT (updateTypeData t cf sf df)
+updateTypedType (OT t) cf sf df = OT (updateTypeData t cf sf df)
+updateTypedType (LT t) cf sf df = LT (updateTypedType t cf sf df)
+
+updateTypeData :: TypeData -> (CodeType -> CodeType) -> (String -> String) 
+  -> (Doc -> Doc) -> TypeData
+updateTypeData t cf sf df = TD (cf $ cdType t) (sf $ tpString t) (df $ tpDoc t)
 
 ---- Values ----
 
@@ -262,14 +280,17 @@ toOtherVar (OVr v) = OVr v
 typeToFunc :: TypedType a -> Doc -> TypedFunc a
 typeToFunc (BT t) d = BF (fd t d)
 typeToFunc (OT t) d = OF (fd t d)
+typeToFunc (LT _) _ = error "List type not yet implemented for functions"
 
 typeToVal :: Maybe Int -> TypedType a -> Doc -> TypedValue a
 typeToVal p (BT t) d = BV (vd p t d)
 typeToVal p (OT t) d = OV (vd p t d)
+typeToVal _ (LT _) _ = error "List type not yet implemented for values"
 
 typeToVar :: Binding -> String -> TypedType a -> Doc -> TypedVar a
 typeToVar b n (BT t) d = BVr (vard b n t d)
 typeToVar b n (OT t) d = OVr (vard b n t d)
+typeToVar _ _ (LT _) _ = error "List type not yet implemented for variables"
 
 funcToType :: TypedFunc a -> TypedType a
 funcToType (BF f) = BT (fnType f)

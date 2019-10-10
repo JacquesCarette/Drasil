@@ -55,7 +55,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD,
 import GOOL.Drasil.Data (Other, Boolean, Terminator(..), 
   FileData(..), file, TypedFunc(..), funcDoc, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
-  ProgData(..), progD, TypeData(..), td, TypedType(..), cType, typeString, 
+  ProgData(..), progD, TypeData(..), td, ltd, TypedType(..), cType, typeString, 
   typeDoc, TypedValue(..), valDoc, toOtherVal, 
   TypedVar(..), getVarData, otherVar, varBind, varName, varType, varDoc, 
   typeToFunc, typeToVal, typeToVar, funcToType, valToType, varToType)
@@ -64,6 +64,7 @@ import GOOL.Drasil.Helpers (angles, emptyIfEmpty,
   lift4Pair, liftPair, liftPairFst, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import qualified Prelude as P (const)
 import Data.Maybe (maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
@@ -160,7 +161,7 @@ instance TypeSym JavaCode where
   infile = return jInfileTypeDoc
   outfile = return jOutfileTypeDoc
   listType p st = liftA2 jListType st (list p)
-  listInnerType = listInnerTypeD
+  listInnerType = fmap listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
   iterator t = t
@@ -646,11 +647,11 @@ jInfileTypeDoc = td File "Scanner" (text "Scanner")
 jOutfileTypeDoc :: TypedType Other
 jOutfileTypeDoc = td File "PrintWriter" (text "PrintWriter")
 
-jListType :: TypedType a -> Doc -> TypedType Other
-jListType (OT (TD Integer _ _)) lst = td (List Integer) (render lst ++ 
-  "<Integer>") (lst <> angles (text "Integer"))
-jListType (OT (TD Float _ _)) lst = td (List Float) (render lst ++ 
-  "<Double>") (lst <> angles (text "Double"))
+jListType :: TypedType a -> Doc -> TypedType [a]
+jListType t@(OT (TD Integer _ _)) lst = ltd t (P.const (render lst ++ 
+  "<Integer>")) (P.const (lst <> angles (text "Integer")))
+jListType t@(OT (TD Float _ _)) lst = ltd t (P.const (render lst ++ 
+  "<Double>")) (P.const (lst <> angles (text "Double")))
 jListType t lst = listTypeDocD t lst
 
 jArrayType :: JavaCode (Type JavaCode Other)

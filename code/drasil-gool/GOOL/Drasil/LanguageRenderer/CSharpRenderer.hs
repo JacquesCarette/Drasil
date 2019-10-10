@@ -162,7 +162,7 @@ instance TypeSym CSharpCode where
   infile = return csInfileTypeDoc
   outfile = return csOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
-  listInnerType = listInnerTypeD
+  listInnerType = fmap listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
   iterator t = t

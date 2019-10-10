@@ -48,7 +48,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD',
 import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..), file, 
   TypedFunc(..), funcDoc, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, OpData(..), ParamData(..), ProgData(..), progD, 
-  TypeData(..), td, btd, TypedType(..), cType, typeString, typeDoc,
+  TypeData(..), td, btd, ltd, TypedType(..), cType, typeString, typeDoc,
   TypedValue(..), valPrec, valDoc, toOtherVal, TypedVar(..), otherVar, varBind, 
   varName, varType, varDoc, toOtherVar, typeToFunc, typeToVal, typeToVar, 
   funcToType, valToType, varToType)
@@ -57,6 +57,7 @@ import GOOL.Drasil.Helpers (vibcat,
   lift4Pair, liftPair, liftPairFst, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import qualified Prelude as P (const)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
@@ -152,8 +153,8 @@ instance TypeSym PythonCode where
   string = return pyStringType
   infile = return $ td File "" empty
   outfile = return $ td File "" empty
-  listType _ t = return $ td (List (getType t)) "[]" (brackets empty)
-  listInnerType = listInnerTypeD
+  listType _ t = return $ ltd t (P.const "[]") (P.const $ brackets empty)
+  listInnerType = fmap listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
   iterator t = t

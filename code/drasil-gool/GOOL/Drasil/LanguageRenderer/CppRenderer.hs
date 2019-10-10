@@ -743,7 +743,7 @@ instance TypeSym CppSrcCode where
   infile = return cppInfileTypeDoc
   outfile = return cppOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
-  listInnerType = listInnerTypeD
+  listInnerType = fmap listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
@@ -1315,7 +1315,7 @@ instance TypeSym CppHdrCode where
   infile = return cppInfileTypeDoc
   outfile = return cppOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
-  listInnerType = listInnerTypeD
+  listInnerType = fmap listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)

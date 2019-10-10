@@ -99,8 +99,8 @@ class (PermanenceSym repr) => TypeSym repr where
   infile        :: repr (Type repr Other)
   outfile       :: repr (Type repr Other)
   listType      :: repr (Permanence repr) -> repr (Type repr a) -> 
-    repr (Type repr Other)
-  listInnerType :: repr (Type repr Other) -> repr (Type repr Other)
+    repr (Type repr [a])
+  listInnerType :: repr (Type repr [a]) -> repr (Type repr a)
   obj           :: Label -> repr (Type repr Other)
   enumType      :: Label -> repr (Type repr Other)
   iterator      :: repr (Type repr Other) -> repr (Type repr Other)

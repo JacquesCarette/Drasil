@@ -12,7 +12,7 @@ import Utils.Drasil (blank)
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
 import GOOL.Drasil.Data (ParamData, Other)
 import qualified GOOL.Drasil.Symantics as S ( 
-  RenderSym(..), TypeSym(..), PermanenceSym(dynamic_))
+  RenderSym(..), TypeSym(..))
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
@@ -119,7 +119,7 @@ convType C.Integer = S.int
 convType C.Float = S.float
 convType C.Char = S.char
 convType C.String = S.string
-convType (C.List t) = S.listType S.dynamic_ (convType t)
+convType (C.List _) = S.int -- hack to keep things from breaking, for now.
 convType (C.Iterator t) = S.iterator $ convType t
 convType (C.Object n) = S.obj n
 convType (C.Enum n) = S.enumType n

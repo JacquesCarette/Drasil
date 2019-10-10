@@ -57,20 +57,18 @@ import GOOL.Drasil.Symantics (Label, Library,
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..), 
   fileD, updateFileMod, ModData(..), updateModDoc, MethodData(..), OpData(..), 
-  od, ParamData(..), pd, TypeData(..), td, btd, TypedType(..), cType, 
-  typeString, typeDoc, TypedValue(..), valPrec, valDoc, Binding(..), 
-  TypedVar(..), getVarData, varBind, varType, varDoc, typeToVal, typeToVar, 
-  valToType)
+  od, ParamData(..), pd, TypeData(..), td, btd, ltd, TypedType(..), cType, 
+  typeDoc, TypedValue(..), valPrec, valDoc, Binding(..), TypedVar(..), 
+  getVarData, varBind, varType, varDoc, typeToVal, typeToVar, valToType)
 import GOOL.Drasil.Helpers (angles, 
-  doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getInnerType, 
-  getNestDegree, convType)
+  doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
 import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
 import Data.Bifunctor (first)
 import Data.Map as Map (lookup, fromList)
 import Data.Maybe (fromMaybe)
-import Prelude hiding (break,print,last,mod,(<>))
+import Prelude hiding (LT,break,print,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
   integer, semi, equals, braces, int, comma, colon, hcat)
@@ -244,13 +242,12 @@ typeDocD t = td (Object t) t (text t)
 enumTypeDocD :: Label -> TypedType Other
 enumTypeDocD t = td (Enum t) t (text t)
 
-listTypeDocD :: TypedType a -> Doc -> TypedType Other
-listTypeDocD t lst = td (List (cType t)) 
-  (render lst ++ "<" ++ typeString t ++ ">") (lst <> angles (typeDoc t))
+listTypeDocD :: TypedType a -> Doc -> TypedType [a]
+listTypeDocD t lst = ltd t (\s -> render lst ++ "<" ++ s ++ ">") 
+  (\d -> lst <> angles d)
 
-listInnerTypeD :: (RenderSym repr) => repr (Type repr Other) -> 
-  repr (Type repr Other)
-listInnerTypeD = convType . getInnerType . getType
+listInnerTypeD :: TypedType [a] -> TypedType a
+listInnerTypeD (LT t) = t
 
 -- Method Types --
 

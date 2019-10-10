@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The structure for a class of renderers is defined here.
-module GOOL.Drasil.Generic (
+module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (
   block, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
   comment, ifCond, for, forEach, while, construct, method, getMethod, setMethod,
   privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 

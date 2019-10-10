@@ -21,7 +21,7 @@ library
     , Language.Drasil.Code.Imperative.ReadInput
     , Language.Drasil.Code.Imperative.WriteInput
     , Language.Drasil.Code.Imperative.GOOL.Data
-    , Language.Drasil.Code.Imperative.GOOL.Generic
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer

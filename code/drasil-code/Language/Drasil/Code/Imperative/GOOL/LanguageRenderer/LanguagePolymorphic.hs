@@ -1,4 +1,4 @@
-module Language.Drasil.Code.Imperative.GOOL.Generic (
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic (
   -- * Common Syntax
   doxConfig, sampleInput, makefile
 ) where

@@ -7,8 +7,9 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
-import qualified Language.Drasil.Code.Imperative.GOOL.Generic as G (doxConfig, 
-  sampleInput, makefile)
+import qualified 
+  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
+  G (doxConfig, sampleInput, makefile)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)

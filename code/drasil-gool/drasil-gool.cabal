@@ -12,7 +12,7 @@ library
       GOOL.Drasil.CodeType
     , GOOL.Drasil.Data
     , GOOL.Drasil.Helpers
-    , GOOL.Drasil.Generic
+    , GOOL.Drasil.LanguageRenderer.LanguagePolymorphic
     , GOOL.Drasil.LanguageRenderer
     , GOOL.Drasil.LanguageRenderer.JavaRenderer
     , GOOL.Drasil.LanguageRenderer.PythonRenderer
@@ -46,7 +46,7 @@ executable codegenTest
     , GOOL.Drasil.CodeType
     , GOOL.Drasil.Data
     , GOOL.Drasil.Helpers
-    , GOOL.Drasil.Generic
+    , GOOL.Drasil.LanguageRenderer.LanguagePolymorphic
     , GOOL.Drasil.LanguageRenderer
     , GOOL.Drasil.LanguageRenderer.JavaRenderer
     , GOOL.Drasil.LanguageRenderer.PythonRenderer

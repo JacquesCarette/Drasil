@@ -46,11 +46,11 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   classDec, dot, forLabel, inLabel, observerListName, commentedItem, 
   addCommentsDocD, commentedModD, docFuncRepr, valList, surroundBody, 
   filterOutObjs)
-import qualified GOOL.Drasil.Generic as G (block, comment, ifCond, objDecNew, 
-  objDecNewNoParams, construct, comment, method, getMethod, setMethod, 
-  privMethod, pubMethod, constructor, function, docFunc, stateVarDef, constVar, 
-  privMVar, pubMVar, pubGVar, buildClass, privClass, pubClass, docClass, 
-  commentedClass, buildModule, fileDoc, docMod)
+import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
+  comment, ifCond, objDecNew, objDecNewNoParams, construct, comment, method, 
+  getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, 
+  pubClass, docClass, commentedClass, buildModule, fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),

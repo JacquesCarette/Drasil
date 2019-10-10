@@ -809,11 +809,11 @@ By writing generic functions for generating code that is common between target
 languages, we maximize code re-use and minimize effort required to write a 
 renderer for a different language. The more similarities a language has to 
 those that GOOL already targets, the less needs to be done to write the new 
-renderer. GOOL's Java and C\# renderers demonstrate this fact well. Out of 307 
-functions across all of GOOL's type classes, the instances of 216 of them are 
+renderer. GOOL's Java and C\# renderers demonstrate this fact well. Out of 327 
+functions across all of GOOL's type classes, the instances of 227 of them are 
 shared between the Java and C\# renderers, in that they are just calls to the 
-same common function. A further 20 are partially shared, for example they call 
-the same common function but with different parameters. 137 functions are 
+same common function. A further 37 are partially shared, for example they call 
+the same common function but with different parameters. 143 functions are 
 actually the same between all 4 languages GOOL currently targets, which might 
 mean that some of them need not be included in the type class mechanism at all, 
 and can instead be defined globally for all renderers, though this requires 

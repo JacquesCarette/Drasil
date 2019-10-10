@@ -8,16 +8,13 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
-  doxConfigName, makefileName, sampleInputName)
+import qualified Language.Drasil.Code.Imperative.GOOL.Generic as G (doxConfig, 
+  sampleInput, makefile)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
-import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
   interp, mainModule, mainModuleFile, packSep, withExt)
-import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 
 import GOOL.Drasil (liftList)
 
@@ -50,14 +47,15 @@ instance PackageSym JavaProject where
 instance AuxiliarySym JavaProject where
   type Auxiliary JavaProject = AuxData
   type AuxHelper JavaProject = Doc
-  doxConfig pName p = fmap (ad doxConfigName . makeDoxConfig pName p)
-    optimizeDox
-  sampleInput db d sd = return $ ad sampleInputName (makeInputFile db d sd)
+  doxConfig = G.doxConfig optimizeDox
+  sampleInput = G.sampleInput
 
   optimizeDox = return $ text "YES"
 
-  makefile cms p = return $ ad makefileName (makeBuild cms jBuildConfig 
-    jRunnable p)
+  makefile = G.makefile jBuildConfig jRunnable
+
+  auxHelperDoc = unJP
+  auxFromData fp d = return $ ad fp d
 
 jBuildConfig :: Maybe BuildConfig
 jBuildConfig = buildSingle (\i _ -> asFragment "javac" : i) $

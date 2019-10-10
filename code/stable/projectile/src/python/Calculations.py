@@ -40,5 +40,3 @@ def func_s(inParams, epsilon, d_offset):
         return "The projectile fell short."
     else :
         return "The projectile went long."
-
-

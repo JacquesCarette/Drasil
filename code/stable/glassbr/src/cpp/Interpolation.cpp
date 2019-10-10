@@ -351,4 +351,3 @@ double func_interpZ(string filename, double x, double y) {
     }
     throw("Interpolation of z failed");
 }
-

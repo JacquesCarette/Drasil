@@ -199,4 +199,3 @@ void func_read_table(string filename, vector<double> &z_vector, vector<vector<do
     outfile.close();
     infile.close();
 }
-

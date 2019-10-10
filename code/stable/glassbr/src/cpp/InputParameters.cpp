@@ -17,4 +17,3 @@ using std::ofstream;
 
 InputParameters::~InputParameters() {
 }
-

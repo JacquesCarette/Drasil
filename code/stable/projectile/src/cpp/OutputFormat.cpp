@@ -24,4 +24,3 @@ void write_output(string s, double d_offset) {
     outputfile << d_offset << std::endl;
     outputfile.close();
 }
-

@@ -27,4 +27,3 @@ public class Control {
         OutputFormat.write_output(s, d_offset);
     }
 }
-

@@ -33,4 +33,3 @@ public class Control {
         OutputFormat.write_output(T_W, E_W);
     }
 }
-

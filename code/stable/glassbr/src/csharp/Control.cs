@@ -93,4 +93,3 @@ public class Control {
         OutputFormat.write_output(is_safePb, is_safeLR, P_b);
     }
 }
-

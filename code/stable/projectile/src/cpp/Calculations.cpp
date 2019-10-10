@@ -40,4 +40,3 @@ string func_s(InputParameters &inParams, double epsilon, double d_offset) {
         return "The projectile went long.";
     }
 }
-

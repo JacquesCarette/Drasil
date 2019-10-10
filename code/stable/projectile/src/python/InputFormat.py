@@ -19,5 +19,3 @@ def get_input(inParams, filename):
     infile.readline()
     inParams.p_target = float(infile.readline())
     infile.close()
-
-

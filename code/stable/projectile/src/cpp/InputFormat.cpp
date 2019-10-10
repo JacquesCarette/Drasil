@@ -31,4 +31,3 @@ void get_input(InputParameters &inParams, string filename) {
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.close();
 }
-

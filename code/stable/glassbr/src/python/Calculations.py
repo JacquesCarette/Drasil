@@ -182,5 +182,3 @@ def func_is_safePb(inParams, P_b):
     outfile.close()
     
     return P_b < inParams.P_btol
-
-

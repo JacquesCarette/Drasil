@@ -23,4 +23,3 @@ public class OutputFormat {
         outputfile.Close();
     }
 }
-

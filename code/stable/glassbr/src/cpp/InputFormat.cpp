@@ -113,4 +113,3 @@ void get_input(InputParameters &inParams, string filename) {
     outfile.close();
     infile.close();
 }
-

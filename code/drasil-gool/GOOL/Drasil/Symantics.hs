@@ -116,7 +116,7 @@ class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
     Maybe (repr (Value repr a)) -> Maybe (repr (Variable repr a)) -> 
     repr (Block repr)
 
-  listSlice        :: repr (Variable repr Other) -> repr (Value repr Other) -> 
+  listSlice        :: repr (Variable repr [a]) -> repr (Value repr [a]) -> 
     Maybe (repr (Value repr Other)) -> Maybe (repr (Value repr Other)) ->
     Maybe (repr (Value repr Other)) -> repr (Block repr)
 
@@ -207,7 +207,7 @@ class (VariableSym repr) => ValueSym repr where
   arg          :: Integer -> repr (Value repr Other)
   enumElement  :: Label -> Label -> repr (Value repr Other)
 
-  argsList  :: repr (Value repr Other)
+  argsList  :: repr (Value repr [Other])
 
   valueType :: repr (Value repr a) -> repr (Type repr a)
   valueDoc :: repr (Value repr a) -> Doc
@@ -335,11 +335,11 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
   selfAccess :: Label -> repr (Function repr a) -> repr (Value repr a)
 
-  listIndexExists :: repr (Value repr Other) -> repr (Value repr Other) -> 
+  listIndexExists :: repr (Value repr [a]) -> repr (Value repr Other) -> 
     repr (Value repr Boolean)
   argExists       :: Integer -> repr (Value repr Boolean)
 
-  indexOf :: repr (Value repr Other) -> repr (Value repr a) -> 
+  indexOf :: repr (Value repr [a]) -> repr (Value repr a) -> 
     repr (Value repr Other)
 
 class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
@@ -352,23 +352,23 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   set :: repr (Value repr Other) -> repr (Variable repr a) -> 
     repr (Value repr a) -> repr (Value repr Other)
 
-  listSize   :: repr (Value repr Other) -> repr (Value repr Other)
-  listAdd    :: repr (Value repr Other) -> repr (Value repr Other) -> 
-    repr (Value repr a) -> repr (Value repr Other)
-  listAppend :: repr (Value repr Other) -> repr (Value repr a) -> 
-    repr (Value repr Other)
+  listSize   :: repr (Value repr [a]) -> repr (Value repr Other)
+  listAdd    :: repr (Value repr [a]) -> repr (Value repr Other) -> 
+    repr (Value repr a) -> repr (Value repr [a])
+  listAppend :: repr (Value repr [a]) -> repr (Value repr a) -> 
+    repr (Value repr [a])
 
-  iterBegin :: repr (Value repr Other) -> repr (Value repr Other)
-  iterEnd   :: repr (Value repr Other) -> repr (Value repr Other)
+  iterBegin :: repr (Value repr [a]) -> repr (Value repr Other)
+  iterEnd   :: repr (Value repr [a]) -> repr (Value repr Other)
 
 class (ValueSym repr, InternalValue repr, FunctionSym repr, Selector repr) => 
   SelectorFunction repr where
-  listAccess :: repr (Value repr Other) -> repr (Value repr Other) -> 
-    repr (Value repr Other)
-  listSet    :: repr (Value repr Other) -> repr (Value repr Other) -> 
-    repr (Value repr a) -> repr (Value repr Other)
-  at         :: repr (Value repr Other) -> repr (Value repr Other) -> 
-    repr (Value repr Other)
+  listAccess :: repr (Value repr [a]) -> repr (Value repr Other) -> 
+    repr (Value repr a)
+  listSet    :: repr (Value repr [a]) -> repr (Value repr Other) -> 
+    repr (Value repr a) -> repr (Value repr [a])
+  at         :: repr (Value repr [a]) -> repr (Value repr Other) -> 
+    repr (Value repr a)
 
 class (ValueSym repr, InternalValue repr) => InternalFunction repr where
   getFunc        :: repr (Variable repr a) -> repr (Function repr a)
@@ -376,16 +376,16 @@ class (ValueSym repr, InternalValue repr) => InternalFunction repr where
     repr (Value repr a) -> repr (Function repr Other)
 
   listSizeFunc       :: repr (Function repr Other)
-  listAddFunc        :: repr (Value repr Other) -> repr (Value repr Other) -> 
+  listAddFunc        :: repr (Value repr [a]) -> repr (Value repr Other) -> 
     repr (Value repr a) -> repr (Function repr Other)
   listAppendFunc         :: repr (Value repr a) -> repr (Function repr Other)
 
-  iterBeginFunc :: repr (Type repr Other) -> repr (Function repr Other)
-  iterEndFunc   :: repr (Type repr Other) -> repr (Function repr Other)
+  iterBeginFunc :: repr (Type repr a) -> repr (Function repr Other)
+  iterEndFunc   :: repr (Type repr a) -> repr (Function repr Other)
 
-  listAccessFunc :: repr (Type repr Other) -> repr (Value repr Other) -> 
+  listAccessFunc :: repr (Type repr a) -> repr (Value repr Other) -> 
     repr (Function repr Other)
-  listSetFunc    :: repr (Value repr Other) -> repr (Value repr Other) -> 
+  listSetFunc    :: repr (Value repr [a]) -> repr (Value repr Other) -> 
     repr (Value repr a) -> repr (Function repr Other)
 
   functionType :: repr (Function repr a) -> repr (Type repr a)
@@ -426,16 +426,16 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
 
   assign            :: repr (Variable repr a) -> repr (Value repr a) -> 
     repr (Statement repr)
-  assignToListIndex :: repr (Variable repr Other) -> repr (Value repr Other) -> 
-    repr (Value repr Other) -> repr (Statement repr)
-  multiAssign       :: [repr (Variable repr Other)] -> [repr (Value repr Other)] ->
-    repr (Statement repr) 
+  assignToListIndex :: repr (Variable repr [a]) -> repr (Value repr Other) -> 
+    repr (Value repr a) -> repr (Statement repr)
+  multiAssign       :: [repr (Variable repr Other)] -> [repr (Value repr Other)]
+    -> repr (Statement repr) 
 
   varDec           :: repr (Variable repr a) -> repr (Statement repr)
   varDecDef        :: repr (Variable repr a) -> repr (Value repr a) -> 
     repr (Statement repr)
-  listDec          :: Integer -> repr (Variable repr Other) -> repr (Statement repr)
-  listDecDef       :: repr (Variable repr Other) -> [repr (Value repr Other)] 
+  listDec          :: Integer -> repr (Variable repr [a]) -> repr (Statement repr)
+  listDecDef       :: repr (Variable repr [a]) -> [repr (Value repr a)] 
     -> repr (Statement repr)
   objDecDef        :: repr (Variable repr Other) -> repr (Value repr Other) -> 
     repr (Statement repr)
@@ -478,15 +478,15 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
   getFileInputLine :: repr (Value repr Other) -> repr (Variable repr Other) -> 
     repr (Statement repr)
   discardFileLine  :: repr (Value repr Other) -> repr (Statement repr)
-  stringSplit      :: Char -> repr (Variable repr Other) -> 
+  stringSplit      :: Char -> repr (Variable repr [Other]) -> 
     repr (Value repr Other) -> repr (Statement repr)
 
   -- For assigning each element from a list of strings (the value) to a list of variables
-  stringListVals :: [repr (Variable repr Other)] -> repr (Value repr Other) -> 
-    repr (Statement repr)
+  stringListVals :: [repr (Variable repr a)] -> repr (Value repr [Other]) 
+    -> repr (Statement repr)
   -- For assigning each element from a list of strings (the value) to elements of list-type variables
-  stringListLists :: [repr (Variable repr Other)] -> repr (Value repr Other) ->
-    repr (Statement repr)
+  stringListLists :: [repr (Variable repr [a])] -> repr (Value repr [Other])
+    -> repr (Statement repr)
 
   break :: repr (Statement repr)
   continue :: repr (Statement repr)
@@ -505,9 +505,9 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
   initState   :: Label -> Label -> repr (Statement repr)
   changeState :: Label -> Label -> repr (Statement repr)
 
-  initObserverList :: repr (Type repr Other) -> [repr (Value repr Other)] 
+  initObserverList :: repr (Type repr [Other]) -> [repr (Value repr Other)] 
     -> repr (Statement repr)
-  addObserver      :: repr (Value repr a) -> repr (Statement repr)
+  addObserver      :: repr (Value repr Other) -> repr (Statement repr)
 
   -- The three lists are inputs, outputs, and both, respectively
   inOutCall :: Label -> [repr (Value repr Other)] -> 
@@ -537,7 +537,7 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
   forRange :: repr (Variable repr Other) -> repr (Value repr Other) -> 
     repr (Value repr Other) -> repr (Value repr Other) -> repr (Body repr) -> 
     repr (Statement repr)
-  forEach  :: repr (Variable repr Other) -> repr (Value repr Other) -> 
+  forEach  :: repr (Variable repr a) -> repr (Value repr [a]) -> 
     repr (Body repr) -> repr (Statement repr)
   while    :: repr (Value repr Boolean) -> repr (Body repr) -> 
     repr (Statement repr) 
@@ -549,8 +549,8 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
   notifyObservers :: repr (Function repr a) -> repr (Type repr b) -> 
     repr (Statement repr)
 
-  getFileInputAll  :: repr (Value repr Other) -> repr (Variable repr Other) -> 
-    repr (Statement repr)
+  getFileInputAll  :: repr (Value repr Other) -> repr (Variable repr [Other]) 
+    -> repr (Statement repr)
 
 class ScopeSym repr where
   type Scope repr

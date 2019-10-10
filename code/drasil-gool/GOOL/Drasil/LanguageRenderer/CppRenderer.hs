@@ -1845,10 +1845,10 @@ cppCast t v = cppCast' (unCPPSC t) (getType $ valueType v)
 cppListSetDoc :: Doc -> Doc -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens i <+> equals <+> v
 
-cppListDecDoc :: TypedVar Other -> TypedValue Other -> Doc -> Doc -> Doc
+cppListDecDoc :: TypedVar [a] -> TypedValue Other -> Doc -> Doc -> Doc
 cppListDecDoc v n s d = varDecDocD v s d <> parens (valDoc n)
 
-cppListDecDefDoc :: TypedVar Other -> Doc -> Doc -> Doc -> Doc
+cppListDecDefDoc :: TypedVar [a] -> Doc -> Doc -> Doc -> Doc
 cppListDecDefDoc v vs s d = varDecDocD v s d <> braces vs
 
 cppPrint :: Bool -> TypedValue Other -> TypedValue a -> Doc

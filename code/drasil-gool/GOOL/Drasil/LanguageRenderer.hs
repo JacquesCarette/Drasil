@@ -183,7 +183,7 @@ printDoc :: (RenderSym repr) => repr (Value repr Other) -> repr (Value repr a)
   -> Doc
 printDoc printFn v = valueDoc printFn <> parens (valueDoc v)
 
-printListDoc :: (RenderSym repr) => Integer -> repr (Value repr Other) -> 
+printListDoc :: (RenderSym repr) => Integer -> repr (Value repr [Other]) -> 
   (repr (Value repr a) -> repr (Statement repr)) -> 
   (String -> repr (Statement repr)) -> 
   (String -> repr (Statement repr)) -> 
@@ -350,8 +350,8 @@ forDocD bStart bEnd sInit vGuard sUpdate b = vcat [
   indent b,
   bEnd]
 
-forEachDocD :: TypedVar Other -> Doc -> Doc -> Doc -> Doc -> TypedValue Other 
-  -> Doc -> Doc
+forEachDocD :: TypedVar a -> Doc -> Doc -> Doc -> Doc -> TypedValue [a] -> Doc
+  -> Doc
 forEachDocD e bStart bEnd forEachLabel inLbl v b =
   vcat [forEachLabel <+> parens (tpDoc (varType e) <+> varDoc e <+> inLbl 
     <+> valDoc v) <+> bStart,
@@ -390,8 +390,8 @@ runStrategyD l strats rv av = docBlock $ maybe
           "Attempt to assign null return to a Value") (assign v) rv
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
-listSliceD :: (RenderSym repr) => repr (Variable repr Other) -> 
-  repr (Value repr Other) -> Maybe (repr (Value repr Other)) ->
+listSliceD :: (RenderSym repr) => repr (Variable repr [a]) -> 
+  repr (Value repr [a]) -> Maybe (repr (Value repr Other)) ->
   Maybe (repr (Value repr Other)) -> Maybe (repr (Value repr Other)) -> 
   repr (Block repr)
 listSliceD vnew vold b e s = 
@@ -455,13 +455,13 @@ varDecDocD v s d = bind (varBind v) <+> tpDoc (varType v) <+> varDoc v
 varDecDefDocD :: TypedVar a -> TypedValue a -> Doc -> Doc -> Doc
 varDecDefDocD v def s d = varDecDocD v s d <+> equals <+> valDoc def
 
-listDecDocD :: TypedVar Other -> TypedValue Other -> Doc -> Doc -> Doc
+listDecDocD :: TypedVar [a] -> TypedValue Other -> Doc -> Doc -> Doc
 listDecDocD v n s d = varDecDocD v s d <+> equals <+> new <+> 
   tpDoc (varType v) <> parens (valDoc n)
 
-listDecDefDocD :: TypedVar Other -> [TypedValue Other] -> Doc -> Doc -> Doc
+listDecDefDocD :: TypedVar [a] -> [TypedValue a] -> Doc -> Doc -> Doc
 listDecDefDocD v vs s d = varDecDocD v s d <+> equals <+> new <+> 
-  tpDoc (varType v) <+> braces (valList vs)
+  tpDoc (varType v) <+> braces (valList' vs)
 
 objDecDefDocD :: TypedVar Other -> TypedValue Other -> Doc -> Doc -> Doc
 objDecDefDocD = varDecDefDocD
@@ -497,8 +497,8 @@ mkSt s = (s, Semi)
 mkStNoEnd :: Doc -> (Doc, Terminator)
 mkStNoEnd s = (s, Empty)
 
-stringListVals' :: (RenderSym repr) => [repr (Variable repr Other)] -> 
-  repr (Value repr Other) -> repr (Statement repr)
+stringListVals' :: (RenderSym repr) => [repr (Variable repr a)] -> 
+  repr (Value repr [Other]) -> repr (Statement repr)
 stringListVals' vars sl = multi $ checkList (getType $ valueType sl)
     where checkList (List String) = assignVals vars 0
           checkList _ = error 
@@ -507,8 +507,8 @@ stringListVals' vars sl = multi $ checkList (getType $ valueType sl)
           assignVals (v:vs) n = assign v (cast (variableType v) 
             (listAccess sl (litInt n))) : assignVals vs (n+1)
 
-stringListLists' :: (RenderSym repr) => [repr (Variable repr Other)] -> repr (Value repr Other)
-  -> repr (Statement repr)
+stringListLists' :: (RenderSym repr) => [repr (Variable repr [a])] -> 
+  repr (Value repr [Other]) -> repr (Statement repr)
 stringListLists' lsts sl = checkList (getType $ valueType sl)
   where checkList (List String) = listVals (map (getType . variableType) lsts)
         checkList _ = error 
@@ -545,8 +545,8 @@ assignD :: (RenderSym repr) => Terminator -> repr (Variable repr a) ->
   repr (Value repr a) -> repr (Statement repr)
 assignD t vr vl = stateFromData (assignDocD vr vl) t
 
-assignToListIndexD :: (RenderSym repr) => repr (Variable repr Other) -> 
-  repr (Value repr Other) -> repr (Value repr Other) -> repr (Statement repr)
+assignToListIndexD :: (RenderSym repr) => repr (Variable repr [a]) -> 
+  repr (Value repr Other) -> repr (Value repr a) -> repr (Statement repr)
 assignToListIndexD lst index v = valState $ listSet (valueOf lst) index v
 
 multiAssignError :: String -> String
@@ -636,11 +636,11 @@ initStateD fsmName initialState = varDecDef (var fsmName string)
 changeStateD :: (RenderSym repr) => Label -> Label -> repr (Statement repr)
 changeStateD fsmName toState = var fsmName string &= litString toState
 
-initObserverListD :: (RenderSym repr) => repr (Type repr Other) -> 
+initObserverListD :: (RenderSym repr) => repr (Type repr [Other]) -> 
   [repr (Value repr Other)] -> repr (Statement repr)
 initObserverListD t = listDecDef (var observerListName t)
 
-addObserverD :: (RenderSym repr) => repr (Value repr a) -> repr (Statement repr)
+addObserverD :: (RenderSym repr) => repr (Value repr Other) -> repr (Statement repr)
 addObserverD o = valState $ listAdd obsList lastelem o
   where obsList = valueOf $ observerListName `listOf` valueType o
         lastelem = listSize obsList
@@ -993,7 +993,7 @@ argD n args = valFromData Nothing string (argDocD n args)
 enumElementD :: (RenderSym repr) => Label -> Label -> repr (Value repr Other)
 enumElementD en e = valFromData Nothing (enumType en) (enumElemDocD en e)
 
-argsListD :: (RenderSym repr) => String -> repr (Value repr Other)
+argsListD :: (RenderSym repr) => String -> repr (Value repr [Other])
 argsListD l = valFromData Nothing (listType static_ string) (text l)
  
 funcAppD :: (RenderSym repr) => Label -> repr (Type repr a) -> 
@@ -1030,11 +1030,11 @@ selfAccessD :: (RenderSym repr) => Label -> repr (Function repr a) ->
   repr (Value repr a)
 selfAccessD l = objAccess (valueOf $ self l)
 
-listIndexExistsD :: (RenderSym repr) => repr (Value repr Other) -> 
+listIndexExistsD :: (RenderSym repr) => repr (Value repr [a]) -> 
   repr (Value repr Other) -> repr (Value repr Boolean)
 listIndexExistsD lst index = listSize lst ?> index
 
-indexOfD :: (RenderSym repr) => Label -> repr (Value repr Other) -> 
+indexOfD :: (RenderSym repr) => Label -> repr (Value repr [a]) -> 
   repr (Value repr a) -> repr (Value repr Other)
 indexOfD f l v = objAccess l (func f S.int [toOtherValue v])
 
@@ -1073,32 +1073,32 @@ setD :: (RenderSym repr) => repr (Value repr Other) -> repr (Variable repr a)
   -> repr (Value repr a) -> repr (Value repr Other)
 setD v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
 
-listSizeD :: (RenderSym repr) => repr (Value repr Other) -> 
+listSizeD :: (RenderSym repr) => repr (Value repr [a]) -> 
   repr (Value repr Other)
 listSizeD v = v $. listSizeFunc
 
-listAddD :: (RenderSym repr) => repr (Value repr Other) -> 
-  repr (Value repr Other) -> repr (Value repr a) -> repr (Value repr Other)
+listAddD :: (RenderSym repr) => repr (Value repr [a]) -> 
+  repr (Value repr Other) -> repr (Value repr a) -> repr (Value repr [a])
 listAddD v i vToAdd = v $. listAddFunc v i vToAdd
 
-listAppendD :: (RenderSym repr) => repr (Value repr Other) -> 
-  repr (Value repr a) -> repr (Value repr Other)
+listAppendD :: (RenderSym repr) => repr (Value repr [a]) -> 
+  repr (Value repr a) -> repr (Value repr [a])
 listAppendD v vToApp = v $. listAppendFunc vToApp
 
-iterBeginD :: (RenderSym repr) => repr (Value repr Other) -> 
+iterBeginD :: (RenderSym repr) => repr (Value repr [a]) -> 
   repr (Value repr Other)
 iterBeginD v = v $. iterBeginFunc (listInnerType $ valueType v)
 
-iterEndD :: (RenderSym repr) => repr (Value repr Other) -> 
+iterEndD :: (RenderSym repr) => repr (Value repr [a]) -> 
   repr (Value repr Other)
 iterEndD v = v $. iterEndFunc (listInnerType $ valueType v)
 
-listAccessD :: (RenderSym repr) => repr (Value repr Other) -> 
-  repr (Value repr Other) -> repr (Value repr Other)
+listAccessD :: (RenderSym repr) => repr (Value repr [a]) -> 
+  repr (Value repr Other) -> repr (Value repr a)
 listAccessD v i = v $. listAccessFunc (listInnerType $ valueType v) i
 
-listSetD :: (RenderSym repr) => repr (Value repr Other) -> 
-  repr (Value repr Other) -> repr (Value repr a) -> repr (Value repr Other)
+listSetD :: (RenderSym repr) => repr (Value repr [a]) -> 
+  repr (Value repr Other) -> repr (Value repr a) -> repr (Value repr [a])
 listSetD v i toVal = v $. listSetFunc v i toVal
 
 getFuncD :: (RenderSym repr) => repr (Variable repr a) -> repr (Function repr a)
@@ -1136,7 +1136,7 @@ listAccessFuncD' :: (RenderSym repr) => Label -> repr (Type repr Other) ->
 listAccessFuncD' f t i = func f t [intValue i]
 
 listSetFuncD :: (RenderSym repr) => (Doc -> Doc -> Doc) -> 
-  repr (Value repr Other) -> repr (Value repr Other) -> repr (Value repr a) -> 
+  repr (Value repr [a]) -> repr (Value repr Other) -> repr (Value repr a) -> 
   repr (Function repr Other)
 listSetFuncD f v i toVal = funcFromData (valueType v) (f (valueDoc $ intValue i)
   (valueDoc toVal))
@@ -1232,6 +1232,9 @@ docFuncRepr desc pComms rComms f = commentedFunc (docComment $ functionDox desc
 
 valList :: [TypedValue Other] -> Doc
 valList vs = hcat (intersperse (text ", ") (map valDoc vs))
+
+valList' :: [TypedValue a] -> Doc
+valList' vs = hcat (intersperse (text ", ") (map valDoc vs))
 
 valueList :: (RenderSym repr) => [repr (Value repr a)] -> Doc
 valueList vs = hcat (intersperse (text ", ") (map valueDoc vs))

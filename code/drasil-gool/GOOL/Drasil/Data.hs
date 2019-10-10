@@ -214,10 +214,12 @@ vd = VD
 updateValDoc :: (Doc -> Doc) -> TypedValue a -> TypedValue a
 updateValDoc f (BV v) = BV $ vd (vlPrec v) (vlType v) ((f . vlDoc) v)
 updateValDoc f (OV v) = OV $ vd (vlPrec v) (vlType v) ((f . vlDoc) v)
+updateValDoc f (LV v) = LV $ updateValDoc f v
 
 data TypedValue a where
   BV :: ValData -> TypedValue Boolean
   OV :: ValData -> TypedValue Other
+  LV :: TypedValue a -> TypedValue [a]
 
 boolVal :: ValData -> TypedValue Boolean
 boolVal = BV
@@ -228,6 +230,7 @@ otherVal = OV
 getValData :: TypedValue a -> ValData
 getValData (BV v) = v
 getValData (OV v) = v
+getValData (LV v) = getValData v
 
 valPrec :: TypedValue a -> Maybe Int
 valType :: TypedValue a -> TypeData
@@ -239,6 +242,7 @@ valDoc = vlDoc . getValData
 toOtherVal :: TypedValue a -> TypedValue Other
 toOtherVal (BV v) = OV v
 toOtherVal (OV v) = OV v
+toOtherVal (LV v) = toOtherVal v
 
 ---- Variables ----
 
@@ -288,7 +292,7 @@ typeToFunc (LT _) _ = error "List type not yet implemented for functions"
 typeToVal :: Maybe Int -> TypedType a -> Doc -> TypedValue a
 typeToVal p (BT t) d = BV (vd p t d)
 typeToVal p (OT t) d = OV (vd p t d)
-typeToVal _ (LT _) _ = error "List type not yet implemented for values"
+typeToVal p (LT t) d = LV (typeToVal p t d)
 
 typeToVar :: Binding -> String -> TypedType a -> Doc -> TypedVar a
 typeToVar b n (BT t) d = BVr (vard b n t d)
@@ -302,6 +306,7 @@ funcToType (OF f) = OT (fnType f)
 valToType :: TypedValue a -> TypedType a
 valToType (BV v) = BT (vlType v)
 valToType (OV v) = OT (vlType v)
+valToType (LV v) = LT (valToType v)
 
 varToType :: TypedVar a -> TypedType a
 varToType (BVr v) = BT (vrType v)

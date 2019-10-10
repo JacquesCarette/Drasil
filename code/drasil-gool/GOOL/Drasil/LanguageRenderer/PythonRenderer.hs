@@ -623,16 +623,16 @@ pyInlineIf :: TypedValue Boolean -> TypedValue a -> TypedValue a ->
 pyInlineIf c v1 v2 = typeToVal (valPrec c) (valToType v1) (valDoc v1 <+> 
   text "if" <+> valDoc c <+> text "else" <+> valDoc v2)
 
-pyListSize :: TypedValue Other -> TypedFunc Other -> Doc
+pyListSize :: TypedValue [a] -> TypedFunc Other -> Doc
 pyListSize v f = funcDoc f <> parens (valDoc v)
 
 pyStringType :: TypedType Other
 pyStringType = td String "str" (text "str")
 
-pyListDec :: TypedVar Other -> Doc
+pyListDec :: TypedVar [a] -> Doc
 pyListDec v = varDoc v <+> equals <+> tpDoc (varType v)
 
-pyListDecDef :: TypedVar Other -> Doc -> Doc
+pyListDecDef :: TypedVar [a] -> Doc -> Doc
 pyListDecDef v vs = varDoc v <+> equals <+> brackets vs
 
 pyPrint :: Bool ->  TypedValue Other -> TypedValue a -> TypedValue Other -> Doc
@@ -670,7 +670,7 @@ pyForRange i inLbl initv finalv stepv b = vcat [
     text ", " <> valDoc finalv <> text ", " <> valDoc stepv) <> colon,
   indent b]
 
-pyForEach :: TypedVar Other -> Doc -> Doc ->  TypedValue Other -> Doc -> Doc
+pyForEach :: TypedVar a -> Doc -> Doc ->  TypedValue [a] -> Doc -> Doc
 pyForEach i forEachLabel inLbl lstVar b = vcat [
   forEachLabel <+> varDoc i <+> inLbl <+> valDoc lstVar <> colon,
   indent b]
@@ -687,7 +687,7 @@ pyTryCatch tryB catchB = vcat [
   text "except" <+> text "Exception" <+> colon,
   indent $ bodyDoc catchB]
 
-pyListSlice :: TypedVar Other -> TypedValue Other -> 
+pyListSlice :: TypedVar [a] -> TypedValue [a] -> 
   TypedValue Other -> TypedValue Other -> TypedValue Other -> Doc
 pyListSlice vnew vold b e s = varDoc vnew <+> equals <+> valDoc vold <> 
   brackets (valDoc b <> colon <> valDoc e <> colon <> valDoc s)

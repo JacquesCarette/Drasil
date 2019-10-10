@@ -972,11 +972,11 @@ objVarSelfD :: (RenderSym repr) => Label -> Label -> repr (Type repr a) ->
 objVarSelfD l n t = objVar (self l) (var n t)
 
 listVarD :: (RenderSym repr) => Label -> repr (Permanence repr) -> 
-  repr (Type repr a) -> repr (Variable repr Other)
+  repr (Type repr a) -> repr (Variable repr [a])
 listVarD n p t = var n (listType p t)
 
 listOfD :: (RenderSym repr) => Label -> repr (Type repr a) ->
-  repr (Variable repr Other)
+  repr (Variable repr [a])
 listOfD n = listVar n static_
 
 iterVarD :: (RenderSym repr) => Label -> repr (Type repr Other) -> 

@@ -171,8 +171,8 @@ class (TypeSym repr, InternalVariable repr) => VariableSym repr where
     repr (Variable repr a)
   enumVar      :: Label -> Label -> repr (Variable repr Other)
   listVar      :: Label -> repr (Permanence repr) -> repr (Type repr a)
-    ->  repr (Variable repr Other)
-  listOf       :: Label -> repr (Type repr a) -> repr (Variable repr Other)
+    ->  repr (Variable repr [a])
+  listOf       :: Label -> repr (Type repr a) -> repr (Variable repr [a])
   -- Use for iterator variables, i.e. in a forEach loop.
   iterVar      :: Label -> repr (Type repr Other) -> repr (Variable repr Other)
 

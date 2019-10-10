@@ -254,10 +254,12 @@ vard = VarD
 data TypedVar a where
   BVr :: VarData -> TypedVar Boolean
   OVr :: VarData -> TypedVar Other
+  LVr :: TypedVar a -> TypedVar [a]
 
 getVarData :: TypedVar a -> VarData
 getVarData (BVr v) = v
 getVarData (OVr v) = v
+getVarData (LVr v) = getVarData v
 
 otherVar :: VarData -> TypedVar Other
 otherVar = OVr
@@ -274,6 +276,7 @@ varDoc = vrDoc . getVarData
 toOtherVar :: TypedVar a -> TypedVar Other
 toOtherVar (BVr v) = OVr v
 toOtherVar (OVr v) = OVr v
+toOtherVar (LVr v) = toOtherVar v
 
 ---- Transformations ----
 
@@ -290,7 +293,7 @@ typeToVal _ (LT _) _ = error "List type not yet implemented for values"
 typeToVar :: Binding -> String -> TypedType a -> Doc -> TypedVar a
 typeToVar b n (BT t) d = BVr (vard b n t d)
 typeToVar b n (OT t) d = OVr (vard b n t d)
-typeToVar _ _ (LT _) _ = error "List type not yet implemented for variables"
+typeToVar b n (LT t) d = LVr (typeToVar b n t d)
 
 funcToType :: TypedFunc a -> TypedType a
 funcToType (BF f) = BT (fnType f)
@@ -303,6 +306,7 @@ valToType (OV v) = OT (vlType v)
 varToType :: TypedVar a -> TypedType a
 varToType (BVr v) = BT (vrType v)
 varToType (OVr v) = OT (vrType v)
+varToType (LVr v) = LT (varToType v)
 
 -- Reminder for later
 -- varToVal :: TypedVar a -> TypedValue a

@@ -86,10 +86,12 @@ fd = FD
 data TypedFunc a where
   BF :: FuncData -> TypedFunc Boolean
   OF :: FuncData -> TypedFunc Other
+  LF :: TypedFunc a -> TypedFunc [a]
 
 getFuncData :: TypedFunc a -> FuncData
 getFuncData (BF f) = f
 getFuncData (OF f) = f
+getFuncData (LF f) = getFuncData f
 
 funcType :: TypedFunc a -> TypeData
 funcDoc :: TypedFunc a -> Doc
@@ -287,7 +289,7 @@ toOtherVar (LVr v) = toOtherVar v
 typeToFunc :: TypedType a -> Doc -> TypedFunc a
 typeToFunc (BT t) d = BF (fd t d)
 typeToFunc (OT t) d = OF (fd t d)
-typeToFunc (LT _) _ = error "List type not yet implemented for functions"
+typeToFunc (LT t) d = LF (typeToFunc t d)
 
 typeToVal :: Maybe Int -> TypedType a -> Doc -> TypedValue a
 typeToVal p (BT t) d = BV (vd p t d)
@@ -302,6 +304,7 @@ typeToVar b n (LT t) d = LVr (typeToVar b n t d)
 funcToType :: TypedFunc a -> TypedType a
 funcToType (BF f) = BT (fnType f)
 funcToType (OF f) = OT (fnType f)
+funcToType (LF f) = LT (funcToType f)
 
 valToType :: TypedValue a -> TypedType a
 valToType (BV v) = BT (vlType v)

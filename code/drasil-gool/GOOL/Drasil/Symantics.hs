@@ -377,16 +377,16 @@ class (ValueSym repr, InternalValue repr) => InternalFunction repr where
 
   listSizeFunc       :: repr (Function repr Other)
   listAddFunc        :: repr (Value repr [a]) -> repr (Value repr Other) -> 
-    repr (Value repr a) -> repr (Function repr Other)
-  listAppendFunc         :: repr (Value repr a) -> repr (Function repr Other)
+    repr (Value repr a) -> repr (Function repr [a])
+  listAppendFunc         :: repr (Value repr a) -> repr (Function repr [a])
 
   iterBeginFunc :: repr (Type repr a) -> repr (Function repr Other)
   iterEndFunc   :: repr (Type repr a) -> repr (Function repr Other)
 
   listAccessFunc :: repr (Type repr a) -> repr (Value repr Other) -> 
-    repr (Function repr Other)
+    repr (Function repr a)
   listSetFunc    :: repr (Value repr [a]) -> repr (Value repr Other) -> 
-    repr (Value repr a) -> repr (Function repr Other)
+    repr (Value repr a) -> repr (Function repr [a])
 
   functionType :: repr (Function repr a) -> repr (Type repr a)
   functionDoc :: repr (Function repr a) -> Doc

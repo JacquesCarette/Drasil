@@ -183,7 +183,7 @@ printDoc :: (RenderSym repr) => repr (Value repr Other) -> repr (Value repr a)
   -> Doc
 printDoc printFn v = valueDoc printFn <> parens (valueDoc v)
 
-printListDoc :: (RenderSym repr) => Integer -> repr (Value repr [Other]) -> 
+printListDoc :: (RenderSym repr) => Integer -> repr (Value repr [a]) -> 
   (repr (Value repr a) -> repr (Statement repr)) -> 
   (String -> repr (Statement repr)) -> 
   (String -> repr (Statement repr)) -> 
@@ -205,8 +205,8 @@ outDoc :: (RenderSym repr) => Bool -> repr (Value repr Other) ->
   repr (Value repr a) -> Maybe (repr (Value repr Other)) -> 
   repr (Statement repr)
 outDoc newLn printFn v f = outDoc' (getTypedType $ valueType v)
-  where outDoc' (OT (TD (List t) _ _)) = printListDoc (getNestDegree 1 t) v 
-          prFn prStrFn prLnFn
+  where outDoc' (LT t) = printListDoc (getNestDegree 1 (cType t)) 
+          v prFn prStrFn prLnFn
         outDoc' (OT (TD (Object n) _ _)) = printObjDoc n prLnFn
         outDoc' _ = printSt newLn printFn v f
         prFn = maybe print printFile f
@@ -1112,11 +1112,11 @@ listSizeFuncD :: (RenderSym repr) => repr (Function repr Other)
 listSizeFuncD = func "size" S.int []
 
 listAddFuncD :: (RenderSym repr) => Label -> repr (Value repr Other) -> 
-  repr (Value repr a) -> repr (Function repr Other)
+  repr (Value repr a) -> repr (Function repr [a])
 listAddFuncD f i v = func f (listType static_ $ valueType v) [i, toOtherValue v]
 
 listAppendFuncD :: (RenderSym repr) => Label -> repr (Value repr a) -> 
-  repr (Function repr Other)
+  repr (Function repr [a])
 listAppendFuncD f v = func f (listType static_ $ valueType v) [toOtherValue v]
 
 iterBeginError :: String -> String
@@ -1127,17 +1127,17 @@ iterEndError :: String -> String
 iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++ 
   " has no iterators"
 
-listAccessFuncD :: (RenderSym repr) => repr (Type repr Other) -> repr (Value repr Other) ->
-  repr (Function repr Other)
+listAccessFuncD :: (RenderSym repr) => repr (Type repr a) -> 
+  repr (Value repr Other) -> repr (Function repr a)
 listAccessFuncD t i = funcFromData t (listAccessFuncDocD $ intValue i)
 
-listAccessFuncD' :: (RenderSym repr) => Label -> repr (Type repr Other) -> 
-  repr (Value repr Other) -> repr (Function repr Other)
+listAccessFuncD' :: (RenderSym repr) => Label -> repr (Type repr a) -> 
+  repr (Value repr Other) -> repr (Function repr a)
 listAccessFuncD' f t i = func f t [intValue i]
 
 listSetFuncD :: (RenderSym repr) => (Doc -> Doc -> Doc) -> 
   repr (Value repr [a]) -> repr (Value repr Other) -> repr (Value repr a) -> 
-  repr (Function repr Other)
+  repr (Function repr [a])
 listSetFuncD f v i toVal = funcFromData (valueType v) (f (valueDoc $ intValue i)
   (valueDoc toVal))
 

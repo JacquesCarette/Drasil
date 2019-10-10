@@ -56,7 +56,7 @@ import GOOL.Drasil.Data (Other, Boolean, Terminator(..),
   FileData(..), file, TypedFunc(..), funcDoc, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ltd, TypedType(..), cType, typeString, 
-  typeDoc, TypedValue(..), valDoc, toOtherVal, 
+  typeDoc, TypedValue(..), valDoc, toOtherVal,
   TypedVar(..), getVarData, otherVar, varBind, varName, varType, varDoc, 
   typeToFunc, typeToVal, typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 

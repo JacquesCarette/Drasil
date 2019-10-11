@@ -8,7 +8,7 @@ module GOOL.Drasil.LanguageRenderer (
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
-  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, printDoc,
+  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, printListDoc, outDoc, prFn, prStrFn, prLnFn, printDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
   stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, iteratorError, voidDocD, 
   constructDocD, paramDocD, paramListDocD, mkParam, methodDocD, 
@@ -188,44 +188,38 @@ printListDoc :: (RenderSym repr) => Integer -> repr (Value repr [a]) ->
   (String -> repr (Statement repr)) -> 
   (String -> repr (Statement repr)) -> 
   repr (Statement repr)
-printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
+printListDoc n v pf psf plf = multi [psf "[", 
   for (varDecDef i (litInt 0)) (valueOf i ?< (listSize v #- litInt 1))
-    (i &++) (bodyStatements [{-FIXME prFn (listAccess v (valueOf i)),-} prStrFn ", "]), 
-  {-ifNoElse [(listSize v ?> litInt 0, oneLiner $
-    prFn (listAccess v (listSize v #- litInt 1)))],-} 
-  prLnFn "]"]
+    (i &++) (bodyStatements [pf (listAccess v (valueOf i)), psf ", "]), 
+  ifNoElse [(listSize v ?> litInt 0, oneLiner $
+    pf (listAccess v (listSize v #- litInt 1)))],
+  plf "]"]
   where l_i = "list_i" ++ show n
         i = var l_i S.int
 
 printObjDoc :: String -> (String -> repr (Statement repr)) 
   -> repr (Statement repr)
-printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
-
--- outDoc :: (RenderSym repr) => Bool -> repr (Value repr Other) -> 
---   repr (Value repr a) -> Maybe (repr (Value repr Other)) -> 
---   repr (Statement repr)
--- outDoc newLn printFn v f = outDoc' (getTypedVal v) 
---   where outDoc' lv@(LV _) = printListDoc (getNestDegree 1 
---           (cType $ valToType lv)) (return lv) prFn prStrFn prLnFn
---         outDoc' _ = outDoc'' (getTypedType $ valueType v)
---         outDoc'' (OT (TD (Object n) _ _)) = printObjDoc n prLnFn
---         outDoc'' _ = printSt newLn printFn v f
---         prFn = maybe print printFile f
---         prStrFn = maybe printStr printFileStr f
---         prLnFn = if newLn then maybe printStrLn printFileStrLn f else maybe 
---           printStr printFileStr f 
+printObjDoc n plf = plf $ "Instance of " ++ n ++ " object"
 
 outDoc :: (RenderSym repr) => Bool -> repr (Value repr Other) -> 
   repr (Value repr a) -> Maybe (repr (Value repr Other)) -> 
   repr (Statement repr)
 outDoc newLn printFn v f = outDoc' (getTypedType $ valueType v)
-  -- where outDoc' (LT t) = printListDoc (getNestDegree 1 (cType t)) 
-  --         v prFn prStrFn prLnFn
-  where outDoc' (OT (TD (Object n) _ _)) = printObjDoc n prLnFn
+  where outDoc' (LT _) = error "List-case should be handled in language-specific function"
+        outDoc' (OT (TD (Object n) _ _)) = printObjDoc n (prLnFn newLn f)
         outDoc' _ = printSt newLn printFn v f
-        prFn = maybe print printFile f
-        prStrFn = maybe printStr printFileStr f
-        prLnFn = if newLn then maybe printStrLn printFileStrLn f else maybe printStr printFileStr f 
+
+prFn :: (RenderSym repr) => Maybe (repr (Value repr Other)) -> 
+  repr (Value repr a) -> repr (Statement repr)
+prFn = maybe print printFile
+
+prStrFn :: (RenderSym repr) => Maybe (repr (Value repr Other)) -> 
+  String -> repr (Statement repr)
+prStrFn = maybe printStr printFileStr
+
+prLnFn :: (RenderSym repr) => Bool -> Maybe (repr (Value repr Other)) -> 
+  String -> repr (Statement repr)
+prLnFn b = if b then maybe printStrLn printFileStrLn else prStrFn
 
 printFileDocD :: Label -> TypedValue Other -> Doc
 printFileDocD fn f = valDoc f <> dot <> text fn

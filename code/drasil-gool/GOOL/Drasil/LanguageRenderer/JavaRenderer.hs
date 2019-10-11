@@ -22,7 +22,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD, 
   classDocD, enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
-  oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
+  oneLinerD, printListDoc, outDoc, prFn, prStrFn, prLnFn, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
   typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, iteratorError, voidDocD, constructDocD,
   paramDocD, paramListDocD, mkParam, methodListDocD, stateVarDocD, 
   stateVarDefDocD, stateVarListDocD, ifCondDocD, forDocD, forEachDocD, 
@@ -61,7 +61,7 @@ import GOOL.Drasil.Data (Other, Boolean, Terminator(..),
   toOtherVar, typeToFunc, typeToVal, typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, 
-  lift4Pair, liftPair, liftPairFst, checkParams)
+  lift4Pair, liftPair, liftPairFst, getNestDegree, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Prelude as P (const)
@@ -411,15 +411,15 @@ instance StatementSym JavaCode where
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
 
-  print v = outDoc False printFunc v Nothing
-  printLn v = outDoc True printLnFunc v Nothing
-  printStr s = outDoc False printFunc (litString s) Nothing
-  printStrLn s = outDoc True printLnFunc (litString s) Nothing
+  print v = jOut False printFunc v Nothing
+  printLn v = jOut True printLnFunc v Nothing
+  printStr s = jOut False printFunc (litString s) Nothing
+  printStrLn s = jOut True printLnFunc (litString s) Nothing
 
-  printFile f v = outDoc False (printFileFunc f) v (Just f)
-  printFileLn f v = outDoc True (printFileLnFunc f) v (Just f)
-  printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
-  printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
+  printFile f v = jOut False (printFileFunc f) v (Just f)
+  printFileLn f v = jOut True (printFileLnFunc f) v (Just f)
+  printFileStr f s = jOut False (printFileFunc f) (litString s) (Just f)
+  printFileStrLn f s = jOut True (printFileLnFunc f) (litString s) (Just f)
 
   getInput v = v &= liftA2 jInput (variableType v) inputFunc
   discardInput = discardInputD jDiscardInput
@@ -694,6 +694,14 @@ jTryCatch tb cb = vcat [
     lbrace,
   indent $ bodyDoc cb,
   rbrace]
+
+jOut :: Bool -> JavaCode (Value JavaCode Other) -> 
+  JavaCode (Value JavaCode a) -> Maybe (JavaCode (Value JavaCode Other)) -> 
+  JavaCode (Statement JavaCode)
+jOut newLn printFn v f = jOut' (getTypedVal v)
+  where jOut' lv@(LV _) = printListDoc (getNestDegree 1 (cType $ valToType lv)) 
+          (return lv) (prFn f) (prStrFn f) (prLnFn newLn f)
+        jOut' _ = outDoc newLn printFn v f
 
 jDiscardInput :: (RenderSym repr) => repr (Value repr Other) -> Doc
 jDiscardInput inFn = valueDoc inFn <> dot <> text "next()"

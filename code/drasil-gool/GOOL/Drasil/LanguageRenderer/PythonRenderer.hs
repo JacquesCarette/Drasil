@@ -56,7 +56,7 @@ import GOOL.Drasil.Helpers (vibcat,
   emptyIfEmpty, liftA4, liftA5, liftA6, liftList, lift1List, lift2Lists, 
   lift4Pair, liftPair, liftPairFst, checkParams)
 
-import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import Prelude hiding (LT,break,print,sin,cos,tan,floor,(<>))
 import qualified Prelude as P (const)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -646,7 +646,7 @@ pyOut :: Bool -> PythonCode (Value PythonCode Other) ->
   PythonCode (Value PythonCode a) -> Maybe (PythonCode (Value PythonCode Other)) -> 
     PythonCode (Statement PythonCode)
 pyOut newLn printFn v f = pyOut' (getTypedType $ valueType v)
-  where pyOut' (OT (TD (List _) _ _)) = printSt newLn printFn v f
+  where pyOut' (LT _) = printSt newLn printFn v f
         pyOut' _ = outDoc newLn printFn v f
 
 pyInput :: PythonCode (Value PythonCode Other) -> 

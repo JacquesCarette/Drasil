@@ -22,7 +22,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   MethodSym(..), InternalMethod(..), StateVarSym(..), ClassSym(..), 
   ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD, 
-  multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
+  multiStateDocD, blockDocD, bodyDocD, oneLinerD, printListDoc, outDoc, prFn, prStrFn, prLnFn, intTypeDocD, 
   charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, 
   listInnerTypeD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam, 
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, alwaysDel, 
@@ -64,7 +64,7 @@ import GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList,
 import GOOL.Drasil.Helpers (angles, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift4Pair, liftPair, liftPairFst, 
-  checkParams)
+  getNestDegree, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Data.Maybe (maybeToList)
@@ -1002,15 +1002,15 @@ instance StatementSym CppSrcCode where
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef = constDecDefD
 
-  print v = outDoc False printFunc v Nothing
-  printLn v = outDoc True printLnFunc v Nothing
-  printStr s = outDoc False printFunc (litString s) Nothing
-  printStrLn s = outDoc True printLnFunc (litString s) Nothing
+  print v = cppOut False printFunc v Nothing
+  printLn v = cppOut True printLnFunc v Nothing
+  printStr s = cppOut False printFunc (litString s) Nothing
+  printStrLn s = cppOut True printLnFunc (litString s) Nothing
 
-  printFile f v = outDoc False (printFileFunc f) v (Just f)
-  printFileLn f v = outDoc True (printFileLnFunc f) v (Just f)
-  printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
-  printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
+  printFile f v = cppOut False (printFileFunc f) v (Just f)
+  printFileLn f v = cppOut True (printFileLnFunc f) v (Just f)
+  printFileStr f s = cppOut False (printFileFunc f) (litString s) (Just f)
+  printFileStrLn f s = cppOut True (printFileLnFunc f) (litString s) (Just f)
 
   getInput v = mkSt <$> liftA3 cppInput v inputFunc endStatement
   discardInput = discardInputD (cppDiscardInput "\\n")
@@ -1873,6 +1873,14 @@ cppTryCatch tb cb = vcat [
   rbrace <+> text "catch" <+> parens (text "...") <+> lbrace,
   indent $ bodyDoc cb,
   rbrace]
+
+cppOut :: Bool -> CppSrcCode (Value CppSrcCode Other) -> 
+  CppSrcCode (Value CppSrcCode a) -> Maybe (CppSrcCode (Value CppSrcCode Other))
+  -> CppSrcCode (Statement CppSrcCode)
+cppOut newLn printFn v f = cppOut' (getTypedVal v)
+  where cppOut' lv@(LV _) = printListDoc (getNestDegree 1 (cType $ valToType 
+          lv)) (return lv) (prFn f) (prStrFn f) (prLnFn newLn f)
+        cppOut' _ = outDoc newLn printFn v f
 
 cppDiscardInput :: (RenderSym repr) => Label -> repr (Value repr Other) -> Doc
 cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens 

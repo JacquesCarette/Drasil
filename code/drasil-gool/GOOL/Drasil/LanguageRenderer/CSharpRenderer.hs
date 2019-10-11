@@ -22,7 +22,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD, 
   enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, oneLinerD, 
-  outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
+  printListDoc, outDoc, prFn, prStrFn, prLnFn, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
   stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD,
   iteratorError, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam, methodDocD, 
   methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, 
@@ -63,7 +63,7 @@ import GOOL.Drasil.Data (Boolean, Other, Terminator(..),
   varDoc, toOtherVar, typeToFunc, typeToVal, typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift4Pair,
-  liftPair, liftPairFst, checkParams)
+  liftPair, liftPairFst, getNestDegree, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Data.Maybe (maybeToList)
@@ -414,15 +414,15 @@ instance StatementSym CSharpCode where
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef = constDecDefD
 
-  print v = outDoc False printFunc v Nothing
-  printLn v = outDoc True printLnFunc v Nothing
-  printStr s = outDoc False printFunc (litString s) Nothing
-  printStrLn s = outDoc True printLnFunc (litString s) Nothing
+  print v = csOut False printFunc v Nothing
+  printLn v = csOut True printLnFunc v Nothing
+  printStr s = csOut False printFunc (litString s) Nothing
+  printStrLn s = csOut True printLnFunc (litString s) Nothing
 
-  printFile f v = outDoc False (printFileFunc f) v (Just f)
-  printFileLn f v = outDoc True (printFileLnFunc f) v (Just f)
-  printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
-  printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
+  printFile f v = csOut False (printFileFunc f) v (Just f)
+  printFileLn f v = csOut True (printFileLnFunc f) v (Just f)
+  printFileStr f s = csOut False (printFileFunc f) (litString s) (Just f)
+  printFileStrLn f s = csOut True (printFileLnFunc f) (litString s) (Just f)
 
   getInput v = v &= liftA2 csInput (variableType v) inputFunc
   discardInput = discardInputD csDiscardInput
@@ -542,7 +542,7 @@ instance MethodSym CSharpCode where
     (returnState $ valueOf v))
   inOutFunc n s p ins outs both b = function n s p void (map (fmap 
     (updateParamDoc csRef) . param) both ++ map param ins ++ 
-    map (fmap (updateParamDoc csOut) . param) outs) b
+    map (fmap (updateParamDoc csOutParam) . param) outs) b
 
   docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
     (inOutFunc n s p (map snd is) [snd o] [] b)
@@ -640,6 +640,14 @@ csTryCatch tb cb = vcat [
   indent $ bodyDoc cb,
   rbrace]
 
+csOut :: Bool -> CSharpCode (Value CSharpCode Other) -> 
+  CSharpCode (Value CSharpCode a) -> Maybe (CSharpCode (Value CSharpCode Other))
+  -> CSharpCode (Statement CSharpCode)
+csOut newLn printFn v f = csOut' (getTypedVal v)
+  where csOut' lv@(LV _) = printListDoc (getNestDegree 1 (cType $ valToType lv))
+          (return lv) (prFn f) (prStrFn f) (prLnFn newLn f)
+        csOut' _ = outDoc newLn printFn v f
+
 csDiscardInput :: (RenderSym repr) => repr (Value repr Other) -> Doc
 csDiscardInput = valueDoc
 
@@ -669,8 +677,8 @@ csOpenFileWorA n w a = valFromData Nothing w $ new <+> getTypeDoc w <>
 csRef :: Doc -> Doc
 csRef p = text "ref" <+> p
 
-csOut :: Doc -> Doc
-csOut p = text "out" <+> p
+csOutParam :: Doc -> Doc
+csOutParam p = text "out" <+> p
 
 csInOutCall :: (Label -> CSharpCode (Type CSharpCode Other) -> 
   [CSharpCode (Value CSharpCode Other)] -> CSharpCode (Value CSharpCode Other)) -> Label -> 
@@ -681,8 +689,8 @@ csInOutCall f n ins [] [out] = if null (filterOutObjs [out])
   then valState $ f n void (valueOf out : ins) 
   else assign out $ f n (variableType out) (valueOf out : ins)
 csInOutCall f n ins outs both = valState $ f n void (map (fmap (updateValDoc 
-  csRef) . valueOf) both ++ ins ++ map (fmap (updateValDoc csOut) . valueOf) 
-  outs)
+  csRef) . valueOf) both ++ ins ++ map (fmap (updateValDoc csOutParam) . 
+  valueOf) outs)
 
 csVarDec :: Binding -> CSharpCode (Statement CSharpCode) -> 
   CSharpCode (Statement CSharpCode)

@@ -1,5 +1,5 @@
 %% For double-blind review submission, w/o CCS and ACM Reference (max submission space)
-\documentclass[sigplan,review,anonymous]{acmart}
+\documentclass[sigplan,review,anonymous,prologue,dvipsnames]{acmart}
 \settopmatter{printfolios=true,printccs=false,printacmref=false}
 %% For double-blind review submission, w/ CCS and ACM Reference
 %\documentclass[sigplan,review,anonymous]{acmart}\settopmatter{printfolios=true}
@@ -60,6 +60,16 @@
 \usepackage{subcaption} %% For complex figures with subfigures/subcaptions
                         %% http://ctan.org/pkg/subcaption
 \usepackage{listings}
+
+\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+% 
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+
+% for nice TODO notes
+\newcommandx{\unsure}[2][1=]{\todo[inline,linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[inline,linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[inline,linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[inline,linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
 
 %%%%%%%%%%%%%%%%%%%%%
 %% Useful abbreviations
@@ -424,15 +434,15 @@ decision: even though we target languages like Python, as we also target
 Java, types are necessary. As type inference for OO languages is too
 difficult, we chose to be explicitly typed.
 
-GOOL offers a shortcut for defining 
-list-type variables with \verb|listVar|, so the ``ages'' variable could 
-alternatively be specified by \verb|listVar "ages" int|. Since GOOL is embedded 
-in Haskell, such a variable definition can be assigned as the value of a 
-Haskell function:
+As some constructions are common, it is useful to offer shortcuts for
+defining them; for example, the above can also be done via
+\verb|listVar "ages" int|. Typical use would be
 \begin{lstlisting}
-ages = listVar "ages" int
+let ages = listVar "ages" int in
 \end{lstlisting}
-Then, in future code the variable can be referred to simply by \verb|ages|. 
+so that \verb|ages| can be used directly from then on.
+
+\improvement{all the following shoul be in a table}
 Other keywords for specifying variables include \verb|extVar| for variables 
 from external libraries, \verb|classVar| for accessing variables from a class, 
 \verb|objVar| for accessing variables from an object, and \verb|self| for 
@@ -440,19 +450,15 @@ referring to an object in its own class definition, equivalent to \verb|self|
 in Python or \verb|this| in Java. The infix operator \verb|$->| is an 
 alternative to the \verb|objVar| keyword.
 
-Unlike in most OO languages, the syntax of GOOL distinguishes a variable from 
-its value. To actually use the value of the \verb|ages| variable defined above, 
-one must write \verb|valueOf ages|. This highlights another goal in developing 
-the syntax of GOOL. We did not want to simply look at the syntax of existing OO 
-languages and develop a parallel syntax for GOOL. Instead, we considered 
-semantics, and aimed to provide different syntax for semantically different 
-tasks. In most languages, writing a variable's name is the syntax both for 
-referring to the variable as a variable and referring to the variable's value, 
-but since these are semantically different tasks, GOOL provides different 
-syntax for each. Having distinguishing syntax for semantically distinguishable 
-tasks enables stricter typing and higher-level syntax that translates to more 
-idiomatic code, which will become apparent in future sections of this paper.
+Note that GOOL distinguishes a variable from its value\footnote{
+as befits the use-mention distinction from analytic philosophy}. To get
+the values of~\verb|ages|, one must write \verb|valueOf ages|. The reason for
+this distinction will be made clear in section~\ref{where?}, driven
+by semantic considerations. This is beneficial for stricter typing and
+enables convenient syntax for \oopatterns that translate to more idiomatic
+code.
 
+\improvement{all the following should be in two tables.}
 Literal values can be referred to by \verb|litTrue|, \verb|litFalse|, 
 \verb|litInt|, \verb|litFloat|, \verb|litChar|, and \verb|litString|. Similar 
 to those seen in most programming languages, GOOL provides many unary prefix 
@@ -466,29 +472,16 @@ absolute value, \verb|#%| for modulus, and \verb|#^| for exponentiation. Any
 other operators are prefixed by \verb|$|, such as the previously mentioned 
 \verb|$->| operator for accessing a variable from an object.
 
-A conditional value can be specified with the keyword \verb|inlineIf| followed 
-by the condition, the value if the condition is true, and the value if the 
-condition is false. For example, given a Boolean-type variable \verb|a|, the 
-following conditional value can be constructed:
-\begin{lstlisting}
-inlineIf (valueOf a) 
-  (litString "a is true") 
-  (litString "a is false")
-\end{lstlisting}
-Note that since this is really just Haskell, values can extend across multiple 
-lines as long as subsequent lines are indented.
+\improvement{another table. I'll put the contents in a list}
+\begin{itemize}
+\item \verb|inlineIf| conditional expression
+\item \verb|funcApp| function application, to a list of parameters
+\item \verb|extFuncApp| function application, for external library functions
+\item \verb|newObj| for calling an Object constructor (\verb|extNewObj| exists too)
+\item \verb|objMethodCall| for calling a method on an object.
+\end{itemize}
 
-Function application can be done with the keyword \verb|funcApp| followed by 
-the function name, return type, and values to pass as parameters. Assuming one 
-has defined a function ``add'' for adding two integers, it could be called like 
-so:
-\begin{lstlisting}
-funcApp "add" int [litInt 5, litInt 4]
-\end{lstlisting}
-Other keywords for function application are \verb|extFuncApp| for when the 
-function comes from an external library, \verb|newObj| and \verb|extNewObj| 
-for calling an object constructor, and \\
-\verb|objMethodCall| for calling a method on an object. \verb|selfFuncApp| and 
+\verb|selfFuncApp| and 
 \verb|objMethodCallNoParams| are two shortcuts for the common cases when a 
 method is being called on \verb|self| or when the method takes no parameters. 
 

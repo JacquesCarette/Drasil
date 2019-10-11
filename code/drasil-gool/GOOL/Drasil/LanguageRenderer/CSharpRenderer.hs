@@ -23,8 +23,8 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD, 
   enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, oneLinerD, 
   outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
-  stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, 
-  voidDocD, constructDocD, paramDocD, paramListDocD, mkParam, methodDocD, 
+  stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD,
+  iteratorError, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam, methodDocD, 
   methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, 
   forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, checkStateD, 
   notifyObserversD, varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, 
@@ -41,7 +41,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD,
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
   mkVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
   classVarD, classVarDocD, objVarDocD, inlineIfD, newObjDocD, varD, staticVarD, 
-  extVarD, selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
+  extVarD, selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD,
   valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, 
   objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
   extFuncAppD, newObjD,notNullD, funcDocD, castDocD, listSetFuncDocD, 
@@ -60,7 +60,7 @@ import GOOL.Drasil.Data (Boolean, Other, Terminator(..),
   TypedType(..), cType, typeString, typeDoc, TypedValue(..),
   updateValDoc, 
   valDoc, toOtherVal, Binding(..), TypedVar(..), getVarData, otherVar, varBind, varName, 
-  varDoc, typeToFunc, typeToVal, typeToVar, funcToType, valToType, varToType)
+  varDoc, toOtherVar, typeToFunc, typeToVal, typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift4Pair,
   liftPair, liftPairFst, checkParams)
@@ -165,7 +165,7 @@ instance TypeSym CSharpCode where
   listInnerType = fmap listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
-  iterator t = t
+  iterator _ = error $ iteratorError csName
   void = return voidDocD
 
   getTypedType = unCSC
@@ -226,7 +226,7 @@ instance VariableSym CSharpCode where
   objVarSelf = objVarSelfD
   listVar  = listVarD
   listOf = listOfD 
-  iterVar = iterVarD
+  iterVar = var
 
   ($->) = objVar
 
@@ -236,6 +236,7 @@ instance VariableSym CSharpCode where
   variableDoc = varDoc . unCSC
 
 instance InternalVariable CSharpCode where
+  toOtherVariable = fmap toOtherVar
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym CSharpCode where
@@ -257,6 +258,7 @@ instance ValueSym CSharpCode where
 
   valueType = fmap valToType
   valueDoc = valDoc . unCSC
+  getTypedVal = unCSC
 
 instance NumericExpression CSharpCode where
   (#~) = liftA2 unExpr' negateOp
@@ -435,7 +437,7 @@ instance StatementSym CSharpCode where
   getFileInputLine = getFileInput
   discardFileLine = discardFileLineD "ReadLine"
   stringSplit d vnew s = assign vnew $ newObj (listType dynamic_ string) 
-    [s $. func "Split" (listType static_ string) [litChar d]]
+    [toOtherValue $ s $. func "Split" (listType static_ string) [litChar d]]
 
   stringListVals = stringListVals'
   stringListLists = stringListLists'

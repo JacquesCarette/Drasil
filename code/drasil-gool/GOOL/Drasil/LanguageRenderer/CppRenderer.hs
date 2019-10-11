@@ -49,7 +49,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   listSetFuncD, staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot,
   blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc,
-  moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
+  moduleDoc, commentedModD, docFuncRepr, valList', appendToBody, surroundBody, 
   getterName, setterName, filterOutObjs)
 import GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, 
   Terminator(..), ScopeTag(..), Binding(..), BindData(..), bd, FileData(..), 
@@ -60,7 +60,7 @@ import GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList,
   typeString, typeDoc,
   TypedValue(..), valPrec, valDoc, toOtherVal, VarData(..), 
   TypedVar(..), getVarData, otherVar, varBind, varName, varType, varDoc, 
-  typeToFunc, typeToVal, typeToVar, funcToType, valToType, varToType)
+  toOtherVar, typeToFunc, typeToVal, typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift4Pair, liftPair, liftPairFst, 
@@ -243,6 +243,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   variableDoc v = variableDoc $ pfst v
 
 instance (Pair p) => InternalVariable (p CppSrcCode CppHdrCode) where
+  toOtherVariable v = pair (toOtherVariable $ pfst v) (toOtherVariable $ psnd v)
   varFromData b n t d = pair (varFromData b n (pfst t) d) 
     (varFromData b n (psnd t) d)
 
@@ -265,6 +266,7 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
 
   valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
   valueDoc v = valueDoc $ pfst v
+  getTypedVal v = getTypedVal $ pfst v
 
 instance (Pair p) => NumericExpression (p CppSrcCode CppHdrCode) where
   (#~) v = pair ((#~) $ pfst v) ((#~) $ psnd v)
@@ -810,7 +812,7 @@ instance VariableSym CppSrcCode where
     text n)
   listVar = listVarD
   listOf = listOfD
-  iterVar l t = liftA2 (mkVar l) (iterator t) (return $ text $ "(*" ++ l ++ ")")
+  iterVar l t = liftA2 (mkVar l) t (return $ text $ "(*" ++ l ++ ")")
 
   ($->) = objVar
 
@@ -820,6 +822,7 @@ instance VariableSym CppSrcCode where
   variableDoc = varDoc . unCPPSC
 
 instance InternalVariable CppSrcCode where
+  toOtherVariable = fmap toOtherVar
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym CppSrcCode where
@@ -841,6 +844,7 @@ instance ValueSym CppSrcCode where
 
   valueType = fmap valToType
   valueDoc = valDoc . unCPPSC
+  getTypedVal = unCPPSC
 
 instance NumericExpression CppSrcCode where
   (#~) = liftA2 unExpr' negateOp
@@ -986,7 +990,7 @@ instance StatementSym CppSrcCode where
     (bindDoc <$> dynamic_) 
   listDec n v = mkSt <$> liftA4 cppListDecDoc v (litInt n) (bindDoc <$> static_)
     (bindDoc <$> dynamic_) 
-  listDecDef v vs = mkSt <$> liftA4 cppListDecDefDoc v (liftList valList vs) 
+  listDecDef v vs = mkSt <$> liftA4 cppListDecDefDoc v (liftList valList' vs) 
     (bindDoc <$> static_) (bindDoc <$> dynamic_) 
   objDecDef v def = mkSt <$> liftA4 objDecDefDocD v def (bindDoc <$> static_) 
     (bindDoc <$> dynamic_) 
@@ -1078,7 +1082,7 @@ instance ControlStatementSym CppSrcCode where
   forRange = forRangeD
   forEach i v = for (varDecDef e (iterBegin v)) (valueOf e ?!= iterEnd v) 
     (e &++)
-    where e = toBasicVar i
+    where e = toOtherVariable $ toBasicVar i
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch = tryCatchD cppTryCatch
@@ -1377,9 +1381,9 @@ instance VariableSym CppHdrCode where
   classVar _ v = liftA2 (mkVar "") (variableType v) (return empty)
   objVar _ v = liftA2 (mkVar "") (variableType v) (return empty)
   objVarSelf _ _ t = liftA2 (mkVar "") t (return empty)
-  listVar _ _ _ = liftA2 (mkVar "") void (return empty)
-  listOf _ _ = liftA2 (mkVar "") void (return empty)
-  iterVar _ _ = liftA2 (mkVar "") void (return empty)
+  listVar _ p t = liftA2 (mkVar "") (listType p t) (return empty)
+  listOf _ t = liftA2 (mkVar "") (listType static_ t) (return empty)
+  iterVar = var
 
   ($->) _ v = liftA2 (mkVar "") (variableType v) (return empty)
   
@@ -1389,6 +1393,7 @@ instance VariableSym CppHdrCode where
   variableDoc = varDoc . unCPPHC
 
 instance InternalVariable CppHdrCode where
+  toOtherVariable = fmap toOtherVar
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym CppHdrCode where
@@ -1410,6 +1415,7 @@ instance ValueSym CppHdrCode where
 
   valueType = fmap valToType
   valueDoc = valDoc . unCPPHC
+  getTypedVal = unCPPHC
 
 instance NumericExpression CppHdrCode where
   (#~) _ = liftA2 mkVal void (return empty)
@@ -1454,7 +1460,7 @@ instance ValueExpression CppHdrCode where
   funcApp _ t _ = liftA2 mkVal t (return empty)
   selfFuncApp _ t _ = liftA2 mkVal t (return empty)
   extFuncApp _ _ t _ = liftA2 mkVal t (return empty)
-  newObj _ _ = liftA2 mkVal void (return empty)
+  newObj t _ = liftA2 mkVal t (return empty)
   extNewObj _ _ _ = liftA2 mkVal void (return empty)
 
   exists _ = liftA2 mkVal bool (return empty)
@@ -1494,15 +1500,15 @@ instance FunctionSym CppHdrCode where
   set _ _ _ = liftA2 mkVal void (return empty)
 
   listSize _ = liftA2 mkVal void (return empty)
-  listAdd _ _ _ = liftA2 mkVal void (return empty)
-  listAppend _ _ = liftA2 mkVal void (return empty)
+  listAdd v _ _ = liftA2 mkVal (valueType v) (return empty)
+  listAppend v _ = liftA2 mkVal (valueType v) (return empty)
 
   iterBegin _ = liftA2 mkVal void (return empty)
   iterEnd _ = liftA2 mkVal void (return empty)
 
 instance SelectorFunction CppHdrCode where
   listAccess v _ = liftA2 mkVal (listInnerType $ valueType v) (return empty)
-  listSet _ _ _ = liftA2 mkVal void (return empty)
+  listSet v _ _ = liftA2 mkVal (valueType v) (return empty)
   at v _ = liftA2 mkVal (listInnerType $ valueType v) (return empty)
 
 instance InternalFunction CppHdrCode where
@@ -1510,14 +1516,14 @@ instance InternalFunction CppHdrCode where
   setFunc _ _ _ = liftA2 typeToFunc void (return empty)
 
   listSizeFunc = liftA2 typeToFunc void (return empty)
-  listAddFunc _ _ _ = liftA2 typeToFunc void (return empty)
-  listAppendFunc _ = liftA2 typeToFunc void (return empty)
+  listAddFunc v _ _ = liftA2 typeToFunc (valueType v) (return empty)
+  listAppendFunc v = liftA2 typeToFunc (listType static_ $ valueType v) (return empty)
 
   iterBeginFunc _ = liftA2 typeToFunc void (return empty)
   iterEndFunc _ = liftA2 typeToFunc void (return empty)
 
   listAccessFunc t _ = liftA2 typeToFunc t (return empty)
-  listSetFunc _ _ _ = liftA2 typeToFunc void (return empty)
+  listSetFunc v _ _ = liftA2 typeToFunc (valueType v) (return empty)
   
   functionType = fmap funcToType
   functionDoc = funcDoc . unCPPHC
@@ -1828,7 +1834,7 @@ cppInfileTypeDoc = td File "ifstream" (text "ifstream")
 cppOutfileTypeDoc :: TypedType Other
 cppOutfileTypeDoc = td File "ofstream" (text "ofstream")
 
-cppIterTypeDoc :: TypedType Other -> TypedType Other
+cppIterTypeDoc :: TypedType [a] -> TypedType Other
 cppIterTypeDoc t = td (Iterator (cType t)) (typeString t ++ "::iterator")
   (text "std::" <> typeDoc t <> text "::iterator")
 
@@ -1918,7 +1924,7 @@ cppDestruct :: CppSrcCode (Variable CppSrcCode a) ->
   CppSrcCode (Statement CppSrcCode)
 cppDestruct v = cppDestruct' v
   where cppDestruct' :: CppSrcCode (Variable CppSrcCode a) -> CppSrcCode (Statement CppSrcCode)
-        cppDestruct' vr@(CPPSC (OVr (VarD _ _ (TD (List _) _ _) _))) = for initv (v_i ?< listSize (valueOf vr)) (var_i &++) (loopBody vr)
+        cppDestruct' vr@(CPPSC (LVr _)) = for initv (v_i ?< listSize (valueOf vr)) (var_i &++) (loopBody vr)
         cppDestruct' _ = free v
         var_i :: CppSrcCode (Variable CppSrcCode Other)
         var_i = var "i" int

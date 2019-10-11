@@ -10,7 +10,7 @@ module GOOL.Drasil.LanguageRenderer (
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, printDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
-  stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, 
+  stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, iteratorError, voidDocD, 
   constructDocD, paramDocD, paramListDocD, mkParam, methodDocD, 
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, stateVarListDocD,
   alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
@@ -31,13 +31,13 @@ module GOOL.Drasil.LanguageRenderer (
   selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarDocD,
   objVarDocD, inlineIfD, funcAppDocD, newObjDocD, newObjDocD',
   objDecDefDocD, constDecDefDocD, listIndexExistsDocD, varD, 
-  staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD,
+  staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD,
   funcDocD, 
   castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
   castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
   privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr,
-  valList, prependToBody, appendToBody, surroundBody, getterName, setterName, 
+  valList, valList', prependToBody, appendToBody, surroundBody, getterName, setterName, 
   setMainMethod, setEmpty, intValue, filterOutObjs
 ) where
 
@@ -201,13 +201,27 @@ printObjDoc :: String -> (String -> repr (Statement repr))
   -> repr (Statement repr)
 printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
+-- outDoc :: (RenderSym repr) => Bool -> repr (Value repr Other) -> 
+--   repr (Value repr a) -> Maybe (repr (Value repr Other)) -> 
+--   repr (Statement repr)
+-- outDoc newLn printFn v f = outDoc' (getTypedVal v) 
+--   where outDoc' lv@(LV _) = printListDoc (getNestDegree 1 
+--           (cType $ valToType lv)) (return lv) prFn prStrFn prLnFn
+--         outDoc' _ = outDoc'' (getTypedType $ valueType v)
+--         outDoc'' (OT (TD (Object n) _ _)) = printObjDoc n prLnFn
+--         outDoc'' _ = printSt newLn printFn v f
+--         prFn = maybe print printFile f
+--         prStrFn = maybe printStr printFileStr f
+--         prLnFn = if newLn then maybe printStrLn printFileStrLn f else maybe 
+--           printStr printFileStr f 
+
 outDoc :: (RenderSym repr) => Bool -> repr (Value repr Other) -> 
   repr (Value repr a) -> Maybe (repr (Value repr Other)) -> 
   repr (Statement repr)
 outDoc newLn printFn v f = outDoc' (getTypedType $ valueType v)
-  where outDoc' (LT t) = printListDoc (getNestDegree 1 (cType t)) 
-          v prFn prStrFn prLnFn
-        outDoc' (OT (TD (Object n) _ _)) = printObjDoc n prLnFn
+  -- where outDoc' (LT t) = printListDoc (getNestDegree 1 (cType t)) 
+  --         v prFn prStrFn prLnFn
+  where outDoc' (OT (TD (Object n) _ _)) = printObjDoc n prLnFn
         outDoc' _ = printSt newLn printFn v f
         prFn = maybe print printFile f
         prStrFn = maybe printStr printFileStr f
@@ -248,6 +262,9 @@ listTypeDocD t lst = ltd t (\s -> render lst ++ "<" ++ s ++ ">")
 
 listInnerTypeD :: TypedType [a] -> TypedType a
 listInnerTypeD (LT t) = t
+
+iteratorError :: String -> String
+iteratorError l = "Iterators not available in " ++ l
 
 -- Method Types --
 
@@ -901,7 +918,7 @@ selfDocD :: Doc
 selfDocD = text "this"
 
 argDocD :: (RenderSym repr) => repr (Value repr Other) -> 
-  repr (Value repr Other) -> Doc
+  repr (Value repr [Other]) -> Doc
 argDocD n args = valueDoc args <> brackets (valueDoc n)
 
 enumElemDocD :: Label -> Label -> Doc
@@ -928,10 +945,10 @@ inlineIfD c v1 v2 = typeToVal prec (valToType v1) (valDoc c <+> text "?" <+>
 funcAppDocD :: (RenderSym repr) => Label -> [repr (Value repr Other)] -> Doc
 funcAppDocD n vs = text n <> parens (valueList vs)
 
-newObjDocD :: (RenderSym repr) => repr (Type repr Other) -> Doc -> Doc
+newObjDocD :: (RenderSym repr) => repr (Type repr a) -> Doc -> Doc
 newObjDocD st vs = new <+> newObjDocD' st vs
 
-newObjDocD' :: (RenderSym repr) => repr (Type repr Other) -> Doc -> Doc
+newObjDocD' :: (RenderSym repr) => repr (Type repr a) -> Doc -> Doc
 newObjDocD' st vs = getTypeDoc st <> parens vs
 
 listIndexExistsDocD :: OpData -> TypedValue Other -> TypedValue Other -> Doc
@@ -979,14 +996,10 @@ listOfD :: (RenderSym repr) => Label -> repr (Type repr a) ->
   repr (Variable repr [a])
 listOfD n = listVar n static_
 
-iterVarD :: (RenderSym repr) => Label -> repr (Type repr Other) -> 
-  repr (Variable repr Other)
-iterVarD n t = var n (iterator t)
-
 valueOfD :: (RenderSym repr) => repr (Variable repr a) -> repr (Value repr a)
 valueOfD v = valFromData Nothing (variableType v) (variableDoc v)
 
-argD :: (RenderSym repr) => repr (Value repr Other) -> repr (Value repr Other) 
+argD :: (RenderSym repr) => repr (Value repr Other) -> repr (Value repr [Other])
   -> repr (Value repr Other)
 argD n args = valFromData Nothing string (argDocD n args)
 
@@ -1004,8 +1017,8 @@ extFuncAppD :: (RenderSym repr) => Library -> Label -> repr (Type repr a) ->
   [repr (Value repr Other)] -> repr (Value repr a)
 extFuncAppD l n = funcAppD (l ++ "." ++ n)
 
-newObjD :: (RenderSym repr) => (repr (Type repr Other) -> Doc -> Doc) -> 
-  repr (Type repr Other) -> [repr (Value repr Other)] -> repr (Value repr Other)
+newObjD :: (RenderSym repr) => (repr (Type repr a) -> Doc -> Doc) -> 
+  repr (Type repr a) -> [repr (Value repr Other)] -> repr (Value repr a)
 newObjD f t vs = valFromData Nothing t (f t (valueList vs))
 
 notNullD :: (RenderSym repr) => repr (Value repr Other) -> 

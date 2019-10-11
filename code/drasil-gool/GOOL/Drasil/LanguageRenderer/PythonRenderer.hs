@@ -21,7 +21,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD', 
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
-  floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, constructDocD, 
+  floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, iteratorError, constructDocD, 
   paramListDocD, mkParam, methodListDocD, stateVarListDocD, ifCondDocD, 
   runStrategyD, checkStateD, multiAssignDoc, plusEqualsDocD', plusPlusDocD', 
   returnDocD, commentDocD, mkStNoEnd, stringListVals', stringListLists', stateD,
@@ -36,14 +36,14 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD',
   multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, 
   litCharD, litFloatD, litIntD, litStringD, classVarD, newObjDocD', varD, 
   staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, 
-  listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, 
+  listOfD, valueOfD, argD, enumElementD, argsListD, objAccessD, 
   objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
   indexOfD, funcAppD, extFuncAppD, newObjD, listSetFuncDocD, castObjDocD, funcD,
   getD, setD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, 
   listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, 
   iterEndError, listAccessFuncD, listSetFuncD, dynamicDocD, classDec,
   dot, forLabel, inLabel, observerListName, commentedItem, addCommentsDocD, 
-  classDoc, moduleDoc, commentedModD, docFuncRepr, valList, surroundBody, 
+  classDoc, moduleDoc, commentedModD, docFuncRepr, valList, valList', surroundBody, 
   getterName, setterName, filterOutObjs)
 import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..), file, 
   TypedFunc(..), funcDoc, ModData(..), md, updateModDoc, 
@@ -153,11 +153,11 @@ instance TypeSym PythonCode where
   string = return pyStringType
   infile = return $ td File "" empty
   outfile = return $ td File "" empty
-  listType _ t = return $ ltd t (P.const "[]") (P.const $ brackets empty)
+  listType _ t = liftA3 ltd t (return $ P.const "[]") (return $ P.const $ brackets empty)
   listInnerType = fmap listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
-  iterator t = t
+  iterator _ = error $ iteratorError pyName
   void = return $ td Void "NoneType" (text "NoneType")
 
   getTypedType = unPC
@@ -220,7 +220,7 @@ instance VariableSym PythonCode where
   objVarSelf = objVarSelfD
   listVar = listVarD
   listOf = listOfD
-  iterVar = iterVarD
+  iterVar = var
 
   ($->) = objVar
 
@@ -230,6 +230,7 @@ instance VariableSym PythonCode where
   variableDoc = varDoc . unPC
 
 instance InternalVariable PythonCode where
+  toOtherVariable = fmap toOtherVar
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym PythonCode where
@@ -250,6 +251,7 @@ instance ValueSym PythonCode where
 
   valueType = fmap valToType
   valueDoc = valDoc . unPC
+  getTypedVal = unPC
 
 instance NumericExpression PythonCode where
   (#~) = liftA2 unExpr' negateOp
@@ -396,7 +398,7 @@ instance StatementSym PythonCode where
   varDec _ = return (mkStNoEnd empty)
   varDecDef = assign
   listDec _ v = mkStNoEnd <$> fmap pyListDec v
-  listDecDef v vs = mkStNoEnd <$> liftA2 pyListDecDef v (liftList valList vs)
+  listDecDef v vs = mkStNoEnd <$> liftA2 pyListDecDef v (liftList valList' vs)
   objDecDef = varDecDef
   objDecNew v vs = varDecDef v (newObj (variableType v) vs)
   extObjDecNew lib v vs = varDecDef v (extNewObj lib (variableType v) vs)
@@ -443,7 +445,7 @@ instance StatementSym PythonCode where
 
   comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
-  free v = fmap toOtherVar v &= valueOf (var "None" void)
+  free v = toOtherVariable v &= valueOf (var "None" void)
 
   throw = throwD pyThrow Empty
 
@@ -640,9 +642,9 @@ pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
         fl = emptyIfEmpty (valDoc f) $ text ", file=" <> valDoc f
 
-pyOut :: (RenderSym repr) => Bool -> repr (Value repr Other) -> 
-  repr (Value repr a) -> Maybe (repr (Value repr Other)) -> 
-  repr (Statement repr)
+pyOut :: Bool -> PythonCode (Value PythonCode Other) -> 
+  PythonCode (Value PythonCode a) -> Maybe (PythonCode (Value PythonCode Other)) -> 
+    PythonCode (Statement PythonCode)
 pyOut newLn printFn v f = pyOut' (getTypedType $ valueType v)
   where pyOut' (OT (TD (List _) _ _)) = printSt newLn printFn v f
         pyOut' _ = outDoc newLn printFn v f
@@ -653,6 +655,7 @@ pyInput inSrc v = v &= pyInput' (unPC $ variableType v)
   where pyInput' :: TypedType a -> PythonCode (TypedValue a)
         pyInput' (BT _) = inSrc ?!= litString "0"
         pyInput' (OT t) = pyInput'' $ cdType t
+        pyInput' (LT _) = error "Attempt to read a value of unreadable type"
         pyInput'' :: CodeType -> PythonCode (TypedValue Other)
         pyInput'' Integer = funcApp "int" int [inSrc]
         pyInput'' Float = funcApp "float" float [inSrc]

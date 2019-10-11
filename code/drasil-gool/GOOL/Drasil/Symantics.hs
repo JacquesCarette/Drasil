@@ -17,7 +17,7 @@ module GOOL.Drasil.Symantics (
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
-import GOOL.Drasil.Data (Boolean, Other, Binding, Terminator, TypedType)
+import GOOL.Drasil.Data (Boolean, Other, Binding, Terminator, TypedType, TypedValue)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
@@ -103,7 +103,7 @@ class (PermanenceSym repr) => TypeSym repr where
   listInnerType :: repr (Type repr [a]) -> repr (Type repr a)
   obj           :: Label -> repr (Type repr Other)
   enumType      :: Label -> repr (Type repr Other)
-  iterator      :: repr (Type repr Other) -> repr (Type repr Other)
+  iterator      :: repr (Type repr a) -> repr (Type repr Other)
   void          :: repr (Type repr Other)
 
   getTypedType :: repr (Type repr a) -> TypedType a
@@ -174,7 +174,7 @@ class (TypeSym repr, InternalVariable repr) => VariableSym repr where
     ->  repr (Variable repr [a])
   listOf       :: Label -> repr (Type repr a) -> repr (Variable repr [a])
   -- Use for iterator variables, i.e. in a forEach loop.
-  iterVar      :: Label -> repr (Type repr Other) -> repr (Variable repr Other)
+  iterVar      :: Label -> repr (Type repr a) -> repr (Variable repr a)
 
   ($->) :: repr (Variable repr Other) -> repr (Variable repr a) -> 
     repr (Variable repr a)
@@ -186,6 +186,7 @@ class (TypeSym repr, InternalVariable repr) => VariableSym repr where
   variableDoc  :: repr (Variable repr a) -> Doc
 
 class InternalVariable repr where
+  toOtherVariable :: repr (Variable repr a) -> repr (Variable repr Other)
   varFromData :: Binding -> String -> repr (Type repr a) -> Doc -> 
     repr (Variable repr a)
 
@@ -211,6 +212,8 @@ class (VariableSym repr) => ValueSym repr where
 
   valueType :: repr (Value repr a) -> repr (Type repr a)
   valueDoc :: repr (Value repr a) -> Doc
+  getTypedVal :: repr (Value repr a) -> TypedValue a
+
 
 class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => 
   NumericExpression repr where
@@ -293,8 +296,8 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
     -> repr (Value repr a)
   extFuncApp   :: Library -> Label -> repr (Type repr a) -> 
     [repr (Value repr Other)] -> repr (Value repr a)
-  newObj       :: repr (Type repr Other) -> [repr (Value repr Other)] -> 
-    repr (Value repr Other)
+  newObj       :: repr (Type repr a) -> [repr (Value repr Other)] -> 
+    repr (Value repr a)
   extNewObj    :: Library -> repr (Type repr Other) -> 
     [repr (Value repr Other)] -> repr (Value repr Other)
 

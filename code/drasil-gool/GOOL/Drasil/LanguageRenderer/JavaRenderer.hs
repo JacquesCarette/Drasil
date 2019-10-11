@@ -23,7 +23,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
 import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD, 
   classDocD, enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
   oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
-  typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, constructDocD,
+  typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, iteratorError, voidDocD, constructDocD,
   paramDocD, paramListDocD, mkParam, methodListDocD, stateVarDocD, 
   stateVarDefDocD, stateVarListDocD, ifCondDocD, forDocD, forEachDocD, 
   whileDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, 
@@ -41,7 +41,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD,
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
   litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, classVarD, 
   classVarDocD, inlineIfD, newObjDocD, varD, staticVarD, extVarD, selfD, 
-  enumVarD, classVarD, objVarD, listVarD, listOfD, iterVarD, valueOfD, argD, 
+  enumVarD, classVarD, objVarD, listVarD, listOfD, valueOfD, argD, 
   enumElementD, argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, 
   selfAccessD, listIndexExistsD, indexOfD, funcAppD, extFuncAppD, newObjD, 
   notNullD, castDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, 
@@ -50,7 +50,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD,
   listAccessFuncD', staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
   elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc,
-  moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
+  moduleDoc, commentedModD, docFuncRepr, valList', appendToBody, surroundBody, 
   getterName, setterName, setMainMethod, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Other, Boolean, Terminator(..), 
   FileData(..), file, TypedFunc(..), funcDoc, ModData(..), md, 
@@ -58,7 +58,7 @@ import GOOL.Drasil.Data (Other, Boolean, Terminator(..),
   ProgData(..), progD, TypeData(..), td, ltd, TypedType(..), cType, typeString, 
   typeDoc, TypedValue(..), valDoc, toOtherVal,
   TypedVar(..), getVarData, otherVar, varBind, varName, varType, varDoc, 
-  typeToFunc, typeToVal, typeToVar, funcToType, valToType, varToType)
+  toOtherVar, typeToFunc, typeToVal, typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, 
   lift4Pair, liftPair, liftPairFst, checkParams)
@@ -164,7 +164,7 @@ instance TypeSym JavaCode where
   listInnerType = fmap listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
-  iterator t = t
+  iterator _ = error $ iteratorError jName
   void = return voidDocD
 
   getTypedType = unJC
@@ -225,7 +225,7 @@ instance VariableSym JavaCode where
   objVarSelf _ = var
   listVar = listVarD
   listOf = listOfD
-  iterVar = iterVarD
+  iterVar = var
 
   ($->) = objVar
 
@@ -235,6 +235,7 @@ instance VariableSym JavaCode where
   variableDoc = varDoc . unJC
   
 instance InternalVariable JavaCode where
+  toOtherVariable = fmap toOtherVar
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym JavaCode where
@@ -256,6 +257,7 @@ instance ValueSym JavaCode where
 
   valueType = fmap valToType
   valueDoc = valDoc . unJC
+  getTypedVal = unJC
 
 instance NumericExpression JavaCode where
   (#~) = liftA2 unExpr' negateOp
@@ -398,7 +400,7 @@ instance StatementSym JavaCode where
   varDec v = mkSt <$> liftA3 varDecDocD v static_ dynamic_
   varDecDef v def = mkSt <$> liftA4 varDecDefDocD v def static_ dynamic_
   listDec n v = mkSt <$> liftA4 listDecDocD v (litInt n) static_ dynamic_ 
-  listDecDef v vs = mkSt <$> liftA4 jListDecDef v (liftList valList vs) static_ 
+  listDecDef v vs = mkSt <$> liftA4 jListDecDef v (liftList valList' vs) static_ 
     dynamic_ 
   objDecDef v def = mkSt <$> liftA4 objDecDefDocD v def static_ dynamic_ 
   objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
@@ -433,7 +435,7 @@ instance StatementSym JavaCode where
   discardFileLine = discardFileLineD "nextLine"
   stringSplit d vnew s = mkSt <$> liftA2 jStringSplit vnew 
     (funcApp "Arrays.asList" (listType static_ string) 
-    [s $. func "split" (listType static_ string) [litString [d]]])
+    [toOtherValue $ s $. func "split" (listType static_ string) [litString [d]]])
 
   stringListVals = stringListVals'
   stringListLists = stringListLists'
@@ -671,7 +673,7 @@ jCast t v = jCast' (unJC t) (getType $ valueType v)
         jCast' (OT (TD Integer _ _)) (Enum _) = v $. func "ordinal" int []
         jCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
-jListDecDef :: TypedVar Other -> Doc -> Doc -> Doc -> Doc
+jListDecDef :: TypedVar [a] -> Doc -> Doc -> Doc -> Doc
 jListDecDef v vs s d = varDecDocD v s d <+> equals <+> new <+> 
   tpDoc (varType v) <+> parens listElements
   where listElements = emptyIfEmpty vs $ text "Arrays.asList" <> parens vs
@@ -718,7 +720,7 @@ jOpenFileWorA n t wa = valFromData Nothing t $ new <+> text "PrintWriter" <>
   parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> 
   parens (valueDoc n) <> comma <+> valueDoc wa))
 
-jStringSplit :: TypedVar Other -> TypedValue Other -> Doc
+jStringSplit :: TypedVar [Other] -> TypedValue [Other] -> Doc
 jStringSplit vnew s = varDoc vnew <+> equals <+> new <+> tpDoc (varType vnew)
   <> parens (valDoc s)
 

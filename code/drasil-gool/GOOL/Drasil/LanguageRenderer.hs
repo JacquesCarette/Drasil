@@ -47,8 +47,7 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, Library,
   RenderSym(..), BodySym(..), BlockSym(..), PermanenceSym(..),
   TypeSym(Type, getTypedType, getType, getTypeString, getTypeDoc, bool, float, 
-  string, infile, outfile, listType, listInnerType, obj, enumType, iterator, 
-  void), 
+    string, infile, outfile, listType, listInnerType, obj, enumType, void), 
   VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
@@ -60,8 +59,8 @@ import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..),
   od, ParamData(..), pd, TypeData(..), td, btd, ltd, TypedType(..), cType, 
   typeDoc, TypedValue(..), valPrec, valDoc, Binding(..), TypedVar(..), 
   getVarData, varBind, varType, varDoc, typeToVal, typeToVar, valToType)
-import GOOL.Drasil.Helpers (angles, 
-  doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
+import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
+  emptyIfEmpty, emptyIfNull)
 
 import Control.Applicative ((<|>))
 import Data.List (intersperse, last)

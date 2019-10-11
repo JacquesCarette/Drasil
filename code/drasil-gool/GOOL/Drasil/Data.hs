@@ -4,14 +4,13 @@ module GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, Terminator(..),
   ScopeTag(..), FileType(..), BindData(..), bd, FileData(..), fileD, file, 
   srcFile, hdrFile, isSource, isHeader, updateFileMod, FuncData(..), fd, 
   TypedFunc(..), funcType, funcDoc, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, OpData(..), od, 
-  ParamData(..), pd, updateParamDoc, ProgData(..), progD, emptyProg, 
-  StateVarData(..), svd, TypeData(..), td, btd, ltd, TypedType(..), cType, 
-  typeString, typeDoc, updateTypedType, ValData(..), vd, updateValDoc, TypedValue(..), 
-  otherVal, boolVal, valPrec, valType, valDoc, toOtherVal, Binding(..), 
-  VarData(..), vard, TypedVar(..), getVarData, otherVar, varBind, varName, 
-  varType, varDoc, toOtherVar, typeToFunc, typeToVal, typeToVar, funcToType, 
-  valToType, varToType
+  MethodData(..), mthd, OpData(..), od, ParamData(..), pd, updateParamDoc, 
+  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, btd, 
+  ltd, TypedType(..), cType, typeString, typeDoc, updateTypedType, ValData(..), 
+  vd, updateValDoc, TypedValue(..), otherVal, boolVal, valPrec, valType, valDoc,
+  toOtherVal, Binding(..), VarData(..), vard, TypedVar(..), getVarData, 
+  otherVar, varBind, varName, varType, varDoc, toOtherVar, typeToFunc, 
+  typeToVal, typeToVar, funcToType, valToType, varToType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..))

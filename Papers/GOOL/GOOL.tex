@@ -61,6 +61,10 @@
                         %% http://ctan.org/pkg/subcaption
 \usepackage{listings}
 
+%%%%%%%%%%%%%%%%%%%%%
+%% Useful abbreviations
+\newcommand{\Csharp}{C$^{sharp}$}
+
 \begin{document}
 
 %% Title information
@@ -264,8 +268,8 @@ the language we are looking for
 is just a DSL in the domain of OO programming languages!
 
 There are some DSLs that already generate code in multiple languages, to be
-further discussed in Section \ref{related}, but none of them have the 
-combination of features we require. We are indeed trying to do something odd:
+further discussed in Section \ref{sec:related}, but none of them have the 
+combination of features we want. We are indeed trying to do something odd:
 writing a ``DSL'' for what is essentially the domain of OO GPLs. Furthermore,
 we have additional requirements:
 \begin{enumerate}
@@ -285,102 +289,126 @@ already supported.
 
 First we present the high-level requirements for such an endeavour, in
 Section~\ref{sec:req}.  To be able to give illustrated examples, we
-next show the syntax of GOOL in Section~\ref{syntax}. The details of
+next show the syntax of GOOL in Section~\ref{sec:syntax}. The details of
 the implementations, namely the internal representation and the
-family of pretty-printers, is in Section~\ref{implementation}.
-Common patterns are illustrated in Section~\ref{patterns}.  We 
-close with a discussion of related work in Section \ref{related}, plans for 
+family of pretty-printers, is in Section~\ref{sec:implementation}.
+Common patterns are illustrated in Section~\ref{sec:patterns}.  We 
+close with a discussion of related work in Section \ref{sec:related}, plans for 
 future improvements in Section \ref{future}, and conclusions in Section 
-\ref{conclusions}.
+\ref{sec:conclusions}.
 
 \section{Requirements} \label{sec:req}
 
-One might not expect a DSL to prioritize generation of human-readable, 
-idiomatic, or documented code. After all, the main purpose of a DSL is to allow 
-the user of the DSL --- who is probably a domain expert but not a programming 
-expert --- to avoid having to write GPL code, so why would they want to look at 
-the generated GPL code? For programs written in most DSLs, the generated code 
-is not itself the goal. The goal is to do something, and the form of the 
-generated code is unimportant, as long as running it achieves that goal. In 
-this respect, GOOL differs from most DSLs. Since the domain of GOOL is OO 
-programming, the user of GOOL is expected to have some programming expertise. 
-In a sense, GOOL is both a GPL and a DSL. GOOL's main purpose, rather than 
-allowing the user to not have to write GPL code, is to allow the user to not 
-have to write GPL code in multiple languages. As with other DSLs, completing 
-some required task will certainly be a goal of a program written in GOOL. But 
-since GOOL is general-purpose, we cannot assume that the generated code will 
-not be an additional goal unto itself. For example, if it is to be integrated 
-into an existing system, other programmers working on the system may need to 
-look at and understand the code and how it impacts their own tasks. Or perhaps 
-the generated code is a library, intended to be used by any project who sees a 
-need for it.
+While we outlined some of our requirements above, here we will give a 
+complete list, along with acronyms (to make referring to them simpler),
+as well as some reasoning behind each requirement.
 
-In light of cases like these, the importance of our requirements for GOOL to 
-generate human-readable, idiomatic, and documented code should be clear. These 
-all contribute to understandability of the generated code. Documentation can 
-explain code such that those using a program or library can do so quickly, 
-without even having to look at the code. Documentation may take the form of 
-comments added ad-hoc throughout the code, or more formal, structured comments 
-that can be compiled into PDF or HTML documents using a tool like Doxygen. 
-Documentation cannot be guaranteed to provide all of the information a user of 
-the generated code may need, however, which is why generating human-readable 
-code is still important. 
+% The following macros should be moved to the preamble
+\newcommand{\abbrev}[1]{\textbf{#1}}
+\newcommand{\mainstream}{\abbrev{mainstream}}
+\newcommand{\readable}{\abbrev{readable}}
+\newcommand{\idiomatic}{\abbrev{idiomatic}}
+\newcommand{\documented}{\abbrev{documented}}
+\newcommand{\oopatterns}{\abbrev{patterns}}
+\newcommand{\common}{\abbrev{common}}
 
-Details not revealed by the documentation should be 
-discernible by examining and understanding the code. Readable code is also 
-important when it comes to debugging. Being unable to understand parts of a 
-system would make diagnosing bugs very difficult. Pretty-printing and reducing 
-complexity are effective ways to enhance code readability 
-\cite{buse2009learning}. Some DSLs complicate generated code by generating it 
-into a custom framework, but GOOL must avoid this to retain readability. 
+\begin{description}
+\item[mainstream] Generate code in mainstream object-oriented languages.
+\item[readable] The generated code should be human-readable,
+\item[idiomatic] The generated code should be idiomatic,
+\item[documented] The generated code should be documented,
+\item[patterns] The generator should allow one to express common OO patterns.
+\item[common] Language commonalities should be abstracted.
+\end{description}
 
-It should be noted that our requirements for the generated code to be 
-documented and readable only hold if the code written in GOOL is documented and 
-readable. Inevitably, a user will be able to write undocumented or overly 
-complex code if they choose to do so. Our requirement is that GOOL at least 
-offers a way to document the code, does not strip away code comments, 
-pretty-prints the generated code, and does not introduce more complexity than 
-required to meet the GOOL specification.
+Targetting OO languages (\mainstream) is primarily because of their popularity, and thus
+would enjoy the most potential users --- in much the same way that the makers
+of Scala and Kotlin chose to target the JVM to leverage the Java ecosystem, and
+Typescript for Javascript.
 
-The importance of generating idiomatic code is perhaps not as obvious as 
-readable and documented code. Consider a project written entirely in one 
-language. If it uses generated code from GOOL and the code is non-idiomatic, it 
-will be inconsistent with the rest of the code base and less understandable, 
-both because it would be more complicated than it needs to be and because it 
-would not be expressed naturally in the target language, not using the idioms 
-with which the developers would be most familiar.
+The \readable~requirement is not as obvious. As DSL users are typically
+domain experts who are not ``programmers'', why generate readable code?
+Few Java programmers ever look at JVM bytecode, and few C++ programmers
+look at assembly. But GOOL's aim is different: to allow writing
+high-level OO code once, but have it be available in many GPLs. One use case
+would be to generate libraries of utilities for a narrow domain. As needs
+evolve and language popularity changes, it is useful to have it immediately
+available in a number of languages. Another use, which is a core part of our
+own motivation, is to have \emph{extremely well documented} code, indeed to
+a level that would be unrealistic to do by hand. But this documentation is
+crucial in domains where \emph{certification} of code is required.
 
-Our last requirement is altogether different from the others, but is 
-typical of DSLs: GOOL should abstract over common OO patterns, allowing them to 
-be expressed naturally. The patterns in question could abstract over 
-small-scale idioms or could be larger-scale OO design patterns. While the 
-motivation for this requirement is partly to make it even more efficient to 
-write code in GOOL than in any of its target languages, there is more to it 
-than that. This requirement is also necessary to make GOOL truly 
-language-agnostic and to generate idiomatic code. This fact will be 
-demonstrated with the examples of patterns shown in Section \ref{patterns}, but 
-to understand why abstractions over patterns are needed, consider Python's 
-ability to return multiple values with a single return statement. Other OO 
-languages do not allow this, so either GOOL could also disallow it or GOOL 
-could provide syntax for it but throw an error if it was used when targeting 
-one of the languages that does not support it. In the first case, if a user of
-GOOL wanted to return multiple values and target Python, they would have to 
-work around the lack of a multiple-value return statement and the generated 
-code would therefore be non-idiomatic. But in the second case, if the user 
-wanted to target both Python and a language that does not support 
-multiple-value return statements, the GOOL code would have to be different when 
-targeting Python than when targeting the other language, so GOOL would not be 
-truly language-agnostic. The higher-level pattern that would require a 
-multiple-value return statement is a function with multiple outputs. If GOOL
-abstracted over that pattern and provided syntax for defining multiple-output 
-functions, the code generator can generate a multiple-value return statement in 
-Python and something different in the other language. In this way, the same 
-GOOL code can truly be compiled into idiomatic code in any target language.
+The same underlying reasons for \readable~also drive \idiomatic and \documented,
+as they contribute to the human-understandability of the generated code.
+\idiomatic is important as many human readers would find the code ``foreign''
+otherwise, and would not be keen on using it.
+Note that documentation can span from informal comments meant for humans, to
+formal, structured comments useful for generating API documentation with tools
+like Doxygen, or with a variety of static analysis tools.
+Readability (and thus understandability) are improved when code is pretty-printed%
+\cite{buse2009learning}. Thus taking care of layout, redundant parentheses,
+well-chosen variable names, using a common style with lines which are not too
+long, are just as valid for generated code as for human-written code.
+GOOL does not prevent users from writing undocumented or complex code, if they
+choose to do so. It just makes it easy to have \readable, \idiomatic and
+\documented code in multiple languages.
 
-\section{GOOL Syntax} \label{syntax}
+The \oopatterns~requirement is typical of DSLs: common programming patterns
+can be reified into a proper linguistic form instead of being merely
+informal. In particular some of the \emph{design patterns} of~\cite{gamma1995design}
+can become part of the language itself. This does make writing some OO
+code even easier in GOOL than in GPLs, it also helps quite a lot with
+keeping GOOL language-agnostic and generating idiomatic code. Illustrative
+examples will be given in Section~\ref{sec:patterns}.  But we can give an
+indication now as to why this helps: Consider Python's 
+ability to return multiple values with a single return statement, which
+is uncommon in other languages.  Two choices might be to disallow this
+feature in GOOL, or throw an error on use when generating code in languages
+that do not support this feature. In the first case, this would likely mean
+unidiomatic Python code, or increased complexity in the Python generator to
+infer that pattern. The second option is worse still: one might have to resort
+to writing language-specific GOOL, obviating the whole reason for the language!
+Multiple-value return statements are always used when a function returns multiple
+outputs; what we can do in GOOL is to support such multiple-value return, and
+then generate the idiomatic pattern of implementation in each target language.
 
-GOOL's syntax was designed to be similar to OO languages while also providing 
-useful abstractions. Basic types in GOOL are \verb|bool| for Booleans, 
+Our last requirement, that language commonalities (\common) be abstracted is
+an internal requirement: we noticed a lot of repeated code in our backends, 
+something that ought to be distasteful to most programmers. For example, writing
+a generator for both Java and \Csharp makes it incredibly clear how similar the two
+languages are.
+
+\section{Creating GOOL} \label{sec:creating}
+
+How do we go about creating a ``generic'' object-oriented language?
+We chose an incremental abstraction approach: start from two languages,
+and unify them \emph{conceptually}.  In other words, pay very close
+attention to the \emph{denotational} semantics of the features, some
+attention to the operational semantics, and ignore syntactic details.
+
+This is most easily done from the core imperative language outwards.
+Most languages provide similar basic types (variations on integers,
+floating point numbers, characters, strings, etc) and functions to deal
+with them. The core expression language tends to be extremely similar
+cross languages. One then moves up to the statement language ---
+assignments, conditionals, loops, etc.  Here we start to encounter
+variations, and choices can be made, and we'll cover that later.
+
+For ease of experimentation, we chose to make GOOL an embedded
+domain specic language (EDSL) inside Haskell.  Haskell is very well-suited
+for this task, offering a variety of features (GADTs, type classes,
+parametric polymorphism, kind polymorphism, etc) which is extremely useful
+for building languages.  Its syntax is also fairly liberal, so that it is
+possible to create \emph{smart constructors} that somewhat mimic the
+usual syntax of OO languages.
+
+\subsection{GOOL Syntax} \label{ssec:syntax}
+
+As our exposition has been somewhat abstract until now, it is useful to
+dive in and give some concrete syntax, so as to be able to illustrate
+our ideas with valid code.
+
+Specifically, Basic types in GOOL are \verb|bool| for Booleans, 
 \verb|int| for integers, \verb|float| for doubles, \verb|char| 
 for characters, \verb|string| for strings, \verb|infile| for a file 
 in read mode, and \verb|outfile| for a file in write mode. Lists can be 
@@ -391,7 +419,12 @@ an object of a class called ``FooClass''.
 
 Variables are specified with \verb|var| followed by the variable name and type. 
 For example, \verb|var "ages" (listType int)| defines a variable called 
-``ages'' that is a list of integers. GOOL offers a shortcut for defining 
+``ages'' that is a list of integers. This illustrates a (necessary) design
+decision: even though we target languages like Python, as we also target
+Java, types are necessary. As type inference for OO languages is too
+difficult, we chose to be explicitly typed.
+
+GOOL offers a shortcut for defining 
 list-type variables with \verb|listVar|, so the ``ages'' variable could 
 alternatively be specified by \verb|listVar "ages" int|. Since GOOL is embedded 
 in Haskell, such a variable definition can be assigned as the value of a 
@@ -509,7 +542,7 @@ ifCond [
     printStrLn "foo is positive")),
   (foo ?< litInt 0, oneLiner (
     printStrLn "foo is negative"))] 
-  (oneLiner $ printStrLn "foo is zero")
+  (oneLiner \$ printStrLn "foo is zero")
 \end{lstlisting}
 \verb|ifNoElse| can be used in place of \verb|ifCond| for when there is no else 
 condition. GOOL also supports \verb|switch| statements. A for-loop can be 
@@ -579,7 +612,7 @@ the list of functions, and the list of classes. Passing a module to
 \verb|fileDoc| will put the finishing touches on the generated file, such as 
 imports of standard libraries and preprocessor guards for C++ header files.
 \begin{lstlisting}
-fileDoc $ buildModule "mod1" ["library1"] 
+fileDoc \$ buildModule "mod1" ["library1"] 
   [func1, func2] [class1, class2] 
 \end{lstlisting}
 Documenting a file with a Doxygen-style file header can be done with 
@@ -598,9 +631,9 @@ specified with the \verb|makefile| keyword. One of the parameters to the
 will compile the Doxygen documentation with the generated Doxygen configuration 
 file.
 
-Syntax for higher-level patterns will be discussed in Section \ref{patterns}.
+Syntax for higher-level patterns will be discussed in Section \ref{sec:patterns}.
 
-\section{GOOL Implementation} \label{implementation}
+\section{GOOL Implementation} \label{sec:implementation}
 
 GOOL is embedded in Haskell in the finally-tagless style originally described 
 in \cite{carette2009finally}. In finally-tagless style, the internal 
@@ -632,7 +665,7 @@ across many type classes, roughly based on the internal types upon which the
 functions act. GOOL's internal types correspond to the types of code being 
 represented, not the types of the values in the target languages, though adding 
 value-types to GOOL's type system is planned for the future, discussed further 
-in Section \ref{future}. Examples of internal types in GOOL, then, are 
+in Section \ref{sec:future}. Examples of internal types in GOOL, then, are 
 \verb|Variable|, \verb|Value|, \verb|Type|, \verb|Scope|, \verb|Statement|, 
 \verb|Method|, \verb|Class|, \verb|Module|, and \verb|Package|. A 
 \verb|Statement| in GOOL, for example, is a representation of a piece of code 
@@ -650,7 +683,7 @@ Since variables have types, a type for representing variables must also know
 how to represent types, thus we constrain our \verb|repr| type variable to be 
 an instance of \verb|TypeSym|, the symantic type class containing functions for 
 representing types, like the \verb|int|, \verb|float|, \verb|string|, and 
-\verb|listType| functions described in Section \ref{syntax}. 
+\verb|listType| functions described in Section \ref{sec:syntax}. 
 
 The types used in the signatures of GOOL's functions have the general form 
 \verb|repr| \verb|(X repr)| for some type \verb|X|, examples of which can be 
@@ -676,7 +709,7 @@ language requires storing more or less information than others.
 The type signature for the \verb|var| function says that \verb|var| takes a 
 label and a representation of a type and yields a representation of a variable. 
 This should not be surprising given how we used \verb|var| to define variables 
-like \verb|var| \verb|"foo"| \verb|int| in Section \ref{syntax}. \verb|Label| 
+like \verb|var| \verb|"foo"| \verb|int| in Section \ref{sec:syntax}. \verb|Label| 
 is simply a Haskell type synonym for \verb|String|. 
 
 Shown below is the instance of the type class excerpt shown above for 
@@ -919,7 +952,7 @@ called on a GOOL program, the resulting pretty-printed \verb|Doc|s are
 transformed back into a \verb|String|s using the \verb|render| function, and 
 then written to files using standard Haskell IO.
 
-\section{Higher-level GOOL functions} \label{patterns}
+\section{Higher-level GOOL functions} \label{sec:patterns}
 
 GOOL provides many high-level functions that abstract over common OO patterns, 
 allowing one to write a small amount of GOOL code to generate a large amount 
@@ -961,7 +994,7 @@ Lists are a very common data structure in OO code, so GOOL provides a suite of
 functions for working with lists. For example, \verb|listAccess| can be passed 
 a list and index value and will return the value of the element of the list at 
 the given index. The GOOL code \verb|listAccess| \verb|(valueOf ages)| 
-\verb|(litInt 1)| for the \verb|ages| variable defined in Section \ref{syntax} 
+\verb|(litInt 1)| for the \verb|ages| variable defined in Section \ref{sec:syntax} 
 will generate \verb|ages[1]| in Python and C\#, \verb|ages.get(1)| in Java, and 
 \verb|ages.at(1)| in C++. Other functions for working with lists offered by 
 GOOL are \verb|listSize| for getting the size of a list, \verb|listAppend| for 
@@ -1189,7 +1222,7 @@ example by not requiring the user to manually define a loop for notifying
 observers, and their syntax should be easily understood by those familiar with 
 OO programming.
 
-\section{Related Work} \label{related}
+\section{Related Work} \label{sec:related}
 
 We divide the Related Work into the following categories
 \begin{itemize}
@@ -1260,7 +1293,7 @@ interface rather than a programming or modeling language. The languages that
 generate code do so only for design patterns, not for any general-purpose code 
 like GOOL does.
 
-\section{Future Work} \label{future}
+\section{Future Work} \label{sec:future}
 
 Currently GOOL code is typed based on what kind of code it represents: 
 variable, value, type, or method, for example. Code that represents a variable 
@@ -1327,7 +1360,7 @@ can provide abstractions, and to implement those as more high-level functions,
 with the aim of writing OO programs in GOOL as efficiently as possible without 
 losing expressivity.
 
-\section{Conclusion} \label{conclusions}
+\section{Conclusion} \label{sec:conclusions}
 
 OO programming languages are similar enough that it is feasible to have a 
 single OO language that can be compiled to any other OO language. GOOL is a DSL 

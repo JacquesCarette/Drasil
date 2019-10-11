@@ -12,20 +12,20 @@ import Data.Maybe (maybeToList)
 import Control.Applicative ((<$>))
 import Control.Monad.Reader (Reader, ask)
 
-maybeLog :: (RenderSym repr) => repr (Variable repr) ->
+maybeLog :: (RenderSym repr) => repr (Variable repr a) ->
   Reader State [repr (Statement repr)]
 maybeLog v = do
   g <- ask
   l <- chooseLogging (logKind g) v
   return $ maybeToList l
 
-chooseLogging :: (RenderSym repr) => Logging -> (repr (Variable repr) -> 
+chooseLogging :: (RenderSym repr) => Logging -> (repr (Variable repr a) -> 
   Reader State (Maybe (repr (Statement repr))))
 chooseLogging LogVar v = Just <$> loggedVar v
 chooseLogging LogAll v = Just <$> loggedVar v
 chooseLogging _      _ = return Nothing
 
-loggedVar :: (RenderSym repr) => repr (Variable repr) -> 
+loggedVar :: (RenderSym repr) => repr (Variable repr a) -> 
   Reader State (repr (Statement repr))
 loggedVar v = do
     g <- ask
@@ -36,7 +36,7 @@ loggedVar v = do
       printFileStrLn valLogFile (" in module " ++ currentModule g),
       closeFile valLogFile ]
 
-logBody :: (RenderSym repr) => Label -> [repr (Variable repr)] -> 
+logBody :: (RenderSym repr) => Label -> [repr (Variable repr a)] -> 
   [repr (Block repr)] -> Reader State (repr (Body repr))
 logBody n vars b = do
   g <- ask
@@ -45,8 +45,8 @@ logBody n vars b = do
       loggedBody _       = b
   return $ body $ loggedBody $ logKind g
 
-loggedMethod :: (RenderSym repr) => Label -> Label -> [repr (Variable repr)] -> 
-  [repr (Block repr)] -> [repr (Block repr)]
+loggedMethod :: (RenderSym repr) => Label -> Label -> [repr (Variable repr a)] 
+  -> [repr (Block repr)] -> [repr (Block repr)]
 loggedMethod lName n vars b = block [
       varDec varLogFile,
       openFileA varLogFile (litString lName),
@@ -65,7 +65,7 @@ loggedMethod lName n vars b = block [
       printFile valLogFile (valueOf v), 
       printFileStrLn valLogFile ", "] ++ printInputs vs
 
-varLogFile :: (RenderSym repr) => repr (Variable repr)
+varLogFile :: (RenderSym repr) => repr (Variable repr Other)
 varLogFile = var "outfile" outfile
 
 valLogFile :: (RenderSym repr) => repr (Value repr Other)

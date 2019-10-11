@@ -43,8 +43,8 @@ import Control.Monad (liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
-value :: (RenderSym repr) => UID -> String -> repr (Type repr Other) -> 
-  Reader State (repr (Value repr Other))
+value :: (RenderSym repr) => UID -> String -> repr (Type repr a) -> 
+  Reader State (repr (Value repr a))
 value u s t = do
   g <- ask
   let cs = codeSpec g
@@ -54,8 +54,8 @@ value u s t = do
   maybe (do { v <- variable s t; return $ valueOf v }) 
     (convExpr . codeEquat) (Map.lookup u mm >>= maybeInline (conStruct g))
 
-variable :: (RenderSym repr) => String -> repr (Type repr Other) -> 
-  Reader State (repr (Variable repr))
+variable :: (RenderSym repr) => String -> repr (Type repr a) -> 
+  Reader State (repr (Variable repr a))
 variable s t = do
   g <- ask
   let cs = csi $ codeSpec g
@@ -68,7 +68,7 @@ variable s t = do
       else return $ var s t
   
 inputVariable :: (RenderSym repr) => Structure -> ConstantRepr -> 
-  repr (Variable repr) -> Reader State (repr (Variable repr))
+  repr (Variable repr a) -> Reader State (repr (Variable repr a))
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
   ip <- mkVar (codevar inParams)
@@ -78,7 +78,7 @@ inputVariable Bundled Const v = do
   return $ classVar (variableType ip) v
 
 constVariable :: (RenderSym repr) => ConstantStructure -> ConstantRepr -> 
-  repr (Variable repr) -> Reader State (repr (Variable repr))
+  repr (Variable repr a) -> Reader State (repr (Variable repr a))
 constVariable (Store Bundled) Var v = do
   cs <- mkVar (codevar consts)
   return $ cs $-> v
@@ -91,15 +91,15 @@ constVariable WithInputs cr v = do
 constVariable _ _ v = return v
 
 mkVal :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => c -> 
-  Reader State (repr (Value repr Other))
+  Reader State (repr (Value repr a))
 mkVal v = value (v ^. uid) (codeName v) (convType $ codeType v)
 
 mkVar :: (RenderSym repr, HasCodeType c, CodeIdea c) => c -> 
-  Reader State (repr (Variable repr))
+  Reader State (repr (Variable repr a))
 mkVar v = variable (codeName v) (convType $ codeType v)
 
 publicMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  repr (Type repr) -> Label -> String -> [c] -> Maybe String -> 
+  repr (Type repr a) -> Label -> String -> [c] -> Maybe String -> 
   [repr (Block repr)] -> Reader State (repr (Method repr))
 publicMethod t n = genMethod (function n public static_ t) n
 
@@ -146,7 +146,7 @@ genInOutFunc s pr n desc ins' outs' b = do
     then docInOutFunc n s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
     bComms bothVs) bod else inOutFunc n s pr inVs outVs bothVs bod
 
-convExpr :: (RenderSym repr) => Expr -> Reader State (repr (Value repr Other))
+convExpr :: (RenderSym repr) => Expr -> Reader State (repr (Value repr a))
 convExpr (Dbl d) = return $ litFloat d
 convExpr (Int i) = return $ litInt i
 convExpr (Str s) = return $ litString s
@@ -420,10 +420,12 @@ readData ddef = do
           (valueOf $ var (codeName v ++ sfx) (convType $ codeType v))
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_i :: Label
-        var_line, var_lines, var_linetokens, var_infile, var_i :: 
-          (RenderSym repr) => repr (Variable repr)
-        v_line, v_lines, v_linetokens, v_infile, v_i ::
-          (RenderSym repr) => repr (Value repr Other)
+        var_line, var_infile, var_i :: (RenderSym repr) => 
+          repr (Variable repr Other)
+        var_lines, var_linetokens :: (RenderSym repr) => 
+          (repr (Variable repr [Other]))
+        v_line, v_infile, v_i :: (RenderSym repr) => repr (Value repr Other)
+        v_lines, v_linetokens :: (RenderSym repr) => repr (Value repr [Other])
         l_line = "line"
         var_line = var l_line string
         v_line = valueOf var_line
@@ -441,7 +443,7 @@ readData ddef = do
         v_i = valueOf var_i
 
 getEntryVars :: (RenderSym repr) => Maybe String -> LinePattern -> 
-  Reader State [repr (Variable repr)]
+  Reader State [repr (Variable repr a)]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> variable (codeName v ++ st) 
   (listInnerType $ convType $ codeType v)) s) (getPatternInputs lp)
 

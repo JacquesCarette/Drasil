@@ -73,12 +73,7 @@ newtonLUGNotes = map foldlSent [
   [S "Two", plural rigidBody `inThe` S "universe attract each other with a",
    getTandS force, S "that is directly proportional to the product of their",
    plural mass `sC` ch mass_1 `sAnd` ch mass_2 `sC` EmptyS `sAnd`
-   S "inversely proportional" `toThe` getTandS sqrDist, S "between them"],
-  [S "The", phrase vector, ch distMass `isThe` phrase distMass
-   `sAnd` ch dispNorm `isThe`
-   S "absolute", phrase distance, S "between the two"],
-  [ch dVect `sIs` S "equivalent" `toThe` phrase distMass,
-   S "divided by the", phrase dispNorm `sC` S "as shown above"]]
+   S "inversely proportional" `toThe` getTandS sqrDist, S "between them"]]
 
 -- T4 : Newton's second law for rotational motion --
 

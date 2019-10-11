@@ -9,10 +9,9 @@ import Drasil.GamePhysics.Unitals (dispNorm, dVect, force_1, force_2,
   mass_1, mass_2, sqrDist, distMass)
 
 import Data.Drasil.Concepts.Documentation (constant)
-import Data.Drasil.Concepts.Math (vector)
 import Data.Drasil.Concepts.Physics (rigidBody, twoD)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.Physics (angularAccel, distance,
+import Data.Drasil.Quantities.Physics (angularAccel,
   force, gravitationalConst, momentOfInertia, torque)
 import Data.Drasil.Theories.Physics (newtonSL)
 

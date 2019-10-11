@@ -668,7 +668,7 @@ switchAsIfD :: (RenderSym repr) => repr (Value repr a) -> [(repr (Value repr a),
 switchAsIfD v cs = ifCond cases
   where cases = map (first (v ?==)) cs
 
-ifExistsD :: (RenderSym repr) => repr (Value repr Other) -> repr (Body repr) -> 
+ifExistsD :: (RenderSym repr) => repr (Value repr a) -> repr (Body repr) -> 
   repr (Body repr) -> repr (Statement repr)
 ifExistsD v ifBody = ifCond [(notNull v, ifBody)]
 
@@ -858,6 +858,8 @@ binExpr' b v1 v2 = mkExpr 9 (numType (valToType v1) (valToType v2))
 numType :: TypedType a -> TypedType a -> TypedType a
 numType t1 t2 = numericType (cType t1) (cType t2)
   where numericType Integer Integer = t1
+        numericType Integer (Iterator _) = t1
+        numericType (Iterator _) Integer = t2
         numericType Float _ = t1
         numericType _ Float = t2
         numericType _ _ = error "Numeric types required for numeric expression"
@@ -1014,7 +1016,7 @@ newObjD :: (RenderSym repr) => (repr (Type repr a) -> Doc -> Doc) ->
   repr (Type repr a) -> [repr (Value repr Other)] -> repr (Value repr a)
 newObjD f t vs = valFromData Nothing t (f t (valueList vs))
 
-notNullD :: (RenderSym repr) => repr (Value repr Other) -> 
+notNullD :: (RenderSym repr) => repr (Value repr a) -> 
   repr (Value repr Boolean)
 notNullD v = v ?!= valueOf (var "null" (valueType v))
 

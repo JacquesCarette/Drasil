@@ -1,9 +1,8 @@
 module Test.Observer (observer, x) where
 
-import GOOL.Drasil.Symantics (
-  RenderSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
+import GOOL.Drasil (RenderSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
   StatementSym(..), VariableSym(..), ValueSym(..), ScopeSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), Other)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observer :: (RenderSym repr) => repr (RenderFile repr)
@@ -11,7 +10,7 @@ observer = fileDoc (buildModule "Observer" [] [] [docClass
   "This is an arbitrary class acting as an Observer"
   helperClass])
 
-x :: (RenderSym repr) => repr (Variable repr)
+x :: (RenderSym repr) => repr (Variable repr Other)
 x = var "x" int
 
 helperClass :: (RenderSym repr) => repr (Class repr)

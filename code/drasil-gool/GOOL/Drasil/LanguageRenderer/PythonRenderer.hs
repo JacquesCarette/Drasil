@@ -229,9 +229,9 @@ instance VariableSym PythonCode where
   variableName = varName . unPC
   variableType = fmap varToType
   variableDoc = varDoc . unPC
+  toOtherVariable = fmap toOtherVar
 
 instance InternalVariable PythonCode where
-  toOtherVariable = fmap toOtherVar
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym PythonCode where
@@ -253,6 +253,7 @@ instance ValueSym PythonCode where
   valueType = fmap valToType
   valueDoc = valDoc . unPC
   getTypedVal = unPC
+  toOtherValue = fmap toOtherVal
 
 instance NumericExpression PythonCode where
   (#~) = liftA2 unExpr' negateOp
@@ -303,7 +304,7 @@ instance ValueExpression PythonCode where
   extNewObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
     valList vs))
 
-  exists v = v ?!= valueOf (var "None" void)
+  exists v = v ?!= valueOf (var "None" (valueType v))
   notNull = exists
 
 instance InternalValue PythonCode where
@@ -316,7 +317,6 @@ instance InternalValue PythonCode where
   cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
 
   valFromData p t d = liftA2 (typeToVal p) t (return d)
-  toOtherValue = fmap toOtherVal
 
 instance Selector PythonCode where
   objAccess = objAccessD

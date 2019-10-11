@@ -234,9 +234,9 @@ instance VariableSym JavaCode where
   variableName = varName . unJC
   variableType = fmap varToType
   variableDoc = varDoc . unJC
+  toOtherVariable = fmap toOtherVar
   
 instance InternalVariable JavaCode where
-  toOtherVariable = fmap toOtherVar
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym JavaCode where
@@ -259,6 +259,7 @@ instance ValueSym JavaCode where
   valueType = fmap valToType
   valueDoc = valDoc . unJC
   getTypedVal = unJC
+  toOtherValue = fmap toOtherVal
 
 instance NumericExpression JavaCode where
   (#~) = liftA2 unExpr' negateOp
@@ -320,7 +321,6 @@ instance InternalValue JavaCode where
   cast = jCast
   
   valFromData p t d = liftA2 (typeToVal p) t (return d)
-  toOtherValue = fmap toOtherVal
 
 instance Selector JavaCode where
   objAccess = objAccessD

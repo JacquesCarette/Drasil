@@ -234,9 +234,9 @@ instance VariableSym CSharpCode where
   variableName = varName . unCSC
   variableType = fmap varToType
   variableDoc = varDoc . unCSC
+  toOtherVariable = fmap toOtherVar
 
 instance InternalVariable CSharpCode where
-  toOtherVariable = fmap toOtherVar
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym CSharpCode where
@@ -259,6 +259,7 @@ instance ValueSym CSharpCode where
   valueType = fmap valToType
   valueDoc = valDoc . unCSC
   getTypedVal = unCSC
+  toOtherValue = fmap toOtherVal
 
 instance NumericExpression CSharpCode where
   (#~) = liftA2 unExpr' negateOp
@@ -319,7 +320,6 @@ instance InternalValue CSharpCode where
   cast = csCast
   
   valFromData p t d = liftA2 (typeToVal p) t (return d)
-  toOtherValue = fmap toOtherVal
 
 instance Selector CSharpCode where
   objAccess = objAccessD

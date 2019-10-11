@@ -184,9 +184,9 @@ class (TypeSym repr, InternalVariable repr) => VariableSym repr where
   variableName :: repr (Variable repr a) -> String
   variableType :: repr (Variable repr a) -> repr (Type repr a)
   variableDoc  :: repr (Variable repr a) -> Doc
+  toOtherVariable :: repr (Variable repr a) -> repr (Variable repr Other)
 
 class InternalVariable repr where
-  toOtherVariable :: repr (Variable repr a) -> repr (Variable repr Other)
   varFromData :: Binding -> String -> repr (Type repr a) -> Doc -> 
     repr (Variable repr a)
 
@@ -213,7 +213,7 @@ class (VariableSym repr) => ValueSym repr where
   valueType :: repr (Value repr a) -> repr (Type repr a)
   valueDoc :: repr (Value repr a) -> Doc
   getTypedVal :: repr (Value repr a) -> TypedValue a
-
+  toOtherValue :: repr (Value repr a) -> repr (Value repr Other)
 
 class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => 
   NumericExpression repr where
@@ -301,8 +301,8 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
   extNewObj    :: Library -> repr (Type repr Other) -> 
     [repr (Value repr Other)] -> repr (Value repr Other)
 
-  exists  :: repr (Value repr Other) -> repr (Value repr Boolean)
-  notNull :: repr (Value repr Other) -> repr (Value repr Boolean)
+  exists  :: repr (Value repr a) -> repr (Value repr Boolean)
+  notNull :: repr (Value repr a) -> repr (Value repr Boolean)
 
 class (ValueExpression repr) => InternalValue repr where
   inputFunc       :: repr (Value repr Other)
@@ -315,7 +315,6 @@ class (ValueExpression repr) => InternalValue repr where
     repr (Value repr a)
 
   valFromData :: Maybe Int -> repr (Type repr a) -> Doc -> repr (Value repr a)
-  toOtherValue :: repr (Value repr a) -> repr (Value repr Other)
 
 -- The cyclic constraints issue arises here too. I've constrained this by ValueExpression,
 -- but really one might want one of these values as part of an expression, so the
@@ -532,7 +531,7 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
   switchAsIf :: repr (Value repr a) -> [(repr (Value repr a), 
     repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
 
-  ifExists :: repr (Value repr Other) -> repr (Body repr) -> repr (Body repr) ->
+  ifExists :: repr (Value repr a) -> repr (Body repr) -> repr (Body repr) ->
     repr (Statement repr)
 
   for      :: repr (Statement repr) -> repr (Value repr Boolean) -> 

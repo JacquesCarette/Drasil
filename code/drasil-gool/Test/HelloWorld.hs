@@ -8,7 +8,7 @@ import GOOL.Drasil (
   StatementSym(..), ControlStatementSym(..),  VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), FunctionSym(..), SelectorFunction(..), MethodSym(..), 
-  ModuleSym(..))
+  ModuleSym(..), Other, Boolean)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 
@@ -20,16 +20,16 @@ helloWorld = prog "HelloWorld" [docMod description
 description :: String
 description = "Tests various GOOL functions. It should run without errors."
 
-discount :: (RenderSym repr) => repr (Variable repr)
-price :: (RenderSym repr) => repr (Variable repr)
-isAffordable :: (RenderSym repr) => repr (Variable repr)
+discount :: (RenderSym repr) => repr (Variable repr Other)
+price :: (RenderSym repr) => repr (Variable repr Other)
+isAffordable :: (RenderSym repr) => repr (Variable repr Boolean)
 discount = var "discount" int
 price = var "price" int
 isAffordable = var "isAffordable" bool
 
 applyDiscount :: (RenderSym repr) => repr (Method repr)
 applyDiscount = inOutFunc "applyDiscount" public static_
-  [discount] [isAffordable] [price]
+  [discount] [toOtherVariable isAffordable] [price]
   (bodyStatements [
     price &-= valueOf discount,
     isAffordable &= valueOf price ?< litInt 20
@@ -43,7 +43,7 @@ helloWorldMain = mainFunction (body [ helloInitVariables,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch,
     varDecDef price (litInt 25),
     varDec isAffordable,
-    inOutCall "applyDiscount" [litInt 10] [isAffordable] [price],
+    inOutCall "applyDiscount" [litInt 10] [toOtherVariable isAffordable] [price],
     print (valueOf isAffordable),
     print (valueOf price)]])
 

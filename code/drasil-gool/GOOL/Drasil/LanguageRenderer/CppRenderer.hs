@@ -238,9 +238,9 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   variableName v = variableName $ pfst v
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
   variableDoc v = variableDoc $ pfst v
+  toOtherVariable v = pair (toOtherVariable $ pfst v) (toOtherVariable $ psnd v)
 
 instance (Pair p) => InternalVariable (p CppSrcCode CppHdrCode) where
-  toOtherVariable v = pair (toOtherVariable $ pfst v) (toOtherVariable $ psnd v)
   varFromData b n t d = pair (varFromData b n (pfst t) d) 
     (varFromData b n (psnd t) d)
 
@@ -264,6 +264,7 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
   valueDoc v = valueDoc $ pfst v
   getTypedVal v = getTypedVal $ pfst v
+  toOtherValue v = pair (toOtherValue $ pfst v) (toOtherValue $ psnd v)
 
 instance (Pair p) => NumericExpression (p CppSrcCode CppHdrCode) where
   (#~) v = pair ((#~) $ pfst v) ((#~) $ psnd v)
@@ -330,7 +331,6 @@ instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
   cast t v = pair (cast (pfst t) (pfst v)) (cast (psnd t) (psnd v))
 
   valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)
-  toOtherValue v = pair (toOtherValue $ pfst v) (toOtherValue $ psnd v)
 
 instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
   objAccess v f = pair (objAccess (pfst v) (pfst f)) (objAccess (psnd v) 
@@ -817,9 +817,9 @@ instance VariableSym CppSrcCode where
   variableName = varName . unCPPSC
   variableType = fmap varToType
   variableDoc = varDoc . unCPPSC
+  toOtherVariable = fmap toOtherVar
 
 instance InternalVariable CppSrcCode where
-  toOtherVariable = fmap toOtherVar
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym CppSrcCode where
@@ -842,6 +842,7 @@ instance ValueSym CppSrcCode where
   valueType = fmap valToType
   valueDoc = valDoc . unCPPSC
   getTypedVal = unCPPSC
+  toOtherValue = fmap toOtherVal
 
 instance NumericExpression CppSrcCode where
   (#~) = liftA2 unExpr' negateOp
@@ -902,7 +903,6 @@ instance InternalValue CppSrcCode where
   cast = cppCast
   
   valFromData p t d = liftA2 (typeToVal p) t (return d)
-  toOtherValue = fmap toOtherVal
 
 instance Selector CppSrcCode where
   objAccess = objAccessD
@@ -1079,7 +1079,7 @@ instance ControlStatementSym CppSrcCode where
   forRange = forRangeD
   forEach i v = for (varDecDef e (iterBegin v)) (valueOf e ?!= iterEnd v) 
     (e &++)
-    where e = toOtherVariable $ toBasicVar i
+    where e = toBasicIterator i
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch = tryCatchD cppTryCatch
@@ -1388,9 +1388,9 @@ instance VariableSym CppHdrCode where
   variableName = varName . unCPPHC
   variableType = fmap varToType
   variableDoc = varDoc . unCPPHC
+  toOtherVariable = fmap toOtherVar
 
 instance InternalVariable CppHdrCode where
-  toOtherVariable = fmap toOtherVar
   varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym CppHdrCode where
@@ -1413,6 +1413,7 @@ instance ValueSym CppHdrCode where
   valueType = fmap valToType
   valueDoc = valDoc . unCPPHC
   getTypedVal = unCPPHC
+  toOtherValue = fmap toOtherVal
 
 instance NumericExpression CppHdrCode where
   (#~) _ = liftA2 mkVal void (return empty)
@@ -1473,7 +1474,6 @@ instance InternalValue CppHdrCode where
   cast t _ = liftA2 mkVal t (return empty)
 
   valFromData p t d = liftA2 (typeToVal p) t (return d)
-  toOtherValue = fmap toOtherVal
 
 instance Selector CppHdrCode where
   objAccess _ f = liftA2 mkVal (fmap funcToType f) (return empty)
@@ -1750,9 +1750,9 @@ instance BlockCommentSym CppHdrCode where
   docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
 
 -- helpers
-toBasicVar :: CppSrcCode (Variable CppSrcCode a) -> 
-  CppSrcCode (Variable CppSrcCode a)
-toBasicVar v = var (variableName v) (variableType v)
+toBasicIterator :: CppSrcCode (Variable CppSrcCode a) -> 
+  CppSrcCode (Variable CppSrcCode Other)
+toBasicIterator v = var (variableName v) (iterator $ variableType v)
 
 isDtor :: Label -> Bool
 isDtor ('~':_) = True

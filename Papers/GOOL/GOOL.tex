@@ -597,16 +597,13 @@ fileDoc \$ buildModule "mod1" ["library1"]
 \end{lstlisting}
 \end{comment}
 
-Finally, at the top of the GOOL hierarchy are programs, auxiliary files, and 
-packages. A program is constructed by passing a program name and list of files 
-to \verb|prog|. Then a program and a list of auxiliary files can be passed to 
-\verb|package| to create a complete package, specified in GOOL. Auxiliary files 
-are non-OO code files that augment the OO program. For example, a Doxygen 
-configuration file is an auxiliary file that can be specified using the 
-\verb|doxConfig| keyword, and a makefile is another auxiliary file that can be 
-specified with the \verb|makefile| keyword. One of the parameters to the 
-\verb|makefile| keyword will toggle generation of a \verb|make doc| rule, which 
-will compile the Doxygen documentation with the generated Doxygen configuration 
+Finally, at the top of the GOOL hierarchy are programs, auxiliary files, and
+packages. A program (\verb|prog|) has a name and a list of files.  A
+\verb|package| is a program and a list of auxiliary files. These files are non
+code files that augment the program. Examples are a Doxygen configuration file
+(\verb|doxConfig|), and a makefile (\verb|makefile|).  One of the parameters of
+\verb|makefile| toggles generation of a \verb|make doc| rule, which will
+compile the Doxygen documentation with the generated Doxygen configuration
 file.
 
 \section{GOOL Implementation} \label{sec:implementation}

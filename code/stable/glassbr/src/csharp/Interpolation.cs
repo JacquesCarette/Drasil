@@ -374,4 +374,3 @@ public class Interpolation {
         throw new Exception("Interpolation of z failed");
     }
 }
-

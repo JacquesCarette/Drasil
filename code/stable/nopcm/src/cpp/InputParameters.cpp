@@ -272,4 +272,3 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "." << std::endl;
     }
 }
-

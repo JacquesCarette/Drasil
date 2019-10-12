@@ -145,5 +145,3 @@ def input_constraints(inParams):
         print(1, end='')
         print(".")
         raise Exception("InputError")
-
-

@@ -24,4 +24,3 @@ void write_output(double T_W, double E_W) {
     outputfile << E_W << std::endl;
     outputfile.close();
 }
-

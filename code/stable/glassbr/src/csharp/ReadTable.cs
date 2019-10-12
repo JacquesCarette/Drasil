@@ -187,4 +187,3 @@ public class ReadTable {
         infile.Close();
     }
 }
-

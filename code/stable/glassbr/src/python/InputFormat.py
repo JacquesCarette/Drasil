@@ -93,5 +93,3 @@ def get_input(inParams, filename):
     print(" in module InputFormat", file=outfile)
     outfile.close()
     infile.close()
-
-

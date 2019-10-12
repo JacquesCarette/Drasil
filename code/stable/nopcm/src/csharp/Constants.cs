@@ -24,4 +24,3 @@ public class Constants {
     public const double AR_max = 100;
     
 }
-

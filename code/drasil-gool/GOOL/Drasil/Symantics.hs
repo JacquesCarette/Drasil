@@ -5,19 +5,20 @@ module GOOL.Drasil.Symantics (
   Label, Library,
   -- Typeclasses
   ProgramSym(..), RenderSym(..), InternalFile(..),  KeywordSym(..), 
-  PermanenceSym(..), BodySym(..), ControlBlockSym(..), BlockSym(..), 
-  TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
-  InternalVariable(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  InternalMethod(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..)
+  PermanenceSym(..), InternalPerm(..), BodySym(..), ControlBlockSym(..), 
+  BlockSym(..), InternalBlock(..), TypeSym(..), InternalType(..), 
+  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
-import GOOL.Drasil.Data (Binding, Terminator)
+import GOOL.Drasil.Data (Binding, Terminator, FileType)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
@@ -43,13 +44,17 @@ class (ModuleSym repr) => InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
 
+  getFilePath :: repr (RenderFile repr) -> FilePath
+  fileFromData :: FileType -> FilePath -> repr (Module repr) -> 
+    repr (RenderFile repr)
+
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   type Keyword repr
   endStatement     :: repr (Keyword repr)
   endStatementLoop :: repr (Keyword repr)
 
   include :: Label -> repr (Keyword repr)
-  inherit :: repr (Keyword repr)
+  inherit :: Label -> repr (Keyword repr)
 
   list     :: repr (Permanence repr) -> repr (Keyword repr)
 
@@ -68,10 +73,16 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   docCommentStart   :: repr (Keyword repr)
   docCommentEnd     :: repr (Keyword repr)
 
-class PermanenceSym repr where
+  keyDoc :: repr (Keyword repr) -> Doc
+
+class (InternalPerm repr) => PermanenceSym repr where
   type Permanence repr
   static_  :: repr (Permanence repr)
   dynamic_ :: repr (Permanence repr)
+
+class InternalPerm repr where
+  permDoc :: repr (Permanence repr) -> Doc
+  binding :: repr (Permanence repr) -> Binding
 
 class (BlockSym repr) => BodySym repr where
   type Body repr
@@ -83,13 +94,15 @@ class (BlockSym repr) => BodySym repr where
 
   bodyDoc :: repr (Body repr) -> Doc
 
-class (StatementSym repr) => BlockSym repr where
+class (StatementSym repr, InternalBlock repr) => BlockSym repr where
   type Block repr
   block   :: [repr (Statement repr)] -> repr (Block repr)
 
+class InternalBlock repr where
+  blockDoc :: repr (Block repr) -> Doc
   docBlock :: Doc -> repr (Block repr)
 
-class (PermanenceSym repr) => TypeSym repr where
+class (PermanenceSym repr, InternalType repr) => TypeSym repr where
   type Type repr
   bool          :: repr (Type repr)
   int           :: repr (Type repr)
@@ -108,6 +121,9 @@ class (PermanenceSym repr) => TypeSym repr where
   getType :: repr (Type repr) -> CodeType
   getTypeString :: repr (Type repr) -> String
   getTypeDoc :: repr (Type repr) -> Doc
+
+class InternalType repr where
+  typeFromData :: CodeType -> String -> Doc -> repr (Type repr)
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, repr (Body repr))] -> 
@@ -382,8 +398,9 @@ class (Selector repr) => InternalStatement repr where
 
   stateFromData :: Doc -> Terminator -> repr (Statement repr)
 
-class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
-  InternalFunction repr, InternalStatement repr) => StatementSym repr where
+class (KeywordSym repr, ValueSym repr, Selector repr, SelectorFunction repr, 
+  FunctionSym repr, InternalFunction repr, InternalStatement repr) => 
+  StatementSym repr where
   type Statement repr
   (&=)   :: repr (Variable repr) -> repr (Value repr) -> repr (Statement repr)
   infixr 1 &=
@@ -516,10 +533,13 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
   getFileInputAll  :: repr (Value repr) -> repr (Variable repr) -> 
     repr (Statement repr)
 
-class ScopeSym repr where
+class (InternalScope repr) => ScopeSym repr where
   type Scope repr
   private :: repr (Scope repr)
   public  :: repr (Scope repr)
+
+class InternalScope repr where
+  scopeDoc :: repr (Scope repr) -> Doc
 
 class MethodTypeSym repr where
   type MethodType repr
@@ -576,18 +596,20 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
 
 class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   BodySym repr, BlockCommentSym repr) => InternalMethod repr where
-  intMethod      :: Label -> Label -> repr (Scope repr) -> 
+  intMethod      :: Bool -> Label -> Label -> repr (Scope repr) -> 
     repr (Permanence repr) -> repr (MethodType repr) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
-  intFunc      :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
+  intFunc      :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
+    -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr)
   commentedFunc :: repr (BlockComment repr) -> repr (Method repr) -> 
     repr (Method repr)
-  
 
-class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr) => 
-  StateVarSym repr where
+  isMainMethod :: repr (Method repr) -> Bool
+  methodDoc :: repr (Method repr) -> Doc
+
+class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr,
+  InternalStateVar repr) => StateVarSym repr where
   type StateVar repr
   stateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) ->
     repr (Variable repr) -> repr (StateVar repr)
@@ -599,7 +621,12 @@ class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr) =>
   pubMVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
   pubGVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
 
-class (StateVarSym repr, MethodSym repr) => ClassSym repr where
+class InternalStateVar repr where
+  stateVarDoc :: repr (StateVar repr) -> Doc
+  stateVarFromData :: Doc -> repr (StateVar repr)
+
+class (StateVarSym repr, MethodSym repr, InternalClass repr) => ClassSym repr 
+  where
   type Class repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
     [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
@@ -614,14 +641,25 @@ class (StateVarSym repr, MethodSym repr) => ClassSym repr where
   commentedClass :: repr (BlockComment repr) -> repr (Class repr) -> 
     repr (Class repr)
 
-class (ClassSym repr) => ModuleSym repr where
+class InternalClass repr where
+  classDoc :: repr (Class repr) -> Doc
+  classFromData :: Doc -> repr (Class repr)
+
+class (ClassSym repr, InternalMod repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [Library] -> [repr (Method repr)] -> 
     [repr (Class repr)] -> repr (Module repr)
     
   moduleName :: repr (Module repr) -> String
+
+class InternalMod repr where
+  isMainModule :: repr (Module repr) -> Bool
+  moduleDoc :: repr (Module repr) -> Doc
+  modFromData :: String -> Bool -> Doc -> repr (Module repr)
     
 class BlockCommentSym repr where
   type BlockComment repr
   blockComment :: [String] -> repr (BlockComment repr)
   docComment :: [String] -> repr (BlockComment repr)
+
+  blockCommentDoc :: repr (BlockComment repr) -> Doc

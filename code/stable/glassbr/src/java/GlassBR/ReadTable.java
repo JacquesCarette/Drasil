@@ -192,4 +192,3 @@ public class ReadTable {
         infile.close();
     }
 }
-

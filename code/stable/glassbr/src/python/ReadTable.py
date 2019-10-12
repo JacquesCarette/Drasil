@@ -60,5 +60,3 @@ def func_read_table(filename, z_vector, x_matrix, y_matrix):
     print(" in module ReadTable", file=outfile)
     outfile.close()
     infile.close()
-
-

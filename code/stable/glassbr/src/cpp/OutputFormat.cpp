@@ -40,4 +40,3 @@ void write_output(bool is_safePb, bool is_safeLR, double P_b) {
     outputfile << P_b << std::endl;
     outputfile.close();
 }
-

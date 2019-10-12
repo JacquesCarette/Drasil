@@ -49,4 +49,3 @@ void input_constraints(InputParameters &inParams, double pi) {
         std::cout << "." << std::endl;
     }
 }
-

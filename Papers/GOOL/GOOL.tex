@@ -412,7 +412,7 @@ for building languages.  Its syntax is also fairly liberal, so that it is
 possible to create \emph{smart constructors} that somewhat mimic the
 usual syntax of OO languages.
 
-\subsection{GOOL Syntax} \label{ssec:syntax}
+\subsection{GOOL Syntax: Imperative core} \label{ssec:syntax}
 
 As our exposition has been somewhat abstract until now, it is useful to
 dive in and give some concrete syntax, so as to be able to illustrate
@@ -428,7 +428,7 @@ specifies a list of integers. Types of objects are specified using
 an object of a class called ``FooClass''. 
 
 Variables are specified with \verb|var| followed by the variable name and type. 
-For example, \verb|var "ages" (listType int)| defines a variable called 
+For example, \verb|var "ages" (listType int)| represents a variable called 
 ``ages'' that is a list of integers. This illustrates a (necessary) design
 decision: even though we target languages like Python, as we also target
 Java, types are necessary. As type inference for OO languages is too
@@ -452,7 +452,7 @@ alternative to the \verb|objVar| keyword.
 
 Note that GOOL distinguishes a variable from its value\footnote{
 as befits the use-mention distinction from analytic philosophy}. To get
-the values of~\verb|ages|, one must write \verb|valueOf ages|. The reason for
+the value of~\verb|ages|, one must write \verb|valueOf ages|. The reason for
 this distinction will be made clear in section~\ref{where?}, driven
 by semantic considerations. This is beneficial for stricter typing and
 enables convenient syntax for \oopatterns that translate to more idiomatic
@@ -485,27 +485,16 @@ other operators are prefixed by \verb|$|, such as the previously mentioned
 \verb|objMethodCallNoParams| are two shortcuts for the common cases when a 
 method is being called on \verb|self| or when the method takes no parameters. 
 
-If Haskell function \verb|foo| has been defined as GOOL variable 
-\verb|var "foo" int|, a GOOL statement declaring the variable would be
-\verb|varDec foo|. To declare and define the variable at the same time,
-\verb|varDecDef foo (litInt 5)| can be used. Or to define the variable when it
-has already been declared, \verb|assign foo (litInt 5)| can be used. Other GOOL 
-keywords for declarations and definitions are \verb|constDecDef| for declaring 
-and defining constants, \verb|listDec| and \verb|listDecDef| for declaring and 
-defining lists, and \verb|objDecDef| for declaring and defining objects. 
-\verb|objDecNew| is a shortcut for the common case where an object constructor 
-is called to define an object, and \verb|objDecNewNoParams| is a further 
-shortcut for when the constructor takes no parameters.
+Variable declarations are statements, and take a variable specification
+as argument. For \verb|foo = var "foo" int|, the corresponding variable
+declaration would be \verb|varDec foo|, and to also initialize it
+\verb|varDecDef foo (litInt 5)| can be used. 
 
-Infix and suffix operators for assignments, as seen in most programming 
-languages, are also offered by GOOL. These are all prefixed with \verb|&|. 
-Instead of \verb|assign a (litInt 5)|, an assignment can be written as 
-\verb|a &= litInt 5|, which looks more like traditional programming languages. 
-The other assignment operators are \verb|&+=| for adding a value to a variable, 
-\verb|&++| for adding 1 to a variable, \verb|&-=| for subtracting a value 
-from a variable, and \verb|&~-| for subtracting 1 from a variable 
-(Unfortunately, the more intuitive \verb|&--| could not be used because 
-\verb|--| initiates a comment in Haskell).
+Assignments are represented by \verb|assign a (litInt 5)|. Convenient
+infix and postfix operators are also provided, prefixed by \verb|&|:
+\verb|&=| is a synonym for \verb|assign|, and C-like 
+\verb|&+=|, \verb|&++|, \verb|&-=| and \verb|&~-| (the more intuitive
+\verb|&--| cannot be used as \verb|--| starts a comment in Haskell).
 
 Other simple statements in GOOL include \verb|break| and \verb|continue|, 
 \verb|returnState| followed by a value to return, \verb|throw| followed by an 
@@ -513,22 +502,20 @@ error message to throw, \verb|free| followed by a variable to free from
 memory, and \verb|comment| followed by a string to be displayed as a 
 single-line comment.
 
-GOOL statements can be grouped together into blocks by specifying a list of 
-statements after the \verb|block| keyword. A GOOL body can then be made by 
-specifying a list of blocks after the \verb|body| keyword. A body can be used 
-as a function body, conditional body, loop body, or similar. The purpose of 
-blocks as an intermediate structure between statement and body is to allow for 
-more organized, readable generated code. For example, the generator can choose 
-to insert a blank line between blocks so lines of code related to the same task 
-are visually grouped together. However, for the case where there is no need for 
-distinct blocks in a body, the body can be made directly from a list of 
-statements with \verb|bodyStatements| or even from a single statement with 
-\verb|oneLiner|. 
+Most languages have statement blocks, introduced by \verb|block| with
+a list of statements in GOOL. Bodies (\verb|body|) are composed
+of a list of blocks, and can be used as a function body, conditional body, loop
+body, etc. The purpose of blocks as an intermediate between statement and body
+is to allow for more organized, readable generated code. For example, the
+generator can choose to insert a blank line between blocks so lines of code
+related to the same task are visually grouped together. Naturally shortcuts
+are provided for single-block bodies (\verb|bodyStatements|) and
+for the common single-statement case, \verb|oneLiner|. 
  
-As alluded to before, bodies can be used in more complex statements like 
-conditionals and loops. An if-then-else statement can be written in GOOL as 
-\verb|ifCond| followed by a list of condition-body pairs and then a final body 
-for the else. An example is shown below.
+
+GOOL has two forms of conditionals: if-then-else via \verb|ifCond| (
+which takes a list of pairs of conditions and bodies) and
+if-then via \verb|ifNoElse|.  For example:
 \begin{lstlisting}
 ifCond [
   (foo ?> litInt 0, oneLiner (
@@ -537,14 +524,14 @@ ifCond [
     printStrLn "foo is negative"))] 
   (oneLiner \$ printStrLn "foo is zero")
 \end{lstlisting}
-\verb|ifNoElse| can be used in place of \verb|ifCond| for when there is no else 
-condition. GOOL also supports \verb|switch| statements. A for-loop can be 
-written in GOOL as \verb|for| followed by a statement to 
+GOOL also supports \verb|switch| statements. 
+
+There are a variety of loops.  A for-loop (\verb|for|) is
+parametrized by a statement to 
 initialize the loop variable, a condition, a statement to update the loop 
-variable, and a body. GOOL also offers \verb|forRange| loops, which are given a 
+variable, and a body; a \verb|forRange| loop, which are given a 
 starting value, ending value, and step size, as well as \verb|forEach| loops. 
-The following examples assume variable \verb|age| and \verb|ages| and body 
-\verb|loopBody| have already been defined:
+For example:
 \begin{lstlisting}
 for (varDecDef age (litInt 0)) 
   (age < litInt 10) (age &++) loopBody
@@ -552,32 +539,29 @@ forRange age (litInt 0) (litInt 9)
   (litInt 1) loopBody
 forEach age ages loopBody
 \end{lstlisting}
-While-loops are also available, using keyword \verb|while| followed by the 
-condition and body. Finally, GOOL offers try-catch statements, which are 
-written as \verb|tryCatch| followed by a body to try and a body for when an 
-exception is caught.
+While-loops (\verb|while|) are parametrized by a condition and a body. Finally,
+try-catch statements (\verb|tryCatch|) are parametrized by two bodies.
 
-A function in GOOL is specified by \verb|function| followed by the function 
-name, scope, either static or dynamic binding, type, list of parameters, and 
-body. Methods are defined similarly, using the \verb|method| keyword, with the 
-only other difference from functions being that the name of the class 
-containing the method must be specified. Parameters are built from variables, 
-using \verb|param| or \verb|pointerParam|. The ``add'' function called in 
-an earlier example can thus be defined like so, assuming variables ``num1'' and 
-``num2'' have been defined:
+\subsection{GOOL Syntax: OO features}
+
+A \verb|function| declaration is followed by the function 
+name, scope, binding type (static or dynamic), type, list of parameters, and 
+body. Methods (\verb|method|) are defined similarly, with the addition of the
+specification of the containing class' name.  Parameters are built from
+variables, using \verb|param| or \verb|pointerParam|. For example, assuming
+variables ``num1'' and ``num2'' have been defined, one can define an
+\textsf{add} function as follows:
 \begin{lstlisting}
 function "add" public dynamic_ int 
   [param num1, param num2] 
   (oneLiner (returnState (num1 #+ num2)))
 \end{lstlisting}
-The  \verb|pubMethod| and \verb|privMethod| shortcuts can be used for public 
-dynamic methods and private dynamic methods, respectively. \verb|mainFunction| 
-followed by a body defines the main function of a program. A documented 
-function can be generated with \verb|docFunc| followed by a brief function 
-description, a list of parameter descriptions, a description of what is 
-returned (if applicable), and lastly the function itself. A documented function 
-will have comments in Doxygen-style, and GOOL offers further support for 
-compiling Doxygen documentation, to be discussed at the end of this section.
+The  \verb|pubMethod| and \verb|privMethod| shortcuts are useful for public 
+dynamic and private dynamic methods, respectively. \verb|mainFunction| 
+followed by a body defines the main function of a program. \verb|docFunc|
+generates a documented function from a function description and
+a list of parameter descriptions, an optional description of the return
+value, and the function itself.  This generate Doxygen-style comments.
 
 Classes are defined with \verb|buildClass| followed by the class name, name of 
 the parent class (if applicable), scope, list of state variables, and list of 
@@ -586,31 +570,32 @@ integer, scope, static or dynamic binding, and the variable itself. The integer
 is a measure of delete priority. \verb|constVar| can be used for constant state 
 variables. Shortcuts for state variables include \verb|privMVar| for private 
 dynamic, \verb|pubMVar| for public dynamic, and \verb|pubGVar| for public 
-static variables. Assuming variables ``var1'' and ``var2'' and methods ``mth1'' 
-and ``mth2'' have been defined, a class containing them all can be defined as:
+static variables. For example:
 \begin{lstlisting}
 buildClass "FooClass" Nothing public 
   [pubMVar 0 var1, privMVar 0 var2] 
   [mth1, mth2]
 \end{lstlisting}
-``Nothing'' indicates that this class does not have a parent. \verb|privClass| 
-and \verb|pubClass| are shortcuts for private and public classes, respectively. 
-Classes can be documented using \verb|docClass| followed by a description of 
-the class then the class itself. Like with functions, the documentation will be 
-in Doxygen-style.
+\verb|Nothing| here indicates that this class does not have a parent,
+\verb|privClass| and \verb|pubClass| are shortcuts for private and public
+classes, respectively. \verb|docClass| serves a similar purpose as \verb|docFunc|.
 
-Functions and classes can be grouped together into a GOOL module using 
-\verb|buildModule|, followed by the module name, a list of libraries to import, 
-the list of functions, and the list of classes. Passing a module to 
+\subsection{GOOL syntax: modules and programs}
+
+Akin to Java packages and other similar constructs, GOOL has modules
+(\verb|buildModule|) consisting of a module name, a list of libraries to import, 
+a list of functions, and a list of classes. Module-level comments are done
+with \verb|docMod|.
+
+\begin{comment}
+Passing a module to 
 \verb|fileDoc| will put the finishing touches on the generated file, such as 
 imports of standard libraries and preprocessor guards for C++ header files.
 \begin{lstlisting}
 fileDoc \$ buildModule "mod1" ["library1"] 
   [func1, func2] [class1, class2] 
 \end{lstlisting}
-Documenting a file with a Doxygen-style file header can be done with 
-\verb|docMod| followed by a file description, list of author names, date 
-string, and then the file, specified in GOOL,  to document.
+\end{comment}
 
 Finally, at the top of the GOOL hierarchy are programs, auxiliary files, and 
 packages. A program is constructed by passing a program name and list of files 
@@ -623,8 +608,6 @@ specified with the \verb|makefile| keyword. One of the parameters to the
 \verb|makefile| keyword will toggle generation of a \verb|make doc| rule, which 
 will compile the Doxygen documentation with the generated Doxygen configuration 
 file.
-
-Syntax for higher-level patterns will be discussed in Section \ref{sec:patterns}.
 
 \section{GOOL Implementation} \label{sec:implementation}
 

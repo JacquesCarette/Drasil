@@ -802,38 +802,30 @@ much of the internals (and are rather tedious to use too).  One important
 example is the \verb|cast| method, which is never needed by user-level code,
 but frequently used by higher-level functions.
 
-In the definition for \verb|varD|, the \verb|Doc| for the variable is 
-constructed simply by passing the variable name to \verb|text|, which is a 
-function from the \verb|HughesPJ| package for converting a \verb|String| to a 
-\verb|Doc| of that \verb|String|. This should make sense because you can refer 
-to a variable in Java simply by typing the variable's name. In fact, this is 
-true of most OO languages, and this is why the functionality for \verb|var| is 
-defined in a generic \verb|varD| function instead of defining it directly in 
-the \verb|VariableSym| \verb|JavaCode| instance: the \verb|varD| function can 
-be re-used between language renderers. In the \verb|VariableSym| instances for 
-the other languages GOOL targets, the \verb|var| function is defined as a 
-dispatch to the \verb|varD| function, exactly as it is for the Java instance. 
-By writing generic functions for generating code that is common between target 
-languages, we maximize code re-use and minimize effort required to write a 
-renderer for a different language. The more similarities a language has to 
-those that GOOL already targets, the less needs to be done to write the new 
-renderer. GOOL's Java and C\# renderers demonstrate this fact well. Out of 327 
-functions across all of GOOL's type classes, the instances of 227 of them are 
-shared between the Java and C\# renderers, in that they are just calls to the 
-same common function. A further 37 are partially shared, for example they call 
-the same common function but with different parameters. 143 functions are 
-actually the same between all 4 languages GOOL currently targets, which might 
-mean that some of them need not be included in the type class mechanism at all, 
-and can instead be defined globally for all renderers, though this requires 
-further investigation.
+\verb|varDocD| can simply be \verb|text| as \verb|Label| is simply an
+alias for a \verb|String| -- and Java variables are simply their names,
+which is indeed the case for most OO languages.  Exceptions can use the
+class mechanism to override this in their specific case.  
 
-Examples from the Python and C\# renderers are not shown here because they both 
+This genericity
+makes writing new renderers for new language fairly straightforward.
+GOOL's Java and C\# renderers demonstrate this fact well. Out of $327$
+methods across all of GOOL's type classes, the instances of $227$ of them are 
+shared between the Java and C\# renderers, in that they are just calls to the 
+same common function. A further $37$ are partially shared, for example they call 
+the same common function but with different parameters. $143$ methods are 
+actually the same between all $4$ languages GOOL currently targets. This might
+indicate that some should be generic functions rather that class methods,
+but we have not investigated this in detail yet.
+
+Examples from Python and \Csharp are not shown here because they both 
 work very similarly to the Java renderer. There are \verb|PythonCode| and 
 \verb|CSharpCode| analogs to \verb|JavaCode|, the underlying types are all the 
-same, and the functions are defined by calling common functions where possible 
+same, and the methods are defined by calling common functions where possible 
 or by constructing the GOOL value directly in the instance definition, if the 
 definition is unique to that language.
 
+\info{edited until here}
 C++ is different, however, because most modules are split between a source and 
 header file. One module written in GOOL essentially needs to be traversed 
 twice, once to generate the source file and a second time to generate the 

@@ -749,81 +749,58 @@ and its type as a \verb|TypeData|, which is the representation for
 generated code, represented as a \verb|Doc|. \verb|Doc| comes from the 
 package \verb|Text.PrettyPrint.HughesPJ| and represents formatted text. 
 
-In common between all of GOOL's underlying data structures is that they each 
-contain a \verb|Doc|. For some types, like a \verb|Block|, the underlying type 
-is in fact nothing more than a \verb|Doc|. The \verb|Package|-level \verb|Doc|s 
-are ultimately what will be printed to files to generate code. Keeping in mind 
-that a \verb|VarData| structure will usually be wrapped in a \verb|repr|, such 
-as \verb|JavaCode|, the pieces of the wrapped \verb|VarData| can be accessed in 
-one of two ways. The first way is to use Haskell's \verb|fmap| in combination 
-with the built-in accessor functions for \verb|VarData|. For example, 
-\verb|fmap| \verb|varDoc| will take a \verb|VarData| and return a 
-\verb|JavaCode| \verb|Doc|. Functions on \verb|Doc|s can then be lifted to work 
-on \verb|JavaCode| \verb|Doc|s using Haskell's \verb|liftA| family of 
-functions. This method only works if the \verb|Variable| \verb|repr| is known 
-to be equivalent to \verb|VarData|, though. That is, it works in the context of 
-\verb|JavaCode| but not in a generic \verb|repr| context. For when one needs to 
-access a piece of \verb|VarData| while in a generic \verb|repr| context, GOOL 
-offers its own ``symantic'' accessor functions. For example, \verb|variableDoc| 
-is part of the \verb|VariableSym| type class, with signature:
+All representing structures contain at least a \verb|Doc|. It can be considered
+to be our \emph{dynamic} representation of code, from a partial-evaluation
+perspective. The other fields are generally \emph{static} information used to
+optimize the code generation.
+
+Generally, GOOL prefers to work generically. So there is as little code as
+possible that works on \verb|VarData| directly.  Instead, there are
+methods like \verb|variableDoc|, part of the \verb|VariableSym| type class,
+with signature:
 \begin{lstlisting}
 variableDoc :: repr (Variable repr) 
-                 -> Doc
+  -> Doc
 \end{lstlisting}
-and definition for the \verb|JavaCode| instance:
+which acts as an accessor.  For \verb|JavaCode|, its instance is
+straightforward:
 \begin{lstlisting}
 variableDoc = varDoc . unJC
 \end{lstlisting}
-Since \verb|variableDoc| is part of the type class, it can be used in a generic 
-\verb|repr| context, and since its definition is in an instance of the type 
-class where \verb|Variable| \verb|repr| is known to resolve to \verb|VarData|, 
-it can be defined simply by calling the \verb|varDoc| accessor on the unwrapped 
-\verb|VarData|. GOOL offers many functions similar to \verb|variableDoc|, for 
-accessing the other pieces of \verb|VarData| and for accessing the pieces of 
-the underlying data structures for other internal GOOL types.
 
-The underlying data types for different GOOL types each store specific 
-information related to the type in question. Some examples are that the 
-underlying type for \verb|Statement|s stores a \verb|Terminator| which 
-determines whether the statement should end in a semi-colon, the underlying 
-type for \verb|Method|s stores a Boolean for whether it is the main method, and 
-the underlying types for \verb|Value|s, \verb|UnaryOp|s, and \verb|BinaryOp|s 
-store precedence information so expressions can be printed without superfluous 
-parentheses, leading to more readable code.
+Here are a few more examples of the kinds of additional information stored by
+each representation. \verb|Statement| which stores a
+\verb|Terminator| which is how that language indicates how a statement is to be
+terminated (frequently this is a semi-colon).  For \verb|Method|, a Boolean
+indicates whether is is the main method.  For \verb|Value|, \verb|UnaryOp|
+and \verb|BinaryOp|, precendence information is stored so that printing can
+elide parentheses whenever possible, leading to more readable code.
 
-The third line of the \verb|VariableSym| \verb|JavaCode| instance defines the 
-\verb|var| function by dispatching to the \verb|varD| function, defined as:
+Note that the \verb|JavaCode| instance of \verb|VariableSym| defines the
+\verb|var| function via the \verb|varD| function:
 \begin{lstlisting}
 varD :: (RenderSym repr) => Label -> 
-  repr (Type repr) -> 
-  repr (Variable repr)
+  repr (Type repr) -> repr (Variable repr)
 varD n t = varFromData Dynamic n t 
   (varDocD n)
 
 varDocD :: Label -> Doc
 varDocD = text
 \end{lstlisting}
-\verb|varD| constructs the variable using a function called \verb|varFromData|, 
-which is a GOOL function for constructing a variable in the generic \verb|repr| 
-context by explicity passing the pieces needed to create a \verb|varData|, as 
-can be seen by its type signature:
+\verb|varD| is generic, i.e. works for all instances, via dispatching to other
+generic functions, such as \verb|varFromData|:
 \begin{lstlisting}
 varFromData :: Binding -> String -> 
   repr (Type repr) -> Doc -> 
   repr (Variable repr)
 \end{lstlisting}
-This function resides in a GOOL type class called \verb|InternalVariable|. GOOL 
-has a number of these ``internal'' type classes, none of which are exported as 
-part of GOOL's user-facing interface. They contain functions that are useful 
-for GOOL's various language renderers, but not to users. A user would not want 
-to define a \verb|Variable| by explicitly passing in the \verb|Doc|, for 
-example, which is why \verb|varFromData| is not exposed. The \verb|Doc| 
-representation for the generated code is entirely internal to GOOL, not exposed 
-in any of GOOL's user-facing functions. Examples of other GOOL functions that 
-are only available internally are \verb|printSt| for generating a low-level 
-print statement, because it is superseded by higher-level functions for 
-printing, and \verb|cast| for casting between types, because any required 
-type-casting is handled by higher-level functions.
+This method is in a type class \verb|InternalVariable|. Several of these
+``internal'' classes exist, none of which are exported from GOOL's interface.
+They however contain functions useful for the various language renderers, but
+not meant to be used to construct code representations, as they reveal too
+much of the internals (and are rather tedious to use too).  One important
+example is the \verb|cast| method, which is never needed by user-level code,
+but frequently used by higher-level functions.
 
 In the definition for \verb|varD|, the \verb|Doc| for the variable is 
 constructed simply by passing the variable name to \verb|text|, which is a 

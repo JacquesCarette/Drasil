@@ -173,4 +173,3 @@ bool func_is_safePb(InputParameters &inParams, double P_b) {
     
     return P_b < inParams.P_btol;
 }
-

@@ -8,4 +8,3 @@ import math
 ## \brief Structure for holding the input values
 class InputParameters:
     None
-

@@ -168,4 +168,3 @@ void input_constraints(InputParameters &inParams) {
         throw("InputError");
     }
 }
-

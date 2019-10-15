@@ -33,4 +33,3 @@ public class InputParameters {
     public double w_TNT;
     
 }
-

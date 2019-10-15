@@ -89,4 +89,3 @@ void derived_values(InputParameters &inParams) {
     outfile << " in module DerivedValues" << std::endl;
     outfile.close();
 }
-

@@ -1,10 +1,7 @@
-{-# LANGUAGE TupleSections #-}
-
-module GOOL.Drasil.Helpers (verticalComma,
-  angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
-  emptyIfEmpty, emptyIfNull, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, 
-  liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, 
-  lift4Pair, liftPairFst, getInnerType, getNestDegree, convType, checkParams
+module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
+  hicat, vicat, vibcat, vmap, vimap, vibmap, emptyIfEmpty, emptyIfNull, 
+  mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, liftList, 
+  lift2Lists, lift1List, getInnerType, getNestDegree, convType, checkParams
 ) where
 
 import Utils.Drasil (blank)
@@ -90,20 +87,6 @@ lift2Lists f as bs = liftA2 f (sequence as) (sequence bs)
 
 lift1List :: Monad m => (a -> [b] -> c) -> m a -> [m b] -> m c
 lift1List f a as = liftA2 f a (sequence as)
-
-lift4Pair :: Monad m => (a -> b -> c -> d -> [(e, f)] -> g) -> m a -> m b -> 
-  m c -> m d -> [(m e, m f)] -> m g
-lift4Pair f a1 a2 a3 a4 as = liftA5 f a1 a2 a3 a4 (mapM liftPair as)
-
-lift3Pair :: Monad m => (a -> b -> c -> [(d, e)] -> f) -> m a -> m b -> m c -> 
-  [(m d, m e)] -> m f
-lift3Pair f a1 a2 a3 as = liftA4 f a1 a2 a3 (mapM liftPair as)
-
-liftPair :: Applicative f => (f a, f b) -> f (a, b)
-liftPair (a, b) = liftA2 (,) a b
-
-liftPairFst :: Functor f => (f a, b) -> f (a, b)
-liftPairFst (c, n) = fmap (, n) c
 
 getInnerType :: C.CodeType -> C.CodeType
 getInnerType (C.List innerT) = innerT

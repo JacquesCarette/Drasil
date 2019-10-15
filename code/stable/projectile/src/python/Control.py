@@ -23,5 +23,3 @@ p_land = Calculations.func_p_land(inParams, g_vect)
 d_offset = Calculations.func_d_offset(inParams, p_land)
 s = Calculations.func_s(inParams, epsilon, d_offset)
 OutputFormat.write_output(s, d_offset)
-
-

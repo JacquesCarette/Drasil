@@ -30,4 +30,3 @@ const double Constants::AR_max = 100;
 
 Constants::~Constants() {
 }
-

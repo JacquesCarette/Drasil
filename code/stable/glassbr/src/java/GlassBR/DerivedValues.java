@@ -90,4 +90,3 @@ public class DerivedValues {
         outfile.close();
     }
 }
-

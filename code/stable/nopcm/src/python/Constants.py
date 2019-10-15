@@ -19,4 +19,3 @@ class Constants:
     t_final_max = 86400
     AR_min = 1.0e-2
     AR_max = 100
-

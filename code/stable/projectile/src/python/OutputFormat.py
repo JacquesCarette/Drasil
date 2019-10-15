@@ -15,5 +15,3 @@ def write_output(s, d_offset):
     print("d_offset = ", end='', file=outputfile)
     print(d_offset, file=outputfile)
     outputfile.close()
-
-

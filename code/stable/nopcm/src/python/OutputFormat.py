@@ -15,5 +15,3 @@ def write_output(T_W, E_W):
     print("E_W = ", end='', file=outputfile)
     print(E_W, file=outputfile)
     outputfile.close()
-
-

@@ -1,5 +1,5 @@
 %% For double-blind review submission, w/o CCS and ACM Reference (max submission space)
-\documentclass[sigplan,review,anonymous]{acmart}
+\documentclass[sigplan,review,anonymous,prologue,dvipsnames]{acmart}
 \settopmatter{printfolios=true,printccs=false,printacmref=false}
 %% For double-blind review submission, w/ CCS and ACM Reference
 %\documentclass[sigplan,review,anonymous]{acmart}\settopmatter{printfolios=true}
@@ -59,7 +59,29 @@
                         %% http://ctan.org/pkg/booktabs
 \usepackage{subcaption} %% For complex figures with subfigures/subcaptions
                         %% http://ctan.org/pkg/subcaption
+\usepackage{listings}
 
+\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+% 
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+
+% for nice TODO notes
+\newcommandx{\unsure}[2][1=]{\todo[inline,linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[inline,linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[inline,linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[inline,linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+
+%%%%%%%%%%%%%%%%%%%%%
+%% Useful abbreviations
+\newcommand{\Csharp}{C$^{sharp}$} %Is this really what we want?
+
+\newcommand{\abbrev}[1]{\textbf{#1}}
+\newcommand{\mainstream}{\abbrev{mainstream}}
+\newcommand{\readable}{\abbrev{readable}}
+\newcommand{\idiomatic}{\abbrev{idiomatic}}
+\newcommand{\documented}{\abbrev{documented}}
+\newcommand{\oopatterns}{\abbrev{patterns}}
+\newcommand{\common}{\abbrev{common}}
 
 \begin{document}
 
@@ -206,8 +228,8 @@ entails writing different versions of the program, one for each. While not
 necessarily difficult, it nevertheless
 requires investing the time to learn the idiosyncrasies of each language and 
 pay attention to the operational details where languages differ. Ultimately, 
-the code they write will likely be marred by influences of the language they 
-know best. They may consistently use techniques that they are familiar with 
+the code will likely be marred by influences of the language the programmer 
+knows best. They may consistently use techniques that they are familiar with 
 from one language, while unaware that the language in which they are currently 
 writing offers a better or cleaner way of doing the same task 
 \cite{scholtz1990learning, alexandron2012effect}. Besides this 
@@ -229,7 +251,7 @@ provided\footnote{Type inference for Python notwithstanding}.
 What if, instead, there was a single meta-language which was designed to
 contain the common semantic concepts of a number of OO languages, encoded
 in such a way that all the necessary information for translation was always
-present?  This source language could be made to be agnostic about what the
+present?  This source language could be made to be agnostic about what
 eventual target language was used -- free of the idiosyncratic details of
 any given language.  This would be quite the boon for the translator.
 In fact, we could try to go even further, and attempt to teach the translator
@@ -253,7 +275,7 @@ the production of high-level code from Domain-Specific Languages (DSL).
 A DSL is a high-level programming language with syntax and semantics tailored
 to a specific domain \cite{mernik2005and}. DSLs allow domain experts 
 to write code without having to concern themselves with the details of
-general-purpose programming languages (GPL). A DSL
+General-Purpose programming Languages (GPL). A DSL
 abstracts over the details of the code, providing notation for a user to
 specify domain-specific knowledge in a natural manner. Such DSL code is typically
 translated to a GPL for execution. Abstracting over code details
@@ -264,8 +286,8 @@ the language we are looking for
 is just a DSL in the domain of OO programming languages!
 
 There are some DSLs that already generate code in multiple languages, to be
-be further discussed in Section \ref{related}, but none of them have the 
-combination of features we require. We are indeed trying to do something odd:
+further discussed in Section \ref{sec:related}, but none of them have the 
+combination of features we want. We are indeed trying to do something odd:
 writing a ``DSL'' for what is essentially the domain of OO GPLs. Furthermore,
 we have additional requirements:
 \begin{enumerate}
@@ -285,34 +307,961 @@ already supported.
 
 First we present the high-level requirements for such an endeavour, in
 Section~\ref{sec:req}.  To be able to give illustrated examples, we
-next show the syntax of GOOL in Section~\ref{syntax}. The details of
+next show the syntax of GOOL in Section~\ref{sec:creating}. The details of
 the implementations, namely the internal representation and the
-family of pretty-printers, is in Section~\ref{implementation}.
-Common patterns are illustrated in Section~\ref{patterns}.  We 
-close with a discussion of related work in Section \ref{related}, plans for 
-future improvements in Section \ref{future}, and conclusions in Section 
-\ref{conclusions}.
+family of pretty-printers, is in Section~\ref{sec:implementation}.
+Common patterns are illustrated in Section~\ref{sec:patterns}.  We 
+close with a discussion of related work in Section \ref{sec:related}, plans for 
+future improvements in Section \ref{sec:future}, and conclusions in Section 
+\ref{sec:conclusions}.
 
 \section{Requirements} \label{sec:req}
-\section{GOOL Syntax} \label{syntax}
-\section{GOOL Implementation} \label{implementation}
-\section{Higher-level GOOL functions} \label{patterns}
-\section{Related Work} \label{related}
+
+While we outlined some of our requirements above, here we will give a 
+complete list, along with acronyms (to make referring to them simpler),
+as well as some reasoning behind each requirement.
+
+\begin{description}
+\item[mainstream] Generate code in mainstream object-oriented languages.
+\item[readable] The generated code should be human-readable,
+\item[idiomatic] The generated code should be idiomatic,
+\item[documented] The generated code should be documented,
+\item[patterns] The generator should allow one to express common OO patterns.
+\item[common] Language commonalities should be abstracted.
+\end{description}
+
+Targetting OO languages (\mainstream) is primarily because of their popularity, and thus
+would enjoy the most potential users --- in much the same way that the makers
+of Scala and Kotlin chose to target the JVM to leverage the Java ecosystem, and
+Typescript for Javascript.
+
+The \readable~requirement is not as obvious. As DSL users are typically
+domain experts who are not ``programmers'', why generate readable code?
+Few Java programmers ever look at JVM bytecode, and few C++ programmers
+look at assembly. But GOOL's aim is different: to allow writing
+high-level OO code once, but have it be available in many GPLs. One use case
+would be to generate libraries of utilities for a narrow domain. As needs
+evolve and language popularity changes, it is useful to have it immediately
+available in a number of languages. Another use, which is a core part of our
+own motivation, is to have \emph{extremely well documented} code, indeed to
+a level that would be unrealistic to do by hand. But this documentation is
+crucial in domains where \emph{certification} of code is required.
+
+The same underlying reasons for \readable~also drive \idiomatic~and \documented,
+as they contribute to the human-understandability of the generated code.
+\idiomatic~is important as many human readers would find the code ``foreign''
+otherwise, and would not be keen on using it.
+Note that documentation can span from informal comments meant for humans, to
+formal, structured comments useful for generating API documentation with tools
+like Doxygen, or with a variety of static analysis tools.
+Readability (and thus understandability) are improved when code is pretty-printed%
+\cite{buse2009learning}. Thus taking care of layout, redundant parentheses,
+well-chosen variable names, using a common style with lines which are not too
+long, are just as valid for generated code as for human-written code.
+GOOL does not prevent users from writing undocumented or complex code, if they
+choose to do so. It just makes it easy to have \readable, \idiomatic~and
+\documented~code in multiple languages.
+
+The \oopatterns~requirement is typical of DSLs: common programming patterns
+can be reified into a proper linguistic form instead of being merely
+informal. In particular some of the \emph{design patterns} of~\cite{gamma1995design}
+can become part of the language itself. This does make writing some OO
+code even easier in GOOL than in GPLs, it also helps quite a lot with
+keeping GOOL language-agnostic and generating idiomatic code. Illustrative
+examples will be given in Section~\ref{sec:patterns}.  But we can give an
+indication now as to why this helps: Consider Python's 
+ability to return multiple values with a single return statement, which
+is uncommon in other languages.  Two choices might be to disallow this
+feature in GOOL, or throw an error on use when generating code in languages
+that do not support this feature. In the first case, this would likely mean
+unidiomatic Python code, or increased complexity in the Python generator to
+infer that pattern. The second option is worse still: one might have to resort
+to writing language-specific GOOL, obviating the whole reason for the language!
+Multiple-value return statements are always used when a function returns multiple
+outputs; what we can do in GOOL is to support such multiple-output functions, 
+and
+then generate the idiomatic pattern of implementation in each target language.
+
+Our last requirement, that language commonalities (\common) be abstracted is
+an internal requirement: we noticed a lot of repeated code in our backends, 
+something that ought to be distasteful to most programmers. For example, writing
+a generator for both Java and \Csharp makes it incredibly clear how similar the two
+languages are.
+
+\section{Creating GOOL} \label{sec:creating}
+
+How do we go about creating a ``generic'' object-oriented language?
+We chose an incremental abstraction approach: start from two languages,
+and unify them \emph{conceptually}.  In other words, pay very close
+attention to the \emph{denotational} semantics of the features, some
+attention to the operational semantics, and ignore syntactic details.
+
+This is most easily done from the core imperative language outwards.
+Most languages provide similar basic types (variations on integers,
+floating point numbers, characters, strings, etc) and functions to deal
+with them. The core expression language tends to be extremely similar
+cross languages. One then moves up to the statement language ---
+assignments, conditionals, loops, etc.  Here we start to encounter
+variations, and choices can be made, and we'll cover that later.
+
+For ease of experimentation, we chose to make GOOL an embedded
+domain specic language (EDSL) inside Haskell.  Haskell is very well-suited
+for this task, offering a variety of features (GADTs, type classes,
+parametric polymorphism, kind polymorphism, etc) which is extremely useful
+for building languages.  Its syntax is also fairly liberal, so that it is
+possible to create \emph{smart constructors} that somewhat mimic the
+usual syntax of OO languages.
+
+\subsection{GOOL Syntax: Imperative core} \label{ssec:syntax}
+
+As our exposition has been somewhat abstract until now, it is useful to
+dive in and give some concrete syntax, so as to be able to illustrate
+our ideas with valid code.
+
+Specifically, basic types in GOOL are \verb|bool| for Booleans, 
+\verb|int| for integers, \verb|float| for doubles, \verb|char| 
+for characters, \verb|string| for strings, \verb|infile| for a file 
+in read mode, and \verb|outfile| for a file in write mode. Lists can be 
+specified with \verb|listType|. For example, \verb|listType int| 
+specifies a list of integers. Types of objects are specified using 
+\verb|obj| followed by the class name, so \verb|obj "FooClass"| is the type of 
+an object of a class called ``FooClass''. 
+
+Variables are specified with \verb|var| followed by the variable name and type. 
+For example, \verb|var "ages" (listType int)| represents a variable called 
+``ages'' that is a list of integers. This illustrates a (necessary) design
+decision: even though we target languages like Python, as we also target
+Java, types are necessary. As type inference for OO languages is too
+difficult, we chose to be explicitly typed.
+
+As some constructions are common, it is useful to offer shortcuts for
+defining them; for example, the above can also be done via
+\verb|listVar "ages" int|. Typical use would be
+\begin{lstlisting}
+let ages = listVar "ages" int in
+\end{lstlisting}
+so that \verb|ages| can be used directly from then on. Other GOOL syntax for 
+specifying variables is shown in Table~\ref{tab:variables}.
+
+\begin{table}[!h]
+\caption{Description of GOOL syntax for specifying variables}
+\begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
+	\textbf{GOOL Syntax} & \textbf{Semantics} \\
+	\midrule
+	\verb|extVar| & for a variable from an external library \\
+	\verb|classVar| & for a variable belonging to a class \\
+	\verb|objVar| & for a variable belonging to an object \\
+	\verb|$->| & infix operator form of \verb|objVar| \\
+	\verb|self| & for referring to an object in the definition of its class \\
+\end{tabular}
+\label{tab:variables}
+\end{table}
+
+Note that GOOL distinguishes a variable from its value\footnote{
+as befits the use-mention distinction from analytic philosophy}. To get
+the value of~\verb|ages|, one must write \verb|valueOf ages|. The reason for
+this distinction will be made clear in section~\ref{where?}, driven
+by semantic considerations. This is beneficial for stricter typing and
+enables convenient syntax for \oopatterns~that translate to more idiomatic
+code.
+
+Syntax for literal values is shown in Table~\ref{tab:literals} and for 
+operators on values is shown in Table~\ref{tab:operators}. In GOOL, each 
+operator is prefixed with an additional symbol based on type. Operators that 
+return Booleans are prefixed by a \verb|?|, operators on numeric values are 
+prefixed by \verb|#|, and other operators are prefixed by \verb|$|.
+
+\begin{table}[!h]
+	\caption{Description of GOOL syntax for literal values}
+	\begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
+		\textbf{GOOL Syntax} & \textbf{Semantics} \\
+		\midrule
+		\verb|litTrue| & literal Boolean true \\
+		\verb|litFalse| & literal Boolean false \\
+		\verb|litInt| \verb|i| & literal integer \verb|i| \\
+		\verb|litFloat| \verb|f| & literal float \verb|f| \\
+		\verb|litChar| \verb|c| & literal character \verb|c| \\
+		\verb|litString| \verb|s| & literal string \verb|s| \\
+	\end{tabular}
+	\label{tab:literals}
+\end{table}
+
+\begin{table}[!h]
+	\caption{Description of GOOL operators for making expressions}
+	\begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
+		\textbf{GOOL Syntax} & \textbf{Semantics} \\
+		\midrule
+		\verb|?!| & Boolean negation \\
+		\verb|?&&| & conjunction \\
+		\verb|?||| & disjunction \\
+		\verb|?<| & less than \\
+		\verb|?<=| & less than or equal \\
+		\verb|?>| & greater than \\
+		\verb|?>=| & greater than or equal \\
+		\verb|?==| & equality \\
+		\verb|?!=| & inequality \\
+		\verb|#~| & numeric negation \\
+		\verb|#/^| & square root \\
+		\verb|#|| & absolute value \\
+		\verb|#+| & addition \\
+		\verb|#-| & subtraction \\
+		\verb|#*| & multiplication \\
+		\verb|#/| & division \\
+		\verb|#%| & modulus \\
+		\verb|#^| & exponentiation \\
+	\end{tabular}
+	\label{tab:operators}
+\end{table}
+
+\begin{table}[!h]
+	\caption{Description of GOOL syntax for values defined by conditional 
+	expressions or function application}
+	\begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
+		\textbf{GOOL Syntax} & \textbf{Semantics} \\
+		\midrule
+		\verb|inlineIf| & conditional expression \\
+		\verb|funcApp| & function application, to a list of parameters \\
+		\verb|extFuncApp| & function application, for external library 
+		functions\\
+		\verb|newObj| & for calling an object constructor (\verb|extNewObj| 
+		exists too) \\
+		\verb|objMethodCall| & for calling a method on an object \\
+	\end{tabular}
+	\label{tab:values}
+\end{table}
+
+Syntax for defining values with conditional expressions or function 
+applications is shown in Table~\ref{tab:values}. \verb|selfFuncApp| and 
+\verb|objMethodCallNoParams| are two shortcuts for the common cases when a 
+method is being called on \verb|self| or when the method takes no parameters. 
+
+Variable declarations are statements, and take a variable specification
+as argument. For \verb|foo = var "foo" int|, the corresponding variable
+declaration would be \verb|varDec foo|, and to also initialize it
+\verb|varDecDef foo (litInt 5)| can be used. 
+
+Assignments are represented by \verb|assign a (litInt 5)|. Convenient
+infix and postfix operators are also provided, prefixed by \verb|&|:
+\verb|&=| is a synonym for \verb|assign|, and C-like 
+\verb|&+=|, \verb|&++|, \verb|&-=| and \verb|&~-| (the more intuitive
+\verb|&--| cannot be used as \verb|--| starts a comment in Haskell).
+
+Other simple statements in GOOL include \verb|break| and \verb|continue|, 
+\verb|returnState| followed by a value to return, \verb|throw| followed by an 
+error message to throw, \verb|free| followed by a variable to free from
+memory, and \verb|comment| followed by a string to be displayed as a 
+single-line comment.
+
+Most languages have statement blocks, introduced by \verb|block| with
+a list of statements in GOOL. Bodies (\verb|body|) are composed
+of a list of blocks, and can be used as a function body, conditional body, loop
+body, etc. The purpose of blocks as an intermediate between statement and body
+is to allow for more organized, readable generated code. For example, the
+generator can choose to insert a blank line between blocks so lines of code
+related to the same task are visually grouped together. Naturally shortcuts
+are provided for single-block bodies (\verb|bodyStatements|) and
+for the common single-statement case, \verb|oneLiner|. 
+ 
+
+GOOL has two forms of conditionals: if-then-else via \verb|ifCond| (
+which takes a list of pairs of conditions and bodies) and
+if-then via \verb|ifNoElse|.  For example:
+\begin{lstlisting}
+ifCond [
+  (foo ?> litInt 0, oneLiner (
+    printStrLn "foo is positive")),
+  (foo ?< litInt 0, oneLiner (
+    printStrLn "foo is negative"))] 
+  (oneLiner $ printStrLn "foo is zero")
+\end{lstlisting}
+GOOL also supports \verb|switch| statements. 
+
+There are a variety of loops: for-loops (\verb|for|), which are
+parametrized by a statement to 
+initialize the loop variable, a condition, a statement to update the loop 
+variable, and a body; \verb|forRange| loops, which are given a 
+starting value, ending value, and step size; as well as \verb|forEach| 
+loops. 
+For example:
+\begin{lstlisting}
+for (varDecDef age (litInt 0)) 
+  (age < litInt 10) (age &++) loopBody
+forRange age (litInt 0) (litInt 9) 
+  (litInt 1) loopBody
+forEach age ages loopBody
+\end{lstlisting}
+While-loops (\verb|while|) are parametrized by a condition and a body. Finally,
+try-catch statements (\verb|tryCatch|) are parametrized by two bodies.
+
+\subsection{GOOL Syntax: OO features}
+
+A \verb|function| declaration is followed by the function 
+name, scope, binding type (static or dynamic), type, list of parameters, and 
+body. Methods (\verb|method|) are defined similarly, with the addition of the
+specification of the containing class' name.  Parameters are built from
+variables, using \verb|param| or \verb|pointerParam|. For example, assuming
+variables ``num1'' and ``num2'' have been defined, one can define an
+\textsf{add} function as follows:
+\begin{lstlisting}
+function "add" public dynamic_ int 
+  [param num1, param num2] 
+  (oneLiner (returnState (num1 #+ num2)))
+\end{lstlisting}
+The  \verb|pubMethod| and \verb|privMethod| shortcuts are useful for public 
+dynamic and private dynamic methods, respectively. \verb|mainFunction| 
+followed by a body defines the main function of a program. \verb|docFunc|
+generates a documented function from a function description and
+a list of parameter descriptions, an optional description of the return
+value, and the function itself.  This generates Doxygen-style comments.
+
+Classes are defined with \verb|buildClass| followed by the class name, name of 
+the parent class (if applicable), scope, list of state variables, and list of 
+methods. State variables can be built by \verb|stateVar| followed by an 
+integer, scope, static or dynamic binding, and the variable itself. The integer 
+is a measure of delete priority. \verb|constVar| can be used for constant state 
+variables. Shortcuts for state variables include \verb|privMVar| for private 
+dynamic, \verb|pubMVar| for public dynamic, and \verb|pubGVar| for public 
+static variables. For example:
+\begin{lstlisting}
+buildClass "FooClass" Nothing public 
+  [pubMVar 0 var1, privMVar 0 var2] 
+  [mth1, mth2]
+\end{lstlisting}
+\verb|Nothing| here indicates that this class does not have a parent,
+\verb|privClass| and \verb|pubClass| are shortcuts for private and public
+classes, respectively. \verb|docClass| serves a similar purpose as \verb|docFunc|.
+
+\subsection{GOOL syntax: modules and programs}
+
+Akin to Java packages and other similar constructs, GOOL has modules
+(\verb|buildModule|) consisting of a module name, a list of libraries to import, 
+a list of functions, and a list of classes. Module-level comments are done
+with \verb|docMod|.
+
+\begin{comment}
+Passing a module to 
+\verb|fileDoc| will put the finishing touches on the generated file, such as 
+imports of standard libraries and preprocessor guards for C++ header files.
+\begin{lstlisting}
+fileDoc \$ buildModule "mod1" ["library1"] 
+  [func1, func2] [class1, class2] 
+\end{lstlisting}
+\end{comment}
+
+Finally, at the top of the GOOL hierarchy are programs, auxiliary files, and
+packages. A program (\verb|prog|) has a name and a list of files.  A
+\verb|package| is a program and a list of auxiliary files. These files are non
+code files that augment the program. Examples are a Doxygen configuration file
+(\verb|doxConfig|), and a makefile (\verb|makefile|).  One of the parameters of
+\verb|makefile| toggles generation of a \verb|make| \verb|doc| rule, which will
+compile the Doxygen documentation with the generated Doxygen configuration
+file.
+
+\section{GOOL Implementation} \label{sec:implementation}
+
+GOOL is embedded in Haskell in the finally-tagless style originally described 
+in \cite{carette2009finally}. In finally-tagless style, the internal 
+representation of an embedded DSL is a group of functions defined in the host 
+language, rather than the more traditional use of data constructors to build an 
+interpretable abstract syntax tree (AST) for the DSL. Whereas an AST of data 
+constructors must have a separately-defined interpreter, the functions 
+themselves in finally-tagless compose to form the interpreter; the definitions 
+of the functions describe how each is interpreted. Thus, the GOOL ``keywords'' 
+referred to in the previous section were really Haskell functions that, when 
+resolved, yield representations of the code to be generated. The 
+finally-tagless style grants us more flexibility in the code we can generate 
+and better extensibility since we do not need to pattern-match on AST nodes.
+
+Finally-tagless facilitates development of a family of interpreters for a DSL 
+by having the functions act on representations, where a type class in Haskell 
+is used to abstract over the representation. The authors of 
+\cite{carette2009finally} coined the term ``symantic'' to describe such a type 
+class, because the interface of the type class defines the syntax of the DSL 
+and the instances of the type class define the semantics. A separate type class 
+instance is written for each representation, each corresponding to one member 
+in the family of interpreters. This suits GOOL's needs nicely, for GOOL 
+requires multiple interpreters (one for each target language) of the same 
+language (GOOL).
+
+GOOL is a collection of these ``symantic'' type classes and instances. For 
+organizational purposes, the functions comprising GOOL's syntax are split 
+across many type classes, roughly based on the internal types upon which the 
+functions act. GOOL's internal types correspond to the types of code being 
+represented, not the types of the values in the target languages, though adding 
+value-types to GOOL's type system is planned for the future, discussed further 
+in Section \ref{sec:future}. Examples of internal types in GOOL, then, are 
+\verb|Variable|, \verb|Value|, \verb|Type|, \verb|Scope|, \verb|Statement|, 
+\verb|Method|, \verb|Class|, \verb|Module|, and \verb|Package|. A 
+\verb|Statement| in GOOL, for example, is a representation of a piece of code 
+that is a statement. Below is an excerpt of GOOL's definition for the 
+\verb|VariableSym| type class; that is, the type class containing functions for 
+defining variables in GOOL.
+\begin{lstlisting}
+class (TypeSym repr) 
+  => VariableSym repr where
+    type Variable repr
+    var :: Label -> repr (Type repr) 
+             -> repr (Variable repr)
+\end{lstlisting}
+Since variables have types, a type for representing variables must also know 
+how to represent types, thus we constrain our \verb|repr| type variable to be 
+an instance of \verb|TypeSym|, the symantic type class containing functions for 
+representing types, like the \verb|int|, \verb|float|, \verb|string|, and 
+\verb|listType| functions described in Section \ref{sec:syntax}. 
+
+The types used in the signatures of GOOL's functions have the general form 
+\verb|repr| \verb|(X repr)| for some type \verb|X|, examples of which can be 
+seen in the type signature for \verb|var|. To understand these types, first 
+remember that we will write different instances of this type class for each 
+different language GOOL targets. That means the \verb|repr| type variable will 
+be instantiated with a type that represents code in a specific target language. 
+In the \verb|repr| \verb|(X repr)| types, the type variable \verb|repr| appears 
+twice because there are two layers of abstraction: abstraction over the target 
+language, handled by the outer \verb|repr|, and abstraction over the underlying 
+types to which GOOL's types map, handled by the inner \verb|repr|.
+
+This abstraction over the underlying types that GOOL's types represent happens 
+because \verb|X repr| is a type family. The first line of the body of the 
+\verb|VariableSym| type class is \verb|type| \verb|Variable| \verb|repr|. This 
+line declares the type family \verb|Variable| \verb|repr|. Since the type is 
+parameterized by \verb|repr|, each instance we write of this type class can 
+define the \verb|Variable| family member differently. Usually different 
+renderers will use the same underlying type for a given GOOL type, but the 
+ability to change it on a per-target-language basis is useful for when a 
+language requires storing more or less information than others.
+
+The type signature for the \verb|var| function says that \verb|var| takes a 
+label and a representation of a type and yields a representation of a variable. 
+This should not be surprising given how we used \verb|var| to define variables 
+like \verb|var| \verb|"foo"| \verb|int| in Section \ref{sec:syntax}. \verb|Label| 
+is simply a Haskell type synonym for \verb|String|. 
+
+Shown below is the instance of the type class excerpt shown above for 
+generating Java code. 
+\begin{lstlisting}
+instance VariableSym JavaCode where
+  type Variable JavaCode = VarData
+  var = varD
+\end{lstlisting}
+We have instantiated \verb|repr| as \verb|JavaCode|, which is a monad defined 
+as:
+\begin{lstlisting}
+newtype JavaCode a = JC {unJC :: a}
+\end{lstlisting}
+This may look like we are tagging our values with \verb|JC|, in contradiction 
+of the finally-tagless style, but Haskell's compiler does not actually treat 
+types defined with \verb|newtype| as tags, so this is valid. \verb|unJC| 
+extracts the underlying value from a value wrapped in \verb|JavaCode|. Calling 
+\verb|unJC| on a program written in GOOL allows Haskell to infer that the 
+\verb|repr| in the GOOL program should be concretized as \verb|JavaCode| and to 
+resolve the functions using the definitions from the \verb|JavaCode| instances 
+of the type classes, thereby generating Java code.
+
+The second line of the instance states that the underlying type for 
+\verb|Variable|s in Java is \verb|VarData|, which is a record that holds data 
+about the variable to be used later. The definition of \verb|VarData| is shown 
+below.
+\begin{lstlisting}
+data VarData = VarD {
+  varBind :: Binding, 
+  varName :: String, 
+  varType :: TypeData, 
+  varDoc :: Doc}
+\end{lstlisting}
+Stored in the \verb|VarData| structure is a variable's binding, either 
+\verb|Static| or \verb|Dynamic|, the name of the variable as a \verb|String|, 
+the type as a \verb|TypeData| structure, which is the underlying type for 
+\verb|Type|s in GOOL for Java, and how the variable should appear in the 
+generated code, represented as a \verb|Doc|. \verb|Doc| comes from the 
+\verb|Text.PrettyPrint.HughesPJ| Haskell package and represents formatted text. 
+We use it to pretty-print our generated code, making it more readable.
+In common between all of GOOL's underlying data structures is that they each 
+contain a \verb|Doc|. For some types, like a \verb|Block|, the underlying type 
+is in fact nothing more than a \verb|Doc|. The \verb|Package|-level \verb|Doc|s 
+are ultimately what will be printed to files to generate code. Keeping in mind 
+that a \verb|VarData| structure will usually be wrapped in a \verb|repr|, such 
+as \verb|JavaCode|, the pieces of the wrapped \verb|VarData| can be accessed in 
+one of two ways. The first way is to use Haskell's \verb|fmap| in combination 
+with the built-in accessor functions for \verb|VarData|. For example, 
+\verb|fmap| \verb|varDoc| will take a \verb|VarData| and return a 
+\verb|JavaCode| \verb|Doc|. Functions on \verb|Doc|s can then be lifted to work 
+on \verb|JavaCode| \verb|Doc|s using Haskell's \verb|liftA| family of 
+functions. This method only works if the \verb|Variable| \verb|repr| is known 
+to be equivalent to \verb|VarData|, though. That is, it works in the context of 
+\verb|JavaCode| but not in a generic \verb|repr| context. For when one needs to 
+access a piece of \verb|VarData| while in a generic \verb|repr| context, GOOL 
+offers its own ``symantic'' accessor functions. For example, \verb|variableDoc| 
+is part of the \verb|VariableSym| type class, with signature:
+\begin{lstlisting}
+variableDoc :: repr (Variable repr) 
+                 -> Doc
+\end{lstlisting}
+and definition for the \verb|JavaCode| instance:
+\begin{lstlisting}
+variableDoc = varDoc . unJC
+\end{lstlisting}
+Since \verb|variableDoc| is part of the type class, it can be used in a generic 
+\verb|repr| context, and since its definition is in an instance of the type 
+class where \verb|Variable| \verb|repr| is known to resolve to \verb|VarData|, 
+it can be defined simply by calling the \verb|varDoc| accessor on the unwrapped 
+\verb|VarData|. GOOL offers many functions similar to \verb|variableDoc|, for 
+accessing the other pieces of \verb|VarData| and for accessing the pieces of 
+the underlying data structures for other internal GOOL types.
+
+The underlying data types for different GOOL types each store specific 
+information related to the type in question. Some examples are that the 
+underlying type for \verb|Statement|s stores a \verb|Terminator| which 
+determines whether the statement should end in a semi-colon, the underlying 
+type for \verb|Method|s stores a Boolean for whether it is the main method, and 
+the underlying types for \verb|Value|s, \verb|UnaryOp|s, and \verb|BinaryOp|s 
+store precedence information so expressions can be printed without superfluous 
+parentheses, leading to more readable code.
+
+The third line of the \verb|VariableSym| \verb|JavaCode| instance defines the 
+\verb|var| function by dispatching to the \verb|varD| function, defined as:
+\begin{lstlisting}
+varD :: (RenderSym repr) => Label -> 
+  repr (Type repr) -> 
+  repr (Variable repr)
+varD n t = varFromData Dynamic n t 
+  (varDocD n)
+
+varDocD :: Label -> Doc
+varDocD = text
+\end{lstlisting}
+\verb|varD| constructs the variable using a function called \verb|varFromData|, 
+which is a GOOL function for constructing a variable in the generic \verb|repr| 
+context by explicity passing the pieces needed to create a \verb|varData|, as 
+can be seen by its type signature:
+\begin{lstlisting}
+varFromData :: Binding -> String -> 
+  repr (Type repr) -> Doc -> 
+  repr (Variable repr)
+\end{lstlisting}
+This function resides in a GOOL type class called \verb|InternalVariable|. GOOL 
+has a number of these ``internal'' type classes, none of which are exported as 
+part of GOOL's user-facing interface. They contain functions that are useful 
+for GOOL's various language renderers, but not to users. A user would not want 
+to define a \verb|Variable| by explicitly passing in the \verb|Doc|, for 
+example, which is why \verb|varFromData| is not exposed. The \verb|Doc| 
+representation for the generated code is entirely internal to GOOL, not exposed 
+in any of GOOL's user-facing functions. Examples of other GOOL functions that 
+are only available internally are \verb|printSt| for generating a low-level 
+print statement, because it is superseded by higher-level functions for 
+printing, and \verb|cast| for casting between types, because any required 
+type-casting is handled by higher-level functions.
+
+In the definition for \verb|varD|, the \verb|Doc| for the variable is 
+constructed simply by passing the variable name to \verb|text|, which is a 
+function from the \verb|HughesPJ| package for converting a \verb|String| to a 
+\verb|Doc| of that \verb|String|. This should make sense because you can refer 
+to a variable in Java simply by typing the variable's name. In fact, this is 
+true of most OO languages, and this is why the functionality for \verb|var| is 
+defined in a generic \verb|varD| function instead of defining it directly in 
+the \verb|VariableSym| \verb|JavaCode| instance: the \verb|varD| function can 
+be re-used between language renderers. In the \verb|VariableSym| instances for 
+the other languages GOOL targets, the \verb|var| function is defined as a 
+dispatch to the \verb|varD| function, exactly as it is for the Java instance. 
+By writing generic functions for generating code that is common between target 
+languages, we maximize code re-use and minimize effort required to write a 
+renderer for a different language. The more similarities a language has to 
+those that GOOL already targets, the less needs to be done to write the new 
+renderer. GOOL's Java and C\# renderers demonstrate this fact well. Out of 327 
+functions across all of GOOL's type classes, the instances of 227 of them are 
+shared between the Java and C\# renderers, in that they are just calls to the 
+same common function. A further 37 are partially shared, for example they call 
+the same common function but with different parameters. 143 functions are 
+actually the same between all 4 languages GOOL currently targets, which might 
+mean that some of them need not be included in the type class mechanism at all, 
+and can instead be defined globally for all renderers, though this requires 
+further investigation.
+
+Examples from the Python and C\# renderers are not shown here because they both 
+work very similarly to the Java renderer. There are \verb|PythonCode| and 
+\verb|CSharpCode| analogs to \verb|JavaCode|, the underlying types are all the 
+same, and the functions are defined by calling common functions where possible 
+or by constructing the GOOL value directly in the instance definition, if the 
+definition is unique to that language.
+
+C++ is different, however, because most modules are split between a source and 
+header file. One module written in GOOL essentially needs to be traversed 
+twice, once to generate the source file and a second time to generate the 
+header file corresponding to the same module. To accomplish this, two instances 
+of the GOOL type classes were written for C++ for two different types defined 
+similarly to \verb|JavaCode|: \verb|CppSrcCode| for source code and 
+\verb|CppHdrCode| for header code. Since a main function does not require a 
+header file, the \verb|CppHdrCode| instance for a module containing only a main 
+function is empty. The renderer is written such that an empty module or file 
+does not actually get generated, and this is true of all GOOL's current 
+renderers. 
+
+Since C++ source and header code should always be generated together, we needed 
+to tie the \verb|CppSrcCode| and \verb|CppHdrCode| types together. To do this, 
+a third type, \verb|CppCode|, was created to pair the source and header types, 
+defined as:
+\begin{lstlisting}
+data CppCode x y a = 
+  CPPC {src :: x a, hdr :: y a}
+\end{lstlisting}
+The type variables \verb|x| and \verb|y| are intended to be instantiated with 
+\verb|CppSrcCode| and \verb|CppHdrCode|, but they are left generic for now 
+because we need to make an instance of a \verb|Pair| type class for 
+\verb|CppCode|, as follows:
+\begin{lstlisting}
+class Pair p where
+  pfst :: p x y a -> x a
+  psnd :: p x y b -> y b
+  pair :: x a -> y a -> p x y a
+  
+instance Pair CppCode where
+  pfst (CPPC xa _) = xa
+  psnd (CPPC _ yb) = yb
+  pair = CPPC
+\end{lstlisting}
+In summary, the \verb|Pair| instance allows us to access the source code piece 
+of the pair with \verb|pfst|, the header code piece with \verb|psnd|, or to 
+combine a source and header piece to form a pair with \verb|pair|. We then need 
+to make \verb|CppCode| instances of the GOOL type classes. The instance of 
+\verb|VariableSym| for the excerpt of the type class we have used as an example 
+throughout this section is shown below.
+\begin{lstlisting}
+instance (Pair p) => VariableSym 
+  (p CppSrcCode CppHdrCode) where
+    type Variable (p 
+      CppSrcCode CppHdrCode) = VarData
+    var n t = pair (var n $ pfst t) 
+      (var n $ psnd t)
+\end{lstlisting}
+Rather than write the instance specifically for \verb|CppCode|, we wrote it for 
+any \verb|Pair| to make this code more re-usable. Unfortunately, the types 
+making up the \verb|Pair| had to be concretized as \verb|CppSrcCode| and 
+\verb|CppHdrCode| so that the Haskell compiler could be sure that the 
+\verb|VarData| underlying type declared for the \verb|Pair| matched the 
+underlying types for each piece of the pair. The compiler knows that 
+\verb|Variable| \verb|CppSrcCode| and \verb|Variable| \verb|CppHdrCode| are 
+equivalent to \verb|VarData|, but it cannot be sure that any generic 
+\verb|Variable| \verb|repr| will be. The actual function definitions for these 
+instances are trivial. The definition for \verb|var| simply calls \verb|var| in 
+the context of \verb|CppSrcCode|, calls it again in the context of 
+\verb|CppHdrCode|, and combines the results in a new \verb|pair|. This same 
+pattern is used for all of the function definitions for the \verb|Pair| 
+instances, so to write a new renderer for another language that requires two 
+files per module, these \verb|Pair| instances can be re-used just by changing 
+the \verb|CppSrcCode| and \verb|CppHdrCode| types to the corresponding types 
+for the new language renderer, and changing any underlying types that are 
+different. This same technique can be used to write a renderer for a language 
+that has even more than two files per module by writing an analog to the 
+\verb|Pair| type class that combines the appropriate number of constiuents.
+
+The last component of the C++ renderer is a function analogous to 
+\verb|JavaCode|'s \verb|unJC|, a function that can be called on a GOOL program 
+to tell the Haskell compiler to concretize the \verb|repr| as \verb|CppCode| 
+and therefore generate C++ code. The function is \verb|unCPPC|, defined as:
+\begin{lstlisting}
+unCPPC :: 
+  CppCode CppSrcCode CppHdrCode a -> a
+unCPPC (CPPC (CPPSC a) _) = a
+\end{lstlisting}
+At the level of a \verb|Program|, it no longer makes sense to consider source 
+and header files independently, so the \verb|Pair| instance of the \verb|prog| 
+function combines the source and header files together in the \verb|CppSrcCode| 
+piece of the \verb|Pair|. This is why \verb|unCPPC| simply extracts the 
+\verb|CppSrcCode| portion of the \verb|Pair|---at that point, that portion 
+contains both the source and header files. Note that the choice to combine them 
+in the \verb|CppSrcCode| half instead of the \verb|CppHdrCode| half of the 
+\verb|Pair| was arbitrary.
+
+After an \verb|unRepr| function, like \verb|unJC| or \verb|unCPPC|, has been 
+called on a GOOL program, the resulting pretty-printed \verb|Doc|s are 
+transformed back into a \verb|String|s using the \verb|render| function, and 
+then written to files using standard Haskell IO.
+
+\section{Higher-level GOOL functions} \label{sec:patterns}
+
+GOOL provides many high-level functions that abstract over common OO patterns, 
+allowing one to write a small amount of GOOL code to generate a large amount 
+code in the target language, conforming to the target language's idioms, which 
+may be very different between languages. This section shows examples of these 
+high-level functions and the code they generate, starting with those that 
+abstract simple patterns on the scale of values, and working up to those that 
+abstract more complex patterns on the scale of entire blocks of code or 
+functions.
+
+One of the simplest examples of a high-level function in GOOL is \verb|sin|, 
+the function for applying the trigonometric sine function to a value. Most OO 
+languages do offer this function, though usually as part of a library and not 
+built in to the language itself. If a GOOL user wanted to apply a sine function 
+and GOOL did not offer a function for doing this, the user would have to use 
+\verb|extFuncApp| and pass it the library name and function name. But the 
+library and function names are likely to be different between target languages, 
+so to target multiple languages, they would have to change the GOOL 
+code for each. A high-level \verb|sin| function eliminates this problem. Each 
+language renderer can define \verb|sin| by calling the specific library and 
+function for that language, but all the GOOL user needs to do is write 
+\verb|sin| \verb|foo| for some declared variable \verb|foo|. This will 
+yield \verb|math.sin(foo)| in Python, \verb|Math.sin(foo)| in Java, 
+\verb|Math.Sin(foo)| in C\#, and \verb|sin(foo)| in C++. In addition to 
+\verb|sin|, GOOL offers functions for applying remaining trigonometric 
+functions and other common functions in mathematics: \verb|log|, \verb|ln|, 
+\verb|exp|, \verb|floor|, and \verb|ceil|ing.
+
+Another simple pattern GOOL abstracts is accessing arguments passed to a main 
+function through the command line. The name given to the variable holding the 
+list of arguments is different depending on the target language, so GOOL offers 
+the \verb|argsList| function to represent the value of that variable. GOOL 
+also has functions for certain actions commonly taken with that list, such as 
+\verb|arg| which, when passed an integer index, represents the value of the 
+argument at that index, and \verb|argExists| which represents a Boolean value 
+for whether an argument exists at a given index.
+
+Lists are a very common data structure in OO code, so GOOL provides a suite of 
+functions for working with lists. For example, \verb|listAccess| can be passed 
+a list and index value and will return the value of the element of the list at 
+the given index. The GOOL code \verb|listAccess| \verb|(valueOf ages)| 
+\verb|(litInt 1)| for the \verb|ages| variable defined in Section \ref{sec:syntax} 
+will generate \verb|ages[1]| in Python and C\#, \verb|ages.get(1)| in Java, and 
+\verb|ages.at(1)| in C++. Other functions for working with lists offered by 
+GOOL are \verb|listSize| for getting the size of a list, \verb|listAppend| for 
+appending a value to a list, \verb|listAdd| for adding a value to a list at a 
+given index, \verb|listSet| for changing the value of a list at a given 
+index to a given value, \verb|listIndexExists| for checking if a list has a 
+value at a given index, and \verb|indexOf| for getting the index of a given 
+value in a given list. Slicing a list can be done with \verb|listSlice| by 
+passing it a variable to assign the sliced list to, a list to slice, and three 
+values representing the starting and ending indices for the slice and the step 
+size. The values are wrapped in Haskell's \verb|Maybe| monad and default to the 
+start of the list, the end of the list, and a step size of one if 
+\verb|Nothing| is passed. So to take the elements from indices 1 and 2 of 
+\verb|ages| and assign them to a new list, \verb|someAges|, the GOOL code looks 
+like:
+\begin{lstlisting}
+listSlice someAges (valueOf ages) 
+  (Just $ litInt 1) (Just $ litInt 3) 
+  Nothing
+\end{lstlisting} 
+List slicing is of particular note because this action is much easier to do in 
+Python than the other languages GOOL generates. The generated Python code for 
+the above list slice is:
+\begin{lstlisting}
+someAges = ages[1:3:]
+\end{lstlisting}
+While the generated Java code is shown below. Throughout this section, 
+backslashes in generated code snippets indicate manually inserted line breaks, 
+added so the code fits between the margins.
+\begin{lstlisting}
+ArrayList<Double> temp = \
+  new ArrayList<Double>(0);
+for (int i_temp = 1; i_temp < 3; \
+  i_temp++) {
+    temp.add(ages.get(i_temp));
+}
+someAges = temp;
+\end{lstlisting}
+The generated C\# and C++ code blocks are similar in structure to the Java 
+code. This example demonstrates GOOL's idiomatic code generation. It would have 
+been easy to generate Python code with the same structure as the other 
+languages, and the code would even be correct. However, since list slicing is 
+available as a high-level function in GOOL, the renderers have the freedom to 
+define that function in a way best-suited to the target language, and an 
+idiomatic, more readable version was generated in Python as a result.
+
+GOOL also offers high-level functions for printing. \verb|print| prints a 
+value, \verb|printLn| prints a value followed by a new line character, and 
+\verb|printFile| and \verb|printFileLn| are the same for printing to a file. 
+There are also variations that are shortcuts for when the value to print is 
+just a literal string, such as \verb|printFileStrLn|. Unlike print functions in 
+many of the target languages, these print functions can be used on lists. So 
+the GOOL code \verb|printLn| \verb|ages| generates \verb|print(ages)| in 
+Python, but in the other languages it generates code to loop through the list 
+and print each element, like the Java code shown below.
+\begin{lstlisting}
+System.out.print("[");
+for (int list_i1 = 0; \
+  list_i1 < ages.size() - 1; \
+  list_i1++) {
+    System.out.print(ages.get(list_i1));
+    System.out.print(", ");
+}
+if (ages.size() > 0) {
+    System.out.print(ages.get( \
+      ages.size() - 1));
+}
+System.out.println("]");
+\end{lstlisting}
+This is another example where the renderers are clearly conforming to the 
+idioms of a language. In addition to its functions for printing output, GOOL 
+also offers functions for reading input, such as \verb|getInput| and 
+\verb|getFileInput|. 
+
+Moving to larger-scale patterns, GOOL's \verb|inOutFunc| generates a function  
+based on three lists of variables: one of inputs, one of outputs, and one of 
+variables that are both inputs and outputs. Consider a function 
+\verb|applyDiscount| that takes a price and a discount, subtracts the discount 
+from the price, and returns both the new price and a Boolean for whether the 
+price is below 20. It can be written in GOOL using \verb|inOutFunc|, assuming 
+variables \verb|price|, \verb|discount|, and \verb|isAffordable| have been 
+defined:
+\begin{lstlisting}
+inOutFunc "applyDiscount" public static_
+  [discount] [isAffordable] [price]
+  (bodyStatements [
+    price &-= valueOf discount,
+    isAffordable &= 
+      valueOf price ?< litFloat 20.0])
+\end{lstlisting}
+The \verb|price| is both an input and output, so it is in the third list. The 
+\verb|discount| is an input only and \verb|isAffordable| is an output only, so 
+they go in the first and second lists, respectively. This function has multiple 
+outputs---\verb|price| and \verb|isAffordable|---and each of GOOL's target 
+languages handles functions with multiple outputs differently. In Python, 
+return statement with multiple values is used:
+\begin{lstlisting}
+def applyDiscount(price, discount):
+    price = price - discount
+    isAffordable = price < 20
+
+    return price, isAffordable
+\end{lstlisting}
+In Java, the outputs are returned in an array of \verb|Object|s:
+\begin{lstlisting}
+public static Object[] applyDiscount( \
+  int price, int discount) \
+  throws Exception {
+    Boolean isAffordable;
+
+    price = price - discount;
+    isAffordable = price < 20;
+
+    Object[] outputs = new Object[2];
+    outputs[0] = price;
+    outputs[1] = isAffordable;
+    return outputs;
+}
+\end{lstlisting}
+In C\#, the outputs are passed as parameters, using the \verb|out| keyword if
+it is only an output or the \verb|ref| keyword if it is both an input and an
+output:
+\begin{lstlisting}
+public static void applyDiscount( \
+  ref int price, int discount, \
+  out Boolean isAffordable) {
+    price = price - discount;
+    isAffordable = price < 20;
+}
+\end{lstlisting}
+And in C++, the outputs are passed as pointer parameters:
+\begin{lstlisting}
+void applyDiscount(int &price, \
+  int discount, bool &isAffordable) {
+    price = price - discount;
+    isAffordable = price < 20;
+}
+\end{lstlisting}
+The structure of the function in each language is different, from the 
+parameters to the function body to the return type. But each uses the 
+language's most natural way of defining a function with multiple outputs. GOOL 
+generates any needed variable declarations and return statements automatically, 
+so the GOOL user is saved from typing these lines out manually. Functions 
+defined with \verb|inOutFunc| can be called with \verb|inOutCall|, which again 
+accepts the three lists of inputs, outputs, and those that are both. Through 
+\verb|inOutCall|, GOOL will again automatically generate any needed variable 
+declarations and assignments, such as declaring the \verb|outputs| array and 
+then assigning its elements to the appropriate variables in Java.
+
+In OO programming, it is common to write getter and setter methods in a class, 
+so GOOL abstracts over these patterns as well. \verb|getMethod| can be used to 
+define a getter, and \verb|setMethod| for a setter. Each needs only be provided 
+the name of the class to which the method will belong, and the variable to be 
+get or set. So, assuming the class \verb|FooClass| has a variable \verb|foo|, a 
+getter for \verb|foo| is simply \verb|getMethod "FooClass" foo| and a setter is 
+simply \verb|setMethod "FooClass" foo|. The generated set method in Python 
+looks like:
+\begin{lstlisting}
+def setFoo(self, foo):
+    self.foo = foo
+\end{lstlisting}
+In Java:
+\begin{lstlisting}
+public void setFoo(int foo) \
+  throws Exception {
+    this.foo = foo;
+}
+\end{lstlisting}
+In C\#:
+\begin{lstlisting}
+public void setFoo(int foo) {
+    this.foo = foo;
+}
+\end{lstlisting}
+And in C++:
+\begin{lstlisting}
+void FooClass::setFoo(int foo) {
+    this->foo = foo;
+}
+\end{lstlisting}
+We show this example not only to demonstrate how a single, small line of GOOL 
+code can generate much more code in the target language, but also to visualize 
+some of the idiosyncracies present in the target languages. Even for such a 
+simple function, there are subtle differences in each language that would be 
+difficult to keep track of if someone were trying to write these programs 
+manually, and GOOL saves the programmer from this tedium. For calling methods 
+defined with \verb|getMethod| or \verb|setMethod|, GOOL also provides 
+\verb|get| and \verb|set| functions, which must be passed the value of the 
+object on which the method should be called, the variable to get or set, and, 
+in the case of \verb|set|, the value to set it to.
+
+The final category of higher-order functions we will discuss are those that 
+abstract over the design patterns described in \cite{gamma1995design}. GOOL 
+currently has syntax for defining instances of three design patterns: Observer, 
+State, and Strategy. The versions of these design patterns GOOL generates are 
+simplified and small in scale. In the case of the Strategy pattern, Haskell 
+does the work of storing and checking which strategy to use, only actually 
+generating code for a strategy when it is used. \verb|runStrategy| is the 
+user-facing function for using the Strategy pattern in GOOL. It must be passed 
+the name of the strategy to use, a list of pairs of strategy names and bodies, 
+and \verb|Maybe| a variable and value to assign after running the strategy. 
+Haskell will check if the given strategy name is in the list, and simply 
+generate the corresponding body if it is. 
+
+For the Observer pattern, \verb|initObserverList| can be passed a list of 
+values and will generate a declaration of an observer list variable initially 
+containing the given values. \verb|addObserver| can then be used to add a given 
+value to the observer list, and \verb|notifyObservers| will call a method on 
+each of the observers. The name of the observer list variable is fixed, so 
+there can only be one observer list in a given scope.
+
+For the State pattern, \verb|initState| will take a name and a state label and 
+generate a declaration of a variable with the given name and assign it the 
+given state. The states are just literal strings. \verb|changeState| takes the 
+variable name and a new state, and changes the state of that variable to the 
+new state. And \verb|checkState| takes the name of the state variable, a list 
+of value-body pairs, and a fallback body, and generates a conditional (usually 
+a switch statement) that checks the state and runs the corresponding body, or 
+the fallback body if none of the states match.
+
+The functionality granted by these high-level design pattern functions was 
+already possible with GOOL's other functions. But they are useful because 
+they are tailored to specific design patterns, so they are concise, for 
+example by not requiring the user to manually define a loop for notifying 
+observers, and their syntax should be easily understood by those familiar with 
+OO programming.
+
+\section{Related Work} \label{sec:related}
 
 We divide the Related Work into the following categories
 \begin{itemize}
-\item cat 1
-\item cat 2
-\item cat 3
+\item General-purpose code generation
+\item Multi-language OO code generation
+\item Design pattern modeling and code generation
 \end{itemize}
 which we present in turn.
 
 Haxe is a general-purpose multi-paradigm language and cross-platform compiler. 
 It compiles to all of the languages GOOL does, in addition to many others. 
 However, it does not offer the high-level abstractions GOOL provides 
-\cite{Haxe} (better reference?). Also, the generated source code is not very 
-readable as Haxe generates a lot of ``noise'' and strips comments from the 
-original Haxe source code.
+\cite{Haxe} (better reference?). Also, Haxe strips comments and generates 
+source code around a custom framework which users would not be familiar with, 
+so the generated code is not very readable.
 
 Protokit's 2nd version is a DSL and code generator for Java and C++, where the 
 generator is designed to be capable of producing general-purpose imperative or 
@@ -325,39 +1274,137 @@ and syntax for high-level tasks, on the other hand, helped it overcome
 differences between target languages.
 
 ThingML \cite{harrand2016thingml} is a DSL for model-driven engineering 
-targeting C, C++, Java, and 
-JavaScript. While it can be used in a broad range of application domains, they 
-all fall under the umbrella domain of distributed reactive systems, and so it 
-is not quite a general-purpose DSL, unlike GOOL. ThingML's modelling-related 
-syntax and abstractions are a contrast to GOOL's object-oriented syntax and 
-abstractions. The generated code lacks some of the pretty-printing provided by 
-GOOL, specifically indentation, which detracts from the readability.
+targeting C, C++, Java, and JavaScript. While it can be used in a broad range 
+of application domains, they all fall under the umbrella domain of distributed 
+reactive systems, and so it is not quite a general-purpose DSL, unlike GOOL. 
+ThingML's modelling-related syntax and abstractions are a contrast to GOOL's 
+object-oriented syntax and abstractions. The generated code lacks some of the 
+pretty-printing provided by GOOL, specifically indentation, which detracts from 
+the readability.
 
-IBM developed a DSL for automatic generation of OO code based on design 
-patterns \cite{budinsky1996automatic}. Their DSL was in the form of a visual 
-user interface rather than a programming language, and could only generate code 
-that followed a design pattern. It could not generate any general-purpose code.
+Moving on to OO-specific code generators with multiple target languages, there 
+are many examples of such DSLs, but for more restricted domains than GOOL. 
+Google protocol buffers is a DSL for serializing structured data, which can 
+then be compiled into Java, Python, Objective C, and C++ \cite{Protobuf}. 
+Thrift is a Facebook-developed tool for generating code in multiple languages 
+and even multiple paradigms based on language-neutral descriptions of data 
+types and interfaces \cite{slee2007thrift}. Clearwater is an approach for 
+implementing DSLs with multiple target languages for components of distributed 
+systems \cite{swint2005clearwater}. The Time Weaver tool uses a multi-language 
+code generator to generate ``glue'' code for real-time embedded systems 
+\cite{de2004glue}. The domain of mobile applications is host to a bevy of DSLs 
+with multiple target languages, of which MobDSL \cite{kramer2010mobdsl} and 
+XIS-Mobile \cite{ribeiro2014xis} are two examples. Conjure is a DSL for 
+generating APIs. It reads YML descriptions of APIs and can generate code in 
+Java, TypeScript, Python, and Rust \cite{Conjure} (include this?). All of these 
+are examples of multi-language code generation, but none of them generate 
+general-purpose code like GOOL does.
 
-There are many examples of DSLs with multiple OO target languages but for a 
-more restricted domain. Google protocol buffers is a DSL for serializing 
-structured data, which can then be compiled into Java, Python, Objective C, and 
-C++ \cite{Protobuf}. Thrift is a Facebook-developed tool for generating code in 
-multiple languages and even multiple paradigms based on language-neutral 
-descriptions of data types and interfaces \cite{slee2007thrift}. Clearwater is 
-an approach for implementing DSLs with multiple target languages for components 
-of distributed systems \cite{swint2005clearwater}. The Time Weaver tool uses a 
-multi-language code generator to generate ``glue'' code for real-time embedded 
-systems \cite{de2004glue}. The domain of mobile 
-applications is host to a bevy of DSLs with multiple target languages, of which 
-MobDSL \cite{kramer2010mobdsl} and XIS-Mobile \cite{ribeiro2014xis} are two 
-examples. Conjure is a DSL for generating APIs. It reads YML descriptions of 
-APIs and can generate code in Java, TypeScript, Python, and Rust 
-\cite{Conjure}. All of these are examples of multi-language code generation, 
-but none of them generate general-purpose code like GOOL does.
+A number of languages for modeling design patterns have been developed. The 
+Design Pattern Modeling Language (DPML) \cite{mapelsden2002design} is similar 
+to the Unified Modeling Language (UML) but designed specifically to overcome 
+UML's shortcomings to be able to model all design patterns. DPML consists of 
+both specification diagrams and instance diagrams for instantiations of design 
+patterns, but does not attempt to generate actual source code from the models. 
+The Role-Based Metamodeling Language \cite{kim2003uml} is also based on UML but 
+with changes to allow for better models of design patterns, with specifications 
+for the structure, interactions, and state-based behaviour in patterns. Again, 
+source code generation is not attempted. Another metamodel for design patterns 
+includes generation of Java code \cite{albin2001meta}, and IBM developed a DSL 
+for generation of OO code based on design patterns 
+\cite{budinsky1996automatic}. IBM's DSL was in the form of a visual user 
+interface rather than a programming or modeling language. The languages that 
+generate code do so only for design patterns, not for any general-purpose code 
+like GOOL does.
 
-\section{Future Work} \label{future}
-\section{Conclusion} \label{conclusions}
+\section{Future Work} \label{sec:future}
 
+Currently GOOL code is typed based on what kind of code it represents: 
+variable, value, type, or method, for example. Code that represents a variable 
+or value is not further typed based on what the type of the variable or value 
+would be in a traditional programming language: Boolean or integer, for 
+example. There is nothing to stop a user from passing a non-list value to a 
+function specifically intended for lists, like \verb|listSize|, or from passing 
+string values to numeric operators like \verb|#+|. We plan on adding this 
+additional layer of typing, making GOOL a statically typed programming 
+language. We have started work to this end by making the underlying types for 
+GOOL's \verb|Variable|s and \verb|Value|s Generalized Algebraic Data Types 
+(GADTs), such as this one for \verb|Variable|s:
+\begin{lstlisting}
+data TypedVar a where
+  BVr :: VarData -> TypedVar Boolean
+  IVr :: VarData -> TypedVar Integer
+  ...
+\end{lstlisting}
+Members of the type family \verb|Variable| \verb|repr| would now map to 
+\verb|TypedVar| and the type for a \verb|Variable| in the generic \verb|repr| 
+context would now be something like \verb|repr| \verb|(Variable repr Boolean)| 
+instead of just \verb|repr| \verb|(Variable repr)|. All instances of 
+\verb|TypedVar| are built from the same \verb|VarData| structure, but variables 
+built with the different GADT constructors will have different types and 
+Haskell's compiler will throw errors if a wrongly-typed variable is passed to a 
+function.
+
+There are many improvements we plan on making to the generated code, especially 
+with regards to not generating code that is not necessary. For example, we 
+currently always generate import statements for certain libraries, like math 
+and IO-related libraries, but we'd instead like to detect when a library is 
+used and only import those that are actually used. We plan on using Haskell's 
+\verb|State| monad to have a list of libraries that gets updated whenever a new 
+library is used, and can then be read by the \verb|buildModule| function to 
+generate only the necessary imports. This technique of using the \verb|State| 
+monad will be useful for other improvements as well, such as to only generate 
+\verb|throws Exception| in the header of a Java method that actually may throw 
+an exception, rather than in every method as is done currently.
+
+We plan on adding syntax to interface with more kinds of external libraries, 
+similar to how we currently interface with math libraries with functions like 
+\verb|sin|. We would like to be able to interface with libraries for solving 
+Ordinary Differential Equations (ODEs), for instance, with different functions 
+available for using different ODE-solving algorithms. Since interfacing with 
+ODE-solving libraries can have major impact on the structure of a program, 
+implementing these high-level functions may require having multiple passes over 
+a GOOL program: an initial pass to collect information, such as the information 
+that an ODE library is used, and then a second pass to generate the code.
+
+Currently GOOL forces certain design decisions on the user, but we plan on 
+providing configuration options to give the user more control over the code 
+they generate. For example, GOOL uses \verb|ArrayList|s to represent lists in 
+Java, but there are many other list implementations that could be used, such as 
+\verb|Vector|. This is something we would like the user to have control over. 
+Another example, building on the aforementioned plan to provide functions to 
+interface with more external libraries, is to allow the user to choose which 
+specific external library they want to be used. These kinds of choices could be 
+accomplished by having the user pass a configuration (such as a Haskell record) 
+to GOOL, which GOOL will then read to decide how the code should be generated.
+
+GOOL's current set of high-level functions for generating common OO patterns is 
+by no means exhaustive. We plan to continue to identify patterns for which GOOL 
+can provide abstractions, and to implement those as more high-level functions, 
+with the aim of writing OO programs in GOOL as efficiently as possible without 
+losing expressivity.
+
+\section{Conclusion} \label{sec:conclusions}
+
+OO programming languages are similar enough that it is feasible to have a 
+single OO language that can be compiled to any other OO language. GOOL is a DSL 
+with multiple target languages for the domain of OO GPLs. Like most DSLs, GOOL 
+provides abstractions suited to its domain, in this case abstractions of common 
+OO patterns. Unlike most DSLs, GOOL considers the code it generates to be a 
+product for human consumption in addition to computer consumption, so it 
+focuses on generating idiomatic, human-readable, and documented code. The goal 
+of generating idiomatic code is helped by the abstractions: GOOL provides 
+syntax for expressing OO patterns naturally and efficiently, and these 
+high-level functions afford each target language renderer the freedom to 
+generate code following its own idioms. The goal of generating documented code 
+is realized by GOOL's syntax for generating informal documentation in the form 
+of code comments, or more formal documentation in the form of Doxygen-style 
+structured comments for functions, classes, and modules. GOOL can even generate 
+Doxygen configuration files and makefiles to facilitate compiling the 
+documentation into PDF or HTML formats. The generated code is pretty-printed so 
+that it is readable, and GOOL allows organization of code related to the same 
+task into blocks to further increase readability. The idiomaticity and presence 
+of documentation in the generated code also contribute to readability.
 
 %% Acknowledgments
 %\begin{acks}                            %% acks environment is optional

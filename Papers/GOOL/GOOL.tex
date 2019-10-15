@@ -73,7 +73,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%
 %% Useful abbreviations
-\newcommand{\Csharp}{C$^{sharp}$} %Is this really what we want?
+\newcommand{\Csharp}{C$^{\sharp}$}
 
 \newcommand{\abbrev}[1]{\textbf{#1}}
 \newcommand{\mainstream}{\abbrev{mainstream}}
@@ -132,15 +132,15 @@
 %% can be repeated if necessary
 %\orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
 \affiliation{
-	\position{Position1}
-	\department{Department of Computing and Software}              %% 
-	%%\department is recommended
-	\institution{McMaster University}            %% \institution is required
-	\streetaddress{1280 Main Street West}
-	\city{Hamilton}
-	\state{Ontario}
-	\postcode{L8S 4L8}
-	\country{Canada}                    %% \country is recommended
+  \position{Position1}
+  \department{Department of Computing and Software}              %% 
+  %%\department is recommended
+  \institution{McMaster University}            %% \institution is required
+  \streetaddress{1280 Main Street West}
+  \city{Hamilton}
+  \state{Ontario}
+  \postcode{L8S 4L8}
+  \country{Canada}                    %% \country is recommended
 }
 \email{carette@mcmaster.ca}          %% \email is recommended
 
@@ -149,15 +149,15 @@
 %% can be repeated if necessary
 %\orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
 \affiliation{
-	\position{Position1}
-	\department{Department of Computing and Software}              %% 
-	%%\department is recommended
-	\institution{McMaster University}            %% \institution is required
-	\streetaddress{1280 Main Street West}
-	\city{Hamilton}
-	\state{Ontario}
-	\postcode{L8S 4L8}
-	\country{Canada}                    %% \country is recommended
+  \position{Position1}
+  \department{Department of Computing and Software}              %% 
+  %%\department is recommended
+  \institution{McMaster University}            %% \institution is required
+  \streetaddress{1280 Main Street West}
+  \city{Hamilton}
+  \state{Ontario}
+  \postcode{L8S 4L8}
+  \country{Canada}                    %% \country is recommended
 }
 \email{smiths@mcmaster.ca}          %% \email is recommended
 
@@ -444,15 +444,15 @@ so that \verb|ages| can be used directly from then on. Other GOOL syntax for
 specifying variables is shown in Table~\ref{tab:variables}.
 
 \begin{table}[!h]
-\caption{Description of GOOL syntax for specifying variables}
+\caption{Syntax for specifying variables}
 \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
-	\textbf{GOOL Syntax} & \textbf{Semantics} \\
-	\midrule
-	\verb|extVar| & for a variable from an external library \\
-	\verb|classVar| & for a variable belonging to a class \\
-	\verb|objVar| & for a variable belonging to an object \\
-	\verb|$->| & infix operator form of \verb|objVar| \\
-	\verb|self| & for referring to an object in the definition of its class \\
+  \textbf{GOOL Syntax} & \textbf{Semantics} \\
+  \midrule
+  \verb|extVar| & for a variable from an external library \\
+  \verb|classVar| & for a variable belonging to a class \\
+  \verb|objVar| & for a variable belonging to an object \\
+  \verb|$->| & infix operator form of \verb|objVar| \\
+  \verb|self| & for referring to an object in the definition of its class \\
 \end{tabular}
 \label{tab:variables}
 \end{table}
@@ -472,62 +472,61 @@ return Booleans are prefixed by a \verb|?|, operators on numeric values are
 prefixed by \verb|#|, and other operators are prefixed by \verb|$|.
 
 \begin{table}[!h]
-	\caption{Description of GOOL syntax for literal values}
-	\begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
-		\textbf{GOOL Syntax} & \textbf{Semantics} \\
-		\midrule
-		\verb|litTrue| & literal Boolean true \\
-		\verb|litFalse| & literal Boolean false \\
-		\verb|litInt| \verb|i| & literal integer \verb|i| \\
-		\verb|litFloat| \verb|f| & literal float \verb|f| \\
-		\verb|litChar| \verb|c| & literal character \verb|c| \\
-		\verb|litString| \verb|s| & literal string \verb|s| \\
-	\end{tabular}
-	\label{tab:literals}
+  \caption{Syntax for literal values}
+  \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
+    \textbf{GOOL Syntax} & \textbf{Semantics} \\
+    \midrule
+    \verb|litTrue| & literal Boolean true \\
+    \verb|litFalse| & literal Boolean false \\
+    \verb|litInt| \verb|i| & literal integer \verb|i| \\
+    \verb|litFloat| \verb|f| & literal float \verb|f| \\
+    \verb|litChar| \verb|c| & literal character \verb|c| \\
+    \verb|litString| \verb|s| & literal string \verb|s| \\
+  \end{tabular}
+  \label{tab:literals}
 \end{table}
 
 \begin{table}[!h]
-	\caption{Description of GOOL operators for making expressions}
-	\begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
-		\textbf{GOOL Syntax} & \textbf{Semantics} \\
-		\midrule
-		\verb|?!| & Boolean negation \\
-		\verb|?&&| & conjunction \\
-		\verb|?||| & disjunction \\
-		\verb|?<| & less than \\
-		\verb|?<=| & less than or equal \\
-		\verb|?>| & greater than \\
-		\verb|?>=| & greater than or equal \\
-		\verb|?==| & equality \\
-		\verb|?!=| & inequality \\
-		\verb|#~| & numeric negation \\
-		\verb|#/^| & square root \\
-		\verb|#|| & absolute value \\
-		\verb|#+| & addition \\
-		\verb|#-| & subtraction \\
-		\verb|#*| & multiplication \\
-		\verb|#/| & division \\
-		\verb|#%| & modulus \\
-		\verb|#^| & exponentiation \\
-	\end{tabular}
-	\label{tab:operators}
+  \caption{Operators for making expressions}
+  \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
+    \textbf{GOOL Syntax} & \textbf{Semantics} \\
+    \midrule
+    \verb|?!| & Boolean negation \\
+    \verb|?&&| & conjunction \\
+    \verb|?||| & disjunction \\
+    \verb|?<| & less than \\
+    \verb|?<=| & less than or equal \\
+    \verb|?>| & greater than \\
+    \verb|?>=| & greater than or equal \\
+    \verb|?==| & equality \\
+    \verb|?!=| & inequality \\
+    \verb|#~| & numeric negation \\
+    \verb|#/^| & square root \\
+    \verb|#|| & absolute value \\
+    \verb|#+| & addition \\
+    \verb|#-| & subtraction \\
+    \verb|#*| & multiplication \\
+    \verb|#/| & division \\
+    \verb|#%| & modulus \\
+    \verb|#^| & exponentiation \\
+  \end{tabular}
+  \label{tab:operators}
 \end{table}
 
 \begin{table}[!h]
-	\caption{Description of GOOL syntax for values defined by conditional 
-	expressions or function application}
-	\begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
-		\textbf{GOOL Syntax} & \textbf{Semantics} \\
-		\midrule
-		\verb|inlineIf| & conditional expression \\
-		\verb|funcApp| & function application, to a list of parameters \\
-		\verb|extFuncApp| & function application, for external library 
-		functions\\
-		\verb|newObj| & for calling an object constructor (\verb|extNewObj| 
-		exists too) \\
-		\verb|objMethodCall| & for calling a method on an object \\
-	\end{tabular}
-	\label{tab:values}
+  \caption{Syntax for conditionals and function application}
+  \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
+    \textbf{GOOL Syntax} & \textbf{Semantics} \\
+    \midrule
+    \verb|inlineIf| & conditional expression \\
+    \verb|funcApp| & function application, to a list of parameters \\
+    \verb|extFuncApp| & function application, for external library 
+    functions\\
+    \verb|newObj| & for calling an object constructor (\verb|extNewObj| 
+    exists too) \\
+    \verb|objMethodCall| & for calling a method on an object \\
+  \end{tabular}
+  \label{tab:values}
 \end{table}
 
 Syntax for defining values with conditional expressions or function 

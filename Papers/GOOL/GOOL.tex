@@ -73,7 +73,15 @@
 
 %%%%%%%%%%%%%%%%%%%%%
 %% Useful abbreviations
-\newcommand{\Csharp}{C$^{sharp}$}
+\newcommand{\Csharp}{C$^{sharp}$} %Is this really what we want?
+
+\newcommand{\abbrev}[1]{\textbf{#1}}
+\newcommand{\mainstream}{\abbrev{mainstream}}
+\newcommand{\readable}{\abbrev{readable}}
+\newcommand{\idiomatic}{\abbrev{idiomatic}}
+\newcommand{\documented}{\abbrev{documented}}
+\newcommand{\oopatterns}{\abbrev{patterns}}
+\newcommand{\common}{\abbrev{common}}
 
 \begin{document}
 
@@ -299,12 +307,12 @@ already supported.
 
 First we present the high-level requirements for such an endeavour, in
 Section~\ref{sec:req}.  To be able to give illustrated examples, we
-next show the syntax of GOOL in Section~\ref{sec:syntax}. The details of
+next show the syntax of GOOL in Section~\ref{sec:creating}. The details of
 the implementations, namely the internal representation and the
 family of pretty-printers, is in Section~\ref{sec:implementation}.
 Common patterns are illustrated in Section~\ref{sec:patterns}.  We 
 close with a discussion of related work in Section \ref{sec:related}, plans for 
-future improvements in Section \ref{future}, and conclusions in Section 
+future improvements in Section \ref{sec:future}, and conclusions in Section 
 \ref{sec:conclusions}.
 
 \section{Requirements} \label{sec:req}
@@ -312,15 +320,6 @@ future improvements in Section \ref{future}, and conclusions in Section
 While we outlined some of our requirements above, here we will give a 
 complete list, along with acronyms (to make referring to them simpler),
 as well as some reasoning behind each requirement.
-
-% The following macros should be moved to the preamble
-\newcommand{\abbrev}[1]{\textbf{#1}}
-\newcommand{\mainstream}{\abbrev{mainstream}}
-\newcommand{\readable}{\abbrev{readable}}
-\newcommand{\idiomatic}{\abbrev{idiomatic}}
-\newcommand{\documented}{\abbrev{documented}}
-\newcommand{\oopatterns}{\abbrev{patterns}}
-\newcommand{\common}{\abbrev{common}}
 
 \begin{description}
 \item[mainstream] Generate code in mainstream object-oriented languages.
@@ -348,9 +347,9 @@ own motivation, is to have \emph{extremely well documented} code, indeed to
 a level that would be unrealistic to do by hand. But this documentation is
 crucial in domains where \emph{certification} of code is required.
 
-The same underlying reasons for \readable~also drive \idiomatic and \documented,
+The same underlying reasons for \readable~also drive \idiomatic~and \documented,
 as they contribute to the human-understandability of the generated code.
-\idiomatic is important as many human readers would find the code ``foreign''
+\idiomatic~is important as many human readers would find the code ``foreign''
 otherwise, and would not be keen on using it.
 Note that documentation can span from informal comments meant for humans, to
 formal, structured comments useful for generating API documentation with tools
@@ -360,8 +359,8 @@ Readability (and thus understandability) are improved when code is pretty-printe
 well-chosen variable names, using a common style with lines which are not too
 long, are just as valid for generated code as for human-written code.
 GOOL does not prevent users from writing undocumented or complex code, if they
-choose to do so. It just makes it easy to have \readable, \idiomatic and
-\documented code in multiple languages.
+choose to do so. It just makes it easy to have \readable, \idiomatic~and
+\documented~code in multiple languages.
 
 The \oopatterns~requirement is typical of DSLs: common programming patterns
 can be reified into a proper linguistic form instead of being merely
@@ -418,7 +417,7 @@ As our exposition has been somewhat abstract until now, it is useful to
 dive in and give some concrete syntax, so as to be able to illustrate
 our ideas with valid code.
 
-Specifically, Basic types in GOOL are \verb|bool| for Booleans, 
+Specifically, basic types in GOOL are \verb|bool| for Booleans, 
 \verb|int| for integers, \verb|float| for doubles, \verb|char| 
 for characters, \verb|string| for strings, \verb|infile| for a file 
 in read mode, and \verb|outfile| for a file in write mode. Lists can be 
@@ -455,7 +454,7 @@ as befits the use-mention distinction from analytic philosophy}. To get
 the value of~\verb|ages|, one must write \verb|valueOf ages|. The reason for
 this distinction will be made clear in section~\ref{where?}, driven
 by semantic considerations. This is beneficial for stricter typing and
-enables convenient syntax for \oopatterns that translate to more idiomatic
+enables convenient syntax for \oopatterns~that translate to more idiomatic
 code.
 
 \improvement{all the following should be in two tables.}
@@ -526,11 +525,12 @@ ifCond [
 \end{lstlisting}
 GOOL also supports \verb|switch| statements. 
 
-There are a variety of loops.  A for-loop (\verb|for|) is
+There are a variety of loops: for-loops (\verb|for|), which are
 parametrized by a statement to 
 initialize the loop variable, a condition, a statement to update the loop 
-variable, and a body; a \verb|forRange| loop, which are given a 
-starting value, ending value, and step size, as well as \verb|forEach| loops. 
+variable, and a body; \verb|forRange| loops, which are given a 
+starting value, ending value, and step size; as well as \verb|forEach| 
+loops. 
 For example:
 \begin{lstlisting}
 for (varDecDef age (litInt 0)) 
@@ -561,7 +561,7 @@ dynamic and private dynamic methods, respectively. \verb|mainFunction|
 followed by a body defines the main function of a program. \verb|docFunc|
 generates a documented function from a function description and
 a list of parameter descriptions, an optional description of the return
-value, and the function itself.  This generate Doxygen-style comments.
+value, and the function itself.  This generates Doxygen-style comments.
 
 Classes are defined with \verb|buildClass| followed by the class name, name of 
 the parent class (if applicable), scope, list of state variables, and list of 
@@ -602,7 +602,7 @@ packages. A program (\verb|prog|) has a name and a list of files.  A
 \verb|package| is a program and a list of auxiliary files. These files are non
 code files that augment the program. Examples are a Doxygen configuration file
 (\verb|doxConfig|), and a makefile (\verb|makefile|).  One of the parameters of
-\verb|makefile| toggles generation of a \verb|make doc| rule, which will
+\verb|makefile| toggles generation of a \verb|make| \verb|doc| rule, which will
 compile the Doxygen documentation with the generated Doxygen configuration
 file.
 

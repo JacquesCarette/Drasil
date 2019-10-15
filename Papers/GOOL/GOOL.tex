@@ -297,7 +297,9 @@ we have additional requirements:
 \item The generator should allow one to express common OO patterns.
 \end{enumerate}
 
-We have developed a Generic Object-Oriented Language (GOOL), demonstrating
+We have developed a Generic Object-Oriented Language (GOOL)%
+\footnote{GOOL is publicly available; the exact link will be
+given once the paper is no longer anonymous}, demonstrating
 that all these requirements can be met.  GOOL is a DSL embedded in Haskell that
 can currently generate code in Python, Java, C\#, and C++%
 \footnote{and is close to generating Lua and Objective-C, but those backends
@@ -658,43 +660,38 @@ file.
 
 \section{GOOL Implementation} \label{sec:implementation}
 
-GOOL is embedded in Haskell in the finally-tagless style originally described 
-in \cite{carette2009finally}. In finally-tagless style, the internal 
-representation of an embedded DSL is a group of functions defined in the host 
-language, rather than the more traditional use of data constructors to build an 
-interpretable abstract syntax tree (AST) for the DSL. Whereas an AST of data 
-constructors must have a separately-defined interpreter, the functions 
-themselves in finally-tagless compose to form the interpreter; the definitions 
-of the functions describe how each is interpreted. Thus, the GOOL ``keywords'' 
-referred to in the previous section were really Haskell functions that, when 
-resolved, yield representations of the code to be generated. The 
-finally-tagless style grants us more flexibility in the code we can generate 
-and better extensibility since we do not need to pattern-match on AST nodes.
+There are two ``obvious'' means of dealing with large embedded DSLs in
+Haskell: either as a set of Generalized Algebraic Data Types (GADTs), or
+using a set of classes, in the ``finally tagless'' style~\cite{carette2009finally}
+(we will refer to it as simply \emph{tagless} from now on).
+The current implementation uses a ``sophisticated'' version of tagless. A
+first implementation~\footnote{citation omitted for anonymization}
+used a straightforward version of tagless
+which did not allow for enough generic routines to be properly implemented.
+This was replaced by a version based on GADTs, which fixed that problem, but
+did not easily allow for \emph{patterns} to be easily encoded. Thus the current
+version has gone back to tagless, but also uses \emph{type families} in a crucial
+way.
 
-Finally-tagless facilitates development of a family of interpreters for a DSL 
-by having the functions act on representations, where a type class in Haskell 
-is used to abstract over the representation. The authors of 
-\cite{carette2009finally} coined the term ``symantic'' to describe such a type 
-class, because the interface of the type class defines the syntax of the DSL 
-and the instances of the type class define the semantics. A separate type class 
-instance is written for each representation, each corresponding to one member 
-in the family of interpreters. This suits GOOL's needs nicely, for GOOL 
-requires multiple interpreters (one for each target language) of the same 
-language (GOOL).
+It is worth recalling that in tagless, the means of encoding a language,
+through methods from a set of classes, really encodes a generalized
+\emph{fold} over any \emph{representation} of the language.  Thus what
+looks like GOOL ``keywords'' are either class methods or generic functions
+that await the specification of a dictionary to decide on the final
+interpretation of the representation.  We typically instantiate these to
+language renderers, but we're also free to do various analysis passes if
+we wish.
 
-GOOL is a collection of these ``symantic'' type classes and instances. For 
-organizational purposes, the functions comprising GOOL's syntax are split 
-across many type classes, roughly based on the internal types upon which the 
-functions act. GOOL's internal types correspond to the types of code being 
-represented, not the types of the values in the target languages, though adding 
-value-types to GOOL's type system is planned for the future, discussed further 
-in Section \ref{sec:future}. Examples of internal types in GOOL, then, are 
-\verb|Variable|, \verb|Value|, \verb|Type|, \verb|Scope|, \verb|Statement|, 
-\verb|Method|, \verb|Class|, \verb|Module|, and \verb|Package|. A 
-\verb|Statement| in GOOL, for example, is a representation of a piece of code 
-that is a statement. Below is an excerpt of GOOL's definition for the 
-\verb|VariableSym| type class; that is, the type class containing functions for 
-defining variables in GOOL.
+Because tagless representations give an embedded syntax to a DSL while
+being polymorphic on the eventual semantic interpretation of the terms,
+\cite{carette2009finally} dubs the resulting classes ``symantic''.
+Our language is defined by a hierarchy of $35$ of these symantic classes,
+grouped by functionality.  For example, there are classes for programs,
+bodies, control blocks, types, unary operators, variables, values, selectors,
+statements, control statements, blocks, scopes, classes, modules, and so
+on.  These define $302$ different methods --- GOOL is not a small language!
+
+For example, here is how variables are defined:
 \begin{lstlisting}
 class (TypeSym repr) 
   => VariableSym repr where
@@ -702,22 +699,23 @@ class (TypeSym repr)
     var :: Label -> repr (Type repr) 
              -> repr (Variable repr)
 \end{lstlisting}
-Since variables have types, a type for representing variables must also know 
-how to represent types, thus we constrain our \verb|repr| type variable to be 
-an instance of \verb|TypeSym|, the symantic type class containing functions for 
-representing types, like the \verb|int|, \verb|float|, \verb|string|, and 
-\verb|listType| functions described in Section \ref{sec:syntax}. 
+As variables are typed, a representation of variables much also know how
+to represent types, thus we constrain our representation with that capability,
+here the~\verb|TypeSym| class.  We also notice the use of an
+\emph{associated type}~\verb|type Variable repr|. This is a type-level
+function which is representation-dependent.  Each instance of this class
+is free to define its own internal representation of what a
+\verb|Variable| is. \verb|var| is then a constructor for variables,
+which takes a \verb|Label| and a representation of a type, returning
+a representation of a variable.  Specifically, \verb|repr| has kind
+\verb|* -> *|, and thus \verb|Variable| has kind \verb|(* -> *) -> *|.
+In \verb|repr| \verb|(X repr)|, the type variable \verb|repr| appears 
+twice because there are two layers of abstraction: over the target 
+language, handled by the outer \verb|repr|, and over the underlying 
+types to which GOOL's types map, represented by the inner \verb|repr|.
 
-The types used in the signatures of GOOL's functions have the general form 
-\verb|repr| \verb|(X repr)| for some type \verb|X|, examples of which can be 
-seen in the type signature for \verb|var|. To understand these types, first 
-remember that we will write different instances of this type class for each 
-different language GOOL targets. That means the \verb|repr| type variable will 
-be instantiated with a type that represents code in a specific target language. 
-In the \verb|repr| \verb|(X repr)| types, the type variable \verb|repr| appears 
-twice because there are two layers of abstraction: abstraction over the target 
-language, handled by the outer \verb|repr|, and abstraction over the underlying 
-types to which GOOL's types map, handled by the inner \verb|repr|.
+\improvement{Perhaps a graph of all $35$ classes as a picture would be a
+nice illustration?}
 
 This abstraction over the underlying types that GOOL's types represent happens 
 because \verb|X repr| is a type family. The first line of the body of the 

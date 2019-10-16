@@ -166,6 +166,7 @@ data InputModule = Combined
                  | Separated
 
 type ConceptMatchMap = Map.Map UID [CodeConcept]
+type MatchedConceptMap = Map.Map UID CodeConcept
 
 data CodeConcept = Pi
 

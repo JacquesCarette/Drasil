@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.State (
 ) where
 
 import Language.Drasil
-import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Comments, ConceptMatchMap, 
+import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Comments, MatchedConceptMap,
   ConstantRepr, ConstantStructure, ConstraintBehaviour, InputModule, Logging, 
   Structure)
 
@@ -18,7 +18,7 @@ data State = State {
   logName :: String,
   logKind :: Logging,
   commented :: [Comments],
-  concMatches :: ConceptMatchMap,
+  concMatches :: MatchedConceptMap,
   auxiliaries :: [AuxFile],
   sampleData :: [Expr],
   currentModule :: String,

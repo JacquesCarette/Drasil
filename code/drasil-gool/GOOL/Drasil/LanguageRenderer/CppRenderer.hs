@@ -66,7 +66,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst,
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
 
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp)
 import Data.Maybe (maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
@@ -268,6 +268,8 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   litFloat v = pair (litFloat v) (litFloat v)
   litInt v = pair (litInt v) (litInt v)
   litString s = pair (litString s) (litString s)
+
+  pi = pair pi pi
 
   ($:) l1 l2 = pair (($:) l1 l2) (($:) l1 l2)
 
@@ -876,6 +878,8 @@ instance ValueSym CppSrcCode where
   litInt = litIntD
   litString = litStringD
 
+  pi = liftA2 mkVal float (return $ text "M_PI")
+
   ($:) = enumElement
 
   valueOf = valueOfD
@@ -1444,6 +1448,8 @@ instance ValueSym CppHdrCode where
   litInt = litIntD
   litString = litStringD
 
+  pi = liftA2 mkVal float (return $ text "M_PI")
+
   ($:) = enumElement
 
   valueOf = valueOfD
@@ -1828,6 +1834,7 @@ cppstop :: ModData -> Doc -> Doc -> Doc
 cppstop (MD n b _) lst end = vcat [
   if b then empty else inc <+> doubleQuotedText (addExt cppHdrExt n),
   if b then empty else blank,
+  text "#define" <+> text "_USE_MATH_DEFINES", --FIXME: Only include if used (i.e. pi)
   inc <+> angles (text "algorithm"),
   inc <+> angles (text "iostream"),
   inc <+> angles (text "fstream"),

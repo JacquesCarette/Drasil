@@ -252,6 +252,8 @@ instance ValueSym PythonCode where
   litInt = litIntD
   litString = litStringD
 
+  pi = liftA2 mkVal float (return $ text "math.pi")
+
   ($:) = enumElement
 
   valueOf = valueOfD

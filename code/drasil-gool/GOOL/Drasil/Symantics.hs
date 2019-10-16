@@ -208,6 +208,8 @@ class (VariableSym repr) => ValueSym repr where
   litInt    :: Integer -> repr (Value repr)
   litString :: String -> repr (Value repr)
 
+  pi :: repr (Value repr)
+
   --other operators ($)
   ($:)  :: Label -> Label -> repr (Value repr)
   infixl 9 $:

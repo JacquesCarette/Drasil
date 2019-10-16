@@ -9,6 +9,7 @@ import Language.Drasil hiding (int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (paramComment, returnComment)
+import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, genModule, mkParam)
 import Language.Drasil.Code.Imperative.Helpers (getUpperBound, liftS, lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
@@ -49,10 +50,12 @@ value u s t = do
   g <- ask
   let cs = codeSpec g
       mm = constMap cs
+      cm = concMatches g
       maybeInline Inline m = Just m
       maybeInline _ _ = Nothing
-  maybe (do { v <- variable s t; return $ valueOf v }) 
-    (convExpr . codeEquat) (Map.lookup u mm >>= maybeInline (conStruct g))
+  maybe (maybe (do { v <- variable s t; return $ valueOf v }) 
+    (convExpr . codeEquat) (Map.lookup u mm >>= maybeInline (conStruct g))) 
+    (return . conceptToGOOL) (Map.lookup u cm)
 
 variable :: (RenderSym repr) => String -> repr (Type repr) -> 
   Reader State (repr (Variable repr))

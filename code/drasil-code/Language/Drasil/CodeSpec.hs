@@ -135,6 +135,7 @@ data Choices = Choices {
   constStructure :: ConstantStructure,
   constRepr :: ConstantRepr,
   inputModule :: InputModule,
+  conceptMatch :: ConceptMatchMap,
   auxFiles :: [AuxFile]
 }
 
@@ -163,6 +164,13 @@ data ConstantRepr = Var | Const
 data InputModule = Combined
                  | Separated
 
+type ConceptMatchMap = Map.Map UID [CodeConcept]
+
+data CodeConcept = Pi
+
+matchConcepts :: (HasUID c) => [c] -> [[CodeConcept]] -> ConceptMatchMap
+matchConcepts cncs cdcs = Map.fromList (zip (map (^. uid) cncs) cdcs)
+
 data AuxFile = SampleInput deriving Eq
              
 data Visibility = Show
@@ -182,6 +190,7 @@ defaultChoices = Choices {
   constStructure = Inline,
   constRepr = Const,
   inputModule = Combined,
+  conceptMatch = matchConcepts ([] :: [QDefinition]) [],
   auxFiles = [SampleInput]
 }
 

@@ -3,9 +3,11 @@ module Main (main) where
 import Language.Drasil.Code (Choices(..), CodeSpec, Comments(..), 
   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
   Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
-  AuxFile(..), Visibility(..), codeSpec)
+  CodeConcept(..), matchConcepts, AuxFile(..), Visibility(..), codeSpec)
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
+
+import Data.Drasil.Quantities.Math (piConst)
 
 import Drasil.Projectile.Body (printSetting, si, srs)
 
@@ -26,6 +28,7 @@ choices = Choices {
   constStructure = Store Unbundled,
   constRepr = Var,
   inputModule = Separated,
+  conceptMatch = matchConcepts [piConst] [[Pi]],
   auxFiles = [SampleInput]
 }
 

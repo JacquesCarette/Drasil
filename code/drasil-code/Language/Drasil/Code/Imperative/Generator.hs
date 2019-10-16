@@ -32,6 +32,7 @@ generator dt sd chs spec = State {
   inMod = inputModule chs,
   logKind  = logging chs,
   commented = comments chs,
+  concMatches = conceptMatch chs,
   auxiliaries = auxFiles chs,
   sampleData = sd,
   -- state

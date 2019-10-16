@@ -89,7 +89,8 @@ codeSpec SI {_sys = sys
               , _sysinfodb = db
               , sampleData = sd} chs ms = 
   let inputs' = map quantvar ins
-      const' = map qtov cnsts
+      const' = map qtov (filter ((`Map.notMember` conceptMatch chs) . (^. uid)) 
+        cnsts)
       derived = getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc ((defs' ++ map qdFromDD ddefs) \\ derived)
       mem   = modExportMap csi' chs

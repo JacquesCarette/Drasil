@@ -884,44 +884,36 @@ longer relevant, so they are joined together into a single component.
 For technical reasons, currently \verb|Pair| is still used, and we arbitrarily
 choose to put the results in the first component.
 
-\section{Higher-level GOOL functions} \label{sec:patterns}
+\improvement{Should show examples of language differences, where semantically
+things are the same, but render quite differently. Rather like the 
+sin example in the next section, but at the language level}
 
-GOOL provides many high-level functions that abstract over common OO patterns,
-allowing one to write a small amount of GOOL code to generate a large amount
-code in the target language, conforming to the target language's idioms, which
-may be very different between languages. This section shows examples of these
-high-level functions and the code they generate, starting with those that
-abstract simple patterns on the scale of values, and working up to those that
-abstract more complex patterns on the scale of entire blocks of code or
-functions.
+\section{Encoding Patterns} \label{sec:patterns}
 
-One of the simplest examples of a high-level function in GOOL is \verb|sin|,
-the function for applying the trigonometric sine function to a value. Most OO
-languages do offer this function, though usually as part of a library and not
-built in to the language itself. If a GOOL user wanted to apply a sine function
-and GOOL did not offer a function for doing this, the user would have to use
-\verb|extFuncApp| and pass it the library name and function name. But the
-library and function names are likely to be different between target languages,
-so to target multiple languages, they would have to change the GOOL
-code for each. A high-level \verb|sin| function eliminates this problem. Each
-language renderer can define \verb|sin| by calling the specific library and
-function for that language, but all the GOOL user needs to do is write
-\verb|sin| \verb|foo| for some declared variable \verb|foo|. This will
+There are various levels of ``patterns'' to encode. The previous section
+documented how to encode the programming language aspects. Now we
+move on to other patterns, from simple library-level functions, to
+simple tasks (command-line arguments, list processing, printing), on to
+more complex patterns such as methods with a mixture of input, output
+and in-out parameters, and finally on to design patterns.
+
+Consider the simple trigonometric sine function, called \verb|sin| in
+GOOL. It is common enough to warrant its own name, even though in most
+languages it is part of a library.  A GOOL expression \verb|sin foo|
+can then be seamlessly translated to 
 yield \verb|math.sin(foo)| in Python, \verb|Math.sin(foo)| in Java,
-\verb|Math.Sin(foo)| in \Csharp, and \verb|sin(foo)| in \Cplusplus. In addition to
-\verb|sin|, GOOL offers functions for applying remaining trigonometric
-functions and other common functions in mathematics: \verb|log|, \verb|ln|,
-\verb|exp|, \verb|floor|, and \verb|ceil|ing.
+\verb|Math.Sin(foo)| in \Csharp, and \verb|sin(foo)| in \Cplusplus. Other
+functions are handled similarly.  This part is easily extensible, but does
+require adding to GOOL classes.
 
-Another simple pattern GOOL abstracts is accessing arguments passed to a main
-function through the command line. The name given to the variable holding the
-list of arguments is different depending on the target language, so GOOL offers
-the \verb|argsList| function to represent the value of that variable. GOOL
-also has functions for certain actions commonly taken with that list, such as
-\verb|arg| which, when passed an integer index, represents the value of the
-argument at that index, and \verb|argExists| which represents a Boolean value
-for whether an argument exists at a given index.
+A slightly more complex task is accessing arguments passed on the command
+line. This tends to differ more significantly accross languages. GOOL
+offers an abstraction of these mechanisms, through an \verb|argList| function
+that represents the list of arguments, as well as convenience functions for
+common tasks such as indexing into \verb|argList| and checking if an argument
+at a particular position exists.
 
+\info{edited until here}
 Lists are a very common data structure in OO code, so GOOL provides a suite of
 functions for working with lists. For example, \verb|listAccess| can be passed
 a list and index value and will return the value of the element of the list at
@@ -1329,9 +1321,9 @@ of documentation in the generated code also contribute to readability.
 
 
 %% Appendix
-\appendix
-\section{Appendix}
-
-Text of appendix \ldots
-
+% \appendix
+% \section{Appendix}
+% 
+% Text of appendix \ldots
+% 
 \end{document}

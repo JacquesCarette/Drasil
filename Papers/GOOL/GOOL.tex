@@ -826,33 +826,27 @@ same, and the methods are defined by calling common functions where possible
 or by constructing the GOOL value directly in the instance definition, if the
 definition is unique to that language.
 
-\info{edited until here}
-\Cplusplus is different, however, because most modules are split between a source and
-header file. One module written in GOOL essentially needs to be traversed
-twice, once to generate the source file and a second time to generate the
-header file corresponding to the same module. To accomplish this, two instances
-of the GOOL type classes were written for \Cplusplus for two different types defined
-similarly to \verb|JavaCode|: \verb|CppSrcCode| for source code and
+\Cplusplus is different since most modules are split between a source and
+header file. To generate \Cplusplus, we traverse the code twice,
+once to generate the header file and a second time to generate the
+source file corresponding to the same module. This is done via two instances
+of the classes, for two different types: \verb|CppSrcCode| for source code and
 \verb|CppHdrCode| for header code. Since a main function does not require a
 header file, the \verb|CppHdrCode| instance for a module containing only a main
-function is empty. The renderer is written such that an empty module or file
-does not actually get generated, and this is true of all GOOL's current
-renderers.
+function is empty. The renderer optimizes empty modules/files away --- for
+all renderers.
 
-Since \Cplusplus source and header code should always be generated together, we needed
-to tie the \verb|CppSrcCode| and \verb|CppHdrCode| types together. To do this,
-a third type, \verb|CppCode|, was created to pair the source and header types,
-defined as:
+As \Cplusplus source and header should always be generated together, a third
+type, \verb|CppCode| achieves this:
 \begin{lstlisting}
 data CppCode x y a =
   CPPC {src :: x a, hdr :: y a}
 \end{lstlisting}
 The type variables \verb|x| and \verb|y| are intended to be instantiated with
-\verb|CppSrcCode| and \verb|CppHdrCode|, but they are left generic for now
-because we need to make an instance of a \verb|Pair| type class for
-\verb|CppCode|, as follows:
+\verb|CppSrcCode| and \verb|CppHdrCode|, but they are left generic
+so that we may use an even more generic \verb|Pair| class:
 \begin{lstlisting}
-class Pair p where
+class Pair (p :: (* -> *) -> (* -> *) -> (* -> *)) where
   pfst :: p x y a -> x a
   psnd :: p x y b -> y b
   pair :: x a -> y a -> p x y a
@@ -862,63 +856,33 @@ instance Pair CppCode where
   psnd (CPPC _ yb) = yb
   pair = CPPC
 \end{lstlisting}
-In summary, the \verb|Pair| instance allows us to access the source code piece
-of the pair with \verb|pfst|, the header code piece with \verb|psnd|, or to
-combine a source and header piece to form a pair with \verb|pair|. We then need
-to make \verb|CppCode| instances of the GOOL type classes. The instance of
-\verb|VariableSym| for the excerpt of the type class we have used as an example
-throughout this section is shown below.
-\begin{lstlisting}
-instance (Pair p) => VariableSym
-  (p CppSrcCode CppHdrCode) where
-    type Variable (p
-      CppSrcCode CppHdrCode) = VarData
-    var n t = pair (var n $ pfst t)
-      (var n $ psnd t)
-\end{lstlisting}
-Rather than write the instance specifically for \verb|CppCode|, we wrote it for
-any \verb|Pair| to make this code more re-usable. Unfortunately, the types
-making up the \verb|Pair| had to be concretized as \verb|CppSrcCode| and
-\verb|CppHdrCode| so that the Haskell compiler could be sure that the
-\verb|VarData| underlying type declared for the \verb|Pair| matched the
-underlying types for each piece of the pair. The compiler knows that
-\verb|Variable| \verb|CppSrcCode| and \verb|Variable| \verb|CppHdrCode| are
-equivalent to \verb|VarData|, but it cannot be sure that any generic
-\verb|Variable| \verb|repr| will be. The actual function definitions for these
-instances are trivial. The definition for \verb|var| simply calls \verb|var| in
-the context of \verb|CppSrcCode|, calls it again in the context of
-\verb|CppHdrCode|, and combines the results in a new \verb|pair|. This same
-pattern is used for all of the function definitions for the \verb|Pair|
-instances, so to write a new renderer for another language that requires two
-files per module, these \verb|Pair| instances can be re-used just by changing
-the \verb|CppSrcCode| and \verb|CppHdrCode| types to the corresponding types
-for the new language renderer, and changing any underlying types that are
-different. This same technique can be used to write a renderer for a language
-that has even more than two files per module by writing an analog to the
-\verb|Pair| type class that combines the appropriate number of constiuents.
+\verb|Pair| is a \emph{type constructor} pairing, one level up from
+Haskell's own \verb|(,) :: * -> * -> *|.  It is given by one constructor
+and two destructors, much as the Church-encoding of pairs into the
+$\lambda$-calculus.
 
-The last component of the \Cplusplus renderer is a function analogous to
-\verb|JavaCode|'s \verb|unJC|, a function that can be called on a GOOL program
-to tell the Haskell compiler to concretize the \verb|repr| as \verb|CppCode|
-and therefore generate \Cplusplus code. The function is \verb|unCPPC|, defined as:
+To understand how this works, here is the instance of \verb|VariableSym|
+but for \Cplusplus:
 \begin{lstlisting}
-unCPPC ::
-  CppCode CppSrcCode CppHdrCode a -> a
-unCPPC (CPPC (CPPSC a) _) = a
+instance (Pair p) => 
+  VariableSym (p CppSrcCode CppHdrCode) where
+    type Variable 
+      (p CppSrcCode CppHdrCode) = VarData
+    var n t = 
+      pair (var n $ pfst t) (var n $ psnd t)
 \end{lstlisting}
-At the level of a \verb|Program|, it no longer makes sense to consider source
-and header files independently, so the \verb|Pair| instance of the \verb|prog|
-function combines the source and header files together in the \verb|CppSrcCode|
-piece of the \verb|Pair|. This is why \verb|unCPPC| simply extracts the
-\verb|CppSrcCode| portion of the \verb|Pair|---at that point, that portion
-contains both the source and header files. Note that the choice to combine them
-in the \verb|CppSrcCode| half instead of the \verb|CppHdrCode| half of the
-\verb|Pair| was arbitrary.
+The instance is generic in the pair representation \verb|p| but
+otherwise concrete, because \verb|VarData| is concrete. The actual
+instance code is straightforward, as it just dispatches to the 
+underlying instances, using the generic wrapping/unwrapping
+methods from \verb|Pair|.  This pattern is used for all instances,
+so adapting it to any other language with two (or more) files per
+module is straightforward.
 
-After an \verb|unRepr| function, like \verb|unJC| or \verb|unCPPC|, has been
-called on a GOOL program, the resulting pretty-printed \verb|Doc|s are
-transformed back into a \verb|String|s using the \verb|render| function, and
-then written to files using standard Haskell IO.
+At the program level, the difference between source and header is no
+longer relevant, so they are joined together into a single component.
+For technical reasons, currently \verb|Pair| is still used, and we arbitrarily
+choose to put the results in the first component.
 
 \section{Higher-level GOOL functions} \label{sec:patterns}
 

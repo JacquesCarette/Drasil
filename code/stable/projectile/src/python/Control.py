@@ -14,10 +14,9 @@ import Calculations
 filename = sys.argv[1]
 inParams = InputParameters.InputParameters()
 g_vect = 9.8
-pi = 3.14159265
 epsilon = 2.0e-2
 InputFormat.get_input(inParams, filename)
-InputConstraints.input_constraints(inParams, pi)
+InputConstraints.input_constraints(inParams)
 t_flight = Calculations.func_t_flight(inParams, g_vect)
 p_land = Calculations.func_p_land(inParams, g_vect)
 d_offset = Calculations.func_d_offset(inParams, p_land)

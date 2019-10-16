@@ -1,5 +1,6 @@
 #include "InputConstraints.hpp"
 
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -17,7 +18,7 @@ using std::ofstream;
 
 #include "InputParameters.hpp"
 
-void input_constraints(InputParameters &inParams, double pi) {
+void input_constraints(InputParameters &inParams) {
     if (!(inParams.v_launch > 0)) {
         std::cout << "Warning: ";
         std::cout << "v_launch has value ";
@@ -27,7 +28,7 @@ void input_constraints(InputParameters &inParams, double pi) {
         std::cout << 0;
         std::cout << "." << std::endl;
     }
-    if (!(0 < inParams.theta && inParams.theta < pi / 2)) {
+    if (!(0 < inParams.theta && inParams.theta < M_PI / 2)) {
         std::cout << "Warning: ";
         std::cout << "theta has value ";
         std::cout << inParams.theta;
@@ -35,7 +36,7 @@ void input_constraints(InputParameters &inParams, double pi) {
         std::cout << "between ";
         std::cout << 0;
         std::cout << " and ";
-        std::cout << (pi / 2);
+        std::cout << (M_PI / 2);
         std::cout << " ((pi)/(2))";
         std::cout << "." << std::endl;
     }

@@ -2,6 +2,7 @@
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Controls the flow of the program
 */
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <iostream>
 #include <fstream>

@@ -11,9 +11,8 @@ public class InputConstraints {
     
     /** \brief Verifies that input values satisfy the physical constraints and software constraints
         \param inParams structure holding the input values
-        \param pi ratio of circumference to diameter for any circle: The ratio of a circle's circumference to its diameter
     */
-    public static void input_constraints(InputParameters inParams, double pi) {
+    public static void input_constraints(InputParameters inParams) {
         if (!(inParams.v_launch > 0)) {
             Console.Write("Warning: ");
             Console.Write("v_launch has value ");
@@ -23,7 +22,7 @@ public class InputConstraints {
             Console.Write(0);
             Console.WriteLine(".");
         }
-        if (!(0 < inParams.theta && inParams.theta < pi / 2)) {
+        if (!(0 < inParams.theta && inParams.theta < Math.PI / 2)) {
             Console.Write("Warning: ");
             Console.Write("theta has value ");
             Console.Write(inParams.theta);
@@ -31,7 +30,7 @@ public class InputConstraints {
             Console.Write("between ");
             Console.Write(0);
             Console.Write(" and ");
-            Console.Write(pi / 2);
+            Console.Write(Math.PI / 2);
             Console.Write(" ((pi)/(2))");
             Console.WriteLine(".");
         }

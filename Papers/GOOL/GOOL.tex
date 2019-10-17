@@ -1261,7 +1261,6 @@ descriptions of APIs and can generate code in Java, TypeScript, Python, and
 Rust.
 
 \subsection{Design Patterns}
-\info{here}
 A number of languages for modeling design patterns have been developed. The
 \textbf{Design Pattern Modeling Language} (DPML)~\cite{mapelsden2002design} is similar
 to the Unified Modeling Language (UML) but designed specifically to overcome
@@ -1281,15 +1280,16 @@ like GOOL does.
 
 \section{Future Work} \label{sec:future}
 
-Currently GOOL code is typed based on what kind of code it represents:
-variable, value, type, or method, for example. Code that represents a variable
-or value is not further typed based on what the type of the variable or value
-would be in a traditional programming language: Boolean or integer, for
-example. There is nothing to stop a user from passing a non-list value to a
-function specifically intended for lists, like \verb|listSize|, or from passing
-string values to numeric operators like \verb|#+|. We plan on adding this
-additional layer of typing, making GOOL a statically typed programming
-language. We have started work to this end by making the underlying types for
+Currently GOOL code is typed based on what it represents:
+variable, value, type, or method, for example. The type system does not
+go ``deeper'', so that variables are untyped, and values (such as booleans
+and strings) are simply ``values''.  This is sufficient to allow us to
+generally well-formed code, but not to insure that it is well-typed.
+For example, it is unfortunately possible to pass a value that is known
+to be a non-list to a function (like \verb|listSize|) which requires it.
+This will generate a compile-time error in generated Java, but a run-time error
+in generated Python.  We have started to statically type GOOL, by making
+the underlying representations for 
 GOOL's \verb|Variable|s and \verb|Value|s Generalized Algebraic Data Types
 (GADTs), such as this one for \verb|Variable|s:
 \begin{lstlisting}
@@ -1298,6 +1298,7 @@ data TypedVar a where
   IVr :: VarData -> TypedVar Integer
   ...
 \end{lstlisting}
+\info{here}
 Members of the type family \verb|Variable| \verb|repr| would now map to
 \verb|TypedVar| and the type for a \verb|Variable| in the generic \verb|repr|
 context would now be something like \verb|repr| \verb|(Variable repr Boolean)|

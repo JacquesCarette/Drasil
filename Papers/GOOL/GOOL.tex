@@ -895,9 +895,30 @@ longer relevant, so they are joined together into a single component.
 For technical reasons, currently \verb|Pair| is still used, and we arbitrarily
 choose to put the results in the first component.
 
-\improvement{Should show examples of language differences, where semantically
-things are the same, but render quite differently. Rather like the 
-sin example in the next section, but at the language level}
+To demonstrate a case where a language feature must be rendered very 
+differently in each target language, consider for-each loops. The opening line 
+of a for-each loop in Python looks like:
+\begin{lstlisting}
+for age in ages:
+\end{lstlisting}
+in Java:
+\begin{lstlisting}
+for (int age : ages) {
+\end{lstlisting}
+in \Csharp:
+\begin{lstlisting}
+foreach (int age in ages) {
+\end{lstlisting}
+and in \Cplusplus:
+\begin{lstlisting}
+for (std::vector<int>::iterator age \
+  = ages.begin(); age != ages.end(); \
+  age++) {
+\end{lstlisting}
+There are differences in how each language renders for-each loops, especially 
+when comparing \Cplusplus to the others. But these differences are easily 
+handled by GOOL, by defining the custom rendering behaviour of each language in 
+its definition for \verb|forEach|.
 
 \section{Encoding Patterns} \label{sec:patterns}
 

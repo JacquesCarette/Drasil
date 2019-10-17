@@ -28,7 +28,7 @@ class (RenderSym repr) => ProgramSym repr where
   type Program repr
   prog :: Label -> [repr (RenderFile repr)] -> repr (Program repr)
 
-class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) => 
+class (ModuleSym repr, InternalFile repr) => 
   RenderSym repr where 
   type RenderFile repr
   fileDoc :: repr (Module repr) -> repr (RenderFile repr)
@@ -40,7 +40,7 @@ class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) =>
   commentedMod :: repr (BlockComment repr) -> repr (RenderFile repr) ->
     repr (RenderFile repr)
 
-class (ModuleSym repr) => InternalFile repr where
+class InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
 
@@ -48,7 +48,7 @@ class (ModuleSym repr) => InternalFile repr where
   fileFromData :: FileType -> FilePath -> repr (Module repr) -> 
     repr (RenderFile repr)
 
-class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
+class (PermanenceSym repr) => KeywordSym repr where
   type Keyword repr
   endStatement     :: repr (Keyword repr)
   endStatementLoop :: repr (Keyword repr)
@@ -125,7 +125,7 @@ class (PermanenceSym repr, InternalType repr) => TypeSym repr where
 class InternalType repr where
   typeFromData :: CodeType -> String -> Doc -> repr (Type repr)
 
-class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
+class (ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, repr (Body repr))] -> 
     Maybe (repr (Value repr)) -> Maybe (repr (Variable repr)) -> 
     repr (Block repr)
@@ -199,7 +199,7 @@ class InternalVariable repr where
   varFromData :: Binding -> String -> repr (Type repr) -> Doc -> 
     repr (Variable repr)
 
-class (VariableSym repr) => ValueSym repr where
+class (VariableSym repr, InternalValue repr) => ValueSym repr where
   type Value repr
   litTrue   :: repr (Value repr)
   litFalse  :: repr (Value repr)
@@ -287,7 +287,7 @@ class (ValueSym repr, NumericExpression repr) =>
   (?!=) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
   infixl 3 ?!=
 
-class (ValueSym repr, NumericExpression repr, BooleanExpression repr) => 
+class (ValueSym repr, BooleanExpression repr) => 
   ValueExpression repr where -- for values that can include expressions
   inlineIf     :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) ->
     repr (Value repr)
@@ -304,7 +304,7 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
   exists  :: repr (Value repr) -> repr (Value repr)
   notNull :: repr (Value repr) -> repr (Value repr)
 
-class (ValueExpression repr) => InternalValue repr where
+class InternalValue repr where
   inputFunc       :: repr (Value repr)
   printFunc       :: repr (Value repr)
   printLnFunc     :: repr (Value repr)
@@ -321,8 +321,7 @@ class (ValueExpression repr) => InternalValue repr where
 -- these sorts of problems, other than removing the constraints altogether, but 
 -- then what is the purpose of splitting the typeclasses into smaller typeclasses?
 -- I'm leaving it as is for now, even though I suspect this will change in the future.
-class (FunctionSym repr, ValueSym repr, ValueExpression repr) => 
-  Selector repr where
+class (FunctionSym repr) => Selector repr where
   objAccess :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
   ($.)      :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
   infixl 9 $.
@@ -339,7 +338,7 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
   indexOf :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
-class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
+class (ValueExpression repr, InternalFunction repr) => FunctionSym repr where
   type Function repr
   func           :: Label -> repr (Type repr) -> [repr (Value repr)] -> 
     repr (Function repr)
@@ -356,14 +355,13 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   iterBegin :: repr (Value repr) -> repr (Value repr)
   iterEnd   :: repr (Value repr) -> repr (Value repr)
 
-class (ValueSym repr, InternalValue repr, FunctionSym repr, Selector repr) => 
-  SelectorFunction repr where
+class (Selector repr) => SelectorFunction repr where
   listAccess :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
   listSet    :: repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Value repr)
   at         :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
-class (ValueSym repr, InternalValue repr) => InternalFunction repr where
+class InternalFunction repr where
   getFunc        :: repr (Variable repr) -> repr (Function repr)
   setFunc        :: repr (Type repr) -> repr (Variable repr) -> 
     repr (Value repr) -> repr (Function repr)
@@ -386,7 +384,7 @@ class (ValueSym repr, InternalValue repr) => InternalFunction repr where
 
   funcFromData :: repr (Type repr) -> Doc -> repr (Function repr)
 
-class (Selector repr) => InternalStatement repr where
+class InternalStatement repr where
   -- newLn, printFunc, value to print, maybe a file to print to 
   printSt :: Bool -> repr (Value repr) -> repr (Value repr) -> 
     Maybe (repr (Value repr)) -> repr (Statement repr)
@@ -400,8 +398,7 @@ class (Selector repr) => InternalStatement repr where
 
   stateFromData :: Doc -> Terminator -> repr (Statement repr)
 
-class (KeywordSym repr, ValueSym repr, Selector repr, SelectorFunction repr, 
-  FunctionSym repr, InternalFunction repr, InternalStatement repr) => 
+class (KeywordSym repr, SelectorFunction repr, InternalStatement repr) => 
   StatementSym repr where
   type Statement repr
   (&=)   :: repr (Variable repr) -> repr (Value repr) -> repr (Statement repr)
@@ -505,7 +502,7 @@ class (KeywordSym repr, ValueSym repr, Selector repr, SelectorFunction repr,
 
   multi     :: [repr (Statement repr)] -> repr (Statement repr)
 
-class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
+class (BodySym repr) => ControlStatementSym repr where
   ifCond     :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) ->
     repr (Statement repr)
   ifNoElse   :: [(repr (Value repr), repr (Body repr))] -> repr (Statement repr)
@@ -543,7 +540,7 @@ class (InternalScope repr) => ScopeSym repr where
 class InternalScope repr where
   scopeDoc :: repr (Scope repr) -> Doc
 
-class MethodTypeSym repr where
+class (TypeSym repr) => MethodTypeSym repr where
   type MethodType repr
   mType    :: repr (Type repr) -> repr (MethodType repr)
   construct :: Label -> repr (MethodType repr)
@@ -557,8 +554,8 @@ class ParameterSym repr where
   parameterName :: repr (Parameter repr) -> String
   parameterType :: repr (Parameter repr) -> repr (Type repr)
 
-class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
-  BodySym repr, InternalMethod repr) => MethodSym repr where
+class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr, 
+  InternalMethod repr) => MethodSym repr where
   type Method repr
   -- Second label is class name
   method      :: Label -> Label -> repr (Scope repr) -> 
@@ -596,8 +593,8 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
 
   parameters :: repr (Method repr) -> [repr (Parameter repr)]
 
-class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
-  BodySym repr, BlockCommentSym repr) => InternalMethod repr where
+class (MethodTypeSym repr, BlockCommentSym repr) => 
+  InternalMethod repr where
   intMethod      :: Bool -> Label -> Label -> repr (Scope repr) -> 
     repr (Permanence repr) -> repr (MethodType repr) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
@@ -627,7 +624,7 @@ class InternalStateVar repr where
   stateVarDoc :: repr (StateVar repr) -> Doc
   stateVarFromData :: Doc -> repr (StateVar repr)
 
-class (StateVarSym repr, MethodSym repr, InternalClass repr) => ClassSym repr 
+class (MethodSym repr, InternalClass repr) => ClassSym repr 
   where
   type Class repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 

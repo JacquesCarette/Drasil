@@ -857,7 +857,8 @@ The type variables \verb|x| and \verb|y| are intended to be instantiated with
 \verb|CppSrcCode| and \verb|CppHdrCode|, but they are left generic
 so that we may use an even more generic \verb|Pair| class:
 \begin{lstlisting}
-class Pair (p :: (* -> *) -> (* -> *) -> (* -> *)) where
+class Pair (p :: (* -> *) -> (* -> *)
+  -> (* -> *)) where
   pfst :: p x y a -> x a
   psnd :: p x y b -> y b
   pair :: x a -> y a -> p x y a
@@ -875,12 +876,12 @@ $\lambda$-calculus.
 To understand how this works, here is the instance of \verb|VariableSym|
 but for \Cplusplus:
 \begin{lstlisting}
-instance (Pair p) => 
-  VariableSym (p CppSrcCode CppHdrCode) where
-    type Variable 
-      (p CppSrcCode CppHdrCode) = VarData
-    var n t = 
-      pair (var n $ pfst t) (var n $ psnd t)
+instance (Pair p) => VariableSym 
+  (p CppSrcCode CppHdrCode) where
+  type Variable 
+    (p CppSrcCode CppHdrCode) = VarData
+  var n t = pair 
+    (var n $ pfst t) (var n $ psnd t)
 \end{lstlisting}
 The instance is generic in the pair representation \verb|p| but
 otherwise concrete, because \verb|VarData| is concrete. The actual
@@ -899,20 +900,17 @@ While ``old'' features of OO languages --- basically features that
 were already present in ancestor procedural languages like Algol ---
 have fairly similar renderings, more recent (to OO languages) features
 such as for-each loops show more variations.  More precisely,
-the first line of a for-each look in Python, Java, \Csharp and
-\Cplusplus are (respectivelly):
+the first line of a for-each loop in Python, Java, \Csharp and
+\Cplusplus~are (respectively):
 \begin{lstlisting}
 for age in ages:
 \end{lstlisting}
-
 \begin{lstlisting}
 for (int age : ages) {
 \end{lstlisting}
-
 \begin{lstlisting}
 foreach (int age in ages) {
 \end{lstlisting}
-
 \begin{lstlisting}
 for (std::vector<int>::iterator age \
   = ages.begin(); age != ages.end(); \

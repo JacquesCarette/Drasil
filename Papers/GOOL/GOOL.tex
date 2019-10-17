@@ -728,7 +728,10 @@ types to which GOOL's types map, represented by the inner \verb|repr|.
 
 The principal use we make of the flexibility of type families on a
 per-target-language basis is to record more (or less) information for
-successful code generation.  \improvement{example?}
+successful code generation. For example, the internal representation for a 
+state variable in \Cplusplus stores the corresponding destructor code for the 
+variable, but in the other languages destructors are not needed so the internal 
+representation of a state variable is just a \verb|Doc|.
 
 For example, for Java, we instantiate the class as follows:
 \begin{lstlisting}

@@ -695,13 +695,17 @@ Because tagless representations give an embedded syntax to a DSL while
 being polymorphic on the eventual semantic interpretation of the terms,
 \cite{carette2009finally} dubs the resulting classes ``symantic''.
 Our language is defined by a hierarchy of $43$ of these symantic classes,
-grouped by functionality.  For example, there are classes for programs,
+grouped by functionality, which are illustrated in Figure~\ref{fig:classes}.  
+For example, there are classes for programs,
 bodies, control blocks, types, unary operators, variables, values, selectors,
 statements, control statements, blocks, scopes, classes, modules, and so
 on.  These define $328$ different methods --- GOOL is not a small language!
 
-\improvement{Perhaps a graph of all $43$ classes as a picture would be a
-nice illustration?}
+\begin{figure}[!h]
+	\includegraphics[scale=0.289]{GOOLClasses.png}
+	\caption{Dependency graph of all of GOOL's type classes}
+	\label{fig:classes}
+\end{figure}
 
 For example, here is how variables are defined:
 \begin{lstlisting}

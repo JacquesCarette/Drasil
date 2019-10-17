@@ -931,6 +931,8 @@ simple tasks (command-line arguments, list processing, printing), on to
 more complex patterns such as methods with a mixture of input, output
 and in-out parameters, and finally on to design patterns.
 
+\subsection{Internalizing library functions}
+
 Consider the simple trigonometric sine function, called \verb|sin| in
 GOOL. It is common enough to warrant its own name, even though in most
 languages it is part of a library.  A GOOL expression \verb|sin foo|
@@ -940,12 +942,16 @@ yield \verb|math.sin(foo)| in Python, \verb|Math.sin(foo)| in Java,
 functions are handled similarly.  This part is easily extensible, but does
 require adding to GOOL classes.
 
+\subsection{Command line arguments}
+
 A slightly more complex task is accessing arguments passed on the command
 line. This tends to differ more significantly accross languages. GOOL
 offers an abstraction of these mechanisms, through an \verb|argList| function
 that represents the list of arguments, as well as convenience functions for
 common tasks such as indexing into \verb|argList| and checking if an argument
 at a particular position exists.
+
+\subsection{Lists}
 
 Variations on lists are frequently used in OO code.  But the actual API
 in each language tends to vary quite a lot, so we need to provide a single
@@ -1014,6 +1020,8 @@ line breaks so that the code fits in this paper's narrow column margins.
 This demonstrates GOOL's idiomatic code generation, enabled by having the
 appropriate high-level information to drive the generation process.
 
+\subsection{Printing}
+
 Printing is another such important feature, which generates quite
 different code depending on the target language.  Here again Python
 is more ``expressive'' so that printing a list (via
@@ -1039,6 +1047,8 @@ System.out.println("]");
 \end{lstlisting}
 In addition to printing, there is also functionality for reading input.
 
+\subsection{Procedures with input, output and input-output parameters}
+
 Moving to larger-scale patterns, we noticed that our codes had methods that
 used its parameters differently: some were used as inputs, some as outputs
 and some for both purposes.  This was a \emph{semantic} pattern that was
@@ -1059,11 +1069,10 @@ inOutFunc "applyDiscount" public static_
       valueOf price ?< litFloat 20.0])
 \end{lstlisting}
 \verb|inOutFunc| takes three lists of parameters, the input, output and
-input-output respectively.
-\info{edited until here}
-This function has multiple
-outputs---\verb|price| and \verb|isAffordable|---and each of GOOL's target
-languages handles functions with multiple outputs differently. In Python,
+input-output respectively.  This function has two outputs
+---\verb|price| and \verb|isAffordable|--- and multiple outputs are
+not directly supports in al target languages.  Thus we need to use
+different features to represent these.  For example, in Python,
 return statement with multiple values is used:
 \begin{lstlisting}
 def applyDiscount(price, discount):
@@ -1086,6 +1095,7 @@ public static Object[] applyDiscount( \
     outputs[0] = price;
     outputs[1] = isAffordable;
     return outputs;
+  }
 }
 \end{lstlisting}
 In \Csharp, the outputs are passed as parameters, using the \verb|out| keyword if
@@ -1107,94 +1117,84 @@ void applyDiscount(int &price, \
     isAffordable = price < 20;
 }
 \end{lstlisting}
-The structure of the function in each language is different, from the
-parameters to the function body to the return type. But each uses the
-language's most natural way of defining a function with multiple outputs. GOOL
-generates any needed variable declarations and return statements automatically,
-so the GOOL user is saved from typing these lines out manually. Functions
-defined with \verb|inOutFunc| can be called with \verb|inOutCall|, which again
-accepts the three lists of inputs, outputs, and those that are both. Through
-\verb|inOutCall|, GOOL will again automatically generate any needed variable
-declarations and assignments, such as declaring the \verb|outputs| array and
-then assigning its elements to the appropriate variables in Java.
+Here again we see how a natural task-level ``feature'', namely the
+desire to have different kinds of parameters, end up being rendered differently,
+but hopefully idiomatically, in each target language.  GOOL manages the
+tedious aspects of generated any needed variable declarations and return
+statements.  To call an \verb|inOutFunc| function, one must use
+\verb|inOutCall| so that GOOL can ``line up'' all the pieces properly.
 
-In OO programming, it is common to write getter and setter methods in a class,
-so GOOL abstracts over these patterns as well. \verb|getMethod| can be used to
-define a getter, and \verb|setMethod| for a setter. Each needs only be provided
-the name of the class to which the method will belong, and the variable to be
-get or set. So, assuming the class \verb|FooClass| has a variable \verb|foo|, a
-getter for \verb|foo| is simply \verb|getMethod "FooClass" foo| and a setter is
-simply \verb|setMethod "FooClass" foo|. The generated set method in Python
-looks like:
+\subsection{Getters and setters}
+
+Getters and setters are a mainstay of OO programming.  Whether these achieve
+encapsulation or not, it is certainly the case that saying to an OO programmer
+``variable \verb|foo| from class \verb|FooClass| should have getters and setters''
+is enough information for them to write the code. And so it is in GOOL as well.
+Saying \verb|getMethod "FooClass" foo| and \verb|setMethod "FooClass" foo|. 
+The generated set method in Python, Java, \Csharp and \Cplusplus are:
 \begin{lstlisting}
 def setFoo(self, foo):
     self.foo = foo
 \end{lstlisting}
-In Java:
+
 \begin{lstlisting}
 public void setFoo(int foo) \
   throws Exception {
     this.foo = foo;
+  }
 }
 \end{lstlisting}
-In \Csharp:
+
 \begin{lstlisting}
 public void setFoo(int foo) {
     this.foo = foo;
 }
 \end{lstlisting}
-And in \Cplusplus:
+
 \begin{lstlisting}
 void FooClass::setFoo(int foo) {
     this->foo = foo;
 }
 \end{lstlisting}
-We show this example not only to demonstrate how a single, small line of GOOL
-code can generate much more code in the target language, but also to visualize
-some of the idiosyncracies present in the target languages. Even for such a
-simple function, there are subtle differences in each language that would be
-difficult to keep track of if someone were trying to write these programs
-manually, and GOOL saves the programmer from this tedium. For calling methods
-defined with \verb|getMethod| or \verb|setMethod|, GOOL also provides
-\verb|get| and \verb|set| functions, which must be passed the value of the
-object on which the method should be called, the variable to get or set, and,
-in the case of \verb|set|, the value to set it to.
+The point is that the conceptually simple ``set method'' contains a number
+of idiosyncracies in each target language. These details are irrelevant for
+the task at hand, and this tedium can be automated. As before, there are
+specific means of calling these functions, \verb|get| and \verb|set|.
 
-The final category of higher-order functions we will discuss are those that
-abstract over the design patterns described in \cite{gamma1995design}. GOOL
-currently has syntax for defining instances of three design patterns: Observer,
-State, and Strategy. The versions of these design patterns GOOL generates are
-simplified and small in scale. In the case of the Strategy pattern, Haskell
-does the work of storing and checking which strategy to use, only actually
-generating code for a strategy when it is used. \verb|runStrategy| is the
-user-facing function for using the Strategy pattern in GOOL. It must be passed
-the name of the strategy to use, a list of pairs of strategy names and bodies,
-and \verb|Maybe| a variable and value to assign after running the strategy.
-Haskell will check if the given strategy name is in the list, and simply
-generate the corresponding body if it is.
+\subsection{Design Patterns}
+Finally we get to the design patterns of ~\cite{gamma1995design}. GOOL
+currently handles three design patterns: Observer,
+State, and Strategy. 
 
-For the Observer pattern, \verb|initObserverList| can be passed a list of
-values and will generate a declaration of an observer list variable initially
-containing the given values. \verb|addObserver| can then be used to add a given
-value to the observer list, and \verb|notifyObservers| will call a method on
-each of the observers. The name of the observer list variable is fixed, so
-there can only be one observer list in a given scope.
+For Strategy, we draw from partial evaluation, and ensure that the set of
+strategies that will effectively be used are statically known at generation
+time.  This way we can ensure to only generate code for those that will
+actually be used.  \verb|runStrategy| is the user-facing function; it needs the
+name of the strategy to use, a list of pairs of strategy names and bodies, and
+an optional variable and value to assign to upon termination of the strategy.
 
-For the State pattern, \verb|initState| will take a name and a state label and
-generate a declaration of a variable with the given name and assign it the
-given state. The states are just literal strings. \verb|changeState| takes the
-variable name and a new state, and changes the state of that variable to the
-new state. And \verb|checkState| takes the name of the state variable, a list
-of value-body pairs, and a fallback body, and generates a conditional (usually
-a switch statement) that checks the state and runs the corresponding body, or
-the fallback body if none of the states match.
+For Observer , \verb|initObserverList| generates an observer for a list.  More
+specifically, given a list of (initial values), it generates a declaration of
+an observer list variable, initially containing the given values.
+\verb|addObserver| can be used to add a value to the observer list, and
+\verb|notifyObservers| will call a method on each of the observers. Currently,
+the name of the observer list variable is fixed, so there can only be one
+observer list in a given scope.
 
-The functionality granted by these high-level design pattern functions was
-already possible with GOOL's other functions. But they are useful because
-they are tailored to specific design patterns, so they are concise, for
-example by not requiring the user to manually define a loop for notifying
-observers, and their syntax should be easily understood by those familiar with
-OO programming.
+The State pattern is here specialized to implement \emph{Finite State Machines}
+with fairly general transition functions.  Transitions happen on checking, not
+on changing the state.  \verb|initState| takes a name and a state label and
+generate a declaration of a variable with the given name and initial state.
+\verb|changeState| changes the state of the variable to a new state.
+\verb|checkState| is more complex.  It takes the name of the state variable, a
+list of value-body pairs, and a fallback body; and it generates a conditional
+(usually a switch statement) that checks the state and runs the corresponding
+body, or the fallback body if none of the states match.
+
+Of course the design patterns could already have been coded in GOOL, but
+having these as language features is useful for two reasons: 1) the GOOL-level
+code is clearer in its intent (and more concise), and 2) the resulting code
+can be more idiomatic.
 
 \section{Related Work} \label{sec:related}
 

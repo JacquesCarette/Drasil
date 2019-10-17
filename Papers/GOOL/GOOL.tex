@@ -1202,32 +1202,39 @@ We divide the Related Work into the following categories
 \end{itemize}
 which we present in turn.
 
-Haxe is a general-purpose multi-paradigm language and cross-platform compiler.
-It compiles to all of the languages GOOL does, in addition to many others.
-However, it does not offer the high-level abstractions GOOL provides
-\cite{Haxe} (better reference?). Also, Haxe strips comments and generates
-source code around a custom framework which users would not be familiar with,
-so the generated code is not very readable.
+\subsection{General-purpose code generation}
 
-Protokit's 2nd version is a DSL and code generator for Java and \Cplusplus, where the
-generator is designed to be capable of producing general-purpose imperative or
-object-oriented code. The Protokit generator is model-driven and uses a final
-``output model'' from which actual code can be trivially generated. Since the
-``output model'' was so similar to the generated code, it presented challenges
-with regards to semantic, conventional, and library-related differences between
-the target language \cite{kovesdan2017multi}. GOOL's finally-tagless approach
-and syntax for high-level tasks, on the other hand, helped it overcome
-differences between target languages.
+\textbf{Haxe}~\cite{Haxe} is a general-purpose multi-paradigm language and cross-platform
+compiler.  It compiles to all of the languages GOOL does, and many
+others.  However, it is designed as a more traditional programming language, and
+thus does not offer the high-level abstractions GOOL that provides. Furthermore
+Haxe strips comments and generates source code around a custom framework; 
+the effort of learning this framework and the lack of comments makes the generated
+code not particularly readable.
 
-ThingML \cite{harrand2016thingml} is a DSL for model-driven engineering
-targeting C, \Cplusplus, Java, and JavaScript. While it can be used in a broad range
-of application domains, they all fall under the umbrella domain of distributed
-reactive systems, and so it is not quite a general-purpose DSL, unlike GOOL.
-ThingML's modelling-related syntax and abstractions are a contrast to GOOL's
+\textbf{Protokit}~\cite{kovesdan2017multi} is a DSL and code generator for Java and
+\Cplusplus, where the generator is designed to produce
+general-purpose imperative or object-oriented code. The Protokit generator is
+model-driven and uses a final ``output model'' from which actual code can be
+generated. Since the ``output model'' is quite similar to the generated
+code, it presented challenges with regards to semantic, conventional, and
+library-related differences between the target language
+\cite{kovesdan2017multi}. GOOL's finally-tagless approach and syntax for
+high-level tasks, on the other hand, helped it overcome differences between
+target languages.
+
+\textbf{ThingML}~\cite{harrand2016thingml} is a DSL for model-driven engineering
+targeting C, \Cplusplus, Java, and JavaScript. It is specialized to deal with
+distributed reactive systems (a nevertheless broad range of application domains).
+This means that this not quite a general-purpose DSL, unlike GOOL.
+ThingML's modelling-related syntax and abstractions stand in contrast to GOOL's
 object-oriented syntax and abstractions. The generated code lacks some of the
 pretty-printing provided by GOOL, specifically indentation, which detracts from
-the readability.
+readability.
 
+\subsection{Object-oriented generators}
+
+\info{here}
 Moving on to OO-specific code generators with multiple target languages, there
 are many examples of such DSLs, but for more restricted domains than GOOL.
 Google protocol buffers is a DSL for serializing structured data, which can

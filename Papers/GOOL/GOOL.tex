@@ -963,23 +963,22 @@ is extremely common.
 This narrows things down to a small set of functions and statements:
 \begin{table}[!h]
 \caption{List functions}
-\begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
-  \textbf{GOOL } & \textbf{Semantics} \\
+\begin{tabular}{p{0.15\textwidth} p{0.3\textwidth}}
+  \textbf{GOOL Syntax} & \textbf{Semantics} \\
   \midrule
-  \verb|listAccess| & ??? \\
-  \verb|listSet| & ??? \\
-  \verb|at| & ??? \\
-  \verb|listSize| & ??? \\
-  \verb|listAppend| & ??? \\
-  \verb|listIndexExists| & ??? \\
-  \verb|indexOf| & ??? \\
+  \verb|listAccess| & access a list element at a given index \\
+  \verb|listSet| & set a list element at a given index to a given value \\
+  \verb|at| & same as \verb|listAccess| \\
+  \verb|listSize| & get the size of a list \\
+  \verb|listAppend| & append a value to the end of a list \\
+  \verb|listIndexExists| & check whether the list has a value at a given index 
+  \\
+  \verb|indexOf| & get the index of a given value in a list \\
 \end{tabular}
-\label{tab:variables}
+\label{tab:listfuncs}
 \end{table}
-For example, 
-
-
-\verb|listAccess| \verb|(valueOf ages)| \verb|(litInt 1)| will generate
+For example, \verb|listAccess| \verb|(valueOf ages)| \verb|(litInt 1)| will 
+generate
 \verb|ages[1]| in Python and \Csharp, \verb|ages.get(1)| in Java, and
 \verb|ages.at(1)| in \Cplusplus.  List slicing is a very convenient
 higher-level primitive.  The \verb|listSlice| \emph{statement} gets

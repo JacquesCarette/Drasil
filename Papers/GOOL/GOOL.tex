@@ -1026,24 +1026,19 @@ Printing is another such important feature, which generates quite
 different code depending on the target language.  Here again Python
 is more ``expressive'' so that printing a list (via
 \verb|printLn ages|) generates \verb|print(ages)|, but in other languages
-must generate a loop; for example, in Java:
-\unsure{Can't better code be generated in Java for this? Not that I want
-GOOL changed now, what I mean is perhaps using C++ as an example, where
-this is not going to be a feature (I think), the loop is indeed
-needed.}
+must generate a loop; for example, in \Cplusplus:
 \begin{lstlisting}
-System.out.print("[");
-for (int list_i1 = 0; \
-  list_i1 < ages.size() - 1; \
-  list_i1++) {
-    System.out.print(ages.get(list_i1));
-    System.out.print(", ");
+std::cout << "[";
+for (int list_i1 = 0; list_i1 < \
+  (int)(myName.size()) - 1; list_i1++) {
+  std::cout << myName.at(list_i1);
+  std::cout << ", ";
 }
-if (ages.size() > 0) {
-    System.out.print(ages.get( \
-      ages.size() - 1));
+if ((int)(myName.size()) > 0) {
+  std::cout << \
+    myName.at((int)(myName.size()) - 1);
 }
-System.out.println("]");
+std::cout << "]" << std::endl;
 \end{lstlisting}
 In addition to printing, there is also functionality for reading input.
 

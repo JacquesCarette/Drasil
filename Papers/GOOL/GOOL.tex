@@ -342,8 +342,8 @@ as well as some reasoning behind each requirement.
 certain set of test cases, drawn from scientific computation software.
 \end{description}
 
-Targetting OO languages (\mainstream) is primarily because of their popularity, and thus
-would enjoy the most potential users --- in much the same way that the makers
+Targetting OO languages (\mainstream) is primarily because of their popularity,
+which implies the most potential users --- in much the same way that the makers
 of Scala and Kotlin chose to target the JVM to leverage the Java ecosystem, and
 Typescript for Javascript.
 
@@ -368,11 +368,13 @@ formal, structured comments useful for generating API documentation with tools
 like Doxygen, or with a variety of static analysis tools.
 Readability (and thus understandability) are improved when code is pretty-printed%
 \cite{buse2009learning}. Thus taking care of layout, redundant parentheses,
-well-chosen variable names, using a common style with lines which are not too
+well-chosen variable names, using a common style with lines that are not too
 long, are just as valid for generated code as for human-written code.
 GOOL does not prevent users from writing undocumented or complex code, if they
 choose to do so. It just makes it easy to have \readable, \idiomatic~and
-\documented~code in multiple languages.
+\documented~code in multiple languages.  \unsure{Is debugging another reason for
+  having human readable code?  We will have an easier time determining if the
+  generator is working if we can quickly understand the code.}
 
 The \oopatterns~requirement is typical of DSLs: common programming patterns
 can be reified into a proper linguistic form instead of being merely
@@ -393,6 +395,9 @@ Multiple-value return statements are always used when a function returns multipl
 outputs; what we can do in GOOL is to support such multiple-output functions,
 and
 then generate the idiomatic pattern of implementation in each target language.
+\unsure{This example isn't a Gamma design pattern.  Are we abusing the
+  terminology design pattern?  We don't support factories, or proxies or any of
+  the other named patterns.}
 
 The last two requirements, that language commonalities (\common) be abstracted,
 and that we can phrase a certain collection of test cases (\expressivity) are
@@ -404,6 +409,11 @@ Regarding commonalities, we noticed a lot of repeated code in our initial
 backends, something that ought to be distasteful to most programmers. For
 example, writing a generator for both Java and \Csharp makes it incredibly
 clear how similar the two languages are.
+
+\unsure{For \expressivity we mention a certain set of test cases, but we never
+  actually explain this.  We could remove this, or we could give a bit more
+  detail on how we are using GOOL in Drasil.  We could include a link (left
+  blank for the anonymous submission) to the generated case study examples.}
 
 \section{Creating GOOL} \label{sec:creating}
 

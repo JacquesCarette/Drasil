@@ -895,30 +895,30 @@ longer relevant, so they are joined together into a single component.
 For technical reasons, currently \verb|Pair| is still used, and we arbitrarily
 choose to put the results in the first component.
 
-To demonstrate a case where a language feature must be rendered very 
-differently in each target language, consider for-each loops. The opening line 
-of a for-each loop in Python looks like:
+While ``old'' features of OO languages --- basically features that
+were already present in ancestor procedural languages like Algol ---
+have fairly similar renderings, more recent (to OO languages) features
+such as for-each loops show more variations.  More precisely,
+the first line of a for-each look in Python, Java, \Csharp and
+\Cplusplus are (respectivelly):
 \begin{lstlisting}
 for age in ages:
 \end{lstlisting}
-in Java:
+
 \begin{lstlisting}
 for (int age : ages) {
 \end{lstlisting}
-in \Csharp:
+
 \begin{lstlisting}
 foreach (int age in ages) {
 \end{lstlisting}
-and in \Cplusplus:
+
 \begin{lstlisting}
 for (std::vector<int>::iterator age \
   = ages.begin(); age != ages.end(); \
   age++) {
 \end{lstlisting}
-There are differences in how each language renders for-each loops, especially 
-when comparing \Cplusplus to the others. But these differences are easily 
-handled by GOOL, by defining the custom rendering behaviour of each language in 
-its definition for \verb|forEach|.
+By providing \verb|forEach|, GOOL abstracts over these differences.
 
 \section{Encoding Patterns} \label{sec:patterns}
 
@@ -973,7 +973,7 @@ This narrows things down to a small set of functions and statements:
   \verb|listIndexExists| & ??? \\
   \verb|indexOf| & ??? \\
 \end{tabular}
-\label{tab:variables}
+\label{tab:lists}
 \end{table}
 For example, 
 
@@ -1038,15 +1038,17 @@ System.out.println("]");
 \end{lstlisting}
 In addition to printing, there is also functionality for reading input.
 
-\info{edited until here}
-Moving to larger-scale patterns, GOOL's \verb|inOutFunc| generates a function
-based on three lists of variables: one of inputs, one of outputs, and one of
-variables that are both inputs and outputs. Consider a function
-\verb|applyDiscount| that takes a price and a discount, subtracts the discount
-from the price, and returns both the new price and a Boolean for whether the
-price is below 20. It can be written in GOOL using \verb|inOutFunc|, assuming
-variables \verb|price|, \verb|discount|, and \verb|isAffordable| have been
-defined:
+Moving to larger-scale patterns, we noticed that our codes had methods that
+used its parameters differently: some were used as inputs, some as outputs
+and some for both purposes.  This was a \emph{semantic} pattern that was
+not necessarily obvious in any of the implementations. But once we noticed it,
+we could use that information to generate better, more idiomatic code in
+each language, while still capturing the higher-level semantics of the
+functionality we were trying to implement.  More concretely, consider a
+function \verb|applyDiscount| that takes a price and a discount, subtracts the
+discount from the price, and returns both the new price and a Boolean for
+whether the price is below $20$. In GOOL, using \verb|inOutFunc|, assuming
+all variables mentioned have been defined:
 \begin{lstlisting}
 inOutFunc "applyDiscount" public static_
   [discount] [isAffordable] [price]
@@ -1055,9 +1057,10 @@ inOutFunc "applyDiscount" public static_
     isAffordable &=
       valueOf price ?< litFloat 20.0])
 \end{lstlisting}
-The \verb|price| is both an input and output, so it is in the third list. The
-\verb|discount| is an input only and \verb|isAffordable| is an output only, so
-they go in the first and second lists, respectively. This function has multiple
+\verb|inOutFunc| takes three lists of parameters, the input, output and
+input-output respectively.
+\info{edited until here}
+This function has multiple
 outputs---\verb|price| and \verb|isAffordable|---and each of GOOL's target
 languages handles functions with multiple outputs differently. In Python,
 return statement with multiple values is used:

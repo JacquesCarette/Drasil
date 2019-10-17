@@ -240,8 +240,8 @@ impulseVDerivSentence3 :: [Sentence]
 impulseVDerivSentence3 = [S "Integrating the right hand side "] 
 
 impulseVDerivEqn1 :: Expr
-impulseVDerivEqn1 = sy QP.force $= sy QPP.mass * sy QP.acceleration
-                    $= sy QPP.mass * deriv (sy QP.velocity) QP.time
+impulseVDerivEqn1 =  sy QP.force $= sy QPP.mass * sy QP.acceleration
+                     $= sy QPP.mass * deriv (sy QP.velocity) QP.time
 
 impulseVDerivEqn2 :: Expr
 impulseVDerivEqn2 = defint (eqSymb timeT) (sy time_1) (sy time_2) (sy QP.force) $=

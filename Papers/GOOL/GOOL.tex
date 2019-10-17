@@ -1209,7 +1209,8 @@ others.  However, it is designed as a more traditional programming language, and
 thus does not offer the high-level abstractions GOOL that provides. Furthermore
 Haxe strips comments and generates source code around a custom framework; 
 the effort of learning this framework and the lack of comments makes the generated
-code not particularly readable.
+code not particularly readable. The internal organization of Haxe does not seem
+to be well documented.
 
 \textbf{Protokit}~\cite{kovesdan2017multi} is a DSL and code generator for Java and
 \Cplusplus, where the generator is designed to produce
@@ -1233,32 +1234,35 @@ readability.
 
 \subsection{Object-oriented generators}
 
-\info{here}
-Moving on to OO-specific code generators with multiple target languages, there
-are many examples of such DSLs, but for more restricted domains than GOOL.
-Google protocol buffers is a DSL for serializing structured data, which can
-then be compiled into Java, Python, Objective C, and \Cplusplus \cite{Protobuf}.
-Thrift is a Facebook-developed tool for generating code in multiple languages
-and even multiple paradigms based on language-neutral descriptions of data
-types and interfaces \cite{slee2007thrift}. Clearwater is an approach for
-implementing DSLs with multiple target languages for components of distributed
-systems \cite{swint2005clearwater}. The Time Weaver tool uses a multi-language
-code generator to generate ``glue'' code for real-time embedded systems
-\cite{de2004glue}. The domain of mobile applications is host to a bevy of DSLs
-with multiple target languages, of which MobDSL \cite{kramer2010mobdsl} and
-XIS-Mobile \cite{ribeiro2014xis} are two examples. Conjure is a DSL for
-generating APIs. It reads YML descriptions of APIs and can generate code in
-Java, TypeScript, Python, and Rust \cite{Conjure} (include this?). All of these
-are examples of multi-language code generation, but none of them generate
-general-purpose code like GOOL does.
+There are a number of code generators with multiple target OO languages,
+though all for more restricted domains than GOOL, and thus do not meet all
+of our requirements.
 
+\textbf{Google protocol buffers}~\cite{Protobuf} is a DSL for serializing
+structured data, which can be compiled into Java, Python, Objective C, and
+\Cplusplus.  \textbf{Thrift}~\cite{slee2007thrift} is a Facebook-developed tool
+for generating code in multiple languages and even multiple paradigms based on
+language-neutral descriptions of data types and interfaces.
+\textbf{Clearwater}~\cite{swint2005clearwater} is an approach for implementing
+DSLs with multiple target languages for components of distributed systems.  The
+\textbf{Time Weaver} tool~\cite{de2004glue} uses a multi-language code
+generator to generate ``glue'' code for real-time embedded systems.  The domain
+of mobile applications is host to a bevy of DSLs with multiple target
+languages, of which \textbf{MobDSL}~\cite{kramer2010mobdsl} and
+\textbf{XIS-Mobile}~\cite{ribeiro2014xis} are two examples.
+\textbf{Conjure}~\cite{Conjure} is a DSL for generating APIs. It reads YML
+descriptions of APIs and can generate code in Java, TypeScript, Python, and
+Rust.
+
+\subsection{Design Patterns}
+\info{here}
 A number of languages for modeling design patterns have been developed. The
-Design Pattern Modeling Language (DPML) \cite{mapelsden2002design} is similar
+\textbf{Design Pattern Modeling Language} (DPML)~\cite{mapelsden2002design} is similar
 to the Unified Modeling Language (UML) but designed specifically to overcome
-UML's shortcomings to be able to model all design patterns. DPML consists of
+UML's shortcomings so as to be able to model all design patterns. DPML consists of
 both specification diagrams and instance diagrams for instantiations of design
 patterns, but does not attempt to generate actual source code from the models.
-The Role-Based Metamodeling Language \cite{kim2003uml} is also based on UML but
+The \textbf{Role-Based Metamodeling Language}~\cite{kim2003uml} is also based on UML but
 with changes to allow for better models of design patterns, with specifications
 for the structure, interactions, and state-based behaviour in patterns. Again,
 source code generation is not attempted. Another metamodel for design patterns

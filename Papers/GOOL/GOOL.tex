@@ -226,7 +226,12 @@ imperative set of primitives. Some OO languages even have very similar syntax
 
 When faced with the task to write a program meant to fit into multiple existing
 infrastructure, which might be written in different languages, frequently that
-entails writing different versions of the program, one for each. While not
+entails writing different versions of the program, one for each.  \unsure{How
+  common is this really?  What are some cases where the same code has to be
+  written in different languages?  Code written in different languages can be
+  compiled and then linked, without the need for all of the code to be in the
+  same language.  This doesn't feel like the right motivation for GOOL.  Should
+  we take this motivation out and stick with the DSL motivation given below?}  While not
 necessarily difficult, it nevertheless
 requires investing the time to learn the idiosyncrasies of each language and
 pay attention to the operational details where languages differ. Ultimately,
@@ -250,7 +255,7 @@ cannot be straightforwardly translated to a statically typed
 language like Java, as additional type information generally needs to be
 provided\footnote{Type inference for Python notwithstanding}.
 
-What if, instead, there was a single meta-language which was designed to
+What if, instead, there was a single meta-language that was designed to
 contain the common semantic concepts of a number of OO languages, encoded
 in such a way that all the necessary information for translation was always
 present?  This source language could be made to be agnostic about what
@@ -259,14 +264,15 @@ any given language.  This would be quite the boon for the translator.
 In fact, we could try to go even further, and attempt to teach the translator
 about idiomatic patterns of each target language.
 
-Why would this even be possible? There are commonly performed tasks and
-patterns of OO solutions, from idioms to architecture patterns, as outlined
+This is possible because there are commonly performed tasks and
+patterns for OO solutions, from idioms to architecture patterns, as outlined
 in~\cite{gamma1995design}. A meta-language
 that provided abstractions for these tasks and patterns would make the process
-of writing OO code even easier.
+of writing OO code even easier.  \unsure{Should we mention design patterns?  We
+  don't explicitly use any patterns.}
 
-But is this even feasible? In some sense, this is already old hat: most
-modern compilers have a single internal Intermediate Representation (IR)
+Is this feasible? In some sense, this is already old hat: most
+modern compilers have a single internal Intermediate Representation (IR),
 which is used to target multiple processors. Compilers can generate
 human-readable symbolic assembly code for a large family of CPUs. But this
 is not quite the same as generating human-readable, idiomatic high-level

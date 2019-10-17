@@ -924,7 +924,6 @@ that represents the list of arguments, as well as convenience functions for
 common tasks such as indexing into \verb|argList| and checking if an argument
 at a particular position exists.
 
-\info{edited until here}
 Variations on lists are frequently used in OO code.  But the actual API
 in each language tends to vary quite a lot, so we need to provide a single
 abstraction that provides sufficient functionality to do useful list
@@ -993,16 +992,15 @@ line breaks to that the code fits in this paper's narrow column margins.
 This demonstrates GOOL's idiomatic code generation, enabled by having the
 appropriate high-level information to drive the generation process.
 
-\info{here}
-GOOL also offers high-level functions for printing. \verb|print| prints a
-value, \verb|printLn| prints a value followed by a new line character, and
-\verb|printFile| and \verb|printFileLn| are the same for printing to a file.
-There are also variations that are shortcuts for when the value to print is
-just a literal string, such as \verb|printFileStrLn|. Unlike print functions in
-many of the target languages, these print functions can be used on lists. So
-the GOOL code \verb|printLn| \verb|ages| generates \verb|print(ages)| in
-Python, but in the other languages it generates code to loop through the list
-and print each element, like the Java code shown below.
+Printing is another such important feature, which generates quite
+different code depending on the target language.  Here again Python
+is more ``expressive'' so that printing a list (via
+\verb|printLn ages|) generates \verb|print(ages)|, but in other languages
+must generate a loop; for example, in Java:
+\unsure{Can't better code be generated in Java for this? Not that I want
+GOOL changed now, what I mean is perhaps using C++ as an example, where
+this is not going to be a feature (I think), the loop is indeed
+needed.}
 \begin{lstlisting}
 System.out.print("[");
 for (int list_i1 = 0; \
@@ -1017,11 +1015,9 @@ if (ages.size() > 0) {
 }
 System.out.println("]");
 \end{lstlisting}
-This is another example where the renderers are clearly conforming to the
-idioms of a language. In addition to its functions for printing output, GOOL
-also offers functions for reading input, such as \verb|getInput| and
-\verb|getFileInput|.
+In addition to printing, there is also functionality for reading input.
 
+\info{edited until here}
 Moving to larger-scale patterns, GOOL's \verb|inOutFunc| generates a function
 based on three lists of variables: one of inputs, one of outputs, and one of
 variables that are both inputs and outputs. Consider a function

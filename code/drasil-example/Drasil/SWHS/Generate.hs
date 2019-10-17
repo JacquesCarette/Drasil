@@ -1,9 +1,10 @@
 module Drasil.SWHS.Generate (generate) where
 
+-- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
 --   Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
---   AuxFile(..), Visibility(..))
+--   matchConcepts, AuxFile(..), Visibility(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -26,6 +27,7 @@ import Drasil.SWHS.Body (srs, printSetting) -- si
 --   constStructure = Inline,   -- Inline, WithInputs, Store Structure
 --   constRepr = Const,      -- Var, Const
 --   inputModule = Combined,    -- Combined, Separated
+--   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
 --   auxFiles = [SampleInput]
 -- }
 

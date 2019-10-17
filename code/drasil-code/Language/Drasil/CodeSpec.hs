@@ -89,7 +89,8 @@ codeSpec SI {_sys = sys
               , _sysinfodb = db
               , sampleData = sd} chs ms = 
   let inputs' = map quantvar ins
-      const' = map qtov cnsts
+      const' = map qtov (filter ((`Map.notMember` conceptMatch chs) . (^. uid)) 
+        cnsts)
       derived = getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc ((defs' ++ map qdFromDD ddefs) \\ derived)
       mem   = modExportMap csi' chs
@@ -135,6 +136,7 @@ data Choices = Choices {
   constStructure :: ConstantStructure,
   constRepr :: ConstantRepr,
   inputModule :: InputModule,
+  conceptMatch :: ConceptMatchMap,
   auxFiles :: [AuxFile]
 }
 
@@ -163,6 +165,14 @@ data ConstantRepr = Var | Const
 data InputModule = Combined
                  | Separated
 
+type ConceptMatchMap = Map.Map UID [CodeConcept]
+type MatchedConceptMap = Map.Map UID CodeConcept
+
+data CodeConcept = Pi
+
+matchConcepts :: (HasUID c) => [c] -> [[CodeConcept]] -> ConceptMatchMap
+matchConcepts cncs cdcs = Map.fromList (zip (map (^. uid) cncs) cdcs)
+
 data AuxFile = SampleInput deriving Eq
              
 data Visibility = Show
@@ -182,6 +192,7 @@ defaultChoices = Choices {
   constStructure = Inline,
   constRepr = Const,
   inputModule = Combined,
+  conceptMatch = matchConcepts ([] :: [QDefinition]) [],
   auxFiles = [SampleInput]
 }
 

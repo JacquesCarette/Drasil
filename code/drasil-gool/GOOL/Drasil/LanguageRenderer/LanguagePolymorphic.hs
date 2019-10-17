@@ -1,8 +1,8 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The structure for a class of renderers is defined here.
-module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (
-  block, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
+module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (block, pi, varDec, 
+  varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
   comment, ifCond, for, forEach, while, construct, method, getMethod, setMethod,
   privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
   docInOutFunc, intFunc, stateVar,stateVarDef, constVar, privMVar, pubMVar, 
@@ -16,8 +16,9 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, KeywordSym(..), 
   RenderSym(RenderFile, commentedMod), InternalFile(..), BlockSym(Block), 
   InternalBlock(..), BodySym(..), PermanenceSym(..), InternalPerm(..), 
-  TypeSym(..), InternalType(..), VariableSym(..), ValueSym(..),
-  ValueExpression(..), InternalStatement(..), 
+  TypeSym(..), InternalType(..), VariableSym(..), 
+  ValueSym(Value, valueOf, valueDoc),
+  ValueExpression(..), InternalValue(..), InternalStatement(..), 
   StatementSym(Statement, (&=), constDecDef, returnState), ScopeSym(..), 
   InternalScope(..), MethodTypeSym(mType), ParameterSym(..), 
   MethodTypeSym(MethodType), MethodSym(Method, inOutFunc), 
@@ -37,7 +38,7 @@ import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD,
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
   moduleDox, getterName, setterName)
 
-import Prelude hiding (break,print,last,mod,(<>))
+import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   vcat, semi, equals)
@@ -46,6 +47,9 @@ block :: (RenderSym repr) => repr (Keyword repr) -> [repr (Statement repr)] ->
   repr (Block repr)
 block end sts = docBlock $ blockDocD (keyDoc end) (map (statementDoc . state) 
   sts)
+
+pi :: (RenderSym repr) => repr (Value repr)
+pi = valFromData Nothing float (text "Math.PI")
 
 varDec :: (RenderSym repr) => repr (Permanence repr) -> repr (Permanence repr) 
   -> repr (Variable repr) -> repr (Statement repr)

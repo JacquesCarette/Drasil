@@ -1,5 +1,6 @@
 #include "ReadTable.hpp"
 
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <iostream>
 #include <fstream>

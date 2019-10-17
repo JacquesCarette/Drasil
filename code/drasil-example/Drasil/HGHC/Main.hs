@@ -1,9 +1,10 @@
 module Main (main) where
 
+-- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
 --   Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
---   AuxFile(..), Visibility(..))
+--   matchConcepts, AuxFile(..), Visibility(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -27,6 +28,7 @@ thisChoices = Choices {
   constStructure   = Inline,
   constRepr        = Const,
   inputModule      = Combined,
+  conceptMatch     = matchConcepts ([] :: [QDefinition]) [],
   auxFiles         = [SampleInput] 
 } -}
   

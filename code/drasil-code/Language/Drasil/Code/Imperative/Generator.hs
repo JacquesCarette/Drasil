@@ -3,6 +3,7 @@ module Language.Drasil.Code.Imperative.Generator (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.GenerateGOOL (genDoxConfig)
 import Language.Drasil.Code.Imperative.Import (genModDef)
 import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstMod, 
@@ -32,6 +33,7 @@ generator dt sd chs spec = State {
   inMod = inputModule chs,
   logKind  = logging chs,
   commented = comments chs,
+  concMatches = chooseConcept chs,
   auxiliaries = auxFiles chs,
   sampleData = sd,
   -- state

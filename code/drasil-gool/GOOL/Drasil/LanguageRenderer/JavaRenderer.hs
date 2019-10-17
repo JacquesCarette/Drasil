@@ -51,7 +51,7 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   commentedItem, addCommentsDocD, commentedModD, docFuncRepr, valueList, 
   appendToBody, surroundBody, intValue, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
-  varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
+  pi, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
   construct, comment, ifCond, for, forEach, while, method, getMethod, setMethod,
   privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
   intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, 
@@ -254,6 +254,8 @@ instance ValueSym JavaCode where
   litFloat = litFloatD
   litInt = litIntD
   litString = litStringD
+
+  pi = G.pi
 
   ($:) = enumElement
 

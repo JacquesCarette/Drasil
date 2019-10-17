@@ -331,6 +331,8 @@ as well as some reasoning behind each requirement.
 \item[documented] The generated code should be documented,
 \item[patterns] The generator should allow one to express common OO patterns.
 \item[common] Language commonalities should be abstracted.
+\item[expressivity] The resulting language should be rich enough to express a
+certain set of test cases, drawn from scientific computation software.
 \end{description}
 
 Targetting OO languages (\mainstream) is primarily because of their popularity, and thus
@@ -385,11 +387,16 @@ outputs; what we can do in GOOL is to support such multiple-output functions,
 and
 then generate the idiomatic pattern of implementation in each target language.
 
-Our last requirement, that language commonalities (\common) be abstracted is
-an internal requirement: we noticed a lot of repeated code in our backends,
-something that ought to be distasteful to most programmers. For example, writing
-a generator for both Java and \Csharp makes it incredibly clear how similar the two
-languages are.
+The last two requirement, that language commonalities (\common) be abstracted,
+and that we can phrase a certain collection of test cases (\expressivity) are
+internal requirements: we didn't set out to create GOOL as a primary artifact,
+but as a side-effect of other work on different methods of creating long-lived
+scientific software.  Part of long-lived means that we need to be flexible about
+the technology, thus needing to be polymorphic on the underlying language.
+Regarding commonalities, we noticed a lot of repeated code in our initial
+backends, something that ought to be distasteful to most programmers. For
+example, writing a generator for both Java and \Csharp makes it incredibly
+clear how similar the two languages are.
 
 \section{Creating GOOL} \label{sec:creating}
 
@@ -914,6 +921,36 @@ common tasks such as indexing into \verb|argList| and checking if an argument
 at a particular position exists.
 
 \info{edited until here}
+Variations on lists are frequently used in OO code.  But the actual API
+in each language tends to very quite a lot, so we need to provide a single
+abstraction that provides sufficient functionality to do useful list
+computations.  Rather than abstracting from the functionality provided
+in the libraries of each language to find some common ground, we instead
+reverse engineer the ``useful'' API from actual use cases in scientific
+code.  
+
+One thing we immediately notice from such an exercise is that lists in
+OO languages are rarely \emph{linked lists} (unlike in Haskell, our host
+language), but rather more like a dynamically sized vector. In particular,
+indexing a list by position, which is a horrifying idea for linked lists,
+is extremely common.
+
+This narrows things down to a small set of functions and statements:
+\begin{table}[!h]
+\caption{List functions}
+\begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
+  \textbf{GOOL } & \textbf{Semantics} \\
+  \midrule
+  \verb|listAccess| & ??? \\
+  \verb|listSet| & ??? \\
+  \verb|at| & ??? \\
+
+\end{tabular}
+\label{tab:variables}
+\end{table}
+
+
+\info{here}
 Lists are a very common data structure in OO code, so GOOL provides a suite of
 functions for working with lists. For example, \verb|listAccess| can be passed
 a list and index value and will return the value of the element of the list at

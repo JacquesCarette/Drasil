@@ -694,13 +694,13 @@ we wish.
 Because tagless representations give an embedded syntax to a DSL while
 being polymorphic on the eventual semantic interpretation of the terms,
 \cite{carette2009finally} dubs the resulting classes ``symantic''.
-Our language is defined by a hierarchy of $35$ of these symantic classes,
+Our language is defined by a hierarchy of $43$ of these symantic classes,
 grouped by functionality.  For example, there are classes for programs,
 bodies, control blocks, types, unary operators, variables, values, selectors,
 statements, control statements, blocks, scopes, classes, modules, and so
-on.  These define $302$ different methods --- GOOL is not a small language!
+on.  These define $328$ different methods --- GOOL is not a small language!
 
-\improvement{Perhaps a graph of all $35$ classes as a picture would be a
+\improvement{Perhaps a graph of all $43$ classes as a picture would be a
 nice illustration?}
 
 For example, here is how variables are defined:
@@ -821,8 +821,8 @@ class mechanism to override this in their specific case.
 
 This genericity
 makes writing new renderers for new languages fairly straightforward.
-GOOL's Java and \Csharp renderers demonstrate this fact well. Out of $327$
-methods across all of GOOL's type classes, the instances of $227$ of them are
+GOOL's Java and \Csharp renderers demonstrate this fact well. Out of $328$
+methods across all of GOOL's type classes, the instances of $228$ of them are
 shared between the Java and \Csharp renderers, in that they are just calls to the
 same common function. A further $37$ are partially shared, for example they call
 the same common function but with different parameters. $143$ methods are
@@ -1008,7 +1008,7 @@ for (int i_temp = 1; i_temp < 3; \
 someAges = temp;
 \end{lstlisting}
 where we use backslashes in generated code to indicate manually inserted
-line breaks to that the code fits in this paper's narrow column margins.
+line breaks so that the code fits in this paper's narrow column margins.
 This demonstrates GOOL's idiomatic code generation, enabled by having the
 appropriate high-level information to drive the generation process.
 

@@ -83,6 +83,7 @@
 \newcommand{\documented}{\abbrev{documented}}
 \newcommand{\oopatterns}{\abbrev{patterns}}
 \newcommand{\common}{\abbrev{common}}
+\newcommand{\expressivity}{\abbrev{expressivity}}
 
 \begin{document}
 
@@ -387,7 +388,7 @@ outputs; what we can do in GOOL is to support such multiple-output functions,
 and
 then generate the idiomatic pattern of implementation in each target language.
 
-The last two requirement, that language commonalities (\common) be abstracted,
+The last two requirements, that language commonalities (\common) be abstracted,
 and that we can phrase a certain collection of test cases (\expressivity) are
 internal requirements: we didn't set out to create GOOL as a primary artifact,
 but as a side-effect of other work on different methods of creating long-lived
@@ -677,7 +678,7 @@ first implementation~\footnote{citation omitted for anonymization}
 used a straightforward version of tagless
 which did not allow for enough generic routines to be properly implemented.
 This was replaced by a version based on GADTs, which fixed that problem, but
-did not easily allow for \emph{patterns} to be easily encoded. Thus the current
+did not allow for \emph{patterns} to be easily encoded. Thus the current
 version has gone back to tagless, but also uses \emph{type families} in a crucial
 way.
 
@@ -777,10 +778,10 @@ variableDoc = varDoc . unJC
 \end{lstlisting}
 
 Here are a few more examples of the kinds of additional information stored by
-each representation. \verb|Statement| which stores a
+each representation. \verb|Statement| stores a
 \verb|Terminator| which is how that language indicates how a statement is to be
 terminated (frequently this is a semi-colon).  For \verb|Method|, a Boolean
-indicates whether is is the main method.  For \verb|Value|, \verb|UnaryOp|
+indicates whether it is the main method.  For \verb|Value|, \verb|UnaryOp|
 and \verb|BinaryOp|, precendence information is stored so that printing can
 elide parentheses whenever possible, leading to more readable code.
 
@@ -816,14 +817,14 @@ which is indeed the case for most OO languages.  Exceptions can use the
 class mechanism to override this in their specific case.
 
 This genericity
-makes writing new renderers for new language fairly straightforward.
+makes writing new renderers for new languages fairly straightforward.
 GOOL's Java and \Csharp renderers demonstrate this fact well. Out of $327$
 methods across all of GOOL's type classes, the instances of $227$ of them are
 shared between the Java and \Csharp renderers, in that they are just calls to the
 same common function. A further $37$ are partially shared, for example they call
 the same common function but with different parameters. $143$ methods are
 actually the same between all $4$ languages GOOL currently targets. This might
-indicate that some should be generic functions rather that class methods,
+indicate that some should be generic functions rather than class methods,
 but we have not investigated this in detail yet.
 
 Examples from Python and \Csharp are not shown here because they both
@@ -922,7 +923,7 @@ at a particular position exists.
 
 \info{edited until here}
 Variations on lists are frequently used in OO code.  But the actual API
-in each language tends to very quite a lot, so we need to provide a single
+in each language tends to vary quite a lot, so we need to provide a single
 abstraction that provides sufficient functionality to do useful list
 computations.  Rather than abstracting from the functionality provided
 in the libraries of each language to find some common ground, we instead

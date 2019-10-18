@@ -168,7 +168,22 @@
 %% Note: \begin{abstract}...\end{abstract} environment must come
 %% before \maketitle command
 \begin{abstract}
-Text of abstract \ldots.
+  This paper presents GOOL, a Generic Object-Oriented Language.  GOOL shows the
+  feasibility of devising a language that, with the right abstractions, captures
+  the essense of mainstream object oriented languages.  To demonstrate that GOOL
+  captures the conceptual meaning of OO programs, we show that programs
+  expressed in GOOL can automatically be translated to OO code (in multiple
+  languages) that is human-readable, idiomatic (to the target language), and
+  well documented.  Moreover, GOOL can be used to express common patterns, from
+  simple library-level functions, to simple tasks (command-line arguments, list
+  processing, printing), on to more complex patterns, such as methods with a
+  mixture of input, output and in-out parameters, and finally on to design
+  patterns, like the Observer, State and Strategy patterns.  GOOL is implemented
+  as a DSL embedded in Haskell that can currently generate code in Python, Java,
+  \Csharp, and \Cplusplus.  The GOOL syntax consists of an imperative core, OO
+  features and a means to express modules, programs, auxiliary files (like
+  Makefiles) and packages.  The GOOL code generator is implemented in the
+  ``finally tagless'' style.
 \end{abstract}
 
 
@@ -327,7 +342,7 @@ Typescript for Javascript.
 
 The \readable~requirement is not as obvious. As DSL users are typically
 domain experts who are not ``programmers'', why generate readable code?
-Few Java programmers ever look at JVM bytecode, and few \Cplusplus programmers
+Few Java programmers ever look at JVM bytecode, and few \Cplusplus{} programmers
 look at assembly. But GOOL's aim is different: to allow writing
 high-level OO code once, but have it be available in many GPLs. One use case
 would be to generate libraries of utilities for a narrow domain. As needs
@@ -382,7 +397,7 @@ scientific software.  Part of long-lived means that we need to be flexible about
 the technology, thus needing to be polymorphic on the underlying language.
 Regarding commonalities, we noticed a lot of repeated code in our initial
 backends, something that ought to be distasteful to most programmers. For
-example, writing a generator for both Java and \Csharp makes it incredibly
+example, writing a generator for both Java and \Csharp{} makes it incredibly
 clear how similar the two languages are.
 
 \unsure{For \expressivity we mention a certain set of test cases, but we never
@@ -642,7 +657,7 @@ with \verb|docMod|.
 \begin{comment}
 Passing a module to
 \verb|fileDoc| will put the finishing touches on the generated file, such as
-imports of standard libraries and preprocessor guards for \Cplusplus header files.
+imports of standard libraries and preprocessor guards for \Cplusplus{} header files.
 \begin{lstlisting}
 fileDoc \$ buildModule "mod1" ["library1"]
   [func1, func2] [class1, class2]
@@ -723,7 +738,7 @@ types to which GOOL's types map, represented by the inner \verb|repr|.
 The principal use we make of the flexibility of type families on a
 per-target-language basis is to record more (or less) information for
 successful code generation. For example, the internal representation for a 
-state variable in \Cplusplus stores the corresponding destructor code for the 
+state variable in \Cplusplus{} stores the corresponding destructor code for the 
 variable, but in the other languages destructors are not needed so the internal 
 representation of a state variable is just a \verb|Doc|.
 
@@ -815,23 +830,23 @@ class mechanism to override this in their specific case.
 
 This genericity
 makes writing new renderers for new languages fairly straightforward.
-GOOL's Java and \Csharp renderers demonstrate this fact well. Out of $328$
+GOOL's Java and \Csharp{} renderers demonstrate this fact well. Out of $328$
 methods across all of GOOL's type classes, the instances of $228$ of them are
-shared between the Java and \Csharp renderers, in that they are just calls to the
+shared between the Java and \Csharp{} renderers, in that they are just calls to the
 same common function. A further $37$ are partially shared, for example they call
 the same common function but with different parameters. $143$ methods are
 actually the same between all $4$ languages GOOL currently targets. This might
 indicate that some should be generic functions rather than class methods,
 but we have not investigated this in detail yet.
 
-Examples from Python and \Csharp are not shown here because they both
+Examples from Python and \Csharp{} are not shown here because they both
 work very similarly to the Java renderer. There are \verb|PythonCode| and
 \verb|CSharpCode| analogs to \verb|JavaCode|, the underlying types are all the
 same, and the methods are defined by calling common functions where possible
 or by constructing the GOOL value directly in the instance definition, if the
 definition is unique to that language.
 
-\Cplusplus is different since most modules are split between a source and
+\Cplusplus{} is different since most modules are split between a source and
 header file. To generate \Cplusplus, we traverse the code twice,
 once to generate the header file and a second time to generate the
 source file corresponding to the same module. This is done via two instances
@@ -841,7 +856,7 @@ header file, the \verb|CppHdrCode| instance for a module containing only a main
 function is empty. The renderer optimizes empty modules/files away --- for
 all renderers.
 
-As \Cplusplus source and header should always be generated together, a third
+As \Cplusplus{} source and header should always be generated together, a third
 type, \verb|CppCode| achieves this:
 \begin{lstlisting}
 data CppCode x y a =
@@ -894,7 +909,7 @@ While ``old'' features of OO languages --- basically features that
 were already present in ancestor procedural languages like Algol ---
 have fairly similar renderings, more recent (to OO languages) features,
 such as for-each loops, show more variations.  More precisely,
-the first line of a for-each loop in Python, Java, \Csharp and
+the first line of a for-each loop in Python, Java, \Csharp{} and
 \Cplusplus~are (respectively):
 \begin{lstlisting}
 for age in ages:
@@ -1118,7 +1133,7 @@ encapsulation or not, it is certainly the case that saying to an OO programmer
 ``variable \verb|foo| from class \verb|FooClass| should have getters and setters''
 is enough information for them to write the code. And so it is in GOOL as well.
 Saying \verb|getMethod "FooClass" foo| and \verb|setMethod "FooClass" foo|. 
-The generated set method in Python, Java, \Csharp and \Cplusplus are:
+The generated set method in Python, Java, \Csharp{} and \Cplusplus{} are:
 \begin{lstlisting}
 def setFoo(self, foo):
     self.foo = foo
@@ -1274,7 +1289,7 @@ Currently GOOL code is typed based on what it represents:
 variable, value, type, or method, for example. The type system does not
 go ``deeper'', so that variables are untyped, and values (such as booleans
 and strings) are simply ``values''.  This is sufficient to allow us to
-generally well-formed code, but not to insure that it is well-typed.
+generate well-formed code, but not to insure that it is well-typed.
 For example, it is unfortunately possible to pass a value that is known
 to be a non-list to a function (like \verb|listSize|) which requires it.
 This will generate a compile-time error in generated Java, but a run-time error
@@ -1333,8 +1348,8 @@ languages.
 GOOL is an unusual DSL, as its ``domain'' is actually that of object-oriented
 languages. Or, to be more precise, of conceptual programs that can be
 easily written in languages containing a procedural code with an
-object-oriented layer on top --- which is what Java, Python, \Cplusplus and
-\Csharp are.
+object-oriented layer on top --- which is what Java, Python, \Cplusplus{} and
+\Csharp{} are.
 
 Since we are capturing \emph{conceptual programs}, we can achieve
 several things that we believe are \emph{together} new:

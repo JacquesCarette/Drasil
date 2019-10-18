@@ -1308,76 +1308,71 @@ data TypedVar a where
   IVr :: VarData -> TypedVar Integer
   ...
 \end{lstlisting}
-\info{here}
-Members of the type family \verb|Variable| \verb|repr| would now map to
-\verb|TypedVar| and the type for a \verb|Variable| in the generic \verb|repr|
-context would now be something like \verb|repr| \verb|(Variable repr Boolean)|
-instead of just \verb|repr| \verb|(Variable repr)|. All instances of
-\verb|TypedVar| are built from the same \verb|VarData| structure, but variables
-built with the different GADT constructors will have different types and
-Haskell's compiler will throw errors if a wrongly-typed variable is passed to a
-function.
+This would allow variables to have different types, and Haskell would catch
+these. We would be re-using Haskell's type system to catch (some) of the
+type errors in GOOL.  Because we don't need to type arbitrary code in any
+of the target languages, but only what is expressible in GOOL, we can
+engineer things so as to encode quite a wide set of typing rules.
 
-There are many improvements we plan on making to the generated code, especially
-with regards to not generating code that is not necessary. For example, we
-currently always generate import statements for certain libraries, like math
-and IO-related libraries, but we'd instead like to detect when a library is
-used and only import those that are actually used. We plan on using Haskell's
-\verb|State| monad to have a list of libraries that gets updated whenever a new
-library is used, and can then be read by the \verb|buildModule| function to
-generate only the necessary imports. This technique of using the \verb|State|
-monad will be useful for other improvements as well, such as to only generate
-\verb|throws Exception| in the header of a Java method that actually may throw
-an exception, rather than in every method as is done currently.
 
-We plan on adding syntax to interface with more kinds of external libraries,
-similar to how we currently interface with math libraries with functions like
-\verb|sin|. We would like to be able to interface with libraries for solving
-Ordinary Differential Equations (ODEs), for instance, with different functions
-available for using different ODE-solving algorithms. Since interfacing with
-ODE-solving libraries can have major impact on the structure of a program,
-implementing these high-level functions may require having multiple passes over
-a GOOL program: an initial pass to collect information, such as the information
-that an ODE library is used, and then a second pass to generate the code.
+GOOL is currently less-than-precise in the list of generated import statements;
+we want to improve the code to track precise dependencies, and only generate
+imports for the features we actually use. This could be done via weaving
+some state a generation-time for example.  In general, we can do various 
+kinds of static analyses to help enhance the code generation quality.
+For example, we ought to be much more precise about \verb|throws Exception|
+in Java.
 
-Currently GOOL forces certain design decisions on the user, but we plan on
-providing configuration options to give the user more control over the code
-they generate. For example, GOOL uses \verb|ArrayList|s to represent lists in
-Java, but there are many other list implementations that could be used, such as
-\verb|Vector|. This is something we would like the user to have control over.
-Another example, building on the aforementioned plan to provide functions to
-interface with more external libraries, is to allow the user to choose which
-specific external library they want to be used. These kinds of choices could be
-accomplished by having the user pass a configuration (such as a Haskell record)
-to GOOL, which GOOL will then read to decide how the code should be generated.
+Another important feature is being able to interface to external libraries
+instead of just already-known libraries. In particular, we have a need to
+call external Ordinary Differential Equations (ODEs) solvers; we do not
+want to restrict ourselves to a single function, but have a host of
+different functions implementing different ODE-solving algorithms available.
+The structure of code that calls ODE solvers varies a lot, so that we cannot
+implement this feature with current GOOL features.  In general, we believe
+that this require a multi-pass architecture: an initial pass to collect
+information, and a second to actually generate the code.
 
-GOOL's current set of high-level functions for generating common OO patterns is
-by no means exhaustive. We plan to continue to identify patterns for which GOOL
-can provide abstractions, and to implement those as more high-level functions,
-with the aim of writing OO programs in GOOL as efficiently as possible without
-losing expressivity.
+Some implementation decisions, such as the use of \verb|ArrayList| to represent
+lists in Java, are hard-coded. But we could have used \verb|Vector| instead.
+We would like such a choice to be user-controlled instead. Another such choice
+point is to allow users to choose which specific external library to use.
+
+And, of course, we ought to implement more of the common OO patterns.
 
 \section{Conclusion} \label{sec:conclusions}
 
-OO programming languages are similar enough that it is feasible to have a
-single OO language that can be compiled to any other OO language. GOOL is a DSL
-with multiple target languages for the domain of OO GPLs. Like most DSLs, GOOL
-provides abstractions suited to its domain, in this case abstractions of common
-OO patterns. Unlike most DSLs, GOOL considers the code it generates to be a
-product for human consumption in addition to computer consumption, so it
-focuses on generating idiomatic, human-readable, and documented code. The goal
-of generating idiomatic code is helped by the abstractions: GOOL provides
-syntax for expressing OO patterns naturally and efficiently, and these
-high-level functions afford each target language renderer the freedom to
-generate code following its own idioms. The goal of generating documented code
-is realized by GOOL's syntax for generating informal documentation in the form
-of code comments, or more formal documentation in the form of Doxygen-style
-structured comments for functions, classes, and modules. GOOL can even generate
-Doxygen configuration files and makefiles to facilitate compiling the
-documentation into PDF or HTML formats. The generated code is pretty-printed so
-that it is readable, and GOOL allows organization of code related to the same
-task into blocks to further increase readability. The idiomaticity and presence
-of documentation in the generated code also contribute to readability.
+Conceptually, mainstream object-oriented languages are similar enough that it
+is indeed feasible to create a single ``generic'' object-oriented language that
+can be ``compiled'' to them.  Of course, these languages are syntactically
+quite different in places, and each contains some unique ideas as well.
+In other words, there exists a ``conceptual'' object-oriented language that
+is more than just ``pseudocode'': it is a full-fledged executable language
+(through generation) that captures the common essence of mainstream OO
+languages.
+
+GOOL is an unusual DSL, as its ``domain'' is actually that of object-oriented
+languages. Or, to be more precise, of conceptual programs that can be
+easily written in languages containing a procedural code with an
+object-oriented layer on top --- which is what Java, Python, \Cplusplus and
+\Csharp are.
+
+But because we are capturing \emph{conceptual programs}, we can achieve
+several things which we believe are \emph{together} new:
+\begin{itemize}
+\item generation of idiomatic code for each target language,
+\item turning coding patterns into language idioms,
+\item generation of human-readable, well-documented code.
+\end{itemize}
+
+We must also re-emphasize this last point: that for GOOL, the generated code
+is meant for human consumption as well as for computer consumption. This is
+why semantically meaningless concepts such as ``blocks'' exist: to be able
+to chunk code into pieces meaningful for the human reader, and provide
+documentation at that level as well.
+
+\improvement{Maybe we could put a larger piece of GOOL-generated, well
+documented code in an appendix to illustrate what we mean?  Projectile?}
 
 %% Acknowledgments
 %\begin{acks}                            %% acks environment is optional

@@ -910,7 +910,9 @@ for (std::vector<int>::iterator age \
   = ages.begin(); age != ages.end(); \
   age++) {
 \end{lstlisting}
-By providing \verb|forEach|, GOOL abstracts over these differences.
+where we use backslashes in generated code to indicate manually inserted
+line breaks so that the code fits in this paper's narrow column margins. By 
+providing \verb|forEach|, GOOL abstracts over these differences.
 
 \section{Encoding Patterns} \label{sec:patterns}
 
@@ -936,9 +938,9 @@ require adding to GOOL classes.
 
 A slightly more complex task is accessing arguments passed on the command
 line. This tends to differ more significantly accross languages. GOOL
-offers an abstraction of these mechanisms, through an \verb|argList| function
+offers an abstraction of these mechanisms, through an \verb|argsList| function
 that represents the list of arguments, as well as convenience functions for
-common tasks such as indexing into \verb|argList| and checking if an argument
+common tasks such as indexing into \verb|argsList| and checking if an argument
 at a particular position exists.  \unsure{Should we show some code here?  There
   doesn't seem to be any information other than saying we can do command line
   arguments.  Maybe we could show one of the convenience functions?}
@@ -1007,8 +1009,6 @@ for (int i_temp = 1; i_temp < 3; \
 }
 someAges = temp;
 \end{lstlisting}
-where we use backslashes in generated code to indicate manually inserted
-line breaks so that the code fits in this paper's narrow column margins.
 This demonstrates GOOL's idiomatic code generation, enabled by having the
 appropriate high-level information to drive the generation process.
 
@@ -1058,7 +1058,7 @@ inOutFunc "applyDiscount" public static_
 \verb|inOutFunc| takes three lists of parameters, the input, output and
 input-output respectively.  This function has two outputs
 ---\verb|price| and \verb|isAffordable|--- and multiple outputs are
-not directly supports in all target languages.  Thus we need to use
+not directly supported in all target languages.  Thus we need to use
 different features to represent these.  For example, in Python,
 return statement with multiple values is used:
 \begin{lstlisting}

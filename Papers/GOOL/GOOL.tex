@@ -423,7 +423,7 @@ As our exposition has been somewhat abstract until now, it is useful to
 dive in and give some concrete syntax, so as to be able to illustrate
 our ideas with valid code.
 
-Specifically, basic types in GOOL are \verb|bool| for Booleans,
+Basic types in GOOL are \verb|bool| for Booleans,
 \verb|int| for integers, \verb|float| for doubles, \verb|char|
 for characters, \verb|string| for strings, \verb|infile| for a file
 in read mode, and \verb|outfile| for a file in write mode. Lists can be
@@ -435,9 +435,9 @@ an object of a class called ``FooClass''.
 Variables are specified with \verb|var| followed by the variable name and type.
 For example, \verb|var "ages" (listType int)| represents a variable called
 ``ages'' that is a list of integers. This illustrates a (necessary) design
-decision: even though we target languages like Python, as we also target
-Java, types are necessary. As type inference for OO languages is too
-difficult, we chose to be explicitly typed.
+decision: even though we target languages like Python, we also target languages
+where types are necessary, like Java. As type inference for OO languages is too
+difficult, we chose explicit typing.
 
 As some constructions are common, it is useful to offer shortcuts for
 defining them; for example, the above can also be done via
@@ -468,10 +468,10 @@ the value of~\verb|ages|, one must write \verb|valueOf ages|. The reason for
 this distinction will be made clear in section~\ref{where?}, driven
 by semantic considerations. This is beneficial for stricter typing and
 enables convenient syntax for \oopatterns~that translate to more idiomatic
-code.
+code. \change{We need to fill in the section reference.}
 
 Syntax for literal values is shown in Table~\ref{tab:literals} and for
-operators on values is shown in Table~\ref{tab:operators}. In GOOL, each
+operators on values in Table~\ref{tab:operators}. In GOOL, each
 operator is prefixed with an additional symbol based on type. Operators that
 return Booleans are prefixed by a \verb|?|, operators on numeric values are
 prefixed by \verb|#|, and other operators are prefixed by \verb|$|.
@@ -540,9 +540,9 @@ applications is shown in Table~\ref{tab:values}. \verb|selfFuncApp| and
 method is being called on \verb|self| or when the method takes no parameters.
 
 Variable declarations are statements, and take a variable specification
-as argument. For \verb|foo = var "foo" int|, the corresponding variable
-declaration would be \verb|varDec foo|, and to also initialize it
-\verb|varDecDef foo (litInt 5)| can be used.
+as an argument. For \verb|foo = var "foo" int|, the corresponding variable
+declaration would be \verb|varDec foo|.  For initialization, 
+\verb|varDecDef foo (litInt 5)| can also be used.
 
 Assignments are represented by \verb|assign a (litInt 5)|. Convenient
 infix and postfix operators are also provided, prefixed by \verb|&|:
@@ -551,10 +551,10 @@ infix and postfix operators are also provided, prefixed by \verb|&|:
 \verb|&--| cannot be used as \verb|--| starts a comment in Haskell).
 
 Other simple statements in GOOL include \verb|break| and \verb|continue|,
-\verb|returnState| followed by a value to return, \verb|throw| followed by an
-error message to throw, \verb|free| followed by a variable to free from
-memory, and \verb|comment| followed by a string to be displayed as a
-single-line comment.
+\verb|returnState| (followed by a value to return), \verb|throw| (followed by an
+error message to throw), \verb|free| (followed by a variable to free from
+memory), and \verb|comment| (followed by a string to be displayed as a
+single-line comment).
 
 Most languages have statement blocks, introduced by \verb|block| with
 a list of statements in GOOL. Bodies (\verb|body|) are composed
@@ -565,7 +565,6 @@ generator can choose to insert a blank line between blocks so lines of code
 related to the same task are visually grouped together. Naturally shortcuts
 are provided for single-block bodies (\verb|bodyStatements|) and
 for the common single-statement case, \verb|oneLiner|.
-
 
 GOOL has two forms of conditionals: if-then-else via \verb|ifCond| (
 which takes a list of pairs of conditions and bodies) and

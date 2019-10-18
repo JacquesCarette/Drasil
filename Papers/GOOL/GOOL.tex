@@ -208,52 +208,33 @@ Text of abstract \ldots.
 
 \section{Introduction}
 
-Before writing any code a programmer must select a programming
-language. Whatever they may base their choice upon, almost any
-programming language will work. While a program may be more difficult to
-express in one language over another, it should be possible to write
-the program in either language. Just as the same sentence can be translated to
-any spoken language, the same program can be written in any programming
-language. Though they will accomplish the same tasks, the
-expressions of a program in different programming languages can appear
-substantially different due to the unique syntax of each language. Within a
-single language paradigm, such as object-oriented (OO),
-these differences should not be as extreme -- at least the global structuring
-mechanisms and the local idioms will be shared.  Mainstream OO languages
-generally contain (mutable) variables, methods, classes, objects and a core
-imperative set of primitives. Some OO languages even have very similar syntax
-(such as Java and \Csharp).
+Java or \Csharp? At the language level, this is close to a 
+non-question: the two languages are so similar that only issues
+external to the programming language itself would be the 
+deciding factor.  Unlike say the question ``C or Prolog?'', which
+is almost non-sensical, as the kinds of applications where each
+is well-suited are vastly different.  But, given a single
+paradigm, for example object-oriented (OO), would it be possible to
+write a unique meta-language that captures the essence of writing
+OO programs?  After all, they generally all contain (mutable)
+variables, statements, conditionals, loops, methods, classes, objects,
+and so on.
 
-When faced with the task to write a program meant to fit into multiple existing
-infrastructure, which might be written in different languages, frequently that
-entails writing different versions of the program, one for each.  \unsure{How
-  common is this really?  What are some cases where the same code has to be
-  written in different languages?  Code written in different languages can be
-  compiled and then linked, without the need for all of the code to be in the
-  same language.  This doesn't feel like the right motivation for GOOL.  Should
-  we take this motivation out and stick with the DSL motivation given below?}  While not
-necessarily difficult, it nevertheless
-requires investing the time to learn the idiosyncrasies of each language and
-pay attention to the operational details where languages differ. Ultimately,
-the code will likely be marred by influences of the language the programmer
-knows best. They may consistently use techniques that they are familiar with
-from one language, while unaware that the language in which they are currently
-writing offers a better or cleaner way of doing the same task
-\cite{scholtz1990learning, alexandron2012effect}. Besides this
-likelihood of writing sub-optimal code, repeatedly writing the same program in
-different languages is entirely inefficient, both as an up-front development cost,
-and even more so for maintenance.
+Of course, OO programs written in different languages appear, at
+least at the surface, to be quite different. But this is mostly because
+the syntax of different programming languages is different. Are they
+quite so different in the utterances that one can say in them? In other
+words, are OO programs akin to sentences in Romance languages
+(French, Spanish, Portugese, etc) which, although different at a
+surface level, are structurally very similar?
 
-Since languages from the same paradigm share many semantic similarities,
-it is tempting to try to leverage this; perhaps the program could be written in
-one language and
-automatically translated to the others?  But a direct translation is often
-difficult, as different languages require the programmer to provide different
-levels of information, even to achieve the same taks.  For example, a dynamically
-typed language like Python
-cannot be straightforwardly translated to a statically typed
-language like Java, as additional type information generally needs to be
-provided\footnote{Type inference for Python notwithstanding}.
+This is what set out to explore.  One non-solution is to find a single
+(existing) language and try to automatically translate it to the others?
+Of course, this can be made to work --- one could
+engineer a multi-language compiler (such as gcc) to de-compile its
+IR into most of its input languages.  The end-results would however
+be wildly unidiomatic; roughly the equivalent of an absolute novice
+in a new (spoken) language ``translating'' word-by-word.
 
 What if, instead, there was a single meta-language that was designed to
 contain the common semantic concepts of a number of OO languages, encoded
@@ -264,12 +245,12 @@ any given language.  This would be quite the boon for the translator.
 In fact, we could try to go even further, and attempt to teach the translator
 about idiomatic patterns of each target language.
 
-This is possible because there are commonly performed tasks and
-patterns for OO solutions, from idioms to architecture patterns, as outlined
-in~\cite{gamma1995design}. A meta-language
-that provided abstractions for these tasks and patterns would make the process
-of writing OO code even easier.  \unsure{Should we mention design patterns?  We
-  don't explicitly use any patterns.}
+Trying to capture all the subtleties of each language is hopeless ---
+akin to attempting to capture the rhythm, puns, metaphors, similes,
+and cultural allusions of a sublime poem in translation.  But programming
+languages are most often used for much more prosaic tasks: writing programs
+for getting things done. This is closer to translating technical textbooks,
+making sure that all of the meaningful material was preserved.
 
 Is this feasible? In some sense, this is already old hat: most
 modern compilers have a single internal Intermediate Representation (IR),
@@ -278,26 +259,23 @@ human-readable symbolic assembly code for a large family of CPUs. But this
 is not quite the same as generating human-readable, idiomatic high-level
 languages.
 
-There is another area where something like this has been looked at:
-the production of high-level code from Domain-Specific Languages (DSL).
-A DSL is a high-level programming language with syntax and semantics tailored
-to a specific domain \cite{mernik2005and}. DSLs allow domain experts
-to write code without having to concern themselves with the details of
-General-Purpose programming Languages (GPL). A DSL
-abstracts over the details of the code, providing notation for a user to
-specify domain-specific knowledge in a natural manner. Such DSL code is typically
-translated to a GPL for execution. Abstracting over code details
-and compiling into traditional OO languages is exactly what we want to do!
-The details to abstract over include both syntactic and operational details of
-any specific language, but also higher-level idioms in common use.  Thus
-the language we are looking for
-is just a DSL in the domain of OO programming languages!
+More precisely, we are interested in capturing the conceptual meaning of
+OO programs, in such a way as to fully automate the translation from
+the ``conceptual'' to human-readable, idiomatic code, in mainstream
+languages.
 
-There are some DSLs that already generate code in multiple languages, to be
-further discussed in Section \ref{sec:related}, but none of them have the
-combination of features we want. We are indeed trying to do something odd:
-writing a ``DSL'' for what is essentially the domain of OO GPLs. Furthermore,
-we have additional requirements:
+At some level, this is not new.  Domain-Specific Languages (DSL),
+are high-level languages with syntax and semantics tailored to a specific
+domain~\cite{mernik2005and}.  A DSL
+abstracts over the details of ``code'', providing notation to
+specify domain-specific knowledge in a natural manner. DSL implementations
+often work via translation to a GPL for execution.  Some generate
+human-readable code. \improvement{can we cite an example or two here?}
+
+This is exactly what we want to do, for the domain of OO programs.
+
+We do have a specific set of requirements that has not been achieved
+before:
 \begin{enumerate}
 \item The generated code should be human-readable,
 \item The generated code should be idiomatic,
@@ -307,17 +285,17 @@ we have additional requirements:
 
 We have developed a Generic Object-Oriented Language (GOOL)%
 \footnote{GOOL is publicly available; the exact link will be
-given once the paper is no longer anonymous}, demonstrating
-that all these requirements can be met.  GOOL is a DSL embedded in Haskell that
+given once the paper is no longer anonymous}, demonstrating that all these
+requirements can be met.  GOOL is implemented as a DSL embedded in Haskell that
 can currently generate code in Python, Java, \Csharp, and \Cplusplus%
-\footnote{and is close to generating Lua and Objective-C, but those backends
+\footnote{and used to also generate Lua and Objective-C, but those backends
 have fallen into disuse}. Others could be added, with the implementation
-effort being commensurate to their (semantic) distance to the languages
+effort being commensurate to the (semantic) distance to the languages
 already supported.
 
-First we present the high-level requirements for such an endeavour, in
-Section~\ref{sec:req}.  To be able to give illustrated examples, we
-next show the syntax of GOOL in Section~\ref{sec:creating}. The details of
+First we expand on the high-level requirements for such an endeavour, in
+Section~\ref{sec:req}.  To be able to give concrete examples, we
+show the syntax of GOOL in Section~\ref{sec:creating}. The details of
 the implementations, namely the internal representation and the
 family of pretty-printers, is in Section~\ref{sec:implementation}.
 Common patterns are illustrated in Section~\ref{sec:patterns}.  We

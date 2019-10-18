@@ -318,7 +318,7 @@ as well as some reasoning behind each requirement.
 \item[patterns] The generator should allow one to express common OO patterns.
 \item[common] Language commonalities should be abstracted.
 \item[expressivity] The resulting language should be rich enough to express a
-certain set of test cases, drawn from scientific computation software.
+set of existing OO programs, which act as test cases for the language.
 \end{description}
 
 Targetting OO languages (\mainstream) is primarily because of their popularity,
@@ -376,21 +376,16 @@ and then generate the idiomatic pattern of implementation in each target
 language.
 
 The last two requirements, that language commonalities (\common) be abstracted,
-and that we can phrase a certain collection of test cases (\expressivity) are
+and that we can phrase a certain collection of existing OO programs 
+(\expressivity) are
 internal requirements: we didn't set out to create GOOL as a primary artifact,
 but as a side-effect of other work on different methods of creating long-lived
-scientific software.  Part of long-lived means that we need to be flexible about
+software.  Part of long-lived means that we need to be flexible about
 the technology, thus needing to be polymorphic on the underlying language.
 Regarding commonalities, we noticed a lot of repeated code in our initial
 backends, something that ought to be distasteful to most programmers. For
 example, writing a generator for both Java and \Csharp makes it incredibly
 clear how similar the two languages are.
-
-\unsure{For \expressivity we mention a certain set of test cases, but we never
-  actually explain this.  We could remove this, or we could give a bit more
-  detail on how we are using GOOL in Drasil.  We could include a link (left
-  blank for the anonymous submission) to the generated case study examples.}
-\improvement{Agreed. Hopefully there will be time to do this}
 
 \section{Creating GOOL} \label{sec:creating}
 
@@ -952,8 +947,7 @@ in each language tends to vary considerably; we need to provide a single
 abstraction that provides sufficient functionality to do useful list
 computations.  Rather than abstracting from the functionality provided
 in the libraries of each language to find some common ground, we instead
-reverse engineer the ``useful'' API from actual use cases in scientific
-code.  
+reverse engineer the ``useful'' API from actual use cases.  
 
 One thing we immediately notice from such an exercise is that lists in
 OO languages are rarely \emph{linked lists} (unlike in Haskell, our host

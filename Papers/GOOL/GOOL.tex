@@ -425,16 +425,16 @@ attention to the operational semantics, and ignore syntactic details.
 
 This is most easily done from the core imperative language outwards.
 Most languages provide similar basic types (variations on integers,
-floating point numbers, characters, strings, etc) and functions to deal
+floating point numbers, characters, strings, etc.) and functions to deal
 with them. The core expression language tends to be extremely similar
-cross languages. One then moves up to the statement language ---
+across languages. One then moves up to the statement language ---
 assignments, conditionals, loops, etc.  Here we start to encounter
-variations, and choices can be made, and we'll cover that later.
+variations, and choices can be made; we'll cover that later.
 
 For ease of experimentation, we chose to make GOOL an embedded
 domain specic language (EDSL) inside Haskell.  Haskell is very well-suited
 for this task, offering a variety of features (GADTs, type classes,
-parametric polymorphism, kind polymorphism, etc) which is extremely useful
+parametric polymorphism, kind polymorphism, etc) that are extremely useful
 for building languages.  Its syntax is also fairly liberal, so that it is
 possible to create \emph{smart constructors} that somewhat mimic the
 usual syntax of OO languages.

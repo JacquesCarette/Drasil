@@ -73,7 +73,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%
 %% Useful abbreviations
-\newcommand{\Csharp}{C$^{\sharp}$}
+\newcommand{\Csharp}{C\#}
 \newcommand{\Cplusplus}{C\texttt{++}}
 
 \newcommand{\abbrev}[1]{\textbf{#1}}
@@ -285,7 +285,8 @@ domain~\cite{mernik2005and}.  A DSL
 abstracts over the details of ``code'', providing notation to
 specify domain-specific knowledge in a natural manner. DSL implementations
 often work via translation to a GPL for execution.  Some generate
-human-readable code \cite{wang1997zephyr, mooij2013gaining, hong2012green}.
+human-readable code \cite{wang1997zephyr, mooij2013gaining, hong2012green, 
+beyak2011saga}.
 
 This is exactly what we want to do, for the domain of OO programs.
 
@@ -332,7 +333,7 @@ as well as some reasoning behind each requirement.
 \item[patterns] The generator should allow one to express common OO patterns.
 \item[common] Language commonalities should be abstracted.
 \item[expressivity] The resulting language should be rich enough to express a
-certain set of test cases, drawn from scientific computation software.
+set of existing OO programs, which act as test cases for the language.
 \end{description}
 
 Targetting OO languages (\mainstream) is primarily because of their popularity,
@@ -390,21 +391,16 @@ and then generate the idiomatic pattern of implementation in each target
 language.
 
 The last two requirements, that language commonalities (\common) be abstracted,
-and that we can phrase a certain collection of test cases (\expressivity) are
+and that we can phrase a certain collection of existing OO programs 
+(\expressivity) are
 internal requirements: we didn't set out to create GOOL as a primary artifact,
 but as a side-effect of other work on different methods of creating long-lived
-scientific software.  Part of long-lived means that we need to be flexible about
+software.  Part of long-lived means that we need to be flexible about
 the technology, thus needing to be polymorphic on the underlying language.
 Regarding commonalities, we noticed a lot of repeated code in our initial
 backends, something that ought to be distasteful to most programmers. For
 example, writing a generator for both Java and \Csharp{} makes it incredibly
 clear how similar the two languages are.
-
-\unsure{For \expressivity we mention a certain set of test cases, but we never
-  actually explain this.  We could remove this, or we could give a bit more
-  detail on how we are using GOOL in Drasil.  We could include a link (left
-  blank for the anonymous submission) to the generated case study examples.}
-\improvement{Agreed. Hopefully there will be time to do this}
 
 \section{Creating GOOL} \label{sec:creating}
 
@@ -477,11 +473,10 @@ specifying variables is shown in Table~\ref{tab:variables}.
 
 Note that GOOL distinguishes a variable from its value\footnote{
 as befits the use-mention distinction from analytic philosophy}. To get
-the value of~\verb|ages|, one must write \verb|valueOf ages|. The reason for
-this distinction will be made clear in section~\ref{where?}, driven
-by semantic considerations. This is beneficial for stricter typing and
-enables convenient syntax for \oopatterns~that translate to more idiomatic
-code. \change{We need to fill in the section reference.}
+the value of~\verb|ages|, one must write \verb|valueOf ages|. This distinction 
+is motivated by semantic considerations; it is beneficial for stricter typing 
+and enables convenient syntax for \oopatterns~that translate to more idiomatic
+code.
 
 Syntax for literal values is shown in Table~\ref{tab:literals} and for
 operators on values in Table~\ref{tab:operators}. In GOOL, each
@@ -632,9 +627,9 @@ value, and the function itself.  This generates Doxygen-style comments.
 
 Classes are defined with \verb|buildClass| followed by the class name, name of
 the parent class (if applicable), scope, list of state variables, and list of
-methods. State variables can be built by \verb|stateVar| followed by an
-integer, scope, static or dynamic binding, and the variable itself. The integer
-is a measure of delete priority. \unsure{What is delete priority?}  \verb|constVar| can be used for constant state
+methods. State variables can be built by \verb|stateVar| followed by scope, 
+static or dynamic binding, and the variable itself.  \verb|constVar| can be 
+used for constant state
 variables. Shortcuts for state variables include \verb|privMVar| for private
 dynamic, \verb|pubMVar| for public dynamic, and \verb|pubGVar| for public
 static variables. For example:
@@ -956,9 +951,8 @@ line. This tends to differ more significantly accross languages. GOOL
 offers an abstraction of these mechanisms, through an \verb|argsList| function
 that represents the list of arguments, as well as convenience functions for
 common tasks such as indexing into \verb|argsList| and checking if an argument
-at a particular position exists.  \unsure{Should we show some code here?  There
-  doesn't seem to be any information other than saying we can do command line
-  arguments.  Maybe we could show one of the convenience functions?}
+at a particular position exists. For example, these functions allow easy 
+generation of code like \verb|sys.argv[1]| in Python. 
 
 \subsection{Lists}
 
@@ -967,8 +961,7 @@ in each language tends to vary considerably; we need to provide a single
 abstraction that provides sufficient functionality to do useful list
 computations.  Rather than abstracting from the functionality provided
 in the libraries of each language to find some common ground, we instead
-reverse engineer the ``useful'' API from actual use cases in scientific
-code.  
+reverse engineer the ``useful'' API from actual use cases.  
 
 One thing we immediately notice from such an exercise is that lists in
 OO languages are rarely \emph{linked lists} (unlike in Haskell, our host

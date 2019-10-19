@@ -14,8 +14,8 @@
 %% Conference information
 %% Supplied to authors by publisher for camera-ready submission;
 %% use defaults for review submission.
-\acmConference[PL'18]{ACM SIGPLAN Conference on Programming Languages}{January 01--03, 2018}{New York, NY, USA}
-\acmYear{2018}
+\acmConference[PL'20]{ACM SIGPLAN Conference on Programming Languages}{January 01--03, 2018}{New York, NY, USA}
+\acmYear{2020}
 \acmISBN{} % \acmISBN{978-x-xxxx-xxxx-x/YY/MM}
 \acmDOI{} % \acmDOI{10.1145/nnnnnnn.nnnnnnn}
 \startPage{1}
@@ -63,13 +63,13 @@
 
 \usepackage{xargs}                      % Use more than one optional parameter in a new commands
 %
-\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+% \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
 
 % for nice TODO notes
-\newcommandx{\unsure}[2][1=]{\todo[inline,linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
-\newcommandx{\change}[2][1=]{\todo[inline,linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
-\newcommandx{\info}[2][1=]{\todo[inline,linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
-\newcommandx{\improvement}[2][1=]{\todo[inline,linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+% \newcommandx{\unsure}[2][1=]{\todo[inline,linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+% \newcommandx{\change}[2][1=]{\todo[inline,linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+% \newcommandx{\info}[2][1=]{\todo[inline,linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+% \newcommandx{\improvement}[2][1=]{\todo[inline,linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
 
 %%%%%%%%%%%%%%%%%%%%%
 %% Useful abbreviations
@@ -168,22 +168,18 @@
 %% Note: \begin{abstract}...\end{abstract} environment must come
 %% before \maketitle command
 \begin{abstract}
-  This paper presents GOOL, a Generic Object-Oriented Language.  GOOL shows the
-  feasibility of devising a language that, with the right abstractions, captures
-  the essense of mainstream object oriented languages.  To demonstrate that GOOL
-  captures the conceptual meaning of OO programs, we show that programs
-  expressed in GOOL can automatically be translated to OO code (in multiple
-  languages) that is human-readable, idiomatic (to the target language), and
-  well documented.  Moreover, GOOL can be used to express common patterns, from
+  We present GOOL, a Generic Object-Oriented Language.  It demonstrates
+  that a language, with the right abstractions, can capture the essence of
+  mainstream object oriented languages.  We show how GOOL programs can
+  be used to generate human-readable, documented and idiomatic source code in
+  multiple languages.  Moreover, in GOOL, it is possible to express common
+  programming idioms and patterns, from
   simple library-level functions, to simple tasks (command-line arguments, list
   processing, printing), on to more complex patterns, such as methods with a
-  mixture of input, output and in-out parameters, and finally on to design
-  patterns, like the Observer, State and Strategy patterns.  GOOL is implemented
-  as a DSL embedded in Haskell that can currently generate code in Python, Java,
-  \Csharp, and \Cplusplus.  The GOOL syntax consists of an imperative core, OO
-  features and a means to express modules, programs, auxiliary files (like
-  Makefiles) and packages.  The GOOL code generator is implemented in the
-  ``finally tagless'' style.
+  mixture of input, output and in-out parameters, and finally Design
+  Patterns (such as Observer, State and Strategy).  GOOL is implemented
+  as an embedded DSL in Haskell that can currently generate code in Python, Java,
+  \Csharp, and \Cplusplus.
 \end{abstract}
 
 
@@ -192,26 +188,32 @@
 \begin{CCSXML}
 <ccs2012>
 <concept>
-<concept_id>10011007.10011006.10011008</concept_id>
-<concept_desc>Software and its engineering~General programming languages</concept_desc>
+<concept_id>10011007.10011006.10011041.10011047</concept_id>
+<concept_desc>Software and its engineering~Source code generation</concept_desc>
 <concept_significance>500</concept_significance>
 </concept>
 <concept>
-<concept_id>10003456.10003457.10003521.10003525</concept_id>
-<concept_desc>Social and professional topics~History of programming languages</concept_desc>
+<concept_id>10011007.10010940.10010971.10011682</concept_id>
+<concept_desc>Software and its engineering~Abstraction, modeling and modularity</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+<concept>
+<concept_id>10011007.10011006.10011008.10011009.10011011</concept_id>
+<concept_desc>Software and its engineering~Object oriented languages</concept_desc>
 <concept_significance>300</concept_significance>
 </concept>
 </ccs2012>
 \end{CCSXML}
 
-\ccsdesc[500]{Software and its engineering~General programming languages}
-\ccsdesc[300]{Social and professional topics~History of programming languages}
+\ccsdesc[500]{Software and its engineering~Source code generation}
+\ccsdesc[300]{Software and its engineering~Abstraction, modeling and modularity}
+\ccsdesc[300]{Software and its engineering~Object oriented languages}
 %% End of generated code
 
 
 %% Keywords
 %% comma separated list
-\keywords{keyword1, keyword2, keyword3}  %% \keywords are mandatory in final camera-ready submission
+\keywords{Code Generation, Domain Specific Language, Haskell, Documentation}
 
 
 %% \maketitle

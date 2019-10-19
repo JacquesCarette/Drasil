@@ -170,7 +170,7 @@
 \begin{abstract}
   This paper presents GOOL, a Generic Object-Oriented Language.  GOOL shows the
   feasibility of devising a language that, with the right abstractions, captures
-  the essense of mainstream object oriented languages.  To demonstrate that GOOL
+  the essence of mainstream object-oriented languages.  To demonstrate that GOOL
   captures the conceptual meaning of OO programs, we show that programs
   expressed in GOOL can automatically be translated to OO code (in multiple
   languages) that is human-readable, idiomatic (to the target language), and
@@ -243,8 +243,8 @@ words, are OO programs akin to sentences in Romance languages
 (French, Spanish, Portugese, etc) which, although different at a
 surface level, are structurally very similar?
 
-This is what set out to explore.  One non-solution is to find a single
-(existing) language and try to automatically translate it to the others?
+This is what we set out to explore.  One non-solution is to find a single
+(existing) language and try to automatically translate it to the others.
 Of course, this can be made to work --- one could
 engineer a multi-language compiler (such as gcc) to de-compile its
 IR into most of its input languages.  The end-results would however
@@ -353,7 +353,7 @@ own motivation, is to have \emph{extremely well documented} code, indeed to
 a level that would be unrealistic to do by hand. But this documentation is
 crucial in domains where \emph{certification} of code is required.  And
 \readable is a proxy for \emph{understandable}, which is also quite
-helpful for debuggin.
+helpful for debugging.
 
 The same underlying reasons for \readable~also drive \idiomatic~and \documented,
 as they contribute to the human-understandability of the generated code.
@@ -362,7 +362,8 @@ otherwise, and would not be keen on using it.
 Note that documentation can span from informal comments meant for humans, to
 formal, structured comments useful for generating API documentation with tools
 like Doxygen, or with a variety of static analysis tools.
-Readability (and thus understandability) are improved when code is pretty-printed%
+Readability (and thus understandability) are improved when code is 
+pretty-printed%
 \cite{buse2009learning}. Thus taking care of layout, redundant parentheses,
 well-chosen variable names, using a common style with lines that are not too
 long, are just as valid for generated code as for human-written code.
@@ -737,7 +738,7 @@ state variable in \Cplusplus{} stores the corresponding destructor code for the
 variable, but in the other languages destructors are not needed so the internal 
 representation of a state variable is just a \verb|Doc|.
 
-For example, for Java, we instantiate the class as follows:
+For Java, we instantiate the \verb|VariableSym| class as follows:
 \begin{lstlisting}
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
@@ -789,7 +790,7 @@ each representation. \verb|Statement| stores a
 \verb|Terminator|, which is how that language indicates how a statement is to be
 terminated (frequently this is a semi-colon).  For \verb|Method|, a Boolean
 indicates whether it is the main method.  For \verb|Value|, \verb|UnaryOp|
-and \verb|BinaryOp|, precendence information is stored so that printing can
+and \verb|BinaryOp|, precedence information is stored so that printing can
 elide parentheses whenever possible, leading to more readable code.
 
 Note that the \verb|JavaCode| instance of \verb|VariableSym| defines the
@@ -969,8 +970,9 @@ language), but rather more like a dynamically sized vector. In particular,
 indexing a list by position, which is a horrifying idea for linked lists,
 is extremely common.
 
-This narrows things down to a small set of functions and statements:
-\begin{table}[!h]
+This narrows things down to a small set of functions and statements, shown in 
+Table~\ref{tab:listfuncs}.
+\begin{table}[b]
 \caption{List functions}
 \begin{tabular}{p{0.15\textwidth} p{0.3\textwidth}}
   \textbf{GOOL Syntax} & \textbf{Semantics} \\
@@ -991,7 +993,7 @@ generate
 \verb|ages[1]| in Python and \Csharp, \verb|ages.get(1)| in Java, and
 \verb|ages.at(1)| in \Cplusplus.  List slicing is a very convenient
 higher-level primitive.  The \verb|listSlice| \emph{statement} gets
-a variable for the rest, a list to slice, and three
+a variable to assign to, a list to slice, and three
 values representing the starting and ending indices for the slice and the step
 size. These last three values are all optional (we use Haskell's \verb|Maybe|
 for this) and default to the start of the list, end of the list and $1$
@@ -1115,7 +1117,7 @@ void applyDiscount(int &price, \
 Here again we see how a natural task-level ``feature'', namely the
 desire to have different kinds of parameters, end up being rendered differently,
 but hopefully idiomatically, in each target language.  GOOL manages the
-tedious aspects of generated any needed variable declarations and return
+tedious aspects of generating any needed variable declarations and return
 statements.  To call an \verb|inOutFunc| function, one must use
 \verb|inOutCall| so that GOOL can ``line up'' all the pieces properly.
 
@@ -1218,7 +1220,7 @@ general-purpose imperative or object-oriented code. The Protokit generator is
 model-driven and uses a final ``output model'' from which actual code can be
 generated. Since the ``output model'' is quite similar to the generated
 code, it presented challenges with regards to semantic, conventional, and
-library-related differences between the target language
+library-related differences between the target languages
 \cite{kovesdan2017multi}. GOOL's finally-tagless approach and syntax for
 high-level tasks, on the other hand, help overcome differences between
 target languages.
@@ -1279,7 +1281,7 @@ Currently GOOL code is typed based on what it represents:
 variable, value, type, or method, for example. The type system does not
 go ``deeper'', so that variables are untyped, and values (such as booleans
 and strings) are simply ``values''.  This is sufficient to allow us to
-generate well-formed code, but not to insure that it is well-typed.
+generate well-formed code, but not to ensure that it is well-typed.
 For example, it is unfortunately possible to pass a value that is known
 to be a non-list to a function (like \verb|listSize|) which requires it.
 This will generate a compile-time error in generated Java, but a run-time error
@@ -1302,7 +1304,7 @@ engineer things so as to encode quite a wide set of typing rules.
 GOOL is currently less-than-precise in the list of generated import statements;
 we want to improve the code to track precise dependencies, and only generate
 imports for the features we actually use. This could be done via weaving
-some state a generation-time for example.  In general, we can do various 
+some state at generation-time for example.  In general, we can do various 
 kinds of static analyses to help enhance the code generation quality.
 For example, we ought to be much more precise about \verb|throws Exception|
 in Java.
@@ -1314,7 +1316,7 @@ want to restrict ourselves to a single function, but have a host of
 different functions implementing different ODE-solving algorithms available.
 The structure of code that calls ODE solvers varies considerably, so that we cannot
 implement this feature with current GOOL features.  In general, we believe
-that this require a multi-pass architecture: an initial pass to collect
+that this requires a multi-pass architecture: an initial pass to collect
 information, and a second to actually generate the code.
 
 Some implementation decisions, such as the use of \verb|ArrayList| to represent

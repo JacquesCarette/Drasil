@@ -1708,7 +1708,9 @@ instance MethodSym CppHdrCode where
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor n = G.constructor n n
-  destructor n _ = pubMethod ('~':n) n void [] (return empty)
+  destructor n vs = return $ mthd False Pub [] (emptyIfEmpty (vcat (map 
+    (statementDoc . fmap destructSts) vs)) (methodDoc (pubMethod ('~':n) n 
+    void [] (return empty) :: (CppHdrCode (Method CppHdrCode)))))
 
   docMain = mainFunction
 
@@ -1730,7 +1732,7 @@ instance MethodSym CppHdrCode where
 
 instance InternalMethod CppHdrCode where
   intMethod m n _ s _ t ps _ = liftA3 (mthd m) (fmap snd s) (checkParams n <$>
-    sequence ps) (liftA3 (cpphMethod n) t (liftList paramListDocD ps) 
+    sequence ps) (liftA3 (cpphMethod n) t (liftList paramListDocD ps)
     endStatement)
   intFunc = G.intFunc
   commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
@@ -1940,8 +1942,8 @@ cppPointerParamDoc :: VarData -> Doc
 cppPointerParamDoc v = typeDoc (varType v) <+> text "&" <> varDoc v
 
 cppsMethod :: Label -> Label -> TypeData -> Doc -> Doc -> Doc -> Doc -> Doc
-cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> 
-  text n <> parens ps <+> bStart,
+cppsMethod n c t ps b bStart bEnd = emptyIfEmpty b $ vcat [ttype <+> text c <> 
+  text "::" <> text n <> parens ps <+> bStart,
   indent b,
   bEnd]
   where ttype | isDtor n = empty
@@ -1954,8 +1956,8 @@ cppsFunction n t ps b bStart bEnd = vcat [
   bEnd]
 
 cpphMethod :: Label -> TypeData -> Doc -> Doc -> Doc
-cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
-                      | otherwise = typeDoc t <+> text n <> parens ps <> end
+cpphMethod n t ps end = (if isDtor n then empty else typeDoc t) <+> text n <> 
+  parens ps <> end
 
 cppsStateVarDef :: Label -> Doc -> BindData -> VarData -> ValData -> Doc -> Doc
 cppsStateVarDef n cns p vr vl end = if bind p == Static then cns <+> typeDoc 

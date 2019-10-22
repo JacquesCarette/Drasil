@@ -1,5 +1,6 @@
 #include "OutputFormat.hpp"
 
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -40,4 +41,3 @@ void write_output(bool is_safePb, bool is_safeLR, double P_b) {
     outputfile << P_b << std::endl;
     outputfile.close();
 }
-

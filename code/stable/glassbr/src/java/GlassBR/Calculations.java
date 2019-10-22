@@ -222,4 +222,3 @@ public class Calculations {
         return P_b < inParams.P_btol;
     }
 }
-

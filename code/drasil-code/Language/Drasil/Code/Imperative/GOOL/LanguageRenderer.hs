@@ -1,4 +1,3 @@
--- | The structure for a class of renderers is defined here.
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   -- * Common Syntax
   doxConfigName, makefileName, sampleInputName

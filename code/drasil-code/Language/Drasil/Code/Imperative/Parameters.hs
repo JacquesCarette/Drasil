@@ -13,7 +13,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Structure(..),
   constraintvarsandfuncs, getConstraints)
 
 import Data.List (nub, (\\))
-import Data.Map (member)
+import Data.Map (member, notMember)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
@@ -72,7 +72,8 @@ getParams cs' = do
       cnsnts = map codeChunk $ constants $ csi $ codeSpec g
       inpVars = filter (`elem` ins) cs
       conVars = filter (`elem` cnsnts) cs
-      csSubIns = cs \\ (ins ++ cnsnts)
+      csSubIns = filter ((`notMember` concMatches g) . (^. uid)) 
+        (cs \\ (ins ++ cnsnts))
       inVs = getInputVars (inStruct g) Var inpVars
   conVs <- getConstVars (conStruct g) (conRepr g) conVars
   return $ nub $ inVs ++ conVs ++ csSubIns

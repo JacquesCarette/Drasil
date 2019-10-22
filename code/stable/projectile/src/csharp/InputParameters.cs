@@ -15,4 +15,3 @@ public class InputParameters {
     public double p_target;
     
 }
-

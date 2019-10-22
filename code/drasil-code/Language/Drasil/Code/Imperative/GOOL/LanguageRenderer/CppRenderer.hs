@@ -9,15 +9,13 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..),
   AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName, 
-  makefileName, sampleInputName)
+import qualified 
+  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
+  G (doxConfig, sampleInput, makefile)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, 
   PackData(..), packD)
-import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, cppCompiler, nativeBinary)
-import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 
 import GOOL.Drasil (liftList)
 
@@ -44,14 +42,15 @@ instance PackageSym CppProject where
 instance AuxiliarySym CppProject where
   type Auxiliary CppProject = AuxData
   type AuxHelper CppProject = Doc
-  doxConfig pName p = fmap (ad doxConfigName . makeDoxConfig pName p)
-    optimizeDox
-  sampleInput db d sd = return $ ad sampleInputName (makeInputFile db d sd)
+  doxConfig = G.doxConfig optimizeDox
+  sampleInput = G.sampleInput
 
   optimizeDox = return $ text "NO"
   
-  makefile cms p = return $ ad makefileName (makeBuild cms cppBuildConfig 
-    cppRunnable p)
+  makefile = G.makefile cppBuildConfig cppRunnable
+  
+  auxHelperDoc = unCPPP
+  auxFromData fp d = return $ ad fp d
 
 -- helpers
 

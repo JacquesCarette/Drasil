@@ -31,5 +31,3 @@ def write_output(is_safePb, is_safeLR, P_b):
     print("P_b = ", end='', file=outputfile)
     print(P_b, file=outputfile)
     outputfile.close()
-
-

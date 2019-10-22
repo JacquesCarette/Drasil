@@ -16,9 +16,8 @@ public class InputConstraints {
     
     /** \brief Verifies that input values satisfy the physical constraints and software constraints
         \param inParams structure holding the input values
-        \param pi ratio of circumference to diameter for any circle: The ratio of a circle's circumference to its diameter
     */
-    public static void input_constraints(InputParameters inParams, double pi) throws Exception {
+    public static void input_constraints(InputParameters inParams) throws Exception {
         if (!(inParams.v_launch > 0)) {
             System.out.print("Warning: ");
             System.out.print("v_launch has value ");
@@ -28,7 +27,7 @@ public class InputConstraints {
             System.out.print(0);
             System.out.println(".");
         }
-        if (!(0 < inParams.theta && inParams.theta < pi / 2)) {
+        if (!(0 < inParams.theta && inParams.theta < Math.PI / 2)) {
             System.out.print("Warning: ");
             System.out.print("theta has value ");
             System.out.print(inParams.theta);
@@ -36,7 +35,7 @@ public class InputConstraints {
             System.out.print("between ");
             System.out.print(0);
             System.out.print(" and ");
-            System.out.print(pi / 2);
+            System.out.print(Math.PI / 2);
             System.out.print(" ((pi)/(2))");
             System.out.println(".");
         }
@@ -51,4 +50,3 @@ public class InputConstraints {
         }
     }
 }
-

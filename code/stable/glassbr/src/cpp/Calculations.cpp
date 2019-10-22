@@ -1,5 +1,6 @@
 #include "Calculations.hpp"
 
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -173,4 +174,3 @@ bool func_is_safePb(InputParameters &inParams, double P_b) {
     
     return P_b < inParams.P_btol;
 }
-

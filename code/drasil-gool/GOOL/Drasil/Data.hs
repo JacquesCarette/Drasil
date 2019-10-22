@@ -1,7 +1,7 @@
 module GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
-  FileType(..), BindData(..), bd, FileData(..), fileD, file, srcFile, hdrFile, 
-  isSource, isHeader, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, OpData(..), od, ParamData(..), pd, 
+  FileType(..), BindData(..), bd, FileData(..), fileD, isSource, isHeader, 
+  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
   updateParamDoc, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
   vard
@@ -45,15 +45,6 @@ instance Eq FileData where
 fileD :: FileType -> String -> ModData -> FileData
 fileD = FileD
 
-file :: String -> ModData -> FileData
-file = FileD Combined
-
-srcFile :: String -> ModData -> FileData
-srcFile = FileD Source
-
-hdrFile :: String -> ModData -> FileData
-hdrFile = FileD Header
-
 isSource :: FileData -> Bool
 isSource = liftA2 (||) (Source ==) (Combined ==) . fileType
 
@@ -81,6 +72,9 @@ data MethodData = MthD {isMainMthd :: Bool, mthdParams :: [ParamData],
 
 mthd :: Bool -> [ParamData] -> Doc -> MethodData
 mthd = MthD 
+
+updateMthdDoc :: (Doc -> Doc) -> MethodData -> MethodData
+updateMthdDoc f m = mthd (isMainMthd m) (mthdParams m) ((f . mthdDoc) m)
 
 data OpData = OD {opPrec :: Int, opDoc :: Doc}
 

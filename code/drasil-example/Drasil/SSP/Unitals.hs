@@ -20,7 +20,7 @@ import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
   vol)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
   force,  gravitationalAccel, height, moment2D, pressure, subX, subY, subZ, 
-  supMax, supMin, torque, weight)
+  supMax, supMin, torque, weight, positionVec)
 
 
 symbols :: [DefinedQuantityDict]
@@ -50,6 +50,7 @@ genericH = height
 genericP = pressure
 genericR = displacement
 genericT = torque
+posVec = positionVec
 
 -------------
 -- HELPERS --
@@ -202,7 +203,7 @@ units = map ucw [accel, genericMass, genericF, genericA, genericM, genericV,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, 
   porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm]
+  effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm, posVec]
 
 accel, genericMass, genericF, genericA, genericM, genericV, genericW, 
   genericSpWght, gravAccel, dens, genericH, genericP, genericR, genericT, 
@@ -213,7 +214,7 @@ accel, genericMass, genericF, genericA, genericM, genericV, genericW,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, fx, fy, 
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, 
   intNormForce, shrStress, totStress, effectiveStress, effNormStress, dryVol, 
-  satVol, rotForce, momntArm :: UnitalChunk
+  satVol, rotForce, momntArm, posVec :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}

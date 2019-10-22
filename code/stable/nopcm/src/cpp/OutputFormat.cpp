@@ -1,5 +1,6 @@
 #include "OutputFormat.hpp"
 
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -24,4 +25,3 @@ void write_output(double T_W, double E_W) {
     outputfile << E_W << std::endl;
     outputfile.close();
 }
-

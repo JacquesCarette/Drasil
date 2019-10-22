@@ -31,7 +31,7 @@ public class ReadTable {
         outfile.print("[");
         for (int list_i1 = 0; list_i1 < z_vector.size() - 1; list_i1++) {
             outfile.print(z_vector.get(list_i1));
-            outfile.print(", /f ");
+            outfile.print(", ");
         }
         if (z_vector.size() > 0) {
             outfile.print(z_vector.get(z_vector.size() - 1));
@@ -44,19 +44,19 @@ public class ReadTable {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < x_matrix.get(list_i2).size() - 1; list_i1++) {
                 outfile.print(x_matrix.get(list_i2).get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (x_matrix.get(list_i2).size() > 0) {
                 outfile.print(x_matrix.get(list_i2).get(x_matrix.get(list_i2).size() - 1));
             }
             outfile.print("]");
-            outfile.print(", /f ");
+            outfile.print(", ");
         }
         if (x_matrix.size() > 0) {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < x_matrix.get(x_matrix.size() - 1).size() - 1; list_i1++) {
                 outfile.print(x_matrix.get(x_matrix.size() - 1).get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (x_matrix.get(x_matrix.size() - 1).size() > 0) {
                 outfile.print(x_matrix.get(x_matrix.size() - 1).get(x_matrix.get(x_matrix.size() - 1).size() - 1));
@@ -71,19 +71,19 @@ public class ReadTable {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < y_matrix.get(list_i2).size() - 1; list_i1++) {
                 outfile.print(y_matrix.get(list_i2).get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (y_matrix.get(list_i2).size() > 0) {
                 outfile.print(y_matrix.get(list_i2).get(y_matrix.get(list_i2).size() - 1));
             }
             outfile.print("]");
-            outfile.print(", /f ");
+            outfile.print(", ");
         }
         if (y_matrix.size() > 0) {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < y_matrix.get(y_matrix.size() - 1).size() - 1; list_i1++) {
                 outfile.print(y_matrix.get(y_matrix.size() - 1).get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (y_matrix.get(y_matrix.size() - 1).size() > 0) {
                 outfile.print(y_matrix.get(y_matrix.size() - 1).get(y_matrix.get(y_matrix.size() - 1).size() - 1));
@@ -109,7 +109,7 @@ public class ReadTable {
         outfile.print("[");
         for (int list_i1 = 0; list_i1 < z_vector.size() - 1; list_i1++) {
             outfile.print(z_vector.get(list_i1));
-            outfile.print(", /f ");
+            outfile.print(", ");
         }
         if (z_vector.size() > 0) {
             outfile.print(z_vector.get(z_vector.size() - 1));
@@ -138,19 +138,19 @@ public class ReadTable {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < x_matrix.get(list_i2).size() - 1; list_i1++) {
                 outfile.print(x_matrix.get(list_i2).get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (x_matrix.get(list_i2).size() > 0) {
                 outfile.print(x_matrix.get(list_i2).get(x_matrix.get(list_i2).size() - 1));
             }
             outfile.print("]");
-            outfile.print(", /f ");
+            outfile.print(", ");
         }
         if (x_matrix.size() > 0) {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < x_matrix.get(x_matrix.size() - 1).size() - 1; list_i1++) {
                 outfile.print(x_matrix.get(x_matrix.size() - 1).get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (x_matrix.get(x_matrix.size() - 1).size() > 0) {
                 outfile.print(x_matrix.get(x_matrix.size() - 1).get(x_matrix.get(x_matrix.size() - 1).size() - 1));
@@ -167,19 +167,19 @@ public class ReadTable {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < y_matrix.get(list_i2).size() - 1; list_i1++) {
                 outfile.print(y_matrix.get(list_i2).get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (y_matrix.get(list_i2).size() > 0) {
                 outfile.print(y_matrix.get(list_i2).get(y_matrix.get(list_i2).size() - 1));
             }
             outfile.print("]");
-            outfile.print(", /f ");
+            outfile.print(", ");
         }
         if (y_matrix.size() > 0) {
             outfile.print("[");
             for (int list_i1 = 0; list_i1 < y_matrix.get(y_matrix.size() - 1).size() - 1; list_i1++) {
                 outfile.print(y_matrix.get(y_matrix.size() - 1).get(list_i1));
-                outfile.print(", /f ");
+                outfile.print(", ");
             }
             if (y_matrix.get(y_matrix.size() - 1).size() > 0) {
                 outfile.print(y_matrix.get(y_matrix.size() - 1).get(y_matrix.get(y_matrix.size() - 1).size() - 1));
@@ -192,4 +192,3 @@ public class ReadTable {
         infile.close();
     }
 }
-

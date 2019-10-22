@@ -1,5 +1,6 @@
 #include "InputFormat.hpp"
 
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -113,4 +114,3 @@ void get_input(InputParameters &inParams, string filename) {
     outfile.close();
     infile.close();
 }
-

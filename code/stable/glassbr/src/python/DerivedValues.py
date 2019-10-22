@@ -75,5 +75,3 @@ def derived_values(inParams):
     print(inParams.w_TNT, end='', file=outfile)
     print(" in module DerivedValues", file=outfile)
     outfile.close()
-
-

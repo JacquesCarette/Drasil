@@ -29,4 +29,3 @@ public class Constants {
     public static final double AR_max = 100;
     
 }
-

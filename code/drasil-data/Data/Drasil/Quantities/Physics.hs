@@ -9,7 +9,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, potEnergy,
   pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel,
-  yDist,  yPos, yVel, momentum, moment)
+  yDist,  yPos, yVel, momentum, moment, fOfGravity, positionVec)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
@@ -27,7 +27,7 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position,
   potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
   weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum, moment, moment2D]
+  yPos, yVel,momentum, moment, moment2D, fOfGravity, positionVec]
 
 acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   constAccel, constAccelV, displacement, distance, energy, fSpeed, fVel, force,
@@ -35,8 +35,9 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   impulseV, ixPos, ixVel, iyPos, iyVel, kEnergy, linearAccel, linearDisplacement,
   linearVelocity, momentOfInertia, position, potEnergy, pressure, scalarAccel,
   scalarPos, speed, time, torque, velocity, weight, xAccel, xConstAccel, xDist,
-  xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, 
-  moment2D :: UnitalChunk
+  xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, moment2D,
+  fOfGravity, positionVec :: UnitalChunk
+
 
 acceleration         = uc CP.acceleration (vec lA) accelU
 angularAccel         = uc CP.angAccel lAlpha angAccelU
@@ -44,8 +45,8 @@ angularDisplacement  = uc CP.angDisp lTheta radian
 angularVelocity      = uc CP.angVelo lOmega angVelU
 chgInVelocity        = uc CP.chgInVelocity (Concat [cDelta, vec lV]) velU
 constAccel           = uc CP.constAccel (sup lA lC) accelU
-displacement         = uc CP.displacement (vec lR) metre
-distance             = uc CP.distance lR metre
+displacement         = uc CP.displacement (vec lU) metre
+distance             = uc CP.distance lD metre
 energy               = uc CP.energy cE joule
 force                = uc CP.force (vec cF) newton
 gravitationalAccel   = uc CP.gravitationalAccel (vec lG) accelU
@@ -55,7 +56,7 @@ impulseS             = uc CP.impulseS lJ impulseU
 impulseV             = uc CP.impulseV (vec cJ) impulseU
 kEnergy              = uc CP.kEnergy  (Concat [cK, cE]) joule
 linearAccel          = uc CP.linAccel (Concat [vec lA, Label "(", lT, Label ")"]) accelU
-linearDisplacement   = uc CP.linDisp  (Concat [vec lR, Label "(", lT, Label ")"]) metre
+linearDisplacement   = uc CP.linDisp  (Concat [vec lU, Label "(", lT, Label ")"]) metre
 linearVelocity       = uc CP.linVelo  (Concat [vec lV, Label "(", lT, Label ")"]) velU
 momentOfInertia      = uc CP.momentOfInertia (vec cI) momtInertU
 momentum             = uc CP.momentum (vec cP) impulseU
@@ -63,6 +64,7 @@ moment               = uc CP.moment   (vec cM) torqueU
 moment2D             = uc CP.moment   cM       torqueU
 -- FIXME: moment2D should eventually be a specialization of moment, not separately defined
 position             = uc CP.position (vec lP) metre
+positionVec          = uc CP.positionVec (vec lR) metre
 potEnergy            = uc CP.potEnergy (Concat [cP, cE]) joule
 pressure             = uc CP.pressure lP pascal
 speed                = uc CP.speed lV velU
@@ -72,6 +74,7 @@ time                 = uc CP.time lT second
 torque               = uc CP.torque (vec lTau) torqueU
 velocity             = uc CP.velocity (vec lV) velU
 weight               = uc CP.weight cW newton
+fOfGravity           = uc CP.fOfGravity (sub (vec cF) (vec lG)) newton
 
 -- Variants of distance, speed, and scalar acceleration
 -- FIXME: Add variants of vector forms?

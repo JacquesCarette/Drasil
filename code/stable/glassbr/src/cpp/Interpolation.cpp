@@ -1,5 +1,6 @@
 #include "Interpolation.hpp"
 
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -49,7 +50,7 @@ int func_find(vector<double> &arr, double v) {
     outfile << "[";
     for (int list_i1 = 0; list_i1 < (int)(arr.size()) - 1; list_i1++) {
         outfile << arr.at(list_i1);
-        outfile << ", /f ";
+        outfile << ", ";
     }
     if ((int)(arr.size()) > 0) {
         outfile << arr.at((int)(arr.size()) - 1);
@@ -79,19 +80,19 @@ vector<double> func_extractColumn(vector<vector<double>> &mat, int j) {
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(mat.at(list_i2).size()) - 1; list_i1++) {
             outfile << mat.at(list_i2).at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(mat.at(list_i2).size()) > 0) {
             outfile << mat.at(list_i2).at((int)(mat.at(list_i2).size()) - 1);
         }
         outfile << "]";
-        outfile << ", /f ";
+        outfile << ", ";
     }
     if ((int)(mat.size()) > 0) {
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(mat.at((int)(mat.size()) - 1).size()) - 1; list_i1++) {
             outfile << mat.at((int)(mat.size()) - 1).at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(mat.at((int)(mat.size()) - 1).size()) > 0) {
             outfile << mat.at((int)(mat.size()) - 1).at((int)(mat.at((int)(mat.size()) - 1).size()) - 1);
@@ -152,7 +153,7 @@ double func_interpY(string filename, double x, double z) {
     outfile << "[";
     for (int list_i1 = 0; list_i1 < (int)(x_z_1.size()) - 1; list_i1++) {
         outfile << x_z_1.at(list_i1);
-        outfile << ", /f ";
+        outfile << ", ";
     }
     if ((int)(x_z_1.size()) > 0) {
         outfile << x_z_1.at((int)(x_z_1.size()) - 1);
@@ -166,7 +167,7 @@ double func_interpY(string filename, double x, double z) {
     outfile << "[";
     for (int list_i1 = 0; list_i1 < (int)(y_z_1.size()) - 1; list_i1++) {
         outfile << y_z_1.at(list_i1);
-        outfile << ", /f ";
+        outfile << ", ";
     }
     if ((int)(y_z_1.size()) > 0) {
         outfile << y_z_1.at((int)(y_z_1.size()) - 1);
@@ -180,7 +181,7 @@ double func_interpY(string filename, double x, double z) {
     outfile << "[";
     for (int list_i1 = 0; list_i1 < (int)(x_z_2.size()) - 1; list_i1++) {
         outfile << x_z_2.at(list_i1);
-        outfile << ", /f ";
+        outfile << ", ";
     }
     if ((int)(x_z_2.size()) > 0) {
         outfile << x_z_2.at((int)(x_z_2.size()) - 1);
@@ -194,7 +195,7 @@ double func_interpY(string filename, double x, double z) {
     outfile << "[";
     for (int list_i1 = 0; list_i1 < (int)(y_z_2.size()) - 1; list_i1++) {
         outfile << y_z_2.at(list_i1);
-        outfile << ", /f ";
+        outfile << ", ";
     }
     if ((int)(y_z_2.size()) > 0) {
         outfile << y_z_2.at((int)(y_z_2.size()) - 1);
@@ -267,7 +268,7 @@ double func_interpZ(string filename, double x, double y) {
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(x_z_1.size()) - 1; list_i1++) {
             outfile << x_z_1.at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(x_z_1.size()) > 0) {
             outfile << x_z_1.at((int)(x_z_1.size()) - 1);
@@ -281,7 +282,7 @@ double func_interpZ(string filename, double x, double y) {
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(y_z_1.size()) - 1; list_i1++) {
             outfile << y_z_1.at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(y_z_1.size()) > 0) {
             outfile << y_z_1.at((int)(y_z_1.size()) - 1);
@@ -295,7 +296,7 @@ double func_interpZ(string filename, double x, double y) {
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(x_z_2.size()) - 1; list_i1++) {
             outfile << x_z_2.at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(x_z_2.size()) > 0) {
             outfile << x_z_2.at((int)(x_z_2.size()) - 1);
@@ -309,7 +310,7 @@ double func_interpZ(string filename, double x, double y) {
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(y_z_2.size()) - 1; list_i1++) {
             outfile << y_z_2.at(list_i1);
-            outfile << ", /f ";
+            outfile << ", ";
         }
         if ((int)(y_z_2.size()) > 0) {
             outfile << y_z_2.at((int)(y_z_2.size()) - 1);
@@ -351,4 +352,3 @@ double func_interpZ(string filename, double x, double y) {
     }
     throw("Interpolation of z failed");
 }
-

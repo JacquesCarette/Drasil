@@ -89,5 +89,3 @@ print(is_safePb, end='', file=outfile)
 print(" in module Control", file=outfile)
 outfile.close()
 OutputFormat.write_output(is_safePb, is_safeLR, P_b)
-
-

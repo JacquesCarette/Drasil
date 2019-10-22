@@ -25,4 +25,3 @@ public class InputFormat {
         infile.Close();
     }
 }
-

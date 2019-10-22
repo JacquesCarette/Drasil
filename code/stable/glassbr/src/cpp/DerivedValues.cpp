@@ -1,5 +1,6 @@
 #include "DerivedValues.hpp"
 
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -89,4 +90,3 @@ void derived_values(InputParameters &inParams) {
     outfile << " in module DerivedValues" << std::endl;
     outfile.close();
 }
-

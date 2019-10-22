@@ -18,7 +18,7 @@ unitVect    = dqdNoUnit CM.unitV    (vec $ hat lI) Real
 unitVectj   = dqdNoUnit CM.unitV    (vec $ hat lJ) Real
 perpVect    = dqdNoUnit CM.perpV    (vec lN)       Real
 pi_         = dqd'      CM.pi_      (staged lPi (Variable "pi")) Real Nothing
-euclidNorm  = dqdNoUnit CM.euclidN  (Concat [Label "||", vec lR, Label "||"]) Real  
+euclidNorm  = dqdNoUnit CM.euclidN  (Concat [Label "||", vec lD, Label "||"]) Real  
 
 area, diameter, surface, surArea, orientation :: UnitalChunk
 

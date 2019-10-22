@@ -257,5 +257,3 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print("above ", end='')
         print(0, end='')
         print(".")
-
-

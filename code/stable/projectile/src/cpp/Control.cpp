@@ -2,6 +2,7 @@
     \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
     \brief Controls the flow of the program
 */
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -32,10 +33,9 @@ int main(int argc, const char *argv[]) {
     string filename = argv[1];
     InputParameters inParams = InputParameters();
     double g_vect = 9.8;
-    double pi = 3.14159265;
     double epsilon = 2.0e-2;
     get_input(inParams, filename);
-    input_constraints(inParams, pi);
+    input_constraints(inParams);
     double t_flight = func_t_flight(inParams, g_vect);
     double p_land = func_p_land(inParams, g_vect);
     double d_offset = func_d_offset(inParams, p_land);
@@ -44,4 +44,3 @@ int main(int argc, const char *argv[]) {
     
     return 0;
 }
-

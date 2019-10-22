@@ -28,4 +28,3 @@ public class OutputFormat {
         outputfile.close();
     }
 }
-

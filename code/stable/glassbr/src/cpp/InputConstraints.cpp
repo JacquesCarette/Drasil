@@ -1,5 +1,6 @@
 #include "InputConstraints.hpp"
 
+#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -168,4 +169,3 @@ void input_constraints(InputParameters &inParams) {
         throw("InputError");
     }
 }
-

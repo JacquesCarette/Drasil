@@ -29,5 +29,3 @@ const double Constants::t_final_max = 86400;
 const double Constants::AR_min = 1.0e-2;
 const double Constants::AR_max = 100;
 
-Constants::~Constants() {
-}

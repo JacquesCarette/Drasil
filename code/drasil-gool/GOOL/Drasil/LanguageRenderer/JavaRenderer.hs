@@ -583,9 +583,9 @@ instance InternalMethod JavaCode where
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
-  stateVar _ = G.stateVar
-  stateVarDef _ _ = G.stateVarDef
-  constVar _ _ = G.constVar (permDoc (static_ :: JavaCode (Permanence JavaCode)))
+  stateVar = G.stateVar
+  stateVarDef _ = G.stateVarDef
+  constVar _ = G.constVar (permDoc (static_ :: JavaCode (Permanence JavaCode)))
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar

@@ -162,8 +162,8 @@ chooseInStructure Bundled = genInputClass
 
 constVarFunc :: (RenderSym repr) => ConstantRepr -> String ->
   (repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr))
-constVarFunc Var n = stateVarDef 0 n public dynamic_
-constVarFunc Const n = constVar 0 n public
+constVarFunc Var n = stateVarDef n public dynamic_
+constVarFunc Const n = constVar n public
 
 genInputClass :: (RenderSym repr) => Reader State (Maybe (repr (Class repr)))
 genInputClass = do
@@ -179,7 +179,7 @@ genInputClass = do
       genClass [] [] = return Nothing 
       genClass inps csts = do
         vals <- mapM (convExpr . codeEquat) csts
-        let inputVars = map (\x -> pubMVar 0 (var (codeName x) (convType $ 
+        let inputVars = map (\x -> pubMVar (var (codeName x) (convType $ 
               codeType x))) inps
             constVars = zipWith (\c vl -> constVarFunc (conRepr g) cname
               (var (codeName c) (convType $ codeType c)) vl) csts vals

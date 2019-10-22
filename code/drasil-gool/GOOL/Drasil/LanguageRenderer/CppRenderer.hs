@@ -26,8 +26,8 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
 import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD, 
   bodyDocD, oneLinerD, outDoc, intTypeDocD, charTypeDocD, stringTypeDocD, 
   typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, paramDocD, 
-  paramListDocD, mkParam, stateVarDocD, constVarDocD, alwaysDel, runStrategyD, 
-  listSliceD, notifyObserversD, freeDocD, mkSt, mkStNoEnd, stringListVals', 
+  paramListDocD, mkParam, stateVarDocD, constVarDocD, runStrategyD, listSliceD, 
+  notifyObserversD, freeDocD, mkSt, mkStNoEnd, stringListVals', 
   stringListLists', stateD, loopStateD, emptyStateD, assignD, 
   assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, 
   increment1D, constDecDefD, discardInputD, discardFileInputD, closeFileD, 
@@ -635,15 +635,15 @@ instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
-  stateVar del s p v = pair (stateVar del (pfst s) (pfst p) (pfst v))
-    (stateVar del (psnd s) (psnd p) (psnd v))
-  stateVarDef del n s p vr vl = pair (stateVarDef del n (pfst s) (pfst p) (pfst 
-    vr) (pfst vl)) (stateVarDef del n (psnd s) (psnd p) (psnd vr) (psnd vl))
-  constVar del n s vr vl = pair (constVar del n (pfst s) (pfst vr) (pfst vl)) 
-    (constVar del n (psnd s) (psnd vr) (psnd vl))
-  privMVar del v = pair (privMVar del $ pfst v) (privMVar del $ psnd v)
-  pubMVar del v = pair (pubMVar del $ pfst v) (pubMVar del $ psnd v)
-  pubGVar del v = pair (pubGVar del $ pfst v) (pubGVar del $ psnd v)
+  stateVar s p v = pair (stateVar (pfst s) (pfst p) (pfst v))
+    (stateVar (psnd s) (psnd p) (psnd v))
+  stateVarDef n s p vr vl = pair (stateVarDef n (pfst s) (pfst p) (pfst vr) 
+    (pfst vl)) (stateVarDef n (psnd s) (psnd p) (psnd vr) (psnd vl))
+  constVar n s vr vl = pair (constVar n (pfst s) (pfst vr) (pfst vl)) 
+    (constVar n (psnd s) (psnd vr) (psnd vl))
+  privMVar v = pair (privMVar $ pfst v) (privMVar $ psnd v)
+  pubMVar v = pair (pubMVar $ pfst v) (pubMVar $ psnd v)
+  pubGVar v = pair (pubGVar $ pfst v) (pubGVar $ psnd v)
 
 instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
   stateVarDoc v = stateVarDoc $ pfst v
@@ -1214,14 +1214,11 @@ instance InternalMethod CppSrcCode where
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
-  stateVar del s _ v = liftA3 svd (fmap snd s) (return empty) (if del < 
-    alwaysDel then return (mkStNoEnd empty) else cppDestruct v)
-  stateVarDef del n s p vr vl = liftA3 svd (fmap snd s)
-    (liftA4 (cppsStateVarDef n empty) p vr vl endStatement)
-    (if del < alwaysDel then return (mkStNoEnd empty) else cppDestruct vr)
-  constVar del n s vr vl = liftA3 svd (fmap snd s)
-    (liftA4 (cppsStateVarDef n (text "const")) static_ vr vl endStatement)
-    (if del < alwaysDel then return (mkStNoEnd empty) else cppDestruct vr)
+  stateVar s _ _ = liftA3 svd (fmap snd s) (return empty) emptyState
+  stateVarDef n s p vr vl = liftA3 svd (fmap snd s) (liftA4 (cppsStateVarDef n 
+    empty) p vr vl endStatement) emptyState
+  constVar n s vr vl = liftA3 svd (fmap snd s) (liftA4 (cppsStateVarDef n 
+    (text "const")) static_ vr vl endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
@@ -1711,7 +1708,9 @@ instance MethodSym CppHdrCode where
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor n = G.constructor n n
-  destructor n _ = pubMethod ('~':n) n void [] (return empty)
+  destructor n vs = return $ mthd False Pub [] (emptyIfEmpty (vcat (map 
+    (statementDoc . fmap destructSts) vs)) (methodDoc (pubMethod ('~':n) n 
+    void [] (return empty) :: (CppHdrCode (Method CppHdrCode)))))
 
   docMain = mainFunction
 
@@ -1733,7 +1732,7 @@ instance MethodSym CppHdrCode where
 
 instance InternalMethod CppHdrCode where
   intMethod m n _ s _ t ps _ = liftA3 (mthd m) (fmap snd s) (checkParams n <$>
-    sequence ps) (liftA3 (cpphMethod n) t (liftList paramListDocD ps) 
+    sequence ps) (liftA3 (cpphMethod n) t (liftList paramListDocD ps)
     endStatement)
   intFunc = G.intFunc
   commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
@@ -1745,12 +1744,12 @@ instance InternalMethod CppHdrCode where
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
-  stateVar _ s p v = liftA3 svd (fmap snd s) (return $ stateVarDocD empty 
-    (permDoc p) (statementDoc (state $ varDec v))) (return (mkStNoEnd empty))
-  stateVarDef _ _ s p vr vl = liftA3 svd (fmap snd s) (return $ cpphStateVarDef 
-    empty p vr vl) (return (mkStNoEnd empty))
-  constVar _ _ s v _ = liftA3 svd (fmap snd s) (liftA3 (constVarDocD empty) 
-    (bindDoc <$> static_) v endStatement) (return (mkStNoEnd empty))
+  stateVar s p v = liftA3 svd (fmap snd s) (return $ stateVarDocD empty 
+    (permDoc p) (statementDoc (state $ varDec v))) emptyState
+  stateVarDef _ s p vr vl = liftA3 svd (fmap snd s) (return $ cpphStateVarDef 
+    empty p vr vl) emptyState
+  constVar _ s v _ = liftA3 svd (fmap snd s) (liftA3 (constVarDocD empty) 
+    (bindDoc <$> static_) v endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
@@ -1943,8 +1942,8 @@ cppPointerParamDoc :: VarData -> Doc
 cppPointerParamDoc v = typeDoc (varType v) <+> text "&" <> varDoc v
 
 cppsMethod :: Label -> Label -> TypeData -> Doc -> Doc -> Doc -> Doc -> Doc
-cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> 
-  text n <> parens ps <+> bStart,
+cppsMethod n c t ps b bStart bEnd = emptyIfEmpty b $ vcat [ttype <+> text c <> 
+  text "::" <> text n <> parens ps <+> bStart,
   indent b,
   bEnd]
   where ttype | isDtor n = empty
@@ -1957,8 +1956,8 @@ cppsFunction n t ps b bStart bEnd = vcat [
   bEnd]
 
 cpphMethod :: Label -> TypeData -> Doc -> Doc -> Doc
-cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
-                      | otherwise = typeDoc t <+> text n <> parens ps <> end
+cpphMethod n t ps end = (if isDtor n then empty else typeDoc t) <+> text n <> 
+  parens ps <> end
 
 cppsStateVarDef :: Label -> Doc -> BindData -> VarData -> ValData -> Doc -> Doc
 cppsStateVarDef n cns p vr vl end = if bind p == Static then cns <+> typeDoc 
@@ -1969,20 +1968,6 @@ cpphStateVarDef :: (RenderSym repr) => Doc -> repr (Permanence repr) ->
   repr (Variable repr) -> repr (Value repr) -> Doc
 cpphStateVarDef s p vr vl = stateVarDocD s (permDoc p) (statementDoc $ state $ 
   if binding p == Static then varDec vr else varDecDef vr vl) 
-
-cppDestruct :: CppSrcCode (Variable CppSrcCode) -> 
-  CppSrcCode (Statement CppSrcCode)
-cppDestruct v = cppDestruct' (getType $ variableType v)
-  where cppDestruct' (List _) = deleteLoop
-        cppDestruct' _ = free v
-        var_i = var "i" int
-        v_i = valueOf var_i
-        guard = v_i ?< listSize (valueOf v)
-        listelem = at (valueOf v) v_i
-        loopBody = oneLiner $ free (liftA2 (mkVar "") (valueType listelem) 
-          (return $ valueDoc listelem))
-        initv = var_i &= litInt 0
-        deleteLoop = for initv guard (var_i &++) loopBody
 
 cpphVarsFuncsList :: ScopeTag -> [StateVarData] -> [MethodData] -> Doc
 cpphVarsFuncsList st vs fs = 

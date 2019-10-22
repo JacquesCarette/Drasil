@@ -552,9 +552,9 @@ instance InternalMethod CSharpCode where
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
-  stateVar _ = G.stateVar
-  stateVarDef _ _ = G.stateVarDef
-  constVar _ _ = G.constVar empty
+  stateVar = G.stateVar
+  stateVarDef _ = G.stateVarDef
+  constVar _ = G.constVar empty
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar

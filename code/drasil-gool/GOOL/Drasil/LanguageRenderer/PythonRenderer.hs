@@ -562,9 +562,9 @@ instance InternalMethod PythonCode where
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
-  stateVar _ _ _ _ = return empty
-  stateVarDef _ _ = G.stateVarDef
-  constVar _ _ = G.constVar (permDoc 
+  stateVar _ _ _ = return empty
+  stateVarDef _ = G.stateVarDef
+  constVar _ = G.constVar (permDoc 
     (static_ :: PythonCode (Permanence PythonCode)))
   privMVar = G.privMVar
   pubMVar = G.pubMVar

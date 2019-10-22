@@ -220,17 +220,17 @@ constVar :: (RenderSym repr) => Doc -> repr (Scope repr) ->
 constVar p s vr vl = stateVarFromData $ stateVarDocD (scopeDoc s) p 
   (statementDoc (state $ constDecDef vr vl))
 
-privMVar :: (RenderSym repr) => Int -> repr (Variable repr) -> 
+privMVar :: (RenderSym repr) => repr (Variable repr) -> 
   repr (StateVar repr)
-privMVar del = S.stateVar del private dynamic_
+privMVar = S.stateVar private dynamic_
 
-pubMVar :: (RenderSym repr) => Int -> repr (Variable repr) -> 
+pubMVar :: (RenderSym repr) => repr (Variable repr) -> 
   repr (StateVar repr)
-pubMVar del = S.stateVar del public dynamic_
+pubMVar = S.stateVar public dynamic_
 
-pubGVar :: (RenderSym repr) => Int -> repr (Variable repr) -> 
+pubGVar :: (RenderSym repr) => repr (Variable repr) -> 
   repr (StateVar repr)
-pubGVar del = S.stateVar del public static_
+pubGVar = S.stateVar public static_
 
 buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> 
   (Label -> repr (Keyword repr)) -> Label -> Maybe Label -> repr (Scope repr) 

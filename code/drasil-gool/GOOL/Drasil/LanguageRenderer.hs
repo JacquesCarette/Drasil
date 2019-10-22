@@ -13,12 +13,12 @@ module GOOL.Drasil.LanguageRenderer (
   charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, 
   listTypeDocD, listInnerTypeD, voidDocD, destructorError, paramDocD, 
   paramListDocD, mkParam, methodDocD, methodListDocD, stateVarDocD, 
-  constVarDocD, stateVarListDocD, alwaysDel, switchDocD, assignDocD, 
-  multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', 
-  listDecDocD, listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD,
-  mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, 
-  loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, 
-  decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
+  constVarDocD, stateVarListDocD, switchDocD, assignDocD, multiAssignDoc, 
+  plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', listDecDocD, 
+  listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, mkSt, 
+  mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, 
+  emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, 
+  incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
   discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, 
   discardFileLineD, breakD, continueD, returnD, multiReturnError, valStateD, 
   freeError, throwD, initStateD, changeStateD, initObserverListD, addObserverD, 
@@ -296,9 +296,6 @@ constVarDocD s p v end = s <+> p <+> text "const" <+> typeDoc (varType v) <+>
 stateVarListDocD :: [Doc] -> Doc
 stateVarListDocD = vcat
 
-alwaysDel :: Int
-alwaysDel = 4
-
 -- Controls --
 
 switchDocD :: (RenderSym repr) => repr (Statement repr) -> repr (Value repr) -> 
@@ -416,7 +413,7 @@ commentDocD :: Label -> Doc -> Doc
 commentDocD cmt cStart = cStart <+> text cmt
 
 freeDocD :: VarData -> Doc
-freeDocD v = text "delete" <+> varDoc v
+freeDocD v = text "delete" <+> text "&" <> varDoc v
 
 statementDocD :: (Doc, Terminator) -> (Doc, Terminator)
 statementDocD (s, t) = (s <> getTermDoc t, Empty)

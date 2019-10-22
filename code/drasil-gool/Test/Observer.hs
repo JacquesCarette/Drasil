@@ -15,7 +15,7 @@ x :: (RenderSym repr) => repr (Variable repr)
 x = var "x" int
 
 helperClass :: (RenderSym repr) => repr (Class repr)
-helperClass = pubClass "Observer" Nothing [stateVar 0 public dynamic_ x]
+helperClass = pubClass "Observer" Nothing [stateVar public dynamic_ x]
   [observerConstructor, printNumMethod, getMethod "Observer" x, 
   setMethod "Observer" x]
 

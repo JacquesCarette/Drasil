@@ -610,15 +610,15 @@ class (MethodTypeSym repr, BlockCommentSym repr) =>
 class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr,
   InternalStateVar repr) => StateVarSym repr where
   type StateVar repr
-  stateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) ->
+  stateVar :: repr (Scope repr) -> repr (Permanence repr) ->
     repr (Variable repr) -> repr (StateVar repr)
-  stateVarDef :: Int -> Label -> repr (Scope repr) -> repr (Permanence repr) ->
+  stateVarDef :: Label -> repr (Scope repr) -> repr (Permanence repr) ->
     repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr)
-  constVar :: Int -> Label -> repr (Scope repr) ->  repr (Variable repr) -> 
+  constVar :: Label -> repr (Scope repr) ->  repr (Variable repr) -> 
     repr (Value repr) -> repr (StateVar repr)
-  privMVar :: Int -> repr (Variable repr) -> repr (StateVar repr)
-  pubMVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
-  pubGVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
+  privMVar :: repr (Variable repr) -> repr (StateVar repr)
+  pubMVar  :: repr (Variable repr) -> repr (StateVar repr)
+  pubGVar  :: repr (Variable repr) -> repr (StateVar repr)
 
 class InternalStateVar repr where
   stateVarDoc :: repr (StateVar repr) -> Doc

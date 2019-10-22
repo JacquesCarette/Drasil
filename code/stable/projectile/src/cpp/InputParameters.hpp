@@ -21,7 +21,6 @@ class InputParameters {
         double theta;
         double p_target;
         
-        ~InputParameters();
     
     private:
 };

@@ -244,7 +244,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   enumVar e en = pair (enumVar e en) (enumVar e en)
   classVar c v = pair (classVar (pfst c) (pfst v)) (classVar (psnd c) (psnd v))
   objVar o v = pair (objVar (pfst o) (pfst v)) (objVar (psnd o) (psnd v))
-  objVarSelf l n t = pair (objVarSelf l n $ pfst t) (objVarSelf l n $ psnd t)
+  objVarSelf l v = pair (objVarSelf l $ pfst v) (objVarSelf l $ psnd v)
   listVar n p t = pair (listVar n (pfst p) (pfst t)) (listVar n (psnd p) (psnd t))
   n `listOf` t = pair (n `listOf` pfst t) (n `listOf` psnd t)
   iterVar l t = pair (iterVar l $ pfst t) (iterVar l $ psnd t)
@@ -853,8 +853,8 @@ instance VariableSym CppSrcCode where
     (getTypeString c ++ "::" ++ variableName v) (variableType v) 
     (cppClassVar (getTypeDoc c) (variableDoc v)))
   objVar = objVarD
-  objVarSelf _ n t = liftA2 (mkVar ("this->"++n)) t (return $ text "this->" <> 
-    text n)
+  objVarSelf _ v = liftA2 (mkVar ("this->"++variableName v)) (variableType v) 
+    (return $ text "this->" <> variableDoc v)
   listVar = listVarD
   listOf = listOfD
   iterVar l t = liftA2 (mkVar l) (iterator t) (return $ text $ "(*" ++ l ++ ")")
@@ -1421,7 +1421,7 @@ instance VariableSym CppHdrCode where
   enumVar _ _ = liftA2 (mkVar "") void (return empty)
   classVar _ _ = liftA2 (mkVar "") void (return empty)
   objVar _ _ = liftA2 (mkVar "") void (return empty)
-  objVarSelf _ _ _ = liftA2 (mkVar "") void (return empty)
+  objVarSelf _ _ = liftA2 (mkVar "") void (return empty)
   listVar _ _ _ = liftA2 (mkVar "") void (return empty)
   listOf _ _ = liftA2 (mkVar "") void (return empty)
   iterVar _ _ = liftA2 (mkVar "") void (return empty)

@@ -879,9 +879,9 @@ objVarD :: (RenderSym repr) => repr (Variable repr) -> repr (Variable repr) ->
 objVarD o v = varFromData Dynamic (variableName o ++ "." ++ variableName v) 
   (variableType v) (objVarDocD (variableDoc o) (variableDoc v))
 
-objVarSelfD :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
+objVarSelfD :: (RenderSym repr) => Label -> repr (Variable repr) -> 
   repr (Variable repr)
-objVarSelfD l n t = objVar (self l) (var n t)
+objVarSelfD l = objVar (self l)
 
 listVarD :: (RenderSym repr) => Label -> repr (Permanence repr) -> 
   repr (Type repr) -> repr (Variable repr)

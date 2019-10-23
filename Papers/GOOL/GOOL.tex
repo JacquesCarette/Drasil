@@ -430,7 +430,17 @@ There are some cases where we are forced to include part of a language's
 expressive range in GOOL, despite it not being a staple of OO programs in every 
 language. The expression of types, for example, is not important in Python, but 
 is so prevalent in other OO languages that the easiest option by far was to 
-include abstractions for types in GOOL.
+include abstractions for types in GOOL. 
+
+There are some features common to OO programs that contribute nothing to the 
+execution of the program but still should be captured by GOOL. Examples are 
+code comments and certain formatting decisions which are ignored by a 
+language's compiler but make code more readable for human beings. Programs are 
+written simultaneously for consumption by machines and other programmers. 
+Generating code for consumption by machines is well understood and performed by 
+most DSLs, but generating code for human consumption has been given less 
+attention, so we were careful while creating GOOL not to overlook features of 
+OO programs that are meaningful only to human readers.
 
 Finding commonalities between OO programs is most easily done from the core 
 imperative language outwards.
@@ -587,13 +597,16 @@ error message to throw), \verb|free| (followed by a variable to free from
 memory), and \verb|comment| (followed by a string to be displayed as a
 single-line comment).
 
-Most languages have statement blocks, introduced by \verb|block| with
+Most OO programs have statements related to the same task grouped together in 
+blocks, introduced by \verb|block| with
 a list of statements in GOOL. Bodies (\verb|body|) are composed
 of a list of blocks, and can be used as a function body, conditional body, loop
-body, etc. The purpose of blocks as an intermediate between statement and body
-is to allow for more organized, readable generated code. For example, the
-generator can choose to insert a blank line between blocks so lines of code
-related to the same task are visually grouped together. Naturally shortcuts
+body, etc. From the perspective of the machine reading the generated code, the 
+organization of statements into blocks is meaningless. The inclusion of blocks 
+as an intermediate between statements and bodies in GOOL is purely because OO 
+programs are typically written with blocks, because human programmers write 
+code to be read by other programmers, and blocks increase human-readability. 
+Naturally, shortcuts
 are provided for single-block bodies (\verb|bodyStatements|) and
 for the common single-statement case, \verb|oneLiner|.
 

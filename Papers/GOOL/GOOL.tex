@@ -828,12 +828,21 @@ variableDoc = varDoc . unJC
 \end{lstlisting}
 
 Here are a few more examples of the kinds of additional information stored by
-each representation. \verb|Statement| stores a
-\verb|Terminator|, which is how that language indicates how a statement is to be
-terminated (frequently this is a semi-colon).  For \verb|Method|, a Boolean
-indicates whether it is the main method.  For \verb|Value|, \verb|UnaryOp|
-and \verb|BinaryOp|, precedence information is stored so that printing can
-elide parentheses whenever possible, leading to more readable code.
+each representation. Even within a language, there are often differences in how 
+statements end. For example in Java, most statements end in a semi-colon but 
+control statements like loops and if-then-else statements do not. Thus, GOOL's 
+representation for a \verb|Statement| stores a \verb|Terminator|, which 
+indicates how the statement is to be terminated. Makefiles are often written to 
+compile and run OO programs, and this sometimes requires knowledge of which 
+file contains the main module or method. GOOL's representations for 
+\verb|Method|s and \verb|Module|s therefore store information on whether it is 
+the main method or module. Redundant parentheses are typically ignored by 
+compilers, but programmers still tend to minimize the number of parentheses 
+they use so their code is more human-readable. This is possible because the 
+compilers know about the precedences of the operators used. To be able to 
+generate OO programs where parentheses are elided wherever possible, GOOL 
+stores precedence information in the representations for \verb|Value|s, 
+\verb|UnaryOp|erators and \verb|BinaryOp|erators.
 
 Note that the \verb|JavaCode| instance of \verb|VariableSym| defines the
 \verb|var| function via the \verb|varD| function:

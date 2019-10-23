@@ -1,0 +1,196 @@
+\chapter{Double Implementation}\label{a:oldDouble}
+This appendix contains a complete version of Double as described in \autoref{teExample}.
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{haskell}
+module Main(main) where
+import Language.Drasil (
+  -- Primitive types
+  Contents(LlC), Document, Expr(Int), LabelledContent,
+  Sentence(S, E, EmptyS), Space(Integer), Symbol(Atomic),
+  -- Chunks
+  AssumpChunk, Change, CI, ConstrainedChunk, QDefinition,
+  QuantityDict, ReqChunk, UnitaryConceptDict, UnitDefn,
+  -- Smart constructors
+  assump, commonIdeaWithDict, cn''', frc, fromEqn', lc,
+  nounPhraseSent, pn, nw, qw, person, shortname, vc,
+  -- Sentence functions
+  atStart, short, phrase,
+  -- Expr combinators
+  ($^), sy)
+
+import Database.Drasil (Block, ChunkDB, RefbyMap,
+  SystemInformation(SI), TraceMap, cdb, collectUnits, rdb,
+  refdb, _authors, _concepts, _constants, _constraints,
+  _datadefs, _definitions, _defSequence, _inputs, _kind,
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (DataDefinition, ddNoRefs)
+import Utils.Drasil (chgsStart, foldlSent, foldlSent_, for)
+
+import Data.Drasil.Concepts.Documentation (doccon, doccon',
+  input_, output_, software, srs, system, value)
+import Data.Drasil.IdeaDicts (mathematics)
+import Data.Drasil.SI_Units (derived, fundamentals, siUnits)
+
+import Drasil.DocLang (
+  DocDesc, DocSection(RefSec, IntroSec, SSDSec, ReqrmntSec,
+    LCsSec, TraceabilitySec),
+  DerivationDisplay(HideDerivation), Field(DefiningEquation,
+    Description, Label, Symbol, Units),
+  InclUnits(IncludeUnits), IntroSec(IntroProg),
+  RefSec(RefProg), ReqrmntSec(ReqsProg), ReqsSub(FReqsSub),
+  SCSSub(Assumptions, DDs), SolChSpec(SCSProg),
+  SSDSec(SSDProg), SSDSub(SSDSolChSpec), TSIntro(TSPurpose),
+  TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
+  generateRefbyMap, generateTraceMap, generateTraceTable,
+  getSCSSub, getTraceMapFromChgs, getTraceMapFromDD,
+  getTraceMapFromReqs, intro, mkDoc, tsymb)
+
+import Language.Drasil.Code (Choices(..), CodeSpec,
+  Comments(CommentNone), ConstraintBehaviour(Warning),
+  ImplementationType(Program), Lang(Cpp, CSharp, Java, 
+    Python), Logging(LogNone), Structure(Bundled), codeSpec)
+import Language.Drasil.Printers (DocSpec(DocSpec),
+  DocType(SRS, Website), PrintingInformation(PI), 
+  defaultConfiguration)
+import Language.Drasil.Generate (gen, genCode)
+
+symbols :: [QuantityDict]
+symbols = [x, y]
+
+pname :: String
+pname = "Double"
+
+double :: CI
+double = commonIdeaWithDict "double" (pn pname) pname
+  [mathematics]
+
+assumpNum :: AssumpChunk
+assumpNum = assump "assumpNum" (foldlSent [S "This",
+  phrase system, S "only considers", phrase input_,
+  S "integers between", E $ (-2) $^ 29, S "and",
+  E (2 $^ 29)]) "assumpNum" $
+  shortname "reasonableNumber"
+
+reqMul :: ReqChunk
+reqMul = frc "reqMul" (foldlSent [S "The", phrase output_,
+  S "shall be twice the", phrase input_, phrase value])
+  "reqMul" $ shortname "mulNum"
+
+chg :: Change
+chg = lc "chg" (foldlSent [chgsStart assumpNum (S "The"),
+  phrase software, S "may be changed to remove the range",
+  S "restriction on the", phrase input_, S "to support",
+  S "doubling any integer"]) "chg" $
+  shortname "removeRestriction"
+
+x :: QuantityDict
+x = vc "x" (cn''' "input value") (Atomic "x") Integer
+
+y :: QDefinition
+y = fromEqn' "y" (nounPhraseSent $ foldlSent_ [phrase input_,
+  phrase value, S "doubled"]) EmptyS (Atomic "y") Integer $
+  (Int 2) * sy x
+
+doubleDD :: DataDefinition
+doubleDD = ddNoRefs y [{-Derivation-}] "doubleDD" [{-Notes-}]
+
+thisSI :: SystemInformation
+thisSI = SI {
+  _sys = double,
+  _kind = srs,
+  _authors = [person "Gabriel" "Dalimonte"],
+  _quants = symbols,
+  _datadefs = [doubleDD],
+  _inputs = [x],
+  _outputs = [y],
+  _sysinfodb = allSymbols,
+  _usedinfodb = allSymbols,
+  _defSequence = [] :: [Block QDefinition],
+  _constraints = [] :: [ConstrainedChunk],
+  _constants = [],
+  _concepts = [] :: [UnitaryConceptDict],
+  _definitions = [] :: [QDefinition],
+  refdb = rdb [] []
+}
+
+allSymbols :: ChunkDB
+allSymbols = cdb symbols (nw double : map nw symbols ++
+  map nw doccon ++ map nw fundamentals ++ map nw derived ++
+  map nw doccon') srsDomains (siUnits ++ checkSI) label refBy
+  dataDefn [] [] [] [assumpNum] reqs chgs [] []
+
+thisSRS :: DocDesc
+thisSRS = [
+  RefSec $ RefProg intro [tsymb [TSPurpose]],
+    IntroSec $ IntroProg (foldlSent [atStart double,
+      S "is a trivial example for demonstrating Drasil's",
+      S "capabilities"]) (short double) [],
+    SSDSec $ SSDProg [
+      SSDSolChSpec $ SCSProg [
+        Assumptions,
+        DDs [] [Label, Symbol, Units, DefiningEquation,
+        Description Verbose IncludeUnits] [doubleDD]
+        HideDerivation
+      ]],
+  ReqrmntSec $ ReqsProg [
+    FReqsSub [reqMul] []
+  ],
+  LCsSec $ LCsProg [chg],
+  TraceabilitySec $
+    TraceabilityProg [traceTable] [foldlSent
+      [S "items with each other"]] [LlC traceTable] []
+  ]
+
+traceTable :: LabelledContent
+traceTable = generateTraceTable thisSI
+
+checkSi :: [UnitDefn]
+checkSi = collectUnits allSymbols symbols
+
+label :: TraceMap
+label = generateTraceMap thisSRS
+
+refBy :: RefbyMap
+refBy = generateRefbyMap label
+
+scs :: SCSSub
+scs = getSCSSub thisSRS
+
+dataDefn :: [DataDefinition]
+dataDefn = getTraceMapFromDD scs
+
+reqs :: [ReqChunk]
+reqs = getTraceMapFromReqs scs
+
+chgs :: [Change]
+chgs = getTraceMapFromChgs scs
+
+srsBody :: Document
+srsBody = mkDoc thisSRS for thisSI
+
+pS :: PrintingInformation
+pS = PI allSymbols defaultConfiguration
+
+thisCode :: CodeSpec
+thisCode = codeSpec thisSI thisChoices []
+
+thisChoices :: Choices
+thisChoices = Choices {
+  lang             = [Python, Cpp, CSharp, Java],
+  impType          = Program,
+  logFile          = "log.txt",
+  logging          = LogNone,
+  comments         = CommentNone,
+  onSfwrConstraint = Warning,
+  onPhysConstraint = Warning,
+  inputStructure   = Bundled
+}
+
+main :: IO ()
+main = do
+  gen (DocSpec Website $ pname ++ "_SRS") srsBody pS
+  gen (DocSpec SRS $ pname ++ "_SRS")     srsBody pS
+  genCode thisChoices thisCode
+
+\end{minted}
+\end{tcolorbox}

@@ -1,0 +1,275 @@
+\chapter{Details of Drasil}\label{toyexample}
+
+Drasil is a complex system involving a number of sub-packages, which can be combined in ways to produce a number of artefacts. Understanding the intricacies of the language and systems can be a daunting task. In an effort to acclimate the reader to Drasil as a system and a language, we present two views of Drasil. \autoref{teHow} examines Drasil at the sub-package level, describing briefly what each sub-package provides to Drasil as a system. \autoref{teExample} walks through a trivial example produced using Drasil to familiarise the reader with how the sub-packages interact, some common constructs of the Drasil language, and introduces the reader to constructs that will be referenced frequently through the rest of the report.
+
+% Plan
+% Fix this section with bottom up approach
+% Push and send email to read chapter 3 and 4
+% Proofread chapter 5 tomorrow.
+\section{How Does Drasil Work?}\label{teHow}
+We have looked at the \textit{what} of Drasil, but not much of the \textit{how}. Drasil is composed of many sub-packages, written in Haskell\footnote{https://www.haskell.org}, which provide increasing levels of abstractions. 
+
+At the heart of Drasil is the \textit{drasil-lang} sub-package, as shown in \autoref{tab:packages}. The \textit{drasil-lang} sub-package contains language primitives focused on mathematical knowledge capture. Some of the core facets of \textit{drasil-lang} include a language for symbols (\haskell{Symbol}) and a language for mathematical expressions embedding symbols (\haskell{Expr}). One differentiating feature present in Drasil is the \haskell{Sentence} datatype. The \haskell{Sentence} type encodes structure about a natural language sentence. Further, \haskell{Sentence} treats mathematical formulae (\haskell{Expr} in Drasil) and symbols (\haskell{Symbol}) with the utmost importance and allows for embedding of such constructs into \haskell{Sentence}s. \haskell{Sentence}s enables a realm of possibilities, such as embedding knowledge \textit{chunks}. One possibility is introducing an acronym into a document automatically if an abbreviation for a phrase is used.
+
+\begin{table}[H]
+  \begin{tabularx}{\textwidth}{ |l|X| }
+    \hline
+    \textbf{Sub-package} & \textbf{Description} \\
+    \hline
+    \textit{drasil-lang} & The main DSL components such as \haskell{Sentence}, \haskell{Reference}, and \haskell{Document}; pervasive through all sub-packages. \\
+    \hline
+    \textit{drasil-data} & Common (reusable) knowledge such as mathematical constants and documentation concepts. \\
+    \hline
+    \textit{drasil-utils} & Common utilities used by non-\textit{drasil-lang} sub-packages. \\
+    \hline
+    \textit{drasil-database} & Contains \haskell{SystemInformation} and a chunk database structure (\haskell{ChunkDB}). \\
+    \hline
+    \textit{drasil-docLang} & A DSL describing the Software Requirement Specification (SRS) template proposed by Smith et al~\cite{smith2005new}. It includes a translation routine for converting to a \haskell{Document} DSL from \textit{drasil-lang}. \\
+    \hline
+    \textit{drasil-theory} & Contains chunk types for describing refinements of mathematical theories and instantiation of definitions. \\
+    \hline
+    \textit{drasil-code} & A DSL for describing (and generating) object-oriented code. \\
+    \hline
+    \textit{drasil-printers} & A set of routines to translate \textit{drasil-lang} \haskell{Document}s to a common markup language such as HTML or~\LaTeX. \\
+    \hline
+    \textit{drasil-gen} & Entry point for artefact generation. \\
+    \hline
+    \textit{drasil-example} & A set of examples maintained in Drasil to demonstrate the capabilities of the language. \\
+    \hline
+  \end{tabularx}
+  \caption{Drasil sub-packages}\label{tab:packages}
+\end{table}
+
+The other focus of \textit{drasil-lang} is capturing knowledge. Knowledge is captured through the use of \textit{chunks} --- a term borrowed from literate programming. A \textit{chunk} (in Drasil) is any data type that holds knowledge about \textit{something}. We have already seen a chunk with \autoref{lst:iglassbr}, \haskell{CI} is a chunk encoding a common idea. As was alluded in \autoref{idrasil}, \haskell{CI} may be embedded within a \haskell{Sentence} adding traceability, context, and consistent appearance when embedded. \textit{drasil-lang} includes many other chunks such as \haskell{UncertainChunk} (a value with some range of uncertainty), \haskell{QuantityDict} (an idea and a mathematical symbol), and \haskell{UnitalChunk} (a symbol with a numeric unit). Chunks can be combined and extended to further the captured knowledge, as an example a \haskell{UnitalChunk} embeds a \haskell{QuantityDict} through transitivity. Sub-packages outside of \textit{drasil-lang}, such as \textit{drasil-theory}, implement additional chunks for more targeted purposes.
+
+% Explain how documents are like HTML
+The primitives of Drasil can be combined and laid out to form a \haskell{Document}. \haskell{Document} is akin to other typical markup languages, such as\ \LaTeX\ and Hypertext Markup Language (HTML), providing the structure and a layout of a rendered document. Much like its analogues, \haskell{Document} contains the ability to link and refer to other portions of a \haskell{Document} (or external resources) by using an amalgamation of a \haskell{Reference} typeclass, \haskell{Label} data structure, and a \haskell{ShortName} (the visible text accompanying a link). 
+
+
+\textit{drasil-lang} provides \haskell{Document}, which describes the layout of an arbitrary rich text document, while \textit{drasil-docLang} produces \haskell{Document}s conforming to the Smith et al.~\cite{smith2005new} requirements document template. A benefit of the sub-package design is \textit{drasil-lang} not being concerned with code generation or document rendering, those features are provided by \textit{drasil-code} and \textit{drasil-printers}, respectively. A complete list of Drasil sub-packages is available in \autoref{tab:packages}.
+
+\section{Small Example}\label{teExample}
+Armed with a basic understanding of Drasil, let us frame a simple example using Drasil. The problem we will be solving is the need to double an integer. To keep this problem simple, we assume the number being doubled, when doubled, will fit in a signed 32-bit integer without overflow (the primitive integer type's width in many programming languages). While the assumption is implementation related, we provide it as an assumption to elide introducing software constraints. Encoding this assumption in Drasil yields:
+\begin{tcolorbox}
+\begin{minted}{haskell}
+assumpNum :: AssumpChunk
+assumpNum = assump "assumpNum" (foldlSent [S "This",
+  phrase system, S "only considers", phrase input_,
+  S "integers between", E $ (-2) $^ 29, S "and",
+  E (2 $^ 29)]) "reasonableNumber"
+\end{minted}
+\end{tcolorbox}
+The first argument being a unique identifier (UID), second argument is the assumption text, and the last one is related to the name displayed when the assumption is referenced. \haskell{system} and \haskell{input_} are nouns of concepts deemed important for what we are describing. The chunks contain both a phrase to represent the concept as well as a definition to disambiguate. In the particular instance of \haskell{assumpNum}, \haskell{phrase} extracts the noun phrase of the concept, preparing it to be displayed in the middle of a sentence.
+
+Our assumption is something that is likely to be changed as we adapt it to different execution environments, or decide to use a large number library to handle arbitrarily large (or small) integers; we should specify that in our requirements document, using the \haskell{l}ikely \haskell{c}hange smart constructor, as well:
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{haskell}
+chg :: Change
+chg = lc "chg" (foldlSent [chgsStart assumpNum (S "The"),
+  phrase software, S "may be changed to remove the range",
+  S "restriction on the", phrase input_, S "to support",
+  S "doubling any integer"]) $ "removeRestriction"
+\end{minted}
+\end{tcolorbox}
+Similar to \haskell{assump}, the arguments to \haskell{lc} are: UID, the likely change description, and the last is referencing related. \haskell{chgsStart} is a constructor to tie the change to the assumption \haskell{assumpNum}, both textually in the generated SRS and internally for Drasil to use for consistency purposes. \haskell{chgsStart} is not mandatory when defining a change; however, for \haskell{chg}, it provides useful context.
+
+Next we should specify the requirement of our system, that is, taking an integer and returning twice the input. In Drasil, this would look like:
+\begin{tcolorbox}
+\begin{minted}{haskell}
+reqMul :: ReqChunk
+reqMul = frc "reqMul" (foldlSent [S "The", phrase output_,
+  S "shall be twice the", phrase input_, phrase value])
+  "mulNum"
+\end{minted}
+\end{tcolorbox}
+The arguments follow the same conventions of the previous two chunk constructors.
+
+Now that we have encoded our scope of the design, we shift our attention to the math of the problem. The math required to fulfill our requirements is fairly simple; expressed as $y = 2\cdot x$. The equation follows common mathematical notation where $x$ is the independent and $y$ is the dependent variable. To properly capture the semantics of this simple equation Drasil requires: $x$ be described as an abstract symbol --- one to be ``plugged in" as an input when we tie the software description together (\haskell{QuantityDict}), a definition (\haskell{QDefinition}) for $y$, and a \haskell{DataDefinition} chunk (from \textit{drasil-theory}) to adapt it for display in a requirements document formatted using the Smith et al. template~\cite{smith2005new}.
+
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{haskell}
+x :: QuantityDict
+x = vc "x" (cn''' "input value") (Atomic "x") Integer
+
+y :: QDefinition
+y = fromEqn' "y" (nounPhraseSent $ foldlSent_
+  [phrase input_, phrase value, S "doubled"]) EmptyS
+  (Atomic "y") Integer $ (Int 2) * sy x
+
+doubleDD :: DataDefinition
+doubleDD = ddNoRefs y [{-Derivation-}] "doubleDD" [{-Notes-}]
+\end{minted}
+\end{tcolorbox}
+
+The first argument for both \haskell{vc} and \haskell{fromEqn'} is a UID, followed by a description of what the quantity (mathematical variable) denotes in words. The last two arguments to \haskell{vc} are the mathematical symbol to denote the variable and the type. For \haskell{fromEqn'}, the \haskell{EmptyS} (empty sentence constructor) argument is a detailed definition of what the variable means conceptually, the \haskell{Atomic "y"} is the mathematical symbol used, \haskell{Integer} is (again) the type, and the last argument is the expression used to obtain our output.
+
+For \haskell{ddNoRefs}, the first argument is the equation that is the basis of the definition, \haskell{y}. The second argument is a list of equational derivation steps (as \haskell{Expr}s embedded in \haskell{Sentence}s), accompanied by a textual commentary in each step, empty for \haskell{doubleDD}. The third argument is \haskell{"doubleDD"}, the displayed name of the data definition in our SRS. Finally, the last argument is a list of \haskell{Sentence}s informing a reader of anything important about the data definition, not relevant or captured by the derivation steps.
+
+Our next step is to begin constructing the document using the chunks we have created. As a brief aside we should decide on a name for our software system. How about ``Double?"
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+pname :: String
+pname = "Double"
+
+double :: CI
+double = commonIdeaWithDict "double" (pn pname) pname
+  [mathematics]
+\end{minted}
+\end{tcolorbox}
+
+With the software name decided, it is time to construct a requirements document. The document ought to contain a table of symbols, it would be a bad decision to omit context to a reader. In a similar vein, we should introduce any readers to the software system being designed. Due to the inclusion of a likely change, it would also be nice to provide a traceability matrix to helpfully show future maintainers how each chunk interacts with all others. These three ideas introduce pieces of knowledge we have not directly encoded in Drasil and are more documentation-related in nature rather than the system we are constructing. The table of symbols and the traceability matrices can be derived automatically by Drasil and are encoded in the document within the reference section and traceability sections, respectively. The introduction (section) is purely for human readers and is thus encoded mainly using plain strings.
+
+In Drasil we declare what we want in a document as:
+
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{haskell}
+traceTable :: LabelledContent
+traceTable = generateTraceTable thisSI
+
+thisSRS :: DocDesc
+thisSRS = [
+  RefSec $ RefProg intro [tsymb [TSPurpose]],
+  IntroSec $ IntroProg (foldlSent [atStart double,
+    S "is a trivial example for",
+    S "demonstrating Drasil's capabilities"])
+    (short double) [],
+  SSDSec $ SSDProg [
+    SSDSolChSpec $ SCSProg [
+      Assumptions,
+      DDs [] [Label, Symbol, Units, DefiningEquation,
+        Description Verbose IncludeUnits] [doubleDD]
+        HideDerivation
+    ]],
+  ReqrmntSec $ ReqsProg [
+    FReqsSub [reqMul] []
+  ],
+  LCsSec $ LCsProg [chg],
+  TraceabilitySec $ TraceabilityProg [traceTable] [foldlSent
+    S "items with each other"]] [LlC traceTable] []
+  ]
+\end{minted}
+\end{tcolorbox}
+
+Of interest in our SRS declaration is that we have not defined \haskell{thisSI} yet; it will be defined shortly. One of the benefits of Drasil should be apparent with the definition of \haskell{traceTable}. \haskell{generateTraceTable} creates a traceability matrix automatically from the knowledge Drasil has available. No need to manually update information in one place and update the corresponding cells in the traceability matrix. In \haskell{RefProg}, the \haskell{tsymb} smart constructor generates a table of symbols from the symbols present in the SRS. Another peculiarity is while other section constructors generate their content from a list of chunks, the \haskell{Assumptions} data constructor is a placeholder that is expanded during document processing using chunks found in the (not yet created) chunk database. Finally, due to data definitions (the \haskell{DDs} constructor) containing a multitude of information, Drasil provides means to select what information should be displayed when generating the document.
+
+The next block of code does not encode new information used for generating a document, but ensures Drasil is consistent. We extract information, such as chunks, from the \haskell{DocDesc}, which will be part of what populates our chunk database.
+
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{haskell}
+checkSi :: [UnitDefn]
+checkSi = collectUnits allSymbols symbols
+
+label :: TraceMap
+label = generateTraceMap thisSRS
+
+refBy :: RefbyMap
+refBy = generateRefbyMap label
+
+scs :: SCSSub
+scs = getSCSSub thisSRS
+
+dataDefn :: [DataDefinition]
+dataDefn = getTraceMapFromDD scs
+
+reqs :: [ReqChunk]
+reqs = getTraceMapFromReqs scs
+
+chgs :: [Change]
+chgs = getTraceMapFromChgs scs
+\end{minted}
+\end{tcolorbox}
+
+It is time to create the chunk database (\haskell{allSymbols}) as well as produce a list of symbols (\haskell{symbols}) we have created for use with code generation:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+symbols :: [QuantityDict]
+symbols = [x, y]
+
+allSymbols :: ChunkDB
+allSymbols = cdb symbols (nw double : map nw symbols ++
+  map nw doccon ++ map nw fundamentals ++ map nw derived ++
+  map nw doccon') srsDomains (siUnits ++ checkSI) label
+  refBy dataDefn [] [] [] [assumpNum] reqs chgs [] []
+\end{minted}
+\end{tcolorbox}
+
+The argument composed of many concatenated lists for the \haskell{cdb} constructor are chunks that contain a term (i.e. a \haskell{NamedIdea}), many provided by \textit{drasil-data}. The empty fields of the chunk database are for chunk types not present in our example.
+
+Next is the \haskell{SystemInformation}, used to hold global information about the system:
+
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{haskell}
+thisSI :: SystemInformation
+thisSI = SI {
+  _sys = double,
+  _kind = srs,
+  _authors = [person "Gabriel" "Dalimonte"],
+  _quants = symbols,
+  _datadefs = [doubleDD],
+  _inputs = [x],
+  _outputs = [y],
+  _sysinfodb = allSymbols,
+  _usedinfodb = allSymbols,
+  ...
+}
+\end{minted}
+\end{tcolorbox}
+
+\haskell{SystemInformation} contains six other field all of which are empty in our example. They have been omitted for brevity.
+
+With all the information needed to generate the SRS, we can invoke \textit{drasil-docLang} to translate our \haskell{DocDesc} to a \textit{drasil-lang}-friendly \haskell{Document}:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+srsBody :: Document
+srsBody = mkDoc thisSRS for thisSI
+\end{minted}
+\end{tcolorbox}
+
+The final step for generating the SRS is to print the document in\ \LaTeX\ or HTML. To print the document we must specify some generation properties like indentation when pretty printing. For our example we use the Drasil provided defaults:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+pS :: PrintingInformation
+pS = PI allSymbols defaultConfiguration
+\end{minted}
+\end{tcolorbox}
+
+A brief detour before we finish artefact generation. We have a beautiful requirements document, but that is documentation, we were hoping for an implementation to save us from our doubling woes. To do that, we need to specify some implementation choices:
+
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{haskell}
+thisChoices :: Choices
+thisChoices = Choices {
+  lang             = [Python, Cpp, CSharp, Java],
+  impType          = Program,
+  logFile          = "log.txt",
+  logging          = LogNone,
+  comments         = CommentNone,
+  onSfwrConstraint = Warning,
+  onPhysConstraint = Warning,
+  inputStructure   = Bundled
+}
+
+thisCode :: CodeSpec
+thisCode = codeSpec thisSI thisChoices []
+\end{minted}
+\end{tcolorbox}
+
+The most interesting field is \haskell{lang}. From our system description, Drasil will generate an implementation in each of the languages we have selected.
+
+It is time to generate the artefacts we have created:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+main :: IO ()
+main = do
+  gen (DocSpec Website $ pname ++ "_SRS") srsBody pS
+  gen (DocSpec SRS $ pname ++ "_SRS")     srsBody pS
+  genCode thisChoices thisCode
+\end{minted}
+\end{tcolorbox}
+
+With the \haskell{main} function we have concluded our small problem, solved using Drasil. A complete version of this example (including imports) can be found in \autoref{a:oldDouble}

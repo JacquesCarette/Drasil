@@ -794,12 +794,19 @@ data VarData = VarD {
   varType :: TypeData,
   varDoc :: Doc}
 \end{lstlisting}
-In other words, for every (Java) variable, we store its binding time, either
-\verb|Static| or \verb|Dynamic|, the name of the variable as a \verb|String|,
-and its type as a \verb|TypeData|, which is the representation for
-\verb|Type|s for Java, and finally how the variable should appear in the
-generated code, represented as a \verb|Doc|. \verb|Doc| comes from the
-package \verb|Text.PrettyPrint.HughesPJ| and represents formatted text.
+In other words, GOOL represents a (Java) variable as not only the \verb|Doc| 
+representation of the Java code for that variable, but also the binding time, 
+name, and type of the variable. \verb|Doc| comes from the package 
+\verb|Text.PrettyPrint.HughesPJ| and represents formatted text. It is common in 
+OO programs to declare some variables as \verb|static| to signify that the 
+variable should be bound at compile-time. The \verb|Binding|, either 
+\verb|Static| or \verb|Dynamic| is thus part of a variable's representation.
+Variables in should only be assigned values with the same type, which GOOL can 
+ensure since the type is included in the variable representation. OO programs 
+commonly have print statements where names of variables are printed as strings, 
+for example for logging. Including the variable name in the representation, 
+from which it can be easily extracted, makes such logging statements easier to 
+specify. 
 
 All representing structures contain at least a \verb|Doc|. It can be considered
 to be our \emph{dynamic} representation of code, from a partial-evaluation

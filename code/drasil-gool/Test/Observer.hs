@@ -1,4 +1,4 @@
-module Test.Observer (observer, x) where
+module Test.Observer (observer, observerName, printNum, x) where
 
 import GOOL.Drasil.Symantics (
   RenderSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
@@ -6,22 +6,26 @@ import GOOL.Drasil.Symantics (
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
+observerName, printNum :: String
+observerName = "Observer"
+printNum = "printNum"
+
 observer :: (RenderSym repr) => repr (RenderFile repr)
-observer = fileDoc (buildModule "Observer" [] [] [docClass 
+observer = fileDoc (buildModule observerName [] [] [docClass 
   "This is an arbitrary class acting as an Observer"
   helperClass])
 
-x :: (RenderSym repr) => repr (Variable repr)
+x :: (VariableSym repr) => repr (Variable repr)
 x = var "x" int
 
 helperClass :: (RenderSym repr) => repr (Class repr)
-helperClass = pubClass "Observer" Nothing [stateVar public dynamic_ x]
-  [observerConstructor, printNumMethod, getMethod "Observer" x, 
-  setMethod "Observer" x]
+helperClass = pubClass observerName Nothing [stateVar public dynamic_ x]
+  [observerConstructor, printNumMethod, getMethod observerName x, 
+  setMethod observerName x]
 
 observerConstructor :: (RenderSym repr) => repr (Method repr)
-observerConstructor = constructor "Observer" [] (oneLiner (assign (objVarSelf "Observer" "x" int) (litInt 5)))
+observerConstructor = constructor observerName [] (oneLiner (assign (objVarSelf observerName "x" int) (litInt 5)))
 
 printNumMethod :: (RenderSym repr) => repr (Method repr)
-printNumMethod = method "printNum" "Observer" public dynamic_ void [] 
-  (oneLiner (printLn (valueOf $ objVarSelf "Observer" "x" int)))
+printNumMethod = method printNum observerName public dynamic_ void [] 
+  (oneLiner (printLn (valueOf $ objVarSelf observerName "x" int)))

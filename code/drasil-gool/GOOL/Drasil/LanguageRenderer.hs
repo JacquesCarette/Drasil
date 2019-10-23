@@ -565,7 +565,7 @@ changeStateD fsmName toState = var fsmName string &= litString toState
 
 initObserverListD :: (RenderSym repr) => repr (Type repr) -> 
   [repr (Value repr)] -> repr (Statement repr)
-initObserverListD t = listDecDef (var observerListName t)
+initObserverListD t = listDecDef (var observerListName (listType static_ t))
 
 addObserverD :: (RenderSym repr) => repr (Value repr) -> repr (Statement repr)
 addObserverD o = valState $ listAdd obsList lastelem o

@@ -950,7 +950,11 @@ module is straightforward.
 At the program level, the difference between source and header is no
 longer relevant, so they are joined together into a single component.
 For technical reasons, currently \verb|Pair| is still used, and we arbitrarily
-choose to put the results in the first component.
+choose to put the results in the first component. Since generating some 
+auxiliary files, especially Makefiles, requires knowledge of which are source 
+files and which are header files, GOOL's representation for files stores a 
+\verb|FileType|, either \verb|Source| or \verb|Header| (or \verb|Combined| for 
+other languages).
 
 While ``old'' features of OO languages --- basically features that
 were already present in ancestor procedural languages like Algol ---

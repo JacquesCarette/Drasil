@@ -828,11 +828,10 @@ variableDoc = varDoc . unJC
 \end{lstlisting}
 
 Here are a few more examples of the kinds of additional information stored by
-each representation. Even within a language, there are often differences in how 
-statements end. For example in Java, most statements end in a semi-colon but 
-control statements like loops and if-then-else statements do not. Thus, GOOL's 
-representation for a \verb|Statement| stores a \verb|Terminator|, which 
-indicates how the statement is to be terminated. Makefiles are often written to 
+each representation. A common documentation style for methods is to provide a 
+description of each of the method's parameters. The representation for 
+\verb|Method|s stores the list of parameters, which GOOL then uses in methods 
+that automate this pattern of documentation. Makefiles are often written to 
 compile and run OO programs, and this sometimes requires knowledge of which 
 file contains the main module or method. GOOL's representations for 
 \verb|Method|s and \verb|Module|s therefore store information on whether it is 

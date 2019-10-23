@@ -419,7 +419,10 @@ OO programs, not OO languages. The range of what can be said in an OO language
 may be very broad, but what we want to be able to say in GOOL is only the 
 subset of that range that is actually used in practice. For example, 
 introspection is possible in Java but is not a common feature of OO programs of 
-every language, so we are not interested in encoding introspection in GOOL. By 
+every language, so we are not interested in encoding introspection in GOOL. On 
+the other hand, a feature like \Cplusplus~templates may be commonly used in OO 
+programs, though not available in every language, but can still be handled by 
+GOOL through partial evaluation, so template code need not be generated. By 
 abstracting over only the kinds of expressions and ideas that are commonly used 
 in OO programs, regardless of the language, GOOL allows these ideas to be 
 expressed more easily and more effectively captures the essence of OO programs. 

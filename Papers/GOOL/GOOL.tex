@@ -408,12 +408,30 @@ clear how similar the two languages are.
 \section{Creating GOOL} \label{sec:creating}
 
 How do we go about creating a ``generic'' object-oriented language?
-We chose an incremental abstraction approach: start from two languages,
-and unify them \emph{conceptually}.  In other words, pay very close
+We chose an incremental abstraction approach: start from OO programs written in 
+two different languages,
+and unify them \emph{conceptually}. In other words, pay very close
 attention to the \emph{denotational} semantics of the features, some
-attention to the operational semantics, and ignore syntactic details.
+attention to the operational semantics, and ignore syntactic details. 
 
-This is most easily done from the core imperative language outwards.
+It is important that we work from concrete examples of OO programs, not only to 
+meet our \expressivity~requirement, but also because GOOL's domain is that of 
+OO programs, not OO languages. The range of what can be said in an OO language 
+may be very broad, but what we want to be able to say in GOOL is only the 
+subset of that range that is actually used in practice. For example, 
+introspection is possible in Java but is not a common feature of OO programs of 
+every language, so we are not interested in encoding introspection in GOOL. By 
+abstracting over only the kinds of expressions and ideas that are commonly used 
+in OO programs, regardless of the language, GOOL allows these ideas to be 
+expressed more easily and more effectively captures the essence of OO programs. 
+There are some cases where we are forced to include part of a language's 
+expressive range in GOOL, despite it not being a staple of OO programs in every 
+language. The expression of types, for example, is not important in Python, but 
+is so prevalent in other OO languages that the easiest option by far was to 
+include abstractions for types in GOOL.
+
+Finding commonalities between OO programs is most easily done from the core 
+imperative language outwards.
 Most languages provide similar basic types (variations on integers,
 floating point numbers, characters, strings, etc.) and functions to deal
 with them. The core expression language tends to be extremely similar

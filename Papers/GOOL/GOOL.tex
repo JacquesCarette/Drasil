@@ -333,9 +333,9 @@ as well as some reasoning behind each requirement.
 \item[idiomatic] The generated code should be idiomatic,
 \item[documented] The generated code should be documented,
 \item[patterns] The generator should allow one to express common OO patterns.
-\item[common] Language commonalities should be abstracted.
 \item[expressivity] The resulting language should be rich enough to express a
 set of existing OO programs, which act as test cases for the language.
+\item[common] Language commonalities should be abstracted.
 \end{description}
 
 Targetting OO languages (\mainstream) is primarily because of their popularity,
@@ -393,14 +393,13 @@ outputs; what we can do in GOOL is to support such multiple-output functions,
 and then generate the idiomatic pattern of implementation in each target
 language.
 
-The last two requirements, that language commonalities (\common) be abstracted,
-and that we can phrase a certain collection of existing OO programs 
-(\expressivity) are
-internal requirements: we didn't set out to create GOOL as a primary artifact,
-but as a side-effect of other work on different methods of creating long-lived
-software.  Part of long-lived means that we need to be flexible about
-the technology, thus needing to be polymorphic on the underlying language.
-Regarding commonalities, we noticed a lot of repeated code in our initial
+Since GOOL is intended to be a language for expressing OO programs, it is only 
+natural that we have an \expressivity~requirement to verify that GOOL is such a 
+language, and can be used to express real-world examples of OO programs.
+
+The last requirement, that language commonalities (\common) be abstracted,
+is an
+internal requirement: we noticed a lot of repeated code in our initial
 backends, something that ought to be distasteful to most programmers. For
 example, writing a generator for both Java and \Csharp{} makes it incredibly
 clear how similar the two languages are.

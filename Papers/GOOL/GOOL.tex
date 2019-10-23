@@ -872,7 +872,7 @@ but frequently used by higher-level functions.
 
 \verb|varDocD| can simply be \verb|text| as \verb|Label| is simply an
 alias for a \verb|String| -- and Java variables are simply their names,
-which is indeed the case for most OO languages.  Exceptions can use the
+which is indeed the case for most OO languages. Exceptions can use the
 class mechanism to override this in their specific case.
 
 This genericity
@@ -955,6 +955,14 @@ auxiliary files, especially Makefiles, requires knowledge of which are source
 files and which are header files, GOOL's representation for files stores a 
 \verb|FileType|, either \verb|Source| or \verb|Header| (or \verb|Combined| for 
 other languages).
+
+We have used the \verb|VariableSym| class as an example thus far, but there are 
+other of GOOL's symantic classes worth drawing attention to. 
+\verb|ControlBlockSym| contains functions for generating code to complete 
+certain tasks. These functions return \verb|Block|s, not \verb|Statement|s, so 
+that the code for completing the task will be visually distinct from 
+surrounding code. So in addition to automating certain tasks, these functions 
+also save the user from having to manually specify the result as a block.
 
 While ``old'' features of OO languages --- basically features that
 were already present in ancestor procedural languages like Algol ---

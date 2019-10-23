@@ -833,8 +833,9 @@ description of each of the method's parameters. The representation for
 \verb|Method|s stores the list of parameters, which GOOL then uses in methods 
 that automate this pattern of documentation. Makefiles are often written to 
 compile and run OO programs, and this sometimes requires knowledge of which 
-file contains the main module or method. GOOL's representations for 
-\verb|Method|s and \verb|Module|s therefore store information on whether it is 
+file contains the main module or method. Since GOOL includes the option of 
+generating a Makefile as part of a \verb|Package|, GOOL's representations for 
+a \verb|Method| and a \verb|Module| store information on whether it is 
 the main method or module. Redundant parentheses are typically ignored by 
 compilers, but programmers still tend to minimize the number of parentheses 
 they use so their code is more human-readable. This is possible because the 

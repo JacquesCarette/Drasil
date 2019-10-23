@@ -42,23 +42,25 @@ patternTestMainMethod = mainFunction (body [block [
   changeState fsmName onState,
   checkState fsmName 
     [(litString offState, 
-      oneLiner (printStrLn offState)), 
+      oneLiner $ printStrLn offState), 
      (litString onState, 
-       oneLiner (printStrLn onState))] 
-    (oneLiner (printStrLn noState))],
+       oneLiner $ printStrLn onState)] 
+    (oneLiner $ printStrLn noState)],
 
   runStrategy strat1
-    [(strat1, oneLiner (printStrLn strat1)), 
-      (strat2, oneLiner (printStrLn strat2))]
-    (Just (litInt 3)) (Just n),
+    [(strat1, oneLiner $ printStrLn strat1), 
+     (strat2, oneLiner $ printStrLn strat2)]
+    (Just $ litInt 3) (Just n),
 
   block [
     varDecDef obs1 newObserver, 
     varDecDef obs2 newObserver],
+
   block [
     initObserverList observerType [valueOf obs1], 
     addObserver $ valueOf obs2,
     notifyObservers (func printNum void []) observerType],
+    
   block [
     valState $ set (valueOf obs1) x (litInt 10),
-    print(get (valueOf obs1) x)]])
+    print $ get (valueOf obs1) x]])

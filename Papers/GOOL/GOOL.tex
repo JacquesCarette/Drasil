@@ -877,13 +877,14 @@ alias for a \verb|String| -- and Java variables are simply their names,
 which is indeed the case for most OO languages. Exceptions can use the
 class mechanism to override this in their specific case.
 
-This genericity
+We have defined $300$ functions like \verb|varDocD|, each abstracting a 
+\common ality between target languages. This genericity
 makes writing new renderers for new languages fairly straightforward.
 GOOL's Java and \Csharp{} renderers demonstrate this fact well. Out of $328$
-methods across all of GOOL's type classes, the instances of $228$ of them are
-shared between the Java and \Csharp{} renderers, in that they are just calls to the
-same common function. A further $37$ are partially shared, for example they call
-the same common function but with different parameters. $143$ methods are
+methods across all of GOOL's type classes, the instances of $229$ of them are
+shared between the Java and \Csharp{} renderers, in that they are just calls to 
+the same common function. A further $37$ are partially shared, for example they 
+call the same common function but with different parameters. $143$ methods are
 actually the same between all $4$ languages GOOL currently targets. This might
 indicate that some should be generic functions rather than class methods,
 but we have not investigated this in detail yet.
@@ -958,12 +959,18 @@ files and which are header files, GOOL's representation for files stores a
 \verb|FileType|, either \verb|Source| or \verb|Header| (or \verb|Combined| for 
 other languages).
 
-We have used the \verb|VariableSym| class as an example thus far, but there are 
-other of GOOL's symantic classes worth drawing attention to. 
-\verb|ControlBlockSym| contains functions for generating code to complete 
-certain tasks. These functions return \verb|Block|s, not \verb|Statement|s, so 
-that the code for completing the task will be visually distinct from 
-surrounding code. So in addition to automating certain tasks, these functions 
+A minimal renderer, where all methods are defined by dispatching to a function, 
+would be around $600$ lines of code. Comparing the number of lines of code of 
+each of our renderers to $600$ therefore gives an indication of the specificity 
+of that renderer. The \Cplusplus{} source code renderer is our largest, with 
+$812$ lines of code. This suggests that of all our target languages, 
+\Cplusplus{} is the least similar to the others. Our smallest renderer is 
+\Csharp{}'s, with $691$ lines of code, meaning \Csharp{} has the most in common 
+with the other languages.
+
+GOOL's \verb|ControlBlockSym| class is worth drawing attention to. 
+It contains methods for certain OO patterns, and they return \verb|Block|s, not 
+\verb|Statement|s. So in addition to automating certain tasks, these methods 
 also save the user from having to manually specify the result as a block.
 
 While ``old'' features of OO languages --- basically features that

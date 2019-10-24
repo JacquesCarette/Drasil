@@ -801,11 +801,13 @@ name, and type of the variable. \verb|Doc| comes from the package
 OO programs to declare some variables as \verb|static| to signify that the 
 variable should be bound at compile-time. The \verb|Binding|, either 
 \verb|Static| or \verb|Dynamic| is thus part of a variable's representation.
-Variables in should only be assigned values with the same type, which GOOL can 
-ensure since the type is included in the variable representation. OO programs 
+The reason for including the type in the variable representation is because 
+variables often appear in OO code alongside their type, for example in 
+declaration statements. GOOL can simply read the type from the variable to 
+easily generate such statements. OO programs 
 commonly have print statements where names of variables are printed as strings, 
 for example for logging. Including the variable name in the representation, 
-from which it can be easily extracted, makes such logging statements easier to 
+from which it can be easily extracted, makes logging statements easier to 
 specify. 
 
 All representing structures contain at least a \verb|Doc|. It can be considered

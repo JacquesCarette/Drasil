@@ -1258,6 +1258,55 @@ having these as language features is useful for two reasons: 1) the GOOL-level
 code is clearer in its intent (and more concise), and 2) the resulting code
 can be more idiomatic.
 
+Below is an example of a function written in GOOL that demonstrates usage of 
+all of the above methods for design patterns. Any Haskell function for which 
+the definition is not shown is defined as a string and left out for brevity.
+\begin{lstlisting}
+observerType :: (TypeSym repr) => 
+  repr (Type repr)
+observerType = obj observerName
+
+n, obs1, obs2 :: (VariableSym repr) => 
+  repr (Variable repr)
+n = var nName int
+obs1 = var obs1Name observerType
+obs2 = var obs2Name observerType
+
+newObserver :: (ValueExpression repr) => 
+  repr (Value repr)
+newObserver = extNewObj observerName 
+  observerType []
+
+patternTest :: (MethodSym repr) => 
+  repr (Method repr)
+patternTest = mainFunction (body [block [
+  varDec n,
+  initState fsmName offState, 
+  changeState fsmName onState,
+  checkState fsmName 
+  [(litString offState, 
+    oneLiner $ printStrLn offState), 
+   (litString onState, 
+    oneLiner $ printStrLn onState)] 
+  (oneLiner $ printStrLn noState)],
+
+  runStrategy str1
+    [(str1, oneLiner $ printStrLn str1), 
+     (str2, oneLiner $ printStrLn str2)]
+    (Just $ litInt 3) (Just n),
+
+  block [
+    varDecDef obs1 newObserver, 
+    varDecDef obs2 newObserver],
+
+  block [
+    initObserverList observerType 
+      [valueOf obs1], 
+    addObserver $ valueOf obs2,
+    notifyObservers (func printNum 
+      void []) observerType],
+\end{lstlisting}
+
 \section{Related Work} \label{sec:related}
 
 We divide the Related Work into the following categories

@@ -1,0 +1,162 @@
+\documentclass[12pt]{report}
+\usepackage{./Style/gscale_thesis}
+\usepackage{./Style/fancyheadings}
+\usepackage{./Style/natbib} %bibliography style for books and articles
+\usepackage{./Style/setspace}
+\include{definitions}
+\setcounter{tocdepth}{1}
+
+% Additional packages
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[justification=centering]{caption}
+\usepackage[hidelinks,bookmarksdepth=3]{hyperref}
+\usepackage{array}
+\newcolumntype{P}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage[shortcuts]{extdash}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{framed}
+\usepackage[chapter]{minted}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{multicol}
+\usepackage{tabularx}
+\usepackage{environ}
+
+\lstset{frame=single}
+\newenvironment{longlisting}{\captionsetup{type=listing}}{}  % Literal theft from: https://tex.stackexchange.com/a/368971
+\providecommand*{\listingautorefname}{Listing} % https://tex.stackexchange.com/questions/13760/use-autoref-with-minted-and-its-listing-environment
+\renewcommand*{\chapterautorefname}{Chapter}
+\renewcommand*{\sectionautorefname}{Section}
+\renewcommand*{\subsectionautorefname}{Subsection}
+\setmintedinline{breaklines}
+\newmintinline[haskell]{haskell}{}
+\newmintinline[makefile]{makefile}{}
+\newmintinline[bash]{bash}{}
+\newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\tiny\bf +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\tiny\bf +}}
+\def\CClb{C\raise.22ex\hbox{{\footnotesize +}}\raise.22ex\hbox{\footnotesize +}}
+
+\graphicspath{{Images/}}
+
+% ********************************
+\begin{document}                     
+	\beforepreface
+	\include{executiveSummary}
+	\referencepages
+	\afterpreface
+	
+	\include{Chapters/introduction}
+		\setcounter{figure}{0}
+		\setcounter{equation}{0}
+		\setcounter{table}{0}
+	\include{Chapters/toyexample}
+		\setcounter{figure}{0}
+		\setcounter{equation}{0}
+		\setcounter{table}{0}
+	\include{Chapters/conceptinstance}
+		\setcounter{figure}{0}
+		\setcounter{equation}{0}
+		\setcounter{table}{0}
+	\include{Chapters/doclang}
+		\setcounter{figure}{0}
+		\setcounter{equation}{0}
+		\setcounter{table}{0}
+	\include{Chapters/buildsys}
+		\setcounter{figure}{0}
+		\setcounter{equation}{0}
+		\setcounter{table}{0}
+	\include{Chapters/conclusion}
+		\setcounter{figure}{0}
+		\setcounter{equation}{0}
+		\setcounter{table}{0}
+		
+\begin{appendix}
+	\include{Appendix/old_double}
+		\setcounter{figure}{0}
+		\setcounter{equation}{0}
+		\setcounter{table}{0}
+	\include{Appendix/modern_double}
+		\setcounter{figure}{0}
+		\setcounter{equation}{0}
+		\setcounter{table}{0}
+	\include{Appendix/double_makefiles}
+		\setcounter{figure}{0}
+		\setcounter{equation}{0}
+		\setcounter{table}{0}
+\end{appendix}
+
+	%\bibliographystyle{Style/natbib}
+	\bibliographystyle{plain}
+	\bibliography{report}
+	
+	\label{NumDocumentPages}
+
+%% Outline
+
+%% introduce the problem Drasil is solving (developing SCS, consistency, certification, etc)
+%% Introduce Drasil 
+%% What is my problem with Drasil as it stand? (It needs some cleaning)
+%% How does Drasil work?
+%% What are chunks?
+%% What is a minimal example?
+
+%% What are ReqChunk, AssumpChunk, Changes? (Noticed from the minimal/toy example)
+%% Hey, they're in the wrong place.
+%% Let's take a look at them to better understand them (and how they transform to being printed)
+%% Hey they're the same.
+%% We were going to put them in docLang, but they're the same, what if we refactor and put the essence in lang?
+%% If we merge them as is we lose semantic meaning
+%% What if we add a domain?
+	%% How do we structure domains as a tree
+	%% Why because then we can select categories of a certain "size" (ex. All requirement or just functional)
+%% Okay, let's do that.
+%% Welp, references
+	%% RefProg detour
+	%% A language for references
+	%% Defer when we assemble references.
+	%% Tag the domain since we derive from that
+%% Okay, we done. But assumptions in DocDesc was a pain, let's fix that.
+
+
+%%% How does assumptions currently work
+%% Why is it better (declarative)
+%% Let's look at what DocLang touches
+%% Yikes, the passes, that is a lot of redundant code
+%% Yikes, that traceability matrix
+%% Views!
+%% Multiplate!!!
+%% Yikes, examples do redundant parsing of DocDesc, let's lift to the Doc-time level.
+%% Okay, they're cleaner, let's add a pass to be more declarative
+%% Dope
+
+%% Build system needs love, tedious to manually compile latex
+%% Ugh, the makefile could use some refactoring
+% Compile latex
+%% Building code since it's similar to TeX.
+%% It's inconvenient to require 4+ compilers, to test locally. 
+	%% What if we revamp our CI to do a comprehensive testing of artefacts.
+%% Warnings always appear, let's enforce that on CI to ensure no more PR's of "fixing warnings"
+%% Let's standardize code because that the natural extension to warnings
+	%% HLint
+%% We have the CI artefacts, but end of build we throw them away. This feels wasteful.
+%% We should have a public page for Drasil with our generated artefacts so new people don't have to compile from scratch!
+	%% We use a static site generator
+	%% HAkyll
+%% How we tie the artefacts with the makefile knowledge to have a deploy into CI.
+	%% Hey look! All of this is connected!
+%% But alas I'm done
+%% HEre's some future work
+
+% Recap what I've done
+% Reiterste how all of these improve Drasil architecturally and fit the philosophy.
+
+\end{document}

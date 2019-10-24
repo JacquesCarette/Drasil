@@ -170,7 +170,7 @@
 \begin{abstract}
   We present GOOL, a Generic Object-Oriented Language.  It demonstrates
   that a language, with the right abstractions, can capture the essence of
-  mainstream object oriented languages.  We show how GOOL programs can
+  object-oriented programs.  We show how GOOL programs can
   be used to generate human-readable, documented and idiomatic source code in
   multiple languages.  Moreover, in GOOL, it is possible to express common
   programming idioms and patterns, from
@@ -248,8 +248,9 @@ surface level, are structurally very similar?
 This is what we set out to explore.  One non-solution is to find a single
 (existing) language and try to automatically translate it to the others.
 Of course, this can be made to work --- one could
-engineer a multi-language compiler (such as gcc) to de-compile its
-IR into most of its input languages.  The end-results would however
+engineer a multi-language compiler (such as gcc) to de-compile its Intermediate 
+Representation (IR) into most of its input languages.  The end-results would 
+however
 be wildly unidiomatic; roughly the equivalent of an absolute novice
 in a new (spoken) language ``translating'' word-by-word.
 
@@ -270,7 +271,7 @@ for getting things done. This is closer to translating technical textbooks,
 making sure that all of the meaningful material was preserved.
 
 Is this feasible? In some sense, this is already old hat: most
-modern compilers have a single internal Intermediate Representation (IR),
+modern compilers have a single internal IR,
 which is used to target multiple processors. Compilers can generate
 human-readable symbolic assembly code for a large family of CPUs. But this
 is not quite the same as generating human-readable, idiomatic high-level
@@ -324,8 +325,7 @@ future improvements in Section \ref{sec:future}, and conclusions in Section
 \section{Requirements} \label{sec:req}
 
 While we outlined some of our requirements above, here we will give a
-complete list, along with acronyms (to make referring to them simpler),
-as well as some reasoning behind each requirement.
+complete list, as well as some reasoning behind each requirement.
 
 \begin{description}
 \item[mainstream] Generate code in mainstream object-oriented languages.
@@ -354,7 +354,7 @@ available in a number of languages. Another use, which is a core part of our
 own motivation, is to have \emph{extremely well documented} code, indeed to
 a level that would be unrealistic to do by hand. But this documentation is
 crucial in domains where \emph{certification} of code is required.  And
-\readable is a proxy for \emph{understandable}, which is also quite
+\readable~is a proxy for \emph{understandable}, which is also quite
 helpful for debugging.
 
 The same underlying reasons for \readable~also drive \idiomatic~and \documented,
@@ -376,7 +376,7 @@ choose to do so. It just makes it easy to have \readable, \idiomatic~and
 The \oopatterns~requirement is typical of DSLs: common programming idioms
 can be reified into a proper linguistic form instead of being merely
 informal. Even some of the \emph{design patterns} of~\cite{gamma1995design}
-can become part of the language itself. This does make writing some OO
+can become part of the language itself. While this does make writing some OO
 code even easier in GOOL than in GPLs, it also helps quite a lot with
 keeping GOOL language-agnostic and generating idiomatic code.
 Examples will be given in Section~\ref{sec:patterns}.  But we can give an
@@ -1435,7 +1435,7 @@ information, and a second to actually generate the code.
 
 Some implementation decisions, such as the use of \verb|ArrayList| to represent
 lists in Java, are hard-coded. But we could have used \verb|Vector| instead.
-We would like such a choice to be user-controlled instead. Another such choice
+We would like such a choice to be user-controlled. Another such choice
 point is to allow users to choose which specific external library to use.
 
 And, of course, we ought to implement more of the common OO patterns.

@@ -1,0 +1,98 @@
+\chapter{Double Makefiles}\label{a:doubleMakefiles}
+This appendix displays the Makefiles generated as the result of \autoref{bsCode}.
+\section{\CClb}\label{a:dm:cxx}
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{makefile}
+ifeq "$(OS)" "Windows_NT"
+    TARGET_EXTENSION=.exe
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S), Linux)
+        TARGET_EXTENSION=
+    endif
+    ifeq ($(UNAME_S), Darwin)
+        TARGET_EXTENSION=
+    endif
+endif
+
+build: Double$(TARGET_EXTENSION)
+
+Double$(TARGET_EXTENSION): InputParameters.hpp \
+  InputFormat.hpp DerivedValues.hpp OutputFormat.hpp \
+  Control.cpp InputParameters.cpp InputFormat.cpp \
+  DerivedValues.cpp OutputFormat.cpp
+	"$(CXX)" Control.cpp InputParameters.cpp \
+	InputFormat.cpp DerivedValues.cpp OutputFormat.cpp \
+	--std=c++11 -o Double$(TARGET_EXTENSION)
+
+run: build
+	./Double$(TARGET_EXTENSION) $(RUNARGS)
+
+.PHONY: build run
+\end{minted}
+\end{tcolorbox}
+
+\section{C\#}\label{a:dm:csharp}
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{makefile}
+ifeq "$(OS)" "Windows_NT"
+    TARGET_EXTENSION=.exe
+    CSC=csc
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S), Linux)
+        TARGET_EXTENSION=
+        CSC=mcs
+    endif
+    ifeq ($(UNAME_S), Darwin)
+        TARGET_EXTENSION=
+        CSC=mcs
+    endif
+endif
+
+build: Double$(TARGET_EXTENSION)
+
+Double$(TARGET_EXTENSION): Control.cs InputParameters.cs \
+  InputFormat.cs DerivedValues.cs OutputFormat.cs
+	$(CSC) -out:Double$(TARGET_EXTENSION) Control.cs \
+	InputParameters.cs InputFormat.cs DerivedValues.cs \
+	OutputFormat.cs
+
+run: build
+	./Double$(TARGET_EXTENSION) $(RUNARGS)
+
+.PHONY: build run
+
+\end{minted}
+\end{tcolorbox}
+
+\section{Java}\label{a:dm:java}
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{makefile}
+build: Double/Control.class
+
+Double/Control.class: Double/Control.java \
+  Double/InputParameters.java Double/InputFormat.java \
+  Double/DerivedValues.java Double/OutputFormat.java
+	javac Double/Control.java
+
+run: build
+	java Double.Control $(RUNARGS)
+
+.PHONY: build run
+
+\end{minted}
+\end{tcolorbox}
+
+\section{Python}\label{a:dm:python}
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{makefile}
+build:
+
+run: build
+	python Control.py $(RUNARGS)
+
+.PHONY: build run
+
+\end{minted}
+\end{tcolorbox}

@@ -146,15 +146,13 @@ getMethod :: (RenderSym repr) => Label -> repr (Variable repr) ->
   repr (Method repr)
 getMethod c v = S.method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
-    where getBody = oneLiner $ returnState (valueOf $ objVarSelf c 
-            (variableName v) (variableType v))
+    where getBody = oneLiner $ returnState (valueOf $ objVarSelf c v)
 
 setMethod :: (RenderSym repr) => Label -> repr (Variable repr) -> 
   repr (Method repr)
 setMethod c v = S.method (setterName $ variableName v) c public dynamic_ void 
   [param v] setBody
-  where setBody = oneLiner $ objVarSelf c (variableName v) (variableType v) 
-          &= valueOf v
+  where setBody = oneLiner $ objVarSelf c v &= valueOf v
 
 privMethod :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
   [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)

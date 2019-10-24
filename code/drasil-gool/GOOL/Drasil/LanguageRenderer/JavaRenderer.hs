@@ -39,17 +39,18 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
   binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
   litIntD, litStringD, classVarD, classVarDocD, inlineIfD, newObjDocD, varD, 
-  staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, listVarD, listOfD, 
-  iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD,
-  objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
-  extFuncAppD, newObjD, notNullD, castDocD, castObjDocD, funcD, getD, setD, 
-  listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD,
-  getFuncD, setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, 
-  iterBeginError, iterEndError, listAccessFuncD', staticDocD, dynamicDocD, 
-  bindingError, privateDocD, publicDocD, dot, new, elseIfLabel, forLabel, 
-  blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, 
-  commentedItem, addCommentsDocD, commentedModD, docFuncRepr, valueList, 
-  appendToBody, surroundBody, intValue, filterOutObjs)
+  staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, 
+  listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, 
+  objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, 
+  listIndexExistsD, indexOfD, funcAppD, extFuncAppD, newObjD, notNullD, 
+  castDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, 
+  iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, 
+  listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
+  listAccessFuncD', staticDocD, dynamicDocD, bindingError, privateDocD, 
+  publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
+  docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, commentedModD, docFuncRepr, valueList, appendToBody, 
+  surroundBody, intValue, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
   pi, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
   construct, comment, ifCond, for, forEach, while, method, getMethod, setMethod,
@@ -231,7 +232,7 @@ instance VariableSym JavaCode where
   enumVar = enumVarD
   classVar = classVarD classVarDocD
   objVar = objVarD
-  objVarSelf _ = var
+  objVarSelf = objVarSelfD
   listVar = listVarD
   listOf = listOfD
   iterVar = iterVarD

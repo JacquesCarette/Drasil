@@ -1,4 +1,4 @@
-module Test.Observer (observer, x) where
+module Test.Observer (observer, observerName, printNum, x) where
 
 import GOOL.Drasil.Symantics (
   RenderSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
@@ -6,22 +6,30 @@ import GOOL.Drasil.Symantics (
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
+observerName, observerDesc, printNum :: String
+observerName = "Observer"
+observerDesc = "This is an arbitrary class acting as an Observer"
+printNum = "printNum"
+
 observer :: (RenderSym repr) => repr (RenderFile repr)
-observer = fileDoc (buildModule "Observer" [] [] [docClass 
-  "This is an arbitrary class acting as an Observer"
+observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
-x :: (RenderSym repr) => repr (Variable repr)
+x :: (VariableSym repr) => repr (Variable repr)
 x = var "x" int
 
-helperClass :: (RenderSym repr) => repr (Class repr)
-helperClass = pubClass "Observer" Nothing [stateVar public dynamic_ x]
-  [observerConstructor, printNumMethod, getMethod "Observer" x, 
-  setMethod "Observer" x]
+selfX :: (VariableSym repr) => repr (Variable repr)
+selfX = objVarSelf observerName x
 
-observerConstructor :: (RenderSym repr) => repr (Method repr)
-observerConstructor = constructor "Observer" [] (oneLiner (assign (objVarSelf "Observer" "x" int) (litInt 5)))
+helperClass :: (ClassSym repr) => repr (Class repr)
+helperClass = pubClass observerName Nothing [stateVar public dynamic_ x]
+  [observerConstructor, printNumMethod, getMethod observerName x, 
+  setMethod observerName x]
 
-printNumMethod :: (RenderSym repr) => repr (Method repr)
-printNumMethod = method "printNum" "Observer" public dynamic_ void [] 
-  (oneLiner (printLn (valueOf $ objVarSelf "Observer" "x" int)))
+observerConstructor :: (MethodSym repr) => repr (Method repr)
+observerConstructor = constructor observerName [] $ oneLiner $ assign selfX 
+  (litInt 5)
+
+printNumMethod :: (MethodSym repr) => repr (Method repr)
+printNumMethod = method printNum observerName public dynamic_ void [] $
+  oneLiner $ printLn $ valueOf selfX

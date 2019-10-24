@@ -1,0 +1,170 @@
+\chapter{Post-Report Double Implementation}\label{a:modernDouble}
+This appendix contains a complete version of Double described in \autoref{teExample}, but modernizes the example by using the improvements discussed in this report.
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{haskell}
+module Main(main) where
+import Language.Drasil (
+  -- Primitive types
+  Document, Expr(Int), Sentence(S, E, EmptyS),
+  Space(Integer), Symbol(Atomic),
+  -- Chunks
+  CI, ConceptInstance, ConstrainedChunk, QDefinition,
+  QuantityDict, UnitaryConceptDict,
+  -- Smart constructors
+  cic, commonIdeaWithDict, cn''', fromEqn', nounPhraseSent,
+  pn, nw, qw, person, vc,
+  -- Sentence functions
+  atStart, short, phrase,
+  -- Expr combinators
+  ($^), sy)
+
+import Database.Drasil (Block, ChunkDB,
+  SystemInformation(SI), cdb, rdb, refdb, _authors,
+  _concepts, _constants, _constraints,  _datadefs,
+  _definitions, _defSequence, _inputs, _kind, _outputs,
+  _quants, _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (DataDefinition, ddNoRefs)
+import Utils.Drasil (chgsStart, foldlSent, foldlSent_, for)
+
+import Data.Drasil.Concepts.Documentation (doccon, doccon',
+  input_, output_, software, srs, system, value,
+  -- Domains
+  assumpDom, funcReqDom, likeChgDom, srsDomains)
+import Data.Drasil.IdeaDicts (mathematics)
+import Data.Drasil.SI_Units (derived, fundamentals, siUnits)
+
+import Drasil.DocLang (
+  DocSection(RefSec, IntroSec, SSDSec, ReqrmntSec, LCsSec,
+    TraceabilitySec), DerivationDisplay(HideDerivation),
+  Field(DefiningEquation, Description, Label, Symbol, Units),
+  InclUnits(IncludeUnits), IntroSec(IntroProg),
+  RefSec(RefProg), ReqrmntSec(ReqsProg), ReqsSub(FReqsSub),
+  SCSSub(Assumptions, DDs), SolChSpec(SCSProg), SRSDecl,
+  SSDSec(SSDProg), SSDSub(SSDSolChSpec), TSIntro(TSPurpose),
+  TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
+  intro, mkDoc, tsymb, traceMatStandard)
+
+import Language.Drasil.Code (Choices(..), CodeSpec,
+  Comments(CommentNone), ConstraintBehaviour(Warning),
+  ImplementationType(Program),
+  Lang(Cpp, CSharp, Java, Python), Logging(LogNone),
+  Structure(Bundled), codeSpec)
+import Language.Drasil.Printers (DocSpec(DocSpec),
+  DocType(SRS, Website), PrintingInformation(PI),
+  defaultConfiguration)
+import Language.Drasil.Generate (gen, genCode)
+
+symbols :: [QuantityDict]
+symbols = [x, qw calcQ]
+
+pname :: String
+pname = "Double"
+
+double :: CI
+double = commonIdeaWithDict "double" (pn pname) pname
+  [mathematics]
+
+assumpNum :: ConceptInstance
+assumpNum = cic "assumpNum" (foldlSent [S "This",
+  phrase system, S "only considers", phrase input_,
+  S "integers between", E $ (-2) $^ 29, S "and",
+  E (2 $^ 29)]) "reasonableNumber" assumpDom
+
+reqMul :: ConceptInstance
+reqMul = cic "reqMul" (foldlSent [S "The", phrase output_,
+  S "shall be twice the", phrase input_, phrase value])
+  "mulNum" funcReqDom
+
+chg :: ConceptInstance
+chg = cic "chg" (foldlSent [chgsStart assumpNum (S "The"),
+  phrase software, S "may be changed to remove the range",
+  S "restriction on the", phrase input_, S "to support",
+  S "doubling any integer"]) "removeRestriction" likeChgDom
+
+-- Calculations
+x :: QuantityDict
+x = vc "x"    (cn''' "input value") (Atomic "x") Integer
+
+calc :: Expr
+calc = (Int 2) * sy x
+
+calcQ :: QDefinition
+calcQ = fromEqn' "y" (nounPhraseSent $ foldlSent_ [
+  phrase input_, phrase value, S "doubled"]) EmptyS
+  (Atomic "y") Integer calc
+
+y :: DataDefinition
+y = ddNoRefs calcQ [{-Derivation-}] "doubledd" [{-Notes-}]
+
+thisSI :: SystemInformation
+thisSI = SI {
+  _sys = double,
+  _kind = srs,
+  _authors = [person "Gabriel" "Dalimonte"],
+  _quants = symbols,
+  _datadefs = [y],
+  _inputs = [x],
+  _outputs = [qw y],
+  _sysinfodb = allSymbols,
+  _usedinfodb = allSymbols,
+  _defSequence = [] :: [Block QDefinition],
+  _constraints = [] :: [ConstrainedChunk],
+  _constants = [],
+  _concepts = [] :: [UnitaryConceptDict],
+  _definitions = [] :: [QDefinition],
+  refdb = rdb [] []
+}
+
+allSymbols :: ChunkDB
+allSymbols = cdb symbols (nw double : map nw symbols ++
+  map nw doccon ++ map nw fundamentals ++ map nw derived ++
+  map nw doccon') srsDomains siUnits [y] [] [] []
+  [assumpNum, reqMul, chg] [] []
+
+pS :: PrintingInformation
+pS = PI allSymbols defaultConfiguration
+
+thisSRS :: SRSDecl
+thisSRS = [
+  RefSec $ RefProg intro [tsymb [TSPurpose]],
+    IntroSec $ IntroProg (foldlSent [atStart double,
+      S "is a trivial example for demonstrating Drasil's",
+      S "capabilities"]) (short double) [],
+    SSDSec $ SSDProg [
+      SSDSolChSpec $ SCSProg [
+        Assumptions,
+        DDs [] [Label, Symbol, Units, DefiningEquation,
+        Description Verbose IncludeUnits] HideDerivation
+      ]],
+  ReqrmntSec $ ReqsProg [
+    FReqsSub []
+  ],
+  LCsSec,
+  TraceabilitySec $ TraceabilityProg $
+    traceMatStandard thisSI]
+
+srsBody :: Document
+srsBody = mkDoc thisSRS for thisSI
+
+thisCode :: CodeSpec
+thisCode = codeSpec thisSI thisChoices []
+
+thisChoices :: Choices
+thisChoices = Choices {
+  lang             = [Python, Cpp, CSharp, Java],
+  impType          = Program,
+  logFile          = "log.txt",
+  logging          = LogNone,
+  comments         = CommentNone,
+  onSfwrConstraint = Warning,
+  onPhysConstraint = Warning,
+  inputStructure   = Bundled
+}
+
+main :: IO ()
+main = do
+  gen (DocSpec Website $ pname ++ "_SRS") srsBody pS
+  gen (DocSpec SRS $ pname ++ "_SRS")     srsBody pS
+  genCode thisChoices thisCode
+\end{minted}
+\end{tcolorbox}

@@ -1245,7 +1245,7 @@ generate a declaration of a variable with the given name and initial state.
 \verb|checkState| is more complex.  It takes the name of the state variable, a
 list of value-body pairs, and a fallback body; and it generates a conditional
 (usually a switch statement) that checks the state and runs the corresponding
-body, or the fallback body if none of the states match.
+body, or the fallback body, if none of the states match.
 
 Of course the design patterns could already have been coded in GOOL, but
 having these as language features is useful for two reasons: 1) the GOOL-level
@@ -1374,11 +1374,11 @@ The \textbf{Role-Based Metamodeling Language}~\cite{kim2003uml} is also based on
 with changes to allow for better models of design patterns, with specifications
 for the structure, interactions, and state-based behaviour in patterns. Again,
 source code generation is not attempted. Another metamodel for design patterns
-includes generation of Java code \cite{albin2001meta}, and IBM developed a DSL
+includes generation of Java code \cite{albin2001meta}, and IBM's DSL
 for generation of OO code based on design patterns
 \cite{budinsky1996automatic}. IBM's DSL was in the form of a visual user
 interface rather than a programming or modeling language. The languages that
-generate code do so only for design patterns, not for any general-purpose code
+generate code do so only for design patterns, not for any general-purpose code,
 as GOOL does.
 
 \section{Future Work} \label{sec:future}
@@ -1401,9 +1401,9 @@ data TypedVar a where
   IVr :: VarData -> TypedVar Integer
   ...
 \end{lstlisting}
-This would allow variables to have different types, and Haskell would catch
+This will allow variables to have different types, and Haskell will catch
 these. We would be re-using Haskell's type system to catch (some) of the
-type errors in GOOL.  Because we don't need to type arbitrary code in any
+type errors in GOOL.  Because we do not need to type arbitrary code in any
 of the target languages, but only what is expressible in GOOL, we can
 engineer things so as to encode quite a wide set of typing rules.
 
@@ -1415,7 +1415,7 @@ kinds of static analyses to help enhance the code generation quality.
 For example, we ought to be much more precise about \verb|throws Exception|
 in Java.
 
-Another important feature is being able to interface to external libraries
+Another important future feature is being able to interface to external libraries,
 instead of just already-known libraries. In particular, we have a need to
 call external Ordinary Differential Equations (ODEs) solvers; we do not
 want to restrict ourselves to a single function, but have a host of
@@ -1427,7 +1427,7 @@ information, and a second to actually generate the code.
 
 Some implementation decisions, such as the use of \verb|ArrayList| to represent
 lists in Java, are hard-coded. But we could have used \verb|Vector| instead.
-We would like such a choice to be user-controlled. Another such choice
+We would like such a choice to be user-controlled. Another such decision
 point is to allow users to choose which specific external library to use.
 
 And, of course, we ought to implement more of the common OO patterns.

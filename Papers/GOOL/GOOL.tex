@@ -858,9 +858,11 @@ GOOL's Java and \Csharp{} renderers demonstrate this well. Out of $328$
 methods across all of GOOL's type classes, the instances of $229$ of them are
 shared between the Java and \Csharp{} renderers, in that they are just calls to 
 the same common function. A further $37$ are partially shared, for example they 
-call the same common function but with different parameters. The number of 
+call the same common function but with different parameters. The numbers of 
 common methods between each pair of renderers are shown in 
-Figure~\ref{fig:common}. $143$ methods are
+Figure~\ref{fig:common}. It is clear from the graph that Python is the least 
+similar to the other target languages, whereas \Csharp has the most in common 
+with the others, closely followed by Java. $143$ methods are
 actually the same between all $4$ languages GOOL currently targets. This might
 indicate that some should be generic functions rather than class methods,
 but we have not investigated this in detail yet.
@@ -953,15 +955,6 @@ auxiliary files, especially Makefiles, requires knowledge of which are source
 files and which are header files, GOOL's representation for files stores a 
 \verb|FileType|, either \verb|Source| or \verb|Header| (or \verb|Combined| for 
 other languages).
-
-A minimal renderer, where all methods are defined by dispatching to a function, 
-would be around $600$ lines of code. Comparing each of our renderers to this
-baseline gives an indication of the specificity 
-of that renderer. The \Cplusplus{} renderer is our largest, with 
-$812$ lines of code. This suggests that of all our target languages, 
-\Cplusplus{} is the least similar to the others. Our smallest renderer is 
-\Csharp{}'s, with $691$ lines of code, meaning \Csharp{} is in some sense
-the most generic.
 
 GOOL's \verb|ControlBlockSym| class is worth drawing attention to. 
 It contains methods for certain OO patterns, and they return \verb|Block|s, not 

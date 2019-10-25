@@ -407,10 +407,7 @@ clear how similar the two languages are.
 
 How do we go about creating a ``generic'' object-oriented language?
 We chose an incremental abstraction approach: start from OO programs written in 
-two different languages,
-and unify them \emph{conceptually}. In other words, pay very close
-attention to the \emph{denotational} semantics of the features, some
-attention to the operational semantics, and ignore syntactic details. 
+two different languages, and unify them \emph{conceptually}.
 
 We work to abstract from concrete OO programs, not just to meet our
 \expressivity~requirement, but also because that is our ``domain''.  Although
@@ -796,21 +793,16 @@ data VarData = VarD {
   varType :: TypeData,
   varDoc :: Doc}
 \end{lstlisting}
-In other words, GOOL represents a (Java) variable as not only the \verb|Doc| 
-representation of the Java code for that variable, but also the binding time, 
+Thus the representations of a (Java) variable consists of more than just its
+printed representation (the \verb|Doc|~field), but also of its binding time,
 name, and type of the variable. \verb|Doc| comes from the package 
 \verb|Text.PrettyPrint.HughesPJ| and represents formatted text. It is common in 
 OO programs to declare some variables as \verb|static| to signify that the 
 variable should be bound at compile-time. The \verb|Binding|, either 
 \verb|Static| or \verb|Dynamic| is thus part of a variable's representation.
-The reason for including the type in the variable representation is because 
-variables often appear in OO code alongside their type, for example in 
-declaration statements. GOOL can simply read the type from the variable to 
-easily generate such statements. OO programs 
-commonly have print statements where names of variables are printed as strings, 
-for example for logging. Including the variable name in the representation, 
-from which it can be easily extracted, makes logging statements easier to 
-specify. 
+That a variable is aware of its type is to make the generation of declarations
+simpler. The inclusion of a name, as a \verb|String|, makes generating
+meta-information, such as for logging, easier.
 
 All representing structures contain at least a \verb|Doc|. It can be considered
 to be our \emph{dynamic} representation of code, from a partial-evaluation
@@ -880,9 +872,9 @@ which is indeed the case for most OO languages. Exceptions can use the
 class mechanism to override this in their specific case.
 
 We have defined $300$ functions like \verb|varDocD|, each abstracting a 
-\common ality between target languages. This genericity
+\common ality between target languages. This
 makes writing new renderers for new languages fairly straightforward.
-GOOL's Java and \Csharp{} renderers demonstrate this fact well. Out of $328$
+GOOL's Java and \Csharp{} renderers demonstrate this well. Out of $328$
 methods across all of GOOL's type classes, the instances of $229$ of them are
 shared between the Java and \Csharp{} renderers, in that they are just calls to 
 the same common function. A further $37$ are partially shared, for example they 
@@ -962,13 +954,13 @@ files and which are header files, GOOL's representation for files stores a
 other languages).
 
 A minimal renderer, where all methods are defined by dispatching to a function, 
-would be around $600$ lines of code. Comparing the number of lines of code of 
-each of our renderers to $600$ therefore gives an indication of the specificity 
-of that renderer. The \Cplusplus{} source code renderer is our largest, with 
+would be around $600$ lines of code. Comparing each of our renderers to this
+baseline gives an indication of the specificity 
+of that renderer. The \Cplusplus{} renderer is our largest, with 
 $812$ lines of code. This suggests that of all our target languages, 
 \Cplusplus{} is the least similar to the others. Our smallest renderer is 
-\Csharp{}'s, with $691$ lines of code, meaning \Csharp{} has the most in common 
-with the other languages.
+\Csharp{}'s, with $691$ lines of code, meaning \Csharp{} is in some sense
+the most generic.
 
 GOOL's \verb|ControlBlockSym| class is worth drawing attention to. 
 It contains methods for certain OO patterns, and they return \verb|Block|s, not 
@@ -1267,7 +1259,9 @@ having these as language features is useful for two reasons: 1) the GOOL-level
 code is clearer in its intent (and more concise), and 2) the resulting code
 can be more idiomatic.
 
-Below is a complete example of a GOOL-defined function:
+Below is a complete example of a GOOL function.  The recommended style is
+to name all strings (to avoid hard-to-debug typos) and variables, then
+write the code proper.
 \begin{lstlisting}
 patternTest :: (MethodSym repr) => 
   repr (Method repr)
@@ -1289,26 +1283,27 @@ patternTest = let
     obsType []
     
   in mainFunction (body [block [
-  varDec n,
-  initState fsmName offState, 
-  changeState fsmName onState,
-  checkState fsmName 
-  [(litString offState, 
-    oneLiner $ printStrLn offState), 
-   (litString onState, 
-    oneLiner $ printStrLn onState)] 
-  (oneLiner $ printStrLn noState)],
+    varDec n,
 
-  block [
-    varDecDef obs1 newObs, 
-    varDecDef obs2 newObs],
+    initState fsmName offState, 
+    changeState fsmName onState,
+    checkState fsmName 
+    [(litString offState, 
+      oneLiner $ printStrLn offState), 
+     (litString onState, 
+      oneLiner $ printStrLn onState)] 
+    (oneLiner $ printStrLn noState)],
 
-  block [
-    initObserverList obsType 
-      [valueOf obs1], 
-    addObserver $ valueOf obs2,
-    notifyObservers (func printNum 
-      void []) obsType]])
+    block [
+      varDecDef obs1 newObs, 
+      varDecDef obs2 newObs],
+
+    block [
+      initObserverList obsType 
+        [valueOf obs1], 
+      addObserver $ valueOf obs2,
+      notifyObservers (func printNum 
+        void []) obsType]])
 \end{lstlisting}
 
 \section{Related Work} \label{sec:related}

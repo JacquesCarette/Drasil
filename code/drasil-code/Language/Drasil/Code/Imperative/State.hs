@@ -3,9 +3,9 @@ module Language.Drasil.Code.Imperative.State (
 ) where
 
 import Language.Drasil
-import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Comments, MatchedConceptMap,
-  ConstantRepr, ConstantStructure, ConstraintBehaviour, InputModule, Logging, 
-  Structure)
+import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Comments, Verbosity, 
+  MatchedConceptMap, ConstantRepr, ConstantStructure, ConstraintBehaviour, 
+  InputModule, Logging, Structure)
 
 -- Private State, used to push these options around the generator
 data State = State {
@@ -18,6 +18,7 @@ data State = State {
   logName :: String,
   logKind :: Logging,
   commented :: [Comments],
+  doxOutput :: Verbosity,
   concMatches :: MatchedConceptMap,
   auxiliaries :: [AuxFile],
   sampleData :: [Expr],

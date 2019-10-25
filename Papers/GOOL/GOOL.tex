@@ -429,7 +429,7 @@ as doing full type inference is unrealistic.
 
 Some features of OO programs are not operational: comments and formatting
 decisions amongst them.  To us, programs are a bidirectional means of
-communication; they must be valid, executable progams by computers, but
+communication; they must be valid, executable programs by computers, but
 also need to be readable and understandable by humans.
 Generating code for consumption by machines is well understood and performed by 
 most DSLs, but generating code for human consumption has been given less 
@@ -448,7 +448,7 @@ assignments, conditionals, loops, etc.  Here we start to encounter
 variations, and choices can be made; we'll cover that later.
 
 For ease of experimentation, GOOL is an Embedded
-Domain Specic Language (EDSL) inside Haskell.  Haskell is very well-suited
+Domain Specific Language (EDSL) inside Haskell.  Haskell is very well-suited
 for this, offering a variety of features (GADTs, type classes,
 parametric polymorphism, kind polymorphism, etc.) that are quite useful
 for building languages.  Its syntax is also fairly liberal, so that
@@ -500,8 +500,8 @@ code.
 
 Syntax for literal values is shown in Table~\ref{tab:literals} and for
 operators on values in Table~\ref{tab:operators}. Each
-operator is prefixed with an additional symbol based on type. 
-Boolean-valued with \verb|?|, numeric by \verb|#|, and others by \verb|$|.
+operator is prefixed by an additional symbol based on type. 
+Boolean-valued by \verb|?|, numeric by \verb|#|, and others by \verb|$|.
 
 \begin{table}[ht]
   \caption{Syntax for literal values}

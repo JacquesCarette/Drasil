@@ -393,13 +393,12 @@ outputs; what we can do in GOOL is to support such multiple-output functions,
 and then generate the idiomatic pattern of implementation in each target
 language.
 
-Since GOOL is intended to be a language for expressing OO programs, it is only 
-natural that we have an \expressivity~requirement to verify that GOOL is such a 
-language, and can be used to express real-world examples of OO programs.
+\expressivity~captures the idea that GOOL is intended to be a language for
+expressing (the ideas contained in) OO programs.  Having it as a requirement
+reminds us to test it against real-world examples of OO programs.
 
-The last requirement, that language commonalities (\common) be abstracted,
-is an
-internal requirement: we noticed a lot of repeated code in our initial
+The last requirement, that language commonalities (\common) be abstracted, is
+an internal requirement: we noticed a lot of repeated code in our initial
 backends, something that ought to be distasteful to most programmers. For
 example, writing a generator for both Java and \Csharp{} makes it incredibly
 clear how similar the two languages are.
@@ -413,34 +412,36 @@ and unify them \emph{conceptually}. In other words, pay very close
 attention to the \emph{denotational} semantics of the features, some
 attention to the operational semantics, and ignore syntactic details. 
 
-It is important that we work from concrete examples of OO programs, not only to 
-meet our \expressivity~requirement, but also because GOOL's domain is that of 
-OO programs, not OO languages. The range of what can be said in an OO language 
-may be very broad, but what we want to be able to say in GOOL is only the 
-subset of that range that is actually used in practice. For example, 
-introspection is possible in Java but is not a common feature of OO programs of 
-every language, so we are not interested in encoding introspection in GOOL. On 
-the other hand, a feature like \Cplusplus~templates may be commonly used in OO 
-programs, though not available in every language, but can still be handled by 
-GOOL through partial evaluation, so template code need not be generated. By 
-abstracting over only the kinds of expressions and ideas that are commonly used 
-in OO programs, regardless of the language, GOOL allows these ideas to be 
-expressed more easily and more effectively captures the essence of OO programs. 
-There are some cases where we are forced to include part of a language's 
-expressive range in GOOL, despite it not being a staple of OO programs in every 
-language. The expression of types, for example, is not important in Python, but 
-is so prevalent in other OO languages that the easiest option by far was to 
-include abstractions for types in GOOL. 
+We work to abstract from concrete OO programs, not just to meet our
+\expressivity~requirement, but also because that is our ``domain''.  Although
+what can be said in any given OO language is quite broad, what we
+\emph{actually want to say} is often much more restricted. And what we
+\emph{need to say} is often even more concise.
+For example, Java offers introspection features, but \Cplusplus doesn't, so
+abstracting from portable OO will not feature introspection (although it
+may be the case in the future that generating idiomatic Java may use it);
+thus GOOL as a language does not encode introspection.  \Cplusplus templates
+are different: while other languages do not necessarily have comparable
+meta-programming features, as GOOL is a code generator, it is not only
+feasible but in fact easy to provide template-like, and even aspects of
+partial evaluation directly. Thus we do not need to generate templates.
+In other words, we are trying to abstract over the fundamental ideas
+expressed via OO programs, rather than abstracting over the languages ---
+and we believe the end result better captures the essence of OO programs.
+Of course, some features, such as types, which don't exist per se in 
+Python but are required in Java, \Csharp and \Cplusplus, will be present
+as doing full type inference is unrealistic.
 
-There are some features common to OO programs that contribute nothing to the 
-execution of the program but still should be captured by GOOL. Examples are 
-code comments and certain formatting decisions which are ignored by a 
-language's compiler but make code more readable for human beings. Programs are 
-written simultaneously for consumption by machines and other programmers. 
+Some features of OO programs are not operational: comments and formatting
+decisions amongst them.  To us, programs are a bidirectional means of
+communication; they must be valid, executable progams, but machines, but
+also need to be readable and understandable by humans.
 Generating code for consumption by machines is well understood and performed by 
 most DSLs, but generating code for human consumption has been given less 
-attention, so we were careful while creating GOOL not to overlook features of 
-OO programs that are meaningful only to human readers.
+attention. We tried to pay close attention to program features --- such
+as the habits of programmers to write longer methods a blocks separated
+by (at least) bland lines, often with comments --- which make programs
+more accessible to human readers.
 
 Finding commonalities between OO programs is most easily done from the core 
 imperative language outwards.
@@ -597,18 +598,19 @@ error message to throw), \verb|free| (followed by a variable to free from
 memory), and \verb|comment| (followed by a string to be displayed as a
 single-line comment).
 
-Most OO programs have statements related to the same task grouped together in 
-blocks, introduced by \verb|block| with
-a list of statements in GOOL. Bodies (\verb|body|) are composed
-of a list of blocks, and can be used as a function body, conditional body, loop
-body, etc. From the perspective of the machine reading the generated code, the 
-organization of statements into blocks is meaningless. The inclusion of blocks 
-as an intermediate between statements and bodies in GOOL is purely because OO 
-programs are typically written with blocks, because human programmers write 
-code to be read by other programmers, and blocks increase human-readability. 
-Naturally, shortcuts
-are provided for single-block bodies (\verb|bodyStatements|) and
-for the common single-statement case, \verb|oneLiner|.
+A single OO method is frequently laid out as a sequence of blocks of
+statements, where each block represents a meaningful task.  In GOOL,
+\verb|block| is used for this purpose. And thus bodies are not just a
+sequence of statement (as would be natural if all we cared about was
+feeding a compiler), but instead a \verb|body| is a list of blocks.
+A body can be used as a function body, conditional body, loop
+body, etc. This additional level of organization of statements is
+operationally meaningless, but represents the actual structure of OO programs
+as written by humans.  This is because programmers (hopefully!) write code to
+be read by other programmers, and blocks increase human-readability.
+Naturally, shortcuts are provided for single-block bodies
+(\verb|bodyStatements|) and for the common single-statement case,
+\verb|oneLiner|.
 
 GOOL has two forms of conditionals: if-then-else via \verb|ifCond| (
 which takes a list of pairs of conditions and bodies) and

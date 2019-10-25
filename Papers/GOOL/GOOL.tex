@@ -61,7 +61,10 @@
                         %% http://ctan.org/pkg/subcaption
 \usepackage{listings}
 
-\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+\usepackage{xargs}                      % Use more than one optional parameter 
+%in a new commands
+\usepackage{pgfplots}
+\pgfplotsset{width=9cm,height=6cm,compat=1.8}
 %
 % \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
 
@@ -297,12 +300,12 @@ We have a set of new requirements:
 \item The generated code should be human-readable,
 \item The generated code should be idiomatic,
 \item The generated code should be documented,
-\item The generator express common OO patterns.
+\item The generator expresses common OO patterns.
 \end{enumerate}
 
 Here we demonstrate that all of these requirements can be met.
 GOOL\footnote{Source is publicly available; link will be
-given provided after blind period}
+provided after blind period}
 is implemented as a DSL embedded in Haskell that
 can currently generate code in Python, Java, \Csharp, and \Cplusplus%
 Others could be added, with the implementation effort being commensurate to the
@@ -389,7 +392,7 @@ outputs; what we can do in GOOL is to support such multiple-output functions,
 and then generate the idiomatic pattern of implementation in each target
 language.
 
-\expressivity~captures the idea that GOOL supposed to express
+\expressivity~captures the idea that GOOL is supposed to express
 (the ideas contained in) OO programs.  As a requirement, it
 reminds us to test it against real-world examples.
 
@@ -432,8 +435,8 @@ also need to be readable and understandable by humans.
 Generating code for consumption by machines is well understood and performed by 
 most DSLs, but generating code for human consumption has been given less 
 attention. We tried to pay close attention to program features --- such
-as the habits of programmers to write longer methods a blocks separated
-by (at least) bland lines, often with comments --- which make programs
+as the habits of programmers to write longer methods as blocks separated
+by (at least) blank lines, often with comments --- which make programs
 more accessible to human readers.
 
 Finding commonalities between OO programs is most easily done from the core 
@@ -582,7 +585,7 @@ single-line comment).
 A single OO method is frequently laid out as a sequence of blocks of
 statements, where each block represents a meaningful task.  In GOOL,
 \verb|block| is used for this purpose. And thus bodies are not just a
-sequence of statement (as would be natural if all we cared about was
+sequence of statements (as would be natural if all we cared about was
 feeding a compiler), but instead a \verb|body| is a list of blocks.
 A body can be used as a function body, conditional body, loop
 body, etc. This additional level of organization of statements is
@@ -772,7 +775,7 @@ data VarData = VarD {
   varType :: TypeData,
   varDoc :: Doc}
 \end{lstlisting}
-Thus the representations of a (Java) variable consists of more than just its
+Thus the representation of a (Java) variable consists of more than just its
 printed representation (the \verb|Doc|~field), but also of its binding time,
 name, and type of the variable. \verb|Doc| comes from the package 
 \verb|Text.PrettyPrint.HughesPJ| and represents formatted text. It is common in 
@@ -856,10 +859,31 @@ GOOL's Java and \Csharp{} renderers demonstrate this well. Out of $328$
 methods across all of GOOL's type classes, the instances of $229$ of them are
 shared between the Java and \Csharp{} renderers, in that they are just calls to 
 the same common function. A further $37$ are partially shared, for example they 
-call the same common function but with different parameters. $143$ methods are
+call the same common function but with different parameters. The number of 
+common methods between each pair of renderers are shown in 
+Figure~\ref{fig:common}. $143$ methods are
 actually the same between all $4$ languages GOOL currently targets. This might
 indicate that some should be generic functions rather than class methods,
 but we have not investigated this in detail yet.
+\begin{figure}[!h]
+\begin{tikzpicture}[scale=0.9]
+\begin{axis}[
+ybar,
+enlargelimits=0.1,
+ylabel={\# common methods},
+symbolic x coords={Python/Java,Python/C\#,Python/C++ Src.,Java/C\#,Java/C++ 
+Src.,C\#/C++ Src.},
+xtick=data,
+x tick label style={rotate=40,anchor=east},
+]
+\addplot coordinates {(Python/Java,163) (Python/C\#,163) (Python/C++ Src.,150) 
+(Java/C\#,229) 
+(Java/C++ Src., 198) (C\#/C++ Src., 202)};
+\end{axis}
+\end{tikzpicture}
+\caption{Number of common methods between renderers}
+\label{fig:common}
+\end{figure}
 
 Examples from Python and \Csharp{} are not shown here because they both
 work very similarly to the Java renderer. There are \verb|PythonCode| and

@@ -713,7 +713,7 @@ Because tagless representations give an embedded syntax to a DSL while
 being polymorphic on the eventual semantic interpretation of the terms,
 \cite{carette2009finally} dubs the resulting classes ``symantic''.
 Our language is defined by a hierarchy of $43$ of these symantic classes,
-grouped by functionality, which are illustrated in Figure~\ref{fig:classes}.  
+grouped by functionality, as illustrated in Figure~\ref{fig:classes}.  
 For example, there are classes for programs,
 bodies, control blocks, types, unary operators, variables, values, selectors,
 statements, control statements, blocks, scopes, classes, modules, and so
@@ -748,7 +748,7 @@ language, handled by the outer \verb|repr|, and over the underlying
 types to which GOOL's types map, represented by the inner \verb|repr|.
 
 We make use of this flexibility of per-target-language representation
-variation is to record more (or less) information for
+variation to record more (or less) information for
 successful idiomatic code generation. For example, the internal representation for a 
 state variable in \Cplusplus{} stores the corresponding destructor code,
 but not in the other languages.
@@ -774,13 +774,13 @@ data VarData = VarD {
   varDoc :: Doc}
 \end{lstlisting}
 Thus the representation of a (Java) variable consists of more than just its
-printed representation (the \verb|Doc|~field), but also of its binding time,
+printed representation (the \verb|Doc|~field), but also its binding time,
 name, and type of the variable. \verb|Doc| comes from the package 
 \verb|Text.PrettyPrint.HughesPJ| and represents formatted text. It is common in 
 OO programs to declare some variables as \verb|static| to signify that the 
 variable should be bound at compile-time. The \verb|Binding|, either 
-\verb|Static| or \verb|Dynamic| is thus part of a variable's representation.
-That a variable is aware of its type is to make the generation of declarations
+\verb|Static| or \verb|Dynamic|, is thus part of a variable's representation.
+That a variable is aware of its type makes the generation of declarations
 simpler. The inclusion of a name, as a \verb|String|, makes generating
 meta-information, such as for logging, easier.
 
@@ -808,14 +808,14 @@ A common documentation style for methods is to provide a
 description of each of the method's parameters. The representation for 
 \verb|Method|s stores the list of parameters, which is then used to
 automate this pattern of documentation. Makefiles are often used to
-compile OO programs, and this process sometimes needs to which file
+compile OO programs, and this process sometimes needs to know which file
 contains the main module or method.  Since GOOL includes the option of 
 generating a Makefile as part of a \verb|Package|, the representation for 
 a \verb|Method| and a \verb|Module| store information on whether it is 
 the main method or module. Redundant parentheses are typically ignored by 
 compilers, but programmers still tend to minimize them in their code ---
 it makes the code more human-readable. Operator precedence is used for
-this purpose, and thus we also store
+this purpose, and thus we also 
 store precedence information in the representations for \verb|Value|s, 
 \verb|UnaryOp|erators and \verb|BinaryOp|erators to elide extra
 parentheses.
@@ -864,7 +864,7 @@ similar to the other target languages, whereas \Csharp has the most in common
 with the others, closely followed by Java. $143$ methods are
 actually the same between all $4$ languages GOOL currently targets. This might
 indicate that some should be generic functions rather than class methods,
-but we have not investigated this in detail yet.
+but we have not yet investigated this in detail.
 \begin{figure}[!h]
 \begin{tikzpicture}[scale=0.9]
 \begin{axis}[
@@ -885,10 +885,10 @@ x tick label style={rotate=40,anchor=east},
 \label{fig:common}
 \end{figure}
 
-Examples from Python and \Csharp{} are not shown here because they both
+Examples from Python and \Csharp{} are not shown because they both
 work very similarly to the Java renderer. There are \verb|PythonCode| and
 \verb|CSharpCode| analogs to \verb|JavaCode|, the underlying types are all the
-same, and the methods are defined by calling common functions where possible
+same, and the methods are defined by calling common functions, where possible,
 or by constructing the GOOL value directly in the instance definition, if the
 definition is unique to that language.
 

@@ -405,18 +405,18 @@ How do we go about creating a ``generic'' object-oriented language?
 We chose an incremental abstraction approach: start from OO programs written in 
 two different languages, and unify them \emph{conceptually}.
 
-We work to abstract from concrete OO programs, not just to meet our
+We abstract from concrete OO programs, not just to meet our
 \expressivity~requirement, but also because that is our ``domain''.  Although
 what can be said in any given OO language is quite broad, what we
 \emph{actually want to say} is often much more restricted. And what we
 \emph{need to say} is often even more concise.
 For example, Java offers introspection features, but \Cplusplus doesn't, so
 abstracting from portable OO will not feature introspection (although it
-may be the case in the future that generating idiomatic Java may use it);
+may be the case that generating idiomatic Java may later use it);
 thus GOOL as a language does not encode introspection.  \Cplusplus templates
 are different: while other languages do not necessarily have comparable
 meta-programming features, as GOOL is a code generator, it is not only
-feasible but in fact easy to provide template-like, and even aspects of
+feasible but in fact easy to provide template-like features, and even aspects of
 partial evaluation directly. Thus we do not need to generate templates.
 In other words, we are trying to abstract over the fundamental ideas
 expressed via OO programs, rather than abstracting over the languages ---
@@ -427,7 +427,7 @@ as doing full type inference is unrealistic.
 
 Some features of OO programs are not operational: comments and formatting
 decisions amongst them.  To us, programs are a bidirectional means of
-communication; they must be valid, executable progams, but machines, but
+communication; they must be valid, executable progams by computers, but
 also need to be readable and understandable by humans.
 Generating code for consumption by machines is well understood and performed by 
 most DSLs, but generating code for human consumption has been given less 
@@ -445,43 +445,34 @@ across languages. One then moves up to the statement language ---
 assignments, conditionals, loops, etc.  Here we start to encounter
 variations, and choices can be made; we'll cover that later.
 
-For ease of experimentation, we chose to make GOOL an embedded
+For ease of experimentation, GOOL is an embedded
 domain specic language (EDSL) inside Haskell.  Haskell is very well-suited
-for this task, offering a variety of features (GADTs, type classes,
-parametric polymorphism, kind polymorphism, etc) that are extremely useful
-for building languages.  Its syntax is also fairly liberal, so that it is
-possible to create \emph{smart constructors} that somewhat mimic the
+for this, offering a variety of features (GADTs, type classes,
+parametric polymorphism, kind polymorphism, etc) that are quite useful
+for building languages.  Its syntax is also fairly liberal, so that
+with \emph{smart constructors}, one can somewhat mimic the
 usual syntax of OO languages.
 
 \subsection{GOOL Syntax: Imperative core} \label{ssec:syntax}
-
-As our exposition has been somewhat abstract until now, it is useful to
-dive in and give some concrete syntax, so as to be able to illustrate
-our ideas with valid code.
 
 Basic types in GOOL are \verb|bool| for Booleans,
 \verb|int| for integers, \verb|float| for doubles, \verb|char|
 for characters, \verb|string| for strings, \verb|infile| for a file
 in read mode, and \verb|outfile| for a file in write mode. Lists can be
-specified with \verb|listType|. For example, \verb|listType int|
-specifies a list of integers. Types of objects are specified using
-\verb|obj| followed by the class name, so \verb|obj "FooClass"| is the type of
-an object of a class called ``FooClass''.
+specified with \verb|listType|; \verb|listType int|
+specifies a list of integers. Objects are specified using
+\verb|obj| followed by a class name.
 
 Variables are specified with \verb|var| followed by the variable name and type.
 For example, \verb|var "ages" (listType int)| represents a variable called
-``ages'' that is a list of integers. This illustrates a (necessary) design
-decision: even though we target languages like Python, we also target languages
-where types are necessary, like Java. As type inference for OO languages is too
-difficult, we chose explicit typing.
-
-As some constructions are common, it is useful to offer shortcuts for
+``ages'' that is a list of integers.  For common constructions,
+it is useful to offer shortcuts for
 defining them; for example, the above can also be done via
 \verb|listVar "ages" int|. Typical use would be
 \begin{lstlisting}
 let ages = listVar "ages" int in
 \end{lstlisting}
-so that \verb|ages| can be used directly from then on. Other GOOL syntax for
+so that \verb|ages| can be used directly from then on. Other means for
 specifying variables is shown in Table~\ref{tab:variables}.
 
 \begin{table}[ht]
@@ -506,10 +497,9 @@ and enables convenient syntax for \oopatterns~that translate to more idiomatic
 code.
 
 Syntax for literal values is shown in Table~\ref{tab:literals} and for
-operators on values in Table~\ref{tab:operators}. In GOOL, each
-operator is prefixed with an additional symbol based on type. Operators that
-return Booleans are prefixed by a \verb|?|, operators on numeric values are
-prefixed by \verb|#|, and other operators are prefixed by \verb|$|.
+operators on values in Table~\ref{tab:operators}. Each
+operator is prefixed with an additional symbol based on type. 
+Boolean-valued with \verb|?|, numeric by \verb|#|, and others by \verb|$|.
 
 \begin{table}[ht]
   \caption{Syntax for literal values}
@@ -547,11 +537,26 @@ prefixed by \verb|#|, and other operators are prefixed by \verb|$|.
     \verb|#-| & subtraction \\
     \verb|#*| & multiplication \\
     \verb|#/| & division \\
-    \verb|#%| & modulus \\
+    % \verb|#%| & modulus \\
     \verb|#^| & exponentiation \\
   \end{tabular}
   \label{tab:operators}
 \end{table}
+
+Table~\ref{tab:values} show conditional expressions and function application.
+\verb|selfFuncApp| and \verb|objMethodCallNoParams| are two shortcuts for the
+when a method is being called on \verb|self| or when the method
+takes no parameters.
+
+Variable declarations are statements, and take a variable specification
+as an argument. For \verb|foo = var "foo" int|, the corresponding variable
+declaration would be \verb|varDec foo|, and initialized declarations are
+\verb|varDecDef foo (litInt 5)|.
+Assignments are represented by \verb|assign a (litInt 5)|. Convenient
+infix and postfix operators are also provided, prefixed by \verb|&|:
+\verb|&=| is a synonym for \verb|assign|, and C-like
+\verb|&+=|, \verb|&++|, \verb|&-=| and \verb|&~-| (the more intuitive
+\verb|&--| cannot be used as \verb|--| starts a comment in Haskell).
 
 \begin{table}[htb]
   \caption{Syntax for conditionals and function application}
@@ -559,36 +564,19 @@ prefixed by \verb|#|, and other operators are prefixed by \verb|$|.
     \textbf{GOOL Syntax} & \textbf{Semantics} \\
     \midrule
     \verb|inlineIf| & conditional expression \\
-    \verb|funcApp| & function application, to a list of parameters \\
+    \verb|funcApp| & function application (list of parameters) \\
     \verb|extFuncApp| & function application, for external library
-    functions\\
-    \verb|newObj| & for calling an object constructor (\verb|extNewObj|
-    exists too) \\
+    \\
+    \verb|newObj| & for calling an object constructor \\
     \verb|objMethodCall| & for calling a method on an object \\
   \end{tabular}
   \label{tab:values}
 \end{table}
 
-Syntax for defining values with conditional expressions or function
-applications is shown in Table~\ref{tab:values}. \verb|selfFuncApp| and
-\verb|objMethodCallNoParams| are two shortcuts for the common cases when a
-method is being called on \verb|self| or when the method takes no parameters.
-
-Variable declarations are statements, and take a variable specification
-as an argument. For \verb|foo = var "foo" int|, the corresponding variable
-declaration would be \verb|varDec foo|.  For initialization, 
-\verb|varDecDef foo (litInt 5)| can also be used.
-
-Assignments are represented by \verb|assign a (litInt 5)|. Convenient
-infix and postfix operators are also provided, prefixed by \verb|&|:
-\verb|&=| is a synonym for \verb|assign|, and C-like
-\verb|&+=|, \verb|&++|, \verb|&-=| and \verb|&~-| (the more intuitive
-\verb|&--| cannot be used as \verb|--| starts a comment in Haskell).
-
-Other simple statements in GOOL include \verb|break| and \verb|continue|,
+Other simple statements include \verb|break| and \verb|continue|,
 \verb|returnState| (followed by a value to return), \verb|throw| (followed by an
 error message to throw), \verb|free| (followed by a variable to free from
-memory), and \verb|comment| (followed by a string to be displayed as a
+memory), and \verb|comment| (followed by a string used as a
 single-line comment).
 
 A single OO method is frequently laid out as a sequence of blocks of
@@ -622,9 +610,8 @@ There are a variety of loops: for-loops (\verb|for|), which are
 parametrized by a statement to
 initialize the loop variable, a condition, a statement to update the loop
 variable, and a body; \verb|forRange| loops, which are given a
-starting value, ending value, and step size; as well as \verb|forEach|
-loops.
-For example:
+starting value, ending value, and step size; and \verb|forEach|
+loops.  For example:
 \begin{lstlisting}
 for (varDecDef age (litInt 0))
   (age < litInt 10) (age &++) loopBody
@@ -632,18 +619,18 @@ forRange age (litInt 0) (litInt 9)
   (litInt 1) loopBody
 forEach age ages loopBody
 \end{lstlisting}
-While-loops (\verb|while|) are parametrized by a condition and a body. Finally,
-try-catch statements (\verb|tryCatch|) are parametrized by two bodies.
+While-loops (\verb|while|) are parametrized by a condition and a body; 
+try-catch (\verb|tryCatch|) by two bodies.
 
 \subsection{GOOL Syntax: OO features}
 
 A \verb|function| declaration is followed by the function
 name, scope, binding type (static or dynamic), type, list of parameters, and
 body. Methods (\verb|method|) are defined similarly, with the addition of the
-specification of the containing class' name.  Parameters are built from
+the containing class' name.  Parameters are built from
 variables, using \verb|param| or \verb|pointerParam|. For example, assuming
 variables ``num1'' and ``num2'' have been defined, one can define an
-\textsf{add} function as follows:
+\textsf{add} function as:
 \begin{lstlisting}
 function "add" public dynamic_ int
   [param num1, param num2]
@@ -651,7 +638,7 @@ function "add" public dynamic_ int
 \end{lstlisting}
 The  \verb|pubMethod| and \verb|privMethod| shortcuts are useful for public
 dynamic and private dynamic methods, respectively. \verb|mainFunction|
-followed by a body defines the main function of a program. \verb|docFunc|
+defines the main function of a program. \verb|docFunc|
 generates a documented function from a function description and
 a list of parameter descriptions, an optional description of the return
 value, and the function itself.  This generates Doxygen-style comments.
@@ -671,7 +658,7 @@ buildClass "FooClass" Nothing public
 \end{lstlisting}
 \verb|Nothing| here indicates that this class does not have a parent,
 \verb|privClass| and \verb|pubClass| are shortcuts for private and public
-classes, respectively. \verb|docClass| serves a similar purpose as \verb|docFunc|.
+classes, respectively. \verb|docClass| is like \verb|docFunc|.
 
 \subsection{GOOL syntax: modules and programs}
 

@@ -175,10 +175,10 @@
   multiple languages.  Moreover, in GOOL, it is possible to express common
   programming idioms and patterns, from
   simple library-level functions, to simple tasks (command-line arguments, list
-  processing, printing), on to more complex patterns, such as methods with a
+  processing, printing), to more complex patterns, such as methods with a
   mixture of input, output and in-out parameters, and finally Design
-  Patterns (such as Observer, State and Strategy).  GOOL is implemented
-  as an embedded DSL in Haskell that can currently generate code in Python, Java,
+  Patterns (such as Observer, State and Strategy).  GOOL 
+  is an embedded DSL in Haskell that can generate code in Python, Java,
   \Csharp, and \Cplusplus.
 \end{abstract}
 
@@ -245,37 +245,36 @@ words, are OO programs akin to sentences in Romance languages
 (French, Spanish, Portugese, etc) which, although different at a
 surface level, are structurally very similar?
 
-This is what we set out to explore.  One non-solution is to find a single
+This is what we set out to explore.  One non-solution is to find an
 (existing) language and try to automatically translate it to the others.
 Of course, this can be made to work --- one could
 engineer a multi-language compiler (such as gcc) to de-compile its Intermediate 
 Representation (IR) into most of its input languages.  The end-results would 
 however
-be wildly unidiomatic; roughly the equivalent of an absolute novice
+be wildly unidiomatic; roughly the equivalent of a novice
 in a new (spoken) language ``translating'' word-by-word.
 
-What if, instead, there was a single meta-language that was designed to
-contain the common semantic concepts of a number of OO languages, encoded
-in such a way that all the necessary information for translation was always
-present?  This source language could be made to be agnostic about what
-eventual target language was used -- free of the idiosyncratic details of
-any given language.  This would be quite the boon for the translator.
-In fact, we could try to go even further, and attempt to teach the translator
-about idiomatic patterns of each target language.
+What if, instead, there was a single meta-language designed to embody
+the common semantic concepts of a number of OO languages, encoded so that the
+necessary information for translation is present?  This source language could
+be agnostic about what eventual target language will be used -- and free of
+the idiosyncratic details of any given language.  This would be quite the boon
+for the translator.  In fact, we could go even further, and attempt to
+teach the translator about idiomatic patterns of each target language.
 
 Trying to capture all the subtleties of each language is hopeless ---
-akin to attempting to capture the rhythm, puns, metaphors, similes,
+akin to capturing the rhythm, puns, metaphors, similes,
 and cultural allusions of a sublime poem in translation.  But programming
 languages are most often used for much more prosaic tasks: writing programs
 for getting things done. This is closer to translating technical textbooks,
-making sure that all of the meaningful material was preserved.
+making sure that all of the meaningful material is preserved.
 
-Is this feasible? In some sense, this is already old hat: most
-modern compilers have a single internal IR,
-which is used to target multiple processors. Compilers can generate
+Is this feasible? In some sense, this is already old hat:
+modern compilers have a single IR,
+used to target multiple processors. Compilers can generate
 human-readable symbolic assembly code for a large family of CPUs. But this
-is not quite the same as generating human-readable, idiomatic high-level
-languages.
+is not the same as generating human-readable, idiomatic high-level
+code.
 
 More precisely, we are interested in capturing the conceptual meaning of
 OO programs, in such a way as to fully automate the translation from
@@ -291,26 +290,23 @@ often work via translation to a GPL for execution.  Some generate
 human-readable code \cite{wang1997zephyr, mooij2013gaining, hong2012green, 
 beyak2011saga}.
 
-This is exactly what we want to do, for the domain of OO programs.
+This is what we do, for the domain of OO programs.
 
-We do have a specific set of requirements that has not been achieved
-before:
+We have a set of new requirements:
 \begin{enumerate}
 \item The generated code should be human-readable,
 \item The generated code should be idiomatic,
 \item The generated code should be documented,
-\item The generator should allow one to express common OO patterns.
+\item The generator express common OO patterns.
 \end{enumerate}
 
-We have developed a Generic Object-Oriented Language (GOOL)%
-\footnote{GOOL is publicly available; the exact link will be
-given once the paper is no longer anonymous}, demonstrating that all these
-requirements can be met.  GOOL is implemented as a DSL embedded in Haskell that
+Here we demonstrate that all of these requirements can be met.
+GOOL\footnote{Source is publicly available; link will be
+given provided after blind period}
+is implemented as a DSL embedded in Haskell that
 can currently generate code in Python, Java, \Csharp, and \Cplusplus%
-\footnote{and used to also generate Lua and Objective-C, but those backends
-have fallen into disuse}. Others could be added, with the implementation
-effort being commensurate to the (semantic) distance to the languages
-already supported.
+Others could be added, with the implementation effort being commensurate to the
+(semantic) distance to the languages already supported.
 
 First we expand on the high-level requirements for such an endeavour, in
 Section~\ref{sec:req}.  To be able to give concrete examples, we
@@ -324,8 +320,8 @@ future improvements in Section \ref{sec:future}, and conclusions in Section
 
 \section{Requirements} \label{sec:req}
 
-While we outlined some of our requirements above, here we will give a
-complete list, as well as some reasoning behind each requirement.
+While we outlined some of our requirements above, here we give a
+complete list, as well as some reasoning behind each.
 
 \begin{description}
 \item[mainstream] Generate code in mainstream object-oriented languages.
@@ -333,7 +329,7 @@ complete list, as well as some reasoning behind each requirement.
 \item[idiomatic] The generated code should be idiomatic,
 \item[documented] The generated code should be documented,
 \item[patterns] The generator should allow one to express common OO patterns.
-\item[expressivity] The resulting language should be rich enough to express a
+\item[expressivity] The language should be rich enough to express a
 set of existing OO programs, which act as test cases for the language.
 \item[common] Language commonalities should be abstracted.
 \end{description}
@@ -346,14 +342,14 @@ Typescript for Javascript.
 The \readable~requirement is not as obvious. As DSL users are typically
 domain experts who are not ``programmers'', why generate readable code?
 Few Java programmers ever look at JVM bytecode, and few \Cplusplus{} programmers
-look at assembly. But GOOL's aim is different: to allow writing
+at assembly. But GOOL's aim is different: to allow writing
 high-level OO code once, but have it be available in many GPLs. One use case
 would be to generate libraries of utilities for a narrow domain. As needs
 evolve and language popularity changes, it is useful to have it immediately
 available in a number of languages. Another use, which is a core part of our
 own motivation, is to have \emph{extremely well documented} code, indeed to
 a level that would be unrealistic to do by hand. But this documentation is
-crucial in domains where \emph{certification} of code is required.  And
+crucial in domains where \emph{certification} is required.  And
 \readable~is a proxy for \emph{understandable}, which is also quite
 helpful for debugging.
 
@@ -377,10 +373,10 @@ The \oopatterns~requirement is typical of DSLs: common programming idioms
 can be reified into a proper linguistic form instead of being merely
 informal. Even some of the \emph{design patterns} of~\cite{gamma1995design}
 can become part of the language itself. While this does make writing some OO
-code even easier in GOOL than in GPLs, it also helps quite a lot with
-keeping GOOL language-agnostic and generating idiomatic code.
-Examples will be given in Section~\ref{sec:patterns}.  But we can give an
-indication now as to why this helps: Consider Python's
+code even easier in GOOL than in GPLs, it also helps
+keep GOOL language-agnostic and generate idiomatic code.
+Examples will be given in Section~\ref{sec:patterns}.  But we can
+indicate now how this helps: Consider Python's
 ability to return multiple values with a single return statement, which
 is uncommon in other languages.  Two choices might be to disallow this
 feature in GOOL, or throw an error on use when generating code in languages
@@ -393,12 +389,12 @@ outputs; what we can do in GOOL is to support such multiple-output functions,
 and then generate the idiomatic pattern of implementation in each target
 language.
 
-\expressivity~captures the idea that GOOL is intended to be a language for
-expressing (the ideas contained in) OO programs.  Having it as a requirement
-reminds us to test it against real-world examples of OO programs.
+\expressivity~captures the idea that GOOL supposed to express
+(the ideas contained in) OO programs.  As a requirement, it
+reminds us to test it against real-world examples.
 
-The last requirement, that language commonalities (\common) be abstracted, is
-an internal requirement: we noticed a lot of repeated code in our initial
+The last requirement (\common) that language commonalities be abstracted, is
+internal: we noticed a lot of repeated code in our initial
 backends, something that ought to be distasteful to most programmers. For
 example, writing a generator for both Java and \Csharp{} makes it incredibly
 clear how similar the two languages are.
@@ -488,7 +484,7 @@ let ages = listVar "ages" int in
 so that \verb|ages| can be used directly from then on. Other GOOL syntax for
 specifying variables is shown in Table~\ref{tab:variables}.
 
-\begin{table}[!h]
+\begin{table}[ht]
 \caption{Syntax for specifying variables}
 \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
   \textbf{GOOL Syntax} & \textbf{Semantics} \\
@@ -515,7 +511,7 @@ operator is prefixed with an additional symbol based on type. Operators that
 return Booleans are prefixed by a \verb|?|, operators on numeric values are
 prefixed by \verb|#|, and other operators are prefixed by \verb|$|.
 
-\begin{table}[!h]
+\begin{table}[ht]
   \caption{Syntax for literal values}
   \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
     \textbf{GOOL Syntax} & \textbf{Semantics} \\
@@ -530,7 +526,7 @@ prefixed by \verb|#|, and other operators are prefixed by \verb|$|.
   \label{tab:literals}
 \end{table}
 
-\begin{table}[!h]
+\begin{table}[htb]
   \caption{Operators for making expressions}
   \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
     \textbf{GOOL Syntax} & \textbf{Semantics} \\
@@ -557,7 +553,7 @@ prefixed by \verb|#|, and other operators are prefixed by \verb|$|.
   \label{tab:operators}
 \end{table}
 
-\begin{table}[!h]
+\begin{table}[htb]
   \caption{Syntax for conditionals and function application}
   \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
     \textbf{GOOL Syntax} & \textbf{Semantics} \\
@@ -736,7 +732,7 @@ bodies, control blocks, types, unary operators, variables, values, selectors,
 statements, control statements, blocks, scopes, classes, modules, and so
 on.  These define $328$ different methods --- GOOL is not a small language!
 
-\begin{figure}[!h]
+\begin{figure}[p]
 	\includegraphics[scale=0.289]{GOOLClasses.png}
 	\caption{Dependency graph of all of GOOL's type classes}
 	\label{fig:classes}
@@ -1038,7 +1034,7 @@ is extremely common.
 
 This narrows things down to a small set of functions and statements, shown in 
 Table~\ref{tab:listfuncs}.
-\begin{table}[b]
+\begin{table}[bth]
 \caption{List functions}
 \begin{tabular}{p{0.15\textwidth} p{0.3\textwidth}}
   \textbf{GOOL Syntax} & \textbf{Semantics} \\

@@ -663,7 +663,7 @@ classes, respectively. \verb|docClass| is like \verb|docFunc|.
 \subsection{GOOL syntax: modules and programs}
 
 Akin to Java packages and other similar constructs, GOOL has modules
-(\verb|buildModule|) consisting of a module name, a list of libraries to import,
+(\verb|buildModule|) consisting of a name, a list of libraries to import,
 a list of functions, and a list of classes. Module-level comments are done
 with \verb|docMod|.
 
@@ -677,12 +677,12 @@ fileDoc \$ buildModule "mod1" ["library1"]
 \end{lstlisting}
 \end{comment}
 
-Finally, at the top of the GOOL hierarchy are programs, auxiliary files, and
-packages. A program (\verb|prog|) has a name and a list of files.  A
-\verb|package| is a program and a list of auxiliary files. These files are non
-code files that augment the program. Examples are a Doxygen configuration file
-(\verb|doxConfig|), and a makefile (\verb|makefile|).  One of the parameters of
-\verb|makefile| toggles generation of a \verb|make| \verb|doc| rule, which will
+At the top of the hierarchy are programs, auxiliary files, and packages. A
+program (\verb|prog|) has a name and a list of files.  A \verb|package| is a
+program and a list of auxiliary files; these are non-code files that
+augment the program. Examples are a Doxygen configuration file
+(\verb|doxConfig|), and a makefile (\verb|makefile|).  A parameter of
+\verb|makefile| toggles generation of a \verb|make doc| rule, to
 compile the Doxygen documentation with the generated Doxygen configuration
 file.
 
@@ -692,22 +692,21 @@ There are two ``obvious'' means of dealing with large embedded DSLs in Haskell:
 either as a set of Generalized Algebraic Data Types (GADTs), or using a set of
 classes, in the ``finally tagless'' style~\cite{carette2009finally} (we will
 refer to it as simply \emph{tagless} from now on).  The current implementation
-uses a ``sophisticated'' version of tagless. A first
-implementation~\footnote{citation omitted for anonymization} used a
+uses a ``sophisticated'' version of tagless. A first implementation of GOOL,
+modelled on the multi-language generator SAGA~\cite{beyak2011saga} used a
 straightforward version of tagless, which did not allow for enough generic
 routines to be properly implemented.  This was replaced by a version based on
 GADTs, which fixed that problem, but did not allow for \emph{patterns} to be
 easily encoded. Thus the current version has gone back to tagless, but also uses
 \emph{type families} in a crucial way.
 
-It is worth recalling that in tagless, the means of encoding a language,
+In tagless the means of encoding a language,
 through methods from a set of classes, really encodes a generalized
 \emph{fold} over any \emph{representation} of the language.  Thus what
 looks like GOOL ``keywords'' are either class methods or generic functions
 that await the specification of a dictionary to decide on the final
 interpretation of the representation.  We typically instantiate these to
-language renderers, but we're also free to do various analysis passes if
-we wish.
+language renderers, but we're also free to do various static analysis passes.
 
 Because tagless representations give an embedded syntax to a DSL while
 being polymorphic on the eventual semantic interpretation of the terms,
@@ -720,9 +719,9 @@ statements, control statements, blocks, scopes, classes, modules, and so
 on.  These define $328$ different methods --- GOOL is not a small language!
 
 \begin{figure}[p]
-	\includegraphics[scale=0.289]{GOOLClasses.png}
-	\caption{Dependency graph of all of GOOL's type classes}
-	\label{fig:classes}
+\includegraphics[scale=0.289]{GOOLClasses.png}
+\caption{Dependency graph of all of GOOL's type classes}
+\label{fig:classes}
 \end{figure}
 
 For example, here is how variables are defined:
@@ -733,12 +732,11 @@ class (TypeSym repr)
     var :: Label -> repr (Type repr)
              -> repr (Variable repr)
 \end{lstlisting}
-As variables are typed, a representation of variables must also know how
-to represent types, thus we constrain our representation with that capability,
-using the~\verb|TypeSym| class.  We also notice the use of an
-\emph{associated type}~\verb|type Variable repr|. This is a type-level
-function that is representation-dependent.  Each instance of this class
-is free to define its own internal representation of what a
+As variables are typed, their representation must be aware of types and
+thus that capability (the~\verb|TypeSym| class) is a constraint.  The
+\emph{associated type}~\verb|type Variable repr| is a representation-dependent
+type-level function.  Each instance of this
+class is free to define its own internal representation of what a
 \verb|Variable| is. \verb|var| is then a constructor for variables,
 which takes a \verb|Label| and a representation of a type, returning
 a representation of a variable.  Specifically, \verb|repr| has kind
@@ -748,12 +746,11 @@ twice because there are two layers of abstraction: over the target
 language, handled by the outer \verb|repr|, and over the underlying
 types to which GOOL's types map, represented by the inner \verb|repr|.
 
-The principal use we make of the flexibility of type families on a
-per-target-language basis is to record more (or less) information for
-successful code generation. For example, the internal representation for a 
-state variable in \Cplusplus{} stores the corresponding destructor code for the 
-variable, but in the other languages destructors are not needed so the internal 
-representation of a state variable is just a \verb|Doc|.
+We make use of this flexibility of per-target-language representation
+variation is to record more (or less) information for
+successful idiomatic code generation. For example, the internal representation for a 
+state variable in \Cplusplus{} stores the corresponding destructor code,
+but not in the other languages.
 
 For Java, we instantiate the \verb|VariableSym| class as follows:
 \begin{lstlisting}
@@ -761,8 +758,7 @@ instance VariableSym JavaCode where
   type Variable JavaCode = VarData
   var = varD
 \end{lstlisting}
-where \verb|JavaCode| is essentially the \verb|Identity| monad
-by another name:
+where \verb|JavaCode| is essentially the \verb|Identity| monad:
 \begin{lstlisting}
 newtype JavaCode a = JC {unJC :: a}
 \end{lstlisting}
@@ -792,36 +788,36 @@ to be our \emph{dynamic} representation of code, from a partial-evaluation
 perspective. The other fields are generally \emph{static} information used to
 optimize the code generation.
 
-Generally, GOOL prefers to work generically. So there is as little code as
-possible that works on \verb|VarData| directly.  Instead, there are
+We prefer generic code over representation-specific code, so there is little
+code that works on \verb|VarData| directly.  Instead, there are
 methods like \verb|variableDoc|, part of the \verb|VariableSym| type class,
 with signature:
 \begin{lstlisting}
 variableDoc :: repr (Variable repr)
   -> Doc
 \end{lstlisting}
-which acts as an accessor.  For \verb|JavaCode|, its instance is
-straightforward:
+which acts as an accessor.  For \verb|JavaCode|, it is simply:
 \begin{lstlisting}
 variableDoc = varDoc . unJC
 \end{lstlisting}
 
-Here are a few more examples of the kinds of additional information stored by
-each representation. A common documentation style for methods is to provide a 
+Other uses of additional information are for uniform documentation,
+builds and better arrangement of parentheses.
+A common documentation style for methods is to provide a 
 description of each of the method's parameters. The representation for 
-\verb|Method|s stores the list of parameters, which GOOL then uses in methods 
-that automate this pattern of documentation. Makefiles are often written to 
-compile and run OO programs, and this sometimes requires knowledge of which 
-file contains the main module or method. Since GOOL includes the option of 
-generating a Makefile as part of a \verb|Package|, GOOL's representations for 
+\verb|Method|s stores the list of parameters, which is then used to
+automate this pattern of documentation. Makefiles are often used to
+compile OO programs, and this process sometimes needs to which file
+contains the main module or method.  Since GOOL includes the option of 
+generating a Makefile as part of a \verb|Package|, the representation for 
 a \verb|Method| and a \verb|Module| store information on whether it is 
 the main method or module. Redundant parentheses are typically ignored by 
-compilers, but programmers still tend to minimize the number of parentheses 
-they use so their code is more human-readable. This is possible because the 
-compilers know about the precedences of the operators used. To be able to 
-generate OO programs where parentheses are elided wherever possible, GOOL 
-stores precedence information in the representations for \verb|Value|s, 
-\verb|UnaryOp|erators and \verb|BinaryOp|erators.
+compilers, but programmers still tend to minimize them in their code ---
+it makes the code more human-readable. Operator precedence is used for
+this purpose, and thus we also store
+store precedence information in the representations for \verb|Value|s, 
+\verb|UnaryOp|erators and \verb|BinaryOp|erators to elide extra
+parentheses.
 
 Note that the \verb|JavaCode| instance of \verb|VariableSym| defines the
 \verb|var| function via the \verb|varD| function:
@@ -841,18 +837,17 @@ varFromData :: Binding -> String ->
   repr (Type repr) -> Doc ->
   repr (Variable repr)
 \end{lstlisting}
-This method is in a type class \verb|InternalVariable|. Several of these
-``internal'' classes exist, none of which are exported from GOOL's interface.
-They however contain functions useful for the various language renderers, but
+This method is in class \verb|InternalVariable|. Several of these
+``internal'' classes exist, which are not exported from GOOL's interface.
+They contain functions useful for the language renderers, but
 not meant to be used to construct code representations, as they reveal too
 much of the internals (and are rather tedious to use).  One important
 example is the \verb|cast| method, which is never needed by user-level code,
 but frequently used by higher-level functions.
 
-\verb|varDocD| can simply be \verb|text| as \verb|Label| is simply an
-alias for a \verb|String| -- and Java variables are simply their names,
-which is indeed the case for most OO languages. Exceptions can use the
-class mechanism to override this in their specific case.
+\verb|varDocD| can simply be \verb|text| as \verb|Label| is an
+alias for a \verb|String| -- and Java variables are just names,
+as with most OO languages.
 
 We have defined $300$ functions like \verb|varDocD|, each abstracting a 
 \common ality between target languages. This

@@ -129,6 +129,7 @@ data Choices = Choices {
   logFile :: String,
   logging :: Logging,
   comments :: [Comments],
+  doxVerbosity :: Verbosity,
   dates :: Visibility,
   onSfwrConstraint :: ConstraintBehaviour,
   onPhysConstraint :: ConstraintBehaviour,
@@ -151,6 +152,8 @@ data Logging = LogNone
 data Comments = CommentFunc
               | CommentClass
               | CommentMod deriving Eq
+
+data Verbosity = Verbose | Quiet
              
 data ConstraintBehaviour = Warning
                          | Exception
@@ -185,6 +188,7 @@ defaultChoices = Choices {
   logFile = "log.txt",
   logging = LogNone,
   comments = [],
+  doxVerbosity = Verbose,
   dates = Hide,
   onSfwrConstraint = Exception,
   onPhysConstraint = Warning,

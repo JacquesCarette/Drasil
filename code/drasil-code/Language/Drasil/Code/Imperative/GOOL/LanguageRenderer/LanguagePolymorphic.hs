@@ -9,7 +9,7 @@ import Database.Drasil (ChunkDB)
 
 import GOOL.Drasil (ProgData)
 
-import Language.Drasil.CodeSpec (Comments)
+import Language.Drasil.CodeSpec (Comments, Verbosity)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable)
@@ -21,9 +21,9 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (
   AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
 
 doxConfig :: (AuxiliarySym repr) => repr (AuxHelper repr) -> String -> ProgData 
-  -> repr (Auxiliary repr)
-doxConfig opt pName p = auxFromData doxConfigName (makeDoxConfig pName p 
-  (auxHelperDoc opt))
+  -> Verbosity -> repr (Auxiliary repr)
+doxConfig opt pName p v = auxFromData doxConfigName (makeDoxConfig pName p 
+  (auxHelperDoc opt) v)
 
 sampleInput :: (AuxiliarySym repr) => ChunkDB -> DataDesc -> [Expr] -> 
   repr (Auxiliary repr)

@@ -16,11 +16,12 @@ import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
   interp, mainModule, mainModuleFile, packSep, withExt)
+import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
 import GOOL.Drasil (liftList)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc, text)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 jNameOpts :: NameOpts
 jNameOpts = NameOpts {
@@ -51,7 +52,7 @@ instance AuxiliarySym JavaProject where
   doxConfig = G.doxConfig optimizeDox
   sampleInput = G.sampleInput
 
-  optimizeDox = return $ text "YES"
+  optimizeDox = return yes
 
   makefile = G.makefile jBuildConfig jRunnable
 

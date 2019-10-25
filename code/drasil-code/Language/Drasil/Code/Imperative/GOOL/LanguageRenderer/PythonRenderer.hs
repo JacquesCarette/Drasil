@@ -13,11 +13,12 @@ import qualified
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
+import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
 import GOOL.Drasil (liftList)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc, text)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 newtype PythonProject a = PP {unPP :: a}
 
@@ -42,7 +43,7 @@ instance AuxiliarySym PythonProject where
   doxConfig = G.doxConfig optimizeDox
   sampleInput = G.sampleInput
 
-  optimizeDox = return $ text "YES"
+  optimizeDox = return yes
 
   makefile = G.makefile Nothing pyRunnable
 

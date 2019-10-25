@@ -1,10 +1,12 @@
 module Language.Drasil.Code.Imperative.Doxygen.Import (
-  makeDoxConfig
+  makeDoxConfig, yes, no
 ) where
 
 import Utils.Drasil (blank)
 
 import GOOL.Drasil (ProgData(..), FileData(..), ModData(..), isHeader)
+
+import Language.Drasil.CodeSpec (Verbosity(..))
 
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), isEmpty, text, hcat, vcat)
@@ -12,8 +14,16 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), isEmpty, text, hcat, vcat)
 type OptimizeChoice = Doc
 type ProjName = String
 
-makeDoxConfig :: ProjName -> ProgData -> OptimizeChoice -> Doc
-makeDoxConfig prog p opt = 
+yes, no :: Doc
+yes = text "YES"
+no = text "NO"
+
+verbosityToDoc :: Verbosity -> Doc
+verbosityToDoc Verbose = no
+verbosityToDoc Quiet = yes
+
+makeDoxConfig :: ProjName -> ProgData -> OptimizeChoice -> Verbosity -> Doc
+makeDoxConfig prog p opt v = 
   let fs = map filePath (filter (\f -> not (isEmpty $ modDoc $ fileMod f) && 
              (isMainMod (fileMod f) || isHeader f)) (progMods p))
   in vcat [
@@ -765,7 +775,7 @@ makeDoxConfig prog p opt =
   text "# messages are off.",
   text "# The default value is: NO.",
   blank,
-  text "QUIET                  = YES",
+  text "QUIET                  =" <+> verbosityToDoc v,
   blank,
   text "# The WARNINGS tag can be used to turn on/off the warning messages that are",
   text "# generated to standard error (stderr) by doxygen. If WARNINGS is set to YES",

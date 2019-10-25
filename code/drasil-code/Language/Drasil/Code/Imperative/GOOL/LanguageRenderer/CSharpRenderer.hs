@@ -15,12 +15,13 @@ import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, nativeBinary, osClassDefault)
+import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
 import GOOL.Drasil (liftList)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
-import Text.PrettyPrint.HughesPJ (Doc, text)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 newtype CSharpProject a = CSP {unCSP :: a}
 
@@ -45,7 +46,7 @@ instance AuxiliarySym CSharpProject where
   doxConfig = G.doxConfig optimizeDox
   sampleInput = G.sampleInput
 
-  optimizeDox = return $ text "NO"
+  optimizeDox = return no
 
   makefile = G.makefile csBuildConfig csRunnable
 

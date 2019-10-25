@@ -41,7 +41,8 @@ genDoxConfig :: (AuxiliarySym repr) => String -> ProgData ->
 genDoxConfig n p = do
   g <- ask
   let cms = commented g
-  return [doxConfig n p | not (null cms)]
+      v = doxOutput g
+  return [doxConfig n p v | not (null cms)]
 
 publicClass :: (RenderSym repr) => String -> Label -> Maybe Label -> 
   [repr (StateVar repr)] -> [repr (Method repr)] -> 

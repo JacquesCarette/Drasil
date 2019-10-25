@@ -2,9 +2,9 @@ module Main where
 
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
---   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
---   Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
---   matchConcepts, AuxFile(..), Visibility(..))
+--   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
+--   Logging(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
+--   InputModule(..), matchConcepts, AuxFile(..), Visibility(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -20,6 +20,7 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
 --   logFile          = "log.txt",
 --   logging          = LogNone,
 --   comments         = CommentNone,
+--   doxVerbosity     = Quiet,
 --   dates            = Hide,
 --   onSfwrConstraint = Warning,
 --   onPhysConstraint = Warning,

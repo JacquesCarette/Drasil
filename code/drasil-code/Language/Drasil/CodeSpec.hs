@@ -463,22 +463,25 @@ getDepsControl cs mem =
 getDepsDerived :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
 getDepsDerived cs mem chs = if null derivedDeps then Nothing else Just 
-  (derivedMod (inputModule chs), derivedDeps)
-  where derivedDeps = nub $ mapMaybe ((`Map.lookup` mem) . codeName) (concatMap 
-          (flip codevars (sysinfodb cs) . codeEquat) (derivedInputs cs))
+  (thisMod, derivedDeps)
+  where derivedDeps = nub $ filter (/= thisMod) (mapMaybe ((`Map.lookup` mem) . 
+          codeName) (concatMap (flip codevars (sysinfodb cs) . codeEquat) (derivedInputs cs)))
+        thisMod = derivedMod (inputModule chs)
         derivedMod Separated = "DerivedValues"
         derivedMod Combined = "InputParameters"
 
 getDepsConstraints :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
 getDepsConstraints cs mem chs = if null constraintDeps then Nothing else Just 
-  (constraintMod (inputModule chs), constraintDeps)
-  where constraintDeps = nub $ mapMaybe ((`Map.lookup` mem) . codeName) reqdVals
+  (thisMod, constraintDeps)
+  where constraintDeps = nub $ filter (/= thisMod) (mapMaybe ((`Map.lookup` mem)
+          . codeName) reqdVals)
         ins = inputs cs
         cm = cMap cs
         varsList = filter (\i -> Map.member (i ^. uid) cm) ins
         reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v
           (sysinfodb cs) mem) (getConstraints cm varsList)
+        thisMod = constraintMod (inputModule chs)
         constraintMod Separated = "InputConstraints"
         constraintMod Combined = "InputParameters"
 

@@ -545,10 +545,9 @@ Boolean-valued with \verb|?|, numeric by \verb|#|, and others by \verb|$|.
   \label{tab:operators}
 \end{table}
 
-Table~\ref{tab:values} show conditional expressions and function application.
-\verb|selfFuncApp| and \verb|objMethodCallNoParams| are two shortcuts for the
-when a method is being called on \verb|self| or when the method
-takes no parameters.
+Table~\ref{tab:values} shows conditional expressions and function application.
+\verb|selfFuncApp| and \verb|objMethodCallNoParams| are two shortcuts for when a
+method is being called on \verb|self| or when the method takes no parameters.
 
 Variable declarations are statements, and take a variable specification
 as an argument. For \verb|foo = var "foo" int|, the corresponding variable
@@ -583,7 +582,7 @@ single-line comment).
 
 A single OO method is frequently laid out as a sequence of blocks of
 statements, where each block represents a meaningful task.  In GOOL,
-\verb|block| is used for this purpose. And thus bodies are not just a
+\verb|block| is used for this purpose. Thus bodies are not just a
 sequence of statements (as would be natural if all we cared about was
 feeding a compiler), but instead a \verb|body| is a list of blocks.
 A body can be used as a function body, conditional body, loop
@@ -622,7 +621,7 @@ forRange age (litInt 0) (litInt 9)
 forEach age ages loopBody
 \end{lstlisting}
 While-loops (\verb|while|) are parametrized by a condition and a body; 
-try-catch (\verb|tryCatch|) by two bodies.
+try-catch (\verb|tryCatch|) is parameterized by two bodies.
 
 \subsection{GOOL Syntax: OO features}
 

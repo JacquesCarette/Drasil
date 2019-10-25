@@ -300,12 +300,12 @@ We have a set of new requirements:
 \item The generated code should be human-readable,
 \item The generated code should be idiomatic,
 \item The generated code should be documented,
-\item The generator express common OO patterns.
+\item The generator expresses common OO patterns.
 \end{enumerate}
 
 Here we demonstrate that all of these requirements can be met.
 GOOL\footnote{Source is publicly available; link will be
-given provided after blind period}
+provided after blind period}
 is implemented as a DSL embedded in Haskell that
 can currently generate code in Python, Java, \Csharp, and \Cplusplus%
 Others could be added, with the implementation effort being commensurate to the
@@ -392,7 +392,7 @@ outputs; what we can do in GOOL is to support such multiple-output functions,
 and then generate the idiomatic pattern of implementation in each target
 language.
 
-\expressivity~captures the idea that GOOL supposed to express
+\expressivity~captures the idea that GOOL is supposed to express
 (the ideas contained in) OO programs.  As a requirement, it
 reminds us to test it against real-world examples.
 
@@ -430,13 +430,13 @@ as doing full type inference is unrealistic.
 
 Some features of OO programs are not operational: comments and formatting
 decisions amongst them.  To us, programs are a bidirectional means of
-communication; they must be valid, executable progams, but machines, but
+communication; they must be valid, executable programs, for machines, but
 also need to be readable and understandable by humans.
 Generating code for consumption by machines is well understood and performed by 
 most DSLs, but generating code for human consumption has been given less 
 attention. We tried to pay close attention to program features --- such
-as the habits of programmers to write longer methods a blocks separated
-by (at least) bland lines, often with comments --- which make programs
+as the habits of programmers to write longer methods as blocks separated
+by (at least) blank lines, often with comments --- which make programs
 more accessible to human readers.
 
 Finding commonalities between OO programs is most easily done from the core 
@@ -597,7 +597,7 @@ single-line comment).
 A single OO method is frequently laid out as a sequence of blocks of
 statements, where each block represents a meaningful task.  In GOOL,
 \verb|block| is used for this purpose. And thus bodies are not just a
-sequence of statement (as would be natural if all we cared about was
+sequence of statements (as would be natural if all we cared about was
 feeding a compiler), but instead a \verb|body| is a list of blocks.
 A body can be used as a function body, conditional body, loop
 body, etc. This additional level of organization of statements is
@@ -792,7 +792,7 @@ data VarData = VarD {
   varType :: TypeData,
   varDoc :: Doc}
 \end{lstlisting}
-Thus the representations of a (Java) variable consists of more than just its
+Thus the representation of a (Java) variable consists of more than just its
 printed representation (the \verb|Doc|~field), but also of its binding time,
 name, and type of the variable. \verb|Doc| comes from the package 
 \verb|Text.PrettyPrint.HughesPJ| and represents formatted text. It is common in 

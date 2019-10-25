@@ -1106,7 +1106,7 @@ In addition to printing, there is also functionality for reading input.
 \subsection{Procedures with input, output and input-output parameters}
 
 Moving to larger-scale patterns, we noticed that our codes had methods that
-used its parameters differently: some were used as inputs, some as outputs
+used their parameters differently: some were used as inputs, some as outputs
 and some for both purposes.  This was a \emph{semantic} pattern that was
 not necessarily obvious in any of the implementations. However, once we noticed it,
 we could use that information to generate better, more idiomatic code in
@@ -1125,7 +1125,7 @@ inOutFunc "applyDiscount" public static_
       valueOf price ?< litFloat 20.0])
 \end{lstlisting}
 \verb|inOutFunc| takes three lists of parameters, the input, output and
-input-output respectively.  This function has two outputs
+input-output, respectively.  This function has two outputs
 ---\verb|price| and \verb|isAffordable|--- and multiple outputs are
 not directly supported in all target languages.  Thus we need to use
 different features to represent these.  For example, in Python,
@@ -1154,8 +1154,8 @@ public static Object[] applyDiscount( \
   }
 }
 \end{lstlisting}
-In \Csharp, the outputs are passed as parameters, using the \verb|out| keyword if
-it is only an output or the \verb|ref| keyword if it is both an input and an
+In \Csharp, the outputs are passed as parameters, using the \verb|out| keyword, if
+it is only an output, or the \verb|ref| keyword, if it is both an input and an
 output:
 \begin{lstlisting}
 public static void applyDiscount( \

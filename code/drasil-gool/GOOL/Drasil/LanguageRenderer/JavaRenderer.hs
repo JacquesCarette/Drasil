@@ -38,7 +38,7 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
   binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
-  litIntD, litStringD, classVarD, classVarDocD, inlineIfD, newObjDocD, varD, 
+  litIntD, litStringD, classVarDocD, inlineIfD, newObjDocD, varD, 
   staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, 
   listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, 
   objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, 
@@ -231,6 +231,7 @@ instance VariableSym JavaCode where
   self = selfD
   enumVar = enumVarD
   classVar = classVarD classVarDocD
+  extClassVar = classVar
   objVar = objVarD
   objVarSelf = objVarSelfD
   listVar = listVarD

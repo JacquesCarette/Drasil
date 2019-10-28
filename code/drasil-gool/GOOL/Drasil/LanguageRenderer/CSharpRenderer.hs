@@ -39,7 +39,7 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
   mkVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
-  classVarD, classVarDocD, objVarDocD, inlineIfD, newObjDocD, varD, staticVarD, 
+  classVarDocD, objVarDocD, inlineIfD, newObjDocD, varD, staticVarD, 
   extVarD, selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
   valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, 
   objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
@@ -230,6 +230,7 @@ instance VariableSym CSharpCode where
   self = selfD
   enumVar = enumVarD
   classVar = classVarD classVarDocD
+  extClassVar = classVar
   objVar = liftA2 csObjVar
   objVarSelf = objVarSelfD
   listVar  = listVarD

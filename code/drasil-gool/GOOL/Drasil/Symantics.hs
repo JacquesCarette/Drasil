@@ -177,8 +177,12 @@ class (TypeSym repr, InternalVariable repr) => VariableSym repr where
   extVar       :: Library -> Label -> repr (Type repr) -> 
     repr (Variable repr)
   self         :: Label -> repr (Variable repr)
-  classVar     :: repr (Type repr) -> repr (Variable repr) -> repr (Variable repr)
-  objVar       :: repr (Variable repr) -> repr (Variable repr) -> repr (Variable repr)
+  classVar     :: repr (Type repr) -> repr (Variable repr) -> 
+    repr (Variable repr)
+  extClassVar  :: repr (Type repr) -> repr (Variable repr) -> 
+    repr (Variable repr)
+  objVar       :: repr (Variable repr) -> repr (Variable repr) -> 
+    repr (Variable repr)
   objVarSelf   :: Label -> repr (Variable repr) -> repr (Variable repr)
   enumVar      :: Label -> Label -> repr (Variable repr)
   listVar      :: Label -> repr (Permanence repr) -> repr (Type repr) -> 

@@ -78,7 +78,7 @@ inputVariable Bundled Var v = do
   return $ ip $-> v
 inputVariable Bundled Const v = do
   ip <- mkVar (codevar inParams)
-  return $ classVar (variableType ip) v
+  classVariable ip v
 
 constVariable :: (RenderSym repr) => ConstantStructure -> ConstantRepr -> 
   repr (Variable repr) -> Reader State (repr (Variable repr))
@@ -87,11 +87,20 @@ constVariable (Store Bundled) Var v = do
   return $ cs $-> v
 constVariable (Store Bundled) Const v = do
   cs <- mkVar (codevar consts)
-  return $ classVar (variableType cs) v
+  classVariable cs v
 constVariable WithInputs cr v = do
   g <- ask
   inputVariable (inStruct g) cr v
 constVariable _ _ v = return v
+
+classVariable :: (RenderSym repr) => repr (Variable repr) -> 
+  repr (Variable repr) -> Reader State (repr (Variable repr))
+classVariable c v = do
+  g <- ask
+  let n = variableName v
+      checkCurrent m = if currentModule g == m then classVar else extClassVar
+  return $ maybe (error $ "Variable " ++ n ++ " missing from export map") 
+    checkCurrent (Map.lookup n (eMap $ codeSpec g)) (variableType c) v
 
 mkVal :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => c -> 
   Reader State (repr (Value repr))

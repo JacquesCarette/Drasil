@@ -262,8 +262,8 @@ commentedClass cmt cs = classFromData (commentedItem (blockCommentDoc cmt)
 buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
   [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)
 buildModule n ls ms cs = modFromData n (any isMainMethod ms) (moduleDocD 
-  (vcat $ map keyDoc ls) (methodListDocD $ map methodDoc ms) 
-  (vibcat $ map classDoc cs))
+  (vcat $ map keyDoc ls) (vibcat $ map classDoc cs) 
+  (methodListDocD $ map methodDoc ms))
 
 buildModule' :: (RenderSym repr) => Label -> [repr (Method repr)] -> 
   [repr (Class repr)] -> repr (Module repr)

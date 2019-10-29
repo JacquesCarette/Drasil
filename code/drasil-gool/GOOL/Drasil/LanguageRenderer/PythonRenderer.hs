@@ -35,7 +35,7 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   andPrec, orPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, 
-  litCharD, litFloatD, litIntD, litStringD, classVarD, newObjDocD', varD, 
+  litCharD, litFloatD, litIntD, litStringD, classVarDocD, newObjDocD', varD, 
   staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, 
   listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, 
   objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
@@ -226,7 +226,8 @@ instance VariableSym PythonCode where
   extVar = extVarD
   self l = liftA2 (mkVar "self") (obj l) (return $ text "self")
   enumVar = enumVarD
-  classVar = classVarD pyClassVar
+  classVar = classVarD classVarDocD
+  extClassVar = classVarD pyClassVar
   objVar = objVarD
   objVarSelf = objVarSelfD
   listVar = listVarD

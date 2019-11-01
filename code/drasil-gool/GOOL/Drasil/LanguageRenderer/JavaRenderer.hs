@@ -531,46 +531,13 @@ instance MethodSym JavaCode where
 
   docFunc = G.docFunc
 
-  inOutFunc n s p ins [] [] b = function n s p void (map param ins) b
-  inOutFunc n s p ins [v] [] b = function n s p (variableType v) 
-    (map param ins) (liftA3 surroundBody (varDec v) b (returnState $ 
-    valueOf v))
-  inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
-    then void else variableType v) (map param $ v : ins) 
-    (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
-    (returnState $ valueOf v))
-  inOutFunc n s p ins outs both b = function n s p (returnTp rets)
-    (map param $ both ++ ins) (liftA3 surroundBody decls b (returnSt rets))
-    where returnTp [x] = variableType x
-          returnTp _ = jArrayType
-          returnSt [x] = returnState $ valueOf x
-          returnSt _ = multi (varDecDef outputs (valueOf (var 
-            ("new Object[" ++ show (length rets) ++ "]") jArrayType))
-            : assignArray 0 (map valueOf rets)
-            ++ [returnState (valueOf outputs)])
-          assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
-            [JavaCode (Statement JavaCode)]
-          assignArray _ [] = []
-          assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
-            (fmap valType v) &= v) : assignArray (c+1) vs
-          decls = multi $ map varDec outs
-          rets = filterOutObjs both ++ outs
-          outputs = var "outputs" jArrayType
+  inOutMethod n c = jInOut (method n c)
+
+  docInOutMethod n c = jDocInOut (inOutMethod n c)
+
+  inOutFunc n = jInOut (function n)
     
-  docInOutFunc n s p desc is [] [] b = docFuncRepr desc (map fst is) [] 
-    (inOutFunc n s p (map snd is) [] [] b)
-  docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
-    (inOutFunc n s p (map snd is) [snd o] [] b)
-  docInOutFunc n s p desc is [] [both] b = docFuncRepr desc (map fst (both : 
-    is)) [fst both | not ((isObject . getType . variableType . snd) both)]
-    (inOutFunc n s p (map snd is) [] [snd both] b)
-  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
-    (bRets ++ map fst os) (inOutFunc n s p (map snd is) (map snd os) 
-    (map snd bs) b)
-    where bRets = bRets' (map fst (filter (not . isObject . getType . 
-            variableType . snd) bs))
-          bRets' [x] = [x]
-          bRets' xs = "array containing the following values:" : xs
+  docInOutFunc n = jDocInOut (inOutFunc n)
     
   parameters m = map return $ (mthdParams . unJC) m
 
@@ -758,3 +725,56 @@ jInOutCall f n ins outs both = fCall rets
         fCall [x] = assign x $ f n (variableType x) (map valueOf both ++ ins)
         fCall xs = multi $ varDecDef (var "outputs" jArrayType) 
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs
+
+jInOut :: (JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
+    JavaCode (Type JavaCode) -> [JavaCode (Parameter JavaCode)] -> 
+    JavaCode (Body JavaCode) -> JavaCode (Method JavaCode)) 
+  -> JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
+  [JavaCode (Variable JavaCode)] -> [JavaCode (Variable JavaCode)] -> 
+  [JavaCode (Variable JavaCode)] -> JavaCode (Body JavaCode) -> 
+  JavaCode (Method JavaCode)
+jInOut f s p ins [] [] b = f s p void (map param ins) b
+jInOut f s p ins [v] [] b = f s p (variableType v) 
+  (map param ins) (liftA3 surroundBody (varDec v) b (returnState $ 
+  valueOf v))
+jInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) 
+  then void else variableType v) (map param $ v : ins) 
+  (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
+  (returnState $ valueOf v))
+jInOut f s p ins outs both b = f s p (returnTp rets)
+  (map param $ both ++ ins) (liftA3 surroundBody decls b (returnSt rets))
+  where returnTp [x] = variableType x
+        returnTp _ = jArrayType
+        returnSt [x] = returnState $ valueOf x
+        returnSt _ = multi (varDecDef outputs (valueOf (var 
+          ("new Object[" ++ show (length rets) ++ "]") jArrayType))
+          : assignArray 0 (map valueOf rets)
+          ++ [returnState (valueOf outputs)])
+        assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
+          [JavaCode (Statement JavaCode)]
+        assignArray _ [] = []
+        assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
+          (fmap valType v) &= v) : assignArray (c+1) vs
+        decls = multi $ map varDec outs
+        rets = filterOutObjs both ++ outs
+        outputs = var "outputs" jArrayType
+
+jDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
+    -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
+    [repr (Variable repr)] -> repr (Body repr) -> repr (Method repr))
+  -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
+  [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
+  [(String, repr (Variable repr))] -> repr (Body repr) -> repr (Method repr)
+jDocInOut f s p desc is [] [] b = docFuncRepr desc (map fst is) [] 
+  (f s p (map snd is) [] [] b)
+jDocInOut f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
+  (f s p (map snd is) [snd o] [] b)
+jDocInOut f s p desc is [] [both] b = docFuncRepr desc (map fst (both : is)) 
+  [fst both | not ((isObject . getType . variableType . snd) both)]
+  (f s p (map snd is) [] [snd both] b)
+jDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
+  (bRets ++ map fst os) (f s p (map snd is) (map snd os) (map snd bs) b)
+  where bRets = bRets' (map fst (filter (not . isObject . getType . 
+          variableType . snd) bs))
+        bRets' [x] = [x]
+        bRets' xs = "array containing the following values:" : xs

@@ -585,6 +585,16 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr,
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> repr (Method repr) -> repr (Method repr) 
 
+  -- Second label is class name, rest is same as inOutFunc
+  inOutMethod :: Label -> Label -> repr (Scope repr) -> repr (Permanence repr) 
+    -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
+    [repr (Variable repr)] -> repr (Body repr) -> repr (Method repr)
+  -- Second label is class name, rest is same as docInOutFunc
+  docInOutMethod :: Label -> Label -> repr (Scope repr) -> 
+    repr (Permanence repr) -> String -> [(String, repr (Variable repr))] -> 
+    [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
+    repr (Body repr) -> repr (Method repr)
+
   -- The three lists are inputs, outputs, and both, respectively
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     [repr (Variable repr)] -> [repr (Variable repr)] -> [repr (Variable repr)] 

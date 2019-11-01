@@ -538,16 +538,13 @@ instance MethodSym PythonCode where
 
   docFunc = G.docFunc
 
-  inOutFunc n s p ins [] [] b = function n s p void (map param ins) b
-  inOutFunc n s p ins outs both b = function n s p void (map 
-    param $ both ++ ins) (if null rets then b else liftA3 surroundBody 
-    (multi $ map varDec outs) b (multiReturn $ map valueOf rets))
-    where rets = filterOutObjs both ++ outs
+  inOutMethod n c = pyInOut (method n c)
 
-  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
-    (map fst $ bRets ++ os) (inOutFunc n s p (map snd is) (map snd os) (map snd
-    bs) b)
-    where bRets = filter (not . isObject . getType . variableType . snd) bs
+  docInOutMethod n c = pyDocInOut (inOutMethod n c)
+
+  inOutFunc n = pyInOut (function n)
+
+  docInOutFunc n = pyDocInOut (inOutFunc n)
 
   parameters m = map return $ (mthdParams . unPC) m
 
@@ -748,3 +745,26 @@ pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
 pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty
 pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . text) lns
+
+pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) 
+    -> PythonCode (Type PythonCode) -> [PythonCode (Parameter PythonCode)] -> 
+    PythonCode (Body PythonCode) -> PythonCode (Method PythonCode)) 
+  -> PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) -> 
+  [PythonCode (Variable PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
+  [PythonCode (Variable PythonCode)] -> PythonCode (Body PythonCode) -> 
+  PythonCode (Method PythonCode)
+pyInOut f s p ins [] [] b = f s p void (map param ins) b
+pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins) 
+  (if null rets then b else liftA3 surroundBody (multi $ map varDec outs) b 
+  (multiReturn $ map valueOf rets))
+  where rets = filterOutObjs both ++ outs
+
+pyDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
+    -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
+    [repr (Variable repr)] -> repr (Body repr) -> repr (Method repr))
+  -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
+  [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
+  [(String, repr (Variable repr))] -> repr (Body repr) -> repr (Method repr)
+pyDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
+  (map fst $ bRets ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)
+  where bRets = filter (not . isObject . getType . variableType . snd) bs

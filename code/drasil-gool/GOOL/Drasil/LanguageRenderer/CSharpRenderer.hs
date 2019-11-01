@@ -528,17 +528,13 @@ instance MethodSym CSharpCode where
 
   docFunc = G.docFunc
 
-  inOutFunc n s p ins [v] [] b = function n s p (variableType v) (map param ins)
-   (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
-  inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
-    then void else variableType v) (map param $ v : ins) 
-    (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
-    (returnState $ valueOf v))
-  inOutFunc n s p ins outs both b = function n s p void (map (fmap 
-    (updateParamDoc csRef) . param) both ++ map param ins ++ 
-    map (fmap (updateParamDoc csOut) . param) outs) b
+  inOutMethod n c = csInOut (method n c)
 
-  docInOutFunc = G.docInOutFunc
+  docInOutMethod n c = G.docInOutFunc (inOutMethod n c)
+
+  inOutFunc n = csInOut (function n)
+
+  docInOutFunc n = G.docInOutFunc (inOutFunc n)
   
   parameters m = map return $ (mthdParams . unCSC) m
 
@@ -690,3 +686,19 @@ csObjVar o v = csObjVar' (varBind v)
           "Cannot use objVar to access static variables through an object in C#"
         csObjVar' Dynamic = mkVar (varName o ++ "." ++ varName v) 
           (varType v) (objVarDocD (varDoc o) (varDoc v))
+
+csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
+    -> CSharpCode (Type CSharpCode) -> [CSharpCode (Parameter CSharpCode)] -> 
+    CSharpCode (Body CSharpCode) -> CSharpCode (Method CSharpCode)) 
+  -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
+  [CSharpCode (Variable CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
+  [CSharpCode (Variable CSharpCode)] -> CSharpCode (Body CSharpCode) -> 
+  CSharpCode (Method CSharpCode)
+csInOut f s p ins [v] [] b = f s p (variableType v) (map param ins)
+  (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
+csInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
+  else variableType v) (map param $ v : ins) (if null (filterOutObjs [v]) then 
+  b else liftA2 appendToBody b (returnState $ valueOf v))
+csInOut f s p ins outs both b = f s p void (map (fmap (updateParamDoc csRef) . 
+  param) both ++ map param ins ++ map (fmap (updateParamDoc csOut) . param) 
+  outs) b

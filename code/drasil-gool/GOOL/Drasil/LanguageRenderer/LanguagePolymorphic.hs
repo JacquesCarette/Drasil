@@ -21,7 +21,7 @@ import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   ValueExpression(..), InternalValue(..), InternalStatement(..), 
   StatementSym(Statement, (&=), constDecDef, returnState), ScopeSym(..), 
   InternalScope(..), MethodTypeSym(mType), ParameterSym(..), 
-  MethodTypeSym(MethodType), MethodSym(Method, inOutFunc), 
+  MethodTypeSym(MethodType), MethodSym(Method), 
   InternalMethod(intMethod, commentedFunc, isMainMethod, methodDoc), 
   StateVarSym(StateVar), InternalStateVar(..), ClassSym(Class), 
   InternalClass(..), ModuleSym(Module, moduleName), InternalMod(..), 
@@ -186,17 +186,19 @@ docFunc :: (RenderSym repr) => String -> [String] -> Maybe String ->
   repr (Method repr) -> repr (Method repr)
 docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
-docInOutFunc :: (RenderSym repr) => Label -> repr (Scope repr) -> 
-  repr (Permanence repr) -> String -> [(String, repr (Variable repr))] -> 
+docInOutFunc :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr)
+    -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
+    [repr (Variable repr)] -> repr (Body repr) -> repr (Method repr)) 
+  -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
   [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
-  repr (Body repr) -> repr (Method repr)
-docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
-  (inOutFunc n s p (map snd is) [snd o] [] b)
-docInOutFunc n s p desc is [] [both] b = docFuncRepr desc (map fst $ both : 
-  is) [fst both | not ((isObject . getType . variableType . snd) both)] 
-  (inOutFunc n s p (map snd is) [] [snd both] b)
-docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ 
-  os) [] (inOutFunc n s p (map snd is) (map snd os) (map snd bs) b)
+  [(String, repr (Variable repr))] -> repr (Body repr) -> repr (Method repr)
+docInOutFunc f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
+  (f s p (map snd is) [snd o] [] b)
+docInOutFunc f s p desc is [] [both] b = docFuncRepr desc (map fst $ both : is) 
+  [fst both | not ((isObject . getType . variableType . snd) both)] 
+  (f s p (map snd is) [] [snd both] b)
+docInOutFunc f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ os)
+  [] (f s p (map snd is) (map snd os) (map snd bs) b)
 
 intFunc :: (RenderSym repr) => Bool -> Label -> repr (Scope repr) -> 
   repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] 

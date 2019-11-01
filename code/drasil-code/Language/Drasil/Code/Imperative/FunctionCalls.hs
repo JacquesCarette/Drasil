@@ -57,22 +57,22 @@ getFuncCall :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => String
   -> repr (Type repr) -> Reader State [c] -> 
   Reader State (Maybe (repr (Value repr)))
 getFuncCall n t funcPs = do
-  g <- ask
-  let getCall Nothing = return Nothing
-      getCall (Just m) = do
+  mm <- getCall n
+  let getFuncCall' Nothing = return Nothing
+      getFuncCall' (Just m) = do
         cs <- funcPs
         pvals <- mapM mkVal cs
         val <- fApp m n t pvals
         return $ Just val
-  getCall $ Map.lookup n (eMap $ codeSpec g)
+  getFuncCall' mm
 
 getInOutCall :: (RenderSym repr, HasCodeType c, CodeIdea c, Eq c) => String -> 
   Reader State [c] -> Reader State [c] ->
   Reader State (Maybe (repr (Statement repr)))
 getInOutCall n inFunc outFunc = do
-  g <- ask
-  let getCall Nothing = return Nothing
-      getCall (Just m) = do
+  mm <- getCall n
+  let getInOutCall' Nothing = return Nothing
+      getInOutCall' (Just m) = do
         ins' <- inFunc
         outs' <- outFunc
         ins <- mapM mkVar (ins' \\ outs')
@@ -80,4 +80,15 @@ getInOutCall n inFunc outFunc = do
         both <- mapM mkVar (ins' `intersect` outs')
         stmt <- fAppInOut m n (map valueOf ins) outs both
         return $ Just stmt
-  getCall $ Map.lookup n (eMap $ codeSpec g)
+  getInOutCall' mm
+
+getCall :: String -> Reader State (Maybe String)
+getCall n = do
+  g <- ask
+  let getCallExported Nothing = getCallDefined (Map.lookup n $ defMap $ 
+        codeSpec g)
+      getCallExported m = return m
+      getCallDefined Nothing = return Nothing
+      getCallDefined (Just m) = if m == currentModule g then return (Just m)
+        else return Nothing
+  getCallExported $ Map.lookup n (eMap $ codeSpec g)

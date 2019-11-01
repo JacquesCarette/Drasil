@@ -5,19 +5,20 @@ module Language.Drasil.Code.Imperative.Modules (
 import Language.Drasil
 import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc, 
-  constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, 
-  inFmtFuncDesc, inputClassDesc, inputConstraintsDesc, inputFormatDesc, 
+  constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, 
+  inputClassDesc, inputConstraintsDesc, inputConstructorDesc, inputFormatDesc, 
   inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc)
 import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
   getConstraintCall, getDerivedCall, getInputCall, getOutputCall)
 import Language.Drasil.Code.Imperative.GenerateGOOL (genModule, publicClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (CalcType(CalcAssign), convExpr,
-  genCalcBlock, mkVal, mkVar, publicInOutFunc, publicMethod, readData, renderC)
+  genCalcBlock, genConstructor, mkVal, mkVar, publicInOutFunc, publicMethod, 
+  readData, renderC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, varLogFile)
 import Language.Drasil.Code.Imperative.Parameters (getConstraintParams, 
-  getDerivedIns, getDerivedOuts, getInputFormatIns, getInputFormatOuts, 
-  getOutputParams)
+  getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns, 
+  getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName, codeChunk), CodeChunk, 
@@ -28,7 +29,7 @@ import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
   Comments(CommentFunc), ConstantStructure(..), ConstantRepr(..), 
-  ConstraintBehaviour(..), InputModule(..), Logging(..), Structure(..))
+  ConstraintBehaviour(..), InputModule(..), Logging(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import GOOL.Drasil (RenderSym(..), BodySym(..), BlockSym(..), PermanenceSym(..),
@@ -131,14 +132,13 @@ chooseInModule Separated = genInputModSeparated
 genInputModSeparated :: (RenderSym repr) => 
   Reader State [repr (RenderFile repr)]
 genInputModSeparated = do
-  g <- ask
   ipDesc <- modDesc inputParametersDesc
   ifDesc <- modDesc (liftS inputFormatDesc)
   dvDesc <- modDesc (liftS derivedValuesDesc)
   icDesc <- modDesc (liftS inputConstraintsDesc)
   sequence 
     [genModule "InputParameters" ipDesc 
-      Nothing (Just $ fmap maybeToList (chooseInStructure $ inStruct g)),
+      Nothing (Just $ fmap maybeToList genInputClass),
     genModule "InputFormat" ifDesc
       (Just $ fmap maybeToList genInputFormat) Nothing,
     genModule "DerivedValues" dvDesc
@@ -148,15 +148,16 @@ genInputModSeparated = do
 
 genInputModCombined :: (RenderSym repr) => Reader State [repr (RenderFile repr)]
 genInputModCombined = do
-  g <- ask
   ipDesc <- modDesc inputParametersDesc
-  liftS $ genModule "InputParameters" ipDesc Nothing
-    (Just $ fmap maybeToList (chooseInStructure $ inStruct g))
-
-chooseInStructure :: (RenderSym repr) => Structure -> Reader State 
-  (Maybe (repr (Class repr)))
-chooseInStructure Unbundled = return Nothing
-chooseInStructure Bundled = genInputClass
+  let cname = "InputParameters"
+      genMod :: (RenderSym repr) => Maybe (repr (Class repr)) ->
+        Reader State (repr (RenderFile repr))
+      genMod Nothing = genModule cname ipDesc (Just $ concat <$> mapM (fmap 
+        maybeToList) [genInputFormat, genInputDerived, genInputConstraints]) 
+        Nothing
+      genMod _ = genModule cname ipDesc Nothing (Just $ fmap maybeToList genInputClass)
+  ic <- genInputClass
+  liftS $ genMod ic
 
 constVarFunc :: (RenderSym repr) => ConstantRepr -> String ->
   (repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr))
@@ -174,11 +175,12 @@ genInputClass = do
         codeName)
       methods :: (RenderSym repr) => InputModule -> Reader State [repr (Method repr)]
       methods Separated = return []
-      methods Combined = concat <$> mapM (fmap maybeToList) [genInputFormat, 
-        genInputDerived, genInputConstraints]
-      genClass :: (RenderSym repr) => [CodeChunk] -> [CodeDefinition] ->
+      methods Combined = concat <$> mapM (fmap maybeToList) 
+        [genInputConstructor, genInputFormat, genInputDerived, 
+        genInputConstraints]
+      genClass :: (RenderSym repr) => [CodeChunk] -> [CodeDefinition] -> 
         Reader State (Maybe (repr (Class repr)))
-      genClass [] [] = return Nothing 
+      genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . codeEquat) csts
         let inputVars = map (\x -> pubMVar (var (codeName x) (convType $ 
@@ -186,10 +188,28 @@ genInputClass = do
             constVars = zipWith (\c vl -> constVarFunc (conRepr g) cname
               (var (codeName c) (convType $ codeType c)) vl) csts vals
         icDesc <- inputClassDesc
-        cls <- publicClass icDesc cname Nothing (inputVars ++ constVars) 
+        c <- publicClass icDesc cname Nothing (inputVars ++ constVars) 
           (methods $ inMod g)
-        return $ Just cls
+        return $ Just c
   genClass (filt ins) (filt cs)
+
+genInputConstructor :: (RenderSym repr) => Reader State 
+  (Maybe (repr (Method repr)))
+genInputConstructor = do
+  g <- ask
+  let em = eMap $ codeSpec g
+      genCtor False = return Nothing
+      genCtor True = do 
+        cdesc <- inputConstructorDesc
+        cparams <- getInConstructorParams    
+        gi <- getInputCall
+        dv <- getDerivedCall
+        ic <- getConstraintCall
+        ctor <- genConstructor "InputParameters" cdesc cparams 
+          [block $ catMaybes [gi, dv, ic]]
+        return $ Just ctor
+  genCtor $ any (`member` em) ["get_input", "derived_values", 
+    "input_constraints"]
 
 genInputDerived :: (RenderSym repr) => Reader State 
   (Maybe (repr (Method repr)))

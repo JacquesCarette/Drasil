@@ -1,4 +1,4 @@
-module Language.Drasil.Code.Imperative.Parameters(
+module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
   getInputFormatIns, getInputFormatOuts, getDerivedIns, getDerivedOuts,
   getConstraintParams, getCalcParams, getOutputParams
 ) where
@@ -16,6 +16,9 @@ import Data.List (nub, (\\))
 import Data.Map (member, notMember)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
+
+getInConstructorParams :: Reader State [CodeChunk]
+getInConstructorParams = getInputFormatIns
 
 getInputFormatIns :: Reader State [CodeChunk]
 getInputFormatIns = do

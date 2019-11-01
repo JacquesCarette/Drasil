@@ -1,7 +1,8 @@
 module Language.Drasil.Code.Imperative.Descriptions (
-  modDesc, inputParametersDesc, inputFormatDesc, derivedValuesDesc, 
-  inputConstraintsDesc, constModDesc, outputFormatDesc, inputClassDesc, 
-  constClassDesc, inFmtFuncDesc, inConsFuncDesc, dvFuncDesc, woFuncDesc
+  modDesc, inputParametersDesc, inputConstructorDesc, inputFormatDesc, 
+  derivedValuesDesc, inputConstraintsDesc, constModDesc, outputFormatDesc, 
+  inputClassDesc, constClassDesc, inFmtFuncDesc, inConsFuncDesc, dvFuncDesc, 
+  woFuncDesc
 ) where
 
 import Utils.Drasil (stringList)
@@ -32,6 +33,22 @@ inputParametersDesc = do
       inDesc Bundled = ["the structure for holding input values"]
       inDesc Unbundled = [""]
   return $ ipDesc im
+
+inputConstructorDesc :: Reader State String
+inputConstructorDesc = do
+  g <- ask
+  pAndS <- physAndSfwrCons
+  let ifDesc False = ""
+      ifDesc True = "reading inputs"
+      idDesc False = ""
+      idDesc True = "calculating derived values"
+      icDesc False = ""
+      icDesc True = "checking " ++ pAndS ++ " on the input"
+      em = eMap $ codeSpec g
+  return $ "Initializes input object by " ++ stringList [ 
+    ifDesc (member "get_input" em),
+    idDesc (member "derived_values" em),
+    icDesc (member "input_constraints" em)]
 
 inputFormatDesc :: Reader State String
 inputFormatDesc = do
@@ -79,8 +96,8 @@ inputClassDesc = do
       inClassD _ = "Structure for holding the " ++ stringList [
         inPs $ extInputs $ csi $ codeSpec g,
         dVs $ Map.lookup "derived_values" (eMap $ codeSpec g),
-        cVs $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
-          codeName) (constants $ csi $ codeSpec g)]
+        cVs $ filter (flip member (Map.filter (cname ==) 
+          (eMap $ codeSpec g)) . codeName) (constants $ csi $ codeSpec g)]
       inPs [] = ""
       inPs _ = "input values"
       dVs Nothing = ""

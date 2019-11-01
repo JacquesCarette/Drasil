@@ -418,9 +418,12 @@ type Export = (String, String)
 
 getExportInput :: Choices -> [Input] -> [Export]
 getExportInput _ [] = []
-getExportInput chs ins = inExp (inputStructure chs) 
-  where inExp Unbundled = []
-        inExp Bundled = map codeName ins `zip` repeat "InputParameters" 
+getExportInput chs ins = inExp (inputModule chs) (inputStructure chs) 
+  where inExp _ Unbundled = []
+        inExp Separated Bundled = inVarExports
+        inExp Combined Bundled = (modName , modName) : inVarExports 
+        inVarExports = map codeName ins `zip` repeat modName
+        modName = "InputParameters"
 
 getExportConstants :: Choices -> [Const] -> [Export]
 getExportConstants _ [] = []

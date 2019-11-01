@@ -45,10 +45,11 @@ genDoxConfig n p = do
   return [doxConfig n p v | not (null cms)]
 
 publicClass :: (RenderSym repr) => String -> Label -> Maybe Label -> 
-  [repr (StateVar repr)] -> [repr (Method repr)] -> 
+  [repr (StateVar repr)] -> Reader State [repr (Method repr)] -> 
   Reader State (repr (Class repr))
-publicClass desc n l vs ms = do
+publicClass desc n l vs mths = do
   g <- ask
+  ms <- mths
   return $ if CommentClass `elem` commented g 
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms

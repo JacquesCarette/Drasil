@@ -150,9 +150,7 @@ genInputModCombined :: (RenderSym repr) => Reader State [repr (RenderFile repr)]
 genInputModCombined = do
   g <- ask
   ipDesc <- modDesc inputParametersDesc
-  liftS $ genModule "InputParameters" ipDesc
-    (Just $ concat <$> mapM (fmap maybeToList) 
-    [genInputFormat, genInputDerived, genInputConstraints]) 
+  liftS $ genModule "InputParameters" ipDesc Nothing
     (Just $ fmap maybeToList (chooseInStructure $ inStruct g))
 
 chooseInStructure :: (RenderSym repr) => Structure -> Reader State 
@@ -174,6 +172,10 @@ genInputClass = do
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
         codeName)
+      methods :: (RenderSym repr) => InputModule -> Reader State [repr (Method repr)]
+      methods Separated = return []
+      methods Combined = concat <$> mapM (fmap maybeToList) [genInputFormat, 
+        genInputDerived, genInputConstraints]
       genClass :: (RenderSym repr) => [CodeChunk] -> [CodeDefinition] ->
         Reader State (Maybe (repr (Class repr)))
       genClass [] [] = return Nothing 
@@ -184,7 +186,8 @@ genInputClass = do
             constVars = zipWith (\c vl -> constVarFunc (conRepr g) cname
               (var (codeName c) (convType $ codeType c)) vl) csts vals
         icDesc <- inputClassDesc
-        cls <- publicClass icDesc cname Nothing (inputVars ++ constVars) []
+        cls <- publicClass icDesc cname Nothing (inputVars ++ constVars) 
+          (methods $ inMod g)
         return $ Just cls
   genClass (filt ins) (filt cs)
 
@@ -365,7 +368,7 @@ genConstClass = do
         let vars = map (\x -> var (codeName x) (convType $ codeType x)) vs
             constVars = zipWith (constVarFunc (conRepr g) cname) vars vals
         cDesc <- constClassDesc
-        cls <- publicClass cDesc cname Nothing constVars []
+        cls <- publicClass cDesc cname Nothing constVars (return [])
         return $ Just cls
   genClass $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
     codeName) cs

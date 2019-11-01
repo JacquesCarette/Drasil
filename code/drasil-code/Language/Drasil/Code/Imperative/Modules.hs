@@ -197,7 +197,7 @@ genInputConstructor :: (RenderSym repr) => Reader State
   (Maybe (repr (Method repr)))
 genInputConstructor = do
   g <- ask
-  let em = eMap $ codeSpec g
+  let dm = defMap $ codeSpec g
       genCtor False = return Nothing
       genCtor True = do 
         cdesc <- inputConstructorDesc
@@ -208,7 +208,7 @@ genInputConstructor = do
         ctor <- genConstructor "InputParameters" cdesc cparams 
           [block $ catMaybes [gi, dv, ic]]
         return $ Just ctor
-  genCtor $ any (`member` em) ["get_input", "derived_values", 
+  genCtor $ any (`member` dm) ["get_input", "derived_values", 
     "input_constraints"]
 
 genInputDerived :: (RenderSym repr) => Reader State 
@@ -226,7 +226,7 @@ genInputDerived = do
         desc <- dvFuncDesc
         mthd <- publicInOutFunc "derived_values" desc ins outs bod
         return $ Just mthd
-  genDerived $ Map.lookup "derived_values" (eMap $ codeSpec g)
+  genDerived $ Map.lookup "derived_values" (defMap $ codeSpec g)
 
 genInputConstraints :: (RenderSym repr) => Reader State 
   (Maybe (repr (Method repr)))
@@ -249,7 +249,7 @@ genInputConstraints = do
         mthd <- publicMethod void "input_constraints" desc parms 
           Nothing [block sf, block hw]
         return $ Just mthd
-  genConstraints $ Map.lookup "input_constraints" (eMap $ codeSpec g)
+  genConstraints $ Map.lookup "input_constraints" (defMap $ codeSpec g)
 
 sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr) 
   => [(q,[Constraint])] -> Reader State [repr (Statement repr)]
@@ -352,7 +352,7 @@ genInputFormat = do
         desc <- inFmtFuncDesc
         mthd <- publicInOutFunc "get_input" desc ins outs bod
         return $ Just mthd
-  genInFormat $ Map.lookup "get_input" (eMap $ codeSpec g)
+  genInFormat $ Map.lookup "get_input" (defMap $ codeSpec g)
 
 genDataDesc :: Reader State DataDesc
 genDataDesc = do

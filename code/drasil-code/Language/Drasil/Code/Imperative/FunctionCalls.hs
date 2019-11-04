@@ -1,5 +1,6 @@
 module Language.Drasil.Code.Imperative.FunctionCalls (
-  getInputCall, getDerivedCall, getConstraintCall, getCalcCall, getOutputCall
+  getAllInputCalls, getInputCall, getDerivedCall, getConstraintCall, 
+  getCalcCall, getOutputCall
 ) where
 
 import Language.Drasil
@@ -20,9 +21,16 @@ import GOOL.Drasil (RenderSym(..), TypeSym(..), ValueSym(..),
 
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (maybe)
+import Data.Maybe (maybe, catMaybes)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
+
+getAllInputCalls :: (RenderSym repr) => Reader State [repr (Statement repr)]
+getAllInputCalls = do
+  gi <- getInputCall
+  dv <- getDerivedCall
+  ic <- getConstraintCall
+  return $ catMaybes [gi, dv, ic]
 
 getInputCall :: (RenderSym repr) => Reader State (Maybe (repr (Statement repr)))
 getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts

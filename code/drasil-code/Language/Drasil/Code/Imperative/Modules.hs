@@ -9,7 +9,7 @@ import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   inputClassDesc, inputConstraintsDesc, inputConstructorDesc, inputFormatDesc, 
   inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc)
 import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
-  getConstraintCall, getDerivedCall, getInputCall, getOutputCall)
+  getAllInputCalls, getOutputCall)
 import Language.Drasil.Code.Imperative.GenerateGOOL (genModule, publicClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (CalcType(CalcAssign), convExpr,
@@ -61,16 +61,14 @@ genMainFunc = do
     logInFile <- maybeLog v_filename
     ip <- getInputDecl
     co <- initConsts
-    gi <- getInputCall
-    dv <- getDerivedCall
-    ic <- getConstraintCall
+    ics <- getAllInputCalls
     varDef <- mapM getCalcCall (execOrder $ csi $ codeSpec g)
     wo <- getOutputCall
     return $ (if CommentFunc `elem` commented g then docMain else mainFunction)
       $ bodyStatements $
       initLogFileVar (logKind g) ++
       varDecDef v_filename (arg 0) : logInFile ++
-      catMaybes ([ip, co, gi, dv, ic] ++ varDef ++ [wo])
+      catMaybes [ip, co] ++ ics ++ catMaybes (varDef ++ [wo])
 
 getInputDecl :: (RenderSym repr) => Reader State (Maybe (repr (
   Statement repr)))
@@ -207,11 +205,9 @@ genInputConstructor = do
       genCtor True = do 
         cdesc <- inputConstructorDesc
         cparams <- getInConstructorParams    
-        gi <- getInputCall
-        dv <- getDerivedCall
-        ic <- getConstraintCall
+        ics <- getAllInputCalls
         ctor <- genConstructor "InputParameters" cdesc cparams 
-          [block $ catMaybes [gi, dv, ic]]
+          [block ics]
         return $ Just ctor
   genCtor $ any (`member` dm) ["get_input", "derived_values", 
     "input_constraints"]

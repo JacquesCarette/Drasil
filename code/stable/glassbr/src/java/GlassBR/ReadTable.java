@@ -28,69 +28,13 @@ public class ReadTable {
         outfile.print(filename);
         outfile.println(", ");
         outfile.print("  z_vector = ");
-        outfile.print("[");
-        for (int list_i1 = 0; list_i1 < z_vector.size() - 1; list_i1++) {
-            outfile.print(z_vector.get(list_i1));
-            outfile.print(", ");
-        }
-        if (z_vector.size() > 0) {
-            outfile.print(z_vector.get(z_vector.size() - 1));
-        }
-        outfile.print("]");
+        outfile.print(z_vector);
         outfile.println(", ");
         outfile.print("  x_matrix = ");
-        outfile.print("[");
-        for (int list_i2 = 0; list_i2 < x_matrix.size() - 1; list_i2++) {
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < x_matrix.get(list_i2).size() - 1; list_i1++) {
-                outfile.print(x_matrix.get(list_i2).get(list_i1));
-                outfile.print(", ");
-            }
-            if (x_matrix.get(list_i2).size() > 0) {
-                outfile.print(x_matrix.get(list_i2).get(x_matrix.get(list_i2).size() - 1));
-            }
-            outfile.print("]");
-            outfile.print(", ");
-        }
-        if (x_matrix.size() > 0) {
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < x_matrix.get(x_matrix.size() - 1).size() - 1; list_i1++) {
-                outfile.print(x_matrix.get(x_matrix.size() - 1).get(list_i1));
-                outfile.print(", ");
-            }
-            if (x_matrix.get(x_matrix.size() - 1).size() > 0) {
-                outfile.print(x_matrix.get(x_matrix.size() - 1).get(x_matrix.get(x_matrix.size() - 1).size() - 1));
-            }
-            outfile.print("]");
-        }
-        outfile.print("]");
+        outfile.print(x_matrix);
         outfile.println(", ");
         outfile.print("  y_matrix = ");
-        outfile.print("[");
-        for (int list_i2 = 0; list_i2 < y_matrix.size() - 1; list_i2++) {
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < y_matrix.get(list_i2).size() - 1; list_i1++) {
-                outfile.print(y_matrix.get(list_i2).get(list_i1));
-                outfile.print(", ");
-            }
-            if (y_matrix.get(list_i2).size() > 0) {
-                outfile.print(y_matrix.get(list_i2).get(y_matrix.get(list_i2).size() - 1));
-            }
-            outfile.print("]");
-            outfile.print(", ");
-        }
-        if (y_matrix.size() > 0) {
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < y_matrix.get(y_matrix.size() - 1).size() - 1; list_i1++) {
-                outfile.print(y_matrix.get(y_matrix.size() - 1).get(list_i1));
-                outfile.print(", ");
-            }
-            if (y_matrix.get(y_matrix.size() - 1).size() > 0) {
-                outfile.print(y_matrix.get(y_matrix.size() - 1).get(y_matrix.get(y_matrix.size() - 1).size() - 1));
-            }
-            outfile.print("]");
-        }
-        outfile.println("]");
+        outfile.println(y_matrix);
         outfile.println("  }");
         outfile.close();
         
@@ -106,15 +50,7 @@ public class ReadTable {
         }
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'z_vector' assigned to ");
-        outfile.print("[");
-        for (int list_i1 = 0; list_i1 < z_vector.size() - 1; list_i1++) {
-            outfile.print(z_vector.get(list_i1));
-            outfile.print(", ");
-        }
-        if (z_vector.size() > 0) {
-            outfile.print(z_vector.get(z_vector.size() - 1));
-        }
-        outfile.print("]");
+        outfile.print(z_vector);
         outfile.println(" in module ReadTable");
         outfile.close();
         while (infile.hasNextLine()) {
@@ -133,60 +69,12 @@ public class ReadTable {
         }
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'x_matrix' assigned to ");
-        outfile.print("[");
-        for (int list_i2 = 0; list_i2 < x_matrix.size() - 1; list_i2++) {
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < x_matrix.get(list_i2).size() - 1; list_i1++) {
-                outfile.print(x_matrix.get(list_i2).get(list_i1));
-                outfile.print(", ");
-            }
-            if (x_matrix.get(list_i2).size() > 0) {
-                outfile.print(x_matrix.get(list_i2).get(x_matrix.get(list_i2).size() - 1));
-            }
-            outfile.print("]");
-            outfile.print(", ");
-        }
-        if (x_matrix.size() > 0) {
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < x_matrix.get(x_matrix.size() - 1).size() - 1; list_i1++) {
-                outfile.print(x_matrix.get(x_matrix.size() - 1).get(list_i1));
-                outfile.print(", ");
-            }
-            if (x_matrix.get(x_matrix.size() - 1).size() > 0) {
-                outfile.print(x_matrix.get(x_matrix.size() - 1).get(x_matrix.get(x_matrix.size() - 1).size() - 1));
-            }
-            outfile.print("]");
-        }
-        outfile.print("]");
+        outfile.print(x_matrix);
         outfile.println(" in module ReadTable");
         outfile.close();
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'y_matrix' assigned to ");
-        outfile.print("[");
-        for (int list_i2 = 0; list_i2 < y_matrix.size() - 1; list_i2++) {
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < y_matrix.get(list_i2).size() - 1; list_i1++) {
-                outfile.print(y_matrix.get(list_i2).get(list_i1));
-                outfile.print(", ");
-            }
-            if (y_matrix.get(list_i2).size() > 0) {
-                outfile.print(y_matrix.get(list_i2).get(y_matrix.get(list_i2).size() - 1));
-            }
-            outfile.print("]");
-            outfile.print(", ");
-        }
-        if (y_matrix.size() > 0) {
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < y_matrix.get(y_matrix.size() - 1).size() - 1; list_i1++) {
-                outfile.print(y_matrix.get(y_matrix.size() - 1).get(list_i1));
-                outfile.print(", ");
-            }
-            if (y_matrix.get(y_matrix.size() - 1).size() > 0) {
-                outfile.print(y_matrix.get(y_matrix.size() - 1).get(y_matrix.get(y_matrix.size() - 1).size() - 1));
-            }
-            outfile.print("]");
-        }
-        outfile.print("]");
+        outfile.print(y_matrix);
         outfile.println(" in module ReadTable");
         outfile.close();
         infile.close();

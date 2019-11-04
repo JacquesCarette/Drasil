@@ -77,6 +77,8 @@ getInputDecl :: (RenderSym repr) => Reader State (Maybe (repr (
 getInputDecl = do
   g <- ask
   v_params <- mkVar (codevar inParams)
+  constrParams <- getInConstructorParams 
+  cps <- mapM mkVal constrParams
   let cname = "InputParameters"
       getDecl ([],[]) = constIns (partition (flip member (Map.filter (cname ==) 
         (eMap $ codeSpec g)) . codeName) (map codeChunk $ constants $ csi $ 
@@ -84,7 +86,7 @@ getInputDecl = do
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
-      getDecl (_,[]) = return $ Just $ extObjDecNewNoParams cname v_params
+      getDecl (_,[]) = return $ Just $ extObjDecNew cname v_params cps
       getDecl _ = error ("Inputs or constants are only partially contained in " 
         ++ cname ++ " class")
       constIns ([],[]) _ = return Nothing

@@ -18,7 +18,12 @@ import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
 getInConstructorParams :: Reader State [CodeChunk]
-getInConstructorParams = getInputFormatIns
+getInConstructorParams = do
+  g <- ask
+  let getCParams False = []
+      getCParams True = [codevar inFileName]
+  getParams $ getCParams $ member "InputParameters" (eMap $ codeSpec g) && 
+    member "get_input" (defMap $ codeSpec g)
 
 getInputFormatIns :: Reader State [CodeChunk]
 getInputFormatIns = do

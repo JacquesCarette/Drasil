@@ -93,8 +93,8 @@ getInputVars Unbundled _ cs = return cs
 getInputVars Bundled Var _ = do
   g <- ask
   let mname = "InputParameters"
-  return $ if currentModule g == mname && member mname (eMap $ codeSpec g) 
-    then [] else [codevar inParams]
+  return [codevar inParams | not (currentModule g == mname && member mname 
+    (eMap $ codeSpec g))]
 getInputVars Bundled Const _ = return []
 
 getConstVars :: ConstantStructure -> ConstantRepr -> [CodeChunk] -> 

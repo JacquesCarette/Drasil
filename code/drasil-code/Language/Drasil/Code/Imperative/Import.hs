@@ -119,7 +119,7 @@ publicFunc n t = genMethod (function n public static_ t) n
 privateMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   Label -> Label -> repr (Type repr) -> String -> [c] -> Maybe String -> 
   [repr (Block repr)] -> Reader State (repr (Method repr))
-privateMethod c n t = genMethod (privMethod n c t) n
+privateMethod c n t = genMethod (method n c private dynamic_ t) n
 
 publicInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) 
   => Label -> String -> [c] -> [c] -> [repr (Block repr)] -> 
@@ -130,7 +130,7 @@ privateInOutMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c,
   Eq c) => Label -> Label -> String -> [c] -> [c] -> [repr (Block repr)] -> 
   Reader State (repr (Method repr))
 privateInOutMethod c n = genInOutFunc (inOutMethod n c) (docInOutMethod n c) 
-  private static_ n
+  private dynamic_ n
 
 genConstructor :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   Label -> String -> [c] -> [repr (Block repr)] -> 

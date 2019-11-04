@@ -327,8 +327,8 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
     (psnd b) (psnd v1) (psnd v2))
   funcApp n t vs = pair (funcApp n (pfst t) (map pfst vs)) (funcApp n (psnd t) 
     (map psnd vs))
-  selfFuncApp n t vs = pair (selfFuncApp n (pfst t) (map pfst vs)) 
-    (selfFuncApp n (psnd t) (map psnd vs))
+  selfFuncApp c n t vs = pair (selfFuncApp c n (pfst t) (map pfst vs)) 
+    (selfFuncApp c n (psnd t) (map psnd vs))
   extFuncApp l n t vs = pair (extFuncApp l n (pfst t) (map pfst vs)) 
     (extFuncApp l n (psnd t) (map psnd vs))
   newObj t vs = pair (newObj (pfst t) (map pfst vs)) (newObj (psnd t) 
@@ -523,6 +523,9 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
 
   inOutCall n ins outs both = pair (inOutCall n (map pfst ins) (map pfst outs) 
     (map pfst both)) (inOutCall n (map psnd ins) (map psnd outs) (map psnd both))
+  selfInOutCall c n ins outs both = pair (selfInOutCall c n (map pfst ins) (map 
+    pfst outs) (map pfst both)) (selfInOutCall c n (map psnd ins) (map psnd 
+    outs) (map psnd both))
   extInOutCall m n ins outs both = pair (extInOutCall m n (map pfst ins) (map 
     pfst outs) (map pfst both)) (extInOutCall m n (map psnd ins) (map psnd outs)
     (map psnd both)) 
@@ -945,7 +948,7 @@ instance BooleanExpression CppSrcCode where
 instance ValueExpression CppSrcCode where
   inlineIf = liftA3 inlineIfD
   funcApp = funcAppD
-  selfFuncApp = funcApp
+  selfFuncApp c = cppSelfFuncApp (self c)
   extFuncApp _ = funcApp
   newObj = newObjD newObjDocD'
   extNewObj _ = newObj
@@ -1113,6 +1116,7 @@ instance StatementSym CppSrcCode where
   addObserver = addObserverD
 
   inOutCall = cppInOutCall funcApp
+  selfInOutCall c = cppInOutCall (selfFuncApp c)
   extInOutCall m = cppInOutCall (extFuncApp m)
 
   multi = lift1List multiStateDocD endStatement
@@ -1509,7 +1513,7 @@ instance BooleanExpression CppHdrCode where
 instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = liftA2 mkVal void (return empty)
   funcApp _ _ _ = liftA2 mkVal void (return empty)
-  selfFuncApp _ _ _ = liftA2 mkVal void (return empty)
+  selfFuncApp _ _ _ _ = liftA2 mkVal void (return empty)
   extFuncApp _ _ _ _ = liftA2 mkVal void (return empty)
   newObj _ _ = liftA2 mkVal void (return empty)
   extNewObj _ _ _ = liftA2 mkVal void (return empty)
@@ -1662,6 +1666,7 @@ instance StatementSym CppHdrCode where
   addObserver _ = return (mkStNoEnd empty)
 
   inOutCall _ _ _ _ = return (mkStNoEnd empty)
+  selfInOutCall _ _ _ _ _ = return (mkStNoEnd empty)
   extInOutCall _ _ _ _ _ = return (mkStNoEnd empty)
 
   multi _ = return (mkStNoEnd empty)
@@ -1899,6 +1904,10 @@ cppIterTypeDoc t = td (Iterator (cType t)) (typeString t ++ "::iterator")
 
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c <> text "::" <> v
+
+cppSelfFuncApp :: (RenderSym repr) => repr (Variable repr) -> Label -> 
+  repr (Type repr) -> [repr (Value repr)] -> repr (Value repr)
+cppSelfFuncApp s n = funcApp (variableName s ++ "->" ++ n)
 
 cppCast :: CppSrcCode (Type CppSrcCode) -> 
   CppSrcCode (Value CppSrcCode) -> CppSrcCode (Value CppSrcCode)

@@ -39,13 +39,13 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, 
   listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, 
   objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
-  indexOfD, funcAppD, extFuncAppD, newObjD, listSetFuncDocD, castObjDocD, funcD,
-  getD, setD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, 
-  listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, 
-  iterEndError, listAccessFuncD, listSetFuncD, dynamicDocD, bindingError, 
-  classDec, dot, forLabel, inLabel, observerListName, commentedItem, 
-  addCommentsDocD, commentedModD, docFuncRepr, valList, surroundBody, 
-  filterOutObjs)
+  indexOfD, funcAppD, selfFuncAppD, extFuncAppD, newObjD, listSetFuncDocD, 
+  castObjDocD, funcD, getD, setD, listAddD, listAppendD, iterBeginD, iterEndD, 
+  listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, 
+  iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, dynamicDocD, 
+  bindingError, classDec, dot, forLabel, inLabel, observerListName, 
+  commentedItem, addCommentsDocD, commentedModD, docFuncRepr, valList, 
+  surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
   comment, ifCond, objDecNew, objDecNewNoParams, construct, comment, method, 
   getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
@@ -308,7 +308,7 @@ instance BooleanExpression PythonCode where
 instance ValueExpression PythonCode where
   inlineIf = liftA3 pyInlineIf
   funcApp = funcAppD
-  selfFuncApp = funcApp
+  selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
   newObj = newObjD newObjDocD'
   extNewObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
@@ -467,6 +467,7 @@ instance StatementSym PythonCode where
   addObserver = addObserverD
 
   inOutCall = pyInOutCall funcApp
+  selfInOutCall c = pyInOutCall (selfFuncApp c)
   extInOutCall m = pyInOutCall (extFuncApp m)
 
   multi = lift1List multiStateDocD endStatement

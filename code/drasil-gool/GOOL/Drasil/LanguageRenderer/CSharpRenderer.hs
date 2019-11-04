@@ -43,14 +43,14 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   extVarD, selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
   valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, 
   objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
-  extFuncAppD, newObjD,notNullD, funcDocD, castDocD, listSetFuncDocD, 
-  castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, 
-  iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD, 
-  listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, 
-  staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, dot, new, 
-  blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD,
-  appendToBody, surroundBody, filterOutObjs)
+  selfFuncAppD, extFuncAppD, newObjD,notNullD, funcDocD, castDocD, 
+  listSetFuncDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, 
+  listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, 
+  listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, 
+  listSetFuncD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
+  dot, new, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
+  inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  commentedModD, appendToBody, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
   pi, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
   construct, comment, ifCond, for, forEach, while, method, getMethod, setMethod,
@@ -310,7 +310,7 @@ instance BooleanExpression CSharpCode where
 instance ValueExpression CSharpCode where
   inlineIf = liftA3 inlineIfD
   funcApp = funcAppD
-  selfFuncApp = funcApp
+  selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
   newObj = newObjD newObjDocD
   extNewObj _ = newObj
@@ -464,6 +464,7 @@ instance StatementSym CSharpCode where
   addObserver = addObserverD
 
   inOutCall = csInOutCall funcApp
+  selfInOutCall c = csInOutCall (selfFuncApp c)
   extInOutCall m = csInOutCall (extFuncApp m)
 
   multi = lift1List multiStateDocD endStatement

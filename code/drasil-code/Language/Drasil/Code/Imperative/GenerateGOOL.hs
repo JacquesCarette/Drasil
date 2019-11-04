@@ -58,7 +58,7 @@ fApp :: (RenderSym repr) => String -> String -> repr (Type repr) ->
   [repr (Value repr)] -> Reader State (repr (Value repr))
 fApp m s t vl = do
   g <- ask
-  return $ if m /= currentModule g then extFuncApp m s t vl else funcApp s t vl
+  return $ if m /= currentModule g then extFuncApp m s t vl else selfFuncApp m s t vl
 
 fAppInOut :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
   [repr (Variable repr)] -> [repr (Variable repr)] -> 
@@ -66,7 +66,7 @@ fAppInOut :: (RenderSym repr) => String -> String -> [repr (Value repr)] ->
 fAppInOut m n ins outs both = do
   g <- ask
   return $ if m /= currentModule g then extInOutCall m n ins outs both
-    else inOutCall n ins outs both
+    else selfInOutCall m n ins outs both
 
 mkParam :: (RenderSym repr) => repr (Variable repr) -> repr (Parameter repr)
 mkParam v = paramFunc (getType $ variableType v) v

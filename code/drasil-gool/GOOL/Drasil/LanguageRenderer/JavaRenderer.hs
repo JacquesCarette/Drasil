@@ -42,9 +42,9 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, 
   listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, 
   objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, 
-  listIndexExistsD, indexOfD, funcAppD, extFuncAppD, newObjD, notNullD, 
-  castDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, 
-  iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, 
+  listIndexExistsD, indexOfD, funcAppD, selfFuncAppD, extFuncAppD, newObjD, 
+  notNullD, castDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, 
+  listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, 
   listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
   listAccessFuncD', staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
@@ -311,7 +311,7 @@ instance BooleanExpression JavaCode where
 instance ValueExpression JavaCode where
   inlineIf = liftA3 inlineIfD
   funcApp = funcAppD
-  selfFuncApp = funcApp
+  selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
   newObj = newObjD newObjDocD
   extNewObj _ = newObj
@@ -468,6 +468,7 @@ instance StatementSym JavaCode where
   addObserver = addObserverD
 
   inOutCall = jInOutCall funcApp
+  selfInOutCall c = jInOutCall (selfFuncApp c)
   extInOutCall m = jInOutCall (extFuncApp m)
 
   multi = lift1List multiStateDocD endStatement

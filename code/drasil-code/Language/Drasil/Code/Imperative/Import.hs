@@ -1,8 +1,9 @@
 {-# LANGUAGE PostfixOperators #-}
 {-# LANGUAGE Rank2Types #-}
 module Language.Drasil.Code.Imperative.Import (
-  publicMethod, publicInOutFunc, genConstructor, mkVar, mkVal, convExpr, 
-  genCalcBlock, CalcType(..), genModDef, readData, renderC
+  publicFunc, privateMethod, publicInOutFunc, privateInOutMethod, 
+  genConstructor, mkVar, mkVal, convExpr, genCalcBlock, CalcType(..), genModDef,
+  readData, renderC
 ) where
 
 import Language.Drasil hiding (int, log, ln, exp,
@@ -110,15 +111,26 @@ mkVar :: (RenderSym repr, HasCodeType c, CodeIdea c) => c ->
   Reader State (repr (Variable repr))
 mkVar v = variable (codeName v) (convType $ codeType v)
 
-publicMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  repr (Type repr) -> Label -> String -> [c] -> Maybe String -> 
+publicFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
+  Label -> repr (Type repr) -> String -> [c] -> Maybe String -> 
   [repr (Block repr)] -> Reader State (repr (Method repr))
-publicMethod t n = genMethod (function n public static_ t) n
+publicFunc n t = genMethod (function n public static_ t) n
+
+privateMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
+  Label -> Label -> repr (Type repr) -> String -> [c] -> Maybe String -> 
+  [repr (Block repr)] -> Reader State (repr (Method repr))
+privateMethod c n t = genMethod (privMethod n c t) n
 
 publicInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) 
   => Label -> String -> [c] -> [c] -> [repr (Block repr)] -> 
   Reader State (repr (Method repr))
-publicInOutFunc = genInOutFunc public static_
+publicInOutFunc n = genInOutFunc (inOutFunc n) (docInOutFunc n) public static_ n
+
+privateInOutMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c,
+  Eq c) => Label -> Label -> String -> [c] -> [c] -> [repr (Block repr)] -> 
+  Reader State (repr (Method repr))
+privateInOutMethod c n = genInOutFunc (inOutMethod n c) (docInOutMethod n c) 
+  private static_ n
 
 genConstructor :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   Label -> String -> [c] -> [repr (Block repr)] -> 
@@ -140,9 +152,15 @@ genMethod f n desc p r b = do
     then docFunc desc pComms r fn else fn
 
 genInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) => 
-  repr (Scope repr) -> repr (Permanence repr) -> Label -> String -> [c] ->
+  (repr (Scope repr) -> repr (Permanence repr) -> [repr (Variable repr)] -> 
+    [repr (Variable repr)] -> [repr (Variable repr)] -> repr (Body repr) -> 
+    repr (Method repr)) -> 
+  (repr (Scope repr) -> repr (Permanence repr) -> String -> 
+    [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
+    [(String, repr (Variable repr))] -> repr (Body repr) -> repr (Method repr)) 
+  -> repr (Scope repr) -> repr (Permanence repr) -> Label -> String -> [c] -> 
   [c] -> [repr (Block repr)] -> Reader State (repr (Method repr))
-genInOutFunc s pr n desc ins' outs' b = do
+genInOutFunc f docf s pr n desc ins' outs' b = do
   g <- ask
   let ins = ins' \\ outs'
       outs = outs' \\ ins'
@@ -155,8 +173,8 @@ genInOutFunc s pr n desc ins' outs' b = do
   oComms <- mapM (paramComment . (^. uid)) outs
   bComms <- mapM (paramComment . (^. uid)) both
   return $ if CommentFunc `elem` commented g 
-    then docInOutFunc n s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
-    bComms bothVs) bod else inOutFunc n s pr inVs outVs bothVs bod
+    then docf s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
+    bComms bothVs) bod else f s pr inVs outVs bothVs bod
 
 convExpr :: (RenderSym repr) => Expr -> Reader State (repr (Value repr))
 convExpr (Dbl d) = return $ litFloat d
@@ -262,9 +280,9 @@ genCalcFunc cdef = do
       tp = convType $ codeType cdef
   blck <- genCalcBlock CalcReturn cdef (codeEquat cdef)
   desc <- returnComment $ cdef ^. uid
-  publicMethod
-    tp
+  publicFunc
     nm
+    tp
     ("Calculates " ++ desc)
     parms
     (Just desc)
@@ -304,7 +322,7 @@ genFunc (FDef (FuncDef n desc parms o rd s)) = do
   g <- ask
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ parms)
-  publicMethod (convType o) n desc parms rd [block $ map varDec vars ++ stmts]
+  publicFunc n (convType o) desc parms rd [block $ map varDec vars ++ stmts]
 genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 genFunc (FCD cd) = genCalcFunc cd
 
@@ -359,7 +377,7 @@ genDataFunc :: (RenderSym repr) => Name -> String -> DataDesc ->
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readData ddef
-  publicMethod void nameTitle desc (codevar inFileName : parms) Nothing bod
+  publicFunc nameTitle void desc (codevar inFileName : parms) Nothing bod
 
 -- this is really ugly!!
 readData :: (RenderSym repr) => DataDesc -> Reader State

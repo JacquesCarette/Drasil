@@ -38,7 +38,7 @@ import qualified GOOL.Drasil as C (CodeType(List))
 
 import Prelude hiding (sin, cos, tan, log, exp)
 import Data.List ((\\), intersect)
-import qualified Data.Map as Map (lookup)
+import qualified Data.Map as Map (lookup, member)
 import Data.Maybe (maybe)
 import Control.Applicative ((<$>))
 import Control.Monad (liftM2,liftM3)
@@ -75,8 +75,11 @@ inputVariable :: (RenderSym repr) => Structure -> ConstantRepr ->
   repr (Variable repr) -> Reader State (repr (Variable repr))
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
+  g <- ask
+  let inModName = "InputParameters"
   ip <- mkVar (codevar inParams)
-  return $ ip $-> v
+  return $ if currentModule g == inModName && Map.member inModName 
+    (eMap $ codeSpec g) then objVarSelf inModName v else ip $-> v
 inputVariable Bundled Const v = do
   ip <- mkVar (codevar inParams)
   classVariable ip v

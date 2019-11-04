@@ -119,8 +119,8 @@ codeSpec SI {_sys = sys
         relations = rels,
         fMap = assocToMap rels,
         vMap = assocToMap (map quantvar q ++ getAdditionalVars chs (mods csi')),
-        eMap = modExportMap mdm chs,
         defMap = mdm,
+        eMap = modExportMap mdm chs,
         constMap = assocToMap const',
         dMap = modDepMap csi' mem chs,
         csi = csi'
@@ -445,27 +445,21 @@ getDefConstants chs cs = cExp (constStructure chs) (inputStructure chs)
 
 getDefDerived :: Choices -> [Derived] -> [ModDef]
 getDefDerived _ [] = []
-getDefDerived chs _ = dMod (inputModule chs) (inputStructure chs)
-  where dMod Combined Bundled = []
-        dMod Combined Unbundled = [(funcName, "InputParameters")]
-        dMod Separated _ = [(funcName, "DerivedValues")]
-        funcName = "derived_values"
+getDefDerived chs _ = [("derived_values", dMod $ inputModule chs)]
+  where dMod Combined = "InputParameters"
+        dMod Separated = "DerivedValues"
 
 getDefConstraints :: Choices -> [Constraint] -> [ModDef]
 getDefConstraints _ [] = []
-getDefConstraints chs _ = cMod (inputModule chs) (inputStructure chs)
-  where cMod Combined Bundled = []
-        cMod Combined Unbundled = [(funcName, "InputParameters")]
-        cMod Separated _ = [(funcName, "InputConstraints")]
-        funcName = "input_constraints"
+getDefConstraints chs _ = [("input_constraints", cMod $ inputModule chs)]
+  where cMod Combined = "InputParameters"
+        cMod Separated = "InputConstraints"
         
 getDefInputFormat :: Choices -> [Input] -> [ModDef]
 getDefInputFormat _ [] = []
-getDefInputFormat chs _ = fMod (inputModule chs) (inputStructure chs)
-  where fMod Combined Bundled = []
-        fMod Combined Unbundled = [(funcName, "InputParameters")]
-        fMod Separated _ = [(funcName, "InputFormat")]
-        funcName = "get_input"
+getDefInputFormat chs _ = [("get_input", fMod $ inputModule chs)]
+  where fMod Combined = "InputParameters"
+        fMod Separated = "InputFormat"
 
 getDefOutput :: [Output] -> [ModDef]
 getDefOutput [] = []

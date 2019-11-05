@@ -69,8 +69,10 @@ import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod,
   td, ValData(..), vd, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
   emptyIfEmpty, emptyIfNull, getInnerType, getNestDegree, convType)
+import GOOL.Drasil.State (GOOLState)
 
 import Control.Applicative ((<|>))
+import Control.Monad.State (State)
 import Data.List (intersperse, last)
 import Data.Bifunctor (first)
 import Data.Map as Map (lookup, fromList)
@@ -1124,9 +1126,11 @@ moduleDox desc as date m = (doxFile ++ m) :
   [doxDate ++ date | not (null date)] ++ 
   [doxBrief ++ desc | not (null desc)]
 
-commentedModD :: Doc -> FileData -> FileData
-commentedModD cmt m = updateFileMod (updateModDoc (commentedItem cmt 
-  ((modDoc . fileMod) m)) (fileMod m)) m
+commentedModD :: Doc -> State GOOLState FileData -> State GOOLState FileData
+commentedModD cmt mod = do
+  m <- mod
+  return $ updateFileMod (updateModDoc (commentedItem cmt 
+    ((modDoc . fileMod) m)) (fileMod m)) m
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
   repr (Method repr) -> repr (Method repr)

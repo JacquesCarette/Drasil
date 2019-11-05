@@ -5,19 +5,20 @@ module Language.Drasil.Code.Imperative.Modules (
 import Language.Drasil
 import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc, 
-  constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, 
-  inFmtFuncDesc, inputClassDesc, inputConstraintsDesc, inputFormatDesc, 
+  constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, 
+  inputClassDesc, inputConstraintsDesc, inputConstructorDesc, inputFormatDesc, 
   inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc)
 import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
-  getConstraintCall, getDerivedCall, getInputCall, getOutputCall)
+  getAllInputCalls, getOutputCall)
 import Language.Drasil.Code.Imperative.GenerateGOOL (genModule, publicClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (CalcType(CalcAssign), convExpr,
-  genCalcBlock, mkVal, mkVar, publicInOutFunc, publicMethod, readData, renderC)
+  genCalcBlock, genConstructor, mkVal, mkVar, privateInOutMethod, privateMethod,
+  publicFunc, publicInOutFunc, readData, renderC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, varLogFile)
 import Language.Drasil.Code.Imperative.Parameters (getConstraintParams, 
-  getDerivedIns, getDerivedOuts, getInputFormatIns, getInputFormatOuts, 
-  getOutputParams)
+  getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns, 
+  getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName, codeChunk), CodeChunk, 
@@ -28,13 +29,14 @@ import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
   Comments(CommentFunc), ConstantStructure(..), ConstantRepr(..), 
-  ConstraintBehaviour(..), InputModule(..), Logging(..), Structure(..))
+  ConstraintBehaviour(..), InputModule(..), Logging(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
-import GOOL.Drasil (RenderSym(..), BodySym(..), BlockSym(..), PermanenceSym(..),
-  TypeSym(..), VariableSym(..), ValueSym(..), BooleanExpression(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), convType)
+import GOOL.Drasil (RenderSym(..), BodySym(..), BlockSym(..), 
+  PermanenceSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
+  BooleanExpression(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ScopeTag(..), 
+  convType)
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
@@ -59,22 +61,22 @@ genMainFunc = do
     logInFile <- maybeLog v_filename
     ip <- getInputDecl
     co <- initConsts
-    gi <- getInputCall
-    dv <- getDerivedCall
-    ic <- getConstraintCall
+    ics <- getAllInputCalls
     varDef <- mapM getCalcCall (execOrder $ csi $ codeSpec g)
     wo <- getOutputCall
     return $ (if CommentFunc `elem` commented g then docMain else mainFunction)
       $ bodyStatements $
       initLogFileVar (logKind g) ++
       varDecDef v_filename (arg 0) : logInFile ++
-      catMaybes ([ip, co, gi, dv, ic] ++ varDef ++ [wo])
+      catMaybes [ip, co] ++ ics ++ catMaybes (varDef ++ [wo])
 
 getInputDecl :: (RenderSym repr) => Reader State (Maybe (repr (
   Statement repr)))
 getInputDecl = do
   g <- ask
   v_params <- mkVar (codevar inParams)
+  constrParams <- getInConstructorParams 
+  cps <- mapM mkVal constrParams
   let cname = "InputParameters"
       getDecl ([],[]) = constIns (partition (flip member (Map.filter (cname ==) 
         (eMap $ codeSpec g)) . codeName) (map codeChunk $ constants $ csi $ 
@@ -82,7 +84,7 @@ getInputDecl = do
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
-      getDecl (_,[]) = return $ Just $ extObjDecNewNoParams cname v_params
+      getDecl (_,[]) = return $ Just $ extObjDecNew cname v_params cps
       getDecl _ = error ("Inputs or constants are only partially contained in " 
         ++ cname ++ " class")
       constIns ([],[]) _ = return Nothing
@@ -131,34 +133,33 @@ chooseInModule Separated = genInputModSeparated
 genInputModSeparated :: (RenderSym repr) => 
   Reader State [repr (RenderFile repr)]
 genInputModSeparated = do
-  g <- ask
   ipDesc <- modDesc inputParametersDesc
   ifDesc <- modDesc (liftS inputFormatDesc)
   dvDesc <- modDesc (liftS derivedValuesDesc)
   icDesc <- modDesc (liftS inputConstraintsDesc)
   sequence 
     [genModule "InputParameters" ipDesc 
-      Nothing (Just $ fmap maybeToList (chooseInStructure $ inStruct g)),
+      Nothing (Just $ fmap maybeToList genInputClass),
     genModule "InputFormat" ifDesc
-      (Just $ fmap maybeToList genInputFormat) Nothing,
+      (Just $ fmap maybeToList (genInputFormat Pub)) Nothing,
     genModule "DerivedValues" dvDesc
-      (Just $ fmap maybeToList genInputDerived) Nothing,
+      (Just $ fmap maybeToList (genInputDerived Pub)) Nothing,
     genModule "InputConstraints" icDesc 
-      (Just $ fmap maybeToList genInputConstraints) Nothing]
+      (Just $ fmap maybeToList (genInputConstraints Pub)) Nothing]
 
 genInputModCombined :: (RenderSym repr) => Reader State [repr (RenderFile repr)]
 genInputModCombined = do
-  g <- ask
   ipDesc <- modDesc inputParametersDesc
-  liftS $ genModule "InputParameters" ipDesc
-    (Just $ concat <$> mapM (fmap maybeToList) 
-    [genInputFormat, genInputDerived, genInputConstraints]) 
-    (Just $ fmap maybeToList (chooseInStructure $ inStruct g))
-
-chooseInStructure :: (RenderSym repr) => Structure -> Reader State 
-  (Maybe (repr (Class repr)))
-chooseInStructure Unbundled = return Nothing
-chooseInStructure Bundled = genInputClass
+  let cname = "InputParameters"
+      genMod :: (RenderSym repr) => Maybe (repr (Class repr)) ->
+        Reader State (repr (RenderFile repr))
+      genMod Nothing = genModule cname ipDesc (Just $ concat <$> mapM (fmap 
+        maybeToList) [genInputFormat Pub, genInputDerived 
+        Pub, genInputConstraints Pub]) 
+        Nothing
+      genMod _ = genModule cname ipDesc Nothing (Just $ fmap maybeToList genInputClass)
+  ic <- genInputClass
+  liftS $ genMod ic
 
 constVarFunc :: (RenderSym repr) => ConstantRepr -> String ->
   (repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr))
@@ -174,9 +175,15 @@ genInputClass = do
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
         codeName)
-      genClass :: (RenderSym repr) => [CodeChunk] -> [CodeDefinition] ->
+      methods :: (RenderSym repr) => InputModule -> Reader State [repr (Method repr)]
+      methods Separated = return []
+      methods Combined = concat <$> mapM (fmap maybeToList) 
+        [genInputConstructor, genInputFormat Priv, 
+        genInputDerived Priv, 
+        genInputConstraints Priv]
+      genClass :: (RenderSym repr) => [CodeChunk] -> [CodeDefinition] -> 
         Reader State (Maybe (repr (Class repr)))
-      genClass [] [] = return Nothing 
+      genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . codeEquat) csts
         let inputVars = map (\x -> pubMVar (var (codeName x) (convType $ 
@@ -184,15 +191,34 @@ genInputClass = do
             constVars = zipWith (\c vl -> constVarFunc (conRepr g) cname
               (var (codeName c) (convType $ codeType c)) vl) csts vals
         icDesc <- inputClassDesc
-        cls <- publicClass icDesc cname Nothing (inputVars ++ constVars) []
-        return $ Just cls
+        c <- publicClass icDesc cname Nothing (inputVars ++ constVars) 
+          (methods $ inMod g)
+        return $ Just c
   genClass (filt ins) (filt cs)
 
-genInputDerived :: (RenderSym repr) => Reader State 
+genInputConstructor :: (RenderSym repr) => Reader State 
   (Maybe (repr (Method repr)))
-genInputDerived = do
+genInputConstructor = do
+  g <- ask
+  let dm = defMap $ codeSpec g
+      genCtor False = return Nothing
+      genCtor True = do 
+        cdesc <- inputConstructorDesc
+        cparams <- getInConstructorParams    
+        ics <- getAllInputCalls
+        ctor <- genConstructor "InputParameters" cdesc cparams 
+          [block ics]
+        return $ Just ctor
+  genCtor $ any (`member` dm) ["get_input", "derived_values", 
+    "input_constraints"]
+
+genInputDerived :: (RenderSym repr) => ScopeTag -> 
+  Reader State (Maybe (repr (Method repr)))
+genInputDerived s = do
   g <- ask
   let dvals = derivedInputs $ csi $ codeSpec g
+      getFunc Pub = publicInOutFunc
+      getFunc Priv = privateInOutMethod "InputParameters"
       genDerived :: (RenderSym repr) => Maybe String -> Reader State 
         (Maybe (repr (Method repr)))
       genDerived Nothing = return Nothing
@@ -201,15 +227,17 @@ genInputDerived = do
         outs <- getDerivedOuts
         bod <- mapM (\x -> genCalcBlock CalcAssign x (codeEquat x)) dvals
         desc <- dvFuncDesc
-        mthd <- publicInOutFunc "derived_values" desc ins outs bod
+        mthd <- getFunc s "derived_values" desc ins outs bod
         return $ Just mthd
-  genDerived $ Map.lookup "derived_values" (eMap $ codeSpec g)
+  genDerived $ Map.lookup "derived_values" (defMap $ codeSpec g)
 
-genInputConstraints :: (RenderSym repr) => Reader State 
-  (Maybe (repr (Method repr)))
-genInputConstraints = do
+genInputConstraints :: (RenderSym repr) => ScopeTag ->
+  Reader State (Maybe (repr (Method repr)))
+genInputConstraints s = do
   g <- ask
   let cm = cMap $ csi $ codeSpec g
+      getFunc Pub = publicFunc
+      getFunc Priv = privateMethod "InputParameters"
       genConstraints :: (RenderSym repr) => Maybe String -> Reader State 
         (Maybe (repr (Method repr)))
       genConstraints Nothing = return Nothing
@@ -223,10 +251,10 @@ genInputConstraints = do
         sf <- sfwrCBody sfwrCs
         hw <- physCBody physCs
         desc <- inConsFuncDesc
-        mthd <- publicMethod void "input_constraints" desc parms 
+        mthd <- getFunc s "input_constraints" void desc parms 
           Nothing [block sf, block hw]
         return $ Just mthd
-  genConstraints $ Map.lookup "input_constraints" (eMap $ codeSpec g)
+  genConstraints $ Map.lookup "input_constraints" (defMap $ codeSpec g)
 
 sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr) 
   => [(q,[Constraint])] -> Reader State [repr (Statement repr)]
@@ -314,12 +342,14 @@ printExpr (Int _) _ = []
 printExpr e db = [printStr $ " (" ++ render (exprDoc db Implementation Linear e)
   ++ ")"]
 
-genInputFormat :: (RenderSym repr) => Reader State 
-  (Maybe (repr (Method repr)))
-genInputFormat = do
+genInputFormat :: (RenderSym repr) => ScopeTag -> 
+  Reader State (Maybe (repr (Method repr)))
+genInputFormat s = do
   g <- ask
   dd <- genDataDesc
-  let genInFormat :: (RenderSym repr) => Maybe String -> Reader State 
+  let getFunc Pub = publicInOutFunc
+      getFunc Priv = privateInOutMethod "InputParameters"
+      genInFormat :: (RenderSym repr) => Maybe String -> Reader State 
         (Maybe (repr (Method repr)))
       genInFormat Nothing = return Nothing
       genInFormat (Just _) = do
@@ -327,9 +357,9 @@ genInputFormat = do
         outs <- getInputFormatOuts
         bod <- readData dd
         desc <- inFmtFuncDesc
-        mthd <- publicInOutFunc "get_input" desc ins outs bod
+        mthd <- getFunc s "get_input" desc ins outs bod
         return $ Just mthd
-  genInFormat $ Map.lookup "get_input" (eMap $ codeSpec g)
+  genInFormat $ Map.lookup "get_input" (defMap $ codeSpec g)
 
 genDataDesc :: Reader State DataDesc
 genDataDesc = do
@@ -365,7 +395,7 @@ genConstClass = do
         let vars = map (\x -> var (codeName x) (convType $ codeType x)) vs
             constVars = zipWith (constVarFunc (conRepr g) cname) vars vals
         cDesc <- constClassDesc
-        cls <- publicClass cDesc cname Nothing constVars []
+        cls <- publicClass cDesc cname Nothing constVars (return [])
         return $ Just cls
   genClass $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
     codeName) cs
@@ -397,7 +427,7 @@ genOutputFormat = do
                    printFileLn v_outfile v
                  ] ) (outputs $ csi $ codeSpec g)
         desc <- woFuncDesc
-        mthd <- publicMethod void "write_output" desc parms Nothing 
+        mthd <- publicFunc "write_output" void desc parms Nothing 
           [block $ [
           varDec var_outfile,
           openFileW var_outfile (litString "output.txt") ] ++

@@ -1,4 +1,4 @@
-module Language.Drasil.Code.Imperative.Parameters(
+module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
   getInputFormatIns, getInputFormatOuts, getDerivedIns, getDerivedOuts,
   getConstraintParams, getCalcParams, getOutputParams
 ) where
@@ -9,7 +9,7 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), codevar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Structure(..), 
-  ConstantStructure(..), ConstantRepr(..), codevars, codevars', 
+  InputModule(..), ConstantStructure(..), ConstantRepr(..), codevars, codevars',
   constraintvarsandfuncs, getConstraints)
 
 import Data.List (nub, (\\))
@@ -17,13 +17,21 @@ import Data.Map (member, notMember)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
+getInConstructorParams :: Reader State [CodeChunk]
+getInConstructorParams = do
+  g <- ask
+  let getCParams False = []
+      getCParams True = [codevar inFileName]
+  getParams $ getCParams $ member "InputParameters" (eMap $ codeSpec g) && 
+    member "get_input" (defMap $ codeSpec g)
+
 getInputFormatIns :: Reader State [CodeChunk]
 getInputFormatIns = do
   g <- ask
-  let getIns :: Structure -> [CodeChunk]
-      getIns Unbundled = []
-      getIns Bundled = [codevar inParams]
-  getParams $ codevar inFileName : getIns (inStruct g)
+  let getIns :: Structure -> InputModule -> [CodeChunk]
+      getIns Bundled Separated = [codevar inParams]
+      getIns _ _ = []
+  getParams $ codevar inFileName : getIns (inStruct g) (inMod g)
 
 getInputFormatOuts :: Reader State [CodeChunk]
 getInputFormatOuts = do
@@ -74,15 +82,20 @@ getParams cs' = do
       conVars = filter (`elem` cnsnts) cs
       csSubIns = filter ((`notMember` concMatches g) . (^. uid)) 
         (cs \\ (ins ++ cnsnts))
-      inVs = getInputVars (inStruct g) Var inpVars
+  inVs <- getInputVars (inStruct g) Var inpVars
   conVs <- getConstVars (conStruct g) (conRepr g) conVars
   return $ nub $ inVs ++ conVs ++ csSubIns
 
-getInputVars :: Structure -> ConstantRepr -> [CodeChunk] -> [CodeChunk]
-getInputVars _ _ [] = []
-getInputVars Unbundled _ cs = cs
-getInputVars Bundled Var _ = [codevar inParams]
-getInputVars Bundled Const _ = []
+getInputVars :: Structure -> ConstantRepr -> [CodeChunk] -> 
+  Reader State [CodeChunk]
+getInputVars _ _ [] = return []
+getInputVars Unbundled _ cs = return cs
+getInputVars Bundled Var _ = do
+  g <- ask
+  let mname = "InputParameters"
+  return [codevar inParams | not (currentModule g == mname && member mname 
+    (eMap $ codeSpec g))]
+getInputVars Bundled Const _ = return []
 
 getConstVars :: ConstantStructure -> ConstantRepr -> [CodeChunk] -> 
   Reader State [CodeChunk]
@@ -92,5 +105,5 @@ getConstVars (Store Bundled) Var _ = return [codevar consts]
 getConstVars (Store Bundled) Const _ = return []
 getConstVars WithInputs cr cs = do
   g <- ask
-  return $ getInputVars (inStruct g) cr cs
+  getInputVars (inStruct g) cr cs
 getConstVars Inline _ _ = return []

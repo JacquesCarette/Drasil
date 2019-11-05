@@ -14,11 +14,9 @@ public class Control {
     */
     public static void Main(string[] args) {
         string filename = args[0];
-        InputParameters inParams = new InputParameters();
+        InputParameters inParams = new InputParameters(filename);
         double g_vect = 9.8;
         double epsilon = 2.0e-2;
-        InputFormat.get_input(inParams, filename);
-        InputConstraints.input_constraints(inParams);
         double t_flight = Calculations.func_t_flight(inParams, g_vect);
         double p_land = Calculations.func_p_land(inParams, g_vect);
         double d_offset = Calculations.func_d_offset(inParams, p_land);

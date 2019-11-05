@@ -45,10 +45,11 @@ genDoxConfig n p = do
   return [doxConfig n p v | not (null cms)]
 
 publicClass :: (RenderSym repr) => String -> Label -> Maybe Label -> 
-  [repr (StateVar repr)] -> [repr (Method repr)] -> 
+  [repr (StateVar repr)] -> Reader State [repr (Method repr)] -> 
   Reader State (repr (Class repr))
-publicClass desc n l vs ms = do
+publicClass desc n l vs mths = do
   g <- ask
+  ms <- mths
   return $ if CommentClass `elem` commented g 
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
@@ -57,15 +58,19 @@ fApp :: (RenderSym repr) => String -> String -> repr (Type repr) ->
   [repr (Value repr)] -> Reader State (repr (Value repr))
 fApp m s t vl = do
   g <- ask
-  return $ if m /= currentModule g then extFuncApp m s t vl else funcApp s t vl
+  let cm = currentModule g
+  return $ if m /= cm then extFuncApp m s t vl else if Map.lookup s 
+    (eMap $ codeSpec g) == Just cm then funcApp s t vl else selfFuncApp m s t vl
 
 fAppInOut :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
   [repr (Variable repr)] -> [repr (Variable repr)] -> 
   Reader State (repr (Statement repr))
 fAppInOut m n ins outs both = do
   g <- ask
-  return $ if m /= currentModule g then extInOutCall m n ins outs both
-    else inOutCall n ins outs both
+  let cm = currentModule g
+  return $ if m /= cm then extInOutCall m n ins outs both else if Map.lookup n
+    (eMap $ codeSpec g) == Just cm then inOutCall n ins outs both else 
+    selfInOutCall m n ins outs both
 
 mkParam :: (RenderSym repr) => repr (Variable repr) -> repr (Parameter repr)
 mkParam v = paramFunc (getType $ variableType v) v

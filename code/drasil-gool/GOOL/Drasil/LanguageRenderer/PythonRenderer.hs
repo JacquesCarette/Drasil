@@ -39,13 +39,13 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, 
   listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, 
   objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
-  indexOfD, funcAppD, extFuncAppD, newObjD, listSetFuncDocD, castObjDocD, funcD,
-  getD, setD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, 
-  listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, 
-  iterEndError, listAccessFuncD, listSetFuncD, dynamicDocD, bindingError, 
-  classDec, dot, forLabel, inLabel, observerListName, commentedItem, 
-  addCommentsDocD, commentedModD, docFuncRepr, valList, surroundBody, 
-  filterOutObjs)
+  indexOfD, funcAppD, selfFuncAppD, extFuncAppD, newObjD, listSetFuncDocD, 
+  castObjDocD, funcD, getD, setD, listAddD, listAppendD, iterBeginD, iterEndD, 
+  listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, 
+  iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, dynamicDocD, 
+  bindingError, classDec, dot, forLabel, inLabel, observerListName, 
+  commentedItem, addCommentsDocD, commentedModD, docFuncRepr, valList, 
+  surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
   comment, ifCond, objDecNew, objDecNewNoParams, construct, comment, method, 
   getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
@@ -308,7 +308,7 @@ instance BooleanExpression PythonCode where
 instance ValueExpression PythonCode where
   inlineIf = liftA3 pyInlineIf
   funcApp = funcAppD
-  selfFuncApp = funcApp
+  selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
   newObj = newObjD newObjDocD'
   extNewObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
@@ -467,6 +467,7 @@ instance StatementSym PythonCode where
   addObserver = addObserverD
 
   inOutCall = pyInOutCall funcApp
+  selfInOutCall c = pyInOutCall (selfFuncApp c)
   extInOutCall m = pyInOutCall (extFuncApp m)
 
   multi = lift1List multiStateDocD endStatement
@@ -538,16 +539,13 @@ instance MethodSym PythonCode where
 
   docFunc = G.docFunc
 
-  inOutFunc n s p ins [] [] b = function n s p void (map param ins) b
-  inOutFunc n s p ins outs both b = function n s p void (map 
-    param $ both ++ ins) (if null rets then b else liftA3 surroundBody 
-    (multi $ map varDec outs) b (multiReturn $ map valueOf rets))
-    where rets = filterOutObjs both ++ outs
+  inOutMethod n c = pyInOut (method n c)
 
-  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
-    (map fst $ bRets ++ os) (inOutFunc n s p (map snd is) (map snd os) (map snd
-    bs) b)
-    where bRets = filter (not . isObject . getType . variableType . snd) bs
+  docInOutMethod n c = pyDocInOut (inOutMethod n c)
+
+  inOutFunc n = pyInOut (function n)
+
+  docInOutFunc n = pyDocInOut (inOutFunc n)
 
   parameters m = map return $ (mthdParams . unPC) m
 
@@ -748,3 +746,26 @@ pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
 pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty
 pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . text) lns
+
+pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) 
+    -> PythonCode (Type PythonCode) -> [PythonCode (Parameter PythonCode)] -> 
+    PythonCode (Body PythonCode) -> PythonCode (Method PythonCode)) 
+  -> PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) -> 
+  [PythonCode (Variable PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
+  [PythonCode (Variable PythonCode)] -> PythonCode (Body PythonCode) -> 
+  PythonCode (Method PythonCode)
+pyInOut f s p ins [] [] b = f s p void (map param ins) b
+pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins) 
+  (if null rets then b else liftA3 surroundBody (multi $ map varDec outs) b 
+  (multiReturn $ map valueOf rets))
+  where rets = filterOutObjs both ++ outs
+
+pyDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
+    -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
+    [repr (Variable repr)] -> repr (Body repr) -> repr (Method repr))
+  -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
+  [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
+  [(String, repr (Variable repr))] -> repr (Body repr) -> repr (Method repr)
+pyDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
+  (map fst $ bRets ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)
+  where bRets = filter (not . isObject . getType . variableType . snd) bs

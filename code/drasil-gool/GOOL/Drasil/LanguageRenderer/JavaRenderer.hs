@@ -418,15 +418,15 @@ instance StatementSym JavaCode where
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
 
-  print v = outDoc False printFunc v Nothing
-  printLn v = outDoc True printLnFunc v Nothing
-  printStr s = outDoc False printFunc (litString s) Nothing
-  printStrLn s = outDoc True printLnFunc (litString s) Nothing
+  print v = jOut False printFunc v Nothing
+  printLn v = jOut True printLnFunc v Nothing
+  printStr s = jOut False printFunc (litString s) Nothing
+  printStrLn s = jOut True printLnFunc (litString s) Nothing
 
-  printFile f v = outDoc False (printFileFunc f) v (Just f)
-  printFileLn f v = outDoc True (printFileLnFunc f) v (Just f)
-  printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
-  printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
+  printFile f v = jOut False (printFileFunc f) v (Just f)
+  printFileLn f v = jOut True (printFileLnFunc f) v (Just f)
+  printFileStr f s = jOut False (printFileFunc f) (litString s) (Just f)
+  printFileStrLn f s = jOut True (printFileLnFunc f) (litString s) (Just f)
 
   getInput v = v &= liftA2 jInput (variableType v) inputFunc
   discardInput = discardInputD jDiscardInput
@@ -668,6 +668,13 @@ jTryCatch tb cb = vcat [
     lbrace,
   indent $ bodyDoc cb,
   rbrace]
+
+jOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
+  -> Maybe (repr (Value repr)) -> repr (Statement repr)
+jOut newLn printFn v f = jOut' (getType $ valueType v)
+  where jOut' (List (Object _)) = outDoc newLn printFn v f
+        jOut' (List _) = printSt newLn printFn v f
+        jOut' _ = outDoc newLn printFn v f
 
 jDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
 jDiscardInput inFn = valueDoc inFn <> dot <> text "next()"

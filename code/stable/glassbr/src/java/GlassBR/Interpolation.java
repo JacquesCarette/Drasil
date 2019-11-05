@@ -56,15 +56,7 @@ public class Interpolation {
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_find called with inputs: {");
         outfile.print("  arr = ");
-        outfile.print("[");
-        for (int list_i1 = 0; list_i1 < arr.size() - 1; list_i1++) {
-            outfile.print(arr.get(list_i1));
-            outfile.print(", ");
-        }
-        if (arr.size() > 0) {
-            outfile.print(arr.get(arr.size() - 1));
-        }
-        outfile.print("]");
+        outfile.print(arr);
         outfile.println(", ");
         outfile.print("  v = ");
         outfile.println(v);
@@ -89,31 +81,7 @@ public class Interpolation {
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_extractColumn called with inputs: {");
         outfile.print("  mat = ");
-        outfile.print("[");
-        for (int list_i2 = 0; list_i2 < mat.size() - 1; list_i2++) {
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < mat.get(list_i2).size() - 1; list_i1++) {
-                outfile.print(mat.get(list_i2).get(list_i1));
-                outfile.print(", ");
-            }
-            if (mat.get(list_i2).size() > 0) {
-                outfile.print(mat.get(list_i2).get(mat.get(list_i2).size() - 1));
-            }
-            outfile.print("]");
-            outfile.print(", ");
-        }
-        if (mat.size() > 0) {
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < mat.get(mat.size() - 1).size() - 1; list_i1++) {
-                outfile.print(mat.get(mat.size() - 1).get(list_i1));
-                outfile.print(", ");
-            }
-            if (mat.get(mat.size() - 1).size() > 0) {
-                outfile.print(mat.get(mat.size() - 1).get(mat.get(mat.size() - 1).size() - 1));
-            }
-            outfile.print("]");
-        }
-        outfile.print("]");
+        outfile.print(mat);
         outfile.println(", ");
         outfile.print("  j = ");
         outfile.println(j);
@@ -170,57 +138,25 @@ public class Interpolation {
         x_z_1 = func_extractColumn(x_matrix, i);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'x_z_1' assigned to ");
-        outfile.print("[");
-        for (int list_i1 = 0; list_i1 < x_z_1.size() - 1; list_i1++) {
-            outfile.print(x_z_1.get(list_i1));
-            outfile.print(", ");
-        }
-        if (x_z_1.size() > 0) {
-            outfile.print(x_z_1.get(x_z_1.size() - 1));
-        }
-        outfile.print("]");
+        outfile.print(x_z_1);
         outfile.println(" in module Interpolation");
         outfile.close();
         y_z_1 = func_extractColumn(y_matrix, i);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'y_z_1' assigned to ");
-        outfile.print("[");
-        for (int list_i1 = 0; list_i1 < y_z_1.size() - 1; list_i1++) {
-            outfile.print(y_z_1.get(list_i1));
-            outfile.print(", ");
-        }
-        if (y_z_1.size() > 0) {
-            outfile.print(y_z_1.get(y_z_1.size() - 1));
-        }
-        outfile.print("]");
+        outfile.print(y_z_1);
         outfile.println(" in module Interpolation");
         outfile.close();
         x_z_2 = func_extractColumn(x_matrix, i + 1);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'x_z_2' assigned to ");
-        outfile.print("[");
-        for (int list_i1 = 0; list_i1 < x_z_2.size() - 1; list_i1++) {
-            outfile.print(x_z_2.get(list_i1));
-            outfile.print(", ");
-        }
-        if (x_z_2.size() > 0) {
-            outfile.print(x_z_2.get(x_z_2.size() - 1));
-        }
-        outfile.print("]");
+        outfile.print(x_z_2);
         outfile.println(" in module Interpolation");
         outfile.close();
         y_z_2 = func_extractColumn(y_matrix, i + 1);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'y_z_2' assigned to ");
-        outfile.print("[");
-        for (int list_i1 = 0; list_i1 < y_z_2.size() - 1; list_i1++) {
-            outfile.print(y_z_2.get(list_i1));
-            outfile.print(", ");
-        }
-        if (y_z_2.size() > 0) {
-            outfile.print(y_z_2.get(y_z_2.size() - 1));
-        }
-        outfile.print("]");
+        outfile.print(y_z_2);
         outfile.println(" in module Interpolation");
         outfile.close();
         try {
@@ -291,57 +227,25 @@ public class Interpolation {
             x_z_1 = func_extractColumn(x_matrix, i);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'x_z_1' assigned to ");
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < x_z_1.size() - 1; list_i1++) {
-                outfile.print(x_z_1.get(list_i1));
-                outfile.print(", ");
-            }
-            if (x_z_1.size() > 0) {
-                outfile.print(x_z_1.get(x_z_1.size() - 1));
-            }
-            outfile.print("]");
+            outfile.print(x_z_1);
             outfile.println(" in module Interpolation");
             outfile.close();
             y_z_1 = func_extractColumn(y_matrix, i);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'y_z_1' assigned to ");
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < y_z_1.size() - 1; list_i1++) {
-                outfile.print(y_z_1.get(list_i1));
-                outfile.print(", ");
-            }
-            if (y_z_1.size() > 0) {
-                outfile.print(y_z_1.get(y_z_1.size() - 1));
-            }
-            outfile.print("]");
+            outfile.print(y_z_1);
             outfile.println(" in module Interpolation");
             outfile.close();
             x_z_2 = func_extractColumn(x_matrix, i + 1);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'x_z_2' assigned to ");
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < x_z_2.size() - 1; list_i1++) {
-                outfile.print(x_z_2.get(list_i1));
-                outfile.print(", ");
-            }
-            if (x_z_2.size() > 0) {
-                outfile.print(x_z_2.get(x_z_2.size() - 1));
-            }
-            outfile.print("]");
+            outfile.print(x_z_2);
             outfile.println(" in module Interpolation");
             outfile.close();
             y_z_2 = func_extractColumn(y_matrix, i + 1);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'y_z_2' assigned to ");
-            outfile.print("[");
-            for (int list_i1 = 0; list_i1 < y_z_2.size() - 1; list_i1++) {
-                outfile.print(y_z_2.get(list_i1));
-                outfile.print(", ");
-            }
-            if (y_z_2.size() > 0) {
-                outfile.print(y_z_2.get(y_z_2.size() - 1));
-            }
-            outfile.print("]");
+            outfile.print(y_z_2);
             outfile.println(" in module Interpolation");
             outfile.close();
             try {

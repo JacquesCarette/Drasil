@@ -57,13 +57,12 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftList, 
   lift1List, lift2Lists, checkParams)
-import GOOL.Drasil.State (GOOLState, combineStates, initialState, getPutReturn, 
-  getPutReturnListStates, addFile)
+import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, addFile)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
-import Control.Monad.State (State, evalState, execState)
+import Control.Monad.State (State, evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty)
 
@@ -93,8 +92,7 @@ instance ProgramSym PythonCode where
   --     fileDatas <- sequence files
   --     return $ progD n fileDatas
     
-  prog n = liftList (\files -> getPutReturnListStates files (\s -> foldr1 
-    combineStates (map (`execState` s) files)) (progD n))
+  prog n = liftList (liftList (progD n))
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = State GOOLState FileData
@@ -118,7 +116,8 @@ instance InternalFile PythonCode where
 
   -- fileFromData ft fp = fmap (\m -> (S.get >>= (put . addFile ft fp)) >> return (fileD ft fp m))
 
-  fileFromData ft fp = fmap (getPutReturn (addFile ft fp) . fileD ft fp)
+  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
+    then s else addFile ft fp s) (fileD ft fp m))
 
   -- fileFromData ft fp m = return $ state (\s -> (unPC $ fmap (fileD ft fp) m, 
   --   addFile ft fp s))

@@ -65,13 +65,12 @@ import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..),
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
-import GOOL.Drasil.State (GOOLState, combineStates, initialState, getPutReturn, 
-  getPutReturnListStates, addFile)
+import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, addFile)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp)
 import Data.Maybe (maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
-import Control.Monad.State (State, evalState, execState)
+import Control.Monad.State (State, evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
 
@@ -711,8 +710,7 @@ instance Monad CppSrcCode where
 
 instance ProgramSym CppSrcCode where
   type Program CppSrcCode = State GOOLState ProgData
-  prog n = liftList (\files -> getPutReturnListStates files (\s -> foldr1 
-    combineStates (map (`execState` s) files)) (progD n))
+  prog n = liftList (liftList (progD n))
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = State GOOLState FileData
@@ -728,7 +726,8 @@ instance InternalFile CppSrcCode where
   bottom = return empty
   
   getFilePath = filePath . (`evalState` initialState) . unCPPSC
-  fileFromData ft fp = fmap (getPutReturn (addFile ft fp) . fileD ft fp)
+  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
+    then s else addFile ft fp s) (fileD ft fp m))
 
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -1299,7 +1298,8 @@ instance InternalFile CppHdrCode where
   bottom = return $ text "#endif"
   
   getFilePath = filePath . (`evalState` initialState) . unCPPHC
-  fileFromData ft fp = fmap (getPutReturn (addFile ft fp) . fileD ft fp)
+  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
+    then s else addFile ft fp s) (fileD ft fp m))
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc

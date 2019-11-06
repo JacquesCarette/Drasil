@@ -654,7 +654,7 @@ instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
   stateVarFromData d = pair (stateVarFromData d) (stateVarFromData d)
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
-  type Class (p CppSrcCode CppHdrCode) = Doc
+  type Class (p CppSrcCode CppHdrCode) = State GOOLState Doc
   buildClass n p s vs fs = pair (buildClass n p (pfst s) (map pfst vs) 
     (map pfst fs)) (buildClass n p (psnd s) (map psnd vs) (map psnd fs))
   enum l ls s = pair (enum l ls $ pfst s) (enum l ls $ psnd s)
@@ -1234,10 +1234,10 @@ instance InternalStateVar CppSrcCode where
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppSrcCode where
-  type Class CppSrcCode = Doc
-  buildClass n _ _ vs fs = lift2Lists cppsClass vs (fs ++ 
+  type Class CppSrcCode = State GOOLState Doc
+  buildClass n _ _ vs fs = return <$> lift2Lists cppsClass vs (fs ++ 
     [destructor n vs])
-  enum _ _ _ = return empty
+  enum _ _ _ = return $ return empty
   privClass = G.privClass
   pubClass = G.pubClass
 
@@ -1246,8 +1246,8 @@ instance ClassSym CppSrcCode where
   commentedClass _ cs = cs
 
 instance InternalClass CppSrcCode where
-  classDoc = unCPPSC
-  classFromData = return
+  classDoc = (`evalState` initialState) . unCPPSC
+  classFromData = return . return
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = State GOOLState ModData
@@ -1767,15 +1767,15 @@ instance InternalStateVar CppHdrCode where
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppHdrCode where
-  type Class CppHdrCode = Doc
+  type Class CppHdrCode = State GOOLState Doc
   -- do this with a do? avoids liftA8...
-  buildClass n p _ vs fs = liftA8 (cpphClass n) (lift2Lists 
+  buildClass n p _ vs fs = return <$> liftA8 (cpphClass n) (lift2Lists 
     (cpphVarsFuncsList Pub) vs (fs ++ [destructor n vs])) (lift2Lists 
     (cpphVarsFuncsList Priv) vs (fs ++ [destructor n vs])) (fmap fst public)
     (fmap fst private) parent blockStart blockEnd endStatement
     where parent = case p of Nothing -> return empty
                              Just pn -> inherit pn
-  enum n es _ = liftA4 (cpphEnum n) (return $ enumElementsDocD es 
+  enum n es _ = return <$> liftA4 (cpphEnum n) (return $ enumElementsDocD es 
     enumsEqualInts) blockStart blockEnd endStatement
   privClass = G.privClass
   pubClass = G.pubClass
@@ -1785,8 +1785,8 @@ instance ClassSym CppHdrCode where
   commentedClass = G.commentedClass
 
 instance InternalClass CppHdrCode where
-  classDoc = unCPPHC
-  classFromData = return
+  classDoc = (`evalState` initialState) . unCPPHC
+  classFromData = return . return
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = State GOOLState ModData

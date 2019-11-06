@@ -579,7 +579,7 @@ instance InternalStateVar PythonCode where
   stateVarFromData = return
 
 instance ClassSym PythonCode where
-  type Class PythonCode = Doc
+  type Class PythonCode = State GOOLState Doc
   buildClass = G.buildClass pyClass inherit
   enum n es s = classFromData (pyClass n empty (scopeDoc s)
     (enumElementsDocD' es) empty)
@@ -591,8 +591,8 @@ instance ClassSym PythonCode where
   commentedClass = G.commentedClass
 
 instance InternalClass PythonCode where
-  classDoc = unPC
-  classFromData = return 
+  classDoc = (`evalState` initialState) . unPC
+  classFromData = return . return
 
 instance ModuleSym PythonCode where
   type Module PythonCode = State GOOLState ModData

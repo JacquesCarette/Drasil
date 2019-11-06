@@ -601,7 +601,7 @@ instance InternalStateVar JavaCode where
   stateVarFromData = return
 
 instance ClassSym JavaCode where
-  type Class JavaCode = Doc
+  type Class JavaCode = State GOOLState Doc
   buildClass = G.buildClass classDocD inherit
   enum = G.enum
   privClass = G.privClass
@@ -612,8 +612,8 @@ instance ClassSym JavaCode where
   commentedClass = G.commentedClass
 
 instance InternalClass JavaCode where
-  classDoc = unJC
-  classFromData = return
+  classDoc = (`evalState` initialState) . unJC
+  classFromData = return . return
 
 instance ModuleSym JavaCode where
   type Module JavaCode = State GOOLState ModData

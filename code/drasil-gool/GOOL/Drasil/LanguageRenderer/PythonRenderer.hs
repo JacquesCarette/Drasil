@@ -83,15 +83,7 @@ instance Monad PythonCode where
   PC x >>= f = f x
 
 instance ProgramSym PythonCode where
-  type Program PythonCode = State GOOLState ProgData
-  -- prog n fs = do 
-  --   files <- sequence fs
-  --   return $ do
-  --     s <- S.get 
-  --     put $ foldr1 combineStates (map (`execState` s) files)
-  --     fileDatas <- sequence files
-  --     return $ progD n fileDatas
-    
+  type Program PythonCode = State GOOLState ProgData 
   prog n = liftList (liftList (progD n))
 
 instance RenderSym PythonCode where
@@ -107,20 +99,8 @@ instance InternalFile PythonCode where
   bottom = return empty
 
   getFilePath = filePath . (`evalState` initialState) . unPC
-  -- fileFromData ft fp mdl = do
-  --   m <- mdl 
-  --   return $ do
-  --     s <- S.get
-  --     put (addFile ft fp s)
-  --     return $ fileD ft fp m
-
-  -- fileFromData ft fp = fmap (\m -> (S.get >>= (put . addFile ft fp)) >> return (fileD ft fp m))
-
   fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
     then s else addFile ft fp s) (fileD ft fp m))
-
-  -- fileFromData ft fp m = return $ state (\s -> (unPC $ fmap (fileD ft fp) m, 
-  --   addFile ft fp s))
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc

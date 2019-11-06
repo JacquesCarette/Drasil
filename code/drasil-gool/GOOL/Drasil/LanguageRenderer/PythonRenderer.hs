@@ -99,8 +99,8 @@ instance InternalFile PythonCode where
   bottom = return empty
 
   getFilePath = filePath . (`evalState` initialState) . unPC
-  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
-    then s else addFile ft fp s) (fileD ft fp m))
+  fileFromData ft fp = fmap (\sm -> getPutReturn sm (\s m -> if isEmpty 
+    (modDoc m) then s else addFile ft fp s) (fileD ft fp))
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
@@ -595,15 +595,15 @@ instance InternalClass PythonCode where
   classFromData = return 
 
 instance ModuleSym PythonCode where
-  type Module PythonCode = ModData
+  type Module PythonCode = State GOOLState ModData
   buildModule n ls = G.buildModule n (map include ls)
 
-  moduleName m = name (unPC m)
+  moduleName = name . (`evalState` initialState) . unPC
 
 instance InternalMod PythonCode where
-  isMainModule = isMainMod . unPC
-  moduleDoc = modDoc . unPC
-  modFromData n m d = return $ md n m d
+  isMainModule = isMainMod . (`evalState` initialState) . unPC
+  moduleDoc = modDoc . (`evalState` initialState) . unPC
+  modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc

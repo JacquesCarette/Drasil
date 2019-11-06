@@ -673,7 +673,7 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
   classFromData d = pair (classFromData d) (classFromData d)
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
-  type Module (p CppSrcCode CppHdrCode) = ModData
+  type Module (p CppSrcCode CppHdrCode) = State GOOLState ModData
   buildModule n l ms cs = pair (buildModule n l (map pfst ms) (map pfst cs)) 
     (buildModule n l (map psnd ms) (map psnd cs))
 
@@ -726,8 +726,8 @@ instance InternalFile CppSrcCode where
   bottom = return empty
   
   getFilePath = filePath . (`evalState` initialState) . unCPPSC
-  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
-    then s else addFile ft fp s) (fileD ft fp m))
+  fileFromData ft fp = fmap (\sm -> getPutReturn sm (\s m -> if isEmpty 
+    (modDoc m) then s else addFile ft fp s) (fileD ft fp))
 
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -1250,15 +1250,15 @@ instance InternalClass CppSrcCode where
   classFromData = return
 
 instance ModuleSym CppSrcCode where
-  type Module CppSrcCode = ModData
+  type Module CppSrcCode = State GOOLState ModData
   buildModule n ls = G.buildModule n (map include ls)
     
-  moduleName m = name (unCPPSC m)
+  moduleName = name . (`evalState` initialState) . unCPPSC
 
 instance InternalMod CppSrcCode where
-  isMainModule = isMainMod . unCPPSC
-  moduleDoc = modDoc . unCPPSC
-  modFromData n m d = return $ md n m d
+  isMainModule = isMainMod . (`evalState` initialState) . unCPPSC
+  moduleDoc = modDoc . (`evalState` initialState) . unCPPSC
+  modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
@@ -1298,8 +1298,8 @@ instance InternalFile CppHdrCode where
   bottom = return $ text "#endif"
   
   getFilePath = filePath . (`evalState` initialState) . unCPPHC
-  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
-    then s else addFile ft fp s) (fileD ft fp m))
+  fileFromData ft fp = fmap (\sm -> getPutReturn sm (\s m -> if isEmpty 
+    (modDoc m) then s else addFile ft fp s) (fileD ft fp))
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
@@ -1789,15 +1789,15 @@ instance InternalClass CppHdrCode where
   classFromData = return
 
 instance ModuleSym CppHdrCode where
-  type Module CppHdrCode = ModData
+  type Module CppHdrCode = State GOOLState ModData
   buildModule n ls = G.buildModule n (map include ls)
       
-  moduleName m = name (unCPPHC m)
+  moduleName = name . (`evalState` initialState) . unCPPHC
 
 instance InternalMod CppHdrCode where
-  isMainModule = isMainMod . unCPPHC
-  moduleDoc = modDoc . unCPPHC
-  modFromData n m d = return $ md n m d
+  isMainModule = isMainMod . (`evalState` initialState) . unCPPHC
+  moduleDoc = modDoc . (`evalState` initialState) . unCPPHC
+  modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc
@@ -1837,8 +1837,8 @@ cppName = "C++"
 enumsEqualInts :: Bool
 enumsEqualInts = False
 
-cppstop :: ModData -> Doc -> Doc -> Doc
-cppstop (MD n b _) lst end = vcat [
+cppstop :: State GOOLState ModData -> Doc -> Doc -> Doc
+cppstop m lst end = vcat [
   if b then empty else inc <+> doubleQuotedText (addExt cppHdrExt n),
   if b then empty else blank,
   text "#define" <+> text "_USE_MATH_DEFINES", --FIXME: Only include if used (i.e. pi)
@@ -1857,9 +1857,12 @@ cppstop (MD n b _) lst end = vcat [
   usingNameSpace "std" (Just "ifstream") end,
   usingNameSpace "std" (Just "ofstream") end]
   where inc = text "#include"
+        modD = evalState m initialState
+        n = name modD
+        b = isMainMod modD
 
-cpphtop :: ModData -> Doc -> Doc -> Doc
-cpphtop (MD n _ _) lst end = vcat [
+cpphtop :: State GOOLState ModData -> Doc -> Doc -> Doc
+cpphtop m lst end = vcat [
   text "#ifndef" <+> text n <> text "_h",
   text "#define" <+> text n <> text "_h",
   blank,
@@ -1871,6 +1874,8 @@ cpphtop (MD n _ _) lst end = vcat [
   usingNameSpace "std" (Just "ifstream") end,
   usingNameSpace "std" (Just "ofstream") end]
   where inc = text "#include"
+        modD = evalState m initialState
+        n = name modD
 
 usingNameSpace :: Label -> Maybe Label -> Doc -> Doc
 usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <>

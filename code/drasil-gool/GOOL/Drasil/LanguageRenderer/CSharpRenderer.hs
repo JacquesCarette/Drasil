@@ -104,8 +104,8 @@ instance InternalFile CSharpCode where
   bottom = return empty
 
   getFilePath = filePath . (`evalState` initialState) . unCSC
-  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
-    then s else addFile ft fp s) (fileD ft fp m))
+  fileFromData ft fp = fmap (\sm -> getPutReturn sm (\s m -> if isEmpty 
+    (modDoc m) then s else addFile ft fp s) (fileD ft fp))
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
@@ -583,15 +583,15 @@ instance InternalClass CSharpCode where
   classFromData = return
 
 instance ModuleSym CSharpCode where
-  type Module CSharpCode = ModData
+  type Module CSharpCode = State GOOLState ModData
   buildModule n _ = G.buildModule' n
     
-  moduleName m = name (unCSC m)
+  moduleName = name . (`evalState` initialState) . unCSC
   
 instance InternalMod CSharpCode where
-  isMainModule = isMainMod . unCSC
-  moduleDoc = modDoc . unCSC
-  modFromData n m d = return $ md n m d
+  isMainModule = isMainMod . (`evalState` initialState) . unCSC
+  moduleDoc = modDoc . (`evalState` initialState) . unCSC
+  modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc

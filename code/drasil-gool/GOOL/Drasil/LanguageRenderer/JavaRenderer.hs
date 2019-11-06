@@ -106,8 +106,8 @@ instance InternalFile JavaCode where
   bottom = return empty
   
   getFilePath = filePath . (`evalState` initialState) . unJC
-  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
-    then s else addFile ft fp s) (fileD ft fp m))
+  fileFromData ft fp = fmap (\sm -> getPutReturn sm (\s m -> if isEmpty 
+    (modDoc m) then s else addFile ft fp s) (fileD ft fp))
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -616,15 +616,15 @@ instance InternalClass JavaCode where
   classFromData = return
 
 instance ModuleSym JavaCode where
-  type Module JavaCode = ModData
+  type Module JavaCode = State GOOLState ModData
   buildModule n _ = G.buildModule' n 
 
-  moduleName m = name (unJC m)
+  moduleName = name . (`evalState` initialState) . unJC
   
 instance InternalMod JavaCode where
-  isMainModule = isMainMod . unJC
-  moduleDoc = modDoc . unJC
-  modFromData n m d = return $ md n m d
+  isMainModule = isMainMod . (`evalState` initialState) . unJC
+  moduleDoc = modDoc . (`evalState` initialState) . unJC
+  modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc

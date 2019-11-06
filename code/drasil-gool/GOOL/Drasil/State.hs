@@ -22,11 +22,13 @@ initialState = GS {
   _sources = []
 }
 
-getPutReturn :: (GOOLState -> GOOLState) -> a -> State GOOLState a
-getPutReturn sf v = do
+getPutReturn :: State GOOLState b -> (GOOLState -> b -> GOOLState) -> (b -> a) 
+  -> State GOOLState a
+getPutReturn st sf vf = do
+  v <- st
   s <- get
-  put $ sf s
-  return v
+  put $ sf s v
+  return $ vf v
 
 addFile :: FileType -> FilePath -> GOOLState -> GOOLState
 addFile Combined = addCombinedHeaderSource

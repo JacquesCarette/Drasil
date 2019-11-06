@@ -64,9 +64,12 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
   lift1List, checkParams)
+import GOOL.Drasil.State (GOOLState, combineStates, initialState, getPutReturn, 
+  getPutReturnListStates, addFile)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (Applicative, liftA2, liftA3)
+import Control.Monad.State (State, evalState, execState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
   equals, semi, vcat, lbrace, rbrace, render, colon, comma, render)
 
@@ -87,11 +90,13 @@ instance Monad JavaCode where
   JC x >>= f = f x
 
 instance ProgramSym JavaCode where
-  type Program JavaCode = ProgData
-  prog n ms = liftList (progD n) (map (liftA2 (packageDocD n) endStatement) ms)
+  type Program JavaCode = State GOOLState ProgData
+  prog n = lift1List (\end files -> getPutReturnListStates files (\s -> foldr1 
+    combineStates (map (`execState` s) files)) (progD n . map (packageDocD n 
+    end))) endStatement 
 
 instance RenderSym JavaCode where
-  type RenderFile JavaCode = FileData 
+  type RenderFile JavaCode = State GOOLState FileData 
   fileDoc code = G.fileDoc Combined jExt (top code) bottom code
 
   docMod = G.docMod
@@ -102,8 +107,8 @@ instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
   
-  getFilePath = filePath . unJC
-  fileFromData ft fp = fmap (fileD ft fp)
+  getFilePath = filePath . (`evalState` initialState) . unJC
+  fileFromData ft fp = fmap (getPutReturn (addFile ft fp) . fileD ft fp)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc

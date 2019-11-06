@@ -1,13 +1,14 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module GOOL.Drasil.State (
-  GOOLState(..), combineStates, initialState, addFile, 
-  addCombinedHeaderSource, addHeader, addSource
+  GOOLState(..), combineStates, initialState, getPutReturn, 
+  getPutReturnListStates, addFile, addCombinedHeaderSource, addHeader, addSource
 ) where
 
 import GOOL.Drasil.Data (FileType(..))
 
 import Control.Lens ((^.),makeLenses,over)
+import Control.Monad.State (State, get, put)
 import Data.List (nub)
 
 data GOOLState = GS {
@@ -31,6 +32,20 @@ initialState = GS {
   _headers = [],
   _sources = []
 }
+
+getPutReturn :: (GOOLState -> GOOLState) -> a -> State GOOLState a
+getPutReturn sf v = do
+  s <- get
+  put $ sf s
+  return v
+
+getPutReturnListStates :: [State GOOLState b] -> (GOOLState -> GOOLState) -> 
+  ([b] -> a) -> State GOOLState a
+getPutReturnListStates s sf vf = do
+  st <- get
+  put $ sf st
+  bs <- sequence s
+  return $ vf bs
 
 addFile :: FileType -> FilePath -> GOOLState -> GOOLState
 addFile Combined = addCombinedHeaderSource

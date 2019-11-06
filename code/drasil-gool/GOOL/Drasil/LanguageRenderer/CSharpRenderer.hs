@@ -63,9 +63,12 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (liftA4, liftA5, liftList, lift1List, checkParams)
+import GOOL.Drasil.State (GOOLState, combineStates, initialState, getPutReturn, 
+  getPutReturnListStates, addFile)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (Applicative, liftA2, liftA3)
+import Control.Monad.State (State, evalState, execState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   semi, vcat, lbrace, rbrace, colon)
 
@@ -86,11 +89,12 @@ instance Monad CSharpCode where
   CSC x >>= f = f x
 
 instance ProgramSym CSharpCode where
-  type Program CSharpCode = ProgData
-  prog n = liftList (progD n)
+  type Program CSharpCode = State GOOLState ProgData
+  prog n = liftList (\files -> getPutReturnListStates files (\s -> foldr1 
+    combineStates (map (`execState` s) files)) (progD n))
 
 instance RenderSym CSharpCode where
-  type RenderFile CSharpCode = FileData
+  type RenderFile CSharpCode = State GOOLState FileData
   fileDoc code = G.fileDoc Combined csExt (top code) bottom code
 
   docMod = G.docMod
@@ -101,8 +105,8 @@ instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
 
-  getFilePath = filePath . unCSC
-  fileFromData ft fp = fmap (fileD ft fp)
+  getFilePath = filePath . (`evalState` initialState) . unCSC
+  fileFromData ft fp = fmap (getPutReturn (addFile ft fp) . fileD ft fp)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc

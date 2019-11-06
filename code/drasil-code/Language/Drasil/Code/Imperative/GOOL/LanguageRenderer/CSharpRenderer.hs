@@ -17,8 +17,9 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, nativeBinary, osClassDefault)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
-import GOOL.Drasil (liftList)
+import GOOL.Drasil (liftList, initialState)
 
+import Control.Monad.State (evalState)
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -38,7 +39,7 @@ instance Monad CSharpProject where
 
 instance PackageSym CSharpProject where
   type Package CSharpProject = PackData
-  package p = liftList (packD p)
+  package p = liftList (packD $ evalState p initialState)
 
 instance AuxiliarySym CSharpProject where
   type Auxiliary CSharpProject = AuxData

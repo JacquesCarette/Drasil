@@ -15,8 +15,9 @@ import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
-import GOOL.Drasil (liftList)
+import GOOL.Drasil (liftList, initialState)
 
+import Control.Monad.State (evalState)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -35,7 +36,7 @@ instance Monad PythonProject where
 
 instance PackageSym PythonProject where
   type Package PythonProject = PackData
-  package p = liftList (packD p)
+  package p = liftList (packD $ evalState p initialState)
 
 instance AuxiliarySym PythonProject where
   type Auxiliary PythonProject = AuxData

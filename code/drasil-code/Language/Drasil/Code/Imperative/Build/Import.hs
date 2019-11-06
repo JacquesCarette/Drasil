@@ -8,27 +8,30 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig(BuildConfig),
   Runnable(Runnable), BuildName(..), RunType(..))
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName)
 
-import GOOL.Drasil (FileData(..), isSource, isHeader, ModData(..), ProgData(..))
+import GOOL.Drasil (FileData(..), isHeader, ModData(..), ProgData(..), 
+  GOOLState(..), initialState, sources)
 
 import Build.Drasil ((+:+), genMake, makeS, MakeString, mkFile, mkRule,
   mkCheckedCommand, mkFreeVar, RuleTransformer(makeRule))
 
 import Control.Applicative (liftA2)
+import Control.Monad.State (State, evalState, execState)
+import Control.Lens ((^.))
 import Data.Maybe (maybe, maybeToList)
 import System.FilePath.Posix (takeExtension, takeBaseName)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-data CodeHarness = Ch (Maybe BuildConfig) Runnable ProgData [Comments]
+data CodeHarness = Ch (Maybe BuildConfig) Runnable ProgData GOOLState [Comments]
 
 instance RuleTransformer CodeHarness where
-  makeRule (Ch b r m cms) = [
+  makeRule (Ch b r m s cms) = [
     mkRule buildTarget (map (const $ renderBuildName m nameOpts nm) 
       $ maybeToList b) []
     ] ++
     maybe [] (\(BuildConfig comp bt) -> [
     mkFile (renderBuildName m nameOpts nm) (map (makeS . filePath) (progMods m))
       [
-      mkCheckedCommand $ foldr (+:+) mempty $ comp (getCompilerInput bt m) $
+      mkCheckedCommand $ foldr (+:+) mempty $ comp (getCompilerInput bt m s) $
         renderBuildName m nameOpts nm
       ]
     ]) b ++ [
@@ -59,10 +62,9 @@ getMainModule p = mainName $ filter (isMainMod . fileMod) (progMods p)
   where mainName [FileD _ fp _] = fp
         mainName _ = error "Expected a single main module."
 
-getCompilerInput :: BuildDependencies -> ProgData -> [MakeString]
-getCompilerInput BcSource p = map (makeS . filePath) $ filter isSource $ 
-  progMods p
-getCompilerInput (BcSingle n) p = [renderBuildName p nameOpts n]
+getCompilerInput :: BuildDependencies -> ProgData -> GOOLState -> [MakeString]
+getCompilerInput BcSource _ s = map makeS $ s ^. sources
+getCompilerInput (BcSingle n) p _ = [renderBuildName p nameOpts n]
 
 getCommentedFiles :: [FileData] -> [MakeString]
 getCommentedFiles fs = map makeS (doxConfigName : map filePath (filter (liftA2 
@@ -72,5 +74,7 @@ buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn
 buildRunTarget fn (Interpreter i) = i +:+ fn
 
-makeBuild :: [Comments] -> Maybe BuildConfig -> Runnable -> ProgData -> Doc
-makeBuild cms b r m = genMake [Ch b r m cms]
+makeBuild :: [Comments] -> Maybe BuildConfig -> Runnable -> State GOOLState ProgData -> Doc
+makeBuild cms b r m = genMake [Ch b r p s cms]
+  where p = evalState m initialState
+        s = execState m initialState

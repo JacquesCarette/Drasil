@@ -8,6 +8,7 @@ module GOOL.Drasil (Label, ProgramSym(..), RenderSym(..), PermanenceSym(..),
   BlockCommentSym(..), 
   ProgData(..), FileData(..), isSource, isHeader, ModData(..),
   CodeType(..),
+  GOOLState(..), headers, sources, initialState,
   convType, liftList,
   unPC, unJC, unCSC, unCPPC
 ) where
@@ -24,6 +25,8 @@ import GOOL.Drasil.Data (FileData(..), ModData(..), ProgData(..),
   isHeader, isSource)
 
 import GOOL.Drasil.CodeType (CodeType(..))
+
+import GOOL.Drasil.State (GOOLState(..), headers, sources, initialState)
 
 import GOOL.Drasil.Helpers (convType, liftList)
 

@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module GOOL.Drasil.State (
-  GOOLState(..), combineStates, initialState, getPutReturn, 
+  GOOLState(..), headers, sources, combineStates, initialState, getPutReturn, 
   getPutReturnListStates, addFile, addCombinedHeaderSource, addHeader, addSource
 ) where
 
@@ -19,10 +19,10 @@ makeLenses ''GOOLState
 
 combineStates :: GOOLState -> GOOLState -> GOOLState
 combineStates gs1 gs2 = GS {
-  _headers = if length hdrs > length (nub hdrs) then hdrs else 
-    error "Multiple modules with same name encountered", 
-  _sources = if length srcs > length (nub srcs) then srcs else 
-    error "Multiple modules with same name encountered"
+  _headers = if length hdrs == length (nub hdrs) then hdrs else 
+    error $ "Multiple modules with same name encountered: " ++ show hdrs, 
+  _sources = if length srcs == length (nub srcs) then srcs else 
+    error $ "Multiple modules with same name encountered: " ++ show srcs
 }
   where hdrs = gs1 ^. headers ++ gs2 ^. headers
         srcs = gs1 ^. sources ++ gs2 ^. sources

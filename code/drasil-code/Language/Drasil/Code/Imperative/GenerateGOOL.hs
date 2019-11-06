@@ -11,8 +11,9 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
 import GOOL.Drasil (Label, RenderSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  CodeType(..), ProgData)
+  CodeType(..), ProgData, GOOLState)
 
+import qualified Control.Monad.State as S (State)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe)
 import Control.Monad.Reader (Reader, ask, withReader)
@@ -36,7 +37,7 @@ genModule n desc maybeMs maybeCs = do
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n ls ms cs
 
-genDoxConfig :: (AuxiliarySym repr) => String -> ProgData ->
+genDoxConfig :: (AuxiliarySym repr) => String -> S.State GOOLState ProgData ->
   Reader State [repr (Auxiliary repr)]
 genDoxConfig n p = do
   g <- ask

@@ -638,7 +638,7 @@ instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
   methodDoc m = methodDoc $ pfst m
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
-  type StateVar (p CppSrcCode CppHdrCode) = StateVarData
+  type StateVar (p CppSrcCode CppHdrCode) = State GOOLState StateVarData
   stateVar s p v = pair (stateVar (pfst s) (pfst p) (pfst v))
     (stateVar (psnd s) (psnd p) (psnd v))
   stateVarDef n s p vr vl = pair (stateVarDef n (pfst s) (pfst p) (pfst vr) 
@@ -1169,7 +1169,8 @@ instance MethodSym CppSrcCode where
   constructor n = G.constructor n n
   destructor n vs = 
     let i = var "i" int
-        deleteStatements = map (fmap destructSts) vs
+        deleteStatements = map (fmap (destructSts . (`evalState` initialState)))
+          vs
         loopIndexDec = varDec i
         dbody = liftA2 emptyIfEmpty 
           (fmap vcat (mapM (fmap fst) deleteStatements)) $
@@ -1219,24 +1220,24 @@ instance InternalMethod CppSrcCode where
   methodDoc = mthdDoc . unCPPSC
 
 instance StateVarSym CppSrcCode where
-  type StateVar CppSrcCode = StateVarData
-  stateVar s _ _ = liftA3 svd (fmap snd s) (return empty) emptyState
-  stateVarDef n s p vr vl = liftA3 svd (fmap snd s) (liftA4 (cppsStateVarDef n 
-    empty) p vr vl endStatement) emptyState
-  constVar n s vr vl = liftA3 svd (fmap snd s) (liftA4 (cppsStateVarDef n 
-    (text "const")) static_ vr vl endStatement) emptyState
+  type StateVar CppSrcCode = State GOOLState StateVarData
+  stateVar s _ _ = return <$> liftA3 svd (fmap snd s) (return empty) emptyState
+  stateVarDef n s p vr vl = return <$> liftA3 svd (fmap snd s) (liftA4 
+    (cppsStateVarDef n empty) p vr vl endStatement) emptyState
+  constVar n s vr vl = return <$> liftA3 svd (fmap snd s) (liftA4 
+    (cppsStateVarDef n (text "const")) static_ vr vl endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
 
 instance InternalStateVar CppSrcCode where
-  stateVarDoc = stVarDoc . unCPPSC
+  stateVarDoc = stVarDoc . (`evalState` initialState) . unCPPSC
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = State GOOLState Doc
-  buildClass n _ _ vs fs = return <$> lift2Lists cppsClass vs (fs ++ 
-    [destructor n vs])
+  buildClass n _ _ vs fs = lift2Lists (lift1List (flip cppsClass) . return)
+    (fs ++ [destructor n vs]) vs
   enum _ _ _ = return $ return empty
   privClass = G.privClass
   pubClass = G.pubClass
@@ -1717,8 +1718,9 @@ instance MethodSym CppHdrCode where
   pubMethod = G.pubMethod
   constructor n = G.constructor n n
   destructor n vs = return $ mthd False Pub [] (emptyIfEmpty (vcat (map 
-    (statementDoc . fmap destructSts) vs)) (methodDoc (pubMethod ('~':n) n 
-    void [] (return empty) :: (CppHdrCode (Method CppHdrCode)))))
+    (statementDoc . fmap (destructSts . (`evalState` initialState))) vs)) 
+    (methodDoc (pubMethod ('~':n) n void [] 
+    (return empty) :: (CppHdrCode (Method CppHdrCode)))))
 
   docMain = mainFunction
 
@@ -1751,27 +1753,28 @@ instance InternalMethod CppHdrCode where
   methodDoc = mthdDoc . unCPPHC
 
 instance StateVarSym CppHdrCode where
-  type StateVar CppHdrCode = StateVarData
-  stateVar s p v = liftA3 svd (fmap snd s) (return $ stateVarDocD empty 
-    (permDoc p) (statementDoc (state $ varDec v))) emptyState
-  stateVarDef _ s p vr vl = liftA3 svd (fmap snd s) (return $ cpphStateVarDef 
-    empty p vr vl) emptyState
-  constVar _ s v _ = liftA3 svd (fmap snd s) (liftA3 (constVarDocD empty) 
-    (bindDoc <$> static_) v endStatement) emptyState
+  type StateVar CppHdrCode = State GOOLState StateVarData
+  stateVar s p v = return <$> liftA3 svd (fmap snd s) (return $ stateVarDocD 
+    empty (permDoc p) (statementDoc (state $ varDec v))) emptyState
+  stateVarDef _ s p vr vl = return <$> liftA3 svd (fmap snd s) (return $ 
+    cpphStateVarDef empty p vr vl) emptyState
+  constVar _ s v _ = return <$> liftA3 svd (fmap snd s) (liftA3 (constVarDocD 
+    empty) (bindDoc <$> static_) v endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
 
 instance InternalStateVar CppHdrCode where
-  stateVarDoc = stVarDoc . unCPPHC
+  stateVarDoc = stVarDoc . (`evalState` initialState) . unCPPHC
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = State GOOLState Doc
   -- do this with a do? avoids liftA8...
-  buildClass n p _ vs fs = return <$> liftA8 (cpphClass n) (lift2Lists 
-    (cpphVarsFuncsList Pub) vs (fs ++ [destructor n vs])) (lift2Lists 
-    (cpphVarsFuncsList Priv) vs (fs ++ [destructor n vs])) (fmap fst public)
+  buildClass n p _ vs fs = liftA8 (cpphClass n) (lift2Lists 
+    (lift1List (flip (cpphVarsFuncsList Pub)) . return) (fs ++ 
+    [destructor n vs]) vs) (lift2Lists (lift1List (flip (cpphVarsFuncsList 
+    Priv)) . return) (fs ++ [destructor n vs]) vs) (fmap fst public)
     (fmap fst private) parent blockStart blockEnd endStatement
     where parent = case p of Nothing -> return empty
                              Just pn -> inherit pn
@@ -1994,17 +1997,20 @@ cppsClass vs fs = vcat $ vars ++ (if any (not . isEmpty) vars then blank else
   where vars = map stVarDoc vs
         funcs = map mthdDoc fs
 
-cpphClass :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> 
-  Doc -> Doc -> Doc
-cpphClass n pubs privs pub priv inhrt bStart bEnd end = vcat [
-  classDec <+> text n <+> inhrt <+> bStart,
-  indentList [
-    pub <> colon,
-    indent pubs,
-    blank,
-    priv <> colon,
-    indent privs],
-  bEnd <> end]
+cpphClass :: Label -> State GOOLState Doc -> State GOOLState Doc -> Doc -> Doc 
+  -> Doc -> Doc -> Doc -> Doc -> State GOOLState Doc
+cpphClass n publs privts pub priv inhrt bStart bEnd end = do
+  pubs <- publs
+  privs <- privts
+  return $ vcat [
+    classDec <+> text n <+> inhrt <+> bStart,
+    indentList [
+      pub <> colon,
+      indent pubs,
+      blank,
+      priv <> colon,
+      indent privs],
+    bEnd <> end]
 
 cpphEnum :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 cpphEnum n es bStart bEnd end = vcat [

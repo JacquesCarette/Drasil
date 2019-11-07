@@ -565,8 +565,8 @@ instance InternalMethod PythonCode where
   methodDoc = mthdDoc . unPC
 
 instance StateVarSym PythonCode where
-  type StateVar PythonCode = Doc
-  stateVar _ _ _ = return empty
+  type StateVar PythonCode = State GOOLState Doc
+  stateVar _ _ _ = return (return empty)
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (permDoc 
     (static_ :: PythonCode (Permanence PythonCode)))
@@ -575,8 +575,8 @@ instance StateVarSym PythonCode where
   pubGVar = G.pubGVar
 
 instance InternalStateVar PythonCode where
-  stateVarDoc = unPC
-  stateVarFromData = return
+  stateVarDoc = (`evalState` initialState) . unPC
+  stateVarFromData = return . return
 
 instance ClassSym PythonCode where
   type Class PythonCode = State GOOLState Doc

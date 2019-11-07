@@ -63,7 +63,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (liftA4, liftA5, liftList, lift1List, checkParams)
-import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, addFile)
+import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
+  getPutReturnFunc, addFile, setMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -104,7 +105,7 @@ instance InternalFile CSharpCode where
   bottom = return empty
 
   getFilePath = filePath . (`evalState` initialState) . unCSC
-  fileFromData ft fp = fmap (\sm -> getPutReturn sm (\s m -> if isEmpty 
+  fileFromData ft fp = fmap (\sm -> getPutReturnFunc sm (\s m -> if isEmpty 
     (modDoc m) then s else addFile ft fp s) (fileD ft fp))
 
 instance KeywordSym CSharpCode where
@@ -516,7 +517,7 @@ instance ParameterSym CSharpCode where
   parameterType = variableType . fmap paramVar
 
 instance MethodSym CSharpCode where
-  type Method CSharpCode = MethodData
+  type Method CSharpCode = State GOOLState MethodData
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -540,16 +541,17 @@ instance MethodSym CSharpCode where
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
   
-  parameters m = map return $ (mthdParams . unCSC) m
+  parameters m = map return $ (mthdParams . (`evalState` initialState) . unCSC) m
 
 instance InternalMethod CSharpCode where
-  intMethod m n _ s p t ps b = liftA2 (mthd m) (checkParams n <$> sequence ps)
-    (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
+  intMethod m n _ s p t ps b = (if m then getPutReturn setMain else return) <$> 
+    liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA5 (methodDocD n) s p 
+    t (liftList paramListDocD ps) b)
   intFunc = G.intFunc
-  commentedFunc cmt = liftA2 updateMthdDoc (fmap commentedItem cmt)
+  commentedFunc cmt = liftA2 (fmap . updateMthdDoc) (fmap commentedItem cmt)
   
-  isMainMethod = isMainMthd . unCSC
-  methodDoc = mthdDoc . unCSC
+  isMainMethod = isMainMthd . (`evalState` initialState) . unCSC
+  methodDoc = mthdDoc . (`evalState` initialState) . unCSC
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = State GOOLState Doc

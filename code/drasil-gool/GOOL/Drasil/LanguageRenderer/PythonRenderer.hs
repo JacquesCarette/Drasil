@@ -57,7 +57,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftList, 
   lift1List, lift2Lists, checkParams)
-import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, addFile)
+import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
+  getPutReturnFunc, addFile, setMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -99,7 +100,7 @@ instance InternalFile PythonCode where
   bottom = return empty
 
   getFilePath = filePath . (`evalState` initialState) . unPC
-  fileFromData ft fp = fmap (\sm -> getPutReturn sm (\s m -> if isEmpty 
+  fileFromData ft fp = fmap (\sm -> getPutReturnFunc sm (\s m -> if isEmpty 
     (modDoc m) then s else addFile ft fp s) (fileD ft fp))
 
 instance KeywordSym PythonCode where
@@ -526,7 +527,7 @@ instance ParameterSym PythonCode where
   parameterType = variableType . fmap paramVar
 
 instance MethodSym PythonCode where
-  type Method PythonCode = MethodData
+  type Method PythonCode = State GOOLState MethodData
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -538,7 +539,7 @@ instance MethodSym PythonCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction = fmap (mthd True [])
+  mainFunction = fmap (getPutReturn setMain . mthd True [])
 
   docFunc = G.docFunc
 
@@ -550,17 +551,19 @@ instance MethodSym PythonCode where
 
   docInOutFunc n = pyDocInOut (inOutFunc n)
 
-  parameters m = map return $ (mthdParams . unPC) m
+  parameters m = map return $ (mthdParams . (`evalState` initialState) . unPC) m
 
 instance InternalMethod PythonCode where
-  intMethod m n l _ _ _ ps b = liftA2 (mthd m) (checkParams n <$> sequence ps)
-    (liftA3 (pyMethod n) (self l) (liftList paramListDocD ps) b)
-  intFunc m n _ _ _ ps b = liftA2 (mthd m) (checkParams n <$> sequence ps) 
-    (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
-  commentedFunc cmt = liftA2 updateMthdDoc (fmap commentedItem cmt)
+  intMethod m n l _ _ _ ps b = (if m then getPutReturn setMain else return) <$> 
+    liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA3 (pyMethod n) 
+    (self l) (liftList paramListDocD ps) b)
+  intFunc m n _ _ _ ps b = (if m then getPutReturn setMain else return) <$>
+    liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA2 (pyFunction n) 
+    (liftList paramListDocD ps) b)
+  commentedFunc cmt = liftA2 (fmap . updateMthdDoc) (fmap commentedItem cmt)
 
-  isMainMethod = isMainMthd . unPC
-  methodDoc = mthdDoc . unPC
+  isMainMethod = isMainMthd . (`evalState` initialState) . unPC
+  methodDoc = mthdDoc . (`evalState` initialState) . unPC
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = State GOOLState Doc

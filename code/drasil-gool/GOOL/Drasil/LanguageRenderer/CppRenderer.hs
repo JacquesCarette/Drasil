@@ -65,10 +65,12 @@ import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..),
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
-import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, addFile)
+import GOOL.Drasil.State (GOOLState, hasMain, initialState, getPutReturn, 
+  getPutReturnFunc, checkGOOLState, addFile, setMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp)
 import Data.Maybe (maybeToList)
+import Control.Lens ((^.))
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (State, evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
@@ -593,7 +595,7 @@ instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   parameterType p = pair (parameterType $ pfst p) (parameterType $ psnd p)
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
-  type Method (p CppSrcCode CppHdrCode) = MethodData
+  type Method (p CppSrcCode CppHdrCode) = State GOOLState MethodData
   method n c s p t ps b = pair (method n c (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (method n c (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
   getMethod c v = pair (getMethod c $ pfst v) (getMethod c $ psnd v) 
@@ -739,7 +741,7 @@ instance InternalFile CppSrcCode where
   bottom = return empty
   
   getFilePath = filePath . (`evalState` initialState) . unCPPSC
-  fileFromData ft fp = fmap (\sm -> getPutReturn sm (\s m -> if isEmpty 
+  fileFromData ft fp = fmap (\sm -> getPutReturnFunc sm (\s m -> if isEmpty 
     (modDoc m) then s else addFile ft fp s) (fileD ft fp))
 
 instance KeywordSym CppSrcCode where
@@ -1174,7 +1176,7 @@ instance ParameterSym CppSrcCode where
   parameterType = variableType . fmap paramVar
 
 instance MethodSym CppSrcCode where
-  type Method CppSrcCode = MethodData
+  type Method CppSrcCode = State GOOLState MethodData
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -1197,7 +1199,7 @@ instance MethodSym CppSrcCode where
     ("argv", "List of command-line arguments")] ["exit code"]) (mainFunction b)
 
   function = G.function
-  mainFunction b = setMainMethod <$> function "main" public static_ int 
+  mainFunction b = intFunc True "main" public static_ (mType int) 
     [param $ var "argc" int, 
     liftA2 pd (var "argv" (listType static_ string)) 
     (return $ text "const char *argv[]")] 
@@ -1213,21 +1215,22 @@ instance MethodSym CppSrcCode where
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
-  parameters m = map return $ (mthdParams . unCPPSC) m
+  parameters m = map return $ (mthdParams . (`evalState` initialState) . unCPPSC) m
 
 instance InternalMethod CppSrcCode where
-  intMethod m n c s _ t ps b = liftA3 (mthd m) (fmap snd s) (checkParams n 
-    <$> sequence ps) (liftA5 (cppsMethod n c) t (liftList paramListDocD ps) b 
-    blockStart blockEnd)
-  intFunc m n s _ t ps b = liftA3 (mthd m) (fmap snd s) (checkParams n <$> 
-    sequence ps) (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b 
-    blockStart blockEnd)
-  commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
-    liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
-    (liftA2 commentedItem cmt (fmap mthdDoc fn)) else fn
+  intMethod m n c s _ t ps b = (if m then getPutReturn setMain else return) <$>
+    liftA3 (mthd m) (fmap snd s) (checkParams n <$> sequence ps) (liftA5 
+    (cppsMethod n c) t (liftList paramListDocD ps) b blockStart blockEnd)
+  intFunc m n s _ t ps b = (if m then getPutReturn setMain else return) <$> 
+    liftA3 (mthd m) (fmap snd s) (checkParams n <$> sequence ps) (liftA5 
+    (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
+  commentedFunc cmt fn = liftA3 (checkGOOLState (^. hasMain)) fn (return <$>
+    liftA3 (mthd $ isMainMethod fn) (fmap (getMthdScp . (`evalState` 
+    initialState)) fn) (fmap (mthdParams . (`evalState` initialState)) fn) 
+    (fmap (`commentedItem` methodDoc fn) cmt)) fn
  
-  isMainMethod = isMainMthd . unCPPSC
-  methodDoc = mthdDoc . unCPPSC
+  isMainMethod = isMainMthd . (`evalState` initialState) . unCPPSC
+  methodDoc = mthdDoc . (`evalState` initialState) . unCPPSC
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = State GOOLState StateVarData
@@ -1246,8 +1249,8 @@ instance InternalStateVar CppSrcCode where
 
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = State GOOLState Doc
-  buildClass n _ _ vs fs = lift2Lists (lift1List (flip cppsClass) . return)
-    (fs ++ [destructor n vs]) vs
+  buildClass n _ _ vs fs = lift2Lists (lift2Lists cppsClass) vs
+    (fs ++ [destructor n vs])
   enum _ _ _ = return $ return empty
   privClass = G.privClass
   pubClass = G.pubClass
@@ -1309,7 +1312,7 @@ instance InternalFile CppHdrCode where
   bottom = return $ text "#endif"
   
   getFilePath = filePath . (`evalState` initialState) . unCPPHC
-  fileFromData ft fp = fmap (\sm -> getPutReturn sm (\s m -> if isEmpty 
+  fileFromData ft fp = fmap (\sm -> getPutReturnFunc sm (\s m -> if isEmpty 
     (modDoc m) then s else addFile ft fp s) (fileD ft fp))
 
 instance KeywordSym CppHdrCode where
@@ -1719,7 +1722,7 @@ instance ParameterSym CppHdrCode where
   parameterType = variableType . fmap paramVar
 
 instance MethodSym CppHdrCode where
-  type Method CppHdrCode = MethodData
+  type Method CppHdrCode = State GOOLState MethodData
   method = G.method
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] (return empty)
@@ -1728,15 +1731,15 @@ instance MethodSym CppHdrCode where
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor n = G.constructor n n
-  destructor n vs = return $ mthd False Pub [] (emptyIfEmpty (vcat (map 
-    (statementDoc . fmap (destructSts . (`evalState` initialState))) vs)) 
+  destructor n vs = return $ return $ mthd False Pub [] (emptyIfEmpty (vcat 
+    (map (statementDoc . fmap (destructSts . (`evalState` initialState))) vs)) 
     (methodDoc (pubMethod ('~':n) n void [] 
     (return empty) :: (CppHdrCode (Method CppHdrCode)))))
 
   docMain = mainFunction
 
   function = G.function
-  mainFunction _ = return (mthd True Pub [] empty)
+  mainFunction _ = return (getPutReturn setMain $ mthd True Pub [] empty)
 
   docFunc = G.docFunc
 
@@ -1748,19 +1751,20 @@ instance MethodSym CppHdrCode where
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
     
-  parameters m = map return $ (mthdParams . unCPPHC) m
+  parameters m = map return $ (mthdParams . (`evalState` initialState) . unCPPHC) m
 
 instance InternalMethod CppHdrCode where
-  intMethod m n _ s _ t ps _ = liftA3 (mthd m) (fmap snd s) (checkParams n <$>
-    sequence ps) (liftA3 (cpphMethod n) t (liftList paramListDocD ps)
-    endStatement)
+  intMethod m n _ s _ t ps _ = (if m then getPutReturn setMain else return) <$>
+    liftA3 (mthd m) (fmap snd s) (checkParams n <$> sequence ps) (liftA3 
+    (cpphMethod n) t (liftList paramListDocD ps) endStatement)
   intFunc = G.intFunc
-  commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
-    liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
-    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+  commentedFunc cmt fn = liftA3 (checkGOOLState (^. hasMain)) fn fn $ return 
+    <$> liftA3 (mthd $ isMainMethod fn) (fmap (getMthdScp . (`evalState` 
+    initialState)) fn) (fmap (mthdParams . (`evalState` initialState)) fn) 
+    (fmap (`commentedItem` methodDoc fn) cmt)
 
-  isMainMethod = isMainMthd . unCPPHC
-  methodDoc = mthdDoc . unCPPHC
+  isMainMethod = isMainMthd . (`evalState` initialState) . unCPPHC
+  methodDoc = mthdDoc . (`evalState` initialState) . unCPPHC
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = State GOOLState StateVarData
@@ -1781,11 +1785,10 @@ instance InternalStateVar CppHdrCode where
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = State GOOLState Doc
   -- do this with a do? avoids liftA8...
-  buildClass n p _ vs fs = liftA8 (cpphClass n) (lift2Lists 
-    (lift1List (flip (cpphVarsFuncsList Pub)) . return) (fs ++ 
-    [destructor n vs]) vs) (lift2Lists (lift1List (flip (cpphVarsFuncsList 
-    Priv)) . return) (fs ++ [destructor n vs]) vs) (fmap fst public)
-    (fmap fst private) parent blockStart blockEnd endStatement
+  buildClass n p _ vs fs = liftA8 (cpphClass n) (lift2Lists (lift2Lists 
+    (cpphVarsFuncsList Pub)) vs (fs ++ [destructor n vs])) (lift2Lists 
+    (lift2Lists (cpphVarsFuncsList Priv)) vs (fs ++ [destructor n vs])) 
+    (fmap fst public) (fmap fst private) parent blockStart blockEnd endStatement
     where parent = case p of Nothing -> return empty
                              Just pn -> inherit pn
   enum n es _ = return <$> liftA4 (cpphEnum n) (return $ enumElementsDocD es 
@@ -1839,9 +1842,6 @@ data MethodData = MthD {isMainMthd :: Bool, getMthdScp :: ScopeTag,
 
 mthd :: Bool -> ScopeTag -> [ParamData] -> Doc -> MethodData
 mthd = MthD 
-
-setMainMethod :: MethodData -> MethodData
-setMainMethod (MthD _ s ps d) = MthD True s ps d
 
 -- convenience
 cppName :: String

@@ -64,7 +64,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
   lift1List, checkParams)
-import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, addFile)
+import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
+  getPutReturnFunc, addFile, setMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -106,7 +107,7 @@ instance InternalFile JavaCode where
   bottom = return empty
   
   getFilePath = filePath . (`evalState` initialState) . unJC
-  fileFromData ft fp = fmap (\sm -> getPutReturn sm (\s m -> if isEmpty 
+  fileFromData ft fp = fmap (\sm -> getPutReturnFunc sm (\s m -> if isEmpty 
     (modDoc m) then s else addFile ft fp s) (fileD ft fp))
 
 instance KeywordSym JavaCode where
@@ -520,7 +521,7 @@ instance ParameterSym JavaCode where
   parameterType = variableType . fmap paramVar
 
 instance MethodSym JavaCode where
-  type Method JavaCode = MethodData
+  type Method JavaCode = State GOOLState MethodData
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -544,16 +545,17 @@ instance MethodSym JavaCode where
     
   docInOutFunc n = jDocInOut (inOutFunc n)
     
-  parameters m = map return $ (mthdParams . unJC) m
+  parameters m = map return $ (mthdParams . (`evalState` initialState) . unJC) m
 
 instance InternalMethod JavaCode where
-  intMethod m n _ s p t ps b = liftA2 (mthd m) (checkParams n <$> sequence ps)
-    (liftA5 (jMethod n) s p t (liftList paramListDocD ps) b)
+  intMethod m n _ s p t ps b = (if m then getPutReturn setMain else return) <$> 
+    liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA5 (jMethod n) s p t 
+    (liftList paramListDocD ps) b)
   intFunc = G.intFunc
-  commentedFunc cmt = liftA2 updateMthdDoc (fmap commentedItem cmt)
+  commentedFunc cmt = liftA2 (fmap . updateMthdDoc) (fmap commentedItem cmt)
   
-  isMainMethod = isMainMthd . unJC
-  methodDoc = mthdDoc . unJC
+  isMainMethod = isMainMthd . (`evalState` initialState) . unJC
+  methodDoc = mthdDoc . (`evalState` initialState) . unJC
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = State GOOLState Doc

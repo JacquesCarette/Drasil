@@ -329,8 +329,8 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
     (psnd b) (psnd v1) (psnd v2))
   funcApp n t vs = pair (funcApp n (pfst t) (map pfst vs)) (funcApp n (psnd t) 
     (map psnd vs))
-  selfFuncApp n t vs = pair (selfFuncApp n (pfst t) (map pfst vs)) 
-    (selfFuncApp n (psnd t) (map psnd vs))
+  selfFuncApp c n t vs = pair (selfFuncApp c n (pfst t) (map pfst vs)) 
+    (selfFuncApp c n (psnd t) (map psnd vs))
   extFuncApp l n t vs = pair (extFuncApp l n (pfst t) (map pfst vs)) 
     (extFuncApp l n (psnd t) (map psnd vs))
   newObj t vs = pair (newObj (pfst t) (map pfst vs)) (newObj (psnd t) 
@@ -525,6 +525,9 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
 
   inOutCall n ins outs both = pair (inOutCall n (map pfst ins) (map pfst outs) 
     (map pfst both)) (inOutCall n (map psnd ins) (map psnd outs) (map psnd both))
+  selfInOutCall c n ins outs both = pair (selfInOutCall c n (map pfst ins) (map 
+    pfst outs) (map pfst both)) (selfInOutCall c n (map psnd ins) (map psnd 
+    outs) (map psnd both))
   extInOutCall m n ins outs both = pair (extInOutCall m n (map pfst ins) (map 
     pfst outs) (map pfst both)) (extInOutCall m n (map psnd ins) (map psnd outs)
     (map psnd both)) 
@@ -612,6 +615,16 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
 
   docFunc desc pComms rComm f = pair (docFunc desc pComms rComm $ pfst f) 
     (docFunc desc pComms rComm $ psnd f)
+
+  inOutMethod n c s p ins outs both b = pair (inOutMethod n c (pfst s) (pfst p) 
+    (map pfst ins) (map pfst outs) (map pfst both) (pfst b)) (inOutMethod n c 
+    (psnd s) (psnd p) (map psnd ins) (map psnd outs) (map psnd both) (psnd b))
+
+  docInOutMethod n c s p desc is os bs b = pair (docInOutMethod n c (pfst s) 
+    (pfst p) desc (map (mapPairSnd pfst) is) (map (mapPairSnd pfst) os) (map 
+    (mapPairSnd pfst) bs) (pfst b)) (docInOutMethod n c (psnd s) (psnd p) desc 
+    (map (mapPairSnd psnd) is) (map (mapPairSnd psnd) os) (map (mapPairSnd psnd)
+    bs) (psnd b))
 
   inOutFunc n s p ins outs both b = pair (inOutFunc n (pfst s) (pfst p) (map
     pfst ins) (map pfst outs) (map pfst both) (pfst b)) (inOutFunc n (psnd s) 
@@ -938,7 +951,7 @@ instance BooleanExpression CppSrcCode where
 instance ValueExpression CppSrcCode where
   inlineIf = liftA3 inlineIfD
   funcApp = funcAppD
-  selfFuncApp = funcApp
+  selfFuncApp c = cppSelfFuncApp (self c)
   extFuncApp _ = funcApp
   newObj = newObjD newObjDocD'
   extNewObj _ = newObj
@@ -1106,6 +1119,7 @@ instance StatementSym CppSrcCode where
   addObserver = addObserverD
 
   inOutCall = cppInOutCall funcApp
+  selfInOutCall c = cppInOutCall (selfFuncApp c)
   extInOutCall m = cppInOutCall (extFuncApp m)
 
   multi = lift1List multiStateDocD endStatement
@@ -1191,17 +1205,13 @@ instance MethodSym CppSrcCode where
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
-  inOutFunc n s p ins [v] [] b = function n s p (variableType v)
-    (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ 
-    valueOf v))
-  inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
-    then void else variableType v) (map (fmap getParam) $ v : 
-    ins) (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
-    (returnState $ valueOf v))
-  inOutFunc n s p ins outs both b = function n s p void (map pointerParam both 
-    ++ map (fmap getParam) ins ++ map pointerParam outs) b
+  inOutMethod n c = cppsInOut (method n c)
 
-  docInOutFunc = G.docInOutFunc
+  docInOutMethod n c = G.docInOutFunc (inOutMethod n c)
+
+  inOutFunc n = cppsInOut (function n)
+
+  docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
   parameters m = map return $ (mthdParams . unCPPSC) m
 
@@ -1508,7 +1518,7 @@ instance BooleanExpression CppHdrCode where
 instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = liftA2 mkVal void (return empty)
   funcApp _ _ _ = liftA2 mkVal void (return empty)
-  selfFuncApp _ _ _ = liftA2 mkVal void (return empty)
+  selfFuncApp _ _ _ _ = liftA2 mkVal void (return empty)
   extFuncApp _ _ _ _ = liftA2 mkVal void (return empty)
   newObj _ _ = liftA2 mkVal void (return empty)
   extNewObj _ _ _ = liftA2 mkVal void (return empty)
@@ -1661,6 +1671,7 @@ instance StatementSym CppHdrCode where
   addObserver _ = return (mkStNoEnd empty)
 
   inOutCall _ _ _ _ = return (mkStNoEnd empty)
+  selfInOutCall _ _ _ _ _ = return (mkStNoEnd empty)
   extInOutCall _ _ _ _ _ = return (mkStNoEnd empty)
 
   multi _ = return (mkStNoEnd empty)
@@ -1729,14 +1740,13 @@ instance MethodSym CppHdrCode where
 
   docFunc = G.docFunc
 
-  inOutFunc n s p ins [v] [] b = function n s p (variableType v) 
-    (map (fmap getParam) ins) b
-  inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
-    then void else variableType v) (map (fmap getParam) $ v : ins) b
-  inOutFunc n s p ins outs both b = function n s p void (map pointerParam both 
-    ++ map (fmap getParam) ins ++ map pointerParam outs) b
+  inOutMethod n c = cpphInOut (method n c)
 
-  docInOutFunc = G.docInOutFunc
+  docInOutMethod n c = G.docInOutFunc (inOutMethod n c)
+
+  inOutFunc n = cpphInOut (function n)
+
+  docInOutFunc n = G.docInOutFunc (inOutFunc n)
     
   parameters m = map return $ (mthdParams . unCPPHC) m
 
@@ -1907,6 +1917,10 @@ cppIterTypeDoc t = td (Iterator (cType t)) (typeString t ++ "::iterator")
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c <> text "::" <> v
 
+cppSelfFuncApp :: (RenderSym repr) => repr (Variable repr) -> Label -> 
+  repr (Type repr) -> [repr (Value repr)] -> repr (Value repr)
+cppSelfFuncApp s n = funcApp (variableName s ++ "->" ++ n)
+
 cppCast :: CppSrcCode (Type CppSrcCode) -> 
   CppSrcCode (Value CppSrcCode) -> CppSrcCode (Value CppSrcCode)
 cppCast t v = cppCast' (getType t) (getType $ valueType v)
@@ -2028,3 +2042,35 @@ cppInOutCall f n ins [] [out] = if null (filterOutObjs [out])
   else assign out $ f n (variableType out) (valueOf out : ins)
 cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins 
   ++ map valueOf outs)
+
+cppsInOut :: (CppSrcCode (Scope CppSrcCode) -> 
+    CppSrcCode (Permanence CppSrcCode) -> CppSrcCode (Type CppSrcCode) -> 
+    [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
+    CppSrcCode (Method CppSrcCode)) 
+  -> CppSrcCode (Scope CppSrcCode) -> CppSrcCode (Permanence CppSrcCode) -> 
+  [CppSrcCode (Variable CppSrcCode)] -> [CppSrcCode (Variable CppSrcCode)] -> 
+  [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
+  CppSrcCode (Method CppSrcCode)
+cppsInOut f s p ins [v] [] b = f s p (variableType v) (map (fmap getParam) ins) 
+  (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
+cppsInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
+  else variableType v) (map (fmap getParam) $ v : ins) 
+  (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
+  (returnState $ valueOf v))
+cppsInOut f s p ins outs both b = f s p void (map pointerParam both 
+  ++ map (fmap getParam) ins ++ map pointerParam outs) b
+
+cpphInOut :: (CppHdrCode (Scope CppHdrCode) -> 
+    CppHdrCode (Permanence CppHdrCode) -> CppHdrCode (Type CppHdrCode) -> 
+    [CppHdrCode (Parameter CppHdrCode)] -> CppHdrCode (Body CppHdrCode) -> 
+    CppHdrCode (Method CppHdrCode)) 
+  -> CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Permanence CppHdrCode) -> 
+  [CppHdrCode (Variable CppHdrCode)] -> [CppHdrCode (Variable CppHdrCode)] -> 
+  [CppHdrCode (Variable CppHdrCode)] -> CppHdrCode (Body CppHdrCode) -> 
+  CppHdrCode (Method CppHdrCode)
+cpphInOut f s p ins [v] [] b = f s p (variableType v) (map (fmap getParam) ins) 
+  b
+cpphInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
+  else variableType v) (map (fmap getParam) $ v : ins) b
+cpphInOut f s p ins outs both b = f s p void (map pointerParam both 
+  ++ map (fmap getParam) ins ++ map pointerParam outs) b

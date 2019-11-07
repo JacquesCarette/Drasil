@@ -297,7 +297,7 @@ class (ValueSym repr, BooleanExpression repr) =>
     repr (Value repr)
   funcApp      :: Label -> repr (Type repr) -> [repr (Value repr)] -> 
     repr (Value repr)
-  selfFuncApp  :: Label -> repr (Type repr) -> [repr (Value repr)] -> 
+  selfFuncApp  :: Label -> Label -> repr (Type repr) -> [repr (Value repr)] -> 
     repr (Value repr)
   extFuncApp   :: Library -> Label -> repr (Type repr) -> 
     [repr (Value repr)] -> repr (Value repr)
@@ -501,6 +501,8 @@ class (KeywordSym repr, SelectorFunction repr, InternalStatement repr) =>
   -- The three lists are inputs, outputs, and both, respectively
   inOutCall :: Label -> [repr (Value repr)] -> [repr (Variable repr)] -> 
     [repr (Variable repr)] -> repr (Statement repr)
+  selfInOutCall :: Label -> Label -> [repr (Value repr)] -> 
+    [repr (Variable repr)] -> [repr (Variable repr)] -> repr (Statement repr)
   extInOutCall :: Library -> Label -> [repr (Value repr)] ->
     [repr (Variable repr)] -> [repr (Variable repr)] -> repr (Statement repr)
 
@@ -584,6 +586,16 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr,
   -- Parameters are: function description, parameter descriptions, 
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> repr (Method repr) -> repr (Method repr) 
+
+  -- Second label is class name, rest is same as inOutFunc
+  inOutMethod :: Label -> Label -> repr (Scope repr) -> repr (Permanence repr) 
+    -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
+    [repr (Variable repr)] -> repr (Body repr) -> repr (Method repr)
+  -- Second label is class name, rest is same as docInOutFunc
+  docInOutMethod :: Label -> Label -> repr (Scope repr) -> 
+    repr (Permanence repr) -> String -> [(String, repr (Variable repr))] -> 
+    [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
+    repr (Body repr) -> repr (Method repr)
 
   -- The three lists are inputs, outputs, and both, respectively
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 

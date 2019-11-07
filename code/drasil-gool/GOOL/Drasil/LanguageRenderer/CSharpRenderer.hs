@@ -43,14 +43,14 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   extVarD, selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
   valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, 
   objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
-  extFuncAppD, newObjD,notNullD, funcDocD, castDocD, listSetFuncDocD, 
-  castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, 
-  iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD, 
-  listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, 
-  staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, dot, new, 
-  blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD,
-  appendToBody, surroundBody, filterOutObjs)
+  selfFuncAppD, extFuncAppD, newObjD,notNullD, funcDocD, castDocD, 
+  listSetFuncDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, 
+  listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, 
+  listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, 
+  listSetFuncD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
+  dot, new, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
+  inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  commentedModD, appendToBody, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
   pi, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
   construct, comment, ifCond, for, forEach, while, method, getMethod, setMethod,
@@ -313,7 +313,7 @@ instance BooleanExpression CSharpCode where
 instance ValueExpression CSharpCode where
   inlineIf = liftA3 inlineIfD
   funcApp = funcAppD
-  selfFuncApp = funcApp
+  selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
   newObj = newObjD newObjDocD
   extNewObj _ = newObj
@@ -467,6 +467,7 @@ instance StatementSym CSharpCode where
   addObserver = addObserverD
 
   inOutCall = csInOutCall funcApp
+  selfInOutCall c = csInOutCall (selfFuncApp c)
   extInOutCall m = csInOutCall (extFuncApp m)
 
   multi = lift1List multiStateDocD endStatement
@@ -531,17 +532,13 @@ instance MethodSym CSharpCode where
 
   docFunc = G.docFunc
 
-  inOutFunc n s p ins [v] [] b = function n s p (variableType v) (map param ins)
-   (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
-  inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
-    then void else variableType v) (map param $ v : ins) 
-    (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
-    (returnState $ valueOf v))
-  inOutFunc n s p ins outs both b = function n s p void (map (fmap 
-    (updateParamDoc csRef) . param) both ++ map param ins ++ 
-    map (fmap (updateParamDoc csOut) . param) outs) b
+  inOutMethod n c = csInOut (method n c)
 
-  docInOutFunc = G.docInOutFunc
+  docInOutMethod n c = G.docInOutFunc (inOutMethod n c)
+
+  inOutFunc n = csInOut (function n)
+
+  docInOutFunc n = G.docInOutFunc (inOutFunc n)
   
   parameters m = map return $ (mthdParams . unCSC) m
 
@@ -693,3 +690,19 @@ csObjVar o v = csObjVar' (varBind v)
           "Cannot use objVar to access static variables through an object in C#"
         csObjVar' Dynamic = mkVar (varName o ++ "." ++ varName v) 
           (varType v) (objVarDocD (varDoc o) (varDoc v))
+
+csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
+    -> CSharpCode (Type CSharpCode) -> [CSharpCode (Parameter CSharpCode)] -> 
+    CSharpCode (Body CSharpCode) -> CSharpCode (Method CSharpCode)) 
+  -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
+  [CSharpCode (Variable CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
+  [CSharpCode (Variable CSharpCode)] -> CSharpCode (Body CSharpCode) -> 
+  CSharpCode (Method CSharpCode)
+csInOut f s p ins [v] [] b = f s p (variableType v) (map param ins)
+  (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
+csInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
+  else variableType v) (map param $ v : ins) (if null (filterOutObjs [v]) then 
+  b else liftA2 appendToBody b (returnState $ valueOf v))
+csInOut f s p ins outs both b = f s p void (map (fmap (updateParamDoc csRef) . 
+  param) both ++ map param ins ++ map (fmap (updateParamDoc csOut) . param) 
+  outs) b

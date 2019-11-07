@@ -19,8 +19,6 @@ using std::ifstream;
 using std::ofstream;
 
 #include "InputParameters.hpp"
-#include "InputFormat.hpp"
-#include "InputConstraints.hpp"
 #include "OutputFormat.hpp"
 #include "Calculations.hpp"
 
@@ -31,11 +29,9 @@ using std::ofstream;
 */
 int main(int argc, const char *argv[]) {
     string filename = argv[1];
-    InputParameters inParams = InputParameters();
+    InputParameters inParams = InputParameters(filename);
     double g_vect = 9.8;
     double epsilon = 2.0e-2;
-    get_input(inParams, filename);
-    input_constraints(inParams);
     double t_flight = func_t_flight(inParams, g_vect);
     double p_land = func_p_land(inParams, g_vect);
     double d_offset = func_d_offset(inParams, p_land);

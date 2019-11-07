@@ -29,7 +29,7 @@ choices = Choices {
   inputStructure = Bundled,
   constStructure = Store Unbundled,
   constRepr = Var,
-  inputModule = Separated,
+  inputModule = Combined,
   conceptMatch = matchConcepts [piConst] [[Pi]],
   auxFiles = [SampleInput]
 }

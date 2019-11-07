@@ -37,18 +37,18 @@ module GOOL.Drasil.LanguageRenderer (
   classVarDocD, objVarDocD, inlineIfD, funcAppDocD, newObjDocD, newObjDocD', 
   constDecDefDocD, varD, staticVarD, extVarD, selfD, enumVarD, classVarD, 
   objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, 
-  enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD, objAccessD,
-  objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
-  indexOfD, funcDocD, castDocD, listAccessFuncDocD, listSetFuncDocD, 
-  objAccessDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, 
-  listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, 
-  listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
-  listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, breakDocD, 
-  continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDox,
-  moduleDox, commentedModD, docFuncRepr, valList, valueList, prependToBody, 
-  appendToBody, surroundBody, getterName, setterName, setEmpty, intValue, 
-  filterOutObjs
+  enumElementD, argsListD, funcAppD, selfFuncAppD, extFuncAppD, newObjD, 
+  notNullD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, 
+  listIndexExistsD, indexOfD, funcDocD, castDocD, listAccessFuncDocD, 
+  listSetFuncDocD, objAccessDocD, castObjDocD, funcD, getD, setD, listSizeD, 
+  listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, 
+  setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, 
+  iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, 
+  breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
+  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDox, classDox, moduleDox, commentedModD, docFuncRepr, valList, 
+  valueList, prependToBody, appendToBody, surroundBody, getterName, setterName, 
+  setEmpty, intValue, filterOutObjs
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -912,6 +912,10 @@ argsListD l = valFromData Nothing (listType static_ string) (text l)
 funcAppD :: (RenderSym repr) => Label -> repr (Type repr) -> [repr (Value repr)]
   -> repr (Value repr)
 funcAppD n t vs = valFromData Nothing t (funcAppDocD n vs)
+
+selfFuncAppD :: (RenderSym repr) => repr (Variable repr) -> Label -> 
+  repr (Type repr) -> [repr (Value repr)] -> repr (Value repr)
+selfFuncAppD s n = funcAppD (variableName s ++ "." ++ n)
 
 extFuncAppD :: (RenderSym repr) => Library -> Label -> repr (Type repr) -> 
   [repr (Value repr)] -> repr (Value repr)

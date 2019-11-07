@@ -2,19 +2,21 @@
 
 module GOOL.Drasil.State (
   GOOLState(..), headers, sources, hasMain, initialState, getPutReturn, 
-  getPutReturnFunc,checkGOOLState, addFile, addCombinedHeaderSource, addHeader, 
-  addSource, setMain
+  getPutReturnFunc, passState2Lists, checkGOOLState, addFile, 
+  addCombinedHeaderSource, addHeader, addSource, setMain, setMainMod
 ) where
 
 import GOOL.Drasil.Data (FileType(..))
 
+import Data.Maybe (isJust)
 import Control.Lens (makeLenses,over)
 import Control.Monad.State (State, get, put)
 
 data GOOLState = GS {
   _headers :: [FilePath],
   _sources :: [FilePath],
-  _hasMain :: Bool
+  _hasMain :: Bool,
+  _mainMod :: Maybe FilePath
 } 
 makeLenses ''GOOLState
 
@@ -22,7 +24,8 @@ initialState :: GOOLState
 initialState = GS {
   _headers = [],
   _sources = [],
-  _hasMain = False
+  _hasMain = False,
+  _mainMod = Nothing
 }
 
 getPutReturn :: (GOOLState -> GOOLState) -> a -> State GOOLState a
@@ -38,6 +41,13 @@ getPutReturnFunc st sf vf = do
   s <- get
   put $ sf s v
   return $ vf v
+
+passState2Lists :: [State GOOLState a] -> [State GOOLState b] -> 
+  State GOOLState c -> State GOOLState c
+passState2Lists l1 l2 v = do
+  sequence_ l1
+  sequence_ l2
+  v 
 
 checkGOOLState :: (GOOLState -> Bool) -> State GOOLState b -> State GOOLState a 
   -> State GOOLState a -> State GOOLState a
@@ -65,3 +75,7 @@ addCombinedHeaderSource fp = addSource fp . addHeader fp
 setMain :: GOOLState -> GOOLState
 setMain = over hasMain (\b -> if b then error "Multiple main functions defined" 
   else not b)
+
+setMainMod :: String -> GOOLState -> GOOLState
+setMainMod n = over mainMod (\m -> if isJust m then error 
+  "Multiple modules have a main function" else Just n)

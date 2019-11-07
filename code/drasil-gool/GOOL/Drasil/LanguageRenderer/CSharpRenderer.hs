@@ -51,26 +51,26 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   dot, new, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
   inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   commentedModD, appendToBody, surroundBody, filterOutObjs)
-import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
-  pi, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
-  construct, comment, ifCond, for, forEach, while, method, getMethod, setMethod,
-  privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, enum, privClass, pubClass, docClass, commentedClass, 
-  buildModule', fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
+import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
+  fileFromData, block, pi, varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  objDecNewNoParams, construct, comment, ifCond, for, forEach, while, method, 
+  getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
+  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
+  privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
+  commentedClass, buildModule', fileDoc, docMod)
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
   FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (liftA4, liftA5, liftList, lift1List, checkParams)
 import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
-  getPutReturnFunc, addFile, setMain)
+  passState2Lists, setMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (State, evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
-  semi, vcat, lbrace, rbrace, colon, isEmpty)
+  semi, vcat, lbrace, rbrace, colon)
 
 csExt :: String
 csExt = "cs"
@@ -105,8 +105,7 @@ instance InternalFile CSharpCode where
   bottom = return empty
 
   getFilePath = filePath . (`evalState` initialState) . unCSC
-  fileFromData ft fp = fmap (\sm -> getPutReturnFunc sm (\s m -> if isEmpty 
-    (modDoc m) then s else addFile ft fp s) (fileD ft fp))
+  fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
@@ -583,7 +582,8 @@ instance InternalClass CSharpCode where
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = State GOOLState ModData
-  buildModule n _ = G.buildModule' n
+  buildModule n _ ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+    (G.buildModule' n ms cs)
     
   moduleName = name . (`evalState` initialState) . unCSC
   

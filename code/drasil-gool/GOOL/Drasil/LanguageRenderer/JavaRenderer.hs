@@ -51,27 +51,27 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, commentedModD, docFuncRepr, valueList, appendToBody, 
   surroundBody, intValue, filterOutObjs)
-import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
-  pi, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
-  construct, comment, ifCond, for, forEach, while, method, getMethod, setMethod,
-  privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, 
-  buildClass, enum, privClass, pubClass, docClass, commentedClass, buildModule',
-  fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
+import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
+  fileFromData, block, pi, varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  objDecNewNoParams, construct, comment, ifCond, for, forEach, while, method, 
+  getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
+  mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
+  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
+  commentedClass, buildModule', fileDoc, docMod)
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
   FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
   vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
   lift1List, checkParams)
 import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
-  getPutReturnFunc, addFile, setMain)
+  passState2Lists, setMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (State, evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
-  equals, semi, vcat, lbrace, rbrace, render, colon, comma, render, isEmpty)
+  equals, semi, vcat, lbrace, rbrace, render, colon, comma, render)
 
 jExt :: String
 jExt = "java"
@@ -107,8 +107,7 @@ instance InternalFile JavaCode where
   bottom = return empty
   
   getFilePath = filePath . (`evalState` initialState) . unJC
-  fileFromData ft fp = fmap (\sm -> getPutReturnFunc sm (\s m -> if isEmpty 
-    (modDoc m) then s else addFile ft fp s) (fileD ft fp))
+  fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -587,7 +586,8 @@ instance InternalClass JavaCode where
 
 instance ModuleSym JavaCode where
   type Module JavaCode = State GOOLState ModData
-  buildModule n _ = G.buildModule' n 
+  buildModule n _ ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+    (G.buildModule' n ms cs)
 
   moduleName = name . (`evalState` initialState) . unJC
   

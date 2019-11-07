@@ -46,19 +46,20 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   bindingError, classDec, dot, forLabel, inLabel, observerListName, 
   commentedItem, addCommentsDocD, commentedModD, docFuncRepr, valList, 
   surroundBody, filterOutObjs)
-import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
-  comment, ifCond, objDecNew, objDecNewNoParams, construct, comment, method, 
-  getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
-  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, 
-  pubClass, docClass, commentedClass, buildModule, fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
+import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
+  fileFromData, block, comment, ifCond, objDecNew, objDecNewNoParams, construct,
+  comment, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
+  function, docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, 
+  buildClass, privClass, pubClass, docClass, commentedClass, buildModule, 
+  fileDoc, docMod)
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
   FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
   vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftList, 
   lift1List, lift2Lists, checkParams)
 import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
-  getPutReturnFunc, addFile, setMain)
+  passState2Lists, setMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -100,8 +101,7 @@ instance InternalFile PythonCode where
   bottom = return empty
 
   getFilePath = filePath . (`evalState` initialState) . unPC
-  fileFromData ft fp = fmap (\sm -> getPutReturnFunc sm (\s m -> if isEmpty 
-    (modDoc m) then s else addFile ft fp s) (fileD ft fp))
+  fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
@@ -597,7 +597,8 @@ instance InternalClass PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = State GOOLState ModData
-  buildModule n ls = G.buildModule n (map include ls)
+  buildModule n ls ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+    (G.buildModule n (map include ls) ms cs)
 
   moduleName = name . (`evalState` initialState) . unPC
 

@@ -51,22 +51,22 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, 
   commentedModD, docFuncRepr, valueList, appendToBody, surroundBody, getterName,
   setterName, filterOutObjs)
-import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
-  varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
-  construct, comment, ifCond, for, while, method, getMethod, setMethod, 
-  privMethod, pubMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
-  privMVar, pubMVar, pubGVar, privClass, pubClass, docClass, commentedClass, 
-  buildModule, fileDoc, docMod)
+import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
+  fileFromData, block, varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  objDecNewNoParams, construct, comment, ifCond, for, while, method, getMethod, 
+  setMethod, privMethod, pubMethod, constructor, function, docFunc, 
+  docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
+  docClass, commentedClass, buildModule, fileDoc, docMod)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
-  Binding(..), BindData(..), bd, FileType(..), FileData(..), fileD, 
-  FuncData(..), fd, ModData(..), md, OpData(..), od, ParamData(..), pd, 
-  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
-  ValData(..), vd, VarData(..), vard)
+  Binding(..), BindData(..), bd, FileType(..), FileData(..), FuncData(..), fd, 
+  ModData(..), md, OpData(..), od, ParamData(..), pd, ProgData(..), progD, 
+  emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
+  VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
 import GOOL.Drasil.State (GOOLState, hasMain, initialState, getPutReturn, 
-  getPutReturnFunc, checkGOOLState, addFile, setMain)
+  passState2Lists, checkGOOLState, setMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp)
 import Data.Maybe (maybeToList)
@@ -741,8 +741,7 @@ instance InternalFile CppSrcCode where
   bottom = return empty
   
   getFilePath = filePath . (`evalState` initialState) . unCPPSC
-  fileFromData ft fp = fmap (\sm -> getPutReturnFunc sm (\s m -> if isEmpty 
-    (modDoc m) then s else addFile ft fp s) (fileD ft fp))
+  fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -1265,7 +1264,8 @@ instance InternalClass CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = State GOOLState ModData
-  buildModule n ls = G.buildModule n (map include ls)
+  buildModule n ls ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+    (G.buildModule n (map include ls) ms cs)
     
   moduleName = name . (`evalState` initialState) . unCPPSC
 
@@ -1312,8 +1312,7 @@ instance InternalFile CppHdrCode where
   bottom = return $ text "#endif"
   
   getFilePath = filePath . (`evalState` initialState) . unCPPHC
-  fileFromData ft fp = fmap (\sm -> getPutReturnFunc sm (\s m -> if isEmpty 
-    (modDoc m) then s else addFile ft fp s) (fileD ft fp))
+  fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
@@ -1806,7 +1805,8 @@ instance InternalClass CppHdrCode where
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = State GOOLState ModData
-  buildModule n ls = G.buildModule n (map include ls)
+  buildModule n ls ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+    (G.buildModule n (map include ls) ms cs)
       
   moduleName = name . (`evalState` initialState) . unCPPHC
 

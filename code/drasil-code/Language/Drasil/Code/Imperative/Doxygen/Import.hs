@@ -4,12 +4,10 @@ module Language.Drasil.Code.Imperative.Doxygen.Import (
 
 import Utils.Drasil (blank)
 
-import GOOL.Drasil (ProgData(..), FileData(..), ModData(..), isHeader, 
-  GOOLState, initialState)
+import GOOL.Drasil (ProgData(..), FileData(..), ModData(..), isHeader)
 
 import Language.Drasil.CodeSpec (Verbosity(..))
 
-import Control.Monad.State (State, evalState)
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), isEmpty, text, hcat, vcat)
 
@@ -24,11 +22,10 @@ verbosityToDoc :: Verbosity -> Doc
 verbosityToDoc Verbose = no
 verbosityToDoc Quiet = yes
 
-makeDoxConfig :: ProjName -> State GOOLState ProgData -> OptimizeChoice -> Verbosity -> Doc
+makeDoxConfig :: ProjName -> ProgData -> OptimizeChoice -> Verbosity -> Doc
 makeDoxConfig prog p opt v = 
   let fs = map filePath (filter (\f -> not (isEmpty $ modDoc $ fileMod f) && 
-             (isMainMod (fileMod f) || isHeader f)) (progMods (evalState p 
-             initialState)))
+             (isMainMod (fileMod f) || isHeader f)) (progMods p))
   in vcat [
   text "# Doxyfile 1.8.15",
   blank,

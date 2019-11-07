@@ -18,9 +18,8 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   interp, mainModule, mainModuleFile, packSep, withExt)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
-import GOOL.Drasil (liftList, initialState)
+import GOOL.Drasil (liftList)
 
-import Control.Monad.State (evalState)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -45,7 +44,7 @@ instance Monad JavaProject where
 
 instance PackageSym JavaProject where
   type Package JavaProject = PackData
-  package p = liftList (packD $ evalState p initialState)
+  package p = liftList (packD p)
 
 instance AuxiliarySym JavaProject where
   type Auxiliary JavaProject = AuxData

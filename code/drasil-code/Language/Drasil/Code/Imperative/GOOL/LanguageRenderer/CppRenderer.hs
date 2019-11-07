@@ -18,9 +18,8 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, cppCompiler, nativeBinary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
-import GOOL.Drasil (liftList, initialState)
+import GOOL.Drasil (liftList)
 
-import Control.Monad.State (evalState)
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -39,7 +38,7 @@ instance Monad CppProject where
 
 instance PackageSym CppProject where
   type Package CppProject = PackData
-  package p = liftList (packD $ evalState p initialState)
+  package p = liftList (packD p)
 
 instance AuxiliarySym CppProject where
   type Auxiliary CppProject = AuxData

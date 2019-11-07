@@ -17,10 +17,13 @@ import Language.Drasil.Chunk.Code (programName)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Visibility(..))
 
-import GOOL.Drasil (ProgramSym(..), RenderSym(..), ProgData(..), GOOLState)
+import GOOL.Drasil (ProgramSym(..), RenderSym(..), ProgData(..), GOOLState, 
+  initialState)
 
-import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
+import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
+  getCurrentDirectory)
 import Control.Monad.Reader (Reader, ask, runReader)
+import Control.Monad.State (evalState, execState)
 import qualified Control.Monad.State as S (State)
 
 generator :: String -> [Expr] -> Choices -> CodeSpec -> State
@@ -68,9 +71,11 @@ genPackage :: (ProgramSym progRepr, PackageSym packRepr) =>
 genPackage unRepr = do
   g <- ask
   p <- genProgram
-  let pd = unRepr p
+  let sp = unRepr p   
+      s = execState sp initialState
+      pd = evalState sp initialState
       n = case codeSpec g of CodeSpec {program = pr} -> programName pr
-      m = makefile (commented g) pd
+      m = makefile (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig n pd
   return $ package pd (m:i++d)

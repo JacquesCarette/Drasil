@@ -20,10 +20,8 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName,
 import Language.Drasil.Code.Imperative.GOOL.Symantics (
   AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
 
-import Control.Monad.State (State)
-
 doxConfig :: (AuxiliarySym repr) => repr (AuxHelper repr) -> String -> 
-  State GOOLState ProgData -> Verbosity -> repr (Auxiliary repr)
+  ProgData -> Verbosity -> repr (Auxiliary repr)
 doxConfig opt pName p v = auxFromData doxConfigName (makeDoxConfig pName p 
   (auxHelperDoc opt) v)
 
@@ -32,5 +30,5 @@ sampleInput :: (AuxiliarySym repr) => ChunkDB -> DataDesc -> [Expr] ->
 sampleInput db d sd = auxFromData sampleInputName (makeInputFile db d sd)
 
 makefile :: (AuxiliarySym repr) => Maybe BuildConfig -> Runnable -> [Comments] 
-  -> State GOOLState ProgData -> repr (Auxiliary repr)
-makefile bc r cms p = auxFromData makefileName (makeBuild cms bc r p)
+  -> GOOLState -> ProgData -> repr (Auxiliary repr)
+makefile bc r cms s p = auxFromData makefileName (makeBuild cms bc r s p)

@@ -9,22 +9,26 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig(BuildConfig),
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName)
 
 import GOOL.Drasil (FileData(..), isHeader, ModData(..), ProgData(..), 
-  GOOLState(..), initialState, sources)
+  GOOLState(..), sources)
 
 import Build.Drasil ((+:+), genMake, makeS, MakeString, mkFile, mkRule,
   mkCheckedCommand, mkFreeVar, RuleTransformer(makeRule))
 
 import Control.Applicative (liftA2)
-import Control.Monad.State (State, evalState, execState)
 import Control.Lens ((^.))
 import Data.Maybe (maybe, maybeToList)
 import System.FilePath.Posix (takeExtension, takeBaseName)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-data CodeHarness = Ch (Maybe BuildConfig) Runnable ProgData GOOLState [Comments]
+data CodeHarness = Ch {
+  buildConfig :: Maybe BuildConfig,
+  runnable :: Runnable, 
+  goolState :: GOOLState,
+  progData :: ProgData,
+  cmts :: [Comments]}
 
 instance RuleTransformer CodeHarness where
-  makeRule (Ch b r m s cms) = [
+  makeRule (Ch b r s m cms) = [
     mkRule buildTarget (map (const $ renderBuildName m nameOpts nm) 
       $ maybeToList b) []
     ] ++
@@ -74,7 +78,11 @@ buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn
 buildRunTarget fn (Interpreter i) = i +:+ fn
 
-makeBuild :: [Comments] -> Maybe BuildConfig -> Runnable -> State GOOLState ProgData -> Doc
-makeBuild cms b r m = genMake [Ch b r p s cms]
-  where p = evalState m initialState
-        s = execState m initialState
+makeBuild :: [Comments] -> Maybe BuildConfig -> Runnable -> GOOLState -> 
+  ProgData -> Doc
+makeBuild cms b r s p = genMake [Ch {
+  buildConfig = b,
+  runnable = r,
+  goolState = s,
+  progData = p,
+  cmts = cms}]

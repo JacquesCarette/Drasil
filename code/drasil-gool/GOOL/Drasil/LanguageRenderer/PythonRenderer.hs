@@ -59,7 +59,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..),
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftList, 
   lift1List, lift2Lists, checkParams)
 import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
-  passState2Lists, setMain)
+  passState, passState2Lists, setMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -90,7 +90,8 @@ instance ProgramSym PythonCode where
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = State GOOLState FileData
-  fileDoc code = G.fileDoc Combined pyExt (top code) bottom code
+  fileDoc code = liftA2 passState code (G.fileDoc Combined pyExt (top code) 
+    bottom code)
 
   docMod = G.docMod
 

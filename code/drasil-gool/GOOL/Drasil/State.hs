@@ -1,15 +1,16 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module GOOL.Drasil.State (
-  GOOLState(..), headers, sources, hasMain, initialState, getPutReturn, 
-  getPutReturnFunc, passState2Lists, checkGOOLState, addFile, 
-  addCombinedHeaderSource, addHeader, addSource, setMain, setMainMod
+  GOOLState(..), headers, sources, hasMain, mainMod, initialState, getPutReturn,
+  getPutReturnFunc, getPutReturnList, passState, passState2Lists, 
+  checkGOOLState, addFile, addCombinedHeaderSource, addHeader, addSource, 
+  addProgNameToPaths, setMain, setMainMod
 ) where
 
+import GOOL.Drasil.Symantics (Label)
 import GOOL.Drasil.Data (FileType(..))
 
-import Data.Maybe (isJust)
-import Control.Lens (makeLenses,over)
+import Control.Lens (makeLenses,over,set)
 import Control.Monad.State (State, get, put)
 
 data GOOLState = GS {
@@ -42,6 +43,19 @@ getPutReturnFunc st sf vf = do
   put $ sf s v
   return $ vf v
 
+getPutReturnList :: [State GOOLState b] -> (GOOLState -> GOOLState) -> 
+  ([b] -> a) -> State GOOLState a
+getPutReturnList l sf vf = do
+  v <- sequence l
+  s <- get
+  put $ sf s
+  return $ vf v
+
+passState :: State GOOLState a -> State GOOLState b -> State GOOLState b
+passState s v = do
+  _ <- s
+  v
+
 passState2Lists :: [State GOOLState a] -> [State GOOLState b] -> 
   State GOOLState c -> State GOOLState c
 passState2Lists l1 l2 v = do
@@ -72,10 +86,14 @@ addSource fp = over sources (\s -> if fp `elem` s then
 addCombinedHeaderSource :: FilePath -> GOOLState -> GOOLState
 addCombinedHeaderSource fp = addSource fp . addHeader fp 
 
+addProgNameToPaths :: Label -> GOOLState -> GOOLState
+addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) . 
+  over headers (map f)
+  where f = ((n++"/")++)
+
 setMain :: GOOLState -> GOOLState
 setMain = over hasMain (\b -> if b then error "Multiple main functions defined" 
   else not b)
 
 setMainMod :: String -> GOOLState -> GOOLState
-setMainMod n = over mainMod (\m -> if isJust m then error 
-  "Multiple modules have a main function" else Just n)
+setMainMod n = set mainMod (Just n)

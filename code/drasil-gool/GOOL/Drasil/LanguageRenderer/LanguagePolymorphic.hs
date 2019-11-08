@@ -37,11 +37,11 @@ import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD,
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
   moduleDox, getterName, setterName)
-import GOOL.Drasil.State (GOOLState, hasMain, getPutReturnFunc, addFile, 
-  setMainMod)
+import GOOL.Drasil.State (GOOLState, hasMain, mainMod, getPutReturnFunc, 
+  addFile, setMainMod)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
-import Data.Maybe (maybeToList)
+import Data.Maybe (maybeToList, isNothing)
 import Control.Lens ((^.))
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
@@ -49,9 +49,9 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
 
 fileFromData :: FileType -> FilePath -> State GOOLState ModData -> 
   State GOOLState FileData
-fileFromData ft fp sm = getPutReturnFunc sm (\s m -> ((if s ^. hasMain then 
-  setMainMod fp else id) . (if isEmpty (modDoc m) then id else addFile ft fp)) 
-  s) (fileD ft fp)
+fileFromData ft fp sm = getPutReturnFunc sm (\s m -> (if isEmpty (modDoc m) 
+  then id else (if s ^. hasMain && isNothing (s ^. mainMod) then setMainMod fp 
+  else id) . addFile ft fp) s) (fileD ft fp)
 
 block :: (RenderSym repr) => repr (Keyword repr) -> [repr (Statement repr)] -> 
   repr (Block repr)

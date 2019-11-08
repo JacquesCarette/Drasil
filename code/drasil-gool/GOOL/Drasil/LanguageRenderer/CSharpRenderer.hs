@@ -64,7 +64,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..),
   td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (liftA4, liftA5, liftList, lift1List, checkParams)
 import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
-  passState2Lists, setMain)
+  passState, passState2Lists, setMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -94,7 +94,8 @@ instance ProgramSym CSharpCode where
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = State GOOLState FileData
-  fileDoc code = G.fileDoc Combined csExt (top code) bottom code
+  fileDoc code = liftA2 passState code (G.fileDoc Combined csExt (top code) 
+    bottom code)
 
   docMod = G.docMod
 

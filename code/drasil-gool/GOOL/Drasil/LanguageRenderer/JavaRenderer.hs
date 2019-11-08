@@ -65,7 +65,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..),
 import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
   lift1List, checkParams)
 import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
-  passState2Lists, setMain)
+  getPutReturnList, passState, passState2Lists, addProgNameToPaths, setMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -91,12 +91,13 @@ instance Monad JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = State GOOLState ProgData
-  prog n = lift1List (\end -> liftList (progD n . map (packageDocD n 
-    end))) endStatement 
+  prog n = lift1List (\end fs -> getPutReturnList fs (addProgNameToPaths n) 
+    (progD n . map (packageDocD n end))) endStatement
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = State GOOLState FileData 
-  fileDoc code = G.fileDoc Combined jExt (top code) bottom code
+  fileDoc code = liftA2 passState code (G.fileDoc Combined jExt (top code) 
+    bottom code)
 
   docMod = G.docMod
 

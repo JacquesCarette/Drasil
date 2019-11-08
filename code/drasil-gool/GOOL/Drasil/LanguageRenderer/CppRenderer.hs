@@ -66,7 +66,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst,
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
 import GOOL.Drasil.State (GOOLState, hasMain, initialState, getPutReturn, 
-  passState2Lists, checkGOOLState, setMain)
+  passState, passState2Lists, checkGOOLState, setMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp)
 import Data.Maybe (maybeToList)
@@ -729,7 +729,8 @@ instance ProgramSym CppSrcCode where
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = State GOOLState FileData
-  fileDoc code = G.fileDoc Source cppSrcExt (top code) bottom code
+  fileDoc code = liftA2 passState code (G.fileDoc Source cppSrcExt (top code) 
+    bottom code)
 
   docMod = G.docMod
 
@@ -1300,7 +1301,8 @@ instance Monad CppHdrCode where
 
 instance RenderSym CppHdrCode where
   type RenderFile CppHdrCode = State GOOLState FileData
-  fileDoc code = G.fileDoc Header cppHdrExt (top code) bottom code
+  fileDoc code = liftA2 passState code (G.fileDoc Header cppHdrExt (top code) 
+    bottom code)
   
   docMod = G.docMod
 
@@ -1738,7 +1740,7 @@ instance MethodSym CppHdrCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction _ = return (getPutReturn setMain $ mthd True Pub [] empty)
+  mainFunction _ = return $ return $ mthd True Pub [] empty
 
   docFunc = G.docFunc
 

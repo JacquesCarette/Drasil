@@ -51,7 +51,7 @@ fileFromData :: FileType -> FilePath -> State GOOLState ModData ->
   State GOOLState FileData
 fileFromData ft fp sm = getPutReturnFunc sm (\s m -> (if isEmpty (modDoc m) 
   then id else (if s ^. hasMain && isNothing (s ^. mainMod) then setMainMod fp 
-  else id) . addFile ft fp) s) (fileD ft fp)
+  else id) . addFile ft fp) s) (fileD fp)
 
 block :: (RenderSym repr) => repr (Keyword repr) -> [repr (Statement repr)] -> 
   repr (Block repr)

@@ -57,10 +57,12 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftList, 
   lift1List, lift2Lists, checkParams)
+import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, addFile)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
+import Control.Monad.State (State, evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty)
 
@@ -81,11 +83,11 @@ instance Monad PythonCode where
   PC x >>= f = f x
 
 instance ProgramSym PythonCode where
-  type Program PythonCode = ProgData
-  prog n = liftList (progD n)
+  type Program PythonCode = State GOOLState ProgData 
+  prog n = liftList (liftList (progD n))
 
 instance RenderSym PythonCode where
-  type RenderFile PythonCode = FileData
+  type RenderFile PythonCode = State GOOLState FileData
   fileDoc code = G.fileDoc Combined pyExt (top code) bottom code
 
   docMod = G.docMod
@@ -96,8 +98,9 @@ instance InternalFile PythonCode where
   top _ = return pytop
   bottom = return empty
 
-  getFilePath = filePath . unPC
-  fileFromData ft fp = fmap (fileD ft fp)
+  getFilePath = filePath . (`evalState` initialState) . unPC
+  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
+    then s else addFile ft fp s) (fileD ft fp m))
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc

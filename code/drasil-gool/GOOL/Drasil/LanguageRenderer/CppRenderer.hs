@@ -65,10 +65,12 @@ import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..),
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
+import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, addFile)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp)
 import Data.Maybe (maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
+import Control.Monad.State (State, evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
 
@@ -90,12 +92,12 @@ hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
-  type Program (p CppSrcCode CppHdrCode) = ProgData
+  type Program (p CppSrcCode CppHdrCode) = State GOOLState ProgData
   prog n ms = pair (prog n $ map (hdrToSrc . psnd) ms ++ map pfst ms) 
-    (return emptyProg)
+    (return (return emptyProg))
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
-  type RenderFile (p CppSrcCode CppHdrCode) = FileData
+  type RenderFile (p CppSrcCode CppHdrCode) = State GOOLState FileData
   fileDoc code = pair (fileDoc $ pfst code) (fileDoc $ psnd code)
 
   docMod d a dt m = pair (docMod d a dt $ pfst m) (docMod d a dt $ psnd m)
@@ -512,8 +514,8 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
 
   throw errMsg = pair (throw errMsg) (throw errMsg)
 
-  initState fsmName initialState = pair (initState fsmName initialState) 
-    (initState fsmName initialState)
+  initState fsmName iState = pair (initState fsmName iState) 
+    (initState fsmName iState)
   changeState fsmName toState = pair (changeState fsmName toState) 
     (changeState fsmName toState)
 
@@ -720,24 +722,25 @@ instance Monad CppSrcCode where
   CPPSC x >>= f = f x
 
 instance ProgramSym CppSrcCode where
-  type Program CppSrcCode = ProgData
-  prog n = liftList (progD n)
+  type Program CppSrcCode = State GOOLState ProgData
+  prog n = liftList (liftList (progD n))
   
 instance RenderSym CppSrcCode where
-  type RenderFile CppSrcCode = FileData
+  type RenderFile CppSrcCode = State GOOLState FileData
   fileDoc code = G.fileDoc Source cppSrcExt (top code) bottom code
 
   docMod = G.docMod
 
-  commentedMod cmt m = if (isMainMod . fileMod . unCPPSC) m then liftA2 
-    commentedModD cmt m else m 
+  commentedMod cmt m = if (isMainMod . fileMod . (`evalState` initialState) . 
+    unCPPSC) m then liftA2 commentedModD cmt m else m 
 
 instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
   
-  getFilePath = filePath . unCPPSC
-  fileFromData ft fp = fmap (fileD ft fp)
+  getFilePath = filePath . (`evalState` initialState) . unCPPSC
+  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
+    then s else addFile ft fp s) (fileD ft fp m))
 
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -1292,20 +1295,21 @@ instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
 instance RenderSym CppHdrCode where
-  type RenderFile CppHdrCode = FileData
+  type RenderFile CppHdrCode = State GOOLState FileData
   fileDoc code = G.fileDoc Header cppHdrExt (top code) bottom code
   
   docMod = G.docMod
 
-  commentedMod cmt m = if (isMainMod . fileMod . unCPPHC) m then m else liftA2 
-    commentedModD cmt m
+  commentedMod cmt m = if (isMainMod . fileMod . (`evalState` initialState) . 
+    unCPPHC) m then m else liftA2 commentedModD cmt m
 
 instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = return $ text "#endif"
   
-  getFilePath = filePath . unCPPHC
-  fileFromData ft fp = fmap (fileD ft fp)
+  getFilePath = filePath . (`evalState` initialState) . unCPPHC
+  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
+    then s else addFile ft fp s) (fileD ft fp m))
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc

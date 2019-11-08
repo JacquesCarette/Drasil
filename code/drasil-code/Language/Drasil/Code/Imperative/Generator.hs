@@ -17,10 +17,14 @@ import Language.Drasil.Chunk.Code (programName)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Visibility(..))
 
-import GOOL.Drasil (ProgramSym(..), RenderSym(..), ProgData(..))
+import GOOL.Drasil (ProgramSym(..), RenderSym(..), ProgData(..), GOOLState, 
+  initialState)
 
-import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
+import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
+  getCurrentDirectory)
 import Control.Monad.Reader (Reader, ask, runReader)
+import Control.Monad.State (evalState, execState)
+import qualified Control.Monad.State as S (State)
 
 generator :: String -> [Expr] -> Choices -> CodeSpec -> State
 generator dt sd chs spec = State {
@@ -49,7 +53,7 @@ generator dt sd chs spec = State {
         showDate Hide = ""
 
 generateCode :: (ProgramSym progRepr, PackageSym packRepr) => Lang -> 
-  (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 
+  (progRepr (Program progRepr) -> S.State GOOLState ProgData) -> (packRepr (Package packRepr) -> 
   PackData) -> State -> IO ()
 generateCode l unReprProg unReprPack g = do 
   workingDir <- getCurrentDirectory
@@ -62,14 +66,16 @@ generateCode l unReprProg unReprPack g = do
           unReprPack pckg)
 
 genPackage :: (ProgramSym progRepr, PackageSym packRepr) => 
-  (progRepr (Program progRepr) -> ProgData) -> 
+  (progRepr (Program progRepr) -> S.State GOOLState ProgData) -> 
   Reader State (packRepr (Package packRepr))
 genPackage unRepr = do
   g <- ask
   p <- genProgram
-  let pd = unRepr p
+  let sp = unRepr p   
+      s = execState sp initialState
+      pd = evalState sp initialState
       n = case codeSpec g of CodeSpec {program = pr} -> programName pr
-      m = makefile (commented g) pd
+      m = makefile (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig n pd
   return $ package pd (m:i++d)

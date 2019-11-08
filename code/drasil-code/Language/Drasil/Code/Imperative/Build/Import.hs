@@ -68,8 +68,8 @@ getCompilerInput BcSource s _ = map makeS $ s ^. sources
 getCompilerInput (BcSingle n) s p = [renderBuildName s p nameOpts n]
 
 getCommentedFiles :: GOOLState -> [MakeString]
-getCommentedFiles s = map makeS (doxConfigName : nub (maybeToList (s ^. mainMod)
-  ++ s ^. headers))
+getCommentedFiles s = map makeS (doxConfigName : nub (s ^. headers ++ 
+  maybeToList (s ^. mainMod)))
 
 buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn

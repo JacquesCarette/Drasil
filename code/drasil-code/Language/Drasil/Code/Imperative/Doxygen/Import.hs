@@ -26,7 +26,7 @@ verbosityToDoc Quiet = yes
 
 makeDoxConfig :: ProjName -> GOOLState -> OptimizeChoice -> Verbosity -> Doc
 makeDoxConfig prog s opt v = 
-  let fs = nub (maybeToList (s ^. mainMod) ++ s ^. headers)
+  let fs = nub (s ^. headers ++ maybeToList (s ^. mainMod))
   in vcat [
   text "# Doxyfile 1.8.15",
   blank,

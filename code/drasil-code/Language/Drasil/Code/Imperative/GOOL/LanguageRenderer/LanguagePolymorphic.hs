@@ -21,8 +21,8 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (
   AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
 
 doxConfig :: (AuxiliarySym repr) => repr (AuxHelper repr) -> String -> 
-  ProgData -> Verbosity -> repr (Auxiliary repr)
-doxConfig opt pName p v = auxFromData doxConfigName (makeDoxConfig pName p 
+  GOOLState -> Verbosity -> repr (Auxiliary repr)
+doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s 
   (auxHelperDoc opt) v)
 
 sampleInput :: (AuxiliarySym repr) => ChunkDB -> DataDesc -> [Expr] -> 

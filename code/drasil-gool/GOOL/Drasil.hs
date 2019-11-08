@@ -8,7 +8,7 @@ module GOOL.Drasil (Label, ProgramSym(..), RenderSym(..), PermanenceSym(..),
   BlockCommentSym(..), 
   ScopeTag(..), ProgData(..), FileData(..), isSource, isHeader, ModData(..),
   CodeType(..),
-  GOOLState(..), headers, sources, initialState,
+  GOOLState(..), headers, sources, mainMod, initialState,
   convType, liftList,
   unPC, unJC, unCSC, unCPPC
 ) where
@@ -26,7 +26,8 @@ import GOOL.Drasil.Data (ScopeTag(..), FileData(..), ModData(..), ProgData(..),
 
 import GOOL.Drasil.CodeType (CodeType(..))
 
-import GOOL.Drasil.State (GOOLState(..), headers, sources, initialState)
+import GOOL.Drasil.State (GOOLState(..), headers, sources, mainMod, 
+  initialState)
 
 import GOOL.Drasil.Helpers (convType, liftList)
 

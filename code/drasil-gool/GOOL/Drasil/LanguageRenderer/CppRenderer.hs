@@ -1852,6 +1852,9 @@ cppName = "C++"
 enumsEqualInts :: Bool
 enumsEqualInts = False
 
+inc :: Doc
+inc = text "#include"
+
 cppstop :: State GOOLState ModData -> Doc -> Doc -> Doc
 cppstop m lst end = vcat [
   if b then empty else inc <+> doubleQuotedText (addExt cppHdrExt n),
@@ -1871,8 +1874,7 @@ cppstop m lst end = vcat [
   usingNameSpace "std" (Just $ render lst) end,
   usingNameSpace "std" (Just "ifstream") end,
   usingNameSpace "std" (Just "ofstream") end]
-  where inc = text "#include"
-        modD = evalState m initialState
+  where modD = evalState m initialState
         n = name modD
         b = isMainMod modD
 
@@ -1888,8 +1890,7 @@ cpphtop m lst end = vcat [
   usingNameSpace "std" (Just $ render lst) end,
   usingNameSpace "std" (Just "ifstream") end,
   usingNameSpace "std" (Just "ofstream") end]
-  where inc = text "#include"
-        modD = evalState m initialState
+  where modD = evalState m initialState
         n = name modD
 
 usingNameSpace :: Label -> Maybe Label -> Doc -> Doc

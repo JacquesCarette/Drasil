@@ -6,9 +6,9 @@ module GOOL.Drasil (Label, ProgramSym(..), RenderSym(..), PermanenceSym(..),
   Selector(..), FunctionSym(..), SelectorFunction(..), ScopeSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   BlockCommentSym(..), 
-  ScopeTag(..), ProgData(..), FileData(..), isSource, isHeader, ModData(..),
+  ScopeTag(..), ProgData(..), FileData(..), ModData(..),
   CodeType(..),
-  GOOLState(..), headers, sources, initialState,
+  GOOLState(..), headers, sources, mainMod, initialState,
   convType, liftList,
   unPC, unJC, unCSC, unCPPC
 ) where
@@ -21,12 +21,12 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 
   ModuleSym(..), BlockCommentSym(..))
 
-import GOOL.Drasil.Data (ScopeTag(..), FileData(..), ModData(..), ProgData(..), 
-  isHeader, isSource)
+import GOOL.Drasil.Data (ScopeTag(..), FileData(..), ModData(..), ProgData(..))
 
 import GOOL.Drasil.CodeType (CodeType(..))
 
-import GOOL.Drasil.State (GOOLState(..), headers, sources, initialState)
+import GOOL.Drasil.State (GOOLState(..), headers, sources, mainMod, 
+  initialState)
 
 import GOOL.Drasil.Helpers (convType, liftList)
 

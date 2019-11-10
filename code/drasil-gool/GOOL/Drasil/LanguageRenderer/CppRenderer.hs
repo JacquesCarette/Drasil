@@ -51,24 +51,26 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, 
   commentedModD, docFuncRepr, valueList, appendToBody, surroundBody, getterName,
   setterName, filterOutObjs)
-import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
-  varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
-  construct, comment, ifCond, for, while, method, getMethod, setMethod, 
-  privMethod, pubMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
-  privMVar, pubMVar, pubGVar, privClass, pubClass, docClass, commentedClass, 
-  buildModule, fileDoc, docMod)
+import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
+  fileFromData, block, varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  objDecNewNoParams, construct, comment, ifCond, for, while, method, getMethod, 
+  setMethod, privMethod, pubMethod, constructor, function, docFunc, 
+  docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
+  docClass, commentedClass, buildModule, fileDoc, docMod)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
-  Binding(..), BindData(..), bd, FileType(..), FileData(..), fileD, 
-  FuncData(..), fd, ModData(..), md, OpData(..), od, ParamData(..), pd, 
-  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
-  ValData(..), vd, VarData(..), vard)
+  Binding(..), BindData(..), bd, FileType(..), FileData(..), FuncData(..), fd, 
+  ModData(..), md, OpData(..), od, ParamData(..), pd, ProgData(..), progD, 
+  emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
+  VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
-import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, addFile)
+import GOOL.Drasil.State (GOOLState, hasMain, initialState, getPutReturn, 
+  passState, passState2Lists, checkGOOLState, setMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp)
 import Data.Maybe (maybeToList)
+import Control.Lens ((^.))
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (State, evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
@@ -593,7 +595,7 @@ instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   parameterType p = pair (parameterType $ pfst p) (parameterType $ psnd p)
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
-  type Method (p CppSrcCode CppHdrCode) = MethodData
+  type Method (p CppSrcCode CppHdrCode) = State GOOLState MethodData
   method n c s p t ps b = pair (method n c (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (method n c (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
   getMethod c v = pair (getMethod c $ pfst v) (getMethod c $ psnd v) 
@@ -651,7 +653,7 @@ instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
   methodDoc m = methodDoc $ pfst m
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
-  type StateVar (p CppSrcCode CppHdrCode) = StateVarData
+  type StateVar (p CppSrcCode CppHdrCode) = State GOOLState StateVarData
   stateVar s p v = pair (stateVar (pfst s) (pfst p) (pfst v))
     (stateVar (psnd s) (psnd p) (psnd v))
   stateVarDef n s p vr vl = pair (stateVarDef n (pfst s) (pfst p) (pfst vr) 
@@ -667,7 +669,7 @@ instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
   stateVarFromData d = pair (stateVarFromData d) (stateVarFromData d)
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
-  type Class (p CppSrcCode CppHdrCode) = Doc
+  type Class (p CppSrcCode CppHdrCode) = State GOOLState Doc
   buildClass n p s vs fs = pair (buildClass n p (pfst s) (map pfst vs) 
     (map pfst fs)) (buildClass n p (psnd s) (map psnd vs) (map psnd fs))
   enum l ls s = pair (enum l ls $ pfst s) (enum l ls $ psnd s)
@@ -686,7 +688,7 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
   classFromData d = pair (classFromData d) (classFromData d)
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
-  type Module (p CppSrcCode CppHdrCode) = ModData
+  type Module (p CppSrcCode CppHdrCode) = State GOOLState ModData
   buildModule n l ms cs = pair (buildModule n l (map pfst ms) (map pfst cs)) 
     (buildModule n l (map psnd ms) (map psnd cs))
 
@@ -727,7 +729,8 @@ instance ProgramSym CppSrcCode where
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = State GOOLState FileData
-  fileDoc code = G.fileDoc Source cppSrcExt (top code) bottom code
+  fileDoc code = liftA2 passState code (G.fileDoc Source cppSrcExt (top code) 
+    bottom code)
 
   docMod = G.docMod
 
@@ -739,8 +742,7 @@ instance InternalFile CppSrcCode where
   bottom = return empty
   
   getFilePath = filePath . (`evalState` initialState) . unCPPSC
-  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
-    then s else addFile ft fp s) (fileD ft fp m))
+  fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -1174,7 +1176,7 @@ instance ParameterSym CppSrcCode where
   parameterType = variableType . fmap paramVar
 
 instance MethodSym CppSrcCode where
-  type Method CppSrcCode = MethodData
+  type Method CppSrcCode = State GOOLState MethodData
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -1183,7 +1185,8 @@ instance MethodSym CppSrcCode where
   constructor n = G.constructor n n
   destructor n vs = 
     let i = var "i" int
-        deleteStatements = map (fmap destructSts) vs
+        deleteStatements = map (fmap (destructSts . (`evalState` initialState)))
+          vs
         loopIndexDec = varDec i
         dbody = liftA2 emptyIfEmpty 
           (fmap vcat (mapM (fmap fst) deleteStatements)) $
@@ -1196,7 +1199,7 @@ instance MethodSym CppSrcCode where
     ("argv", "List of command-line arguments")] ["exit code"]) (mainFunction b)
 
   function = G.function
-  mainFunction b = setMainMethod <$> function "main" public static_ int 
+  mainFunction b = intFunc True "main" public static_ (mType int) 
     [param $ var "argc" int, 
     liftA2 pd (var "argv" (listType static_ string)) 
     (return $ text "const char *argv[]")] 
@@ -1212,42 +1215,43 @@ instance MethodSym CppSrcCode where
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
-  parameters m = map return $ (mthdParams . unCPPSC) m
+  parameters m = map return $ (mthdParams . (`evalState` initialState) . unCPPSC) m
 
 instance InternalMethod CppSrcCode where
-  intMethod m n c s _ t ps b = liftA3 (mthd m) (fmap snd s) (checkParams n 
-    <$> sequence ps) (liftA5 (cppsMethod n c) t (liftList paramListDocD ps) b 
-    blockStart blockEnd)
-  intFunc m n s _ t ps b = liftA3 (mthd m) (fmap snd s) (checkParams n <$> 
-    sequence ps) (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b 
-    blockStart blockEnd)
-  commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
-    liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
-    (liftA2 commentedItem cmt (fmap mthdDoc fn)) else fn
+  intMethod m n c s _ t ps b = (if m then getPutReturn setMain else return) <$>
+    liftA3 (mthd m) (fmap snd s) (checkParams n <$> sequence ps) (liftA5 
+    (cppsMethod n c) t (liftList paramListDocD ps) b blockStart blockEnd)
+  intFunc m n s _ t ps b = (if m then getPutReturn setMain else return) <$> 
+    liftA3 (mthd m) (fmap snd s) (checkParams n <$> sequence ps) (liftA5 
+    (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
+  commentedFunc cmt fn = liftA3 (checkGOOLState (^. hasMain)) fn (return <$>
+    liftA3 (mthd $ isMainMethod fn) (fmap (getMthdScp . (`evalState` 
+    initialState)) fn) (fmap (mthdParams . (`evalState` initialState)) fn) 
+    (fmap (`commentedItem` methodDoc fn) cmt)) fn
  
-  isMainMethod = isMainMthd . unCPPSC
-  methodDoc = mthdDoc . unCPPSC
+  isMainMethod = isMainMthd . (`evalState` initialState) . unCPPSC
+  methodDoc = mthdDoc . (`evalState` initialState) . unCPPSC
 
 instance StateVarSym CppSrcCode where
-  type StateVar CppSrcCode = StateVarData
-  stateVar s _ _ = liftA3 svd (fmap snd s) (return empty) emptyState
-  stateVarDef n s p vr vl = liftA3 svd (fmap snd s) (liftA4 (cppsStateVarDef n 
-    empty) p vr vl endStatement) emptyState
-  constVar n s vr vl = liftA3 svd (fmap snd s) (liftA4 (cppsStateVarDef n 
-    (text "const")) static_ vr vl endStatement) emptyState
+  type StateVar CppSrcCode = State GOOLState StateVarData
+  stateVar s _ _ = return <$> liftA3 svd (fmap snd s) (return empty) emptyState
+  stateVarDef n s p vr vl = return <$> liftA3 svd (fmap snd s) (liftA4 
+    (cppsStateVarDef n empty) p vr vl endStatement) emptyState
+  constVar n s vr vl = return <$> liftA3 svd (fmap snd s) (liftA4 
+    (cppsStateVarDef n (text "const")) static_ vr vl endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
 
 instance InternalStateVar CppSrcCode where
-  stateVarDoc = stVarDoc . unCPPSC
+  stateVarDoc = stVarDoc . (`evalState` initialState) . unCPPSC
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppSrcCode where
-  type Class CppSrcCode = Doc
-  buildClass n _ _ vs fs = lift2Lists cppsClass vs (fs ++ 
-    [destructor n vs])
-  enum _ _ _ = return empty
+  type Class CppSrcCode = State GOOLState Doc
+  buildClass n _ _ vs fs = lift2Lists (lift2Lists cppsClass) vs
+    (fs ++ [destructor n vs])
+  enum _ _ _ = return $ return empty
   privClass = G.privClass
   pubClass = G.pubClass
 
@@ -1256,19 +1260,20 @@ instance ClassSym CppSrcCode where
   commentedClass _ cs = cs
 
 instance InternalClass CppSrcCode where
-  classDoc = unCPPSC
-  classFromData = return
+  classDoc = (`evalState` initialState) . unCPPSC
+  classFromData = return . return
 
 instance ModuleSym CppSrcCode where
-  type Module CppSrcCode = ModData
-  buildModule n ls = G.buildModule n (map include ls)
+  type Module CppSrcCode = State GOOLState ModData
+  buildModule n ls ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+    (G.buildModule n (map include ls) ms cs)
     
-  moduleName m = name (unCPPSC m)
+  moduleName = name . (`evalState` initialState) . unCPPSC
 
 instance InternalMod CppSrcCode where
-  isMainModule = isMainMod . unCPPSC
-  moduleDoc = modDoc . unCPPSC
-  modFromData n m d = return $ md n m d
+  isMainModule = isMainMod . (`evalState` initialState) . unCPPSC
+  moduleDoc = modDoc . (`evalState` initialState) . unCPPSC
+  modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
@@ -1296,7 +1301,8 @@ instance Monad CppHdrCode where
 
 instance RenderSym CppHdrCode where
   type RenderFile CppHdrCode = State GOOLState FileData
-  fileDoc code = G.fileDoc Header cppHdrExt (top code) bottom code
+  fileDoc code = liftA2 passState code (G.fileDoc Header cppHdrExt (top code) 
+    bottom code)
   
   docMod = G.docMod
 
@@ -1308,8 +1314,7 @@ instance InternalFile CppHdrCode where
   bottom = return $ text "#endif"
   
   getFilePath = filePath . (`evalState` initialState) . unCPPHC
-  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
-    then s else addFile ft fp s) (fileD ft fp m))
+  fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
@@ -1718,7 +1723,7 @@ instance ParameterSym CppHdrCode where
   parameterType = variableType . fmap paramVar
 
 instance MethodSym CppHdrCode where
-  type Method CppHdrCode = MethodData
+  type Method CppHdrCode = State GOOLState MethodData
   method = G.method
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] (return empty)
@@ -1727,14 +1732,15 @@ instance MethodSym CppHdrCode where
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor n = G.constructor n n
-  destructor n vs = return $ mthd False Pub [] (emptyIfEmpty (vcat (map 
-    (statementDoc . fmap destructSts) vs)) (methodDoc (pubMethod ('~':n) n 
-    void [] (return empty) :: (CppHdrCode (Method CppHdrCode)))))
+  destructor n vs = return $ return $ mthd False Pub [] (emptyIfEmpty (vcat 
+    (map (statementDoc . fmap (destructSts . (`evalState` initialState))) vs)) 
+    (methodDoc (pubMethod ('~':n) n void [] 
+    (return empty) :: (CppHdrCode (Method CppHdrCode)))))
 
   docMain = mainFunction
 
   function = G.function
-  mainFunction _ = return (mthd True Pub [] empty)
+  mainFunction _ = return $ return $ mthd True Pub [] empty
 
   docFunc = G.docFunc
 
@@ -1746,46 +1752,47 @@ instance MethodSym CppHdrCode where
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
     
-  parameters m = map return $ (mthdParams . unCPPHC) m
+  parameters m = map return $ (mthdParams . (`evalState` initialState) . unCPPHC) m
 
 instance InternalMethod CppHdrCode where
-  intMethod m n _ s _ t ps _ = liftA3 (mthd m) (fmap snd s) (checkParams n <$>
-    sequence ps) (liftA3 (cpphMethod n) t (liftList paramListDocD ps)
-    endStatement)
+  intMethod m n _ s _ t ps _ = (if m then getPutReturn setMain else return) <$>
+    liftA3 (mthd m) (fmap snd s) (checkParams n <$> sequence ps) (liftA3 
+    (cpphMethod n) t (liftList paramListDocD ps) endStatement)
   intFunc = G.intFunc
-  commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
-    liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
-    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+  commentedFunc cmt fn = liftA3 (checkGOOLState (^. hasMain)) fn fn $ return 
+    <$> liftA3 (mthd $ isMainMethod fn) (fmap (getMthdScp . (`evalState` 
+    initialState)) fn) (fmap (mthdParams . (`evalState` initialState)) fn) 
+    (fmap (`commentedItem` methodDoc fn) cmt)
 
-  isMainMethod = isMainMthd . unCPPHC
-  methodDoc = mthdDoc . unCPPHC
+  isMainMethod = isMainMthd . (`evalState` initialState) . unCPPHC
+  methodDoc = mthdDoc . (`evalState` initialState) . unCPPHC
 
 instance StateVarSym CppHdrCode where
-  type StateVar CppHdrCode = StateVarData
-  stateVar s p v = liftA3 svd (fmap snd s) (return $ stateVarDocD empty 
-    (permDoc p) (statementDoc (state $ varDec v))) emptyState
-  stateVarDef _ s p vr vl = liftA3 svd (fmap snd s) (return $ cpphStateVarDef 
-    empty p vr vl) emptyState
-  constVar _ s v _ = liftA3 svd (fmap snd s) (liftA3 (constVarDocD empty) 
-    (bindDoc <$> static_) v endStatement) emptyState
+  type StateVar CppHdrCode = State GOOLState StateVarData
+  stateVar s p v = return <$> liftA3 svd (fmap snd s) (return $ stateVarDocD 
+    empty (permDoc p) (statementDoc (state $ varDec v))) emptyState
+  stateVarDef _ s p vr vl = return <$> liftA3 svd (fmap snd s) (return $ 
+    cpphStateVarDef empty p vr vl) emptyState
+  constVar _ s v _ = return <$> liftA3 svd (fmap snd s) (liftA3 (constVarDocD 
+    empty) (bindDoc <$> static_) v endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
 
 instance InternalStateVar CppHdrCode where
-  stateVarDoc = stVarDoc . unCPPHC
+  stateVarDoc = stVarDoc . (`evalState` initialState) . unCPPHC
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppHdrCode where
-  type Class CppHdrCode = Doc
+  type Class CppHdrCode = State GOOLState Doc
   -- do this with a do? avoids liftA8...
-  buildClass n p _ vs fs = liftA8 (cpphClass n) (lift2Lists 
-    (cpphVarsFuncsList Pub) vs (fs ++ [destructor n vs])) (lift2Lists 
-    (cpphVarsFuncsList Priv) vs (fs ++ [destructor n vs])) (fmap fst public)
-    (fmap fst private) parent blockStart blockEnd endStatement
+  buildClass n p _ vs fs = liftA8 (cpphClass n) (lift2Lists (lift2Lists 
+    (cpphVarsFuncsList Pub)) vs (fs ++ [destructor n vs])) (lift2Lists 
+    (lift2Lists (cpphVarsFuncsList Priv)) vs (fs ++ [destructor n vs])) 
+    (fmap fst public) (fmap fst private) parent blockStart blockEnd endStatement
     where parent = case p of Nothing -> return empty
                              Just pn -> inherit pn
-  enum n es _ = liftA4 (cpphEnum n) (return $ enumElementsDocD es 
+  enum n es _ = return <$> liftA4 (cpphEnum n) (return $ enumElementsDocD es 
     enumsEqualInts) blockStart blockEnd endStatement
   privClass = G.privClass
   pubClass = G.pubClass
@@ -1795,19 +1802,20 @@ instance ClassSym CppHdrCode where
   commentedClass = G.commentedClass
 
 instance InternalClass CppHdrCode where
-  classDoc = unCPPHC
-  classFromData = return
+  classDoc = (`evalState` initialState) . unCPPHC
+  classFromData = return . return
 
 instance ModuleSym CppHdrCode where
-  type Module CppHdrCode = ModData
-  buildModule n ls = G.buildModule n (map include ls)
+  type Module CppHdrCode = State GOOLState ModData
+  buildModule n ls ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+    (G.buildModule n (map include ls) ms cs)
       
-  moduleName m = name (unCPPHC m)
+  moduleName = name . (`evalState` initialState) . unCPPHC
 
 instance InternalMod CppHdrCode where
-  isMainModule = isMainMod . unCPPHC
-  moduleDoc = modDoc . unCPPHC
-  modFromData n m d = return $ md n m d
+  isMainModule = isMainMod . (`evalState` initialState) . unCPPHC
+  moduleDoc = modDoc . (`evalState` initialState) . unCPPHC
+  modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc
@@ -1837,9 +1845,6 @@ data MethodData = MthD {isMainMthd :: Bool, getMthdScp :: ScopeTag,
 mthd :: Bool -> ScopeTag -> [ParamData] -> Doc -> MethodData
 mthd = MthD 
 
-setMainMethod :: MethodData -> MethodData
-setMainMethod (MthD _ s ps d) = MthD True s ps d
-
 -- convenience
 cppName :: String
 cppName = "C++" 
@@ -1847,8 +1852,11 @@ cppName = "C++"
 enumsEqualInts :: Bool
 enumsEqualInts = False
 
-cppstop :: ModData -> Doc -> Doc -> Doc
-cppstop (MD n b _) lst end = vcat [
+inc :: Doc
+inc = text "#include"
+
+cppstop :: State GOOLState ModData -> Doc -> Doc -> Doc
+cppstop m lst end = vcat [
   if b then empty else inc <+> doubleQuotedText (addExt cppHdrExt n),
   if b then empty else blank,
   text "#define" <+> text "_USE_MATH_DEFINES", --FIXME: Only include if used (i.e. pi)
@@ -1866,10 +1874,12 @@ cppstop (MD n b _) lst end = vcat [
   usingNameSpace "std" (Just $ render lst) end,
   usingNameSpace "std" (Just "ifstream") end,
   usingNameSpace "std" (Just "ofstream") end]
-  where inc = text "#include"
+  where modD = evalState m initialState
+        n = name modD
+        b = isMainMod modD
 
-cpphtop :: ModData -> Doc -> Doc -> Doc
-cpphtop (MD n _ _) lst end = vcat [
+cpphtop :: State GOOLState ModData -> Doc -> Doc -> Doc
+cpphtop m lst end = vcat [
   text "#ifndef" <+> text n <> text "_h",
   text "#define" <+> text n <> text "_h",
   blank,
@@ -1880,7 +1890,8 @@ cpphtop (MD n _ _) lst end = vcat [
   usingNameSpace "std" (Just $ render lst) end,
   usingNameSpace "std" (Just "ifstream") end,
   usingNameSpace "std" (Just "ofstream") end]
-  where inc = text "#include"
+  where modD = evalState m initialState
+        n = name modD
 
 usingNameSpace :: Label -> Maybe Label -> Doc -> Doc
 usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <>
@@ -2003,17 +2014,20 @@ cppsClass vs fs = vcat $ vars ++ (if any (not . isEmpty) vars then blank else
   where vars = map stVarDoc vs
         funcs = map mthdDoc fs
 
-cpphClass :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> 
-  Doc -> Doc -> Doc
-cpphClass n pubs privs pub priv inhrt bStart bEnd end = vcat [
-  classDec <+> text n <+> inhrt <+> bStart,
-  indentList [
-    pub <> colon,
-    indent pubs,
-    blank,
-    priv <> colon,
-    indent privs],
-  bEnd <> end]
+cpphClass :: Label -> State GOOLState Doc -> State GOOLState Doc -> Doc -> Doc 
+  -> Doc -> Doc -> Doc -> Doc -> State GOOLState Doc
+cpphClass n publs privts pub priv inhrt bStart bEnd end = do
+  pubs <- publs
+  privs <- privts
+  return $ vcat [
+    classDec <+> text n <+> inhrt <+> bStart,
+    indentList [
+      pub <> colon,
+      indent pubs,
+      blank,
+      priv <> colon,
+      indent privs],
+    bEnd <> end]
 
 cpphEnum :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 cpphEnum n es bStart bEnd end = vcat [

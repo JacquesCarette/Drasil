@@ -1,8 +1,8 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The structure for a class of renderers is defined here.
-module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (block, pi, varDec, 
-  varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
+module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, block, 
+  pi, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
   comment, ifCond, for, forEach, while, construct, method, getMethod, setMethod,
   privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
   docInOutFunc, intFunc, stateVar,stateVarDef, constVar, privMVar, pubMVar, 
@@ -13,8 +13,8 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (block, pi, varDec,
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, KeywordSym(..), 
-  RenderSym(RenderFile, commentedMod), InternalFile(..), BlockSym(Block), 
+import GOOL.Drasil.Symantics (Label, KeywordSym(..), InternalFile(getFilePath),
+  RenderSym(RenderFile, commentedMod), BlockSym(Block), 
   InternalBlock(..), BodySym(..), PermanenceSym(..), InternalPerm(..), 
   TypeSym(..), InternalType(..), VariableSym(..), 
   ValueSym(Value, valueOf, valueDoc),
@@ -26,22 +26,32 @@ import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   StateVarSym(StateVar), InternalStateVar(..), ClassSym(Class), 
   InternalClass(..), ModuleSym(Module, moduleName), InternalMod(..), 
   BlockComment(..))
-import qualified GOOL.Drasil.Symantics as S (StatementSym(varDec, varDecDef), 
-  MethodTypeSym(construct), MethodSym(method, mainFunction), 
-  InternalMethod(intFunc), StateVarSym(stateVar), 
-  ClassSym(buildClass, commentedClass))
+import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData), 
+  StatementSym(varDec, varDecDef), MethodTypeSym(construct), 
+  MethodSym(method, mainFunction), InternalMethod(intFunc), 
+  StateVarSym(stateVar), ClassSym(buildClass, commentedClass))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
-  FileType)
+  FileType, FileData(..), fileD, ModData(..))
 import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty)
 import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD, 
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
   moduleDox, getterName, setterName)
+import GOOL.Drasil.State (GOOLState, hasMain, mainMod, getPutReturnFunc, 
+  addFile, setMainMod)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
-import Data.Maybe (maybeToList)
+import Data.Maybe (maybeToList, isNothing)
+import Control.Lens ((^.))
+import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  vcat, semi, equals)
+  vcat, semi, equals, isEmpty)
+
+fileFromData :: FileType -> FilePath -> State GOOLState ModData -> 
+  State GOOLState FileData
+fileFromData ft fp sm = getPutReturnFunc sm (\s m -> (if isEmpty (modDoc m) 
+  then id else (if s ^. hasMain && isNothing (s ^. mainMod) then setMainMod fp 
+  else id) . addFile ft fp) s) (fileD fp)
 
 block :: (RenderSym repr) => repr (Keyword repr) -> [repr (Statement repr)] -> 
   repr (Block repr)
@@ -264,7 +274,7 @@ commentedClass cmt cs = classFromData (commentedItem (blockCommentDoc cmt)
 buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
   [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)
 buildModule n ls ms cs = modFromData n (any isMainMethod ms) (moduleDocD 
-  (vcat $ map keyDoc ls) (vibcat $ map classDoc cs) 
+  (vcat $ map keyDoc ls) (vibcat $ map classDoc cs)
   (methodListDocD $ map methodDoc ms))
 
 buildModule' :: (RenderSym repr) => Label -> [repr (Method repr)] -> 
@@ -274,7 +284,7 @@ buildModule' n ms cs = modFromData n (any isMainMethod ms) (vibcat $ map
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
   repr (Block repr) -> repr (Module repr) -> repr (RenderFile repr)
-fileDoc ft ext topb botb m = fileFromData ft (addExt ext (moduleName m)) 
+fileDoc ft ext topb botb m = S.fileFromData ft (addExt ext (moduleName m)) 
   (modFromData (moduleName m) (isMainModule m) (emptyIfEmpty (moduleDoc m) 
   (fileDoc' (blockDoc topb) (moduleDoc m) (blockDoc botb))))
 

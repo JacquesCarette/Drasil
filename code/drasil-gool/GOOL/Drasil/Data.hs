@@ -1,15 +1,13 @@
 module GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
-  FileType(..), BindData(..), bd, FileData(..), fileD, isSource, isHeader, 
-  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
-  updateParamDoc, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
-  TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
-  vard
+  FileType(..), BindData(..), bd, FileData(..), fileD, updateFileMod, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
+  updateMthdDoc, OpData(..), od, ParamData(..), pd, updateParamDoc, 
+  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
+  ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
 
-import Control.Applicative (liftA2)
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 
@@ -36,23 +34,16 @@ data BindData = BD {bind :: Binding, bindDoc :: Doc}
 bd :: Binding -> Doc -> BindData
 bd = BD
 
-data FileData = FileD {fileType :: FileType, filePath :: FilePath,
-  fileMod :: ModData}
+data FileData = FileD {filePath :: FilePath, fileMod :: ModData}
 
 instance Eq FileData where
-  FileD _ p1 _ == FileD _ p2 _ = p1 == p2
+  FileD p1 _ == FileD p2 _ = p1 == p2
 
-fileD :: FileType -> String -> ModData -> FileData
+fileD :: String -> ModData -> FileData
 fileD = FileD
 
-isSource :: FileData -> Bool
-isSource = liftA2 (||) (Source ==) (Combined ==) . fileType
-
-isHeader :: FileData -> Bool
-isHeader = liftA2 (||) (Header ==) (Combined ==) . fileType
-
 updateFileMod :: ModData -> FileData -> FileData
-updateFileMod m f = fileD (fileType f) (filePath f) m
+updateFileMod m f = fileD (filePath f) m
 
 data FuncData = FD {funcType :: TypeData, funcDoc :: Doc}
 

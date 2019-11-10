@@ -77,7 +77,7 @@ genPackage unRepr = do
       n = case codeSpec g of CodeSpec {program = pr} -> programName pr
       m = makefile (commented g) s pd
   i <- genSampleInput
-  d <- genDoxConfig n pd
+  d <- genDoxConfig n s
   return $ package pd (m:i++d)
 
 genProgram :: (ProgramSym repr) => Reader State (repr (Program repr))

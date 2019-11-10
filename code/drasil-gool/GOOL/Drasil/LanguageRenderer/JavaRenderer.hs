@@ -51,26 +51,27 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, commentedModD, docFuncRepr, valueList, appendToBody, 
   surroundBody, intValue, filterOutObjs)
-import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
-  pi, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
-  construct, comment, ifCond, for, forEach, while, method, getMethod, setMethod,
-  privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, 
-  buildClass, enum, privClass, pubClass, docClass, commentedClass, buildModule',
-  fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
+import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
+  fileFromData, block, pi, varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  objDecNewNoParams, construct, comment, ifCond, for, forEach, while, method, 
+  getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
+  mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
+  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
+  commentedClass, buildModule', fileDoc, docMod)
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
   FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
   vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
   lift1List, checkParams)
-import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, addFile)
+import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
+  getPutReturnList, passState, passState2Lists, addProgNameToPaths, setMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (State, evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
-  equals, semi, vcat, lbrace, rbrace, render, colon, comma, render, isEmpty)
+  equals, semi, vcat, lbrace, rbrace, render, colon, comma, render)
 
 jExt :: String
 jExt = "java"
@@ -90,12 +91,13 @@ instance Monad JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = State GOOLState ProgData
-  prog n = lift1List (\end -> liftList (progD n . map (packageDocD n 
-    end))) endStatement 
+  prog n = lift1List (\end fs -> getPutReturnList fs (addProgNameToPaths n) 
+    (progD n . map (packageDocD n end))) endStatement
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = State GOOLState FileData 
-  fileDoc code = G.fileDoc Combined jExt (top code) bottom code
+  fileDoc code = liftA2 passState code (G.fileDoc Combined jExt (top code) 
+    bottom code)
 
   docMod = G.docMod
 
@@ -106,8 +108,7 @@ instance InternalFile JavaCode where
   bottom = return empty
   
   getFilePath = filePath . (`evalState` initialState) . unJC
-  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
-    then s else addFile ft fp s) (fileD ft fp m))
+  fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -520,7 +521,7 @@ instance ParameterSym JavaCode where
   parameterType = variableType . fmap paramVar
 
 instance MethodSym JavaCode where
-  type Method JavaCode = MethodData
+  type Method JavaCode = State GOOLState MethodData
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -544,19 +545,20 @@ instance MethodSym JavaCode where
     
   docInOutFunc n = jDocInOut (inOutFunc n)
     
-  parameters m = map return $ (mthdParams . unJC) m
+  parameters m = map return $ (mthdParams . (`evalState` initialState) . unJC) m
 
 instance InternalMethod JavaCode where
-  intMethod m n _ s p t ps b = liftA2 (mthd m) (checkParams n <$> sequence ps)
-    (liftA5 (jMethod n) s p t (liftList paramListDocD ps) b)
+  intMethod m n _ s p t ps b = (if m then getPutReturn setMain else return) <$> 
+    liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA5 (jMethod n) s p t 
+    (liftList paramListDocD ps) b)
   intFunc = G.intFunc
-  commentedFunc cmt = liftA2 updateMthdDoc (fmap commentedItem cmt)
+  commentedFunc cmt = liftA2 (fmap . updateMthdDoc) (fmap commentedItem cmt)
   
-  isMainMethod = isMainMthd . unJC
-  methodDoc = mthdDoc . unJC
+  isMainMethod = isMainMthd . (`evalState` initialState) . unJC
+  methodDoc = mthdDoc . (`evalState` initialState) . unJC
 
 instance StateVarSym JavaCode where
-  type StateVar JavaCode = Doc
+  type StateVar JavaCode = State GOOLState Doc
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (permDoc (static_ :: JavaCode (Permanence JavaCode)))
@@ -565,11 +567,11 @@ instance StateVarSym JavaCode where
   pubGVar = G.pubGVar
 
 instance InternalStateVar JavaCode where
-  stateVarDoc = unJC
-  stateVarFromData = return
+  stateVarDoc = (`evalState` initialState) . unJC
+  stateVarFromData = return . return
 
 instance ClassSym JavaCode where
-  type Class JavaCode = Doc
+  type Class JavaCode = State GOOLState Doc
   buildClass = G.buildClass classDocD inherit
   enum = G.enum
   privClass = G.privClass
@@ -580,19 +582,20 @@ instance ClassSym JavaCode where
   commentedClass = G.commentedClass
 
 instance InternalClass JavaCode where
-  classDoc = unJC
-  classFromData = return
+  classDoc = (`evalState` initialState) . unJC
+  classFromData = return . return
 
 instance ModuleSym JavaCode where
-  type Module JavaCode = ModData
-  buildModule n _ = G.buildModule' n 
+  type Module JavaCode = State GOOLState ModData
+  buildModule n _ ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+    (G.buildModule' n ms cs)
 
-  moduleName m = name (unJC m)
+  moduleName = name . (`evalState` initialState) . unJC
   
 instance InternalMod JavaCode where
-  isMainModule = isMainMod . unJC
-  moduleDoc = modDoc . unJC
-  modFromData n m d = return $ md n m d
+  isMainModule = isMainMod . (`evalState` initialState) . unJC
+  moduleDoc = modDoc . (`evalState` initialState) . unJC
+  modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc

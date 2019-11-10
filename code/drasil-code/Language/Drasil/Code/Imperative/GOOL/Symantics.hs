@@ -22,8 +22,7 @@ class (AuxiliarySym repr) => PackageSym repr where
 class AuxiliarySym repr where
   type Auxiliary repr
   type AuxHelper repr
-  doxConfig :: String -> ProgData -> Verbosity -> 
-    repr (Auxiliary repr)
+  doxConfig :: String -> GOOLState -> Verbosity -> repr (Auxiliary repr)
   sampleInput :: ChunkDB -> DataDesc -> [Expr] -> repr (Auxiliary repr)
 
   optimizeDox :: repr (AuxHelper repr)

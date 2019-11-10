@@ -51,25 +51,26 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   dot, new, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
   inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   commentedModD, appendToBody, surroundBody, filterOutObjs)
-import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (block, 
-  pi, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
-  construct, comment, ifCond, for, forEach, while, method, getMethod, setMethod,
-  privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, enum, privClass, pubClass, docClass, commentedClass, 
-  buildModule', fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
+import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
+  fileFromData, block, pi, varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  objDecNewNoParams, construct, comment, ifCond, for, forEach, while, method, 
+  getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
+  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
+  privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
+  commentedClass, buildModule', fileDoc, docMod)
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
   FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (liftA4, liftA5, liftList, lift1List, checkParams)
-import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, addFile)
+import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
+  passState, passState2Lists, setMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (State, evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
-  semi, vcat, lbrace, rbrace, colon, isEmpty)
+  semi, vcat, lbrace, rbrace, colon)
 
 csExt :: String
 csExt = "cs"
@@ -93,7 +94,8 @@ instance ProgramSym CSharpCode where
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = State GOOLState FileData
-  fileDoc code = G.fileDoc Combined csExt (top code) bottom code
+  fileDoc code = liftA2 passState code (G.fileDoc Combined csExt (top code) 
+    bottom code)
 
   docMod = G.docMod
 
@@ -104,8 +106,7 @@ instance InternalFile CSharpCode where
   bottom = return empty
 
   getFilePath = filePath . (`evalState` initialState) . unCSC
-  fileFromData ft fp = fmap (\m -> getPutReturn (\s -> if isEmpty (modDoc m) 
-    then s else addFile ft fp s) (fileD ft fp m))
+  fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
@@ -516,7 +517,7 @@ instance ParameterSym CSharpCode where
   parameterType = variableType . fmap paramVar
 
 instance MethodSym CSharpCode where
-  type Method CSharpCode = MethodData
+  type Method CSharpCode = State GOOLState MethodData
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -540,19 +541,20 @@ instance MethodSym CSharpCode where
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
   
-  parameters m = map return $ (mthdParams . unCSC) m
+  parameters m = map return $ (mthdParams . (`evalState` initialState) . unCSC) m
 
 instance InternalMethod CSharpCode where
-  intMethod m n _ s p t ps b = liftA2 (mthd m) (checkParams n <$> sequence ps)
-    (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
+  intMethod m n _ s p t ps b = (if m then getPutReturn setMain else return) <$> 
+    liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA5 (methodDocD n) s p 
+    t (liftList paramListDocD ps) b)
   intFunc = G.intFunc
-  commentedFunc cmt = liftA2 updateMthdDoc (fmap commentedItem cmt)
+  commentedFunc cmt = liftA2 (fmap . updateMthdDoc) (fmap commentedItem cmt)
   
-  isMainMethod = isMainMthd . unCSC
-  methodDoc = mthdDoc . unCSC
+  isMainMethod = isMainMthd . (`evalState` initialState) . unCSC
+  methodDoc = mthdDoc . (`evalState` initialState) . unCSC
 
 instance StateVarSym CSharpCode where
-  type StateVar CSharpCode = Doc
+  type StateVar CSharpCode = State GOOLState Doc
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar empty
@@ -561,11 +563,11 @@ instance StateVarSym CSharpCode where
   pubGVar = G.pubGVar
 
 instance InternalStateVar CSharpCode where
-  stateVarDoc = unCSC
-  stateVarFromData = return
+  stateVarDoc = (`evalState` initialState) . unCSC
+  stateVarFromData = return . return
 
 instance ClassSym CSharpCode where
-  type Class CSharpCode = Doc
+  type Class CSharpCode = State GOOLState Doc
   buildClass = G.buildClass classDocD inherit
   enum = G.enum
   privClass = G.privClass
@@ -576,19 +578,20 @@ instance ClassSym CSharpCode where
   commentedClass = G.commentedClass
 
 instance InternalClass CSharpCode where
-  classDoc = unCSC
-  classFromData = return
+  classDoc = (`evalState` initialState) . unCSC
+  classFromData = return . return
 
 instance ModuleSym CSharpCode where
-  type Module CSharpCode = ModData
-  buildModule n _ = G.buildModule' n
+  type Module CSharpCode = State GOOLState ModData
+  buildModule n _ ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+    (G.buildModule' n ms cs)
     
-  moduleName m = name (unCSC m)
+  moduleName = name . (`evalState` initialState) . unCSC
   
 instance InternalMod CSharpCode where
-  isMainModule = isMainMod . unCSC
-  moduleDoc = modDoc . unCSC
-  modFromData n m d = return $ md n m d
+  isMainModule = isMainMod . (`evalState` initialState) . unCSC
+  moduleDoc = modDoc . (`evalState` initialState) . unCSC
+  modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc

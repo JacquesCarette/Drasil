@@ -1083,11 +1083,11 @@ publicDocD = text "public"
 
 -- Comment Functions -- 
 
-blockCmtDoc :: [String] -> Doc -> Doc -> Doc
-blockCmtDoc lns start end = start <+> vcat (map text lns) <+> end
+blockCmtDoc :: [String] -> Doc -> Doc -> State GOOLState Doc
+blockCmtDoc lns start end = return $ start <+> vcat (map text lns) <+> end
 
-docCmtDoc :: [String] -> Doc -> Doc -> Doc
-docCmtDoc lns start end = emptyIfNull lns $
+docCmtDoc :: Doc -> Doc -> [String] -> Doc
+docCmtDoc start end lns = emptyIfNull lns $
   vcat $ start : map (indent . text) lns ++ [end]
 
 commentedItem :: Doc -> Doc -> Doc
@@ -1130,15 +1130,13 @@ moduleDox desc as date m = (doxFile ++ m) :
   [doxDate ++ date | not (null date)] ++ 
   [doxBrief ++ desc | not (null desc)]
 
-commentedModD :: Doc -> State GOOLState FileData -> State GOOLState FileData
-commentedModD cmt mod = do
-  m <- mod
-  return $ updateFileMod (updateModDoc (commentedItem cmt 
+commentedModD :: Doc -> FileData -> FileData
+commentedModD cmt m = updateFileMod (updateModDoc (commentedItem cmt 
     ((modDoc . fileMod) m)) (fileMod m)) m
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
   repr (Method repr) -> repr (Method repr)
-docFuncRepr desc pComms rComms f = commentedFunc (docComment $ functionDox desc
+docFuncRepr desc pComms rComms f = commentedFunc (docComment $ return $ functionDox desc
   (zip (map parameterName (parameters f)) pComms) rComms) f
 
 -- Helper Functions --

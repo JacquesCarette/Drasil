@@ -99,7 +99,7 @@ instance RenderSym CSharpCode where
 
   docMod = G.docMod
 
-  commentedMod = liftA2 commentedModD
+  commentedMod = liftA2 (liftA2 commentedModD)
 
 instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
@@ -548,7 +548,8 @@ instance InternalMethod CSharpCode where
     liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA5 (methodDocD n) s p 
     t (liftList paramListDocD ps) b)
   intFunc = G.intFunc
-  commentedFunc cmt = liftA2 (fmap . updateMthdDoc) (fmap commentedItem cmt)
+  commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem) 
+    cmt)
   
   isMainMethod = isMainMthd . (`evalState` initialState) . unCSC
   methodDoc = mthdDoc . (`evalState` initialState) . unCSC
@@ -579,7 +580,7 @@ instance ClassSym CSharpCode where
 
 instance InternalClass CSharpCode where
   classDoc = (`evalState` initialState) . unCSC
-  classFromData = return . return
+  classFromData = return
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = State GOOLState ModData
@@ -594,9 +595,10 @@ instance InternalMod CSharpCode where
   modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym CSharpCode where
-  type BlockComment CSharpCode = Doc
+  type BlockComment CSharpCode = State GOOLState Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
-  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
+  docComment lns = liftA2 (\dcs dce -> fmap (docCmtDoc dcs dce) lns) 
+    docCommentStart docCommentEnd
 
   blockCommentDoc = unCSC
 

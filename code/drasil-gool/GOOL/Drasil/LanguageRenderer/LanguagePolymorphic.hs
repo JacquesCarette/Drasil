@@ -177,7 +177,7 @@ constructor :: (RenderSym repr) => Label -> Label -> [repr (Parameter repr)] ->
 constructor fName n = intMethod False fName n public dynamic_ (S.construct n)
 
 docMain :: (RenderSym repr) => repr (Body repr) -> repr (Method repr)
-docMain b = commentedFunc (docComment $ functionDox 
+docMain b = commentedFunc (docComment $ return $ functionDox 
   "Controls the flow of the program" 
   [("args", "List of command-line arguments")] []) (S.mainFunction b)
 
@@ -245,14 +245,14 @@ pubGVar = S.stateVar public static_
 buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> 
   (Label -> repr (Keyword repr)) -> Label -> Maybe Label -> repr (Scope repr) 
   -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
-buildClass f i n p s vs fs = classFromData (f n parent (scopeDoc s) 
+buildClass f i n p s vs fs = classFromData (return $ f n parent (scopeDoc s) 
   (stateVarListDocD (map stateVarDoc vs)) (methodListDocD (map methodDoc fs)))
   where parent = case p of Nothing -> empty
                            Just pn -> keyDoc $ i pn
 
 enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
   repr (Class repr)
-enum n es s = classFromData (enumDocD n (enumElementsDocD es False) 
+enum n es s = classFromData (return $ enumDocD n (enumElementsDocD es False) 
   (scopeDoc s))
 
 privClass :: (RenderSym repr) => Label -> Maybe Label -> [repr (StateVar repr)] 
@@ -264,12 +264,12 @@ pubClass :: (RenderSym repr) => Label -> Maybe Label -> [repr (StateVar repr)]
 pubClass n p = S.buildClass n p public
 
 docClass :: (RenderSym repr) => String -> repr (Class repr) -> repr (Class repr)
-docClass d = S.commentedClass (docComment $ classDox d)
+docClass d = S.commentedClass (docComment $ return $ classDox d)
 
 commentedClass :: (RenderSym repr) => repr (BlockComment repr) -> 
   repr (Class repr) -> repr (Class repr)
-commentedClass cmt cs = classFromData (commentedItem (blockCommentDoc cmt) 
-  (classDoc cs))
+commentedClass cmt cs = classFromData (fmap (`commentedItem` classDoc cs)
+  (blockCommentDoc cmt))
 
 buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
   [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)
@@ -290,4 +290,5 @@ fileDoc ft ext topb botb m = S.fileFromData ft (addExt ext (moduleName m))
 
 docMod :: (RenderSym repr) => String -> [String] -> String -> 
   repr (RenderFile repr) -> repr (RenderFile repr)
-docMod d a dt m = commentedMod (docComment $ moduleDox d a dt $ getFilePath m) m
+docMod d a dt m = commentedMod (docComment $ return $ moduleDox d a dt $ 
+  getFilePath m) m

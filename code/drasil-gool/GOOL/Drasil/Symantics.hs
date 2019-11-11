@@ -19,6 +19,8 @@ module GOOL.Drasil.Symantics (
 
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.Data (Binding, Terminator, FileType)
+import GOOL.Drasil.State (GOOLState)
+import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
@@ -658,7 +660,7 @@ class (MethodSym repr, InternalClass repr) => ClassSym repr
 
 class InternalClass repr where
   classDoc :: repr (Class repr) -> Doc
-  classFromData :: Doc -> repr (Class repr)
+  classFromData :: State GOOLState Doc -> repr (Class repr)
 
 class (ClassSym repr, InternalMod repr) => ModuleSym repr where
   type Module repr
@@ -675,6 +677,6 @@ class InternalMod repr where
 class BlockCommentSym repr where
   type BlockComment repr
   blockComment :: [String] -> repr (BlockComment repr)
-  docComment :: [String] -> repr (BlockComment repr)
+  docComment :: State GOOLState [String] -> repr (BlockComment repr)
 
-  blockCommentDoc :: repr (BlockComment repr) -> Doc
+  blockCommentDoc :: repr (BlockComment repr) -> State GOOLState Doc

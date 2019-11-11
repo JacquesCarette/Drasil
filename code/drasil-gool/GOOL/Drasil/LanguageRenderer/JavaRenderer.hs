@@ -101,7 +101,7 @@ instance RenderSym JavaCode where
 
   docMod = G.docMod
 
-  commentedMod = liftA2 commentedModD
+  commentedMod = liftA2 (liftA2 commentedModD)
 
 instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
@@ -552,7 +552,8 @@ instance InternalMethod JavaCode where
     liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA5 (jMethod n) s p t 
     (liftList paramListDocD ps) b)
   intFunc = G.intFunc
-  commentedFunc cmt = liftA2 (fmap . updateMthdDoc) (fmap commentedItem cmt)
+  commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem)
+    cmt)
   
   isMainMethod = isMainMthd . (`evalState` initialState) . unJC
   methodDoc = mthdDoc . (`evalState` initialState) . unJC
@@ -583,7 +584,7 @@ instance ClassSym JavaCode where
 
 instance InternalClass JavaCode where
   classDoc = (`evalState` initialState) . unJC
-  classFromData = return . return
+  classFromData = return
 
 instance ModuleSym JavaCode where
   type Module JavaCode = State GOOLState ModData
@@ -598,9 +599,10 @@ instance InternalMod JavaCode where
   modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym JavaCode where
-  type BlockComment JavaCode = Doc
+  type BlockComment JavaCode = State GOOLState Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
-  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd 
+  docComment lns = liftA2 (\dcs dce -> fmap (docCmtDoc dcs dce) lns) 
+    docCommentStart docCommentEnd 
 
   blockCommentDoc = unJC
 

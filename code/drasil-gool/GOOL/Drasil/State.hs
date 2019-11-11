@@ -7,7 +7,6 @@ module GOOL.Drasil.State (
   addProgNameToPaths, setMain, setMainMod
 ) where
 
-import GOOL.Drasil.Symantics (Label)
 import GOOL.Drasil.Data (FileType(..))
 
 import Control.Lens (makeLenses,over,set)
@@ -86,7 +85,7 @@ addSource fp = over sources (\s -> if fp `elem` s then
 addCombinedHeaderSource :: FilePath -> GOOLState -> GOOLState
 addCombinedHeaderSource fp = addSource fp . addHeader fp 
 
-addProgNameToPaths :: Label -> GOOLState -> GOOLState
+addProgNameToPaths :: String -> GOOLState -> GOOLState
 addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) . 
   over headers (map f)
   where f = ((n++"/")++)

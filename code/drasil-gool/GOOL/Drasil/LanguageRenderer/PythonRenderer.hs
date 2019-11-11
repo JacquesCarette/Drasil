@@ -95,7 +95,7 @@ instance RenderSym PythonCode where
 
   docMod = G.docMod
 
-  commentedMod = liftA2 commentedModD
+  commentedMod = liftA2 (liftA2 commentedModD)
 
 instance InternalFile PythonCode where
   top _ = return pytop
@@ -561,7 +561,8 @@ instance InternalMethod PythonCode where
   intFunc m n _ _ _ ps b = (if m then getPutReturn setMain else return) <$>
     liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA2 (pyFunction n) 
     (liftList paramListDocD ps) b)
-  commentedFunc cmt = liftA2 (fmap . updateMthdDoc) (fmap commentedItem cmt)
+  commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem) 
+    cmt)
 
   isMainMethod = isMainMthd . (`evalState` initialState) . unPC
   methodDoc = mthdDoc . (`evalState` initialState) . unPC
@@ -583,7 +584,7 @@ instance InternalStateVar PythonCode where
 instance ClassSym PythonCode where
   type Class PythonCode = State GOOLState Doc
   buildClass = G.buildClass pyClass inherit
-  enum n es s = classFromData (pyClass n empty (scopeDoc s)
+  enum n es s = classFromData (return $ pyClass n empty (scopeDoc s)
     (enumElementsDocD' es) empty)
   privClass = G.privClass
   pubClass = G.pubClass
@@ -594,7 +595,7 @@ instance ClassSym PythonCode where
 
 instance InternalClass PythonCode where
   classDoc = (`evalState` initialState) . unPC
-  classFromData = return . return
+  classFromData = return
 
 instance ModuleSym PythonCode where
   type Module PythonCode = State GOOLState ModData
@@ -609,9 +610,9 @@ instance InternalMod PythonCode where
   modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym PythonCode where
-  type BlockComment PythonCode = Doc
+  type BlockComment PythonCode = State GOOLState Doc
   blockComment lns = fmap (pyBlockComment lns) commentStart
-  docComment lns = liftA2 (pyDocComment lns) docCommentStart commentStart
+  docComment lns = liftA2 (\dcs cs -> fmap (pyDocComment dcs cs) lns) docCommentStart commentStart
 
   blockCommentDoc = unPC
 
@@ -748,12 +749,13 @@ pyInOutCall f n ins outs both = if null rets then valState (f n void (map
   [f n void (map valueOf both ++ ins)]
   where rets = filterOutObjs both ++ outs
 
-pyBlockComment :: [String] -> Doc -> Doc
-pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
+pyBlockComment :: [String] -> Doc -> State GOOLState Doc
+pyBlockComment lns cmt = return $ vcat $ map ((<+>) cmt . text) lns
 
-pyDocComment :: [String] -> Doc -> Doc -> Doc
-pyDocComment [] _ _ = empty
-pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . text) lns
+pyDocComment :: Doc -> Doc -> [String] -> Doc
+pyDocComment _ _ [] = empty
+pyDocComment start mid (l:lns) = vcat $ start <+> text l : map ((<+>) mid . 
+  text) lns
 
 pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) 
     -> PythonCode (Type PythonCode) -> [PythonCode (Parameter PythonCode)] -> 

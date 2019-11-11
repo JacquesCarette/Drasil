@@ -700,7 +700,7 @@ instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
   modFromData n m d = pair (modFromData n m d) (modFromData n m d)
 
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
-  type BlockComment (p CppSrcCode CppHdrCode) = Doc
+  type BlockComment (p CppSrcCode CppHdrCode) = State GOOLState Doc
   blockComment lns = pair (blockComment lns) (blockComment lns)
   docComment lns = pair (docComment lns) (docComment lns)
 
@@ -735,7 +735,7 @@ instance RenderSym CppSrcCode where
   docMod = G.docMod
 
   commentedMod cmt m = if (isMainMod . fileMod . (`evalState` initialState) . 
-    unCPPSC) m then liftA2 commentedModD cmt m else m 
+    unCPPSC) m then liftA2 (liftA2 commentedModD) cmt m else m 
 
 instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
@@ -1193,7 +1193,7 @@ instance MethodSym CppSrcCode where
           bodyStatements $ loopIndexDec : deleteStatements
     in pubMethod ('~':n) n void [] dbody
 
-  docMain b = commentedFunc (docComment $ functionDox 
+  docMain b = commentedFunc (docComment $ return $ functionDox 
     "Controls the flow of the program" 
     [("argc", "Number of command-line arguments"),
     ("argv", "List of command-line arguments")] ["exit code"]) (mainFunction b)
@@ -1224,10 +1224,10 @@ instance InternalMethod CppSrcCode where
   intFunc m n s _ t ps b = (if m then getPutReturn setMain else return) <$> 
     liftA3 (mthd m) (fmap snd s) (checkParams n <$> sequence ps) (liftA5 
     (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
-  commentedFunc cmt fn = liftA3 (checkGOOLState (^. hasMain)) fn (return <$>
-    liftA3 (mthd $ isMainMethod fn) (fmap (getMthdScp . (`evalState` 
-    initialState)) fn) (fmap (mthdParams . (`evalState` initialState)) fn) 
-    (fmap (`commentedItem` methodDoc fn) cmt)) fn
+  commentedFunc cmt fn = liftA3 (checkGOOLState (^. hasMain)) fn (liftA3 
+    (\scp pms -> fmap (mthd (isMainMethod fn) scp pms)) (fmap (getMthdScp . 
+    (`evalState` initialState)) fn) (fmap (mthdParams . (`evalState` 
+    initialState)) fn) (fmap (fmap (`commentedItem` methodDoc fn)) cmt)) fn
  
   isMainMethod = isMainMthd . (`evalState` initialState) . unCPPSC
   methodDoc = mthdDoc . (`evalState` initialState) . unCPPSC
@@ -1261,7 +1261,7 @@ instance ClassSym CppSrcCode where
 
 instance InternalClass CppSrcCode where
   classDoc = (`evalState` initialState) . unCPPSC
-  classFromData = return . return
+  classFromData = return
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = State GOOLState ModData
@@ -1276,9 +1276,10 @@ instance InternalMod CppSrcCode where
   modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym CppSrcCode where
-  type BlockComment CppSrcCode = Doc
+  type BlockComment CppSrcCode = State GOOLState Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
-  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
+  docComment lns = liftA2 (\dcs dce -> fmap (docCmtDoc dcs dce) lns) 
+    docCommentStart docCommentEnd
 
   blockCommentDoc = unCPPSC
 
@@ -1307,7 +1308,7 @@ instance RenderSym CppHdrCode where
   docMod = G.docMod
 
   commentedMod cmt m = if (isMainMod . fileMod . (`evalState` initialState) . 
-    unCPPHC) m then m else liftA2 commentedModD cmt m
+    unCPPHC) m then m else liftA2 (liftA2 commentedModD) cmt m
 
 instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement
@@ -1759,10 +1760,10 @@ instance InternalMethod CppHdrCode where
     liftA3 (mthd m) (fmap snd s) (checkParams n <$> sequence ps) (liftA3 
     (cpphMethod n) t (liftList paramListDocD ps) endStatement)
   intFunc = G.intFunc
-  commentedFunc cmt fn = liftA3 (checkGOOLState (^. hasMain)) fn fn $ return 
-    <$> liftA3 (mthd $ isMainMethod fn) (fmap (getMthdScp . (`evalState` 
-    initialState)) fn) (fmap (mthdParams . (`evalState` initialState)) fn) 
-    (fmap (`commentedItem` methodDoc fn) cmt)
+  commentedFunc cmt fn = liftA3 (checkGOOLState (^. hasMain)) fn fn $ liftA3 
+    (\scp pms -> fmap (mthd (isMainMethod fn) scp pms)) (fmap (getMthdScp . 
+    (`evalState` initialState)) fn) (fmap (mthdParams . (`evalState` 
+    initialState)) fn) (fmap (fmap (`commentedItem` methodDoc fn)) cmt)
 
   isMainMethod = isMainMthd . (`evalState` initialState) . unCPPHC
   methodDoc = mthdDoc . (`evalState` initialState) . unCPPHC
@@ -1803,7 +1804,7 @@ instance ClassSym CppHdrCode where
 
 instance InternalClass CppHdrCode where
   classDoc = (`evalState` initialState) . unCPPHC
-  classFromData = return . return
+  classFromData = return
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = State GOOLState ModData
@@ -1818,9 +1819,10 @@ instance InternalMod CppHdrCode where
   modFromData n m d = return $ return $ md n m d
 
 instance BlockCommentSym CppHdrCode where
-  type BlockComment CppHdrCode = Doc
+  type BlockComment CppHdrCode = State GOOLState Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
-  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
+  docComment lns = liftA2 (\dcs dce -> fmap (docCmtDoc dcs dce) lns) 
+    docCommentStart docCommentEnd
 
   blockCommentDoc = unCPPHC
 

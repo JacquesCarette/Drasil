@@ -111,8 +111,8 @@ addExt ext nm = nm ++ "." ++ ext
 
 packageDocD :: Label -> Doc -> FileData -> FileData
 packageDocD n end f = fileD (n ++ "/" ++ filePath f) (updateModDoc 
-  (emptyIfEmpty (modDoc $ fileMod f) (vibcat [text "package" <+> text n <> end, 
-  modDoc (fileMod f)])) (fileMod f))
+  (\d -> emptyIfEmpty d (vibcat [text "package" <+> text n <> end, d])) 
+  (fileMod f))
 
 fileDoc' :: Doc -> Doc -> Doc -> Doc
 fileDoc' t m b = vibcat (filter (not . isEmpty) [
@@ -1131,8 +1131,7 @@ moduleDox desc as date m = (doxFile ++ m) :
   [doxBrief ++ desc | not (null desc)]
 
 commentedModD :: Doc -> FileData -> FileData
-commentedModD cmt m = updateFileMod (updateModDoc (commentedItem cmt 
-    ((modDoc . fileMod) m)) (fileMod m)) m
+commentedModD cmt m = updateFileMod (updateModDoc (commentedItem cmt) (fileMod m)) m
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
   repr (Method repr) -> repr (Method repr)

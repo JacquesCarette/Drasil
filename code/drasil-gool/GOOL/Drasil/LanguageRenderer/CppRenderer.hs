@@ -59,7 +59,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   docClass, commentedClass, buildModule, fileDoc, docMod)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileType(..), FileData(..), FuncData(..), fd, 
-  ModData(..), md, OpData(..), od, ParamData(..), pd, ProgData(..), progD, 
+  ModData(..), md, updateModDoc, OpData(..), od, ParamData(..), pd, ProgData(..), progD, 
   emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
   VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
@@ -729,8 +729,8 @@ instance ProgramSym CppSrcCode where
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = State GOOLState FileData
-  fileDoc code = liftA2 passState code (G.fileDoc Source cppSrcExt (top code) 
-    bottom code)
+  fileDoc code = G.fileDoc Source cppSrcExt (top code) 
+    bottom code
 
   docMod = G.docMod
 
@@ -1274,6 +1274,7 @@ instance InternalMod CppSrcCode where
   isMainModule = isMainMod . (`evalState` initialState) . unCPPSC
   moduleDoc = modDoc . (`evalState` initialState) . unCPPSC
   modFromData n m d = return $ return $ md n m d
+  updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = State GOOLState Doc
@@ -1302,8 +1303,8 @@ instance Monad CppHdrCode where
 
 instance RenderSym CppHdrCode where
   type RenderFile CppHdrCode = State GOOLState FileData
-  fileDoc code = liftA2 passState code (G.fileDoc Header cppHdrExt (top code) 
-    bottom code)
+  fileDoc code = G.fileDoc Header cppHdrExt (top code) 
+    bottom code
   
   docMod = G.docMod
 
@@ -1817,6 +1818,7 @@ instance InternalMod CppHdrCode where
   isMainModule = isMainMod . (`evalState` initialState) . unCPPHC
   moduleDoc = modDoc . (`evalState` initialState) . unCPPHC
   modFromData n m d = return $ return $ md n m d
+  updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = State GOOLState Doc

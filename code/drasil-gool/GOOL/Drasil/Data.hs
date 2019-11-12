@@ -55,8 +55,8 @@ data ModData = MD {name :: String, isMainMod :: Bool, modDoc :: Doc}
 md :: String -> Bool -> Doc -> ModData
 md = MD
 
-updateModDoc :: Doc -> ModData -> ModData
-updateModDoc d m = md (name m) (isMainMod m) d
+updateModDoc :: (Doc -> Doc) -> ModData -> ModData
+updateModDoc f m = md (name m) (isMainMod m) (f $ modDoc m)
 
 data MethodData = MthD {isMainMthd :: Bool, mthdParams :: [ParamData], 
   mthdDoc :: Doc}

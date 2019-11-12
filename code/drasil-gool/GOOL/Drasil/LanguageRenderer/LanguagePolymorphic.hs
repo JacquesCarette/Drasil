@@ -285,8 +285,7 @@ buildModule' n ms cs = modFromData n (any isMainMethod ms) (vibcat $ map
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
   repr (Block repr) -> repr (Module repr) -> repr (RenderFile repr)
 fileDoc ft ext topb botb m = S.fileFromData ft (addExt ext (moduleName m)) 
-  (modFromData (moduleName m) (isMainModule m) (emptyIfEmpty (moduleDoc m) 
-  (fileDoc' (blockDoc topb) (moduleDoc m) (blockDoc botb))))
+  (updateModuleDoc (\d -> emptyIfEmpty d (fileDoc' (blockDoc topb) d (blockDoc botb))) m)
 
 docMod :: (RenderSym repr) => String -> [String] -> String -> 
   repr (RenderFile repr) -> repr (RenderFile repr)

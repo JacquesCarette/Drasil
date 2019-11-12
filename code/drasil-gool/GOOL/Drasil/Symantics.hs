@@ -673,6 +673,7 @@ class InternalMod repr where
   isMainModule :: repr (Module repr) -> Bool
   moduleDoc :: repr (Module repr) -> Doc
   modFromData :: String -> Bool -> Doc -> repr (Module repr)
+  updateModuleDoc :: (Doc -> Doc) -> repr (Module repr) -> repr (Module repr)
     
 class BlockCommentSym repr where
   type BlockComment repr

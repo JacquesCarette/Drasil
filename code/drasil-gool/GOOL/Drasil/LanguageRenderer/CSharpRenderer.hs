@@ -59,7 +59,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
   commentedClass, buildModule', fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
-  FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (liftA4, liftA5, liftList, lift1List, checkParams)
@@ -94,8 +94,8 @@ instance ProgramSym CSharpCode where
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = State GOOLState FileData
-  fileDoc code = liftA2 passState code (G.fileDoc Combined csExt (top code) 
-    bottom code)
+  fileDoc code = G.fileDoc Combined csExt (top code) 
+    bottom code
 
   docMod = G.docMod
 
@@ -593,6 +593,7 @@ instance InternalMod CSharpCode where
   isMainModule = isMainMod . (`evalState` initialState) . unCSC
   moduleDoc = modDoc . (`evalState` initialState) . unCSC
   modFromData n m d = return $ return $ md n m d
+  updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = State GOOLState Doc

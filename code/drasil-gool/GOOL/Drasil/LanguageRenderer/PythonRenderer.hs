@@ -53,7 +53,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   buildClass, privClass, pubClass, docClass, commentedClass, buildModule, 
   fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
-  FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
   OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
   vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftList, 
@@ -90,8 +90,7 @@ instance ProgramSym PythonCode where
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = State GOOLState FileData
-  fileDoc code = liftA2 passState code (G.fileDoc Combined pyExt (top code) 
-    bottom code)
+  fileDoc code = G.fileDoc Combined pyExt (top code) bottom code
 
   docMod = G.docMod
 
@@ -608,6 +607,7 @@ instance InternalMod PythonCode where
   isMainModule = isMainMod . (`evalState` initialState) . unPC
   moduleDoc = modDoc . (`evalState` initialState) . unPC
   modFromData n m d = return $ return $ md n m d
+  updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = State GOOLState Doc

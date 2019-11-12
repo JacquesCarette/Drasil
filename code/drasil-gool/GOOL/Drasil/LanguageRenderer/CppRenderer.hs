@@ -59,14 +59,14 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   docClass, commentedClass, buildModule, fileDoc, docMod)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileType(..), FileData(..), FuncData(..), fd, 
-  ModData(..), md, updateModDoc, OpData(..), od, ParamData(..), pd, ProgData(..), progD, 
-  emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
-  VarData(..), vard)
+  ModData(..), md, updateModDoc, OpData(..), od, ParamData(..), pd, 
+  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
+  ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
 import GOOL.Drasil.State (GOOLState, hasMain, initialState, getPutReturn, 
-  passState, passState2Lists, checkGOOLState, setMain)
+  passState2Lists, checkGOOLState, setMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp)
 import Data.Maybe (maybeToList)

@@ -39,14 +39,13 @@ class (ModuleSym repr, InternalFile repr) =>
   docMod :: String -> [String] -> String -> repr (RenderFile repr) -> 
     repr (RenderFile repr)
 
-  commentedMod :: repr (BlockComment repr) -> repr (RenderFile repr) ->
+  commentedMod :: repr (RenderFile repr) -> repr (BlockComment repr) -> 
     repr (RenderFile repr)
 
 class InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
 
-  getFilePath :: repr (RenderFile repr) -> FilePath
   fileFromData :: FileType -> FilePath -> repr (Module repr) -> 
     repr (RenderFile repr)
 

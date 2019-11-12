@@ -4,19 +4,21 @@ module GOOL.Drasil.State (
   GOOLState(..), headers, sources, hasMain, mainMod, initialState, getPutReturn,
   getPutReturnFunc, getPutReturnList, passState, passState2Lists, 
   checkGOOLState, addFile, addCombinedHeaderSource, addHeader, addSource, 
-  addProgNameToPaths, setMain, setMainMod
+  addProgNameToPaths, setMain, setMainMod, setFilePath, getFilePath
 ) where
 
 import GOOL.Drasil.Data (FileType(..))
 
-import Control.Lens (makeLenses,over,set)
-import Control.Monad.State (State, get, put)
+import Control.Lens (makeLenses,over,set,(^.))
+import Control.Monad.State (State, get, put, gets)
 
 data GOOLState = GS {
   _headers :: [FilePath],
   _sources :: [FilePath],
   _hasMain :: Bool,
-  _mainMod :: Maybe FilePath
+  _mainMod :: Maybe FilePath,
+
+  _currFilePath :: FilePath
 } 
 makeLenses ''GOOLState
 
@@ -25,7 +27,9 @@ initialState = GS {
   _headers = [],
   _sources = [],
   _hasMain = False,
-  _mainMod = Nothing
+  _mainMod = Nothing,
+
+  _currFilePath = ""
 }
 
 getPutReturn :: (GOOLState -> GOOLState) -> a -> State GOOLState a
@@ -91,8 +95,14 @@ addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
   where f = ((n++"/")++)
 
 setMain :: GOOLState -> GOOLState
-setMain = over hasMain (\b -> if b then error "Multiple main functions defined" 
+setMain = over hasMain (\b -> if b then error "Multiple main functions defined"
   else not b)
 
 setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = set mainMod (Just n)
+
+setFilePath :: FilePath -> GOOLState -> GOOLState
+setFilePath = set currFilePath
+
+getFilePath :: State GOOLState FilePath
+getFilePath = gets (^. currFilePath)

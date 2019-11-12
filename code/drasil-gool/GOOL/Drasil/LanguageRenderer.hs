@@ -65,8 +65,8 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
   ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
-  ModData(..), updateModDoc, OpData(..), od, ParamData(..), pd, TypeData(..), 
-  td, ValData(..), vd, Binding(..), VarData(..), vard)
+  updateModDoc, OpData(..), od, ParamData(..), pd, TypeData(..), td, 
+  ValData(..), vd, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
   emptyIfEmpty, emptyIfNull, getInnerType, getNestDegree, convType)
 import GOOL.Drasil.State (GOOLState)
@@ -1130,8 +1130,8 @@ moduleDox desc as date m = (doxFile ++ m) :
   [doxDate ++ date | not (null date)] ++ 
   [doxBrief ++ desc | not (null desc)]
 
-commentedModD :: Doc -> FileData -> FileData
-commentedModD cmt m = updateFileMod (updateModDoc (commentedItem cmt) (fileMod m)) m
+commentedModD :: FileData -> Doc -> FileData
+commentedModD m cmt = updateFileMod (updateModDoc (commentedItem cmt) (fileMod m)) m
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
   repr (Method repr) -> repr (Method repr)

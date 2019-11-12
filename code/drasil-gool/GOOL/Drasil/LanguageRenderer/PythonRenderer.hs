@@ -100,7 +100,6 @@ instance InternalFile PythonCode where
   top _ = return pytop
   bottom = return empty
 
-  getFilePath = filePath . (`evalState` initialState) . unPC
   fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym PythonCode where

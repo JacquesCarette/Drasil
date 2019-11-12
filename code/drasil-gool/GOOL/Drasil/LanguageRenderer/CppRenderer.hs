@@ -104,14 +104,13 @@ instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
 
   docMod d a dt m = pair (docMod d a dt $ pfst m) (docMod d a dt $ psnd m)
 
-  commentedMod cmt m = pair (commentedMod (pfst cmt) (pfst m)) 
-    (commentedMod (psnd cmt) (psnd m))
+  commentedMod m cmt = pair (commentedMod (pfst m) (pfst cmt)) 
+    (commentedMod (psnd m) (psnd cmt))
 
 instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
   
-  getFilePath f = getFilePath $ pfst f
   fileFromData ft fp m = pair (fileFromData ft fp $ pfst m) 
     (fileFromData ft fp $ psnd m)
 
@@ -698,6 +697,8 @@ instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
   isMainModule m = isMainModule $ pfst m
   moduleDoc m = moduleDoc $ pfst m
   modFromData n m d = pair (modFromData n m d) (modFromData n m d)
+  updateModuleDoc f m = pair (updateModuleDoc f $ pfst m) (updateModuleDoc f $ 
+    psnd m)
 
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   type BlockComment (p CppSrcCode CppHdrCode) = State GOOLState Doc
@@ -734,14 +735,13 @@ instance RenderSym CppSrcCode where
 
   docMod = G.docMod
 
-  commentedMod cmt m = if (isMainMod . fileMod . (`evalState` initialState) . 
-    unCPPSC) m then liftA2 (liftA2 commentedModD) cmt m else m 
+  commentedMod m cmt = if (isMainMod . fileMod . (`evalState` initialState) . 
+    unCPPSC) m then liftA2 (liftA2 commentedModD) m cmt else m 
 
 instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
   
-  getFilePath = filePath . (`evalState` initialState) . unCPPSC
   fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym CppSrcCode where
@@ -1308,14 +1308,13 @@ instance RenderSym CppHdrCode where
   
   docMod = G.docMod
 
-  commentedMod cmt m = if (isMainMod . fileMod . (`evalState` initialState) . 
-    unCPPHC) m then m else liftA2 (liftA2 commentedModD) cmt m
+  commentedMod m cmt = if (isMainMod . fileMod . (`evalState` initialState) . 
+    unCPPHC) m then m else liftA2 (liftA2 commentedModD) m cmt
 
 instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = return $ text "#endif"
   
-  getFilePath = filePath . (`evalState` initialState) . unCPPHC
   fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym CppHdrCode where

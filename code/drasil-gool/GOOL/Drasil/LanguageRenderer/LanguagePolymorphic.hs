@@ -13,7 +13,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, block,
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, KeywordSym(..), InternalFile(getFilePath),
+import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   RenderSym(RenderFile, commentedMod), BlockSym(Block), 
   InternalBlock(..), BodySym(..), PermanenceSym(..), InternalPerm(..), 
   TypeSym(..), InternalType(..), VariableSym(..), 
@@ -38,7 +38,7 @@ import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD,
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
   moduleDox, getterName, setterName)
 import GOOL.Drasil.State (GOOLState, hasMain, mainMod, getPutReturnFunc, 
-  addFile, setMainMod)
+  addFile, setMainMod, setFilePath, getFilePath)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList, isNothing)
@@ -51,7 +51,7 @@ fileFromData :: FileType -> FilePath -> State GOOLState ModData ->
   State GOOLState FileData
 fileFromData ft fp sm = getPutReturnFunc sm (\s m -> (if isEmpty (modDoc m) 
   then id else (if s ^. hasMain && isNothing (s ^. mainMod) then setMainMod fp 
-  else id) . addFile ft fp) s) (fileD fp)
+  else id) . addFile ft fp . setFilePath fp) s) (fileD fp)
 
 block :: (RenderSym repr) => repr (Keyword repr) -> [repr (Statement repr)] -> 
   repr (Block repr)
@@ -285,9 +285,9 @@ buildModule' n ms cs = modFromData n (any isMainMethod ms) (vibcat $ map
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
   repr (Block repr) -> repr (Module repr) -> repr (RenderFile repr)
 fileDoc ft ext topb botb m = S.fileFromData ft (addExt ext (moduleName m)) 
-  (updateModuleDoc (\d -> emptyIfEmpty d (fileDoc' (blockDoc topb) d (blockDoc botb))) m)
+  (updateModuleDoc (\d -> emptyIfEmpty d (fileDoc' (blockDoc topb) d (blockDoc 
+  botb))) m)
 
 docMod :: (RenderSym repr) => String -> [String] -> String -> 
   repr (RenderFile repr) -> repr (RenderFile repr)
-docMod d a dt m = commentedMod (docComment $ return $ moduleDox d a dt $ 
-  getFilePath m) m
+docMod d a dt m = commentedMod m (docComment $ moduleDox d a dt <$> getFilePath)

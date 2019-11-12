@@ -107,7 +107,6 @@ instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
   
-  getFilePath = filePath . (`evalState` initialState) . unJC
   fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym JavaCode where

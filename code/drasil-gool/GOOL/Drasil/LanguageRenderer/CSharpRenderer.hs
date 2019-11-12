@@ -105,7 +105,6 @@ instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
 
-  getFilePath = filePath . (`evalState` initialState) . unCSC
   fileFromData ft fp = fmap (G.fileFromData ft fp)
 
 instance KeywordSym CSharpCode where

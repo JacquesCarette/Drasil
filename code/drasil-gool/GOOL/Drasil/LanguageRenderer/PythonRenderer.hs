@@ -610,7 +610,7 @@ instance InternalMod PythonCode where
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = State GOOLState Doc
-  blockComment lns = fmap (pyBlockComment lns) commentStart
+  blockComment lns = fmap (return . pyBlockComment lns) commentStart
   docComment lns = liftA2 (\dcs cs -> fmap (pyDocComment dcs cs) lns) docCommentStart commentStart
 
   blockCommentDoc = unPC
@@ -748,8 +748,8 @@ pyInOutCall f n ins outs both = if null rets then valState (f n void (map
   [f n void (map valueOf both ++ ins)]
   where rets = filterOutObjs both ++ outs
 
-pyBlockComment :: [String] -> Doc -> State GOOLState Doc
-pyBlockComment lns cmt = return $ vcat $ map ((<+>) cmt . text) lns
+pyBlockComment :: [String] -> Doc -> Doc
+pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
 
 pyDocComment :: Doc -> Doc -> [String] -> Doc
 pyDocComment _ _ [] = empty

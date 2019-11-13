@@ -1278,7 +1278,8 @@ instance InternalMod CppSrcCode where
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = State GOOLState Doc
-  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  blockComment lns = liftA2 (\bcs bce -> return $ blockCmtDoc lns bcs bce) 
+    blockCommentStart blockCommentEnd
   docComment lns = liftA2 (\dcs dce -> fmap (docCmtDoc dcs dce) lns) 
     docCommentStart docCommentEnd
 
@@ -1821,7 +1822,8 @@ instance InternalMod CppHdrCode where
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = State GOOLState Doc
-  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  blockComment lns = liftA2 (\bcs bce -> return $ blockCmtDoc lns bcs bce) 
+    blockCommentStart blockCommentEnd
   docComment lns = liftA2 (\dcs dce -> fmap (docCmtDoc dcs dce) lns) 
     docCommentStart docCommentEnd
 

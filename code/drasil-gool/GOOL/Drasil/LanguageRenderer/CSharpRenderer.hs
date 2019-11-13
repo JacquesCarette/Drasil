@@ -596,7 +596,8 @@ instance InternalMod CSharpCode where
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = State GOOLState Doc
-  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  blockComment lns = liftA2 (\bcs bce -> return $ blockCmtDoc lns bcs bce) 
+    blockCommentStart blockCommentEnd
   docComment lns = liftA2 (\dcs dce -> fmap (docCmtDoc dcs dce) lns) 
     docCommentStart docCommentEnd
 

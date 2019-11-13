@@ -600,7 +600,8 @@ instance InternalMod JavaCode where
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = State GOOLState Doc
-  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  blockComment lns = liftA2 (\bcs bce -> return $ blockCmtDoc lns bcs bce) 
+    blockCommentStart blockCommentEnd
   docComment lns = liftA2 (\dcs dce -> fmap (docCmtDoc dcs dce) lns) 
     docCommentStart docCommentEnd 
 

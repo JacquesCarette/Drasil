@@ -58,10 +58,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
   docClass, commentedClass, buildModule, fileDoc, docMod)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
-  Binding(..), BindData(..), bd, FileType(..), FileData(..), FuncData(..), fd, 
-  ModData(..), md, updateModDoc, OpData(..), od, ParamData(..), pd, 
-  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
-  ValData(..), vd, VarData(..), vard)
+  Binding(..), BindData(..), bd, FileType(..), FileData(..), fileD, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
+  ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
+  TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
@@ -99,20 +99,22 @@ instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
     (return (return emptyProg))
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
-  type RenderFile (p CppSrcCode CppHdrCode) = State GOOLState FileData
-  fileDoc code = pair (fileDoc $ pfst code) (fileDoc $ psnd code)
+  type RenderFile (p CppSrcCode CppHdrCode) = FileData
+  fileDoc code = liftA2 pair (fileDoc $ fmap pfst code) (fileDoc $ fmap psnd 
+    code)
 
-  docMod d a dt m = pair (docMod d a dt $ pfst m) (docMod d a dt $ psnd m)
+  docMod d a dt m = liftA2 pair (docMod d a dt $ fmap pfst m) (docMod d a dt $ 
+    fmap psnd m)
 
-  commentedMod m cmt = pair (commentedMod (pfst m) (pfst cmt)) 
-    (commentedMod (psnd m) (psnd cmt))
+  commentedMod m cmt = liftA2 pair (commentedMod (fmap pfst m) (fmap pfst cmt)) 
+    (commentedMod (fmap psnd m) (fmap psnd cmt))
 
 instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
   
-  fileFromData ft fp m = pair (fileFromData ft fp $ pfst m) 
-    (fileFromData ft fp $ psnd m)
+  fileFromData ft fp m = liftA2 pair (fileFromData ft fp $ fmap pfst m) 
+    (fileFromData ft fp $ fmap psnd m)
 
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
@@ -736,20 +738,20 @@ instance ProgramSym CppSrcCode where
   prog n = liftList (liftList (progD n))
   
 instance RenderSym CppSrcCode where
-  type RenderFile CppSrcCode = State GOOLState FileData
-  fileDoc code = G.fileDoc Source cppSrcExt (top code) 
+  type RenderFile CppSrcCode = FileData
+  fileDoc code = G.fileDoc Source cppSrcExt (top $ evalState code initialState)
     bottom code
 
   docMod = G.docMod
 
-  commentedMod m cmt = if (isMainMod . fileMod . (`evalState` initialState) . 
-    unCPPSC) m then liftA2 (liftA2 commentedModD) m cmt else m 
+  commentedMod = liftA2 (\m cmt-> if (isMainMod . fileMod . unCPPSC) m then 
+    liftA2 commentedModD m cmt else m)
 
 instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
   
-  fileFromData ft fp = fmap (G.fileFromData ft fp)
+  fileFromData = G.fileFromData (\fp m -> fmap (fileD fp) m)
 
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -1309,20 +1311,20 @@ instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
 instance RenderSym CppHdrCode where
-  type RenderFile CppHdrCode = State GOOLState FileData
-  fileDoc code = G.fileDoc Header cppHdrExt (top code) 
+  type RenderFile CppHdrCode = FileData
+  fileDoc code = G.fileDoc Header cppHdrExt (top $ evalState code initialState)
     bottom code
   
   docMod = G.docMod
 
-  commentedMod m cmt = if (isMainMod . fileMod . (`evalState` initialState) . 
-    unCPPHC) m then m else liftA2 (liftA2 commentedModD) m cmt
+  commentedMod = liftA2 (\m cmt -> if (isMainMod . fileMod . unCPPHC) m then m 
+    else liftA2 commentedModD m cmt)
 
 instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = return $ text "#endif"
   
-  fileFromData ft fp = fmap (G.fileFromData ft fp)
+  fileFromData = G.fileFromData (\fp m -> fmap (fileD fp) m)
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc

@@ -58,7 +58,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
   privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
   commentedClass, buildModule', fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
@@ -93,8 +93,8 @@ instance ProgramSym CSharpCode where
   prog n = liftList (liftList (progD n))
 
 instance RenderSym CSharpCode where
-  type RenderFile CSharpCode = State GOOLState FileData
-  fileDoc code = G.fileDoc Combined csExt (top code) 
+  type RenderFile CSharpCode = FileData
+  fileDoc code = G.fileDoc Combined csExt (top $ evalState code initialState) 
     bottom code
 
   docMod = G.docMod
@@ -105,7 +105,7 @@ instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
 
-  fileFromData ft fp = fmap (G.fileFromData ft fp)
+  fileFromData = G.fileFromData (\fp m -> fmap (fileD fp) m)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc

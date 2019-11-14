@@ -52,7 +52,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   function, docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, 
   buildClass, privClass, pubClass, docClass, commentedClass, buildModule, 
   fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
@@ -89,8 +89,10 @@ instance ProgramSym PythonCode where
   prog n = liftList (liftList (progD n))
 
 instance RenderSym PythonCode where
-  type RenderFile PythonCode = State GOOLState FileData
-  fileDoc code = G.fileDoc Combined pyExt (top code) bottom code
+  type RenderFile PythonCode = FileData
+  -- temporary evalState until I add more state
+  fileDoc code = G.fileDoc Combined pyExt (top $ evalState code initialState)
+    bottom code
 
   docMod = G.docMod
 
@@ -100,7 +102,7 @@ instance InternalFile PythonCode where
   top _ = return pytop
   bottom = return empty
 
-  fileFromData ft fp = fmap (G.fileFromData ft fp)
+  fileFromData = G.fileFromData (\fp m -> fmap (fileD fp) m)
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc

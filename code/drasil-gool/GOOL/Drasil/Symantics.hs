@@ -33,21 +33,25 @@ class (RenderSym repr) => ProgramSym repr where
 class (ModuleSym repr, InternalFile repr) => 
   RenderSym repr where 
   type RenderFile repr
-  fileDoc :: repr (Module repr) -> repr (RenderFile repr)
+  fileDoc :: State GOOLState (repr (Module repr)) -> 
+    State GOOLState (repr (RenderFile repr))
 
   -- Module description, list of author names, date as a String, file to comment
-  docMod :: String -> [String] -> String -> repr (RenderFile repr) -> 
-    repr (RenderFile repr)
+  docMod :: String -> [String] -> String -> 
+    State GOOLState (repr (RenderFile repr)) -> 
+    State GOOLState (repr (RenderFile repr))
 
-  commentedMod :: repr (RenderFile repr) -> 
-    State GOOLState (repr (BlockComment repr)) -> repr (RenderFile repr)
+  commentedMod :: State GOOLState (repr (RenderFile repr)) -> 
+    State GOOLState (repr (BlockComment repr)) -> 
+    State GOOLState (repr (RenderFile repr))
 
 class InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
 
-  fileFromData :: FileType -> FilePath -> repr (Module repr) -> 
-    repr (RenderFile repr)
+  fileFromData :: FileType -> State GOOLState FilePath -> 
+    State GOOLState (repr (Module repr)) -> 
+    State GOOLState (repr (RenderFile repr))
 
 class (PermanenceSym repr) => KeywordSym repr where
   type Keyword repr

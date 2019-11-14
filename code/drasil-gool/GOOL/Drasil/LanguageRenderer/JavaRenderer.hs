@@ -58,7 +58,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
   pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
   commentedClass, buildModule', fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
@@ -95,8 +95,8 @@ instance ProgramSym JavaCode where
     (progD n . map (packageDocD n end))) endStatement
 
 instance RenderSym JavaCode where
-  type RenderFile JavaCode = State GOOLState FileData 
-  fileDoc code = G.fileDoc Combined jExt (top code) 
+  type RenderFile JavaCode = FileData 
+  fileDoc code = G.fileDoc Combined jExt (top $ evalState code initialState) 
     bottom code
 
   docMod = G.docMod
@@ -107,7 +107,7 @@ instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
   
-  fileFromData ft fp = fmap (G.fileFromData ft fp)
+  fileFromData = G.fileFromData (\fp m -> fmap (fileD fp) m)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc

@@ -2,9 +2,9 @@
 
 module GOOL.Drasil.State (
   GOOLState(..), headers, sources, hasMain, mainMod, initialState, getPutReturn,
-  getPutReturnFunc, getPutReturnList, passState, passState2Lists, 
-  checkGOOLState, addFile, addCombinedHeaderSource, addHeader, addSource, 
-  addProgNameToPaths, setMain, setMainMod, setFilePath, getFilePath
+  getPutReturnFunc, getPutReturnFunc2, getPutReturnList, passState, 
+  passState2Lists, checkGOOLState, addFile, addCombinedHeaderSource, addHeader, 
+  addSource, addProgNameToPaths, setMain, setMainMod, setFilePath, getFilePath
 ) where
 
 import GOOL.Drasil.Data (FileType(..))
@@ -45,6 +45,15 @@ getPutReturnFunc st sf vf = do
   s <- get
   put $ sf s v
   return $ vf v
+
+getPutReturnFunc2 :: State GOOLState c -> State GOOLState b -> 
+  (GOOLState -> c -> b -> GOOLState) -> (c -> b -> a) -> State GOOLState a
+getPutReturnFunc2 st1 st2 sf vf = do
+  v1 <- st1
+  v2 <- st2
+  s <- get
+  put $ sf s v1 v2
+  return $ vf v1 v2
 
 getPutReturnList :: [State GOOLState b] -> (GOOLState -> GOOLState) -> 
   ([b] -> a) -> State GOOLState a

@@ -31,13 +31,13 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   MethodSym(method, mainFunction), InternalMethod(intFunc), 
   StateVarSym(stateVar), ClassSym(buildClass, commentedClass))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
-  FileType, FileData(..), fileD, ModData(..))
+  FileType)
 import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, liftList)
 import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD, 
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
   moduleDox, getterName, setterName)
-import GOOL.Drasil.State (GOOLState, hasMain, mainMod, getPutReturnFunc, 
+import GOOL.Drasil.State (GOOLState, hasMain, mainMod, getPutReturnFunc2, 
   addFile, setMainMod, setFilePath, getFilePath)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
@@ -48,11 +48,12 @@ import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   vcat, semi, equals, isEmpty)
 
-fileFromData :: FileType -> FilePath -> State GOOLState ModData -> 
-  State GOOLState FileData
-fileFromData ft fp sm = getPutReturnFunc sm (\s m -> (if isEmpty (modDoc m) 
-  then id else (if s ^. hasMain && isNothing (s ^. mainMod) then setMainMod fp 
-  else id) . addFile ft fp . setFilePath fp) s) (fileD fp)
+fileFromData :: (RenderSym repr) => (FilePath -> repr (Module repr) -> repr 
+  (RenderFile repr)) -> FileType -> State GOOLState FilePath -> State GOOLState 
+  (repr (Module repr)) -> State GOOLState (repr (RenderFile repr))
+fileFromData f ft fp m = getPutReturnFunc2 fp m (\s fpath mdl -> (if isEmpty 
+  (moduleDoc mdl) then id else (if s ^. hasMain && isNothing (s ^. mainMod) 
+  then setMainMod fpath else id) . addFile ft fpath . setFilePath fpath) s) f
 
 block :: (RenderSym repr) => repr (Keyword repr) -> [repr (Statement repr)] -> 
   repr (Block repr)
@@ -300,11 +301,12 @@ buildModule' n ms cs = modFromData n (liftList (any isMainMethod) ms)
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
   repr (Block repr) -> State GOOLState (repr (Module repr)) -> 
-  repr (RenderFile repr)
+  State GOOLState (repr (RenderFile repr))
 fileDoc ft ext topb botb m = S.fileFromData ft (fmap (addExt ext . moduleName) 
   m) (updateModuleDoc (\d -> emptyIfEmpty d (fileDoc' (blockDoc topb) d 
   (blockDoc botb))) m)
 
 docMod :: (RenderSym repr) => String -> [String] -> String -> 
-  repr (RenderFile repr) -> repr (RenderFile repr)
+  State GOOLState (repr (RenderFile repr)) -> 
+  State GOOLState (repr (RenderFile repr))
 docMod d a dt m = commentedMod m (docComment $ moduleDox d a dt <$> getFilePath)

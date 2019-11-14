@@ -596,16 +596,16 @@ instance InternalClass PythonCode where
   classFromData = fmap return
 
 instance ModuleSym PythonCode where
-  type Module PythonCode = State GOOLState ModData
-  buildModule n ls ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+  type Module PythonCode = ModData
+  buildModule n ls ms cs = passState2Lists (sequence ms) (sequence cs) 
     (G.buildModule n (map include ls) ms cs)
 
-  moduleName = name . (`evalState` initialState) . unPC
+  moduleName = name . unPC
 
 instance InternalMod PythonCode where
-  isMainModule = isMainMod . (`evalState` initialState) . unPC
-  moduleDoc = modDoc . (`evalState` initialState) . unPC
-  modFromData n m d = return $ return $ md n m d
+  isMainModule = isMainMod . unPC
+  moduleDoc = modDoc . unPC
+  modFromData n = liftA2 (\m d -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym PythonCode where

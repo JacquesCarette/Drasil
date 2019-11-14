@@ -675,16 +675,19 @@ class InternalClass repr where
 
 class (ClassSym repr, InternalMod repr) => ModuleSym repr where
   type Module repr
-  buildModule :: Label -> [Library] -> [repr (Method repr)] -> 
-    [repr (Class repr)] -> repr (Module repr)
+  buildModule :: Label -> [Library] -> [State GOOLState (repr (Method repr))] 
+    -> [State GOOLState (repr (Class repr))] -> 
+    State GOOLState (repr (Module repr))
     
   moduleName :: repr (Module repr) -> String
 
 class InternalMod repr where
   isMainModule :: repr (Module repr) -> Bool
   moduleDoc :: repr (Module repr) -> Doc
-  modFromData :: String -> Bool -> State GOOLState Doc -> repr (Module repr)
-  updateModuleDoc :: (Doc -> Doc) -> repr (Module repr) -> repr (Module repr)
+  modFromData :: String -> State GOOLState Bool -> State GOOLState Doc -> 
+    State GOOLState (repr (Module repr))
+  updateModuleDoc :: (Doc -> Doc) -> State GOOLState (repr (Module repr)) -> 
+    State GOOLState (repr (Module repr))
     
 class BlockCommentSym repr where
   type BlockComment repr

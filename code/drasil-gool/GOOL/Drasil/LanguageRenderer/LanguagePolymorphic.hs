@@ -285,22 +285,25 @@ commentedClass cmt cs = classFromData (liftA2 (\cmt' cs' -> commentedItem
   (blockCommentDoc cmt') (classDoc cs')) cmt cs)
 
 buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
-  [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)
-buildModule n ls ms cs = modFromData n (any isMainMethod ms) (moduleDocD 
-  (vcat $ map keyDoc ls) (vibcat $ map classDoc cs)
-  (methodListDocD $ map methodDoc ms))
+  [State GOOLState (repr (Method repr))] -> 
+  [State GOOLState (repr (Class repr))] -> State GOOLState (repr (Module repr))
+buildModule n ls ms cs = modFromData n (liftList (any isMainMethod) ms) 
+  (liftA2 (moduleDocD (vcat $ map keyDoc ls)) (liftList (vibcat . map classDoc) 
+  cs) (liftList (methodListDocD . map methodDoc) ms))
 
 buildModule' :: (RenderSym repr) => Label -> 
   [State GOOLState (repr (Method repr))] -> 
-  [State GOOLState (repr (Class repr))] -> repr (Module repr)
-buildModule' n ms cs = modFromData n (any isMainMethod ms) (liftList (vibcat . 
-  map classDoc) (if null ms then cs else pubClass n Nothing [] ms : cs))
+  [State GOOLState (repr (Class repr))] -> State GOOLState (repr (Module repr))
+buildModule' n ms cs = modFromData n (liftList (any isMainMethod) ms) 
+  (liftList (vibcat . map classDoc) (if null ms then cs else pubClass n Nothing 
+  [] ms : cs))
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
-  repr (Block repr) -> repr (Module repr) -> repr (RenderFile repr)
-fileDoc ft ext topb botb m = S.fileFromData ft (addExt ext (moduleName m)) 
-  (updateModuleDoc (\d -> emptyIfEmpty d (fileDoc' (blockDoc topb) d (blockDoc 
-  botb))) m)
+  repr (Block repr) -> State GOOLState (repr (Module repr)) -> 
+  repr (RenderFile repr)
+fileDoc ft ext topb botb m = S.fileFromData ft (fmap (addExt ext . moduleName) 
+  m) (updateModuleDoc (\d -> emptyIfEmpty d (fileDoc' (blockDoc topb) d 
+  (blockDoc botb))) m)
 
 docMod :: (RenderSym repr) => String -> [String] -> String -> 
   repr (RenderFile repr) -> repr (RenderFile repr)

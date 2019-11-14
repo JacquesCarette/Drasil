@@ -586,16 +586,16 @@ instance InternalClass JavaCode where
   classFromData = fmap return
 
 instance ModuleSym JavaCode where
-  type Module JavaCode = State GOOLState ModData
-  buildModule n _ ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+  type Module JavaCode = ModData
+  buildModule n _ ms cs = passState2Lists (sequence ms) (sequence cs) 
     (G.buildModule' n ms cs)
 
-  moduleName = name . (`evalState` initialState) . unJC
+  moduleName = name . unJC
   
 instance InternalMod JavaCode where
-  isMainModule = isMainMod . (`evalState` initialState) . unJC
-  moduleDoc = modDoc . (`evalState` initialState) . unJC
-  modFromData n m d = return $ return $ md n m d
+  isMainModule = isMainMod . unJC
+  moduleDoc = modDoc . unJC
+  modFromData n = liftA2 (\m d -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym JavaCode where

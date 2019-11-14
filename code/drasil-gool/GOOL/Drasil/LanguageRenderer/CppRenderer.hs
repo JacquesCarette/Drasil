@@ -693,18 +693,19 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
   classFromData d = pair (classFromData d) (classFromData d)
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
-  type Module (p CppSrcCode CppHdrCode) = State GOOLState ModData
-  buildModule n l ms cs = pair (buildModule n l (map pfst ms) (map pfst cs)) 
-    (buildModule n l (map psnd ms) (map psnd cs))
+  type Module (p CppSrcCode CppHdrCode) = ModData
+  buildModule n l ms cs = liftA2 pair (buildModule n l (map (fmap pfst) ms) 
+    (map (fmap pfst) cs)) (buildModule n l (map (fmap psnd) ms) (map (fmap psnd)
+    cs))
 
   moduleName m = moduleName $ pfst m
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
   isMainModule m = isMainModule $ pfst m
   moduleDoc m = moduleDoc $ pfst m
-  modFromData n m d = pair (modFromData n m d) (modFromData n m d)
-  updateModuleDoc f m = pair (updateModuleDoc f $ pfst m) (updateModuleDoc f $ 
-    psnd m)
+  modFromData n m d = liftA2 pair (modFromData n m d) (modFromData n m d)
+  updateModuleDoc f m = liftA2 pair (updateModuleDoc f $ fmap pfst m) 
+    (updateModuleDoc f $ fmap psnd m)
 
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   type BlockComment (p CppSrcCode CppHdrCode) = Doc
@@ -1270,16 +1271,16 @@ instance InternalClass CppSrcCode where
   classFromData = fmap return
 
 instance ModuleSym CppSrcCode where
-  type Module CppSrcCode = State GOOLState ModData
-  buildModule n ls ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+  type Module CppSrcCode = ModData
+  buildModule n ls ms cs = passState2Lists (sequence ms) (sequence cs) 
     (G.buildModule n (map include ls) ms cs)
     
-  moduleName = name . (`evalState` initialState) . unCPPSC
+  moduleName = name . unCPPSC
 
 instance InternalMod CppSrcCode where
-  isMainModule = isMainMod . (`evalState` initialState) . unCPPSC
-  moduleDoc = modDoc . (`evalState` initialState) . unCPPSC
-  modFromData n m d = return $ return $ md n m d
+  isMainModule = isMainMod . unCPPSC
+  moduleDoc = modDoc . unCPPSC
+  modFromData n = liftA2 (\m d -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CppSrcCode where
@@ -1814,16 +1815,16 @@ instance InternalClass CppHdrCode where
   classFromData = fmap return
 
 instance ModuleSym CppHdrCode where
-  type Module CppHdrCode = State GOOLState ModData
-  buildModule n ls ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+  type Module CppHdrCode = ModData
+  buildModule n ls ms cs = passState2Lists (sequence ms) (sequence cs) 
     (G.buildModule n (map include ls) ms cs)
       
-  moduleName = name . (`evalState` initialState) . unCPPHC
+  moduleName = name . unCPPHC
 
 instance InternalMod CppHdrCode where
-  isMainModule = isMainMod . (`evalState` initialState) . unCPPHC
-  moduleDoc = modDoc . (`evalState` initialState) . unCPPHC
-  modFromData n m d = return $ return $ md n m d
+  isMainModule = isMainMod . unCPPHC
+  moduleDoc = modDoc . unCPPHC
+  modFromData n = liftA2 (\m d -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CppHdrCode where

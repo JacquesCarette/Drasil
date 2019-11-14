@@ -582,16 +582,16 @@ instance InternalClass CSharpCode where
   classFromData = fmap return
 
 instance ModuleSym CSharpCode where
-  type Module CSharpCode = State GOOLState ModData
-  buildModule n _ ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
+  type Module CSharpCode = ModData
+  buildModule n _ ms cs = passState2Lists (sequence ms) (sequence cs) 
     (G.buildModule' n ms cs)
     
-  moduleName = name . (`evalState` initialState) . unCSC
+  moduleName = name . unCSC
   
 instance InternalMod CSharpCode where
-  isMainModule = isMainMod . (`evalState` initialState) . unCSC
-  moduleDoc = modDoc . (`evalState` initialState) . unCSC
-  modFromData n m d = return $ return $ md n m d
+  isMainModule = isMainMod . unCSC
+  moduleDoc = modDoc . unCSC
+  modFromData n = liftA2 (\m d -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CSharpCode where

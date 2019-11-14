@@ -587,8 +587,7 @@ instance InternalClass JavaCode where
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
-  buildModule n _ ms cs = passState2Lists (sequence ms) (sequence cs) 
-    (G.buildModule' n ms cs)
+  buildModule n _ ms cs = passState2Lists ms cs (G.buildModule' n ms cs)
 
   moduleName = name . unJC
   

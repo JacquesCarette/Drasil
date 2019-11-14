@@ -599,7 +599,7 @@ instance InternalClass PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n ls ms cs = passState2Lists (sequence ms) (sequence cs) 
+  buildModule n ls ms cs = passState2Lists ms cs 
     (G.buildModule n (map include ls) ms cs)
 
   moduleName = name . unPC

@@ -96,7 +96,7 @@ hdrToSrc (CPPHC a) = CPPSC a
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
   type Program (p CppSrcCode CppHdrCode) = ProgData
   prog n ms = liftA2 pair (prog n $ map (fmap (hdrToSrc . psnd)) ms ++ map 
-    (fmap pfst ms) (return (return emptyProg)))
+    (fmap pfst) ms) (return (return emptyProg))
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   type RenderFile (p CppSrcCode CppHdrCode) = FileData
@@ -608,8 +608,8 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     (pfst b)) (pubMethod n c (psnd t) (map psnd ps) (psnd b))
   constructor n ps b = liftA2 pair (constructor n (map pfst ps) (pfst b))
     (constructor n (map psnd ps) (psnd b))
-  destructor n vs = liftA2 pair (destructor n $ map pfst vs) 
-    (destructor n $ map psnd vs)
+  destructor n vs = liftA2 pair (destructor n $ map (fmap pfst) vs) 
+    (destructor n $ map (fmap psnd) vs)
 
   docMain b = liftA2 pair (docMain $ pfst b) (docMain $ psnd b)
 
@@ -692,7 +692,7 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
   classDoc c = classDoc $ pfst c
-  classFromData d = pair (classFromData d) (classFromData d)
+  classFromData d = liftA2 pair (classFromData d) (classFromData d)
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
@@ -712,7 +712,7 @@ instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   type BlockComment (p CppSrcCode CppHdrCode) = Doc
   blockComment lns = pair (blockComment lns) (blockComment lns)
-  docComment lns = pair (docComment lns) (docComment lns)
+  docComment lns = liftA2 pair (docComment lns) (docComment lns)
 
   blockCommentDoc c = blockCommentDoc $ pfst c
 
@@ -1194,7 +1194,8 @@ instance MethodSym CppSrcCode where
   constructor n = G.constructor n n
   destructor n vs = 
     let i = var "i" int
-        deleteStatements = map (fmap (destructSts . (`evalState` initialState)))
+        -- temporary evalState until I add more state
+        deleteStatements = map (fmap destructSts . (`evalState` initialState)) 
           vs
         loopIndexDec = varDec i
         dbody = liftA2 emptyIfEmpty 
@@ -1274,7 +1275,7 @@ instance InternalClass CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n ls ms cs = passState2Lists (sequence ms) (sequence cs) 
+  buildModule n ls ms cs = passState2Lists ms cs
     (G.buildModule n (map include ls) ms cs)
     
   moduleName = name . unCPPSC
@@ -1742,10 +1743,9 @@ instance MethodSym CppHdrCode where
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor n = G.constructor n n
-  destructor n vs = return $ return $ mthd False Pub [] (emptyIfEmpty (vcat 
-    (map (statementDoc . fmap (destructSts . (`evalState` initialState))) vs)) 
-    (methodDoc (pubMethod ('~':n) n void [] 
-    (return empty) :: (CppHdrCode (Method CppHdrCode)))))
+  destructor n = lift1List (\m vs -> return $ mthd False Pub [] 
+    (emptyIfEmpty (vcat (map (statementDoc . fmap destructSts) vs)) 
+    (methodDoc m))) ((pubMethod ('~':n) n void [] (return empty)) :: State GOOLState (CppHdrCode (Method CppHdrCode)))
 
   docMain = mainFunction
 
@@ -1796,10 +1796,11 @@ instance InternalStateVar CppHdrCode where
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
   -- do this with a do? avoids liftA8...
-  buildClass n p _ vs mths = liftA8 (cpphClass n) 
-    (lift2Lists (lift2Lists (cpphVarsFuncsList Pub)) vs fs) 
-    (lift2Lists (lift2Lists (cpphVarsFuncsList Priv)) vs fs) 
-    (fmap fst public) (fmap fst private) parent blockStart blockEnd endStatement
+  buildClass n p _ vs mths = lift2Lists (\vars funcs -> liftA8 (cpphClass n) 
+    (lift2Lists (cpphVarsFuncsList Pub) vars funcs) 
+    (lift2Lists (cpphVarsFuncsList Priv) vars funcs) 
+    (fmap fst public) (fmap fst private) parent blockStart blockEnd 
+    endStatement) vs fs
     where parent = case p of Nothing -> return empty
                              Just pn -> inherit pn
           fs = mths ++ [destructor n vs]
@@ -1818,7 +1819,7 @@ instance InternalClass CppHdrCode where
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
-  buildModule n ls ms cs = passState2Lists (sequence ms) (sequence cs) 
+  buildModule n ls ms cs = passState2Lists ms cs
     (G.buildModule n (map include ls) ms cs)
       
   moduleName = name . unCPPHC
@@ -1868,7 +1869,7 @@ enumsEqualInts = False
 inc :: Doc
 inc = text "#include"
 
-cppstop :: State GOOLState ModData -> Doc -> Doc -> Doc
+cppstop :: ModData -> Doc -> Doc -> Doc
 cppstop m lst end = vcat [
   if b then empty else inc <+> doubleQuotedText (addExt cppHdrExt n),
   if b then empty else blank,
@@ -1887,11 +1888,10 @@ cppstop m lst end = vcat [
   usingNameSpace "std" (Just $ render lst) end,
   usingNameSpace "std" (Just "ifstream") end,
   usingNameSpace "std" (Just "ofstream") end]
-  where modD = evalState m initialState
-        n = name modD
-        b = isMainMod modD
+  where n = name m
+        b = isMainMod m
 
-cpphtop :: State GOOLState ModData -> Doc -> Doc -> Doc
+cpphtop :: ModData -> Doc -> Doc -> Doc
 cpphtop m lst end = vcat [
   text "#ifndef" <+> text n <> text "_h",
   text "#define" <+> text n <> text "_h",
@@ -1903,8 +1903,7 @@ cpphtop m lst end = vcat [
   usingNameSpace "std" (Just $ render lst) end,
   usingNameSpace "std" (Just "ifstream") end,
   usingNameSpace "std" (Just "ofstream") end]
-  where modD = evalState m initialState
-        n = name modD
+  where n = name m
 
 usingNameSpace :: Label -> Maybe Label -> Doc -> Doc
 usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <>
@@ -2027,12 +2026,9 @@ cppsClass vs fs = vcat $ vars ++ (if any (not . isEmpty) vars then blank else
   where vars = map stVarDoc vs
         funcs = map mthdDoc fs
 
-cpphClass :: Label -> State GOOLState Doc -> State GOOLState Doc -> Doc -> Doc 
-  -> Doc -> Doc -> Doc -> Doc -> State GOOLState Doc
-cpphClass n publs privts pub priv inhrt bStart bEnd end = do
-  pubs <- publs
-  privs <- privts
-  return $ vcat [
+cpphClass :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> 
+  Doc
+cpphClass n pubs privs pub priv inhrt bStart bEnd end = vcat [
     classDec <+> text n <+> inhrt <+> bStart,
     indentList [
       pub <> colon,

@@ -583,7 +583,7 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr,
     -> repr (Body repr) -> State GOOLState (repr (Method repr))
   constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> 
     State GOOLState (repr (Method repr))
-  destructor :: Label -> [repr (StateVar repr)] -> 
+  destructor :: Label -> [State GOOLState (repr (StateVar repr))] -> 
     State GOOLState (repr (Method repr))
 
   docMain :: repr (Body repr) -> State GOOLState (repr (Method repr))

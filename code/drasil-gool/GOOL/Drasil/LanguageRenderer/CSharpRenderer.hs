@@ -583,8 +583,7 @@ instance InternalClass CSharpCode where
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n _ ms cs = passState2Lists (sequence ms) (sequence cs) 
-    (G.buildModule' n ms cs)
+  buildModule n _ ms cs = passState2Lists ms cs (G.buildModule' n ms cs)
     
   moduleName = name . unCSC
   

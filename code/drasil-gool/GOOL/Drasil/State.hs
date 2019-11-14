@@ -1,10 +1,11 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module GOOL.Drasil.State (
-  GOOLState(..), headers, sources, hasMain, mainMod, initialState, getPutReturn,
-  getPutReturnFunc, getPutReturnFunc2, getPutReturnList, passState, 
-  passState2Lists, checkGOOLState, addFile, addCombinedHeaderSource, addHeader, 
-  addSource, addProgNameToPaths, setMain, setMainMod, setFilePath, getFilePath
+  GS, GOOLState(..), headers, sources, hasMain, mainMod, initialState, 
+  getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, 
+  passState, passState2Lists, checkGOOLState, addFile, addCombinedHeaderSource, 
+  addHeader, addSource, addProgNameToPaths, setMain, setMainMod, setFilePath, 
+  getFilePath
 ) where
 
 import GOOL.Drasil.Data (FileType(..))
@@ -22,6 +23,8 @@ data GOOLState = GS {
 } 
 makeLenses ''GOOLState
 
+type GS = State GOOLState
+
 initialState :: GOOLState
 initialState = GS {
   _headers = [],
@@ -32,22 +35,22 @@ initialState = GS {
   _currFilePath = ""
 }
 
-getPutReturn :: (GOOLState -> GOOLState) -> a -> State GOOLState a
+getPutReturn :: (GOOLState -> GOOLState) -> a -> GS a
 getPutReturn sf v = do
   s <- get
   put $ sf s
   return v
 
-getPutReturnFunc :: State GOOLState b -> (GOOLState -> b -> GOOLState) -> 
-  (b -> a) -> State GOOLState a
+getPutReturnFunc :: GS b -> (GOOLState -> b -> GOOLState) -> 
+  (b -> a) -> GS a
 getPutReturnFunc st sf vf = do
   v <- st
   s <- get
   put $ sf s v
   return $ vf v
 
-getPutReturnFunc2 :: State GOOLState c -> State GOOLState b -> 
-  (GOOLState -> c -> b -> GOOLState) -> (c -> b -> a) -> State GOOLState a
+getPutReturnFunc2 :: GS c -> GS b -> 
+  (GOOLState -> c -> b -> GOOLState) -> (c -> b -> a) -> GS a
 getPutReturnFunc2 st1 st2 sf vf = do
   v1 <- st1
   v2 <- st2
@@ -55,28 +58,28 @@ getPutReturnFunc2 st1 st2 sf vf = do
   put $ sf s v1 v2
   return $ vf v1 v2
 
-getPutReturnList :: [State GOOLState b] -> (GOOLState -> GOOLState) -> 
-  ([b] -> a) -> State GOOLState a
+getPutReturnList :: [GS b] -> (GOOLState -> GOOLState) -> 
+  ([b] -> a) -> GS a
 getPutReturnList l sf vf = do
   v <- sequence l
   s <- get
   put $ sf s
   return $ vf v
 
-passState :: State GOOLState a -> State GOOLState b -> State GOOLState b
+passState :: GS a -> GS b -> GS b
 passState s v = do
   _ <- s
   v
 
-passState2Lists :: [State GOOLState a] -> [State GOOLState b] -> 
-  State GOOLState c -> State GOOLState c
+passState2Lists :: [GS a] -> [GS b] -> 
+  GS c -> GS c
 passState2Lists l1 l2 v = do
   sequence_ l1
   sequence_ l2
   v 
 
-checkGOOLState :: (GOOLState -> Bool) -> State GOOLState b -> State GOOLState a 
-  -> State GOOLState a -> State GOOLState a
+checkGOOLState :: (GOOLState -> Bool) -> GS b -> GS a 
+  -> GS a -> GS a
 checkGOOLState f st ifv elsev = do
   _ <- st
   s <- get
@@ -113,5 +116,5 @@ setMainMod n = set mainMod (Just n)
 setFilePath :: FilePath -> GOOLState -> GOOLState
 setFilePath = set currFilePath
 
-getFilePath :: State GOOLState FilePath
+getFilePath :: GS FilePath
 getFilePath = gets (^. currFilePath)

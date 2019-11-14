@@ -24,7 +24,6 @@ import System.Directory (setCurrentDirectory, createDirectoryIfMissing,
   getCurrentDirectory)
 import Control.Monad.Reader (Reader, ask, runReader)
 import Control.Monad.State (evalState, execState)
-import qualified Control.Monad.State as S (State)
 
 generator :: String -> [Expr] -> Choices -> CodeSpec -> State
 generator dt sd chs spec = State {
@@ -53,7 +52,7 @@ generator dt sd chs spec = State {
         showDate Hide = ""
 
 generateCode :: (ProgramSym progRepr, PackageSym packRepr) => Lang -> 
-  (progRepr (Program progRepr) -> S.State GOOLState ProgData) -> (packRepr (Package packRepr) -> 
+  (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 
   PackData) -> State -> IO ()
 generateCode l unReprProg unReprPack g = do 
   workingDir <- getCurrentDirectory
@@ -66,7 +65,7 @@ generateCode l unReprProg unReprPack g = do
           unReprPack pckg)
 
 genPackage :: (ProgramSym progRepr, PackageSym packRepr) => 
-  (progRepr (Program progRepr) -> S.State GOOLState ProgData) -> 
+  (progRepr (Program progRepr) -> ProgData) -> 
   Reader State (packRepr (Package packRepr))
 genPackage unRepr = do
   g <- ask

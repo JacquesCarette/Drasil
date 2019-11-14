@@ -65,14 +65,14 @@ import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..),
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
-import GOOL.Drasil.State (GOOLState, hasMain, initialState, getPutReturn, 
+import GOOL.Drasil.State (GS, hasMain, initialState, getPutReturn, 
   passState2Lists, checkGOOLState, setMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp)
 import Data.Maybe (maybeToList)
 import Control.Lens ((^.))
 import Control.Applicative (Applicative, liftA2, liftA3)
-import Control.Monad.State (State, evalState)
+import Control.Monad.State (evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
 
@@ -1745,7 +1745,7 @@ instance MethodSym CppHdrCode where
   constructor n = G.constructor n n
   destructor n = lift1List (\m vs -> return $ mthd False Pub [] 
     (emptyIfEmpty (vcat (map (statementDoc . fmap destructSts) vs)) 
-    (methodDoc m))) ((pubMethod ('~':n) n void [] (return empty)) :: State GOOLState (CppHdrCode (Method CppHdrCode)))
+    (methodDoc m))) ((pubMethod ('~':n) n void [] (return empty)) :: GS (CppHdrCode (Method CppHdrCode)))
 
   docMain = mainFunction
 
@@ -2058,11 +2058,11 @@ cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins
 cppsInOut :: (CppSrcCode (Scope CppSrcCode) -> 
     CppSrcCode (Permanence CppSrcCode) -> CppSrcCode (Type CppSrcCode) -> 
     [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
-    State GOOLState (CppSrcCode (Method CppSrcCode)))
+    GS (CppSrcCode (Method CppSrcCode)))
   -> CppSrcCode (Scope CppSrcCode) -> CppSrcCode (Permanence CppSrcCode) -> 
   [CppSrcCode (Variable CppSrcCode)] -> [CppSrcCode (Variable CppSrcCode)] -> 
   [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
-  State GOOLState (CppSrcCode (Method CppSrcCode))
+  GS (CppSrcCode (Method CppSrcCode))
 cppsInOut f s p ins [v] [] b = f s p (variableType v) (map (fmap getParam) ins) 
   (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
 cppsInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
@@ -2075,11 +2075,11 @@ cppsInOut f s p ins outs both b = f s p void (map pointerParam both
 cpphInOut :: (CppHdrCode (Scope CppHdrCode) -> 
     CppHdrCode (Permanence CppHdrCode) -> CppHdrCode (Type CppHdrCode) -> 
     [CppHdrCode (Parameter CppHdrCode)] -> CppHdrCode (Body CppHdrCode) -> 
-    State GOOLState (CppHdrCode (Method CppHdrCode))) 
+    GS (CppHdrCode (Method CppHdrCode))) 
   -> CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Permanence CppHdrCode) -> 
   [CppHdrCode (Variable CppHdrCode)] -> [CppHdrCode (Variable CppHdrCode)] -> 
   [CppHdrCode (Variable CppHdrCode)] -> CppHdrCode (Body CppHdrCode) -> 
-  State GOOLState (CppHdrCode (Method CppHdrCode))
+  GS (CppHdrCode (Method CppHdrCode))
 cpphInOut f s p ins [v] [] b = f s p (variableType v) (map (fmap getParam) ins) 
   b
 cpphInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 

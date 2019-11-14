@@ -19,8 +19,7 @@ module GOOL.Drasil.Symantics (
 
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.Data (Binding, Terminator, FileType)
-import GOOL.Drasil.State (GOOLState)
-import Control.Monad.State (State)
+import GOOL.Drasil.State (GS)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
@@ -28,31 +27,31 @@ type Library = String
 
 class (RenderSym repr) => ProgramSym repr where
   type Program repr
-  prog :: Label -> [State GOOLState (repr (RenderFile repr))] -> 
-    State GOOLState (repr (Program repr))
+  prog :: Label -> [GS (repr (RenderFile repr))] -> 
+    GS (repr (Program repr))
 
 class (ModuleSym repr, InternalFile repr) => 
   RenderSym repr where 
   type RenderFile repr
-  fileDoc :: State GOOLState (repr (Module repr)) -> 
-    State GOOLState (repr (RenderFile repr))
+  fileDoc :: GS (repr (Module repr)) -> 
+    GS (repr (RenderFile repr))
 
   -- Module description, list of author names, date as a String, file to comment
   docMod :: String -> [String] -> String -> 
-    State GOOLState (repr (RenderFile repr)) -> 
-    State GOOLState (repr (RenderFile repr))
+    GS (repr (RenderFile repr)) -> 
+    GS (repr (RenderFile repr))
 
-  commentedMod :: State GOOLState (repr (RenderFile repr)) -> 
-    State GOOLState (repr (BlockComment repr)) -> 
-    State GOOLState (repr (RenderFile repr))
+  commentedMod :: GS (repr (RenderFile repr)) -> 
+    GS (repr (BlockComment repr)) -> 
+    GS (repr (RenderFile repr))
 
 class InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
 
-  fileFromData :: FileType -> State GOOLState FilePath -> 
-    State GOOLState (repr (Module repr)) -> 
-    State GOOLState (repr (RenderFile repr))
+  fileFromData :: FileType -> GS FilePath -> 
+    GS (repr (Module repr)) -> 
+    GS (repr (RenderFile repr))
 
 class (PermanenceSym repr) => KeywordSym repr where
   type Keyword repr
@@ -572,51 +571,51 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr,
   -- Second label is class name
   method      :: Label -> Label -> repr (Scope repr) -> repr (Permanence repr) 
     -> repr (Type repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
-    State GOOLState (repr (Method repr))
+    GS (repr (Method repr))
   getMethod   :: Label -> repr (Variable repr) -> 
-    State GOOLState (repr (Method repr))
+    GS (repr (Method repr))
   setMethod   :: Label -> repr (Variable repr) -> 
-    State GOOLState (repr (Method repr)) 
+    GS (repr (Method repr)) 
   privMethod  :: Label -> Label -> repr (Type repr) -> [repr (Parameter repr)] 
-    -> repr (Body repr) -> State GOOLState (repr (Method repr))
+    -> repr (Body repr) -> GS (repr (Method repr))
   pubMethod   :: Label -> Label -> repr (Type repr) -> [repr (Parameter repr)] 
-    -> repr (Body repr) -> State GOOLState (repr (Method repr))
+    -> repr (Body repr) -> GS (repr (Method repr))
   constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> 
-    State GOOLState (repr (Method repr))
-  destructor :: Label -> [State GOOLState (repr (StateVar repr))] -> 
-    State GOOLState (repr (Method repr))
+    GS (repr (Method repr))
+  destructor :: Label -> [GS (repr (StateVar repr))] -> 
+    GS (repr (Method repr))
 
-  docMain :: repr (Body repr) -> State GOOLState (repr (Method repr))
+  docMain :: repr (Body repr) -> GS (repr (Method repr))
 
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     repr (Type repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
-    State GOOLState (repr (Method repr))
-  mainFunction  :: repr (Body repr) -> State GOOLState (repr (Method repr))
+    GS (repr (Method repr))
+  mainFunction  :: repr (Body repr) -> GS (repr (Method repr))
   -- Parameters are: function description, parameter descriptions, 
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> 
-    State GOOLState (repr (Method repr)) -> State GOOLState (repr (Method repr))
+    GS (repr (Method repr)) -> GS (repr (Method repr))
 
   -- Second label is class name, rest is same as inOutFunc
   inOutMethod :: Label -> Label -> repr (Scope repr) -> repr (Permanence repr) 
     -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
     [repr (Variable repr)] -> repr (Body repr) -> 
-    State GOOLState (repr (Method repr))
+    GS (repr (Method repr))
   -- Second label is class name, rest is same as docInOutFunc
   docInOutMethod :: Label -> Label -> repr (Scope repr) -> 
     repr (Permanence repr) -> String -> [(String, repr (Variable repr))] -> 
     [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
-    repr (Body repr) -> State GOOLState (repr (Method repr))
+    repr (Body repr) -> GS (repr (Method repr))
 
   -- The three lists are inputs, outputs, and both, respectively
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     [repr (Variable repr)] -> [repr (Variable repr)] -> [repr (Variable repr)] 
-    -> repr (Body repr) -> State GOOLState (repr (Method repr))
+    -> repr (Body repr) -> GS (repr (Method repr))
   -- Parameters are: function name, scope, permanence, brief description, input descriptions and variables, output descriptions and variables, descriptions and variables for parameters that are both input and output, function body
   docInOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     String -> [(String, repr (Variable repr))] -> [(String, repr 
     (Variable repr))] -> [(String, repr (Variable repr))] -> repr (Body repr)
-    -> State GOOLState (repr (Method repr))
+    -> GS (repr (Method repr))
 
   parameters :: repr (Method repr) -> [repr (Parameter repr)]
 
@@ -624,12 +623,12 @@ class (MethodTypeSym repr, BlockCommentSym repr) =>
   InternalMethod repr where
   intMethod      :: Bool -> Label -> Label -> repr (Scope repr) -> 
     repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] 
-    -> repr (Body repr) -> State GOOLState (repr (Method repr))
+    -> repr (Body repr) -> GS (repr (Method repr))
   intFunc      :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
     -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
-    State GOOLState (repr (Method repr))
-  commentedFunc :: State GOOLState (repr (BlockComment repr)) -> 
-    State GOOLState (repr (Method repr)) -> State GOOLState (repr (Method repr))
+    GS (repr (Method repr))
+  commentedFunc :: GS (repr (BlockComment repr)) -> 
+    GS (repr (Method repr)) -> GS (repr (Method repr))
 
   isMainMethod :: repr (Method repr) -> Bool
   methodDoc :: repr (Method repr) -> Doc
@@ -638,65 +637,65 @@ class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr,
   InternalStateVar repr) => StateVarSym repr where
   type StateVar repr
   stateVar :: repr (Scope repr) -> repr (Permanence repr) ->
-    repr (Variable repr) -> State GOOLState (repr (StateVar repr))
+    repr (Variable repr) -> GS (repr (StateVar repr))
   stateVarDef :: Label -> repr (Scope repr) -> repr (Permanence repr) ->
     repr (Variable repr) -> repr (Value repr) -> 
-    State GOOLState (repr (StateVar repr))
+    GS (repr (StateVar repr))
   constVar :: Label -> repr (Scope repr) ->  repr (Variable repr) -> 
-    repr (Value repr) -> State GOOLState (repr (StateVar repr))
-  privMVar :: repr (Variable repr) -> State GOOLState (repr (StateVar repr))
-  pubMVar  :: repr (Variable repr) -> State GOOLState (repr (StateVar repr))
-  pubGVar  :: repr (Variable repr) -> State GOOLState (repr (StateVar repr))
+    repr (Value repr) -> GS (repr (StateVar repr))
+  privMVar :: repr (Variable repr) -> GS (repr (StateVar repr))
+  pubMVar  :: repr (Variable repr) -> GS (repr (StateVar repr))
+  pubGVar  :: repr (Variable repr) -> GS (repr (StateVar repr))
 
 class InternalStateVar repr where
   stateVarDoc :: repr (StateVar repr) -> Doc
-  stateVarFromData :: Doc -> State GOOLState (repr (StateVar repr))
+  stateVarFromData :: Doc -> GS (repr (StateVar repr))
 
 class (MethodSym repr, InternalClass repr) => ClassSym repr 
   where
   type Class repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
-    [State GOOLState (repr (StateVar repr))] -> 
-    [State GOOLState (repr (Method repr))] -> 
-    State GOOLState (repr (Class repr))
+    [GS (repr (StateVar repr))] -> 
+    [GS (repr (Method repr))] -> 
+    GS (repr (Class repr))
   enum :: Label -> [Label] -> repr (Scope repr) -> 
-    State GOOLState (repr (Class repr))
-  privClass :: Label -> Maybe Label -> [State GOOLState (repr (StateVar repr))] 
-    -> [State GOOLState (repr (Method repr))] -> 
-    State GOOLState (repr (Class repr))
-  pubClass :: Label -> Maybe Label -> [State GOOLState (repr (StateVar repr))] 
-    -> [State GOOLState (repr (Method repr))] -> 
-    State GOOLState (repr (Class repr))
+    GS (repr (Class repr))
+  privClass :: Label -> Maybe Label -> [GS (repr (StateVar repr))] 
+    -> [GS (repr (Method repr))] -> 
+    GS (repr (Class repr))
+  pubClass :: Label -> Maybe Label -> [GS (repr (StateVar repr))] 
+    -> [GS (repr (Method repr))] -> 
+    GS (repr (Class repr))
 
-  docClass :: String -> State GOOLState (repr (Class repr)) ->
-    State GOOLState (repr (Class repr))
+  docClass :: String -> GS (repr (Class repr)) ->
+    GS (repr (Class repr))
 
-  commentedClass :: State GOOLState (repr (BlockComment repr)) -> 
-    State GOOLState (repr (Class repr)) -> State GOOLState (repr (Class repr))
+  commentedClass :: GS (repr (BlockComment repr)) -> 
+    GS (repr (Class repr)) -> GS (repr (Class repr))
 
 class InternalClass repr where
   classDoc :: repr (Class repr) -> Doc
-  classFromData :: State GOOLState Doc -> State GOOLState (repr (Class repr))
+  classFromData :: GS Doc -> GS (repr (Class repr))
 
 class (ClassSym repr, InternalMod repr) => ModuleSym repr where
   type Module repr
-  buildModule :: Label -> [Library] -> [State GOOLState (repr (Method repr))] 
-    -> [State GOOLState (repr (Class repr))] -> 
-    State GOOLState (repr (Module repr))
+  buildModule :: Label -> [Library] -> [GS (repr (Method repr))] 
+    -> [GS (repr (Class repr))] -> 
+    GS (repr (Module repr))
     
   moduleName :: repr (Module repr) -> String
 
 class InternalMod repr where
   isMainModule :: repr (Module repr) -> Bool
   moduleDoc :: repr (Module repr) -> Doc
-  modFromData :: String -> State GOOLState Bool -> State GOOLState Doc -> 
-    State GOOLState (repr (Module repr))
-  updateModuleDoc :: (Doc -> Doc) -> State GOOLState (repr (Module repr)) -> 
-    State GOOLState (repr (Module repr))
+  modFromData :: String -> GS Bool -> GS Doc -> 
+    GS (repr (Module repr))
+  updateModuleDoc :: (Doc -> Doc) -> GS (repr (Module repr)) -> 
+    GS (repr (Module repr))
     
 class BlockCommentSym repr where
   type BlockComment repr
   blockComment :: [String] -> repr (BlockComment repr)
-  docComment :: State GOOLState [String] -> State GOOLState (repr (BlockComment repr))
+  docComment :: GS [String] -> GS (repr (BlockComment repr))
 
   blockCommentDoc :: repr (BlockComment repr) -> Doc

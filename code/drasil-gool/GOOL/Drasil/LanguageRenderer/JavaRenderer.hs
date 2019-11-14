@@ -64,12 +64,12 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
   lift1List, checkParams)
-import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
+import GOOL.Drasil.State (GS, initialState, getPutReturn, 
   getPutReturnList, passState2Lists, addProgNameToPaths, setMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (Applicative, liftA2, liftA3)
-import Control.Monad.State (State, evalState)
+import Control.Monad.State (evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
   equals, semi, vcat, lbrace, rbrace, render, colon, comma, render)
 
@@ -744,11 +744,11 @@ jInOutCall f n ins outs both = fCall rets
 
 jInOut :: (JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
     JavaCode (Type JavaCode) -> [JavaCode (Parameter JavaCode)] -> 
-    JavaCode (Body JavaCode) -> State GOOLState (JavaCode (Method JavaCode))) 
+    JavaCode (Body JavaCode) -> GS (JavaCode (Method JavaCode))) 
   -> JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
   [JavaCode (Variable JavaCode)] -> [JavaCode (Variable JavaCode)] -> 
   [JavaCode (Variable JavaCode)] -> JavaCode (Body JavaCode) -> 
-  State GOOLState (JavaCode (Method JavaCode))
+  GS (JavaCode (Method JavaCode))
 jInOut f s p ins [] [] b = f s p void (map param ins) b
 jInOut f s p ins [v] [] b = f s p (variableType v) 
   (map param ins) (liftA3 surroundBody (varDec v) b (returnState $ 
@@ -778,11 +778,11 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
 jDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
     -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
     [repr (Variable repr)] -> repr (Body repr) -> 
-    State GOOLState (repr (Method repr)))
+    GS (repr (Method repr)))
   -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
   [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
   [(String, repr (Variable repr))] -> repr (Body repr) -> 
-  State GOOLState (repr (Method repr))
+  GS (repr (Method repr))
 jDocInOut f s p desc is [] [] b = docFuncRepr desc (map fst is) [] 
   (f s p (map snd is) [] [] b)
 jDocInOut f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 

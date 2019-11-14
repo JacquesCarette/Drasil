@@ -594,59 +594,63 @@ instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   parameterType p = pair (parameterType $ pfst p) (parameterType $ psnd p)
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
-  type Method (p CppSrcCode CppHdrCode) = State GOOLState MethodData
-  method n c s p t ps b = pair (method n c (pfst s) (pfst p) (pfst t) (map pfst
-    ps) (pfst b)) (method n c (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
-  getMethod c v = pair (getMethod c $ pfst v) (getMethod c $ psnd v) 
-  setMethod c v = pair (setMethod c $ pfst v) (setMethod c $ psnd v)
-  privMethod n c t ps b = pair (privMethod n c (pfst t) (map pfst ps) (pfst b))
-    (privMethod n c (psnd t) (map psnd ps) (psnd b))
-  pubMethod n c t ps b = pair (pubMethod n c (pfst t) (map pfst ps) (pfst b)) 
-    (pubMethod n c (psnd t) (map psnd ps) (psnd b))
-  constructor n ps b = pair (constructor n (map pfst ps) (pfst b))
+  type Method (p CppSrcCode CppHdrCode) = MethodData
+  method n c s p t ps b = liftA2 pair (method n c (pfst s) (pfst p) (pfst t) 
+    (map pfst ps) (pfst b)) (method n c (psnd s) (psnd p) (psnd t) (map psnd ps)
+    (psnd b))
+  getMethod c v = liftA2 pair (getMethod c $ pfst v) (getMethod c $ psnd v) 
+  setMethod c v = liftA2 pair (setMethod c $ pfst v) (setMethod c $ psnd v)
+  privMethod n c t ps b = liftA2 pair (privMethod n c (pfst t) (map pfst ps) 
+    (pfst b)) (privMethod n c (psnd t) (map psnd ps) (psnd b))
+  pubMethod n c t ps b = liftA2 pair (pubMethod n c (pfst t) (map pfst ps) 
+    (pfst b)) (pubMethod n c (psnd t) (map psnd ps) (psnd b))
+  constructor n ps b = liftA2 pair (constructor n (map pfst ps) (pfst b))
     (constructor n (map psnd ps) (psnd b))
-  destructor n vs = pair (destructor n $ map pfst vs) 
+  destructor n vs = liftA2 pair (destructor n $ map pfst vs) 
     (destructor n $ map psnd vs)
 
-  docMain b = pair (docMain $ pfst b) (docMain $ psnd b)
+  docMain b = liftA2 pair (docMain $ pfst b) (docMain $ psnd b)
 
-  function n s p t ps b = pair (function n (pfst s) (pfst p) (pfst t) (map pfst
-    ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
-  mainFunction b = pair (mainFunction $ pfst b) (mainFunction $ psnd b)
+  function n s p t ps b = liftA2 pair (function n (pfst s) (pfst p) (pfst t) 
+    (map pfst ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps)
+    (psnd b))
+  mainFunction b = liftA2 pair (mainFunction $ pfst b) (mainFunction $ psnd b)
 
-  docFunc desc pComms rComm f = pair (docFunc desc pComms rComm $ pfst f) 
-    (docFunc desc pComms rComm $ psnd f)
+  docFunc desc pComms rComm f = liftA2 pair (docFunc desc pComms rComm $ fmap 
+    pfst f) (docFunc desc pComms rComm $ fmap psnd f)
 
-  inOutMethod n c s p ins outs both b = pair (inOutMethod n c (pfst s) (pfst p) 
-    (map pfst ins) (map pfst outs) (map pfst both) (pfst b)) (inOutMethod n c 
-    (psnd s) (psnd p) (map psnd ins) (map psnd outs) (map psnd both) (psnd b))
+  inOutMethod n c s p ins outs both b = liftA2 pair (inOutMethod n c (pfst s) 
+    (pfst p) (map pfst ins) (map pfst outs) (map pfst both) (pfst b)) 
+    (inOutMethod n c (psnd s) (psnd p) (map psnd ins) (map psnd outs) (map psnd 
+    both) (psnd b))
 
-  docInOutMethod n c s p desc is os bs b = pair (docInOutMethod n c (pfst s) 
+  docInOutMethod n c s p desc is os bs b = liftA2 pair (docInOutMethod n c 
+    (pfst s) (pfst p) desc (map (mapPairSnd pfst) is) (map (mapPairSnd pfst) os)
+    (map (mapPairSnd pfst) bs) (pfst b)) (docInOutMethod n c (psnd s) (psnd p) 
+    desc (map (mapPairSnd psnd) is) (map (mapPairSnd psnd) os) (map (mapPairSnd 
+    psnd) bs) (psnd b))
+
+  inOutFunc n s p ins outs both b = liftA2 pair (inOutFunc n (pfst s) (pfst p) 
+    (map pfst ins) (map pfst outs) (map pfst both) (pfst b)) (inOutFunc n (psnd 
+    s) (psnd p) (map psnd ins) (map psnd outs) (map psnd both) (psnd b))
+
+  docInOutFunc n s p desc is os bs b = liftA2 pair (docInOutFunc n (pfst s) 
     (pfst p) desc (map (mapPairSnd pfst) is) (map (mapPairSnd pfst) os) (map 
-    (mapPairSnd pfst) bs) (pfst b)) (docInOutMethod n c (psnd s) (psnd p) desc 
-    (map (mapPairSnd psnd) is) (map (mapPairSnd psnd) os) (map (mapPairSnd psnd)
-    bs) (psnd b))
-
-  inOutFunc n s p ins outs both b = pair (inOutFunc n (pfst s) (pfst p) (map
-    pfst ins) (map pfst outs) (map pfst both) (pfst b)) (inOutFunc n (psnd s) 
-    (psnd p) (map psnd ins) (map psnd outs) (map psnd both) (psnd b))
-
-  docInOutFunc n s p desc is os bs b = pair (docInOutFunc n (pfst s) (pfst p) 
-    desc (map (mapPairSnd pfst) is) (map (mapPairSnd pfst) os) (map (mapPairSnd 
-    pfst) bs) (pfst b)) (docInOutFunc n (psnd s) (psnd p) desc (map (mapPairSnd 
-    psnd) is) (map (mapPairSnd psnd) os) (map (mapPairSnd psnd) bs) (psnd b))
+    (mapPairSnd pfst) bs) (pfst b)) (docInOutFunc n (psnd s) (psnd p) desc (map 
+    (mapPairSnd psnd) is) (map (mapPairSnd psnd) os) (map (mapPairSnd psnd) bs) 
+    (psnd b))
 
   parameters m = pairList (parameters $ pfst m) (parameters $ psnd m)
 
 instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
-  intMethod m n c s p t ps b = pair (intMethod m n c (pfst s) (pfst p) (pfst t) 
-    (map pfst ps) (pfst b)) (intMethod m n c (psnd s) (psnd p) (psnd t) 
+  intMethod m n c s p t ps b = liftA2 pair (intMethod m n c (pfst s) (pfst p) 
+    (pfst t) (map pfst ps) (pfst b)) (intMethod m n c (psnd s) (psnd p) (psnd t)
     (map psnd ps) (psnd b))
-  intFunc m n s p t ps b = pair (intFunc m n (pfst s) (pfst p) (pfst t) (map 
-    pfst ps) (pfst b)) (intFunc m n (psnd s) (psnd p) (psnd t) (map psnd ps) 
-    (psnd b))
-  commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
-    (commentedFunc (psnd cmt) (psnd fn)) 
+  intFunc m n s p t ps b = liftA2 pair (intFunc m n (pfst s) (pfst p) (pfst t) 
+    (map pfst ps) (pfst b)) (intFunc m n (psnd s) (psnd p) (psnd t) (map psnd 
+    ps) (psnd b))
+  commentedFunc cmt fn = liftA2 pair (commentedFunc (fmap pfst cmt) (fmap pfst 
+    fn)) (commentedFunc (fmap psnd cmt) (fmap psnd fn)) 
     
   isMainMethod m = isMainMethod $ pfst m
   methodDoc m = methodDoc $ pfst m
@@ -1176,7 +1180,7 @@ instance ParameterSym CppSrcCode where
   parameterType = variableType . fmap paramVar
 
 instance MethodSym CppSrcCode where
-  type Method CppSrcCode = State GOOLState MethodData
+  type Method CppSrcCode = MethodData
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -1215,22 +1219,22 @@ instance MethodSym CppSrcCode where
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
-  parameters m = map return $ (mthdParams . (`evalState` initialState) . unCPPSC) m
+  parameters m = map return $ (mthdParams . unCPPSC) m
 
 instance InternalMethod CppSrcCode where
-  intMethod m n c s _ t ps b = (if m then getPutReturn setMain else return) <$>
+  intMethod m n c s _ t ps b = (if m then getPutReturn setMain else return) $
     liftA3 (mthd m) (fmap snd s) (checkParams n <$> sequence ps) (liftA5 
     (cppsMethod n c) t (liftList paramListDocD ps) b blockStart blockEnd)
-  intFunc m n s _ t ps b = (if m then getPutReturn setMain else return) <$> 
+  intFunc m n s _ t ps b = (if m then getPutReturn setMain else return) $ 
     liftA3 (mthd m) (fmap snd s) (checkParams n <$> sequence ps) (liftA5 
     (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
-  commentedFunc cmt fn = liftA3 (checkGOOLState (^. hasMain)) fn (liftA3 
-    (\scp pms -> fmap (mthd (isMainMethod fn) scp pms)) (fmap (getMthdScp . 
-    (`evalState` initialState)) fn) (fmap (mthdParams . (`evalState` 
-    initialState)) fn) (fmap (fmap (`commentedItem` methodDoc fn)) cmt)) fn
+  commentedFunc cmt fn = checkGOOLState (^. hasMain) fn (liftA4
+    (\m scp pms -> fmap (mthd m scp pms)) (fmap isMainMethod fn)
+    (fmap (getMthdScp . unCPPSC) fn) (fmap (mthdParams . unCPPSC) fn) 
+    (liftA2 (\f -> fmap (`commentedItem` methodDoc f)) fn cmt)) fn
  
-  isMainMethod = isMainMthd . (`evalState` initialState) . unCPPSC
-  methodDoc = mthdDoc . (`evalState` initialState) . unCPPSC
+  isMainMethod = isMainMthd . unCPPSC
+  methodDoc = mthdDoc . unCPPSC
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = State GOOLState StateVarData
@@ -1724,7 +1728,7 @@ instance ParameterSym CppHdrCode where
   parameterType = variableType . fmap paramVar
 
 instance MethodSym CppHdrCode where
-  type Method CppHdrCode = State GOOLState MethodData
+  type Method CppHdrCode = MethodData
   method = G.method
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] (return empty)
@@ -1753,20 +1757,20 @@ instance MethodSym CppHdrCode where
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
     
-  parameters m = map return $ (mthdParams . (`evalState` initialState) . unCPPHC) m
+  parameters m = map return $ (mthdParams . unCPPHC) m
 
 instance InternalMethod CppHdrCode where
-  intMethod m n _ s _ t ps _ = (if m then getPutReturn setMain else return) <$>
+  intMethod m n _ s _ t ps _ = (if m then getPutReturn setMain else return) $
     liftA3 (mthd m) (fmap snd s) (checkParams n <$> sequence ps) (liftA3 
     (cpphMethod n) t (liftList paramListDocD ps) endStatement)
   intFunc = G.intFunc
-  commentedFunc cmt fn = liftA3 (checkGOOLState (^. hasMain)) fn fn $ liftA3 
-    (\scp pms -> fmap (mthd (isMainMethod fn) scp pms)) (fmap (getMthdScp . 
-    (`evalState` initialState)) fn) (fmap (mthdParams . (`evalState` 
-    initialState)) fn) (fmap (fmap (`commentedItem` methodDoc fn)) cmt)
+  commentedFunc cmt fn = checkGOOLState (^. hasMain) fn fn $ liftA4 
+    (\m scp pms -> fmap (mthd m scp pms)) (fmap isMainMethod fn)
+    (fmap (getMthdScp . unCPPHC) fn) (fmap (mthdParams . unCPPHC) fn) 
+    (liftA2 (\f -> fmap (`commentedItem` methodDoc f)) fn cmt)
 
-  isMainMethod = isMainMthd . (`evalState` initialState) . unCPPHC
-  methodDoc = mthdDoc . (`evalState` initialState) . unCPPHC
+  isMainMethod = isMainMthd . unCPPHC
+  methodDoc = mthdDoc . unCPPHC
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = State GOOLState StateVarData
@@ -2052,11 +2056,11 @@ cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins
 cppsInOut :: (CppSrcCode (Scope CppSrcCode) -> 
     CppSrcCode (Permanence CppSrcCode) -> CppSrcCode (Type CppSrcCode) -> 
     [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
-    CppSrcCode (Method CppSrcCode)) 
+    State GOOLState (CppSrcCode (Method CppSrcCode)))
   -> CppSrcCode (Scope CppSrcCode) -> CppSrcCode (Permanence CppSrcCode) -> 
   [CppSrcCode (Variable CppSrcCode)] -> [CppSrcCode (Variable CppSrcCode)] -> 
   [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
-  CppSrcCode (Method CppSrcCode)
+  State GOOLState (CppSrcCode (Method CppSrcCode))
 cppsInOut f s p ins [v] [] b = f s p (variableType v) (map (fmap getParam) ins) 
   (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
 cppsInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
@@ -2069,11 +2073,11 @@ cppsInOut f s p ins outs both b = f s p void (map pointerParam both
 cpphInOut :: (CppHdrCode (Scope CppHdrCode) -> 
     CppHdrCode (Permanence CppHdrCode) -> CppHdrCode (Type CppHdrCode) -> 
     [CppHdrCode (Parameter CppHdrCode)] -> CppHdrCode (Body CppHdrCode) -> 
-    CppHdrCode (Method CppHdrCode)) 
+    State GOOLState (CppHdrCode (Method CppHdrCode))) 
   -> CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Permanence CppHdrCode) -> 
   [CppHdrCode (Variable CppHdrCode)] -> [CppHdrCode (Variable CppHdrCode)] -> 
   [CppHdrCode (Variable CppHdrCode)] -> CppHdrCode (Body CppHdrCode) -> 
-  CppHdrCode (Method CppHdrCode)
+  State GOOLState (CppHdrCode (Method CppHdrCode))
 cpphInOut f s p ins [v] [] b = f s p (variableType v) (map (fmap getParam) ins) 
   b
 cpphInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 

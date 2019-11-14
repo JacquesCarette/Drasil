@@ -516,7 +516,7 @@ instance ParameterSym CSharpCode where
   parameterType = variableType . fmap paramVar
 
 instance MethodSym CSharpCode where
-  type Method CSharpCode = State GOOLState MethodData
+  type Method CSharpCode = MethodData
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -540,18 +540,18 @@ instance MethodSym CSharpCode where
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
   
-  parameters m = map return $ (mthdParams . (`evalState` initialState) . unCSC) m
+  parameters m = map return $ (mthdParams . unCSC) m
 
 instance InternalMethod CSharpCode where
-  intMethod m n _ s p t ps b = (if m then getPutReturn setMain else return) <$> 
+  intMethod m n _ s p t ps b = (if m then getPutReturn setMain else return) $ 
     liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA5 (methodDocD n) s p 
     t (liftList paramListDocD ps) b)
   intFunc = G.intFunc
   commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem) 
     cmt)
   
-  isMainMethod = isMainMthd . (`evalState` initialState) . unCSC
-  methodDoc = mthdDoc . (`evalState` initialState) . unCSC
+  isMainMethod = isMainMthd . unCSC
+  methodDoc = mthdDoc . unCSC
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = State GOOLState Doc
@@ -698,11 +698,12 @@ csObjVar o v = csObjVar' (varBind v)
 
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
     -> CSharpCode (Type CSharpCode) -> [CSharpCode (Parameter CSharpCode)] -> 
-    CSharpCode (Body CSharpCode) -> CSharpCode (Method CSharpCode)) 
+    CSharpCode (Body CSharpCode) -> 
+    State GOOLState (CSharpCode (Method CSharpCode)))
   -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
   [CSharpCode (Variable CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
   [CSharpCode (Variable CSharpCode)] -> CSharpCode (Body CSharpCode) -> 
-  CSharpCode (Method CSharpCode)
+  State GOOLState (CSharpCode (Method CSharpCode))
 csInOut f s p ins [v] [] b = f s p (variableType v) (map param ins)
   (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
 csInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 

@@ -148,60 +148,65 @@ construct :: Label -> TypeData
 construct n = td (Object n) n empty
 
 method :: (RenderSym repr) => Label -> Label -> repr (Scope repr) -> 
-  repr (Permanence repr) -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+  repr (Permanence repr) -> repr (Type repr) -> [repr (Parameter repr)] -> 
+  repr (Body repr) -> State GOOLState (repr (Method repr))
 method n c s p t = intMethod False n c s p (mType t)
 
 getMethod :: (RenderSym repr) => Label -> repr (Variable repr) -> 
-  repr (Method repr)
+  State GOOLState (repr (Method repr))
 getMethod c v = S.method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ objVarSelf c v)
 
 setMethod :: (RenderSym repr) => Label -> repr (Variable repr) -> 
-  repr (Method repr)
+  State GOOLState (repr (Method repr))
 setMethod c v = S.method (setterName $ variableName v) c public dynamic_ void 
   [param v] setBody
   where setBody = oneLiner $ objVarSelf c v &= valueOf v
 
 privMethod :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+  [repr (Parameter repr)] -> repr (Body repr) -> 
+  State GOOLState (repr (Method repr))
 privMethod n c = S.method n c private dynamic_
 
 pubMethod :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+  [repr (Parameter repr)] -> repr (Body repr) -> 
+  State GOOLState (repr (Method repr))
 pubMethod n c = S.method n c public dynamic_
 
 constructor :: (RenderSym repr) => Label -> Label -> [repr (Parameter repr)] -> 
-  repr (Body repr) -> repr (Method repr)
+  repr (Body repr) -> State GOOLState (repr (Method repr))
 constructor fName n = intMethod False fName n public dynamic_ (S.construct n)
 
-docMain :: (RenderSym repr) => repr (Body repr) -> repr (Method repr)
+docMain :: (RenderSym repr) => repr (Body repr) -> 
+  State GOOLState (repr (Method repr))
 docMain b = commentedFunc (docComment $ return $ functionDox 
   "Controls the flow of the program" 
   [("args", "List of command-line arguments")] []) (S.mainFunction b)
 
 function :: (RenderSym repr) => Label -> repr (Scope repr) -> 
   repr (Permanence repr) -> repr (Type repr) -> [repr (Parameter repr)] -> 
-  repr (Body repr) -> repr (Method repr) 
+  repr (Body repr) -> State GOOLState (repr (Method repr))
 function n s p t = S.intFunc False n s p (mType t)
 
 mainFunction :: (RenderSym repr) => repr (Type repr) -> Label -> 
-  repr (Body repr) -> repr (Method repr)
+  repr (Body repr) -> State GOOLState (repr (Method repr))
 mainFunction s n = S.intFunc True n public static_ (mType void)
   [param (var "args" (typeFromData (List String) (render (getTypeDoc s) ++ 
   "[]") (getTypeDoc s <> text "[]")))]
 
 docFunc :: (RenderSym repr) => String -> [String] -> Maybe String -> 
-  repr (Method repr) -> repr (Method repr)
+  State GOOLState (repr (Method repr)) -> State GOOLState (repr (Method repr))
 docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
 docInOutFunc :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr)
     -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
-    [repr (Variable repr)] -> repr (Body repr) -> repr (Method repr)) 
+    [repr (Variable repr)] -> repr (Body repr) -> 
+    State GOOLState (repr (Method repr)))
   -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
   [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
-  [(String, repr (Variable repr))] -> repr (Body repr) -> repr (Method repr)
+  [(String, repr (Variable repr))] -> repr (Body repr) -> 
+  State GOOLState (repr (Method repr))
 docInOutFunc f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
   (f s p (map snd is) [snd o] [] b)
 docInOutFunc f s p desc is [] [both] b = docFuncRepr desc (map fst $ both : is) 
@@ -212,7 +217,7 @@ docInOutFunc f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ os)
 
 intFunc :: (RenderSym repr) => Bool -> Label -> repr (Scope repr) -> 
   repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] 
-  -> repr (Body repr) -> repr (Method repr)
+  -> repr (Body repr) -> State GOOLState (repr (Method repr))
 intFunc m n = intMethod m n ""
 
 stateVar :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) ->

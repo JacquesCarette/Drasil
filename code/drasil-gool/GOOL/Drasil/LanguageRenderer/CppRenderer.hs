@@ -94,9 +94,9 @@ hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
-  type Program (p CppSrcCode CppHdrCode) = State GOOLState ProgData
-  prog n ms = pair (prog n $ map (hdrToSrc . psnd) ms ++ map pfst ms) 
-    (return (return emptyProg))
+  type Program (p CppSrcCode CppHdrCode) = ProgData
+  prog n ms = liftA2 pair (prog n $ map (fmap (hdrToSrc . psnd)) ms ++ map 
+    (fmap pfst ms) (return (return emptyProg)))
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   type RenderFile (p CppSrcCode CppHdrCode) = FileData
@@ -734,7 +734,7 @@ instance Monad CppSrcCode where
   CPPSC x >>= f = f x
 
 instance ProgramSym CppSrcCode where
-  type Program CppSrcCode = State GOOLState ProgData
+  type Program CppSrcCode = ProgData
   prog n = liftList (liftList (progD n))
   
 instance RenderSym CppSrcCode where

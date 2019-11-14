@@ -90,9 +90,9 @@ instance Monad JavaCode where
   JC x >>= f = f x
 
 instance ProgramSym JavaCode where
-  type Program JavaCode = State GOOLState ProgData
-  prog n = lift1List (\end fs -> getPutReturnList fs (addProgNameToPaths n) 
-    (progD n . map (packageDocD n end))) endStatement
+  type Program JavaCode = ProgData
+  prog n fs = getPutReturnList fs (addProgNameToPaths n) (lift1List (\end -> 
+    progD n . map (packageDocD n end)) endStatement)
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = FileData 

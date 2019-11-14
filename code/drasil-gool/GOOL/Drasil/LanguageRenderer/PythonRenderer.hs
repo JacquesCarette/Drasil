@@ -85,7 +85,7 @@ instance Monad PythonCode where
   PC x >>= f = f x
 
 instance ProgramSym PythonCode where
-  type Program PythonCode = State GOOLState ProgData 
+  type Program PythonCode = ProgData 
   prog n = liftList (liftList (progD n))
 
 instance RenderSym PythonCode where

@@ -89,7 +89,7 @@ instance Monad CSharpCode where
   CSC x >>= f = f x
 
 instance ProgramSym CSharpCode where
-  type Program CSharpCode = State GOOLState ProgData
+  type Program CSharpCode = ProgData
   prog n = liftList (liftList (progD n))
 
 instance RenderSym CSharpCode where

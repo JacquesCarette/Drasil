@@ -28,7 +28,8 @@ type Library = String
 
 class (RenderSym repr) => ProgramSym repr where
   type Program repr
-  prog :: Label -> [repr (RenderFile repr)] -> repr (Program repr)
+  prog :: Label -> [State GOOLState (repr (RenderFile repr))] -> 
+    State GOOLState (repr (Program repr))
 
 class (ModuleSym repr, InternalFile repr) => 
   RenderSym repr where 

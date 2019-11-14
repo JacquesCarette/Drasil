@@ -221,30 +221,32 @@ intFunc :: (RenderSym repr) => Bool -> Label -> repr (Scope repr) ->
 intFunc m n = intMethod m n ""
 
 stateVar :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) ->
-  repr (Variable repr) -> repr (StateVar repr)
+  repr (Variable repr) -> State GOOLState (repr (StateVar repr))
 stateVar s p v = stateVarFromData $ stateVarDocD (scopeDoc s) (permDoc p) 
   (statementDoc (state $ S.varDec v))
 
 stateVarDef :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) 
-  -> repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr)
+  -> repr (Variable repr) -> repr (Value repr) -> 
+  State GOOLState (repr (StateVar repr))
 stateVarDef s p vr vl = stateVarFromData $ stateVarDocD (scopeDoc s) (permDoc p)
   (statementDoc (state $ S.varDecDef vr vl))
 
 constVar :: (RenderSym repr) => Doc -> repr (Scope repr) ->
-  repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr)
+  repr (Variable repr) -> repr (Value repr) -> 
+  State GOOLState (repr (StateVar repr))
 constVar p s vr vl = stateVarFromData $ stateVarDocD (scopeDoc s) p 
   (statementDoc (state $ constDecDef vr vl))
 
 privMVar :: (RenderSym repr) => repr (Variable repr) -> 
-  repr (StateVar repr)
+  State GOOLState (repr (StateVar repr))
 privMVar = S.stateVar private dynamic_
 
 pubMVar :: (RenderSym repr) => repr (Variable repr) -> 
-  repr (StateVar repr)
+  State GOOLState (repr (StateVar repr))
 pubMVar = S.stateVar public dynamic_
 
 pubGVar :: (RenderSym repr) => repr (Variable repr) -> 
-  repr (StateVar repr)
+  State GOOLState (repr (StateVar repr))
 pubGVar = S.stateVar public static_
 
 buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> 

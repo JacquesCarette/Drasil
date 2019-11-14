@@ -554,7 +554,7 @@ instance InternalMethod CSharpCode where
   methodDoc = mthdDoc . unCSC
 
 instance StateVarSym CSharpCode where
-  type StateVar CSharpCode = State GOOLState Doc
+  type StateVar CSharpCode = Doc
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar empty
@@ -563,7 +563,7 @@ instance StateVarSym CSharpCode where
   pubGVar = G.pubGVar
 
 instance InternalStateVar CSharpCode where
-  stateVarDoc = (`evalState` initialState) . unCSC
+  stateVarDoc = unCSC
   stateVarFromData = return . return
 
 instance ClassSym CSharpCode where

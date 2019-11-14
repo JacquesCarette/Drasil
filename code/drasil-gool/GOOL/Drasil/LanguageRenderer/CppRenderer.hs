@@ -656,20 +656,20 @@ instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
   methodDoc m = methodDoc $ pfst m
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
-  type StateVar (p CppSrcCode CppHdrCode) = State GOOLState StateVarData
-  stateVar s p v = pair (stateVar (pfst s) (pfst p) (pfst v))
+  type StateVar (p CppSrcCode CppHdrCode) = StateVarData
+  stateVar s p v = liftA2 pair (stateVar (pfst s) (pfst p) (pfst v))
     (stateVar (psnd s) (psnd p) (psnd v))
-  stateVarDef n s p vr vl = pair (stateVarDef n (pfst s) (pfst p) (pfst vr) 
-    (pfst vl)) (stateVarDef n (psnd s) (psnd p) (psnd vr) (psnd vl))
-  constVar n s vr vl = pair (constVar n (pfst s) (pfst vr) (pfst vl)) 
+  stateVarDef n s p vr vl = liftA2 pair (stateVarDef n (pfst s) (pfst p) 
+    (pfst vr) (pfst vl)) (stateVarDef n (psnd s) (psnd p) (psnd vr) (psnd vl))
+  constVar n s vr vl = liftA2 pair (constVar n (pfst s) (pfst vr) (pfst vl)) 
     (constVar n (psnd s) (psnd vr) (psnd vl))
-  privMVar v = pair (privMVar $ pfst v) (privMVar $ psnd v)
-  pubMVar v = pair (pubMVar $ pfst v) (pubMVar $ psnd v)
-  pubGVar v = pair (pubGVar $ pfst v) (pubGVar $ psnd v)
+  privMVar v = liftA2 pair (privMVar $ pfst v) (privMVar $ psnd v)
+  pubMVar v = liftA2 pair (pubMVar $ pfst v) (pubMVar $ psnd v)
+  pubGVar v = liftA2 pair (pubGVar $ pfst v) (pubGVar $ psnd v)
 
 instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
   stateVarDoc v = stateVarDoc $ pfst v
-  stateVarFromData d = pair (stateVarFromData d) (stateVarFromData d)
+  stateVarFromData d = liftA2 pair (stateVarFromData d) (stateVarFromData d)
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   type Class (p CppSrcCode CppHdrCode) = State GOOLState Doc
@@ -1237,18 +1237,18 @@ instance InternalMethod CppSrcCode where
   methodDoc = mthdDoc . unCPPSC
 
 instance StateVarSym CppSrcCode where
-  type StateVar CppSrcCode = State GOOLState StateVarData
-  stateVar s _ _ = return <$> liftA3 svd (fmap snd s) (return empty) emptyState
-  stateVarDef n s p vr vl = return <$> liftA3 svd (fmap snd s) (liftA4 
+  type StateVar CppSrcCode = StateVarData
+  stateVar s _ _ = return $ liftA3 svd (fmap snd s) (return empty) emptyState
+  stateVarDef n s p vr vl = return $ liftA3 svd (fmap snd s) (liftA4 
     (cppsStateVarDef n empty) p vr vl endStatement) emptyState
-  constVar n s vr vl = return <$> liftA3 svd (fmap snd s) (liftA4 
+  constVar n s vr vl = return $ liftA3 svd (fmap snd s) (liftA4 
     (cppsStateVarDef n (text "const")) static_ vr vl endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
 
 instance InternalStateVar CppSrcCode where
-  stateVarDoc = stVarDoc . (`evalState` initialState) . unCPPSC
+  stateVarDoc = stVarDoc . unCPPSC
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppSrcCode where
@@ -1773,19 +1773,19 @@ instance InternalMethod CppHdrCode where
   methodDoc = mthdDoc . unCPPHC
 
 instance StateVarSym CppHdrCode where
-  type StateVar CppHdrCode = State GOOLState StateVarData
-  stateVar s p v = return <$> liftA3 svd (fmap snd s) (return $ stateVarDocD 
+  type StateVar CppHdrCode = StateVarData
+  stateVar s p v = return $ liftA3 svd (fmap snd s) (return $ stateVarDocD 
     empty (permDoc p) (statementDoc (state $ varDec v))) emptyState
-  stateVarDef _ s p vr vl = return <$> liftA3 svd (fmap snd s) (return $ 
+  stateVarDef _ s p vr vl = return $ liftA3 svd (fmap snd s) (return $ 
     cpphStateVarDef empty p vr vl) emptyState
-  constVar _ s v _ = return <$> liftA3 svd (fmap snd s) (liftA3 (constVarDocD 
+  constVar _ s v _ = return $ liftA3 svd (fmap snd s) (liftA3 (constVarDocD 
     empty) (bindDoc <$> static_) v endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
 
 instance InternalStateVar CppHdrCode where
-  stateVarDoc = stVarDoc . (`evalState` initialState) . unCPPHC
+  stateVarDoc = stVarDoc . unCPPHC
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppHdrCode where

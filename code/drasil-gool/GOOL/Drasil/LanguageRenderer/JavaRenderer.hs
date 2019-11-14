@@ -558,7 +558,7 @@ instance InternalMethod JavaCode where
   methodDoc = mthdDoc . unJC
 
 instance StateVarSym JavaCode where
-  type StateVar JavaCode = State GOOLState Doc
+  type StateVar JavaCode = Doc
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (permDoc (static_ :: JavaCode (Permanence JavaCode)))
@@ -567,7 +567,7 @@ instance StateVarSym JavaCode where
   pubGVar = G.pubGVar
 
 instance InternalStateVar JavaCode where
-  stateVarDoc = (`evalState` initialState) . unJC
+  stateVarDoc = unJC
   stateVarFromData = return . return
 
 instance ClassSym JavaCode where

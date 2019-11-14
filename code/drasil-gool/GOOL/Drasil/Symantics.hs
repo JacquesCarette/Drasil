@@ -633,18 +633,19 @@ class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr,
   InternalStateVar repr) => StateVarSym repr where
   type StateVar repr
   stateVar :: repr (Scope repr) -> repr (Permanence repr) ->
-    repr (Variable repr) -> repr (StateVar repr)
+    repr (Variable repr) -> State GOOLState (repr (StateVar repr))
   stateVarDef :: Label -> repr (Scope repr) -> repr (Permanence repr) ->
-    repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr)
+    repr (Variable repr) -> repr (Value repr) -> 
+    State GOOLState (repr (StateVar repr))
   constVar :: Label -> repr (Scope repr) ->  repr (Variable repr) -> 
-    repr (Value repr) -> repr (StateVar repr)
-  privMVar :: repr (Variable repr) -> repr (StateVar repr)
-  pubMVar  :: repr (Variable repr) -> repr (StateVar repr)
-  pubGVar  :: repr (Variable repr) -> repr (StateVar repr)
+    repr (Value repr) -> State GOOLState (repr (StateVar repr))
+  privMVar :: repr (Variable repr) -> State GOOLState (repr (StateVar repr))
+  pubMVar  :: repr (Variable repr) -> State GOOLState (repr (StateVar repr))
+  pubGVar  :: repr (Variable repr) -> State GOOLState (repr (StateVar repr))
 
 class InternalStateVar repr where
   stateVarDoc :: repr (StateVar repr) -> Doc
-  stateVarFromData :: Doc -> repr (StateVar repr)
+  stateVarFromData :: Doc -> State GOOLState (repr (StateVar repr))
 
 class (MethodSym repr, InternalClass repr) => ClassSym repr 
   where

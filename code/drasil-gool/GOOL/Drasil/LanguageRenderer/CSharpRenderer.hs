@@ -567,7 +567,7 @@ instance InternalStateVar CSharpCode where
   stateVarFromData = return . return
 
 instance ClassSym CSharpCode where
-  type Class CSharpCode = State GOOLState Doc
+  type Class CSharpCode = Doc
   buildClass = G.buildClass classDocD inherit
   enum = G.enum
   privClass = G.privClass
@@ -578,8 +578,8 @@ instance ClassSym CSharpCode where
   commentedClass = G.commentedClass
 
 instance InternalClass CSharpCode where
-  classDoc = (`evalState` initialState) . unCSC
-  classFromData = return
+  classDoc = unCSC
+  classFromData = fmap return
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = State GOOLState ModData

@@ -32,7 +32,7 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   StateVarSym(stateVar), ClassSym(buildClass, commentedClass))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
   FileType, FileData(..), fileD, ModData(..))
-import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty)
+import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, liftList)
 import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD, 
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
@@ -43,6 +43,7 @@ import GOOL.Drasil.State (GOOLState, hasMain, mainMod, getPutReturnFunc,
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList, isNothing)
 import Control.Lens ((^.))
+import Control.Applicative (liftA2)
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   vcat, semi, equals, isEmpty)
@@ -251,32 +252,37 @@ pubGVar = S.stateVar public static_
 
 buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> 
   (Label -> repr (Keyword repr)) -> Label -> Maybe Label -> repr (Scope repr) 
-  -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
-buildClass f i n p s vs fs = classFromData (return $ f n parent (scopeDoc s) 
-  (stateVarListDocD (map stateVarDoc vs)) (methodListDocD (map methodDoc fs)))
+  -> [State GOOLState (repr (StateVar repr))] -> 
+  [State GOOLState (repr (Method repr))] -> State GOOLState (repr (Class repr))
+buildClass f i n p s vs fs = classFromData (liftA2 (f n parent (scopeDoc s)) 
+  (liftList (stateVarListDocD . map stateVarDoc) vs) 
+  (liftList (methodListDocD . map methodDoc) fs))
   where parent = case p of Nothing -> empty
                            Just pn -> keyDoc $ i pn
 
 enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
-  repr (Class repr)
+  State GOOLState (repr (Class repr))
 enum n es s = classFromData (return $ enumDocD n (enumElementsDocD es False) 
   (scopeDoc s))
 
-privClass :: (RenderSym repr) => Label -> Maybe Label -> [repr (StateVar repr)] 
-  -> [repr (Method repr)] -> repr (Class repr)
+privClass :: (RenderSym repr) => Label -> Maybe Label -> 
+  [State GOOLState (repr (StateVar repr))] -> 
+  [State GOOLState (repr (Method repr))] -> State GOOLState (repr (Class repr))
 privClass n p = S.buildClass n p private
 
-pubClass :: (RenderSym repr) => Label -> Maybe Label -> [repr (StateVar repr)] 
-  -> [repr (Method repr)] -> repr (Class repr)
+pubClass :: (RenderSym repr) => Label -> Maybe Label -> 
+  [State GOOLState (repr (StateVar repr))] -> 
+  [State GOOLState (repr (Method repr))] -> State GOOLState (repr (Class repr))
 pubClass n p = S.buildClass n p public
 
-docClass :: (RenderSym repr) => String -> repr (Class repr) -> repr (Class repr)
+docClass :: (RenderSym repr) => String -> State GOOLState (repr (Class repr))
+  -> State GOOLState (repr (Class repr))
 docClass d = S.commentedClass (docComment $ return $ classDox d)
 
 commentedClass :: (RenderSym repr) => State GOOLState (repr (BlockComment repr))
-  -> repr (Class repr) -> repr (Class repr)
-commentedClass cmt cs = classFromData (fmap ((`commentedItem` classDoc cs) . 
-  blockCommentDoc) cmt)
+  -> State GOOLState (repr (Class repr)) -> State GOOLState (repr (Class repr))
+commentedClass cmt cs = classFromData (liftA2 (\cmt' cs' -> commentedItem 
+  (blockCommentDoc cmt') (classDoc cs')) cmt cs)
 
 buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
   [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)
@@ -284,10 +290,11 @@ buildModule n ls ms cs = modFromData n (any isMainMethod ms) (moduleDocD
   (vcat $ map keyDoc ls) (vibcat $ map classDoc cs)
   (methodListDocD $ map methodDoc ms))
 
-buildModule' :: (RenderSym repr) => Label -> [repr (Method repr)] -> 
-  [repr (Class repr)] -> repr (Module repr)
-buildModule' n ms cs = modFromData n (any isMainMethod ms) (vibcat $ map 
-  classDoc $ if null ms then cs else pubClass n Nothing [] ms : cs)
+buildModule' :: (RenderSym repr) => Label -> 
+  [State GOOLState (repr (Method repr))] -> 
+  [State GOOLState (repr (Class repr))] -> repr (Module repr)
+buildModule' n ms cs = modFromData n (any isMainMethod ms) (liftList (vibcat . 
+  map classDoc) (if null ms then cs else pubClass n Nothing [] ms : cs))
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
   repr (Block repr) -> repr (Module repr) -> repr (RenderFile repr)

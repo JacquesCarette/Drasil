@@ -651,21 +651,27 @@ class (MethodSym repr, InternalClass repr) => ClassSym repr
   where
   type Class repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
-    [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
-  enum :: Label -> [Label] -> repr (Scope repr) -> repr (Class repr)
-  privClass :: Label -> Maybe Label -> [repr (StateVar repr)] -> 
-    [repr (Method repr)] -> repr (Class repr)
-  pubClass :: Label -> Maybe Label -> [repr (StateVar repr)] -> 
-    [repr (Method repr)] -> repr (Class repr)
+    [State GOOLState (repr (StateVar repr))] -> 
+    [State GOOLState (repr (Method repr))] -> 
+    State GOOLState (repr (Class repr))
+  enum :: Label -> [Label] -> repr (Scope repr) -> 
+    State GOOLState (repr (Class repr))
+  privClass :: Label -> Maybe Label -> [State GOOLState (repr (StateVar repr))] 
+    -> [State GOOLState (repr (Method repr))] -> 
+    State GOOLState (repr (Class repr))
+  pubClass :: Label -> Maybe Label -> [State GOOLState (repr (StateVar repr))] 
+    -> [State GOOLState (repr (Method repr))] -> 
+    State GOOLState (repr (Class repr))
 
-  docClass :: String -> repr (Class repr) -> repr (Class repr)
+  docClass :: String -> State GOOLState (repr (Class repr)) ->
+    State GOOLState (repr (Class repr))
 
   commentedClass :: State GOOLState (repr (BlockComment repr)) -> 
-    repr (Class repr) -> repr (Class repr)
+    State GOOLState (repr (Class repr)) -> State GOOLState (repr (Class repr))
 
 class InternalClass repr where
   classDoc :: repr (Class repr) -> Doc
-  classFromData :: State GOOLState Doc -> repr (Class repr)
+  classFromData :: State GOOLState Doc -> State GOOLState (repr (Class repr))
 
 class (ClassSym repr, InternalMod repr) => ModuleSym repr where
   type Module repr
@@ -677,7 +683,7 @@ class (ClassSym repr, InternalMod repr) => ModuleSym repr where
 class InternalMod repr where
   isMainModule :: repr (Module repr) -> Bool
   moduleDoc :: repr (Module repr) -> Doc
-  modFromData :: String -> Bool -> Doc -> repr (Module repr)
+  modFromData :: String -> Bool -> State GOOLState Doc -> repr (Module repr)
   updateModuleDoc :: (Doc -> Doc) -> repr (Module repr) -> repr (Module repr)
     
 class BlockCommentSym repr where

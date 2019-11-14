@@ -672,19 +672,21 @@ instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
   stateVarFromData d = liftA2 pair (stateVarFromData d) (stateVarFromData d)
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
-  type Class (p CppSrcCode CppHdrCode) = State GOOLState Doc
-  buildClass n p s vs fs = pair (buildClass n p (pfst s) (map pfst vs) 
-    (map pfst fs)) (buildClass n p (psnd s) (map psnd vs) (map psnd fs))
-  enum l ls s = pair (enum l ls $ pfst s) (enum l ls $ psnd s)
-  privClass n p vs fs = pair (privClass n p (map pfst vs) (map pfst fs))
-    (privClass n p (map psnd vs) (map psnd fs))
-  pubClass n p vs fs = pair (pubClass n p (map pfst vs) (map pfst fs)) 
-    (pubClass n p (map psnd vs) (map psnd fs))
+  type Class (p CppSrcCode CppHdrCode) = Doc
+  buildClass n p s vs fs = liftA2 pair (buildClass n p (pfst s) (map (fmap pfst)
+    vs) (map (fmap pfst) fs)) (buildClass n p (psnd s) (map (fmap psnd) vs) 
+    (map (fmap psnd) fs))
+  enum l ls s = liftA2 pair (enum l ls $ pfst s) (enum l ls $ psnd s)
+  privClass n p vs fs = liftA2 pair (privClass n p (map (fmap pfst) vs) (map 
+    (fmap pfst) fs)) (privClass n p (map (fmap psnd) vs) (map (fmap psnd) fs))
+  pubClass n p vs fs = liftA2 pair (pubClass n p (map (fmap pfst) vs) (map 
+    (fmap pfst) fs)) (pubClass n p (map (fmap psnd) vs) (map (fmap psnd) fs))
 
-  docClass d c = pair (docClass d $ pfst c) (docClass d $ psnd c)
+  docClass d c = liftA2 pair (docClass d $ fmap pfst c) 
+    (docClass d $ fmap psnd c)
 
-  commentedClass cmt cs = pair (commentedClass (pfst cmt) (pfst cs)) 
-    (commentedClass (psnd cmt) (psnd cs))
+  commentedClass cmt cs = liftA2 pair (commentedClass (fmap pfst cmt) (fmap 
+    pfst cs)) (commentedClass (fmap psnd cmt) (fmap psnd cs))
 
 instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
   classDoc c = classDoc $ pfst c
@@ -1252,7 +1254,7 @@ instance InternalStateVar CppSrcCode where
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppSrcCode where
-  type Class CppSrcCode = State GOOLState Doc
+  type Class CppSrcCode = Doc
   buildClass n _ _ vs fs = lift2Lists (lift2Lists cppsClass) vs
     (fs ++ [destructor n vs])
   enum _ _ _ = return $ return empty
@@ -1264,8 +1266,8 @@ instance ClassSym CppSrcCode where
   commentedClass _ cs = cs
 
 instance InternalClass CppSrcCode where
-  classDoc = (`evalState` initialState) . unCPPSC
-  classFromData = return
+  classDoc = unCPPSC
+  classFromData = fmap return
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = State GOOLState ModData
@@ -1789,15 +1791,16 @@ instance InternalStateVar CppHdrCode where
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppHdrCode where
-  type Class CppHdrCode = State GOOLState Doc
+  type Class CppHdrCode = Doc
   -- do this with a do? avoids liftA8...
-  buildClass n p _ vs fs = liftA8 (cpphClass n) (lift2Lists (lift2Lists 
-    (cpphVarsFuncsList Pub)) vs (fs ++ [destructor n vs])) (lift2Lists 
-    (lift2Lists (cpphVarsFuncsList Priv)) vs (fs ++ [destructor n vs])) 
+  buildClass n p _ vs mths = liftA8 (cpphClass n) 
+    (lift2Lists (lift2Lists (cpphVarsFuncsList Pub)) vs fs) 
+    (lift2Lists (lift2Lists (cpphVarsFuncsList Priv)) vs fs) 
     (fmap fst public) (fmap fst private) parent blockStart blockEnd endStatement
     where parent = case p of Nothing -> return empty
                              Just pn -> inherit pn
-  enum n es _ = return <$> liftA4 (cpphEnum n) (return $ enumElementsDocD es 
+          fs = mths ++ [destructor n vs]
+  enum n es _ = return $ liftA4 (cpphEnum n) (return $ enumElementsDocD es 
     enumsEqualInts) blockStart blockEnd endStatement
   privClass = G.privClass
   pubClass = G.pubClass
@@ -1807,8 +1810,8 @@ instance ClassSym CppHdrCode where
   commentedClass = G.commentedClass
 
 instance InternalClass CppHdrCode where
-  classDoc = (`evalState` initialState) . unCPPHC
-  classFromData = return
+  classDoc = unCPPHC
+  classFromData = fmap return
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = State GOOLState ModData

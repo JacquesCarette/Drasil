@@ -609,9 +609,10 @@ instance InternalMod PythonCode where
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym PythonCode where
-  type BlockComment PythonCode = State GOOLState Doc
-  blockComment lns = fmap (return . pyBlockComment lns) commentStart
-  docComment lns = liftA2 (\dcs cs -> fmap (pyDocComment dcs cs) lns) docCommentStart commentStart
+  type BlockComment PythonCode = Doc
+  blockComment lns = fmap (pyBlockComment lns) commentStart
+  docComment = fmap (\lns -> liftA2 (pyDocComment lns) docCommentStart 
+    commentStart)
 
   blockCommentDoc = unPC
 
@@ -751,9 +752,9 @@ pyInOutCall f n ins outs both = if null rets then valState (f n void (map
 pyBlockComment :: [String] -> Doc -> Doc
 pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
 
-pyDocComment :: Doc -> Doc -> [String] -> Doc
-pyDocComment _ _ [] = empty
-pyDocComment start mid (l:lns) = vcat $ start <+> text l : map ((<+>) mid . 
+pyDocComment :: [String] -> Doc -> Doc -> Doc
+pyDocComment [] _ _ = empty
+pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . 
   text) lns
 
 pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) 

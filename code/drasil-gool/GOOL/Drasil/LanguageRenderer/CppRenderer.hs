@@ -701,7 +701,7 @@ instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
     psnd m)
 
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
-  type BlockComment (p CppSrcCode CppHdrCode) = State GOOLState Doc
+  type BlockComment (p CppSrcCode CppHdrCode) = Doc
   blockComment lns = pair (blockComment lns) (blockComment lns)
   docComment lns = pair (docComment lns) (docComment lns)
 
@@ -1277,11 +1277,10 @@ instance InternalMod CppSrcCode where
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CppSrcCode where
-  type BlockComment CppSrcCode = State GOOLState Doc
-  blockComment lns = liftA2 (\bcs bce -> return $ blockCmtDoc lns bcs bce) 
-    blockCommentStart blockCommentEnd
-  docComment lns = liftA2 (\dcs dce -> fmap (docCmtDoc dcs dce) lns) 
-    docCommentStart docCommentEnd
+  type BlockComment CppSrcCode = Doc
+  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  docComment = fmap (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
+    docCommentEnd)
 
   blockCommentDoc = unCPPSC
 
@@ -1821,11 +1820,10 @@ instance InternalMod CppHdrCode where
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CppHdrCode where
-  type BlockComment CppHdrCode = State GOOLState Doc
-  blockComment lns = liftA2 (\bcs bce -> return $ blockCmtDoc lns bcs bce) 
-    blockCommentStart blockCommentEnd
-  docComment lns = liftA2 (\dcs dce -> fmap (docCmtDoc dcs dce) lns) 
-    docCommentStart docCommentEnd
+  type BlockComment CppHdrCode = Doc
+  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  docComment = fmap (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
+    docCommentEnd)
 
   blockCommentDoc = unCPPHC
 

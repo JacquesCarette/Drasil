@@ -266,10 +266,10 @@ pubClass n p = S.buildClass n p public
 docClass :: (RenderSym repr) => String -> repr (Class repr) -> repr (Class repr)
 docClass d = S.commentedClass (docComment $ return $ classDox d)
 
-commentedClass :: (RenderSym repr) => repr (BlockComment repr) -> 
-  repr (Class repr) -> repr (Class repr)
-commentedClass cmt cs = classFromData (fmap (`commentedItem` classDoc cs)
-  (blockCommentDoc cmt))
+commentedClass :: (RenderSym repr) => State GOOLState (repr (BlockComment repr))
+  -> repr (Class repr) -> repr (Class repr)
+commentedClass cmt cs = classFromData (fmap ((`commentedItem` classDoc cs) . 
+  blockCommentDoc) cmt)
 
 buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
   [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)

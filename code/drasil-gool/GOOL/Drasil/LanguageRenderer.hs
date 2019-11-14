@@ -1084,8 +1084,8 @@ publicDocD = text "public"
 blockCmtDoc :: [String] -> Doc -> Doc -> Doc
 blockCmtDoc lns start end = start <+> vcat (map text lns) <+> end
 
-docCmtDoc :: Doc -> Doc -> [String] -> Doc
-docCmtDoc start end lns = emptyIfNull lns $
+docCmtDoc :: [String] -> Doc -> Doc -> Doc
+docCmtDoc lns start end = emptyIfNull lns $
   vcat $ start : map (indent . text) lns ++ [end]
 
 commentedItem :: Doc -> Doc -> Doc

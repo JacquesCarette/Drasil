@@ -39,8 +39,8 @@ class (ModuleSym repr, InternalFile repr) =>
   docMod :: String -> [String] -> String -> repr (RenderFile repr) -> 
     repr (RenderFile repr)
 
-  commentedMod :: repr (RenderFile repr) -> repr (BlockComment repr) -> 
-    repr (RenderFile repr)
+  commentedMod :: repr (RenderFile repr) -> 
+    State GOOLState (repr (BlockComment repr)) -> repr (RenderFile repr)
 
 class InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
@@ -618,8 +618,8 @@ class (MethodTypeSym repr, BlockCommentSym repr) =>
   intFunc      :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
     -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr)
-  commentedFunc :: repr (BlockComment repr) -> repr (Method repr) -> 
-    repr (Method repr)
+  commentedFunc :: State GOOLState (repr (BlockComment repr)) -> 
+    repr (Method repr) -> repr (Method repr)
 
   isMainMethod :: repr (Method repr) -> Bool
   methodDoc :: repr (Method repr) -> Doc
@@ -654,8 +654,8 @@ class (MethodSym repr, InternalClass repr) => ClassSym repr
 
   docClass :: String -> repr (Class repr) -> repr (Class repr)
 
-  commentedClass :: repr (BlockComment repr) -> repr (Class repr) -> 
-    repr (Class repr)
+  commentedClass :: State GOOLState (repr (BlockComment repr)) -> 
+    repr (Class repr) -> repr (Class repr)
 
 class InternalClass repr where
   classDoc :: repr (Class repr) -> Doc
@@ -677,6 +677,6 @@ class InternalMod repr where
 class BlockCommentSym repr where
   type BlockComment repr
   blockComment :: [String] -> repr (BlockComment repr)
-  docComment :: State GOOLState [String] -> repr (BlockComment repr)
+  docComment :: State GOOLState [String] -> State GOOLState (repr (BlockComment repr))
 
-  blockCommentDoc :: repr (BlockComment repr) -> State GOOLState Doc
+  blockCommentDoc :: repr (BlockComment repr) -> Doc

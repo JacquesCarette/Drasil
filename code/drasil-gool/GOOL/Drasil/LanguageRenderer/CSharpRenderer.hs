@@ -595,11 +595,10 @@ instance InternalMod CSharpCode where
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CSharpCode where
-  type BlockComment CSharpCode = State GOOLState Doc
-  blockComment lns = liftA2 (\bcs bce -> return $ blockCmtDoc lns bcs bce) 
-    blockCommentStart blockCommentEnd
-  docComment lns = liftA2 (\dcs dce -> fmap (docCmtDoc dcs dce) lns) 
-    docCommentStart docCommentEnd
+  type BlockComment CSharpCode = Doc
+  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  docComment = fmap (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
+    docCommentEnd)
 
   blockCommentDoc = unCSC
 

@@ -562,7 +562,6 @@ class ParameterSym repr where
   -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
   pointerParam :: repr (Variable repr) -> repr (Parameter repr)
 
-  parameterName :: repr (Parameter repr) -> String
   parameterType :: repr (Parameter repr) -> repr (Type repr)
 
 class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr, 
@@ -617,8 +616,6 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr,
     (Variable repr))] -> [(String, repr (Variable repr))] -> repr (Body repr)
     -> GS (repr (Method repr))
 
-  parameters :: repr (Method repr) -> [repr (Parameter repr)]
-
 class (MethodTypeSym repr, BlockCommentSym repr) => 
   InternalMethod repr where
   intMethod      :: Bool -> Label -> Label -> repr (Scope repr) -> 
@@ -629,7 +626,7 @@ class (MethodTypeSym repr, BlockCommentSym repr) =>
     GS (repr (Method repr))
   commentedFunc :: GS (repr (BlockComment repr)) -> 
     GS (repr (Method repr)) -> GS (repr (Method repr))
-    
+
   methodDoc :: repr (Method repr) -> Doc
 
 class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr,

@@ -65,11 +65,11 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
   ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
-  updateModDoc, OpData(..), od, ParamData(..), pd, TypeData(..), td, 
+  updateModDoc, OpData(..), od, ParamData(..), pd, paramName, TypeData(..), td, 
   ValData(..), vd, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
   emptyIfEmpty, emptyIfNull, getInnerType, getNestDegree, convType)
-import GOOL.Drasil.State (GS)
+import GOOL.Drasil.State (GS, getParameters)
 
 import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
@@ -1134,8 +1134,9 @@ commentedModD m cmt = updateFileMod (updateModDoc (commentedItem cmt) (fileMod m
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
   GS (repr (Method repr)) -> GS (repr (Method repr))
-docFuncRepr desc pComms rComms fn = commentedFunc (docComment $ fmap 
-  (\f -> functionDox desc (zip (map parameterName (parameters f)) pComms) rComms) fn) fn
+docFuncRepr desc pComms rComms = commentedFunc (docComment $ fmap 
+  (\ps -> functionDox desc (zip (map paramName ps) pComms) rComms) 
+  getParameters)
 
 -- Helper Functions --
 

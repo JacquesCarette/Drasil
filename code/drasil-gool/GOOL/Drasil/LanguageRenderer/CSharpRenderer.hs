@@ -63,8 +63,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (liftA4, liftA5, liftList, lift1List, checkParams)
-import GOOL.Drasil.State (GS, initialState, getPutReturn, 
-  passState2Lists, setMain, setCurrMain)
+import GOOL.Drasil.State (GS, initialState, getPutReturn, passState2Lists, 
+  setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -512,7 +512,6 @@ instance ParameterSym CSharpCode where
   param = fmap (mkParam paramDocD)
   pointerParam = param
 
-  parameterName = variableName . fmap paramVar
   parameterType = variableType . fmap paramVar
 
 instance MethodSym CSharpCode where
@@ -539,13 +538,11 @@ instance MethodSym CSharpCode where
   inOutFunc n = csInOut (function n)
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
-  
-  parameters m = map return $ (mthdParams . unCSC) m
 
 instance InternalMethod CSharpCode where
-  intMethod m n _ s p t ps b = (if m then getPutReturn (setCurrMain m . setMain)
-    else return) $  liftA2 mthd (checkParams n <$> sequence ps) (liftA5 
-    (methodDocD n) s p t (liftList paramListDocD ps) b)
+  intMethod m n _ s p t ps b = getPutReturn (setParameters (map unCSC ps) . 
+    if m then setCurrMain m . setMain else id) $ liftA2 mthd (checkParams n <$> 
+    sequence ps) (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
   intFunc = G.intFunc
   commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem) 
     cmt)

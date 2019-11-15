@@ -58,8 +58,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftList, 
   lift1List, lift2Lists, checkParams)
-import GOOL.Drasil.State (GS, initialState, getPutReturn, 
-  passState2Lists, setMain, setCurrMain)
+import GOOL.Drasil.State (GS, initialState, getPutReturn, passState2Lists, 
+  setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -524,7 +524,6 @@ instance ParameterSym PythonCode where
   param = fmap (mkParam varDoc)
   pointerParam = param
 
-  parameterName = variableName . fmap paramVar
   parameterType = variableType . fmap paramVar
 
 instance MethodSym PythonCode where
@@ -540,7 +539,8 @@ instance MethodSym PythonCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction = getPutReturn (setCurrMain True . setMain) . fmap (mthd [])
+  mainFunction = getPutReturn (setParameters [] . setCurrMain True . setMain) . 
+    fmap (mthd [])
 
   docFunc = G.docFunc
 
@@ -552,15 +552,13 @@ instance MethodSym PythonCode where
 
   docInOutFunc n = pyDocInOut (inOutFunc n)
 
-  parameters m = map return $ (mthdParams . unPC) m
-
 instance InternalMethod PythonCode where
-  intMethod m n l _ _ _ ps b = (if m then getPutReturn (setCurrMain m . setMain)
-    else return) $ liftA2 mthd (checkParams n <$> sequence ps) (liftA3 
-    (pyMethod n) (self l) (liftList paramListDocD ps) b)
-  intFunc m n _ _ _ ps b = (if m then getPutReturn (setCurrMain m . setMain) 
-    else return) $ liftA2 mthd (checkParams n <$> sequence ps) (liftA2 
-    (pyFunction n) (liftList paramListDocD ps) b)
+  intMethod m n l _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
+    if m then setCurrMain m . setMain else id) $ liftA2 mthd (checkParams n <$> 
+    sequence ps) (liftA3 (pyMethod n) (self l) (liftList paramListDocD ps) b)
+  intFunc m n _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
+    if m then setCurrMain m . setMain else id) $ liftA2 mthd (checkParams n <$> 
+    sequence ps) (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
   commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem) 
     cmt)
 

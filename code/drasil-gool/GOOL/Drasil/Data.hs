@@ -1,7 +1,7 @@
 module GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
   FileType(..), BindData(..), bd, FileData(..), fileD, updateFileMod, 
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  updateMthdDoc, OpData(..), od, ParamData(..), pd, updateParamDoc, 
+  updateMthdDoc, OpData(..), od, ParamData(..), pd, paramName, updateParamDoc, 
   ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
   ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard
 ) where
@@ -78,6 +78,9 @@ instance Eq ParamData where
 
 pd :: VarData -> Doc -> ParamData
 pd = PD 
+
+paramName :: ParamData -> String
+paramName = varName . paramVar
 
 updateParamDoc :: (Doc -> Doc) -> ParamData -> ParamData
 updateParamDoc f v = pd (paramVar v) ((f . paramDoc) v)

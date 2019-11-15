@@ -64,8 +64,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
   lift1List, checkParams)
-import GOOL.Drasil.State (GS, initialState, getPutReturn, 
-  getPutReturnList, passState2Lists, addProgNameToPaths, setMain, setCurrMain)
+import GOOL.Drasil.State (GS, initialState, getPutReturn, getPutReturnList, 
+  passState2Lists, addProgNameToPaths, setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -516,7 +516,6 @@ instance ParameterSym JavaCode where
   param = fmap (mkParam paramDocD)
   pointerParam = param
 
-  parameterName = variableName . fmap paramVar
   parameterType = variableType . fmap paramVar
 
 instance MethodSym JavaCode where
@@ -543,13 +542,11 @@ instance MethodSym JavaCode where
   inOutFunc n = jInOut (function n)
     
   docInOutFunc n = jDocInOut (inOutFunc n)
-    
-  parameters m = map return $ (mthdParams . unJC) m
 
 instance InternalMethod JavaCode where
-  intMethod m n _ s p t ps b = (if m then getPutReturn (setCurrMain m . setMain)
-    else return) $ liftA2 mthd (checkParams n <$> sequence ps) (liftA5 
-    (jMethod n) s p t (liftList paramListDocD ps) b)
+  intMethod m n _ s p t ps b = getPutReturn (setParameters (map unJC ps) . 
+    if m then setCurrMain m . setMain else id) $ liftA2 mthd (checkParams n <$> 
+    sequence ps) (liftA5 (jMethod n) s p t (liftList paramListDocD ps) b)
   intFunc = G.intFunc
   commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem)
     cmt)

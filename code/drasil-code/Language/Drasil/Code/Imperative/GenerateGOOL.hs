@@ -11,16 +11,16 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
 import GOOL.Drasil (Label, RenderSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  CodeType(..), GOOLState)
+  CodeType(..), GOOLState, GS)
 
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe)
 import Control.Monad.Reader (Reader, ask, withReader)
 
 genModule :: (RenderSym repr) => Name -> String
-  -> Maybe (Reader State [repr (Method repr)])
-  -> Maybe (Reader State [repr (Class repr)])
-  -> Reader State (repr (RenderFile repr))
+  -> Maybe (Reader State [GS (repr (Method repr))])
+  -> Maybe (Reader State [GS (repr (Class repr))])
+  -> Reader State (GS (repr (RenderFile repr)))
 genModule n desc maybeMs maybeCs = do
   g <- ask
   let ls = fromMaybe [] (Map.lookup n (dMap $ codeSpec g))
@@ -45,8 +45,8 @@ genDoxConfig n s = do
   return [doxConfig n s v | not (null cms)]
 
 publicClass :: (RenderSym repr) => String -> Label -> Maybe Label -> 
-  [repr (StateVar repr)] -> Reader State [repr (Method repr)] -> 
-  Reader State (repr (Class repr))
+  [GS (repr (StateVar repr))] -> Reader State [GS (repr (Method repr))] -> 
+  Reader State (GS (repr (Class repr)))
 publicClass desc n l vs mths = do
   g <- ask
   ms <- mths

@@ -17,7 +17,7 @@ import Language.Drasil.Chunk.Code (programName)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Visibility(..))
 
-import GOOL.Drasil (ProgramSym(..), RenderSym(..), ProgData(..), GOOLState, 
+import GOOL.Drasil (ProgramSym(..), RenderSym(..), ProgData(..), GS, 
   initialState)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
@@ -70,16 +70,15 @@ genPackage :: (ProgramSym progRepr, PackageSym packRepr) =>
 genPackage unRepr = do
   g <- ask
   p <- genProgram
-  let sp = unRepr p   
-      s = execState sp initialState
-      pd = evalState sp initialState
+  let s = execState p initialState
+      pd = unRepr $ evalState p initialState
       n = case codeSpec g of CodeSpec {program = pr} -> programName pr
       m = makefile (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig n s
   return $ package pd (m:i++d)
 
-genProgram :: (ProgramSym repr) => Reader State (repr (Program repr))
+genProgram :: (ProgramSym repr) => Reader State (GS (repr (Program repr)))
 genProgram = do
   g <- ask
   ms <- genModules
@@ -87,7 +86,7 @@ genProgram = do
   let n = case codeSpec g of CodeSpec {program = p} -> programName p
   return $ prog n ms
           
-genModules :: (RenderSym repr) => Reader State [repr (RenderFile repr)]
+genModules :: (RenderSym repr) => Reader State [GS (repr (RenderFile repr))]
 genModules = do
   g <- ask
   let s = csi $ codeSpec g

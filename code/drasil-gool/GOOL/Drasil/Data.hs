@@ -58,14 +58,13 @@ md = MD
 updateModDoc :: (Doc -> Doc) -> ModData -> ModData
 updateModDoc f m = md (name m) (isMainMod m) (f $ modDoc m)
 
-data MethodData = MthD {isMainMthd :: Bool, mthdParams :: [ParamData], 
-  mthdDoc :: Doc}
+data MethodData = MthD {mthdParams :: [ParamData], mthdDoc :: Doc}
 
-mthd :: Bool -> [ParamData] -> Doc -> MethodData
+mthd :: [ParamData] -> Doc -> MethodData
 mthd = MthD 
 
 updateMthdDoc :: (Doc -> Doc) -> MethodData -> MethodData
-updateMthdDoc f m = mthd (isMainMthd m) (mthdParams m) ((f . mthdDoc) m)
+updateMthdDoc f m = mthd (mthdParams m) ((f . mthdDoc) m)
 
 data OpData = OD {opPrec :: Int, opDoc :: Doc}
 

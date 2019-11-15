@@ -64,7 +64,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (liftA4, liftA5, liftList, lift1List, checkParams)
 import GOOL.Drasil.State (GS, initialState, getPutReturn, 
-  passState2Lists, setMain)
+  passState2Lists, setMain, setCurrMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -543,14 +543,13 @@ instance MethodSym CSharpCode where
   parameters m = map return $ (mthdParams . unCSC) m
 
 instance InternalMethod CSharpCode where
-  intMethod m n _ s p t ps b = (if m then getPutReturn setMain else return) $ 
-    liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA5 (methodDocD n) s p 
-    t (liftList paramListDocD ps) b)
+  intMethod m n _ s p t ps b = (if m then getPutReturn (setCurrMain m . setMain)
+    else return) $  liftA2 mthd (checkParams n <$> sequence ps) (liftA5 
+    (methodDocD n) s p t (liftList paramListDocD ps) b)
   intFunc = G.intFunc
   commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem) 
     cmt)
   
-  isMainMethod = isMainMthd . unCSC
   methodDoc = mthdDoc . unCSC
 
 instance StateVarSym CSharpCode where

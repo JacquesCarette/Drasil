@@ -629,8 +629,7 @@ class (MethodTypeSym repr, BlockCommentSym repr) =>
     GS (repr (Method repr))
   commentedFunc :: GS (repr (BlockComment repr)) -> 
     GS (repr (Method repr)) -> GS (repr (Method repr))
-
-  isMainMethod :: repr (Method repr) -> Bool
+    
   methodDoc :: repr (Method repr) -> Doc
 
 class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr,
@@ -679,14 +678,12 @@ class InternalClass repr where
 
 class (ClassSym repr, InternalMod repr) => ModuleSym repr where
   type Module repr
-  buildModule :: Label -> [Library] -> [GS (repr (Method repr))] 
-    -> [GS (repr (Class repr))] -> 
-    GS (repr (Module repr))
+  buildModule :: Label -> [Library] -> [GS (repr (Method repr))] -> 
+    [GS (repr (Class repr))] -> GS (repr (Module repr))
 
 class InternalMod repr where
   moduleDoc :: repr (Module repr) -> Doc
-  modFromData :: String -> GS Bool -> GS Doc -> 
-    GS (repr (Module repr))
+  modFromData :: String -> GS Bool -> GS Doc -> GS (repr (Module repr))
   updateModuleDoc :: (Doc -> Doc) -> GS (repr (Module repr)) -> 
     GS (repr (Module repr))
     

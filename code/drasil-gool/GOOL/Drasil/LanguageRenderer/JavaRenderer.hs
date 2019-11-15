@@ -65,7 +65,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
 import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
   lift1List, checkParams)
 import GOOL.Drasil.State (GS, initialState, getPutReturn, 
-  getPutReturnList, passState2Lists, addProgNameToPaths, setMain)
+  getPutReturnList, passState2Lists, addProgNameToPaths, setMain, setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -547,14 +547,13 @@ instance MethodSym JavaCode where
   parameters m = map return $ (mthdParams . unJC) m
 
 instance InternalMethod JavaCode where
-  intMethod m n _ s p t ps b = (if m then getPutReturn setMain else return) $ 
-    liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA5 (jMethod n) s p t 
-    (liftList paramListDocD ps) b)
+  intMethod m n _ s p t ps b = (if m then getPutReturn (setCurrMain m . setMain)
+    else return) $ liftA2 mthd (checkParams n <$> sequence ps) (liftA5 
+    (jMethod n) s p t (liftList paramListDocD ps) b)
   intFunc = G.intFunc
   commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem)
     cmt)
   
-  isMainMethod = isMainMthd . unJC
   methodDoc = mthdDoc . unJC
 
 instance StateVarSym JavaCode where

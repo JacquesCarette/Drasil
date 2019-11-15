@@ -22,7 +22,7 @@ import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   StatementSym(Statement, (&=), constDecDef, returnState), ScopeSym(..), 
   InternalScope(..), MethodTypeSym(mType), ParameterSym(..), 
   MethodTypeSym(MethodType), MethodSym(Method), 
-  InternalMethod(intMethod, commentedFunc, isMainMethod, methodDoc), 
+  InternalMethod(intMethod, commentedFunc, methodDoc), 
   StateVarSym(StateVar), InternalStateVar(..), ClassSym(Class), 
   InternalClass(..), ModuleSym(Module), InternalMod(moduleDoc, updateModuleDoc),
   BlockComment(..))
@@ -39,7 +39,8 @@ import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD,
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
   moduleDox, getterName, setterName)
 import GOOL.Drasil.State (GS, hasMain, mainMod, getPut, getPutReturnFunc2,
-  addFile, setMainMod, setFilePath, getFilePath, setModuleName, getModuleName)
+  addFile, setMainMod, setFilePath, getFilePath, setModuleName, getModuleName, 
+  setCurrMain, getCurrMain)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList, isNothing)
@@ -288,20 +289,19 @@ commentedClass cmt cs = classFromData (liftA2 (\cmt' cs' -> commentedItem
 buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
   [GS (repr (Method repr))] -> [GS (repr (Class repr))] -> 
   GS (repr (Module repr))
-buildModule n ls ms cs = S.modFromData n (liftList (any isMainMethod) ms) 
-  (liftA2 (moduleDocD (vcat $ map keyDoc ls)) (liftList (vibcat . map classDoc) 
-  cs) (liftList (methodListDocD . map methodDoc) ms))
+buildModule n ls ms cs = S.modFromData n getCurrMain (liftA2 (moduleDocD (vcat 
+  $ map keyDoc ls)) (liftList (vibcat . map classDoc) cs) (liftList 
+  (methodListDocD . map methodDoc) ms))
 
-buildModule' :: (RenderSym repr) => Label -> 
-  [GS (repr (Method repr))] -> 
+buildModule' :: (RenderSym repr) => Label -> [GS (repr (Method repr))] -> 
   [GS (repr (Class repr))] -> GS (repr (Module repr))
-buildModule' n ms cs = S.modFromData n (liftList (any isMainMethod) ms) 
-  (liftList (vibcat . map classDoc) (if null ms then cs else pubClass n Nothing 
-  [] ms : cs))
+buildModule' n ms cs = S.modFromData n getCurrMain (liftList (vibcat . map 
+  classDoc) (if null ms then cs else pubClass n Nothing [] ms : cs))
 
 modFromData :: Label -> (Bool -> Doc -> repr (Module repr)) -> GS Bool -> 
   GS Doc -> GS (repr (Module repr))
-modFromData n f m d = getPut (setModuleName n) (liftA2 f m d)
+modFromData n f m d = getPut (setCurrMain False . setModuleName n) 
+  (liftA2 f m d)
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
   repr (Block repr) -> GS (repr (Module repr)) -> GS (repr (RenderFile repr))

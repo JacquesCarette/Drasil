@@ -57,7 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   setMethod, privMethod, pubMethod, constructor, function, docFunc, 
   docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
   docClass, commentedClass, buildModule, modFromData, fileDoc, docMod)
-import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
+import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
@@ -66,7 +66,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst,
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
 import GOOL.Drasil.State (GS, hasMain, initialState, getPutReturn, 
-  passState2Lists, checkGOOLState, setMain, setCurrMain, setParameters)
+  checkGOOLState, setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp)
 import Data.Maybe (maybeToList)
@@ -1266,8 +1266,7 @@ instance InternalClass CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n ls ms cs = passState2Lists ms cs
-    (G.buildModule n (map include ls) ms cs)
+  buildModule n ls = G.buildModule n (map include ls)
 
 instance InternalMod CppSrcCode where
   moduleDoc = modDoc . unCPPSC
@@ -1804,8 +1803,7 @@ instance InternalClass CppHdrCode where
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
-  buildModule n ls ms cs = passState2Lists ms cs
-    (G.buildModule n (map include ls) ms cs)
+  buildModule n ls = G.buildModule n (map include ls)
 
 instance InternalMod CppHdrCode where
   moduleDoc = modDoc . unCPPHC

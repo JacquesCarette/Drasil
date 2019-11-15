@@ -65,7 +65,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
 import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
   lift1List, checkParams)
 import GOOL.Drasil.State (GS, initialState, getPutReturn, getPutReturnList, 
-  passState2Lists, addProgNameToPaths, setMain, setCurrMain, setParameters)
+  addProgNameToPaths, setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -583,7 +583,7 @@ instance InternalClass JavaCode where
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
-  buildModule n _ ms cs = passState2Lists ms cs (G.buildModule' n ms cs)
+  buildModule n _ = G.buildModule' n
   
 instance InternalMod JavaCode where
   moduleDoc = modDoc . unJC

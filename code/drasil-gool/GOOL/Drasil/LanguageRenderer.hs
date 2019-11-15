@@ -62,7 +62,7 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
+  MethodSym(..), InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateModDoc, OpData(..), od, ParamData(..), pd, paramName, TypeData(..), td, 

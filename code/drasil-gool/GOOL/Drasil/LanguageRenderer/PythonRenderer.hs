@@ -58,8 +58,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftList, 
   lift1List, lift2Lists, checkParams)
-import GOOL.Drasil.State (GS, initialState, getPutReturn, passState2Lists, 
-  setMain, setCurrMain, setParameters)
+import GOOL.Drasil.State (GS, initialState, getPutReturn, setMain, setCurrMain, 
+  setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -596,8 +596,7 @@ instance InternalClass PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n ls ms cs = passState2Lists ms cs 
-    (G.buildModule n (map include ls) ms cs)
+  buildModule n ls = G.buildModule n (map include ls)
 
 instance InternalMod PythonCode where
   moduleDoc = modDoc . unPC

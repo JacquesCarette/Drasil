@@ -63,8 +63,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (liftA4, liftA5, liftList, lift1List, checkParams)
-import GOOL.Drasil.State (GS, initialState, getPutReturn, passState2Lists, 
-  setMain, setCurrMain, setParameters)
+import GOOL.Drasil.State (GS, initialState, getPutReturn, setMain, setCurrMain, 
+  setParameters)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -579,7 +579,7 @@ instance InternalClass CSharpCode where
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n _ ms cs = passState2Lists ms cs (G.buildModule' n ms cs)
+  buildModule n _ = G.buildModule' n
   
 instance InternalMod CSharpCode where
   moduleDoc = modDoc . unCSC

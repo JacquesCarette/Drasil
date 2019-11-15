@@ -2,7 +2,7 @@
 
 module GOOL.Drasil.State (
   GS, GOOLState(..), headers, sources, hasMain, mainMod, initialState, 
-  getPut, getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, 
+  putAfter, getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList,
   passState, passState2Lists, checkGOOLState, addFile, addCombinedHeaderSource, 
   addHeader, addSource, addProgNameToPaths, setMain, setMainMod, setFilePath, 
   getFilePath, setModuleName, getModuleName, setCurrMain, getCurrMain, 
@@ -42,11 +42,10 @@ initialState = GS {
   _currParameters = []
 }
 
-getPut :: (GOOLState -> GOOLState) -> GS a -> GS a
-getPut sf v = do
-  s <- get
-  put $ sf s
-  v
+putAfter :: (GOOLState -> GOOLState) -> GS a -> GS a
+putAfter sf sv = do
+  v <- sv
+  getPutReturn sf v
 
 getPutReturn :: (GOOLState -> GOOLState) -> a -> GS a
 getPutReturn sf v = do

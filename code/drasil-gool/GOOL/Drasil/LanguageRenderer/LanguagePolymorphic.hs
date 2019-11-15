@@ -38,7 +38,7 @@ import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD,
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
   moduleDox, getterName, setterName)
-import GOOL.Drasil.State (GS, hasMain, mainMod, getPut, getPutReturnFunc2,
+import GOOL.Drasil.State (GS, hasMain, mainMod, putAfter, getPutReturnFunc2,
   addFile, setMainMod, setFilePath, getFilePath, setModuleName, getModuleName, 
   setCurrMain, getCurrMain)
 
@@ -48,13 +48,6 @@ import Control.Lens ((^.))
 import Control.Applicative (liftA2)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   vcat, semi, equals, isEmpty)
-
-fileFromData :: (RenderSym repr) => (FilePath -> repr (Module repr) -> repr 
-  (RenderFile repr)) -> FileType -> GS FilePath -> GS 
-  (repr (Module repr)) -> GS (repr (RenderFile repr))
-fileFromData f ft fp m = getPutReturnFunc2 fp m (\s fpath mdl -> (if isEmpty 
-  (moduleDoc mdl) then id else (if s ^. hasMain && isNothing (s ^. mainMod) 
-  then setMainMod fpath else id) . addFile ft fpath . setFilePath fpath) s) f
 
 block :: (RenderSym repr) => repr (Keyword repr) -> [repr (Statement repr)] -> 
   repr (Block repr)
@@ -300,7 +293,7 @@ buildModule' n ms cs = S.modFromData n getCurrMain (liftList (vibcat . map
 
 modFromData :: Label -> (Bool -> Doc -> repr (Module repr)) -> GS Bool -> 
   GS Doc -> GS (repr (Module repr))
-modFromData n f m d = getPut (setCurrMain False . setModuleName n) 
+modFromData n f m d = putAfter (setCurrMain False . setModuleName n) 
   (liftA2 f m d)
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
@@ -312,3 +305,10 @@ fileDoc ft ext topb botb m = S.fileFromData ft (fmap (addExt ext) getModuleName)
 docMod :: (RenderSym repr) => String -> [String] -> String -> 
   GS (repr (RenderFile repr)) -> GS (repr (RenderFile repr))
 docMod d a dt m = commentedMod m (docComment $ moduleDox d a dt <$> getFilePath)
+
+fileFromData :: (RenderSym repr) => (FilePath -> repr (Module repr) -> 
+  repr (RenderFile repr)) -> FileType -> GS FilePath -> GS (repr (Module repr)) 
+  -> GS (repr (RenderFile repr))
+fileFromData f ft fp m = getPutReturnFunc2 fp m (\s fpath mdl -> (if isEmpty 
+  (moduleDoc mdl) then id else (if s ^. hasMain && isNothing (s ^. mainMod) 
+  then setMainMod fpath else id) . addFile ft fpath . setFilePath fpath) s) f

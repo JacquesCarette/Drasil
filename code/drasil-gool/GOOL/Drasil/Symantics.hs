@@ -682,11 +682,8 @@ class (ClassSym repr, InternalMod repr) => ModuleSym repr where
   buildModule :: Label -> [Library] -> [GS (repr (Method repr))] 
     -> [GS (repr (Class repr))] -> 
     GS (repr (Module repr))
-    
-  moduleName :: repr (Module repr) -> String
 
 class InternalMod repr where
-  isMainModule :: repr (Module repr) -> Bool
   moduleDoc :: repr (Module repr) -> Doc
   modFromData :: String -> GS Bool -> GS Doc -> 
     GS (repr (Module repr))

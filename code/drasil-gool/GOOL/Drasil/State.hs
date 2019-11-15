@@ -2,10 +2,10 @@
 
 module GOOL.Drasil.State (
   GS, GOOLState(..), headers, sources, hasMain, mainMod, initialState, 
-  getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, 
+  getPut, getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, 
   passState, passState2Lists, checkGOOLState, addFile, addCombinedHeaderSource, 
   addHeader, addSource, addProgNameToPaths, setMain, setMainMod, setFilePath, 
-  getFilePath
+  getFilePath, setModuleName, getModuleName
 ) where
 
 import GOOL.Drasil.Data (FileType(..))
@@ -19,7 +19,8 @@ data GOOLState = GS {
   _hasMain :: Bool,
   _mainMod :: Maybe FilePath,
 
-  _currFilePath :: FilePath
+  _currFilePath :: FilePath,
+  _currModName :: String
 } 
 makeLenses ''GOOLState
 
@@ -32,8 +33,15 @@ initialState = GS {
   _hasMain = False,
   _mainMod = Nothing,
 
-  _currFilePath = ""
+  _currFilePath = "",
+  _currModName = ""
 }
+
+getPut :: (GOOLState -> GOOLState) -> GS a -> GS a
+getPut sf v = do
+  s <- get
+  put $ sf s
+  v
 
 getPutReturn :: (GOOLState -> GOOLState) -> a -> GS a
 getPutReturn sf v = do
@@ -118,3 +126,9 @@ setFilePath = set currFilePath
 
 getFilePath :: GS FilePath
 getFilePath = gets (^. currFilePath)
+
+setModuleName :: String -> GOOLState -> GOOLState
+setModuleName = set currModName
+
+getModuleName :: GS String
+getModuleName = gets (^. currModName)

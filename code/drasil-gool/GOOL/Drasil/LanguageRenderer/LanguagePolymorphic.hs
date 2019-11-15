@@ -7,7 +7,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, block,
   privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
   docInOutFunc, intFunc, stateVar,stateVarDef, constVar, privMVar, pubMVar, 
   pubGVar, buildClass, enum, privClass, pubClass, docClass, commentedClass, 
-  buildModule, buildModule', fileDoc, docMod
+  buildModule, buildModule', modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -24,12 +24,13 @@ import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   MethodTypeSym(MethodType), MethodSym(Method), 
   InternalMethod(intMethod, commentedFunc, isMainMethod, methodDoc), 
   StateVarSym(StateVar), InternalStateVar(..), ClassSym(Class), 
-  InternalClass(..), ModuleSym(Module, moduleName), InternalMod(..), 
+  InternalClass(..), ModuleSym(Module), InternalMod(moduleDoc, updateModuleDoc),
   BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData), 
   StatementSym(varDec, varDecDef), MethodTypeSym(construct), 
   MethodSym(method, mainFunction), InternalMethod(intFunc), 
-  StateVarSym(stateVar), ClassSym(buildClass, commentedClass))
+  StateVarSym(stateVar), ClassSym(buildClass, commentedClass), 
+  InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
   FileType)
 import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, liftList)
@@ -37,8 +38,8 @@ import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD,
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
   moduleDox, getterName, setterName)
-import GOOL.Drasil.State (GS, hasMain, mainMod, getPutReturnFunc2, addFile, 
-  setMainMod, setFilePath, getFilePath)
+import GOOL.Drasil.State (GS, hasMain, mainMod, getPut, getPutReturnFunc2,
+  addFile, setMainMod, setFilePath, getFilePath, setModuleName, getModuleName)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList, isNothing)
@@ -271,8 +272,8 @@ privClass :: (RenderSym repr) => Label -> Maybe Label ->
 privClass n p = S.buildClass n p private
 
 pubClass :: (RenderSym repr) => Label -> Maybe Label -> 
-  [GS (repr (StateVar repr))] -> 
-  [GS (repr (Method repr))] -> GS (repr (Class repr))
+  [GS (repr (StateVar repr))] -> [GS (repr (Method repr))] -> 
+  GS (repr (Class repr))
 pubClass n p = S.buildClass n p public
 
 docClass :: (RenderSym repr) => String -> GS (repr (Class repr))
@@ -285,27 +286,29 @@ commentedClass cmt cs = classFromData (liftA2 (\cmt' cs' -> commentedItem
   (blockCommentDoc cmt') (classDoc cs')) cmt cs)
 
 buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
-  [GS (repr (Method repr))] -> 
-  [GS (repr (Class repr))] -> GS (repr (Module repr))
-buildModule n ls ms cs = modFromData n (liftList (any isMainMethod) ms) 
+  [GS (repr (Method repr))] -> [GS (repr (Class repr))] -> 
+  GS (repr (Module repr))
+buildModule n ls ms cs = S.modFromData n (liftList (any isMainMethod) ms) 
   (liftA2 (moduleDocD (vcat $ map keyDoc ls)) (liftList (vibcat . map classDoc) 
   cs) (liftList (methodListDocD . map methodDoc) ms))
 
 buildModule' :: (RenderSym repr) => Label -> 
   [GS (repr (Method repr))] -> 
   [GS (repr (Class repr))] -> GS (repr (Module repr))
-buildModule' n ms cs = modFromData n (liftList (any isMainMethod) ms) 
+buildModule' n ms cs = S.modFromData n (liftList (any isMainMethod) ms) 
   (liftList (vibcat . map classDoc) (if null ms then cs else pubClass n Nothing 
   [] ms : cs))
 
+modFromData :: Label -> (Bool -> Doc -> repr (Module repr)) -> GS Bool -> 
+  GS Doc -> GS (repr (Module repr))
+modFromData n f m d = getPut (setModuleName n) (liftA2 f m d)
+
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
-  repr (Block repr) -> GS (repr (Module repr)) -> 
-  GS (repr (RenderFile repr))
-fileDoc ft ext topb botb m = S.fileFromData ft (fmap (addExt ext . moduleName) 
-  m) (updateModuleDoc (\d -> emptyIfEmpty d (fileDoc' (blockDoc topb) d 
+  repr (Block repr) -> GS (repr (Module repr)) -> GS (repr (RenderFile repr))
+fileDoc ft ext topb botb m = S.fileFromData ft (fmap (addExt ext) getModuleName)
+  (updateModuleDoc (\d -> emptyIfEmpty d (fileDoc' (blockDoc topb) d 
   (blockDoc botb))) m)
 
 docMod :: (RenderSym repr) => String -> [String] -> String -> 
-  GS (repr (RenderFile repr)) -> 
-  GS (repr (RenderFile repr))
+  GS (repr (RenderFile repr)) -> GS (repr (RenderFile repr))
 docMod d a dt m = commentedMod m (docComment $ moduleDox d a dt <$> getFilePath)

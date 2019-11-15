@@ -57,7 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
   pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule', fileDoc, docMod)
+  commentedClass, buildModule', modFromData, fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
@@ -588,13 +588,10 @@ instance InternalClass JavaCode where
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
   buildModule n _ ms cs = passState2Lists ms cs (G.buildModule' n ms cs)
-
-  moduleName = name . unJC
   
 instance InternalMod JavaCode where
-  isMainModule = isMainMod . unJC
   moduleDoc = modDoc . unJC
-  modFromData n = liftA2 (\m d -> return $ md n m d)
+  modFromData n = G.modFromData n (\m d -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym JavaCode where

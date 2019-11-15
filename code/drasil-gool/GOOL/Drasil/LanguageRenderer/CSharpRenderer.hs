@@ -57,7 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
   privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule', fileDoc, docMod)
+  commentedClass, buildModule', modFromData, fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
@@ -584,13 +584,10 @@ instance InternalClass CSharpCode where
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
   buildModule n _ ms cs = passState2Lists ms cs (G.buildModule' n ms cs)
-    
-  moduleName = name . unCSC
   
 instance InternalMod CSharpCode where
-  isMainModule = isMainMod . unCSC
   moduleDoc = modDoc . unCSC
-  modFromData n = liftA2 (\m d -> return $ md n m d)
+  modFromData n = G.modFromData n (\m d -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CSharpCode where

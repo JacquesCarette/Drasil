@@ -56,7 +56,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objDecNewNoParams, construct, comment, ifCond, for, while, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, function, docFunc, 
   docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
-  docClass, commentedClass, buildModule, fileDoc, docMod)
+  docClass, commentedClass, buildModule, modFromData, fileDoc, docMod)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
@@ -699,11 +699,8 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   buildModule n l ms cs = liftA2 pair (buildModule n l (map (fmap pfst) ms) 
     (map (fmap pfst) cs)) (buildModule n l (map (fmap psnd) ms) (map (fmap psnd)
     cs))
-
-  moduleName m = moduleName $ pfst m
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
-  isMainModule m = isMainModule $ pfst m
   moduleDoc m = moduleDoc $ pfst m
   modFromData n m d = liftA2 pair (modFromData n m d) (modFromData n m d)
   updateModuleDoc f m = liftA2 pair (updateModuleDoc f $ fmap pfst m) 
@@ -1277,13 +1274,10 @@ instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
   buildModule n ls ms cs = passState2Lists ms cs
     (G.buildModule n (map include ls) ms cs)
-    
-  moduleName = name . unCPPSC
 
 instance InternalMod CppSrcCode where
-  isMainModule = isMainMod . unCPPSC
   moduleDoc = modDoc . unCPPSC
-  modFromData n = liftA2 (\m d -> return $ md n m d)
+  modFromData n = G.modFromData n (\m d -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CppSrcCode where
@@ -1821,13 +1815,10 @@ instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
   buildModule n ls ms cs = passState2Lists ms cs
     (G.buildModule n (map include ls) ms cs)
-      
-  moduleName = name . unCPPHC
 
 instance InternalMod CppHdrCode where
-  isMainModule = isMainMod . unCPPHC
   moduleDoc = modDoc . unCPPHC
-  modFromData n = liftA2 (\m d -> return $ md n m d)
+  modFromData n = G.modFromData n (\m d -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CppHdrCode where

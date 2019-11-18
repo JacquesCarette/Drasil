@@ -91,7 +91,7 @@
 \begin{document}
 
 %% Title information
-\title{GOOL: A Generic Object-Oriented Language}         %% [Short
+\title{GOOL: A Generic Object-Oriented Language (Short Paper)}         %% [Short
 %%Title] is optional;
                                         %% when present, will be used in
 %                                        %% header instead of Full Title.
@@ -1187,7 +1187,7 @@ encapsulation or not, it is certainly the case that saying to an OO programmer
 ``variable \verb|foo| from class \verb|FooClass| should have getters and setters''
 is enough information for them to write the code. And so it is in GOOL as well.
 Saying \verb|getMethod "FooClass" foo| and \verb|setMethod "FooClass" foo|. 
-The generated set method in Python, Java, \Csharp{} and \Cplusplus{} are:
+The generated set methods in Python, Java, \Csharp{} and \Cplusplus{} are:
 \begin{lstlisting}
 def setFoo(self, foo):
     self.foo = foo
@@ -1334,7 +1334,7 @@ target languages.
 \textbf{ThingML}~\cite{harrand2016thingml} is a DSL for model-driven engineering
 targeting C, \Cplusplus, Java, and JavaScript. It is specialized to deal with
 distributed reactive systems (a nevertheless broad range of application domains).
-This means that this not quite a general-purpose DSL, unlike GOOL.
+This means that this is not quite a general-purpose DSL, unlike GOOL.
 ThingML's modelling-related syntax and abstractions stand in contrast to GOOL's
 object-oriented syntax and abstractions. The generated code lacks some of the
 pretty-printing provided by GOOL, specifically indentation, which detracts from
@@ -1343,7 +1343,7 @@ readability.
 \subsection{Object-oriented generators}
 
 There are a number of code generators with multiple target OO languages,
-though all for more restricted domains than GOOL, and thus do not meet all
+though all are for more restricted domains than GOOL, and thus do not meet all
 of our requirements.
 
 \textbf{Google protocol buffers}~\cite{Protobuf} is a DSL for serializing
@@ -1374,10 +1374,9 @@ The \textbf{Role-Based Metamodeling Language}~\cite{kim2003uml} is also based on
 with changes to allow for better models of design patterns, with specifications
 for the structure, interactions, and state-based behaviour in patterns. Again,
 source code generation is not attempted. Another metamodel for design patterns
-includes generation of Java code \cite{albin2001meta}, and IBM's DSL
-for generation of OO code based on design patterns
-\cite{budinsky1996automatic}. IBM's DSL was in the form of a visual user
-interface rather than a programming or modeling language. The languages that
+includes generation of Java code \cite{albin2001meta}. IBM developed a DSL in 
+the form of a visual user interface for generation of OO code based on design 
+patterns \cite{budinsky1996automatic}. The languages that
 generate code do so only for design patterns, not for any general-purpose code,
 as GOOL does.
 

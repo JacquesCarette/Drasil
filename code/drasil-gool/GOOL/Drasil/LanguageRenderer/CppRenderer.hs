@@ -68,7 +68,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst,
 import GOOL.Drasil.State (GS, hasMain, initialState, getPutReturn, 
   checkGOOLState, setMain, setCurrMain, setParameters)
 
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp)
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Data.Maybe (maybeToList)
 import Control.Lens ((^.))
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -95,26 +95,35 @@ hdrToSrc (CPPHC a) = CPPSC a
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
   type Program (p CppSrcCode CppHdrCode) = ProgData
-  prog n ms = liftA2 pair (prog n $ map (fmap (hdrToSrc . psnd)) ms ++ map 
-    (fmap pfst) ms) (return (return emptyProg))
+  -- prog n ms = liftA2 pair (prog n $ map (fmap (hdrToSrc . psnd)) ms ++ map 
+    -- (fmap pfst) ms) (return (return emptyProg))
+  
+  -- prog n mods = liftList (\ms -> pair (prog n $ map (return . hdrToSrc . psnd) ms ++ map (return . pfst) ms) (return (return emptyProg))) mods
+
+  -- prog n mods = liftA2 pair (prog n $ map (return . hdrToSrc. psnd) ms ++ 
+  --   map (return . pfst) ms) (return (return emptyProg))
+  --   where ms = map (`evalState` initialState) mods
+
+  prog n mods = do
+    m <- sequence mods
+    let fm = map pfst m
+        sm = map (hdrToSrc . psnd) m
+    p1 <- prog n $ map return sm ++ map return fm
+    return $ pair p1 (return emptyProg)
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   type RenderFile (p CppSrcCode CppHdrCode) = FileData
-  fileDoc code = liftA2 pair (fileDoc $ fmap pfst code) (fileDoc $ fmap psnd 
-    code)
+  fileDoc c = pair1 c fileDoc fileDoc
 
-  docMod d a dt m = liftA2 pair (docMod d a dt $ fmap pfst m) (docMod d a dt $ 
-    fmap psnd m)
+  docMod d a dt m = pair1 m (docMod d a dt) (docMod d a dt)
 
-  commentedMod m cmt = liftA2 pair (commentedMod (fmap pfst m) (fmap pfst cmt)) 
-    (commentedMod (fmap psnd m) (fmap psnd cmt))
+  commentedMod m cmt = pair2 m cmt commentedMod commentedMod
 
 instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
   
-  fileFromData ft fp m = liftA2 pair (fileFromData ft fp $ fmap pfst m) 
-    (fileFromData ft fp $ fmap psnd m)
+  fileFromData ft fp m = pair1 m (fileFromData ft fp) (fileFromData ft fp)
 
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
@@ -607,8 +616,7 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     (pfst b)) (pubMethod n c (psnd t) (map psnd ps) (psnd b))
   constructor n ps b = liftA2 pair (constructor n (map pfst ps) (pfst b))
     (constructor n (map psnd ps) (psnd b))
-  destructor n vs = liftA2 pair (destructor n $ map (fmap pfst) vs) 
-    (destructor n $ map (fmap psnd) vs)
+  destructor n vars = pair1List vars (destructor n) (destructor n)
 
   docMain b = liftA2 pair (docMain $ pfst b) (docMain $ psnd b)
 
@@ -617,8 +625,8 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     (psnd b))
   mainFunction b = liftA2 pair (mainFunction $ pfst b) (mainFunction $ psnd b)
 
-  docFunc desc pComms rComm f = liftA2 pair (docFunc desc pComms rComm $ fmap 
-    pfst f) (docFunc desc pComms rComm $ fmap psnd f)
+  docFunc desc pComms rComm f = pair1 f (docFunc desc pComms rComm) 
+    (docFunc desc pComms rComm)
 
   inOutMethod n c s p ins outs both b = liftA2 pair (inOutMethod n c (pfst s) 
     (pfst p) (map pfst ins) (map pfst outs) (map pfst both) (pfst b)) 
@@ -648,8 +656,7 @@ instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
   intFunc m n s p t ps b = liftA2 pair (intFunc m n (pfst s) (pfst p) (pfst t) 
     (map pfst ps) (pfst b)) (intFunc m n (psnd s) (psnd p) (psnd t) (map psnd 
     ps) (psnd b))
-  commentedFunc cmt fn = liftA2 pair (commentedFunc (fmap pfst cmt) (fmap pfst 
-    fn)) (commentedFunc (fmap psnd cmt) (fmap psnd fn)) 
+  commentedFunc cmt fn = pair2 cmt fn commentedFunc commentedFunc
     
   methodDoc m = methodDoc $ pfst m
 
@@ -671,20 +678,15 @@ instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   type Class (p CppSrcCode CppHdrCode) = Doc
-  buildClass n p s vs fs = liftA2 pair (buildClass n p (pfst s) (map (fmap pfst)
-    vs) (map (fmap pfst) fs)) (buildClass n p (psnd s) (map (fmap psnd) vs) 
-    (map (fmap psnd) fs))
+  buildClass n p s vs fs = pair2Lists vs fs (buildClass n p (pfst s)) 
+    (buildClass n p (psnd s))
   enum l ls s = liftA2 pair (enum l ls $ pfst s) (enum l ls $ psnd s)
-  privClass n p vs fs = liftA2 pair (privClass n p (map (fmap pfst) vs) (map 
-    (fmap pfst) fs)) (privClass n p (map (fmap psnd) vs) (map (fmap psnd) fs))
-  pubClass n p vs fs = liftA2 pair (pubClass n p (map (fmap pfst) vs) (map 
-    (fmap pfst) fs)) (pubClass n p (map (fmap psnd) vs) (map (fmap psnd) fs))
+  privClass n p vs fs = pair2Lists vs fs (privClass n p) (privClass n p)
+  pubClass n p vs fs = pair2Lists vs fs (pubClass n p) (pubClass n p)
 
-  docClass d c = liftA2 pair (docClass d $ fmap pfst c) 
-    (docClass d $ fmap psnd c)
+  docClass d c = pair1 c (docClass d) (docClass d)
 
-  commentedClass cmt cs = liftA2 pair (commentedClass (fmap pfst cmt) (fmap 
-    pfst cs)) (commentedClass (fmap psnd cmt) (fmap psnd cs))
+  commentedClass cmt cs = pair2 cmt cs commentedClass commentedClass
 
 instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
   classDoc c = classDoc $ pfst c
@@ -692,15 +694,12 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
-  buildModule n l ms cs = liftA2 pair (buildModule n l (map (fmap pfst) ms) 
-    (map (fmap pfst) cs)) (buildModule n l (map (fmap psnd) ms) (map (fmap psnd)
-    cs))
+  buildModule n l ms cs = pair2Lists ms cs (buildModule n l) (buildModule n l)
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
   moduleDoc m = moduleDoc $ pfst m
   modFromData n m d = liftA2 pair (modFromData n m d) (modFromData n m d)
-  updateModuleDoc f m = liftA2 pair (updateModuleDoc f $ fmap pfst m) 
-    (updateModuleDoc f $ fmap psnd m)
+  updateModuleDoc f m = pair1 m (updateModuleDoc f) (updateModuleDoc f)
 
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   type BlockComment (p CppSrcCode CppHdrCode) = Doc
@@ -708,6 +707,62 @@ instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   docComment lns = liftA2 pair (docComment lns) (docComment lns)
 
   blockCommentDoc c = blockCommentDoc $ pfst c
+
+-- Helpers for pair instance
+
+pair1 :: (Pair p) => GS (p CppSrcCode CppHdrCode a) -> 
+  (GS (CppSrcCode a) -> GS (CppSrcCode b)) -> 
+  (GS (CppHdrCode a) -> GS (CppHdrCode b)) -> GS (p CppSrcCode CppHdrCode b)
+pair1 stv srcf hdrf = do
+  v <- stv
+  let fp = return $ pfst v
+      sp = return $ psnd v
+  p1 <- srcf fp
+  p2 <- hdrf sp
+  return $ pair p1 p2
+
+pair2 :: (Pair p) => GS (p CppSrcCode CppHdrCode a) -> 
+  GS (p CppSrcCode CppHdrCode b) -> 
+  (GS (CppSrcCode a) -> GS (CppSrcCode b) -> GS (CppSrcCode c)) -> 
+  (GS (CppHdrCode a) -> GS (CppHdrCode b) -> GS (CppHdrCode c)) -> 
+  GS (p CppSrcCode CppHdrCode c)
+pair2 stv1 stv2 srcf hdrf = do
+  v1 <- stv1
+  v2 <- stv2
+  let fv1 = return $ pfst v1
+      sv1 = return $ psnd v1
+      fv2 = return $ pfst v2
+      sv2 = return $ psnd v2
+  p1 <- srcf fv1 fv2
+  p2 <- hdrf sv1 sv2
+  return $ pair p1 p2
+
+pair1List :: (Pair p) => [GS (p CppSrcCode CppHdrCode a)] -> 
+  ([GS (CppSrcCode a)] -> GS (CppSrcCode b)) -> 
+  ([GS (CppHdrCode a)] -> GS (CppHdrCode b)) -> GS (p CppSrcCode CppHdrCode b)
+pair1List stv srcf hdrf = do
+  v <- sequence stv
+  let fv = map (return . pfst) v
+      sv = map (return . psnd) v
+  p1 <- srcf fv
+  p2 <- hdrf sv
+  return $ pair p1 p2
+
+pair2Lists :: (Pair p) => [GS (p CppSrcCode CppHdrCode a)] -> 
+  [GS (p CppSrcCode CppHdrCode b)] -> 
+  ([GS (CppSrcCode a)] -> [GS (CppSrcCode b)] -> GS (CppSrcCode c)) -> 
+  ([GS (CppHdrCode a)] -> [GS (CppHdrCode b)] -> GS (CppHdrCode c)) -> 
+  GS (p CppSrcCode CppHdrCode c)
+pair2Lists stv1 stv2 srcf hdrf = do
+  v1 <- sequence stv1
+  v2 <- sequence stv2
+  let fv1 = map (return . pfst) v1
+      sv1 = map (return . psnd) v1
+      fv2 = map (return . pfst) v2
+      sv2 = map (return . psnd) v2
+  p1 <- srcf fv1 fv2
+  p2 <- hdrf sv1 sv2
+  return $ pair p1 p2
 
 -----------------
 -- Source File --

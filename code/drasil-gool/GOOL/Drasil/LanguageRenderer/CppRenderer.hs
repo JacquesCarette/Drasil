@@ -65,8 +65,8 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
-import GOOL.Drasil.State (GS, hasMain, initialState, getPutReturn, 
-  checkGOOLState, setMain, setCurrMain, setParameters)
+import GOOL.Drasil.State (GS, hasMain, initialState, putAfter, getPutReturn, 
+  checkGOOLState, setMain, setCurrMain, getCurrMain, setParameters)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Data.Maybe (maybeToList)
@@ -95,15 +95,6 @@ hdrToSrc (CPPHC a) = CPPSC a
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
   type Program (p CppSrcCode CppHdrCode) = ProgData
-  -- prog n ms = liftA2 pair (prog n $ map (fmap (hdrToSrc . psnd)) ms ++ map 
-    -- (fmap pfst) ms) (return (return emptyProg))
-  
-  -- prog n mods = liftList (\ms -> pair (prog n $ map (return . hdrToSrc . psnd) ms ++ map (return . pfst) ms) (return (return emptyProg))) mods
-
-  -- prog n mods = liftA2 pair (prog n $ map (return . hdrToSrc. psnd) ms ++ 
-  --   map (return . pfst) ms) (return (return emptyProg))
-  --   where ms = map (`evalState` initialState) mods
-
   prog n mods = do
     m <- sequence mods
     let fm = map pfst m
@@ -783,7 +774,7 @@ instance Monad CppSrcCode where
 
 instance ProgramSym CppSrcCode where
   type Program CppSrcCode = ProgData
-  prog n = liftList (liftList (progD n))
+  prog n = liftList (liftList (progD n)) . map (putAfter $ setCurrMain False)
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
@@ -792,8 +783,8 @@ instance RenderSym CppSrcCode where
 
   docMod = G.docMod
 
-  commentedMod = liftA2 (\m cmt-> if (isMainMod . fileMod . unCPPSC) m then 
-    liftA2 commentedModD m cmt else m)
+  commentedMod = liftA3 (\mn m cmt-> if mn then liftA2 commentedModD m cmt else 
+    m) getCurrMain
 
 instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
@@ -1360,8 +1351,8 @@ instance RenderSym CppHdrCode where
   
   docMod = G.docMod
 
-  commentedMod = liftA2 (\m cmt -> if (isMainMod . fileMod . unCPPHC) m then m 
-    else liftA2 commentedModD m cmt)
+  commentedMod = liftA3 (\mn m cmt -> if mn then m else liftA2 
+    commentedModD m cmt) getCurrMain
 
 instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement

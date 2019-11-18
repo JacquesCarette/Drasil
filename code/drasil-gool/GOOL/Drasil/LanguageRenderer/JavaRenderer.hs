@@ -64,8 +64,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
   lift1List, checkParams)
-import GOOL.Drasil.State (GS, initialState, getPutReturn, getPutReturnList, 
-  addProgNameToPaths, setMain, setCurrMain, setParameters)
+import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, 
+  getPutReturnList, addProgNameToPaths, setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -91,8 +91,9 @@ instance Monad JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
-  prog n fs = getPutReturnList fs (addProgNameToPaths n) (lift1List (\end -> 
-    progD n . map (packageDocD n end)) endStatement)
+  prog n fs = getPutReturnList (map (putAfter $ setCurrMain False) fs) 
+    (addProgNameToPaths n) (lift1List (\end -> progD n . 
+    map (packageDocD n end)) endStatement)
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = FileData 

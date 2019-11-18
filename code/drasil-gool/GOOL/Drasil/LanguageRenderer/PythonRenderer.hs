@@ -58,8 +58,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftList, 
   lift1List, lift2Lists, checkParams)
-import GOOL.Drasil.State (GS, initialState, getPutReturn, setMain, setCurrMain, 
-  setParameters)
+import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, setMain, 
+  setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -86,7 +86,7 @@ instance Monad PythonCode where
 
 instance ProgramSym PythonCode where
   type Program PythonCode = ProgData 
-  prog n = liftList (liftList (progD n))
+  prog n = liftList (liftList (progD n)) . map (putAfter $ setCurrMain False)
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = FileData

@@ -40,7 +40,7 @@ import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD,
   moduleDox, getterName, setterName)
 import GOOL.Drasil.State (GS, hasMain, mainMod, putAfter, getPutReturnFunc2,
   addFile, setMainMod, setFilePath, getFilePath, setModuleName, getModuleName, 
-  setCurrMain, getCurrMain)
+  getCurrMain)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList, isNothing)
@@ -293,8 +293,7 @@ buildModule' n ms cs = S.modFromData n getCurrMain (liftList (vibcat . map
 
 modFromData :: Label -> (Bool -> Doc -> repr (Module repr)) -> GS Bool -> 
   GS Doc -> GS (repr (Module repr))
-modFromData n f m d = putAfter (setCurrMain False . setModuleName n) 
-  (liftA2 f m d)
+modFromData n f m d = putAfter (setModuleName n) (liftA2 f m d)
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
   repr (Block repr) -> GS (repr (Module repr)) -> GS (repr (RenderFile repr))

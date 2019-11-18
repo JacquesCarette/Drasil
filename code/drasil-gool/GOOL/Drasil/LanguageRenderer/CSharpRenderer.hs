@@ -63,8 +63,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (liftA4, liftA5, liftList, lift1List, checkParams)
-import GOOL.Drasil.State (GS, initialState, getPutReturn, setMain, setCurrMain, 
-  setParameters)
+import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, setMain, 
+  setCurrMain, setParameters)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -90,7 +90,7 @@ instance Monad CSharpCode where
 
 instance ProgramSym CSharpCode where
   type Program CSharpCode = ProgData
-  prog n = liftList (liftList (progD n))
+  prog n = liftList (liftList (progD n)) . map (putAfter $ setCurrMain False)
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = FileData

@@ -9,7 +9,7 @@ module GOOL.Drasil.State (
   setParameters, getParameters, setScope, getScope
 ) where
 
-import GOOL.Drasil.Data (FileType(..), ParamData, ScopeTag(..))
+import GOOL.Drasil.Data (FileType(..), ParamData, ScopeTag(..), paramName)
 
 import Control.Lens (makeLenses,over,set,(^.))
 import Control.Monad.State (State, get, put, gets)
@@ -92,12 +92,12 @@ passState2Lists l1 l2 v = do
   sequence_ l2
   v 
 
-checkGOOLState :: (GOOLState -> Bool) -> GS b -> GS a 
-  -> GS a -> GS a
+checkGOOLState :: (GOOLState -> Bool) -> GS b -> (b -> GS a) 
+  -> (b -> GS a) -> GS a
 checkGOOLState f st ifv elsev = do
-  _ <- st
+  v <- st
   s <- get
-  if f s then ifv else elsev
+  if f s then ifv v else elsev v
 
 addFile :: FileType -> FilePath -> GOOLState -> GOOLState
 addFile Combined = addCombinedHeaderSource
@@ -121,8 +121,8 @@ addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
   where f = ((n++"/")++)
 
 setMain :: GOOLState -> GOOLState
-setMain = over hasMain (\b -> if b then error "Multiple main functions defined"
-  else not b)
+setMain s = over hasMain (\b -> if b then error $ "Multiple main functions defined" ++ show (s ^. headers) ++ show (s ^. sources) ++ show (s ^. hasMain) ++ show (s ^. mainMod) ++ s ^. currFilePath ++ s ^. currModName ++ show (s ^. currMain) ++ show (map paramName $ s ^. currParameters)
+  else not b) s
 
 setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = set mainMod (Just n)

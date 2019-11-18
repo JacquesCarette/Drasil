@@ -70,6 +70,7 @@ import GOOL.Drasil.State (GS, hasMain, initialState, putAfter, getPutReturn,
   getParameters, setScope, getScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
+import qualified Prelude as P (const)
 import Data.Maybe (maybeToList)
 import Control.Lens ((^.))
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -1273,9 +1274,9 @@ instance InternalMethod CppSrcCode where
     setParameters (map unCPPSC ps) . if m then setCurrMain m . setMain else id) 
     $ liftA3 mthd (fmap snd s) (checkParams n <$> sequence ps) (liftA5 
     (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
-  commentedFunc cmt fn = checkGOOLState (^. hasMain) fn (liftA3
+  commentedFunc cmt fn = checkGOOLState (^. hasMain) fn (\f -> liftA3
     (\scp pms -> fmap (mthd scp pms)) getScope getParameters 
-    (liftA2 (\f -> fmap (`commentedItem` methodDoc f)) fn cmt)) fn
+    (fmap (fmap (`commentedItem` methodDoc f)) cmt)) (P.const fn)
  
   methodDoc = mthdDoc . unCPPSC
 
@@ -1800,9 +1801,9 @@ instance InternalMethod CppHdrCode where
     $ liftA3 mthd (fmap snd s) (checkParams n <$> sequence ps) (liftA3 
     (cpphMethod n) t (liftList paramListDocD ps) endStatement)
   intFunc = G.intFunc
-  commentedFunc cmt fn = checkGOOLState (^. hasMain) fn fn $ liftA3 
-    (\scp pms -> fmap (mthd scp pms)) getScope getParameters 
-    (liftA2 (\f -> fmap (`commentedItem` methodDoc f)) fn cmt)
+  commentedFunc cmt fn = checkGOOLState (^. hasMain) fn (P.const fn) $ \f -> 
+    liftA3 (\scp pms -> fmap (mthd scp pms)) getScope getParameters 
+    (fmap (fmap (`commentedItem` methodDoc f)) cmt)
 
   methodDoc = mthdDoc . unCPPHC
 

@@ -66,7 +66,8 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst,
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
 import GOOL.Drasil.State (GS, hasMain, initialState, putAfter, getPutReturn, 
-  checkGOOLState, setMain, setCurrMain, getCurrMain, setParameters)
+  checkGOOLState, setMain, setCurrMain, getCurrMain, setParameters, 
+  getParameters, setScope, getScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Data.Maybe (maybeToList)
@@ -1264,17 +1265,16 @@ instance MethodSym CppSrcCode where
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
 instance InternalMethod CppSrcCode where
-  intMethod m n c s _ t ps b = getPutReturn (setParameters (map unCPPSC ps) . 
-    if m then setCurrMain m . setMain else id) $ liftA3 mthd (fmap snd s) 
-    (checkParams n <$> sequence ps) (liftA5 (cppsMethod n c) t (liftList 
-    paramListDocD ps) b blockStart blockEnd)
-  intFunc m n s _ t ps b = getPutReturn (setParameters (map unCPPSC ps) . 
-    if m then setCurrMain m . setMain else id) $ liftA3 mthd (fmap snd s) 
-    (checkParams n <$> sequence ps) (liftA5 (cppsFunction n) t (liftList 
-    paramListDocD ps) b blockStart blockEnd)
+  intMethod m n c s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) .
+    setParameters (map unCPPSC ps) . if m then setCurrMain m . setMain else id) 
+    $ liftA3 mthd (fmap snd s) (checkParams n <$> sequence ps) (liftA5 
+    (cppsMethod n c) t (liftList paramListDocD ps) b blockStart blockEnd)
+  intFunc m n s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) . 
+    setParameters (map unCPPSC ps) . if m then setCurrMain m . setMain else id) 
+    $ liftA3 mthd (fmap snd s) (checkParams n <$> sequence ps) (liftA5 
+    (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
   commentedFunc cmt fn = checkGOOLState (^. hasMain) fn (liftA3
-    (\scp pms -> fmap (mthd scp pms)) (fmap (getMthdScp . unCPPSC) fn) 
-    (fmap (mthdParams . unCPPSC) fn) 
+    (\scp pms -> fmap (mthd scp pms)) getScope getParameters 
     (liftA2 (\f -> fmap (`commentedItem` methodDoc f)) fn cmt)) fn
  
   methodDoc = mthdDoc . unCPPSC
@@ -1782,7 +1782,7 @@ instance MethodSym CppHdrCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction _ = return $ return $ mthd Pub [] empty
+  mainFunction _ = getPutReturn (setScope Pub) $ return $ mthd Pub [] empty
 
   docFunc = G.docFunc
 
@@ -1795,14 +1795,13 @@ instance MethodSym CppHdrCode where
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
 instance InternalMethod CppHdrCode where
-  intMethod m n _ s _ t ps _ = getPutReturn (setParameters (map unCPPHC ps) . 
-    if m then setCurrMain m . setMain else id) $ liftA3 mthd (fmap snd s) 
-    (checkParams n <$> sequence ps) (liftA3 (cpphMethod n) t (liftList 
-    paramListDocD ps) endStatement)
+  intMethod m n _ s _ t ps _ = getPutReturn (setScope (snd $ unCPPHC s) . 
+    setParameters (map unCPPHC ps) . if m then setCurrMain m . setMain else id) 
+    $ liftA3 mthd (fmap snd s) (checkParams n <$> sequence ps) (liftA3 
+    (cpphMethod n) t (liftList paramListDocD ps) endStatement)
   intFunc = G.intFunc
   commentedFunc cmt fn = checkGOOLState (^. hasMain) fn fn $ liftA3 
-    (\scp pms -> fmap (mthd scp pms)) (fmap (getMthdScp . unCPPHC) fn) 
-    (fmap (mthdParams . unCPPHC) fn) 
+    (\scp pms -> fmap (mthd scp pms)) getScope getParameters 
     (liftA2 (\f -> fmap (`commentedItem` methodDoc f)) fn cmt)
 
   methodDoc = mthdDoc . unCPPHC

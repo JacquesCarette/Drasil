@@ -349,12 +349,14 @@ at assembly. But GOOL's aim is different: to allow writing
 high-level OO code once, but have it be available in many GPLs. One use case
 would be to generate libraries of utilities for a narrow domain. As needs
 evolve and language popularity changes, it is useful to have it immediately
-available in a number of languages. Another use, which is a core part of our
-own motivation, is to have \emph{extremely well documented} code, indeed to
-a level that would be unrealistic to do by hand. But this documentation is
-crucial in domains where \emph{certification} is required.  And
-\readable~is a proxy for \emph{understandable}, which is also quite
-helpful for debugging.
+available in a number of languages. Another use, which is core to our
+own motivation, is to have \emph{extremely well documented} code that would be 
+unrealistic to do by hand. Our motivation for developing GOOL is to use it as 
+the target language for code generation in the \textit{Drasil} framework, where 
+\textit{Drasil} aims to generate high-quality, fully documented scientific 
+software. In the domain of scientific software, \emph{certification} is often 
+required, and extensive documentation is crucial for that process. \readable~is 
+also a proxy for \emph{understandable}, which is quite helpful for debugging.
 
 The same underlying reasons for \readable~also drive \idiomatic~and \documented,
 as they contribute to the human-understandability of the generated code.
@@ -392,8 +394,10 @@ and then generate the idiomatic pattern of implementation in each target
 language.
 
 \expressivity~captures the idea that GOOL is supposed to express
-(the ideas contained in) OO programs.  As a requirement, it
-reminds us to test it against real-world examples.
+(the ideas contained in) OO programs.  To evaluate this requirement, we test 
+GOOL against real-world examples from the \textit{Drasil} project, such as 
+software for determining whether glass withstands a nearby explosion and 
+software for simulating projectile motion.
 
 The last requirement (\common) that language commonalities be abstracted, is
 internal: we noticed a lot of repeated code in our initial
@@ -436,7 +440,8 @@ most DSLs, but generating code for human consumption has been given less
 attention. We tried to pay close attention to program features --- such
 as the habits of programmers to write longer methods as blocks separated
 by (at least) blank lines, often with comments --- which make programs
-more accessible to human readers.
+more accessible to human readers, and the resulting syntax contributes to the 
+novelty of GOOL.
 
 Finding commonalities between OO programs is most easily done from the core 
 imperative language outwards.
@@ -453,7 +458,13 @@ for this, offering a variety of features (GADTs, type classes,
 parametric polymorphism, kind polymorphism, etc.) that are quite useful
 for building languages.  Its syntax is also fairly liberal, so that
 with \emph{smart constructors}, one can somewhat mimic the
-usual syntax of OO languages.
+usual syntax of OO languages. Unfortunately, the embedded nature of GOOL means 
+its syntax is constrained by Haskell's, so a programmer familiar with OO 
+languages may find it difficult to write in GOOL. However, in our anticipated 
+use cases, where the program may have to be written in multiple different 
+languages, it is easier to write it once in GOOL. Also, if GOOL is used as the 
+target language for other DSLs, the ease of writing GOOL programs matters less, 
+since the programs will be written by a computer rather than a human. 
 
 \subsection{GOOL Syntax: Imperative core} \label{ssec:syntax}
 
@@ -1432,6 +1443,10 @@ point is to allow users to choose which specific external library to use.
 And, of course, we ought to implement more of the common OO patterns.
 
 \section{Conclusion} \label{sec:conclusions}
+
+We currently successfully use GOOL to simultaneously generate code in all of 
+our target languages for the glass and projectile programs described in Section 
+\ref{sec:req}. 
 
 Conceptually, mainstream object-oriented languages are similar enough that it
 is indeed feasible to create a single ``generic'' object-oriented language that

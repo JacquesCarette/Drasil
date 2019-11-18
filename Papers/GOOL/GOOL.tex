@@ -342,10 +342,13 @@ which implies the most potential users --- in much the same way that the makers
 of Scala and Kotlin chose to target the JVM to leverage the Java ecosystem, and
 Typescript for Javascript.
 
-The \readable~requirement is not as obvious. As DSL users are typically
-domain experts who are not ``programmers'', why generate readable code?
-Few Java programmers ever look at JVM bytecode, and few \Cplusplus{} programmers
-at assembly. But GOOL's aim is different: to allow writing
+The \readable~requirement is not as obvious. 
+%As DSL users are typically
+%domain experts who are not ``programmers'', why generate readable code?
+%Few Java programmers ever look at JVM bytecode, and few \Cplusplus{} 
+%programmers
+%at assembly. But 
+GOOL's aim is to allow writing
 high-level OO code once, but have it be available in many GPLs. One use case
 would be to generate libraries of utilities for a narrow domain. As needs
 evolve and language popularity changes, it is useful to have it immediately
@@ -356,15 +359,15 @@ the target language for code generation in the \textit{Drasil} framework, where
 \textit{Drasil} aims to generate high-quality, fully documented scientific 
 software. In the domain of scientific software, \emph{certification} is often 
 required, and extensive documentation is crucial for that process. \readable~is 
-also a proxy for \emph{understandable}, which is quite helpful for debugging.
+also a proxy for \emph{understandable}, which is helpful for debugging.
 
 The same underlying reasons for \readable~also drive \idiomatic~and \documented,
 as they contribute to the human-understandability of the generated code.
-\idiomatic~is important as many human readers would find the code ``foreign''
-otherwise, and would not be keen on using it.
-Note that documentation can span from informal comments meant for humans, to
-formal, structured comments useful for generating API documentation with tools
-like Doxygen, or with a variety of static analysis tools.
+%\idiomatic~is important as many human readers would find the code ``foreign''
+%otherwise, and would not be keen on using it.
+%Note that documentation can span from informal comments meant for humans, to
+%formal, structured comments useful for generating API documentation with tools
+%like Doxygen, or with a variety of static analysis tools.
 Readability (and thus understandability) are improved when code is 
 pretty-printed~\cite{buse2009learning}. Thus taking care of layout, redundant parentheses,
 well-chosen variable names, using a common style with lines that are not too
@@ -379,19 +382,20 @@ informal. Even some of the \emph{design patterns} of~\cite{gamma1995design}
 can become part of the language itself. While this does make writing some OO
 code even easier in GOOL than in GPLs, it also helps
 keep GOOL language-agnostic and facilitates generating idiomatic code.
-Examples will be given in Section~\ref{sec:patterns}.  But we can
-indicate now how this helps: Consider Python's
-ability to return multiple values with a single return statement, which
-is uncommon in other languages.  Two choices might be to disallow this
-feature in GOOL, or throw an error on use when generating code in languages
-that do not support this feature. In the first case, this would likely mean
-unidiomatic Python code, or increased complexity in the Python generator to
-infer that idiom. The second option is worse still: one might have to resort
-to writing language-specific GOOL, obviating the whole reason for the language!
-Multiple-value return statements are always used when a function returns multiple
-outputs; what we can do in GOOL is to support such multiple-output functions,
-and then generate the idiomatic pattern of implementation in each target
-language.
+%Examples will be given in Section~\ref{sec:patterns}.  But we can
+%indicate now how this helps: Consider Python's
+%ability to return multiple values with a single return statement, which
+%is uncommon in other languages.  Two choices might be to disallow this
+%feature in GOOL, or throw an error on use when generating code in languages
+%that do not support this feature. In the first case, this would likely mean
+%unidiomatic Python code, or increased complexity in the Python generator to
+%infer that idiom. The second option is worse still: one might have to resort
+%to writing language-specific GOOL, obviating the whole reason for the language!
+%Multiple-value return statements are always used when a function returns 
+%multiple
+%outputs; what we can do in GOOL is to support such multiple-output functions,
+%and then generate the idiomatic pattern of implementation in each target
+%language.
 
 \expressivity~captures the idea that GOOL is supposed to express
 (the ideas contained in) OO programs.  To evaluate this requirement, we test 

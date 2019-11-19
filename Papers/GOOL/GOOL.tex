@@ -1412,13 +1412,16 @@ variable, value, type, or method, for example. The type system does not
 go ``deeper'', so that variables are untyped, and values (such as booleans
 and strings) are simply ``values''.  This is sufficient to allow us to
 generate well-formed code, but not to ensure that it is well-typed.
+\begin{comment}
 For example, it is unfortunately possible to pass a value that is known
 to be a non-list to a function (like \verb|listSize|) which requires it.
 This will generate a compile-time error in generated Java, but a run-time error
-in generated Python.  We have started to statically type GOOL, by making
-the underlying representations for 
-GOOL's \verb|Variable|s and \verb|Value|s Generalized Algebraic Data Types
-(GADTs), such as this one for \verb|Variable|s:
+in generated Python.
+\end{comment}
+We have started to statically type GOOL by making the underlying 
+representations for GOOL's \verb|Variable|s and \verb|Value|s GADTs. 
+\begin{comment}
+such as this one for \verb|Variable|s:
 \begin{lstlisting}
 data TypedVar a where
   BVr :: VarData -> TypedVar Boolean
@@ -1430,24 +1433,31 @@ these. We would be re-using Haskell's type system to catch (some) of the
 type errors in GOOL.  Because we do not need to type arbitrary code in any
 of the target languages, but only what is expressible in GOOL, we can
 engineer things so as to encode quite a wide set of typing rules.
+\end{comment}
 
 GOOL is currently less-than-precise in the list of generated import statements;
-we want to improve the code to track precise dependencies, and only generate
+we want to improve the code to track dependencies, and only generate
 imports for the features we actually use. This could be done via weaving
-some state at generation-time for example.  In general, we can do various 
-kinds of static analyses to help enhance the code generation quality.
+some state at generation-time.  In general, we can do various 
+kinds of static analyses to enhance the code generation quality.
+\begin{comment}
 For example, we ought to be much more precise about \verb|throws Exception|
 in Java.
+\end{comment}
 
-Another important future feature is being able to interface to external libraries,
-instead of just already-known libraries. In particular, we have a need to
-call external Ordinary Differential Equations (ODEs) solvers; we do not
+Another important future feature is to interface with certain external 
+libraries. In particular, we have a need to
+call external Ordinary Differential Equation (ODE) solvers; we do not
 want to restrict ourselves to a single function, but have a host of
 different functions implementing different ODE-solving algorithms available.
-The structure of code that calls ODE solvers varies considerably, so that we cannot
+The structure of code that calls ODE solvers varies considerably, so the 
+addition of generation-time state will help again here.
+\begin{comment}
+that we cannot
 implement this feature with current GOOL features.  In general, we believe
 that this requires a multi-pass architecture: an initial pass to collect
 information, and a second to actually generate the code.
+\end{comment}
 
 Some implementation decisions, such as the use of \verb|ArrayList| to represent
 lists in Java, are hard-coded. But we could have used \verb|Vector| instead.

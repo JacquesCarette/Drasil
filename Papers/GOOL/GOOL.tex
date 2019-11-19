@@ -416,6 +416,53 @@ backends, something that ought to be distasteful to most programmers. For
 example, writing a generator for both Java and \Csharp{} makes it incredibly
 clear how similar the two languages are.
 
+\begin{table*}[t]
+	\caption{Basic GOOL Syntax - functions enclosed in brackets are shortcuts 
+	for 
+		common cases}
+	\begin{tabular}{p{2.2cm}| p{15cm}}
+		Types & \verb|bool|, \verb|int|, \verb|float|, \verb|char|, 
+		\verb|string|, 
+		\verb|infile| (read mode), \verb|outfile| (write mode), 
+		\verb|listType|, 
+		\verb|obj| \\
+		Variables & \verb|var|, \verb|extVar|, \verb|classVar|, \verb|objVar|, 
+		\verb|$->| (infix operator for \verb|objVar|), \verb|self|,
+		[\verb|listVar|] \\
+		Values & \verb|valueOf| (value from variable), \verb|litTrue|, 
+		\verb|litFalse|, \verb|litInt|, 
+		\verb|litFloat|, \verb|litChar|, \verb|litString|, \verb|?!|, 
+		\verb|?&&|, 
+		\verb|?<|, \verb|?<=|, \verb|?>|, \verb|?>=|, \verb|?==|, \verb|?!=|, 
+		\verb|#~|, \verb|#/^|, \verb|#||, \verb|#+|, \verb|#-|, \verb|#*|, 
+		\verb|#/|, \verb|#^|, \verb|inlineIf|, \verb|funcApp|, 
+		\verb|extFuncApp|, 
+		\verb|newObj|, \verb|objMethodCall|, [\verb|selfFuncApp|, 
+		\verb|objMethodCallNoParams|] \\
+		Statements & \verb|varDec|, \verb|varDecDef|, \verb|assign|, \verb|&=|, 
+		\verb|&+=|, \verb|&-=|, \verb|&++|, \verb|&~-|, \verb|break|, 
+		\verb|continue|, \verb|returnState|, \verb|throw|, \verb|free|, 
+		\verb|comment|, \verb|ifCond|, \verb|ifNoElse|, \verb|switch|, 
+		\verb|for|, 
+		\verb|forRange|, \verb|forEach|, \verb|while|, \verb|tryCatch|, 
+		\verb|block|, \verb|body| [\verb|bodyStatements| (single-block body), 
+		\verb|oneLiner| (single-statement body)] \\
+		Scope & \verb|public|, \verb|private| \\
+		Binding & \verb|static_|, \verb|dynamic_| \\
+		Functions & \verb|function|, \verb|method|, \verb|param|, 
+		\verb|pointerParam|, \verb|mainFunction|, \verb|docFunc|, 
+		[\verb|pubMethod|, \verb|privMethod|] \\
+		State Variables & \verb|stateVar|, \verb|constVar|, [\verb|privMVar|, 
+		\verb|pubMVar| (dynamic), \verb|pubGVar| (static)]\\
+		Classes & \verb|buildClass|, \verb|docClass|, [\verb|pubClass|, 
+		\verb|privClass|]\\
+		Packages & \verb|buildModule|, \verb|fileDoc|, \verb|docMod|, 
+		\verb|prog|, 
+		\verb|package|, \verb|doxConfig|, \verb|makefile|
+	\end{tabular}
+	\label{tab:syntax}
+\end{table*}
+
 \section{Creating GOOL} \label{sec:creating}
 
 How do we go about creating a ``generic'' object-oriented language?
@@ -452,8 +499,21 @@ attention. We tried to pay close attention to program features --- such
 as the habits of programmers to write longer methods as blocks separated
 by (at least) blank lines, often with comments --- which make programs
 more accessible to human readers, and the resulting syntax contributes to the 
-novelty of GOOL.
+novelty of GOOL. In GOOL, bodies are not just a sequence of statements (as 
+would be natural if all we cared about was feeding a compiler), but instead a 
+list of blocks. This additional level of organization of statements is 
+operationally meaningless, but represents the actual structure of OO programs 
+as written by humans.  This is because programmers (hopefully!) write code to 
+be read by other programmers, and blocks increase human-readability.
 
+Basic GOOL syntax is shown in Table \ref{tab:syntax}. Note that GOOL 
+distinguishes a 
+variable from its value\footnote{as befits the use-mention distinction from 
+analytic philosophy}. This distinction is motivated by semantic considerations; 
+it is beneficial for stricter typing and enables convenient syntax for 
+\oopatterns~that translate to more idiomatic code.
+
+\begin{comment}
 Finding commonalities between OO programs is most easily done from the core 
 imperative language outwards.
 Most languages provide similar basic types (variations on integers,
@@ -462,10 +522,12 @@ with them. The core expression language tends to be extremely similar
 across languages. One then moves up to the statement language ---
 assignments, conditionals, loops, etc.  Here we start to encounter
 variations, and choices can be made; we'll cover that later.
+\end{comment}
 
-For ease of experimentation, GOOL is an Embedded
+GOOL is an Embedded
 Domain Specific Language (EDSL) inside Haskell.  Haskell is very well-suited
-for this, offering a variety of features (GADTs, type classes,
+for this, offering a variety of features (Generalized Algebraic Data Types 
+(GADTs), type classes,
 parametric polymorphism, kind polymorphism, etc.) that are quite useful
 for building languages.  Its syntax is also fairly liberal, so that
 with \emph{smart constructors}, one can somewhat mimic the
@@ -477,284 +539,243 @@ languages, it is easier to write it once in GOOL. Also, if GOOL is used as the
 target language for other DSLs, the ease of writing GOOL programs matters less, 
 since the programs will be written by a computer rather than a human. 
 
-\begin{table*}[t]
-\caption{Basic GOOL Syntax - functions enclosed in brackets are shortcuts for 
-common cases}
-\begin{tabular}{p{2.2cm}| p{15cm}}
-	Types & \verb|bool|, \verb|int|, \verb|float|, \verb|char|, \verb|string|, 
-	\verb|infile| (read mode), \verb|outfile| (write mode), \verb|listType|, 
-	\verb|obj| \\
-	Variables & \verb|var|, \verb|extVar|, \verb|classVar|, \verb|objVar|, 
-	\verb|$->| (infix operator for \verb|objVar|), \verb|self|,
-	[\verb|listVar|] \\
-	Values & \verb|valueOf| (value from variable), \verb|litTrue|, 
-	\verb|litFalse|, \verb|litInt|, 
-	\verb|litFloat|, \verb|litChar|, \verb|litString|, \verb|?!|, \verb|?&&|, 
-	\verb|?<|, \verb|?<=|, \verb|?>|, \verb|?>=|, \verb|?==|, \verb|?!=|, 
-	\verb|#~|, \verb|#/^|, \verb|#||, \verb|#+|, \verb|#-|, \verb|#*|, 
-	\verb|#/|, \verb|#^|, \verb|inlineIf|, \verb|funcApp|, \verb|extFuncApp|, 
-	\verb|newObj|, \verb|objMethodCall|, [\verb|selfFuncApp|, 
-	\verb|objMethodCallNoParams|] \\
-	Statements & \verb|varDec|, \verb|varDecDef|, \verb|assign|, \verb|&=|, 
-	\verb|&+=|, \verb|&-=|, \verb|&++|, \verb|&~-|, \verb|break|, 
-	\verb|continue|, \verb|returnState|, \verb|throw|, \verb|free|, 
-	\verb|comment|, \verb|ifCond|, \verb|ifNoElse|, \verb|switch|, \verb|for|, 
-	\verb|forRange|, \verb|forEach|, \verb|while|, \verb|tryCatch|, 
-	\verb|block|, \verb|body| [\verb|bodyStatements| (single-block body), 
-	\verb|oneLiner| (single-statement body)] \\
-	Scope & \verb|public|, \verb|private| \\
-	Binding & \verb|static_|, \verb|dynamic_| \\
-	Functions & \verb|function|, \verb|method|, \verb|param|, 
-	\verb|pointerParam|, \verb|mainFunction|, \verb|docFunc|, 
-	[\verb|pubMethod|, \verb|privMethod|] \\
-	State Variables & \verb|stateVar|, \verb|constVar|, [\verb|privMVar|, 
-	\verb|pubMVar| (dynamic), \verb|pubGVar| (static)]\\
-	Classes & \verb|buildClass|, \verb|docClass|, [\verb|pubClass|, 
-	\verb|privClass|]\\
-	Packages & \verb|buildModule|, \verb|fileDoc|, \verb|docMod|, \verb|prog|, 
-	\verb|package|, \verb|doxConfig|, \verb|makefile|
-\end{tabular}
-\label{tab:syntax}
-\end{table*}
-
-\subsection{GOOL Syntax: Imperative core} \label{ssec:syntax}
-
-Basic types in GOOL are \verb|bool|, \verb|int|, \verb|float|, \verb|char|, and 
-\verb|string|. \verb|infile| and \verb|outfile| are types for files in read and 
-write mode, respectively. Lists can be specified with \verb|listType|, and 
-objects with \verb|obj| followed by a class name.
-
-Variables are specified with \verb|var| followed by the name and type.
-For example, \verb|var "ages" (listType int)| represents a variable called
-``ages'' that is a list of integers.  GOOL offers shortcuts for defining common 
-constructions; for example, the above can also be done via
-\verb|listVar "ages" int|. Typical use would be
-\begin{lstlisting}
-let ages = listVar "ages" int in
-\end{lstlisting}
-so that \verb|ages| can be used directly from then on. 
-\begin{comment}
-Other means for
-specifying variables is shown in Table~\ref{tab:variables}.
-
-\begin{table}[ht]
-\caption{Syntax for specifying variables}
-\begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
-  \textbf{GOOL Syntax} & \textbf{Semantics} \\
-  \midrule
-  \verb|extVar| & for a variable from an external library \\
-  \verb|classVar| & for a variable belonging to a class \\
-  \verb|objVar| & for a variable belonging to an object \\
-  \verb|$->| & infix operator form of \verb|objVar| \\
-  \verb|self| & for referring to an object in the definition of its class \\
-\end{tabular}
-\label{tab:variables}
-\end{table}
-\end{comment}
-
-Note that GOOL distinguishes a variable from its value\footnote{
-as befits the use-mention distinction from analytic philosophy}. To get
-the value of~\verb|ages|, one must write \verb|valueOf ages|. This distinction 
-enables stricter typing.
-
-A literal integer value can be expressed with \verb|litInt 1|, and similar 
-syntax exists for other types. Operator syntax is modeled after the operator 
-symbols commonly used in OO languages, except each operator is prefixed by an 
-additional symbol based on type: Boolean-valued by \verb|?|, numeric by 
-\verb|#|, assignments by \verb|&|, and others by \verb|$|.
-
-\begin{comment}
-\begin{table}[ht]
-  \caption{Syntax for literal values}
-  \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
-    \textbf{GOOL Syntax} & \textbf{Semantics} \\
-    \midrule
-    \verb|litTrue| & literal Boolean true \\
-    \verb|litFalse| & literal Boolean false \\
-    \verb|litInt| \verb|i| & literal integer \verb|i| \\
-    \verb|litFloat| \verb|f| & literal float \verb|f| \\
-    \verb|litChar| \verb|c| & literal character \verb|c| \\
-    \verb|litString| \verb|s| & literal string \verb|s| \\
-  \end{tabular}
-  \label{tab:literals}
-\end{table}
-
-\begin{table}[htb]
-  \caption{Operators for making expressions}
-  \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
-    \textbf{GOOL Syntax} & \textbf{Semantics} \\
-    \midrule
-    \verb|?!| & Boolean negation \\
-    \verb|?&&| & conjunction \\
-    \verb|?||| & disjunction \\
-    \verb|?<| & less than \\
-    \verb|?<=| & less than or equal \\
-    \verb|?>| & greater than \\
-    \verb|?>=| & greater than or equal \\
-    \verb|?==| & equality \\
-    \verb|?!=| & inequality \\
-    \verb|#~| & numeric negation \\
-    \verb|#/^| & square root \\
-    \verb|#|| & absolute value \\
-    \verb|#+| & addition \\
-    \verb|#-| & subtraction \\
-    \verb|#*| & multiplication \\
-    \verb|#/| & division \\
-    % \verb|#%| & modulus \\
-    \verb|#^| & exponentiation \\
-  \end{tabular}
-  \label{tab:operators}
-\end{table}
-\end{comment}
-
-Conditional expressions can be expressed with \verb|inlineIf| and function 
-application with \verb|funcApp|.
-
-Variable declarations are statements, and take a variable specification
-as an argument. For \verb|foo = var "foo" int|, the corresponding variable
-declaration would be \verb|varDec foo|, and initialized declarations are
-\verb|varDecDef foo (litInt 5)|. Assignments are represented by 
-\verb|foo &= litInt 5|. 
-\begin{comment}
-Convenient
-infix and postfix operators are also provided, prefixed by \verb|&|:
-\verb|&=| is a synonym for \verb|assign|, and C-like
-\verb|&+=|, \verb|&++|, \verb|&-=| and \verb|&~-| (the more intuitive
-\verb|&--| cannot be used as \verb|--| starts a comment in Haskell).
-
-\begin{table}[htb]
-  \caption{Syntax for conditionals and function application}
-  \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
-    \textbf{GOOL Syntax} & \textbf{Semantics} \\
-    \midrule
-    \verb|inlineIf| & conditional expression \\
-    \verb|funcApp| & function application (list of parameters) \\
-    \verb|extFuncApp| & function application, for external library
-    \\
-    \verb|newObj| & for calling an object constructor \\
-    \verb|objMethodCall| & for calling a method on an object \\
-  \end{tabular}
-  \label{tab:values}
-\end{table}
-\end{comment}
-
-Other simple statements can be formed with \verb|break|, \verb|continue|,
-\verb|returnState|, \verb|throw|, \verb|free|, or \verb|comment|.
-
-A single OO method is frequently laid out as a sequence of blocks of
-statements, where each block represents a meaningful task.  In GOOL,
-\verb|block| is used for this purpose. Thus bodies are not just a
-sequence of statements (as would be natural if all we cared about was
-feeding a compiler), but instead a \verb|body| is a list of blocks. This 
-additional level of organization of statements is
-operationally meaningless, but represents the actual structure of OO programs
-as written by humans.  This is because programmers (hopefully!) write code to
-be read by other programmers, and blocks increase human-readability.
-\begin{comment}
-Naturally, shortcuts are provided for single-block bodies
-(\verb|bodyStatements|) and for the common single-statement case,
-\verb|oneLiner|.
-\end{comment}
-
-GOOL has two forms of conditionals: if-then-else via \verb|ifCond| (
-which takes a list of pairs of conditions and bodies) and
-if-then via \verb|ifNoElse|.  
-For example:
-\begin{comment}
-\begin{lstlisting}
-ifCond [
-  (foo ?> litInt 0, oneLiner (
-    printStrLn "foo is positive")),
-  (foo ?< litInt 0, oneLiner (
-    printStrLn "foo is negative"))]
-  (oneLiner $ printStrLn "foo is zero")
-\end{lstlisting}
-\end{comment}
-GOOL also supports \verb|switch| statements, a variety of loops (for-loops 
-(\verb|for|), \verb|forRange| loops, \verb|forEach| loops, and 
-\verb|while|-loops), and \verb|tryCatch| statements.  
-\begin{comment}
-For example:
-\begin{lstlisting}
-for (varDecDef age (litInt 0))
-  (age < litInt 10) (age &++) loopBody
-forRange age (litInt 0) (litInt 9)
-  (litInt 1) loopBody
-forEach age ages loopBody
-\end{lstlisting}
-\end{comment}
-
-\subsection{GOOL Syntax: OO features}
-
-A \verb|function| declaration is followed by the function
-name, scope, binding type (static or dynamic), type, list of parameters, and
-body. Methods (\verb|method|) are defined similarly, with the addition of the
-the containing class' name.  Parameters are built from
-variables, using \verb|param| or \verb|pointerParam|. For example, assuming
-variables ``num1'' and ``num2'' have been defined, one can define an
-\textsf{add} function as:
-\begin{lstlisting}
-function "add" public dynamic_ int
-  [param num1, param num2]
-  (oneLiner (returnState (num1 #+ num2)))
-\end{lstlisting}
-\verb|mainFunction| defines the main function of a program. \verb|docFunc|
-generates a function with Doxygen-style comments.
-
-Classes are defined with \verb|buildClass| followed by the class name, name of
-the class it inherits from (if applicable), scope, state variables, and
-methods. \verb|docClass| is like \verb|docFunc|. State variables can be built 
-by \verb|stateVar| followed by scope, static or dynamic binding, and the 
-variable itself.
-\begin{comment}
-Shortcuts for state variables include \verb|privMVar| for private
-dynamic, \verb|pubMVar| for public dynamic, and \verb|pubGVar| for public
-static variables. For example:
-\begin{lstlisting}
-buildClass "FooClass" Nothing public
-  [pubMVar 0 var1, privMVar 0 var2]
-  [mth1, mth2]
-\end{lstlisting}
-\verb|Nothing| here indicates that this class does not have a parent,
-\verb|privClass| and \verb|pubClass| are shortcuts for private and public
-classes, respectively.
-\end{comment}
-
-\subsection{GOOL syntax: modules and programs}
-
-Akin to Java packages and other similar constructs, GOOL has modules
-(\verb|buildModule|) consisting of a name, a list of libraries to import,
-a list of functions, and a list of classes. Module-level comments are done
-with \verb|docMod|.
-
-\begin{comment}
-Passing a module to
-\verb|fileDoc| will put the finishing touches on the generated file, such as
-imports of standard libraries and preprocessor guards for \Cplusplus{} header files.
-\begin{lstlisting}
-fileDoc \$ buildModule "mod1" ["library1"]
-  [func1, func2] [class1, class2]
-\end{lstlisting}
-\end{comment}
-
-At the top of the hierarchy are programs, auxiliary files, and packages. A
-program (\verb|prog|) has a name and a list of files.  A \verb|package| is a
-program and a list of auxiliary files; these are non-code files that
-augment the program. Examples are a Doxygen configuration file
-(\verb|doxConfig|), and a makefile (\verb|makefile|).  
-\begin{comment}
-A parameter of
-\verb|makefile| toggles generation of a \verb|make doc| rule, to
-compile the Doxygen documentation with the generated Doxygen configuration
-file.
-\end{comment}
+%\subsection{GOOL Syntax: Imperative core} \label{ssec:syntax}
+%
+%Basic types in GOOL are \verb|bool|, \verb|int|, \verb|float|, \verb|char|, 
+%and 
+%\verb|string|. \verb|infile| and \verb|outfile| are types for files in read 
+%and 
+%write mode, respectively. Lists can be specified with \verb|listType|, and 
+%objects with \verb|obj| followed by a class name.
+%
+%Variables are specified with \verb|var| followed by the name and type.
+%For example, \verb|var "ages" (listType int)| represents a variable called
+%``ages'' that is a list of integers.  GOOL offers shortcuts for defining 
+%common 
+%constructions; for example, the above can also be done via
+%\verb|listVar "ages" int|. Typical use would be
+%\begin{lstlisting}
+%let ages = listVar "ages" int in
+%\end{lstlisting}
+%so that \verb|ages| can be used directly from then on. 
+%\begin{comment}
+%Other means for
+%specifying variables is shown in Table~\ref{tab:variables}.
+%
+%\begin{table}[ht]
+%\caption{Syntax for specifying variables}
+%\begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
+%  \textbf{GOOL Syntax} & \textbf{Semantics} \\
+%  \midrule
+%  \verb|extVar| & for a variable from an external library \\
+%  \verb|classVar| & for a variable belonging to a class \\
+%  \verb|objVar| & for a variable belonging to an object \\
+%  \verb|$->| & infix operator form of \verb|objVar| \\
+%  \verb|self| & for referring to an object in the definition of its class \\
+%\end{tabular}
+%\label{tab:variables}
+%\end{table}
+%\end{comment}
+%
+%A literal integer value can be expressed with \verb|litInt 1|, and similar 
+%syntax exists for other types. Operator syntax is modeled after the operator 
+%symbols commonly used in OO languages, except each operator is prefixed by an 
+%additional symbol based on type: Boolean-valued by \verb|?|, numeric by 
+%\verb|#|, assignments by \verb|&|, and others by \verb|$|.
+%
+%\begin{comment}
+%\begin{table}[ht]
+%  \caption{Syntax for literal values}
+%  \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
+%    \textbf{GOOL Syntax} & \textbf{Semantics} \\
+%    \midrule
+%    \verb|litTrue| & literal Boolean true \\
+%    \verb|litFalse| & literal Boolean false \\
+%    \verb|litInt| \verb|i| & literal integer \verb|i| \\
+%    \verb|litFloat| \verb|f| & literal float \verb|f| \\
+%    \verb|litChar| \verb|c| & literal character \verb|c| \\
+%    \verb|litString| \verb|s| & literal string \verb|s| \\
+%  \end{tabular}
+%  \label{tab:literals}
+%\end{table}
+%
+%\begin{table}[htb]
+%  \caption{Operators for making expressions}
+%  \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
+%    \textbf{GOOL Syntax} & \textbf{Semantics} \\
+%    \midrule
+%    \verb|?!| & Boolean negation \\
+%    \verb|?&&| & conjunction \\
+%    \verb|?||| & disjunction \\
+%    \verb|?<| & less than \\
+%    \verb|?<=| & less than or equal \\
+%    \verb|?>| & greater than \\
+%    \verb|?>=| & greater than or equal \\
+%    \verb|?==| & equality \\
+%    \verb|?!=| & inequality \\
+%    \verb|#~| & numeric negation \\
+%    \verb|#/^| & square root \\
+%    \verb|#|| & absolute value \\
+%    \verb|#+| & addition \\
+%    \verb|#-| & subtraction \\
+%    \verb|#*| & multiplication \\
+%    \verb|#/| & division \\
+%    % \verb|#%| & modulus \\
+%    \verb|#^| & exponentiation \\
+%  \end{tabular}
+%  \label{tab:operators}
+%\end{table}
+%\end{comment}
+%
+%Conditional expressions can be expressed with \verb|inlineIf| and function 
+%application with \verb|funcApp|.
+%
+%Variable declarations are statements, and take a variable specification
+%as an argument. For \verb|foo = var "foo" int|, the corresponding variable
+%declaration would be \verb|varDec foo|, and initialized declarations are
+%\verb|varDecDef foo (litInt 5)|. Assignments are represented by 
+%\verb|foo &= litInt 5|. 
+%\begin{comment}
+%Convenient
+%infix and postfix operators are also provided, prefixed by \verb|&|:
+%\verb|&=| is a synonym for \verb|assign|, and C-like
+%\verb|&+=|, \verb|&++|, \verb|&-=| and \verb|&~-| (the more intuitive
+%\verb|&--| cannot be used as \verb|--| starts a comment in Haskell).
+%
+%\begin{table}[htb]
+%  \caption{Syntax for conditionals and function application}
+%  \begin{tabular}{p{0.12\textwidth} p{0.33\textwidth}}
+%    \textbf{GOOL Syntax} & \textbf{Semantics} \\
+%    \midrule
+%    \verb|inlineIf| & conditional expression \\
+%    \verb|funcApp| & function application (list of parameters) \\
+%    \verb|extFuncApp| & function application, for external library
+%    \\
+%    \verb|newObj| & for calling an object constructor \\
+%    \verb|objMethodCall| & for calling a method on an object \\
+%  \end{tabular}
+%  \label{tab:values}
+%\end{table}
+%\end{comment}
+%
+%Other simple statements can be formed with \verb|break|, \verb|continue|,
+%\verb|returnState|, \verb|throw|, \verb|free|, or \verb|comment|.
+%
+%A single OO method is frequently laid out as a sequence of blocks of
+%statements, where each block represents a meaningful task.  In GOOL,
+%\verb|block| is used for this purpose. Thus bodies are not just a
+%sequence of statements (as would be natural if all we cared about was
+%feeding a compiler), but instead a \verb|body| is a list of blocks. This 
+%additional level of organization of statements is
+%operationally meaningless, but represents the actual structure of OO programs
+%as written by humans.  This is because programmers (hopefully!) write code to
+%be read by other programmers, and blocks increase human-readability.
+%\begin{comment}
+%Naturally, shortcuts are provided for single-block bodies
+%(\verb|bodyStatements|) and for the common single-statement case,
+%\verb|oneLiner|.
+%\end{comment}
+%
+%GOOL has two forms of conditionals: if-then-else via \verb|ifCond| (
+%which takes a list of pairs of conditions and bodies) and
+%if-then via \verb|ifNoElse|.  
+%For example:
+%\begin{comment}
+%\begin{lstlisting}
+%ifCond [
+%  (foo ?> litInt 0, oneLiner (
+%    printStrLn "foo is positive")),
+%  (foo ?< litInt 0, oneLiner (
+%    printStrLn "foo is negative"))]
+%  (oneLiner $ printStrLn "foo is zero")
+%\end{lstlisting}
+%\end{comment}
+%GOOL also supports \verb|switch| statements, a variety of loops (for-loops 
+%(\verb|for|), \verb|forRange| loops, \verb|forEach| loops, and 
+%\verb|while|-loops), and \verb|tryCatch| statements.  
+%\begin{comment}
+%For example:
+%\begin{lstlisting}
+%for (varDecDef age (litInt 0))
+%  (age < litInt 10) (age &++) loopBody
+%forRange age (litInt 0) (litInt 9)
+%  (litInt 1) loopBody
+%forEach age ages loopBody
+%\end{lstlisting}
+%\end{comment}
+%
+%\subsection{GOOL Syntax: OO features}
+%
+%A \verb|function| declaration is followed by the function
+%name, scope, binding type (static or dynamic), type, list of parameters, and
+%body. Methods (\verb|method|) are defined similarly, with the addition of the
+%the containing class' name.  Parameters are built from
+%variables, using \verb|param| or \verb|pointerParam|. For example, assuming
+%variables ``num1'' and ``num2'' have been defined, one can define an
+%\textsf{add} function as:
+%\begin{lstlisting}
+%function "add" public dynamic_ int
+%  [param num1, param num2]
+%  (oneLiner (returnState (num1 #+ num2)))
+%\end{lstlisting}
+%\verb|mainFunction| defines the main function of a program. \verb|docFunc|
+%generates a function with Doxygen-style comments.
+%
+%Classes are defined with \verb|buildClass| followed by the class name, name of
+%the class it inherits from (if applicable), scope, state variables, and
+%methods. \verb|docClass| is like \verb|docFunc|. State variables can be built 
+%by \verb|stateVar| followed by scope, static or dynamic binding, and the 
+%variable itself.
+%\begin{comment}
+%Shortcuts for state variables include \verb|privMVar| for private
+%dynamic, \verb|pubMVar| for public dynamic, and \verb|pubGVar| for public
+%static variables. For example:
+%\begin{lstlisting}
+%buildClass "FooClass" Nothing public
+%  [pubMVar 0 var1, privMVar 0 var2]
+%  [mth1, mth2]
+%\end{lstlisting}
+%\verb|Nothing| here indicates that this class does not have a parent,
+%\verb|privClass| and \verb|pubClass| are shortcuts for private and public
+%classes, respectively.
+%\end{comment}
+%
+%\subsection{GOOL syntax: modules and programs}
+%
+%Akin to Java packages and other similar constructs, GOOL has modules
+%(\verb|buildModule|) consisting of a name, a list of libraries to import,
+%a list of functions, and a list of classes. Module-level comments are done
+%with \verb|docMod|.
+%
+%\begin{comment}
+%Passing a module to
+%\verb|fileDoc| will put the finishing touches on the generated file, such as
+%imports of standard libraries and preprocessor guards for \Cplusplus{} header 
+%files.
+%\begin{lstlisting}
+%fileDoc \$ buildModule "mod1" ["library1"]
+%  [func1, func2] [class1, class2]
+%\end{lstlisting}
+%\end{comment}
+%
+%At the top of the hierarchy are programs, auxiliary files, and packages. A
+%program (\verb|prog|) has a name and a list of files.  A \verb|package| is a
+%program and a list of auxiliary files; these are non-code files that
+%augment the program. Examples are a Doxygen configuration file
+%(\verb|doxConfig|), and a makefile (\verb|makefile|).  
+%\begin{comment}
+%A parameter of
+%\verb|makefile| toggles generation of a \verb|make doc| rule, to
+%compile the Doxygen documentation with the generated Doxygen configuration
+%file.
+%\end{comment}
 
 \section{GOOL Implementation} \label{sec:implementation}
 
 There are two ``obvious'' means of dealing with large embedded DSLs in Haskell:
-either as a set of Generalized Algebraic Data Types (GADTs), or using a set of
+either as a set of GADTs, or using a set of
 classes, in the ``finally tagless'' style~\cite{carette2009finally} (we will
-refer to it as simply \emph{tagless} from now on).  The current implementation
+refer to it as simply \emph{tagless} from now on).  GOOL
 uses a ``sophisticated'' version of tagless involving \emph{type families}, 
 which allows for generic routines to be implemented and \emph{patterns} easily 
 encoded.
@@ -773,13 +794,20 @@ through methods from a set of classes, really encodes a generalized
 \emph{fold} over any \emph{representation} of the language.  Thus what
 look like GOOL ``keywords'' are really class methods which we typically 
 instantiate to language renderers, though we're also free to do various static 
-analysis passes.
+analysis passes. By using \emph{type families}, each instance of the classes 
+can choose different underlying data structures for GOOL's types, for when a 
+language needs to store more or less information than others. For example the 
+\Cplusplus~instance stores destructor statements with state variables, but 
+destructors are not needed for the other languages. Our language is defined by 
+$328$ methods across a hierarchy of $43$ classes, grouped by functionality 
+--- GOOL is not a small language!
 
+\begin{comment}
 Because tagless representations give an embedded syntax to a DSL while
 being polymorphic on the eventual semantic interpretation of the terms,
 \cite{carette2009finally} dubs the resulting classes ``symantic''.
-Our language is defined by a hierarchy of $43$ of these symantic classes,
-grouped by functionality.
+\end{comment}
+
 \begin{comment}
 as illustrated in Figure~\ref{fig:classes}.  
 For example, there are classes for programs,
@@ -787,7 +815,6 @@ bodies, control blocks, types, unary operators, variables, values, selectors,
 statements, control statements, blocks, scopes, classes, modules, and so
 on.  
 \end{comment}
-These define $328$ different methods --- GOOL is not a small language!
 \begin{comment}
 \begin{figure}[p]
 \includegraphics[scale=0.289]{GOOLClasses.png}
@@ -796,123 +823,125 @@ These define $328$ different methods --- GOOL is not a small language!
 \end{figure}
 \end{comment}
 
-For example, here is part of the class for variables:
-\begin{lstlisting}
-class (TypeSym repr) => VariableSym repr where
-  type Variable repr
-  var :: Label -> repr (Type repr) -> repr (Variable repr)
-\end{lstlisting}
-As variables are typed, their representation must be aware of types and
-thus that capability (the~\verb|TypeSym| class) is a constraint.  The
-\emph{associated type}~\verb|type Variable repr| is a representation-dependent
-type-level function.  Each instance of this
-class is free to define its own internal representation of what a
-\verb|Variable| is. \verb|var| is then a constructor for variables,
-which takes a \verb|Label| (which is a string) and a representation of a type, 
-returning a representation of a variable.  Specifically, \verb|repr| has kind
-\verb|* -> *|, and thus \verb|Variable| has kind \verb|(* -> *) -> *|.
-In \verb|repr| \verb|(X repr)|, the type variable \verb|repr| appears
-twice because there are two layers of abstraction: over the target
-language, handled by the outer \verb|repr|, and over the underlying
-types to which GOOL's types map, represented by the inner \verb|repr|.
+%For example, here is part of the class for variables:
+%\begin{lstlisting}
+%class (TypeSym repr) => VariableSym repr where
+%  type Variable repr
+%  var :: Label -> repr (Type repr) -> repr (Variable repr)
+%\end{lstlisting}
+%As variables are typed, their representation must be aware of types and
+%thus that capability (the~\verb|TypeSym| class) is a constraint.  The
+%\emph{associated type}~\verb|type Variable repr| is a representation-dependent
+%type-level function.  Each instance of this
+%class is free to define its own internal representation of what a
+%\verb|Variable| is. \verb|var| is then a constructor for variables,
+%which takes a \verb|Label| (which is a string) and a representation of a type, 
+%returning a representation of a variable.  Specifically, \verb|repr| has kind
+%\verb|* -> *|, and thus \verb|Variable| has kind \verb|(* -> *) -> *|.
+%In \verb|repr| \verb|(X repr)|, the type variable \verb|repr| appears
+%twice because there are two layers of abstraction: over the target
+%language, handled by the outer \verb|repr|, and over the underlying
+%types to which GOOL's types map, represented by the inner \verb|repr|.
+%
+%We make use of this flexibility of per-target-language representation
+%variation to record more (or less) information for
+%successful idiomatic code generation. For example, the internal representation 
+%for a 
+%state variable in \Cplusplus{} stores the corresponding destructor code,
+%but not in the other languages.
+%
+%For Java, we instantiate the \verb|VariableSym| class as follows:
+%\begin{lstlisting}
+%instance VariableSym JavaCode where
+%  type Variable JavaCode = VarData
+%  var = varD
+%\end{lstlisting}
+%where \verb|JavaCode| is essentially the \verb|Identity| monad:
+%\begin{lstlisting}
+%newtype JavaCode a = JC {unJC :: a}
+%\end{lstlisting}
+%The \verb|unJC| record field is useful for type inference: when applied to
+%an otherwise generic term, it lets Haskell infer that we are wishing
+%to only consider the \verb|JavaCode| instances.  \verb|VarData| is defined as
+%\begin{lstlisting}
+%data VarData = VarD {varBind :: Binding,
+%                    varName :: String,
+%                    varType :: TypeData,
+%                    varDoc :: Doc}
+%\end{lstlisting}
+%Thus the representation of a (Java) variable consists of more than just its
+%printed representation (the \verb|Doc|~field), but also its binding time,
+%name, and type of the variable. \verb|Doc| comes from the package 
+%\verb|Text.PrettyPrint.HughesPJ| and represents formatted text. It is common 
+%in 
+%OO programs to declare some variables as \verb|static| to signify that the 
+%variable should be bound at compile-time. The \verb|Binding|, either 
+%\verb|Static| or \verb|Dynamic|, is thus part of a variable's representation.
+%That a variable is aware of its type makes the generation of declarations
+%simpler. The inclusion of a name, as a \verb|String|, makes generating
+%meta-information, such as for logging, easier.
+%
+%All representing structures contain at least a \verb|Doc|. It can be considered
+%to be our \emph{dynamic} representation of code, from a partial-evaluation
+%perspective. The other fields are generally \emph{static} information used to
+%optimize the code generation.
+%
+%We prefer generic code over representation-specific code, so there is little
+%code that works on \verb|VarData| directly.  Instead, there are
+%methods like \verb|variableDoc|, part of the \verb|VariableSym| type class,
+%with signature:
+%\begin{lstlisting}
+%variableDoc :: repr (Variable repr) -> Doc
+%\end{lstlisting}
+%which acts as an accessor.  For \verb|JavaCode|, it is simply:
+%\begin{lstlisting}
+%variableDoc = varDoc . unJC
+%\end{lstlisting}
+%
+%Other uses of additional information are for uniform documentation,
+%builds and better arrangement of parentheses.
+%A common documentation style for methods is to provide a 
+%description of each of the method's parameters. The representation for 
+%\verb|Method|s stores the list of parameters, which is then used to
+%automate this pattern of documentation. Makefiles are often used to
+%compile OO programs, and this process sometimes needs to know which file
+%contains the main module or method.  Since GOOL includes the option of 
+%generating a Makefile as part of a \verb|Package|, the representation for 
+%a \verb|Method| and a \verb|Module| store information on whether it is 
+%the main method or module. Redundant parentheses are typically ignored by 
+%compilers, but programmers still tend to minimize them in their code ---
+%it makes the code more human-readable. Operator precedence is used for
+%this purpose, and thus we also 
+%store precedence information in the representations for \verb|Value|s, 
+%\verb|UnaryOp|erators and \verb|BinaryOp|erators to elide extra
+%parentheses.
+%
+%Note that the \verb|JavaCode| instance of \verb|VariableSym| defines the
+%\verb|var| function via the \verb|varD| function:
+%\begin{lstlisting}
+%varD :: (RenderSym repr) => Label ->
+%  repr (Type repr) -> repr (Variable repr)
+%varD n t = varFromData Dynamic n t (varDocD n)
+%\end{lstlisting}
+%\verb|varD| is generic, i.e. works for all instances, via dispatching to other
+%generic functions, such as \verb|varFromData|, which constructs the variable 
+%from the pieces in \verb|VarData|. This method is in class 
+%\verb|InternalVariable|. Several of these
+%``internal'' classes exist, which are not exported from GOOL's interface.
+%They contain functions useful for the language renderers, but
+%not meant to be used to construct code representations, as they reveal too
+%much of the internals (and are rather tedious to use).  One important
+%example is the \verb|cast| method, which is never needed by user-level code,
+%but frequently used by higher-level functions.
+%
+%\verb|varDocD| simply converts the variable name to a \verb|Doc|, since Java 
+%variables are just names, as with most OO languages.
 
-We make use of this flexibility of per-target-language representation
-variation to record more (or less) information for
-successful idiomatic code generation. For example, the internal representation for a 
-state variable in \Cplusplus{} stores the corresponding destructor code,
-but not in the other languages.
-
-For Java, we instantiate the \verb|VariableSym| class as follows:
-\begin{lstlisting}
-instance VariableSym JavaCode where
-  type Variable JavaCode = VarData
-  var = varD
-\end{lstlisting}
-where \verb|JavaCode| is essentially the \verb|Identity| monad:
-\begin{lstlisting}
-newtype JavaCode a = JC {unJC :: a}
-\end{lstlisting}
-The \verb|unJC| record field is useful for type inference: when applied to
-an otherwise generic term, it lets Haskell infer that we are wishing
-to only consider the \verb|JavaCode| instances.  \verb|VarData| is defined as
-\begin{lstlisting}
-data VarData = VarD {varBind :: Binding,
-                    varName :: String,
-                    varType :: TypeData,
-                    varDoc :: Doc}
-\end{lstlisting}
-Thus the representation of a (Java) variable consists of more than just its
-printed representation (the \verb|Doc|~field), but also its binding time,
-name, and type of the variable. \verb|Doc| comes from the package 
-\verb|Text.PrettyPrint.HughesPJ| and represents formatted text. It is common in 
-OO programs to declare some variables as \verb|static| to signify that the 
-variable should be bound at compile-time. The \verb|Binding|, either 
-\verb|Static| or \verb|Dynamic|, is thus part of a variable's representation.
-That a variable is aware of its type makes the generation of declarations
-simpler. The inclusion of a name, as a \verb|String|, makes generating
-meta-information, such as for logging, easier.
-
-All representing structures contain at least a \verb|Doc|. It can be considered
-to be our \emph{dynamic} representation of code, from a partial-evaluation
-perspective. The other fields are generally \emph{static} information used to
-optimize the code generation.
-
-We prefer generic code over representation-specific code, so there is little
-code that works on \verb|VarData| directly.  Instead, there are
-methods like \verb|variableDoc|, part of the \verb|VariableSym| type class,
-with signature:
-\begin{lstlisting}
-variableDoc :: repr (Variable repr) -> Doc
-\end{lstlisting}
-which acts as an accessor.  For \verb|JavaCode|, it is simply:
-\begin{lstlisting}
-variableDoc = varDoc . unJC
-\end{lstlisting}
-
-Other uses of additional information are for uniform documentation,
-builds and better arrangement of parentheses.
-A common documentation style for methods is to provide a 
-description of each of the method's parameters. The representation for 
-\verb|Method|s stores the list of parameters, which is then used to
-automate this pattern of documentation. Makefiles are often used to
-compile OO programs, and this process sometimes needs to know which file
-contains the main module or method.  Since GOOL includes the option of 
-generating a Makefile as part of a \verb|Package|, the representation for 
-a \verb|Method| and a \verb|Module| store information on whether it is 
-the main method or module. Redundant parentheses are typically ignored by 
-compilers, but programmers still tend to minimize them in their code ---
-it makes the code more human-readable. Operator precedence is used for
-this purpose, and thus we also 
-store precedence information in the representations for \verb|Value|s, 
-\verb|UnaryOp|erators and \verb|BinaryOp|erators to elide extra
-parentheses.
-
-Note that the \verb|JavaCode| instance of \verb|VariableSym| defines the
-\verb|var| function via the \verb|varD| function:
-\begin{lstlisting}
-varD :: (RenderSym repr) => Label ->
-  repr (Type repr) -> repr (Variable repr)
-varD n t = varFromData Dynamic n t (varDocD n)
-\end{lstlisting}
-\verb|varD| is generic, i.e. works for all instances, via dispatching to other
-generic functions, such as \verb|varFromData|, which constructs the variable 
-from the pieces in \verb|VarData|. This method is in class 
-\verb|InternalVariable|. Several of these
-``internal'' classes exist, which are not exported from GOOL's interface.
-They contain functions useful for the language renderers, but
-not meant to be used to construct code representations, as they reveal too
-much of the internals (and are rather tedious to use).  One important
-example is the \verb|cast| method, which is never needed by user-level code,
-but frequently used by higher-level functions.
-
-\verb|varDocD| simply converts the variable name to a \verb|Doc|, since Java 
-variables are just names, as with most OO languages.
-
-We have defined $300$ functions like \verb|varD|, each abstracting a 
-\common ality between target languages. This makes writing new renderers for 
+We have also defined $300$ functions that abstract over 
+\common alities between target languages. This makes writing new renderers for 
 new languages fairly straightforward. GOOL's Java and \Csharp{} renderers 
-demonstrate this well. Out of $328$ methods across all of GOOL's type classes, 
-the instances of $229$ of them are shared between the Java and \Csharp{} 
+demonstrate this well. Out of the $328$ total methods,
+the instances of $229$ are shared between the Java and \Csharp{} 
 renderers, in that they are just calls to the same common function. That is 
 $40\%$ more common instances compared to between Python and Java, for example.
 \begin{comment}
@@ -948,65 +977,65 @@ x tick label style={rotate=40,anchor=east},
 \end{figure}
 \end{comment}
 
-Examples from Python and \Csharp{} are not shown because they both
-work very similarly to the Java renderer. 
-\begin{comment}
-There are \verb|PythonCode| and \verb|CSharpCode| analogs to \verb|JavaCode|, 
-the underlying types are all the
-same, and the methods are defined by calling common functions, where possible,
-or by constructing the GOOL value directly in the instance definition, if the
-definition is unique to that language.
-\end{comment}
-
-\Cplusplus{} is different since most modules are split between a source and
-header file. To generate \Cplusplus, we traverse the code twice,
-once to generate the header file and a second time to generate the
-source file corresponding to the same module. This is done via two instances
-of the classes, for two different types: \verb|CppSrcCode| for source code and
-\verb|CppHdrCode| for header code. Since a main function does not require a
-header file, the \verb|CppHdrCode| instance for a module containing only a main
-function is empty. The renderer optimizes empty modules/files away --- for
-all renderers.
-
-As \Cplusplus{} source and header should always be generated together, a third
-type, \verb|CppCode| achieves this:
-\begin{lstlisting}
-data CppCode x y a = CPPC {src :: x a, hdr :: y a}
-\end{lstlisting}
-The type variables \verb|x| and \verb|y| are intended to be instantiated with
-\verb|CppSrcCode| and \verb|CppHdrCode|, but they are left generic
-so that we may use an even more generic \verb|Pair| class:
-\begin{lstlisting}
-class Pair (p :: (* -> *) -> (* -> *) -> (* -> *)) where
-  pfst :: p x y a -> x a
-  psnd :: p x y b -> y b
-  pair :: x a -> y a -> p x y a
-
-instance Pair CppCode where
-  pfst (CPPC xa _) = xa
-  psnd (CPPC _ yb) = yb
-  pair = CPPC
-\end{lstlisting}
-\verb|Pair| is a \emph{type constructor} pairing, one level up from
-Haskell's own \verb|(,) :: * -> * -> *|.  It is given by one constructor
-and two destructors, much as the Church-encoding of pairs into the
-$\lambda$-calculus.
-
-To understand how this works, here is the instance of \verb|VariableSym|,
-but for \Cplusplus:
-\begin{lstlisting}
-instance (Pair p) => VariableSym 
- (p CppSrcCode CppHdrCode) where
-  type Variable (p CppSrcCode CppHdrCode) = VarData
-  var n t = pair (var n $ pfst t) (var n $ psnd t)
-\end{lstlisting}
-The instance is generic in the pair representation \verb|p| but
-otherwise concrete, because \verb|VarData| is concrete. The actual
-instance code is straightforward, as it just dispatches to the 
-underlying instances, using the generic wrapping/unwrapping
-methods from \verb|Pair|.  This pattern is used for all instances,
-so adapting it to any other language with two (or more) files per
-module is straightforward.
+%Examples from Python and \Csharp{} are not shown because they both
+%work very similarly to the Java renderer. 
+%\begin{comment}
+%There are \verb|PythonCode| and \verb|CSharpCode| analogs to \verb|JavaCode|, 
+%the underlying types are all the
+%same, and the methods are defined by calling common functions, where possible,
+%or by constructing the GOOL value directly in the instance definition, if the
+%definition is unique to that language.
+%\end{comment}
+%
+%\Cplusplus{} is different since most modules are split between a source and
+%header file. To generate \Cplusplus, we traverse the code twice,
+%once to generate the header file and a second time to generate the
+%source file corresponding to the same module. This is done via two instances
+%of the classes, for two different types: \verb|CppSrcCode| for source code and
+%\verb|CppHdrCode| for header code. Since a main function does not require a
+%header file, the \verb|CppHdrCode| instance for a module containing only a main
+%function is empty. The renderer optimizes empty modules/files away --- for
+%all renderers.
+%
+%As \Cplusplus{} source and header should always be generated together, a third
+%type, \verb|CppCode| achieves this:
+%\begin{lstlisting}
+%data CppCode x y a = CPPC {src :: x a, hdr :: y a}
+%\end{lstlisting}
+%The type variables \verb|x| and \verb|y| are intended to be instantiated with
+%\verb|CppSrcCode| and \verb|CppHdrCode|, but they are left generic
+%so that we may use an even more generic \verb|Pair| class:
+%\begin{lstlisting}
+%class Pair (p :: (* -> *) -> (* -> *) -> (* -> *)) where
+%  pfst :: p x y a -> x a
+%  psnd :: p x y b -> y b
+%  pair :: x a -> y a -> p x y a
+%
+%instance Pair CppCode where
+%  pfst (CPPC xa _) = xa
+%  psnd (CPPC _ yb) = yb
+%  pair = CPPC
+%\end{lstlisting}
+%\verb|Pair| is a \emph{type constructor} pairing, one level up from
+%Haskell's own \verb|(,) :: * -> * -> *|.  It is given by one constructor
+%and two destructors, much as the Church-encoding of pairs into the
+%$\lambda$-calculus.
+%
+%To understand how this works, here is the instance of \verb|VariableSym|,
+%but for \Cplusplus:
+%\begin{lstlisting}
+%instance (Pair p) => VariableSym 
+% (p CppSrcCode CppHdrCode) where
+%  type Variable (p CppSrcCode CppHdrCode) = VarData
+%  var n t = pair (var n $ pfst t) (var n $ psnd t)
+%\end{lstlisting}
+%The instance is generic in the pair representation \verb|p| but
+%otherwise concrete, because \verb|VarData| is concrete. The actual
+%instance code is straightforward, as it just dispatches to the 
+%underlying instances, using the generic wrapping/unwrapping
+%methods from \verb|Pair|.  This pattern is used for all instances,
+%so adapting it to any other language with two (or more) files per
+%module is straightforward.
 
 \begin{comment}
 At the program level, the difference between source and header is no
@@ -1024,6 +1053,7 @@ It contains methods for certain OO patterns, and they return \verb|Block|s, not
 also save the user from having to manually specify the result as a block.
 \end{comment}
 
+\begin{comment}
 While ``old'' features of OO languages --- basically features that
 were already present in ancestor procedural languages like Algol ---
 have fairly similar renderings, more recent (to OO languages) features,
@@ -1046,6 +1076,7 @@ for (std::vector<int>::iterator age = ages.begin(); \
 where we use backslashes in generated code to indicate manually inserted
 line breaks so that the code fits in this paper's narrow column margins. By 
 providing \verb|forEach|, GOOL abstracts over these differences.
+\end{comment}
 
 \section{Encoding Patterns} \label{sec:patterns}
 

@@ -447,6 +447,9 @@ clear how similar the two languages are.
 		\verb|forRange|, \verb|forEach|, \verb|while|, \verb|tryCatch|, 
 		\verb|block|, \verb|body| [\verb|bodyStatements| (single-block body), 
 		\verb|oneLiner| (single-statement body)] \\
+		List API & \verb|listAccess|, \verb|at| (same as \verb|listAccess|), 
+		\verb|listSet|, \verb|listAppend|, \verb|listIndexExists|, 
+		\verb|indexOf|, \verb|listSlice| \\
 		Scope & \verb|public|, \verb|private| \\
 		Binding & \verb|static_|, \verb|dynamic_| \\
 		Functions & \verb|function|, \verb|method|, \verb|param|, 
@@ -506,7 +509,7 @@ operationally meaningless, but represents the actual structure of OO programs
 as written by humans.  This is because programmers (hopefully!) write code to 
 be read by other programmers, and blocks increase human-readability.
 
-Basic GOOL syntax is shown in Table \ref{tab:syntax}. Note that GOOL 
+Basic GOOL syntax is shown in Table~\ref{tab:syntax}. Note that GOOL 
 distinguishes a 
 variable from its value\footnote{as befits the use-mention distinction from 
 analytic philosophy}. This distinction is motivated by semantic considerations; 
@@ -1080,11 +1083,9 @@ providing \verb|forEach|, GOOL abstracts over these differences.
 
 \section{Encoding Patterns} \label{sec:patterns}
 
-There are various levels of ``patterns'' to encode. The previous section
-documented how to encode the programming language aspects. Now we
-move on to other patterns, from simple library-level functions, to
-simple tasks (command-line arguments, list processing, printing), on to
-more complex patterns such as methods with a mixture of input, output
+There are various levels of ``patterns'' to encode, from simple library-level 
+functions, to simple tasks (command-line arguments, list processing, printing), 
+on to more complex patterns such as methods with a mixture of input, output
 and in-out parameters, and finally on to design patterns.
 
 \subsection{Internalizing library functions}
@@ -1092,7 +1093,7 @@ and in-out parameters, and finally on to design patterns.
 Consider the simple trigonometric sine function, called \verb|sin| in
 GOOL. It is common enough to warrant its own name, even though in most
 languages it is part of a library.  A GOOL expression \verb|sin foo|
-can then be seamlessly translated to 
+can be seamlessly translated to 
 yield \verb|math.sin(foo)| in Python, \verb|Math.sin(foo)| in Java,
 \verb|Math.Sin(foo)| in \Csharp, and \verb|sin(foo)| in \Cplusplus. Other
 functions are handled similarly.  This part is easily extensible, but does
@@ -1101,12 +1102,15 @@ require adding to GOOL classes.
 \subsection{Command line arguments}
 
 A slightly more complex task is accessing arguments passed on the command
-line. This tends to differ more significantly accross languages. GOOL
+line. This tends to differ more significantly across languages. GOOL
 offers an abstraction of these mechanisms, through an \verb|argsList| function
 that represents the list of arguments, as well as convenience functions for
 common tasks such as indexing into \verb|argsList| and checking if an argument
-at a particular position exists. For example, these functions allow easy 
+at a particular position exists. 
+\begin{comment}
+For example, these functions allow easy 
 generation of code like \verb|sys.argv[1]| in Python. 
+\end{comment}
 
 \subsection{Lists}
 
@@ -1114,17 +1118,18 @@ Variations on lists are frequently used in OO code, but the actual API
 in each language tends to vary considerably; we need to provide a single
 abstraction that provides sufficient functionality to do useful list
 computations.  Rather than abstracting from the functionality provided
-in the libraries of each language to find some common ground, we instead
+in the libraries of each language to find common ground, we instead
 reverse engineer the ``useful'' API from actual use cases.  
 
-One thing we immediately notice from such an exercise is that lists in
-OO languages are rarely \emph{linked lists} (unlike in Haskell, our host
-language), but rather more like a dynamically sized vector. In particular,
+One thing we immediately notice is that lists in
+OO languages are rarely \emph{linked lists} (unlike in Haskell), but rather 
+more like a dynamically sized vector. In particular, 
 indexing a list by position, which is a horrifying idea for linked lists,
 is extremely common.
 
 This narrows things down to a small set of functions and statements, shown in 
-Table~\ref{tab:listfuncs}.
+Table~\ref{tab:syntax}.
+\begin{comment}
 \begin{table}[bth]
 \caption{List functions}
 \begin{tabular}{p{0.15\textwidth} p{0.3\textwidth}}
@@ -1141,6 +1146,7 @@ Table~\ref{tab:listfuncs}.
 \end{tabular}
 \label{tab:listfuncs}
 \end{table}
+\end{comment}
 For example, \verb|listAccess| \verb|(valueOf ages)| \verb|(litInt 1)| will 
 generate
 \verb|ages[1]| in Python and \Csharp, \verb|ages.get(1)| in Java, and
@@ -1187,8 +1193,7 @@ for (int list_i1 = 0; list_i1 < \
   std::cout << ", ";
 }
 if ((int)(myName.size()) > 0) {
-  std::cout << \
-    myName.at((int)(myName.size()) - 1);
+  std::cout << myName.at((int)(myName.size()) - 1);
 }
 std::cout << "]" << std::endl;
 \end{lstlisting}
@@ -1199,8 +1204,8 @@ In addition to printing, there is also functionality for reading input.
 Moving to larger-scale patterns, we noticed that our codes had methods that
 used their parameters differently: some were used as inputs, some as outputs
 and some for both purposes.  This was a \emph{semantic} pattern that was
-not necessarily obvious in any of the implementations. However, once we noticed it,
-we could use that information to generate better, more idiomatic code in
+not necessarily obvious in any of the implementations. However, once we noticed 
+it, we could use that information to generate better, more idiomatic code in
 each language, while still capturing the higher-level semantics of the
 functionality we were trying to implement.  More concretely, consider a
 function \verb|applyDiscount| that takes a price and a discount, subtracts the
@@ -1218,7 +1223,7 @@ inOutFunc "applyDiscount" public static_
 input-output, respectively.  This function has two outputs
 ---\verb|price| and \verb|isAffordable|--- and multiple outputs are
 not directly supported in all target languages.  Thus we need to use
-different features to represent these.  For example, in Python,
+different features to represent these.  For example, in Python, a
 return statement with multiple values is used:
 \begin{lstlisting}
 def applyDiscount(price, discount):
@@ -1262,7 +1267,8 @@ void applyDiscount(int &price, \
 }
 \end{lstlisting}
 Here again we see how a natural task-level ``feature'', namely the
-desire to have different kinds of parameters, end up being rendered differently,
+desire to have different kinds of parameters, ends up being rendered 
+differently,
 but hopefully idiomatically, in each target language.  GOOL manages the
 tedious aspects of generating any needed variable declarations and return
 statements.  To call an \verb|inOutFunc| function, one must use
@@ -1273,9 +1279,9 @@ statements.  To call an \verb|inOutFunc| function, one must use
 Getters and setters are a mainstay of OO programming.  Whether these achieve
 encapsulation or not, it is certainly the case that saying to an OO programmer
 ``variable \verb|foo| from class \verb|FooClass| should have getters and setters''
-is enough information for them to write the code. And so it is in GOOL as well.
-Saying \verb|getMethod "FooClass" foo| and \verb|setMethod "FooClass" foo|. 
-The generated set methods in Python, Java, \Csharp{} and \Cplusplus{} are:
+is enough information for them to write the code. And so it is in GOOL as well,
+with \verb|getMethod "FooClass" foo| and \verb|setMethod "FooClass" foo|. 
+The generated setters in Python, Java, \Csharp{} and \Cplusplus{} are:
 \begin{lstlisting}
 def setFoo(self, foo):
     self.foo = foo
@@ -1332,7 +1338,7 @@ Of course the design patterns could already have been coded in GOOL, but
 having these as language features is useful for two reasons: 1) the GOOL-level
 code is clearer in its intent (and more concise), and 2) the resulting code
 can be more idiomatic.
-
+\begin{comment}
 Below is a complete example of a GOOL function.  The recommended style is
 to name all strings (to avoid hard-to-debug typos) and variables, then
 write the code proper.
@@ -1379,7 +1385,7 @@ patternTest = let
       notifyObservers (func printNum 
         void []) obsType]])
 \end{lstlisting}
-
+\end{comment}
 \section{Related Work} \label{sec:related}
 
 We divide the Related Work into the following categories

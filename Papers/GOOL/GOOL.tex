@@ -714,39 +714,48 @@ There are two ``obvious'' means of dealing with large embedded DSLs in Haskell:
 either as a set of Generalized Algebraic Data Types (GADTs), or using a set of
 classes, in the ``finally tagless'' style~\cite{carette2009finally} (we will
 refer to it as simply \emph{tagless} from now on).  The current implementation
-uses a ``sophisticated'' version of tagless. A first implementation of GOOL,
+uses a ``sophisticated'' version of tagless involving \emph{type families}, 
+which allows for generic routines to be implemented and \emph{patterns} easily 
+encoded.
+\begin{comment}
+A first implementation of GOOL,
 modelled on the multi-language generator SAGA~\cite{beyak2011saga} used a
 straightforward version of tagless, which did not allow for enough generic
 routines to be properly implemented.  This was replaced by a version based on
 GADTs, which fixed that problem, but did not allow for \emph{patterns} to be
 easily encoded. Thus the current version has gone back to tagless, but also uses
 \emph{type families} in a crucial way.
+\end{comment}
 
 In tagless the means of encoding a language,
 through methods from a set of classes, really encodes a generalized
 \emph{fold} over any \emph{representation} of the language.  Thus what
-looks like GOOL ``keywords'' are either class methods or generic functions
-that await the specification of a dictionary to decide on the final
-interpretation of the representation.  We typically instantiate these to
-language renderers, but we're also free to do various static analysis passes.
+look like GOOL ``keywords'' are really class methods which we typically 
+instantiate to language renderers, though we're also free to do various static 
+analysis passes.
 
 Because tagless representations give an embedded syntax to a DSL while
 being polymorphic on the eventual semantic interpretation of the terms,
 \cite{carette2009finally} dubs the resulting classes ``symantic''.
 Our language is defined by a hierarchy of $43$ of these symantic classes,
-grouped by functionality, as illustrated in Figure~\ref{fig:classes}.  
+grouped by functionality.
+\begin{comment}
+as illustrated in Figure~\ref{fig:classes}.  
 For example, there are classes for programs,
 bodies, control blocks, types, unary operators, variables, values, selectors,
 statements, control statements, blocks, scopes, classes, modules, and so
-on.  These define $328$ different methods --- GOOL is not a small language!
-
+on.  
+\end{comment}
+These define $328$ different methods --- GOOL is not a small language!
+\begin{comment}
 \begin{figure}[p]
 \includegraphics[scale=0.289]{GOOLClasses.png}
 \caption{Dependency graph of all of GOOL's type classes}
 \label{fig:classes}
 \end{figure}
+\end{comment}
 
-For example, here is how variables are defined:
+For example, here is part of the class for variables:
 \begin{lstlisting}
 class (TypeSym repr)
   => VariableSym repr where
@@ -760,8 +769,8 @@ thus that capability (the~\verb|TypeSym| class) is a constraint.  The
 type-level function.  Each instance of this
 class is free to define its own internal representation of what a
 \verb|Variable| is. \verb|var| is then a constructor for variables,
-which takes a \verb|Label| and a representation of a type, returning
-a representation of a variable.  Specifically, \verb|repr| has kind
+which takes a \verb|Label| (which is a string) and a representation of a type, 
+returning a representation of a variable.  Specifically, \verb|repr| has kind
 \verb|* -> *|, and thus \verb|Variable| has kind \verb|(* -> *) -> *|.
 In \verb|repr| \verb|(X repr)|, the type variable \verb|repr| appears
 twice because there are two layers of abstraction: over the target
@@ -848,18 +857,11 @@ varD :: (RenderSym repr) => Label ->
   repr (Type repr) -> repr (Variable repr)
 varD n t = varFromData Dynamic n t
   (varDocD n)
-
-varDocD :: Label -> Doc
-varDocD = text
 \end{lstlisting}
 \verb|varD| is generic, i.e. works for all instances, via dispatching to other
-generic functions, such as \verb|varFromData|:
-\begin{lstlisting}
-varFromData :: Binding -> String ->
-  repr (Type repr) -> Doc ->
-  repr (Variable repr)
-\end{lstlisting}
-This method is in class \verb|InternalVariable|. Several of these
+generic functions, such as \verb|varFromData|, which constructs the variable 
+from the pieces in \verb|VarData|. This method is in class 
+\verb|InternalVariable|. Several of these
 ``internal'' classes exist, which are not exported from GOOL's interface.
 They contain functions useful for the language renderers, but
 not meant to be used to construct code representations, as they reveal too
@@ -867,25 +869,28 @@ much of the internals (and are rather tedious to use).  One important
 example is the \verb|cast| method, which is never needed by user-level code,
 but frequently used by higher-level functions.
 
-\verb|varDocD| can simply be \verb|text| as \verb|Label| is an
-alias for a \verb|String| -- and Java variables are just names,
-as with most OO languages.
+\verb|varDocD| simply converts the variable name to a \verb|Doc|, since Java 
+variables are just names, as with most OO languages.
 
-We have defined $300$ functions like \verb|varDocD|, each abstracting a 
-\common ality between target languages. This
-makes writing new renderers for new languages fairly straightforward.
-GOOL's Java and \Csharp{} renderers demonstrate this well. Out of $328$
-methods across all of GOOL's type classes, the instances of $229$ of them are
-shared between the Java and \Csharp{} renderers, in that they are just calls to 
-the same common function. A further $37$ are partially shared, for example they 
+We have defined $300$ functions like \verb|varD|, each abstracting a 
+\common ality between target languages. This makes writing new renderers for 
+new languages fairly straightforward. GOOL's Java and \Csharp{} renderers 
+demonstrate this well. Out of $328$ methods across all of GOOL's type classes, 
+the instances of $229$ of them are shared between the Java and \Csharp{} 
+renderers, in that they are just calls to the same common function. That is 
+$40\%$ more common instances compared to between Python and Java, for example.
+\begin{comment}
+A further $37$ are partially shared, for example they 
 call the same common function but with different parameters. The numbers of 
 common methods between each pair of renderers are shown in 
 Figure~\ref{fig:common}. It is clear from the graph that Python is the least 
 similar to the other target languages, whereas \Csharp has the most in common 
-with the others, closely followed by Java. $143$ methods are
+with the others, closely followed by Java. 
+$143$ methods are
 actually the same between all $4$ languages GOOL currently targets. This might
 indicate that some should be generic functions rather than class methods,
 but we have not yet investigated this in detail.
+
 \begin{figure}[!h]
 \begin{tikzpicture}[scale=0.9]
 \begin{axis}[
@@ -905,13 +910,17 @@ x tick label style={rotate=40,anchor=east},
 \caption{Number of common methods between renderers}
 \label{fig:common}
 \end{figure}
+\end{comment}
 
 Examples from Python and \Csharp{} are not shown because they both
-work very similarly to the Java renderer. There are \verb|PythonCode| and
-\verb|CSharpCode| analogs to \verb|JavaCode|, the underlying types are all the
+work very similarly to the Java renderer. 
+\begin{comment}
+There are \verb|PythonCode| and \verb|CSharpCode| analogs to \verb|JavaCode|, 
+the underlying types are all the
 same, and the methods are defined by calling common functions, where possible,
 or by constructing the GOOL value directly in the instance definition, if the
 definition is unique to that language.
+\end{comment}
 
 \Cplusplus{} is different since most modules are split between a source and
 header file. To generate \Cplusplus, we traverse the code twice,
@@ -967,6 +976,7 @@ methods from \verb|Pair|.  This pattern is used for all instances,
 so adapting it to any other language with two (or more) files per
 module is straightforward.
 
+\begin{comment}
 At the program level, the difference between source and header is no
 longer relevant, so they are joined together into a single component.
 For technical reasons, currently \verb|Pair| is still used, and we arbitrarily
@@ -980,6 +990,7 @@ GOOL's \verb|ControlBlockSym| class is worth drawing attention to.
 It contains methods for certain OO patterns, and they return \verb|Block|s, not 
 \verb|Statement|s. So in addition to automating certain tasks, these methods 
 also save the user from having to manually specify the result as a block.
+\end{comment}
 
 While ``old'' features of OO languages --- basically features that
 were already present in ancestor procedural languages like Algol ---

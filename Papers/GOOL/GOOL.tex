@@ -477,6 +477,21 @@ languages, it is easier to write it once in GOOL. Also, if GOOL is used as the
 target language for other DSLs, the ease of writing GOOL programs matters less, 
 since the programs will be written by a computer rather than a human. 
 
+\begin{table*}[t]
+\caption{GOOL Syntax}
+\begin{tabular}{l | l}
+	Types & \verb|bool|, \verb|int|, \verb|float|, \verb|char|, \verb|string|, 
+	\verb|infile| (read mode), \verb|outfile| (write mode), \verb|listType|, 
+	\verb|obj| \\
+	Variables & \verb|var|, \verb|extVar|, \verb|classVar|, \verb|objVar|, 
+	\verb|self| \\
+	Values & \verb|valueOf|, \verb|litTrue|, \verb|litFalse|, \verb|litInt|, 
+	\verb|litFloat|, \verb|litChar|, \verb|litString|, \verb|?!|, 
+	\verb|inlineIf|, \verb|funcApp|, \verb|extFuncApp|
+\end{tabular}
+\label{tab:syntax}
+\end{table*}
+
 \subsection{GOOL Syntax: Imperative core} \label{ssec:syntax}
 
 Basic types in GOOL are \verb|bool|, \verb|int|, \verb|float|, \verb|char|, and 

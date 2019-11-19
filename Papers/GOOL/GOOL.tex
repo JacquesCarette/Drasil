@@ -478,16 +478,41 @@ target language for other DSLs, the ease of writing GOOL programs matters less,
 since the programs will be written by a computer rather than a human. 
 
 \begin{table*}[t]
-\caption{GOOL Syntax}
-\begin{tabular}{l | l}
+\caption{Basic GOOL Syntax - functions enclosed in brackets are shortcuts for 
+common cases}
+\begin{tabular}{p{2.2cm}| p{15cm}}
 	Types & \verb|bool|, \verb|int|, \verb|float|, \verb|char|, \verb|string|, 
 	\verb|infile| (read mode), \verb|outfile| (write mode), \verb|listType|, 
 	\verb|obj| \\
 	Variables & \verb|var|, \verb|extVar|, \verb|classVar|, \verb|objVar|, 
-	\verb|self| \\
-	Values & \verb|valueOf|, \verb|litTrue|, \verb|litFalse|, \verb|litInt|, 
-	\verb|litFloat|, \verb|litChar|, \verb|litString|, \verb|?!|, 
-	\verb|inlineIf|, \verb|funcApp|, \verb|extFuncApp|
+	\verb|$->| (infix operator for \verb|objVar|), \verb|self|,
+	[\verb|listVar|] \\
+	Values & \verb|valueOf| (value from variable), \verb|litTrue|, 
+	\verb|litFalse|, \verb|litInt|, 
+	\verb|litFloat|, \verb|litChar|, \verb|litString|, \verb|?!|, \verb|?&&|, 
+	\verb|?<|, \verb|?<=|, \verb|?>|, \verb|?>=|, \verb|?==|, \verb|?!=|, 
+	\verb|#~|, \verb|#/^|, \verb|#||, \verb|#+|, \verb|#-|, \verb|#*|, 
+	\verb|#/|, \verb|#^|, \verb|inlineIf|, \verb|funcApp|, \verb|extFuncApp|, 
+	\verb|newObj|, \verb|objMethodCall|, [\verb|selfFuncApp|, 
+	\verb|objMethodCallNoParams|] \\
+	Statements & \verb|varDec|, \verb|varDecDef|, \verb|assign|, \verb|&=|, 
+	\verb|&+=|, \verb|&-=|, \verb|&++|, \verb|&~-|, \verb|break|, 
+	\verb|continue|, \verb|returnState|, \verb|throw|, \verb|free|, 
+	\verb|comment|, \verb|ifCond|, \verb|ifNoElse|, \verb|switch|, \verb|for|, 
+	\verb|forRange|, \verb|forEach|, \verb|while|, \verb|tryCatch|, 
+	\verb|block|, \verb|body| [\verb|bodyStatements| (single-block body), 
+	\verb|oneLiner| (single-statement body)] \\
+	Scope & \verb|public|, \verb|private| \\
+	Binding & \verb|static_|, \verb|dynamic_| \\
+	Functions & \verb|function|, \verb|method|, \verb|param|, 
+	\verb|pointerParam|, \verb|mainFunction|, \verb|docFunc|, 
+	[\verb|pubMethod|, \verb|privMethod|] \\
+	State Variables & \verb|stateVar|, \verb|constVar|, [\verb|privMVar|, 
+	\verb|pubMVar| (dynamic), \verb|pubGVar| (static)]\\
+	Classes & \verb|buildClass|, \verb|docClass|, [\verb|pubClass|, 
+	\verb|privClass|]\\
+	Packages & \verb|buildModule|, \verb|fileDoc|, \verb|docMod|, \verb|prog|, 
+	\verb|package|, \verb|doxConfig|, \verb|makefile|
 \end{tabular}
 \label{tab:syntax}
 \end{table*}

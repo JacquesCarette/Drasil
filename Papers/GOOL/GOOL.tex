@@ -1,5 +1,5 @@
 %% For double-blind review submission, w/o CCS and ACM Reference (max submission space)
-\documentclass[sigplan,review,anonymous,prologue,dvipsnames]{acmart}
+\documentclass[sigplan,review,prologue,dvipsnames]{acmart}
 \settopmatter{printfolios=true,printccs=false,printacmref=false}
 %% For double-blind review submission, w/ CCS and ACM Reference
 %\documentclass[sigplan,review,anonymous]{acmart}\settopmatter{printfolios=true}
@@ -121,7 +121,7 @@
                                         %% can be repeated if necessary
 %\orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
 \affiliation{
-  \position{Position1}
+%  \position{Position1}
   \department{Department of Computing and Software}              %% \department
   %%is recommended
   \institution{McMaster University}            %% \institution is required
@@ -138,7 +138,7 @@
 %% can be repeated if necessary
 %\orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
 \affiliation{
-  \position{Position1}
+%  \position{Position1}
   \department{Department of Computing and Software}              %%
   %%\department is recommended
   \institution{McMaster University}            %% \institution is required
@@ -155,7 +155,7 @@
 %% can be repeated if necessary
 %\orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
 \affiliation{
-  \position{Position1}
+%  \position{Position1}
   \department{Department of Computing and Software}              %%
   %%\department is recommended
   \institution{McMaster University}            %% \institution is required
@@ -305,8 +305,7 @@ We have a set of new requirements:
 \end{enumerate}
 
 Here we demonstrate that all of these requirements can be met.
-GOOL\footnote{Source is publicly available; link will be
-provided after blind period}
+GOOL \cite{Drasil2019}
 is implemented as a DSL embedded in Haskell that
 can currently generate code in Python, Java, \Csharp, and \Cplusplus.
 Others could be added, with the implementation effort being commensurate to the
@@ -358,7 +357,8 @@ evolve and language popularity changes, it is useful to have it immediately
 available in a number of languages. Another use, which is core to our
 own motivation, is to have \emph{extremely well documented} code that would be 
 unrealistic to do by hand. Our motivation for developing GOOL is to use it as 
-the target language for code generation in the \textit{Drasil} framework, where 
+the target language for code generation in the \textit{Drasil} framework 
+\cite{SzymczakEtAl2016, Drasil2019}, where 
 \textit{Drasil} aims to generate high-quality, fully documented scientific 
 software. In the domain of scientific software, \emph{certification} is often 
 required, and extensive documentation is crucial for that process. \readable~is 

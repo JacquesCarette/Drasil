@@ -1,5 +1,5 @@
 module Language.Drasil.Code.Imperative.State (
-  State(..)
+  DrasilState(..)
 ) where
 
 import Language.Drasil
@@ -8,7 +8,7 @@ import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Comments, Verbosity,
   InputModule, Logging, Structure)
 
 -- Private State, used to push these options around the generator
-data State = State {
+data DrasilState = DrasilState {
   codeSpec :: CodeSpec,
   date :: String,
   inStruct :: Structure,

@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 ) where
 
 import Language.Drasil 
-import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.Code.Imperative.State (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), codevar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
@@ -17,7 +17,7 @@ import Data.Map (member, notMember)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
-getInConstructorParams :: Reader State [CodeChunk]
+getInConstructorParams :: Reader DrasilState [CodeChunk]
 getInConstructorParams = do
   g <- ask
   let getCParams False = []
@@ -25,7 +25,7 @@ getInConstructorParams = do
   getParams $ getCParams $ member "InputParameters" (eMap $ codeSpec g) && 
     member "get_input" (defMap $ codeSpec g)
 
-getInputFormatIns :: Reader State [CodeChunk]
+getInputFormatIns :: Reader DrasilState [CodeChunk]
 getInputFormatIns = do
   g <- ask
   let getIns :: Structure -> InputModule -> [CodeChunk]
@@ -33,12 +33,12 @@ getInputFormatIns = do
       getIns _ _ = []
   getParams $ codevar inFileName : getIns (inStruct g) (inMod g)
 
-getInputFormatOuts :: Reader State [CodeChunk]
+getInputFormatOuts :: Reader DrasilState [CodeChunk]
 getInputFormatOuts = do
   g <- ask
   getParams $ extInputs $ csi $ codeSpec g
 
-getDerivedIns :: Reader State [CodeChunk]
+getDerivedIns :: Reader DrasilState [CodeChunk]
 getDerivedIns = do
   g <- ask
   let s = csi $ codeSpec g
@@ -46,12 +46,12 @@ getDerivedIns = do
       reqdVals = concatMap (flip codevars (sysinfodb s) . codeEquat) dvals
   getParams reqdVals
 
-getDerivedOuts :: Reader State [CodeChunk]
+getDerivedOuts :: Reader DrasilState [CodeChunk]
 getDerivedOuts = do
   g <- ask
   getParams $ map codeChunk $ derivedInputs $ csi $ codeSpec g
 
-getConstraintParams :: Reader State [CodeChunk]
+getConstraintParams :: Reader DrasilState [CodeChunk]
 getConstraintParams = do 
   g <- ask
   let cm = cMap $ csi $ codeSpec g
@@ -62,17 +62,17 @@ getConstraintParams = do
         mem) (getConstraints cm varsList)
   getParams reqdVals
 
-getCalcParams :: CodeDefinition -> Reader State [CodeChunk]
+getCalcParams :: CodeDefinition -> Reader DrasilState [CodeChunk]
 getCalcParams c = do
   g <- ask
   getParams $ codevars' (codeEquat c) $ sysinfodb $ csi $ codeSpec g
 
-getOutputParams :: Reader State [CodeChunk]
+getOutputParams :: Reader DrasilState [CodeChunk]
 getOutputParams = do
   g <- ask
   getParams $ outputs $ csi $ codeSpec g
 
-getParams :: (CodeIdea c) => [c] -> Reader State [CodeChunk]
+getParams :: (CodeIdea c) => [c] -> Reader DrasilState [CodeChunk]
 getParams cs' = do
   g <- ask
   let cs = map codeChunk cs'
@@ -87,7 +87,7 @@ getParams cs' = do
   return $ nub $ inVs ++ conVs ++ csSubIns
 
 getInputVars :: Structure -> ConstantRepr -> [CodeChunk] -> 
-  Reader State [CodeChunk]
+  Reader DrasilState [CodeChunk]
 getInputVars _ _ [] = return []
 getInputVars Unbundled _ cs = return cs
 getInputVars Bundled Var _ = do
@@ -98,7 +98,7 @@ getInputVars Bundled Var _ = do
 getInputVars Bundled Const _ = return []
 
 getConstVars :: ConstantStructure -> ConstantRepr -> [CodeChunk] -> 
-  Reader State [CodeChunk]
+  Reader DrasilState [CodeChunk]
 getConstVars _ _ [] = return []
 getConstVars (Store Unbundled) _ cs = return cs
 getConstVars (Store Bundled) Var _ = return [codevar consts]

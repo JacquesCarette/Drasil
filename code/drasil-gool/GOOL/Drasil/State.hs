@@ -6,7 +6,8 @@ module GOOL.Drasil.State (
   passState, passState2Lists, checkGOOLState, addFile, addCombinedHeaderSource, 
   addHeader, addSource, addProgNameToPaths, setMain, setMainMod, setFilePath, 
   getFilePath, setModuleName, getModuleName, setCurrMain, getCurrMain, 
-  setParameters, getParameters, setScope, getScope
+  setParameters, getParameters, setScope, getScope, setCurrMainFunc, 
+  getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ParamData, ScopeTag(..), paramName)
@@ -24,7 +25,10 @@ data GOOLState = GS {
   _currModName :: String,
   _currMain :: Bool,
   _currParameters :: [ParamData],
-  _currScope :: ScopeTag
+  
+  -- Only used for C++
+  _currScope :: ScopeTag,
+  _currMainFunc :: Bool
 } 
 makeLenses ''GOOLState
 
@@ -41,7 +45,9 @@ initialState = GS {
   _currModName = "",
   _currMain = False,
   _currParameters = [],
-  _currScope = Priv
+
+  _currScope = Priv,
+  _currMainFunc = False
 }
 
 putAfter :: (GOOLState -> GOOLState) -> GS a -> GS a
@@ -156,3 +162,9 @@ setScope = set currScope
 
 getScope :: GS ScopeTag
 getScope = gets (^. currScope)
+
+setCurrMainFunc :: Bool -> GOOLState -> GOOLState
+setCurrMainFunc = set currMainFunc
+
+getCurrMainFunc :: GS Bool
+getCurrMainFunc = gets (^. currMainFunc)

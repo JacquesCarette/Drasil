@@ -65,16 +65,15 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
-import GOOL.Drasil.State (GS, hasMain, initialState, putAfter, getPutReturn, 
-  setMain, setCurrMain, getCurrMain, setParameters, setScope, getScope)
+import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, setMain, 
+  setCurrMain, getCurrMain, setParameters, setScope, getScope, setCurrMainFunc, 
+  getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Data.Maybe (maybeToList)
-import Control.Lens ((^.))
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (evalState)
 import Control.Monad (liftM3)
-import qualified Control.Monad.State as S (get)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
 
@@ -688,7 +687,8 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
-  buildModule n l ms cs = pair2Lists ms cs (buildModule n l) (buildModule n l)
+  buildModule n l ms cs = pair2Lists (map (putAfter $ setCurrMainFunc False) ms)
+    cs (buildModule n l) (buildModule n l)
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
   moduleDoc m = moduleDoc $ pfst m
@@ -777,7 +777,7 @@ instance Monad CppSrcCode where
 
 instance ProgramSym CppSrcCode where
   type Program CppSrcCode = ProgData
-  prog n = liftList (liftList (progD n)) . map (putAfter $ setCurrMain False)
+  prog n = liftList (liftList (progD n))
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
@@ -1272,9 +1272,10 @@ instance InternalMethod CppSrcCode where
     $ liftA2 mthd (fmap snd s) (liftA5 (cppsMethod n c) t (liftList 
     (paramListDocD . checkParams n) ps) b blockStart blockEnd)
   intFunc m n s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) . 
-    setParameters (map unCPPSC ps) . if m then setCurrMain m . setMain else id) 
-    $ liftA2 mthd (fmap snd s) (liftA5 (cppsFunction n) t (liftList 
-    (paramListDocD . checkParams n) ps) b blockStart blockEnd)
+    setParameters (map unCPPSC ps) . if m then setCurrMainFunc m . 
+    setCurrMain m . setMain else id) $ liftA2 mthd (fmap snd s) 
+    (liftA5 (cppsFunction n) t (liftList (paramListDocD . checkParams n) ps) 
+    b blockStart blockEnd)
   commentedFunc = cppCommentedFunc Source
  
   methodDoc = mthdDoc . unCPPSC
@@ -2033,14 +2034,13 @@ cppCommentedFunc :: (RenderSym repr) => FileType ->
   GS (repr (Method repr))
 cppCommentedFunc ft cmt fn = do
   f <- fn
-  s <- S.get
+  mn <- getCurrMainFunc
   scp <- getScope
   cmnt <- cmt
-  let hm = s ^. hasMain
-      cf = return (methodFromData scp $ commentedItem (blockCommentDoc cmnt) $ 
+  let cf = return (methodFromData scp $ commentedItem (blockCommentDoc cmnt) $ 
         methodDoc f)
-      ret Source = if hm then cf else fn
-      ret Header = if hm then fn else cf
+      ret Source = if mn then cf else fn
+      ret Header = if mn then fn else cf
       ret Combined = error "Combined passed to cppCommentedFunc"
   ret ft
 

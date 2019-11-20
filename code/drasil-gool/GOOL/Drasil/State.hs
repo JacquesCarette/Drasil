@@ -3,14 +3,13 @@
 module GOOL.Drasil.State (
   GS, GOOLState(..), headers, sources, hasMain, mainMod, initialState, 
   putAfter, getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList,
-  passState, passState2Lists, checkGOOLState, addFile, addCombinedHeaderSource, 
-  addHeader, addSource, addProgNameToPaths, setMain, setMainMod, setFilePath, 
-  getFilePath, setModuleName, getModuleName, setCurrMain, getCurrMain, 
-  setParameters, getParameters, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc
+  addFile, addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, 
+  setMain, setMainMod, setFilePath, getFilePath, setModuleName, getModuleName, 
+  setCurrMain, getCurrMain, setParameters, getParameters, setScope, getScope, 
+  setCurrMainFunc, getCurrMainFunc
 ) where
 
-import GOOL.Drasil.Data (FileType(..), ParamData, ScopeTag(..), paramName)
+import GOOL.Drasil.Data (FileType(..), ParamData, ScopeTag(..))
 
 import Control.Lens (makeLenses,over,set,(^.))
 import Control.Monad.State (State, get, put, gets)
@@ -86,25 +85,6 @@ getPutReturnList l sf vf = do
   put $ sf s
   return $ vf v
 
-passState :: GS a -> GS b -> GS b
-passState s v = do
-  _ <- s
-  v
-
-passState2Lists :: [GS a] -> [GS b] -> 
-  GS c -> GS c
-passState2Lists l1 l2 v = do
-  sequence_ l1
-  sequence_ l2
-  v 
-
-checkGOOLState :: (GOOLState -> Bool) -> GS b -> (b -> GS a) 
-  -> (b -> GS a) -> GS a
-checkGOOLState f st ifv elsev = do
-  v <- st
-  s <- get
-  if f s then ifv v else elsev v
-
 addFile :: FileType -> FilePath -> GOOLState -> GOOLState
 addFile Combined = addCombinedHeaderSource
 addFile Source = addSource
@@ -127,8 +107,8 @@ addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
   where f = ((n++"/")++)
 
 setMain :: GOOLState -> GOOLState
-setMain s = over hasMain (\b -> if b then error $ "Multiple main functions defined" ++ show (s ^. headers) ++ show (s ^. sources) ++ show (s ^. hasMain) ++ show (s ^. mainMod) ++ s ^. currFilePath ++ s ^. currModName ++ show (s ^. currMain) ++ show (map paramName $ s ^. currParameters)
-  else not b) s
+setMain = over hasMain (\b -> if b then error "Multiple main functions defined"
+  else not b)
 
 setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = set mainMod (Just n)

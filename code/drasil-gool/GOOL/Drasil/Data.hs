@@ -1,4 +1,4 @@
-module GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
+module GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
   FileType(..), BindData(..), bd, FileData(..), fileD, updateFileMod, 
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), od, ParamData(..), pd, paramName, updateParamDoc, 
@@ -15,11 +15,6 @@ class Pair p where
   pfst :: p x y a -> x a
   psnd :: p x y b -> y b
   pair :: x a -> y a -> p x y a
-
-pairList :: (Pair p) => [x a] -> [y a] -> [p x y a]
-pairList [] _ = []
-pairList _ [] = []
-pairList (x:xs) (y:ys) = pair x y : pairList xs ys
  
 data Terminator = Semi | Empty
 

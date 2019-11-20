@@ -541,14 +541,14 @@ instance MethodSym CSharpCode where
 
 instance InternalMethod CSharpCode where
   intMethod m n _ s p t ps b = getPutReturn (setParameters (map unCSC ps) . 
-    if m then setCurrMain m . setMain else id) $ liftA2 mthd (checkParams n <$> 
-    sequence ps) (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
+    if m then setCurrMain m . setMain else id) $ fmap mthd (liftA5 (methodDocD 
+    n) s p t (liftList (paramListDocD . checkParams n) ps) b)
   intFunc = G.intFunc
   commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem) 
     cmt)
   
   methodDoc = mthdDoc . unCSC
-  methodFromData _ = return . mthd []
+  methodFromData _ = return . mthd
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc

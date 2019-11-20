@@ -540,7 +540,7 @@ instance MethodSym PythonCode where
 
   function = G.function
   mainFunction = getPutReturn (setParameters [] . setCurrMain True . setMain) . 
-    fmap (mthd [])
+    fmap mthd
 
   docFunc = G.docFunc
 
@@ -554,16 +554,15 @@ instance MethodSym PythonCode where
 
 instance InternalMethod PythonCode where
   intMethod m n l _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
-    if m then setCurrMain m . setMain else id) $ liftA2 mthd (checkParams n <$> 
-    sequence ps) (liftA3 (pyMethod n) (self l) (liftList paramListDocD ps) b)
+    if m then setCurrMain m . setMain else id) $ fmap mthd (liftA3 (pyMethod n) (self l) (liftList (paramListDocD . checkParams n) ps) b)
   intFunc m n _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
-    if m then setCurrMain m . setMain else id) $ liftA2 mthd (checkParams n <$> 
-    sequence ps) (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
+    if m then setCurrMain m . setMain else id) $ fmap mthd (liftA2 
+    (pyFunction n) (liftList (paramListDocD . checkParams n) ps) b)
   commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem) 
     cmt)
 
   methodDoc = mthdDoc . unPC
-  methodFromData _ = return . mthd []
+  methodFromData _ = return . mthd
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc

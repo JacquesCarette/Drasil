@@ -546,14 +546,14 @@ instance MethodSym JavaCode where
 
 instance InternalMethod JavaCode where
   intMethod m n _ s p t ps b = getPutReturn (setParameters (map unJC ps) . 
-    if m then setCurrMain m . setMain else id) $ liftA2 mthd (checkParams n <$> 
-    sequence ps) (liftA5 (jMethod n) s p t (liftList paramListDocD ps) b)
+    if m then setCurrMain m . setMain else id) $ fmap mthd (liftA5 (jMethod n) 
+    s p t (liftList (paramListDocD . checkParams n) ps) b)
   intFunc = G.intFunc
   commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem)
     cmt)
   
   methodDoc = mthdDoc . unJC
-  methodFromData _ = return . mthd []
+  methodFromData _ = return . mthd
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc

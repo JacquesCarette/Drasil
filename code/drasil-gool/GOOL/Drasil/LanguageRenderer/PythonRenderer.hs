@@ -65,6 +65,7 @@ import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (evalState)
+import Control.Monad (liftM2)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty)
 
@@ -102,7 +103,7 @@ instance InternalFile PythonCode where
   top _ = return pytop
   bottom = return empty
 
-  fileFromData = G.fileFromData (\fp m -> fmap (fileD fp) m)
+  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
@@ -558,8 +559,8 @@ instance InternalMethod PythonCode where
   intFunc m n _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
     if m then setCurrMain m . setMain else id) $ fmap mthd (liftA2 
     (pyFunction n) (liftList (paramListDocD . checkParams n) ps) b)
-  commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem) 
-    cmt)
+  commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
+    (fmap (fmap commentedItem) cmt)
 
   methodDoc = mthdDoc . unPC
   methodFromData _ = return . mthd

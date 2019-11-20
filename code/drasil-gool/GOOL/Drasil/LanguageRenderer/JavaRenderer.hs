@@ -70,6 +70,7 @@ import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn,
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (evalState)
+import Control.Monad (liftM2)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
   equals, semi, vcat, lbrace, rbrace, render, colon, comma, render)
 
@@ -108,7 +109,7 @@ instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
   
-  fileFromData = G.fileFromData (\fp m -> fmap (fileD fp) m)
+  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -549,8 +550,8 @@ instance InternalMethod JavaCode where
     if m then setCurrMain m . setMain else id) $ fmap mthd (liftA5 (jMethod n) 
     s p t (liftList (paramListDocD . checkParams n) ps) b)
   intFunc = G.intFunc
-  commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem)
-    cmt)
+  commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
+    (fmap (fmap commentedItem) cmt)
   
   methodDoc = mthdDoc . unJC
   methodFromData _ = return . mthd

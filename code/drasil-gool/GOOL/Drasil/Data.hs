@@ -63,8 +63,8 @@ newtype MethodData = MthD {mthdDoc :: Doc}
 mthd :: Doc -> MethodData
 mthd = MthD 
 
-updateMthdDoc :: (Doc -> Doc) -> MethodData -> MethodData
-updateMthdDoc f m = mthd ((f . mthdDoc) m)
+updateMthdDoc :: MethodData -> (Doc -> Doc) -> MethodData
+updateMthdDoc m f = mthd ((f . mthdDoc) m)
 
 data OpData = OD {opPrec :: Int, opDoc :: Doc}
 

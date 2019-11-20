@@ -792,7 +792,7 @@ instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
   
-  fileFromData = G.fileFromData (\fp m -> fmap (fileD fp) m)
+  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -1358,7 +1358,7 @@ instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = return $ text "#endif"
   
-  fileFromData = G.fileFromData (\fp m -> fmap (fileD fp) m)
+  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc

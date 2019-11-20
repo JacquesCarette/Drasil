@@ -305,9 +305,9 @@ docMod :: (RenderSym repr) => String -> [String] -> String ->
   GS (repr (RenderFile repr)) -> GS (repr (RenderFile repr))
 docMod d a dt m = commentedMod m (docComment $ moduleDox d a dt <$> getFilePath)
 
-fileFromData :: (RenderSym repr) => (FilePath -> repr (Module repr) -> 
+fileFromData :: (RenderSym repr) => (repr (Module repr) -> FilePath -> 
   repr (RenderFile repr)) -> FileType -> GS FilePath -> GS (repr (Module repr)) 
   -> GS (repr (RenderFile repr))
-fileFromData f ft fp m = getPutReturnFunc2 fp m (\s fpath mdl -> (if isEmpty 
+fileFromData f ft fp m = getPutReturnFunc2 m fp (\s mdl fpath -> (if isEmpty 
   (moduleDoc mdl) then id else (if s ^. hasMain && isNothing (s ^. mainMod) 
   then setMainMod fpath else id) . addFile ft fpath . setFilePath fpath) s) f

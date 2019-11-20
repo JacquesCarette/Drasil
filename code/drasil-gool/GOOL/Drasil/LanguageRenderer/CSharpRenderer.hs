@@ -69,6 +69,7 @@ import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, setMain,
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (evalState)
+import Control.Monad (liftM2)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   semi, vcat, lbrace, rbrace, colon)
 
@@ -105,7 +106,7 @@ instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
 
-  fileFromData = G.fileFromData (\fp m -> fmap (fileD fp) m)
+  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
@@ -544,8 +545,8 @@ instance InternalMethod CSharpCode where
     if m then setCurrMain m . setMain else id) $ fmap mthd (liftA5 (methodDocD 
     n) s p t (liftList (paramListDocD . checkParams n) ps) b)
   intFunc = G.intFunc
-  commentedFunc cmt = liftA2 (liftA2 updateMthdDoc) (fmap (fmap commentedItem) 
-    cmt)
+  commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
+    (fmap (fmap commentedItem) cmt)
   
   methodDoc = mthdDoc . unCSC
   methodFromData _ = return . mthd

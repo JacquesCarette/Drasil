@@ -46,6 +46,7 @@ import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList, isNothing)
 import Control.Lens ((^.))
 import Control.Applicative (liftA2)
+import Control.Monad (liftM2)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   vcat, semi, equals, isEmpty)
 
@@ -291,9 +292,9 @@ buildModule' :: (RenderSym repr) => Label -> [GS (repr (Method repr))] ->
 buildModule' n ms cs = S.modFromData n getCurrMain (liftList (vibcat . map 
   classDoc) (if null ms then cs else pubClass n Nothing [] ms : cs))
 
-modFromData :: Label -> (Bool -> Doc -> repr (Module repr)) -> GS Bool -> 
+modFromData :: Label -> (Doc -> Bool -> repr (Module repr)) -> GS Bool -> 
   GS Doc -> GS (repr (Module repr))
-modFromData n f m d = putAfter (setModuleName n) (liftA2 f m d)
+modFromData n f m d = putAfter (setModuleName n) (liftM2 f d m)
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
   repr (Block repr) -> GS (repr (Module repr)) -> GS (repr (RenderFile repr))

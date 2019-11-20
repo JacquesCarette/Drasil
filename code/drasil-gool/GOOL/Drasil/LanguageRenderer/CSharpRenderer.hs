@@ -585,7 +585,7 @@ instance ModuleSym CSharpCode where
   
 instance InternalMod CSharpCode where
   moduleDoc = modDoc . unCSC
-  modFromData n = G.modFromData n (\m d -> return $ md n m d)
+  modFromData n = G.modFromData n (\d m -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CSharpCode where

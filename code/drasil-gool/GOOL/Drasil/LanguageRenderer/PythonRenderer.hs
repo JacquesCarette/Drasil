@@ -601,7 +601,7 @@ instance ModuleSym PythonCode where
 
 instance InternalMod PythonCode where
   moduleDoc = modDoc . unPC
-  modFromData n = G.modFromData n (\m d -> return $ md n m d)
+  modFromData n = G.modFromData n (\d m -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym PythonCode where

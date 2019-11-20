@@ -98,7 +98,7 @@ hdrToSrc (CPPHC a) = CPPSC a
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
   type Program (p CppSrcCode CppHdrCode) = ProgData
   prog n mods = do
-    m <- sequence mods
+    m <-  mapM (putAfter $ setCurrMain False) mods
     let fm = map pfst m
         sm = map (hdrToSrc . psnd) m
     p1 <- prog n $ map return sm ++ map return fm
@@ -1317,7 +1317,7 @@ instance ModuleSym CppSrcCode where
 
 instance InternalMod CppSrcCode where
   moduleDoc = modDoc . unCPPSC
-  modFromData n = G.modFromData n (\m d -> return $ md n m d)
+  modFromData n = G.modFromData n (\d m -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CppSrcCode where
@@ -1852,7 +1852,7 @@ instance ModuleSym CppHdrCode where
 
 instance InternalMod CppHdrCode where
   moduleDoc = modDoc . unCPPHC
-  modFromData n = G.modFromData n (\m d -> return $ md n m d)
+  modFromData n = G.modFromData n (\d m -> return $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CppHdrCode where

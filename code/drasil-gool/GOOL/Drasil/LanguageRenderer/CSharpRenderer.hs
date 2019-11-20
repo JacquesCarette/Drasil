@@ -548,6 +548,7 @@ instance InternalMethod CSharpCode where
     cmt)
   
   methodDoc = mthdDoc . unCSC
+  methodFromData _ = return . mthd []
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc

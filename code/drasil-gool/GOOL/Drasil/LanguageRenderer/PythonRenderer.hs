@@ -563,6 +563,7 @@ instance InternalMethod PythonCode where
     cmt)
 
   methodDoc = mthdDoc . unPC
+  methodFromData _ = return . mthd []
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc

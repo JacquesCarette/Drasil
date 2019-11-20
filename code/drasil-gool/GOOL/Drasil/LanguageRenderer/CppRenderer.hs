@@ -66,15 +66,14 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst,
   mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
   checkParams)
 import GOOL.Drasil.State (GS, hasMain, initialState, putAfter, getPutReturn, 
-  checkGOOLState, setMain, setCurrMain, getCurrMain, setParameters, 
-  getParameters, setScope, getScope)
+  setMain, setCurrMain, getCurrMain, setParameters, setScope, getScope)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
-import qualified Prelude as P (const)
 import Data.Maybe (maybeToList)
 import Control.Lens ((^.))
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (evalState)
+import qualified Control.Monad.State as S (get)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
 
@@ -652,6 +651,7 @@ instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
   commentedFunc cmt fn = pair2 cmt fn commentedFunc commentedFunc
     
   methodDoc m = methodDoc $ pfst m
+  methodFromData s d = pair (methodFromData s d) (methodFromData s d)
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
@@ -1268,17 +1268,16 @@ instance MethodSym CppSrcCode where
 instance InternalMethod CppSrcCode where
   intMethod m n c s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) .
     setParameters (map unCPPSC ps) . if m then setCurrMain m . setMain else id) 
-    $ liftA3 mthd (fmap snd s) (checkParams n <$> sequence ps) (liftA5 
-    (cppsMethod n c) t (liftList paramListDocD ps) b blockStart blockEnd)
+    $ liftA2 mthd (fmap snd s) (liftA5 (cppsMethod n c) t (liftList 
+    (paramListDocD . checkParams n) ps) b blockStart blockEnd)
   intFunc m n s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) . 
     setParameters (map unCPPSC ps) . if m then setCurrMain m . setMain else id) 
-    $ liftA3 mthd (fmap snd s) (checkParams n <$> sequence ps) (liftA5 
-    (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
-  commentedFunc cmt fn = checkGOOLState (^. hasMain) fn (\f -> liftA3
-    (\scp pms -> fmap (mthd scp pms)) getScope getParameters 
-    (fmap (fmap (`commentedItem` methodDoc f)) cmt)) (P.const fn)
+    $ liftA2 mthd (fmap snd s) (liftA5 (cppsFunction n) t (liftList 
+    (paramListDocD . checkParams n) ps) b blockStart blockEnd)
+  commentedFunc = cppCommentedFunc Source
  
   methodDoc = mthdDoc . unCPPSC
+  methodFromData s d = return $ mthd s d
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1776,14 +1775,14 @@ instance MethodSym CppHdrCode where
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor n = G.constructor n n
-  destructor n = lift1List (\m vs -> return $ mthd Pub [] 
+  destructor n = lift1List (\m vs -> return $ mthd Pub 
     (emptyIfEmpty (vcat (map (statementDoc . fmap destructSts) vs)) 
     (methodDoc m))) (pubMethod ('~':n) n void [] (return empty) :: GS (CppHdrCode (Method CppHdrCode)))
 
   docMain = mainFunction
 
   function = G.function
-  mainFunction _ = getPutReturn (setScope Pub) $ return $ mthd Pub [] empty
+  mainFunction _ = getPutReturn (setScope Pub) $ return $ mthd Pub empty
 
   docFunc = G.docFunc
 
@@ -1798,14 +1797,13 @@ instance MethodSym CppHdrCode where
 instance InternalMethod CppHdrCode where
   intMethod m n _ s _ t ps _ = getPutReturn (setScope (snd $ unCPPHC s) . 
     setParameters (map unCPPHC ps) . if m then setCurrMain m . setMain else id) 
-    $ liftA3 mthd (fmap snd s) (checkParams n <$> sequence ps) (liftA3 
-    (cpphMethod n) t (liftList paramListDocD ps) endStatement)
+    $ liftA2 mthd (fmap snd s) (liftA3 (cpphMethod n) t 
+    (liftList (paramListDocD . checkParams n) ps) endStatement)
   intFunc = G.intFunc
-  commentedFunc cmt fn = checkGOOLState (^. hasMain) fn (P.const fn) $ \f -> 
-    liftA3 (\scp pms -> fmap (mthd scp pms)) getScope getParameters 
-    (fmap (fmap (`commentedItem` methodDoc f)) cmt)
+  commentedFunc = cppCommentedFunc Header
 
   methodDoc = mthdDoc . unCPPHC
+  methodFromData s d = return $ mthd s d
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
@@ -1879,10 +1877,9 @@ getParam v = mkParam (getParamFunc ((cType . varType) v)) v
         getParamFunc (Object _) = cppPointerParamDoc
         getParamFunc _ = paramDocD
  
-data MethodData = MthD {getMthdScp :: ScopeTag, mthdParams :: [ParamData], 
-  mthdDoc :: Doc}
+data MethodData = MthD {getMthdScp :: ScopeTag, mthdDoc :: Doc}
 
-mthd :: ScopeTag -> [ParamData] -> Doc -> MethodData
+mthd :: ScopeTag -> Doc -> MethodData
 mthd = MthD 
 
 -- convenience
@@ -2029,6 +2026,22 @@ cppsFunction n t ps b bStart bEnd = vcat [
 cpphMethod :: Label -> TypeData -> Doc -> Doc -> Doc
 cpphMethod n t ps end = (if isDtor n then empty else typeDoc t) <+> text n <> 
   parens ps <> end
+
+cppCommentedFunc :: (RenderSym repr) => FileType -> 
+  GS (repr (BlockComment repr)) -> GS (repr (Method repr)) -> 
+  GS (repr (Method repr))
+cppCommentedFunc ft cmt fn = do
+  f <- fn
+  s <- S.get
+  scp <- getScope
+  cmnt <- cmt
+  let hm = s ^. hasMain
+      cf = return (methodFromData scp $ commentedItem (blockCommentDoc cmnt) $ 
+        methodDoc f)
+      ret Source = if hm then cf else fn
+      ret Header = if hm then fn else cf
+      ret Combined = error "Combined passed to cppCommentedFunc"
+  ret ft
 
 cppsStateVarDef :: Label -> Doc -> BindData -> VarData -> ValData -> Doc -> Doc
 cppsStateVarDef n cns p vr vl end = if bind p == Static then cns <+> typeDoc 

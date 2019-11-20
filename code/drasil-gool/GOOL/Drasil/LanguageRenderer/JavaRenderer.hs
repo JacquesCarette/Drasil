@@ -553,6 +553,7 @@ instance InternalMethod JavaCode where
     cmt)
   
   methodDoc = mthdDoc . unJC
+  methodFromData _ = return . mthd []
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc

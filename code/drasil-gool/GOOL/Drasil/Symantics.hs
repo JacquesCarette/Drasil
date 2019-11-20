@@ -18,7 +18,7 @@ module GOOL.Drasil.Symantics (
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
-import GOOL.Drasil.Data (Binding, Terminator, FileType)
+import GOOL.Drasil.Data (Binding, Terminator, FileType, ScopeTag)
 import GOOL.Drasil.State (GS)
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -624,10 +624,11 @@ class (MethodTypeSym repr, BlockCommentSym repr) =>
   intFunc      :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
     -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     GS (repr (Method repr))
-  commentedFunc :: GS (repr (BlockComment repr)) -> 
-    GS (repr (Method repr)) -> GS (repr (Method repr))
+  commentedFunc :: GS (repr (BlockComment repr)) -> GS (repr (Method repr)) -> 
+    GS (repr (Method repr))
 
   methodDoc :: repr (Method repr) -> Doc
+  methodFromData :: ScopeTag -> Doc -> repr (Method repr)
 
 class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr,
   InternalStateVar repr) => StateVarSym repr where

@@ -736,10 +736,10 @@ pair1List :: (Pair p) => [GS (p CppSrcCode CppHdrCode a)] ->
   ([GS (CppHdrCode a)] -> GS (CppHdrCode b)) -> GS (p CppSrcCode CppHdrCode b)
 pair1List stv srcf hdrf = do
   v <- sequence stv
-  let fv = map (return . pfst) v
-      sv = map (return . psnd) v
-  p1 <- srcf fv
-  p2 <- hdrf sv
+  let fl = map (return . pfst) v
+      sl = map (return . psnd) v
+  p1 <- srcf fl
+  p2 <- hdrf sl
   return $ pair p1 p2
 
 pair2Lists :: (Pair p) => [GS (p CppSrcCode CppHdrCode a)] -> 
@@ -750,12 +750,12 @@ pair2Lists :: (Pair p) => [GS (p CppSrcCode CppHdrCode a)] ->
 pair2Lists stv1 stv2 srcf hdrf = do
   v1 <- sequence stv1
   v2 <- sequence stv2
-  let fv1 = map (return . pfst) v1
-      sv1 = map (return . psnd) v1
-      fv2 = map (return . pfst) v2
-      sv2 = map (return . psnd) v2
-  p1 <- srcf fv1 fv2
-  p2 <- hdrf sv1 sv2
+  let fl1 = map (return . pfst) v1
+      sl1 = map (return . psnd) v1
+      fl2 = map (return . pfst) v2
+      sl2 = map (return . psnd) v2
+  p1 <- srcf fl1 fl2
+  p2 <- hdrf sl1 sl2
   return $ pair p1 p2
 
 -----------------

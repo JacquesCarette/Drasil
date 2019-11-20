@@ -56,8 +56,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftList, 
-  lift1List, lift2Lists, checkParams)
+import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, onStateValue, liftA4, liftA5, 
+  liftA6, liftList, lift1List, lift2Lists, checkParams)
 import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, setMain, 
   setCurrMain, setParameters)
 
@@ -593,7 +593,7 @@ instance ClassSym PythonCode where
 
 instance InternalClass PythonCode where
   classDoc = unPC
-  classFromData = fmap return
+  classFromData = onStateValue toCode
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData

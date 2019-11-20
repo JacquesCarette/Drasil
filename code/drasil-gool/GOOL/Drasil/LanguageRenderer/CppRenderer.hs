@@ -63,8 +63,8 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
-  mapPairSnd, liftA4, liftA5, liftA8, liftList, lift2Lists, lift1List, 
-  checkParams)
+  mapPairSnd, toCode, onStateValue, liftA4, liftA5, liftA8, liftList, 
+  lift2Lists, lift1List, checkParams)
 import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, setMain, 
   setCurrMain, getCurrMain, setParameters, setScope, getScope, setCurrMainFunc, 
   getCurrMainFunc)
@@ -1310,7 +1310,7 @@ instance ClassSym CppSrcCode where
 
 instance InternalClass CppSrcCode where
   classDoc = unCPPSC
-  classFromData = fmap return
+  classFromData = onStateValue toCode
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
@@ -1845,7 +1845,7 @@ instance ClassSym CppHdrCode where
 
 instance InternalClass CppHdrCode where
   classDoc = unCPPHC
-  classFromData = fmap return
+  classFromData = onStateValue toCode
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData

@@ -62,8 +62,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
-  lift1List, checkParams)
+import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, onStateValue, liftA4, 
+  liftA5, liftList, lift1List, checkParams)
 import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, 
   getPutReturnList, addProgNameToPaths, setMain, setCurrMain, setParameters)
 
@@ -582,7 +582,7 @@ instance ClassSym JavaCode where
 
 instance InternalClass JavaCode where
   classDoc = unJC
-  classFromData = fmap return
+  classFromData = onStateValue toCode
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData

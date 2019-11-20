@@ -62,7 +62,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
-import GOOL.Drasil.Helpers (liftA4, liftA5, liftList, lift1List, checkParams)
+import GOOL.Drasil.Helpers (toCode, onStateValue, liftA4, liftA5, liftList, 
+  lift1List, checkParams)
 import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, setMain, 
   setCurrMain, setParameters)
 
@@ -577,7 +578,7 @@ instance ClassSym CSharpCode where
 
 instance InternalClass CSharpCode where
   classDoc = unCSC
-  classFromData = fmap return
+  classFromData = onStateValue toCode
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData

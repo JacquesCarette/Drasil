@@ -103,7 +103,7 @@ instance RenderSym JavaCode where
 
   docMod = G.docMod
 
-  commentedMod = liftA2 (liftA2 commentedModD)
+  commentedMod cmt m = liftM2 (liftA2 commentedModD) m cmt
 
 instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)

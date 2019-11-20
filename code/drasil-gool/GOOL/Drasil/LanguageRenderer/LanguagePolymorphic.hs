@@ -303,7 +303,7 @@ fileDoc ft ext topb botb m = S.fileFromData ft (fmap (addExt ext) getModuleName)
 
 docMod :: (RenderSym repr) => String -> [String] -> String -> 
   GS (repr (RenderFile repr)) -> GS (repr (RenderFile repr))
-docMod d a dt m = commentedMod m (docComment $ moduleDox d a dt <$> getFilePath)
+docMod d a dt = commentedMod (docComment $ moduleDox d a dt <$> getFilePath)
 
 fileFromData :: (RenderSym repr) => (repr (Module repr) -> FilePath -> 
   repr (RenderFile repr)) -> FileType -> GS FilePath -> GS (repr (Module repr)) 

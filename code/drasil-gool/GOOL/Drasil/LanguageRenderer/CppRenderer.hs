@@ -73,6 +73,7 @@ import Data.Maybe (maybeToList)
 import Control.Lens ((^.))
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (evalState)
+import Control.Monad (liftM3)
 import qualified Control.Monad.State as S (get)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
@@ -109,7 +110,7 @@ instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
 
   docMod d a dt m = pair1 m (docMod d a dt) (docMod d a dt)
 
-  commentedMod m cmt = pair2 m cmt commentedMod commentedMod
+  commentedMod cmt m = pair2 cmt m commentedMod commentedMod
 
 instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
@@ -785,8 +786,8 @@ instance RenderSym CppSrcCode where
 
   docMod = G.docMod
 
-  commentedMod = liftA3 (\mn m cmt-> if mn then liftA2 commentedModD m cmt else 
-    m) getCurrMain
+  commentedMod cmnt mod = liftM3 (\m cmt mn -> if mn then liftA2 commentedModD 
+    m cmt else m) mod cmnt getCurrMain
 
 instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
@@ -1351,8 +1352,8 @@ instance RenderSym CppHdrCode where
   
   docMod = G.docMod
 
-  commentedMod = liftA3 (\mn m cmt -> if mn then m else liftA2 
-    commentedModD m cmt) getCurrMain
+  commentedMod cmnt mod = liftM3 (\m cmt mn -> if mn then m else liftA2 
+    commentedModD m cmt) mod cmnt getCurrMain
 
 instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement

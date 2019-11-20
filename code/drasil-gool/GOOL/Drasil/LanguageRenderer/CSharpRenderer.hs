@@ -100,7 +100,7 @@ instance RenderSym CSharpCode where
 
   docMod = G.docMod
 
-  commentedMod = liftA2 (liftA2 commentedModD)
+  commentedMod cmt m = liftM2 (liftA2 commentedModD) m cmt
 
 instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")

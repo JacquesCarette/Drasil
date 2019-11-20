@@ -41,9 +41,8 @@ class (ModuleSym repr, InternalFile repr) =>
     GS (repr (RenderFile repr)) -> 
     GS (repr (RenderFile repr))
 
-  commentedMod :: GS (repr (RenderFile repr)) -> 
-    GS (repr (BlockComment repr)) -> 
-    GS (repr (RenderFile repr))
+  commentedMod :: GS (repr (BlockComment repr)) -> GS (repr (RenderFile repr)) 
+    -> GS (repr (RenderFile repr))
 
 class InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)

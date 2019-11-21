@@ -8,7 +8,7 @@ import GOOL.Drasil (
   StatementSym(..), ControlStatementSym(..),  VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), FunctionSym(..), SelectorFunction(..), MethodSym(..), 
-  ModuleSym(..), GS)
+  ModuleSym(..), GS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 
@@ -20,7 +20,7 @@ helloWorld = prog "HelloWorld" [docMod description
 description :: String
 description = "Tests various GOOL functions. It should run without errors."
 
-helloWorldMain :: (RenderSym repr) => GS (repr (Method repr))
+helloWorldMain :: (RenderSym repr) => MS (repr (Method repr))
 helloWorldMain = mainFunction (body [ helloInitVariables, 
     helloListSlice,
     block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),

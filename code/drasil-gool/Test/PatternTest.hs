@@ -4,7 +4,7 @@ import GOOL.Drasil (
   ProgramSym(..), RenderSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), 
   StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..),
-  ValueExpression(..), FunctionSym(..), MethodSym(..), ModuleSym(..), GS)
+  ValueExpression(..), FunctionSym(..), MethodSym(..), ModuleSym(..), GS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer, observerName, printNum, x)
 
@@ -35,7 +35,7 @@ newObserver = extNewObj observerName observerType []
 patternTest :: (ProgramSym repr) => GS (repr (Program repr))
 patternTest = prog progName [fileDoc (buildModule progName [observerName] [patternTestMainMethod] []), observer]
 
-patternTestMainMethod :: (MethodSym repr) => GS (repr (Method repr))
+patternTestMainMethod :: (MethodSym repr) => MS (repr (Method repr))
 patternTestMainMethod = mainFunction (body [block [
   varDec n,
   initState fsmName offState, 

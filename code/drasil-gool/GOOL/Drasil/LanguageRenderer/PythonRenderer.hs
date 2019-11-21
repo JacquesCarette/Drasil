@@ -58,11 +58,13 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, onStateValue, liftA4, liftA5, 
   liftA6, liftList, lift1List, lift2Lists, checkParams)
-import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, setMain, 
-  setCurrMain, setParameters)
+import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
+  setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
+import Control.Lens (over)
+import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (evalState)
 import Control.Monad (liftM2)
@@ -540,8 +542,8 @@ instance MethodSym PythonCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction = getPutReturn (setParameters [] . setCurrMain True . setMain) . 
-    fmap mthd
+  mainFunction = getPutReturn (setParameters [] . over lensMStoGS (setCurrMain 
+    True) . setMain) . fmap mthd
 
   docFunc = G.docFunc
 
@@ -555,12 +557,13 @@ instance MethodSym PythonCode where
 
 instance InternalMethod PythonCode where
   intMethod m n l _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
-    if m then setCurrMain m . setMain else id) $ fmap mthd (liftA3 (pyMethod n) (self l) (liftList (paramListDocD . checkParams n) ps) b)
+    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ fmap mthd 
+    (liftA3 (pyMethod n) (self l) (liftList (paramListDocD . checkParams n) ps) b)
   intFunc m n _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
-    if m then setCurrMain m . setMain else id) $ fmap mthd (liftA2 
-    (pyFunction n) (liftList (paramListDocD . checkParams n) ps) b)
+    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ fmap mthd 
+    (liftA2 (pyFunction n) (liftList (paramListDocD . checkParams n) ps) b)
   commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
-    (fmap (fmap commentedItem) cmt)
+    (fmap (fmap commentedItem) (zoom lensMStoGS cmt))
 
   methodDoc = mthdDoc . unPC
   methodFromData _ = return . mthd
@@ -756,11 +759,11 @@ pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid .
 pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) 
     -> PythonCode (Type PythonCode) -> [PythonCode (Parameter PythonCode)] -> 
     PythonCode (Body PythonCode) -> 
-    GS (PythonCode (Method PythonCode)))
+    MS (PythonCode (Method PythonCode)))
   -> PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) -> 
   [PythonCode (Variable PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
   [PythonCode (Variable PythonCode)] -> PythonCode (Body PythonCode) -> 
-  GS (PythonCode (Method PythonCode))
+  MS (PythonCode (Method PythonCode))
 pyInOut f s p ins [] [] b = f s p void (map param ins) b
 pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins) 
   (if null rets then b else liftA3 surroundBody (multi $ map varDec outs) b 
@@ -770,11 +773,11 @@ pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins)
 pyDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
     -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
     [repr (Variable repr)] -> repr (Body repr) -> 
-    GS (repr (Method repr)))
+    MS (repr (Method repr)))
   -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
   [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
   [(String, repr (Variable repr))] -> repr (Body repr) -> 
-  GS (repr (Method repr))
+  MS (repr (Method repr))
 pyDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
   (map fst $ bRets ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)
   where bRets = filter (not . isObject . getType . variableType . snd) bs

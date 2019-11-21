@@ -69,9 +69,10 @@ import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod,
   ValData(..), vd, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
   emptyIfEmpty, emptyIfNull, getInnerType, getNestDegree, convType)
-import GOOL.Drasil.State (GS, getParameters)
+import GOOL.Drasil.State (MS, lensGStoMS, getParameters)
 
 import Control.Applicative ((<|>))
+import Control.Lens.Zoom (zoom)
 import Data.List (intersperse, last)
 import Data.Bifunctor (first)
 import Data.Map as Map (lookup, fromList)
@@ -1133,10 +1134,10 @@ commentedModD :: FileData -> Doc -> FileData
 commentedModD m cmt = updateFileMod (updateModDoc (commentedItem cmt) (fileMod m)) m
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
-  GS (repr (Method repr)) -> GS (repr (Method repr))
+  MS (repr (Method repr)) -> MS (repr (Method repr))
 docFuncRepr desc pComms rComms = commentedFunc (docComment $ fmap 
   (\ps -> functionDox desc (zip (map paramName ps) pComms) rComms) 
-  getParameters)
+  (zoom lensGStoMS getParameters))
 
 -- Helper Functions --
 

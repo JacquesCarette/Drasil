@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TypeFamilies, Rank2Types #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE PostfixOperators #-}
 
@@ -65,14 +65,16 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, toCode, onStateValue, liftA4, liftA5, liftA8, liftList, 
   lift2Lists, lift1List, checkParams)
-import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, setMain, 
-  setCurrMain, getCurrMain, setParameters, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc)
+import GOOL.Drasil.State (GS, MS, lensGStoMS, lensMStoGS, initialState, 
+  putAfter, getPutReturn, setMain, setCurrMain, getCurrMain, setParameters, 
+  setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Data.Maybe (maybeToList)
+import Control.Lens (Lens', over)
+import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative, liftA2, liftA3)
-import Control.Monad.State (evalState)
+import Control.Monad.State (State, evalState)
 import Control.Monad (liftM3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
@@ -608,7 +610,7 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     (pfst b)) (pubMethod n c (psnd t) (map psnd ps) (psnd b))
   constructor n ps b = liftA2 pair (constructor n (map pfst ps) (pfst b))
     (constructor n (map psnd ps) (psnd b))
-  destructor n vars = pair1List vars (destructor n) (destructor n)
+  destructor n vars = pair1List vars lensMStoGS (destructor n) (destructor n)
 
   docMain b = liftA2 pair (docMain $ pfst b) (docMain $ psnd b)
 
@@ -648,7 +650,8 @@ instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
   intFunc m n s p t ps b = liftA2 pair (intFunc m n (pfst s) (pfst p) (pfst t) 
     (map pfst ps) (pfst b)) (intFunc m n (psnd s) (psnd p) (psnd t) (map psnd 
     ps) (psnd b))
-  commentedFunc cmt fn = pair2 cmt fn commentedFunc commentedFunc
+  commentedFunc cmt fn = pair2 (zoom lensMStoGS cmt) fn commentedFunc 
+    commentedFunc
     
   methodDoc m = methodDoc $ pfst m
   methodFromData s d = pair (methodFromData s d) (methodFromData s d)
@@ -671,11 +674,13 @@ instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   type Class (p CppSrcCode CppHdrCode) = Doc
-  buildClass n p s vs fs = pair2Lists vs fs (buildClass n p (pfst s)) 
-    (buildClass n p (psnd s))
+  buildClass n p s vs fs = pair2Lists vs (map (zoom lensGStoMS) fs) 
+    (buildClass n p (pfst s)) (buildClass n p (psnd s))
   enum l ls s = liftA2 pair (enum l ls $ pfst s) (enum l ls $ psnd s)
-  privClass n p vs fs = pair2Lists vs fs (privClass n p) (privClass n p)
-  pubClass n p vs fs = pair2Lists vs fs (pubClass n p) (pubClass n p)
+  privClass n p vs fs = pair2Lists vs (map (zoom lensGStoMS) fs) 
+    (privClass n p) (privClass n p)
+  pubClass n p vs fs = pair2Lists vs (map (zoom lensGStoMS) fs) 
+    (pubClass n p) (pubClass n p)
 
   docClass d c = pair1 c (docClass d) (docClass d)
 
@@ -687,8 +692,8 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
-  buildModule n l ms cs = pair2Lists (map (putAfter $ setCurrMainFunc False) ms)
-    cs (buildModule n l) (buildModule n l)
+  buildModule n l ms cs = pair2Lists (map (zoom lensGStoMS . putAfter 
+    (setCurrMainFunc False)) ms) cs (buildModule n l) (buildModule n l)
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
   moduleDoc m = moduleDoc $ pfst m
@@ -704,9 +709,10 @@ instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
 
 -- Helpers for pair instance
 
-pair1 :: (Pair p) => GS (p CppSrcCode CppHdrCode a) -> 
-  (GS (CppSrcCode a) -> GS (CppSrcCode b)) -> 
-  (GS (CppHdrCode a) -> GS (CppHdrCode b)) -> GS (p CppSrcCode CppHdrCode b)
+pair1 :: (Pair p) => State s (p CppSrcCode CppHdrCode a) -> 
+  (State r (CppSrcCode a) -> State s (CppSrcCode b)) -> 
+  (State r (CppHdrCode a) -> State s (CppHdrCode b)) -> 
+  State s (p CppSrcCode CppHdrCode b)
 pair1 stv srcf hdrf = do
   v <- stv
   let fp = return $ pfst v
@@ -715,11 +721,11 @@ pair1 stv srcf hdrf = do
   p2 <- hdrf sp
   return $ pair p1 p2
 
-pair2 :: (Pair p) => GS (p CppSrcCode CppHdrCode a) -> 
-  GS (p CppSrcCode CppHdrCode b) -> 
-  (GS (CppSrcCode a) -> GS (CppSrcCode b) -> GS (CppSrcCode c)) -> 
-  (GS (CppHdrCode a) -> GS (CppHdrCode b) -> GS (CppHdrCode c)) -> 
-  GS (p CppSrcCode CppHdrCode c)
+pair2 :: (Pair p) => State t (p CppSrcCode CppHdrCode a) -> 
+  State t (p CppSrcCode CppHdrCode b) -> 
+  (State r (CppSrcCode a) -> State s (CppSrcCode b) -> State t (CppSrcCode c)) 
+  -> (State r (CppHdrCode a) -> State s (CppHdrCode b) -> 
+  State t (CppHdrCode c)) -> State t (p CppSrcCode CppHdrCode c)
 pair2 stv1 stv2 srcf hdrf = do
   v1 <- stv1
   v2 <- stv2
@@ -731,22 +737,23 @@ pair2 stv1 stv2 srcf hdrf = do
   p2 <- hdrf sv1 sv2
   return $ pair p1 p2
 
-pair1List :: (Pair p) => [GS (p CppSrcCode CppHdrCode a)] -> 
-  ([GS (CppSrcCode a)] -> GS (CppSrcCode b)) -> 
-  ([GS (CppHdrCode a)] -> GS (CppHdrCode b)) -> GS (p CppSrcCode CppHdrCode b)
-pair1List stv srcf hdrf = do
-  v <- sequence stv
+pair1List :: (Pair p) => [State s (p CppSrcCode CppHdrCode a)] -> Lens' r s -> 
+  ([State s (CppSrcCode a)] -> State r (CppSrcCode b)) -> 
+  ([State s (CppHdrCode a)] -> State r (CppHdrCode b)) -> 
+  State r (p CppSrcCode CppHdrCode b)
+pair1List stv l srcf hdrf = do
+  v <- mapM (zoom l) stv
   let fl = map (return . pfst) v
       sl = map (return . psnd) v
   p1 <- srcf fl
   p2 <- hdrf sl
   return $ pair p1 p2
 
-pair2Lists :: (Pair p) => [GS (p CppSrcCode CppHdrCode a)] -> 
-  [GS (p CppSrcCode CppHdrCode b)] -> 
-  ([GS (CppSrcCode a)] -> [GS (CppSrcCode b)] -> GS (CppSrcCode c)) -> 
-  ([GS (CppHdrCode a)] -> [GS (CppHdrCode b)] -> GS (CppHdrCode c)) -> 
-  GS (p CppSrcCode CppHdrCode c)
+pair2Lists :: (Pair p) => [State t (p CppSrcCode CppHdrCode a)] -> 
+  [State t (p CppSrcCode CppHdrCode b)] -> ([State r (CppSrcCode a)] -> 
+  [State s (CppSrcCode b)] -> State t (CppSrcCode c)) -> 
+  ([State r (CppHdrCode a)] -> [State s (CppHdrCode b)] -> 
+  State t (CppHdrCode c)) -> State t (p CppSrcCode CppHdrCode c)
 pair2Lists stv1 stv2 srcf hdrf = do
   v1 <- sequence stv1
   v2 <- sequence stv2
@@ -1268,12 +1275,12 @@ instance MethodSym CppSrcCode where
 
 instance InternalMethod CppSrcCode where
   intMethod m n c s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) .
-    setParameters (map unCPPSC ps) . if m then setCurrMain m . setMain else id) 
-    $ liftA2 mthd (fmap snd s) (liftA5 (cppsMethod n c) t (liftList 
-    (paramListDocD . checkParams n) ps) b blockStart blockEnd)
+    setParameters (map unCPPSC ps) . if m then over lensMStoGS (setCurrMain m) 
+    . setMain else id) $ liftA2 mthd (fmap snd s) (liftA5 (cppsMethod n c) t 
+    (liftList (paramListDocD . checkParams n) ps) b blockStart blockEnd)
   intFunc m n s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) . 
-    setParameters (map unCPPSC ps) . if m then setCurrMainFunc m . 
-    setCurrMain m . setMain else id) $ liftA2 mthd (fmap snd s) 
+    setParameters (map unCPPSC ps) . if m then setCurrMainFunc m . over
+    lensMStoGS (setCurrMain m) . setMain else id) $ liftA2 mthd (fmap snd s) 
     (liftA5 (cppsFunction n) t (liftList (paramListDocD . checkParams n) ps) 
     b blockStart blockEnd)
   commentedFunc = cppCommentedFunc Source
@@ -1299,7 +1306,7 @@ instance InternalStateVar CppSrcCode where
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
   buildClass n _ _ vs fs = lift2Lists (lift2Lists cppsClass) vs
-    (fs ++ [destructor n vs])
+    (map (zoom lensGStoMS) $ fs ++ [destructor n vs])
   enum _ _ _ = return $ return empty
   privClass = G.privClass
   pubClass = G.pubClass
@@ -1777,9 +1784,9 @@ instance MethodSym CppHdrCode where
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor n = G.constructor n n
-  destructor n = lift1List (\m vs -> return $ mthd Pub 
+  destructor n vars = lift1List (\m vs -> return $ mthd Pub 
     (emptyIfEmpty (vcat (map (statementDoc . fmap destructSts) vs)) 
-    (methodDoc m))) (pubMethod ('~':n) n void [] (return empty) :: GS (CppHdrCode (Method CppHdrCode)))
+    (methodDoc m))) (pubMethod ('~':n) n void [] (return empty) :: MS (CppHdrCode (Method CppHdrCode))) (map (zoom lensMStoGS) vars)
 
   docMain = mainFunction
 
@@ -1798,8 +1805,8 @@ instance MethodSym CppHdrCode where
 
 instance InternalMethod CppHdrCode where
   intMethod m n _ s _ t ps _ = getPutReturn (setScope (snd $ unCPPHC s) . 
-    setParameters (map unCPPHC ps) . if m then setCurrMain m . setMain else id) 
-    $ liftA2 mthd (fmap snd s) (liftA3 (cpphMethod n) t 
+    setParameters (map unCPPHC ps) . if m then over lensMStoGS (setCurrMain m) 
+    . setMain else id) $ liftA2 mthd (fmap snd s) (liftA3 (cpphMethod n) t 
     (liftList (paramListDocD . checkParams n) ps) endStatement)
   intFunc = G.intFunc
   commentedFunc = cppCommentedFunc Header
@@ -1833,7 +1840,7 @@ instance ClassSym CppHdrCode where
     endStatement) vs fs
     where parent = case p of Nothing -> return empty
                              Just pn -> inherit pn
-          fs = mths ++ [destructor n vs]
+          fs = map (zoom lensGStoMS) $ mths ++ [destructor n vs]
   enum n es _ = return $ liftA4 (cpphEnum n) (return $ enumElementsDocD es 
     enumsEqualInts) blockStart blockEnd endStatement
   privClass = G.privClass
@@ -2030,13 +2037,13 @@ cpphMethod n t ps end = (if isDtor n then empty else typeDoc t) <+> text n <>
   parens ps <> end
 
 cppCommentedFunc :: (RenderSym repr) => FileType -> 
-  GS (repr (BlockComment repr)) -> GS (repr (Method repr)) -> 
-  GS (repr (Method repr))
+  GS (repr (BlockComment repr)) -> MS (repr (Method repr)) -> 
+  MS (repr (Method repr))
 cppCommentedFunc ft cmt fn = do
   f <- fn
   mn <- getCurrMainFunc
   scp <- getScope
-  cmnt <- cmt
+  cmnt <- zoom lensMStoGS cmt
   let cf = return (methodFromData scp $ commentedItem (blockCommentDoc cmnt) $ 
         methodDoc f)
       ret Source = if mn then cf else fn
@@ -2098,11 +2105,11 @@ cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins
 cppsInOut :: (CppSrcCode (Scope CppSrcCode) -> 
     CppSrcCode (Permanence CppSrcCode) -> CppSrcCode (Type CppSrcCode) -> 
     [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
-    GS (CppSrcCode (Method CppSrcCode)))
+    MS (CppSrcCode (Method CppSrcCode)))
   -> CppSrcCode (Scope CppSrcCode) -> CppSrcCode (Permanence CppSrcCode) -> 
   [CppSrcCode (Variable CppSrcCode)] -> [CppSrcCode (Variable CppSrcCode)] -> 
   [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
-  GS (CppSrcCode (Method CppSrcCode))
+  MS (CppSrcCode (Method CppSrcCode))
 cppsInOut f s p ins [v] [] b = f s p (variableType v) (map (fmap getParam) ins) 
   (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
 cppsInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
@@ -2115,11 +2122,11 @@ cppsInOut f s p ins outs both b = f s p void (map pointerParam both
 cpphInOut :: (CppHdrCode (Scope CppHdrCode) -> 
     CppHdrCode (Permanence CppHdrCode) -> CppHdrCode (Type CppHdrCode) -> 
     [CppHdrCode (Parameter CppHdrCode)] -> CppHdrCode (Body CppHdrCode) -> 
-    GS (CppHdrCode (Method CppHdrCode))) 
+    MS (CppHdrCode (Method CppHdrCode))) 
   -> CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Permanence CppHdrCode) -> 
   [CppHdrCode (Variable CppHdrCode)] -> [CppHdrCode (Variable CppHdrCode)] -> 
   [CppHdrCode (Variable CppHdrCode)] -> CppHdrCode (Body CppHdrCode) -> 
-  GS (CppHdrCode (Method CppHdrCode))
+  MS (CppHdrCode (Method CppHdrCode))
 cpphInOut f s p ins [v] [] b = f s p (variableType v) (map (fmap getParam) ins) 
   b
 cpphInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 

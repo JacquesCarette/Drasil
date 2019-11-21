@@ -69,7 +69,6 @@ import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn,
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens (over)
-import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (evalState)
 import Control.Monad (liftM2)
@@ -549,7 +548,7 @@ instance InternalMethod CSharpCode where
     (liftA5 (methodDocD n) s p t (liftList (paramListDocD . checkParams n) ps) b)
   intFunc = G.intFunc
   commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
-    (fmap (fmap commentedItem) (zoom lensMStoGS cmt))
+    (fmap (fmap commentedItem) cmt)
   
   methodDoc = mthdDoc . unCSC
   methodFromData _ = return . mthd

@@ -64,7 +64,6 @@ import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn,
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens (over)
-import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (evalState)
 import Control.Monad (liftM2)
@@ -563,7 +562,7 @@ instance InternalMethod PythonCode where
     if m then over lensMStoGS (setCurrMain m) . setMain else id) $ fmap mthd 
     (liftA2 (pyFunction n) (liftList (paramListDocD . checkParams n) ps) b)
   commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
-    (fmap (fmap commentedItem) (zoom lensMStoGS cmt))
+    (fmap (fmap commentedItem) cmt)
 
   methodDoc = mthdDoc . unPC
   methodFromData _ = return . mthd

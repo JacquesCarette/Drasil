@@ -20,6 +20,8 @@ module GOOL.Drasil.Symantics (
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.Data (Binding, Terminator, FileType, ScopeTag)
 import GOOL.Drasil.State (GS, MS)
+
+import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
@@ -623,7 +625,7 @@ class (MethodTypeSym repr, BlockCommentSym repr) =>
   intFunc      :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
     -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     MS (repr (Method repr))
-  commentedFunc :: GS (repr (BlockComment repr)) -> MS (repr (Method repr)) -> 
+  commentedFunc :: MS (repr (BlockComment repr)) -> MS (repr (Method repr)) -> 
     MS (repr (Method repr))
 
   methodDoc :: repr (Method repr) -> Doc
@@ -687,6 +689,6 @@ class InternalMod repr where
 class BlockCommentSym repr where
   type BlockComment repr
   blockComment :: [String] -> repr (BlockComment repr)
-  docComment :: GS [String] -> GS (repr (BlockComment repr))
+  docComment :: State a [String] -> State a (repr (BlockComment repr))
 
   blockCommentDoc :: repr (BlockComment repr) -> Doc

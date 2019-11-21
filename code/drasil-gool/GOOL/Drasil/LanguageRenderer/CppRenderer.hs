@@ -65,7 +65,7 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, toCode, onStateValue, liftA4, liftA5, liftA8, liftList, 
   lift2Lists, lift1List, checkParams)
-import GOOL.Drasil.State (GS, MS, lensGStoMS, lensMStoGS, initialState, 
+import GOOL.Drasil.State (MS, lensGStoMS, lensMStoGS, initialState, 
   putAfter, getPutReturn, setMain, setCurrMain, getCurrMain, setParameters, 
   setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
@@ -650,7 +650,7 @@ instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
   intFunc m n s p t ps b = liftA2 pair (intFunc m n (pfst s) (pfst p) (pfst t) 
     (map pfst ps) (pfst b)) (intFunc m n (psnd s) (psnd p) (psnd t) (map psnd 
     ps) (psnd b))
-  commentedFunc cmt fn = pair2 (zoom lensMStoGS cmt) fn commentedFunc 
+  commentedFunc cmt fn = pair2 cmt fn commentedFunc 
     commentedFunc
     
   methodDoc m = methodDoc $ pfst m
@@ -2037,13 +2037,13 @@ cpphMethod n t ps end = (if isDtor n then empty else typeDoc t) <+> text n <>
   parens ps <> end
 
 cppCommentedFunc :: (RenderSym repr) => FileType -> 
-  GS (repr (BlockComment repr)) -> MS (repr (Method repr)) -> 
+  MS (repr (BlockComment repr)) -> MS (repr (Method repr)) -> 
   MS (repr (Method repr))
 cppCommentedFunc ft cmt fn = do
   f <- fn
   mn <- getCurrMainFunc
   scp <- getScope
-  cmnt <- zoom lensMStoGS cmt
+  cmnt <- cmt
   let cf = return (methodFromData scp $ commentedItem (blockCommentDoc cmnt) $ 
         methodDoc f)
       ret Source = if mn then cf else fn

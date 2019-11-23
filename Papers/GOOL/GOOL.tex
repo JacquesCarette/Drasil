@@ -413,78 +413,75 @@ example, writing a generator for both Java and \Csharp{} makes it incredibly
 clear how similar the two languages are.
 
 \begin{table*}[t]
-	\caption{Basic GOOL Syntax - functions enclosed in brackets are shortcuts 
-	for 
-		common cases}
-	\begin{tabular}{p{2.2cm}| p{15cm}}
-		Types & \verb|bool|, \verb|int|, \verb|float|, \verb|char|, 
-		\verb|string|, 
-		\verb|infile| (read mode), \verb|outfile| (write mode), 
-		\verb|listType|, 
-		\verb|obj| \\
-		Variables & \verb|var|, \verb|extVar|, \verb|classVar|, \verb|objVar|, 
-		\verb|$->| (infix operator for \verb|objVar|), \verb|self|,
-		[\verb|listVar|] \\
-		Values & \verb|valueOf| (value from variable), \verb|litTrue|, 
-		\verb|litFalse|, \verb|litInt|, 
-		\verb|litFloat|, \verb|litChar|, \verb|litString|, \verb|?!|, 
-		\verb|?&&|, 
-		\verb|?<|, \verb|?<=|, \verb|?>|, \verb|?>=|, \verb|?==|, \verb|?!=|, 
-		\verb|#~|, \verb|#/^|, \verb|#||, \verb|#+|, \verb|#-|, \verb|#*|, 
-		\verb|#/|, \verb|#^|, \verb|inlineIf|, \verb|funcApp|, 
-		\verb|extFuncApp|, 
-		\verb|newObj|, \verb|objMethodCall|, [\verb|selfFuncApp|, 
-		\verb|objMethodCallNoParams|] \\
-		Statements & \verb|varDec|, \verb|varDecDef|, \verb|assign|, \verb|&=|, 
-		\verb|&+=|, \verb|&-=|, \verb|&++|, \verb|&~-|, \verb|break|, 
-		\verb|continue|, \verb|returnState|, \verb|throw|, \verb|free|, 
-		\verb|comment|, \verb|ifCond|, \verb|ifNoElse|, \verb|switch|, 
-		\verb|for|, 
-		\verb|forRange|, \verb|forEach|, \verb|while|, \verb|tryCatch|, 
-		\verb|block|, \verb|body| [\verb|bodyStatements| (single-block body), 
-		\verb|oneLiner| (single-statement body)] \\
-		List API & \verb|listAccess|, \verb|at| (same as \verb|listAccess|), 
-		\verb|listSet|, \verb|listAppend|, \verb|listIndexExists|, 
-		\verb|indexOf|, \verb|listSlice| \\
-		Scope & \verb|public|, \verb|private| \\
-		Binding & \verb|static_|, \verb|dynamic_| \\
-		Functions & \verb|function|, \verb|method|, \verb|param|, 
-		\verb|pointerParam|, \verb|mainFunction|, \verb|docFunc|, 
-		[\verb|pubMethod|, \verb|privMethod|] \\
-		State Variables & \verb|stateVar|, \verb|constVar|, [\verb|privMVar|, 
-		\verb|pubMVar| (dynamic), \verb|pubGVar| (static)]\\
-		Classes & \verb|buildClass|, \verb|docClass|, [\verb|pubClass|, 
-		\verb|privClass|]\\
-		Packages & \verb|buildModule|, \verb|fileDoc|, \verb|docMod|, 
-		\verb|prog|, 
-		\verb|package|, \verb|doxConfig|, \verb|makefile|
-	\end{tabular}
-	\label{tab:syntax}
+  \caption{Basic GOOL Syntax - brackets indicate shortcuts for common cases}
+  \begin{tabular}{p{2.2cm}| p{15cm}}
+    Types & \verb|bool|, \verb|int|, \verb|float|, \verb|char|, 
+    \verb|string|, 
+    \verb|infile| (read mode), \verb|outfile| (write mode), 
+    \verb|listType|, 
+    \verb|obj| \\
+    Variables & \verb|var|, \verb|extVar|, \verb|classVar|, \verb|objVar|, 
+    \verb|$->| (infix operator for \verb|objVar|), \verb|self|,
+    [\verb|listVar|] \\
+    Values & \verb|valueOf| (value from variable), \verb|litTrue|, 
+    \verb|litFalse|, \verb|litInt|, 
+    \verb|litFloat|, \verb|litChar|, \verb|litString|, \verb|?!|, 
+    \verb|?&&|, 
+    \verb|?<|, \verb|?<=|, \verb|?>|, \verb|?>=|, \verb|?==|, \verb|?!=|, 
+    \verb|#~|, \verb|#/^|, \verb|#||, \verb|#+|, \verb|#-|, \verb|#*|, 
+    \verb|#/|, \verb|#^|, \verb|inlineIf|, \verb|funcApp|, 
+    \verb|extFuncApp|, 
+    \verb|newObj|, \verb|objMethodCall|, [\verb|selfFuncApp|, 
+    \verb|objMethodCallNoParams|] \\
+    Statements & \verb|varDec|, \verb|varDecDef|, \verb|assign|, \verb|&=|, 
+    \verb|&+=|, \verb|&-=|, \verb|&++|, \verb|&~-|, \verb|break|, 
+    \verb|continue|, \verb|returnState|, \verb|throw|, \verb|free|, 
+    \verb|comment|, \verb|ifCond|, \verb|ifNoElse|, \verb|switch|, 
+    \verb|for|, 
+    \verb|forRange|, \verb|forEach|, \verb|while|, \verb|tryCatch|, 
+    \verb|block|, \verb|body| [\verb|bodyStatements| (single-block body), 
+    \verb|oneLiner| (single-statement body)] \\
+    List API & \verb|listAccess|, \verb|at| (same as \verb|listAccess|), 
+    \verb|listSet|, \verb|listAppend|, \verb|listIndexExists|, 
+    \verb|indexOf|, \verb|listSlice| \\
+    Scope & \verb|public|, \verb|private| \\
+    Binding & \verb|static_|, \verb|dynamic_| \\
+    Functions & \verb|function|, \verb|method|, \verb|param|, 
+    \verb|pointerParam|, \verb|mainFunction|, \verb|docFunc|, 
+    [\verb|pubMethod|, \verb|privMethod|] \\
+    State Variables & \verb|stateVar|, \verb|constVar|, [\verb|privMVar|, 
+    \verb|pubMVar| (dynamic), \verb|pubGVar| (static)]\\
+    Classes & \verb|buildClass|, \verb|docClass|, [\verb|pubClass|, 
+    \verb|privClass|]\\
+    Packages & \verb|buildModule|, \verb|fileDoc|, \verb|docMod|, 
+    \verb|prog|, 
+    \verb|package|, \verb|doxConfig|, \verb|makefile|
+  \end{tabular}
+  \label{tab:syntax}
 \end{table*}
 
 \section{Creating GOOL} \label{sec:creating}
 
-How do we go about creating a ``generic'' object-oriented language?
-We chose an incremental abstraction approach: start from OO programs written in 
+To create a ``generic'' object-oriented language,
+we chose an incremental abstraction approach: start from OO programs written in 
 two different languages, and unify them \emph{conceptually}.
-
-We abstract from concrete OO programs, not just to meet our
+We abstract from concrete programs, not just to meet our
 \expressivity~requirement, but also because that is our ``domain''.  Although
 what can be said in any given OO language is quite broad, what we
 \emph{actually want to say} is often much more restricted. And what we
 \emph{need to say} is often even more concise.
 For example, Java offers introspection features, but \Cplusplus doesn't, so
 abstracting from portable OO will not feature introspection (although it
-may be the case that generating idiomatic Java may later use it);
-thus GOOL as a language does not encode introspection.  \Cplusplus templates
+may be the case that generating idiomatic Java may do so);
+thus GOOL does not encode introspection.  \Cplusplus templates
 are different: while other languages do not necessarily have comparable
-meta-programming features, as GOOL is a code generator, it is not only
-feasible but in fact easy to provide template-like features, and even aspects of
-partial evaluation directly. Thus we do not need to generate templates.
+meta-programming features, it is not only feasible but in fact easy to provide
+template-like features in GOOL, as well as some
+partial evaluation . Thus we do not need to generate templates.
 In other words, we are trying to abstract over the fundamental ideas
 expressed via OO programs, rather than abstracting over the languages ---
 and we believe the end result better captures the essence of OO programs.
-Of course, some features, such as types, which don't exist per se in 
+Some features, such as types, which don't exist per se in 
 Python but are required in Java, \Csharp and \Cplusplus, will be present
 as doing full type inference is unrealistic.
 

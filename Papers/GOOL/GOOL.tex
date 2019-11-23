@@ -778,34 +778,18 @@ refer to it as simply \emph{tagless} from now on).  GOOL
 uses a ``sophisticated'' version of tagless involving \emph{type families}, 
 which allows for generic routines to be implemented and \emph{patterns} easily 
 encoded.
-\begin{comment}
-A first implementation of GOOL,
-modelled on the multi-language generator SAGA~\cite{beyak2011saga} used a
-straightforward version of tagless, which did not allow for enough generic
-routines to be properly implemented.  This was replaced by a version based on
-GADTs, which fixed that problem, but did not allow for \emph{patterns} to be
-easily encoded. Thus the current version has gone back to tagless, but also uses
-\emph{type families} in a crucial way.
-\end{comment}
 
-In tagless the means of encoding a language,
-through methods from a set of classes, really encodes a generalized
+Tagless encodes a language, 
+through methods from a set of classes, as a generalized
 \emph{fold} over any \emph{representation} of the language.  Thus what
-look like GOOL ``keywords'' are really class methods which we typically 
+look like GOOL ``keywords'' are actually class methods which we typically 
 instantiate to language renderers, though we're also free to do various static 
-analysis passes. By using \emph{type families}, each instance of the classes 
-can choose different underlying data structures for GOOL's types, for when a 
-language needs to store more or less information than others. For example the 
+analysis passes. By using \emph{type families}, each instance can choose
+different underlying data structures for GOOL's types.  For example the
 \Cplusplus~instance stores destructor statements with state variables, but 
 destructors are not needed for the other languages. Our language is defined by 
 $328$ methods across a hierarchy of $43$ classes, grouped by functionality 
 --- GOOL is not a small language!
-
-\begin{comment}
-Because tagless representations give an embedded syntax to a DSL while
-being polymorphic on the eventual semantic interpretation of the terms,
-\cite{carette2009finally} dubs the resulting classes ``symantic''.
-\end{comment}
 
 \begin{comment}
 as illustrated in Figure~\ref{fig:classes}.  
@@ -943,6 +927,7 @@ demonstrate this well. Out of the $328$ total methods,
 the instances of $229$ are shared between the Java and \Csharp{} 
 renderers, in that they are just calls to the same common function. That is 
 $40\%$ more common instances compared to between Python and Java, for example.
+%% TODO: try to bring some of this back
 \begin{comment}
 A further $37$ are partially shared, for example they 
 call the same common function but with different parameters. The numbers of 
@@ -976,16 +961,6 @@ x tick label style={rotate=40,anchor=east},
 \end{figure}
 \end{comment}
 
-%Examples from Python and \Csharp{} are not shown because they both
-%work very similarly to the Java renderer. 
-%\begin{comment}
-%There are \verb|PythonCode| and \verb|CSharpCode| analogs to \verb|JavaCode|, 
-%the underlying types are all the
-%same, and the methods are defined by calling common functions, where possible,
-%or by constructing the GOOL value directly in the instance definition, if the
-%definition is unique to that language.
-%\end{comment}
-%
 %\Cplusplus{} is different since most modules are split between a source and
 %header file. To generate \Cplusplus, we traverse the code twice,
 %once to generate the header file and a second time to generate the
@@ -1037,15 +1012,6 @@ x tick label style={rotate=40,anchor=east},
 %module is straightforward.
 
 \begin{comment}
-At the program level, the difference between source and header is no
-longer relevant, so they are joined together into a single component.
-For technical reasons, currently \verb|Pair| is still used, and we arbitrarily
-choose to put the results in the first component. Since generating some 
-auxiliary files, especially Makefiles, requires knowledge of which are source 
-files and which are header files, GOOL's representation for files stores a 
-\verb|FileType|, either \verb|Source| or \verb|Header| (or \verb|Combined| for 
-other languages).
-
 GOOL's \verb|ControlBlockSym| class is worth drawing attention to. 
 It contains methods for certain OO patterns, and they return \verb|Block|s, not 
 \verb|Statement|s. So in addition to automating certain tasks, these methods 

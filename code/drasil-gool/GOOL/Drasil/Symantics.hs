@@ -19,7 +19,9 @@ module GOOL.Drasil.Symantics (
 
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.Data (Binding, Terminator, FileType, ScopeTag)
-import GOOL.Drasil.State (GS)
+import GOOL.Drasil.State (GS, MS)
+
+import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
@@ -569,62 +571,62 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr,
   -- Second label is class name
   method      :: Label -> Label -> repr (Scope repr) -> repr (Permanence repr) 
     -> repr (Type repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
-    GS (repr (Method repr))
+    MS (repr (Method repr))
   getMethod   :: Label -> repr (Variable repr) -> 
-    GS (repr (Method repr))
+    MS (repr (Method repr))
   setMethod   :: Label -> repr (Variable repr) -> 
-    GS (repr (Method repr)) 
+    MS (repr (Method repr)) 
   privMethod  :: Label -> Label -> repr (Type repr) -> [repr (Parameter repr)] 
-    -> repr (Body repr) -> GS (repr (Method repr))
+    -> repr (Body repr) -> MS (repr (Method repr))
   pubMethod   :: Label -> Label -> repr (Type repr) -> [repr (Parameter repr)] 
-    -> repr (Body repr) -> GS (repr (Method repr))
+    -> repr (Body repr) -> MS (repr (Method repr))
   constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> 
-    GS (repr (Method repr))
+    MS (repr (Method repr))
   destructor :: Label -> [GS (repr (StateVar repr))] -> 
-    GS (repr (Method repr))
+    MS (repr (Method repr))
 
-  docMain :: repr (Body repr) -> GS (repr (Method repr))
+  docMain :: repr (Body repr) -> MS (repr (Method repr))
 
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     repr (Type repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
-    GS (repr (Method repr))
-  mainFunction  :: repr (Body repr) -> GS (repr (Method repr))
+    MS (repr (Method repr))
+  mainFunction  :: repr (Body repr) -> MS (repr (Method repr))
   -- Parameters are: function description, parameter descriptions, 
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> 
-    GS (repr (Method repr)) -> GS (repr (Method repr))
+    MS (repr (Method repr)) -> MS (repr (Method repr))
 
   -- Second label is class name, rest is same as inOutFunc
   inOutMethod :: Label -> Label -> repr (Scope repr) -> repr (Permanence repr) 
     -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
     [repr (Variable repr)] -> repr (Body repr) -> 
-    GS (repr (Method repr))
+    MS (repr (Method repr))
   -- Second label is class name, rest is same as docInOutFunc
   docInOutMethod :: Label -> Label -> repr (Scope repr) -> 
     repr (Permanence repr) -> String -> [(String, repr (Variable repr))] -> 
     [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
-    repr (Body repr) -> GS (repr (Method repr))
+    repr (Body repr) -> MS (repr (Method repr))
 
   -- The three lists are inputs, outputs, and both, respectively
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     [repr (Variable repr)] -> [repr (Variable repr)] -> [repr (Variable repr)] 
-    -> repr (Body repr) -> GS (repr (Method repr))
+    -> repr (Body repr) -> MS (repr (Method repr))
   -- Parameters are: function name, scope, permanence, brief description, input descriptions and variables, output descriptions and variables, descriptions and variables for parameters that are both input and output, function body
   docInOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     String -> [(String, repr (Variable repr))] -> [(String, repr 
     (Variable repr))] -> [(String, repr (Variable repr))] -> repr (Body repr)
-    -> GS (repr (Method repr))
+    -> MS (repr (Method repr))
 
 class (MethodTypeSym repr, BlockCommentSym repr) => 
   InternalMethod repr where
   intMethod      :: Bool -> Label -> Label -> repr (Scope repr) -> 
     repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] 
-    -> repr (Body repr) -> GS (repr (Method repr))
+    -> repr (Body repr) -> MS (repr (Method repr))
   intFunc      :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
     -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
-    GS (repr (Method repr))
-  commentedFunc :: GS (repr (BlockComment repr)) -> GS (repr (Method repr)) -> 
-    GS (repr (Method repr))
+    MS (repr (Method repr))
+  commentedFunc :: MS (repr (BlockComment repr)) -> MS (repr (Method repr)) -> 
+    MS (repr (Method repr))
 
   methodDoc :: repr (Method repr) -> Doc
   methodFromData :: ScopeTag -> Doc -> repr (Method repr)
@@ -652,15 +654,15 @@ class (MethodSym repr, InternalClass repr) => ClassSym repr
   type Class repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
     [GS (repr (StateVar repr))] -> 
-    [GS (repr (Method repr))] -> 
+    [MS (repr (Method repr))] -> 
     GS (repr (Class repr))
   enum :: Label -> [Label] -> repr (Scope repr) -> 
     GS (repr (Class repr))
   privClass :: Label -> Maybe Label -> [GS (repr (StateVar repr))] 
-    -> [GS (repr (Method repr))] -> 
+    -> [MS (repr (Method repr))] -> 
     GS (repr (Class repr))
   pubClass :: Label -> Maybe Label -> [GS (repr (StateVar repr))] 
-    -> [GS (repr (Method repr))] -> 
+    -> [MS (repr (Method repr))] -> 
     GS (repr (Class repr))
 
   docClass :: String -> GS (repr (Class repr)) ->
@@ -675,7 +677,7 @@ class InternalClass repr where
 
 class (ClassSym repr, InternalMod repr) => ModuleSym repr where
   type Module repr
-  buildModule :: Label -> [Library] -> [GS (repr (Method repr))] -> 
+  buildModule :: Label -> [Library] -> [MS (repr (Method repr))] -> 
     [GS (repr (Class repr))] -> GS (repr (Module repr))
 
 class InternalMod repr where
@@ -687,6 +689,6 @@ class InternalMod repr where
 class BlockCommentSym repr where
   type BlockComment repr
   blockComment :: [String] -> repr (BlockComment repr)
-  docComment :: GS [String] -> GS (repr (BlockComment repr))
+  docComment :: State a [String] -> State a (repr (BlockComment repr))
 
   blockCommentDoc :: repr (BlockComment repr) -> Doc

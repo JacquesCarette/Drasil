@@ -64,10 +64,11 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (toCode, onStateValue, liftA4, liftA5, liftList, 
   lift1List, checkParams)
-import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, setMain, 
-  setCurrMain, setParameters)
+import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
+  setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import Control.Lens (over)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Control.Monad.State (evalState)
 import Control.Monad (liftM2)
@@ -543,8 +544,8 @@ instance MethodSym CSharpCode where
 
 instance InternalMethod CSharpCode where
   intMethod m n _ s p t ps b = getPutReturn (setParameters (map unCSC ps) . 
-    if m then setCurrMain m . setMain else id) $ fmap mthd (liftA5 (methodDocD 
-    n) s p t (liftList (paramListDocD . checkParams n) ps) b)
+    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ fmap mthd 
+    (liftA5 (methodDocD n) s p t (liftList (paramListDocD . checkParams n) ps) b)
   intFunc = G.intFunc
   commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
     (fmap (fmap commentedItem) cmt)
@@ -694,11 +695,11 @@ csObjVar o v = csObjVar' (varBind v)
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
     -> CSharpCode (Type CSharpCode) -> [CSharpCode (Parameter CSharpCode)] -> 
     CSharpCode (Body CSharpCode) -> 
-    GS (CSharpCode (Method CSharpCode)))
+    MS (CSharpCode (Method CSharpCode)))
   -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
   [CSharpCode (Variable CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
   [CSharpCode (Variable CSharpCode)] -> CSharpCode (Body CSharpCode) -> 
-  GS (CSharpCode (Method CSharpCode))
+  MS (CSharpCode (Method CSharpCode))
 csInOut f s p ins [v] [] b = f s p (variableType v) (map param ins)
   (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
 csInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 

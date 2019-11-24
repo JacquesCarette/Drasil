@@ -33,7 +33,7 @@ import GOOL.Drasil (Label, RenderSym(..), PermanenceSym(..), BodySym(..),
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  convType, GS) 
+  convType, GS, MS) 
 import qualified GOOL.Drasil as C (CodeType(List))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -116,34 +116,34 @@ mkVar v = variable (codeName v) (convType $ codeType v)
 
 publicFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   Label -> repr (Type repr) -> String -> [c] -> Maybe String -> 
-  [repr (Block repr)] -> Reader DrasilState (GS (repr (Method repr)))
+  [repr (Block repr)] -> Reader DrasilState (MS (repr (Method repr)))
 publicFunc n t = genMethod (function n public static_ t) n
 
 privateMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   Label -> Label -> repr (Type repr) -> String -> [c] -> Maybe String -> 
-  [repr (Block repr)] -> Reader DrasilState (GS (repr (Method repr)))
+  [repr (Block repr)] -> Reader DrasilState (MS (repr (Method repr)))
 privateMethod c n t = genMethod (method n c private dynamic_ t) n
 
 publicInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) 
   => Label -> String -> [c] -> [c] -> [repr (Block repr)] -> 
-  Reader DrasilState (GS (repr (Method repr)))
+  Reader DrasilState (MS (repr (Method repr)))
 publicInOutFunc n = genInOutFunc (inOutFunc n) (docInOutFunc n) public static_ n
 
 privateInOutMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c,
   Eq c) => Label -> Label -> String -> [c] -> [c] -> [repr (Block repr)] -> 
-  Reader DrasilState (GS (repr (Method repr)))
+  Reader DrasilState (MS (repr (Method repr)))
 privateInOutMethod c n = genInOutFunc (inOutMethod n c) (docInOutMethod n c) 
   private dynamic_ n
 
 genConstructor :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   Label -> String -> [c] -> [repr (Block repr)] -> 
-  Reader DrasilState (GS (repr (Method repr)))
+  Reader DrasilState (MS (repr (Method repr)))
 genConstructor n desc p = genMethod (constructor n) n desc p Nothing
 
 genMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  ([repr (Parameter repr)] -> repr (Body repr) -> GS (repr (Method repr))) -> 
+  ([repr (Parameter repr)] -> repr (Body repr) -> MS (repr (Method repr))) -> 
   Label -> String -> [c] -> Maybe String -> [repr (Block repr)] -> 
-  Reader DrasilState (GS (repr (Method repr)))
+  Reader DrasilState (MS (repr (Method repr)))
 genMethod f n desc p r b = do
   g <- ask
   vars <- mapM mkVar p
@@ -157,13 +157,13 @@ genMethod f n desc p r b = do
 genInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) => 
   (repr (Scope repr) -> repr (Permanence repr) -> [repr (Variable repr)] -> 
     [repr (Variable repr)] -> [repr (Variable repr)] -> repr (Body repr) -> 
-    GS (repr (Method repr))) -> 
+    MS (repr (Method repr))) -> 
   (repr (Scope repr) -> repr (Permanence repr) -> String -> 
     [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
     [(String, repr (Variable repr))] -> repr (Body repr) -> 
-    GS (repr (Method repr))) -> 
+    MS (repr (Method repr))) -> 
   repr (Scope repr) -> repr (Permanence repr) -> Label -> String -> [c] -> 
-  [c] -> [repr (Block repr)] -> Reader DrasilState (GS (repr (Method repr)))
+  [c] -> [repr (Block repr)] -> Reader DrasilState (MS (repr (Method repr)))
 genInOutFunc f docf s pr n desc ins' outs' b = do
   g <- ask
   let ins = ins' \\ outs'
@@ -277,7 +277,7 @@ bfunc Index = listAccess
 ------- CALC ----------
 
 genCalcFunc :: (RenderSym repr) => CodeDefinition -> 
-  Reader DrasilState (GS (repr (Method repr)))
+  Reader DrasilState (MS (repr (Method repr)))
 genCalcFunc cdef = do
   parms <- getCalcParams cdef
   let nm = codeName cdef
@@ -322,7 +322,7 @@ genModDef :: (RenderSym repr) => Mod ->
   Reader DrasilState (GS (repr (RenderFile repr)))
 genModDef (Mod n desc fs) = genModule n desc (Just $ mapM genFunc fs) Nothing
 
-genFunc :: (RenderSym repr) => Func -> Reader DrasilState (GS (repr (Method repr)))
+genFunc :: (RenderSym repr) => Func -> Reader DrasilState (MS (repr (Method repr)))
 genFunc (FDef (FuncDef n desc parms o rd s)) = do
   g <- ask
   stmts <- mapM convStmt s
@@ -378,7 +378,7 @@ convStmt (FAppend a b) = do
   return $ valState $ listAppend a' b'
 
 genDataFunc :: (RenderSym repr) => Name -> String -> DataDesc -> 
-  Reader DrasilState (GS (repr (Method repr)))
+  Reader DrasilState (MS (repr (Method repr)))
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readData ddef

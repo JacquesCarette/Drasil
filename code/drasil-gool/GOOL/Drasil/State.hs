@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module GOOL.Drasil.State (
+module GOOL.Drasil.State (MS, lensGStoMS, lensMStoGS,
   GS, GOOLState(..), headers, sources, hasMain, mainMod, initialState, 
   putAfter, getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList,
   addFile, addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, 
@@ -11,7 +11,8 @@ module GOOL.Drasil.State (
 
 import GOOL.Drasil.Data (FileType(..), ParamData, ScopeTag(..))
 
-import Control.Lens (makeLenses,over,set,(^.))
+import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
+import Control.Lens.Tuple (_1, _2)
 import Control.Monad.State (State, get, put, gets)
 
 data GOOLState = GS {
@@ -22,16 +23,33 @@ data GOOLState = GS {
 
   _currFilePath :: FilePath,
   _currModName :: String,
-  _currMain :: Bool,
+  _currMain :: Bool
+} 
+makeLenses ''GOOLState
+
+data MethodState = MS {
   _currParameters :: [ParamData],
   
   -- Only used for C++
   _currScope :: ScopeTag,
   _currMainFunc :: Bool
-} 
-makeLenses ''GOOLState
+}
+makeLenses ''MethodState
 
 type GS = State GOOLState
+type MS = State (GOOLState, MethodState)
+
+getMSfromGS :: GOOLState -> (GOOLState, MethodState)
+getMSfromGS gs = (gs, initialMS)
+
+setMSfromGS :: GOOLState -> (GOOLState, MethodState) -> GOOLState
+setMSfromGS _ (gs, _) = gs
+
+lensGStoMS :: Lens' GOOLState (GOOLState, MethodState)
+lensGStoMS = lens getMSfromGS setMSfromGS
+
+lensMStoGS :: Lens' (GOOLState, MethodState) GOOLState
+lensMStoGS = _1
 
 initialState :: GOOLState
 initialState = GS {
@@ -42,19 +60,23 @@ initialState = GS {
 
   _currFilePath = "",
   _currModName = "",
-  _currMain = False,
+  _currMain = False
+}
+
+initialMS :: MethodState
+initialMS = MS {
   _currParameters = [],
 
   _currScope = Priv,
   _currMainFunc = False
 }
 
-putAfter :: (GOOLState -> GOOLState) -> GS a -> GS a
+putAfter :: (s -> s) -> State s a -> State s a
 putAfter sf sv = do
   v <- sv
   getPutReturn sf v
 
-getPutReturn :: (GOOLState -> GOOLState) -> a -> GS a
+getPutReturn :: (s -> s) -> a -> State s a
 getPutReturn sf v = do
   s <- get
   put $ sf s
@@ -106,9 +128,9 @@ addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
   over headers (map f)
   where f = ((n++"/")++)
 
-setMain :: GOOLState -> GOOLState
-setMain = over hasMain (\b -> if b then error "Multiple main functions defined"
-  else not b)
+setMain :: (GOOLState, MethodState) -> (GOOLState, MethodState)
+setMain = over _1 (over hasMain (\b -> if b then error "Multiple main functions defined"
+  else not b)) 
 
 setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = set mainMod (Just n)
@@ -131,20 +153,20 @@ setCurrMain = set currMain
 getCurrMain :: GS Bool
 getCurrMain = gets (^. currMain)
 
-setParameters :: [ParamData] -> GOOLState -> GOOLState
-setParameters = set currParameters
+setParameters :: [ParamData] -> (GOOLState, MethodState) -> (GOOLState, MethodState)
+setParameters ps = over _2 (set currParameters ps) 
 
-getParameters :: GS [ParamData]
-getParameters = gets (^. currParameters)
+getParameters :: MS [ParamData]
+getParameters = gets ((^. currParameters) . snd)
 
-setScope :: ScopeTag -> GOOLState -> GOOLState
-setScope = set currScope
+setScope :: ScopeTag -> (GOOLState, MethodState) -> (GOOLState, MethodState)
+setScope scp = over _2 (set currScope scp)
 
-getScope :: GS ScopeTag
-getScope = gets (^. currScope)
+getScope :: MS ScopeTag
+getScope = gets ((^. currScope) . snd)
 
-setCurrMainFunc :: Bool -> GOOLState -> GOOLState
-setCurrMainFunc = set currMainFunc
+setCurrMainFunc :: Bool -> (GOOLState, MethodState) -> (GOOLState, MethodState)
+setCurrMainFunc m = over _2 (set currMainFunc m)
 
-getCurrMainFunc :: GS Bool
-getCurrMainFunc = gets (^. currMainFunc)
+getCurrMainFunc :: MS Bool
+getCurrMainFunc = gets ((^. currMainFunc) . snd)

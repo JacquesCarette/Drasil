@@ -300,7 +300,16 @@ We have a set of new requirements:
 \item The generator expresses common OO patterns.
 \end{enumerate}
 
-Here we demonstrate that all of these requirements can be met.
+Satisfying the above requirements is a worthwhile goal in its own right, but we
+have a second motive for designing and developing GOOL.  We need a means to
+generate readable code in multiple OO languages from a common knowledge-base as part of
+our Drasil project~\cite{Drasil2019, SzymczakEtAl2016}.  The idea of Drasil is
+that from domain knowledge provided by experts all required documentation
+and code can be generated.  The generated code needs to be human readable so that
+experts can verify that the code matches their requirements.  The importance of
+understandable code is discussed further in the next section.
+
+%Here we demonstrate that all of these requirements can be met.
 GOOL, part of Drasil~\cite{Drasil2019} (available on github)
 is implemented as a DSL embedded in Haskell that
 can currently generate code in Python, Java, \Csharp, and \Cplusplus.
@@ -333,7 +342,7 @@ set of existing OO programs, which act as test cases for the language.
 \item[common] Language commonalities should be abstracted.
 \end{description}
 
-Targetting OO languages (\mainstream) is primarily because of their popularity,
+Targeting OO languages (\mainstream) is primarily because of their popularity,
 which implies the most potential users --- in much the same way that the makers
 of Scala and Kotlin chose to target the JVM to leverage the Java ecosystem, and
 Typescript for Javascript.

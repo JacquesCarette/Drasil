@@ -296,98 +296,62 @@ and conclusions.
 
 \section{Requirements} \label{sec:req}
 
-While we outlined some of our requirements above, here we give a
-complete list, as well as some reasoning behind each.
+Our requirements are as follows:
 
 \begin{description}
-\item[mainstream] Generate code in mainstream object-oriented languages.
+\item[mainstream] Generate code in mainstream OO languages.
 \item[readable] The generated code should be human-readable,
 \item[idiomatic] The generated code should be idiomatic,
 \item[documented] The generated code should be documented,
-\item[patterns] The generator should allow one to express common OO patterns.
+\item[patterns] Common OO patterns should be expressible.
 \item[expressivity] The language should be rich enough to express a
 set of existing OO programs, which act as test cases for the language.
 \item[common] Language commonalities should be abstracted.
 \end{description}
 
-Targeting OO languages (\mainstream) is primarily because of their popularity,
-which implies the most potential users --- in much the same way that the makers
+Targeting OO languages (\mainstream) reflects their popularity,
+thus the most potential users --- one reasons that the makers
 of Scala and Kotlin chose to target the JVM to leverage the Java ecosystem, and
 Typescript for Javascript.
 
-The \readable~requirement is not as obvious. 
-\begin{comment}
-As DSL users are typically
-domain experts who are not ``programmers'', why generate readable code?
-Few Java programmers ever look at JVM bytecode, and few \Cplusplus{} 
-programmers
-at assembly. But 
-\end{comment}
-GOOL's aim is to allow writing
-high-level OO code once, but have it be available in many GPLs. One use case
-would be to generate libraries of utilities for a narrow domain. As needs
+The \readable~requirement is not as obvious.  We aim to write
+high-level OO code once and have it be available in many GPLs. One use case
+is to generate libraries of functions for a narrow domain. As needs
 evolve and language popularity changes, it is useful to have it immediately
-available in a number of languages. Another use, which is core to our
-own motivation, is to have \emph{extremely well documented} code that would be 
-unrealistic to do by hand. Our motivation for developing GOOL is to use it as 
-the target language for code generation in the \textit{Drasil} framework 
-\cite{SzymczakEtAl2016, Drasil2019}, where 
-\textit{Drasil} aims to generate high-quality, fully documented scientific 
-software. In the domain of scientific software, \emph{certification} is often 
-required, and extensive documentation is crucial for that process. \readable~is 
+available in a number of languages. We use it to get \emph{extremely well
+documented} code that would be unrealistic to do by hand, as part of
+Drasil~\cite{SzymczakEtAl2016, Drasil2019}. \readable~is 
 also a proxy for \emph{understandable}, which is helpful for debugging.
 
 The same underlying reasons for \readable~also drive \idiomatic~and \documented,
 as they contribute to the human-understandability of the generated code.
-\begin{comment}
-\idiomatic~is important as many human readers would find the code ``foreign''
-otherwise, and would not be keen on using it.
-Note that documentation can span from informal comments meant for humans, to
-formal, structured comments useful for generating API documentation with tools
-like Doxygen, or with a variety of static analysis tools.
-\end{comment}
+\idiomatic~is important as readers would otherwise find the code ``foreign''.
+Documentation spans informal one-liners meant for humans to
+formal, structured comments for generating API documentation with tools
+like Doxygen, or static analysis.
 Readability (and thus understandability) are improved when code is 
-pretty-printed~\cite{buse2009learning}. Thus taking care of layout, redundant parentheses,
+pretty-printed~\cite{buse2009learning}. Thus layout, redundant parentheses,
 well-chosen variable names, using a common style with lines that are not too
-long, are just as valid for generated code as for human-written code.
-GOOL does not prevent users from writing undocumented or complex code, if they
-choose to do so. It just makes it easy to have \readable, \idiomatic~and
-\documented~code in multiple languages.
+long, are just as useful for generated code as for human-written code.
+GOOL does not prevent bad code, it just simplifies creating \readable,
+\idiomatic~and \documented~code in multiple languages.
 
-The \oopatterns~requirement is typical of DSLs: common programming idioms
-can be reified into a proper linguistic form instead of being merely
+The \oopatterns~requirement is typical of DSLs: common idioms
+can be reified into a linguistic form instead of being
 informal. Even some of the \emph{design patterns} of~\cite{gamma1995design}
-can become part of the language itself. While this does make writing some OO
-code even easier in GOOL than in GPLs, it also helps
+can become part of the language. This makes writing some OO
+code even easier in GOOL than in GPLs, but it also helps
 keep GOOL language-agnostic and facilitates generating idiomatic code.
-\begin{comment}
-Examples will be given in Section~\ref{sec:patterns}.  But we can
-indicate now how this helps: Consider Python's
-ability to return multiple values with a single return statement, which
-is uncommon in other languages.  Two choices might be to disallow this
-feature in GOOL, or throw an error on use when generating code in languages
-that do not support this feature. In the first case, this would likely mean
-unidiomatic Python code, or increased complexity in the Python generator to
-infer that idiom. The second option is worse still: one might have to resort
-to writing language-specific GOOL, obviating the whole reason for the language!
-Multiple-value return statements are always used when a function returns 
-multiple
-outputs; what we can do in GOOL is to support such multiple-output functions,
-and then generate the idiomatic pattern of implementation in each target
-language.
-\end{comment}
 
-\expressivity~captures the idea that GOOL is supposed to express
-(the ideas contained in) OO programs.  To evaluate this requirement, we test 
+\expressivity~is about GOOL capturing
+the ideas contained in OO programs.  We test 
 GOOL against real-world examples from the \textit{Drasil} project, such as 
 software for determining whether glass withstands a nearby explosion and 
 software for simulating projectile motion.
 
 The last requirement (\common) that language commonalities be abstracted, is
-internal: we noticed a lot of repeated code in our initial
-backends, something that ought to be distasteful to most programmers. For
-example, writing a generator for both Java and \Csharp{} makes it incredibly
-clear how similar the two languages are.
+internal: we noticed too much code duplication in our initial
+backends.
 
 \begin{table*}[t]
   \caption{Basic GOOL Syntax - brackets indicate shortcuts for common cases}

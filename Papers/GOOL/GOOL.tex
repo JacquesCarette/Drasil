@@ -472,19 +472,6 @@ $328$ methods across a hierarchy of $43$ classes (see Figure~\ref{fig:classes}
 for the dependency graph), grouped by functionality 
 --- GOOL is not a small language!
 
-\begin{comment}
-as illustrated in Figure~\ref{fig:classes}.  
-For example, there are classes for programs,
-bodies, control blocks, types, unary operators, variables, values, selectors,
-statements, control statements, blocks, scopes, classes, modules, and so
-on.  
-\end{comment}
-\begin{figure}[p]
-\includegraphics[scale=0.289]{GOOLClasses.png}
-\caption{Dependency graph of all of GOOL's type classes}
-\label{fig:classes}
-\end{figure}
-
 For example, here is part of the class for variables:
 \begin{lstlisting}
 class (TypeSym repr) => VariableSym repr where
@@ -691,6 +678,12 @@ line breaks so that the code fits in this paper's narrow column margins. By
 providing \verb|forEach|, GOOL abstracts over these differences.
 \end{comment}
 
+\begin{figure}[tp]
+\includegraphics[scale=0.289]{GOOLClasses.png}
+\caption{Dependency graph of all of GOOL's type classes}
+\label{fig:classes}
+\end{figure}
+
 \section{Idioms and Patterns} \label{sec:patterns}
 
 \subsection{Idioms}
@@ -803,9 +796,9 @@ statements.  To call an \verb|inOutFunc| function, one must use
 
 \paragraph{Getters and setters} are common in OO programs (regardless of
 whether these actually achieve encapsulation), and mechanical to write.
-And so it is in GOOL,
-with \verb|getMethod "FooClass" foo| and \verb|setMethod "FooClass" foo|
-being enough information, and yet abstracts over the idiosyncracies of
+In GOOL, \verb|getMethod "FooClass" foo| and \verb|setMethod "FooClass" foo|
+are sufficient to get that code generated, which can be called with
+\verb|get| and \verb|set|, and yet abstracts over the idiosyncracies of
 each target language.
 
 \paragraph{Design Patterns}
@@ -825,9 +818,9 @@ an observer list variable, initially containing the given values.
 the name of the observer list variable is fixed, so there can only be one
 observer list in a given scope.
 
-The State pattern is here specialized to implement \emph{Finite State Machines}
+The State pattern is specialized to \emph{Finite State Machines}
 with fairly general transition functions.  Transitions happen on checking, not
-on changing the state.  \verb|initState| takes a name and a state label and
+on changing the state. \verb|initState| takes a name and a state label and
 generate a declaration of a variable with the given name and initial state.
 \verb|changeState| changes the state of the variable to a new state.
 \verb|checkState| is more complex.  It takes the name of the state variable, a
@@ -835,58 +828,55 @@ list of value-body pairs, and a fallback body; and it generates a conditional
 (usually a switch statement) that checks the state and runs the corresponding
 body, or the fallback body, if none of the states match.
 
-Of course the design patterns could already have been coded in GOOL, but
+The design patterns could already have been coded in GOOL, but
 having these as language features is useful for two reasons: 1) the GOOL-level
 code is clearer in its intent (and more concise), and 2) the resulting code
 can be more idiomatic.
-\begin{comment}
-Below is a complete example of a GOOL function.  The recommended style is
+
+Figure~\ref{fig:code} shows a larger example.  The recommended style is
 to name all strings (to avoid hard-to-debug typos) and variables, then
 write the code proper.
+\begin{figure}[tb]
 \begin{lstlisting}
-patternTest :: (MethodSym repr) => 
-  repr (Method repr)
+patternTest :: (MethodSym repr) => repr (Method repr)
 patternTest = let 
-  fsmName = "myFSM"
-  offState = "Off"
-  onState = "On"
-  noState = "Neither"
-  obsName = "Observer"
-  obs1Name = "obs1"
-  obs2Name = "obs2"
-  printNum = "printNum"
-  nName = "n"
-  obsType = obj obsName
-  n = var n int
-  obs1 = var obs1Name obsType
-  obs2 = var obs2Name obsType
-  newObs = extNewObj obsName 
-    obsType []
-    
-  in mainFunction (body [block [
-    varDec n,
+ fsmName = "myFSM"
+ offState = "Off"
+ onState = "On"
+ noState = "Neither"
+ obsName = "Observer"
+ obs1Name = "obs1"
+ obs2Name = "obs2"
+ printNum = "printNum"
+ nName = "n"
+ obsType = obj obsName
+ n = var n int
+ obs1 = var obs1Name obsType
+ obs2 = var obs2Name obsType
+ newObs = extNewObj obsName obsType []
+   
+ in mainFunction (body [block [
+  varDec n,
 
-    initState fsmName offState, 
-    changeState fsmName onState,
-    checkState fsmName 
-    [(litString offState, 
-      oneLiner $ printStrLn offState), 
-     (litString onState, 
-      oneLiner $ printStrLn onState)] 
-    (oneLiner $ printStrLn noState)],
+  initState fsmName offState, 
+  changeState fsmName onState,
+  checkState fsmName 
+  [(litString offState, oneLiner $ printStrLn offState), 
+   (litString onState, oneLiner $ printStrLn onState)] 
+  (oneLiner $ printStrLn noState)],
 
-    block [
-      varDecDef obs1 newObs, 
-      varDecDef obs2 newObs],
+  block [
+   varDecDef obs1 newObs, 
+   varDecDef obs2 newObs],
 
-    block [
-      initObserverList obsType 
-        [valueOf obs1], 
-      addObserver $ valueOf obs2,
-      notifyObservers (func printNum 
-        void []) obsType]])
+  block [
+   initObserverList obsType [valueOf obs1], 
+   addObserver $ valueOf obs2,
+   notifyObservers (func printNum void []) obsType]])
 \end{lstlisting}
-\end{comment}
+\caption{GOOL sample code}
+\label{fig:code}
+\end{figure}
 
 \section{Related Work} \label{sec:related}
 

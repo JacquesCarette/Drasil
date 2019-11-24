@@ -281,7 +281,7 @@ experts can certify that it matches their requirements.
 We largely rewrote SAGA~\cite{beyak2011saga} to create
 GOOL\footnote{Available at \url{https://github.com/JacquesCarette/Drasil}
 as a sub-package.}.
-It is implemented as a DSL embedded in Haskell that
+It is implemented as a Haskell embedded DSL (EDSL) that
 can currently generate code in Python, Java, \Csharp, and \Cplusplus.
 Others can be added, with the implementation effort being commensurate to the
 (semantic) distance to the languages already supported.
@@ -354,7 +354,7 @@ internal: we noticed too much code duplication in our initial
 backends.
 
 \begin{table*}[t]
-  \caption{Basic GOOL Syntax - brackets indicate shortcuts for common cases}
+  \caption{The GOOL Language - brackets indicate shortcuts for common cases}
   \begin{tabular}{p{2.2cm}| p{15cm}}
     Types & \verb|bool|, \verb|int|, \verb|float|, \verb|char|, 
     \verb|string|, 
@@ -403,91 +403,50 @@ backends.
 
 \section{Creating GOOL} \label{sec:creating}
 
-To create a ``generic'' object-oriented language,
-we chose an incremental abstraction approach: start from OO programs written in 
+To create a ``generic'' OO language,
+we chose an incremental abstraction approach: start from programs written in 
 two different languages, and unify them \emph{conceptually}.
-We abstract from concrete programs, not just to meet our
-\expressivity~requirement, but also because that is our ``domain''.  Although
+We abstract from concrete programs, not just for
+\expressivity, but also because that is our ``domain''.  Although
 what can be said in any given OO language is quite broad, what we
 \emph{actually want to say} is often much more restricted. And what we
 \emph{need to say} is often even more concise.
 For example, Java offers introspection features, but \Cplusplus doesn't, so
-abstracting from portable OO will not feature introspection (although it
-may be the case that generating idiomatic Java may do so);
-thus GOOL does not encode introspection.  \Cplusplus templates
+abstracting from portable OO will not feature introspection (although
+generating idiomatic Java may do so). \Cplusplus templates
 are different: while other languages do not necessarily have comparable
-meta-programming features, it is not only feasible but in fact easy to provide
+meta-programming features, it is not only feasible but easy to provide
 template-like features in GOOL, as well as some
 partial evaluation . Thus we do not need to generate templates.
-In other words, we are trying to abstract over the fundamental ideas
-expressed via OO programs, rather than abstracting over the languages ---
-and we believe the end result better captures the essence of OO programs.
-Some features, such as types, which don't exist per se in 
-Python but are required in Java, \Csharp and \Cplusplus, will be present
+We are trying to abstract over the fundamental ideas
+expressed via OO programs, rather than abstracting over the languages.
+We believe the end result captures the essence of OO programs.
+Some features, such as static types, which is not a feature of
+Python but required in Java, will be present
 as doing full type inference is unrealistic.
 
 Some features of OO programs are not operational: comments and formatting
 decisions amongst them.  To us, programs are a bidirectional means of
 communication; they must be valid and executable, but
-also need to be readable and understandable by humans.
-Generating code for consumption by machines is well understood,
+also readable and understandable by humans.
+Generating code for interpretation by machines is well understood,
 but generating code for human consumption has been given less 
-attention. We tried to pay close attention to program features --- such
-as programmers writing longer methods as blocks separated
-by blank lines, often with comments --- which make programs
-more accessible to human readers.
-In GOOL, bodies are not just a sequence of statements, but instead a 
-list of blocks. This additional level is
-operationally meaningless, but represents the actual structure of OO programs.
-This is because programmers (hopefully!) write code to 
-be read by other programmers, and blocks increase human-readability.
+attention. We paid close attention to readaibility features --- such
+as when programmers write long methods, they write them as blocks separated
+by blank lines, often with comments.
+Thus in GOOL, bodies are not just a sequence of statements, but a 
+list of blocks, to represent the actual structure of OO programs.
 
-Basic GOOL syntax is shown in Table~\ref{tab:syntax}. Note that we 
+The GOOL language is shown in Table~\ref{tab:syntax}. We 
 distinguish a variable from its value\footnote{as befits the use-mention
-distinction from analytic philosophy}. This distinction is motivated by
+distinction from analytic philosophy}, motivated by
 semantic considerations; it is beneficial for stricter typing and enables
-convenient syntax for \oopatterns~that translate to more idiomatic code.
+convenient syntax for \oopatterns~for more idiomatic code.
 
-% TODO bring some of this back?
-\begin{comment}
-Finding commonalities between OO programs is most easily done from the core 
-imperative language outwards.
-Most languages provide similar basic types (variations on integers,
-floating point numbers, characters, strings, etc.) and functions to deal
-with them. The core expression language tends to be extremely similar
-across languages. One then moves up to the statement language ---
-assignments, conditionals, loops, etc.
-\end{comment}
+We might eventually give GOOL its own external syntax, but for now it works
+well as a Haskell EDSL, especially as part of Drasil. We can, with judicious
+use of smart constructors, somewhat mimic the syntax of OO languages.
 
-GOOL is currently an Embedded
-Domain Specific Language (EDSL) in Haskell.  Haskell is very well-suited
-for this, offering a variety of features (Generalized Algebraic Data Types 
-(GADTs), type classes,
-parametric polymorphism, kind polymorphism, etc.) that are quite useful
-for building languages.  Its syntax is also fairly liberal, so that
-with \emph{smart constructors}, one can somewhat mimic the
-usual syntax of OO languages. Unfortunately, the embedded nature of GOOL means 
-its syntax is constrained by Haskell's, so a programmer familiar with OO 
-languages may find it difficult to write in GOOL. However, in our anticipated 
-use cases, where the program may have to be written in multiple different 
-languages, it is easier to write it once in GOOL. Also, if GOOL is used as the 
-target language for other DSLs, the ease of writing GOOL programs matters less, 
-since the programs will be written by a computer rather than a human. 
-
-%A single OO method is frequently laid out as a sequence of blocks of
-%statements, where each block represents a meaningful task.  In GOOL,
-%\verb|block| is used for this purpose. Thus bodies are not just a
-%sequence of statements (as would be natural if all we cared about was
-%feeding a compiler), but instead a \verb|body| is a list of blocks. This 
-%additional level of organization of statements is
-%operationally meaningless, but represents the actual structure of OO programs
-%as written by humans.  This is because programmers (hopefully!) write code to
-%be read by other programmers, and blocks increase human-readability.
-%\begin{comment}
-%Naturally, shortcuts are provided for single-block bodies
-%(\verb|bodyStatements|) and for the common single-statement case,
-%\verb|oneLiner|.
-%
 %\subsection{GOOL Syntax: OO features}
 %
 %Classes are defined with \verb|buildClass| followed by the class name, name of

@@ -10,7 +10,7 @@ import Language.Drasil.Code.Imperative.Logging (maybeLog)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams, 
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
   getInputFormatOuts, getOutputParams)
-import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.Code.Imperative.State (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
@@ -25,27 +25,27 @@ import Data.Maybe (maybe, catMaybes)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
-getAllInputCalls :: (RenderSym repr) => Reader State [repr (Statement repr)]
+getAllInputCalls :: (RenderSym repr) => Reader DrasilState [repr (Statement repr)]
 getAllInputCalls = do
   gi <- getInputCall
   dv <- getDerivedCall
   ic <- getConstraintCall
   return $ catMaybes [gi, dv, ic]
 
-getInputCall :: (RenderSym repr) => Reader State (Maybe (repr (Statement repr)))
+getInputCall :: (RenderSym repr) => Reader DrasilState (Maybe (repr (Statement repr)))
 getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
 
-getDerivedCall :: (RenderSym repr) => Reader State 
+getDerivedCall :: (RenderSym repr) => Reader DrasilState 
   (Maybe (repr (Statement repr)))
 getDerivedCall = getInOutCall "derived_values" getDerivedIns getDerivedOuts
 
-getConstraintCall :: (RenderSym repr) => Reader State 
+getConstraintCall :: (RenderSym repr) => Reader DrasilState 
   (Maybe (repr (Statement repr)))
 getConstraintCall = do
   val <- getFuncCall "input_constraints" void getConstraintParams
   return $ fmap valState val
 
-getCalcCall :: (RenderSym repr) => CodeDefinition -> Reader State 
+getCalcCall :: (RenderSym repr) => CodeDefinition -> Reader DrasilState 
   (Maybe (repr (Statement repr)))
 getCalcCall c = do
   g <- ask
@@ -55,15 +55,15 @@ getCalcCall c = do
   l <- maybeLog v
   return $ fmap (multi . (: l) . varDecDef v) val
 
-getOutputCall :: (RenderSym repr) => Reader State 
+getOutputCall :: (RenderSym repr) => Reader DrasilState 
   (Maybe (repr (Statement repr)))
 getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
   return $ fmap valState val
 
 getFuncCall :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => String 
-  -> repr (Type repr) -> Reader State [c] -> 
-  Reader State (Maybe (repr (Value repr)))
+  -> repr (Type repr) -> Reader DrasilState [c] -> 
+  Reader DrasilState (Maybe (repr (Value repr)))
 getFuncCall n t funcPs = do
   mm <- getCall n
   let getFuncCall' Nothing = return Nothing
@@ -75,8 +75,8 @@ getFuncCall n t funcPs = do
   getFuncCall' mm
 
 getInOutCall :: (RenderSym repr, HasCodeType c, CodeIdea c, Eq c) => String -> 
-  Reader State [c] -> Reader State [c] ->
-  Reader State (Maybe (repr (Statement repr)))
+  Reader DrasilState [c] -> Reader DrasilState [c] ->
+  Reader DrasilState (Maybe (repr (Statement repr)))
 getInOutCall n inFunc outFunc = do
   mm <- getCall n
   let getInOutCall' Nothing = return Nothing
@@ -90,7 +90,7 @@ getInOutCall n inFunc outFunc = do
         return $ Just stmt
   getInOutCall' mm
 
-getCall :: String -> Reader State (Maybe String)
+getCall :: String -> Reader DrasilState (Maybe String)
 getCall n = do
   g <- ask
   let getCallExported Nothing = getCallDefined (Map.lookup n $ defMap $ 

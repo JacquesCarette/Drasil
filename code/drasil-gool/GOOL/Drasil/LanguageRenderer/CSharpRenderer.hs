@@ -57,18 +57,20 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
   privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule', fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
-  FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
-  OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD, TypeData(..), 
-  td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
-import GOOL.Drasil.Helpers (liftA4, liftA5, liftList, lift1List, checkParams)
-import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
-  passState, passState2Lists, setMain)
+  commentedClass, buildModule', modFromData, fileDoc, docMod)
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
+  updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
+  TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
+import GOOL.Drasil.Helpers (toCode, onStateValue, liftA4, liftA5, liftList, 
+  lift1List, checkParams)
+import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, setMain, 
+  setCurrMain, setParameters)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Applicative (Applicative, liftA2, liftA3)
-import Control.Monad.State (State, evalState)
+import Control.Monad.State (evalState)
+import Control.Monad (liftM2)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   semi, vcat, lbrace, rbrace, colon)
 
@@ -89,24 +91,23 @@ instance Monad CSharpCode where
   CSC x >>= f = f x
 
 instance ProgramSym CSharpCode where
-  type Program CSharpCode = State GOOLState ProgData
-  prog n = liftList (liftList (progD n))
+  type Program CSharpCode = ProgData
+  prog n = liftList (liftList (progD n)) . map (putAfter $ setCurrMain False)
 
 instance RenderSym CSharpCode where
-  type RenderFile CSharpCode = State GOOLState FileData
-  fileDoc code = liftA2 passState code (G.fileDoc Combined csExt (top code) 
-    bottom code)
+  type RenderFile CSharpCode = FileData
+  fileDoc code = G.fileDoc Combined csExt (top $ evalState code initialState) 
+    bottom code
 
   docMod = G.docMod
 
-  commentedMod = liftA2 commentedModD
+  commentedMod cmt m = liftM2 (liftA2 commentedModD) m cmt
 
 instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
 
-  getFilePath = filePath . (`evalState` initialState) . unCSC
-  fileFromData ft fp = fmap (G.fileFromData ft fp)
+  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
@@ -513,11 +514,10 @@ instance ParameterSym CSharpCode where
   param = fmap (mkParam paramDocD)
   pointerParam = param
 
-  parameterName = variableName . fmap paramVar
   parameterType = variableType . fmap paramVar
 
 instance MethodSym CSharpCode where
-  type Method CSharpCode = State GOOLState MethodData
+  type Method CSharpCode = MethodData
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -540,21 +540,20 @@ instance MethodSym CSharpCode where
   inOutFunc n = csInOut (function n)
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
-  
-  parameters m = map return $ (mthdParams . (`evalState` initialState) . unCSC) m
 
 instance InternalMethod CSharpCode where
-  intMethod m n _ s p t ps b = (if m then getPutReturn setMain else return) <$> 
-    liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA5 (methodDocD n) s p 
-    t (liftList paramListDocD ps) b)
+  intMethod m n _ s p t ps b = getPutReturn (setParameters (map unCSC ps) . 
+    if m then setCurrMain m . setMain else id) $ fmap mthd (liftA5 (methodDocD 
+    n) s p t (liftList (paramListDocD . checkParams n) ps) b)
   intFunc = G.intFunc
-  commentedFunc cmt = liftA2 (fmap . updateMthdDoc) (fmap commentedItem cmt)
+  commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
+    (fmap (fmap commentedItem) cmt)
   
-  isMainMethod = isMainMthd . (`evalState` initialState) . unCSC
-  methodDoc = mthdDoc . (`evalState` initialState) . unCSC
+  methodDoc = mthdDoc . unCSC
+  methodFromData _ = return . mthd
 
 instance StateVarSym CSharpCode where
-  type StateVar CSharpCode = State GOOLState Doc
+  type StateVar CSharpCode = Doc
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar empty
@@ -563,11 +562,11 @@ instance StateVarSym CSharpCode where
   pubGVar = G.pubGVar
 
 instance InternalStateVar CSharpCode where
-  stateVarDoc = (`evalState` initialState) . unCSC
+  stateVarDoc = unCSC
   stateVarFromData = return . return
 
 instance ClassSym CSharpCode where
-  type Class CSharpCode = State GOOLState Doc
+  type Class CSharpCode = Doc
   buildClass = G.buildClass classDocD inherit
   enum = G.enum
   privClass = G.privClass
@@ -578,25 +577,23 @@ instance ClassSym CSharpCode where
   commentedClass = G.commentedClass
 
 instance InternalClass CSharpCode where
-  classDoc = (`evalState` initialState) . unCSC
-  classFromData = return . return
+  classDoc = unCSC
+  classFromData = onStateValue toCode
 
 instance ModuleSym CSharpCode where
-  type Module CSharpCode = State GOOLState ModData
-  buildModule n _ ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
-    (G.buildModule' n ms cs)
-    
-  moduleName = name . (`evalState` initialState) . unCSC
+  type Module CSharpCode = ModData
+  buildModule n _ = G.buildModule' n
   
 instance InternalMod CSharpCode where
-  isMainModule = isMainMod . (`evalState` initialState) . unCSC
-  moduleDoc = modDoc . (`evalState` initialState) . unCSC
-  modFromData n m d = return $ return $ md n m d
+  moduleDoc = modDoc . unCSC
+  modFromData n = G.modFromData n (\d m -> return $ md n m d)
+  updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
-  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
+  docComment = fmap (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
+    docCommentEnd)
 
   blockCommentDoc = unCSC
 
@@ -696,11 +693,12 @@ csObjVar o v = csObjVar' (varBind v)
 
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
     -> CSharpCode (Type CSharpCode) -> [CSharpCode (Parameter CSharpCode)] -> 
-    CSharpCode (Body CSharpCode) -> CSharpCode (Method CSharpCode)) 
+    CSharpCode (Body CSharpCode) -> 
+    GS (CSharpCode (Method CSharpCode)))
   -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
   [CSharpCode (Variable CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
   [CSharpCode (Variable CSharpCode)] -> CSharpCode (Body CSharpCode) -> 
-  CSharpCode (Method CSharpCode)
+  GS (CSharpCode (Method CSharpCode))
 csInOut f s p ins [v] [] b = f s p (variableType v) (map param ins)
   (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
 csInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 

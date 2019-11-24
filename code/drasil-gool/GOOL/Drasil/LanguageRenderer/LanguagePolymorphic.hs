@@ -7,13 +7,13 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, block,
   privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
   docInOutFunc, intFunc, stateVar,stateVarDef, constVar, privMVar, pubMVar, 
   pubGVar, buildClass, enum, privClass, pubClass, docClass, commentedClass, 
-  buildModule, buildModule', fileDoc, docMod
+  buildModule, buildModule', modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, KeywordSym(..), InternalFile(getFilePath),
+import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   RenderSym(RenderFile, commentedMod), BlockSym(Block), 
   InternalBlock(..), BodySym(..), PermanenceSym(..), InternalPerm(..), 
   TypeSym(..), InternalType(..), VariableSym(..), 
@@ -22,36 +22,33 @@ import GOOL.Drasil.Symantics (Label, KeywordSym(..), InternalFile(getFilePath),
   StatementSym(Statement, (&=), constDecDef, returnState), ScopeSym(..), 
   InternalScope(..), MethodTypeSym(mType), ParameterSym(..), 
   MethodTypeSym(MethodType), MethodSym(Method), 
-  InternalMethod(intMethod, commentedFunc, isMainMethod, methodDoc), 
+  InternalMethod(intMethod, commentedFunc, methodDoc), 
   StateVarSym(StateVar), InternalStateVar(..), ClassSym(Class), 
-  InternalClass(..), ModuleSym(Module, moduleName), InternalMod(..), 
+  InternalClass(..), ModuleSym(Module), InternalMod(moduleDoc, updateModuleDoc),
   BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData), 
   StatementSym(varDec, varDecDef), MethodTypeSym(construct), 
   MethodSym(method, mainFunction), InternalMethod(intFunc), 
-  StateVarSym(stateVar), ClassSym(buildClass, commentedClass))
+  StateVarSym(stateVar), ClassSym(buildClass, commentedClass), 
+  InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
-  FileType, FileData(..), fileD, ModData(..))
-import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty)
+  FileType)
+import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, liftList)
 import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD, 
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
   moduleDox, getterName, setterName)
-import GOOL.Drasil.State (GOOLState, hasMain, mainMod, getPutReturnFunc, 
-  addFile, setMainMod)
+import GOOL.Drasil.State (GS, hasMain, mainMod, putAfter, getPutReturnFunc2,
+  addFile, setMainMod, setFilePath, getFilePath, setModuleName, getModuleName, 
+  getCurrMain)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList, isNothing)
 import Control.Lens ((^.))
-import Control.Monad.State (State)
+import Control.Applicative (liftA2)
+import Control.Monad (liftM2)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   vcat, semi, equals, isEmpty)
-
-fileFromData :: FileType -> FilePath -> State GOOLState ModData -> 
-  State GOOLState FileData
-fileFromData ft fp sm = getPutReturnFunc sm (\s m -> (if isEmpty (modDoc m) 
-  then id else (if s ^. hasMain && isNothing (s ^. mainMod) then setMainMod fp 
-  else id) . addFile ft fp) s) (fileD fp)
 
 block :: (RenderSym repr) => repr (Keyword repr) -> [repr (Statement repr)] -> 
   repr (Block repr)
@@ -148,60 +145,65 @@ construct :: Label -> TypeData
 construct n = td (Object n) n empty
 
 method :: (RenderSym repr) => Label -> Label -> repr (Scope repr) -> 
-  repr (Permanence repr) -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+  repr (Permanence repr) -> repr (Type repr) -> [repr (Parameter repr)] -> 
+  repr (Body repr) -> GS (repr (Method repr))
 method n c s p t = intMethod False n c s p (mType t)
 
 getMethod :: (RenderSym repr) => Label -> repr (Variable repr) -> 
-  repr (Method repr)
+  GS (repr (Method repr))
 getMethod c v = S.method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ objVarSelf c v)
 
 setMethod :: (RenderSym repr) => Label -> repr (Variable repr) -> 
-  repr (Method repr)
+  GS (repr (Method repr))
 setMethod c v = S.method (setterName $ variableName v) c public dynamic_ void 
   [param v] setBody
   where setBody = oneLiner $ objVarSelf c v &= valueOf v
 
 privMethod :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+  [repr (Parameter repr)] -> repr (Body repr) -> 
+  GS (repr (Method repr))
 privMethod n c = S.method n c private dynamic_
 
 pubMethod :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+  [repr (Parameter repr)] -> repr (Body repr) -> 
+  GS (repr (Method repr))
 pubMethod n c = S.method n c public dynamic_
 
 constructor :: (RenderSym repr) => Label -> Label -> [repr (Parameter repr)] -> 
-  repr (Body repr) -> repr (Method repr)
+  repr (Body repr) -> GS (repr (Method repr))
 constructor fName n = intMethod False fName n public dynamic_ (S.construct n)
 
-docMain :: (RenderSym repr) => repr (Body repr) -> repr (Method repr)
-docMain b = commentedFunc (docComment $ functionDox 
+docMain :: (RenderSym repr) => repr (Body repr) -> 
+  GS (repr (Method repr))
+docMain b = commentedFunc (docComment $ return $ functionDox 
   "Controls the flow of the program" 
   [("args", "List of command-line arguments")] []) (S.mainFunction b)
 
 function :: (RenderSym repr) => Label -> repr (Scope repr) -> 
   repr (Permanence repr) -> repr (Type repr) -> [repr (Parameter repr)] -> 
-  repr (Body repr) -> repr (Method repr) 
+  repr (Body repr) -> GS (repr (Method repr))
 function n s p t = S.intFunc False n s p (mType t)
 
 mainFunction :: (RenderSym repr) => repr (Type repr) -> Label -> 
-  repr (Body repr) -> repr (Method repr)
+  repr (Body repr) -> GS (repr (Method repr))
 mainFunction s n = S.intFunc True n public static_ (mType void)
   [param (var "args" (typeFromData (List String) (render (getTypeDoc s) ++ 
   "[]") (getTypeDoc s <> text "[]")))]
 
 docFunc :: (RenderSym repr) => String -> [String] -> Maybe String -> 
-  repr (Method repr) -> repr (Method repr)
+  GS (repr (Method repr)) -> GS (repr (Method repr))
 docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
 docInOutFunc :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr)
     -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
-    [repr (Variable repr)] -> repr (Body repr) -> repr (Method repr)) 
+    [repr (Variable repr)] -> repr (Body repr) -> 
+    GS (repr (Method repr)))
   -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
   [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
-  [(String, repr (Variable repr))] -> repr (Body repr) -> repr (Method repr)
+  [(String, repr (Variable repr))] -> repr (Body repr) -> 
+  GS (repr (Method repr))
 docInOutFunc f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
   (f s p (map snd is) [snd o] [] b)
 docInOutFunc f s p desc is [] [both] b = docFuncRepr desc (map fst $ both : is) 
@@ -212,82 +214,101 @@ docInOutFunc f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ os)
 
 intFunc :: (RenderSym repr) => Bool -> Label -> repr (Scope repr) -> 
   repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] 
-  -> repr (Body repr) -> repr (Method repr)
+  -> repr (Body repr) -> GS (repr (Method repr))
 intFunc m n = intMethod m n ""
 
 stateVar :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) ->
-  repr (Variable repr) -> repr (StateVar repr)
+  repr (Variable repr) -> GS (repr (StateVar repr))
 stateVar s p v = stateVarFromData $ stateVarDocD (scopeDoc s) (permDoc p) 
   (statementDoc (state $ S.varDec v))
 
 stateVarDef :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) 
-  -> repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr)
+  -> repr (Variable repr) -> repr (Value repr) -> 
+  GS (repr (StateVar repr))
 stateVarDef s p vr vl = stateVarFromData $ stateVarDocD (scopeDoc s) (permDoc p)
   (statementDoc (state $ S.varDecDef vr vl))
 
 constVar :: (RenderSym repr) => Doc -> repr (Scope repr) ->
-  repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr)
+  repr (Variable repr) -> repr (Value repr) -> 
+  GS (repr (StateVar repr))
 constVar p s vr vl = stateVarFromData $ stateVarDocD (scopeDoc s) p 
   (statementDoc (state $ constDecDef vr vl))
 
 privMVar :: (RenderSym repr) => repr (Variable repr) -> 
-  repr (StateVar repr)
+  GS (repr (StateVar repr))
 privMVar = S.stateVar private dynamic_
 
 pubMVar :: (RenderSym repr) => repr (Variable repr) -> 
-  repr (StateVar repr)
+  GS (repr (StateVar repr))
 pubMVar = S.stateVar public dynamic_
 
 pubGVar :: (RenderSym repr) => repr (Variable repr) -> 
-  repr (StateVar repr)
+  GS (repr (StateVar repr))
 pubGVar = S.stateVar public static_
 
 buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> 
   (Label -> repr (Keyword repr)) -> Label -> Maybe Label -> repr (Scope repr) 
-  -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
-buildClass f i n p s vs fs = classFromData (f n parent (scopeDoc s) 
-  (stateVarListDocD (map stateVarDoc vs)) (methodListDocD (map methodDoc fs)))
+  -> [GS (repr (StateVar repr))] -> 
+  [GS (repr (Method repr))] -> GS (repr (Class repr))
+buildClass f i n p s vs fs = classFromData (liftA2 (f n parent (scopeDoc s)) 
+  (liftList (stateVarListDocD . map stateVarDoc) vs) 
+  (liftList (methodListDocD . map methodDoc) fs))
   where parent = case p of Nothing -> empty
                            Just pn -> keyDoc $ i pn
 
 enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
-  repr (Class repr)
-enum n es s = classFromData (enumDocD n (enumElementsDocD es False) 
+  GS (repr (Class repr))
+enum n es s = classFromData (return $ enumDocD n (enumElementsDocD es False) 
   (scopeDoc s))
 
-privClass :: (RenderSym repr) => Label -> Maybe Label -> [repr (StateVar repr)] 
-  -> [repr (Method repr)] -> repr (Class repr)
+privClass :: (RenderSym repr) => Label -> Maybe Label -> 
+  [GS (repr (StateVar repr))] -> 
+  [GS (repr (Method repr))] -> GS (repr (Class repr))
 privClass n p = S.buildClass n p private
 
-pubClass :: (RenderSym repr) => Label -> Maybe Label -> [repr (StateVar repr)] 
-  -> [repr (Method repr)] -> repr (Class repr)
+pubClass :: (RenderSym repr) => Label -> Maybe Label -> 
+  [GS (repr (StateVar repr))] -> [GS (repr (Method repr))] -> 
+  GS (repr (Class repr))
 pubClass n p = S.buildClass n p public
 
-docClass :: (RenderSym repr) => String -> repr (Class repr) -> repr (Class repr)
-docClass d = S.commentedClass (docComment $ classDox d)
+docClass :: (RenderSym repr) => String -> GS (repr (Class repr))
+  -> GS (repr (Class repr))
+docClass d = S.commentedClass (docComment $ return $ classDox d)
 
-commentedClass :: (RenderSym repr) => repr (BlockComment repr) -> 
-  repr (Class repr) -> repr (Class repr)
-commentedClass cmt cs = classFromData (commentedItem (blockCommentDoc cmt) 
-  (classDoc cs))
+commentedClass :: (RenderSym repr) => GS (repr (BlockComment repr))
+  -> GS (repr (Class repr)) -> GS (repr (Class repr))
+commentedClass cmt cs = classFromData (liftA2 (\cmt' cs' -> commentedItem 
+  (blockCommentDoc cmt') (classDoc cs')) cmt cs)
 
 buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
-  [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)
-buildModule n ls ms cs = modFromData n (any isMainMethod ms) (moduleDocD 
-  (vcat $ map keyDoc ls) (vibcat $ map classDoc cs)
-  (methodListDocD $ map methodDoc ms))
+  [GS (repr (Method repr))] -> [GS (repr (Class repr))] -> 
+  GS (repr (Module repr))
+buildModule n ls ms cs = S.modFromData n getCurrMain (liftA2 (moduleDocD (vcat 
+  $ map keyDoc ls)) (liftList (vibcat . map classDoc) cs) (liftList 
+  (methodListDocD . map methodDoc) ms))
 
-buildModule' :: (RenderSym repr) => Label -> [repr (Method repr)] -> 
-  [repr (Class repr)] -> repr (Module repr)
-buildModule' n ms cs = modFromData n (any isMainMethod ms) (vibcat $ map 
-  classDoc $ if null ms then cs else pubClass n Nothing [] ms : cs)
+buildModule' :: (RenderSym repr) => Label -> [GS (repr (Method repr))] -> 
+  [GS (repr (Class repr))] -> GS (repr (Module repr))
+buildModule' n ms cs = S.modFromData n getCurrMain (liftList (vibcat . map 
+  classDoc) (if null ms then cs else pubClass n Nothing [] ms : cs))
+
+modFromData :: Label -> (Doc -> Bool -> repr (Module repr)) -> GS Bool -> 
+  GS Doc -> GS (repr (Module repr))
+modFromData n f m d = putAfter (setModuleName n) (liftM2 f d m)
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
-  repr (Block repr) -> repr (Module repr) -> repr (RenderFile repr)
-fileDoc ft ext topb botb m = S.fileFromData ft (addExt ext (moduleName m)) 
-  (modFromData (moduleName m) (isMainModule m) (emptyIfEmpty (moduleDoc m) 
-  (fileDoc' (blockDoc topb) (moduleDoc m) (blockDoc botb))))
+  repr (Block repr) -> GS (repr (Module repr)) -> GS (repr (RenderFile repr))
+fileDoc ft ext topb botb m = S.fileFromData ft (fmap (addExt ext) getModuleName)
+  (updateModuleDoc (\d -> emptyIfEmpty d (fileDoc' (blockDoc topb) d 
+  (blockDoc botb))) m)
 
 docMod :: (RenderSym repr) => String -> [String] -> String -> 
-  repr (RenderFile repr) -> repr (RenderFile repr)
-docMod d a dt m = commentedMod (docComment $ moduleDox d a dt $ getFilePath m) m
+  GS (repr (RenderFile repr)) -> GS (repr (RenderFile repr))
+docMod d a dt = commentedMod (docComment $ moduleDox d a dt <$> getFilePath)
+
+fileFromData :: (RenderSym repr) => (repr (Module repr) -> FilePath -> 
+  repr (RenderFile repr)) -> FileType -> GS FilePath -> GS (repr (Module repr)) 
+  -> GS (repr (RenderFile repr))
+fileFromData f ft fp m = getPutReturnFunc2 m fp (\s mdl fpath -> (if isEmpty 
+  (moduleDoc mdl) then id else (if s ^. hasMain && isNothing (s ^. mainMod) 
+  then setMainMod fpath else id) . addFile ft fpath . setFilePath fpath) s) f

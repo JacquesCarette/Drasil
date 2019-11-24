@@ -51,20 +51,21 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   comment, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
   function, docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, 
   buildClass, privClass, pubClass, docClass, commentedClass, buildModule, 
-  fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
-  FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
-  OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
-  vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftList, 
-  lift1List, lift2Lists, checkParams)
-import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
-  passState, passState2Lists, setMain)
+  modFromData, fileDoc, docMod)
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
+  updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
+  td, ValData(..), vd, VarData(..), vard)
+import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, onStateValue, liftA4, liftA5, 
+  liftA6, liftList, lift1List, lift2Lists, checkParams)
+import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, setMain, 
+  setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
-import Control.Monad.State (State, evalState)
+import Control.Monad.State (evalState)
+import Control.Monad (liftM2)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty)
 
@@ -85,24 +86,24 @@ instance Monad PythonCode where
   PC x >>= f = f x
 
 instance ProgramSym PythonCode where
-  type Program PythonCode = State GOOLState ProgData 
-  prog n = liftList (liftList (progD n))
+  type Program PythonCode = ProgData 
+  prog n = liftList (liftList (progD n)) . map (putAfter $ setCurrMain False)
 
 instance RenderSym PythonCode where
-  type RenderFile PythonCode = State GOOLState FileData
-  fileDoc code = liftA2 passState code (G.fileDoc Combined pyExt (top code) 
-    bottom code)
+  type RenderFile PythonCode = FileData
+  -- temporary evalState until I add more state
+  fileDoc code = G.fileDoc Combined pyExt (top $ evalState code initialState)
+    bottom code
 
   docMod = G.docMod
 
-  commentedMod = liftA2 commentedModD
+  commentedMod cmt m = liftM2 (liftA2 commentedModD) m cmt
 
 instance InternalFile PythonCode where
   top _ = return pytop
   bottom = return empty
 
-  getFilePath = filePath . (`evalState` initialState) . unPC
-  fileFromData ft fp = fmap (G.fileFromData ft fp)
+  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
@@ -524,11 +525,10 @@ instance ParameterSym PythonCode where
   param = fmap (mkParam varDoc)
   pointerParam = param
 
-  parameterName = variableName . fmap paramVar
   parameterType = variableType . fmap paramVar
 
 instance MethodSym PythonCode where
-  type Method PythonCode = State GOOLState MethodData
+  type Method PythonCode = MethodData
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -540,7 +540,8 @@ instance MethodSym PythonCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction = fmap (getPutReturn setMain . mthd True [])
+  mainFunction = getPutReturn (setParameters [] . setCurrMain True . setMain) . 
+    fmap mthd
 
   docFunc = G.docFunc
 
@@ -552,22 +553,20 @@ instance MethodSym PythonCode where
 
   docInOutFunc n = pyDocInOut (inOutFunc n)
 
-  parameters m = map return $ (mthdParams . (`evalState` initialState) . unPC) m
-
 instance InternalMethod PythonCode where
-  intMethod m n l _ _ _ ps b = (if m then getPutReturn setMain else return) <$> 
-    liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA3 (pyMethod n) 
-    (self l) (liftList paramListDocD ps) b)
-  intFunc m n _ _ _ ps b = (if m then getPutReturn setMain else return) <$>
-    liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA2 (pyFunction n) 
-    (liftList paramListDocD ps) b)
-  commentedFunc cmt = liftA2 (fmap . updateMthdDoc) (fmap commentedItem cmt)
+  intMethod m n l _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
+    if m then setCurrMain m . setMain else id) $ fmap mthd (liftA3 (pyMethod n) (self l) (liftList (paramListDocD . checkParams n) ps) b)
+  intFunc m n _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
+    if m then setCurrMain m . setMain else id) $ fmap mthd (liftA2 
+    (pyFunction n) (liftList (paramListDocD . checkParams n) ps) b)
+  commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
+    (fmap (fmap commentedItem) cmt)
 
-  isMainMethod = isMainMthd . (`evalState` initialState) . unPC
-  methodDoc = mthdDoc . (`evalState` initialState) . unPC
+  methodDoc = mthdDoc . unPC
+  methodFromData _ = return . mthd
 
 instance StateVarSym PythonCode where
-  type StateVar PythonCode = State GOOLState Doc
+  type StateVar PythonCode = Doc
   stateVar _ _ _ = return (return empty)
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (permDoc 
@@ -577,13 +576,13 @@ instance StateVarSym PythonCode where
   pubGVar = G.pubGVar
 
 instance InternalStateVar PythonCode where
-  stateVarDoc = (`evalState` initialState) . unPC
+  stateVarDoc = unPC
   stateVarFromData = return . return
 
 instance ClassSym PythonCode where
-  type Class PythonCode = State GOOLState Doc
+  type Class PythonCode = Doc
   buildClass = G.buildClass pyClass inherit
-  enum n es s = classFromData (pyClass n empty (scopeDoc s)
+  enum n es s = classFromData (return $ pyClass n empty (scopeDoc s)
     (enumElementsDocD' es) empty)
   privClass = G.privClass
   pubClass = G.pubClass
@@ -593,25 +592,23 @@ instance ClassSym PythonCode where
   commentedClass = G.commentedClass
 
 instance InternalClass PythonCode where
-  classDoc = (`evalState` initialState) . unPC
-  classFromData = return . return
+  classDoc = unPC
+  classFromData = onStateValue toCode
 
 instance ModuleSym PythonCode where
-  type Module PythonCode = State GOOLState ModData
-  buildModule n ls ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
-    (G.buildModule n (map include ls) ms cs)
-
-  moduleName = name . (`evalState` initialState) . unPC
+  type Module PythonCode = ModData
+  buildModule n ls = G.buildModule n (map include ls)
 
 instance InternalMod PythonCode where
-  isMainModule = isMainMod . (`evalState` initialState) . unPC
-  moduleDoc = modDoc . (`evalState` initialState) . unPC
-  modFromData n m d = return $ return $ md n m d
+  moduleDoc = modDoc . unPC
+  modFromData n = G.modFromData n (\d m -> return $ md n m d)
+  updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
   blockComment lns = fmap (pyBlockComment lns) commentStart
-  docComment lns = liftA2 (pyDocComment lns) docCommentStart commentStart
+  docComment = fmap (\lns -> liftA2 (pyDocComment lns) docCommentStart 
+    commentStart)
 
   blockCommentDoc = unPC
 
@@ -753,15 +750,17 @@ pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
 
 pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty
-pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . text) lns
+pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . 
+  text) lns
 
 pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) 
     -> PythonCode (Type PythonCode) -> [PythonCode (Parameter PythonCode)] -> 
-    PythonCode (Body PythonCode) -> PythonCode (Method PythonCode)) 
+    PythonCode (Body PythonCode) -> 
+    GS (PythonCode (Method PythonCode)))
   -> PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) -> 
   [PythonCode (Variable PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
   [PythonCode (Variable PythonCode)] -> PythonCode (Body PythonCode) -> 
-  PythonCode (Method PythonCode)
+  GS (PythonCode (Method PythonCode))
 pyInOut f s p ins [] [] b = f s p void (map param ins) b
 pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins) 
   (if null rets then b else liftA3 surroundBody (multi $ map varDec outs) b 
@@ -770,10 +769,12 @@ pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins)
 
 pyDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
     -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
-    [repr (Variable repr)] -> repr (Body repr) -> repr (Method repr))
+    [repr (Variable repr)] -> repr (Body repr) -> 
+    GS (repr (Method repr)))
   -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
   [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
-  [(String, repr (Variable repr))] -> repr (Body repr) -> repr (Method repr)
+  [(String, repr (Variable repr))] -> repr (Body repr) -> 
+  GS (repr (Method repr))
 pyDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
   (map fst $ bRets ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)
   where bRets = filter (not . isObject . getType . variableType . snd) bs

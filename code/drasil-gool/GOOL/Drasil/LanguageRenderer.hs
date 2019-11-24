@@ -62,17 +62,16 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
+  MethodSym(..), InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
-  ModData(..), updateModDoc, OpData(..), od, ParamData(..), pd, TypeData(..), 
-  td, ValData(..), vd, Binding(..), VarData(..), vard)
+  updateModDoc, OpData(..), od, ParamData(..), pd, paramName, TypeData(..), td, 
+  ValData(..), vd, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
   emptyIfEmpty, emptyIfNull, getInnerType, getNestDegree, convType)
-import GOOL.Drasil.State (GOOLState)
+import GOOL.Drasil.State (GS, getParameters)
 
 import Control.Applicative ((<|>))
-import Control.Monad.State (State)
 import Data.List (intersperse, last)
 import Data.Bifunctor (first)
 import Data.Map as Map (lookup, fromList)
@@ -111,8 +110,8 @@ addExt ext nm = nm ++ "." ++ ext
 
 packageDocD :: Label -> Doc -> FileData -> FileData
 packageDocD n end f = fileD (n ++ "/" ++ filePath f) (updateModDoc 
-  (emptyIfEmpty (modDoc $ fileMod f) (vibcat [text "package" <+> text n <> end, 
-  modDoc (fileMod f)])) (fileMod f))
+  (\d -> emptyIfEmpty d (vibcat [text "package" <+> text n <> end, d])) 
+  (fileMod f))
 
 fileDoc' :: Doc -> Doc -> Doc -> Doc
 fileDoc' t m b = vibcat (filter (not . isEmpty) [
@@ -1130,16 +1129,14 @@ moduleDox desc as date m = (doxFile ++ m) :
   [doxDate ++ date | not (null date)] ++ 
   [doxBrief ++ desc | not (null desc)]
 
-commentedModD :: Doc -> State GOOLState FileData -> State GOOLState FileData
-commentedModD cmt mod = do
-  m <- mod
-  return $ updateFileMod (updateModDoc (commentedItem cmt 
-    ((modDoc . fileMod) m)) (fileMod m)) m
+commentedModD :: FileData -> Doc -> FileData
+commentedModD m cmt = updateFileMod (updateModDoc (commentedItem cmt) (fileMod m)) m
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
-  repr (Method repr) -> repr (Method repr)
-docFuncRepr desc pComms rComms f = commentedFunc (docComment $ functionDox desc
-  (zip (map parameterName (parameters f)) pComms) rComms) f
+  GS (repr (Method repr)) -> GS (repr (Method repr))
+docFuncRepr desc pComms rComms = commentedFunc (docComment $ fmap 
+  (\ps -> functionDox desc (zip (map paramName ps) pComms) rComms) 
+  getParameters)
 
 -- Helper Functions --
 

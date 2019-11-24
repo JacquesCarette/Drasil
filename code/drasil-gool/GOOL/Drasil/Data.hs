@@ -1,7 +1,7 @@
-module GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
+module GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
   FileType(..), BindData(..), bd, FileData(..), fileD, updateFileMod, 
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  updateMthdDoc, OpData(..), od, ParamData(..), pd, updateParamDoc, 
+  updateMthdDoc, OpData(..), od, ParamData(..), pd, paramName, updateParamDoc, 
   ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
   ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard
 ) where
@@ -15,11 +15,6 @@ class Pair p where
   pfst :: p x y a -> x a
   psnd :: p x y b -> y b
   pair :: x a -> y a -> p x y a
-
-pairList :: (Pair p) => [x a] -> [y a] -> [p x y a]
-pairList [] _ = []
-pairList _ [] = []
-pairList (x:xs) (y:ys) = pair x y : pairList xs ys
  
 data Terminator = Semi | Empty
 
@@ -55,17 +50,16 @@ data ModData = MD {name :: String, isMainMod :: Bool, modDoc :: Doc}
 md :: String -> Bool -> Doc -> ModData
 md = MD
 
-updateModDoc :: Doc -> ModData -> ModData
-updateModDoc d m = md (name m) (isMainMod m) d
+updateModDoc :: (Doc -> Doc) -> ModData -> ModData
+updateModDoc f m = md (name m) (isMainMod m) (f $ modDoc m)
 
-data MethodData = MthD {isMainMthd :: Bool, mthdParams :: [ParamData], 
-  mthdDoc :: Doc}
+newtype MethodData = MthD {mthdDoc :: Doc}
 
-mthd :: Bool -> [ParamData] -> Doc -> MethodData
+mthd :: Doc -> MethodData
 mthd = MthD 
 
-updateMthdDoc :: (Doc -> Doc) -> MethodData -> MethodData
-updateMthdDoc f m = mthd (isMainMthd m) (mthdParams m) ((f . mthdDoc) m)
+updateMthdDoc :: MethodData -> (Doc -> Doc) -> MethodData
+updateMthdDoc m f = mthd ((f . mthdDoc) m)
 
 data OpData = OD {opPrec :: Int, opDoc :: Doc}
 
@@ -79,6 +73,9 @@ instance Eq ParamData where
 
 pd :: VarData -> Doc -> ParamData
 pd = PD 
+
+paramName :: ParamData -> String
+paramName = varName . paramVar
 
 updateParamDoc :: (Doc -> Doc) -> ParamData -> ParamData
 updateParamDoc f v = pd (paramVar v) ((f . paramDoc) v)

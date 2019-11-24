@@ -1,13 +1,15 @@
 module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
   hicat, vicat, vibcat, vmap, vimap, vibmap, emptyIfEmpty, emptyIfNull, 
-  mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, liftList, 
-  lift2Lists, lift1List, getInnerType, getNestDegree, convType, checkParams
+  mapPairFst, mapPairSnd, toCode, onStateValue, liftA4, liftA5, liftA6, liftA7, 
+  liftA8, liftList, lift2Lists, lift1List, getInnerType, getNestDegree, 
+  convType, checkParams
 ) where
 
 import Utils.Drasil (blank)
 
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
 import GOOL.Drasil.Data (ParamData)
+import GOOL.Drasil.State (GS)
 import qualified GOOL.Drasil.Symantics as S ( 
   RenderSym(..), TypeSym(..), PermanenceSym(dynamic_))
 
@@ -58,6 +60,12 @@ mapPairFst f (a, c) = (f a, c)
 
 mapPairSnd :: (a -> b) -> (c, a) -> (c, b)
 mapPairSnd f (c, b) = (c, f b)
+
+toCode :: (Monad repr) => a -> repr a
+toCode = return
+
+onStateValue :: (a -> b) -> GS a -> GS b
+onStateValue = fmap
 
 liftA4 :: Applicative f => (a -> b -> c -> d -> e) -> f a -> f b -> f c -> 
   f d -> f e

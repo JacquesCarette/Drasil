@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (
 ) where
 
 import Language.Drasil
-import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.Code.Imperative.State (DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..), 
   Name)
@@ -11,16 +11,16 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
 import GOOL.Drasil (Label, RenderSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  CodeType(..), GOOLState)
+  CodeType(..), GOOLState, GS)
 
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe)
 import Control.Monad.Reader (Reader, ask, withReader)
 
 genModule :: (RenderSym repr) => Name -> String
-  -> Maybe (Reader State [repr (Method repr)])
-  -> Maybe (Reader State [repr (Class repr)])
-  -> Reader State (repr (RenderFile repr))
+  -> Maybe (Reader DrasilState [GS (repr (Method repr))])
+  -> Maybe (Reader DrasilState [GS (repr (Class repr))])
+  -> Reader DrasilState (GS (repr (RenderFile repr)))
 genModule n desc maybeMs maybeCs = do
   g <- ask
   let ls = fromMaybe [] (Map.lookup n (dMap $ codeSpec g))
@@ -37,7 +37,7 @@ genModule n desc maybeMs maybeCs = do
   return $ commMod $ fileDoc $ buildModule n ls ms cs
 
 genDoxConfig :: (AuxiliarySym repr) => String -> GOOLState ->
-  Reader State [repr (Auxiliary repr)]
+  Reader DrasilState [repr (Auxiliary repr)]
 genDoxConfig n s = do
   g <- ask
   let cms = commented g
@@ -45,8 +45,8 @@ genDoxConfig n s = do
   return [doxConfig n s v | not (null cms)]
 
 publicClass :: (RenderSym repr) => String -> Label -> Maybe Label -> 
-  [repr (StateVar repr)] -> Reader State [repr (Method repr)] -> 
-  Reader State (repr (Class repr))
+  [GS (repr (StateVar repr))] -> Reader DrasilState [GS (repr (Method repr))] -> 
+  Reader DrasilState (GS (repr (Class repr)))
 publicClass desc n l vs mths = do
   g <- ask
   ms <- mths
@@ -55,7 +55,7 @@ publicClass desc n l vs mths = do
     else pubClass n l vs ms
 
 fApp :: (RenderSym repr) => String -> String -> repr (Type repr) -> 
-  [repr (Value repr)] -> Reader State (repr (Value repr))
+  [repr (Value repr)] -> Reader DrasilState (repr (Value repr))
 fApp m s t vl = do
   g <- ask
   let cm = currentModule g
@@ -64,7 +64,7 @@ fApp m s t vl = do
 
 fAppInOut :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
   [repr (Variable repr)] -> [repr (Variable repr)] -> 
-  Reader State (repr (Statement repr))
+  Reader DrasilState (repr (Statement repr))
 fAppInOut m n ins outs both = do
   g <- ask
   let cm = currentModule g

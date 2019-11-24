@@ -57,19 +57,20 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
   pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule', fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), 
-  FuncData(..), fd, ModData(..), md, MethodData(..), mthd, updateMthdDoc, 
-  OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
-  vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, emptyIfNull, liftA4, liftA5, liftList, 
-  lift1List, checkParams)
-import GOOL.Drasil.State (GOOLState, initialState, getPutReturn, 
-  getPutReturnList, passState, passState2Lists, addProgNameToPaths, setMain)
+  commentedClass, buildModule', modFromData, fileDoc, docMod)
+import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
+  updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
+  td, ValData(..), vd, VarData(..), vard)
+import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, onStateValue, liftA4, 
+  liftA5, liftList, lift1List, checkParams)
+import GOOL.Drasil.State (GS, initialState, putAfter, getPutReturn, 
+  getPutReturnList, addProgNameToPaths, setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (Applicative, liftA2, liftA3)
-import Control.Monad.State (State, evalState)
+import Control.Monad.State (evalState)
+import Control.Monad (liftM2)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
   equals, semi, vcat, lbrace, rbrace, render, colon, comma, render)
 
@@ -90,25 +91,25 @@ instance Monad JavaCode where
   JC x >>= f = f x
 
 instance ProgramSym JavaCode where
-  type Program JavaCode = State GOOLState ProgData
-  prog n = lift1List (\end fs -> getPutReturnList fs (addProgNameToPaths n) 
-    (progD n . map (packageDocD n end))) endStatement
+  type Program JavaCode = ProgData
+  prog n fs = getPutReturnList (map (putAfter $ setCurrMain False) fs) 
+    (addProgNameToPaths n) (lift1List (\end -> progD n . 
+    map (packageDocD n end)) endStatement)
 
 instance RenderSym JavaCode where
-  type RenderFile JavaCode = State GOOLState FileData 
-  fileDoc code = liftA2 passState code (G.fileDoc Combined jExt (top code) 
-    bottom code)
+  type RenderFile JavaCode = FileData 
+  fileDoc code = G.fileDoc Combined jExt (top $ evalState code initialState) 
+    bottom code
 
   docMod = G.docMod
 
-  commentedMod = liftA2 commentedModD
+  commentedMod cmt m = liftM2 (liftA2 commentedModD) m cmt
 
 instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
   
-  getFilePath = filePath . (`evalState` initialState) . unJC
-  fileFromData ft fp = fmap (G.fileFromData ft fp)
+  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -517,11 +518,10 @@ instance ParameterSym JavaCode where
   param = fmap (mkParam paramDocD)
   pointerParam = param
 
-  parameterName = variableName . fmap paramVar
   parameterType = variableType . fmap paramVar
 
 instance MethodSym JavaCode where
-  type Method JavaCode = State GOOLState MethodData
+  type Method JavaCode = MethodData
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
@@ -544,21 +544,20 @@ instance MethodSym JavaCode where
   inOutFunc n = jInOut (function n)
     
   docInOutFunc n = jDocInOut (inOutFunc n)
-    
-  parameters m = map return $ (mthdParams . (`evalState` initialState) . unJC) m
 
 instance InternalMethod JavaCode where
-  intMethod m n _ s p t ps b = (if m then getPutReturn setMain else return) <$> 
-    liftA2 (mthd m) (checkParams n <$> sequence ps) (liftA5 (jMethod n) s p t 
-    (liftList paramListDocD ps) b)
+  intMethod m n _ s p t ps b = getPutReturn (setParameters (map unJC ps) . 
+    if m then setCurrMain m . setMain else id) $ fmap mthd (liftA5 (jMethod n) 
+    s p t (liftList (paramListDocD . checkParams n) ps) b)
   intFunc = G.intFunc
-  commentedFunc cmt = liftA2 (fmap . updateMthdDoc) (fmap commentedItem cmt)
+  commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
+    (fmap (fmap commentedItem) cmt)
   
-  isMainMethod = isMainMthd . (`evalState` initialState) . unJC
-  methodDoc = mthdDoc . (`evalState` initialState) . unJC
+  methodDoc = mthdDoc . unJC
+  methodFromData _ = return . mthd
 
 instance StateVarSym JavaCode where
-  type StateVar JavaCode = State GOOLState Doc
+  type StateVar JavaCode = Doc
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (permDoc (static_ :: JavaCode (Permanence JavaCode)))
@@ -567,11 +566,11 @@ instance StateVarSym JavaCode where
   pubGVar = G.pubGVar
 
 instance InternalStateVar JavaCode where
-  stateVarDoc = (`evalState` initialState) . unJC
+  stateVarDoc = unJC
   stateVarFromData = return . return
 
 instance ClassSym JavaCode where
-  type Class JavaCode = State GOOLState Doc
+  type Class JavaCode = Doc
   buildClass = G.buildClass classDocD inherit
   enum = G.enum
   privClass = G.privClass
@@ -582,25 +581,23 @@ instance ClassSym JavaCode where
   commentedClass = G.commentedClass
 
 instance InternalClass JavaCode where
-  classDoc = (`evalState` initialState) . unJC
-  classFromData = return . return
+  classDoc = unJC
+  classFromData = onStateValue toCode
 
 instance ModuleSym JavaCode where
-  type Module JavaCode = State GOOLState ModData
-  buildModule n _ ms cs = liftA3 passState2Lists (sequence ms) (sequence cs) 
-    (G.buildModule' n ms cs)
-
-  moduleName = name . (`evalState` initialState) . unJC
+  type Module JavaCode = ModData
+  buildModule n _ = G.buildModule' n
   
 instance InternalMod JavaCode where
-  isMainModule = isMainMod . (`evalState` initialState) . unJC
-  moduleDoc = modDoc . (`evalState` initialState) . unJC
-  modFromData n m d = return $ return $ md n m d
+  moduleDoc = modDoc . unJC
+  modFromData n = G.modFromData n (\d m -> return $ md n m d)
+  updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
-  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd 
+  docComment = fmap (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
+    docCommentEnd)
 
   blockCommentDoc = unJC
 
@@ -743,11 +740,11 @@ jInOutCall f n ins outs both = fCall rets
 
 jInOut :: (JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
     JavaCode (Type JavaCode) -> [JavaCode (Parameter JavaCode)] -> 
-    JavaCode (Body JavaCode) -> JavaCode (Method JavaCode)) 
+    JavaCode (Body JavaCode) -> GS (JavaCode (Method JavaCode))) 
   -> JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
   [JavaCode (Variable JavaCode)] -> [JavaCode (Variable JavaCode)] -> 
   [JavaCode (Variable JavaCode)] -> JavaCode (Body JavaCode) -> 
-  JavaCode (Method JavaCode)
+  GS (JavaCode (Method JavaCode))
 jInOut f s p ins [] [] b = f s p void (map param ins) b
 jInOut f s p ins [v] [] b = f s p (variableType v) 
   (map param ins) (liftA3 surroundBody (varDec v) b (returnState $ 
@@ -776,10 +773,12 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
 
 jDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
     -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
-    [repr (Variable repr)] -> repr (Body repr) -> repr (Method repr))
+    [repr (Variable repr)] -> repr (Body repr) -> 
+    GS (repr (Method repr)))
   -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
   [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
-  [(String, repr (Variable repr))] -> repr (Body repr) -> repr (Method repr)
+  [(String, repr (Variable repr))] -> repr (Body repr) -> 
+  GS (repr (Method repr))
 jDocInOut f s p desc is [] [] b = docFuncRepr desc (map fst is) [] 
   (f s p (map snd is) [] [] b)
 jDocInOut f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 

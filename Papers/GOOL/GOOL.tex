@@ -214,50 +214,42 @@
 \keywords{Code Generation, Domain Specific Language, Haskell, Documentation}
 
 
-%% \maketitle
-%% Note: \maketitle command must come after title commands, author
-%% commands, abstract environment, Computing Classification System
-%% environment and commands, and keywords command.
 \maketitle
-
 
 \section{Introduction}
 
-Java or \Csharp? At the language level, this is close to a 
-non-question: the two languages are so similar that only issues
-external to the programming language itself would be the 
-deciding factor.  Unlike say the question ``C or Prolog?'', which
+Java or \Csharp? As languages, this is close to a 
+non-question: the two are so similar that only ecosystem issues
+would be the deciding factor.  Unlike the question ``C or Prolog?'', which
 is almost non-sensical, as the kinds of applications where each
 is well-suited are vastly different.  But, given a single
-paradigm, for example Object-Oriented (OO), would it be possible to
-write a unique meta-language that captures the essence of writing
-OO programs?  After all, they generally all contain (mutable)
-variables, statements, conditionals, loops, methods, classes, objects,
-and so on.
+paradigm, such as Object-Oriented (OO), would it be possible to
+write a meta-language that captures the essence of writing
+OO programs?  They generally all contain (mutable)
+variables, statements, conditionals, loops, methods, classes, etc.
 
-Of course, OO programs written in different languages appear, at
-least at the surface, to be quite different. But this is mostly because
-the syntax of different programming languages is different. Are they
-quite so different in the utterances that one can say in them? In other
-words, are OO programs akin to sentences in Romance languages
-(French, Spanish, Portugese, etc.) which, although different at a
-surface level, are structurally very similar?
+OO programs written in different languages appear, superficially,
+quite dissimilar. But this is mostly due to
+syntactic differences. Are they so different in the utterances that
+one can make? Are OO programs akin to sentences in
+Romance languages (French, Spanish, Portugese, etc.) which, although 
+syntactically different,
+are structurally very similar?
 
-This is what we set out to explore.  One non-solution is to find an
-(existing) language and try to automatically translate it to the others.
-Of course, this can be made to work --- one could
-engineer a multi-language compiler (such as gcc) to de-compile its Intermediate 
+This is what we set out to explore.  One non-solution is to pick a
+language and implement a translator to the others.
+It is feasible --- say by 
+engineering a multi-language compiler (such as gcc) to de-compile its Intermediate 
 Representation (IR) into most of its input languages.  The end-results would 
-however
 be wildly unidiomatic; roughly the equivalent of a novice
-in a new (spoken) language ``translating'' word-by-word.
+in a (spoken) language ``translating'' word-by-word.
 
-What if, instead, there was a single meta-language designed to embody
-the common semantic concepts of a number of OO languages, encoded so that the
-necessary information for translation is present?  This source language could
-be agnostic about what eventual target language will be used -- and free of
-the idiosyncratic details of any given language.  This would be quite the boon
-for the translator.  In fact, we could go even further, and attempt to
+So we set out to design a meta-language that embodies
+the common semantic concepts of OO languages, encoded so that the
+necessary information for translation is present.  This language is
+agnostic of the eventual target language -- and free of
+the idiosyncratic details of any given language.
+In fact, with proper case, on can go even further and
 teach the translator about idiomatic patterns of each target language.
 
 Trying to capture all the subtleties of each language is hopeless ---
@@ -267,18 +259,10 @@ languages are most often used for much more prosaic tasks: writing programs
 for getting things done. This is closer to translating technical textbooks,
 making sure that all of the meaningful material is preserved.
 
-Is this feasible? In some sense, this is already old hat:
-modern compilers have a single IR,
-used to target multiple processors. Compilers can generate
-human-readable symbolic assembly code for a large family of CPUs. But this
-is not the same as generating human-readable, idiomatic high-level
-code.
-
-More precisely, we are interested in capturing the conceptual meaning of
-OO programs, in such a way as to fully automate the translation from
+We want to capture the conceptual meaning of
+OO programs, so as to fully automate the translation from
 the ``conceptual'' to human-readable, idiomatic code, in mainstream
 languages.
-
 At some level, this is not new.  Domain-Specific Languages (DSL),
 are high-level languages with syntax and semantics tailored to a specific
 domain~\cite{mernik2005and}.  A DSL
@@ -288,39 +272,27 @@ often work via translation to a GPL for execution.  Some generate
 human-readable code \cite{wang1997zephyr, mooij2013gaining, hong2012green, 
 beyak2011saga}.  This is what we do, for the domain of OO programs.
 
-We have a set of new requirements:
-\begin{enumerate}
-\item The generated code should be human-readable,
-\item The generated code should be idiomatic,
-\item The generated code should be documented,
-\item The generator expresses common OO patterns.
-\end{enumerate}
-
-Satisfying the above requirements is a worthwhile goal in its own right, but we
-have a second motive for designing and developing GOOL.  We need a means to
-generate readable code in multiple OO languages from a common knowledge-base as part of
+While designing a generic OO language is a worthwhile endeavour, we had
+a second motive: we needed a means to do exactly that as part of
 our Drasil project~\cite{Drasil2019, SzymczakEtAl2016}.  The idea of Drasil is
-that from domain knowledge provided by experts all required documentation
-and code can be generated.  The generated code needs to be human readable so that
-experts can verify that the code matches their requirements.  The importance of
-understandable code is discussed further in the next section.
-
-%Here we demonstrate that all of these requirements can be met.
-GOOL, part of Drasil~\cite{Drasil2019} (available on github)
-is implemented as a DSL embedded in Haskell that
+to generate all the requirement documentation and code from expert-provided
+domain knowledge.  The generated code needs to be human readable so that
+experts can certify that it matches their requirements.
+We largely rewrote SAGA~\cite{beyak2011saga} to create
+GOOL\footnote{Available at \url{https://github.com/JacquesCarette/Drasil}
+as a sub-package.}.
+It is implemented as a DSL embedded in Haskell that
 can currently generate code in Python, Java, \Csharp, and \Cplusplus.
-Others could be added, with the implementation effort being commensurate to the
+Others can be added, with the implementation effort being commensurate to the
 (semantic) distance to the languages already supported.
 
-First we expand on the high-level requirements for such an endeavour, in
-Section~\ref{sec:req}.  To be able to give concrete examples, we
-show the syntax of GOOL in Section~\ref{sec:creating}. The details of
-the implementations, namely the internal representation and the
-family of pretty-printers, is in Section~\ref{sec:implementation}.
-Common patterns are illustrated in Section~\ref{sec:patterns}.  We
-close with a discussion of related work in Section \ref{sec:related}, plans for
-future improvements in Section \ref{sec:future}, and conclusions in Section
-\ref{sec:conclusions}.
+In Section~\ref{sec:req}, we outline the high-level requirements for GOOL,
+followed by an outline of the syntax in Section~\ref{sec:creating}, to
+enable concrete examples. The interesting design details are given in
+Section~\ref{sec:implementation}. How we capture idioms and patterns is
+in Section~\ref{sec:patterns}. We
+close with a discussion of related work, plans for future improvements
+and conclusions.
 
 \section{Requirements} \label{sec:req}
 

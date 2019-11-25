@@ -1,5 +1,5 @@
 %% For double-blind review submission, w/o CCS and ACM Reference (max submission space)
-\documentclass[sigplan,review,prologue,dvipsnames]{acmart}
+\documentclass[sigplan,screen]{acmart}
 \settopmatter{printfolios=true,printccs=false,printacmref=false}
 %% For double-blind review submission, w/ CCS and ACM Reference
 %\documentclass[sigplan,review,anonymous]{acmart}\settopmatter{printfolios=true}
@@ -73,7 +73,7 @@
 \usepackage{pgfplots}
 \pgfplotsset{width=9cm,height=6cm,compat=1.8}
 
-\usepackage{flushend}
+\usepackage{balance}
 %
 % \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
 
@@ -1030,6 +1030,7 @@ documentation at that level as well.
 
 
 %% Bibliography
+\balance
 \bibliography{References}
 
 

@@ -669,7 +669,8 @@ a list of parameter descriptions, an optional description of the return
 value, and the function itself.  This generates Doxygen-style comments.
 
 Classes are defined with \verb|buildClass| followed by the class name, name of
-the parent class (if applicable), scope, list of state variables, and list of
+the class from which it inherits (if applicable), scope, list of state 
+variables, and list of
 methods. State variables can be built by \verb|stateVar| followed by scope, 
 static or dynamic binding, and the variable itself.  \verb|constVar| can be 
 used for constant state
@@ -877,11 +878,13 @@ makes writing new renderers for new languages fairly straightforward.
 GOOL's Java and \Csharp{} renderers demonstrate this well. Out of $328$
 methods across all of GOOL's type classes, the instances of $229$ of them are
 shared between the Java and \Csharp{} renderers, in that they are just calls to 
-the same common function. A further $37$ are partially shared, for example they 
-call the same common function but with different parameters. The numbers of 
-common methods between each pair of renderers are shown in 
+the same common function. That is $40\%$ more common instances compared to 
+between Python and Java. A further $37$ instances are partially shared between 
+Java and \Csharp, for example they call the same common function but with
+different parameters. The numbers of common methods between each pair of 
+renderers are shown in 
 Figure~\ref{fig:common}. It is clear from the graph that Python is the least 
-similar to the other target languages, whereas \Csharp has the most in common 
+similar to the other target languages, whereas \Csharp~has the most in common 
 with the others, closely followed by Java. $143$ methods are
 actually the same between all $4$ languages GOOL currently targets. This might
 indicate that some should be generic functions rather than class methods,
@@ -890,7 +893,7 @@ but we have not yet investigated this in detail.
 \begin{tikzpicture}[scale=0.9]
 \begin{axis}[
 ybar,
-enlargelimits=0.1,
+ymin=0,
 ylabel={\# common methods},
 symbolic x coords={Python/Java,Python/C\#,Python/C++ Src.,Java/C\#,Java/C++ 
 Src.,C\#/C++ Src.},
@@ -1199,7 +1202,7 @@ encapsulation or not, it is certainly the case that saying to an OO programmer
 setters''
 is enough information for them to write the code. And so it is in GOOL as well.
 Saying \verb|getMethod "FooClass" foo| and \verb|setMethod "FooClass" foo|. 
-The generated set method in Python, Java, \Csharp{} and \Cplusplus{} are:
+The generated set methods in Python, Java, \Csharp{} and \Cplusplus{} are:
 \begin{lstlisting}
 def setFoo(self, foo):
     self.foo = foo
@@ -1343,7 +1346,7 @@ target languages.
 targeting C, \Cplusplus, Java, and JavaScript. It is specialized to deal with
 distributed reactive systems (a nevertheless broad range of application 
 domains).
-This means that this not quite a general-purpose DSL, unlike GOOL.
+This means that this is not quite a general-purpose DSL, unlike GOOL.
 ThingML's modelling-related syntax and abstractions stand in contrast to GOOL's
 object-oriented syntax and abstractions. The generated code lacks some of the
 pretty-printing provided by GOOL, specifically indentation, which detracts from
@@ -1352,7 +1355,7 @@ readability.
 \subsection{Object-oriented generators}
 
 There are a number of code generators with multiple target OO languages,
-though all for more restricted domains than GOOL, and thus do not meet all
+though all are for more restricted domains than GOOL, and thus do not meet all
 of our requirements.
 
 \textbf{Google protocol buffers}~\cite{Protobuf} is a DSL for serializing
@@ -1386,10 +1389,9 @@ on UML but
 with changes to allow for better models of design patterns, with specifications
 for the structure, interactions, and state-based behaviour in patterns. Again,
 source code generation is not attempted. Another metamodel for design patterns
-includes generation of Java code \cite{albin2001meta}, and IBM's DSL
-for generation of OO code based on design patterns
-\cite{budinsky1996automatic}. IBM's DSL was in the form of a visual user
-interface rather than a programming or modeling language. The languages that
+includes generation of Java code \cite{albin2001meta}. IBM developed a DSL in 
+the form of a visual user interface for generation of OO code based on design 
+patterns \cite{budinsky1996automatic}.  The languages that
 generate code do so only for design patterns, not for any general-purpose code,
 as GOOL does.
 

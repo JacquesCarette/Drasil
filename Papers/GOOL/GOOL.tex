@@ -249,7 +249,7 @@ the common semantic concepts of OO languages, encoded so that the
 necessary information for translation is present.  This language is
 agnostic of the eventual target language -- and free of
 the idiosyncratic details of any given language.
-In fact, with proper care, on can go even further and
+In fact, with proper care, one can go even further and
 teach the translator about idiomatic patterns of each target language.
 
 Trying to capture all the subtleties of each language is hopeless ---
@@ -263,7 +263,7 @@ We want to capture the conceptual meaning of
 OO programs, so as to fully automate the translation from
 the ``conceptual'' to human-readable, idiomatic code, in mainstream
 languages.
-At some level, this is not new.  Domain-Specific Languages (DSL),
+At some level, this is not new.  Domain-Specific Languages (DSLs)
 are high-level languages with syntax and semantics tailored to a specific
 domain~\cite{mernik2005and}.  A DSL
 abstracts over the details of ``code'', providing notation to
@@ -300,9 +300,9 @@ Our requirements are as follows:
 
 \begin{description}
 \item[mainstream] Generate code in mainstream OO languages.
-\item[readable] The generated code should be human-readable,
-\item[idiomatic] The generated code should be idiomatic,
-\item[documented] The generated code should be documented,
+\item[readable] The generated code should be human-readable.
+\item[idiomatic] The generated code should be idiomatic.
+\item[documented] The generated code should be documented.
 \item[patterns] Common OO patterns should be expressible.
 \item[expressivity] The language should be rich enough to express a
 set of existing OO programs, which act as test cases for the language.
@@ -310,7 +310,7 @@ set of existing OO programs, which act as test cases for the language.
 \end{description}
 
 Targeting OO languages (\mainstream) reflects their popularity,
-thus the most potential users --- one reasons that the makers
+thus the most potential users --- one reason that the makers
 of Scala and Kotlin chose to target the JVM to leverage the Java ecosystem, and
 Typescript for Javascript.
 
@@ -331,7 +331,7 @@ formal, structured comments for generating API documentation with tools
 like Doxygen, or static analysis.
 Readability (and thus understandability) are improved when code is 
 pretty-printed~\cite{buse2009learning}. Thus layout, redundant parentheses,
-well-chosen variable names, using a common style with lines that are not too
+well-chosen variable names, and using a common style with lines that are not too
 long, are just as useful for generated code as for human-written code.
 GOOL does not prevent bad code, it just simplifies creating \readable,
 \idiomatic~and \documented~code in multiple languages.
@@ -411,9 +411,9 @@ We abstract from concrete programs, not just for
 what can be said in any given OO language is quite broad, what we
 \emph{actually want to say} is often much more restricted. And what we
 \emph{need to say} is often even more concise.
-For example, Java offers introspection features, but \Cplusplus doesn't, so
+For example, Java offers introspection features, but \Cplusplus~doesn't, so
 abstracting from portable OO will not feature introspection (although
-generating idiomatic Java may do so). \Cplusplus templates
+generating idiomatic Java may do so). \Cplusplus~templates
 are different: while other languages do not necessarily have comparable
 meta-programming features, it is not only feasible but easy to provide
 template-like features in GOOL, as well as some
@@ -431,7 +431,7 @@ communication; they must be valid and executable, but
 also readable and understandable by humans.
 Generating code for interpretation by machines is well understood,
 but generating code for human consumption has been given less 
-attention. We paid close attention to readaibility features --- such
+attention. We paid close attention to readability features --- such
 as when programmers write long methods, they write them as blocks separated
 by blank lines, often with comments.
 Thus in GOOL, bodies are not just a sequence of statements, but a 
@@ -450,17 +450,17 @@ We also use smart constructors for common idioms, like
 \verb|privMVar| to denote a private dynamic state variable, 
 and \verb|pubClass| for a public class.  Note that many of the constructs
 (see Table~\ref{tab:syntax}) have \verb|doc| versions.  We can also
-generate \verb|Makefile|s, and Doxygen config files.
+generate \verb|Makefile|s and Doxygen config files.
 
 \section{GOOL Implementation} \label{sec:implementation}
 
-There are three standards methods of encoding EDSLs in Haskell:
+There are three standard methods of encoding EDSLs in Haskell:
 shallow (a set of GADTs), deep (a set of functions), or ``finally
 tagless'' (a set of methods in classes).  GOOL uses a
 ``sophisticated'' version of tagless~\cite{carette2009finally}
 involving \emph{type families}. 
 
-Tagless encodes a language, as a generalized
+Tagless encodes a language as a generalized
 \emph{fold} over any \emph{representation} of the language.  Thus what
 look like GOOL ``keywords'' are actually class methods, which we typically 
 instantiate to language renderers, though we're also free to do various static 
@@ -690,7 +690,7 @@ providing \verb|forEach|, GOOL abstracts over these differences.
 
 \paragraph{Command line arguments} Accessing these differs
 signficantly across languages.  Thus we abstract over the details through an
-\verb|argList| that represents the list of arguments, with a dedicated API.
+\verb|argsList| that represents the list of arguments, with a dedicated API.
 
 \paragraph{Lists}
 As with command line arguments, list APIs vary considerably.
@@ -746,7 +746,7 @@ In addition to printing, there is also functionality for reading input.
 
 \paragraph{Procedures with I/O/B parameters}
 Our target, hand-written codes had methods that
-used their parameters differently: inputs, outputs and both.
+used their parameters differently: as inputs, outputs, or both.
 This is a \emph{semantic} pattern that is
 not necessarily obvious in any of the implementations. Once noticed,
 we could create an encoding of that information to generate better,
@@ -786,9 +786,8 @@ void applyDiscount(int &price, \
 \end{lstlisting}
 to capture the same idea.  The Java version (not shown) is more
 awkward.
-We see how a natural task-level ``feature'', 
-different kinds of parameters, ends up being rendered 
-differently,
+We see how a natural task-level ``feature'' --- 
+different kinds of parameters --- ends up being rendered differently,
 but hopefully idiomatically, in each target language.  GOOL manages the
 tedious aspects of generating any needed variable declarations and return
 statements.  To call an \verb|inOutFunc| function, one must use
@@ -821,7 +820,7 @@ observer list in a given scope.
 The State pattern is specialized to \emph{Finite State Machines}
 with fairly general transition functions.  Transitions happen on checking, not
 on changing the state. \verb|initState| takes a name and a state label and
-generate a declaration of a variable with the given name and initial state.
+generates a declaration of a variable with the given name and initial state.
 \verb|changeState| changes the state of the variable to a new state.
 \verb|checkState| is more complex.  It takes the name of the state variable, a
 list of value-body pairs, and a fallback body; and it generates a conditional
@@ -969,10 +968,10 @@ such as being more precise about \verb|throws Exception| in Java.
 We also want to interface with external libraries, such as a variety of ODE
 solvers, since Drasil currently focuses on scientific applications. The API for
 available solvers varies considerably, so we will need to change the ``shape''
-of generated code depending on the users' choice.
+of generated code depending on the user's choice.
 
-Some implementation decisions, such as the use of \verb|ArrayList| to represent
-lists in Java, are hard-coded. But we could have used \verb|Vector| instead.
+Some implementation decisions, such as representing lists in Java as 
+\verb|ArrayList|, are hard-coded. But we could have used \verb|Vector| instead.
 We would like such a choice to be user-controlled. Another such decision
 point is to allow users to choose which specific external library to use.
 
@@ -994,7 +993,7 @@ languages.
 GOOL is an unusual DSL, as its ``domain'' is actually that of object-oriented
 languages. Or, to be more precise, of conceptual programs that can be
 easily written in languages containing a procedural code with an
-object-oriented layer on top --- which is what Java, Python, \Cplusplus{} and
+object-oriented layer on top --- which is what Java, Python, \Cplusplus{}, and
 \Csharp{} are.
 
 Since we are capturing \emph{conceptual programs}, we can achieve

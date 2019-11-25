@@ -315,9 +315,16 @@ We have a set of new requirements:
 \item The generator expresses common OO patterns.
 \end{enumerate}
 
-Here we demonstrate that all of these requirements can be met.
-GOOL\footnote{Source is publicly available; link will be
-provided after blind period}
+Here we demonstrate that all of these requirements can be met. While designing 
+a generic OO language is a worthwhile endeavour, we had
+a second motive: we needed a means to do exactly that as part of
+our Drasil project~\cite{Drasil2019, SzymczakEtAl2016}.  The idea of Drasil is
+to generate all the requirements documentation and code from expert-provided
+domain knowledge.  The generated code needs to be human readable so that
+experts can certify that it matches their requirements.
+We largely rewrote SAGA~\cite{beyak2011saga} to create
+GOOL\footnote{Available at \url{https://github.com/JacquesCarette/Drasil}
+	as a sub-package.}. GOOL
 is implemented as a DSL embedded in Haskell that
 can currently generate code in Python, Java, \Csharp, and \Cplusplus.
 Others could be added, with the implementation effort being commensurate to the
@@ -362,7 +369,8 @@ high-level OO code once, but have it be available in many GPLs. One use case
 would be to generate libraries of utilities for a narrow domain. As needs
 evolve and language popularity changes, it is useful to have it immediately
 available in a number of languages. Another use, which is a core part of our
-own motivation, is to have \emph{extremely well documented} code, indeed to
+own motivation as part of Drasil~\cite{SzymczakEtAl2016, Drasil2019}., is to 
+have \emph{extremely well documented} code, indeed to
 a level that would be unrealistic to do by hand. But this documentation is
 crucial in domains where \emph{certification} is required.  And
 \readable~is a proxy for \emph{understandable}, which is also quite
@@ -405,9 +413,10 @@ outputs; what we can do in GOOL is to support such multiple-output functions,
 and then generate the idiomatic pattern of implementation in each target
 language.
 
-\expressivity~captures the idea that GOOL is supposed to express
-(the ideas contained in) OO programs.  As a requirement, it
-reminds us to test it against real-world examples.
+\expressivity~is about GOOL capturing the ideas contained in OO programs.  We
+test GOOL against real-world examples from the Drasil project, such as 
+software for determining whether glass withstands a nearby explosion and 
+software for simulating projectile motion.
 
 The last requirement (\common) that language commonalities be abstracted, is
 internal: we noticed a lot of repeated code in our initial
@@ -462,7 +471,9 @@ assignments, conditionals, loops, etc.  Here we start to encounter
 variations, and choices can be made; we'll cover that later.
 
 For ease of experimentation, GOOL is an Embedded
-Domain Specific Language (EDSL) inside Haskell.  Haskell is very well-suited
+Domain Specific Language (EDSL) inside Haskell.  We might eventually give GOOL 
+its own external syntax, but for now it works well as a Haskell EDSL, 
+especially as part of Drasil. Haskell is very well-suited
 for this, offering a variety of features (GADTs, type classes,
 parametric polymorphism, kind polymorphism, etc.) that are quite useful
 for building languages.  Its syntax is also fairly liberal, so that
@@ -1417,9 +1428,10 @@ For example, we ought to be much more precise about \verb|throws Exception|
 in Java.
 
 Another important future feature is being able to interface to external 
-libraries,
-instead of just already-known libraries. In particular, we have a need to
-call external Ordinary Differential Equations (ODEs) solvers; we do not
+libraries, instead of just already-known libraries. In particular, we have a 
+need to
+call external Ordinary Differential Equation (ODE) solvers, since Drasil 
+currently focuses on scientific applications. We do not
 want to restrict ourselves to a single function, but have a host of
 different functions implementing different ODE-solving algorithms available.
 The structure of code that calls ODE solvers varies considerably, so that we 
@@ -1436,6 +1448,10 @@ point is to allow users to choose which specific external library to use.
 And, of course, we ought to implement more of the common OO patterns.
 
 \section{Conclusion} \label{sec:conclusions}
+
+We currently successfully use GOOL to simultaneously generate code in all of 
+our target languages for the glass and projectile programs described in Section 
+\ref{sec:req}. 
 
 Conceptually, mainstream object-oriented languages are similar enough that it
 is indeed feasible to create a single ``generic'' object-oriented language that

@@ -417,7 +417,7 @@ generating idiomatic Java may do so). \Cplusplus templates
 are different: while other languages do not necessarily have comparable
 meta-programming features, it is not only feasible but easy to provide
 template-like features in GOOL, as well as some
-partial evaluation . Thus we do not need to generate templates.
+partial evaluation. Thus we do not need to generate templates.
 We are trying to abstract over the fundamental ideas
 expressed via OO programs, rather than abstracting over the languages.
 We believe the end result captures the essence of OO programs.
@@ -462,12 +462,12 @@ involving \emph{type families}.
 
 Tagless encodes a language, as a generalized
 \emph{fold} over any \emph{representation} of the language.  Thus what
-look like GOOL ``keywords'' are actually class methods which we typically 
+look like GOOL ``keywords'' are actually class methods, which we typically 
 instantiate to language renderers, though we're also free to do various static 
 analysis passes. By using \emph{type families}, each instance can choose
 different underlying data structures for GOOL's types.  For example the
 \Cplusplus~instance stores destructor statements with state variables, which
-is not need by the other languages.  Our language is defined by 
+is not needed by the other languages.  Our language is defined by 
 $328$ methods across a hierarchy of $43$ classes (see Figure~\ref{fig:classes}
 for the dependency graph), grouped by functionality 
 --- GOOL is not a small language!
@@ -703,7 +703,7 @@ The result is a small set of functions and statements, shown in
 Table~\ref{tab:syntax} on the line labelled \emph{List API}.
 
 List slicing (the \verb|listSlice|
-\emph{statement}) is interesting as the quite it generates varies
+\emph{statement}) is interesting as the code it generates varies
 a lot by language.  For example
 \begin{lstlisting}
 listSlice someAges (valueOf ages) (Just $ litInt 1) 
@@ -749,10 +749,10 @@ Our target, hand-written codes had methods that
 used their parameters differently: inputs, outputs and both.
 This is a \emph{semantic} pattern that is
 not necessarily obvious in any of the implementations. Once noticed,
-we could create an encoding of that information to generate better ,
+we could create an encoding of that information to generate better,
 more idiomatic code in each language.
 
-Concretely, the following Pythong code
+Concretely, the following Python code
 \begin{lstlisting}
 def applyDiscount(price, discount):
     price = price - discount
@@ -966,10 +966,10 @@ actual dependencies on features used.  In general, we can do various
 kinds of static analyses to enhance the code generation quality,
 such as being more precise about \verb|throws Exception| in Java.
 
-We also want to interface with external libraries, such as a variety
-of ODE solvers. The API to available solvers varies considerably, so
-we will need to change the ``shape'' of generated code depending on
-the users' choice.
+We also want to interface with external libraries, such as a variety of ODE
+solvers, since Drasil currently focuses on scientific applications. The API for
+available solvers varies considerably, so we will need to change the ``shape''
+of generated code depending on the users' choice.
 
 Some implementation decisions, such as the use of \verb|ArrayList| to represent
 lists in Java, are hard-coded. But we could have used \verb|Vector| instead.

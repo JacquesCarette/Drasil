@@ -33,7 +33,7 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
   FileType)
-import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, liftList)
+import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, toState, liftList)
 import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD, 
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
@@ -178,7 +178,7 @@ constructor fName n = intMethod False fName n public dynamic_ (S.construct n)
 
 docMain :: (RenderSym repr) => repr (Body repr) -> 
   MS (repr (Method repr))
-docMain b = commentedFunc (docComment $ return $ functionDox 
+docMain b = commentedFunc (docComment $ toState $ functionDox 
   "Controls the flow of the program" 
   [("args", "List of command-line arguments")] []) (S.mainFunction b)
 
@@ -259,7 +259,7 @@ buildClass f i n p s vs fs = classFromData (liftA2 (f n parent (scopeDoc s))
 
 enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
   GS (repr (Class repr))
-enum n es s = classFromData (return $ enumDocD n (enumElementsDocD es False) 
+enum n es s = classFromData (toState $ enumDocD n (enumElementsDocD es False) 
   (scopeDoc s))
 
 privClass :: (RenderSym repr) => Label -> Maybe Label -> 
@@ -274,7 +274,7 @@ pubClass n p = S.buildClass n p public
 
 docClass :: (RenderSym repr) => String -> GS (repr (Class repr))
   -> GS (repr (Class repr))
-docClass d = S.commentedClass (docComment $ return $ classDox d)
+docClass d = S.commentedClass (docComment $ toState $ classDox d)
 
 commentedClass :: (RenderSym repr) => GS (repr (BlockComment repr))
   -> GS (repr (Class repr)) -> GS (repr (Class repr))

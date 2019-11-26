@@ -63,7 +63,7 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
-  mapPairSnd, toCode, onStateValue, liftA4, liftA5, liftA8, liftList, 
+  mapPairSnd, toCode, toState, onStateValue, liftA4, liftA5, liftA8, liftList, 
   lift2Lists, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensGStoMS, lensMStoGS, initialState, 
   putAfter, getPutReturn, setMain, setCurrMain, getCurrMain, setParameters, 
@@ -102,8 +102,8 @@ instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
     m <-  mapM (putAfter $ setCurrMain False) mods
     let fm = map pfst m
         sm = map (hdrToSrc . psnd) m
-    p1 <- prog n $ map return sm ++ map return fm
-    return $ pair p1 (return emptyProg)
+    p1 <- prog n $ map toState sm ++ map toState fm
+    toState $ pair p1 (toCode emptyProg)
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   type RenderFile (p CppSrcCode CppHdrCode) = FileData
@@ -522,8 +522,8 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
 
   initState fsmName iState = pair (initState fsmName iState) 
     (initState fsmName iState)
-  changeState fsmName toState = pair (changeState fsmName toState) 
-    (changeState fsmName toState)
+  changeState fsmName postState = pair (changeState fsmName postState) 
+    (changeState fsmName postState)
 
   initObserverList t vs = pair (initObserverList (pfst t) (map pfst vs)) 
     (initObserverList (psnd t) (map psnd vs))
@@ -715,11 +715,11 @@ pair1 :: (Pair p) => State s (p CppSrcCode CppHdrCode a) ->
   State s (p CppSrcCode CppHdrCode b)
 pair1 stv srcf hdrf = do
   v <- stv
-  let fp = return $ pfst v
-      sp = return $ psnd v
+  let fp = toState $ pfst v
+      sp = toState $ psnd v
   p1 <- srcf fp
   p2 <- hdrf sp
-  return $ pair p1 p2
+  toState $ pair p1 p2
 
 pair2 :: (Pair p) => State t (p CppSrcCode CppHdrCode a) -> 
   State t (p CppSrcCode CppHdrCode b) -> 
@@ -729,13 +729,13 @@ pair2 :: (Pair p) => State t (p CppSrcCode CppHdrCode a) ->
 pair2 stv1 stv2 srcf hdrf = do
   v1 <- stv1
   v2 <- stv2
-  let fv1 = return $ pfst v1
-      sv1 = return $ psnd v1
-      fv2 = return $ pfst v2
-      sv2 = return $ psnd v2
+  let fv1 = toState $ pfst v1
+      sv1 = toState $ psnd v1
+      fv2 = toState $ pfst v2
+      sv2 = toState $ psnd v2
   p1 <- srcf fv1 fv2
   p2 <- hdrf sv1 sv2
-  return $ pair p1 p2
+  toState $ pair p1 p2
 
 pair1List :: (Pair p) => [State s (p CppSrcCode CppHdrCode a)] -> Lens' r s -> 
   ([State s (CppSrcCode a)] -> State r (CppSrcCode b)) -> 
@@ -743,11 +743,11 @@ pair1List :: (Pair p) => [State s (p CppSrcCode CppHdrCode a)] -> Lens' r s ->
   State r (p CppSrcCode CppHdrCode b)
 pair1List stv l srcf hdrf = do
   v <- mapM (zoom l) stv
-  let fl = map (return . pfst) v
-      sl = map (return . psnd) v
+  let fl = map (toState . pfst) v
+      sl = map (toState . psnd) v
   p1 <- srcf fl
   p2 <- hdrf sl
-  return $ pair p1 p2
+  toState $ pair p1 p2
 
 pair2Lists :: (Pair p) => [State t (p CppSrcCode CppHdrCode a)] -> 
   [State t (p CppSrcCode CppHdrCode b)] -> ([State r (CppSrcCode a)] -> 
@@ -757,13 +757,13 @@ pair2Lists :: (Pair p) => [State t (p CppSrcCode CppHdrCode a)] ->
 pair2Lists stv1 stv2 srcf hdrf = do
   v1 <- sequence stv1
   v2 <- sequence stv2
-  let fl1 = map (return . pfst) v1
-      sl1 = map (return . psnd) v1
-      fl2 = map (return . pfst) v2
-      sl2 = map (return . psnd) v2
+  let fl1 = map (toState . pfst) v1
+      sl1 = map (toState . psnd) v1
+      fl2 = map (toState . pfst) v2
+      sl2 = map (toState . psnd) v2
   p1 <- srcf fl1 fl2
   p2 <- hdrf sl1 sl2
-  return $ pair p1 p2
+  toState $ pair p1 p2
 
 -----------------
 -- Source File --
@@ -798,41 +798,41 @@ instance RenderSym CppSrcCode where
 
 instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
-  bottom = return empty
+  bottom = toCode empty
   
   fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
-  endStatement = return semi
-  endStatementLoop = return empty
+  endStatement = toCode semi
+  endStatementLoop = toCode empty
 
-  include n = return $ text "#include" <+> doubleQuotedText (addExt cppHdrExt n)
+  include n = toCode $ text "#include" <+> doubleQuotedText (addExt cppHdrExt n)
   inherit n = fmap (cppInherit n . fst) public
 
-  list _ = return $ text "vector"
+  list _ = toCode $ text "vector"
 
-  blockStart = return lbrace
-  blockEnd = return rbrace
+  blockStart = toCode lbrace
+  blockEnd = toCode rbrace
 
   ifBodyStart = blockStart
-  elseIf = return elseIfLabel
+  elseIf = toCode elseIfLabel
   
-  iterForEachLabel = return empty
-  iterInLabel = return empty
+  iterForEachLabel = toCode empty
+  iterInLabel = toCode empty
 
-  commentStart = return doubleSlash
-  blockCommentStart = return blockCmtStart
-  blockCommentEnd = return blockCmtEnd
-  docCommentStart = return docCmtStart
+  commentStart = toCode doubleSlash
+  blockCommentStart = toCode blockCmtStart
+  blockCommentEnd = toCode blockCmtEnd
+  docCommentStart = toCode docCmtStart
   docCommentEnd = blockCommentEnd
 
   keyDoc = unCPPSC
 
 instance PermanenceSym CppSrcCode where
   type Permanence CppSrcCode = BindData
-  static_ = return $ bd Static staticDocD
-  dynamic_ = return $ bd Dynamic dynamicDocD
+  static_ = toCode $ bd Static staticDocD
+  dynamic_ = toCode $ bd Dynamic dynamicDocD
   
 instance InternalPerm CppSrcCode where
   permDoc = bindDoc . unCPPSC
@@ -854,30 +854,30 @@ instance BlockSym CppSrcCode where
 
 instance InternalBlock CppSrcCode where
   blockDoc = unCPPSC
-  docBlock = return
+  docBlock = toCode
 
 instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
-  bool = return cppBoolTypeDoc
-  int = return intTypeDocD
-  float = return cppFloatTypeDoc
-  char = return charTypeDocD
-  string = return stringTypeDocD
-  infile = return cppInfileTypeDoc
-  outfile = return cppOutfileTypeDoc
+  bool = toCode cppBoolTypeDoc
+  int = toCode intTypeDocD
+  float = toCode cppFloatTypeDoc
+  char = toCode charTypeDocD
+  string = toCode stringTypeDocD
+  infile = toCode cppInfileTypeDoc
+  outfile = toCode cppOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
   listInnerType = listInnerTypeD
-  obj t = return $ typeDocD t
-  enumType t = return $ enumTypeDocD t
+  obj t = toCode $ typeDocD t
+  enumType t = toCode $ enumTypeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
-  void = return voidDocD
+  void = toCode voidDocD
 
   getType = cType . unCPPSC
   getTypeString = typeString . unCPPSC
   getTypeDoc = typeDoc . unCPPSC
   
 instance InternalType CppSrcCode where
-  typeFromData t s d = return $ td t s d
+  typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym CppSrcCode where
   runStrategy = runStrategyD
@@ -886,38 +886,38 @@ instance ControlBlockSym CppSrcCode where
 
 instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
-  notOp = return notOpDocD
-  negateOp = return negateOpDocD
-  sqrtOp = return sqrtOpDocD
-  absOp = return absOpDocD
-  logOp = return $ unOpPrec "log10"
-  lnOp = return $ unOpPrec "log"
-  expOp = return expOpDocD
-  sinOp = return sinOpDocD
-  cosOp = return cosOpDocD
-  tanOp = return tanOpDocD
-  asinOp = return asinOpDocD
-  acosOp = return acosOpDocD
-  atanOp = return atanOpDocD
-  floorOp = return $ unOpPrec "floor"
-  ceilOp = return $ unOpPrec "ceil"
+  notOp = toCode notOpDocD
+  negateOp = toCode negateOpDocD
+  sqrtOp = toCode sqrtOpDocD
+  absOp = toCode absOpDocD
+  logOp = toCode $ unOpPrec "log10"
+  lnOp = toCode $ unOpPrec "log"
+  expOp = toCode expOpDocD
+  sinOp = toCode sinOpDocD
+  cosOp = toCode cosOpDocD
+  tanOp = toCode tanOpDocD
+  asinOp = toCode asinOpDocD
+  acosOp = toCode acosOpDocD
+  atanOp = toCode atanOpDocD
+  floorOp = toCode $ unOpPrec "floor"
+  ceilOp = toCode $ unOpPrec "ceil"
 
 instance BinaryOpSym CppSrcCode where
   type BinaryOp CppSrcCode = OpData
-  equalOp = return equalOpDocD
-  notEqualOp = return notEqualOpDocD
-  greaterOp = return greaterOpDocD
-  greaterEqualOp = return greaterEqualOpDocD
-  lessOp = return lessOpDocD
-  lessEqualOp = return lessEqualOpDocD
-  plusOp = return plusOpDocD
-  minusOp = return minusOpDocD
-  multOp = return multOpDocD
-  divideOp = return divideOpDocD
-  powerOp = return powerOpDocD
-  moduloOp = return moduloOpDocD
-  andOp = return andOpDocD
-  orOp = return orOpDocD
+  equalOp = toCode equalOpDocD
+  notEqualOp = toCode notEqualOpDocD
+  greaterOp = toCode greaterOpDocD
+  greaterEqualOp = toCode greaterEqualOpDocD
+  lessOp = toCode lessOpDocD
+  lessEqualOp = toCode lessEqualOpDocD
+  plusOp = toCode plusOpDocD
+  minusOp = toCode minusOpDocD
+  multOp = toCode multOpDocD
+  divideOp = toCode divideOpDocD
+  powerOp = toCode powerOpDocD
+  moduloOp = toCode moduloOpDocD
+  andOp = toCode andOpDocD
+  orOp = toCode orOpDocD
 
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
@@ -933,10 +933,10 @@ instance VariableSym CppSrcCode where
   extClassVar = classVar
   objVar = objVarD
   objVarSelf _ v = liftA2 (mkVar ("this->"++variableName v)) (variableType v) 
-    (return $ text "this->" <> variableDoc v)
+    (toCode $ text "this->" <> variableDoc v)
   listVar = listVarD
   listOf = listOfD
-  iterVar l t = liftA2 (mkVar l) (iterator t) (return $ text $ "(*" ++ l ++ ")")
+  iterVar l t = liftA2 (mkVar l) (iterator t) (toCode $ text $ "(*" ++ l ++ ")")
 
   ($->) = objVar
 
@@ -946,7 +946,7 @@ instance VariableSym CppSrcCode where
   variableDoc = varDoc . unCPPSC
 
 instance InternalVariable CppSrcCode where
-  varFromData b n t d = liftA2 (vard b n) t (return d)
+  varFromData b n t d = liftA2 (vard b n) t (toCode d)
 
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
@@ -957,13 +957,13 @@ instance ValueSym CppSrcCode where
   litInt = litIntD
   litString = litStringD
 
-  pi = liftA2 mkVal float (return $ text "M_PI")
+  pi = liftA2 mkVal float (toCode $ text "M_PI")
 
   ($:) = enumElement
 
   valueOf = valueOfD
   arg n = argD (litInt $ n+1) argsList
-  enumElement en e = liftA2 mkVal (enumType en) (return $ text e)
+  enumElement en e = liftA2 mkVal (enumType en) (toCode $ text e)
   
   argsList = argsListD "argv"
 
@@ -1020,15 +1020,15 @@ instance ValueExpression CppSrcCode where
   notNull v = v
 
 instance InternalValue CppSrcCode where
-  inputFunc = liftA2 mkVal string (return $ text "std::cin")
-  printFunc = liftA2 mkVal void (return $ text "std::cout")
-  printLnFunc = liftA2 mkVal void (return $ text "std::cout")
+  inputFunc = liftA2 mkVal string (toCode $ text "std::cin")
+  printFunc = liftA2 mkVal void (toCode $ text "std::cout")
+  printLnFunc = liftA2 mkVal void (toCode $ text "std::cout")
   printFileFunc f = liftA2 mkVal void (fmap valDoc f)
   printFileLnFunc f = liftA2 mkVal void (fmap valDoc f)
 
   cast = cppCast
   
-  valFromData p t d = liftA2 (vd p) t (return d)
+  valFromData p t d = liftA2 (vd p) t (toCode d)
 
 instance Selector CppSrcCode where
   objAccess = objAccessD
@@ -1081,7 +1081,7 @@ instance InternalFunction CppSrcCode where
   functionType = fmap funcType
   functionDoc = funcDoc . unCPPSC
   
-  funcFromData t d = liftA2 fd t (return d)
+  funcFromData t d = liftA2 fd t (toCode d)
 
 instance InternalStatement CppSrcCode where
   printSt nl p v _ = mkSt <$> liftA2 (cppPrint nl) p v
@@ -1093,7 +1093,7 @@ instance InternalStatement CppSrcCode where
   statementDoc = fst . unCPPSC
   statementTerm = snd . unCPPSC
   
-  stateFromData d t = return (d, t)
+  stateFromData d t = toCode (d, t)
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -1138,7 +1138,7 @@ instance StatementSym CppSrcCode where
   closeFile = closeFileD "close"
 
   getFileInputLine f v = valState $ funcApp "std::getline" string [f, valueOf v]
-  discardFileLine f = mkSt <$> return (cppDiscardInput "\\n" f)
+  discardFileLine f = mkSt <$> toCode (cppDiscardInput "\\n" f)
   stringSplit d vnew s = let l_ss = "ss"
                              var_ss = var l_ss (obj "std::stringstream")
                              v_ss = valueOf var_ss
@@ -1214,8 +1214,8 @@ instance ControlStatementSym CppSrcCode where
 
 instance ScopeSym CppSrcCode where
   type Scope CppSrcCode = (Doc, ScopeTag)
-  private = return (privateDocD, Priv)
-  public = return (publicDocD, Pub)
+  private = toCode (privateDocD, Priv)
+  public = toCode (publicDocD, Pub)
 
 instance InternalScope CppSrcCode where
   scopeDoc = fst . unCPPSC
@@ -1223,7 +1223,7 @@ instance InternalScope CppSrcCode where
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
   mType t = t
-  construct = return . G.construct
+  construct = toCode . G.construct
 
 instance ParameterSym CppSrcCode where
   type Parameter CppSrcCode = ParamData
@@ -1251,7 +1251,7 @@ instance MethodSym CppSrcCode where
           bodyStatements $ loopIndexDec : deleteStatements
     in pubMethod ('~':n) n void [] dbody
 
-  docMain b = commentedFunc (docComment $ return $ functionDox 
+  docMain b = commentedFunc (docComment $ toState $ functionDox 
     "Controls the flow of the program" 
     [("argc", "Number of command-line arguments"),
     ("argv", "List of command-line arguments")] ["exit code"]) (mainFunction b)
@@ -1260,7 +1260,7 @@ instance MethodSym CppSrcCode where
   mainFunction b = intFunc True "main" public static_ (mType int) 
     [param $ var "argc" int, 
     liftA2 pd (var "argv" (listType static_ string)) 
-    (return $ text "const char *argv[]")] 
+    (toCode $ text "const char *argv[]")] 
     (liftA2 appendToBody b (returnState $ litInt 0))
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
@@ -1286,14 +1286,14 @@ instance InternalMethod CppSrcCode where
   commentedFunc = cppCommentedFunc Source
  
   methodDoc = mthdDoc . unCPPSC
-  methodFromData s d = return $ mthd s d
+  methodFromData s d = toCode $ mthd s d
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
-  stateVar s _ _ = return $ liftA3 svd (fmap snd s) (return empty) emptyState
-  stateVarDef n s p vr vl = return $ liftA3 svd (fmap snd s) (liftA4 
+  stateVar s _ _ = toState $ liftA3 svd (fmap snd s) (toCode empty) emptyState
+  stateVarDef n s p vr vl = toState $ liftA3 svd (fmap snd s) (liftA4 
     (cppsStateVarDef n empty) p vr vl endStatement) emptyState
-  constVar n s vr vl = return $ liftA3 svd (fmap snd s) (liftA4 
+  constVar n s vr vl = toState $ liftA3 svd (fmap snd s) (liftA4 
     (cppsStateVarDef n (text "const")) static_ vr vl endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
@@ -1307,7 +1307,7 @@ instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
   buildClass n _ _ vs fs = lift2Lists (lift2Lists cppsClass) vs
     (map (zoom lensGStoMS) $ fs ++ [destructor n vs])
-  enum _ _ _ = return $ return empty
+  enum _ _ _ = toState $ toCode empty
   privClass = G.privClass
   pubClass = G.pubClass
 
@@ -1325,7 +1325,7 @@ instance ModuleSym CppSrcCode where
 
 instance InternalMod CppSrcCode where
   moduleDoc = modDoc . unCPPSC
-  modFromData n = G.modFromData n (\d m -> return $ md n m d)
+  modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CppSrcCode where
@@ -1365,41 +1365,41 @@ instance RenderSym CppHdrCode where
 
 instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement
-  bottom = return $ text "#endif"
+  bottom = toCode $ text "#endif"
   
   fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
-  endStatement = return semi
-  endStatementLoop = return empty
+  endStatement = toCode semi
+  endStatementLoop = toCode empty
 
-  include n = return $ text "#include" <+> doubleQuotedText (addExt cppHdrExt n)
+  include n = toCode $ text "#include" <+> doubleQuotedText (addExt cppHdrExt n)
   inherit n = fmap (cppInherit n . fst) public
 
-  list _ = return $ text "vector"
+  list _ = toCode $ text "vector"
 
-  blockStart = return lbrace
-  blockEnd = return rbrace
+  blockStart = toCode lbrace
+  blockEnd = toCode rbrace
 
-  ifBodyStart = return empty
-  elseIf = return empty
+  ifBodyStart = toCode empty
+  elseIf = toCode empty
   
-  iterForEachLabel = return empty
-  iterInLabel = return empty
+  iterForEachLabel = toCode empty
+  iterInLabel = toCode empty
 
-  commentStart = return empty
-  blockCommentStart = return blockCmtStart
-  blockCommentEnd = return blockCmtEnd
-  docCommentStart = return docCmtStart
+  commentStart = toCode empty
+  blockCommentStart = toCode blockCmtStart
+  blockCommentEnd = toCode blockCmtEnd
+  docCommentStart = toCode docCmtStart
   docCommentEnd = blockCommentEnd
 
   keyDoc = unCPPHC
 
 instance PermanenceSym CppHdrCode where
   type Permanence CppHdrCode = BindData
-  static_ = return $ bd Static staticDocD
-  dynamic_ = return $ bd Dynamic dynamicDocD
+  static_ = toCode $ bd Static staticDocD
+  dynamic_ = toCode $ bd Dynamic dynamicDocD
 
 instance InternalPerm CppHdrCode where
   permDoc = bindDoc . unCPPHC
@@ -1407,102 +1407,102 @@ instance InternalPerm CppHdrCode where
 
 instance BodySym CppHdrCode where
   type Body CppHdrCode = Doc
-  body _ = return empty
-  bodyStatements _ = return empty
-  oneLiner _ = return empty
+  body _ = toCode empty
+  bodyStatements _ = toCode empty
+  oneLiner _ = toCode empty
 
-  addComments _ _ = return empty
+  addComments _ _ = toCode empty
 
   bodyDoc = unCPPHC
 
 instance BlockSym CppHdrCode where
   type Block CppHdrCode = Doc
-  block _ = return empty
+  block _ = toCode empty
 
 instance InternalBlock CppHdrCode where
   blockDoc = unCPPHC
-  docBlock = return
+  docBlock = toCode
 
 instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData
-  bool = return cppBoolTypeDoc
-  int = return intTypeDocD
-  float = return cppFloatTypeDoc
-  char = return charTypeDocD
-  string = return stringTypeDocD
-  infile = return cppInfileTypeDoc
-  outfile = return cppOutfileTypeDoc
+  bool = toCode cppBoolTypeDoc
+  int = toCode intTypeDocD
+  float = toCode cppFloatTypeDoc
+  char = toCode charTypeDocD
+  string = toCode stringTypeDocD
+  infile = toCode cppInfileTypeDoc
+  outfile = toCode cppOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
   listInnerType = listInnerTypeD
-  obj t = return $ typeDocD t
-  enumType t = return $ enumTypeDocD t
+  obj t = toCode $ typeDocD t
+  enumType t = toCode $ enumTypeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
-  void = return voidDocD
+  void = toCode voidDocD
 
   getType = cType . unCPPHC
   getTypeString = typeString . unCPPHC
   getTypeDoc = typeDoc . unCPPHC
   
 instance InternalType CppHdrCode where
-  typeFromData t s d = return $ td t s d
+  typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym CppHdrCode where
-  runStrategy _ _ _ _ = return empty
+  runStrategy _ _ _ _ = toCode empty
 
-  listSlice _ _ _ _ _ = return empty
+  listSlice _ _ _ _ _ = toCode empty
 
 instance UnaryOpSym CppHdrCode where
   type UnaryOp CppHdrCode = OpData
-  notOp = return $ od 0 empty
-  negateOp = return $ od 0 empty
-  sqrtOp = return $ od 0 empty
-  absOp = return $ od 0 empty
-  logOp = return $ od 0 empty
-  lnOp = return $ od 0 empty
-  expOp = return $ od 0 empty
-  sinOp = return $ od 0 empty
-  cosOp = return $ od 0 empty
-  tanOp = return $ od 0 empty
-  asinOp = return $ od 0 empty
-  acosOp = return $ od 0 empty
-  atanOp = return $ od 0 empty
-  floorOp = return $ od 0 empty
-  ceilOp = return $ od 0 empty
+  notOp = toCode $ od 0 empty
+  negateOp = toCode $ od 0 empty
+  sqrtOp = toCode $ od 0 empty
+  absOp = toCode $ od 0 empty
+  logOp = toCode $ od 0 empty
+  lnOp = toCode $ od 0 empty
+  expOp = toCode $ od 0 empty
+  sinOp = toCode $ od 0 empty
+  cosOp = toCode $ od 0 empty
+  tanOp = toCode $ od 0 empty
+  asinOp = toCode $ od 0 empty
+  acosOp = toCode $ od 0 empty
+  atanOp = toCode $ od 0 empty
+  floorOp = toCode $ od 0 empty
+  ceilOp = toCode $ od 0 empty
 
 instance BinaryOpSym CppHdrCode where
   type BinaryOp CppHdrCode = OpData
-  equalOp = return $ od 0 empty
-  notEqualOp = return $ od 0 empty
-  greaterOp = return $ od 0 empty
-  greaterEqualOp = return $ od 0 empty
-  lessOp = return $ od 0 empty
-  lessEqualOp = return $ od 0 empty
-  plusOp = return $ od 0 empty
-  minusOp = return $ od 0 empty
-  multOp = return $ od 0 empty
-  divideOp = return $ od 0 empty
-  powerOp = return $ od 0 empty
-  moduloOp = return $ od 0 empty
-  andOp = return $ od 0 empty
-  orOp = return $ od 0 empty
+  equalOp = toCode $ od 0 empty
+  notEqualOp = toCode $ od 0 empty
+  greaterOp = toCode $ od 0 empty
+  greaterEqualOp = toCode $ od 0 empty
+  lessOp = toCode $ od 0 empty
+  lessEqualOp = toCode $ od 0 empty
+  plusOp = toCode $ od 0 empty
+  minusOp = toCode $ od 0 empty
+  multOp = toCode $ od 0 empty
+  divideOp = toCode $ od 0 empty
+  powerOp = toCode $ od 0 empty
+  moduloOp = toCode $ od 0 empty
+  andOp = toCode $ od 0 empty
+  orOp = toCode $ od 0 empty
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
   var = varD 
   staticVar = staticVarD
-  const _ _ = liftA2 (mkVar "") void (return empty)
-  extVar _ _ _ = liftA2 (mkVar "") void (return empty)
-  self _ = liftA2 (mkVar "") void (return empty)
-  enumVar _ _ = liftA2 (mkVar "") void (return empty)
-  classVar _ _ = liftA2 (mkVar "") void (return empty)
-  extClassVar _ _ = liftA2 (mkVar "") void (return empty)
-  objVar _ _ = liftA2 (mkVar "") void (return empty)
-  objVarSelf _ _ = liftA2 (mkVar "") void (return empty)
-  listVar _ _ _ = liftA2 (mkVar "") void (return empty)
-  listOf _ _ = liftA2 (mkVar "") void (return empty)
-  iterVar _ _ = liftA2 (mkVar "") void (return empty)
+  const _ _ = liftA2 (mkVar "") void (toCode empty)
+  extVar _ _ _ = liftA2 (mkVar "") void (toCode empty)
+  self _ = liftA2 (mkVar "") void (toCode empty)
+  enumVar _ _ = liftA2 (mkVar "") void (toCode empty)
+  classVar _ _ = liftA2 (mkVar "") void (toCode empty)
+  extClassVar _ _ = liftA2 (mkVar "") void (toCode empty)
+  objVar _ _ = liftA2 (mkVar "") void (toCode empty)
+  objVarSelf _ _ = liftA2 (mkVar "") void (toCode empty)
+  listVar _ _ _ = liftA2 (mkVar "") void (toCode empty)
+  listOf _ _ = liftA2 (mkVar "") void (toCode empty)
+  iterVar _ _ = liftA2 (mkVar "") void (toCode empty)
 
-  ($->) _ _ = liftA2 (mkVar "") void (return empty)
+  ($->) _ _ = liftA2 (mkVar "") void (toCode empty)
   
   variableBind = varBind . unCPPHC
   variableName = varName . unCPPHC
@@ -1510,7 +1510,7 @@ instance VariableSym CppHdrCode where
   variableDoc = varDoc . unCPPHC
 
 instance InternalVariable CppHdrCode where
-  varFromData b n t d = liftA2 (vard b n) t (return d)
+  varFromData b n t d = liftA2 (vard b n) t (toCode d)
 
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
@@ -1521,13 +1521,13 @@ instance ValueSym CppHdrCode where
   litInt = litIntD
   litString = litStringD
 
-  pi = liftA2 mkVal float (return $ text "M_PI")
+  pi = liftA2 mkVal float (toCode $ text "M_PI")
 
   ($:) = enumElement
 
   valueOf = valueOfD
   arg n = argD (litInt $ n+1) argsList
-  enumElement en e = liftA2 mkVal (enumType en) (return $ text e)
+  enumElement en e = liftA2 mkVal (enumType en) (toCode $ text e)
   
   argsList = argsListD "argv"
 
@@ -1535,229 +1535,229 @@ instance ValueSym CppHdrCode where
   valueDoc = valDoc . unCPPHC
 
 instance NumericExpression CppHdrCode where
-  (#~) _ = liftA2 mkVal void (return empty)
-  (#/^) _ = liftA2 mkVal void (return empty)
-  (#|) _ = liftA2 mkVal void (return empty)
-  (#+) _ _ = liftA2 mkVal void (return empty)
-  (#-) _ _ = liftA2 mkVal void (return empty)
-  (#*) _ _ = liftA2 mkVal void (return empty)
-  (#/) _ _ = liftA2 mkVal void (return empty)
-  (#%) _ _ = liftA2 mkVal void (return empty)
-  (#^) _ _ = liftA2 mkVal void (return empty)
+  (#~) _ = liftA2 mkVal void (toCode empty)
+  (#/^) _ = liftA2 mkVal void (toCode empty)
+  (#|) _ = liftA2 mkVal void (toCode empty)
+  (#+) _ _ = liftA2 mkVal void (toCode empty)
+  (#-) _ _ = liftA2 mkVal void (toCode empty)
+  (#*) _ _ = liftA2 mkVal void (toCode empty)
+  (#/) _ _ = liftA2 mkVal void (toCode empty)
+  (#%) _ _ = liftA2 mkVal void (toCode empty)
+  (#^) _ _ = liftA2 mkVal void (toCode empty)
 
-  log _ = liftA2 mkVal void (return empty)
-  ln _ = liftA2 mkVal void (return empty)
-  exp _ = liftA2 mkVal void (return empty)
-  sin _ = liftA2 mkVal void (return empty)
-  cos _ = liftA2 mkVal void (return empty)
-  tan _ = liftA2 mkVal void (return empty)
-  csc _ = liftA2 mkVal void (return empty)
-  sec _ = liftA2 mkVal void (return empty)
-  cot _ = liftA2 mkVal void (return empty)
-  arcsin _ = liftA2 mkVal void (return empty)
-  arccos _ = liftA2 mkVal void (return empty)
-  arctan _ = liftA2 mkVal void (return empty)
-  floor _ = liftA2 mkVal void (return empty)
-  ceil _ = liftA2 mkVal void (return empty)
+  log _ = liftA2 mkVal void (toCode empty)
+  ln _ = liftA2 mkVal void (toCode empty)
+  exp _ = liftA2 mkVal void (toCode empty)
+  sin _ = liftA2 mkVal void (toCode empty)
+  cos _ = liftA2 mkVal void (toCode empty)
+  tan _ = liftA2 mkVal void (toCode empty)
+  csc _ = liftA2 mkVal void (toCode empty)
+  sec _ = liftA2 mkVal void (toCode empty)
+  cot _ = liftA2 mkVal void (toCode empty)
+  arcsin _ = liftA2 mkVal void (toCode empty)
+  arccos _ = liftA2 mkVal void (toCode empty)
+  arctan _ = liftA2 mkVal void (toCode empty)
+  floor _ = liftA2 mkVal void (toCode empty)
+  ceil _ = liftA2 mkVal void (toCode empty)
 
 instance BooleanExpression CppHdrCode where
-  (?!) _ = liftA2 mkVal void (return empty)
-  (?&&) _ _ = liftA2 mkVal void (return empty)
-  (?||) _ _ = liftA2 mkVal void (return empty)
+  (?!) _ = liftA2 mkVal void (toCode empty)
+  (?&&) _ _ = liftA2 mkVal void (toCode empty)
+  (?||) _ _ = liftA2 mkVal void (toCode empty)
 
-  (?<) _ _ = liftA2 mkVal void (return empty)
-  (?<=) _ _ = liftA2 mkVal void (return empty)
-  (?>) _ _ = liftA2 mkVal void (return empty)
-  (?>=) _ _ = liftA2 mkVal void (return empty)
-  (?==) _ _ = liftA2 mkVal void (return empty)
-  (?!=) _ _ = liftA2 mkVal void (return empty)
+  (?<) _ _ = liftA2 mkVal void (toCode empty)
+  (?<=) _ _ = liftA2 mkVal void (toCode empty)
+  (?>) _ _ = liftA2 mkVal void (toCode empty)
+  (?>=) _ _ = liftA2 mkVal void (toCode empty)
+  (?==) _ _ = liftA2 mkVal void (toCode empty)
+  (?!=) _ _ = liftA2 mkVal void (toCode empty)
    
 instance ValueExpression CppHdrCode where
-  inlineIf _ _ _ = liftA2 mkVal void (return empty)
-  funcApp _ _ _ = liftA2 mkVal void (return empty)
-  selfFuncApp _ _ _ _ = liftA2 mkVal void (return empty)
-  extFuncApp _ _ _ _ = liftA2 mkVal void (return empty)
-  newObj _ _ = liftA2 mkVal void (return empty)
-  extNewObj _ _ _ = liftA2 mkVal void (return empty)
+  inlineIf _ _ _ = liftA2 mkVal void (toCode empty)
+  funcApp _ _ _ = liftA2 mkVal void (toCode empty)
+  selfFuncApp _ _ _ _ = liftA2 mkVal void (toCode empty)
+  extFuncApp _ _ _ _ = liftA2 mkVal void (toCode empty)
+  newObj _ _ = liftA2 mkVal void (toCode empty)
+  extNewObj _ _ _ = liftA2 mkVal void (toCode empty)
 
-  exists _ = liftA2 mkVal void (return empty)
-  notNull _ = liftA2 mkVal void (return empty)
+  exists _ = liftA2 mkVal void (toCode empty)
+  notNull _ = liftA2 mkVal void (toCode empty)
 
 instance InternalValue CppHdrCode where
-  inputFunc = liftA2 mkVal void (return empty)
-  printFunc = liftA2 mkVal void (return empty)
-  printLnFunc = liftA2 mkVal void (return empty)
-  printFileFunc _ = liftA2 mkVal void (return empty)
-  printFileLnFunc _ = liftA2 mkVal void (return empty)
+  inputFunc = liftA2 mkVal void (toCode empty)
+  printFunc = liftA2 mkVal void (toCode empty)
+  printLnFunc = liftA2 mkVal void (toCode empty)
+  printFileFunc _ = liftA2 mkVal void (toCode empty)
+  printFileLnFunc _ = liftA2 mkVal void (toCode empty)
   
-  cast _ _ = liftA2 mkVal void (return empty)
+  cast _ _ = liftA2 mkVal void (toCode empty)
   
-  valFromData p t d = liftA2 (vd p) t (return d)
+  valFromData p t d = liftA2 (vd p) t (toCode d)
 
 instance Selector CppHdrCode where
-  objAccess _ _ = liftA2 mkVal void (return empty)
-  ($.) _ _ = liftA2 mkVal void (return empty)
+  objAccess _ _ = liftA2 mkVal void (toCode empty)
+  ($.) _ _ = liftA2 mkVal void (toCode empty)
 
-  objMethodCall _ _ _ _ = liftA2 mkVal void (return empty)
-  objMethodCallNoParams _ _ _ = liftA2 mkVal void (return empty)
+  objMethodCall _ _ _ _ = liftA2 mkVal void (toCode empty)
+  objMethodCallNoParams _ _ _ = liftA2 mkVal void (toCode empty)
 
-  selfAccess _ _ = liftA2 mkVal void (return empty)
+  selfAccess _ _ = liftA2 mkVal void (toCode empty)
 
-  listIndexExists _ _ = liftA2 mkVal void (return empty)
-  argExists _ = liftA2 mkVal void (return empty)
+  listIndexExists _ _ = liftA2 mkVal void (toCode empty)
+  argExists _ = liftA2 mkVal void (toCode empty)
   
-  indexOf _ _ = liftA2 mkVal void (return empty)
+  indexOf _ _ = liftA2 mkVal void (toCode empty)
 
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
-  func _ _ _ = liftA2 fd void (return empty)
+  func _ _ _ = liftA2 fd void (toCode empty)
   
-  get _ _ = liftA2 mkVal void (return empty)
-  set _ _ _ = liftA2 mkVal void (return empty)
+  get _ _ = liftA2 mkVal void (toCode empty)
+  set _ _ _ = liftA2 mkVal void (toCode empty)
 
-  listSize _ = liftA2 mkVal void (return empty)
-  listAdd _ _ _ = liftA2 mkVal void (return empty)
-  listAppend _ _ = liftA2 mkVal void (return empty)
+  listSize _ = liftA2 mkVal void (toCode empty)
+  listAdd _ _ _ = liftA2 mkVal void (toCode empty)
+  listAppend _ _ = liftA2 mkVal void (toCode empty)
 
-  iterBegin _ = liftA2 mkVal void (return empty)
-  iterEnd _ = liftA2 mkVal void (return empty)
+  iterBegin _ = liftA2 mkVal void (toCode empty)
+  iterEnd _ = liftA2 mkVal void (toCode empty)
 
 instance SelectorFunction CppHdrCode where
-  listAccess _ _ = liftA2 mkVal void (return empty)
-  listSet _ _ _ = liftA2 mkVal void (return empty)
-  at _ _ = liftA2 mkVal void (return empty)
+  listAccess _ _ = liftA2 mkVal void (toCode empty)
+  listSet _ _ _ = liftA2 mkVal void (toCode empty)
+  at _ _ = liftA2 mkVal void (toCode empty)
 
 instance InternalFunction CppHdrCode where
-  getFunc _ = liftA2 fd void (return empty)
-  setFunc _ _ _ = liftA2 fd void (return empty)
+  getFunc _ = liftA2 fd void (toCode empty)
+  setFunc _ _ _ = liftA2 fd void (toCode empty)
 
-  listSizeFunc = liftA2 fd void (return empty)
-  listAddFunc _ _ _ = liftA2 fd void (return empty)
-  listAppendFunc _ = liftA2 fd void (return empty)
+  listSizeFunc = liftA2 fd void (toCode empty)
+  listAddFunc _ _ _ = liftA2 fd void (toCode empty)
+  listAppendFunc _ = liftA2 fd void (toCode empty)
 
-  iterBeginFunc _ = liftA2 fd void (return empty)
-  iterEndFunc _ = liftA2 fd void (return empty)
+  iterBeginFunc _ = liftA2 fd void (toCode empty)
+  iterEndFunc _ = liftA2 fd void (toCode empty)
 
-  listAccessFunc _ _ = liftA2 fd void (return empty)
-  listSetFunc _ _ _ = liftA2 fd void (return empty)
+  listAccessFunc _ _ = liftA2 fd void (toCode empty)
+  listSetFunc _ _ _ = liftA2 fd void (toCode empty)
   
   functionType = fmap funcType
   functionDoc = funcDoc . unCPPHC
   
-  funcFromData t d = liftA2 fd t (return d)
+  funcFromData t d = liftA2 fd t (toCode d)
 
 instance InternalStatement CppHdrCode where
-  printSt _ _ _ _ = return (mkStNoEnd empty)
+  printSt _ _ _ _ = toCode (mkStNoEnd empty)
 
   state = stateD
-  loopState _ = return (mkStNoEnd empty)
+  loopState _ = toCode (mkStNoEnd empty)
 
-  emptyState = return $ mkStNoEnd empty
+  emptyState = toCode $ mkStNoEnd empty
   statementDoc = fst . unCPPHC
   statementTerm = snd . unCPPHC
   
-  stateFromData d t = return (d, t)
+  stateFromData d t = toCode (d, t)
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
-  assign _ _ = return (mkStNoEnd empty)
-  assignToListIndex _ _ _ = return (mkStNoEnd empty)
-  multiAssign _ _ = return (mkStNoEnd empty)
-  (&=) _ _ = return (mkStNoEnd empty)
-  (&-=) _ _ = return (mkStNoEnd empty)
-  (&+=) _ _ = return (mkStNoEnd empty)
-  (&++) _ = return (mkStNoEnd empty)
-  (&~-) _ = return (mkStNoEnd empty)
+  assign _ _ = toCode (mkStNoEnd empty)
+  assignToListIndex _ _ _ = toCode (mkStNoEnd empty)
+  multiAssign _ _ = toCode (mkStNoEnd empty)
+  (&=) _ _ = toCode (mkStNoEnd empty)
+  (&-=) _ _ = toCode (mkStNoEnd empty)
+  (&+=) _ _ = toCode (mkStNoEnd empty)
+  (&++) _ = toCode (mkStNoEnd empty)
+  (&~-) _ = toCode (mkStNoEnd empty)
 
   varDec = G.varDec static_ dynamic_
   varDecDef = G.varDecDef
-  listDec _ _ = return (mkStNoEnd empty)
-  listDecDef _ _ = return (mkStNoEnd empty)
-  objDecDef _ _ = return (mkStNoEnd empty)
-  objDecNew _ _ = return (mkStNoEnd empty)
-  extObjDecNew _ _ _ = return (mkStNoEnd empty)
-  objDecNewNoParams _ = return (mkStNoEnd empty)
-  extObjDecNewNoParams _ _ = return (mkStNoEnd empty)
+  listDec _ _ = toCode (mkStNoEnd empty)
+  listDecDef _ _ = toCode (mkStNoEnd empty)
+  objDecDef _ _ = toCode (mkStNoEnd empty)
+  objDecNew _ _ = toCode (mkStNoEnd empty)
+  extObjDecNew _ _ _ = toCode (mkStNoEnd empty)
+  objDecNewNoParams _ = toCode (mkStNoEnd empty)
+  extObjDecNewNoParams _ _ = toCode (mkStNoEnd empty)
   constDecDef = constDecDefD
 
-  print _ = return (mkStNoEnd empty)
-  printLn _ = return (mkStNoEnd empty)
-  printStr _ = return (mkStNoEnd empty)
-  printStrLn _ = return (mkStNoEnd empty)
+  print _ = toCode (mkStNoEnd empty)
+  printLn _ = toCode (mkStNoEnd empty)
+  printStr _ = toCode (mkStNoEnd empty)
+  printStrLn _ = toCode (mkStNoEnd empty)
 
-  printFile _ _ = return (mkStNoEnd empty)
-  printFileLn _ _ = return (mkStNoEnd empty)
-  printFileStr _ _ = return (mkStNoEnd empty)
-  printFileStrLn _ _ = return (mkStNoEnd empty)
+  printFile _ _ = toCode (mkStNoEnd empty)
+  printFileLn _ _ = toCode (mkStNoEnd empty)
+  printFileStr _ _ = toCode (mkStNoEnd empty)
+  printFileStrLn _ _ = toCode (mkStNoEnd empty)
 
-  getInput _ = return (mkStNoEnd empty)
-  discardInput = return (mkStNoEnd empty)
-  getFileInput _ _ = return (mkStNoEnd empty)
-  discardFileInput _ = return (mkStNoEnd empty)
+  getInput _ = toCode (mkStNoEnd empty)
+  discardInput = toCode (mkStNoEnd empty)
+  getFileInput _ _ = toCode (mkStNoEnd empty)
+  discardFileInput _ = toCode (mkStNoEnd empty)
 
-  openFileR _ _ = return (mkStNoEnd empty)
-  openFileW _ _ = return (mkStNoEnd empty)
-  openFileA _ _ = return (mkStNoEnd empty)
-  closeFile _ = return (mkStNoEnd empty)
+  openFileR _ _ = toCode (mkStNoEnd empty)
+  openFileW _ _ = toCode (mkStNoEnd empty)
+  openFileA _ _ = toCode (mkStNoEnd empty)
+  closeFile _ = toCode (mkStNoEnd empty)
 
-  getFileInputLine _ _ = return (mkStNoEnd empty)
-  discardFileLine _ = return (mkStNoEnd empty)
-  stringSplit _ _ _ = return (mkStNoEnd empty)
+  getFileInputLine _ _ = toCode (mkStNoEnd empty)
+  discardFileLine _ = toCode (mkStNoEnd empty)
+  stringSplit _ _ _ = toCode (mkStNoEnd empty)
 
-  stringListVals _ _ = return (mkStNoEnd empty)
-  stringListLists _ _ = return (mkStNoEnd empty)
+  stringListVals _ _ = toCode (mkStNoEnd empty)
+  stringListLists _ _ = toCode (mkStNoEnd empty)
 
-  break = return (mkStNoEnd empty)
-  continue = return (mkStNoEnd empty)
+  break = toCode (mkStNoEnd empty)
+  continue = toCode (mkStNoEnd empty)
 
-  returnState _ = return (mkStNoEnd empty)
-  multiReturn _ = return (mkStNoEnd empty)
+  returnState _ = toCode (mkStNoEnd empty)
+  multiReturn _ = toCode (mkStNoEnd empty)
 
-  valState _ = return (mkStNoEnd empty)
+  valState _ = toCode (mkStNoEnd empty)
 
-  comment _ = return (mkStNoEnd empty)
+  comment _ = toCode (mkStNoEnd empty)
 
-  free _ = return (mkStNoEnd empty)
+  free _ = toCode (mkStNoEnd empty)
 
-  throw _ = return (mkStNoEnd empty)
+  throw _ = toCode (mkStNoEnd empty)
 
-  initState _ _ = return (mkStNoEnd empty)
-  changeState _ _ = return (mkStNoEnd empty)
+  initState _ _ = toCode (mkStNoEnd empty)
+  changeState _ _ = toCode (mkStNoEnd empty)
 
-  initObserverList _ _ = return (mkStNoEnd empty)
-  addObserver _ = return (mkStNoEnd empty)
+  initObserverList _ _ = toCode (mkStNoEnd empty)
+  addObserver _ = toCode (mkStNoEnd empty)
 
-  inOutCall _ _ _ _ = return (mkStNoEnd empty)
-  selfInOutCall _ _ _ _ _ = return (mkStNoEnd empty)
-  extInOutCall _ _ _ _ _ = return (mkStNoEnd empty)
+  inOutCall _ _ _ _ = toCode (mkStNoEnd empty)
+  selfInOutCall _ _ _ _ _ = toCode (mkStNoEnd empty)
+  extInOutCall _ _ _ _ _ = toCode (mkStNoEnd empty)
 
-  multi _ = return (mkStNoEnd empty)
+  multi _ = toCode (mkStNoEnd empty)
 
 instance ControlStatementSym CppHdrCode where
-  ifCond _ _ = return (mkStNoEnd empty)
-  ifNoElse _ = return (mkStNoEnd empty)
-  switch _ _ _ = return (mkStNoEnd empty)
-  switchAsIf _ _ _ = return (mkStNoEnd empty)
+  ifCond _ _ = toCode (mkStNoEnd empty)
+  ifNoElse _ = toCode (mkStNoEnd empty)
+  switch _ _ _ = toCode (mkStNoEnd empty)
+  switchAsIf _ _ _ = toCode (mkStNoEnd empty)
 
-  ifExists _ _ _ = return (mkStNoEnd empty)
+  ifExists _ _ _ = toCode (mkStNoEnd empty)
 
-  for _ _ _ _ = return (mkStNoEnd empty)
-  forRange _ _ _ _ _ = return (mkStNoEnd empty)
-  forEach _ _ _ = return (mkStNoEnd empty)
-  while _ _ = return (mkStNoEnd empty)
+  for _ _ _ _ = toCode (mkStNoEnd empty)
+  forRange _ _ _ _ _ = toCode (mkStNoEnd empty)
+  forEach _ _ _ = toCode (mkStNoEnd empty)
+  while _ _ = toCode (mkStNoEnd empty)
 
-  tryCatch _ _ = return (mkStNoEnd empty)
+  tryCatch _ _ = toCode (mkStNoEnd empty)
 
-  checkState _ _ _ = return (mkStNoEnd empty)
+  checkState _ _ _ = toCode (mkStNoEnd empty)
 
-  notifyObservers _ _ = return (mkStNoEnd empty)
+  notifyObservers _ _ = toCode (mkStNoEnd empty)
 
-  getFileInputAll _ _ = return (mkStNoEnd empty)
+  getFileInputAll _ _ = toCode (mkStNoEnd empty)
 
 instance ScopeSym CppHdrCode where
   type Scope CppHdrCode = (Doc, ScopeTag)
-  private = return (privateDocD, Priv)
-  public = return (publicDocD, Pub)
+  private = toCode (privateDocD, Priv)
+  public = toCode (publicDocD, Pub)
 
 instance InternalScope CppHdrCode where
   scopeDoc = fst . unCPPHC
@@ -1765,7 +1765,7 @@ instance InternalScope CppHdrCode where
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = TypeData
   mType t = t
-  construct = return . G.construct
+  construct = toCode . G.construct
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
@@ -1778,20 +1778,20 @@ instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
   method = G.method
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
-    (variableType v) [] (return empty)
+    (variableType v) [] (toCode empty)
   setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
-    [param v] (return empty)
+    [param v] (toCode empty)
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor n = G.constructor n n
-  destructor n vars = lift1List (\m vs -> return $ mthd Pub 
+  destructor n vars = lift1List (\m vs -> toCode $ mthd Pub 
     (emptyIfEmpty (vcat (map (statementDoc . fmap destructSts) vs)) 
-    (methodDoc m))) (pubMethod ('~':n) n void [] (return empty) :: MS (CppHdrCode (Method CppHdrCode))) (map (zoom lensMStoGS) vars)
+    (methodDoc m))) (pubMethod ('~':n) n void [] (toCode empty) :: MS (CppHdrCode (Method CppHdrCode))) (map (zoom lensMStoGS) vars)
 
   docMain = mainFunction
 
   function = G.function
-  mainFunction _ = getPutReturn (setScope Pub) $ return $ mthd Pub empty
+  mainFunction _ = getPutReturn (setScope Pub) $ toCode $ mthd Pub empty
 
   docFunc = G.docFunc
 
@@ -1812,15 +1812,15 @@ instance InternalMethod CppHdrCode where
   commentedFunc = cppCommentedFunc Header
 
   methodDoc = mthdDoc . unCPPHC
-  methodFromData s d = return $ mthd s d
+  methodFromData s d = toCode $ mthd s d
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
-  stateVar s p v = return $ liftA3 svd (fmap snd s) (return $ stateVarDocD 
+  stateVar s p v = toState $ liftA3 svd (fmap snd s) (toCode $ stateVarDocD 
     empty (permDoc p) (statementDoc (state $ varDec v))) emptyState
-  stateVarDef _ s p vr vl = return $ liftA3 svd (fmap snd s) (return $ 
+  stateVarDef _ s p vr vl = toState $ liftA3 svd (fmap snd s) (toCode $ 
     cpphStateVarDef empty p vr vl) emptyState
-  constVar _ s v _ = return $ liftA3 svd (fmap snd s) (liftA3 (constVarDocD 
+  constVar _ s v _ = toState $ liftA3 svd (fmap snd s) (liftA3 (constVarDocD 
     empty) (bindDoc <$> static_) v endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
@@ -1838,10 +1838,10 @@ instance ClassSym CppHdrCode where
     (lift2Lists (cpphVarsFuncsList Priv) vars funcs) 
     (fmap fst public) (fmap fst private) parent blockStart blockEnd 
     endStatement) vs fs
-    where parent = case p of Nothing -> return empty
+    where parent = case p of Nothing -> toCode empty
                              Just pn -> inherit pn
           fs = map (zoom lensGStoMS) $ mths ++ [destructor n vs]
-  enum n es _ = return $ liftA4 (cpphEnum n) (return $ enumElementsDocD es 
+  enum n es _ = toState $ liftA4 (cpphEnum n) (toCode $ enumElementsDocD es 
     enumsEqualInts) blockStart blockEnd endStatement
   privClass = G.privClass
   pubClass = G.pubClass
@@ -1860,7 +1860,7 @@ instance ModuleSym CppHdrCode where
 
 instance InternalMod CppHdrCode where
   moduleDoc = modDoc . unCPPHC
-  modFromData n = G.modFromData n (\d m -> return $ md n m d)
+  modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CppHdrCode where
@@ -2044,7 +2044,7 @@ cppCommentedFunc ft cmt fn = do
   mn <- getCurrMainFunc
   scp <- getScope
   cmnt <- cmt
-  let cf = return (methodFromData scp $ commentedItem (blockCommentDoc cmnt) $ 
+  let cf = toState (methodFromData scp $ commentedItem (blockCommentDoc cmnt) $ 
         methodDoc f)
       ret Source = if mn then cf else fn
       ret Header = if mn then fn else cf

@@ -62,8 +62,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, onStateValue, liftA4, 
-  liftA5, liftList, lift1List, checkParams)
+import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onStateValue, 
+  liftA4, liftA5, liftList, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   getPutReturnList, addProgNameToPaths, setMain, setCurrMain, setParameters)
 
@@ -108,41 +108,41 @@ instance RenderSym JavaCode where
 
 instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
-  bottom = return empty
+  bottom = toCode empty
   
   fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
-  endStatement = return semi
-  endStatementLoop = return empty
+  endStatement = toCode semi
+  endStatementLoop = toCode empty
 
-  include _ = return $ text "import"
-  inherit n = return $ text "extends" <+> text n
+  include _ = toCode $ text "import"
+  inherit n = toCode $ text "extends" <+> text n
 
-  list _ = return $ text "ArrayList"
+  list _ = toCode $ text "ArrayList"
 
-  blockStart = return lbrace
-  blockEnd = return rbrace
+  blockStart = toCode lbrace
+  blockEnd = toCode rbrace
 
   ifBodyStart = blockStart
-  elseIf = return elseIfLabel
+  elseIf = toCode elseIfLabel
   
-  iterForEachLabel = return forLabel
-  iterInLabel = return colon
+  iterForEachLabel = toCode forLabel
+  iterInLabel = toCode colon
 
-  commentStart = return doubleSlash
-  blockCommentStart = return blockCmtStart
-  blockCommentEnd = return blockCmtEnd
-  docCommentStart = return docCmtStart
+  commentStart = toCode doubleSlash
+  blockCommentStart = toCode blockCmtStart
+  blockCommentEnd = toCode blockCmtEnd
+  docCommentStart = toCode docCmtStart
   docCommentEnd = blockCommentEnd
 
   keyDoc = unJC
 
 instance PermanenceSym JavaCode where
   type Permanence JavaCode = Doc
-  static_ = return staticDocD
-  dynamic_ = return dynamicDocD
+  static_ = toCode staticDocD
+  dynamic_ = toCode dynamicDocD
 
 instance InternalPerm JavaCode where
   permDoc = unJC
@@ -164,30 +164,30 @@ instance BlockSym JavaCode where
 
 instance InternalBlock JavaCode where
   blockDoc = unJC
-  docBlock = return
+  docBlock = toCode
 
 instance TypeSym JavaCode where
   type Type JavaCode = TypeData
-  bool = return boolTypeDocD
-  int = return intTypeDocD
-  float = return jFloatTypeDocD
-  char = return charTypeDocD
-  string = return jStringTypeDoc
-  infile = return jInfileTypeDoc
-  outfile = return jOutfileTypeDoc
+  bool = toCode boolTypeDocD
+  int = toCode intTypeDocD
+  float = toCode jFloatTypeDocD
+  char = toCode charTypeDocD
+  string = toCode jStringTypeDoc
+  infile = toCode jInfileTypeDoc
+  outfile = toCode jOutfileTypeDoc
   listType p st = liftA2 jListType st (list p)
   listInnerType = listInnerTypeD
-  obj t = return $ typeDocD t
-  enumType t = return $ enumTypeDocD t
+  obj t = toCode $ typeDocD t
+  enumType t = toCode $ enumTypeDocD t
   iterator t = t
-  void = return voidDocD
+  void = toCode voidDocD
 
   getType = cType . unJC
   getTypeString = typeString . unJC
   getTypeDoc = typeDoc . unJC
   
 instance InternalType JavaCode where
-  typeFromData t s d = return $ td t s d
+  typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym JavaCode where
   runStrategy = runStrategyD
@@ -196,38 +196,38 @@ instance ControlBlockSym JavaCode where
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
-  notOp = return notOpDocD
-  negateOp = return negateOpDocD
-  sqrtOp = return $ unOpPrec "Math.sqrt"
-  absOp = return $ unOpPrec "Math.abs"
-  logOp = return $ unOpPrec "Math.log10"
-  lnOp = return $ unOpPrec "Math.log"
-  expOp = return $ unOpPrec "Math.exp"
-  sinOp = return $ unOpPrec "Math.sin"
-  cosOp = return $ unOpPrec "Math.cos"
-  tanOp = return $ unOpPrec "Math.tan"
-  asinOp = return $ unOpPrec "Math.asin"
-  acosOp = return $ unOpPrec "Math.acos"
-  atanOp = return $ unOpPrec "Math.atan"
-  floorOp = return $ unOpPrec "Math.floor"
-  ceilOp = return $ unOpPrec "Math.ceil"
+  notOp = toCode notOpDocD
+  negateOp = toCode negateOpDocD
+  sqrtOp = toCode $ unOpPrec "Math.sqrt"
+  absOp = toCode $ unOpPrec "Math.abs"
+  logOp = toCode $ unOpPrec "Math.log10"
+  lnOp = toCode $ unOpPrec "Math.log"
+  expOp = toCode $ unOpPrec "Math.exp"
+  sinOp = toCode $ unOpPrec "Math.sin"
+  cosOp = toCode $ unOpPrec "Math.cos"
+  tanOp = toCode $ unOpPrec "Math.tan"
+  asinOp = toCode $ unOpPrec "Math.asin"
+  acosOp = toCode $ unOpPrec "Math.acos"
+  atanOp = toCode $ unOpPrec "Math.atan"
+  floorOp = toCode $ unOpPrec "Math.floor"
+  ceilOp = toCode $ unOpPrec "Math.ceil"
 
 instance BinaryOpSym JavaCode where
   type BinaryOp JavaCode = OpData
-  equalOp = return equalOpDocD
-  notEqualOp = return notEqualOpDocD
-  greaterOp = return greaterOpDocD
-  greaterEqualOp = return greaterEqualOpDocD
-  lessOp = return lessOpDocD
-  lessEqualOp = return lessEqualOpDocD
-  plusOp = return plusOpDocD
-  minusOp = return minusOpDocD
-  multOp = return multOpDocD
-  divideOp = return divideOpDocD
-  powerOp = return $ powerPrec "Math.pow"
-  moduloOp = return moduloOpDocD
-  andOp = return andOpDocD
-  orOp = return orOpDocD
+  equalOp = toCode equalOpDocD
+  notEqualOp = toCode notEqualOpDocD
+  greaterOp = toCode greaterOpDocD
+  greaterEqualOp = toCode greaterEqualOpDocD
+  lessOp = toCode lessOpDocD
+  lessEqualOp = toCode lessEqualOpDocD
+  plusOp = toCode plusOpDocD
+  minusOp = toCode minusOpDocD
+  multOp = toCode multOpDocD
+  divideOp = toCode divideOpDocD
+  powerOp = toCode $ powerPrec "Math.pow"
+  moduloOp = toCode moduloOpDocD
+  andOp = toCode andOpDocD
+  orOp = toCode orOpDocD
 
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
@@ -253,7 +253,7 @@ instance VariableSym JavaCode where
   variableDoc = varDoc . unJC
   
 instance InternalVariable JavaCode where
-  varFromData b n t d = liftA2 (vard b n) t (return d)
+  varFromData b n t d = liftA2 (vard b n) t (toCode d)
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
@@ -327,16 +327,16 @@ instance ValueExpression JavaCode where
   notNull = notNullD
 
 instance InternalValue JavaCode where
-  inputFunc = liftA2 mkVal (obj "Scanner") (return $ parens (
+  inputFunc = liftA2 mkVal (obj "Scanner") (toCode $ parens (
     text "new Scanner(System.in)"))
-  printFunc = liftA2 mkVal void (return $ text "System.out.print")
-  printLnFunc = liftA2 mkVal void (return $ text "System.out.println")
+  printFunc = liftA2 mkVal void (toCode $ text "System.out.print")
+  printLnFunc = liftA2 mkVal void (toCode $ text "System.out.println")
   printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "print") f)
   printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "println") f)
   
   cast = jCast
   
-  valFromData p t d = liftA2 (vd p) t (return d)
+  valFromData p t d = liftA2 (vd p) t (toCode d)
 
 instance Selector JavaCode where
   objAccess = objAccessD
@@ -388,7 +388,7 @@ instance InternalFunction JavaCode where
   functionType = fmap funcType
   functionDoc = funcDoc . unJC
 
-  funcFromData t d = liftA2 fd t (return d)
+  funcFromData t d = liftA2 fd t (toCode d)
 
 instance InternalStatement JavaCode where
   printSt _ p v _ = printStD p v
@@ -400,7 +400,7 @@ instance InternalStatement JavaCode where
   statementDoc = fst . unJC
   statementTerm = snd . unJC
   
-  stateFromData d t = return (d, t)
+  stateFromData d t = toCode (d, t)
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
@@ -503,8 +503,8 @@ instance ControlStatementSym JavaCode where
 
 instance ScopeSym JavaCode where
   type Scope JavaCode = Doc
-  private = return privateDocD
-  public = return publicDocD
+  private = toCode privateDocD
+  public = toCode publicDocD
 
 instance InternalScope JavaCode where
   scopeDoc = unJC
@@ -512,7 +512,7 @@ instance InternalScope JavaCode where
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
   mType t = t
-  construct = return . G.construct
+  construct = toCode . G.construct
 
 instance ParameterSym JavaCode where
   type Parameter JavaCode = ParamData
@@ -555,7 +555,7 @@ instance InternalMethod JavaCode where
     (fmap (fmap commentedItem) cmt)
   
   methodDoc = mthdDoc . unJC
-  methodFromData _ = return . mthd
+  methodFromData _ = toCode . mthd
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
@@ -568,7 +568,7 @@ instance StateVarSym JavaCode where
 
 instance InternalStateVar JavaCode where
   stateVarDoc = unJC
-  stateVarFromData = return . return
+  stateVarFromData = toState . toCode
 
 instance ClassSym JavaCode where
   type Class JavaCode = Doc
@@ -591,7 +591,7 @@ instance ModuleSym JavaCode where
   
 instance InternalMod JavaCode where
   moduleDoc = modDoc . unJC
-  modFromData n = G.modFromData n (\d m -> return $ md n m d)
+  modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym JavaCode where
@@ -635,7 +635,7 @@ jListType (TD Float _ _) lst = td (List Float) (render lst ++ "<Double>")
 jListType t lst = listTypeDocD t lst
 
 jArrayType :: JavaCode (Type JavaCode)
-jArrayType = return $ td (List $ Object "Object") "Object" (text "Object[]")
+jArrayType = toCode $ td (List $ Object "Object") "Object" (text "Object[]")
 
 jEquality :: JavaCode (Value JavaCode) -> JavaCode (Value JavaCode) -> 
   JavaCode (Value JavaCode)

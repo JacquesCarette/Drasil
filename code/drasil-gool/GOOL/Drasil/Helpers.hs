@@ -1,7 +1,7 @@
 module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
   hicat, vicat, vibcat, vmap, vimap, vibmap, emptyIfEmpty, emptyIfNull, 
-  mapPairFst, mapPairSnd, toCode, onStateValue, liftA4, liftA5, liftA6, liftA7, 
-  liftA8, liftList, lift2Lists, lift1List, getInnerType, getNestDegree, 
+  mapPairFst, mapPairSnd, toCode, toState, onStateValue, liftA4, liftA5, liftA6,
+  liftA7, liftA8, liftList, lift2Lists, lift1List, getInnerType, getNestDegree, 
   convType, checkParams
 ) where
 
@@ -15,6 +15,7 @@ import qualified GOOL.Drasil.Symantics as S (
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
+import Control.Monad.State (State)
 import Data.List (intersperse, nub)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
   (<>), comma, punctuate, empty, isEmpty)
@@ -63,6 +64,9 @@ mapPairSnd f (c, b) = (c, f b)
 
 toCode :: (Monad repr) => a -> repr a
 toCode = return
+
+toState :: a -> State s a
+toState = return
 
 onStateValue :: (a -> b) -> GS a -> GS b
 onStateValue = fmap

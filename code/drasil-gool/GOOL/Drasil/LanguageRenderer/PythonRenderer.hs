@@ -56,8 +56,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, onStateValue, liftA4, liftA5, 
-  liftA6, liftList, lift1List, lift2Lists, checkParams)
+import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, 
+  onStateValue, liftA4, liftA5, liftA6, liftList, lift1List, lift2Lists, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
 
@@ -101,42 +101,42 @@ instance RenderSym PythonCode where
   commentedMod cmt m = liftM2 (liftA2 commentedModD) m cmt
 
 instance InternalFile PythonCode where
-  top _ = return pytop
-  bottom = return empty
+  top _ = toCode pytop
+  bottom = toCode empty
 
   fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
-  endStatement = return empty
-  endStatementLoop = return empty
+  endStatement = toCode empty
+  endStatementLoop = toCode empty
 
-  include n = return $ pyInclude n
-  inherit n = return $ parens (text n)
+  include n = toCode $ pyInclude n
+  inherit n = toCode $ parens (text n)
 
-  list _ = return empty
+  list _ = toCode empty
 
-  blockStart = return colon
-  blockEnd = return empty
+  blockStart = toCode colon
+  blockEnd = toCode empty
 
   ifBodyStart = blockStart
-  elseIf = return $ text "elif"
+  elseIf = toCode $ text "elif"
   
-  iterForEachLabel = return forLabel
-  iterInLabel = return inLabel
+  iterForEachLabel = toCode forLabel
+  iterInLabel = toCode inLabel
 
-  commentStart = return $ text "#"
-  blockCommentStart = return empty
-  blockCommentEnd = return empty
-  docCommentStart = return $ text "##"
-  docCommentEnd = return empty
+  commentStart = toCode $ text "#"
+  blockCommentStart = toCode empty
+  blockCommentEnd = toCode empty
+  docCommentStart = toCode $ text "##"
+  docCommentEnd = toCode empty
 
   keyDoc = unPC
 
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
-  static_ = return empty
-  dynamic_ = return dynamicDocD
+  static_ = toCode empty
+  dynamic_ = toCode dynamicDocD
 
 instance InternalPerm PythonCode where
   permDoc = unPC
@@ -158,72 +158,72 @@ instance BlockSym PythonCode where
 
 instance InternalBlock PythonCode where
   blockDoc = unPC
-  docBlock = return
+  docBlock = toCode
 
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData
-  bool = return $ td Boolean "" empty
-  int = return intTypeDocD
-  float = return floatTypeDocD
-  char = return $ td Char "" empty
-  string = return pyStringType
-  infile = return $ td File "" empty
-  outfile = return $ td File "" empty
-  listType _ t = return $ td (List (getType t)) "[]" (brackets empty)
+  bool = toCode $ td Boolean "" empty
+  int = toCode intTypeDocD
+  float = toCode floatTypeDocD
+  char = toCode $ td Char "" empty
+  string = toCode pyStringType
+  infile = toCode $ td File "" empty
+  outfile = toCode $ td File "" empty
+  listType _ t = toCode $ td (List (getType t)) "[]" (brackets empty)
   listInnerType = listInnerTypeD
-  obj t = return $ typeDocD t
-  enumType t = return $ enumTypeDocD t
+  obj t = toCode $ typeDocD t
+  enumType t = toCode $ enumTypeDocD t
   iterator t = t
-  void = return $ td Void "NoneType" (text "NoneType")
+  void = toCode $ td Void "NoneType" (text "NoneType")
 
   getType = cType . unPC
   getTypeString = typeString . unPC
   getTypeDoc = typeDoc . unPC
 
 instance InternalType PythonCode where
-  typeFromData t s d = return $ td t s d
+  typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym PythonCode where
   runStrategy = runStrategyD
 
   listSlice vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
-    where getVal = fromMaybe (liftA2 mkVal void (return empty))
+    where getVal = fromMaybe (liftA2 mkVal void (toCode empty))
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData
-  notOp = return notOpDocD'
-  negateOp = return negateOpDocD
-  sqrtOp = return sqrtOpDocD'
-  absOp = return absOpDocD'
-  logOp = return pyLogOp
-  lnOp = return pyLnOp
-  expOp = return expOpDocD'
-  sinOp = return sinOpDocD'
-  cosOp = return cosOpDocD'
-  tanOp = return tanOpDocD'
-  asinOp = return asinOpDocD'
-  acosOp = return acosOpDocD'
-  atanOp = return atanOpDocD'
-  floorOp = return $ unOpPrec "math.floor"
-  ceilOp = return $ unOpPrec "math.ceil"
+  notOp = toCode notOpDocD'
+  negateOp = toCode negateOpDocD
+  sqrtOp = toCode sqrtOpDocD'
+  absOp = toCode absOpDocD'
+  logOp = toCode pyLogOp
+  lnOp = toCode pyLnOp
+  expOp = toCode expOpDocD'
+  sinOp = toCode sinOpDocD'
+  cosOp = toCode cosOpDocD'
+  tanOp = toCode tanOpDocD'
+  asinOp = toCode asinOpDocD'
+  acosOp = toCode acosOpDocD'
+  atanOp = toCode atanOpDocD'
+  floorOp = toCode $ unOpPrec "math.floor"
+  ceilOp = toCode $ unOpPrec "math.ceil"
 
 instance BinaryOpSym PythonCode where
   type BinaryOp PythonCode = OpData
-  equalOp = return equalOpDocD
-  notEqualOp = return notEqualOpDocD
-  greaterOp = return greaterOpDocD
-  greaterEqualOp = return greaterEqualOpDocD
-  lessOp = return lessOpDocD
-  lessEqualOp = return lessEqualOpDocD
-  plusOp = return plusOpDocD
-  minusOp = return minusOpDocD
-  multOp = return multOpDocD
-  divideOp = return divideOpDocD
-  powerOp = return $ powerPrec "**"
-  moduloOp = return moduloOpDocD
-  andOp = return $ andPrec "and"
-  orOp = return $ orPrec "or"
+  equalOp = toCode equalOpDocD
+  notEqualOp = toCode notEqualOpDocD
+  greaterOp = toCode greaterOpDocD
+  greaterEqualOp = toCode greaterEqualOpDocD
+  lessOp = toCode lessOpDocD
+  lessEqualOp = toCode lessEqualOpDocD
+  plusOp = toCode plusOpDocD
+  minusOp = toCode minusOpDocD
+  multOp = toCode multOpDocD
+  divideOp = toCode divideOpDocD
+  powerOp = toCode $ powerPrec "**"
+  moduloOp = toCode moduloOpDocD
+  andOp = toCode $ andPrec "and"
+  orOp = toCode $ orPrec "or"
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
@@ -231,7 +231,7 @@ instance VariableSym PythonCode where
   staticVar = staticVarD
   const = var
   extVar = extVarD
-  self l = liftA2 (mkVar "self") (obj l) (return $ text "self")
+  self l = liftA2 (mkVar "self") (obj l) (toCode $ text "self")
   enumVar = enumVarD
   classVar = classVarD classVarDocD
   extClassVar = classVarD pyClassVar
@@ -249,18 +249,18 @@ instance VariableSym PythonCode where
   variableDoc = varDoc . unPC
 
 instance InternalVariable PythonCode where
-  varFromData b n t d = liftA2 (vard b n) t (return d)
+  varFromData b n t d = liftA2 (vard b n) t (toCode d)
 
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
-  litTrue = liftA2 mkVal bool (return $ text "True")
-  litFalse = liftA2 mkVal bool (return $ text "False")
+  litTrue = liftA2 mkVal bool (toCode $ text "True")
+  litFalse = liftA2 mkVal bool (toCode $ text "False")
   litChar = litCharD
   litFloat = litFloatD
   litInt = litIntD
   litString = litStringD
 
-  pi = liftA2 mkVal float (return $ text "math.pi")
+  pi = liftA2 mkVal float (toCode $ text "math.pi")
 
   ($:) = enumElement
 
@@ -325,15 +325,15 @@ instance ValueExpression PythonCode where
   notNull = exists
 
 instance InternalValue PythonCode where
-  inputFunc = liftA2 mkVal string (return $ text "input()")  -- raw_input() for < Python 3.0
-  printFunc = liftA2 mkVal void (return $ text "print")
-  printLnFunc = liftA2 mkVal void (return empty)
-  printFileFunc _ = liftA2 mkVal void (return empty)
-  printFileLnFunc _ = liftA2 mkVal void (return empty)
+  inputFunc = liftA2 mkVal string (toCode $ text "input()")  -- raw_input() for < Python 3.0
+  printFunc = liftA2 mkVal void (toCode $ text "print")
+  printLnFunc = liftA2 mkVal void (toCode empty)
+  printFileFunc _ = liftA2 mkVal void (toCode empty)
+  printFileLnFunc _ = liftA2 mkVal void (toCode empty)
   
   cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
 
-  valFromData p t d = liftA2 (vd p) t (return d)
+  valFromData p t d = liftA2 (vd p) t (toCode d)
 
 instance Selector PythonCode where
   objAccess = objAccessD
@@ -373,7 +373,7 @@ instance InternalFunction PythonCode where
   getFunc = getFuncD
   setFunc = setFuncD
 
-  listSizeFunc = liftA2 fd int (return $ text "len")
+  listSizeFunc = liftA2 fd int (toCode $ text "len")
   listAddFunc _ = listAddFuncD "insert"
   listAppendFunc = listAppendFuncD "append"
 
@@ -386,11 +386,11 @@ instance InternalFunction PythonCode where
   functionType = fmap funcType
   functionDoc = funcDoc . unPC
 
-  funcFromData t d = liftA2 fd t (return d)
+  funcFromData t d = liftA2 fd t (toCode d)
 
 instance InternalStatement PythonCode where
   printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
-    (fromMaybe (liftA2 mkVal void (return empty)) f)
+    (fromMaybe (liftA2 mkVal void (toCode empty)) f)
 
   state = stateD
   loopState = loopStateD
@@ -399,7 +399,7 @@ instance InternalStatement PythonCode where
   statementDoc = fst . unPC
   statementTerm = snd . unPC
 
-  stateFromData d t = return (d, t)
+  stateFromData d t = toCode (d, t)
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
@@ -413,7 +413,7 @@ instance StatementSym PythonCode where
   (&++) v = mkStNoEnd <$> liftA2 plusPlusDocD' v plusOp
   (&~-) = decrement1D
 
-  varDec _ = return (mkStNoEnd empty)
+  varDec _ = toCode (mkStNoEnd empty)
   varDecDef = assign
   listDec _ v = mkStNoEnd <$> fmap pyListDec v
   listDecDef v vs = mkStNoEnd <$> liftA2 pyListDecDef v (liftList valList vs)
@@ -457,7 +457,7 @@ instance StatementSym PythonCode where
 
   returnState = returnD Empty
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs = return $ mkStNoEnd $ returnDocD vs
+  multiReturn vs = toCode $ mkStNoEnd $ returnDocD vs
 
   valState = valStateD Empty
 
@@ -510,8 +510,8 @@ instance ControlStatementSym PythonCode where
 
 instance ScopeSym PythonCode where
   type Scope PythonCode = Doc
-  private = return empty
-  public = return empty
+  private = toCode empty
+  public = toCode empty
 
 instance InternalScope PythonCode where
   scopeDoc = unPC
@@ -519,7 +519,7 @@ instance InternalScope PythonCode where
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
   mType t = t
-  construct = return . G.construct
+  construct = toCode . G.construct
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
@@ -565,11 +565,11 @@ instance InternalMethod PythonCode where
     (fmap (fmap commentedItem) cmt)
 
   methodDoc = mthdDoc . unPC
-  methodFromData _ = return . mthd
+  methodFromData _ = toCode . mthd
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
-  stateVar _ _ _ = return (return empty)
+  stateVar _ _ _ = toState (toCode empty)
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (permDoc 
     (static_ :: PythonCode (Permanence PythonCode)))
@@ -579,12 +579,12 @@ instance StateVarSym PythonCode where
 
 instance InternalStateVar PythonCode where
   stateVarDoc = unPC
-  stateVarFromData = return . return
+  stateVarFromData = toState . toCode
 
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
   buildClass = G.buildClass pyClass inherit
-  enum n es s = classFromData (return $ pyClass n empty (scopeDoc s)
+  enum n es s = classFromData (toState $ pyClass n empty (scopeDoc s)
     (enumElementsDocD' es) empty)
   privClass = G.privClass
   pubClass = G.pubClass
@@ -603,7 +603,7 @@ instance ModuleSym PythonCode where
 
 instance InternalMod PythonCode where
   moduleDoc = modDoc . unPC
-  modFromData n = G.modFromData n (\d m -> return $ md n m d)
+  modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym PythonCode where

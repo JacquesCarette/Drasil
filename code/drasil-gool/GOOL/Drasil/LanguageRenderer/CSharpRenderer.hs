@@ -62,8 +62,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
-import GOOL.Drasil.Helpers (toCode, onStateValue, liftA4, liftA5, liftList, 
-  lift1List, checkParams)
+import GOOL.Drasil.Helpers (toCode, toState, onStateValue, liftA4, liftA5, 
+  liftList, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
 
@@ -106,41 +106,41 @@ instance RenderSym CSharpCode where
 
 instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
-  bottom = return empty
+  bottom = toCode empty
 
   fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
-  endStatement = return semi
-  endStatementLoop = return empty
+  endStatement = toCode semi
+  endStatementLoop = toCode empty
 
-  include _ = return $ text "using"
-  inherit n = return $ colon <+> text n
+  include _ = toCode $ text "using"
+  inherit n = toCode $ colon <+> text n
 
-  list _ = return $ text "List"
+  list _ = toCode $ text "List"
 
-  blockStart = return lbrace
-  blockEnd = return rbrace
+  blockStart = toCode lbrace
+  blockEnd = toCode rbrace
 
   ifBodyStart = blockStart
-  elseIf = return elseIfLabel
+  elseIf = toCode elseIfLabel
   
-  iterForEachLabel = return $ text "foreach"
-  iterInLabel = return inLabel
+  iterForEachLabel = toCode $ text "foreach"
+  iterInLabel = toCode inLabel
 
-  commentStart = return doubleSlash
-  blockCommentStart = return blockCmtStart
-  blockCommentEnd = return blockCmtEnd
-  docCommentStart = return docCmtStart
+  commentStart = toCode doubleSlash
+  blockCommentStart = toCode blockCmtStart
+  blockCommentEnd = toCode blockCmtEnd
+  docCommentStart = toCode docCmtStart
   docCommentEnd = blockCommentEnd
 
   keyDoc = unCSC
 
 instance PermanenceSym CSharpCode where
   type Permanence CSharpCode = Doc
-  static_ = return staticDocD
-  dynamic_ = return dynamicDocD
+  static_ = toCode staticDocD
+  dynamic_ = toCode dynamicDocD
 
 instance InternalPerm CSharpCode where
   permDoc = unCSC
@@ -162,30 +162,30 @@ instance BlockSym CSharpCode where
 
 instance InternalBlock CSharpCode where
   blockDoc = unCSC
-  docBlock = return
+  docBlock = toCode
 
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData
-  bool = return boolTypeDocD
-  int = return intTypeDocD
-  float = return csFloatTypeDoc
-  char = return charTypeDocD
-  string = return stringTypeDocD
-  infile = return csInfileTypeDoc
-  outfile = return csOutfileTypeDoc
+  bool = toCode boolTypeDocD
+  int = toCode intTypeDocD
+  float = toCode csFloatTypeDoc
+  char = toCode charTypeDocD
+  string = toCode stringTypeDocD
+  infile = toCode csInfileTypeDoc
+  outfile = toCode csOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
   listInnerType = listInnerTypeD
-  obj t = return $ typeDocD t
-  enumType t = return $ enumTypeDocD t
+  obj t = toCode $ typeDocD t
+  enumType t = toCode $ enumTypeDocD t
   iterator t = t
-  void = return voidDocD
+  void = toCode voidDocD
 
   getType = cType . unCSC
   getTypeString = typeString . unCSC
   getTypeDoc = typeDoc . unCSC
   
 instance InternalType CSharpCode where
-  typeFromData t s d = return $ td t s d
+  typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym CSharpCode where
   runStrategy = runStrategyD
@@ -194,38 +194,38 @@ instance ControlBlockSym CSharpCode where
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
-  notOp = return notOpDocD
-  negateOp = return negateOpDocD
-  sqrtOp = return $ unOpPrec "Math.Sqrt"
-  absOp = return $ unOpPrec "Math.Abs"
-  logOp = return $ unOpPrec "Math.Log10"
-  lnOp = return $ unOpPrec "Math.Log"
-  expOp = return $ unOpPrec "Math.Exp"
-  sinOp = return $ unOpPrec "Math.Sin"
-  cosOp = return $ unOpPrec "Math.Cos"
-  tanOp = return $ unOpPrec "Math.Tan"
-  asinOp = return $ unOpPrec "Math.Asin"
-  acosOp = return $ unOpPrec "Math.Acos"
-  atanOp = return $ unOpPrec "Math.Atan"
-  floorOp = return $ unOpPrec "Math.Floor"
-  ceilOp = return $ unOpPrec "Math.Ceiling"
+  notOp = toCode notOpDocD
+  negateOp = toCode negateOpDocD
+  sqrtOp = toCode $ unOpPrec "Math.Sqrt"
+  absOp = toCode $ unOpPrec "Math.Abs"
+  logOp = toCode $ unOpPrec "Math.Log10"
+  lnOp = toCode $ unOpPrec "Math.Log"
+  expOp = toCode $ unOpPrec "Math.Exp"
+  sinOp = toCode $ unOpPrec "Math.Sin"
+  cosOp = toCode $ unOpPrec "Math.Cos"
+  tanOp = toCode $ unOpPrec "Math.Tan"
+  asinOp = toCode $ unOpPrec "Math.Asin"
+  acosOp = toCode $ unOpPrec "Math.Acos"
+  atanOp = toCode $ unOpPrec "Math.Atan"
+  floorOp = toCode $ unOpPrec "Math.Floor"
+  ceilOp = toCode $ unOpPrec "Math.Ceiling"
 
 instance BinaryOpSym CSharpCode where
   type BinaryOp CSharpCode = OpData
-  equalOp = return equalOpDocD
-  notEqualOp = return notEqualOpDocD
-  greaterOp = return greaterOpDocD
-  greaterEqualOp = return greaterEqualOpDocD
-  lessOp = return lessOpDocD
-  lessEqualOp = return lessEqualOpDocD
-  plusOp = return plusOpDocD
-  minusOp = return minusOpDocD
-  multOp = return multOpDocD
-  divideOp = return divideOpDocD
-  powerOp = return $ powerPrec "Math.Pow"
-  moduloOp = return moduloOpDocD
-  andOp = return andOpDocD
-  orOp = return orOpDocD
+  equalOp = toCode equalOpDocD
+  notEqualOp = toCode notEqualOpDocD
+  greaterOp = toCode greaterOpDocD
+  greaterEqualOp = toCode greaterEqualOpDocD
+  lessOp = toCode lessOpDocD
+  lessEqualOp = toCode lessEqualOpDocD
+  plusOp = toCode plusOpDocD
+  minusOp = toCode minusOpDocD
+  multOp = toCode multOpDocD
+  divideOp = toCode divideOpDocD
+  powerOp = toCode $ powerPrec "Math.Pow"
+  moduloOp = toCode moduloOpDocD
+  andOp = toCode andOpDocD
+  orOp = toCode orOpDocD
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
@@ -251,7 +251,7 @@ instance VariableSym CSharpCode where
   variableDoc = varDoc . unCSC
 
 instance InternalVariable CSharpCode where
-  varFromData b n t d = liftA2 (vard b n) t (return d)
+  varFromData b n t d = liftA2 (vard b n) t (toCode d)
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
@@ -325,15 +325,15 @@ instance ValueExpression CSharpCode where
   notNull = notNullD
 
 instance InternalValue CSharpCode where
-  inputFunc = liftA2 mkVal string (return $ text "Console.ReadLine()")
-  printFunc = liftA2 mkVal void (return $ text "Console.Write")
-  printLnFunc = liftA2 mkVal void (return $ text "Console.WriteLine")
+  inputFunc = liftA2 mkVal string (toCode $ text "Console.ReadLine()")
+  printFunc = liftA2 mkVal void (toCode $ text "Console.Write")
+  printLnFunc = liftA2 mkVal void (toCode $ text "Console.WriteLine")
   printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "Write") f)
   printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "WriteLine") f)
   
   cast = csCast
   
-  valFromData p t d = liftA2 (vd p) t (return d)
+  valFromData p t d = liftA2 (vd p) t (toCode d)
 
 instance Selector CSharpCode where
   objAccess = objAccessD
@@ -372,7 +372,7 @@ instance InternalFunction CSharpCode where
   getFunc = getFuncD
   setFunc = setFuncD
 
-  listSizeFunc = liftA2 fd int (return $ funcDocD (text "Count"))
+  listSizeFunc = liftA2 fd int (toCode $ funcDocD (text "Count"))
   listAddFunc _ = listAddFuncD "Insert"
   listAppendFunc = listAppendFuncD "Add"
 
@@ -385,7 +385,7 @@ instance InternalFunction CSharpCode where
   functionType = fmap funcType
   functionDoc = funcDoc . unCSC
 
-  funcFromData t d = liftA2 fd t (return d)
+  funcFromData t d = liftA2 fd t (toCode d)
 
 instance InternalStatement CSharpCode where
   printSt _ p v _ = printStD p v
@@ -397,7 +397,7 @@ instance InternalStatement CSharpCode where
   statementDoc = fst . unCSC
   statementTerm = snd . unCSC
   
-  stateFromData d t = return (d, t)
+  stateFromData d t = toCode (d, t)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
@@ -493,14 +493,14 @@ instance ControlStatementSym CSharpCode where
   checkState = checkStateD
   notifyObservers = notifyObserversD
 
-  getFileInputAll f v = while ((f $. liftA2 fd bool (return $ text 
+  getFileInputAll f v = while ((f $. liftA2 fd bool (toCode $ text 
     ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (valueOf v) (fmap 
     csFileInput f))
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc
-  private = return privateDocD
-  public = return publicDocD
+  private = toCode privateDocD
+  public = toCode publicDocD
 
 instance InternalScope CSharpCode where
   scopeDoc = unCSC
@@ -508,7 +508,7 @@ instance InternalScope CSharpCode where
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
   mType t = t
-  construct = return . G.construct
+  construct = toCode . G.construct
 
 instance ParameterSym CSharpCode where
   type Parameter CSharpCode = ParamData
@@ -551,7 +551,7 @@ instance InternalMethod CSharpCode where
     (fmap (fmap commentedItem) cmt)
   
   methodDoc = mthdDoc . unCSC
-  methodFromData _ = return . mthd
+  methodFromData _ = toCode . mthd
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
@@ -564,7 +564,7 @@ instance StateVarSym CSharpCode where
 
 instance InternalStateVar CSharpCode where
   stateVarDoc = unCSC
-  stateVarFromData = return . return
+  stateVarFromData = toState . toCode
 
 instance ClassSym CSharpCode where
   type Class CSharpCode = Doc
@@ -587,7 +587,7 @@ instance ModuleSym CSharpCode where
   
 instance InternalMod CSharpCode where
   moduleDoc = modDoc . unCSC
-  modFromData n = G.modFromData n (\d m -> return $ md n m d)
+  modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
   updateModuleDoc f = fmap (fmap (updateModDoc f))
 
 instance BlockCommentSym CSharpCode where

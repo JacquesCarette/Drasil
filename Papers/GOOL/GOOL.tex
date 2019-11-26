@@ -11,25 +11,22 @@
 %\documentclass[sigplan]{acmart}\settopmatter{}
 
 
-%% Conference information
-%% Supplied to authors by publisher for camera-ready submission;
-%% use defaults for review submission.
-\acmConference[PL'20]{ACM SIGPLAN Conference on Programming Languages}{January 
-01--03, 2018}{New York, NY, USA}
-\acmYear{2020}
-\acmISBN{} % \acmISBN{978-x-xxxx-xxxx-x/YY/MM}
-\acmDOI{} % \acmDOI{10.1145/nnnnnnn.nnnnnnn}
-%\startPage{1}
-
 %% Copyright information
 %% Supplied to authors (based on authors' rights management selection;
 %% see authors.acm.org) by publisher for camera-ready submission;
 %% use 'none' for review submission.
-\setcopyright{none}
-%\setcopyright{acmcopyright}
-%\setcopyright{acmlicensed}
-%\setcopyright{rightsretained}
-%\copyrightyear{2018}           %% If different from \acmYear
+%%% The following is specific to PEPM '20 and the paper
+%%% 'GOOL: A Generic Object-Oriented Language'
+%%% by Jacques Carette, Brooks MacLachlan, and Spencer Smith.
+%%%
+\setcopyright{acmlicensed}
+\acmPrice{15.00}
+\acmDOI{10.1145/3372884.3373159}
+\acmYear{2020}
+\copyrightyear{2020}
+\acmISBN{978-1-4503-7096-7/20/01}
+\acmConference[PEPM '20]{Proceedings of the 2020 ACM SIGPLAN Workshop on Partial Evaluation and Program Manipulation}{January 20, 2020}{New Orleans, LA, USA}
+\acmBooktitle{Proceedings of the 2020 ACM SIGPLAN Workshop on Partial Evaluation and Program Manipulation (PEPM '20), January 20, 2020, New Orleans, LA, USA}
 
 %% Bibliography style
 \bibliographystyle{ACM-Reference-Format}
@@ -125,27 +122,9 @@
 %% extraction tools.
 
 %% Author with single affiliation.
-\author{Brooks MacLachlan}
-%\authornote{with author1 note}          %% \authornote is optional;
-                                        %% can be repeated if necessary
 %\orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
-\affiliation{
-%  \position{Position1}
-  \department{Department of Computing and Software}              %% \department
-  %%is recommended
-  \institution{McMaster University}            %% \institution is required
-  \streetaddress{1280 Main Street West}
-  \city{Hamilton}
-  \state{Ontario}
-  \postcode{L8S 4L8}
-  \country{Canada}                    %% \country is recommended
-}
-\email{maclachb@mcmaster.ca}          %% \email is recommended
-
 \author{Jacques Carette}
-%\authornote{with author1 note}          %% \authornote is optional;
-%% can be repeated if necessary
-%\orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
+\orcid{0000-0001-8993-9804}
 \affiliation{
 %  \position{Position1}
   \department{Department of Computing and Software}              %%
@@ -159,14 +138,26 @@
 }
 \email{carette@mcmaster.ca}          %% \email is recommended
 
+\author{Brooks MacLachlan}
+%\authornote{with author1 note}          %% \authornote is optional;
+                                        %% can be repeated if necessary
+\affiliation{
+  \department{Department of Computing and Software}              %% \department
+  \institution{McMaster University}            %% \institution is required
+  \streetaddress{1280 Main Street West}
+  \city{Hamilton}
+  \state{Ontario}
+  \postcode{L8S 4L8}
+  \country{Canada}                    %% \country is recommended
+}
+\email{maclachb@mcmaster.ca}          %% \email is recommended
+
 \author{Spencer Smith}
 %\authornote{with author1 note}          %% \authornote is optional;
 %% can be repeated if necessary
-%\orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
+\orcid{0000-0002-0760-0987}
 \affiliation{
-%  \position{Position1}
   \department{Department of Computing and Software}              %%
-  %%\department is recommended
   \institution{McMaster University}            %% \institution is required
   \streetaddress{1280 Main Street West}
   \city{Hamilton}
@@ -577,7 +568,9 @@ show this: out of the $328$ total methods,
 $229$ are shared. That is
 $40\%$ more common instances than between Python and Java, for example.
 A further $37$ are partially shared --- they 
-call the same common function but with different parameters. The numbers of 
+call the same common function but with different parameters. 
+\begin{comment}
+The numbers of 
 common methods between each pair of renderers are shown in 
 Figure~\ref{fig:common}. Python is the least 
 similar to the other languages, whereas \Csharp has the most in common.
@@ -585,7 +578,7 @@ $143$ methods are
 the same between all $4$ target languages (which possibly means
 they should be generic functions rather than methods).
 
-\begin{figure}[!h]
+\begin{figure}[tbh]
 \begin{tikzpicture}[scale=0.9]
 \begin{axis}[
 ybar,
@@ -604,6 +597,7 @@ x tick label style={rotate=40,anchor=east},
 \caption{Number of common methods between renderers}
 \label{fig:common}
 \end{figure}
+\end{comment}
 
 %\Cplusplus{} is different since most modules are split between a source and
 %header file. To generate \Cplusplus, we traverse the code twice,

@@ -181,13 +181,12 @@
 %% Note: \begin{abstract}...\end{abstract} environment must come
 %% before \maketitle command
 \begin{abstract}
-  We present GOOL, a Generic Object-Oriented Language.  GOOL demonstrates that
+  We present GOOL, a Generic Object-Oriented Language.  GOOL shows that
   with the right abstractions, a language can capture the essence of
   object-oriented programs.  GOOL generates
-  human-readable, documented and idiomatic source code in multiple languages.
+  human-readable, documented and idiomatic code in 
+  Python, Java, \Csharp, and \Cplusplus.
   In it, we can express common programming idioms and patterns.
-  GOOL is an embedded DSL in Haskell
-  that generates code in Python, Java, \Csharp, and \Cplusplus.
 \end{abstract}
 
 
@@ -466,22 +465,21 @@ generate \verb|Makefile|s and Doxygen config files.
 \section{GOOL Implementation} \label{sec:implementation}
 
 There are three standard methods of encoding EDSLs in Haskell:
-shallow (a set of GADTs), deep (a set of functions), or ``finally
+deep (a set of GADTs), shallow (a set of functions), or ``finally
 tagless'' (a set of methods in classes).  GOOL uses a
 ``sophisticated'' version of tagless~\cite{carette2009finally}
 involving \emph{type families}. 
 
 Tagless encodes a language as a generalized
 \emph{fold} over any \emph{representation} of the language.  Thus what
-look like GOOL ``keywords'' are actually class methods, which we typically 
-instantiate to language renderers, though we're also free to do various static 
+look like GOOL ``keywords'' are actually methods, typically 
+instantiated to language renderers, but also to static
 analysis passes. By using \emph{type families}, each instance can choose
 different underlying data structures for GOOL's types.  For example the
 \Cplusplus~instance stores destructor statements with state variables, which
-is not needed by the other languages.  Our language is defined by 
-$328$ methods across a hierarchy of $43$ classes (see Figure~\ref{fig:classes}
-for the dependency graph), grouped by functionality 
---- GOOL is not a small language!
+is not needed by the other languages.  GOOL is defined by 
+$328$ methods across a hierarchy of $43$ classes (see Figure~\ref{fig:classes})
+, grouped by functionality --- it is not a small language!
 
 For example, here is part of the class for variables:
 \begin{lstlisting}
@@ -493,8 +491,7 @@ class (TypeSym repr) => VariableSym repr where
 As variables are typed, their representation must be too and
 thus that capability (the~\verb|TypeSym| class) is a constraint.  
 The \emph{associated type}~\verb|type Variable repr| is a representation-dependent
-type-level function.  Each instance of this
-class can define its own representation of what a
+type-level function.  Each instance can define its own representation of what a
 \verb|Variable| is. 
 
 %For Java, we instantiate the \verb|VariableSym| class as follows:
@@ -576,21 +573,17 @@ class can define its own representation of what a
 We have defined $300$ functions that abstract over 
 \common alities between target languages, making writing new renderers
 fairly straightforward. GOOL's Java and \Csharp{} renderers 
-demonstrate this: out of the $328$ total methods,
-the instances of $229$ are shared. That is
-$40\%$ more common instances compared to between Python and Java, for example.
-%% TODO: try to bring some of this back
-\begin{comment}
-A further $37$ are partially shared, for example they 
+show this: out of the $328$ total methods,
+$229$ are shared. That is
+$40\%$ more common instances than between Python and Java, for example.
+A further $37$ are partially shared --- they 
 call the same common function but with different parameters. The numbers of 
 common methods between each pair of renderers are shown in 
-Figure~\ref{fig:common}. It is clear from the graph that Python is the least 
-similar to the other target languages, whereas \Csharp has the most in common 
-with the others, closely followed by Java. 
+Figure~\ref{fig:common}. Python is the least 
+similar to the other languages, whereas \Csharp has the most in common.
 $143$ methods are
-actually the same between all $4$ languages GOOL currently targets. This might
-indicate that some should be generic functions rather than class methods,
-but we have not yet investigated this in detail.
+the same between all $4$ target languages (which possibly means
+they should be generic functions rather than methods).
 
 \begin{figure}[!h]
 \begin{tikzpicture}[scale=0.9]
@@ -611,7 +604,6 @@ x tick label style={rotate=40,anchor=east},
 \caption{Number of common methods between renderers}
 \label{fig:common}
 \end{figure}
-\end{comment}
 
 %\Cplusplus{} is different since most modules are split between a source and
 %header file. To generate \Cplusplus, we traverse the code twice,
@@ -706,8 +698,8 @@ signficantly across languages.  Thus we abstract over the details through an
 \paragraph{Lists}
 As with command line arguments, list APIs vary considerably.
 We thus reverse engineer the ``useful'' API for lists from actual
-use cases (rather than abstracting from the languages). We note that
-lists in OO languages are rarely \emph{linked lists} (unlike Haskell), but
+use cases.
+Lists in OO languages are rarely \emph{linked lists} (unlike Haskell), but
 more like dynamically sized vectors. In particular, indexing a list by
 position, which is a horrifying idea for linked lists, is extremely common.
 The result is a small set of functions and statements, shown in
@@ -736,7 +728,7 @@ Idiomatic code generation is enabled by having
 appropriate high-level information driving the generation.
 
 \paragraph{Printing}
-is also quite target dependent.  Here again Python
+is also target dependent.  Again Python
 is more ``expressive'' so that printing a list (via
 \verb|printLn ages|) generates \verb|print(ages)|, but in other languages
 we must generate a loop. 
@@ -753,17 +745,15 @@ we must generate a loop.
 % }
 % std::cout << "]" << std::endl;
 % \end{lstlisting}
-In addition to printing, there is also functionality for reading input.
+There is also similar functionality for reading input.
 
 \paragraph{Procedures with I/O/B parameters}
-Our target, hand-written codes had methods that
+Our hand-written target codes had methods that
 used their parameters differently: as inputs, outputs, or both.
 This is a \emph{semantic} pattern that is
 not necessarily obvious in any of the implementations. Once noticed,
-we could create an encoding of that information to generate better,
-more idiomatic code in each language.
-
-Concretely, the following Python code
+we created an encoding of that information to generate better,
+more idiomatic code.  Concretely, the following Python code
 \begin{lstlisting}
 def applyDiscount(price, discount):
     price = price - discount
@@ -771,7 +761,7 @@ def applyDiscount(price, discount):
 
     return price, isAffordable
 \end{lstlisting}
-can be properly captured in GOOL using the \verb|inOutFunc| idiom:
+can be captured in GOOL with the \verb|inOutFunc| idiom:
 \begin{lstlisting}
 inOutFunc "applyDiscount" public static_
   [discount] [isAffordable] [price]
@@ -797,7 +787,7 @@ void applyDiscount(int &price, \
 \end{lstlisting}
 to capture the same idea.  The Java version (not shown) is more
 awkward.
-We see how a natural task-level ``feature'' --- 
+A natural task-level ``feature'' --- 
 different kinds of parameters --- ends up being rendered differently,
 but hopefully idiomatically, in each target language.  GOOL manages the
 tedious aspects of generating any needed variable declarations and return
@@ -807,7 +797,7 @@ statements.  To call an \verb|inOutFunc| function, one must use
 \paragraph{Getters and setters} are common in OO programs (regardless of
 whether these actually achieve encapsulation), and mechanical to write.
 In GOOL, \verb|getMethod "FooClass" foo| and \verb|setMethod "FooClass" foo|
-are sufficient to get that code generated, which can be called with
+are sufficient to generate that code, which can be called with
 \verb|get| and \verb|set|, and yet abstracts over the idiosyncracies of
 each target language.
 
@@ -815,13 +805,13 @@ each target language.
 GOOL currently handles three design patterns: Observer,
 State, and Strategy~\cite{gamma1995design}. 
 
-For Strategy, we draw from partial evaluation, and ensure that the set of
+For Strategy, we ensure that the set of
 strategies that will be used are statically known at generation
-time.  Then we can generate code only for those that will
+time, and then generate code only for those that will
 be used.  \verb|runStrategy| is the user-facing function.
 
-For Observer, \verb|initObserverList| generates an observer for a list.  More
-specifically, given a list of (initial values), it generates a declaration of
+For Observer, \verb|initObserverList| generates an observer, given a list
+of initial values; it generates a declaration of
 an observer list variable, initially containing the given values.
 \verb|addObserver| can be used to add a value to the observer list, and
 \verb|notifyObservers| will call a method on each of the observers. Currently,
@@ -831,14 +821,14 @@ observer list in a given scope.
 The State pattern is specialized to \emph{Finite State Machines}
 with fairly general transition functions.  Transitions happen on checking, not
 on changing the state. \verb|initState| takes a name and a state label and
-generates a declaration of a variable with the given name and initial state.
-\verb|changeState| changes the state of the variable to a new state.
-\verb|checkState| is more complex.  It takes the name of the state variable, a
-list of value-body pairs, and a fallback body; and it generates a conditional
+generates a declaration of a variable.
+\verb|changeState| changes the state of the variable.
+\verb|checkState| is more complex:  it takes the name of the state variable, a
+list of value-body pairs, and a fallback body; it generates a conditional
 (usually a switch statement) that checks the state and runs the corresponding
 body, or the fallback body, if none of the states match.
 
-The design patterns could already have been coded in GOOL, but
+The design patterns could have been coded in GOOL, but
 having these as language features is useful for two reasons: 1) the GOOL-level
 code is clearer in its intent (and more concise), and 2) the resulting code
 can be more idiomatic.
@@ -849,23 +839,18 @@ write the code proper.
 \begin{figure}[tb]
 \begin{lstlisting}
 patternTest :: (MethodSym repr) => repr (Method repr)
-patternTest = let 
- fsmName = "myFSM"
- offState = "Off"
- onState = "On"
- noState = "Neither"
- obsName = "Observer"
- obs1Name = "obs1"
- obs2Name = "obs2"
- printNum = "printNum"
- nName = "n"
+patternTest = let      fsmName = "myFSM"
+ offState = "Off"      onState = "On"
+ noState = "Neither"   obsName = "Observer"
+ obs1Name = "obs1"     obs2Name = "obs2"
+ printNum = "printNum" nName = "n"
  obsType = obj obsName
  n = var n int
  obs1 = var obs1Name obsType
  obs2 = var obs2Name obsType
- newObs = extNewObj obsName obsType []
+ newObs = extNewObj obsName obsType [] in
    
- in mainFunction (body [block [
+ mainFunction (body [block [
   varDec n,
 
   initState fsmName offState, 
@@ -895,7 +880,7 @@ patternTest = let
 \textbf{Haxe}~\cite{Haxe} is a general-purpose multi-paradigm language and cross-platform
 compiler.  It compiles to all of the languages GOOL does, and many
 others.  However, it is designed as a more traditional programming language, and
-thus does not offer the high-level abstractions that GOOL provides. Furthermore
+does not offer the high-level abstractions that GOOL provides. Furthermore
 Haxe strips comments and generates source code around a custom framework; 
 the effort of learning this framework and the lack of comments makes the generated
 code not particularly readable. The internal organization of Haxe does not seem
@@ -908,14 +893,13 @@ model-driven and uses a final ``output model'' from which actual code can be
 generated. Since the ``output model'' is quite similar to the generated
 code, it presented challenges with regards to semantic, conventional, and
 library-related differences between the target languages
-\cite{kovesdan2017multi}. GOOL's finally-tagless approach and syntax for
-high-level tasks, on the other hand, help overcome differences between
+\cite{kovesdan2017multi}. GOOL's design helps overcome differences between
 target languages.
 
 \textbf{ThingML}~\cite{harrand2016thingml} is a DSL for model-driven engineering
 targeting C, \Cplusplus, Java, and JavaScript. It is specialized to deal with
 distributed reactive systems (a nevertheless broad range of application domains).
-This means that this is not quite a general-purpose DSL, unlike GOOL.
+This means that it is not quite a general-purpose DSL, unlike GOOL.
 ThingML's modelling-related syntax and abstractions stand in contrast to GOOL's
 object-oriented syntax and abstractions. The generated code lacks some of the
 pretty-printing provided by GOOL, specifically indentation, which detracts from
@@ -923,9 +907,8 @@ readability.
 
 \subsection{Object-oriented generators}
 
-There are a number of code generators with multiple target OO languages,
-though all are for more restricted domains than GOOL, and thus do not meet all
-of our requirements.
+There are code generators which multiple target OO languages, but all are
+domain-specific.
 
 \textbf{Google protocol buffers}~\cite{Protobuf} is a DSL for serializing
 structured data, which can be compiled into Java, Python, Objective C, and
@@ -948,16 +931,16 @@ Rust.
 A number of languages for modeling design patterns have been developed. The
 \textbf{Design Pattern Modeling Language} (DPML)~\cite{mapelsden2002design} is similar
 to the Unified Modeling Language (UML) but designed specifically to overcome
-UML's shortcomings so as to be able to model all design patterns. DPML consists of
+UML's shortcomings. DPML consists of
 both specification diagrams and instance diagrams for instantiations of design
-patterns, but does not attempt to generate actual source code from the models.
+patterns, but does not attempt to generate actual source code.
 The \textbf{Role-Based Metamodeling Language}~\cite{kim2003uml} is also based on UML but
 with changes to allow for better models of design patterns, with specifications
 for the structure, interactions, and state-based behaviour in patterns. Again,
 source code generation is not attempted. Another metamodel for design patterns
-includes generation of Java code \cite{albin2001meta}. IBM developed a DSL in 
+includes generation of Java code~\cite{albin2001meta}. IBM developed a DSL in 
 the form of a visual user interface for generation of OO code based on design 
-patterns \cite{budinsky1996automatic}. The languages that
+patterns~\cite{budinsky1996automatic}. The languages that
 generate code do so only for design patterns, not for any general-purpose code,
 as GOOL does.
 
@@ -965,11 +948,10 @@ as GOOL does.
 
 Currently GOOL code is typed based on what it represents:
 variable, value, type, or method, for example. The type system does not
-go ``deeper'', so that variables are untyped, and values (such as booleans
+go ``deeper'', so that values (such as booleans
 and strings) are simply ``values''.  This is sufficient to allow us to
 generate well-formed code, but not to ensure that it is well-typed.
-We have started to statically type GOOL by making the
-representations for GOOL's \verb|Variable|s and \verb|Value|s GADTs. 
+We have started to statically type GOOL.
 
 We also want to improve the generated import statements, via tracking
 actual dependencies on features used.  In general, we can do various 
@@ -998,12 +980,12 @@ can be ``compiled'' to them.  Of course, these languages are syntactically
 quite different in places, and each contains some unique ideas as well.
 In other words, there exists a ``conceptual'' object-oriented language that
 is more than just ``pseudocode'': it is a full-fledged executable language
-(through generation) that captures the common essence of mainstream OO
+that captures the common essence of mainstream OO
 languages.
 
 GOOL is an unusual DSL, as its ``domain'' is actually that of object-oriented
-languages. Or, to be more precise, of conceptual programs that can be
-easily written in languages containing a procedural code with an
+programs. More precisely, of conceptual programs that can be
+easily written in languages containing a procedural core with an
 object-oriented layer on top --- which is what Java, Python, \Cplusplus{}, and
 \Csharp{} are.
 

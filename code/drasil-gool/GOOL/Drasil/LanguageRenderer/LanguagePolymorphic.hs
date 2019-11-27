@@ -33,7 +33,7 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
   FileType)
-import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, toState, onStateValue, liftList)
+import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, toState, onStateValue, on2StateValues, liftList)
 import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD, 
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
@@ -46,8 +46,6 @@ import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList, isNothing)
 import Control.Lens ((^.))
 import Control.Lens.Zoom (zoom)
-import Control.Applicative (liftA2)
-import Control.Monad (liftM2)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   vcat, semi, equals, isEmpty)
 
@@ -251,8 +249,8 @@ buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) ->
   (Label -> repr (Keyword repr)) -> Label -> Maybe Label -> repr (Scope repr) 
   -> [GS (repr (StateVar repr))] -> 
   [MS (repr (Method repr))] -> GS (repr (Class repr))
-buildClass f i n p s vs fs = classFromData (liftA2 (f n parent (scopeDoc s)) 
-  (liftList (stateVarListDocD . map stateVarDoc) vs) 
+buildClass f i n p s vs fs = classFromData (on2StateValues (f n parent 
+  (scopeDoc s)) (liftList (stateVarListDocD . map stateVarDoc) vs) 
   (liftList (methodListDocD . map methodDoc) (map (zoom lensGStoMS) fs)))
   where parent = case p of Nothing -> empty
                            Just pn -> keyDoc $ i pn
@@ -278,15 +276,15 @@ docClass d = S.commentedClass (docComment $ toState $ classDox d)
 
 commentedClass :: (RenderSym repr) => GS (repr (BlockComment repr))
   -> GS (repr (Class repr)) -> GS (repr (Class repr))
-commentedClass cmt cs = classFromData (liftA2 (\cmt' cs' -> commentedItem 
-  (blockCommentDoc cmt') (classDoc cs')) cmt cs)
+commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' -> 
+  commentedItem (blockCommentDoc cmt') (classDoc cs')) cmt cs)
 
 buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
   [MS (repr (Method repr))] -> [GS (repr (Class repr))] -> 
   GS (repr (Module repr))
-buildModule n ls ms cs = S.modFromData n getCurrMain (liftA2 (moduleDocD (vcat 
-  $ map keyDoc ls)) (liftList (vibcat . map classDoc) cs) (liftList 
-  (methodListDocD . map methodDoc) (map (zoom lensGStoMS) ms)))
+buildModule n ls ms cs = S.modFromData n getCurrMain (on2StateValues 
+  (moduleDocD (vcat $ map keyDoc ls)) (liftList (vibcat . map classDoc) cs) 
+  (liftList (methodListDocD . map methodDoc) (map (zoom lensGStoMS) ms)))
 
 buildModule' :: (RenderSym repr) => Label -> [MS (repr (Method repr))] -> 
   [GS (repr (Class repr))] -> GS (repr (Module repr))
@@ -295,7 +293,7 @@ buildModule' n ms cs = S.modFromData n getCurrMain (liftList (vibcat . map
 
 modFromData :: Label -> (Doc -> Bool -> repr (Module repr)) -> GS Bool -> 
   GS Doc -> GS (repr (Module repr))
-modFromData n f m d = putAfter (setModuleName n) (liftM2 f d m)
+modFromData n f m d = putAfter (setModuleName n) (on2StateValues f d m)
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
   repr (Block repr) -> GS (repr (Module repr)) -> GS (repr (RenderFile repr))

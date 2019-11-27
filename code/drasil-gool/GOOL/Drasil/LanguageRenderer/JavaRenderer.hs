@@ -62,16 +62,15 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, onStateValue, 
+import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, 
   liftA4, liftA5, liftList, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   getPutReturnList, addProgNameToPaths, setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens (over)
-import Control.Applicative (Applicative, liftA2, liftA3)
+import Control.Applicative (Applicative, liftA3)
 import Control.Monad.State (evalState)
-import Control.Monad (liftM2)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
   equals, semi, vcat, lbrace, rbrace, render, colon, comma, render)
 
@@ -104,7 +103,7 @@ instance RenderSym JavaCode where
 
   docMod = G.docMod
 
-  commentedMod cmt m = liftM2 (liftA2 commentedModD) m cmt
+  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
 instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
@@ -154,7 +153,7 @@ instance BodySym JavaCode where
   bodyStatements = block
   oneLiner = oneLinerD
 
-  addComments s = liftA2 (addCommentsDocD s) commentStart
+  addComments s = on2CodeValues (addCommentsDocD s) commentStart
 
   bodyDoc = unJC
 
@@ -175,7 +174,7 @@ instance TypeSym JavaCode where
   string = toCode jStringTypeDoc
   infile = toCode jInfileTypeDoc
   outfile = toCode jOutfileTypeDoc
-  listType p st = liftA2 jListType st (list p)
+  listType p st = on2CodeValues jListType st (list p)
   listInnerType = listInnerTypeD
   obj t = toCode $ typeDocD t
   enumType t = toCode $ enumTypeDocD t
@@ -253,7 +252,7 @@ instance VariableSym JavaCode where
   variableDoc = varDoc . unJC
   
 instance InternalVariable JavaCode where
-  varFromData b n t d = liftA2 (vard b n) t (toCode d)
+  varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
@@ -278,9 +277,9 @@ instance ValueSym JavaCode where
   valueDoc = valDoc . unJC
 
 instance NumericExpression JavaCode where
-  (#~) = liftA2 unExpr' negateOp
-  (#/^) = liftA2 unExpr sqrtOp
-  (#|) = liftA2 unExpr absOp
+  (#~) = on2CodeValues unExpr' negateOp
+  (#/^) = on2CodeValues unExpr sqrtOp
+  (#|) = on2CodeValues unExpr absOp
   (#+) = liftA3 binExpr plusOp
   (#-) = liftA3 binExpr minusOp
   (#*) = liftA3 binExpr multOp
@@ -288,20 +287,20 @@ instance NumericExpression JavaCode where
   (#%) = liftA3 binExpr moduloOp
   (#^) = liftA3 binExpr' powerOp
 
-  log = liftA2 unExpr logOp
-  ln = liftA2 unExpr lnOp
-  exp = liftA2 unExpr expOp
-  sin = liftA2 unExpr sinOp
-  cos = liftA2 unExpr cosOp
-  tan = liftA2 unExpr tanOp
+  log = on2CodeValues unExpr logOp
+  ln = on2CodeValues unExpr lnOp
+  exp = on2CodeValues unExpr expOp
+  sin = on2CodeValues unExpr sinOp
+  cos = on2CodeValues unExpr cosOp
+  tan = on2CodeValues unExpr tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin = liftA2 unExpr asinOp
-  arccos = liftA2 unExpr acosOp
-  arctan = liftA2 unExpr atanOp
-  floor = liftA2 unExpr floorOp
-  ceil = liftA2 unExpr ceilOp
+  arcsin = on2CodeValues unExpr asinOp
+  arccos = on2CodeValues unExpr acosOp
+  arctan = on2CodeValues unExpr atanOp
+  floor = on2CodeValues unExpr floorOp
+  ceil = on2CodeValues unExpr ceilOp
 
 instance BooleanExpression JavaCode where
   (?!) = liftA3 typeUnExpr notOp bool
@@ -327,16 +326,18 @@ instance ValueExpression JavaCode where
   notNull = notNullD
 
 instance InternalValue JavaCode where
-  inputFunc = liftA2 mkVal (obj "Scanner") (toCode $ parens (
+  inputFunc = on2CodeValues mkVal (obj "Scanner") (toCode $ parens (
     text "new Scanner(System.in)"))
-  printFunc = liftA2 mkVal void (toCode $ text "System.out.print")
-  printLnFunc = liftA2 mkVal void (toCode $ text "System.out.println")
-  printFileFunc f = liftA2 mkVal void (onCodeValue (printFileDocD "print") f)
-  printFileLnFunc f = liftA2 mkVal void (onCodeValue (printFileDocD "println") f)
+  printFunc = on2CodeValues mkVal void (toCode $ text "System.out.print")
+  printLnFunc = on2CodeValues mkVal void (toCode $ text "System.out.println")
+  printFileFunc f = on2CodeValues mkVal void (onCodeValue (printFileDocD 
+    "print") f)
+  printFileLnFunc f = on2CodeValues mkVal void (onCodeValue (printFileDocD 
+    "println") f)
   
   cast = jCast
   
-  valFromData p t d = liftA2 (vd p) t (toCode d)
+  valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector JavaCode where
   objAccess = objAccessD
@@ -388,7 +389,7 @@ instance InternalFunction JavaCode where
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unJC
 
-  funcFromData t d = liftA2 fd t (toCode d)
+  funcFromData t d = on2CodeValues fd t (toCode d)
 
 instance InternalStatement JavaCode where
   printSt _ p v _ = printStD p v
@@ -423,7 +424,7 @@ instance StatementSym JavaCode where
   extObjDecNew _ = objDecNew
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams _ = objDecNewNoParams
-  constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
+  constDecDef v def = mkSt <$> on2CodeValues jConstDecDef v def
 
   print v = jOut False printFunc v Nothing
   printLn v = jOut True printLnFunc v Nothing
@@ -435,9 +436,9 @@ instance StatementSym JavaCode where
   printFileStr f s = jOut False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = jOut True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = v &= liftA2 jInput (variableType v) inputFunc
+  getInput v = v &= on2CodeValues jInput (variableType v) inputFunc
   discardInput = discardInputD jDiscardInput
-  getFileInput f v = v &= liftA2 jInput (variableType v) f
+  getFileInput f v = v &= on2CodeValues jInput (variableType v) f
   discardFileInput = discardFileInputD jDiscardInput
 
   openFileR = openFileRD jOpenFileR
@@ -447,7 +448,7 @@ instance StatementSym JavaCode where
 
   getFileInputLine f v = v &= f $. func "nextLine" string []
   discardFileLine = discardFileLineD "nextLine"
-  stringSplit d vnew s = mkSt <$> liftA2 jStringSplit vnew 
+  stringSplit d vnew s = mkSt <$> on2CodeValues jStringSplit vnew 
     (funcApp "Arrays.asList" (listType static_ string) 
     [s $. func "split" (listType static_ string) [litString [d]]])
 
@@ -552,7 +553,7 @@ instance InternalMethod JavaCode where
     mthd (liftA5 (jMethod n) s p t (liftList (paramListDocD . checkParams n) ps)
     b)
   intFunc = G.intFunc
-  commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
+  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
   
   methodDoc = mthdDoc . unJC
@@ -597,9 +598,10 @@ instance InternalMod JavaCode where
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc
-  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
-  docComment = onStateValue (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
-    docCommentEnd)
+  blockComment lns = on2CodeValues (blockCmtDoc lns) blockCommentStart 
+    blockCommentEnd
+  docComment = onStateValue (\lns -> on2CodeValues (docCmtDoc lns) 
+    docCommentStart docCommentEnd)
 
   blockCommentDoc = unJC
 
@@ -649,7 +651,8 @@ jCast :: JavaCode (Type JavaCode) -> JavaCode (Value JavaCode) ->
 jCast t v = jCast' (getType t) (getType $ valueType v)
   where jCast' Float String = funcApp "Double.parseDouble" float [v]
         jCast' Integer (Enum _) = v $. func "ordinal" int []
-        jCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (onCodeValue castDocD t) v
+        jCast' _ _ = on2CodeValues mkVal t $ on2CodeValues castObjDocD 
+          (onCodeValue castDocD t) v
 
 jListDecDef :: (RenderSym repr) => repr (Variable repr) -> [repr (Value repr)] 
   -> Doc
@@ -753,7 +756,7 @@ jInOut f s p ins [v] [] b = f s p (variableType v)
   valueOf v))
 jInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) 
   then void else variableType v) (map param $ v : ins) 
-  (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
+  (if null (filterOutObjs [v]) then b else on2CodeValues appendToBody b 
   (returnState $ valueOf v))
 jInOut f s p ins outs both b = f s p (returnTp rets)
   (map param $ both ++ ins) (liftA3 surroundBody decls b (returnSt rets))

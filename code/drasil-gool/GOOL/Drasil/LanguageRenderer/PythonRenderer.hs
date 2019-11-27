@@ -57,17 +57,16 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
-  onStateValue, liftA4, liftA5, liftA6, liftList, lift1List, lift2Lists, 
-  checkParams)
+  onStateValue, on2CodeValues, on2StateValues, liftA4, liftA5, liftA6, liftList,
+  lift1List, lift2Lists, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens (over)
-import Control.Applicative (Applicative, liftA2, liftA3)
+import Control.Applicative (Applicative, liftA3)
 import Control.Monad.State (evalState)
-import Control.Monad (liftM2)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty)
 
@@ -99,7 +98,7 @@ instance RenderSym PythonCode where
 
   docMod = G.docMod
 
-  commentedMod cmt m = liftM2 (liftA2 commentedModD) m cmt
+  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
 instance InternalFile PythonCode where
   top _ = toCode pytop
@@ -149,7 +148,7 @@ instance BodySym PythonCode where
   bodyStatements = block
   oneLiner = oneLinerD
 
-  addComments s = liftA2 (addCommentsDocD s) commentStart
+  addComments s = on2CodeValues (addCommentsDocD s) commentStart
 
   bodyDoc = unPC
 
@@ -189,7 +188,7 @@ instance ControlBlockSym PythonCode where
 
   listSlice vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
-    where getVal = fromMaybe (liftA2 mkVal void (toCode empty))
+    where getVal = fromMaybe (on2CodeValues mkVal void (toCode empty))
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData
@@ -232,7 +231,7 @@ instance VariableSym PythonCode where
   staticVar = staticVarD
   const = var
   extVar = extVarD
-  self l = liftA2 (mkVar "self") (obj l) (toCode $ text "self")
+  self l = on2CodeValues (mkVar "self") (obj l) (toCode $ text "self")
   enumVar = enumVarD
   classVar = classVarD classVarDocD
   extClassVar = classVarD pyClassVar
@@ -250,18 +249,18 @@ instance VariableSym PythonCode where
   variableDoc = varDoc . unPC
 
 instance InternalVariable PythonCode where
-  varFromData b n t d = liftA2 (vard b n) t (toCode d)
+  varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
-  litTrue = liftA2 mkVal bool (toCode $ text "True")
-  litFalse = liftA2 mkVal bool (toCode $ text "False")
+  litTrue = on2CodeValues mkVal bool (toCode $ text "True")
+  litFalse = on2CodeValues mkVal bool (toCode $ text "False")
   litChar = litCharD
   litFloat = litFloatD
   litInt = litIntD
   litString = litStringD
 
-  pi = liftA2 mkVal float (toCode $ text "math.pi")
+  pi = on2CodeValues mkVal float (toCode $ text "math.pi")
 
   ($:) = enumElement
 
@@ -274,32 +273,33 @@ instance ValueSym PythonCode where
   valueDoc = valDoc . unPC
 
 instance NumericExpression PythonCode where
-  (#~) = liftA2 unExpr' negateOp
-  (#/^) = liftA2 unExpr sqrtOp
-  (#|) = liftA2 unExpr absOp
+  (#~) = on2CodeValues unExpr' negateOp
+  (#/^) = on2CodeValues unExpr sqrtOp
+  (#|) = on2CodeValues unExpr absOp
   (#+) = liftA3 binExpr plusOp
   (#-) = liftA3 binExpr minusOp
   (#*) = liftA3 binExpr multOp
   (#/) v1 v2 = pyDivision (getType $ valueType v1) (getType $ valueType v2) 
-    where pyDivision Integer Integer = liftA2 (binExpr (multPrec "//")) v1 v2
+    where pyDivision Integer Integer = on2CodeValues (binExpr (multPrec "//")) 
+            v1 v2
           pyDivision _ _ = liftA3 binExpr divideOp v1 v2
   (#%) = liftA3 binExpr moduloOp
   (#^) = liftA3 binExpr powerOp
 
-  log = liftA2 unExpr logOp
-  ln = liftA2 unExpr lnOp
-  exp = liftA2 unExpr expOp
-  sin = liftA2 unExpr sinOp
-  cos = liftA2 unExpr cosOp
-  tan = liftA2 unExpr tanOp
+  log = on2CodeValues unExpr logOp
+  ln = on2CodeValues unExpr lnOp
+  exp = on2CodeValues unExpr expOp
+  sin = on2CodeValues unExpr sinOp
+  cos = on2CodeValues unExpr cosOp
+  tan = on2CodeValues unExpr tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin = liftA2 unExpr asinOp
-  arccos = liftA2 unExpr acosOp
-  arctan = liftA2 unExpr atanOp
-  floor = liftA2 unExpr floorOp
-  ceil = liftA2 unExpr ceilOp
+  arcsin = on2CodeValues unExpr asinOp
+  arccos = on2CodeValues unExpr acosOp
+  arctan = on2CodeValues unExpr atanOp
+  floor = on2CodeValues unExpr floorOp
+  ceil = on2CodeValues unExpr ceilOp
 
 instance BooleanExpression PythonCode where
   (?!) = liftA3 typeUnExpr notOp bool
@@ -319,22 +319,22 @@ instance ValueExpression PythonCode where
   selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
   newObj = newObjD newObjDocD'
-  extNewObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
-    valList vs))
+  extNewObj l t vs = on2CodeValues mkVal t (on2CodeValues (pyExtStateObj l) t 
+    (liftList valList vs))
 
   exists v = v ?!= valueOf (var "None" void)
   notNull = exists
 
 instance InternalValue PythonCode where
-  inputFunc = liftA2 mkVal string (toCode $ text "input()")  -- raw_input() for < Python 3.0
-  printFunc = liftA2 mkVal void (toCode $ text "print")
-  printLnFunc = liftA2 mkVal void (toCode empty)
-  printFileFunc _ = liftA2 mkVal void (toCode empty)
-  printFileLnFunc _ = liftA2 mkVal void (toCode empty)
+  inputFunc = on2CodeValues mkVal string (toCode $ text "input()")  -- raw_input() for < Python 3.0
+  printFunc = on2CodeValues mkVal void (toCode $ text "print")
+  printLnFunc = on2CodeValues mkVal void (toCode empty)
+  printFileFunc _ = on2CodeValues mkVal void (toCode empty)
+  printFileLnFunc _ = on2CodeValues mkVal void (toCode empty)
   
-  cast t v = liftA2 mkVal t $ onCodeValue (castObjDocD (getTypeDoc t)) v
+  cast t v = on2CodeValues mkVal t $ onCodeValue (castObjDocD (getTypeDoc t)) v
 
-  valFromData p t d = liftA2 (vd p) t (toCode d)
+  valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector PythonCode where
   objAccess = objAccessD
@@ -357,8 +357,8 @@ instance FunctionSym PythonCode where
   get = getD
   set = setD
 
-  listSize v = liftA2 mkVal (functionType listSizeFunc) 
-    (liftA2 pyListSize v listSizeFunc)
+  listSize v = on2CodeValues mkVal (functionType listSizeFunc) 
+    (on2CodeValues pyListSize v listSizeFunc)
   listAdd = listAddD
   listAppend = listAppendD
 
@@ -374,7 +374,7 @@ instance InternalFunction PythonCode where
   getFunc = getFuncD
   setFunc = setFuncD
 
-  listSizeFunc = liftA2 fd int (toCode $ text "len")
+  listSizeFunc = on2CodeValues fd int (toCode $ text "len")
   listAddFunc _ = listAddFuncD "insert"
   listAppendFunc = listAppendFuncD "append"
 
@@ -387,11 +387,11 @@ instance InternalFunction PythonCode where
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unPC
 
-  funcFromData t d = liftA2 fd t (toCode d)
+  funcFromData t d = on2CodeValues fd t (toCode d)
 
 instance InternalStatement PythonCode where
   printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
-    (fromMaybe (liftA2 mkVal void (toCode empty)) f)
+    (fromMaybe (on2CodeValues mkVal void (toCode empty)) f)
 
   state = stateD
   loopState = loopStateD
@@ -411,13 +411,14 @@ instance StatementSym PythonCode where
   (&=) = assign
   (&-=) = decrementD
   (&+=) vr vl = mkStNoEnd <$> liftA3 plusEqualsDocD' vr plusOp vl
-  (&++) v = mkStNoEnd <$> liftA2 plusPlusDocD' v plusOp
+  (&++) v = mkStNoEnd <$> on2CodeValues plusPlusDocD' v plusOp
   (&~-) = decrement1D
 
   varDec _ = toCode (mkStNoEnd empty)
   varDecDef = assign
   listDec _ v = mkStNoEnd <$> onCodeValue pyListDec v
-  listDecDef v vs = mkStNoEnd <$> liftA2 pyListDecDef v (liftList valList vs)
+  listDecDef v vs = mkStNoEnd <$> on2CodeValues pyListDecDef v (liftList 
+    valList vs)
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v vs = varDecDef v (extNewObj lib (variableType v) vs)
@@ -494,7 +495,7 @@ instance ControlStatementSym PythonCode where
     iterInLabel initv finalv stepv b
   forEach e v b = mkStNoEnd <$> liftA5 pyForEach e iterForEachLabel 
     iterInLabel v b
-  while v b = mkStNoEnd <$> liftA2 pyWhile v b
+  while v b = mkStNoEnd <$> on2CodeValues pyWhile v b
 
   tryCatch = tryCatchD pyTryCatch
 
@@ -562,8 +563,9 @@ instance InternalMethod PythonCode where
     ps) b)
   intFunc m n _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
     if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
-    mthd (liftA2 (pyFunction n) (liftList (paramListDocD . checkParams n) ps) b)
-  commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
+    mthd (on2CodeValues (pyFunction n) (liftList (paramListDocD . checkParams n)
+    ps) b)
+  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
 
   methodDoc = mthdDoc . unPC
@@ -611,8 +613,8 @@ instance InternalMod PythonCode where
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
   blockComment lns = onCodeValue (pyBlockComment lns) commentStart
-  docComment = onStateValue (\lns -> liftA2 (pyDocComment lns) docCommentStart 
-    commentStart)
+  docComment = onStateValue (\lns -> on2CodeValues (pyDocComment lns) 
+    docCommentStart commentStart)
 
   blockCommentDoc = unPC
 

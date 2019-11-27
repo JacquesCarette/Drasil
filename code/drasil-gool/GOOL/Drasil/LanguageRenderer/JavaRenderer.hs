@@ -63,7 +63,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues,
-  liftA4, liftA5, liftList, lift1List, checkParams)
+  on4CodeValues, on5CodeValues, liftList, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   getPutReturnList, addProgNameToPaths, setMain, setCurrMain, setParameters)
 
@@ -304,15 +304,15 @@ instance NumericExpression JavaCode where
 
 instance BooleanExpression JavaCode where
   (?!) = on3CodeValues typeUnExpr notOp bool
-  (?&&) = liftA4 typeBinExpr andOp bool
-  (?||) = liftA4 typeBinExpr orOp bool
+  (?&&) = on4CodeValues typeBinExpr andOp bool
+  (?||) = on4CodeValues typeBinExpr orOp bool
 
-  (?<) = liftA4 typeBinExpr lessOp bool
-  (?<=) = liftA4 typeBinExpr lessEqualOp bool
-  (?>) = liftA4 typeBinExpr greaterOp bool
-  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
+  (?<) = on4CodeValues typeBinExpr lessOp bool
+  (?<=) = on4CodeValues typeBinExpr lessEqualOp bool
+  (?>) = on4CodeValues typeBinExpr greaterOp bool
+  (?>=) = on4CodeValues typeBinExpr greaterEqualOp bool
   (?==) = jEquality
-  (?!=) = liftA4 typeBinExpr notEqualOp bool
+  (?!=) = on4CodeValues typeBinExpr notEqualOp bool
   
 instance ValueExpression JavaCode where
   inlineIf = on3CodeValues inlineIfD
@@ -550,8 +550,8 @@ instance MethodSym JavaCode where
 instance InternalMethod JavaCode where
   intMethod m n _ s p t ps b = getPutReturn (setParameters (map unJC ps) . 
     if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
-    mthd (liftA5 (jMethod n) s p t (liftList (paramListDocD . checkParams n) ps)
-    b)
+    mthd (on5CodeValues (jMethod n) s p t (liftList (paramListDocD . 
+    checkParams n) ps) b)
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
@@ -644,7 +644,7 @@ jEquality :: JavaCode (Value JavaCode) -> JavaCode (Value JavaCode) ->
   JavaCode (Value JavaCode)
 jEquality v1 v2 = jEquality' (getType $ valueType v2)
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
-        jEquality' _ = liftA4 typeBinExpr equalOp bool v1 v2
+        jEquality' _ = on4CodeValues typeBinExpr equalOp bool v1 v2
 
 jCast :: JavaCode (Type JavaCode) -> JavaCode (Value JavaCode) -> 
   JavaCode (Value JavaCode)

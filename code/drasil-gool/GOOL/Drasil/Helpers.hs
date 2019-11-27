@@ -1,8 +1,9 @@
 module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
   hicat, vicat, vibcat, vmap, vimap, vibmap, emptyIfEmpty, emptyIfNull, 
-  mapPairFst, mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, liftA4, liftA5, liftA6,
-  liftA7, liftA8, liftList, lift2Lists, lift1List, getInnerType, getNestDegree, 
-  convType, checkParams
+  mapPairFst, mapPairSnd, toCode, toState, onCodeValue, onStateValue, 
+  on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, 
+  on5CodeValues, on6CodeValues, on7CodeValues, on8CodeValues, liftList, 
+  lift2Lists, lift1List, getInnerType, getNestDegree, convType, checkParams
 ) where
 
 import Utils.Drasil (blank)
@@ -89,25 +90,26 @@ on3StateValues :: (a -> b -> c -> d) -> State s a -> State s b -> State s c ->
   State s d
 on3StateValues = liftM3
 
-liftA4 :: Applicative f => (a -> b -> c -> d -> e) -> f a -> f b -> f c -> 
-  f d -> f e
-liftA4 f a1 a2 a3 a4 = liftA3 f a1 a2 a3 <*> a4
+on4CodeValues :: Applicative f => (a -> b -> c -> d -> e) -> f a -> f b -> f c 
+  -> f d -> f e
+on4CodeValues f a1 a2 a3 a4 = liftA3 f a1 a2 a3 <*> a4
 
-liftA5 :: Applicative f => (a -> b -> c -> d -> e -> g) -> f a -> f b -> f c ->
-  f d -> f e -> f g
-liftA5 f a1 a2 a3 a4 a5 = liftA4 f a1 a2 a3 a4 <*> a5
+on5CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g) -> f a -> f b -> 
+  f c -> f d -> f e -> f g
+on5CodeValues f a1 a2 a3 a4 a5 = on4CodeValues f a1 a2 a3 a4 <*> a5
 
-liftA6 :: Applicative f => (a -> b -> c -> d -> e -> g -> h) -> f a -> f b -> 
-  f c -> f d -> f e -> f g -> f h
-liftA6 f a1 a2 a3 a4 a5 a6 = liftA5 f a1 a2 a3 a4 a5 <*> a6
+on6CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g -> h) -> f a -> f 
+  b -> f c -> f d -> f e -> f g -> f h
+on6CodeValues f a1 a2 a3 a4 a5 a6 = on5CodeValues f a1 a2 a3 a4 a5 <*> a6
 
-liftA7 :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i) -> f a -> 
-  f b -> f c -> f d -> f e -> f g -> f h -> f i
-liftA7 f a1 a2 a3 a4 a5 a6 a7 = liftA6 f a1 a2 a3 a4 a5 a6 <*> a7
+on7CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i) -> f a 
+  -> f b -> f c -> f d -> f e -> f g -> f h -> f i
+on7CodeValues f a1 a2 a3 a4 a5 a6 a7 = on6CodeValues f a1 a2 a3 a4 a5 a6 <*> a7
 
-liftA8 :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i -> j) -> 
-  f a -> f b -> f c -> f d -> f e -> f g -> f h -> f i -> f j
-liftA8 f a1 a2 a3 a4 a5 a6 a7 a8 = liftA7 f a1 a2 a3 a4 a5 a6 a7 <*> a8
+on8CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i -> j) 
+  -> f a -> f b -> f c -> f d -> f e -> f g -> f h -> f i -> f j
+on8CodeValues f a1 a2 a3 a4 a5 a6 a7 a8 = on7CodeValues f a1 a2 a3 a4 a5 a6 a7 
+  <*> a8
 
 liftList :: Monad m => ([a] -> b) -> [m a] -> m b
 liftList f as = f <$> sequence as

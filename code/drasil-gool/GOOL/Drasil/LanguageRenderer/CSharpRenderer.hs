@@ -62,7 +62,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
-import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, liftA4, liftA5, 
+import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, on5CodeValues, 
   liftList, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
@@ -302,15 +302,15 @@ instance NumericExpression CSharpCode where
 
 instance BooleanExpression CSharpCode where
   (?!) = on3CodeValues typeUnExpr notOp bool
-  (?&&) = liftA4 typeBinExpr andOp bool
-  (?||) = liftA4 typeBinExpr orOp bool
+  (?&&) = on4CodeValues typeBinExpr andOp bool
+  (?||) = on4CodeValues typeBinExpr orOp bool
 
-  (?<) = liftA4 typeBinExpr lessOp bool
-  (?<=) = liftA4 typeBinExpr lessEqualOp bool
-  (?>) = liftA4 typeBinExpr greaterOp bool
-  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
-  (?==) = liftA4 typeBinExpr equalOp bool
-  (?!=) = liftA4 typeBinExpr notEqualOp bool
+  (?<) = on4CodeValues typeBinExpr lessOp bool
+  (?<=) = on4CodeValues typeBinExpr lessEqualOp bool
+  (?>) = on4CodeValues typeBinExpr greaterOp bool
+  (?>=) = on4CodeValues typeBinExpr greaterEqualOp bool
+  (?==) = on4CodeValues typeBinExpr equalOp bool
+  (?!=) = on4CodeValues typeBinExpr notEqualOp bool
   
 instance ValueExpression CSharpCode where
   inlineIf = on3CodeValues inlineIfD
@@ -547,8 +547,8 @@ instance MethodSym CSharpCode where
 instance InternalMethod CSharpCode where
   intMethod m n _ s p t ps b = getPutReturn (setParameters (map unCSC ps) . 
     if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
-    mthd (liftA5 (methodDocD n) s p t (liftList (paramListDocD . checkParams n) 
-    ps) b)
+    mthd (on5CodeValues (methodDocD n) s p t (liftList (paramListDocD . 
+    checkParams n) ps) b)
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)

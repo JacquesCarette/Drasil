@@ -63,7 +63,7 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
-  mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, liftA4, liftA5, liftA8, 
+  mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, on5CodeValues, on8CodeValues, 
   liftList, lift2Lists, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensGStoMS, lensMStoGS, initialState, 
   putAfter, getPutReturn, setMain, setCurrMain, getCurrMain, setParameters, 
@@ -1005,15 +1005,15 @@ instance NumericExpression CppSrcCode where
 
 instance BooleanExpression CppSrcCode where
   (?!) = on3CodeValues typeUnExpr notOp bool
-  (?&&) = liftA4 typeBinExpr andOp bool
-  (?||) = liftA4 typeBinExpr orOp bool
+  (?&&) = on4CodeValues typeBinExpr andOp bool
+  (?||) = on4CodeValues typeBinExpr orOp bool
 
-  (?<) = liftA4 typeBinExpr lessOp bool
-  (?<=) = liftA4 typeBinExpr lessEqualOp bool
-  (?>) = liftA4 typeBinExpr greaterOp bool
-  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
-  (?==) = liftA4 typeBinExpr equalOp bool
-  (?!=) = liftA4 typeBinExpr notEqualOp bool
+  (?<) = on4CodeValues typeBinExpr lessOp bool
+  (?<=) = on4CodeValues typeBinExpr lessEqualOp bool
+  (?>) = on4CodeValues typeBinExpr greaterOp bool
+  (?>=) = on4CodeValues typeBinExpr greaterEqualOp bool
+  (?==) = on4CodeValues typeBinExpr equalOp bool
+  (?!=) = on4CodeValues typeBinExpr notEqualOp bool
    
 instance ValueExpression CppSrcCode where
   inlineIf = on3CodeValues inlineIfD
@@ -1283,14 +1283,14 @@ instance MethodSym CppSrcCode where
 instance InternalMethod CppSrcCode where
   intMethod m n c s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) .
     setParameters (map unCPPSC ps) . if m then over lensMStoGS (setCurrMain m) 
-    . setMain else id) $ on2CodeValues mthd (onCodeValue snd s) (liftA5 
+    . setMain else id) $ on2CodeValues mthd (onCodeValue snd s) (on5CodeValues 
     (cppsMethod n c) t (liftList (paramListDocD . checkParams n) ps) b 
     blockStart blockEnd)
   intFunc m n s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) . 
     setParameters (map unCPPSC ps) . if m then setCurrMainFunc m . over
     lensMStoGS (setCurrMain m) . setMain else id) $ on2CodeValues mthd 
-    (onCodeValue snd s) (liftA5 (cppsFunction n) t (liftList (paramListDocD . 
-    checkParams n) ps) b blockStart blockEnd)
+    (onCodeValue snd s) (on5CodeValues (cppsFunction n) t (liftList 
+    (paramListDocD . checkParams n) ps) b blockStart blockEnd)
   commentedFunc = cppCommentedFunc Source
  
   methodDoc = mthdDoc . unCPPSC
@@ -1301,9 +1301,10 @@ instance StateVarSym CppSrcCode where
   stateVar s _ _ = toState $ on3CodeValues svd (onCodeValue snd s) (toCode 
     empty) emptyState
   stateVarDef n s p vr vl = toState $ on3CodeValues svd (onCodeValue snd s) 
-    (liftA4 (cppsStateVarDef n empty) p vr vl endStatement) emptyState
-  constVar n s vr vl = toState $ on3CodeValues svd (onCodeValue snd s) (liftA4 
-    (cppsStateVarDef n (text "const")) static_ vr vl endStatement) emptyState
+    (on4CodeValues (cppsStateVarDef n empty) p vr vl endStatement) emptyState
+  constVar n s vr vl = toState $ on3CodeValues svd (onCodeValue snd s) 
+    (on4CodeValues (cppsStateVarDef n (text "const")) static_ vr vl 
+    endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
@@ -1843,17 +1844,17 @@ instance InternalStateVar CppHdrCode where
 
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
-  -- do this with a do? avoids liftA8...
-  buildClass n p _ vs mths = lift2Lists (\vars funcs -> liftA8 (cpphClass n) 
-    (lift2Lists (cpphVarsFuncsList Pub) vars funcs) 
+  -- do this with a do? avoids on8CodeValues...
+  buildClass n p _ vs mths = lift2Lists (\vars funcs -> on8CodeValues 
+    (cpphClass n) (lift2Lists (cpphVarsFuncsList Pub) vars funcs) 
     (lift2Lists (cpphVarsFuncsList Priv) vars funcs) 
     (onCodeValue fst public) (onCodeValue fst private) parent blockStart 
     blockEnd endStatement) vs fs
     where parent = case p of Nothing -> toCode empty
                              Just pn -> inherit pn
           fs = map (zoom lensGStoMS) $ mths ++ [destructor n vs]
-  enum n es _ = toState $ liftA4 (cpphEnum n) (toCode $ enumElementsDocD es 
-    enumsEqualInts) blockStart blockEnd endStatement
+  enum n es _ = toState $ on4CodeValues (cpphEnum n) (toCode $ enumElementsDocD 
+    es enumsEqualInts) blockStart blockEnd endStatement
   privClass = G.privClass
   pubClass = G.pubClass
 

@@ -57,8 +57,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
-  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, liftA4, liftA5, liftA6, liftList,
-  lift1List, lift2Lists, checkParams)
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, 
+  on5CodeValues, on6CodeValues, liftList, lift1List, lift2Lists, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
 
@@ -186,7 +186,7 @@ instance InternalType PythonCode where
 instance ControlBlockSym PythonCode where
   runStrategy = runStrategyD
 
-  listSlice vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) 
+  listSlice vnew vold b e s = on5CodeValues pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
     where getVal = fromMaybe (on2CodeValues mkVal void (toCode empty))
 
@@ -303,15 +303,15 @@ instance NumericExpression PythonCode where
 
 instance BooleanExpression PythonCode where
   (?!) = on3CodeValues typeUnExpr notOp bool
-  (?&&) = liftA4 typeBinExpr andOp bool
-  (?||) = liftA4 typeBinExpr orOp bool
+  (?&&) = on4CodeValues typeBinExpr andOp bool
+  (?||) = on4CodeValues typeBinExpr orOp bool
 
-  (?<) = liftA4 typeBinExpr lessOp bool
-  (?<=) = liftA4 typeBinExpr lessEqualOp bool
-  (?>) = liftA4 typeBinExpr greaterOp bool
-  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
-  (?==) = liftA4 typeBinExpr equalOp bool
-  (?!=) = liftA4 typeBinExpr notEqualOp bool
+  (?<) = on4CodeValues typeBinExpr lessOp bool
+  (?<=) = on4CodeValues typeBinExpr lessEqualOp bool
+  (?>) = on4CodeValues typeBinExpr greaterOp bool
+  (?>=) = on4CodeValues typeBinExpr greaterEqualOp bool
+  (?==) = on4CodeValues typeBinExpr equalOp bool
+  (?!=) = on4CodeValues typeBinExpr notEqualOp bool
 
 instance ValueExpression PythonCode where
   inlineIf = on3CodeValues pyInlineIf
@@ -491,9 +491,9 @@ instance ControlStatementSym PythonCode where
 
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"
-  forRange i initv finalv stepv b = mkStNoEnd <$> liftA6 pyForRange i
+  forRange i initv finalv stepv b = mkStNoEnd <$> on6CodeValues pyForRange i
     iterInLabel initv finalv stepv b
-  forEach e v b = mkStNoEnd <$> liftA5 pyForEach e iterForEachLabel 
+  forEach e v b = mkStNoEnd <$> on5CodeValues pyForEach e iterForEachLabel 
     iterInLabel v b
   while v b = mkStNoEnd <$> on2CodeValues pyWhile v b
 

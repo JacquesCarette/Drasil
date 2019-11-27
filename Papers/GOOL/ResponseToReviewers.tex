@@ -1,0 +1,141 @@
+\documentclass[12pt]{article}
+
+\usepackage{url}
+
+\title{Response to Reviewers}
+\author{Spencer Smith, Brooks MacLachlan, Jacques Carette}
+\date{\today} 
+
+\begin{document}
+
+\maketitle
+
+The thoughtful and detailed comments of the reviewers are very much appreciated.
+Their comments have been used to revise and improve the paper, as described in
+the sections below.  Each section corresponds to one of the three reviewers.  In
+each case, the reviewers comment are reproduced in italics, followed by the
+author's response.
+
+\section{Reviewer A}
+
+\textit{The overall approach that the authors propose in the paper is 
+understandable to some extent, but still leaves me a question about how 
+developers will use the DSL.
+	In general, this kind of DSLs has two possible usages.  The first one is to 
+	write an entire program in the DSL, and generate into one or more concrete 
+	languages.  In this case, the programmability of the DSL (how it is easy to 
+	write general programs in the DSL) matters a lot.  Due to many constraints, 
+	it will not be as easy as writing programs in the target languages 
+	directly.  But it this case, since you don't need to worry about the 
+	readability of the generated code, I suppose that the authors are not 
+	thinking about this usage.
+	The second one is to write skeletons of a program in the DSL, generate code 
+	in a concrete language, and then write the rest of the application logic in 
+	the target language.  In this case, the readability of the generated code 
+	matters.  However, this usage requires the developer plan everything ahead 
+	of code generation.  Otherwise, when the developer finds to extend or 
+	modify some part of the program (like adding a field) after code 
+	generation, there is no chance to use the DSL-based code generation.
+	I would like to see discussion on this point in the paper.}
+
+Expanded discussion about use cases have been added, including our concrete use 
+case with \textit{Drasil}. \\
+
+\noindent \textit{Sections 3.1, 3.2 and (first half of) 4 are not 
+well-structured to 
+understand the contributions.  While it is great to describe the design and 
+implementation in detail, it was not easy to understand which parts of the 
+design/implementation are novel, and which are mere results of some decisions.  
+It would be great if the authors can extract the novel parts out, and explain 
+them at the beginning of each section.}
+
+In shortening the paper to 6 pages, sections 3 and 4 were dramatically reduced, 
+so that what is left better represents the novel aspects of GOOL's syntax and 
+design. \\
+
+\noindent \textit{Figure 2, the Y-axis of the graph should be started from 
+zero.  The 
+number of common methods are relative as they depend on how the authors 
+decomposed the system into methods.  Therefore, relative numbers of common 
+methods would be more useful, like "compared to Python/C++, Java/C++ has 33\% 
+more common methods" rather  than "...Java/C++ has 50 more common methods"}
+
+This graph was removed in shortening the paper. The part of the text that 
+quantifies the commonalities between language renderers now uses a relative 
+comparison between languages, as the reviewer suggested.
+
+\section{Reviewer B}
+
+\textit{From the snippets, GOOL looks a bit cumbersome to use and is probably 
+less readable than the generated code. This could be because of the embedded 
+DSL aspect, and the need to re-name all the embedded operators like equality, 
+and so on.}
+
+We added discussion of context and use cases, which should help in 
+understanding why GOOL is useful even if its syntax might be sometimes 
+cumbersome. Specifically, we mention that GOOL's current syntax is well-suited 
+to our use case with Drasil. \\
+
+\noindent \textit{(Incidentally, the font formatting used also spaces letters 
+too much.)}
+
+Updated lstlistings settings to use flexible columns, leading to less spacing 
+between characters/words. \\
+
+\noindent \textit{Because the language is actually quite large, I didn't get an 
+insight 
+as to what the essence of OO is. The paper does not discuss inheritance at all, 
+and does not delve into semantics of OO in general.}
+
+We have not addressed this point explicitly (due to space constraints), but 
+hopefully the focused nature of the short paper helps, as we have cut out many 
+of the low-level details of GOOL while keeping discussion of most of the 
+patterns and idioms that are the essence of OO. \\
+
+\noindent \textit{I think an interesting avenue for future work would be to 
+allow the 
+high-level design patterns to be described within GOOL itself.}
+
+The paper discusses some design patterns that are encoded as language features 
+of GOOL. So I am not sure what this comment is referring to. \\
+
+\noindent \textit{Minor:
+	- missing spaces after C++ or C+:
+	- l. 215 "C++doesn’t"
+	- l. 218 "C++templates"
+	- l. 230 "C\#and"}
+
+These have been fixed.
+
+\section{Reviewer C}
+
+\textit{The main problem I have with the paper is that I do not understand its 
+motivation: who
+would use such a language and what for? The paper does not give a specific use 
+case
+that needs or benefits from GOOL, nor is there an evaluation section that 
+demonstrates
+somehow the benefits of GOOL. The paper hints at there being such a use case 
+involving
+ODEs, but does not share it.}
+
+See above comment for reviewer A's first point. \\
+
+\noindent \textit{I also did not find an evaluation section where the paper 
+evaluates to 
+what extent
+	GOOL succeeds in its aims and can be used to write practical programs in.}
+
+Added brief discussion of the real-world examples from Drasil we use 
+to test that GOOL indeed works. \\
+
+\noindent \textit{It would probably make the paper itself more appealing if 
+less space 
+were spent on the basic
+	language features (expressions and statements) and more details were given 
+	of the more advanced aspects like design patterns.}
+
+We could not add more detail about design patterns due to the 6-page 
+constraint, but in cutting the paper down to 6 pages we prioritized 
+preservation of the higher-level patterns over the low-level syntax.
+\end{document}  

@@ -1,6 +1,6 @@
 module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
   hicat, vicat, vibcat, vmap, vimap, vibmap, emptyIfEmpty, emptyIfNull, 
-  mapPairFst, mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, liftA4, liftA5, liftA6,
+  mapPairFst, mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, liftA4, liftA5, liftA6,
   liftA7, liftA8, liftList, lift2Lists, lift1List, getInnerType, getNestDegree, 
   convType, checkParams
 ) where
@@ -14,7 +14,7 @@ import qualified GOOL.Drasil.Symantics as S (
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
-import Control.Monad (liftM2)
+import Control.Monad (liftM2, liftM3)
 import Control.Monad.State (State)
 import Data.List (intersperse, nub)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
@@ -80,6 +80,14 @@ on2CodeValues = liftA2
 
 on2StateValues :: (a -> b -> c) -> State s a -> State s b -> State s c
 on2StateValues = liftM2
+
+on3CodeValues :: (Applicative repr) => (a -> b -> c -> d) -> repr a -> repr b 
+  -> repr c -> repr d
+on3CodeValues = liftA3
+
+on3StateValues :: (a -> b -> c -> d) -> State s a -> State s b -> State s c ->
+  State s d
+on3StateValues = liftM3
 
 liftA4 :: Applicative f => (a -> b -> c -> d -> e) -> f a -> f b -> f c -> 
   f d -> f e

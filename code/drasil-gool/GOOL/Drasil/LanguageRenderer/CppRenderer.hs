@@ -63,8 +63,8 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
-  mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, liftA4, liftA5, liftA8, liftList, 
-  lift2Lists, lift1List, checkParams)
+  mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, liftA4, liftA5, liftA8, 
+  liftList, lift2Lists, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensGStoMS, lensMStoGS, initialState, 
   putAfter, getPutReturn, setMain, setCurrMain, getCurrMain, setParameters, 
   setScope, getScope, setCurrMainFunc, getCurrMainFunc)
@@ -73,9 +73,8 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Data.Maybe (maybeToList)
 import Control.Lens (Lens', over)
 import Control.Lens.Zoom (zoom)
-import Control.Applicative (Applicative, liftA3)
+import Control.Applicative (Applicative)
 import Control.Monad.State (State, evalState)
-import Control.Monad (liftM3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
 
@@ -800,11 +799,11 @@ instance RenderSym CppSrcCode where
 
   docMod = G.docMod
 
-  commentedMod cmnt mod = liftM3 (\m cmt mn -> if mn then on2CodeValues 
+  commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then on2CodeValues 
     commentedModD m cmt else m) mod cmnt getCurrMain
 
 instance InternalFile CppSrcCode where
-  top m = liftA3 cppstop m (list dynamic_) endStatement
+  top m = on3CodeValues cppstop m (list dynamic_) endStatement
   bottom = toCode empty
   
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
@@ -982,12 +981,12 @@ instance NumericExpression CppSrcCode where
   (#~) = on2CodeValues unExpr' negateOp
   (#/^) = on2CodeValues unExpr sqrtOp
   (#|) = on2CodeValues unExpr absOp
-  (#+) = liftA3 binExpr plusOp
-  (#-) = liftA3 binExpr minusOp
-  (#*) = liftA3 binExpr multOp
-  (#/) = liftA3 binExpr divideOp
-  (#%) = liftA3 binExpr moduloOp
-  (#^) = liftA3 binExpr' powerOp
+  (#+) = on3CodeValues binExpr plusOp
+  (#-) = on3CodeValues binExpr minusOp
+  (#*) = on3CodeValues binExpr multOp
+  (#/) = on3CodeValues binExpr divideOp
+  (#%) = on3CodeValues binExpr moduloOp
+  (#^) = on3CodeValues binExpr' powerOp
 
   log = on2CodeValues unExpr logOp
   ln = on2CodeValues unExpr lnOp
@@ -1005,7 +1004,7 @@ instance NumericExpression CppSrcCode where
   ceil = on2CodeValues unExpr ceilOp
 
 instance BooleanExpression CppSrcCode where
-  (?!) = liftA3 typeUnExpr notOp bool
+  (?!) = on3CodeValues typeUnExpr notOp bool
   (?&&) = liftA4 typeBinExpr andOp bool
   (?||) = liftA4 typeBinExpr orOp bool
 
@@ -1017,7 +1016,7 @@ instance BooleanExpression CppSrcCode where
   (?!=) = liftA4 typeBinExpr notEqualOp bool
    
 instance ValueExpression CppSrcCode where
-  inlineIf = liftA3 inlineIfD
+  inlineIf = on3CodeValues inlineIfD
   funcApp = funcAppD
   selfFuncApp c = cppSelfFuncApp (self c)
   extFuncApp _ = funcApp
@@ -1135,9 +1134,9 @@ instance StatementSym CppSrcCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = mkSt <$> liftA3 cppInput v inputFunc endStatement
+  getInput v = mkSt <$> on3CodeValues cppInput v inputFunc endStatement
   discardInput = discardInputD (cppDiscardInput "\\n")
-  getFileInput f v = mkSt <$> liftA3 cppInput v f endStatement
+  getFileInput f v = mkSt <$> on3CodeValues cppInput v f endStatement
   discardFileInput = discardFileInputD (cppDiscardInput " ")
 
   openFileR f n = mkSt <$> on2CodeValues (cppOpenFile "std::fstream::in") f n
@@ -1299,11 +1298,11 @@ instance InternalMethod CppSrcCode where
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
-  stateVar s _ _ = toState $ liftA3 svd (onCodeValue snd s) (toCode empty) 
-    emptyState
-  stateVarDef n s p vr vl = toState $ liftA3 svd (onCodeValue snd s) (liftA4 
-    (cppsStateVarDef n empty) p vr vl endStatement) emptyState
-  constVar n s vr vl = toState $ liftA3 svd (onCodeValue snd s) (liftA4 
+  stateVar s _ _ = toState $ on3CodeValues svd (onCodeValue snd s) (toCode 
+    empty) emptyState
+  stateVarDef n s p vr vl = toState $ on3CodeValues svd (onCodeValue snd s) 
+    (liftA4 (cppsStateVarDef n empty) p vr vl endStatement) emptyState
+  constVar n s vr vl = toState $ on3CodeValues svd (onCodeValue snd s) (liftA4 
     (cppsStateVarDef n (text "const")) static_ vr vl endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
@@ -1371,11 +1370,11 @@ instance RenderSym CppHdrCode where
   
   docMod = G.docMod
 
-  commentedMod cmnt mod = liftM3 (\m cmt mn -> if mn then m else on2CodeValues 
+  commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then m else on2CodeValues 
     commentedModD m cmt) mod cmnt getCurrMain
 
 instance InternalFile CppHdrCode where
-  top m = liftA3 cpphtop m (list dynamic_) endStatement
+  top m = on3CodeValues cpphtop m (list dynamic_) endStatement
   bottom = toCode $ text "#endif"
   
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
@@ -1817,7 +1816,7 @@ instance MethodSym CppHdrCode where
 instance InternalMethod CppHdrCode where
   intMethod m n _ s _ t ps _ = getPutReturn (setScope (snd $ unCPPHC s) . 
     setParameters (map unCPPHC ps) . if m then over lensMStoGS (setCurrMain m) 
-    . setMain else id) $ on2CodeValues mthd (onCodeValue snd s) (liftA3 
+    . setMain else id) $ on2CodeValues mthd (onCodeValue snd s) (on3CodeValues 
     (cpphMethod n) t (liftList (paramListDocD . checkParams n) ps) endStatement)
   intFunc = G.intFunc
   commentedFunc = cppCommentedFunc Header
@@ -1827,12 +1826,13 @@ instance InternalMethod CppHdrCode where
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
-  stateVar s p v = toState $ liftA3 svd (onCodeValue snd s) (toCode $ 
+  stateVar s p v = toState $ on3CodeValues svd (onCodeValue snd s) (toCode $ 
     stateVarDocD empty (permDoc p) (statementDoc (state $ varDec v))) emptyState
-  stateVarDef _ s p vr vl = toState $ liftA3 svd (onCodeValue snd s) (toCode $ 
-    cpphStateVarDef empty p vr vl) emptyState
-  constVar _ s v _ = toState $ liftA3 svd (onCodeValue snd s) (liftA3 
-    (constVarDocD empty) (bindDoc <$> static_) v endStatement) emptyState
+  stateVarDef _ s p vr vl = toState $ on3CodeValues svd (onCodeValue snd s) 
+    (toCode $ cpphStateVarDef empty p vr vl) emptyState
+  constVar _ s v _ = toState $ on3CodeValues svd (onCodeValue snd s) 
+    (on3CodeValues (constVarDocD empty) (bindDoc <$> static_) v endStatement) 
+    emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
@@ -2124,7 +2124,8 @@ cppsInOut :: (CppSrcCode (Scope CppSrcCode) ->
   [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
   MS (CppSrcCode (Method CppSrcCode))
 cppsInOut f s p ins [v] [] b = f s p (variableType v) (map (onCodeValue 
-  getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
+  getParam) ins) (on3CodeValues surroundBody (varDec v) b (returnState $ 
+  valueOf v))
 cppsInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
   else variableType v) (map (onCodeValue getParam) $ v : ins) 
   (if null (filterOutObjs [v]) then b else on2CodeValues appendToBody b 

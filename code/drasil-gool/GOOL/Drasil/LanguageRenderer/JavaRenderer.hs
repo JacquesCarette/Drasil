@@ -62,14 +62,14 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, 
+import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues,
   liftA4, liftA5, liftList, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   getPutReturnList, addProgNameToPaths, setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens (over)
-import Control.Applicative (Applicative, liftA3)
+import Control.Applicative (Applicative)
 import Control.Monad.State (evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
   equals, semi, vcat, lbrace, rbrace, render, colon, comma, render)
@@ -106,7 +106,7 @@ instance RenderSym JavaCode where
   commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
 instance InternalFile JavaCode where
-  top _ = liftA3 jtop endStatement (include "") (list static_)
+  top _ = on3CodeValues jtop endStatement (include "") (list static_)
   bottom = toCode empty
   
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
@@ -280,12 +280,12 @@ instance NumericExpression JavaCode where
   (#~) = on2CodeValues unExpr' negateOp
   (#/^) = on2CodeValues unExpr sqrtOp
   (#|) = on2CodeValues unExpr absOp
-  (#+) = liftA3 binExpr plusOp
-  (#-) = liftA3 binExpr minusOp
-  (#*) = liftA3 binExpr multOp
-  (#/) = liftA3 binExpr divideOp
-  (#%) = liftA3 binExpr moduloOp
-  (#^) = liftA3 binExpr' powerOp
+  (#+) = on3CodeValues binExpr plusOp
+  (#-) = on3CodeValues binExpr minusOp
+  (#*) = on3CodeValues binExpr multOp
+  (#/) = on3CodeValues binExpr divideOp
+  (#%) = on3CodeValues binExpr moduloOp
+  (#^) = on3CodeValues binExpr' powerOp
 
   log = on2CodeValues unExpr logOp
   ln = on2CodeValues unExpr lnOp
@@ -303,7 +303,7 @@ instance NumericExpression JavaCode where
   ceil = on2CodeValues unExpr ceilOp
 
 instance BooleanExpression JavaCode where
-  (?!) = liftA3 typeUnExpr notOp bool
+  (?!) = on3CodeValues typeUnExpr notOp bool
   (?&&) = liftA4 typeBinExpr andOp bool
   (?||) = liftA4 typeBinExpr orOp bool
 
@@ -315,7 +315,7 @@ instance BooleanExpression JavaCode where
   (?!=) = liftA4 typeBinExpr notEqualOp bool
   
 instance ValueExpression JavaCode where
-  inlineIf = liftA3 inlineIfD
+  inlineIf = on3CodeValues inlineIfD
   funcApp = funcAppD
   selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
@@ -751,15 +751,14 @@ jInOut :: (JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) ->
   [JavaCode (Variable JavaCode)] -> JavaCode (Body JavaCode) -> 
   MS (JavaCode (Method JavaCode))
 jInOut f s p ins [] [] b = f s p void (map param ins) b
-jInOut f s p ins [v] [] b = f s p (variableType v) 
-  (map param ins) (liftA3 surroundBody (varDec v) b (returnState $ 
-  valueOf v))
+jInOut f s p ins [v] [] b = f s p (variableType v) (map param ins) 
+  (on3CodeValues surroundBody (varDec v) b (returnState $ valueOf v))
 jInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) 
   then void else variableType v) (map param $ v : ins) 
   (if null (filterOutObjs [v]) then b else on2CodeValues appendToBody b 
   (returnState $ valueOf v))
 jInOut f s p ins outs both b = f s p (returnTp rets)
-  (map param $ both ++ ins) (liftA3 surroundBody decls b (returnSt rets))
+  (map param $ both ++ ins) (on3CodeValues surroundBody decls b (returnSt rets))
   where returnTp [x] = variableType x
         returnTp _ = jArrayType
         returnSt [x] = returnState $ valueOf x

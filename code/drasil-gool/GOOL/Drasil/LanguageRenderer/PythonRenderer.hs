@@ -57,7 +57,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
-  onStateValue, on2CodeValues, on2StateValues, liftA4, liftA5, liftA6, liftList,
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, liftA4, liftA5, liftA6, liftList,
   lift1List, lift2Lists, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
@@ -65,7 +65,7 @@ import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn,
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens (over)
-import Control.Applicative (Applicative, liftA3)
+import Control.Applicative (Applicative)
 import Control.Monad.State (evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty)
@@ -276,15 +276,15 @@ instance NumericExpression PythonCode where
   (#~) = on2CodeValues unExpr' negateOp
   (#/^) = on2CodeValues unExpr sqrtOp
   (#|) = on2CodeValues unExpr absOp
-  (#+) = liftA3 binExpr plusOp
-  (#-) = liftA3 binExpr minusOp
-  (#*) = liftA3 binExpr multOp
+  (#+) = on3CodeValues binExpr plusOp
+  (#-) = on3CodeValues binExpr minusOp
+  (#*) = on3CodeValues binExpr multOp
   (#/) v1 v2 = pyDivision (getType $ valueType v1) (getType $ valueType v2) 
     where pyDivision Integer Integer = on2CodeValues (binExpr (multPrec "//")) 
             v1 v2
-          pyDivision _ _ = liftA3 binExpr divideOp v1 v2
-  (#%) = liftA3 binExpr moduloOp
-  (#^) = liftA3 binExpr powerOp
+          pyDivision _ _ = on3CodeValues binExpr divideOp v1 v2
+  (#%) = on3CodeValues binExpr moduloOp
+  (#^) = on3CodeValues binExpr powerOp
 
   log = on2CodeValues unExpr logOp
   ln = on2CodeValues unExpr lnOp
@@ -302,7 +302,7 @@ instance NumericExpression PythonCode where
   ceil = on2CodeValues unExpr ceilOp
 
 instance BooleanExpression PythonCode where
-  (?!) = liftA3 typeUnExpr notOp bool
+  (?!) = on3CodeValues typeUnExpr notOp bool
   (?&&) = liftA4 typeBinExpr andOp bool
   (?||) = liftA4 typeBinExpr orOp bool
 
@@ -314,7 +314,7 @@ instance BooleanExpression PythonCode where
   (?!=) = liftA4 typeBinExpr notEqualOp bool
 
 instance ValueExpression PythonCode where
-  inlineIf = liftA3 pyInlineIf
+  inlineIf = on3CodeValues pyInlineIf
   funcApp = funcAppD
   selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
@@ -390,7 +390,7 @@ instance InternalFunction PythonCode where
   funcFromData t d = on2CodeValues fd t (toCode d)
 
 instance InternalStatement PythonCode where
-  printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
+  printSt nl p v f = mkStNoEnd <$> on3CodeValues (pyPrint nl) p v 
     (fromMaybe (on2CodeValues mkVal void (toCode empty)) f)
 
   state = stateD
@@ -410,7 +410,7 @@ instance StatementSym PythonCode where
   multiAssign vrs vls = mkStNoEnd <$> lift2Lists multiAssignDoc vrs vls
   (&=) = assign
   (&-=) = decrementD
-  (&+=) vr vl = mkStNoEnd <$> liftA3 plusEqualsDocD' vr plusOp vl
+  (&+=) vr vl = mkStNoEnd <$> on3CodeValues plusEqualsDocD' vr plusOp vl
   (&++) v = mkStNoEnd <$> on2CodeValues plusPlusDocD' v plusOp
   (&~-) = decrement1D
 
@@ -559,8 +559,8 @@ instance MethodSym PythonCode where
 instance InternalMethod PythonCode where
   intMethod m n l _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
     if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
-    mthd (liftA3 (pyMethod n) (self l) (liftList (paramListDocD . checkParams n)
-    ps) b)
+    mthd (on3CodeValues (pyMethod n) (self l) (liftList (paramListDocD . 
+    checkParams n) ps) b)
   intFunc m n _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
     if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
     mthd (on2CodeValues (pyFunction n) (liftList (paramListDocD . checkParams n)
@@ -769,8 +769,8 @@ pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode)
   MS (PythonCode (Method PythonCode))
 pyInOut f s p ins [] [] b = f s p void (map param ins) b
 pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins) 
-  (if null rets then b else liftA3 surroundBody (multi $ map varDec outs) b 
-  (multiReturn $ map valueOf rets))
+  (if null rets then b else on3CodeValues surroundBody (multi $ map varDec outs)
+  b (multiReturn $ map valueOf rets))
   where rets = filterOutObjs both ++ outs
 
 pyDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 

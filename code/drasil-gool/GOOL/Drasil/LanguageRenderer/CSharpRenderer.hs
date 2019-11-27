@@ -62,14 +62,14 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
-import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, liftA4, liftA5, 
+import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, liftA4, liftA5, 
   liftList, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens (over)
-import Control.Applicative (Applicative, liftA3)
+import Control.Applicative (Applicative)
 import Control.Monad.State (evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   semi, vcat, lbrace, rbrace, colon)
@@ -278,12 +278,12 @@ instance NumericExpression CSharpCode where
   (#~) = on2CodeValues unExpr' negateOp
   (#/^) = on2CodeValues unExpr sqrtOp
   (#|) = on2CodeValues unExpr absOp
-  (#+) = liftA3 binExpr plusOp
-  (#-) = liftA3 binExpr minusOp
-  (#*) = liftA3 binExpr multOp
-  (#/) = liftA3 binExpr divideOp
-  (#%) = liftA3 binExpr moduloOp
-  (#^) = liftA3 binExpr' powerOp
+  (#+) = on3CodeValues binExpr plusOp
+  (#-) = on3CodeValues binExpr minusOp
+  (#*) = on3CodeValues binExpr multOp
+  (#/) = on3CodeValues binExpr divideOp
+  (#%) = on3CodeValues binExpr moduloOp
+  (#^) = on3CodeValues binExpr' powerOp
 
   log = on2CodeValues unExpr logOp
   ln = on2CodeValues unExpr lnOp
@@ -301,7 +301,7 @@ instance NumericExpression CSharpCode where
   ceil = on2CodeValues unExpr ceilOp
 
 instance BooleanExpression CSharpCode where
-  (?!) = liftA3 typeUnExpr notOp bool
+  (?!) = on3CodeValues typeUnExpr notOp bool
   (?&&) = liftA4 typeBinExpr andOp bool
   (?||) = liftA4 typeBinExpr orOp bool
 
@@ -313,7 +313,7 @@ instance BooleanExpression CSharpCode where
   (?!=) = liftA4 typeBinExpr notEqualOp bool
   
 instance ValueExpression CSharpCode where
-  inlineIf = liftA3 inlineIfD
+  inlineIf = on3CodeValues inlineIfD
   funcApp = funcAppD
   selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
@@ -706,7 +706,7 @@ csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode)
   [CSharpCode (Variable CSharpCode)] -> CSharpCode (Body CSharpCode) -> 
   MS (CSharpCode (Method CSharpCode))
 csInOut f s p ins [v] [] b = f s p (variableType v) (map param ins)
-  (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
+  (on3CodeValues surroundBody (varDec v) b (returnState $ valueOf v))
 csInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
   else variableType v) (map param $ v : ins) (if null (filterOutObjs [v]) then 
   b else on2CodeValues appendToBody b (returnState $ valueOf v))

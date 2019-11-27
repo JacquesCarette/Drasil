@@ -63,7 +63,7 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
-  mapPairSnd, toCode, toState, onStateValue, liftA4, liftA5, liftA8, liftList, 
+  mapPairSnd, toCode, toState, onCodeValue, onStateValue, liftA4, liftA5, liftA8, liftList, 
   lift2Lists, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensGStoMS, lensMStoGS, initialState, 
   putAfter, getPutReturn, setMain, setCurrMain, getCurrMain, setParameters, 
@@ -200,12 +200,13 @@ instance (Pair p) => InternalType (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
   runStrategy l strats rv av = pair (runStrategy l (map (mapPairSnd pfst) 
-    strats) (fmap pfst rv) (fmap pfst av)) (runStrategy l (map 
-    (mapPairSnd psnd) strats) (fmap psnd rv) (fmap psnd av))
+    strats) (onCodeValue pfst rv) (onCodeValue pfst av)) (runStrategy l (map 
+    (mapPairSnd psnd) strats) (onCodeValue psnd rv) (onCodeValue psnd av))
 
   listSlice vnew vold b e s = pair (listSlice (pfst vnew) (pfst vold)
-    (fmap pfst b) (fmap pfst e) (fmap pfst s)) (listSlice (psnd vnew) 
-    (psnd vold) (fmap psnd b) (fmap psnd e) (fmap psnd s))
+    (onCodeValue pfst b) (onCodeValue pfst e) (onCodeValue pfst s)) 
+    (listSlice (psnd vnew) (psnd vold) (onCodeValue psnd b) (onCodeValue psnd e)
+    (onCodeValue psnd s))
 
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
   type UnaryOp (p CppSrcCode CppHdrCode) = OpData
@@ -424,8 +425,8 @@ instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where
   funcFromData t d = pair (funcFromData (pfst t) d) (funcFromData (psnd t) d)
 
 instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
-  printSt nl p v f = pair (printSt nl (pfst p) (pfst v) (fmap pfst f)) 
-    (printSt nl (psnd p) (psnd v) (fmap psnd f))
+  printSt nl p v f = pair (printSt nl (pfst p) (pfst v) (onCodeValue pfst f)) 
+    (printSt nl (psnd p) (psnd v) (onCodeValue psnd f))
     
   state s = pair (state $ pfst s) (state $ psnd s)
   loopState s = pair (loopState $ pfst s) (loopState $ psnd s)
@@ -800,7 +801,7 @@ instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = toCode empty
   
-  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
+  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -808,7 +809,7 @@ instance KeywordSym CppSrcCode where
   endStatementLoop = toCode empty
 
   include n = toCode $ text "#include" <+> doubleQuotedText (addExt cppHdrExt n)
-  inherit n = fmap (cppInherit n . fst) public
+  inherit n = onCodeValue (cppInherit n . fst) public
 
   list _ = toCode $ text "vector"
 
@@ -869,7 +870,7 @@ instance TypeSym CppSrcCode where
   listInnerType = listInnerTypeD
   obj t = toCode $ typeDocD t
   enumType t = toCode $ enumTypeDocD t
-  iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
+  iterator t = onCodeValue cppIterTypeDoc (listType dynamic_ t)
   void = toCode voidDocD
 
   getType = cType . unCPPSC
@@ -942,7 +943,7 @@ instance VariableSym CppSrcCode where
 
   variableBind = varBind . unCPPSC
   variableName = varName . unCPPSC
-  variableType = fmap varType
+  variableType = onCodeValue varType
   variableDoc = varDoc . unCPPSC
 
 instance InternalVariable CppSrcCode where
@@ -967,7 +968,7 @@ instance ValueSym CppSrcCode where
   
   argsList = argsListD "argv"
 
-  valueType = fmap valType
+  valueType = onCodeValue valType
   valueDoc = valDoc . unCPPSC
 
 instance NumericExpression CppSrcCode where
@@ -1023,8 +1024,8 @@ instance InternalValue CppSrcCode where
   inputFunc = liftA2 mkVal string (toCode $ text "std::cin")
   printFunc = liftA2 mkVal void (toCode $ text "std::cout")
   printLnFunc = liftA2 mkVal void (toCode $ text "std::cout")
-  printFileFunc f = liftA2 mkVal void (fmap valDoc f)
-  printFileLnFunc f = liftA2 mkVal void (fmap valDoc f)
+  printFileFunc f = liftA2 mkVal void (onCodeValue valDoc f)
+  printFileLnFunc f = liftA2 mkVal void (onCodeValue valDoc f)
 
   cast = cppCast
   
@@ -1068,7 +1069,7 @@ instance InternalFunction CppSrcCode where
   setFunc = setFuncD
 
   listSizeFunc = listSizeFuncD
-  listAddFunc l i v = func "insert" (listType static_ $ fmap valType v) 
+  listAddFunc l i v = func "insert" (listType static_ $ valueType v) 
     [iterBegin l #+ i, v]
   listAppendFunc = listAppendFuncD "push_back"
 
@@ -1078,7 +1079,7 @@ instance InternalFunction CppSrcCode where
   listAccessFunc = listAccessFuncD' "at"
   listSetFunc = listSetFuncD cppListSetDoc
 
-  functionType = fmap funcType
+  functionType = onCodeValue funcType
   functionDoc = funcDoc . unCPPSC
   
   funcFromData t d = liftA2 fd t (toCode d)
@@ -1168,7 +1169,7 @@ instance StatementSym CppSrcCode where
 
   comment = G.comment commentStart
 
-  free v = mkSt <$> fmap freeDocD v
+  free v = mkSt <$> onCodeValue freeDocD v
 
   throw = throwD cppThrowDoc Semi
 
@@ -1227,10 +1228,10 @@ instance MethodTypeSym CppSrcCode where
 
 instance ParameterSym CppSrcCode where
   type Parameter CppSrcCode = ParamData
-  param = fmap (mkParam paramDocD)
-  pointerParam = fmap (mkParam cppPointerParamDoc)
+  param = onCodeValue (mkParam paramDocD)
+  pointerParam = onCodeValue (mkParam cppPointerParamDoc)
 
-  parameterType = variableType . fmap paramVar
+  parameterType = variableType . onCodeValue paramVar
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
@@ -1243,11 +1244,11 @@ instance MethodSym CppSrcCode where
   destructor n vs = 
     let i = var "i" int
         -- temporary evalState until I add more state
-        deleteStatements = map (fmap destructSts . (`evalState` initialState)) 
-          vs
+        deleteStatements = map (onCodeValue destructSts . (`evalState` 
+          initialState)) vs
         loopIndexDec = varDec i
         dbody = liftA2 emptyIfEmpty 
-          (fmap vcat (mapM (fmap fst) deleteStatements)) $
+          (onCodeValue vcat (mapM (onCodeValue fst) deleteStatements)) $
           bodyStatements $ loopIndexDec : deleteStatements
     in pubMethod ('~':n) n void [] dbody
 
@@ -1276,13 +1277,13 @@ instance MethodSym CppSrcCode where
 instance InternalMethod CppSrcCode where
   intMethod m n c s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) .
     setParameters (map unCPPSC ps) . if m then over lensMStoGS (setCurrMain m) 
-    . setMain else id) $ liftA2 mthd (fmap snd s) (liftA5 (cppsMethod n c) t 
-    (liftList (paramListDocD . checkParams n) ps) b blockStart blockEnd)
+    . setMain else id) $ liftA2 mthd (onCodeValue snd s) (liftA5 (cppsMethod n 
+    c) t (liftList (paramListDocD . checkParams n) ps) b blockStart blockEnd)
   intFunc m n s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) . 
     setParameters (map unCPPSC ps) . if m then setCurrMainFunc m . over
-    lensMStoGS (setCurrMain m) . setMain else id) $ liftA2 mthd (fmap snd s) 
-    (liftA5 (cppsFunction n) t (liftList (paramListDocD . checkParams n) ps) 
-    b blockStart blockEnd)
+    lensMStoGS (setCurrMain m) . setMain else id) $ liftA2 mthd (onCodeValue 
+    snd s) (liftA5 (cppsFunction n) t (liftList (paramListDocD . checkParams n) 
+    ps) b blockStart blockEnd)
   commentedFunc = cppCommentedFunc Source
  
   methodDoc = mthdDoc . unCPPSC
@@ -1290,10 +1291,11 @@ instance InternalMethod CppSrcCode where
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
-  stateVar s _ _ = toState $ liftA3 svd (fmap snd s) (toCode empty) emptyState
-  stateVarDef n s p vr vl = toState $ liftA3 svd (fmap snd s) (liftA4 
+  stateVar s _ _ = toState $ liftA3 svd (onCodeValue snd s) (toCode empty) 
+    emptyState
+  stateVarDef n s p vr vl = toState $ liftA3 svd (onCodeValue snd s) (liftA4 
     (cppsStateVarDef n empty) p vr vl endStatement) emptyState
-  constVar n s vr vl = toState $ liftA3 svd (fmap snd s) (liftA4 
+  constVar n s vr vl = toState $ liftA3 svd (onCodeValue snd s) (liftA4 
     (cppsStateVarDef n (text "const")) static_ vr vl endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
@@ -1326,12 +1328,12 @@ instance ModuleSym CppSrcCode where
 instance InternalMod CppSrcCode where
   moduleDoc = modDoc . unCPPSC
   modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
-  updateModuleDoc f = fmap (fmap (updateModDoc f))
+  updateModuleDoc f = onStateValue (onCodeValue (updateModDoc f))
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
-  docComment = fmap (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
+  docComment = onStateValue (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
     docCommentEnd)
 
   blockCommentDoc = unCPPSC
@@ -1367,7 +1369,7 @@ instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = toCode $ text "#endif"
   
-  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
+  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
@@ -1375,7 +1377,7 @@ instance KeywordSym CppHdrCode where
   endStatementLoop = toCode empty
 
   include n = toCode $ text "#include" <+> doubleQuotedText (addExt cppHdrExt n)
-  inherit n = fmap (cppInherit n . fst) public
+  inherit n = onCodeValue (cppInherit n . fst) public
 
   list _ = toCode $ text "vector"
 
@@ -1436,7 +1438,7 @@ instance TypeSym CppHdrCode where
   listInnerType = listInnerTypeD
   obj t = toCode $ typeDocD t
   enumType t = toCode $ enumTypeDocD t
-  iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
+  iterator t = onCodeValue cppIterTypeDoc (listType dynamic_ t)
   void = toCode voidDocD
 
   getType = cType . unCPPHC
@@ -1506,7 +1508,7 @@ instance VariableSym CppHdrCode where
   
   variableBind = varBind . unCPPHC
   variableName = varName . unCPPHC
-  variableType = fmap varType
+  variableType = onCodeValue varType
   variableDoc = varDoc . unCPPHC
 
 instance InternalVariable CppHdrCode where
@@ -1531,7 +1533,7 @@ instance ValueSym CppHdrCode where
   
   argsList = argsListD "argv"
 
-  valueType = fmap valType
+  valueType = onCodeValue valType
   valueDoc = valDoc . unCPPHC
 
 instance NumericExpression CppHdrCode where
@@ -1641,7 +1643,7 @@ instance InternalFunction CppHdrCode where
   listAccessFunc _ _ = liftA2 fd void (toCode empty)
   listSetFunc _ _ _ = liftA2 fd void (toCode empty)
   
-  functionType = fmap funcType
+  functionType = onCodeValue funcType
   functionDoc = funcDoc . unCPPHC
   
   funcFromData t d = liftA2 fd t (toCode d)
@@ -1769,10 +1771,10 @@ instance MethodTypeSym CppHdrCode where
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
-  param = fmap (mkParam paramDocD)
-  pointerParam = fmap (mkParam cppPointerParamDoc)
+  param = onCodeValue (mkParam paramDocD)
+  pointerParam = onCodeValue (mkParam cppPointerParamDoc)
 
-  parameterType = variableType . fmap paramVar
+  parameterType = variableType . onCodeValue paramVar
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
@@ -1785,7 +1787,7 @@ instance MethodSym CppHdrCode where
   pubMethod = G.pubMethod
   constructor n = G.constructor n n
   destructor n vars = lift1List (\m vs -> toCode $ mthd Pub 
-    (emptyIfEmpty (vcat (map (statementDoc . fmap destructSts) vs)) 
+    (emptyIfEmpty (vcat (map (statementDoc . onCodeValue destructSts) vs)) 
     (methodDoc m))) (pubMethod ('~':n) n void [] (toCode empty) :: MS (CppHdrCode (Method CppHdrCode))) (map (zoom lensMStoGS) vars)
 
   docMain = mainFunction
@@ -1806,8 +1808,8 @@ instance MethodSym CppHdrCode where
 instance InternalMethod CppHdrCode where
   intMethod m n _ s _ t ps _ = getPutReturn (setScope (snd $ unCPPHC s) . 
     setParameters (map unCPPHC ps) . if m then over lensMStoGS (setCurrMain m) 
-    . setMain else id) $ liftA2 mthd (fmap snd s) (liftA3 (cpphMethod n) t 
-    (liftList (paramListDocD . checkParams n) ps) endStatement)
+    . setMain else id) $ liftA2 mthd (onCodeValue snd s) (liftA3 (cpphMethod n) 
+    t (liftList (paramListDocD . checkParams n) ps) endStatement)
   intFunc = G.intFunc
   commentedFunc = cppCommentedFunc Header
 
@@ -1816,12 +1818,12 @@ instance InternalMethod CppHdrCode where
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
-  stateVar s p v = toState $ liftA3 svd (fmap snd s) (toCode $ stateVarDocD 
-    empty (permDoc p) (statementDoc (state $ varDec v))) emptyState
-  stateVarDef _ s p vr vl = toState $ liftA3 svd (fmap snd s) (toCode $ 
+  stateVar s p v = toState $ liftA3 svd (onCodeValue snd s) (toCode $ 
+    stateVarDocD empty (permDoc p) (statementDoc (state $ varDec v))) emptyState
+  stateVarDef _ s p vr vl = toState $ liftA3 svd (onCodeValue snd s) (toCode $ 
     cpphStateVarDef empty p vr vl) emptyState
-  constVar _ s v _ = toState $ liftA3 svd (fmap snd s) (liftA3 (constVarDocD 
-    empty) (bindDoc <$> static_) v endStatement) emptyState
+  constVar _ s v _ = toState $ liftA3 svd (onCodeValue snd s) (liftA3 
+    (constVarDocD empty) (bindDoc <$> static_) v endStatement) emptyState
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
@@ -1836,8 +1838,8 @@ instance ClassSym CppHdrCode where
   buildClass n p _ vs mths = lift2Lists (\vars funcs -> liftA8 (cpphClass n) 
     (lift2Lists (cpphVarsFuncsList Pub) vars funcs) 
     (lift2Lists (cpphVarsFuncsList Priv) vars funcs) 
-    (fmap fst public) (fmap fst private) parent blockStart blockEnd 
-    endStatement) vs fs
+    (onCodeValue fst public) (onCodeValue fst private) parent blockStart 
+    blockEnd endStatement) vs fs
     where parent = case p of Nothing -> toCode empty
                              Just pn -> inherit pn
           fs = map (zoom lensGStoMS) $ mths ++ [destructor n vs]
@@ -1861,12 +1863,12 @@ instance ModuleSym CppHdrCode where
 instance InternalMod CppHdrCode where
   moduleDoc = modDoc . unCPPHC
   modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
-  updateModuleDoc f = fmap (fmap (updateModDoc f))
+  updateModuleDoc f = onStateValue (onCodeValue (updateModDoc f))
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
-  docComment = fmap (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
+  docComment = onStateValue (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
     docCommentEnd)
 
   blockCommentDoc = unCPPHC
@@ -1972,7 +1974,7 @@ cppCast :: CppSrcCode (Type CppSrcCode) ->
   CppSrcCode (Value CppSrcCode) -> CppSrcCode (Value CppSrcCode)
 cppCast t v = cppCast' (getType t) (getType $ valueType v)
   where cppCast' Float String = funcApp "std::stod" float [v]
-        cppCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
+        cppCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (onCodeValue castDocD t) v
 
 cppListSetDoc :: Doc -> Doc -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens i <+> equals <+> v
@@ -2110,14 +2112,14 @@ cppsInOut :: (CppSrcCode (Scope CppSrcCode) ->
   [CppSrcCode (Variable CppSrcCode)] -> [CppSrcCode (Variable CppSrcCode)] -> 
   [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
   MS (CppSrcCode (Method CppSrcCode))
-cppsInOut f s p ins [v] [] b = f s p (variableType v) (map (fmap getParam) ins) 
-  (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
+cppsInOut f s p ins [v] [] b = f s p (variableType v) (map (onCodeValue 
+  getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
 cppsInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else variableType v) (map (fmap getParam) $ v : ins) 
+  else variableType v) (map (onCodeValue getParam) $ v : ins) 
   (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
   (returnState $ valueOf v))
 cppsInOut f s p ins outs both b = f s p void (map pointerParam both 
-  ++ map (fmap getParam) ins ++ map pointerParam outs) b
+  ++ map (onCodeValue getParam) ins ++ map pointerParam outs) b
 
 cpphInOut :: (CppHdrCode (Scope CppHdrCode) -> 
     CppHdrCode (Permanence CppHdrCode) -> CppHdrCode (Type CppHdrCode) -> 
@@ -2127,9 +2129,9 @@ cpphInOut :: (CppHdrCode (Scope CppHdrCode) ->
   [CppHdrCode (Variable CppHdrCode)] -> [CppHdrCode (Variable CppHdrCode)] -> 
   [CppHdrCode (Variable CppHdrCode)] -> CppHdrCode (Body CppHdrCode) -> 
   MS (CppHdrCode (Method CppHdrCode))
-cpphInOut f s p ins [v] [] b = f s p (variableType v) (map (fmap getParam) ins) 
-  b
+cpphInOut f s p ins [v] [] b = f s p (variableType v) (map (onCodeValue 
+  getParam) ins) b
 cpphInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else variableType v) (map (fmap getParam) $ v : ins) b
+  else variableType v) (map (onCodeValue getParam) $ v : ins) b
 cpphInOut f s p ins outs both b = f s p void (map pointerParam both 
-  ++ map (fmap getParam) ins ++ map pointerParam outs) b
+  ++ map (onCodeValue getParam) ins ++ map pointerParam outs) b

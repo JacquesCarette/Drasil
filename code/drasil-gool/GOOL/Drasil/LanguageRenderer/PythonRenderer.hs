@@ -56,8 +56,9 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, 
-  onStateValue, liftA4, liftA5, liftA6, liftList, lift1List, lift2Lists, checkParams)
+import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
+  onStateValue, liftA4, liftA5, liftA6, liftList, lift1List, lift2Lists, 
+  checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
 
@@ -104,7 +105,7 @@ instance InternalFile PythonCode where
   top _ = toCode pytop
   bottom = toCode empty
 
-  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
+  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
@@ -245,7 +246,7 @@ instance VariableSym PythonCode where
 
   variableBind = varBind . unPC
   variableName = varName . unPC
-  variableType = fmap varType
+  variableType = onCodeValue varType
   variableDoc = varDoc . unPC
 
 instance InternalVariable PythonCode where
@@ -269,7 +270,7 @@ instance ValueSym PythonCode where
   enumElement = enumElementD
   argsList = argsListD "sys.argv"
 
-  valueType = fmap valType
+  valueType = onCodeValue valType
   valueDoc = valDoc . unPC
 
 instance NumericExpression PythonCode where
@@ -331,7 +332,7 @@ instance InternalValue PythonCode where
   printFileFunc _ = liftA2 mkVal void (toCode empty)
   printFileLnFunc _ = liftA2 mkVal void (toCode empty)
   
-  cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
+  cast t v = liftA2 mkVal t $ onCodeValue (castObjDocD (getTypeDoc t)) v
 
   valFromData p t d = liftA2 (vd p) t (toCode d)
 
@@ -356,7 +357,7 @@ instance FunctionSym PythonCode where
   get = getD
   set = setD
 
-  listSize v = liftA2 mkVal (fmap funcType listSizeFunc) 
+  listSize v = liftA2 mkVal (functionType listSizeFunc) 
     (liftA2 pyListSize v listSizeFunc)
   listAdd = listAddD
   listAppend = listAppendD
@@ -383,7 +384,7 @@ instance InternalFunction PythonCode where
   listAccessFunc = listAccessFuncD 
   listSetFunc = listSetFuncD listSetFuncDocD
 
-  functionType = fmap funcType
+  functionType = onCodeValue funcType
   functionDoc = funcDoc . unPC
 
   funcFromData t d = liftA2 fd t (toCode d)
@@ -415,7 +416,7 @@ instance StatementSym PythonCode where
 
   varDec _ = toCode (mkStNoEnd empty)
   varDecDef = assign
-  listDec _ v = mkStNoEnd <$> fmap pyListDec v
+  listDec _ v = mkStNoEnd <$> onCodeValue pyListDec v
   listDecDef v vs = mkStNoEnd <$> liftA2 pyListDecDef v (liftList valList vs)
   objDecDef = varDecDef
   objDecNew = G.objDecNew
@@ -523,10 +524,10 @@ instance MethodTypeSym PythonCode where
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
-  param = fmap (mkParam varDoc)
+  param = onCodeValue (mkParam varDoc)
   pointerParam = param
 
-  parameterType = variableType . fmap paramVar
+  parameterType = variableType . onCodeValue paramVar
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
@@ -542,7 +543,7 @@ instance MethodSym PythonCode where
 
   function = G.function
   mainFunction = getPutReturn (setParameters [] . over lensMStoGS (setCurrMain 
-    True) . setMain) . fmap mthd
+    True) . setMain) . onCodeValue mthd
 
   docFunc = G.docFunc
 
@@ -556,13 +557,14 @@ instance MethodSym PythonCode where
 
 instance InternalMethod PythonCode where
   intMethod m n l _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
-    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ fmap mthd 
-    (liftA3 (pyMethod n) (self l) (liftList (paramListDocD . checkParams n) ps) b)
+    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
+    mthd (liftA3 (pyMethod n) (self l) (liftList (paramListDocD . checkParams n)
+    ps) b)
   intFunc m n _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
-    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ fmap mthd 
-    (liftA2 (pyFunction n) (liftList (paramListDocD . checkParams n) ps) b)
+    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
+    mthd (liftA2 (pyFunction n) (liftList (paramListDocD . checkParams n) ps) b)
   commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
-    (fmap (fmap commentedItem) cmt)
+    (onStateValue (onCodeValue commentedItem) cmt)
 
   methodDoc = mthdDoc . unPC
   methodFromData _ = toCode . mthd
@@ -604,12 +606,12 @@ instance ModuleSym PythonCode where
 instance InternalMod PythonCode where
   moduleDoc = modDoc . unPC
   modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
-  updateModuleDoc f = fmap (fmap (updateModDoc f))
+  updateModuleDoc f = onStateValue (onCodeValue (updateModDoc f))
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
-  blockComment lns = fmap (pyBlockComment lns) commentStart
-  docComment = fmap (\lns -> liftA2 (pyDocComment lns) docCommentStart 
+  blockComment lns = onCodeValue (pyBlockComment lns) commentStart
+  docComment = onStateValue (\lns -> liftA2 (pyDocComment lns) docCommentStart 
     commentStart)
 
   blockCommentDoc = unPC

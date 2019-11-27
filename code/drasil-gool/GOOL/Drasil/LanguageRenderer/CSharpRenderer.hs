@@ -62,7 +62,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
-import GOOL.Drasil.Helpers (toCode, toState, onStateValue, liftA4, liftA5, 
+import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, liftA4, liftA5, 
   liftList, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
@@ -108,7 +108,7 @@ instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = toCode empty
 
-  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
+  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
@@ -247,7 +247,7 @@ instance VariableSym CSharpCode where
 
   variableBind = varBind . unCSC
   variableName = varName . unCSC
-  variableType = fmap varType
+  variableType = onCodeValue varType
   variableDoc = varDoc . unCSC
 
 instance InternalVariable CSharpCode where
@@ -272,7 +272,7 @@ instance ValueSym CSharpCode where
   
   argsList = argsListD "args"
 
-  valueType = fmap valType
+  valueType = onCodeValue valType
   valueDoc = valDoc . unCSC
 
 instance NumericExpression CSharpCode where
@@ -328,8 +328,8 @@ instance InternalValue CSharpCode where
   inputFunc = liftA2 mkVal string (toCode $ text "Console.ReadLine()")
   printFunc = liftA2 mkVal void (toCode $ text "Console.Write")
   printLnFunc = liftA2 mkVal void (toCode $ text "Console.WriteLine")
-  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "Write") f)
-  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "WriteLine") f)
+  printFileFunc f = liftA2 mkVal void (onCodeValue (printFileDocD "Write") f)
+  printFileLnFunc f = liftA2 mkVal void (onCodeValue (printFileDocD "WriteLine") f)
   
   cast = csCast
   
@@ -382,7 +382,7 @@ instance InternalFunction CSharpCode where
   listAccessFunc = listAccessFuncD
   listSetFunc = listSetFuncD listSetFuncDocD 
     
-  functionType = fmap funcType
+  functionType = onCodeValue funcType
   functionDoc = funcDoc . unCSC
 
   funcFromData t d = liftA2 fd t (toCode d)
@@ -433,8 +433,8 @@ instance StatementSym CSharpCode where
 
   getInput v = v &= liftA2 csInput (variableType v) inputFunc
   discardInput = discardInputD csDiscardInput
-  getFileInput f v = v &= liftA2 csInput (variableType v) (fmap csFileInput f)
-  discardFileInput f = valState $ fmap csFileInput f
+  getFileInput f v = v &= liftA2 csInput (variableType v) (onCodeValue csFileInput f)
+  discardFileInput f = valState $ onCodeValue csFileInput f
 
   openFileR = openFileRD csOpenFileR
   openFileW = openFileWD csOpenFileWorA
@@ -494,8 +494,8 @@ instance ControlStatementSym CSharpCode where
   notifyObservers = notifyObserversD
 
   getFileInputAll f v = while ((f $. liftA2 fd bool (toCode $ text 
-    ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (valueOf v) (fmap 
-    csFileInput f))
+    ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (valueOf v) 
+    (onCodeValue csFileInput f))
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc
@@ -512,10 +512,10 @@ instance MethodTypeSym CSharpCode where
 
 instance ParameterSym CSharpCode where
   type Parameter CSharpCode = ParamData
-  param = fmap (mkParam paramDocD)
+  param = onCodeValue (mkParam paramDocD)
   pointerParam = param
 
-  parameterType = variableType . fmap paramVar
+  parameterType = variableType . onCodeValue paramVar
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
@@ -544,11 +544,12 @@ instance MethodSym CSharpCode where
 
 instance InternalMethod CSharpCode where
   intMethod m n _ s p t ps b = getPutReturn (setParameters (map unCSC ps) . 
-    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ fmap mthd 
-    (liftA5 (methodDocD n) s p t (liftList (paramListDocD . checkParams n) ps) b)
+    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
+    mthd (liftA5 (methodDocD n) s p t (liftList (paramListDocD . checkParams n) 
+    ps) b)
   intFunc = G.intFunc
   commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
-    (fmap (fmap commentedItem) cmt)
+    (onStateValue (onCodeValue commentedItem) cmt)
   
   methodDoc = mthdDoc . unCSC
   methodFromData _ = toCode . mthd
@@ -588,12 +589,12 @@ instance ModuleSym CSharpCode where
 instance InternalMod CSharpCode where
   moduleDoc = modDoc . unCSC
   modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
-  updateModuleDoc f = fmap (fmap (updateModDoc f))
+  updateModuleDoc f = onStateValue (onCodeValue (updateModDoc f))
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
-  docComment = fmap (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
+  docComment = onStateValue (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
     docCommentEnd)
 
   blockCommentDoc = unCSC
@@ -621,7 +622,7 @@ csCast :: CSharpCode (Type CSharpCode) -> CSharpCode (Value CSharpCode) ->
   CSharpCode (Value CSharpCode)
 csCast t v = csCast' (getType t) (getType $ valueType v)
   where csCast' Float String = funcApp "Double.Parse" float [v]
-        csCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
+        csCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (onCodeValue castDocD t) v
 
 csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
@@ -676,9 +677,9 @@ csInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
 csInOutCall f n ins [] [out] = if null (filterOutObjs [out])
   then valState $ f n void (valueOf out : ins) 
   else assign out $ f n (variableType out) (valueOf out : ins)
-csInOutCall f n ins outs both = valState $ f n void (map (fmap (updateValDoc 
-  csRef) . valueOf) both ++ ins ++ map (fmap (updateValDoc csOut) . valueOf) 
-  outs)
+csInOutCall f n ins outs both = valState $ f n void (map (onCodeValue 
+  (updateValDoc csRef) . valueOf) both ++ ins ++ map (onCodeValue (updateValDoc 
+  csOut) . valueOf) outs)
 
 csVarDec :: Binding -> CSharpCode (Statement CSharpCode) -> 
   CSharpCode (Statement CSharpCode)
@@ -705,6 +706,6 @@ csInOut f s p ins [v] [] b = f s p (variableType v) (map param ins)
 csInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
   else variableType v) (map param $ v : ins) (if null (filterOutObjs [v]) then 
   b else liftA2 appendToBody b (returnState $ valueOf v))
-csInOut f s p ins outs both b = f s p void (map (fmap (updateParamDoc csRef) . 
-  param) both ++ map param ins ++ map (fmap (updateParamDoc csOut) . param) 
-  outs) b
+csInOut f s p ins outs both b = f s p void (map (onCodeValue (updateParamDoc 
+  csRef) . param) both ++ map param ins ++ map (onCodeValue (updateParamDoc 
+  csOut) . param) outs) b

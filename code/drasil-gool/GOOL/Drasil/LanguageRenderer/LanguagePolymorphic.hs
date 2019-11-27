@@ -33,7 +33,7 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
   FileType)
-import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, toState, liftList)
+import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, toState, onStateValue, liftList)
 import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD, 
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
@@ -299,9 +299,9 @@ modFromData n f m d = putAfter (setModuleName n) (liftM2 f d m)
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
   repr (Block repr) -> GS (repr (Module repr)) -> GS (repr (RenderFile repr))
-fileDoc ft ext topb botb m = S.fileFromData ft (fmap (addExt ext) getModuleName)
-  (updateModuleDoc (\d -> emptyIfEmpty d (fileDoc' (blockDoc topb) d 
-  (blockDoc botb))) m)
+fileDoc ft ext topb botb m = S.fileFromData ft (onStateValue (addExt ext) 
+  getModuleName) (updateModuleDoc (\d -> emptyIfEmpty d (fileDoc' (blockDoc 
+  topb) d (blockDoc botb))) m)
 
 docMod :: (RenderSym repr) => String -> [String] -> String -> 
   GS (repr (RenderFile repr)) -> GS (repr (RenderFile repr))

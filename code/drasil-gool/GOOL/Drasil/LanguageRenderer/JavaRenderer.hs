@@ -62,7 +62,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onStateValue, 
+import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, onStateValue, 
   liftA4, liftA5, liftList, lift1List, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   getPutReturnList, addProgNameToPaths, setMain, setCurrMain, setParameters)
@@ -110,7 +110,7 @@ instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = toCode empty
   
-  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
+  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -249,7 +249,7 @@ instance VariableSym JavaCode where
 
   variableBind = varBind . unJC
   variableName = varName . unJC
-  variableType = fmap varType
+  variableType = onCodeValue varType
   variableDoc = varDoc . unJC
   
 instance InternalVariable JavaCode where
@@ -274,7 +274,7 @@ instance ValueSym JavaCode where
 
   argsList = argsListD "args"
 
-  valueType = fmap valType
+  valueType = onCodeValue valType
   valueDoc = valDoc . unJC
 
 instance NumericExpression JavaCode where
@@ -331,8 +331,8 @@ instance InternalValue JavaCode where
     text "new Scanner(System.in)"))
   printFunc = liftA2 mkVal void (toCode $ text "System.out.print")
   printLnFunc = liftA2 mkVal void (toCode $ text "System.out.println")
-  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "print") f)
-  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "println") f)
+  printFileFunc f = liftA2 mkVal void (onCodeValue (printFileDocD "print") f)
+  printFileLnFunc f = liftA2 mkVal void (onCodeValue (printFileDocD "println") f)
   
   cast = jCast
   
@@ -385,7 +385,7 @@ instance InternalFunction JavaCode where
   listAccessFunc = listAccessFuncD' "get"
   listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
 
-  functionType = fmap funcType
+  functionType = onCodeValue funcType
   functionDoc = funcDoc . unJC
 
   funcFromData t d = liftA2 fd t (toCode d)
@@ -516,10 +516,10 @@ instance MethodTypeSym JavaCode where
 
 instance ParameterSym JavaCode where
   type Parameter JavaCode = ParamData
-  param = fmap (mkParam paramDocD)
+  param = onCodeValue (mkParam paramDocD)
   pointerParam = param
 
-  parameterType = variableType . fmap paramVar
+  parameterType = variableType . onCodeValue paramVar
 
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData
@@ -548,11 +548,12 @@ instance MethodSym JavaCode where
 
 instance InternalMethod JavaCode where
   intMethod m n _ s p t ps b = getPutReturn (setParameters (map unJC ps) . 
-    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ fmap mthd 
-    (liftA5 (jMethod n) s p t (liftList (paramListDocD . checkParams n) ps) b)
+    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
+    mthd (liftA5 (jMethod n) s p t (liftList (paramListDocD . checkParams n) ps)
+    b)
   intFunc = G.intFunc
   commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
-    (fmap (fmap commentedItem) cmt)
+    (onStateValue (onCodeValue commentedItem) cmt)
   
   methodDoc = mthdDoc . unJC
   methodFromData _ = toCode . mthd
@@ -592,12 +593,12 @@ instance ModuleSym JavaCode where
 instance InternalMod JavaCode where
   moduleDoc = modDoc . unJC
   modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
-  updateModuleDoc f = fmap (fmap (updateModDoc f))
+  updateModuleDoc f = onStateValue (onCodeValue (updateModDoc f))
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
-  docComment = fmap (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
+  docComment = onStateValue (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
     docCommentEnd)
 
   blockCommentDoc = unJC
@@ -648,7 +649,7 @@ jCast :: JavaCode (Type JavaCode) -> JavaCode (Value JavaCode) ->
 jCast t v = jCast' (getType t) (getType $ valueType v)
   where jCast' Float String = funcApp "Double.parseDouble" float [v]
         jCast' Integer (Enum _) = v $. func "ordinal" int []
-        jCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
+        jCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (onCodeValue castDocD t) v
 
 jListDecDef :: (RenderSym repr) => repr (Variable repr) -> [repr (Value repr)] 
   -> Doc
@@ -767,7 +768,7 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
           [JavaCode (Statement JavaCode)]
         assignArray _ [] = []
         assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
-          (fmap valType v) &= v) : assignArray (c+1) vs
+          (valueType v) &= v) : assignArray (c+1) vs
         decls = multi $ map varDec outs
         rets = filterOutObjs both ++ outs
         outputs = var "outputs" jArrayType

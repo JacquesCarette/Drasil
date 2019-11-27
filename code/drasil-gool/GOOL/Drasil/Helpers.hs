@@ -1,6 +1,6 @@
 module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
   hicat, vicat, vibcat, vmap, vimap, vibmap, emptyIfEmpty, emptyIfNull, 
-  mapPairFst, mapPairSnd, toCode, toState, onStateValue, liftA4, liftA5, liftA6,
+  mapPairFst, mapPairSnd, toCode, toState, onCodeValue, onStateValue, liftA4, liftA5, liftA6,
   liftA7, liftA8, liftList, lift2Lists, lift1List, getInnerType, getNestDegree, 
   convType, checkParams
 ) where
@@ -9,7 +9,6 @@ import Utils.Drasil (blank)
 
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
 import GOOL.Drasil.Data (ParamData)
-import GOOL.Drasil.State (GS)
 import qualified GOOL.Drasil.Symantics as S ( 
   RenderSym(..), TypeSym(..), PermanenceSym(dynamic_))
 
@@ -68,7 +67,10 @@ toCode = return
 toState :: a -> State s a
 toState = return
 
-onStateValue :: (a -> b) -> GS a -> GS b
+onCodeValue :: (Functor repr) => (a -> b) -> repr a -> repr b
+onCodeValue = fmap
+
+onStateValue :: (a -> b) -> State s a -> State s b
 onStateValue = fmap
 
 liftA4 :: Applicative f => (a -> b -> c -> d -> e) -> f a -> f b -> f c -> 

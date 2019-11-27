@@ -9,7 +9,7 @@ module GOOL.Drasil (Label, ProgramSym(..), RenderSym(..), PermanenceSym(..),
   ScopeTag(..), ProgData(..), FileData(..), ModData(..),
   CodeType(..),
   GOOLState(..), GS, MS, headers, sources, mainMod, initialState,
-  convType, liftList,
+  convType, onCodeList,
   unPC, unJC, unCSC, unCPPC
 ) where
 
@@ -28,7 +28,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.State (GOOLState(..), GS, MS, headers, sources, mainMod, 
   initialState)
 
-import GOOL.Drasil.Helpers (convType, liftList)
+import GOOL.Drasil.Helpers (convType, onCodeList)
 
 import GOOL.Drasil.LanguageRenderer.JavaRenderer (unJC)
 import GOOL.Drasil.LanguageRenderer.PythonRenderer (unPC)

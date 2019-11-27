@@ -61,17 +61,18 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
-  TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
-import GOOL.Drasil.Helpers (toCode, onStateValue, liftA4, liftA5, liftList, 
-  lift1List, checkParams)
+  TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
+  vard)
+import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
+  on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, on5CodeValues, 
+  onCodeList, onStateList, on1CodeValue1List, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens (over)
-import Control.Applicative (Applicative, liftA2, liftA3)
+import Control.Applicative (Applicative)
 import Control.Monad.State (evalState)
-import Control.Monad (liftM2)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   semi, vcat, lbrace, rbrace, colon)
 
@@ -93,7 +94,8 @@ instance Monad CSharpCode where
 
 instance ProgramSym CSharpCode where
   type Program CSharpCode = ProgData
-  prog n = liftList (liftList (progD n)) . map (putAfter $ setCurrMain False)
+  prog n = onStateList (onCodeList (progD n)) . map (putAfter $ setCurrMain 
+    False)
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = FileData
@@ -102,45 +104,45 @@ instance RenderSym CSharpCode where
 
   docMod = G.docMod
 
-  commentedMod cmt m = liftM2 (liftA2 commentedModD) m cmt
+  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
 instance InternalFile CSharpCode where
-  top _ = liftA2 cstop endStatement (include "")
-  bottom = return empty
+  top _ = on2CodeValues cstop endStatement (include "")
+  bottom = toCode empty
 
-  fileFromData = G.fileFromData (\m fp -> fmap (fileD fp) m)
+  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
-  endStatement = return semi
-  endStatementLoop = return empty
+  endStatement = toCode semi
+  endStatementLoop = toCode empty
 
-  include _ = return $ text "using"
-  inherit n = return $ colon <+> text n
+  include _ = toCode $ text "using"
+  inherit n = toCode $ colon <+> text n
 
-  list _ = return $ text "List"
+  list _ = toCode $ text "List"
 
-  blockStart = return lbrace
-  blockEnd = return rbrace
+  blockStart = toCode lbrace
+  blockEnd = toCode rbrace
 
   ifBodyStart = blockStart
-  elseIf = return elseIfLabel
+  elseIf = toCode elseIfLabel
   
-  iterForEachLabel = return $ text "foreach"
-  iterInLabel = return inLabel
+  iterForEachLabel = toCode $ text "foreach"
+  iterInLabel = toCode inLabel
 
-  commentStart = return doubleSlash
-  blockCommentStart = return blockCmtStart
-  blockCommentEnd = return blockCmtEnd
-  docCommentStart = return docCmtStart
+  commentStart = toCode doubleSlash
+  blockCommentStart = toCode blockCmtStart
+  blockCommentEnd = toCode blockCmtEnd
+  docCommentStart = toCode docCmtStart
   docCommentEnd = blockCommentEnd
 
   keyDoc = unCSC
 
 instance PermanenceSym CSharpCode where
   type Permanence CSharpCode = Doc
-  static_ = return staticDocD
-  dynamic_ = return dynamicDocD
+  static_ = toCode staticDocD
+  dynamic_ = toCode dynamicDocD
 
 instance InternalPerm CSharpCode where
   permDoc = unCSC
@@ -148,11 +150,11 @@ instance InternalPerm CSharpCode where
 
 instance BodySym CSharpCode where
   type Body CSharpCode = Doc
-  body = liftList bodyDocD
+  body = onCodeList bodyDocD
   bodyStatements = block
   oneLiner = oneLinerD
 
-  addComments s = liftA2 (addCommentsDocD s) commentStart
+  addComments s = on2CodeValues (addCommentsDocD s) commentStart
 
   bodyDoc = unCSC
 
@@ -162,30 +164,30 @@ instance BlockSym CSharpCode where
 
 instance InternalBlock CSharpCode where
   blockDoc = unCSC
-  docBlock = return
+  docBlock = toCode
 
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData
-  bool = return boolTypeDocD
-  int = return intTypeDocD
-  float = return csFloatTypeDoc
-  char = return charTypeDocD
-  string = return stringTypeDocD
-  infile = return csInfileTypeDoc
-  outfile = return csOutfileTypeDoc
-  listType p st = liftA2 listTypeDocD st (list p)
+  bool = toCode boolTypeDocD
+  int = toCode intTypeDocD
+  float = toCode csFloatTypeDoc
+  char = toCode charTypeDocD
+  string = toCode stringTypeDocD
+  infile = toCode csInfileTypeDoc
+  outfile = toCode csOutfileTypeDoc
+  listType p st = on2CodeValues listTypeDocD st (list p)
   listInnerType = listInnerTypeD
-  obj t = return $ typeDocD t
-  enumType t = return $ enumTypeDocD t
+  obj t = toCode $ typeDocD t
+  enumType t = toCode $ enumTypeDocD t
   iterator t = t
-  void = return voidDocD
+  void = toCode voidDocD
 
   getType = cType . unCSC
   getTypeString = typeString . unCSC
   getTypeDoc = typeDoc . unCSC
   
 instance InternalType CSharpCode where
-  typeFromData t s d = return $ td t s d
+  typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym CSharpCode where
   runStrategy = runStrategyD
@@ -194,38 +196,38 @@ instance ControlBlockSym CSharpCode where
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
-  notOp = return notOpDocD
-  negateOp = return negateOpDocD
-  sqrtOp = return $ unOpPrec "Math.Sqrt"
-  absOp = return $ unOpPrec "Math.Abs"
-  logOp = return $ unOpPrec "Math.Log10"
-  lnOp = return $ unOpPrec "Math.Log"
-  expOp = return $ unOpPrec "Math.Exp"
-  sinOp = return $ unOpPrec "Math.Sin"
-  cosOp = return $ unOpPrec "Math.Cos"
-  tanOp = return $ unOpPrec "Math.Tan"
-  asinOp = return $ unOpPrec "Math.Asin"
-  acosOp = return $ unOpPrec "Math.Acos"
-  atanOp = return $ unOpPrec "Math.Atan"
-  floorOp = return $ unOpPrec "Math.Floor"
-  ceilOp = return $ unOpPrec "Math.Ceiling"
+  notOp = toCode notOpDocD
+  negateOp = toCode negateOpDocD
+  sqrtOp = toCode $ unOpPrec "Math.Sqrt"
+  absOp = toCode $ unOpPrec "Math.Abs"
+  logOp = toCode $ unOpPrec "Math.Log10"
+  lnOp = toCode $ unOpPrec "Math.Log"
+  expOp = toCode $ unOpPrec "Math.Exp"
+  sinOp = toCode $ unOpPrec "Math.Sin"
+  cosOp = toCode $ unOpPrec "Math.Cos"
+  tanOp = toCode $ unOpPrec "Math.Tan"
+  asinOp = toCode $ unOpPrec "Math.Asin"
+  acosOp = toCode $ unOpPrec "Math.Acos"
+  atanOp = toCode $ unOpPrec "Math.Atan"
+  floorOp = toCode $ unOpPrec "Math.Floor"
+  ceilOp = toCode $ unOpPrec "Math.Ceiling"
 
 instance BinaryOpSym CSharpCode where
   type BinaryOp CSharpCode = OpData
-  equalOp = return equalOpDocD
-  notEqualOp = return notEqualOpDocD
-  greaterOp = return greaterOpDocD
-  greaterEqualOp = return greaterEqualOpDocD
-  lessOp = return lessOpDocD
-  lessEqualOp = return lessEqualOpDocD
-  plusOp = return plusOpDocD
-  minusOp = return minusOpDocD
-  multOp = return multOpDocD
-  divideOp = return divideOpDocD
-  powerOp = return $ powerPrec "Math.Pow"
-  moduloOp = return moduloOpDocD
-  andOp = return andOpDocD
-  orOp = return orOpDocD
+  equalOp = toCode equalOpDocD
+  notEqualOp = toCode notEqualOpDocD
+  greaterOp = toCode greaterOpDocD
+  greaterEqualOp = toCode greaterEqualOpDocD
+  lessOp = toCode lessOpDocD
+  lessEqualOp = toCode lessEqualOpDocD
+  plusOp = toCode plusOpDocD
+  minusOp = toCode minusOpDocD
+  multOp = toCode multOpDocD
+  divideOp = toCode divideOpDocD
+  powerOp = toCode $ powerPrec "Math.Pow"
+  moduloOp = toCode moduloOpDocD
+  andOp = toCode andOpDocD
+  orOp = toCode orOpDocD
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
@@ -237,7 +239,7 @@ instance VariableSym CSharpCode where
   enumVar = enumVarD
   classVar = classVarD classVarDocD
   extClassVar = classVar
-  objVar = liftA2 csObjVar
+  objVar = on2CodeValues csObjVar
   objVarSelf = objVarSelfD
   listVar  = listVarD
   listOf = listOfD 
@@ -247,11 +249,11 @@ instance VariableSym CSharpCode where
 
   variableBind = varBind . unCSC
   variableName = varName . unCSC
-  variableType = fmap varType
+  variableType = onCodeValue varType
   variableDoc = varDoc . unCSC
 
 instance InternalVariable CSharpCode where
-  varFromData b n t d = liftA2 (vard b n) t (return d)
+  varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
@@ -272,49 +274,49 @@ instance ValueSym CSharpCode where
   
   argsList = argsListD "args"
 
-  valueType = fmap valType
+  valueType = onCodeValue valType
   valueDoc = valDoc . unCSC
 
 instance NumericExpression CSharpCode where
-  (#~) = liftA2 unExpr' negateOp
-  (#/^) = liftA2 unExpr sqrtOp
-  (#|) = liftA2 unExpr absOp
-  (#+) = liftA3 binExpr plusOp
-  (#-) = liftA3 binExpr minusOp
-  (#*) = liftA3 binExpr multOp
-  (#/) = liftA3 binExpr divideOp
-  (#%) = liftA3 binExpr moduloOp
-  (#^) = liftA3 binExpr' powerOp
+  (#~) = on2CodeValues unExpr' negateOp
+  (#/^) = on2CodeValues unExpr sqrtOp
+  (#|) = on2CodeValues unExpr absOp
+  (#+) = on3CodeValues binExpr plusOp
+  (#-) = on3CodeValues binExpr minusOp
+  (#*) = on3CodeValues binExpr multOp
+  (#/) = on3CodeValues binExpr divideOp
+  (#%) = on3CodeValues binExpr moduloOp
+  (#^) = on3CodeValues binExpr' powerOp
 
-  log = liftA2 unExpr logOp
-  ln = liftA2 unExpr lnOp
-  exp = liftA2 unExpr expOp
-  sin = liftA2 unExpr sinOp
-  cos = liftA2 unExpr cosOp
-  tan = liftA2 unExpr tanOp
+  log = on2CodeValues unExpr logOp
+  ln = on2CodeValues unExpr lnOp
+  exp = on2CodeValues unExpr expOp
+  sin = on2CodeValues unExpr sinOp
+  cos = on2CodeValues unExpr cosOp
+  tan = on2CodeValues unExpr tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin = liftA2 unExpr asinOp
-  arccos = liftA2 unExpr acosOp
-  arctan = liftA2 unExpr atanOp
-  floor = liftA2 unExpr floorOp
-  ceil = liftA2 unExpr ceilOp
+  arcsin = on2CodeValues unExpr asinOp
+  arccos = on2CodeValues unExpr acosOp
+  arctan = on2CodeValues unExpr atanOp
+  floor = on2CodeValues unExpr floorOp
+  ceil = on2CodeValues unExpr ceilOp
 
 instance BooleanExpression CSharpCode where
-  (?!) = liftA3 typeUnExpr notOp bool
-  (?&&) = liftA4 typeBinExpr andOp bool
-  (?||) = liftA4 typeBinExpr orOp bool
+  (?!) = on3CodeValues typeUnExpr notOp bool
+  (?&&) = on4CodeValues typeBinExpr andOp bool
+  (?||) = on4CodeValues typeBinExpr orOp bool
 
-  (?<) = liftA4 typeBinExpr lessOp bool
-  (?<=) = liftA4 typeBinExpr lessEqualOp bool
-  (?>) = liftA4 typeBinExpr greaterOp bool
-  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
-  (?==) = liftA4 typeBinExpr equalOp bool
-  (?!=) = liftA4 typeBinExpr notEqualOp bool
+  (?<) = on4CodeValues typeBinExpr lessOp bool
+  (?<=) = on4CodeValues typeBinExpr lessEqualOp bool
+  (?>) = on4CodeValues typeBinExpr greaterOp bool
+  (?>=) = on4CodeValues typeBinExpr greaterEqualOp bool
+  (?==) = on4CodeValues typeBinExpr equalOp bool
+  (?!=) = on4CodeValues typeBinExpr notEqualOp bool
   
 instance ValueExpression CSharpCode where
-  inlineIf = liftA3 inlineIfD
+  inlineIf = on3CodeValues inlineIfD
   funcApp = funcAppD
   selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
@@ -325,15 +327,17 @@ instance ValueExpression CSharpCode where
   notNull = notNullD
 
 instance InternalValue CSharpCode where
-  inputFunc = liftA2 mkVal string (return $ text "Console.ReadLine()")
-  printFunc = liftA2 mkVal void (return $ text "Console.Write")
-  printLnFunc = liftA2 mkVal void (return $ text "Console.WriteLine")
-  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "Write") f)
-  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "WriteLine") f)
+  inputFunc = on2CodeValues mkVal string (toCode $ text "Console.ReadLine()")
+  printFunc = on2CodeValues mkVal void (toCode $ text "Console.Write")
+  printLnFunc = on2CodeValues mkVal void (toCode $ text "Console.WriteLine")
+  printFileFunc f = on2CodeValues mkVal void (onCodeValue (printFileDocD 
+    "Write") f)
+  printFileLnFunc f = on2CodeValues mkVal void (onCodeValue (printFileDocD 
+    "WriteLine") f)
   
   cast = csCast
   
-  valFromData p t d = liftA2 (vd p) t (return d)
+  valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CSharpCode where
   objAccess = objAccessD
@@ -372,7 +376,7 @@ instance InternalFunction CSharpCode where
   getFunc = getFuncD
   setFunc = setFuncD
 
-  listSizeFunc = liftA2 fd int (return $ funcDocD (text "Count"))
+  listSizeFunc = on2CodeValues fd int (toCode $ funcDocD (text "Count"))
   listAddFunc _ = listAddFuncD "Insert"
   listAppendFunc = listAppendFuncD "Add"
 
@@ -382,10 +386,10 @@ instance InternalFunction CSharpCode where
   listAccessFunc = listAccessFuncD
   listSetFunc = listSetFuncD listSetFuncDocD 
     
-  functionType = fmap funcType
+  functionType = onCodeValue funcType
   functionDoc = funcDoc . unCSC
 
-  funcFromData t d = liftA2 fd t (return d)
+  funcFromData t d = on2CodeValues fd t (toCode d)
 
 instance InternalStatement CSharpCode where
   printSt _ p v _ = printStD p v
@@ -397,7 +401,7 @@ instance InternalStatement CSharpCode where
   statementDoc = fst . unCSC
   statementTerm = snd . unCSC
   
-  stateFromData d t = return (d, t)
+  stateFromData d t = toCode (d, t)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
@@ -431,10 +435,11 @@ instance StatementSym CSharpCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = v &= liftA2 csInput (variableType v) inputFunc
+  getInput v = v &= on2CodeValues csInput (variableType v) inputFunc
   discardInput = discardInputD csDiscardInput
-  getFileInput f v = v &= liftA2 csInput (variableType v) (fmap csFileInput f)
-  discardFileInput f = valState $ fmap csFileInput f
+  getFileInput f v = v &= on2CodeValues csInput (variableType v) (onCodeValue 
+    csFileInput f)
+  discardFileInput f = valState $ onCodeValue csFileInput f
 
   openFileR = openFileRD csOpenFileR
   openFileW = openFileWD csOpenFileWorA
@@ -473,7 +478,7 @@ instance StatementSym CSharpCode where
   selfInOutCall c = csInOutCall (selfFuncApp c)
   extInOutCall m = csInOutCall (extFuncApp m)
 
-  multi = lift1List multiStateDocD endStatement
+  multi = on1CodeValue1List multiStateDocD endStatement
 
 instance ControlStatementSym CSharpCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
@@ -493,14 +498,14 @@ instance ControlStatementSym CSharpCode where
   checkState = checkStateD
   notifyObservers = notifyObserversD
 
-  getFileInputAll f v = while ((f $. liftA2 fd bool (return $ text 
-    ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (valueOf v) (fmap 
-    csFileInput f))
+  getFileInputAll f v = while ((f $. on2CodeValues fd bool (toCode $ text 
+    ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (valueOf v) 
+    (onCodeValue csFileInput f))
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc
-  private = return privateDocD
-  public = return publicDocD
+  private = toCode privateDocD
+  public = toCode publicDocD
 
 instance InternalScope CSharpCode where
   scopeDoc = unCSC
@@ -508,14 +513,14 @@ instance InternalScope CSharpCode where
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
   mType t = t
-  construct = return . G.construct
+  construct = toCode . G.construct
 
 instance ParameterSym CSharpCode where
   type Parameter CSharpCode = ParamData
-  param = fmap (mkParam paramDocD)
+  param = onCodeValue (mkParam paramDocD)
   pointerParam = param
 
-  parameterType = variableType . fmap paramVar
+  parameterType = variableType . onCodeValue paramVar
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
@@ -544,14 +549,15 @@ instance MethodSym CSharpCode where
 
 instance InternalMethod CSharpCode where
   intMethod m n _ s p t ps b = getPutReturn (setParameters (map unCSC ps) . 
-    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ fmap mthd 
-    (liftA5 (methodDocD n) s p t (liftList (paramListDocD . checkParams n) ps) b)
+    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
+    mthd (on5CodeValues (methodDocD n) s p t (onCodeList (paramListDocD . 
+    checkParams n) ps) b)
   intFunc = G.intFunc
-  commentedFunc cmt m = liftM2 (liftA2 updateMthdDoc) m 
-    (fmap (fmap commentedItem) cmt)
+  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
+    (onStateValue (onCodeValue commentedItem) cmt)
   
   methodDoc = mthdDoc . unCSC
-  methodFromData _ = return . mthd
+  methodFromData _ = toCode . mthd
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
@@ -564,7 +570,7 @@ instance StateVarSym CSharpCode where
 
 instance InternalStateVar CSharpCode where
   stateVarDoc = unCSC
-  stateVarFromData = return . return
+  stateVarFromData = toState . toCode
 
 instance ClassSym CSharpCode where
   type Class CSharpCode = Doc
@@ -587,14 +593,15 @@ instance ModuleSym CSharpCode where
   
 instance InternalMod CSharpCode where
   moduleDoc = modDoc . unCSC
-  modFromData n = G.modFromData n (\d m -> return $ md n m d)
-  updateModuleDoc f = fmap (fmap (updateModDoc f))
+  modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
+  updateModuleDoc f = onStateValue (onCodeValue (updateModDoc f))
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
-  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
-  docComment = fmap (\lns -> liftA2 (docCmtDoc lns) docCommentStart 
-    docCommentEnd)
+  blockComment lns = on2CodeValues (blockCmtDoc lns) blockCommentStart 
+    blockCommentEnd
+  docComment = onStateValue (\lns -> on2CodeValues (docCmtDoc lns) 
+    docCommentStart docCommentEnd)
 
   blockCommentDoc = unCSC
 
@@ -621,7 +628,8 @@ csCast :: CSharpCode (Type CSharpCode) -> CSharpCode (Value CSharpCode) ->
   CSharpCode (Value CSharpCode)
 csCast t v = csCast' (getType t) (getType $ valueType v)
   where csCast' Float String = funcApp "Double.Parse" float [v]
-        csCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
+        csCast' _ _ = on2CodeValues mkVal t $ on2CodeValues castObjDocD 
+          (onCodeValue castDocD t) v
 
 csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
@@ -676,9 +684,9 @@ csInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
 csInOutCall f n ins [] [out] = if null (filterOutObjs [out])
   then valState $ f n void (valueOf out : ins) 
   else assign out $ f n (variableType out) (valueOf out : ins)
-csInOutCall f n ins outs both = valState $ f n void (map (fmap (updateValDoc 
-  csRef) . valueOf) both ++ ins ++ map (fmap (updateValDoc csOut) . valueOf) 
-  outs)
+csInOutCall f n ins outs both = valState $ f n void (map (onCodeValue 
+  (updateValDoc csRef) . valueOf) both ++ ins ++ map (onCodeValue (updateValDoc 
+  csOut) . valueOf) outs)
 
 csVarDec :: Binding -> CSharpCode (Statement CSharpCode) -> 
   CSharpCode (Statement CSharpCode)
@@ -701,10 +709,10 @@ csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode)
   [CSharpCode (Variable CSharpCode)] -> CSharpCode (Body CSharpCode) -> 
   MS (CSharpCode (Method CSharpCode))
 csInOut f s p ins [v] [] b = f s p (variableType v) (map param ins)
-  (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
+  (on3CodeValues surroundBody (varDec v) b (returnState $ valueOf v))
 csInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
   else variableType v) (map param $ v : ins) (if null (filterOutObjs [v]) then 
-  b else liftA2 appendToBody b (returnState $ valueOf v))
-csInOut f s p ins outs both b = f s p void (map (fmap (updateParamDoc csRef) . 
-  param) both ++ map param ins ++ map (fmap (updateParamDoc csOut) . param) 
-  outs) b
+  b else on2CodeValues appendToBody b (returnState $ valueOf v))
+csInOut f s p ins outs both b = f s p void (map (onCodeValue (updateParamDoc 
+  csRef) . param) both ++ map param ins ++ map (onCodeValue (updateParamDoc 
+  csOut) . param) outs) b

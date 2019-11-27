@@ -1,20 +1,23 @@
 module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
   hicat, vicat, vibcat, vmap, vimap, vibmap, emptyIfEmpty, emptyIfNull, 
-  mapPairFst, mapPairSnd, toCode, onStateValue, liftA4, liftA5, liftA6, liftA7, 
-  liftA8, liftList, lift2Lists, lift1List, getInnerType, getNestDegree, 
-  convType, checkParams
+  mapPairFst, mapPairSnd, toCode, toState, onCodeValue, onStateValue, 
+  on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, 
+  on5CodeValues, on6CodeValues, on7CodeValues, on8CodeValues, onCodeList, 
+  onStateList, on2CodeLists, on2StateLists, on1CodeValue1List, 
+  on1StateValue1List, getInnerType, getNestDegree, convType, checkParams
 ) where
 
 import Utils.Drasil (blank)
 
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
 import GOOL.Drasil.Data (ParamData)
-import GOOL.Drasil.State (GS)
 import qualified GOOL.Drasil.Symantics as S ( 
   RenderSym(..), TypeSym(..), PermanenceSym(dynamic_))
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
+import Control.Monad (liftM2, liftM3)
+import Control.Monad.State (State)
 import Data.List (intersperse, nub)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
   (<>), comma, punctuate, empty, isEmpty)
@@ -64,37 +67,68 @@ mapPairSnd f (c, b) = (c, f b)
 toCode :: (Monad repr) => a -> repr a
 toCode = return
 
-onStateValue :: (a -> b) -> GS a -> GS b
+toState :: a -> State s a
+toState = return
+
+onCodeValue :: (Functor repr) => (a -> b) -> repr a -> repr b
+onCodeValue = fmap
+
+onStateValue :: (a -> b) -> State s a -> State s b
 onStateValue = fmap
 
-liftA4 :: Applicative f => (a -> b -> c -> d -> e) -> f a -> f b -> f c -> 
-  f d -> f e
-liftA4 f a1 a2 a3 a4 = liftA3 f a1 a2 a3 <*> a4
+on2CodeValues :: (Applicative repr) => (a -> b -> c) -> repr a -> repr b -> 
+  repr c
+on2CodeValues = liftA2
 
-liftA5 :: Applicative f => (a -> b -> c -> d -> e -> g) -> f a -> f b -> f c ->
-  f d -> f e -> f g
-liftA5 f a1 a2 a3 a4 a5 = liftA4 f a1 a2 a3 a4 <*> a5
+on2StateValues :: (a -> b -> c) -> State s a -> State s b -> State s c
+on2StateValues = liftM2
 
-liftA6 :: Applicative f => (a -> b -> c -> d -> e -> g -> h) -> f a -> f b -> 
-  f c -> f d -> f e -> f g -> f h
-liftA6 f a1 a2 a3 a4 a5 a6 = liftA5 f a1 a2 a3 a4 a5 <*> a6
+on3CodeValues :: (Applicative repr) => (a -> b -> c -> d) -> repr a -> repr b 
+  -> repr c -> repr d
+on3CodeValues = liftA3
 
-liftA7 :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i) -> f a -> 
-  f b -> f c -> f d -> f e -> f g -> f h -> f i
-liftA7 f a1 a2 a3 a4 a5 a6 a7 = liftA6 f a1 a2 a3 a4 a5 a6 <*> a7
+on3StateValues :: (a -> b -> c -> d) -> State s a -> State s b -> State s c ->
+  State s d
+on3StateValues = liftM3
 
-liftA8 :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i -> j) -> 
-  f a -> f b -> f c -> f d -> f e -> f g -> f h -> f i -> f j
-liftA8 f a1 a2 a3 a4 a5 a6 a7 a8 = liftA7 f a1 a2 a3 a4 a5 a6 a7 <*> a8
+on4CodeValues :: Applicative f => (a -> b -> c -> d -> e) -> f a -> f b -> f c 
+  -> f d -> f e
+on4CodeValues f a1 a2 a3 a4 = liftA3 f a1 a2 a3 <*> a4
 
-liftList :: Monad m => ([a] -> b) -> [m a] -> m b
-liftList f as = f <$> sequence as
+on5CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g) -> f a -> f b -> 
+  f c -> f d -> f e -> f g
+on5CodeValues f a1 a2 a3 a4 a5 = on4CodeValues f a1 a2 a3 a4 <*> a5
 
-lift2Lists :: Monad m => ([a] -> [b] -> c) -> [m a] -> [m b] -> m c
-lift2Lists f as bs = liftA2 f (sequence as) (sequence bs)
+on6CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g -> h) -> f a -> f 
+  b -> f c -> f d -> f e -> f g -> f h
+on6CodeValues f a1 a2 a3 a4 a5 a6 = on5CodeValues f a1 a2 a3 a4 a5 <*> a6
 
-lift1List :: Monad m => (a -> [b] -> c) -> m a -> [m b] -> m c
-lift1List f a as = liftA2 f a (sequence as)
+on7CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i) -> f a 
+  -> f b -> f c -> f d -> f e -> f g -> f h -> f i
+on7CodeValues f a1 a2 a3 a4 a5 a6 a7 = on6CodeValues f a1 a2 a3 a4 a5 a6 <*> a7
+
+on8CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i -> j) 
+  -> f a -> f b -> f c -> f d -> f e -> f g -> f h -> f i -> f j
+on8CodeValues f a1 a2 a3 a4 a5 a6 a7 a8 = on7CodeValues f a1 a2 a3 a4 a5 a6 a7 
+  <*> a8
+
+onCodeList :: Monad m => ([a] -> b) -> [m a] -> m b
+onCodeList f as = f <$> sequence as
+
+onStateList :: ([a] -> b) -> [State s a] -> State s b
+onStateList f as = f <$> sequence as
+
+on2CodeLists :: Monad m => ([a] -> [b] -> c) -> [m a] -> [m b] -> m c
+on2CodeLists f as bs = liftA2 f (sequence as) (sequence bs)
+
+on2StateLists :: ([a] -> [b] -> c) -> [State s a] -> [State s b] -> State s c
+on2StateLists f as bs = liftM2 f (sequence as) (sequence bs)
+
+on1CodeValue1List :: Monad m => (a -> [b] -> c) -> m a -> [m b] -> m c
+on1CodeValue1List f a as = liftA2 f a (sequence as)
+
+on1StateValue1List :: (a -> [b] -> c) -> State s a -> [State s b] -> State s c
+on1StateValue1List f a as = liftM2 f a (sequence as)
 
 getInnerType :: C.CodeType -> C.CodeType
 getInnerType (C.List innerT) = innerT

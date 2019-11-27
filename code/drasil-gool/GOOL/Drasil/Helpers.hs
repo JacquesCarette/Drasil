@@ -2,8 +2,9 @@ module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
   hicat, vicat, vibcat, vmap, vimap, vibmap, emptyIfEmpty, emptyIfNull, 
   mapPairFst, mapPairSnd, toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, 
-  on5CodeValues, on6CodeValues, on7CodeValues, on8CodeValues, liftList, 
-  lift2Lists, lift1List, getInnerType, getNestDegree, convType, checkParams
+  on5CodeValues, on6CodeValues, on7CodeValues, on8CodeValues, onCodeList, 
+  onStateList, on2CodeLists, on2StateLists, on1CodeValue1List, 
+  on1StateValue1List, getInnerType, getNestDegree, convType, checkParams
 ) where
 
 import Utils.Drasil (blank)
@@ -111,14 +112,23 @@ on8CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i -> j)
 on8CodeValues f a1 a2 a3 a4 a5 a6 a7 a8 = on7CodeValues f a1 a2 a3 a4 a5 a6 a7 
   <*> a8
 
-liftList :: Monad m => ([a] -> b) -> [m a] -> m b
-liftList f as = f <$> sequence as
+onCodeList :: Monad m => ([a] -> b) -> [m a] -> m b
+onCodeList f as = f <$> sequence as
 
-lift2Lists :: Monad m => ([a] -> [b] -> c) -> [m a] -> [m b] -> m c
-lift2Lists f as bs = liftA2 f (sequence as) (sequence bs)
+onStateList :: ([a] -> b) -> [State s a] -> State s b
+onStateList f as = f <$> sequence as
 
-lift1List :: Monad m => (a -> [b] -> c) -> m a -> [m b] -> m c
-lift1List f a as = liftA2 f a (sequence as)
+on2CodeLists :: Monad m => ([a] -> [b] -> c) -> [m a] -> [m b] -> m c
+on2CodeLists f as bs = liftA2 f (sequence as) (sequence bs)
+
+on2StateLists :: ([a] -> [b] -> c) -> [State s a] -> [State s b] -> State s c
+on2StateLists f as bs = liftM2 f (sequence as) (sequence bs)
+
+on1CodeValue1List :: Monad m => (a -> [b] -> c) -> m a -> [m b] -> m c
+on1CodeValue1List f a as = liftA2 f a (sequence as)
+
+on1StateValue1List :: (a -> [b] -> c) -> State s a -> [State s b] -> State s c
+on1StateValue1List f a as = liftM2 f a (sequence as)
 
 getInnerType :: C.CodeType -> C.CodeType
 getInnerType (C.List innerT) = innerT

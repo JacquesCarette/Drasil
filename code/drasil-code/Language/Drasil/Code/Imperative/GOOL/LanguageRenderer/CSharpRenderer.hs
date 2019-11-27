@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, nativeBinary, osClassDefault)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
-import GOOL.Drasil (liftList)
+import GOOL.Drasil (onCodeList)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
@@ -38,7 +38,7 @@ instance Monad CSharpProject where
 
 instance PackageSym CSharpProject where
   type Package CSharpProject = PackData
-  package p = liftList (packD p)
+  package p = onCodeList (packD p)
 
 instance AuxiliarySym CSharpProject where
   type Auxiliary CSharpProject = AuxData

@@ -63,8 +63,10 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
-  mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, on5CodeValues, on8CodeValues, 
-  liftList, lift2Lists, lift1List, checkParams)
+  mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
+  on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, on5CodeValues, 
+  on8CodeValues, onCodeList, onStateList, on2CodeLists, on2StateLists, 
+  on1CodeValue1List, on1StateValue1List, checkParams)
 import GOOL.Drasil.State (MS, lensGStoMS, lensMStoGS, initialState, 
   putAfter, getPutReturn, setMain, setCurrMain, getCurrMain, setParameters, 
   setScope, getScope, setCurrMainFunc, getCurrMainFunc)
@@ -790,7 +792,7 @@ instance Monad CppSrcCode where
 
 instance ProgramSym CppSrcCode where
   type Program CppSrcCode = ProgData
-  prog n = liftList (liftList (progD n))
+  prog n = onStateList (onCodeList (progD n))
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
@@ -846,7 +848,7 @@ instance InternalPerm CppSrcCode where
 
 instance BodySym CppSrcCode where
   type Body CppSrcCode = Doc
-  body = liftList bodyDocD
+  body = onCodeList bodyDocD
   bodyStatements = block
   oneLiner = oneLinerD
 
@@ -1189,7 +1191,7 @@ instance StatementSym CppSrcCode where
   selfInOutCall c = cppInOutCall (selfFuncApp c)
   extInOutCall m = cppInOutCall (extFuncApp m)
 
-  multi = lift1List multiStateDocD endStatement
+  multi = on1CodeValue1List multiStateDocD endStatement
 
 instance ControlStatementSym CppSrcCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
@@ -1284,12 +1286,12 @@ instance InternalMethod CppSrcCode where
   intMethod m n c s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) .
     setParameters (map unCPPSC ps) . if m then over lensMStoGS (setCurrMain m) 
     . setMain else id) $ on2CodeValues mthd (onCodeValue snd s) (on5CodeValues 
-    (cppsMethod n c) t (liftList (paramListDocD . checkParams n) ps) b 
+    (cppsMethod n c) t (onCodeList (paramListDocD . checkParams n) ps) b 
     blockStart blockEnd)
   intFunc m n s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) . 
     setParameters (map unCPPSC ps) . if m then setCurrMainFunc m . over
     lensMStoGS (setCurrMain m) . setMain else id) $ on2CodeValues mthd 
-    (onCodeValue snd s) (on5CodeValues (cppsFunction n) t (liftList 
+    (onCodeValue snd s) (on5CodeValues (cppsFunction n) t (onCodeList 
     (paramListDocD . checkParams n) ps) b blockStart blockEnd)
   commentedFunc = cppCommentedFunc Source
  
@@ -1315,7 +1317,7 @@ instance InternalStateVar CppSrcCode where
 
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
-  buildClass n _ _ vs fs = lift2Lists (lift2Lists cppsClass) vs
+  buildClass n _ _ vs fs = on2StateLists (on2CodeLists cppsClass) vs
     (map (zoom lensGStoMS) $ fs ++ [destructor n vs])
   enum _ _ _ = toState $ toCode empty
   privClass = G.privClass
@@ -1795,7 +1797,7 @@ instance MethodSym CppHdrCode where
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor n = G.constructor n n
-  destructor n vars = lift1List (\m vs -> toCode $ mthd Pub 
+  destructor n vars = on1StateValue1List (\m vs -> toCode $ mthd Pub 
     (emptyIfEmpty (vcat (map (statementDoc . onCodeValue destructSts) vs)) 
     (methodDoc m))) (pubMethod ('~':n) n void [] (toCode empty) :: MS (CppHdrCode (Method CppHdrCode))) (map (zoom lensMStoGS) vars)
 
@@ -1818,7 +1820,8 @@ instance InternalMethod CppHdrCode where
   intMethod m n _ s _ t ps _ = getPutReturn (setScope (snd $ unCPPHC s) . 
     setParameters (map unCPPHC ps) . if m then over lensMStoGS (setCurrMain m) 
     . setMain else id) $ on2CodeValues mthd (onCodeValue snd s) (on3CodeValues 
-    (cpphMethod n) t (liftList (paramListDocD . checkParams n) ps) endStatement)
+    (cpphMethod n) t (onCodeList (paramListDocD . checkParams n) ps) 
+    endStatement)
   intFunc = G.intFunc
   commentedFunc = cppCommentedFunc Header
 
@@ -1845,9 +1848,9 @@ instance InternalStateVar CppHdrCode where
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
   -- do this with a do? avoids on8CodeValues...
-  buildClass n p _ vs mths = lift2Lists (\vars funcs -> on8CodeValues 
-    (cpphClass n) (lift2Lists (cpphVarsFuncsList Pub) vars funcs) 
-    (lift2Lists (cpphVarsFuncsList Priv) vars funcs) 
+  buildClass n p _ vs mths = on2StateLists (\vars funcs -> on8CodeValues 
+    (cpphClass n) (on2CodeLists (cpphVarsFuncsList Pub) vars funcs) 
+    (on2CodeLists (cpphVarsFuncsList Priv) vars funcs) 
     (onCodeValue fst public) (onCodeValue fst private) parent blockStart 
     blockEnd endStatement) vs fs
     where parent = case p of Nothing -> toCode empty

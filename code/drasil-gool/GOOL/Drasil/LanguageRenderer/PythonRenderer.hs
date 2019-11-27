@@ -58,7 +58,8 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, 
-  on5CodeValues, on6CodeValues, liftList, lift1List, lift2Lists, checkParams)
+  on5CodeValues, on6CodeValues, onCodeList, onStateList, on1CodeValue1List, 
+  on2CodeLists, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
 
@@ -88,7 +89,8 @@ instance Monad PythonCode where
 
 instance ProgramSym PythonCode where
   type Program PythonCode = ProgData 
-  prog n = liftList (liftList (progD n)) . map (putAfter $ setCurrMain False)
+  prog n = onStateList (onCodeList (progD n)) . map (putAfter $ setCurrMain 
+    False)
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = FileData
@@ -144,7 +146,7 @@ instance InternalPerm PythonCode where
 
 instance BodySym PythonCode where
   type Body PythonCode = Doc
-  body = liftList bodyDocD
+  body = onCodeList bodyDocD
   bodyStatements = block
   oneLiner = oneLinerD
 
@@ -320,7 +322,7 @@ instance ValueExpression PythonCode where
   extFuncApp = extFuncAppD
   newObj = newObjD newObjDocD'
   extNewObj l t vs = on2CodeValues mkVal t (on2CodeValues (pyExtStateObj l) t 
-    (liftList valList vs))
+    (onCodeList valList vs))
 
   exists v = v ?!= valueOf (var "None" void)
   notNull = exists
@@ -407,7 +409,7 @@ instance StatementSym PythonCode where
   type Statement PythonCode = (Doc, Terminator)
   assign = assignD Empty
   assignToListIndex = assignToListIndexD
-  multiAssign vrs vls = mkStNoEnd <$> lift2Lists multiAssignDoc vrs vls
+  multiAssign vrs vls = mkStNoEnd <$> on2CodeLists multiAssignDoc vrs vls
   (&=) = assign
   (&-=) = decrementD
   (&+=) vr vl = mkStNoEnd <$> on3CodeValues plusEqualsDocD' vr plusOp vl
@@ -417,7 +419,7 @@ instance StatementSym PythonCode where
   varDec _ = toCode (mkStNoEnd empty)
   varDecDef = assign
   listDec _ v = mkStNoEnd <$> onCodeValue pyListDec v
-  listDecDef v vs = mkStNoEnd <$> on2CodeValues pyListDecDef v (liftList 
+  listDecDef v vs = mkStNoEnd <$> on2CodeValues pyListDecDef v (onCodeList 
     valList vs)
   objDecDef = varDecDef
   objDecNew = G.objDecNew
@@ -479,7 +481,7 @@ instance StatementSym PythonCode where
   selfInOutCall c = pyInOutCall (selfFuncApp c)
   extInOutCall m = pyInOutCall (extFuncApp m)
 
-  multi = lift1List multiStateDocD endStatement
+  multi = on1CodeValue1List multiStateDocD endStatement
 
 instance ControlStatementSym PythonCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
@@ -559,12 +561,12 @@ instance MethodSym PythonCode where
 instance InternalMethod PythonCode where
   intMethod m n l _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
     if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
-    mthd (on3CodeValues (pyMethod n) (self l) (liftList (paramListDocD . 
+    mthd (on3CodeValues (pyMethod n) (self l) (onCodeList (paramListDocD . 
     checkParams n) ps) b)
   intFunc m n _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
     if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
-    mthd (on2CodeValues (pyFunction n) (liftList (paramListDocD . checkParams n)
-    ps) b)
+    mthd (on2CodeValues (pyFunction n) (onCodeList (paramListDocD . checkParams 
+    n) ps) b)
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
 

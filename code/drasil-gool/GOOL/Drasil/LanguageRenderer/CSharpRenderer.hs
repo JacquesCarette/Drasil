@@ -61,9 +61,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
-  TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
-import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, on5CodeValues, 
-  liftList, lift1List, checkParams)
+  TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
+  vard)
+import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
+  on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, on5CodeValues, 
+  onCodeList, onStateList, on1CodeValue1List, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
 
@@ -92,7 +94,8 @@ instance Monad CSharpCode where
 
 instance ProgramSym CSharpCode where
   type Program CSharpCode = ProgData
-  prog n = liftList (liftList (progD n)) . map (putAfter $ setCurrMain False)
+  prog n = onStateList (onCodeList (progD n)) . map (putAfter $ setCurrMain 
+    False)
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = FileData
@@ -147,7 +150,7 @@ instance InternalPerm CSharpCode where
 
 instance BodySym CSharpCode where
   type Body CSharpCode = Doc
-  body = liftList bodyDocD
+  body = onCodeList bodyDocD
   bodyStatements = block
   oneLiner = oneLinerD
 
@@ -475,7 +478,7 @@ instance StatementSym CSharpCode where
   selfInOutCall c = csInOutCall (selfFuncApp c)
   extInOutCall m = csInOutCall (extFuncApp m)
 
-  multi = lift1List multiStateDocD endStatement
+  multi = on1CodeValue1List multiStateDocD endStatement
 
 instance ControlStatementSym CSharpCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
@@ -547,7 +550,7 @@ instance MethodSym CSharpCode where
 instance InternalMethod CSharpCode where
   intMethod m n _ s p t ps b = getPutReturn (setParameters (map unCSC ps) . 
     if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
-    mthd (on5CodeValues (methodDocD n) s p t (liftList (paramListDocD . 
+    mthd (on5CodeValues (methodDocD n) s p t (onCodeList (paramListDocD . 
     checkParams n) ps) b)
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 

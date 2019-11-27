@@ -33,7 +33,7 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
   FileType)
-import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, toState, onStateValue, on2StateValues, liftList)
+import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, toState, onStateValue, on2StateValues, onStateList)
 import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD, 
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
@@ -250,8 +250,8 @@ buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) ->
   -> [GS (repr (StateVar repr))] -> 
   [MS (repr (Method repr))] -> GS (repr (Class repr))
 buildClass f i n p s vs fs = classFromData (on2StateValues (f n parent 
-  (scopeDoc s)) (liftList (stateVarListDocD . map stateVarDoc) vs) 
-  (liftList (methodListDocD . map methodDoc) (map (zoom lensGStoMS) fs)))
+  (scopeDoc s)) (onStateList (stateVarListDocD . map stateVarDoc) vs) 
+  (onStateList (methodListDocD . map methodDoc) (map (zoom lensGStoMS) fs)))
   where parent = case p of Nothing -> empty
                            Just pn -> keyDoc $ i pn
 
@@ -283,12 +283,12 @@ buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] ->
   [MS (repr (Method repr))] -> [GS (repr (Class repr))] -> 
   GS (repr (Module repr))
 buildModule n ls ms cs = S.modFromData n getCurrMain (on2StateValues 
-  (moduleDocD (vcat $ map keyDoc ls)) (liftList (vibcat . map classDoc) cs) 
-  (liftList (methodListDocD . map methodDoc) (map (zoom lensGStoMS) ms)))
+  (moduleDocD (vcat $ map keyDoc ls)) (onStateList (vibcat . map classDoc) cs) 
+  (onStateList (methodListDocD . map methodDoc) (map (zoom lensGStoMS) ms)))
 
 buildModule' :: (RenderSym repr) => Label -> [MS (repr (Method repr))] -> 
   [GS (repr (Class repr))] -> GS (repr (Module repr))
-buildModule' n ms cs = S.modFromData n getCurrMain (liftList (vibcat . map 
+buildModule' n ms cs = S.modFromData n getCurrMain (onStateList (vibcat . map 
   classDoc) (if null ms then cs else pubClass n Nothing [] ms : cs))
 
 modFromData :: Label -> (Doc -> Bool -> repr (Module repr)) -> GS Bool -> 

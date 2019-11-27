@@ -62,8 +62,9 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues,
-  on4CodeValues, on5CodeValues, liftList, lift1List, checkParams)
+import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, 
+  on5CodeValues, onCodeList, on1CodeValue1List, checkParams)
 import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
   getPutReturnList, addProgNameToPaths, setMain, setCurrMain, setParameters)
 
@@ -93,7 +94,7 @@ instance Monad JavaCode where
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
   prog n fs = getPutReturnList (map (putAfter $ setCurrMain False) fs) 
-    (addProgNameToPaths n) (lift1List (\end -> progD n . 
+    (addProgNameToPaths n) (on1CodeValue1List (\end -> progD n . 
     map (packageDocD n end)) endStatement)
 
 instance RenderSym JavaCode where
@@ -149,7 +150,7 @@ instance InternalPerm JavaCode where
 
 instance BodySym JavaCode where
   type Body JavaCode = Doc
-  body = liftList bodyDocD
+  body = onCodeList bodyDocD
   bodyStatements = block
   oneLiner = oneLinerD
 
@@ -479,7 +480,7 @@ instance StatementSym JavaCode where
   selfInOutCall c = jInOutCall (selfFuncApp c)
   extInOutCall m = jInOutCall (extFuncApp m)
 
-  multi = lift1List multiStateDocD endStatement
+  multi = on1CodeValue1List multiStateDocD endStatement
 
 instance ControlStatementSym JavaCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
@@ -550,7 +551,7 @@ instance MethodSym JavaCode where
 instance InternalMethod JavaCode where
   intMethod m n _ s p t ps b = getPutReturn (setParameters (map unJC ps) . 
     if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
-    mthd (on5CodeValues (jMethod n) s p t (liftList (paramListDocD . 
+    mthd (on5CodeValues (jMethod n) s p t (onCodeList (paramListDocD . 
     checkParams n) ps) b)
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 

@@ -99,13 +99,13 @@
 \begin{document}
 
 %% Title information
-\title[GOOL]{GOOL: A Generic Object-Oriented Language}         %% [Short %%Title] is optional;
+\title{GOOL: A Generic Object-Oriented Language}         %% [Short %%Title] is optional;
                                         %% when present, will be used in
 %                                        %% header instead of Full Title.
 %\titlenote{with title note}             %% \titlenote is optional;
 %                                        %% can be repeated if necessary;
 %                                        %% contents suppressed with 'anonymous'
-\subtitle{(Short Paper)}                     %% \subtitle is optional
+%\subtitle{(Short Paper)}                     %% \subtitle is optional
 %\subtitlenote{with subtitle note}       %% \subtitlenote is optional;
 %                                        %% can be repeated if necessary;
 %                                        %% contents suppressed with 'anonymous'
@@ -832,7 +832,8 @@ to name all strings (to avoid hard-to-debug typos) and variables, then
 write the code proper.
 \begin{figure}[tb]
 \begin{lstlisting}
-patternTest :: (MethodSym repr) => repr (Method repr)
+patternTest :: (MethodSym repr) =>
+  repr (Method repr)
 patternTest = let      fsmName = "myFSM"
  offState = "Off"      onState = "On"
  noState = "Neither"   obsName = "Observer"
@@ -850,8 +851,10 @@ patternTest = let      fsmName = "myFSM"
   initState fsmName offState, 
   changeState fsmName onState,
   checkState fsmName 
-  [(litString offState, oneLiner $ printStrLn offState), 
-   (litString onState, oneLiner $ printStrLn onState)] 
+  [(litString offState, 
+         oneLiner $ printStrLn offState), 
+   (litString onState, 
+         oneLiner $ printStrLn onState)] 
   (oneLiner $ printStrLn noState)],
 
   block [
@@ -869,7 +872,7 @@ patternTest = let      fsmName = "myFSM"
 
 \section{Related Work} \label{sec:related}
 
-\subsection{General-purpose Code Generation}
+\subsection{General-Purpose Code Generation}
 
 \textbf{Haxe}~\cite{Haxe} is a general-purpose multi-paradigm language and cross-platform
 compiler.  It compiles to all of the languages GOOL does, and many
@@ -899,7 +902,7 @@ object-oriented syntax and abstractions. The generated code lacks some of the
 pretty-printing provided by GOOL, specifically indentation, which detracts from
 readability.
 
-\subsection{Object-oriented generators}
+\subsection{Object-Oriented Generators}
 
 There are code generators which multiple target OO languages, but all are
 domain-specific.

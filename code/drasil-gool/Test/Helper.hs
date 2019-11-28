@@ -3,10 +3,10 @@ module Test.Helper (helper) where
 import GOOL.Drasil (
   RenderSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
   StatementSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
-  ScopeSym(..), ParameterSym(..), MethodSym(..), ModuleSym(..), GS, MS)
+  ScopeSym(..), ParameterSym(..), MethodSym(..), ModuleSym(..), FS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-helper :: (RenderSym repr) => GS (repr (RenderFile repr))
+helper :: (RenderSym repr) => FS (repr (RenderFile repr))
 helper = fileDoc (buildModule "Helper" [] [doubleAndAdd] [])
 
 doubleAndAdd :: (RenderSym repr) => MS (repr (Method repr))

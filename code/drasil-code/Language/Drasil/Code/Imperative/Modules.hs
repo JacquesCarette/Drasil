@@ -36,7 +36,7 @@ import GOOL.Drasil (RenderSym(..), BodySym(..), BlockSym(..),
   PermanenceSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   BooleanExpression(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ScopeTag(..), 
-  convType, GS, MS)
+  convType, GS, FS, MS)
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
@@ -50,7 +50,7 @@ import Text.PrettyPrint.HughesPJ (render)
 
 ---- MAIN ---
 
-genMain :: (RenderSym repr) => Reader DrasilState (GS (repr (RenderFile repr)))
+genMain :: (RenderSym repr) => Reader DrasilState (FS (repr (RenderFile repr)))
 genMain = genModule "Control" "Controls the flow of the program" 
   (Just $ liftS genMainFunc) Nothing
 
@@ -126,12 +126,12 @@ initLogFileVar _ = []
 ------- INPUT ----------
 
 chooseInModule :: (RenderSym repr) => InputModule -> Reader DrasilState 
-  [GS (repr (RenderFile repr))]
+  [FS (repr (RenderFile repr))]
 chooseInModule Combined = genInputModCombined
 chooseInModule Separated = genInputModSeparated
 
 genInputModSeparated :: (RenderSym repr) => 
-  Reader DrasilState [GS (repr (RenderFile repr))]
+  Reader DrasilState [FS (repr (RenderFile repr))]
 genInputModSeparated = do
   ipDesc <- modDesc inputParametersDesc
   ifDesc <- modDesc (liftS inputFormatDesc)
@@ -148,12 +148,12 @@ genInputModSeparated = do
       (Just $ fmap maybeToList (genInputConstraints Pub)) Nothing]
 
 genInputModCombined :: (RenderSym repr) => 
-  Reader DrasilState [GS (repr (RenderFile repr))]
+  Reader DrasilState [FS (repr (RenderFile repr))]
 genInputModCombined = do
   ipDesc <- modDesc inputParametersDesc
   let cname = "InputParameters"
       genMod :: (RenderSym repr) => Maybe (GS (repr (Class repr))) ->
-        Reader DrasilState (GS (repr (RenderFile repr)))
+        Reader DrasilState (FS (repr (RenderFile repr)))
       genMod Nothing = genModule cname ipDesc (Just $ concat <$> mapM (fmap 
         maybeToList) [genInputFormat Pub, genInputDerived 
         Pub, genInputConstraints Pub]) 
@@ -379,7 +379,7 @@ genSampleInput = do
 
 ----- CONSTANTS -----
 
-genConstMod :: (RenderSym repr) => Reader DrasilState [GS (repr (RenderFile repr))]
+genConstMod :: (RenderSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
 genConstMod = do
   cDesc <- modDesc $ liftS constModDesc
   liftS $ genModule "Constants" cDesc Nothing (Just $ fmap maybeToList 
@@ -406,7 +406,7 @@ genConstClass = do
 
 ----- OUTPUT -------
 
-genOutputMod :: (RenderSym repr) => Reader DrasilState [GS (repr (RenderFile repr))]
+genOutputMod :: (RenderSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
 genOutputMod = do
   outformat <- genOutputFormat
   ofDesc <- modDesc $ liftS outputFormatDesc

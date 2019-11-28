@@ -67,9 +67,10 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst,
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, on5CodeValues, 
   on8CodeValues, onCodeList, onStateList, on2CodeLists, on2StateLists, 
   on1CodeValue1List, on1StateValue1List, checkParams)
-import GOOL.Drasil.State (MS, lensGStoMS, lensMStoGS, initialState, 
-  putAfter, getPutReturn, setMain, setCurrMain, getCurrMain, setParameters, 
-  setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+import GOOL.Drasil.State (MS, lensGStoFS, lensFStoGS, lensFStoMS, lensGStoMS, 
+  lensMStoGS, initialState, initialFS, putAfter, getPutReturn, setMain, 
+  setCurrMain, getCurrMain, setParameters, setScope, getScope, setCurrMainFunc, 
+  getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Data.Maybe (maybeToList)
@@ -100,7 +101,7 @@ hdrToSrc (CPPHC a) = CPPSC a
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
   type Program (p CppSrcCode CppHdrCode) = ProgData
   prog n mods = do
-    m <-  mapM (putAfter $ setCurrMain False) mods
+    m <-  mapM (putAfter (setCurrMain False) . zoom lensGStoFS) mods
     let fm = map pfst m
         sm = map (hdrToSrc . psnd) m
     p1 <- prog n $ map toState sm ++ map toState fm
@@ -699,8 +700,9 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
-  buildModule n l ms cs = pair2Lists (map (zoom lensGStoMS . putAfter 
-    (setCurrMainFunc False)) ms) cs (buildModule n l) (buildModule n l)
+  buildModule n l ms cs = pair2Lists (map (zoom lensFStoMS . putAfter 
+    (setCurrMainFunc False)) ms) (map (zoom lensFStoGS) cs) (buildModule n l) 
+    (buildModule n l)
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
   moduleDoc m = moduleDoc $ pfst m
@@ -792,17 +794,17 @@ instance Monad CppSrcCode where
 
 instance ProgramSym CppSrcCode where
   type Program CppSrcCode = ProgData
-  prog n = onStateList (onCodeList (progD n))
+  prog n = onStateList (onCodeList (progD n)) . map (zoom lensGStoFS)
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
-  fileDoc code = G.fileDoc Source cppSrcExt (top $ evalState code initialState)
-    bottom code
+  fileDoc code = G.fileDoc Source cppSrcExt (top $ evalState code (initialState,
+    initialFS)) bottom code
 
   docMod = G.docMod
 
   commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then on2CodeValues 
-    commentedModD m cmt else m) mod cmnt getCurrMain
+    commentedModD m cmt else m) mod cmnt (zoom lensFStoGS getCurrMain)
 
 instance InternalFile CppSrcCode where
   top m = on3CodeValues cppstop m (list dynamic_) endStatement
@@ -1368,13 +1370,13 @@ instance Monad CppHdrCode where
 
 instance RenderSym CppHdrCode where
   type RenderFile CppHdrCode = FileData
-  fileDoc code = G.fileDoc Header cppHdrExt (top $ evalState code initialState)
-    bottom code
+  fileDoc code = G.fileDoc Header cppHdrExt (top $ evalState code (initialState,
+    initialFS)) bottom code
   
   docMod = G.docMod
 
-  commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then m else on2CodeValues 
-    commentedModD m cmt) mod cmnt getCurrMain
+  commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then m else 
+    on2CodeValues commentedModD m cmt) mod cmnt (zoom lensFStoGS getCurrMain)
 
 instance InternalFile CppHdrCode where
   top m = on3CodeValues cpphtop m (list dynamic_) endStatement

@@ -65,11 +65,12 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, 
   on5CodeValues, onCodeList, on1CodeValue1List, checkParams)
-import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
+import GOOL.Drasil.State (MS, lensGStoFS, lensMStoGS, initialState, initialFS, putAfter, getPutReturn, 
   getPutReturnList, addProgNameToPaths, setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens (over)
+import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad.State (evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
@@ -93,14 +94,15 @@ instance Monad JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
-  prog n fs = getPutReturnList (map (putAfter $ setCurrMain False) fs) 
+  prog n fs = getPutReturnList (map (putAfter (setCurrMain False) . 
+    zoom lensGStoFS) fs) 
     (addProgNameToPaths n) (on1CodeValue1List (\end -> progD n . 
     map (packageDocD n end)) endStatement)
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = FileData 
-  fileDoc code = G.fileDoc Combined jExt (top $ evalState code initialState) 
-    bottom code
+  fileDoc code = G.fileDoc Combined jExt (top $ evalState code (initialState,
+    initialFS)) bottom code
 
   docMod = G.docMod
 

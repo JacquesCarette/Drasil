@@ -66,11 +66,12 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, on5CodeValues, 
   onCodeList, onStateList, on1CodeValue1List, checkParams)
-import GOOL.Drasil.State (MS, lensMStoGS, initialState, putAfter, getPutReturn, 
+import GOOL.Drasil.State (MS, lensGStoFS, lensMStoGS, initialState, initialFS, putAfter, getPutReturn, 
   setMain, setCurrMain, setParameters)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens (over)
+import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad.State (evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
@@ -94,13 +95,13 @@ instance Monad CSharpCode where
 
 instance ProgramSym CSharpCode where
   type Program CSharpCode = ProgData
-  prog n = onStateList (onCodeList (progD n)) . map (putAfter $ setCurrMain 
-    False)
+  prog n = onStateList (onCodeList (progD n)) . map (putAfter (setCurrMain 
+    False) . zoom lensGStoFS)
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = FileData
-  fileDoc code = G.fileDoc Combined csExt (top $ evalState code initialState) 
-    bottom code
+  fileDoc code = G.fileDoc Combined csExt (top $ evalState code (initialState,
+    initialFS)) bottom code
 
   docMod = G.docMod
 

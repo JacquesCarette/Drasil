@@ -33,7 +33,7 @@ import GOOL.Drasil (Label, RenderSym(..), PermanenceSym(..), BodySym(..),
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  convType, GS, MS) 
+  convType, FS, MS) 
 import qualified GOOL.Drasil as C (CodeType(List))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -319,7 +319,7 @@ genCaseBlock t v c cs = do
 
 -- medium hacks --
 genModDef :: (RenderSym repr) => Mod -> 
-  Reader DrasilState (GS (repr (RenderFile repr)))
+  Reader DrasilState (FS (repr (RenderFile repr)))
 genModDef (Mod n desc fs) = genModule n desc (Just $ mapM genFunc fs) Nothing
 
 genFunc :: (RenderSym repr) => Func -> Reader DrasilState (MS (repr (Method repr)))

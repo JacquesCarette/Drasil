@@ -33,18 +33,19 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
   FileType)
-import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, toState, onStateValue, on2StateValues, onStateList)
+import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, toState, onStateValue, 
+  on2StateValues, onStateList)
 import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD, 
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
   moduleDox, getterName, setterName)
-import GOOL.Drasil.State (GS, MS, lensGStoMS, hasMain, mainMod, putAfter, 
-  getPutReturnFunc2, addFile, setMainMod, setFilePath, getFilePath, 
-  setModuleName, getModuleName, getCurrMain)
+import GOOL.Drasil.State (GS, FS, MS, lensFStoGS, lensFStoMS, lensGStoMS, 
+  hasMain, mainMod, putAfter, getPutReturnFunc2, addFile, setMainMod, 
+  setFilePath, getFilePath, setModuleName, getModuleName, getCurrMain)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList, isNothing)
-import Control.Lens ((^.))
+import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   vcat, semi, equals, isEmpty)
@@ -281,33 +282,36 @@ commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' ->
 
 buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
   [MS (repr (Method repr))] -> [GS (repr (Class repr))] -> 
-  GS (repr (Module repr))
+  FS (repr (Module repr))
 buildModule n ls ms cs = S.modFromData n getCurrMain (on2StateValues 
-  (moduleDocD (vcat $ map keyDoc ls)) (onStateList (vibcat . map classDoc) cs) 
-  (onStateList (methodListDocD . map methodDoc) (map (zoom lensGStoMS) ms)))
+  (moduleDocD (vcat $ map keyDoc ls)) (onStateList (vibcat . map classDoc) (map 
+  (zoom lensFStoGS) cs)) (onStateList (methodListDocD . map methodDoc) (map 
+  (zoom lensFStoMS) ms)))
 
 buildModule' :: (RenderSym repr) => Label -> [MS (repr (Method repr))] -> 
-  [GS (repr (Class repr))] -> GS (repr (Module repr))
+  [GS (repr (Class repr))] -> FS (repr (Module repr))
 buildModule' n ms cs = S.modFromData n getCurrMain (onStateList (vibcat . map 
-  classDoc) (if null ms then cs else pubClass n Nothing [] ms : cs))
+  classDoc) (map (zoom lensFStoGS) (if null ms then cs else pubClass n 
+  Nothing [] ms : cs)))
 
 modFromData :: Label -> (Doc -> Bool -> repr (Module repr)) -> GS Bool -> 
-  GS Doc -> GS (repr (Module repr))
-modFromData n f m d = putAfter (setModuleName n) (on2StateValues f d m)
+  FS Doc -> FS (repr (Module repr))
+modFromData n f m d = putAfter (setModuleName n) (on2StateValues f d (zoom   
+  lensFStoGS m))
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
-  repr (Block repr) -> GS (repr (Module repr)) -> GS (repr (RenderFile repr))
+  repr (Block repr) -> FS (repr (Module repr)) -> FS (repr (RenderFile repr))
 fileDoc ft ext topb botb m = S.fileFromData ft (onStateValue (addExt ext) 
   getModuleName) (updateModuleDoc (\d -> emptyIfEmpty d (fileDoc' (blockDoc 
   topb) d (blockDoc botb))) m)
 
 docMod :: (RenderSym repr) => String -> [String] -> String -> 
-  GS (repr (RenderFile repr)) -> GS (repr (RenderFile repr))
+  FS (repr (RenderFile repr)) -> FS (repr (RenderFile repr))
 docMod d a dt = commentedMod (docComment $ moduleDox d a dt <$> getFilePath)
 
 fileFromData :: (RenderSym repr) => (repr (Module repr) -> FilePath -> 
-  repr (RenderFile repr)) -> FileType -> GS FilePath -> GS (repr (Module repr)) 
-  -> GS (repr (RenderFile repr))
+  repr (RenderFile repr)) -> FileType -> FS FilePath -> 
+  FS (repr (Module repr)) -> FS (repr (RenderFile repr))
 fileFromData f ft fp m = getPutReturnFunc2 m fp (\s mdl fpath -> (if isEmpty 
-  (moduleDoc mdl) then id else (if s ^. hasMain && isNothing (s ^. mainMod) 
-  then setMainMod fpath else id) . addFile ft fpath . setFilePath fpath) s) f
+  (moduleDoc mdl) then id else (if fst s ^. hasMain && isNothing (fst s ^. 
+  mainMod) then over lensFStoGS (setMainMod fpath) else id) . over lensFStoGS (addFile ft fpath) . setFilePath fpath) s) f

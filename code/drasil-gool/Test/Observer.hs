@@ -21,7 +21,7 @@ x = var "x" int
 selfX :: (VariableSym repr) => repr (Variable repr)
 selfX = objVarSelf observerName x
 
-helperClass :: (ClassSym repr) => GS (repr (Class repr))
+helperClass :: (ClassSym repr) => FS (repr (Class repr))
 helperClass = pubClass observerName Nothing [stateVar public dynamic_ x]
   [observerConstructor, printNumMethod, getMethod observerName x, 
   setMethod observerName x]

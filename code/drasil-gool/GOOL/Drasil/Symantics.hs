@@ -655,34 +655,34 @@ class (MethodSym repr, InternalClass repr) => ClassSym repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
     [GS (repr (StateVar repr))] -> 
     [MS (repr (Method repr))] -> 
-    GS (repr (Class repr))
+    FS (repr (Class repr))
   enum :: Label -> [Label] -> repr (Scope repr) -> 
-    GS (repr (Class repr))
+    FS (repr (Class repr))
   privClass :: Label -> Maybe Label -> [GS (repr (StateVar repr))] 
     -> [MS (repr (Method repr))] -> 
-    GS (repr (Class repr))
+    FS (repr (Class repr))
   pubClass :: Label -> Maybe Label -> [GS (repr (StateVar repr))] 
     -> [MS (repr (Method repr))] -> 
-    GS (repr (Class repr))
+    FS (repr (Class repr))
 
-  docClass :: String -> GS (repr (Class repr)) ->
-    GS (repr (Class repr))
+  docClass :: String -> FS (repr (Class repr)) ->
+    FS (repr (Class repr))
 
-  commentedClass :: GS (repr (BlockComment repr)) -> 
-    GS (repr (Class repr)) -> GS (repr (Class repr))
+  commentedClass :: FS (repr (BlockComment repr)) -> 
+    FS (repr (Class repr)) -> FS (repr (Class repr))
 
 class InternalClass repr where
   classDoc :: repr (Class repr) -> Doc
-  classFromData :: GS Doc -> GS (repr (Class repr))
+  classFromData :: FS Doc -> FS (repr (Class repr))
 
 class (ClassSym repr, InternalMod repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [Library] -> [MS (repr (Method repr))] -> 
-    [GS (repr (Class repr))] -> FS (repr (Module repr))
+    [FS (repr (Class repr))] -> FS (repr (Module repr))
 
 class InternalMod repr where
   moduleDoc :: repr (Module repr) -> Doc
-  modFromData :: String -> GS Bool -> FS Doc -> FS (repr (Module repr))
+  modFromData :: String -> FS Bool -> FS Doc -> FS (repr (Module repr))
   updateModuleDoc :: (Doc -> Doc) -> FS (repr (Module repr)) -> 
     FS (repr (Module repr))
     

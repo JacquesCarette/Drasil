@@ -39,12 +39,12 @@ import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD,
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
   moduleDox, getterName, setterName)
-import GOOL.Drasil.State (GS, FS, MS, lensFStoGS, lensFStoMS, lensGStoMS, 
-  hasMain, mainMod, putAfter, getPutReturnFunc2, addFile, setMainMod, 
-  setFilePath, getFilePath, setModuleName, getModuleName, getCurrMain)
+import GOOL.Drasil.State (GS, FS, MS, lensFStoGS, lensFStoMS, currMain, 
+  putAfter, getPutReturnFunc2, addFile, setMainMod, setFilePath, getFilePath, 
+  setModuleName, getModuleName, getCurrMain)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
-import Data.Maybe (maybeToList, isNothing)
+import Data.Maybe (maybeToList)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
@@ -249,55 +249,52 @@ pubGVar = S.stateVar public static_
 buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> 
   (Label -> repr (Keyword repr)) -> Label -> Maybe Label -> repr (Scope repr) 
   -> [GS (repr (StateVar repr))] -> 
-  [MS (repr (Method repr))] -> GS (repr (Class repr))
+  [MS (repr (Method repr))] -> FS (repr (Class repr))
 buildClass f i n p s vs fs = classFromData (on2StateValues (f n parent 
-  (scopeDoc s)) (onStateList (stateVarListDocD . map stateVarDoc) vs) 
-  (onStateList (methodListDocD . map methodDoc) (map (zoom lensGStoMS) fs)))
+  (scopeDoc s)) (onStateList (stateVarListDocD . map stateVarDoc) (map (zoom lensFStoGS) vs)) 
+  (onStateList (methodListDocD . map methodDoc) (map (zoom lensFStoMS) fs)))
   where parent = case p of Nothing -> empty
                            Just pn -> keyDoc $ i pn
 
 enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
-  GS (repr (Class repr))
+  FS (repr (Class repr))
 enum n es s = classFromData (toState $ enumDocD n (enumElementsDocD es False) 
   (scopeDoc s))
 
 privClass :: (RenderSym repr) => Label -> Maybe Label -> 
   [GS (repr (StateVar repr))] -> 
-  [MS (repr (Method repr))] -> GS (repr (Class repr))
+  [MS (repr (Method repr))] -> FS (repr (Class repr))
 privClass n p = S.buildClass n p private
 
 pubClass :: (RenderSym repr) => Label -> Maybe Label -> 
   [GS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
-  GS (repr (Class repr))
+  FS (repr (Class repr))
 pubClass n p = S.buildClass n p public
 
-docClass :: (RenderSym repr) => String -> GS (repr (Class repr))
-  -> GS (repr (Class repr))
+docClass :: (RenderSym repr) => String -> FS (repr (Class repr))
+  -> FS (repr (Class repr))
 docClass d = S.commentedClass (docComment $ toState $ classDox d)
 
-commentedClass :: (RenderSym repr) => GS (repr (BlockComment repr))
-  -> GS (repr (Class repr)) -> GS (repr (Class repr))
+commentedClass :: (RenderSym repr) => FS (repr (BlockComment repr))
+  -> FS (repr (Class repr)) -> FS (repr (Class repr))
 commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' -> 
   commentedItem (blockCommentDoc cmt') (classDoc cs')) cmt cs)
 
 buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
-  [MS (repr (Method repr))] -> [GS (repr (Class repr))] -> 
+  [MS (repr (Method repr))] -> [FS (repr (Class repr))] -> 
   FS (repr (Module repr))
 buildModule n ls ms cs = S.modFromData n getCurrMain (on2StateValues 
-  (moduleDocD (vcat $ map keyDoc ls)) (onStateList (vibcat . map classDoc) (map 
-  (zoom lensFStoGS) cs)) (onStateList (methodListDocD . map methodDoc) (map 
-  (zoom lensFStoMS) ms)))
+  (moduleDocD (vcat $ map keyDoc ls)) (onStateList (vibcat . map classDoc) cs) 
+  (onStateList (methodListDocD . map methodDoc) (map (zoom lensFStoMS) ms)))
 
 buildModule' :: (RenderSym repr) => Label -> [MS (repr (Method repr))] -> 
-  [GS (repr (Class repr))] -> FS (repr (Module repr))
+  [FS (repr (Class repr))] -> FS (repr (Module repr))
 buildModule' n ms cs = S.modFromData n getCurrMain (onStateList (vibcat . map 
-  classDoc) (map (zoom lensFStoGS) (if null ms then cs else pubClass n 
-  Nothing [] ms : cs)))
+  classDoc) (if null ms then cs else pubClass n Nothing [] ms : cs))
 
-modFromData :: Label -> (Doc -> Bool -> repr (Module repr)) -> GS Bool -> 
+modFromData :: Label -> (Doc -> Bool -> repr (Module repr)) -> FS Bool -> 
   FS Doc -> FS (repr (Module repr))
-modFromData n f m d = putAfter (setModuleName n) (on2StateValues f d (zoom   
-  lensFStoGS m))
+modFromData n f m d = putAfter (setModuleName n) (on2StateValues f d m)
 
 fileDoc :: (RenderSym repr) => FileType -> String -> repr (Block repr) -> 
   repr (Block repr) -> FS (repr (Module repr)) -> FS (repr (RenderFile repr))
@@ -313,5 +310,4 @@ fileFromData :: (RenderSym repr) => (repr (Module repr) -> FilePath ->
   repr (RenderFile repr)) -> FileType -> FS FilePath -> 
   FS (repr (Module repr)) -> FS (repr (RenderFile repr))
 fileFromData f ft fp m = getPutReturnFunc2 m fp (\s mdl fpath -> (if isEmpty 
-  (moduleDoc mdl) then id else (if fst s ^. hasMain && isNothing (fst s ^. 
-  mainMod) then over lensFStoGS (setMainMod fpath) else id) . over lensFStoGS (addFile ft fpath) . setFilePath fpath) s) f
+  (moduleDoc mdl) then id else (if snd s ^. currMain then over lensFStoGS (setMainMod fpath) else id) . over lensFStoGS (addFile ft fpath) . setFilePath fpath) s) f

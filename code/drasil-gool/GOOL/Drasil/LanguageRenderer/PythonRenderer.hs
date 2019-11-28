@@ -60,12 +60,11 @@ import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, 
   on5CodeValues, on6CodeValues, onCodeList, onStateList, on1CodeValue1List, 
   on2CodeLists, checkParams)
-import GOOL.Drasil.State (MS, lensGStoFS, lensMStoGS, initialState, initialFS, putAfter, getPutReturn, 
-  setMain, setCurrMain, setParameters)
+import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
+  setCurrMain, setParameters)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
-import Control.Lens (over)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad.State (evalState)
@@ -90,8 +89,7 @@ instance Monad PythonCode where
 
 instance ProgramSym PythonCode where
   type Program PythonCode = ProgData 
-  prog n = onStateList (onCodeList (progD n)) . map (putAfter (setCurrMain 
-    False) . zoom lensGStoFS)
+  prog n = onStateList (onCodeList (progD n)) . map (zoom lensGStoFS)
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = FileData
@@ -546,8 +544,8 @@ instance MethodSym PythonCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction = getPutReturn (setParameters [] . over lensMStoGS (setCurrMain 
-    True) . setMain) . onCodeValue mthd
+  mainFunction = getPutReturn (setParameters [] . setCurrMain) . onCodeValue 
+    mthd
 
   docFunc = G.docFunc
 
@@ -561,13 +559,11 @@ instance MethodSym PythonCode where
 
 instance InternalMethod PythonCode where
   intMethod m n l _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
-    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
-    mthd (on3CodeValues (pyMethod n) (self l) (onCodeList (paramListDocD . 
-    checkParams n) ps) b)
+    if m then setCurrMain else id) $ onCodeValue mthd (on3CodeValues (pyMethod 
+    n) (self l) (onCodeList (paramListDocD . checkParams n) ps) b)
   intFunc m n _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
-    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
-    mthd (on2CodeValues (pyFunction n) (onCodeList (paramListDocD . checkParams 
-    n) ps) b)
+    if m then setCurrMain else id) $ onCodeValue mthd (on2CodeValues 
+    (pyFunction n) (onCodeList (paramListDocD . checkParams n) ps) b)
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
 

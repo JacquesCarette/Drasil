@@ -66,11 +66,10 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, on5CodeValues, 
   onCodeList, onStateList, on1CodeValue1List, checkParams)
-import GOOL.Drasil.State (MS, lensGStoFS, lensMStoGS, initialState, initialFS, putAfter, getPutReturn, 
-  setMain, setCurrMain, setParameters)
+import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
+  setCurrMain, setParameters)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Control.Lens (over)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad.State (evalState)
@@ -95,8 +94,7 @@ instance Monad CSharpCode where
 
 instance ProgramSym CSharpCode where
   type Program CSharpCode = ProgData
-  prog n = onStateList (onCodeList (progD n)) . map (putAfter (setCurrMain 
-    False) . zoom lensGStoFS)
+  prog n = onStateList (onCodeList (progD n)) . map (zoom lensGStoFS)
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = FileData
@@ -550,9 +548,8 @@ instance MethodSym CSharpCode where
 
 instance InternalMethod CSharpCode where
   intMethod m n _ s p t ps b = getPutReturn (setParameters (map unCSC ps) . 
-    if m then over lensMStoGS (setCurrMain m) . setMain else id) $ onCodeValue 
-    mthd (on5CodeValues (methodDocD n) s p t (onCodeList (paramListDocD . 
-    checkParams n) ps) b)
+    if m then setCurrMain else id) $ onCodeValue mthd (on5CodeValues 
+    (methodDocD n) s p t (onCodeList (paramListDocD . checkParams n) ps) b)
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)

@@ -19,7 +19,7 @@ import Control.Monad.Reader (Reader, ask, withReader)
 
 genModule :: (RenderSym repr) => Name -> String
   -> Maybe (Reader DrasilState [MS (repr (Method repr))])
-  -> Maybe (Reader DrasilState [GS (repr (Class repr))])
+  -> Maybe (Reader DrasilState [FS (repr (Class repr))])
   -> Reader DrasilState (FS (repr (RenderFile repr)))
 genModule n desc maybeMs maybeCs = do
   g <- ask
@@ -45,8 +45,8 @@ genDoxConfig n s = do
   return [doxConfig n s v | not (null cms)]
 
 publicClass :: (RenderSym repr) => String -> Label -> Maybe Label -> 
-  [GS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] -> 
-  Reader DrasilState (GS (repr (Class repr)))
+  [GS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
+  -> Reader DrasilState (FS (repr (Class repr)))
 publicClass desc n l vs mths = do
   g <- ask
   ms <- mths

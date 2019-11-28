@@ -152,7 +152,7 @@ genInputModCombined :: (RenderSym repr) =>
 genInputModCombined = do
   ipDesc <- modDesc inputParametersDesc
   let cname = "InputParameters"
-      genMod :: (RenderSym repr) => Maybe (GS (repr (Class repr))) ->
+      genMod :: (RenderSym repr) => Maybe (FS (repr (Class repr))) ->
         Reader DrasilState (FS (repr (RenderFile repr)))
       genMod Nothing = genModule cname ipDesc (Just $ concat <$> mapM (fmap 
         maybeToList) [genInputFormat Pub, genInputDerived 
@@ -168,7 +168,7 @@ constVarFunc Var n = stateVarDef n public dynamic_
 constVarFunc Const n = constVar n public
 
 genInputClass :: (RenderSym repr) => 
-  Reader DrasilState (Maybe (GS (repr (Class repr))))
+  Reader DrasilState (Maybe (FS (repr (Class repr))))
 genInputClass = do
   g <- ask
   let ins = inputs $ csi $ codeSpec g
@@ -185,7 +185,7 @@ genInputClass = do
         genInputDerived Priv, 
         genInputConstraints Priv]
       genClass :: (RenderSym repr) => [CodeChunk] -> [CodeDefinition] -> 
-        Reader DrasilState (Maybe (GS (repr (Class repr))))
+        Reader DrasilState (Maybe (FS (repr (Class repr))))
       genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . codeEquat) csts
@@ -386,13 +386,13 @@ genConstMod = do
     genConstClass)
 
 genConstClass :: (RenderSym repr) => 
-  Reader DrasilState (Maybe (GS (repr (Class repr))))
+  Reader DrasilState (Maybe (FS (repr (Class repr))))
 genConstClass = do
   g <- ask
   let cs = constants $ csi $ codeSpec g
       cname = "Constants"
       genClass :: (RenderSym repr) => [CodeDefinition] -> Reader DrasilState (Maybe 
-        (GS (repr (Class repr))))
+        (FS (repr (Class repr))))
       genClass [] = return Nothing 
       genClass vs = do
         vals <- mapM (convExpr . codeEquat) vs 

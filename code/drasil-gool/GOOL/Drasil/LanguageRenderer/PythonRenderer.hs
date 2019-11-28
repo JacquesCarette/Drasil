@@ -45,7 +45,7 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, dynamicDocD, 
   bindingError, classDec, dot, forLabel, inLabel, observerListName, 
   commentedItem, addCommentsDocD, commentedModD, docFuncRepr, valList, 
-  surroundBody, filterOutObjs)
+  valueList, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData, block, comment, ifCond, objDecNew, objDecNewNoParams, construct,
   comment, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
@@ -189,7 +189,7 @@ instance ControlBlockSym PythonCode where
 
   listSlice vnew vold b e s = on5CodeValues pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
-    where getVal = fromMaybe (on2CodeValues mkVal void (toCode empty))
+    where getVal = fromMaybe (mkVal void empty)
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData
@@ -254,14 +254,14 @@ instance InternalVariable PythonCode where
 
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
-  litTrue = on2CodeValues mkVal bool (toCode $ text "True")
-  litFalse = on2CodeValues mkVal bool (toCode $ text "False")
+  litTrue = mkVal bool (text "True")
+  litFalse = mkVal bool (text "False")
   litChar = litCharD
   litFloat = litFloatD
   litInt = litIntD
   litString = litStringD
 
-  pi = on2CodeValues mkVal float (toCode $ text "math.pi")
+  pi = mkVal float (text "math.pi")
 
   ($:) = enumElement
 
@@ -320,20 +320,19 @@ instance ValueExpression PythonCode where
   selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
   newObj = newObjD newObjDocD'
-  extNewObj l t vs = on2CodeValues mkVal t (on2CodeValues (pyExtStateObj l) t 
-    (onCodeList valList vs))
+  extNewObj l t vs = mkVal t (pyExtStateObj l (getTypeDoc t) (valueList vs))
 
   exists v = v ?!= valueOf (var "None" void)
   notNull = exists
 
 instance InternalValue PythonCode where
-  inputFunc = on2CodeValues mkVal string (toCode $ text "input()")  -- raw_input() for < Python 3.0
-  printFunc = on2CodeValues mkVal void (toCode $ text "print")
-  printLnFunc = on2CodeValues mkVal void (toCode empty)
-  printFileFunc _ = on2CodeValues mkVal void (toCode empty)
-  printFileLnFunc _ = on2CodeValues mkVal void (toCode empty)
+  inputFunc = mkVal string (text "input()")  -- raw_input() for < Python 3.0
+  printFunc = mkVal void (text "print")
+  printLnFunc = mkVal void empty
+  printFileFunc _ = mkVal void empty
+  printFileLnFunc _ = mkVal void empty
   
-  cast t v = on2CodeValues mkVal t $ onCodeValue (castObjDocD (getTypeDoc t)) v
+  cast t v = mkVal t $ castObjDocD (getTypeDoc t) (valueDoc v)
 
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
@@ -358,8 +357,8 @@ instance FunctionSym PythonCode where
   get = getD
   set = setD
 
-  listSize v = on2CodeValues mkVal (functionType listSizeFunc) 
-    (on2CodeValues pyListSize v listSizeFunc)
+  listSize v = mkVal (functionType listSizeFunc) 
+    (pyListSize (valueDoc v) (functionDoc (listSizeFunc :: PythonCode (Function PythonCode))))
   listAdd = listAddD
   listAppend = listAppendD
 
@@ -392,7 +391,7 @@ instance InternalFunction PythonCode where
 
 instance InternalStatement PythonCode where
   printSt nl p v f = mkStNoEnd <$> on3CodeValues (pyPrint nl) p v 
-    (fromMaybe (on2CodeValues mkVal void (toCode empty)) f)
+    (fromMaybe (mkVal void empty) f)
 
   state = stateD
   loopState = loopStateD
@@ -644,15 +643,15 @@ pyLnOp = unOpPrec "math.log"
 pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v
 
-pyExtStateObj :: Label -> TypeData -> Doc -> Doc
-pyExtStateObj l t vs = text l <> dot <> typeDoc t <> parens vs
+pyExtStateObj :: Label -> Doc -> Doc -> Doc
+pyExtStateObj l t vs = text l <> dot <> t <> parens vs
 
 pyInlineIf :: ValData -> ValData -> ValData -> ValData
 pyInlineIf c v1 v2 = vd (valPrec c) (valType v1) (valDoc v1 <+> text "if" <+> 
   valDoc c <+> text "else" <+> valDoc v2)
 
-pyListSize :: ValData -> FuncData -> Doc
-pyListSize v f = funcDoc f <> parens (valDoc v)
+pyListSize :: Doc -> Doc -> Doc
+pyListSize v f = f <> parens v
 
 pyStringType :: TypeData
 pyStringType = td String "str" (text "str")

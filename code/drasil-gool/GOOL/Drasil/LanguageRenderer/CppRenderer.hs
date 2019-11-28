@@ -966,13 +966,13 @@ instance ValueSym CppSrcCode where
   litInt = litIntD
   litString = litStringD
 
-  pi = on2CodeValues mkVal float (toCode $ text "M_PI")
+  pi = mkVal float (text "M_PI")
 
   ($:) = enumElement
 
   valueOf = valueOfD
   arg n = argD (litInt $ n+1) argsList
-  enumElement en e = on2CodeValues mkVal (enumType en) (toCode $ text e)
+  enumElement en e = mkVal (enumType en) (text e)
   
   argsList = argsListD "argv"
 
@@ -1029,11 +1029,11 @@ instance ValueExpression CppSrcCode where
   notNull v = v
 
 instance InternalValue CppSrcCode where
-  inputFunc = on2CodeValues mkVal string (toCode $ text "std::cin")
-  printFunc = on2CodeValues mkVal void (toCode $ text "std::cout")
-  printLnFunc = on2CodeValues mkVal void (toCode $ text "std::cout")
-  printFileFunc f = on2CodeValues mkVal void (onCodeValue valDoc f)
-  printFileLnFunc f = on2CodeValues mkVal void (onCodeValue valDoc f)
+  inputFunc = mkVal string (text "std::cin")
+  printFunc = mkVal void (text "std::cout")
+  printLnFunc = mkVal void (text "std::cout")
+  printFileFunc f = mkVal void (valueDoc f)
+  printFileLnFunc f = mkVal void (valueDoc f)
 
   cast = cppCast
   
@@ -1533,13 +1533,13 @@ instance ValueSym CppHdrCode where
   litInt = litIntD
   litString = litStringD
 
-  pi = on2CodeValues mkVal float (toCode $ text "M_PI")
+  pi = mkVal float (text "M_PI")
 
   ($:) = enumElement
 
   valueOf = valueOfD
   arg n = argD (litInt $ n+1) argsList
-  enumElement en e = on2CodeValues mkVal (enumType en) (toCode $ text e)
+  enumElement en e = mkVal (enumType en) (text e)
   
   argsList = argsListD "argv"
 
@@ -1547,97 +1547,97 @@ instance ValueSym CppHdrCode where
   valueDoc = valDoc . unCPPHC
 
 instance NumericExpression CppHdrCode where
-  (#~) _ = on2CodeValues mkVal void (toCode empty)
-  (#/^) _ = on2CodeValues mkVal void (toCode empty)
-  (#|) _ = on2CodeValues mkVal void (toCode empty)
-  (#+) _ _ = on2CodeValues mkVal void (toCode empty)
-  (#-) _ _ = on2CodeValues mkVal void (toCode empty)
-  (#*) _ _ = on2CodeValues mkVal void (toCode empty)
-  (#/) _ _ = on2CodeValues mkVal void (toCode empty)
-  (#%) _ _ = on2CodeValues mkVal void (toCode empty)
-  (#^) _ _ = on2CodeValues mkVal void (toCode empty)
+  (#~) _ = mkVal void empty
+  (#/^) _ = mkVal void empty
+  (#|) _ = mkVal void empty
+  (#+) _ _ = mkVal void empty
+  (#-) _ _ = mkVal void empty
+  (#*) _ _ = mkVal void empty
+  (#/) _ _ = mkVal void empty
+  (#%) _ _ = mkVal void empty
+  (#^) _ _ = mkVal void empty
 
-  log _ = on2CodeValues mkVal void (toCode empty)
-  ln _ = on2CodeValues mkVal void (toCode empty)
-  exp _ = on2CodeValues mkVal void (toCode empty)
-  sin _ = on2CodeValues mkVal void (toCode empty)
-  cos _ = on2CodeValues mkVal void (toCode empty)
-  tan _ = on2CodeValues mkVal void (toCode empty)
-  csc _ = on2CodeValues mkVal void (toCode empty)
-  sec _ = on2CodeValues mkVal void (toCode empty)
-  cot _ = on2CodeValues mkVal void (toCode empty)
-  arcsin _ = on2CodeValues mkVal void (toCode empty)
-  arccos _ = on2CodeValues mkVal void (toCode empty)
-  arctan _ = on2CodeValues mkVal void (toCode empty)
-  floor _ = on2CodeValues mkVal void (toCode empty)
-  ceil _ = on2CodeValues mkVal void (toCode empty)
+  log _ = mkVal void empty
+  ln _ = mkVal void empty
+  exp _ = mkVal void empty
+  sin _ = mkVal void empty
+  cos _ = mkVal void empty
+  tan _ = mkVal void empty
+  csc _ = mkVal void empty
+  sec _ = mkVal void empty
+  cot _ = mkVal void empty
+  arcsin _ = mkVal void empty
+  arccos _ = mkVal void empty
+  arctan _ = mkVal void empty
+  floor _ = mkVal void empty
+  ceil _ = mkVal void empty
 
 instance BooleanExpression CppHdrCode where
-  (?!) _ = on2CodeValues mkVal void (toCode empty)
-  (?&&) _ _ = on2CodeValues mkVal void (toCode empty)
-  (?||) _ _ = on2CodeValues mkVal void (toCode empty)
+  (?!) _ = mkVal void empty
+  (?&&) _ _ = mkVal void empty
+  (?||) _ _ = mkVal void empty
 
-  (?<) _ _ = on2CodeValues mkVal void (toCode empty)
-  (?<=) _ _ = on2CodeValues mkVal void (toCode empty)
-  (?>) _ _ = on2CodeValues mkVal void (toCode empty)
-  (?>=) _ _ = on2CodeValues mkVal void (toCode empty)
-  (?==) _ _ = on2CodeValues mkVal void (toCode empty)
-  (?!=) _ _ = on2CodeValues mkVal void (toCode empty)
+  (?<) _ _ = mkVal void empty
+  (?<=) _ _ = mkVal void empty
+  (?>) _ _ = mkVal void empty
+  (?>=) _ _ = mkVal void empty
+  (?==) _ _ = mkVal void empty
+  (?!=) _ _ = mkVal void empty
    
 instance ValueExpression CppHdrCode where
-  inlineIf _ _ _ = on2CodeValues mkVal void (toCode empty)
-  funcApp _ _ _ = on2CodeValues mkVal void (toCode empty)
-  selfFuncApp _ _ _ _ = on2CodeValues mkVal void (toCode empty)
-  extFuncApp _ _ _ _ = on2CodeValues mkVal void (toCode empty)
-  newObj _ _ = on2CodeValues mkVal void (toCode empty)
-  extNewObj _ _ _ = on2CodeValues mkVal void (toCode empty)
+  inlineIf _ _ _ = mkVal void empty
+  funcApp _ _ _ = mkVal void empty
+  selfFuncApp _ _ _ _ = mkVal void empty
+  extFuncApp _ _ _ _ = mkVal void empty
+  newObj _ _ = mkVal void empty
+  extNewObj _ _ _ = mkVal void empty
 
-  exists _ = on2CodeValues mkVal void (toCode empty)
-  notNull _ = on2CodeValues mkVal void (toCode empty)
+  exists _ = mkVal void empty
+  notNull _ = mkVal void empty
 
 instance InternalValue CppHdrCode where
-  inputFunc = on2CodeValues mkVal void (toCode empty)
-  printFunc = on2CodeValues mkVal void (toCode empty)
-  printLnFunc = on2CodeValues mkVal void (toCode empty)
-  printFileFunc _ = on2CodeValues mkVal void (toCode empty)
-  printFileLnFunc _ = on2CodeValues mkVal void (toCode empty)
+  inputFunc = mkVal void empty
+  printFunc = mkVal void empty
+  printLnFunc = mkVal void empty
+  printFileFunc _ = mkVal void empty
+  printFileLnFunc _ = mkVal void empty
   
-  cast _ _ = on2CodeValues mkVal void (toCode empty)
+  cast _ _ = mkVal void empty
   
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CppHdrCode where
-  objAccess _ _ = on2CodeValues mkVal void (toCode empty)
-  ($.) _ _ = on2CodeValues mkVal void (toCode empty)
+  objAccess _ _ = mkVal void empty
+  ($.) _ _ = mkVal void empty
 
-  objMethodCall _ _ _ _ = on2CodeValues mkVal void (toCode empty)
-  objMethodCallNoParams _ _ _ = on2CodeValues mkVal void (toCode empty)
+  objMethodCall _ _ _ _ = mkVal void empty
+  objMethodCallNoParams _ _ _ = mkVal void empty
 
-  selfAccess _ _ = on2CodeValues mkVal void (toCode empty)
+  selfAccess _ _ = mkVal void empty
 
-  listIndexExists _ _ = on2CodeValues mkVal void (toCode empty)
-  argExists _ = on2CodeValues mkVal void (toCode empty)
+  listIndexExists _ _ = mkVal void empty
+  argExists _ = mkVal void empty
   
-  indexOf _ _ = on2CodeValues mkVal void (toCode empty)
+  indexOf _ _ = mkVal void empty
 
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
   func _ _ _ = on2CodeValues fd void (toCode empty)
   
-  get _ _ = on2CodeValues mkVal void (toCode empty)
-  set _ _ _ = on2CodeValues mkVal void (toCode empty)
+  get _ _ = mkVal void empty
+  set _ _ _ = mkVal void empty
 
-  listSize _ = on2CodeValues mkVal void (toCode empty)
-  listAdd _ _ _ = on2CodeValues mkVal void (toCode empty)
-  listAppend _ _ = on2CodeValues mkVal void (toCode empty)
+  listSize _ = mkVal void empty
+  listAdd _ _ _ = mkVal void empty
+  listAppend _ _ = mkVal void empty
 
-  iterBegin _ = on2CodeValues mkVal void (toCode empty)
-  iterEnd _ = on2CodeValues mkVal void (toCode empty)
+  iterBegin _ = mkVal void empty
+  iterEnd _ = mkVal void empty
 
 instance SelectorFunction CppHdrCode where
-  listAccess _ _ = on2CodeValues mkVal void (toCode empty)
-  listSet _ _ _ = on2CodeValues mkVal void (toCode empty)
-  at _ _ = on2CodeValues mkVal void (toCode empty)
+  listAccess _ _ = mkVal void empty
+  listSet _ _ _ = mkVal void empty
+  at _ _ = mkVal void empty
 
 instance InternalFunction CppHdrCode where
   getFunc _ = on2CodeValues fd void (toCode empty)
@@ -1986,8 +1986,8 @@ cppCast :: CppSrcCode (Type CppSrcCode) ->
   CppSrcCode (Value CppSrcCode) -> CppSrcCode (Value CppSrcCode)
 cppCast t v = cppCast' (getType t) (getType $ valueType v)
   where cppCast' Float String = funcApp "std::stod" float [v]
-        cppCast' _ _ = on2CodeValues mkVal t $ on2CodeValues castObjDocD 
-          (onCodeValue castDocD t) v
+        cppCast' _ _ = mkVal t $ castObjDocD (castDocD (getTypeDoc t)) 
+          (valueDoc v)
 
 cppListSetDoc :: Doc -> Doc -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens i <+> equals <+> v

@@ -219,8 +219,8 @@ outDoc newLn printFn v f = outDoc' (getType $ valueType v)
         prStrFn = maybe printStr printFileStr f
         prLnFn = if newLn then maybe printStrLn printFileStrLn f else maybe printStr printFileStr f 
 
-printFileDocD :: Label -> ValData -> Doc
-printFileDocD fn f = valDoc f <> dot <> text fn
+printFileDocD :: Label -> Doc -> Doc
+printFileDocD fn f = f <> dot <> text fn
 
 -- Type Printers --
 
@@ -777,8 +777,8 @@ typeBinExpr :: OpData -> TypeData -> ValData -> ValData -> ValData
 typeBinExpr b t v1 v2 = mkExpr (opPrec b) t (binOpDocD (opDoc b) (exprParensL b 
   v1 $ valDoc v1) (exprParensR b v2 $ valDoc v2))
 
-mkVal :: TypeData -> Doc -> ValData
-mkVal = vd Nothing
+mkVal :: (RenderSym repr) => repr (Type repr) -> Doc -> repr (Value repr)
+mkVal = valFromData Nothing
 
 mkVar :: String -> TypeData -> Doc -> VarData
 mkVar = vard Dynamic
@@ -958,8 +958,8 @@ indexOfD f l v = objAccess l (func f S.int [v])
 funcDocD :: Doc -> Doc
 funcDocD fnApp = dot <> fnApp
 
-castDocD :: TypeData -> Doc
-castDocD t = parens $ typeDoc t
+castDocD :: Doc -> Doc
+castDocD = parens
 
 listAccessFuncDocD :: (RenderSym repr) => repr (Value repr) -> Doc
 listAccessFuncDocD v = brackets $ valueDoc v
@@ -970,8 +970,8 @@ listSetFuncDocD i v = brackets i <+> equals <+> v
 objAccessDocD :: Doc -> Doc -> Doc
 objAccessDocD v f = v <> f
 
-castObjDocD :: Doc -> ValData -> Doc
-castObjDocD t v = t <> parens (valDoc v)
+castObjDocD :: Doc -> Doc -> Doc
+castObjDocD t v = t <> parens v
 
 funcD :: (RenderSym repr) => Label -> repr (Type repr) -> [repr (Value repr)] 
   -> repr (Function repr)

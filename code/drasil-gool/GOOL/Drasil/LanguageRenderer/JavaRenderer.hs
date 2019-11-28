@@ -326,14 +326,11 @@ instance ValueExpression JavaCode where
   notNull = notNullD
 
 instance InternalValue JavaCode where
-  inputFunc = on2CodeValues mkVal (obj "Scanner") (toCode $ parens (
-    text "new Scanner(System.in)"))
-  printFunc = on2CodeValues mkVal void (toCode $ text "System.out.print")
-  printLnFunc = on2CodeValues mkVal void (toCode $ text "System.out.println")
-  printFileFunc f = on2CodeValues mkVal void (onCodeValue (printFileDocD 
-    "print") f)
-  printFileLnFunc f = on2CodeValues mkVal void (onCodeValue (printFileDocD 
-    "println") f)
+  inputFunc = mkVal (obj "Scanner") (parens (text "new Scanner(System.in)"))
+  printFunc = mkVal void (text "System.out.print")
+  printLnFunc = mkVal void (text "System.out.println")
+  printFileFunc f = mkVal void (printFileDocD "print" (valueDoc f))
+  printFileLnFunc f = mkVal void (printFileDocD "println" (valueDoc f))
   
   cast = jCast
   
@@ -436,9 +433,9 @@ instance StatementSym JavaCode where
   printFileStr f s = jOut False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = jOut True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = v &= on2CodeValues jInput (variableType v) inputFunc
+  getInput v = v &= jInput (variableType v) inputFunc
   discardInput = discardInputD jDiscardInput
-  getFileInput f v = v &= on2CodeValues jInput (variableType v) f
+  getFileInput f v = v &= jInput (variableType v) f
   discardFileInput = discardFileInputD jDiscardInput
 
   openFileR = openFileRD jOpenFileR
@@ -650,8 +647,8 @@ jCast :: JavaCode (Type JavaCode) -> JavaCode (Value JavaCode) ->
 jCast t v = jCast' (getType t) (getType $ valueType v)
   where jCast' Float String = funcApp "Double.parseDouble" float [v]
         jCast' Integer (Enum _) = v $. func "ordinal" int []
-        jCast' _ _ = on2CodeValues mkVal t $ on2CodeValues castObjDocD 
-          (onCodeValue castDocD t) v
+        jCast' _ _ = mkVal t $ castObjDocD (castDocD (getTypeDoc t)) 
+          (valueDoc v)
 
 jListDecDef :: (RenderSym repr) => repr (Variable repr) -> [repr (Value repr)] 
   -> Doc
@@ -687,15 +684,16 @@ jOut newLn printFn v f = jOut' (getType $ valueType v)
 jDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
 jDiscardInput inFn = valueDoc inFn <> dot <> text "next()"
 
-jInput :: TypeData -> ValData -> ValData
-jInput t inFn = mkVal t $ jInput' (cType t) 
-  where jInput' Integer = text "Integer.parseInt" <> parens (valDoc inFn <> 
+jInput :: (RenderSym repr) => repr (Type repr) -> repr (Value repr) -> 
+  repr (Value repr)
+jInput t inFn = mkVal t $ jInput' (getType t) 
+  where jInput' Integer = text "Integer.parseInt" <> parens (valueDoc inFn <> 
           dot <> text "nextLine()")
-        jInput' Float = text "Double.parseDouble" <> parens (valDoc inFn <> 
+        jInput' Float = text "Double.parseDouble" <> parens (valueDoc inFn <> 
           dot <> text "nextLine()")
-        jInput' Boolean = valDoc inFn <> dot <> text "nextBoolean()"
-        jInput' String = valDoc inFn <> dot <> text "nextLine()"
-        jInput' Char = valDoc inFn <> dot <> text "next().charAt(0)"
+        jInput' Boolean = valueDoc inFn <> dot <> text "nextBoolean()"
+        jInput' String = valueDoc inFn <> dot <> text "nextLine()"
+        jInput' Char = valueDoc inFn <> dot <> text "next().charAt(0)"
         jInput' _ = error "Attempt to read value of unreadable type"
 
 jOpenFileR :: (RenderSym repr) => repr (Value repr) -> repr (Type repr) -> 

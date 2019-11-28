@@ -326,13 +326,11 @@ instance ValueExpression CSharpCode where
   notNull = notNullD
 
 instance InternalValue CSharpCode where
-  inputFunc = on2CodeValues mkVal string (toCode $ text "Console.ReadLine()")
-  printFunc = on2CodeValues mkVal void (toCode $ text "Console.Write")
-  printLnFunc = on2CodeValues mkVal void (toCode $ text "Console.WriteLine")
-  printFileFunc f = on2CodeValues mkVal void (onCodeValue (printFileDocD 
-    "Write") f)
-  printFileLnFunc f = on2CodeValues mkVal void (onCodeValue (printFileDocD 
-    "WriteLine") f)
+  inputFunc = mkVal string (text "Console.ReadLine()")
+  printFunc = mkVal void (text "Console.Write")
+  printLnFunc = mkVal void (text "Console.WriteLine")
+  printFileFunc f = mkVal void (printFileDocD "Write" (valueDoc f))
+  printFileLnFunc f = mkVal void (printFileDocD "WriteLine" (valueDoc f))
   
   cast = csCast
   
@@ -434,11 +432,10 @@ instance StatementSym CSharpCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = v &= on2CodeValues csInput (variableType v) inputFunc
+  getInput v = v &= csInput (variableType v) inputFunc
   discardInput = discardInputD csDiscardInput
-  getFileInput f v = v &= on2CodeValues csInput (variableType v) (onCodeValue 
-    csFileInput f)
-  discardFileInput f = valState $ onCodeValue csFileInput f
+  getFileInput f v = v &= csInput (variableType v) (csFileInput f)
+  discardFileInput f = valState $ csFileInput f
 
   openFileR = openFileRD csOpenFileR
   openFileW = openFileWD csOpenFileWorA
@@ -499,7 +496,7 @@ instance ControlStatementSym CSharpCode where
 
   getFileInputAll f v = while ((f $. on2CodeValues fd bool (toCode $ text 
     ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (valueOf v) 
-    (onCodeValue csFileInput f))
+    (csFileInput f))
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc
@@ -626,8 +623,8 @@ csCast :: CSharpCode (Type CSharpCode) -> CSharpCode (Value CSharpCode) ->
   CSharpCode (Value CSharpCode)
 csCast t v = csCast' (getType t) (getType $ valueType v)
   where csCast' Float String = funcApp "Double.Parse" float [v]
-        csCast' _ _ = on2CodeValues mkVal t $ on2CodeValues castObjDocD 
-          (onCodeValue castDocD t) v
+        csCast' _ _ = mkVal t $ castObjDocD (castDocD (getTypeDoc t)) 
+          (valueDoc v)
 
 csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
@@ -645,12 +642,13 @@ csTryCatch tb cb = vcat [
 csDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
 csDiscardInput = valueDoc
 
-csFileInput :: ValData -> ValData
-csFileInput f = mkVal (valType f) (valDoc f <> dot <> text "ReadLine()")
+csFileInput :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
+csFileInput f = mkVal (valueType f) (valueDoc f <> dot <> text "ReadLine()")
 
-csInput :: TypeData -> ValData -> ValData
-csInput t inFn = mkVal t $ text (csInput' (cType t)) <> 
-  parens (valDoc inFn)
+csInput :: (RenderSym repr) => repr (Type repr) -> repr (Value repr) -> 
+  repr (Value repr)
+csInput t inFn = mkVal t $ text (csInput' (getType t)) <> 
+  parens (valueDoc inFn)
   where csInput' Integer = "Int32.Parse"
         csInput' Float = "Double.Parse"
         csInput' Boolean = "Boolean.Parse"

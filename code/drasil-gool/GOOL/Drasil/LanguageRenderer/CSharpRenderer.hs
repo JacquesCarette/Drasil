@@ -689,12 +689,13 @@ csVarDec :: Binding -> CSharpCode (Statement CSharpCode) ->
 csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
 csVarDec Dynamic d = d
 
-csObjVar :: VarData -> VarData -> VarData
-csObjVar o v = csObjVar' (varBind v)
+csObjVar :: (RenderSym repr) => repr (Variable repr) -> repr (Variable repr) -> 
+  repr (Variable repr)
+csObjVar o v = csObjVar' (variableBind v)
   where csObjVar' Static = error 
           "Cannot use objVar to access static variables through an object in C#"
-        csObjVar' Dynamic = mkVar (varName o ++ "." ++ varName v) 
-          (varType v) (objVarDocD (varDoc o) (varDoc v))
+        csObjVar' Dynamic = mkVar (variableName o ++ "." ++ variableName v) 
+          (variableType v) (objVarDocD (variableDoc o) (variableDoc v))
 
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
     -> CSharpCode (Type CSharpCode) -> [CSharpCode (Parameter CSharpCode)] -> 

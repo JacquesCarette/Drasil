@@ -940,12 +940,11 @@ instance VariableSym CppSrcCode where
     (cppClassVar (getTypeDoc c) (variableDoc v)))
   extClassVar = classVar
   objVar = objVarD
-  objVarSelf _ v = on2CodeValues (mkVar ("this->"++variableName v)) 
-    (variableType v) (toCode $ text "this->" <> variableDoc v)
+  objVarSelf _ v = mkVar ("this->"++variableName v) (variableType v) 
+    (text "this->" <> variableDoc v)
   listVar = listVarD
   listOf = listOfD
-  iterVar l t = on2CodeValues (mkVar l) (iterator t) (toCode $ text $ "(*" ++ l 
-    ++ ")")
+  iterVar l t = mkVar l (iterator t) (text $ "(*" ++ l ++ ")")
 
   ($->) = objVar
 
@@ -1502,19 +1501,19 @@ instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
   var = varD 
   staticVar = staticVarD
-  const _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  extVar _ _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  self _ = on2CodeValues (mkVar "") void (toCode empty)
-  enumVar _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  classVar _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  extClassVar _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  objVar _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  objVarSelf _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  listVar _ _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  listOf _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  iterVar _ _ = on2CodeValues (mkVar "") void (toCode empty)
+  const _ _ = mkVar "" void empty
+  extVar _ _ _ = mkVar "" void empty
+  self _ = mkVar "" void empty
+  enumVar _ _ = mkVar "" void empty
+  classVar _ _ = mkVar "" void empty
+  extClassVar _ _ = mkVar "" void empty
+  objVar _ _ = mkVar "" void empty
+  objVarSelf _ _ = mkVar "" void empty
+  listVar _ _ _ = mkVar "" void empty
+  listOf _ _ = mkVar "" void empty
+  iterVar _ _ = mkVar "" void empty
 
-  ($->) _ _ = on2CodeValues (mkVar "") void (toCode empty)
+  ($->) _ _ = mkVar "" void empty
   
   variableBind = varBind . unCPPHC
   variableName = varName . unCPPHC

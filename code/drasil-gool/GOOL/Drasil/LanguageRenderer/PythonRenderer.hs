@@ -232,7 +232,7 @@ instance VariableSym PythonCode where
   staticVar = staticVarD
   const = var
   extVar = extVarD
-  self l = on2CodeValues (mkVar "self") (obj l) (toCode $ text "self")
+  self l = mkVar "self" (obj l) (text "self")
   enumVar = enumVarD
   classVar = classVarD classVarDocD
   extClassVar = classVarD pyClassVar

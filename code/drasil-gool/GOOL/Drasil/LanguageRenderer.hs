@@ -780,7 +780,8 @@ typeBinExpr b t v1 v2 = mkExpr (opPrec b) t (binOpDocD (opDoc b) (exprParensL b
 mkVal :: (RenderSym repr) => repr (Type repr) -> Doc -> repr (Value repr)
 mkVal = valFromData Nothing
 
-mkVar :: String -> TypeData -> Doc -> VarData
+mkVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
+  repr (Variable repr)
 mkVar = vard Dynamic
 
 mkStaticVar :: String -> TypeData -> Doc -> VarData

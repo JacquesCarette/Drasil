@@ -17,7 +17,7 @@ import Language.Drasil.Chunk.Code (programName)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Visibility(..))
 
-import GOOL.Drasil (ProgramSym(..), RenderSym(..), ProgData(..), GS, 
+import GOOL.Drasil (ProgramSym(..), RenderSym(..), ProgData(..), GS, FS, 
   initialState)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
@@ -86,7 +86,7 @@ genProgram = do
   let n = case codeSpec g of CodeSpec {program = p} -> programName p
   return $ prog n ms
           
-genModules :: (RenderSym repr) => Reader DrasilState [GS (repr (RenderFile repr))]
+genModules :: (RenderSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
 genModules = do
   g <- ask
   let s = csi $ codeSpec g

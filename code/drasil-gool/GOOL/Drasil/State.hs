@@ -1,11 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module GOOL.Drasil.State (MS, lensGStoMS, lensMStoGS,
-  GS, GOOLState(..), headers, sources, hasMain, mainMod, initialState, 
-  putAfter, getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList,
-  addFile, addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, 
-  setMain, setMainMod, setFilePath, getFilePath, setModuleName, getModuleName, 
-  setCurrMain, getCurrMain, setParameters, getParameters, setScope, getScope, 
+module GOOL.Drasil.State (
+  GS, GOOLState(..), FS, MS, lensFStoGS, lensGStoFS, lensFStoMS, lensMStoGS,  
+  headers, sources, mainMod, currMain, initialState, initialFS, putAfter, 
+  getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, addFile, 
+  addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
+  setFilePath, getFilePath, setModuleName, getModuleName, setCurrMain, 
+  getCurrMain, setParameters, getParameters, setScope, getScope, 
   setCurrMainFunc, getCurrMainFunc
 ) where
 
@@ -14,16 +15,12 @@ import GOOL.Drasil.Data (FileType(..), ParamData, ScopeTag(..))
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
 import Control.Monad.State (State, get, put, gets)
+import Data.Maybe (isNothing)
 
 data GOOLState = GS {
   _headers :: [FilePath],
   _sources :: [FilePath],
-  _hasMain :: Bool,
-  _mainMod :: Maybe FilePath,
-
-  _currFilePath :: FilePath,
-  _currModName :: String,
-  _currMain :: Bool
+  _mainMod :: Maybe FilePath
 } 
 makeLenses ''GOOLState
 
@@ -36,30 +33,67 @@ data MethodState = MS {
 }
 makeLenses ''MethodState
 
+data FileState = FS {
+  _currModName :: String,
+  _currFilePath :: FilePath,
+  _currMain :: Bool
+}
+makeLenses ''FileState
+
 type GS = State GOOLState
-type MS = State (GOOLState, MethodState)
+type FS = State (GOOLState, FileState)
+type MS = State (GOOLState, (FileState, MethodState))
 
-getMSfromGS :: GOOLState -> (GOOLState, MethodState)
-getMSfromGS gs = (gs, initialMS)
+-------------------------------
+---- Lenses between States ----
+-------------------------------
 
-setMSfromGS :: GOOLState -> (GOOLState, MethodState) -> GOOLState
-setMSfromGS _ (gs, _) = gs
+-- GS - FS --
 
-lensGStoMS :: Lens' GOOLState (GOOLState, MethodState)
-lensGStoMS = lens getMSfromGS setMSfromGS
+getFSfromGS :: GOOLState -> (GOOLState, FileState)
+getFSfromGS gs = (gs, initialFS)
 
-lensMStoGS :: Lens' (GOOLState, MethodState) GOOLState
+setFSfromGS :: GOOLState -> (GOOLState, FileState) -> GOOLState
+setFSfromGS _ (gs, _) = gs
+
+lensGStoFS :: Lens' GOOLState (GOOLState, FileState)
+lensGStoFS = lens getFSfromGS setFSfromGS
+
+lensFStoGS :: Lens' (GOOLState, FileState) GOOLState
+lensFStoGS = _1
+
+-- FS - MS --
+
+getMSfromFS :: (GOOLState, FileState) -> (GOOLState, (FileState, MethodState))
+getMSfromFS (gs, fs) = (gs, (fs, initialMS))
+
+setMSfromFS :: (GOOLState, FileState) -> (GOOLState, (FileState, MethodState))
+  -> (GOOLState, FileState)
+setMSfromFS _ (gs, (fs, _)) = (gs, fs)
+
+lensFStoMS :: Lens' (GOOLState, FileState) (GOOLState, (FileState, MethodState))
+lensFStoMS = lens getMSfromFS setMSfromFS
+
+-- MS - GS --
+
+lensMStoGS :: Lens' (GOOLState, (FileState, MethodState)) GOOLState
 lensMStoGS = _1
+
+-------------------------------
+------- Initial States -------
+-------------------------------
 
 initialState :: GOOLState
 initialState = GS {
   _headers = [],
   _sources = [],
-  _hasMain = False,
-  _mainMod = Nothing,
+  _mainMod = Nothing
+}
 
-  _currFilePath = "",
+initialFS :: FileState
+initialFS = FS {
   _currModName = "",
+  _currFilePath = "",
   _currMain = False
 }
 
@@ -70,6 +104,10 @@ initialMS = MS {
   _currScope = Priv,
   _currMainFunc = False
 }
+
+-------------------------------
+------- State Patterns -------
+-------------------------------
 
 putAfter :: (s -> s) -> State s a -> State s a
 putAfter sf sv = do
@@ -82,16 +120,15 @@ getPutReturn sf v = do
   put $ sf s
   return v
 
-getPutReturnFunc :: GS b -> (GOOLState -> b -> GOOLState) -> 
-  (b -> a) -> GS a
+getPutReturnFunc :: State s b -> (s -> b -> s) -> (b -> a) -> State s a
 getPutReturnFunc st sf vf = do
   v <- st
   s <- get
   put $ sf s v
   return $ vf v
 
-getPutReturnFunc2 :: GS c -> GS b -> 
-  (GOOLState -> c -> b -> GOOLState) -> (c -> b -> a) -> GS a
+getPutReturnFunc2 :: State s c -> State s b -> 
+  (s -> c -> b -> s) -> (c -> b -> a) -> State s a
 getPutReturnFunc2 st1 st2 sf vf = do
   v1 <- st1
   v2 <- st2
@@ -99,13 +136,17 @@ getPutReturnFunc2 st1 st2 sf vf = do
   put $ sf s v1 v2
   return $ vf v1 v2
 
-getPutReturnList :: [GS b] -> (GOOLState -> GOOLState) -> 
-  ([b] -> a) -> GS a
+getPutReturnList :: [State s b] -> (s -> s) -> 
+  ([b] -> a) -> State s a
 getPutReturnList l sf vf = do
   v <- sequence l
   s <- get
   put $ sf s
   return $ vf v
+
+-------------------------------
+------- State Modifiers -------
+-------------------------------
 
 addFile :: FileType -> FilePath -> GOOLState -> GOOLState
 addFile Combined = addCombinedHeaderSource
@@ -128,45 +169,47 @@ addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
   over headers (map f)
   where f = ((n++"/")++)
 
-setMain :: (GOOLState, MethodState) -> (GOOLState, MethodState)
-setMain = over _1 (over hasMain (\b -> if b then error "Multiple main functions defined"
-  else not b)) 
-
 setMainMod :: String -> GOOLState -> GOOLState
-setMainMod n = set mainMod (Just n)
+setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
+  "Multiple modules with main methods encountered")
 
-setFilePath :: FilePath -> GOOLState -> GOOLState
-setFilePath = set currFilePath
+setFilePath :: FilePath -> (GOOLState, FileState) -> (GOOLState, FileState)
+setFilePath fp = over _2 (set currFilePath fp)
 
-getFilePath :: GS FilePath
-getFilePath = gets (^. currFilePath)
+getFilePath :: FS FilePath
+getFilePath = gets ((^. currFilePath) . snd)
 
-setModuleName :: String -> GOOLState -> GOOLState
-setModuleName = set currModName
+setModuleName :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
+setModuleName n = over _2 (set currModName n)
 
-getModuleName :: GS String
-getModuleName = gets (^. currModName)
+getModuleName :: FS String
+getModuleName = gets ((^. currModName) . snd)
 
-setCurrMain :: Bool -> GOOLState -> GOOLState
-setCurrMain = set currMain
+setCurrMain :: (GOOLState, (FileState, MethodState)) -> 
+  (GOOLState, (FileState, MethodState))
+setCurrMain = over _2 (over _1 (over currMain (\b -> if b then error 
+  "Multiple main functions defined" else not b)))
 
-getCurrMain :: GS Bool
-getCurrMain = gets (^. currMain)
+getCurrMain :: FS Bool
+getCurrMain = gets ((^. currMain) . snd)
 
-setParameters :: [ParamData] -> (GOOLState, MethodState) -> (GOOLState, MethodState)
-setParameters ps = over _2 (set currParameters ps) 
+setParameters :: [ParamData] -> (GOOLState, (FileState, MethodState)) -> 
+  (GOOLState, (FileState, MethodState))
+setParameters ps = over _2 $ over _2 $ set currParameters ps
 
 getParameters :: MS [ParamData]
-getParameters = gets ((^. currParameters) . snd)
+getParameters = gets ((^. currParameters) . snd . snd)
 
-setScope :: ScopeTag -> (GOOLState, MethodState) -> (GOOLState, MethodState)
-setScope scp = over _2 (set currScope scp)
+setScope :: ScopeTag -> (GOOLState, (FileState, MethodState)) -> 
+  (GOOLState, (FileState, MethodState))
+setScope scp = over _2 $ over _2 $ set currScope scp
 
 getScope :: MS ScopeTag
-getScope = gets ((^. currScope) . snd)
+getScope = gets ((^. currScope) . snd . snd)
 
-setCurrMainFunc :: Bool -> (GOOLState, MethodState) -> (GOOLState, MethodState)
-setCurrMainFunc m = over _2 (set currMainFunc m)
+setCurrMainFunc :: Bool -> (GOOLState, (FileState, MethodState)) -> 
+  (GOOLState, (FileState, MethodState))
+setCurrMainFunc m = over _2 $ over _2 $ set currMainFunc m
 
 getCurrMainFunc :: MS Bool
-getCurrMainFunc = gets ((^. currMainFunc) . snd)
+getCurrMainFunc = gets ((^. currMainFunc) . snd . snd)

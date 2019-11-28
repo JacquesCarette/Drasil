@@ -19,7 +19,7 @@ module GOOL.Drasil.Symantics (
 
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.Data (Binding, Terminator, FileType, ScopeTag)
-import GOOL.Drasil.State (GS, MS)
+import GOOL.Drasil.State (GS, FS, MS)
 
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -29,30 +29,30 @@ type Library = String
 
 class (RenderSym repr) => ProgramSym repr where
   type Program repr
-  prog :: Label -> [GS (repr (RenderFile repr))] -> 
+  prog :: Label -> [FS (repr (RenderFile repr))] -> 
     GS (repr (Program repr))
 
 class (ModuleSym repr, InternalFile repr) => 
   RenderSym repr where 
   type RenderFile repr
-  fileDoc :: GS (repr (Module repr)) -> 
-    GS (repr (RenderFile repr))
+  fileDoc :: FS (repr (Module repr)) -> 
+    FS (repr (RenderFile repr))
 
   -- Module description, list of author names, date as a String, file to comment
   docMod :: String -> [String] -> String -> 
-    GS (repr (RenderFile repr)) -> 
-    GS (repr (RenderFile repr))
+    FS (repr (RenderFile repr)) -> 
+    FS (repr (RenderFile repr))
 
-  commentedMod :: GS (repr (BlockComment repr)) -> GS (repr (RenderFile repr)) 
-    -> GS (repr (RenderFile repr))
+  commentedMod :: FS (repr (BlockComment repr)) -> FS (repr (RenderFile repr)) 
+    -> FS (repr (RenderFile repr))
 
 class InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
 
-  fileFromData :: FileType -> GS FilePath -> 
-    GS (repr (Module repr)) -> 
-    GS (repr (RenderFile repr))
+  fileFromData :: FileType -> FS FilePath -> 
+    FS (repr (Module repr)) -> 
+    FS (repr (RenderFile repr))
 
 class (PermanenceSym repr) => KeywordSym repr where
   type Keyword repr
@@ -655,36 +655,36 @@ class (MethodSym repr, InternalClass repr) => ClassSym repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
     [GS (repr (StateVar repr))] -> 
     [MS (repr (Method repr))] -> 
-    GS (repr (Class repr))
+    FS (repr (Class repr))
   enum :: Label -> [Label] -> repr (Scope repr) -> 
-    GS (repr (Class repr))
+    FS (repr (Class repr))
   privClass :: Label -> Maybe Label -> [GS (repr (StateVar repr))] 
     -> [MS (repr (Method repr))] -> 
-    GS (repr (Class repr))
+    FS (repr (Class repr))
   pubClass :: Label -> Maybe Label -> [GS (repr (StateVar repr))] 
     -> [MS (repr (Method repr))] -> 
-    GS (repr (Class repr))
+    FS (repr (Class repr))
 
-  docClass :: String -> GS (repr (Class repr)) ->
-    GS (repr (Class repr))
+  docClass :: String -> FS (repr (Class repr)) ->
+    FS (repr (Class repr))
 
-  commentedClass :: GS (repr (BlockComment repr)) -> 
-    GS (repr (Class repr)) -> GS (repr (Class repr))
+  commentedClass :: FS (repr (BlockComment repr)) -> 
+    FS (repr (Class repr)) -> FS (repr (Class repr))
 
 class InternalClass repr where
   classDoc :: repr (Class repr) -> Doc
-  classFromData :: GS Doc -> GS (repr (Class repr))
+  classFromData :: FS Doc -> FS (repr (Class repr))
 
 class (ClassSym repr, InternalMod repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [Library] -> [MS (repr (Method repr))] -> 
-    [GS (repr (Class repr))] -> GS (repr (Module repr))
+    [FS (repr (Class repr))] -> FS (repr (Module repr))
 
 class InternalMod repr where
   moduleDoc :: repr (Module repr) -> Doc
-  modFromData :: String -> GS Bool -> GS Doc -> GS (repr (Module repr))
-  updateModuleDoc :: (Doc -> Doc) -> GS (repr (Module repr)) -> 
-    GS (repr (Module repr))
+  modFromData :: String -> FS Bool -> FS Doc -> FS (repr (Module repr))
+  updateModuleDoc :: (Doc -> Doc) -> FS (repr (Module repr)) -> 
+    FS (repr (Module repr))
     
 class BlockCommentSym repr where
   type BlockComment repr

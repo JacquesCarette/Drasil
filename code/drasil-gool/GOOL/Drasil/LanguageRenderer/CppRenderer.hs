@@ -67,13 +67,13 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst,
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, on5CodeValues, 
   on8CodeValues, onCodeList, onStateList, on2CodeLists, on2StateLists, 
   on1CodeValue1List, on1StateValue1List, checkParams)
-import GOOL.Drasil.State (MS, lensGStoMS, lensMStoGS, initialState, 
-  putAfter, getPutReturn, setMain, setCurrMain, getCurrMain, setParameters, 
-  setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+import GOOL.Drasil.State (MS, lensGStoFS, lensFStoGS, lensFStoMS, lensMStoGS, 
+  initialState, initialFS, getPutReturn, setCurrMain, getCurrMain, 
+  setParameters, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Data.Maybe (maybeToList)
-import Control.Lens (Lens', over)
+import Control.Lens (Lens')
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad.State (State, evalState)
@@ -100,7 +100,7 @@ hdrToSrc (CPPHC a) = CPPSC a
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
   type Program (p CppSrcCode CppHdrCode) = ProgData
   prog n mods = do
-    m <-  mapM (putAfter $ setCurrMain False) mods
+    m <-  mapM (zoom lensGStoFS) mods
     let fm = map pfst m
         sm = map (hdrToSrc . psnd) m
     p1 <- prog n $ map toState sm ++ map toState fm
@@ -681,13 +681,13 @@ instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   type Class (p CppSrcCode CppHdrCode) = Doc
-  buildClass n p s vs fs = pair2Lists vs (map (zoom lensGStoMS) fs) 
-    (buildClass n p (pfst s)) (buildClass n p (psnd s))
+  buildClass n p s vs fs = pair2Lists (map (zoom lensFStoGS) vs) (map (zoom 
+    lensFStoMS) fs) (buildClass n p (pfst s)) (buildClass n p (psnd s))
   enum l ls s = on2StateValues pair (enum l ls $ pfst s) (enum l ls $ psnd s)
-  privClass n p vs fs = pair2Lists vs (map (zoom lensGStoMS) fs) 
-    (privClass n p) (privClass n p)
-  pubClass n p vs fs = pair2Lists vs (map (zoom lensGStoMS) fs) 
-    (pubClass n p) (pubClass n p)
+  privClass n p vs fs = pair2Lists (map (zoom lensFStoGS) vs) (map (zoom 
+    lensFStoMS) fs) (privClass n p) (privClass n p)
+  pubClass n p vs fs = pair2Lists (map (zoom lensFStoGS) vs) (map (zoom 
+    lensFStoMS) fs) (pubClass n p) (pubClass n p)
 
   docClass d c = pair1 c (docClass d) (docClass d)
 
@@ -699,8 +699,8 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
-  buildModule n l ms cs = pair2Lists (map (zoom lensGStoMS . putAfter 
-    (setCurrMainFunc False)) ms) cs (buildModule n l) (buildModule n l)
+  buildModule n l ms cs = pair2Lists (map (zoom lensFStoMS) ms) cs 
+    (buildModule n l) (buildModule n l)
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
   moduleDoc m = moduleDoc $ pfst m
@@ -792,12 +792,12 @@ instance Monad CppSrcCode where
 
 instance ProgramSym CppSrcCode where
   type Program CppSrcCode = ProgData
-  prog n = onStateList (onCodeList (progD n))
+  prog n = onStateList (onCodeList (progD n)) . map (zoom lensGStoFS)
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
-  fileDoc code = G.fileDoc Source cppSrcExt (top $ evalState code initialState)
-    bottom code
+  fileDoc code = G.fileDoc Source cppSrcExt (top $ evalState code (initialState,
+    initialFS)) bottom code
 
   docMod = G.docMod
 
@@ -1284,15 +1284,14 @@ instance MethodSym CppSrcCode where
 
 instance InternalMethod CppSrcCode where
   intMethod m n c s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) .
-    setParameters (map unCPPSC ps) . if m then over lensMStoGS (setCurrMain m) 
-    . setMain else id) $ on2CodeValues mthd (onCodeValue snd s) (on5CodeValues 
-    (cppsMethod n c) t (onCodeList (paramListDocD . checkParams n) ps) b 
-    blockStart blockEnd)
+    setParameters (map unCPPSC ps) . if m then setCurrMain else id) $ 
+    on2CodeValues mthd (onCodeValue snd s) (on5CodeValues (cppsMethod n c) t 
+    (onCodeList (paramListDocD . checkParams n) ps) b blockStart blockEnd)
   intFunc m n s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) . 
-    setParameters (map unCPPSC ps) . if m then setCurrMainFunc m . over
-    lensMStoGS (setCurrMain m) . setMain else id) $ on2CodeValues mthd 
-    (onCodeValue snd s) (on5CodeValues (cppsFunction n) t (onCodeList 
-    (paramListDocD . checkParams n) ps) b blockStart blockEnd)
+    setParameters (map unCPPSC ps) . if m then setCurrMainFunc m . setCurrMain 
+    else id) $ on2CodeValues mthd (onCodeValue snd s) (on5CodeValues 
+    (cppsFunction n) t (onCodeList (paramListDocD . checkParams n) ps) b 
+    blockStart blockEnd)
   commentedFunc = cppCommentedFunc Source
  
   methodDoc = mthdDoc . unCPPSC
@@ -1317,8 +1316,8 @@ instance InternalStateVar CppSrcCode where
 
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
-  buildClass n _ _ vs fs = on2StateLists (on2CodeLists cppsClass) vs
-    (map (zoom lensGStoMS) $ fs ++ [destructor n vs])
+  buildClass n _ _ vs fs = on2StateLists (on2CodeLists cppsClass) (map (zoom 
+    lensFStoGS) vs) (map (zoom lensFStoMS) $ fs ++ [destructor n vs])
   enum _ _ _ = toState $ toCode empty
   privClass = G.privClass
   pubClass = G.pubClass
@@ -1368,13 +1367,13 @@ instance Monad CppHdrCode where
 
 instance RenderSym CppHdrCode where
   type RenderFile CppHdrCode = FileData
-  fileDoc code = G.fileDoc Header cppHdrExt (top $ evalState code initialState)
-    bottom code
+  fileDoc code = G.fileDoc Header cppHdrExt (top $ evalState code (initialState,
+    initialFS)) bottom code
   
   docMod = G.docMod
 
-  commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then m else on2CodeValues 
-    commentedModD m cmt) mod cmnt getCurrMain
+  commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then m else 
+    on2CodeValues commentedModD m cmt) mod cmnt getCurrMain
 
 instance InternalFile CppHdrCode where
   top m = on3CodeValues cpphtop m (list dynamic_) endStatement
@@ -1818,10 +1817,9 @@ instance MethodSym CppHdrCode where
 
 instance InternalMethod CppHdrCode where
   intMethod m n _ s _ t ps _ = getPutReturn (setScope (snd $ unCPPHC s) . 
-    setParameters (map unCPPHC ps) . if m then over lensMStoGS (setCurrMain m) 
-    . setMain else id) $ on2CodeValues mthd (onCodeValue snd s) (on3CodeValues 
-    (cpphMethod n) t (onCodeList (paramListDocD . checkParams n) ps) 
-    endStatement)
+    setParameters (map unCPPHC ps) . if m then setCurrMain else id) $ 
+    on2CodeValues mthd (onCodeValue snd s) (on3CodeValues (cpphMethod n) t 
+    (onCodeList (paramListDocD . checkParams n) ps) endStatement)
   intFunc = G.intFunc
   commentedFunc = cppCommentedFunc Header
 
@@ -1852,10 +1850,10 @@ instance ClassSym CppHdrCode where
     (cpphClass n) (on2CodeLists (cpphVarsFuncsList Pub) vars funcs) 
     (on2CodeLists (cpphVarsFuncsList Priv) vars funcs) 
     (onCodeValue fst public) (onCodeValue fst private) parent blockStart 
-    blockEnd endStatement) vs fs
+    blockEnd endStatement) (map (zoom lensFStoGS) vs) fs
     where parent = case p of Nothing -> toCode empty
                              Just pn -> inherit pn
-          fs = map (zoom lensGStoMS) $ mths ++ [destructor n vs]
+          fs = map (zoom lensFStoMS) $ mths ++ [destructor n vs]
   enum n es _ = toState $ on4CodeValues (cpphEnum n) (toCode $ enumElementsDocD 
     es enumsEqualInts) blockStart blockEnd endStatement
   privClass = G.privClass

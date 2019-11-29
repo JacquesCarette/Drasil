@@ -22,8 +22,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
   BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
-  bodyDocD, oneLinerD, outDoc, intTypeDocD, floatTypeDocD, typeDocD, 
-  enumTypeDocD, listInnerTypeD, destructorError, paramListDocD, mkParam, 
+  bodyDocD, oneLinerD, outDoc, destructorError, paramListDocD, mkParam, 
   runStrategyD, checkStateD, multiAssignDoc, returnDocD, mkStNoEnd, 
   stringListVals', stringListLists', stateD, loopStateD, emptyStateD, assignD, 
   assignToListIndexD, decrementD, decrement1D, closeFileD, discardFileLineD, 
@@ -47,11 +46,11 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   commentedItem, addCommentsDocD, commentedModD, docFuncRepr, 
   valueList, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, increment, increment1, comment, ifCond, objDecNew, 
-  objDecNewNoParams, construct, method, getMethod, setMethod, privMethod, 
-  pubMethod, constructor, function, docFunc, stateVarDef, constVar, privMVar, 
-  pubMVar, pubGVar, buildClass, privClass, pubClass, docClass, commentedClass, 
-  buildModule, modFromData, fileDoc, docMod)
+  fileFromData, block, int, float, listInnerType, obj, enumType, increment, 
+  increment1, comment, ifCond, objDecNew, objDecNewNoParams, construct, method, 
+  getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, 
+  pubClass, docClass, commentedClass, buildModule, modFromData, fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
@@ -162,19 +161,19 @@ instance InternalBlock PythonCode where
 
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData
-  bool = toCode $ td Boolean "" empty
-  int = toCode intTypeDocD
-  float = toCode floatTypeDocD
-  char = toCode $ td Char "" empty
-  string = toCode pyStringType
-  infile = toCode $ td File "" empty
-  outfile = toCode $ td File "" empty
-  listType _ t = toCode $ td (List (getType t)) "[]" (brackets empty)
-  listInnerType = listInnerTypeD
-  obj t = toCode $ typeDocD t
-  enumType t = toCode $ enumTypeDocD t
+  bool = typeFromData Boolean "" empty
+  int = G.int
+  float = G.float
+  char = typeFromData Char "" empty
+  string = pyStringType
+  infile = typeFromData File "" empty
+  outfile = typeFromData File "" empty
+  listType _ t = typeFromData (List (getType t)) "[]" (brackets empty)
+  listInnerType = G.listInnerType
+  obj = G.obj
+  enumType = G.enumType
   iterator t = t
-  void = toCode $ td Void "NoneType" (text "NoneType")
+  void = typeFromData Void "NoneType" (text "NoneType")
 
   getType = cType . unPC
   getTypeString = typeString . unPC
@@ -656,8 +655,8 @@ pyInlineIf c v1 v2 = valFromData (valuePrec c) (valueType v1)
 pyListSize :: Doc -> Doc -> Doc
 pyListSize v f = f <> parens v
 
-pyStringType :: TypeData
-pyStringType = td String "str" (text "str")
+pyStringType :: (RenderSym repr) => repr (Type repr)
+pyStringType = typeFromData String "str" (text "str")
 
 pyListDec :: (RenderSym repr) => repr (Variable repr) -> Doc
 pyListDec v = variableDoc v <+> equals <+> getTypeDoc (variableType v)

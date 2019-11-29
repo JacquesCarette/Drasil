@@ -23,14 +23,13 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
   BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
-  bodyDocD, oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, 
-  charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, 
-  destructorError, paramDocD, paramListDocD, mkParam, runStrategyD, listSliceD, 
-  checkStateD, notifyObserversD, listDecDocD, mkSt, stringListVals', 
-  stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, 
-  assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, 
-  increment1D, discardInputD, discardFileInputD, openFileRD, openFileWD, 
-  openFileAD, closeFileD, discardFileLineD, breakDocD, continueDocD, returnD, 
+  bodyDocD, oneLinerD, outDoc, printFileDocD, destructorError, paramDocD, 
+  paramListDocD, mkParam, runStrategyD, listSliceD, checkStateD, 
+  notifyObserversD, listDecDocD, mkSt, stringListVals', stringListLists', 
+  printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, 
+  multiAssignError, decrementD, incrementD, decrement1D, increment1D, 
+  discardInputD, discardFileInputD, openFileRD, openFileWD, openFileAD, 
+  closeFileD, discardFileLineD, breakDocD, continueDocD, returnD, 
   multiReturnError, valStateD, freeError, throwD, initStateD, changeStateD, 
   initObserverListD, addObserverD, ifNoElseD, switchD, switchAsIfD, ifExistsD, 
   forRangeD, tryCatchD, unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', 
@@ -52,7 +51,8 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   addCommentsDocD, commentedModD, docFuncRepr, valueList, appendToBody, 
   surroundBody, intValue, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, pi, inlineIf, varDec, varDecDef, listDec, listDecDef, 
+  fileFromData, block, bool, int, double, char, listType, listInnerType, obj, 
+  enumType, void, pi, inlineIf, varDec, varDecDef, listDec, listDecDef, 
   objDecNew, objDecNewNoParams, construct, comment, ifCond, for, forEach, while,
   method, getMethod, setMethod,privMethod, pubMethod, constructor, docMain, 
   function, mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, 
@@ -167,19 +167,19 @@ instance InternalBlock JavaCode where
 
 instance TypeSym JavaCode where
   type Type JavaCode = TypeData
-  bool = toCode boolTypeDocD
-  int = toCode intTypeDocD
-  float = toCode jFloatTypeDocD
-  char = toCode charTypeDocD
-  string = toCode jStringTypeDoc
-  infile = toCode jInfileTypeDoc
-  outfile = toCode jOutfileTypeDoc
-  listType p st = on2CodeValues jListType st (list p)
-  listInnerType = listInnerTypeD
-  obj t = toCode $ typeDocD t
-  enumType t = toCode $ enumTypeDocD t
+  bool = G.bool
+  int = G.int
+  float = G.double
+  char = G.char
+  string = jStringType
+  infile = jInfileType
+  outfile = jOutfileType
+  listType = jListType
+  listInnerType = G.listInnerType
+  obj = G.obj
+  enumType = G.enumType
   iterator t = t
-  void = toCode voidDocD
+  void = G.void
 
   getType = cType . unJC
   getTypeString = typeString . unJC
@@ -621,27 +621,28 @@ jtop end inc lst = vcat [
   inc <+> text "java.io.File" <> end,
   inc <+> text ("java.util." ++ render lst) <> end]
 
-jFloatTypeDocD :: TypeData
-jFloatTypeDocD = td Float "double" (text "double")
+jStringType :: (RenderSym repr) => repr (Type repr)
+jStringType = typeFromData String "String" (text "String")
 
-jStringTypeDoc :: TypeData
-jStringTypeDoc = td String "String" (text "String")
+jInfileType :: (RenderSym repr) => repr (Type repr)
+jInfileType = typeFromData File "Scanner" (text "Scanner")
 
-jInfileTypeDoc :: TypeData
-jInfileTypeDoc = td File "Scanner" (text "Scanner")
+jOutfileType :: (RenderSym repr) => repr (Type repr)
+jOutfileType = typeFromData File "PrintWriter" (text "PrintWriter")
 
-jOutfileTypeDoc :: TypeData
-jOutfileTypeDoc = td File "PrintWriter" (text "PrintWriter")
+jListType :: (RenderSym repr) => repr (Permanence repr) -> repr (Type repr) -> 
+  repr (Type repr)
+jListType p t = jListType' (getType t)
+  where jListType' Integer = typeFromData (List Integer) (render lst ++ 
+          "<Integer>") (lst <> angles (text "Integer"))
+        jListType' Float = typeFromData (List Float) (render lst ++ "<Double>") 
+          (lst <> angles (text "Double"))
+        jListType' _ = G.listType p t
+        lst = keyDoc $ list p
 
-jListType :: TypeData -> Doc -> TypeData
-jListType (TD Integer _ _) lst = td (List Integer) (render lst ++ "<Integer>") 
-  (lst <> angles (text "Integer"))
-jListType (TD Float _ _) lst = td (List Float) (render lst ++ "<Double>") 
-  (lst <> angles (text "Double"))
-jListType t lst = listTypeDocD t lst
 
 jArrayType :: JavaCode (Type JavaCode)
-jArrayType = toCode $ td (List $ Object "Object") "Object" (text "Object[]")
+jArrayType = typeFromData (List $ Object "Object") "Object" (text "Object[]")
 
 jEquality :: JavaCode (Value JavaCode) -> JavaCode (Value JavaCode) -> 
   JavaCode (Value JavaCode)

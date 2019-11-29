@@ -23,24 +23,22 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
   BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
-  oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
-  stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, 
-  voidDocD, destructorError, paramDocD, paramListDocD, mkParam, methodDocD, 
-  runStrategyD, listSliceD, checkStateD, notifyObserversD, listDecDocD, 
-  listDecDefDocD, mkSt, stringListVals', stringListLists', printStD, stateD, 
-  loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, 
-  decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
-  openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, breakDocD, 
-  continueDocD, returnD, multiReturnError, valStateD, freeError, throwD, 
-  initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD,
-  switchAsIfD, ifExistsD, forRangeD, tryCatchD, unOpPrec, notOpDocD, 
-  negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
-  mkVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
-  classVarDocD, objVarDocD, newObjDocD, varD, staticVarD, extVarD, selfD, 
-  enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
+  oneLinerD, outDoc, printFileDocD, destructorError, paramDocD, paramListDocD, 
+  mkParam, methodDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, 
+  listDecDocD, listDecDefDocD, mkSt, stringListVals', stringListLists', 
+  printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, 
+  multiAssignError, decrementD, incrementD, decrement1D, increment1D, 
+  constDecDefD, discardInputD, openFileRD, openFileWD, openFileAD, closeFileD, 
+  discardFileLineD, breakDocD, continueDocD, returnD, multiReturnError, 
+  valStateD, freeError, throwD, initStateD, changeStateD, initObserverListD, 
+  addObserverD, ifNoElseD, switchD, switchAsIfD, ifExistsD, forRangeD, 
+  tryCatchD, unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', typeUnExpr, 
+  powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
+  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
+  divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
+  typeBinExpr, mkVal, mkVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
+  litStringD, classVarDocD, objVarDocD, newObjDocD, varD, staticVarD, extVarD, 
+  selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
   valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, 
   objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
   selfFuncAppD, extFuncAppD, newObjD,notNullD, funcDocD, castDocD, 
@@ -52,7 +50,8 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   commentedModD, appendToBody, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, pi, inlineIf, varDec, varDecDef, listDec, listDecDef, 
+  fileFromData, block, bool, int, double, char, string, listType, listInnerType,
+  obj, enumType, void, pi, inlineIf, varDec, varDecDef, listDec, listDecDef, 
   objDecNew, objDecNewNoParams, construct, comment, ifCond, for, forEach, while,
   method, getMethod, setMethod,privMethod, pubMethod, constructor, docMain, 
   function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef,
@@ -167,19 +166,19 @@ instance InternalBlock CSharpCode where
 
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData
-  bool = toCode boolTypeDocD
-  int = toCode intTypeDocD
-  float = toCode csFloatTypeDoc
-  char = toCode charTypeDocD
-  string = toCode stringTypeDocD
-  infile = toCode csInfileTypeDoc
-  outfile = toCode csOutfileTypeDoc
-  listType p st = on2CodeValues listTypeDocD st (list p)
-  listInnerType = listInnerTypeD
-  obj t = toCode $ typeDocD t
-  enumType t = toCode $ enumTypeDocD t
+  bool = G.bool
+  int = G.int
+  float = G.double
+  char = G.char
+  string = G.string
+  infile = csInfileType
+  outfile = csOutfileType
+  listType = G.listType
+  listInnerType = G.listInnerType
+  obj = G.obj
+  enumType = G.enumType
   iterator t = t
-  void = toCode voidDocD
+  void = G.void
 
   getType = cType . unCSC
   getTypeString = typeString . unCSC
@@ -616,14 +615,11 @@ cstop end inc = vcat [
   inc <+> text "System.Collections" <> end,
   inc <+> text "System.Collections.Generic" <> end]
 
-csFloatTypeDoc :: TypeData
-csFloatTypeDoc = td Float "double" (text "double") -- Same as Java, maybe make a common function
+csInfileType :: (RenderSym repr) => repr (Type repr)
+csInfileType = typeFromData File "StreamReader" (text "StreamReader")
 
-csInfileTypeDoc :: TypeData
-csInfileTypeDoc = td File "StreamReader" (text "StreamReader")
-
-csOutfileTypeDoc :: TypeData
-csOutfileTypeDoc = td File "StreamWriter" (text "StreamWriter")
+csOutfileType :: (RenderSym repr) => repr (Type repr)
+csOutfileType = typeFromData File "StreamWriter" (text "StreamWriter")
 
 csCast :: CSharpCode (Type CSharpCode) -> CSharpCode (Value CSharpCode) -> 
   CSharpCode (Value CSharpCode)

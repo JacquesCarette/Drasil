@@ -24,16 +24,14 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
   BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD, 
-  bodyDocD, oneLinerD, outDoc, intTypeDocD, charTypeDocD, stringTypeDocD, 
-  typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, paramDocD, 
-  paramListDocD, mkParam, stateVarDocD, constVarDocD, runStrategyD, listSliceD, 
-  notifyObserversD, freeDocD, mkSt, mkStNoEnd, stringListVals', 
-  stringListLists', stateD, loopStateD, emptyStateD, assignD, 
-  assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, 
-  increment1D, constDecDefD, discardInputD, discardFileInputD, closeFileD, 
-  breakDocD, continueDocD, returnD, multiReturnError, valStateD, throwD, 
-  initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD,
-  switchAsIfD, forRangeD, tryCatchD, unOpPrec, notOpDocD, negateOpDocD, 
+  bodyDocD, oneLinerD, outDoc, paramDocD, paramListDocD, mkParam, stateVarDocD, 
+  constVarDocD, runStrategyD, listSliceD, notifyObserversD, freeDocD, mkSt, 
+  mkStNoEnd, stringListVals', stringListLists', stateD, loopStateD, emptyStateD,
+  assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, 
+  decrement1D, increment1D, constDecDefD, discardInputD, discardFileInputD, 
+  closeFileD, breakDocD, continueDocD, returnD, multiReturnError, valStateD, 
+  throwD, initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, 
+  switchD, switchAsIfD, forRangeD, tryCatchD, unOpPrec, notOpDocD, negateOpDocD,
   sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, asinOpDocD,
   acosOpDocD, atanOpDocD, unExpr, unExpr', typeUnExpr, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -52,7 +50,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   commentedModD, docFuncRepr, valueList, appendToBody, surroundBody, getterName,
   setterName, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, inlineIf, varDec, varDecDef, listDec, listDecDef, 
+  fileFromData, block, int, double, char, string, listType, listInnerType, obj, enumType, void, inlineIf, varDec, varDecDef, listDec, listDecDef, 
   objDecNew, objDecNewNoParams, construct, comment, ifCond, for, while, method, 
   getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
   docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
@@ -873,19 +871,19 @@ instance InternalBlock CppSrcCode where
 
 instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
-  bool = toCode cppBoolTypeDoc
-  int = toCode intTypeDocD
-  float = toCode cppFloatTypeDoc
-  char = toCode charTypeDocD
-  string = toCode stringTypeDocD
-  infile = toCode cppInfileTypeDoc
-  outfile = toCode cppOutfileTypeDoc
-  listType p st = on2CodeValues listTypeDocD st (list p)
-  listInnerType = listInnerTypeD
-  obj t = toCode $ typeDocD t
-  enumType t = toCode $ enumTypeDocD t
-  iterator t = onCodeValue cppIterTypeDoc (listType dynamic_ t)
-  void = toCode voidDocD
+  bool = cppBoolType
+  int = G.int
+  float = G.double
+  char = G.char
+  string = G.string
+  infile = cppInfileType
+  outfile = cppOutfileType
+  listType = G.listType
+  listInnerType = G.listInnerType
+  obj = G.obj
+  enumType = G.enumType
+  iterator = cppIterType . listType dynamic_
+  void = G.void
 
   getType = cType . unCPPSC
   getTypeString = typeString . unCPPSC
@@ -1450,19 +1448,19 @@ instance InternalBlock CppHdrCode where
 
 instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData
-  bool = toCode cppBoolTypeDoc
-  int = toCode intTypeDocD
-  float = toCode cppFloatTypeDoc
-  char = toCode charTypeDocD
-  string = toCode stringTypeDocD
-  infile = toCode cppInfileTypeDoc
-  outfile = toCode cppOutfileTypeDoc
-  listType p st = on2CodeValues listTypeDocD st (list p)
-  listInnerType = listInnerTypeD
-  obj t = toCode $ typeDocD t
-  enumType t = toCode $ enumTypeDocD t
-  iterator t = onCodeValue cppIterTypeDoc (listType dynamic_ t)
-  void = toCode voidDocD
+  bool = cppBoolType
+  int = G.int
+  float = G.double
+  char = G.char
+  string = G.string
+  infile = cppInfileType
+  outfile = cppOutfileType
+  listType = G.listType
+  listInnerType = G.listInnerType
+  obj = G.obj
+  enumType = G.enumType
+  iterator = cppIterType . listType dynamic_
+  void = G.void
 
   getType = cType . unCPPHC
   getTypeString = typeString . unCPPHC
@@ -1979,21 +1977,18 @@ usingNameSpace n Nothing end = text "using namespace" <+> text n <> end
 cppInherit :: Label -> Doc -> Doc
 cppInherit n pub = colon <+> pub <+> text n
 
-cppBoolTypeDoc :: TypeData
-cppBoolTypeDoc = td Boolean "bool" (text "bool")
+cppBoolType :: (RenderSym repr) => repr (Type repr)
+cppBoolType = typeFromData Boolean "bool" (text "bool")
 
-cppFloatTypeDoc :: TypeData
-cppFloatTypeDoc = td Float "double" (text "double")
+cppInfileType :: (RenderSym repr) => repr (Type repr)
+cppInfileType = typeFromData File "ifstream" (text "ifstream")
 
-cppInfileTypeDoc :: TypeData
-cppInfileTypeDoc = td File "ifstream" (text "ifstream")
+cppOutfileType :: (RenderSym repr) => repr (Type repr)
+cppOutfileType = typeFromData File "ofstream" (text "ofstream")
 
-cppOutfileTypeDoc :: TypeData
-cppOutfileTypeDoc = td File "ofstream" (text "ofstream")
-
-cppIterTypeDoc :: TypeData -> TypeData
-cppIterTypeDoc t = td (Iterator (cType t)) (typeString t ++ "::iterator")
-  (text "std::" <> typeDoc t <> text "::iterator")
+cppIterType :: (RenderSym repr) => repr (Type repr) -> repr (Type repr)
+cppIterType t = typeFromData (Iterator (getType t)) (getTypeString t ++ 
+  "::iterator") (text "std::" <> getTypeDoc t <> text "::iterator")
 
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c <> text "::" <> v

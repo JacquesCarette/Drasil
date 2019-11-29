@@ -9,16 +9,13 @@ module GOOL.Drasil.LanguageRenderer (
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, 
-  printDoc, printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
-  charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, listInnerTypeD, voidDocD, destructorError, paramDocD, 
-  paramListDocD, mkParam, methodDocD, methodListDocD, stateVarDocD, 
-  constVarDocD, stateVarListDocD, switchDocD, assignDocD, multiAssignDoc, 
-  plusEqualsDocD, plusPlusDocD, listDecDocD, 
-  listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, mkSt, 
-  mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, 
-  emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, 
-  incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
+  printDoc, printFileDocD, destructorError, paramDocD, paramListDocD, mkParam, 
+  methodDocD, methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD, 
+  switchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusPlusDocD, 
+  listDecDocD, listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD,
+  mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, 
+  loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, 
+  decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
   discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, 
   discardFileLineD, returnD, multiReturnError, valStateD, 
   freeError, throwD, initStateD, changeStateD, initObserverListD, addObserverD, 
@@ -66,11 +63,10 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
   MethodSym(..), InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
-  updateModDoc, OpData(..), od, ParamData(..), pd, paramName, TypeData(..), td, 
+  updateModDoc, OpData(..), od, ParamData(..), pd, paramName, TypeData(..), 
   Binding(..), VarData(..))
-import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
-  emptyIfEmpty, emptyIfNull, onStateValue, getInnerType, getNestDegree, 
-  convType)
+import GOOL.Drasil.Helpers (doubleQuotedText, hicat, vibcat, vmap, 
+  emptyIfEmpty, emptyIfNull, onStateValue, getNestDegree)
 import GOOL.Drasil.State (MS, getParameters)
 
 import Data.List (intersperse, last)
@@ -222,47 +218,6 @@ outDoc newLn printFn v f = outDoc' (getType $ valueType v)
 printFileDocD :: Label -> Doc -> Doc
 printFileDocD fn f = f <> dot <> text fn
 
--- Type Printers --
-
-boolTypeDocD :: TypeData
-boolTypeDocD = td Boolean "Boolean" (text "Boolean") -- capital B?
-
-intTypeDocD :: TypeData
-intTypeDocD = td Integer "int" (text "int")
-
-floatTypeDocD :: TypeData
-floatTypeDocD = td Float "float" (text "float")
-
-charTypeDocD :: TypeData
-charTypeDocD = td Char "char" (text "char")
-
-stringTypeDocD :: TypeData
-stringTypeDocD = td String "string" (text "string")
-
-fileTypeDocD :: TypeData
-fileTypeDocD = td File "File" (text "File")
-
-typeDocD :: Label -> TypeData
-typeDocD t = td (Object t) t (text t)
-
-enumTypeDocD :: Label -> TypeData
-enumTypeDocD t = td (Enum t) t (text t)
-
-listTypeDocD :: TypeData -> Doc -> TypeData
-listTypeDocD t lst = td (List (cType t)) 
-  (render lst ++ "<" ++ typeString t ++ ">") (lst <> angles (typeDoc t))
-
-listInnerTypeD :: (RenderSym repr) => repr (Type repr) -> repr (Type repr)
-listInnerTypeD = convType . getInnerType . getType
-
--- Method Types --
-
-voidDocD :: TypeData
-voidDocD = td Void "void" (text "void")
-
-destructorError :: String -> String
-destructorError l = "Destructors not allowed in " ++ l
-
 -- Parameters --
 
 paramDocD :: VarData -> Doc
@@ -285,6 +240,9 @@ methodDocD n s p t ps b = vcat [
 methodListDocD :: [Doc] -> Doc
 methodListDocD ms = vibcat methods
   where methods = filter (not . isEmpty) ms
+  
+destructorError :: String -> String
+destructorError l = "Destructors not allowed in " ++ l
 
 -- StateVar --
 

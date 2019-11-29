@@ -14,7 +14,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..),
   VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..),
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
@@ -24,23 +24,21 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
   BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD, 
-  bodyDocD, oneLinerD, outDoc, intTypeDocD, charTypeDocD, stringTypeDocD, 
-  typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, paramDocD, 
-  paramListDocD, mkParam, stateVarDocD, constVarDocD, runStrategyD, listSliceD, 
-  notifyObserversD, freeDocD, mkSt, mkStNoEnd, stringListVals', 
-  stringListLists', stateD, loopStateD, emptyStateD, assignD, 
-  assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, 
-  increment1D, constDecDefD, discardInputD, discardFileInputD, closeFileD, 
-  breakD, continueD, returnD, multiReturnError, valStateD, throwD, initStateD, 
-  changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD, 
-  switchAsIfD, forRangeD, tryCatchD, unOpPrec, notOpDocD, negateOpDocD, 
+  bodyDocD, oneLinerD, outDoc, paramDocD, paramListDocD, mkParam, stateVarDocD, 
+  constVarDocD, runStrategyD, listSliceD, notifyObserversD, freeDocD, mkSt, 
+  mkStNoEnd, stringListVals', stringListLists', stateD, loopStateD, emptyStateD,
+  assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, 
+  decrement1D, increment1D, constDecDefD, discardInputD, discardFileInputD, 
+  closeFileD, breakDocD, continueDocD, returnD, multiReturnError, valStateD, 
+  throwD, initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, 
+  switchD, switchAsIfD, forRangeD, tryCatchD, unOpPrec, notOpDocD, negateOpDocD,
   sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, asinOpDocD,
   acosOpDocD, atanOpDocD, unExpr, unExpr', typeUnExpr, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
   typeBinExpr, mkVal, mkVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
-  litStringD, classVarCheckStatic, inlineIfD, varD, staticVarD, selfD, enumVarD,
+  litStringD, classVarCheckStatic, varD, staticVarD, selfD, enumVarD,
   objVarD, listVarD, listOfD, valueOfD, argD, argsListD, objAccessD, 
   objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
   funcAppD, newObjD, newObjDocD', castDocD, castObjDocD, funcD, getD, setD, 
@@ -52,9 +50,9 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   commentedModD, docFuncRepr, valueList, appendToBody, surroundBody, getterName,
   setterName, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, varDec, varDecDef, listDec, listDecDef, objDecNew, 
-  objDecNewNoParams, construct, comment, ifCond, for, while, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, function, docFunc, 
+  fileFromData, block, int, double, char, string, listType, listInnerType, obj, enumType, void, inlineIf, varDec, varDecDef, listDec, listDecDef, 
+  objDecNew, objDecNewNoParams, construct, comment, ifCond, for, while, method, 
+  getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
   docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
   docClass, commentedClass, buildModule, modFromData, fileDoc, docMod)
 import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
@@ -65,10 +63,10 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, on5CodeValues, 
-  on8CodeValues, onCodeList, onStateList, on2CodeLists, on2StateLists, 
-  on1CodeValue1List, on1StateValue1List, checkParams)
-import GOOL.Drasil.State (MS, lensGStoFS, lensFStoGS, lensFStoMS, lensMStoGS, 
-  initialState, initialFS, getPutReturn, setCurrMain, getCurrMain, 
+  onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List,
+  checkParams)
+import GOOL.Drasil.State (MS, FS, lensGStoFS, lensFStoGS, lensFStoMS, 
+  lensMStoGS, initialState, initialFS, getPutReturn, setCurrMain, getCurrMain, 
   setParameters, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
@@ -244,6 +242,12 @@ instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
   andOp = pair andOp andOp
   orOp = pair orOp orOp
 
+instance (Pair p) => InternalOp (p CppSrcCode CppHdrCode) where
+  uOpDoc o = uOpDoc $ pfst o
+  bOpDoc o = bOpDoc $ pfst o
+  uOpPrec o = uOpPrec $ pfst o
+  bOpPrec o = bOpPrec $ pfst o
+
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   type Variable (p CppSrcCode CppHdrCode) = VarData
   var n t = pair (var n $ pfst t) (var n $ psnd t)
@@ -358,6 +362,7 @@ instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
 
   cast t v = pair (cast (pfst t) (pfst v)) (cast (psnd t) (psnd v))
 
+  valuePrec v = valuePrec $ pfst v
   valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)
 
 instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
@@ -866,19 +871,19 @@ instance InternalBlock CppSrcCode where
 
 instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
-  bool = toCode cppBoolTypeDoc
-  int = toCode intTypeDocD
-  float = toCode cppFloatTypeDoc
-  char = toCode charTypeDocD
-  string = toCode stringTypeDocD
-  infile = toCode cppInfileTypeDoc
-  outfile = toCode cppOutfileTypeDoc
-  listType p st = on2CodeValues listTypeDocD st (list p)
-  listInnerType = listInnerTypeD
-  obj t = toCode $ typeDocD t
-  enumType t = toCode $ enumTypeDocD t
-  iterator t = onCodeValue cppIterTypeDoc (listType dynamic_ t)
-  void = toCode voidDocD
+  bool = cppBoolType
+  int = G.int
+  float = G.double
+  char = G.char
+  string = G.string
+  infile = cppInfileType
+  outfile = cppOutfileType
+  listType = G.listType
+  listInnerType = G.listInnerType
+  obj = G.obj
+  enumType = G.enumType
+  iterator = cppIterType . listType dynamic_
+  void = G.void
 
   getType = cType . unCPPSC
   getTypeString = typeString . unCPPSC
@@ -927,6 +932,12 @@ instance BinaryOpSym CppSrcCode where
   andOp = toCode andOpDocD
   orOp = toCode orOpDocD
 
+instance InternalOp CppSrcCode where
+  uOpDoc = opDoc . unCPPSC
+  bOpDoc = opDoc . unCPPSC
+  uOpPrec = opPrec . unCPPSC
+  bOpPrec = opPrec . unCPPSC
+
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
   var = varD
@@ -940,12 +951,11 @@ instance VariableSym CppSrcCode where
     (cppClassVar (getTypeDoc c) (variableDoc v)))
   extClassVar = classVar
   objVar = objVarD
-  objVarSelf _ v = on2CodeValues (mkVar ("this->"++variableName v)) 
-    (variableType v) (toCode $ text "this->" <> variableDoc v)
+  objVarSelf _ v = mkVar ("this->"++variableName v) (variableType v) 
+    (text "this->" <> variableDoc v)
   listVar = listVarD
   listOf = listOfD
-  iterVar l t = on2CodeValues (mkVar l) (iterator t) (toCode $ text $ "(*" ++ l 
-    ++ ")")
+  iterVar l t = mkVar l (iterator t) (text $ "(*" ++ l ++ ")")
 
   ($->) = objVar
 
@@ -966,13 +976,13 @@ instance ValueSym CppSrcCode where
   litInt = litIntD
   litString = litStringD
 
-  pi = on2CodeValues mkVal float (toCode $ text "M_PI")
+  pi = mkVal float (text "M_PI")
 
   ($:) = enumElement
 
   valueOf = valueOfD
   arg n = argD (litInt $ n+1) argsList
-  enumElement en e = on2CodeValues mkVal (enumType en) (toCode $ text e)
+  enumElement en e = mkVal (enumType en) (text e)
   
   argsList = argsListD "argv"
 
@@ -980,45 +990,45 @@ instance ValueSym CppSrcCode where
   valueDoc = valDoc . unCPPSC
 
 instance NumericExpression CppSrcCode where
-  (#~) = on2CodeValues unExpr' negateOp
-  (#/^) = on2CodeValues unExpr sqrtOp
-  (#|) = on2CodeValues unExpr absOp
-  (#+) = on3CodeValues binExpr plusOp
-  (#-) = on3CodeValues binExpr minusOp
-  (#*) = on3CodeValues binExpr multOp
-  (#/) = on3CodeValues binExpr divideOp
-  (#%) = on3CodeValues binExpr moduloOp
-  (#^) = on3CodeValues binExpr' powerOp
+  (#~) = unExpr' negateOp
+  (#/^) = unExpr sqrtOp
+  (#|) = unExpr absOp
+  (#+) = binExpr plusOp
+  (#-) = binExpr minusOp
+  (#*) = binExpr multOp
+  (#/) = binExpr divideOp
+  (#%) = binExpr moduloOp
+  (#^) = binExpr' powerOp
 
-  log = on2CodeValues unExpr logOp
-  ln = on2CodeValues unExpr lnOp
-  exp = on2CodeValues unExpr expOp
-  sin = on2CodeValues unExpr sinOp
-  cos = on2CodeValues unExpr cosOp
-  tan = on2CodeValues unExpr tanOp
+  log = unExpr logOp
+  ln = unExpr lnOp
+  exp = unExpr expOp
+  sin = unExpr sinOp
+  cos = unExpr cosOp
+  tan = unExpr tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin = on2CodeValues unExpr asinOp
-  arccos = on2CodeValues unExpr acosOp
-  arctan = on2CodeValues unExpr atanOp
-  floor = on2CodeValues unExpr floorOp
-  ceil = on2CodeValues unExpr ceilOp
+  arcsin = unExpr asinOp
+  arccos = unExpr acosOp
+  arctan = unExpr atanOp
+  floor = unExpr floorOp
+  ceil = unExpr ceilOp
 
 instance BooleanExpression CppSrcCode where
-  (?!) = on3CodeValues typeUnExpr notOp bool
-  (?&&) = on4CodeValues typeBinExpr andOp bool
-  (?||) = on4CodeValues typeBinExpr orOp bool
+  (?!) = typeUnExpr notOp bool
+  (?&&) = typeBinExpr andOp bool
+  (?||) = typeBinExpr orOp bool
 
-  (?<) = on4CodeValues typeBinExpr lessOp bool
-  (?<=) = on4CodeValues typeBinExpr lessEqualOp bool
-  (?>) = on4CodeValues typeBinExpr greaterOp bool
-  (?>=) = on4CodeValues typeBinExpr greaterEqualOp bool
-  (?==) = on4CodeValues typeBinExpr equalOp bool
-  (?!=) = on4CodeValues typeBinExpr notEqualOp bool
+  (?<) = typeBinExpr lessOp bool
+  (?<=) = typeBinExpr lessEqualOp bool
+  (?>) = typeBinExpr greaterOp bool
+  (?>=) = typeBinExpr greaterEqualOp bool
+  (?==) = typeBinExpr equalOp bool
+  (?!=) = typeBinExpr notEqualOp bool
    
 instance ValueExpression CppSrcCode where
-  inlineIf = on3CodeValues inlineIfD
+  inlineIf = G.inlineIf
   funcApp = funcAppD
   selfFuncApp c = cppSelfFuncApp (self c)
   extFuncApp _ = funcApp
@@ -1029,14 +1039,15 @@ instance ValueExpression CppSrcCode where
   notNull v = v
 
 instance InternalValue CppSrcCode where
-  inputFunc = on2CodeValues mkVal string (toCode $ text "std::cin")
-  printFunc = on2CodeValues mkVal void (toCode $ text "std::cout")
-  printLnFunc = on2CodeValues mkVal void (toCode $ text "std::cout")
-  printFileFunc f = on2CodeValues mkVal void (onCodeValue valDoc f)
-  printFileLnFunc f = on2CodeValues mkVal void (onCodeValue valDoc f)
+  inputFunc = mkVal string (text "std::cin")
+  printFunc = mkVal void (text "std::cout")
+  printLnFunc = mkVal void (text "std::cout")
+  printFileFunc f = mkVal void (valueDoc f)
+  printFileLnFunc f = mkVal void (valueDoc f)
 
   cast = cppCast
-  
+
+  valuePrec = valPrec . unCPPSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CppSrcCode where
@@ -1093,7 +1104,7 @@ instance InternalFunction CppSrcCode where
   funcFromData t d = on2CodeValues fd t (toCode d)
 
 instance InternalStatement CppSrcCode where
-  printSt nl p v _ = mkSt <$> on2CodeValues (cppPrint nl) p v
+  printSt nl p v _ = mkSt $ cppPrint nl p v
 
   state = stateD
   loopState = loopStateD
@@ -1136,18 +1147,18 @@ instance StatementSym CppSrcCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = mkSt <$> on3CodeValues cppInput v inputFunc endStatement
+  getInput v = mkSt $ cppInput v inputFunc endStatement
   discardInput = discardInputD (cppDiscardInput "\\n")
-  getFileInput f v = mkSt <$> on3CodeValues cppInput v f endStatement
+  getFileInput f v = mkSt $ cppInput v f endStatement
   discardFileInput = discardFileInputD (cppDiscardInput " ")
 
-  openFileR f n = mkSt <$> on2CodeValues (cppOpenFile "std::fstream::in") f n
-  openFileW f n = mkSt <$> on2CodeValues (cppOpenFile "std::fstream::out") f n
-  openFileA f n = mkSt <$> on2CodeValues (cppOpenFile "std::fstream::app") f n
+  openFileR f n = mkSt $ cppOpenFile "std::fstream::in" f n
+  openFileW f n = mkSt $ cppOpenFile "std::fstream::out" f n
+  openFileA f n = mkSt $ cppOpenFile "std::fstream::app" f n
   closeFile = closeFileD "close"
 
   getFileInputLine f v = valState $ funcApp "std::getline" string [f, valueOf v]
-  discardFileLine f = mkSt <$> toCode (cppDiscardInput "\\n" f)
+  discardFileLine f = mkSt $ cppDiscardInput "\\n" f
   stringSplit d vnew s = let l_ss = "ss"
                              var_ss = var l_ss (obj "std::stringstream")
                              v_ss = valueOf var_ss
@@ -1167,8 +1178,8 @@ instance StatementSym CppSrcCode where
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = breakD Semi
-  continue = continueD Semi
+  break = mkSt breakDocD
+  continue = mkSt continueDocD
 
   returnState = returnD Semi
   multiReturn _ = error $ multiReturnError cppName
@@ -1177,7 +1188,7 @@ instance StatementSym CppSrcCode where
 
   comment = G.comment commentStart
 
-  free v = mkSt <$> onCodeValue freeDocD v
+  free v = mkSt $ freeDocD v
 
   throw = throwD cppThrowDoc Semi
 
@@ -1199,7 +1210,7 @@ instance ControlStatementSym CppSrcCode where
   switch = switchD
   switchAsIf = switchAsIfD
 
-  ifExists _ ifBody _ = mkStNoEnd <$> ifBody -- All variables are initialized in C++
+  ifExists _ ifBody _ = mkStNoEnd $ bodyDoc ifBody -- All variables are initialized in C++
 
   for = G.for blockStart blockEnd 
   forRange = forRangeD
@@ -1316,7 +1327,7 @@ instance InternalStateVar CppSrcCode where
 
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
-  buildClass n _ _ vs fs = on2StateLists (on2CodeLists cppsClass) (map (zoom 
+  buildClass n _ _ vs fs = on2StateLists cppsClass (map (zoom 
     lensFStoGS) vs) (map (zoom lensFStoMS) $ fs ++ [destructor n vs])
   enum _ _ _ = toState $ toCode empty
   privClass = G.privClass
@@ -1437,19 +1448,19 @@ instance InternalBlock CppHdrCode where
 
 instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData
-  bool = toCode cppBoolTypeDoc
-  int = toCode intTypeDocD
-  float = toCode cppFloatTypeDoc
-  char = toCode charTypeDocD
-  string = toCode stringTypeDocD
-  infile = toCode cppInfileTypeDoc
-  outfile = toCode cppOutfileTypeDoc
-  listType p st = on2CodeValues listTypeDocD st (list p)
-  listInnerType = listInnerTypeD
-  obj t = toCode $ typeDocD t
-  enumType t = toCode $ enumTypeDocD t
-  iterator t = onCodeValue cppIterTypeDoc (listType dynamic_ t)
-  void = toCode voidDocD
+  bool = cppBoolType
+  int = G.int
+  float = G.double
+  char = G.char
+  string = G.string
+  infile = cppInfileType
+  outfile = cppOutfileType
+  listType = G.listType
+  listInnerType = G.listInnerType
+  obj = G.obj
+  enumType = G.enumType
+  iterator = cppIterType . listType dynamic_
+  void = G.void
 
   getType = cType . unCPPHC
   getTypeString = typeString . unCPPHC
@@ -1498,23 +1509,29 @@ instance BinaryOpSym CppHdrCode where
   andOp = toCode $ od 0 empty
   orOp = toCode $ od 0 empty
 
+instance InternalOp CppHdrCode where
+  uOpDoc = opDoc . unCPPHC
+  bOpDoc = opDoc . unCPPHC
+  uOpPrec = opPrec . unCPPHC
+  bOpPrec = opPrec . unCPPHC
+
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
   var = varD 
   staticVar = staticVarD
-  const _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  extVar _ _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  self _ = on2CodeValues (mkVar "") void (toCode empty)
-  enumVar _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  classVar _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  extClassVar _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  objVar _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  objVarSelf _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  listVar _ _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  listOf _ _ = on2CodeValues (mkVar "") void (toCode empty)
-  iterVar _ _ = on2CodeValues (mkVar "") void (toCode empty)
+  const _ _ = mkVar "" void empty
+  extVar _ _ _ = mkVar "" void empty
+  self _ = mkVar "" void empty
+  enumVar _ _ = mkVar "" void empty
+  classVar _ _ = mkVar "" void empty
+  extClassVar _ _ = mkVar "" void empty
+  objVar _ _ = mkVar "" void empty
+  objVarSelf _ _ = mkVar "" void empty
+  listVar _ _ _ = mkVar "" void empty
+  listOf _ _ = mkVar "" void empty
+  iterVar _ _ = mkVar "" void empty
 
-  ($->) _ _ = on2CodeValues (mkVar "") void (toCode empty)
+  ($->) _ _ = mkVar "" void empty
   
   variableBind = varBind . unCPPHC
   variableName = varName . unCPPHC
@@ -1533,13 +1550,13 @@ instance ValueSym CppHdrCode where
   litInt = litIntD
   litString = litStringD
 
-  pi = on2CodeValues mkVal float (toCode $ text "M_PI")
+  pi = mkVal float (text "M_PI")
 
   ($:) = enumElement
 
   valueOf = valueOfD
   arg n = argD (litInt $ n+1) argsList
-  enumElement en e = on2CodeValues mkVal (enumType en) (toCode $ text e)
+  enumElement en e = mkVal (enumType en) (text e)
   
   argsList = argsListD "argv"
 
@@ -1547,111 +1564,112 @@ instance ValueSym CppHdrCode where
   valueDoc = valDoc . unCPPHC
 
 instance NumericExpression CppHdrCode where
-  (#~) _ = on2CodeValues mkVal void (toCode empty)
-  (#/^) _ = on2CodeValues mkVal void (toCode empty)
-  (#|) _ = on2CodeValues mkVal void (toCode empty)
-  (#+) _ _ = on2CodeValues mkVal void (toCode empty)
-  (#-) _ _ = on2CodeValues mkVal void (toCode empty)
-  (#*) _ _ = on2CodeValues mkVal void (toCode empty)
-  (#/) _ _ = on2CodeValues mkVal void (toCode empty)
-  (#%) _ _ = on2CodeValues mkVal void (toCode empty)
-  (#^) _ _ = on2CodeValues mkVal void (toCode empty)
+  (#~) _ = mkVal void empty
+  (#/^) _ = mkVal void empty
+  (#|) _ = mkVal void empty
+  (#+) _ _ = mkVal void empty
+  (#-) _ _ = mkVal void empty
+  (#*) _ _ = mkVal void empty
+  (#/) _ _ = mkVal void empty
+  (#%) _ _ = mkVal void empty
+  (#^) _ _ = mkVal void empty
 
-  log _ = on2CodeValues mkVal void (toCode empty)
-  ln _ = on2CodeValues mkVal void (toCode empty)
-  exp _ = on2CodeValues mkVal void (toCode empty)
-  sin _ = on2CodeValues mkVal void (toCode empty)
-  cos _ = on2CodeValues mkVal void (toCode empty)
-  tan _ = on2CodeValues mkVal void (toCode empty)
-  csc _ = on2CodeValues mkVal void (toCode empty)
-  sec _ = on2CodeValues mkVal void (toCode empty)
-  cot _ = on2CodeValues mkVal void (toCode empty)
-  arcsin _ = on2CodeValues mkVal void (toCode empty)
-  arccos _ = on2CodeValues mkVal void (toCode empty)
-  arctan _ = on2CodeValues mkVal void (toCode empty)
-  floor _ = on2CodeValues mkVal void (toCode empty)
-  ceil _ = on2CodeValues mkVal void (toCode empty)
+  log _ = mkVal void empty
+  ln _ = mkVal void empty
+  exp _ = mkVal void empty
+  sin _ = mkVal void empty
+  cos _ = mkVal void empty
+  tan _ = mkVal void empty
+  csc _ = mkVal void empty
+  sec _ = mkVal void empty
+  cot _ = mkVal void empty
+  arcsin _ = mkVal void empty
+  arccos _ = mkVal void empty
+  arctan _ = mkVal void empty
+  floor _ = mkVal void empty
+  ceil _ = mkVal void empty
 
 instance BooleanExpression CppHdrCode where
-  (?!) _ = on2CodeValues mkVal void (toCode empty)
-  (?&&) _ _ = on2CodeValues mkVal void (toCode empty)
-  (?||) _ _ = on2CodeValues mkVal void (toCode empty)
+  (?!) _ = mkVal void empty
+  (?&&) _ _ = mkVal void empty
+  (?||) _ _ = mkVal void empty
 
-  (?<) _ _ = on2CodeValues mkVal void (toCode empty)
-  (?<=) _ _ = on2CodeValues mkVal void (toCode empty)
-  (?>) _ _ = on2CodeValues mkVal void (toCode empty)
-  (?>=) _ _ = on2CodeValues mkVal void (toCode empty)
-  (?==) _ _ = on2CodeValues mkVal void (toCode empty)
-  (?!=) _ _ = on2CodeValues mkVal void (toCode empty)
+  (?<) _ _ = mkVal void empty
+  (?<=) _ _ = mkVal void empty
+  (?>) _ _ = mkVal void empty
+  (?>=) _ _ = mkVal void empty
+  (?==) _ _ = mkVal void empty
+  (?!=) _ _ = mkVal void empty
    
 instance ValueExpression CppHdrCode where
-  inlineIf _ _ _ = on2CodeValues mkVal void (toCode empty)
-  funcApp _ _ _ = on2CodeValues mkVal void (toCode empty)
-  selfFuncApp _ _ _ _ = on2CodeValues mkVal void (toCode empty)
-  extFuncApp _ _ _ _ = on2CodeValues mkVal void (toCode empty)
-  newObj _ _ = on2CodeValues mkVal void (toCode empty)
-  extNewObj _ _ _ = on2CodeValues mkVal void (toCode empty)
+  inlineIf _ _ _ = mkVal void empty
+  funcApp _ _ _ = mkVal void empty
+  selfFuncApp _ _ _ _ = mkVal void empty
+  extFuncApp _ _ _ _ = mkVal void empty
+  newObj _ _ = mkVal void empty
+  extNewObj _ _ _ = mkVal void empty
 
-  exists _ = on2CodeValues mkVal void (toCode empty)
-  notNull _ = on2CodeValues mkVal void (toCode empty)
+  exists _ = mkVal void empty
+  notNull _ = mkVal void empty
 
 instance InternalValue CppHdrCode where
-  inputFunc = on2CodeValues mkVal void (toCode empty)
-  printFunc = on2CodeValues mkVal void (toCode empty)
-  printLnFunc = on2CodeValues mkVal void (toCode empty)
-  printFileFunc _ = on2CodeValues mkVal void (toCode empty)
-  printFileLnFunc _ = on2CodeValues mkVal void (toCode empty)
+  inputFunc = mkVal void empty
+  printFunc = mkVal void empty
+  printLnFunc = mkVal void empty
+  printFileFunc _ = mkVal void empty
+  printFileLnFunc _ = mkVal void empty
   
-  cast _ _ = on2CodeValues mkVal void (toCode empty)
+  cast _ _ = mkVal void empty
   
+  valuePrec = valPrec . unCPPHC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CppHdrCode where
-  objAccess _ _ = on2CodeValues mkVal void (toCode empty)
-  ($.) _ _ = on2CodeValues mkVal void (toCode empty)
+  objAccess _ _ = mkVal void empty
+  ($.) _ _ = mkVal void empty
 
-  objMethodCall _ _ _ _ = on2CodeValues mkVal void (toCode empty)
-  objMethodCallNoParams _ _ _ = on2CodeValues mkVal void (toCode empty)
+  objMethodCall _ _ _ _ = mkVal void empty
+  objMethodCallNoParams _ _ _ = mkVal void empty
 
-  selfAccess _ _ = on2CodeValues mkVal void (toCode empty)
+  selfAccess _ _ = mkVal void empty
 
-  listIndexExists _ _ = on2CodeValues mkVal void (toCode empty)
-  argExists _ = on2CodeValues mkVal void (toCode empty)
+  listIndexExists _ _ = mkVal void empty
+  argExists _ = mkVal void empty
   
-  indexOf _ _ = on2CodeValues mkVal void (toCode empty)
+  indexOf _ _ = mkVal void empty
 
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
-  func _ _ _ = on2CodeValues fd void (toCode empty)
+  func _ _ _ = funcFromData void empty
   
-  get _ _ = on2CodeValues mkVal void (toCode empty)
-  set _ _ _ = on2CodeValues mkVal void (toCode empty)
+  get _ _ = mkVal void empty
+  set _ _ _ = mkVal void empty
 
-  listSize _ = on2CodeValues mkVal void (toCode empty)
-  listAdd _ _ _ = on2CodeValues mkVal void (toCode empty)
-  listAppend _ _ = on2CodeValues mkVal void (toCode empty)
+  listSize _ = mkVal void empty
+  listAdd _ _ _ = mkVal void empty
+  listAppend _ _ = mkVal void empty
 
-  iterBegin _ = on2CodeValues mkVal void (toCode empty)
-  iterEnd _ = on2CodeValues mkVal void (toCode empty)
+  iterBegin _ = mkVal void empty
+  iterEnd _ = mkVal void empty
 
 instance SelectorFunction CppHdrCode where
-  listAccess _ _ = on2CodeValues mkVal void (toCode empty)
-  listSet _ _ _ = on2CodeValues mkVal void (toCode empty)
-  at _ _ = on2CodeValues mkVal void (toCode empty)
+  listAccess _ _ = mkVal void empty
+  listSet _ _ _ = mkVal void empty
+  at _ _ = mkVal void empty
 
 instance InternalFunction CppHdrCode where
-  getFunc _ = on2CodeValues fd void (toCode empty)
-  setFunc _ _ _ = on2CodeValues fd void (toCode empty)
+  getFunc _ = funcFromData void empty
+  setFunc _ _ _ = funcFromData void empty
 
-  listSizeFunc = on2CodeValues fd void (toCode empty)
-  listAddFunc _ _ _ = on2CodeValues fd void (toCode empty)
-  listAppendFunc _ = on2CodeValues fd void (toCode empty)
+  listSizeFunc = funcFromData void empty
+  listAddFunc _ _ _ = funcFromData void empty
+  listAppendFunc _ = funcFromData void empty
 
-  iterBeginFunc _ = on2CodeValues fd void (toCode empty)
-  iterEndFunc _ = on2CodeValues fd void (toCode empty)
+  iterBeginFunc _ = funcFromData void empty
+  iterEndFunc _ = funcFromData void empty
 
-  listAccessFunc _ _ = on2CodeValues fd void (toCode empty)
-  listSetFunc _ _ _ = on2CodeValues fd void (toCode empty)
+  listAccessFunc _ _ = funcFromData void empty
+  listSetFunc _ _ _ = funcFromData void empty
   
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unCPPHC
@@ -1659,12 +1677,12 @@ instance InternalFunction CppHdrCode where
   funcFromData t d = on2CodeValues fd t (toCode d)
 
 instance InternalStatement CppHdrCode where
-  printSt _ _ _ _ = toCode (mkStNoEnd empty)
+  printSt _ _ _ _ = emptyState
 
   state = stateD
-  loopState _ = toCode (mkStNoEnd empty)
+  loopState _ = emptyState
 
-  emptyState = toCode $ mkStNoEnd empty
+  emptyState = emptyStateD
   statementDoc = fst . unCPPHC
   statementTerm = snd . unCPPHC
   
@@ -1672,99 +1690,99 @@ instance InternalStatement CppHdrCode where
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
-  assign _ _ = toCode (mkStNoEnd empty)
-  assignToListIndex _ _ _ = toCode (mkStNoEnd empty)
-  multiAssign _ _ = toCode (mkStNoEnd empty)
-  (&=) _ _ = toCode (mkStNoEnd empty)
-  (&-=) _ _ = toCode (mkStNoEnd empty)
-  (&+=) _ _ = toCode (mkStNoEnd empty)
-  (&++) _ = toCode (mkStNoEnd empty)
-  (&~-) _ = toCode (mkStNoEnd empty)
+  assign _ _ = emptyState
+  assignToListIndex _ _ _ = emptyState
+  multiAssign _ _ = emptyState
+  (&=) _ _ = emptyState
+  (&-=) _ _ = emptyState
+  (&+=) _ _ = emptyState
+  (&++) _ = emptyState
+  (&~-) _ = emptyState
 
   varDec = G.varDec static_ dynamic_
   varDecDef = G.varDecDef
-  listDec _ _ = toCode (mkStNoEnd empty)
-  listDecDef _ _ = toCode (mkStNoEnd empty)
-  objDecDef _ _ = toCode (mkStNoEnd empty)
-  objDecNew _ _ = toCode (mkStNoEnd empty)
-  extObjDecNew _ _ _ = toCode (mkStNoEnd empty)
-  objDecNewNoParams _ = toCode (mkStNoEnd empty)
-  extObjDecNewNoParams _ _ = toCode (mkStNoEnd empty)
+  listDec _ _ = emptyState
+  listDecDef _ _ = emptyState
+  objDecDef _ _ = emptyState
+  objDecNew _ _ = emptyState
+  extObjDecNew _ _ _ = emptyState
+  objDecNewNoParams _ = emptyState
+  extObjDecNewNoParams _ _ = emptyState
   constDecDef = constDecDefD
 
-  print _ = toCode (mkStNoEnd empty)
-  printLn _ = toCode (mkStNoEnd empty)
-  printStr _ = toCode (mkStNoEnd empty)
-  printStrLn _ = toCode (mkStNoEnd empty)
+  print _ = emptyState
+  printLn _ = emptyState
+  printStr _ = emptyState
+  printStrLn _ = emptyState
 
-  printFile _ _ = toCode (mkStNoEnd empty)
-  printFileLn _ _ = toCode (mkStNoEnd empty)
-  printFileStr _ _ = toCode (mkStNoEnd empty)
-  printFileStrLn _ _ = toCode (mkStNoEnd empty)
+  printFile _ _ = emptyState
+  printFileLn _ _ = emptyState
+  printFileStr _ _ = emptyState
+  printFileStrLn _ _ = emptyState
 
-  getInput _ = toCode (mkStNoEnd empty)
-  discardInput = toCode (mkStNoEnd empty)
-  getFileInput _ _ = toCode (mkStNoEnd empty)
-  discardFileInput _ = toCode (mkStNoEnd empty)
+  getInput _ = emptyState
+  discardInput = emptyState
+  getFileInput _ _ = emptyState
+  discardFileInput _ = emptyState
 
-  openFileR _ _ = toCode (mkStNoEnd empty)
-  openFileW _ _ = toCode (mkStNoEnd empty)
-  openFileA _ _ = toCode (mkStNoEnd empty)
-  closeFile _ = toCode (mkStNoEnd empty)
+  openFileR _ _ = emptyState
+  openFileW _ _ = emptyState
+  openFileA _ _ = emptyState
+  closeFile _ = emptyState
 
-  getFileInputLine _ _ = toCode (mkStNoEnd empty)
-  discardFileLine _ = toCode (mkStNoEnd empty)
-  stringSplit _ _ _ = toCode (mkStNoEnd empty)
+  getFileInputLine _ _ = emptyState
+  discardFileLine _ = emptyState
+  stringSplit _ _ _ = emptyState
 
-  stringListVals _ _ = toCode (mkStNoEnd empty)
-  stringListLists _ _ = toCode (mkStNoEnd empty)
+  stringListVals _ _ = emptyState
+  stringListLists _ _ = emptyState
 
-  break = toCode (mkStNoEnd empty)
-  continue = toCode (mkStNoEnd empty)
+  break = emptyState
+  continue = emptyState
 
-  returnState _ = toCode (mkStNoEnd empty)
-  multiReturn _ = toCode (mkStNoEnd empty)
+  returnState _ = emptyState
+  multiReturn _ = emptyState
 
-  valState _ = toCode (mkStNoEnd empty)
+  valState _ = emptyState
 
-  comment _ = toCode (mkStNoEnd empty)
+  comment _ = emptyState
 
-  free _ = toCode (mkStNoEnd empty)
+  free _ = emptyState
 
-  throw _ = toCode (mkStNoEnd empty)
+  throw _ = emptyState
 
-  initState _ _ = toCode (mkStNoEnd empty)
-  changeState _ _ = toCode (mkStNoEnd empty)
+  initState _ _ = emptyState
+  changeState _ _ = emptyState
 
-  initObserverList _ _ = toCode (mkStNoEnd empty)
-  addObserver _ = toCode (mkStNoEnd empty)
+  initObserverList _ _ = emptyState
+  addObserver _ = emptyState
 
-  inOutCall _ _ _ _ = toCode (mkStNoEnd empty)
-  selfInOutCall _ _ _ _ _ = toCode (mkStNoEnd empty)
-  extInOutCall _ _ _ _ _ = toCode (mkStNoEnd empty)
+  inOutCall _ _ _ _ = emptyState
+  selfInOutCall _ _ _ _ _ = emptyState
+  extInOutCall _ _ _ _ _ = emptyState
 
-  multi _ = toCode (mkStNoEnd empty)
+  multi _ = emptyState
 
 instance ControlStatementSym CppHdrCode where
-  ifCond _ _ = toCode (mkStNoEnd empty)
-  ifNoElse _ = toCode (mkStNoEnd empty)
-  switch _ _ _ = toCode (mkStNoEnd empty)
-  switchAsIf _ _ _ = toCode (mkStNoEnd empty)
+  ifCond _ _ = emptyState
+  ifNoElse _ = emptyState
+  switch _ _ _ = emptyState
+  switchAsIf _ _ _ = emptyState
 
-  ifExists _ _ _ = toCode (mkStNoEnd empty)
+  ifExists _ _ _ = emptyState
 
-  for _ _ _ _ = toCode (mkStNoEnd empty)
-  forRange _ _ _ _ _ = toCode (mkStNoEnd empty)
-  forEach _ _ _ = toCode (mkStNoEnd empty)
-  while _ _ = toCode (mkStNoEnd empty)
+  for _ _ _ _ = emptyState
+  forRange _ _ _ _ _ = emptyState
+  forEach _ _ _ = emptyState
+  while _ _ = emptyState
 
-  tryCatch _ _ = toCode (mkStNoEnd empty)
+  tryCatch _ _ = emptyState
 
-  checkState _ _ _ = toCode (mkStNoEnd empty)
+  checkState _ _ _ = emptyState
 
-  notifyObservers _ _ = toCode (mkStNoEnd empty)
+  notifyObservers _ _ = emptyState
 
-  getFileInputAll _ _ = toCode (mkStNoEnd empty)
+  getFileInputAll _ _ = emptyState
 
 instance ScopeSym CppHdrCode where
   type Scope CppHdrCode = (Doc, ScopeTag)
@@ -1845,17 +1863,12 @@ instance InternalStateVar CppHdrCode where
 
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
-  -- do this with a do? avoids on8CodeValues...
-  buildClass n p _ vs mths = on2StateLists (\vars funcs -> on8CodeValues 
-    (cpphClass n) (on2CodeLists (cpphVarsFuncsList Pub) vars funcs) 
-    (on2CodeLists (cpphVarsFuncsList Priv) vars funcs) 
-    (onCodeValue fst public) (onCodeValue fst private) parent blockStart 
-    blockEnd endStatement) (map (zoom lensFStoGS) vs) fs
-    where parent = case p of Nothing -> toCode empty
-                             Just pn -> inherit pn
-          fs = map (zoom lensFStoMS) $ mths ++ [destructor n vs]
-  enum n es _ = toState $ on4CodeValues (cpphEnum n) (toCode $ enumElementsDocD 
-    es enumsEqualInts) blockStart blockEnd endStatement
+  buildClass n p _ vs mths = on2StateLists (\vars funcs -> cpphClass n p vars 
+    funcs public private blockStart blockEnd endStatement) 
+    (map (zoom lensFStoGS) vs) fs
+    where fs = map (zoom lensFStoMS) $ mths ++ [destructor n vs]
+  enum n es _ = cpphEnum n (enumElementsDocD es enumsEqualInts) blockStart 
+    blockEnd endStatement
   privClass = G.privClass
   pubClass = G.pubClass
 
@@ -1959,21 +1972,18 @@ usingNameSpace n Nothing end = text "using namespace" <+> text n <> end
 cppInherit :: Label -> Doc -> Doc
 cppInherit n pub = colon <+> pub <+> text n
 
-cppBoolTypeDoc :: TypeData
-cppBoolTypeDoc = td Boolean "bool" (text "bool")
+cppBoolType :: (RenderSym repr) => repr (Type repr)
+cppBoolType = typeFromData Boolean "bool" (text "bool")
 
-cppFloatTypeDoc :: TypeData
-cppFloatTypeDoc = td Float "double" (text "double")
+cppInfileType :: (RenderSym repr) => repr (Type repr)
+cppInfileType = typeFromData File "ifstream" (text "ifstream")
 
-cppInfileTypeDoc :: TypeData
-cppInfileTypeDoc = td File "ifstream" (text "ifstream")
+cppOutfileType :: (RenderSym repr) => repr (Type repr)
+cppOutfileType = typeFromData File "ofstream" (text "ofstream")
 
-cppOutfileTypeDoc :: TypeData
-cppOutfileTypeDoc = td File "ofstream" (text "ofstream")
-
-cppIterTypeDoc :: TypeData -> TypeData
-cppIterTypeDoc t = td (Iterator (cType t)) (typeString t ++ "::iterator")
-  (text "std::" <> typeDoc t <> text "::iterator")
+cppIterType :: (RenderSym repr) => repr (Type repr) -> repr (Type repr)
+cppIterType t = typeFromData (Iterator (getType t)) (getTypeString t ++ 
+  "::iterator") (text "std::" <> getTypeDoc t <> text "::iterator")
 
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c <> text "::" <> v
@@ -1986,8 +1996,8 @@ cppCast :: CppSrcCode (Type CppSrcCode) ->
   CppSrcCode (Value CppSrcCode) -> CppSrcCode (Value CppSrcCode)
 cppCast t v = cppCast' (getType t) (getType $ valueType v)
   where cppCast' Float String = funcApp "std::stod" float [v]
-        cppCast' _ _ = on2CodeValues mkVal t $ on2CodeValues castObjDocD 
-          (onCodeValue castDocD t) v
+        cppCast' _ _ = mkVal t $ castObjDocD (castDocD (getTypeDoc t)) 
+          (valueDoc v)
 
 cppListSetDoc :: Doc -> Doc -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens i <+> equals <+> v
@@ -1998,10 +2008,11 @@ cppListDecDoc n = parens (valueDoc n)
 cppListDecDefDoc :: (RenderSym repr) => [repr (Value repr)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
-cppPrint :: Bool -> ValData -> ValData -> Doc
-cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> val (valDoc v) <+> 
-  end
-  where val = if maybe False (< 9) (valPrec v) then parens else id
+cppPrint :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
+  -> Doc
+cppPrint newLn printFn v = valueDoc printFn <+> text "<<" <+> val (valueDoc v) 
+  <+> end
+  where val = if maybe False (< 9) (valuePrec v) then parens else id
         end = if newLn then text "<<" <+> text "std::endl" else empty
 
 cppThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
@@ -2020,15 +2031,17 @@ cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens
   (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
   quotes (text sep))
 
-cppInput :: VarData -> ValData -> Doc -> Doc
+cppInput :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
+  repr (Keyword repr) -> Doc
 cppInput v inFn end = vcat [
-  valDoc inFn <+> text ">>" <+> varDoc v <> end,
-  valDoc inFn <> dot <> 
+  valueDoc inFn <+> text ">>" <+> variableDoc v <> keyDoc end,
+  valueDoc inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]
 
-cppOpenFile :: Label -> VarData -> ValData -> Doc
-cppOpenFile mode f n = varDoc f <> dot <> text "open" <> 
-  parens (valDoc n <> comma <+> text mode)
+cppOpenFile :: (RenderSym repr) => Label -> repr (Variable repr) -> 
+  repr (Value repr) -> Doc
+cppOpenFile mode f n = variableDoc f <> dot <> text "open" <> 
+  parens (valueDoc n <> comma <+> text mode)
 
 cppPointerParamDoc :: VarData -> Doc
 cppPointerParamDoc v = typeDoc (varType v) <+> text "&" <> varDoc v
@@ -2076,35 +2089,46 @@ cpphStateVarDef :: (RenderSym repr) => Doc -> repr (Permanence repr) ->
 cpphStateVarDef s p vr vl = stateVarDocD s (permDoc p) (statementDoc $ state $ 
   if binding p == Static then varDec vr else varDecDef vr vl) 
 
-cpphVarsFuncsList :: ScopeTag -> [StateVarData] -> [MethodData] -> Doc
+cpphVarsFuncsList :: ScopeTag -> [CppHdrCode (StateVar CppHdrCode)] -> 
+  [CppHdrCode (Method CppHdrCode)] -> Doc
 cpphVarsFuncsList st vs fs = 
-  let scopedVs = [stVarDoc v | v <- vs, getStVarScp v == st]
-      scopedFs = [mthdDoc f | f <- fs, getMthdScp f == st]
+  let scopedVs = [stateVarDoc v | v <- vs, getStVarScp (unCPPHC v) == st]
+      scopedFs = [methodDoc f | f <- fs, getMthdScp (unCPPHC f) == st]
   in vcat $ scopedVs ++ (if null scopedVs then empty else blank) : scopedFs
 
-cppsClass :: [StateVarData] -> [MethodData] -> Doc
-cppsClass vs fs = vcat $ vars ++ (if any (not . isEmpty) vars then blank else
-  empty) : funcs
-  where vars = map stVarDoc vs
-        funcs = map mthdDoc fs
+cppsClass :: [CppSrcCode (StateVar CppSrcCode)] -> 
+  [CppSrcCode (Method CppSrcCode)] -> CppSrcCode (Class CppSrcCode)
+cppsClass vs fs = toCode $ vcat $ vars ++ (if any (not . isEmpty) vars then 
+  blank else empty) : funcs
+  where vars = map stateVarDoc vs
+        funcs = map methodDoc fs
 
-cpphClass :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> 
-  Doc
-cpphClass n pubs privs pub priv inhrt bStart bEnd end = vcat [
-    classDec <+> text n <+> inhrt <+> bStart,
+cpphClass :: Label -> Maybe Label -> [CppHdrCode (StateVar CppHdrCode)] -> 
+  [CppHdrCode (Method CppHdrCode)] -> CppHdrCode (Scope CppHdrCode) -> 
+  CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Keyword CppHdrCode) -> 
+  CppHdrCode (Keyword CppHdrCode) -> CppHdrCode (Keyword CppHdrCode) -> 
+  CppHdrCode (Class CppHdrCode)
+cpphClass n p vars funcs pub priv bStart bEnd end = toCode $ vcat [
+    classDec <+> text n <+> keyDoc (parent :: CppHdrCode (Keyword CppHdrCode)) 
+    <+> keyDoc bStart,
     indentList [
-      pub <> colon,
+      scopeDoc pub <> colon,
       indent pubs,
       blank,
-      priv <> colon,
+      scopeDoc priv <> colon,
       indent privs],
-    bEnd <> end]
+    keyDoc bEnd <> keyDoc end]
+  where pubs = cpphVarsFuncsList Pub vars funcs
+        privs = cpphVarsFuncsList Priv vars funcs
+        parent = case p of Nothing -> toCode empty
+                           Just pn -> inherit pn
 
-cpphEnum :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
-cpphEnum n es bStart bEnd end = vcat [
-  text "enum" <+> text n <+> bStart,
+cpphEnum :: (RenderSym repr) => Label -> Doc -> repr (Keyword repr) -> 
+  repr (Keyword repr) -> repr (Keyword repr) -> FS (repr (Class repr))
+cpphEnum n es bStart bEnd end = classFromData $ toState $ vcat [
+  text "enum" <+> text n <+> keyDoc bStart,
   indent es,
-  bEnd <> end]
+  keyDoc bEnd <> keyDoc end]
 
 cppInOutCall :: (Label -> CppSrcCode (Type CppSrcCode) -> 
   [CppSrcCode (Value CppSrcCode)] -> CppSrcCode (Value CppSrcCode)) -> Label -> 

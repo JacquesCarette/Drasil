@@ -9,18 +9,15 @@ module GOOL.Drasil.LanguageRenderer (
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, 
-  printDoc, printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
-  charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, listInnerTypeD, voidDocD, destructorError, paramDocD, 
-  paramListDocD, mkParam, methodDocD, methodListDocD, stateVarDocD, 
-  constVarDocD, stateVarListDocD, switchDocD, assignDocD, multiAssignDoc, 
-  plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', listDecDocD, 
-  listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, mkSt, 
-  mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, 
-  emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, 
-  incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
+  printDoc, printFileDocD, destructorError, paramDocD, paramListDocD, mkParam, 
+  methodDocD, methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD, 
+  switchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusPlusDocD, 
+  listDecDocD, listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD,
+  mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, 
+  loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, 
+  decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
   discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, 
-  discardFileLineD, breakD, continueD, returnD, multiReturnError, valStateD, 
+  discardFileLineD, returnD, multiReturnError, valStateD, 
   freeError, throwD, initStateD, changeStateD, initObserverListD, addObserverD, 
   ifNoElseD, switchD, switchAsIfD, ifExistsD, forRangeD, tryCatchD, stratDocD, 
   runStrategyD, listSliceD, checkStateD, notifyObserversD, unOpPrec, notOpDocD, 
@@ -34,7 +31,7 @@ module GOOL.Drasil.LanguageRenderer (
   binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, mkVar,
   mkStaticVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
   varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, classVarCheckStatic, 
-  classVarDocD, objVarDocD, inlineIfD, funcAppDocD, newObjDocD, newObjDocD', 
+  classVarDocD, objVarDocD, funcAppDocD, newObjDocD, newObjDocD', 
   constDecDefDocD, varD, staticVarD, extVarD, selfD, enumVarD, classVarD, 
   objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, 
   enumElementD, argsListD, funcAppD, selfFuncAppD, extFuncAppD, newObjD, 
@@ -46,9 +43,9 @@ module GOOL.Drasil.LanguageRenderer (
   iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDox, classDox, moduleDox, commentedModD, docFuncRepr, valList, 
-  valueList, prependToBody, appendToBody, surroundBody, getterName, setterName, 
-  setEmpty, intValue, filterOutObjs
+  functionDox, classDox, moduleDox, commentedModD, docFuncRepr, 
+  valueList, variableList, prependToBody, appendToBody, surroundBody, 
+  getterName, setterName, setEmpty, intValue, filterOutObjs
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -58,21 +55,20 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
   BlockSym(..), InternalBlock(..), PermanenceSym(..),
   TypeSym(Type, getType, getTypeString, getTypeDoc, bool, float, string, infile,
     outfile, listType, listInnerType, obj, enumType, iterator, void), 
-  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
+  InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   MethodSym(..), InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
-  updateModDoc, OpData(..), od, ParamData(..), pd, paramName, TypeData(..), td, 
-  ValData(..), vd, Binding(..), VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
-  emptyIfEmpty, emptyIfNull, onStateValue, getInnerType, getNestDegree, 
-  convType)
+  updateModDoc, OpData(..), od, ParamData(..), pd, paramName, TypeData(..), 
+  Binding(..), VarData(..))
+import GOOL.Drasil.Helpers (doubleQuotedText, hicat, vibcat, vmap, 
+  emptyIfEmpty, emptyIfNull, onStateValue, getNestDegree)
 import GOOL.Drasil.State (MS, getParameters)
 
-import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
 import Data.Bifunctor (first)
 import Data.Map as Map (lookup, fromList)
@@ -219,49 +215,8 @@ outDoc newLn printFn v f = outDoc' (getType $ valueType v)
         prStrFn = maybe printStr printFileStr f
         prLnFn = if newLn then maybe printStrLn printFileStrLn f else maybe printStr printFileStr f 
 
-printFileDocD :: Label -> ValData -> Doc
-printFileDocD fn f = valDoc f <> dot <> text fn
-
--- Type Printers --
-
-boolTypeDocD :: TypeData
-boolTypeDocD = td Boolean "Boolean" (text "Boolean") -- capital B?
-
-intTypeDocD :: TypeData
-intTypeDocD = td Integer "int" (text "int")
-
-floatTypeDocD :: TypeData
-floatTypeDocD = td Float "float" (text "float")
-
-charTypeDocD :: TypeData
-charTypeDocD = td Char "char" (text "char")
-
-stringTypeDocD :: TypeData
-stringTypeDocD = td String "string" (text "string")
-
-fileTypeDocD :: TypeData
-fileTypeDocD = td File "File" (text "File")
-
-typeDocD :: Label -> TypeData
-typeDocD t = td (Object t) t (text t)
-
-enumTypeDocD :: Label -> TypeData
-enumTypeDocD t = td (Enum t) t (text t)
-
-listTypeDocD :: TypeData -> Doc -> TypeData
-listTypeDocD t lst = td (List (cType t)) 
-  (render lst ++ "<" ++ typeString t ++ ">") (lst <> angles (typeDoc t))
-
-listInnerTypeD :: (RenderSym repr) => repr (Type repr) -> repr (Type repr)
-listInnerTypeD = convType . getInnerType . getType
-
--- Method Types --
-
-voidDocD :: TypeData
-voidDocD = td Void "void" (text "void")
-
-destructorError :: String -> String
-destructorError l = "Destructors not allowed in " ++ l
+printFileDocD :: Label -> Doc -> Doc
+printFileDocD fn f = f <> dot <> text fn
 
 -- Parameters --
 
@@ -285,6 +240,9 @@ methodDocD n s p t ps b = vcat [
 methodListDocD :: [Doc] -> Doc
 methodListDocD ms = vibcat methods
   where methods = filter (not . isEmpty) ms
+  
+destructorError :: String -> String
+destructorError l = "Destructors not allowed in " ++ l
 
 -- StateVar --
 
@@ -375,23 +333,16 @@ assignDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) ->
   Doc
 assignDocD vr vl = variableDoc vr <+> equals <+> valueDoc vl
 
-multiAssignDoc :: [VarData] -> [ValData] -> Doc
-multiAssignDoc vrs vls = varList vrs <+> equals <+> valList vls
+multiAssignDoc :: (RenderSym repr) => [repr (Variable repr)] -> 
+  [repr (Value repr)] -> Doc
+multiAssignDoc vrs vls = variableList vrs <+> equals <+> valueList vls
 
 plusEqualsDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) 
   -> Doc
 plusEqualsDocD vr vl = variableDoc vr <+> text "+=" <+> valueDoc vl
 
-plusEqualsDocD' :: VarData -> OpData -> ValData -> Doc
-plusEqualsDocD' vr plusOp vl = varDoc vr <+> equals <+> varDoc vr <+> 
-  opDoc plusOp <+> valDoc vl
-
 plusPlusDocD :: (RenderSym repr) => repr (Variable repr) -> Doc
 plusPlusDocD v = variableDoc v <> text "++"
-
-plusPlusDocD' :: VarData -> OpData -> Doc
-plusPlusDocD' v plusOp = varDoc v <+> equals <+> varDoc v <+> opDoc plusOp <+>
-  int 1
 
 listDecDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
   Doc
@@ -414,8 +365,8 @@ returnDocD vs = text "return" <+> valueList vs
 commentDocD :: Label -> Doc -> Doc
 commentDocD cmt cStart = cStart <+> text cmt
 
-freeDocD :: VarData -> Doc
-freeDocD v = text "delete" <+> text "&" <> varDoc v
+freeDocD :: (RenderSym repr) => repr (Variable repr) -> Doc
+freeDocD v = text "delete" <+> text "&" <> variableDoc v
 
 statementDocD :: (Doc, Terminator) -> (Doc, Terminator)
 statementDocD (s, t) = (s <> getTermDoc t, Empty)
@@ -424,11 +375,11 @@ getTermDoc :: Terminator -> Doc
 getTermDoc Semi = semi
 getTermDoc Empty = empty
 
-mkSt :: Doc -> (Doc, Terminator)
-mkSt s = (s, Semi)
+mkSt :: (RenderSym repr) => Doc -> repr (Statement repr)
+mkSt = flip stateFromData Semi
 
-mkStNoEnd :: Doc -> (Doc, Terminator)
-mkStNoEnd s = (s, Empty)
+mkStNoEnd :: (RenderSym repr) => Doc -> repr (Statement repr)
+mkStNoEnd = flip stateFromData Empty
 
 stringListVals' :: (RenderSym repr) => [repr (Variable repr)] -> 
   repr (Value repr) -> repr (Statement repr)
@@ -533,12 +484,6 @@ closeFileD n f = valState $ objMethodCallNoParams void f n
 discardFileLineD :: (RenderSym repr) => Label -> repr (Value repr) -> 
   repr (Statement repr)
 discardFileLineD n f = valState $ objMethodCallNoParams string f n 
-
-breakD :: (RenderSym repr) => Terminator -> repr (Statement repr)
-breakD = stateFromData breakDocD
-
-continueD :: (RenderSym repr) => Terminator -> repr (Statement repr)
-continueD = stateFromData continueDocD
 
 returnD :: (RenderSym repr) => Terminator -> repr (Value repr) -> 
   repr (Statement repr)
@@ -677,14 +622,18 @@ unOpDocD op v = op <> parens v
 unOpDocD' :: Doc -> Doc -> Doc
 unOpDocD' op v = op <> v
 
-unExpr :: OpData -> ValData -> ValData
-unExpr u v = mkExpr (opPrec u) (valType v) (unOpDocD (opDoc u) (valDoc v))
+unExpr :: (RenderSym repr) => repr (UnaryOp repr) -> repr (Value repr) -> 
+  repr (Value repr)
+unExpr u v = mkExpr (uOpPrec u) (valueType v) (unOpDocD (uOpDoc u) (valueDoc v))
 
-unExpr' :: OpData -> ValData -> ValData
-unExpr' u v = mkExpr (opPrec u) (valType v) (unOpDocD' (opDoc u) (valDoc v))
+unExpr' :: (RenderSym repr) => repr (UnaryOp repr) -> repr (Value repr) -> 
+  repr (Value repr)
+unExpr' u v = mkExpr (uOpPrec u) (valueType v) (unOpDocD' (uOpDoc u) 
+  (valueDoc v))
 
-typeUnExpr :: OpData -> TypeData -> ValData -> ValData
-typeUnExpr u t v = mkExpr (opPrec u) t (unOpDocD (opDoc u) (valDoc v))
+typeUnExpr :: (RenderSym repr) => repr (UnaryOp repr) -> repr (Type repr) -> 
+  repr (Value repr) -> repr (Value repr)
+typeUnExpr u t v = mkExpr (uOpPrec u) t (unOpDocD (uOpDoc u) (valueDoc v))
 
 -- Binary Operators --
 
@@ -757,37 +706,44 @@ binOpDocD op v1 v2 = v1 <+> op <+> v2
 binOpDocD' :: Doc -> Doc -> Doc -> Doc
 binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
   
-binExpr :: OpData -> ValData -> ValData -> ValData
-binExpr b v1 v2 = mkExpr (opPrec b) (numType (valType v1) (valType v2)) 
-  (binOpDocD (opDoc b) (exprParensL b v1 $ valDoc v1) (exprParensR b v2 $ 
-  valDoc v2))
+binExpr :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr)
+binExpr b v1 v2 = mkExpr (bOpPrec b) (numType (valueType v1) (valueType v2)) 
+  (binOpDocD (bOpDoc b) (exprParensL b v1 $ valueDoc v1) (exprParensR b v2 $ 
+  valueDoc v2))
 
-binExpr' :: OpData -> ValData -> ValData -> ValData
-binExpr' b v1 v2 = mkExpr 9 (numType (valType v1) (valType v2)) 
-  (binOpDocD' (opDoc b) (valDoc v1) (valDoc v2))
+binExpr' :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr)
+binExpr' b v1 v2 = mkExpr 9 (numType (valueType v1) (valueType v2)) 
+  (binOpDocD' (bOpDoc b) (valueDoc v1) (valueDoc v2))
 
-numType :: TypeData -> TypeData -> TypeData
-numType t1 t2 = numericType (cType t1) (cType t2)
+numType :: (RenderSym repr) => repr (Type repr) -> repr (Type repr) -> 
+  repr (Type repr)
+numType t1 t2 = numericType (getType t1) (getType t2)
   where numericType Integer Integer = t1
         numericType Float _ = t1
         numericType _ Float = t2
         numericType _ _ = error "Numeric types required for numeric expression"
 
-typeBinExpr :: OpData -> TypeData -> ValData -> ValData -> ValData
-typeBinExpr b t v1 v2 = mkExpr (opPrec b) t (binOpDocD (opDoc b) (exprParensL b 
-  v1 $ valDoc v1) (exprParensR b v2 $ valDoc v2))
+typeBinExpr :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Type repr) -> 
+  repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+typeBinExpr b t v1 v2 = mkExpr (bOpPrec b) t (binOpDocD (bOpDoc b) 
+  (exprParensL b v1 $ valueDoc v1) (exprParensR b v2 $ valueDoc v2))
 
-mkVal :: TypeData -> Doc -> ValData
-mkVal = vd Nothing
+mkVal :: (RenderSym repr) => repr (Type repr) -> Doc -> repr (Value repr)
+mkVal = valFromData Nothing
 
-mkVar :: String -> TypeData -> Doc -> VarData
-mkVar = vard Dynamic
+mkVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
+  repr (Variable repr)
+mkVar = varFromData Dynamic
 
-mkStaticVar :: String -> TypeData -> Doc -> VarData
-mkStaticVar = vard Static
+mkStaticVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
+  repr (Variable repr)
+mkStaticVar = varFromData Static
 
-mkExpr :: Int -> TypeData -> Doc -> ValData
-mkExpr p = vd (Just p)
+mkExpr :: (RenderSym repr) => Int -> repr (Type repr) -> Doc -> 
+  repr (Value repr)
+mkExpr p = valFromData (Just p)
 
 -- Literals --
 
@@ -839,11 +795,6 @@ classVarDocD c v = c <> dot <> v
 objVarDocD :: Doc -> Doc ->  Doc
 objVarDocD n1 n2 = n1 <> dot <> n2
 
-inlineIfD :: ValData -> ValData -> ValData -> ValData
-inlineIfD c v1 v2 = vd prec (valType v1) (valDoc c <+> text "?" <+> 
-  valDoc v1 <+> text ":" <+> valDoc v2)
-  where prec = valPrec c <|> Just 0
-
 funcAppDocD :: (RenderSym repr) => Label -> [repr (Value repr)] -> Doc
 funcAppDocD n vs = text n <> parens (valueList vs)
 
@@ -858,7 +809,7 @@ varD n t = varFromData Dynamic n t (varDocD n)
 
 staticVarD :: (RenderSym repr) => Label -> repr (Type repr) -> 
   repr (Variable repr)
-staticVarD n t = varFromData Static n t (varDocD n)
+staticVarD n t = mkStaticVar n t (varDocD n)
 
 extVarD :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
   repr (Variable repr)
@@ -958,8 +909,8 @@ indexOfD f l v = objAccess l (func f S.int [v])
 funcDocD :: Doc -> Doc
 funcDocD fnApp = dot <> fnApp
 
-castDocD :: TypeData -> Doc
-castDocD t = parens $ typeDoc t
+castDocD :: Doc -> Doc
+castDocD = parens
 
 listAccessFuncDocD :: (RenderSym repr) => repr (Value repr) -> Doc
 listAccessFuncDocD v = brackets $ valueDoc v
@@ -970,8 +921,8 @@ listSetFuncDocD i v = brackets i <+> equals <+> v
 objAccessDocD :: Doc -> Doc -> Doc
 objAccessDocD v f = v <> f
 
-castObjDocD :: Doc -> ValData -> Doc
-castObjDocD t v = t <> parens (valDoc v)
+castObjDocD :: Doc -> Doc -> Doc
+castObjDocD t v = t <> parens v
 
 funcD :: (RenderSym repr) => Label -> repr (Type repr) -> [repr (Value repr)] 
   -> repr (Function repr)
@@ -1141,14 +1092,11 @@ docFuncRepr desc pComms rComms = commentedFunc (docComment $ onStateValue
 
 -- Helper Functions --
 
-valList :: [ValData] -> Doc
-valList vs = hcat (intersperse (text ", ") (map valDoc vs))
-
 valueList :: (RenderSym repr) => [repr (Value repr)] -> Doc
 valueList vs = hcat (intersperse (text ", ") (map valueDoc vs))
 
-varList :: [VarData] -> Doc
-varList vs = hcat (intersperse (text ", ") (map varDoc vs))
+variableList :: (RenderSym repr) => [repr (Variable repr)] -> Doc
+variableList vs = hcat (intersperse (text ", ") (map variableDoc vs))
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 prependToBody s b = vcat [fst $ statementDocD s, maybeBlank, b]
@@ -1170,11 +1118,14 @@ setterName s = "set" ++ capitalize s
 setEmpty :: (RenderSym repr) => repr (Statement repr) -> repr (Statement repr)
 setEmpty s = stateFromData (statementDoc s) Empty
 
-exprParensL :: OpData -> ValData -> (Doc -> Doc)
-exprParensL o v = if maybe False (< opPrec o) (valPrec v) then parens else id
+exprParensL :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Value repr) -> 
+  (Doc -> Doc)
+exprParensL o v = if maybe False (< bOpPrec o) (valuePrec v) then parens else id
 
-exprParensR :: OpData -> ValData -> (Doc -> Doc)
-exprParensR o v = if maybe False (<= opPrec o) (valPrec v) then parens else id
+exprParensR :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Value repr) -> 
+  (Doc -> Doc)
+exprParensR o v = if maybe False (<= bOpPrec o) (valuePrec v) then parens else 
+  id
 
 intValue :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
 intValue i = intValue' (getType $ valueType i)

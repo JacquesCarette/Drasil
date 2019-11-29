@@ -2,12 +2,14 @@
 
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, block, 
-  pi, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
-  comment, ifCond, for, forEach, while, construct, method, getMethod, setMethod,
-  privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  docInOutFunc, intFunc, stateVar,stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, enum, privClass, pubClass, docClass, commentedClass, 
-  buildModule, buildModule', modFromData, fileDoc, docMod
+  pi, bool, int, float, double, char, string, fileType, listType, listInnerType,
+  obj, enumType, void, inlineIf, increment, increment1, varDec, varDecDef, 
+  listDec, listDecDef, objDecNew, objDecNewNoParams, comment, ifCond, for, 
+  forEach, while, construct, method, getMethod, setMethod,privMethod, pubMethod,
+  constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
+  stateVar,stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
+  privClass, pubClass, docClass, commentedClass, buildModule, buildModule', 
+  modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -16,9 +18,10 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   RenderSym(RenderFile, commentedMod), BlockSym(Block), 
   InternalBlock(..), BodySym(..), PermanenceSym(..), InternalPerm(..), 
-  TypeSym(..), InternalType(..), VariableSym(..), 
-  ValueSym(Value, valueOf, valueDoc),
-  ValueExpression(..), InternalValue(..), InternalStatement(..), 
+  TypeSym(Type, getType, getTypeDoc, getTypeString), InternalType(..), 
+  VariableSym(..), ValueSym(Value, litInt, valueOf, valueDoc, valueType), 
+  NumericExpression(..), ValueExpression(newObj), InternalValue(..), 
+  InternalStatement(..), 
   StatementSym(Statement, (&=), constDecDef, returnState), ScopeSym(..), 
   InternalScope(..), MethodTypeSym(mType), ParameterSym(..), 
   MethodTypeSym(MethodType), MethodSym(Method), 
@@ -27,14 +30,14 @@ import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   InternalClass(..), ModuleSym(Module), InternalMod(moduleDoc, updateModuleDoc),
   BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData), 
-  StatementSym(varDec, varDecDef), MethodTypeSym(construct), 
-  MethodSym(method, mainFunction), InternalMethod(intFunc), 
-  StateVarSym(stateVar), ClassSym(buildClass, commentedClass), 
-  InternalMod(modFromData))
+  TypeSym(float, void), StatementSym(varDec, varDecDef), 
+  MethodTypeSym(construct), MethodSym(method, mainFunction), 
+  InternalMethod(intFunc), StateVarSym(stateVar), 
+  ClassSym(buildClass, commentedClass), InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
   FileType)
-import GOOL.Drasil.Helpers (vibcat, vmap, emptyIfEmpty, toState, onStateValue, 
-  on2StateValues, onStateList)
+import GOOL.Drasil.Helpers (angles, vibcat, vmap, emptyIfEmpty, toState, 
+  onStateValue, on2StateValues, onStateList, getInnerType, convType)
 import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD, 
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
@@ -45,6 +48,7 @@ import GOOL.Drasil.State (GS, FS, MS, lensFStoGS, lensFStoMS, currMain,
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList)
+import Control.Applicative ((<|>))
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
@@ -55,8 +59,59 @@ block :: (RenderSym repr) => repr (Keyword repr) -> [repr (Statement repr)] ->
 block end sts = docBlock $ blockDocD (keyDoc end) (map (statementDoc . state) 
   sts)
 
+bool :: (RenderSym repr) => repr (Type repr)
+bool = typeFromData Boolean "Boolean" (text "Boolean")
+
+int :: (RenderSym repr) => repr (Type repr)
+int = typeFromData Integer "int" (text "int")
+
+float :: (RenderSym repr) => repr (Type repr)
+float = typeFromData Float "float" (text "float")
+
+double :: (RenderSym repr) => repr (Type repr)
+double = typeFromData Float "double" (text "double")
+
+char :: (RenderSym repr) => repr (Type repr)
+char = typeFromData Char "char" (text "char")
+
+string :: (RenderSym repr) => repr (Type repr)
+string = typeFromData String "string" (text "string")
+
+fileType :: (RenderSym repr) => repr (Type repr)
+fileType = typeFromData File "File" (text "File")
+
+listType :: (RenderSym repr) => repr (Permanence repr) -> repr (Type repr) -> 
+  repr (Type repr)
+listType p t = typeFromData (List (getType t)) (render (keyDoc $ list p) ++ 
+  "<" ++ getTypeString t ++ ">") (keyDoc (list p) <> angles (getTypeDoc t))
+
+listInnerType :: (RenderSym repr) => repr (Type repr) -> repr (Type repr)
+listInnerType = convType . getInnerType . getType
+
+obj :: (RenderSym repr) => Label -> repr (Type repr)
+obj n = typeFromData (Object n) n (text n)
+
+enumType :: (RenderSym repr) => Label -> repr (Type repr)
+enumType e = typeFromData (Enum e) e (text e)
+
+void :: (RenderSym repr) => repr (Type repr)
+void = typeFromData Void "void" (text "void")
+
 pi :: (RenderSym repr) => repr (Value repr)
-pi = valFromData Nothing float (text "Math.PI")
+pi = valFromData Nothing S.float (text "Math.PI")
+
+inlineIf :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr)
+inlineIf c v1 v2 = valFromData prec (valueType v1) (valueDoc c <+> text "?" <+> 
+  valueDoc v1 <+> text ":" <+> valueDoc v2)
+  where prec = valuePrec c <|> Just 0
+
+increment :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
+  repr (Statement repr)
+increment vr vl = vr &= valueOf vr #+ vl
+
+increment1 :: (RenderSym repr) => repr (Variable repr) -> repr (Statement repr)
+increment1 vr = vr &= valueOf vr #+ litInt 1
 
 varDec :: (RenderSym repr) => repr (Permanence repr) -> repr (Permanence repr) 
   -> repr (Variable repr) -> repr (Statement repr)
@@ -157,7 +212,7 @@ getMethod c v = S.method (getterName $ variableName v) c public dynamic_
 
 setMethod :: (RenderSym repr) => Label -> repr (Variable repr) -> 
   MS (repr (Method repr))
-setMethod c v = S.method (setterName $ variableName v) c public dynamic_ void 
+setMethod c v = S.method (setterName $ variableName v) c public dynamic_ S.void 
   [param v] setBody
   where setBody = oneLiner $ objVarSelf c v &= valueOf v
 
@@ -188,7 +243,7 @@ function n s p t = S.intFunc False n s p (mType t)
 
 mainFunction :: (RenderSym repr) => repr (Type repr) -> Label -> 
   repr (Body repr) -> MS (repr (Method repr))
-mainFunction s n = S.intFunc True n public static_ (mType void)
+mainFunction s n = S.intFunc True n public static_ (mType S.void)
   [param (var "args" (typeFromData (List String) (render (getTypeDoc s) ++ 
   "[]") (getTypeDoc s <> text "[]")))]
 

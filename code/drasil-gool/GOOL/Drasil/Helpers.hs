@@ -2,8 +2,7 @@ module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
   hicat, vicat, vibcat, vmap, vimap, vibmap, emptyIfEmpty, emptyIfNull, 
   mapPairFst, mapPairSnd, toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, 
-  on5CodeValues, on6CodeValues, on7CodeValues, on8CodeValues, onCodeList, 
-  onStateList, on2CodeLists, on2StateLists, on1CodeValue1List, 
+  on5CodeValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
   on1StateValue1List, getInnerType, getNestDegree, convType, checkParams
 ) where
 
@@ -99,27 +98,11 @@ on5CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g) -> f a -> f b ->
   f c -> f d -> f e -> f g
 on5CodeValues f a1 a2 a3 a4 a5 = on4CodeValues f a1 a2 a3 a4 <*> a5
 
-on6CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g -> h) -> f a -> f 
-  b -> f c -> f d -> f e -> f g -> f h
-on6CodeValues f a1 a2 a3 a4 a5 a6 = on5CodeValues f a1 a2 a3 a4 a5 <*> a6
-
-on7CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i) -> f a 
-  -> f b -> f c -> f d -> f e -> f g -> f h -> f i
-on7CodeValues f a1 a2 a3 a4 a5 a6 a7 = on6CodeValues f a1 a2 a3 a4 a5 a6 <*> a7
-
-on8CodeValues :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i -> j) 
-  -> f a -> f b -> f c -> f d -> f e -> f g -> f h -> f i -> f j
-on8CodeValues f a1 a2 a3 a4 a5 a6 a7 a8 = on7CodeValues f a1 a2 a3 a4 a5 a6 a7 
-  <*> a8
-
 onCodeList :: Monad m => ([a] -> b) -> [m a] -> m b
 onCodeList f as = f <$> sequence as
 
 onStateList :: ([a] -> b) -> [State s a] -> State s b
 onStateList f as = f <$> sequence as
-
-on2CodeLists :: Monad m => ([a] -> [b] -> c) -> [m a] -> [m b] -> m c
-on2CodeLists f as bs = liftA2 f (sequence as) (sequence bs)
 
 on2StateLists :: ([a] -> [b] -> c) -> [State s a] -> [State s b] -> State s c
 on2StateLists f as bs = liftM2 f (sequence as) (sequence bs)

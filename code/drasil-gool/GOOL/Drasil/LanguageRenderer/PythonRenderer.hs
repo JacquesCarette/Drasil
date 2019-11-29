@@ -12,7 +12,7 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..),
   VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
@@ -22,12 +22,11 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
   BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
-  bodyDocD, oneLinerD, outDoc, intTypeDocD, floatTypeDocD, typeDocD, 
-  enumTypeDocD, listInnerTypeD, destructorError, paramListDocD, mkParam, 
-  runStrategyD, checkStateD, multiAssignDoc, plusEqualsDocD', plusPlusDocD', 
-  returnDocD, mkStNoEnd, stringListVals', stringListLists', stateD, loopStateD, 
-  emptyStateD, assignD, assignToListIndexD, decrementD, decrement1D, closeFileD,
-  discardFileLineD, breakD, continueD, returnD, valStateD, throwD, initStateD, 
+  bodyDocD, oneLinerD, outDoc, destructorError, paramListDocD, mkParam, 
+  runStrategyD, checkStateD, multiAssignDoc, returnDocD, mkStNoEnd, 
+  stringListVals', stringListLists', stateD, loopStateD, emptyStateD, assignD, 
+  assignToListIndexD, decrementD, decrement1D, closeFileD, discardFileLineD, 
+  breakDocD, continueDocD, returnD, valStateD, throwD, initStateD, 
   changeStateD, initObserverListD, addObserverD, ifNoElseD, switchAsIfD, 
   ifExistsD, tryCatchD, unOpPrec, notOpDocD', negateOpDocD, sqrtOpDocD', 
   absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', 
@@ -44,22 +43,21 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, 
   iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, dynamicDocD, 
   bindingError, classDec, dot, forLabel, inLabel, observerListName, 
-  commentedItem, addCommentsDocD, commentedModD, docFuncRepr, valList, 
-  surroundBody, filterOutObjs)
+  commentedItem, addCommentsDocD, commentedModD, docFuncRepr, 
+  valueList, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, comment, ifCond, objDecNew, objDecNewNoParams, construct,
-  comment, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
-  function, docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, 
-  buildClass, privClass, pubClass, docClass, commentedClass, buildModule, 
-  modFromData, fileDoc, docMod)
+  fileFromData, block, int, float, listInnerType, obj, enumType, increment, 
+  increment1, comment, ifCond, objDecNew, objDecNewNoParams, construct, method, 
+  getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, 
+  pubClass, docClass, commentedClass, buildModule, modFromData, fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
-  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, 
-  on5CodeValues, on6CodeValues, onCodeList, onStateList, on1CodeValue1List, 
-  on2CodeLists, checkParams)
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
+  onCodeList, onStateList, on1CodeValue1List, checkParams)
 import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
   setCurrMain, setParameters)
 
@@ -163,19 +161,19 @@ instance InternalBlock PythonCode where
 
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData
-  bool = toCode $ td Boolean "" empty
-  int = toCode intTypeDocD
-  float = toCode floatTypeDocD
-  char = toCode $ td Char "" empty
-  string = toCode pyStringType
-  infile = toCode $ td File "" empty
-  outfile = toCode $ td File "" empty
-  listType _ t = toCode $ td (List (getType t)) "[]" (brackets empty)
-  listInnerType = listInnerTypeD
-  obj t = toCode $ typeDocD t
-  enumType t = toCode $ enumTypeDocD t
+  bool = typeFromData Boolean "" empty
+  int = G.int
+  float = G.float
+  char = typeFromData Char "" empty
+  string = pyStringType
+  infile = typeFromData File "" empty
+  outfile = typeFromData File "" empty
+  listType _ t = typeFromData (List (getType t)) "[]" (brackets empty)
+  listInnerType = G.listInnerType
+  obj = G.obj
+  enumType = G.enumType
   iterator t = t
-  void = toCode $ td Void "NoneType" (text "NoneType")
+  void = typeFromData Void "NoneType" (text "NoneType")
 
   getType = cType . unPC
   getTypeString = typeString . unPC
@@ -187,9 +185,9 @@ instance InternalType PythonCode where
 instance ControlBlockSym PythonCode where
   runStrategy = runStrategyD
 
-  listSlice vnew vold b e s = on5CodeValues pyListSlice vnew vold (getVal b) 
+  listSlice vnew vold b e s = toCode $ pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
-    where getVal = fromMaybe (on2CodeValues mkVal void (toCode empty))
+    where getVal = fromMaybe (mkVal void empty)
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData
@@ -226,13 +224,19 @@ instance BinaryOpSym PythonCode where
   andOp = toCode $ andPrec "and"
   orOp = toCode $ orPrec "or"
 
+instance InternalOp PythonCode where
+  uOpDoc = opDoc . unPC
+  bOpDoc = opDoc . unPC
+  uOpPrec = opPrec . unPC
+  bOpPrec = opPrec . unPC
+
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
   var = varD
   staticVar = staticVarD
   const = var
   extVar = extVarD
-  self l = on2CodeValues (mkVar "self") (obj l) (toCode $ text "self")
+  self l = mkVar "self" (obj l) (text "self")
   enumVar = enumVarD
   classVar = classVarD classVarDocD
   extClassVar = classVarD pyClassVar
@@ -254,14 +258,14 @@ instance InternalVariable PythonCode where
 
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
-  litTrue = on2CodeValues mkVal bool (toCode $ text "True")
-  litFalse = on2CodeValues mkVal bool (toCode $ text "False")
+  litTrue = mkVal bool (text "True")
+  litFalse = mkVal bool (text "False")
   litChar = litCharD
   litFloat = litFloatD
   litInt = litIntD
   litString = litStringD
 
-  pi = on2CodeValues mkVal float (toCode $ text "math.pi")
+  pi = mkVal float (text "math.pi")
 
   ($:) = enumElement
 
@@ -274,67 +278,66 @@ instance ValueSym PythonCode where
   valueDoc = valDoc . unPC
 
 instance NumericExpression PythonCode where
-  (#~) = on2CodeValues unExpr' negateOp
-  (#/^) = on2CodeValues unExpr sqrtOp
-  (#|) = on2CodeValues unExpr absOp
-  (#+) = on3CodeValues binExpr plusOp
-  (#-) = on3CodeValues binExpr minusOp
-  (#*) = on3CodeValues binExpr multOp
+  (#~) = unExpr' negateOp
+  (#/^) = unExpr sqrtOp
+  (#|) = unExpr absOp
+  (#+) = binExpr plusOp
+  (#-) = binExpr minusOp
+  (#*) = binExpr multOp
   (#/) v1 v2 = pyDivision (getType $ valueType v1) (getType $ valueType v2) 
-    where pyDivision Integer Integer = on2CodeValues (binExpr (multPrec "//")) 
-            v1 v2
-          pyDivision _ _ = on3CodeValues binExpr divideOp v1 v2
-  (#%) = on3CodeValues binExpr moduloOp
-  (#^) = on3CodeValues binExpr powerOp
+    where pyDivision Integer Integer = binExpr (toCode $ multPrec "//") v1 v2
+          pyDivision _ _ = binExpr divideOp v1 v2
+  (#%) = binExpr moduloOp
+  (#^) = binExpr powerOp
 
-  log = on2CodeValues unExpr logOp
-  ln = on2CodeValues unExpr lnOp
-  exp = on2CodeValues unExpr expOp
-  sin = on2CodeValues unExpr sinOp
-  cos = on2CodeValues unExpr cosOp
-  tan = on2CodeValues unExpr tanOp
+  log = unExpr logOp
+  ln = unExpr lnOp
+  exp = unExpr expOp
+  sin = unExpr sinOp
+  cos = unExpr cosOp
+  tan = unExpr tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin = on2CodeValues unExpr asinOp
-  arccos = on2CodeValues unExpr acosOp
-  arctan = on2CodeValues unExpr atanOp
-  floor = on2CodeValues unExpr floorOp
-  ceil = on2CodeValues unExpr ceilOp
+  arcsin = unExpr asinOp
+  arccos = unExpr acosOp
+  arctan = unExpr atanOp
+  floor = unExpr floorOp
+  ceil = unExpr ceilOp
 
 instance BooleanExpression PythonCode where
-  (?!) = on3CodeValues typeUnExpr notOp bool
-  (?&&) = on4CodeValues typeBinExpr andOp bool
-  (?||) = on4CodeValues typeBinExpr orOp bool
+  (?!) = typeUnExpr notOp bool
+  (?&&) = typeBinExpr andOp bool
+  (?||) = typeBinExpr orOp bool
 
-  (?<) = on4CodeValues typeBinExpr lessOp bool
-  (?<=) = on4CodeValues typeBinExpr lessEqualOp bool
-  (?>) = on4CodeValues typeBinExpr greaterOp bool
-  (?>=) = on4CodeValues typeBinExpr greaterEqualOp bool
-  (?==) = on4CodeValues typeBinExpr equalOp bool
-  (?!=) = on4CodeValues typeBinExpr notEqualOp bool
+  (?<) = typeBinExpr lessOp bool
+  (?<=) = typeBinExpr lessEqualOp bool
+  (?>) = typeBinExpr greaterOp bool
+  (?>=) = typeBinExpr greaterEqualOp bool
+  (?==) = typeBinExpr equalOp bool
+  (?!=) = typeBinExpr notEqualOp bool
 
 instance ValueExpression PythonCode where
-  inlineIf = on3CodeValues pyInlineIf
+  inlineIf = pyInlineIf
   funcApp = funcAppD
   selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
   newObj = newObjD newObjDocD'
-  extNewObj l t vs = on2CodeValues mkVal t (on2CodeValues (pyExtStateObj l) t 
-    (onCodeList valList vs))
+  extNewObj l t vs = mkVal t (pyExtStateObj l (getTypeDoc t) (valueList vs))
 
   exists v = v ?!= valueOf (var "None" void)
   notNull = exists
 
 instance InternalValue PythonCode where
-  inputFunc = on2CodeValues mkVal string (toCode $ text "input()")  -- raw_input() for < Python 3.0
-  printFunc = on2CodeValues mkVal void (toCode $ text "print")
-  printLnFunc = on2CodeValues mkVal void (toCode empty)
-  printFileFunc _ = on2CodeValues mkVal void (toCode empty)
-  printFileLnFunc _ = on2CodeValues mkVal void (toCode empty)
+  inputFunc = mkVal string (text "input()")  -- raw_input() for < Python 3.0
+  printFunc = mkVal void (text "print")
+  printLnFunc = mkVal void empty
+  printFileFunc _ = mkVal void empty
+  printFileLnFunc _ = mkVal void empty
   
-  cast t v = on2CodeValues mkVal t $ onCodeValue (castObjDocD (getTypeDoc t)) v
+  cast t v = mkVal t $ castObjDocD (getTypeDoc t) (valueDoc v)
 
+  valuePrec = valPrec . unPC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector PythonCode where
@@ -358,8 +361,8 @@ instance FunctionSym PythonCode where
   get = getD
   set = setD
 
-  listSize v = on2CodeValues mkVal (functionType listSizeFunc) 
-    (on2CodeValues pyListSize v listSizeFunc)
+  listSize v = mkVal (functionType listSizeFunc) 
+    (pyListSize (valueDoc v) (functionDoc (listSizeFunc :: PythonCode (Function PythonCode))))
   listAdd = listAddD
   listAppend = listAppendD
 
@@ -375,7 +378,7 @@ instance InternalFunction PythonCode where
   getFunc = getFuncD
   setFunc = setFuncD
 
-  listSizeFunc = on2CodeValues fd int (toCode $ text "len")
+  listSizeFunc = funcFromData int (text "len")
   listAddFunc _ = listAddFuncD "insert"
   listAppendFunc = listAppendFuncD "append"
 
@@ -391,8 +394,7 @@ instance InternalFunction PythonCode where
   funcFromData t d = on2CodeValues fd t (toCode d)
 
 instance InternalStatement PythonCode where
-  printSt nl p v f = mkStNoEnd <$> on3CodeValues (pyPrint nl) p v 
-    (fromMaybe (on2CodeValues mkVal void (toCode empty)) f)
+  printSt nl p v f = mkStNoEnd $ pyPrint nl p v (fromMaybe (mkVal void empty) f)
 
   state = stateD
   loopState = loopStateD
@@ -408,18 +410,17 @@ instance StatementSym PythonCode where
   type Statement PythonCode = (Doc, Terminator)
   assign = assignD Empty
   assignToListIndex = assignToListIndexD
-  multiAssign vrs vls = mkStNoEnd <$> on2CodeLists multiAssignDoc vrs vls
+  multiAssign vrs vls = mkStNoEnd $ multiAssignDoc vrs vls
   (&=) = assign
   (&-=) = decrementD
-  (&+=) vr vl = mkStNoEnd <$> on3CodeValues plusEqualsDocD' vr plusOp vl
-  (&++) v = mkStNoEnd <$> on2CodeValues plusPlusDocD' v plusOp
+  (&+=) = G.increment
+  (&++) = G.increment1
   (&~-) = decrement1D
 
-  varDec _ = toCode (mkStNoEnd empty)
+  varDec _ = mkStNoEnd empty
   varDecDef = assign
-  listDec _ v = mkStNoEnd <$> onCodeValue pyListDec v
-  listDecDef v vs = mkStNoEnd <$> on2CodeValues pyListDecDef v (onCodeList 
-    valList vs)
+  listDec _ v = mkStNoEnd $ pyListDec v
+  listDecDef v vs = mkStNoEnd $ pyListDecDef v vs
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v vs = varDecDef v (extNewObj lib (variableType v) vs)
@@ -455,12 +456,12 @@ instance StatementSym PythonCode where
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = breakD Empty
-  continue = continueD Empty
+  break = mkStNoEnd breakDocD
+  continue = mkStNoEnd continueDocD
 
   returnState = returnD Empty
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs = toCode $ mkStNoEnd $ returnDocD vs
+  multiReturn vs = mkStNoEnd $ returnDocD vs
 
   valState = valStateD Empty
 
@@ -492,11 +493,10 @@ instance ControlStatementSym PythonCode where
 
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"
-  forRange i initv finalv stepv b = mkStNoEnd <$> on6CodeValues pyForRange i
-    iterInLabel initv finalv stepv b
-  forEach e v b = mkStNoEnd <$> on5CodeValues pyForEach e iterForEachLabel 
-    iterInLabel v b
-  while v b = mkStNoEnd <$> on2CodeValues pyWhile v b
+  forRange i initv finalv stepv b = mkStNoEnd $ pyForRange i iterInLabel initv 
+    finalv stepv b
+  forEach e v b = mkStNoEnd $ pyForEach e iterForEachLabel iterInLabel v b
+  while v b = mkStNoEnd $ pyWhile v b
 
   tryCatch = tryCatchD pyTryCatch
 
@@ -644,29 +644,32 @@ pyLnOp = unOpPrec "math.log"
 pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v
 
-pyExtStateObj :: Label -> TypeData -> Doc -> Doc
-pyExtStateObj l t vs = text l <> dot <> typeDoc t <> parens vs
+pyExtStateObj :: Label -> Doc -> Doc -> Doc
+pyExtStateObj l t vs = text l <> dot <> t <> parens vs
 
-pyInlineIf :: ValData -> ValData -> ValData -> ValData
-pyInlineIf c v1 v2 = vd (valPrec c) (valType v1) (valDoc v1 <+> text "if" <+> 
-  valDoc c <+> text "else" <+> valDoc v2)
+pyInlineIf :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr)
+pyInlineIf c v1 v2 = valFromData (valuePrec c) (valueType v1) 
+  (valueDoc v1 <+> text "if" <+> valueDoc c <+> text "else" <+> valueDoc v2)
 
-pyListSize :: ValData -> FuncData -> Doc
-pyListSize v f = funcDoc f <> parens (valDoc v)
+pyListSize :: Doc -> Doc -> Doc
+pyListSize v f = f <> parens v
 
-pyStringType :: TypeData
-pyStringType = td String "str" (text "str")
+pyStringType :: (RenderSym repr) => repr (Type repr)
+pyStringType = typeFromData String "str" (text "str")
 
-pyListDec :: VarData -> Doc
-pyListDec v = varDoc v <+> equals <+> typeDoc (varType v)
+pyListDec :: (RenderSym repr) => repr (Variable repr) -> Doc
+pyListDec v = variableDoc v <+> equals <+> getTypeDoc (variableType v)
 
-pyListDecDef :: VarData -> Doc -> Doc
-pyListDecDef v vs = varDoc v <+> equals <+> brackets vs
+pyListDecDef :: (RenderSym repr) => repr (Variable repr) -> [repr (Value repr)] 
+  -> Doc
+pyListDecDef v vs = variableDoc v <+> equals <+> brackets (valueList vs)
 
-pyPrint :: Bool ->  ValData -> ValData -> ValData -> Doc
-pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
+pyPrint :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
+  -> repr (Value repr) -> Doc
+pyPrint newLn prf v f = valueDoc prf <> parens (valueDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
-        fl = emptyIfEmpty (valDoc f) $ text ", file=" <> valDoc f
+        fl = emptyIfEmpty (valueDoc f) $ text ", file=" <> valueDoc f
 
 pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
   -> Maybe (repr (Value repr)) -> repr (Statement repr)
@@ -687,22 +690,26 @@ pyInput inSrc v = v &= pyInput' (getType $ variableType v)
 pyThrow :: (RenderSym repr) => repr (Value repr) -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valueDoc errMsg)
 
-pyForRange :: VarData -> Doc ->  ValData ->  ValData ->
-  ValData -> Doc -> Doc
+pyForRange :: (RenderSym repr) => repr (Variable repr) -> repr (Keyword repr) 
+  -> repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
+  repr (Body repr) -> Doc
 pyForRange i inLbl initv finalv stepv b = vcat [
-  forLabel <+> varDoc i <+> inLbl <+> text "range" <> parens (valDoc initv <> 
-    text ", " <> valDoc finalv <> text ", " <> valDoc stepv) <> colon,
-  indent b]
+  forLabel <+> variableDoc i <+> keyDoc inLbl <+> text "range" <> parens 
+    (valueDoc initv <> text ", " <> valueDoc finalv <> text ", " <> valueDoc 
+    stepv) <> colon,
+  indent $ bodyDoc b]
 
-pyForEach :: VarData -> Doc -> Doc ->  ValData -> Doc -> Doc
+pyForEach :: (RenderSym repr) => repr (Variable repr) -> repr (Keyword repr) -> 
+  repr (Keyword repr) -> repr (Value repr) -> repr (Body repr) -> Doc
 pyForEach i forEachLabel inLbl lstVar b = vcat [
-  forEachLabel <+> varDoc i <+> inLbl <+> valDoc lstVar <> colon,
-  indent b]
+  keyDoc forEachLabel <+> variableDoc i <+> keyDoc inLbl <+> valueDoc lstVar <> 
+    colon,
+  indent $ bodyDoc b]
 
-pyWhile ::  ValData -> Doc -> Doc
+pyWhile :: (RenderSym repr) => repr (Value repr) -> repr (Body repr) -> Doc
 pyWhile v b = vcat [
-  text "while" <+> valDoc v <> colon,
-  indent b]
+  text "while" <+> valueDoc v <> colon,
+  indent $ bodyDoc b]
 
 pyTryCatch :: (RenderSym repr) => repr (Body repr) -> repr (Body repr) -> Doc
 pyTryCatch tryB catchB = vcat [
@@ -711,10 +718,10 @@ pyTryCatch tryB catchB = vcat [
   text "except" <+> text "Exception" <+> colon,
   indent $ bodyDoc catchB]
 
-pyListSlice :: VarData -> ValData -> 
-  ValData -> ValData -> ValData -> Doc
-pyListSlice vnew vold b e s = varDoc vnew <+> equals <+> valDoc vold <> 
-  brackets (valDoc b <> colon <> valDoc e <> colon <> valDoc s)
+pyListSlice :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> Doc
+pyListSlice vnew vold b e s = variableDoc vnew <+> equals <+> valueDoc vold <> 
+  brackets (valueDoc b <> colon <> valueDoc e <> colon <> valueDoc s)
 
 pyMethod :: Label -> VarData -> Doc -> Doc -> Doc
 pyMethod n slf ps b = vcat [

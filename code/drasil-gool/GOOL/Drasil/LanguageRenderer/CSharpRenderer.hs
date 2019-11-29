@@ -13,7 +13,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..),
   VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
@@ -23,24 +23,22 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
   BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
-  oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
-  stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, 
-  voidDocD, destructorError, paramDocD, paramListDocD, mkParam, methodDocD, 
-  runStrategyD, listSliceD, checkStateD, notifyObserversD, listDecDocD, 
-  listDecDefDocD, stringListVals', stringListLists', printStD, stateD, 
-  loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, 
-  decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
-  openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, breakD, 
-  continueD, returnD, multiReturnError, valStateD, freeError, throwD, 
-  initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD,
-  switchAsIfD, ifExistsD, forRangeD, tryCatchD, unOpPrec, notOpDocD, 
-  negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
-  mkVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
-  classVarDocD, objVarDocD, inlineIfD, newObjDocD, varD, staticVarD, 
-  extVarD, selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
+  oneLinerD, outDoc, printFileDocD, destructorError, paramDocD, paramListDocD, 
+  mkParam, methodDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, 
+  listDecDocD, listDecDefDocD, mkSt, stringListVals', stringListLists', 
+  printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, 
+  multiAssignError, decrementD, incrementD, decrement1D, increment1D, 
+  constDecDefD, discardInputD, openFileRD, openFileWD, openFileAD, closeFileD, 
+  discardFileLineD, breakDocD, continueDocD, returnD, multiReturnError, 
+  valStateD, freeError, throwD, initStateD, changeStateD, initObserverListD, 
+  addObserverD, ifNoElseD, switchD, switchAsIfD, ifExistsD, forRangeD, 
+  tryCatchD, unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', typeUnExpr, 
+  powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
+  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
+  divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
+  typeBinExpr, mkVal, mkVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
+  litStringD, classVarDocD, objVarDocD, newObjDocD, varD, staticVarD, extVarD, 
+  selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
   valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, 
   objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
   selfFuncAppD, extFuncAppD, newObjD,notNullD, funcDocD, castDocD, 
@@ -52,19 +50,20 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   commentedModD, appendToBody, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, pi, varDec, varDecDef, listDec, listDecDef, objDecNew, 
-  objDecNewNoParams, construct, comment, ifCond, for, forEach, while, method, 
-  getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
-  privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule', modFromData, fileDoc, docMod)
+  fileFromData, block, bool, int, double, char, string, listType, listInnerType,
+  obj, enumType, void, pi, inlineIf, varDec, varDecDef, listDec, listDecDef, 
+  objDecNew, objDecNewNoParams, construct, comment, ifCond, for, forEach, while,
+  method, getMethod, setMethod,privMethod, pubMethod, constructor, docMain, 
+  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef,
+  constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
+  docClass, commentedClass, buildModule', modFromData, fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
   vard)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
-  on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, on5CodeValues, 
+  on2CodeValues, on2StateValues, on3CodeValues, on5CodeValues, 
   onCodeList, onStateList, on1CodeValue1List, checkParams)
 import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
   setCurrMain, setParameters)
@@ -167,19 +166,19 @@ instance InternalBlock CSharpCode where
 
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData
-  bool = toCode boolTypeDocD
-  int = toCode intTypeDocD
-  float = toCode csFloatTypeDoc
-  char = toCode charTypeDocD
-  string = toCode stringTypeDocD
-  infile = toCode csInfileTypeDoc
-  outfile = toCode csOutfileTypeDoc
-  listType p st = on2CodeValues listTypeDocD st (list p)
-  listInnerType = listInnerTypeD
-  obj t = toCode $ typeDocD t
-  enumType t = toCode $ enumTypeDocD t
+  bool = G.bool
+  int = G.int
+  float = G.double
+  char = G.char
+  string = G.string
+  infile = csInfileType
+  outfile = csOutfileType
+  listType = G.listType
+  listInnerType = G.listInnerType
+  obj = G.obj
+  enumType = G.enumType
   iterator t = t
-  void = toCode voidDocD
+  void = G.void
 
   getType = cType . unCSC
   getTypeString = typeString . unCSC
@@ -228,6 +227,12 @@ instance BinaryOpSym CSharpCode where
   andOp = toCode andOpDocD
   orOp = toCode orOpDocD
 
+instance InternalOp CSharpCode where
+  uOpDoc = opDoc . unCSC
+  bOpDoc = opDoc . unCSC
+  uOpPrec = opPrec . unCSC
+  bOpPrec = opPrec . unCSC
+
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
   var = varD
@@ -238,7 +243,7 @@ instance VariableSym CSharpCode where
   enumVar = enumVarD
   classVar = classVarD classVarDocD
   extClassVar = classVar
-  objVar = on2CodeValues csObjVar
+  objVar = csObjVar
   objVarSelf = objVarSelfD
   listVar  = listVarD
   listOf = listOfD 
@@ -277,45 +282,45 @@ instance ValueSym CSharpCode where
   valueDoc = valDoc . unCSC
 
 instance NumericExpression CSharpCode where
-  (#~) = on2CodeValues unExpr' negateOp
-  (#/^) = on2CodeValues unExpr sqrtOp
-  (#|) = on2CodeValues unExpr absOp
-  (#+) = on3CodeValues binExpr plusOp
-  (#-) = on3CodeValues binExpr minusOp
-  (#*) = on3CodeValues binExpr multOp
-  (#/) = on3CodeValues binExpr divideOp
-  (#%) = on3CodeValues binExpr moduloOp
-  (#^) = on3CodeValues binExpr' powerOp
+  (#~) = unExpr' negateOp
+  (#/^) = unExpr sqrtOp
+  (#|) = unExpr absOp
+  (#+) = binExpr plusOp
+  (#-) = binExpr minusOp
+  (#*) = binExpr multOp
+  (#/) = binExpr divideOp
+  (#%) = binExpr moduloOp
+  (#^) = binExpr' powerOp
 
-  log = on2CodeValues unExpr logOp
-  ln = on2CodeValues unExpr lnOp
-  exp = on2CodeValues unExpr expOp
-  sin = on2CodeValues unExpr sinOp
-  cos = on2CodeValues unExpr cosOp
-  tan = on2CodeValues unExpr tanOp
+  log = unExpr logOp
+  ln = unExpr lnOp
+  exp = unExpr expOp
+  sin = unExpr sinOp
+  cos = unExpr cosOp
+  tan = unExpr tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin = on2CodeValues unExpr asinOp
-  arccos = on2CodeValues unExpr acosOp
-  arctan = on2CodeValues unExpr atanOp
-  floor = on2CodeValues unExpr floorOp
-  ceil = on2CodeValues unExpr ceilOp
+  arcsin = unExpr asinOp
+  arccos = unExpr acosOp
+  arctan = unExpr atanOp
+  floor = unExpr floorOp
+  ceil = unExpr ceilOp
 
 instance BooleanExpression CSharpCode where
-  (?!) = on3CodeValues typeUnExpr notOp bool
-  (?&&) = on4CodeValues typeBinExpr andOp bool
-  (?||) = on4CodeValues typeBinExpr orOp bool
+  (?!) = typeUnExpr notOp bool
+  (?&&) = typeBinExpr andOp bool
+  (?||) = typeBinExpr orOp bool
 
-  (?<) = on4CodeValues typeBinExpr lessOp bool
-  (?<=) = on4CodeValues typeBinExpr lessEqualOp bool
-  (?>) = on4CodeValues typeBinExpr greaterOp bool
-  (?>=) = on4CodeValues typeBinExpr greaterEqualOp bool
-  (?==) = on4CodeValues typeBinExpr equalOp bool
-  (?!=) = on4CodeValues typeBinExpr notEqualOp bool
+  (?<) = typeBinExpr lessOp bool
+  (?<=) = typeBinExpr lessEqualOp bool
+  (?>) = typeBinExpr greaterOp bool
+  (?>=) = typeBinExpr greaterEqualOp bool
+  (?==) = typeBinExpr equalOp bool
+  (?!=) = typeBinExpr notEqualOp bool
   
 instance ValueExpression CSharpCode where
-  inlineIf = on3CodeValues inlineIfD
+  inlineIf = G.inlineIf
   funcApp = funcAppD
   selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
@@ -326,16 +331,15 @@ instance ValueExpression CSharpCode where
   notNull = notNullD
 
 instance InternalValue CSharpCode where
-  inputFunc = on2CodeValues mkVal string (toCode $ text "Console.ReadLine()")
-  printFunc = on2CodeValues mkVal void (toCode $ text "Console.Write")
-  printLnFunc = on2CodeValues mkVal void (toCode $ text "Console.WriteLine")
-  printFileFunc f = on2CodeValues mkVal void (onCodeValue (printFileDocD 
-    "Write") f)
-  printFileLnFunc f = on2CodeValues mkVal void (onCodeValue (printFileDocD 
-    "WriteLine") f)
+  inputFunc = mkVal string (text "Console.ReadLine()")
+  printFunc = mkVal void (text "Console.Write")
+  printLnFunc = mkVal void (text "Console.WriteLine")
+  printFileFunc f = mkVal void (printFileDocD "Write" (valueDoc f))
+  printFileLnFunc f = mkVal void (printFileDocD "WriteLine" (valueDoc f))
   
   cast = csCast
   
+  valuePrec = valPrec . unCSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CSharpCode where
@@ -375,7 +379,7 @@ instance InternalFunction CSharpCode where
   getFunc = getFuncD
   setFunc = setFuncD
 
-  listSizeFunc = on2CodeValues fd int (toCode $ funcDocD (text "Count"))
+  listSizeFunc = funcFromData int (funcDocD (text "Count"))
   listAddFunc _ = listAddFuncD "Insert"
   listAppendFunc = listAppendFuncD "Add"
 
@@ -434,11 +438,10 @@ instance StatementSym CSharpCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = v &= on2CodeValues csInput (variableType v) inputFunc
+  getInput v = v &= csInput (variableType v) inputFunc
   discardInput = discardInputD csDiscardInput
-  getFileInput f v = v &= on2CodeValues csInput (variableType v) (onCodeValue 
-    csFileInput f)
-  discardFileInput f = valState $ onCodeValue csFileInput f
+  getFileInput f v = v &= csInput (variableType v) (csFileInput f)
+  discardFileInput f = valState $ csFileInput f
 
   openFileR = openFileRD csOpenFileR
   openFileW = openFileWD csOpenFileWorA
@@ -453,8 +456,8 @@ instance StatementSym CSharpCode where
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = breakD Semi
-  continue = continueD Semi
+  break = mkSt breakDocD
+  continue = mkSt continueDocD
 
   returnState = returnD Semi
   multiReturn _ = error $ multiReturnError csName 
@@ -497,9 +500,8 @@ instance ControlStatementSym CSharpCode where
   checkState = checkStateD
   notifyObservers = notifyObserversD
 
-  getFileInputAll f v = while ((f $. on2CodeValues fd bool (toCode $ text 
-    ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (valueOf v) 
-    (onCodeValue csFileInput f))
+  getFileInputAll f v = while ((f $. funcFromData bool (text ".EndOfStream")) 
+    ?!) (oneLiner $ valState $ listAppend (valueOf v) (csFileInput f))
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc
@@ -613,21 +615,18 @@ cstop end inc = vcat [
   inc <+> text "System.Collections" <> end,
   inc <+> text "System.Collections.Generic" <> end]
 
-csFloatTypeDoc :: TypeData
-csFloatTypeDoc = td Float "double" (text "double") -- Same as Java, maybe make a common function
+csInfileType :: (RenderSym repr) => repr (Type repr)
+csInfileType = typeFromData File "StreamReader" (text "StreamReader")
 
-csInfileTypeDoc :: TypeData
-csInfileTypeDoc = td File "StreamReader" (text "StreamReader")
-
-csOutfileTypeDoc :: TypeData
-csOutfileTypeDoc = td File "StreamWriter" (text "StreamWriter")
+csOutfileType :: (RenderSym repr) => repr (Type repr)
+csOutfileType = typeFromData File "StreamWriter" (text "StreamWriter")
 
 csCast :: CSharpCode (Type CSharpCode) -> CSharpCode (Value CSharpCode) -> 
   CSharpCode (Value CSharpCode)
 csCast t v = csCast' (getType t) (getType $ valueType v)
   where csCast' Float String = funcApp "Double.Parse" float [v]
-        csCast' _ _ = on2CodeValues mkVal t $ on2CodeValues castObjDocD 
-          (onCodeValue castDocD t) v
+        csCast' _ _ = mkVal t $ castObjDocD (castDocD (getTypeDoc t)) 
+          (valueDoc v)
 
 csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
@@ -645,12 +644,13 @@ csTryCatch tb cb = vcat [
 csDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
 csDiscardInput = valueDoc
 
-csFileInput :: ValData -> ValData
-csFileInput f = mkVal (valType f) (valDoc f <> dot <> text "ReadLine()")
+csFileInput :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
+csFileInput f = mkVal (valueType f) (valueDoc f <> dot <> text "ReadLine()")
 
-csInput :: TypeData -> ValData -> ValData
-csInput t inFn = mkVal t $ text (csInput' (cType t)) <> 
-  parens (valDoc inFn)
+csInput :: (RenderSym repr) => repr (Type repr) -> repr (Value repr) -> 
+  repr (Value repr)
+csInput t inFn = mkVal t $ text (csInput' (getType t)) <> 
+  parens (valueDoc inFn)
   where csInput' Integer = "Int32.Parse"
         csInput' Float = "Double.Parse"
         csInput' Boolean = "Boolean.Parse"
@@ -691,12 +691,13 @@ csVarDec :: Binding -> CSharpCode (Statement CSharpCode) ->
 csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
 csVarDec Dynamic d = d
 
-csObjVar :: VarData -> VarData -> VarData
-csObjVar o v = csObjVar' (varBind v)
+csObjVar :: (RenderSym repr) => repr (Variable repr) -> repr (Variable repr) -> 
+  repr (Variable repr)
+csObjVar o v = csObjVar' (variableBind v)
   where csObjVar' Static = error 
           "Cannot use objVar to access static variables through an object in C#"
-        csObjVar' Dynamic = mkVar (varName o ++ "." ++ varName v) 
-          (varType v) (objVarDocD (varDoc o) (varDoc v))
+        csObjVar' Dynamic = mkVar (variableName o ++ "." ++ variableName v) 
+          (variableType v) (objVarDocD (variableDoc o) (variableDoc v))
 
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
     -> CSharpCode (Type CSharpCode) -> [CSharpCode (Parameter CSharpCode)] -> 

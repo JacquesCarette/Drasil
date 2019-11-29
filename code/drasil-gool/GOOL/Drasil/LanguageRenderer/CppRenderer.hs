@@ -63,10 +63,10 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, on5CodeValues, 
-  on8CodeValues, onCodeList, onStateList, on2CodeLists, on2StateLists, 
-  on1CodeValue1List, on1StateValue1List, checkParams)
-import GOOL.Drasil.State (MS, lensGStoFS, lensFStoGS, lensFStoMS, lensMStoGS, 
-  initialState, initialFS, getPutReturn, setCurrMain, getCurrMain, 
+  onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List,
+  checkParams)
+import GOOL.Drasil.State (MS, FS, lensGStoFS, lensFStoGS, lensFStoMS, 
+  lensMStoGS, initialState, initialFS, getPutReturn, setCurrMain, getCurrMain, 
   setParameters, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
@@ -1327,7 +1327,7 @@ instance InternalStateVar CppSrcCode where
 
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
-  buildClass n _ _ vs fs = on2StateLists (on2CodeLists cppsClass) (map (zoom 
+  buildClass n _ _ vs fs = on2StateLists cppsClass (map (zoom 
     lensFStoGS) vs) (map (zoom lensFStoMS) $ fs ++ [destructor n vs])
   enum _ _ _ = toState $ toCode empty
   privClass = G.privClass
@@ -1863,17 +1863,12 @@ instance InternalStateVar CppHdrCode where
 
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
-  -- do this with a do? avoids on8CodeValues...
-  buildClass n p _ vs mths = on2StateLists (\vars funcs -> on8CodeValues 
-    (cpphClass n) (on2CodeLists (cpphVarsFuncsList Pub) vars funcs) 
-    (on2CodeLists (cpphVarsFuncsList Priv) vars funcs) 
-    (onCodeValue fst public) (onCodeValue fst private) parent blockStart 
-    blockEnd endStatement) (map (zoom lensFStoGS) vs) fs
-    where parent = case p of Nothing -> toCode empty
-                             Just pn -> inherit pn
-          fs = map (zoom lensFStoMS) $ mths ++ [destructor n vs]
-  enum n es _ = toState $ on4CodeValues (cpphEnum n) (toCode $ enumElementsDocD 
-    es enumsEqualInts) blockStart blockEnd endStatement
+  buildClass n p _ vs mths = on2StateLists (\vars funcs -> cpphClass n p vars 
+    funcs public private blockStart blockEnd endStatement) 
+    (map (zoom lensFStoGS) vs) fs
+    where fs = map (zoom lensFStoMS) $ mths ++ [destructor n vs]
+  enum n es _ = cpphEnum n (enumElementsDocD es enumsEqualInts) blockStart 
+    blockEnd endStatement
   privClass = G.privClass
   pubClass = G.pubClass
 
@@ -2094,35 +2089,46 @@ cpphStateVarDef :: (RenderSym repr) => Doc -> repr (Permanence repr) ->
 cpphStateVarDef s p vr vl = stateVarDocD s (permDoc p) (statementDoc $ state $ 
   if binding p == Static then varDec vr else varDecDef vr vl) 
 
-cpphVarsFuncsList :: ScopeTag -> [StateVarData] -> [MethodData] -> Doc
+cpphVarsFuncsList :: ScopeTag -> [CppHdrCode (StateVar CppHdrCode)] -> 
+  [CppHdrCode (Method CppHdrCode)] -> Doc
 cpphVarsFuncsList st vs fs = 
-  let scopedVs = [stVarDoc v | v <- vs, getStVarScp v == st]
-      scopedFs = [mthdDoc f | f <- fs, getMthdScp f == st]
+  let scopedVs = [stateVarDoc v | v <- vs, getStVarScp (unCPPHC v) == st]
+      scopedFs = [methodDoc f | f <- fs, getMthdScp (unCPPHC f) == st]
   in vcat $ scopedVs ++ (if null scopedVs then empty else blank) : scopedFs
 
-cppsClass :: [StateVarData] -> [MethodData] -> Doc
-cppsClass vs fs = vcat $ vars ++ (if any (not . isEmpty) vars then blank else
-  empty) : funcs
-  where vars = map stVarDoc vs
-        funcs = map mthdDoc fs
+cppsClass :: [CppSrcCode (StateVar CppSrcCode)] -> 
+  [CppSrcCode (Method CppSrcCode)] -> CppSrcCode (Class CppSrcCode)
+cppsClass vs fs = toCode $ vcat $ vars ++ (if any (not . isEmpty) vars then 
+  blank else empty) : funcs
+  where vars = map stateVarDoc vs
+        funcs = map methodDoc fs
 
-cpphClass :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> 
-  Doc
-cpphClass n pubs privs pub priv inhrt bStart bEnd end = vcat [
-    classDec <+> text n <+> inhrt <+> bStart,
+cpphClass :: Label -> Maybe Label -> [CppHdrCode (StateVar CppHdrCode)] -> 
+  [CppHdrCode (Method CppHdrCode)] -> CppHdrCode (Scope CppHdrCode) -> 
+  CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Keyword CppHdrCode) -> 
+  CppHdrCode (Keyword CppHdrCode) -> CppHdrCode (Keyword CppHdrCode) -> 
+  CppHdrCode (Class CppHdrCode)
+cpphClass n p vars funcs pub priv bStart bEnd end = toCode $ vcat [
+    classDec <+> text n <+> keyDoc (parent :: CppHdrCode (Keyword CppHdrCode)) 
+    <+> keyDoc bStart,
     indentList [
-      pub <> colon,
+      scopeDoc pub <> colon,
       indent pubs,
       blank,
-      priv <> colon,
+      scopeDoc priv <> colon,
       indent privs],
-    bEnd <> end]
+    keyDoc bEnd <> keyDoc end]
+  where pubs = cpphVarsFuncsList Pub vars funcs
+        privs = cpphVarsFuncsList Priv vars funcs
+        parent = case p of Nothing -> toCode empty
+                           Just pn -> inherit pn
 
-cpphEnum :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
-cpphEnum n es bStart bEnd end = vcat [
-  text "enum" <+> text n <+> bStart,
+cpphEnum :: (RenderSym repr) => Label -> Doc -> repr (Keyword repr) -> 
+  repr (Keyword repr) -> repr (Keyword repr) -> FS (repr (Class repr))
+cpphEnum n es bStart bEnd end = classFromData $ toState $ vcat [
+  text "enum" <+> text n <+> keyDoc bStart,
   indent es,
-  bEnd <> end]
+  keyDoc bEnd <> keyDoc end]
 
 cppInOutCall :: (Label -> CppSrcCode (Type CppSrcCode) -> 
   [CppSrcCode (Value CppSrcCode)] -> CppSrcCode (Value CppSrcCode)) -> Label -> 

@@ -12,7 +12,7 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..),
   VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
@@ -57,7 +57,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
-  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, 
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
   on5CodeValues, onCodeList, onStateList, on1CodeValue1List, checkParams)
 import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
   setCurrMain, setParameters)
@@ -225,6 +225,12 @@ instance BinaryOpSym PythonCode where
   andOp = toCode $ andPrec "and"
   orOp = toCode $ orPrec "or"
 
+instance InternalOp PythonCode where
+  uOpDoc = opDoc . unPC
+  bOpDoc = opDoc . unPC
+  uOpPrec = opPrec . unPC
+  bOpPrec = opPrec . unPC
+
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
   var = varD
@@ -273,45 +279,44 @@ instance ValueSym PythonCode where
   valueDoc = valDoc . unPC
 
 instance NumericExpression PythonCode where
-  (#~) = on2CodeValues unExpr' negateOp
-  (#/^) = on2CodeValues unExpr sqrtOp
-  (#|) = on2CodeValues unExpr absOp
-  (#+) = on3CodeValues binExpr plusOp
-  (#-) = on3CodeValues binExpr minusOp
-  (#*) = on3CodeValues binExpr multOp
+  (#~) = unExpr' negateOp
+  (#/^) = unExpr sqrtOp
+  (#|) = unExpr absOp
+  (#+) = binExpr plusOp
+  (#-) = binExpr minusOp
+  (#*) = binExpr multOp
   (#/) v1 v2 = pyDivision (getType $ valueType v1) (getType $ valueType v2) 
-    where pyDivision Integer Integer = on2CodeValues (binExpr (multPrec "//")) 
-            v1 v2
-          pyDivision _ _ = on3CodeValues binExpr divideOp v1 v2
-  (#%) = on3CodeValues binExpr moduloOp
-  (#^) = on3CodeValues binExpr powerOp
+    where pyDivision Integer Integer = binExpr (toCode $ multPrec "//") v1 v2
+          pyDivision _ _ = binExpr divideOp v1 v2
+  (#%) = binExpr moduloOp
+  (#^) = binExpr powerOp
 
-  log = on2CodeValues unExpr logOp
-  ln = on2CodeValues unExpr lnOp
-  exp = on2CodeValues unExpr expOp
-  sin = on2CodeValues unExpr sinOp
-  cos = on2CodeValues unExpr cosOp
-  tan = on2CodeValues unExpr tanOp
+  log = unExpr logOp
+  ln = unExpr lnOp
+  exp = unExpr expOp
+  sin = unExpr sinOp
+  cos = unExpr cosOp
+  tan = unExpr tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin = on2CodeValues unExpr asinOp
-  arccos = on2CodeValues unExpr acosOp
-  arctan = on2CodeValues unExpr atanOp
-  floor = on2CodeValues unExpr floorOp
-  ceil = on2CodeValues unExpr ceilOp
+  arcsin = unExpr asinOp
+  arccos = unExpr acosOp
+  arctan = unExpr atanOp
+  floor = unExpr floorOp
+  ceil = unExpr ceilOp
 
 instance BooleanExpression PythonCode where
-  (?!) = on3CodeValues typeUnExpr notOp bool
-  (?&&) = on4CodeValues typeBinExpr andOp bool
-  (?||) = on4CodeValues typeBinExpr orOp bool
+  (?!) = typeUnExpr notOp bool
+  (?&&) = typeBinExpr andOp bool
+  (?||) = typeBinExpr orOp bool
 
-  (?<) = on4CodeValues typeBinExpr lessOp bool
-  (?<=) = on4CodeValues typeBinExpr lessEqualOp bool
-  (?>) = on4CodeValues typeBinExpr greaterOp bool
-  (?>=) = on4CodeValues typeBinExpr greaterEqualOp bool
-  (?==) = on4CodeValues typeBinExpr equalOp bool
-  (?!=) = on4CodeValues typeBinExpr notEqualOp bool
+  (?<) = typeBinExpr lessOp bool
+  (?<=) = typeBinExpr lessEqualOp bool
+  (?>) = typeBinExpr greaterOp bool
+  (?>=) = typeBinExpr greaterEqualOp bool
+  (?==) = typeBinExpr equalOp bool
+  (?!=) = typeBinExpr notEqualOp bool
 
 instance ValueExpression PythonCode where
   inlineIf = on3CodeValues pyInlineIf

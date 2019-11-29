@@ -7,14 +7,15 @@ module GOOL.Drasil.Symantics (
   ProgramSym(..), RenderSym(..), InternalFile(..),  KeywordSym(..), 
   PermanenceSym(..), InternalPerm(..), BodySym(..), ControlBlockSym(..), 
   BlockSym(..), InternalBlock(..), TypeSym(..), InternalType(..), 
-  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..)
+  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
+  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), 
+  Selector(..), FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
+  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
+  BlockCommentSym(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -140,7 +141,7 @@ class (ControlStatementSym repr) => ControlBlockSym repr where
     Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) ->
     Maybe (repr (Value repr)) -> repr (Block repr)
 
-class UnaryOpSym repr where
+class (InternalOp repr) => UnaryOpSym repr where
   type UnaryOp repr
   notOp    :: repr (UnaryOp repr)
   negateOp :: repr (UnaryOp repr)
@@ -158,7 +159,7 @@ class UnaryOpSym repr where
   floorOp  :: repr (UnaryOp repr)
   ceilOp   :: repr (UnaryOp repr)
 
-class BinaryOpSym repr where
+class (InternalOp repr) => BinaryOpSym repr where
   type BinaryOp repr
   equalOp        :: repr (BinaryOp repr)
   notEqualOp     :: repr (BinaryOp repr)
@@ -174,6 +175,12 @@ class BinaryOpSym repr where
   moduloOp       :: repr (BinaryOp repr)
   andOp          :: repr (BinaryOp repr)
   orOp           :: repr (BinaryOp repr)
+
+class InternalOp repr where
+  uOpDoc :: repr (UnaryOp repr) -> Doc
+  bOpDoc :: repr (BinaryOp repr) -> Doc
+  uOpPrec :: repr (UnaryOp repr) -> Int
+  bOpPrec :: repr (BinaryOp repr) -> Int
 
 class (TypeSym repr, InternalVariable repr) => VariableSym repr where
   type Variable repr

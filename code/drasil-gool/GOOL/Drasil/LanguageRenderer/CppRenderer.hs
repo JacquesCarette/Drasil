@@ -14,7 +14,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..),
   VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..),
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
@@ -243,6 +243,12 @@ instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
   moduloOp = pair moduloOp moduloOp
   andOp = pair andOp andOp
   orOp = pair orOp orOp
+
+instance (Pair p) => InternalOp (p CppSrcCode CppHdrCode) where
+  uOpDoc o = uOpDoc $ pfst o
+  bOpDoc o = bOpDoc $ pfst o
+  uOpPrec o = uOpPrec $ pfst o
+  bOpPrec o = bOpPrec $ pfst o
 
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   type Variable (p CppSrcCode CppHdrCode) = VarData
@@ -928,6 +934,12 @@ instance BinaryOpSym CppSrcCode where
   andOp = toCode andOpDocD
   orOp = toCode orOpDocD
 
+instance InternalOp CppSrcCode where
+  uOpDoc = opDoc . unCPPSC
+  bOpDoc = opDoc . unCPPSC
+  uOpPrec = opPrec . unCPPSC
+  bOpPrec = opPrec . unCPPSC
+
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
   var = varD
@@ -980,42 +992,42 @@ instance ValueSym CppSrcCode where
   valueDoc = valDoc . unCPPSC
 
 instance NumericExpression CppSrcCode where
-  (#~) = on2CodeValues unExpr' negateOp
-  (#/^) = on2CodeValues unExpr sqrtOp
-  (#|) = on2CodeValues unExpr absOp
-  (#+) = on3CodeValues binExpr plusOp
-  (#-) = on3CodeValues binExpr minusOp
-  (#*) = on3CodeValues binExpr multOp
-  (#/) = on3CodeValues binExpr divideOp
-  (#%) = on3CodeValues binExpr moduloOp
-  (#^) = on3CodeValues binExpr' powerOp
+  (#~) = unExpr' negateOp
+  (#/^) = unExpr sqrtOp
+  (#|) = unExpr absOp
+  (#+) = binExpr plusOp
+  (#-) = binExpr minusOp
+  (#*) = binExpr multOp
+  (#/) = binExpr divideOp
+  (#%) = binExpr moduloOp
+  (#^) = binExpr' powerOp
 
-  log = on2CodeValues unExpr logOp
-  ln = on2CodeValues unExpr lnOp
-  exp = on2CodeValues unExpr expOp
-  sin = on2CodeValues unExpr sinOp
-  cos = on2CodeValues unExpr cosOp
-  tan = on2CodeValues unExpr tanOp
+  log = unExpr logOp
+  ln = unExpr lnOp
+  exp = unExpr expOp
+  sin = unExpr sinOp
+  cos = unExpr cosOp
+  tan = unExpr tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin = on2CodeValues unExpr asinOp
-  arccos = on2CodeValues unExpr acosOp
-  arctan = on2CodeValues unExpr atanOp
-  floor = on2CodeValues unExpr floorOp
-  ceil = on2CodeValues unExpr ceilOp
+  arcsin = unExpr asinOp
+  arccos = unExpr acosOp
+  arctan = unExpr atanOp
+  floor = unExpr floorOp
+  ceil = unExpr ceilOp
 
 instance BooleanExpression CppSrcCode where
-  (?!) = on3CodeValues typeUnExpr notOp bool
-  (?&&) = on4CodeValues typeBinExpr andOp bool
-  (?||) = on4CodeValues typeBinExpr orOp bool
+  (?!) = typeUnExpr notOp bool
+  (?&&) = typeBinExpr andOp bool
+  (?||) = typeBinExpr orOp bool
 
-  (?<) = on4CodeValues typeBinExpr lessOp bool
-  (?<=) = on4CodeValues typeBinExpr lessEqualOp bool
-  (?>) = on4CodeValues typeBinExpr greaterOp bool
-  (?>=) = on4CodeValues typeBinExpr greaterEqualOp bool
-  (?==) = on4CodeValues typeBinExpr equalOp bool
-  (?!=) = on4CodeValues typeBinExpr notEqualOp bool
+  (?<) = typeBinExpr lessOp bool
+  (?<=) = typeBinExpr lessEqualOp bool
+  (?>) = typeBinExpr greaterOp bool
+  (?>=) = typeBinExpr greaterEqualOp bool
+  (?==) = typeBinExpr equalOp bool
+  (?!=) = typeBinExpr notEqualOp bool
    
 instance ValueExpression CppSrcCode where
   inlineIf = on3CodeValues inlineIfD
@@ -1498,6 +1510,12 @@ instance BinaryOpSym CppHdrCode where
   moduloOp = toCode $ od 0 empty
   andOp = toCode $ od 0 empty
   orOp = toCode $ od 0 empty
+
+instance InternalOp CppHdrCode where
+  uOpDoc = opDoc . unCPPHC
+  bOpDoc = opDoc . unCPPHC
+  uOpPrec = opPrec . unCPPHC
+  bOpPrec = opPrec . unCPPHC
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData

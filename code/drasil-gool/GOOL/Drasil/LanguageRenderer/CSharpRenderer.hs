@@ -13,7 +13,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..),
   VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
@@ -64,7 +64,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
   vard)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
-  on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, on5CodeValues, 
+  on2CodeValues, on2StateValues, on3CodeValues, on5CodeValues, 
   onCodeList, onStateList, on1CodeValue1List, checkParams)
 import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
   setCurrMain, setParameters)
@@ -228,6 +228,12 @@ instance BinaryOpSym CSharpCode where
   andOp = toCode andOpDocD
   orOp = toCode orOpDocD
 
+instance InternalOp CSharpCode where
+  uOpDoc = opDoc . unCSC
+  bOpDoc = opDoc . unCSC
+  uOpPrec = opPrec . unCSC
+  bOpPrec = opPrec . unCSC
+
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
   var = varD
@@ -277,42 +283,42 @@ instance ValueSym CSharpCode where
   valueDoc = valDoc . unCSC
 
 instance NumericExpression CSharpCode where
-  (#~) = on2CodeValues unExpr' negateOp
-  (#/^) = on2CodeValues unExpr sqrtOp
-  (#|) = on2CodeValues unExpr absOp
-  (#+) = on3CodeValues binExpr plusOp
-  (#-) = on3CodeValues binExpr minusOp
-  (#*) = on3CodeValues binExpr multOp
-  (#/) = on3CodeValues binExpr divideOp
-  (#%) = on3CodeValues binExpr moduloOp
-  (#^) = on3CodeValues binExpr' powerOp
+  (#~) = unExpr' negateOp
+  (#/^) = unExpr sqrtOp
+  (#|) = unExpr absOp
+  (#+) = binExpr plusOp
+  (#-) = binExpr minusOp
+  (#*) = binExpr multOp
+  (#/) = binExpr divideOp
+  (#%) = binExpr moduloOp
+  (#^) = binExpr' powerOp
 
-  log = on2CodeValues unExpr logOp
-  ln = on2CodeValues unExpr lnOp
-  exp = on2CodeValues unExpr expOp
-  sin = on2CodeValues unExpr sinOp
-  cos = on2CodeValues unExpr cosOp
-  tan = on2CodeValues unExpr tanOp
+  log = unExpr logOp
+  ln = unExpr lnOp
+  exp = unExpr expOp
+  sin = unExpr sinOp
+  cos = unExpr cosOp
+  tan = unExpr tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin = on2CodeValues unExpr asinOp
-  arccos = on2CodeValues unExpr acosOp
-  arctan = on2CodeValues unExpr atanOp
-  floor = on2CodeValues unExpr floorOp
-  ceil = on2CodeValues unExpr ceilOp
+  arcsin = unExpr asinOp
+  arccos = unExpr acosOp
+  arctan = unExpr atanOp
+  floor = unExpr floorOp
+  ceil = unExpr ceilOp
 
 instance BooleanExpression CSharpCode where
-  (?!) = on3CodeValues typeUnExpr notOp bool
-  (?&&) = on4CodeValues typeBinExpr andOp bool
-  (?||) = on4CodeValues typeBinExpr orOp bool
+  (?!) = typeUnExpr notOp bool
+  (?&&) = typeBinExpr andOp bool
+  (?||) = typeBinExpr orOp bool
 
-  (?<) = on4CodeValues typeBinExpr lessOp bool
-  (?<=) = on4CodeValues typeBinExpr lessEqualOp bool
-  (?>) = on4CodeValues typeBinExpr greaterOp bool
-  (?>=) = on4CodeValues typeBinExpr greaterEqualOp bool
-  (?==) = on4CodeValues typeBinExpr equalOp bool
-  (?!=) = on4CodeValues typeBinExpr notEqualOp bool
+  (?<) = typeBinExpr lessOp bool
+  (?<=) = typeBinExpr lessEqualOp bool
+  (?>) = typeBinExpr greaterOp bool
+  (?>=) = typeBinExpr greaterEqualOp bool
+  (?==) = typeBinExpr equalOp bool
+  (?!=) = typeBinExpr notEqualOp bool
   
 instance ValueExpression CSharpCode where
   inlineIf = on3CodeValues inlineIfD

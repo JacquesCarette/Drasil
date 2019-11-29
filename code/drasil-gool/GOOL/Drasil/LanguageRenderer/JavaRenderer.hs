@@ -13,7 +13,7 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..),
   VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
@@ -63,7 +63,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
-  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, 
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
   on5CodeValues, onCodeList, on1CodeValue1List, checkParams)
 import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
   getPutReturnList, addProgNameToPaths, setCurrMain, setParameters)
@@ -228,6 +228,12 @@ instance BinaryOpSym JavaCode where
   andOp = toCode andOpDocD
   orOp = toCode orOpDocD
 
+instance InternalOp JavaCode where
+  uOpDoc = opDoc . unJC
+  bOpDoc = opDoc . unJC
+  uOpPrec = opPrec . unJC
+  bOpPrec = opPrec . unJC
+
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
   var = varD
@@ -277,42 +283,42 @@ instance ValueSym JavaCode where
   valueDoc = valDoc . unJC
 
 instance NumericExpression JavaCode where
-  (#~) = on2CodeValues unExpr' negateOp
-  (#/^) = on2CodeValues unExpr sqrtOp
-  (#|) = on2CodeValues unExpr absOp
-  (#+) = on3CodeValues binExpr plusOp
-  (#-) = on3CodeValues binExpr minusOp
-  (#*) = on3CodeValues binExpr multOp
-  (#/) = on3CodeValues binExpr divideOp
-  (#%) = on3CodeValues binExpr moduloOp
-  (#^) = on3CodeValues binExpr' powerOp
+  (#~) = unExpr' negateOp
+  (#/^) = unExpr sqrtOp
+  (#|) = unExpr absOp
+  (#+) = binExpr plusOp
+  (#-) = binExpr minusOp
+  (#*) = binExpr multOp
+  (#/) = binExpr divideOp
+  (#%) = binExpr moduloOp
+  (#^) = binExpr' powerOp
 
-  log = on2CodeValues unExpr logOp
-  ln = on2CodeValues unExpr lnOp
-  exp = on2CodeValues unExpr expOp
-  sin = on2CodeValues unExpr sinOp
-  cos = on2CodeValues unExpr cosOp
-  tan = on2CodeValues unExpr tanOp
+  log = unExpr logOp
+  ln = unExpr lnOp
+  exp = unExpr expOp
+  sin = unExpr sinOp
+  cos = unExpr cosOp
+  tan = unExpr tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin = on2CodeValues unExpr asinOp
-  arccos = on2CodeValues unExpr acosOp
-  arctan = on2CodeValues unExpr atanOp
-  floor = on2CodeValues unExpr floorOp
-  ceil = on2CodeValues unExpr ceilOp
+  arcsin = unExpr asinOp
+  arccos = unExpr acosOp
+  arctan = unExpr atanOp
+  floor = unExpr floorOp
+  ceil = unExpr ceilOp
 
 instance BooleanExpression JavaCode where
-  (?!) = on3CodeValues typeUnExpr notOp bool
-  (?&&) = on4CodeValues typeBinExpr andOp bool
-  (?||) = on4CodeValues typeBinExpr orOp bool
+  (?!) = typeUnExpr notOp bool
+  (?&&) = typeBinExpr andOp bool
+  (?||) = typeBinExpr orOp bool
 
-  (?<) = on4CodeValues typeBinExpr lessOp bool
-  (?<=) = on4CodeValues typeBinExpr lessEqualOp bool
-  (?>) = on4CodeValues typeBinExpr greaterOp bool
-  (?>=) = on4CodeValues typeBinExpr greaterEqualOp bool
+  (?<) = typeBinExpr lessOp bool
+  (?<=) = typeBinExpr lessEqualOp bool
+  (?>) = typeBinExpr greaterOp bool
+  (?>=) = typeBinExpr greaterEqualOp bool
   (?==) = jEquality
-  (?!=) = on4CodeValues typeBinExpr notEqualOp bool
+  (?!=) = typeBinExpr notEqualOp bool
   
 instance ValueExpression JavaCode where
   inlineIf = on3CodeValues inlineIfD
@@ -641,7 +647,7 @@ jEquality :: JavaCode (Value JavaCode) -> JavaCode (Value JavaCode) ->
   JavaCode (Value JavaCode)
 jEquality v1 v2 = jEquality' (getType $ valueType v2)
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
-        jEquality' _ = on4CodeValues typeBinExpr equalOp bool v1 v2
+        jEquality' _ = typeBinExpr equalOp bool v1 v2
 
 jCast :: JavaCode (Type JavaCode) -> JavaCode (Value JavaCode) -> 
   JavaCode (Value JavaCode)

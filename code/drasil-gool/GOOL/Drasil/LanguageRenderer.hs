@@ -14,7 +14,7 @@ module GOOL.Drasil.LanguageRenderer (
   listTypeDocD, listInnerTypeD, voidDocD, destructorError, paramDocD, 
   paramListDocD, mkParam, methodDocD, methodListDocD, stateVarDocD, 
   constVarDocD, stateVarListDocD, switchDocD, assignDocD, multiAssignDoc, 
-  plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', listDecDocD, 
+  plusEqualsDocD, plusPlusDocD, listDecDocD, 
   listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, mkSt, 
   mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, 
   emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, 
@@ -58,7 +58,8 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
   BlockSym(..), InternalBlock(..), PermanenceSym(..),
   TypeSym(Type, getType, getTypeString, getTypeDoc, bool, float, string, infile,
     outfile, listType, listInnerType, obj, enumType, iterator, void), 
-  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
+  InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
@@ -66,7 +67,7 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateModDoc, OpData(..), od, ParamData(..), pd, paramName, TypeData(..), td, 
-  ValData(..), vd, Binding(..), VarData(..), vard)
+  ValData(..), vd, Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
   emptyIfEmpty, emptyIfNull, onStateValue, getInnerType, getNestDegree, 
   convType)
@@ -383,16 +384,8 @@ plusEqualsDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr)
   -> Doc
 plusEqualsDocD vr vl = variableDoc vr <+> text "+=" <+> valueDoc vl
 
-plusEqualsDocD' :: VarData -> OpData -> ValData -> Doc
-plusEqualsDocD' vr plusOp vl = varDoc vr <+> equals <+> varDoc vr <+> 
-  opDoc plusOp <+> valDoc vl
-
 plusPlusDocD :: (RenderSym repr) => repr (Variable repr) -> Doc
 plusPlusDocD v = variableDoc v <> text "++"
-
-plusPlusDocD' :: VarData -> OpData -> Doc
-plusPlusDocD' v plusOp = varDoc v <+> equals <+> varDoc v <+> opDoc plusOp <+>
-  int 1
 
 listDecDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
   Doc
@@ -672,14 +665,18 @@ unOpDocD op v = op <> parens v
 unOpDocD' :: Doc -> Doc -> Doc
 unOpDocD' op v = op <> v
 
-unExpr :: OpData -> ValData -> ValData
-unExpr u v = mkExpr (opPrec u) (valType v) (unOpDocD (opDoc u) (valDoc v))
+unExpr :: (RenderSym repr) => repr (UnaryOp repr) -> repr (Value repr) -> 
+  repr (Value repr)
+unExpr u v = mkExpr (uOpPrec u) (valueType v) (unOpDocD (uOpDoc u) (valueDoc v))
 
-unExpr' :: OpData -> ValData -> ValData
-unExpr' u v = mkExpr (opPrec u) (valType v) (unOpDocD' (opDoc u) (valDoc v))
+unExpr' :: (RenderSym repr) => repr (UnaryOp repr) -> repr (Value repr) -> 
+  repr (Value repr)
+unExpr' u v = mkExpr (uOpPrec u) (valueType v) (unOpDocD' (uOpDoc u) 
+  (valueDoc v))
 
-typeUnExpr :: OpData -> TypeData -> ValData -> ValData
-typeUnExpr u t v = mkExpr (opPrec u) t (unOpDocD (opDoc u) (valDoc v))
+typeUnExpr :: (RenderSym repr) => repr (UnaryOp repr) -> repr (Type repr) -> 
+  repr (Value repr) -> repr (Value repr)
+typeUnExpr u t v = mkExpr (uOpPrec u) t (unOpDocD (uOpDoc u) (valueDoc v))
 
 -- Binary Operators --
 
@@ -752,25 +749,29 @@ binOpDocD op v1 v2 = v1 <+> op <+> v2
 binOpDocD' :: Doc -> Doc -> Doc -> Doc
 binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
   
-binExpr :: OpData -> ValData -> ValData -> ValData
-binExpr b v1 v2 = mkExpr (opPrec b) (numType (valType v1) (valType v2)) 
-  (binOpDocD (opDoc b) (exprParensL b v1 $ valDoc v1) (exprParensR b v2 $ 
-  valDoc v2))
+binExpr :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr)
+binExpr b v1 v2 = mkExpr (bOpPrec b) (numType (valueType v1) (valueType v2)) 
+  (binOpDocD (bOpDoc b) (exprParensL b v1 $ valueDoc v1) (exprParensR b v2 $ 
+  valueDoc v2))
 
-binExpr' :: OpData -> ValData -> ValData -> ValData
-binExpr' b v1 v2 = mkExpr 9 (numType (valType v1) (valType v2)) 
-  (binOpDocD' (opDoc b) (valDoc v1) (valDoc v2))
+binExpr' :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr)
+binExpr' b v1 v2 = mkExpr 9 (numType (valueType v1) (valueType v2)) 
+  (binOpDocD' (bOpDoc b) (valueDoc v1) (valueDoc v2))
 
-numType :: TypeData -> TypeData -> TypeData
-numType t1 t2 = numericType (cType t1) (cType t2)
+numType :: (RenderSym repr) => repr (Type repr) -> repr (Type repr) -> 
+  repr (Type repr)
+numType t1 t2 = numericType (getType t1) (getType t2)
   where numericType Integer Integer = t1
         numericType Float _ = t1
         numericType _ Float = t2
         numericType _ _ = error "Numeric types required for numeric expression"
 
-typeBinExpr :: OpData -> TypeData -> ValData -> ValData -> ValData
-typeBinExpr b t v1 v2 = mkExpr (opPrec b) t (binOpDocD (opDoc b) (exprParensL b 
-  v1 $ valDoc v1) (exprParensR b v2 $ valDoc v2))
+typeBinExpr :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Type repr) -> 
+  repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+typeBinExpr b t v1 v2 = mkExpr (bOpPrec b) t (binOpDocD (bOpDoc b) 
+  (exprParensL b v1 $ valueDoc v1) (exprParensR b v2 $ valueDoc v2))
 
 mkVal :: (RenderSym repr) => repr (Type repr) -> Doc -> repr (Value repr)
 mkVal = valFromData Nothing
@@ -779,11 +780,13 @@ mkVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc ->
   repr (Variable repr)
 mkVar = varFromData Dynamic
 
-mkStaticVar :: String -> TypeData -> Doc -> VarData
-mkStaticVar = vard Static
+mkStaticVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
+  repr (Variable repr)
+mkStaticVar = varFromData Static
 
-mkExpr :: Int -> TypeData -> Doc -> ValData
-mkExpr p = vd (Just p)
+mkExpr :: (RenderSym repr) => Int -> repr (Type repr) -> Doc -> 
+  repr (Value repr)
+mkExpr p = valFromData (Just p)
 
 -- Literals --
 
@@ -854,7 +857,7 @@ varD n t = varFromData Dynamic n t (varDocD n)
 
 staticVarD :: (RenderSym repr) => Label -> repr (Type repr) -> 
   repr (Variable repr)
-staticVarD n t = varFromData Static n t (varDocD n)
+staticVarD n t = mkStaticVar n t (varDocD n)
 
 extVarD :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
   repr (Variable repr)
@@ -1163,11 +1166,14 @@ setterName s = "set" ++ capitalize s
 setEmpty :: (RenderSym repr) => repr (Statement repr) -> repr (Statement repr)
 setEmpty s = stateFromData (statementDoc s) Empty
 
-exprParensL :: OpData -> ValData -> (Doc -> Doc)
-exprParensL o v = if maybe False (< opPrec o) (valPrec v) then parens else id
+exprParensL :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Value repr) -> 
+  (Doc -> Doc)
+exprParensL o v = if maybe False (< bOpPrec o) (valuePrec v) then parens else id
 
-exprParensR :: OpData -> ValData -> (Doc -> Doc)
-exprParensR o v = if maybe False (<= opPrec o) (valPrec v) then parens else id
+exprParensR :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Value repr) -> 
+  (Doc -> Doc)
+exprParensR o v = if maybe False (<= bOpPrec o) (valuePrec v) then parens else 
+  id
 
 intValue :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
 intValue i = intValue' (getType $ valueType i)

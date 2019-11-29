@@ -24,10 +24,10 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
 import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
   bodyDocD, oneLinerD, outDoc, intTypeDocD, floatTypeDocD, typeDocD, 
   enumTypeDocD, listInnerTypeD, destructorError, paramListDocD, mkParam, 
-  runStrategyD, checkStateD, multiAssignDoc, plusEqualsDocD', plusPlusDocD', 
-  returnDocD, mkStNoEnd, stringListVals', stringListLists', stateD, loopStateD, 
-  emptyStateD, assignD, assignToListIndexD, decrementD, decrement1D, closeFileD,
-  discardFileLineD, breakD, continueD, returnD, valStateD, throwD, initStateD, 
+  runStrategyD, checkStateD, multiAssignDoc, returnDocD, mkStNoEnd, 
+  stringListVals', stringListLists', stateD, loopStateD, emptyStateD, assignD, 
+  assignToListIndexD, decrementD, decrement1D, closeFileD, discardFileLineD, 
+  breakD, continueD, returnD, valStateD, throwD, initStateD, 
   changeStateD, initObserverListD, addObserverD, ifNoElseD, switchAsIfD, 
   ifExistsD, tryCatchD, unOpPrec, notOpDocD', negateOpDocD, sqrtOpDocD', 
   absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', 
@@ -44,22 +44,21 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, 
   iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, dynamicDocD, 
   bindingError, classDec, dot, forLabel, inLabel, observerListName, 
-  commentedItem, addCommentsDocD, commentedModD, docFuncRepr, valList, 
+  commentedItem, addCommentsDocD, commentedModD, docFuncRepr, 
   valueList, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, comment, ifCond, objDecNew, objDecNewNoParams, construct,
-  comment, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
-  function, docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, 
-  buildClass, privClass, pubClass, docClass, commentedClass, buildModule, 
-  modFromData, fileDoc, docMod)
+  fileFromData, block, increment, increment1, comment, ifCond, objDecNew, 
+  objDecNewNoParams, construct, method, getMethod, setMethod, privMethod, 
+  pubMethod, constructor, function, docFunc, stateVarDef, constVar, privMVar, 
+  pubMVar, pubGVar, buildClass, privClass, pubClass, docClass, commentedClass, 
+  buildModule, modFromData, fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on4CodeValues, 
-  on5CodeValues, on6CodeValues, onCodeList, onStateList, on1CodeValue1List, 
-  on2CodeLists, checkParams)
+  on5CodeValues, onCodeList, onStateList, on1CodeValue1List, checkParams)
 import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
   setCurrMain, setParameters)
 
@@ -390,8 +389,7 @@ instance InternalFunction PythonCode where
   funcFromData t d = on2CodeValues fd t (toCode d)
 
 instance InternalStatement PythonCode where
-  printSt nl p v f = mkStNoEnd <$> on3CodeValues (pyPrint nl) p v 
-    (fromMaybe (mkVal void empty) f)
+  printSt nl p v f = mkStNoEnd $ pyPrint nl p v (fromMaybe (mkVal void empty) f)
 
   state = stateD
   loopState = loopStateD
@@ -407,18 +405,17 @@ instance StatementSym PythonCode where
   type Statement PythonCode = (Doc, Terminator)
   assign = assignD Empty
   assignToListIndex = assignToListIndexD
-  multiAssign vrs vls = mkStNoEnd <$> on2CodeLists multiAssignDoc vrs vls
+  multiAssign vrs vls = mkStNoEnd $ multiAssignDoc vrs vls
   (&=) = assign
   (&-=) = decrementD
-  (&+=) vr vl = mkStNoEnd <$> on3CodeValues plusEqualsDocD' vr plusOp vl
-  (&++) v = mkStNoEnd <$> on2CodeValues plusPlusDocD' v plusOp
+  (&+=) = G.increment
+  (&++) = G.increment1
   (&~-) = decrement1D
 
-  varDec _ = toCode (mkStNoEnd empty)
+  varDec _ = mkStNoEnd empty
   varDecDef = assign
-  listDec _ v = mkStNoEnd <$> onCodeValue pyListDec v
-  listDecDef v vs = mkStNoEnd <$> on2CodeValues pyListDecDef v (onCodeList 
-    valList vs)
+  listDec _ v = mkStNoEnd $ pyListDec v
+  listDecDef v vs = mkStNoEnd $ pyListDecDef v vs
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v vs = varDecDef v (extNewObj lib (variableType v) vs)
@@ -459,7 +456,7 @@ instance StatementSym PythonCode where
 
   returnState = returnD Empty
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs = toCode $ mkStNoEnd $ returnDocD vs
+  multiReturn vs = mkStNoEnd $ returnDocD vs
 
   valState = valStateD Empty
 
@@ -491,11 +488,10 @@ instance ControlStatementSym PythonCode where
 
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"
-  forRange i initv finalv stepv b = mkStNoEnd <$> on6CodeValues pyForRange i
-    iterInLabel initv finalv stepv b
-  forEach e v b = mkStNoEnd <$> on5CodeValues pyForEach e iterForEachLabel 
-    iterInLabel v b
-  while v b = mkStNoEnd <$> on2CodeValues pyWhile v b
+  forRange i initv finalv stepv b = mkStNoEnd $ pyForRange i iterInLabel initv 
+    finalv stepv b
+  forEach e v b = mkStNoEnd $ pyForEach e iterForEachLabel iterInLabel v b
+  while v b = mkStNoEnd $ pyWhile v b
 
   tryCatch = tryCatchD pyTryCatch
 
@@ -656,16 +652,18 @@ pyListSize v f = f <> parens v
 pyStringType :: TypeData
 pyStringType = td String "str" (text "str")
 
-pyListDec :: VarData -> Doc
-pyListDec v = varDoc v <+> equals <+> typeDoc (varType v)
+pyListDec :: (RenderSym repr) => repr (Variable repr) -> Doc
+pyListDec v = variableDoc v <+> equals <+> getTypeDoc (variableType v)
 
-pyListDecDef :: VarData -> Doc -> Doc
-pyListDecDef v vs = varDoc v <+> equals <+> brackets vs
+pyListDecDef :: (RenderSym repr) => repr (Variable repr) -> [repr (Value repr)] 
+  -> Doc
+pyListDecDef v vs = variableDoc v <+> equals <+> brackets (valueList vs)
 
-pyPrint :: Bool ->  ValData -> ValData -> ValData -> Doc
-pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
+pyPrint :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
+  -> repr (Value repr) -> Doc
+pyPrint newLn prf v f = valueDoc prf <> parens (valueDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
-        fl = emptyIfEmpty (valDoc f) $ text ", file=" <> valDoc f
+        fl = emptyIfEmpty (valueDoc f) $ text ", file=" <> valueDoc f
 
 pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
   -> Maybe (repr (Value repr)) -> repr (Statement repr)
@@ -686,22 +684,26 @@ pyInput inSrc v = v &= pyInput' (getType $ variableType v)
 pyThrow :: (RenderSym repr) => repr (Value repr) -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valueDoc errMsg)
 
-pyForRange :: VarData -> Doc ->  ValData ->  ValData ->
-  ValData -> Doc -> Doc
+pyForRange :: (RenderSym repr) => repr (Variable repr) -> repr (Keyword repr) 
+  -> repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
+  repr (Body repr) -> Doc
 pyForRange i inLbl initv finalv stepv b = vcat [
-  forLabel <+> varDoc i <+> inLbl <+> text "range" <> parens (valDoc initv <> 
-    text ", " <> valDoc finalv <> text ", " <> valDoc stepv) <> colon,
-  indent b]
+  forLabel <+> variableDoc i <+> keyDoc inLbl <+> text "range" <> parens 
+    (valueDoc initv <> text ", " <> valueDoc finalv <> text ", " <> valueDoc 
+    stepv) <> colon,
+  indent $ bodyDoc b]
 
-pyForEach :: VarData -> Doc -> Doc ->  ValData -> Doc -> Doc
+pyForEach :: (RenderSym repr) => repr (Variable repr) -> repr (Keyword repr) -> 
+  repr (Keyword repr) -> repr (Value repr) -> repr (Body repr) -> Doc
 pyForEach i forEachLabel inLbl lstVar b = vcat [
-  forEachLabel <+> varDoc i <+> inLbl <+> valDoc lstVar <> colon,
-  indent b]
+  keyDoc forEachLabel <+> variableDoc i <+> keyDoc inLbl <+> valueDoc lstVar <> 
+    colon,
+  indent $ bodyDoc b]
 
-pyWhile ::  ValData -> Doc -> Doc
+pyWhile :: (RenderSym repr) => repr (Value repr) -> repr (Body repr) -> Doc
 pyWhile v b = vcat [
-  text "while" <+> valDoc v <> colon,
-  indent b]
+  text "while" <+> valueDoc v <> colon,
+  indent $ bodyDoc b]
 
 pyTryCatch :: (RenderSym repr) => repr (Body repr) -> repr (Body repr) -> Doc
 pyTryCatch tryB catchB = vcat [

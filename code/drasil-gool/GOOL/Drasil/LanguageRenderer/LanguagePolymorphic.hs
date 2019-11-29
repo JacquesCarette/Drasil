@@ -2,12 +2,12 @@
 
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, block, 
-  pi, varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
-  comment, ifCond, for, forEach, while, construct, method, getMethod, setMethod,
-  privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  docInOutFunc, intFunc, stateVar,stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, enum, privClass, pubClass, docClass, commentedClass, 
-  buildModule, buildModule', modFromData, fileDoc, docMod
+  pi, increment, increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  objDecNewNoParams, comment, ifCond, for, forEach, while, construct, method, 
+  getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
+  mainFunction, docFunc, docInOutFunc, intFunc, stateVar,stateVarDef, constVar, 
+  privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
+  commentedClass, buildModule, buildModule', modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -17,7 +17,7 @@ import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   RenderSym(RenderFile, commentedMod), BlockSym(Block), 
   InternalBlock(..), BodySym(..), PermanenceSym(..), InternalPerm(..), 
   TypeSym(..), InternalType(..), VariableSym(..), 
-  ValueSym(Value, valueOf, valueDoc),
+  ValueSym(Value, litInt, valueOf, valueDoc), NumericExpression(..),
   ValueExpression(..), InternalValue(..), InternalStatement(..), 
   StatementSym(Statement, (&=), constDecDef, returnState), ScopeSym(..), 
   InternalScope(..), MethodTypeSym(mType), ParameterSym(..), 
@@ -57,6 +57,13 @@ block end sts = docBlock $ blockDocD (keyDoc end) (map (statementDoc . state)
 
 pi :: (RenderSym repr) => repr (Value repr)
 pi = valFromData Nothing float (text "Math.PI")
+
+increment :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
+  repr (Statement repr)
+increment vr vl = vr &= valueOf vr #+ vl
+
+increment1 :: (RenderSym repr) => repr (Variable repr) -> repr (Statement repr)
+increment1 vr = vr &= valueOf vr #+ litInt 1
 
 varDec :: (RenderSym repr) => repr (Permanence repr) -> repr (Permanence repr) 
   -> repr (Variable repr) -> repr (Statement repr)

@@ -1198,7 +1198,7 @@ instance ControlStatementSym CppSrcCode where
   switch = switchD
   switchAsIf = switchAsIfD
 
-  ifExists _ ifBody _ = mkStNoEnd <$> ifBody -- All variables are initialized in C++
+  ifExists _ ifBody _ = mkStNoEnd $ bodyDoc ifBody -- All variables are initialized in C++
 
   for = G.for blockStart blockEnd 
   forRange = forRangeD
@@ -1658,12 +1658,12 @@ instance InternalFunction CppHdrCode where
   funcFromData t d = on2CodeValues fd t (toCode d)
 
 instance InternalStatement CppHdrCode where
-  printSt _ _ _ _ = toCode (mkStNoEnd empty)
+  printSt _ _ _ _ = emptyState
 
   state = stateD
-  loopState _ = toCode (mkStNoEnd empty)
+  loopState _ = emptyState
 
-  emptyState = toCode $ mkStNoEnd empty
+  emptyState = emptyStateD
   statementDoc = fst . unCPPHC
   statementTerm = snd . unCPPHC
   
@@ -1671,99 +1671,99 @@ instance InternalStatement CppHdrCode where
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
-  assign _ _ = toCode (mkStNoEnd empty)
-  assignToListIndex _ _ _ = toCode (mkStNoEnd empty)
-  multiAssign _ _ = toCode (mkStNoEnd empty)
-  (&=) _ _ = toCode (mkStNoEnd empty)
-  (&-=) _ _ = toCode (mkStNoEnd empty)
-  (&+=) _ _ = toCode (mkStNoEnd empty)
-  (&++) _ = toCode (mkStNoEnd empty)
-  (&~-) _ = toCode (mkStNoEnd empty)
+  assign _ _ = emptyState
+  assignToListIndex _ _ _ = emptyState
+  multiAssign _ _ = emptyState
+  (&=) _ _ = emptyState
+  (&-=) _ _ = emptyState
+  (&+=) _ _ = emptyState
+  (&++) _ = emptyState
+  (&~-) _ = emptyState
 
   varDec = G.varDec static_ dynamic_
   varDecDef = G.varDecDef
-  listDec _ _ = toCode (mkStNoEnd empty)
-  listDecDef _ _ = toCode (mkStNoEnd empty)
-  objDecDef _ _ = toCode (mkStNoEnd empty)
-  objDecNew _ _ = toCode (mkStNoEnd empty)
-  extObjDecNew _ _ _ = toCode (mkStNoEnd empty)
-  objDecNewNoParams _ = toCode (mkStNoEnd empty)
-  extObjDecNewNoParams _ _ = toCode (mkStNoEnd empty)
+  listDec _ _ = emptyState
+  listDecDef _ _ = emptyState
+  objDecDef _ _ = emptyState
+  objDecNew _ _ = emptyState
+  extObjDecNew _ _ _ = emptyState
+  objDecNewNoParams _ = emptyState
+  extObjDecNewNoParams _ _ = emptyState
   constDecDef = constDecDefD
 
-  print _ = toCode (mkStNoEnd empty)
-  printLn _ = toCode (mkStNoEnd empty)
-  printStr _ = toCode (mkStNoEnd empty)
-  printStrLn _ = toCode (mkStNoEnd empty)
+  print _ = emptyState
+  printLn _ = emptyState
+  printStr _ = emptyState
+  printStrLn _ = emptyState
 
-  printFile _ _ = toCode (mkStNoEnd empty)
-  printFileLn _ _ = toCode (mkStNoEnd empty)
-  printFileStr _ _ = toCode (mkStNoEnd empty)
-  printFileStrLn _ _ = toCode (mkStNoEnd empty)
+  printFile _ _ = emptyState
+  printFileLn _ _ = emptyState
+  printFileStr _ _ = emptyState
+  printFileStrLn _ _ = emptyState
 
-  getInput _ = toCode (mkStNoEnd empty)
-  discardInput = toCode (mkStNoEnd empty)
-  getFileInput _ _ = toCode (mkStNoEnd empty)
-  discardFileInput _ = toCode (mkStNoEnd empty)
+  getInput _ = emptyState
+  discardInput = emptyState
+  getFileInput _ _ = emptyState
+  discardFileInput _ = emptyState
 
-  openFileR _ _ = toCode (mkStNoEnd empty)
-  openFileW _ _ = toCode (mkStNoEnd empty)
-  openFileA _ _ = toCode (mkStNoEnd empty)
-  closeFile _ = toCode (mkStNoEnd empty)
+  openFileR _ _ = emptyState
+  openFileW _ _ = emptyState
+  openFileA _ _ = emptyState
+  closeFile _ = emptyState
 
-  getFileInputLine _ _ = toCode (mkStNoEnd empty)
-  discardFileLine _ = toCode (mkStNoEnd empty)
-  stringSplit _ _ _ = toCode (mkStNoEnd empty)
+  getFileInputLine _ _ = emptyState
+  discardFileLine _ = emptyState
+  stringSplit _ _ _ = emptyState
 
-  stringListVals _ _ = toCode (mkStNoEnd empty)
-  stringListLists _ _ = toCode (mkStNoEnd empty)
+  stringListVals _ _ = emptyState
+  stringListLists _ _ = emptyState
 
-  break = toCode (mkStNoEnd empty)
-  continue = toCode (mkStNoEnd empty)
+  break = emptyState
+  continue = emptyState
 
-  returnState _ = toCode (mkStNoEnd empty)
-  multiReturn _ = toCode (mkStNoEnd empty)
+  returnState _ = emptyState
+  multiReturn _ = emptyState
 
-  valState _ = toCode (mkStNoEnd empty)
+  valState _ = emptyState
 
-  comment _ = toCode (mkStNoEnd empty)
+  comment _ = emptyState
 
-  free _ = toCode (mkStNoEnd empty)
+  free _ = emptyState
 
-  throw _ = toCode (mkStNoEnd empty)
+  throw _ = emptyState
 
-  initState _ _ = toCode (mkStNoEnd empty)
-  changeState _ _ = toCode (mkStNoEnd empty)
+  initState _ _ = emptyState
+  changeState _ _ = emptyState
 
-  initObserverList _ _ = toCode (mkStNoEnd empty)
-  addObserver _ = toCode (mkStNoEnd empty)
+  initObserverList _ _ = emptyState
+  addObserver _ = emptyState
 
-  inOutCall _ _ _ _ = toCode (mkStNoEnd empty)
-  selfInOutCall _ _ _ _ _ = toCode (mkStNoEnd empty)
-  extInOutCall _ _ _ _ _ = toCode (mkStNoEnd empty)
+  inOutCall _ _ _ _ = emptyState
+  selfInOutCall _ _ _ _ _ = emptyState
+  extInOutCall _ _ _ _ _ = emptyState
 
-  multi _ = toCode (mkStNoEnd empty)
+  multi _ = emptyState
 
 instance ControlStatementSym CppHdrCode where
-  ifCond _ _ = toCode (mkStNoEnd empty)
-  ifNoElse _ = toCode (mkStNoEnd empty)
-  switch _ _ _ = toCode (mkStNoEnd empty)
-  switchAsIf _ _ _ = toCode (mkStNoEnd empty)
+  ifCond _ _ = emptyState
+  ifNoElse _ = emptyState
+  switch _ _ _ = emptyState
+  switchAsIf _ _ _ = emptyState
 
-  ifExists _ _ _ = toCode (mkStNoEnd empty)
+  ifExists _ _ _ = emptyState
 
-  for _ _ _ _ = toCode (mkStNoEnd empty)
-  forRange _ _ _ _ _ = toCode (mkStNoEnd empty)
-  forEach _ _ _ = toCode (mkStNoEnd empty)
-  while _ _ = toCode (mkStNoEnd empty)
+  for _ _ _ _ = emptyState
+  forRange _ _ _ _ _ = emptyState
+  forEach _ _ _ = emptyState
+  while _ _ = emptyState
 
-  tryCatch _ _ = toCode (mkStNoEnd empty)
+  tryCatch _ _ = emptyState
 
-  checkState _ _ _ = toCode (mkStNoEnd empty)
+  checkState _ _ _ = emptyState
 
-  notifyObservers _ _ = toCode (mkStNoEnd empty)
+  notifyObservers _ _ = emptyState
 
-  getFileInputAll _ _ = toCode (mkStNoEnd empty)
+  getFileInputAll _ _ = emptyState
 
 instance ScopeSym CppHdrCode where
   type Scope CppHdrCode = (Doc, ScopeTag)

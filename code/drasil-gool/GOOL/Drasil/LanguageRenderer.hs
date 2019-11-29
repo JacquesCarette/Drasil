@@ -46,9 +46,9 @@ module GOOL.Drasil.LanguageRenderer (
   iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDox, classDox, moduleDox, commentedModD, docFuncRepr, valList, 
-  valueList, prependToBody, appendToBody, surroundBody, getterName, setterName, 
-  setEmpty, intValue, filterOutObjs
+  functionDox, classDox, moduleDox, commentedModD, docFuncRepr, 
+  valueList, variableList, prependToBody, appendToBody, surroundBody, 
+  getterName, setterName, setEmpty, intValue, filterOutObjs
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -375,8 +375,9 @@ assignDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) ->
   Doc
 assignDocD vr vl = variableDoc vr <+> equals <+> valueDoc vl
 
-multiAssignDoc :: [VarData] -> [ValData] -> Doc
-multiAssignDoc vrs vls = varList vrs <+> equals <+> valList vls
+multiAssignDoc :: (RenderSym repr) => [repr (Variable repr)] -> 
+  [repr (Value repr)] -> Doc
+multiAssignDoc vrs vls = variableList vrs <+> equals <+> valueList vls
 
 plusEqualsDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) 
   -> Doc
@@ -427,8 +428,8 @@ getTermDoc Empty = empty
 mkSt :: Doc -> (Doc, Terminator)
 mkSt s = (s, Semi)
 
-mkStNoEnd :: Doc -> (Doc, Terminator)
-mkStNoEnd s = (s, Empty)
+mkStNoEnd :: (RenderSym repr) => Doc -> repr (Statement repr)
+mkStNoEnd = flip stateFromData Empty
 
 stringListVals' :: (RenderSym repr) => [repr (Variable repr)] -> 
   repr (Value repr) -> repr (Statement repr)
@@ -782,7 +783,7 @@ mkVal = valFromData Nothing
 
 mkVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
   repr (Variable repr)
-mkVar = vard Dynamic
+mkVar = varFromData Dynamic
 
 mkStaticVar :: String -> TypeData -> Doc -> VarData
 mkStaticVar = vard Static
@@ -1142,14 +1143,11 @@ docFuncRepr desc pComms rComms = commentedFunc (docComment $ onStateValue
 
 -- Helper Functions --
 
-valList :: [ValData] -> Doc
-valList vs = hcat (intersperse (text ", ") (map valDoc vs))
-
 valueList :: (RenderSym repr) => [repr (Value repr)] -> Doc
 valueList vs = hcat (intersperse (text ", ") (map valueDoc vs))
 
-varList :: [VarData] -> Doc
-varList vs = hcat (intersperse (text ", ") (map varDoc vs))
+variableList :: (RenderSym repr) => [repr (Variable repr)] -> Doc
+variableList vs = hcat (intersperse (text ", ") (map variableDoc vs))
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 prependToBody s b = vcat [fst $ statementDocD s, maybeBlank, b]

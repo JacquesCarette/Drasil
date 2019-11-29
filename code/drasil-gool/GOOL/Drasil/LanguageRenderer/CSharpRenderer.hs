@@ -238,7 +238,7 @@ instance VariableSym CSharpCode where
   enumVar = enumVarD
   classVar = classVarD classVarDocD
   extClassVar = classVar
-  objVar = on2CodeValues csObjVar
+  objVar = csObjVar
   objVarSelf = objVarSelfD
   listVar  = listVarD
   listOf = listOfD 

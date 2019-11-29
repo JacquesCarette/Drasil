@@ -34,7 +34,7 @@ module GOOL.Drasil.LanguageRenderer (
   binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, mkVar,
   mkStaticVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
   varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, classVarCheckStatic, 
-  classVarDocD, objVarDocD, inlineIfD, funcAppDocD, newObjDocD, newObjDocD', 
+  classVarDocD, objVarDocD, funcAppDocD, newObjDocD, newObjDocD', 
   constDecDefDocD, varD, staticVarD, extVarD, selfD, enumVarD, classVarD, 
   objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, 
   enumElementD, argsListD, funcAppD, selfFuncAppD, extFuncAppD, newObjD, 
@@ -67,13 +67,12 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateModDoc, OpData(..), od, ParamData(..), pd, paramName, TypeData(..), td, 
-  ValData(..), vd, Binding(..), VarData(..))
+  Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
   emptyIfEmpty, emptyIfNull, onStateValue, getInnerType, getNestDegree, 
   convType)
 import GOOL.Drasil.State (MS, getParameters)
 
-import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
 import Data.Bifunctor (first)
 import Data.Map as Map (lookup, fromList)
@@ -837,11 +836,6 @@ classVarDocD c v = c <> dot <> v
 
 objVarDocD :: Doc -> Doc ->  Doc
 objVarDocD n1 n2 = n1 <> dot <> n2
-
-inlineIfD :: ValData -> ValData -> ValData -> ValData
-inlineIfD c v1 v2 = vd prec (valType v1) (valDoc c <+> text "?" <+> 
-  valDoc v1 <+> text ":" <+> valDoc v2)
-  where prec = valPrec c <|> Just 0
 
 funcAppDocD :: (RenderSym repr) => Label -> [repr (Value repr)] -> Doc
 funcAppDocD n vs = text n <> parens (valueList vs)

@@ -58,7 +58,7 @@ import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
-  on5CodeValues, onCodeList, onStateList, on1CodeValue1List, checkParams)
+  onCodeList, onStateList, on1CodeValue1List, checkParams)
 import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
   setCurrMain, setParameters)
 
@@ -186,7 +186,7 @@ instance InternalType PythonCode where
 instance ControlBlockSym PythonCode where
   runStrategy = runStrategyD
 
-  listSlice vnew vold b e s = on5CodeValues pyListSlice vnew vold (getVal b) 
+  listSlice vnew vold b e s = toCode $ pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
     where getVal = fromMaybe (mkVal void empty)
 
@@ -319,7 +319,7 @@ instance BooleanExpression PythonCode where
   (?!=) = typeBinExpr notEqualOp bool
 
 instance ValueExpression PythonCode where
-  inlineIf = on3CodeValues pyInlineIf
+  inlineIf = pyInlineIf
   funcApp = funcAppD
   selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
@@ -379,7 +379,7 @@ instance InternalFunction PythonCode where
   getFunc = getFuncD
   setFunc = setFuncD
 
-  listSizeFunc = on2CodeValues fd int (toCode $ text "len")
+  listSizeFunc = funcFromData int (text "len")
   listAddFunc _ = listAddFuncD "insert"
   listAppendFunc = listAppendFuncD "append"
 
@@ -648,9 +648,10 @@ pyClassVar c v = c <> dot <> c <> dot <> v
 pyExtStateObj :: Label -> Doc -> Doc -> Doc
 pyExtStateObj l t vs = text l <> dot <> t <> parens vs
 
-pyInlineIf :: ValData -> ValData -> ValData -> ValData
-pyInlineIf c v1 v2 = vd (valPrec c) (valType v1) (valDoc v1 <+> text "if" <+> 
-  valDoc c <+> text "else" <+> valDoc v2)
+pyInlineIf :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr)
+pyInlineIf c v1 v2 = valFromData (valuePrec c) (valueType v1) 
+  (valueDoc v1 <+> text "if" <+> valueDoc c <+> text "else" <+> valueDoc v2)
 
 pyListSize :: Doc -> Doc -> Doc
 pyListSize v f = f <> parens v
@@ -718,10 +719,10 @@ pyTryCatch tryB catchB = vcat [
   text "except" <+> text "Exception" <+> colon,
   indent $ bodyDoc catchB]
 
-pyListSlice :: VarData -> ValData -> 
-  ValData -> ValData -> ValData -> Doc
-pyListSlice vnew vold b e s = varDoc vnew <+> equals <+> valDoc vold <> 
-  brackets (valDoc b <> colon <> valDoc e <> colon <> valDoc s)
+pyListSlice :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> Doc
+pyListSlice vnew vold b e s = variableDoc vnew <+> equals <+> valueDoc vold <> 
+  brackets (valueDoc b <> colon <> valueDoc e <> colon <> valueDoc s)
 
 pyMethod :: Label -> VarData -> Doc -> Doc -> Doc
 pyMethod n slf ps b = vcat [

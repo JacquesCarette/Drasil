@@ -2,12 +2,13 @@
 
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, block, 
-  pi, increment, increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
-  objDecNewNoParams, comment, ifCond, for, forEach, while, construct, method, 
-  getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, docInOutFunc, intFunc, stateVar,stateVarDef, constVar, 
-  privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule, buildModule', modFromData, fileDoc, docMod
+  pi, inlineIf, increment, increment1, varDec, varDecDef, listDec, listDecDef, 
+  objDecNew, objDecNewNoParams, comment, ifCond, for, forEach, while, construct,
+  method, getMethod, setMethod,privMethod, pubMethod, constructor, docMain, 
+  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar,stateVarDef, 
+  constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
+  docClass, commentedClass, buildModule, buildModule', modFromData, fileDoc, 
+  docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -17,8 +18,8 @@ import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   RenderSym(RenderFile, commentedMod), BlockSym(Block), 
   InternalBlock(..), BodySym(..), PermanenceSym(..), InternalPerm(..), 
   TypeSym(..), InternalType(..), VariableSym(..), 
-  ValueSym(Value, litInt, valueOf, valueDoc), NumericExpression(..),
-  ValueExpression(..), InternalValue(..), InternalStatement(..), 
+  ValueSym(Value, litInt, valueOf, valueDoc, valueType), NumericExpression(..),
+  ValueExpression(newObj), InternalValue(..), InternalStatement(..), 
   StatementSym(Statement, (&=), constDecDef, returnState), ScopeSym(..), 
   InternalScope(..), MethodTypeSym(mType), ParameterSym(..), 
   MethodTypeSym(MethodType), MethodSym(Method), 
@@ -45,6 +46,7 @@ import GOOL.Drasil.State (GS, FS, MS, lensFStoGS, lensFStoMS, currMain,
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList)
+import Control.Applicative ((<|>))
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
@@ -57,6 +59,12 @@ block end sts = docBlock $ blockDocD (keyDoc end) (map (statementDoc . state)
 
 pi :: (RenderSym repr) => repr (Value repr)
 pi = valFromData Nothing float (text "Math.PI")
+
+inlineIf :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr)
+inlineIf c v1 v2 = valFromData prec (valueType v1) (valueDoc c <+> text "?" <+> 
+  valueDoc v1 <+> text ":" <+> valueDoc v2)
+  where prec = valuePrec c <|> Just 0
 
 increment :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
   repr (Statement repr)

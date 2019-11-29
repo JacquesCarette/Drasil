@@ -40,7 +40,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
   typeBinExpr, mkVal, mkVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
-  litStringD, classVarCheckStatic, inlineIfD, varD, staticVarD, selfD, enumVarD,
+  litStringD, classVarCheckStatic, varD, staticVarD, selfD, enumVarD,
   objVarD, listVarD, listOfD, valueOfD, argD, argsListD, objAccessD, 
   objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
   funcAppD, newObjD, newObjDocD', castDocD, castObjDocD, funcD, getD, setD, 
@@ -52,9 +52,9 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   commentedModD, docFuncRepr, valueList, appendToBody, surroundBody, getterName,
   setterName, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, varDec, varDecDef, listDec, listDecDef, objDecNew, 
-  objDecNewNoParams, construct, comment, ifCond, for, while, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, function, docFunc, 
+  fileFromData, block, inlineIf, varDec, varDecDef, listDec, listDecDef, 
+  objDecNew, objDecNewNoParams, construct, comment, ifCond, for, while, method, 
+  getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
   docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
   docClass, commentedClass, buildModule, modFromData, fileDoc, docMod)
 import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
@@ -1030,7 +1030,7 @@ instance BooleanExpression CppSrcCode where
   (?!=) = typeBinExpr notEqualOp bool
    
 instance ValueExpression CppSrcCode where
-  inlineIf = on3CodeValues inlineIfD
+  inlineIf = G.inlineIf
   funcApp = funcAppD
   selfFuncApp c = cppSelfFuncApp (self c)
   extFuncApp _ = funcApp
@@ -1642,7 +1642,7 @@ instance Selector CppHdrCode where
 
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
-  func _ _ _ = on2CodeValues fd void (toCode empty)
+  func _ _ _ = funcFromData void empty
   
   get _ _ = mkVal void empty
   set _ _ _ = mkVal void empty
@@ -1660,18 +1660,18 @@ instance SelectorFunction CppHdrCode where
   at _ _ = mkVal void empty
 
 instance InternalFunction CppHdrCode where
-  getFunc _ = on2CodeValues fd void (toCode empty)
-  setFunc _ _ _ = on2CodeValues fd void (toCode empty)
+  getFunc _ = funcFromData void empty
+  setFunc _ _ _ = funcFromData void empty
 
-  listSizeFunc = on2CodeValues fd void (toCode empty)
-  listAddFunc _ _ _ = on2CodeValues fd void (toCode empty)
-  listAppendFunc _ = on2CodeValues fd void (toCode empty)
+  listSizeFunc = funcFromData void empty
+  listAddFunc _ _ _ = funcFromData void empty
+  listAppendFunc _ = funcFromData void empty
 
-  iterBeginFunc _ = on2CodeValues fd void (toCode empty)
-  iterEndFunc _ = on2CodeValues fd void (toCode empty)
+  iterBeginFunc _ = funcFromData void empty
+  iterEndFunc _ = funcFromData void empty
 
-  listAccessFunc _ _ = on2CodeValues fd void (toCode empty)
-  listSetFunc _ _ _ = on2CodeValues fd void (toCode empty)
+  listAccessFunc _ _ = funcFromData void empty
+  listSetFunc _ _ _ = funcFromData void empty
   
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unCPPHC

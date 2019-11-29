@@ -38,7 +38,7 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
   binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
-  litIntD, litStringD, classVarDocD, inlineIfD, newObjDocD, varD, 
+  litIntD, litStringD, classVarDocD, newObjDocD, varD, 
   staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, 
   listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, 
   objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, 
@@ -52,11 +52,11 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   addCommentsDocD, commentedModD, docFuncRepr, valueList, appendToBody, 
   surroundBody, intValue, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, pi, varDec, varDecDef, listDec, listDecDef, objDecNew, 
-  objDecNewNoParams, construct, comment, ifCond, for, forEach, while, method, 
-  getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
-  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
+  fileFromData, block, pi, inlineIf, varDec, varDecDef, listDec, listDecDef, 
+  objDecNew, objDecNewNoParams, construct, comment, ifCond, for, forEach, while,
+  method, getMethod, setMethod,privMethod, pubMethod, constructor, docMain, 
+  function, mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, 
+  privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
   commentedClass, buildModule', modFromData, fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
@@ -321,7 +321,7 @@ instance BooleanExpression JavaCode where
   (?!=) = typeBinExpr notEqualOp bool
   
 instance ValueExpression JavaCode where
-  inlineIf = on3CodeValues inlineIfD
+  inlineIf = G.inlineIf
   funcApp = funcAppD
   selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD

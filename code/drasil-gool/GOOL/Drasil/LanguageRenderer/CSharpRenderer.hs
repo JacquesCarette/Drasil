@@ -39,8 +39,8 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
   mkVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
-  classVarDocD, objVarDocD, inlineIfD, newObjDocD, varD, staticVarD, 
-  extVarD, selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
+  classVarDocD, objVarDocD, newObjDocD, varD, staticVarD, extVarD, selfD, 
+  enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
   valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, 
   objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
   selfFuncAppD, extFuncAppD, newObjD,notNullD, funcDocD, castDocD, 
@@ -52,12 +52,12 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   commentedModD, appendToBody, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, pi, varDec, varDecDef, listDec, listDecDef, objDecNew, 
-  objDecNewNoParams, construct, comment, ifCond, for, forEach, while, method, 
-  getMethod, setMethod,privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
-  privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule', modFromData, fileDoc, docMod)
+  fileFromData, block, pi, inlineIf, varDec, varDecDef, listDec, listDecDef, 
+  objDecNew, objDecNewNoParams, construct, comment, ifCond, for, forEach, while,
+  method, getMethod, setMethod,privMethod, pubMethod, constructor, docMain, 
+  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef,
+  constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
+  docClass, commentedClass, buildModule', modFromData, fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
@@ -321,7 +321,7 @@ instance BooleanExpression CSharpCode where
   (?!=) = typeBinExpr notEqualOp bool
   
 instance ValueExpression CSharpCode where
-  inlineIf = on3CodeValues inlineIfD
+  inlineIf = G.inlineIf
   funcApp = funcAppD
   selfFuncApp c = selfFuncAppD (self c)
   extFuncApp = extFuncAppD
@@ -380,7 +380,7 @@ instance InternalFunction CSharpCode where
   getFunc = getFuncD
   setFunc = setFuncD
 
-  listSizeFunc = on2CodeValues fd int (toCode $ funcDocD (text "Count"))
+  listSizeFunc = funcFromData int (funcDocD (text "Count"))
   listAddFunc _ = listAddFuncD "Insert"
   listAppendFunc = listAppendFuncD "Add"
 
@@ -501,9 +501,8 @@ instance ControlStatementSym CSharpCode where
   checkState = checkStateD
   notifyObservers = notifyObserversD
 
-  getFileInputAll f v = while ((f $. on2CodeValues fd bool (toCode $ text 
-    ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (valueOf v) 
-    (csFileInput f))
+  getFileInputAll f v = while ((f $. funcFromData bool (text ".EndOfStream")) 
+    ?!) (oneLiner $ valState $ listAppend (valueOf v) (csFileInput f))
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc

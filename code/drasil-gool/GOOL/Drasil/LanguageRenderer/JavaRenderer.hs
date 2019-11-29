@@ -30,7 +30,7 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, 
   assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, 
   increment1D, discardInputD, discardFileInputD, openFileRD, openFileWD, 
-  openFileAD, closeFileD, discardFileLineD, breakD, continueD, returnD, 
+  openFileAD, closeFileD, discardFileLineD, breakDocD, continueDocD, returnD, 
   multiReturnError, valStateD, freeError, throwD, initStateD, changeStateD, 
   initObserverListD, addObserverD, ifNoElseD, switchD, switchAsIfD, ifExistsD, 
   forRangeD, tryCatchD, unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', 
@@ -334,6 +334,7 @@ instance InternalValue JavaCode where
   
   cast = jCast
   
+  valuePrec = valPrec . unJC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector JavaCode where
@@ -421,7 +422,7 @@ instance StatementSym JavaCode where
   extObjDecNew _ = objDecNew
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams _ = objDecNewNoParams
-  constDecDef v def = mkSt <$> on2CodeValues jConstDecDef v def
+  constDecDef v def = mkSt $ jConstDecDef v def
 
   print v = jOut False printFunc v Nothing
   printLn v = jOut True printLnFunc v Nothing
@@ -445,15 +446,15 @@ instance StatementSym JavaCode where
 
   getFileInputLine f v = v &= f $. func "nextLine" string []
   discardFileLine = discardFileLineD "nextLine"
-  stringSplit d vnew s = mkSt <$> on2CodeValues jStringSplit vnew 
+  stringSplit d vnew s = mkSt $ jStringSplit vnew 
     (funcApp "Arrays.asList" (listType static_ string) 
     [s $. func "split" (listType static_ string) [litString [d]]])
 
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = breakD Semi  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
-  continue = continueD Semi
+  break = mkSt breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
+  continue = mkSt continueDocD
 
   returnState = returnD Semi
   multiReturn _ = error $ multiReturnError jName
@@ -657,9 +658,10 @@ jListDecDef v vs = space <> equals <+> new <+> getTypeDoc (variableType v) <+>
   where listElements = emptyIfNull vs $ text "Arrays.asList" <> parens 
           (valueList vs)
 
-jConstDecDef :: VarData -> ValData -> Doc
-jConstDecDef v def = text "final" <+> typeDoc (varType v) <+> varDoc v <+> 
-  equals <+> valDoc def
+jConstDecDef :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) 
+  -> Doc
+jConstDecDef v def = text "final" <+> getTypeDoc (variableType v) <+> 
+  variableDoc v <+> equals <+> valueDoc def
 
 jThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
 jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (valueDoc 
@@ -707,9 +709,10 @@ jOpenFileWorA n t wa = valFromData Nothing t $ new <+> text "PrintWriter" <>
   parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> 
   parens (valueDoc n) <> comma <+> valueDoc wa))
 
-jStringSplit :: VarData -> ValData -> Doc
-jStringSplit vnew s = varDoc vnew <+> equals <+> new <+> typeDoc (varType vnew)
-  <> parens (valDoc s)
+jStringSplit :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) 
+  -> Doc
+jStringSplit vnew s = variableDoc vnew <+> equals <+> new <+> getTypeDoc 
+  (variableType vnew) <> parens (valueDoc s)
 
 jMethod :: Label -> Doc -> Doc -> TypeData -> Doc -> Doc -> Doc
 jMethod n s p t ps b = vcat [

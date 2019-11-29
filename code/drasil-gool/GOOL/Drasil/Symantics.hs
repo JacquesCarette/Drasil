@@ -323,6 +323,7 @@ class InternalValue repr where
 
   cast :: repr (Type repr) -> repr (Value repr) -> repr (Value repr)
 
+  valuePrec :: repr (Value repr) -> Maybe Int
   valFromData :: Maybe Int -> repr (Type repr) -> Doc -> repr (Value repr)
 
 -- The cyclic constraints issue arises here too. I've constrained this by ValueExpression,

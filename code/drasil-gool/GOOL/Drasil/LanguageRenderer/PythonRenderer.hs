@@ -27,7 +27,7 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   runStrategyD, checkStateD, multiAssignDoc, returnDocD, mkStNoEnd, 
   stringListVals', stringListLists', stateD, loopStateD, emptyStateD, assignD, 
   assignToListIndexD, decrementD, decrement1D, closeFileD, discardFileLineD, 
-  breakD, continueD, returnD, valStateD, throwD, initStateD, 
+  breakDocD, continueDocD, returnD, valStateD, throwD, initStateD, 
   changeStateD, initObserverListD, addObserverD, ifNoElseD, switchAsIfD, 
   ifExistsD, tryCatchD, unOpPrec, notOpDocD', negateOpDocD, sqrtOpDocD', 
   absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', 
@@ -333,6 +333,7 @@ instance InternalValue PythonCode where
   
   cast t v = mkVal t $ castObjDocD (getTypeDoc t) (valueDoc v)
 
+  valuePrec = valPrec . unPC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector PythonCode where
@@ -451,8 +452,8 @@ instance StatementSym PythonCode where
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = breakD Empty
-  continue = continueD Empty
+  break = mkStNoEnd breakDocD
+  continue = mkStNoEnd continueDocD
 
   returnState = returnD Empty
   multiReturn [] = error "Attempt to write return statement with no return variables"

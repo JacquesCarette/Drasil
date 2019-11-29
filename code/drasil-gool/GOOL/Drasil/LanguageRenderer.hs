@@ -20,7 +20,7 @@ module GOOL.Drasil.LanguageRenderer (
   emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, 
   incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
   discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, 
-  discardFileLineD, breakD, continueD, returnD, multiReturnError, valStateD, 
+  discardFileLineD, returnD, multiReturnError, valStateD, 
   freeError, throwD, initStateD, changeStateD, initObserverListD, addObserverD, 
   ifNoElseD, switchD, switchAsIfD, ifExistsD, forRangeD, tryCatchD, stratDocD, 
   runStrategyD, listSliceD, checkStateD, notifyObserversD, unOpPrec, notOpDocD, 
@@ -415,8 +415,8 @@ returnDocD vs = text "return" <+> valueList vs
 commentDocD :: Label -> Doc -> Doc
 commentDocD cmt cStart = cStart <+> text cmt
 
-freeDocD :: VarData -> Doc
-freeDocD v = text "delete" <+> text "&" <> varDoc v
+freeDocD :: (RenderSym repr) => repr (Variable repr) -> Doc
+freeDocD v = text "delete" <+> text "&" <> variableDoc v
 
 statementDocD :: (Doc, Terminator) -> (Doc, Terminator)
 statementDocD (s, t) = (s <> getTermDoc t, Empty)
@@ -425,8 +425,8 @@ getTermDoc :: Terminator -> Doc
 getTermDoc Semi = semi
 getTermDoc Empty = empty
 
-mkSt :: Doc -> (Doc, Terminator)
-mkSt s = (s, Semi)
+mkSt :: (RenderSym repr) => Doc -> repr (Statement repr)
+mkSt = flip stateFromData Semi
 
 mkStNoEnd :: (RenderSym repr) => Doc -> repr (Statement repr)
 mkStNoEnd = flip stateFromData Empty
@@ -534,12 +534,6 @@ closeFileD n f = valState $ objMethodCallNoParams void f n
 discardFileLineD :: (RenderSym repr) => Label -> repr (Value repr) -> 
   repr (Statement repr)
 discardFileLineD n f = valState $ objMethodCallNoParams string f n 
-
-breakD :: (RenderSym repr) => Terminator -> repr (Statement repr)
-breakD = stateFromData breakDocD
-
-continueD :: (RenderSym repr) => Terminator -> repr (Statement repr)
-continueD = stateFromData continueDocD
 
 returnD :: (RenderSym repr) => Terminator -> repr (Value repr) -> 
   repr (Statement repr)

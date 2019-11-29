@@ -31,8 +31,8 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   stringListLists', stateD, loopStateD, emptyStateD, assignD, 
   assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, 
   increment1D, constDecDefD, discardInputD, discardFileInputD, closeFileD, 
-  breakD, continueD, returnD, multiReturnError, valStateD, throwD, initStateD, 
-  changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD, 
+  breakDocD, continueDocD, returnD, multiReturnError, valStateD, throwD, 
+  initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD,
   switchAsIfD, forRangeD, tryCatchD, unOpPrec, notOpDocD, negateOpDocD, 
   sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, asinOpDocD,
   acosOpDocD, atanOpDocD, unExpr, unExpr', typeUnExpr, equalOpDocD, 
@@ -358,6 +358,7 @@ instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
 
   cast t v = pair (cast (pfst t) (pfst v)) (cast (psnd t) (psnd v))
 
+  valuePrec v = valuePrec $ pfst v
   valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)
 
 instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
@@ -1035,7 +1036,8 @@ instance InternalValue CppSrcCode where
   printFileLnFunc f = mkVal void (valueDoc f)
 
   cast = cppCast
-  
+
+  valuePrec = valPrec . unCPPSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CppSrcCode where
@@ -1092,7 +1094,7 @@ instance InternalFunction CppSrcCode where
   funcFromData t d = on2CodeValues fd t (toCode d)
 
 instance InternalStatement CppSrcCode where
-  printSt nl p v _ = mkSt <$> on2CodeValues (cppPrint nl) p v
+  printSt nl p v _ = mkSt $ cppPrint nl p v
 
   state = stateD
   loopState = loopStateD
@@ -1135,18 +1137,18 @@ instance StatementSym CppSrcCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = mkSt <$> on3CodeValues cppInput v inputFunc endStatement
+  getInput v = mkSt $ cppInput v inputFunc endStatement
   discardInput = discardInputD (cppDiscardInput "\\n")
-  getFileInput f v = mkSt <$> on3CodeValues cppInput v f endStatement
+  getFileInput f v = mkSt $ cppInput v f endStatement
   discardFileInput = discardFileInputD (cppDiscardInput " ")
 
-  openFileR f n = mkSt <$> on2CodeValues (cppOpenFile "std::fstream::in") f n
-  openFileW f n = mkSt <$> on2CodeValues (cppOpenFile "std::fstream::out") f n
-  openFileA f n = mkSt <$> on2CodeValues (cppOpenFile "std::fstream::app") f n
+  openFileR f n = mkSt $ cppOpenFile "std::fstream::in" f n
+  openFileW f n = mkSt $ cppOpenFile "std::fstream::out" f n
+  openFileA f n = mkSt $ cppOpenFile "std::fstream::app" f n
   closeFile = closeFileD "close"
 
   getFileInputLine f v = valState $ funcApp "std::getline" string [f, valueOf v]
-  discardFileLine f = mkSt <$> toCode (cppDiscardInput "\\n" f)
+  discardFileLine f = mkSt $ cppDiscardInput "\\n" f
   stringSplit d vnew s = let l_ss = "ss"
                              var_ss = var l_ss (obj "std::stringstream")
                              v_ss = valueOf var_ss
@@ -1166,8 +1168,8 @@ instance StatementSym CppSrcCode where
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = breakD Semi
-  continue = continueD Semi
+  break = mkSt breakDocD
+  continue = mkSt continueDocD
 
   returnState = returnD Semi
   multiReturn _ = error $ multiReturnError cppName
@@ -1176,7 +1178,7 @@ instance StatementSym CppSrcCode where
 
   comment = G.comment commentStart
 
-  free v = mkSt <$> onCodeValue freeDocD v
+  free v = mkSt $ freeDocD v
 
   throw = throwD cppThrowDoc Semi
 
@@ -1603,6 +1605,7 @@ instance InternalValue CppHdrCode where
   
   cast _ _ = mkVal void empty
   
+  valuePrec = valPrec . unCPPHC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CppHdrCode where
@@ -1997,10 +2000,11 @@ cppListDecDoc n = parens (valueDoc n)
 cppListDecDefDoc :: (RenderSym repr) => [repr (Value repr)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
-cppPrint :: Bool -> ValData -> ValData -> Doc
-cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> val (valDoc v) <+> 
-  end
-  where val = if maybe False (< 9) (valPrec v) then parens else id
+cppPrint :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
+  -> Doc
+cppPrint newLn printFn v = valueDoc printFn <+> text "<<" <+> val (valueDoc v) 
+  <+> end
+  where val = if maybe False (< 9) (valuePrec v) then parens else id
         end = if newLn then text "<<" <+> text "std::endl" else empty
 
 cppThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
@@ -2019,15 +2023,17 @@ cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens
   (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
   quotes (text sep))
 
-cppInput :: VarData -> ValData -> Doc -> Doc
+cppInput :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
+  repr (Keyword repr) -> Doc
 cppInput v inFn end = vcat [
-  valDoc inFn <+> text ">>" <+> varDoc v <> end,
-  valDoc inFn <> dot <> 
+  valueDoc inFn <+> text ">>" <+> variableDoc v <> keyDoc end,
+  valueDoc inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]
 
-cppOpenFile :: Label -> VarData -> ValData -> Doc
-cppOpenFile mode f n = varDoc f <> dot <> text "open" <> 
-  parens (valDoc n <> comma <+> text mode)
+cppOpenFile :: (RenderSym repr) => Label -> repr (Variable repr) -> 
+  repr (Value repr) -> Doc
+cppOpenFile mode f n = variableDoc f <> dot <> text "open" <> 
+  parens (valueDoc n <> comma <+> text mode)
 
 cppPointerParamDoc :: VarData -> Doc
 cppPointerParamDoc v = typeDoc (varType v) <+> text "&" <> varDoc v

@@ -27,11 +27,11 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, 
   voidDocD, destructorError, paramDocD, paramListDocD, mkParam, methodDocD, 
   runStrategyD, listSliceD, checkStateD, notifyObserversD, listDecDocD, 
-  listDecDefDocD, stringListVals', stringListLists', printStD, stateD, 
+  listDecDefDocD, mkSt, stringListVals', stringListLists', printStD, stateD, 
   loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, 
   decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
-  openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, breakD, 
-  continueD, returnD, multiReturnError, valStateD, freeError, throwD, 
+  openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, breakDocD, 
+  continueDocD, returnD, multiReturnError, valStateD, freeError, throwD, 
   initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD,
   switchAsIfD, ifExistsD, forRangeD, tryCatchD, unOpPrec, notOpDocD, 
   negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, equalOpDocD, 
@@ -334,6 +334,7 @@ instance InternalValue CSharpCode where
   
   cast = csCast
   
+  valuePrec = valPrec . unCSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CSharpCode where
@@ -450,8 +451,8 @@ instance StatementSym CSharpCode where
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = breakD Semi
-  continue = continueD Semi
+  break = mkSt breakDocD
+  continue = mkSt continueDocD
 
   returnState = returnD Semi
   multiReturn _ = error $ multiReturnError csName 

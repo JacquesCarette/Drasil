@@ -9,7 +9,7 @@ module GOOL.Drasil.LanguageRenderer (
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, 
-  printDoc, printFileDocD, destructorError, paramDocD, paramListDocD, mkParam, 
+  printDoc, printFileDocD, destructorError, paramDocD, paramListDocD, 
   methodDocD, methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD, 
   switchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusPlusDocD, 
   listDecDocD, listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD,
@@ -63,8 +63,8 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
   MethodSym(..), InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
-  updateModDoc, OpData(..), od, ParamData(..), pd, paramName, TypeData(..), 
-  Binding(..), VarData(..))
+  updateModDoc, OpData(..), od, ParamData(..), TypeData(..), Binding(..), 
+  VarData(..))
 import GOOL.Drasil.Helpers (doubleQuotedText, hicat, vibcat, vmap, 
   emptyIfEmpty, emptyIfNull, onStateValue, getNestDegree)
 import GOOL.Drasil.State (MS, getParameters)
@@ -220,14 +220,11 @@ printFileDocD fn f = f <> dot <> text fn
 
 -- Parameters --
 
-paramDocD :: VarData -> Doc
-paramDocD v = typeDoc (varType v) <+> varDoc v
+paramDocD :: (RenderSym repr) => repr (Variable repr) -> Doc
+paramDocD v = getTypeDoc (variableType v) <+> variableDoc v
 
 paramListDocD :: [ParamData] -> Doc
 paramListDocD = hicat (text ", ") . map paramDoc
-
-mkParam :: (VarData -> Doc) -> VarData -> ParamData
-mkParam f v = pd v (f v)
 
 -- Method --
 
@@ -1087,8 +1084,7 @@ commentedModD m cmt = updateFileMod (updateModDoc (commentedItem cmt) (fileMod m
 docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
   MS (repr (Method repr)) -> MS (repr (Method repr))
 docFuncRepr desc pComms rComms = commentedFunc (docComment $ onStateValue 
-  (\ps -> functionDox desc (zip (map paramName ps) pComms) rComms) 
-  getParameters)
+  (\ps -> functionDox desc (zip ps pComms) rComms) getParameters)
 
 -- Helper Functions --
 

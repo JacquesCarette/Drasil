@@ -6,11 +6,11 @@ module GOOL.Drasil.State (
   getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, addFile, 
   addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
   setFilePath, getFilePath, setModuleName, getModuleName, setCurrMain, 
-  getCurrMain, setParameters, getParameters, setScope, getScope, 
+  getCurrMain, addParameter, getParameters, setScope, getScope, 
   setCurrMainFunc, getCurrMainFunc
 ) where
 
-import GOOL.Drasil.Data (FileType(..), ParamData, ScopeTag(..))
+import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
@@ -25,7 +25,7 @@ data GOOLState = GS {
 makeLenses ''GOOLState
 
 data MethodState = MS {
-  _currParameters :: [ParamData],
+  _currParameters :: [String],
   
   -- Only used for C++
   _currScope :: ScopeTag,
@@ -193,11 +193,12 @@ setCurrMain = over _2 (over _1 (over currMain (\b -> if b then error
 getCurrMain :: FS Bool
 getCurrMain = gets ((^. currMain) . snd)
 
-setParameters :: [ParamData] -> (GOOLState, (FileState, MethodState)) -> 
+addParameter :: String -> (GOOLState, (FileState, MethodState)) -> 
   (GOOLState, (FileState, MethodState))
-setParameters ps = over _2 $ over _2 $ set currParameters ps
+addParameter p = over _2 $ over _2 $ over currParameters (\ps -> if p `elem` 
+  ps then error $ "Function has duplicate parameter: " ++ p else ps ++ [p])
 
-getParameters :: MS [ParamData]
+getParameters :: MS [String]
 getParameters = gets ((^. currParameters) . snd . snd)
 
 setScope :: ScopeTag -> (GOOLState, (FileState, MethodState)) -> 

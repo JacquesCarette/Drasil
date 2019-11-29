@@ -13,9 +13,9 @@ module GOOL.Drasil.Symantics (
   Selector(..), FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
-  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
-  BlockCommentSym(..)
+  InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
+  InternalMod(..), BlockCommentSym(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -565,38 +565,38 @@ class (TypeSym repr) => MethodTypeSym repr where
   mType    :: repr (Type repr) -> repr (MethodType repr)
   construct :: Label -> repr (MethodType repr)
 
-class ParameterSym repr where
+class (InternalParam repr) => ParameterSym repr where
   type Parameter repr
-  param :: repr (Variable repr) -> repr (Parameter repr)
+  param :: repr (Variable repr) -> MS (repr (Parameter repr))
   -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
-  pointerParam :: repr (Variable repr) -> repr (Parameter repr)
+  pointerParam :: repr (Variable repr) -> MS (repr (Parameter repr))
 
+class InternalParam repr where
+  parameterName :: repr (Parameter repr) -> Label
   parameterType :: repr (Parameter repr) -> repr (Type repr)
+  paramFromData :: repr (Variable repr) -> Doc -> repr (Parameter repr)
 
 class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr, 
   InternalMethod repr) => MethodSym repr where
   type Method repr
   -- Second label is class name
   method      :: Label -> Label -> repr (Scope repr) -> repr (Permanence repr) 
-    -> repr (Type repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
+    -> repr (Type repr) -> [MS (repr (Parameter repr))] -> repr (Body repr) -> 
     MS (repr (Method repr))
-  getMethod   :: Label -> repr (Variable repr) -> 
+  getMethod   :: Label -> repr (Variable repr) -> MS (repr (Method repr))
+  setMethod   :: Label -> repr (Variable repr) -> MS (repr (Method repr)) 
+  privMethod  :: Label -> Label -> repr (Type repr) -> 
+    [MS (repr (Parameter repr))] -> repr (Body repr) -> MS (repr (Method repr))
+  pubMethod   :: Label -> Label -> repr (Type repr) -> 
+    [MS (repr (Parameter repr))] -> repr (Body repr) -> MS (repr (Method repr))
+  constructor :: Label -> [MS (repr (Parameter repr))] -> repr (Body repr) -> 
     MS (repr (Method repr))
-  setMethod   :: Label -> repr (Variable repr) -> 
-    MS (repr (Method repr)) 
-  privMethod  :: Label -> Label -> repr (Type repr) -> [repr (Parameter repr)] 
-    -> repr (Body repr) -> MS (repr (Method repr))
-  pubMethod   :: Label -> Label -> repr (Type repr) -> [repr (Parameter repr)] 
-    -> repr (Body repr) -> MS (repr (Method repr))
-  constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> 
-    MS (repr (Method repr))
-  destructor :: Label -> [GS (repr (StateVar repr))] -> 
-    MS (repr (Method repr))
+  destructor :: Label -> [GS (repr (StateVar repr))] -> MS (repr (Method repr))
 
   docMain :: repr (Body repr) -> MS (repr (Method repr))
 
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    repr (Type repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
+    repr (Type repr) -> [MS (repr (Parameter repr))] -> repr (Body repr) -> 
     MS (repr (Method repr))
   mainFunction  :: repr (Body repr) -> MS (repr (Method repr))
   -- Parameters are: function description, parameter descriptions, 
@@ -627,12 +627,12 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr,
 
 class (MethodTypeSym repr, BlockCommentSym repr) => 
   InternalMethod repr where
-  intMethod      :: Bool -> Label -> Label -> repr (Scope repr) -> 
-    repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] 
-    -> repr (Body repr) -> MS (repr (Method repr))
-  intFunc      :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
-    -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
-    MS (repr (Method repr))
+  intMethod     :: Bool -> Label -> Label -> repr (Scope repr) -> 
+    repr (Permanence repr) -> repr (MethodType repr) -> 
+    [MS (repr (Parameter repr))] -> repr (Body repr) -> MS (repr (Method repr))
+  intFunc       :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
+    -> repr (MethodType repr) -> [MS (repr (Parameter repr))] -> 
+    repr (Body repr) -> MS (repr (Method repr))
   commentedFunc :: MS (repr (BlockComment repr)) -> MS (repr (Method repr)) -> 
     MS (repr (Method repr))
 

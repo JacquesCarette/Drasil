@@ -3,13 +3,12 @@ module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
   mapPairFst, mapPairSnd, toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, 
   on5CodeValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
-  on1StateValue1List, getInnerType, getNestDegree, convType, checkParams
+  on1StateValue1List, getInnerType, getNestDegree, convType
 ) where
 
 import Utils.Drasil (blank)
 
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
-import GOOL.Drasil.Data (ParamData)
 import qualified GOOL.Drasil.Symantics as S ( 
   RenderSym(..), TypeSym(..), PermanenceSym(dynamic_))
 
@@ -17,7 +16,7 @@ import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
 import Control.Monad (liftM2, liftM3)
 import Control.Monad.State (State)
-import Data.List (intersperse, nub)
+import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
   (<>), comma, punctuate, empty, isEmpty)
 
@@ -133,7 +132,3 @@ convType (C.Object n) = S.obj n
 convType (C.Enum n) = S.enumType n
 convType C.Void = S.void
 convType C.File = error "convType: File ?"
-
-checkParams :: String -> [ParamData] -> [ParamData]
-checkParams n ps = if length ps == length (nub ps) then ps else error 
-  ("Duplicate parameters encountered in function " ++ n ++ ".")

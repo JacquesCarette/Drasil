@@ -14,17 +14,17 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..),
-  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..),
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
-  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
-  BlockCommentSym(..))
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  InternalOp(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD, 
-  bodyDocD, oneLinerD, outDoc, paramDocD, paramListDocD, mkParam, stateVarDocD, 
+  bodyDocD, oneLinerD, outDoc, paramDocD, paramListDocD, stateVarDocD, 
   constVarDocD, runStrategyD, listSliceD, notifyObserversD, freeDocD, mkSt, 
   mkStNoEnd, stringListVals', stringListLists', stateD, loopStateD, emptyStateD,
   assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, 
@@ -50,8 +50,9 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   commentedModD, docFuncRepr, valueList, appendToBody, surroundBody, getterName,
   setterName, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, int, double, char, string, listType, listInnerType, obj, enumType, void, inlineIf, varDec, varDecDef, listDec, listDecDef, 
-  objDecNew, objDecNewNoParams, construct, comment, ifCond, for, while, method, 
+  fileFromData, block, int, double, char, string, listType, listInnerType, obj, 
+  enumType, void, inlineIf, varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  objDecNewNoParams, construct, comment, ifCond, for, while, param, method, 
   getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
   docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, pubClass, 
   docClass, commentedClass, buildModule, modFromData, fileDoc, docMod)
@@ -63,11 +64,10 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst, 
   mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, on5CodeValues, 
-  onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List,
-  checkParams)
+  onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (MS, FS, lensGStoFS, lensFStoGS, lensFStoMS, 
   lensMStoGS, initialState, initialFS, getPutReturn, setCurrMain, getCurrMain, 
-  setParameters, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+  setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Data.Maybe (maybeToList)
@@ -602,7 +602,9 @@ instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   param v = pair (param $ pfst v) (param $ psnd v)
   pointerParam v = pair (pointerParam $ pfst v) (pointerParam $ psnd v)
 
+instance (Pair p) => InternalParam (p CppSrcCode CppHdrCode) where
   parameterType p = pair (parameterType $ pfst p) (parameterType $ psnd p)
+  paramFromData v d = pair (paramFromData (pfst v) d) (paramFromData (psnd v) d)
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   type Method (p CppSrcCode CppHdrCode) = MethodData
@@ -1247,10 +1249,13 @@ instance MethodTypeSym CppSrcCode where
 
 instance ParameterSym CppSrcCode where
   type Parameter CppSrcCode = ParamData
-  param = onCodeValue (mkParam paramDocD)
-  pointerParam = onCodeValue (mkParam cppPointerParamDoc)
+  param = G.param paramDocD
+  pointerParam = G.param cppPointerParamDoc
 
+instance InternalParam CppSrcCode where
+  parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
+  paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
@@ -1295,14 +1300,13 @@ instance MethodSym CppSrcCode where
 
 instance InternalMethod CppSrcCode where
   intMethod m n c s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) .
-    setParameters (map unCPPSC ps) . if m then setCurrMain else id) $ 
+    if m then setCurrMain else id) $ 
     on2CodeValues mthd (onCodeValue snd s) (on5CodeValues (cppsMethod n c) t 
-    (onCodeList (paramListDocD . checkParams n) ps) b blockStart blockEnd)
+    (onCodeList paramListDocD ps) b blockStart blockEnd)
   intFunc m n s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) . 
-    setParameters (map unCPPSC ps) . if m then setCurrMainFunc m . setCurrMain 
-    else id) $ on2CodeValues mthd (onCodeValue snd s) (on5CodeValues 
-    (cppsFunction n) t (onCodeList (paramListDocD . checkParams n) ps) b 
-    blockStart blockEnd)
+    if m then setCurrMainFunc m . setCurrMain else id) $ on2CodeValues mthd 
+    (onCodeValue snd s) (on5CodeValues (cppsFunction n) t (onCodeList 
+    paramListDocD ps) b blockStart blockEnd)
   commentedFunc = cppCommentedFunc Source
  
   methodDoc = mthdDoc . unCPPSC
@@ -1799,10 +1803,13 @@ instance MethodTypeSym CppHdrCode where
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
-  param = onCodeValue (mkParam paramDocD)
-  pointerParam = onCodeValue (mkParam cppPointerParamDoc)
+  param = G.param paramDocD
+  pointerParam = G.param cppPointerParamDoc
 
+instance InternalParam CppHdrCode where
+  parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
+  paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
@@ -1835,9 +1842,9 @@ instance MethodSym CppHdrCode where
 
 instance InternalMethod CppHdrCode where
   intMethod m n _ s _ t ps _ = getPutReturn (setScope (snd $ unCPPHC s) . 
-    setParameters (map unCPPHC ps) . if m then setCurrMain else id) $ 
+    if m then setCurrMain else id) $ 
     on2CodeValues mthd (onCodeValue snd s) (on3CodeValues (cpphMethod n) t 
-    (onCodeList (paramListDocD . checkParams n) ps) endStatement)
+    (onCodeList paramListDocD ps) endStatement)
   intFunc = G.intFunc
   commentedFunc = cppCommentedFunc Header
 
@@ -1907,8 +1914,8 @@ isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
-getParam :: VarData -> ParamData
-getParam v = mkParam (getParamFunc ((cType . varType) v)) v
+getParam :: (RenderSym repr) => repr (Variable repr) -> repr (Parameter repr)
+getParam v = G.param (getParamFunc ((getType . variableType) v)) v
   where getParamFunc (List _) = cppPointerParamDoc
         getParamFunc (Object _) = cppPointerParamDoc
         getParamFunc _ = paramDocD
@@ -2043,8 +2050,8 @@ cppOpenFile :: (RenderSym repr) => Label -> repr (Variable repr) ->
 cppOpenFile mode f n = variableDoc f <> dot <> text "open" <> 
   parens (valueDoc n <> comma <+> text mode)
 
-cppPointerParamDoc :: VarData -> Doc
-cppPointerParamDoc v = typeDoc (varType v) <+> text "&" <> varDoc v
+cppPointerParamDoc :: (RenderSym repr) => repr (Variable repr) -> Doc
+cppPointerParamDoc v = getTypeDoc (variableType v) <+> text "&" <> variableDoc v
 
 cppsMethod :: Label -> Label -> TypeData -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsMethod n c t ps b bStart bEnd = emptyIfEmpty b $ vcat [ttype <+> text c <> 
@@ -2149,15 +2156,13 @@ cppsInOut :: (CppSrcCode (Scope CppSrcCode) ->
   [CppSrcCode (Variable CppSrcCode)] -> [CppSrcCode (Variable CppSrcCode)] -> 
   [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
   MS (CppSrcCode (Method CppSrcCode))
-cppsInOut f s p ins [v] [] b = f s p (variableType v) (map (onCodeValue 
-  getParam) ins) (on3CodeValues surroundBody (varDec v) b (returnState $ 
-  valueOf v))
+cppsInOut f s p ins [v] [] b = f s p (variableType v) (map getParam ins) 
+  (on3CodeValues surroundBody (varDec v) b (returnState $ valueOf v))
 cppsInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else variableType v) (map (onCodeValue getParam) $ v : ins) 
-  (if null (filterOutObjs [v]) then b else on2CodeValues appendToBody b 
-  (returnState $ valueOf v))
+  else variableType v) (map getParam $ v : ins) (if null (filterOutObjs [v]) 
+  then b else on2CodeValues appendToBody b (returnState $ valueOf v))
 cppsInOut f s p ins outs both b = f s p void (map pointerParam both 
-  ++ map (onCodeValue getParam) ins ++ map pointerParam outs) b
+  ++ map getParam ins ++ map pointerParam outs) b
 
 cpphInOut :: (CppHdrCode (Scope CppHdrCode) -> 
     CppHdrCode (Permanence CppHdrCode) -> CppHdrCode (Type CppHdrCode) -> 
@@ -2167,9 +2172,8 @@ cpphInOut :: (CppHdrCode (Scope CppHdrCode) ->
   [CppHdrCode (Variable CppHdrCode)] -> [CppHdrCode (Variable CppHdrCode)] -> 
   [CppHdrCode (Variable CppHdrCode)] -> CppHdrCode (Body CppHdrCode) -> 
   MS (CppHdrCode (Method CppHdrCode))
-cpphInOut f s p ins [v] [] b = f s p (variableType v) (map (onCodeValue 
-  getParam) ins) b
+cpphInOut f s p ins [v] [] b = f s p (variableType v) (map getParam ins) b
 cpphInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else variableType v) (map (onCodeValue getParam) $ v : ins) b
+  else variableType v) (map getParam $ v : ins) b
 cpphInOut f s p ins outs both b = f s p void (map pointerParam both 
-  ++ map (onCodeValue getParam) ins ++ map pointerParam outs) b
+  ++ map getParam ins ++ map pointerParam outs) b

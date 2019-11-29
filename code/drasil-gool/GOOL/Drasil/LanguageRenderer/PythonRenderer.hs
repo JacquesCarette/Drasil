@@ -12,19 +12,19 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..),
-  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
-  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
-  BlockCommentSym(..))
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  InternalOp(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
-  bodyDocD, oneLinerD, outDoc, destructorError, paramListDocD, mkParam, 
-  runStrategyD, checkStateD, multiAssignDoc, returnDocD, mkStNoEnd, 
-  stringListVals', stringListLists', stateD, loopStateD, emptyStateD, assignD, 
+  bodyDocD, oneLinerD, outDoc, destructorError, paramListDocD, runStrategyD, 
+  checkStateD, multiAssignDoc, returnDocD, mkStNoEnd, stringListVals', 
+  stringListLists', stateD, loopStateD, emptyStateD, assignD, 
   assignToListIndexD, decrementD, decrement1D, closeFileD, discardFileLineD, 
   breakDocD, continueDocD, returnD, valStateD, throwD, initStateD, 
   changeStateD, initObserverListD, addObserverD, ifNoElseD, switchAsIfD, 
@@ -47,19 +47,20 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   valueList, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData, block, int, float, listInnerType, obj, enumType, increment, 
-  increment1, comment, ifCond, objDecNew, objDecNewNoParams, construct, method, 
-  getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
-  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, 
-  pubClass, docClass, commentedClass, buildModule, modFromData, fileDoc, docMod)
+  increment1, comment, ifCond, objDecNew, objDecNewNoParams, construct, param, 
+  method, getMethod, setMethod, privMethod, pubMethod, constructor, function, 
+  docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
+  privClass, pubClass, docClass, commentedClass, buildModule, modFromData, 
+  fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
   updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
-  onCodeList, onStateList, on1CodeValue1List, checkParams)
+  onCodeList, onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
-  setCurrMain, setParameters)
+  setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -526,10 +527,13 @@ instance MethodTypeSym PythonCode where
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
-  param = onCodeValue (mkParam varDoc)
+  param = G.param variableDoc
   pointerParam = param
 
+instance InternalParam PythonCode where
+  parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
+  paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
@@ -544,8 +548,7 @@ instance MethodSym PythonCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction = getPutReturn (setParameters [] . setCurrMain) . onCodeValue 
-    mthd
+  mainFunction = getPutReturn setCurrMain . onCodeValue mthd
 
   docFunc = G.docFunc
 
@@ -558,12 +561,12 @@ instance MethodSym PythonCode where
   docInOutFunc n = pyDocInOut (inOutFunc n)
 
 instance InternalMethod PythonCode where
-  intMethod m n l _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
-    if m then setCurrMain else id) $ onCodeValue mthd (on3CodeValues (pyMethod 
-    n) (self l) (onCodeList (paramListDocD . checkParams n) ps) b)
-  intFunc m n _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
-    if m then setCurrMain else id) $ onCodeValue mthd (on2CodeValues 
-    (pyFunction n) (onCodeList (paramListDocD . checkParams n) ps) b)
+  intMethod m n l _ _ _ ps b = getPutReturn (if m then setCurrMain else id) $ 
+    onCodeValue mthd (on3CodeValues (pyMethod n) (self l) (onCodeList 
+    paramListDocD ps) b)
+  intFunc m n _ _ _ ps b = getPutReturn (if m then setCurrMain else id) $ 
+    onCodeValue mthd (on2CodeValues (pyFunction n) (onCodeList paramListDocD ps)
+    b)
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
 

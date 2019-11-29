@@ -5,11 +5,11 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, block,
   pi, bool, int, float, double, char, string, fileType, listType, listInnerType,
   obj, enumType, void, inlineIf, increment, increment1, varDec, varDecDef, 
   listDec, listDecDef, objDecNew, objDecNewNoParams, comment, ifCond, for, 
-  forEach, while, construct, method, getMethod, setMethod,privMethod, pubMethod,
-  constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
-  stateVar,stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
-  privClass, pubClass, docClass, commentedClass, buildModule, buildModule', 
-  modFromData, fileDoc, docMod
+  forEach, while, construct, param, method, getMethod, setMethod,privMethod, 
+  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
+  docInOutFunc, intFunc, stateVar,stateVarDef, constVar, privMVar, pubMVar, 
+  pubGVar, buildClass, enum, privClass, pubClass, docClass, commentedClass, 
+  buildModule, buildModule', modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -23,28 +23,29 @@ import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   NumericExpression(..), ValueExpression(newObj), InternalValue(..), 
   InternalStatement(..), 
   StatementSym(Statement, (&=), constDecDef, returnState), ScopeSym(..), 
-  InternalScope(..), MethodTypeSym(mType), ParameterSym(..), 
-  MethodTypeSym(MethodType), MethodSym(Method), 
+  InternalScope(..), MethodTypeSym(MethodType, mType), ParameterSym(Parameter), 
+  InternalParam(paramFromData), MethodSym(Method), 
   InternalMethod(intMethod, commentedFunc, methodDoc), 
   StateVarSym(StateVar), InternalStateVar(..), ClassSym(Class), 
   InternalClass(..), ModuleSym(Module), InternalMod(moduleDoc, updateModuleDoc),
   BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData), 
   TypeSym(float, void), StatementSym(varDec, varDecDef), 
-  MethodTypeSym(construct), MethodSym(method, mainFunction), 
-  InternalMethod(intFunc), StateVarSym(stateVar), 
-  ClassSym(buildClass, commentedClass), InternalMod(modFromData))
+  MethodTypeSym(construct), ParameterSym(param), 
+  MethodSym(method, mainFunction), InternalMethod(intFunc), 
+  StateVarSym(stateVar), ClassSym(buildClass, commentedClass), 
+  InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
   FileType)
-import GOOL.Drasil.Helpers (angles, vibcat, vmap, emptyIfEmpty, toState, 
+import GOOL.Drasil.Helpers (angles, vibcat, vmap, emptyIfEmpty, toState,
   onStateValue, on2StateValues, onStateList, getInnerType, convType)
 import GOOL.Drasil.LanguageRenderer (forLabel, addExt, blockDocD, stateVarDocD, 
   stateVarListDocD, methodListDocD, enumDocD, enumElementsDocD, moduleDocD, 
   fileDoc', docFuncRepr, commentDocD, commentedItem, functionDox, classDox, 
   moduleDox, getterName, setterName)
 import GOOL.Drasil.State (GS, FS, MS, lensFStoGS, lensFStoMS, currMain, 
-  putAfter, getPutReturnFunc2, addFile, setMainMod, setFilePath, getFilePath, 
-  setModuleName, getModuleName, getCurrMain)
+  putAfter, getPutReturn, getPutReturnFunc2, addFile, setMainMod, setFilePath, 
+  getFilePath, setModuleName, getModuleName, getCurrMain, addParameter)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Maybe (maybeToList)
@@ -199,8 +200,12 @@ while bStart bEnd v b = stateFromData (vcat [
 construct :: Label -> TypeData
 construct n = td (Object n) n empty
 
+param :: (RenderSym repr) => (repr (Variable repr) -> Doc) -> 
+  repr (Variable repr) -> MS (repr (Parameter repr))
+param f v = getPutReturn (addParameter (variableName v)) (paramFromData v (f v))
+
 method :: (RenderSym repr) => Label -> Label -> repr (Scope repr) -> 
-  repr (Permanence repr) -> repr (Type repr) -> [repr (Parameter repr)] -> 
+  repr (Permanence repr) -> repr (Type repr) -> [MS (repr (Parameter repr))] -> 
   repr (Body repr) -> MS (repr (Method repr))
 method n c s p t = intMethod False n c s p (mType t)
 
@@ -213,21 +218,21 @@ getMethod c v = S.method (getterName $ variableName v) c public dynamic_
 setMethod :: (RenderSym repr) => Label -> repr (Variable repr) -> 
   MS (repr (Method repr))
 setMethod c v = S.method (setterName $ variableName v) c public dynamic_ S.void 
-  [param v] setBody
+  [S.param v] setBody
   where setBody = oneLiner $ objVarSelf c v &= valueOf v
 
 privMethod :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> 
+  [MS (repr (Parameter repr))] -> repr (Body repr) -> 
   MS (repr (Method repr))
 privMethod n c = S.method n c private dynamic_
 
 pubMethod :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> 
+  [MS (repr (Parameter repr))] -> repr (Body repr) -> 
   MS (repr (Method repr))
 pubMethod n c = S.method n c public dynamic_
 
-constructor :: (RenderSym repr) => Label -> Label -> [repr (Parameter repr)] -> 
-  repr (Body repr) -> MS (repr (Method repr))
+constructor :: (RenderSym repr) => Label -> Label -> 
+  [MS (repr (Parameter repr))] -> repr (Body repr) -> MS (repr (Method repr))
 constructor fName n = intMethod False fName n public dynamic_ (S.construct n)
 
 docMain :: (RenderSym repr) => repr (Body repr) -> 
@@ -237,14 +242,14 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
   [("args", "List of command-line arguments")] []) (S.mainFunction b)
 
 function :: (RenderSym repr) => Label -> repr (Scope repr) -> 
-  repr (Permanence repr) -> repr (Type repr) -> [repr (Parameter repr)] -> 
+  repr (Permanence repr) -> repr (Type repr) -> [MS (repr (Parameter repr))] -> 
   repr (Body repr) -> MS (repr (Method repr))
 function n s p t = S.intFunc False n s p (mType t)
 
 mainFunction :: (RenderSym repr) => repr (Type repr) -> Label -> 
   repr (Body repr) -> MS (repr (Method repr))
 mainFunction s n = S.intFunc True n public static_ (mType S.void)
-  [param (var "args" (typeFromData (List String) (render (getTypeDoc s) ++ 
+  [S.param (var "args" (typeFromData (List String) (render (getTypeDoc s) ++ 
   "[]") (getTypeDoc s <> text "[]")))]
 
 docFunc :: (RenderSym repr) => String -> [String] -> Maybe String -> 
@@ -268,8 +273,8 @@ docInOutFunc f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ os)
   [] (f s p (map snd is) (map snd os) (map snd bs) b)
 
 intFunc :: (RenderSym repr) => Bool -> Label -> repr (Scope repr) -> 
-  repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] 
-  -> repr (Body repr) -> MS (repr (Method repr))
+  repr (Permanence repr) -> repr (MethodType repr) -> 
+  [MS (repr (Parameter repr))] -> repr (Body repr) -> MS (repr (Method repr))
 intFunc m n = intMethod m n ""
 
 stateVar :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) ->

@@ -47,7 +47,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   listSetFuncD, staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot,
   blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, 
-  commentedModD, docFuncRepr, valueList, appendToBody, surroundBody, getterName,
+  commentedModD, valueList, appendToBody, surroundBody, getterName,
   setterName, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData, block, int, double, char, string, listType, listInnerType, obj, 
@@ -66,12 +66,11 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, mapPairFst,
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, on5CodeValues, 
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (MS, FS, lensGStoFS, lensFStoGS, lensFStoMS, 
-  lensMStoGS, initialState, initialFS, getPutReturn, setCurrMain, getCurrMain, 
-  setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+  lensMStoGS, initialState, initialFS, getPutReturn, getPutReturnList, 
+  setCurrMain, getCurrMain, setScope, getScope, setCurrMainFunc, 
+  getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
-import Data.Maybe (maybeToList)
-import Control.Lens (Lens')
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad.State (State, evalState)
@@ -599,35 +598,38 @@ instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   type Parameter (p CppSrcCode CppHdrCode) = ParamData
-  param v = pair (param $ pfst v) (param $ psnd v)
-  pointerParam v = pair (pointerParam $ pfst v) (pointerParam $ psnd v)
+  param v = on2StateValues pair (param $ pfst v) (param $ psnd v)
+  pointerParam v = on2StateValues pair (pointerParam $ pfst v) (pointerParam $ 
+    psnd v)
 
 instance (Pair p) => InternalParam (p CppSrcCode CppHdrCode) where
+  parameterName p = parameterName $ pfst p
   parameterType p = pair (parameterType $ pfst p) (parameterType $ psnd p)
   paramFromData v d = pair (paramFromData (pfst v) d) (paramFromData (psnd v) d)
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   type Method (p CppSrcCode CppHdrCode) = MethodData
-  method n c s p t ps b = on2StateValues pair (method n c (pfst s) (pfst p) 
-    (pfst t) (map pfst ps) (pfst b)) (method n c (psnd s) (psnd p) (psnd t) 
-    (map psnd ps) (psnd b))
+  method n c s p t ps b = pair1List ps (\pms -> method n c (pfst s) 
+    (pfst p) (pfst t) pms (pfst b)) 
+    (\pms -> method n c (psnd s) (psnd p) (psnd t) pms (psnd b))
   getMethod c v = on2StateValues pair (getMethod c $ pfst v) (getMethod c $ 
     psnd v) 
   setMethod c v = on2StateValues pair (setMethod c $ pfst v) (setMethod c $ 
     psnd v)
-  privMethod n c t ps b = on2StateValues pair (privMethod n c (pfst t) 
-    (map pfst ps) (pfst b)) (privMethod n c (psnd t) (map psnd ps) (psnd b))
-  pubMethod n c t ps b = on2StateValues pair (pubMethod n c (pfst t) 
-    (map pfst ps) (pfst b)) (pubMethod n c (psnd t) (map psnd ps) (psnd b))
-  constructor n ps b = on2StateValues pair (constructor n (map pfst ps) 
-    (pfst b)) (constructor n (map psnd ps) (psnd b))
-  destructor n vars = pair1List vars lensMStoGS (destructor n) (destructor n)
+  privMethod n c t ps b = pair1List ps (\pms -> privMethod n c (pfst t) pms
+    (pfst b)) (\pms -> privMethod n c (psnd t) pms (psnd b))
+  pubMethod n c t ps b = pair1List ps (\pms -> pubMethod n c (pfst t) pms (pfst 
+    b)) (\pms -> pubMethod n c (psnd t) pms (psnd b))
+  constructor n ps b = pair1List ps (\pms -> constructor n pms (pfst b)) 
+    (\pms -> constructor n pms (psnd b))
+  destructor n vars = pair1List (map (zoom lensMStoGS) vars) (destructor n) 
+    (destructor n)
 
   docMain b = on2StateValues pair (docMain $ pfst b) (docMain $ psnd b)
 
-  function n s p t ps b = on2StateValues pair (function n (pfst s) (pfst p) 
-    (pfst t) (map pfst ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) 
-    (map psnd ps) (psnd b))
+  function n s p t ps b = pair1List ps (\pms -> function n (pfst s) (pfst p) 
+    (pfst t) pms (pfst b)) (\pms -> function n (psnd s) (psnd p) (psnd t) 
+    pms (psnd b))
   mainFunction b = on2StateValues pair (mainFunction $ pfst b) (mainFunction $ 
     psnd b)
 
@@ -644,6 +646,7 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     os) (map (mapPairSnd pfst) bs) (pfst b)) (docInOutMethod n c (psnd s) (psnd 
     p) desc (map (mapPairSnd psnd) is) (map (mapPairSnd psnd) os) (map 
     (mapPairSnd psnd) bs) (psnd b))
+  
 
   inOutFunc n s p ins outs both b = on2StateValues pair (inOutFunc n (pfst s) 
     (pfst p) (map pfst ins) (map pfst outs) (map pfst both) (pfst b)) 
@@ -655,16 +658,16 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     (map (mapPairSnd pfst) bs) (pfst b)) (docInOutFunc n (psnd s) (psnd p) desc 
     (map (mapPairSnd psnd) is) (map (mapPairSnd psnd) os) (map (mapPairSnd psnd)
     bs) (psnd b))
+  
 
 instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
-  intMethod m n c s p t ps b = on2StateValues pair (intMethod m n c (pfst s) 
-    (pfst p) (pfst t) (map pfst ps) (pfst b)) (intMethod m n c (psnd s) (psnd p)
-    (psnd t) (map psnd ps) (psnd b))
-  intFunc m n s p t ps b = on2StateValues pair (intFunc m n (pfst s) (pfst p) 
-    (pfst t) (map pfst ps) (pfst b)) (intFunc m n (psnd s) (psnd p) (psnd t) 
-    (map psnd ps) (psnd b))
-  commentedFunc cmt fn = pair2 cmt fn commentedFunc 
-    commentedFunc
+  intMethod m n c s p t ps b = pair1List ps (\pms -> intMethod m n c (pfst s) 
+    (pfst p) (pfst t) pms (pfst b)) (\pms -> intMethod m n c (psnd s) (psnd p)
+    (psnd t) pms (psnd b))
+  intFunc m n s p t ps b = pair1List ps (\pms -> intFunc m n (pfst s) (pfst p) 
+    (pfst t) pms (pfst b)) (\pms -> intFunc m n (psnd s) (psnd p) (psnd t) 
+    pms (psnd b))
+  commentedFunc cmt fn = pair2 fn cmt (flip commentedFunc) (flip commentedFunc)
     
   methodDoc m = methodDoc $ pfst m
   methodFromData s d = pair (methodFromData s d) (methodFromData s d)
@@ -706,7 +709,7 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
-  buildModule n l ms cs = pair2Lists (map (zoom lensFStoMS) ms) cs 
+  buildModule n l ms cs = pair2Lists (map (zoom lensFStoMS) ms) cs
     (buildModule n l) (buildModule n l)
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
@@ -752,12 +755,12 @@ pair2 stv1 stv2 srcf hdrf = do
   p2 <- hdrf sv1 sv2
   toState $ pair p1 p2
 
-pair1List :: (Pair p) => [State s (p CppSrcCode CppHdrCode a)] -> Lens' r s -> 
-  ([State s (CppSrcCode a)] -> State r (CppSrcCode b)) -> 
-  ([State s (CppHdrCode a)] -> State r (CppHdrCode b)) -> 
-  State r (p CppSrcCode CppHdrCode b)
-pair1List stv l srcf hdrf = do
-  v <- mapM (zoom l) stv
+pair1List :: (Pair p) => [State s (p CppSrcCode CppHdrCode a)] ->
+  ([State r (CppSrcCode a)] -> State s (CppSrcCode b)) -> 
+  ([State r (CppHdrCode a)] -> State s (CppHdrCode b)) -> 
+  State s (p CppSrcCode CppHdrCode b)
+pair1List stv srcf hdrf = do
+  v <- sequence stv
   let fl = map (toState . pfst) v
       sl = map (toState . psnd) v
   p1 <- srcf fl
@@ -1283,12 +1286,13 @@ instance MethodSym CppSrcCode where
 
   function = G.function
   mainFunction b = intFunc True "main" public static_ (mType int) 
-    [param $ var "argc" int, 
-    on2CodeValues pd (var "argv" (listType static_ string)) 
-    (toCode $ text "const char *argv[]")] 
+    [param argc, param argv]
     (on2CodeValues appendToBody b (returnState $ litInt 0))
+    where argc = var "argc" int
+          argv = mkVar "argv" (toCode $ td (List String) "const char" 
+            (text "const char")) (text "*argv[]")
 
-  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
+  docFunc = G.docFunc
 
   inOutMethod n c = cppsInOut (method n c)
 
@@ -1299,14 +1303,14 @@ instance MethodSym CppSrcCode where
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
 instance InternalMethod CppSrcCode where
-  intMethod m n c s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) .
-    if m then setCurrMain else id) $ 
-    on2CodeValues mthd (onCodeValue snd s) (on5CodeValues (cppsMethod n c) t 
-    (onCodeList paramListDocD ps) b blockStart blockEnd)
-  intFunc m n s _ t ps b = getPutReturn (setScope (snd $ unCPPSC s) . 
-    if m then setCurrMainFunc m . setCurrMain else id) $ on2CodeValues mthd 
-    (onCodeValue snd s) (on5CodeValues (cppsFunction n) t (onCodeList 
-    paramListDocD ps) b blockStart blockEnd)
+  intMethod m n c s _ t ps b = getPutReturnList ps (setScope (snd $ unCPPSC s) .
+    if m then setCurrMain else id) (\pms -> on2CodeValues mthd (onCodeValue snd 
+    s) (on5CodeValues (cppsMethod n c) t (onCodeList paramListDocD pms) b 
+    blockStart blockEnd))
+  intFunc m n s _ t ps b = getPutReturnList ps (setScope (snd $ unCPPSC s) . 
+    if m then setCurrMainFunc m . setCurrMain else id) (\pms -> on2CodeValues 
+    mthd (onCodeValue snd s) (on5CodeValues (cppsFunction n) t (onCodeList 
+    paramListDocD pms) b blockStart blockEnd))
   commentedFunc = cppCommentedFunc Source
  
   methodDoc = mthdDoc . unCPPSC
@@ -1803,8 +1807,8 @@ instance MethodTypeSym CppHdrCode where
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
-  param = G.param paramDocD
-  pointerParam = G.param cppPointerParamDoc
+  param v = toState $ paramFromData v (paramDocD v)
+  pointerParam v = toState $ paramFromData v (cppPointerParamDoc v)
 
 instance InternalParam CppHdrCode where
   parameterName = variableName . onCodeValue paramVar
@@ -1841,10 +1845,10 @@ instance MethodSym CppHdrCode where
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
 instance InternalMethod CppHdrCode where
-  intMethod m n _ s _ t ps _ = getPutReturn (setScope (snd $ unCPPHC s) . 
-    if m then setCurrMain else id) $ 
-    on2CodeValues mthd (onCodeValue snd s) (on3CodeValues (cpphMethod n) t 
-    (onCodeList paramListDocD ps) endStatement)
+  intMethod m n _ s _ t ps _ = getPutReturnList ps (setScope (snd $ unCPPHC s) 
+    . if m then setCurrMain else id) (\pms -> on2CodeValues mthd (onCodeValue 
+    snd s) (on3CodeValues (cpphMethod n) t (onCodeList paramListDocD pms) 
+    endStatement))
   intFunc = G.intFunc
   commentedFunc = cppCommentedFunc Header
 
@@ -1914,11 +1918,12 @@ isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
-getParam :: (RenderSym repr) => repr (Variable repr) -> repr (Parameter repr)
-getParam v = G.param (getParamFunc ((getType . variableType) v)) v
-  where getParamFunc (List _) = cppPointerParamDoc
-        getParamFunc (Object _) = cppPointerParamDoc
-        getParamFunc _ = paramDocD
+getParam :: (RenderSym repr) => repr (Variable repr) -> 
+  MS (repr (Parameter repr))
+getParam v = getParamFunc ((getType . variableType) v) v
+  where getParamFunc (List _) = pointerParam
+        getParamFunc (Object _) = pointerParam
+        getParamFunc _ = param
  
 data MethodData = MthD {getMthdScp :: ScopeTag, mthdDoc :: Doc}
 
@@ -2081,8 +2086,8 @@ cppCommentedFunc ft cmt fn = do
   cmnt <- cmt
   let cf = toState (methodFromData scp $ commentedItem (blockCommentDoc cmnt) $ 
         methodDoc f)
-      ret Source = if mn then cf else fn
-      ret Header = if mn then fn else cf
+      ret Source = if mn then cf else toState f
+      ret Header = if mn then toState f else cf
       ret Combined = error "Combined passed to cppCommentedFunc"
   ret ft
 
@@ -2150,30 +2155,34 @@ cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins
 
 cppsInOut :: (CppSrcCode (Scope CppSrcCode) -> 
     CppSrcCode (Permanence CppSrcCode) -> CppSrcCode (Type CppSrcCode) -> 
-    [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
+    [MS (CppSrcCode (Parameter CppSrcCode))] -> CppSrcCode (Body CppSrcCode) -> 
     MS (CppSrcCode (Method CppSrcCode)))
   -> CppSrcCode (Scope CppSrcCode) -> CppSrcCode (Permanence CppSrcCode) -> 
   [CppSrcCode (Variable CppSrcCode)] -> [CppSrcCode (Variable CppSrcCode)] -> 
   [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
   MS (CppSrcCode (Method CppSrcCode))
-cppsInOut f s p ins [v] [] b = f s p (variableType v) (map getParam ins) 
+cppsInOut f s p ins [v] [] b = f s p (variableType v) (cppInOutParams ins [v] [])
   (on3CodeValues surroundBody (varDec v) b (returnState $ valueOf v))
 cppsInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else variableType v) (map getParam $ v : ins) (if null (filterOutObjs [v]) 
+  else variableType v) (cppInOutParams ins [] [v]) (if null (filterOutObjs [v]) 
   then b else on2CodeValues appendToBody b (returnState $ valueOf v))
-cppsInOut f s p ins outs both b = f s p void (map pointerParam both 
-  ++ map getParam ins ++ map pointerParam outs) b
+cppsInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
 
 cpphInOut :: (CppHdrCode (Scope CppHdrCode) -> 
     CppHdrCode (Permanence CppHdrCode) -> CppHdrCode (Type CppHdrCode) -> 
-    [CppHdrCode (Parameter CppHdrCode)] -> CppHdrCode (Body CppHdrCode) -> 
+    [MS (CppHdrCode (Parameter CppHdrCode))] -> CppHdrCode (Body CppHdrCode) -> 
     MS (CppHdrCode (Method CppHdrCode))) 
   -> CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Permanence CppHdrCode) -> 
   [CppHdrCode (Variable CppHdrCode)] -> [CppHdrCode (Variable CppHdrCode)] -> 
   [CppHdrCode (Variable CppHdrCode)] -> CppHdrCode (Body CppHdrCode) -> 
   MS (CppHdrCode (Method CppHdrCode))
-cpphInOut f s p ins [v] [] b = f s p (variableType v) (map getParam ins) b
+cpphInOut f s p ins [v] [] b = f s p (variableType v) (cppInOutParams ins [v] []) b
 cpphInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else variableType v) (map getParam $ v : ins) b
-cpphInOut f s p ins outs both b = f s p void (map pointerParam both 
-  ++ map getParam ins ++ map pointerParam outs) b
+  else variableType v) (cppInOutParams ins [] [v]) b
+cpphInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
+
+cppInOutParams :: (RenderSym repr) => [repr (Variable repr)] -> 
+  [repr (Variable repr)] -> [repr (Variable repr)] -> [MS (repr (Parameter repr))]
+cppInOutParams ins [_] [] = map getParam ins
+cppInOutParams ins [] [v] = map getParam $ v : ins
+cppInOutParams ins outs both = map pointerParam both ++ map getParam ins ++ map pointerParam outs

@@ -60,14 +60,14 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  updateMthdDoc, OpData(..), ParamData(..), updateParamDoc, ProgData(..), progD,
-  TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
-  vard)
+  updateMthdDoc, OpData(..), ParamData(..), pd, updateParamDoc, ProgData(..), 
+  progD, TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), 
+  VarData(..), vard)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on5CodeValues, 
   onCodeList, onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
-  setCurrMain)
+import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS,
+  getPutReturnList, setCurrMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -553,9 +553,9 @@ instance MethodSym CSharpCode where
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
 instance InternalMethod CSharpCode where
-  intMethod m n _ s p t ps b = getPutReturn (if m then setCurrMain else id) $ 
-    onCodeValue mthd (on5CodeValues (methodDocD n) s p t (onCodeList 
-    paramListDocD ps) b)
+  intMethod m n _ s p t ps b = getPutReturnList ps (if m then setCurrMain else 
+    id) (\pms -> onCodeValue mthd (on5CodeValues (methodDocD n) s p t 
+    (onCodeList paramListDocD pms) b))
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
@@ -704,9 +704,8 @@ csObjVar o v = csObjVar' (variableBind v)
           (variableType v) (objVarDocD (variableDoc o) (variableDoc v))
 
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
-    -> CSharpCode (Type CSharpCode) -> [CSharpCode (Parameter CSharpCode)] -> 
-    CSharpCode (Body CSharpCode) -> 
-    MS (CSharpCode (Method CSharpCode)))
+    -> CSharpCode (Type CSharpCode) -> [MS (CSharpCode (Parameter CSharpCode))] 
+    -> CSharpCode (Body CSharpCode) -> MS (CSharpCode (Method CSharpCode)))
   -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
   [CSharpCode (Variable CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
   [CSharpCode (Variable CSharpCode)] -> CSharpCode (Body CSharpCode) -> 
@@ -716,6 +715,6 @@ csInOut f s p ins [v] [] b = f s p (variableType v) (map param ins)
 csInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
   else variableType v) (map param $ v : ins) (if null (filterOutObjs [v]) then 
   b else on2CodeValues appendToBody b (returnState $ valueOf v))
-csInOut f s p ins outs both b = f s p void (map (onCodeValue (updateParamDoc 
-  csRef) . param) both ++ map param ins ++ map (onCodeValue (updateParamDoc 
-  csOut) . param) outs) b
+csInOut f s p ins outs both b = f s p void (map (onStateValue (onCodeValue 
+  (updateParamDoc csRef)) . param) both ++ map param ins ++ map (onStateValue 
+  (onCodeValue (updateParamDoc csOut)) . param) outs) b

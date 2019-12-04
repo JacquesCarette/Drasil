@@ -59,12 +59,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   docClass, commentedClass, buildModule', modFromData, fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
-  td, ValData(..), vd, VarData(..), vard)
+  updateMthdDoc, OpData(..), ParamData(..), pd, ProgData(..), progD, 
+  TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
   on5CodeValues, onCodeList, on1CodeValue1List)
-import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
+import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS,
   getPutReturnList, addProgNameToPaths, setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -554,9 +554,9 @@ instance MethodSym JavaCode where
   docInOutFunc n = jDocInOut (inOutFunc n)
 
 instance InternalMethod JavaCode where
-  intMethod m n _ s p t ps b = getPutReturn (if m then setCurrMain else id) $ 
-    onCodeValue mthd (on5CodeValues (jMethod n) s p t (onCodeList 
-    paramListDocD ps) b)
+  intMethod m n _ s p t ps b = getPutReturnList ps (if m then setCurrMain else 
+    id) (\pms -> onCodeValue mthd (on5CodeValues (jMethod n) s p t (onCodeList 
+    paramListDocD pms) b))
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
@@ -753,7 +753,7 @@ jInOutCall f n ins outs both = fCall rets
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs
 
 jInOut :: (JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
-    JavaCode (Type JavaCode) -> [JavaCode (Parameter JavaCode)] -> 
+    JavaCode (Type JavaCode) -> [MS (JavaCode (Parameter JavaCode))] -> 
     JavaCode (Body JavaCode) -> MS (JavaCode (Method JavaCode))) 
   -> JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
   [JavaCode (Variable JavaCode)] -> [JavaCode (Variable JavaCode)] -> 

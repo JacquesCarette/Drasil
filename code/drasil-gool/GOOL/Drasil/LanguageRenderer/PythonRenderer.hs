@@ -54,13 +54,13 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileDoc, docMod)
 import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
-  td, ValData(..), vd, VarData(..), vard)
+  updateMthdDoc, OpData(..), ParamData(..), pd, ProgData(..), progD, 
+  TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
   onCodeList, onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
-  setCurrMain)
+  getPutReturnList, setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -561,12 +561,12 @@ instance MethodSym PythonCode where
   docInOutFunc n = pyDocInOut (inOutFunc n)
 
 instance InternalMethod PythonCode where
-  intMethod m n l _ _ _ ps b = getPutReturn (if m then setCurrMain else id) $ 
-    onCodeValue mthd (on3CodeValues (pyMethod n) (self l) (onCodeList 
-    paramListDocD ps) b)
-  intFunc m n _ _ _ ps b = getPutReturn (if m then setCurrMain else id) $ 
-    onCodeValue mthd (on2CodeValues (pyFunction n) (onCodeList paramListDocD ps)
-    b)
+  intMethod m n l _ _ _ ps b = getPutReturnList ps (if m then setCurrMain else 
+    id) (\pms -> onCodeValue mthd (on3CodeValues (pyMethod n) (self l) 
+    (onCodeList paramListDocD pms) b))
+  intFunc m n _ _ _ ps b = getPutReturnList ps (if m then setCurrMain else id) 
+    (\pms -> onCodeValue mthd (on2CodeValues (pyFunction n) (onCodeList 
+    paramListDocD pms) b))
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
 
@@ -769,9 +769,8 @@ pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid .
   text) lns
 
 pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) 
-    -> PythonCode (Type PythonCode) -> [PythonCode (Parameter PythonCode)] -> 
-    PythonCode (Body PythonCode) -> 
-    MS (PythonCode (Method PythonCode)))
+    -> PythonCode (Type PythonCode) -> [MS (PythonCode (Parameter PythonCode))] 
+    -> PythonCode (Body PythonCode) -> MS (PythonCode (Method PythonCode)))
   -> PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) -> 
   [PythonCode (Variable PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
   [PythonCode (Variable PythonCode)] -> PythonCode (Body PythonCode) -> 

@@ -24,31 +24,31 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
   bodyDocD, oneLinerD, outDoc, printFileDocD, destructorError, paramDocD, 
-  paramListDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, 
-  listDecDocD, mkSt, stringListVals', stringListLists', printStD, stateD, 
-  loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, 
-  decrementD, incrementD, decrement1D, increment1D, discardInputD, 
-  discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, 
-  discardFileLineD, breakDocD, continueDocD, returnD, multiReturnError, 
-  valStateD, freeError, throwD, initStateD, changeStateD, initObserverListD, 
-  addObserverD, ifNoElseD, switchD, switchAsIfD, ifExistsD, forRangeD, 
-  tryCatchD, unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', typeUnExpr, 
-  powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
-  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
-  divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
-  typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
-  litStringD, classVarDocD, newObjDocD, varD, staticVarD, extVarD, selfD, 
-  enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, 
-  valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, 
-  objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
-  selfFuncAppD, extFuncAppD, newObjD, notNullD, castDocD, castObjDocD, funcD, 
-  getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, 
-  listAccessD, listSetD, getFuncD, setFuncD, listSizeFuncD, listAddFuncD, 
-  listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD', staticDocD, 
-  dynamicDocD, bindingError, privateDocD, publicDocD, dot, new, elseIfLabel, 
-  forLabel, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, commentedModD, docFuncRepr, 
-  valueList, appendToBody, surroundBody, intValue, filterOutObjs)
+  runStrategyD, listSliceD, checkStateD, notifyObserversD, listDecDocD, mkSt, 
+  stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, 
+  assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, 
+  decrement1D, increment1D, discardInputD, discardFileInputD, openFileRD, 
+  openFileWD, openFileAD, closeFileD, discardFileLineD, breakDocD, continueDocD,
+  returnD, multiReturnError, valStateD, freeError, throwD, initStateD, 
+  changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD, 
+  switchAsIfD, ifExistsD, forRangeD, tryCatchD, unOpPrec, notOpDocD, 
+  negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, equalOpDocD, 
+  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
+  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, classVarDocD, 
+  newObjDocD, varD, staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, 
+  objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, 
+  argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, 
+  listIndexExistsD, indexOfD, funcAppD, selfFuncAppD, extFuncAppD, newObjD, 
+  notNullD, castDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, 
+  listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, 
+  listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
+  listAccessFuncD', staticDocD, dynamicDocD, bindingError, privateDocD, 
+  publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
+  docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, commentedModD, docFuncRepr, valueList, parameterList, 
+  appendToBody, surroundBody, intValue, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData, block, bool, int, double, char, listType, listInnerType, obj, 
   enumType, void, pi, inlineIf, varDec, varDecDef, listDec, listDecDef, 
@@ -57,13 +57,13 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   docMain, function, mainFunction, docFunc, intFunc, stateVar, stateVarDef, 
   constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
   docClass, commentedClass, buildModule', modFromData, fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD, 
-  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  updateMthdDoc, OpData(..), ParamData(..), pd, ProgData(..), progD, 
-  TypeData(..), td, ValData(..), vd, VarData(..), vard)
+import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
+  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, updateMthdDoc, OpData(..), ParamData(..), pd, 
+  ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
-  on5CodeValues, onCodeList, on1CodeValue1List)
+  onCodeList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS,
   getPutReturnList, addProgNameToPaths, setCurrMain)
 
@@ -526,6 +526,7 @@ instance ParameterSym JavaCode where
 instance InternalParam JavaCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
+  parameterDoc = paramDoc . unJC
   paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance MethodSym JavaCode where
@@ -555,8 +556,7 @@ instance MethodSym JavaCode where
 
 instance InternalMethod JavaCode where
   intMethod m n _ s p t ps b = getPutReturnList ps (if m then setCurrMain else 
-    id) (\pms -> onCodeValue mthd (on5CodeValues (jMethod n) s p t (onCodeList 
-    paramListDocD pms) b))
+    id) (\pms -> methodFromData Pub $ jMethod n s p t pms b)
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
@@ -723,11 +723,13 @@ jStringSplit :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr)
 jStringSplit vnew s = variableDoc vnew <+> equals <+> new <+> getTypeDoc 
   (variableType vnew) <> parens (valueDoc s)
 
-jMethod :: Label -> Doc -> Doc -> TypeData -> Doc -> Doc -> Doc
+jMethod :: (RenderSym repr) => Label -> repr (Scope repr) -> 
+  repr (Permanence repr) -> repr (Type repr) -> [repr (Parameter repr)] -> 
+  repr (Body repr) -> Doc
 jMethod n s p t ps b = vcat [
-  s <+> p <+> typeDoc t <+> text n <> parens ps <+> text "throws Exception" <+> 
-    lbrace,
-  indent b,
+  scopeDoc s <+> permDoc p <+> getTypeDoc t <+> text n <> 
+    parens (parameterList ps) <+> text "throws Exception" <+> lbrace,
+  indent $ bodyDoc b,
   rbrace]
 
 jAssignFromArray :: Int -> [JavaCode (Variable JavaCode)] -> 

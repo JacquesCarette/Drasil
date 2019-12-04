@@ -574,6 +574,7 @@ class (InternalParam repr) => ParameterSym repr where
 class InternalParam repr where
   parameterName :: repr (Parameter repr) -> Label
   parameterType :: repr (Parameter repr) -> repr (Type repr)
+  parameterDoc  :: repr (Parameter repr) -> Doc
   paramFromData :: repr (Variable repr) -> Doc -> repr (Parameter repr)
 
 class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr, 

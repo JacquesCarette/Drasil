@@ -23,16 +23,9 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
   ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
-  bodyDocD, oneLinerD, outDoc, printFileDocD, destructorError, paramDocD, 
-  runStrategyD, listSliceD, checkStateD, notifyObserversD, listDecDocD, mkSt, 
-  stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, 
-  assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, 
-  decrement1D, increment1D, discardInputD, discardFileInputD, openFileRD, 
-  openFileWD, openFileAD, closeFileD, discardFileLineD, breakDocD, continueDocD,
-  returnD, multiReturnError, valStateD, freeError, throwD, initStateD, 
-  changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD, 
-  switchAsIfD, ifExistsD, forRangeD, tryCatchD, unOpPrec, notOpDocD, 
-  negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, equalOpDocD, 
+  bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
+  mkSt, stringListVals', stringListLists', breakDocD, continueDocD, unOpPrec, 
+  notOpDocD, negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
@@ -50,27 +43,34 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   addCommentsDocD, commentedModD, docFuncRepr, valueList, parameterList, 
   appendToBody, surroundBody, intValue, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, bool, int, double, char, listType, listInnerType, obj, 
-  enumType, void, pi, inlineIf, varDec, varDecDef, listDec, listDecDef, 
-  objDecNew, objDecNewNoParams, construct, comment, ifCond, for, forEach, while,
+  oneLiner, block, bool, int, double, char, listType, listInnerType, obj, 
+  enumType, void, runStrategy, listSlice, pi, inlineIf, printSt, state, loopState, emptyState, 
+  assign, assignToListIndex, multiAssignError, decrement, increment, 
+  decrement1, increment1, varDec, varDecDef, listDec, listDecDef, 
+  objDecNew, objDecNewNoParams, discardInput, discardFileInput, openFileR, 
+  openFileW, openFileA, closeFile, discardFileLine, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, 
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
+  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, notifyObservers, construct,
   param, method, getMethod, setMethod, privMethod, pubMethod, constructor, 
   docMain, function, mainFunction, docFunc, intFunc, stateVar, stateVarDef, 
   constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
-  docClass, commentedClass, buildModule', modFromData, fileDoc, docMod)
+  docClass, commentedClass, buildModule', modFromData, fileDoc, docMod, 
+  fileFromData)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
-  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
-  onCodeList, on1CodeValue1List)
-import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS,
-  getPutReturnList, addProgNameToPaths, setCurrMain)
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
+  onCodeList, onStateList, on1CodeValue1List, on1StateValue1List)
+import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, getPutReturnList, 
+  addProgNameToPaths, setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
-import Control.Monad.State (evalState)
+import Control.Monad.State (modify)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
   equals, semi, vcat, lbrace, rbrace, render, colon, comma, render)
 
@@ -97,8 +97,7 @@ instance ProgramSym JavaCode where
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = FileData 
-  fileDoc code = G.fileDoc Combined jExt (top $ evalState code (initialState,
-    initialFS)) bottom code
+  fileDoc = G.fileDoc Combined jExt top bottom
 
   docMod = G.docMod
 
@@ -148,9 +147,9 @@ instance InternalPerm JavaCode where
 
 instance BodySym JavaCode where
   type Body JavaCode = Doc
-  body = onCodeList bodyDocD
+  body = onStateList (onCodeList bodyDocD)
   bodyStatements = block
-  oneLiner = oneLinerD
+  oneLiner = G.oneLiner
 
   addComments s = on2CodeValues (addCommentsDocD s) commentStart
 
@@ -162,7 +161,7 @@ instance BlockSym JavaCode where
 
 instance InternalBlock JavaCode where
   blockDoc = unJC
-  docBlock = toCode
+  docBlock = onStateValue toCode
 
 instance TypeSym JavaCode where
   type Type JavaCode = TypeData
@@ -188,9 +187,9 @@ instance InternalType JavaCode where
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym JavaCode where
-  runStrategy = runStrategyD
+  runStrategy = G.runStrategy
 
-  listSlice = listSliceD
+  listSlice = G.listSlice
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
@@ -395,12 +394,12 @@ instance InternalFunction JavaCode where
   funcFromData t d = on2CodeValues fd t (toCode d)
 
 instance InternalStatement JavaCode where
-  printSt _ p v _ = printStD p v
+  printSt _ p v _ = G.printSt p v
 
-  state = stateD
-  loopState = loopStateD
+  state = G.state
+  loopState = G.loopState
 
-  emptyState = emptyStateD
+  emptyState = G.emptyState
   statementDoc = fst . unJC
   statementTerm = snd . unJC
   
@@ -409,14 +408,14 @@ instance InternalStatement JavaCode where
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
-  assign = assignD Semi
-  assignToListIndex = assignToListIndexD
-  multiAssign _ _ = error $ multiAssignError jName
+  assign = G.assign Semi
+  assignToListIndex = G.assignToListIndex
+  multiAssign _ _ = error $ G.multiAssignError jName
   (&=) = assign
-  (&-=) = decrementD
-  (&+=) = incrementD
-  (&++) = increment1D
-  (&~-) = decrement1D
+  (&-=) = G.decrement
+  (&+=) = G.increment
+  (&++) = G.increment1
+  (&~-) = G.decrement1
 
   varDec = G.varDec static_ dynamic_
   varDecDef = G.varDecDef
@@ -427,7 +426,7 @@ instance StatementSym JavaCode where
   extObjDecNew _ = objDecNew
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams _ = objDecNewNoParams
-  constDecDef v def = mkSt $ jConstDecDef v def
+  constDecDef v def = toState $ mkSt $ jConstDecDef v def
 
   print v = jOut False printFunc v Nothing
   printLn v = jOut True printLnFunc v Nothing
@@ -440,67 +439,67 @@ instance StatementSym JavaCode where
   printFileStrLn f s = jOut True (printFileLnFunc f) (litString s) (Just f)
 
   getInput v = v &= jInput (variableType v) inputFunc
-  discardInput = discardInputD jDiscardInput
+  discardInput = G.discardInput jDiscardInput
   getFileInput f v = v &= jInput (variableType v) f
-  discardFileInput = discardFileInputD jDiscardInput
+  discardFileInput = G.discardFileInput jDiscardInput
 
-  openFileR = openFileRD jOpenFileR
-  openFileW = openFileWD jOpenFileWorA
-  openFileA = openFileAD jOpenFileWorA
-  closeFile = closeFileD "close"
+  openFileR = G.openFileR jOpenFileR
+  openFileW = G.openFileW jOpenFileWorA
+  openFileA = G.openFileA jOpenFileWorA
+  closeFile = G.closeFile "close"
 
   getFileInputLine f v = v &= f $. func "nextLine" string []
-  discardFileLine = discardFileLineD "nextLine"
-  stringSplit d vnew s = mkSt $ jStringSplit vnew 
+  discardFileLine = G.discardFileLine "nextLine"
+  stringSplit d vnew s = toState $ mkSt $ jStringSplit vnew 
     (funcApp "Arrays.asList" (listType static_ string) 
     [s $. func "split" (listType static_ string) [litString [d]]])
 
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = mkSt breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
-  continue = mkSt continueDocD
+  break = toState $ mkSt breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
+  continue = toState $ mkSt continueDocD
 
-  returnState = returnD Semi
-  multiReturn _ = error $ multiReturnError jName
+  returnState = G.returnState Semi
+  multiReturn _ = error $ G.multiReturnError jName
 
-  valState = valStateD Semi
+  valState = G.valState Semi
 
   comment = G.comment commentStart
 
-  free _ = error $ freeError jName -- could set variable to null? Might be misleading.
+  free _ = error $ G.freeError jName -- could set variable to null? Might be misleading.
 
-  throw = throwD jThrowDoc Semi
+  throw = G.throw jThrowDoc Semi
 
-  initState = initStateD
-  changeState = changeStateD
+  initState = G.initState
+  changeState = G.changeState
 
-  initObserverList = initObserverListD
-  addObserver = addObserverD
+  initObserverList = G.initObserverList
+  addObserver = G.addObserver
 
   inOutCall = jInOutCall funcApp
   selfInOutCall c = jInOutCall (selfFuncApp c)
   extInOutCall m = jInOutCall (extFuncApp m)
 
-  multi = on1CodeValue1List multiStateDocD endStatement
+  multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
 instance ControlStatementSym JavaCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
-  ifNoElse = ifNoElseD
-  switch  = switchD
-  switchAsIf = switchAsIfD
+  ifNoElse = G.ifNoElse
+  switch  = G.switch
+  switchAsIf = G.switchAsIf
 
-  ifExists = ifExistsD
+  ifExists = G.ifExists
 
   for = G.for blockStart blockEnd
-  forRange = forRangeD 
+  forRange = G.forRange 
   forEach = G.forEach blockStart blockEnd iterForEachLabel iterInLabel
   while = G.while blockStart blockEnd
 
-  tryCatch = tryCatchD jTryCatch
+  tryCatch = G.tryCatch jTryCatch
   
-  checkState = checkStateD
-  notifyObservers = notifyObserversD
+  checkState = G.checkState
+  notifyObservers = G.notifyObservers
 
   getFileInputAll f v = while (f $. func "hasNextLine" bool [])
     (oneLiner $ valState $ listAppend (valueOf v) (f $. func "nextLine" string []))
@@ -555,8 +554,9 @@ instance MethodSym JavaCode where
   docInOutFunc n = jDocInOut (inOutFunc n)
 
 instance InternalMethod JavaCode where
-  intMethod m n _ s p t ps b = getPutReturnList ps (if m then setCurrMain else 
-    id) (\pms -> methodFromData Pub $ jMethod n s p t pms b)
+  intMethod m n _ s p t ps b = modify (if m then setCurrMain else id) >> 
+    on1StateValue1List (\bd pms -> methodFromData Pub $ jMethod n s p t pms bd) 
+    (zoom lensMStoGS b) ps
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
@@ -575,7 +575,7 @@ instance StateVarSym JavaCode where
 
 instance InternalStateVar JavaCode where
   stateVarDoc = unJC
-  stateVarFromData = toState . toCode
+  stateVarFromData = onStateValue toCode
 
 instance ClassSym JavaCode where
   type Class JavaCode = Doc
@@ -599,7 +599,7 @@ instance ModuleSym JavaCode where
 instance InternalMod JavaCode where
   moduleDoc = modDoc . unJC
   modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
-  updateModuleDoc f = onStateValue (onCodeValue (updateModDoc f))
+  updateModuleDoc f = onCodeValue (updateModDoc f)
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc
@@ -686,7 +686,7 @@ jTryCatch tb cb = vcat [
   rbrace]
 
 jOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
-  -> Maybe (repr (Value repr)) -> repr (Statement repr)
+  -> Maybe (repr (Value repr)) -> GS (repr (Statement repr))
 jOut newLn printFn v f = jOut' (getType $ valueType v)
   where jOut' (List (Object _)) = outDoc newLn printFn v f
         jOut' (List _) = printSt newLn printFn v f
@@ -733,7 +733,7 @@ jMethod n s p t ps b = vcat [
   rbrace]
 
 jAssignFromArray :: Int -> [JavaCode (Variable JavaCode)] -> 
-  [JavaCode (Statement JavaCode)]
+  [GS (JavaCode (Statement JavaCode))]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (variableType v)
   (valueOf (var ("outputs[" ++ show c ++ "]") (variableType v))))
@@ -742,7 +742,7 @@ jAssignFromArray c (v:vs) = (v &= cast (variableType v)
 jInOutCall :: (Label -> JavaCode (Type JavaCode) -> 
   [JavaCode (Value JavaCode)] -> JavaCode (Value JavaCode)) -> Label -> 
   [JavaCode (Value JavaCode)] -> [JavaCode (Variable JavaCode)] -> 
-  [JavaCode (Variable JavaCode)] -> JavaCode (Statement JavaCode)
+  [JavaCode (Variable JavaCode)] -> GS (JavaCode (Statement JavaCode))
 jInOutCall f n ins [] [] = valState $ f n void ins
 jInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
 jInOutCall f n ins [] [out] = if null (filterOutObjs [out])
@@ -756,20 +756,21 @@ jInOutCall f n ins outs both = fCall rets
 
 jInOut :: (JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
     JavaCode (Type JavaCode) -> [MS (JavaCode (Parameter JavaCode))] -> 
-    JavaCode (Body JavaCode) -> MS (JavaCode (Method JavaCode))) 
+    GS (JavaCode (Body JavaCode)) -> MS (JavaCode (Method JavaCode))) 
   -> JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
   [JavaCode (Variable JavaCode)] -> [JavaCode (Variable JavaCode)] -> 
-  [JavaCode (Variable JavaCode)] -> JavaCode (Body JavaCode) -> 
+  [JavaCode (Variable JavaCode)] -> GS (JavaCode (Body JavaCode)) -> 
   MS (JavaCode (Method JavaCode))
 jInOut f s p ins [] [] b = f s p void (map param ins) b
 jInOut f s p ins [v] [] b = f s p (variableType v) (map param ins) 
-  (on3CodeValues surroundBody (varDec v) b (returnState $ valueOf v))
-jInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) 
-  then void else variableType v) (map param $ v : ins) 
-  (if null (filterOutObjs [v]) then b else on2CodeValues appendToBody b 
-  (returnState $ valueOf v))
+  (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 
+  valueOf v))
+jInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void else 
+  variableType v) (map param $ v : ins) (if null (filterOutObjs [v]) then b 
+  else on2StateValues (on2CodeValues appendToBody) b (returnState $ valueOf v))
 jInOut f s p ins outs both b = f s p (returnTp rets)
-  (map param $ both ++ ins) (on3CodeValues surroundBody decls b (returnSt rets))
+  (map param $ both ++ ins) (on3StateValues (on3CodeValues surroundBody) decls 
+  b (returnSt rets))
   where returnTp [x] = variableType x
         returnTp _ = jArrayType
         returnSt [x] = returnState $ valueOf x
@@ -778,7 +779,7 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
           : assignArray 0 (map valueOf rets)
           ++ [returnState (valueOf outputs)])
         assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
-          [JavaCode (Statement JavaCode)]
+          [GS (JavaCode (Statement JavaCode))]
         assignArray _ [] = []
         assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
           (valueType v) &= v) : assignArray (c+1) vs
@@ -788,11 +789,10 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
 
 jDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
     -> [repr (Variable repr)] -> [repr (Variable repr)] -> 
-    [repr (Variable repr)] -> repr (Body repr) -> 
-    MS (repr (Method repr)))
+    [repr (Variable repr)] -> GS (repr (Body repr)) -> MS (repr (Method repr)))
   -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
   [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
-  [(String, repr (Variable repr))] -> repr (Body repr) -> 
+  [(String, repr (Variable repr))] -> GS (repr (Body repr)) -> 
   MS (repr (Method repr))
 jDocInOut f s p desc is [] [] b = docFuncRepr desc (map fst is) [] 
   (f s p (map snd is) [] [] b)

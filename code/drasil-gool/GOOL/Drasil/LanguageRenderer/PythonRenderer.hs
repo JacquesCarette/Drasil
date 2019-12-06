@@ -44,14 +44,14 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, int, float, listInnerType, obj, enumType, runStrategy, 
   state, loopState, emptyState, assign, assignToListIndex, decrement, 
-  increment', increment1', decrement1, comment, ifCond, objDecNew, 
-  objDecNewNoParams, closeFile, discardFileLine, returnState, valState, comment,
-  throw, initState, changeState, initObserverList, addObserver, ifCond, 
-  ifNoElse, switchAsIf, ifExists, tryCatch, checkState, construct, param, 
-  method, getMethod, setMethod, privMethod, pubMethod, constructor, function, 
-  docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
-  privClass, pubClass, docClass, commentedClass, buildModule, modFromData, 
-  fileDoc, docMod, fileFromData)
+  increment', increment1', decrement1, objDecNew, objDecNewNoParams, closeFile, 
+  discardFileLine, returnState, valState, comment, throw, initState, 
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switchAsIf, 
+  ifExists, tryCatch, checkState, construct, param, method, getMethod, 
+  setMethod, privMethod, pubMethod, constructor, function, docFunc, stateVarDef,
+  constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, pubClass, 
+  docClass, commentedClass, buildModule, modFromData, fileDoc, docMod, 
+  fileFromData)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), ParamData(..), pd, 
@@ -65,7 +65,7 @@ import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
-import Control.Monad.State (evalState, modify)
+import Control.Monad.State (modify)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty)
 
@@ -623,9 +623,8 @@ instance BlockCommentSym PythonCode where
   blockCommentDoc = unPC
 
 -- convenience
-imp, incl, initName :: Label
+imp, initName :: Label
 imp = "import"
-incl = "from"
 initName = "__init__"
 
 pyName :: String

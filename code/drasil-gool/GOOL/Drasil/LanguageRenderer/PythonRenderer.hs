@@ -12,54 +12,54 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..),
-  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
-  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
-  BlockCommentSym(..))
+  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
+  InternalOp(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
-  bodyDocD, oneLinerD, outDoc, destructorError, paramListDocD, mkParam, 
-  runStrategyD, checkStateD, multiAssignDoc, returnDocD, mkStNoEnd, 
-  stringListVals', stringListLists', stateD, loopStateD, emptyStateD, assignD, 
-  assignToListIndexD, decrementD, decrement1D, closeFileD, discardFileLineD, 
-  breakDocD, continueDocD, returnD, valStateD, throwD, initStateD, 
-  changeStateD, initObserverListD, addObserverD, ifNoElseD, switchAsIfD, 
-  ifExistsD, tryCatchD, unOpPrec, notOpDocD', negateOpDocD, sqrtOpDocD', 
-  absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', 
-  acosOpDocD', atanOpDocD', unExpr, unExpr', typeUnExpr, powerPrec, multPrec, 
-  andPrec, orPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
-  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
-  multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, 
-  litCharD, litFloatD, litIntD, litStringD, classVarDocD, newObjDocD', varD, 
-  staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, 
-  listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, 
-  objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
-  indexOfD, funcAppD, selfFuncAppD, extFuncAppD, newObjD, listSetFuncDocD, 
-  castObjDocD, funcD, getD, setD, listAddD, listAppendD, iterBeginD, iterEndD, 
-  listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, 
-  iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, dynamicDocD, 
-  bindingError, classDec, dot, forLabel, inLabel, observerListName, 
-  commentedItem, addCommentsDocD, commentedModD, docFuncRepr, 
-  valueList, surroundBody, filterOutObjs)
+  bodyDocD, oneLinerD, outDoc, destructorError, runStrategyD, checkStateD, 
+  multiAssignDoc, returnDocD, mkStNoEnd, stringListVals', stringListLists', 
+  stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, decrementD, 
+  decrement1D, closeFileD, discardFileLineD, breakDocD, continueDocD, returnD, 
+  valStateD, throwD, initStateD, changeStateD, initObserverListD, addObserverD, 
+  ifNoElseD, switchAsIfD, ifExistsD, tryCatchD, unOpPrec, notOpDocD', 
+  negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', 
+  tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, unExpr', 
+  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
+  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
+  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, 
+  mkVal, mkVar, litCharD, litFloatD, litIntD, litStringD, classVarDocD, 
+  newObjDocD', varD, staticVarD, extVarD, enumVarD, classVarD, objVarD, 
+  objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, 
+  argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, 
+  listIndexExistsD, indexOfD, funcAppD, selfFuncAppD, extFuncAppD, newObjD, 
+  listSetFuncDocD, castObjDocD, funcD, getD, setD, listAddD, listAppendD, 
+  iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD,
+  listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, 
+  dynamicDocD, bindingError, classDec, dot, forLabel, inLabel, observerListName,
+  commentedItem, addCommentsDocD, commentedModD, docFuncRepr, valueList, 
+  parameterList, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData, block, int, float, listInnerType, obj, enumType, increment, 
-  increment1, comment, ifCond, objDecNew, objDecNewNoParams, construct, method, 
-  getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
-  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, 
-  pubClass, docClass, commentedClass, buildModule, modFromData, fileDoc, docMod)
-import GOOL.Drasil.Data (Terminator(..), FileType(..), FileData(..), fileD,
-  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  updateMthdDoc, OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), 
-  td, ValData(..), vd, VarData(..), vard)
+  increment1, comment, ifCond, objDecNew, objDecNewNoParams, construct, param, 
+  method, getMethod, setMethod, privMethod, pubMethod, constructor, function, 
+  docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
+  privClass, pubClass, docClass, commentedClass, buildModule, modFromData, 
+  fileDoc, docMod)
+import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
+  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, updateMthdDoc, OpData(..), ParamData(..), pd, 
+  ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
-  onCodeList, onStateList, on1CodeValue1List, checkParams)
+  onCodeList, onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS, getPutReturn,
-  setCurrMain, setParameters)
+  getPutReturnList, setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -526,10 +526,14 @@ instance MethodTypeSym PythonCode where
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
-  param = onCodeValue (mkParam varDoc)
+  param = G.param variableDoc
   pointerParam = param
 
+instance InternalParam PythonCode where
+  parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
+  parameterDoc = paramDoc . unPC
+  paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
@@ -544,8 +548,7 @@ instance MethodSym PythonCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction = getPutReturn (setParameters [] . setCurrMain) . onCodeValue 
-    mthd
+  mainFunction = getPutReturn setCurrMain . onCodeValue mthd
 
   docFunc = G.docFunc
 
@@ -558,12 +561,10 @@ instance MethodSym PythonCode where
   docInOutFunc n = pyDocInOut (inOutFunc n)
 
 instance InternalMethod PythonCode where
-  intMethod m n l _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
-    if m then setCurrMain else id) $ onCodeValue mthd (on3CodeValues (pyMethod 
-    n) (self l) (onCodeList (paramListDocD . checkParams n) ps) b)
-  intFunc m n _ _ _ ps b = getPutReturn (setParameters (map unPC ps) . 
-    if m then setCurrMain else id) $ onCodeValue mthd (on2CodeValues 
-    (pyFunction n) (onCodeList (paramListDocD . checkParams n) ps) b)
+  intMethod m n l _ _ _ ps b = getPutReturnList ps (if m then setCurrMain else 
+    id) (\pms -> methodFromData Pub $ pyMethod n (self l) pms b)
+  intFunc m n _ _ _ ps b = getPutReturnList ps (if m then setCurrMain else id) 
+    (\pms -> methodFromData Pub $ pyFunction n pms b)
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
 
@@ -723,20 +724,23 @@ pyListSlice :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) ->
 pyListSlice vnew vold b e s = variableDoc vnew <+> equals <+> valueDoc vold <> 
   brackets (valueDoc b <> colon <> valueDoc e <> colon <> valueDoc s)
 
-pyMethod :: Label -> VarData -> Doc -> Doc -> Doc
+pyMethod :: (RenderSym repr) => Label -> repr (Variable repr) -> 
+  [repr (Parameter repr)] -> repr (Body repr) -> Doc
 pyMethod n slf ps b = vcat [
-  text "def" <+> text n <> parens (varDoc slf <> oneParam <> ps) <> colon,
+  text "def" <+> text n <> parens (variableDoc slf <> oneParam <> pms) <> colon,
   indent bodyD]
-      where oneParam = emptyIfEmpty ps $ text ", "
-            bodyD | isEmpty b = text "None"
-                  | otherwise = b
+      where pms = parameterList ps
+            oneParam = emptyIfEmpty pms $ text ", "
+            bodyD | isEmpty (bodyDoc b) = text "None"
+                  | otherwise = bodyDoc b
 
-pyFunction :: Label -> Doc -> Doc -> Doc
+pyFunction :: (RenderSym repr) => Label -> [repr (Parameter repr)] -> 
+  repr (Body repr) -> Doc
 pyFunction n ps b = vcat [
-  text "def" <+> text n <> parens ps <> colon,
+  text "def" <+> text n <> parens (parameterList ps) <> colon,
   indent bodyD]
-  where bodyD | isEmpty b = text "None"
-              | otherwise = b
+  where bodyD | isEmpty (bodyDoc b) = text "None"
+              | otherwise = bodyDoc b
 
 pyClass :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 pyClass n pn s vs fs = vcat [
@@ -766,9 +770,8 @@ pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid .
   text) lns
 
 pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) 
-    -> PythonCode (Type PythonCode) -> [PythonCode (Parameter PythonCode)] -> 
-    PythonCode (Body PythonCode) -> 
-    MS (PythonCode (Method PythonCode)))
+    -> PythonCode (Type PythonCode) -> [MS (PythonCode (Parameter PythonCode))] 
+    -> PythonCode (Body PythonCode) -> MS (PythonCode (Method PythonCode)))
   -> PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) -> 
   [PythonCode (Variable PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
   [PythonCode (Variable PythonCode)] -> PythonCode (Body PythonCode) -> 

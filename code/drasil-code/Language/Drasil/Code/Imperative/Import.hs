@@ -141,8 +141,8 @@ genConstructor :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) =>
 genConstructor n desc p = genMethod (constructor n) n desc p Nothing
 
 genMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  ([repr (Parameter repr)] -> repr (Body repr) -> MS (repr (Method repr))) -> 
-  Label -> String -> [c] -> Maybe String -> [repr (Block repr)] -> 
+  ([MS (repr (Parameter repr))] -> repr (Body repr) -> MS (repr (Method repr))) 
+  -> Label -> String -> [c] -> Maybe String -> [repr (Block repr)] -> 
   Reader DrasilState (MS (repr (Method repr)))
 genMethod f n desc p r b = do
   g <- ask

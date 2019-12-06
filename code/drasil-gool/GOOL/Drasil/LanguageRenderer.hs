@@ -9,13 +9,13 @@ module GOOL.Drasil.LanguageRenderer (
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, 
-  printDoc, printFileDocD, destructorError, paramDocD, paramListDocD, mkParam, 
-  methodDocD, methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD, 
-  switchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusPlusDocD, 
-  listDecDocD, listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD,
-  mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, 
-  loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, 
-  decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
+  printDoc, printFileDocD, destructorError, paramDocD, methodDocD, 
+  methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD, switchDocD, 
+  assignDocD, multiAssignDoc, plusEqualsDocD, plusPlusDocD, listDecDocD, 
+  listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, mkSt, 
+  mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, 
+  emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, 
+  incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
   discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, 
   discardFileLineD, returnD, multiReturnError, valStateD, 
   freeError, throwD, initStateD, changeStateD, initObserverListD, addObserverD, 
@@ -43,8 +43,8 @@ module GOOL.Drasil.LanguageRenderer (
   iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDox, classDox, moduleDox, commentedModD, docFuncRepr, 
-  valueList, variableList, prependToBody, appendToBody, surroundBody, 
+  functionDox, classDox, moduleDox, commentedModD, docFuncRepr, valueList, 
+  variableList, parameterList, prependToBody, appendToBody, surroundBody, 
   getterName, setterName, setEmpty, intValue, filterOutObjs
 ) where
 
@@ -52,7 +52,7 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..), 
-  BlockSym(..), InternalBlock(..), PermanenceSym(..),
+  BlockSym(..), InternalBlock(..), PermanenceSym(..), InternalPerm(..),
   TypeSym(Type, getType, getTypeString, getTypeDoc, bool, float, string, infile,
     outfile, listType, listInnerType, obj, enumType, iterator, void), 
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
@@ -60,23 +60,23 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), InternalScope(..), ParameterSym(..), InternalParam(..), 
   MethodSym(..), InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
-  updateModDoc, OpData(..), od, ParamData(..), pd, paramName, TypeData(..), 
-  Binding(..), VarData(..))
+  updateModDoc, OpData(..), od, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (doubleQuotedText, hicat, vibcat, vmap, 
   emptyIfEmpty, emptyIfNull, onStateValue, getNestDegree)
 import GOOL.Drasil.State (MS, getParameters)
 
-import Data.List (intersperse, last)
+import Data.List (last)
 import Data.Bifunctor (first)
 import Data.Map as Map (lookup, fromList)
 import Data.Maybe (fromMaybe)
 import Prelude hiding (break,print,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   space, brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
-  integer, semi, equals, braces, int, comma, colon, hcat)
+  integer, semi, equals, braces, int, comma, colon)
 
 ----------------------------------------
 -- Syntax common to several renderers --
@@ -220,21 +220,18 @@ printFileDocD fn f = f <> dot <> text fn
 
 -- Parameters --
 
-paramDocD :: VarData -> Doc
-paramDocD v = typeDoc (varType v) <+> varDoc v
-
-paramListDocD :: [ParamData] -> Doc
-paramListDocD = hicat (text ", ") . map paramDoc
-
-mkParam :: (VarData -> Doc) -> VarData -> ParamData
-mkParam f v = pd v (f v)
+paramDocD :: (RenderSym repr) => repr (Variable repr) -> Doc
+paramDocD v = getTypeDoc (variableType v) <+> variableDoc v
 
 -- Method --
 
-methodDocD :: Label -> Doc -> Doc -> TypeData -> Doc -> Doc -> Doc
+methodDocD :: (RenderSym repr) => Label -> repr (Scope repr) -> 
+  repr (Permanence repr) -> repr (Type repr) -> [repr (Parameter repr)] -> 
+  repr (Body repr) -> Doc
 methodDocD n s p t ps b = vcat [
-  s <+> p <+> typeDoc t <+> text n <> parens ps <+> lbrace,
-  indent b,
+  scopeDoc s <+> permDoc p <+> getTypeDoc t <+> text n <> 
+    parens (parameterList ps) <+> lbrace,
+  indent (bodyDoc b),
   rbrace]
 
 methodListDocD :: [Doc] -> Doc
@@ -1087,16 +1084,18 @@ commentedModD m cmt = updateFileMod (updateModDoc (commentedItem cmt) (fileMod m
 docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
   MS (repr (Method repr)) -> MS (repr (Method repr))
 docFuncRepr desc pComms rComms = commentedFunc (docComment $ onStateValue 
-  (\ps -> functionDox desc (zip (map paramName ps) pComms) rComms) 
-  getParameters)
+  (\ps -> functionDox desc (zip ps pComms) rComms) getParameters)
 
 -- Helper Functions --
 
 valueList :: (RenderSym repr) => [repr (Value repr)] -> Doc
-valueList vs = hcat (intersperse (text ", ") (map valueDoc vs))
+valueList = hicat (text ", ") . map valueDoc
 
 variableList :: (RenderSym repr) => [repr (Variable repr)] -> Doc
-variableList vs = hcat (intersperse (text ", ") (map variableDoc vs))
+variableList = hicat (text ", ") . map variableDoc
+
+parameterList :: (RenderSym repr) => [repr (Parameter repr)] -> Doc
+parameterList = hicat (text ", ") . map parameterDoc
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 prependToBody s b = vcat [fst $ statementDocD s, maybeBlank, b]

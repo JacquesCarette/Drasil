@@ -72,7 +72,8 @@ fAppInOut m n ins outs both = do
     (eMap $ codeSpec g) == Just cm then inOutCall n ins outs both else 
     selfInOutCall m n ins outs both
 
-mkParam :: (RenderSym repr) => repr (Variable repr) -> repr (Parameter repr)
+mkParam :: (RenderSym repr) => repr (Variable repr) -> 
+  MS (repr (Parameter repr))
 mkParam v = paramFunc (getType $ variableType v) v
   where paramFunc (List _) = pointerParam
         paramFunc (Object _) = pointerParam

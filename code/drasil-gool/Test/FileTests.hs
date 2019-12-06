@@ -12,7 +12,7 @@ fileTests = prog "FileTests" [fileDoc (buildModule "FileTests" [] [fileTestMetho
 fileTestMethod :: (RenderSym repr) => MS (repr (Method repr))
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 
-writeStory :: (RenderSym repr) => repr (Block repr)
+writeStory :: (RenderSym repr) => GS (repr (Block repr))
 writeStory = block [
   varDec $ var "fileToWrite" outfile,
 
@@ -31,11 +31,11 @@ writeStory = block [
   discardFileLine (valueOf $ var "fileToRead" infile),
   listDec 0 (var "fileContents" (listType dynamic_ string))]
 
-readStory :: (RenderSym repr) => repr (Statement repr)
+readStory :: (RenderSym repr) => GS (repr (Statement repr))
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile) 
   (var "fileContents" (listType dynamic_ string))
 
-goodBye :: (RenderSym repr) => repr (Block repr)
+goodBye :: (RenderSym repr) => GS (repr (Block repr))
 goodBye = block [
   printLn (valueOf $ var "fileContents" (listType dynamic_ string)), 
   closeFile (valueOf $ var "fileToRead" infile)]

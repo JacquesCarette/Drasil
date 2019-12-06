@@ -44,7 +44,8 @@ import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   InternalClass(..), ModuleSym(Module), InternalMod(moduleDoc, updateModuleDoc),
   BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData), 
-  BodySym(oneLiner), BlockSym(block), TypeSym(int, float, void), 
+  BodySym(oneLiner), BlockSym(block), 
+  TypeSym(int, float, string, listType, void), 
   InternalStatement(state, loopState, emptyState), 
   StatementSym(varDec, varDecDef, listDec, listDecDef, objDecNew, constDecDef, 
     valState, returnState),
@@ -277,11 +278,11 @@ openFileA f vr vl = vr &= f vl outfile litTrue
 
 closeFile :: (RenderSym repr) => Label -> repr (Value repr) -> 
   GS (repr (Statement repr))
-closeFile n f = S.valState $ objMethodCallNoParams void f n
+closeFile n f = S.valState $ objMethodCallNoParams S.void f n
 
 discardFileLine :: (RenderSym repr) => Label -> repr (Value repr) -> 
   GS (repr (Statement repr))
-discardFileLine n f = S.valState $ objMethodCallNoParams string f n 
+discardFileLine n f = S.valState $ objMethodCallNoParams S.string f n 
 
 returnState :: (RenderSym repr) => Terminator -> repr (Value repr) -> 
   GS (repr (Statement repr))
@@ -306,15 +307,15 @@ throw :: (RenderSym repr) => (repr (Value repr) -> Doc) -> Terminator -> Label
 throw f t l = toState $ stateFromData (f (litString l)) t
 
 initState :: (RenderSym repr) => Label -> Label -> GS (repr (Statement repr))
-initState fsmName initialState = S.varDecDef (var fsmName string) 
+initState fsmName initialState = S.varDecDef (var fsmName S.string) 
   (litString initialState)
 
 changeState :: (RenderSym repr) => Label -> Label -> GS (repr (Statement repr))
-changeState fsmName tState = var fsmName string &= litString tState
+changeState fsmName tState = var fsmName S.string &= litString tState
 
 initObserverList :: (RenderSym repr) => repr (Type repr) -> 
   [repr (Value repr)] -> GS (repr (Statement repr))
-initObserverList t = S.listDecDef (var observerListName (listType static_ t))
+initObserverList t = S.listDecDef (var observerListName (S.listType static_ t))
 
 addObserver :: (RenderSym repr) => repr (Value repr) -> 
   GS (repr (Statement repr))
@@ -401,7 +402,7 @@ tryCatch f = on2StateValues (\tb cb -> stateFromData (f tb cb) Empty)
 
 checkState :: (RenderSym repr) => Label -> [(repr (Value repr), 
   GS (repr (Body repr)))] -> GS (repr (Body repr)) -> GS (repr (Statement repr))
-checkState l = S.switch (valueOf $ var l string)
+checkState l = S.switch (valueOf $ var l S.string)
 
 notifyObservers :: (RenderSym repr) => repr (Function repr) -> repr (Type repr)
   -> GS (repr (Statement repr))

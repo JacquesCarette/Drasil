@@ -97,7 +97,7 @@ class (BlockSym repr) => BodySym repr where
   bodyStatements :: [GS (repr (Statement repr))] -> GS (repr (Body repr))
   oneLiner       :: GS (repr (Statement repr)) -> GS (repr (Body repr))
 
-  addComments :: Label -> repr (Body repr) -> repr (Body repr)
+  addComments :: Label -> GS (repr (Body repr)) -> GS (repr (Body repr))
 
   bodyDoc :: repr (Body repr) -> Doc
 

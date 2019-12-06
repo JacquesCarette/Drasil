@@ -64,7 +64,7 @@ fApp m s t vl = do
 
 fAppInOut :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
   [repr (Variable repr)] -> [repr (Variable repr)] -> 
-  Reader DrasilState (repr (Statement repr))
+  Reader DrasilState (GS (repr (Statement repr)))
 fAppInOut m n ins outs both = do
   g <- ask
   let cm = currentModule g

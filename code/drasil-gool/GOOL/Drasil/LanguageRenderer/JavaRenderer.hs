@@ -151,7 +151,7 @@ instance BodySym JavaCode where
   bodyStatements = block
   oneLiner = G.oneLiner
 
-  addComments s = on2CodeValues (addCommentsDocD s) commentStart
+  addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 
   bodyDoc = unJC
 

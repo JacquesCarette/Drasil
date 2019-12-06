@@ -158,7 +158,7 @@ instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
   bodyStatements sts = pair1List sts bodyStatements bodyStatements
   oneLiner s = pair1 s oneLiner oneLiner
 
-  addComments s b = pair (addComments s $ pfst b) (addComments s $ psnd b)
+  addComments s b = pair1 b (addComments s) (addComments s)
 
   bodyDoc b = bodyDoc $ pfst b
 
@@ -877,7 +877,7 @@ instance BodySym CppSrcCode where
   bodyStatements = block
   oneLiner = G.oneLiner
 
-  addComments s = on2CodeValues (addCommentsDocD s) commentStart
+  addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 
   bodyDoc = unCPPSC
 
@@ -1455,7 +1455,7 @@ instance BodySym CppHdrCode where
   bodyStatements _ = toState $ toCode empty
   oneLiner _ = toState $ toCode empty
 
-  addComments _ _ = toCode empty
+  addComments _ _ = toState $ toCode empty
 
   bodyDoc = unCPPHC
 

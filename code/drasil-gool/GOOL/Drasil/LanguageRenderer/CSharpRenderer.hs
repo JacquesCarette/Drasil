@@ -65,7 +65,8 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, setCurrMain)
+import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, addLangImport, 
+  setCurrMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -466,7 +467,7 @@ instance StatementSym CSharpCode where
 
   free _ = error $ G.freeError csName -- could set variable to null? Might be misleading.
 
-  throw = G.throw csThrowDoc Semi
+  throw msg = modify (addLangImport "System") >> G.throw csThrowDoc Semi msg
 
   initState = G.initState
   changeState = G.changeState
@@ -612,9 +613,8 @@ csName = "C#"
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [
-  inc <+> text "System" <> end,
+  inc <+> text "System" <> end, -- Console, Math
   inc <+> text "System.IO" <> end,
-  inc <+> text "System.Collections" <> end,
   inc <+> text "System.Collections.Generic" <> end]
 
 csInfileType :: (RenderSym repr) => repr (Type repr)

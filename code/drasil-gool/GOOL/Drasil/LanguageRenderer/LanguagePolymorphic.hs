@@ -176,7 +176,7 @@ state :: (RenderSym repr) => GS (repr (Statement repr)) ->
   GS (repr (Statement repr))
 state = onStateValue (\s -> stateFromData (statementDoc s <> getTermDoc 
   (statementTerm s)) Empty)
-
+  
 loopState :: (RenderSym repr) => GS (repr (Statement repr)) -> 
   GS (repr (Statement repr))
 loopState = S.state . setEmpty

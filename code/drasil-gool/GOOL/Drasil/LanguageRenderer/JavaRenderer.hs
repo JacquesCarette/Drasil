@@ -64,8 +64,8 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, getPutReturnList, 
-  addProgNameToPaths, setCurrMain)
+import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, getPutReturn, 
+  getPutReturnList, addProgNameToPaths, addLangImport, setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -420,7 +420,8 @@ instance StatementSym JavaCode where
   varDec = G.varDec static_ dynamic_
   varDecDef = G.varDecDef
   listDec n v = G.listDec (listDecDocD v) (litInt n) v
-  listDecDef v = G.listDecDef (jListDecDef v) v
+  listDecDef v vs = modify (if null vs then id else addLangImport 
+    "java.util.Arrays") >> G.listDecDef (jListDecDef v) v vs
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew
@@ -443,15 +444,18 @@ instance StatementSym JavaCode where
   getFileInput f v = v &= jInput (variableType v) f
   discardFileInput = G.discardFileInput jDiscardInput
 
-  openFileR = G.openFileR jOpenFileR
-  openFileW = G.openFileW jOpenFileWorA
-  openFileA = G.openFileA jOpenFileWorA
+  openFileR f n = modify (addLangImport "java.io.File") >> G.openFileR 
+    jOpenFileR f n
+  openFileW f n = modify (addLangImport "java.io.File" . addLangImport 
+    "java.io.FileWriter") >> G.openFileW jOpenFileWorA f n
+  openFileA f n = modify (addLangImport "java.io.File" . addLangImport 
+    "java.io.FileWriter") >> G.openFileA jOpenFileWorA f n
   closeFile = G.closeFile "close"
 
   getFileInputLine f v = v &= f $. func "nextLine" string []
   discardFileLine = G.discardFileLine "nextLine"
-  stringSplit d vnew s = toState $ mkSt $ jStringSplit vnew 
-    (funcApp "Arrays.asList" (listType static_ string) 
+  stringSplit d vnew s = getPutReturn (addLangImport "java.util.Arrays") $ mkSt 
+    $ jStringSplit vnew (funcApp "Arrays.asList" (listType static_ string) 
     [s $. func "split" (listType static_ string) [litString [d]]])
 
   stringListVals = stringListVals'
@@ -615,8 +619,7 @@ jName = "Java"
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [
-  inc <+> text "java.util.Arrays" <> end,
-  inc <+> text "java.util.BitSet" <> end, --TODO: only include these if they are used in the code?
+  inc <+> text "java.util.Arrays" <> end, --TODO: only include these if they are used in the code?
   inc <+> text "java.util.Scanner" <> end,
   inc <+> text "java.io.PrintWriter" <> end,
   inc <+> text "java.io.FileWriter" <> end,

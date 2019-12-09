@@ -5,8 +5,8 @@ module GOOL.Drasil.State (
   headers, sources, mainMod, currMain, initialState, initialFS, putAfter, 
   getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, addFile, 
   addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
-  setFilePath, getFilePath, setModuleName, getModuleName, setCurrMain, 
-  getCurrMain, addParameter, getParameters, setScope, getScope, 
+  addLangImport, setFilePath, getFilePath, setModuleName, getModuleName, 
+  setCurrMain, getCurrMain, addParameter, getParameters, setScope, getScope, 
   setCurrMainFunc, getCurrMainFunc
 ) where
 
@@ -20,7 +20,8 @@ import Data.Maybe (isNothing)
 data GOOLState = GS {
   _headers :: [FilePath],
   _sources :: [FilePath],
-  _mainMod :: Maybe FilePath
+  _mainMod :: Maybe FilePath,
+  _langImports :: [String]
 } 
 makeLenses ''GOOLState
 
@@ -87,7 +88,8 @@ initialState :: GOOLState
 initialState = GS {
   _headers = [],
   _sources = [],
-  _mainMod = Nothing
+  _mainMod = Nothing,
+  _langImports = []
 }
 
 initialFS :: FileState
@@ -172,6 +174,9 @@ addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
 setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
   "Multiple modules with main methods encountered")
+
+addLangImport :: String -> GOOLState -> GOOLState
+addLangImport i = over langImports (\is -> if i `elem` is then i:is else is)
 
 setFilePath :: FilePath -> (GOOLState, FileState) -> (GOOLState, FileState)
 setFilePath fp = over _2 (set currFilePath fp)

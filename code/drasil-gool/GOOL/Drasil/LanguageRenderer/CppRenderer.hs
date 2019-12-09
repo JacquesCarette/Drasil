@@ -66,8 +66,8 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty,
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, onCodeList, 
   onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GS, MS, FS, lensGStoFS, lensFStoGS, lensFStoMS, 
-  lensMStoGS, getPutReturn, getPutReturnList, setCurrMain, getCurrMain, 
-  setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+  lensMStoGS, getPutReturn, getPutReturnList, addLangImport, setCurrMain, 
+  getCurrMain, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -654,15 +654,14 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     s) (psnd p) desc (map (mapPairSnd psnd) is) (map (mapPairSnd psnd) os) (map 
     (mapPairSnd psnd) bs))
 
-  inOutFunc n s p ins outs both b = pair1 (zoom lensMStoGS b) (inOutFunc n   
-    (pfst s) (pfst p) (map pfst ins) (map pfst outs) (map pfst both)) 
+  inOutFunc n s p ins outs both b = pair1 (zoom lensMStoGS b) 
+    (inOutFunc n (pfst s) (pfst p) (map pfst ins) (map pfst outs) (map pfst both)) 
     (inOutFunc n (psnd s) (psnd p) (map psnd ins) (map psnd outs) (map psnd 
     both))
 
-  docInOutFunc n s p desc is os bs b = pair1 (zoom lensMStoGS b) (docInOutFunc 
-    n (pfst s) (pfst p) desc (map (mapPairSnd pfst) is) (map (mapPairSnd pfst) 
-    os) (map (mapPairSnd pfst) bs)) (docInOutFunc n (psnd s) (psnd p) desc (map 
-    (mapPairSnd psnd) is) (map (mapPairSnd psnd) os) (map (mapPairSnd psnd) bs))
+  docInOutFunc n s p desc is os bs b = pair1 (zoom lensMStoGS b) 
+    (docInOutFunc n (pfst s) (pfst p) desc (map (mapPairSnd pfst) is) (map (mapPairSnd pfst) os) (map (mapPairSnd pfst) bs)) 
+    (docInOutFunc n (psnd s) (psnd p) desc (map (mapPairSnd psnd) is) (map (mapPairSnd psnd) os) (map (mapPairSnd psnd) bs))
   
 instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
   intMethod m n c s p t ps b = pair1List1 ps (zoom lensMStoGS b) (intMethod m n 
@@ -1167,10 +1166,12 @@ instance StatementSym CppSrcCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = toState $ mkSt $ cppInput v inputFunc endStatement
-  discardInput = G.discardInput (cppDiscardInput "\\n")
-  getFileInput f v = toState $ mkSt $ cppInput v f endStatement
-  discardFileInput = G.discardFileInput (cppDiscardInput " ")
+  getInput v = cppInput v inputFunc endStatement
+  discardInput = modify (addLangImport "limits") >> G.discardInput 
+    (cppDiscardInput "\\n")
+  getFileInput f v = cppInput v f endStatement
+  discardFileInput f = modify (addLangImport "limits") >> G.discardFileInput 
+    (cppDiscardInput " ") f
 
   openFileR f n = toState $ mkSt $ cppOpenFile "std::fstream::in" f n
   openFileW f n = toState $ mkSt $ cppOpenFile "std::fstream::out" f n
@@ -1178,7 +1179,8 @@ instance StatementSym CppSrcCode where
   closeFile = G.closeFile "close"
 
   getFileInputLine f v = valState $ funcApp "std::getline" string [f, valueOf v]
-  discardFileLine f = toState $ mkSt $ cppDiscardInput "\\n" f
+  discardFileLine f = getPutReturn (addLangImport "limits") $ mkSt $ 
+    cppDiscardInput "\\n" f
   stringSplit d vnew s = let l_ss = "ss"
                              var_ss = var l_ss (obj "std::stringstream")
                              v_ss = valueOf var_ss
@@ -1186,7 +1188,7 @@ instance StatementSym CppSrcCode where
                              var_word = var l_word string
                              v_word = valueOf var_word
                          in
-    multi [
+    modify (addLangImport "sstream") >> multi [
       valState $ valueOf vnew $. func "clear" void [],
       varDec var_ss,
       valState $ objMethodCall string v_ss "str" [s],
@@ -1959,9 +1961,9 @@ cppstop m lst end = vcat [
   if b then empty else inc <+> doubleQuotedText (addExt cppHdrExt n),
   if b then empty else blank,
   text "#define" <+> text "_USE_MATH_DEFINES", --FIXME: Only include if used (i.e. pi)
-  inc <+> angles (text "algorithm"),
-  inc <+> angles (text "iostream"),
-  inc <+> angles (text "fstream"),
+  inc <+> angles (text "algorithm"), -- find
+  inc <+> angles (text "iostream"), -- cout, cin
+  inc <+> angles (text "fstream"), -- ifstream, ofstream
   inc <+> angles (text "iterator"),
   inc <+> angles (text "string"),
   inc <+> angles (text "math.h"),
@@ -2058,8 +2060,8 @@ cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens
   quotes (text sep))
 
 cppInput :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
-  repr (Keyword repr) -> Doc
-cppInput v inFn end = vcat [
+  repr (Keyword repr) -> GS (repr (Statement repr))
+cppInput v inFn end = getPutReturn (addLangImport "limits") $ mkSt $ vcat [
   valueDoc inFn <+> text ">>" <+> variableDoc v <> keyDoc end,
   valueDoc inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]

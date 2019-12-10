@@ -66,8 +66,9 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty,
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, onCodeList, 
   onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GS, MS, FS, lensGStoFS, lensFStoGS, lensFStoMS, 
-  lensMStoGS, getPutReturn, getPutReturnList, addLangImport, setCurrMain, 
-  getCurrMain, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+  lensMStoGS, getPutReturn, getPutReturnList, addLangImport, addModuleImport, 
+  setCurrMain, getCurrMain, setScope, getScope, setCurrMainFunc, 
+  getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -1151,9 +1152,9 @@ instance StatementSym CppSrcCode where
   listDecDef = G.listDecDef cppListDecDefDoc
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew _ = objDecNew
+  extObjDecNew l v vs = modify (addModuleImport l) >> objDecNew v vs
   objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams _ = objDecNewNoParams
+  extObjDecNewNoParams l v = modify (addModuleImport l) >> objDecNewNoParams v
   constDecDef = G.constDecDef
 
   print v = outDoc False printFunc v Nothing

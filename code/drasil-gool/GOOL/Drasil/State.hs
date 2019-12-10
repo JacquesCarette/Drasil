@@ -5,9 +5,9 @@ module GOOL.Drasil.State (
   headers, sources, mainMod, currMain, initialState, initialFS, putAfter, 
   getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, addFile, 
   addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
-  addLangImport, setFilePath, getFilePath, setModuleName, getModuleName, 
-  setCurrMain, getCurrMain, addParameter, getParameters, setScope, getScope, 
-  setCurrMainFunc, getCurrMainFunc
+  addLangImport, addModuleImport, setFilePath, getFilePath, setModuleName, 
+  getModuleName, setCurrMain, getCurrMain, addParameter, getParameters, 
+  setScope, getScope, setCurrMainFunc, getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
@@ -21,7 +21,8 @@ data GOOLState = GS {
   _headers :: [FilePath],
   _sources :: [FilePath],
   _mainMod :: Maybe FilePath,
-  _langImports :: [String]
+  _langImports :: [String],
+  _moduleImports :: [String]
 } 
 makeLenses ''GOOLState
 
@@ -89,7 +90,8 @@ initialState = GS {
   _headers = [],
   _sources = [],
   _mainMod = Nothing,
-  _langImports = []
+  _langImports = [],
+  _moduleImports = []
 }
 
 initialFS :: FileState
@@ -177,6 +179,9 @@ setMainMod n = over mainMod (\m -> if isNothing m then Just n else error
 
 addLangImport :: String -> GOOLState -> GOOLState
 addLangImport i = over langImports (\is -> if i `elem` is then i:is else is)
+
+addModuleImport :: String -> GOOLState -> GOOLState
+addModuleImport i = over moduleImports (\is -> if i `elem` is then i:is else is)
 
 setFilePath :: FilePath -> (GOOLState, FileState) -> (GOOLState, FileState)
 setFilePath fp = over _2 (set currFilePath fp)

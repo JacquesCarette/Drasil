@@ -1,7 +1,6 @@
 ## \file Interpolation.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides functions for linear interpolation on three-dimensional data
-from __future__ import print_function
 import sys
 import math
 

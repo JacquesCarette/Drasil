@@ -5,7 +5,6 @@ package Projectile;
     \brief Provides functions for calculating the outputs
 */
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.io.FileWriter;

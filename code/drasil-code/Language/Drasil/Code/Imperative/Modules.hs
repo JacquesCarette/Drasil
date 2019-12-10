@@ -70,8 +70,8 @@ genMainFunc = do
       varDecDef v_filename (arg 0) : logInFile ++
       catMaybes [ip, co] ++ ics ++ catMaybes (varDef ++ [wo])
 
-getInputDecl :: (RenderSym repr) => Reader DrasilState (Maybe (repr (
-  Statement repr)))
+getInputDecl :: (RenderSym repr) => Reader DrasilState 
+  (Maybe (GS (repr (Statement repr))))
 getInputDecl = do
   g <- ask
   v_params <- mkVar (codevar inParams)
@@ -93,7 +93,8 @@ getInputDecl = do
   getDecl (partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
     . codeName) (inputs $ csi $ codeSpec g))
 
-initConsts :: (RenderSym repr) => Reader DrasilState (Maybe (repr (Statement repr)))
+initConsts :: (RenderSym repr) => Reader DrasilState 
+  (Maybe (GS (repr (Statement repr))))
 initConsts = do
   g <- ask
   v_consts <- mkVar (codevar consts)
@@ -118,7 +119,7 @@ initConsts = do
   getDecl (partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
     . codeName) (constants $ csi $ codeSpec g)) (conStruct g)
 
-initLogFileVar :: (RenderSym repr) => Logging -> [repr (Statement repr)]
+initLogFileVar :: (RenderSym repr) => Logging -> [GS (repr (Statement repr))]
 initLogFileVar LogVar = [varDec varLogFile]
 initLogFileVar LogAll = [varDec varLogFile]
 initLogFileVar _ = []
@@ -260,14 +261,14 @@ genInputConstraints s = do
   genConstraints $ Map.lookup "input_constraints" (defMap $ codeSpec g)
 
 sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr) 
-  => [(q,[Constraint])] -> Reader DrasilState [repr (Statement repr)]
+  => [(q,[Constraint])] -> Reader DrasilState [GS (repr (Statement repr))]
 sfwrCBody cs = do
   g <- ask
   let cb = onSfwrC g
   chooseConstr cb cs
 
 physCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr) 
-  => [(q,[Constraint])] -> Reader DrasilState [repr (Statement repr)]
+  => [(q,[Constraint])] -> Reader DrasilState [GS (repr (Statement repr))]
 physCBody cs = do
   g <- ask
   let cb = onPhysC g
@@ -275,7 +276,7 @@ physCBody cs = do
 
 chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, 
   RenderSym repr) => ConstraintBehaviour -> [(q,[Constraint])] -> 
-  Reader DrasilState [repr (Statement repr)]
+  Reader DrasilState [GS (repr (Statement repr))]
 chooseConstr Warning   cs = do
   checks <- mapM constrWarn cs
   return $ concat checks
@@ -284,7 +285,7 @@ chooseConstr Exception cs = do
   return $ concat checks
 
 constrWarn :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr)
-  => (q,[Constraint]) -> Reader DrasilState [repr (Statement repr)]
+  => (q,[Constraint]) -> Reader DrasilState [GS (repr (Statement repr))]
 constrWarn c = do
   let q = fst c
       cs = snd c
@@ -294,7 +295,7 @@ constrWarn c = do
     printStr "Warning: " : m)]) conds msgs
 
 constrExc :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr) 
-  => (q,[Constraint]) -> Reader DrasilState [repr (Statement repr)]
+  => (q,[Constraint]) -> Reader DrasilState [GS (repr (Statement repr))]
 constrExc c = do
   let q = fst c
       cs = snd c
@@ -304,7 +305,8 @@ constrExc c = do
     m ++ [throw "InputError"])]) conds msgs
 
 constraintViolatedMsg :: (CodeIdea q, HasUID q, HasCodeType q, RenderSym repr) 
-  => q -> String -> Constraint -> Reader DrasilState [repr (Statement repr)]
+  => q -> String -> Constraint -> Reader DrasilState 
+  [GS (repr (Statement repr))]
 constraintViolatedMsg q s c = do
   pc <- printConstraint c 
   v <- mkVal q
@@ -313,12 +315,12 @@ constraintViolatedMsg q s c = do
     printStr $ " but " ++ s ++ " to be "] ++ pc
 
 printConstraint :: (RenderSym repr) => Constraint -> 
-  Reader DrasilState [repr (Statement repr)]
+  Reader DrasilState [GS (repr (Statement repr))]
 printConstraint c = do
   g <- ask
   let db = sysinfodb $ csi $ codeSpec g
       printConstraint' :: (RenderSym repr) => Constraint -> Reader DrasilState 
-        [repr (Statement repr)]
+        [GS (repr (Statement repr))]
       printConstraint' (Range _ (Bounded (_,e1) (_,e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
@@ -339,7 +341,7 @@ printConstraint c = do
         printStrLn $ "one of: " ++ intercalate ", " ss]
   printConstraint' c
 
-printExpr :: (RenderSym repr) => Expr -> ChunkDB -> [repr (Statement repr)]
+printExpr :: (RenderSym repr) => Expr -> ChunkDB -> [GS (repr (Statement repr))]
 printExpr (Dbl _) _ = []
 printExpr (Int _) _ = []
 printExpr e db = [printStr $ " (" ++ render (exprDoc db Implementation Linear e)

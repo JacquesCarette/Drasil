@@ -1,7 +1,6 @@
 ## \file Constants.py
 # \author Thulasi Jegatheesan
 # \brief Provides the structure for holding constant values
-from __future__ import print_function
 import sys
 import math
 

@@ -23,56 +23,55 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
   ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
-  oneLinerD, outDoc, printFileDocD, destructorError, paramDocD, methodDocD, 
-  runStrategyD, listSliceD, checkStateD, notifyObserversD, listDecDocD, 
-  listDecDefDocD, mkSt, stringListVals', stringListLists', printStD, stateD, 
-  loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, 
-  decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,
-  openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, breakDocD, 
-  continueDocD, returnD, multiReturnError, valStateD, freeError, throwD, 
-  initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD,
-  switchAsIfD, ifExistsD, forRangeD, tryCatchD, unOpPrec, notOpDocD, 
-  negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
-  mkVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
-  classVarDocD, objVarDocD, newObjDocD, varD, staticVarD, extVarD, selfD, 
-  enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD,
-  enumElementD, argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, 
-  selfAccessD, listIndexExistsD, indexOfD, funcAppD, selfFuncAppD, extFuncAppD, 
-  newObjD, notNullD, funcDocD, castDocD, listSetFuncDocD, castObjDocD, funcD, 
-  getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, 
-  listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, 
-  iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, staticDocD, 
-  dynamicDocD, bindingError, privateDocD, publicDocD, dot, new, blockCmtStart, 
-  blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, commentedModD, appendToBody, 
-  surroundBody, filterOutObjs)
+  outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
+  listDecDefDocD, mkSt, stringListVals', stringListLists', breakDocD, 
+  continueDocD, unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', typeUnExpr, 
+  powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
+  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
+  divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
+  typeBinExpr, mkVal, mkVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
+  litStringD, classVarDocD, objVarDocD, newObjDocD, varD, staticVarD, extVarD, 
+  selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD, 
+  valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, 
+  objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
+  selfFuncAppD, extFuncAppD, newObjD, notNullD, funcDocD, castDocD, 
+  listSetFuncDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, 
+  listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, 
+  listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, 
+  listSetFuncD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
+  dot, new, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
+  inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  commentedModD, appendToBody, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  fileFromData, block, bool, int, double, char, string, listType, listInnerType,
-  obj, enumType, void, pi, inlineIf, varDec, varDecDef, listDec, listDecDef, 
-  objDecNew, objDecNewNoParams, construct, comment, ifCond, for, forEach, while,
-  param, method, getMethod, setMethod,privMethod, pubMethod, constructor, 
-  docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
-  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
+  oneLiner, block, bool, int, double, char, string, listType, listInnerType,
+  obj, enumType, void, runStrategy, listSlice, pi, inlineIf, printSt, state, 
+  loopState, emptyState, assign, assignToListIndex, multiAssignError, 
+  decrement, increment, decrement1, increment1, varDec, varDecDef, 
+  listDec, listDecDef, objDecNew, objDecNewNoParams,constDecDef, discardInput,
+  openFileR, openFileW, openFileA, closeFile, discardFileLine, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, changeState,
+  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
+  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
+  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
+  constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
+  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
   privClass, pubClass, docClass, commentedClass, buildModule', modFromData, 
-  fileDoc, docMod)
+  fileDoc, docMod, fileFromData)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), ParamData(..), pd, 
   updateParamDoc, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
   updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
-  on2CodeValues, on2StateValues, on3CodeValues, onCodeList, onStateList, 
-  on1CodeValue1List)
-import GOOL.Drasil.State (MS, lensGStoFS, initialState, initialFS,
-  getPutReturnList, setCurrMain)
+  on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
+  onStateList, on1CodeValue1List, on1StateValue1List)
+import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, addLangImport, 
+  setCurrMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
-import Control.Monad.State (evalState)
+import Control.Monad.State (modify)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   semi, vcat, lbrace, rbrace, colon)
 
@@ -98,8 +97,7 @@ instance ProgramSym CSharpCode where
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = FileData
-  fileDoc code = G.fileDoc Combined csExt (top $ evalState code (initialState,
-    initialFS)) bottom code
+  fileDoc = G.fileDoc Combined csExt top bottom
 
   docMod = G.docMod
 
@@ -149,11 +147,11 @@ instance InternalPerm CSharpCode where
 
 instance BodySym CSharpCode where
   type Body CSharpCode = Doc
-  body = onCodeList bodyDocD
+  body = onStateList (onCodeList bodyDocD)
   bodyStatements = block
-  oneLiner = oneLinerD
+  oneLiner = G.oneLiner
 
-  addComments s = on2CodeValues (addCommentsDocD s) commentStart
+  addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 
   bodyDoc = unCSC
 
@@ -163,7 +161,7 @@ instance BlockSym CSharpCode where
 
 instance InternalBlock CSharpCode where
   blockDoc = unCSC
-  docBlock = toCode
+  docBlock = onStateValue toCode
 
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData
@@ -189,9 +187,9 @@ instance InternalType CSharpCode where
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym CSharpCode where
-  runStrategy = runStrategyD
+  runStrategy = G.runStrategy
 
-  listSlice = listSliceD
+  listSlice = G.listSlice
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
@@ -396,12 +394,12 @@ instance InternalFunction CSharpCode where
   funcFromData t d = on2CodeValues fd t (toCode d)
 
 instance InternalStatement CSharpCode where
-  printSt _ p v _ = printStD p v
+  printSt _ p v _ = G.printSt p v
 
-  state = stateD
-  loopState = loopStateD
+  state = G.state
+  loopState = G.loopState
 
-  emptyState = emptyStateD
+  emptyState = G.emptyState
   statementDoc = fst . unCSC
   statementTerm = snd . unCSC
   
@@ -409,14 +407,14 @@ instance InternalStatement CSharpCode where
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
-  assign = assignD Semi
-  assignToListIndex = assignToListIndexD
-  multiAssign _ _ = error $ multiAssignError csName
+  assign = G.assign Semi
+  assignToListIndex = G.assignToListIndex
+  multiAssign _ _ = error $ G.multiAssignError csName
   (&=) = assign
-  (&-=) = decrementD
-  (&+=) = incrementD
-  (&++) = increment1D
-  (&~-) = decrement1D
+  (&-=) = G.decrement
+  (&+=) = G.increment
+  (&++) = G.increment1
+  (&~-) = G.decrement1
 
   varDec v = csVarDec (variableBind v) $ G.varDec static_ dynamic_ v
   varDecDef = G.varDecDef
@@ -427,7 +425,7 @@ instance StatementSym CSharpCode where
   extObjDecNew _ = objDecNew
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams _ = objDecNewNoParams
-  constDecDef = constDecDefD
+  constDecDef = G.constDecDef
 
   print v = outDoc False printFunc v Nothing
   printLn v = outDoc True printLnFunc v Nothing
@@ -440,66 +438,66 @@ instance StatementSym CSharpCode where
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
   getInput v = v &= csInput (variableType v) inputFunc
-  discardInput = discardInputD csDiscardInput
+  discardInput = G.discardInput csDiscardInput
   getFileInput f v = v &= csInput (variableType v) (csFileInput f)
   discardFileInput f = valState $ csFileInput f
 
-  openFileR = openFileRD csOpenFileR
-  openFileW = openFileWD csOpenFileWorA
-  openFileA = openFileAD csOpenFileWorA
-  closeFile = closeFileD "Close"
+  openFileR = G.openFileR csOpenFileR
+  openFileW = G.openFileW csOpenFileWorA
+  openFileA = G.openFileA csOpenFileWorA
+  closeFile = G.closeFile "Close"
 
   getFileInputLine = getFileInput
-  discardFileLine = discardFileLineD "ReadLine"
+  discardFileLine = G.discardFileLine "ReadLine"
   stringSplit d vnew s = assign vnew $ newObj (listType dynamic_ string) 
     [s $. func "Split" (listType static_ string) [litChar d]]
 
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = mkSt breakDocD
-  continue = mkSt continueDocD
+  break = toState $ mkSt breakDocD
+  continue = toState $ mkSt continueDocD
 
-  returnState = returnD Semi
-  multiReturn _ = error $ multiReturnError csName 
+  returnState = G.returnState Semi
+  multiReturn _ = error $ G.multiReturnError csName 
 
-  valState = valStateD Semi
+  valState = G.valState Semi
 
   comment = G.comment commentStart
 
-  free _ = error $ freeError csName -- could set variable to null? Might be misleading.
+  free _ = error $ G.freeError csName -- could set variable to null? Might be misleading.
 
-  throw = throwD csThrowDoc Semi
+  throw msg = modify (addLangImport "System") >> G.throw csThrowDoc Semi msg
 
-  initState = initStateD
-  changeState = changeStateD
+  initState = G.initState
+  changeState = G.changeState
 
-  initObserverList = initObserverListD
-  addObserver = addObserverD
+  initObserverList = G.initObserverList
+  addObserver = G.addObserver
 
   inOutCall = csInOutCall funcApp
   selfInOutCall c = csInOutCall (selfFuncApp c)
   extInOutCall m = csInOutCall (extFuncApp m)
 
-  multi = on1CodeValue1List multiStateDocD endStatement
+  multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
 instance ControlStatementSym CSharpCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
-  ifNoElse = ifNoElseD
-  switch = switchD
-  switchAsIf = switchAsIfD
+  ifNoElse = G.ifNoElse
+  switch = G.switch
+  switchAsIf = G.switchAsIf
 
-  ifExists = ifExistsD
+  ifExists = G.ifExists
 
   for = G.for blockStart blockEnd
-  forRange = forRangeD
+  forRange = G.forRange
   forEach = G.forEach blockStart blockEnd iterForEachLabel iterInLabel 
   while = G.while blockStart blockEnd
 
-  tryCatch = tryCatchD csTryCatch
+  tryCatch = G.tryCatch csTryCatch
 
-  checkState = checkStateD
-  notifyObservers = notifyObserversD
+  checkState = G.checkState
+  notifyObservers = G.notifyObservers
 
   getFileInputAll f v = while ((f $. funcFromData bool (text ".EndOfStream")) 
     ?!) (oneLiner $ valState $ listAppend (valueOf v) (csFileInput f))
@@ -554,8 +552,9 @@ instance MethodSym CSharpCode where
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
 instance InternalMethod CSharpCode where
-  intMethod m n _ s p t ps b = getPutReturnList ps (if m then setCurrMain else 
-    id) (\pms -> methodFromData Pub $ methodDocD n s p t pms b)
+  intMethod m n _ s p t ps b = modify (if m then setCurrMain else id) >> 
+    on1StateValue1List (\bd pms -> methodFromData Pub $ methodDocD n s p t pms 
+    bd) (zoom lensMStoGS b) ps
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
@@ -574,7 +573,7 @@ instance StateVarSym CSharpCode where
 
 instance InternalStateVar CSharpCode where
   stateVarDoc = unCSC
-  stateVarFromData = toState . toCode
+  stateVarFromData = onStateValue toCode
 
 instance ClassSym CSharpCode where
   type Class CSharpCode = Doc
@@ -598,7 +597,7 @@ instance ModuleSym CSharpCode where
 instance InternalMod CSharpCode where
   moduleDoc = modDoc . unCSC
   modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
-  updateModuleDoc f = onStateValue (onCodeValue (updateModDoc f))
+  updateModuleDoc f = onCodeValue (updateModDoc f)
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
@@ -614,9 +613,8 @@ csName = "C#"
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [
-  inc <+> text "System" <> end,
+  inc <+> text "System" <> end, -- Console, Math
   inc <+> text "System.IO" <> end,
-  inc <+> text "System.Collections" <> end,
   inc <+> text "System.Collections.Generic" <> end]
 
 csInfileType :: (RenderSym repr) => repr (Type repr)
@@ -681,7 +679,7 @@ csOut p = text "out" <+> p
 csInOutCall :: (Label -> CSharpCode (Type CSharpCode) -> 
   [CSharpCode (Value CSharpCode)] -> CSharpCode (Value CSharpCode)) -> Label -> 
   [CSharpCode (Value CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
-  [CSharpCode (Variable CSharpCode)] -> CSharpCode (Statement CSharpCode)
+  [CSharpCode (Variable CSharpCode)] -> GS (CSharpCode (Statement CSharpCode))
 csInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
 csInOutCall f n ins [] [out] = if null (filterOutObjs [out])
   then valState $ f n void (valueOf out : ins) 
@@ -690,8 +688,8 @@ csInOutCall f n ins outs both = valState $ f n void (map (onCodeValue
   (updateValDoc csRef) . valueOf) both ++ ins ++ map (onCodeValue (updateValDoc 
   csOut) . valueOf) outs)
 
-csVarDec :: Binding -> CSharpCode (Statement CSharpCode) -> 
-  CSharpCode (Statement CSharpCode)
+csVarDec :: Binding -> GS (CSharpCode (Statement CSharpCode)) -> 
+  GS (CSharpCode (Statement CSharpCode))
 csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
 csVarDec Dynamic d = d
 
@@ -705,16 +703,17 @@ csObjVar o v = csObjVar' (variableBind v)
 
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
     -> CSharpCode (Type CSharpCode) -> [MS (CSharpCode (Parameter CSharpCode))] 
-    -> CSharpCode (Body CSharpCode) -> MS (CSharpCode (Method CSharpCode)))
+    -> GS (CSharpCode (Body CSharpCode)) -> MS (CSharpCode (Method CSharpCode)))
   -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
   [CSharpCode (Variable CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
-  [CSharpCode (Variable CSharpCode)] -> CSharpCode (Body CSharpCode) -> 
+  [CSharpCode (Variable CSharpCode)] -> GS (CSharpCode (Body CSharpCode)) -> 
   MS (CSharpCode (Method CSharpCode))
 csInOut f s p ins [v] [] b = f s p (variableType v) (map param ins)
-  (on3CodeValues surroundBody (varDec v) b (returnState $ valueOf v))
+  (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 
+  valueOf v))
 csInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else variableType v) (map param $ v : ins) (if null (filterOutObjs [v]) then 
-  b else on2CodeValues appendToBody b (returnState $ valueOf v))
+  else variableType v) (map param $ v : ins) (if null (filterOutObjs [v]) then b
+  else on2StateValues (on2CodeValues appendToBody) b (returnState $ valueOf v))
 csInOut f s p ins outs both b = f s p void (map (onStateValue (onCodeValue 
   (updateParamDoc csRef)) . param) both ++ map param ins ++ map (onStateValue 
   (onCodeValue (updateParamDoc csOut)) . param) outs) b

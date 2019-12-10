@@ -4,7 +4,6 @@
 */
 using System;
 using System.IO;
-using System.Collections;
 using System.Collections.Generic;
 
 /** \brief Structure for holding the input values

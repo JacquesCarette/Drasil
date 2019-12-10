@@ -1,7 +1,6 @@
 ## \file OutputFormat.py
 # \author Thulasi Jegatheesan
 # \brief Provides the function for writing outputs
-from __future__ import print_function
 import sys
 import math
 

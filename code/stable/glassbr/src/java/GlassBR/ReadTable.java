@@ -5,7 +5,6 @@ package GlassBR;
     \brief Provides a function for reading glass ASTM data
 */
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.io.FileWriter;

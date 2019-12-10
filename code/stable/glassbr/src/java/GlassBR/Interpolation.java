@@ -5,7 +5,6 @@ package GlassBR;
     \brief Provides functions for linear interpolation on three-dimensional data
 */
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.io.FileWriter;

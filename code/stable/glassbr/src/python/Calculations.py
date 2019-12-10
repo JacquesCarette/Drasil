@@ -1,7 +1,6 @@
 ## \file Calculations.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides functions for calculating the outputs
-from __future__ import print_function
 import sys
 import math
 

@@ -3,8 +3,9 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   block, bool, int, float, double, char, string, fileType, listType, 
-  listInnerType, obj, enumType, void, runStrategy, listSlice, pi, inlineIf, 
-  printSt, state, loopState, emptyState, assign, assignToListIndex, 
+  listInnerType, obj, enumType, void, runStrategy, listSlice, litTrue, litFalse,
+  litChar, litFloat, litInt, litString, pi, valueOf, arg, enumElement, argsList,
+  inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, printSt, state, loopState, emptyState, assign, assignToListIndex, 
   multiAssignError, decrement, increment, increment', increment1, increment1', 
   decrement1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
   objDecNewNoParams, constDecDef, discardInput, discardFileInput, openFileR, 
@@ -22,19 +23,16 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, KeywordSym(..),
+import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..),
   RenderSym(RenderFile, commentedMod), BlockSym(Block), 
   InternalBlock(..), BodySym(Body, body, bodyStatements, bodyDoc), 
   PermanenceSym(..), InternalPerm(..), 
   TypeSym(Type, infile, outfile, getType, getTypeDoc, getTypeString), 
   InternalType(..), VariableSym(..), 
-  ValueSym(Value, litTrue, litFalse, litInt, litString, valueOf, valueDoc, 
-    valueType), 
-  NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(newObj, notNull), InternalValue(..), 
-  Selector(($.), objMethodCallNoParams), 
-  FunctionSym(Function, listSize, listAdd, listAppend), 
-  SelectorFunction(listAccess, listSet, at),
+  ValueSym(Value, valueDoc, valueType), 
+  NumericExpression(..), BooleanExpression(..), InternalValue(..), 
+  Selector(($.)), FunctionSym(Function, func), SelectorFunction(at), 
+  InternalFunction(..),
   InternalStatement(statementDoc, statementTerm, stateFromData), 
   StatementSym(Statement, (&=), (&+=), (&++), break), ScopeSym(..),
   InternalScope(..), MethodTypeSym(MethodType, mType), ParameterSym(Parameter), 
@@ -45,7 +43,12 @@ import GOOL.Drasil.Symantics (Label, KeywordSym(..),
   BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData), 
   BodySym(oneLiner), BlockSym(block), 
-  TypeSym(int, float, string, listType, void), 
+  TypeSym(bool, int, float, char, string, listType, void), 
+  ValueSym(litTrue, litFalse, litInt, litString, valueOf),
+  ValueExpression(funcApp, newObj, notNull),
+  Selector(objAccess, objMethodCall, objMethodCallNoParams),
+  FunctionSym(listSize, listAdd, listAppend),
+  SelectorFunction(listAccess, listSet),
   InternalStatement(state, loopState, emptyState), 
   StatementSym(varDec, varDecDef, listDec, listDecDef, objDecNew, constDecDef, 
     valState, returnState),
@@ -56,17 +59,19 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), TypeData(..), td, 
   FileType)
-import GOOL.Drasil.Helpers (angles, vibcat, emptyIfEmpty, toState, onStateValue,
-  on2StateValues, on3StateValues, onStateList, getInnerType, convType)
+import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, toState, onStateValue,
+  on2StateValues, on3StateValues, on4StateValues, onStateList, on2StateLists, 
+  on1StateValue1List, getInnerType, convType)
 import GOOL.Drasil.LanguageRenderer (forLabel, observerListName, addExt, 
-  blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, constDecDefDocD, 
+  blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, mkStateVal, mkVal, argDocD, enumElemDocD, funcAppDocD, objAccessDocD, constDecDefDocD, 
   printDoc, returnDocD, getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, 
   methodListDocD, enumDocD, enumElementsDocD, moduleDocD, fileDoc', docFuncRepr,
   commentDocD, commentedItem, functionDox, classDox, moduleDox, getterName, 
-  setterName)
+  setterName, valueList)
 import GOOL.Drasil.State (GS, FS, MS, lensFStoGS, lensFStoMS, currMain, 
   putAfter, getPutReturn, getPutReturnFunc2, addFile, setMainMod, setFilePath, 
-  getFilePath, setModuleName, getModuleName, getCurrMain, addParameter)
+  getFilePath, setModuleName, getModuleName, getCurrMain, addParameter, 
+  initialState)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Bifunctor (first)
@@ -75,8 +80,10 @@ import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative ((<|>))
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
+import Control.Monad.State (evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  vcat, semi, equals, isEmpty)
+  quotes, integer, vcat, semi, equals, isEmpty)
+import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
 oneLiner :: (RenderSym repr) => GS (repr (Statement repr)) -> 
   GS (repr (Body repr))
@@ -131,7 +138,7 @@ strat r bd = docBlock $ on2StateValues (\result b -> vcat [bodyDoc b,
   statementDoc result]) r bd
 
 runStrategy :: (RenderSym repr) => String -> [(Label, GS (repr (Body repr)))] 
-  -> Maybe (repr (Value repr)) -> Maybe (repr (Variable repr)) -> 
+  -> Maybe (GS (repr (Value repr))) -> Maybe (repr (Variable repr)) -> 
   GS (repr (Block repr))
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy") 
@@ -141,26 +148,57 @@ runStrategy l strats rv av = maybe
           "Attempt to assign null return to a Value") (v &=) rv
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
-listSlice :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
-  Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) ->
-  Maybe (repr (Value repr)) -> GS (repr (Block repr))
+listSlice :: (RenderSym repr) => repr (Variable repr) -> GS (repr (Value repr))
+  -> Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Value repr))) ->
+  Maybe (GS (repr (Value repr))) -> GS (repr (Block repr))
 listSlice vnew vold b e s = 
   let l_temp = "temp"
       var_temp = var l_temp (variableType vnew)
-      v_temp = valueOf var_temp
+      v_temp = S.valueOf var_temp
       l_i = "i_temp"
       var_i = var l_i S.int
-      v_i = valueOf var_i
+      v_i = S.valueOf var_i
   in
     S.block [
       S.listDec 0 var_temp,
-      S.for (S.varDecDef var_i (fromMaybe (litInt 0) b)) 
-        (v_i ?< fromMaybe (listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
-        (S.oneLiner $ S.valState $ listAppend v_temp (listAccess vold v_i)),
+      S.for (S.varDecDef var_i (fromMaybe (S.litInt 0) b)) 
+        (v_i ?< fromMaybe (S.listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
+        (S.oneLiner $ S.valState $ S.listAppend v_temp (S.listAccess vold v_i)),
       vnew &= v_temp]
 
-pi :: (RenderSym repr) => repr (Value repr)
-pi = valFromData Nothing S.float (text "Math.PI")
+litTrue :: (RenderSym repr) => GS (repr (Value repr))
+litTrue = mkStateVal S.bool (text "true")
+
+litFalse :: (RenderSym repr) => GS (repr (Value repr))
+litFalse = mkStateVal S.bool (text "false")
+
+litChar :: (RenderSym repr) => Char -> GS (repr (Value repr))
+litChar c = mkStateVal S.char (quotes $ D.char c)
+
+litFloat :: (RenderSym repr) => Double -> GS (repr (Value repr))
+litFloat f = mkStateVal S.float (D.double f)
+
+litInt :: (RenderSym repr) => Integer -> GS (repr (Value repr))
+litInt i = mkStateVal S.int (integer i)
+
+litString :: (RenderSym repr) => String -> GS (repr (Value repr))
+litString s = mkStateVal S.string (doubleQuotedText s)
+
+pi :: (RenderSym repr) => GS (repr (Value repr))
+pi = mkStateVal S.float (text "Math.PI")
+
+valueOf :: (RenderSym repr) => repr (Variable repr) -> GS (repr (Value repr))
+valueOf v = mkStateVal (variableType v) (variableDoc v)
+
+arg :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr)) ->
+  GS (repr (Value repr))
+arg = on2StateValues (\n args -> mkVal string (argDocD n args))
+
+enumElement :: (RenderSym repr) => Label -> Label -> GS (repr (Value repr))
+enumElement en e = mkStateVal (enumType en) (enumElemDocD en e)
+
+argsList :: (RenderSym repr) => String -> GS (repr (Value repr))
+argsList l = mkStateVal (listType static_ string) (text l)
 
 inlineIf :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> 
   repr (Value repr) -> repr (Value repr)
@@ -168,9 +206,87 @@ inlineIf c v1 v2 = valFromData prec (valueType v1) (valueDoc c <+> text "?" <+>
   valueDoc v1 <+> text ":" <+> valueDoc v2)
   where prec = valuePrec c <|> Just 0
 
-printSt :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> 
-  GS (repr (Statement repr))
-printSt p v = toState $ stateFromData (printDoc p v) Semi
+funcApp :: (RenderSym repr) => Label -> repr (Type repr) -> 
+  [GS (repr (Value repr))] -> GS (repr (Value repr))
+funcApp n t = onStateList (mkVal t . funcAppDocD n)
+
+selfFuncApp :: (RenderSym repr) => repr (Variable repr) -> Label -> 
+  repr (Type repr) -> [GS (repr (Value repr))] -> GS (repr (Value repr))
+selfFuncApp s n = S.funcApp (variableName s ++ "." ++ n)
+
+extFuncApp :: (RenderSym repr) => Library -> Label -> repr (Type repr) -> 
+  [GS (repr (Value repr))] -> GS (repr (Value repr))
+extFuncApp l n = S.funcApp (l ++ "." ++ n)
+
+newObj :: (RenderSym repr) => (repr (Type repr) -> Doc -> Doc) -> 
+  repr (Type repr) -> [GS (repr (Value repr))] -> GS (repr (Value repr))
+newObj f t = onStateList (mkVal t . f t . valueList)
+
+notNull :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))
+notNull v = v ?!= S.valueOf (var "null" (valueType (evalState v initialState))) -- temporary evalState
+
+objAccess :: (RenderSym repr) => GS (repr (Value repr)) -> repr (Function repr)
+  -> GS (repr (Value repr))
+objAccess v f = onStateValue (\o -> mkVal (functionType f) (objAccessDocD 
+  (valueDoc o) (functionDoc f))) v
+
+objMethodCall :: (RenderSym repr) => repr (Type repr) -> GS (repr (Value repr)) 
+  -> Label -> [GS (repr (Value repr))] -> GS (repr (Value repr))
+objMethodCall t o f ps = S.objAccess o (func f t ps)
+
+objMethodCallNoParams :: (RenderSym repr) => repr (Type repr) -> 
+  GS (repr (Value repr)) -> Label -> GS (repr (Value repr))
+objMethodCallNoParams t o f = S.objMethodCall t o f []
+
+selfAccess :: (RenderSym repr) => Label -> repr (Function repr) -> 
+  GS (repr (Value repr))
+selfAccess l = S.objAccess (S.valueOf $ self l)
+
+listIndexExists :: (RenderSym repr) => GS (repr (Value repr)) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr))
+listIndexExists lst index = S.listSize lst ?> index
+
+indexOf :: (RenderSym repr) => Label -> GS (repr (Value repr)) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr))
+indexOf f l v = S.objAccess l (func f S.int [v])
+
+get :: (RenderSym repr) => GS (repr (Value repr)) -> repr (Variable repr) -> 
+  GS (repr (Value repr))
+get v vToGet = v $. getFunc vToGet
+
+set :: (RenderSym repr) => GS (repr (Value repr)) -> repr (Variable repr) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr))
+set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+
+listSize :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))
+listSize v = v $. listSizeFunc
+
+listAdd :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr)) 
+  -> GS (repr (Value repr)) -> GS (repr (Value repr))
+listAdd v i vToAdd = v $. listAddFunc v i vToAdd
+
+listAppend :: (RenderSym repr) => GS (repr (Value repr)) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr))
+listAppend v vToApp = v $. listAppendFunc vToApp
+
+iterBegin :: (RenderSym repr) => GS (repr (Value repr)) -> 
+  GS (repr (Value repr))
+iterBegin v = v $. iterBeginFunc (listInnerType $ valueType v)
+
+iterEnd :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))
+iterEnd v = v $. iterEndFunc (listInnerType $ valueType v)
+
+listAccess :: (RenderSym repr) => GS (repr (Value repr)) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr))
+listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+
+listSet :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr)) 
+  -> GS (repr (Value repr)) -> GS (repr (Value repr))
+listSet v i toVal = v $. listSetFunc v i toVal
+
+printSt :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))
+  -> GS (repr (Statement repr))
+printSt = on2StateValues (\p v -> stateFromData (printDoc p v) Semi)
 
 state :: (RenderSym repr) => GS (repr (Statement repr)) -> 
   GS (repr (Statement repr))
@@ -185,39 +301,39 @@ emptyState :: (RenderSym repr) => GS (repr (Statement repr))
 emptyState = toState $ stateFromData empty Empty
 
 assign :: (RenderSym repr) => Terminator -> repr (Variable repr) -> 
-  repr (Value repr) -> GS (repr (Statement repr))
-assign t vr vl = toState $ stateFromData (assignDocD vr vl) t
+  GS (repr (Value repr)) -> GS (repr (Statement repr))
+assign t vr = onStateValue (\vl -> stateFromData (assignDocD vr vl) t)
 
 assignToListIndex :: (RenderSym repr) => repr (Variable repr) -> 
-  repr (Value repr) -> repr (Value repr) -> GS (repr (Statement repr))
-assignToListIndex lst index v = S.valState $ listSet (valueOf lst) index v
+  GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Statement repr))
+assignToListIndex lst index v = S.valState $ S.listSet (S.valueOf lst) index v
 
 multiAssignError :: String -> String
 multiAssignError l = "No multiple assignment statements in " ++ l
 
-decrement :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
-  GS (repr (Statement repr))
-decrement vr vl = vr &= (valueOf vr #- vl)
+decrement :: (RenderSym repr) => repr (Variable repr) -> GS (repr (Value repr)) 
+  -> GS (repr (Statement repr))
+decrement vr vl = vr &= (S.valueOf vr #- vl)
 
-increment :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
-  GS (repr (Statement repr))
-increment vr vl = toState $ stateFromData (plusEqualsDocD vr vl) Semi
+increment :: (RenderSym repr) => repr (Variable repr) -> GS (repr (Value repr)) 
+  -> GS (repr (Statement repr))
+increment vr = onStateValue (\vl -> stateFromData (plusEqualsDocD vr vl) Semi)
 
 increment1 :: (RenderSym repr) => repr (Variable repr) -> 
   GS (repr (Statement repr))
 increment1 v = toState $ stateFromData (plusPlusDocD v) Semi
 
-increment' :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
-  GS (repr (Statement repr))
-increment' vr vl = vr &= valueOf vr #+ vl
+increment' :: (RenderSym repr) => repr (Variable repr) -> GS (repr (Value repr))
+  -> GS (repr (Statement repr))
+increment' vr vl = vr &= S.valueOf vr #+ vl
 
 increment1' :: (RenderSym repr) => repr (Variable repr) -> 
   GS (repr (Statement repr))
-increment1' vr = vr &= valueOf vr #+ litInt 1
+increment1' vr = vr &= S.valueOf vr #+ S.litInt 1
 
 decrement1 :: (RenderSym repr) => repr (Variable repr) -> 
   GS (repr (Statement repr))
-decrement1 v = v &= (valueOf v #- litInt 1)
+decrement1 v = v &= (S.valueOf v #- S.litInt 1)
 
 varDec :: (RenderSym repr) => repr (Permanence repr) -> repr (Permanence repr) 
   -> repr (Variable repr) -> GS (repr (Statement repr))
@@ -226,74 +342,75 @@ varDec s d v = toState $ stateFromData (permDoc (bind $ variableBind v) <+>
   where bind Static = s
         bind Dynamic = d
 
-varDecDef :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
-  GS (repr (Statement repr))
-varDecDef vr vl = onStateValue (\vd -> stateFromData (statementDoc vd <+> 
+varDecDef :: (RenderSym repr) => repr (Variable repr) -> GS (repr (Value repr)) 
+  -> GS (repr (Statement repr))
+varDecDef vr = on2StateValues (\vd vl -> stateFromData (statementDoc vd <+> 
   equals <+> valueDoc vl) Semi) (S.varDec vr)
 
 listDec :: (RenderSym repr) => (repr (Value repr) -> Doc) -> 
-  repr (Value repr) -> repr (Variable repr) -> GS (repr (Statement repr))
-listDec f sz v = onStateValue (\vd -> stateFromData (statementDoc vd <> f sz) 
-  Semi) (S.varDec v)
+  GS (repr (Value repr)) -> repr (Variable repr) -> GS (repr (Statement repr))
+listDec f vl v = on2StateValues (\sz vd -> stateFromData (statementDoc vd <> f 
+  sz) Semi) vl (S.varDec v)
 
 listDecDef :: (RenderSym repr) => ([repr (Value repr)] -> Doc) -> 
-  repr (Variable repr) -> [repr (Value repr)] -> GS (repr (Statement repr))
-listDecDef f v vs = onStateValue (\vd -> stateFromData (statementDoc vd <> f vs)
-  Semi) (S.varDec v)
+  repr (Variable repr) -> [GS (repr (Value repr))] -> GS (repr (Statement repr))
+listDecDef f v = on1StateValue1List (\vd vs -> stateFromData (statementDoc vd 
+  <> f vs) Semi) (S.varDec v)
 
-objDecNew :: (RenderSym repr) => repr (Variable repr) -> [repr (Value repr)] -> 
-  GS (repr (Statement repr))
-objDecNew v vs = S.varDecDef v (newObj (variableType v) vs)
+objDecNew :: (RenderSym repr) => repr (Variable repr) -> 
+  [GS (repr (Value repr))] -> GS (repr (Statement repr))
+objDecNew v vs = S.varDecDef v (S.newObj (variableType v) vs)
 
 objDecNewNoParams :: (RenderSym repr) => repr (Variable repr) -> 
   GS (repr (Statement repr))
 objDecNewNoParams v = S.objDecNew v []
 
-constDecDef :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) 
-  -> GS (repr (Statement repr))
-constDecDef v def = toState $ stateFromData (constDecDefDocD v def) Semi
+constDecDef :: (RenderSym repr) => repr (Variable repr) -> 
+  GS (repr (Value repr)) -> GS (repr (Statement repr))
+constDecDef v = onStateValue (\def -> stateFromData (constDecDefDocD v def) 
+  Semi)
 
 discardInput :: (RenderSym repr) => (repr (Value repr) -> Doc) ->
   GS (repr (Statement repr))
-discardInput f = toState $ stateFromData (f inputFunc) Semi
+discardInput f = onStateValue (\infn -> stateFromData (f infn) Semi) inputFunc
 
 discardFileInput :: (RenderSym repr) => (repr (Value repr) -> Doc) -> 
-  repr (Value repr) -> GS (repr (Statement repr))
-discardFileInput f v = toState $ stateFromData (f v) Semi
+  GS (repr (Value repr)) -> GS (repr (Statement repr))
+discardFileInput f = onStateValue (\v -> stateFromData (f v) Semi)
 
-openFileR :: (RenderSym repr) => (repr (Value repr) -> repr (Type repr) -> 
-  repr (Value repr)) -> repr (Variable repr) -> repr (Value repr) -> 
+openFileR :: (RenderSym repr) => (GS (repr (Value repr)) -> repr (Type repr) -> 
+  GS (repr (Value repr))) -> repr (Variable repr) -> GS (repr (Value repr)) -> 
   GS (repr (Statement repr))
 openFileR f vr vl = vr &= f vl infile
 
-openFileW :: (RenderSym repr) => (repr (Value repr) -> repr (Type repr) -> 
-  repr (Value repr) -> repr (Value repr)) -> repr (Variable repr) -> 
-  repr (Value repr) -> GS (repr (Statement repr))
-openFileW f vr vl = vr &= f vl outfile litFalse
+openFileW :: (RenderSym repr) => (GS (repr (Value repr)) -> repr (Type repr) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr))) -> repr (Variable repr) -> 
+  GS (repr (Value repr)) -> GS (repr (Statement repr))
+openFileW f vr vl = vr &= f vl outfile S.litFalse
 
-openFileA :: (RenderSym repr) => (repr (Value repr) -> repr (Type repr) -> 
-  repr (Value repr) -> repr (Value repr)) -> repr (Variable repr) -> 
-  repr (Value repr) -> GS (repr (Statement repr))
-openFileA f vr vl = vr &= f vl outfile litTrue
+openFileA :: (RenderSym repr) => (GS (repr (Value repr)) -> repr (Type repr) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr))) -> repr (Variable repr) -> 
+  GS (repr (Value repr)) -> GS (repr (Statement repr))
+openFileA f vr vl = vr &= f vl outfile S.litTrue
 
-closeFile :: (RenderSym repr) => Label -> repr (Value repr) -> 
+closeFile :: (RenderSym repr) => Label -> GS (repr (Value repr)) -> 
   GS (repr (Statement repr))
-closeFile n f = S.valState $ objMethodCallNoParams S.void f n
+closeFile n f = S.valState $ S.objMethodCallNoParams S.void f n
 
-discardFileLine :: (RenderSym repr) => Label -> repr (Value repr) -> 
+discardFileLine :: (RenderSym repr) => Label -> GS (repr (Value repr)) -> 
   GS (repr (Statement repr))
-discardFileLine n f = S.valState $ objMethodCallNoParams S.string f n 
+discardFileLine n f = S.valState $ S.objMethodCallNoParams S.string f n 
 
-returnState :: (RenderSym repr) => Terminator -> repr (Value repr) -> 
+returnState :: (RenderSym repr) => Terminator -> GS (repr (Value repr)) -> 
   GS (repr (Statement repr))
-returnState t v = toState $ stateFromData (returnDocD [v]) t
+returnState t = onStateValue (\v -> stateFromData (returnDocD [v]) t)
 
 multiReturnError :: String -> String
 multiReturnError l = "Cannot return multiple values in " ++ l
 
-valState :: (RenderSym repr) => Terminator -> repr (Value repr) ->
+valState :: (RenderSym repr) => Terminator -> GS (repr (Value repr)) ->
   GS (repr (Statement repr))
-valState t v = toState $ stateFromData (valueDoc v) t
+valState t = onStateValue (\v -> stateFromData (valueDoc v) t)
 
 comment :: (RenderSym repr) => repr (Keyword repr) -> Label -> 
   GS (repr (Statement repr))
@@ -302,43 +419,43 @@ comment cs c = toState $ stateFromData (commentDocD c (keyDoc cs)) Empty
 freeError :: String -> String
 freeError l = "Cannot free variables in " ++ l
 
-throw :: (RenderSym repr) => (repr (Value repr) -> Doc) -> Terminator -> Label 
-  -> GS (repr (Statement repr))
-throw f t l = toState $ stateFromData (f (litString l)) t
+throw :: (RenderSym repr) => (repr (Value repr) -> Doc) -> Terminator -> 
+  Label -> GS (repr (Statement repr))
+throw f t = onStateValue (\msg -> stateFromData (f msg) t) . S.litString
 
 initState :: (RenderSym repr) => Label -> Label -> GS (repr (Statement repr))
 initState fsmName initialState = S.varDecDef (var fsmName S.string) 
-  (litString initialState)
+  (S.litString initialState)
 
 changeState :: (RenderSym repr) => Label -> Label -> GS (repr (Statement repr))
-changeState fsmName tState = var fsmName S.string &= litString tState
+changeState fsmName tState = var fsmName S.string &= S.litString tState
 
 initObserverList :: (RenderSym repr) => repr (Type repr) -> 
-  [repr (Value repr)] -> GS (repr (Statement repr))
+  [GS (repr (Value repr))] -> GS (repr (Statement repr))
 initObserverList t = S.listDecDef (var observerListName (S.listType static_ t))
 
-addObserver :: (RenderSym repr) => repr (Value repr) -> 
+addObserver :: (RenderSym repr) => GS (repr (Value repr)) -> 
   GS (repr (Statement repr))
-addObserver o = S.valState $ listAdd obsList lastelem o
-  where obsList = valueOf $ observerListName `listOf` valueType o
-        lastelem = listSize obsList
+addObserver o = S.valState $ S.listAdd obsList lastelem o
+  where obsList = S.valueOf $ observerListName `listOf` valueType (evalState o initialState) -- temporary evalState until I add more state
+        lastelem = S.listSize obsList
 
 ifCond :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> [(repr (Value repr), GS (repr (Body repr)))] -> 
+  repr (Keyword repr) -> [(GS (repr (Value repr)), GS (repr (Body repr)))] -> 
   GS (repr (Body repr)) -> GS (repr (Statement repr))
 ifCond _ _ _ [] _ = error "if condition created with no cases"
 ifCond ifst elseif blEnd (c:cs) eBody = 
     let ifStart = keyDoc ifst
         elif = keyDoc elseif
         bEnd = keyDoc blEnd
-        ifSect (v, b) = onStateValue (\bd -> vcat [
-          text "if" <+> parens (valueDoc v) <+> ifStart,
+        ifSect (v, b) = on2StateValues (\val bd -> vcat [
+          text "if" <+> parens (valueDoc val) <+> ifStart,
           indent $ bodyDoc bd,
-          bEnd]) b
-        elseIfSect (v, b) = onStateValue (\bd -> vcat [
-          elif <+> parens (valueDoc v) <+> ifStart,
+          bEnd]) v b
+        elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
+          elif <+> parens (valueDoc val) <+> ifStart,
           indent $ bodyDoc bd,
-          bEnd]) b
+          bEnd]) v b
         elseSect = onStateValue (\bd -> emptyIfEmpty (bodyDoc bd) $ vcat [
           text "else" <+> ifStart,
           indent $ bodyDoc bd,
@@ -346,52 +463,55 @@ ifCond ifst elseif blEnd (c:cs) eBody =
     in onStateList (\l -> stateFromData (vcat l) Empty)
       (ifSect c : map elseIfSect cs ++ [elseSect])
 
-ifNoElse :: (RenderSym repr) => [(repr (Value repr), GS (repr (Body repr)))] 
-  -> GS (repr (Statement repr))
+ifNoElse :: (RenderSym repr) => [(GS (repr (Value repr)), 
+  GS (repr (Body repr)))] -> GS (repr (Statement repr))
 ifNoElse bs = S.ifCond bs $ body []
 
-switch :: (RenderSym repr) => repr (Value repr) -> [(repr (Value repr), 
-  GS (repr (Body repr)))] -> GS (repr (Body repr)) -> GS (repr (Statement repr))
-switch v cs c = on3StateValues (\b de css -> stateFromData (switchDocD b v 
-  de css) Semi) (S.state break) c (onStateList (zip (map fst cs)) (map snd cs))
+switch :: (RenderSym repr) => GS (repr (Value repr)) -> 
+  [(GS (repr (Value repr)), GS (repr (Body repr)))] -> GS (repr (Body repr)) -> 
+  GS (repr (Statement repr))
+switch v cs = on4StateValues (\b val css de -> stateFromData (switchDocD b val 
+  de css) Semi) (S.state break) v (on2StateLists zip (map fst cs) (map snd cs))
 
-switchAsIf :: (RenderSym repr) => repr (Value repr) -> [(repr (Value repr), 
-  GS (repr (Body repr)))] -> GS (repr (Body repr)) -> GS (repr (Statement repr))
+switchAsIf :: (RenderSym repr) => GS (repr (Value repr)) -> 
+  [(GS (repr (Value repr)), GS (repr (Body repr)))] -> GS (repr (Body repr)) -> 
+  GS (repr (Statement repr))
 switchAsIf v cs = S.ifCond cases
   where cases = map (first (v ?==)) cs
 
-ifExists :: (RenderSym repr) => repr (Value repr) -> GS (repr (Body repr)) -> 
-  GS (repr (Body repr)) -> GS (repr (Statement repr))
-ifExists v ifBody = S.ifCond [(notNull v, ifBody)]
+ifExists :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Body repr)) 
+  -> GS (repr (Body repr)) -> GS (repr (Statement repr))
+ifExists v ifBody = S.ifCond [(S.notNull v, ifBody)]
 
 for :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  GS (repr (Statement repr)) -> repr (Value repr) -> GS (repr (Statement repr))
-  -> GS (repr (Body repr)) -> GS (repr (Statement repr))
-for bStart bEnd sInit vGuard sUpdate = on3StateValues (\initl upd bod -> 
+  GS (repr (Statement repr)) -> GS (repr (Value repr)) -> 
+  GS (repr (Statement repr)) -> GS (repr (Body repr)) -> 
+  GS (repr (Statement repr))
+for bStart bEnd sInit vGuard sUpdate = on4StateValues (\initl guard upd bod -> 
   stateFromData (vcat [
-  forLabel <+> parens (statementDoc initl <> semi <+> valueDoc vGuard <> semi 
+  forLabel <+> parens (statementDoc initl <> semi <+> valueDoc guard <> semi 
     <+> statementDoc upd) <+> keyDoc bStart,
   indent $ bodyDoc bod,
-  keyDoc bEnd]) Empty) (S.loopState sInit) (S.loopState sUpdate)
+  keyDoc bEnd]) Empty) (S.loopState sInit) vGuard (S.loopState sUpdate)
 
-forRange :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
-  repr (Value repr) -> repr (Value repr) -> GS (repr (Body repr)) -> 
-  GS (repr (Statement repr))
-forRange i initv finalv stepv = S.for (S.varDecDef i initv) (valueOf i ?< 
+forRange :: (RenderSym repr) => repr (Variable repr) -> GS (repr (Value repr)) 
+  -> GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Body repr)) 
+  -> GS (repr (Statement repr))
+forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?< 
   finalv) (i &+= stepv)
 
 forEach :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
   repr (Keyword repr) -> repr (Keyword repr) -> repr (Variable repr) -> 
-  repr (Value repr) -> GS (repr (Body repr)) -> GS (repr (Statement repr))
-forEach bStart bEnd forEachLabel inLbl e v = onStateValue (\b -> stateFromData
+  GS (repr (Value repr)) -> GS (repr (Body repr)) -> GS (repr (Statement repr))
+forEach bStart bEnd forEachLabel inLbl e = on2StateValues (\v b -> stateFromData
   (vcat [keyDoc forEachLabel <+> parens (getTypeDoc (variableType e) <+> 
     variableDoc e <+> keyDoc inLbl <+> valueDoc v) <+> keyDoc bStart,
   indent $ bodyDoc b,
   keyDoc bEnd]) Empty) 
 
 while :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  repr (Value repr) -> GS (repr (Body repr)) -> GS (repr (Statement repr))
-while bStart bEnd v = onStateValue (\b -> stateFromData (vcat [
+  GS (repr (Value repr)) -> GS (repr (Body repr)) -> GS (repr (Statement repr))
+while bStart bEnd = on2StateValues (\v b -> stateFromData (vcat [
   text "while" <+> parens (valueDoc v) <+> keyDoc bStart,
   indent $ bodyDoc b,
   keyDoc bEnd]) Empty)
@@ -400,18 +520,18 @@ tryCatch :: (RenderSym repr) => (repr (Body repr) -> repr (Body repr) -> Doc) ->
   GS (repr (Body repr)) -> GS (repr (Body repr)) -> GS (repr (Statement repr))
 tryCatch f = on2StateValues (\tb cb -> stateFromData (f tb cb) Empty)
 
-checkState :: (RenderSym repr) => Label -> [(repr (Value repr), 
+checkState :: (RenderSym repr) => Label -> [(GS (repr (Value repr)), 
   GS (repr (Body repr)))] -> GS (repr (Body repr)) -> GS (repr (Statement repr))
-checkState l = S.switch (valueOf $ var l S.string)
+checkState l = S.switch (S.valueOf $ var l S.string)
 
 notifyObservers :: (RenderSym repr) => repr (Function repr) -> repr (Type repr)
   -> GS (repr (Statement repr))
-notifyObservers f t = S.for initv (v_index ?< listSize obsList) 
+notifyObservers f t = S.for initv (v_index ?< S.listSize obsList) 
   (var_index &++) notify
-  where obsList = valueOf $ observerListName `listOf` t 
+  where obsList = S.valueOf $ observerListName `listOf` t 
         var_index = var "observerIndex" S.int
-        v_index = valueOf var_index
-        initv = S.varDecDef var_index $ litInt 0
+        v_index = S.valueOf var_index
+        initv = S.varDecDef var_index $ S.litInt 0
         notify = S.oneLiner $ S.valState $ at obsList v_index $. f
 
 construct :: Label -> TypeData
@@ -430,13 +550,13 @@ getMethod :: (RenderSym repr) => Label -> repr (Variable repr) ->
   MS (repr (Method repr))
 getMethod c v = S.method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
-    where getBody = S.oneLiner $ S.returnState (valueOf $ objVarSelf c v)
+    where getBody = S.oneLiner $ S.returnState (S.valueOf $ objVarSelf c v)
 
 setMethod :: (RenderSym repr) => Label -> repr (Variable repr) -> 
   MS (repr (Method repr))
 setMethod c v = S.method (setterName $ variableName v) c public dynamic_ S.void 
   [S.param v] setBody
-  where setBody = S.oneLiner $ objVarSelf c v &= valueOf v
+  where setBody = S.oneLiner $ objVarSelf c v &= S.valueOf v
 
 privMethod :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
   [MS (repr (Parameter repr))] -> GS (repr (Body repr)) -> 
@@ -501,14 +621,12 @@ stateVar s p v = stateVarFromData (onStateValue (stateVarDocD
   (scopeDoc s) (permDoc p) . statementDoc) (S.state $ S.varDec v))
 
 stateVarDef :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) 
-  -> repr (Variable repr) -> repr (Value repr) -> 
-  GS (repr (StateVar repr))
+  -> repr (Variable repr) -> GS (repr (Value repr)) -> GS (repr (StateVar repr))
 stateVarDef s p vr vl = stateVarFromData (onStateValue (stateVarDocD 
   (scopeDoc s) (permDoc p) . statementDoc) (S.state $ S.varDecDef vr vl))
 
 constVar :: (RenderSym repr) => Doc -> repr (Scope repr) ->
-  repr (Variable repr) -> repr (Value repr) -> 
-  GS (repr (StateVar repr))
+  repr (Variable repr) -> GS (repr (Value repr)) -> GS (repr (StateVar repr))
 constVar p s vr vl = stateVarFromData (onStateValue (stateVarDocD (scopeDoc s) 
   p . statementDoc) (S.state $ S.constDecDef vr vl))
 

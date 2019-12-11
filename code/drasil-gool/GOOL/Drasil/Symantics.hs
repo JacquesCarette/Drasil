@@ -134,12 +134,12 @@ class InternalType repr where
 
 class (ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, GS (repr (Body repr)))] -> 
-    Maybe (repr (Value repr)) -> Maybe (repr (Variable repr)) -> 
+    Maybe (GS (repr (Value repr))) -> Maybe (repr (Variable repr)) -> 
     GS (repr (Block repr))
 
-  listSlice        :: repr (Variable repr) -> repr (Value repr) -> 
-    Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) ->
-    Maybe (repr (Value repr)) -> GS (repr (Block repr))
+  listSlice        :: repr (Variable repr) -> GS (repr (Value repr)) -> 
+    Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Value repr))) ->
+    Maybe (GS (repr (Value repr))) -> GS (repr (Block repr))
 
 class (InternalOp repr) => UnaryOpSym repr where
   type UnaryOp repr
@@ -218,64 +218,70 @@ class InternalVariable repr where
 
 class (VariableSym repr, InternalValue repr) => ValueSym repr where
   type Value repr
-  litTrue   :: repr (Value repr)
-  litFalse  :: repr (Value repr)
-  litChar   :: Char -> repr (Value repr)
-  litFloat  :: Double -> repr (Value repr)
-  litInt    :: Integer -> repr (Value repr)
-  litString :: String -> repr (Value repr)
+  litTrue   :: GS (repr (Value repr))
+  litFalse  :: GS (repr (Value repr))
+  litChar   :: Char -> GS (repr (Value repr))
+  litFloat  :: Double -> GS (repr (Value repr))
+  litInt    :: Integer -> GS (repr (Value repr))
+  litString :: String -> GS (repr (Value repr))
 
-  pi :: repr (Value repr)
+  pi :: GS (repr (Value repr))
 
   --other operators ($)
-  ($:)  :: Label -> Label -> repr (Value repr)
+  ($:)  :: Label -> Label -> GS (repr (Value repr))
   infixl 9 $:
 
-  valueOf       :: repr (Variable repr) -> repr (Value repr)
+  valueOf       :: repr (Variable repr) -> GS (repr (Value repr))
 --  global       :: Label -> repr (Value repr)         -- not sure how this one works, but in GOOL it was hardcoded to give an error so I'm leaving it out for now
-  arg          :: Integer -> repr (Value repr)
-  enumElement  :: Label -> Label -> repr (Value repr)
+  arg          :: Integer -> GS (repr (Value repr))
+  enumElement  :: Label -> Label -> GS (repr (Value repr))
 
-  argsList  :: repr (Value repr)
+  argsList  :: GS (repr (Value repr))
 
   valueType :: repr (Value repr) -> repr (Type repr)
   valueDoc :: repr (Value repr) -> Doc
 
 class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => 
   NumericExpression repr where
-  (#~)  :: repr (Value repr) -> repr (Value repr)
+  (#~)  :: GS (repr (Value repr)) -> GS (repr (Value repr))
   infixl 8 #~
-  (#/^) :: repr (Value repr) -> repr (Value repr)
+  (#/^) :: GS (repr (Value repr)) -> GS (repr (Value repr))
   infixl 7 #/^
-  (#|)  :: repr (Value repr) -> repr (Value repr)
+  (#|)  :: GS (repr (Value repr)) -> GS (repr (Value repr))
   infixl 7 #|
-  (#+)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (#+)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 5 #+
-  (#-)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (#-)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 5 #-
-  (#*)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (#*)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 6 #*
-  (#/)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (#/)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 6 #/
-  (#%)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (#%)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 6 #%
-  (#^)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (#^)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 7 #^
 
-  log    :: repr (Value repr) -> repr (Value repr)
-  ln     :: repr (Value repr) -> repr (Value repr)
-  exp    :: repr (Value repr) -> repr (Value repr)
-  sin    :: repr (Value repr) -> repr (Value repr)
-  cos    :: repr (Value repr) -> repr (Value repr)
-  tan    :: repr (Value repr) -> repr (Value repr)
-  csc    :: repr (Value repr) -> repr (Value repr)
-  sec    :: repr (Value repr) -> repr (Value repr)
-  cot    :: repr (Value repr) -> repr (Value repr)
-  arcsin :: repr (Value repr) -> repr (Value repr)
-  arccos :: repr (Value repr) -> repr (Value repr)
-  arctan :: repr (Value repr) -> repr (Value repr)
-  floor  :: repr (Value repr) -> repr (Value repr)
-  ceil   :: repr (Value repr) -> repr (Value repr)
+  log    :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  ln     :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  exp    :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  sin    :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  cos    :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  tan    :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  csc    :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  sec    :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  cot    :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  arcsin :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  arccos :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  arctan :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  floor  :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  ceil   :: GS (repr (Value repr)) -> GS (repr (Value repr))
 
 -- I considered having two separate classes, BooleanExpressions and BooleanComparisons,
 -- but this would require cyclic constraints, since it is feasible to have
@@ -284,51 +290,60 @@ class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) =>
 -- 3 functions here, even though they don't really need it.
 class (ValueSym repr, NumericExpression repr) => 
   BooleanExpression repr where
-  (?!)  :: repr (Value repr) -> repr (Value repr)
+  (?!)  :: GS (repr (Value repr)) -> GS (repr (Value repr))
   infixr 6 ?!
-  (?&&) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (?&&) :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 2 ?&&
-  (?||) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (?||) :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 1 ?||
 
-  (?<)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (?<)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 4 ?<
-  (?<=) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (?<=) :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 4 ?<=
-  (?>)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (?>)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 4 ?>
-  (?>=) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (?>=) :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 4 ?>=
-  (?==) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (?==) :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 3 ?==
-  (?!=) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  (?!=) :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
   infixl 3 ?!=
 
 class (ValueSym repr, BooleanExpression repr) => 
   ValueExpression repr where -- for values that can include expressions
-  inlineIf     :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) ->
-    repr (Value repr)
-  funcApp      :: Label -> repr (Type repr) -> [repr (Value repr)] -> 
-    repr (Value repr)
-  selfFuncApp  :: Label -> Label -> repr (Type repr) -> [repr (Value repr)] -> 
-    repr (Value repr)
+  inlineIf     :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr)) -> GS (repr (Value repr))
+  funcApp      :: Label -> repr (Type repr) -> [GS (repr (Value repr))] -> 
+    GS (repr (Value repr))
+  selfFuncApp  :: Label -> Label -> repr (Type repr) -> [GS (repr (Value repr))]
+    -> GS (repr (Value repr))
   extFuncApp   :: Library -> Label -> repr (Type repr) -> 
-    [repr (Value repr)] -> repr (Value repr)
-  newObj     :: repr (Type repr) -> [repr (Value repr)] -> repr (Value repr)
-  extNewObj  :: Library -> repr (Type repr) -> [repr (Value repr)] -> 
-    repr (Value repr)
+    [GS (repr (Value repr))] -> GS (repr (Value repr))
+  newObj     :: repr (Type repr) -> [GS (repr (Value repr))] -> 
+    GS (repr (Value repr))
+  extNewObj  :: Library -> repr (Type repr) -> [GS (repr (Value repr))] -> 
+    GS (repr (Value repr))
 
-  exists  :: repr (Value repr) -> repr (Value repr)
-  notNull :: repr (Value repr) -> repr (Value repr)
+  exists  :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  notNull :: GS (repr (Value repr)) -> GS (repr (Value repr))
 
 class InternalValue repr where
-  inputFunc       :: repr (Value repr)
-  printFunc       :: repr (Value repr)
-  printLnFunc     :: repr (Value repr)
-  printFileFunc   :: repr (Value repr) -> repr (Value repr)
-  printFileLnFunc :: repr (Value repr) -> repr (Value repr)
+  inputFunc       :: GS (repr (Value repr))
+  printFunc       :: GS (repr (Value repr))
+  printLnFunc     :: GS (repr (Value repr))
+  printFileFunc   :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  printFileLnFunc :: GS (repr (Value repr)) -> GS (repr (Value repr))
 
-  cast :: repr (Type repr) -> repr (Value repr) -> repr (Value repr)
+  cast :: repr (Type repr) -> GS (repr (Value repr)) -> GS (repr (Value repr))
 
   valuePrec :: repr (Value repr) -> Maybe Int
   valFromData :: Maybe Int -> repr (Type repr) -> Doc -> repr (Value repr)
@@ -340,44 +355,52 @@ class InternalValue repr where
 -- then what is the purpose of splitting the typeclasses into smaller typeclasses?
 -- I'm leaving it as is for now, even though I suspect this will change in the future.
 class (FunctionSym repr) => Selector repr where
-  objAccess :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
-  ($.)      :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
+  objAccess :: GS (repr (Value repr)) -> repr (Function repr) -> 
+    GS (repr (Value repr))
+  ($.)      :: GS (repr (Value repr)) -> repr (Function repr) -> 
+    GS (repr (Value repr))
   infixl 9 $.
 
-  objMethodCall     :: repr (Type repr) -> repr (Value repr) -> Label -> 
-    [repr (Value repr)] -> repr (Value repr)
-  objMethodCallNoParams :: repr (Type repr) -> repr (Value repr) -> Label
-    -> repr (Value repr)
+  objMethodCall     :: repr (Type repr) -> GS (repr (Value repr)) -> Label -> 
+    [GS (repr (Value repr))] -> GS (repr (Value repr))
+  objMethodCallNoParams :: repr (Type repr) -> GS (repr (Value repr)) -> Label
+    -> GS (repr (Value repr))
 
-  selfAccess :: Label -> repr (Function repr) -> repr (Value repr)
+  selfAccess :: Label -> repr (Function repr) -> GS (repr (Value repr))
 
-  listIndexExists :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-  argExists       :: Integer -> repr (Value repr)
+  listIndexExists :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
+  argExists       :: Integer -> GS (repr (Value repr))
 
-  indexOf :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  indexOf :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
 
 class (ValueExpression repr, InternalFunction repr) => FunctionSym repr where
   type Function repr
-  func           :: Label -> repr (Type repr) -> [repr (Value repr)] -> 
+  func :: Label -> repr (Type repr) -> [repr (Value repr)] -> 
     repr (Function repr)
 
-  get :: repr (Value repr) -> repr (Variable repr) -> repr (Value repr)
-  set :: repr (Value repr) -> repr (Variable repr) -> repr (Value repr) -> 
-    repr (Value repr)
+  get :: GS (repr (Value repr)) -> repr (Variable repr) -> 
+    GS (repr (Value repr))
+  set :: GS (repr (Value repr)) -> repr (Variable repr) -> 
+    GS (repr (Value repr)) -> GS (repr (Value repr))
 
-  listSize   :: repr (Value repr) -> repr (Value repr)
-  listAdd    :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
-    repr (Value repr)
-  listAppend :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  listSize   :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  listAdd    :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr)) -> GS (repr (Value repr))
+  listAppend :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
 
-  iterBegin :: repr (Value repr) -> repr (Value repr)
-  iterEnd   :: repr (Value repr) -> repr (Value repr)
+  iterBegin :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  iterEnd   :: GS (repr (Value repr)) -> GS (repr (Value repr))
 
 class (Selector repr) => SelectorFunction repr where
-  listAccess :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-  listSet    :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Value repr) -> repr (Value repr)
-  at         :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  listAccess :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
+  listSet    :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr)) -> GS (repr (Value repr))
+  at         :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr))
 
 class InternalFunction repr where
   getFunc        :: repr (Variable repr) -> repr (Function repr)
@@ -404,8 +427,8 @@ class InternalFunction repr where
 
 class InternalStatement repr where
   -- newLn, printFunc, value to print, maybe a file to print to 
-  printSt :: Bool -> repr (Value repr) -> repr (Value repr) -> 
-    Maybe (repr (Value repr)) -> GS (repr (Statement repr))
+  printSt :: Bool -> GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    Maybe (GS (repr (Value repr))) -> GS (repr (Statement repr))
 
   state     :: GS (repr (Statement repr)) -> GS (repr (Statement repr))
   loopState :: GS (repr (Statement repr)) -> GS (repr (Statement repr))
@@ -419,13 +442,13 @@ class InternalStatement repr where
 class (KeywordSym repr, SelectorFunction repr, InternalStatement repr) => 
   StatementSym repr where
   type Statement repr
-  (&=)   :: repr (Variable repr) -> repr (Value repr) -> 
+  (&=)   :: repr (Variable repr) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
   infixr 1 &=
-  (&-=)  :: repr (Variable repr) -> repr (Value repr) -> 
+  (&-=)  :: repr (Variable repr) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
   infixl 1 &-=
-  (&+=)  :: repr (Variable repr) -> repr (Value repr) -> 
+  (&+=)  :: repr (Variable repr) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
   infixl 1 &+=
   (&++)  :: repr (Variable repr) -> GS (repr (Statement repr))
@@ -433,76 +456,78 @@ class (KeywordSym repr, SelectorFunction repr, InternalStatement repr) =>
   (&~-)  :: repr (Variable repr) -> GS (repr (Statement repr))
   infixl 8 &~-
 
-  assign            :: repr (Variable repr) -> repr (Value repr) -> 
+  assign            :: repr (Variable repr) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
-  assignToListIndex :: repr (Variable repr) -> repr (Value repr) -> 
-    repr (Value repr) -> GS (repr (Statement repr))
-  multiAssign       :: [repr (Variable repr)] -> [repr (Value repr)] ->
+  assignToListIndex :: repr (Variable repr) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr)) -> GS (repr (Statement repr))
+  multiAssign       :: [repr (Variable repr)] -> [GS (repr (Value repr))] ->
     GS (repr (Statement repr)) 
 
   varDec           :: repr (Variable repr) -> GS (repr (Statement repr))
-  varDecDef        :: repr (Variable repr) -> repr (Value repr) -> 
+  varDecDef        :: repr (Variable repr) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
   listDec          :: Integer -> repr (Variable repr) -> 
     GS (repr (Statement repr))
-  listDecDef       :: repr (Variable repr) -> [repr (Value repr)] -> 
+  listDecDef       :: repr (Variable repr) -> [GS (repr (Value repr))] -> 
     GS (repr (Statement repr))
-  objDecDef        :: repr (Variable repr) -> repr (Value repr) -> 
+  objDecDef        :: repr (Variable repr) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
-  objDecNew        :: repr (Variable repr) -> [repr (Value repr)] -> 
+  objDecNew        :: repr (Variable repr) -> [GS (repr (Value repr))] -> 
     GS (repr (Statement repr))
   extObjDecNew     :: Library -> repr (Variable repr) -> 
-    [repr (Value repr)] -> GS (repr (Statement repr))
+    [GS (repr (Value repr))] -> GS (repr (Statement repr))
   objDecNewNoParams    :: repr (Variable repr) -> GS (repr (Statement repr))
   extObjDecNewNoParams :: Library -> repr (Variable repr) -> 
     GS (repr (Statement repr))
-  constDecDef      :: repr (Variable repr) -> repr (Value repr) -> 
+  constDecDef      :: repr (Variable repr) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
 
-  print      :: repr (Value repr) -> GS (repr (Statement repr))
-  printLn    :: repr (Value repr) -> GS (repr (Statement repr))
+  print      :: GS (repr (Value repr)) -> GS (repr (Statement repr))
+  printLn    :: GS (repr (Value repr)) -> GS (repr (Statement repr))
   printStr   :: String -> GS (repr (Statement repr))
   printStrLn :: String -> GS (repr (Statement repr))
 
-  printFile      :: repr (Value repr) -> repr (Value repr) -> 
+  printFile      :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
-  printFileLn    :: repr (Value repr) -> repr (Value repr) -> 
+  printFileLn    :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
-  printFileStr   :: repr (Value repr) -> String -> GS (repr (Statement repr))
-  printFileStrLn :: repr (Value repr) -> String -> GS (repr (Statement repr))
+  printFileStr   :: GS (repr (Value repr)) -> String -> 
+    GS (repr (Statement repr))
+  printFileStrLn :: GS (repr (Value repr)) -> String -> 
+    GS (repr (Statement repr))
 
   getInput         :: repr (Variable repr) -> GS (repr (Statement repr))
   discardInput     :: GS (repr (Statement repr))
-  getFileInput     :: repr (Value repr) -> repr (Variable repr) -> 
+  getFileInput     :: GS (repr (Value repr)) -> repr (Variable repr) -> 
     GS (repr (Statement repr))
-  discardFileInput :: repr (Value repr) -> GS (repr (Statement repr))
+  discardFileInput :: GS (repr (Value repr)) -> GS (repr (Statement repr))
 
-  openFileR :: repr (Variable repr) -> repr (Value repr) -> 
+  openFileR :: repr (Variable repr) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
-  openFileW :: repr (Variable repr) -> repr (Value repr) -> 
+  openFileW :: repr (Variable repr) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
-  openFileA :: repr (Variable repr) -> repr (Value repr) -> 
+  openFileA :: repr (Variable repr) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
-  closeFile :: repr (Value repr) -> GS (repr (Statement repr))
+  closeFile :: GS (repr (Value repr)) -> GS (repr (Statement repr))
 
-  getFileInputLine :: repr (Value repr) -> repr (Variable repr) -> 
+  getFileInputLine :: GS (repr (Value repr)) -> repr (Variable repr) -> 
     GS (repr (Statement repr))
-  discardFileLine  :: repr (Value repr) -> GS (repr (Statement repr))
-  stringSplit      :: Char -> repr (Variable repr) -> repr (Value repr) -> 
+  discardFileLine  :: GS (repr (Value repr)) -> GS (repr (Statement repr))
+  stringSplit      :: Char -> repr (Variable repr) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
 
-  stringListVals :: [repr (Variable repr)] -> repr (Value repr) -> 
+  stringListVals :: [repr (Variable repr)] -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
-  stringListLists :: [repr (Variable repr)] -> repr (Value repr) ->
+  stringListLists :: [repr (Variable repr)] -> GS (repr (Value repr)) ->
     GS (repr (Statement repr))
 
   break :: GS (repr (Statement repr))
   continue :: GS (repr (Statement repr))
 
-  returnState :: repr (Value repr) -> GS (repr (Statement repr))
-  multiReturn :: [repr (Value repr)] -> GS (repr (Statement repr))
+  returnState :: GS (repr (Value repr)) -> GS (repr (Statement repr))
+  multiReturn :: [GS (repr (Value repr))] -> GS (repr (Statement repr))
 
-  valState :: repr (Value repr) -> GS (repr (Statement repr))
+  valState :: GS (repr (Value repr)) -> GS (repr (Statement repr))
 
   comment :: Label -> GS (repr (Statement repr))
 
@@ -513,56 +538,57 @@ class (KeywordSym repr, SelectorFunction repr, InternalStatement repr) =>
   initState   :: Label -> Label -> GS (repr (Statement repr))
   changeState :: Label -> Label -> GS (repr (Statement repr))
 
-  initObserverList :: repr (Type repr) -> [repr (Value repr)] -> 
+  initObserverList :: repr (Type repr) -> [GS (repr (Value repr))] -> 
     GS (repr (Statement repr))
-  addObserver      :: repr (Value repr) -> GS (repr (Statement repr))
+  addObserver      :: GS (repr (Value repr)) -> GS (repr (Statement repr))
 
   -- The three lists are inputs, outputs, and both, respectively
-  inOutCall :: Label -> [repr (Value repr)] -> [repr (Variable repr)] -> 
+  inOutCall :: Label -> [GS (repr (Value repr))] -> [repr (Variable repr)] -> 
     [repr (Variable repr)] -> GS (repr (Statement repr))
-  selfInOutCall :: Label -> Label -> [repr (Value repr)] -> 
+  selfInOutCall :: Label -> Label -> [GS (repr (Value repr))] -> 
     [repr (Variable repr)] -> [repr (Variable repr)] -> 
     GS (repr (Statement repr))
-  extInOutCall :: Library -> Label -> [repr (Value repr)] ->
+  extInOutCall :: Library -> Label -> [GS (repr (Value repr))] ->
     [repr (Variable repr)] -> [repr (Variable repr)] -> 
     GS (repr (Statement repr))
 
   multi     :: [GS (repr (Statement repr))] -> GS (repr (Statement repr))
 
 class (BodySym repr) => ControlStatementSym repr where
-  ifCond     :: [(repr (Value repr), GS (repr (Body repr)))] -> 
+  ifCond     :: [(GS (repr (Value repr)), GS (repr (Body repr)))] -> 
     GS (repr (Body repr)) -> GS (repr (Statement repr))
-  ifNoElse   :: [(repr (Value repr), GS (repr (Body repr)))] -> 
+  ifNoElse   :: [(GS (repr (Value repr)), GS (repr (Body repr)))] -> 
     GS (repr (Statement repr))
-  switch     :: repr (Value repr) -> [(repr (Value repr), 
+  switch     :: GS (repr (Value repr)) -> [(GS (repr (Value repr)), 
     GS (repr (Body repr)))] -> GS (repr (Body repr)) -> 
     GS (repr (Statement repr)) -- is there value in separating Literals into their own type?
-  switchAsIf :: repr (Value repr) -> [(repr (Value repr), 
+  switchAsIf :: GS (repr (Value repr)) -> [(GS (repr (Value repr)), 
     GS (repr (Body repr)))] -> GS (repr (Body repr)) -> 
     GS (repr (Statement repr))
 
-  ifExists :: repr (Value repr) -> GS (repr (Body repr)) -> 
+  ifExists :: GS (repr (Value repr)) -> GS (repr (Body repr)) -> 
     GS (repr (Body repr)) -> GS (repr (Statement repr))
 
-  for      :: GS (repr (Statement repr)) -> repr (Value repr) -> 
+  for      :: GS (repr (Statement repr)) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr)) -> GS (repr (Body repr)) -> 
     GS (repr (Statement repr))
-  forRange :: repr (Variable repr) -> repr (Value repr) -> repr (Value repr) -> 
-    repr (Value repr) -> GS (repr (Body repr)) -> GS (repr (Statement repr))
-  forEach  :: repr (Variable repr) -> repr (Value repr) -> GS (repr (Body repr))
+  forRange :: repr (Variable repr) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Body repr)) 
     -> GS (repr (Statement repr))
-  while    :: repr (Value repr) -> GS (repr (Body repr)) -> 
+  forEach  :: repr (Variable repr) -> GS (repr (Value repr)) -> 
+    GS (repr (Body repr)) -> GS (repr (Statement repr))
+  while    :: GS (repr (Value repr)) -> GS (repr (Body repr)) -> 
     GS (repr (Statement repr)) 
 
   tryCatch :: GS (repr (Body repr)) -> GS (repr (Body repr)) -> 
     GS (repr (Statement repr))
 
-  checkState      :: Label -> [(repr (Value repr), GS (repr (Body repr)))] -> 
-    GS (repr (Body repr)) -> GS (repr (Statement repr))
+  checkState      :: Label -> [(GS (repr (Value repr)), GS (repr (Body repr)))] 
+    -> GS (repr (Body repr)) -> GS (repr (Statement repr))
   notifyObservers :: repr (Function repr) -> repr (Type repr) -> 
     GS (repr (Statement repr))
 
-  getFileInputAll  :: repr (Value repr) -> repr (Variable repr) -> 
+  getFileInputAll  :: GS (repr (Value repr)) -> repr (Variable repr) -> 
     GS (repr (Statement repr))
 
 class (InternalScope repr) => ScopeSym repr where
@@ -661,10 +687,10 @@ class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr,
   stateVar :: repr (Scope repr) -> repr (Permanence repr) ->
     repr (Variable repr) -> GS (repr (StateVar repr))
   stateVarDef :: Label -> repr (Scope repr) -> repr (Permanence repr) ->
-    repr (Variable repr) -> repr (Value repr) -> 
+    repr (Variable repr) -> GS (repr (Value repr)) -> 
     GS (repr (StateVar repr))
   constVar :: Label -> repr (Scope repr) ->  repr (Variable repr) -> 
-    repr (Value repr) -> GS (repr (StateVar repr))
+    GS (repr (Value repr)) -> GS (repr (StateVar repr))
   privMVar :: repr (Variable repr) -> GS (repr (StateVar repr))
   pubMVar  :: repr (Variable repr) -> GS (repr (StateVar repr))
   pubGVar  :: repr (Variable repr) -> GS (repr (StateVar repr))

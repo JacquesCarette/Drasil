@@ -355,9 +355,9 @@ class InternalValue repr where
 -- then what is the purpose of splitting the typeclasses into smaller typeclasses?
 -- I'm leaving it as is for now, even though I suspect this will change in the future.
 class (FunctionSym repr) => Selector repr where
-  objAccess :: GS (repr (Value repr)) -> repr (Function repr) -> 
+  objAccess :: GS (repr (Value repr)) -> GS (repr (Function repr)) -> 
     GS (repr (Value repr))
-  ($.)      :: GS (repr (Value repr)) -> repr (Function repr) -> 
+  ($.)      :: GS (repr (Value repr)) -> GS (repr (Function repr)) -> 
     GS (repr (Value repr))
   infixl 9 $.
 
@@ -366,7 +366,7 @@ class (FunctionSym repr) => Selector repr where
   objMethodCallNoParams :: repr (Type repr) -> GS (repr (Value repr)) -> Label
     -> GS (repr (Value repr))
 
-  selfAccess :: Label -> repr (Function repr) -> GS (repr (Value repr))
+  selfAccess :: Label -> GS (repr (Function repr)) -> GS (repr (Value repr))
 
   listIndexExists :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
     GS (repr (Value repr))
@@ -377,8 +377,8 @@ class (FunctionSym repr) => Selector repr where
 
 class (ValueExpression repr, InternalFunction repr) => FunctionSym repr where
   type Function repr
-  func :: Label -> repr (Type repr) -> [repr (Value repr)] -> 
-    repr (Function repr)
+  func :: Label -> repr (Type repr) -> [GS (repr (Value repr))] -> 
+    GS (repr (Function repr))
 
   get :: GS (repr (Value repr)) -> repr (Variable repr) -> 
     GS (repr (Value repr))
@@ -403,22 +403,22 @@ class (Selector repr) => SelectorFunction repr where
     GS (repr (Value repr))
 
 class InternalFunction repr where
-  getFunc        :: repr (Variable repr) -> repr (Function repr)
+  getFunc        :: repr (Variable repr) -> GS (repr (Function repr))
   setFunc        :: repr (Type repr) -> repr (Variable repr) -> 
-    repr (Value repr) -> repr (Function repr)
+    GS (repr (Value repr)) -> GS (repr (Function repr))
 
-  listSizeFunc       :: repr (Function repr)
-  listAddFunc        :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Value repr) -> repr (Function repr)
-  listAppendFunc         :: repr (Value repr) -> repr (Function repr)
+  listSizeFunc       :: GS (repr (Function repr))
+  listAddFunc        :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr)) -> GS (repr (Function repr))
+  listAppendFunc         :: GS (repr (Value repr)) -> GS (repr (Function repr))
 
-  iterBeginFunc :: repr (Type repr) -> repr (Function repr)
-  iterEndFunc   :: repr (Type repr) -> repr (Function repr)
+  iterBeginFunc :: repr (Type repr) -> GS (repr (Function repr))
+  iterEndFunc   :: repr (Type repr) -> GS (repr (Function repr))
 
-  listAccessFunc :: repr (Type repr) -> repr (Value repr) -> 
-    repr (Function repr)
-  listSetFunc    :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Value repr) -> repr (Function repr)
+  listAccessFunc :: repr (Type repr) -> GS (repr (Value repr)) -> 
+    GS (repr (Function repr))
+  listSetFunc    :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Value repr)) -> GS (repr (Function repr))
 
   functionType :: repr (Function repr) -> repr (Type repr)
   functionDoc :: repr (Function repr) -> Doc
@@ -585,7 +585,7 @@ class (BodySym repr) => ControlStatementSym repr where
 
   checkState      :: Label -> [(GS (repr (Value repr)), GS (repr (Body repr)))] 
     -> GS (repr (Body repr)) -> GS (repr (Statement repr))
-  notifyObservers :: repr (Function repr) -> repr (Type repr) -> 
+  notifyObservers :: GS (repr (Function repr)) -> repr (Type repr) -> 
     GS (repr (Statement repr))
 
   getFileInputAll  :: GS (repr (Value repr)) -> repr (Variable repr) -> 

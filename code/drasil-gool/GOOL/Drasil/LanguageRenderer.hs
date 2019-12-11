@@ -27,9 +27,7 @@ module GOOL.Drasil.LanguageRenderer (
   classVarDocD, objVarDocD, funcAppDocD, newObjDocD, newObjDocD', 
   constDecDefDocD, varD, staticVarD, extVarD, selfD, enumVarD, classVarD, 
   objVarD, objVarSelfD, listVarD, listOfD, iterVarD, funcDocD, castDocD, listAccessFuncDocD, 
-  listSetFuncDocD, objAccessDocD, castObjDocD, funcD, getFuncD, 
-  setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, 
-  iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, 
+  listSetFuncDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   functionDox, classDox, moduleDox, commentedModD, docFuncRepr, valueList, 
@@ -46,8 +44,8 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
     listType, listInnerType, obj, enumType, iterator), 
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..),
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  BooleanExpression(..), InternalValue(..), FunctionSym(..), 
+  SelectorFunction(..),
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), InternalScope(..), ParameterSym(..), InternalParam(..), 
   MethodSym(..), InternalMethod(..), BlockCommentSym(..))
@@ -656,49 +654,6 @@ objAccessDocD v f = v <> f
 
 castObjDocD :: Doc -> Doc -> Doc
 castObjDocD t v = t <> parens v
-
-funcD :: (RenderSym repr) => Label -> repr (Type repr) -> [repr (Value repr)] 
-  -> repr (Function repr)
-funcD l t vs = funcFromData t (funcDocD (valueDoc $ evalState (funcApp l t (map toState vs)) initialState)) -- temporary evalState
-
-getFuncD :: (RenderSym repr) => repr (Variable repr) -> repr (Function repr)
-getFuncD v = func (getterName $ variableName v) (variableType v) []
-
-setFuncD :: (RenderSym repr) => repr (Type repr) -> repr (Variable repr) -> 
-  repr (Value repr) -> repr (Function repr)
-setFuncD t v toVal = func (setterName $ variableName v) t [toVal]
-
-listSizeFuncD :: (RenderSym repr) => repr (Function repr)
-listSizeFuncD = func "size" S.int []
-
-listAddFuncD :: (RenderSym repr) => Label -> repr (Value repr) -> 
-  repr (Value repr) -> repr (Function repr)
-listAddFuncD f i v = func f (listType static_ $ valueType v) [i, v]
-
-listAppendFuncD :: (RenderSym repr) => Label -> repr (Value repr) -> 
-  repr (Function repr)
-listAppendFuncD f v = func f (listType static_ $ valueType v) [v]
-
-iterBeginError :: String -> String
-iterBeginError l = "Attempt to use iterBeginFunc in " ++ l ++ ", but " ++ l ++ 
-  " has no iterators"
-
-iterEndError :: String -> String
-iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++ 
-  " has no iterators"
-
-listAccessFuncD :: (RenderSym repr) => repr (Type repr) -> repr (Value repr) ->
-  repr (Function repr)
-listAccessFuncD t i = funcFromData t (listAccessFuncDocD $ intValue i)
-
-listAccessFuncD' :: (RenderSym repr) => Label -> repr (Type repr) -> 
-  repr (Value repr) -> repr (Function repr)
-listAccessFuncD' f t i = func f t [intValue i]
-
-listSetFuncD :: (RenderSym repr) => (Doc -> Doc -> Doc) -> repr (Value repr) -> 
-  repr (Value repr) -> repr (Value repr) -> repr (Function repr)
-listSetFuncD f v i toVal = funcFromData (valueType v) (f (valueDoc $ intValue i)
-  (valueDoc toVal))
 
 -- Keywords --
 

@@ -32,9 +32,7 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   typeBinExpr, mkStateVal, mkVal, mkVar, classVarDocD, objVarDocD, newObjDocD, varD, staticVarD, extVarD, 
   selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD, 
   funcDocD, castDocD, 
-  listSetFuncDocD, castObjDocD, funcD, getFuncD, setFuncD, 
-  listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, 
-  listSetFuncD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
+  listSetFuncDocD, castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
   dot, new, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
   inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   commentedModD, appendToBody, surroundBody, filterOutObjs)
@@ -43,8 +41,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   obj, enumType, void, runStrategy, listSlice, pi, litTrue, litFalse, litChar, litFloat, litInt, 
   litString, valueOf, arg, enumElement, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
-  selfFuncApp, extFuncApp, newObj, notNull, get, set, listSize, listAdd, 
-  listAppend, iterBegin, iterEnd, listAccess, listSet, printSt, state, 
+  selfFuncApp, extFuncApp, newObj, notNull, func, get, set, listSize, listAdd, 
+  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
+  listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
+  listSetFunc, printSt, state, 
   loopState, emptyState, assign, assignToListIndex, multiAssignError, 
   decrement, increment, decrement1, increment1, varDec, varDecDef, 
   listDec, listDecDef, objDecNew, objDecNewNoParams,constDecDef, discardInput,
@@ -358,7 +358,7 @@ instance Selector CSharpCode where
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
-  func = funcD
+  func = G.func
 
   get = G.get
   set = G.set
@@ -376,18 +376,18 @@ instance SelectorFunction CSharpCode where
   at = listAccess
 
 instance InternalFunction CSharpCode where
-  getFunc = getFuncD
-  setFunc = setFuncD
+  getFunc = G.getFunc
+  setFunc = G.setFunc
 
-  listSizeFunc = funcFromData int (funcDocD (text "Count"))
-  listAddFunc _ = listAddFuncD "Insert"
-  listAppendFunc = listAppendFuncD "Add"
+  listSizeFunc = toState $ funcFromData int (funcDocD (text "Count"))
+  listAddFunc _ = G.listAddFunc "Insert"
+  listAppendFunc = G.listAppendFunc "Add"
 
-  iterBeginFunc _ = error $ iterBeginError csName
-  iterEndFunc _ = error $ iterEndError csName
+  iterBeginFunc _ = error $ G.iterBeginError csName
+  iterEndFunc _ = error $ G.iterEndError csName
 
-  listAccessFunc = listAccessFuncD
-  listSetFunc = listSetFuncD listSetFuncDocD 
+  listAccessFunc = G.listAccessFunc
+  listSetFunc = G.listSetFunc listSetFuncDocD 
     
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unCSC

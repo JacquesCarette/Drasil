@@ -33,15 +33,15 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   mkStateVal, mkStateVal, mkVal, mkVar, classVarDocD, 
   newObjDocD', varD, staticVarD, extVarD, enumVarD, classVarD, objVarD, 
   objVarSelfD, listVarD, listOfD, iterVarD, 
-  listSetFuncDocD, castObjDocD, funcD, getFuncD, setFuncD, listAddFuncD,
-  listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, 
+  listSetFuncDocD, castObjDocD, 
   dynamicDocD, bindingError, classDec, dot, forLabel, inLabel, observerListName,
   commentedItem, addCommentsDocD, commentedModD, docFuncRepr, valueList, 
   parameterList, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, int, float, listInnerType, obj, enumType, runStrategy, litChar, litFloat, litInt, litString, valueOf, arg, enumElement, 
   argsList, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
-  listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, newObj, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, state, loopState, emptyState, assign, assignToListIndex, decrement, 
+  listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, newObj, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc,
+  listAppendFunc, iterBeginError, iterEndError, listAccessFunc, listSetFunc, state, loopState, emptyState, assign, assignToListIndex, decrement, 
   increment', increment1', decrement1, objDecNew, objDecNewNoParams, closeFile, 
   discardFileLine, returnState, valState, comment, throw, initState, 
   changeState, initObserverList, addObserver, ifCond, ifNoElse, switchAsIf, 
@@ -355,7 +355,7 @@ instance Selector PythonCode where
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
-  func = funcD
+  func = G.func
 
   get = G.get
   set = G.set
@@ -374,18 +374,18 @@ instance SelectorFunction PythonCode where
   at = listAccess
 
 instance InternalFunction PythonCode where
-  getFunc = getFuncD
-  setFunc = setFuncD
+  getFunc = G.getFunc
+  setFunc = G.setFunc
 
-  listSizeFunc = funcFromData int (text "len")
-  listAddFunc _ = listAddFuncD "insert"
-  listAppendFunc = listAppendFuncD "append"
+  listSizeFunc = toState $ funcFromData int (text "len")
+  listAddFunc _ = G.listAddFunc "insert"
+  listAppendFunc = G.listAppendFunc "append"
 
-  iterBeginFunc _ = error $ iterBeginError pyName
-  iterEndFunc _ = error $ iterEndError pyName
+  iterBeginFunc _ = error $ G.iterBeginError pyName
+  iterEndFunc _ = error $ G.iterEndError pyName
 
-  listAccessFunc = listAccessFuncD 
-  listSetFunc = listSetFuncD listSetFuncDocD
+  listAccessFunc = G.listAccessFunc
+  listSetFunc = G.listSetFunc listSetFuncDocD
 
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unPC

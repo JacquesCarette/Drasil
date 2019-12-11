@@ -31,9 +31,7 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkStateVal, mkVal, 
   classVarDocD, 
   newObjDocD, varD, staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, 
-  objVarSelfD, listVarD, listOfD, iterVarD, castDocD, castObjDocD, funcD, getFuncD, setFuncD, 
-  listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
-  listAccessFuncD', staticDocD, dynamicDocD, bindingError, privateDocD, 
+  objVarSelfD, listVarD, listOfD, iterVarD, castDocD, castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
   docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, commentedModD, docFuncRepr, valueList, parameterList, 
@@ -43,8 +41,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   enumType, void, runStrategy, listSlice, litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, enumElement, 
   argsList, inlineIf, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
   listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, newObj, 
-  notNull, get, set, listSize, listAdd, 
-  listAppend, iterBegin, iterEnd, listAccess, listSet, printSt, state, loopState, emptyState, 
+  notNull, func, get, set, listSize, listAdd, 
+  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
+  listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
+  listAccessFunc', printSt, state, loopState, emptyState, 
   assign, assignToListIndex, multiAssignError, decrement, increment, 
   decrement1, increment1, varDec, varDecDef, listDec, listDecDef, 
   objDecNew, objDecNewNoParams, discardInput, discardFileInput, openFileR, 
@@ -358,7 +358,7 @@ instance Selector JavaCode where
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
-  func = funcD
+  func = G.func
 
   get = G.get
   set = G.set
@@ -376,17 +376,17 @@ instance SelectorFunction JavaCode where
   at = listAccess
 
 instance InternalFunction JavaCode where
-  getFunc = getFuncD
-  setFunc = setFuncD
+  getFunc = G.getFunc
+  setFunc = G.setFunc
 
-  listSizeFunc = listSizeFuncD
-  listAddFunc _ = listAddFuncD "add"
-  listAppendFunc = listAppendFuncD "add"
+  listSizeFunc = G.listSizeFunc
+  listAddFunc _ = G.listAddFunc "add"
+  listAppendFunc = G.listAppendFunc "add"
 
-  iterBeginFunc _ = error $ iterBeginError jName
-  iterEndFunc _ = error $ iterEndError jName
+  iterBeginFunc _ = error $ G.iterBeginError jName
+  iterEndFunc _ = error $ G.iterEndError jName
   
-  listAccessFunc = listAccessFuncD' "get"
+  listAccessFunc = G.listAccessFunc' "get"
   listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
 
   functionType = onCodeValue funcType

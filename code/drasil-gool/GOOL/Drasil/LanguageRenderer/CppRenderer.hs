@@ -32,9 +32,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, 
   binExpr, binExpr', typeBinExpr, mkStateVal, mkVal, mkVar, classVarCheckStatic, varD, staticVarD, selfD, 
-  enumVarD, objVarD, listVarD, listOfD, newObjDocD', castDocD, castObjDocD, funcD,
-  getFuncD, setFuncD, listSizeFuncD, listAppendFuncD, listAccessFuncD', 
-  listSetFuncD, staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot,
+  enumVarD, objVarD, listVarD, listOfD, newObjDocD', castDocD, castObjDocD,  staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot,
   blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, 
   commentedModD, valueList, parameterList, appendToBody, surroundBody, 
@@ -44,8 +42,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   enumType, void, runStrategy, listSlice, litTrue, litFalse, litChar, 
   litFloat, litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, 
   objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, 
-  funcApp, newObj, get, set, 
-  listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, state, loopState, 
+  funcApp, newObj, func, get, set, 
+  listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet,
+  getFunc, setFunc, listSizeFunc, listAppendFunc, listAccessFunc', 
+  listSetFunc, state, loopState, 
   emptyState, assign, assignToListIndex, multiAssignError, decrement, increment,
   decrement1, increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
   objDecNewNoParams, constDecDef, discardInput, discardFileInput, closeFile, 
@@ -371,10 +371,8 @@ instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
   valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)
 
 instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
-  objAccess v f = pair1 v 
-    (\o -> objAccess o (pfst f)) 
-    (\o -> objAccess o (psnd f))
-  ($.) v f = pair1 v (\o -> o $. pfst f) (\o -> o $. psnd f)
+  objAccess v f = pair2 v f objAccess objAccess
+  ($.) v f = pair2 v f ($.) ($.)
 
   objMethodCall t o f ps = pair1List1 ps o 
     (\pms ob -> objMethodCall (pfst t) ob f pms) 
@@ -383,7 +381,7 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
     (\ob -> objMethodCallNoParams (pfst t) ob f) 
     (\ob -> objMethodCallNoParams (psnd t) ob f)
 
-  selfAccess l f = on2StateValues pair (selfAccess l $ pfst f) (selfAccess l $ psnd f)
+  selfAccess l f = pair1 f (selfAccess l) (selfAccess l)
 
   listIndexExists v i = pair2 v i listIndexExists listIndexExists
   argExists i = on2StateValues pair (argExists i) (argExists i)
@@ -392,7 +390,7 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
-  func l t vs = pair (func l (pfst t) (map pfst vs)) (func l (psnd t) (map psnd vs))
+  func l t vs = pair1List vs (func l (pfst t)) (func l (psnd t))
 
   get v vToGet = pair1 v (\o -> get o (pfst vToGet)) (\o -> get o (psnd vToGet))
   set v vToSet toVal = pair2 v toVal 
@@ -1095,7 +1093,7 @@ instance Selector CppSrcCode where
 
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
-  func = funcD
+  func = G.func
 
   get = G.get
   set = G.set
@@ -1113,19 +1111,19 @@ instance SelectorFunction CppSrcCode where
   at = listAccess
 
 instance InternalFunction CppSrcCode where
-  getFunc = getFuncD
-  setFunc = setFuncD
+  getFunc = G.getFunc
+  setFunc = G.setFunc
 
-  listSizeFunc = listSizeFuncD
+  listSizeFunc = G.listSizeFunc
   listAddFunc l i v = func "insert" (listType static_ $ valueType v) 
     [iterBegin l #+ i, v]
-  listAppendFunc = listAppendFuncD "push_back"
+  listAppendFunc = G.listAppendFunc "push_back"
 
   iterBeginFunc t = func "begin" (iterator t) []
   iterEndFunc t = func "end" (iterator t) []
 
-  listAccessFunc = listAccessFuncD' "at"
-  listSetFunc = listSetFuncD cppListSetDoc
+  listAccessFunc = G.listAccessFunc' "at"
+  listSetFunc = G.listSetFunc cppListSetDoc
 
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unCPPSC
@@ -1674,7 +1672,7 @@ instance Selector CppHdrCode where
 
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
-  func _ _ _ = funcFromData void empty
+  func _ _ _ = toState $ funcFromData void empty
   
   get _ _ = mkStateVal void empty
   set _ _ _ = mkStateVal void empty
@@ -1692,18 +1690,18 @@ instance SelectorFunction CppHdrCode where
   at _ _ = mkStateVal void empty
 
 instance InternalFunction CppHdrCode where
-  getFunc _ = funcFromData void empty
-  setFunc _ _ _ = funcFromData void empty
+  getFunc _ = toState $ funcFromData void empty
+  setFunc _ _ _ = toState $ funcFromData void empty
 
-  listSizeFunc = funcFromData void empty
-  listAddFunc _ _ _ = funcFromData void empty
-  listAppendFunc _ = funcFromData void empty
+  listSizeFunc = toState $ funcFromData void empty
+  listAddFunc _ _ _ = toState $ funcFromData void empty
+  listAppendFunc _ = toState $ funcFromData void empty
 
-  iterBeginFunc _ = funcFromData void empty
-  iterEndFunc _ = funcFromData void empty
+  iterBeginFunc _ = toState $ funcFromData void empty
+  iterEndFunc _ = toState $ funcFromData void empty
 
-  listAccessFunc _ _ = funcFromData void empty
-  listSetFunc _ _ _ = funcFromData void empty
+  listAccessFunc _ _ = toState $ funcFromData void empty
+  listSetFunc _ _ _ = toState $ funcFromData void empty
   
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unCPPHC

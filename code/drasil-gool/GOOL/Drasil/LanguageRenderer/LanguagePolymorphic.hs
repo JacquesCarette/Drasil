@@ -5,7 +5,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   block, bool, int, float, double, char, string, fileType, listType, 
   listInnerType, obj, enumType, void, runStrategy, listSlice, litTrue, litFalse,
   litChar, litFloat, litInt, litString, pi, valueOf, arg, enumElement, argsList,
-  inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, printSt, state, loopState, emptyState, assign, assignToListIndex, 
+  inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, listAccessFunc', listSetFunc, printSt, state, loopState, emptyState, assign, assignToListIndex, 
   multiAssignError, decrement, increment, increment', increment1, increment1', 
   decrement1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
   objDecNewNoParams, constDecDef, discardInput, discardFileInput, openFileR, 
@@ -31,8 +31,9 @@ import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..),
   InternalType(..), VariableSym(..), 
   ValueSym(Value, valueDoc, valueType), 
   NumericExpression(..), BooleanExpression(..), InternalValue(..), 
-  Selector(($.)), FunctionSym(Function, func), SelectorFunction(at), 
-  InternalFunction(..),
+  Selector(($.)), FunctionSym(Function), SelectorFunction(at), 
+  InternalFunction(iterBeginFunc, iterEndFunc, functionDoc, functionType, 
+    funcFromData),
   InternalStatement(statementDoc, statementTerm, stateFromData), 
   StatementSym(Statement, (&=), (&+=), (&++), break), ScopeSym(..),
   InternalScope(..), MethodTypeSym(MethodType, mType), ParameterSym(Parameter), 
@@ -47,8 +48,10 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   ValueSym(litTrue, litFalse, litInt, litString, valueOf),
   ValueExpression(funcApp, newObj, notNull),
   Selector(objAccess, objMethodCall, objMethodCallNoParams),
-  FunctionSym(listSize, listAdd, listAppend),
+  FunctionSym(func, listSize, listAdd, listAppend),
   SelectorFunction(listAccess, listSet),
+  InternalFunction(getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, 
+    listAccessFunc, listSetFunc),
   InternalStatement(state, loopState, emptyState), 
   StatementSym(varDec, varDecDef, listDec, listDecDef, objDecNew, constDecDef, 
     valState, returnState),
@@ -63,11 +66,11 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, toSt
   on2StateValues, on3StateValues, on4StateValues, onStateList, on2StateLists, 
   on1StateValue1List, getInnerType, convType)
 import GOOL.Drasil.LanguageRenderer (forLabel, observerListName, addExt, 
-  blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, mkStateVal, mkVal, argDocD, enumElemDocD, funcAppDocD, objAccessDocD, constDecDefDocD, 
+  blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, mkStateVal, mkVal, argDocD, enumElemDocD, funcAppDocD, objAccessDocD, funcDocD, listAccessFuncDocD, constDecDefDocD, 
   printDoc, returnDocD, getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, 
   methodListDocD, enumDocD, enumElementsDocD, moduleDocD, fileDoc', docFuncRepr,
   commentDocD, commentedItem, functionDox, classDox, moduleDox, getterName, 
-  setterName, valueList)
+  setterName, valueList, intValue)
 import GOOL.Drasil.State (GS, FS, MS, lensFStoGS, lensFStoMS, currMain, 
   putAfter, getPutReturn, getPutReturnFunc2, addFile, setMainMod, setFilePath, 
   getFilePath, setModuleName, getModuleName, getCurrMain, addParameter, 
@@ -225,20 +228,20 @@ newObj f t = onStateList (mkVal t . f t . valueList)
 notNull :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))
 notNull v = v ?!= S.valueOf (var "null" (valueType (evalState v initialState))) -- temporary evalState
 
-objAccess :: (RenderSym repr) => GS (repr (Value repr)) -> repr (Function repr)
-  -> GS (repr (Value repr))
-objAccess v f = onStateValue (\o -> mkVal (functionType f) (objAccessDocD 
-  (valueDoc o) (functionDoc f))) v
+objAccess :: (RenderSym repr) => GS (repr (Value repr)) ->
+  GS (repr (Function repr)) -> GS (repr (Value repr))
+objAccess = on2StateValues (\v f -> mkVal (functionType f) (objAccessDocD 
+  (valueDoc v) (functionDoc f)))
 
 objMethodCall :: (RenderSym repr) => repr (Type repr) -> GS (repr (Value repr)) 
   -> Label -> [GS (repr (Value repr))] -> GS (repr (Value repr))
-objMethodCall t o f ps = S.objAccess o (func f t ps)
+objMethodCall t o f ps = S.objAccess o (S.func f t ps)
 
 objMethodCallNoParams :: (RenderSym repr) => repr (Type repr) -> 
   GS (repr (Value repr)) -> Label -> GS (repr (Value repr))
 objMethodCallNoParams t o f = S.objMethodCall t o f []
 
-selfAccess :: (RenderSym repr) => Label -> repr (Function repr) -> 
+selfAccess :: (RenderSym repr) => Label -> GS (repr (Function repr)) -> 
   GS (repr (Value repr))
 selfAccess l = S.objAccess (S.valueOf $ self l)
 
@@ -248,26 +251,30 @@ listIndexExists lst index = S.listSize lst ?> index
 
 indexOf :: (RenderSym repr) => Label -> GS (repr (Value repr)) -> 
   GS (repr (Value repr)) -> GS (repr (Value repr))
-indexOf f l v = S.objAccess l (func f S.int [v])
+indexOf f l v = S.objAccess l (S.func f S.int [v])
+
+func :: (RenderSym repr) => Label -> repr (Type repr) -> 
+  [GS (repr (Value repr))] -> GS (repr (Function repr))
+func l t vs = onStateValue (funcFromData t . funcDocD . valueDoc) (S.funcApp l t vs)
 
 get :: (RenderSym repr) => GS (repr (Value repr)) -> repr (Variable repr) -> 
   GS (repr (Value repr))
-get v vToGet = v $. getFunc vToGet
+get v vToGet = v $. S.getFunc vToGet
 
 set :: (RenderSym repr) => GS (repr (Value repr)) -> repr (Variable repr) -> 
   GS (repr (Value repr)) -> GS (repr (Value repr))
-set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+set v vToSet toVal = v $. S.setFunc (valueType v) vToSet toVal
 
 listSize :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))
-listSize v = v $. listSizeFunc
+listSize v = v $. S.listSizeFunc
 
 listAdd :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr)) 
   -> GS (repr (Value repr)) -> GS (repr (Value repr))
-listAdd v i vToAdd = v $. listAddFunc v i vToAdd
+listAdd v i vToAdd = v $. S.listAddFunc v i vToAdd
 
 listAppend :: (RenderSym repr) => GS (repr (Value repr)) -> 
   GS (repr (Value repr)) -> GS (repr (Value repr))
-listAppend v vToApp = v $. listAppendFunc vToApp
+listAppend v vToApp = v $. S.listAppendFunc vToApp
 
 iterBegin :: (RenderSym repr) => GS (repr (Value repr)) -> 
   GS (repr (Value repr))
@@ -278,11 +285,51 @@ iterEnd v = v $. iterEndFunc (listInnerType $ valueType v)
 
 listAccess :: (RenderSym repr) => GS (repr (Value repr)) -> 
   GS (repr (Value repr)) -> GS (repr (Value repr))
-listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+listAccess v i = v $. S.listAccessFunc (listInnerType $ valueType v) i
 
 listSet :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr)) 
   -> GS (repr (Value repr)) -> GS (repr (Value repr))
-listSet v i toVal = v $. listSetFunc v i toVal
+listSet v i toVal = v $. S.listSetFunc v i toVal
+
+getFunc :: (RenderSym repr) => repr (Variable repr) -> GS (repr (Function repr))
+getFunc v = S.func (getterName $ variableName v) (variableType v) []
+
+setFunc :: (RenderSym repr) => repr (Type repr) -> repr (Variable repr) -> 
+  GS (repr (Value repr)) -> GS (repr (Function repr))
+setFunc t v toVal = S.func (setterName $ variableName v) t [toVal]
+
+listSizeFunc :: (RenderSym repr) => GS (repr (Function repr))
+listSizeFunc = S.func "size" S.int []
+
+listAddFunc :: (RenderSym repr) => Label -> GS (repr (Value repr)) -> 
+  GS (repr (Value repr)) -> GS (repr (Function repr))
+listAddFunc f i v = S.func f (listType static_ $ valueType v) [i, v]
+
+listAppendFunc :: (RenderSym repr) => Label -> GS (repr (Value repr)) -> 
+  GS (repr (Function repr))
+listAppendFunc f v = S.func f (listType static_ $ valueType v) [v]
+
+iterBeginError :: String -> String
+iterBeginError l = "Attempt to use iterBeginFunc in " ++ l ++ ", but " ++ l ++ 
+  " has no iterators"
+
+iterEndError :: String -> String
+iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++ 
+  " has no iterators"
+
+listAccessFunc :: (RenderSym repr) => repr (Type repr) ->
+  GS (repr (Value repr)) -> GS (repr (Function repr))
+listAccessFunc t = onStateValue (funcFromData t . listAccessFuncDocD . intValue)
+
+listAccessFunc' :: (RenderSym repr) => Label -> repr (Type repr) -> 
+  GS (repr (Value repr)) -> GS (repr (Function repr))
+listAccessFunc' f t i = S.func f t [onStateValue intValue i]
+
+listSetFunc :: (RenderSym repr) => (Doc -> Doc -> Doc) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
+  GS (repr (Function repr))
+listSetFunc f = on3StateValues (\v i toVal -> funcFromData (valueType v) 
+  (f (valueDoc $ intValue i) (valueDoc toVal)))
 
 printSt :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))
   -> GS (repr (Statement repr))
@@ -524,8 +571,8 @@ checkState :: (RenderSym repr) => Label -> [(GS (repr (Value repr)),
   GS (repr (Body repr)))] -> GS (repr (Body repr)) -> GS (repr (Statement repr))
 checkState l = S.switch (S.valueOf $ var l S.string)
 
-notifyObservers :: (RenderSym repr) => repr (Function repr) -> repr (Type repr)
-  -> GS (repr (Statement repr))
+notifyObservers :: (RenderSym repr) => GS (repr (Function repr)) -> 
+  repr (Type repr) -> GS (repr (Statement repr))
 notifyObservers f t = S.for initv (v_index ?< S.listSize obsList) 
   (var_index &++) notify
   where obsList = S.valueOf $ observerListName `listOf` t 

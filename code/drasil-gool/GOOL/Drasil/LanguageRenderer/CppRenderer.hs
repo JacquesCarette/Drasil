@@ -272,7 +272,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   n `listOf` t = pair1 t (n `listOf`) (n `listOf`)
   iterVar l t = pair1 t (iterVar l) (iterVar l)
   
-  ($->) v1 v2 = pair (($->) (pfst v1) (pfst v2)) (($->) (psnd v1) (psnd v2))
+  ($->) v1 v2 = pair2 v1 v2 ($->) ($->)
 
   variableBind v = variableBind $ pfst v
   variableName v = variableName $ pfst v
@@ -345,13 +345,11 @@ instance (Pair p) => BooleanExpression (p CppSrcCode CppHdrCode) where
   
 instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   inlineIf b v1 v2 = pair3 b v1 v2 inlineIf inlineIf
-  funcApp n t vs = pair2 t (sequence vs) (funcApp n) (funcApp n)
-  selfFuncApp c n t vs = pair2 t (sequence vs) 
-    (selfFuncApp c n) 
-    (selfFuncApp c n)
-  extFuncApp l n t vs = pair2 t (sequence vs) (extFuncApp l n) (extFuncApp l n)
-  newObj t vs = pair2 t (sequence vs) newObj newObj
-  extNewObj l t vs = pair2 t (sequence vs) extNewObj extNewObj
+  funcApp n t vs = pair1Val1List t vs (funcApp n) (funcApp n)
+  selfFuncApp c n t vs = pair1Val1List t vs (selfFuncApp c n) (selfFuncApp c n)
+  extFuncApp l n t vs = pair1Val1List t vs (extFuncApp l n) (extFuncApp l n)
+  newObj t vs = pair1Val1List t vs newObj newObj
+  extNewObj l t vs = pair1Val1List t vs (extNewObj l) (extNewObj l)
 
   exists v = pair1 v exists exists
   notNull v = pair1 v notNull notNull
@@ -372,10 +370,10 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
   objAccess v f = pair2 v f objAccess objAccess
   ($.) v f = pair2 v f ($.) ($.)
 
-  objMethodCall t o f ps = pair3 t o (sequence ps)
-    (\tp pms ob -> objMethodCall tp ob f pms) 
-    (\tp pms ob -> objMethodCall tp ob f pms)
-  objMethodCallNoParams t o f = pair3 t o 
+  objMethodCall t o f ps = pair2Vals1List t o ps
+    (\tp ob -> objMethodCall tp ob f) 
+    (\tp ob -> objMethodCall tp ob f)
+  objMethodCallNoParams t o f = pair2 t o 
     (\tp ob -> objMethodCallNoParams tp ob f) 
     (\tp ob -> objMethodCallNoParams tp ob f)
 
@@ -388,7 +386,7 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
-  func l t vs = pair2 t (sequence vs) (func l) (func l)
+  func l t vs = pair1Val1List t vs (func l) (func l)
 
   get v vToGet = pair2 v vToGet get get
   set v vToSet toVal = pair3 v vToSet toVal set set
@@ -427,8 +425,8 @@ instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where
 instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
   -- Another Maybe/State combination
   printSt nl p v f = pair2 p v 
-    (printSt nl (pfst p) (pfst v) (fmap (onStateValue pfst) f)) 
-    (printSt nl (psnd p) (psnd v) (fmap (onStateValue psnd) f))
+    (\pr val -> printSt nl pr val (fmap (onStateValue pfst) f)) 
+    (\pr val -> printSt nl pr val (fmap (onStateValue psnd) f))
     
   state s = pair1 s state state
   loopState s = pair1 s loopState loopState
@@ -441,13 +439,10 @@ instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
-  assign vr vl = pair1 vl (assign (pfst vr)) (assign (psnd vr))
-  assignToListIndex lst index v = pair2 index v 
-    (assignToListIndex (pfst lst)) 
-    (assignToListIndex (psnd lst))
-  multiAssign vrs vls = pair1List vls 
-    (multiAssign (map pfst vrs)) 
-    (multiAssign (map psnd vrs))
+  assign vr vl = pair2 vr vl assign assign
+  assignToListIndex lst index v = pair3 lst index v assignToListIndex
+    assignToListIndex
+  multiAssign vrs vls = pair2Lists vrs vls multiAssign multiAssign
   (&=) vr vl = pair2 vr vl (&=) (&=)
   (&-=) vr vl = pair2 vr vl (&-=) (&-=)
   (&+=) vr vl = pair2 vr vl (&+=) (&+=)
@@ -457,10 +452,10 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   varDec v = pair1 v varDec varDec
   varDecDef v def = pair2 v def varDecDef varDecDef
   listDec n v = pair1 v (listDec n) (listDec n)
-  listDecDef v vs = pair2 v (sequence vs) listDecDef listDecDef
+  listDecDef v vs = pair1Val1List v vs listDecDef listDecDef
   objDecDef v def = pair2 v def objDecDef objDecDef
-  objDecNew v vs = pair2 v (sequence vs) objDecNew objDecNew
-  extObjDecNew lib v vs = pair2 v (sequence vs) 
+  objDecNew v vs = pair1Val1List v vs objDecNew objDecNew
+  extObjDecNew lib v vs = pair1Val1List v vs 
     (extObjDecNew lib) 
     (extObjDecNew lib)
   objDecNewNoParams v = pair1 v objDecNewNoParams objDecNewNoParams
@@ -493,8 +488,9 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   discardFileLine f = pair1 f discardFileLine discardFileLine
   stringSplit d vnew s = pair2 vnew s (stringSplit d) (stringSplit d)
 
-  stringListVals vals sl = pair1List1 vals sl stringListVals stringListVals
-  stringListLists lsts sl = pair1List1 lsts sl stringListLists stringListLists
+  stringListVals vals sl = pair1List1Val vals sl stringListVals stringListVals
+  stringListLists lsts sl = pair1List1Val lsts sl stringListLists 
+    stringListLists
 
   break = on2StateValues pair break break
   continue = on2StateValues pair continue continue
@@ -515,7 +511,7 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   changeState fsmName postState = on2StateValues pair (changeState fsmName 
     postState) (changeState fsmName postState)
 
-  initObserverList t vs = pair2 t (sequence vs) initObserverList 
+  initObserverList t vs = pair1Val1List t vs initObserverList 
     initObserverList
   addObserver o = pair1 o addObserver addObserver
 
@@ -523,25 +519,25 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (inOutCall n)
     (inOutCall n)
   selfInOutCall c n ins outs both = pair3Lists ins outs both
-    (selfInOutCall c n is) 
-    (selfInOutCall c n is)
-  extInOutCall m n ins outs both = pair3Lists ins 
+    (selfInOutCall c n) 
+    (selfInOutCall c n)
+  extInOutCall m n ins outs both = pair3Lists ins outs both
     (extInOutCall m n) 
     (extInOutCall m n) 
 
   multi ss = pair1List ss multi multi
 
 instance (Pair p) => ControlStatementSym (p CppSrcCode CppHdrCode) where
-  ifCond bs b = pair3 (mapM fst bs) (mapM snd bs) b 
+  ifCond bs b = pair2Lists1Val (map fst bs) (map snd bs) b 
     (\cs bods -> ifCond (zip cs bods)) 
     (\cs bods -> ifCond (zip cs bods))
   ifNoElse bs = pair2Lists (map fst bs) (map snd bs) 
     (\cs bods -> ifNoElse (zip cs bods))
     (\cs bods -> ifNoElse (zip cs bods))
-  switch v cs c = pair4 v (mapM fst cs) (mapM snd cs) c 
+  switch v cs c = pairVal2ListsVal v (map fst cs) (map snd cs) c 
     (\s cv cb def -> switch s (zip cv cb) def)
     (\s cv cb def -> switch s (zip cv cb) def)
-  switchAsIf v cs b = pair4 v (mapM fst cs) (mapM snd cs) b 
+  switchAsIf v cs b = pairVal2ListsVal v (map fst cs) (map snd cs) b 
     (\s cv cb def -> switchAsIf s (zip cv cb) def)
     (\s cv cb def -> switchAsIf s (zip cv cb) def)
 
@@ -555,7 +551,7 @@ instance (Pair p) => ControlStatementSym (p CppSrcCode CppHdrCode) where
 
   tryCatch tb cb = pair2 tb cb tryCatch tryCatch
 
-  checkState l vs b = pair3 (mapM fst vs) (mapM snd vs) b 
+  checkState l vs b = pair2Lists1Val (map fst vs) (map snd vs) b 
     (\sts bods -> checkState l (zip sts bods))
     (\sts bods -> checkState l (zip sts bods))
 
@@ -578,8 +574,8 @@ instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   type Parameter (p CppSrcCode CppHdrCode) = ParamData
-  param v = pair1 v param param
-  pointerParam v = pair1 v pointerParam pointerParam
+  param v = pair1 (zoom lensMStoGS v) param param
+  pointerParam v = pair1 (zoom lensMStoGS v) pointerParam pointerParam
 
 instance (Pair p) => InternalParam (p CppSrcCode CppHdrCode) where
   parameterName p = parameterName $ pfst p
@@ -589,23 +585,23 @@ instance (Pair p) => InternalParam (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   type Method (p CppSrcCode CppHdrCode) = MethodData
-  method n c s p t ps b = pair3 (zoom lensMStoGS t) (sequence ps) 
+  method n c s p t ps b = pairValListVal (zoom lensMStoGS t) ps
     (zoom lensMStoGS b) 
     (method n c (pfst s) (pfst p)) (method n c (psnd s) (psnd p))
-  getMethod c v = pair1 v (getMethod c) (getMethod c) 
-  setMethod c v = pair1 v (setMethod c) (setMethod c)
-  privMethod n c t ps b = pair3 (zoom lensMStoGS t) (sequence ps) 
+  getMethod c v = pair1 (zoom lensMStoGS v) (getMethod c) (getMethod c) 
+  setMethod c v = pair1 (zoom lensMStoGS v) (setMethod c) (setMethod c)
+  privMethod n c t ps b = pairValListVal (zoom lensMStoGS t) ps 
     (zoom lensMStoGS b) (privMethod n c) (privMethod n c)
-  pubMethod n c t ps b = pair3 (zoom lensMStoGS t) (sequence ps) 
+  pubMethod n c t ps b = pairValListVal (zoom lensMStoGS t) ps
     (zoom lensMStoGS b) (pubMethod n c) (pubMethod n c)
-  constructor n ps b = pair1List1 ps (zoom lensMStoGS b) (constructor n) 
+  constructor n ps b = pair1List1Val ps (zoom lensMStoGS b) (constructor n) 
     (constructor n)
   destructor n vars = pair1List (map (zoom lensMStoGS) vars) (destructor n) 
     (destructor n)
 
   docMain b = pair1 (zoom lensMStoGS b) docMain docMain
 
-  function n s p t ps b = pair3 (zoom lensMStoGS t) (sequence ps) 
+  function n s p t ps b = pairValListVal (zoom lensMStoGS t) ps 
     (zoom lensMStoGS b) 
     (function n (pfst s) (pfst p)) (function n (psnd s) (psnd p))
   mainFunction b = pair1 (zoom lensMStoGS b) mainFunction mainFunction
@@ -613,28 +609,28 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   docFunc desc pComms rComm f = pair1 f (docFunc desc pComms rComm) 
     (docFunc desc pComms rComm)
 
-  inOutMethod n c s p ins outs both b = pair4 (mapM (zoom lensMStoGS) ins) 
-    (mapM (zoom lensMStoGS) outs) (mapM (zoom lensMStoGS) both) 
+  inOutMethod n c s p ins outs both b = pair3Lists1Val (map (zoom lensMStoGS) 
+    ins) (map (zoom lensMStoGS) outs) (map (zoom lensMStoGS) both) 
     (zoom lensMStoGS b) 
     (inOutMethod n c (pfst s) (pfst p)) 
     (inOutMethod n c (psnd s) (psnd p))
 
-  docInOutMethod n c s p desc is os bs b = pair4 (mapM (zoom lensMStoGS . snd)
-    is) (mapM (zoom lensMStoGS . snd) os) (mapM (zoom lensMStoGS . snd) bs) 
+  docInOutMethod n c s p desc is os bs b = pair3Lists1Val (map (zoom lensMStoGS 
+    . snd) is) (map (zoom lensMStoGS . snd) os) (map (zoom lensMStoGS . snd) bs)
     (zoom lensMStoGS b) 
     (\ins outs both -> docInOutMethod n c (pfst s) (pfst p) desc (zip (map fst 
       is) ins) (zip (map fst os) outs) (zip (map fst bs) both))
     (\ins outs both -> docInOutMethod n c (psnd s) (psnd p) desc (zip (map fst 
       is) ins) (zip (map fst os) outs) (zip (map fst bs) both))
 
-  inOutFunc n s p ins outs both b = pair4 (mapM (zoom lensMStoGS) ins) 
-    (mapM (zoom lensMStoGS) outs) (mapM (zoom lensMStoGS) both) 
+  inOutFunc n s p ins outs both b = pair3Lists1Val (map (zoom lensMStoGS) ins) 
+    (map (zoom lensMStoGS) outs) (map (zoom lensMStoGS) both) 
     (zoom lensMStoGS b) 
     (inOutFunc n (pfst s) (pfst p)) 
     (inOutFunc n (psnd s) (psnd p))
 
-  docInOutFunc n s p desc is os bs b = pair4 (mapM (zoom lensMStoGS . snd)
-    is) (mapM (zoom lensMStoGS . snd) os) (mapM (zoom lensMStoGS . snd) bs) 
+  docInOutFunc n s p desc is os bs b = pair3Lists1Val (map (zoom lensMStoGS . 
+    snd) is) (map (zoom lensMStoGS . snd) os) (map (zoom lensMStoGS . snd) bs) 
     (zoom lensMStoGS b) 
     (\ins outs both -> docInOutFunc n (pfst s) (pfst p) desc (zip (map fst 
       is) ins) (zip (map fst os) outs) (zip (map fst bs) both))
@@ -642,10 +638,10 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
       is) ins) (zip (map fst os) outs) (zip (map fst bs) both))
   
 instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
-  intMethod m n c s p t ps b = pair3 (zoom lensMStoGS t) (sequence ps) 
+  intMethod m n c s p t ps b = pairValListVal (zoom lensMStoGS t) ps
     (zoom lensMStoGS b) 
     (intMethod m n c (pfst s) (pfst p)) (intMethod m n c (psnd s) (psnd p))
-  intFunc m n s p t ps b = pair3 (zoom lensMStoGS t) (sequence ps) 
+  intFunc m n s p t ps b = pairValListVal (zoom lensMStoGS t) ps
     (zoom lensMStoGS b) 
     (intFunc m n (pfst s) (pfst p)) (intFunc m n (psnd s) (psnd p))
   commentedFunc cmt fn = pair2 fn cmt (flip commentedFunc) (flip commentedFunc)
@@ -809,16 +805,91 @@ pair3Lists stv1 stv2 stv3 srcf hdrf = do
       sl1 = map (toState . psnd) v1
   pair2Lists stv2 stv3 (srcf fl1) (hdrf sl1)
 
-pair1List1 :: (Pair p) => [State t (p CppSrcCode CppHdrCode a)] -> 
+pair1List1Val :: (Pair p) => [State t (p CppSrcCode CppHdrCode a)] -> 
   State t (p CppSrcCode CppHdrCode b) -> ([State r (CppSrcCode a)] -> 
   State s (CppSrcCode b) -> State t (CppSrcCode c)) -> ([State r (CppHdrCode a)]
   -> State s (CppHdrCode b) -> State t (CppHdrCode c)) -> 
   State t (p CppSrcCode CppHdrCode c)
-pair1List1 stv1 stv2 srcf hdrf = do
+pair1List1Val stv1 stv2 srcf hdrf = do
   v1 <- sequence stv1
   let fl1 = map (toState . pfst) v1
       sl1 = map (toState . psnd) v1
   pair1 stv2 (srcf fl1) (hdrf sl1)
+
+pair1Val1List :: (Pair p) => State t (p CppSrcCode CppHdrCode a) -> 
+  [State t (p CppSrcCode CppHdrCode b)] -> (State r (CppSrcCode a) -> 
+  [State s (CppSrcCode b)] -> State t (CppSrcCode c)) -> 
+  (State r (CppHdrCode a) -> [State s (CppHdrCode b)] -> State t (CppHdrCode c))
+  -> State t (p CppSrcCode CppHdrCode c)
+pair1Val1List stv1 stv2 srcf hdrf = do
+  v1 <- stv1
+  let fv1 = toState $ pfst v1
+      sv1 = toState $ psnd v1
+  pair1List stv2 (srcf fv1) (hdrf sv1)
+
+pair2Vals1List :: (Pair p) => State u (p CppSrcCode CppHdrCode a) -> 
+  State u (p CppSrcCode CppHdrCode b) -> [State u (p CppSrcCode CppHdrCode c)] 
+  -> (State r (CppSrcCode a) -> State s (CppSrcCode b) ->
+  [State t (CppSrcCode c)] -> State u (CppSrcCode d)) -> (State r (CppHdrCode a)
+  -> State s (CppHdrCode b) -> [State t (CppHdrCode c)] -> 
+  State u (CppHdrCode d)) -> State u (p CppSrcCode CppHdrCode d)
+pair2Vals1List stv1 stv2 stv3 srcf hdrf = do
+  v1 <- stv1
+  let fv1 = toState $ pfst v1
+      sv1 = toState $ psnd v1
+  pair1Val1List stv2 stv3 (srcf fv1) (hdrf sv1)
+
+pair2Lists1Val :: (Pair p) => [State u (p CppSrcCode CppHdrCode a)] -> 
+  [State u (p CppSrcCode CppHdrCode b)] -> State u (p CppSrcCode CppHdrCode c) 
+  -> ([State r (CppSrcCode a)] -> [State s (CppSrcCode b)] ->
+  State t (CppSrcCode c) -> State u (CppSrcCode d)) -> ([State r (CppHdrCode a)]
+  -> [State s (CppHdrCode b)] -> State t (CppHdrCode c) -> 
+  State u (CppHdrCode d)) -> State u (p CppSrcCode CppHdrCode d)
+pair2Lists1Val stv1 stv2 stv3 srcf hdrf = do
+  v1 <- sequence stv1
+  let fl1 = map (toState . pfst) v1
+      sl1 = map (toState . psnd) v1
+  pair1List1Val stv2 stv3 (srcf fl1) (hdrf sl1)
+
+pairValListVal :: (Pair p) => State u (p CppSrcCode CppHdrCode a) -> 
+  [State u (p CppSrcCode CppHdrCode b)] -> State u (p CppSrcCode CppHdrCode c) 
+  -> (State r (CppSrcCode a) -> [State s (CppSrcCode b)] ->
+  State t (CppSrcCode c) -> State u (CppSrcCode d)) -> (State r (CppHdrCode a)
+  -> [State s (CppHdrCode b)] -> State t (CppHdrCode c) -> 
+  State u (CppHdrCode d)) -> State u (p CppSrcCode CppHdrCode d)
+pairValListVal stv1 stv2 stv3 srcf hdrf = do
+  v1 <- stv1
+  let fv1 = toState $ pfst v1
+      sv1 = toState $ psnd v1
+  pair1List1Val stv2 stv3 (srcf fv1) (hdrf sv1)
+
+pair3Lists1Val :: (Pair p) => [State v (p CppSrcCode CppHdrCode a)] -> 
+  [State v (p CppSrcCode CppHdrCode b)] -> [State v (p CppSrcCode CppHdrCode c)]
+  -> State v (p CppSrcCode CppHdrCode d) -> ([State r (CppSrcCode a)] -> 
+  [State s (CppSrcCode b)] -> [State t (CppSrcCode c)] -> State u (CppSrcCode d)
+  -> State v (CppSrcCode e)) -> ([State r (CppHdrCode a)] 
+  -> [State s (CppHdrCode b)] -> [State t (CppHdrCode c)] -> 
+  State u (CppHdrCode d) -> State v (CppHdrCode e)) -> 
+  State v (p CppSrcCode CppHdrCode e)
+pair3Lists1Val stv1 stv2 stv3 stv4 srcf hdrf = do
+  v1 <- sequence stv1
+  let fl1 = map (toState . pfst) v1
+      sl1 = map (toState . psnd) v1
+  pair2Lists1Val stv2 stv3 stv4 (srcf fl1) (hdrf sl1)
+
+pairVal2ListsVal :: (Pair p) => State v (p CppSrcCode CppHdrCode a) -> 
+  [State v (p CppSrcCode CppHdrCode b)] -> [State v (p CppSrcCode CppHdrCode c)]
+  -> State v (p CppSrcCode CppHdrCode d) -> (State r (CppSrcCode a) -> 
+  [State s (CppSrcCode b)] -> [State t (CppSrcCode c)] -> State u (CppSrcCode d)
+  -> State v (CppSrcCode e)) -> (State r (CppHdrCode a) 
+  -> [State s (CppHdrCode b)] -> [State t (CppHdrCode c)] -> 
+  State u (CppHdrCode d) -> State v (CppHdrCode e)) -> 
+  State v (p CppSrcCode CppHdrCode e)
+pairVal2ListsVal stv1 stv2 stv3 stv4 srcf hdrf = do
+  v1 <- stv1
+  let fv1 = toState $ pfst v1
+      sv1 = toState $ psnd v1
+  pair2Lists1Val stv2 stv3 stv4 (srcf fv1) (hdrf sv1)
 
 -----------------
 -- Source File --

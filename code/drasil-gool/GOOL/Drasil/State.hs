@@ -124,16 +124,16 @@ getPutReturn sf v = do
   put $ sf s
   return v
 
-getPutReturnFunc :: State s b -> (s -> b -> s) -> (b -> a) -> State s a
-getPutReturnFunc st sf vf = do
+getPutReturnFunc :: (s -> b -> s) -> (b -> a) -> State s b -> State s a
+getPutReturnFunc sf vf st = do
   v <- st
   s <- get
   put $ sf s v
   return $ vf v
 
-getPutReturnFunc2 :: State s c -> State s b -> 
-  (s -> c -> b -> s) -> (c -> b -> a) -> State s a
-getPutReturnFunc2 st1 st2 sf vf = do
+getPutReturnFunc2 :: (s -> c -> b -> s) -> (c -> b -> a) -> State s c -> 
+  State s b -> State s a
+getPutReturnFunc2 sf vf st1 st2 = do
   v1 <- st1
   v2 <- st2
   s <- get

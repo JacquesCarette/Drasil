@@ -24,13 +24,12 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
-  listDecDefDocD, mkSt, stringListVals', stringListLists', breakDocD, 
+  listDecDefDocD, mkSt, breakDocD, 
   continueDocD, unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', typeUnExpr, 
   powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
   lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
   divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
-  typeBinExpr, mkStateVal, mkVal, mkVar, classVarDocD, objVarDocD, newObjDocD, varD, staticVarD, extVarD, 
-  selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD, 
+  typeBinExpr, mkStateVal, mkVal, mkVar, classVarDocD, objVarDocD, newObjDocD, 
   funcDocD, castDocD, 
   listSetFuncDocD, castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
   dot, new, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
@@ -38,7 +37,8 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   commentedModD, appendToBody, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, bool, int, double, char, string, listType, listInnerType,
-  obj, enumType, void, runStrategy, listSlice, pi, litTrue, litFalse, litChar, litFloat, litInt, 
+  obj, enumType, void, runStrategy, listSlice, var, staticVar, extVar, 
+  self, enumVar, classVar, objVarSelf, listVar, listOf, iterVar, pi, litTrue, litFalse, litChar, litFloat, litInt, 
   litString, valueOf, arg, enumElement, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
   selfFuncApp, extFuncApp, newObj, notNull, func, get, set, listSize, listAdd, 
@@ -47,8 +47,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listSetFunc, printSt, state, 
   loopState, emptyState, assign, assignToListIndex, multiAssignError, 
   decrement, increment, decrement1, increment1, varDec, varDecDef, 
-  listDec, listDecDef, objDecNew, objDecNewNoParams,constDecDef, discardInput,
-  openFileR, openFileW, openFileA, closeFile, discardFileLine, returnState, 
+  listDec, listDecDef', objDecNew, objDecNewNoParams,constDecDef, discardInput,
+  openFileR, openFileW, openFileA, closeFile, discardFileLine, stringListVals, stringListLists, returnState, 
   multiReturnError, valState, comment, freeError, throw, initState, changeState,
   initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
   for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
@@ -234,19 +234,19 @@ instance InternalOp CSharpCode where
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
-  var = varD
-  staticVar = staticVarD
+  var = G.var
+  staticVar = G.staticVar
   const = var
-  extVar = extVarD
-  self = selfD
-  enumVar = enumVarD
-  classVar = classVarD classVarDocD
+  extVar = G.extVar
+  self = G.self
+  enumVar = G.enumVar
+  classVar = G.classVar classVarDocD
   extClassVar = classVar
-  objVar = csObjVar
-  objVarSelf = objVarSelfD
-  listVar  = listVarD
-  listOf = listOfD 
-  iterVar = iterVarD
+  objVar = on2StateValues csObjVar
+  objVarSelf = G.objVarSelf
+  listVar  = G.listVar
+  listOf = G.listOf
+  iterVar = G.iterVar
 
   ($->) = objVar
 
@@ -420,7 +420,7 @@ instance StatementSym CSharpCode where
   varDec v = csVarDec (variableBind v) $ G.varDec static_ dynamic_ v
   varDecDef = G.varDecDef
   listDec n v = G.listDec (listDecDocD v) (litInt n) v
-  listDecDef v = G.listDecDef (listDecDefDocD v) v
+  listDecDef = G.listDecDef' listDecDefDocD
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew
@@ -453,8 +453,8 @@ instance StatementSym CSharpCode where
   stringSplit d vnew s = assign vnew $ newObj (listType dynamic_ string) 
     [s $. func "Split" (listType static_ string) [litChar d]]
 
-  stringListVals = stringListVals'
-  stringListLists = stringListLists'
+  stringListVals = G.stringListVals
+  stringListLists = G.stringListLists
 
   break = toState $ mkSt breakDocD
   continue = toState $ mkSt continueDocD
@@ -682,7 +682,8 @@ csOut p = text "out" <+> p
 csInOutCall :: (Label -> CSharpCode (Type CSharpCode) -> 
   [GS (CSharpCode (Value CSharpCode))] -> GS (CSharpCode (Value CSharpCode)))
   -> Label -> [GS (CSharpCode (Value CSharpCode))] -> 
-  [CSharpCode (Variable CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
+  [GS (CSharpCode (Variable CSharpCode))] -> 
+  [GS (CSharpCode (Variable CSharpCode))] -> 
   GS (CSharpCode (Statement CSharpCode))
 csInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
 csInOutCall f n ins [] [out] = if null (filterOutObjs [out])
@@ -709,9 +710,10 @@ csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode)
     -> CSharpCode (Type CSharpCode) -> [MS (CSharpCode (Parameter CSharpCode))] 
     -> GS (CSharpCode (Body CSharpCode)) -> MS (CSharpCode (Method CSharpCode)))
   -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
-  [CSharpCode (Variable CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
-  [CSharpCode (Variable CSharpCode)] -> GS (CSharpCode (Body CSharpCode)) -> 
-  MS (CSharpCode (Method CSharpCode))
+  [GS (CSharpCode (Variable CSharpCode))] -> 
+  [GS (CSharpCode (Variable CSharpCode))] -> 
+  [GS (CSharpCode (Variable CSharpCode))] -> 
+  GS (CSharpCode (Body CSharpCode)) -> MS (CSharpCode (Method CSharpCode))
 csInOut f s p ins [v] [] b = f s p (variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 
   valueOf v))

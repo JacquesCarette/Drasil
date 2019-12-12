@@ -13,7 +13,7 @@ module GOOL.Drasil.LanguageRenderer (
   methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD, switchDocD, 
   assignDocD, multiAssignDoc, plusEqualsDocD, plusPlusDocD, listDecDocD, 
   listDecDefDocD, statementDocD, getTermDoc, returnDocD, commentDocD, freeDocD, 
-  mkSt, mkStNoEnd, stringListVals', stringListLists', unOpPrec, notOpDocD, 
+  mkSt, mkStNoEnd, unOpPrec, notOpDocD, 
   notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD',
   expOpDocD, expOpDocD', sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', 
   tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', 
@@ -21,12 +21,11 @@ module GOOL.Drasil.LanguageRenderer (
   multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, 
-  binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkStateVal, mkVal, mkVar,
+  binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkStateVal, mkVal, mkStateVar, mkVar,
   mkStaticVar, 
   varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, classVarCheckStatic, 
   classVarDocD, objVarDocD, funcAppDocD, newObjDocD, newObjDocD', 
-  constDecDefDocD, varD, staticVarD, extVarD, selfD, enumVarD, classVarD, 
-  objVarD, objVarSelfD, listVarD, listOfD, iterVarD, funcDocD, castDocD, listAccessFuncDocD, 
+  constDecDefDocD, funcDocD, castDocD, listAccessFuncDocD, 
   listSetFuncDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
@@ -40,8 +39,7 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..), 
   PermanenceSym(..), InternalPerm(..),
-  TypeSym(Type, getType, getTypeString, getTypeDoc,
-    listType, listInnerType, obj, enumType, iterator), 
+  TypeSym(Type, getType, getTypeDoc), 
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), InternalValue(..), FunctionSym(..), 
@@ -313,39 +311,6 @@ mkSt = flip stateFromData Semi
 mkStNoEnd :: (RenderSym repr) => Doc -> repr (Statement repr)
 mkStNoEnd = flip stateFromData Empty
 
-stringListVals' :: (RenderSym repr) => [repr (Variable repr)] -> 
-  GS (repr (Value repr)) -> GS (repr (Statement repr))
-stringListVals' vars sl = multi $ checkList (getType $ valueType (evalState sl 
-  initialState)) -- temporary evalState
-  where checkList (List String) = assignVals vars 0
-        checkList _ = error 
-          "Value passed to stringListVals must be a list of strings"
-        assignVals [] _ = []
-        assignVals (v:vs) n = assign v (cast (variableType v) 
-          (listAccess sl (litInt n))) : assignVals vs (n+1)
-
-stringListLists' :: (RenderSym repr) => [repr (Variable repr)] -> 
-  GS (repr (Value repr)) -> GS (repr (Statement repr))
-stringListLists' lsts sl = checkList (getType $ valueType (evalState sl 
-  initialState)) -- temporary evalState
-  where checkList (List String) = listVals (map (getType . variableType) lsts)
-        checkList _ = error 
-          "Value passed to stringListLists must be a list of strings"
-        listVals [] = loop
-        listVals (List _:vs) = listVals vs
-        listVals _ = error 
-          "All values passed to stringListLists must have list types"
-        loop = forRange var_i (litInt 0) (listSize sl #/ numLists) (litInt 1)
-          (bodyStatements $ appendLists (map valueOf lsts) 0)
-        appendLists [] _ = []
-        appendLists (v:vs) n = valState (listAppend v (cast (listInnerType $ 
-          valueType (evalState v initialState) {-temporary evalState-})
-          (listAccess sl ((v_i #* numLists) #+ litInt n)))) 
-          : appendLists vs (n+1)
-        numLists = litInt (toInteger $ length lsts)
-        var_i = var "stringlist_i" S.int
-        v_i = valueOf var_i
-
 -- Unary Operators --
 
 unOpPrec :: String -> OpData
@@ -541,13 +506,17 @@ mkStateVal t d = toState $ valFromData Nothing t d
 mkVal :: (RenderSym repr) => repr (Type repr) -> Doc -> repr (Value repr)
 mkVal = valFromData Nothing
 
+mkStateVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
+  GS (repr (Variable repr))
+mkStateVar n t d = toState $ varFromData Dynamic n t d
+
 mkVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
   repr (Variable repr)
 mkVar = varFromData Dynamic
 
 mkStaticVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
-  repr (Variable repr)
-mkStaticVar = varFromData Static
+  GS (repr (Variable repr))
+mkStaticVar n t d = toState $ varFromData Static n t d
 
 mkExpr :: (RenderSym repr) => Int -> repr (Type repr) -> Doc -> 
   repr (Value repr)
@@ -591,49 +560,6 @@ newObjDocD st vs = new <+> newObjDocD' st vs
 
 newObjDocD' :: (RenderSym repr) => repr (Type repr) -> Doc -> Doc
 newObjDocD' st vs = getTypeDoc st <> parens vs
-
-varD :: (RenderSym repr) => Label -> repr (Type repr) -> repr (Variable repr)
-varD n t = varFromData Dynamic n t (varDocD n)
-
-staticVarD :: (RenderSym repr) => Label -> repr (Type repr) -> 
-  repr (Variable repr)
-staticVarD n t = mkStaticVar n t (varDocD n)
-
-extVarD :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
-  repr (Variable repr)
-extVarD l n t = varFromData Dynamic (l ++ "." ++ n) t (extVarDocD l n)
-
-selfD :: (RenderSym repr) => Label -> repr (Variable repr)
-selfD l = varFromData Dynamic "this" (obj l) selfDocD
-
-enumVarD :: (RenderSym repr) => Label -> Label -> repr (Variable repr)
-enumVarD e en = var e (enumType en)
-
-classVarD :: (RenderSym repr) => (Doc -> Doc -> Doc) -> repr (Type repr) -> 
-  repr (Variable repr) -> repr (Variable repr)
-classVarD f c v = classVarCheckStatic $ varFromData (variableBind v) 
-  (getTypeString c ++ "." ++ variableName v) 
-  (variableType v) (f (getTypeDoc c) (variableDoc v))
-
-objVarD :: (RenderSym repr) => repr (Variable repr) -> repr (Variable repr) -> 
-  repr (Variable repr)
-objVarD o v = varFromData Dynamic (variableName o ++ "." ++ variableName v) 
-  (variableType v) (objVarDocD (variableDoc o) (variableDoc v))
-
-objVarSelfD :: (RenderSym repr) => Label -> repr (Variable repr) -> 
-  repr (Variable repr)
-objVarSelfD l = objVar (self l)
-
-listVarD :: (RenderSym repr) => Label -> repr (Permanence repr) -> 
-  repr (Type repr) -> repr (Variable repr)
-listVarD n p t = var n (listType p t)
-
-listOfD :: (RenderSym repr) => Label -> repr (Type repr) -> repr (Variable repr)
-listOfD n = listVar n static_
-
-iterVarD :: (RenderSym repr) => Label -> repr (Type repr) -> 
-  repr (Variable repr)
-iterVarD n t = var n (iterator t)
 
 -- Functions --
 

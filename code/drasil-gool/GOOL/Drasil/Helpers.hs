@@ -2,8 +2,8 @@ module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
   hicat, vicat, vibcat, vmap, vimap, vibmap, emptyIfEmpty, emptyIfNull, 
   mapPairFst, mapPairSnd, toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, 
-  on4StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
-  on1StateValue1List, getInnerType, getNestDegree, convType
+  on4StateValues, on5StateValues, onCodeList, onStateList, on2StateLists, 
+  on1CodeValue1List, on1StateValue1List, getInnerType, getNestDegree, convType
 ) where
 
 import Utils.Drasil (blank)
@@ -14,7 +14,7 @@ import qualified GOOL.Drasil.Symantics as S (
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
-import Control.Monad (liftM2, liftM3, liftM4)
+import Control.Monad (liftM2, liftM3, liftM4, liftM5)
 import Control.Monad.State (State)
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
@@ -96,6 +96,10 @@ on4CodeValues f a1 a2 a3 a4 = liftA3 f a1 a2 a3 <*> a4
 on4StateValues :: (a -> b -> c -> d -> e) -> State s a -> State s b -> 
   State s c -> State s d -> State s e
 on4StateValues = liftM4
+
+on5StateValues :: (a -> b -> c -> d -> e -> f) -> State s a -> State s b -> 
+  State s c -> State s d -> State s e -> State s f
+on5StateValues = liftM5
 
 onCodeList :: Monad m => ([a] -> b) -> [m a] -> m b
 onCodeList f as = f <$> sequence as

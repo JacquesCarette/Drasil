@@ -281,31 +281,16 @@ vavPlan                      = compoundNC vav plan
 srsDom :: CommonConcept
 srsDom = dcc' "srsDom" (srs ^. term) "srs" ""
 
-goalStmtDom :: ConceptChunk
-goalStmtDom = ccs (mkIdea "goalStmtDom" (goalStmt ^. term) $ Just "GS") EmptyS
-  [srsDom]
+goalStmtDom, assumpDom, reqDom, funcReqDom, nonFuncReqDom, chgProbDom, likeChgDom, unlikeChgDom :: ConceptChunk
+goalStmtDom   = ccs (mkIdea "goalStmtDom"   (goalStmt ^. term)                 $ Just "GS")  EmptyS [srsDom]
+assumpDom     = ccs (mkIdea "assumpDom"     (assumption ^. term)               $ Just "A")   EmptyS [srsDom]
+reqDom        = ccs (mkIdea "reqDom"        (requirement ^. term)              $ Just "R")   EmptyS [srsDom]
+funcReqDom    = ccs (mkIdea "funcReqDom"    (functionalRequirement ^. term)    $ Just "FR")  EmptyS [reqDom]
+nonFuncReqDom = ccs (mkIdea "nonFuncReqDom" (nonfunctionalRequirement ^. term) $ Just "NFR") EmptyS [reqDom]
+chgProbDom    = ccs (nc "chgProbDom" $ cn' "change")                                         EmptyS [srsDom]
+likeChgDom    = ccs (mkIdea "likeChgDom"    (likelyChg ^. term)                $ Just "LC")  EmptyS [chgProbDom]
+unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $ Just "UC")  EmptyS [chgProbDom]
 
-assumpDom :: ConceptChunk
-assumpDom = ccs (mkIdea "assumpDom" (assumption ^. term) $ Just "A") EmptyS [srsDom]
-
-reqDom :: ConceptChunk
-reqDom = ccs (mkIdea "reqDom" (requirement ^. term) $ Just "R") EmptyS [srsDom]
-
-funcReqDom :: ConceptChunk
-funcReqDom = ccs (mkIdea "funcReqDom" (functionalRequirement ^. term) $ Just "FR") EmptyS [reqDom]
-
-nonFuncReqDom :: ConceptChunk
-nonFuncReqDom = ccs (mkIdea "nonFuncReqDom" (nonfunctionalRequirement ^. term) $
-  Just "NFR") EmptyS [reqDom]
-
-chgProbDom :: ConceptChunk
-chgProbDom = ccs (nc "chgProbDom" $ cn' "change") EmptyS [srsDom]
-
-likeChgDom :: ConceptChunk
-likeChgDom = ccs (mkIdea "likeChgDom" (likelyChg ^. term) $ Just "LC") EmptyS [chgProbDom]
-
-unlikeChgDom :: ConceptChunk
-unlikeChgDom = ccs (mkIdea "unlikeChgDom" (unlikelyChg ^. term) $ Just "UC") EmptyS [chgProbDom]
 -- | List of domains for SRS
 srsDomains :: [ConceptChunk]
 srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom,

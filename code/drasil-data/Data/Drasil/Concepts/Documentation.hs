@@ -278,8 +278,8 @@ vavPlan                      = compoundNC vav plan
 -- Domains
 
 --Root SRS Domain
-srsDom :: CommonConcept
-srsDom = dcc' "srsDom" (srs ^. term) "srs" ""
+srsDom :: ConceptChunk
+srsDom = dcc "srsDom" (srs ^. term) "srs"
 
 goalStmtDom, assumpDom, reqDom, funcReqDom, nonFuncReqDom, chgProbDom, likeChgDom, unlikeChgDom :: ConceptChunk
 goalStmtDom   = ccs (mkIdea "goalStmtDom"   (goalStmt ^. term)                 $ Just "GS")  EmptyS [srsDom]
@@ -291,10 +291,9 @@ chgProbDom    = ccs (nc "chgProbDom" $ cn' "change")                            
 likeChgDom    = ccs (mkIdea "likeChgDom"    (likelyChg ^. term)                $ Just "LC")  EmptyS [chgProbDom]
 unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $ Just "UC")  EmptyS [chgProbDom]
 
--- | List of domains for SRS
+-- | List of SRS-related concepts, including SRS
 srsDomains :: [ConceptChunk]
-srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom,
-  chgProbDom, likeChgDom, unlikeChgDom]
+srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom, chgProbDom, likeChgDom, unlikeChgDom]
 
 -- FIXME: fterms is here instead of Utils because of cyclic import
 -- | Apply a binary function to the terms of two named ideas, instead of to the named

@@ -50,9 +50,8 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..),
 import qualified GOOL.Drasil.Symantics as S (TypeSym(int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateModDoc, OpData(..), od, TypeData(..), Binding(..), VarData(..))
-import GOOL.Drasil.Helpers (hicat, vibcat, vmap, 
-  emptyIfEmpty, emptyIfNull, toState, onStateValue, on2StateValues, 
-  getNestDegree)
+import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
+  onStateValue, on2StateValues, on3StateValues, getNestDegree)
 import GOOL.Drasil.State (GS, MS, initialState, getParameters)
 
 import Data.List (last)
@@ -395,10 +394,10 @@ unExpr' :: (RenderSym repr) => repr (UnaryOp repr) -> GS (repr (Value repr)) ->
 unExpr' u = onStateValue (\v -> mkExpr (uOpPrec u) (valueType v) (unOpDocD' 
   (uOpDoc u) (valueDoc v)))
 
-typeUnExpr :: (RenderSym repr) => repr (UnaryOp repr) -> repr (Type repr) -> 
-  GS (repr (Value repr)) -> GS (repr (Value repr))
-typeUnExpr u t = onStateValue (\v -> mkExpr (uOpPrec u) t (unOpDocD (uOpDoc u) 
-  (valueDoc v)))
+typeUnExpr :: (RenderSym repr) => repr (UnaryOp repr) -> GS (repr (Type repr))
+  -> GS (repr (Value repr)) -> GS (repr (Value repr))
+typeUnExpr u = on2StateValues (\t -> mkExpr (uOpPrec u) t . unOpDocD (uOpDoc u) 
+  . valueDoc)
 
 -- Binary Operators --
 
@@ -494,29 +493,29 @@ numType t1 t2 = numericType (getType t1) (getType t2)
         numericType _ Float = t2
         numericType _ _ = error "Numeric types required for numeric expression"
 
-typeBinExpr :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Type repr) -> 
-  GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Value repr))
-typeBinExpr b t = on2StateValues (\v1 v2 -> mkExpr (bOpPrec b) t (binOpDocD 
+typeBinExpr :: (RenderSym repr) => repr (BinaryOp repr) -> GS (repr (Type repr))
+  -> GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Value repr))
+typeBinExpr b = on3StateValues (\t v1 v2 -> mkExpr (bOpPrec b) t (binOpDocD 
   (bOpDoc b) (exprParensL b v1 $ valueDoc v1) (exprParensR b v2 $ valueDoc v2)))
 
-mkStateVal :: (RenderSym repr) => repr (Type repr) -> Doc -> 
+mkStateVal :: (RenderSym repr) => GS (repr (Type repr)) -> Doc -> 
   GS (repr (Value repr))
-mkStateVal t d = toState $ valFromData Nothing t d
+mkStateVal t d = onStateValue (\tp -> valFromData Nothing tp d) t
 
 mkVal :: (RenderSym repr) => repr (Type repr) -> Doc -> repr (Value repr)
 mkVal = valFromData Nothing
 
-mkStateVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
+mkStateVar :: (RenderSym repr) => String -> GS (repr (Type repr)) -> Doc -> 
   GS (repr (Variable repr))
-mkStateVar n t d = toState $ varFromData Dynamic n t d
+mkStateVar n t d = onStateValue (\tp -> varFromData Dynamic n tp d) t
 
 mkVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
   repr (Variable repr)
 mkVar = varFromData Dynamic
 
-mkStaticVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
+mkStaticVar :: (RenderSym repr) => String -> GS (repr (Type repr)) -> Doc -> 
   GS (repr (Variable repr))
-mkStaticVar n t d = toState $ varFromData Static n t d
+mkStaticVar n t d = onStateValue (\tp -> varFromData Static n tp d) t
 
 mkExpr :: (RenderSym repr) => Int -> repr (Type repr) -> Doc -> 
   repr (Value repr)
@@ -707,10 +706,10 @@ exprParensR :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Value repr) ->
 exprParensR o v = if maybe False (<= bOpPrec o) (valuePrec v) then parens else 
   id
 
-intValue :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
-intValue i = intValue' (getType $ valueType i)
+intValue :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))
+intValue i = i >>= intValue' . getType . valueType
   where intValue' Integer = i
-        intValue' (Enum _) = evalState (cast S.int (toState i)) initialState -- temporary evalState
+        intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
 
 filterOutObjs :: (VariableSym repr) => [repr (Variable repr)] -> 

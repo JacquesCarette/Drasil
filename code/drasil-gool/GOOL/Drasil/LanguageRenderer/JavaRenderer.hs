@@ -440,9 +440,9 @@ instance StatementSym JavaCode where
   printFileStr f s = jOut False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = jOut True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = v &= jInput (variableType v) inputFunc
+  getInput v = v &= jInput (onStateValue variableType v) inputFunc
   discardInput = G.discardInput jDiscardInput
-  getFileInput f v = v &= jInput (variableType v) f
+  getFileInput f v = v &= jInput (onStateValue variableType v) f
   discardFileInput = G.discardFileInput jDiscardInput
 
   openFileR f n = modify (addLangImport "java.io.File") >> G.openFileR 
@@ -521,7 +521,7 @@ instance InternalScope JavaCode where
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
   mType t = t
-  construct = toCode . G.construct
+  construct = G.construct
 
 instance ParameterSym JavaCode where
   type Parameter JavaCode = ParamData
@@ -561,8 +561,8 @@ instance MethodSym JavaCode where
 
 instance InternalMethod JavaCode where
   intMethod m n _ s p t ps b = modify (if m then setCurrMain else id) >> 
-    on1StateValue1List (\bd pms -> methodFromData Pub $ jMethod n s p t pms bd) 
-    (zoom lensMStoGS b) ps
+    on3StateValues (\tp pms bd -> methodFromData Pub $ jMethod n s p tp pms bd) 
+    (zoom lensMStoGS t) (sequence ps) (zoom lensMStoGS b)
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
@@ -628,28 +628,29 @@ jtop end inc lst = vcat [
   inc <+> text "java.io.File" <> end,
   inc <+> text ("java.util." ++ render lst) <> end]
 
-jStringType :: (RenderSym repr) => repr (Type repr)
-jStringType = typeFromData String "String" (text "String")
+jStringType :: (RenderSym repr) => GS (repr (Type repr))
+jStringType = toState $ typeFromData String "String" (text "String")
 
-jInfileType :: (RenderSym repr) => repr (Type repr)
-jInfileType = typeFromData File "Scanner" (text "Scanner")
+jInfileType :: (RenderSym repr) => GS (repr (Type repr))
+jInfileType = toState $ typeFromData File "Scanner" (text "Scanner")
 
-jOutfileType :: (RenderSym repr) => repr (Type repr)
-jOutfileType = typeFromData File "PrintWriter" (text "PrintWriter")
+jOutfileType :: (RenderSym repr) => GS (repr (Type repr))
+jOutfileType = toState $ typeFromData File "PrintWriter" (text "PrintWriter")
 
-jListType :: (RenderSym repr) => repr (Permanence repr) -> repr (Type repr) -> 
-  repr (Type repr)
-jListType p t = jListType' (getType t)
-  where jListType' Integer = typeFromData (List Integer) (render lst ++ 
-          "<Integer>") (lst <> angles (text "Integer"))
-        jListType' Float = typeFromData (List Float) (render lst ++ "<Double>") 
+jListType :: (RenderSym repr) => repr (Permanence repr) -> GS (repr (Type repr))
+  -> GS (repr (Type repr))
+jListType p t = t >>= (jListType' . getType)
+  where jListType' Integer = toState $ typeFromData (List Integer) (render lst 
+          ++ "<Integer>") (lst <> angles (text "Integer"))
+        jListType' Float = toState $ typeFromData (List Float) (render lst ++ "<Double>") 
           (lst <> angles (text "Double"))
         jListType' _ = G.listType p t
         lst = keyDoc $ list p
 
 
-jArrayType :: JavaCode (Type JavaCode)
-jArrayType = typeFromData (List $ Object "Object") "Object" (text "Object[]")
+jArrayType :: GS (JavaCode (Type JavaCode))
+jArrayType = toState $ typeFromData (List $ Object "Object") "Object" 
+  (text "Object[]")
 
 jEquality :: GS (JavaCode (Value JavaCode)) -> GS (JavaCode (Value JavaCode)) 
   -> GS (JavaCode (Value JavaCode))
@@ -657,13 +658,14 @@ jEquality v1 v2 = jEquality' (getType $ valueType (evalState v2 initialState)) -
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jCast :: JavaCode (Type JavaCode) -> GS (JavaCode (Value JavaCode)) -> 
+jCast :: GS (JavaCode (Type JavaCode)) -> GS (JavaCode (Value JavaCode)) -> 
   GS (JavaCode (Value JavaCode))
-jCast t v = jCast' (getType t) (getType $ valueType (evalState v initialState)) -- temporary evalState
-  where jCast' Float String = funcApp "Double.parseDouble" float [v]
-        jCast' Integer (Enum _) = v $. func "ordinal" int []
-        jCast' _ _ = onStateValue (mkVal t . castObjDocD (castDocD (getTypeDoc 
-          t)) . valueDoc) v
+jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $ 
+  valueType vl) tp vl) t v
+  where jCast' Float String _ _ = funcApp "Double.parseDouble" float [v]
+        jCast' Integer (Enum _) _ _ = v $. func "ordinal" int []
+        jCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
+          tp)) (valueDoc vl))
 
 jListDecDef :: (RenderSym repr) => repr (Variable repr) -> [repr (Value repr)] 
   -> Doc
@@ -701,9 +703,9 @@ jOut newLn printFn v f = jOut' (getType $ valueType (evalState v initialState)) 
 jDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
 jDiscardInput inFn = valueDoc inFn <> dot <> text "next()"
 
-jInput :: (RenderSym repr) => repr (Type repr) -> GS (repr (Value repr)) -> 
-  GS (repr (Value repr))
-jInput t = onStateValue (mkVal t . jInput' (getType t))
+jInput :: (RenderSym repr) => GS (repr (Type repr)) -> GS (repr (Value repr)) 
+  -> GS (repr (Value repr))
+jInput = on2StateValues (\t -> mkVal t . jInput' (getType t))
   where jInput' Integer inFn = text "Integer.parseInt" <> parens (valueDoc inFn 
           <> dot <> text "nextLine()")
         jInput' Float inFn = text "Double.parseDouble" <> parens (valueDoc inFn 
@@ -713,16 +715,16 @@ jInput t = onStateValue (mkVal t . jInput' (getType t))
         jInput' Char inFn = valueDoc inFn <> dot <> text "next().charAt(0)"
         jInput' _ = error "Attempt to read value of unreadable type"
 
-jOpenFileR :: (RenderSym repr) => GS repr (Value repr) -> repr (Type repr) -> 
-  GS (repr (Value repr))
-jOpenFileR v t = onStateValue (\n -> mkVal t $ new <+> text "Scanner" <> parens 
-  (new <+> text "File" <> parens (valueDoc n))) v
+jOpenFileR :: (RenderSym repr) => GS repr (Value repr) -> GS (repr (Type repr))
+  -> GS (repr (Value repr))
+jOpenFileR = on2StateValues (\n t -> mkVal t $ new <+> text "Scanner" <> parens 
+  (new <+> text "File" <> parens (valueDoc n)))
 
-jOpenFileWorA :: (RenderSym repr) => GS (repr (Value repr)) -> repr (Type repr) 
-  -> GS (repr (Value repr)) -> GS (repr (Value repr))
-jOpenFileWorA v t wa = on2StateValues (\n wa -> mkVal t $ new <+> text 
+jOpenFileWorA :: (RenderSym repr) => GS (repr (Value repr)) -> 
+  GS (repr (Type repr)) -> GS (repr (Value repr)) -> GS (repr (Value repr))
+jOpenFileWorA = on3StateValues (\n t wa -> mkVal t $ new <+> text 
   "PrintWriter" <> parens (new <+> text "FileWriter" <> parens (new <+> text 
-  "File" <> parens (valueDoc n) <> comma <+> valueDoc wa))) v
+  "File" <> parens (valueDoc n) <> comma <+> valueDoc wa)))
 
 jStringSplit :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) 
   -> Doc
@@ -745,7 +747,7 @@ jAssignFromArray c (v:vs) = (v &= cast (variableType v)
   (valueOf (var ("outputs[" ++ show c ++ "]") (variableType v))))
   : jAssignFromArray (c+1) vs
 
-jInOutCall :: (Label -> JavaCode (Type JavaCode) -> 
+jInOutCall :: (Label -> GS (JavaCode (Type JavaCode)) -> 
   [GS (JavaCode (Value JavaCode))] -> GS (JavaCode (Value JavaCode))) -> Label 
   -> [GS (JavaCode (Value JavaCode))] -> [GS (JavaCode (Variable JavaCode))] -> 
   [GS (JavaCode (Variable JavaCode))] -> GS (JavaCode (Statement JavaCode))
@@ -761,7 +763,7 @@ jInOutCall f n ins outs both = fCall rets
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs
 
 jInOut :: (JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
-    JavaCode (Type JavaCode) -> [MS (JavaCode (Parameter JavaCode))] -> 
+    GS (JavaCode (Type JavaCode)) -> [MS (JavaCode (Parameter JavaCode))] -> 
     GS (JavaCode (Body JavaCode)) -> MS (JavaCode (Method JavaCode))) 
   -> JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
   [GS (JavaCode (Variable JavaCode))] -> [GS (JavaCode (Variable JavaCode))] -> 

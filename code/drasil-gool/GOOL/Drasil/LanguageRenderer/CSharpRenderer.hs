@@ -514,7 +514,7 @@ instance InternalScope CSharpCode where
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
   mType t = t
-  construct = toCode . G.construct
+  construct = G.construct
 
 instance ParameterSym CSharpCode where
   type Parameter CSharpCode = ParamData
@@ -554,8 +554,8 @@ instance MethodSym CSharpCode where
 
 instance InternalMethod CSharpCode where
   intMethod m n _ s p t ps b = modify (if m then setCurrMain else id) >> 
-    on1StateValue1List (\bd pms -> methodFromData Pub $ methodDocD n s p t pms 
-    bd) (zoom lensMStoGS b) ps
+    on3StateValues (\tp pms bd -> methodFromData Pub $ methodDocD n s p t pms 
+    bd) (zoom lensMStoGS t) ps (zoom lensMStoGS b)
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
@@ -618,18 +618,19 @@ cstop end inc = vcat [
   inc <+> text "System.IO" <> end,
   inc <+> text "System.Collections.Generic" <> end]
 
-csInfileType :: (RenderSym repr) => repr (Type repr)
-csInfileType = typeFromData File "StreamReader" (text "StreamReader")
+csInfileType :: (RenderSym repr) => GS (repr (Type repr))
+csInfileType = toState $ typeFromData File "StreamReader" (text "StreamReader")
 
-csOutfileType :: (RenderSym repr) => repr (Type repr)
-csOutfileType = typeFromData File "StreamWriter" (text "StreamWriter")
+csOutfileType :: (RenderSym repr) => GS (repr (Type repr))
+csOutfileType = toState $ typeFromData File "StreamWriter" (text "StreamWriter")
 
-csCast :: CSharpCode (Type CSharpCode) -> GS (CSharpCode (Value CSharpCode)) -> 
-  GS (CSharpCode (Value CSharpCode))
-csCast t v = csCast' (getType t) (getType $ valueType (evalState v initialState)) -- temporary evalState
-  where csCast' Float String = funcApp "Double.Parse" float [v]
-        csCast' _ _ = onStateValue (mkVal t . castObjDocD (castDocD (getTypeDoc 
-          t)) . valueDoc) v
+csCast :: GS (CSharpCode (Type CSharpCode)) -> 
+  GS (CSharpCode (Value CSharpCode)) -> GS (CSharpCode (Value CSharpCode))
+csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $ 
+  valueType vl) tp vl) t v
+  where csCast' Float String _ _ = funcApp "Double.Parse" float [v]
+        csCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
+          tp)) (valueDoc vl))
 
 csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
@@ -652,9 +653,9 @@ csFileInput :: (RenderSym repr) => GS (repr (Value repr)) ->
 csFileInput = onStateValue (\f -> mkVal (valueType f) (valueDoc f <> dot <> 
   text "ReadLine()"))
 
-csInput :: (RenderSym repr) => repr (Type repr) -> GS (repr (Value repr)) -> 
-  GS (repr (Value repr))
-csInput t = onStateValue (\inFn -> mkVal t $ text (csInput' (getType t)) <> 
+csInput :: (RenderSym repr) => GS (repr (Type repr)) -> GS (repr (Value repr)) 
+  -> GS (repr (Value repr))
+csInput = on2StateValues (\t inFn -> mkVal t $ text (csInput' (getType t)) <> 
   parens (valueDoc inFn))
   where csInput' Integer = "Int32.Parse"
         csInput' Float = "Double.Parse"
@@ -663,15 +664,15 @@ csInput t = onStateValue (\inFn -> mkVal t $ text (csInput' (getType t)) <>
         csInput' Char = "Char.Parse"
         csInput' _ = error "Attempt to read value of unreadable type"
 
-csOpenFileR :: (RenderSym repr) => GS (repr (Value repr)) -> repr (Type repr) 
-  -> GS (repr (Value repr))
-csOpenFileR v r = onStateValue (\n -> mkVal r $ new <+> getTypeDoc r <> parens 
-  (valueDoc n)) v
+csOpenFileR :: (RenderSym repr) => GS (repr (Value repr)) -> 
+  GS (repr (Type repr)) -> GS (repr (Value repr))
+csOpenFileR = on2StateValues (\n r -> mkVal r $ new <+> getTypeDoc r <> parens 
+  (valueDoc n))
 
-csOpenFileWorA :: (RenderSym repr) => GS (repr (Value repr)) -> repr (Type repr)
-  -> GS (repr (Value repr)) -> GS (repr (Value repr))
-csOpenFileWorA v w = on2StateValues (\n a -> mkVal w $ new <+> getTypeDoc w <> 
-  parens (valueDoc n <> comma <+> valueDoc a)) v
+csOpenFileWorA :: (RenderSym repr) => GS (repr (Value repr)) -> 
+  GS (repr (Type repr)) -> GS (repr (Value repr)) -> GS (repr (Value repr))
+csOpenFileWorA = on3StateValues (\n w a -> mkVal w $ new <+> getTypeDoc w <> 
+  parens (valueDoc n <> comma <+> valueDoc a))
 
 csRef :: Doc -> Doc
 csRef p = text "ref" <+> p
@@ -679,7 +680,7 @@ csRef p = text "ref" <+> p
 csOut :: Doc -> Doc
 csOut p = text "out" <+> p
 
-csInOutCall :: (Label -> CSharpCode (Type CSharpCode) -> 
+csInOutCall :: (Label -> GS (CSharpCode (Type CSharpCode)) -> 
   [GS (CSharpCode (Value CSharpCode))] -> GS (CSharpCode (Value CSharpCode)))
   -> Label -> [GS (CSharpCode (Value CSharpCode))] -> 
   [GS (CSharpCode (Variable CSharpCode))] -> 
@@ -707,7 +708,8 @@ csObjVar o v = csObjVar' (variableBind v)
           (variableType v) (objVarDocD (variableDoc o) (variableDoc v))
 
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
-    -> CSharpCode (Type CSharpCode) -> [MS (CSharpCode (Parameter CSharpCode))] 
+    -> GS (CSharpCode (Type CSharpCode)) -> 
+    [MS (CSharpCode (Parameter CSharpCode))] 
     -> GS (CSharpCode (Body CSharpCode)) -> MS (CSharpCode (Method CSharpCode)))
   -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
   [GS (CSharpCode (Variable CSharpCode))] -> 

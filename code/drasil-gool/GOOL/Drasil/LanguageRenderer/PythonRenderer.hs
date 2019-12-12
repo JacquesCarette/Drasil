@@ -158,19 +158,20 @@ instance InternalBlock PythonCode where
 
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData
-  bool = typeFromData Boolean "" empty
+  bool = toState $ typeFromData Boolean "" empty
   int = G.int
   float = G.float
-  char = typeFromData Char "" empty
+  char = toState $ typeFromData Char "" empty
   string = pyStringType
-  infile = typeFromData File "" empty
-  outfile = typeFromData File "" empty
-  listType _ t = typeFromData (List (getType t)) "[]" (brackets empty)
+  infile = toState $ typeFromData File "" empty
+  outfile = toState $ typeFromData File "" empty
+  listType _ = onStateValue (\t -> typeFromData (List (getType t)) "[]" 
+    (brackets empty))
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
   iterator t = t
-  void = typeFromData Void "NoneType" (text "NoneType")
+  void = toState $ typeFromData Void "NoneType" (text "NoneType")
 
   getType = cType . unPC
   getTypeString = typeString . unPC
@@ -334,7 +335,7 @@ instance InternalValue PythonCode where
   printFileFunc _ = mkStateVal void empty
   printFileLnFunc _ = mkStateVal void empty
   
-  cast t = onStateValue (mkVal t . castObjDocD (getTypeDoc t) . valueDoc)
+  cast = on2StateValues (\t -> mkVal t . castObjDocD (getTypeDoc t) . valueDoc)
 
   valuePrec = valPrec . unPC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
@@ -521,7 +522,7 @@ instance InternalScope PythonCode where
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
   mType t = t
-  construct = toCode . G.construct
+  construct = G.construct
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
@@ -657,8 +658,8 @@ pyInlineIf = on3StateValues (\c v1 v2 -> valFromData (valuePrec c)
 pyListSize :: Doc -> Doc -> Doc
 pyListSize v f = f <> parens v
 
-pyStringType :: (RenderSym repr) => repr (Type repr)
-pyStringType = typeFromData String "str" (text "str")
+pyStringType :: (RenderSym repr) => GS (repr (Type repr))
+pyStringType = toState $ typeFromData String "str" (text "str")
 
 pyListDec :: (RenderSym repr) => repr (Variable repr) -> Doc
 pyListDec v = variableDoc v <+> equals <+> getTypeDoc (variableType v)
@@ -756,7 +757,7 @@ pyClass n pn s vs fs = vcat [
                 | isEmpty fs = vs
                 | otherwise = vcat [vs, blank, fs]
 
-pyInOutCall :: (Label -> PythonCode (Type PythonCode) -> 
+pyInOutCall :: (Label -> GS (PythonCode (Type PythonCode)) -> 
   [GS (PythonCode (Value PythonCode))] -> GS (PythonCode (Value PythonCode))) 
   -> Label -> [GS (PythonCode (Value PythonCode))] -> 
   [GS (PythonCode (Variable PythonCode))] -> 
@@ -777,7 +778,8 @@ pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid .
   text) lns
 
 pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) 
-    -> PythonCode (Type PythonCode) -> [MS (PythonCode (Parameter PythonCode))] 
+    -> GS (PythonCode (Type PythonCode)) -> 
+    [MS (PythonCode (Parameter PythonCode))] 
     -> GS (PythonCode (Body PythonCode)) -> MS (PythonCode (Method PythonCode)))
   -> PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) -> 
   [GS (PythonCode (Variable PythonCode))] -> 

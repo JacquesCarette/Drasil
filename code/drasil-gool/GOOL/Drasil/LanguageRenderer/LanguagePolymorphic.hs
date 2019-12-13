@@ -84,6 +84,7 @@ import Data.Bifunctor (first)
 import Data.Map as Map (lookup, fromList)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative ((<|>))
+import Control.Monad (join)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
@@ -308,8 +309,7 @@ indexOf f l v = S.objAccess l (S.func f S.int [v])
 
 func :: (RenderSym repr) => Label -> GS (repr (Type repr)) -> 
   [GS (repr (Value repr))] -> GS (repr (Function repr))
-func l t vs = on2StateValues (\tp -> funcFromData tp . funcDocD . valueDoc) t
-  (S.funcApp l t vs)
+func l t vs = S.funcApp l t vs >>= (funcFromData t . funcDocD . valueDoc)
 
 get :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Variable repr)) 
   -> GS (repr (Value repr))
@@ -379,8 +379,7 @@ iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++
 
 listAccessFunc :: (RenderSym repr) => GS (repr (Type repr)) ->
   GS (repr (Value repr)) -> GS (repr (Function repr))
-listAccessFunc t v = on2StateValues (\tp -> funcFromData tp . 
-  listAccessFuncDocD) t (intValue v)
+listAccessFunc t v = intValue v >>= (funcFromData t . listAccessFuncDocD)
 
 listAccessFunc' :: (RenderSym repr) => Label -> GS (repr (Type repr)) -> 
   GS (repr (Value repr)) -> GS (repr (Function repr))
@@ -389,8 +388,9 @@ listAccessFunc' f t i = S.func f t [intValue i]
 listSetFunc :: (RenderSym repr) => (Doc -> Doc -> Doc) -> 
   GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
   GS (repr (Function repr))
-listSetFunc f vl idx = on3StateValues (\v i toVal -> funcFromData (valueType v) 
-  (f (valueDoc i) (valueDoc toVal))) vl (intValue idx) 
+listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData 
+  (onStateValue valueType v) (f (valueDoc i) (valueDoc toVal))) (intValue idx) 
+  setVal
 
 printSt :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))
   -> GS (repr (Statement repr))

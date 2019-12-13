@@ -30,7 +30,7 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
   greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
   minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, 
-  mkStateVal, mkStateVal, mkVal, mkVar, classVarDocD, 
+  mkStateVal, mkStateVal, mkVal, mkStateVar, classVarDocD, 
   newObjDocD', 
   listSetFuncDocD, castObjDocD, 
   dynamicDocD, bindingError, classDec, dot, forLabel, inLabel, observerListName,
@@ -56,14 +56,17 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  onCodeList, onStateList, on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, setCurrMain)
+  on5StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
+  on1StateValue1List)
+import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, initialState, 
+  setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
-import Control.Monad.State (modify)
+import Control.Monad (join)
+import Control.Monad.State (modify, evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty)
 
@@ -282,10 +285,10 @@ instance NumericExpression PythonCode where
   (#+) = binExpr plusOp
   (#-) = binExpr minusOp
   (#*) = binExpr multOp
-  (#/) = on2StateValues (\v1 v2 -> pyDivision (getType $ valueType v1) (getType 
-    $ valueType v2) v1 v2)
-    where pyDivision Integer Integer = binExprNoState (toCode $ multPrec "//")
-          pyDivision _ _ = binExprNoState divideOp
+  (#/) v1' v2' = join $ on2StateValues (\v1 v2 -> pyDivision (getType $ 
+    valueType v1) (getType $ valueType v2) v1' v2') v1' v2'
+    where pyDivision Integer Integer = binExpr (toCode $ multPrec "//")
+          pyDivision _ _ = binExpr divideOp
   (#%) = binExpr moduloOp
   (#^) = binExpr powerOp
 
@@ -322,8 +325,8 @@ instance ValueExpression PythonCode where
   selfFuncApp c = G.selfFuncApp (self c)
   extFuncApp = G.extFuncApp
   newObj = G.newObj newObjDocD'
-  extNewObj l t = onStateList (mkVal t . pyExtStateObj l (getTypeDoc t) . 
-    valueList)
+  extNewObj l = on1StateValue1List (\t -> mkVal t . pyExtStateObj l (getTypeDoc 
+    t) . valueList)
 
   exists v = v ?!= valueOf (var "None" void)
   notNull = exists
@@ -361,8 +364,8 @@ instance FunctionSym PythonCode where
   get = G.get
   set = G.set
 
-  listSize = onStateValue (\v -> mkVal (functionType listSizeFunc) 
-    (pyListSize (valueDoc v) (functionDoc (listSizeFunc :: PythonCode (Function PythonCode))))) 
+  listSize = on2StateValues (\f v -> mkVal (functionType f) 
+    (pyListSize (valueDoc v) (functionDoc f))) listSizeFunc
   listAdd = G.listAdd
   listAppend = G.listAppend
 
@@ -378,7 +381,7 @@ instance InternalFunction PythonCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
-  listSizeFunc = toState $ funcFromData int (text "len")
+  listSizeFunc = funcFromData int (text "len")
   listAddFunc _ = G.listAddFunc "insert"
   listAppendFunc = G.listAppendFunc "append"
 
@@ -391,7 +394,7 @@ instance InternalFunction PythonCode where
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unPC
 
-  funcFromData t d = on2CodeValues fd t (toCode d)
+  funcFromData t d = onStateValue (onCodeValue (`fd` d)) t
 
 instance InternalStatement PythonCode where
   printSt nl p v f = on3StateValues (\p' v' f' -> mkStNoEnd $ pyPrint nl p' v' 
@@ -411,7 +414,7 @@ instance StatementSym PythonCode where
   type Statement PythonCode = (Doc, Terminator)
   assign = G.assign Empty
   assignToListIndex = G.assignToListIndex
-  multiAssign vrs = onStateList (mkStNoEnd . multiAssignDoc vrs)
+  multiAssign = on2StateLists (\vrs vls -> mkStNoEnd (multiAssignDoc vrs vls))
   (&=) = assign
   (&-=) = G.decrement
   (&+=) = G.increment'
@@ -421,12 +424,14 @@ instance StatementSym PythonCode where
   varDec _ = toState $ mkStNoEnd empty
   varDecDef = assign
   listDec _ = onStateValue (mkStNoEnd . pyListDec)
-  listDecDef = on1StateList1Value (\v vs -> mkStNoEnd $ pyListDecDef v vs)
+  listDecDef = on1StateValue1List (\v vs -> mkStNoEnd $ pyListDecDef v vs)
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew lib v vs = varDecDef v (extNewObj lib (variableType v) vs)
+  extObjDecNew lib v vs = varDecDef v (extNewObj lib (onStateValue variableType 
+    v) vs)
   objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams lib v = varDecDef v (extNewObj lib (variableType v) [])
+  extObjDecNewNoParams lib v = varDecDef v (extNewObj lib (onStateValue 
+    variableType v) [])
   constDecDef = varDecDef
 
   print v = pyOut False printFunc v Nothing
@@ -462,7 +467,7 @@ instance StatementSym PythonCode where
 
   returnState = G.returnState Empty
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn = onStateList (mkStNoEnd . returnDocD)
+  multiReturn vs = onStateList (mkStNoEnd . returnDocD) vs
 
   valState = G.valState Empty
 
@@ -494,9 +499,11 @@ instance ControlStatementSym PythonCode where
 
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"
-  forRange = on5StateValues (mkStNoEnd . pyForRange iterInLabel)
-  forEach = on3StateValues (mkStNoEnd . pyForEach iterForEachLabel iterInLabel)
-  while = on2StateValues (mkStNoEnd . pyWhile)
+  forRange = on5StateValues (\i initv finalv stepv b -> mkStNoEnd (pyForRange 
+    iterInLabel i initv finalv stepv b))
+  forEach = on3StateValues (\i v b -> mkStNoEnd (pyForEach iterForEachLabel 
+    iterInLabel i v b))
+  while = on2StateValues (\v b -> mkStNoEnd (pyWhile v b))
 
   tryCatch = G.tryCatch pyTryCatch
 
@@ -563,8 +570,8 @@ instance MethodSym PythonCode where
 
 instance InternalMethod PythonCode where
   intMethod m n l _ _ _ ps b = modify (if m then setCurrMain else id) >> 
-    on1StateValue1List (\bd pms -> methodFromData Pub $ pyMethod n (self l) pms 
-    bd) (zoom lensMStoGS b) ps
+    on3StateValues (\sl pms bd -> methodFromData Pub $ pyMethod n sl pms bd) 
+    (zoom lensMStoGS $ self l) (sequence ps) (zoom lensMStoGS b) 
   intFunc m n _ _ _ ps b = modify (if m then setCurrMain else id) >>
     on1StateValue1List (\bd pms -> methodFromData Pub $ pyFunction n pms bd) 
     (zoom lensMStoGS b) ps
@@ -677,14 +684,14 @@ pyPrint newLn prf v f = valueDoc prf <> parens (valueDoc v <> nl <> fl)
 pyOut :: (RenderSym repr) => Bool -> GS (repr (Value repr)) -> 
   GS (repr (Value repr)) -> Maybe (GS (repr (Value repr))) -> 
   GS (repr (Statement repr))
-pyOut newLn printFn v f = pyOut' (getType $ valueType (evalState v initialState)) -- temporary evalState
+pyOut newLn printFn v f = v >>= pyOut' . getType . valueType
   where pyOut' (List _) = printSt newLn printFn v f
         pyOut' _ = outDoc newLn printFn v f
 
 pyInput :: GS (PythonCode (Value PythonCode)) ->
   GS (PythonCode (Variable PythonCode)) -> 
   GS (PythonCode (Statement PythonCode))
-pyInput inSrc v = v &= pyInput' (getType $ variableType v)
+pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
   where pyInput' Integer = funcApp "int" int [inSrc]
         pyInput' Float = funcApp "float" float [inSrc]
         pyInput' Boolean = inSrc ?!= litString "0"
@@ -802,4 +809,5 @@ pyDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr)
   MS (repr (Method repr))
 pyDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
   (map fst $ bRets ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)
-  where bRets = filter (not . isObject . getType . variableType . snd) bs
+  where bRets = filter (not . isObject . getType . variableType . 
+          (`evalState` initialState) . snd) bs

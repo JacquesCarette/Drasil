@@ -392,7 +392,7 @@ instance InternalFunction JavaCode where
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unJC
 
-  funcFromData t d = on2CodeValues fd t (toCode d)
+  funcFromData t d = onStateValue (onCodeValue (`fd` d)) t
 
 instance InternalStatement JavaCode where
   printSt _ p v _ = G.printSt p v

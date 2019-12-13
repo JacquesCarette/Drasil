@@ -425,7 +425,7 @@ class InternalFunction repr where
   functionType :: repr (Function repr) -> repr (Type repr)
   functionDoc :: repr (Function repr) -> Doc
 
-  funcFromData :: repr (Type repr) -> Doc -> repr (Function repr)
+  funcFromData :: GS (repr (Type repr)) -> Doc -> GS (repr (Function repr))
 
 class InternalStatement repr where
   -- newLn, printFunc, value to print, maybe a file to print to 

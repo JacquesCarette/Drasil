@@ -379,7 +379,7 @@ instance InternalFunction CSharpCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
-  listSizeFunc = toState $ funcFromData int (funcDocD (text "Count"))
+  listSizeFunc = funcFromData int (funcDocD (text "Count"))
   listAddFunc _ = G.listAddFunc "Insert"
   listAppendFunc = G.listAppendFunc "Add"
 
@@ -392,7 +392,7 @@ instance InternalFunction CSharpCode where
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unCSC
 
-  funcFromData t d = on2CodeValues fd t (toCode d)
+  funcFromData t d = onStateValue (onCodeValue (`fd` d)) t
 
 instance InternalStatement CSharpCode where
   printSt _ p v _ = G.printSt p v

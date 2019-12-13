@@ -469,16 +469,12 @@ binOpDocD op v1 v2 = v1 <+> op <+> v2
 
 binOpDocD' :: Doc -> Doc -> Doc -> Doc
 binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
-  
+
 binExpr :: (RenderSym repr) => repr (BinaryOp repr) -> GS (repr (Value repr)) 
   -> GS (repr (Value repr)) -> GS (repr (Value repr))
-binExpr b = on2StateValues (binExprNoState b)
-
-binExprNoState :: (RenderSym repr) => repr (BinaryOp repr) -> repr (Value repr)
-  -> repr (Value repr) -> repr (Value repr)
-binExprNoState b v1 v2 = mkExpr (bOpPrec b) (numType (valueType v1) (valueType 
-  v2)) (binOpDocD (bOpDoc b) (exprParensL b v1 $ valueDoc v1) (exprParensR b v2 
-  $ valueDoc v2))
+binExpr b = on2StateValues (\v1 v2 -> mkExpr (bOpPrec b) (numType (valueType v1)
+  (valueType v2)) (binOpDocD (bOpDoc b) (exprParensL b v1 $ valueDoc v1) 
+  (exprParensR b v2 $ valueDoc v2)))
 
 binExpr' :: (RenderSym repr) => repr (BinaryOp repr) -> GS (repr (Value repr))
   -> GS (repr (Value repr)) -> GS (repr (Value repr))
@@ -712,9 +708,10 @@ intValue i = i >>= intValue' . getType . valueType
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
 
-filterOutObjs :: (VariableSym repr) => [repr (Variable repr)] -> 
-  [repr (Variable repr)]
-filterOutObjs = filter (not . isObject . getType . variableType)
+filterOutObjs :: (VariableSym repr) => [GS (repr (Variable repr))] -> 
+  [GS (repr (Variable repr))]
+filterOutObjs = filter (not . isObject . getType . variableType . 
+  (`evalState` initialState))
 
 doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String
 doxCommand = "\\"

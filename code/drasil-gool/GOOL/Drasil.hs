@@ -8,8 +8,9 @@ module GOOL.Drasil (Label, ProgramSym(..), RenderSym(..), PermanenceSym(..),
   BlockCommentSym(..), 
   ScopeTag(..), ProgData(..), FileData(..), ModData(..),
   CodeType(..),
-  GOOLState(..), GS, FS, MS, headers, sources, mainMod, initialState,
-  convType, onCodeList,
+  GOOLState(..), GS, FS, MS, lensMStoGS, headers, sources, mainMod, 
+  initialState,
+  convType, onStateValue, onCodeList,
   unPC, unJC, unCSC, unCPPC
 ) where
 
@@ -25,10 +26,10 @@ import GOOL.Drasil.Data (ScopeTag(..), FileData(..), ModData(..), ProgData(..))
 
 import GOOL.Drasil.CodeType (CodeType(..))
 
-import GOOL.Drasil.State (GOOLState(..), GS, FS, MS, headers, sources, 
-  mainMod, initialState)
+import GOOL.Drasil.State (GOOLState(..), GS, FS, MS, lensMStoGS, headers, 
+  sources, mainMod, initialState)
 
-import GOOL.Drasil.Helpers (convType, onCodeList)
+import GOOL.Drasil.Helpers (convType, onStateValue, onCodeList)
 
 import GOOL.Drasil.LanguageRenderer.JavaRenderer (unJC)
 import GOOL.Drasil.LanguageRenderer.PythonRenderer (unPC)

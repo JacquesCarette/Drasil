@@ -64,8 +64,8 @@ getOutputCall = do
   return $ fmap valState val
 
 getFuncCall :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => String 
-  -> repr (Type repr) -> Reader DrasilState [c] -> 
-  Reader DrasilState (Maybe (repr (Value repr)))
+  -> GS (repr (Type repr)) -> Reader DrasilState [c] -> 
+  Reader DrasilState (Maybe (GS (repr (Value repr))))
 getFuncCall n t funcPs = do
   mm <- getCall n
   let getFuncCall' Nothing = return Nothing

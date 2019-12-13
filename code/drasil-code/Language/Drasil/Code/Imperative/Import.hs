@@ -33,7 +33,7 @@ import GOOL.Drasil (Label, RenderSym(..), PermanenceSym(..), BodySym(..),
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  convType, GS, FS, MS) 
+  convType, GS, FS, MS, onStateValue) 
 import qualified GOOL.Drasil as C (CodeType(List))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -45,8 +45,8 @@ import Control.Monad (liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
-value :: (RenderSym repr) => UID -> String -> repr (Type repr) -> 
-  Reader DrasilState (repr (Value repr))
+value :: (RenderSym repr) => UID -> String -> GS (repr (Type repr)) -> 
+  Reader DrasilState (GS (repr (Value repr)))
 value u s t = do
   g <- ask
   let cs = codeSpec g
@@ -58,8 +58,8 @@ value u s t = do
     (convExpr . codeEquat) (Map.lookup u mm >>= maybeInline (conStruct g))) 
     (return . conceptToGOOL) (Map.lookup u cm)
 
-variable :: (RenderSym repr) => String -> repr (Type repr) -> 
-  Reader DrasilState (repr (Variable repr))
+variable :: (RenderSym repr) => String -> GS (repr (Type repr)) -> 
+  Reader DrasilState (GS (repr (Variable repr)))
 variable s t = do
   g <- ask
   let cs = csi $ codeSpec g
@@ -72,7 +72,7 @@ variable s t = do
       else return $ var s t
   
 inputVariable :: (RenderSym repr) => Structure -> ConstantRepr -> 
-  repr (Variable repr) -> Reader DrasilState (repr (Variable repr))
+  GS (repr (Variable repr)) -> Reader DrasilState (GS (repr (Variable repr)))
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
   g <- ask
@@ -85,7 +85,7 @@ inputVariable Bundled Const v = do
   classVariable ip v
 
 constVariable :: (RenderSym repr) => ConstantStructure -> ConstantRepr -> 
-  repr (Variable repr) -> Reader DrasilState (repr (Variable repr))
+  GS (repr (Variable repr)) -> Reader DrasilState (GS (repr (Variable repr)))
 constVariable (Store Bundled) Var v = do
   cs <- mkVar (codevar consts)
   return $ cs $-> v
@@ -97,30 +97,30 @@ constVariable WithInputs cr v = do
   inputVariable (inStruct g) cr v
 constVariable _ _ v = return v
 
-classVariable :: (RenderSym repr) => repr (Variable repr) -> 
-  repr (Variable repr) -> Reader DrasilState (repr (Variable repr))
+classVariable :: (RenderSym repr) => GS (repr (Variable repr)) -> 
+  GS (repr (Variable repr)) -> Reader DrasilState (GS (repr (Variable repr)))
 classVariable c v = do
   g <- ask
-  let n = variableName v
-      checkCurrent m = if currentModule g == m then classVar else extClassVar
-  return $ maybe (error $ "Variable " ++ n ++ " missing from export map") 
-    checkCurrent (Map.lookup n (eMap $ codeSpec g)) (variableType c) v
+  let checkCurrent m = if currentModule g == m then classVar else extClassVar
+  return $ v >>= (\v' -> maybe (error $ "Variable " ++ variableName v' ++ 
+    " missing from export map") checkCurrent (Map.lookup (variableName v') 
+    (eMap $ codeSpec g)) (onStateValue variableType c) v)
 
 mkVal :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => c -> 
-  Reader DrasilState (repr (Value repr))
+  Reader DrasilState (GS (repr (Value repr)))
 mkVal v = value (v ^. uid) (codeName v) (convType $ codeType v)
 
 mkVar :: (RenderSym repr, HasCodeType c, CodeIdea c) => c -> 
-  Reader DrasilState (repr (Variable repr))
+  Reader DrasilState (GS (repr (Variable repr)))
 mkVar v = variable (codeName v) (convType $ codeType v)
 
 publicFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  Label -> repr (Type repr) -> String -> [c] -> Maybe String -> 
+  Label -> GS (repr (Type repr)) -> String -> [c] -> Maybe String -> 
   [GS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
 publicFunc n t = genMethod (function n public static_ t) n
 
 privateMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  Label -> Label -> repr (Type repr) -> String -> [c] -> Maybe String -> 
+  Label -> Label -> GS (repr (Type repr)) -> String -> [c] -> Maybe String -> 
   [GS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
 privateMethod c n t = genMethod (method n c private dynamic_ t) n
 
@@ -155,12 +155,13 @@ genMethod f n desc p r b = do
     then docFunc desc pComms r fn else fn
 
 genInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) => 
-  (repr (Scope repr) -> repr (Permanence repr) -> [repr (Variable repr)] -> 
-    [repr (Variable repr)] -> [repr (Variable repr)] -> GS (repr (Body repr)) 
-    -> MS (repr (Method repr))) -> 
+  (repr (Scope repr) -> repr (Permanence repr) -> [GS (repr (Variable repr))] 
+    -> [GS (repr (Variable repr))] -> [GS (repr (Variable repr))] -> 
+    GS (repr (Body repr)) -> MS (repr (Method repr))) -> 
   (repr (Scope repr) -> repr (Permanence repr) -> String -> 
-    [(String, repr (Variable repr))] -> [(String, repr (Variable repr))] -> 
-    [(String, repr (Variable repr))] -> GS (repr (Body repr)) -> 
+    [(String, GS (repr (Variable repr)))] -> 
+    [(String, GS (repr (Variable repr)))] -> 
+    [(String, GS (repr (Variable repr)))] -> GS (repr (Body repr)) -> 
     MS (repr (Method repr))) -> 
   repr (Scope repr) -> repr (Permanence repr) -> Label -> String -> [c] -> 
   [c] -> [GS (repr (Block repr))] -> 
@@ -181,7 +182,7 @@ genInOutFunc f docf s pr n desc ins' outs' b = do
     then docf s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
     bComms bothVs) bod else f s pr inVs outVs bothVs bod
 
-convExpr :: (RenderSym repr) => Expr -> Reader DrasilState (repr (Value repr))
+convExpr :: (RenderSym repr) => Expr -> Reader DrasilState (GS (repr (Value repr)))
 convExpr (Dbl d) = return $ litFloat d
 convExpr (Int i) = return $ litInt i
 convExpr (Str s) = return $ litString s
@@ -238,7 +239,7 @@ renderRealInt s (UpTo (Exc,a))    = sy s $< a
 renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
 renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
-unop :: (RenderSym repr) => UFunc -> (repr (Value repr) -> repr (Value repr))
+unop :: (RenderSym repr) => UFunc -> (GS (repr (Value repr)) -> GS (repr (Value repr)))
 unop Sqrt = (#/^)
 unop Log  = log
 unop Ln   = ln
@@ -258,8 +259,8 @@ unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
 
-bfunc :: (RenderSym repr) => BinOp -> (repr (Value repr) -> repr
-  (Value repr) -> repr (Value repr))
+bfunc :: (RenderSym repr) => BinOp -> (GS (repr (Value repr)) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr)))
 bfunc Eq    = (?==)
 bfunc NEq   = (?!=)
 bfunc Gt    = (?>)
@@ -457,9 +458,9 @@ readData ddef = do
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_i :: Label
         var_line, var_lines, var_linetokens, var_infile, var_i :: 
-          (RenderSym repr) => repr (Variable repr)
+          (RenderSym repr) => GS (repr (Variable repr))
         v_line, v_lines, v_linetokens, v_infile, v_i ::
-          (RenderSym repr) => repr (Value repr)
+          (RenderSym repr) => GS (repr (Value repr))
         l_line = "line"
         var_line = var l_line string
         v_line = valueOf var_line
@@ -477,7 +478,7 @@ readData ddef = do
         v_i = valueOf var_i
 
 getEntryVars :: (RenderSym repr) => Maybe String -> LinePattern -> 
-  Reader DrasilState [repr (Variable repr)]
+  Reader DrasilState [GS (repr (Variable repr))]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> variable (codeName v ++ st) 
   (listInnerType $ convType $ codeType v)) s) (getPatternInputs lp)
 

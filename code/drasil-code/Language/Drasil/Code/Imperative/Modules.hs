@@ -164,7 +164,8 @@ genInputModCombined = do
   liftS $ genMod ic
 
 constVarFunc :: (RenderSym repr) => ConstantRepr -> String ->
-  (repr (Variable repr) -> repr (Value repr) -> GS (repr (StateVar repr)))
+  (GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
+  GS (repr (StateVar repr)))
 constVarFunc Var n = stateVarDef n public dynamic_
 constVarFunc Const n = constVar n public
 

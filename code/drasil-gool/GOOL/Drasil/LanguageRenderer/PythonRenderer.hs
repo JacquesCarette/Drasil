@@ -92,7 +92,6 @@ instance ProgramSym PythonCode where
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = FileData
-  -- temporary evalState until I add more state
   fileDoc = G.fileDoc Combined pyExt top bottom
 
   docMod = G.docMod

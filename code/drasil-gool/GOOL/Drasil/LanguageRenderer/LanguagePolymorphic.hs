@@ -255,11 +255,11 @@ enumElement en e = mkStateVal (enumType en) (enumElemDocD en e)
 argsList :: (RenderSym repr) => String -> GS (repr (Value repr))
 argsList l = mkStateVal (listType static_ S.string) (text l)
 
-inlineIf :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> 
-  repr (Value repr) -> repr (Value repr)
-inlineIf c v1 v2 = valFromData prec (valueType v1) (valueDoc c <+> text "?" <+> 
-  valueDoc v1 <+> text ":" <+> valueDoc v2)
-  where prec = valuePrec c <|> Just 0
+inlineIf :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))
+  -> GS (repr (Value repr)) -> GS (repr (Value repr))
+inlineIf = on3StateValues (\c v1 v2 -> valFromData (prec c) (valueType v1) 
+  (valueDoc c <+> text "?" <+> valueDoc v1 <+> text ":" <+> valueDoc v2)) 
+  where prec cd = valuePrec cd <|> Just 0
 
 funcApp :: (RenderSym repr) => Label -> GS (repr (Type repr)) -> 
   [GS (repr (Value repr))] -> GS (repr (Value repr))

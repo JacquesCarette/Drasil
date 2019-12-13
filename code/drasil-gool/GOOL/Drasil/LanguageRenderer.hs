@@ -186,7 +186,7 @@ printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 outDoc :: (RenderSym repr) => Bool -> GS (repr (Value repr)) -> 
   GS (repr (Value repr)) -> Maybe (GS (repr (Value repr))) -> 
   GS (repr (Statement repr))
-outDoc newLn printFn v f = outDoc' (getType $ valueType (evalState v initialState)) -- temporary evalState
+outDoc newLn printFn v f = v >>= outDoc' . getType . valueType
   where outDoc' (List t) = printListDoc (getNestDegree 1 t) v prFn prStrFn 
           prLnFn
         outDoc' (Object n) = printObjDoc n prLnFn

@@ -64,13 +64,14 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
   updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
-  onStateList, on1CodeValue1List, on1StateValue1List)
+  onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, addLangImport, 
   setCurrMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
+import Control.Monad (join)
 import Control.Monad.State (modify)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   semi, vcat, lbrace, rbrace, colon)
@@ -333,9 +334,10 @@ instance InternalValue CSharpCode where
   inputFunc = mkStateVal string (text "Console.ReadLine()")
   printFunc = mkStateVal void (text "Console.Write")
   printLnFunc = mkStateVal void (text "Console.WriteLine")
-  printFileFunc = onStateValue (mkVal void . printFileDocD "Write" . valueDoc)
-  printFileLnFunc = onStateValue (mkVal void . printFileDocD "WriteLine" . 
-    valueDoc)
+  printFileFunc = on2StateValues (\v -> mkVal v . printFileDocD "Write" . 
+    valueDoc) void
+  printFileLnFunc = on2StateValues (\v -> mkVal v . printFileDocD "WriteLine" . 
+    valueDoc) void
   
   cast = csCast
   
@@ -417,9 +419,10 @@ instance StatementSym CSharpCode where
   (&++) = G.increment1
   (&~-) = G.decrement1
 
-  varDec v = csVarDec (variableBind v) $ G.varDec static_ dynamic_ v
+  varDec v = v >>= (\v' -> csVarDec (variableBind v') $ G.varDec static_ 
+    dynamic_ v)
   varDecDef = G.varDecDef
-  listDec n v = G.listDec (listDecDocD v) (litInt n) v
+  listDec n v = v >>= (\v' -> G.listDec (listDecDocD v') (litInt n) v)
   listDecDef = G.listDecDef' listDecDefDocD
   objDecDef = varDecDef
   objDecNew = G.objDecNew
@@ -438,9 +441,9 @@ instance StatementSym CSharpCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = v &= csInput (variableType v) inputFunc
+  getInput v = v &= csInput (onStateValue variableType v) inputFunc
   discardInput = G.discardInput csDiscardInput
-  getFileInput f v = v &= csInput (variableType v) (csFileInput f)
+  getFileInput f v = v &= csInput (onStateValue variableType v) (csFileInput f)
   discardFileInput f = valState $ csFileInput f
 
   openFileR = G.openFileR csOpenFileR
@@ -554,8 +557,8 @@ instance MethodSym CSharpCode where
 
 instance InternalMethod CSharpCode where
   intMethod m n _ s p t ps b = modify (if m then setCurrMain else id) >> 
-    on3StateValues (\tp pms bd -> methodFromData Pub $ methodDocD n s p t pms 
-    bd) (zoom lensMStoGS t) ps (zoom lensMStoGS b)
+    on3StateValues (\tp pms bd -> methodFromData Pub $ methodDocD n s p tp pms 
+    bd) (zoom lensMStoGS t) (sequence ps) (zoom lensMStoGS b)
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
@@ -686,13 +689,14 @@ csInOutCall :: (Label -> GS (CSharpCode (Type CSharpCode)) ->
   [GS (CSharpCode (Variable CSharpCode))] -> 
   [GS (CSharpCode (Variable CSharpCode))] -> 
   GS (CSharpCode (Statement CSharpCode))
-csInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
+csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out) 
+  ins
 csInOutCall f n ins [] [out] = if null (filterOutObjs [out])
   then valState $ f n void (valueOf out : ins) 
-  else assign out $ f n (variableType out) (valueOf out : ins)
-csInOutCall f n ins outs both = valState $ f n void (map (onCodeValue 
-  (updateValDoc csRef) . valueOf) both ++ ins ++ map (onCodeValue (updateValDoc 
-  csOut) . valueOf) outs)
+  else assign out $ f n (onStateValue variableType out) (valueOf out : ins)
+csInOutCall f n ins outs both = valState $ f n void (map (onStateValue 
+  (onCodeValue (updateValDoc csRef)) . valueOf) both ++ ins ++ map 
+  (onStateValue (onCodeValue (updateValDoc csOut)) . valueOf) outs)
 
 csVarDec :: Binding -> GS (CSharpCode (Statement CSharpCode)) -> 
   GS (CSharpCode (Statement CSharpCode))
@@ -716,12 +720,13 @@ csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode)
   [GS (CSharpCode (Variable CSharpCode))] -> 
   [GS (CSharpCode (Variable CSharpCode))] -> 
   GS (CSharpCode (Body CSharpCode)) -> MS (CSharpCode (Method CSharpCode))
-csInOut f s p ins [v] [] b = f s p (variableType v) (map param ins)
+csInOut f s p ins [v] [] b = f s p (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 
   valueOf v))
 csInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else variableType v) (map param $ v : ins) (if null (filterOutObjs [v]) then b
-  else on2StateValues (on2CodeValues appendToBody) b (returnState $ valueOf v))
+  else onStateValue variableType v) (map param $ v : ins) (if null 
+  (filterOutObjs [v]) then b else on2StateValues (on2CodeValues appendToBody) b 
+  (returnState $ valueOf v))
 csInOut f s p ins outs both b = f s p void (map (onStateValue (onCodeValue 
   (updateParamDoc csRef)) . param) both ++ map param ins ++ map (onStateValue 
   (onCodeValue (updateParamDoc csOut)) . param) outs) b

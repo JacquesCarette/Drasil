@@ -1,9 +1,9 @@
-module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
-  hicat, vicat, vibcat, vmap, vimap, vibmap, emptyIfEmpty, emptyIfNull, 
-  mapPairFst, mapPairSnd, toCode, toState, onCodeValue, onStateValue, 
-  on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, 
-  onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List,
-  getInnerType, getNestDegree, convType
+module GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat, 
+  vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue, 
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
+  on4CodeValues, on4StateValues, on5StateValues, onCodeList, onStateList, 
+  on2StateLists, on1CodeValue1List, on1StateValue1List, getInnerType, 
+  getNestDegree, convType
 ) where
 
 import Utils.Drasil (blank)
@@ -11,26 +11,21 @@ import Utils.Drasil (blank)
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
 import qualified GOOL.Drasil.Symantics as S ( 
   RenderSym(..), TypeSym(..), PermanenceSym(dynamic_))
+import GOOL.Drasil.State (GS)
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
-import Control.Monad (liftM2, liftM3)
+import Control.Monad (liftM2, liftM3, liftM4, liftM5)
 import Control.Monad.State (State)
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
-  (<>), comma, punctuate, empty, isEmpty)
-
-verticalComma :: (a -> Doc) -> [a] -> Doc
-verticalComma f = vcat . punctuate comma . map f
+  (<>), empty, isEmpty)
 
 angles :: Doc -> Doc
 angles d = char '<' <> d <> char '>'
 
 doubleQuotedText :: String -> Doc
 doubleQuotedText = doubleQuotes . text
-
-himap :: Doc -> (a -> Doc) -> [a] -> Doc
-himap c f = hcat . intersperse c . map f
 
 hicat :: Doc -> [Doc] -> Doc
 hicat c l = hcat $ intersperse c l
@@ -47,20 +42,11 @@ vmap f = vcat . map f
 vimap :: Doc -> (a -> Doc) -> [a] -> Doc
 vimap c f = vicat c . map f
 
-vibmap :: (a -> Doc) -> [a] -> Doc
-vibmap = vimap blank
-
 emptyIfEmpty :: Doc -> Doc -> Doc
 emptyIfEmpty ifDoc elseDoc = if isEmpty ifDoc then empty else elseDoc
 
 emptyIfNull :: [a] -> Doc -> Doc
 emptyIfNull lst elseDoc = if null lst then empty else elseDoc
-
-mapPairFst :: (a -> b) -> (a, c) -> (b, c)
-mapPairFst f (a, c) = (f a, c)
-
-mapPairSnd :: (a -> b) -> (c, a) -> (c, b)
-mapPairSnd f (c, b) = (c, f b)
 
 toCode :: (Monad repr) => a -> repr a
 toCode = return
@@ -93,6 +79,14 @@ on4CodeValues :: Applicative f => (a -> b -> c -> d -> e) -> f a -> f b -> f c
   -> f d -> f e
 on4CodeValues f a1 a2 a3 a4 = liftA3 f a1 a2 a3 <*> a4
 
+on4StateValues :: (a -> b -> c -> d -> e) -> State s a -> State s b -> 
+  State s c -> State s d -> State s e
+on4StateValues = liftM4
+
+on5StateValues :: (a -> b -> c -> d -> e -> f) -> State s a -> State s b -> 
+  State s c -> State s d -> State s e -> State s f
+on5StateValues = liftM5
+
 onCodeList :: Monad m => ([a] -> b) -> [m a] -> m b
 onCodeList f as = f <$> sequence as
 
@@ -116,7 +110,7 @@ getNestDegree :: Integer -> C.CodeType -> Integer
 getNestDegree n (C.List t) = getNestDegree (n+1) t
 getNestDegree n _ = n
 
-convType :: (S.RenderSym repr) => C.CodeType -> repr (S.Type repr)
+convType :: (S.RenderSym repr) => C.CodeType -> GS (repr (S.Type repr))
 convType C.Boolean = S.bool
 convType C.Integer = S.int
 convType C.Float = S.float

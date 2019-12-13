@@ -31,7 +31,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   unExpr', typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, 
-  binExpr, binExpr', typeBinExpr, mkStateVal, mkVal, mkVar, classVarCheckStatic,newObjDocD', castDocD, castObjDocD,  staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot,
+  binExpr, binExpr', typeBinExpr, mkStateVal, mkVal, mkStateVar, mkVar, classVarCheckStatic,newObjDocD', castDocD, castObjDocD,  staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot,
   blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, 
   commentedModD, valueList, parameterList, appendToBody, surroundBody, 
@@ -62,17 +62,17 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, 
-  mapPairSnd, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
+  toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, onCodeList, 
   onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GS, MS, FS, lensGStoFS, lensFStoGS, lensFStoMS, 
-  lensMStoGS, getPutReturn, getPutReturnList, addLangImport, addModuleImport, 
-  setCurrMain, getCurrMain, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc)
+  lensMStoGS, getPutReturn, addLangImport, addModuleImport, setCurrMain,
+  getCurrMain, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
+import Control.Monad (join)
 import Control.Monad.State (State, modify)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
@@ -1154,8 +1154,8 @@ instance InternalValue CppSrcCode where
   inputFunc = mkStateVal string (text "std::cin")
   printFunc = mkStateVal void (text "std::cout")
   printLnFunc = mkStateVal void (text "std::cout")
-  printFileFunc = onStateValue (mkVal void . valueDoc)
-  printFileLnFunc = onStateValue (mkVal void . valueDoc)
+  printFileFunc = on2StateValues (\v -> mkVal v . valueDoc) void
+  printFileLnFunc = on2StateValues (\v -> mkVal v . valueDoc) void
 
   cast = cppCast
 
@@ -1216,7 +1216,7 @@ instance InternalFunction CppSrcCode where
   funcFromData t d = onStateValue (onCodeValue (`fd` d)) t
 
 instance InternalStatement CppSrcCode where
-  printSt nl p v _ = on2StateValues (mkSt . cppPrint nl)
+  printSt nl p v _ = on2StateValues (\pr vl -> mkSt $ cppPrint nl pr vl) p v
 
   state = G.state
   loopState = G.loopState
@@ -1266,9 +1266,9 @@ instance StatementSym CppSrcCode where
   discardFileInput f = modify (addLangImport "limits") >> G.discardFileInput 
     (cppDiscardInput " ") f
 
-  openFileR = on2StateValues (\f v -> mkSt $ cppOpenFile "std::fstream::in")
-  openFileW = on2StateValues (\f v -> mkSt $ cppOpenFile "std::fstream::out")
-  openFileA = on2StateValues (\f v -> mkSt $ cppOpenFile "std::fstream::app")
+  openFileR = on2StateValues (\f v -> mkSt $ cppOpenFile "std::fstream::in" f v)
+  openFileW = on2StateValues (\f v -> mkSt $ cppOpenFile "std::fstream::out" f v)
+  openFileA = on2StateValues (\f v -> mkSt $ cppOpenFile "std::fstream::app" f v)
   closeFile = G.closeFile "close"
 
   getFileInputLine f v = valState $ funcApp "std::getline" string [f, valueOf v]
@@ -1398,8 +1398,8 @@ instance MethodSym CppSrcCode where
     [param argc, param argv]
     (on2StateValues (on2CodeValues appendToBody) b (returnState $ litInt 0))
     where argc = var "argc" int
-          argv = mkVar "argv" (toCode $ td (List String) "const char" 
-            (text "const char")) (text "*argv[]")
+          argv = toState $ mkVar "argv" (typeFromData (List String) 
+            "const char" (text "const char")) (text "*argv[]")
 
   docFunc = G.docFunc
 
@@ -1415,11 +1415,11 @@ instance InternalMethod CppSrcCode where
   intMethod m n c s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
     setCurrMain else id) >> on3StateValues (\tp pms bod -> methodFromData (snd 
     $ unCPPSC s) $ cppsMethod n c tp pms bod blockStart blockEnd) (zoom 
-    lensMStoGS t) ps (zoom lensMStoGS b)
+    lensMStoGS t) (sequence ps) (zoom lensMStoGS b)
   intFunc m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
     setCurrMainFunc m . setCurrMain else id) >> on3StateValues (\tp pms bod -> 
     methodFromData (snd $ unCPPSC s) $ cppsFunction n tp pms bod blockStart 
-    blockEnd) (zoom lensMStoGS t) ps (zoom lensMStoGS b)
+    blockEnd) (zoom lensMStoGS t) (sequence ps) (zoom lensMStoGS b)
   commentedFunc = cppCommentedFunc Source
  
   methodDoc = mthdDoc . unCPPSC
@@ -1916,8 +1916,9 @@ instance MethodTypeSym CppHdrCode where
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
-  param = onStateValue (\v -> paramFromData v (paramDocD v))
-  pointerParam = onStateValue (\v -> paramFromData v (cppPointerParamDoc v))
+  param = onStateValue (\v -> paramFromData v (paramDocD v)) . zoom lensMStoGS
+  pointerParam = onStateValue (\v -> paramFromData v (cppPointerParamDoc v)) .
+    zoom lensMStoGS
 
 instance InternalParam CppHdrCode where
   parameterName = variableName . onCodeValue paramVar
@@ -1928,10 +1929,11 @@ instance InternalParam CppHdrCode where
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
   method = G.method
-  getMethod c v = method (getterName $ variableName v) c public dynamic_ 
-    (variableType v) [] (toState (toCode empty))
-  setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
-    [param v] (toState (toCode empty))
+  getMethod c v = zoom lensMStoGS v >>= (\v' -> method (getterName $ 
+    variableName v') c public dynamic_ (toState $ variableType v') [] 
+    (toState $ toCode empty))
+  setMethod c v = zoom lensMStoGS v >>= (\v' -> method (setterName $ 
+    variableName v') c public dynamic_ void [param v] (toState $ toCode empty))
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor n = G.constructor n n
@@ -1957,7 +1959,7 @@ instance MethodSym CppHdrCode where
 instance InternalMethod CppHdrCode where
   intMethod m n _ s _ t ps _ = modify (setScope (snd $ unCPPHC s) . if m then 
     setCurrMain else id) >> on1StateValue1List (\tp pms -> methodFromData (snd 
-    $ unCPPHC s) $ cpphMethod n tp pms endStatement) t ps
+    $ unCPPHC s) $ cpphMethod n tp pms endStatement) (zoom lensMStoGS t) ps
   intFunc = G.intFunc
   commentedFunc = cppCommentedFunc Header
 
@@ -2020,9 +2022,9 @@ instance BlockCommentSym CppHdrCode where
   blockCommentDoc = unCPPHC
 
 -- helpers
-toBasicVar :: CppSrcCode (Variable CppSrcCode) -> 
-  CppSrcCode (Variable CppSrcCode)
-toBasicVar v = var (variableName v) (variableType v)
+toBasicVar :: GS (CppSrcCode (Variable CppSrcCode)) -> 
+  GS (CppSrcCode (Variable CppSrcCode))
+toBasicVar v = v >>= (\v' -> var (variableName v') (onStateValue variableType v))
 
 isDtor :: Label -> Bool
 isDtor ('~':_) = True
@@ -2030,7 +2032,8 @@ isDtor _ = False
 
 getParam :: (RenderSym repr) => GS (repr (Variable repr)) -> 
   MS (repr (Parameter repr))
-getParam v = getParamFunc ((getType . variableType) v) v
+getParam v = zoom lensMStoGS v >>= (\v' -> getParamFunc ((getType . 
+  variableType) v') v)
   where getParamFunc (List _) = pointerParam
         getParamFunc (Object _) = pointerParam
         getParamFunc _ = param
@@ -2159,10 +2162,10 @@ cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens
 
 cppInput :: (RenderSym repr) => repr (Keyword repr) -> GS (repr (Variable repr))
   -> GS (repr (Value repr)) -> GS (repr (Statement repr))
-cppInput end = modify (addLangImport "limits") >> on2StateValues (\v inFn -> 
-  mkSt $ vcat [valueDoc inFn <+> text ">>" <+> variableDoc v <> keyDoc end,
+cppInput end vr i = modify (addLangImport "limits") >> on2StateValues (\v inFn 
+  -> mkSt $ vcat [valueDoc inFn <+> text ">>" <+> variableDoc v <> keyDoc end,
   valueDoc inFn <> dot <> 
-    text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"])
+    text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]) vr i
 
 cppOpenFile :: (RenderSym repr) => Label -> repr (Variable repr) -> 
   repr (Value repr) -> Doc
@@ -2262,21 +2265,22 @@ cpphEnum n es bStart bEnd end = classFromData $ toState $ vcat [
   indent es,
   keyDoc bEnd <> keyDoc end]
 
-cppInOutCall :: (Label -> CppSrcCode (Type CppSrcCode) -> 
+cppInOutCall :: (Label -> GS (CppSrcCode (Type CppSrcCode)) -> 
   [GS (CppSrcCode (Value CppSrcCode))] -> GS (CppSrcCode (Value CppSrcCode))) 
   -> Label -> [GS (CppSrcCode (Value CppSrcCode))] -> 
   [GS (CppSrcCode (Variable CppSrcCode))] -> 
   [GS (CppSrcCode (Variable CppSrcCode))] -> 
   GS (CppSrcCode (Statement CppSrcCode))
-cppInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
+cppInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
+  ins
 cppInOutCall f n ins [] [out] = if null (filterOutObjs [out]) 
   then valState $ f n void (valueOf out : ins)
-  else assign out $ f n (variableType out) (valueOf out : ins)
+  else assign out $ f n (onStateValue variableType out) (valueOf out : ins)
 cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins 
   ++ map valueOf outs)
 
 cppsInOut :: (CppSrcCode (Scope CppSrcCode) -> 
-    CppSrcCode (Permanence CppSrcCode) -> CppSrcCode (Type CppSrcCode) -> 
+    CppSrcCode (Permanence CppSrcCode) -> GS (CppSrcCode (Type CppSrcCode)) -> 
     [MS (CppSrcCode (Parameter CppSrcCode))] -> 
     GS (CppSrcCode (Body CppSrcCode)) -> MS (CppSrcCode (Method CppSrcCode)))
   -> CppSrcCode (Scope CppSrcCode) -> CppSrcCode (Permanence CppSrcCode) -> 
@@ -2284,17 +2288,17 @@ cppsInOut :: (CppSrcCode (Scope CppSrcCode) ->
   [GS (CppSrcCode (Variable CppSrcCode))] -> 
   [GS (CppSrcCode (Variable CppSrcCode))] -> GS (CppSrcCode (Body CppSrcCode)) 
   -> MS (CppSrcCode (Method CppSrcCode))
-cppsInOut f s p ins [v] [] b = f s p (variableType v) (cppInOutParams ins [v] 
-  []) (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 
-  valueOf v))
+cppsInOut f s p ins [v] [] b = f s p (onStateValue variableType v) 
+  (cppInOutParams ins [v] []) (on3StateValues (on3CodeValues surroundBody) 
+  (varDec v) b (returnState $ valueOf v))
 cppsInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else variableType v) (cppInOutParams ins [] [v]) (if null (filterOutObjs [v]) 
-  then b else on2StateValues (on2CodeValues appendToBody) b (returnState $ 
-  valueOf v))
+  else onStateValue variableType v) (cppInOutParams ins [] [v]) (if null 
+  (filterOutObjs [v]) then b else on2StateValues (on2CodeValues appendToBody) b 
+  (returnState $ valueOf v))
 cppsInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
 
 cpphInOut :: (CppHdrCode (Scope CppHdrCode) -> 
-    CppHdrCode (Permanence CppHdrCode) -> CppHdrCode (Type CppHdrCode) -> 
+    CppHdrCode (Permanence CppHdrCode) -> GS (CppHdrCode (Type CppHdrCode)) -> 
     [MS (CppHdrCode (Parameter CppHdrCode))] -> 
     GS (CppHdrCode (Body CppHdrCode)) -> MS (CppHdrCode (Method CppHdrCode))) 
   -> CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Permanence CppHdrCode) -> 
@@ -2302,10 +2306,10 @@ cpphInOut :: (CppHdrCode (Scope CppHdrCode) ->
   [GS (CppHdrCode (Variable CppHdrCode))] -> 
   [GS (CppHdrCode (Variable CppHdrCode))] -> GS (CppHdrCode (Body CppHdrCode)) 
   -> MS (CppHdrCode (Method CppHdrCode))
-cpphInOut f s p ins [v] [] b = f s p (variableType v) (cppInOutParams ins [v] 
-  []) b
+cpphInOut f s p ins [v] [] b = f s p (onStateValue variableType v) 
+  (cppInOutParams ins [v] []) b
 cpphInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else variableType v) (cppInOutParams ins [] [v]) b
+  else onStateValue variableType v) (cppInOutParams ins [] [v]) b
 cpphInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
 
 cppInOutParams :: (RenderSym repr) => [GS (repr (Variable repr))] -> 

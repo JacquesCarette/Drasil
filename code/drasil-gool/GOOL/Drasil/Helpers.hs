@@ -1,9 +1,9 @@
-module GOOL.Drasil.Helpers (verticalComma, angles, doubleQuotedText, himap,
-  hicat, vicat, vibcat, vmap, vimap, vibmap, emptyIfEmpty, emptyIfNull, 
-  mapPairFst, mapPairSnd, toCode, toState, onCodeValue, onStateValue, 
-  on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, 
-  on4StateValues, on5StateValues, onCodeList, onStateList, on2StateLists, 
-  on1CodeValue1List, on1StateValue1List, getInnerType, getNestDegree, convType
+module GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat, 
+  vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue, 
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
+  on4CodeValues, on4StateValues, on5StateValues, onCodeList, onStateList, 
+  on2StateLists, on1CodeValue1List, on1StateValue1List, getInnerType, 
+  getNestDegree, convType
 ) where
 
 import Utils.Drasil (blank)
@@ -19,19 +19,13 @@ import Control.Monad (liftM2, liftM3, liftM4, liftM5)
 import Control.Monad.State (State)
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
-  (<>), comma, punctuate, empty, isEmpty)
-
-verticalComma :: (a -> Doc) -> [a] -> Doc
-verticalComma f = vcat . punctuate comma . map f
+  (<>), empty, isEmpty)
 
 angles :: Doc -> Doc
 angles d = char '<' <> d <> char '>'
 
 doubleQuotedText :: String -> Doc
 doubleQuotedText = doubleQuotes . text
-
-himap :: Doc -> (a -> Doc) -> [a] -> Doc
-himap c f = hcat . intersperse c . map f
 
 hicat :: Doc -> [Doc] -> Doc
 hicat c l = hcat $ intersperse c l
@@ -48,20 +42,11 @@ vmap f = vcat . map f
 vimap :: Doc -> (a -> Doc) -> [a] -> Doc
 vimap c f = vicat c . map f
 
-vibmap :: (a -> Doc) -> [a] -> Doc
-vibmap = vimap blank
-
 emptyIfEmpty :: Doc -> Doc -> Doc
 emptyIfEmpty ifDoc elseDoc = if isEmpty ifDoc then empty else elseDoc
 
 emptyIfNull :: [a] -> Doc -> Doc
 emptyIfNull lst elseDoc = if null lst then empty else elseDoc
-
-mapPairFst :: (a -> b) -> (a, c) -> (b, c)
-mapPairFst f (a, c) = (f a, c)
-
-mapPairSnd :: (a -> b) -> (c, a) -> (c, b)
-mapPairSnd f (c, b) = (c, f b)
 
 toCode :: (Monad repr) => a -> repr a
 toCode = return

@@ -41,25 +41,26 @@ doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
 assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requirement,
   mg, mis, notApp, srs, typUnc, sec :: CI
 
------------------------------------------------------------------------------------------------------------------
--- | CI       |           |    uid      |         term                        | abbreviation |     ConceptDomain
------------------------------------------------------------------------------------------------------------------
-assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                  "A"         [softEng]
-desSpec     = commonIdeaWithDict "desSpec"     (fterms compoundPhrase design specification)        "DS"        [softEng]
-goalStmt    = commonIdeaWithDict "goalStmt"    (fterms compoundPhrase goal statement)              "GS"        [softEng]
-dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                             "DC"        [softEng]
-likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                               "LC"        [softEng]
-unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                             "UC"        [softEng]
-physSyst    = commonIdeaWithDict "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"        [softEng]
-requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                 "R"         [softEng]
-mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"        [softEng]
-mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)               "MG"        [softEng]
-notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                     "N/A"       []
-typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                         "Uncert."   [softEng]
-sec         = commonIdeaWithDict "section"     (cn' "section")                                     "Sec"       [documentc]
-srs = commonIdeaWithDict "srs" 
-  (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))
-  "SRS" [softEng]
+softReqSpec :: NP
+softReqSpec = compoundPhraseP1 (softwareReq ^. term) (specification ^. term)
+
+------------------------------------------------------------------------------------------------------------------------------
+-- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain
+------------------------------------------------------------------------------------------------------------------------------
+assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                    "A"       [softEng]
+desSpec     = commonIdeaWithDict "desSpec"     (fterms compoundPhrase design specification)          "DS"      [softEng]
+goalStmt    = commonIdeaWithDict "goalStmt"    (fterms compoundPhrase goal statement)                "GS"      [softEng]
+dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
+likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
+unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
+physSyst    = commonIdeaWithDict "physSyst"    (fterms compoundPhrase physicalSystem description)    "PS"      [softEng]
+requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]
+mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
+mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
+notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                       "N/A"     []
+typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                           "Uncert." [softEng]
+sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
+srs         = commonIdeaWithDict "srs"         softReqSpec                                           "SRS"     [softEng]
 
 ---------------------------------------------------------------------
 

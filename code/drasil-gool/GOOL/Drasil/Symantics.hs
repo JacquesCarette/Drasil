@@ -6,7 +6,7 @@ module GOOL.Drasil.Symantics (
   -- Typeclasses
   ProgramSym(..), RenderSym(..), InternalFile(..),  KeywordSym(..), 
   PermanenceSym(..), InternalPerm(..), BodySym(..), ControlBlockSym(..), 
-  BlockSym(..), InternalBlock(..), TypeSym(..), InternalType(..), 
+  listSlice, BlockSym(..), InternalBlock(..), TypeSym(..), InternalType(..), 
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), 
@@ -138,9 +138,16 @@ class (ControlStatementSym repr) => ControlBlockSym repr where
     Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Variable repr))) -> 
     GS (repr (Block repr))
 
-  listSlice        :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
+  listSlice'      :: Maybe (GS (repr (Value repr))) -> 
     Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Value repr))) ->
-    Maybe (GS (repr (Value repr))) -> GS (repr (Block repr))
+    GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Block repr))
+
+listSlice :: (ControlBlockSym repr) => GS (repr (Variable repr)) -> 
+  GS (repr (Value repr)) -> Maybe (GS (repr (Value repr))) -> 
+  Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Value repr))) -> 
+  GS (repr (Block repr))
+listSlice vnew vold b e s = listSlice' b e s vnew vold
 
 class (InternalOp repr) => UnaryOpSym repr where
   type UnaryOp repr

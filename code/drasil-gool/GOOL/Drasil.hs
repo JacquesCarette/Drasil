@@ -1,6 +1,6 @@
 -- | re-export smart constructors for external code writing
 module GOOL.Drasil (Label, ProgramSym(..), RenderSym(..), PermanenceSym(..), 
-  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), 
+  BodySym(..), BlockSym(..), ControlBlockSym(runStrategy), listSlice, TypeSym(..), 
   StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), FunctionSym(..), SelectorFunction(..), ScopeSym(..), 
@@ -15,9 +15,9 @@ module GOOL.Drasil (Label, ProgramSym(..), RenderSym(..), PermanenceSym(..),
 ) where
 
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  TypeSym(..), StatementSym(..), ControlStatementSym(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(runStrategy), 
+  listSlice, TypeSym(..), StatementSym(..), ControlStatementSym(..), 
+  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 
   ModuleSym(..), BlockCommentSym(..))

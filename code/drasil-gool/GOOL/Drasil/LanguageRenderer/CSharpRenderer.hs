@@ -189,7 +189,7 @@ instance InternalType CSharpCode where
 instance ControlBlockSym CSharpCode where
   runStrategy = G.runStrategy
 
-  listSlice = G.listSlice
+  listSlice' = G.listSlice
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData

@@ -187,7 +187,7 @@ instance InternalType PythonCode where
 instance ControlBlockSym PythonCode where
   runStrategy = G.runStrategy
 
-  listSlice vnew vold b e s = docBlock $ pyListSlice vnew vold (getVal b) 
+  listSlice' b e s vnew vold = docBlock $ pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 

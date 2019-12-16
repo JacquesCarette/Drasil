@@ -209,11 +209,11 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
     (\s -> runStrategy l (zip (map fst strats) s) (fmap (onStateValue psnd) rv) 
       (fmap (onStateValue psnd) av)) (map snd strats)
 
-  listSlice vnew vold b e s = pair2 
-    (\vn vo -> listSlice vn vo (fmap (onStateValue pfst) b) (fmap 
-      (onStateValue pfst) e) (fmap (onStateValue pfst) s)) 
-    (\vn vo -> listSlice vn vo (fmap (onStateValue psnd) b) (fmap 
-      (onStateValue psnd) e) (fmap (onStateValue psnd) s)) vnew vold
+  listSlice' b e s = pair2 
+    (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e) 
+      (fmap (onStateValue pfst) s)) 
+    (listSlice' (fmap (onStateValue psnd) b) (fmap (onStateValue psnd) e) 
+      (fmap (onStateValue psnd) s))
 
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
   type UnaryOp (p CppSrcCode CppHdrCode) = OpData
@@ -990,7 +990,7 @@ instance InternalType CppSrcCode where
 instance ControlBlockSym CppSrcCode where
   runStrategy = G.runStrategy
 
-  listSlice = G.listSlice
+  listSlice' = G.listSlice
 
 instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
@@ -1572,7 +1572,7 @@ instance InternalType CppHdrCode where
 instance ControlBlockSym CppHdrCode where
   runStrategy _ _ _ _ = toState $ toCode empty
 
-  listSlice _ _ _ _ _ = toState $ toCode empty
+  listSlice' _ _ _ _ _ = toState $ toCode empty
 
 instance UnaryOpSym CppHdrCode where
   type UnaryOp CppHdrCode = OpData

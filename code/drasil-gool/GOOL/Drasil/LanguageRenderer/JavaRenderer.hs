@@ -189,7 +189,7 @@ instance InternalType JavaCode where
 instance ControlBlockSym JavaCode where
   runStrategy = G.runStrategy
 
-  listSlice = G.listSlice
+  listSlice' = G.listSlice
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData

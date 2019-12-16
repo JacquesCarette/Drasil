@@ -162,11 +162,10 @@ runStrategy l strats rv av = maybe
           "Attempt to assign null return to a Value") (v &=) rv
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
-listSlice :: (RenderSym repr) => GS (repr (Variable repr)) -> 
-  GS (repr (Value repr)) -> Maybe (GS (repr (Value repr))) -> 
+listSlice :: (RenderSym repr) => Maybe (GS (repr (Value repr))) -> 
   Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Value repr))) -> 
-  GS (repr (Block repr))
-listSlice vnew vold b e s = 
+  GS (repr (Variable repr)) -> GS (repr (Value repr)) -> GS (repr (Block repr))
+listSlice b e s vnew vold = 
   let l_temp = "temp"
       var_temp = S.var l_temp (onStateValue variableType vnew)
       v_temp = S.valueOf var_temp

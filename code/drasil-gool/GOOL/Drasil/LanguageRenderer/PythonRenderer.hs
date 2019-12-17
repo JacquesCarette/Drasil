@@ -62,7 +62,7 @@ import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
   on5StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
   on1StateValue1List)
 import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, initialState, 
-  addLangImport, setCurrMain)
+  addLangImport, addModuleImport, setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)

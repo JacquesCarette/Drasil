@@ -64,7 +64,8 @@ import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, initialState, 
-  getPutReturnList, addProgNameToPaths, addLangImport, setCurrMain)
+  getPutReturn, getPutReturnList, addProgNameToPaths, addLangImport, 
+  setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -72,7 +73,7 @@ import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify, evalState)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
-  equals, semi, vcat, lbrace, rbrace, render, colon, comma, render)
+  equals, semi, vcat, lbrace, rbrace, render, colon, render)
 
 jExt :: String
 jExt = "java"
@@ -453,12 +454,9 @@ instance StatementSym JavaCode where
   getFileInput f v = v &= jInput (onStateValue variableType v) f
   discardFileInput = G.discardFileInput jDiscardInput
 
-  openFileR f n = modify (addLangImport "java.io.File") >> G.openFileR 
-    jOpenFileR f n
-  openFileW f n = modify (addLangImport "java.io.File" . addLangImport 
-    "java.io.FileWriter") >> G.openFileW jOpenFileWorA f n
-  openFileA f n = modify (addLangImport "java.io.File" . addLangImport 
-    "java.io.FileWriter") >> G.openFileA jOpenFileWorA f n
+  openFileR = G.openFileR jOpenFileR
+  openFileW = G.openFileW jOpenFileWorA
+  openFileA = G.openFileA jOpenFileWorA
   closeFile = G.closeFile "close"
 
   getFileInputLine f v = v &= f $. func "nextLine" string []
@@ -640,14 +638,17 @@ jStringType :: (RenderSym repr) => GS (repr (Type repr))
 jStringType = toState $ typeFromData String "String" (text "String")
 
 jInfileType :: (RenderSym repr) => GS (repr (Type repr))
-jInfileType = toState $ typeFromData File "Scanner" (text "Scanner")
+jInfileType = getPutReturn (addLangImport "java.util.Scanner") $ 
+  typeFromData File "Scanner" (text "Scanner")
 
 jOutfileType :: (RenderSym repr) => GS (repr (Type repr))
-jOutfileType = toState $ typeFromData File "PrintWriter" (text "PrintWriter")
+jOutfileType = getPutReturn (addLangImport "java.io.PrintWriter") $ 
+  typeFromData File "PrintWriter" (text "PrintWriter")
 
 jListType :: (RenderSym repr) => repr (Permanence repr) -> GS (repr (Type repr))
   -> GS (repr (Type repr))
-jListType p t = t >>= (jListType' . getType)
+jListType p t = modify (addLangImport $ "java.util." ++ render lst) >> 
+  (t >>= (jListType' . getType))
   where jListType' Integer = toState $ typeFromData (List Integer) (render lst 
           ++ "<Integer>") (lst <> angles (text "Integer"))
         jListType' Float = toState $ typeFromData (List Float) (render lst ++ "<Double>") 
@@ -659,6 +660,14 @@ jListType p t = t >>= (jListType' . getType)
 jArrayType :: GS (JavaCode (Type JavaCode))
 jArrayType = toState $ typeFromData (List $ Object "Object") "Object" 
   (text "Object[]")
+
+jFileType :: (RenderSym repr) => GS (repr (Type repr))
+jFileType = getPutReturn (addLangImport "java.io.File") $ typeFromData File 
+  "File" (text "File")
+
+jFileWriterType :: (RenderSym repr) => GS (repr (Type repr))
+jFileWriterType = getPutReturn (addLangImport "java.io.FileWriter") $ 
+  typeFromData File "FileWriter" (text "FileWriter")
 
 jEquality :: GS (JavaCode (Value JavaCode)) -> GS (JavaCode (Value JavaCode)) 
   -> GS (JavaCode (Value JavaCode))
@@ -724,14 +733,12 @@ jInput = on2StateValues (\t -> mkVal t . jInput' (getType t))
 
 jOpenFileR :: (RenderSym repr) => GS (repr (Value repr)) -> 
   GS (repr (Type repr)) -> GS (repr (Value repr))
-jOpenFileR = on2StateValues (\n t -> mkVal t $ new <+> text "Scanner" <> parens 
-  (new <+> text "File" <> parens (valueDoc n)))
+jOpenFileR n t = newObj t [newObj jFileType [n]]
 
 jOpenFileWorA :: (RenderSym repr) => GS (repr (Value repr)) -> 
   GS (repr (Type repr)) -> GS (repr (Value repr)) -> GS (repr (Value repr))
-jOpenFileWorA = on3StateValues (\n t wa -> mkVal t $ new <+> text 
-  "PrintWriter" <> parens (new <+> text "FileWriter" <> parens (new <+> text 
-  "File" <> parens (valueDoc n) <> comma <+> valueDoc wa)))
+jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n], 
+  wa]]
 
 jStringSplit :: (RenderSym repr) => GS (repr (Variable repr)) -> 
   GS (repr (Value repr)) -> GS Doc

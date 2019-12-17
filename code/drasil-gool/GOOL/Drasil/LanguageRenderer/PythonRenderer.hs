@@ -243,7 +243,7 @@ instance VariableSym PythonCode where
   var = G.var
   staticVar = G.staticVar
   const = var
-  extVar = G.extVar
+  extVar l n t = modify (addModuleImport l) >> G.extVar l n t
   self l = mkStateVar "self" (obj l) (text "self")
   enumVar = G.enumVar
   classVar = G.classVar classVarDocD
@@ -330,10 +330,10 @@ instance ValueExpression PythonCode where
   inlineIf = pyInlineIf
   funcApp = G.funcApp
   selfFuncApp c = G.selfFuncApp (self c)
-  extFuncApp = G.extFuncApp
+  extFuncApp l n t ps = modify (addModuleImport l) >> G.extFuncApp l n t ps
   newObj = G.newObj newObjDocD'
-  extNewObj l = on1StateValue1List (\t -> mkVal t . pyExtStateObj l (getTypeDoc 
-    t) . valueList)
+  extNewObj l tp ps = modify (addModuleImport l) >> on1StateValue1List 
+    (\t -> mkVal t . pyExtStateObj l (getTypeDoc t) . valueList) tp ps
 
   exists v = v ?!= valueOf (var "None" void)
   notNull = exists
@@ -435,11 +435,11 @@ instance StatementSym PythonCode where
   listDecDef = on1StateValue1List (\v vs -> mkStNoEnd $ pyListDecDef v vs)
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew lib v vs = varDecDef v (extNewObj lib (onStateValue variableType 
-    v) vs)
+  extObjDecNew lib v vs = modify (addModuleImport lib) >> varDecDef v 
+    (extNewObj lib (onStateValue variableType v) vs)
   objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams lib v = varDecDef v (extNewObj lib (onStateValue 
-    variableType v) [])
+  extObjDecNewNoParams lib v = modify (addModuleImport lib) >> varDecDef v 
+    (extNewObj lib (onStateValue variableType v) [])
   constDecDef = varDecDef
 
   print = pyOut False Nothing printFunc

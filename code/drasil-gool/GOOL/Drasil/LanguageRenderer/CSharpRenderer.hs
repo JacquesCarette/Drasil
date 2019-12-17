@@ -381,7 +381,7 @@ instance InternalFunction CSharpCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
-  listSizeFunc = funcFromData int (funcDocD (text "Count"))
+  listSizeFunc = funcFromData (funcDocD (text "Count")) int
   listAddFunc _ = G.listAddFunc "Insert"
   listAppendFunc = G.listAppendFunc "Add"
 
@@ -394,7 +394,7 @@ instance InternalFunction CSharpCode where
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unCSC
 
-  funcFromData t d = onStateValue (onCodeValue (`fd` d)) t
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalStatement CSharpCode where
   printSt _ _ = G.printSt
@@ -503,7 +503,7 @@ instance ControlStatementSym CSharpCode where
   checkState = G.checkState
   notifyObservers = G.notifyObservers
 
-  getFileInputAll f v = while ((f $. funcFromData bool (text ".EndOfStream")) 
+  getFileInputAll f v = while ((f $. funcFromData (text ".EndOfStream") bool) 
     ?!) (oneLiner $ valState $ listAppend (valueOf v) (csFileInput f))
 
 instance ScopeSym CSharpCode where

@@ -313,7 +313,7 @@ indexOf f l v = S.objAccess l (S.func f S.int [v])
 
 func :: (RenderSym repr) => Label -> GS (repr (Type repr)) -> 
   [GS (repr (Value repr))] -> GS (repr (Function repr))
-func l t vs = S.funcApp l t vs >>= (funcFromData t . funcDocD . valueDoc)
+func l t vs = S.funcApp l t vs >>= ((`funcFromData` t) . funcDocD . valueDoc)
 
 get :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Variable repr)) 
   -> GS (repr (Value repr))
@@ -383,7 +383,7 @@ iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++
 
 listAccessFunc :: (RenderSym repr) => GS (repr (Type repr)) ->
   GS (repr (Value repr)) -> GS (repr (Function repr))
-listAccessFunc t v = intValue v >>= (funcFromData t . listAccessFuncDocD)
+listAccessFunc t v = intValue v >>= ((`funcFromData` t) . listAccessFuncDocD)
 
 listAccessFunc' :: (RenderSym repr) => Label -> GS (repr (Type repr)) -> 
   GS (repr (Value repr)) -> GS (repr (Function repr))
@@ -393,7 +393,7 @@ listSetFunc :: (RenderSym repr) => (Doc -> Doc -> Doc) ->
   GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
   GS (repr (Function repr))
 listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData 
-  (onStateValue valueType v) (f (valueDoc i) (valueDoc toVal))) (intValue idx) 
+  (f (valueDoc i) (valueDoc toVal)) (onStateValue valueType v)) (intValue idx) 
   setVal
 
 printSt :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))

@@ -419,7 +419,7 @@ instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where
   functionType f = pair (functionType $ pfst f) (functionType $ psnd f)
   functionDoc f = functionDoc $ pfst f
   
-  funcFromData t d = pair1 (`funcFromData` d) (`funcFromData` d) t
+  funcFromData d = pair1 (funcFromData d) (funcFromData d)
 
 instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
   -- Another Maybe/State combination
@@ -1196,7 +1196,7 @@ instance InternalFunction CppSrcCode where
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unCPPSC
   
-  funcFromData t d = onStateValue (onCodeValue (`fd` d)) t
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalStatement CppSrcCode where
   printSt nl _ = on2StateValues (\pr vl -> mkSt $ cppPrint nl pr vl)
@@ -1741,7 +1741,7 @@ instance InternalSelector CppHdrCode where
 
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
-  func _ _ _ = funcFromData void empty
+  func _ _ _ = funcFromData empty void
   
   get _ _ = mkStateVal void empty
   set _ _ _ = mkStateVal void empty
@@ -1759,23 +1759,23 @@ instance SelectorFunction CppHdrCode where
   at _ _ = mkStateVal void empty
 
 instance InternalFunction CppHdrCode where
-  getFunc _ = funcFromData void empty
-  setFunc _ _ _ = funcFromData void empty
+  getFunc _ = funcFromData empty void
+  setFunc _ _ _ = funcFromData empty void
 
-  listSizeFunc = funcFromData void empty
-  listAddFunc _ _ _ = funcFromData void empty
-  listAppendFunc _ = funcFromData void empty
+  listSizeFunc = funcFromData empty void
+  listAddFunc _ _ _ = funcFromData empty void
+  listAppendFunc _ = funcFromData empty void
 
-  iterBeginFunc _ = funcFromData void empty
-  iterEndFunc _ = funcFromData void empty
+  iterBeginFunc _ = funcFromData empty void
+  iterEndFunc _ = funcFromData empty void
 
-  listAccessFunc _ _ = funcFromData void empty
-  listSetFunc _ _ _ = funcFromData void empty
+  listAccessFunc _ _ = funcFromData empty void
+  listSetFunc _ _ _ = funcFromData empty void
   
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unCPPHC
   
-  funcFromData t d = onStateValue (onCodeValue (`fd` d)) t
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalStatement CppHdrCode where
   printSt _ _ _ _ = emptyState

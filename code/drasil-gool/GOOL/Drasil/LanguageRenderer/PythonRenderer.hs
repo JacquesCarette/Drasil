@@ -383,7 +383,7 @@ instance InternalFunction PythonCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
-  listSizeFunc = funcFromData int (text "len")
+  listSizeFunc = funcFromData (text "len") int
   listAddFunc _ = G.listAddFunc "insert"
   listAppendFunc = G.listAppendFunc "append"
 
@@ -396,7 +396,7 @@ instance InternalFunction PythonCode where
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unPC
 
-  funcFromData t d = onStateValue (onCodeValue (`fd` d)) t
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalStatement PythonCode where
   printSt nl f = on3StateValues (\f' p' v' -> mkStNoEnd $ pyPrint nl p' v' f') 

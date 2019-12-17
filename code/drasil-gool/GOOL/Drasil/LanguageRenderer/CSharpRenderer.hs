@@ -24,20 +24,18 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
-  listDecDefDocD, mkSt, breakDocD, continueDocD, unOpPrec, notOpDocD, 
-  negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkStateVal,
-  mkVal, mkVar, classVarDocD, objVarDocD, newObjDocD, funcDocD, castDocD, 
-  listSetFuncDocD, castObjDocD, staticDocD, dynamicDocD, bindingError, 
-  privateDocD, publicDocD, dot, new, blockCmtStart, blockCmtEnd, docCmtStart, 
-  doubleSlash, elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, commentedModD, appendToBody, surroundBody, filterOutObjs)
+  listDecDefDocD, mkSt, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
+  classVarDocD, objVarDocD, newObjDocD, funcDocD, castDocD, listSetFuncDocD, 
+  castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
+  dot, new, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
+  inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  commentedModD, appendToBody, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, bool, int, double, char, string, listType, listInnerType,
-  obj, enumType, void, runStrategy, listSlice, var, staticVar, extVar, 
-  self, enumVar, classVar, objVarSelf, listVar, listOf, iterVar, pi, litTrue, 
+  obj, enumType, void, runStrategy, listSlice, notOp, negateOp, equalOp, 
+  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
+  multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, 
+  enumVar, classVar, objVarSelf, listVar, listOf, iterVar, pi, litTrue, 
   litFalse, litChar, litFloat, litInt, litString, valueOf, arg, enumElement, 
   argsList, inlineIf, objAccess, objMethodCall, objMethodCallNoParams, 
   selfAccess, listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, 
@@ -56,9 +54,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
   privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
   commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, updateMthdDoc, OpData(..), ParamData(..), pd, 
+  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
   updateParamDoc, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
   updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
@@ -195,44 +194,47 @@ instance ControlBlockSym CSharpCode where
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
-  notOp = toCode notOpDocD
-  negateOp = toCode negateOpDocD
-  sqrtOp = toCode $ unOpPrec "Math.Sqrt"
-  absOp = toCode $ unOpPrec "Math.Abs"
-  logOp = toCode $ unOpPrec "Math.Log10"
-  lnOp = toCode $ unOpPrec "Math.Log"
-  expOp = toCode $ unOpPrec "Math.Exp"
-  sinOp = toCode $ unOpPrec "Math.Sin"
-  cosOp = toCode $ unOpPrec "Math.Cos"
-  tanOp = toCode $ unOpPrec "Math.Tan"
-  asinOp = toCode $ unOpPrec "Math.Asin"
-  acosOp = toCode $ unOpPrec "Math.Acos"
-  atanOp = toCode $ unOpPrec "Math.Atan"
-  floorOp = toCode $ unOpPrec "Math.Floor"
-  ceilOp = toCode $ unOpPrec "Math.Ceiling"
+  notOp = G.notOp
+  negateOp = G.negateOp
+  sqrtOp = addSystemImport $ unOpPrec "Math.Sqrt"
+  absOp = addSystemImport $ unOpPrec "Math.Abs"
+  logOp = addSystemImport $ unOpPrec "Math.Log10"
+  lnOp = addSystemImport $ unOpPrec "Math.Log"
+  expOp = addSystemImport $ unOpPrec "Math.Exp"
+  sinOp = addSystemImport $ unOpPrec "Math.Sin"
+  cosOp = addSystemImport $ unOpPrec "Math.Cos"
+  tanOp = addSystemImport $ unOpPrec "Math.Tan"
+  asinOp = addSystemImport $ unOpPrec "Math.Asin"
+  acosOp = addSystemImport $ unOpPrec "Math.Acos"
+  atanOp = addSystemImport $ unOpPrec "Math.Atan"
+  floorOp = addSystemImport $ unOpPrec "Math.Floor"
+  ceilOp = addSystemImport $ unOpPrec "Math.Ceiling"
 
 instance BinaryOpSym CSharpCode where
   type BinaryOp CSharpCode = OpData
-  equalOp = toCode equalOpDocD
-  notEqualOp = toCode notEqualOpDocD
-  greaterOp = toCode greaterOpDocD
-  greaterEqualOp = toCode greaterEqualOpDocD
-  lessOp = toCode lessOpDocD
-  lessEqualOp = toCode lessEqualOpDocD
-  plusOp = toCode plusOpDocD
-  minusOp = toCode minusOpDocD
-  multOp = toCode multOpDocD
-  divideOp = toCode divideOpDocD
-  powerOp = toCode $ powerPrec "Math.Pow"
-  moduloOp = toCode moduloOpDocD
-  andOp = toCode andOpDocD
-  orOp = toCode orOpDocD
+  equalOp = G.equalOp
+  notEqualOp = G.notEqualOp
+  greaterOp = G.greaterOp
+  greaterEqualOp = G.greaterEqualOp
+  lessOp = G.lessOp
+  lessEqualOp = G.lessEqualOp
+  plusOp = G.plusOp
+  minusOp = G.minusOp
+  multOp = G.multOp
+  divideOp = G.divideOp
+  powerOp = addSystemImport $ powerPrec "Math.Pow"
+  moduloOp = G.moduloOp
+  andOp = G.andOp
+  orOp = G.orOp
 
 instance InternalOp CSharpCode where
   uOpDoc = opDoc . unCSC
   bOpDoc = opDoc . unCSC
   uOpPrec = opPrec . unCSC
   bOpPrec = opPrec . unCSC
+  
+  uOpFromData p d = toState $ toCode $ od p d
+  bOpFromData p d = toState $ toCode $ od p d
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
@@ -614,12 +616,15 @@ instance BlockCommentSym CSharpCode where
 
   blockCommentDoc = unCSC
 
+addSystemImport :: GS a -> GS a
+addSystemImport = (>>) $ modify (addLangImport "System")
+
 csName :: String
 csName = "C#"
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [
-  inc <+> text "System" <> end, -- Console, Math
+  inc <+> text "System" <> end, -- Console
   inc <+> text "System.IO" <> end,
   inc <+> text "System.Collections.Generic" <> end]
 

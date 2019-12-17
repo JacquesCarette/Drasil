@@ -24,19 +24,17 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
   bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
-  mkSt, breakDocD, continueDocD, unOpPrec, notOpDocD, negateOpDocD, unExpr, 
-  unExpr', typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
-  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
-  multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
-  binExpr', typeBinExpr, mkStateVal, mkVal, classVarDocD, newObjDocD, castDocD, 
-  castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
-  dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, 
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  commentedModD, docFuncRepr, valueList, parameterList, appendToBody, 
-  surroundBody, intValue, filterOutObjs)
+  mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, newObjDocD, 
+  castDocD, castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
+  publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
+  docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, commentedModD, docFuncRepr, valueList, parameterList, 
+  appendToBody, surroundBody, intValue, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, bool, int, double, char, listType, listInnerType, obj, 
-  enumType, void, runStrategy, listSlice, var, staticVar, extVar, self, enumVar,
+  enumType, void, runStrategy, listSlice, notOp, negateOp, equalOp, notEqualOp, 
+  greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
+  divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar,
   classVar, objVar, objVarSelf, listVar, listOf, iterVar, litTrue, litFalse, 
   litChar, litFloat, litInt, litString, pi, valueOf, arg, enumElement, argsList,
   inlineIf, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
@@ -56,9 +54,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
   pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
   commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
+  unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, updateMthdDoc, OpData(..), ParamData(..), pd, 
+  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
@@ -195,44 +195,47 @@ instance ControlBlockSym JavaCode where
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
-  notOp = toCode notOpDocD
-  negateOp = toCode negateOpDocD
-  sqrtOp = toCode $ unOpPrec "Math.sqrt"
-  absOp = toCode $ unOpPrec "Math.abs"
-  logOp = toCode $ unOpPrec "Math.log10"
-  lnOp = toCode $ unOpPrec "Math.log"
-  expOp = toCode $ unOpPrec "Math.exp"
-  sinOp = toCode $ unOpPrec "Math.sin"
-  cosOp = toCode $ unOpPrec "Math.cos"
-  tanOp = toCode $ unOpPrec "Math.tan"
-  asinOp = toCode $ unOpPrec "Math.asin"
-  acosOp = toCode $ unOpPrec "Math.acos"
-  atanOp = toCode $ unOpPrec "Math.atan"
-  floorOp = toCode $ unOpPrec "Math.floor"
-  ceilOp = toCode $ unOpPrec "Math.ceil"
+  notOp = G.notOp
+  negateOp = G.negateOp
+  sqrtOp = unOpPrec "Math.sqrt"
+  absOp = unOpPrec "Math.abs"
+  logOp = unOpPrec "Math.log10"
+  lnOp = unOpPrec "Math.log"
+  expOp = unOpPrec "Math.exp"
+  sinOp = unOpPrec "Math.sin"
+  cosOp = unOpPrec "Math.cos"
+  tanOp = unOpPrec "Math.tan"
+  asinOp = unOpPrec "Math.asin"
+  acosOp = unOpPrec "Math.acos"
+  atanOp = unOpPrec "Math.atan"
+  floorOp = unOpPrec "Math.floor"
+  ceilOp = unOpPrec "Math.ceil"
 
 instance BinaryOpSym JavaCode where
   type BinaryOp JavaCode = OpData
-  equalOp = toCode equalOpDocD
-  notEqualOp = toCode notEqualOpDocD
-  greaterOp = toCode greaterOpDocD
-  greaterEqualOp = toCode greaterEqualOpDocD
-  lessOp = toCode lessOpDocD
-  lessEqualOp = toCode lessEqualOpDocD
-  plusOp = toCode plusOpDocD
-  minusOp = toCode minusOpDocD
-  multOp = toCode multOpDocD
-  divideOp = toCode divideOpDocD
-  powerOp = toCode $ powerPrec "Math.pow"
-  moduloOp = toCode moduloOpDocD
-  andOp = toCode andOpDocD
-  orOp = toCode orOpDocD
+  equalOp = G.equalOp
+  notEqualOp = G.notEqualOp
+  greaterOp = G.greaterOp
+  greaterEqualOp = G.greaterEqualOp
+  lessOp = G.lessOp
+  lessEqualOp = G.lessEqualOp
+  plusOp = G.plusOp
+  minusOp = G.minusOp
+  multOp = G.multOp
+  divideOp = G.divideOp
+  powerOp = powerPrec "Math.pow"
+  moduloOp = G.moduloOp
+  andOp = G.andOp
+  orOp = G.orOp
 
 instance InternalOp JavaCode where
   uOpDoc = opDoc . unJC
   bOpDoc = opDoc . unJC
   uOpPrec = opPrec . unJC
   bOpPrec = opPrec . unJC
+  
+  uOpFromData p d = toState $ toCode $ od p d
+  bOpFromData p d = toState $ toCode $ od p d
 
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData

@@ -24,19 +24,16 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
   bodyDocD, outDoc, destructorError, multiAssignDoc, returnDocD, mkStNoEnd,
-  breakDocD, continueDocD, unOpPrec, notOpDocD', negateOpDocD, sqrtOpDocD', 
-  absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', 
-  acosOpDocD', atanOpDocD', unExpr, unExpr', typeUnExpr, powerPrec, multPrec, 
-  andPrec, orPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
-  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
-  multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkStateVal, 
-  mkStateVal, mkVal, mkStateVar, classVarDocD, newObjDocD', 
-  listSetFuncDocD, castObjDocD, dynamicDocD, bindingError, classDec, dot, 
-  forLabel, inLabel, observerListName, commentedItem, addCommentsDocD, 
-  commentedModD, docFuncRepr, valueList, parameterList, surroundBody, 
-  filterOutObjs)
+  breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, 
+  newObjDocD', listSetFuncDocD, castObjDocD, dynamicDocD, bindingError, 
+  classDec, dot, forLabel, inLabel, observerListName, commentedItem, 
+  addCommentsDocD, commentedModD, docFuncRepr, valueList, parameterList, 
+  surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, block, int, float, listInnerType, obj, enumType, runStrategy, var, 
+  oneLiner, block, int, float, listInnerType, obj, enumType, runStrategy, 
+  notOp', negateOp, sqrtOp', absOp', expOp', sinOp', cosOp', tanOp', asinOp', 
+  acosOp', atanOp', equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
+  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, 
   staticVar, extVar, enumVar, classVar, objVar, objVarSelf, listVar, listOf, 
   iterVar, litChar, litFloat, litInt, litString, valueOf, arg, enumElement, 
   argsList, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
@@ -53,16 +50,19 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, pubClass, 
   docClass, commentedClass, buildModule, modFromData, fileDoc, docMod, 
   fileFromData)
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
+  unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, binExpr, 
+  typeBinExpr, addmathImport)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, updateMthdDoc, OpData(..), ParamData(..), pd, 
+  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on5StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
   on1StateValue1List)
 import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, initialState, 
-  setCurrMain)
+  addLangImport, setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -196,44 +196,47 @@ instance ControlBlockSym PythonCode where
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData
-  notOp = toCode notOpDocD'
-  negateOp = toCode negateOpDocD
-  sqrtOp = toCode sqrtOpDocD'
-  absOp = toCode absOpDocD'
-  logOp = toCode pyLogOp
-  lnOp = toCode pyLnOp
-  expOp = toCode expOpDocD'
-  sinOp = toCode sinOpDocD'
-  cosOp = toCode cosOpDocD'
-  tanOp = toCode tanOpDocD'
-  asinOp = toCode asinOpDocD'
-  acosOp = toCode acosOpDocD'
-  atanOp = toCode atanOpDocD'
-  floorOp = toCode $ unOpPrec "math.floor"
-  ceilOp = toCode $ unOpPrec "math.ceil"
+  notOp = G.notOp'
+  negateOp = G.negateOp
+  sqrtOp = G.sqrtOp'
+  absOp = G.absOp'
+  logOp = pyLogOp
+  lnOp = pyLnOp
+  expOp = G.expOp'
+  sinOp = G.sinOp'
+  cosOp = G.cosOp'
+  tanOp = G.tanOp'
+  asinOp = G.asinOp'
+  acosOp = G.acosOp'
+  atanOp = G.atanOp'
+  floorOp = addmathImport $ unOpPrec "math.floor"
+  ceilOp = addmathImport $ unOpPrec "math.ceil"
 
 instance BinaryOpSym PythonCode where
   type BinaryOp PythonCode = OpData
-  equalOp = toCode equalOpDocD
-  notEqualOp = toCode notEqualOpDocD
-  greaterOp = toCode greaterOpDocD
-  greaterEqualOp = toCode greaterEqualOpDocD
-  lessOp = toCode lessOpDocD
-  lessEqualOp = toCode lessEqualOpDocD
-  plusOp = toCode plusOpDocD
-  minusOp = toCode minusOpDocD
-  multOp = toCode multOpDocD
-  divideOp = toCode divideOpDocD
-  powerOp = toCode $ powerPrec "**"
-  moduloOp = toCode moduloOpDocD
-  andOp = toCode $ andPrec "and"
-  orOp = toCode $ orPrec "or"
+  equalOp = G.equalOp
+  notEqualOp = G.notEqualOp
+  greaterOp = G.greaterOp
+  greaterEqualOp = G.greaterEqualOp
+  lessOp = G.lessOp
+  lessEqualOp = G.lessEqualOp
+  plusOp = G.plusOp
+  minusOp = G.minusOp
+  multOp = G.multOp
+  divideOp = G.divideOp
+  powerOp = powerPrec "**"
+  moduloOp = G.moduloOp
+  andOp = andPrec "and"
+  orOp = orPrec "or"
 
 instance InternalOp PythonCode where
   uOpDoc = opDoc . unPC
   bOpDoc = opDoc . unPC
   uOpPrec = opPrec . unPC
   bOpPrec = opPrec . unPC
+  
+  uOpFromData p d = toState $ toCode $ od p d
+  bOpFromData p d = toState $ toCode $ od p d
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
@@ -270,14 +273,14 @@ instance ValueSym PythonCode where
   litInt = G.litInt
   litString = G.litString
 
-  pi = mkStateVal float (text "math.pi")
+  pi = addmathImport $ mkStateVal float (text "math.pi")
 
   ($:) = enumElement
 
   valueOf = G.valueOf
   arg n = G.arg (litInt $ n+1) argsList
   enumElement = G.enumElement
-  argsList = G.argsList "sys.argv"
+  argsList = modify (addLangImport "sys") >> G.argsList "sys.argv"
 
   valueType = onCodeValue valType
   valueDoc = valDoc . unPC
@@ -291,7 +294,7 @@ instance NumericExpression PythonCode where
   (#*) = binExpr multOp
   (#/) v1' v2' = join $ on2StateValues (\v1 v2 -> pyDivision (getType $ 
     valueType v1) (getType $ valueType v2) v1' v2') v1' v2'
-    where pyDivision Integer Integer = binExpr (toCode $ multPrec "//")
+    where pyDivision Integer Integer = binExpr (multPrec "//")
           pyDivision _ _ = binExpr divideOp
   (#%) = binExpr moduloOp
   (#^) = binExpr powerOp
@@ -649,11 +652,11 @@ pytop = vcat [   -- There are also imports from the libraries supplied by module
 pyInclude :: Label -> Doc
 pyInclude n = text imp <+> text n
 
-pyLogOp :: OpData
-pyLogOp = unOpPrec "math.log10"
+pyLogOp :: (RenderSym repr) => GS (repr (UnaryOp repr))
+pyLogOp = addmathImport $ unOpPrec "math.log10"
 
-pyLnOp :: OpData
-pyLnOp = unOpPrec "math.log"
+pyLnOp :: (RenderSym repr) => GS (repr (UnaryOp repr))
+pyLnOp = addmathImport $ unOpPrec "math.log"
 
 pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v

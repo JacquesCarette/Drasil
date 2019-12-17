@@ -157,44 +157,47 @@ listSlice vnew vold b e s = listSlice' b e s vnew vold
 
 class UnaryOpSym repr where
   type UnaryOp repr
-  notOp    :: repr (UnaryOp repr)
-  negateOp :: repr (UnaryOp repr)
-  sqrtOp   :: repr (UnaryOp repr)
-  absOp    :: repr (UnaryOp repr)
-  logOp    :: repr (UnaryOp repr)
-  lnOp     :: repr (UnaryOp repr)
-  expOp    :: repr (UnaryOp repr)
-  sinOp    :: repr (UnaryOp repr)
-  cosOp    :: repr (UnaryOp repr)
-  tanOp    :: repr (UnaryOp repr)
-  asinOp   :: repr (UnaryOp repr)
-  acosOp   :: repr (UnaryOp repr)
-  atanOp   :: repr (UnaryOp repr)
-  floorOp  :: repr (UnaryOp repr)
-  ceilOp   :: repr (UnaryOp repr)
+  notOp    :: GS (repr (UnaryOp repr))
+  negateOp :: GS (repr (UnaryOp repr))
+  sqrtOp   :: GS (repr (UnaryOp repr))
+  absOp    :: GS (repr (UnaryOp repr))
+  logOp    :: GS (repr (UnaryOp repr))
+  lnOp     :: GS (repr (UnaryOp repr))
+  expOp    :: GS (repr (UnaryOp repr))
+  sinOp    :: GS (repr (UnaryOp repr))
+  cosOp    :: GS (repr (UnaryOp repr))
+  tanOp    :: GS (repr (UnaryOp repr))
+  asinOp   :: GS (repr (UnaryOp repr))
+  acosOp   :: GS (repr (UnaryOp repr))
+  atanOp   :: GS (repr (UnaryOp repr))
+  floorOp  :: GS (repr (UnaryOp repr))
+  ceilOp   :: GS (repr (UnaryOp repr))
 
 class BinaryOpSym repr where
   type BinaryOp repr
-  equalOp        :: repr (BinaryOp repr)
-  notEqualOp     :: repr (BinaryOp repr)
-  greaterOp      :: repr (BinaryOp repr)
-  greaterEqualOp :: repr (BinaryOp repr)
-  lessOp         :: repr (BinaryOp repr)
-  lessEqualOp    :: repr (BinaryOp repr)
-  plusOp         :: repr (BinaryOp repr)
-  minusOp        :: repr (BinaryOp repr)
-  multOp         :: repr (BinaryOp repr)
-  divideOp       :: repr (BinaryOp repr)
-  powerOp        :: repr (BinaryOp repr)
-  moduloOp       :: repr (BinaryOp repr)
-  andOp          :: repr (BinaryOp repr)
-  orOp           :: repr (BinaryOp repr)
+  equalOp        :: GS (repr (BinaryOp repr))
+  notEqualOp     :: GS (repr (BinaryOp repr))
+  greaterOp      :: GS (repr (BinaryOp repr))
+  greaterEqualOp :: GS (repr (BinaryOp repr))
+  lessOp         :: GS (repr (BinaryOp repr))
+  lessEqualOp    :: GS (repr (BinaryOp repr))
+  plusOp         :: GS (repr (BinaryOp repr))
+  minusOp        :: GS (repr (BinaryOp repr))
+  multOp         :: GS (repr (BinaryOp repr))
+  divideOp       :: GS (repr (BinaryOp repr))
+  powerOp        :: GS (repr (BinaryOp repr))
+  moduloOp       :: GS (repr (BinaryOp repr))
+  andOp          :: GS (repr (BinaryOp repr))
+  orOp           :: GS (repr (BinaryOp repr))
 
 class InternalOp repr where
   uOpDoc :: repr (UnaryOp repr) -> Doc
   bOpDoc :: repr (BinaryOp repr) -> Doc
   uOpPrec :: repr (UnaryOp repr) -> Int
   bOpPrec :: repr (BinaryOp repr) -> Int
+
+  uOpFromData :: Int -> Doc -> GS (repr (UnaryOp repr))
+  bOpFromData :: Int -> Doc -> GS (repr (BinaryOp repr))
 
 class (TypeSym repr) => VariableSym repr where
   type Variable repr

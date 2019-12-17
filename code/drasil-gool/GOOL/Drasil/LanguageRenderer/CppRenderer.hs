@@ -26,21 +26,19 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD, 
   bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, freeDocD, mkSt, 
-  mkStNoEnd, breakDocD, continueDocD, unOpPrec, notOpDocD, negateOpDocD, 
-  sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, asinOpDocD,
-  acosOpDocD, atanOpDocD, unExpr, unExpr', typeUnExpr, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
-  typeBinExpr, mkStateVal, mkVal, mkStateVar, mkVar, classVarCheckStatic,
-  newObjDocD', castDocD, castObjDocD,  staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, docCmtStart, 
-  doubleSlash, elseIfLabel, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, commentedModD, valueList, parameterList, 
-  appendToBody, surroundBody, getterName, setterName, filterOutObjs)
+  mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
+  classVarCheckStatic, newObjDocD', castDocD, castObjDocD, staticDocD, 
+  dynamicDocD, privateDocD, publicDocD, classDec, dot, blockCmtStart, 
+  blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, blockCmtDoc, docCmtDoc, 
+  commentedItem, addCommentsDocD, functionDox, commentedModD, valueList, 
+  parameterList, appendToBody, surroundBody, getterName, setterName, 
+  filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, int, double, char, string, listType, listInnerType, obj, 
-  enumType, void, runStrategy, listSlice, var, staticVar, self, enumVar, objVar,
+  enumType, void, runStrategy, listSlice, notOp, negateOp, sqrtOp, absOp, expOp,
+  sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, equalOp, notEqualOp, greaterOp, 
+  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
+  moduloOp, powerOp, andOp, orOp, var, staticVar, self, enumVar, objVar,
   listVar, listOf, litTrue, litFalse, litChar, litFloat, litInt, litString, 
   valueOf, arg, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, funcApp, newObj, func, 
@@ -57,6 +55,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   docFunc, docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, 
   pubClass, docClass, commentedClass, buildModule, modFromData, fileDoc, docMod,
   fileFromData)
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
+  unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
@@ -220,44 +220,47 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
   type UnaryOp (p CppSrcCode CppHdrCode) = OpData
-  notOp = pair notOp notOp
-  negateOp = pair negateOp negateOp
-  sqrtOp = pair sqrtOp sqrtOp
-  absOp = pair absOp absOp
-  logOp = pair logOp logOp
-  lnOp = pair lnOp lnOp
-  expOp = pair expOp expOp
-  sinOp = pair sinOp sinOp
-  cosOp = pair cosOp cosOp
-  tanOp = pair tanOp tanOp
-  asinOp = pair asinOp asinOp
-  acosOp = pair acosOp acosOp
-  atanOp = pair atanOp atanOp
-  floorOp = pair floorOp floorOp
-  ceilOp = pair ceilOp ceilOp
+  notOp = on2StateValues pair notOp notOp
+  negateOp = on2StateValues pair negateOp negateOp
+  sqrtOp = on2StateValues pair sqrtOp sqrtOp
+  absOp = on2StateValues pair absOp absOp
+  logOp = on2StateValues pair logOp logOp
+  lnOp = on2StateValues pair lnOp lnOp
+  expOp = on2StateValues pair expOp expOp
+  sinOp = on2StateValues pair sinOp sinOp
+  cosOp = on2StateValues pair cosOp cosOp
+  tanOp = on2StateValues pair tanOp tanOp
+  asinOp = on2StateValues pair asinOp asinOp
+  acosOp = on2StateValues pair acosOp acosOp
+  atanOp = on2StateValues pair atanOp atanOp
+  floorOp = on2StateValues pair floorOp floorOp
+  ceilOp = on2StateValues pair ceilOp ceilOp
 
 instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
   type BinaryOp (p CppSrcCode CppHdrCode) = OpData
-  equalOp = pair equalOp equalOp
-  notEqualOp = pair notEqualOp notEqualOp
-  greaterOp = pair greaterOp greaterOp
-  greaterEqualOp = pair greaterEqualOp greaterEqualOp
-  lessOp = pair lessOp lessOp
-  lessEqualOp = pair lessEqualOp lessEqualOp
-  plusOp = pair plusOp plusOp
-  minusOp = pair minusOp minusOp
-  multOp = pair multOp multOp
-  divideOp = pair divideOp divideOp
-  powerOp = pair powerOp powerOp
-  moduloOp = pair moduloOp moduloOp
-  andOp = pair andOp andOp
-  orOp = pair orOp orOp
+  equalOp = on2StateValues pair equalOp equalOp
+  notEqualOp = on2StateValues pair notEqualOp notEqualOp
+  greaterOp = on2StateValues pair greaterOp greaterOp
+  greaterEqualOp = on2StateValues pair greaterEqualOp greaterEqualOp
+  lessOp = on2StateValues pair lessOp lessOp
+  lessEqualOp = on2StateValues pair lessEqualOp lessEqualOp
+  plusOp = on2StateValues pair plusOp plusOp
+  minusOp = on2StateValues pair minusOp minusOp
+  multOp = on2StateValues pair multOp multOp
+  divideOp = on2StateValues pair divideOp divideOp
+  powerOp = on2StateValues pair powerOp powerOp
+  moduloOp = on2StateValues pair moduloOp moduloOp
+  andOp = on2StateValues pair andOp andOp
+  orOp = on2StateValues pair orOp orOp
 
 instance (Pair p) => InternalOp (p CppSrcCode CppHdrCode) where
   uOpDoc o = uOpDoc $ pfst o
   bOpDoc o = bOpDoc $ pfst o
   uOpPrec o = uOpPrec $ pfst o
   bOpPrec o = bOpPrec $ pfst o
+  
+  uOpFromData p d = on2StateValues pair (uOpFromData p d) (uOpFromData p d)
+  bOpFromData p d = on2StateValues pair (bOpFromData p d) (bOpFromData p d)
 
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   type Variable (p CppSrcCode CppHdrCode) = VarData
@@ -998,44 +1001,47 @@ instance ControlBlockSym CppSrcCode where
 
 instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
-  notOp = toCode notOpDocD
-  negateOp = toCode negateOpDocD
-  sqrtOp = toCode sqrtOpDocD
-  absOp = toCode absOpDocD
-  logOp = toCode $ unOpPrec "log10"
-  lnOp = toCode $ unOpPrec "log"
-  expOp = toCode expOpDocD
-  sinOp = toCode sinOpDocD
-  cosOp = toCode cosOpDocD
-  tanOp = toCode tanOpDocD
-  asinOp = toCode asinOpDocD
-  acosOp = toCode acosOpDocD
-  atanOp = toCode atanOpDocD
-  floorOp = toCode $ unOpPrec "floor"
-  ceilOp = toCode $ unOpPrec "ceil"
+  notOp = G.notOp
+  negateOp = G.negateOp
+  sqrtOp = addMathHImport $ G.sqrtOp
+  absOp = addMathHImport $ G.absOp
+  logOp = addMathHImport $ unOpPrec "log10"
+  lnOp = addMathHImport $ unOpPrec "log"
+  expOp = addMathHImport $ G.expOp
+  sinOp = addMathHImport $ G.sinOp
+  cosOp = addMathHImport $ G.cosOp
+  tanOp = addMathHImport $ G.tanOp
+  asinOp = addMathHImport $ G.asinOp
+  acosOp = addMathHImport $ G.acosOp
+  atanOp = addMathHImport $ G.atanOp
+  floorOp = addMathHImport $ unOpPrec "floor"
+  ceilOp = addMathHImport $ unOpPrec "ceil"
 
 instance BinaryOpSym CppSrcCode where
   type BinaryOp CppSrcCode = OpData
-  equalOp = toCode equalOpDocD
-  notEqualOp = toCode notEqualOpDocD
-  greaterOp = toCode greaterOpDocD
-  greaterEqualOp = toCode greaterEqualOpDocD
-  lessOp = toCode lessOpDocD
-  lessEqualOp = toCode lessEqualOpDocD
-  plusOp = toCode plusOpDocD
-  minusOp = toCode minusOpDocD
-  multOp = toCode multOpDocD
-  divideOp = toCode divideOpDocD
-  powerOp = toCode powerOpDocD
-  moduloOp = toCode moduloOpDocD
-  andOp = toCode andOpDocD
-  orOp = toCode orOpDocD
+  equalOp = G.equalOp
+  notEqualOp = G.notEqualOp
+  greaterOp = G.greaterOp
+  greaterEqualOp = G.greaterEqualOp
+  lessOp = G.lessOp
+  lessEqualOp = G.lessEqualOp
+  plusOp = G.plusOp
+  minusOp = G.minusOp
+  multOp = G.multOp
+  divideOp = G.divideOp
+  powerOp = addMathHImport $ G.powerOp
+  moduloOp = G.moduloOp
+  andOp = G.andOp
+  orOp = G.orOp
 
 instance InternalOp CppSrcCode where
   uOpDoc = opDoc . unCPPSC
   bOpDoc = opDoc . unCPPSC
   uOpPrec = opPrec . unCPPSC
   bOpPrec = opPrec . unCPPSC
+  
+  uOpFromData p d = toState $ toCode $ od p d
+  bOpFromData p d = toState $ toCode $ od p d
 
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
@@ -1583,44 +1589,47 @@ instance ControlBlockSym CppHdrCode where
 
 instance UnaryOpSym CppHdrCode where
   type UnaryOp CppHdrCode = OpData
-  notOp = toCode $ od 0 empty
-  negateOp = toCode $ od 0 empty
-  sqrtOp = toCode $ od 0 empty
-  absOp = toCode $ od 0 empty
-  logOp = toCode $ od 0 empty
-  lnOp = toCode $ od 0 empty
-  expOp = toCode $ od 0 empty
-  sinOp = toCode $ od 0 empty
-  cosOp = toCode $ od 0 empty
-  tanOp = toCode $ od 0 empty
-  asinOp = toCode $ od 0 empty
-  acosOp = toCode $ od 0 empty
-  atanOp = toCode $ od 0 empty
-  floorOp = toCode $ od 0 empty
-  ceilOp = toCode $ od 0 empty
+  notOp = uOpFromData 0 empty
+  negateOp = uOpFromData 0 empty
+  sqrtOp = uOpFromData 0 empty
+  absOp = uOpFromData 0 empty
+  logOp = uOpFromData 0 empty
+  lnOp = uOpFromData 0 empty
+  expOp = uOpFromData 0 empty
+  sinOp = uOpFromData 0 empty
+  cosOp = uOpFromData 0 empty
+  tanOp = uOpFromData 0 empty
+  asinOp = uOpFromData 0 empty
+  acosOp = uOpFromData 0 empty
+  atanOp = uOpFromData 0 empty
+  floorOp = uOpFromData 0 empty
+  ceilOp = uOpFromData 0 empty
 
 instance BinaryOpSym CppHdrCode where
   type BinaryOp CppHdrCode = OpData
-  equalOp = toCode $ od 0 empty
-  notEqualOp = toCode $ od 0 empty
-  greaterOp = toCode $ od 0 empty
-  greaterEqualOp = toCode $ od 0 empty
-  lessOp = toCode $ od 0 empty
-  lessEqualOp = toCode $ od 0 empty
-  plusOp = toCode $ od 0 empty
-  minusOp = toCode $ od 0 empty
-  multOp = toCode $ od 0 empty
-  divideOp = toCode $ od 0 empty
-  powerOp = toCode $ od 0 empty
-  moduloOp = toCode $ od 0 empty
-  andOp = toCode $ od 0 empty
-  orOp = toCode $ od 0 empty
+  equalOp = bOpFromData 0 empty
+  notEqualOp = bOpFromData 0 empty
+  greaterOp = bOpFromData 0 empty
+  greaterEqualOp = bOpFromData 0 empty
+  lessOp = bOpFromData 0 empty
+  lessEqualOp = bOpFromData 0 empty
+  plusOp = bOpFromData 0 empty
+  minusOp = bOpFromData 0 empty
+  multOp = bOpFromData 0 empty
+  divideOp = bOpFromData 0 empty
+  powerOp = bOpFromData 0 empty
+  moduloOp = bOpFromData 0 empty
+  andOp = bOpFromData 0 empty
+  orOp = bOpFromData 0 empty
 
 instance InternalOp CppHdrCode where
   uOpDoc = opDoc . unCPPHC
   bOpDoc = opDoc . unCPPHC
   uOpPrec = opPrec . unCPPHC
   bOpPrec = opPrec . unCPPHC
+  
+  uOpFromData p d = toState $ toCode $ od p d
+  bOpFromData p d = toState $ toCode $ od p d
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
@@ -2035,6 +2044,9 @@ mthd :: ScopeTag -> Doc -> MethodData
 mthd = MthD 
 
 -- convenience
+addMathHImport :: GS a -> GS a
+addMathHImport = (>>) $ modify (addLangImport "math.h")
+
 cppName :: String
 cppName = "C++" 
 

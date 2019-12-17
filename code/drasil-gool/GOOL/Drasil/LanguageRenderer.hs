@@ -11,17 +11,17 @@ module GOOL.Drasil.LanguageRenderer (
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, 
   printFileDocD, destructorError, paramDocD, methodDocD, methodListDocD, 
   stateVarDocD, constVarDocD, stateVarListDocD, switchDocD, assignDocD, 
-  multiAssignDoc, plusEqualsDocD, plusPlusDocD, listDecDocD, listDecDefDocD, 
-  statementDocD, getTermDoc, returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd,
-  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, 
-  selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarDocD, 
-  objVarDocD, funcAppDocD, newObjDocD, newObjDocD', constDecDefDocD, funcDocD, 
-  castDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
-  includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, 
-  privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, classDox, moduleDox, commentedModD, docFuncRepr,
-  valueList, variableList, parameterList, prependToBody, appendToBody, 
-  surroundBody, getterName, setterName, intValue, filterOutObjs
+  multiAssignDoc, plusEqualsDocD, plusPlusDocD, listDecDocD, statementDocD, 
+  getTermDoc, returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd, mkStateVal, 
+  mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, selfDocD, argDocD,
+  enumElemDocD, classVarCheckStatic, classVarDocD, objVarDocD, funcAppDocD, 
+  newObjDocD, newObjDocD', constDecDefDocD, funcDocD, castDocD, 
+  listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, includeD, 
+  breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
+  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDox, classDox, moduleDox, commentedModD, docFuncRepr, valueList, 
+  variableList, parameterList, prependToBody, appendToBody, surroundBody, 
+  getterName, setterName, intValue, filterOutObjs
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -45,8 +45,8 @@ import Data.List (last)
 import Control.Monad.State (evalState)
 import Prelude hiding (break,print,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
-  space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, braces, 
-  int, colon)
+  space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, int, 
+  colon)
 
 ----------------------------------------
 -- Syntax common to several renderers --
@@ -263,11 +263,6 @@ listDecDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) ->
   Doc
 listDecDocD v n = space <> equals <+> new <+> getTypeDoc (variableType v) 
   <> parens (valueDoc n)
-
-listDecDefDocD :: (RenderSym repr) => repr (Variable repr) -> 
-  [repr (Value repr)] -> Doc
-listDecDefDocD v vs = space <> equals <+> new <+> getTypeDoc (variableType v) 
-  <+> braces (valueList vs)
 
 constDecDefDocD :: (RenderSym repr) => repr (Variable repr) -> 
   repr (Value repr) -> Doc

@@ -28,8 +28,8 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   castDocD, castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
   docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, commentedModD, docFuncRepr, valueList, parameterList, 
-  appendToBody, surroundBody, intValue, filterOutObjs)
+  addCommentsDocD, commentedModD, docFuncRepr, parameterList, appendToBody, 
+  surroundBody, intValue, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, bool, int, double, char, listType, listInnerType, obj, 
   enumType, void, runStrategy, listSlice, notOp, negateOp, equalOp, notEqualOp, 
@@ -43,24 +43,24 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listSet, getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, 
   iterBeginError, iterEndError, listAccessFunc', printSt, state, loopState, 
   emptyState, assign, assignToListIndex, multiAssignError, decrement, increment,
-  decrement1, increment1, varDec, varDecDef, listDec, listDecDef', 
-  objDecNew, objDecNewNoParams, discardInput, discardFileInput, openFileR, 
-  openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
-  stringListLists, returnState, multiReturnError, valState, comment, freeError, 
-  throw, initState, changeState, initObserverList, addObserver, ifCond, 
-  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
-  tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
-  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
+  decrement1, increment1, varDec, varDecDef, listDec, objDecNew, 
+  objDecNewNoParams, discardInput, discardFileInput, openFileR, openFileW, 
+  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
+  returnState, multiReturnError, valState, comment, freeError, throw, initState,
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
+  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
+  pubMethod, constructor, docMain, function, mainFunction, docFunc, intFunc, 
+  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
+  privClass, pubClass, docClass, commentedClass, buildModule', modFromData, 
+  fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
+import GOOL.Drasil.Helpers (angles, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, initialState, 
@@ -72,7 +72,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify, evalState)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, space, 
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
   equals, semi, vcat, lbrace, rbrace, render, colon, render)
 
 jExt :: String
@@ -431,7 +431,8 @@ instance StatementSym JavaCode where
   varDecDef = G.varDecDef
   listDec n v = v >>= (\v' -> G.listDec (listDecDocD v') (litInt n) v)
   listDecDef v vs = modify (if null vs then id else addLangImport 
-    "java.util.Arrays") >> G.listDecDef' jListDecDef v vs
+    "java.util.Arrays") >> objDecNew v [funcApp "Arrays.asList" 
+    (onStateValue variableType v) vs]
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew
@@ -683,13 +684,6 @@ jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $
         jCast' Integer (Enum _) _ _ = v $. func "ordinal" int []
         jCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
           tp)) (valueDoc vl))
-
-jListDecDef :: (RenderSym repr) => repr (Variable repr) -> [repr (Value repr)] 
-  -> Doc
-jListDecDef v vs = space <> equals <+> new <+> getTypeDoc (variableType v) <+> 
-  parens listElements
-  where listElements = emptyIfNull vs $ text "Arrays.asList" <> parens 
-          (valueList vs)
 
 jConstDecDef :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) 
   -> Doc

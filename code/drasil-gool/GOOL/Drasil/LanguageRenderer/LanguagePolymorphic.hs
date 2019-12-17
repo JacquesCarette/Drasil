@@ -75,7 +75,7 @@ import GOOL.Drasil.Data (Binding(..), Terminator(..), FileType)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toState, onStateValue, on2StateValues, on3StateValues, on4StateValues, 
   onStateList, on2StateLists, on1StateValue1List, getInnerType, convType)
-import GOOL.Drasil.LanguageRenderer (forLabel, observerListName, addExt, 
+import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt, 
   blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, mkStateVal, mkVal, 
   mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, selfDocD, argDocD, 
   enumElemDocD, classVarCheckStatic, objVarDocD, funcAppDocD, objAccessDocD, 
@@ -99,7 +99,7 @@ import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  quotes, integer, vcat, semi, comma, equals, isEmpty)
+  braces, quotes, integer, vcat, semi, comma, equals, isEmpty)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
 -- Bodies --
@@ -673,11 +673,11 @@ listDecDef :: (RenderSym repr) => ([repr (Value repr)] -> Doc) ->
 listDecDef f v = on1StateValue1List (\vd vs -> stateFromData (statementDoc vd 
   <> f vs) Semi) (S.varDec v)
 
-listDecDef' :: (RenderSym repr) => (repr (Variable repr)-> [repr (Value repr)] 
-  -> Doc) -> GS (repr (Variable repr)) -> [GS (repr (Value repr))] -> 
-  GS (repr (Statement repr))
-listDecDef' f v vals = on3StateValues (\vd vr vs -> stateFromData (statementDoc
-  vd <> f vr vs) Semi) (S.varDec v) v (sequence vals)
+listDecDef' :: (RenderSym repr) => GS (repr (Variable repr)) -> 
+  [GS (repr (Value repr))] -> GS (repr (Statement repr))
+listDecDef' v vals = on3StateValues (\vd vr vs -> stateFromData (statementDoc
+  vd <+> equals <+> new <+> getTypeDoc (variableType vr) <+> braces 
+  (valueList vs)) Semi) (S.varDec v) v (sequence vals)
 
 objDecNew :: (RenderSym repr) => GS (repr (Variable repr)) -> 
   [GS (repr (Value repr))] -> GS (repr (Statement repr))

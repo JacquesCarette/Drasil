@@ -24,12 +24,12 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
-  listDecDefDocD, mkSt, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
-  classVarDocD, objVarDocD, newObjDocD, funcDocD, castDocD, listSetFuncDocD, 
-  castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
-  dot, new, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
-  inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  commentedModD, appendToBody, surroundBody, filterOutObjs)
+  mkSt, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, classVarDocD, 
+  objVarDocD, newObjDocD, funcDocD, castDocD, listSetFuncDocD, castObjDocD, 
+  staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, dot, 
+  blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, 
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD, 
+  appendToBody, surroundBody, filterOutObjs)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, bool, int, double, char, string, listType, listInnerType,
   obj, enumType, void, runStrategy, listSlice, notOp, negateOp, equalOp, 
@@ -63,15 +63,15 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, addLangImport, 
-  setCurrMain)
+import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, getPutReturn, 
+  addLangImport, setCurrMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty,
   semi, vcat, lbrace, rbrace, colon)
 
 csExt :: String
@@ -173,7 +173,8 @@ instance TypeSym CSharpCode where
   string = G.string
   infile = csInfileType
   outfile = csOutfileType
-  listType = G.listType
+  listType p t = modify (addLangImport "System.Collections.Generic") >> 
+    G.listType p t
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
@@ -334,9 +335,9 @@ instance ValueExpression CSharpCode where
   notNull = G.notNull
 
 instance InternalValue CSharpCode where
-  inputFunc = mkStateVal string (text "Console.ReadLine()")
-  printFunc = mkStateVal void (text "Console.Write")
-  printLnFunc = mkStateVal void (text "Console.WriteLine")
+  inputFunc = addSystemImport $ mkStateVal string (text "Console.ReadLine()")
+  printFunc = addSystemImport $ mkStateVal void (text "Console.Write")
+  printLnFunc = addSystemImport $ mkStateVal void (text "Console.WriteLine")
   printFileFunc = on2StateValues (\v -> mkVal v . printFileDocD "Write" . 
     valueDoc) void
   printFileLnFunc = on2StateValues (\v -> mkVal v . printFileDocD "WriteLine" . 
@@ -427,7 +428,7 @@ instance StatementSym CSharpCode where
     dynamic_ v)
   varDecDef = G.varDecDef
   listDec n v = v >>= (\v' -> G.listDec (listDecDocD v') (litInt n) v)
-  listDecDef = G.listDecDef' listDecDefDocD
+  listDecDef = G.listDecDef'
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew
@@ -624,15 +625,17 @@ csName = "C#"
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [
-  inc <+> text "System" <> end, -- Console
+  inc <+> text "System" <> end,
   inc <+> text "System.IO" <> end,
   inc <+> text "System.Collections.Generic" <> end]
 
 csInfileType :: (RenderSym repr) => GS (repr (Type repr))
-csInfileType = toState $ typeFromData File "StreamReader" (text "StreamReader")
+csInfileType = getPutReturn (addLangImport "System.IO") $ 
+  typeFromData File "StreamReader" (text "StreamReader")
 
 csOutfileType :: (RenderSym repr) => GS (repr (Type repr))
-csOutfileType = toState $ typeFromData File "StreamWriter" (text "StreamWriter")
+csOutfileType = getPutReturn (addLangImport "System.IO") $ 
+  typeFromData File "StreamWriter" (text "StreamWriter")
 
 csCast :: GS (CSharpCode (Type CSharpCode)) -> 
   GS (CSharpCode (Value CSharpCode)) -> GS (CSharpCode (Value CSharpCode))
@@ -676,13 +679,11 @@ csInput = on2StateValues (\t inFn -> mkVal t $ text (csInput' (getType t)) <>
 
 csOpenFileR :: (RenderSym repr) => GS (repr (Value repr)) -> 
   GS (repr (Type repr)) -> GS (repr (Value repr))
-csOpenFileR = on2StateValues (\n r -> mkVal r $ new <+> getTypeDoc r <> parens 
-  (valueDoc n))
+csOpenFileR n r = newObj r [n]
 
 csOpenFileWorA :: (RenderSym repr) => GS (repr (Value repr)) -> 
   GS (repr (Type repr)) -> GS (repr (Value repr)) -> GS (repr (Value repr))
-csOpenFileWorA = on3StateValues (\n w a -> mkVal w $ new <+> getTypeDoc w <> 
-  parens (valueDoc n <> comma <+> valueDoc a))
+csOpenFileWorA n w a = newObj w [n, a] 
 
 csRef :: Doc -> Doc
 csRef p = text "ref" <+> p

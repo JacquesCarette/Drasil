@@ -446,9 +446,9 @@ class InternalFunction repr where
   funcFromData :: GS (repr (Type repr)) -> Doc -> GS (repr (Function repr))
 
 class InternalStatement repr where
-  -- newLn, printFunc, value to print, maybe a file to print to 
-  printSt :: Bool -> GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    Maybe (GS (repr (Value repr))) -> GS (repr (Statement repr))
+  -- newLn, maybe a file to print to, printFunc, value to print
+  printSt :: Bool -> Maybe (GS (repr (Value repr))) -> GS (repr (Value repr)) 
+    -> GS (repr (Value repr)) -> GS (repr (Statement repr))
 
   state     :: GS (repr (Statement repr)) -> GS (repr (Statement repr))
   loopState :: GS (repr (Statement repr)) -> GS (repr (Statement repr))

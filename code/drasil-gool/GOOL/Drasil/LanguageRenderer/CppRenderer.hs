@@ -423,9 +423,9 @@ instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
   -- Another Maybe/State combination
-  printSt nl p v f = pair2
-    (\pr val -> printSt nl pr val (fmap (onStateValue pfst) f)) 
-    (\pr val -> printSt nl pr val (fmap (onStateValue psnd) f)) p v
+  printSt nl f = pair2
+    (printSt nl (fmap (onStateValue pfst) f)) 
+    (printSt nl (fmap (onStateValue psnd) f))
     
   state = pair1 state state
   loopState = pair1 loopState loopState
@@ -1199,7 +1199,7 @@ instance InternalFunction CppSrcCode where
   funcFromData t d = onStateValue (onCodeValue (`fd` d)) t
 
 instance InternalStatement CppSrcCode where
-  printSt nl p v _ = on2StateValues (\pr vl -> mkSt $ cppPrint nl pr vl) p v
+  printSt nl _ = on2StateValues (\pr vl -> mkSt $ cppPrint nl pr vl)
 
   state = G.state
   loopState = G.loopState
@@ -1232,15 +1232,15 @@ instance StatementSym CppSrcCode where
   extObjDecNewNoParams l v = modify (addModuleImport l) >> objDecNewNoParams v
   constDecDef = G.constDecDef
 
-  print v = outDoc False printFunc v Nothing
-  printLn v = outDoc True printLnFunc v Nothing
-  printStr s = outDoc False printFunc (litString s) Nothing
-  printStrLn s = outDoc True printLnFunc (litString s) Nothing
+  print = outDoc False Nothing printFunc
+  printLn = outDoc True Nothing printLnFunc
+  printStr = outDoc False Nothing printFunc . litString
+  printStrLn = outDoc True Nothing printLnFunc . litString
 
-  printFile f v = outDoc False (printFileFunc f) v (Just f)
-  printFileLn f v = outDoc True (printFileLnFunc f) v (Just f)
-  printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
-  printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
+  printFile f = outDoc False (Just f) (printFileFunc f)
+  printFileLn f = outDoc True (Just f) (printFileLnFunc f)
+  printFileStr f = outDoc False (Just f) (printFileFunc f) . litString
+  printFileStrLn f = outDoc True (Just f) (printFileLnFunc f) . litString
 
   getInput v = cppInput endStatement v inputFunc
   discardInput = modify (addLangImport "limits") >> G.discardInput 

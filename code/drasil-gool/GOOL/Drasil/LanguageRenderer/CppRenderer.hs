@@ -67,8 +67,8 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty,
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, onCodeList, 
   onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GS, MS, FS, lensGStoFS, lensFStoGS, lensFStoMS, 
-  lensMStoGS, getPutReturn, addLangImport, addModuleImport, setCurrMain,
-  getCurrMain, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+  lensMStoGS, getPutReturn, addLangImport, addModuleImport, addHeaderLangImport,
+  addDefine, setCurrMain, getCurrMain, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -977,14 +977,16 @@ instance TypeSym CppSrcCode where
   int = G.int
   float = G.double
   char = G.char
-  string = G.string
+  string = modify (addLangImport "string") >> G.string
   infile = cppInfileType
   outfile = cppOutfileType
-  listType = G.listType
+  listType p t = modify (addLangImport $ render $ keyDoc (list p)) >> 
+    G.listType p t
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
-  iterator = cppIterType . listType dynamic_
+  iterator t = modify (addLangImport "iterator") >> 
+    (cppIterType . listType dynamic_) t
   void = G.void
 
   getType = cType . unCPPSC
@@ -1048,7 +1050,7 @@ instance VariableSym CppSrcCode where
   var = G.var
   staticVar = G.staticVar
   const = var
-  extVar _ = var
+  extVar l n t = modify (addModuleImport l) >> var n t
   self = G.self
   enumVar = G.enumVar
   classVar = on2StateValues (\c v -> classVarCheckStatic (varFromData 
@@ -1081,7 +1083,8 @@ instance ValueSym CppSrcCode where
   litInt = G.litInt
   litString = G.litString
 
-  pi = mkStateVal float (text "M_PI")
+  pi = modify (addDefine "_USE_MATH_DEFINES") >> addMathHImport (mkStateVal 
+    float (text "M_PI"))
 
   ($:) = enumElement
 
@@ -1136,17 +1139,17 @@ instance ValueExpression CppSrcCode where
   inlineIf = G.inlineIf
   funcApp = G.funcApp
   selfFuncApp c = cppSelfFuncApp (self c)
-  extFuncApp _ = funcApp
+  extFuncApp l n t vs = modify (addModuleImport l) >> funcApp n t vs
   newObj = G.newObj newObjDocD'
-  extNewObj _ = newObj
+  extNewObj l t vs = modify (addModuleImport l) >> newObj t vs
 
   exists = notNull
   notNull v = v
 
 instance InternalValue CppSrcCode where
-  inputFunc = mkStateVal string (text "std::cin")
-  printFunc = mkStateVal void (text "std::cout")
-  printLnFunc = mkStateVal void (text "std::cout")
+  inputFunc = addIOStreamImport $ mkStateVal string (text "std::cin")
+  printFunc = addIOStreamImport $ mkStateVal void (text "std::cout")
+  printLnFunc = addIOStreamImport $ mkStateVal void (text "std::cout")
   printFileFunc = on2StateValues (\v -> mkVal v . valueDoc) void
   printFileLnFunc = on2StateValues (\v -> mkVal v . valueDoc) void
 
@@ -1163,7 +1166,8 @@ instance Selector CppSrcCode where
   listIndexExists = G.listIndexExists
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
-  indexOf l v = funcApp "find" int [iterBegin l, iterEnd l, v] #- iterBegin l
+  indexOf l v = addAlgorithmImport $ funcApp "find" int 
+    [iterBegin l, iterEnd l, v] #- iterBegin l
   
 instance InternalSelector CppSrcCode where
   objMethodCall' = G.objMethodCall
@@ -1210,7 +1214,7 @@ instance InternalFunction CppSrcCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalStatement CppSrcCode where
-  printSt nl _ = on2StateValues (\pr vl -> mkSt $ cppPrint nl pr vl)
+  printSt nl _ = cppPrint nl
 
   state = G.state
   loopState = G.loopState
@@ -1254,11 +1258,11 @@ instance StatementSym CppSrcCode where
   printFileStrLn f = outDoc True (Just f) (printFileLnFunc f) . litString
 
   getInput v = cppInput endStatement v inputFunc
-  discardInput = modify (addLangImport "limits") >> G.discardInput 
+  discardInput = addAlgorithmImport $ addLimitsImport $ G.discardInput 
     (cppDiscardInput "\\n")
   getFileInput f v = cppInput endStatement v f
-  discardFileInput f = modify (addLangImport "limits") >> G.discardFileInput 
-    (cppDiscardInput " ") f
+  discardFileInput f = addAlgorithmImport $ addLimitsImport $ 
+    G.discardFileInput (cppDiscardInput " ") f
 
   openFileR = on2StateValues (\f v -> mkSt $ cppOpenFile "std::fstream::in" f v)
   openFileW = on2StateValues (\f v -> mkSt $ cppOpenFile "std::fstream::out" f v)
@@ -1266,7 +1270,7 @@ instance StatementSym CppSrcCode where
   closeFile = G.closeFile "close"
 
   getFileInputLine f v = valState $ funcApp "std::getline" string [f, valueOf v]
-  discardFileLine f = modify (addLangImport "limits") >> onStateValue (mkSt .
+  discardFileLine f = addLimitsImport $ onStateValue (mkSt .
     cppDiscardInput "\\n") f
   stringSplit d vnew s = let l_ss = "ss"
                              var_ss = var l_ss (obj "std::stringstream")
@@ -1565,14 +1569,16 @@ instance TypeSym CppHdrCode where
   int = G.int
   float = G.double
   char = G.char
-  string = G.string
+  string = modify (addHeaderLangImport "string") >> G.string
   infile = cppInfileType
   outfile = cppOutfileType
-  listType = G.listType
+  listType p t = modify (addHeaderLangImport $ render $ keyDoc (list p)) >> 
+    G.listType p t
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
-  iterator = cppIterType . listType dynamic_
+  iterator t = modify (addHeaderLangImport "iterator") >> 
+    (cppIterType . listType dynamic_) t
   void = G.void
 
   getType = cType . unCPPHC
@@ -1666,7 +1672,8 @@ instance ValueSym CppHdrCode where
   litInt = G.litInt
   litString = G.litString
 
-  pi = mkStateVal float (text "M_PI")
+  pi = modify (addDefine "_USE_MATH_DEFINES" . addHeaderLangImport "math.h") >> 
+    mkStateVal float (text "M_PI")
 
   ($:) = enumElement
 
@@ -2043,10 +2050,22 @@ data MethodData = MthD {getMthdScp :: ScopeTag, mthdDoc :: Doc}
 mthd :: ScopeTag -> Doc -> MethodData
 mthd = MthD 
 
--- convenience
+addAlgorithmImport :: GS a -> GS a
+addAlgorithmImport = (>>) $ modify (addLangImport "algorithm")
+
+addFStreamImport :: a -> GS a
+addFStreamImport = getPutReturn (addLangImport "fstream")
+
+addIOStreamImport :: GS a -> GS a
+addIOStreamImport = (>>) $ modify (addLangImport "iostream")
+
 addMathHImport :: GS a -> GS a
 addMathHImport = (>>) $ modify (addLangImport "math.h")
 
+addLimitsImport :: GS a -> GS a
+addLimitsImport = (>>) $ modify (addLangImport "limits")
+
+-- convenience
 cppName :: String
 cppName = "C++" 
 
@@ -2104,10 +2123,12 @@ cppBoolType :: (RenderSym repr) => GS (repr (Type repr))
 cppBoolType = toState $ typeFromData Boolean "bool" (text "bool")
 
 cppInfileType :: (RenderSym repr) => GS (repr (Type repr))
-cppInfileType = toState $ typeFromData File "ifstream" (text "ifstream")
+cppInfileType = addFStreamImport $ typeFromData File "ifstream" 
+  (text "ifstream")
 
 cppOutfileType :: (RenderSym repr) => GS (repr (Type repr))
-cppOutfileType = toState $ typeFromData File "ofstream" (text "ofstream")
+cppOutfileType = addFStreamImport $ typeFromData File "ofstream" 
+  (text "ofstream")
 
 cppIterType :: (RenderSym repr) => GS (repr (Type repr)) -> 
   GS (repr (Type repr))
@@ -2140,12 +2161,13 @@ cppListDecDoc n = parens (valueDoc n)
 cppListDecDefDoc :: (RenderSym repr) => [repr (Value repr)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
-cppPrint :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
-  -> Doc
-cppPrint newLn printFn v = valueDoc printFn <+> text "<<" <+> val (valueDoc v) 
-  <+> end
-  where val = if maybe False (< 9) (valuePrec v) then parens else id
-        end = if newLn then text "<<" <+> text "std::endl" else empty
+cppPrint :: (RenderSym repr) => Bool -> GS (repr (Value repr)) -> 
+  GS (repr (Value repr)) -> GS (repr (Statement repr))
+cppPrint newLn = on3StateValues (\e printFn v -> mkSt $ valueDoc printFn <+> 
+  text "<<" <+> val v (valueDoc v) <+> e) end
+  where val v = if maybe False (< 9) (valuePrec v) then parens else id
+        end = if newLn then addIOStreamImport (toState $ text "<<" <+> 
+          text "std::endl") else toState empty
 
 cppThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
 cppThrowDoc errMsg = text "throw" <> parens (valueDoc errMsg)
@@ -2165,9 +2187,9 @@ cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens
 
 cppInput :: (RenderSym repr) => repr (Keyword repr) -> GS (repr (Variable repr))
   -> GS (repr (Value repr)) -> GS (repr (Statement repr))
-cppInput end vr i = modify (addLangImport "limits") >> on2StateValues (\v inFn 
-  -> mkSt $ vcat [valueDoc inFn <+> text ">>" <+> variableDoc v <> keyDoc end,
-  valueDoc inFn <> dot <> 
+cppInput end vr i = addAlgorithmImport $ addLimitsImport $ on2StateValues 
+  (\v inFn -> mkSt $ vcat [valueDoc inFn <+> text ">>" <+> variableDoc v <> 
+  keyDoc end, valueDoc inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]) vr i
 
 cppOpenFile :: (RenderSym repr) => Label -> repr (Variable repr) -> 

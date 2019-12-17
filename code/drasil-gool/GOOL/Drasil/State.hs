@@ -5,10 +5,10 @@ module GOOL.Drasil.State (
   headers, sources, mainMod, currMain, initialState, initialFS, putAfter, 
   getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, addFile, 
   addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
-  addLangImport, addModuleImport, setFilePath, getFilePath, setModuleName, 
-  getModuleName, setCurrMain, getCurrMain, addClass, getClasses, updateClassMap,
-  getClassMap, addParameter, getParameters, setScope, getScope, setCurrMainFunc,
-  getCurrMainFunc
+  addLangImport, addModuleImport, addHeaderLangImport, addDefine, setFilePath, 
+  getFilePath, setModuleName, getModuleName, setCurrMain, getCurrMain, addClass,
+  getClasses, updateClassMap, getClassMap, addParameter, getParameters, 
+  setScope, getScope, setCurrMainFunc, getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
@@ -25,7 +25,11 @@ data GOOLState = GS {
   _mainMod :: Maybe FilePath,
   _classMap :: Map String String,
   _langImports :: [String],
-  _moduleImports :: [String]
+  _moduleImports :: [String],
+
+  -- C++ only
+  _headerLangImports :: [String],
+  _defines :: [String]
 } 
 makeLenses ''GOOLState
 
@@ -96,7 +100,10 @@ initialState = GS {
   _mainMod = Nothing,
   _classMap = empty,
   _langImports = [],
-  _moduleImports = []
+  _moduleImports = [],
+
+  _headerLangImports = [],
+  _defines = []
 }
 
 initialFS :: FileState
@@ -188,6 +195,13 @@ addLangImport i = over langImports (\is -> if i `elem` is then i:is else is)
 
 addModuleImport :: String -> GOOLState -> GOOLState
 addModuleImport i = over moduleImports (\is -> if i `elem` is then i:is else is)
+
+addHeaderLangImport :: String -> GOOLState -> GOOLState
+addHeaderLangImport i = over headerLangImports (\is -> if i `elem` is then i:is 
+  else is)
+
+addDefine :: String -> GOOLState -> GOOLState
+addDefine d = over defines (\ds -> if d `elem` ds then d:ds else ds)
 
 setFilePath :: FilePath -> (GOOLState, FileState) -> (GOOLState, FileState)
 setFilePath fp = over _2 (set currFilePath fp)

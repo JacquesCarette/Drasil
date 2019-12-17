@@ -16,7 +16,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
   InternalOp(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalValue(..), Selector(..), InternalSelector(..), FunctionSym(..), SelectorFunction(..), 
   InternalFunction(..), InternalStatement(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
   ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
@@ -347,15 +347,16 @@ instance Selector JavaCode where
   objAccess = G.objAccess
   ($.) = objAccess
 
-  objMethodCall = G.objMethodCall
-  objMethodCallNoParams = G.objMethodCallNoParams
-
   selfAccess = G.selfAccess
 
   listIndexExists = G.listIndexExists
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf = G.indexOf "indexOf"
+
+instance InternalSelector JavaCode where
+  objMethodCall' = G.objMethodCall
+  objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData

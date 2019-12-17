@@ -17,7 +17,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
   InternalOp(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalValue(..), Selector(..), InternalSelector(..), objMethodCall, FunctionSym(..), SelectorFunction(..), 
   InternalFunction(..), InternalStatement(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
   ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
@@ -370,19 +370,18 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
   objAccess = pair2 objAccess objAccess
   ($.) = pair2 ($.) ($.)
 
-  objMethodCall t o f = pair2Vals1List
-    (\tp ob -> objMethodCall tp ob f) 
-    (\tp ob -> objMethodCall tp ob f) t o
-  objMethodCallNoParams t o f = pair2
-    (\tp ob -> objMethodCallNoParams tp ob f) 
-    (\tp ob -> objMethodCallNoParams tp ob f) t o
-
   selfAccess l = pair1 (selfAccess l) (selfAccess l)
 
   listIndexExists = pair2 listIndexExists listIndexExists
   argExists i = on2StateValues pair (argExists i) (argExists i)
   
   indexOf = pair2 indexOf indexOf
+
+instance (Pair p) => InternalSelector (p CppSrcCode CppHdrCode) where
+  objMethodCall' f = pair2Vals1List (objMethodCall' f) (objMethodCall' f)
+  objMethodCallNoParams' f = pair2 
+    (objMethodCallNoParams' f) 
+    (objMethodCallNoParams' f)
 
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
@@ -1148,16 +1147,17 @@ instance InternalValue CppSrcCode where
 instance Selector CppSrcCode where
   objAccess = G.objAccess
   ($.) = G.objAccess
-
-  objMethodCall = G.objMethodCall
-  objMethodCallNoParams = G.objMethodCallNoParams
-
   selfAccess = G.selfAccess
 
   listIndexExists = G.listIndexExists
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf l v = funcApp "find" int [iterBegin l, iterEnd l, v] #- iterBegin l
+  
+instance InternalSelector CppSrcCode where
+  objMethodCall' = G.objMethodCall
+  objMethodCallNoParams' = G.objMethodCallNoParams
+
 
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
@@ -1728,15 +1728,16 @@ instance Selector CppHdrCode where
   objAccess _ _ = mkStateVal void empty
   ($.) _ _ = mkStateVal void empty
 
-  objMethodCall _ _ _ _ = mkStateVal void empty
-  objMethodCallNoParams _ _ _ = mkStateVal void empty
-
   selfAccess _ _ = mkStateVal void empty
 
   listIndexExists _ _ = mkStateVal void empty
   argExists _ = mkStateVal void empty
   
   indexOf _ _ = mkStateVal void empty
+  
+instance InternalSelector CppHdrCode where
+  objMethodCall' _ _ _ _ = mkStateVal void empty
+  objMethodCallNoParams' _ _ _ = mkStateVal void empty
 
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData

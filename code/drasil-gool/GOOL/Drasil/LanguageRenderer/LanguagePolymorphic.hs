@@ -55,7 +55,7 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
   ValueSym(litTrue, litFalse, litInt, litString, valueOf),
   ValueExpression(funcApp, newObj, notNull),
-  Selector(objAccess, objMethodCall, objMethodCallNoParams),
+  Selector(objAccess), objMethodCall, objMethodCallNoParams, 
   FunctionSym(func, listSize, listAdd, listAppend),
   SelectorFunction(listAccess, listSet),
   InternalFunction(getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, 
@@ -291,14 +291,13 @@ objAccess :: (RenderSym repr) => GS (repr (Value repr)) ->
 objAccess = on2StateValues (\v f -> mkVal (functionType f) (objAccessDocD 
   (valueDoc v) (functionDoc f)))
 
-objMethodCall :: (RenderSym repr) => GS (repr (Type repr)) -> 
-  GS (repr (Value repr)) -> Label -> [GS (repr (Value repr))] -> 
-  GS (repr (Value repr))
-objMethodCall t o f ps = S.objAccess o (S.func f t ps)
+objMethodCall :: (RenderSym repr) => Label -> GS (repr (Type repr)) -> 
+  GS (repr (Value repr)) -> [GS (repr (Value repr))] -> GS (repr (Value repr))
+objMethodCall f t o ps = S.objAccess o (S.func f t ps)
 
-objMethodCallNoParams :: (RenderSym repr) => GS (repr (Type repr)) -> 
-  GS (repr (Value repr)) -> Label -> GS (repr (Value repr))
-objMethodCallNoParams t o f = S.objMethodCall t o f []
+objMethodCallNoParams :: (RenderSym repr) => Label -> GS (repr (Type repr)) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr))
+objMethodCallNoParams f t o = S.objMethodCall t o f []
 
 selfAccess :: (RenderSym repr) => Label -> GS (repr (Function repr)) -> 
   GS (repr (Value repr))

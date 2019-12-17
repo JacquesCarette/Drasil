@@ -10,7 +10,8 @@ module GOOL.Drasil.Symantics (
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), 
-  Selector(..), FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  Selector(..), InternalSelector(..), objMethodCall, objMethodCallNoParams,
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
   InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
@@ -370,11 +371,6 @@ class (FunctionSym repr) => Selector repr where
     GS (repr (Value repr))
   infixl 9 $.
 
-  objMethodCall     :: GS (repr (Type repr)) -> GS (repr (Value repr)) -> Label 
-    -> [GS (repr (Value repr))] -> GS (repr (Value repr))
-  objMethodCallNoParams :: GS (repr (Type repr)) -> GS (repr (Value repr)) -> 
-    Label -> GS (repr (Value repr))
-
   selfAccess :: Label -> GS (repr (Function repr)) -> GS (repr (Value repr))
 
   listIndexExists :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
@@ -383,6 +379,21 @@ class (FunctionSym repr) => Selector repr where
 
   indexOf :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
     GS (repr (Value repr))
+
+class (FunctionSym repr) => InternalSelector repr where
+  objMethodCall' :: Label -> GS (repr (Type repr)) -> GS (repr (Value repr)) -> 
+    [GS (repr (Value repr))] -> GS (repr (Value repr))
+  objMethodCallNoParams' :: Label -> GS (repr (Type repr)) -> 
+    GS (repr (Value repr)) -> GS (repr (Value repr))
+
+objMethodCall :: (InternalSelector repr) => GS (repr (Type repr)) -> 
+  GS (repr (Value repr)) -> Label -> [GS (repr (Value repr))] -> 
+  GS (repr (Value repr))
+objMethodCall t o f = objMethodCall' f t o
+
+objMethodCallNoParams :: (InternalSelector repr) => GS (repr (Type repr)) -> 
+  GS (repr (Value repr)) -> Label -> GS (repr (Value repr))
+objMethodCallNoParams t o f = objMethodCallNoParams' f t o
 
 class (ValueExpression repr, InternalFunction repr) => FunctionSym repr where
   type Function repr
@@ -403,7 +414,7 @@ class (ValueExpression repr, InternalFunction repr) => FunctionSym repr where
   iterBegin :: GS (repr (Value repr)) -> GS (repr (Value repr))
   iterEnd   :: GS (repr (Value repr)) -> GS (repr (Value repr))
 
-class (Selector repr) => SelectorFunction repr where
+class (Selector repr, InternalSelector repr) => SelectorFunction repr where
   listAccess :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
     GS (repr (Value repr))
   listSet    :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 

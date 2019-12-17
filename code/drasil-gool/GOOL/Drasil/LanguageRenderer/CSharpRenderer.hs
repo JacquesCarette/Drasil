@@ -16,12 +16,12 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
   InternalOp(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
-  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
+  InternalValue(..), Selector(..), InternalSelector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
+  InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
+  InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
   listDecDefDocD, mkSt, breakDocD, continueDocD, unOpPrec, notOpDocD, 
@@ -189,7 +189,7 @@ instance InternalType CSharpCode where
 instance ControlBlockSym CSharpCode where
   runStrategy = G.runStrategy
 
-  listSlice = G.listSlice
+  listSlice' = G.listSlice
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
@@ -347,15 +347,16 @@ instance Selector CSharpCode where
   objAccess = G.objAccess
   ($.) = objAccess
 
-  objMethodCall = G.objMethodCall
-  objMethodCallNoParams = G.objMethodCallNoParams
-
   selfAccess = G.selfAccess
 
   listIndexExists = G.listIndexExists
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf = G.indexOf "IndexOf"
+  
+instance InternalSelector CSharpCode where
+  objMethodCall' = G.objMethodCall
+  objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
@@ -380,7 +381,7 @@ instance InternalFunction CSharpCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
-  listSizeFunc = funcFromData int (funcDocD (text "Count"))
+  listSizeFunc = funcFromData (funcDocD (text "Count")) int
   listAddFunc _ = G.listAddFunc "Insert"
   listAppendFunc = G.listAppendFunc "Add"
 
@@ -393,10 +394,10 @@ instance InternalFunction CSharpCode where
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unCSC
 
-  funcFromData t d = onStateValue (onCodeValue (`fd` d)) t
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalStatement CSharpCode where
-  printSt _ p v _ = G.printSt p v
+  printSt _ _ = G.printSt
 
   state = G.state
   loopState = G.loopState
@@ -430,15 +431,15 @@ instance StatementSym CSharpCode where
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef = G.constDecDef
 
-  print v = outDoc False printFunc v Nothing
-  printLn v = outDoc True printLnFunc v Nothing
-  printStr s = outDoc False printFunc (litString s) Nothing
-  printStrLn s = outDoc True printLnFunc (litString s) Nothing
+  print = outDoc False Nothing printFunc
+  printLn = outDoc True Nothing printLnFunc
+  printStr = outDoc False Nothing printFunc . litString
+  printStrLn = outDoc True Nothing printLnFunc . litString
 
-  printFile f v = outDoc False (printFileFunc f) v (Just f)
-  printFileLn f v = outDoc True (printFileLnFunc f) v (Just f)
-  printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
-  printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
+  printFile f = outDoc False (Just f) (printFileFunc f)
+  printFileLn f = outDoc True (Just f) (printFileLnFunc f)
+  printFileStr f = outDoc False (Just f) (printFileFunc f) . litString
+  printFileStrLn f = outDoc True (Just f) (printFileLnFunc f) . litString
 
   getInput v = v &= csInput (onStateValue variableType v) inputFunc
   discardInput = G.discardInput csDiscardInput
@@ -502,7 +503,7 @@ instance ControlStatementSym CSharpCode where
   checkState = G.checkState
   notifyObservers = G.notifyObservers
 
-  getFileInputAll f v = while ((f $. funcFromData bool (text ".EndOfStream")) 
+  getFileInputAll f v = while ((f $. funcFromData (text ".EndOfStream") bool) 
     ?!) (oneLiner $ valState $ listAppend (valueOf v) (csFileInput f))
 
 instance ScopeSym CSharpCode where

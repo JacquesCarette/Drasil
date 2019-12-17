@@ -15,12 +15,13 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
   InternalOp(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
-  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
+  InternalValue(..), Selector(..), InternalSelector(..), objMethodCall, 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
+  InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
+  InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
   bodyDocD, outDoc, destructorError, multiAssignDoc, returnDocD, mkStNoEnd,
   breakDocD, continueDocD, unOpPrec, notOpDocD', negateOpDocD, sqrtOpDocD', 
@@ -187,7 +188,7 @@ instance InternalType PythonCode where
 instance ControlBlockSym PythonCode where
   runStrategy = G.runStrategy
 
-  listSlice vnew vold b e s = docBlock $ pyListSlice vnew vold (getVal b) 
+  listSlice' b e s vnew vold = docBlock $ pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 
@@ -348,15 +349,16 @@ instance Selector PythonCode where
   objAccess = G.objAccess
   ($.) = objAccess 
 
-  objMethodCall = G.objMethodCall
-  objMethodCallNoParams = G.objMethodCallNoParams
-
   selfAccess = G.selfAccess
 
   listIndexExists = G.listIndexExists
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf = G.indexOf "index"
+
+instance InternalSelector PythonCode where
+  objMethodCall' = G.objMethodCall
+  objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
@@ -382,7 +384,7 @@ instance InternalFunction PythonCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
-  listSizeFunc = funcFromData int (text "len")
+  listSizeFunc = funcFromData (text "len") int
   listAddFunc _ = G.listAddFunc "insert"
   listAppendFunc = G.listAppendFunc "append"
 
@@ -395,11 +397,11 @@ instance InternalFunction PythonCode where
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unPC
 
-  funcFromData t d = onStateValue (onCodeValue (`fd` d)) t
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalStatement PythonCode where
-  printSt nl p v f = on3StateValues (\p' v' f' -> mkStNoEnd $ pyPrint nl p' v' 
-    f') p v (fromMaybe (mkStateVal void empty) f)
+  printSt nl f = on3StateValues (\f' p' v' -> mkStNoEnd $ pyPrint nl p' v' f') 
+    (fromMaybe (mkStateVal void empty) f)
 
   state = G.state
   loopState = G.loopState
@@ -435,15 +437,15 @@ instance StatementSym PythonCode where
     variableType v) [])
   constDecDef = varDecDef
 
-  print v = pyOut False printFunc v Nothing
-  printLn v = pyOut True printFunc v Nothing
-  printStr s = print (litString s)
-  printStrLn s = printLn (litString s)
+  print = pyOut False Nothing printFunc
+  printLn = pyOut True Nothing printFunc
+  printStr = print . litString
+  printStrLn = printLn . litString
 
-  printFile f v = pyOut False printFunc v (Just f)
-  printFileLn f v = pyOut True printFunc v (Just f)
-  printFileStr f s = printFile f (litString s)
-  printFileStrLn f s = printFileLn f (litString s)
+  printFile f = pyOut False (Just f) printFunc
+  printFileLn f = pyOut True (Just f) printFunc
+  printFileStr f = printFile f . litString
+  printFileStrLn f = printFileLn f . litString
 
   getInput = pyInput inputFunc
   discardInput = valState inputFunc
@@ -682,12 +684,11 @@ pyPrint newLn prf v f = valueDoc prf <> parens (valueDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
         fl = emptyIfEmpty (valueDoc f) $ text ", file=" <> valueDoc f
 
-pyOut :: (RenderSym repr) => Bool -> GS (repr (Value repr)) -> 
-  GS (repr (Value repr)) -> Maybe (GS (repr (Value repr))) -> 
-  GS (repr (Statement repr))
-pyOut newLn printFn v f = v >>= pyOut' . getType . valueType
-  where pyOut' (List _) = printSt newLn printFn v f
-        pyOut' _ = outDoc newLn printFn v f
+pyOut :: (RenderSym repr) => Bool -> Maybe (GS (repr (Value repr))) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Statement repr))
+pyOut newLn f printFn v = v >>= pyOut' . getType . valueType
+  where pyOut' (List _) = printSt newLn f printFn v
+        pyOut' _ = outDoc newLn f printFn v
 
 pyInput :: GS (PythonCode (Value PythonCode)) ->
   GS (PythonCode (Variable PythonCode)) -> 

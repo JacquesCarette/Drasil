@@ -54,9 +54,8 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   TypeSym(bool, int, float, char, string, listType, listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
   ValueSym(litTrue, litFalse, litInt, litString, valueOf),
-  ValueExpression(funcApp, newObj, notNull),
-  Selector(objAccess, objMethodCall, objMethodCallNoParams),
-  FunctionSym(func, listSize, listAdd, listAppend),
+  ValueExpression(funcApp, newObj, notNull), Selector(objAccess), objMethodCall,
+  objMethodCallNoParams, FunctionSym(func, listSize, listAdd, listAppend),
   SelectorFunction(listAccess, listSet),
   InternalFunction(getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, 
     listAccessFunc, listSetFunc),
@@ -162,11 +161,10 @@ runStrategy l strats rv av = maybe
           "Attempt to assign null return to a Value") (v &=) rv
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
-listSlice :: (RenderSym repr) => GS (repr (Variable repr)) -> 
-  GS (repr (Value repr)) -> Maybe (GS (repr (Value repr))) -> 
+listSlice :: (RenderSym repr) => Maybe (GS (repr (Value repr))) -> 
   Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Value repr))) -> 
-  GS (repr (Block repr))
-listSlice vnew vold b e s = 
+  GS (repr (Variable repr)) -> GS (repr (Value repr)) -> GS (repr (Block repr))
+listSlice b e s vnew vold = 
   let l_temp = "temp"
       var_temp = S.var l_temp (onStateValue variableType vnew)
       v_temp = S.valueOf var_temp
@@ -292,14 +290,13 @@ objAccess :: (RenderSym repr) => GS (repr (Value repr)) ->
 objAccess = on2StateValues (\v f -> mkVal (functionType f) (objAccessDocD 
   (valueDoc v) (functionDoc f)))
 
-objMethodCall :: (RenderSym repr) => GS (repr (Type repr)) -> 
-  GS (repr (Value repr)) -> Label -> [GS (repr (Value repr))] -> 
-  GS (repr (Value repr))
-objMethodCall t o f ps = S.objAccess o (S.func f t ps)
+objMethodCall :: (RenderSym repr) => Label -> GS (repr (Type repr)) -> 
+  GS (repr (Value repr)) -> [GS (repr (Value repr))] -> GS (repr (Value repr))
+objMethodCall f t o ps = S.objAccess o (S.func f t ps)
 
-objMethodCallNoParams :: (RenderSym repr) => GS (repr (Type repr)) -> 
-  GS (repr (Value repr)) -> Label -> GS (repr (Value repr))
-objMethodCallNoParams t o f = S.objMethodCall t o f []
+objMethodCallNoParams :: (RenderSym repr) => Label -> GS (repr (Type repr)) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr))
+objMethodCallNoParams f t o = S.objMethodCall t o f []
 
 selfAccess :: (RenderSym repr) => Label -> GS (repr (Function repr)) -> 
   GS (repr (Value repr))
@@ -315,7 +312,7 @@ indexOf f l v = S.objAccess l (S.func f S.int [v])
 
 func :: (RenderSym repr) => Label -> GS (repr (Type repr)) -> 
   [GS (repr (Value repr))] -> GS (repr (Function repr))
-func l t vs = S.funcApp l t vs >>= (funcFromData t . funcDocD . valueDoc)
+func l t vs = S.funcApp l t vs >>= ((`funcFromData` t) . funcDocD . valueDoc)
 
 get :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Variable repr)) 
   -> GS (repr (Value repr))
@@ -385,7 +382,7 @@ iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++
 
 listAccessFunc :: (RenderSym repr) => GS (repr (Type repr)) ->
   GS (repr (Value repr)) -> GS (repr (Function repr))
-listAccessFunc t v = intValue v >>= (funcFromData t . listAccessFuncDocD)
+listAccessFunc t v = intValue v >>= ((`funcFromData` t) . listAccessFuncDocD)
 
 listAccessFunc' :: (RenderSym repr) => Label -> GS (repr (Type repr)) -> 
   GS (repr (Value repr)) -> GS (repr (Function repr))
@@ -395,7 +392,7 @@ listSetFunc :: (RenderSym repr) => (Doc -> Doc -> Doc) ->
   GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
   GS (repr (Function repr))
 listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData 
-  (onStateValue valueType v) (f (valueDoc i) (valueDoc toVal))) (intValue idx) 
+  (f (valueDoc i) (valueDoc toVal)) (onStateValue valueType v)) (intValue idx) 
   setVal
 
 printSt :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))

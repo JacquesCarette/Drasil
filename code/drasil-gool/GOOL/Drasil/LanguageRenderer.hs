@@ -179,14 +179,13 @@ printObjDoc :: String -> (String -> GS (repr (Statement repr)))
   -> GS (repr (Statement repr))
 printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
-outDoc :: (RenderSym repr) => Bool -> GS (repr (Value repr)) -> 
-  GS (repr (Value repr)) -> Maybe (GS (repr (Value repr))) -> 
-  GS (repr (Statement repr))
-outDoc newLn printFn v f = v >>= outDoc' . getType . valueType
+outDoc :: (RenderSym repr) => Bool -> Maybe (GS (repr (Value repr))) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Statement repr))
+outDoc newLn f printFn v = v >>= outDoc' . getType . valueType
   where outDoc' (List t) = printListDoc (getNestDegree 1 t) v prFn prStrFn 
           prLnFn
         outDoc' (Object n) = printObjDoc n prLnFn
-        outDoc' _ = printSt newLn printFn v f
+        outDoc' _ = printSt newLn f printFn v
         prFn = maybe print printFile f
         prStrFn = maybe printStr printFileStr f
         prLnFn = if newLn then maybe printStrLn printFileStrLn f else maybe 

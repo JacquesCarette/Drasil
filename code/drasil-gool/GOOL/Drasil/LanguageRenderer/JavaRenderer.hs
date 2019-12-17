@@ -16,12 +16,12 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
   InternalOp(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
-  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
+  InternalValue(..), Selector(..), InternalSelector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
+  InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
+  InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
   bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
   mkSt, breakDocD, continueDocD, unOpPrec, notOpDocD, negateOpDocD, unExpr, 
@@ -189,7 +189,7 @@ instance InternalType JavaCode where
 instance ControlBlockSym JavaCode where
   runStrategy = G.runStrategy
 
-  listSlice = G.listSlice
+  listSlice' = G.listSlice
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
@@ -347,15 +347,16 @@ instance Selector JavaCode where
   objAccess = G.objAccess
   ($.) = objAccess
 
-  objMethodCall = G.objMethodCall
-  objMethodCallNoParams = G.objMethodCallNoParams
-
   selfAccess = G.selfAccess
 
   listIndexExists = G.listIndexExists
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf = G.indexOf "indexOf"
+
+instance InternalSelector JavaCode where
+  objMethodCall' = G.objMethodCall
+  objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
@@ -394,10 +395,10 @@ instance InternalFunction JavaCode where
   functionType = onCodeValue funcType
   functionDoc = funcDoc . unJC
 
-  funcFromData t d = onStateValue (onCodeValue (`fd` d)) t
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalStatement JavaCode where
-  printSt _ p v _ = G.printSt p v
+  printSt _ _ = G.printSt
 
   state = G.state
   loopState = G.loopState
@@ -432,15 +433,15 @@ instance StatementSym JavaCode where
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef = on2StateValues (\vr vl -> mkSt $ jConstDecDef vr vl)
 
-  print v = jOut False printFunc v Nothing
-  printLn v = jOut True printLnFunc v Nothing
-  printStr s = jOut False printFunc (litString s) Nothing
-  printStrLn s = jOut True printLnFunc (litString s) Nothing
+  print = jOut False Nothing printFunc
+  printLn = jOut True Nothing printLnFunc
+  printStr = jOut False Nothing printFunc . litString
+  printStrLn = jOut True Nothing printLnFunc . litString
 
-  printFile f v = jOut False (printFileFunc f) v (Just f)
-  printFileLn f v = jOut True (printFileLnFunc f) v (Just f)
-  printFileStr f s = jOut False (printFileFunc f) (litString s) (Just f)
-  printFileStrLn f s = jOut True (printFileLnFunc f) (litString s) (Just f)
+  printFile f = jOut False (Just f) (printFileFunc f)
+  printFileLn f = jOut True (Just f) (printFileLnFunc f)
+  printFileStr f = jOut False (Just f) (printFileFunc f) . litString
+  printFileStrLn f = jOut True (Just f) (printFileLnFunc f) . litString
 
   getInput v = v &= jInput (onStateValue variableType v) inputFunc
   discardInput = G.discardInput jDiscardInput
@@ -694,13 +695,12 @@ jTryCatch tb cb = vcat [
   indent $ bodyDoc cb,
   rbrace]
 
-jOut :: (RenderSym repr) => Bool -> GS (repr (Value repr)) -> 
-  GS (repr (Value repr)) -> Maybe (GS (repr (Value repr))) -> 
-  GS (repr (Statement repr))
-jOut newLn printFn v f = v >>= jOut' . getType . valueType
-  where jOut' (List (Object _)) = outDoc newLn printFn v f
-        jOut' (List _) = printSt newLn printFn v f
-        jOut' _ = outDoc newLn printFn v f
+jOut :: (RenderSym repr) => Bool -> Maybe (GS (repr (Value repr))) -> 
+  GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Statement repr))
+jOut newLn f printFn v = v >>= jOut' . getType . valueType
+  where jOut' (List (Object _)) = outDoc newLn f printFn v
+        jOut' (List _) = printSt newLn f printFn v
+        jOut' _ = outDoc newLn f printFn v
 
 jDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
 jDiscardInput inFn = valueDoc inFn <> dot <> text "next()"

@@ -6,11 +6,12 @@ module GOOL.Drasil.Symantics (
   -- Typeclasses
   ProgramSym(..), RenderSym(..), InternalFile(..),  KeywordSym(..), 
   PermanenceSym(..), InternalPerm(..), BodySym(..), ControlBlockSym(..), 
-  BlockSym(..), InternalBlock(..), TypeSym(..), InternalType(..), 
+  listSlice, BlockSym(..), InternalBlock(..), TypeSym(..), InternalType(..), 
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), 
-  Selector(..), FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  Selector(..), InternalSelector(..), objMethodCall, objMethodCallNoParams,
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
   InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
@@ -138,9 +139,16 @@ class (ControlStatementSym repr) => ControlBlockSym repr where
     Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Variable repr))) -> 
     GS (repr (Block repr))
 
-  listSlice        :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
+  listSlice'      :: Maybe (GS (repr (Value repr))) -> 
     Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Value repr))) ->
-    Maybe (GS (repr (Value repr))) -> GS (repr (Block repr))
+    GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
+    GS (repr (Block repr))
+
+listSlice :: (ControlBlockSym repr) => GS (repr (Variable repr)) -> 
+  GS (repr (Value repr)) -> Maybe (GS (repr (Value repr))) -> 
+  Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Value repr))) -> 
+  GS (repr (Block repr))
+listSlice vnew vold b e s = listSlice' b e s vnew vold
 
 class (InternalOp repr) => UnaryOpSym repr where
   type UnaryOp repr
@@ -363,11 +371,6 @@ class (FunctionSym repr) => Selector repr where
     GS (repr (Value repr))
   infixl 9 $.
 
-  objMethodCall     :: GS (repr (Type repr)) -> GS (repr (Value repr)) -> Label 
-    -> [GS (repr (Value repr))] -> GS (repr (Value repr))
-  objMethodCallNoParams :: GS (repr (Type repr)) -> GS (repr (Value repr)) -> 
-    Label -> GS (repr (Value repr))
-
   selfAccess :: Label -> GS (repr (Function repr)) -> GS (repr (Value repr))
 
   listIndexExists :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
@@ -376,6 +379,21 @@ class (FunctionSym repr) => Selector repr where
 
   indexOf :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
     GS (repr (Value repr))
+
+class (FunctionSym repr) => InternalSelector repr where
+  objMethodCall' :: Label -> GS (repr (Type repr)) -> GS (repr (Value repr)) -> 
+    [GS (repr (Value repr))] -> GS (repr (Value repr))
+  objMethodCallNoParams' :: Label -> GS (repr (Type repr)) -> 
+    GS (repr (Value repr)) -> GS (repr (Value repr))
+
+objMethodCall :: (InternalSelector repr) => GS (repr (Type repr)) -> 
+  GS (repr (Value repr)) -> Label -> [GS (repr (Value repr))] -> 
+  GS (repr (Value repr))
+objMethodCall t o f = objMethodCall' f t o
+
+objMethodCallNoParams :: (InternalSelector repr) => GS (repr (Type repr)) -> 
+  GS (repr (Value repr)) -> Label -> GS (repr (Value repr))
+objMethodCallNoParams t o f = objMethodCallNoParams' f t o
 
 class (ValueExpression repr, InternalFunction repr) => FunctionSym repr where
   type Function repr
@@ -396,7 +414,7 @@ class (ValueExpression repr, InternalFunction repr) => FunctionSym repr where
   iterBegin :: GS (repr (Value repr)) -> GS (repr (Value repr))
   iterEnd   :: GS (repr (Value repr)) -> GS (repr (Value repr))
 
-class (Selector repr) => SelectorFunction repr where
+class (Selector repr, InternalSelector repr) => SelectorFunction repr where
   listAccess :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
     GS (repr (Value repr))
   listSet    :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
@@ -425,12 +443,12 @@ class InternalFunction repr where
   functionType :: repr (Function repr) -> repr (Type repr)
   functionDoc :: repr (Function repr) -> Doc
 
-  funcFromData :: GS (repr (Type repr)) -> Doc -> GS (repr (Function repr))
+  funcFromData :: Doc -> GS (repr (Type repr)) -> GS (repr (Function repr))
 
 class InternalStatement repr where
-  -- newLn, printFunc, value to print, maybe a file to print to 
-  printSt :: Bool -> GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    Maybe (GS (repr (Value repr))) -> GS (repr (Statement repr))
+  -- newLn, maybe a file to print to, printFunc, value to print
+  printSt :: Bool -> Maybe (GS (repr (Value repr))) -> GS (repr (Value repr)) 
+    -> GS (repr (Value repr)) -> GS (repr (Statement repr))
 
   state     :: GS (repr (Statement repr)) -> GS (repr (Statement repr))
   loopState :: GS (repr (Statement repr)) -> GS (repr (Statement repr))

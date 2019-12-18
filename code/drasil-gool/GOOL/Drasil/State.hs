@@ -1,15 +1,16 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module GOOL.Drasil.State (
-  GS, GOOLState(..), FS, MS, lensFStoGS, lensGStoFS, lensFStoMS, lensMStoGS,  
+  GS, GOOLState(..), FS, MS, lensFStoGS, lensGStoFS, lensFStoMS, lensMStoFS, 
   headers, sources, mainMod, currMain, initialState, initialFS, putAfter, 
   getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, addFile, 
   addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
   addLangImport, getLangImports, addModuleImport, getModuleImports, 
-  addHeaderLangImport, addDefine, setFilePath, getFilePath, setModuleName, 
-  getModuleName, setCurrMain, getCurrMain, addClass, getClasses, updateClassMap,
-  getClassMap, addParameter, getParameters, setScope, getScope, setCurrMainFunc,
-  getCurrMainFunc
+  addHeaderLangImport, getHeaderLangImports, addHeaderModImport, 
+  getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines,
+  setFilePath, getFilePath, setModuleName, getModuleName, setCurrMain, 
+  getCurrMain, addClass, getClasses, updateClassMap, getClassMap, addParameter, 
+  getParameters, setScope, getScope, setCurrMainFunc, getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
@@ -47,7 +48,9 @@ data FileState = FS {
 
   -- C++ only
   _headerLangImports :: [String],
-  _defines :: [String]
+  _headerModImports :: [String],
+  _defines :: [String],
+  _headerDefines :: [String]
 }
 makeLenses ''FileState
 
@@ -110,7 +113,9 @@ initialFS = FS {
   _moduleImports = [],
 
   _headerLangImports = [],
-  _defines = []
+  _headerModImports = [],
+  _defines = [],
+  _headerDefines = []
 }
 
 initialMS :: MethodState
@@ -208,8 +213,29 @@ addHeaderLangImport :: String -> (GOOLState, FileState) -> (GOOLState,
 addHeaderLangImport i = over _2 $ over headerLangImports (\is -> if i `elem` is 
   then is else i:is)
 
+getHeaderLangImports :: FS [String]
+getHeaderLangImports = gets ((^. headerLangImports) . snd)
+
+addHeaderModImport :: String -> (GOOLState, FileState) -> (GOOLState, 
+  FileState)
+addHeaderModImport i = over _2 $ over headerModImports (\is -> if i `elem` is 
+  then is else i:is)
+
+getHeaderModImports :: FS [String]
+getHeaderModImports = gets ((^. headerModImports) . snd)
+
 addDefine :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
 addDefine d = over _2 $ over defines (\ds -> if d `elem` ds then ds else d:ds)
+
+getDefines :: FS [String]
+getDefines = gets ((^. defines) . snd)
+
+addHeaderDefine :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
+addHeaderDefine d = over _2 $ over headerDefines (\ds -> if d `elem` ds then ds 
+  else d:ds)
+
+getHeaderDefines :: FS [String]
+getHeaderDefines = gets ((^. headerDefines) . snd)
 
 setFilePath :: FilePath -> (GOOLState, FileState) -> (GOOLState, FileState)
 setFilePath fp = over _2 (set currFilePath fp)

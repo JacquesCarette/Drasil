@@ -9,11 +9,11 @@ module GOOL.Drasil.LanguageRenderer (
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, 
-  printFileDocD, destructorError, paramDocD, methodDocD, methodListDocD, 
-  stateVarDocD, constVarDocD, stateVarListDocD, switchDocD, assignDocD, 
-  multiAssignDoc, plusEqualsDocD, plusPlusDocD, listDecDocD, statementDocD, 
-  getTermDoc, returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd, mkStateVal, 
-  mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, selfDocD, argDocD,
+  printFileDocD, destructorError, paramDocD, methodDocD, stateVarDocD, 
+  constVarDocD, stateVarListDocD, switchDocD, assignDocD, multiAssignDoc, 
+  plusEqualsDocD, plusPlusDocD, listDecDocD, statementDocD, getTermDoc, 
+  returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd, mkStateVal, mkVal, 
+  mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, selfDocD, argDocD,
   enumElemDocD, classVarCheckStatic, classVarDocD, objVarDocD, funcAppDocD, 
   newObjDocD, newObjDocD', constDecDefDocD, funcDocD, castDocD, 
   listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, includeD, 
@@ -81,10 +81,10 @@ packageDocD n end f = fileD (n ++ "/" ++ filePath f) (updateModDoc
   (fileMod f))
 
 fileDoc' :: Doc -> Doc -> Doc -> Doc
-fileDoc' t m b = vibcat (filter (not . isEmpty) [
+fileDoc' t m b = vibcat [
   t,
   m,
-  b])
+  b]
 
 -----------------------------------------------
 -- 'Default' functions used in the renderers --
@@ -200,10 +200,6 @@ methodDocD n s p t ps b = vcat [
     parens (parameterList ps) <+> lbrace,
   indent (bodyDoc b),
   rbrace]
-
-methodListDocD :: [Doc] -> Doc
-methodListDocD ms = vibcat methods
-  where methods = filter (not . isEmpty) ms
   
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l

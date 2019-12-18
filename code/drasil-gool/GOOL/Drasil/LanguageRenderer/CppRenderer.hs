@@ -62,14 +62,12 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
   FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, doubleQuotedText, emptyIfEmpty, 
+import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, onCodeList, 
   onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (FS, MS, lensGStoFS, lensFStoMS, lensMStoFS, 
-  getPutReturn, addLangImport, addModuleImport, addHeaderLangImport, addDefine, 
-  setCurrMain, getCurrMain, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc)
+  getPutReturn, addLangImport, getLangImports, addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, addHeaderModImport, getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines, setCurrMain, getCurrMain, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -1072,7 +1070,8 @@ instance VariableSym CppSrcCode where
   classVar = on2StateValues (\c v -> classVarCheckStatic (varFromData 
     (variableBind v) (getTypeString c ++ "::" ++ variableName v) 
     (variableType v) (cppClassVar (getTypeDoc c) (variableDoc v))))
-  extClassVar = classVar
+  extClassVar c v = c >>= (\t -> modify (addModuleImport $ getTypeString t) >> 
+    classVar (toState t) v)
   objVar = G.objVar
   objVarSelf _ = onStateValue (\v -> mkVar ("this->"++variableName v) 
     (variableType v) (text "this->" <> variableDoc v))
@@ -1475,7 +1474,13 @@ instance InternalClass CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n ls = G.buildModule n (map include ls)
+  buildModule n _ = G.buildModule n (on3StateValues (\ds lis mis -> vibcat [
+    vcat (map ((text "#define" <+>) . text) ds),
+    vcat (map (importDoc . 
+      (langImport :: Label -> CppSrcCode (Import CppSrcCode))) lis),
+    vcat (map (importDoc . 
+      (modImport :: Label -> CppSrcCode (Import CppSrcCode))) mis)]) 
+    getDefines getLangImports getModuleImports)
 
 instance InternalMod CppSrcCode where
   moduleDoc = modDoc . unCPPSC
@@ -1696,8 +1701,8 @@ instance ValueSym CppHdrCode where
   litInt = G.litInt
   litString = G.litString
 
-  pi = modify (addDefine "_USE_MATH_DEFINES" . addHeaderLangImport "math.h") >> 
-    mkStateVal float (text "M_PI")
+  pi = modify (addHeaderDefine "_USE_MATH_DEFINES" . addHeaderLangImport 
+    "math.h") >> mkStateVal float (text "M_PI")
 
   ($:) = enumElement
 
@@ -2035,7 +2040,13 @@ instance InternalClass CppHdrCode where
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
-  buildModule n ls = G.buildModule n (map include ls)
+  buildModule n _ = G.buildModule n (on3StateValues (\ds lis mis -> vibcat [
+    vcat (map ((text "#define" <+>) . text) ds),
+    vcat (map (importDoc . 
+      (langImport :: Label -> CppHdrCode (Import CppHdrCode))) lis),
+    vcat (map (importDoc . 
+      (modImport :: Label -> CppHdrCode (Import CppHdrCode))) mis)]) 
+    getHeaderDefines getHeaderLangImports getHeaderModImports)
 
 instance InternalMod CppHdrCode where
   moduleDoc = modDoc . unCPPHC

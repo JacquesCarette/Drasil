@@ -76,14 +76,13 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty,
   toState, onStateValue, on2StateValues, on3StateValues, on4StateValues, 
   onStateList, on2StateLists, on1StateValue1List, getInnerType, convType)
 import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt, 
-  blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, mkStateVal, mkVal, 
-  mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, selfDocD, argDocD, 
+  moduleDocD, blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, mkStateVal, 
+  mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, selfDocD, argDocD,
   enumElemDocD, classVarCheckStatic, objVarDocD, funcAppDocD, objAccessDocD, 
   funcDocD, listAccessFuncDocD, constDecDefDocD, printDoc, returnDocD, 
-  getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, methodListDocD, 
-  enumDocD, enumElementsDocD, moduleDocD, fileDoc', docFuncRepr, commentDocD, 
-  commentedItem, functionDox, classDox, moduleDox, getterName, setterName, 
-  valueList, intValue)
+  getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, enumDocD, 
+  enumElementsDocD, fileDoc', docFuncRepr, commentDocD, commentedItem, 
+  functionDox, classDox, moduleDox, getterName, setterName, valueList, intValue)
 import GOOL.Drasil.State (FS, MS, lensFStoGS, lensFStoMS, lensMStoFS, 
   currMain, putAfter, getPutReturnFunc, getPutReturnFunc2, addFile, setMainMod, 
   addLangImport, getLangImports, getModuleImports, setFilePath, getFilePath, 
@@ -1018,7 +1017,7 @@ buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) ->
   FS (repr (Class repr))
 buildClass f i n p s vs fs = classFromData (on2StateValues (f n parent 
   (scopeDoc s)) (onStateList (stateVarListDocD . map stateVarDoc) vs)
-  (onStateList (methodListDocD . map methodDoc) (map (zoom lensFStoMS) fs)))
+  (onStateList (vibcat . map methodDoc) (map (zoom lensFStoMS) fs)))
   where parent = case p of Nothing -> empty
                            Just pn -> keyDoc $ i pn
 
@@ -1048,12 +1047,11 @@ commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' ->
 
 -- Modules --
 
-buildModule :: (RenderSym repr) => Label -> [repr (Keyword repr)] -> 
-  [MS (repr (Method repr))] -> [FS (repr (Class repr))] -> 
-  FS (repr (Module repr))
-buildModule n ls ms cs = S.modFromData n getCurrMain (on2StateValues 
-  (moduleDocD (vcat $ map keyDoc ls)) (onStateList (vibcat . map classDoc) cs) 
-  (onStateList (methodListDocD . map methodDoc) (map (zoom lensFStoMS) ms)))
+buildModule :: (RenderSym repr) => Label -> FS Doc -> [MS (repr (Method repr))] 
+  -> [FS (repr (Class repr))] -> FS (repr (Module repr))
+buildModule n imps ms cs = S.modFromData n getCurrMain ((\cls fs is -> 
+  moduleDocD is (vibcat (map classDoc cls)) (vibcat (map methodDoc fs))) <$>
+  sequence cs <*> mapM (zoom lensFStoMS) ms <*> imps)
 
 buildModule' :: (RenderSym repr) => Label -> (String -> repr (Import repr)) -> 
   [MS (repr (Method repr))] -> [FS (repr (Class repr))] -> 

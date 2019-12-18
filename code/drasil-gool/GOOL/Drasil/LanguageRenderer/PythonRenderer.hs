@@ -57,12 +57,13 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (emptyIfEmpty, toCode, toState, onCodeValue,
+import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on5StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
   on1StateValue1List)
 import GOOL.Drasil.State (FS, MS, lensGStoFS, lensMStoFS, initialState, 
-  initialFS, addLangImport, addModuleImport, setCurrMain)
+  initialFS, addLangImport, getLangImports, addModuleImport, getModuleImports, 
+  setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -104,7 +105,7 @@ instance FileSym PythonCode where
   commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
 instance InternalFile PythonCode where
-  top _ = toCode pytop
+  top _ = toCode empty
   bottom = toCode empty
 
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
@@ -254,7 +255,8 @@ instance VariableSym PythonCode where
   self l = mkStateVar "self" (obj l) (text "self")
   enumVar = G.enumVar
   classVar = G.classVar classVarDocD
-  extClassVar = G.classVar pyClassVar
+  extClassVar c v = c >>= (\t -> modify (addModuleImport $ getTypeString t) >> 
+    G.classVar pyClassVar (toState t) v)
   objVar = G.objVar
   objVarSelf = G.objVarSelf
   listVar = G.listVar
@@ -628,7 +630,12 @@ instance InternalClass PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n ls = G.buildModule n (map include ls)
+  buildModule n _ = G.buildModule n (on2StateValues (\lis mis -> vibcat [
+    vcat (map (importDoc . 
+      (langImport :: Label -> PythonCode (Import PythonCode))) lis),
+    vcat (map (importDoc . 
+      (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
+    getLangImports getModuleImports)
 
 instance InternalMod PythonCode where
   moduleDoc = modDoc . unPC
@@ -650,11 +657,6 @@ initName = "__init__"
 
 pyName :: String
 pyName = "Python"
-
-pytop :: Doc 
-pytop = vcat [   -- There are also imports from the libraries supplied by module. These will be handled by module.
-  text imp <+> text "sys",
-  text imp <+> text "math"] 
 
 pyInclude :: Label -> Doc
 pyInclude n = text imp <+> text n

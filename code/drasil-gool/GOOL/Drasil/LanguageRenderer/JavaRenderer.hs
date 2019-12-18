@@ -64,7 +64,7 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (angles, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (GS, FS, MS, lensGStoFS, lensMStoFS, initialState, 
+import GOOL.Drasil.State (FS, MS, lensGStoFS, lensMStoFS, initialState, 
   initialFS, getPutReturn, getPutReturnList, addProgNameToPaths, addLangImport, 
   setCurrMain)
 

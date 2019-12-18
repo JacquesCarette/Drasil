@@ -106,38 +106,38 @@ class InternalPerm repr where
 
 class (BlockSym repr) => BodySym repr where
   type Body repr
-  body           :: [GS (repr (Block repr))] -> GS (repr (Body repr))
-  bodyStatements :: [GS (repr (Statement repr))] -> GS (repr (Body repr))
-  oneLiner       :: GS (repr (Statement repr)) -> GS (repr (Body repr))
+  body           :: [FS (repr (Block repr))] -> FS (repr (Body repr))
+  bodyStatements :: [FS (repr (Statement repr))] -> FS (repr (Body repr))
+  oneLiner       :: FS (repr (Statement repr)) -> FS (repr (Body repr))
 
-  addComments :: Label -> GS (repr (Body repr)) -> GS (repr (Body repr))
+  addComments :: Label -> FS (repr (Body repr)) -> FS (repr (Body repr))
 
   bodyDoc :: repr (Body repr) -> Doc
 
 class (StatementSym repr) => BlockSym repr where
   type Block repr
-  block   :: [GS (repr (Statement repr))] -> GS (repr (Block repr))
+  block   :: [FS (repr (Statement repr))] -> FS (repr (Block repr))
 
 class InternalBlock repr where
   blockDoc :: repr (Block repr) -> Doc
-  docBlock :: GS Doc -> GS (repr (Block repr))
+  docBlock :: FS Doc -> FS (repr (Block repr))
 
 class (PermanenceSym repr) => TypeSym repr where
   type Type repr
-  bool          :: GS (repr (Type repr))
-  int           :: GS (repr (Type repr))
-  float         :: GS (repr (Type repr))
-  char          :: GS (repr (Type repr))
-  string        :: GS (repr (Type repr))
-  infile        :: GS (repr (Type repr))
-  outfile       :: GS (repr (Type repr))
-  listType      :: repr (Permanence repr) -> GS (repr (Type repr)) -> 
-    GS (repr (Type repr))
-  listInnerType :: GS (repr (Type repr)) -> GS (repr (Type repr))
-  obj           :: Label -> GS (repr (Type repr))
-  enumType      :: Label -> GS (repr (Type repr))
-  iterator      :: GS (repr (Type repr)) -> GS (repr (Type repr))
-  void          :: GS (repr (Type repr))
+  bool          :: FS (repr (Type repr))
+  int           :: FS (repr (Type repr))
+  float         :: FS (repr (Type repr))
+  char          :: FS (repr (Type repr))
+  string        :: FS (repr (Type repr))
+  infile        :: FS (repr (Type repr))
+  outfile       :: FS (repr (Type repr))
+  listType      :: repr (Permanence repr) -> FS (repr (Type repr)) -> 
+    FS (repr (Type repr))
+  listInnerType :: FS (repr (Type repr)) -> FS (repr (Type repr))
+  obj           :: Label -> FS (repr (Type repr))
+  enumType      :: Label -> FS (repr (Type repr))
+  iterator      :: FS (repr (Type repr)) -> FS (repr (Type repr))
+  void          :: FS (repr (Type repr))
 
   getType :: repr (Type repr) -> CodeType
   getTypeString :: repr (Type repr) -> String
@@ -147,55 +147,55 @@ class InternalType repr where
   typeFromData :: CodeType -> String -> Doc -> repr (Type repr)
 
 class (ControlStatementSym repr) => ControlBlockSym repr where
-  runStrategy     :: Label -> [(Label, GS (repr (Body repr)))] -> 
-    Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Variable repr))) -> 
-    GS (repr (Block repr))
+  runStrategy     :: Label -> [(Label, FS (repr (Body repr)))] -> 
+    Maybe (FS (repr (Value repr))) -> Maybe (FS (repr (Variable repr))) -> 
+    FS (repr (Block repr))
 
-  listSlice'      :: Maybe (GS (repr (Value repr))) -> 
-    Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Value repr))) ->
-    GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Block repr))
+  listSlice'      :: Maybe (FS (repr (Value repr))) -> 
+    Maybe (FS (repr (Value repr))) -> Maybe (FS (repr (Value repr))) ->
+    FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Block repr))
 
-listSlice :: (ControlBlockSym repr) => GS (repr (Variable repr)) -> 
-  GS (repr (Value repr)) -> Maybe (GS (repr (Value repr))) -> 
-  Maybe (GS (repr (Value repr))) -> Maybe (GS (repr (Value repr))) -> 
-  GS (repr (Block repr))
+listSlice :: (ControlBlockSym repr) => FS (repr (Variable repr)) -> 
+  FS (repr (Value repr)) -> Maybe (FS (repr (Value repr))) -> 
+  Maybe (FS (repr (Value repr))) -> Maybe (FS (repr (Value repr))) -> 
+  FS (repr (Block repr))
 listSlice vnew vold b e s = listSlice' b e s vnew vold
 
 class UnaryOpSym repr where
   type UnaryOp repr
-  notOp    :: GS (repr (UnaryOp repr))
-  negateOp :: GS (repr (UnaryOp repr))
-  sqrtOp   :: GS (repr (UnaryOp repr))
-  absOp    :: GS (repr (UnaryOp repr))
-  logOp    :: GS (repr (UnaryOp repr))
-  lnOp     :: GS (repr (UnaryOp repr))
-  expOp    :: GS (repr (UnaryOp repr))
-  sinOp    :: GS (repr (UnaryOp repr))
-  cosOp    :: GS (repr (UnaryOp repr))
-  tanOp    :: GS (repr (UnaryOp repr))
-  asinOp   :: GS (repr (UnaryOp repr))
-  acosOp   :: GS (repr (UnaryOp repr))
-  atanOp   :: GS (repr (UnaryOp repr))
-  floorOp  :: GS (repr (UnaryOp repr))
-  ceilOp   :: GS (repr (UnaryOp repr))
+  notOp    :: FS (repr (UnaryOp repr))
+  negateOp :: FS (repr (UnaryOp repr))
+  sqrtOp   :: FS (repr (UnaryOp repr))
+  absOp    :: FS (repr (UnaryOp repr))
+  logOp    :: FS (repr (UnaryOp repr))
+  lnOp     :: FS (repr (UnaryOp repr))
+  expOp    :: FS (repr (UnaryOp repr))
+  sinOp    :: FS (repr (UnaryOp repr))
+  cosOp    :: FS (repr (UnaryOp repr))
+  tanOp    :: FS (repr (UnaryOp repr))
+  asinOp   :: FS (repr (UnaryOp repr))
+  acosOp   :: FS (repr (UnaryOp repr))
+  atanOp   :: FS (repr (UnaryOp repr))
+  floorOp  :: FS (repr (UnaryOp repr))
+  ceilOp   :: FS (repr (UnaryOp repr))
 
 class BinaryOpSym repr where
   type BinaryOp repr
-  equalOp        :: GS (repr (BinaryOp repr))
-  notEqualOp     :: GS (repr (BinaryOp repr))
-  greaterOp      :: GS (repr (BinaryOp repr))
-  greaterEqualOp :: GS (repr (BinaryOp repr))
-  lessOp         :: GS (repr (BinaryOp repr))
-  lessEqualOp    :: GS (repr (BinaryOp repr))
-  plusOp         :: GS (repr (BinaryOp repr))
-  minusOp        :: GS (repr (BinaryOp repr))
-  multOp         :: GS (repr (BinaryOp repr))
-  divideOp       :: GS (repr (BinaryOp repr))
-  powerOp        :: GS (repr (BinaryOp repr))
-  moduloOp       :: GS (repr (BinaryOp repr))
-  andOp          :: GS (repr (BinaryOp repr))
-  orOp           :: GS (repr (BinaryOp repr))
+  equalOp        :: FS (repr (BinaryOp repr))
+  notEqualOp     :: FS (repr (BinaryOp repr))
+  greaterOp      :: FS (repr (BinaryOp repr))
+  greaterEqualOp :: FS (repr (BinaryOp repr))
+  lessOp         :: FS (repr (BinaryOp repr))
+  lessEqualOp    :: FS (repr (BinaryOp repr))
+  plusOp         :: FS (repr (BinaryOp repr))
+  minusOp        :: FS (repr (BinaryOp repr))
+  multOp         :: FS (repr (BinaryOp repr))
+  divideOp       :: FS (repr (BinaryOp repr))
+  powerOp        :: FS (repr (BinaryOp repr))
+  moduloOp       :: FS (repr (BinaryOp repr))
+  andOp          :: FS (repr (BinaryOp repr))
+  orOp           :: FS (repr (BinaryOp repr))
 
 class InternalOp repr where
   uOpDoc :: repr (UnaryOp repr) -> Doc
@@ -203,32 +203,32 @@ class InternalOp repr where
   uOpPrec :: repr (UnaryOp repr) -> Int
   bOpPrec :: repr (BinaryOp repr) -> Int
 
-  uOpFromData :: Int -> Doc -> GS (repr (UnaryOp repr))
-  bOpFromData :: Int -> Doc -> GS (repr (BinaryOp repr))
+  uOpFromData :: Int -> Doc -> FS (repr (UnaryOp repr))
+  bOpFromData :: Int -> Doc -> FS (repr (BinaryOp repr))
 
 class (TypeSym repr) => VariableSym repr where
   type Variable repr
-  var          :: Label -> GS (repr (Type repr)) -> GS (repr (Variable repr))
-  staticVar    :: Label -> GS (repr (Type repr)) -> GS (repr (Variable repr))
-  const        :: Label -> GS (repr (Type repr)) -> GS (repr (Variable repr))
-  extVar       :: Library -> Label -> GS (repr (Type repr)) -> 
-    GS (repr (Variable repr))
-  self         :: Label -> GS (repr (Variable repr))
-  classVar     :: GS (repr (Type repr)) -> GS (repr (Variable repr)) -> 
-    GS (repr (Variable repr))
-  extClassVar  :: GS (repr (Type repr)) -> GS (repr (Variable repr)) -> 
-    GS (repr (Variable repr))
-  objVar       :: GS (repr (Variable repr)) -> GS (repr (Variable repr)) -> 
-    GS (repr (Variable repr))
-  objVarSelf   :: Label -> GS (repr (Variable repr)) -> GS (repr (Variable repr))
-  enumVar      :: Label -> Label -> GS (repr (Variable repr))
-  listVar      :: Label -> repr (Permanence repr) -> GS (repr (Type repr)) -> 
-    GS (repr (Variable repr))
-  listOf       :: Label -> GS (repr (Type repr)) -> GS (repr (Variable repr))
+  var          :: Label -> FS (repr (Type repr)) -> FS (repr (Variable repr))
+  staticVar    :: Label -> FS (repr (Type repr)) -> FS (repr (Variable repr))
+  const        :: Label -> FS (repr (Type repr)) -> FS (repr (Variable repr))
+  extVar       :: Library -> Label -> FS (repr (Type repr)) -> 
+    FS (repr (Variable repr))
+  self         :: Label -> FS (repr (Variable repr))
+  classVar     :: FS (repr (Type repr)) -> FS (repr (Variable repr)) -> 
+    FS (repr (Variable repr))
+  extClassVar  :: FS (repr (Type repr)) -> FS (repr (Variable repr)) -> 
+    FS (repr (Variable repr))
+  objVar       :: FS (repr (Variable repr)) -> FS (repr (Variable repr)) -> 
+    FS (repr (Variable repr))
+  objVarSelf   :: Label -> FS (repr (Variable repr)) -> FS (repr (Variable repr))
+  enumVar      :: Label -> Label -> FS (repr (Variable repr))
+  listVar      :: Label -> repr (Permanence repr) -> FS (repr (Type repr)) -> 
+    FS (repr (Variable repr))
+  listOf       :: Label -> FS (repr (Type repr)) -> FS (repr (Variable repr))
   -- Use for iterator variables, i.e. in a forEach loop.
-  iterVar      :: Label -> GS (repr (Type repr)) -> GS (repr (Variable repr))
+  iterVar      :: Label -> FS (repr (Type repr)) -> FS (repr (Variable repr))
 
-  ($->) :: GS (repr (Variable repr)) -> GS (repr (Variable repr)) -> GS (repr (Variable repr))
+  ($->) :: FS (repr (Variable repr)) -> FS (repr (Variable repr)) -> FS (repr (Variable repr))
   infixl 9 $->
 
   variableBind :: repr (Variable repr) -> Binding
@@ -242,70 +242,70 @@ class InternalVariable repr where
 
 class (VariableSym repr) => ValueSym repr where
   type Value repr
-  litTrue   :: GS (repr (Value repr))
-  litFalse  :: GS (repr (Value repr))
-  litChar   :: Char -> GS (repr (Value repr))
-  litFloat  :: Double -> GS (repr (Value repr))
-  litInt    :: Integer -> GS (repr (Value repr))
-  litString :: String -> GS (repr (Value repr))
+  litTrue   :: FS (repr (Value repr))
+  litFalse  :: FS (repr (Value repr))
+  litChar   :: Char -> FS (repr (Value repr))
+  litFloat  :: Double -> FS (repr (Value repr))
+  litInt    :: Integer -> FS (repr (Value repr))
+  litString :: String -> FS (repr (Value repr))
 
-  pi :: GS (repr (Value repr))
+  pi :: FS (repr (Value repr))
 
   --other operators ($)
-  ($:)  :: Label -> Label -> GS (repr (Value repr))
+  ($:)  :: Label -> Label -> FS (repr (Value repr))
   infixl 9 $:
 
-  valueOf       :: GS (repr (Variable repr)) -> GS (repr (Value repr))
+  valueOf       :: FS (repr (Variable repr)) -> FS (repr (Value repr))
 --  global       :: Label -> repr (Value repr)         -- not sure how this one works, but in GOOL it was hardcoded to give an error so I'm leaving it out for now
-  arg          :: Integer -> GS (repr (Value repr))
-  enumElement  :: Label -> Label -> GS (repr (Value repr))
+  arg          :: Integer -> FS (repr (Value repr))
+  enumElement  :: Label -> Label -> FS (repr (Value repr))
 
-  argsList  :: GS (repr (Value repr))
+  argsList  :: FS (repr (Value repr))
 
   valueType :: repr (Value repr) -> repr (Type repr)
   valueDoc :: repr (Value repr) -> Doc
 
 class (ValueSym repr) => 
   NumericExpression repr where
-  (#~)  :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  (#~)  :: FS (repr (Value repr)) -> FS (repr (Value repr))
   infixl 8 #~
-  (#/^) :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  (#/^) :: FS (repr (Value repr)) -> FS (repr (Value repr))
   infixl 7 #/^
-  (#|)  :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  (#|)  :: FS (repr (Value repr)) -> FS (repr (Value repr))
   infixl 7 #|
-  (#+)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (#+)  :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 5 #+
-  (#-)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (#-)  :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 5 #-
-  (#*)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (#*)  :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 6 #*
-  (#/)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (#/)  :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 6 #/
-  (#%)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (#%)  :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 6 #%
-  (#^)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (#^)  :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 7 #^
 
-  log    :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  ln     :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  exp    :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  sin    :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  cos    :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  tan    :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  csc    :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  sec    :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  cot    :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  arcsin :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  arccos :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  arctan :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  floor  :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  ceil   :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  log    :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  ln     :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  exp    :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  sin    :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  cos    :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  tan    :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  csc    :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  sec    :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  cot    :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  arcsin :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  arccos :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  arctan :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  floor  :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  ceil   :: FS (repr (Value repr)) -> FS (repr (Value repr))
 
 -- I considered having two separate classes, BooleanExpressions and BooleanComparisons,
 -- but this would require cyclic constraints, since it is feasible to have
@@ -314,61 +314,61 @@ class (ValueSym repr) =>
 -- 3 functions here, even though they don't really need it.
 class (ValueSym repr, NumericExpression repr) => 
   BooleanExpression repr where
-  (?!)  :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  (?!)  :: FS (repr (Value repr)) -> FS (repr (Value repr))
   infixr 6 ?!
-  (?&&) :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (?&&) :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 2 ?&&
-  (?||) :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (?||) :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 1 ?||
 
-  (?<)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (?<)  :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 4 ?<
-  (?<=) :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (?<=) :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 4 ?<=
-  (?>)  :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (?>)  :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 4 ?>
-  (?>=) :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (?>=) :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 4 ?>=
-  (?==) :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (?==) :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 3 ?==
-  (?!=) :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  (?!=) :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
   infixl 3 ?!=
 
 class (ValueSym repr, BooleanExpression repr) => 
   ValueExpression repr where -- for values that can include expressions
-  inlineIf     :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr)) -> GS (repr (Value repr))
-  funcApp      :: Label -> GS (repr (Type repr)) -> [GS (repr (Value repr))] -> 
-    GS (repr (Value repr))
-  selfFuncApp  :: Label -> Label -> GS (repr (Type repr)) -> 
-    [GS (repr (Value repr))] -> GS (repr (Value repr))
-  extFuncApp   :: Library -> Label -> GS (repr (Type repr)) -> 
-    [GS (repr (Value repr))] -> GS (repr (Value repr))
-  newObj     :: GS (repr (Type repr)) -> [GS (repr (Value repr))] -> 
-    GS (repr (Value repr))
-  extNewObj  :: Library -> GS (repr (Type repr)) -> [GS (repr (Value repr))] -> 
-    GS (repr (Value repr))
+  inlineIf     :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr)) -> FS (repr (Value repr))
+  funcApp      :: Label -> FS (repr (Type repr)) -> [FS (repr (Value repr))] -> 
+    FS (repr (Value repr))
+  selfFuncApp  :: Label -> Label -> FS (repr (Type repr)) -> 
+    [FS (repr (Value repr))] -> FS (repr (Value repr))
+  extFuncApp   :: Library -> Label -> FS (repr (Type repr)) -> 
+    [FS (repr (Value repr))] -> FS (repr (Value repr))
+  newObj     :: FS (repr (Type repr)) -> [FS (repr (Value repr))] -> 
+    FS (repr (Value repr))
+  extNewObj  :: Library -> FS (repr (Type repr)) -> [FS (repr (Value repr))] -> 
+    FS (repr (Value repr))
 
-  exists  :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  notNull :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  exists  :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  notNull :: FS (repr (Value repr)) -> FS (repr (Value repr))
 
 class InternalValue repr where
-  inputFunc       :: GS (repr (Value repr))
-  printFunc       :: GS (repr (Value repr))
-  printLnFunc     :: GS (repr (Value repr))
-  printFileFunc   :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  printFileLnFunc :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  inputFunc       :: FS (repr (Value repr))
+  printFunc       :: FS (repr (Value repr))
+  printLnFunc     :: FS (repr (Value repr))
+  printFileFunc   :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  printFileLnFunc :: FS (repr (Value repr)) -> FS (repr (Value repr))
 
-  cast :: GS (repr (Type repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  cast :: FS (repr (Type repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
 
   valuePrec :: repr (Value repr) -> Maybe Int
   valFromData :: Maybe Int -> repr (Type repr) -> Doc -> repr (Value repr)
@@ -380,95 +380,95 @@ class InternalValue repr where
 -- then what is the purpose of splitting the typeclasses into smaller typeclasses?
 -- I'm leaving it as is for now, even though I suspect this will change in the future.
 class (FunctionSym repr) => Selector repr where
-  objAccess :: GS (repr (Value repr)) -> GS (repr (Function repr)) -> 
-    GS (repr (Value repr))
-  ($.)      :: GS (repr (Value repr)) -> GS (repr (Function repr)) -> 
-    GS (repr (Value repr))
+  objAccess :: FS (repr (Value repr)) -> FS (repr (Function repr)) -> 
+    FS (repr (Value repr))
+  ($.)      :: FS (repr (Value repr)) -> FS (repr (Function repr)) -> 
+    FS (repr (Value repr))
   infixl 9 $.
 
-  selfAccess :: Label -> GS (repr (Function repr)) -> GS (repr (Value repr))
+  selfAccess :: Label -> FS (repr (Function repr)) -> FS (repr (Value repr))
 
-  listIndexExists :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
-  argExists       :: Integer -> GS (repr (Value repr))
+  listIndexExists :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
+  argExists       :: Integer -> FS (repr (Value repr))
 
-  indexOf :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  indexOf :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
 
 class (FunctionSym repr) => InternalSelector repr where
-  objMethodCall' :: Label -> GS (repr (Type repr)) -> GS (repr (Value repr)) -> 
-    [GS (repr (Value repr))] -> GS (repr (Value repr))
-  objMethodCallNoParams' :: Label -> GS (repr (Type repr)) -> 
-    GS (repr (Value repr)) -> GS (repr (Value repr))
+  objMethodCall' :: Label -> FS (repr (Type repr)) -> FS (repr (Value repr)) -> 
+    [FS (repr (Value repr))] -> FS (repr (Value repr))
+  objMethodCallNoParams' :: Label -> FS (repr (Type repr)) -> 
+    FS (repr (Value repr)) -> FS (repr (Value repr))
 
-objMethodCall :: (InternalSelector repr) => GS (repr (Type repr)) -> 
-  GS (repr (Value repr)) -> Label -> [GS (repr (Value repr))] -> 
-  GS (repr (Value repr))
+objMethodCall :: (InternalSelector repr) => FS (repr (Type repr)) -> 
+  FS (repr (Value repr)) -> Label -> [FS (repr (Value repr))] -> 
+  FS (repr (Value repr))
 objMethodCall t o f = objMethodCall' f t o
 
-objMethodCallNoParams :: (InternalSelector repr) => GS (repr (Type repr)) -> 
-  GS (repr (Value repr)) -> Label -> GS (repr (Value repr))
+objMethodCallNoParams :: (InternalSelector repr) => FS (repr (Type repr)) -> 
+  FS (repr (Value repr)) -> Label -> FS (repr (Value repr))
 objMethodCallNoParams t o f = objMethodCallNoParams' f t o
 
 class (ValueExpression repr) => FunctionSym repr where
   type Function repr
-  func :: Label -> GS (repr (Type repr)) -> [GS (repr (Value repr))] -> 
-    GS (repr (Function repr))
+  func :: Label -> FS (repr (Type repr)) -> [FS (repr (Value repr))] -> 
+    FS (repr (Function repr))
 
-  get :: GS (repr (Value repr)) -> GS (repr (Variable repr)) -> 
-    GS (repr (Value repr))
-  set :: GS (repr (Value repr)) -> GS (repr (Variable repr)) -> 
-    GS (repr (Value repr)) -> GS (repr (Value repr))
+  get :: FS (repr (Value repr)) -> FS (repr (Variable repr)) -> 
+    FS (repr (Value repr))
+  set :: FS (repr (Value repr)) -> FS (repr (Variable repr)) -> 
+    FS (repr (Value repr)) -> FS (repr (Value repr))
 
-  listSize   :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  listAdd    :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr)) -> GS (repr (Value repr))
-  listAppend :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  listSize   :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  listAdd    :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr)) -> FS (repr (Value repr))
+  listAppend :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
 
-  iterBegin :: GS (repr (Value repr)) -> GS (repr (Value repr))
-  iterEnd   :: GS (repr (Value repr)) -> GS (repr (Value repr))
+  iterBegin :: FS (repr (Value repr)) -> FS (repr (Value repr))
+  iterEnd   :: FS (repr (Value repr)) -> FS (repr (Value repr))
 
 class (Selector repr, InternalSelector repr) => SelectorFunction repr where
-  listAccess :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
-  listSet    :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr)) -> GS (repr (Value repr))
-  at         :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr))
+  listAccess :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
+  listSet    :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr)) -> FS (repr (Value repr))
+  at         :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr))
 
 class InternalFunction repr where
-  getFunc        :: GS (repr (Variable repr)) -> GS (repr (Function repr))
-  setFunc        :: GS (repr (Type repr)) -> GS (repr (Variable repr)) -> 
-    GS (repr (Value repr)) -> GS (repr (Function repr))
+  getFunc        :: FS (repr (Variable repr)) -> FS (repr (Function repr))
+  setFunc        :: FS (repr (Type repr)) -> FS (repr (Variable repr)) -> 
+    FS (repr (Value repr)) -> FS (repr (Function repr))
 
-  listSizeFunc       :: GS (repr (Function repr))
-  listAddFunc        :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr)) -> GS (repr (Function repr))
-  listAppendFunc         :: GS (repr (Value repr)) -> GS (repr (Function repr))
+  listSizeFunc       :: FS (repr (Function repr))
+  listAddFunc        :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr)) -> FS (repr (Function repr))
+  listAppendFunc         :: FS (repr (Value repr)) -> FS (repr (Function repr))
 
-  iterBeginFunc :: GS (repr (Type repr)) -> GS (repr (Function repr))
-  iterEndFunc   :: GS (repr (Type repr)) -> GS (repr (Function repr))
+  iterBeginFunc :: FS (repr (Type repr)) -> FS (repr (Function repr))
+  iterEndFunc   :: FS (repr (Type repr)) -> FS (repr (Function repr))
 
-  listAccessFunc :: GS (repr (Type repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Function repr))
-  listSetFunc    :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr)) -> GS (repr (Function repr))
+  listAccessFunc :: FS (repr (Type repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Function repr))
+  listSetFunc    :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr)) -> FS (repr (Function repr))
 
   functionType :: repr (Function repr) -> repr (Type repr)
   functionDoc :: repr (Function repr) -> Doc
 
-  funcFromData :: Doc -> GS (repr (Type repr)) -> GS (repr (Function repr))
+  funcFromData :: Doc -> FS (repr (Type repr)) -> FS (repr (Function repr))
 
 class InternalStatement repr where
   -- newLn, maybe a file to print to, printFunc, value to print
-  printSt :: Bool -> Maybe (GS (repr (Value repr))) -> GS (repr (Value repr)) 
-    -> GS (repr (Value repr)) -> GS (repr (Statement repr))
+  printSt :: Bool -> Maybe (FS (repr (Value repr))) -> FS (repr (Value repr)) 
+    -> FS (repr (Value repr)) -> FS (repr (Statement repr))
 
-  state     :: GS (repr (Statement repr)) -> GS (repr (Statement repr))
-  loopState :: GS (repr (Statement repr)) -> GS (repr (Statement repr))
+  state     :: FS (repr (Statement repr)) -> FS (repr (Statement repr))
+  loopState :: FS (repr (Statement repr)) -> FS (repr (Statement repr))
 
-  emptyState   :: GS (repr (Statement repr))
+  emptyState   :: FS (repr (Statement repr))
   statementDoc :: repr (Statement repr) -> Doc
   statementTerm :: repr (Statement repr) -> Terminator
 
@@ -476,154 +476,154 @@ class InternalStatement repr where
 
 class (SelectorFunction repr) => StatementSym repr where
   type Statement repr
-  (&=)   :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
+  (&=)   :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
   infixr 1 &=
-  (&-=)  :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
+  (&-=)  :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
   infixl 1 &-=
-  (&+=)  :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
+  (&+=)  :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
   infixl 1 &+=
-  (&++)  :: GS (repr (Variable repr)) -> GS (repr (Statement repr))
+  (&++)  :: FS (repr (Variable repr)) -> FS (repr (Statement repr))
   infixl 8 &++
-  (&~-)  :: GS (repr (Variable repr)) -> GS (repr (Statement repr))
+  (&~-)  :: FS (repr (Variable repr)) -> FS (repr (Statement repr))
   infixl 8 &~-
 
-  assign            :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
-  assignToListIndex :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr)) -> GS (repr (Statement repr))
-  multiAssign       :: [GS (repr (Variable repr))] -> [GS (repr (Value repr))] ->
-    GS (repr (Statement repr)) 
+  assign            :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
+  assignToListIndex :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr)) -> FS (repr (Statement repr))
+  multiAssign       :: [FS (repr (Variable repr))] -> [FS (repr (Value repr))] ->
+    FS (repr (Statement repr)) 
 
-  varDec           :: GS (repr (Variable repr)) -> GS (repr (Statement repr))
-  varDecDef        :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
-  listDec          :: Integer -> GS (repr (Variable repr)) -> 
-    GS (repr (Statement repr))
-  listDecDef       :: GS (repr (Variable repr)) -> [GS (repr (Value repr))] -> 
-    GS (repr (Statement repr))
-  objDecDef        :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
-  objDecNew        :: GS (repr (Variable repr)) -> [GS (repr (Value repr))] -> 
-    GS (repr (Statement repr))
-  extObjDecNew     :: Library -> GS (repr (Variable repr)) -> 
-    [GS (repr (Value repr))] -> GS (repr (Statement repr))
-  objDecNewNoParams    :: GS (repr (Variable repr)) -> GS (repr (Statement repr))
-  extObjDecNewNoParams :: Library -> GS (repr (Variable repr)) -> 
-    GS (repr (Statement repr))
-  constDecDef      :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
+  varDec           :: FS (repr (Variable repr)) -> FS (repr (Statement repr))
+  varDecDef        :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
+  listDec          :: Integer -> FS (repr (Variable repr)) -> 
+    FS (repr (Statement repr))
+  listDecDef       :: FS (repr (Variable repr)) -> [FS (repr (Value repr))] -> 
+    FS (repr (Statement repr))
+  objDecDef        :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
+  objDecNew        :: FS (repr (Variable repr)) -> [FS (repr (Value repr))] -> 
+    FS (repr (Statement repr))
+  extObjDecNew     :: Library -> FS (repr (Variable repr)) -> 
+    [FS (repr (Value repr))] -> FS (repr (Statement repr))
+  objDecNewNoParams    :: FS (repr (Variable repr)) -> FS (repr (Statement repr))
+  extObjDecNewNoParams :: Library -> FS (repr (Variable repr)) -> 
+    FS (repr (Statement repr))
+  constDecDef      :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
 
-  print      :: GS (repr (Value repr)) -> GS (repr (Statement repr))
-  printLn    :: GS (repr (Value repr)) -> GS (repr (Statement repr))
-  printStr   :: String -> GS (repr (Statement repr))
-  printStrLn :: String -> GS (repr (Statement repr))
+  print      :: FS (repr (Value repr)) -> FS (repr (Statement repr))
+  printLn    :: FS (repr (Value repr)) -> FS (repr (Statement repr))
+  printStr   :: String -> FS (repr (Statement repr))
+  printStrLn :: String -> FS (repr (Statement repr))
 
-  printFile      :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
-  printFileLn    :: GS (repr (Value repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
-  printFileStr   :: GS (repr (Value repr)) -> String -> 
-    GS (repr (Statement repr))
-  printFileStrLn :: GS (repr (Value repr)) -> String -> 
-    GS (repr (Statement repr))
+  printFile      :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
+  printFileLn    :: FS (repr (Value repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
+  printFileStr   :: FS (repr (Value repr)) -> String -> 
+    FS (repr (Statement repr))
+  printFileStrLn :: FS (repr (Value repr)) -> String -> 
+    FS (repr (Statement repr))
 
-  getInput         :: GS (repr (Variable repr)) -> GS (repr (Statement repr))
-  discardInput     :: GS (repr (Statement repr))
-  getFileInput     :: GS (repr (Value repr)) -> GS (repr (Variable repr)) -> 
-    GS (repr (Statement repr))
-  discardFileInput :: GS (repr (Value repr)) -> GS (repr (Statement repr))
+  getInput         :: FS (repr (Variable repr)) -> FS (repr (Statement repr))
+  discardInput     :: FS (repr (Statement repr))
+  getFileInput     :: FS (repr (Value repr)) -> FS (repr (Variable repr)) -> 
+    FS (repr (Statement repr))
+  discardFileInput :: FS (repr (Value repr)) -> FS (repr (Statement repr))
 
-  openFileR :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
-  openFileW :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
-  openFileA :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
-  closeFile :: GS (repr (Value repr)) -> GS (repr (Statement repr))
+  openFileR :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
+  openFileW :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
+  openFileA :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
+  closeFile :: FS (repr (Value repr)) -> FS (repr (Statement repr))
 
-  getFileInputLine :: GS (repr (Value repr)) -> GS (repr (Variable repr)) -> 
-    GS (repr (Statement repr))
-  discardFileLine  :: GS (repr (Value repr)) -> GS (repr (Statement repr))
-  stringSplit      :: Char -> GS (repr (Variable repr)) -> 
-    GS (repr (Value repr)) -> GS (repr (Statement repr))
+  getFileInputLine :: FS (repr (Value repr)) -> FS (repr (Variable repr)) -> 
+    FS (repr (Statement repr))
+  discardFileLine  :: FS (repr (Value repr)) -> FS (repr (Statement repr))
+  stringSplit      :: Char -> FS (repr (Variable repr)) -> 
+    FS (repr (Value repr)) -> FS (repr (Statement repr))
 
-  stringListVals :: [GS (repr (Variable repr))] -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr))
-  stringListLists :: [GS (repr (Variable repr))] -> GS (repr (Value repr)) ->
-    GS (repr (Statement repr))
+  stringListVals :: [FS (repr (Variable repr))] -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr))
+  stringListLists :: [FS (repr (Variable repr))] -> FS (repr (Value repr)) ->
+    FS (repr (Statement repr))
 
-  break :: GS (repr (Statement repr))
-  continue :: GS (repr (Statement repr))
+  break :: FS (repr (Statement repr))
+  continue :: FS (repr (Statement repr))
 
-  returnState :: GS (repr (Value repr)) -> GS (repr (Statement repr))
-  multiReturn :: [GS (repr (Value repr))] -> GS (repr (Statement repr))
+  returnState :: FS (repr (Value repr)) -> FS (repr (Statement repr))
+  multiReturn :: [FS (repr (Value repr))] -> FS (repr (Statement repr))
 
-  valState :: GS (repr (Value repr)) -> GS (repr (Statement repr))
+  valState :: FS (repr (Value repr)) -> FS (repr (Statement repr))
 
-  comment :: Label -> GS (repr (Statement repr))
+  comment :: Label -> FS (repr (Statement repr))
 
-  free :: GS (repr (Variable repr)) -> GS (repr (Statement repr))
+  free :: FS (repr (Variable repr)) -> FS (repr (Statement repr))
 
-  throw :: Label -> GS (repr (Statement repr))
+  throw :: Label -> FS (repr (Statement repr))
 
-  initState   :: Label -> Label -> GS (repr (Statement repr))
-  changeState :: Label -> Label -> GS (repr (Statement repr))
+  initState   :: Label -> Label -> FS (repr (Statement repr))
+  changeState :: Label -> Label -> FS (repr (Statement repr))
 
-  initObserverList :: GS (repr (Type repr)) -> [GS (repr (Value repr))] -> 
-    GS (repr (Statement repr))
-  addObserver      :: GS (repr (Value repr)) -> GS (repr (Statement repr))
+  initObserverList :: FS (repr (Type repr)) -> [FS (repr (Value repr))] -> 
+    FS (repr (Statement repr))
+  addObserver      :: FS (repr (Value repr)) -> FS (repr (Statement repr))
 
   -- The three lists are inputs, outputs, and both, respectively
-  inOutCall :: Label -> [GS (repr (Value repr))] -> [GS (repr (Variable repr))] 
-    -> [GS (repr (Variable repr))] -> GS (repr (Statement repr))
-  selfInOutCall :: Label -> Label -> [GS (repr (Value repr))] -> 
-    [GS (repr (Variable repr))] -> [GS (repr (Variable repr))] -> 
-    GS (repr (Statement repr))
-  extInOutCall :: Library -> Label -> [GS (repr (Value repr))] ->
-    [GS (repr (Variable repr))] -> [GS (repr (Variable repr))] -> 
-    GS (repr (Statement repr))
+  inOutCall :: Label -> [FS (repr (Value repr))] -> [FS (repr (Variable repr))] 
+    -> [FS (repr (Variable repr))] -> FS (repr (Statement repr))
+  selfInOutCall :: Label -> Label -> [FS (repr (Value repr))] -> 
+    [FS (repr (Variable repr))] -> [FS (repr (Variable repr))] -> 
+    FS (repr (Statement repr))
+  extInOutCall :: Library -> Label -> [FS (repr (Value repr))] ->
+    [FS (repr (Variable repr))] -> [FS (repr (Variable repr))] -> 
+    FS (repr (Statement repr))
 
-  multi     :: [GS (repr (Statement repr))] -> GS (repr (Statement repr))
+  multi     :: [FS (repr (Statement repr))] -> FS (repr (Statement repr))
 
 class (BodySym repr) => ControlStatementSym repr where
-  ifCond     :: [(GS (repr (Value repr)), GS (repr (Body repr)))] -> 
-    GS (repr (Body repr)) -> GS (repr (Statement repr))
-  ifNoElse   :: [(GS (repr (Value repr)), GS (repr (Body repr)))] -> 
-    GS (repr (Statement repr))
-  switch     :: GS (repr (Value repr)) -> [(GS (repr (Value repr)), 
-    GS (repr (Body repr)))] -> GS (repr (Body repr)) -> 
-    GS (repr (Statement repr)) -- is there value in separating Literals into their own type?
-  switchAsIf :: GS (repr (Value repr)) -> [(GS (repr (Value repr)), 
-    GS (repr (Body repr)))] -> GS (repr (Body repr)) -> 
-    GS (repr (Statement repr))
+  ifCond     :: [(FS (repr (Value repr)), FS (repr (Body repr)))] -> 
+    FS (repr (Body repr)) -> FS (repr (Statement repr))
+  ifNoElse   :: [(FS (repr (Value repr)), FS (repr (Body repr)))] -> 
+    FS (repr (Statement repr))
+  switch     :: FS (repr (Value repr)) -> [(FS (repr (Value repr)), 
+    FS (repr (Body repr)))] -> FS (repr (Body repr)) -> 
+    FS (repr (Statement repr)) -- is there value in separating Literals into their own type?
+  switchAsIf :: FS (repr (Value repr)) -> [(FS (repr (Value repr)), 
+    FS (repr (Body repr)))] -> FS (repr (Body repr)) -> 
+    FS (repr (Statement repr))
 
-  ifExists :: GS (repr (Value repr)) -> GS (repr (Body repr)) -> 
-    GS (repr (Body repr)) -> GS (repr (Statement repr))
+  ifExists :: FS (repr (Value repr)) -> FS (repr (Body repr)) -> 
+    FS (repr (Body repr)) -> FS (repr (Statement repr))
 
-  for      :: GS (repr (Statement repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Statement repr)) -> GS (repr (Body repr)) -> 
-    GS (repr (Statement repr))
-  forRange :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Body repr)) 
-    -> GS (repr (Statement repr))
-  forEach  :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (Body repr)) -> GS (repr (Statement repr))
-  while    :: GS (repr (Value repr)) -> GS (repr (Body repr)) -> 
-    GS (repr (Statement repr)) 
+  for      :: FS (repr (Statement repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Statement repr)) -> FS (repr (Body repr)) -> 
+    FS (repr (Statement repr))
+  forRange :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Value repr)) -> FS (repr (Value repr)) -> FS (repr (Body repr)) 
+    -> FS (repr (Statement repr))
+  forEach  :: FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (Body repr)) -> FS (repr (Statement repr))
+  while    :: FS (repr (Value repr)) -> FS (repr (Body repr)) -> 
+    FS (repr (Statement repr)) 
 
-  tryCatch :: GS (repr (Body repr)) -> GS (repr (Body repr)) -> 
-    GS (repr (Statement repr))
+  tryCatch :: FS (repr (Body repr)) -> FS (repr (Body repr)) -> 
+    FS (repr (Statement repr))
 
-  checkState      :: Label -> [(GS (repr (Value repr)), GS (repr (Body repr)))] 
-    -> GS (repr (Body repr)) -> GS (repr (Statement repr))
-  notifyObservers :: GS (repr (Function repr)) -> GS (repr (Type repr)) -> 
-    GS (repr (Statement repr))
+  checkState      :: Label -> [(FS (repr (Value repr)), FS (repr (Body repr)))] 
+    -> FS (repr (Body repr)) -> FS (repr (Statement repr))
+  notifyObservers :: FS (repr (Function repr)) -> FS (repr (Type repr)) -> 
+    FS (repr (Statement repr))
 
-  getFileInputAll  :: GS (repr (Value repr)) -> GS (repr (Variable repr)) -> 
-    GS (repr (Statement repr))
+  getFileInputAll  :: FS (repr (Value repr)) -> FS (repr (Variable repr)) -> 
+    FS (repr (Statement repr))
 
 class ScopeSym repr where
   type Scope repr
@@ -635,14 +635,14 @@ class InternalScope repr where
 
 class (TypeSym repr) => MethodTypeSym repr where
   type MethodType repr
-  mType    :: GS (repr (Type repr)) -> GS (repr (MethodType repr))
-  construct :: Label -> GS (repr (MethodType repr))
+  mType    :: FS (repr (Type repr)) -> FS (repr (MethodType repr))
+  construct :: Label -> FS (repr (MethodType repr))
 
 class ParameterSym repr where
   type Parameter repr
-  param :: GS (repr (Variable repr)) -> MS (repr (Parameter repr))
+  param :: FS (repr (Variable repr)) -> MS (repr (Parameter repr))
   -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
-  pointerParam :: GS (repr (Variable repr)) -> MS (repr (Parameter repr))
+  pointerParam :: FS (repr (Variable repr)) -> MS (repr (Parameter repr))
 
 class InternalParam repr where
   parameterName :: repr (Parameter repr) -> Label
@@ -655,26 +655,26 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr) =>
   type Method repr
   -- Second label is class name
   method      :: Label -> Label -> repr (Scope repr) -> repr (Permanence repr) 
-    -> GS (repr (Type repr)) -> [MS (repr (Parameter repr))] -> 
-    GS (repr (Body repr)) -> MS (repr (Method repr))
-  getMethod   :: Label -> GS (repr (Variable repr)) -> MS (repr (Method repr))
-  setMethod   :: Label -> GS (repr (Variable repr)) -> MS (repr (Method repr)) 
-  privMethod  :: Label -> Label -> GS (repr (Type repr)) -> 
-    [MS (repr (Parameter repr))] -> GS (repr (Body repr)) -> 
+    -> FS (repr (Type repr)) -> [MS (repr (Parameter repr))] -> 
+    FS (repr (Body repr)) -> MS (repr (Method repr))
+  getMethod   :: Label -> FS (repr (Variable repr)) -> MS (repr (Method repr))
+  setMethod   :: Label -> FS (repr (Variable repr)) -> MS (repr (Method repr)) 
+  privMethod  :: Label -> Label -> FS (repr (Type repr)) -> 
+    [MS (repr (Parameter repr))] -> FS (repr (Body repr)) -> 
     MS (repr (Method repr))
-  pubMethod   :: Label -> Label -> GS (repr (Type repr)) -> 
-    [MS (repr (Parameter repr))] -> GS (repr (Body repr)) -> 
+  pubMethod   :: Label -> Label -> FS (repr (Type repr)) -> 
+    [MS (repr (Parameter repr))] -> FS (repr (Body repr)) -> 
     MS (repr (Method repr))
-  constructor :: Label -> [MS (repr (Parameter repr))] -> GS (repr (Body repr)) 
+  constructor :: Label -> [MS (repr (Parameter repr))] -> FS (repr (Body repr)) 
     -> MS (repr (Method repr))
-  destructor :: Label -> [GS (repr (StateVar repr))] -> MS (repr (Method repr))
+  destructor :: Label -> [FS (repr (StateVar repr))] -> MS (repr (Method repr))
 
-  docMain :: GS (repr (Body repr)) -> MS (repr (Method repr))
+  docMain :: FS (repr (Body repr)) -> MS (repr (Method repr))
 
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    GS (repr (Type repr)) -> [MS (repr (Parameter repr))] -> 
-    GS (repr (Body repr)) -> MS (repr (Method repr))
-  mainFunction  :: GS (repr (Body repr)) -> MS (repr (Method repr))
+    FS (repr (Type repr)) -> [MS (repr (Parameter repr))] -> 
+    FS (repr (Body repr)) -> MS (repr (Method repr))
+  mainFunction  :: FS (repr (Body repr)) -> MS (repr (Method repr))
   -- Parameters are: function description, parameter descriptions, 
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> 
@@ -682,35 +682,35 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr) =>
 
   -- Second label is class name, rest is same as inOutFunc
   inOutMethod :: Label -> Label -> repr (Scope repr) -> repr (Permanence repr) 
-    -> [GS (repr (Variable repr))] -> [GS (repr (Variable repr))] -> 
-    [GS (repr (Variable repr))] -> GS (repr (Body repr)) -> 
+    -> [FS (repr (Variable repr))] -> [FS (repr (Variable repr))] -> 
+    [FS (repr (Variable repr))] -> FS (repr (Body repr)) -> 
     MS (repr (Method repr))
   -- Second label is class name, rest is same as docInOutFunc
   docInOutMethod :: Label -> Label -> repr (Scope repr) -> 
-    repr (Permanence repr) -> String -> [(String, GS (repr (Variable repr)))] 
-    -> [(String, GS (repr (Variable repr)))] -> 
-    [(String, GS (repr (Variable repr)))] -> GS (repr (Body repr)) -> 
+    repr (Permanence repr) -> String -> [(String, FS (repr (Variable repr)))] 
+    -> [(String, FS (repr (Variable repr)))] -> 
+    [(String, FS (repr (Variable repr)))] -> FS (repr (Body repr)) -> 
     MS (repr (Method repr))
 
   -- The three lists are inputs, outputs, and both, respectively
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    [GS (repr (Variable repr))] -> [GS (repr (Variable repr))] -> 
-    [GS (repr (Variable repr))] -> GS (repr (Body repr)) -> 
+    [FS (repr (Variable repr))] -> [FS (repr (Variable repr))] -> 
+    [FS (repr (Variable repr))] -> FS (repr (Body repr)) -> 
     MS (repr (Method repr))
   -- Parameters are: function name, scope, permanence, brief description, input descriptions and variables, output descriptions and variables, descriptions and variables for parameters that are both input and output, function body
   docInOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    String -> [(String, GS (repr (Variable repr)))] -> [(String, GS (repr 
-    (Variable repr)))] -> [(String, GS (repr (Variable repr)))] -> 
-    GS (repr (Body repr)) -> MS (repr (Method repr))
+    String -> [(String, FS (repr (Variable repr)))] -> [(String, FS (repr 
+    (Variable repr)))] -> [(String, FS (repr (Variable repr)))] -> 
+    FS (repr (Body repr)) -> MS (repr (Method repr))
 
 class (MethodTypeSym repr, BlockCommentSym repr) => InternalMethod repr where
   intMethod     :: Bool -> Label -> Label -> repr (Scope repr) -> 
-    repr (Permanence repr) -> GS (repr (MethodType repr)) -> 
-    [MS (repr (Parameter repr))] -> GS (repr (Body repr)) -> 
+    repr (Permanence repr) -> FS (repr (MethodType repr)) -> 
+    [MS (repr (Parameter repr))] -> FS (repr (Body repr)) -> 
     MS (repr (Method repr))
   intFunc       :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
-    -> GS (repr (MethodType repr)) -> [MS (repr (Parameter repr))] -> 
-    GS (repr (Body repr)) -> MS (repr (Method repr))
+    -> FS (repr (MethodType repr)) -> [MS (repr (Parameter repr))] -> 
+    FS (repr (Body repr)) -> MS (repr (Method repr))
   commentedFunc :: MS (repr (BlockComment repr)) -> MS (repr (Method repr)) -> 
     MS (repr (Method repr))
 
@@ -721,32 +721,32 @@ class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr) =>
   StateVarSym repr where
   type StateVar repr
   stateVar :: repr (Scope repr) -> repr (Permanence repr) ->
-    GS (repr (Variable repr)) -> GS (repr (StateVar repr))
+    FS (repr (Variable repr)) -> FS (repr (StateVar repr))
   stateVarDef :: Label -> repr (Scope repr) -> repr (Permanence repr) ->
-    GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
-    GS (repr (StateVar repr))
-  constVar :: Label -> repr (Scope repr) ->  GS (repr (Variable repr)) -> 
-    GS (repr (Value repr)) -> GS (repr (StateVar repr))
-  privMVar :: GS (repr (Variable repr)) -> GS (repr (StateVar repr))
-  pubMVar  :: GS (repr (Variable repr)) -> GS (repr (StateVar repr))
-  pubGVar  :: GS (repr (Variable repr)) -> GS (repr (StateVar repr))
+    FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+    FS (repr (StateVar repr))
+  constVar :: Label -> repr (Scope repr) ->  FS (repr (Variable repr)) -> 
+    FS (repr (Value repr)) -> FS (repr (StateVar repr))
+  privMVar :: FS (repr (Variable repr)) -> FS (repr (StateVar repr))
+  pubMVar  :: FS (repr (Variable repr)) -> FS (repr (StateVar repr))
+  pubGVar  :: FS (repr (Variable repr)) -> FS (repr (StateVar repr))
 
 class InternalStateVar repr where
   stateVarDoc :: repr (StateVar repr) -> Doc
-  stateVarFromData :: GS Doc -> GS (repr (StateVar repr))
+  stateVarFromData :: FS Doc -> FS (repr (StateVar repr))
 
 class (MethodSym repr) => ClassSym repr where
   type Class repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
-    [GS (repr (StateVar repr))] -> 
+    [FS (repr (StateVar repr))] -> 
     [MS (repr (Method repr))] -> 
     FS (repr (Class repr))
   enum :: Label -> [Label] -> repr (Scope repr) -> 
     FS (repr (Class repr))
-  privClass :: Label -> Maybe Label -> [GS (repr (StateVar repr))] 
+  privClass :: Label -> Maybe Label -> [FS (repr (StateVar repr))] 
     -> [MS (repr (Method repr))] -> 
     FS (repr (Class repr))
-  pubClass :: Label -> Maybe Label -> [GS (repr (StateVar repr))] 
+  pubClass :: Label -> Maybe Label -> [FS (repr (StateVar repr))] 
     -> [MS (repr (Method repr))] -> 
     FS (repr (Class repr))
 

@@ -3,7 +3,7 @@ module Test.Observer (observer, observerName, printNum, x) where
 import GOOL.Drasil (
   ProgramSym, FileSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
   StatementSym(..), VariableSym(..), ValueSym(..), ScopeSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), GS, FS, MS)
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), FS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observerName, observerDesc, printNum :: String
@@ -15,10 +15,10 @@ observer :: (ProgramSym repr) => FS (repr (RenderFile repr))
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
-x :: (VariableSym repr) => GS (repr (Variable repr))
+x :: (VariableSym repr) => FS (repr (Variable repr))
 x = var "x" int
 
-selfX :: (VariableSym repr) => GS (repr (Variable repr))
+selfX :: (VariableSym repr) => FS (repr (Variable repr))
 selfX = objVarSelf observerName x
 
 helperClass :: (ClassSym repr) => FS (repr (Class repr))

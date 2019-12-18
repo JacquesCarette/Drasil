@@ -1,9 +1,9 @@
 module Test.PatternTest (patternTest) where
 
-import GOOL.Drasil (ProgramSym(..), FileSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), 
-  StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..),
-  ValueExpression(..), FunctionSym(..), MethodSym(..), ModuleSym(..), GS, MS)
+import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
+  ControlBlockSym(..), TypeSym(..), StatementSym(..), ControlStatementSym(..), 
+  VariableSym(..), ValueSym(..), ValueExpression(..), FunctionSym(..), 
+  MethodSym(..), ModuleSym(..), GS, FS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer, observerName, printNum, x)
 
@@ -20,15 +20,15 @@ obs1Name = "obs1"
 obs2Name = "obs2"
 nName = "n"
 
-observerType :: (TypeSym repr) => GS (repr (Type repr))
+observerType :: (TypeSym repr) => FS (repr (Type repr))
 observerType = obj observerName
 
-n, obs1, obs2 :: (VariableSym repr) => GS (repr (Variable repr))
+n, obs1, obs2 :: (VariableSym repr) => FS (repr (Variable repr))
 n = var nName int
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
-newObserver :: (ValueExpression repr) => GS (repr (Value repr))
+newObserver :: (ValueExpression repr) => FS (repr (Value repr))
 newObserver = extNewObj observerName observerType []
 
 patternTest :: (ProgramSym repr) => GS (repr (Program repr))

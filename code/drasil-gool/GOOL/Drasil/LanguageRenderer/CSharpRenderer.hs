@@ -64,7 +64,7 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (GS, MS, lensGStoFS, lensMStoGS, getPutReturn, 
+import GOOL.Drasil.State (FS, MS, lensGStoFS, lensMStoFS, getPutReturn, 
   addLangImport, setCurrMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -571,7 +571,7 @@ instance MethodSym CSharpCode where
 instance InternalMethod CSharpCode where
   intMethod m n _ s p t ps b = modify (if m then setCurrMain else id) >> 
     on3StateValues (\tp pms bd -> methodFromData Pub $ methodDocD n s p tp pms 
-    bd) (zoom lensMStoGS t) (sequence ps) (zoom lensMStoGS b)
+    bd) (zoom lensMStoFS t) (sequence ps) (zoom lensMStoFS b)
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
@@ -625,7 +625,7 @@ instance BlockCommentSym CSharpCode where
 
   blockCommentDoc = unCSC
 
-addSystemImport :: GS a -> GS a
+addSystemImport :: FS a -> FS a
 addSystemImport = (>>) $ modify (addLangImport "System")
 
 csName :: String
@@ -634,16 +634,16 @@ csName = "C#"
 csImport :: Label -> CSharpCode (Keyword CSharpCode) -> Doc
 csImport n end = text ("using " ++ n) <> keyDoc end
 
-csInfileType :: (RenderSym repr) => GS (repr (Type repr))
+csInfileType :: (RenderSym repr) => FS (repr (Type repr))
 csInfileType = getPutReturn (addLangImport "System.IO") $ 
   typeFromData File "StreamReader" (text "StreamReader")
 
-csOutfileType :: (RenderSym repr) => GS (repr (Type repr))
+csOutfileType :: (RenderSym repr) => FS (repr (Type repr))
 csOutfileType = getPutReturn (addLangImport "System.IO") $ 
   typeFromData File "StreamWriter" (text "StreamWriter")
 
-csCast :: GS (CSharpCode (Type CSharpCode)) -> 
-  GS (CSharpCode (Value CSharpCode)) -> GS (CSharpCode (Value CSharpCode))
+csCast :: FS (CSharpCode (Type CSharpCode)) -> 
+  FS (CSharpCode (Value CSharpCode)) -> FS (CSharpCode (Value CSharpCode))
 csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
   where csCast' Float String _ _ = funcApp "Double.Parse" float [v]
@@ -666,13 +666,13 @@ csTryCatch tb cb = vcat [
 csDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
 csDiscardInput = valueDoc
 
-csFileInput :: (RenderSym repr) => GS (repr (Value repr)) -> 
-  GS (repr (Value repr))
+csFileInput :: (RenderSym repr) => FS (repr (Value repr)) -> 
+  FS (repr (Value repr))
 csFileInput = onStateValue (\f -> mkVal (valueType f) (valueDoc f <> dot <> 
   text "ReadLine()"))
 
-csInput :: (RenderSym repr) => GS (repr (Type repr)) -> GS (repr (Value repr)) 
-  -> GS (repr (Value repr))
+csInput :: (RenderSym repr) => FS (repr (Type repr)) -> FS (repr (Value repr)) 
+  -> FS (repr (Value repr))
 csInput = on2StateValues (\t inFn -> mkVal t $ text (csInput' (getType t)) <> 
   parens (valueDoc inFn))
   where csInput' Integer = "Int32.Parse"
@@ -682,12 +682,12 @@ csInput = on2StateValues (\t inFn -> mkVal t $ text (csInput' (getType t)) <>
         csInput' Char = "Char.Parse"
         csInput' _ = error "Attempt to read value of unreadable type"
 
-csOpenFileR :: (RenderSym repr) => GS (repr (Value repr)) -> 
-  GS (repr (Type repr)) -> GS (repr (Value repr))
+csOpenFileR :: (RenderSym repr) => FS (repr (Value repr)) -> 
+  FS (repr (Type repr)) -> FS (repr (Value repr))
 csOpenFileR n r = newObj r [n]
 
-csOpenFileWorA :: (RenderSym repr) => GS (repr (Value repr)) -> 
-  GS (repr (Type repr)) -> GS (repr (Value repr)) -> GS (repr (Value repr))
+csOpenFileWorA :: (RenderSym repr) => FS (repr (Value repr)) -> 
+  FS (repr (Type repr)) -> FS (repr (Value repr)) -> FS (repr (Value repr))
 csOpenFileWorA n w a = newObj w [n, a] 
 
 csRef :: Doc -> Doc
@@ -696,12 +696,12 @@ csRef p = text "ref" <+> p
 csOut :: Doc -> Doc
 csOut p = text "out" <+> p
 
-csInOutCall :: (Label -> GS (CSharpCode (Type CSharpCode)) -> 
-  [GS (CSharpCode (Value CSharpCode))] -> GS (CSharpCode (Value CSharpCode)))
-  -> Label -> [GS (CSharpCode (Value CSharpCode))] -> 
-  [GS (CSharpCode (Variable CSharpCode))] -> 
-  [GS (CSharpCode (Variable CSharpCode))] -> 
-  GS (CSharpCode (Statement CSharpCode))
+csInOutCall :: (Label -> FS (CSharpCode (Type CSharpCode)) -> 
+  [FS (CSharpCode (Value CSharpCode))] -> FS (CSharpCode (Value CSharpCode)))
+  -> Label -> [FS (CSharpCode (Value CSharpCode))] -> 
+  [FS (CSharpCode (Variable CSharpCode))] -> 
+  [FS (CSharpCode (Variable CSharpCode))] -> 
+  FS (CSharpCode (Statement CSharpCode))
 csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out) 
   ins
 csInOutCall f n ins [] [out] = if null (filterOutObjs [out])
@@ -711,8 +711,8 @@ csInOutCall f n ins outs both = valState $ f n void (map (onStateValue
   (onCodeValue (updateValDoc csRef)) . valueOf) both ++ ins ++ map 
   (onStateValue (onCodeValue (updateValDoc csOut)) . valueOf) outs)
 
-csVarDec :: Binding -> GS (CSharpCode (Statement CSharpCode)) -> 
-  GS (CSharpCode (Statement CSharpCode))
+csVarDec :: Binding -> FS (CSharpCode (Statement CSharpCode)) -> 
+  FS (CSharpCode (Statement CSharpCode))
 csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
 csVarDec Dynamic d = d
 
@@ -725,14 +725,14 @@ csObjVar o v = csObjVar' (variableBind v)
           (variableType v) (objVarDocD (variableDoc o) (variableDoc v))
 
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
-    -> GS (CSharpCode (Type CSharpCode)) -> 
+    -> FS (CSharpCode (Type CSharpCode)) -> 
     [MS (CSharpCode (Parameter CSharpCode))] 
-    -> GS (CSharpCode (Body CSharpCode)) -> MS (CSharpCode (Method CSharpCode)))
+    -> FS (CSharpCode (Body CSharpCode)) -> MS (CSharpCode (Method CSharpCode)))
   -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
-  [GS (CSharpCode (Variable CSharpCode))] -> 
-  [GS (CSharpCode (Variable CSharpCode))] -> 
-  [GS (CSharpCode (Variable CSharpCode))] -> 
-  GS (CSharpCode (Body CSharpCode)) -> MS (CSharpCode (Method CSharpCode))
+  [FS (CSharpCode (Variable CSharpCode))] -> 
+  [FS (CSharpCode (Variable CSharpCode))] -> 
+  [FS (CSharpCode (Variable CSharpCode))] -> 
+  FS (CSharpCode (Body CSharpCode)) -> MS (CSharpCode (Method CSharpCode))
 csInOut f s p ins [v] [] b = f s p (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 
   valueOf v))

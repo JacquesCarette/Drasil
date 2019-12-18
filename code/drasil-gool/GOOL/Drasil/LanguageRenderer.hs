@@ -39,7 +39,7 @@ import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod,
   updateModDoc, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
   onStateValue, getNestDegree)
-import GOOL.Drasil.State (GS, MS, initialState, getParameters)
+import GOOL.Drasil.State (FS, MS, initialState, initialFS, getParameters)
 
 import Data.List (last)
 import Control.Monad.State (evalState)
@@ -153,10 +153,10 @@ bodyDocD bs = vibcat blocks
 printDoc :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> Doc
 printDoc printFn v = valueDoc printFn <> parens (valueDoc v)
 
-printListDoc :: (RenderSym repr) => Integer -> GS (repr (Value repr)) -> 
-  (GS (repr (Value repr)) -> GS (repr (Statement repr))) -> 
-  (String -> GS (repr (Statement repr))) -> 
-  (String -> GS (repr (Statement repr))) -> GS (repr (Statement repr))
+printListDoc :: (RenderSym repr) => Integer -> FS (repr (Value repr)) -> 
+  (FS (repr (Value repr)) -> FS (repr (Statement repr))) -> 
+  (String -> FS (repr (Statement repr))) -> 
+  (String -> FS (repr (Statement repr))) -> FS (repr (Statement repr))
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
   for (varDecDef i (litInt 0)) (valueOf i ?< (listSize v #- litInt 1))
     (i &++) (bodyStatements [prFn (listAccess v (valueOf i)), prStrFn ", "]), 
@@ -166,12 +166,12 @@ printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[",
   where l_i = "list_i" ++ show n
         i = var l_i S.int
 
-printObjDoc :: String -> (String -> GS (repr (Statement repr)))
-  -> GS (repr (Statement repr))
+printObjDoc :: String -> (String -> FS (repr (Statement repr)))
+  -> FS (repr (Statement repr))
 printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
-outDoc :: (RenderSym repr) => Bool -> Maybe (GS (repr (Value repr))) -> 
-  GS (repr (Value repr)) -> GS (repr (Value repr)) -> GS (repr (Statement repr))
+outDoc :: (RenderSym repr) => Bool -> Maybe (FS (repr (Value repr))) -> 
+  FS (repr (Value repr)) -> FS (repr (Value repr)) -> FS (repr (Statement repr))
 outDoc newLn f printFn v = v >>= outDoc' . getType . valueType
   where outDoc' (List t) = printListDoc (getNestDegree 1 t) v prFn prStrFn 
           prLnFn
@@ -291,23 +291,23 @@ mkSt = flip stateFromData Semi
 mkStNoEnd :: (RenderSym repr) => Doc -> repr (Statement repr)
 mkStNoEnd = flip stateFromData Empty
 
-mkStateVal :: (RenderSym repr) => GS (repr (Type repr)) -> Doc -> 
-  GS (repr (Value repr))
+mkStateVal :: (RenderSym repr) => FS (repr (Type repr)) -> Doc -> 
+  FS (repr (Value repr))
 mkStateVal t d = onStateValue (\tp -> valFromData Nothing tp d) t
 
 mkVal :: (RenderSym repr) => repr (Type repr) -> Doc -> repr (Value repr)
 mkVal = valFromData Nothing
 
-mkStateVar :: (RenderSym repr) => String -> GS (repr (Type repr)) -> Doc -> 
-  GS (repr (Variable repr))
+mkStateVar :: (RenderSym repr) => String -> FS (repr (Type repr)) -> Doc -> 
+  FS (repr (Variable repr))
 mkStateVar n t d = onStateValue (\tp -> varFromData Dynamic n tp d) t
 
 mkVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
   repr (Variable repr)
 mkVar = varFromData Dynamic
 
-mkStaticVar :: (RenderSym repr) => String -> GS (repr (Type repr)) -> Doc -> 
-  GS (repr (Variable repr))
+mkStaticVar :: (RenderSym repr) => String -> FS (repr (Type repr)) -> Doc -> 
+  FS (repr (Variable repr))
 mkStaticVar n t d = onStateValue (\tp -> varFromData Static n tp d) t
 
 -- Value Printers --
@@ -486,16 +486,16 @@ getterName s = "get" ++ capitalize s
 setterName :: String -> String
 setterName s = "set" ++ capitalize s
 
-intValue :: (RenderSym repr) => GS (repr (Value repr)) -> GS (repr (Value repr))
+intValue :: (RenderSym repr) => FS (repr (Value repr)) -> FS (repr (Value repr))
 intValue i = i >>= intValue' . getType . valueType
   where intValue' Integer = i
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
 
-filterOutObjs :: (VariableSym repr) => [GS (repr (Variable repr))] -> 
-  [GS (repr (Variable repr))]
+filterOutObjs :: (VariableSym repr) => [FS (repr (Variable repr))] -> 
+  [FS (repr (Variable repr))]
 filterOutObjs = filter (not . isObject . getType . variableType . 
-  (`evalState` initialState))
+  (`evalState` (initialState, initialFS)))
 
 doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String
 doxCommand = "\\"

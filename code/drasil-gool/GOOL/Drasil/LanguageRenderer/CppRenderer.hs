@@ -12,13 +12,13 @@ import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
-  InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
-  BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
-  InternalOp(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  InternalValue(..), Selector(..), InternalSelector(..), objMethodCall, 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
+  InternalPerm(..), BodySym(..), BlockSym(..), InternalBlock(..), 
+  ControlBlockSym(..), TypeSym(..), InternalType(..), UnaryOpSym(..), 
+  BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
+  objMethodCall, FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
   InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
@@ -125,7 +125,6 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   endStatement = pair endStatement endStatement
   endStatementLoop = pair endStatementLoop endStatementLoop
 
-  include n = pair (include n) (include n)
   inherit n = pair (inherit n) (inherit n)
 
   list p = pair (list $ pfst p) (list $ psnd p)
@@ -146,6 +145,13 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   docCommentEnd = pair docCommentEnd docCommentEnd
 
   keyDoc k = keyDoc $ pfst k
+
+instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
+  type Import (p CppSrcCode CppHdrCode) = Doc
+  langImport n = pair (langImport n) (langImport n)
+  modImport n = pair (modImport n) (modImport n)
+
+  importDoc i = importDoc $ pfst i
 
 instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
   type Permanence (p CppSrcCode CppHdrCode) = BindData
@@ -922,7 +928,8 @@ instance KeywordSym CppSrcCode where
   endStatement = toCode semi
   endStatementLoop = toCode empty
 
-  include n = toCode $ text "#include" <+> doubleQuotedText (addExt cppHdrExt n)
+  include n = toCode $ text "#include" <+> doubleQuotedText (addExt cppHdrExt 
+    n)
   inherit n = onCodeValue (cppInherit n . fst) public
 
   list _ = toCode $ text "vector"
@@ -943,6 +950,14 @@ instance KeywordSym CppSrcCode where
   docCommentEnd = blockCommentEnd
 
   keyDoc = unCPPSC
+
+instance ImportSym CppSrcCode where
+  type Import CppSrcCode = Doc
+  langImport n = toCode $ text "#include" <+> angles (text n)
+  modImport n = toCode $ text "#include" <+> doubleQuotedText (addExt cppHdrExt 
+    n)
+
+  importDoc = unCPPSC
 
 instance PermanenceSym CppSrcCode where
   type Permanence CppSrcCode = BindData
@@ -1535,6 +1550,14 @@ instance KeywordSym CppHdrCode where
   docCommentEnd = blockCommentEnd
 
   keyDoc = unCPPHC
+
+instance ImportSym CppHdrCode where
+  type Import CppHdrCode = Doc
+  langImport n = toCode $ text "#include" <+> angles (text n)
+  modImport n = toCode $ text "#include" <+> doubleQuotedText (addExt cppHdrExt 
+    n)
+
+  importDoc = unCPPHC
 
 instance PermanenceSym CppHdrCode where
   type Permanence CppHdrCode = BindData

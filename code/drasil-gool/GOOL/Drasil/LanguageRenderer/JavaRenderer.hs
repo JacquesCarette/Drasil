@@ -10,18 +10,19 @@ module GOOL.Drasil.LanguageRenderer.JavaRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
-  InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
-  BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
-  InternalOp(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  InternalValue(..), Selector(..), InternalSelector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
-  InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..))
+import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..), 
+  InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
+  InternalPerm(..), BodySym(..), BlockSym(..), InternalBlock(..), 
+  ControlBlockSym(..), TypeSym(..), InternalType(..), UnaryOpSym(..), 
+  BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
+  InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
+  InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
   bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, newObjDocD, 
@@ -107,7 +108,7 @@ instance FileSym JavaCode where
   commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
 instance InternalFile JavaCode where
-  top _ = on3CodeValues jtop endStatement (include "") (list static_)
+  top _ = toCode empty
   bottom = toCode empty
   
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
@@ -138,6 +139,13 @@ instance KeywordSym JavaCode where
   docCommentEnd = blockCommentEnd
 
   keyDoc = unJC
+
+instance ImportSym JavaCode where
+  type Import JavaCode = Doc
+  langImport n = toCode $ jImport n endStatement
+  modImport = langImport
+
+  importDoc = unJC
 
 instance PermanenceSym JavaCode where
   type Permanence JavaCode = Doc
@@ -607,7 +615,7 @@ instance InternalClass JavaCode where
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
-  buildModule n _ = G.buildModule' n
+  buildModule n _ = G.buildModule' n langImport
   
 instance InternalMod JavaCode where
   moduleDoc = modDoc . unJC
@@ -626,14 +634,8 @@ instance BlockCommentSym JavaCode where
 jName :: String
 jName = "Java"
 
-jtop :: Doc -> Doc -> Doc -> Doc
-jtop end inc lst = vcat [
-  inc <+> text "java.util.Arrays" <> end, --TODO: only include these if they are used in the code?
-  inc <+> text "java.util.Scanner" <> end,
-  inc <+> text "java.io.PrintWriter" <> end,
-  inc <+> text "java.io.FileWriter" <> end,
-  inc <+> text "java.io.File" <> end,
-  inc <+> text ("java.util." ++ render lst) <> end]
+jImport :: Label -> JavaCode (Keyword JavaCode) -> Doc
+jImport n end = text ("import " ++ n) <> keyDoc end
 
 jStringType :: (RenderSym repr) => GS (repr (Type repr))
 jStringType = toState $ typeFromData String "String" (text "String")

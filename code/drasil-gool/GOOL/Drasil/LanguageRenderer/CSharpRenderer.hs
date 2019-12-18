@@ -11,17 +11,18 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
-  InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
-  BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
-  TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
-  InternalOp(..), VariableSym(..), InternalVariable(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  InternalValue(..), Selector(..), InternalSelector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
-  InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..))
+  InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
+  InternalPerm(..), BodySym(..), BlockSym(..), InternalBlock(..), 
+  ControlBlockSym(..), TypeSym(..), InternalType(..), UnaryOpSym(..), 
+  BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
+  InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
+  InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, classVarDocD, 
@@ -105,7 +106,7 @@ instance FileSym CSharpCode where
   commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
 instance InternalFile CSharpCode where
-  top _ = on2CodeValues cstop endStatement (include "")
+  top _ = toCode empty
   bottom = toCode empty
 
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
@@ -136,6 +137,13 @@ instance KeywordSym CSharpCode where
   docCommentEnd = blockCommentEnd
 
   keyDoc = unCSC
+
+instance ImportSym CSharpCode where
+  type Import CSharpCode = Doc
+  langImport n = toCode $ csImport n endStatement
+  modImport = langImport
+
+  importDoc = unCSC
 
 instance PermanenceSym CSharpCode where
   type Permanence CSharpCode = Doc
@@ -601,7 +609,7 @@ instance InternalClass CSharpCode where
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n _ = G.buildModule' n
+  buildModule n _ = G.buildModule' n langImport
   
 instance InternalMod CSharpCode where
   moduleDoc = modDoc . unCSC
@@ -623,11 +631,8 @@ addSystemImport = (>>) $ modify (addLangImport "System")
 csName :: String
 csName = "C#"
 
-cstop :: Doc -> Doc -> Doc
-cstop end inc = vcat [
-  inc <+> text "System" <> end,
-  inc <+> text "System.IO" <> end,
-  inc <+> text "System.Collections.Generic" <> end]
+csImport :: Label -> CSharpCode (Keyword CSharpCode) -> Doc
+csImport n end = text ("using " ++ n) <> keyDoc end
 
 csInfileType :: (RenderSym repr) => GS (repr (Type repr))
 csInfileType = getPutReturn (addLangImport "System.IO") $ 

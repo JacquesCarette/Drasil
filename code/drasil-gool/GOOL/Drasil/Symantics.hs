@@ -3,12 +3,12 @@
 module GOOL.Drasil.Symantics (
   -- Types
   Label, Library,
--- Typeclasses
-  ProgramSym(..), RenderSym, FileSym(..), InternalFile(..),  KeywordSym(..),
-  PermanenceSym(..), InternalPerm(..), BodySym(..), ControlBlockSym(..), 
-  listSlice, BlockSym(..), InternalBlock(..), TypeSym(..), InternalType(..), 
-  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
-  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  -- Typeclasses
+  ProgramSym(..), RenderSym, FileSym(..), InternalFile(..),  KeywordSym(..), 
+  ImportSym(..), PermanenceSym(..), InternalPerm(..), BodySym(..), 
+  ControlBlockSym(..), listSlice, BlockSym(..), InternalBlock(..), TypeSym(..), 
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), 
   Selector(..), InternalSelector(..), objMethodCall, objMethodCallNoParams,
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
@@ -87,6 +87,13 @@ class (PermanenceSym repr) => KeywordSym repr where
   docCommentEnd     :: repr (Keyword repr)
 
   keyDoc :: repr (Keyword repr) -> Doc
+
+class ImportSym repr where
+  type Import repr
+  langImport :: Label -> repr (Import repr)
+  modImport :: Label -> repr (Import repr)
+
+  importDoc :: repr (Import repr) -> Doc
 
 class PermanenceSym repr where
   type Permanence repr
@@ -753,7 +760,7 @@ class InternalClass repr where
   classDoc :: repr (Class repr) -> Doc
   classFromData :: FS Doc -> FS (repr (Class repr))
 
-class (ClassSym repr) => ModuleSym repr where
+class (ClassSym repr, ImportSym repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [Library] -> [MS (repr (Method repr))] -> 
     [FS (repr (Class repr))] -> FS (repr (Module repr))

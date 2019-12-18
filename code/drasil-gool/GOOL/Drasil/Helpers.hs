@@ -31,7 +31,7 @@ hicat :: Doc -> [Doc] -> Doc
 hicat c l = hcat $ intersperse c l
 
 vicat :: Doc -> [Doc] -> Doc
-vicat c = vcat . intersperse c
+vicat c = vcat . intersperse c . filter (not . isEmpty)
 
 vibcat :: [Doc] -> Doc
 vibcat = vicat blank

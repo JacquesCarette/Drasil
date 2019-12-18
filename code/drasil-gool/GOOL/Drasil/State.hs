@@ -5,10 +5,11 @@ module GOOL.Drasil.State (
   headers, sources, mainMod, currMain, initialState, initialFS, putAfter, 
   getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, addFile, 
   addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
-  addLangImport, addModuleImport, addHeaderLangImport, addDefine, setFilePath, 
-  getFilePath, setModuleName, getModuleName, setCurrMain, getCurrMain, addClass,
-  getClasses, updateClassMap, getClassMap, addParameter, getParameters, 
-  setScope, getScope, setCurrMainFunc, getCurrMainFunc
+  addLangImport, getLangImports, addModuleImport, getModuleImports, 
+  addHeaderLangImport, addDefine, setFilePath, getFilePath, setModuleName, 
+  getModuleName, setCurrMain, getCurrMain, addClass, getClasses, updateClassMap,
+  getClassMap, addParameter, getParameters, setScope, getScope, setCurrMainFunc,
+  getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
@@ -191,17 +192,23 @@ setMainMod n = over mainMod (\m -> if isNothing m then Just n else error
   "Multiple modules with main methods encountered")
 
 addLangImport :: String -> GOOLState -> GOOLState
-addLangImport i = over langImports (\is -> if i `elem` is then i:is else is)
+addLangImport i = over langImports (\is -> if i `elem` is then is else i:is)
+
+getLangImports :: GS [String]
+getLangImports = gets (^. langImports)
 
 addModuleImport :: String -> GOOLState -> GOOLState
-addModuleImport i = over moduleImports (\is -> if i `elem` is then i:is else is)
+addModuleImport i = over moduleImports (\is -> if i `elem` is then is else i:is)
+
+getModuleImports :: GS [String]
+getModuleImports = gets (^. moduleImports)
 
 addHeaderLangImport :: String -> GOOLState -> GOOLState
-addHeaderLangImport i = over headerLangImports (\is -> if i `elem` is then i:is 
-  else is)
+addHeaderLangImport i = over headerLangImports (\is -> if i `elem` is then is 
+  else i:is)
 
 addDefine :: String -> GOOLState -> GOOLState
-addDefine d = over defines (\ds -> if d `elem` ds then d:ds else ds)
+addDefine d = over defines (\ds -> if d `elem` ds then ds else d:ds)
 
 setFilePath :: FilePath -> (GOOLState, FileState) -> (GOOLState, FileState)
 setFilePath fp = over _2 (set currFilePath fp)

@@ -37,8 +37,8 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   FileSym(RenderFile, commentedMod), BlockSym(Block), InternalBlock(..), 
-  BodySym(Body, body, bodyStatements, bodyDoc), PermanenceSym(..), 
-  InternalPerm(..), 
+  BodySym(Body, body, bodyStatements, bodyDoc), ImportSym(..), 
+  PermanenceSym(..), InternalPerm(..), 
   TypeSym(Type, infile, outfile, iterator, getType, getTypeDoc, getTypeString), 
   InternalType(..), UnaryOpSym(UnaryOp), BinaryOpSym(BinaryOp), InternalOp(..),
   VariableSym(Variable, variableBind, variableName, variableType, variableDoc), 
@@ -86,8 +86,8 @@ import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt,
   valueList, intValue)
 import GOOL.Drasil.State (GS, FS, MS, lensFStoGS, lensMStoGS, lensFStoMS, 
   currMain, putAfter, getPutReturnFunc, getPutReturnFunc2, addFile, setMainMod, 
-  addLangImport, setFilePath, getFilePath, setModuleName, getModuleName, 
-  getCurrMain, addParameter)
+  addLangImport, getLangImports, getModuleImports, setFilePath, getFilePath, 
+  setModuleName, getModuleName, getCurrMain, addParameter)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Bifunctor (first)
@@ -1056,10 +1056,16 @@ buildModule n ls ms cs = S.modFromData n getCurrMain (on2StateValues
   (moduleDocD (vcat $ map keyDoc ls)) (onStateList (vibcat . map classDoc) cs) 
   (onStateList (methodListDocD . map methodDoc) (map (zoom lensFStoMS) ms)))
 
-buildModule' :: (RenderSym repr) => Label -> [MS (repr (Method repr))] -> 
-  [FS (repr (Class repr))] -> FS (repr (Module repr))
-buildModule' n ms cs = S.modFromData n getCurrMain (onStateList (vibcat . map 
-  classDoc) (if null ms then cs else pubClass n Nothing [] ms : cs))
+buildModule' :: (RenderSym repr) => Label -> (String -> repr (Import repr)) -> 
+  [MS (repr (Method repr))] -> [FS (repr (Class repr))] -> 
+  FS (repr (Module repr))
+buildModule' n inc ms cs = S.modFromData n getCurrMain (on3StateValues 
+  (\cls lis mis -> vibcat [
+    vcat (map (importDoc . inc) lis), 
+    vcat (map (importDoc . inc) mis), 
+    vibcat (map classDoc cls)])
+  (sequence $ if null ms then cs else pubClass n Nothing [] ms : cs)
+  (zoom lensFStoGS getLangImports) (zoom lensFStoGS getModuleImports))
 
 modFromData :: Label -> (Doc -> Bool -> repr (Module repr)) -> FS Bool -> 
   FS Doc -> FS (repr (Module repr))

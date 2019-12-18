@@ -344,7 +344,8 @@ instance ValueExpression JavaCode where
   notNull = G.notNull
 
 instance InternalValue JavaCode where
-  inputFunc = mkStateVal (obj "Scanner") $ parens $ text "new Scanner(System.in)"
+  inputFunc = modify (addLangImport "java.util.Scanner") >> mkStateVal 
+    (obj "Scanner") (parens $ text "new Scanner(System.in)")
   printFunc = mkStateVal void (text "System.out.print")
   printLnFunc = mkStateVal void (text "System.out.println")
   printFileFunc = on2StateValues (\v -> mkVal v . printFileDocD "print" . 

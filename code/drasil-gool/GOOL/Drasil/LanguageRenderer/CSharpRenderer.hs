@@ -174,7 +174,7 @@ instance InternalBlock CSharpCode where
 
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData
-  bool = G.bool
+  bool = addSystemImport G.bool
   int = G.int
   float = G.double
   char = G.char
@@ -673,14 +673,16 @@ csFileInput = onStateValue (\f -> mkVal (valueType f) (valueDoc f <> dot <>
 
 csInput :: (RenderSym repr) => FS (repr (Type repr)) -> FS (repr (Value repr)) 
   -> FS (repr (Value repr))
-csInput = on2StateValues (\t inFn -> mkVal t $ text (csInput' (getType t)) <> 
-  parens (valueDoc inFn))
+csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn 
+  -> mkVal t $ text (csInput' (getType t)) <> parens (valueDoc inFn)) inF)
   where csInput' Integer = "Int32.Parse"
         csInput' Float = "Double.Parse"
         csInput' Boolean = "Boolean.Parse"
         csInput' String = ""
         csInput' Char = "Char.Parse"
         csInput' _ = error "Attempt to read value of unreadable type"
+        csInputImport t = if t `elem` [Integer, Float, Boolean, Char] then 
+          addSystemImport else id
 
 csOpenFileR :: (RenderSym repr) => FS (repr (Value repr)) -> 
   FS (repr (Type repr)) -> FS (repr (Value repr))

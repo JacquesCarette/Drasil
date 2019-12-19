@@ -66,14 +66,20 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty,
   toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, onCodeList, 
   onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (FS, MS, lensGStoFS, lensFStoMS, lensMStoFS, 
-  getPutReturn, addLangImport, getLangImports, addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, addHeaderModImport, getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing, setCurrMain, getCurrMain, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+import GOOL.Drasil.State (FS, MS, lensGStoFS, lensFStoGS, lensFStoMS, 
+  lensMStoFS, getPutReturn, addLangImport, getLangImports, addModuleImport, 
+  getModuleImports, addHeaderLangImport, getHeaderLangImports, 
+  addHeaderModImport, getHeaderModImports, addDefine, getDefines,
+  addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
+  getHeaderUsing, setCurrMain, getCurrMain, getClassMap, setScope, getScope, 
+  setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (State, modify)
+import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
 
@@ -995,7 +1001,8 @@ instance TypeSym CppSrcCode where
   listType p t = modify (addUsing lst . addLangImport lst) >> G.listType p t
     where lst = render $ keyDoc (list p)
   listInnerType = G.listInnerType
-  obj = G.obj
+  obj n = zoom lensFStoGS getClassMap >>= (\cm -> maybe id ((>>) . modify .
+    addModuleImport) (Map.lookup n cm) $ G.obj n)
   enumType = G.enumType
   iterator t = modify (addLangImport "iterator") >> 
     (cppIterType . listType dynamic_) t
@@ -1068,8 +1075,9 @@ instance VariableSym CppSrcCode where
   classVar = on2StateValues (\c v -> classVarCheckStatic (varFromData 
     (variableBind v) (getTypeString c ++ "::" ++ variableName v) 
     (variableType v) (cppClassVar (getTypeDoc c) (variableDoc v))))
-  extClassVar c v = c >>= (\t -> modify (addModuleImport $ getTypeString t) >> 
-    classVar (toState t) v)
+  extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
+    addModuleImport) (Map.lookup (getTypeString t) cm) $ 
+    classVar (toState t) v) c (zoom lensFStoGS getClassMap)
   objVar = G.objVar
   objVarSelf _ = onStateValue (\v -> mkVar ("this->"++variableName v) 
     (variableType v) (text "this->" <> variableDoc v))
@@ -1607,7 +1615,8 @@ instance TypeSym CppHdrCode where
     G.listType p t
     where lst = render $ keyDoc (list p)
   listInnerType = G.listInnerType
-  obj = G.obj
+  obj n = zoom lensFStoGS getClassMap >>= (\cm -> maybe id ((>>) . modify .
+    addHeaderModImport) (Map.lookup n cm) $ G.obj n)
   enumType = G.enumType
   iterator t = modify (addHeaderLangImport "iterator") >> 
     (cppIterType . listType dynamic_) t

@@ -61,9 +61,9 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   on5StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
   on1StateValue1List)
-import GOOL.Drasil.State (FS, MS, lensGStoFS, lensMStoFS, initialState, 
-  initialFS, addLangImport, getLangImports, addModuleImport, getModuleImports, 
-  setCurrMain)
+import GOOL.Drasil.State (FS, MS, lensGStoFS, lensFStoGS, lensMStoFS, 
+  initialState, initialFS, addLangImport, getLangImports, addModuleImport, 
+  getModuleImports, setCurrMain, getClassMap)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -71,6 +71,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify, evalState)
+import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty)
 
@@ -254,8 +255,9 @@ instance VariableSym PythonCode where
   self l = mkStateVar "self" (obj l) (text "self")
   enumVar = G.enumVar
   classVar = G.classVar classVarDocD
-  extClassVar c v = c >>= (\t -> modify (addModuleImport $ getTypeString t) >> 
-    G.classVar pyClassVar (toState t) v)
+  extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
+    addModuleImport) (Map.lookup (getTypeString t) cm) $ 
+    G.classVar pyClassVar (toState t) v) c (zoom lensFStoGS getClassMap)
   objVar = G.objVar
   objVarSelf = G.objVarSelf
   listVar = G.listVar

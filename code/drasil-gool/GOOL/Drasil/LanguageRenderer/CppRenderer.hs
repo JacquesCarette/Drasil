@@ -67,7 +67,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty,
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, onCodeList, 
   onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (FS, MS, lensGStoFS, lensFStoMS, lensMStoFS, 
-  getPutReturn, addLangImport, getLangImports, addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, addHeaderModImport, getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines, setCurrMain, getCurrMain, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+  getPutReturn, addLangImport, getLangImports, addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, addHeaderModImport, getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing, setCurrMain, getCurrMain, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -917,7 +917,7 @@ instance FileSym CppSrcCode where
     commentedModD m cmt else m) mod cmnt getCurrMain
 
 instance InternalFile CppSrcCode where
-  top m = on3CodeValues cppstop m (list dynamic_) endStatement
+  top _ = toCode empty
   bottom = toCode empty
   
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
@@ -927,8 +927,6 @@ instance KeywordSym CppSrcCode where
   endStatement = toCode semi
   endStatementLoop = toCode empty
 
-  include n = toCode $ text "#include" <+> doubleQuotedText (addExt cppHdrExt 
-    n)
   inherit n = onCodeValue (cppInherit n . fst) public
 
   list _ = toCode $ text "vector"
@@ -952,8 +950,8 @@ instance KeywordSym CppSrcCode where
 
 instance ImportSym CppSrcCode where
   type Import CppSrcCode = Doc
-  langImport n = toCode $ text "#include" <+> angles (text n)
-  modImport n = toCode $ text "#include" <+> doubleQuotedText (addExt cppHdrExt 
+  langImport n = toCode $ inc <+> angles (text n)
+  modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt 
     n)
 
   importDoc = unCPPSC
@@ -991,11 +989,11 @@ instance TypeSym CppSrcCode where
   int = G.int
   float = G.double
   char = G.char
-  string = modify (addLangImport "string") >> G.string
-  infile = cppInfileType
-  outfile = cppOutfileType
-  listType p t = modify (addLangImport $ render $ keyDoc (list p)) >> 
-    G.listType p t
+  string = modify (addUsing "string" . addLangImport "string") >> G.string
+  infile = modify (addUsing "ifstream") >> cppInfileType
+  outfile = modify (addUsing "ofstream") >> cppOutfileType
+  listType p t = modify (addUsing lst . addLangImport lst) >> G.listType p t
+    where lst = render $ keyDoc (list p)
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
@@ -1019,17 +1017,17 @@ instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
   notOp = G.notOp
   negateOp = G.negateOp
-  sqrtOp = addMathHImport $ G.sqrtOp
-  absOp = addMathHImport $ G.absOp
+  sqrtOp = addMathHImport G.sqrtOp
+  absOp = addMathHImport G.absOp
   logOp = addMathHImport $ unOpPrec "log10"
   lnOp = addMathHImport $ unOpPrec "log"
-  expOp = addMathHImport $ G.expOp
-  sinOp = addMathHImport $ G.sinOp
-  cosOp = addMathHImport $ G.cosOp
-  tanOp = addMathHImport $ G.tanOp
-  asinOp = addMathHImport $ G.asinOp
-  acosOp = addMathHImport $ G.acosOp
-  atanOp = addMathHImport $ G.atanOp
+  expOp = addMathHImport G.expOp
+  sinOp = addMathHImport G.sinOp
+  cosOp = addMathHImport G.cosOp
+  tanOp = addMathHImport G.tanOp
+  asinOp = addMathHImport G.asinOp
+  acosOp = addMathHImport G.acosOp
+  atanOp = addMathHImport G.atanOp
   floorOp = addMathHImport $ unOpPrec "floor"
   ceilOp = addMathHImport $ unOpPrec "ceil"
 
@@ -1474,13 +1472,17 @@ instance InternalClass CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n _ = G.buildModule n (on3StateValues (\ds lis mis -> vibcat [
+  buildModule n _ = G.buildModule n ((\ds lis mis us mn -> vibcat [
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . 
       (langImport :: Label -> CppSrcCode (Import CppSrcCode))) lis),
     vcat (map (importDoc . 
-      (modImport :: Label -> CppSrcCode (Import CppSrcCode))) mis)]) 
-    getDefines getLangImports getModuleImports)
+      (modImport :: Label -> CppSrcCode (Import CppSrcCode))) 
+      (if mn then mis else n:mis)),
+    vcat (map (\i -> usingNameSpace "std" (Just i) 
+      (endStatement :: CppSrcCode (Keyword CppSrcCode))) us)]) 
+    <$> getDefines <*> getLangImports <*> getModuleImports <*> getUsing <*> 
+    getCurrMain)
 
 instance InternalMod CppSrcCode where
   moduleDoc = modDoc . unCPPSC
@@ -1525,7 +1527,7 @@ instance FileSym CppHdrCode where
     on2CodeValues commentedModD m cmt) mod cmnt getCurrMain
 
 instance InternalFile CppHdrCode where
-  top m = on3CodeValues cpphtop m (list dynamic_) endStatement
+  top = onCodeValue cpphtop
   bottom = toCode $ text "#endif"
   
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
@@ -1535,7 +1537,6 @@ instance KeywordSym CppHdrCode where
   endStatement = toCode semi
   endStatementLoop = toCode empty
 
-  include n = toCode $ text "#include" <+> doubleQuotedText (addExt cppHdrExt n)
   inherit n = onCodeValue (cppInherit n . fst) public
 
   list _ = toCode $ text "vector"
@@ -1559,8 +1560,8 @@ instance KeywordSym CppHdrCode where
 
 instance ImportSym CppHdrCode where
   type Import CppHdrCode = Doc
-  langImport n = toCode $ text "#include" <+> angles (text n)
-  modImport n = toCode $ text "#include" <+> doubleQuotedText (addExt cppHdrExt 
+  langImport n = toCode $ inc <+> angles (text n)
+  modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt 
     n)
 
   importDoc = unCPPHC
@@ -1598,11 +1599,13 @@ instance TypeSym CppHdrCode where
   int = G.int
   float = G.double
   char = G.char
-  string = modify (addHeaderLangImport "string") >> G.string
-  infile = cppInfileType
-  outfile = cppOutfileType
-  listType p t = modify (addHeaderLangImport $ render $ keyDoc (list p)) >> 
+  string = modify (addHeaderUsing "string" . addHeaderLangImport "string") >> 
+    G.string
+  infile = modify (addHeaderUsing "ifstream") >> cppInfileType
+  outfile = modify (addHeaderUsing "ofstream") >> cppOutfileType
+  listType p t = modify (addHeaderUsing lst . addHeaderLangImport lst) >> 
     G.listType p t
+    where lst = render $ keyDoc (list p)
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
@@ -2040,13 +2043,16 @@ instance InternalClass CppHdrCode where
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
-  buildModule n _ = G.buildModule n (on3StateValues (\ds lis mis -> vibcat [
+  buildModule n _ = G.buildModule n ((\ds lis mis us -> vibcat [
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . 
       (langImport :: Label -> CppHdrCode (Import CppHdrCode))) lis),
     vcat (map (importDoc . 
-      (modImport :: Label -> CppHdrCode (Import CppHdrCode))) mis)]) 
-    getHeaderDefines getHeaderLangImports getHeaderModImports)
+      (modImport :: Label -> CppHdrCode (Import CppHdrCode))) mis),
+    vcat (map (\i -> usingNameSpace "std" (Just i) 
+      (endStatement :: CppHdrCode (Keyword CppHdrCode))) us)]) 
+    <$> getHeaderDefines <*> getHeaderLangImports <*> getHeaderModImports <*> 
+    getHeaderUsing)
 
 instance InternalMod CppHdrCode where
   moduleDoc = modDoc . unCPPHC
@@ -2109,46 +2115,17 @@ enumsEqualInts = False
 inc :: Doc
 inc = text "#include"
 
-cppstop :: ModData -> Doc -> Doc -> Doc
-cppstop m lst end = vcat [
-  if b then empty else inc <+> doubleQuotedText (addExt cppHdrExt n),
-  if b then empty else blank,
-  text "#define" <+> text "_USE_MATH_DEFINES", --FIXME: Only include if used (i.e. pi)
-  inc <+> angles (text "algorithm"), -- find
-  inc <+> angles (text "iostream"), -- cout, cin
-  inc <+> angles (text "fstream"), -- ifstream, ofstream
-  inc <+> angles (text "iterator"),
-  inc <+> angles (text "string"),
-  inc <+> angles (text "math.h"),
-  inc <+> angles (text "sstream"),
-  inc <+> angles (text "limits"),
-  inc <+> angles lst,
-  blank,
-  usingNameSpace "std" (Just "string") end,
-  usingNameSpace "std" (Just $ render lst) end,
-  usingNameSpace "std" (Just "ifstream") end,
-  usingNameSpace "std" (Just "ofstream") end]
-  where n = name m
-        b = isMainMod m
-
-cpphtop :: ModData -> Doc -> Doc -> Doc
-cpphtop m lst end = vcat [
+cpphtop :: ModData -> Doc
+cpphtop m = vcat [
   text "#ifndef" <+> text n <> text "_h",
-  text "#define" <+> text n <> text "_h",
-  blank,
-  inc <+> angles (text "string"),
-  inc <+> angles lst,
-  blank,
-  usingNameSpace "std" (Just "string") end,
-  usingNameSpace "std" (Just $ render lst) end,
-  usingNameSpace "std" (Just "ifstream") end,
-  usingNameSpace "std" (Just "ofstream") end]
+  text "#define" <+> text n <> text "_h"]
   where n = name m
 
-usingNameSpace :: Label -> Maybe Label -> Doc -> Doc
+usingNameSpace :: (RenderSym repr) => Label -> Maybe Label -> 
+  repr (Keyword repr) -> Doc
 usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <>
-  text m <> end
-usingNameSpace n Nothing end = text "using namespace" <+> text n <> end
+  text m <> keyDoc end
+usingNameSpace n Nothing end = text "using namespace" <+> text n <> keyDoc end
 
 cppInherit :: Label -> Doc -> Doc
 cppInherit n pub = colon <+> pub <+> text n

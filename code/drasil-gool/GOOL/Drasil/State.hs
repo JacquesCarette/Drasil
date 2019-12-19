@@ -8,9 +8,10 @@ module GOOL.Drasil.State (
   addLangImport, getLangImports, addModuleImport, getModuleImports, 
   addHeaderLangImport, getHeaderLangImports, addHeaderModImport, 
   getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines,
-  setFilePath, getFilePath, setModuleName, getModuleName, setCurrMain, 
-  getCurrMain, addClass, getClasses, updateClassMap, getClassMap, addParameter, 
-  getParameters, setScope, getScope, setCurrMainFunc, getCurrMainFunc
+  addUsing, getUsing, addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, 
+  setModuleName, getModuleName, setCurrMain, getCurrMain, addClass, getClasses, 
+  updateClassMap, getClassMap, addParameter, getParameters, setScope, getScope, 
+  setCurrMainFunc, getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
@@ -25,7 +26,7 @@ data GOOLState = GS {
   _headers :: [FilePath],
   _sources :: [FilePath],
   _mainMod :: Maybe FilePath,
-  _classMap :: Map String String,
+  _classMap :: Map String String
 } 
 makeLenses ''GOOLState
 
@@ -42,7 +43,7 @@ data FileState = FS {
   _currModName :: String,
   _currFilePath :: FilePath,
   _currMain :: Bool,
-  _currClasses :: [String]
+  _currClasses :: [String],
   _langImports :: [String],
   _moduleImports :: [String],
 
@@ -50,7 +51,9 @@ data FileState = FS {
   _headerLangImports :: [String],
   _headerModImports :: [String],
   _defines :: [String],
-  _headerDefines :: [String]
+  _headerDefines :: [String],
+  _using :: [String],
+  _headerUsing :: [String]
 }
 makeLenses ''FileState
 
@@ -100,7 +103,7 @@ initialState = GS {
   _headers = [],
   _sources = [],
   _mainMod = Nothing,
-  _classMap = empty,
+  _classMap = empty
 }
 
 initialFS :: FileState
@@ -108,14 +111,16 @@ initialFS = FS {
   _currModName = "",
   _currFilePath = "",
   _currMain = False,
-  _currClasses = []
+  _currClasses = [],
   _langImports = [],
   _moduleImports = [],
 
   _headerLangImports = [],
   _headerModImports = [],
   _defines = [],
-  _headerDefines = []
+  _headerDefines = [],
+  _using = [],
+  _headerUsing = []
 }
 
 initialMS :: MethodState
@@ -229,13 +234,26 @@ addDefine d = over _2 $ over defines (\ds -> if d `elem` ds then ds else d:ds)
 
 getDefines :: FS [String]
 getDefines = gets ((^. defines) . snd)
-
+  
 addHeaderDefine :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
 addHeaderDefine d = over _2 $ over headerDefines (\ds -> if d `elem` ds then ds 
   else d:ds)
 
 getHeaderDefines :: FS [String]
 getHeaderDefines = gets ((^. headerDefines) . snd)
+
+addUsing :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
+addUsing u = over _2 $ over using (\us -> if u `elem` us then us else u:us)
+
+getUsing :: FS [String]
+getUsing = gets ((^. using) . snd)
+
+addHeaderUsing :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
+addHeaderUsing u = over _2 $ over headerUsing (\us -> if u `elem` us then us 
+  else u:us)
+
+getHeaderUsing :: FS [String]
+getHeaderUsing = gets ((^. headerUsing) . snd)
 
 setFilePath :: FilePath -> (GOOLState, FileState) -> (GOOLState, FileState)
 setFilePath fp = over _2 (set currFilePath fp)

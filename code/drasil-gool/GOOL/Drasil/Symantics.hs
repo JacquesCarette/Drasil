@@ -66,7 +66,6 @@ class (PermanenceSym repr) => KeywordSym repr where
   endStatement     :: repr (Keyword repr)
   endStatementLoop :: repr (Keyword repr)
 
-  include :: Label -> repr (Keyword repr)
   inherit :: Label -> repr (Keyword repr)
 
   list     :: repr (Permanence repr) -> repr (Keyword repr)

@@ -116,7 +116,6 @@ instance KeywordSym CSharpCode where
   endStatement = toCode semi
   endStatementLoop = toCode empty
 
-  include _ = toCode $ text "using"
   inherit n = toCode $ colon <+> text n
 
   list _ = toCode $ text "List"

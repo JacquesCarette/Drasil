@@ -115,7 +115,6 @@ instance KeywordSym PythonCode where
   endStatement = toCode empty
   endStatementLoop = toCode empty
 
-  include n = toCode $ pyInclude n
   inherit n = toCode $ parens (text n)
 
   list _ = toCode empty
@@ -651,15 +650,11 @@ instance BlockCommentSym PythonCode where
   blockCommentDoc = unPC
 
 -- convenience
-imp, initName :: Label
-imp = "import"
+initName :: Label
 initName = "__init__"
 
 pyName :: String
 pyName = "Python"
-
-pyInclude :: Label -> Doc
-pyInclude n = text imp <+> text n
 
 pyLogOp :: (RenderSym repr) => FS (repr (UnaryOp repr))
 pyLogOp = addmathImport $ unOpPrec "math.log10"

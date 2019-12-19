@@ -118,7 +118,6 @@ instance KeywordSym JavaCode where
   endStatement = toCode semi
   endStatementLoop = toCode empty
 
-  include _ = toCode $ text "import"
   inherit n = toCode $ text "extends" <+> text n
 
   list _ = toCode $ text "ArrayList"

@@ -17,7 +17,7 @@ import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
 import Control.Monad.State (State, get, put, gets)
 import Data.Maybe (isNothing)
-import Data.Map (Map, fromList, empty, union, toList)
+import Data.Map (Map, fromList, empty, union)
 
 data GOOLState = GS {
   _headers :: [FilePath],
@@ -180,8 +180,8 @@ addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
   where f = ((n++"/")++)
 
 setMainMod :: String -> GOOLState -> GOOLState
-setMainMod n s = error $ show (toList $ s ^. classMap) -- over mainMod (\m -> if isNothing m then Just n else error 
-  -- "Multiple modules with main methods encountered")
+setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
+  "Multiple modules with main methods encountered")
 
 addLangImport :: String -> GOOLState -> GOOLState
 addLangImport i = over langImports (\is -> if i `elem` is then i:is else is)

@@ -36,16 +36,14 @@ class (FileSym repr, InternalBlock repr, InternalClass repr, InternalFile repr,
   InternalValue repr, InternalVariable repr, KeywordSym repr, UnaryOpSym repr, 
   BinaryOpSym repr) => RenderSym repr
 
-class (RenderSym repr) => ProgramSym repr where
+class (FileSym repr) => ProgramSym repr where
   type Program repr
   prog :: Label -> [FS (repr (RenderFile repr))] -> 
     GS (repr (Program repr))
 
-class (ModuleSym repr) => 
-  FileSym repr where 
+class (ModuleSym repr) => FileSym repr where 
   type RenderFile repr
-  fileDoc :: FS (repr (Module repr)) -> 
-    FS (repr (RenderFile repr))
+  fileDoc :: FS (repr (Module repr)) -> FS (repr (RenderFile repr))
 
   -- Module description, list of author names, date as a String, file to comment
   docMod :: String -> [String] -> String -> 

@@ -10,7 +10,7 @@ import Utils.Drasil (blank)
 
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
 import qualified GOOL.Drasil.Symantics as S ( 
-  RenderSym, TypeSym(..), PermanenceSym(dynamic_))
+  TypeSym(..), PermanenceSym(dynamic_))
 import GOOL.Drasil.State (GS)
 
 import Prelude hiding ((<>))
@@ -110,7 +110,7 @@ getNestDegree :: Integer -> C.CodeType -> Integer
 getNestDegree n (C.List t) = getNestDegree (n+1) t
 getNestDegree n _ = n
 
-convType :: (S.RenderSym repr) => C.CodeType -> GS (repr (S.Type repr))
+convType :: (S.TypeSym repr) => C.CodeType -> GS (repr (S.Type repr))
 convType C.Boolean = S.bool
 convType C.Integer = S.int
 convType C.Float = S.float

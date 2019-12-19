@@ -6,8 +6,9 @@ module GOOL.Drasil.State (
   getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, addFile, 
   addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
   addLangImport, addModuleImport, setFilePath, getFilePath, setModuleName, 
-  getModuleName, setCurrMain, getCurrMain, addParameter, getParameters, 
-  setScope, getScope, setCurrMainFunc, getCurrMainFunc
+  getModuleName, setCurrMain, getCurrMain, addClass, getClasses, updateClassMap,
+  getClassMap, addParameter, getParameters, setScope, getScope, setCurrMainFunc,
+  getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
@@ -16,11 +17,13 @@ import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
 import Control.Monad.State (State, get, put, gets)
 import Data.Maybe (isNothing)
+import Data.Map (Map, fromList, empty, union, toList)
 
 data GOOLState = GS {
   _headers :: [FilePath],
   _sources :: [FilePath],
   _mainMod :: Maybe FilePath,
+  _classMap :: Map String String,
   _langImports :: [String],
   _moduleImports :: [String]
 } 
@@ -38,7 +41,8 @@ makeLenses ''MethodState
 data FileState = FS {
   _currModName :: String,
   _currFilePath :: FilePath,
-  _currMain :: Bool
+  _currMain :: Bool,
+  _currClasses :: [String]
 }
 makeLenses ''FileState
 
@@ -90,6 +94,7 @@ initialState = GS {
   _headers = [],
   _sources = [],
   _mainMod = Nothing,
+  _classMap = empty,
   _langImports = [],
   _moduleImports = []
 }
@@ -98,7 +103,8 @@ initialFS :: FileState
 initialFS = FS {
   _currModName = "",
   _currFilePath = "",
-  _currMain = False
+  _currMain = False,
+  _currClasses = []
 }
 
 initialMS :: MethodState
@@ -174,8 +180,8 @@ addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
   where f = ((n++"/")++)
 
 setMainMod :: String -> GOOLState -> GOOLState
-setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
-  "Multiple modules with main methods encountered")
+setMainMod n s = error $ show (toList $ s ^. classMap) -- over mainMod (\m -> if isNothing m then Just n else error 
+  -- "Multiple modules with main methods encountered")
 
 addLangImport :: String -> GOOLState -> GOOLState
 addLangImport i = over langImports (\is -> if i `elem` is then i:is else is)
@@ -202,6 +208,20 @@ setCurrMain = over _2 (over _1 (over currMain (\b -> if b then error
 
 getCurrMain :: FS Bool
 getCurrMain = gets ((^. currMain) . snd)
+
+addClass :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
+addClass c = over _2 (over currClasses (\cs -> if c `elem` cs then error
+  "Multiple classes with same name in same file" else c:cs))
+
+getClasses :: FS [String]
+getClasses = gets ((^. currClasses) . snd)
+
+updateClassMap :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
+updateClassMap n (gs, fs) = over _1 (over classMap (union (fromList $ 
+  zip (repeat n) (fs ^. currClasses)))) (gs, fs)
+
+getClassMap :: GS (Map String String)
+getClassMap = gets (^. classMap)
 
 addParameter :: String -> (GOOLState, (FileState, MethodState)) -> 
   (GOOLState, (FileState, MethodState))

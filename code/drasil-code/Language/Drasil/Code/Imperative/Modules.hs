@@ -32,7 +32,7 @@ import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
   ConstraintBehaviour(..), InputModule(..), Logging(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
-import GOOL.Drasil (RenderSym, FileSym(..), BodySym(..), BlockSym(..), 
+import GOOL.Drasil (ProgramSym, FileSym(..), BodySym(..), BlockSym(..), 
   PermanenceSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   BooleanExpression(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ScopeTag(..), 
@@ -50,11 +50,11 @@ import Text.PrettyPrint.HughesPJ (render)
 
 ---- MAIN ---
 
-genMain :: (RenderSym repr) => Reader DrasilState (FS (repr (RenderFile repr)))
+genMain :: (ProgramSym repr) => Reader DrasilState (FS (repr (RenderFile repr)))
 genMain = genModule "Control" "Controls the flow of the program" 
   (Just $ liftS genMainFunc) Nothing
 
-genMainFunc :: (RenderSym repr) => Reader DrasilState (MS (repr (Method repr)))
+genMainFunc :: (ProgramSym repr) => Reader DrasilState (MS (repr (Method repr)))
 genMainFunc = do
     g <- ask
     v_filename <- mkVar $ codevar inFileName
@@ -70,7 +70,7 @@ genMainFunc = do
       varDecDef v_filename (arg 0) : logInFile ++
       catMaybes [ip, co] ++ ics ++ catMaybes (varDef ++ [wo])
 
-getInputDecl :: (RenderSym repr) => Reader DrasilState 
+getInputDecl :: (ProgramSym repr) => Reader DrasilState 
   (Maybe (GS (repr (Statement repr))))
 getInputDecl = do
   g <- ask
@@ -93,7 +93,7 @@ getInputDecl = do
   getDecl (partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
     . codeName) (inputs $ csi $ codeSpec g))
 
-initConsts :: (RenderSym repr) => Reader DrasilState 
+initConsts :: (ProgramSym repr) => Reader DrasilState 
   (Maybe (GS (repr (Statement repr))))
 initConsts = do
   g <- ask
@@ -119,19 +119,19 @@ initConsts = do
   getDecl (partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
     . codeName) (constants $ csi $ codeSpec g)) (conStruct g)
 
-initLogFileVar :: (RenderSym repr) => Logging -> [GS (repr (Statement repr))]
+initLogFileVar :: (ProgramSym repr) => Logging -> [GS (repr (Statement repr))]
 initLogFileVar LogVar = [varDec varLogFile]
 initLogFileVar LogAll = [varDec varLogFile]
 initLogFileVar _ = []
 
 ------- INPUT ----------
 
-chooseInModule :: (RenderSym repr) => InputModule -> Reader DrasilState 
+chooseInModule :: (ProgramSym repr) => InputModule -> Reader DrasilState 
   [FS (repr (RenderFile repr))]
 chooseInModule Combined = genInputModCombined
 chooseInModule Separated = genInputModSeparated
 
-genInputModSeparated :: (RenderSym repr) => 
+genInputModSeparated :: (ProgramSym repr) => 
   Reader DrasilState [FS (repr (RenderFile repr))]
 genInputModSeparated = do
   ipDesc <- modDesc inputParametersDesc
@@ -148,12 +148,12 @@ genInputModSeparated = do
     genModule "InputConstraints" icDesc 
       (Just $ fmap maybeToList (genInputConstraints Pub)) Nothing]
 
-genInputModCombined :: (RenderSym repr) => 
+genInputModCombined :: (ProgramSym repr) => 
   Reader DrasilState [FS (repr (RenderFile repr))]
 genInputModCombined = do
   ipDesc <- modDesc inputParametersDesc
   let cname = "InputParameters"
-      genMod :: (RenderSym repr) => Maybe (FS (repr (Class repr))) ->
+      genMod :: (ProgramSym repr) => Maybe (FS (repr (Class repr))) ->
         Reader DrasilState (FS (repr (RenderFile repr)))
       genMod Nothing = genModule cname ipDesc (Just $ concat <$> mapM (fmap 
         maybeToList) [genInputFormat Pub, genInputDerived 
@@ -163,13 +163,13 @@ genInputModCombined = do
   ic <- genInputClass
   liftS $ genMod ic
 
-constVarFunc :: (RenderSym repr) => ConstantRepr -> String ->
+constVarFunc :: (ProgramSym repr) => ConstantRepr -> String ->
   (GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
   GS (repr (StateVar repr)))
 constVarFunc Var n = stateVarDef n public dynamic_
 constVarFunc Const n = constVar n public
 
-genInputClass :: (RenderSym repr) => 
+genInputClass :: (ProgramSym repr) => 
   Reader DrasilState (Maybe (FS (repr (Class repr))))
 genInputClass = do
   g <- ask
@@ -179,14 +179,14 @@ genInputClass = do
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
         codeName)
-      methods :: (RenderSym repr) => InputModule -> 
+      methods :: (ProgramSym repr) => InputModule -> 
         Reader DrasilState [MS (repr (Method repr))]
       methods Separated = return []
       methods Combined = concat <$> mapM (fmap maybeToList) 
         [genInputConstructor, genInputFormat Priv, 
         genInputDerived Priv, 
         genInputConstraints Priv]
-      genClass :: (RenderSym repr) => [CodeChunk] -> [CodeDefinition] -> 
+      genClass :: (ProgramSym repr) => [CodeChunk] -> [CodeDefinition] -> 
         Reader DrasilState (Maybe (FS (repr (Class repr))))
       genClass [] [] = return Nothing
       genClass inps csts = do
@@ -201,7 +201,7 @@ genInputClass = do
         return $ Just c
   genClass (filt ins) (filt cs)
 
-genInputConstructor :: (RenderSym repr) => Reader DrasilState 
+genInputConstructor :: (ProgramSym repr) => Reader DrasilState 
   (Maybe (MS (repr (Method repr))))
 genInputConstructor = do
   g <- ask
@@ -217,14 +217,14 @@ genInputConstructor = do
   genCtor $ any (`member` dm) ["get_input", "derived_values", 
     "input_constraints"]
 
-genInputDerived :: (RenderSym repr) => ScopeTag -> 
+genInputDerived :: (ProgramSym repr) => ScopeTag -> 
   Reader DrasilState (Maybe (MS (repr (Method repr))))
 genInputDerived s = do
   g <- ask
   let dvals = derivedInputs $ csi $ codeSpec g
       getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod "InputParameters"
-      genDerived :: (RenderSym repr) => Maybe String -> Reader DrasilState 
+      genDerived :: (ProgramSym repr) => Maybe String -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
       genDerived Nothing = return Nothing
       genDerived (Just _) = do
@@ -236,14 +236,14 @@ genInputDerived s = do
         return $ Just mthd
   genDerived $ Map.lookup "derived_values" (defMap $ codeSpec g)
 
-genInputConstraints :: (RenderSym repr) => ScopeTag ->
+genInputConstraints :: (ProgramSym repr) => ScopeTag ->
   Reader DrasilState (Maybe (MS (repr (Method repr))))
 genInputConstraints s = do
   g <- ask
   let cm = cMap $ csi $ codeSpec g
       getFunc Pub = publicFunc
       getFunc Priv = privateMethod "InputParameters"
-      genConstraints :: (RenderSym repr) => Maybe String -> Reader DrasilState 
+      genConstraints :: (ProgramSym repr) => Maybe String -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
       genConstraints Nothing = return Nothing
       genConstraints (Just _) = do
@@ -261,14 +261,14 @@ genInputConstraints s = do
         return $ Just mthd
   genConstraints $ Map.lookup "input_constraints" (defMap $ codeSpec g)
 
-sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr) 
+sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr) 
   => [(q,[Constraint])] -> Reader DrasilState [GS (repr (Statement repr))]
 sfwrCBody cs = do
   g <- ask
   let cb = onSfwrC g
   chooseConstr cb cs
 
-physCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr) 
+physCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr) 
   => [(q,[Constraint])] -> Reader DrasilState [GS (repr (Statement repr))]
 physCBody cs = do
   g <- ask
@@ -276,7 +276,7 @@ physCBody cs = do
   chooseConstr cb cs
 
 chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, 
-  RenderSym repr) => ConstraintBehaviour -> [(q,[Constraint])] -> 
+  ProgramSym repr) => ConstraintBehaviour -> [(q,[Constraint])] -> 
   Reader DrasilState [GS (repr (Statement repr))]
 chooseConstr Warning   cs = do
   checks <- mapM constrWarn cs
@@ -285,7 +285,7 @@ chooseConstr Exception cs = do
   checks <- mapM constrExc cs
   return $ concat checks
 
-constrWarn :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr)
+constrWarn :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr)
   => (q,[Constraint]) -> Reader DrasilState [GS (repr (Statement repr))]
 constrWarn c = do
   let q = fst c
@@ -295,7 +295,7 @@ constrWarn c = do
   return $ zipWith (\cond m -> ifNoElse [((?!) cond, bodyStatements $
     printStr "Warning: " : m)]) conds msgs
 
-constrExc :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr) 
+constrExc :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr) 
   => (q,[Constraint]) -> Reader DrasilState [GS (repr (Statement repr))]
 constrExc c = do
   let q = fst c
@@ -305,7 +305,7 @@ constrExc c = do
   return $ zipWith (\cond m -> ifNoElse [((?!) cond, bodyStatements $ 
     m ++ [throw "InputError"])]) conds msgs
 
-constraintViolatedMsg :: (CodeIdea q, HasUID q, HasCodeType q, RenderSym repr) 
+constraintViolatedMsg :: (CodeIdea q, HasUID q, HasCodeType q, ProgramSym repr) 
   => q -> String -> Constraint -> Reader DrasilState 
   [GS (repr (Statement repr))]
 constraintViolatedMsg q s c = do
@@ -315,12 +315,12 @@ constraintViolatedMsg q s c = do
     print v,
     printStr $ " but " ++ s ++ " to be "] ++ pc
 
-printConstraint :: (RenderSym repr) => Constraint -> 
+printConstraint :: (ProgramSym repr) => Constraint -> 
   Reader DrasilState [GS (repr (Statement repr))]
 printConstraint c = do
   g <- ask
   let db = sysinfodb $ csi $ codeSpec g
-      printConstraint' :: (RenderSym repr) => Constraint -> Reader DrasilState 
+      printConstraint' :: (ProgramSym repr) => Constraint -> Reader DrasilState 
         [GS (repr (Statement repr))]
       printConstraint' (Range _ (Bounded (_,e1) (_,e2))) = do
         lb <- convExpr e1
@@ -342,20 +342,20 @@ printConstraint c = do
         printStrLn $ "one of: " ++ intercalate ", " ss]
   printConstraint' c
 
-printExpr :: (RenderSym repr) => Expr -> ChunkDB -> [GS (repr (Statement repr))]
+printExpr :: (ProgramSym repr) => Expr -> ChunkDB -> [GS (repr (Statement repr))]
 printExpr (Dbl _) _ = []
 printExpr (Int _) _ = []
 printExpr e db = [printStr $ " (" ++ render (exprDoc db Implementation Linear e)
   ++ ")"]
 
-genInputFormat :: (RenderSym repr) => ScopeTag -> 
+genInputFormat :: (ProgramSym repr) => ScopeTag -> 
   Reader DrasilState (Maybe (MS (repr (Method repr))))
 genInputFormat s = do
   g <- ask
   dd <- genDataDesc
   let getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod "InputParameters"
-      genInFormat :: (RenderSym repr) => Maybe String -> Reader DrasilState 
+      genInFormat :: (ProgramSym repr) => Maybe String -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
       genInFormat Nothing = return Nothing
       genInFormat (Just _) = do
@@ -382,19 +382,19 @@ genSampleInput = do
 
 ----- CONSTANTS -----
 
-genConstMod :: (RenderSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
+genConstMod :: (ProgramSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
 genConstMod = do
   cDesc <- modDesc $ liftS constModDesc
   liftS $ genModule "Constants" cDesc Nothing (Just $ fmap maybeToList 
     genConstClass)
 
-genConstClass :: (RenderSym repr) => 
+genConstClass :: (ProgramSym repr) => 
   Reader DrasilState (Maybe (FS (repr (Class repr))))
 genConstClass = do
   g <- ask
   let cs = constants $ csi $ codeSpec g
       cname = "Constants"
-      genClass :: (RenderSym repr) => [CodeDefinition] -> Reader DrasilState (Maybe 
+      genClass :: (ProgramSym repr) => [CodeDefinition] -> Reader DrasilState (Maybe 
         (FS (repr (Class repr))))
       genClass [] = return Nothing 
       genClass vs = do
@@ -409,7 +409,7 @@ genConstClass = do
 
 ----- OUTPUT -------
 
-genOutputMod :: (RenderSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
+genOutputMod :: (ProgramSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
 genOutputMod = do
   outformat <- genOutputFormat
   ofDesc <- modDesc $ liftS outputFormatDesc
@@ -417,11 +417,11 @@ genOutputMod = do
   liftS $ genModule "OutputFormat" ofDesc
     (Just $ return outf) Nothing
 
-genOutputFormat :: (RenderSym repr) => 
+genOutputFormat :: (ProgramSym repr) => 
   Reader DrasilState (Maybe (MS (repr (Method repr))))
 genOutputFormat = do
   g <- ask
-  let genOutput :: (RenderSym repr) => Maybe String -> Reader DrasilState 
+  let genOutput :: (ProgramSym repr) => Maybe String -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
       genOutput Nothing = return Nothing
       genOutput (Just _) = do

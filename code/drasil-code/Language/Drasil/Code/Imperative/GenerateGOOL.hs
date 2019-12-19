@@ -8,7 +8,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..), 
   Name)
   
-import GOOL.Drasil (Label, RenderSym, FileSym(..), TypeSym(..), 
+import GOOL.Drasil (Label, ProgramSym, FileSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   CodeType(..), GOOLState, GS, FS, MS, lensMStoGS)
@@ -18,7 +18,7 @@ import Data.Maybe (fromMaybe, maybe)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.Reader (Reader, ask, withReader)
 
-genModule :: (RenderSym repr) => Name -> String
+genModule :: (ProgramSym repr) => Name -> String
   -> Maybe (Reader DrasilState [MS (repr (Method repr))])
   -> Maybe (Reader DrasilState [FS (repr (Class repr))])
   -> Reader DrasilState (FS (repr (RenderFile repr)))
@@ -45,7 +45,7 @@ genDoxConfig n s = do
       v = doxOutput g
   return [doxConfig n s v | not (null cms)]
 
-publicClass :: (RenderSym repr) => String -> Label -> Maybe Label -> 
+publicClass :: (ProgramSym repr) => String -> Label -> Maybe Label -> 
   [GS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
   -> Reader DrasilState (FS (repr (Class repr)))
 publicClass desc n l vs mths = do
@@ -55,7 +55,7 @@ publicClass desc n l vs mths = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-fApp :: (RenderSym repr) => String -> String -> GS (repr (Type repr)) -> 
+fApp :: (ProgramSym repr) => String -> String -> GS (repr (Type repr)) -> 
   [GS (repr (Value repr))] -> Reader DrasilState (GS (repr (Value repr)))
 fApp m s t vl = do
   g <- ask
@@ -63,7 +63,7 @@ fApp m s t vl = do
   return $ if m /= cm then extFuncApp m s t vl else if Map.lookup s 
     (eMap $ codeSpec g) == Just cm then funcApp s t vl else selfFuncApp m s t vl
 
-fAppInOut :: (RenderSym repr) => String -> String -> [GS (repr (Value repr))] 
+fAppInOut :: (ProgramSym repr) => String -> String -> [GS (repr (Value repr))] 
   -> [GS (repr (Variable repr))] -> [GS (repr (Variable repr))] -> 
   Reader DrasilState (GS (repr (Statement repr)))
 fAppInOut m n ins outs both = do
@@ -73,7 +73,7 @@ fAppInOut m n ins outs both = do
     (eMap $ codeSpec g) == Just cm then inOutCall n ins outs both else 
     selfInOutCall m n ins outs both
 
-mkParam :: (RenderSym repr) => GS (repr (Variable repr)) -> 
+mkParam :: (ProgramSym repr) => GS (repr (Variable repr)) -> 
   MS (repr (Parameter repr))
 mkParam v = zoom lensMStoGS v >>= (\v' -> paramFunc (getType $ variableType v') v)
   where paramFunc (List _) = pointerParam

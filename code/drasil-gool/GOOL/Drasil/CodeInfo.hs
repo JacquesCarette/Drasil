@@ -1,13 +1,24 @@
+{-# LANGUAGE TypeFamilies, Rank2Types #-}
+
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
-import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  TypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), 
-  InternalSelector(..), objMethodCall, FunctionSym(..), SelectorFunction(..),
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  BlockCommentSym(..))
+import GOOL.Drasil.Symantics (ProgramSym(..), FileSym(..), PermanenceSym(..), 
+  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), VariableSym(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), Selector(..), InternalSelector(..), FunctionSym(..), 
+  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+import GOOL.Drasil.CodeType (CodeType(Void))
+import GOOL.Drasil.Data (Binding(Dynamic), ScopeTag(..))
+import GOOL.Drasil.Helpers (toCode, toState)
+import GOOL.Drasil.State (GOOLState, lensGStoFS, getPutReturn, addClass, 
+  updateClassMap)
+
+import Control.Monad.State (State)
+import qualified Control.Monad.State as S (get)
+import Control.Lens.Zoom (zoom)
+import Text.PrettyPrint.HughesPJ (empty)
 
 newtype CodeInfo a = CI {unCI :: a} deriving Eq
 
@@ -24,371 +35,371 @@ instance Monad CodeInfo where
 
 instance ProgramSym CodeInfo where
   type Program CodeInfo = GOOLState
-  prog _ _ = get
-
-instance RenderSym CodeInfo
+  prog _ fs = do
+    mapM_ (zoom lensGStoFS) fs
+    s <- S.get
+    toState $ toCode s
+  
+noInfo :: State s (CodeInfo ())
+noInfo = toState $ toCode ()
 
 instance FileSym CodeInfo where
-  type RenderFile CodeInfo = FileData
-  fileDoc = G.fileDoc Header cppHdrExt top bottom
+  type RenderFile CodeInfo = ()
+  fileDoc m = do
+    _ <- m
+    noInfo
   
-  docMod = G.docMod
+  docMod _ _ _ m = do
+    _ <- m
+    noInfo
 
-  commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then m else 
-    on2CodeValues commentedModD m cmt) mod cmnt getCurrMain
+  commentedMod _ m = do
+    _ <- m
+    noInfo
 
 instance PermanenceSym CodeInfo where
-  type Permanence CodeInfo = BindData
-  static_ = toCode $ bd Static staticDocD
-  dynamic_ = toCode $ bd Dynamic dynamicDocD
+  type Permanence CodeInfo = ()
+  static_ = toCode ()
+  dynamic_ = toCode ()
 
 instance BodySym CodeInfo where
-  type Body CodeInfo = Doc
-  body _ = toState $ toCode empty
-  bodyStatements _ = toState $ toCode empty
-  oneLiner _ = toState $ toCode empty
+  type Body CodeInfo = ()
+  body _ = noInfo
+  bodyStatements _ = noInfo
+  oneLiner _ = noInfo
 
-  addComments _ _ = toState $ toCode empty
+  addComments _ _ = noInfo
 
-  bodyDoc = unCI
+  bodyDoc _ = empty
 
 instance BlockSym CodeInfo where
-  type Block CodeInfo = Doc
-  block _ = toState $ toCode empty
+  type Block CodeInfo = ()
+  block _ = noInfo
 
 instance TypeSym CodeInfo where
-  type Type CodeInfo = TypeData
-  bool = cppBoolType
-  int = G.int
-  float = G.double
-  char = G.char
-  string = G.string
-  infile = cppInfileType
-  outfile = cppOutfileType
-  listType = G.listType
-  listInnerType = G.listInnerType
-  obj = G.obj
-  enumType = G.enumType
-  iterator = cppIterType . listType dynamic_
-  void = G.void
+  type Type CodeInfo = ()
+  bool = noInfo
+  int = noInfo
+  float = noInfo
+  char = noInfo
+  string = noInfo
+  infile = noInfo
+  outfile = noInfo
+  listType _ _ = noInfo
+  listInnerType _ = noInfo
+  obj _ = noInfo
+  enumType _ = noInfo
+  iterator _ = noInfo
+  void = noInfo
 
-  getType = cType . unCI
-  getTypeString = typeString . unCI
-  getTypeDoc = typeDoc . unCI
+  getType _ = Void
+  getTypeString _ = ""
+  getTypeDoc _ = empty
 
 instance ControlBlockSym CodeInfo where
-  runStrategy _ _ _ _ = toState $ toCode empty
+  runStrategy _ _ _ _ = noInfo
 
-  listSlice' _ _ _ _ _ = toState $ toCode empty
+  listSlice' _ _ _ _ _ = noInfo
 
 instance VariableSym CodeInfo where
-  type Variable CodeInfo = VarData
-  var = G.var
-  staticVar = G.staticVar
-  const _ _ = mkStateVar "" void empty
-  extVar _ _ _ = mkStateVar "" void empty
-  self _ = mkStateVar "" void empty
-  enumVar _ _ = mkStateVar "" void empty
-  classVar _ _ = mkStateVar "" void empty
-  extClassVar _ _ = mkStateVar "" void empty
-  objVar _ _ = mkStateVar "" void empty
-  objVarSelf _ _ = mkStateVar "" void empty
-  listVar _ _ _ = mkStateVar "" void empty
-  listOf _ _ = mkStateVar "" void empty
-  iterVar _ _ = mkStateVar "" void empty
+  type Variable CodeInfo = ()
+  var _ _ = noInfo
+  staticVar _ _ = noInfo
+  const _ _ = noInfo
+  extVar _ _ _ = noInfo
+  self _ = noInfo
+  enumVar _ _ = noInfo
+  classVar _ _ = noInfo
+  extClassVar _ _ = noInfo
+  objVar _ _ = noInfo
+  objVarSelf _ _ = noInfo
+  listVar _ _ _ = noInfo
+  listOf _ _ = noInfo
+  iterVar _ _ = noInfo
 
-  ($->) _ _ = mkStateVar "" void empty
+  ($->) _ _ = noInfo
   
-  variableBind = varBind . unCI
-  variableName = varName . unCI
-  variableType = onCodeValue varType
-  variableDoc = varDoc . unCI
+  variableBind _ = Dynamic
+  variableName _ = ""
+  variableType _ = toCode ()
+  variableDoc _ = empty
 
 instance ValueSym CodeInfo where
-  type Value CodeInfo = ValData
-  litTrue = G.litTrue
-  litFalse = G.litFalse
-  litChar = G.litChar
-  litFloat = G.litFloat
-  litInt = G.litInt
-  litString = G.litString
+  type Value CodeInfo = ()
+  litTrue = noInfo
+  litFalse = noInfo
+  litChar _ = noInfo
+  litFloat _ = noInfo
+  litInt _ = noInfo
+  litString _ = noInfo
 
-  pi = mkStateVal float (text "M_PI")
+  pi = noInfo
 
-  ($:) = enumElement
+  ($:) _ _ = noInfo
 
-  valueOf = G.valueOf
-  arg n = G.arg (litInt $ n+1) argsList
-  enumElement en e = mkStateVal (enumType en) (text e)
+  valueOf _ = noInfo
+  arg _ = noInfo
+  enumElement _ _ = noInfo
   
-  argsList = G.argsList "argv"
+  argsList = noInfo
 
-  valueType = onCodeValue valType
-  valueDoc = valDoc . unCI
+  valueType _ = toCode ()
+  valueDoc _ = empty
 
 instance NumericExpression CodeInfo where
-  (#~) _ = mkStateVal void empty
-  (#/^) _ = mkStateVal void empty
-  (#|) _ = mkStateVal void empty
-  (#+) _ _ = mkStateVal void empty
-  (#-) _ _ = mkStateVal void empty
-  (#*) _ _ = mkStateVal void empty
-  (#/) _ _ = mkStateVal void empty
-  (#%) _ _ = mkStateVal void empty
-  (#^) _ _ = mkStateVal void empty
+  (#~) _ = noInfo
+  (#/^) _ = noInfo
+  (#|) _ = noInfo
+  (#+) _ _ = noInfo
+  (#-) _ _ = noInfo
+  (#*) _ _ = noInfo
+  (#/) _ _ = noInfo
+  (#%) _ _ = noInfo
+  (#^) _ _ = noInfo
 
-  log _ = mkStateVal void empty
-  ln _ = mkStateVal void empty
-  exp _ = mkStateVal void empty
-  sin _ = mkStateVal void empty
-  cos _ = mkStateVal void empty
-  tan _ = mkStateVal void empty
-  csc _ = mkStateVal void empty
-  sec _ = mkStateVal void empty
-  cot _ = mkStateVal void empty
-  arcsin _ = mkStateVal void empty
-  arccos _ = mkStateVal void empty
-  arctan _ = mkStateVal void empty
-  floor _ = mkStateVal void empty
-  ceil _ = mkStateVal void empty
+  log _ = noInfo
+  ln _ = noInfo
+  exp _ = noInfo
+  sin _ = noInfo
+  cos _ = noInfo
+  tan _ = noInfo
+  csc _ = noInfo
+  sec _ = noInfo
+  cot _ = noInfo
+  arcsin _ = noInfo
+  arccos _ = noInfo
+  arctan _ = noInfo
+  floor _ = noInfo
+  ceil _ = noInfo
 
 instance BooleanExpression CodeInfo where
-  (?!) _ = mkStateVal void empty
-  (?&&) _ _ = mkStateVal void empty
-  (?||) _ _ = mkStateVal void empty
+  (?!) _ = noInfo
+  (?&&) _ _ = noInfo
+  (?||) _ _ = noInfo
 
-  (?<) _ _ = mkStateVal void empty
-  (?<=) _ _ = mkStateVal void empty
-  (?>) _ _ = mkStateVal void empty
-  (?>=) _ _ = mkStateVal void empty
-  (?==) _ _ = mkStateVal void empty
-  (?!=) _ _ = mkStateVal void empty
+  (?<) _ _ = noInfo
+  (?<=) _ _ = noInfo
+  (?>) _ _ = noInfo
+  (?>=) _ _ = noInfo
+  (?==) _ _ = noInfo
+  (?!=) _ _ = noInfo
     
 instance ValueExpression CodeInfo where
-  inlineIf _ _ _ = mkStateVal void empty
-  funcApp _ _ _ = mkStateVal void empty
-  selfFuncApp _ _ _ _ = mkStateVal void empty
-  extFuncApp _ _ _ _ = mkStateVal void empty
-  newObj _ _ = mkStateVal void empty
-  extNewObj _ _ _ = mkStateVal void empty
+  inlineIf _ _ _ = noInfo
+  funcApp _ _ _ = noInfo
+  selfFuncApp _ _ _ _ = noInfo
+  extFuncApp _ _ _ _ = noInfo
+  newObj _ _ = noInfo
+  extNewObj _ _ _ = noInfo
 
-  exists _ = mkStateVal void empty
-  notNull _ = mkStateVal void empty
+  exists _ = noInfo
+  notNull _ = noInfo
 
 instance Selector CodeInfo where
-  objAccess _ _ = mkStateVal void empty
-  ($.) _ _ = mkStateVal void empty
+  objAccess _ _ = noInfo
+  ($.) _ _ = noInfo
 
-  selfAccess _ _ = mkStateVal void empty
+  selfAccess _ _ = noInfo
 
-  listIndexExists _ _ = mkStateVal void empty
-  argExists _ = mkStateVal void empty
+  listIndexExists _ _ = noInfo
+  argExists _ = noInfo
   
-  indexOf _ _ = mkStateVal void empty
+  indexOf _ _ = noInfo
   
 instance InternalSelector CodeInfo where
-  objMethodCall' _ _ _ _ = mkStateVal void empty
-  objMethodCallNoParams' _ _ _ = mkStateVal void empty
+  objMethodCall' _ _ _ _ = noInfo
+  objMethodCallNoParams' _ _ _ = noInfo
 
 instance FunctionSym CodeInfo where
-  type Function CodeInfo = FuncData
-  func _ _ _ = funcFromData empty void
+  type Function CodeInfo = ()
+  func _ _ _ = noInfo
   
-  get _ _ = mkStateVal void empty
-  set _ _ _ = mkStateVal void empty
+  get _ _ = noInfo
+  set _ _ _ = noInfo
 
-  listSize _ = mkStateVal void empty
-  listAdd _ _ _ = mkStateVal void empty
-  listAppend _ _ = mkStateVal void empty
+  listSize _ = noInfo
+  listAdd _ _ _ = noInfo
+  listAppend _ _ = noInfo
 
-  iterBegin _ = mkStateVal void empty
-  iterEnd _ = mkStateVal void empty
+  iterBegin _ = noInfo
+  iterEnd _ = noInfo
 
 instance SelectorFunction CodeInfo where
-  listAccess _ _ = mkStateVal void empty
-  listSet _ _ _ = mkStateVal void empty
-  at _ _ = mkStateVal void empty
+  listAccess _ _ = noInfo
+  listSet _ _ _ = noInfo
+  at _ _ = noInfo
 
 instance StatementSym CodeInfo where
-  type Statement CodeInfo = (Doc, Terminator)
-  assign _ _ = emptyState
-  assignToListIndex _ _ _ = emptyState
-  multiAssign _ _ = emptyState
-  (&=) _ _ = emptyState
-  (&-=) _ _ = emptyState
-  (&+=) _ _ = emptyState
-  (&++) _ = emptyState
-  (&~-) _ = emptyState
+  type Statement CodeInfo = ()
+  assign _ _ = noInfo
+  assignToListIndex _ _ _ = noInfo
+  multiAssign _ _ = noInfo
+  (&=) _ _ = noInfo
+  (&-=) _ _ = noInfo
+  (&+=) _ _ = noInfo
+  (&++) _ = noInfo
+  (&~-) _ = noInfo
 
-  varDec = G.varDec static_ dynamic_
-  varDecDef = G.varDecDef
-  listDec _ _ = emptyState
-  listDecDef _ _ = emptyState
-  objDecDef _ _ = emptyState
-  objDecNew _ _ = emptyState
-  extObjDecNew _ _ _ = emptyState
-  objDecNewNoParams _ = emptyState
-  extObjDecNewNoParams _ _ = emptyState
-  constDecDef = G.constDecDef
+  varDec _ = noInfo
+  varDecDef _ _ = noInfo
+  listDec _ _ = noInfo
+  listDecDef _ _ = noInfo
+  objDecDef _ _ = noInfo
+  objDecNew _ _ = noInfo
+  extObjDecNew _ _ _ = noInfo
+  objDecNewNoParams _ = noInfo
+  extObjDecNewNoParams _ _ = noInfo
+  constDecDef _ _ = noInfo
 
-  print _ = emptyState
-  printLn _ = emptyState
-  printStr _ = emptyState
-  printStrLn _ = emptyState
+  print _ = noInfo
+  printLn _ = noInfo
+  printStr _ = noInfo
+  printStrLn _ = noInfo
 
-  printFile _ _ = emptyState
-  printFileLn _ _ = emptyState
-  printFileStr _ _ = emptyState
-  printFileStrLn _ _ = emptyState
+  printFile _ _ = noInfo
+  printFileLn _ _ = noInfo
+  printFileStr _ _ = noInfo
+  printFileStrLn _ _ = noInfo
 
-  getInput _ = emptyState
-  discardInput = emptyState
-  getFileInput _ _ = emptyState
-  discardFileInput _ = emptyState
+  getInput _ = noInfo
+  discardInput = noInfo
+  getFileInput _ _ = noInfo
+  discardFileInput _ = noInfo
 
-  openFileR _ _ = emptyState
-  openFileW _ _ = emptyState
-  openFileA _ _ = emptyState
-  closeFile _ = emptyState
+  openFileR _ _ = noInfo
+  openFileW _ _ = noInfo
+  openFileA _ _ = noInfo
+  closeFile _ = noInfo
 
-  getFileInputLine _ _ = emptyState
-  discardFileLine _ = emptyState
-  stringSplit _ _ _ = emptyState
+  getFileInputLine _ _ = noInfo
+  discardFileLine _ = noInfo
+  stringSplit _ _ _ = noInfo
 
-  stringListVals _ _ = emptyState
-  stringListLists _ _ = emptyState
+  stringListVals _ _ = noInfo
+  stringListLists _ _ = noInfo
 
-  break = emptyState
-  continue = emptyState
+  break = noInfo
+  continue = noInfo
 
-  returnState _ = emptyState
-  multiReturn _ = emptyState
+  returnState _ = noInfo
+  multiReturn _ = noInfo
 
-  valState _ = emptyState
+  valState _ = noInfo
 
-  comment _ = emptyState
+  comment _ = noInfo
 
-  free _ = emptyState
+  free _ = noInfo
 
-  throw _ = emptyState
+  throw _ = noInfo
 
-  initState _ _ = emptyState
-  changeState _ _ = emptyState
+  initState _ _ = noInfo
+  changeState _ _ = noInfo
 
-  initObserverList _ _ = emptyState
-  addObserver _ = emptyState
+  initObserverList _ _ = noInfo
+  addObserver _ = noInfo
 
-  inOutCall _ _ _ _ = emptyState
-  selfInOutCall _ _ _ _ _ = emptyState
-  extInOutCall _ _ _ _ _ = emptyState
+  inOutCall _ _ _ _ = noInfo
+  selfInOutCall _ _ _ _ _ = noInfo
+  extInOutCall _ _ _ _ _ = noInfo
 
-  multi _ = emptyState
+  multi _ = noInfo
 
 instance ControlStatementSym CodeInfo where
-  ifCond _ _ = emptyState
-  ifNoElse _ = emptyState
-  switch _ _ _ = emptyState
-  switchAsIf _ _ _ = emptyState
+  ifCond _ _ = noInfo
+  ifNoElse _ = noInfo
+  switch _ _ _ = noInfo
+  switchAsIf _ _ _ = noInfo
 
-  ifExists _ _ _ = emptyState
+  ifExists _ _ _ = noInfo
 
-  for _ _ _ _ = emptyState
-  forRange _ _ _ _ _ = emptyState
-  forEach _ _ _ = emptyState
-  while _ _ = emptyState
+  for _ _ _ _ = noInfo
+  forRange _ _ _ _ _ = noInfo
+  forEach _ _ _ = noInfo
+  while _ _ = noInfo
 
-  tryCatch _ _ = emptyState
+  tryCatch _ _ = noInfo
 
-  checkState _ _ _ = emptyState
+  checkState _ _ _ = noInfo
 
-  notifyObservers _ _ = emptyState
+  notifyObservers _ _ = noInfo
 
-  getFileInputAll _ _ = emptyState
+  getFileInputAll _ _ = noInfo
 
 instance ScopeSym CodeInfo where
-  type Scope CodeInfo = (Doc, ScopeTag)
-  private = toCode (privateDocD, Priv)
-  public = toCode (publicDocD, Pub)
+  type Scope CodeInfo = ScopeTag
+  private = toCode Priv
+  public = toCode Pub
 
 instance MethodTypeSym CodeInfo where
-  type MethodType CodeInfo = TypeData
-  mType t = t
-  construct = G.construct
+  type MethodType CodeInfo = ()
+  mType _ = noInfo
+  construct _ = noInfo
 
 instance ParameterSym CodeInfo where
-  type Parameter CodeInfo = ParamData
-  param = onStateValue (\v -> paramFromData v (paramDocD v)) . zoom lensMStoGS
-  pointerParam = onStateValue (\v -> paramFromData v (cppPointerParamDoc v)) .
-    zoom lensMStoGS
+  type Parameter CodeInfo = ()
+  param _ = noInfo
+  pointerParam _ = noInfo
 
 instance MethodSym CodeInfo where
-  type Method CodeInfo = MethodData
-  method = G.method
-  getMethod c v = zoom lensMStoGS v >>= (\v' -> method (getterName $ 
-    variableName v') c public dynamic_ (toState $ variableType v') [] 
-    (toState $ toCode empty))
-  setMethod c v = zoom lensMStoGS v >>= (\v' -> method (setterName $ 
-    variableName v') c public dynamic_ void [param v] (toState $ toCode empty))
-  privMethod = G.privMethod
-  pubMethod = G.pubMethod
-  constructor n = G.constructor n n
-  destructor n vars = on1StateValue1List (\m vs -> toCode $ mthd Pub 
-    (emptyIfEmpty (vcat (map (statementDoc . onCodeValue destructSts) vs)) 
-    (methodDoc m))) (pubMethod ('~':n) n void [] (toState (toCode empty)) :: MS (CodeInfo (Method CodeInfo))) (map (zoom lensMStoGS) vars)
+  type Method CodeInfo = ()
+  method _ _ _ _ _ _ _ = noInfo
+  getMethod _ _ = noInfo
+  setMethod _ _ = noInfo
+  privMethod _ _ _ _ _ = noInfo
+  pubMethod _ _ _ _ _ = noInfo
+  constructor _ _ _ = noInfo
+  destructor _ _ = noInfo
 
-  docMain = mainFunction
+  docMain _ = noInfo
 
-  function = G.function
-  mainFunction _ = getPutReturn (setScope Pub) $ toCode $ mthd Pub empty
+  function _ _ _ _ _ _ = noInfo
+  mainFunction _ = noInfo
 
-  docFunc = G.docFunc
+  docFunc _ _ _ _ = noInfo
 
-  inOutMethod n c = cpphInOut (method n c)
+  inOutMethod _ _ _ _ _ _ _ _= noInfo
 
-  docInOutMethod n c = G.docInOutFunc (inOutMethod n c)
+  docInOutMethod _ _ _ _ _ _ _ _ _ = noInfo
 
-  inOutFunc n = cpphInOut (function n)
+  inOutFunc _ _ _ _ _ _ _ = noInfo
 
-  docInOutFunc n = G.docInOutFunc (inOutFunc n)
+  docInOutFunc _ _ _ _ _ _ _ _ = noInfo
 
 instance StateVarSym CodeInfo where
-  type StateVar CodeInfo = StateVarData
-  stateVar s p v = on2StateValues (\dec -> on3CodeValues svd (onCodeValue snd s)
-    (toCode $ stateVarDocD empty (permDoc p) (statementDoc dec)))
-    (state $ varDec v) emptyState
-  stateVarDef _ s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCI s))
-    (cpphStateVarDef empty p vr vl) emptyState
-  constVar _ s vr _ = on2StateValues (\v -> on3CodeValues svd (onCodeValue snd 
-    s) (on3CodeValues (constVarDocD empty) (bindDoc <$> static_) v 
-    endStatement)) vr emptyState
-  privMVar = G.privMVar
-  pubMVar = G.pubMVar
-  pubGVar = G.pubGVar
+  type StateVar CodeInfo = ()
+  stateVar _ _ _ = noInfo
+  stateVarDef _ _ _ _ _ = noInfo
+  constVar _ _ _ _ = noInfo
+  privMVar _ = noInfo
+  pubMVar _ = noInfo
+  pubGVar _ = noInfo
 
 instance ClassSym CodeInfo where
-  type Class CodeInfo = Doc
-  buildClass n p _ vs mths = on2StateLists (\vars funcs -> cpphClass n p vars 
-    funcs public private blockStart blockEnd endStatement) 
-    (map (zoom lensFStoGS) vs) fs
-    where fs = map (zoom lensFStoMS) $ mths ++ [destructor n vs]
-  enum n es _ = cpphEnum n (enumElementsDocD es enumsEqualInts) blockStart 
-    blockEnd endStatement
-  privClass = G.privClass
-  pubClass = G.pubClass
+  type Class CodeInfo = ()
+  buildClass n _ s _ _ = if unCI s == Pub then getPutReturn (addClass n) 
+    (toCode ()) else noInfo 
+  enum n _ s = if unCI s == Pub then getPutReturn (addClass n) (toCode ()) else 
+    noInfo 
+  privClass _ _ _ _ = noInfo
+  pubClass n _ _ _ = getPutReturn (addClass n) (toCode ())
 
-  docClass = G.docClass
+  docClass _ c = do
+    _ <- c
+    noInfo
 
-  commentedClass = G.commentedClass
+  commentedClass _ c = do
+    _ <- c
+    noInfo
 
 instance ModuleSym CodeInfo where
-  type Module CodeInfo = ModData
-  buildModule n ls = G.buildModule n (map include ls)
+  type Module CodeInfo = ()
+  buildModule n _ _ cs = do
+    sequence_ cs 
+    getPutReturn (updateClassMap n) (toCode ())
 
 instance BlockCommentSym CodeInfo where
-  type BlockComment CodeInfo = Doc
-  blockComment lns = on2CodeValues (blockCmtDoc lns) blockCommentStart 
-    blockCommentEnd
-  docComment = onStateValue (\lns -> on2CodeValues (docCmtDoc lns) 
-    docCommentStart docCommentEnd)
+  type BlockComment CodeInfo = ()
+  blockComment _ = toCode ()
+  docComment _ = noInfo
 
-  blockCommentDoc = unCI
+  blockCommentDoc _ = empty

@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 
-import GOOL.Drasil (RenderSym(..), TypeSym(..), ValueSym(..), 
+import GOOL.Drasil (RenderSym, TypeSym(..), ValueSym(..), 
   StatementSym(..), GS, convType)
 
 import Data.List ((\\), intersect)

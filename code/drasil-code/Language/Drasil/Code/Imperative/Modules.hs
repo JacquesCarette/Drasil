@@ -32,7 +32,7 @@ import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
   ConstraintBehaviour(..), InputModule(..), Logging(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
-import GOOL.Drasil (RenderSym(..), BodySym(..), BlockSym(..), 
+import GOOL.Drasil (RenderSym, FileSym(..), BodySym(..), BlockSym(..), 
   PermanenceSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   BooleanExpression(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ScopeTag(..), 

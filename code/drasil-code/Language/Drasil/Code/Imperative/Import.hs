@@ -28,8 +28,8 @@ import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
 
-import GOOL.Drasil (Label, RenderSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
+import GOOL.Drasil (Label, RenderSym, FileSym(..), PermanenceSym(..), 
+  BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 

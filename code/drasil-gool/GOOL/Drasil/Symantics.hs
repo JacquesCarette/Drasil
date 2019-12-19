@@ -3,8 +3,8 @@
 module GOOL.Drasil.Symantics (
   -- Types
   Label, Library,
-  -- Typeclasses
-  ProgramSym(..), RenderSym(..), InternalFile(..),  KeywordSym(..), 
+-- Typeclasses
+  ProgramSym(..), RenderSym, FileSym(..), InternalFile(..),  KeywordSym(..),
   PermanenceSym(..), InternalPerm(..), BodySym(..), ControlBlockSym(..), 
   listSlice, BlockSym(..), InternalBlock(..), TypeSym(..), InternalType(..), 
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
@@ -29,13 +29,20 @@ import Text.PrettyPrint.HughesPJ (Doc)
 type Label = String
 type Library = String
 
+class (FileSym repr, InternalBlock repr, InternalClass repr, InternalFile repr, 
+  InternalFunction repr, InternalMethod repr, InternalMod repr, InternalOp repr,
+  InternalParam repr, InternalPerm repr, InternalScope repr, 
+  InternalStatement repr, InternalStateVar repr, InternalType repr, 
+  InternalValue repr, InternalVariable repr, KeywordSym repr, UnaryOpSym repr, 
+  BinaryOpSym repr) => RenderSym repr
+
 class (RenderSym repr) => ProgramSym repr where
   type Program repr
   prog :: Label -> [FS (repr (RenderFile repr))] -> 
     GS (repr (Program repr))
 
-class (ModuleSym repr, InternalFile repr) => 
-  RenderSym repr where 
+class (ModuleSym repr) => 
+  FileSym repr where 
   type RenderFile repr
   fileDoc :: FS (repr (Module repr)) -> 
     FS (repr (RenderFile repr))
@@ -83,7 +90,7 @@ class (PermanenceSym repr) => KeywordSym repr where
 
   keyDoc :: repr (Keyword repr) -> Doc
 
-class (InternalPerm repr) => PermanenceSym repr where
+class PermanenceSym repr where
   type Permanence repr
   static_  :: repr (Permanence repr)
   dynamic_ :: repr (Permanence repr)
@@ -102,7 +109,7 @@ class (BlockSym repr) => BodySym repr where
 
   bodyDoc :: repr (Body repr) -> Doc
 
-class (StatementSym repr, InternalBlock repr) => BlockSym repr where
+class (StatementSym repr) => BlockSym repr where
   type Block repr
   block   :: [GS (repr (Statement repr))] -> GS (repr (Block repr))
 
@@ -110,7 +117,7 @@ class InternalBlock repr where
   blockDoc :: repr (Block repr) -> Doc
   docBlock :: GS Doc -> GS (repr (Block repr))
 
-class (PermanenceSym repr, InternalType repr) => TypeSym repr where
+class (PermanenceSym repr) => TypeSym repr where
   type Type repr
   bool          :: GS (repr (Type repr))
   int           :: GS (repr (Type repr))
@@ -150,7 +157,7 @@ listSlice :: (ControlBlockSym repr) => GS (repr (Variable repr)) ->
   GS (repr (Block repr))
 listSlice vnew vold b e s = listSlice' b e s vnew vold
 
-class (InternalOp repr) => UnaryOpSym repr where
+class UnaryOpSym repr where
   type UnaryOp repr
   notOp    :: repr (UnaryOp repr)
   negateOp :: repr (UnaryOp repr)
@@ -168,7 +175,7 @@ class (InternalOp repr) => UnaryOpSym repr where
   floorOp  :: repr (UnaryOp repr)
   ceilOp   :: repr (UnaryOp repr)
 
-class (InternalOp repr) => BinaryOpSym repr where
+class BinaryOpSym repr where
   type BinaryOp repr
   equalOp        :: repr (BinaryOp repr)
   notEqualOp     :: repr (BinaryOp repr)
@@ -191,7 +198,7 @@ class InternalOp repr where
   uOpPrec :: repr (UnaryOp repr) -> Int
   bOpPrec :: repr (BinaryOp repr) -> Int
 
-class (TypeSym repr, InternalVariable repr) => VariableSym repr where
+class (TypeSym repr) => VariableSym repr where
   type Variable repr
   var          :: Label -> GS (repr (Type repr)) -> GS (repr (Variable repr))
   staticVar    :: Label -> GS (repr (Type repr)) -> GS (repr (Variable repr))
@@ -225,7 +232,7 @@ class InternalVariable repr where
   varFromData :: Binding -> String -> repr (Type repr) -> Doc -> 
     repr (Variable repr)
 
-class (VariableSym repr, InternalValue repr) => ValueSym repr where
+class (VariableSym repr) => ValueSym repr where
   type Value repr
   litTrue   :: GS (repr (Value repr))
   litFalse  :: GS (repr (Value repr))
@@ -250,7 +257,7 @@ class (VariableSym repr, InternalValue repr) => ValueSym repr where
   valueType :: repr (Value repr) -> repr (Type repr)
   valueDoc :: repr (Value repr) -> Doc
 
-class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => 
+class (ValueSym repr) => 
   NumericExpression repr where
   (#~)  :: GS (repr (Value repr)) -> GS (repr (Value repr))
   infixl 8 #~
@@ -395,7 +402,7 @@ objMethodCallNoParams :: (InternalSelector repr) => GS (repr (Type repr)) ->
   GS (repr (Value repr)) -> Label -> GS (repr (Value repr))
 objMethodCallNoParams t o f = objMethodCallNoParams' f t o
 
-class (ValueExpression repr, InternalFunction repr) => FunctionSym repr where
+class (ValueExpression repr) => FunctionSym repr where
   type Function repr
   func :: Label -> GS (repr (Type repr)) -> [GS (repr (Value repr))] -> 
     GS (repr (Function repr))
@@ -459,8 +466,7 @@ class InternalStatement repr where
 
   stateFromData :: Doc -> Terminator -> repr (Statement repr)
 
-class (KeywordSym repr, SelectorFunction repr, InternalStatement repr) => 
-  StatementSym repr where
+class (SelectorFunction repr) => StatementSym repr where
   type Statement repr
   (&=)   :: GS (repr (Variable repr)) -> GS (repr (Value repr)) -> 
     GS (repr (Statement repr))
@@ -611,7 +617,7 @@ class (BodySym repr) => ControlStatementSym repr where
   getFileInputAll  :: GS (repr (Value repr)) -> GS (repr (Variable repr)) -> 
     GS (repr (Statement repr))
 
-class (InternalScope repr) => ScopeSym repr where
+class ScopeSym repr where
   type Scope repr
   private :: repr (Scope repr)
   public  :: repr (Scope repr)
@@ -624,7 +630,7 @@ class (TypeSym repr) => MethodTypeSym repr where
   mType    :: GS (repr (Type repr)) -> GS (repr (MethodType repr))
   construct :: Label -> GS (repr (MethodType repr))
 
-class (InternalParam repr) => ParameterSym repr where
+class ParameterSym repr where
   type Parameter repr
   param :: GS (repr (Variable repr)) -> MS (repr (Parameter repr))
   -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
@@ -636,8 +642,8 @@ class InternalParam repr where
   parameterDoc  :: repr (Parameter repr) -> Doc
   paramFromData :: repr (Variable repr) -> Doc -> repr (Parameter repr)
 
-class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr, 
-  InternalMethod repr) => MethodSym repr where
+class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr) => 
+  MethodSym repr where
   type Method repr
   -- Second label is class name
   method      :: Label -> Label -> repr (Scope repr) -> repr (Permanence repr) 
@@ -689,8 +695,7 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr,
     (Variable repr)))] -> [(String, GS (repr (Variable repr)))] -> 
     GS (repr (Body repr)) -> MS (repr (Method repr))
 
-class (MethodTypeSym repr, BlockCommentSym repr) => 
-  InternalMethod repr where
+class (MethodTypeSym repr, BlockCommentSym repr) => InternalMethod repr where
   intMethod     :: Bool -> Label -> Label -> repr (Scope repr) -> 
     repr (Permanence repr) -> GS (repr (MethodType repr)) -> 
     [MS (repr (Parameter repr))] -> GS (repr (Body repr)) -> 
@@ -704,8 +709,8 @@ class (MethodTypeSym repr, BlockCommentSym repr) =>
   methodDoc :: repr (Method repr) -> Doc
   methodFromData :: ScopeTag -> Doc -> repr (Method repr)
 
-class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr,
-  InternalStateVar repr) => StateVarSym repr where
+class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr) =>
+  StateVarSym repr where
   type StateVar repr
   stateVar :: repr (Scope repr) -> repr (Permanence repr) ->
     GS (repr (Variable repr)) -> GS (repr (StateVar repr))
@@ -722,8 +727,7 @@ class InternalStateVar repr where
   stateVarDoc :: repr (StateVar repr) -> Doc
   stateVarFromData :: GS Doc -> GS (repr (StateVar repr))
 
-class (MethodSym repr, InternalClass repr) => ClassSym repr 
-  where
+class (MethodSym repr) => ClassSym repr where
   type Class repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
     [GS (repr (StateVar repr))] -> 
@@ -748,7 +752,7 @@ class InternalClass repr where
   classDoc :: repr (Class repr) -> Doc
   classFromData :: FS Doc -> FS (repr (Class repr))
 
-class (ClassSym repr, InternalMod repr) => ModuleSym repr where
+class (ClassSym repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [Library] -> [MS (repr (Method repr))] -> 
     [FS (repr (Class repr))] -> FS (repr (Module repr))

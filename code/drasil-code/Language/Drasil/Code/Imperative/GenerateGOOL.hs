@@ -8,7 +8,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..), 
   Name)
   
-import GOOL.Drasil (Label, RenderSym(..), TypeSym(..), 
+import GOOL.Drasil (Label, RenderSym, FileSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   CodeType(..), GOOLState, GS, FS, MS, lensMStoGS)

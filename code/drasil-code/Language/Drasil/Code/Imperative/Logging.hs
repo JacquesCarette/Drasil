@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.Logging (
 import Language.Drasil.Code.Imperative.State (DrasilState(..))
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 
-import GOOL.Drasil (Label, RenderSym(..), BodySym(..), BlockSym(..), 
+import GOOL.Drasil (Label, RenderSym, BodySym(..), BlockSym(..), 
   TypeSym(..), VariableSym(..), ValueSym(..), StatementSym(..), GS)
 
 import Data.Maybe (maybeToList)

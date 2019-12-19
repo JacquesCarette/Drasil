@@ -10,7 +10,7 @@ import Utils.Drasil (blank)
 
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
 import qualified GOOL.Drasil.Symantics as S ( 
-  RenderSym(..), TypeSym(..), PermanenceSym(dynamic_))
+  RenderSym, TypeSym(..), PermanenceSym(dynamic_))
 import GOOL.Drasil.State (GS)
 
 import Prelude hiding ((<>))

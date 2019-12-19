@@ -33,8 +33,8 @@ class (FileSym repr, InternalBlock repr, InternalClass repr, InternalFile repr,
   InternalFunction repr, InternalMethod repr, InternalMod repr, InternalOp repr,
   InternalParam repr, InternalPerm repr, InternalScope repr, 
   InternalStatement repr, InternalStateVar repr, InternalType repr, 
-  InternalValue repr, InternalVariable repr, KeywordSym repr, UnaryOpSym repr, 
-  BinaryOpSym repr) => RenderSym repr
+  InternalValue repr, InternalVariable repr, KeywordSym repr, ImportSym repr, 
+  UnaryOpSym repr, BinaryOpSym repr) => RenderSym repr
 
 class (FileSym repr) => ProgramSym repr where
   type Program repr
@@ -759,7 +759,7 @@ class InternalClass repr where
   classDoc :: repr (Class repr) -> Doc
   classFromData :: FS Doc -> FS (repr (Class repr))
 
-class (ClassSym repr, ImportSym repr) => ModuleSym repr where
+class (ClassSym repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [Library] -> [MS (repr (Method repr))] -> 
     [FS (repr (Class repr))] -> FS (repr (Module repr))

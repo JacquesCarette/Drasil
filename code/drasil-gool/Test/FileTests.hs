@@ -3,7 +3,7 @@ module Test.FileTests (fileTests) where
 import GOOL.Drasil (ProgramSym(..), FileSym(..),
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
   StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..), 
-MethodSym(..), ModuleSym(..), GS, MS)
+  MethodSym(..), ModuleSym(..), GS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 fileTests :: (ProgramSym repr) => GS (repr (Program repr))

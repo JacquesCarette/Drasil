@@ -106,8 +106,7 @@ getConstVars :: ParamType -> ConstantStructure -> ConstantRepr -> [CodeChunk]
   -> Reader DrasilState [CodeChunk]
 getConstVars _ _ _ [] = return []
 getConstVars _ (Store Unbundled) _ cs = return cs
-getConstVars pt (Store Bundled) Var _ = return (if isIn pt then [codevar consts]
-  else [])
+getConstVars pt (Store Bundled) Var _ = return [codevar consts | isIn pt]
 getConstVars _ (Store Bundled) Const _ = return []
 getConstVars pt WithInputs cr cs = do
   g <- ask

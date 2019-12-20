@@ -86,7 +86,7 @@ import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt,
 import GOOL.Drasil.State (FS, MS, lensFStoGS, lensFStoMS, lensMStoFS, 
   currMain, putAfter, getPutReturnFunc, getPutReturnFunc2, addFile, setMainMod, 
   addLangImport, getLangImports, getModuleImports, setFilePath, getFilePath, 
-  setModuleName, getModuleName, getCurrMain, addParameter)
+  setModuleName, getModuleName, addParameter)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Bifunctor (first)
@@ -1049,24 +1049,24 @@ commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' ->
 
 buildModule :: (RenderSym repr) => Label -> FS Doc -> [MS (repr (Method repr))] 
   -> [FS (repr (Class repr))] -> FS (repr (Module repr))
-buildModule n imps ms cs = S.modFromData n getCurrMain ((\cls fs is -> 
-  moduleDocD is (vibcat (map classDoc cls)) (vibcat (map methodDoc fs))) <$>
-  sequence cs <*> mapM (zoom lensFStoMS) ms <*> imps)
+buildModule n imps ms cs = S.modFromData n ((\cls fs is -> moduleDocD is 
+  (vibcat (map classDoc cls)) (vibcat (map methodDoc fs))) <$> sequence cs <*> 
+  mapM (zoom lensFStoMS) ms <*> imps)
 
 buildModule' :: (RenderSym repr) => Label -> (String -> repr (Import repr)) -> 
   [MS (repr (Method repr))] -> [FS (repr (Class repr))] -> 
   FS (repr (Module repr))
-buildModule' n inc ms cs = S.modFromData n getCurrMain (on3StateValues 
-  (\cls lis mis -> vibcat [
+buildModule' n inc ms cs = S.modFromData n (on3StateValues (\cls lis mis -> 
+  vibcat [
     vcat (map (importDoc . inc) lis), 
     vcat (map (importDoc . inc) mis), 
     vibcat (map classDoc cls)])
   (sequence $ if null ms then cs else pubClass n Nothing [] ms : cs)
   getLangImports getModuleImports)
 
-modFromData :: Label -> (Doc -> Bool -> repr (Module repr)) -> FS Bool -> 
-  FS Doc -> FS (repr (Module repr))
-modFromData n f m d = putAfter (setModuleName n) (on2StateValues f d m)
+modFromData :: Label -> (Doc -> repr (Module repr)) -> FS Doc -> 
+  FS (repr (Module repr))
+modFromData n f d = putAfter (setModuleName n) (onStateValue f d)
 
 -- Files --
 

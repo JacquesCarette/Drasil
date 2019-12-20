@@ -766,7 +766,7 @@ class (ClassSym repr) => ModuleSym repr where
 
 class InternalMod repr where
   moduleDoc :: repr (Module repr) -> Doc
-  modFromData :: String -> FS Bool -> FS Doc -> FS (repr (Module repr))
+  modFromData :: String -> FS Doc -> FS (repr (Module repr))
   updateModuleDoc :: (Doc -> Doc) -> repr (Module repr) -> repr (Module repr)
     
 class BlockCommentSym repr where

@@ -695,8 +695,7 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
   moduleDoc m = moduleDoc $ pfst m
-  modFromData n m d = on2StateValues pair (modFromData n m d) (modFromData n m 
-    d)
+  modFromData n d = on2StateValues pair (modFromData n d) (modFromData n d)
   updateModuleDoc f m = pair (updateModuleDoc f $ pfst m) (updateModuleDoc f $ 
     psnd m)
 
@@ -1494,7 +1493,7 @@ instance ModuleSym CppSrcCode where
 
 instance InternalMod CppSrcCode where
   moduleDoc = modDoc . unCPPSC
-  modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
+  modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateModDoc f)
 
 instance BlockCommentSym CppSrcCode where
@@ -2065,7 +2064,7 @@ instance ModuleSym CppHdrCode where
 
 instance InternalMod CppHdrCode where
   moduleDoc = modDoc . unCPPHC
-  modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
+  modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateModDoc f)
 
 instance BlockCommentSym CppHdrCode where

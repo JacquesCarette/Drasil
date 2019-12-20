@@ -45,13 +45,13 @@ data FuncData = FD {funcType :: TypeData, funcDoc :: Doc}
 fd :: TypeData -> Doc -> FuncData
 fd = FD
 
-data ModData = MD {name :: String, isMainMod :: Bool, modDoc :: Doc}
+data ModData = MD {name :: String, modDoc :: Doc}
 
-md :: String -> Bool -> Doc -> ModData
+md :: String -> Doc -> ModData
 md = MD
 
 updateModDoc :: (Doc -> Doc) -> ModData -> ModData
-updateModDoc f m = md (name m) (isMainMod m) (f $ modDoc m)
+updateModDoc f m = md (name m) (f $ modDoc m)
 
 newtype MethodData = MthD {mthdDoc :: Doc}
 

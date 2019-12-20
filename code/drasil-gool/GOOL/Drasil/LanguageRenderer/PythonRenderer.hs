@@ -640,7 +640,7 @@ instance ModuleSym PythonCode where
 
 instance InternalMod PythonCode where
   moduleDoc = modDoc . unPC
-  modFromData n = G.modFromData n (\d m -> toCode $ md n m d)
+  modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateModDoc f)
 
 instance BlockCommentSym PythonCode where

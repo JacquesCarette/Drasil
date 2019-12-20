@@ -34,7 +34,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
 
 import Utils.Drasil (indent)
 
-import GOOL.Drasil.CodeType (CodeType(..), isObject)
+import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   FileSym(RenderFile, commentedMod), BlockSym(Block), InternalBlock(..), 
   BodySym(Body, body, bodyStatements, bodyDoc), ImportSym(..), 
@@ -967,9 +967,8 @@ docInOutFunc :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr)
   MS (repr (Method repr))
 docInOutFunc f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
   (f s p (map snd is) [snd o] [] b)
-docInOutFunc f s p desc is [] [both] b = zoom lensMStoFS (snd both) >>= (\bth 
-  -> docFuncRepr desc (map fst $ both : is) [fst both | not ((isObject . 
-  getType . variableType) bth)] (f s p (map snd is) [] [toState bth] b))
+docInOutFunc f s p desc is [] [both] b = docFuncRepr desc (map fst $ both : is) 
+  [fst both] (f s p (map snd is) [] [snd both] b)
 docInOutFunc f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ os)
   [] (f s p (map snd is) (map snd os) (map snd bs) b)
 

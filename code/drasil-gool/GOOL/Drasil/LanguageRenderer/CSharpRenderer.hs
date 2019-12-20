@@ -30,7 +30,7 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, dot, 
   blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD, 
-  appendToBody, surroundBody, filterOutObjs)
+  appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, bool, int, double, char, string, listType, listInnerType,
   obj, enumType, void, runStrategy, listSlice, notOp, negateOp, equalOp, 
@@ -705,9 +705,8 @@ csInOutCall :: (Label -> FS (CSharpCode (Type CSharpCode)) ->
   FS (CSharpCode (Statement CSharpCode))
 csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out) 
   ins
-csInOutCall f n ins [] [out] = if null (filterOutObjs [out])
-  then valState $ f n void (valueOf out : ins) 
-  else assign out $ f n (onStateValue variableType out) (valueOf out : ins)
+csInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out) 
+  (valueOf out : ins)
 csInOutCall f n ins outs both = valState $ f n void (map (onStateValue 
   (onCodeValue (updateValDoc csRef)) . valueOf) both ++ ins ++ map 
   (onStateValue (onCodeValue (updateValDoc csOut)) . valueOf) outs)
@@ -737,9 +736,8 @@ csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode)
 csInOut f s p ins [v] [] b = f s p (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 
   valueOf v))
-csInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else onStateValue variableType v) (map param $ v : ins) (if null 
-  (filterOutObjs [v]) then b else on2StateValues (on2CodeValues appendToBody) b 
+csInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
+  (map param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b 
   (returnState $ valueOf v))
 csInOut f s p ins outs both b = f s p void (map (onStateValue (onCodeValue 
   (updateParamDoc csRef)) . param) both ++ map param ins ++ map (onStateValue 

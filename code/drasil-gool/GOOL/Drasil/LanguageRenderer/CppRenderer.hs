@@ -31,8 +31,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   dynamicDocD, privateDocD, publicDocD, classDec, dot, blockCmtStart, 
   blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, blockCmtDoc, docCmtDoc, 
   commentedItem, addCommentsDocD, functionDox, commentedModD, valueList, 
-  parameterList, appendToBody, surroundBody, getterName, setterName, 
-  filterOutObjs)
+  parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, int, double, char, string, listType, listInnerType, obj, 
   enumType, void, runStrategy, listSlice, notOp, negateOp, sqrtOp, absOp, expOp,
@@ -2317,9 +2316,8 @@ cppInOutCall :: (Label -> FS (CppSrcCode (Type CppSrcCode)) ->
   FS (CppSrcCode (Statement CppSrcCode))
 cppInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
-cppInOutCall f n ins [] [out] = if null (filterOutObjs [out]) 
-  then valState $ f n void (valueOf out : ins)
-  else assign out $ f n (onStateValue variableType out) (valueOf out : ins)
+cppInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)
+  (valueOf out : ins)
 cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins 
   ++ map valueOf outs)
 
@@ -2335,9 +2333,8 @@ cppsInOut :: (CppSrcCode (Scope CppSrcCode) ->
 cppsInOut f s p ins [v] [] b = f s p (onStateValue variableType v) 
   (cppInOutParams ins [v] []) (on3StateValues (on3CodeValues surroundBody) 
   (varDec v) b (returnState $ valueOf v))
-cppsInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else onStateValue variableType v) (cppInOutParams ins [] [v]) (if null 
-  (filterOutObjs [v]) then b else on2StateValues (on2CodeValues appendToBody) b 
+cppsInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
+  (cppInOutParams ins [] [v]) (on2StateValues (on2CodeValues appendToBody) b 
   (returnState $ valueOf v))
 cppsInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
 
@@ -2352,8 +2349,8 @@ cpphInOut :: (CppHdrCode (Scope CppHdrCode) ->
   -> MS (CppHdrCode (Method CppHdrCode))
 cpphInOut f s p ins [v] [] b = f s p (onStateValue variableType v) 
   (cppInOutParams ins [v] []) b
-cpphInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void 
-  else onStateValue variableType v) (cppInOutParams ins [] [v]) b
+cpphInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
+  (cppInOutParams ins [] [v]) b
 cpphInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
 
 cppInOutParams :: (RenderSym repr) => [FS (repr (Variable repr))] -> 

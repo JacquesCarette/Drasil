@@ -1479,16 +1479,17 @@ instance InternalClass CppSrcCode where
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
   buildModule n = G.buildModule n ((\ds lis mis us mn -> vibcat [
+    if mn then importDoc $ mi n else empty,
     vcat (map ((text "#define" <+>) . text) ds),
-    vcat (map (importDoc . 
-      (langImport :: Label -> CppSrcCode (Import CppSrcCode))) lis),
-    vcat (map (importDoc . 
-      (modImport :: Label -> CppSrcCode (Import CppSrcCode))) 
-      (if mn then mis else n:mis)),
+    vcat (map (importDoc . li) lis),
+    vcat (map (importDoc . mi) mis),
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppSrcCode (Keyword CppSrcCode))) us)]) 
     <$> getDefines <*> getLangImports <*> getModuleImports <*> getUsing <*> 
     getCurrMain)
+    where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
+          mi = modImport
+          li = langImport
 
 instance InternalMod CppSrcCode where
   moduleDoc = modDoc . unCPPSC
@@ -2052,14 +2053,15 @@ instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
   buildModule n = G.buildModule n ((\ds lis mis us -> vibcat [
     vcat (map ((text "#define" <+>) . text) ds),
-    vcat (map (importDoc . 
-      (langImport :: Label -> CppHdrCode (Import CppHdrCode))) lis),
-    vcat (map (importDoc . 
-      (modImport :: Label -> CppHdrCode (Import CppHdrCode))) mis),
+    vcat (map (importDoc . li) lis),
+    vcat (map (importDoc . mi) mis),
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppHdrCode (Keyword CppHdrCode))) us)]) 
     <$> getHeaderDefines <*> getHeaderLangImports <*> getHeaderModImports <*> 
     getHeaderUsing)
+    where mi, li :: Label -> CppHdrCode (Import CppHdrCode)
+          mi = modImport
+          li = langImport
 
 instance InternalMod CppHdrCode where
   moduleDoc = modDoc . unCPPHC

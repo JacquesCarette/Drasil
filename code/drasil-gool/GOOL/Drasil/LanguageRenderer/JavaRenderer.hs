@@ -9,7 +9,7 @@ module GOOL.Drasil.LanguageRenderer.JavaRenderer (
 
 import Utils.Drasil (indent)
 
-import GOOL.Drasil.CodeType (CodeType(..), isObject)
+import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..), 
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
   InternalPerm(..), BodySym(..), BlockSym(..), InternalBlock(..), 
@@ -30,7 +30,7 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
   docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, commentedModD, docFuncRepr, parameterList, appendToBody, 
-  surroundBody, intValue, filterOutObjs)
+  surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, bool, int, double, char, listType, listInnerType, obj, 
   enumType, void, runStrategy, listSlice, notOp, negateOp, equalOp, notEqualOp, 
@@ -64,15 +64,14 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (angles, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (FS, MS, lensGStoFS, lensMStoFS, initialState, 
-  initialFS, getPutReturn, getPutReturnList, addProgNameToPaths, addLangImport, 
-  setCurrMain)
+import GOOL.Drasil.State (FS, MS, lensGStoFS, lensMStoFS, getPutReturn, 
+  getPutReturnList, addProgNameToPaths, addLangImport, setCurrMain)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
-import Control.Monad.State (modify, evalState)
+import Control.Monad.State (modify)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
   equals, semi, vcat, lbrace, rbrace, render, colon, render)
 
@@ -764,11 +763,10 @@ jInOutCall :: (Label -> FS (JavaCode (Type JavaCode)) ->
 jInOutCall f n ins [] [] = valState $ f n void ins
 jInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out) 
   ins
-jInOutCall f n ins [] [out] = if null (filterOutObjs [out])
-  then valState $ f n void (valueOf out : ins) 
-  else assign out $ f n (onStateValue variableType out) (valueOf out : ins)
+jInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out) 
+  (valueOf out : ins)
 jInOutCall f n ins outs both = fCall rets
-  where rets = filterOutObjs both ++ outs
+  where rets = both ++ outs
         fCall [x] = assign x $ f n (onStateValue variableType x) 
           (map valueOf both ++ ins)
         fCall xs = multi $ varDecDef (var "outputs" jArrayType) 
@@ -785,10 +783,9 @@ jInOut f s p ins [] [] b = f s p void (map param ins) b
 jInOut f s p ins [v] [] b = f s p (onStateValue variableType v) (map param ins) 
   (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 
   valueOf v))
-jInOut f s p ins [] [v] b = f s p (if null (filterOutObjs [v]) then void else 
-  onStateValue variableType v) (map param $ v : ins) (if null (filterOutObjs 
-  [v]) then b else on2StateValues (on2CodeValues appendToBody) b (returnState $ 
-  valueOf v))
+jInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
+  (map param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b 
+  (returnState $ valueOf v))
 jInOut f s p ins outs both b = f s p (returnTp rets)
   (map param $ both ++ ins) (on3StateValues (on3CodeValues surroundBody) decls 
   b (returnSt rets))
@@ -805,7 +802,7 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
         assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
           (onStateValue valueType v) &= v) : assignArray (c+1) vs
         decls = multi $ map varDec outs
-        rets = filterOutObjs both ++ outs
+        rets = both ++ outs
         outputs = var "outputs" jArrayType
 
 jDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
@@ -820,12 +817,9 @@ jDocInOut f s p desc is [] [] b = docFuncRepr desc (map fst is) []
   (f s p (map snd is) [] [] b)
 jDocInOut f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
   (f s p (map snd is) [snd o] [] b)
-jDocInOut f s p desc is [] [both] b = zoom lensMStoFS (snd both) >>= (\bth ->
-  docFuncRepr desc (map fst (both : is)) [fst both | not ((isObject . getType .
-  variableType) bth)] (f s p (map snd is) [] [toState bth] b))
+jDocInOut f s p desc is [] [both] b = docFuncRepr desc (map fst (both : is)) 
+  [fst both] (f s p (map snd is) [] [snd both] b)
 jDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
-  (bRets ++ map fst os) (f s p (map snd is) (map snd os) (map snd bs) b)
-  where bRets = bRets' (map fst (filter (not . isObject . getType . 
-          variableType . (`evalState` (initialState, initialFS)) . snd) bs))
-        bRets' [x] = [x]
-        bRets' xs = "array containing the following values:" : xs
+  rets (f s p (map snd is) (map snd os) (map snd bs) b)
+  where rets = "array containing the following values:" : map fst bs ++ 
+          map fst os

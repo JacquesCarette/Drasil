@@ -30,7 +30,7 @@ int main(int argc, const char *argv[]) {
     outfile << " in module Control" << std::endl;
     outfile.close();
     InputParameters inParams = InputParameters();
-    get_input(inParams, filename);
+    get_input(filename, inParams);
     derived_values(inParams);
     input_constraints(inParams);
     double J_tol = func_J_tol(inParams);

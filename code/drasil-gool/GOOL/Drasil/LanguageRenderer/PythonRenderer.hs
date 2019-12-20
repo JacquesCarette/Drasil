@@ -8,7 +8,7 @@ module GOOL.Drasil.LanguageRenderer.PythonRenderer (
 
 import Utils.Drasil (blank, indent)
 
-import GOOL.Drasil.CodeType (CodeType(..), isObject)
+import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
   InternalPerm(..), BodySym(..), BlockSym(..), InternalBlock(..), 
@@ -28,7 +28,7 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   newObjDocD', listSetFuncDocD, castObjDocD, dynamicDocD, bindingError, 
   classDec, dot, forLabel, inLabel, observerListName, commentedItem, 
   addCommentsDocD, commentedModD, docFuncRepr, valueList, parameterList, 
-  surroundBody, filterOutObjs)
+  surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, int, float, listInnerType, obj, enumType, runStrategy, 
   notOp', negateOp, sqrtOp', absOp', expOp', sinOp', cosOp', tanOp', asinOp', 
@@ -62,15 +62,15 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   on5StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
   on1StateValue1List)
 import GOOL.Drasil.State (FS, MS, lensGStoFS, lensFStoGS, lensMStoFS, 
-  initialState, initialFS, addLangImport, getLangImports, addModuleImport, 
-  getModuleImports, setCurrMain, getClassMap)
+  addLangImport, getLangImports, addModuleImport, getModuleImports, setCurrMain,
+  getClassMap)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
-import Control.Monad.State (modify, evalState)
+import Control.Monad.State (modify)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty)
@@ -784,10 +784,9 @@ pyInOutCall :: (Label -> FS (PythonCode (Type PythonCode)) ->
   [FS (PythonCode (Variable PythonCode))] -> 
   FS (PythonCode (Statement PythonCode))
 pyInOutCall f n ins [] [] = valState $ f n void ins
-pyInOutCall f n ins outs both = if null rets then valState (f n void (map 
-  valueOf both ++ ins)) else multiAssign (filterOutObjs both ++ outs) 
-  [f n void (map valueOf both ++ ins)]
-  where rets = filterOutObjs both ++ outs
+pyInOutCall f n ins outs both = multiAssign rets [f n void (map valueOf both ++ 
+  ins)]
+  where rets = both ++ outs
 
 pyBlockComment :: [String] -> Doc -> Doc
 pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
@@ -808,9 +807,9 @@ pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode)
   -> MS (PythonCode (Method PythonCode))
 pyInOut f s p ins [] [] b = f s p void (map param ins) b
 pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins) 
-  (if null rets then b else on3StateValues (on3CodeValues surroundBody) 
-  (multi $ map varDec outs) b (multiReturn $ map valueOf rets))
-  where rets = filterOutObjs both ++ outs
+  (on3StateValues (on3CodeValues surroundBody) (multi $ map varDec outs) b 
+  (multiReturn $ map valueOf rets))
+  where rets = both ++ outs
 
 pyDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
     -> [FS (repr (Variable repr))] -> [FS (repr (Variable repr))] -> 
@@ -821,6 +820,5 @@ pyDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr)
   -> [(String, FS (repr (Variable repr)))] -> FS (repr (Body repr)) -> 
   MS (repr (Method repr))
 pyDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
-  (map fst $ bRets ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)
-  where bRets = filter (not . isObject . getType . variableType . 
-          (`evalState` (initialState, initialFS)) . snd) bs
+  (map fst $ bs ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)
+  

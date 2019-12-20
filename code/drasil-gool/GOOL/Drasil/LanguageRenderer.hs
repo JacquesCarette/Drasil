@@ -21,12 +21,12 @@ module GOOL.Drasil.LanguageRenderer (
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   functionDox, classDox, moduleDox, commentedModD, docFuncRepr, valueList, 
   variableList, parameterList, prependToBody, appendToBody, surroundBody, 
-  getterName, setterName, intValue, filterOutObjs
+  getterName, setterName, intValue
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
-import GOOL.Drasil.CodeType (CodeType(..), isObject)
+import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, Library, RenderSym, BodySym(..), 
   PermanenceSym(..), InternalPerm(..), TypeSym(Type, getType, getTypeDoc), 
   VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
@@ -39,10 +39,9 @@ import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod,
   updateModDoc, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
   onStateValue, getNestDegree)
-import GOOL.Drasil.State (FS, MS, initialState, initialFS, getParameters)
+import GOOL.Drasil.State (FS, MS, getParameters)
 
 import Data.List (last)
-import Control.Monad.State (evalState)
 import Prelude hiding (break,print,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, int, 
@@ -487,11 +486,6 @@ intValue i = i >>= intValue' . getType . valueType
   where intValue' Integer = i
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
-
-filterOutObjs :: (VariableSym repr) => [FS (repr (Variable repr))] -> 
-  [FS (repr (Variable repr))]
-filterOutObjs = filter (not . isObject . getType . variableType . 
-  (`evalState` (initialState, initialFS)))
 
 doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String
 doxCommand = "\\"

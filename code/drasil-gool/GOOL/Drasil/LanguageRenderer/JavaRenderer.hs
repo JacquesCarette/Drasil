@@ -820,7 +820,6 @@ jDocInOut f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o]
 jDocInOut f s p desc is [] [both] b = docFuncRepr desc (map fst (both : is)) 
   [fst both] (f s p (map snd is) [] [snd both] b)
 jDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
-  (bRets ++ map fst os) (f s p (map snd is) (map snd os) (map snd bs) b)
-  where bRets = bRets' (map fst bs)
-        bRets' [x] = [x]
-        bRets' xs = "array containing the following values:" : xs
+  rets (f s p (map snd is) (map snd os) (map snd bs) b)
+  where rets = "array containing the following values:" : map fst bs ++ 
+          map fst os

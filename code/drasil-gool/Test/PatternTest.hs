@@ -3,7 +3,7 @@ module Test.PatternTest (patternTest) where
 import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), TypeSym(..), StatementSym(..), ControlStatementSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), FunctionSym(..), 
-  MethodSym(..), ModuleSym(..), GS, FS, MS)
+  MethodSym(..), ModuleSym(..), GS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer, observerName, printNum, x)
 

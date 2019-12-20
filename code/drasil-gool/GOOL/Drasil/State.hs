@@ -10,8 +10,8 @@ module GOOL.Drasil.State (
   getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines,
   addUsing, getUsing, addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, 
   setModuleName, getModuleName, setCurrMain, getCurrMain, addClass, getClasses, 
-  updateClassMap, getClassMap, addParameter, getParameters, setScope, getScope, 
-  setCurrMainFunc, getCurrMainFunc
+  updateClassMap, getClassMap, addParameter, getParameters, setOutputsDeclared, 
+  isOutputsDeclared, setScope, getScope, setCurrMainFunc, getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
@@ -33,6 +33,9 @@ makeLenses ''GOOLState
 
 data MethodState = MS {
   _currParameters :: [String],
+
+  -- Only used for Java
+  _outputsDeclared :: Bool,
   
   -- Only used for C++
   _currScope :: ScopeTag,
@@ -127,6 +130,8 @@ initialFS = FS {
 initialMS :: MethodState
 initialMS = MS {
   _currParameters = [],
+
+  _outputsDeclared = False,
 
   _currScope = Priv,
   _currMainFunc = False
@@ -305,6 +310,13 @@ addParameter p = over _2 $ over currParameters (\ps -> if p `elem` ps then
 
 getParameters :: MS [String]
 getParameters = gets ((^. currParameters) . snd)
+
+setOutputsDeclared :: ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+setOutputsDeclared = over _2 $ set outputsDeclared True
+
+isOutputsDeclared :: MS Bool
+isOutputsDeclared = gets ((^. outputsDeclared) . snd)
 
 setScope :: ScopeTag -> ((GOOLState, FileState), MethodState) -> 
   ((GOOLState, FileState), MethodState)

@@ -6,7 +6,7 @@ import GOOL.Drasil (ProgramSym(..), FileSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), listSlice, TypeSym(..), StatementSym(..), 
   ControlStatementSym(..), VariableSym(..), ValueSym(..), NumericExpression(..),
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), MethodSym(..), ModuleSym(..), GS, FS, MS)
+  SelectorFunction(..), MethodSym(..), ModuleSym(..), GS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 

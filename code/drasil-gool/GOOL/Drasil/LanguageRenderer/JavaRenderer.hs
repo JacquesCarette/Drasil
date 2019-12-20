@@ -64,8 +64,9 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (angles, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (FS, MS, lensGStoFS, getPutReturn, getPutReturnList, 
-  addProgNameToPaths, addLangImport, setCurrMain)
+import GOOL.Drasil.State (MS, lensGStoFS, getPutReturn, getPutReturnList, 
+  addProgNameToPaths, addLangImport, setCurrMain, setOutputsDeclared, 
+  isOutputsDeclared)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -769,8 +770,10 @@ jInOutCall f n ins outs both = fCall rets
   where rets = both ++ outs
         fCall [x] = assign x $ f n (onStateValue variableType x) 
           (map valueOf both ++ ins)
-        fCall xs = multi $ varDecDef (var "outputs" jArrayType) 
-          (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs
+        fCall xs = isOutputsDeclared >>= (\odec -> modify setOutputsDeclared >>
+          (multi $ (if odec then assign else varDecDef) (var "outputs" 
+          jArrayType) (f n jArrayType (map valueOf both ++ ins)) : 
+          jAssignFromArray 0 xs))
 
 jInOut :: (JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
     MS (JavaCode (Type JavaCode)) -> [MS (JavaCode (Parameter JavaCode))] -> 

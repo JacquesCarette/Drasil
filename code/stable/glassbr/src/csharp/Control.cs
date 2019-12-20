@@ -19,7 +19,7 @@ public class Control {
         outfile.WriteLine(" in module Control");
         outfile.Close();
         InputParameters inParams = new InputParameters();
-        InputFormat.get_input(inParams, filename);
+        InputFormat.get_input(filename, inParams);
         DerivedValues.derived_values(inParams);
         InputConstraints.input_constraints(inParams);
         double J_tol = Calculations.func_J_tol(inParams);

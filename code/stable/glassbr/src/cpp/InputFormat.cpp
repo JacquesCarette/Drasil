@@ -11,15 +11,15 @@ using std::ifstream;
 using std::ofstream;
 using std::string;
 
-void get_input(InputParameters &inParams, string filename) {
+void get_input(string filename, InputParameters &inParams) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function get_input called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object";
-    outfile << ", " << std::endl;
     outfile << "  filename = ";
-    outfile << filename << std::endl;
+    outfile << filename;
+    outfile << ", " << std::endl;
+    outfile << "  inParams = ";
+    outfile << "Instance of InputParameters object" << std::endl;
     outfile << "  }" << std::endl;
     outfile.close();
     

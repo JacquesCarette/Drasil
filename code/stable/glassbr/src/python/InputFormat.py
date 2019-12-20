@@ -2,16 +2,16 @@
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides the function for reading inputs
 ## \brief Reads input from a file with the given file name
-# \param inParams structure holding the input values
 # \param filename name of the input file
-def get_input(inParams, filename):
+# \param inParams structure holding the input values
+def get_input(filename, inParams):
     outfile = open("log.txt", "a")
     print("function get_input called with inputs: {", file=outfile)
-    print("  inParams = ", end='', file=outfile)
-    print("Instance of InputParameters object", end='', file=outfile)
-    print(", ", file=outfile)
     print("  filename = ", end='', file=outfile)
-    print(filename, file=outfile)
+    print(filename, end='', file=outfile)
+    print(", ", file=outfile)
+    print("  inParams = ", end='', file=outfile)
+    print("Instance of InputParameters object", file=outfile)
     print("  }", file=outfile)
     outfile.close()
     

@@ -20,15 +20,15 @@ obs1Name = "obs1"
 obs2Name = "obs2"
 nName = "n"
 
-observerType :: (TypeSym repr) => FS (repr (Type repr))
+observerType :: (TypeSym repr) => MS (repr (Type repr))
 observerType = obj observerName
 
-n, obs1, obs2 :: (VariableSym repr) => FS (repr (Variable repr))
+n, obs1, obs2 :: (VariableSym repr) => MS (repr (Variable repr))
 n = var nName int
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
-newObserver :: (ValueExpression repr) => FS (repr (Value repr))
+newObserver :: (ValueExpression repr) => MS (repr (Value repr))
 newObserver = extNewObj observerName observerType []
 
 patternTest :: (ProgramSym repr) => GS (repr (Program repr))

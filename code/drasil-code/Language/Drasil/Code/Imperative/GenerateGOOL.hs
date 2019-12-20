@@ -11,11 +11,10 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  CodeType(..), GOOLState, FS, MS, lensMStoFS)
+  CodeType(..), GOOLState, FS, MS)
 
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
-import Control.Lens.Zoom (zoom)
 import Control.Monad.Reader (Reader, ask, withReader)
 
 genModule :: (ProgramSym repr) => Name -> String
@@ -54,17 +53,17 @@ publicClass desc n l vs mths = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-fApp :: (ProgramSym repr) => String -> String -> FS (repr (Type repr)) -> 
-  [FS (repr (Value repr))] -> Reader DrasilState (FS (repr (Value repr)))
+fApp :: (ProgramSym repr) => String -> String -> MS (repr (Type repr)) -> 
+  [MS (repr (Value repr))] -> Reader DrasilState (MS (repr (Value repr)))
 fApp m s t vl = do
   g <- ask
   let cm = currentModule g
   return $ if m /= cm then extFuncApp m s t vl else if Map.lookup s 
     (eMap $ codeSpec g) == Just cm then funcApp s t vl else selfFuncApp m s t vl
 
-fAppInOut :: (ProgramSym repr) => String -> String -> [FS (repr (Value repr))] 
-  -> [FS (repr (Variable repr))] -> [FS (repr (Variable repr))] -> 
-  Reader DrasilState (FS (repr (Statement repr)))
+fAppInOut :: (ProgramSym repr) => String -> String -> [MS (repr (Value repr))] 
+  -> [MS (repr (Variable repr))] -> [MS (repr (Variable repr))] -> 
+  Reader DrasilState (MS (repr (Statement repr)))
 fAppInOut m n ins outs both = do
   g <- ask
   let cm = currentModule g
@@ -72,9 +71,9 @@ fAppInOut m n ins outs both = do
     (eMap $ codeSpec g) == Just cm then inOutCall n ins outs both else 
     selfInOutCall m n ins outs both
 
-mkParam :: (ProgramSym repr) => FS (repr (Variable repr)) -> 
+mkParam :: (ProgramSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Parameter repr))
-mkParam v = zoom lensMStoFS v >>= (\v' -> paramFunc (getType $ variableType v') v)
+mkParam v = v >>= (\v' -> paramFunc (getType $ variableType v') v)
   where paramFunc (List _) = pointerParam
         paramFunc (Object _) = pointerParam
         paramFunc _ = param

@@ -15,10 +15,10 @@ observer :: (ProgramSym repr) => FS (repr (RenderFile repr))
 observer = fileDoc (buildModule observerName [] [docClass observerDesc
   helperClass])
 
-x :: (VariableSym repr) => FS (repr (Variable repr))
+x :: (VariableSym repr) => MS (repr (Variable repr))
 x = var "x" int
 
-selfX :: (VariableSym repr) => FS (repr (Variable repr))
+selfX :: (VariableSym repr) => MS (repr (Variable repr))
 selfX = objVarSelf observerName x
 
 helperClass :: (ClassSym repr) => FS (repr (Class repr))

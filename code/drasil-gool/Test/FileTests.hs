@@ -7,7 +7,8 @@ import GOOL.Drasil (ProgramSym(..), FileSym(..),
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 fileTests :: (ProgramSym repr) => GS (repr (Program repr))
-fileTests = prog "FileTests" [fileDoc (buildModule "FileTests" [] [fileTestMethod] [])]
+fileTests = prog "FileTests" [fileDoc (buildModule "FileTests" [fileTestMethod] 
+  [])]
 
 fileTestMethod :: (ProgramSym repr) => MS (repr (Method repr))
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])

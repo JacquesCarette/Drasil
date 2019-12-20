@@ -690,7 +690,7 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
-  buildModule n l ms = pair2Lists (buildModule n l) (buildModule n l) 
+  buildModule n ms = pair2Lists (buildModule n) (buildModule n) 
     (map (zoom lensFStoMS) ms)
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
@@ -1479,7 +1479,7 @@ instance InternalClass CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n _ = G.buildModule n ((\ds lis mis us mn -> vibcat [
+  buildModule n = G.buildModule n ((\ds lis mis us mn -> vibcat [
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . 
       (langImport :: Label -> CppSrcCode (Import CppSrcCode))) lis),
@@ -2051,7 +2051,7 @@ instance InternalClass CppHdrCode where
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
-  buildModule n _ = G.buildModule n ((\ds lis mis us -> vibcat [
+  buildModule n = G.buildModule n ((\ds lis mis us -> vibcat [
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . 
       (langImport :: Label -> CppHdrCode (Import CppHdrCode))) lis),

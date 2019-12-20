@@ -631,7 +631,7 @@ instance InternalClass PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n _ = G.buildModule n (on2StateValues (\lis mis -> vibcat [
+  buildModule n = G.buildModule n (on2StateValues (\lis mis -> vibcat [
     vcat (map (importDoc . 
       (langImport :: Label -> PythonCode (Import PythonCode))) lis),
     vcat (map (importDoc . 

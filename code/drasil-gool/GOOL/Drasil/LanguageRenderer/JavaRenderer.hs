@@ -615,7 +615,7 @@ instance InternalClass JavaCode where
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
-  buildModule n _ = G.buildModule' n langImport
+  buildModule n = G.buildModule' n langImport
   
 instance InternalMod JavaCode where
   moduleDoc = modDoc . unJC

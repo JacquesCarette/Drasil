@@ -608,7 +608,7 @@ instance InternalClass CSharpCode where
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n _ = G.buildModule' n langImport
+  buildModule n = G.buildModule' n langImport
   
 instance InternalMod CSharpCode where
   moduleDoc = modDoc . unCSC

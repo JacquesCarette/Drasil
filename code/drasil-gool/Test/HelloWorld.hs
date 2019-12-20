@@ -12,8 +12,8 @@ import Test.Helper (helper)
 
 helloWorld :: (ProgramSym repr) => GS (repr (Program repr))
 helloWorld = prog "HelloWorld" [docMod description 
-  ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" ["Helper"] 
-  [helloWorldMain] []), helper]
+  ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" [helloWorldMain] 
+  []), helper]
 
 description :: String
 description = "Tests various GOOL functions. It should run without errors."

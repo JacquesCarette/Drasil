@@ -7,7 +7,7 @@ import GOOL.Drasil (
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 helper :: (ProgramSym repr) => FS (repr (RenderFile repr))
-helper = fileDoc (buildModule "Helper" [] [doubleAndAdd] [])
+helper = fileDoc (buildModule "Helper" [doubleAndAdd] [])
 
 doubleAndAdd :: (ProgramSym repr) => MS (repr (Method repr))
 doubleAndAdd = docFunc "This function adds two numbers" 

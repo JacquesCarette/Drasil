@@ -393,7 +393,7 @@ instance ClassSym CodeInfo where
 
 instance ModuleSym CodeInfo where
   type Module CodeInfo = ()
-  buildModule n _ _ cs = do
+  buildModule n _ cs = do
     sequence_ cs 
     getPutReturn (updateClassMap n) (toCode ())
 

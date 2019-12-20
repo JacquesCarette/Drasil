@@ -439,8 +439,8 @@ instance StatementSym JavaCode where
   varDecDef = G.varDecDef
   listDec n v = v >>= (\v' -> G.listDec (listDecDocD v') (litInt n) v)
   listDecDef v vs = modify (if null vs then id else addLangImport 
-    "java.util.Arrays") >> objDecNew v (if null vs then [] else [funcApp 
-    "Arrays.asList" (onStateValue variableType v) vs])
+    "java.util.Arrays") >> objDecNew v [funcApp "Arrays.asList" 
+    (onStateValue variableType v) vs | not (null vs)]
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew

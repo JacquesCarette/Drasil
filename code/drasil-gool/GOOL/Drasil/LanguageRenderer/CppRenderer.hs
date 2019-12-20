@@ -1049,7 +1049,7 @@ instance BinaryOpSym CppSrcCode where
   minusOp = G.minusOp
   multOp = G.multOp
   divideOp = G.divideOp
-  powerOp = addMathHImport $ G.powerOp
+  powerOp = addMathHImport G.powerOp
   moduloOp = G.moduloOp
   andOp = G.andOp
   orOp = G.orOp

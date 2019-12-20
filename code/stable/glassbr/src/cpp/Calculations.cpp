@@ -1,3 +1,5 @@
+#include "Calculations.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <math.h>

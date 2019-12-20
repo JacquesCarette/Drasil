@@ -1,3 +1,5 @@
+#include "Constants.hpp"
+
 const double Constants::L_min = 0.1;
 const double Constants::L_max = 50;
 const double Constants::rho_W_min = 950;

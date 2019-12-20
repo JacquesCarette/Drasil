@@ -1,3 +1,5 @@
+#include "InputParameters.hpp"
+
 #include <algorithm>
 #include <fstream>
 #include <iostream>

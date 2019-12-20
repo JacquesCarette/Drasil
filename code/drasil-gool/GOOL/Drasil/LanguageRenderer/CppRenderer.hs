@@ -1471,7 +1471,7 @@ instance InternalClass CppSrcCode where
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
   buildModule n = G.buildModule n ((\ds lis mis us mn -> vibcat [
-    if mn then importDoc $ mi n else empty,
+    if mn then empty else importDoc $ mi n,
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
     vcat (map (importDoc . mi) mis),

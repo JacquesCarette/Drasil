@@ -1,3 +1,5 @@
+#include "Calculations.hpp"
+
 #include <math.h>
 #include <string>
 

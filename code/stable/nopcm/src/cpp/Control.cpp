@@ -2,8 +2,6 @@
     \author Thulasi Jegatheesan
     \brief Controls the flow of the program
 */
-#include "Control.hpp"
-
 #include <string>
 
 #include "InputParameters.hpp"

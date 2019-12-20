@@ -1,3 +1,5 @@
+#include "OutputFormat.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <string>

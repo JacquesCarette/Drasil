@@ -1,3 +1,5 @@
+#include "InputFormat.hpp"
+
 #include <algorithm>
 #include <fstream>
 #include <iostream>

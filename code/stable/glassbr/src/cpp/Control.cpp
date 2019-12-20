@@ -2,8 +2,6 @@
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Controls the flow of the program
 */
-#include "Control.hpp"
-
 #include <fstream>
 #include <iostream>
 #include <string>

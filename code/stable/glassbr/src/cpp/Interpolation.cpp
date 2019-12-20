@@ -1,22 +1,14 @@
-#include "Interpolation.hpp"
-
-#define _USE_MATH_DEFINES
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <iterator>
-#include <string>
-#include <math.h>
-#include <sstream>
-#include <limits>
 #include <vector>
+#include <iostream>
+#include <string>
+#include <fstream>
 
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
-
+#include "Interpolation.hpp"
 #include "ReadTable.hpp"
+
+using std::vector;
+using std::string;
+using std::ofstream;
 
 double func_lin_interp(double x_1, double y_1, double x_2, double y_2, double x) {
     ofstream outfile;

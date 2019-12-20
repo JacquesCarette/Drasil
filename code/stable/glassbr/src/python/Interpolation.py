@@ -1,9 +1,6 @@
 ## \file Interpolation.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides functions for linear interpolation on three-dimensional data
-import sys
-import math
-
 import ReadTable
 
 ## \brief Performs linear interpolation

@@ -1,22 +1,15 @@
-#include "InputFormat.hpp"
-
-#define _USE_MATH_DEFINES
 #include <algorithm>
+#include <limits>
 #include <iostream>
 #include <fstream>
-#include <iterator>
 #include <string>
-#include <math.h>
-#include <sstream>
-#include <limits>
-#include <vector>
 
-using std::string;
-using std::vector;
+#include "InputFormat.hpp"
+#include "InputParameters.hpp"
+
 using std::ifstream;
 using std::ofstream;
-
-#include "InputParameters.hpp"
+using std::string;
 
 void get_input(InputParameters &inParams, string filename) {
     ofstream outfile;

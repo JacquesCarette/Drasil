@@ -1,11 +1,6 @@
 ## \file InputFormat.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides the function for reading inputs
-import sys
-import math
-
-import InputParameters
-
 ## \brief Reads input from a file with the given file name
 # \param inParams structure holding the input values
 # \param filename name of the input file

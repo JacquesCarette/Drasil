@@ -1,20 +1,11 @@
-#include "OutputFormat.hpp"
-
-#define _USE_MATH_DEFINES
-#include <algorithm>
 #include <iostream>
 #include <fstream>
-#include <iterator>
 #include <string>
-#include <math.h>
-#include <sstream>
-#include <limits>
-#include <vector>
 
-using std::string;
-using std::vector;
-using std::ifstream;
+#include "OutputFormat.hpp"
+
 using std::ofstream;
+using std::string;
 
 void write_output(string s, double d_offset) {
     ofstream outputfile;

@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.ConceptMatch (
 import Language.Drasil.CodeSpec (Choices(..), CodeConcept(..), 
   MatchedConceptMap)
 
-import GOOL.Drasil (ProgramSym, ValueSym(..), GS)
+import GOOL.Drasil (ProgramSym, ValueSym(..), FS)
 
 import Prelude hiding (pi)
 import qualified Data.Map as Map (map)
@@ -17,6 +17,6 @@ chooseConcept chs = Map.map (chooseConcept' chs) (conceptMatch chs)
           "ConceptMatchMap"
         chooseConcept' _ cs = head cs
 
-conceptToGOOL :: (ProgramSym repr) => CodeConcept -> GS (repr (Value repr))
+conceptToGOOL :: (ProgramSym repr) => CodeConcept -> FS (repr (Value repr))
 conceptToGOOL Pi = pi
 

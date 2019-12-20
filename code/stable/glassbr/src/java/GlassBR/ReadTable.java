@@ -6,9 +6,9 @@ package GlassBR;
 */
 import java.util.Arrays;
 import java.util.Scanner;
-import java.io.PrintWriter;
-import java.io.FileWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class ReadTable {
@@ -57,8 +57,8 @@ public class ReadTable {
         }
         for (int i = 0; i < lines.size(); i += 1) {
             linetokens = new ArrayList<String>(Arrays.asList(lines.get(i).split(",")));
-            ArrayList<Double> x_matrix_temp = new ArrayList<Double> ();
-            ArrayList<Double> y_matrix_temp = new ArrayList<Double> ();
+            ArrayList<Double> x_matrix_temp = new ArrayList<Double>();
+            ArrayList<Double> y_matrix_temp = new ArrayList<Double>();
             for (int stringlist_i = 0; stringlist_i < linetokens.size() / 2; stringlist_i += 1) {
                 x_matrix_temp.add(Double.parseDouble(linetokens.get(stringlist_i * 2 + 0)));
                 y_matrix_temp.add(Double.parseDouble(linetokens.get(stringlist_i * 2 + 1)));

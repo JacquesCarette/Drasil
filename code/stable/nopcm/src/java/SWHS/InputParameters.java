@@ -4,12 +4,8 @@ package SWHS;
     \author Thulasi Jegatheesan
     \brief Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input
 */
-import java.util.Arrays;
-import java.util.Scanner;
-import java.io.PrintWriter;
-import java.io.FileWriter;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Scanner;
 
 public class InputParameters {
     

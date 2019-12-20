@@ -6,14 +6,11 @@
 #define InputParameters_h
 
 #include <string>
-#include <vector>
-
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
 
 #include "Constants.hpp"
+
+using std::ifstream;
+using std::string;
 
 /** \brief Reads input from a file with the given file name
     \param filename name of the input file

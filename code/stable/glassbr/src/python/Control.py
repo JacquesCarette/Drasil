@@ -2,14 +2,13 @@
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Controls the flow of the program
 import sys
-import math
 
-import InputParameters
-import InputFormat
-import DerivedValues
-import InputConstraints
 import OutputFormat
 import Calculations
+import InputConstraints
+import DerivedValues
+import InputFormat
+import InputParameters
 
 filename = sys.argv[1]
 outfile = open("log.txt", "a")

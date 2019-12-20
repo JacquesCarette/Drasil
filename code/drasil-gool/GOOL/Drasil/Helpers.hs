@@ -11,7 +11,7 @@ import Utils.Drasil (blank)
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
 import qualified GOOL.Drasil.Symantics as S ( 
   TypeSym(..), PermanenceSym(dynamic_))
-import GOOL.Drasil.State (GS)
+import GOOL.Drasil.State (FS)
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
@@ -31,7 +31,7 @@ hicat :: Doc -> [Doc] -> Doc
 hicat c l = hcat $ intersperse c l
 
 vicat :: Doc -> [Doc] -> Doc
-vicat c = vcat . intersperse c
+vicat c = vcat . intersperse c . filter (not . isEmpty)
 
 vibcat :: [Doc] -> Doc
 vibcat = vicat blank
@@ -110,7 +110,7 @@ getNestDegree :: Integer -> C.CodeType -> Integer
 getNestDegree n (C.List t) = getNestDegree (n+1) t
 getNestDegree n _ = n
 
-convType :: (S.TypeSym repr) => C.CodeType -> GS (repr (S.Type repr))
+convType :: (S.TypeSym repr) => C.CodeType -> FS (repr (S.Type repr))
 convType C.Boolean = S.bool
 convType C.Integer = S.int
 convType C.Float = S.float

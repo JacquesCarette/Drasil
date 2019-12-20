@@ -1,9 +1,6 @@
 ## \file InputParameters.py
 # \author Thulasi Jegatheesan
 # \brief Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input
-import sys
-import math
-
 import Constants
 
 ## \brief Reads input from a file with the given file name

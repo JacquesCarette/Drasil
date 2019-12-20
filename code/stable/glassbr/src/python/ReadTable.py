@@ -1,9 +1,6 @@
 ## \file ReadTable.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides a function for reading glass ASTM data
-import sys
-import math
-
 ## \brief Reads glass ASTM data from a file with the given file name
 # \param filename name of the input file
 # \param z_vector list of z values

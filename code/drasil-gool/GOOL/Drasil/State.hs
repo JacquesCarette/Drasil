@@ -1,14 +1,17 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module GOOL.Drasil.State (
-  GS, GOOLState(..), FS, MS, lensFStoGS, lensGStoFS, lensFStoMS, lensMStoGS,  
+  GS, GOOLState(..), FS, MS, lensFStoGS, lensGStoFS, lensFStoMS, lensMStoFS, 
   headers, sources, mainMod, currMain, initialState, initialFS, putAfter, 
   getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, addFile, 
   addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
-  addLangImport, addModuleImport, setFilePath, getFilePath, setModuleName, 
-  getModuleName, setCurrMain, getCurrMain, addClass, getClasses, updateClassMap,
-  getClassMap, addParameter, getParameters, setScope, getScope, setCurrMainFunc,
-  getCurrMainFunc
+  addLangImport, getLangImports, addModuleImport, getModuleImports, 
+  addHeaderLangImport, getHeaderLangImports, addHeaderModImport, 
+  getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines,
+  addUsing, getUsing, addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, 
+  setModuleName, getModuleName, setCurrMain, getCurrMain, addClass, getClasses, 
+  updateClassMap, getClassMap, addParameter, getParameters, setScope, getScope, 
+  setCurrMainFunc, getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
@@ -23,9 +26,7 @@ data GOOLState = GS {
   _headers :: [FilePath],
   _sources :: [FilePath],
   _mainMod :: Maybe FilePath,
-  _classMap :: Map String String,
-  _langImports :: [String],
-  _moduleImports :: [String]
+  _classMap :: Map String String
 } 
 makeLenses ''GOOLState
 
@@ -42,13 +43,23 @@ data FileState = FS {
   _currModName :: String,
   _currFilePath :: FilePath,
   _currMain :: Bool,
-  _currClasses :: [String]
+  _currClasses :: [String],
+  _langImports :: [String],
+  _moduleImports :: [String],
+
+  -- C++ only
+  _headerLangImports :: [String],
+  _headerModImports :: [String],
+  _defines :: [String],
+  _headerDefines :: [String],
+  _using :: [String],
+  _headerUsing :: [String]
 }
 makeLenses ''FileState
 
 type GS = State GOOLState
 type FS = State (GOOLState, FileState)
-type MS = State (GOOLState, (FileState, MethodState))
+type MS = State ((GOOLState, FileState), MethodState)
 
 -------------------------------
 ---- Lenses between States ----
@@ -70,20 +81,18 @@ lensFStoGS = _1
 
 -- FS - MS --
 
-getMSfromFS :: (GOOLState, FileState) -> (GOOLState, (FileState, MethodState))
-getMSfromFS (gs, fs) = (gs, (fs, initialMS))
+getMSfromFS :: (GOOLState, FileState) -> ((GOOLState, FileState), MethodState)
+getMSfromFS (gs, fs) = ((gs, fs), initialMS)
 
-setMSfromFS :: (GOOLState, FileState) -> (GOOLState, (FileState, MethodState))
+setMSfromFS :: (GOOLState, FileState) -> ((GOOLState, FileState), MethodState)
   -> (GOOLState, FileState)
-setMSfromFS _ (gs, (fs, _)) = (gs, fs)
+setMSfromFS _ (fs, _) = fs
 
-lensFStoMS :: Lens' (GOOLState, FileState) (GOOLState, (FileState, MethodState))
+lensFStoMS :: Lens' (GOOLState, FileState) ((GOOLState, FileState), MethodState)
 lensFStoMS = lens getMSfromFS setMSfromFS
 
--- MS - GS --
-
-lensMStoGS :: Lens' (GOOLState, (FileState, MethodState)) GOOLState
-lensMStoGS = _1
+lensMStoFS :: Lens' ((GOOLState, FileState), MethodState) (GOOLState, FileState)
+lensMStoFS = _1
 
 -------------------------------
 ------- Initial States -------
@@ -94,9 +103,7 @@ initialState = GS {
   _headers = [],
   _sources = [],
   _mainMod = Nothing,
-  _classMap = empty,
-  _langImports = [],
-  _moduleImports = []
+  _classMap = empty
 }
 
 initialFS :: FileState
@@ -104,7 +111,16 @@ initialFS = FS {
   _currModName = "",
   _currFilePath = "",
   _currMain = False,
-  _currClasses = []
+  _currClasses = [],
+  _langImports = [],
+  _moduleImports = [],
+
+  _headerLangImports = [],
+  _headerModImports = [],
+  _defines = [],
+  _headerDefines = [],
+  _using = [],
+  _headerUsing = []
 }
 
 initialMS :: MethodState
@@ -183,11 +199,61 @@ setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
   "Multiple modules with main methods encountered")
 
-addLangImport :: String -> GOOLState -> GOOLState
-addLangImport i = over langImports (\is -> if i `elem` is then i:is else is)
+addLangImport :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
+addLangImport i = over _2 $ over langImports (\is -> if i `elem` is then is 
+  else i:is)
 
-addModuleImport :: String -> GOOLState -> GOOLState
-addModuleImport i = over moduleImports (\is -> if i `elem` is then i:is else is)
+getLangImports :: FS [String]
+getLangImports = gets ((^. langImports) . snd)
+
+addModuleImport :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
+addModuleImport i = over _2 $ over moduleImports (\is -> if i `elem` is then is 
+  else i:is)
+
+getModuleImports :: FS [String]
+getModuleImports = gets ((^. moduleImports) . snd)
+
+addHeaderLangImport :: String -> (GOOLState, FileState) -> (GOOLState, 
+  FileState)
+addHeaderLangImport i = over _2 $ over headerLangImports (\is -> if i `elem` is 
+  then is else i:is)
+
+getHeaderLangImports :: FS [String]
+getHeaderLangImports = gets ((^. headerLangImports) . snd)
+
+addHeaderModImport :: String -> (GOOLState, FileState) -> (GOOLState, 
+  FileState)
+addHeaderModImport i = over _2 $ over headerModImports (\is -> if i `elem` is 
+  then is else i:is)
+
+getHeaderModImports :: FS [String]
+getHeaderModImports = gets ((^. headerModImports) . snd)
+
+addDefine :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
+addDefine d = over _2 $ over defines (\ds -> if d `elem` ds then ds else d:ds)
+
+getDefines :: FS [String]
+getDefines = gets ((^. defines) . snd)
+  
+addHeaderDefine :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
+addHeaderDefine d = over _2 $ over headerDefines (\ds -> if d `elem` ds then ds 
+  else d:ds)
+
+getHeaderDefines :: FS [String]
+getHeaderDefines = gets ((^. headerDefines) . snd)
+
+addUsing :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
+addUsing u = over _2 $ over using (\us -> if u `elem` us then us else u:us)
+
+getUsing :: FS [String]
+getUsing = gets ((^. using) . snd)
+
+addHeaderUsing :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
+addHeaderUsing u = over _2 $ over headerUsing (\us -> if u `elem` us then us 
+  else u:us)
+
+getHeaderUsing :: FS [String]
+getHeaderUsing = gets ((^. headerUsing) . snd)
 
 setFilePath :: FilePath -> (GOOLState, FileState) -> (GOOLState, FileState)
 setFilePath fp = over _2 (set currFilePath fp)
@@ -201,9 +267,9 @@ setModuleName n = over _2 (set currModName n)
 getModuleName :: FS String
 getModuleName = gets ((^. currModName) . snd)
 
-setCurrMain :: (GOOLState, (FileState, MethodState)) -> 
-  (GOOLState, (FileState, MethodState))
-setCurrMain = over _2 (over _1 (over currMain (\b -> if b then error 
+setCurrMain :: ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+setCurrMain = over _1 (over _2 (over currMain (\b -> if b then error 
   "Multiple main functions defined" else not b)))
 
 getCurrMain :: FS Bool
@@ -223,24 +289,24 @@ updateClassMap n (gs, fs) = over _1 (over classMap (union (fromList $
 getClassMap :: GS (Map String String)
 getClassMap = gets (^. classMap)
 
-addParameter :: String -> (GOOLState, (FileState, MethodState)) -> 
-  (GOOLState, (FileState, MethodState))
-addParameter p = over _2 $ over _2 $ over currParameters (\ps -> if p `elem` 
-  ps then error $ "Function has duplicate parameter: " ++ p else ps ++ [p])
+addParameter :: String -> ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+addParameter p = over _2 $ over currParameters (\ps -> if p `elem` ps then 
+  error $ "Function has duplicate parameter: " ++ p else ps ++ [p])
 
 getParameters :: MS [String]
-getParameters = gets ((^. currParameters) . snd . snd)
+getParameters = gets ((^. currParameters) . snd)
 
-setScope :: ScopeTag -> (GOOLState, (FileState, MethodState)) -> 
-  (GOOLState, (FileState, MethodState))
-setScope scp = over _2 $ over _2 $ set currScope scp
+setScope :: ScopeTag -> ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+setScope scp = over _2 $ set currScope scp
 
 getScope :: MS ScopeTag
-getScope = gets ((^. currScope) . snd . snd)
+getScope = gets ((^. currScope) . snd)
 
-setCurrMainFunc :: Bool -> (GOOLState, (FileState, MethodState)) -> 
-  (GOOLState, (FileState, MethodState))
-setCurrMainFunc m = over _2 $ over _2 $ set currMainFunc m
+setCurrMainFunc :: Bool -> ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+setCurrMainFunc m = over _2 $ set currMainFunc m
 
 getCurrMainFunc :: MS Bool
-getCurrMainFunc = gets ((^. currMainFunc) . snd . snd)
+getCurrMainFunc = gets ((^. currMainFunc) . snd)

@@ -11,10 +11,10 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  CodeType(..), GOOLState, GS, FS, MS, lensMStoGS)
+  CodeType(..), GOOLState, FS, MS, lensMStoFS)
 
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (fromMaybe, maybe)
+import Data.Maybe (maybe)
 import Control.Lens.Zoom (zoom)
 import Control.Monad.Reader (Reader, ask, withReader)
 
@@ -24,8 +24,7 @@ genModule :: (ProgramSym repr) => Name -> String
   -> Reader DrasilState (FS (repr (RenderFile repr)))
 genModule n desc maybeMs maybeCs = do
   g <- ask
-  let ls = fromMaybe [] (Map.lookup n (dMap $ codeSpec g))
-      updateState = withReader (\s -> s { currentModule = n })
+  let updateState = withReader (\s -> s { currentModule = n })
       -- Below line of code cannot be simplified because authors has a generic type
       as = case csi (codeSpec g) of CSI {authors = a} -> map name a
   cs <- maybe (return []) updateState maybeCs
@@ -35,7 +34,7 @@ genModule n desc maybeMs maybeCs = do
               | CommentFunc `elem` commented g && not (null ms) = docMod "" []  
                   (date g)
               | otherwise                                       = id
-  return $ commMod $ fileDoc $ buildModule n ls ms cs
+  return $ commMod $ fileDoc $ buildModule n ms cs
 
 genDoxConfig :: (AuxiliarySym repr) => String -> GOOLState ->
   Reader DrasilState [repr (Auxiliary repr)]
@@ -46,7 +45,7 @@ genDoxConfig n s = do
   return [doxConfig n s v | not (null cms)]
 
 publicClass :: (ProgramSym repr) => String -> Label -> Maybe Label -> 
-  [GS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
+  [FS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
   -> Reader DrasilState (FS (repr (Class repr)))
 publicClass desc n l vs mths = do
   g <- ask
@@ -55,17 +54,17 @@ publicClass desc n l vs mths = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-fApp :: (ProgramSym repr) => String -> String -> GS (repr (Type repr)) -> 
-  [GS (repr (Value repr))] -> Reader DrasilState (GS (repr (Value repr)))
+fApp :: (ProgramSym repr) => String -> String -> FS (repr (Type repr)) -> 
+  [FS (repr (Value repr))] -> Reader DrasilState (FS (repr (Value repr)))
 fApp m s t vl = do
   g <- ask
   let cm = currentModule g
   return $ if m /= cm then extFuncApp m s t vl else if Map.lookup s 
     (eMap $ codeSpec g) == Just cm then funcApp s t vl else selfFuncApp m s t vl
 
-fAppInOut :: (ProgramSym repr) => String -> String -> [GS (repr (Value repr))] 
-  -> [GS (repr (Variable repr))] -> [GS (repr (Variable repr))] -> 
-  Reader DrasilState (GS (repr (Statement repr)))
+fAppInOut :: (ProgramSym repr) => String -> String -> [FS (repr (Value repr))] 
+  -> [FS (repr (Variable repr))] -> [FS (repr (Variable repr))] -> 
+  Reader DrasilState (FS (repr (Statement repr)))
 fAppInOut m n ins outs both = do
   g <- ask
   let cm = currentModule g
@@ -73,9 +72,9 @@ fAppInOut m n ins outs both = do
     (eMap $ codeSpec g) == Just cm then inOutCall n ins outs both else 
     selfInOutCall m n ins outs both
 
-mkParam :: (ProgramSym repr) => GS (repr (Variable repr)) -> 
+mkParam :: (ProgramSym repr) => FS (repr (Variable repr)) -> 
   MS (repr (Parameter repr))
-mkParam v = zoom lensMStoGS v >>= (\v' -> paramFunc (getType $ variableType v') v)
+mkParam v = zoom lensMStoFS v >>= (\v' -> paramFunc (getType $ variableType v') v)
   where paramFunc (List _) = pointerParam
         paramFunc (Object _) = pointerParam
         paramFunc _ = param

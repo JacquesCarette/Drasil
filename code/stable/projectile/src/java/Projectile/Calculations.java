@@ -4,13 +4,6 @@ package Projectile;
     \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
     \brief Provides functions for calculating the outputs
 */
-import java.util.Arrays;
-import java.util.Scanner;
-import java.io.PrintWriter;
-import java.io.FileWriter;
-import java.io.File;
-import java.util.ArrayList;
-
 public class Calculations {
     
     /** \brief Calculates flight duration: the time when the projectile lands (s)

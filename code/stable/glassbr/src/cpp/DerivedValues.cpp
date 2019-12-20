@@ -1,13 +1,12 @@
-#include <math.h>
-#include <iostream>
-#include <string>
 #include <fstream>
+#include <iostream>
+#include <math.h>
+#include <string>
 
-#include "DerivedValues.hpp"
 #include "InputParameters.hpp"
 
-using std::string;
 using std::ofstream;
+using std::string;
 
 void derived_values(InputParameters &inParams) {
     ofstream outfile;

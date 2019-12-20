@@ -2,8 +2,8 @@
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides the function for writing outputs
 */
-using System.IO;
 using System;
+using System.IO;
 
 public class OutputFormat {
     

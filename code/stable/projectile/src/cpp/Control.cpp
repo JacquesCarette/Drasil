@@ -2,11 +2,13 @@
     \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
     \brief Controls the flow of the program
 */
+#include "Control.hpp"
+
 #include <string>
 
-#include "OutputFormat.hpp"
 #include "Calculations.hpp"
 #include "InputParameters.hpp"
+#include "OutputFormat.hpp"
 
 using std::string;
 

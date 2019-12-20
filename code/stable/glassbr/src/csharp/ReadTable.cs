@@ -3,8 +3,8 @@
     \brief Provides a function for reading glass ASTM data
 */
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 
 public class ReadTable {
     

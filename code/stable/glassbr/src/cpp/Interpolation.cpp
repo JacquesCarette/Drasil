@@ -1,14 +1,13 @@
-#include <vector>
+#include <fstream>
 #include <iostream>
 #include <string>
-#include <fstream>
+#include <vector>
 
-#include "Interpolation.hpp"
 #include "ReadTable.hpp"
 
-using std::vector;
-using std::string;
 using std::ofstream;
+using std::string;
+using std::vector;
 
 double func_lin_interp(double x_1, double y_1, double x_2, double y_2, double x) {
     ofstream outfile;

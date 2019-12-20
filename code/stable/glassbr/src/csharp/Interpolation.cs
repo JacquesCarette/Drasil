@@ -2,8 +2,8 @@
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides functions for linear interpolation on three-dimensional data
 */
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 public class Interpolation {

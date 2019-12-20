@@ -1,14 +1,13 @@
-#include <math.h>
-#include <iostream>
-#include <string>
 #include <fstream>
+#include <iostream>
+#include <math.h>
+#include <string>
 
-#include "Calculations.hpp"
-#include "Interpolation.hpp"
 #include "InputParameters.hpp"
+#include "Interpolation.hpp"
 
-using std::string;
 using std::ofstream;
+using std::string;
 
 double func_J_tol(InputParameters &inParams) {
     ofstream outfile;

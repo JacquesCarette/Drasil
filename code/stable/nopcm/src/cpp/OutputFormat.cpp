@@ -1,11 +1,9 @@
+#include <fstream>
 #include <iostream>
 #include <string>
-#include <fstream>
 
-#include "OutputFormat.hpp"
-
-using std::string;
 using std::ofstream;
+using std::string;
 
 void write_output(double T_W, double E_W) {
     ofstream outputfile;

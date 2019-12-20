@@ -1,10 +1,9 @@
-#include <iostream>
 #include <algorithm>
-#include <limits>
 #include <fstream>
+#include <iostream>
+#include <limits>
 #include <string>
 
-#include "InputParameters.hpp"
 #include "Constants.hpp"
 
 using std::ifstream;

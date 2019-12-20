@@ -1,13 +1,11 @@
 #define _USE_MATH_DEFINES
 
-#include <math.h>
-#include <iostream>
 #include <algorithm>
-#include <limits>
 #include <fstream>
+#include <iostream>
+#include <limits>
+#include <math.h>
 #include <string>
-
-#include "InputParameters.hpp"
 
 using std::ifstream;
 using std::string;

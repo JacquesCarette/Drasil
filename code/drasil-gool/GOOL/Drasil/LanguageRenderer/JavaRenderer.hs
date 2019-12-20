@@ -10,7 +10,7 @@ module GOOL.Drasil.LanguageRenderer.JavaRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
+import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
   TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
@@ -95,7 +95,9 @@ instance ProgramSym JavaCode where
   prog n fs = getPutReturnList (map (zoom lensGStoFS) fs) (addProgNameToPaths n)
     (on1CodeValue1List (\end -> progD n . map (packageDocD n end)) endStatement)
 
-instance RenderSym JavaCode where
+instance RenderSym JavaCode
+
+instance FileSym JavaCode where
   type RenderFile JavaCode = FileData 
   fileDoc = G.fileDoc Combined jExt top bottom
 

@@ -9,7 +9,7 @@ module GOOL.Drasil.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
+import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
   TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
@@ -93,7 +93,9 @@ instance ProgramSym PythonCode where
   type Program PythonCode = ProgData 
   prog n = onStateList (onCodeList (progD n)) . map (zoom lensGStoFS)
 
-instance RenderSym PythonCode where
+instance RenderSym PythonCode
+
+instance FileSym PythonCode where
   type RenderFile PythonCode = FileData
   fileDoc = G.fileDoc Combined pyExt top bottom
 

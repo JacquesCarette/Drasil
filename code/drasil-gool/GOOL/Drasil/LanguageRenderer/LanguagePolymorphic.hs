@@ -30,8 +30,8 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..),
-  RenderSym(RenderFile, commentedMod), BlockSym(Block), InternalBlock(..), 
+import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
+  FileSym(RenderFile, commentedMod), BlockSym(Block), InternalBlock(..), 
   BodySym(Body, body, bodyStatements, bodyDoc), PermanenceSym(..), 
   InternalPerm(..), 
   TypeSym(Type, infile, outfile, iterator, getType, getTypeDoc, getTypeString), 

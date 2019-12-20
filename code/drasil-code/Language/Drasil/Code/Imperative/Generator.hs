@@ -17,13 +17,13 @@ import Language.Drasil.Chunk.Code (programName)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Visibility(..))
 
-import GOOL.Drasil (ProgramSym(..), RenderSym(..), ProgData(..), GS, FS, 
-  initialState)
+import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), 
+  GS, FS, initialState, unCI)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
   getCurrentDirectory)
 import Control.Monad.Reader (Reader, ask, runReader)
-import Control.Monad.State (evalState, execState)
+import Control.Monad.State (evalState, runState)
 
 generator :: String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator dt sd chs spec = DrasilState {
@@ -69,9 +69,11 @@ genPackage :: (ProgramSym progRepr, PackageSym packRepr) =>
   Reader DrasilState (packRepr (Package packRepr))
 genPackage unRepr = do
   g <- ask
+  ci <- genProgram
   p <- genProgram
-  let s = execState p initialState
-      pd = unRepr $ evalState p initialState
+  let info = unCI $ evalState ci initialState
+      (reprPD, s) = runState p info
+      pd = unRepr reprPD
       n = case codeSpec g of CodeSpec {program = pr} -> programName pr
       m = makefile (commented g) s pd
   i <- genSampleInput
@@ -86,7 +88,7 @@ genProgram = do
   let n = case codeSpec g of CodeSpec {program = p} -> programName p
   return $ prog n ms
           
-genModules :: (RenderSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
+genModules :: (ProgramSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
 genModules = do
   g <- ask
   let s = csi $ codeSpec g

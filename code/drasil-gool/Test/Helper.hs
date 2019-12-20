@@ -1,15 +1,15 @@
 module Test.Helper (helper) where
 
 import GOOL.Drasil (
-  RenderSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
+  ProgramSym, FileSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
   StatementSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
   ScopeSym(..), ParameterSym(..), MethodSym(..), ModuleSym(..), FS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-helper :: (RenderSym repr) => FS (repr (RenderFile repr))
+helper :: (ProgramSym repr) => FS (repr (RenderFile repr))
 helper = fileDoc (buildModule "Helper" [] [doubleAndAdd] [])
 
-doubleAndAdd :: (RenderSym repr) => MS (repr (Method repr))
+doubleAndAdd :: (ProgramSym repr) => MS (repr (Method repr))
 doubleAndAdd = docFunc "This function adds two numbers" 
   ["First number to add", "Second number to add"] (Just "Sum") $ 
   function "doubleAndAdd"  public static_ float

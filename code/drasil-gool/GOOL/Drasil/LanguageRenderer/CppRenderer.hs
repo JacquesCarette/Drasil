@@ -11,7 +11,7 @@ module GOOL.Drasil.LanguageRenderer.CppRenderer (
 import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
+import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
   TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
@@ -104,7 +104,9 @@ instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
     p1 <- prog n $ map toState sm ++ map toState fm
     toState $ pair p1 (toCode emptyProg)
 
-instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode)
+
+instance (Pair p) => FileSym (p CppSrcCode CppHdrCode) where
   type RenderFile (p CppSrcCode CppHdrCode) = FileData
   fileDoc = pair1 fileDoc fileDoc
 
@@ -894,8 +896,10 @@ instance Monad CppSrcCode where
 instance ProgramSym CppSrcCode where
   type Program CppSrcCode = ProgData
   prog n = onStateList (onCodeList (progD n)) . map (zoom lensGStoFS)
+
+instance RenderSym CppSrcCode
   
-instance RenderSym CppSrcCode where
+instance FileSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
   fileDoc = G.fileDoc Source cppSrcExt top bottom
 
@@ -1478,7 +1482,9 @@ instance Monad CppHdrCode where
   return = CPPHC
   CPPHC x >>= f = f x
 
-instance RenderSym CppHdrCode where
+instance RenderSym CppHdrCode
+
+instance FileSym CppHdrCode where
   type RenderFile CppHdrCode = FileData
   fileDoc = G.fileDoc Header cppHdrExt top bottom
   

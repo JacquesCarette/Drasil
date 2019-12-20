@@ -10,7 +10,7 @@ module GOOL.Drasil.LanguageRenderer.CSharpRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..), 
+import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), PermanenceSym(..), InternalPerm(..), 
   BodySym(..), BlockSym(..), InternalBlock(..), ControlBlockSym(..), 
   TypeSym(..), InternalType(..), UnaryOpSym(..), BinaryOpSym(..), 
@@ -95,7 +95,9 @@ instance ProgramSym CSharpCode where
   type Program CSharpCode = ProgData
   prog n = onStateList (onCodeList (progD n)) . map (zoom lensGStoFS)
 
-instance RenderSym CSharpCode where
+instance RenderSym CSharpCode
+
+instance FileSym CSharpCode where
   type RenderFile CSharpCode = FileData
   fileDoc = G.fileDoc Combined csExt top bottom
 

@@ -35,7 +35,7 @@ module GOOL.Drasil.LanguageRenderer (
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, Library, RenderSym(..), BodySym(..), 
+import GOOL.Drasil.Symantics (Label, Library, RenderSym, BodySym(..), 
   PermanenceSym(..), InternalPerm(..), TypeSym(Type, getType, getTypeDoc), 
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
@@ -655,7 +655,7 @@ moduleDox desc as date m = (doxFile ++ m) :
 commentedModD :: FileData -> Doc -> FileData
 commentedModD m cmt = updateFileMod (updateModDoc (commentedItem cmt) (fileMod m)) m
 
-docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
+docFuncRepr :: (RenderSym repr) => String -> [String] -> [String] -> 
   MS (repr (Method repr)) -> MS (repr (Method repr))
 docFuncRepr desc pComms rComms = commentedFunc (docComment $ onStateValue 
   (\ps -> functionDox desc (zip ps pComms) rComms) getParameters)

@@ -1,7 +1,7 @@
 module Test.Observer (observer, observerName, printNum, x) where
 
 import GOOL.Drasil (
-  RenderSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
+  ProgramSym, FileSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
   StatementSym(..), VariableSym(..), ValueSym(..), ScopeSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), GS, FS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
@@ -11,7 +11,7 @@ observerName = "Observer"
 observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
-observer :: (RenderSym repr) => FS (repr (RenderFile repr))
+observer :: (ProgramSym repr) => FS (repr (RenderFile repr))
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 

@@ -5,13 +5,13 @@
 #ifndef InputParameters_h
 #define InputParameters_h
 
-#include <string>
-#include <vector>
+#define _USE_MATH_DEFINES
 
-using std::string;
-using std::vector;
+#include <math.h>
+#include <string>
+
 using std::ifstream;
-using std::ofstream;
+using std::string;
 
 /** \brief Structure for holding the input values
 */

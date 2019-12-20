@@ -1,10 +1,8 @@
 ## \file Calculations.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides functions for calculating the outputs
-import sys
 import math
 
-import InputParameters
 import Interpolation
 
 ## \brief Calculates stress distribution factor (Function) based on Pbtol

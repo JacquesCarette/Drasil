@@ -5,13 +5,13 @@
 #ifndef ReadTable_h
 #define ReadTable_h
 
-#include <string>
 #include <vector>
+#include <string>
 
-using std::string;
-using std::vector;
 using std::ifstream;
 using std::ofstream;
+using std::vector;
+using std::string;
 
 /** \brief Reads glass ASTM data from a file with the given file name
     \param filename name of the input file

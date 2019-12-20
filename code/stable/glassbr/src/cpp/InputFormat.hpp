@@ -6,14 +6,12 @@
 #define InputFormat_h
 
 #include <string>
-#include <vector>
-
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
 
 #include "InputParameters.hpp"
+
+using std::ifstream;
+using std::ofstream;
+using std::string;
 
 /** \brief Reads input from a file with the given file name
     \param inParams structure holding the input values

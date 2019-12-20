@@ -4,12 +4,9 @@ package SWHS;
     \author Thulasi Jegatheesan
     \brief Provides the function for writing outputs
 */
-import java.util.Arrays;
-import java.util.Scanner;
-import java.io.PrintWriter;
-import java.io.FileWriter;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class OutputFormat {
     

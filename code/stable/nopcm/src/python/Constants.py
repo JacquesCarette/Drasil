@@ -1,9 +1,6 @@
 ## \file Constants.py
 # \author Thulasi Jegatheesan
 # \brief Provides the structure for holding constant values
-import sys
-import math
-
 ## \brief Structure for holding the constant values
 class Constants:
     L_min = 0.1

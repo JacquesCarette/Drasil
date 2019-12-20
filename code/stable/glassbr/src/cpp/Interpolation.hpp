@@ -5,15 +5,12 @@
 #ifndef Interpolation_h
 #define Interpolation_h
 
-#include <string>
 #include <vector>
+#include <string>
 
-using std::string;
 using std::vector;
-using std::ifstream;
+using std::string;
 using std::ofstream;
-
-#include "ReadTable.hpp"
 
 /** \brief Performs linear interpolation
     \param x_1 lower x-coordinate

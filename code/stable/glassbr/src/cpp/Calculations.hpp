@@ -6,15 +6,11 @@
 #define Calculations_h
 
 #include <string>
-#include <vector>
-
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
 
 #include "InputParameters.hpp"
-#include "Interpolation.hpp"
+
+using std::string;
+using std::ofstream;
 
 /** \brief Calculates stress distribution factor (Function) based on Pbtol
     \param inParams structure holding the input values

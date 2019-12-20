@@ -2,11 +2,10 @@
 # \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
 # \brief Controls the flow of the program
 import sys
-import math
 
-import InputParameters
 import OutputFormat
 import Calculations
+import InputParameters
 
 filename = sys.argv[1]
 inParams = InputParameters.InputParameters(filename)

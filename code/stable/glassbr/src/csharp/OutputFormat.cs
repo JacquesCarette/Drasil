@@ -2,9 +2,8 @@
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides the function for writing outputs
 */
-using System;
 using System.IO;
-using System.Collections.Generic;
+using System;
 
 public class OutputFormat {
     

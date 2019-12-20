@@ -1,20 +1,15 @@
-#include "ReadTable.hpp"
-
-#define _USE_MATH_DEFINES
-#include <algorithm>
+#include <sstream>
 #include <iostream>
 #include <fstream>
-#include <iterator>
-#include <string>
-#include <math.h>
-#include <sstream>
-#include <limits>
 #include <vector>
+#include <string>
 
-using std::string;
-using std::vector;
+#include "ReadTable.hpp"
+
 using std::ifstream;
 using std::ofstream;
+using std::vector;
+using std::string;
 
 void func_read_table(string filename, vector<double> &z_vector, vector<vector<double>> &x_matrix, vector<vector<double>> &y_matrix) {
     ofstream outfile;

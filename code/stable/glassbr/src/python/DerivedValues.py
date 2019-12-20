@@ -1,10 +1,7 @@
 ## \file DerivedValues.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides the function for calculating derived values
-import sys
 import math
-
-import InputParameters
 
 ## \brief Calculates values that can be immediately derived from the inputs
 # \param inParams structure holding the input values

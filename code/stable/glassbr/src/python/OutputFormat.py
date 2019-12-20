@@ -1,9 +1,6 @@
 ## \file OutputFormat.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides the function for writing outputs
-import sys
-import math
-
 ## \brief Writes the output values to output.txt
 # \param is_safePb probability of glass breakage safety requirement
 # \param is_safeLR 3 second load equivalent resistance safety requirement

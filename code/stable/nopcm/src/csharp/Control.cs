@@ -2,10 +2,6 @@
     \author Thulasi Jegatheesan
     \brief Controls the flow of the program
 */
-using System;
-using System.IO;
-using System.Collections.Generic;
-
 public class Control {
     
     /** \brief Controls the flow of the program

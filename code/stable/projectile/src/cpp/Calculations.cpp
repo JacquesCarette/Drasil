@@ -1,22 +1,10 @@
-#include "Calculations.hpp"
-
-#define _USE_MATH_DEFINES
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <iterator>
 #include <string>
 #include <math.h>
-#include <sstream>
-#include <limits>
-#include <vector>
+
+#include "Calculations.hpp"
+#include "InputParameters.hpp"
 
 using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
-
-#include "InputParameters.hpp"
 
 double func_t_flight(InputParameters &inParams, double g_vect) {
     return 2 * inParams.v_launch * sin(inParams.theta) / g_vect;

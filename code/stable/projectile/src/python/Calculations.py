@@ -1,10 +1,7 @@
 ## \file Calculations.py
 # \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
 # \brief Provides functions for calculating the outputs
-import sys
 import math
-
-import InputParameters
 
 ## \brief Calculates flight duration: the time when the projectile lands (s)
 # \param inParams structure holding the input values

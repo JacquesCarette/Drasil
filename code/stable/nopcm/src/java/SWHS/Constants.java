@@ -4,13 +4,6 @@ package SWHS;
     \author Thulasi Jegatheesan
     \brief Provides the structure for holding constant values
 */
-import java.util.Arrays;
-import java.util.Scanner;
-import java.io.PrintWriter;
-import java.io.FileWriter;
-import java.io.File;
-import java.util.ArrayList;
-
 /** \brief Structure for holding the constant values
 */
 public class Constants {

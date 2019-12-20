@@ -4,12 +4,8 @@ package Projectile;
     \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
     \brief Provides the structure for holding input values
 */
-import java.util.Arrays;
-import java.util.Scanner;
-import java.io.PrintWriter;
-import java.io.FileWriter;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Scanner;
 
 /** \brief Structure for holding the input values
 */

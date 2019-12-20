@@ -6,14 +6,10 @@
 #define Calculations_h
 
 #include <string>
-#include <vector>
-
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
 
 #include "InputParameters.hpp"
+
+using std::string;
 
 /** \brief Calculates flight duration: the time when the projectile lands (s)
     \param inParams structure holding the input values

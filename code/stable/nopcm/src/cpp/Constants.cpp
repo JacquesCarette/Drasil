@@ -1,21 +1,5 @@
 #include "Constants.hpp"
 
-#define _USE_MATH_DEFINES
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <iterator>
-#include <string>
-#include <math.h>
-#include <sstream>
-#include <limits>
-#include <vector>
-
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
-
 const double Constants::L_min = 0.1;
 const double Constants::L_max = 50;
 const double Constants::rho_W_min = 950;

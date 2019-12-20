@@ -2,28 +2,19 @@
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Controls the flow of the program
 */
-#define _USE_MATH_DEFINES
-#include <algorithm>
 #include <iostream>
-#include <fstream>
-#include <iterator>
 #include <string>
-#include <math.h>
-#include <sstream>
-#include <limits>
-#include <vector>
+#include <fstream>
 
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
-
-#include "InputParameters.hpp"
-#include "InputFormat.hpp"
-#include "DerivedValues.hpp"
-#include "InputConstraints.hpp"
 #include "OutputFormat.hpp"
 #include "Calculations.hpp"
+#include "InputConstraints.hpp"
+#include "DerivedValues.hpp"
+#include "InputFormat.hpp"
+#include "InputParameters.hpp"
+
+using std::string;
+using std::ofstream;
 
 /** \brief Controls the flow of the program
     \param argc Number of command-line arguments

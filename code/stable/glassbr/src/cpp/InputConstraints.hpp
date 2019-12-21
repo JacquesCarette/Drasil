@@ -9,8 +9,8 @@
 
 #include "InputParameters.hpp"
 
-using std::string;
 using std::ofstream;
+using std::string;
 
 /** \brief Verifies that input values satisfy the physical constraints and software constraints
     \param inParams structure holding the input values

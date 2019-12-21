@@ -4,9 +4,9 @@
 */
 #include <string>
 
-#include "OutputFormat.hpp"
 #include "Calculations.hpp"
 #include "InputParameters.hpp"
+#include "OutputFormat.hpp"
 
 using std::string;
 

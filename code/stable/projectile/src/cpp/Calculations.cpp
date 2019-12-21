@@ -1,7 +1,8 @@
-#include <string>
-#include <math.h>
-
 #include "Calculations.hpp"
+
+#include <math.h>
+#include <string>
+
 #include "InputParameters.hpp"
 
 using std::string;

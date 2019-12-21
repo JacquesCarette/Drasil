@@ -3,9 +3,9 @@
 # \brief Controls the flow of the program
 import sys
 
-import OutputFormat
 import Calculations
 import InputParameters
+import OutputFormat
 
 filename = sys.argv[1]
 inParams = InputParameters.InputParameters(filename)

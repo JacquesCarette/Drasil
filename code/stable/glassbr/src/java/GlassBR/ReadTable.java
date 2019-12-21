@@ -4,12 +4,12 @@ package GlassBR;
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides a function for reading glass ASTM data
 */
-import java.util.Arrays;
-import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class ReadTable {
     

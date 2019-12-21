@@ -1,8 +1,8 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-
 #include "OutputFormat.hpp"
+
+#include <fstream>
+#include <iostream>
+#include <string>
 
 using std::ofstream;
 using std::string;

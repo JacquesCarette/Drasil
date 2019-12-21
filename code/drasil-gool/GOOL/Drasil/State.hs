@@ -19,6 +19,7 @@ import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
 import Control.Monad.State (State, get, put, gets)
+import Data.List (sort)
 import Data.Maybe (isNothing)
 import Data.Map (Map, fromList, empty, union)
 
@@ -201,14 +202,14 @@ setMainMod n = over mainMod (\m -> if isNothing m then Just n else error
 
 addLangImport :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
 addLangImport i = over _2 $ over langImports (\is -> if i `elem` is then is 
-  else i:is)
+  else sort $ i:is)
 
 getLangImports :: FS [String]
 getLangImports = gets ((^. langImports) . snd)
 
 addModuleImport :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
 addModuleImport i = over _2 $ over moduleImports (\is -> if i `elem` is then is 
-  else i:is)
+  else sort $ i:is)
 
 getModuleImports :: FS [String]
 getModuleImports = gets ((^. moduleImports) . snd)
@@ -216,7 +217,7 @@ getModuleImports = gets ((^. moduleImports) . snd)
 addHeaderLangImport :: String -> (GOOLState, FileState) -> (GOOLState, 
   FileState)
 addHeaderLangImport i = over _2 $ over headerLangImports (\is -> if i `elem` is 
-  then is else i:is)
+  then is else sort $ i:is)
 
 getHeaderLangImports :: FS [String]
 getHeaderLangImports = gets ((^. headerLangImports) . snd)
@@ -224,33 +225,35 @@ getHeaderLangImports = gets ((^. headerLangImports) . snd)
 addHeaderModImport :: String -> (GOOLState, FileState) -> (GOOLState, 
   FileState)
 addHeaderModImport i = over _2 $ over headerModImports (\is -> if i `elem` is 
-  then is else i:is)
+  then is else sort $ i:is)
 
 getHeaderModImports :: FS [String]
 getHeaderModImports = gets ((^. headerModImports) . snd)
 
 addDefine :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
-addDefine d = over _2 $ over defines (\ds -> if d `elem` ds then ds else d:ds)
+addDefine d = over _2 $ over defines (\ds -> if d `elem` ds then ds else 
+  sort $ d:ds)
 
 getDefines :: FS [String]
 getDefines = gets ((^. defines) . snd)
   
 addHeaderDefine :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
 addHeaderDefine d = over _2 $ over headerDefines (\ds -> if d `elem` ds then ds 
-  else d:ds)
+  else sort $ d:ds)
 
 getHeaderDefines :: FS [String]
 getHeaderDefines = gets ((^. headerDefines) . snd)
 
 addUsing :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
-addUsing u = over _2 $ over using (\us -> if u `elem` us then us else u:us)
+addUsing u = over _2 $ over using (\us -> if u `elem` us then us else 
+  sort $ u:us)
 
 getUsing :: FS [String]
 getUsing = gets ((^. using) . snd)
 
 addHeaderUsing :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
 addHeaderUsing u = over _2 $ over headerUsing (\us -> if u `elem` us then us 
-  else u:us)
+  else sort $ u:us)
 
 getHeaderUsing :: FS [String]
 getHeaderUsing = gets ((^. headerUsing) . snd)

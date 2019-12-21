@@ -2,19 +2,19 @@
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Controls the flow of the program
 */
+#include <fstream>
 #include <iostream>
 #include <string>
-#include <fstream>
 
-#include "OutputFormat.hpp"
 #include "Calculations.hpp"
-#include "InputConstraints.hpp"
 #include "DerivedValues.hpp"
+#include "InputConstraints.hpp"
 #include "InputFormat.hpp"
 #include "InputParameters.hpp"
+#include "OutputFormat.hpp"
 
-using std::string;
 using std::ofstream;
+using std::string;
 
 /** \brief Controls the flow of the program
     \param argc Number of command-line arguments

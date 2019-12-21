@@ -1,12 +1,13 @@
+#include "InputConstraints.hpp"
+
+#include <fstream>
 #include <iostream>
 #include <string>
-#include <fstream>
 
-#include "InputConstraints.hpp"
 #include "InputParameters.hpp"
 
-using std::string;
 using std::ofstream;
+using std::string;
 
 void input_constraints(InputParameters &inParams) {
     ofstream outfile;

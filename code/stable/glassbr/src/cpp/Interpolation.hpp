@@ -5,12 +5,12 @@
 #ifndef Interpolation_h
 #define Interpolation_h
 
-#include <vector>
 #include <string>
+#include <vector>
 
-using std::vector;
-using std::string;
 using std::ofstream;
+using std::string;
+using std::vector;
 
 /** \brief Performs linear interpolation
     \param x_1 lower x-coordinate

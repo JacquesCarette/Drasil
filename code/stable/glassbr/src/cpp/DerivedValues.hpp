@@ -9,8 +9,8 @@
 
 #include "InputParameters.hpp"
 
-using std::string;
 using std::ofstream;
+using std::string;
 
 /** \brief Calculates values that can be immediately derived from the inputs
     \param inParams structure holding the input values

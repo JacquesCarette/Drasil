@@ -1,11 +1,11 @@
-#include <iostream>
-#include <string>
-#include <fstream>
-
 #include "OutputFormat.hpp"
 
-using std::string;
+#include <fstream>
+#include <iostream>
+#include <string>
+
 using std::ofstream;
+using std::string;
 
 void write_output(bool is_safePb, bool is_safeLR, double P_b) {
     ofstream outfile;

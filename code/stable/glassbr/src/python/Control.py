@@ -3,12 +3,12 @@
 # \brief Controls the flow of the program
 import sys
 
-import OutputFormat
 import Calculations
-import InputConstraints
 import DerivedValues
+import InputConstraints
 import InputFormat
 import InputParameters
+import OutputFormat
 
 filename = sys.argv[1]
 outfile = open("log.txt", "a")

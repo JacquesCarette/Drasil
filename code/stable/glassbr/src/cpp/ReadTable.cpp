@@ -1,15 +1,15 @@
-#include <sstream>
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
-
 #include "ReadTable.hpp"
+
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 using std::ifstream;
 using std::ofstream;
-using std::vector;
 using std::string;
+using std::vector;
 
 void func_read_table(string filename, vector<double> &z_vector, vector<vector<double>> &x_matrix, vector<vector<double>> &y_matrix) {
     ofstream outfile;

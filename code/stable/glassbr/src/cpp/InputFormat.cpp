@@ -1,10 +1,11 @@
+#include "InputFormat.hpp"
+
 #include <algorithm>
-#include <limits>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <limits>
 #include <string>
 
-#include "InputFormat.hpp"
 #include "InputParameters.hpp"
 
 using std::ifstream;

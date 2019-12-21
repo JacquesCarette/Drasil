@@ -7,8 +7,8 @@
 
 #include <string>
 
-using std::string;
 using std::ofstream;
+using std::string;
 
 /** \brief Writes the output values to output.txt
     \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)

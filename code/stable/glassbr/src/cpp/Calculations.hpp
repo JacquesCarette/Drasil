@@ -9,8 +9,8 @@
 
 #include "InputParameters.hpp"
 
-using std::string;
 using std::ofstream;
+using std::string;
 
 /** \brief Calculates stress distribution factor (Function) based on Pbtol
     \param inParams structure holding the input values

@@ -4,10 +4,10 @@ package GlassBR;
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides functions for linear interpolation on three-dimensional data
 */
-import java.util.ArrayList;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class Interpolation {
     

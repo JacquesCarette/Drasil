@@ -10,8 +10,8 @@ module GOOL.Drasil.State (
   getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines,
   addUsing, getUsing, addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, 
   setModuleName, getModuleName, setCurrMain, getCurrMain, addClass, getClasses, 
-  updateClassMap, getClassMap, addParameter, getParameters, setScope, getScope, 
-  setCurrMainFunc, getCurrMainFunc
+  updateClassMap, getClassMap, addParameter, getParameters, setOutputsDeclared, 
+  isOutputsDeclared, setScope, getScope, setCurrMainFunc, getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
@@ -33,6 +33,9 @@ makeLenses ''GOOLState
 
 data MethodState = MS {
   _currParameters :: [String],
+
+  -- Only used for Java
+  _outputsDeclared :: Bool,
   
   -- Only used for C++
   _currScope :: ScopeTag,
@@ -128,6 +131,8 @@ initialMS :: MethodState
 initialMS = MS {
   _currParameters = [],
 
+  _outputsDeclared = False,
+
   _currScope = Priv,
   _currMainFunc = False
 }
@@ -200,60 +205,66 @@ setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
   "Multiple modules with main methods encountered")
 
-addLangImport :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
-addLangImport i = over _2 $ over langImports (\is -> if i `elem` is then is 
-  else sort $ i:is)
+addLangImport :: String -> ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+addLangImport i = over _1 $ over _2 $ over langImports (\is -> if i `elem` is 
+  then is else sort $ i:is)
 
 getLangImports :: FS [String]
 getLangImports = gets ((^. langImports) . snd)
 
-addModuleImport :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
-addModuleImport i = over _2 $ over moduleImports (\is -> if i `elem` is then is 
-  else sort $ i:is)
+addModuleImport :: String -> ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+addModuleImport i = over _1 $ over _2 $ over moduleImports (\is -> 
+  if i `elem` is then is else sort $ i:is)
 
 getModuleImports :: FS [String]
 getModuleImports = gets ((^. moduleImports) . snd)
 
-addHeaderLangImport :: String -> (GOOLState, FileState) -> (GOOLState, 
-  FileState)
-addHeaderLangImport i = over _2 $ over headerLangImports (\is -> if i `elem` is 
-  then is else sort $ i:is)
+addHeaderLangImport :: String -> ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+addHeaderLangImport i = over _1 $ over _2 $ over headerLangImports (\is -> 
+  if i `elem` is then is else sort $ i:is)
 
 getHeaderLangImports :: FS [String]
 getHeaderLangImports = gets ((^. headerLangImports) . snd)
 
-addHeaderModImport :: String -> (GOOLState, FileState) -> (GOOLState, 
-  FileState)
-addHeaderModImport i = over _2 $ over headerModImports (\is -> if i `elem` is 
-  then is else sort $ i:is)
+addHeaderModImport :: String -> ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+addHeaderModImport i = over _1 $ over _2 $ over headerModImports (\is -> 
+  if i `elem` is then is else sort $ i:is)
 
 getHeaderModImports :: FS [String]
 getHeaderModImports = gets ((^. headerModImports) . snd)
 
-addDefine :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
-addDefine d = over _2 $ over defines (\ds -> if d `elem` ds then ds else 
-  sort $ d:ds)
+addDefine :: String -> ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+addDefine d = over _1 $ over _2 $ over defines (\ds -> if d `elem` ds then ds 
+  else sort $ d:ds)
 
 getDefines :: FS [String]
 getDefines = gets ((^. defines) . snd)
   
-addHeaderDefine :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
-addHeaderDefine d = over _2 $ over headerDefines (\ds -> if d `elem` ds then ds 
-  else sort $ d:ds)
+addHeaderDefine :: String -> ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+addHeaderDefine d = over _1 $ over _2 $ over headerDefines (\ds -> 
+  if d `elem` ds then ds else sort $ d:ds)
 
 getHeaderDefines :: FS [String]
 getHeaderDefines = gets ((^. headerDefines) . snd)
 
-addUsing :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
-addUsing u = over _2 $ over using (\us -> if u `elem` us then us else 
+addUsing :: String -> ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+addUsing u = over _1 $ over _2 $ over using (\us -> if u `elem` us then us else 
   sort $ u:us)
 
 getUsing :: FS [String]
 getUsing = gets ((^. using) . snd)
 
-addHeaderUsing :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
-addHeaderUsing u = over _2 $ over headerUsing (\us -> if u `elem` us then us 
-  else sort $ u:us)
+addHeaderUsing :: String -> ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+addHeaderUsing u = over _1 $ over _2 $ over headerUsing (\us -> if u `elem` us 
+  then us else sort $ u:us)
 
 getHeaderUsing :: FS [String]
 getHeaderUsing = gets ((^. headerUsing) . snd)
@@ -289,8 +300,8 @@ updateClassMap :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
 updateClassMap n (gs, fs) = over _1 (over classMap (union (fromList $ 
   zip (repeat n) (fs ^. currClasses)))) (gs, fs)
 
-getClassMap :: GS (Map String String)
-getClassMap = gets (^. classMap)
+getClassMap :: MS (Map String String)
+getClassMap = gets ((^. classMap) . fst . fst)
 
 addParameter :: String -> ((GOOLState, FileState), MethodState) -> 
   ((GOOLState, FileState), MethodState)
@@ -299,6 +310,13 @@ addParameter p = over _2 $ over currParameters (\ps -> if p `elem` ps then
 
 getParameters :: MS [String]
 getParameters = gets ((^. currParameters) . snd)
+
+setOutputsDeclared :: ((GOOLState, FileState), MethodState) -> 
+  ((GOOLState, FileState), MethodState)
+setOutputsDeclared = over _2 $ set outputsDeclared True
+
+isOutputsDeclared :: MS Bool
+isOutputsDeclared = gets ((^. outputsDeclared) . snd)
 
 setScope :: ScopeTag -> ((GOOLState, FileState), MethodState) -> 
   ((GOOLState, FileState), MethodState)

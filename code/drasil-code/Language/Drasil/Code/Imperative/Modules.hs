@@ -71,7 +71,7 @@ genMainFunc = do
       catMaybes [ip, co] ++ ics ++ catMaybes (varDef ++ [wo])
 
 getInputDecl :: (ProgramSym repr) => Reader DrasilState 
-  (Maybe (FS (repr (Statement repr))))
+  (Maybe (MS (repr (Statement repr))))
 getInputDecl = do
   g <- ask
   v_params <- mkVar (codevar inParams)
@@ -94,7 +94,7 @@ getInputDecl = do
     . codeName) (inputs $ csi $ codeSpec g))
 
 initConsts :: (ProgramSym repr) => Reader DrasilState 
-  (Maybe (FS (repr (Statement repr))))
+  (Maybe (MS (repr (Statement repr))))
 initConsts = do
   g <- ask
   v_consts <- mkVar (codevar consts)
@@ -119,7 +119,7 @@ initConsts = do
   getDecl (partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
     . codeName) (constants $ csi $ codeSpec g)) (conStruct g)
 
-initLogFileVar :: (ProgramSym repr) => Logging -> [FS (repr (Statement repr))]
+initLogFileVar :: (ProgramSym repr) => Logging -> [MS (repr (Statement repr))]
 initLogFileVar LogVar = [varDec varLogFile]
 initLogFileVar LogAll = [varDec varLogFile]
 initLogFileVar _ = []
@@ -164,7 +164,7 @@ genInputModCombined = do
   liftS $ genMod ic
 
 constVarFunc :: (ProgramSym repr) => ConstantRepr -> String ->
-  (FS (repr (Variable repr)) -> FS (repr (Value repr)) -> 
+  (MS (repr (Variable repr)) -> MS (repr (Value repr)) -> 
   FS (repr (StateVar repr)))
 constVarFunc Var n = stateVarDef n public dynamic_
 constVarFunc Const n = constVar n public
@@ -262,14 +262,14 @@ genInputConstraints s = do
   genConstraints $ Map.lookup "input_constraints" (defMap $ codeSpec g)
 
 sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr) 
-  => [(q,[Constraint])] -> Reader DrasilState [FS (repr (Statement repr))]
+  => [(q,[Constraint])] -> Reader DrasilState [MS (repr (Statement repr))]
 sfwrCBody cs = do
   g <- ask
   let cb = onSfwrC g
   chooseConstr cb cs
 
 physCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr) 
-  => [(q,[Constraint])] -> Reader DrasilState [FS (repr (Statement repr))]
+  => [(q,[Constraint])] -> Reader DrasilState [MS (repr (Statement repr))]
 physCBody cs = do
   g <- ask
   let cb = onPhysC g
@@ -277,7 +277,7 @@ physCBody cs = do
 
 chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, 
   ProgramSym repr) => ConstraintBehaviour -> [(q,[Constraint])] -> 
-  Reader DrasilState [FS (repr (Statement repr))]
+  Reader DrasilState [MS (repr (Statement repr))]
 chooseConstr Warning   cs = do
   checks <- mapM constrWarn cs
   return $ concat checks
@@ -286,7 +286,7 @@ chooseConstr Exception cs = do
   return $ concat checks
 
 constrWarn :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr)
-  => (q,[Constraint]) -> Reader DrasilState [FS (repr (Statement repr))]
+  => (q,[Constraint]) -> Reader DrasilState [MS (repr (Statement repr))]
 constrWarn c = do
   let q = fst c
       cs = snd c
@@ -296,7 +296,7 @@ constrWarn c = do
     printStr "Warning: " : m)]) conds msgs
 
 constrExc :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr) 
-  => (q,[Constraint]) -> Reader DrasilState [FS (repr (Statement repr))]
+  => (q,[Constraint]) -> Reader DrasilState [MS (repr (Statement repr))]
 constrExc c = do
   let q = fst c
       cs = snd c
@@ -307,7 +307,7 @@ constrExc c = do
 
 constraintViolatedMsg :: (CodeIdea q, HasUID q, HasCodeType q, ProgramSym repr) 
   => q -> String -> Constraint -> Reader DrasilState 
-  [FS (repr (Statement repr))]
+  [MS (repr (Statement repr))]
 constraintViolatedMsg q s c = do
   pc <- printConstraint c 
   v <- mkVal q
@@ -316,12 +316,12 @@ constraintViolatedMsg q s c = do
     printStr $ " but " ++ s ++ " to be "] ++ pc
 
 printConstraint :: (ProgramSym repr) => Constraint -> 
-  Reader DrasilState [FS (repr (Statement repr))]
+  Reader DrasilState [MS (repr (Statement repr))]
 printConstraint c = do
   g <- ask
   let db = sysinfodb $ csi $ codeSpec g
       printConstraint' :: (ProgramSym repr) => Constraint -> Reader DrasilState 
-        [FS (repr (Statement repr))]
+        [MS (repr (Statement repr))]
       printConstraint' (Range _ (Bounded (_,e1) (_,e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
@@ -342,7 +342,7 @@ printConstraint c = do
         printStrLn $ "one of: " ++ intercalate ", " ss]
   printConstraint' c
 
-printExpr :: (ProgramSym repr) => Expr -> ChunkDB -> [FS (repr (Statement repr))]
+printExpr :: (ProgramSym repr) => Expr -> ChunkDB -> [MS (repr (Statement repr))]
 printExpr (Dbl _) _ = []
 printExpr (Int _) _ = []
 printExpr e db = [printStr $ " (" ++ render (exprDoc db Implementation Linear e)

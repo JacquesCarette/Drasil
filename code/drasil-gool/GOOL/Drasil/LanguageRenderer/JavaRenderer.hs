@@ -771,7 +771,7 @@ jInOutCall f n ins outs both = fCall rets
         fCall [x] = assign x $ f n (onStateValue variableType x) 
           (map valueOf both ++ ins)
         fCall xs = isOutputsDeclared >>= (\odec -> modify setOutputsDeclared >>
-          (multi $ (if odec then assign else varDecDef) (var "outputs" 
+          multi ((if odec then assign else varDecDef) (var "outputs" 
           jArrayType) (f n jArrayType (map valueOf both ++ ins)) : 
           jAssignFromArray 0 xs))
 

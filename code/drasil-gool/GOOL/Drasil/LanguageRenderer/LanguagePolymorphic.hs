@@ -83,7 +83,7 @@ import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt,
   printDoc, returnDocD, getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, 
   enumDocD, enumElementsDocD, fileDoc', docFuncRepr, commentDocD, commentedItem,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, intValue)
-import GOOL.Drasil.State (FS, MS, lensFStoGS, lensFStoMS, currMain, modifyAfter, 
+import GOOL.Drasil.State (FS, MS, lensFStoGS, lensFStoMS, currMain, modifyAfter,
   modifyReturnFunc, modifyReturnFunc2, addFile, setMainMod, addLangImport, 
   getLangImports, getModuleImports, setFilePath, getFilePath, setModuleName, 
   getModuleName, addParameter)

@@ -107,12 +107,12 @@ instance VariableSym CodeInfo where
   staticVar _ _ = noInfo
   const _ _ = noInfo
   extVar _ _ _ = noInfo
-  self _ = noInfo
+  self = noInfo
   enumVar _ _ = noInfo
   classVar _ _ = noInfo
   extClassVar _ _ = noInfo
   objVar _ _ = noInfo
-  objVarSelf _ _ = noInfo
+  objVarSelf _ = noInfo
   listVar _ _ _ = noInfo
   listOf _ _ = noInfo
   iterVar _ _ = noInfo
@@ -187,7 +187,7 @@ instance BooleanExpression CodeInfo where
 instance ValueExpression CodeInfo where
   inlineIf _ _ _ = noInfo
   funcApp _ _ _ = noInfo
-  selfFuncApp _ _ _ _ = noInfo
+  selfFuncApp _ _ _ = noInfo
   extFuncApp _ _ _ _ = noInfo
   newObj _ _ = noInfo
   extNewObj _ _ _ = noInfo
@@ -199,7 +199,7 @@ instance Selector CodeInfo where
   objAccess _ _ = noInfo
   ($.) _ _ = noInfo
 
-  selfAccess _ _ = noInfo
+  selfAccess _ = noInfo
 
   listIndexExists _ _ = noInfo
   argExists _ = noInfo
@@ -299,7 +299,7 @@ instance StatementSym CodeInfo where
   addObserver _ = noInfo
 
   inOutCall _ _ _ _ = noInfo
-  selfInOutCall _ _ _ _ _ = noInfo
+  selfInOutCall _ _ _ _ = noInfo
   extInOutCall _ _ _ _ _ = noInfo
 
   multi _ = noInfo
@@ -342,13 +342,13 @@ instance ParameterSym CodeInfo where
 
 instance MethodSym CodeInfo where
   type Method CodeInfo = ()
-  method _ _ _ _ _ _ _ = noInfo
-  getMethod _ _ = noInfo
-  setMethod _ _ = noInfo
-  privMethod _ _ _ _ _ = noInfo
-  pubMethod _ _ _ _ _ = noInfo
-  constructor _ _ _ = noInfo
-  destructor _ _ = noInfo
+  method _ _ _ _ _ _ = noInfo
+  getMethod _ = noInfo
+  setMethod _ = noInfo
+  privMethod _ _ _ _ = noInfo
+  pubMethod _ _ _ _ = noInfo
+  constructor _ _ = noInfo
+  destructor _ = noInfo
 
   docMain _ = noInfo
 
@@ -357,9 +357,9 @@ instance MethodSym CodeInfo where
 
   docFunc _ _ _ _ = noInfo
 
-  inOutMethod _ _ _ _ _ _ _ _= noInfo
+  inOutMethod _ _ _ _ _ _ _= noInfo
 
-  docInOutMethod _ _ _ _ _ _ _ _ _ = noInfo
+  docInOutMethod _ _ _ _ _ _ _ _ = noInfo
 
   inOutFunc _ _ _ _ _ _ _ = noInfo
 

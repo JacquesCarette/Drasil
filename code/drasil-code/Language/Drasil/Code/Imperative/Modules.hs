@@ -223,7 +223,7 @@ genInputDerived s = do
   g <- ask
   let dvals = derivedInputs $ csi $ codeSpec g
       getFunc Pub = publicInOutFunc
-      getFunc Priv = privateInOutMethod "InputParameters"
+      getFunc Priv = privateInOutMethod
       genDerived :: (ProgramSym repr) => Maybe String -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
       genDerived Nothing = return Nothing
@@ -242,7 +242,7 @@ genInputConstraints s = do
   g <- ask
   let cm = cMap $ csi $ codeSpec g
       getFunc Pub = publicFunc
-      getFunc Priv = privateMethod "InputParameters"
+      getFunc Priv = privateMethod
       genConstraints :: (ProgramSym repr) => Maybe String -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
       genConstraints Nothing = return Nothing
@@ -354,7 +354,7 @@ genInputFormat s = do
   g <- ask
   dd <- genDataDesc
   let getFunc Pub = publicInOutFunc
-      getFunc Priv = privateInOutMethod "InputParameters"
+      getFunc Priv = privateInOutMethod
       genInFormat :: (ProgramSym repr) => Maybe String -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
       genInFormat Nothing = return Nothing

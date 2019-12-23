@@ -65,8 +65,8 @@ import GOOL.Drasil.Helpers (angles, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, lensGStoFS, modifyReturn, modifyReturnList, 
-  addProgNameToPaths, addLangImport, setCurrMain, setOutputsDeclared, 
-  isOutputsDeclared)
+  addProgNameToPaths, addLangImport, getClassName, setCurrMain, 
+  setOutputsDeclared, isOutputsDeclared)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -334,7 +334,7 @@ instance BooleanExpression JavaCode where
 instance ValueExpression JavaCode where
   inlineIf = G.inlineIf
   funcApp = G.funcApp
-  selfFuncApp c = G.selfFuncApp (self c)
+  selfFuncApp = G.selfFuncApp self
   extFuncApp = G.extFuncApp
   newObj = G.newObj newObjDocD
   extNewObj _ = newObj
@@ -499,7 +499,7 @@ instance StatementSym JavaCode where
   addObserver = G.addObserver
 
   inOutCall = jInOutCall funcApp
-  selfInOutCall c = jInOutCall (selfFuncApp c)
+  selfInOutCall = jInOutCall selfFuncApp
   extInOutCall m = jInOutCall (extFuncApp m)
 
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
@@ -556,8 +556,8 @@ instance MethodSym JavaCode where
   setMethod = G.setMethod
   privMethod = G.privMethod
   pubMethod = G.pubMethod
-  constructor n = G.constructor n n
-  destructor _ _ = error $ destructorError jName
+  constructor ps b = getClassName >>= (\n -> G.constructor n ps b)
+  destructor _ = error $ destructorError jName
 
   docMain = G.docMain
 
@@ -566,16 +566,16 @@ instance MethodSym JavaCode where
 
   docFunc = G.docFunc
 
-  inOutMethod n c = jInOut (method n c)
+  inOutMethod n = jInOut (method n)
 
-  docInOutMethod n c = jDocInOut (inOutMethod n c)
+  docInOutMethod n = jDocInOut (inOutMethod n)
 
   inOutFunc n = jInOut (function n)
     
   docInOutFunc n = jDocInOut (inOutFunc n)
 
 instance InternalMethod JavaCode where
-  intMethod m n _ s p t ps b = modify (if m then setCurrMain else id) >> 
+  intMethod m n s p t ps b = modify (if m then setCurrMain else id) >> 
     on3StateValues (\tp pms bd -> methodFromData Pub $ jMethod n s p tp pms bd) 
     t (sequence ps) b
   intFunc = G.intFunc

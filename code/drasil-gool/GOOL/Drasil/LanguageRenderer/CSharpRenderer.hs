@@ -65,7 +65,7 @@ import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, lensGStoFS, modifyReturn, addLangImport, 
-  setCurrMain)
+  getClassName, setCurrMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -333,7 +333,7 @@ instance BooleanExpression CSharpCode where
 instance ValueExpression CSharpCode where
   inlineIf = G.inlineIf
   funcApp = G.funcApp
-  selfFuncApp c = G.selfFuncApp (self c)
+  selfFuncApp = G.selfFuncApp self
   extFuncApp = G.extFuncApp
   newObj = G.newObj newObjDocD
   extNewObj _ = newObj
@@ -492,7 +492,7 @@ instance StatementSym CSharpCode where
   addObserver = G.addObserver
 
   inOutCall = csInOutCall funcApp
-  selfInOutCall c = csInOutCall (selfFuncApp c)
+  selfInOutCall = csInOutCall selfFuncApp
   extInOutCall m = csInOutCall (extFuncApp m)
 
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
@@ -549,8 +549,8 @@ instance MethodSym CSharpCode where
   setMethod = G.setMethod
   privMethod = G.privMethod
   pubMethod = G.pubMethod
-  constructor n = G.constructor n n
-  destructor _ _ = error $ destructorError csName
+  constructor ps b = getClassName >>= (\n -> G.constructor n ps b)
+  destructor _ = error $ destructorError csName
 
   docMain = G.docMain
  
@@ -559,16 +559,16 @@ instance MethodSym CSharpCode where
 
   docFunc = G.docFunc
 
-  inOutMethod n c = csInOut (method n c)
+  inOutMethod n = csInOut (method n)
 
-  docInOutMethod n c = G.docInOutFunc (inOutMethod n c)
+  docInOutMethod n = G.docInOutFunc (inOutMethod n)
 
   inOutFunc n = csInOut (function n)
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
 instance InternalMethod CSharpCode where
-  intMethod m n _ s p t ps b = modify (if m then setCurrMain else id) >> 
+  intMethod m n s p t ps b = modify (if m then setCurrMain else id) >> 
     on3StateValues (\tp pms bd -> methodFromData Pub $ methodDocD n s p tp pms 
     bd) t (sequence ps) b
   intFunc = G.intFunc

@@ -59,7 +59,7 @@ fApp m s t vl = do
   g <- ask
   let cm = currentModule g
   return $ if m /= cm then extFuncApp m s t vl else if Map.lookup s 
-    (eMap $ codeSpec g) == Just cm then funcApp s t vl else selfFuncApp m s t vl
+    (eMap $ codeSpec g) == Just cm then funcApp s t vl else selfFuncApp s t vl
 
 fAppInOut :: (ProgramSym repr) => String -> String -> [MS (repr (Value repr))] 
   -> [MS (repr (Variable repr))] -> [MS (repr (Variable repr))] -> 
@@ -69,7 +69,7 @@ fAppInOut m n ins outs both = do
   let cm = currentModule g
   return $ if m /= cm then extInOutCall m n ins outs both else if Map.lookup n
     (eMap $ codeSpec g) == Just cm then inOutCall n ins outs both else 
-    selfInOutCall m n ins outs both
+    selfInOutCall n ins outs both
 
 mkParam :: (ProgramSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Parameter repr))

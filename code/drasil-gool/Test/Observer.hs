@@ -3,7 +3,7 @@ module Test.Observer (observer, observerName, printNum, x) where
 import GOOL.Drasil (
   ProgramSym, FileSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
   StatementSym(..), VariableSym(..), ValueSym(..), ScopeSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), FS, MS)
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), FS, CS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observerName, observerDesc, printNum :: String
@@ -21,7 +21,7 @@ x = var "x" int
 selfX :: (VariableSym repr) => MS (repr (Variable repr))
 selfX = objVarSelf observerName x
 
-helperClass :: (ClassSym repr) => FS (repr (Class repr))
+helperClass :: (ClassSym repr) => CS (repr (Class repr))
 helperClass = pubClass observerName Nothing [stateVar public dynamic_ x]
   [observerConstructor, printNumMethod, getMethod observerName x, 
   setMethod observerName x]

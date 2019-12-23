@@ -21,7 +21,7 @@ module GOOL.Drasil.Symantics (
 
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.Data (Binding, Terminator, FileType, ScopeTag)
-import GOOL.Drasil.State (GS, FS, MS)
+import GOOL.Drasil.State (GS, FS, CS, MS)
 
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -666,7 +666,7 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr) =>
     MS (repr (Method repr))
   constructor :: Label -> [MS (repr (Parameter repr))] -> MS (repr (Body repr)) 
     -> MS (repr (Method repr))
-  destructor :: Label -> [FS (repr (StateVar repr))] -> MS (repr (Method repr))
+  destructor :: Label -> [CS (repr (StateVar repr))] -> MS (repr (Method repr))
 
   docMain :: MS (repr (Body repr)) -> MS (repr (Method repr))
 
@@ -720,49 +720,44 @@ class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr) =>
   StateVarSym repr where
   type StateVar repr
   stateVar :: repr (Scope repr) -> repr (Permanence repr) ->
-    MS (repr (Variable repr)) -> FS (repr (StateVar repr))
+    MS (repr (Variable repr)) -> CS (repr (StateVar repr))
   stateVarDef :: Label -> repr (Scope repr) -> repr (Permanence repr) ->
     MS (repr (Variable repr)) -> MS (repr (Value repr)) -> 
-    FS (repr (StateVar repr))
+    CS (repr (StateVar repr))
   constVar :: Label -> repr (Scope repr) ->  MS (repr (Variable repr)) -> 
-    MS (repr (Value repr)) -> FS (repr (StateVar repr))
-  privMVar :: MS (repr (Variable repr)) -> FS (repr (StateVar repr))
-  pubMVar  :: MS (repr (Variable repr)) -> FS (repr (StateVar repr))
-  pubGVar  :: MS (repr (Variable repr)) -> FS (repr (StateVar repr))
+    MS (repr (Value repr)) -> CS (repr (StateVar repr))
+  privMVar :: MS (repr (Variable repr)) -> CS (repr (StateVar repr))
+  pubMVar  :: MS (repr (Variable repr)) -> CS (repr (StateVar repr))
+  pubGVar  :: MS (repr (Variable repr)) -> CS (repr (StateVar repr))
 
 class InternalStateVar repr where
   stateVarDoc :: repr (StateVar repr) -> Doc
-  stateVarFromData :: FS Doc -> FS (repr (StateVar repr))
+  stateVarFromData :: CS Doc -> CS (repr (StateVar repr))
 
 class (MethodSym repr) => ClassSym repr where
   type Class repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
-    [FS (repr (StateVar repr))] -> 
-    [MS (repr (Method repr))] -> 
-    FS (repr (Class repr))
-  enum :: Label -> [Label] -> repr (Scope repr) -> 
-    FS (repr (Class repr))
-  privClass :: Label -> Maybe Label -> [FS (repr (StateVar repr))] 
-    -> [MS (repr (Method repr))] -> 
-    FS (repr (Class repr))
-  pubClass :: Label -> Maybe Label -> [FS (repr (StateVar repr))] 
-    -> [MS (repr (Method repr))] -> 
-    FS (repr (Class repr))
+    [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
+    CS (repr (Class repr))
+  enum :: Label -> [Label] -> repr (Scope repr) -> CS (repr (Class repr))
+  privClass :: Label -> Maybe Label -> [CS (repr (StateVar repr))] 
+    -> [MS (repr (Method repr))] -> CS (repr (Class repr))
+  pubClass :: Label -> Maybe Label -> [CS (repr (StateVar repr))] 
+    -> [MS (repr (Method repr))] -> CS (repr (Class repr))
 
-  docClass :: String -> FS (repr (Class repr)) ->
-    FS (repr (Class repr))
+  docClass :: String -> CS (repr (Class repr)) -> CS (repr (Class repr))
 
-  commentedClass :: FS (repr (BlockComment repr)) -> 
-    FS (repr (Class repr)) -> FS (repr (Class repr))
+  commentedClass :: CS (repr (BlockComment repr)) -> 
+    CS (repr (Class repr)) -> CS (repr (Class repr))
 
 class InternalClass repr where
   classDoc :: repr (Class repr) -> Doc
-  classFromData :: FS Doc -> FS (repr (Class repr))
+  classFromData :: CS Doc -> CS (repr (Class repr))
 
 class (ClassSym repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [MS (repr (Method repr))] -> 
-    [FS (repr (Class repr))] -> FS (repr (Module repr))
+    [CS (repr (Class repr))] -> FS (repr (Module repr))
 
 class InternalMod repr where
   moduleDoc :: repr (Module repr) -> Doc

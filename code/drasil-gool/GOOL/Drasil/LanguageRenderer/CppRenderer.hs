@@ -65,9 +65,9 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty,
   toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, 
   on3CodeValues, on3StateValues, onCodeList, onStateList, on2StateLists, 
   on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (FS, MS, lensGStoFS, lensFStoMS, lensMStoFS, 
-  modifyReturn, addLangImport, getLangImports, addModuleImport, 
-  getModuleImports, addHeaderLangImport, getHeaderLangImports, 
+import GOOL.Drasil.State (CS, MS, lensGStoFS, lensFStoCS, lensFStoMS, 
+  lensCStoMS, lensMStoCS, modifyReturn, addLangImport, getLangImports, 
+  addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderModImports, addDefine, getDefines,
   addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
   getHeaderUsing, setCurrMain, getCurrMain, getClassMap, setScope, getScope, 
@@ -597,7 +597,7 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   privMethod n c = pairValListVal (privMethod n c) (privMethod n c)
   pubMethod n c = pairValListVal (pubMethod n c) (pubMethod n c)
   constructor n = pair1List1Val (constructor n) (constructor n)
-  destructor n = pair1List (destructor n) (destructor n) . map (zoom lensMStoFS)
+  destructor n = pair1List (destructor n) (destructor n) . map (zoom lensMStoCS)
 
   docMain = pair1 docMain docMain
 
@@ -641,15 +641,15 @@ instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
   stateVar s p = pair1 (stateVar (pfst s) (pfst p)) (stateVar (psnd s) (psnd p))
-    . zoom lensFStoMS
+    . zoom lensCStoMS
   stateVarDef n s p vr vl = pair2
     (stateVarDef n (pfst s) (pfst p)) 
-    (stateVarDef n (psnd s) (psnd p)) (zoom lensFStoMS vr) (zoom lensFStoMS vl)
+    (stateVarDef n (psnd s) (psnd p)) (zoom lensCStoMS vr) (zoom lensCStoMS vl)
   constVar n s vr vl = pair2 (constVar n (pfst s)) (constVar n (psnd s))
-    (zoom lensFStoMS vr) (zoom lensFStoMS vl)
-  privMVar = pair1 privMVar privMVar . zoom lensFStoMS
-  pubMVar = pair1 pubMVar pubMVar . zoom lensFStoMS
-  pubGVar = pair1 pubGVar pubGVar . zoom lensFStoMS
+    (zoom lensCStoMS vr) (zoom lensCStoMS vl)
+  privMVar = pair1 privMVar privMVar . zoom lensCStoMS
+  pubMVar = pair1 pubMVar pubMVar . zoom lensCStoMS
+  pubGVar = pair1 pubGVar pubGVar . zoom lensCStoMS
 
 instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
   stateVarDoc v = stateVarDoc $ pfst v
@@ -661,12 +661,12 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   buildClass n p s vs fs = pair2Lists 
     (buildClass n p (pfst s)) 
     (buildClass n p (psnd s)) 
-    vs (map (zoom lensFStoMS) fs)
+    vs (map (zoom lensCStoMS) fs)
   enum l ls s = on2StateValues pair (enum l ls $ pfst s) (enum l ls $ psnd s)
   privClass n p vs fs = pair2Lists (privClass n p) (privClass n p)
-    vs (map (zoom lensFStoMS) fs)
+    vs (map (zoom lensCStoMS) fs)
   pubClass n p vs fs = pair2Lists (pubClass n p) (pubClass n p)
-    vs (map (zoom lensFStoMS) fs)
+    vs (map (zoom lensCStoMS) fs)
 
   docClass d = pair1 (docClass d) (docClass d)
 
@@ -679,7 +679,7 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
   buildModule n ms = pair2Lists (buildModule n) (buildModule n) 
-    (map (zoom lensFStoMS) ms)
+    (map (zoom lensFStoMS) ms) . map (zoom lensFStoCS)
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
   moduleDoc m = moduleDoc $ pfst m
@@ -1388,7 +1388,7 @@ instance MethodSym CppSrcCode where
   destructor n vs = 
     let i = var "i" int
         deleteStatements = map (onStateValue (onCodeValue destructSts) . 
-          zoom lensMStoFS) vs
+          zoom lensMStoCS) vs
         loopIndexDec = varDec i
         dbody = on2StateValues (on2CodeValues emptyIfEmpty)
           (onStateList (onCodeList (vcat . map fst)) deleteStatements) $
@@ -1435,15 +1435,15 @@ instance InternalMethod CppSrcCode where
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
   stateVar s _ _ = onStateValue (on3CodeValues svd (onCodeValue snd s) (toCode 
-    empty)) $ zoom lensFStoMS emptyState
+    empty)) $ zoom lensCStoMS emptyState
   stateVarDef n s p v vl = on3StateValues (\vr val -> on3CodeValues svd 
     (onCodeValue snd s) (cppsStateVarDef n empty <$> p <*> vr <*> val <*>
-    endStatement)) (zoom lensFStoMS v) (zoom lensFStoMS vl) 
-    (zoom lensFStoMS emptyState)
+    endStatement)) (zoom lensCStoMS v) (zoom lensCStoMS vl) 
+    (zoom lensCStoMS emptyState)
   constVar n s v vl = on3StateValues (\vr val -> on3CodeValues svd (onCodeValue 
     snd s) (cppsStateVarDef n (text "const") <$> static_ <*> vr <*> val <*>
-    endStatement)) (zoom lensFStoMS v) (zoom lensFStoMS vl) 
-    (zoom lensFStoMS emptyState)
+    endStatement)) (zoom lensCStoMS v) (zoom lensCStoMS vl) 
+    (zoom lensCStoMS emptyState)
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
@@ -1454,7 +1454,7 @@ instance InternalStateVar CppSrcCode where
 
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
-  buildClass n _ _ vs fs = on2StateLists cppsClass vs (map (zoom lensFStoMS) $ 
+  buildClass n _ _ vs fs = on2StateLists cppsClass vs (map (zoom lensCStoMS) $ 
     fs ++ [destructor n vs])
   enum _ _ _ = toState $ toCode empty
   privClass = G.privClass
@@ -1977,7 +1977,7 @@ instance MethodSym CppHdrCode where
   constructor n = G.constructor n n
   destructor n vars = on1StateValue1List (\m vs -> toCode $ mthd Pub 
     (emptyIfEmpty (vcat (map (statementDoc . onCodeValue destructSts) vs)) 
-    (methodDoc m))) (pubMethod ('~':n) n void [] (toState (toCode empty)) :: MS (CppHdrCode (Method CppHdrCode))) (map (zoom lensMStoFS) vars)
+    (methodDoc m))) (pubMethod ('~':n) n void [] (toState (toCode empty)) :: MS (CppHdrCode (Method CppHdrCode))) (map (zoom lensMStoCS) vars)
 
   docMain = mainFunction
 
@@ -2008,12 +2008,12 @@ instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar s p v = on2StateValues (\dec -> on3CodeValues svd (onCodeValue snd s)
     (toCode $ stateVarDocD empty (permDoc p) (statementDoc dec)))
-    (zoom lensFStoMS $ state $ varDec v) (zoom lensFStoMS emptyState)
+    (zoom lensCStoMS $ state $ varDec v) (zoom lensCStoMS emptyState)
   stateVarDef _ s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
-    (cpphStateVarDef empty p vr vl) (zoom lensFStoMS emptyState)
+    (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyState)
   constVar _ s vr _ = on2StateValues (\v -> on3CodeValues svd (onCodeValue snd 
     s) (on3CodeValues (constVarDocD empty) (bindDoc <$> static_) v 
-    endStatement)) (zoom lensFStoMS vr) (zoom lensFStoMS emptyState)
+    endStatement)) (zoom lensCStoMS vr) (zoom lensCStoMS emptyState)
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
@@ -2026,7 +2026,7 @@ instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
   buildClass n p _ vs mths = on2StateLists (\vars funcs -> cpphClass n p vars 
     funcs public private blockStart blockEnd endStatement) vs fs
-    where fs = map (zoom lensFStoMS) $ mths ++ [destructor n vs]
+    where fs = map (zoom lensCStoMS) $ mths ++ [destructor n vs]
   enum n es _ = cpphEnum n (enumElementsDocD es enumsEqualInts) blockStart 
     blockEnd endStatement
   privClass = G.privClass
@@ -2254,9 +2254,9 @@ cppsStateVarDef n cns p vr vl end = if bind p == Static then cns <+> typeDoc
   end else empty
 
 cpphStateVarDef :: (RenderSym repr) => Doc -> repr (Permanence repr) -> 
-  MS (repr (Variable repr)) -> MS (repr (Value repr)) -> FS Doc
+  MS (repr (Variable repr)) -> MS (repr (Value repr)) -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (stateVarDocD s (permDoc p) .  
-  statementDoc) (zoom lensFStoMS $ state $ if binding p == Static then varDec 
+  statementDoc) (zoom lensCStoMS $ state $ if binding p == Static then varDec 
   vr else varDecDef vr vl) 
 
 cpphVarsFuncsList :: ScopeTag -> [CppHdrCode (StateVar CppHdrCode)] -> 
@@ -2294,7 +2294,7 @@ cpphClass n p vars funcs pub priv bStart bEnd end = toCode $ vcat [
                            Just pn -> inherit pn
 
 cpphEnum :: (RenderSym repr) => Label -> Doc -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> repr (Keyword repr) -> FS (repr (Class repr))
+  repr (Keyword repr) -> repr (Keyword repr) -> CS (repr (Class repr))
 cpphEnum n es bStart bEnd end = classFromData $ toState $ vcat [
   text "enum" <+> text n <+> keyDoc bStart,
   indent es,

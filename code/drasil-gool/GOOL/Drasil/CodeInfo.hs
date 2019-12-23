@@ -12,8 +12,8 @@ import GOOL.Drasil.Symantics (ProgramSym(..), FileSym(..), PermanenceSym(..),
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.Data (Binding(Dynamic), ScopeTag(..))
 import GOOL.Drasil.Helpers (toCode, toState)
-import GOOL.Drasil.State (GOOLState, lensGStoFS, modifyReturn, addClass, 
-  updateClassMap)
+import GOOL.Drasil.State (GOOLState, lensGStoFS, lensFStoCS, modifyReturn, 
+  addClass, updateClassMap)
 
 import Control.Monad.State (State)
 import qualified Control.Monad.State as S (get)
@@ -394,7 +394,7 @@ instance ClassSym CodeInfo where
 instance ModuleSym CodeInfo where
   type Module CodeInfo = ()
   buildModule n _ cs = do
-    sequence_ cs 
+    mapM_ (zoom lensFStoCS) cs 
     modifyReturn (updateClassMap n) (toCode ())
 
 instance BlockCommentSym CodeInfo where

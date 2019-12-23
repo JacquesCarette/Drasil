@@ -66,7 +66,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty,
   on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, onCodeList, 
   onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (FS, MS, lensGStoFS, lensFStoMS, lensMStoFS, 
-  getPutReturn, addLangImport, getLangImports, addModuleImport, 
+  modifyReturn, addLangImport, getLangImports, addModuleImport, 
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderModImports, addDefine, getDefines,
   addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
@@ -1982,7 +1982,7 @@ instance MethodSym CppHdrCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction _ = getPutReturn (setScope Pub) $ toCode $ mthd Pub empty
+  mainFunction _ = modifyReturn (setScope Pub) $ toCode $ mthd Pub empty
 
   docFunc = G.docFunc
 
@@ -2093,7 +2093,7 @@ addAlgorithmImport :: MS a -> MS a
 addAlgorithmImport = (>>) $ modify (addLangImport "algorithm")
 
 addFStreamImport :: a -> MS a
-addFStreamImport = getPutReturn (addLangImport "fstream")
+addFStreamImport = modifyReturn (addLangImport "fstream")
 
 addIOStreamImport :: MS a -> MS a
 addIOStreamImport = (>>) $ modify (addLangImport "iostream")

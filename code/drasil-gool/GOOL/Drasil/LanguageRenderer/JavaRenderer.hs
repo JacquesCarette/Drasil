@@ -64,7 +64,7 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (angles, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (MS, lensGStoFS, getPutReturn, getPutReturnList, 
+import GOOL.Drasil.State (MS, lensGStoFS, modifyReturn, modifyReturnList, 
   addProgNameToPaths, addLangImport, setCurrMain, setOutputsDeclared, 
   isOutputsDeclared)
 
@@ -94,7 +94,7 @@ instance Monad JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
-  prog n fs = getPutReturnList (map (zoom lensGStoFS) fs) (addProgNameToPaths n)
+  prog n fs = modifyReturnList (map (zoom lensGStoFS) fs) (addProgNameToPaths n)
     (on1CodeValue1List (\end -> progD n . map (packageDocD n end)) endStatement)
 
 instance RenderSym JavaCode
@@ -641,11 +641,11 @@ jStringType :: (RenderSym repr) => MS (repr (Type repr))
 jStringType = toState $ typeFromData String "String" (text "String")
 
 jInfileType :: (RenderSym repr) => MS (repr (Type repr))
-jInfileType = getPutReturn (addLangImport "java.util.Scanner") $ 
+jInfileType = modifyReturn (addLangImport "java.util.Scanner") $ 
   typeFromData File "Scanner" (text "Scanner")
 
 jOutfileType :: (RenderSym repr) => MS (repr (Type repr))
-jOutfileType = getPutReturn (addLangImport "java.io.PrintWriter") $ 
+jOutfileType = modifyReturn (addLangImport "java.io.PrintWriter") $ 
   typeFromData File "PrintWriter" (text "PrintWriter")
 
 jListType :: (RenderSym repr) => repr (Permanence repr) -> MS (repr (Type repr))
@@ -665,11 +665,11 @@ jArrayType = toState $ typeFromData (List $ Object "Object") "Object"
   (text "Object[]")
 
 jFileType :: (RenderSym repr) => MS (repr (Type repr))
-jFileType = getPutReturn (addLangImport "java.io.File") $ typeFromData File 
+jFileType = modifyReturn (addLangImport "java.io.File") $ typeFromData File 
   "File" (text "File")
 
 jFileWriterType :: (RenderSym repr) => MS (repr (Type repr))
-jFileWriterType = getPutReturn (addLangImport "java.io.FileWriter") $ 
+jFileWriterType = modifyReturn (addLangImport "java.io.FileWriter") $ 
   typeFromData File "FileWriter" (text "FileWriter")
 
 jEquality :: MS (JavaCode (Value JavaCode)) -> MS (JavaCode (Value JavaCode)) 

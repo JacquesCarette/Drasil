@@ -2,8 +2,8 @@
 
 module GOOL.Drasil.State (
   GS, GOOLState(..), FS, MS, lensFStoGS, lensGStoFS, lensFStoMS, lensMStoFS, 
-  headers, sources, mainMod, currMain, initialState, initialFS, putAfter, 
-  getPutReturn, getPutReturnFunc, getPutReturnFunc2, getPutReturnList, addFile, 
+  headers, sources, mainMod, currMain, initialState, initialFS, modifyAfter, 
+  modifyReturn, modifyReturnFunc, modifyReturnFunc2, modifyReturnList, addFile, 
   addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
   addLangImport, getLangImports, addModuleImport, getModuleImports, 
   addHeaderLangImport, getHeaderLangImports, addHeaderModImport, 
@@ -18,7 +18,7 @@ import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
-import Control.Monad.State (State, get, put, gets)
+import Control.Monad.State (State, modify, gets)
 import Data.List (sort)
 import Data.Maybe (isNothing)
 import Data.Map (Map, fromList, empty, union)
@@ -141,39 +141,35 @@ initialMS = MS {
 ------- State Patterns -------
 -------------------------------
 
-putAfter :: (s -> s) -> State s a -> State s a
-putAfter sf sv = do
+modifyAfter :: (s -> s) -> State s a -> State s a
+modifyAfter sf sv = do
   v <- sv
-  getPutReturn sf v
+  modifyReturn sf v
 
-getPutReturn :: (s -> s) -> a -> State s a
-getPutReturn sf v = do
-  s <- get
-  put $ sf s
+modifyReturn :: (s -> s) -> a -> State s a
+modifyReturn sf v = do
+  modify sf
   return v
 
-getPutReturnFunc :: (s -> b -> s) -> (b -> a) -> State s b -> State s a
-getPutReturnFunc sf vf st = do
+modifyReturnFunc :: (b -> s -> s) -> (b -> a) -> State s b -> State s a
+modifyReturnFunc sf vf st = do
   v <- st
-  s <- get
-  put $ sf s v
+  modify $ sf v
   return $ vf v
 
-getPutReturnFunc2 :: (s -> c -> b -> s) -> (c -> b -> a) -> State s c -> 
+modifyReturnFunc2 :: (c -> b -> s -> s) -> (c -> b -> a) -> State s c -> 
   State s b -> State s a
-getPutReturnFunc2 sf vf st1 st2 = do
+modifyReturnFunc2 sf vf st1 st2 = do
   v1 <- st1
   v2 <- st2
-  s <- get
-  put $ sf s v1 v2
+  modify $ sf v1 v2
   return $ vf v1 v2
 
-getPutReturnList :: [State s b] -> (s -> s) -> 
+modifyReturnList :: [State s b] -> (s -> s) -> 
   ([b] -> a) -> State s a
-getPutReturnList l sf vf = do
+modifyReturnList l sf vf = do
   v <- sequence l
-  s <- get
-  put $ sf s
+  modify sf
   return $ vf v
 
 -------------------------------

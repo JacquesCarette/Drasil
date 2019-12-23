@@ -12,7 +12,7 @@ import GOOL.Drasil.Symantics (ProgramSym(..), FileSym(..), PermanenceSym(..),
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.Data (Binding(Dynamic), ScopeTag(..))
 import GOOL.Drasil.Helpers (toCode, toState)
-import GOOL.Drasil.State (GOOLState, lensGStoFS, getPutReturn, addClass, 
+import GOOL.Drasil.State (GOOLState, lensGStoFS, modifyReturn, addClass, 
   updateClassMap)
 
 import Control.Monad.State (State)
@@ -376,12 +376,12 @@ instance StateVarSym CodeInfo where
 
 instance ClassSym CodeInfo where
   type Class CodeInfo = ()
-  buildClass n _ s _ _ = if unCI s == Pub then getPutReturn (addClass n) 
+  buildClass n _ s _ _ = if unCI s == Pub then modifyReturn (addClass n) 
     (toCode ()) else noInfo 
-  enum n _ s = if unCI s == Pub then getPutReturn (addClass n) (toCode ()) else 
+  enum n _ s = if unCI s == Pub then modifyReturn (addClass n) (toCode ()) else 
     noInfo 
   privClass _ _ _ _ = noInfo
-  pubClass n _ _ _ = getPutReturn (addClass n) (toCode ())
+  pubClass n _ _ _ = modifyReturn (addClass n) (toCode ())
 
   docClass _ c = do
     _ <- c
@@ -395,7 +395,7 @@ instance ModuleSym CodeInfo where
   type Module CodeInfo = ()
   buildModule n _ cs = do
     sequence_ cs 
-    getPutReturn (updateClassMap n) (toCode ())
+    modifyReturn (updateClassMap n) (toCode ())
 
 instance BlockCommentSym CodeInfo where
   type BlockComment CodeInfo = ()

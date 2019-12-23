@@ -83,8 +83,8 @@ import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt,
   getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, enumDocD, 
   enumElementsDocD, fileDoc', docFuncRepr, commentDocD, commentedItem, 
   functionDox, classDox, moduleDox, getterName, setterName, valueList, intValue)
-import GOOL.Drasil.State (FS, MS, lensFStoGS, lensFStoMS, currMain, putAfter, 
-  getPutReturnFunc, getPutReturnFunc2, addFile, setMainMod, addLangImport, 
+import GOOL.Drasil.State (FS, MS, lensFStoGS, lensFStoMS, currMain, modifyAfter, 
+  modifyReturnFunc, modifyReturnFunc2, addFile, setMainMod, addLangImport, 
   getLangImports, getModuleImports, setFilePath, getFilePath, setModuleName, 
   getModuleName, addParameter)
 
@@ -900,7 +900,7 @@ construct n = toState $ typeFromData (Object n) n empty
 
 param :: (RenderSym repr) => (repr (Variable repr) -> Doc) -> 
   MS (repr (Variable repr)) -> MS (repr (Parameter repr))
-param f = getPutReturnFunc (\s v -> addParameter (variableName v) s) 
+param f = modifyReturnFunc (\v s -> addParameter (variableName v) s) 
   (\v -> paramFromData v (f v))
 
 method :: (RenderSym repr) => Label -> Label -> repr (Scope repr) -> 
@@ -1067,7 +1067,7 @@ buildModule' n inc ms cs = S.modFromData n (on3StateValues (\cls lis mis ->
 
 modFromData :: Label -> (Doc -> repr (Module repr)) -> FS Doc -> 
   FS (repr (Module repr))
-modFromData n f d = putAfter (setModuleName n) (onStateValue f d)
+modFromData n f d = modifyAfter (setModuleName n) (onStateValue f d)
 
 -- Files --
 
@@ -1085,7 +1085,7 @@ docMod d a dt = commentedMod (docComment $ moduleDox d a dt <$> getFilePath)
 fileFromData :: (RenderSym repr) => (repr (Module repr) -> FilePath -> 
   repr (RenderFile repr)) -> FileType -> FS FilePath -> 
   FS (repr (Module repr)) -> FS (repr (RenderFile repr))
-fileFromData f ft fp m = getPutReturnFunc2 (\s mdl fpath -> (if isEmpty 
+fileFromData f ft fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty 
   (moduleDoc mdl) then id else (if snd s ^. currMain then over lensFStoGS 
   (setMainMod fpath) else id) . over lensFStoGS (addFile ft fpath) . 
   setFilePath fpath) s) f m fp 

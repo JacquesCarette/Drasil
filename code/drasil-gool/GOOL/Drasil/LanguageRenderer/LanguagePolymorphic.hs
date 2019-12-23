@@ -86,7 +86,8 @@ import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt,
 import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensFStoCS, lensFStoMS, 
   lensCStoMS, currMain, modifyAfter, modifyReturnFunc, modifyReturnFunc2, 
   addFile, setMainMod, addLangImport, getLangImports, getModuleImports, 
-  setFilePath, getFilePath, setModuleName, getModuleName, addParameter)
+  setFilePath, getFilePath, setModuleName, getModuleName, setClassName, 
+  addParameter)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Bifunctor (first)
@@ -1014,16 +1015,17 @@ buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) ->
   (Label -> repr (Keyword repr)) -> Label -> Maybe Label -> repr (Scope repr) 
   -> [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
   CS (repr (Class repr))
-buildClass f i n p s vs fs = classFromData (on2StateValues (f n parent 
-  (scopeDoc s)) (onStateList (stateVarListDocD . map stateVarDoc) vs)
-  (onStateList (vibcat . map methodDoc) (map (zoom lensCStoMS) fs)))
+buildClass f i n p s vs fs = modify (setClassName n) >> classFromData 
+  (on2StateValues (f n parent (scopeDoc s)) (onStateList (stateVarListDocD . 
+  map stateVarDoc) vs) (onStateList (vibcat . map methodDoc) (map (zoom 
+  lensCStoMS) fs)))
   where parent = case p of Nothing -> empty
                            Just pn -> keyDoc $ i pn
 
 enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
   CS (repr (Class repr))
-enum n es s = classFromData (toState $ enumDocD n (enumElementsDocD es False) 
-  (scopeDoc s))
+enum n es s = modify (setClassName n) >> classFromData (toState $ enumDocD n 
+  (enumElementsDocD es False) (scopeDoc s))
 
 privClass :: (RenderSym repr) => Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> 

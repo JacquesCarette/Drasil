@@ -70,8 +70,8 @@ import GOOL.Drasil.State (CS, MS, lensGStoFS, lensFStoCS, lensFStoMS,
   addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderModImports, addDefine, getDefines,
   addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
-  getHeaderUsing, setCurrMain, getCurrMain, getClassMap, setScope, getScope, 
-  setCurrMainFunc, getCurrMainFunc)
+  getHeaderUsing, setClassName, getClassName, setCurrMain, getCurrMain, 
+  getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -658,14 +658,17 @@ instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   type Class (p CppSrcCode CppHdrCode) = Doc
-  buildClass n p s vs fs = pair2Lists 
+  buildClass n p s vs fs = modify (setClassName n) >> pair2Lists 
     (buildClass n p (pfst s)) 
     (buildClass n p (psnd s)) 
     vs (map (zoom lensCStoMS) fs)
-  enum l ls s = on2StateValues pair (enum l ls $ pfst s) (enum l ls $ psnd s)
-  privClass n p vs fs = pair2Lists (privClass n p) (privClass n p)
+  enum l ls s = modify (setClassName l) >> on2StateValues pair 
+    (enum l ls $ pfst s) (enum l ls $ psnd s)
+  privClass n p vs fs = modify (setClassName n) >> pair2Lists 
+    (privClass n p) (privClass n p)
     vs (map (zoom lensCStoMS) fs)
-  pubClass n p vs fs = pair2Lists (pubClass n p) (pubClass n p)
+  pubClass n p vs fs = modify (setClassName n) >> pair2Lists 
+    (pubClass n p) (pubClass n p)
     vs (map (zoom lensCStoMS) fs)
 
   docClass d = pair1 (docClass d) (docClass d)
@@ -1419,10 +1422,10 @@ instance MethodSym CppSrcCode where
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
 instance InternalMethod CppSrcCode where
-  intMethod m n c s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
-    setCurrMain else id) >> on3StateValues (\tp pms bod -> methodFromData (snd 
-    $ unCPPSC s) $ cppsMethod n c tp pms bod blockStart blockEnd) t 
-    (sequence ps) b
+  intMethod m n _ s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
+    setCurrMain else id) >> (\c tp pms bod -> methodFromData 
+    (snd $ unCPPSC s) $ cppsMethod n c tp pms bod blockStart blockEnd) <$>
+    getClassName <*> t <*> sequence ps <*> b
   intFunc m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
     setCurrMainFunc m . setCurrMain else id) >> on3StateValues (\tp pms bod -> 
     methodFromData (snd $ unCPPSC s) $ cppsFunction n tp pms bod blockStart 
@@ -1454,8 +1457,8 @@ instance InternalStateVar CppSrcCode where
 
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
-  buildClass n _ _ vs fs = on2StateLists cppsClass vs (map (zoom lensCStoMS) $ 
-    fs ++ [destructor n vs])
+  buildClass n _ _ vs fs = modify (setClassName n) >> on2StateLists cppsClass 
+    vs (map (zoom lensCStoMS) $ fs ++ [destructor n vs])
   enum _ _ _ = toState $ toCode empty
   privClass = G.privClass
   pubClass = G.pubClass
@@ -2024,11 +2027,12 @@ instance InternalStateVar CppHdrCode where
 
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
-  buildClass n p _ vs mths = on2StateLists (\vars funcs -> cpphClass n p vars 
-    funcs public private blockStart blockEnd endStatement) vs fs
+  buildClass n p _ vs mths = modify (setClassName n) >> on2StateLists 
+    (\vars funcs -> cpphClass n p vars funcs public private blockStart blockEnd 
+    endStatement) vs fs
     where fs = map (zoom lensCStoMS) $ mths ++ [destructor n vs]
-  enum n es _ = cpphEnum n (enumElementsDocD es enumsEqualInts) blockStart 
-    blockEnd endStatement
+  enum n es _ = modify (setClassName n) >> cpphEnum n (enumElementsDocD es 
+    enumsEqualInts) blockStart blockEnd endStatement
   privClass = G.privClass
   pubClass = G.pubClass
 

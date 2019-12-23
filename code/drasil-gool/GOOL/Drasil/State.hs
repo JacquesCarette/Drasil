@@ -325,8 +325,8 @@ setClassName :: String -> ((GOOLState, FileState), ClassState) ->
   ((GOOLState, FileState), ClassState)
 setClassName n = over _2 (set currClassName n)
 
-getClassName :: CS String
-getClassName = gets ((^. currClassName) . snd)
+getClassName :: MS String
+getClassName = gets ((^. currClassName) . snd . fst)
 
 setCurrMain :: (((GOOLState, FileState), ClassState), MethodState) -> 
   (((GOOLState, FileState), ClassState), MethodState)

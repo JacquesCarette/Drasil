@@ -73,8 +73,8 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), FileType)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
-  toState, onStateValue, on2StateValues, on3StateValues, on4StateValues, 
-  onStateList, on2StateLists, on1StateValue1List, getInnerType, convType)
+  toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
+  on2StateLists, on1StateValue1List, getInnerType, convType)
 import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt, 
   moduleDocD, blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, mkSt, 
   mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, 
@@ -828,8 +828,8 @@ ifNoElse bs = S.ifCond bs $ body []
 switch :: (RenderSym repr) => MS (repr (Value repr)) -> 
   [(MS (repr (Value repr)), MS (repr (Body repr)))] -> MS (repr (Body repr)) -> 
   MS (repr (Statement repr))
-switch v cs = on4StateValues (\b val css de -> mkSt (switchDocD b val de css)) 
-  (S.state break) v (on2StateLists zip (map fst cs) (map snd cs))
+switch v cs bod = (\b val css de -> mkSt (switchDocD b val de css)) <$>
+  S.state break <*> v <*> on2StateLists zip (map fst cs) (map snd cs) <*> bod
 
 switchAsIf :: (RenderSym repr) => MS (repr (Value repr)) -> 
   [(MS (repr (Value repr)), MS (repr (Body repr)))] -> MS (repr (Body repr)) -> 
@@ -845,12 +845,11 @@ for :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) ->
   MS (repr (Statement repr)) -> MS (repr (Value repr)) -> 
   MS (repr (Statement repr)) -> MS (repr (Body repr)) -> 
   MS (repr (Statement repr))
-for bStart bEnd sInit vGuard sUpdate = on4StateValues (\initl guard upd bod -> 
-  mkStNoEnd (vcat [
-  forLabel <+> parens (statementDoc initl <> semi <+> valueDoc guard <> semi 
-    <+> statementDoc upd) <+> keyDoc bStart,
+for bStart bEnd sInit vGuard sUpdate b = (\initl guard upd bod -> mkStNoEnd 
+  (vcat [forLabel <+> parens (statementDoc initl <> semi <+> valueDoc guard <> 
+    semi <+> statementDoc upd) <+> keyDoc bStart,
   indent $ bodyDoc bod,
-  keyDoc bEnd])) (S.loopState sInit) vGuard (S.loopState sUpdate)
+  keyDoc bEnd])) <$> S.loopState sInit <*> vGuard <*> S.loopState sUpdate <*> b
 
 forRange :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Value repr)) -> MS (repr (Value repr)) -> MS (repr (Value repr)) -> 

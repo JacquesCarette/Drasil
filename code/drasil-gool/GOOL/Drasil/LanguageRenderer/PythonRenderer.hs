@@ -59,8 +59,7 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  on5StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
-  on1StateValue1List)
+  onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (MS, lensGStoFS, addLangImport, getLangImports, 
   addModuleImport, getModuleImports, setCurrMain, getClassMap)
 
@@ -516,8 +515,9 @@ instance ControlStatementSym PythonCode where
 
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"
-  forRange = on5StateValues (\i initv finalv stepv b -> mkStNoEnd (pyForRange 
-    iterInLabel i initv finalv stepv b))
+  forRange it initval finalval step bod = (\i initv finalv stepv b -> mkStNoEnd 
+    (pyForRange iterInLabel i initv finalv stepv b))
+    <$> it <*> initval <*> finalval <*> step <*> bod
   forEach = on3StateValues (\i v b -> mkStNoEnd (pyForEach iterForEachLabel 
     iterInLabel i v b))
   while = on2StateValues (\v b -> mkStNoEnd (pyWhile v b))
@@ -744,9 +744,9 @@ pyTryCatch tryB catchB = vcat [
 pyListSlice :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Value repr)) -> MS (repr (Value repr)) -> MS (repr (Value repr)) -> 
   MS (repr (Value repr)) -> MS Doc
-pyListSlice = on5StateValues (\vnew vold b e s -> variableDoc vnew <+> equals 
-  <+> valueDoc vold <> brackets (valueDoc b <> colon <> valueDoc e <> colon <> 
-  valueDoc s))
+pyListSlice vn vo beg end step = (\vnew vold b e s -> variableDoc vnew <+> 
+  equals <+> valueDoc vold <> brackets (valueDoc b <> colon <> valueDoc e <> 
+  colon <> valueDoc s)) <$> vn <*> vo <*> beg <*> end <*> step
 
 pyMethod :: (RenderSym repr) => Label -> repr (Variable repr) -> 
   [repr (Parameter repr)] -> repr (Body repr) -> Doc

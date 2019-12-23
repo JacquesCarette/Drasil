@@ -64,7 +64,7 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (MS, lensGStoFS, getPutReturn, addLangImport, 
+import GOOL.Drasil.State (MS, lensGStoFS, modifyReturn, addLangImport, 
   setCurrMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -634,11 +634,11 @@ csImport :: Label -> CSharpCode (Keyword CSharpCode) -> Doc
 csImport n end = text ("using " ++ n) <> keyDoc end
 
 csInfileType :: (RenderSym repr) => MS (repr (Type repr))
-csInfileType = getPutReturn (addLangImport "System.IO") $ 
+csInfileType = modifyReturn (addLangImport "System.IO") $ 
   typeFromData File "StreamReader" (text "StreamReader")
 
 csOutfileType :: (RenderSym repr) => MS (repr (Type repr))
-csOutfileType = getPutReturn (addLangImport "System.IO") $ 
+csOutfileType = modifyReturn (addLangImport "System.IO") $ 
   typeFromData File "StreamWriter" (text "StreamWriter")
 
 csCast :: MS (CSharpCode (Type CSharpCode)) -> 

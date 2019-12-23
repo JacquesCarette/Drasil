@@ -62,11 +62,11 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
-  toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
-  on2StateValues, on3CodeValues, on3StateValues, on4CodeValues, onCodeList, 
-  onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
+  toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, 
+  on3CodeValues, on3StateValues, onCodeList, onStateList, on2StateLists, 
+  on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (FS, MS, lensGStoFS, lensFStoMS, lensMStoFS, 
-  getPutReturn, addLangImport, getLangImports, addModuleImport, 
+  modifyReturn, addLangImport, getLangImports, addModuleImport, 
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderModImports, addDefine, getDefines,
   addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
@@ -517,10 +517,10 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
 
   throw errMsg = on2StateValues pair (throw errMsg) (throw errMsg)
 
-  initState fsmName iState = on2StateValues pair (initState fsmName iState) 
-    (initState fsmName iState)
-  changeState fsmName postState = on2StateValues pair (changeState fsmName 
-    postState) (changeState fsmName postState)
+  initState fsmName iState = on2StateValues pair 
+    (initState fsmName iState) (initState fsmName iState)
+  changeState fsmName postState = on2StateValues pair 
+    (changeState fsmName postState) (changeState fsmName postState)
 
   initObserverList = pair1Val1List initObserverList initObserverList
   addObserver = pair1 addObserver addObserver
@@ -684,8 +684,8 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
   moduleDoc m = moduleDoc $ pfst m
   modFromData n d = on2StateValues pair (modFromData n d) (modFromData n d)
-  updateModuleDoc f m = pair (updateModuleDoc f $ pfst m) (updateModuleDoc f $ 
-    psnd m)
+  updateModuleDoc f m = pair 
+    (updateModuleDoc f $ pfst m) (updateModuleDoc f $ psnd m)
 
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   type BlockComment (p CppSrcCode CppHdrCode) = Doc
@@ -1437,11 +1437,11 @@ instance StateVarSym CppSrcCode where
   stateVar s _ _ = onStateValue (on3CodeValues svd (onCodeValue snd s) (toCode 
     empty)) $ zoom lensFStoMS emptyState
   stateVarDef n s p v vl = on3StateValues (\vr val -> on3CodeValues svd 
-    (onCodeValue snd s) (on4CodeValues (cppsStateVarDef n empty) p vr val 
+    (onCodeValue snd s) (cppsStateVarDef n empty <$> p <*> vr <*> val <*>
     endStatement)) (zoom lensFStoMS v) (zoom lensFStoMS vl) 
     (zoom lensFStoMS emptyState)
   constVar n s v vl = on3StateValues (\vr val -> on3CodeValues svd (onCodeValue 
-    snd s) (on4CodeValues (cppsStateVarDef n (text "const")) static_ vr val 
+    snd s) (cppsStateVarDef n (text "const") <$> static_ <*> vr <*> val <*>
     endStatement)) (zoom lensFStoMS v) (zoom lensFStoMS vl) 
     (zoom lensFStoMS emptyState)
   privMVar = G.privMVar
@@ -1982,7 +1982,7 @@ instance MethodSym CppHdrCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction _ = getPutReturn (setScope Pub) $ toCode $ mthd Pub empty
+  mainFunction _ = modifyReturn (setScope Pub) $ toCode $ mthd Pub empty
 
   docFunc = G.docFunc
 
@@ -2093,7 +2093,7 @@ addAlgorithmImport :: MS a -> MS a
 addAlgorithmImport = (>>) $ modify (addLangImport "algorithm")
 
 addFStreamImport :: a -> MS a
-addFStreamImport = getPutReturn (addLangImport "fstream")
+addFStreamImport = modifyReturn (addLangImport "fstream")
 
 addIOStreamImport :: MS a -> MS a
 addIOStreamImport = (>>) $ modify (addLangImport "iostream")

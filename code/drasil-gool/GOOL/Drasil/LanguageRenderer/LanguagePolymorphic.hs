@@ -73,18 +73,18 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), Terminator(..), FileType)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
-  toState, onStateValue, on2StateValues, on3StateValues, on4StateValues, 
-  onStateList, on2StateLists, on1StateValue1List, getInnerType, convType)
+  toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
+  on2StateLists, on1StateValue1List, getInnerType, convType)
 import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt, 
-  moduleDocD, blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, mkStateVal, 
-  mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, selfDocD, argDocD,
-  enumElemDocD, classVarCheckStatic, objVarDocD, funcAppDocD, objAccessDocD, 
-  funcDocD, listAccessFuncDocD, constDecDefDocD, printDoc, returnDocD, 
-  getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, enumDocD, 
-  enumElementsDocD, fileDoc', docFuncRepr, commentDocD, commentedItem, 
+  moduleDocD, blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, mkSt, 
+  mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, 
+  extVarDocD, selfDocD, argDocD, enumElemDocD, classVarCheckStatic, objVarDocD, 
+  funcAppDocD, objAccessDocD, funcDocD, listAccessFuncDocD, constDecDefDocD, 
+  printDoc, returnDocD, getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, 
+  enumDocD, enumElementsDocD, fileDoc', docFuncRepr, commentDocD, commentedItem,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, intValue)
-import GOOL.Drasil.State (FS, MS, lensFStoGS, lensFStoMS, currMain, putAfter, 
-  getPutReturnFunc, getPutReturnFunc2, addFile, setMainMod, addLangImport, 
+import GOOL.Drasil.State (FS, MS, lensFStoGS, lensFStoMS, currMain, modifyAfter,
+  modifyReturnFunc, modifyReturnFunc2, addFile, setMainMod, addLangImport, 
   getLangImports, getModuleImports, setFilePath, getFilePath, setModuleName, 
   getModuleName, addParameter)
 
@@ -599,19 +599,19 @@ listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
 
 printSt :: (RenderSym repr) => MS (repr (Value repr)) -> MS (repr (Value repr))
   -> MS (repr (Statement repr))
-printSt = on2StateValues (\p v -> stateFromData (printDoc p v) Semi)
+printSt = on2StateValues (\p -> mkSt . printDoc p)
 
 state :: (RenderSym repr) => MS (repr (Statement repr)) -> 
   MS (repr (Statement repr))
-state = onStateValue (\s -> stateFromData (statementDoc s <> getTermDoc 
-  (statementTerm s)) Empty)
+state = onStateValue (\s -> mkStNoEnd (statementDoc s <> getTermDoc 
+  (statementTerm s)))
   
 loopState :: (RenderSym repr) => MS (repr (Statement repr)) -> 
   MS (repr (Statement repr))
 loopState = S.state . setEmpty
 
 emptyState :: (RenderSym repr) => MS (repr (Statement repr))
-emptyState = toState $ stateFromData empty Empty
+emptyState = toState $ mkStNoEnd empty
 
 assign :: (RenderSym repr) => Terminator -> MS (repr (Variable repr)) -> 
   MS (repr (Value repr)) -> MS (repr (Statement repr))
@@ -630,11 +630,11 @@ decrement vr vl = vr &= (S.valueOf vr #- vl)
 
 increment :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Value repr)) -> MS (repr (Statement repr))
-increment = on2StateValues (\vr vl -> stateFromData (plusEqualsDocD vr vl) Semi)
+increment = on2StateValues (\vr -> mkSt . plusEqualsDocD vr)
 
 increment1 :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Statement repr))
-increment1 = onStateValue (\v -> stateFromData (plusPlusDocD v) Semi)
+increment1 = onStateValue (mkSt . plusPlusDocD)
 
 increment' :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Value repr)) -> MS (repr (Statement repr))
@@ -650,33 +650,33 @@ decrement1 v = v &= (S.valueOf v #- S.litInt 1)
 
 varDec :: (RenderSym repr) => repr (Permanence repr) -> repr (Permanence repr) 
   -> MS (repr (Variable repr)) -> MS (repr (Statement repr))
-varDec s d = onStateValue (\v -> stateFromData (permDoc (bind $ variableBind v) 
-  <+> getTypeDoc (variableType v) <+> variableDoc v) Semi)
+varDec s d = onStateValue (\v -> mkSt (permDoc (bind $ variableBind v) 
+  <+> getTypeDoc (variableType v) <+> variableDoc v))
   where bind Static = s
         bind Dynamic = d
 
 varDecDef :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Value repr)) -> MS (repr (Statement repr))
-varDecDef vr = on2StateValues (\vd vl -> stateFromData (statementDoc vd <+> 
-  equals <+> valueDoc vl) Semi) (S.varDec vr)
+varDecDef vr = on2StateValues (\vd vl -> mkSt (statementDoc vd <+> equals <+> 
+  valueDoc vl)) (S.varDec vr)
 
 listDec :: (RenderSym repr) => (repr (Value repr) -> Doc) -> 
   MS (repr (Value repr)) -> MS (repr (Variable repr)) -> 
   MS (repr (Statement repr))
-listDec f vl v = on2StateValues (\sz vd -> stateFromData (statementDoc vd <> f 
-  sz) Semi) vl (S.varDec v)
+listDec f vl v = on2StateValues (\sz vd -> mkSt (statementDoc vd <> f 
+  sz)) vl (S.varDec v)
 
 listDecDef :: (RenderSym repr) => ([repr (Value repr)] -> Doc) -> 
   MS (repr (Variable repr)) -> [MS (repr (Value repr))] -> 
   MS (repr (Statement repr))
-listDecDef f v = on1StateValue1List (\vd vs -> stateFromData (statementDoc vd 
-  <> f vs) Semi) (S.varDec v)
+listDecDef f v = on1StateValue1List (\vd vs -> mkSt (statementDoc vd <> f vs)) 
+  (S.varDec v)
 
 listDecDef' :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   [MS (repr (Value repr))] -> MS (repr (Statement repr))
-listDecDef' v vals = on3StateValues (\vd vr vs -> stateFromData (statementDoc
+listDecDef' v vals = on3StateValues (\vd vr vs -> mkSt (statementDoc
   vd <+> equals <+> new <+> getTypeDoc (variableType vr) <+> braces 
-  (valueList vs)) Semi) (S.varDec v) v (sequence vals)
+  (valueList vs))) (S.varDec v) v (sequence vals)
 
 objDecNew :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   [MS (repr (Value repr))] -> MS (repr (Statement repr))
@@ -688,16 +688,15 @@ objDecNewNoParams v = S.objDecNew v []
 
 constDecDef :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Value repr)) -> MS (repr (Statement repr))
-constDecDef = on2StateValues (\v def -> stateFromData (constDecDefDocD v def) 
-  Semi)
+constDecDef = on2StateValues (\v -> mkSt . constDecDefDocD v)
 
 discardInput :: (RenderSym repr) => (repr (Value repr) -> Doc) ->
   MS (repr (Statement repr))
-discardInput f = onStateValue (\infn -> stateFromData (f infn) Semi) inputFunc
+discardInput f = onStateValue (mkSt . f) inputFunc
 
 discardFileInput :: (RenderSym repr) => (repr (Value repr) -> Doc) -> 
   MS (repr (Value repr)) -> MS (repr (Statement repr))
-discardFileInput f = onStateValue (\v -> stateFromData (f v) Semi)
+discardFileInput f = onStateValue (mkSt . f)
 
 openFileR :: (RenderSym repr) => (MS (repr (Value repr)) -> 
   MS (repr (Type repr)) -> MS (repr (Value repr))) -> MS (repr (Variable repr)) 
@@ -770,7 +769,7 @@ valState t = onStateValue (\v -> stateFromData (valueDoc v) t)
 
 comment :: (RenderSym repr) => repr (Keyword repr) -> Label -> 
   MS (repr (Statement repr))
-comment cs c = toState $ stateFromData (commentDocD c (keyDoc cs)) Empty
+comment cs c = toState $ mkStNoEnd (commentDocD c (keyDoc cs))
 
 freeError :: String -> String
 freeError l = "Cannot free variables in " ++ l
@@ -819,7 +818,7 @@ ifCond ifst elseif blEnd (c:cs) eBody =
           text "else" <+> ifStart,
           indent $ bodyDoc bd,
           bEnd]) eBody
-    in onStateList (\l -> stateFromData (vcat l) Empty)
+    in onStateList (mkStNoEnd . vcat)
       (ifSect c : map elseIfSect cs ++ [elseSect])
 
 ifNoElse :: (RenderSym repr) => [(MS (repr (Value repr)), 
@@ -829,8 +828,8 @@ ifNoElse bs = S.ifCond bs $ body []
 switch :: (RenderSym repr) => MS (repr (Value repr)) -> 
   [(MS (repr (Value repr)), MS (repr (Body repr)))] -> MS (repr (Body repr)) -> 
   MS (repr (Statement repr))
-switch v cs = on4StateValues (\b val css de -> stateFromData (switchDocD b val 
-  de css) Semi) (S.state break) v (on2StateLists zip (map fst cs) (map snd cs))
+switch v cs bod = (\b val css de -> mkSt (switchDocD b val de css)) <$>
+  S.state break <*> v <*> on2StateLists zip (map fst cs) (map snd cs) <*> bod
 
 switchAsIf :: (RenderSym repr) => MS (repr (Value repr)) -> 
   [(MS (repr (Value repr)), MS (repr (Body repr)))] -> MS (repr (Body repr)) -> 
@@ -846,12 +845,11 @@ for :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) ->
   MS (repr (Statement repr)) -> MS (repr (Value repr)) -> 
   MS (repr (Statement repr)) -> MS (repr (Body repr)) -> 
   MS (repr (Statement repr))
-for bStart bEnd sInit vGuard sUpdate = on4StateValues (\initl guard upd bod -> 
-  stateFromData (vcat [
-  forLabel <+> parens (statementDoc initl <> semi <+> valueDoc guard <> semi 
-    <+> statementDoc upd) <+> keyDoc bStart,
+for bStart bEnd sInit vGuard sUpdate b = (\initl guard upd bod -> mkStNoEnd 
+  (vcat [forLabel <+> parens (statementDoc initl <> semi <+> valueDoc guard <> 
+    semi <+> statementDoc upd) <+> keyDoc bStart,
   indent $ bodyDoc bod,
-  keyDoc bEnd]) Empty) (S.loopState sInit) vGuard (S.loopState sUpdate)
+  keyDoc bEnd])) <$> S.loopState sInit <*> vGuard <*> S.loopState sUpdate <*> b
 
 forRange :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Value repr)) -> MS (repr (Value repr)) -> MS (repr (Value repr)) -> 
@@ -862,22 +860,22 @@ forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?<
 forEach :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
   repr (Keyword repr) -> repr (Keyword repr) -> MS (repr (Variable repr)) -> 
   MS (repr (Value repr)) -> MS (repr (Body repr)) -> MS (repr (Statement repr))
-forEach bStart bEnd forEachLabel inLbl = on3StateValues (\e v b -> stateFromData
+forEach bStart bEnd forEachLabel inLbl = on3StateValues (\e v b -> mkStNoEnd
   (vcat [keyDoc forEachLabel <+> parens (getTypeDoc (variableType e) <+> 
     variableDoc e <+> keyDoc inLbl <+> valueDoc v) <+> keyDoc bStart,
   indent $ bodyDoc b,
-  keyDoc bEnd]) Empty) 
+  keyDoc bEnd])) 
 
 while :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
   MS (repr (Value repr)) -> MS (repr (Body repr)) -> MS (repr (Statement repr))
-while bStart bEnd = on2StateValues (\v b -> stateFromData (vcat [
+while bStart bEnd = on2StateValues (\v b -> mkStNoEnd (vcat [
   text "while" <+> parens (valueDoc v) <+> keyDoc bStart,
   indent $ bodyDoc b,
-  keyDoc bEnd]) Empty)
+  keyDoc bEnd]))
 
 tryCatch :: (RenderSym repr) => (repr (Body repr) -> repr (Body repr) -> Doc) ->
   MS (repr (Body repr)) -> MS (repr (Body repr)) -> MS (repr (Statement repr))
-tryCatch f = on2StateValues (\tb cb -> stateFromData (f tb cb) Empty)
+tryCatch f = on2StateValues (\tb -> mkStNoEnd . f tb)
 
 checkState :: (RenderSym repr) => Label -> [(MS (repr (Value repr)), 
   MS (repr (Body repr)))] -> MS (repr (Body repr)) -> MS (repr (Statement repr))
@@ -900,7 +898,7 @@ construct n = toState $ typeFromData (Object n) n empty
 
 param :: (RenderSym repr) => (repr (Variable repr) -> Doc) -> 
   MS (repr (Variable repr)) -> MS (repr (Parameter repr))
-param f = getPutReturnFunc (\s v -> addParameter (variableName v) s) 
+param f = modifyReturnFunc (\v s -> addParameter (variableName v) s) 
   (\v -> paramFromData v (f v))
 
 method :: (RenderSym repr) => Label -> Label -> repr (Scope repr) -> 
@@ -1067,7 +1065,7 @@ buildModule' n inc ms cs = S.modFromData n (on3StateValues (\cls lis mis ->
 
 modFromData :: Label -> (Doc -> repr (Module repr)) -> FS Doc -> 
   FS (repr (Module repr))
-modFromData n f d = putAfter (setModuleName n) (onStateValue f d)
+modFromData n f d = modifyAfter (setModuleName n) (onStateValue f d)
 
 -- Files --
 
@@ -1085,7 +1083,7 @@ docMod d a dt = commentedMod (docComment $ moduleDox d a dt <$> getFilePath)
 fileFromData :: (RenderSym repr) => (repr (Module repr) -> FilePath -> 
   repr (RenderFile repr)) -> FileType -> FS FilePath -> 
   FS (repr (Module repr)) -> FS (repr (RenderFile repr))
-fileFromData f ft fp m = getPutReturnFunc2 (\s mdl fpath -> (if isEmpty 
+fileFromData f ft fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty 
   (moduleDoc mdl) then id else (if snd s ^. currMain then over lensFStoGS 
   (setMainMod fpath) else id) . over lensFStoGS (addFile ft fpath) . 
   setFilePath fpath) s) f m fp 
@@ -1094,7 +1092,7 @@ fileFromData f ft fp m = getPutReturnFunc2 (\s mdl fpath -> (if isEmpty
 
 setEmpty :: (RenderSym repr) => MS (repr (Statement repr)) -> 
   MS (repr (Statement repr))
-setEmpty = onStateValue (\s -> stateFromData (statementDoc s) Empty)
+setEmpty = onStateValue (mkStNoEnd . statementDoc)
 
 numType :: (RenderSym repr) => repr (Type repr) -> repr (Type repr) -> 
   repr (Type repr)

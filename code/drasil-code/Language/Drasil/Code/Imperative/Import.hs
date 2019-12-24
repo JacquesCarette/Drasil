@@ -79,7 +79,7 @@ inputVariable Bundled Var v = do
   let inModName = "InputParameters"
   ip <- mkVar (codevar inParams)
   return $ if currentModule g == inModName && Map.member inModName 
-    (eMap $ codeSpec g) then objVarSelf inModName v else ip $-> v
+    (eMap $ codeSpec g) then objVarSelf v else ip $-> v
 inputVariable Bundled Const v = do
   ip <- mkVar (codevar inParams)
   classVariable ip v
@@ -120,9 +120,9 @@ publicFunc :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) =>
 publicFunc n t = genMethod (function n public static_ t) n
 
 privateMethod :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  Label -> Label -> MS (repr (Type repr)) -> String -> [c] -> Maybe String -> 
+  Label -> MS (repr (Type repr)) -> String -> [c] -> Maybe String -> 
   [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
-privateMethod c n t = genMethod (method n c private dynamic_ t) n
+privateMethod n t = genMethod (method n private dynamic_ t) n
 
 publicInOutFunc :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) 
   => Label -> String -> [c] -> [c] -> [MS (repr (Block repr))] -> 
@@ -130,15 +130,15 @@ publicInOutFunc :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c)
 publicInOutFunc n = genInOutFunc (inOutFunc n) (docInOutFunc n) public static_ n
 
 privateInOutMethod :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c,
-  Eq c) => Label -> Label -> String -> [c] -> [c] -> [MS (repr (Block repr))] 
+  Eq c) => Label -> String -> [c] -> [c] -> [MS (repr (Block repr))] 
   -> Reader DrasilState (MS (repr (Method repr)))
-privateInOutMethod c n = genInOutFunc (inOutMethod n c) (docInOutMethod n c) 
+privateInOutMethod n = genInOutFunc (inOutMethod n) (docInOutMethod n) 
   private dynamic_ n
 
 genConstructor :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   Label -> String -> [c] -> [MS (repr (Block repr))] -> 
   Reader DrasilState (MS (repr (Method repr)))
-genConstructor n desc p = genMethod (constructor n) n desc p Nothing
+genConstructor n desc p = genMethod constructor n desc p Nothing
 
 genMethod :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   ([MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 

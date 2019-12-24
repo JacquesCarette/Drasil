@@ -11,7 +11,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  CodeType(..), GOOLState, FS, MS)
+  CodeType(..), GOOLState, FS, CS, MS)
 
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
@@ -19,7 +19,7 @@ import Control.Monad.Reader (Reader, ask, withReader)
 
 genModule :: (ProgramSym repr) => Name -> String
   -> Maybe (Reader DrasilState [MS (repr (Method repr))])
-  -> Maybe (Reader DrasilState [FS (repr (Class repr))])
+  -> Maybe (Reader DrasilState [CS (repr (Class repr))])
   -> Reader DrasilState (FS (repr (RenderFile repr)))
 genModule n desc maybeMs maybeCs = do
   g <- ask
@@ -44,8 +44,8 @@ genDoxConfig n s = do
   return [doxConfig n s v | not (null cms)]
 
 publicClass :: (ProgramSym repr) => String -> Label -> Maybe Label -> 
-  [FS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
-  -> Reader DrasilState (FS (repr (Class repr)))
+  [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
+  -> Reader DrasilState (CS (repr (Class repr)))
 publicClass desc n l vs mths = do
   g <- ask
   ms <- mths
@@ -59,7 +59,7 @@ fApp m s t vl = do
   g <- ask
   let cm = currentModule g
   return $ if m /= cm then extFuncApp m s t vl else if Map.lookup s 
-    (eMap $ codeSpec g) == Just cm then funcApp s t vl else selfFuncApp m s t vl
+    (eMap $ codeSpec g) == Just cm then funcApp s t vl else selfFuncApp s t vl
 
 fAppInOut :: (ProgramSym repr) => String -> String -> [MS (repr (Value repr))] 
   -> [MS (repr (Variable repr))] -> [MS (repr (Variable repr))] -> 
@@ -69,7 +69,7 @@ fAppInOut m n ins outs both = do
   let cm = currentModule g
   return $ if m /= cm then extInOutCall m n ins outs both else if Map.lookup n
     (eMap $ codeSpec g) == Just cm then inOutCall n ins outs both else 
-    selfInOutCall m n ins outs both
+    selfInOutCall n ins outs both
 
 mkParam :: (ProgramSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Parameter repr))

@@ -83,10 +83,11 @@ import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt,
   printDoc, returnDocD, getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, 
   enumDocD, enumElementsDocD, fileDoc', docFuncRepr, commentDocD, commentedItem,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, intValue)
-import GOOL.Drasil.State (FS, MS, lensFStoGS, lensFStoMS, currMain, modifyAfter,
-  modifyReturnFunc, modifyReturnFunc2, addFile, setMainMod, addLangImport, 
-  getLangImports, getModuleImports, setFilePath, getFilePath, setModuleName, 
-  getModuleName, addParameter)
+import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensFStoCS, lensFStoMS, 
+  lensCStoMS, currMain, modifyAfter, modifyReturnFunc, modifyReturnFunc2, 
+  addFile, setMainMod, addLangImport, getLangImports, getModuleImports, 
+  setFilePath, getFilePath, setModuleName, getModuleName, setClassName,
+  getClassName, addParameter)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Bifunctor (first)
@@ -387,8 +388,8 @@ extVar :: (RenderSym repr) => Label -> Label -> MS (repr (Type repr)) ->
   MS (repr (Variable repr))
 extVar l n t = mkStateVar (l ++ "." ++ n) t (extVarDocD l n)
 
-self :: (RenderSym repr) => Label -> MS (repr (Variable repr))
-self l = mkStateVar "this" (obj l) selfDocD
+self :: (RenderSym repr) => MS (repr (Variable repr))
+self = getClassName >>= (\l -> mkStateVar "this" (obj l) selfDocD)
 
 enumVar :: (RenderSym repr) => Label -> Label -> MS (repr (Variable repr))
 enumVar e en = S.var e (enumType en)
@@ -404,9 +405,9 @@ objVar :: (RenderSym repr) => MS (repr (Variable repr)) ->
 objVar = on2StateValues (\o v -> mkVar (variableName o ++ "." ++ variableName 
   v) (variableType v) (objVarDocD (variableDoc o) (variableDoc v)))
 
-objVarSelf :: (RenderSym repr) => Label -> MS (repr (Variable repr)) -> 
+objVarSelf :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Variable repr))
-objVarSelf l = S.objVar (S.self l)
+objVarSelf = S.objVar S.self
 
 listVar :: (RenderSym repr) => Label -> repr (Permanence repr) -> 
   MS (repr (Type repr)) -> MS (repr (Variable repr))
@@ -496,9 +497,9 @@ objMethodCallNoParams :: (RenderSym repr) => Label -> MS (repr (Type repr)) ->
   MS (repr (Value repr)) -> MS (repr (Value repr))
 objMethodCallNoParams f t o = S.objMethodCall t o f []
 
-selfAccess :: (RenderSym repr) => Label -> MS (repr (Function repr)) -> 
+selfAccess :: (RenderSym repr) => MS (repr (Function repr)) -> 
   MS (repr (Value repr))
-selfAccess l = S.objAccess (S.valueOf $ S.self l)
+selfAccess = S.objAccess (S.valueOf S.self)
 
 listIndexExists :: (RenderSym repr) => MS (repr (Value repr)) -> 
   MS (repr (Value repr)) -> MS (repr (Value repr))
@@ -901,38 +902,38 @@ param :: (RenderSym repr) => (repr (Variable repr) -> Doc) ->
 param f = modifyReturnFunc (\v s -> addParameter (variableName v) s) 
   (\v -> paramFromData v (f v))
 
-method :: (RenderSym repr) => Label -> Label -> repr (Scope repr) -> 
+method :: (RenderSym repr) => Label -> repr (Scope repr) -> 
   repr (Permanence repr) -> MS (repr (Type repr)) -> 
   [MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
   MS (repr (Method repr))
-method n c s p t = intMethod False n c s p (mType t)
+method n s p t = intMethod False n s p (mType t)
 
-getMethod :: (RenderSym repr) => Label -> MS (repr (Variable repr)) -> 
+getMethod :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Method repr))
-getMethod c v = v >>= (\vr -> S.method (getterName $ variableName vr) c public 
-  dynamic_ (toState $ variableType vr) [] getBody)
-  where getBody = S.oneLiner $ S.returnState (S.valueOf $ S.objVarSelf c v)
+getMethod v = v >>= (\vr -> S.method (getterName $ variableName vr) 
+  public dynamic_ (toState $ variableType vr) [] getBody)
+  where getBody = S.oneLiner $ S.returnState (S.valueOf $ S.objVarSelf v)
 
-setMethod :: (RenderSym repr) => Label -> MS (repr (Variable repr)) -> 
+setMethod :: (RenderSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Method repr))
-setMethod c v = v >>= (\vr -> S.method (setterName $ variableName vr) c public 
+setMethod v = v >>= (\vr -> S.method (setterName $ variableName vr) public 
   dynamic_ S.void [S.param v] setBody)
-  where setBody = S.oneLiner $ S.objVarSelf c v &= S.valueOf v
+  where setBody = S.oneLiner $ S.objVarSelf v &= S.valueOf v
 
-privMethod :: (RenderSym repr) => Label -> Label -> MS (repr (Type repr)) -> 
+privMethod :: (RenderSym repr) => Label -> MS (repr (Type repr)) -> 
   [MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
   MS (repr (Method repr))
-privMethod n c = S.method n c private dynamic_
+privMethod n = S.method n private dynamic_
 
-pubMethod :: (RenderSym repr) => Label -> Label -> MS (repr (Type repr)) -> 
+pubMethod :: (RenderSym repr) => Label -> MS (repr (Type repr)) -> 
   [MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
   MS (repr (Method repr))
-pubMethod n c = S.method n c public dynamic_
+pubMethod n = S.method n public dynamic_
 
-constructor :: (RenderSym repr) => Label -> Label -> 
-  [MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
-  MS (repr (Method repr))
-constructor fName n = intMethod False fName n public dynamic_ (S.construct n)
+constructor :: (RenderSym repr) => Label -> [MS (repr (Parameter repr))] -> 
+  MS (repr (Body repr)) -> MS (repr (Method repr))
+constructor fName ps b = getClassName >>= (\c -> intMethod False fName public 
+  dynamic_ (S.construct c) ps b)
 
 docMain :: (RenderSym repr) => MS (repr (Body repr)) -> MS (repr (Method repr))
 docMain b = commentedFunc (docComment $ toState $ functionDox 
@@ -974,94 +975,95 @@ intFunc :: (RenderSym repr) => Bool -> Label -> repr (Scope repr) ->
   repr (Permanence repr) -> MS (repr (MethodType repr)) -> 
   [MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
   MS (repr (Method repr))
-intFunc m n = intMethod m n ""
+intFunc = intMethod
 
 -- State Variables --
 
 stateVar :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) ->
-  MS (repr (Variable repr)) -> FS (repr (StateVar repr))
-stateVar s p v = stateVarFromData (zoom lensFStoMS $ onStateValue (stateVarDocD 
+  MS (repr (Variable repr)) -> CS (repr (StateVar repr))
+stateVar s p v = stateVarFromData (zoom lensCStoMS $ onStateValue (stateVarDocD 
   (scopeDoc s) (permDoc p) . statementDoc) (S.state $ S.varDec v))
 
 stateVarDef :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) 
   -> MS (repr (Variable repr)) -> MS (repr (Value repr)) -> 
-  FS (repr (StateVar repr))
-stateVarDef s p vr vl = stateVarFromData (zoom lensFStoMS $ onStateValue 
+  CS (repr (StateVar repr))
+stateVarDef s p vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue 
   (stateVarDocD (scopeDoc s) (permDoc p) . statementDoc) (S.state $ S.varDecDef 
   vr vl))
 
 constVar :: (RenderSym repr) => Doc -> repr (Scope repr) ->
   MS (repr (Variable repr)) -> MS (repr (Value repr)) -> 
-  FS (repr (StateVar repr))
-constVar p s vr vl = stateVarFromData (zoom lensFStoMS $ onStateValue 
+  CS (repr (StateVar repr))
+constVar p s vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue 
   (stateVarDocD (scopeDoc s) p . statementDoc) (S.state $ S.constDecDef vr vl))
 
 privMVar :: (RenderSym repr) => MS (repr (Variable repr)) -> 
-  FS (repr (StateVar repr))
+  CS (repr (StateVar repr))
 privMVar = S.stateVar private dynamic_
 
 pubMVar :: (RenderSym repr) => MS (repr (Variable repr)) -> 
-  FS (repr (StateVar repr))
+  CS (repr (StateVar repr))
 pubMVar = S.stateVar public dynamic_
 
 pubGVar :: (RenderSym repr) => MS (repr (Variable repr)) -> 
-  FS (repr (StateVar repr))
+  CS (repr (StateVar repr))
 pubGVar = S.stateVar public static_
 
 -- Classes --
 
 buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> 
   (Label -> repr (Keyword repr)) -> Label -> Maybe Label -> repr (Scope repr) 
-  -> [FS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
-  FS (repr (Class repr))
-buildClass f i n p s vs fs = classFromData (on2StateValues (f n parent 
-  (scopeDoc s)) (onStateList (stateVarListDocD . map stateVarDoc) vs)
-  (onStateList (vibcat . map methodDoc) (map (zoom lensFStoMS) fs)))
+  -> [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
+  CS (repr (Class repr))
+buildClass f i n p s vs fs = modify (setClassName n) >> classFromData 
+  (on2StateValues (f n parent (scopeDoc s)) (onStateList (stateVarListDocD . 
+  map stateVarDoc) vs) (onStateList (vibcat . map methodDoc) (map (zoom 
+  lensCStoMS) fs)))
   where parent = case p of Nothing -> empty
                            Just pn -> keyDoc $ i pn
 
 enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
-  FS (repr (Class repr))
-enum n es s = classFromData (toState $ enumDocD n (enumElementsDocD es False) 
-  (scopeDoc s))
+  CS (repr (Class repr))
+enum n es s = modify (setClassName n) >> classFromData (toState $ enumDocD n 
+  (enumElementsDocD es False) (scopeDoc s))
 
 privClass :: (RenderSym repr) => Label -> Maybe Label -> 
-  [FS (repr (StateVar repr))] -> 
-  [MS (repr (Method repr))] -> FS (repr (Class repr))
+  [CS (repr (StateVar repr))] -> 
+  [MS (repr (Method repr))] -> CS (repr (Class repr))
 privClass n p = S.buildClass n p private
 
 pubClass :: (RenderSym repr) => Label -> Maybe Label -> 
-  [FS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
-  FS (repr (Class repr))
+  [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
+  CS (repr (Class repr))
 pubClass n p = S.buildClass n p public
 
-docClass :: (RenderSym repr) => String -> FS (repr (Class repr))
-  -> FS (repr (Class repr))
+docClass :: (RenderSym repr) => String -> CS (repr (Class repr))
+  -> CS (repr (Class repr))
 docClass d = S.commentedClass (docComment $ toState $ classDox d)
 
-commentedClass :: (RenderSym repr) => FS (repr (BlockComment repr))
-  -> FS (repr (Class repr)) -> FS (repr (Class repr))
+commentedClass :: (RenderSym repr) => CS (repr (BlockComment repr))
+  -> CS (repr (Class repr)) -> CS (repr (Class repr))
 commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' -> 
   commentedItem (blockCommentDoc cmt') (classDoc cs')) cmt cs)
 
 -- Modules --
 
 buildModule :: (RenderSym repr) => Label -> FS Doc -> [MS (repr (Method repr))] 
-  -> [FS (repr (Class repr))] -> FS (repr (Module repr))
+  -> [CS (repr (Class repr))] -> FS (repr (Module repr))
 buildModule n imps ms cs = S.modFromData n ((\cls fs is -> moduleDocD is 
-  (vibcat (map classDoc cls)) (vibcat (map methodDoc fs))) <$> sequence cs <*> 
-  mapM (zoom lensFStoMS) ms <*> imps)
+  (vibcat (map classDoc cls)) (vibcat (map methodDoc fs))) <$> 
+  mapM (zoom lensFStoCS) cs <*> mapM (zoom lensFStoMS) ms <*> imps)
 
 buildModule' :: (RenderSym repr) => Label -> (String -> repr (Import repr)) -> 
-  [MS (repr (Method repr))] -> [FS (repr (Class repr))] -> 
+  [MS (repr (Method repr))] -> [CS (repr (Class repr))] -> 
   FS (repr (Module repr))
 buildModule' n inc ms cs = S.modFromData n (on3StateValues (\cls lis mis -> 
   vibcat [
     vcat (map (importDoc . inc) lis), 
     vcat (map (importDoc . inc) mis), 
     vibcat (map classDoc cls)])
-  (sequence $ if null ms then cs else pubClass n Nothing [] ms : cs)
-  getLangImports getModuleImports)
+  (mapM (zoom lensFStoCS) $ if null ms then cs else pubClass n Nothing [] ms : 
+  cs) getLangImports getModuleImports)
 
 modFromData :: Label -> (Doc -> repr (Module repr)) -> FS Doc -> 
   FS (repr (Module repr))

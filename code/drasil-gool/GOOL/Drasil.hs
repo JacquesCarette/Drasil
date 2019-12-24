@@ -8,7 +8,7 @@ module GOOL.Drasil (Label, ProgramSym(..), FileSym(..),
   ModuleSym(..), BlockCommentSym(..), 
   ScopeTag(..), ProgData(..), FileData(..), ModData(..),
   CodeType(..),
-  GOOLState(..), GS, FS, MS, headers, sources, mainMod, 
+  GOOLState(..), GS, FS, CS, MS, headers, sources, mainMod, 
   initialState,
   convType, onStateValue, onCodeList,
   unCI, unPC, unJC, unCSC, unCPPC
@@ -26,7 +26,7 @@ import GOOL.Drasil.Data (ScopeTag(..), FileData(..), ModData(..), ProgData(..))
 
 import GOOL.Drasil.CodeType (CodeType(..))
 
-import GOOL.Drasil.State (GOOLState(..), GS, FS, MS, headers, 
+import GOOL.Drasil.State (GOOLState(..), GS, FS, CS, MS, headers, 
   sources, mainMod, initialState)
 
 import GOOL.Drasil.Helpers (convType, onStateValue, onCodeList)

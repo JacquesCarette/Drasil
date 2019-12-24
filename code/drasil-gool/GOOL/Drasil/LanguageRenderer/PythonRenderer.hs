@@ -61,7 +61,8 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (MS, lensGStoFS, addLangImport, getLangImports, 
-  addModuleImport, getModuleImports, setCurrMain, getClassMap)
+  addModuleImport, getModuleImports, setClassName, getClassName, setCurrMain, 
+  getClassMap)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -250,7 +251,7 @@ instance VariableSym PythonCode where
   staticVar = G.staticVar
   const = var
   extVar l n t = modify (addModuleImport l) >> G.extVar l n t
-  self l = mkStateVar "self" (obj l) (text "self")
+  self = getClassName >>= (\l -> mkStateVar "self" (obj l) (text "self"))
   enumVar = G.enumVar
   classVar = G.classVar classVarDocD
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
@@ -337,7 +338,7 @@ instance BooleanExpression PythonCode where
 instance ValueExpression PythonCode where
   inlineIf = pyInlineIf
   funcApp = G.funcApp
-  selfFuncApp c = G.selfFuncApp (self c)
+  selfFuncApp = G.selfFuncApp self
   extFuncApp l n t ps = modify (addModuleImport l) >> G.extFuncApp l n t ps
   newObj = G.newObj newObjDocD'
   extNewObj l tp ps = modify (addModuleImport l) >> on1StateValue1List 
@@ -500,7 +501,7 @@ instance StatementSym PythonCode where
   addObserver = G.addObserver
 
   inOutCall = pyInOutCall funcApp
-  selfInOutCall c = pyInOutCall (selfFuncApp c)
+  selfInOutCall = pyInOutCall selfFuncApp
   extInOutCall m = pyInOutCall (extFuncApp m)
 
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
@@ -567,7 +568,7 @@ instance MethodSym PythonCode where
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor = G.constructor initName
-  destructor _ _ = error $ destructorError pyName
+  destructor _ = error $ destructorError pyName
 
   docMain = mainFunction
 
@@ -576,18 +577,18 @@ instance MethodSym PythonCode where
 
   docFunc = G.docFunc
 
-  inOutMethod n c = pyInOut (method n c)
+  inOutMethod n = pyInOut (method n)
 
-  docInOutMethod n c = pyDocInOut (inOutMethod n c)
+  docInOutMethod n = pyDocInOut (inOutMethod n)
 
   inOutFunc n = pyInOut (function n)
 
   docInOutFunc n = pyDocInOut (inOutFunc n)
 
 instance InternalMethod PythonCode where
-  intMethod m n l _ _ _ ps b = modify (if m then setCurrMain else id) >> 
+  intMethod m n _ _ _ ps b = modify (if m then setCurrMain else id) >> 
     on3StateValues (\sl pms bd -> methodFromData Pub $ pyMethod n sl pms bd) 
-    (self l) (sequence ps) b 
+    self (sequence ps) b 
   intFunc m n _ _ _ ps b = modify (if m then setCurrMain else id) >>
     on1StateValue1List (\bd pms -> methodFromData Pub $ pyFunction n pms bd) 
     b ps
@@ -614,8 +615,8 @@ instance InternalStateVar PythonCode where
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
   buildClass = G.buildClass pyClass inherit
-  enum n es s = classFromData (toState $ pyClass n empty (scopeDoc s)
-    (enumElementsDocD' es) empty)
+  enum n es s = modify (setClassName n) >> classFromData (toState $ pyClass n 
+    empty (scopeDoc s) (enumElementsDocD' es) empty)
   privClass = G.privClass
   pubClass = G.pubClass
 

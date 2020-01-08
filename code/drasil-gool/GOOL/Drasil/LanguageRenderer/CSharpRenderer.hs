@@ -17,20 +17,21 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
-  InternalMod(..), BlockCommentSym(..))
-import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
+  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..), ODEInfo(..), 
+  ODEOptions(..), ODEMethod(..))
+import GOOL.Drasil.LanguageRenderer (new, classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, classVarDocD, 
   objVarDocD, newObjDocD, funcDocD, castDocD, listSetFuncDocD, castObjDocD, 
   staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, dot, 
   blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD, 
-  appendToBody, surroundBody)
+  variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, multiBlock, bool, int, double, char, string, listType, 
   listInnerType, obj, enumType, void, runStrategy, listSlice, notOp, negateOp, 
@@ -55,7 +56,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
   privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
   commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
+  unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
@@ -64,16 +66,17 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (MS, lensGStoFS, modifyReturn, addLangImport, 
-  getClassName, setCurrMain)
+import GOOL.Drasil.State (MS, lensGStoFS, modifyReturn, tempStateChange, 
+  addLangImport, getClassName, setCurrMain, setODEDepVars, getODEDepVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
+import Data.List (elemIndex)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty,
-  semi, vcat, lbrace, rbrace, colon)
+  comma, equals, semi, vcat, braces, lbrace, rbrace, colon)
 
 csExt :: String
 csExt = "cs"
@@ -201,6 +204,39 @@ instance ControlBlockSym CSharpCode where
 
   listSlice' = G.listSlice
 
+  solveODE info opts = modify (addLangImport "Microsoft.Research.Oslo") >> 
+    multiBlock [
+      block [
+        varDecDef sol (extFuncApp "Ode" (csODEMethod $ solveMethod opts) odeT 
+        [tInit info, 
+        newObj vec [initVal info], 
+        join $ on2StateValues (\idv dpv -> newObj vec [tempStateChange 
+          (setODEDepVars [variableName dpv]) (ode info)] >>= (mkStateVal void .
+          (parens (variableList [idv, dpv]) <+> text "=>" <+>) . valueDoc)) 
+          iv dv,
+        join $ on2StateValues (\abt rt -> mkStateVal (obj "Options") (new <+> 
+          text "Options" <+> braces (text "AbsoluteTolerance" <+> equals <+> 
+          valueDoc abt <> comma <+> text "RelativeTolerance" <+> equals <+> 
+          valueDoc rt))) (absTol opts) (relTol opts)])],
+      block [
+        varDecDef points (objMethodCallNoParams spArray 
+        (objMethodCall void (valueOf sol) "SolveFromToStep" 
+          [tInit info, tFinal info, stepSize opts]) "ToArray"),
+        listDecDef dv [],
+        forEach sp (valueOf points) 
+          (oneLiner $ valState $ listAppend (valueOf dv) (valueOf $ 
+          objVar sp (var "X" (listInnerType $ onStateValue variableType dv))))]
+    ]
+    where iv = indepVar info
+          dv = depVar info
+          odeT = obj "IEnumerable<SolPoint>"
+          vec = obj "Vector"
+          sol = var "sol" odeT
+          spArray = toState $ typeFromData (List (Object "SolPoint")) 
+            "SolPoint[]" (text "SolPoint[]")
+          points = var "points" spArray
+          sp = var "sp" (obj "SolPoint")
+
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
   notOp = G.notOp
@@ -284,7 +320,9 @@ instance ValueSym CSharpCode where
 
   ($:) = enumElement
 
-  valueOf = G.valueOf
+  valueOf v = join $ on2StateValues (\dvs vr -> maybe (G.valueOf v) (listAccess 
+    (G.valueOf v) . litInt . toInteger) (elemIndex (variableName vr) dvs)) 
+    getODEDepVars v
   arg n = G.arg (litInt n) argsList
   enumElement = G.enumElement
   
@@ -630,6 +668,11 @@ addSystemImport = (>>) $ modify (addLangImport "System")
 
 csName :: String
 csName = "C#"
+
+csODEMethod :: ODEMethod -> String
+csODEMethod RK45 = "RK547M"
+csODEMethod BDF = "GearBDF"
+csODEMethod _ = error "Chosen ODE method unavailable in C#"
 
 csImport :: Label -> CSharpCode (Keyword CSharpCode) -> Doc
 csImport n end = text ("using " ++ n) <> keyDoc end

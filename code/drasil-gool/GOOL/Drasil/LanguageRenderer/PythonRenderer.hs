@@ -232,10 +232,10 @@ instance ControlBlockSym PythonCode where
          odeT = obj "ode"
          r = var "r" odeT
          rVal = valueOf r
-         r_t = valueOf $ objVar r (var "t" $ onStateValue variableType $ 
-           indepVar info)
-         r_y = valueOf $ objVar r (var "t" $ onStateValue variableType $ 
-           depVar info)
+         r_t = valueOf $ objVar r (var "t" $ listInnerType $ onStateValue 
+           variableType iv)
+         r_y = valueOf $ objVar r (var "t" $ listInnerType $ onStateValue 
+           variableType dv)
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData

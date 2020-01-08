@@ -4,22 +4,23 @@ module GOOL.Drasil.State (
   GS, GOOLState(..), FS, CS, MS, lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoMS, lensMStoCS, headers, sources, mainMod, currMain, initialState, 
   initialFS, modifyAfter, modifyReturn, modifyReturnFunc, modifyReturnFunc2, 
-  modifyReturnList, addFile, addCombinedHeaderSource, addHeader, addSource, 
-  addProgNameToPaths, setMainMod, addLangImport, getLangImports, 
-  addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, 
-  addHeaderModImport, getHeaderModImports, addDefine, getDefines, 
-  addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
-  getHeaderUsing, setFilePath, getFilePath, setModuleName, getModuleName, 
-  setClassName, getClassName, setCurrMain, getCurrMain, addClass, getClasses, 
-  updateClassMap, getClassMap, addParameter, getParameters, setOutputsDeclared, 
-  isOutputsDeclared, setScope, getScope, setCurrMainFunc, getCurrMainFunc
+  modifyReturnList, tempStateChange, addFile, addCombinedHeaderSource, 
+  addHeader, addSource, addProgNameToPaths, setMainMod, addLangImport, 
+  getLangImports, addModuleImport, getModuleImports, addHeaderLangImport, 
+  getHeaderLangImports, addHeaderModImport, getHeaderModImports, addDefine, 
+  getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
+  addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, setModuleName, 
+  getModuleName, setClassName, getClassName, setCurrMain, getCurrMain, addClass,
+  getClasses, updateClassMap, getClassMap, addParameter, getParameters, 
+  setODEDepVars, getODEDepVars, setOutputsDeclared, isOutputsDeclared, setScope,
+  getScope, setCurrMainFunc, getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
-import Control.Monad.State (State, modify, gets)
+import Control.Monad.State (State, modify, get, gets, put)
 import Data.List (sort)
 import Data.Maybe (isNothing)
 import Data.Map (Map, fromList, empty, union)
@@ -34,6 +35,7 @@ makeLenses ''GOOLState
 
 data MethodState = MS {
   _currParameters :: [String],
+  _currODEDepVars :: [String],
 
   -- Only used for Java
   _outputsDeclared :: Bool,
@@ -172,6 +174,7 @@ initialCS = CS {
 initialMS :: MethodState
 initialMS = MS {
   _currParameters = [],
+  _currODEDepVars = [],
 
   _outputsDeclared = False,
 
@@ -213,6 +216,14 @@ modifyReturnList l sf vf = do
   v <- sequence l
   modify sf
   return $ vf v
+
+tempStateChange :: (s -> s) -> State s a -> State s a
+tempStateChange f st = do
+  s <- get
+  modify f
+  v <- st
+  put s
+  return v
 
 -------------------------------
 ------- State Modifiers -------
@@ -358,6 +369,13 @@ addParameter p = over _2 $ over currParameters (\ps -> if p `elem` ps then
 
 getParameters :: MS [String]
 getParameters = gets ((^. currParameters) . snd)
+
+setODEDepVars :: [String] -> (((GOOLState, FileState), ClassState), MethodState)
+  -> (((GOOLState, FileState), ClassState), MethodState)
+setODEDepVars vs = over _2 $ set currODEDepVars vs
+
+getODEDepVars :: MS [String]
+getODEDepVars = gets ((^. currODEDepVars) . snd)
 
 setOutputsDeclared :: (((GOOLState, FileState), ClassState), MethodState) -> 
   (((GOOLState, FileState), ClassState), MethodState)

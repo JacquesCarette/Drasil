@@ -33,13 +33,13 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   commentedItem, addCommentsDocD, functionDox, commentedModD, valueList, 
   parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, block, int, double, char, string, listType, listInnerType, obj, 
-  enumType, void, runStrategy, listSlice, notOp, negateOp, sqrtOp, absOp, expOp,
-  sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, equalOp, notEqualOp, greaterOp, 
-  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
-  moduloOp, powerOp, andOp, orOp, var, staticVar, self, enumVar, objVar,
-  listVar, listOf, litTrue, litFalse, litChar, litFloat, litInt, litString, 
-  valueOf, arg, argsList, inlineIf, objAccess, objMethodCall, 
+  oneLiner, block, multiBlock, int, double, char, string, listType, 
+  listInnerType, obj, enumType, void, runStrategy, listSlice, notOp, negateOp, 
+  sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, equalOp, 
+  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
+  multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, staticVar, self, 
+  enumVar, objVar, listVar, listOf, litTrue, litFalse, litChar, litFloat, 
+  litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, objMethodCall,
   objMethodCallNoParams, selfAccess, listIndexExists, funcApp, newObj, func, 
   get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
   listSet, getFunc, setFunc, listSizeFunc, listAppendFunc, listAccessFunc', 
@@ -183,6 +183,7 @@ instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => InternalBlock (p CppSrcCode CppHdrCode) where
   blockDoc b = blockDoc $ pfst b
   docBlock d = on2StateValues pair (docBlock d) (docBlock d)
+  multiBlock = pair1List multiBlock multiBlock
 
 instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   type Type (p CppSrcCode CppHdrCode) = TypeData
@@ -978,6 +979,7 @@ instance BlockSym CppSrcCode where
 instance InternalBlock CppSrcCode where
   blockDoc = unCPPSC
   docBlock = onStateValue toCode
+  multiBlock = G.multiBlock
 
 instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
@@ -1594,6 +1596,7 @@ instance BlockSym CppHdrCode where
 instance InternalBlock CppHdrCode where
   blockDoc = unCPPHC
   docBlock = onStateValue toCode
+  multiBlock = G.multiBlock
 
 instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData

@@ -32,11 +32,11 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD, 
   appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, block, bool, int, double, char, string, listType, listInnerType,
-  obj, enumType, void, runStrategy, listSlice, notOp, negateOp, equalOp, 
-  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
-  multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, 
-  enumVar, classVar, objVarSelf, listVar, listOf, iterVar, pi, litTrue, 
+  oneLiner, block, multiBlock, bool, int, double, char, string, listType, 
+  listInnerType, obj, enumType, void, runStrategy, listSlice, notOp, negateOp, 
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
+  minusOp, multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, 
+  self, enumVar, classVar, objVarSelf, listVar, listOf, iterVar, pi, litTrue, 
   litFalse, litChar, litFloat, litInt, litString, valueOf, arg, enumElement, 
   argsList, inlineIf, objAccess, objMethodCall, objMethodCallNoParams, 
   selfAccess, listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, 
@@ -170,6 +170,7 @@ instance BlockSym CSharpCode where
 instance InternalBlock CSharpCode where
   blockDoc = unCSC
   docBlock = onStateValue toCode
+  multiBlock = G.multiBlock
 
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData

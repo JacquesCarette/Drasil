@@ -32,19 +32,19 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   addCommentsDocD, commentedModD, docFuncRepr, parameterList, appendToBody, 
   surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, block, bool, int, double, char, listType, listInnerType, obj, 
-  enumType, void, runStrategy, listSlice, notOp, negateOp, equalOp, notEqualOp, 
-  greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
-  divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar,
-  classVar, objVar, objVarSelf, listVar, listOf, iterVar, litTrue, litFalse, 
-  litChar, litFloat, litInt, litString, pi, valueOf, arg, enumElement, argsList,
-  inlineIf, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
-  listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, newObj, notNull, 
-  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess,
-  listSet, getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, 
-  iterBeginError, iterEndError, listAccessFunc', printSt, state, loopState, 
-  emptyState, assign, assignToListIndex, multiAssignError, decrement, increment,
-  decrement1, increment1, varDec, varDecDef, listDec, objDecNew, 
+  oneLiner, block, multiBlock, bool, int, double, char, listType, listInnerType,
+  obj, enumType, void, runStrategy, listSlice, notOp, negateOp, equalOp, 
+  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
+  multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, 
+  enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar, litTrue, 
+  litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, enumElement,
+  argsList, inlineIf, objAccess, objMethodCall, objMethodCallNoParams, 
+  selfAccess, listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, 
+  newObj, notNull, func, get, set, listSize, listAdd, listAppend, iterBegin, 
+  iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
+  listAppendFunc, iterBeginError, iterEndError, listAccessFunc', printSt, state,
+  loopState, emptyState, assign, assignToListIndex, multiAssignError, decrement,
+  increment, decrement1, increment1, varDec, varDecDef, listDec, objDecNew, 
   objDecNewNoParams, discardInput, discardFileInput, openFileR, openFileW, 
   openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
   returnState, multiReturnError, valState, comment, freeError, throw, initState,
@@ -172,6 +172,7 @@ instance BlockSym JavaCode where
 instance InternalBlock JavaCode where
   blockDoc = unJC
   docBlock = onStateValue toCode
+  multiBlock = G.multiBlock
 
 instance TypeSym JavaCode where
   type Type JavaCode = TypeData

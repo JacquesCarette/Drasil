@@ -774,6 +774,7 @@ class BlockCommentSym repr where
 data ODEInfo repr = ODEInfo {
   indepVar :: MS (repr (Variable repr)),
   depVar :: MS (repr (Variable repr)),
+  otherVars :: [MS (repr (Variable repr))],
   tInit :: MS (repr (Value repr)),
   tFinal :: MS (repr (Value repr)),
   initVal :: MS (repr (Value repr)),
@@ -781,8 +782,9 @@ data ODEInfo repr = ODEInfo {
 }
 
 odeInfo :: MS (repr (Variable repr)) -> MS (repr (Variable repr)) -> 
+  [MS (repr (Variable repr))] -> MS (repr (Value repr)) -> 
   MS (repr (Value repr)) -> MS (repr (Value repr)) -> MS (repr (Value repr)) -> 
-  MS (repr (Value repr)) -> ODEInfo repr
+  ODEInfo repr
 odeInfo = ODEInfo
 
 data ODEOptions repr = ODEOptions {

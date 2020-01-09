@@ -7,7 +7,7 @@ module GOOL.Drasil.LanguageRenderer.JavaRenderer (
   JavaCode(..)
 ) where
 
-import Utils.Drasil (indent)
+import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..), 
@@ -17,12 +17,13 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
-  InternalMod(..), BlockCommentSym(..))
+  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..), ODEInfo(..), 
+  ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
   bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, newObjDocD, 
@@ -65,16 +66,16 @@ import GOOL.Drasil.Helpers (angles, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, lensGStoFS, modifyReturn, modifyReturnList, 
-  addProgNameToPaths, addLangImport, getClassName, setCurrMain, 
-  setOutputsDeclared, isOutputsDeclared)
+  addProgNameToPaths, addLangImport, addLibImport, addLibImports, getClassName, 
+  setCurrMain, setOutputsDeclared, isOutputsDeclared)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
-  equals, semi, vcat, lbrace, rbrace, render, colon, render)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), braces, parens, 
+  empty, equals, semi, vcat, lbrace, rbrace, render, colon, render)
 
 jExt :: String
 jExt = "java"
@@ -201,6 +202,49 @@ instance ControlBlockSym JavaCode where
   runStrategy = G.runStrategy
 
   listSlice' = G.listSlice
+
+  solveODE info opts = modify (addLibImports (map ((odeImport ++ "sampling.") 
+    ++) [stH, stI])) >> (dv >>= (\dpv -> 
+      let odeVarType = obj (odeClassName dpv)
+          odeVar = var "ode" odeVarType
+          odeDepVar = var (odeVarName dpv) (toState dblArray)
+          initval = initVal info
+          dblArray = typeFromData (List Float) "double[]" (text "double[]")
+          integVal = valueOf $ jODEIntVar (solveMethod opts)
+          hndlr = var "stepHandler" (obj stH)
+          interp = var "interpolator" (obj stI)
+          odeClassName = ((++ "_ODE") . variableName)
+          odeVarName = ((++ "_ode") . variableName)
+          odeTempName = ((++ "_curr") . variableName)
+      in multiBlock [
+      block [
+        jODEMethod opts,
+        objDecDef odeVar (newObj odeVarType (map valueOf $ otherVars info)),
+        initval >>= (\initv -> varDecDef odeDepVar (toState $ mkVal 
+          (variableType dpv) (new <+> getTypeDoc dblArray <+> braces
+          (valueDoc initv)))),
+        listDecDef dv [initval]],
+      block [
+        on3StateValues (\odec initf handlef -> mkSt $ statementDoc odec <+> 
+          keyDoc (blockStart :: JavaCode Doc) $$ methodDoc initf $$ blank $$ methodDoc handlef $$ keyDoc (blockEnd :: JavaCode Doc)) 
+          (objDecDef hndlr (newObj (obj stH) [])) 
+          (function "init" public dynamic_ void (map param [var "t0" float, 
+            var "y0" (toState dblArray), var "t" float]) (body []))
+          (function "handleStep" public dynamic_ void (map param [interp, 
+            var "isLast" (toState $ typeFromData Boolean "boolean" 
+            (text "boolean"))]) (bodyStatements [
+              varDecDef (var (odeTempName dpv) (toState dblArray)) 
+                (objMethodCallNoParams (toState dblArray) (valueOf interp) 
+                "getInterpolatedState"),
+              valState $ listAppend (valueOf dv) (mkStateVal float 
+                (text $ odeTempName dpv ++ "[0]"))])),
+        valState $ objMethodCall void integVal "addStepHandler" [valueOf hndlr],
+        valState $ objMethodCall void integVal "integrate"   
+          [valueOf odeVar, tInit info, valueOf odeDepVar, tFinal info, 
+          valueOf odeDepVar]]]))
+    where stH = "StepHandler"
+          stI = "StepInterpolator"
+          dv = depVar info
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
@@ -631,6 +675,28 @@ instance BlockCommentSym JavaCode where
     docCommentStart docCommentEnd)
 
   blockCommentDoc = unJC
+
+odeImport :: String
+odeImport = "org.apache.commons.math3.ode."
+
+jODEMethod :: ODEOptions JavaCode -> MS (JavaCode (Statement JavaCode))
+jODEMethod opts = modify (addLibImport (odeImport ++ "nonstiff." ++ it)) >> 
+  varDecDef (jODEIntVar m) (newObj (obj it) (jODEParams m))
+  where m = solveMethod opts
+        it = jODEInt m
+        jODEParams RK45 = [stepSize opts, stepSize opts, absTol opts, 
+          relTol opts]
+        jODEParams Adams = [litInt 3, stepSize opts, stepSize opts, absTol opts,
+          relTol opts]
+        jODEParams _ = error "Chosen ODE method unavailable in Java"
+
+jODEIntVar :: ODEMethod -> MS (JavaCode (Variable JavaCode))
+jODEIntVar m = var "it" (obj $ jODEInt m)
+
+jODEInt :: ODEMethod -> String
+jODEInt RK45 = "DormandPrince54Integrator"
+jODEInt Adams = "AdamsBashforthIntegrator"
+jODEInt _ = error "Chosen ODE method unavailable in Java"
 
 jName :: String
 jName = "Java"

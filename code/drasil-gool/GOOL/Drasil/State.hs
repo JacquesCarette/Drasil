@@ -6,7 +6,7 @@ module GOOL.Drasil.State (
   initialFS, modifyAfter, modifyReturn, modifyReturnFunc, modifyReturnFunc2, 
   modifyReturnList, tempStateChange, addFile, addCombinedHeaderSource, 
   addHeader, addSource, addProgNameToPaths, setMainMod, addLangImport, 
-  getLangImports, addLibImport, getLibImports, addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, addHeaderModImport, getHeaderModImports, addDefine, 
+  getLangImports, addLibImport, addLibImports, getLibImports, addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, addHeaderModImport, getHeaderModImports, addDefine, 
   getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
   addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, setModuleName, 
   getModuleName, setClassName, getClassName, setCurrMain, getCurrMain, addClass,
@@ -269,6 +269,10 @@ addLibImport :: String -> (((GOOLState, FileState), ClassState), MethodState)
   -> (((GOOLState, FileState), ClassState), MethodState)
 addLibImport i = over _1 $ over _1 $ over _2 $ over libImports (\is -> 
   if i `elem` is then is else sort $ i:is)
+
+addLibImports :: [String] -> (((GOOLState, FileState), ClassState), MethodState)
+  -> (((GOOLState, FileState), ClassState), MethodState)
+addLibImports is s = foldl (flip addLibImport) s is
 
 getLibImports :: FS [String]
 getLibImports = gets ((^. libImports) . snd)

@@ -67,7 +67,8 @@ import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, lensGStoFS, modifyReturn, tempStateChange, 
-  addLangImport, getClassName, setCurrMain, setODEDepVars, getODEDepVars)
+  addLangImport, addLibImport, getClassName, setCurrMain, setODEDepVars, 
+  getODEDepVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -204,7 +205,8 @@ instance ControlBlockSym CSharpCode where
 
   listSlice' = G.listSlice
 
-  solveODE info opts = modify (addLangImport "Microsoft.Research.Oslo") >> 
+  solveODE info opts = modify (addLibImport "Microsoft.Research.Oslo" . 
+    addLangImport "System.Linq") >> 
     multiBlock [
       block [
         varDecDef sol (extFuncApp "Ode" (csODEMethod $ solveMethod opts) odeT 

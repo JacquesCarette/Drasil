@@ -86,9 +86,9 @@ import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, intValue)
 import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensFStoCS, lensFStoMS, 
   lensCStoMS, currMain, modifyAfter, modifyReturnFunc, modifyReturnFunc2, 
-  addFile, setMainMod, addLangImport, getLangImports, getModuleImports, 
-  setFilePath, getFilePath, setModuleName, getModuleName, setClassName,
-  getClassName, addParameter)
+  addFile, setMainMod, addLangImport, getLangImports, getLibImports, 
+  getModuleImports, setFilePath, getFilePath, setModuleName, getModuleName, 
+  setClassName, getClassName, addParameter)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Bifunctor (first)
@@ -1062,13 +1062,11 @@ buildModule n imps ms cs = S.modFromData n ((\cls fs is -> moduleDocD is
 buildModule' :: (RenderSym repr) => Label -> (String -> repr (Import repr)) -> 
   [MS (repr (Method repr))] -> [CS (repr (Class repr))] -> 
   FS (repr (Module repr))
-buildModule' n inc ms cs = S.modFromData n (on3StateValues (\cls lis mis -> 
-  vibcat [
-    vcat (map (importDoc . inc) lis), 
-    vcat (map (importDoc . inc) mis), 
-    vibcat (map classDoc cls)])
-  (mapM (zoom lensFStoCS) $ if null ms then cs else pubClass n Nothing [] ms : 
-  cs) getLangImports getModuleImports)
+buildModule' n inc ms cs = S.modFromData n ((\cls lis libis mis -> vibcat [
+    vcat (map (importDoc . inc) (lis ++ libis ++ mis)),
+    vibcat (map classDoc cls)]) <$>
+  mapM (zoom lensFStoCS) (if null ms then cs else pubClass n Nothing [] ms : 
+  cs) <*> getLangImports <*> getLibImports <*> getModuleImports)
 
 modFromData :: Label -> (Doc -> repr (Module repr)) -> FS Doc -> 
   FS (repr (Module repr))

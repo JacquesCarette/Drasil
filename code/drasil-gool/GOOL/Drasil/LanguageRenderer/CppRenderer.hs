@@ -67,11 +67,12 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty,
   on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (CS, MS, lensGStoFS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensMStoCS, modifyReturn, addLangImport, getLangImports, 
-  addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, 
-  addHeaderModImport, getHeaderModImports, addDefine, getDefines,
-  addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
-  getHeaderUsing, setClassName, getClassName, setCurrMain, getCurrMain, 
-  getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+  getLibImports, addModuleImport, getModuleImports, addHeaderLangImport, 
+  getHeaderLangImports, addHeaderModImport, getHeaderLibImports, 
+  getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines,
+  addUsing, getUsing, addHeaderUsing, getHeaderUsing, setClassName, 
+  getClassName, setCurrMain, getCurrMain, getClassMap, setScope, getScope, 
+  setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -1475,15 +1476,15 @@ instance InternalClass CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n = G.buildModule n ((\ds lis mis us mn -> vibcat [
+  buildModule n = G.buildModule n ((\ds lis libis mis us mn -> vibcat [
     if mn then empty else importDoc $ mi n,
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
-    vcat (map (importDoc . mi) mis),
+    vcat (map (importDoc . mi) (libis ++ mis)),
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppSrcCode (Keyword CppSrcCode))) us)]) 
-    <$> getDefines <*> getLangImports <*> getModuleImports <*> getUsing <*> 
-    getCurrMain)
+    <$> getDefines <*> getLangImports <*> getLibImports <*> getModuleImports 
+    <*> getUsing <*> getCurrMain)
     where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
           mi = modImport
           li = langImport
@@ -2050,14 +2051,14 @@ instance InternalClass CppHdrCode where
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
-  buildModule n = G.buildModule n ((\ds lis mis us -> vibcat [
+  buildModule n = G.buildModule n ((\ds lis libis mis us -> vibcat [
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
-    vcat (map (importDoc . mi) mis),
+    vcat (map (importDoc . mi) (libis ++ mis)),
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppHdrCode (Keyword CppHdrCode))) us)]) 
-    <$> getHeaderDefines <*> getHeaderLangImports <*> getHeaderModImports <*> 
-    getHeaderUsing)
+    <$> getHeaderDefines <*> getHeaderLangImports <*> getHeaderLibImports <*> 
+    getHeaderModImports <*> getHeaderUsing)
     where mi, li :: Label -> CppHdrCode (Import CppHdrCode)
           mi = modImport
           li = langImport

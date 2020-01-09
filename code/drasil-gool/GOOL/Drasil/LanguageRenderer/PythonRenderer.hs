@@ -62,8 +62,8 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (MS, lensGStoFS, addLangImport, getLangImports, 
-  addModuleImport, getModuleImports, setClassName, getClassName, setCurrMain, 
-  getClassMap)
+  addLibImport, getLibImports, addModuleImport, getModuleImports, setClassName, 
+  getClassName, setCurrMain, getClassMap)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -203,7 +203,7 @@ instance ControlBlockSym PythonCode where
     (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 
-  solveODE info opts = modify (addLangImport odeLib) >> multiBlock [
+  solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
     docBlock $ onStateValue methodDoc $ function "f" public dynamic_ 
       (onStateValue valueType $ ode info) [param iv, param dv] 
       (oneLiner $ returnState $ ode info),
@@ -666,12 +666,14 @@ instance InternalClass PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n = G.buildModule n (on2StateValues (\lis mis -> vibcat [
+  buildModule n = G.buildModule n (on3StateValues (\lis libis mis -> vibcat [
     vcat (map (importDoc . 
       (langImport :: Label -> PythonCode (Import PythonCode))) lis),
     vcat (map (importDoc . 
+      (langImport :: Label -> PythonCode (Import PythonCode))) libis),
+    vcat (map (importDoc . 
       (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
-    getLangImports getModuleImports)
+    getLangImports getLibImports getModuleImports)
 
 instance InternalMod PythonCode where
   moduleDoc = modDoc . unPC

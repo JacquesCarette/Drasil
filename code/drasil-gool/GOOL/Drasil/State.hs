@@ -6,8 +6,7 @@ module GOOL.Drasil.State (
   initialFS, modifyAfter, modifyReturn, modifyReturnFunc, modifyReturnFunc2, 
   modifyReturnList, tempStateChange, addFile, addCombinedHeaderSource, 
   addHeader, addSource, addProgNameToPaths, setMainMod, addLangImport, 
-  getLangImports, addModuleImport, getModuleImports, addHeaderLangImport, 
-  getHeaderLangImports, addHeaderModImport, getHeaderModImports, addDefine, 
+  getLangImports, addLibImport, getLibImports, addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, addHeaderModImport, getHeaderModImports, addDefine, 
   getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
   addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, setModuleName, 
   getModuleName, setClassName, getClassName, setCurrMain, getCurrMain, addClass,
@@ -57,10 +56,12 @@ data FileState = FS {
   _currMain :: Bool,
   _currClasses :: [String],
   _langImports :: [String],
+  _libImports :: [String],
   _moduleImports :: [String],
 
   -- C++ only
   _headerLangImports :: [String],
+  _headerLibImports :: [String],
   _headerModImports :: [String],
   _defines :: [String],
   _headerDefines :: [String],
@@ -156,9 +157,11 @@ initialFS = FS {
   _currMain = False,
   _currClasses = [],
   _langImports = [],
+  _libImports = [],
   _moduleImports = [],
 
   _headerLangImports = [],
+  _headerLibImports = [],
   _headerModImports = [],
   _defines = [],
   _headerDefines = [],
@@ -262,6 +265,14 @@ addLangImport i = over _1 $ over _1 $ over _2 $ over langImports (\is ->
 getLangImports :: FS [String]
 getLangImports = gets ((^. langImports) . snd)
 
+addLibImport :: String -> (((GOOLState, FileState), ClassState), MethodState)
+  -> (((GOOLState, FileState), ClassState), MethodState)
+addLibImport i = over _1 $ over _1 $ over _2 $ over libImports (\is -> 
+  if i `elem` is then is else sort $ i:is)
+
+getLibImports :: FS [String]
+getLibImports = gets ((^. libImports) . snd)
+
 addModuleImport :: String -> (((GOOLState, FileState), ClassState), MethodState)
   -> (((GOOLState, FileState), ClassState), MethodState)
 addModuleImport i = over _1 $ over _1 $ over _2 $ over moduleImports (\is -> 
@@ -278,6 +289,15 @@ addHeaderLangImport i = over _1 $ over _1 $ over _2 $ over headerLangImports
 
 getHeaderLangImports :: FS [String]
 getHeaderLangImports = gets ((^. headerLangImports) . snd)
+
+addHeaderLibImport :: String -> 
+  (((GOOLState, FileState), ClassState), MethodState) -> 
+  (((GOOLState, FileState), ClassState), MethodState)
+addHeaderLibImport i = over _1 $ over _1 $ over _2 $ over headerLibImports 
+  (\is -> if i `elem` is then is else sort $ i:is)
+
+getHeaderLibImports :: FS [String]
+getHeaderLibImports = gets ((^. headerLibImports) . snd)
 
 addHeaderModImport :: String -> 
   (((GOOLState, FileState), ClassState), MethodState) -> 

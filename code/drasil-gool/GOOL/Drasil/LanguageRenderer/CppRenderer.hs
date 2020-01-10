@@ -23,7 +23,8 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
   InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
   InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
-  InternalMod(..), BlockCommentSym(..))
+  InternalMod(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
+  odeOptions, ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD, 
   bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, freeDocD, mkSt, 
   mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
@@ -67,12 +68,12 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty,
   on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (CS, MS, lensGStoFS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensMStoCS, modifyReturn, addLangImport, getLangImports, 
-  getLibImports, addModuleImport, getModuleImports, addHeaderLangImport, 
-  getHeaderLangImports, addHeaderModImport, getHeaderLibImports, 
-  getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines,
-  addUsing, getUsing, addHeaderUsing, getHeaderUsing, setClassName, 
-  getClassName, setCurrMain, getCurrMain, getClassMap, setScope, getScope, 
-  setCurrMainFunc, getCurrMainFunc)
+  addLibImport, getLibImports, addModuleImport, getModuleImports, 
+  addHeaderLangImport, getHeaderLangImports, addHeaderModImport, 
+  getHeaderLibImports, getHeaderModImports, addDefine, getDefines, 
+  addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
+  getHeaderUsing, setClassName, getClassName, setCurrMain, getCurrMain, 
+  getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -229,6 +230,68 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
       (fmap (onStateValue pfst) s)) 
     (listSlice' (fmap (onStateValue psnd) b) (fmap (onStateValue psnd) e) 
       (fmap (onStateValue psnd) s))
+
+  solveODE info opts = do
+    pdv <- depVar info
+    piv <- indepVar info
+    povs <- sequence $ otherVars info
+    pti <- tInit info
+    ptf <- tFinal info
+    pinitv <- initVal info
+    pode <- ode info
+    patol <- absTol opts
+    prtol <- relTol opts
+    pss <- stepSize opts
+    let m = solveMethod opts
+        dv1 = toState $ pfst pdv
+        dv2 = toState $ psnd pdv
+        iv1 = toState $ pfst piv
+        iv2 = toState $ psnd piv
+        ovs1 = map (toState . pfst) povs
+        ovs2 = map (toState . psnd) povs
+        ti1 = toState $ pfst pti
+        ti2 = toState $ psnd pti
+        tf1 = toState $ pfst ptf
+        tf2 = toState $ psnd ptf
+        initv1 = toState $ pfst pinitv
+        initv2 = toState $ psnd pinitv
+        ode1 = toState $ pfst pode
+        ode2 = toState $ psnd pode
+        atol1 = toState $ pfst patol
+        atol2 = toState $ psnd patol
+        rtol1 = toState $ pfst prtol
+        rtol2 = toState $ psnd prtol
+        ss1 = toState $ pfst pss
+        ss2 = toState $ psnd pss
+        solveODESrc :: ODEInfo CppSrcCode -> ODEOptions CppSrcCode -> 
+          MS (CppSrcCode (Block CppSrcCode))
+        solveODESrc = solveODE
+        solveODEHdr :: ODEInfo CppHdrCode -> ODEOptions CppHdrCode -> 
+          MS (CppHdrCode (Block CppHdrCode))
+        solveODEHdr = solveODE
+        odeInfoSrc :: MS (CppSrcCode (Variable CppSrcCode)) -> MS (CppSrcCode (Variable CppSrcCode)) -> 
+          [MS (CppSrcCode (Variable CppSrcCode))] -> MS (CppSrcCode (Value CppSrcCode)) -> 
+          MS (CppSrcCode (Value CppSrcCode)) -> MS (CppSrcCode (Value CppSrcCode)) -> 
+          MS (CppSrcCode (Value CppSrcCode)) -> ODEInfo CppSrcCode
+        odeInfoSrc = odeInfo
+        odeOptionsSrc :: ODEMethod -> MS (CppSrcCode (Value CppSrcCode)) -> 
+          MS (CppSrcCode (Value CppSrcCode)) -> MS (CppSrcCode (Value CppSrcCode)) -> ODEOptions CppSrcCode
+        odeOptionsSrc = odeOptions
+        odeInfoHdr :: MS (CppHdrCode (Variable CppHdrCode)) -> MS (CppHdrCode (Variable CppHdrCode)) -> 
+          [MS (CppHdrCode (Variable CppHdrCode))] -> MS (CppHdrCode (Value CppHdrCode)) -> 
+          MS (CppHdrCode (Value CppHdrCode)) -> MS (CppHdrCode (Value CppHdrCode)) -> 
+          MS (CppHdrCode (Value CppHdrCode)) -> ODEInfo CppHdrCode
+        odeInfoHdr = odeInfo
+        odeOptionsHdr :: ODEMethod -> MS (CppHdrCode (Value CppHdrCode)) -> 
+          MS (CppHdrCode (Value CppHdrCode)) -> MS (CppHdrCode (Value CppHdrCode)) -> ODEOptions CppHdrCode
+        odeOptionsHdr = odeOptions
+    p1 <- solveODESrc
+      (odeInfoSrc dv1 iv1 ovs1 ti1 tf1 initv1 ode1)
+      (odeOptionsSrc m atol1 rtol1 ss1)
+    p2 <- solveODEHdr 
+      (odeInfoHdr dv2 iv2 ovs2 ti2 tf2 initv2 ode2)
+      (odeOptionsHdr m atol2 rtol2 ss2)
+    toState $ pair p1 p2
 
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
   type UnaryOp (p CppSrcCode CppHdrCode) = OpData
@@ -1013,6 +1076,20 @@ instance ControlBlockSym CppSrcCode where
 
   listSlice' = G.listSlice
 
+  solveODE info opts = modify (addLibImport "boost/numeric/odeint.hpp") >> 
+    dv >>= (\dpv -> 
+      let odeClassName = variableName dpv ++ "_ODE"
+          odeVar = var "ode" (obj odeClassName)
+      in block [
+        objDecDef odeVar (newObj (obj odeClassName) 
+          (map valueOf $ otherVars info)),
+        listDec 0 dv,
+        valState $ funcApp (odeNameSpace ++ "integrate_const") void 
+          [cppODEMethod info opts, valueOf odeVar, initVal info, 
+          tInit info, tFinal info, stepSize opts, 
+          newObj (obj $ "Populate_" ++ variableName dpv) [valueOf dv]]])
+    where dv = depVar info
+
 instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
   notOp = G.notOp
@@ -1632,6 +1709,8 @@ instance ControlBlockSym CppHdrCode where
 
   listSlice' _ _ _ _ _ = toState $ toCode empty
 
+  solveODE _ _ = toState $ toCode empty
+
 instance UnaryOpSym CppHdrCode where
   type UnaryOp CppHdrCode = OpData
   notOp = uOpFromData 0 empty
@@ -2122,6 +2201,22 @@ enumsEqualInts = False
 
 inc :: Doc
 inc = text "#include"
+
+odeNameSpace :: String
+odeNameSpace = "boost::numeric::odeint::"
+
+cppODEMethod :: ODEInfo CppSrcCode -> ODEOptions CppSrcCode -> 
+  MS (CppSrcCode (Value CppSrcCode))
+cppODEMethod info opts = depVar info >>= (\dpv -> 
+  let rkdp5 = "runge_kutta_dopri5"  
+      adams = "adams_bashforth"
+      stepper RK45 = funcApp (odeNameSpace ++ "make_controlled") void 
+        [absTol opts, relTol opts, newObj (obj $ odeNameSpace ++ rkdp5 ++ "<" 
+        ++ getTypeString (variableType dpv) ++ ">") []]
+      stepper Adams = newObj (obj $ odeNameSpace ++ adams ++ "<3," ++   
+        getTypeString (variableType dpv) ++ ">") []
+      stepper _ = error "Chosen ODE method unavailable in C++"
+  in stepper (solveMethod opts))  
 
 cpphtop :: ModData -> Doc
 cpphtop m = vcat [

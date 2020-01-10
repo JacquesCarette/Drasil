@@ -788,14 +788,14 @@ odeInfo :: MS (repr (Variable repr)) -> MS (repr (Variable repr)) ->
 odeInfo = ODEInfo
 
 data ODEOptions repr = ODEOptions {
+  solveMethod :: ODEMethod,
   absTol :: MS (repr (Value repr)),
   relTol :: MS (repr (Value repr)),
-  stepSize :: MS (repr (Value repr)),
-  solveMethod :: ODEMethod
+  stepSize :: MS (repr (Value repr))
 }
 
-odeOptions :: MS (repr (Value repr)) -> MS (repr (Value repr)) -> 
-  MS (repr (Value repr)) -> ODEMethod -> ODEOptions repr
+odeOptions :: ODEMethod -> MS (repr (Value repr)) -> MS (repr (Value repr)) -> 
+  MS (repr (Value repr)) -> ODEOptions repr
 odeOptions = ODEOptions
 
 data ODEMethod = RK45 | BDF | Adams

@@ -7,7 +7,7 @@ module GOOL.Drasil.LanguageRenderer.JavaRenderer (
   JavaCode(..)
 ) where
 
-import Utils.Drasil (blank, indent)
+import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..), 
@@ -28,8 +28,8 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, newObjDocD, 
   castDocD, castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
-  publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
-  docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  publicDocD, dot, new, classDec, elseIfLabel, forLabel, blockCmtStart, 
+  blockCmtEnd, docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, commentedModD, docFuncRepr, parameterList, appendToBody, 
   surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
@@ -62,18 +62,21 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, toCode, toState, onCodeValue, 
+import GOOL.Drasil.Helpers (angles, vibcat, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  onCodeList, onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (MS, lensGStoFS, modifyReturn, modifyReturnList, 
-  addProgNameToPaths, addLangImport, addLibImport, addLibImports, getClassName, 
-  setCurrMain, setOutputsDeclared, isOutputsDeclared)
+  onCodeList, onStateList, on2StateLists, on1CodeValue1List)
+import GOOL.Drasil.State (GOOLState, MS, lensGStoFS, lensFStoMS, lensCStoMS, 
+  initialState, initialFS, modifyReturn, modifyReturnFunc, tempStateChange, addODEFilePaths, 
+  addProgNameToPaths, addODEFile, getODEFiles, addLangImport, addLibImport, 
+  addLibImports, getClassName, setCurrMain, setODEDepVars, getODEDepVars, 
+  setOutputsDeclared, isOutputsDeclared)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
-import Control.Monad.State (modify)
+import Control.Monad.State (modify, runState)
+import Data.List (elemIndex)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), braces, parens, 
   empty, equals, semi, vcat, lbrace, rbrace, render, colon, render)
 
@@ -95,8 +98,10 @@ instance Monad JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
-  prog n fs = modifyReturnList (map (zoom lensGStoFS) fs) (addProgNameToPaths n)
+  prog n fs = modifyReturnFunc (\_ -> addProgNameToPaths n)
     (on1CodeValue1List (\end -> progD n . map (packageDocD n end)) endStatement)
+    (on2StateValues (++) (mapM (zoom lensGStoFS) fs) (onStateValue (map toCode) 
+    getODEFiles))
 
 instance RenderSym JavaCode
 
@@ -203,13 +208,13 @@ instance ControlBlockSym JavaCode where
 
   listSlice' = G.listSlice
 
-  solveODE info opts = modify (addLibImports (map ((odeImport ++ "sampling.") 
-    ++) [stH, stI])) >> (dv >>= (\dpv -> 
+  solveODE info opts = let (fl, s) = jODEFile info 
+    in modify (addODEFilePaths s . addODEFile fl . addLibImports 
+    (map ((odeImport ++ "sampling.") ++) [stH, stI])) >> (dv >>= (\dpv -> 
       let odeVarType = obj (odeClassName dpv)
           odeVar = var "ode" odeVarType
           odeDepVar = var (odeVarName dpv) (toState dblArray)
           initval = initVal info
-          dblArray = typeFromData (List Float) "double[]" (text "double[]")
           integVal = valueOf $ jODEIntVar (solveMethod opts)
           hndlr = var "stepHandler" (obj stH)
           interp = var "interpolator" (obj stI)
@@ -329,7 +334,9 @@ instance ValueSym JavaCode where
 
   ($:) = enumElement
 
-  valueOf = G.valueOf
+  valueOf v = join $ on2StateValues (\dvs vr -> maybe (G.valueOf v) (listAccess 
+    (G.valueOf v) . litInt . toInteger) (elemIndex (variableName vr) dvs)) 
+    getODEDepVars v
   arg n = G.arg (litInt n) argsList
   enumElement = G.enumElement
 
@@ -679,6 +686,9 @@ instance BlockCommentSym JavaCode where
 odeImport :: String
 odeImport = "org.apache.commons.math3.ode."
 
+dblArray :: JavaCode (Type JavaCode)
+dblArray = typeFromData (List Float) "double[]" (text "double[]")
+
 jODEMethod :: ODEOptions JavaCode -> MS (JavaCode (Statement JavaCode))
 jODEMethod opts = modify (addLibImport (odeImport ++ "nonstiff." ++ it)) >> 
   varDecDef (jODEIntVar m) (newObj (obj it) (jODEParams m))
@@ -697,6 +707,38 @@ jODEInt :: ODEMethod -> String
 jODEInt RK45 = "DormandPrince54Integrator"
 jODEInt Adams = "AdamsBashforthIntegrator"
 jODEInt _ = error "Chosen ODE method unavailable in Java"
+
+jODEFile :: ODEInfo JavaCode -> (FileData, GOOLState)
+jODEFile info = (unJC fl, fst s)
+  where (fl, s) = runState odeFile (initialState, initialFS)
+        fode = "FirstOrderDifferentialEquations"
+        dv = depVar info
+        othVars = map (\ov -> ov >>= (\v -> 
+          var (reverse $ takeWhile (/='.') $ reverse $ variableName v)
+          (toState $ variableType v))) (otherVars info)
+        odeFile = zoom lensFStoMS dv >>= (\dpv -> 
+          let n = variableName dpv
+              cn = n ++ "_ODE"
+              dn = "d" ++ n 
+          in fileDoc (buildModule cn [] [zoom lensCStoMS (modify (addLibImport 
+            (odeImport ++ fode))) >> classFromData (on2StateLists (\svars mths 
+              -> scopeDoc (public :: JavaCode (Scope JavaCode)) <+> classDec 
+              <+> text cn <+> text "implements" <+> text fode <+> 
+              keyDoc (blockStart :: JavaCode (Keyword JavaCode)) $$ 
+              indentList [
+                vcat (map stateVarDoc svars), 
+                blank, 
+                vibcat (map methodDoc mths)] 
+              $$ keyDoc (blockEnd :: JavaCode (Keyword JavaCode))) 
+              (map privMVar othVars) 
+              (map (zoom lensCStoMS) [constructor (map param othVars) 
+                (bodyStatements (map (\v -> objVarSelf v &= valueOf v) othVars)),
+              pubMethod "getDimension" int [] (oneLiner $ returnState $ 
+                litInt 1),
+              pubMethod "computeDerivatives" void (map param [var "t" float, 
+                var n (toState dblArray), var dn (toState dblArray)]) (oneLiner 
+                $ var (dn ++ "[0]") float &= tempStateChange (setODEDepVars 
+                [variableName dpv, dn]) (ode info))]))]))
 
 jName :: String
 jName = "Java"

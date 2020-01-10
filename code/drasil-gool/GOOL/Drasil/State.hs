@@ -4,9 +4,9 @@ module GOOL.Drasil.State (
   GS, GOOLState(..), FS, CS, MS, lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoMS, lensMStoCS, headers, sources, mainMod, currMain, initialState, 
   initialFS, modifyAfter, modifyReturn, modifyReturnFunc, modifyReturnFunc2, 
-  modifyReturnList, tempStateChange, addFile, addCombinedHeaderSource, 
-  addHeader, addSource, addProgNameToPaths, setMainMod, addLangImport, 
-  getLangImports, addLibImport, addLibImports, getLibImports, addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, addHeaderModImport, getHeaderModImports, addDefine, 
+  modifyReturnList, tempStateChange, addODEFilePaths, addFile, 
+  addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
+  addODEFile, getODEFiles, addLangImport, getLangImports, addLibImport, addLibImports, getLibImports, addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, addHeaderModImport, getHeaderModImports, addDefine, 
   getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
   addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, setModuleName, 
   getModuleName, setClassName, getClassName, setCurrMain, getCurrMain, addClass,
@@ -15,7 +15,7 @@ module GOOL.Drasil.State (
   getScope, setCurrMainFunc, getCurrMainFunc
 ) where
 
-import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
+import GOOL.Drasil.Data (FileType(..), ScopeTag(..), FileData)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
@@ -28,7 +28,8 @@ data GOOLState = GS {
   _headers :: [FilePath],
   _sources :: [FilePath],
   _mainMod :: Maybe FilePath,
-  _classMap :: Map String String
+  _classMap :: Map String String,
+  _odeFiles :: [FileData]
 } 
 makeLenses ''GOOLState
 
@@ -147,7 +148,8 @@ initialState = GS {
   _headers = [],
   _sources = [],
   _mainMod = Nothing,
-  _classMap = empty
+  _classMap = empty,
+  _odeFiles = []
 }
 
 initialFS :: FileState
@@ -232,6 +234,12 @@ tempStateChange f st = do
 ------- State Modifiers -------
 -------------------------------
 
+addODEFilePaths :: GOOLState -> 
+  (((GOOLState, FileState), ClassState), MethodState) -> 
+  (((GOOLState, FileState), ClassState), MethodState)
+addODEFilePaths s = over (_1 . _1 . _1 . headers) (s ^. headers ++)
+  . over (_1 . _1 . _1 . sources) (s ^. sources ++)
+
 addFile :: FileType -> FilePath -> GOOLState -> GOOLState
 addFile Combined = addCombinedHeaderSource
 addFile Source = addSource
@@ -256,6 +264,13 @@ addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
 setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
   "Multiple modules with main methods encountered")
+
+addODEFile :: FileData -> (((GOOLState, FileState), ClassState), MethodState) 
+  -> (((GOOLState, FileState), ClassState), MethodState)
+addODEFile f = over _1 $ over _1 $ over _1 $ over odeFiles (f:)
+
+getODEFiles :: GS [FileData]
+getODEFiles = gets (^. odeFiles)
 
 addLangImport :: String -> (((GOOLState, FileState), ClassState), MethodState) 
   -> (((GOOLState, FileState), ClassState), MethodState)

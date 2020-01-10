@@ -234,8 +234,8 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
       (fmap (onStateValue psnd) s))
 
   solveODE info opts = do
-    pdv <- depVar info
     piv <- indepVar info
+    pdv <- depVar info
     povs <- sequence $ otherVars info
     pti <- tInit info
     ptf <- tFinal info
@@ -245,10 +245,10 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
     prtol <- relTol opts
     pss <- stepSize opts
     let m = solveMethod opts
-        dv1 = toState $ pfst pdv
-        dv2 = toState $ psnd pdv
         iv1 = toState $ pfst piv
         iv2 = toState $ psnd piv
+        dv1 = toState $ pfst pdv
+        dv2 = toState $ psnd pdv
         ovs1 = map (toState . pfst) povs
         ovs2 = map (toState . psnd) povs
         ti1 = toState $ pfst pti
@@ -288,10 +288,10 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
           MS (CppHdrCode (Value CppHdrCode)) -> MS (CppHdrCode (Value CppHdrCode)) -> ODEOptions CppHdrCode
         odeOptionsHdr = odeOptions
     p1 <- solveODESrc
-      (odeInfoSrc dv1 iv1 ovs1 ti1 tf1 initv1 ode1)
+      (odeInfoSrc iv1 dv1 ovs1 ti1 tf1 initv1 ode1)
       (odeOptionsSrc m atol1 rtol1 ss1)
     p2 <- solveODEHdr 
-      (odeInfoHdr dv2 iv2 ovs2 ti2 tf2 initv2 ode2)
+      (odeInfoHdr iv2 dv2 ovs2 ti2 tf2 initv2 ode2)
       (odeOptionsHdr m atol2 rtol2 ss2)
     toState $ pair p1 p2
 

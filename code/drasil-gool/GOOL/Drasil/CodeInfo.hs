@@ -101,6 +101,8 @@ instance ControlBlockSym CodeInfo where
 
   listSlice' _ _ _ _ _ = noInfo
 
+  solveODE _ _ = noInfo
+
 instance VariableSym CodeInfo where
   type Variable CodeInfo = ()
   var _ _ = noInfo

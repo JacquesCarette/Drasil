@@ -1,11 +1,13 @@
 -- | re-export smart constructors for external code writing
 module GOOL.Drasil (Label, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(runStrategy), 
-  listSlice, TypeSym(..), StatementSym(..), ControlStatementSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 
-  ModuleSym(..), BlockCommentSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), 
+  ControlBlockSym(runStrategy, solveODE), listSlice, TypeSym(..), 
+  StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  Selector(..), FunctionSym(..), SelectorFunction(..), ScopeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 
+  ModuleSym(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
+  odeOptions, ODEMethod(..),
   ScopeTag(..), ProgData(..), FileData(..), ModData(..),
   CodeType(..),
   GOOLState(..), GS, FS, CS, MS, headers, sources, mainMod, 
@@ -15,12 +17,13 @@ module GOOL.Drasil (Label, ProgramSym(..), FileSym(..),
 ) where
 
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), FileSym(..),
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(runStrategy), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
   listSlice, TypeSym(..), StatementSym(..), ControlStatementSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 
-  ModuleSym(..), BlockCommentSym(..))
+  ModuleSym(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
+  odeOptions, ODEMethod(..))
 
 import GOOL.Drasil.Data (ScopeTag(..), FileData(..), ModData(..), ProgData(..))
 

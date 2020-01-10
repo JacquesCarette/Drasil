@@ -234,8 +234,7 @@ instance ControlBlockSym PythonCode where
          rVal = valueOf r
          r_t = valueOf $ objVar r (var "t" $ listInnerType $ onStateValue 
            variableType iv)
-         r_y = valueOf $ objVar r (var "t" $ listInnerType $ onStateValue 
-           variableType dv)
+         r_y = valueOf $ objVar r (var "y" $ onStateValue variableType dv)
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData

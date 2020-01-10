@@ -64,12 +64,12 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, vibcat, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  onCodeList, onStateList, on2StateLists, on1CodeValue1List)
+  onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, MS, lensGStoFS, lensFStoMS, lensCStoMS, 
   initialState, initialFS, modifyReturn, modifyReturnFunc, tempStateChange, addODEFilePaths, 
   addProgNameToPaths, addODEFile, getODEFiles, addLangImport, addLibImport, 
   addLibImports, getClassName, setCurrMain, setODEDepVars, getODEDepVars, 
-  setOutputsDeclared, isOutputsDeclared)
+  setODEOthVars, getODEOthVars, setOutputsDeclared, isOutputsDeclared)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -305,7 +305,9 @@ instance VariableSym JavaCode where
   enumVar = G.enumVar
   classVar = G.classVar classVarDocD
   extClassVar = classVar
-  objVar = G.objVar
+  objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
+    ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
+    (toState vr)) getODEOthVars o v
   objVarSelf = G.objVarSelf
   listVar = G.listVar
   listOf = G.listOf
@@ -713,13 +715,13 @@ jODEFile info = (unJC fl, fst s)
   where (fl, s) = runState odeFile (initialState, initialFS)
         fode = "FirstOrderDifferentialEquations"
         dv = depVar info
-        othVars = map (\ov -> ov >>= (\v -> 
-          var (reverse $ takeWhile (/='.') $ reverse $ variableName v)
-          (toState $ variableType v))) (otherVars info)
-        odeFile = zoom lensFStoMS dv >>= (\dpv -> 
+        ovars = otherVars info 
+        odeFile = join $ on1StateValue1List (\dpv ovs -> 
           let n = variableName dpv
               cn = n ++ "_ODE"
               dn = "d" ++ n 
+              othVars = map (tempStateChange (setODEOthVars (map variableName 
+                ovs))) ovars
           in fileDoc (buildModule cn [] [zoom lensCStoMS (modify (addLibImport 
             (odeImport ++ fode))) >> classFromData (on2StateLists (\svars mths 
               -> scopeDoc (public :: JavaCode (Scope JavaCode)) <+> classDec 
@@ -738,7 +740,9 @@ jODEFile info = (unJC fl, fst s)
               pubMethod "computeDerivatives" void (map param [var "t" float, 
                 var n (toState dblArray), var dn (toState dblArray)]) (oneLiner 
                 $ var (dn ++ "[0]") float &= tempStateChange (setODEDepVars 
-                [variableName dpv, dn]) (ode info))]))]))
+                [variableName dpv, dn] . setODEOthVars (map variableName ovs)) 
+                (ode info))]))])) 
+            (zoom lensFStoMS dv) (map (zoom lensFStoMS) ovars)
 
 jName :: String
 jName = "Java"

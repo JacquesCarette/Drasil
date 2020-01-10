@@ -11,8 +11,9 @@ module GOOL.Drasil.State (
   addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, setModuleName, 
   getModuleName, setClassName, getClassName, setCurrMain, getCurrMain, addClass,
   getClasses, updateClassMap, getClassMap, addParameter, getParameters, 
-  setODEDepVars, getODEDepVars, setOutputsDeclared, isOutputsDeclared, setScope,
-  getScope, setCurrMainFunc, getCurrMainFunc
+  setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
+  setOutputsDeclared, isOutputsDeclared, setScope, getScope, setCurrMainFunc, 
+  getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..), FileData)
@@ -36,6 +37,7 @@ makeLenses ''GOOLState
 data MethodState = MS {
   _currParameters :: [String],
   _currODEDepVars :: [String],
+  _currODEOthVars :: [String],
 
   -- Only used for Java
   _outputsDeclared :: Bool,
@@ -180,6 +182,7 @@ initialMS :: MethodState
 initialMS = MS {
   _currParameters = [],
   _currODEDepVars = [],
+  _currODEOthVars = [],
 
   _outputsDeclared = False,
 
@@ -415,6 +418,13 @@ setODEDepVars vs = over _2 $ set currODEDepVars vs
 
 getODEDepVars :: MS [String]
 getODEDepVars = gets ((^. currODEDepVars) . snd)
+
+setODEOthVars :: [String] -> (((GOOLState, FileState), ClassState), MethodState)
+  -> (((GOOLState, FileState), ClassState), MethodState)
+setODEOthVars vs = over _2 $ set currODEOthVars vs
+
+getODEOthVars :: MS [String]
+getODEOthVars = gets ((^. currODEOthVars) . snd)
 
 setOutputsDeclared :: (((GOOLState, FileState), ClassState), MethodState) -> 
   (((GOOLState, FileState), ClassState), MethodState)

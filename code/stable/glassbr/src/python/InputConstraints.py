@@ -1,12 +1,6 @@
 ## \file InputConstraints.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides the function for checking the physical constraints and software constraints on the input
-from __future__ import print_function
-import sys
-import math
-
-import InputParameters
-
 ## \brief Verifies that input values satisfy the physical constraints and software constraints
 # \param inParams structure holding the input values
 def input_constraints(inParams):
@@ -145,5 +139,3 @@ def input_constraints(inParams):
         print(1, end='')
         print(".")
         raise Exception("InputError")
-
-

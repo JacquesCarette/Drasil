@@ -1,21 +1,11 @@
 #include "Calculations.hpp"
 
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <iterator>
-#include <string>
 #include <math.h>
-#include <sstream>
-#include <limits>
-#include <vector>
-
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
+#include <string>
 
 #include "InputParameters.hpp"
+
+using std::string;
 
 double func_t_flight(InputParameters &inParams, double g_vect) {
     return 2 * inParams.v_launch * sin(inParams.theta) / g_vect;
@@ -40,4 +30,3 @@ string func_s(InputParameters &inParams, double epsilon, double d_offset) {
         return "The projectile went long.";
     }
 }
-

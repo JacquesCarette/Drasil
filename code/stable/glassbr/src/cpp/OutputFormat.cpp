@@ -1,19 +1,11 @@
 #include "OutputFormat.hpp"
 
-#include <algorithm>
-#include <iostream>
 #include <fstream>
-#include <iterator>
+#include <iostream>
 #include <string>
-#include <math.h>
-#include <sstream>
-#include <limits>
-#include <vector>
 
-using std::string;
-using std::vector;
-using std::ifstream;
 using std::ofstream;
+using std::string;
 
 void write_output(bool is_safePb, bool is_safeLR, double P_b) {
     ofstream outfile;
@@ -40,4 +32,3 @@ void write_output(bool is_safePb, bool is_safeLR, double P_b) {
     outputfile << P_b << std::endl;
     outputfile.close();
 }
-

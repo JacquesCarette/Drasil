@@ -2,11 +2,6 @@
     \author Thulasi Jegatheesan
     \brief Provides the structure for holding constant values
 */
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-
 /** \brief Structure for holding the constant values
 */
 public class Constants {
@@ -24,4 +19,3 @@ public class Constants {
     public const double AR_max = 100;
     
 }
-

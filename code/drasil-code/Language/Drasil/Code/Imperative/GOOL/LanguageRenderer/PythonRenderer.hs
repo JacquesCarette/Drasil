@@ -7,19 +7,18 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName, 
-  makefileName, sampleInputName)
+import qualified 
+  Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
+  G (doxConfig, sampleInput, makefile)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
-import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
-import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
+import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
-import GOOL.Drasil (liftList)
+import GOOL.Drasil (onCodeList)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Text.PrettyPrint.HughesPJ (Doc, text)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 newtype PythonProject a = PP {unPP :: a}
 
@@ -36,18 +35,20 @@ instance Monad PythonProject where
 
 instance PackageSym PythonProject where
   type Package PythonProject = PackData
-  package p = liftList (packD p)
+  package p = onCodeList (packD p)
 
 instance AuxiliarySym PythonProject where
   type Auxiliary PythonProject = AuxData
   type AuxHelper PythonProject = Doc
-  doxConfig pName p = fmap (ad doxConfigName . makeDoxConfig pName p)
-    optimizeDox
-  sampleInput db d sd = return $ ad sampleInputName (makeInputFile db d sd)
+  doxConfig = G.doxConfig optimizeDox
+  sampleInput = G.sampleInput
 
-  optimizeDox = return $ text "YES"
+  optimizeDox = return yes
 
-  makefile cms p = return $ ad makefileName (makeBuild cms Nothing pyRunnable p)
+  makefile = G.makefile Nothing pyRunnable
+
+  auxHelperDoc = unPP
+  auxFromData fp d = return $ ad fp d
 
 pyRunnable :: Runnable
 pyRunnable = interpMM "python"

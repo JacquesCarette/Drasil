@@ -355,7 +355,7 @@
                 <tr>
                   <td><em><b>r</b></em></td>
                   <td>
-                    Displacement: The change in an object's location relative to a reference point.
+                    Position Vector: The a vector from the origin of the Cartesian coordinate system defined to the point where the force is applied.
                   </td>
                   <td>m</td>
                 </tr>
@@ -400,6 +400,13 @@
                     Pore Pressure: The pressure that comes from water within the soil.
                   </td>
                   <td>Pa</td>
+                </tr>
+                <tr>
+                  <td><em><b>u</b></em></td>
+                  <td>
+                    Displacement: The change in an object's location relative to a reference point.
+                  </td>
+                  <td>m</td>
                 </tr>
                 <tr>
                   <td><em>V</em></td>
@@ -648,7 +655,7 @@
                   <td>Pa</td>
                 </tr>
                 <tr>
-                  <td><em>τ</em></td>
+                  <td><em><b>τ</b></em></td>
                   <td>Torque: A twisting force that tends to cause rotation.</td>
                   <td>N&sdot;m</td>
                 </tr>
@@ -2005,7 +2012,7 @@
                     <p class="paragraph">
                       Moment is equal to torque, so the equation from <a href=#DD:torque>DD: torque</a> will be used to calculate moments:
                     </p>
-                    \[τ=\mathbf{r}\times\mathbf{F}\]
+                    \[\mathbf{τ}=\mathbf{u}\times\mathbf{F}\]
                     <p class="paragraph">
                       Considering one dimension, with moments in the clockwise direction as positive and moments in the counterclockwise direction as negative, and replacing the torque symbol with the moment symbol, the equation simplifies to:
                     </p>
@@ -2975,7 +2982,7 @@
                     </tr>
                     <tr>
                       <th>Symbol</th>
-                      <td><p class="paragraph"><em>τ</em></p></td>
+                      <td><p class="paragraph"><em><b>τ</b></em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -2983,14 +2990,14 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[τ=\mathbf{r}\times\mathbf{F}\]</td>
+                      <td>\[\mathbf{τ}=\mathbf{r}\times\mathbf{F}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em>τ</em> is the torque (N&sdot;m)</li>
-                          <li><em><b>r</b></em> is the displacement (m)</li>
+                          <li><em><b>τ</b></em> is the torque (N&sdot;m)</li>
+                          <li><em><b>r</b></em> is the position vector (m)</li>
                           <li><em><b>F</b></em> is the force (N)</li>
                         </ul>
                       </td>

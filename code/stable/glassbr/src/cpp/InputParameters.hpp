@@ -6,12 +6,8 @@
 #define InputParameters_h
 
 #include <string>
-#include <vector>
 
 using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
 
 /** \brief Structure for holding the input values and derived values
 */
@@ -29,12 +25,11 @@ class InputParameters {
         double SD_z;
         double h;
         double LDF;
-        double GTF;
+        int GTF;
         double SD;
         double AR;
         double w_TNT;
         
-        ~InputParameters();
     
     private:
 };

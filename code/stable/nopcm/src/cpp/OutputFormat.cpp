@@ -1,19 +1,11 @@
 #include "OutputFormat.hpp"
 
-#include <algorithm>
-#include <iostream>
 #include <fstream>
-#include <iterator>
+#include <iostream>
 #include <string>
-#include <math.h>
-#include <sstream>
-#include <limits>
-#include <vector>
 
-using std::string;
-using std::vector;
-using std::ifstream;
 using std::ofstream;
+using std::string;
 
 void write_output(double T_W, double E_W) {
     ofstream outputfile;
@@ -24,4 +16,3 @@ void write_output(double T_W, double E_W) {
     outputfile << E_W << std::endl;
     outputfile.close();
 }
-

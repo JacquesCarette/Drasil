@@ -6,14 +6,11 @@
 #define DerivedValues_h
 
 #include <string>
-#include <vector>
-
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
 
 #include "InputParameters.hpp"
+
+using std::ofstream;
+using std::string;
 
 /** \brief Calculates values that can be immediately derived from the inputs
     \param inParams structure holding the input values

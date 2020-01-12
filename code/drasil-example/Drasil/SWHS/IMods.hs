@@ -61,7 +61,7 @@ balWtrDesc = map foldlSent [
   [S "The initial", plural condition, S "for the", getAcc ode `sAre` 
    E (apply (sy tempW) [Int 0] $= apply (sy tempPCM) [Int 0] $= sy tempInit) `follows` assumpSITWP],
   [S "The", getAcc ode, S "applies as long as the", phrase water `sIs` EmptyS `sIn`
-   phrase liquid, S "form" `sC` (E $ realInterval tempW (Bounded (Exc,0) (Exc,100))),
+   phrase liquid, S "form" `sC` E (realInterval tempW (Bounded (Exc,0) (Exc,100))),
    sParen (unwrap $ getUnit tempW), S "where", E 0, sParen (unwrap $ getUnit tempW) `sAnd`
    E 100, sParen (unwrap $ getUnit tempW) `sAre` S "the", phrase melting `sAnd`
    plural boilPt `sOf` phrase water `sC` S "respectively",
@@ -82,17 +82,17 @@ eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 htTransEnd overAreas extr
 
 eBalanceOnWtrDerivDesc1 :: Sentence -> Sentence-> Sentence -> ConceptInstance -> Sentence
 eBalanceOnWtrDerivDesc1 htEnd oa ea htA = foldlSentCol [
-  S "To find the", phrase rOfChng `sOf` (E $ sy tempW) `sC`
+  S "To find the", phrase rOfChng `sOf` E (sy tempW) `sC`
   S "we look at the", phrase energy, S "balance on" +:+. phrase water, S "The",
   phrase vol, S "being considered" `isThe` (phrase vol `sOf` phrase water), S "in the",
-  phrase tank, (E $ sy wVol) `sC` S "which has", phrase mass +:+. ((E $ sy wMass) `sAnd`
-  phrase heatCapSpec `sC` (E $ sy htCapW)), atStart heatTrans, S "occurs in the",
+  phrase tank, E (sy wVol) `sC` S "which has", phrase mass +:+. (E (sy wMass) `sAnd`
+  phrase heatCapSpec `sC` E (sy htCapW)), atStart heatTrans, S "occurs in the",
   phrase water, S "from the", phrase coil, S "as", E $ sy htFluxC,
   sParen (makeRef2S htFluxWaterFromCoil) +:+ htEnd `sC` EmptyS +:+. oa, ea, S "No", phrase heatTrans, S "occurs to", S "outside" `ofThe`
   phrase tank `sC` S "since it has been assumed to be perfectly insulated" +:+.
   sParen (makeRef2S assumpPIT), S "Since the", phrase assumption,
   S "is made that no internal heat is generated" +:+. (sParen (makeRef2S htA) `sC`
-  (E $ sy volHtGen $= 0)), S "Therefore" `sC` S "the", phrase equation, S "for",
+  E (sy volHtGen $= 0)), S "Therefore" `sC` S "the", phrase equation, S "for",
   makeRef2S rocTempSimp, S "can be written as"]
 
 htTransEnd :: Sentence
@@ -243,7 +243,7 @@ eBalanceOnPCMDerivDesc1 = foldlSentCol [
   phrase water `sIs` S "fully mixed" +:+. sParen (makeRef2S assumpCWTAT),
   S "There is no", phrase htFlux, phrase output_, S "from the" +:+. getAcc phsChgMtrl,
   S "Assuming no volumetric", phrase heat, S "generation per unit", phrase vol,
-  sParen (makeRef2S assumpNIHGBWP) `sC` (E $ sy volHtGen $= 0) `sC` 
+  sParen (makeRef2S assumpNIHGBWP) `sC` E (sy volHtGen $= 0) `sC` 
   S "the equation for", makeRef2S rocTempSimp, S "can be written as"]
 
 eBalanceOnPCMDerivDesc2 :: Sentence

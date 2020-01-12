@@ -1,36 +1,66 @@
 module Test.PatternTest (patternTest) where
 
-import GOOL.Drasil (
-  ProgramSym(..), RenderSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..),
-  ValueExpression(..), FunctionSym(..), MethodSym(..), ModuleSym(..))
+import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
+  ControlBlockSym(..), TypeSym(..), StatementSym(..), ControlStatementSym(..), 
+  VariableSym(..), ValueSym(..), ValueExpression(..), FunctionSym(..), 
+  MethodSym(..), ModuleSym(..), GS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
-import Test.Observer (observer)
+import Test.Observer (observer, observerName, printNum, x)
 
-patternTest :: (ProgramSym repr) => repr (Program repr)
-patternTest = prog "PatternTest" [fileDoc (buildModule "PatternTest" ["Observer"] [patternTestMainMethod] []), observer]
+progName, fsmName, offState, onState, noState, strat1, strat2, obs1Name, 
+  obs2Name, nName :: String
+progName = "PatternTest"
+fsmName = "myFSM"
+offState = "Off"
+onState = "On"
+noState = "Neither"
+strat1 = "myStrat"
+strat2 = "yourStrat"
+obs1Name = "obs1"
+obs2Name = "obs2"
+nName = "n"
 
-patternTestMainMethod :: (RenderSym repr) => repr (Method repr)
-patternTestMainMethod = mainMethod "PatternTest" (body [block [
-  varDec $ var "n" int,
-  initState "myFSM" "Off", 
-  changeState "myFSM" "On",
-  checkState "myFSM" 
-    [(litString "Off", 
-      oneLiner (printStrLn "Off")), 
-      (litString "On", oneLiner (printStrLn "On"))] 
-    (oneLiner (printStrLn "In"))],
+observerType :: (TypeSym repr) => MS (repr (Type repr))
+observerType = obj observerName
 
-  runStrategy "myStrat" 
-    [("myStrat", oneLiner (printStrLn "myStrat")), 
-      ("yourStrat", oneLiner (printStrLn "yourStrat"))]
-    (Just (litInt 3)) (Just (var "n" int)),
+n, obs1, obs2 :: (VariableSym repr) => MS (repr (Variable repr))
+n = var nName int
+obs1 = var obs1Name observerType
+obs2 = var obs2Name observerType
+
+newObserver :: (ValueExpression repr) => MS (repr (Value repr))
+newObserver = extNewObj observerName observerType []
+
+patternTest :: (ProgramSym repr) => GS (repr (Program repr))
+patternTest = prog progName [fileDoc (buildModule progName 
+  [patternTestMainMethod] []), observer]
+
+patternTestMainMethod :: (MethodSym repr) => MS (repr (Method repr))
+patternTestMainMethod = mainFunction (body [block [
+  varDec n,
+  initState fsmName offState, 
+  changeState fsmName onState,
+  checkState fsmName 
+    [(litString offState, 
+      oneLiner $ printStrLn offState), 
+     (litString onState, 
+       oneLiner $ printStrLn onState)] 
+    (oneLiner $ printStrLn noState)],
+
+  runStrategy strat1
+    [(strat1, oneLiner $ printStrLn strat1), 
+     (strat2, oneLiner $ printStrLn strat2)]
+    (Just $ litInt 3) (Just n),
 
   block [
-    varDecDef (var "obs1" (obj "Observer")) (extStateObj "Observer" (obj "Observer") []), 
-    varDecDef (var "obs2" (obj "Observer")) (extStateObj "Observer" (obj "Observer") [])],
+    varDecDef obs1 newObserver, 
+    varDecDef obs2 newObserver],
+
   block [
-    initObserverList (listType static_ (obj "Observer")) [valueOf $ var "obs1" (obj "Observer")], 
-    addObserver (valueOf $ var "obs2" (obj "Observer")),
-    notifyObservers (func "printNum" void []) (listType static_ (obj "Observer"))]])
+    initObserverList observerType [valueOf obs1], 
+    addObserver $ valueOf obs2,
+    notifyObservers (func printNum void []) observerType],
+    
+  block [
+    valState $ set (valueOf obs1) x (litInt 10),
+    print $ get (valueOf obs1) x]])

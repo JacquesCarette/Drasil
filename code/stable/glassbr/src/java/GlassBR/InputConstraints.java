@@ -4,13 +4,9 @@ package GlassBR;
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides the function for checking the physical constraints and software constraints on the input
 */
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Scanner;
-import java.io.PrintWriter;
-import java.io.FileWriter;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class InputConstraints {
     
@@ -169,4 +165,3 @@ public class InputConstraints {
         }
     }
 }
-

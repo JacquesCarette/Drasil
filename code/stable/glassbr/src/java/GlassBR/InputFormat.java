@@ -4,29 +4,26 @@ package GlassBR;
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides the function for reading inputs
 */
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Scanner;
-import java.io.PrintWriter;
-import java.io.FileWriter;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 public class InputFormat {
     
     /** \brief Reads input from a file with the given file name
-        \param inParams structure holding the input values
         \param filename name of the input file
+        \param inParams structure holding the input values
     */
-    public static void get_input(InputParameters inParams, String filename) throws Exception {
+    public static void get_input(String filename, InputParameters inParams) throws Exception {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function get_input called with inputs: {");
-        outfile.print("  inParams = ");
-        outfile.print("Instance of InputParameters object");
-        outfile.println(", ");
         outfile.print("  filename = ");
-        outfile.println(filename);
+        outfile.print(filename);
+        outfile.println(", ");
+        outfile.print("  inParams = ");
+        outfile.println("Instance of InputParameters object");
         outfile.println("  }");
         outfile.close();
         
@@ -105,4 +102,3 @@ public class InputFormat {
         infile.close();
     }
 }
-

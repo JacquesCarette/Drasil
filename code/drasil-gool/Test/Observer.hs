@@ -1,23 +1,34 @@
-module Test.Observer (observer) where
+module Test.Observer (observer, observerName, printNum, x) where
 
-import GOOL.Drasil.Symantics (
-  RenderSym(..), PermanenceSym(..), BodySym(..), StateTypeSym(..), 
+import GOOL.Drasil (
+  ProgramSym, FileSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
   StatementSym(..), VariableSym(..), ValueSym(..), ScopeSym(..), 
-  MethodTypeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 
-  ModuleSym(..))
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), FS, CS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-observer :: (RenderSym repr) => repr (RenderFile repr)
-observer = fileDoc (buildModule "Observer" [] [] [docClass 
-  "This is an arbitrary class acting as an Observer"
+observerName, observerDesc, printNum :: String
+observerName = "Observer"
+observerDesc = "This is an arbitrary class acting as an Observer"
+printNum = "printNum"
+
+observer :: (ProgramSym repr) => FS (repr (RenderFile repr))
+observer = fileDoc (buildModule observerName [] [docClass observerDesc
   helperClass])
 
-helperClass :: (RenderSym repr) => repr (Class repr)
-helperClass = pubClass "Observer" Nothing [stateVar 0 public dynamic_ 
-  (var "x" int)] [observerConstructor, printNumMethod]
+x :: (VariableSym repr) => MS (repr (Variable repr))
+x = var "x" int
 
-observerConstructor :: (RenderSym repr) => repr (Method repr)
-observerConstructor = constructor "Observer" [] (oneLiner (assign (objVarSelf "Observer" "x" int) (litInt 5)))
+selfX :: (VariableSym repr) => MS (repr (Variable repr))
+selfX = objVarSelf x
 
-printNumMethod :: (RenderSym repr) => repr (Method repr)
-printNumMethod = method "printNum" "Observer" public dynamic_ (mState void) [] (oneLiner (printLn (valueOf $ objVarSelf "Observer" "x" int)))
+helperClass :: (ClassSym repr) => CS (repr (Class repr))
+helperClass = pubClass observerName Nothing [stateVar public dynamic_ x]
+  [observerConstructor, printNumMethod, getMethod x, setMethod x]
+
+observerConstructor :: (MethodSym repr) => MS (repr (Method repr))
+observerConstructor = constructor [] $ oneLiner $ assign selfX 
+  (litInt 5)
+
+printNumMethod :: (MethodSym repr) => MS (repr (Method repr))
+printNumMethod = method printNum public dynamic_ void [] $
+  oneLiner $ printLn $ valueOf selfX

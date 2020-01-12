@@ -1,31 +1,26 @@
 #include "InputFormat.hpp"
 
 #include <algorithm>
-#include <iostream>
 #include <fstream>
-#include <iterator>
-#include <string>
-#include <math.h>
-#include <sstream>
+#include <iostream>
 #include <limits>
-#include <vector>
-
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
+#include <string>
 
 #include "InputParameters.hpp"
 
-void get_input(InputParameters &inParams, string filename) {
+using std::ifstream;
+using std::ofstream;
+using std::string;
+
+void get_input(string filename, InputParameters &inParams) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function get_input called with inputs: {" << std::endl;
-    outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object";
-    outfile << ", " << std::endl;
     outfile << "  filename = ";
-    outfile << filename << std::endl;
+    outfile << filename;
+    outfile << ", " << std::endl;
+    outfile << "  inParams = ";
+    outfile << "Instance of InputParameters object" << std::endl;
     outfile << "  }" << std::endl;
     outfile.close();
     
@@ -113,4 +108,3 @@ void get_input(InputParameters &inParams, string filename) {
     outfile.close();
     infile.close();
 }
-

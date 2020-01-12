@@ -36,7 +36,7 @@ instance Idea          ConceptChunk where getA = getA . view idea
 instance Definition    ConceptChunk where defn = defn'
 instance ConceptDomain ConceptChunk where cdom = cdom'
 
-data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence, dom :: [UID]}
+data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence}
 makeLenses ''CommonConcept
 
 instance Eq            CommonConcept where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
@@ -45,7 +45,7 @@ instance NamedIdea     CommonConcept where term = comm . term
 instance Idea          CommonConcept where getA = getA . view comm
 instance Definition    CommonConcept where defn = def
 instance CommonIdea    CommonConcept where abrv = abrv . view comm
-instance ConceptDomain CommonConcept where cdom = dom
+instance ConceptDomain CommonConcept where cdom = cdom . view comm
 
 data ConceptInstance = ConInst { _cc :: ConceptChunk , ra :: String, shnm :: ShortName}
 makeLenses ''ConceptInstance

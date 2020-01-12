@@ -3,9 +3,6 @@
     \brief Provides functions for calculating the outputs
 */
 using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
 
 public class Calculations {
     
@@ -54,4 +51,3 @@ public class Calculations {
         }
     }
 }
-

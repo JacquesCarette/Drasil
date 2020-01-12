@@ -4,9 +4,10 @@ module Language.Drasil.Code (
   generator, generateCode,
   readWithDataDesc, sampleInputDD,
   ($:=), Choices(..), CodeSpec(..), CodeSystInfo(..), Comments(..), 
-  ConstraintBehaviour(..), Func, FuncStmt(..), ImplementationType(..), Lang(..),
-  Logging(LogNone, LogAll), Mod(Mod), Structure(..), ConstantStructure(..), 
-  ConstantRepr(..), InputModule(..), AuxFile(..), Visibility(..),
+  Verbosity(..), ConstraintBehaviour(..), Func, FuncStmt(..), 
+  ImplementationType(..), Lang(..), Logging(LogNone, LogAll), Mod(Mod), 
+  Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
+  CodeConcept(..), matchConcepts, AuxFile(..), Visibility(..),
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, 
   packmod, relToQD,
   junkLine, multiLine, repeated, singleLine, singleton,
@@ -28,11 +29,11 @@ import Language.Drasil.Code.DataDesc (junkLine, multiLine, repeated, singleLine,
   singleton)
 
 import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec(..), 
-  CodeSystInfo(..), Comments(..), ConstraintBehaviour(..), Func, FuncStmt(..),
-  ImplementationType(..), Lang(..), Logging(..), Mod(Mod), Structure(..), 
-  ConstantStructure(..), ConstantRepr(..), InputModule(..), AuxFile(..), 
-  Visibility(..), asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, 
-  funcDef, packmod, relToQD)
+  CodeSystInfo(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), Func, 
+  FuncStmt(..), ImplementationType(..), Lang(..), Logging(..), Mod(Mod), 
+  Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
+  CodeConcept(..), matchConcepts, AuxFile(..), Visibility(..), asExpr, asExpr', 
+  asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD)
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
 

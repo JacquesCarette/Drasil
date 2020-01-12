@@ -9,17 +9,18 @@ import Drasil.SSP.Defs (fsConcept)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre, m_3, newton, pascal, specificWeight)
 
-import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
+import Data.Drasil.Units.Physics (forcePerMeterU)
 
 import Data.Drasil.Concepts.Math (cartesian, xCoord, xDir, yCoord, yDir,
   zCoord, zDir)
 import Data.Drasil.Concepts.Physics (gravity)
 
 import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
-import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight, vol)
+import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight, 
+  vol)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
-  force,  gravitationalAccel, height, pressure, subX, subY, subZ, supMax,
-  supMin, torque, weight)
+  force,  gravitationalAccel, height, moment2D, pressure, subX, subY, subZ, 
+  supMax, supMin, torque, weight, positionVec)
 
 
 symbols :: [DefinedQuantityDict]
@@ -35,6 +36,7 @@ SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 genericF = force
 genericA = area
+genericM = moment2D
 
 -- FIXME: These need to be imported here because they are used in generic TMs/GDs that SSP also imports. Automate this?
 genericV = vol
@@ -48,6 +50,7 @@ genericH = height
 genericP = pressure
 genericR = displacement
 genericT = torque
+posVec = positionVec
 
 -------------
 -- HELPERS --
@@ -191,27 +194,27 @@ coords = constrainedNRV' (dqd' (dccWDS "(x,y)" (cn "cartesian position coordinat
 ---------------------------
 
 units :: [UnitaryConceptDict]
-units = map ucw [accel, genericMass, genericF, genericA, genericV, genericW,
-  genericSpWght, gravAccel, dens, genericH, genericP, genericR, genericT, 
-  nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords, slipDist, 
-  mobilizedShear, resistiveShear, mobShrI, shrResI, shearFNoIntsl, 
+units = map ucw [accel, genericMass, genericF, genericA, genericM, genericV,
+  genericW, genericSpWght, gravAccel, dens, genericH, genericP, genericR, 
+  genericT, nrmShearNum, nrmShearDen, slipHght, xi, yi, zcoord, critCoords, 
+  slipDist, mobilizedShear, resistiveShear, mobShrI, shrResI, shearFNoIntsl, 
   shearRNoIntsl, slcWght, watrForce, intShrForce, baseHydroForce, 
   surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
-  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, 
+  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, 
   porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totStress, 
-  effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm]
+  effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm, posVec]
 
-accel, genericMass, genericF, genericA, genericV, genericW, genericSpWght, 
-  gravAccel, dens, genericH, genericP, genericR, genericT, nrmShearNum, 
-  nrmShearDen, slipDist, slipHght, xi, yi, zcoord, critCoords, mobilizedShear,
-  mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, shearRNoIntsl, slcWght, 
-  watrForce, resistiveShear, shrResI, intShrForce, baseHydroForce, 
+accel, genericMass, genericF, genericA, genericM, genericV, genericW, 
+  genericSpWght, gravAccel, dens, genericH, genericP, genericR, genericT, 
+  nrmShearNum, nrmShearDen, slipDist, slipHght, xi, yi, zcoord, critCoords, 
+  mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, shearRNoIntsl,
+  slcWght, watrForce, resistiveShear, shrResI, intShrForce, baseHydroForce, 
   surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
-  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, momntOfBdy, fx, fy, 
+  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, fx, fy, 
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, 
   intNormForce, shrStress, totStress, effectiveStress, effNormStress, dryVol, 
-  satVol, rotForce, momntArm :: UnitalChunk
+  satVol, rotForce, momntArm, posVec :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -346,10 +349,6 @@ midpntHght = makeUCWDS "h_i" (nounPhraseSent $ phrase yDir +:+ S "heights of sli
   (S "the heights" `inThe` phrase yDir +:+ S "from the base of each slice" `toThe`
    S "slope surface, at the" +:+ phrase xDir +:+ S "midpoint of the slice")
   (vec lH) metre
-
-momntOfBdy = uc' "M" (cn' "moment")
-  "a measure of the tendency of a body to rotate about a specific point or axis"
-  cM momentOfForceU --FIXME: move in concepts.physics ?
 
 porePressure = uc' "u" (cn "pore pressure")
   "the pressure that comes from water within the soil" lU pascal

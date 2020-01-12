@@ -1,19 +1,19 @@
 module Test.FileTests (fileTests) where
 
-import GOOL.Drasil (ProgramSym(..), RenderSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
+import GOOL.Drasil (ProgramSym(..), FileSym(..),
+  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
   StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..), 
-  MethodSym(..), ModuleSym(..))
+  MethodSym(..), ModuleSym(..), GS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-fileTests :: (ProgramSym repr) => repr (Program repr)
-fileTests = prog "FileTests" [fileDoc (buildModule "FileTests" [] [fileTestMethod] [])]
+fileTests :: (ProgramSym repr) => GS (repr (Program repr))
+fileTests = prog "FileTests" [fileDoc (buildModule "FileTests" [fileTestMethod] 
+  [])]
 
-fileTestMethod :: (RenderSym repr) => repr (Method repr)
-fileTestMethod = mainMethod "FileTests" (body [writeStory, block [readStory], 
-  goodBye])
+fileTestMethod :: (ProgramSym repr) => MS (repr (Method repr))
+fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 
-writeStory :: (RenderSym repr) => repr (Block repr)
+writeStory :: (ProgramSym repr) => MS (repr (Block repr))
 writeStory = block [
   varDec $ var "fileToWrite" outfile,
 
@@ -32,11 +32,11 @@ writeStory = block [
   discardFileLine (valueOf $ var "fileToRead" infile),
   listDec 0 (var "fileContents" (listType dynamic_ string))]
 
-readStory :: (RenderSym repr) => repr (Statement repr)
+readStory :: (ProgramSym repr) => MS (repr (Statement repr))
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile) 
   (var "fileContents" (listType dynamic_ string))
 
-goodBye :: (RenderSym repr) => repr (Block repr)
+goodBye :: (ProgramSym repr) => MS (repr (Block repr))
 goodBye = block [
   printLn (valueOf $ var "fileContents" (listType dynamic_ string)), 
   closeFile (valueOf $ var "fileToRead" infile)]

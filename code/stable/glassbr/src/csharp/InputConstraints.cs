@@ -4,8 +4,6 @@
 */
 using System;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
 
 public class InputConstraints {
     
@@ -164,4 +162,3 @@ public class InputConstraints {
         }
     }
 }
-

@@ -2,32 +2,30 @@
 
 module Test.HelloWorld (helloWorld) where
 
-import GOOL.Drasil (
-  ProgramSym(..), RenderSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), ControlStatementSym(..),  VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), FunctionSym(..), SelectorFunction(..), MethodSym(..), 
-  ModuleSym(..))
+import GOOL.Drasil (ProgramSym(..), FileSym(..), PermanenceSym(..), 
+  BodySym(..), BlockSym(..), listSlice, TypeSym(..), StatementSym(..), 
+  ControlStatementSym(..), VariableSym(..), ValueSym(..), NumericExpression(..),
+  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), MethodSym(..), ModuleSym(..), GS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 
-helloWorld :: (ProgramSym repr) => repr (Program repr)
+helloWorld :: (ProgramSym repr) => GS (repr (Program repr))
 helloWorld = prog "HelloWorld" [docMod description 
-  ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" ["Helper"] 
-  [helloWorldMain] []), helper]
+  ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" [helloWorldMain] 
+  []), helper]
 
 description :: String
 description = "Tests various GOOL functions. It should run without errors."
 
-helloWorldMain :: (RenderSym repr) => repr (Method repr)
-helloWorldMain = mainMethod "HelloWorld" (body [ helloInitVariables, 
+helloWorldMain :: (ProgramSym repr) => MS (repr (Method repr))
+helloWorldMain = mainFunction (body [ helloInitVariables, 
     helloListSlice,
     block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]])
 
-helloInitVariables :: (RenderSym repr) => repr (Block repr)
+helloInitVariables :: (ProgramSym repr) => MS (repr (Block repr))
 helloInitVariables = block [comment "Initializing variables",
   varDec $ var "a" int, 
   varDecDef (var "b" int) (litInt 5),
@@ -54,12 +52,12 @@ helloInitVariables = block [comment "Initializing variables",
   printLn (valueOf $ var "boringList" (listType dynamic_ bool)),
   listDec 2 $ var "mySlicedList" (listType static_ float)]
 
-helloListSlice :: (RenderSym repr) => repr (Block repr)
+helloListSlice :: (ProgramSym repr) => MS (repr (Block repr))
 helloListSlice = listSlice (var "mySlicedList" (listType static_ float)) 
   (valueOf $ var "myOtherList" (listType static_ float)) (Just (litInt 1)) 
   (Just (litInt 3)) Nothing
 
-helloIfBody :: (RenderSym repr) => repr (Body repr)
+helloIfBody :: (ProgramSym repr) => MS (repr (Body repr))
 helloIfBody = addComments "If body" (body [
   block [
     varDec $ var "c" int,
@@ -127,30 +125,33 @@ helloIfBody = addComments "If body" (body [
     printLn (inlineIf litTrue (litInt 5) (litInt 0)),
     printLn (cot (litFloat 1.0))]])
 
-helloElseBody :: (RenderSym repr) => repr (Body repr)
+helloElseBody :: (ProgramSym repr) => MS (repr (Body repr))
 helloElseBody = bodyStatements [printLn (arg 5)]
 
-helloIfExists :: (RenderSym repr) => repr (Statement repr)
+helloIfExists :: (ProgramSym repr) => MS (repr (Statement repr))
 helloIfExists = ifExists (valueOf $ var "boringList" (listType dynamic_ bool)) 
   (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
-helloSwitch :: (RenderSym repr) => repr (Statement repr)
+helloSwitch :: (ProgramSym repr) => MS (repr (Statement repr))
 helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)), 
   (litInt 0, oneLiner (var "b" int &= litInt 5))]
   (oneLiner (var "b" int &= litInt 0))
 
-helloForLoop :: (RenderSym repr) => repr (Statement repr)
-helloForLoop = forRange "i" (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn (valueOf $ var "i" int)))
+helloForLoop :: (ProgramSym repr) => MS (repr (Statement repr))
+helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn 
+  (valueOf i)))
+  where i = var "i" int
 
-helloWhileLoop :: (RenderSym repr) => repr (Statement repr)
+helloWhileLoop :: (ProgramSym repr) => MS (repr (Statement repr))
 helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements 
   [printStrLn "Hello", (&++) (var "a" int)]) 
 
-helloForEachLoop :: (RenderSym repr) => repr (Statement repr)
-helloForEachLoop = forEach "num" (valueOf $ listVar "myOtherList" static_ float) 
-  (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" float [valueOf $ 
-  iterVar "num" float, litFloat 1.0])))
+helloForEachLoop :: (ProgramSym repr) => MS (repr (Statement repr))
+helloForEachLoop = forEach i (valueOf $ listVar "myOtherList" static_ float) 
+  (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" float [valueOf i, 
+  litFloat 1.0])))
+  where i = iterVar "num" float
 
-helloTryCatch :: (RenderSym repr) => repr (Statement repr)
+helloTryCatch :: (ProgramSym repr) => MS (repr (Statement repr))
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))

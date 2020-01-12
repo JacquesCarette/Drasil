@@ -4,13 +4,9 @@ package GlassBR;
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides functions for calculating the outputs
 */
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Scanner;
-import java.io.PrintWriter;
-import java.io.FileWriter;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class Calculations {
     
@@ -222,4 +218,3 @@ public class Calculations {
         return P_b < inParams.P_btol;
     }
 }
-

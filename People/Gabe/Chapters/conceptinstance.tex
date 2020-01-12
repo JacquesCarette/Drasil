@@ -1,0 +1,660 @@
+\chapter{Code Duplication is Evil}\label{ci}
+
+Many Drasil sub-packages begun as part of either \textit{drasil-lang} or \textit{drasil-example}, but were later spun off as seen fit. \textit{drasil-docLang}'s implementation was originally a part of \textit{drasil-example}, before it was decided that the requirements template is reusable and could become its own sub-package, setting a standard that document templates should be modular and independent from a particular example.
+
+\textit{drasil-printers} originally resided within \textit{drasil-lang}. The rich-text document output facilities were extracted from the \textit{drasil-lang} sub-package as they are not a part \textit{of} the language. The printers take a \textit{drasil-lang} \haskell{Document} as input to produce a rendered version of the document in some \textit{other} language. The separation allows for changes to occur within the document renderers, including the ability to add new renderers, without requiring or even tempting an author to modify the \haskell{Document} structure of \textit{drasil-lang}.
+
+\textit{drasil-database} was extracted from \textit{drasil-lang}. The components moved are more related to aggregation of information and specification of a software system. While the description of a software system seems like a core facet of Drasil and thus should belong in \textit{drasil-lang}, it is not. By migrating database features to a separate sub-package, \textit{drasil-lang} becomes more abstract and not tied to the (primary) design, a language to encode software system descriptions, and instead becomes a language of general mathematical and natural language knowledge capture, document description, and capturing the relationship between chunks of knowledge.
+
+\textit{drasil-theory} is the result of extracting chunks from \textit{drasil-lang} aligned with deriving scientific information and formulae. An example of a chunk residing in \textit{drasil-theory} is \haskell{DataDefinition}, a chunk that supports the knowledge captured in other \textit{drasil-theory} chunks, such as a \haskell{GenDefn} (\textbf{Gen}eral \textbf{Def}initio\textbf{n}~\cite{smith2005new}). \haskell{DataDefinition} is a piece of knowledge we can hand \textit{drasil-code} and say ``please generate code for this!" \textit{drasil-lang} captures primitive chunks such as quantities, units, and uncertainty; \textit{drasil-theory} adds general chunks with semantic meaning and traceability relating to the derivation of information.
+
+With the role of \textit{drasil-lang} refactored to a small, generic, flexible, core language, it is peculiar to find chunks such as \haskell{AssumpChunk}, \haskell{ReqChunk}, and \haskell{Change} (Chunk) residing in the sub-package, as evidenced at the beginning of \autoref{a:oldDouble}. The chunks capture requirements-oriented documentation knowledge. \haskell{AssumpChunk} is a semantic chunk capturing a system's assumption within a requirements document. In a similar fashion, \haskell{ReqChunk} is a semantic chunk capturing knowledge of a requirement (either functional or non-functional) while \haskell{Changes} is a semantic chunk encoding a likely or unlikely change as described by Smith et al~\cite{smith2005new}. We emphasize the semantics of these chunks as they largely encode natural language (\textit{drasil-lang}) \haskell{Sentence}s.
+
+It seems rather odd for the requirements-oriented chunks to appear in \textit{drasil-lang}. From \autoref{tab:packages} and the historical evolution of sub-packages, a more appropriate location for these chunks may be \textit{drasil-docLang} as the sub-package encodes requirements document knowledge. It is possible the semantic requirements document chunks were simply missed as \textit{drasil-docLang} is derived from \textit{drasil-example}, while the chunks reside in \textit{drasil-lang}. Maybe these chunks parallel those moved to \textit{drasil-theory} and a new sub-package, named \textit{drasil-requirements}, is in order? Perhaps the requirements chunks intentionally reside in \textit{drasil-lang} due to an implementation detail and deemed ``not worth the effort" to resolve?
+
+The inclusion of the requirements-oriented documentation chunks in \textit{drasil-lang} ``breaks" the encapsulation and desired scope of the sub-package. It would be ideal to migrate these odd chunks to a more predictable and philosophically-consistent location within the Drasil sub-package structure. Before delving into detail about where to move the chunks, \autoref{ciThread} investigates to see how the chunks listed in \autoref{teExample} are used throughout the sub-packages to discern if there \textit{is} a convincing reason why the requirements-oriented chunks reside in \textit{drasil-lang}. \autoref{sec:ciDesign}, and the remainder of \autoref{ci}, considers the observations of \autoref{ciThread} and work towards remedying peculiar chunks.
+
+% Go with well, before we decide where we should move them, we should step back and examine if we CAN move them.
+% Go provide some details on Assumptions being a requirements level concept indicating that it is disjoint from reqchunk and changes, because although it contains a simple Sentence, it is semantically separate from the other chunks, where as ReqChunk has a type because while requirements are something Functional and non-functional are two kinds of the same things. Expalin what each functions purpose is before examining it.
+
+\section{Pulling a Thread}\label{ciThread}
+
+%\begin{longlisting}
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%import Language.Drasil (...
+%  -- Chunks
+%  AssumpChunk, Change, CI, ConstrainedChunk, QDefinition,
+%  QuantityDict, ReqChunk, UnitaryConceptDict, UnitDefn,
+%  ...)
+%import Theory.Drasil (DataDefinition, ddNoRefs)
+%\end{minted}
+%\end{tcolorbox}
+%\caption{A reduced subset of import required for \autoref{teExample}.}
+%\label{ciImports}
+%\end{longlisting}
+%
+%In the small example created in \autoref{teExample}, we omitted the imports to preserve brevity. An oddity of Drasil appears amongst the import for the small example relating to where some of the chunks are stored. \autoref{ciImports} contains some of the imports (in a reduced fashion) needed for Double. The chunks themselves, as evidenced by \autoref{teExample} capture documentation-level knowledge and do not belong in the \textit{drasil-lang} sub-package. The core Drasil language doesn't strive to capture this nuanced knowledge. The requirements knowledge belongs in a sub-package such as \textit{drasil-docLang} or a new sub-package such as \textit{drasil-requirements}. As demonstrated by \haskell{import Theory.Drasil} in \autoref{ciImports}, \textit{drasil-docLang} already gathers nuanced chunk information from non-\textit{drasil-lang} sub-packages indicating it already has the infrastructure to handle the transformation from a chunk such as \haskell{ReqChunk} to a \haskell{Document} representation. Before rushing to conclusions about if we can or \textit{should} move the requirements-type chunks out of \textit{drasil-lang}, it is only appropriate to take note of what their implementations are and how they get transformed into other constructs.
+
+We begin investigating the requirements-oriented chunks, pulling on \haskell[breakanywhere, breakanywheresymbolpre=\textcolor{black}{-}]{AssumpChunk} to see how it --- and the information it captures --- propagates. We begin by examining the definition of \haskell{AssumpChunk} and the \haskell{assump} smart constructor (used in \autoref{teExample}).
+
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{haskell}
+data AssumpChunk = AC { _aid :: UID
+	                 , assuming :: Sentence
+	                 , _refName :: ShortName
+	                 }
+
+assump :: UID -> Sentence -> String -> AssumpChunk
+assump i a s = AC i a (shortname' s)
+\end{minted}
+\end{tcolorbox}
+
+The underscores prior to the \haskell{refName} and \haskell{aid} fields are indicators to the Lens library~\cite{Lenses}. The Lens library is used to the extent within Drasil to provide automatic getters and setters for records requiring only \haskell{makeLenses ''AssumpChunk} be added to automatically create the functions. The underscores indicate to \haskell{makeLenses} which fields to create functions for. As it will appear throughout this report, the infix operator \haskell{^.} is a getter, for example \haskell{assumpNum ^. aid} retrieves the value of the field named \haskell{_aid}.
+
+\haskell{AssumpChunk} is a purely semantic chunk, it ``extends" a \haskell{Sentence} with the ability to be referenced. Despite the simple specification, an \haskell{AssumpChunk} \textit{means} the referable \haskell{Sentence} is a requirements document assumption; it adds \textit{context} to an otherwise ambiguous \haskell{Sentence}.
+
+As for \haskell{AssumpChunk}'s implementation, it is composed of types exposed by \textit{drasil-lang} making them accessible to other sub-packages. From the definition of \haskell{AssumpChunk} and \haskell{assump} alone, we would be able to cleanly transplant them to another sub-package if it is the correct solution. Further, there appears to be no reason, based on the definition, \textit{why} the chunk exists in \textit{drasil-lang}.
+
+Examining \autoref{teExample}, we can see that \haskell{AssumpChunk}, specifically \haskell[breakanywhere, breakanywheresymbolpre=\textcolor{black}{-}]{assumpNum}, is an argument in two functions (\haskell{chgsStart} and \haskell{cdb}). \haskell{chgsStart} is a utility function that extracts a reference from the chunk. The name is a slight misnomer, the function produces a \haskell{Sentence} of the form ``<reference> --- <sentence>," such as ``A:assumpNum --- The software..." in the case of \autoref{teExample}. In fact, \haskell{chgsStart} does not explicitly require an \haskell{AssumpChunk}; it accepts any referable chunks, for example \haskell{DataDefinition} is valid for \haskell{chgsStart}. \haskell{cdb} is a database constructor, residing in \textit{drasil-database}. \haskell{cdb} creates a \haskell{ChunkDB}, which is used by Drasil sub-packages to lookup references to chunks. \haskell{chgsStart} and \haskell{cdb} do not further our understanding of \haskell[breakanywhere, breakanywheresymbolpre=\textcolor{black}{-}]{AssumpChunk}'s residency in \textit{drasil-lang}.
+
+In \autoref{teExample} we explained the oddity of \haskell{DocDesc}'s \haskell{Assumptions} constructor, meaning while not explicitly specified, functions taking \haskell{DocDesc} as an argument may interact with \haskell{AssumpChunk} if the \haskell{Assumptions} constructor is specified. Indeed, \haskell{mkDoc}, the function that interprets all the documentation constructs and produces a \textit{drasil-lang} \haskell{Document} layout, interprets \haskell{AssumpChunk}s. \haskell{mkDoc} acts as a boundary between \textit{drasil-docLang} and \textit{drasil-lang}. \textit{drasil-lang} has no knowledge about concepts such as traceability matrices or data definitions, those ideas all exist in higher-level sub-packages. In an idealized version of Drasil, \haskell{mkDoc} should be the function where \haskell{AssumpChunk}'s thread is complete. The thread of \haskell{AssumpChunk} continues through a function invoked within \haskell{mkDoc}:
+
+% Author Note: Never existed in this form.
+% Added helperAssump signature to make explicit Assumption argument is indeed AssumpChunk
+\begin{tcolorbox}
+\begin{minted}{haskell}
+mkSubSCS :: SystemInformation -> SCSSub -> Section
+mkSubSCS si' (Assumptions) =
+  SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $
+  map (\y -> LlC $ mkRawLC (Assumption (helperAssump y $
+  _sysinfodb si')) $ makeRef y) $ asOrderedList $
+  (_assumpTable (cdb si'))
+
+helperAssump :: AssumpChunk -> ChunkDB -> AssumpChunk
+\end{minted}
+\end{tcolorbox}
+
+The interesting bit from the code block above is the \haskell{AssumpChunk}s are pulled from the referencing database (\haskell{_assumpTable}) and (in effect) promptly wrapped by an \haskell{Assumption} constructor of the datatype \haskell{LabelledContent}. \haskell{LabelledContent} is a \textit{drasil-lang} construct --- supporting referencing --- which can be embedded in \haskell{Document}s. An assumption seems like an odd primitive to encode for a rich-text document, especially considering other efforts to make \textit{drasil-lang} more abstract with the creation of \textit{drasil-theory}, removing chunks encoding derivation knowledge, and \textit{drasil-database}, removing knowledge of software system descriptions.
+
+\textit{drasil-lang} \haskell{Document}s are an input to the \textit{drasil-printers} sub-package, which renders the document. \textit{drasil-printers} is the only sub-package using \haskell{Document} meaning any remaining uses of \haskell{AssumpChunk} or \haskell{LabelledContent}'s \linebreak\haskell{Assumption} should occur in the sub-package.
+
+From an implementation perspective, \textit{drasil-printers} consumes a \haskell{Document} to produce an internal layout-oriented object (\haskell{LayoutObj}), something that maps closely to primitives of the (layout) languages implemented. From a design perspective, the layout-oriented object decouples individual printers from \haskell{Document} and changes made in \textit{drasil-lang}. The translation of \haskell{Assumption} from \haskell{Document} to \haskell{LayoutObj} occurs in the following pattern match:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+import qualified Language.Drasil.Printing.LayoutObj as T
+
+lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
+lay sm x@(Assumption a) = T.ALUR T.Assumption
+  (spec sm (assuming a)) (P.S (refAdd x)) (spec sm $
+  getShortName a)
+\end{minted}
+\end{tcolorbox}
+
+\haskell{lay} finishes the journey of \haskell{AssumpChunk} as a concrete chunk. The fields comprising \haskell{AssumpChunk} are repackaged into the \haskell{ALUR} constructor of \haskell[breakanywhere, breakanywheresymbolpre=\textcolor{black}{-}]{LayoutObj}. 
+
+We still do not know \textit{why} the idea of a requirements document assumption is necessary until document layout, both in \haskell{Document} and in \haskell{LayoutObj}. Whatever the use of \haskell{ALUR}, one observation is becoming clear: \textit{drasil-lang} not exposing or providing any interesting interactions involving \haskell{AssumpChunk} or \haskell{Assumption} hints that the constructs are likely nothing more than a historical ``hack," perhaps to make \textit{something} easier in \textit{drasil-printers}. Such a ``hack" is a flawed idea when examining the sub-package hierarchy, \textit{drasil-lang} is not aware of \textit{drasil-printers} existence, and if truly necessary can likely be expressed in a more appropriate fashion.
+
+The investigation of \haskell{AssumpChunk} has not concluded, the thread continues. What is the definition of \haskell{ALUR}?
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+data ALUR = Assumption | LikelyChange | UnlikelyChange
+          | Requirement
+data LayoutObj =
+   ...
+   | ALUR ALUR Contents Label Label -- two labels?
+   ...
+\end{minted}
+\end{tcolorbox}
+
+The definition of \haskell{ALUR} reveals that all three \textit{drasil-lang} requirements \linebreak document-oriented chunks seem to converge into the data constructor. The document printers seem to be aware of these three chunks that exist in \textit{drasil-lang}, but no others. Why? Perhaps how \haskell{ALUR} is used provides the answer.
+
+Starting with the HTML renderer, \haskell{ALUR} for \haskell{Assumption} is rendered using:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+printLO :: LayoutObj -> Doc
+printLO (ALUR _ x l i) = wrap "ul" ["hide-list-style"] $
+  makeRefList (p_spec x) (p_spec l) (p_spec i)
+
+-- | Renders assumptions, requirements, likely changes
+makeRefList :: Doc -> Doc -> Doc -> Doc
+makeRefList a l i = wrap "li" [] (refwrap l (i <>
+  text ": " <> a))
+\end{minted}
+\end{tcolorbox}
+
+\haskell{Doc} is a pretty-printing data structure originating from a pretty-printer design in \cite{Hughes95thedesign}.
+
+How peculiar, when the HTML renderer is printing assumptions it follows the same code path as other \haskell{ALUR} constructors. \haskell{ALUR} does not describe a ``layout object," we observe in the HTML printer that assumptions are rendered as an unordered list. Looking back at the definition of \haskell{Document} and \haskell{LayoutObj}, they both contain list constructors supporting formatting used for the HTML printer's \haskell{ALUR} output. 
+
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%data LayoutObj =
+%   ...
+%   | List ListType
+%   ...
+%
+%data ListType = Ordered [ItemType]
+%              | Unordered [ItemType]
+%              | Simple      [(Title,ItemType)]
+%              | Desc        [(Title,ItemType)]
+%              | Definitions  [(Title,ItemType)]
+%
+%data ItemType = Flat Spec
+%              | Nested Spec ListType
+%\end{minted}
+%\end{tcolorbox}
+%
+%\haskell{LayoutObj} has a primitive (and layout-oriented) \haskell{List} constructor!
+
+Perhaps the reason for \haskell{ALUR} can be found in the\ \LaTeX\ printer? \haskell{ALUR} appears in two locations within the\ \LaTeX\ printer:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+-- 1st
+parseDoc' :: LayoutObj -> ([Package], [Def])
+parseDoc' (ALUR Assumption _ _ _) = ([], [AssumpCounter])
+
+-- 2nd
+lo :: HasSymbolTable s => LayoutObj -> s -> D
+lo (ALUR Assumption n l _) _  = toText $
+  makeAssump (spec n) (spec l)
+
+makeAssump :: D -> D -> D
+makeAssump n l = description $ item' ((pure $
+  text ("\\refstepcounter{assumpnum}" ++
+  "\\atheassumpnum")) <> label l <>
+  (pure $ text ":")) n
+\end{minted}
+\end{tcolorbox}
+
+The first instance adds a counter (using the\ \LaTeX\ command \mintinline{latex}{\newcounter} --- named \texttt{assumpnum}; unrelated to \autoref{teExample}'s \haskell{assumpNum}) to automatically index and number the assumptions when printed (with the macro \mintinline[breakanywhere, breakanywheresymbolpre=\textcolor{black}{-}]{latex}{\atheassumpnum}). The second implicitly references the counter created when printing assumptions through \haskell{ALUR}.
+
+With the examination of the\ \LaTeX\ printer, we have reached the end of the thread that spanned three of Drasil's sub-packages. Now that we are aware of \textit{why} \haskell{AssumpChunk} is where it is, we must examine what benefit the automatic numbering provides. Automatic numbering is a useful tool when manually writing\ \LaTeX\ as it allows for the author to ignore manually inputting numbers but have them correctly numbered in the rendered document in the order they appear. It can be a useful tool in a requirements document when lists are re-organized, or if an assumption is added between two others. Drasil is not asking authors to manually edit the\ \LaTeX\ source and already abstracts over the concrete numbers (using the existing list constructors), ergo the feature of automatic numbering has already lost value in the context of Drasil generated\ \LaTeX. Causing further concern, the HTML printer's output does not match the\ \LaTeX\ printer in terms of numbering! The HTML printer does not number assumptions, it prefixes assumption contents with their short name. As an added comment, discussion amongst Drasil contributors resulted in the HTML printers output being preferable due to the prefix being the same string that appears when an assumption is referenced; the short name being more descriptive than a number thus providing more context than a number indicating the order of the assumption.
+
+Based on the reasons \haskell{ALUR} exists for \haskell{Assumption}s and the desired output for assumptions, we can conclude that the counter is unnecessary and numeric (ordered) and unordered lists can already be displayed through the \haskell{LayoutObj} constructor \haskell{List}. If we remove the \haskell{ALUR} constructor then we would be in a place where \haskell{AssumpChunk} would no longer be a dependency of \textit{drasil-printers} making it no longer a type within a \haskell{Document} constructor meaning it could be moved to \textit{drasil-docLang}.
+
+%\begin{listing}[H]
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%lo :: HasSymbolTable s => LayoutObj -> s -> D
+%lo (ALUR Requirement n l _) _ = toText $
+%  makeReq (spec n) (spec l)
+%lo (ALUR LikelyChange n l _) _ = toText $
+%  makeLC (spec n) (spec l)
+%lo (ALUR UnlikelyChange n l _) _ = toText $
+%  makeUC (spec n) (spec l)
+%
+%makeReq :: D -> D -> D
+%makeReq n l = description $ item' ((pure $
+%  text ("\\refstepcounter{reqnum}" ++ "\\rthereqnum")) <>
+%  label l <> (pure $ text ":")) n
+%
+%makeLC :: D -> D -> D
+%makeLC n l = description $ item' ((pure $
+%  text ("\\refstepcounter{lcnum}" ++ "\\lcthelcnum")) <>
+%  label l <> (pure $ text ":")) n
+%
+%makeUC :: D -> D -> D
+%makeUC n l = description $ item' ((pure $
+%  text ("\\refstepcounter{ucnum}" ++ "\\uctheucnum")) <>
+%  label l <> (pure $ text ":")) n
+%\end{minted}
+%\end{tcolorbox}
+%\caption{The\ \LaTeX\ printer's rendering functions for \haskell{ALUR}.}
+%\label{cicopypasta}
+%\end{listing}
+
+Excellent! We have a plan of action! Before actioning the plan we must also consider \haskell{ReqChunk} and \haskell{Change} (Chunk). As already hinted within \textit{drasil-printers}, \haskell{Requirement} (which \haskell{ReqChunk} semantically provides) and \haskell[breakanywhere, breakanywheresymbolpre=\textcolor{black}{-}]{LikelyChange}/\haskell{UnlikelyChange} (which \haskell{Change} provides) are handled in an identical way to \haskell{Assumption} within the HTML printer as the pattern match in \haskell{printLO} ignores the \haskell{ALUR} datatype entirely. The\ \LaTeX\ printer is not much different, while each \haskell{ALUR} constructor dispatches to a different function, the functions are copy-paste with the counter name changed. %, seen in Listing\ \autoref{cicopypasta}.
+
+With duplicated code comprising the printers, what do the data structure definitions for \haskell{ReqChunk} and \haskell{Change} look like; are they also duplicates of \haskell{AssumpChunk}?
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+data ChngType = Likely -- ^ Likely Change
+              | Unlikely -- ^ Unlikely Change
+
+data Change = ChC
+  { _id      :: UID
+  , chngType :: ChngType
+  , chng     :: Sentence
+  , _refName :: ShortName
+  }
+
+data ReqType = FR  -- ^ Functional Requirement
+             | NFR -- ^ Non-Functional Requirement
+
+data ReqChunk = RC
+  { _id        :: UID
+  , reqType    :: ReqType
+  , requires   :: Sentence
+  , _refName   :: ShortName
+  }
+\end{minted}
+\end{tcolorbox}
+
+% Hack: Forcing a new page so the footer doesn't split between two pages
+\clearpage
+Indeed they are!\footnote{When copying the definitions for \haskell{ReqChunk} and \haskell{Change} into this report, both chunks had a trailing whitespace on the same lines. One on the first line specifying the constructor name and one on the third line specifying the subtype.} The differences being that \haskell{ReqChunk} and \haskell{Change} both contain an additional field over \haskell{AssumpChunk} indicating the subtype --- providing additional semantic context --- of what each chunk encodes.
+
+Perhaps moving these chunks to \textit{drasil-docLang} is not the correct choice. The common code and structure of all three chunks indicate they contain fairly similar information. Perhaps the correct action is to unify the chunks into something more generic and flexible!
+
+\section{A Generic Flexible Chunk}\label{sec:ciDesign}
+
+With the decision to create a generic chunk, what should such a chunk provide? First off, the chunk should be capable of expressing everything possible with the existing chunks. Secondly, we should provide a mechanism to maintain the semantics provided by the existing chunks. It is important to provide semantics to know whether a chunk is a requirement or an assumption, without ad-hoc mechanisms such as code locality or code comments. Providing a proper semantic mechanism allows \textit{drasil-docLang} to ensure the ``assumptions" being passed to it are indeed assumptions. Third, the design should not be targeted at any particular chunk type and be generic and reusable outside of the case study of uses performed in \autoref{ciThread}.
+
+We should start the design by combining and unifying the three existing chunks, providing a placeholder name \haskell{GenericChunk} with fields similar to \haskell{AssumpChunk}:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+data GenericChunk = Gc
+  { _id      :: UID
+  , body     :: Sentence
+  , _refName :: ShortName
+  }
+\end{minted}
+\end{tcolorbox}
+
+\haskell{GenericChunk} models \haskell{AssumpChunk} well. There is a bijection between an \haskell{AssumpChunk} and \haskell{GenericChunk}. \haskell{GenericChunk} is not yet an adequate substitution for \haskell{ReqChunk} or \haskell{Change}. Where is the selection of subtype (let alone the ``main" type)?
+
+We enumerate the ``main" type and subtypes of the chunks we are attempting to abstract in an effort to visualize the relationship:
+
+\begin{itemize}
+	\item Assumption
+	\item Requirement
+	\begin{itemize}
+		\item Functional
+		\item Non-functional
+	\end{itemize}
+	\item Change
+	\begin{itemize}
+		\item Likely
+		\item Unlikely
+	\end{itemize}
+\end{itemize}
+
+The chunks form what appears to be small (two-level) trees. Further, we have been considering \haskell{AssumpChunk}, \haskell{ReqChunk}, and \haskell{Change}, all concepts within the \textit{domain} of a (software) requirements document. If we encode the software requirements domain we can form a larger tree with all chunks we are abstracting being the ``main" type or the first level of the tree. By providing a domain to \haskell{GenericChunk} we would capture the semantics as the existing chunks do!
+
+\textit{drasil-lang} provides a typeclass named \haskell{ConceptDomain} with the following definition:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+class ConceptDomain c where
+  -- | cdom provides Getter for the concept domain tags
+  --   for a chunk
+  cdom :: c -> [UID]
+\end{minted}
+\end{tcolorbox}
+
+\haskell{cdom} is constrained on the \haskell{[UID]} being those belonging to chunk implementing the typeclass \haskell{Concept}. One such instance of the \haskell{ConceptDomain} typeclass is \haskell{ConceptChunk}. \haskell{ConceptChunk} is defined as:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+data ConceptChunk = ConDict
+  { _idea :: IdeaDict
+  , _defn' :: Sentence
+  , cdom' :: [UID]
+  }
+\end{minted}
+\end{tcolorbox}
+
+An \haskell{IdeaDict} provides an (optional) abbreviation and a \haskell{NounPhrase}, which is a phrase describing the concept. Combined with a definition (\haskell{_defn'}) we have a sufficient amount of information to capture the enumerated SRS domains. If we assume we have an abstract \haskell{srsDom}(ain) defined, we could define an \haskell{assumpDom} by providing the noun phrase as ``assumption," abbreviation as ``A," and a definition describing \textit{what} an assumption is. Finally, the \haskell{cdom'} field is a list of \haskell{ConceptDomain} \haskell{UID}s, in this case, \haskell{assumpDom} is in the \haskell{srsDom}ain! By structuring domains into a tree we are able to ``select" a domain such as ``requirement" and gather both functional and non-functional requirements by taking, as an example, a chunk tagged as a functional (requirement) and walking the domains upwards --- towards the root --- to find functional (requirements) is in the requirements domain. We can perform similar definitions for all of the enumerated domains. In fact, we do, and we place the domains in \textit{drasil-data}. We realize the implementation of \haskell{assumpDom} as:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+assumpDom :: ConceptChunk
+assumpDom = ccs (mkIdea "assumpDom" (assumption ^. term) $
+  Just "A") EmptyS [srsDom]
+\end{minted}
+\end{tcolorbox}
+
+\haskell{assumption} is a \haskell{CI} being reused and \haskell{"assumpDom"} is a UID (a component of an \haskell{IdeaDict}). One argument of interest is \haskell{EmptyS} representing an empty \haskell{Sentence}, or in this particular instance, an empty definition. We have omitted writing a definition for the domains as Drasil does not currently use any domain's definition.
+
+We have given \haskell{assumpDom} an abbreviation, but what purpose does it serve? When referencing a chunk within Drasil, the reference contains a prefix to provide context to a reader. For example, using the assumption from \autoref{teExample} the reference would appear as ``A:reasonableNumber," similar to how a reference to a section --- say this section --- within\ \LaTeX\ may render as ``\autoref{sec:ciDesign}." With the removal of the semantics provided by the type ``\haskell{AssumpChunk}," the replacement must provide sufficient context and information to construct an appropriate reference.
+
+The \haskell{ConceptDomain} typeclass provides context for \haskell{GenericChunk}. We have effectively met all three design constraints. 
+
+% FIXM:E I think I need to go over this once more and organize this a little better.
+The \haskell{ConceptChunk} definition contains very similar fields to the proposed \haskell{GenericChunk}. An expanded (i.e. inlined definition of \haskell{IdeaDict}) \haskell[breakanywhere, breakanywheresymbolpre=\textcolor{black}{-}]{ConceptChunk} contains a (\haskell{Maybe String}) abbreviation field and a \haskell{NounPhrase} field. The abbreviation field is optional and can be ignored. The \haskell{NounPhrase} is a name of the assumption. This ``name" is similar to a displayed string identifying the chunk to a reader in the final document. For \haskell{GenericChunk} this can be the same as the value to \haskell{ShortName}. 
+
+The UID, \haskell{cdom'}, and \haskell{body} (\haskell{defn'} in \haskell{ConceptChunk}) fields are shared between \haskell{ConceptChunk} and \haskell{GenericChunk} definitions. We differentiate from the list of domains \haskell{ConceptChunk} allows for \haskell{cdom'} by restricting the number of domains in \haskell{GenericChunk} to exactly one as we have not encountered a case where this is not true with the current examples. 
+
+Drasil is unable to produce references for \haskell{ConceptChunk} as it is not something that can be referenced or printed as a group of knowledge. \haskell[breakanywhere, breakanywheresymbolpre=\textcolor{black}{-}]{GenericChunk} extends \haskell{ConceptChunk} in this regard to provide referencing capabilities required by the chunks it is replacing. \haskell{ShortName} is a field providing much of the referencing capabilities to \haskell{GenericChunk}. We add a reference address field to \haskell{GenericChunk} to provide the possibility of a distinct document address not tied to the UID to complete the realization of referencing \haskell{GenericChunk}.
+
+With these similarities to \haskell{ConceptChunk}, we can write \haskell{GenericChunk} as an extension of \haskell{ConceptChunk}:
+\begin{tcolorbox}
+\begin{minted}{haskell}
+data GenericChunk = Gc
+  { cc :: ConceptChunk
+  , ra :: String
+  , shnm :: ShortName
+  }
+\end{minted}
+\end{tcolorbox}
+
+In this format \haskell{GenericChunk} is simply an instantiation of a \textit{concept} (both conceptually and syntactically) extended to provide referencing information. Further, the chunk is an instance of a particular \haskell{ConceptDomain}! We provide a final name for the new chunk to reflect these observations: \haskell{ConceptInstance}.
+
+
+\section{``I Understood That Reference"}\label{ciRefProg}
+% RefProg and the addition of the refaddr field
+During the development of \haskell{ConceptInstance}, many Drasil contributors encountered friction from the chunk referencing system Drasil has in place. \haskell{ConceptInstance} experiences some limitations in terms of implementation as a result of the use of \haskell{ConceptDomain}. \haskell{ConceptDomain}'s abbreviation field is supposed to encode referencing context information for display names. Examining the core facet of Drasil's referencing architecture, the \haskell{RefType} constructor, reveals the problem with the existing implementation:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+data RefType = Tab    -- ^ Table
+             | Fig    -- ^ Figure
+             | Sect   -- ^ Section
+             | Req    -- ^ Requirement
+             | Assump -- ^ Assumption
+             | LC     -- ^ Likely Change
+             | UC     -- ^ Unlikely Change
+             | PSD    -- ^ Physical System Description
+             ...
+\end{minted}
+\end{tcolorbox}
+
+We can see the chunk types (in the conceptual sense, not the Haskell type system sense) we have removed, such as \haskell{Assump}, are hardcoded as a constructor within \haskell{RefType}. This results in calling the hardcoded function \haskell{aref} within the\ \LaTeX\ printer.
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+aref :: D -> D
+aref  x = custRef "A\\ref" x 
+\end{minted}
+\end{tcolorbox}
+
+Although this was not exposed during our initial exploration, it is very much something that requires addressing to facilitate the implementation of \haskell{ConceptInstance}. The specification of chunk types is another instance, similar to \haskell{AssumpChunk}, where knowledge is inappropriately captured by \textit{drasil-lang} introducing notions of software system descriptions that otherwise do not appear in \textit{drasil-lang}. Small slip-ups such as \haskell{RefType} open doors to thoughts such as, ``\textit{drasil-lang} already knows about assumptions! What is the harm in adding another structure that has domain-specific knowledge?" Blurred boundaries produced by \haskell{RefType} can weaken the idea of keeping the sub-package abstract and lead to a reduction in modularity. Furthermore, the \haskell{RefType} data type is not extensible requiring \textit{drasil-lang} to be aware of all referable chunks.
+
+With the interest \haskell{ConceptInstance} has in the referencing system introducing an unaccounted stake, we provide a unique perspective and requirements for guiding improvements to the refined implementation. A working group of Drasil contributors formed to provide a number of perspectives in an effort to address the referencing system deficiencies. For the purpose of this report we will discuss the \haskell{RefType} resolution.
+
+The core issue with \haskell{RefType}, and thus with referencing from the perspective of \haskell{ConceptInstance}, is the hardcoded nature of the structure, which forces spreading knowledge around the Drasil codebase. Instead of \haskell[breakanywhere, breakanywheresymbolpre=\textcolor{black}{-}]{AssumpChunk}, or any particular chunk, being responsible for providing the context with which to render its \haskell{ShortName}, it is the individual printer that decides. The existing architecture requires \textit{drasil-lang} and \textit{drasil-printers} to be aware of chunks that are defined in, say, \textit{drasil-theory} despite the correct design involving \textit{drasil-lang} being unaware of any chunks defined externally. 
+
+A new design should provide the following: 
+\begin{enumerate}
+	\item Remove referencing knowledge of all chunks (which require referencing) from \textit{drasil-lang}
+	\item Provide a flexible means to describe \textit{how} a chunk should have its name displayed
+	\item Defer final rendering of name to \textit{drasil-printers} to make the final layout/display decisions
+\end{enumerate}
+
+Based on requirements 2 and 3, it seems appropriate to implement the replacement as a small language for displaying names. The flexibility required is provided by the constructs of the language, which is evaluated and interpreted by \textit{drasil-printers}. How do we achieve the first item of the design criteria with this language? We provide a typeclass that referable chunks implement to describe themselves with the referencing language.
+
+We add constructs to the referencing language on an as-needed basis. We begin with a symbol for \haskell{ShortName}: \haskell{Name}. A \haskell{Name}, when interpreted, will render the value of the chunk's \haskell{ShortName}. The next construct to add is a way to lift plain \haskell{String}s into the language: \haskell{RS}. We require means to combine smaller programs: \haskell{RConcat}. These three constructs cover all existing uses of \haskell{RefType}. \haskell{ConceptInstance} requires a referencing construct to include a \haskell{UID} for a \haskell{ConceptDomain} to lookup during rendering; this construct is \haskell{Deferred}. 
+
+%Piecing all of the constructors together we have a data structure:
+%
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%data IRefProg =
+%    Deferred UID
+%  | RS String
+%  | RConcat IRefProg IRefProg
+%  | Name
+%\end{minted}
+%\end{tcolorbox}
+
+All existing chunks use \haskell{RefType} to provide a prefix to a displayed \haskell[breakanywhere, breakanywheresymbolpre=\textcolor{black}{-}]{ShortName}. We provide a smart constructor to produce these common display names:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+prepend :: String -> IRefProg
+prepend s = RS s +::+ RS ": " +::+ Name
+\end{minted}
+\end{tcolorbox}
+
+%The working group as a collective decided to place all reference related information in a \haskell{Reference} data record allowing for possible references in non-\haskell{Sentence} structures going forward. Included in the new \haskell{Reference} structure is a \haskell{LblType} which encodes an internal reference display name and reference address, as well as citations and internet hyperlinks.
+
+% Author Note: Not the most current version of the structure.
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%data LblType = RP IRefProg String
+%  | Citation String
+%  | URI String
+%
+%data Reference = Reference
+%  { _ui :: UID
+%  ,  ra :: LblType
+%  ,  sn :: ShortName }
+%\end{minted}
+%\end{tcolorbox}
+%
+%The \haskell{Reference} structure reduces the \haskell{Sentence} constructor to:
+%
+%% Author Note: Rewritten without using GADT syntax to keepn the Haskell "simple"
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%data Sentence =
+%  ...
+%  | Ref Reference
+%  ...
+%\end{minted}
+%\end{tcolorbox}
+
+In \textit{drasil-printers} we must construct a function to evaluate \haskell{RefProg} to \haskell{Sentence}. The function performing the transformations is straightforward with the only complexity (albeit minimal) stemming from the \haskell{Deferred} constructor. The \haskell{Deferred} constructor requires looking up the provided \haskell{UID} in the appropriate \haskell{Concept}-containing table within \haskell{ChunkDB}. The looked-up chunk is then consumed to retrieve the abbreviation. 
+
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%renderShortName :: ChunkDB -> IRefProg ->
+%  ShortName -> Sentence
+%renderShortName _ Name sn = S $ getStringSN sn
+%\end{minted}
+%\end{tcolorbox}
+%
+%where \haskell{getStringSN} renders a \haskell{ShortName} to a \haskell{String}.
+%
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%renderShortName _ (RS s) _ = S s
+%renderShortName ctx (Deferred u) _ = S $
+%  fromMaybe (error "Domain has no abbreviation.") $
+%  getA . defLookup u $ defTable ctx
+%\end{minted}
+%\end{tcolorbox}
+%
+%The \haskell{defTable} and \haskell{defLookup} functions act as a pair to extract the \haskell{Concept} table from the \haskell{ChunkDB} and lookup a particular \haskell{ConceptChunk}. From the \haskell{ConceptChunk} we must extract the abbreviation, using \haskell{getA}, if such an abbreviation exists.
+
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%renderShortName ctx (RConcat a b) sn =
+%  renderShortName ctx a sn :+: renderShortName ctx b sn
+%\end{minted}
+%\end{tcolorbox}
+%
+%Of note for the final pattern is the \haskell{:+:} operator which is the \haskell{Sentence} concatenation operator conforming to \haskell{Semigroup}'s append.
+
+Satisfying requirement 1 for the improved referencing system requires we provide a way to create a \haskell{Reference} wherever a chunk type is defined. We introduce the typeclass \haskell{Referable}, constrained to those types that implement an existing typeclass \haskell{HasUID}. We define the typeclass as:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+class HasUID s => Referable s where
+  refAdd    :: s -> String
+  renderRef :: s -> LblType
+\end{minted}
+\end{tcolorbox}
+
+\haskell{refAdd} defines the reference address and \haskell{renderRef} provides \haskell{RefProg} (contained in another structure) specifying the displayed name semantics.
+
+\haskell{Referable} is used to implement decentralised referencing information for \haskell{DataDefinition} (defined in \textit{drasil-theory}) using the following instance:
+
+% Author Note: Simplified this because otherwise I may have to explain some functions which aren't necessary.
+\begin{tcolorbox}
+\begin{minted}{haskell}
+instance Referable DataDefinition where
+  refAdd      = getRefAdd
+  renderRef l = RP (prepend "DD") (refAdd l)
+\end{minted}
+\end{tcolorbox}
+
+With the inclusion of \haskell{Referable} and \haskell{RefProg} we have achieved our goals and satisfied the requirements required to properly remove \haskell{RefType} from \textit{drasil-lang} --- and all together --- and replace its uses with a much more versatile and powerful system. The working group produced other improvements to the referencing system in Drasil, however, the author was not as heavily involved with the other improvements, and they will not be discussed in this report.
+
+\section{Putting It All Together}\label{ciFinale}
+With the new referencing system in place we can construct a \haskell{Referable} instance for \haskell{ConceptInstance} that produces display names in the familiar format ``<abbrev>: <name>":
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+sDom :: [UID] -> UID
+sDom [d] = d
+sDom d = error $ "Expected ConceptDomain with single " ++
+  "domain, found " ++ show (length d) ++ " instead."
+
+(+::+) :: IRefProg -> IRefProg -> IRefProg
+a +::+ b = RConcat a b
+
+instance Referable ConceptInstance where
+  refAdd      = ra
+  renderRef l = RP (Deferred (sDom $ cdom' $ cc l) +::+
+  	RS ": " +::+ Name) (refAdd l)
+\end{minted}
+\end{tcolorbox}
+
+With the definition of \haskell{ConceptInstance} being complete, we add a smart constructor. We name it \haskell{cic} for \textbf{C}oncept \textbf{I}nstance \textbf{C}hunk. The smart constructor provides a simpler, stricter interface for describing \haskell{ConceptInstance}s than the regular constructor. One example of strictness enacted by \haskell{cic} is accepting \haskell{ConceptChunk} as an argument to enforce that the \haskell{cdom'} field contains a single valid \haskell{UID} rather than allowing opportunities for users to specify inconsistent or invalid chunks. 
+
+% I removed the Concept constraint from this snippet to keep everything simple
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%cic :: String -> Sentence -> String ->
+%  ConceptChunk -> ConceptInstance
+%cic u d sn dom = ConInst (ccs (nc u $ pn sn) d [dom]) u $
+%  shortname' sn
+%\end{minted}
+%\end{tcolorbox}
+%
+%where \haskell{ccs} is a \haskell{ConceptChunk} constructor (for the embedded \haskell{ConceptChunk} within \haskell{ConceptInstance}) and \haskell{nc} constructs a \haskell{NamedChunk}, a type embedded within \haskell{ConceptChunk}. With the constructor we enforce the single domain, further, for simplicity of the end interface we use the passed UID (argument name \haskell{u}) as the reference address as well. To prevent misuse of the chunk we only export the \haskell{cic} constructor and not the \haskell{ConInst} constructor.
+
+We turn our focus to the \haskell{Document} structure within \textit{drasil-lang}. The \haskell{Document} structure, and consequently \haskell{LayoutObj}, only requires minor modifications, enhancements even, to accommodate the features previously provided by the \haskell{Assumption}, \haskell{Requirement}, and \haskell{Change} constructors. We require the ability to reference particular items within a list or enumeration. With the design of Drasil, it is not difficult to add. We begin by adding an additional field to all \haskell{ListType} constructors to encode an address that can be linked to by references in the generated documents.
+
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%type ListPair = (Sentence,ItemType)
+%
+%data ListType = Bullet [ItemType]
+%              | Numeric [ItemType]
+%              | Simple [ListPair]
+%              | Desc [ListPair]
+%              | Definitions [ListPair]
+%         
+%data ItemType = Flat Sentence
+%              | Nested Sentence ListType
+%\end{minted}
+%\end{tcolorbox}
+%
+%into
+%
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%type ListTuple = (Sentence,ItemType,Maybe String)
+%
+%data ListType = Bullet [(ItemType,Maybe String)]
+%              | Numeric [(ItemType,Maybe String)]
+%              | Simple [ListTuple]
+%              | Desc [ListTuple]
+%              | Definitions [ListTuple]
+%
+%data ItemType = Flat Sentence
+%              | Nested Header ListType
+%\end{minted}
+%\end{tcolorbox}
+
+Most of the other changes to enable referencing of individual list elements is not particularly of interest as it is general plumbing and propagation of the new list item identifier into the printers. The individual printers expose the new identifiers by generating an \texttt{id} attribute for the HTML printer and a \mintinline{latex}{\phantomsection\label{}} within the\ \LaTeX\ printer. 
+
+We make a small change to \textit{drasil-database} to replace all the removed chunk tables with a new table called \haskell{conceptinsTable} holding all \haskell[breakanywhere, breakanywheresymbolpre=\textcolor{black}{-}]{ConceptInstance}s regardless of which section a \haskell{ConceptInstance} should appear.
+
+Two small convenience functions were added to \textit{drasil-utils} to facilitate creating non-referable lists without requiring an author to type \haskell{Nothing} for each list item:
+
+\begin{tcolorbox}
+\begin{minted}{haskell}
+noRefs :: [ItemType] -> [(ItemType, Maybe String)]
+noRefs a = zip a $ repeat Nothing
+
+noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
+noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
+\end{minted}
+\end{tcolorbox}
+
+With much of the infrastructure work complete, we now look to \textit{drasil-docLang} to use \haskell{ConceptInstance}. The changes are fairly minimal, we must update \haskell{DocDesc} constructors that take any of the removed chunks to instead use \haskell{ConceptInstance}. 
+
+The next adaptation we must perform is to convert \haskell{ConceptInstance} to a list of \haskell{Document} items. While this is to be used in \textit{drasil-docLang}, there is nothing specific about the operation we are performing making \textit{drasil-utils} a suitable home for these functions. We provide a level of flexibility with these functions to allow for high-level document layout sub-packages (like \textit{drasil-docLang}) to customize the \haskell{Document} constructs produced. We aim to match the output and formatting produced by the previous \haskell{ALUR} \haskell{LayoutObj} constructs in the HTML printer, meaning we should produce an enumeration of type \haskell{Simple} with each \haskell{ConceptInstance} being referable. We decompose the function to perform this transformation, \haskell{mkEnumSimpleD}, into two helpers: \haskell{mkEnumSimple}, which produces an \haskell{Enumeration} of type \haskell{Simple}, and \haskell{mkListTuple}, which translates each \haskell{ConceptInstance} into a \haskell{ListTuple}.
+
+% I'm doing this here to seed the idea that Assumptions is jank and providing a little foreshadowing for the next chapter.
+%Our final step is to use \haskell{mkEnumSimpleD} within the document language to perform the transformation. Most transformation uses appear similar to the one presented below transforming the likely changes \haskell{ConceptInstance}s into a \haskell{Document} list:
+
+% Removed the head of the list for this snippet to keep the snippet smaller and more focused.
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%mkLCsSec :: LCsSec -> Section
+%mkLCsSec (LCsProg c) = SRS.likeChg (mkEnumSimpleD c) []
+%\end{minted}
+%\end{tcolorbox}
+%
+%\haskell{Assumptions} due to its unique declarative constructor requires a slightly different implementation:
+%
+%% Removed Lens again here
+%% Leaving this in again because foreshadowing.
+%\begin{tcolorbox}
+%\begin{minted}{haskell}
+%mkSubSCS si' Assumptions =
+%  SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $
+%  mkEnumSimpleD . map (`helperCI` si') .
+%  filter (\x -> sDom (cdom' $ cc x) == _uid assumpDom) .
+%  asOrderedList $ _conceptinsTable (_sysinfodb si')
+%\end{minted}
+%\end{tcolorbox}
+%
+%where \haskell{helperCI} is an evolution of \haskell{helperAssump} to provide referenced by information for all \haskell{ConceptInstance} chunks.
+
+The addition of \haskell{ConceptInstance} to replace the out-of-place chunks is a large distance from the original, seemingly simple, planned change. Overall, it collapses three-to-four different code paths encoding the same type of information. We performed these changes at the correct time in Drasil's development coinciding with a redesign of Drasil's referencing system. We contributed important requirements and design decisions that led to the creation of \haskell{RefProg}. We can translate the assumption from \autoref{teExample} to a \haskell{ConceptInstance} as:
+
+\begin{tcolorbox}[breakable, toprule at break=0pt, bottomrule at break=0pt]
+\begin{minted}{haskell}
+assumpNum :: ConceptInstance
+assumpNum = cic "assumpNum" (foldlSent [S "This",
+  phrase system, S "only considers", phrase input_,
+  S "integers between", E $ (-2) $^ 29, S "and",
+  E (2 $^ 29)]) "reasonableNumber" assumpDom
+\end{minted}
+\end{tcolorbox}
+
+\haskell{assumpNum} continues to encode the same information, even in a very similar way to the removed \haskell{AssumpChunk}, while providing more flexibility.
+
+We observed another Drasil contributor implement a new goals section to the requirements document, adding a domain and leveraging \haskell[breakanywhere, breakanywheresymbolpre=\textcolor{black}{-}]{ConceptInstance}, by performing the following modification:
+
+In \textit{drasil-data}:
+\begin{tcolorbox}
+\begin{minted}{haskell}
+-- Insert
+goalStmtDom :: ConceptChunk
+goalStmtDom = ccs (mkIdea "goalStmtDom" (goalStmt ^. term) $
+  Just "GS") EmptyS [srsDom]
+
+-- Modify
+srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom,
+  nonFuncReqDom, chgProbDom, assumpDom, likeChgDom,
+  unlikeChgDom]
+\end{minted}
+\end{tcolorbox}
+
+Inserting the following constructor into \textit{drasil-docLang}:
+\begin{tcolorbox}
+\begin{minted}{haskell}
+data PDSub =
+  ...
+  Goals [Sentence] [ConceptInstance]
+\end{minted}
+\end{tcolorbox}
+
+Lastly, add a single pattern match within \textit{drasil-docLang}:
+\begin{tcolorbox}
+\begin{minted}{haskell}
+mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
+\end{minted}
+\end{tcolorbox}
+
+\haskell{SSD.goalStmtF} performs general section layout unrelated to the actual \haskell{ConceptInstance}-transformed content. To add an entire section dependent on \haskell{ConceptInstance} simply required five additional lines of code and one modified line of code. None of which were in \textit{drasil-lang} or \textit{drasil-printers}. Five lines were inserted or altered in the reusable data sub-package, and two were required within the requirements document template sub-package related to transforming the chunks for layout.
+
+
+% Before is https://github.com/JacquesCarette/Drasil/tree/41c51c1c8675d0411a5549ddc67e204ec6e03195
+% Effectively after is: https://github.com/JacquesCarette/Drasil/pull/1148#issue-257686255
+% https://github.com/JacquesCarette/Drasil/pull/1232/files % Goals domain
+% https://github.com/JacquesCarette/Drasil/pull/1091 % AssumpChunk removal PR
+% https://github.com/JacquesCarette/Drasil/issues/562 % Base issue

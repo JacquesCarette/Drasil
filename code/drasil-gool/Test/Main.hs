@@ -1,12 +1,10 @@
 module Test.Main (main) where
 
-import GOOL.Drasil.Symantics (Label, ProgramSym(..))
-import GOOL.Drasil.LanguageRenderer.JavaRenderer (JavaCode(..))
-import GOOL.Drasil.LanguageRenderer.PythonRenderer (PythonCode(..))
-import GOOL.Drasil.LanguageRenderer.CSharpRenderer (CSharpCode(..))
-import GOOL.Drasil.LanguageRenderer.CppRenderer (unCPPC)
-import GOOL.Drasil.Data (FileData(..), ModData(..), ProgData(..))
+import GOOL.Drasil (Label, ProgramSym(..), unCI, unJC, unPC, unCSC, unCPPC, 
+  FileData(..), ModData(..), ProgData(..), initialState)
+
 import Text.PrettyPrint.HughesPJ (Doc, render)
+import Control.Monad.State (evalState)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import System.FilePath.Posix (takeDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
@@ -40,7 +38,8 @@ genCode files = createCodeFiles (concatMap (\p -> replicate (length $ progMods
   p) (progName p)) files) $ makeCode (concatMap progMods files)
 
 classes :: (ProgramSym repr) => (repr (Program repr) -> ProgData) -> [ProgData]
-classes unRepr = map unRepr [helloWorld, patternTest, fileTests]
+classes unRepr = zipWith (\p gs -> unRepr (evalState p gs)) [helloWorld, patternTest, fileTests] 
+  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests])
 
 -- | Takes code
 makeCode :: [FileData] -> [(FilePath, Doc)]

@@ -1,10 +1,6 @@
 ## \file ReadTable.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides a function for reading glass ASTM data
-from __future__ import print_function
-import sys
-import math
-
 ## \brief Reads glass ASTM data from a file with the given file name
 # \param filename name of the input file
 # \param z_vector list of z values
@@ -60,5 +56,3 @@ def func_read_table(filename, z_vector, x_matrix, y_matrix):
     print(" in module ReadTable", file=outfile)
     outfile.close()
     infile.close()
-
-

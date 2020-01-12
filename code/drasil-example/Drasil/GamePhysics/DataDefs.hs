@@ -240,8 +240,8 @@ impulseVDerivSentence3 :: [Sentence]
 impulseVDerivSentence3 = [S "Integrating the right hand side "] 
 
 impulseVDerivEqn1 :: Expr
-impulseVDerivEqn1 = sy QP.force $= sy QPP.mass * sy QP.acceleration
-                    $= sy QPP.mass * deriv (sy QP.velocity) QP.time
+impulseVDerivEqn1 =  sy QP.force $= sy QPP.mass * sy QP.acceleration
+                     $= sy QPP.mass * deriv (sy QP.velocity) QP.time
 
 impulseVDerivEqn2 :: Expr
 impulseVDerivEqn2 = defint (eqSymb timeT) (sy time_1) (sy time_2) (sy QP.force) $=
@@ -293,9 +293,9 @@ coeffRestitutionDesc :: Sentence
 coeffRestitutionDesc = foldlSent [S "The", getTandS QP.restitutionCoef,
   S "determines the elasticity of a collision between two" +:+. plural rigidBody,
   foldlList Comma List [
-  (E $ sy QP.restitutionCoef $= 1) +:+ S "results in an elastic collision",
-  (E $ sy QP.restitutionCoef $< 1) +:+ S "results in an inelastic collision",
-  (E $ sy QP.restitutionCoef $= 0) +:+ S "results in a totally inelastic collision"]]
+  E (sy QP.restitutionCoef $= 1) +:+ S "results in an elastic collision",
+  E (sy QP.restitutionCoef $< 1) +:+ S "results in an inelastic collision",
+  E (sy QP.restitutionCoef $= 0) +:+ S "results in a totally inelastic collision"]]
 -----------------------DD15 Kinetic Energy--------------------------------  
 kEnergyDD :: DataDefinition
 kEnergyDD = ddNoRefs kEnergy Nothing "kEnergy"

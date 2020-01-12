@@ -4,13 +4,9 @@ package GlassBR;
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Controls the flow of the program
 */
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Scanner;
-import java.io.PrintWriter;
-import java.io.FileWriter;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class Control {
     
@@ -26,7 +22,7 @@ public class Control {
         outfile.println(" in module Control");
         outfile.close();
         InputParameters inParams = new InputParameters();
-        InputFormat.get_input(inParams, filename);
+        InputFormat.get_input(filename, inParams);
         DerivedValues.derived_values(inParams);
         InputConstraints.input_constraints(inParams);
         double J_tol = Calculations.func_J_tol(inParams);
@@ -98,4 +94,3 @@ public class Control {
         OutputFormat.write_output(is_safePb, is_safeLR, P_b);
     }
 }
-

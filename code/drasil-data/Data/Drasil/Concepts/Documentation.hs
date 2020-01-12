@@ -41,25 +41,26 @@ doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
 assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requirement,
   mg, mis, notApp, srs, typUnc, sec :: CI
 
------------------------------------------------------------------------------------------------------------------
--- | CI       |           |    uid      |         term                        | abbreviation |     ConceptDomain
------------------------------------------------------------------------------------------------------------------
-assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                  "A"         [softEng]
-desSpec     = commonIdeaWithDict "desSpec"     (fterms compoundPhrase design specification)        "DS"        [softEng]
-goalStmt    = commonIdeaWithDict "goalStmt"    (fterms compoundPhrase goal statement)              "GS"        [softEng]
-dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                             "DC"        [softEng]
-likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                               "LC"        [softEng]
-unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                             "UC"        [softEng]
-physSyst    = commonIdeaWithDict "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"        [softEng]
-requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                 "R"         [softEng]
-mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"        [softEng]
-mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)               "MG"        [softEng]
-notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                     "N/A"       []
-typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                         "Uncert."   [softEng]
-sec         = commonIdeaWithDict "section"     (cn' "section")                                     "Sec"       [documentc]
-srs = commonIdeaWithDict "srs" 
-  (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))
-  "SRS" [softEng]
+softReqSpec :: NP
+softReqSpec = compoundPhraseP1 (softwareReq ^. term) (specification ^. term)
+
+------------------------------------------------------------------------------------------------------------------------------
+-- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain
+------------------------------------------------------------------------------------------------------------------------------
+assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                    "A"       [softEng]
+desSpec     = commonIdeaWithDict "desSpec"     (fterms compoundPhrase design specification)          "DS"      [softEng]
+goalStmt    = commonIdeaWithDict "goalStmt"    (fterms compoundPhrase goal statement)                "GS"      [softEng]
+dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
+likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
+unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
+physSyst    = commonIdeaWithDict "physSyst"    (fterms compoundPhrase physicalSystem description)    "PS"      [softEng]
+requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]
+mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
+mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
+notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                       "N/A"     []
+typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                           "Uncert." [softEng]
+sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
+srs         = commonIdeaWithDict "srs"         softReqSpec                                           "SRS"     [softEng]
 
 ---------------------------------------------------------------------
 
@@ -278,38 +279,22 @@ vavPlan                      = compoundNC vav plan
 -- Domains
 
 --Root SRS Domain
-srsDom :: CommonConcept
-srsDom = dcc' "srsDom" (srs ^. term) "srs" ""
+srsDom :: ConceptChunk
+srsDom = dcc "srsDom" (srs ^. term) "srs"
 
-goalStmtDom :: ConceptChunk
-goalStmtDom = ccs (mkIdea "goalStmtDom" (goalStmt ^. term) $ Just "GS") EmptyS
-  [srsDom]
+goalStmtDom, assumpDom, reqDom, funcReqDom, nonFuncReqDom, chgProbDom, likeChgDom, unlikeChgDom :: ConceptChunk
+goalStmtDom   = ccs (mkIdea "goalStmtDom"   (goalStmt ^. term)                 $ Just "GS")  EmptyS [srsDom]
+assumpDom     = ccs (mkIdea "assumpDom"     (assumption ^. term)               $ Just "A")   EmptyS [srsDom]
+reqDom        = ccs (mkIdea "reqDom"        (requirement ^. term)              $ Just "R")   EmptyS [srsDom]
+funcReqDom    = ccs (mkIdea "funcReqDom"    (functionalRequirement ^. term)    $ Just "FR")  EmptyS [reqDom]
+nonFuncReqDom = ccs (mkIdea "nonFuncReqDom" (nonfunctionalRequirement ^. term) $ Just "NFR") EmptyS [reqDom]
+chgProbDom    = ccs (nc "chgProbDom" $ cn' "change")                                         EmptyS [srsDom]
+likeChgDom    = ccs (mkIdea "likeChgDom"    (likelyChg ^. term)                $ Just "LC")  EmptyS [chgProbDom]
+unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $ Just "UC")  EmptyS [chgProbDom]
 
-assumpDom :: ConceptChunk
-assumpDom = ccs (mkIdea "assumpDom" (assumption ^. term) $ Just "A") EmptyS [srsDom]
-
-reqDom :: ConceptChunk
-reqDom = ccs (mkIdea "reqDom" (requirement ^. term) $ Just "R") EmptyS [srsDom]
-
-funcReqDom :: ConceptChunk
-funcReqDom = ccs (mkIdea "funcReqDom" (functionalRequirement ^. term) $ Just "FR") EmptyS [reqDom]
-
-nonFuncReqDom :: ConceptChunk
-nonFuncReqDom = ccs (mkIdea "nonFuncReqDom" (nonfunctionalRequirement ^. term) $
-  Just "NFR") EmptyS [reqDom]
-
-chgProbDom :: ConceptChunk
-chgProbDom = ccs (nc "chgProbDom" $ cn' "change") EmptyS [srsDom]
-
-likeChgDom :: ConceptChunk
-likeChgDom = ccs (mkIdea "likeChgDom" (likelyChg ^. term) $ Just "LC") EmptyS [chgProbDom]
-
-unlikeChgDom :: ConceptChunk
-unlikeChgDom = ccs (mkIdea "unlikeChgDom" (unlikelyChg ^. term) $ Just "UC") EmptyS [chgProbDom]
--- | List of domains for SRS
+-- | List of SRS-related concepts, including SRS
 srsDomains :: [ConceptChunk]
-srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom,
-  chgProbDom, likeChgDom, unlikeChgDom]
+srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom, chgProbDom, likeChgDom, unlikeChgDom]
 
 -- FIXME: fterms is here instead of Utils because of cyclic import
 -- | Apply a binary function to the terms of two named ideas, instead of to the named

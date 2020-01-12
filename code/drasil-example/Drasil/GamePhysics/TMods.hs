@@ -1,18 +1,17 @@
-module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR) where
+module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG) where
 
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tmNoRefs)
 import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpOD)
-import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
-  mass_1, mass_2, sqrDist)
+import Drasil.GamePhysics.Unitals (dispNorm, dVect, force_1, force_2,
+  mass_1, mass_2, sqrDist, distMass)
 
 import Data.Drasil.Concepts.Documentation (constant)
-import Data.Drasil.Concepts.Math (vector)
 import Data.Drasil.Concepts.Physics (rigidBody, twoD)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.Physics (angularAccel, displacement, distance,
+import Data.Drasil.Quantities.Physics (angularAccel,
   force, gravitationalConst, momentOfInertia, torque)
 import Data.Drasil.Theories.Physics (newtonSL)
 
@@ -47,7 +46,7 @@ newtonTLNote = foldlSent [S "Every action has an equal and opposite reaction.",
 newtonLUG :: TheoryModel
 newtonLUG = tmNoRefs (cw newtonLUGRC)
   [qw force, qw gravitationalConst, qw mass_1, qw mass_2,
-  qw dispNorm, qw dispUnit, qw displacement] ([] :: [ConceptChunk])
+  qw dispNorm, qw dVect, qw distMass] ([] :: [ConceptChunk])
   [] [newtonLUGRel] [] "UniversalGravLaw" newtonLUGNotes
 
 newtonLUGRC :: RelationConcept
@@ -57,9 +56,9 @@ newtonLUGRC = makeRC "newtonLUGRC"
 newtonLUGRel :: Relation
 newtonLUGRel = sy force $=
   sy gravitationalConst * (sy mass_1 * sy mass_2 /
-  (sy dispNorm $^ 2)) * sy dispUnit $=
+  (sy dispNorm $^ 2)) * sy dVect $=
   sy gravitationalConst * (sy mass_1 * sy mass_2 /
-  (sy dispNorm $^ 2)) * (sy displacement / sy dispNorm)
+  (sy dispNorm $^ 2)) * (sy distMass / sy dispNorm)
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a
@@ -73,12 +72,7 @@ newtonLUGNotes = map foldlSent [
   [S "Two", plural rigidBody `inThe` S "universe attract each other with a",
    getTandS force, S "that is directly proportional to the product of their",
    plural mass `sC` ch mass_1 `sAnd` ch mass_2 `sC` EmptyS `sAnd`
-   S "inversely proportional" `toThe` getTandS sqrDist, S "between them"],
-  [S "The", phrase vector, ch displacement `isThe` phrase displacement,
-   S "between", S "centres" `ofThe` plural rigidBody `sAnd` ch dispNorm `isThe`
-   S "absolute", phrase distance, S "between the two"],
-  [ch dispUnit `sIs` S "equivalent" `toThe` phrase displacement,
-   S "divided by the", phrase dispNorm `sC` S "as shown above"]]
+   S "inversely proportional" `toThe` getTandS sqrDist, S "between them"]]
 
 -- T4 : Newton's second law for rotational motion --
 

@@ -1,21 +1,14 @@
 #include "DerivedValues.hpp"
 
-#include <algorithm>
-#include <iostream>
 #include <fstream>
-#include <iterator>
-#include <string>
+#include <iostream>
 #include <math.h>
-#include <sstream>
-#include <limits>
-#include <vector>
-
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
+#include <string>
 
 #include "InputParameters.hpp"
+
+using std::ofstream;
+using std::string;
 
 void derived_values(InputParameters &inParams) {
     ofstream outfile;
@@ -89,4 +82,3 @@ void derived_values(InputParameters &inParams) {
     outfile << " in module DerivedValues" << std::endl;
     outfile.close();
 }
-

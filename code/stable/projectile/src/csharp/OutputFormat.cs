@@ -4,8 +4,6 @@
 */
 using System;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
 
 public class OutputFormat {
     
@@ -23,4 +21,3 @@ public class OutputFormat {
         outputfile.Close();
     }
 }
-

@@ -5,14 +5,6 @@
 #ifndef Constants_h
 #define Constants_h
 
-#include <string>
-#include <vector>
-
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
-
 /** \brief Structure for holding the constant values
 */
 class Constants {
@@ -30,7 +22,6 @@ class Constants {
         static const double AR_min;
         static const double AR_max;
         
-        ~Constants();
     
     private:
 };

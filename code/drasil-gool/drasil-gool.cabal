@@ -1,5 +1,5 @@
 Name:		  drasil-gool
-Version:	0.1.0
+Version:	0.1.1
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith, Brooks MacLachlan
 build-type:     Simple
@@ -12,11 +12,14 @@ library
       GOOL.Drasil.CodeType
     , GOOL.Drasil.Data
     , GOOL.Drasil.Helpers
+    , GOOL.Drasil.CodeInfo
+    , GOOL.Drasil.LanguageRenderer.LanguagePolymorphic
     , GOOL.Drasil.LanguageRenderer
     , GOOL.Drasil.LanguageRenderer.JavaRenderer
     , GOOL.Drasil.LanguageRenderer.PythonRenderer
     , GOOL.Drasil.LanguageRenderer.CSharpRenderer
     , GOOL.Drasil.LanguageRenderer.CppRenderer
+    , GOOL.Drasil.State
     , GOOL.Drasil.Symantics
   Build-Depends:
     base >= 4.7,
@@ -45,11 +48,14 @@ executable codegenTest
     , GOOL.Drasil.CodeType
     , GOOL.Drasil.Data
     , GOOL.Drasil.Helpers
+    , GOOL.Drasil.CodeInfo
+    , GOOL.Drasil.LanguageRenderer.LanguagePolymorphic
     , GOOL.Drasil.LanguageRenderer
     , GOOL.Drasil.LanguageRenderer.JavaRenderer
     , GOOL.Drasil.LanguageRenderer.PythonRenderer
     , GOOL.Drasil.LanguageRenderer.CSharpRenderer
     , GOOL.Drasil.LanguageRenderer.CppRenderer
+    , GOOL.Drasil.State
     , GOOL.Drasil.Symantics
   Build-Depends:
     base >= 4.7,

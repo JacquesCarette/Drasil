@@ -4,13 +4,9 @@ package GlassBR;
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides the function for writing outputs
 */
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Scanner;
-import java.io.PrintWriter;
-import java.io.FileWriter;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class OutputFormat {
     
@@ -45,4 +41,3 @@ public class OutputFormat {
         outputfile.close();
     }
 }
-

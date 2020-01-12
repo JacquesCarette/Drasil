@@ -101,6 +101,25 @@
                   <td>--</td>
                 </tr>
                 <tr>
+                  <td><em>d<sub>j</sub></em></td>
+                  <td>
+                    Distance Between the J-Th Particle and the Axis of Rotation
+                  </td>
+                  <td>m</td>
+                </tr>
+                <tr>
+                  <td><em><b>d</b></em></td>
+                  <td>Distance between the center of mass of the rigid bodies</td>
+                  <td>m</td>
+                </tr>
+                <tr>
+                  <td><em><b>d&#770;</b></em></td>
+                  <td>
+                    Unit vector directed from the center of the large mass to the center of the smaller mass
+                  </td>
+                  <td>m</td>
+                </tr>
+                <tr>
                   <td><em><b>F</b></em></td>
                   <td>Force</td>
                   <td>N</td>
@@ -113,6 +132,11 @@
                 <tr>
                   <td><em><b>F</b><sub>2</sub></em></td>
                   <td>Force exerted by the second body (on another body)</td>
+                  <td>N</td>
+                </tr>
+                <tr>
+                  <td><em><b>F</b><sub><b>g</b></sub></em></td>
+                  <td>Force of gravity</td>
                   <td>N</td>
                 </tr>
                 <tr>
@@ -236,32 +260,8 @@
                   <td>m</td>
                 </tr>
                 <tr>
-                  <td><em>r<sub>j</sub></em></td>
-                  <td>
-                    Distance Between the J-Th Particle and the Axis of Rotation
-                  </td>
-                  <td>m</td>
-                </tr>
-                <tr>
                   <td><em><b>r</b></em></td>
-                  <td>Displacement</td>
-                  <td>m</td>
-                </tr>
-                <tr>
-                  <td><em><b>r</b>(t)</em></td>
-                  <td>Linear Displacement</td>
-                  <td>m</td>
-                </tr>
-                <tr>
-                  <td><em><b>r</b><sub>OB</sub></em></td>
-                  <td>Displacement vector between the origin and point B</td>
-                  <td>m</td>
-                </tr>
-                <tr>
-                  <td><em><b>r&#770;</b></em></td>
-                  <td>
-                    Unit vector directed from the center of the large mass to the center of the smaller mass
-                  </td>
+                  <td>Position vector</td>
                   <td>m</td>
                 </tr>
                 <tr>
@@ -273,6 +273,21 @@
                   <td><em>t<sub>c</sub></em></td>
                   <td>Denotes the time at collision</td>
                   <td>s</td>
+                </tr>
+                <tr>
+                  <td><em><b>u</b></em></td>
+                  <td>Displacement</td>
+                  <td>m</td>
+                </tr>
+                <tr>
+                  <td><em><b>u</b>(t)</em></td>
+                  <td>Linear Displacement</td>
+                  <td>m</td>
+                </tr>
+                <tr>
+                  <td><em><b>u</b><sub>OB</sub></em></td>
+                  <td>Displacement vector between the origin and point B</td>
+                  <td>m</td>
                 </tr>
                 <tr>
                   <td><em><b>v</b></em></td>
@@ -340,31 +355,33 @@
                   <td>m/s</td>
                 </tr>
                 <tr>
+                  <td><em>||<b>d</b>||</em></td>
+                  <td>
+                    Euclidean norm of the distance between the center of mass of two bodies
+                  </td>
+                  <td>m</td>
+                </tr>
+                <tr>
                   <td><em>||<b>n</b>||</em></td>
                   <td>Length of the Normal Vector</td>
                   <td>m</td>
                 </tr>
                 <tr>
-                  <td><em>||<b>r</b>||</em></td>
-                  <td>Euclidean norm of the displacement</td>
-                  <td>m</td>
-                </tr>
-                <tr>
-                  <td><em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em></td>
+                  <td><em>||<b>u</b><sub>AP</sub>*<b>n</b>||</em></td>
                   <td>
                     Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body A
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
-                  <td><em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em></td>
+                  <td><em>||<b>u</b><sub>BP</sub>*<b>n</b>||</em></td>
                   <td>
                     Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body B
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
-                  <td><em>||<b>r</b>||<sup>2</sup></em></td>
+                  <td><em>||<b>d</b>||<sup>2</sup></em></td>
                   <td>Squared distance</td>
                   <td>m<sup>2</sup></td>
                 </tr>
@@ -379,12 +396,12 @@
                   <td>rad</td>
                 </tr>
                 <tr>
-                  <td><em>τ</em></td>
+                  <td><em><b>τ</b></em></td>
                   <td>Torque</td>
                   <td>N&sdot;m</td>
                 </tr>
                 <tr>
-                  <td><em>τ<sub>i</sub></em></td>
+                  <td><em><b>τ</b><sub>i</sub></em></td>
                   <td>Torque applied to the i-th body</td>
                   <td>N&sdot;m</td>
                 </tr>
@@ -564,7 +581,7 @@
                     Ensure application programming interface use complies with the user guide.
                   </li>
                   <li>
-                    Ensure required software assumptions (FIXME REF) are appropriate for any particular problem the software addresses.
+                    Ensure required software assumptions (<a href=#Sec:Assumps>Section: Assumptions</a>) are appropriate for any particular problem the software addresses.
                   </li>
                 </ul>
               </li>
@@ -572,7 +589,7 @@
                 Game Physics Responsibilities
                 <ul class="list">
                   <li>
-                    Determine if the inputs and simulation state satisfy the required physical and system constraints (FIXME REF).
+                    Determine if the inputs and simulation state satisfy the required physical and system constraints (<a href=#Sec:DataConstraints>Section: Data Constraints</a>).
                   </li>
                   <li>
                     Calculate the new state of all rigid bodies within the simulation at each simulation step.
@@ -636,10 +653,10 @@
                     Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen..
                   </li>
                   <li>
-                    Line: An interval between two points (from <a href=#lineSource>lineSource</a>).
+                    line: An interval between two points (from <a href=#lineSource>lineSource</a>).
                   </li>
                   <li>
-                    Point: An exact location, it has no size, only position (from <a href=#pointSource>pointSource</a>).
+                    point: An exact location, it has no size, only position (from <a href=#pointSource>pointSource</a>).
                   </li>
                   <li>
                     damping: An influence within or upon an oscillatory system that has the effect of reducing, restricting or preventing its oscillations (from <a href=#dampingSource>dampingSource</a>).
@@ -651,7 +668,7 @@
               <div class="subsubsection">
                 <h3>Goal Statements</h3>
                 <p class="paragraph">
-                  Given the kinematic properties, and forces including any (collision forces) applied on a set of rigid bodies, the goal statements are:
+                  Given the kinematic properties, and forces (including any collision forces) applied on a set of rigid bodies, the goal statements are:
                 </p>
                 <div class="list">
                   <p>
@@ -830,7 +847,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{F}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{r}\text{||}^{2}} \frac{\mathbf{r}}{\text{||}\mathbf{r}\text{||}}\]
+                        \[\mathbf{F}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{d}\text{||}^{2}} \mathbf{\hat{d}}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{d}\text{||}^{2}} \frac{\mathbf{d}}{\text{||}\mathbf{d}\text{||}}\]
                       </td>
                     </tr>
                     <tr>
@@ -844,12 +861,14 @@
                           <li><em>m<sub>1</sub></em> is the mass of the first body (kg)</li>
                           <li><em>m<sub>2</sub></em> is the mass of the second body (kg)</li>
                           <li>
-                            <em>||<b>r</b>||</em> is the Euclidean norm of the displacement (m)
+                            <em>||<b>d</b>||</em> is the Euclidean norm of the distance between the center of mass of two bodies (m)
                           </li>
                           <li>
-                            <em><b>r&#770;</b></em> is the unit vector directed from the center of the large mass to the center of the smaller mass (m)
+                            <em><b>d&#770;</b></em> is the unit vector directed from the center of the large mass to the center of the smaller mass (m)
                           </li>
-                          <li><em><b>r</b></em> is the displacement (m)</li>
+                          <li>
+                            <em><b>d</b></em> is the distance between the center of mass of the rigid bodies (m)
+                          </li>
                         </ul>
                       </td>
                     </tr>
@@ -857,13 +876,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em>, and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> between them.
-                        </p>
-                        <p class="paragraph">
-                          The vector <em><b>r</b></em> is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> is the absolute distance between the two.
-                        </p>
-                        <p class="paragraph">
-                          <em><b>r&#770;</b></em> is equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above.
+                          Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em>, and inversely proportional to the squared distance <em>||<b>d</b>||<sup>2</sup></em> between them.
                         </p>
                       </td>
                     </tr>
@@ -873,7 +886,11 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#GD:accelGravity>GD: accelGravity</a>
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -891,13 +908,13 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[τ=\mathbf{I} α\]</td>
+                      <td>\[\mathbf{τ}=\mathbf{I} α\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em>τ</em> is the torque (N&sdot;m)</li>
+                          <li><em><b>τ</b></em> is the torque (N&sdot;m)</li>
                           <li>
                             <em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)
                           </li>
@@ -909,7 +926,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The net torque <em>τ</em> on a rigid body is proportional to its angular acceleration <em>α</em>, where <em><b>I</b></em> denotes the moment of inertia of the rigid body as the constant of proportionality.
+                          The net torque <em><b>τ</b></em> on a rigid body is proportional to its angular acceleration <em>α</em>, where <em><b>I</b></em> denotes the moment of inertia of the rigid body as the constant of proportionality.
                         </p>
                         <p class="paragraph">
                           We also assume that all rigid bodies involved are two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
@@ -951,7 +968,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{g}=-\frac{G M}{\mathbf{r}^{2}} \mathbf{\hat{r}}\]
+                        \[\mathbf{g}=-\frac{G M}{\text{||}\mathbf{d}\text{||}^{2}} \mathbf{\hat{d}}\]
                       </td>
                     </tr>
                     <tr>
@@ -965,9 +982,11 @@
                             <em>G</em> is the gravitational constant (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>))
                           </li>
                           <li><em>M</em> is the mass of the larger rigid body (kg)</li>
-                          <li><em><b>r</b></em> is the displacement (m)</li>
                           <li>
-                            <em><b>r&#770;</b></em> is the unit vector directed from the center of the large mass to the center of the smaller mass (m)
+                            <em>||<b>d</b>||</em> is the Euclidean norm of the distance between the center of mass of two bodies (m)
+                          </li>
+                          <li>
+                            <em><b>d&#770;</b></em> is the unit vector directed from the center of the large mass to the center of the smaller mass (m)
                           </li>
                         </ul>
                       </td>
@@ -996,7 +1015,31 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
+                <div id="GD:accelGravityDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of gravitational acceleration:</h4>
+                    <p class="paragraph">
+                      From Newton's law of universal gravitation (<a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a>) we have:
+                    </p>
+                    \[\mathbf{F}=\frac{G {m_{1}} {m_{2}}}{{\text{||}\mathbf{d}\text{||}^{2}}} \mathbf{\hat{d}}\]
+                    <p class="paragraph">
+                      The above equation governs the gravitational attraction between two bodies. Suppose that one of the bodies is significantly more massive than the other, so that we concern ourselves with the force the massive body exerts on the lighter body. Further, suppose that the Cartesian coordinate system is chosen such that this force acts on a line which lies along one of the principal axes. Then our unit vector directed from the center of the large mass to the center of the smaller mass <em><b>d&#770;</b></em> for the x or y axes is:
+                    </p>
+                    \[\mathbf{\hat{d}}=\frac{\mathbf{d}}{\text{||}\mathbf{d}\text{||}}\]
+                    <p class="paragraph">
+                      Given the above assumptions, let <em>M</em> and <em>m</em> be the the mass of the massive and light body respectively. Equating <em><b>F</b></em> above with Newton's second law for the force experienced by the light body, we get:
+                    </p>
+                    \[{\mathbf{F}_{\mathbf{g}}}=G \frac{M m}{{\text{||}\mathbf{d}\text{||}^{2}}} \mathbf{\hat{d}}=m \mathbf{g}\]
+                    <p class="paragraph">
+                      where <em><b>g</b></em> is the gravitational acceleration. Dividing the above equation by <em>m</em>,  we have:
+                    </p>
+                    \[G \frac{M}{{\text{||}\mathbf{d}\text{||}^{2}}} \mathbf{\hat{d}}=\mathbf{g}\]
+                    <p class="paragraph">
+                      and thus the negative sign indicates that the force is an attractive force:
+                    </p>
+                    \[\mathbf{g}=-G \frac{M}{{\text{||}\mathbf{d}\text{||}^{2}}} \mathbf{\hat{d}}\]
+                  </div>
+                </div>
                 <div id="GD:impulse">
                   <table class="gdefn">
                     <tr>
@@ -1014,7 +1057,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}\]
+                        \[j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{u}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{u}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1035,13 +1078,13 @@
                             <em>||<b>n</b>||</em> is the length of the normal vector (m)
                           </li>
                           <li>
-                            <em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)
+                            <em>||<b>u</b><sub>AP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)
                           </li>
                           <li>
                             <em><b>I</b><sub>A</sub></em> is the moment of inertia of rigid body A (kg&sdot;m<sup>2</sup>)
                           </li>
                           <li>
-                            <em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)
+                            <em>||<b>u</b><sub>BP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)
                           </li>
                           <li>
                             <em><b>I</b><sub>B</sub></em> is the moment of inertia of rigid body B (kg&sdot;m<sup>2</sup>)
@@ -1162,7 +1205,7 @@
                     </tr>
                     <tr>
                       <th>Symbol</th>
-                      <td><p class="paragraph"><em><b>r</b>(t)</em></p></td>
+                      <td><p class="paragraph"><em><b>u</b>(t)</em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -1171,14 +1214,14 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{r}\text{(}t\text{)}=\frac{\,d\mathbf{p}\left(t\right)}{\,dt}\]
+                        \[\mathbf{u}\text{(}t\text{)}=\frac{\,d\mathbf{p}\left(t\right)}{\,dt}\]
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>r</b>(t)</em> is the linear displacement (m)</li>
+                          <li><em><b>u</b>(t)</em> is the linear displacement (m)</li>
                           <li><em>t</em> is the time (s)</li>
                           <li><em><b>p</b></em> is the position (m)</li>
                         </ul>
@@ -1226,7 +1269,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{v}\text{(}t\text{)}=\frac{\,d\mathbf{r}\left(t\right)}{\,dt}\]
+                        \[\mathbf{v}\text{(}t\text{)}=\frac{\,d\mathbf{u}\left(t\right)}{\,dt}\]
                       </td>
                     </tr>
                     <tr>
@@ -1235,7 +1278,7 @@
                         <ul class="hide-list-style-no-indent">
                           <li><em><b>v</b>(t)</em> is the linear velocity (m/s)</li>
                           <li><em>t</em> is the time (s)</li>
-                          <li><em><b>r</b></em> is the displacement (m)</li>
+                          <li><em><b>u</b></em> is the displacement (m)</li>
                         </ul>
                       </td>
                     </tr>
@@ -1491,7 +1534,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\mathbf{v}_{\text{B}}}={\mathbf{v}_{\text{O}}}+ω\times{\mathbf{r}_{\text{O}\text{B}}}\]
+                        \[{\mathbf{v}_{\text{B}}}={\mathbf{v}_{\text{O}}}+ω\times{\mathbf{u}_{\text{O}\text{B}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1506,7 +1549,7 @@
                           </li>
                           <li><em>ω</em> is the angular velocity (rad/s)</li>
                           <li>
-                            <em><b>r</b><sub>OB</sub></em> is the displacement vector between the origin and point B (m)
+                            <em><b>u</b><sub>OB</sub></em> is the displacement vector between the origin and point B (m)
                           </li>
                         </ul>
                       </td>
@@ -1515,7 +1558,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The linear velocity <em><b>v</b><sub>B</sub></em> of any point B in a rigid body is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> and the displacement vector between the origin and point B <em><b>r</b><sub>OB</sub></em>.
+                          The linear velocity <em><b>v</b><sub>B</sub></em> of any point B in a rigid body is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> and the displacement vector between the origin and point B <em><b>u</b><sub>OB</sub></em>.
                         </p>
                         <p class="paragraph">
                           All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>).
@@ -1547,7 +1590,7 @@
                     </tr>
                     <tr>
                       <th>Symbol</th>
-                      <td><p class="paragraph"><em>τ</em></p></td>
+                      <td><p class="paragraph"><em><b>τ</b></em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -1555,14 +1598,14 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[τ=\mathbf{r}\times\mathbf{F}\]</td>
+                      <td>\[\mathbf{τ}=\mathbf{r}\times\mathbf{F}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em>τ</em> is the torque (N&sdot;m)</li>
-                          <li><em><b>r</b></em> is the displacement (m)</li>
+                          <li><em><b>τ</b></em> is the torque (N&sdot;m)</li>
+                          <li><em><b>r</b></em> is the position vector (m)</li>
                           <li><em><b>F</b></em> is the force (N)</li>
                         </ul>
                       </td>
@@ -1915,7 +1958,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathbf{I}=\displaystyle\sum{{m_{j}} {r_{j}}^{2}}\]</td>
+                      <td>\[\mathbf{I}=\displaystyle\sum{{m_{j}} {d_{j}}^{2}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1928,7 +1971,7 @@
                             <em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
                           </li>
                           <li>
-                            <em>r<sub>j</sub></em> is the distance between the j-th particle and the axis of rotation (m)
+                            <em>d<sub>j</sub></em> is the distance between the j-th particle and the axis of rotation (m)
                           </li>
                         </ul>
                       </td>
@@ -2081,7 +2124,7 @@
                       <th>Input</th>
                       <td>
                         <p class="paragraph">
-                          <em>ω</em>, <em>t</em>, <em>τ<sub>i</sub></em>, <em><b>I</b></em>
+                          <em>ω</em>, <em>t</em>, <em><b>τ</b><sub>i</sub></em>, <em><b>I</b></em>
                         </p>
                       </td>
                     </tr>
@@ -2094,7 +2137,7 @@
                       <td>
                         \[ω\gt{}0\]
                         \[t\gt{}0\]
-                        \[{τ_{i}}\gt{}0\]
+                        \[{\mathbf{τ}_{i}}\gt{}0\]
                         \[\mathbf{I}\gt{}0\]
                       </td>
                     </tr>
@@ -2105,7 +2148,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}\]
+                        \[α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{\mathbf{τ}_{i}}\left(t\right)}{\mathbf{I}}\]
                       </td>
                     </tr>
                     <tr>
@@ -2116,7 +2159,7 @@
                           <li><em>t</em> is the time (s)</li>
                           <li><em>ω</em> is the angular velocity (rad/s)</li>
                           <li>
-                            <em>τ<sub>i</sub></em> is the torque applied to the i-th body (N&sdot;m)
+                            <em><b>τ</b><sub>i</sub></em> is the torque applied to the i-th body (N&sdot;m)
                           </li>
                           <li>
                             <em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)
@@ -2313,7 +2356,7 @@
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
-                      <td><em>τ</em></td>
+                      <td><em><b>τ</b></em></td>
                       <td>--</td>
                       <td><em>200.0</em> N&sdot;m</td>
                       <td>10<em>%</em></td>
@@ -3621,7 +3664,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

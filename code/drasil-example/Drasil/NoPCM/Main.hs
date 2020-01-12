@@ -1,9 +1,10 @@
 module Main (main) where
 
+import Language.Drasil (QDefinition)
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
-  ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
-  Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
-  AuxFile(..), Visibility(..))
+  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
+  Logging(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
+  InputModule(..), matchConcepts, AuxFile(..), Visibility(..))
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -20,6 +21,7 @@ choices = Choices {
   logFile = "log.txt",
   logging = LogNone,
   comments = [CommentFunc, CommentClass, CommentMod],
+  doxVerbosity = Quiet,
   dates = Hide,
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
@@ -27,6 +29,7 @@ choices = Choices {
   constStructure = Store Bundled,
   constRepr = Const,
   inputModule = Combined,
+  conceptMatch = matchConcepts ([] :: [QDefinition]) [],
   auxFiles = [SampleInput]
 }       
        

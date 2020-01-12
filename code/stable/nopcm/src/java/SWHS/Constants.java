@@ -4,14 +4,6 @@ package SWHS;
     \author Thulasi Jegatheesan
     \brief Provides the structure for holding constant values
 */
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Scanner;
-import java.io.PrintWriter;
-import java.io.FileWriter;
-import java.io.File;
-import java.util.ArrayList;
-
 /** \brief Structure for holding the constant values
 */
 public class Constants {
@@ -29,4 +21,3 @@ public class Constants {
     public static final double AR_max = 100;
     
 }
-

@@ -1,16 +1,14 @@
 ## \file Control.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Controls the flow of the program
-from __future__ import print_function
 import sys
-import math
 
-import InputParameters
-import InputFormat
+import Calculations
 import DerivedValues
 import InputConstraints
+import InputFormat
+import InputParameters
 import OutputFormat
-import Calculations
 
 filename = sys.argv[1]
 outfile = open("log.txt", "a")
@@ -19,7 +17,7 @@ print(filename, end='', file=outfile)
 print(" in module Control", file=outfile)
 outfile.close()
 inParams = InputParameters.InputParameters()
-InputFormat.get_input(inParams, filename)
+InputFormat.get_input(filename, inParams)
 DerivedValues.derived_values(inParams)
 InputConstraints.input_constraints(inParams)
 J_tol = Calculations.func_J_tol(inParams)
@@ -89,5 +87,3 @@ print(is_safePb, end='', file=outfile)
 print(" in module Control", file=outfile)
 outfile.close()
 OutputFormat.write_output(is_safePb, is_safeLR, P_b)
-
-

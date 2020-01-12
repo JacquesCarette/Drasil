@@ -1,11 +1,7 @@
 ## \file DerivedValues.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides the function for calculating derived values
-from __future__ import print_function
-import sys
 import math
-
-import InputParameters
 
 ## \brief Calculates values that can be immediately derived from the inputs
 # \param inParams structure holding the input values
@@ -75,5 +71,3 @@ def derived_values(inParams):
     print(inParams.w_TNT, end='', file=outfile)
     print(" in module DerivedValues", file=outfile)
     outfile.close()
-
-

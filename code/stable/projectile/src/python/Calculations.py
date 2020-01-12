@@ -1,11 +1,7 @@
 ## \file Calculations.py
 # \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
 # \brief Provides functions for calculating the outputs
-from __future__ import print_function
-import sys
 import math
-
-import InputParameters
 
 ## \brief Calculates flight duration: the time when the projectile lands (s)
 # \param inParams structure holding the input values
@@ -40,5 +36,3 @@ def func_s(inParams, epsilon, d_offset):
         return "The projectile fell short."
     else :
         return "The projectile went long."
-
-

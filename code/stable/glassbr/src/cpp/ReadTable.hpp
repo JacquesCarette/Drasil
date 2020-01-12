@@ -8,10 +8,10 @@
 #include <string>
 #include <vector>
 
-using std::string;
-using std::vector;
 using std::ifstream;
 using std::ofstream;
+using std::string;
+using std::vector;
 
 /** \brief Reads glass ASTM data from a file with the given file name
     \param filename name of the input file

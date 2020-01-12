@@ -2,11 +2,6 @@
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides the structure for holding input values
 */
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-
 /** \brief Structure for holding the input values and derived values
 */
 public class InputParameters {
@@ -22,10 +17,9 @@ public class InputParameters {
     public double SD_z;
     public double h;
     public double LDF;
-    public double GTF;
+    public int GTF;
     public double SD;
     public double AR;
     public double w_TNT;
     
 }
-

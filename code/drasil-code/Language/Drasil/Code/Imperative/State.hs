@@ -1,13 +1,14 @@
 module Language.Drasil.Code.Imperative.State (
-  State(..)
+  DrasilState(..)
 ) where
 
 import Language.Drasil
-import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Comments, ConstantRepr,
-  ConstantStructure, ConstraintBehaviour, InputModule, Logging, Structure)
+import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Comments, Verbosity, 
+  MatchedConceptMap, ConstantRepr, ConstantStructure, ConstraintBehaviour, 
+  InputModule, Logging, Structure)
 
 -- Private State, used to push these options around the generator
-data State = State {
+data DrasilState = DrasilState {
   codeSpec :: CodeSpec,
   date :: String,
   inStruct :: Structure,
@@ -17,6 +18,8 @@ data State = State {
   logName :: String,
   logKind :: Logging,
   commented :: [Comments],
+  doxOutput :: Verbosity,
+  concMatches :: MatchedConceptMap,
   auxiliaries :: [AuxFile],
   sampleData :: [Expr],
   currentModule :: String,

@@ -3,9 +3,8 @@
     \brief Provides a function for reading glass ASTM data
 */
 using System;
-using System.IO;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class ReadTable {
     
@@ -26,7 +25,7 @@ public class ReadTable {
         outfile.Write("[");
         for (int list_i1 = 0; list_i1 < z_vector.Count - 1; list_i1++) {
             outfile.Write(z_vector[list_i1]);
-            outfile.Write(", /f ");
+            outfile.Write(", ");
         }
         if (z_vector.Count > 0) {
             outfile.Write(z_vector[z_vector.Count - 1]);
@@ -39,19 +38,19 @@ public class ReadTable {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < x_matrix[list_i2].Count - 1; list_i1++) {
                 outfile.Write(x_matrix[list_i2][list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (x_matrix[list_i2].Count > 0) {
                 outfile.Write(x_matrix[list_i2][x_matrix[list_i2].Count - 1]);
             }
             outfile.Write("]");
-            outfile.Write(", /f ");
+            outfile.Write(", ");
         }
         if (x_matrix.Count > 0) {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < x_matrix[x_matrix.Count - 1].Count - 1; list_i1++) {
                 outfile.Write(x_matrix[x_matrix.Count - 1][list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (x_matrix[x_matrix.Count - 1].Count > 0) {
                 outfile.Write(x_matrix[x_matrix.Count - 1][x_matrix[x_matrix.Count - 1].Count - 1]);
@@ -66,19 +65,19 @@ public class ReadTable {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < y_matrix[list_i2].Count - 1; list_i1++) {
                 outfile.Write(y_matrix[list_i2][list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (y_matrix[list_i2].Count > 0) {
                 outfile.Write(y_matrix[list_i2][y_matrix[list_i2].Count - 1]);
             }
             outfile.Write("]");
-            outfile.Write(", /f ");
+            outfile.Write(", ");
         }
         if (y_matrix.Count > 0) {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < y_matrix[y_matrix.Count - 1].Count - 1; list_i1++) {
                 outfile.Write(y_matrix[y_matrix.Count - 1][list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (y_matrix[y_matrix.Count - 1].Count > 0) {
                 outfile.Write(y_matrix[y_matrix.Count - 1][y_matrix[y_matrix.Count - 1].Count - 1]);
@@ -104,7 +103,7 @@ public class ReadTable {
         outfile.Write("[");
         for (int list_i1 = 0; list_i1 < z_vector.Count - 1; list_i1++) {
             outfile.Write(z_vector[list_i1]);
-            outfile.Write(", /f ");
+            outfile.Write(", ");
         }
         if (z_vector.Count > 0) {
             outfile.Write(z_vector[z_vector.Count - 1]);
@@ -133,19 +132,19 @@ public class ReadTable {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < x_matrix[list_i2].Count - 1; list_i1++) {
                 outfile.Write(x_matrix[list_i2][list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (x_matrix[list_i2].Count > 0) {
                 outfile.Write(x_matrix[list_i2][x_matrix[list_i2].Count - 1]);
             }
             outfile.Write("]");
-            outfile.Write(", /f ");
+            outfile.Write(", ");
         }
         if (x_matrix.Count > 0) {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < x_matrix[x_matrix.Count - 1].Count - 1; list_i1++) {
                 outfile.Write(x_matrix[x_matrix.Count - 1][list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (x_matrix[x_matrix.Count - 1].Count > 0) {
                 outfile.Write(x_matrix[x_matrix.Count - 1][x_matrix[x_matrix.Count - 1].Count - 1]);
@@ -162,19 +161,19 @@ public class ReadTable {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < y_matrix[list_i2].Count - 1; list_i1++) {
                 outfile.Write(y_matrix[list_i2][list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (y_matrix[list_i2].Count > 0) {
                 outfile.Write(y_matrix[list_i2][y_matrix[list_i2].Count - 1]);
             }
             outfile.Write("]");
-            outfile.Write(", /f ");
+            outfile.Write(", ");
         }
         if (y_matrix.Count > 0) {
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < y_matrix[y_matrix.Count - 1].Count - 1; list_i1++) {
                 outfile.Write(y_matrix[y_matrix.Count - 1][list_i1]);
-                outfile.Write(", /f ");
+                outfile.Write(", ");
             }
             if (y_matrix[y_matrix.Count - 1].Count > 0) {
                 outfile.Write(y_matrix[y_matrix.Count - 1][y_matrix[y_matrix.Count - 1].Count - 1]);
@@ -187,4 +186,3 @@ public class ReadTable {
         infile.Close();
     }
 }
-

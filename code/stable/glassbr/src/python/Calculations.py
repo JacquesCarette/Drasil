@@ -1,11 +1,8 @@
 ## \file Calculations.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides functions for calculating the outputs
-from __future__ import print_function
-import sys
 import math
 
-import InputParameters
 import Interpolation
 
 ## \brief Calculates stress distribution factor (Function) based on Pbtol
@@ -182,5 +179,3 @@ def func_is_safePb(inParams, P_b):
     outfile.close()
     
     return P_b < inParams.P_btol
-
-

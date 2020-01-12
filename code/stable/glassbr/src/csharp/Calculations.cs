@@ -4,8 +4,6 @@
 */
 using System;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
 
 public class Calculations {
     
@@ -217,4 +215,3 @@ public class Calculations {
         return P_b < inParams.P_btol;
     }
 }
-

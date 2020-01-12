@@ -12,13 +12,13 @@ endif
 
 build: Projectile$(TARGET_EXTENSION)
 
-Projectile$(TARGET_EXTENSION): InputParameters.hpp InputFormat.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp Control.cpp InputParameters.cpp InputFormat.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp
-	"$(CXX)" Control.cpp InputParameters.cpp InputFormat.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp --std=c++11 -o Projectile$(TARGET_EXTENSION)
+Projectile$(TARGET_EXTENSION): InputParameters.hpp OutputFormat.hpp Calculations.hpp Control.cpp InputParameters.cpp OutputFormat.cpp Calculations.cpp
+	"$(CXX)" Control.cpp InputParameters.cpp OutputFormat.cpp Calculations.cpp --std=c++11 -o Projectile$(TARGET_EXTENSION)
 
 run: build
 	./Projectile$(TARGET_EXTENSION) $(RUNARGS)
 
-doc: doxConfig InputParameters.hpp InputFormat.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp Control.cpp
+doc: doxConfig InputParameters.hpp OutputFormat.hpp Calculations.hpp Control.cpp
 	doxygen doxConfig
 
 .PHONY: build run doc

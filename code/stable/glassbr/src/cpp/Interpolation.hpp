@@ -8,12 +8,9 @@
 #include <string>
 #include <vector>
 
+using std::ofstream;
 using std::string;
 using std::vector;
-using std::ifstream;
-using std::ofstream;
-
-#include "ReadTable.hpp"
 
 /** \brief Performs linear interpolation
     \param x_1 lower x-coordinate

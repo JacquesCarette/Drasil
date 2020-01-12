@@ -16,7 +16,7 @@ import Drasil.SSP.Assumptions (assumpENSL, assumpSBSBISL)
 import Drasil.SSP.Defs (factorOfSafety)
 import Drasil.SSP.References (fredlund1977)
 import Drasil.SSP.Unitals (effCohesion, effNormStress, effectiveStress, 
-  fricAngle, fs, fx, fy, mobilizedShear, momntOfBdy, nrmFSubWat, porePressure, 
+  fricAngle, fs, fx, fy, genericM, mobilizedShear, nrmFSubWat, porePressure, 
   resistiveShear, shrStress, totStress)
 import Drasil.SSP.DataDefs (stressDD)
 
@@ -52,15 +52,15 @@ equilibriumRC = makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eqDesc eqRel
 
 -- FIXME: Variable "i" is a hack.  But we need to sum over something!
 eqRel :: Relation
-eqRel = foldr (($=) . sumAll (Variable "i") . sy) 0 [fx, fy, momntOfBdy]
+eqRel = foldr (($=) . sumAll (Variable "i") . sy) 0 [fx, fy, genericM]
 
 eqDesc :: Sentence
 eqDesc = foldlSent [S "For a body in static equilibrium, the net",
-  plural force, S "and", plural momntOfBdy +:+. S "acting on the body will cancel out",
+  plural force, S "and", plural genericM +:+. S "acting on the body will cancel out",
   S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
-  S "will create a net", phrase momntOfBdy, S "equal to" +:+ E 0]
+  S "will create a net", phrase genericM, S "equal to" +:+ E 0]
 
 --
 ------------- New Chunk -----------
@@ -83,7 +83,7 @@ mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
   getTandS shrStress, S "is proportional to the product of the",
   phrase effNormStress, ch effNormStress, S "on the plane", 
   S "with its static", phrase friction, S "in the angular form" +:+.
-  (E $ tan (sy fricAngle)),
+  E (tan $ sy fricAngle),
   S "The", ch shrStress, S "versus", ch effNormStress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the", phrase nrmFSubWat, 

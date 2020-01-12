@@ -2,27 +2,19 @@
     \author Nikitha Krithnan and W. Spencer Smith
     \brief Controls the flow of the program
 */
-#include <algorithm>
-#include <iostream>
 #include <fstream>
-#include <iterator>
+#include <iostream>
 #include <string>
-#include <math.h>
-#include <sstream>
-#include <limits>
-#include <vector>
 
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
-
-#include "InputParameters.hpp"
-#include "InputFormat.hpp"
+#include "Calculations.hpp"
 #include "DerivedValues.hpp"
 #include "InputConstraints.hpp"
+#include "InputFormat.hpp"
+#include "InputParameters.hpp"
 #include "OutputFormat.hpp"
-#include "Calculations.hpp"
+
+using std::ofstream;
+using std::string;
 
 /** \brief Controls the flow of the program
     \param argc Number of command-line arguments
@@ -38,7 +30,7 @@ int main(int argc, const char *argv[]) {
     outfile << " in module Control" << std::endl;
     outfile.close();
     InputParameters inParams = InputParameters();
-    get_input(inParams, filename);
+    get_input(filename, inParams);
     derived_values(inParams);
     input_constraints(inParams);
     double J_tol = func_J_tol(inParams);
@@ -111,4 +103,3 @@ int main(int argc, const char *argv[]) {
     
     return 0;
 }
-

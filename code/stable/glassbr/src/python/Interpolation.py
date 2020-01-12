@@ -1,10 +1,6 @@
 ## \file Interpolation.py
 # \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides functions for linear interpolation on three-dimensional data
-from __future__ import print_function
-import sys
-import math
-
 import ReadTable
 
 ## \brief Performs linear interpolation
@@ -236,5 +232,3 @@ def func_interpZ(filename, x, y):
         if (y_1 <= y and y <= y_2) :
             return func_lin_interp(y_1, z_vector[i], y_2, z_vector[i + 1], y)
     raise Exception("Interpolation of z failed")
-
-

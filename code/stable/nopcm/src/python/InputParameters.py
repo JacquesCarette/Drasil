@@ -1,10 +1,6 @@
 ## \file InputParameters.py
 # \author Thulasi Jegatheesan
 # \brief Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input
-from __future__ import print_function
-import sys
-import math
-
 import Constants
 
 ## \brief Reads input from a file with the given file name
@@ -257,5 +253,3 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print("above ", end='')
         print(0, end='')
         print(".")
-
-

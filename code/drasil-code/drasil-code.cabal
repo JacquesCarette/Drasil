@@ -17,10 +17,12 @@ library
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
+    , Language.Drasil.Code.Imperative.ConceptMatch
     , Language.Drasil.Code.Imperative.Doxygen.Import
     , Language.Drasil.Code.Imperative.ReadInput
     , Language.Drasil.Code.Imperative.WriteInput
     , Language.Drasil.Code.Imperative.GOOL.Data
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer

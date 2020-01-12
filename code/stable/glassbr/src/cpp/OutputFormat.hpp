@@ -6,12 +6,9 @@
 #define OutputFormat_h
 
 #include <string>
-#include <vector>
 
-using std::string;
-using std::vector;
-using std::ifstream;
 using std::ofstream;
+using std::string;
 
 /** \brief Writes the output values to output.txt
     \param is_safePb probability of glass breakage safety requirement

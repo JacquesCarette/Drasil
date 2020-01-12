@@ -1,13 +1,14 @@
 module Language.Drasil.Code.Imperative.Generator (
-  State(..), generator, generateCode
+  generator, generateCode
 ) where
 
 import Language.Drasil
+import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.GenerateGOOL (genDoxConfig)
 import Language.Drasil.Code.Imperative.Import (genModDef)
 import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstMod, 
   genMain, genOutputMod, genSampleInput)
-import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.Code.Imperative.State (DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
@@ -16,13 +17,16 @@ import Language.Drasil.Chunk.Code (programName)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Visibility(..))
 
-import GOOL.Drasil (ProgramSym(..), RenderSym(..), ProgData(..))
+import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), 
+  GS, FS, initialState, unCI)
 
-import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
+import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
+  getCurrentDirectory)
 import Control.Monad.Reader (Reader, ask, runReader)
+import Control.Monad.State (evalState, runState)
 
-generator :: String -> [Expr] -> Choices -> CodeSpec -> State
-generator dt sd chs spec = State {
+generator :: String -> [Expr] -> Choices -> CodeSpec -> DrasilState
+generator dt sd chs spec = DrasilState {
   -- constants
   codeSpec = spec,
   date = showDate $ dates chs,
@@ -32,6 +36,8 @@ generator dt sd chs spec = State {
   inMod = inputModule chs,
   logKind  = logging chs,
   commented = comments chs,
+  doxOutput = doxVerbosity chs,
+  concMatches = chooseConcept chs,
   auxiliaries = auxFiles chs,
   sampleData = sd,
   -- state
@@ -47,7 +53,7 @@ generator dt sd chs spec = State {
 
 generateCode :: (ProgramSym progRepr, PackageSym packRepr) => Lang -> 
   (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 
-  PackData) -> State -> IO ()
+  PackData) -> DrasilState -> IO ()
 generateCode l unReprProg unReprPack g = do 
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False (getDir l)
@@ -60,18 +66,21 @@ generateCode l unReprProg unReprPack g = do
 
 genPackage :: (ProgramSym progRepr, PackageSym packRepr) => 
   (progRepr (Program progRepr) -> ProgData) -> 
-  Reader State (packRepr (Package packRepr))
+  Reader DrasilState (packRepr (Package packRepr))
 genPackage unRepr = do
   g <- ask
+  ci <- genProgram
   p <- genProgram
-  let pd = unRepr p
+  let info = unCI $ evalState ci initialState
+      (reprPD, s) = runState p info
+      pd = unRepr reprPD
       n = case codeSpec g of CodeSpec {program = pr} -> programName pr
-      m = makefile (commented g) pd
+      m = makefile (commented g) s pd
   i <- genSampleInput
-  d <- genDoxConfig n pd
+  d <- genDoxConfig n s
   return $ package pd (m:i++d)
 
-genProgram :: (ProgramSym repr) => Reader State (repr (Program repr))
+genProgram :: (ProgramSym repr) => Reader DrasilState (GS (repr (Program repr)))
 genProgram = do
   g <- ask
   ms <- genModules
@@ -79,7 +88,7 @@ genProgram = do
   let n = case codeSpec g of CodeSpec {program = p} -> programName p
   return $ prog n ms
           
-genModules :: (RenderSym repr) => Reader State [repr (RenderFile repr)]
+genModules :: (ProgramSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
 genModules = do
   g <- ask
   let s = csi $ codeSpec g

@@ -1,22 +1,15 @@
 #include "Calculations.hpp"
 
-#include <algorithm>
-#include <iostream>
 #include <fstream>
-#include <iterator>
-#include <string>
+#include <iostream>
 #include <math.h>
-#include <sstream>
-#include <limits>
-#include <vector>
-
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
+#include <string>
 
 #include "InputParameters.hpp"
 #include "Interpolation.hpp"
+
+using std::ofstream;
+using std::string;
 
 double func_J_tol(InputParameters &inParams) {
     ofstream outfile;
@@ -173,4 +166,3 @@ bool func_is_safePb(InputParameters &inParams, double P_b) {
     
     return P_b < inParams.P_btol;
 }
-

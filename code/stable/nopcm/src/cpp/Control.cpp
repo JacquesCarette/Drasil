@@ -2,24 +2,12 @@
     \author Thulasi Jegatheesan
     \brief Controls the flow of the program
 */
-#include <algorithm>
-#include <iostream>
-#include <fstream>
-#include <iterator>
 #include <string>
-#include <math.h>
-#include <sstream>
-#include <limits>
-#include <vector>
 
-using std::string;
-using std::vector;
-using std::ifstream;
-using std::ofstream;
-
-#include "Constants.hpp"
 #include "InputParameters.hpp"
 #include "OutputFormat.hpp"
+
+using std::string;
 
 /** \brief Controls the flow of the program
     \param argc Number of command-line arguments
@@ -48,4 +36,3 @@ int main(int argc, const char *argv[]) {
     
     return 0;
 }
-

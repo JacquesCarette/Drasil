@@ -1,11 +1,14 @@
 module Main (main) where
 
 import Language.Drasil.Code (Choices(..), CodeSpec, Comments(..), 
-  ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
-  Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
-  AuxFile(..), Visibility(..), codeSpec)
+  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
+  Logging(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
+  InputModule(..), CodeConcept(..), matchConcepts, AuxFile(..), Visibility(..), 
+  codeSpec)
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
+
+import Data.Drasil.Quantities.Math (piConst)
 
 import Drasil.Projectile.Body (printSetting, si, srs)
 
@@ -19,13 +22,15 @@ choices = Choices {
   logFile = "log.txt",
   logging = LogNone,
   comments = [CommentFunc, CommentClass, CommentMod],
+  doxVerbosity = Quiet,
   dates = Hide,
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
   inputStructure = Bundled,
   constStructure = Store Unbundled,
   constRepr = Var,
-  inputModule = Separated,
+  inputModule = Combined,
+  conceptMatch = matchConcepts [piConst] [[Pi]],
   auxFiles = [SampleInput]
 }
 

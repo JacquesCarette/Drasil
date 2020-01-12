@@ -1,27 +1,24 @@
-{-# LANGUAGE TupleSections #-}
-
-module GOOL.Drasil.Helpers (verticalComma,
-  angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
-  emptyIfEmpty, emptyIfNull, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, 
-  liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, 
-  lift4Pair, liftPairFst, getInnerType, getNestDegree, convType, checkParams
+module GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat, 
+  vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue, 
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
+  onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
+  on1StateValue1List, getInnerType, getNestDegree, convType
 ) where
 
 import Utils.Drasil (blank)
 
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
-import GOOL.Drasil.Data (ParamData)
 import qualified GOOL.Drasil.Symantics as S ( 
-  RenderSym(..), StateTypeSym(..), PermanenceSym(dynamic_))
+  TypeSym(..), PermanenceSym(dynamic_))
+import GOOL.Drasil.State (MS)
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
-import Data.List (intersperse, nub)
+import Control.Monad (liftM2, liftM3)
+import Control.Monad.State (State)
+import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
-  (<>), comma, punctuate, empty, isEmpty)
-
-verticalComma :: (a -> Doc) -> [a] -> Doc
-verticalComma f = vcat . punctuate comma . map f
+  (<>), empty, isEmpty)
 
 angles :: Doc -> Doc
 angles d = char '<' <> d <> char '>'
@@ -29,14 +26,11 @@ angles d = char '<' <> d <> char '>'
 doubleQuotedText :: String -> Doc
 doubleQuotedText = doubleQuotes . text
 
-himap :: Doc -> (a -> Doc) -> [a] -> Doc
-himap c f = hcat . intersperse c . map f
-
 hicat :: Doc -> [Doc] -> Doc
 hicat c l = hcat $ intersperse c l
 
 vicat :: Doc -> [Doc] -> Doc
-vicat c = vcat . intersperse c
+vicat c = vcat . intersperse c . filter (not . isEmpty)
 
 vibcat :: [Doc] -> Doc
 vibcat = vicat blank
@@ -47,63 +41,53 @@ vmap f = vcat . map f
 vimap :: Doc -> (a -> Doc) -> [a] -> Doc
 vimap c f = vicat c . map f
 
-vibmap :: (a -> Doc) -> [a] -> Doc
-vibmap = vimap blank
-
 emptyIfEmpty :: Doc -> Doc -> Doc
 emptyIfEmpty ifDoc elseDoc = if isEmpty ifDoc then empty else elseDoc
 
 emptyIfNull :: [a] -> Doc -> Doc
 emptyIfNull lst elseDoc = if null lst then empty else elseDoc
 
-mapPairFst :: (a -> b) -> (a, c) -> (b, c)
-mapPairFst f (a, c) = (f a, c)
+toCode :: (Monad repr) => a -> repr a
+toCode = return
 
-mapPairSnd :: (a -> b) -> (c, a) -> (c, b)
-mapPairSnd f (c, b) = (c, f b)
+toState :: a -> State s a
+toState = return
 
-liftA4 :: Applicative f => (a -> b -> c -> d -> e) -> f a -> f b -> f c -> 
-  f d -> f e
-liftA4 f a1 a2 a3 a4 = liftA3 f a1 a2 a3 <*> a4
+onCodeValue :: (Functor repr) => (a -> b) -> repr a -> repr b
+onCodeValue = fmap
 
-liftA5 :: Applicative f => (a -> b -> c -> d -> e -> g) -> f a -> f b -> f c ->
-  f d -> f e -> f g
-liftA5 f a1 a2 a3 a4 a5 = liftA4 f a1 a2 a3 a4 <*> a5
+onStateValue :: (a -> b) -> State s a -> State s b
+onStateValue = fmap
 
-liftA6 :: Applicative f => (a -> b -> c -> d -> e -> g -> h) -> f a -> f b -> 
-  f c -> f d -> f e -> f g -> f h
-liftA6 f a1 a2 a3 a4 a5 a6 = liftA5 f a1 a2 a3 a4 a5 <*> a6
+on2CodeValues :: (Applicative repr) => (a -> b -> c) -> repr a -> repr b -> 
+  repr c
+on2CodeValues = liftA2
 
-liftA7 :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i) -> f a -> 
-  f b -> f c -> f d -> f e -> f g -> f h -> f i
-liftA7 f a1 a2 a3 a4 a5 a6 a7 = liftA6 f a1 a2 a3 a4 a5 a6 <*> a7
+on2StateValues :: (a -> b -> c) -> State s a -> State s b -> State s c
+on2StateValues = liftM2
 
-liftA8 :: Applicative f => (a -> b -> c -> d -> e -> g -> h -> i -> j) -> 
-  f a -> f b -> f c -> f d -> f e -> f g -> f h -> f i -> f j
-liftA8 f a1 a2 a3 a4 a5 a6 a7 a8 = liftA7 f a1 a2 a3 a4 a5 a6 a7 <*> a8
+on3CodeValues :: (Applicative repr) => (a -> b -> c -> d) -> repr a -> repr b 
+  -> repr c -> repr d
+on3CodeValues = liftA3
 
-liftList :: Monad m => ([a] -> b) -> [m a] -> m b
-liftList f as = f <$> sequence as
+on3StateValues :: (a -> b -> c -> d) -> State s a -> State s b -> State s c ->
+  State s d
+on3StateValues = liftM3
 
-lift2Lists :: Monad m => ([a] -> [b] -> c) -> [m a] -> [m b] -> m c
-lift2Lists f as bs = liftA2 f (sequence as) (sequence bs)
+onCodeList :: Monad m => ([a] -> b) -> [m a] -> m b
+onCodeList f as = f <$> sequence as
 
-lift1List :: Monad m => (a -> [b] -> c) -> m a -> [m b] -> m c
-lift1List f a as = liftA2 f a (sequence as)
+onStateList :: ([a] -> b) -> [State s a] -> State s b
+onStateList f as = f <$> sequence as
 
-lift4Pair :: Monad m => (a -> b -> c -> d -> [(e, f)] -> g) -> m a -> m b -> 
-  m c -> m d -> [(m e, m f)] -> m g
-lift4Pair f a1 a2 a3 a4 as = liftA5 f a1 a2 a3 a4 (mapM liftPair as)
+on2StateLists :: ([a] -> [b] -> c) -> [State s a] -> [State s b] -> State s c
+on2StateLists f as bs = liftM2 f (sequence as) (sequence bs)
 
-lift3Pair :: Monad m => (a -> b -> c -> [(d, e)] -> f) -> m a -> m b -> m c -> 
-  [(m d, m e)] -> m f
-lift3Pair f a1 a2 a3 as = liftA4 f a1 a2 a3 (mapM liftPair as)
+on1CodeValue1List :: Monad m => (a -> [b] -> c) -> m a -> [m b] -> m c
+on1CodeValue1List f a as = liftA2 f a (sequence as)
 
-liftPair :: Applicative f => (f a, f b) -> f (a, b)
-liftPair (a, b) = liftA2 (,) a b
-
-liftPairFst :: Functor f => (f a, b) -> f (a, b)
-liftPairFst (c, n) = fmap (, n) c
+on1StateValue1List :: (a -> [b] -> c) -> State s a -> [State s b] -> State s c
+on1StateValue1List f a as = liftM2 f a (sequence as)
 
 getInnerType :: C.CodeType -> C.CodeType
 getInnerType (C.List innerT) = innerT
@@ -113,7 +97,7 @@ getNestDegree :: Integer -> C.CodeType -> Integer
 getNestDegree n (C.List t) = getNestDegree (n+1) t
 getNestDegree n _ = n
 
-convType :: (S.RenderSym repr) => C.CodeType -> repr (S.StateType repr)
+convType :: (S.TypeSym repr) => C.CodeType -> MS (repr (S.Type repr))
 convType C.Boolean = S.bool
 convType C.Integer = S.int
 convType C.Float = S.float
@@ -125,7 +109,3 @@ convType (C.Object n) = S.obj n
 convType (C.Enum n) = S.enumType n
 convType C.Void = S.void
 convType C.File = error "convType: File ?"
-
-checkParams :: String -> [ParamData] -> [ParamData]
-checkParams n ps = if length ps == length (nub ps) then ps else error 
-  ("Duplicate parameters encountered in function " ++ n ++ ".")

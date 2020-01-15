@@ -67,15 +67,15 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty,
   on3CodeValues, on3StateValues, onCodeList, onStateList, on2StateLists, 
   on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, CS, MS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensMStoCS, initialState, initialFS, modifyReturn, tempStateChange, addODEFilePaths, 
-  addODEFile, getODEFiles, addLangImport, getLangImports, addLibImport, 
-  getLibImports, addModuleImport, getModuleImports, 
-  addHeaderLangImport, getHeaderLangImports, addHeaderModImport, 
-  getHeaderLibImports, getHeaderModImports, addDefine, getDefines, 
-  addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
-  getHeaderUsing, setClassName, getClassName, setCurrMain, getCurrMain, 
-  getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc, 
-  setODEOthVars, getODEOthVars)
+  lensCStoMS, lensMStoCS, initialState, initialFS, modifyReturn, 
+  tempStateChange, addODEFilePaths, addODEFile, getODEFiles, addLangImport, 
+  getLangImports, addLibImport, getLibImports, addModuleImport, 
+  getModuleImports, addHeaderLangImport, getHeaderLangImports, 
+  addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine, 
+  getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
+  addHeaderUsing, getHeaderUsing, setClassName, getClassName, setCurrMain, 
+  getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
+  getCurrMainFunc, setODEOthVars, getODEOthVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -84,7 +84,7 @@ import Control.Monad (join)
 import Control.Monad.State (State, modify, runState)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
-  empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
+  empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -1079,20 +1079,24 @@ instance ControlBlockSym CppSrcCode where
 
   listSlice' = G.listSlice
 
-  solveODE info opts = let (fl, s) = cppODEFile info cppsODEFunc
+  solveODE info opts = let (fl, s) = cppODEFile info cppsODEFunc dynamic_
+                           dv = depVar info
     in modify (addODEFilePaths s . addODEFile (unCPPSC fl) . addLibImport 
-    "boost/numeric/odeint.hpp") >> (dv >>= (\dpv -> 
+    "boost/numeric/odeint") >> (dv >>= (\dpv -> 
       let odeClassName = variableName dpv ++ "_ODE"
           odeVar = var "ode" (obj odeClassName)
-      in block [
+          currVal = var "currVal" (listInnerType $ toState $ variableType dpv)
+      in modify (addModuleImport odeClassName) >> block [
         objDecDef odeVar (newObj (obj odeClassName) 
           (map valueOf $ otherVars info)),
         listDec 0 dv,
+        -- The initial value MUST be assigned to a variable because odeint will 
+        -- update that variable at each step.
+        varDecDef currVal (initVal info),
         valState $ funcApp (odeNameSpace ++ "integrate_const") void 
-          [cppODEMethod info opts, valueOf odeVar, initVal info, 
+          [cppODEMethod info opts, valueOf odeVar, valueOf currVal, 
           tInit info, tFinal info, stepSize opts, 
           newObj (obj $ "Populate_" ++ variableName dpv) [valueOf dv]]]))
-    where dv = depVar info
 
 instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
@@ -1715,7 +1719,7 @@ instance ControlBlockSym CppHdrCode where
 
   listSlice' _ _ _ _ _ = toState $ toCode empty
 
-  solveODE info _ = let (fl, s) = cppODEFile info cpphODEFunc
+  solveODE info _ = let (fl, s) = cppODEFile info cpphODEFunc dynamic_
     in modify (addODEFilePaths s . addODEFile (unCPPHC fl)) >> 
     toState (toCode empty)
 
@@ -2217,55 +2221,62 @@ odeNameSpace = "boost::numeric::odeint::"
 
 cppODEMethod :: ODEInfo CppSrcCode -> ODEOptions CppSrcCode -> 
   MS (CppSrcCode (Value CppSrcCode))
-cppODEMethod info opts = depVar info >>= (\dpv -> 
+cppODEMethod info opts = listInnerType (onStateValue variableType $ depVar info)
+  >>= (\dpt -> 
   let rkdp5 = "runge_kutta_dopri5"  
       adams = "adams_bashforth"
+      tp = getTypeString dpt
       stepper RK45 = funcApp (odeNameSpace ++ "make_controlled") void 
         [absTol opts, relTol opts, newObj (obj $ odeNameSpace ++ rkdp5 ++ "<" 
-        ++ getTypeString (variableType dpv) ++ ">") []]
+        ++ tp ++ ">") []]
       stepper Adams = newObj (obj $ odeNameSpace ++ adams ++ "<3," ++   
-        getTypeString (variableType dpv) ++ ">") []
+        tp ++ ">") []
       stepper _ = error "Chosen ODE method unavailable in C++"
   in stepper (solveMethod opts))  
 
-cppODEFile :: (RenderSym repr) => ODEInfo repr -> 
-  (ODEInfo repr -> MS (repr (Method repr))) -> 
+cppODEFile :: (RenderSym repr) => ODEInfo repr ->
+  (ODEInfo repr -> MS (repr (Method repr))) -> repr (Permanence repr) ->
   (repr (RenderFile repr), GOOLState)
-cppODEFile info f = (fl, fst s)
+cppODEFile info f p = (fl, fst s)
   where (fl, s) = runState odeFile (initialState, initialFS)
-        dv = depVar info
-        iv = indepVar info
+        olddv = depVar info
+        oldiv = indepVar info
         ovars = otherVars info
         odeFile = join $ on3StateValues (\dpv idpv ovs ->
           let n = variableName dpv
               t = variableName idpv
+              -- dv below is a hack. Needed to "rebuild" it because its state has already been evaluated higher up (for building the file where the ode solver is called) (the evaluation happens in the pair instance). This hack won't be necessary when we do things right as this file won't be built so deep in GOOL.
+              dv = var (variableName dpv) (listType p $ innerVarType dpv)
               cn = n ++ "_ODE"
               dn = "d" ++ n ++ "d" ++ t
+              innerVarType = (listInnerType . toState . variableType)
+              tElem = var t $ innerVarType idpv
               dvptr = var ('&':n) (onStateValue variableType dv)
-              dvElemPtr = var ('&':n) (listInnerType $ onStateValue
-                variableType dv)
+              dvElemPtr = var ('&':n) (innerVarType dpv)
               othVars = map (tempStateChange (setODEOthVars (map variableName 
                 ovs))) ovars
           in fileDoc (buildModule cn [] [pubClass cn Nothing 
             (pubMVar dv : map privMVar othVars) 
             [constructor (map param othVars) (bodyStatements (map (\v -> 
               objVarSelf v &= valueOf v) othVars)),
-            pubMethod "operator()" void [param dv, param $ var ('&':dn) float, 
-              param iv] (oneLiner $ var dn float &= tempStateChange (setODEOthVars (map variableName ovs)) (ode info))], 
+            pubMethod "operator()" void [param $ var n $ innerVarType dpv, 
+              param $ var ('&':dn) float, param tElem] 
+              (oneLiner $ var dn float &= tempStateChange (setODEOthVars 
+              (map variableName ovs)) (ode info))], 
           pubClass ("Populate_" ++ n) Nothing [pubMVar dvptr] 
             [f info,
-            pubMethod "operator()" void [param dvElemPtr, param iv] 
+            pubMethod "operator()" void [param dvElemPtr, param tElem] 
               (oneLiner $ valState $ listAppend (valueOf $ objVarSelf dv) 
               (valueOf dv))]]))
-          (zoom lensFStoMS dv) (zoom lensFStoMS iv) (mapM (zoom lensFStoMS) ovars)
+          (zoom lensFStoMS olddv) (zoom lensFStoMS oldiv) (mapM (zoom lensFStoMS) ovars)
 
 -- Need src and hdr versions of this function until I teach this renderer about
 -- initializer lists
 cppsODEFunc :: ODEInfo CppSrcCode -> MS (CppSrcCode (Method CppSrcCode))
 cppsODEFunc info = depVar info >>= (\dpv -> on2StateValues (\n v -> 
   methodFromData Pub (text (n ++ "::" ++ n) <+> parens (parameterDoc v) <+> 
-  colon <+> text n <> parens (text n) <+> braces empty)) getClassName 
-  (param $ var ('&':variableName dpv) (toState $ variableType dpv)))
+  colon <+> variableDoc dpv <> parens (variableDoc dpv) <+> braces empty)) 
+  getClassName (param $ var ('&':variableName dpv) (toState $ variableType dpv)))
 
 cpphODEFunc :: ODEInfo CppHdrCode -> MS (CppHdrCode (Method CppHdrCode))
 cpphODEFunc info = dv >>= (\dpv -> 
@@ -2427,8 +2438,7 @@ cpphVarsFuncsList st vs fs =
 
 cppsClass :: [CppSrcCode (StateVar CppSrcCode)] -> 
   [CppSrcCode (Method CppSrcCode)] -> CppSrcCode (Class CppSrcCode)
-cppsClass vs fs = toCode $ vcat $ vars ++ (if any (not . isEmpty) vars then 
-  blank else empty) : funcs
+cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
   where vars = map stateVarDoc vs
         funcs = map methodDoc fs
 

@@ -11,8 +11,9 @@ module GOOL.Drasil.State (
   addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
   getHeaderUsing, setFilePath, getFilePath, setModuleName, getModuleName, 
   setClassName, getClassName, setCurrMain, getCurrMain, addClass, getClasses, 
-  updateClassMap, getClassMap, addParameter, getParameters, setOutputsDeclared, 
-  isOutputsDeclared, setScope, getScope, setCurrMainFunc, getCurrMainFunc
+  updateClassMap, getClassMap, updateMethodExcMap, getMethodExcMap, 
+  addParameter, getParameters, setOutputsDeclared, isOutputsDeclared, 
+  addException, setScope, getScope, setCurrMainFunc, getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
@@ -22,13 +23,16 @@ import Control.Lens.Tuple (_1, _2)
 import Control.Monad.State (State, modify, gets)
 import Data.List (sort)
 import Data.Maybe (isNothing)
-import Data.Map (Map, fromList, empty, union)
+import Data.Map (Map, fromList, empty, insert, union)
 
 data GOOLState = GS {
   _headers :: [FilePath],
   _sources :: [FilePath],
   _mainMod :: Maybe FilePath,
-  _classMap :: Map String String
+  _classMap :: Map String String,
+
+  -- Only used for Java
+  _methodExceptionMap :: Map String [String]
 } 
 makeLenses ''GOOLState
 
@@ -37,6 +41,7 @@ data MethodState = MS {
 
   -- Only used for Java
   _outputsDeclared :: Bool,
+  _exceptions :: [String],
   
   -- Only used for C++
   _currScope :: ScopeTag,
@@ -144,7 +149,9 @@ initialState = GS {
   _headers = [],
   _sources = [],
   _mainMod = Nothing,
-  _classMap = empty
+  _classMap = empty,
+
+  _methodExceptionMap = empty
 }
 
 initialFS :: FileState
@@ -174,6 +181,7 @@ initialMS = MS {
   _currParameters = [],
 
   _outputsDeclared = False,
+  _exceptions = [],
 
   _currScope = Priv,
   _currMainFunc = False
@@ -351,6 +359,17 @@ updateClassMap n (gs, fs) = over _1 (over classMap (union (fromList $
 getClassMap :: MS (Map String String)
 getClassMap = gets ((^. classMap) . fst . fst . fst)
 
+updateMethodExcMap :: String ->
+  (((GOOLState, FileState), ClassState), MethodState) 
+  -> (((GOOLState, FileState), ClassState), MethodState)
+updateMethodExcMap n ((fs, cs), ms) = over (_1 . _1 . _1 . 
+  methodExceptionMap) (insert (if null cn then n else cn ++ "." ++ n) 
+  (ms ^. exceptions)) ((fs, cs), ms)
+  where cn = cs ^. currClassName
+
+getMethodExcMap :: MS (Map String [String])
+getMethodExcMap = gets ((^. methodExceptionMap) . fst . fst . fst)
+
 addParameter :: String -> (((GOOLState, FileState), ClassState), MethodState) 
   -> (((GOOLState, FileState), ClassState), MethodState)
 addParameter p = over _2 $ over currParameters (\ps -> if p `elem` ps then 
@@ -365,6 +384,11 @@ setOutputsDeclared = over _2 $ set outputsDeclared True
 
 isOutputsDeclared :: MS Bool
 isOutputsDeclared = gets ((^. outputsDeclared) . snd)
+
+addException :: String -> (((GOOLState, FileState), ClassState), MethodState) 
+  -> (((GOOLState, FileState), ClassState), MethodState)
+addException e = over (_2 . exceptions) (\es -> if e `elem` es then es else 
+  es ++ [e])
 
 setScope :: ScopeTag -> (((GOOLState, FileState), ClassState), MethodState) -> 
   (((GOOLState, FileState), ClassState), MethodState)

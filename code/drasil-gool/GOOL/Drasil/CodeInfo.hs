@@ -12,10 +12,11 @@ import GOOL.Drasil.Symantics (ProgramSym(..), FileSym(..), PermanenceSym(..),
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.Data (Binding(Dynamic), ScopeTag(..))
 import GOOL.Drasil.Helpers (toCode, toState)
-import GOOL.Drasil.State (GOOLState, lensGStoFS, lensFStoCS, modifyReturn, 
-  addClass, updateClassMap)
+import GOOL.Drasil.State (GOOLState, MS, lensGStoFS, lensFStoCS, lensFStoMS, 
+  lensCStoMS, modifyReturn, setClassName, getClassName, addClass, 
+  updateClassMap, addException, updateMethodExcMap)
 
-import Control.Monad.State (State)
+import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (empty)
@@ -64,9 +65,15 @@ instance PermanenceSym CodeInfo where
 
 instance BodySym CodeInfo where
   type Body CodeInfo = ()
-  body _ = noInfo
-  bodyStatements _ = noInfo
-  oneLiner _ = noInfo
+  body bs = do
+    sequence_ bs
+    noInfo
+  bodyStatements ss = do
+    sequence_ ss
+    noInfo
+  oneLiner s = do
+    _ <- s
+    noInfo
 
   addComments _ _ = noInfo
 
@@ -74,7 +81,9 @@ instance BodySym CodeInfo where
 
 instance BlockSym CodeInfo where
   type Block CodeInfo = ()
-  block _ = noInfo
+  block ss = do
+    sequence_ ss
+    noInfo
 
 instance TypeSym CodeInfo where
   type Type CodeInfo = ()
@@ -266,9 +275,9 @@ instance StatementSym CodeInfo where
   getFileInput _ _ = noInfo
   discardFileInput _ = noInfo
 
-  openFileR _ _ = noInfo
-  openFileW _ _ = noInfo
-  openFileA _ _ = noInfo
+  openFileR _ _ = modifyReturn (addException "FileNotFoundException") (toCode ())
+  openFileW _ _ = modifyReturn (addException "IOException") (toCode ())
+  openFileA _ _ = modifyReturn (addException "IOException") (toCode ())
   closeFile _ = noInfo
 
   getFileInputLine _ _ = noInfo
@@ -290,7 +299,7 @@ instance StatementSym CodeInfo where
 
   free _ = noInfo
 
-  throw _ = noInfo
+  throw _ = modifyReturn (addException "Exception") (toCode ())
 
   initState _ _ = noInfo
   changeState _ _ = noInfo
@@ -302,24 +311,39 @@ instance StatementSym CodeInfo where
   selfInOutCall _ _ _ _ = noInfo
   extInOutCall _ _ _ _ _ = noInfo
 
-  multi _ = noInfo
+  multi ss = do
+    sequence_ ss
+    noInfo
 
 instance ControlStatementSym CodeInfo where
-  ifCond _ _ = noInfo
-  ifNoElse _ = noInfo
-  switch _ _ _ = noInfo
-  switchAsIf _ _ _ = noInfo
+  ifCond = evalConds
+  ifNoElse cs = do
+    mapM_ snd cs
+    noInfo
+  switch _ = evalConds
+  switchAsIf _ = evalConds
 
-  ifExists _ _ _ = noInfo
+  ifExists _ ib eb = do
+    _ <- ib
+    _ <- eb
+    noInfo
 
-  for _ _ _ _ = noInfo
-  forRange _ _ _ _ _ = noInfo
-  forEach _ _ _ = noInfo
-  while _ _ = noInfo
+  for _ _ _ b = do
+    _ <- b
+    noInfo
+  forRange _ _ _ _ b = do
+    _ <- b
+    noInfo
+  forEach _ _ b = do
+    _ <- b
+    noInfo
+  while _ b = do
+    _ <- b
+    noInfo
 
   tryCatch _ _ = noInfo
 
-  checkState _ _ _ = noInfo
+  checkState _ = evalConds
 
   notifyObservers _ _ = noInfo
 
@@ -342,28 +366,34 @@ instance ParameterSym CodeInfo where
 
 instance MethodSym CodeInfo where
   type Method CodeInfo = ()
-  method _ _ _ _ _ _ = noInfo
+  method n _ _ _ _ = updateMEM n
   getMethod _ = noInfo
   setMethod _ = noInfo
-  privMethod _ _ _ _ = noInfo
-  pubMethod _ _ _ _ = noInfo
-  constructor _ _ = noInfo
+  privMethod n _ _ = updateMEM n
+  pubMethod n _ _ = updateMEM n
+  constructor _ b = do
+    _ <- b
+    cn <- getClassName
+    modify (updateMethodExcMap cn)
+    noInfo
   destructor _ = noInfo
 
-  docMain _ = noInfo
+  docMain = updateMEM "main"
 
-  function _ _ _ _ _ _ = noInfo
-  mainFunction _ = noInfo
+  function n _ _ _ _ = updateMEM n
+  mainFunction = updateMEM "main"
 
-  docFunc _ _ _ _ = noInfo
+  docFunc _ _ _ f = do
+    _ <- f
+    noInfo
 
-  inOutMethod _ _ _ _ _ _ _= noInfo
+  inOutMethod n _ _ _ _ _ = updateMEM n
 
-  docInOutMethod _ _ _ _ _ _ _ _ = noInfo
+  docInOutMethod n _ _ _ _ _ _ = updateMEM n
 
-  inOutFunc _ _ _ _ _ _ _ = noInfo
+  inOutFunc n _ _ _ _ _ = updateMEM n
 
-  docInOutFunc _ _ _ _ _ _ _ _ = noInfo
+  docInOutFunc n _ _ _ _ _ _ = updateMEM n
 
 instance StateVarSym CodeInfo where
   type StateVar CodeInfo = ()
@@ -376,12 +406,20 @@ instance StateVarSym CodeInfo where
 
 instance ClassSym CodeInfo where
   type Class CodeInfo = ()
-  buildClass n _ s _ _ = if unCI s == Pub then modifyReturn (addClass n) 
-    (toCode ()) else noInfo 
+  buildClass n _ s _ ms = do
+    modify ((if unCI s == Pub then addClass n else id) . setClassName n)
+    mapM_ (zoom lensCStoMS) ms
+    noInfo
   enum n _ s = if unCI s == Pub then modifyReturn (addClass n) (toCode ()) else 
     noInfo 
-  privClass _ _ _ _ = noInfo
-  pubClass n _ _ _ = modifyReturn (addClass n) (toCode ())
+  privClass n _ _ ms = do
+    modify (setClassName n)
+    mapM_ (zoom lensCStoMS) ms
+    noInfo
+  pubClass n _ _ ms = do
+    modify (addClass n . setClassName n)
+    mapM_ (zoom lensCStoMS) ms
+    noInfo
 
   docClass _ c = do
     _ <- c
@@ -393,8 +431,9 @@ instance ClassSym CodeInfo where
 
 instance ModuleSym CodeInfo where
   type Module CodeInfo = ()
-  buildModule n _ cs = do
+  buildModule n fs cs = do
     mapM_ (zoom lensFStoCS) cs 
+    mapM_ (zoom lensFStoMS) fs
     modifyReturn (updateClassMap n) (toCode ())
 
 instance BlockCommentSym CodeInfo where
@@ -403,3 +442,20 @@ instance BlockCommentSym CodeInfo where
   docComment _ = noInfo
 
   blockCommentDoc _ = empty
+
+
+-- Helpers
+
+updateMEM :: String -> MS (CodeInfo (Body CodeInfo)) -> 
+  MS (CodeInfo (Method CodeInfo))
+updateMEM n b = do
+  _ <- b
+  modify (updateMethodExcMap n)
+  noInfo
+
+evalConds :: [(a, MS (CodeInfo (Body CodeInfo)))] -> 
+  MS (CodeInfo (Body CodeInfo)) -> MS (CodeInfo (Statement CodeInfo))
+evalConds cs def = do
+  mapM_ snd cs
+  _ <- def
+  noInfo

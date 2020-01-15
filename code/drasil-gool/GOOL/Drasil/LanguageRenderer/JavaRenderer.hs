@@ -66,10 +66,11 @@ import GOOL.Drasil.Helpers (angles, vibcat, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, MS, lensGStoFS, lensFStoMS, lensCStoMS, 
-  initialState, initialFS, modifyReturn, modifyReturnFunc, tempStateChange, addODEFilePaths, 
-  addProgNameToPaths, addODEFile, getODEFiles, addLangImport, addLibImport, 
-  addLibImports, getClassName, setCurrMain, setODEDepVars, getODEDepVars, 
-  setODEOthVars, getODEOthVars, setOutputsDeclared, isOutputsDeclared)
+  initialState, initialFS, modifyReturn, modifyReturnFunc, tempStateChange, 
+  addODEFilePaths, addProgNameToPaths, addODEFile, getODEFiles, addLangImport, 
+  addLibImport, addLibImports, setClassName, getClassName, setCurrMain, 
+  setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
+  setOutputsDeclared, isOutputsDeclared)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -78,7 +79,8 @@ import Control.Monad (join)
 import Control.Monad.State (modify, runState)
 import Data.List (elemIndex)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), braces, parens, 
-  empty, equals, semi, vcat, lbrace, rbrace, render, colon, render)
+  brackets, empty, equals, semi, vcat, lbrace, rbrace, render, colon, integer, 
+  render)
 
 jExt :: String
 jExt = "java"
@@ -231,7 +233,9 @@ instance ControlBlockSym JavaCode where
         listDecDef dv [initval]],
       block [
         on3StateValues (\odec initf handlef -> mkSt $ statementDoc odec <+> 
-          keyDoc (blockStart :: JavaCode Doc) $$ methodDoc initf $$ blank $$ methodDoc handlef $$ keyDoc (blockEnd :: JavaCode Doc)) 
+          keyDoc (blockStart :: JavaCode Doc) $$ 
+          vibcat (map (indent . methodDoc) [initf, handlef]) $$ 
+          keyDoc (blockEnd :: JavaCode Doc)) 
           (objDecDef hndlr (newObj (obj stH) [])) 
           (function "init" public dynamic_ void (map param [var "t0" float, 
             var "y0" (toState dblArray), var "t" float]) (body []))
@@ -336,8 +340,9 @@ instance ValueSym JavaCode where
 
   ($:) = enumElement
 
-  valueOf v = join $ on2StateValues (\dvs vr -> maybe (G.valueOf v) (listAccess 
-    (G.valueOf v) . litInt . toInteger) (elemIndex (variableName vr) dvs)) 
+  valueOf v = join $ on2StateValues (\dvs vr -> maybe (G.valueOf v) (mkStateVal 
+    (listInnerType $ toState $ variableType vr) . (variableDoc vr <>) . 
+    brackets . integer . toInteger) (elemIndex (variableName vr) dvs)) 
     getODEDepVars v
   arg n = G.arg (litInt n) argsList
   enumElement = G.enumElement
@@ -723,7 +728,8 @@ jODEFile info = (unJC fl, fst s)
               othVars = map (tempStateChange (setODEOthVars (map variableName 
                 ovs))) ovars
           in fileDoc (buildModule cn [] [zoom lensCStoMS (modify (addLibImport 
-            (odeImport ++ fode))) >> classFromData (on2StateLists (\svars mths 
+            (odeImport ++ fode))) >> modify (setClassName cn) >> classFromData 
+            (on2StateLists (\svars mths 
               -> scopeDoc (public :: JavaCode (Scope JavaCode)) <+> classDec 
               <+> text cn <+> text "implements" <+> text fode <+> 
               keyDoc (blockStart :: JavaCode (Keyword JavaCode)) $$ 

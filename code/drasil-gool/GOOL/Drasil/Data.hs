@@ -1,9 +1,10 @@
-module GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
-  FileType(..), BindData(..), bd, FileData(..), fileD, updateFileMod, 
-  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  updateMthdDoc, OpData(..), od, ParamData(..), pd, paramName, updateParamDoc, 
-  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
-  ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard
+module GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), FileType(..), 
+  Exception(..), exception, stdExc, BindData(..), bd, FileData(..), 
+  fileD, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
+  paramName, updateParamDoc, ProgData(..), progD, emptyProg, StateVarData(..), 
+  svd, TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), 
+  VarData(..), vard
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -23,6 +24,23 @@ data ScopeTag = Pub | Priv deriving Eq
 data FileType = Combined | Source | Header deriving Eq
 
 data Binding = Static | Dynamic deriving Eq
+
+data Exception = Exc {
+  loc :: String,
+  exc :: String
+}
+
+instance Eq Exception where
+  (Exc l1 e1) == (Exc l2 e2) = l1 == l2 && e1 == e2
+
+instance Show Exception where
+  show (Exc l e) = l ++ "." ++ e
+
+exception :: String -> String -> Exception
+exception = Exc
+
+stdExc :: String -> Exception
+stdExc = Exc ""
 
 data BindData = BD {bind :: Binding, bindDoc :: Doc}
 

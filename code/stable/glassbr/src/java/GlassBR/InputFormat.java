@@ -5,7 +5,9 @@ package GlassBR;
     \brief Provides the function for reading inputs
 */
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -15,7 +17,7 @@ public class InputFormat {
         \param filename name of the input file
         \param inParams structure holding the input values
     */
-    public static void get_input(String filename, InputParameters inParams) throws Exception {
+    public static void get_input(String filename, InputParameters inParams) throws FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function get_input called with inputs: {");

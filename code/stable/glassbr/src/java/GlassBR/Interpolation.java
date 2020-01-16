@@ -5,7 +5,9 @@ package GlassBR;
     \brief Provides functions for linear interpolation on three-dimensional data
 */
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -19,7 +21,7 @@ public class Interpolation {
         \param x x-coordinate to interpolate at
         \return y value interpolated at given x value
     */
-    public static double func_lin_interp(double x_1, double y_1, double x_2, double y_2, double x) throws Exception {
+    public static double func_lin_interp(double x_1, double y_1, double x_2, double y_2, double x) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_lin_interp called with inputs: {");
@@ -48,7 +50,7 @@ public class Interpolation {
         \param v value whose index will be found
         \return index of given value in given array
     */
-    public static int func_find(ArrayList<Double> arr, double v) throws Exception {
+    public static int func_find(ArrayList<Double> arr, double v) throws Exception, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_find called with inputs: {");
@@ -73,7 +75,7 @@ public class Interpolation {
         \param j index
         \return column of the given matrix at the given index
     */
-    public static ArrayList<Double> func_extractColumn(ArrayList<ArrayList<Double>> mat, int j) throws Exception {
+    public static ArrayList<Double> func_extractColumn(ArrayList<ArrayList<Double>> mat, int j) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_extractColumn called with inputs: {");
@@ -98,7 +100,7 @@ public class Interpolation {
         \param z z-coordinate to interpolate at
         \return y value interpolated at given x and z values
     */
-    public static double func_interpY(String filename, double x, double z) throws Exception {
+    public static double func_interpY(String filename, double x, double z) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_interpY called with inputs: {");
@@ -193,7 +195,7 @@ public class Interpolation {
         \param y y-coordinate to interpolate at
         \return z value interpolated at given x and y values
     */
-    public static double func_interpZ(String filename, double x, double y) throws Exception {
+    public static double func_interpZ(String filename, double x, double y) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_interpZ called with inputs: {");

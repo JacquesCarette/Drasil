@@ -6,6 +6,7 @@ package GlassBR;
 */
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class OutputFormat {
@@ -15,7 +16,7 @@ public class OutputFormat {
         \param is_safeLR 3 second load equivalent resistance safety requirement
         \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     */
-    public static void write_output(Boolean is_safePb, Boolean is_safeLR, double P_b) throws Exception {
+    public static void write_output(Boolean is_safePb, Boolean is_safeLR, double P_b) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function write_output called with inputs: {");

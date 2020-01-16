@@ -84,7 +84,7 @@ import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt,
   enumDocD, enumElementsDocD, fileDoc', docFuncRepr, commentDocD, commentedItem,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, intValue)
 import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensFStoCS, lensFStoMS, 
-  lensCStoMS, currMain, modifyAfter, modifyReturnFunc, modifyReturnFunc2, 
+  lensCStoMS, currMain, modifyReturnFunc, modifyReturnFunc2, 
   addFile, setMainMod, addLangImport, getLangImports, getModuleImports, 
   setFilePath, getFilePath, setModuleName, getModuleName, setClassName,
   getClassName, addParameter)
@@ -1067,7 +1067,7 @@ buildModule' n inc ms cs = S.modFromData n (on3StateValues (\cls lis mis ->
 
 modFromData :: Label -> (Doc -> repr (Module repr)) -> FS Doc -> 
   FS (repr (Module repr))
-modFromData n f d = modifyAfter (setModuleName n) (onStateValue f d)
+modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Files --
 

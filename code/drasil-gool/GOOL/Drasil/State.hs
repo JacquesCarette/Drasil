@@ -2,18 +2,19 @@
 
 module GOOL.Drasil.State (
   GS, GOOLState(..), FS, CS, MS, lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensMStoCS, headers, sources, mainMod, currMain, initialState, 
-  initialFS, modifyAfter, modifyReturn, modifyReturnFunc, modifyReturnFunc2, 
-  modifyReturnList, addFile, addCombinedHeaderSource, addHeader, addSource, 
-  addProgNameToPaths, setMainMod, addLangImport, getLangImports, 
-  addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, 
-  addHeaderModImport, getHeaderModImports, addDefine, getDefines, 
-  addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
-  getHeaderUsing, setFilePath, getFilePath, setModuleName, getModuleName, 
-  setClassName, getClassName, setCurrMain, getCurrMain, addClass, getClasses, 
-  updateClassMap, getClassMap, updateMethodExcMap, getMethodExcMap, 
+  lensCStoMS, lensMStoCS, lensMStoFS, headers, sources, mainMod, currMain, 
+  initialState, initialFS, modifyReturn, modifyReturnFunc, 
+  modifyReturnFunc2, modifyReturnList, addFile, addCombinedHeaderSource, 
+  addHeader, addSource, addProgNameToPaths, setMainMod, addLangImport, 
+  getLangImports, addModuleImport, getModuleImports, addHeaderLangImport, 
+  getHeaderLangImports, addHeaderModImport, getHeaderModImports, addDefine, 
+  getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
+  addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, setModuleName, 
+  getModuleName, setClassName, getClassName, setCurrMain, getCurrMain, addClass,
+  getClasses, updateClassMap, getClassMap, updateMethodExcMap, getMethodExcMap, 
   addParameter, getParameters, setOutputsDeclared, isOutputsDeclared, 
-  addException, setScope, getScope, setCurrMainFunc, getCurrMainFunc
+  addException, addExceptions, getExceptions, setScope, getScope, 
+  setCurrMainFunc, getCurrMainFunc
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
@@ -21,7 +22,7 @@ import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
 import Control.Monad.State (State, modify, gets)
-import Data.List (sort)
+import Data.List (sort, nub)
 import Data.Maybe (isNothing)
 import Data.Map (Map, fromList, empty, insert, union)
 
@@ -121,6 +122,10 @@ lensFStoMS :: Lens' (GOOLState, FileState)
   (((GOOLState, FileState), ClassState), MethodState)
 lensFStoMS = lens getMSfromFS setMSfromFS
 
+lensMStoFS :: Lens' (((GOOLState, FileState), ClassState), MethodState) 
+  (GOOLState, FileState) 
+lensMStoFS = _1 . _1
+
 -- CS - MS --
 
 getMSfromCS :: ((GOOLState, FileState), ClassState) -> 
@@ -190,11 +195,6 @@ initialMS = MS {
 -------------------------------
 ------- State Patterns -------
 -------------------------------
-
-modifyAfter :: (s -> s) -> State s a -> State s a
-modifyAfter sf sv = do
-  v <- sv
-  modifyReturn sf v
 
 modifyReturn :: (s -> s) -> a -> State s a
 modifyReturn sf v = do
@@ -362,10 +362,10 @@ getClassMap = gets ((^. classMap) . fst . fst . fst)
 updateMethodExcMap :: String ->
   (((GOOLState, FileState), ClassState), MethodState) 
   -> (((GOOLState, FileState), ClassState), MethodState)
-updateMethodExcMap n ((fs, cs), ms) = over (_1 . _1 . _1 . 
-  methodExceptionMap) (insert (if null cn then n else cn ++ "." ++ n) 
-  (ms ^. exceptions)) ((fs, cs), ms)
-  where cn = cs ^. currClassName
+updateMethodExcMap n (((gs, fs), cs), ms) = over (_1 . _1 . _1 . 
+  methodExceptionMap) (insert (mn ++ "." ++ n) (ms ^. exceptions)) 
+  (((gs, fs), cs), ms)
+  where mn = fs ^. currModName
 
 getMethodExcMap :: MS (Map String [String])
 getMethodExcMap = gets ((^. methodExceptionMap) . fst . fst . fst)
@@ -389,6 +389,13 @@ addException :: String -> (((GOOLState, FileState), ClassState), MethodState)
   -> (((GOOLState, FileState), ClassState), MethodState)
 addException e = over (_2 . exceptions) (\es -> if e `elem` es then es else 
   es ++ [e])
+
+addExceptions :: [String] -> (((GOOLState, FileState), ClassState), MethodState)
+  -> (((GOOLState, FileState), ClassState), MethodState)
+addExceptions es = over (_2 . exceptions) (\exs -> nub $ exs ++ es)
+
+getExceptions :: MS [String]
+getExceptions = gets ((^. exceptions) . snd)
 
 setScope :: ScopeTag -> (((GOOLState, FileState), ClassState), MethodState) -> 
   (((GOOLState, FileState), ClassState), MethodState)

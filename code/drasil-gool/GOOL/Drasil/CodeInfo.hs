@@ -13,8 +13,8 @@ import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.Data (Binding(Dynamic), ScopeTag(..))
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, MS, lensGStoFS, lensFStoCS, lensFStoMS, 
-  lensCStoMS, modifyReturn, setClassName, getClassName, addClass, 
-  updateClassMap, addException, updateMethodExcMap)
+  lensCStoMS, lensMStoFS, modifyReturn, setClassName, setModuleName, 
+  getModuleName, addClass, updateClassMap, addException, updateMethodExcMap)
 
 import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
@@ -275,9 +275,10 @@ instance StatementSym CodeInfo where
   getFileInput _ _ = noInfo
   discardFileInput _ = noInfo
 
-  openFileR _ _ = modifyReturn (addException "FileNotFoundException") (toCode ())
-  openFileW _ _ = modifyReturn (addException "IOException") (toCode ())
-  openFileA _ _ = modifyReturn (addException "IOException") (toCode ())
+  openFileR _ _ = modifyReturn (addException "java.io.FileNotFoundException") 
+    (toCode ())
+  openFileW _ _ = modifyReturn (addException "java.io.IOException") (toCode ())
+  openFileA _ _ = modifyReturn (addException "java.io.IOException") (toCode ())
   closeFile _ = noInfo
 
   getFileInputLine _ _ = noInfo
@@ -341,7 +342,9 @@ instance ControlStatementSym CodeInfo where
     _ <- b
     noInfo
 
-  tryCatch _ _ = noInfo
+  tryCatch _ cb = do
+    _ <- cb
+    noInfo
 
   checkState _ = evalConds
 
@@ -373,8 +376,8 @@ instance MethodSym CodeInfo where
   pubMethod n _ _ = updateMEM n
   constructor _ b = do
     _ <- b
-    cn <- getClassName
-    modify (updateMethodExcMap cn)
+    mn <- zoom lensMStoFS getModuleName
+    modify (updateMethodExcMap mn)
     noInfo
   destructor _ = noInfo
 
@@ -432,6 +435,7 @@ instance ClassSym CodeInfo where
 instance ModuleSym CodeInfo where
   type Module CodeInfo = ()
   buildModule n fs cs = do
+    modify (setModuleName n)
     mapM_ (zoom lensFStoCS) cs 
     mapM_ (zoom lensFStoMS) fs
     modifyReturn (updateClassMap n) (toCode ())

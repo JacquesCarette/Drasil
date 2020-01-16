@@ -61,18 +61,21 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, toCode, toState, onCodeValue, 
+import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (MS, lensGStoFS, modifyReturn, modifyReturnList, 
-  addProgNameToPaths, addLangImport, getClassName, setCurrMain, 
-  setOutputsDeclared, isOutputsDeclared)
+import GOOL.Drasil.State (MS, lensGStoFS, lensMStoFS, modifyReturn, 
+  modifyReturnList, addProgNameToPaths, addLangImport, getModuleName, 
+  getClassName, setCurrMain, setOutputsDeclared, isOutputsDeclared, 
+  addExceptions, getExceptions, getMethodExcMap)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
+import qualified Data.Map as Map (lookup)
+import Data.List (nub, intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
   equals, semi, vcat, lbrace, rbrace, render, colon, render)
 
@@ -333,10 +336,27 @@ instance BooleanExpression JavaCode where
   
 instance ValueExpression JavaCode where
   inlineIf = G.inlineIf
-  funcApp = G.funcApp
-  selfFuncApp = G.selfFuncApp self
-  extFuncApp = G.extFuncApp
-  newObj = G.newObj newObjDocD
+  funcApp n t vs = do
+    cm <- zoom lensMStoFS getModuleName
+    mem <- getMethodExcMap
+    modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ n) mem))
+    G.funcApp n t vs
+  selfFuncApp n t vs = do
+    slf <- self :: MS (JavaCode (Variable JavaCode))
+    mem <- getMethodExcMap
+    let tp = getTypeString (variableType slf)
+    modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ n) mem))
+    G.selfFuncApp self n t vs
+  extFuncApp l n t vs = do
+    mem <- getMethodExcMap
+    modify (maybe id addExceptions (Map.lookup (l ++ "." ++ n) mem))
+    G.extFuncApp l n t vs
+  newObj ot vs = do
+    t <- ot
+    mem <- getMethodExcMap
+    let tp = getTypeString t
+    modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ tp) mem))
+    G.newObj newObjDocD ot vs
   extNewObj _ = newObj
 
   exists = notNull
@@ -369,7 +389,12 @@ instance Selector JavaCode where
   indexOf = G.indexOf "indexOf"
 
 instance InternalSelector JavaCode where
-  objMethodCall' = G.objMethodCall
+  objMethodCall' f t o ps = do
+    ob <- o
+    mem <- getMethodExcMap
+    let tp = getTypeString (valueType ob)
+    modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ f) mem))
+    G.objMethodCall f t o ps
   objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym JavaCode where
@@ -576,8 +601,10 @@ instance MethodSym JavaCode where
 
 instance InternalMethod JavaCode where
   intMethod m n s p t ps b = modify (if m then setCurrMain else id) >> 
-    on3StateValues (\tp pms bd -> methodFromData Pub $ jMethod n s p tp pms bd) 
-    t (sequence ps) b
+    (\tp pms bd mem es cn -> methodFromData Pub $ jMethod n (maybe es (nub . 
+    (++ es)) (Map.lookup (key cn n) mem)) s p tp pms bd) <$> t <*> sequence ps 
+    <*> b <*> getMethodExcMap <*> getExceptions <*> getClassName
+    where key cnm nm = if null cnm then nm else cnm ++ "." ++ nm
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
@@ -741,12 +768,13 @@ jStringSplit :: (RenderSym repr) => MS (repr (Variable repr)) ->
 jStringSplit = on2StateValues (\vnew s -> variableDoc vnew <+> equals <+> new 
   <+> getTypeDoc (variableType vnew) <> parens (valueDoc s))
 
-jMethod :: (RenderSym repr) => Label -> repr (Scope repr) -> 
+jMethod :: (RenderSym repr) => Label -> [String] -> repr (Scope repr) -> 
   repr (Permanence repr) -> repr (Type repr) -> [repr (Parameter repr)] -> 
   repr (Body repr) -> Doc
-jMethod n s p t ps b = vcat [
+jMethod n es s p t ps b = vcat [
   scopeDoc s <+> permDoc p <+> getTypeDoc t <+> text n <> 
-    parens (parameterList ps) <+> text "throws Exception" <+> lbrace,
+    parens (parameterList ps) <+> emptyIfNull es (text "throws" <+> 
+    text  (intercalate ", " es)) <+> lbrace,
   indent $ bodyDoc b,
   rbrace]
 

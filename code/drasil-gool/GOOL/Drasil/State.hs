@@ -6,18 +6,18 @@ module GOOL.Drasil.State (
   initialState, initialFS, modifyReturn, modifyReturnFunc, 
   modifyReturnFunc2, modifyReturnList, addFile, addCombinedHeaderSource, 
   addHeader, addSource, addProgNameToPaths, setMainMod, addLangImport, 
-  getLangImports, addModuleImport, getModuleImports, addHeaderLangImport, 
-  getHeaderLangImports, addHeaderModImport, getHeaderModImports, addDefine, 
-  getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
-  addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, setModuleName, 
-  getModuleName, setClassName, getClassName, setCurrMain, getCurrMain, addClass,
-  getClasses, updateClassMap, getClassMap, updateMethodExcMap, getMethodExcMap, 
-  addParameter, getParameters, setOutputsDeclared, isOutputsDeclared, 
-  addException, addExceptions, getExceptions, setScope, getScope, 
-  setCurrMainFunc, getCurrMainFunc
+  addExceptionImports, getLangImports, addModuleImport, getModuleImports, 
+  addHeaderLangImport, getHeaderLangImports, addHeaderModImport, 
+  getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines,
+  addUsing, getUsing, addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, 
+  setModuleName, getModuleName, setClassName, getClassName, setCurrMain, 
+  getCurrMain, addClass, getClasses, updateClassMap, getClassMap, 
+  updateMethodExcMap, getMethodExcMap, addParameter, getParameters, 
+  setOutputsDeclared, isOutputsDeclared, addException, addExceptions, 
+  getExceptions, setScope, getScope, setCurrMainFunc, getCurrMainFunc
 ) where
 
-import GOOL.Drasil.Data (FileType(..), ScopeTag(..))
+import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..))
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
@@ -33,7 +33,7 @@ data GOOLState = GS {
   _classMap :: Map String String,
 
   -- Only used for Java
-  _methodExceptionMap :: Map String [String]
+  _methodExceptionMap :: Map String [Exception]
 } 
 makeLenses ''GOOLState
 
@@ -42,7 +42,7 @@ data MethodState = MS {
 
   -- Only used for Java
   _outputsDeclared :: Bool,
-  _exceptions :: [String],
+  _exceptions :: [Exception],
   
   -- Only used for C++
   _currScope :: ScopeTag,
@@ -256,6 +256,14 @@ addLangImport :: String -> (((GOOLState, FileState), ClassState), MethodState)
 addLangImport i = over _1 $ over _1 $ over _2 $ over langImports (\is -> 
   if i `elem` is then is else sort $ i:is)
 
+addExceptionImports :: [Exception] -> 
+  (((GOOLState, FileState), ClassState), MethodState) -> 
+  (((GOOLState, FileState), ClassState), MethodState)
+addExceptionImports es = over (_1 . _1 . _2 . langImports) (\is -> sort $ nub $ 
+  is ++ imps)
+  where mkImport l e = if null l then "" else l ++ "." ++ e
+        imps = filter (not . null) $ zipWith mkImport (map loc es) (map exc es)
+
 getLangImports :: FS [String]
 getLangImports = gets ((^. langImports) . snd)
 
@@ -367,7 +375,7 @@ updateMethodExcMap n (((gs, fs), cs), ms) = over (_1 . _1 . _1 .
   (((gs, fs), cs), ms)
   where mn = fs ^. currModName
 
-getMethodExcMap :: MS (Map String [String])
+getMethodExcMap :: MS (Map String [Exception])
 getMethodExcMap = gets ((^. methodExceptionMap) . fst . fst . fst)
 
 addParameter :: String -> (((GOOLState, FileState), ClassState), MethodState) 
@@ -385,16 +393,17 @@ setOutputsDeclared = over _2 $ set outputsDeclared True
 isOutputsDeclared :: MS Bool
 isOutputsDeclared = gets ((^. outputsDeclared) . snd)
 
-addException :: String -> (((GOOLState, FileState), ClassState), MethodState) 
+addException :: Exception -> (((GOOLState, FileState), ClassState), MethodState)
   -> (((GOOLState, FileState), ClassState), MethodState)
 addException e = over (_2 . exceptions) (\es -> if e `elem` es then es else 
   es ++ [e])
 
-addExceptions :: [String] -> (((GOOLState, FileState), ClassState), MethodState)
-  -> (((GOOLState, FileState), ClassState), MethodState)
+addExceptions :: [Exception] -> 
+  (((GOOLState, FileState), ClassState), MethodState) -> 
+  (((GOOLState, FileState), ClassState), MethodState)
 addExceptions es = over (_2 . exceptions) (\exs -> nub $ exs ++ es)
 
-getExceptions :: MS [String]
+getExceptions :: MS [Exception]
 getExceptions = gets ((^. exceptions) . snd)
 
 setScope :: ScopeTag -> (((GOOLState, FileState), ClassState), MethodState) -> 

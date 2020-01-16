@@ -10,7 +10,8 @@ import GOOL.Drasil.Symantics (ProgramSym(..), FileSym(..), PermanenceSym(..),
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
-import GOOL.Drasil.Data (Binding(Dynamic), ScopeTag(..))
+import GOOL.Drasil.Data (Binding(Dynamic), ScopeTag(..), Exception(..),
+  exception, stdExc)
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, MS, lensGStoFS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensMStoFS, modifyReturn, setClassName, setModuleName, 
@@ -275,10 +276,10 @@ instance StatementSym CodeInfo where
   getFileInput _ _ = noInfo
   discardFileInput _ = noInfo
 
-  openFileR _ _ = modifyReturn (addException "java.io.FileNotFoundException") 
+  openFileR _ _ = modifyReturn (addException fnfExc) 
     (toCode ())
-  openFileW _ _ = modifyReturn (addException "java.io.IOException") (toCode ())
-  openFileA _ _ = modifyReturn (addException "java.io.IOException") (toCode ())
+  openFileW _ _ = modifyReturn (addException ioExc) (toCode ())
+  openFileA _ _ = modifyReturn (addException ioExc) (toCode ())
   closeFile _ = noInfo
 
   getFileInputLine _ _ = noInfo
@@ -300,7 +301,7 @@ instance StatementSym CodeInfo where
 
   free _ = noInfo
 
-  throw _ = modifyReturn (addException "Exception") (toCode ())
+  throw _ = modifyReturn (addException genericExc) (toCode ())
 
   initState _ _ = noInfo
   changeState _ _ = noInfo
@@ -449,6 +450,11 @@ instance BlockCommentSym CodeInfo where
 
 
 -- Helpers
+
+fnfExc, ioExc, genericExc :: Exception
+fnfExc = exception "java.io" "FileNotFoundException"
+ioExc = exception "java.io" "IOException"
+genericExc = stdExc "Exception"
 
 updateMEM :: String -> MS (CodeInfo (Body CodeInfo)) -> 
   MS (CodeInfo (Method CodeInfo))

@@ -4,12 +4,15 @@ package SWHS;
     \author Thulasi Jegatheesan
     \brief Controls the flow of the program
 */
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class Control {
     
     /** \brief Controls the flow of the program
         \param args List of command-line arguments
     */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         String filename = args[0];
         double A_C;
         double C_W;

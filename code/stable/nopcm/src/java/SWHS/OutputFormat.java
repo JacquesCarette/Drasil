@@ -6,6 +6,7 @@ package SWHS;
 */
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class OutputFormat {
@@ -14,7 +15,7 @@ public class OutputFormat {
         \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
         \param E_W change in heat energy in the water: change in thermal energy within the water (J)
     */
-    public static void write_output(double T_W, double E_W) throws Exception {
+    public static void write_output(double T_W, double E_W) throws IOException {
         PrintWriter outputfile;
         outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));
         outputfile.print("T_W = ");

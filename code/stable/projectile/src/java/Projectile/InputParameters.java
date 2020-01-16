@@ -5,6 +5,7 @@ package Projectile;
     \brief Provides the structure for holding input values
 */
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /** \brief Structure for holding the input values
@@ -17,7 +18,7 @@ public class InputParameters {
     /** \brief Initializes input object by reading inputs and checking physical constraints and software constraints on the input
         \param filename name of the input file
     */
-    public InputParameters(String filename) throws Exception {
+    public InputParameters(String filename) throws FileNotFoundException {
         this.get_input(filename);
         this.input_constraints();
     }
@@ -25,7 +26,7 @@ public class InputParameters {
     /** \brief Reads input from a file with the given file name
         \param filename name of the input file
     */
-    private void get_input(String filename) throws Exception {
+    private void get_input(String filename) throws FileNotFoundException {
         Scanner infile;
         infile = new Scanner(new File(filename));
         infile.nextLine();
@@ -39,7 +40,7 @@ public class InputParameters {
     
     /** \brief Verifies that input values satisfy the physical constraints and software constraints
     */
-    private void input_constraints() throws Exception {
+    private void input_constraints() {
         if (!(this.v_launch > 0)) {
             System.out.print("Warning: ");
             System.out.print("v_launch has value ");

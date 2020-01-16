@@ -6,6 +6,7 @@ package GlassBR;
 */
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Calculations {
@@ -14,7 +15,7 @@ public class Calculations {
         \param inParams structure holding the input values
         \return stress distribution factor (Function) based on Pbtol
     */
-    public static double func_J_tol(InputParameters inParams) throws Exception {
+    public static double func_J_tol(InputParameters inParams) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_J_tol called with inputs: {");
@@ -30,7 +31,7 @@ public class Calculations {
         \param inParams structure holding the input values
         \return applied load (demand): 3 second duration equivalent pressure (Pa)
     */
-    public static double func_q(InputParameters inParams) throws Exception {
+    public static double func_q(InputParameters inParams) throws Exception, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_q called with inputs: {");
@@ -47,7 +48,7 @@ public class Calculations {
         \param q applied load (demand): 3 second duration equivalent pressure (Pa)
         \return dimensionless load
     */
-    public static double func_q_hat(InputParameters inParams, double q) throws Exception {
+    public static double func_q_hat(InputParameters inParams, double q) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_q_hat called with inputs: {");
@@ -67,7 +68,7 @@ public class Calculations {
         \param J_tol stress distribution factor (Function) based on Pbtol
         \return tolerable load
     */
-    public static double func_q_hat_tol(InputParameters inParams, double J_tol) throws Exception {
+    public static double func_q_hat_tol(InputParameters inParams, double J_tol) throws Exception, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_q_hat_tol called with inputs: {");
@@ -87,7 +88,7 @@ public class Calculations {
         \param q_hat dimensionless load
         \return stress distribution factor (Function)
     */
-    public static double func_J(InputParameters inParams, double q_hat) throws Exception {
+    public static double func_J(InputParameters inParams, double q_hat) throws Exception, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_J called with inputs: {");
@@ -107,7 +108,7 @@ public class Calculations {
         \param q_hat_tol tolerable load
         \return non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
     */
-    public static double func_NFL(InputParameters inParams, double q_hat_tol) throws Exception {
+    public static double func_NFL(InputParameters inParams, double q_hat_tol) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_NFL called with inputs: {");
@@ -127,7 +128,7 @@ public class Calculations {
         \param J stress distribution factor (Function)
         \return risk of failure
     */
-    public static double func_B(InputParameters inParams, double J) throws Exception {
+    public static double func_B(InputParameters inParams, double J) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_B called with inputs: {");
@@ -147,7 +148,7 @@ public class Calculations {
         \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
         \return load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
     */
-    public static double func_LR(InputParameters inParams, double NFL) throws Exception {
+    public static double func_LR(InputParameters inParams, double NFL) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_LR called with inputs: {");
@@ -167,7 +168,7 @@ public class Calculations {
         \param q applied load (demand): 3 second duration equivalent pressure (Pa)
         \return 3 second load equivalent resistance safety requirement
     */
-    public static Boolean func_is_safeLR(double LR, double q) throws Exception {
+    public static Boolean func_is_safeLR(double LR, double q) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_is_safeLR called with inputs: {");
@@ -186,7 +187,7 @@ public class Calculations {
         \param B risk of failure
         \return probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     */
-    public static double func_P_b(double B) throws Exception {
+    public static double func_P_b(double B) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_P_b called with inputs: {");
@@ -203,7 +204,7 @@ public class Calculations {
         \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
         \return probability of glass breakage safety requirement
     */
-    public static Boolean func_is_safePb(InputParameters inParams, double P_b) throws Exception {
+    public static Boolean func_is_safePb(InputParameters inParams, double P_b) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_is_safePb called with inputs: {");

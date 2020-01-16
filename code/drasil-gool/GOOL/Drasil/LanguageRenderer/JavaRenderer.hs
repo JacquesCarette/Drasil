@@ -59,28 +59,31 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
-  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
-  ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, vibcat, toCode, toState, onCodeValue, 
-  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
+  Exception(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md, 
+  updateModDoc, MethodData(..), mthd, updateMthdDoc, OpData(..), od, 
+  ParamData(..), pd, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
+  VarData(..), vard)
+import GOOL.Drasil.Helpers (angles, vibcat, emptyIfNull, toCode, toState, 
+  onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
+  on3StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
+  on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, MS, lensGStoFS, lensFStoMS, lensCStoMS, 
-  initialState, initialFS, modifyReturn, modifyReturnFunc, tempStateChange, 
-  addODEFilePaths, addProgNameToPaths, addODEFile, getODEFiles, addLangImport, 
-  addLibImport, addLibImports, setClassName, getClassName, setCurrMain, 
-  setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
-  setOutputsDeclared, isOutputsDeclared)
+  lensMStoFS, initialState, initialFS, modifyReturn, modifyReturnFunc, 
+  tempStateChange, addODEFilePaths, addProgNameToPaths, addODEFile, getODEFiles,
+  addLangImport, addExceptionImports, addLibImport, addLibImports, 
+  getModuleName, setClassName, getClassName, setCurrMain, setODEDepVars, 
+  getODEDepVars, setODEOthVars, getODEOthVars, setOutputsDeclared, 
+  isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify, runState)
-import Data.List (elemIndex)
+import qualified Data.Map as Map (lookup)
+import Data.List (elemIndex, nub, intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), braces, parens, 
-  brackets, empty, equals, semi, vcat, lbrace, rbrace, render, colon, integer, 
-  render)
+  brackets, empty, equals, semi, vcat, lbrace, rbrace, render, colon, integer)
 
 jExt :: String
 jExt = "java"
@@ -392,10 +395,27 @@ instance BooleanExpression JavaCode where
   
 instance ValueExpression JavaCode where
   inlineIf = G.inlineIf
-  funcApp = G.funcApp
-  selfFuncApp = G.selfFuncApp self
-  extFuncApp = G.extFuncApp
-  newObj = G.newObj newObjDocD
+  funcApp n t vs = do
+    cm <- zoom lensMStoFS getModuleName
+    mem <- getMethodExcMap
+    modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ n) mem))
+    G.funcApp n t vs
+  selfFuncApp n t vs = do
+    slf <- self :: MS (JavaCode (Variable JavaCode))
+    mem <- getMethodExcMap
+    let tp = getTypeString (variableType slf)
+    modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ n) mem))
+    G.selfFuncApp self n t vs
+  extFuncApp l n t vs = do
+    mem <- getMethodExcMap
+    modify (maybe id addExceptions (Map.lookup (l ++ "." ++ n) mem))
+    G.extFuncApp l n t vs
+  newObj ot vs = do
+    t <- ot
+    mem <- getMethodExcMap
+    let tp = getTypeString t
+    modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ tp) mem))
+    G.newObj newObjDocD ot vs
   extNewObj _ = newObj
 
   exists = notNull
@@ -428,7 +448,12 @@ instance Selector JavaCode where
   indexOf = G.indexOf "indexOf"
 
 instance InternalSelector JavaCode where
-  objMethodCall' = G.objMethodCall
+  objMethodCall' f t o ps = do
+    ob <- o
+    mem <- getMethodExcMap
+    let tp = getTypeString (valueType ob)
+    modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ f) mem))
+    G.objMethodCall f t o ps
   objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym JavaCode where
@@ -634,9 +659,17 @@ instance MethodSym JavaCode where
   docInOutFunc n = jDocInOut (inOutFunc n)
 
 instance InternalMethod JavaCode where
-  intMethod m n s p t ps b = modify (if m then setCurrMain else id) >> 
-    on3StateValues (\tp pms bd -> methodFromData Pub $ jMethod n s p tp pms bd) 
-    t (sequence ps) b
+  intMethod m n s p t ps b = do
+    tp <- t
+    pms <- sequence ps
+    bd <- b
+    mem <- getMethodExcMap
+    es <- getExceptions
+    mn <- zoom lensMStoFS getModuleName
+    let excs = maybe es (nub . (++ es)) (Map.lookup (key mn n) mem) 
+        key mnm nm = mnm ++ "." ++ nm
+    modify ((if m then setCurrMain else id) . addExceptionImports excs) 
+    toState $ methodFromData Pub $ jMethod n (map exc excs) s p tp pms bd
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
@@ -860,12 +893,13 @@ jStringSplit :: (RenderSym repr) => MS (repr (Variable repr)) ->
 jStringSplit = on2StateValues (\vnew s -> variableDoc vnew <+> equals <+> new 
   <+> getTypeDoc (variableType vnew) <> parens (valueDoc s))
 
-jMethod :: (RenderSym repr) => Label -> repr (Scope repr) -> 
+jMethod :: (RenderSym repr) => Label -> [String] -> repr (Scope repr) -> 
   repr (Permanence repr) -> repr (Type repr) -> [repr (Parameter repr)] -> 
   repr (Body repr) -> Doc
-jMethod n s p t ps b = vcat [
+jMethod n es s p t ps b = vcat [
   scopeDoc s <+> permDoc p <+> getTypeDoc t <+> text n <> 
-    parens (parameterList ps) <+> text "throws Exception" <+> lbrace,
+    parens (parameterList ps) <+> emptyIfNull es (text "throws" <+> 
+    text (intercalate ", " (sort es))) <+> lbrace,
   indent $ bodyDoc b,
   rbrace]
 

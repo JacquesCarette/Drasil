@@ -6,6 +6,7 @@ package GlassBR;
 */
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class InputConstraints {
@@ -13,7 +14,7 @@ public class InputConstraints {
     /** \brief Verifies that input values satisfy the physical constraints and software constraints
         \param inParams structure holding the input values
     */
-    public static void input_constraints(InputParameters inParams) throws Exception {
+    public static void input_constraints(InputParameters inParams) throws Exception, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function input_constraints called with inputs: {");

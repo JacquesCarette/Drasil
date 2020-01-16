@@ -5,7 +5,9 @@ package GlassBR;
     \brief Controls the flow of the program
 */
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Control {
@@ -13,7 +15,7 @@ public class Control {
     /** \brief Controls the flow of the program
         \param args List of command-line arguments
     */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
         String filename = args[0];
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));

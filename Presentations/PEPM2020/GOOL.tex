@@ -59,7 +59,7 @@
 
 \author[Slide \thepage~of \pageref{TotPages}] % (optional, use only with lots of
                                               % authors)
-{Jacques Carette, Brooks MacLachlan, and Spencer Smith}
+{\underline{Jacques Carette}, Brooks MacLachlan, and Spencer Smith}
 % - Give the names in the same order as the appear in the paper.
 % - Use the \inst{?} command only if the authors have different
 %   affiliation.
@@ -113,6 +113,7 @@
 
 \newcommand{\authornote}[3]{\textcolor{#1}{[#3 ---#2]}}
 \newcommand{\bmac}[1]{\authornote{red}{BM}{#1}}
+\newcommand{\jc}[1]{\authornote{purple}{JC}{#1}}
 
 %% Useful abbreviations
 \newcommand{\Csharp}{C\#}
@@ -137,13 +138,14 @@
 
 \begin{frame}
 
-\frametitle{The Problem}
+\frametitle{Observations}
 
 OO languages:
 \begin{itemize}
-	\item Structurally similar
-	\item Differences are mostly syntactic
-	\item Like Romance languages
+  \item Structurally similar
+  \item Differences are mostly syntactic
+  \item Like Romance languages
+  \item We tend to say similar things in all of them
 \end{itemize}
 
 \end{frame}
@@ -154,12 +156,13 @@ OO languages:
 
 \frametitle{The Goal}
 
-Generalize to one language:
+One language to express them all.
+
 \begin{itemize}
-	\item Is it possible?
-	\item Capture the meaning of OO programs
-	\item DSL for domain of OO programs
-	\item GOOL currently targets Java, Python, \Csharp, \Cplusplus
+  \item Is it possible?
+  \item Capture the meaning of OO programs
+  \item DSL for domain of OO programs
+  \item GOOL currently targets Java, Python, \Csharp, \Cplusplus
 \end{itemize}
 
 \end{frame}
@@ -173,17 +176,20 @@ Generalize to one language:
 \begin{frame}
 
 \begin{itemize}
-	\item \textbf{mainstream}: Generate code in mainstream languages
-	\item \textbf{readable}: Generared code is human-readable
-	\item \textbf{idiomatic}: Generated code is idiomatic
-	\item \textbf{documented}: Generated code is documented
-	\item \textbf{patterns}: Express common OO patterns
-	\item \textbf{expressivity}: Language succeeds in expressing real OO 
-	programs
-	\item \textbf{common}: Commonalities abstracted
+  \item \textbf{mainstream}: Generate code in mainstream languages
+  \item \textbf{readable}: Generared code is human-readable
+  \item \textbf{idiomatic}: Generated code is idiomatic
+  \item \textbf{documented}: Generated code is documented
+  \item \textbf{patterns}: Express common OO patterns
+  \item \textbf{expressivity}: Language succeeds in expressing real OO 
+  programs
+  \item \textbf{common}: Commonalities abstracted
 \end{itemize}
 
-\bmac{One slide for each?}
+% \bmac{One slide for each?}
+% \jc{No. One slide for the requirements.  Might want to unveil each
+%  one at a time, with the rhs being a justification instead of expansion.
+
 
 \end{frame}
 
@@ -197,12 +203,13 @@ Generalize to one language:
 
 \frametitle{Principles}
 
+% This could be split into 2-3 slides
 \begin{itemize}
-	\item What we can say vs. want to say vs. need to say (ex. Java 
-	introspection, \Cplusplus templates)
-	\item Readability features i.e. blocks
-	\item Variables vs. values
-	\item Smart constructors for common idioms
+  \item What we can say vs. want to say vs. need to say (ex. Java 
+  introspection, \Cplusplus templates)
+  \item Readability features i.e. blocks
+  \item Variables vs. values
+  \item Smart constructors for common idioms
 \end{itemize}
 
 \end{frame}
@@ -213,49 +220,50 @@ Generalize to one language:
 
 \frametitle{GOOL Language}
 
+% excellent!
 \tiny
 \begin{tabular}{p{1.5cm}| p{7cm}}
-	Types & \verb|bool|, \verb|int|, \verb|float|, \verb|char|, 
-	\verb|string|, 
-	\verb|infile| (read mode), \verb|outfile| (write mode), 
-	\verb|listType|, 
-	\verb|obj| \\
-	Variables & \verb|var|, \verb|extVar|, \verb|classVar|, \verb|objVar|, 
-	\verb|$->| (infix operator for \verb|objVar|), \verb|self|,
-	[\verb|listVar|] \\
-	Values & \verb|valueOf| (value from variable), \verb|litTrue|, 
-	\verb|litFalse|, \verb|litInt|, 
-	\verb|litFloat|, \verb|litChar|, \verb|litString|, \verb|?!|, 
-	\verb|?&&|, 
-	\verb|?<|, \verb|?<=|, \verb|?>|, \verb|?>=|, \verb|?==|, \verb|?!=|, 
-	\verb|#~|, \verb|#/^|, \verb|#||, \verb|#+|, \verb|#-|, \verb|#*|, 
-	\verb|#/|, \verb|#^|, \verb|inlineIf|, \verb|funcApp|, 
-	\verb|extFuncApp|, 
-	\verb|newObj|, \verb|objMethodCall|, [\verb|selfFuncApp|, 
-	\verb|objMethodCallNoParams|] \\
-	Statements & \verb|varDec|, \verb|varDecDef|, \verb|assign|, \verb|&=|, 
-	\verb|&+=|, \verb|&-=|, \verb|&++|, \verb|&~-|, \verb|break|, 
-	\verb|continue|, \verb|returnState|, \verb|throw|, \verb|free|, 
-	\verb|comment|, \verb|ifCond|, \verb|ifNoElse|, \verb|switch|, 
-	\verb|for|, 
-	\verb|forRange|, \verb|forEach|, \verb|while|, \verb|tryCatch|, 
-	\verb|block|, \verb|body| [\verb|bodyStatements| (single-block body), 
-	\verb|oneLiner| (single-statement body)] \\
-	List API & \verb|listAccess|, \verb|at| (same as \verb|listAccess|), 
-	\verb|listSet|, \verb|listAppend|, \verb|listIndexExists|, 
-	\verb|indexOf|, \verb|listSlice| \\
-	Scope & \verb|public|, \verb|private| \\
-	Binding & \verb|static_|, \verb|dynamic_| \\
-	Functions & \verb|function|, \verb|method|, \verb|param|, 
-	\verb|pointerParam|, \verb|mainFunction|, \verb|docFunc|, 
-	[\verb|pubMethod|, \verb|privMethod|] \\
-	State Variables & \verb|stateVar|, \verb|constVar|, [\verb|privMVar|, 
-	\verb|pubMVar| (dynamic), \verb|pubGVar| (static)]\\
-	Classes & \verb|buildClass|, \verb|docClass|, [\verb|pubClass|, 
-	\verb|privClass|]\\
-	Packages & \verb|buildModule|, \verb|fileDoc|, \verb|docMod|, 
-	\verb|prog|, 
-	\verb|package|, \verb|doxConfig|, \verb|makefile|
+  Types & \verb|bool|, \verb|int|, \verb|float|, \verb|char|, 
+  \verb|string|, 
+  \verb|infile| (read mode), \verb|outfile| (write mode), 
+  \verb|listType|, 
+  \verb|obj| \\
+  Variables & \verb|var|, \verb|extVar|, \verb|classVar|, \verb|objVar|, 
+  \verb|$->| (infix operator for \verb|objVar|), \verb|self|,
+  [\verb|listVar|] \\
+  Values & \verb|valueOf| (value from variable), \verb|litTrue|, 
+  \verb|litFalse|, \verb|litInt|, 
+  \verb|litFloat|, \verb|litChar|, \verb|litString|, \verb|?!|, 
+  \verb|?&&|, 
+  \verb|?<|, \verb|?<=|, \verb|?>|, \verb|?>=|, \verb|?==|, \verb|?!=|, 
+  \verb|#~|, \verb|#/^|, \verb|#||, \verb|#+|, \verb|#-|, \verb|#*|, 
+  \verb|#/|, \verb|#^|, \verb|inlineIf|, \verb|funcApp|, 
+  \verb|extFuncApp|, 
+  \verb|newObj|, \verb|objMethodCall|, [\verb|selfFuncApp|, 
+  \verb|objMethodCallNoParams|] \\
+  Statements & \verb|varDec|, \verb|varDecDef|, \verb|assign|, \verb|&=|, 
+  \verb|&+=|, \verb|&-=|, \verb|&++|, \verb|&~-|, \verb|break|, 
+  \verb|continue|, \verb|returnState|, \verb|throw|, \verb|free|, 
+  \verb|comment|, \verb|ifCond|, \verb|ifNoElse|, \verb|switch|, 
+  \verb|for|, 
+  \verb|forRange|, \verb|forEach|, \verb|while|, \verb|tryCatch|, 
+  \verb|block|, \verb|body| [\verb|bodyStatements| (single-block body), 
+  \verb|oneLiner| (single-statement body)] \\
+  List API & \verb|listAccess|, \verb|at| (same as \verb|listAccess|), 
+  \verb|listSet|, \verb|listAppend|, \verb|listIndexExists|, 
+  \verb|indexOf|, \verb|listSlice| \\
+  Scope & \verb|public|, \verb|private| \\
+  Binding & \verb|static_|, \verb|dynamic_| \\
+  Functions & \verb|function|, \verb|method|, \verb|param|, 
+  \verb|pointerParam|, \verb|mainFunction|, \verb|docFunc|, 
+  [\verb|pubMethod|, \verb|privMethod|] \\
+  State Variables & \verb|stateVar|, \verb|constVar|, [\verb|privMVar|, 
+  \verb|pubMVar| (dynamic), \verb|pubGVar| (static)]\\
+  Classes & \verb|buildClass|, \verb|docClass|, [\verb|pubClass|, 
+  \verb|privClass|]\\
+  Packages & \verb|buildModule|, \verb|fileDoc|, \verb|docMod|, 
+  \verb|prog|, 
+  \verb|package|, \verb|doxConfig|, \verb|makefile|
 \end{tabular}
 
 \end{frame}
@@ -272,10 +280,11 @@ Generalize to one language:
 
 Tagless with type families -- 2 Layers of abstraction
 \begin{itemize}
-	\item Over target language
-	\item Over underlying data structures
+  \item Over target language
+  \item Over underlying data structures
 \end{itemize}
 
+% make sure to load the language 'haskell' here.
 \begin{lstlisting}
 class (TypeSym repr) => VariableSym repr where
   type Variable repr
@@ -291,7 +300,9 @@ class (TypeSym repr) => VariableSym repr where
 \centering
 \includegraphics[scale=0.12]{GOOLClasses.png}
 
-\bmac{Very squished to fit in frame, should we keep this?}
+% \bmac{Very squished to fit in frame, should we keep this?}
+% \jc{Yes - but also have a side-by side version of the top half / bottom
+% half that is more readable}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -301,16 +312,17 @@ class (TypeSym repr) => VariableSym repr where
 \frametitle{Statistics}
 
 \begin{itemize}
-	\item 43 classes
-	\item 328 methods
-	\item 300 functions that abstract over commonalities
-	\item 229 methods shared between Java and \Csharp
-	\begin{itemize}
-	    \item 40\% more than between Java and Python
-	\end{itemize}
+  \item 43 classes
+  \item 328 methods
+  \item 300 functions that abstract over commonalities
+  \item 229 methods shared between Java and \Csharp
+  \begin{itemize}
+      \item 40\% more than between Java and Python
+  \end{itemize}
 \end{itemize}
 
 \bmac{Include the bar graph of common methods from long version of paper?}
+	\jc{yes please}
 
 \end{frame}
 
@@ -325,16 +337,17 @@ class (TypeSym repr) => VariableSym repr where
 \frametitle{Patterns}
 
 \begin{itemize}
-	\item Command line arguments
-	\item Lists
-	\item I/O
-	\item Procedures with Input/Output/Both parameters
-	\item Getters and setters
-	\item Design patterns
+  \item Command line arguments
+  \item Lists
+  \item I/O
+  \item Procedures with Input/Output/Both parameters
+  \item Getters and setters
+  \item Design patterns
 \end{itemize}
 
-\bmac{Do we want to mention all of these? A slide with sample code for each? Or 
-maybe pick one to use as an example? GOOL code, generated code, or both?}
+%\bmac{Do we want to mention all of these? A slide with sample code for each? Or 
+%maybe pick one to use as an example? GOOL code, generated code, or both?}
+% \jc{Pick maybe 2 as examples, with all artifacts?}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -343,6 +356,7 @@ maybe pick one to use as an example? GOOL code, generated code, or both?}
 
 \frametitle{Demo?}
 
+\jc{Short papers \emph{may} include a demo, but don't have to.}
 \bmac{Maybe show the PatternTest example like we do in the long version of the 
 paper. Can show GOOL code and target code in all languages. Would probably want 
 to leave the slideshow for this demo?}
@@ -364,11 +378,11 @@ specific idea}
 \frametitle{Future}
 
 \begin{itemize}
-	\item More types
-	\item Smarter generation using State monad - ex. import statements
-	\item Interface with external libraries
-	\item User-decisions - ex. which type to use for lists?
-	\item More patterns
+  \item More types
+  \item Smarter generation using State monad - ex. import statements
+  \item Interface with external libraries
+  \item User-decisions - ex. which type to use for lists?
+  \item More patterns
 \end{itemize}
 
 \bmac{Split into a slide for each? Or pick a couple important ones and just do 
@@ -387,14 +401,15 @@ breakage, projectile simulation)\\~\
 
 Together new:
 \begin{itemize}
-	\item Idiomatic code generation
-	\item Human-readable, documented code generation
-	\item Coding patterns are language idioms\\~\
+  \item Idiomatic code generation
+  \item Human-readable, documented code generation
+  \item Coding patterns are language idioms\\~\
 \end{itemize}
 
 With respect to ``\hyperref[goal]{The Goal}'' --- It is possible\\~\
 
-\bmac{We don't need to discuss related work in the presentation, do we?}
+% \bmac{We don't need to discuss related work in the presentation, do we?}
+% \jc{no}
 
 \end{frame}
 

@@ -30,6 +30,12 @@
 \usepackage{hyperref}
 \usepackage{booktabs}
 
+\hypersetup{
+	urlcolor=blue,
+	linkcolor=blue,
+	colorlinks=true
+}
+
 \usepackage{listings}
 \lstset{columns=flexible,
         language=haskell}
@@ -235,7 +241,7 @@ Example: Blocks
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile] \label{goal}
+\begin{frame}[fragile]
 
 \frametitle{GOOL Language}
 
@@ -526,7 +532,7 @@ a slide for each of those?}
 Drasil project
 \begin{itemize}
 \item Generate scientific software
-\item Design language allowed users to influence design
+\item Design language allows users to influence design
 \item GOOL is the backend
 \end{itemize}
 
@@ -538,18 +544,19 @@ Drasil project
 
 \frametitle{Complete Example}
 
-Projectile\\~\
+Projectile program\\~\
 
-\href{}{Design 1}
+\href{https://github.com/JacquesCarette/Drasil/tree/projectileDemos/Presentations/PEPM2020/projectile1}{Design
+ 1}
 \begin{itemize}
-	\item Logging
 	\item Documented
+	\item Bundled inputs
 \end{itemize}
 
-\href{}{Design 2}
+\href{https://github.com/JacquesCarette/Drasil/tree/projectileDemos/Presentations/PEPM2020/projectile2}{Design
+ 2}
 \begin{itemize}
-	\item No logging
-	\item Not documented
+	\item Logging
 	\item More modular
 \end{itemize}
 
@@ -571,7 +578,7 @@ Together new:
   \item Coding patterns are language idioms\\~\
 \end{itemize}
 
-With respect to ``\hyperref[goal]{The Goal}'' --- It is possible\\~\
+With respect to ``The Goal'' --- It is possible\\~\
 
 \end{frame}
 

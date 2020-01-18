@@ -64,7 +64,7 @@
 %\subtitle
 %{Include Only If Paper Has a Subtitle}
 
-\author[]{\underline{Jacques Carette}, Brooks MacLachlan, and Spencer Smith}
+\author[]{\underline{Jacques Carette}, Brooks MacLachlan, Spencer Smith}
 % - Give the names in the same order as the appear in the paper.
 % - Use the \inst{?} command only if the authors have different
 %   affiliation.
@@ -147,10 +147,10 @@
 
 OO languages:
 \begin{itemize}
-  \item Structurally similar
-  \item Differences are mostly syntactic
-  \item Like Romance languages
-  \item We tend to say similar things in all of them
+  \item<1-> Structurally similar
+  \item<2-> Mainly \emph{shallow} syntaxtic differences
+  \item<3-> Like Romance languages
+  \item<4-> We tend to say similar things in all of them
 \end{itemize}
 
 \end{frame}
@@ -161,13 +161,19 @@ OO languages:
 
 \frametitle{The Goal}
 
+\begin{picture}(0,0)
+\put(180,-20){%
+  \includegraphics[width=0.3\textwidth]{Unico_Anello.png}%
+}
+\end{picture}
+\\[2ex]
 One language to express them all.
 
 \begin{itemize}
   \item Is it possible?
-  \item Capture the meaning of OO programs
-  \item DSL for domain of OO programs
-  \item GOOL currently targets Java, Python, \Csharp, \Cplusplus
+  \item Capture the meaning of \textcolor{red}{OO programs}
+  \item DSL for domain of \textcolor{red}{OO programs}
+  \item Currently targets Java, Python, \Csharp, \Cplusplus
 \end{itemize}
 
 \end{frame}

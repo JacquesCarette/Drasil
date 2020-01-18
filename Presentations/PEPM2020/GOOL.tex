@@ -469,24 +469,23 @@ setMethod "FooClass" foo
 \end{lstlisting}
 \vspace{\baselineskip}
 
-\begin{onlyenv}<1>
+\begin{overprint}
+\onslide<1>
 Python:
 \begin{lstlisting}[language=Python]
 def setFoo(self, foo):
     self.foo = foo
 \end{lstlisting}
-\end{onlyenv}
 
-\begin{onlyenv}<2>
+\onslide<2>
 Java:
 \begin{lstlisting}[language=java]
 public void setFoo(int foo) throws Exception {
     this.foo = foo;
 }
 \end{lstlisting}
-\end{onlyenv}
 
-\begin{onlyenv}<3>
+\onslide<3>
 \Csharp:
 \lstset{language=[Sharp]C}
 \begin{lstlisting}
@@ -495,16 +494,15 @@ public void setFoo(int foo) {
 }
 \end{lstlisting}
 \lstset{language=haskell}
-\end{onlyenv}
 
-\begin{onlyenv}<4>
+\onslide<4>
 \Cplusplus:
 \begin{lstlisting}[language=C++]
 void FooClass::setFoo(int foo) {
     this->foo = foo;
 }
 \end{lstlisting}
-\end{onlyenv}
+\end{overprint}
 
 \end{frame}
 
@@ -516,18 +514,15 @@ void FooClass::setFoo(int foo) {
 
 \begin{frame}
 
-\frametitle{Future}
+\frametitle{Currently working on}
 
 \begin{itemize}
   \item More types
-  \item Smarter generation using State monad - ex. import statements
-  \item Interface with external libraries
+  \item Smarter generation - ex. import statements
+  \item Interfacing with external libraries
   \item User-decisions - ex. which type to use for lists?
   \item More patterns
 \end{itemize}
-
-\bmac{Split into a slide for each? Or pick a couple important ones and just do 
-a slide for each of those?}
 
 \end{frame}
 
@@ -537,10 +532,10 @@ a slide for each of those?}
 
 \frametitle{Language of Design}
 
-Drasil project
+Drasil project - \url{http://github.com/JacquesCarette/Drasil}
 \begin{itemize}
 \item Generate scientific software
-\item Design language allows users to influence design
+\item \textcolor{red}{Design language} lets users guide design
 \item GOOL is the backend
 \end{itemize}
 

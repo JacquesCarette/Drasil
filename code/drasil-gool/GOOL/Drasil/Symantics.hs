@@ -16,7 +16,8 @@ module GOOL.Drasil.Symantics (
   ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
   InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
   InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
-  InternalMod(..), BlockCommentSym(..)
+  InternalMod(..), BlockCommentSym(..),
+  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -120,6 +121,7 @@ class (StatementSym repr) => BlockSym repr where
 class InternalBlock repr where
   blockDoc :: repr (Block repr) -> Doc
   docBlock :: MS Doc -> MS (repr (Block repr))
+  multiBlock :: [MS (repr (Block repr))] -> MS (repr (Block repr))
 
 class (PermanenceSym repr) => TypeSym repr where
   type Type repr
@@ -155,6 +157,8 @@ class (ControlStatementSym repr) => ControlBlockSym repr where
     MS (repr (Variable repr)) -> MS (repr (Value repr)) -> 
     MS (repr (Block repr))
 
+  solveODE :: ODEInfo repr -> ODEOptions repr -> MS (repr (Block repr))
+  
 listSlice :: (ControlBlockSym repr) => MS (repr (Variable repr)) -> 
   MS (repr (Value repr)) -> Maybe (MS (repr (Value repr))) -> 
   Maybe (MS (repr (Value repr))) -> Maybe (MS (repr (Value repr))) -> 
@@ -764,3 +768,34 @@ class BlockCommentSym repr where
   docComment :: State a [String] -> State a (repr (BlockComment repr))
 
   blockCommentDoc :: repr (BlockComment repr) -> Doc
+
+-- Data
+
+data ODEInfo repr = ODEInfo {
+  indepVar :: MS (repr (Variable repr)),
+  depVar :: MS (repr (Variable repr)),
+  otherVars :: [MS (repr (Variable repr))],
+  tInit :: MS (repr (Value repr)),
+  tFinal :: MS (repr (Value repr)),
+  initVal :: MS (repr (Value repr)),
+  ode :: MS (repr (Value repr))
+}
+
+odeInfo :: MS (repr (Variable repr)) -> MS (repr (Variable repr)) -> 
+  [MS (repr (Variable repr))] -> MS (repr (Value repr)) -> 
+  MS (repr (Value repr)) -> MS (repr (Value repr)) -> MS (repr (Value repr)) -> 
+  ODEInfo repr
+odeInfo = ODEInfo
+
+data ODEOptions repr = ODEOptions {
+  solveMethod :: ODEMethod,
+  absTol :: MS (repr (Value repr)),
+  relTol :: MS (repr (Value repr)),
+  stepSize :: MS (repr (Value repr))
+}
+
+odeOptions :: ODEMethod -> MS (repr (Value repr)) -> MS (repr (Value repr)) -> 
+  MS (repr (Value repr)) -> ODEOptions repr
+odeOptions = ODEOptions
+
+data ODEMethod = RK45 | BDF | Adams

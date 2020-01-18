@@ -16,12 +16,13 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
-  objMethodCall, FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
-  InternalMod(..), BlockCommentSym(..))
+  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..), ODEInfo(..), 
+  ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
   bodyDocD, outDoc, destructorError, multiAssignDoc, returnDocD, mkStNoEnd,
   breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, 
@@ -30,19 +31,19 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   addCommentsDocD, commentedModD, docFuncRepr, valueList, parameterList, 
   surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, block, int, float, listInnerType, obj, enumType, runStrategy, 
-  notOp', negateOp, sqrtOp', absOp', expOp', sinOp', cosOp', tanOp', asinOp', 
-  acosOp', atanOp', equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, 
-  staticVar, extVar, enumVar, classVar, objVar, objVarSelf, listVar, listOf, 
-  iterVar, litChar, litFloat, litInt, litString, valueOf, arg, enumElement, 
-  argsList, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
-  listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, newObj, func, get,
-  set, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
-  setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
-  listAccessFunc, listSetFunc, state, loopState, emptyState, assign, 
-  assignToListIndex, decrement, increment', increment1', decrement1, objDecNew, 
-  objDecNewNoParams, closeFile, discardFileLine, stringListVals, 
+  oneLiner, block, multiBlock, int, float, listInnerType, obj, enumType, 
+  runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', sinOp', cosOp', 
+  tanOp', asinOp', acosOp', atanOp', equalOp, notEqualOp, greaterOp, 
+  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
+  moduloOp, var, staticVar, extVar, enumVar, classVar, objVar, objVarSelf, 
+  listVar, listOf, iterVar, litChar, litFloat, litInt, litString, valueOf, arg, 
+  enumElement, argsList, objAccess, objMethodCall, objMethodCallNoParams, 
+  selfAccess, listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, 
+  newObj, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
+  listSet, getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, 
+  iterEndError, listAccessFunc, listSetFunc, state, loopState, emptyState, 
+  assign, assignToListIndex, decrement, increment', increment1', decrement1, 
+  objDecNew, objDecNewNoParams, closeFile, discardFileLine, stringListVals, 
   stringListLists, returnState, valState, comment, throw, initState, 
   changeState, initObserverList, addObserver, ifCond, ifNoElse, switchAsIf, 
   ifExists, tryCatch, checkState, construct, param, method, getMethod, 
@@ -61,8 +62,8 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (MS, lensGStoFS, addLangImport, getLangImports, 
-  addModuleImport, getModuleImports, setClassName, getClassName, setCurrMain, 
-  getClassMap)
+  addLibImport, getLibImports, addModuleImport, getModuleImports, setClassName, 
+  getClassName, setCurrMain, getClassMap)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -169,6 +170,7 @@ instance BlockSym PythonCode where
 instance InternalBlock PythonCode where
   blockDoc = unPC
   docBlock = onStateValue toCode
+  multiBlock = G.multiBlock
 
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData
@@ -200,6 +202,39 @@ instance ControlBlockSym PythonCode where
   listSlice' b e s vnew vold = docBlock $ pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
+
+  solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
+    docBlock $ onStateValue methodDoc $ function "f" public dynamic_ 
+      (onStateValue valueType $ ode info) [param iv, param dv] 
+      (oneLiner $ returnState $ ode info),
+    block [
+      r &= objMethodCall odeT (extNewObj odeLib odeT 
+      [valueOf $ var fname (onStateValue valueType $ ode info)]) 
+        "set_integrator" (pyODEMethod (solveMethod opts) ++
+          [absTol opts >>= (mkStateVal float . (text "atol=" <>) . valueDoc),
+          relTol opts >>= (mkStateVal float . (text "rtol=" <>) . valueDoc)]),
+      valState $ objMethodCall odeT rVal "set_initial_value" [initVal info]],
+    block [
+      listDecDef iv [tInit info],
+      listDecDef dv [initVal info],
+      while (objMethodCallNoParams bool rVal "successful" ?&& 
+        r_t ?< tFinal info) (bodyStatements [
+          valState $ objMethodCall odeT rVal "integrate" [r_t #+ stepSize opts],
+          valState $ listAppend (valueOf iv) r_t,
+          valState $ listAppend (valueOf dv) (listAccess r_y $ litInt 0)
+        ])
+     ]
+   ]
+   where fname = "f"
+         odeLib = "scipy.integrate"
+         iv = indepVar info
+         dv = depVar info
+         odeT = obj "ode"
+         r = var "r" odeT
+         rVal = valueOf r
+         r_t = valueOf $ objVar r (var "t" $ listInnerType $ onStateValue 
+           variableType iv)
+         r_y = valueOf $ objVar r (var "y" $ onStateValue variableType dv)
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData
@@ -630,12 +665,14 @@ instance InternalClass PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n = G.buildModule n (on2StateValues (\lis mis -> vibcat [
+  buildModule n = G.buildModule n (on3StateValues (\lis libis mis -> vibcat [
     vcat (map (importDoc . 
       (langImport :: Label -> PythonCode (Import PythonCode))) lis),
     vcat (map (importDoc . 
+      (langImport :: Label -> PythonCode (Import PythonCode))) libis),
+    vcat (map (importDoc . 
       (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
-    getLangImports getModuleImports)
+    getLangImports getLibImports getModuleImports)
 
 instance InternalMod PythonCode where
   moduleDoc = modDoc . unPC
@@ -656,6 +693,15 @@ initName = "__init__"
 
 pyName :: String
 pyName = "Python"
+
+pyODEMethod :: ODEMethod -> [MS (PythonCode (Value PythonCode))]
+pyODEMethod RK45 = [litString "dopri5"]
+pyODEMethod BDF = [litString "vode", 
+  (litString "bdf" :: MS (PythonCode (Value PythonCode))) >>= 
+  (mkStateVal string . (text "method=" <>) . valueDoc)]
+pyODEMethod Adams = [litString "vode", 
+  (litString "adams" :: MS (PythonCode (Value PythonCode))) >>= 
+  (mkStateVal string . (text "method=" <>) . valueDoc)]
 
 pyLogOp :: (RenderSym repr) => MS (repr (UnaryOp repr))
 pyLogOp = addmathImport $ unOpPrec "math.log10"

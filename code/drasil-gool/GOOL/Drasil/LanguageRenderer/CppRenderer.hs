@@ -23,7 +23,8 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
   InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
   InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
-  InternalMod(..), BlockCommentSym(..))
+  InternalMod(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
+  odeOptions, ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD, 
   bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, freeDocD, mkSt, 
   mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
@@ -33,13 +34,13 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   commentedItem, addCommentsDocD, functionDox, commentedModD, valueList, 
   parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, block, int, double, char, string, listType, listInnerType, obj, 
-  enumType, void, runStrategy, listSlice, notOp, negateOp, sqrtOp, absOp, expOp,
-  sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, equalOp, notEqualOp, greaterOp, 
-  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
-  moduloOp, powerOp, andOp, orOp, var, staticVar, self, enumVar, objVar,
-  listVar, listOf, litTrue, litFalse, litChar, litFloat, litInt, litString, 
-  valueOf, arg, argsList, inlineIf, objAccess, objMethodCall, 
+  oneLiner, block, multiBlock, int, double, char, string, listType, 
+  listInnerType, obj, enumType, void, runStrategy, listSlice, notOp, negateOp, 
+  sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, equalOp, 
+  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
+  multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, staticVar, self, 
+  enumVar, objVar, listVar, listOf, litTrue, litFalse, litChar, litFloat, 
+  litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, objMethodCall,
   objMethodCallNoParams, selfAccess, listIndexExists, funcApp, newObj, func, 
   get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
   listSet, getFunc, setFunc, listSizeFunc, listAppendFunc, listAccessFunc', 
@@ -65,22 +66,25 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty,
   toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, 
   on3CodeValues, on3StateValues, onCodeList, onStateList, on2StateLists, 
   on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (CS, MS, lensGStoFS, lensFStoCS, lensFStoMS, 
-  lensCStoMS, lensMStoCS, modifyReturn, addLangImport, getLangImports, 
-  addModuleImport, getModuleImports, addHeaderLangImport, getHeaderLangImports, 
-  addHeaderModImport, getHeaderModImports, addDefine, getDefines,
-  addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
-  getHeaderUsing, setClassName, getClassName, setCurrMain, getCurrMain, 
-  getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+import GOOL.Drasil.State (GOOLState, CS, MS, lensGStoFS, lensFStoCS, lensFStoMS,
+  lensCStoMS, lensMStoCS, initialState, initialFS, modifyReturn, 
+  tempStateChange, addODEFilePaths, addODEFile, getODEFiles, addLangImport, 
+  getLangImports, addLibImport, getLibImports, addModuleImport, 
+  getModuleImports, addHeaderLangImport, getHeaderLangImports, 
+  addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine, 
+  getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
+  addHeaderUsing, getHeaderUsing, setClassName, getClassName, setCurrMain, 
+  getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
+  getCurrMainFunc, setODEOthVars, getODEOthVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
-import Control.Monad.State (State, modify)
+import Control.Monad.State (State, modify, runState)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
-  empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
+  empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -183,6 +187,7 @@ instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => InternalBlock (p CppSrcCode CppHdrCode) where
   blockDoc b = blockDoc $ pfst b
   docBlock d = on2StateValues pair (docBlock d) (docBlock d)
+  multiBlock = pair1List multiBlock multiBlock
 
 instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   type Type (p CppSrcCode CppHdrCode) = TypeData
@@ -227,6 +232,68 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
       (fmap (onStateValue pfst) s)) 
     (listSlice' (fmap (onStateValue psnd) b) (fmap (onStateValue psnd) e) 
       (fmap (onStateValue psnd) s))
+
+  solveODE info opts = do
+    piv <- indepVar info
+    pdv <- depVar info
+    povs <- sequence $ otherVars info
+    pti <- tInit info
+    ptf <- tFinal info
+    pinitv <- initVal info
+    pode <- ode info
+    patol <- absTol opts
+    prtol <- relTol opts
+    pss <- stepSize opts
+    let m = solveMethod opts
+        iv1 = toState $ pfst piv
+        iv2 = toState $ psnd piv
+        dv1 = toState $ pfst pdv
+        dv2 = toState $ psnd pdv
+        ovs1 = map (toState . pfst) povs
+        ovs2 = map (toState . psnd) povs
+        ti1 = toState $ pfst pti
+        ti2 = toState $ psnd pti
+        tf1 = toState $ pfst ptf
+        tf2 = toState $ psnd ptf
+        initv1 = toState $ pfst pinitv
+        initv2 = toState $ psnd pinitv
+        ode1 = toState $ pfst pode
+        ode2 = toState $ psnd pode
+        atol1 = toState $ pfst patol
+        atol2 = toState $ psnd patol
+        rtol1 = toState $ pfst prtol
+        rtol2 = toState $ psnd prtol
+        ss1 = toState $ pfst pss
+        ss2 = toState $ psnd pss
+        solveODESrc :: ODEInfo CppSrcCode -> ODEOptions CppSrcCode -> 
+          MS (CppSrcCode (Block CppSrcCode))
+        solveODESrc = solveODE
+        solveODEHdr :: ODEInfo CppHdrCode -> ODEOptions CppHdrCode -> 
+          MS (CppHdrCode (Block CppHdrCode))
+        solveODEHdr = solveODE
+        odeInfoSrc :: MS (CppSrcCode (Variable CppSrcCode)) -> MS (CppSrcCode (Variable CppSrcCode)) -> 
+          [MS (CppSrcCode (Variable CppSrcCode))] -> MS (CppSrcCode (Value CppSrcCode)) -> 
+          MS (CppSrcCode (Value CppSrcCode)) -> MS (CppSrcCode (Value CppSrcCode)) -> 
+          MS (CppSrcCode (Value CppSrcCode)) -> ODEInfo CppSrcCode
+        odeInfoSrc = odeInfo
+        odeOptionsSrc :: ODEMethod -> MS (CppSrcCode (Value CppSrcCode)) -> 
+          MS (CppSrcCode (Value CppSrcCode)) -> MS (CppSrcCode (Value CppSrcCode)) -> ODEOptions CppSrcCode
+        odeOptionsSrc = odeOptions
+        odeInfoHdr :: MS (CppHdrCode (Variable CppHdrCode)) -> MS (CppHdrCode (Variable CppHdrCode)) -> 
+          [MS (CppHdrCode (Variable CppHdrCode))] -> MS (CppHdrCode (Value CppHdrCode)) -> 
+          MS (CppHdrCode (Value CppHdrCode)) -> MS (CppHdrCode (Value CppHdrCode)) -> 
+          MS (CppHdrCode (Value CppHdrCode)) -> ODEInfo CppHdrCode
+        odeInfoHdr = odeInfo
+        odeOptionsHdr :: ODEMethod -> MS (CppHdrCode (Value CppHdrCode)) -> 
+          MS (CppHdrCode (Value CppHdrCode)) -> MS (CppHdrCode (Value CppHdrCode)) -> ODEOptions CppHdrCode
+        odeOptionsHdr = odeOptions
+    p1 <- solveODESrc
+      (odeInfoSrc iv1 dv1 ovs1 ti1 tf1 initv1 ode1)
+      (odeOptionsSrc m atol1 rtol1 ss1)
+    p2 <- solveODEHdr 
+      (odeInfoHdr iv2 dv2 ovs2 ti2 tf2 initv2 ode2)
+      (odeOptionsHdr m atol2 rtol2 ss2)
+    toState $ pair p1 p2
 
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
   type UnaryOp (p CppSrcCode CppHdrCode) = OpData
@@ -899,7 +966,8 @@ instance Monad CppSrcCode where
 
 instance ProgramSym CppSrcCode where
   type Program CppSrcCode = ProgData
-  prog n = onStateList (onCodeList (progD n)) . map (zoom lensGStoFS)
+  prog n fs = onStateValue (onCodeList (progD n)) (on2StateValues (++) 
+    (mapM (zoom lensGStoFS) fs) (onStateValue (map toCode) getODEFiles))
 
 instance RenderSym CppSrcCode
   
@@ -978,6 +1046,7 @@ instance BlockSym CppSrcCode where
 instance InternalBlock CppSrcCode where
   blockDoc = unCPPSC
   docBlock = onStateValue toCode
+  multiBlock = G.multiBlock
 
 instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
@@ -1009,6 +1078,25 @@ instance ControlBlockSym CppSrcCode where
   runStrategy = G.runStrategy
 
   listSlice' = G.listSlice
+
+  solveODE info opts = let (fl, s) = cppODEFile info cppsODEFunc dynamic_
+                           dv = depVar info
+    in modify (addODEFilePaths s . addODEFile (unCPPSC fl) . addLibImport 
+    "boost/numeric/odeint") >> (dv >>= (\dpv -> 
+      let odeClassName = variableName dpv ++ "_ODE"
+          odeVar = var "ode" (obj odeClassName)
+          currVal = var "currVal" (listInnerType $ toState $ variableType dpv)
+      in modify (addModuleImport odeClassName) >> block [
+        objDecDef odeVar (newObj (obj odeClassName) 
+          (map valueOf $ otherVars info)),
+        listDec 0 dv,
+        -- The initial value MUST be assigned to a variable because odeint will 
+        -- update that variable at each step.
+        varDecDef currVal (initVal info),
+        valState $ funcApp (odeNameSpace ++ "integrate_const") void 
+          [cppODEMethod info opts, valueOf odeVar, valueOf currVal, 
+          tInit info, tFinal info, stepSize opts, 
+          newObj (obj $ "Populate_" ++ variableName dpv) [valueOf dv]]]))
 
 instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
@@ -1068,7 +1156,9 @@ instance VariableSym CppSrcCode where
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
     addModuleImport) (Map.lookup (getTypeString t) cm) $ 
     classVar (toState t) v) c getClassMap
-  objVar = G.objVar
+  objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
+    ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
+    (toState vr)) getODEOthVars o v
   objVarSelf = onStateValue (\v -> mkVar ("this->"++variableName v) 
     (variableType v) (text "this->" <> variableDoc v))
   listVar = G.listVar
@@ -1473,15 +1563,15 @@ instance InternalClass CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n = G.buildModule n ((\ds lis mis us mn -> vibcat [
+  buildModule n = G.buildModule n ((\ds lis libis mis us mn -> vibcat [
     if mn then empty else importDoc $ mi n,
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
-    vcat (map (importDoc . mi) mis),
+    vcat (map (importDoc . mi) (libis ++ mis)),
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppSrcCode (Keyword CppSrcCode))) us)]) 
-    <$> getDefines <*> getLangImports <*> getModuleImports <*> getUsing <*> 
-    getCurrMain)
+    <$> getDefines <*> getLangImports <*> getLibImports <*> getModuleImports 
+    <*> getUsing <*> getCurrMain)
     where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
           mi = modImport
           li = langImport
@@ -1594,6 +1684,7 @@ instance BlockSym CppHdrCode where
 instance InternalBlock CppHdrCode where
   blockDoc = unCPPHC
   docBlock = onStateValue toCode
+  multiBlock = G.multiBlock
 
 instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData
@@ -1627,6 +1718,10 @@ instance ControlBlockSym CppHdrCode where
   runStrategy _ _ _ _ = toState $ toCode empty
 
   listSlice' _ _ _ _ _ = toState $ toCode empty
+
+  solveODE info _ = let (fl, s) = cppODEFile info cpphODEFunc dynamic_
+    in modify (addODEFilePaths s . addODEFile (unCPPHC fl)) >> 
+    toState (toCode empty)
 
 instance UnaryOpSym CppHdrCode where
   type UnaryOp CppHdrCode = OpData
@@ -1682,7 +1777,9 @@ instance VariableSym CppHdrCode where
   enumVar _ _ = mkStateVar "" void empty
   classVar _ _ = mkStateVar "" void empty
   extClassVar _ _ = mkStateVar "" void empty
-  objVar _ _ = mkStateVar "" void empty
+  objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
+    ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
+    (toState vr)) getODEOthVars o v
   objVarSelf _ = mkStateVar "" void empty
   listVar _ _ _ = mkStateVar "" void empty
   listOf _ _ = mkStateVar "" void empty
@@ -2047,14 +2144,14 @@ instance InternalClass CppHdrCode where
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
-  buildModule n = G.buildModule n ((\ds lis mis us -> vibcat [
+  buildModule n = G.buildModule n ((\ds lis libis mis us -> vibcat [
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
-    vcat (map (importDoc . mi) mis),
+    vcat (map (importDoc . mi) (libis ++ mis)),
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppHdrCode (Keyword CppHdrCode))) us)]) 
-    <$> getHeaderDefines <*> getHeaderLangImports <*> getHeaderModImports <*> 
-    getHeaderUsing)
+    <$> getHeaderDefines <*> getHeaderLangImports <*> getHeaderLibImports <*> 
+    getHeaderModImports <*> getHeaderUsing)
     where mi, li :: Label -> CppHdrCode (Import CppHdrCode)
           mi = modImport
           li = langImport
@@ -2118,6 +2215,74 @@ enumsEqualInts = False
 
 inc :: Doc
 inc = text "#include"
+
+odeNameSpace :: String
+odeNameSpace = "boost::numeric::odeint::"
+
+cppODEMethod :: ODEInfo CppSrcCode -> ODEOptions CppSrcCode -> 
+  MS (CppSrcCode (Value CppSrcCode))
+cppODEMethod info opts = listInnerType (onStateValue variableType $ depVar info)
+  >>= (\dpt -> 
+  let rkdp5 = "runge_kutta_dopri5"  
+      adams = "adams_bashforth"
+      tp = getTypeString dpt
+      stepper RK45 = funcApp (odeNameSpace ++ "make_controlled") void 
+        [absTol opts, relTol opts, newObj (obj $ odeNameSpace ++ rkdp5 ++ "<" 
+        ++ tp ++ ">") []]
+      stepper Adams = newObj (obj $ odeNameSpace ++ adams ++ "<3," ++   
+        tp ++ ">") []
+      stepper _ = error "Chosen ODE method unavailable in C++"
+  in stepper (solveMethod opts))  
+
+cppODEFile :: (RenderSym repr) => ODEInfo repr ->
+  (ODEInfo repr -> MS (repr (Method repr))) -> repr (Permanence repr) ->
+  (repr (RenderFile repr), GOOLState)
+cppODEFile info f p = (fl, fst s)
+  where (fl, s) = runState odeFile (initialState, initialFS)
+        olddv = depVar info
+        oldiv = indepVar info
+        ovars = otherVars info
+        odeFile = join $ on3StateValues (\dpv idpv ovs ->
+          let n = variableName dpv
+              t = variableName idpv
+              -- dv below is a hack. Needed to "rebuild" it because its state has already been evaluated higher up (for building the file where the ode solver is called) (the evaluation happens in the pair instance). This hack won't be necessary when we do things right as this file won't be built so deep in GOOL.
+              dv = var (variableName dpv) (listType p $ innerVarType dpv)
+              cn = n ++ "_ODE"
+              dn = "d" ++ n ++ "d" ++ t
+              innerVarType = (listInnerType . toState . variableType)
+              tElem = var t $ innerVarType idpv
+              dvptr = var ('&':n) (onStateValue variableType dv)
+              dvElemPtr = var ('&':n) (innerVarType dpv)
+              othVars = map (tempStateChange (setODEOthVars (map variableName 
+                ovs))) ovars
+          in fileDoc (buildModule cn [] [pubClass cn Nothing 
+            (pubMVar dv : map privMVar othVars) 
+            [constructor (map param othVars) (bodyStatements (map (\v -> 
+              objVarSelf v &= valueOf v) othVars)),
+            pubMethod "operator()" void [param $ var n $ innerVarType dpv, 
+              param $ var ('&':dn) float, param tElem] 
+              (oneLiner $ var dn float &= tempStateChange (setODEOthVars 
+              (map variableName ovs)) (ode info))], 
+          pubClass ("Populate_" ++ n) Nothing [pubMVar dvptr] 
+            [f info,
+            pubMethod "operator()" void [param dvElemPtr, param tElem] 
+              (oneLiner $ valState $ listAppend (valueOf $ objVarSelf dv) 
+              (valueOf dv))]]))
+          (zoom lensFStoMS olddv) (zoom lensFStoMS oldiv) (mapM (zoom lensFStoMS) ovars)
+
+-- Need src and hdr versions of this function until I teach this renderer about
+-- initializer lists
+cppsODEFunc :: ODEInfo CppSrcCode -> MS (CppSrcCode (Method CppSrcCode))
+cppsODEFunc info = depVar info >>= (\dpv -> on2StateValues (\n v -> 
+  methodFromData Pub (text (n ++ "::" ++ n) <+> parens (parameterDoc v) <+> 
+  colon <+> variableDoc dpv <> parens (variableDoc dpv) <+> braces empty)) 
+  getClassName (param $ var ('&':variableName dpv) (toState $ variableType dpv)))
+
+cpphODEFunc :: ODEInfo CppHdrCode -> MS (CppHdrCode (Method CppHdrCode))
+cpphODEFunc info = dv >>= (\dpv -> 
+  constructor [param $ var ('&':variableName dpv) (toState $ variableType dpv)]
+  (oneLiner $ objVarSelf dv &= valueOf dv))
+  where dv = depVar info
 
 cpphtop :: ModData -> Doc
 cpphtop m = vcat [
@@ -2273,8 +2438,7 @@ cpphVarsFuncsList st vs fs =
 
 cppsClass :: [CppSrcCode (StateVar CppSrcCode)] -> 
   [CppSrcCode (Method CppSrcCode)] -> CppSrcCode (Class CppSrcCode)
-cppsClass vs fs = toCode $ vcat $ vars ++ (if any (not . isEmpty) vars then 
-  blank else empty) : funcs
+cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
   where vars = map stateVarDoc vs
         funcs = map methodDoc fs
 

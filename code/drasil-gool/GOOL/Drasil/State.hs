@@ -3,25 +3,28 @@
 module GOOL.Drasil.State (
   GS, GOOLState(..), FS, CS, MS, lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoMS, lensMStoCS, lensMStoFS, headers, sources, mainMod, currMain, 
-  initialState, initialFS, modifyReturn, modifyReturnFunc, 
-  modifyReturnFunc2, modifyReturnList, addFile, addCombinedHeaderSource, 
-  addHeader, addSource, addProgNameToPaths, setMainMod, addLangImport, 
-  addExceptionImports, getLangImports, addModuleImport, getModuleImports, 
-  addHeaderLangImport, getHeaderLangImports, addHeaderModImport, 
-  getHeaderModImports, addDefine, getDefines, addHeaderDefine, getHeaderDefines,
-  addUsing, getUsing, addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, 
-  setModuleName, getModuleName, setClassName, getClassName, setCurrMain, 
-  getCurrMain, addClass, getClasses, updateClassMap, getClassMap, 
-  updateMethodExcMap, getMethodExcMap, addParameter, getParameters, 
-  setOutputsDeclared, isOutputsDeclared, addException, addExceptions, 
-  getExceptions, setScope, getScope, setCurrMainFunc, getCurrMainFunc
+  initialState, initialFS, modifyReturn, modifyReturnFunc, modifyReturnFunc2, 
+  modifyReturnList, tempStateChange, addODEFilePaths, addFile, 
+  addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
+  addODEFile, getODEFiles, addLangImport, addExceptionImports, getLangImports, 
+  addLibImport, addLibImports, getLibImports, addModuleImport, getModuleImports,
+  addHeaderLangImport, getHeaderLangImports, addHeaderLibImport, 
+  getHeaderLibImports, addHeaderModImport, getHeaderModImports, addDefine, 
+  getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
+  addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, setModuleName, 
+  getModuleName, setClassName, getClassName, setCurrMain, getCurrMain, addClass,
+  getClasses, updateClassMap, getClassMap, updateMethodExcMap, getMethodExcMap,
+  addParameter, getParameters, setODEDepVars, getODEDepVars, setODEOthVars, 
+  getODEOthVars, setOutputsDeclared, isOutputsDeclared, addException, 
+  addExceptions, getExceptions, setScope, getScope, setCurrMainFunc, 
+  getCurrMainFunc
 ) where
 
-import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..))
+import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..), FileData)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
-import Control.Monad.State (State, modify, gets)
+import Control.Monad.State (State, modify, get, gets, put)
 import Data.List (sort, nub)
 import Data.Maybe (isNothing)
 import Data.Map (Map, fromList, empty, insert, union)
@@ -31,6 +34,7 @@ data GOOLState = GS {
   _sources :: [FilePath],
   _mainMod :: Maybe FilePath,
   _classMap :: Map String String,
+  _odeFiles :: [FileData],
 
   -- Only used for Java
   _methodExceptionMap :: Map String [Exception]
@@ -39,6 +43,8 @@ makeLenses ''GOOLState
 
 data MethodState = MS {
   _currParameters :: [String],
+  _currODEDepVars :: [String],
+  _currODEOthVars :: [String],
 
   -- Only used for Java
   _outputsDeclared :: Bool,
@@ -61,10 +67,12 @@ data FileState = FS {
   _currMain :: Bool,
   _currClasses :: [String],
   _langImports :: [String],
+  _libImports :: [String],
   _moduleImports :: [String],
 
   -- C++ only
   _headerLangImports :: [String],
+  _headerLibImports :: [String],
   _headerModImports :: [String],
   _defines :: [String],
   _headerDefines :: [String],
@@ -155,6 +163,7 @@ initialState = GS {
   _sources = [],
   _mainMod = Nothing,
   _classMap = empty,
+  _odeFiles = [],
 
   _methodExceptionMap = empty
 }
@@ -166,9 +175,11 @@ initialFS = FS {
   _currMain = False,
   _currClasses = [],
   _langImports = [],
+  _libImports = [],
   _moduleImports = [],
 
   _headerLangImports = [],
+  _headerLibImports = [],
   _headerModImports = [],
   _defines = [],
   _headerDefines = [],
@@ -184,6 +195,8 @@ initialCS = CS {
 initialMS :: MethodState
 initialMS = MS {
   _currParameters = [],
+  _currODEDepVars = [],
+  _currODEOthVars = [],
 
   _outputsDeclared = False,
   _exceptions = [],
@@ -222,9 +235,23 @@ modifyReturnList l sf vf = do
   modify sf
   return $ vf v
 
+tempStateChange :: (s -> s) -> State s a -> State s a
+tempStateChange f st = do
+  s <- get
+  modify f
+  v <- st
+  put s
+  return v
+
 -------------------------------
 ------- State Modifiers -------
 -------------------------------
+
+addODEFilePaths :: GOOLState -> 
+  (((GOOLState, FileState), ClassState), MethodState) -> 
+  (((GOOLState, FileState), ClassState), MethodState)
+addODEFilePaths s = over (_1 . _1 . _1 . headers) (s ^. headers ++)
+  . over (_1 . _1 . _1 . sources) (s ^. sources ++)
 
 addFile :: FileType -> FilePath -> GOOLState -> GOOLState
 addFile Combined = addCombinedHeaderSource
@@ -251,6 +278,13 @@ setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
   "Multiple modules with main methods encountered")
 
+addODEFile :: FileData -> (((GOOLState, FileState), ClassState), MethodState) 
+  -> (((GOOLState, FileState), ClassState), MethodState)
+addODEFile f = over _1 $ over _1 $ over _1 $ over odeFiles (f:)
+
+getODEFiles :: GS [FileData]
+getODEFiles = gets (^. odeFiles)
+
 addLangImport :: String -> (((GOOLState, FileState), ClassState), MethodState) 
   -> (((GOOLState, FileState), ClassState), MethodState)
 addLangImport i = over _1 $ over _1 $ over _2 $ over langImports (\is -> 
@@ -266,6 +300,18 @@ addExceptionImports es = over (_1 . _1 . _2 . langImports) (\is -> sort $ nub $
 
 getLangImports :: FS [String]
 getLangImports = gets ((^. langImports) . snd)
+
+addLibImport :: String -> (((GOOLState, FileState), ClassState), MethodState)
+  -> (((GOOLState, FileState), ClassState), MethodState)
+addLibImport i = over _1 $ over _1 $ over _2 $ over libImports (\is -> 
+  if i `elem` is then is else sort $ i:is)
+
+addLibImports :: [String] -> (((GOOLState, FileState), ClassState), MethodState)
+  -> (((GOOLState, FileState), ClassState), MethodState)
+addLibImports is s = foldl (flip addLibImport) s is
+
+getLibImports :: FS [String]
+getLibImports = gets ((^. libImports) . snd)
 
 addModuleImport :: String -> (((GOOLState, FileState), ClassState), MethodState)
   -> (((GOOLState, FileState), ClassState), MethodState)
@@ -283,6 +329,15 @@ addHeaderLangImport i = over _1 $ over _1 $ over _2 $ over headerLangImports
 
 getHeaderLangImports :: FS [String]
 getHeaderLangImports = gets ((^. headerLangImports) . snd)
+
+addHeaderLibImport :: String -> 
+  (((GOOLState, FileState), ClassState), MethodState) -> 
+  (((GOOLState, FileState), ClassState), MethodState)
+addHeaderLibImport i = over _1 $ over _1 $ over _2 $ over headerLibImports 
+  (\is -> if i `elem` is then is else sort $ i:is)
+
+getHeaderLibImports :: FS [String]
+getHeaderLibImports = gets ((^. headerLibImports) . snd)
 
 addHeaderModImport :: String -> 
   (((GOOLState, FileState), ClassState), MethodState) -> 
@@ -385,6 +440,20 @@ addParameter p = over _2 $ over currParameters (\ps -> if p `elem` ps then
 
 getParameters :: MS [String]
 getParameters = gets ((^. currParameters) . snd)
+
+setODEDepVars :: [String] -> (((GOOLState, FileState), ClassState), MethodState)
+  -> (((GOOLState, FileState), ClassState), MethodState)
+setODEDepVars vs = over _2 $ set currODEDepVars vs
+
+getODEDepVars :: MS [String]
+getODEDepVars = gets ((^. currODEDepVars) . snd)
+
+setODEOthVars :: [String] -> (((GOOLState, FileState), ClassState), MethodState)
+  -> (((GOOLState, FileState), ClassState), MethodState)
+setODEOthVars vs = over _2 $ set currODEOthVars vs
+
+getODEOthVars :: MS [String]
+getODEOthVars = gets ((^. currODEOthVars) . snd)
 
 setOutputsDeclared :: (((GOOLState, FileState), ClassState), MethodState) -> 
   (((GOOLState, FileState), ClassState), MethodState)

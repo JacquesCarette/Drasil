@@ -12,6 +12,7 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.HelloWorld (helloWorld)
 import Test.PatternTest (patternTest)
 import Test.FileTests (fileTests)
+import Test.SimpleODE (simpleODE)
 
 main :: IO()
 main = do
@@ -38,8 +39,8 @@ genCode files = createCodeFiles (concatMap (\p -> replicate (length $ progMods
   p) (progName p)) files) $ makeCode (concatMap progMods files)
 
 classes :: (ProgramSym repr) => (repr (Program repr) -> ProgData) -> [ProgData]
-classes unRepr = zipWith (\p gs -> unRepr (evalState p gs)) [helloWorld, patternTest, fileTests] 
-  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests])
+classes unRepr = zipWith (\p gs -> unRepr (evalState p gs)) [helloWorld, patternTest, fileTests, simpleODE] 
+  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, simpleODE])
 
 -- | Takes code
 makeCode :: [FileData] -> [(FilePath, Doc)]

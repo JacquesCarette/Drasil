@@ -2,7 +2,7 @@
 
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
-  block, bool, int, float, double, char, string, fileType, listType, 
+  block, multiBlock, bool, int, float, double, char, string, fileType, listType,
   listInnerType, obj, enumType, void, runStrategy, listSlice, unOpPrec, 
   notOp, notOp', negateOp, sqrtOp, sqrtOp', absOp, absOp', expOp, expOp', sinOp,
   sinOp', cosOp, cosOp', tanOp, tanOp', asinOp, asinOp', acosOp, acosOp', 
@@ -36,9 +36,10 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
-  FileSym(RenderFile, commentedMod), BlockSym(Block), InternalBlock(..), 
-  BodySym(Body, body, bodyStatements, bodyDoc), ImportSym(..), 
-  PermanenceSym(..), InternalPerm(..), 
+  FileSym(RenderFile, commentedMod), BlockSym(Block), 
+  InternalBlock(docBlock, blockDoc), 
+  BodySym(Body, body, bodyStatements, bodyDoc), 
+  ImportSym(..), PermanenceSym(..), InternalPerm(..), 
   TypeSym(Type, infile, outfile, iterator, getType, getTypeDoc, getTypeString), 
   InternalType(..), UnaryOpSym(UnaryOp), BinaryOpSym(BinaryOp), InternalOp(..),
   VariableSym(Variable, variableBind, variableName, variableType, variableDoc), 
@@ -85,9 +86,9 @@ import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, intValue)
 import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensFStoCS, lensFStoMS, 
   lensCStoMS, currMain, modifyReturnFunc, modifyReturnFunc2, 
-  addFile, setMainMod, addLangImport, getLangImports, getModuleImports, 
-  setFilePath, getFilePath, setModuleName, getModuleName, setClassName,
-  getClassName, addParameter)
+  addFile, setMainMod, addLangImport, getLangImports, getLibImports, 
+  getModuleImports, setFilePath, getFilePath, setModuleName, getModuleName, 
+  setClassName, getClassName, addParameter)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Bifunctor (first)
@@ -114,6 +115,10 @@ block :: (RenderSym repr) => repr (Keyword repr) -> [MS (repr (Statement repr))]
   -> MS (repr (Block repr))
 block end sts = docBlock $ onStateList (blockDocD (keyDoc end) . map 
   statementDoc) (map S.state sts)
+
+multiBlock :: (RenderSym repr) => [MS (repr (Block repr))] -> 
+  MS (repr (Block repr))
+multiBlock bs = docBlock $ onStateList vibcat $ map (onStateValue blockDoc) bs
 
 -- Types --
 
@@ -1057,13 +1062,11 @@ buildModule n imps ms cs = S.modFromData n ((\cls fs is -> moduleDocD is
 buildModule' :: (RenderSym repr) => Label -> (String -> repr (Import repr)) -> 
   [MS (repr (Method repr))] -> [CS (repr (Class repr))] -> 
   FS (repr (Module repr))
-buildModule' n inc ms cs = S.modFromData n (on3StateValues (\cls lis mis -> 
-  vibcat [
-    vcat (map (importDoc . inc) lis), 
-    vcat (map (importDoc . inc) mis), 
-    vibcat (map classDoc cls)])
-  (mapM (zoom lensFStoCS) $ if null ms then cs else pubClass n Nothing [] ms : 
-  cs) getLangImports getModuleImports)
+buildModule' n inc ms cs = S.modFromData n ((\cls lis libis mis -> vibcat [
+    vcat (map (importDoc . inc) (lis ++ libis ++ mis)),
+    vibcat (map classDoc cls)]) <$>
+  mapM (zoom lensFStoCS) (if null ms then cs else pubClass n Nothing [] ms : 
+  cs) <*> getLangImports <*> getLibImports <*> getModuleImports)
 
 modFromData :: Label -> (Doc -> repr (Module repr)) -> FS Doc -> 
   FS (repr (Module repr))

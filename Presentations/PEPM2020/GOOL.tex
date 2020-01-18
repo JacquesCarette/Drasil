@@ -216,7 +216,7 @@ Start from real OO programs\\~\
 vs. 
 \textcolor{blue}{want to say}
 vs. 
-\textcolor{yellow}{need to say}
+\textcolor{orange}{need to say}
 
 % \begin{itemize}
 % \item Introspection vs. templates vs. function definition
@@ -232,21 +232,22 @@ vs.
 
 Example: Blocks
 \begin{itemize}
-	\item Semantically meaningless
-	\item Reflect how people write programs
+  \item Semantically meaningless
+  \item Reflect how people write programs
 \end{itemize}
 
+\jc{example code would really help here}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
 
-\frametitle{Principles}
+\frametitle{Some ingredients}
 
 \begin{itemize}
-  \item Variables distinct from values
-  \item Smart constructors for common idioms
+  \item<1-> Variables distinct from values (viz use/mention)
+  \item<2-> Smart constructors for common idioms
 \end{itemize}
 
 \end{frame}
@@ -316,10 +317,10 @@ Example: Blocks
 \frametitle{Encoding}
 
 Tagless with type families -- 2 Layers of abstraction
-\begin{itemize}
+\begin{enumerate}
   \item Over target language
-  \item Over underlying data structures
-\end{itemize}
+  \item Over language-specific representational data structures
+\end{enumerate}
 
 \begin{lstlisting}
 class (TypeSym repr) => VariableSym repr where
@@ -386,7 +387,7 @@ x tick label style={rotate=40,anchor=east},
 
 \begin{frame}
 
-\frametitle{Patterns}
+\frametitle{Things we need/want to say}
 
 \begin{itemize}
   \item Command line arguments
@@ -397,10 +398,6 @@ x tick label style={rotate=40,anchor=east},
   \item Design patterns
 \end{itemize}
 
-%\bmac{Do we want to mention all of these? A slide with sample code for each? Or 
-%maybe pick one to use as an example? GOOL code, generated code, or both?}
-% \jc{Pick maybe 2 as examples, with all artifacts?}
-\bmac{Examples added below, still keep this slide as a more complete overview?}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -409,22 +406,22 @@ x tick label style={rotate=40,anchor=east},
 
 \frametitle{Example: List Slicing}
 
-GOOL:
+GOOL: {\footnotesize \emph{hideous, we know}}
 % new list, old list, start value, end value, step size
 \begin{lstlisting}
 listSlice sliced (valueOf old) (Just $ litInt 1)
-(Just $ litInt 3) Nothing
+  (Just $ litInt 3) Nothing
 \end{lstlisting}
 \vspace{\baselineskip}
 
-\begin{onlyenv}<1>
+\begin{overprint}
+\onslide<1>
 Python:
 \begin{lstlisting}[language=Python]
 sliced = old[1:3:]
 \end{lstlisting}
-\end{onlyenv}
 
-\begin{onlyenv}<2>
+\onslide<2>
 Java:
 \begin{lstlisting}[language=java]
 ArrayList<Double> temp = new ArrayList<Double>(0);
@@ -433,9 +430,8 @@ for (int i_temp = 1; i_temp < 3; i_temp++) {
 }
 sliced = temp;
 \end{lstlisting}
-\end{onlyenv}
 
-\begin{onlyenv}<3>
+\onslide<3>
 \Csharp:
 \lstset{language=[Sharp]C}
 \begin{lstlisting}
@@ -445,22 +441,22 @@ for (int i_temp = 1; i_temp < 3; i_temp++) {
 }
 sliced = temp;
 \end{lstlisting}
-\lstset{language=haskell}
-\end{onlyenv}
 
-\begin{onlyenv}<4>
+\onslide<4>
 \Cplusplus:
-\begin{lstlisting}[language=C++]
+\lstset{language=C++}
+\begin{lstlisting}
 vector<double> temp(0);
 for (int i_temp = 1; i_temp < 3; i_temp++) {
     temp.push_back(old.at(i_temp));
 }
 sliced = temp;
 \end{lstlisting}
-\end{onlyenv}
+\end{overprint}
 
 \end{frame}
 
+\lstset{language=haskell}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[fragile]

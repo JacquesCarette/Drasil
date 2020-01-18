@@ -236,7 +236,16 @@ Example: Blocks
   \item Reflect how people write programs
 \end{itemize}
 
-\jc{example code would really help here}
+\begin{lstlisting}[language=Python]
+# Initialize dimensions
+h = input('What is the height? ')
+w = input('What is the width? ')
+d = input('What is the depth? ')
+
+# Calculate volume and surface area
+v = h * w * d
+sa = 2 * (h * w + w * d + h * d)
+\end{lstlisting}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

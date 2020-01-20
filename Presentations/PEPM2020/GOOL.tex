@@ -31,9 +31,9 @@
 \usepackage{booktabs}
 
 \hypersetup{
-	urlcolor=blue,
-	linkcolor=blue,
-	colorlinks=true
+  urlcolor=blue,
+  linkcolor=blue,
+  colorlinks=true
 }
 
 \usepackage{listings}
@@ -147,10 +147,10 @@
 
 OO languages:
 \begin{itemize}
-  \item<1-> Structurally similar
-  \item<2-> Mainly \emph{shallow} syntaxtic differences
+  \item<1-> Conceptually similar
+  \item<2-> Mainly \emph{shallow} syntactic differences
   \item<3-> Like Romance languages
-  \item<4-> We tend to say similar things in all of them
+  \item<4-> We tend to \textcolor{blue}{say} similar things in all of them
 \end{itemize}
 
 \end{frame}
@@ -186,6 +186,8 @@ One language to express them all.
 
 \begin{frame}
 
+\frametitle{Requirements}
+
 \begin{itemize}
   \item \textbf{mainstream}: Most potential users
   \uncover<2->{\item \textbf{readable}: Human beings are a target audience}
@@ -214,7 +216,7 @@ Start from real OO programs\\~\
 
 \textcolor{red}{What we can say}
 vs. 
-\textcolor{blue}{want to say}
+\textcolor{blue}{\textbf{want to say}}
 vs. 
 \textcolor{orange}{need to say}
 
@@ -236,7 +238,9 @@ Example: Blocks
   \item Reflect how people write programs
 \end{itemize}
 
-\begin{lstlisting}[language=Python]
+\noindent\rule{\textwidth}{1pt}
+
+\begin{lstlisting}[language=Python,basicstyle=\footnotesize]
 # Initialize dimensions
 h = input('What is the height? ')
 w = input('What is the width? ')
@@ -255,8 +259,8 @@ sa = 2 * (h * w + w * d + h * d)
 \frametitle{Some ingredients}
 
 \begin{itemize}
-  \item<1-> Variables distinct from values (viz use/mention)
-  \item<2-> Smart constructors for common idioms
+  \item Variables distinct from values (viz use/mention)
+  \item Smart constructors for common idioms
 \end{itemize}
 
 \end{frame}
@@ -376,13 +380,13 @@ ybar,
 ymin=0,
 ylabel={\# common methods},
 symbolic x coords={Python/Java,Python/C\#,Python/C++ Src.,Java/C\#,Java/C++ 
-	Src.,C\#/C++ Src.},
+  Src.,C\#/C++ Src.},
 xtick=data,
 x tick label style={rotate=40,anchor=east},
 ]
 \addplot coordinates {(Python/Java,163) (Python/C\#,163) (Python/C++ Src.,150) 
-	(Java/C\#,229) 
-	(Java/C++ Src., 198) (C\#/C++ Src., 202)};
+  (Java/C\#,229) 
+  (Java/C++ Src., 198) (C\#/C++ Src., 202)};
 \end{axis}
 \end{tikzpicture}
 
@@ -517,9 +521,41 @@ void FooClass::setFoo(int foo) {
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section[Conclusions]{Conclusions}
+\section[Example]{Example}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}
+
+\frametitle{Complete Example}
+
+As part of
+\href{https://jacquescarette.github.io/Drasil/}{Drasil}, we can look at the
+Projectile program\\~\
+
+\href{https://github.com/JacquesCarette/Drasil/tree/projectileDemos/Presentations/PEPM2020/projectile1}{Design
+ 1}
+\begin{itemize}
+  \item Documented
+  \item Bundled inputs
+\end{itemize}
+
+\href{https://github.com/JacquesCarette/Drasil/tree/projectileDemos/Presentations/PEPM2020/projectile2}{Design
+ 2}
+\begin{itemize}
+  \item Logging
+  \item More modular
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Current Work]{Current Work}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \begin{frame}
 
@@ -552,35 +588,16 @@ Drasil project - \url{http://github.com/JacquesCarette/Drasil}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
-
-\frametitle{Complete Example}
-
-Projectile program\\~\
-
-\href{https://github.com/JacquesCarette/Drasil/tree/projectileDemos/Presentations/PEPM2020/projectile1}{Design
- 1}
-\begin{itemize}
-	\item Documented
-	\item Bundled inputs
-\end{itemize}
-
-\href{https://github.com/JacquesCarette/Drasil/tree/projectileDemos/Presentations/PEPM2020/projectile2}{Design
- 2}
-\begin{itemize}
-	\item Logging
-	\item More modular
-\end{itemize}
-
-\end{frame}
+\section[Conclusions]{Conclusions}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 \begin{frame}
 
-\frametitle{Conclusion}
+\frametitle{Conclusion: it works}
 
-We currently use GOOL to generate some examples of scientific software (glass 
+GOOL used to generate some scientific software (glass 
 breakage, projectile simulation)\\~\
 
 Together new:
@@ -589,8 +606,6 @@ Together new:
   \item Human-readable, documented code generation
   \item Coding patterns are language idioms\\~\
 \end{itemize}
-
-With respect to ``The Goal'' --- It is possible\\~\
 
 \end{frame}
 

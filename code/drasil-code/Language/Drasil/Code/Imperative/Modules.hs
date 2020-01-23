@@ -36,7 +36,7 @@ import GOOL.Drasil (ProgramSym, FileSym(..), BodySym(..), BlockSym(..),
   PermanenceSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   BooleanExpression(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ScopeTag(..), 
-  convType, FS, CS, MS)
+  convType, FS, CS, MS, VS)
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
@@ -164,7 +164,7 @@ genInputModCombined = do
   liftS $ genMod ic
 
 constVarFunc :: (ProgramSym repr) => ConstantRepr -> String ->
-  (MS (repr (Variable repr)) -> MS (repr (Value repr)) -> 
+  (VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
   CS (repr (StateVar repr)))
 constVarFunc Var n = stateVarDef n public dynamic_
 constVarFunc Const n = constVar n public

@@ -11,8 +11,9 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  CodeType(..), GOOLState, FS, CS, MS)
+  CodeType(..), GOOLState, FS, CS, MS, VS, lensMStoVS)
 
+import Control.Lens.Zoom (zoom)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
 import Control.Monad.Reader (Reader, ask, withReader)
@@ -53,16 +54,16 @@ publicClass desc n l vs mths = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-fApp :: (ProgramSym repr) => String -> String -> MS (repr (Type repr)) -> 
-  [MS (repr (Value repr))] -> Reader DrasilState (MS (repr (Value repr)))
+fApp :: (ProgramSym repr) => String -> String -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> Reader DrasilState (VS (repr (Value repr)))
 fApp m s t vl = do
   g <- ask
   let cm = currentModule g
   return $ if m /= cm then extFuncApp m s t vl else if Map.lookup s 
     (eMap $ codeSpec g) == Just cm then funcApp s t vl else selfFuncApp s t vl
 
-fAppInOut :: (ProgramSym repr) => String -> String -> [MS (repr (Value repr))] 
-  -> [MS (repr (Variable repr))] -> [MS (repr (Variable repr))] -> 
+fAppInOut :: (ProgramSym repr) => String -> String -> [VS (repr (Value repr))] 
+  -> [VS (repr (Variable repr))] -> [VS (repr (Variable repr))] -> 
   Reader DrasilState (MS (repr (Statement repr)))
 fAppInOut m n ins outs both = do
   g <- ask
@@ -71,9 +72,10 @@ fAppInOut m n ins outs both = do
     (eMap $ codeSpec g) == Just cm then inOutCall n ins outs both else 
     selfInOutCall n ins outs both
 
-mkParam :: (ProgramSym repr) => MS (repr (Variable repr)) -> 
+mkParam :: (ProgramSym repr) => VS (repr (Variable repr)) -> 
   MS (repr (Parameter repr))
-mkParam v = v >>= (\v' -> paramFunc (getType $ variableType v') v)
+mkParam v = zoom lensMStoVS v >>= (\v' -> paramFunc (getType $ variableType v') 
+  v)
   where paramFunc (List _) = pointerParam
         paramFunc (Object _) = pointerParam
         paramFunc _ = param

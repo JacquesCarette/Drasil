@@ -4,7 +4,7 @@ import GOOL.Drasil (
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   TypeSym(..), ControlBlockSym(..), StatementSym(..), VariableSym(..), 
   ValueSym(..), NumericExpression(..), MethodSym(..), ModuleSym(..), ODEInfo, 
-  odeInfo, ODEOptions, odeOptions, ODEMethod(RK45), GS, MS)
+  odeInfo, ODEOptions, odeOptions, ODEMethod(RK45), GS, MS, VS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 simpleODE :: (ProgramSym repr) => GS (repr (Program repr))
@@ -17,7 +17,7 @@ simpleODEMain = mainFunction (body [block [varDecDef odeConst (litFloat 3.5)],
   block [print $ valueOf odeDepVar]])
 
 odeConst, odeDepVar, odeIndepVar :: (VariableSym repr) =>
-  MS (repr (Variable repr))
+  VS (repr (Variable repr))
 odeConst = var "c" float
 odeDepVar = var "T" (listType dynamic_ float)
 odeIndepVar = var "t" (listType dynamic_ float)

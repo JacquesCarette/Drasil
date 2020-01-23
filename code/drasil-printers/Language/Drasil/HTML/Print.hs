@@ -354,8 +354,8 @@ makeRefList a l i = li (refwrap l (i <> text ": " <> a))
 
 makeBib :: BibRef -> Doc
 makeBib = ul ["hide-list-style"] . vcat .
-  map (\(x,(y,z)) -> makeRefList z y x) .
-  zip [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map renderCite
+  zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
+  [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map renderCite
 
 --for when we add other things to reference like website, newspaper
 renderCite :: Citation -> (Doc, Doc)

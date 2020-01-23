@@ -68,7 +68,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty,
   on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS,
   lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, initialState, initialFS, modifyReturn, 
-  tempStateChange, addODEFilePaths, addODEFile, getODEFiles, addLangImport, 
+  addODEFilePaths, addODEFile, getODEFiles, addLangImport, 
   addLangImportVS, getLangImports, addLibImport, getLibImports, addModuleImport, addModuleImportVS,
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine, 
@@ -2311,16 +2311,16 @@ cppODEFile info f p = (fl, fst s)
               tElem = var t $ innerVarType idpv
               dvptr = var ('&':n) (onStateValue variableType dv)
               dvElemPtr = var ('&':n) (innerVarType dpv)
-              othVars = map (tempStateChange (setODEOthVars (map variableName 
-                ovs))) ovars
+              othVars = map (modify (setODEOthVars (map variableName 
+                ovs)) >>) ovars
           in fileDoc (buildModule cn [] [pubClass cn Nothing 
             (pubMVar dv : map privMVar othVars) 
             [constructor (map param othVars) (bodyStatements (map (\v -> 
               objVarSelf v &= valueOf v) othVars)),
             pubMethod "operator()" void [param $ var n $ innerVarType dpv, 
               param $ var ('&':dn) float, param tElem] 
-              (oneLiner $ var dn float &= tempStateChange (setODEOthVars 
-              (map variableName ovs)) (ode info))], 
+              (oneLiner $ var dn float &= (modify (setODEOthVars 
+              (map variableName ovs)) >> ode info))], 
           pubClass ("Populate_" ++ n) Nothing [pubMVar dvptr] 
             [f info,
             pubMethod "operator()" void [param dvElemPtr, param tElem] 

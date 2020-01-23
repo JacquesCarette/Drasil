@@ -68,7 +68,7 @@ import GOOL.Drasil.Helpers (angles, vibcat, emptyIfNull, toCode, toState,
   on3StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
   on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, modifyReturnFunc, 
-  tempStateChange, addODEFilePaths, addProgNameToPaths, addODEFile, getODEFiles,
+  addODEFilePaths, addProgNameToPaths, addODEFile, getODEFiles,
   addLangImport, addLangImportVS, addExceptionImports, addLibImport, addLibImports, 
   getModuleName, setClassName, getClassName, setCurrMain, setODEDepVars, 
   getODEDepVars, setODEOthVars, getODEOthVars, setOutputsDeclared, 
@@ -760,8 +760,8 @@ jODEFile info = (unJC fl, fst s)
           let n = variableName dpv
               cn = n ++ "_ODE"
               dn = "d" ++ n 
-              othVars = map (tempStateChange (setODEOthVars (map variableName 
-                ovs))) ovars
+              othVars = map (modify (setODEOthVars (map variableName 
+                ovs)) >>) ovars
           in fileDoc (buildModule cn [] [zoom lensCStoMS (modify (addLibImport 
             (odeImport ++ fode))) >> modify (setClassName cn) >> classFromData 
             (on2StateLists (\svars mths 
@@ -780,9 +780,9 @@ jODEFile info = (unJC fl, fst s)
                 litInt 1),
               pubMethod "computeDerivatives" void (map param [var "t" float, 
                 var n (toState dblArray), var dn (toState dblArray)]) (oneLiner 
-                $ var (dn ++ "[0]") float &= tempStateChange (setODEDepVars 
+                $ var (dn ++ "[0]") float &= (modify (setODEDepVars 
                 [variableName dpv, dn] . setODEOthVars (map variableName ovs)) 
-                (ode info))]))])) 
+                >> ode info))]))])) 
             (zoom lensFStoVS dv) (map (zoom lensFStoVS) ovars)
 
 jName :: String

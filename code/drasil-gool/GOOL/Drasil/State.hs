@@ -3,7 +3,7 @@
 module GOOL.Drasil.State (
   GS, GOOLState(..), FS, CS, MS, VS, lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS, lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, lensVStoMS, headers, sources, mainMod, currMain, 
   initialState, initialFS, modifyReturn, modifyReturnFunc, modifyReturnFunc2, 
-  modifyReturnList, tempStateChange, addODEFilePaths, addFile, 
+  modifyReturnList, addODEFilePaths, addFile, 
   addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
   addODEFile, getODEFiles, addLangImport, addLangImportVS, addExceptionImports, getLangImports, 
   addLibImport, addLibImports, getLibImports, addModuleImport, addModuleImportVS, getModuleImports,
@@ -44,8 +44,6 @@ makeLenses ''GOOLState
 
 data MethodState = MS {
   _currParameters :: [String],
-  _currODEDepVars :: [String],
-  _currODEOthVars :: [String],
 
   -- Only used for Java
   _outputsDeclared :: Bool,
@@ -85,6 +83,9 @@ data FileState = FS {
 makeLenses ''FileState
 
 data ValueState = VS {
+  _currODEDepVars :: [String],
+  _currODEOthVars :: [String],
+
   -- Currently only used in C++
   _leftAssignment :: Bool,
   _assigningSelfVar :: String, -- the name of the state variable being assigned to
@@ -93,6 +94,7 @@ data ValueState = VS {
   _variablesAssigned :: [String], -- the names of the variables whose values are part of the expression that is being assigned to something
   _exprAssigned :: Doc -- the value being assigned to something
 }
+makeLenses ''ValueState
 
 type GS = State GOOLState
 type FS = State (GOOLState, FileState)
@@ -263,8 +265,6 @@ initialCS = CS {
 initialMS :: MethodState
 initialMS = MS {
   _currParameters = [],
-  _currODEDepVars = [],
-  _currODEOthVars = [],
 
   _outputsDeclared = False,
   _exceptions = [],
@@ -277,6 +277,9 @@ initialMS = MS {
 
 initialVS :: ValueState
 initialVS = VS {
+  _currODEDepVars = [],
+  _currODEOthVars = [],
+
   _leftAssignment = False,
   _assigningSelfVar = "",
 
@@ -314,14 +317,6 @@ modifyReturnList l sf vf = do
   v <- sequence l
   modify sf
   return $ vf v
-
-tempStateChange :: (s -> s) -> State s a -> State s a
-tempStateChange f st = do
-  s <- get
-  modify f
-  v <- st
-  put s
-  return v
 
 -------------------------------
 ------- State Modifiers -------
@@ -538,18 +533,18 @@ getParameters = gets ((^. currParameters) . snd)
 setODEDepVars :: [String] -> 
   ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
   ((((GOOLState, FileState), ClassState), MethodState), ValueState)
-setODEDepVars vs = over (_1 . _2) $ set currODEDepVars vs
+setODEDepVars vs = over _2 $ set currODEDepVars vs
 
 getODEDepVars :: VS [String]
-getODEDepVars = gets ((^. currODEDepVars) . snd . fst)
+getODEDepVars = gets ((^. currODEDepVars) . snd)
 
 setODEOthVars :: [String] -> 
   ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
   ((((GOOLState, FileState), ClassState), MethodState), ValueState)
-setODEOthVars vs = over (_1 . _2) $ set currODEOthVars vs
+setODEOthVars vs = over _2 $ set currODEOthVars vs
 
 getODEOthVars :: VS [String]
-getODEOthVars = gets ((^. currODEOthVars) . snd . fst)
+getODEOthVars = gets ((^. currODEOthVars) . snd)
 
 setOutputsDeclared :: (((GOOLState, FileState), ClassState), MethodState) -> 
   (((GOOLState, FileState), ClassState), MethodState)

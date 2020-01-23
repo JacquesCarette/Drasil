@@ -67,7 +67,7 @@ import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn, 
-  tempStateChange, addLangImport, addLangImportVS, addLibImport, getClassName, 
+  addLangImport, addLangImportVS, addLibImport, getClassName, 
   setCurrMain, setODEDepVars, getODEDepVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -212,8 +212,8 @@ instance ControlBlockSym CSharpCode where
         varDecDef sol (extFuncApp "Ode" (csODEMethod $ solveMethod opts) odeT 
         [tInit info, 
         newObj vec [initVal info], 
-        join $ on2StateValues (\idv dpv -> newObj vec [tempStateChange 
-          (setODEDepVars [variableName dpv]) (ode info)] >>= (mkStateVal void .
+        join $ on2StateValues (\idv dpv -> newObj vec [modify 
+          (setODEDepVars [variableName dpv]) >> ode info] >>= (mkStateVal void .
           (parens (variableList [idv, dpv]) <+> text "=>" <+>) . valueDoc)) 
           iv dv,
         join $ on2StateValues (\abt rt -> mkStateVal (obj "Options") (new <+> 

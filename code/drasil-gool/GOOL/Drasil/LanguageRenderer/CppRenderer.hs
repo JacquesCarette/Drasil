@@ -67,7 +67,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat,
   on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList, 
   on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS,
-  lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, initialState, initialFS, modifyReturn, 
+  lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, lensVStoMS, initialState, initialFS, modifyReturn, 
   addODEFilePaths, addODEFile, getODEFiles, addLangImport, 
   addLangImportVS, getLangImports, addLibImport, getLibImports, addModuleImport, addModuleImportVS,
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
@@ -1124,7 +1124,7 @@ instance ControlBlockSym CppSrcCode where
 
   listSlice' = G.listSlice
 
-  solveODE info opts = let (fl, s) = cppODEFile info cppsODEFunc dynamic_
+  solveODE info opts = let (fl, s) = cppODEFile info dynamic_
                            dv = depVar info
     in modify (addODEFilePaths s . addODEFile (unCPPSC fl) . addLibImport 
     "boost/numeric/odeint") >> (zoom lensMStoVS dv >>= (\dpv -> 
@@ -1377,13 +1377,13 @@ instance InternalStatement CppSrcCode where
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
-  assign vr vl = join $ (\_ ea asv vsa cps -> if all (`elem` cps) vsa && not 
-    (null asv) then modify (addSelfAssignment asv (valueDoc ea)) >> emptyState 
-    else G.assign Semi vr vl) <$> 
-    zoom lensMStoVS (modify setLeftAssignment >> vr) <*> 
-    zoom lensMStoVS (modify setRightAssignment >> vl) <*> 
-    zoom lensMStoVS getAssignedSelfVar <*> 
-    zoom lensMStoVS getVariablesAssigned <*> getConstructorParams
+  assign vr vl = getConstructorParams >>= (\cps -> zoom lensMStoVS (join $ 
+    (\_ ea asv vsa -> zoom lensVStoMS $ if all (`elem` cps) vsa && 
+    not (null asv) && not (null cps) then 
+    modify (addSelfAssignment asv (valueDoc ea)) >> emptyState else 
+    G.assign Semi vr vl) <$> 
+    (modify setLeftAssignment >> vr) <*> (modify setRightAssignment >> vl) <*> 
+    getAssignedSelfVar <*> getVariablesAssigned))
   assignToListIndex = G.assignToListIndex
   multiAssign _ _ = error $ G.multiAssignError cppName
   (&=) = assign
@@ -1536,7 +1536,8 @@ instance MethodSym CppSrcCode where
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor ps b = sequence ps >>= (\pms -> modify (setConstructorParams (map 
-    parameterName pms)) >> getClassName >>= (\n -> G.constructor n ps b))
+    (dropWhile (=='&') . parameterName) pms)) >> getClassName >>= (\n -> 
+    G.constructor n ps b))
   destructor vs = 
     let i = var "i" int
         deleteStatements = map (onStateValue (onCodeValue destructSts) . 
@@ -1778,7 +1779,7 @@ instance ControlBlockSym CppHdrCode where
 
   listSlice' _ _ _ _ _ = toState $ toCode empty
 
-  solveODE info _ = let (fl, s) = cppODEFile info cpphODEFunc dynamic_
+  solveODE info _ = let (fl, s) = cppODEFile info dynamic_
     in modify (addODEFilePaths s . addODEFile (unCPPHC fl)) >> 
     toState (toCode empty)
 
@@ -2301,10 +2302,9 @@ cppODEMethod info opts = listInnerType (onStateValue variableType $ depVar info)
       stepper _ = error "Chosen ODE method unavailable in C++"
   in stepper (solveMethod opts))  
 
-cppODEFile :: (RenderSym repr) => ODEInfo repr ->
-  (ODEInfo repr -> MS (repr (Method repr))) -> repr (Permanence repr) ->
+cppODEFile :: (RenderSym repr) => ODEInfo repr -> repr (Permanence repr) ->
   (repr (RenderFile repr), GOOLState)
-cppODEFile info f p = (fl, fst s)
+cppODEFile info p = (fl, fst s)
   where (fl, s) = runState odeFile (initialState, initialFS)
         olddv = depVar info
         oldiv = indepVar info
@@ -2331,25 +2331,12 @@ cppODEFile info f p = (fl, fst s)
               (oneLiner $ var dn float &= (modify (setODEOthVars 
               (map variableName ovs)) >> ode info))], 
           pubClass ("Populate_" ++ n) Nothing [pubMVar dvptr] 
-            [f info,
+            [constructor [param $ var ('&':variableName dpv) (toState $ 
+              variableType dpv)] (oneLiner $ objVarSelf dv &= valueOf dv),
             pubMethod "operator()" void [param dvElemPtr, param tElem] 
               (oneLiner $ valState $ listAppend (valueOf $ objVarSelf dv) 
               (valueOf dv))]]))
           (zoom lensFStoVS olddv) (zoom lensFStoVS oldiv) (mapM (zoom lensFStoVS) ovars)
-
--- Need src and hdr versions of this function until I teach this renderer about
--- initializer lists
-cppsODEFunc :: ODEInfo CppSrcCode -> MS (CppSrcCode (Method CppSrcCode))
-cppsODEFunc info = zoom lensMStoVS (depVar info) >>= (\dpv -> on2StateValues 
-  (\n v -> methodFromData Pub (text (n ++ "::" ++ n) <+> parens (parameterDoc v)
-  <+> colon <+> variableDoc dpv <> parens (variableDoc dpv) <+> braces empty)) 
-  getClassName (param $ var ('&':variableName dpv) (toState $ variableType dpv)))
-
-cpphODEFunc :: ODEInfo CppHdrCode -> MS (CppHdrCode (Method CppHdrCode))
-cpphODEFunc info = zoom lensMStoVS dv >>= (\dpv -> 
-  constructor [param $ var ('&':variableName dpv) (toState $ variableType dpv)]
-  (oneLiner $ objVarSelf dv &= valueOf dv))
-  where dv = depVar info
 
 cpphtop :: ModData -> Doc
 cpphtop m = vcat [

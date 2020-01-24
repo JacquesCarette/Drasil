@@ -88,4 +88,4 @@ mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> 
 mkQRTuple = map (\c -> (qw c, makeRef2S c))
 
 mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
-mkQRTupleRef qs rs = map (bimap qw makeRef2S) $ zip qs rs
+mkQRTupleRef = zipWith (curry (bimap qw makeRef2S))

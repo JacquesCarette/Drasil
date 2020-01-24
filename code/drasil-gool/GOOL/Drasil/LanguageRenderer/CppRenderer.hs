@@ -62,10 +62,10 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
   FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
-  toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, 
-  on3CodeValues, on3StateValues, onCodeList, onStateList, on2StateLists, 
-  on1CodeValue1List, on1StateValue1List)
+import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, 
+  emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
+  on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList, 
+  on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS,
   lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, initialState, initialFS, modifyReturn, 
   addODEFilePaths, addODEFile, getODEFiles, addLangImport, 
@@ -75,7 +75,7 @@ import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, lensFSt
   getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
   addHeaderUsing, getHeaderUsing, setClassName, getClassName, setCurrMain, 
   getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc, setODEOthVars, getODEOthVars, setConstructorParams)
+  getCurrMainFunc, setODEOthVars, getODEOthVars, setConstructorParams, getConstructorParams, addSelfAssignment, getSelfAssignments, setLeftAssignment, getLeftAssignment, setAssignedSelfVar, getAssignedSelfVar, setRightAssignment, getRightAssignment, addVariableAssigned, getVariablesAssigned)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -1061,8 +1061,7 @@ instance KeywordSym CppSrcCode where
 instance ImportSym CppSrcCode where
   type Import CppSrcCode = Doc
   langImport n = toCode $ inc <+> angles (text n)
-  modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt 
-    n)
+  modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt n)
 
   importDoc = unCPPSC
 
@@ -1205,8 +1204,10 @@ instance VariableSym CppSrcCode where
   objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
     ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
-  objVarSelf = onStateValue (\v -> mkVar ("this->"++variableName v) 
-    (variableType v) (text "this->" <> variableDoc v))
+  objVarSelf v' = join $ on2StateValues (\v la -> modifyReturn (if la 
+    then setAssignedSelfVar (variableName v) else id) 
+    (mkVar ("this->"++variableName v) (variableType v) 
+    (text "this->" <> variableDoc v))) v' getLeftAssignment
   listVar = G.listVar
   listOf = G.listOf
   iterVar l t = mkStateVar l (iterator t) (text $ "(*" ++ l ++ ")")
@@ -1235,7 +1236,9 @@ instance ValueSym CppSrcCode where
 
   ($:) = enumElement
 
-  valueOf = G.valueOf
+  valueOf v = join $ on2StateValues (\v' ra -> modify (if ra then 
+    addVariableAssigned (variableName v') else id) >> G.valueOf v) 
+    v getRightAssignment
   arg n = G.arg (litInt $ n+1) argsList
   enumElement en e = mkStateVal (enumType en) (text e)
   
@@ -1374,7 +1377,13 @@ instance InternalStatement CppSrcCode where
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
-  assign = G.assign Semi
+  assign vr vl = join $ (\_ ea asv vsa cps -> if all (`elem` cps) vsa && not 
+    (null asv) then modify (addSelfAssignment asv (valueDoc ea)) >> emptyState 
+    else G.assign Semi vr vl) <$> 
+    zoom lensMStoVS (modify setLeftAssignment >> vr) <*> 
+    zoom lensMStoVS (modify setRightAssignment >> vl) <*> 
+    zoom lensMStoVS getAssignedSelfVar <*> 
+    zoom lensMStoVS getVariablesAssigned <*> getConstructorParams
   assignToListIndex = G.assignToListIndex
   multiAssign _ _ = error $ G.multiAssignError cppName
   (&=) = assign
@@ -1563,9 +1572,9 @@ instance MethodSym CppSrcCode where
 
 instance InternalMethod CppSrcCode where
   intMethod m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
-    setCurrMain else id) >> (\c tp pms bod -> methodFromData 
-    (snd $ unCPPSC s) $ cppsMethod n c tp pms bod blockStart blockEnd) <$>
-    getClassName <*> t <*> sequence ps <*> b
+    setCurrMain else id) >> (\c tp pms bod sas -> methodFromData 
+    (snd $ unCPPSC s) $ cppsMethod n c tp pms bod sas blockStart blockEnd) <$>
+    getClassName <*> t <*> sequence ps <*> b <*> getSelfAssignments
   intFunc m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
     setCurrMainFunc m . setCurrMain else id) >> on3StateValues (\tp pms bod -> 
     methodFromData (snd $ unCPPSC s) $ cppsFunction n tp pms bod blockStart 
@@ -2439,14 +2448,17 @@ cppPointerParamDoc :: (RenderSym repr) => repr (Variable repr) -> Doc
 cppPointerParamDoc v = getTypeDoc (variableType v) <+> text "&" <> variableDoc v
 
 cppsMethod :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> Doc
-cppsMethod n c t ps b bStart bEnd = emptyIfEmpty (bodyDoc b) $ vcat [ttype <+> 
-  text c <> text "::" <> text n <> parens (parameterList ps) <+> keyDoc bStart,
+  [repr (Parameter repr)] -> repr (Body repr) -> [(String, Doc)] ->
+  repr (Keyword repr) -> repr (Keyword repr) -> Doc
+cppsMethod n c t ps b sas bStart bEnd = emptyIfEmpty (bodyDoc b <> initList) $ 
+  vcat [ttype <+> text c <> text "::" <> text n <> parens (parameterList ps) 
+  <+> emptyIfEmpty initList (colon <+> initList) <+> keyDoc bStart,
   indent (bodyDoc b),
   keyDoc bEnd]
   where ttype | isDtor n = empty
               | otherwise = getTypeDoc t
+        initList = hicat (text ", ") $ zipWith (\sv d -> text sv <> parens d) 
+          (map fst sas) (map snd sas)
 
 cppsFunction :: (RenderSym repr) => Label -> repr (Type repr) -> 
   [repr (Parameter repr)] -> repr (Body repr) -> repr (Keyword repr) -> 

@@ -13,22 +13,20 @@ module GOOL.Drasil.State (
   addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, setModuleName, 
   getModuleName, setClassName, getClassName, setCurrMain, getCurrMain, addClass,
   getClasses, updateClassMap, getClassMap, updateMethodExcMap, getMethodExcMap,
-  addParameter, getParameters, setODEDepVars, getODEDepVars, setODEOthVars, 
-  getODEOthVars, setOutputsDeclared, isOutputsDeclared, addException, 
+  addParameter, getParameters, setOutputsDeclared, isOutputsDeclared, addException, 
   addExceptions, getExceptions, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc, setConstructorParams, getConstructorParams
+  getCurrMainFunc, setConstructorParams, getConstructorParams, addSelfAssignment, getSelfAssignments, setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, setLeftAssignment, getLeftAssignment, setAssignedSelfVar, getAssignedSelfVar, setRightAssignment, getRightAssignment, addVariableAssigned, getVariablesAssigned
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..), FileData)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
-import Control.Monad.State (State, modify, get, gets, put)
+import Control.Monad.State (State, modify, gets)
 import Data.List (sort, nub)
 import Data.Maybe (isNothing)
 import Data.Map (Map, fromList, empty, insert, union)
 import Text.PrettyPrint.HughesPJ (Doc)
-import qualified Text.PrettyPrint.HughesPJ as D (empty)
 
 data GOOLState = GS {
   _headers :: [FilePath],
@@ -53,7 +51,7 @@ data MethodState = MS {
   _currScope :: ScopeTag,
   _currMainFunc :: Bool,
   _constructorParams :: [String],
-  _selfAssignments :: [(String, String)]
+  _selfAssignments :: [(String, Doc)]
 }
 makeLenses ''MethodState
 
@@ -88,11 +86,10 @@ data ValueState = VS {
 
   -- Currently only used in C++
   _leftAssignment :: Bool,
-  _assigningSelfVar :: String, -- the name of the state variable being assigned to
+  _assignedSelfVar :: String, -- the name of the state variable being assigned to
   
   _rightAssignment :: Bool,
-  _variablesAssigned :: [String], -- the names of the variables whose values are part of the expression that is being assigned to something
-  _exprAssigned :: Doc -- the value being assigned to something
+  _variablesAssigned :: [String] -- the names of the variables whose values are part of the expression that is being assigned to something
 }
 makeLenses ''ValueState
 
@@ -281,11 +278,10 @@ initialVS = VS {
   _currODEOthVars = [],
 
   _leftAssignment = False,
-  _assigningSelfVar = "",
+  _assignedSelfVar = "",
 
   _rightAssignment = False,
-  _variablesAssigned = [],
-  _exprAssigned = D.empty
+  _variablesAssigned = []
 }
 
 -------------------------------
@@ -530,22 +526,6 @@ addParameter p = over _2 $ over currParameters (\ps -> if p `elem` ps then
 getParameters :: MS [String]
 getParameters = gets ((^. currParameters) . snd)
 
-setODEDepVars :: [String] -> 
-  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
-  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
-setODEDepVars vs = over _2 $ set currODEDepVars vs
-
-getODEDepVars :: VS [String]
-getODEDepVars = gets ((^. currODEDepVars) . snd)
-
-setODEOthVars :: [String] -> 
-  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
-  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
-setODEOthVars vs = over _2 $ set currODEOthVars vs
-
-getODEOthVars :: VS [String]
-getODEOthVars = gets ((^. currODEOthVars) . snd)
-
 setOutputsDeclared :: (((GOOLState, FileState), ClassState), MethodState) -> 
   (((GOOLState, FileState), ClassState), MethodState)
 setOutputsDeclared = over _2 $ set outputsDeclared True
@@ -587,3 +567,59 @@ setConstructorParams ps = over _2 $ set constructorParams ps
 
 getConstructorParams :: MS [String]
 getConstructorParams = gets ((^. constructorParams) . snd)
+
+addSelfAssignment :: String -> Doc -> 
+  (((GOOLState, FileState), ClassState), MethodState)-> 
+  (((GOOLState, FileState), ClassState), MethodState)
+addSelfAssignment n d = over (_2 . selfAssignments) ((n,d) :)
+
+getSelfAssignments :: MS [(String, Doc)]
+getSelfAssignments = gets ((^. selfAssignments) . snd)
+
+setODEDepVars :: [String] -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
+setODEDepVars vs = over _2 $ set currODEDepVars vs
+
+getODEDepVars :: VS [String]
+getODEDepVars = gets ((^. currODEDepVars) . snd)
+
+setODEOthVars :: [String] -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
+setODEOthVars vs = over _2 $ set currODEOthVars vs
+
+getODEOthVars :: VS [String]
+getODEOthVars = gets ((^. currODEOthVars) . snd)
+
+setLeftAssignment :: 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
+setLeftAssignment = over _2 $ set leftAssignment True
+
+getLeftAssignment :: VS Bool
+getLeftAssignment = gets ((^. leftAssignment) . snd)
+
+setAssignedSelfVar :: String ->
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
+setAssignedSelfVar n = over _2 $ set assignedSelfVar n
+
+getAssignedSelfVar :: VS String
+getAssignedSelfVar = gets ((^. assignedSelfVar) . snd)
+
+setRightAssignment :: 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
+setRightAssignment = over _2 $ set rightAssignment True
+
+getRightAssignment :: VS Bool
+getRightAssignment = gets ((^. rightAssignment) . snd)
+
+addVariableAssigned :: String ->
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
+addVariableAssigned n = over (_2 . variablesAssigned) (n :)
+
+getVariablesAssigned :: VS [String]
+getVariablesAssigned = gets ((^. variablesAssigned) . snd)

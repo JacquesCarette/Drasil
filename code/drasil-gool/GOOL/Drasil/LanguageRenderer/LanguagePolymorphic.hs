@@ -3,33 +3,34 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   block, multiBlock, bool, int, float, double, char, string, fileType, listType,
-  listInnerType, obj, enumType, void, runStrategy, listSlice, unOpPrec, 
-  notOp, notOp', negateOp, sqrtOp, sqrtOp', absOp, absOp', expOp, expOp', sinOp,
-  sinOp', cosOp, cosOp', tanOp, tanOp', asinOp, asinOp', acosOp, acosOp', 
-  atanOp, atanOp', unExpr, unExpr', typeUnExpr, powerPrec, multPrec, andPrec, 
-  orPrec, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
-  plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, binExpr, 
-  binExpr', typeBinExpr, addmathImport, var, staticVar, extVar, self, enumVar, 
-  classVar, objVar, objVarSelf, listVar, listOf, iterVar, litTrue, litFalse, 
-  litChar, litFloat, litInt, litString, pi, valueOf, arg, enumElement, argsList,
-  inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, notNull, objAccess, 
-  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
-  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess,
-  listSet, getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, 
-  iterBeginError, iterEndError, listAccessFunc, listAccessFunc', listSetFunc, 
-  printSt, state, loopState, emptyState, assign, assignToListIndex, 
-  multiAssignError, decrement, increment, increment', increment1, increment1', 
-  decrement1, varDec, varDecDef, listDec, listDecDef, listDecDef', objDecNew, 
-  objDecNewNoParams, constDecDef, discardInput, discardFileInput, openFileR, 
-  openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
-  stringListLists, returnState, multiReturnError, valState, comment, freeError, 
-  throw, initState, changeState, initObserverList, addObserver, ifCond, 
-  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
-  tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
-  setMethod,privMethod, pubMethod, constructor, docMain, function, mainFunction,
-  docFunc, docInOutFunc, intFunc, stateVar,stateVarDef, constVar, privMVar, 
-  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule, buildModule', modFromData, fileDoc, docMod
+  listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, 
+  unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', absOp, absOp', expOp, 
+  expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', asinOp, asinOp', acosOp, 
+  acosOp', atanOp, atanOp', unExpr, unExpr', typeUnExpr, powerPrec, multPrec, 
+  andPrec, orPrec, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
+  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, andOp, 
+  orOp, binExpr, binExpr', typeBinExpr, addmathImport, var, staticVar, extVar, 
+  self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar, 
+  litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, 
+  enumElement, argsList, inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, 
+  notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
+  listIndexExists, indexOf, func, get, set, listSize, listAdd, listAppend, 
+  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
+  listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
+  listAccessFunc', listSetFunc, printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, increment', 
+  increment1, increment1', decrement1, varDec, varDecDef, listDec, listDecDef, 
+  listDecDef', objDecNew, objDecNewNoParams, constDecDef, discardInput, 
+  discardFileInput, openFileR, openFileW, openFileA, closeFile, discardFileLine,
+  stringListVals, stringListLists, returnState, multiReturnError, valState, 
+  comment, freeError, throw, initState, changeState, initObserverList, 
+  addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists, for, forRange, 
+  forEach, while, tryCatch, checkState, notifyObservers, construct, param, 
+  method, getMethod, setMethod,privMethod, pubMethod, constructor, docMain, 
+  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar,stateVarDef, 
+  constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
+  docClass, commentedClass, buildModule, buildModule', modFromData, fileDoc, 
+  docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -158,6 +159,9 @@ obj n = toState $ typeFromData (Object n) n (text n)
 
 enumType :: (RenderSym repr) => Label -> VS (repr (Type repr))
 enumType e = toState $ typeFromData (Enum e) e (text e)
+
+funcType :: (RenderSym repr) => [VS (repr (Type repr))] -> VS (repr (Type repr))
+funcType = onStateList (\sig -> typeFromData (Func (map getType sig)) "" empty)
 
 void :: (RenderSym repr) => VS (repr (Type repr))
 void = toState $ typeFromData Void "void" (text "void")

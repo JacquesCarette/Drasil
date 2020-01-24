@@ -35,11 +35,11 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, multiBlock, int, double, char, string, listType, 
-  listInnerType, obj, enumType, void, runStrategy, listSlice, notOp, negateOp, 
-  sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, equalOp, 
-  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
-  multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, staticVar, self, 
-  enumVar, objVar, listVar, listOf, litTrue, litFalse, litChar, litFloat, 
+  listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
+  negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, 
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
+  minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, staticVar, 
+  self, enumVar, objVar, listVar, listOf, litTrue, litFalse, litChar, litFloat, 
   litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, objMethodCall,
   objMethodCallNoParams, selfAccess, listIndexExists, funcApp, newObj, func, 
   get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
@@ -207,6 +207,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   listInnerType = pair1 listInnerType listInnerType
   obj t = on2StateValues pair (obj t) (obj t)
   enumType t = on2StateValues pair (enumType t) (enumType t)
+  funcType = pair1List funcType funcType
   iterator = pair1 iterator iterator
   void = on2StateValues pair void void
 
@@ -1113,6 +1114,7 @@ instance TypeSym CppSrcCode where
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
     (Map.lookup n cm) $ G.obj n)
   enumType = G.enumType
+  funcType = G.funcType
   iterator t = modify (addLangImportVS "iterator") >> 
     (cppIterType . listType dynamic_) t
   void = G.void
@@ -1363,7 +1365,7 @@ instance InternalFunction CppSrcCode where
   listAccessFunc = G.listAccessFunc' "at"
   listSetFunc = G.listSetFunc cppListSetDoc
 
-  functionType = onCodeValue funcType
+  functionType = onCodeValue fType
   functionDoc = funcDoc . unCPPSC
   
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -1767,6 +1769,7 @@ instance TypeSym CppHdrCode where
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
     (Map.lookup n cm) $ G.obj n)
   enumType = G.enumType
+  funcType = G.funcType
   iterator t = modify (addHeaderLangImport "iterator") >> 
     (cppIterType . listType dynamic_) t
   void = G.void
@@ -1991,7 +1994,7 @@ instance InternalFunction CppHdrCode where
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
   
-  functionType = onCodeValue funcType
+  functionType = onCodeValue fType
   functionDoc = funcDoc . unCPPHC
   
   funcFromData d = onStateValue (onCodeValue (`fd` d))

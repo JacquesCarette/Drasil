@@ -34,26 +34,27 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, multiBlock, bool, int, double, char, listType, listInnerType,
-  obj, enumType, void, runStrategy, listSlice, notOp, negateOp, equalOp, 
-  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
-  multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, 
-  enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar, litTrue, 
-  litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, enumElement,
-  argsList, inlineIf, objAccess, objMethodCall, objMethodCallNoParams, 
-  selfAccess, listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, 
-  newObj, notNull, func, get, set, listSize, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
-  listAppendFunc, iterBeginError, iterEndError, listAccessFunc', printSt, state,
-  loopState, emptyState, assign, assignToListIndex, multiAssignError, decrement,
-  increment, decrement1, increment1, varDec, varDecDef, listDec, objDecNew, 
-  objDecNewNoParams, discardInput, discardFileInput, openFileR, openFileW, 
-  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, freeError, throw, initState,
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
-  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
-  pubMethod, constructor, docMain, function, mainFunction, docFunc, intFunc, 
-  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
+  obj, enumType, funcType, void, runStrategy, listSlice, notOp, negateOp, 
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
+  minusOp, multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, 
+  self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar, 
+  litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, 
+  enumElement, argsList, inlineIf, objAccess, objMethodCall, 
+  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
+  selfFuncApp, extFuncApp, newObj, notNull, func, get, set, listSize, listAdd, 
+  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
+  listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
+  listAccessFunc', printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  increment1, varDec, varDecDef, listDec, objDecNew, objDecNewNoParams, 
+  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
+  discardFileLine, stringListVals, stringListLists, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, changeState,
+  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
+  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
+  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
+  constructor, docMain, function, mainFunction, docFunc, intFunc, stateVar, 
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
   privClass, pubClass, docClass, commentedClass, buildModule', modFromData, 
   fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
@@ -199,6 +200,7 @@ instance TypeSym JavaCode where
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
+  funcType = G.funcType
   iterator t = t
   void = G.void
 
@@ -492,7 +494,7 @@ instance InternalFunction JavaCode where
   listSetFunc v i toVal = func "set" (onStateValue valueType v) [intValue i, 
     toVal]
 
-  functionType = onCodeValue funcType
+  functionType = onCodeValue fType
   functionDoc = funcDoc . unJC
 
   funcFromData d = onStateValue (onCodeValue (`fd` d))

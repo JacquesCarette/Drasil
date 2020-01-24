@@ -137,6 +137,7 @@ class (PermanenceSym repr) => TypeSym repr where
   listInnerType :: VS (repr (Type repr)) -> VS (repr (Type repr))
   obj           :: Label -> VS (repr (Type repr))
   enumType      :: Label -> VS (repr (Type repr))
+  funcType      :: [VS (repr (Type repr))] -> VS (repr (Type repr))
   iterator      :: VS (repr (Type repr)) -> VS (repr (Type repr))
   void          :: VS (repr (Type repr))
 
@@ -358,6 +359,9 @@ class (ValueSym repr, BooleanExpression repr) =>
   newObj     :: VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
     VS (repr (Value repr))
   extNewObj  :: Library -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
+    VS (repr (Value repr))
+
+  lambda :: [VS (repr (Variable repr))] -> VS (repr (Value repr)) -> 
     VS (repr (Value repr))
 
   exists  :: VS (repr (Value repr)) -> VS (repr (Value repr))

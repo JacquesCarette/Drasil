@@ -32,8 +32,8 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, multiBlock, int, float, listInnerType, obj, enumType, 
-  runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', sinOp', cosOp', 
-  tanOp', asinOp', acosOp', atanOp', equalOp, notEqualOp, greaterOp, 
+  funcType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', sinOp', 
+  cosOp', tanOp', asinOp', acosOp', atanOp', equalOp, notEqualOp, greaterOp, 
   greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
   moduloOp, var, staticVar, extVar, enumVar, classVar, objVar, objVarSelf, 
   listVar, listOf, iterVar, litChar, litFloat, litInt, litString, valueOf, arg, 
@@ -187,6 +187,7 @@ instance TypeSym PythonCode where
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
+  funcType = G.funcType
   iterator t = t
   void = toState $ typeFromData Void "NoneType" (text "NoneType")
 
@@ -444,7 +445,7 @@ instance InternalFunction PythonCode where
   listAccessFunc = G.listAccessFunc
   listSetFunc = G.listSetFunc listSetFuncDocD
 
-  functionType = onCodeValue funcType
+  functionType = onCodeValue fType
   functionDoc = funcDoc . unPC
 
   funcFromData d = onStateValue (onCodeValue (`fd` d))

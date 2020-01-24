@@ -1536,8 +1536,7 @@ instance MethodSym CppSrcCode where
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor ps b = sequence ps >>= (\pms -> modify (setConstructorParams (map 
-    (dropWhile (=='&') . parameterName) pms)) >> getClassName >>= (\n -> 
-    G.constructor n ps b))
+    parameterName pms)) >> getClassName >>= (\n -> G.constructor n ps b))
   destructor vs = 
     let i = var "i" int
         deleteStatements = map (onStateValue (onCodeValue destructSts) . 
@@ -2319,21 +2318,19 @@ cppODEFile info p = (fl, fst s)
               innerVarType = (listInnerType . toState . variableType)
               tElem = var t $ innerVarType idpv
               dvptr = var ('&':n) (onStateValue variableType dv)
-              dvElemPtr = var ('&':n) (innerVarType dpv)
+              dvElem = var n (innerVarType dpv)
               othVars = map (modify (setODEOthVars (map variableName 
                 ovs)) >>) ovars
           in fileDoc (buildModule cn [] [pubClass cn Nothing 
             (pubMVar dv : map privMVar othVars) 
             [constructor (map param othVars) (bodyStatements (map (\v -> 
               objVarSelf v &= valueOf v) othVars)),
-            pubMethod "operator()" void [param $ var n $ innerVarType dpv, 
-              param $ var ('&':dn) float, param tElem] 
-              (oneLiner $ var dn float &= (modify (setODEOthVars 
-              (map variableName ovs)) >> ode info))], 
+            pubMethod "operator()" void [param dvElem, pointerParam $ var dn 
+              float, param tElem] (oneLiner $ var dn float &= (modify 
+              (setODEOthVars (map variableName ovs)) >> ode info))], 
           pubClass ("Populate_" ++ n) Nothing [pubMVar dvptr] 
-            [constructor [param $ var ('&':variableName dpv) (toState $ 
-              variableType dpv)] (oneLiner $ objVarSelf dv &= valueOf dv),
-            pubMethod "operator()" void [param dvElemPtr, param tElem] 
+            [constructor [pointerParam dv] (oneLiner $ objVarSelf dv &= valueOf dv),
+            pubMethod "operator()" void [pointerParam dvElem, param tElem] 
               (oneLiner $ valState $ listAppend (valueOf $ objVarSelf dv) 
               (valueOf dv))]]))
           (zoom lensFStoVS olddv) (zoom lensFStoVS oldiv) (mapM (zoom lensFStoVS) ovars)

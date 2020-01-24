@@ -206,12 +206,9 @@ instance ControlBlockSym PythonCode where
     where getVal = fromMaybe (mkStateVal void empty)
 
   solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
-    docBlock $ onStateValue methodDoc $ function "f" public dynamic_ 
-      (onStateValue valueType $ ode info) [param iv, param dv] 
-      (oneLiner $ returnState $ ode info),
     block [
       r &= objMethodCall odeT (extNewObj odeLib odeT 
-      [valueOf $ var fname (onStateValue valueType $ ode info)]) 
+      [lambda [iv, dv] (ode info)]) 
         "set_integrator" (pyODEMethod (solveMethod opts) ++
           [absTol opts >>= (mkStateVal float . (text "atol=" <>) . valueDoc),
           relTol opts >>= (mkStateVal float . (text "rtol=" <>) . valueDoc)]),
@@ -227,8 +224,7 @@ instance ControlBlockSym PythonCode where
         ])
      ]
    ]
-   where fname = "f"
-         odeLib = "scipy.integrate"
+   where odeLib = "scipy.integrate"
          iv = indepVar info
          dv = depVar info
          odeT = obj "ode"

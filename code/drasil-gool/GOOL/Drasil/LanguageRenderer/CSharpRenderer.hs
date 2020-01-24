@@ -214,10 +214,8 @@ instance ControlBlockSym CSharpCode where
         varDecDef sol (extFuncApp "Ode" (csODEMethod $ solveMethod opts) odeT 
         [tInit info, 
         newObj vec [initVal info], 
-        join $ on2StateValues (\idv dpv -> newObj vec [modify 
-          (setODEDepVars [variableName dpv]) >> ode info] >>= (mkStateVal void .
-          (parens (variableList [idv, dpv]) <+> text "=>" <+>) . valueDoc)) 
-          iv dv,
+        lambda [iv, dv] (newObj vec [dv >>= (\dpv -> modify (setODEDepVars 
+          [variableName dpv]) >> ode info)]),
         join $ on2StateValues (\abt rt -> mkStateVal (obj "Options") (new <+> 
           text "Options" <+> braces (text "AbsoluteTolerance" <+> equals <+> 
           valueDoc abt <> comma <+> text "RelativeTolerance" <+> equals <+> 
@@ -694,7 +692,7 @@ csOutfileType = modifyReturn (addLangImportVS "System.IO") $
 
 csLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
   Doc
-csLambda ps ex = parens (variableList ps) <+> text "->" <+> valueDoc ex
+csLambda ps ex = parens (variableList ps) <+> text "=>" <+> valueDoc ex
 
 csCast :: VS (CSharpCode (Type CSharpCode)) -> 
   VS (CSharpCode (Value CSharpCode)) -> VS (CSharpCode (Value CSharpCode))

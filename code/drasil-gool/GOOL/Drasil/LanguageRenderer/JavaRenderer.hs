@@ -30,8 +30,8 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   castDocD, castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, dot, new, classDec, elseIfLabel, forLabel, blockCmtStart, 
   blockCmtEnd, docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, commentedModD, docFuncRepr, parameterList, appendToBody, 
-  surroundBody, intValue)
+  addCommentsDocD, commentedModD, docFuncRepr, variableList, parameterList, 
+  appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, multiBlock, bool, int, double, char, listType, listInnerType,
   obj, enumType, funcType, void, runStrategy, listSlice, notOp, negateOp, 
@@ -41,10 +41,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, 
   enumElement, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
-  selfFuncApp, extFuncApp, newObj, notNull, func, get, set, listSize, listAdd, 
-  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
-  listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
-  listAccessFunc', printSt, state, loopState, emptyState, assign, 
+  selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
+  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
+  setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
+  iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
   increment1, varDec, varDecDef, listDec, objDecNew, objDecNewNoParams, 
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
@@ -421,6 +421,8 @@ instance ValueExpression JavaCode where
     modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ tp) mem))
     G.newObj newObjDocD ot vs
   extNewObj _ = newObj
+
+  lambda = G.lambda jLambda
 
   exists = notNull
   notNull = G.notNull
@@ -835,6 +837,10 @@ jEquality :: VS (JavaCode (Value JavaCode)) -> VS (JavaCode (Value JavaCode))
 jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
         jEquality' _ = typeBinExpr equalOp bool v1 v2
+
+jLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
+  Doc
+jLambda ps ex = parens (variableList ps) <+> text "->" <+> valueDoc ex
 
 jCast :: VS (JavaCode (Type JavaCode)) -> VS (JavaCode (Value JavaCode)) -> 
   VS (JavaCode (Value JavaCode))

@@ -41,8 +41,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, staticVar, 
   self, enumVar, objVar, listVar, listOf, litTrue, litFalse, litChar, litFloat, 
   litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, objMethodCall,
-  objMethodCallNoParams, selfAccess, listIndexExists, funcApp, newObj, func, 
-  get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
+  objMethodCallNoParams, selfAccess, listIndexExists, funcApp, newObj, lambda, 
+  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess,
   listSet, getFunc, setFunc, listSizeFunc, listAppendFunc, listAccessFunc', 
   listSetFunc, state, loopState, emptyState, assign, assignToListIndex, 
   multiAssignError, decrement, increment, decrement1, increment1, varDec, 
@@ -440,6 +440,8 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   extFuncApp l n = pair1Val1List (extFuncApp l n) (extFuncApp l n)
   newObj = pair1Val1List newObj newObj
   extNewObj l = pair1Val1List (extNewObj l) (extNewObj l)
+
+  lambda = pair1List1Val lambda lambda
 
   exists = pair1 exists exists
   notNull = pair1 notNull notNull
@@ -1300,6 +1302,8 @@ instance ValueExpression CppSrcCode where
   newObj = G.newObj newObjDocD'
   extNewObj l t vs = modify (addModuleImportVS l) >> newObj t vs
 
+  lambda = G.lambda (cppLambda blockStart blockEnd endStatement)
+
   exists = notNull
   notNull v = v
 
@@ -1931,6 +1935,8 @@ instance ValueExpression CppHdrCode where
   newObj _ _ = mkStateVal void empty
   extNewObj _ _ _ = mkStateVal void empty
 
+  lambda _ _ = mkStateVal void empty
+
   exists _ = mkStateVal void empty
   notNull _ = mkStateVal void empty
 
@@ -2382,6 +2388,13 @@ cppSelfFuncApp :: (RenderSym repr) => VS (repr (Variable repr)) -> Label ->
   VS (repr (Type repr)) -> [VS (repr (Value repr))] -> VS (repr (Value repr))
 cppSelfFuncApp s n t vs = s >>= 
   (\slf -> funcApp (variableName slf ++ "->" ++ n) t vs)
+
+cppLambda :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
+  repr (Keyword repr) -> [repr (Variable repr)] -> repr (Value repr) -> Doc
+cppLambda bStart bEnd endSt ps ex = text "[]" <+> parens (hicat (text ",") $ 
+  zipWith (<+>) (map (getTypeDoc . variableType) ps) (map variableDoc ps)) <+> 
+  text "->" <+> keyDoc bStart <> text "return" <+> valueDoc ex <> keyDoc endSt 
+  <> keyDoc bEnd
 
 cppCast :: VS (CppSrcCode (Type CppSrcCode)) -> 
   VS (CppSrcCode (Value CppSrcCode)) -> VS (CppSrcCode (Value CppSrcCode))

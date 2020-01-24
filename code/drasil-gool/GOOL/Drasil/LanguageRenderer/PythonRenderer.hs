@@ -28,8 +28,8 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, 
   newObjDocD', listSetFuncDocD, castObjDocD, dynamicDocD, bindingError, 
   classDec, dot, forLabel, inLabel, observerListName, commentedItem, 
-  addCommentsDocD, commentedModD, docFuncRepr, valueList, parameterList, 
-  surroundBody)
+  addCommentsDocD, commentedModD, docFuncRepr, valueList, variableList,
+  parameterList, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, multiBlock, int, float, listInnerType, obj, enumType, 
   funcType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', sinOp', 
@@ -39,17 +39,17 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listVar, listOf, iterVar, litChar, litFloat, litInt, litString, valueOf, arg, 
   enumElement, argsList, objAccess, objMethodCall, objMethodCallNoParams, 
   selfAccess, listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, 
-  newObj, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
-  listSet, getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, 
-  iterEndError, listAccessFunc, listSetFunc, state, loopState, emptyState, 
-  assign, assignToListIndex, decrement, increment', increment1', decrement1, 
-  objDecNew, objDecNewNoParams, closeFile, discardFileLine, stringListVals, 
-  stringListLists, returnState, valState, comment, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switchAsIf, 
-  ifExists, tryCatch, checkState, construct, param, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, function, docFunc, stateVarDef,
-  constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, pubClass, 
-  docClass, commentedClass, buildModule, modFromData, fileDoc, docMod, 
+  newObj, lambda, func, get, set, listAdd, listAppend, iterBegin, iterEnd, 
+  listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
+  iterBeginError, iterEndError, listAccessFunc, listSetFunc, state, loopState, 
+  emptyState, assign, assignToListIndex, decrement, increment', increment1', 
+  decrement1, objDecNew, objDecNewNoParams, closeFile, discardFileLine, 
+  stringListVals, stringListLists, returnState, valState, comment, throw, 
+  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
+  switchAsIf, ifExists, tryCatch, checkState, construct, param, method, 
+  getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, 
+  pubClass, docClass, commentedClass, buildModule, modFromData, fileDoc, docMod,
   fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, binExpr, 
@@ -380,6 +380,8 @@ instance ValueExpression PythonCode where
   newObj = G.newObj newObjDocD'
   extNewObj l tp ps = modify (addModuleImportVS l) >> on1StateValue1List 
     (\t -> mkVal t . pyExtStateObj l (getTypeDoc t) . valueList) tp ps
+
+  lambda = G.lambda pyLambda
 
   exists v = v ?!= valueOf (var "None" void)
   notNull = exists
@@ -727,6 +729,10 @@ pyInlineIf :: (RenderSym repr) => VS (repr (Value repr)) ->
 pyInlineIf = on3StateValues (\c v1 v2 -> valFromData (valuePrec c) 
   (valueType v1) (valueDoc v1 <+> text "if" <+> valueDoc c <+> text "else" <+> 
   valueDoc v2))
+
+pyLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
+  Doc
+pyLambda ps ex = text "lambda" <+> variableList ps <> colon <+> valueDoc ex
 
 pyListSize :: Doc -> Doc -> Doc
 pyListSize v f = f <> parens v

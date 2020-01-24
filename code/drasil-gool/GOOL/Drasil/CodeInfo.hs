@@ -99,6 +99,7 @@ instance TypeSym CodeInfo where
   listInnerType _ = noInfo
   obj _ = noInfo
   enumType _ = noInfo
+  funcType _ = noInfo
   iterator _ = noInfo
   void = noInfo
 
@@ -203,6 +204,8 @@ instance ValueExpression CodeInfo where
   extFuncApp _ _ _ _ = noInfo
   newObj _ _ = noInfo
   extNewObj _ _ _ = noInfo
+
+  lambda _ _ = noInfo
 
   exists _ = noInfo
   notNull _ = noInfo

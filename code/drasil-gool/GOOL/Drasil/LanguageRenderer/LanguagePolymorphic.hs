@@ -13,7 +13,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar, 
   litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, 
   enumElement, argsList, inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, 
-  notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
+  lambda, notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
   listIndexExists, indexOf, func, get, set, listSize, listAdd, listAppend, 
   iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
   listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
@@ -492,6 +492,13 @@ newObj f = on1StateValue1List (\t -> mkVal t . f t . valueList)
 
 notNull :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
 notNull v = v ?!= S.valueOf (S.var "null" $ onStateValue valueType v)
+
+lambda :: (RenderSym repr) => ([repr (Variable repr)] -> repr (Value repr) -> 
+  Doc) -> [VS (repr (Variable repr))] -> VS (repr (Value repr)) ->
+  VS (repr (Value repr))
+lambda f ps' ex' = sequence ps' >>= (\ps -> ex' >>= (\ex -> funcType (map 
+  (toState . variableType) ps ++ [toState $ valueType ex]) >>= (\ft -> 
+  toState $ valFromData (Just 0) ft (f ps ex))))
 
 objAccess :: (RenderSym repr) => VS (repr (Value repr)) ->
   VS (repr (Function repr)) -> VS (repr (Value repr))

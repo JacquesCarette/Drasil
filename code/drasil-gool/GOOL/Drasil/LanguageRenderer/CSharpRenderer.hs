@@ -41,22 +41,22 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   litTrue, litFalse, litChar, litFloat, litInt, litString, valueOf, arg, 
   enumElement, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
-  selfFuncApp, extFuncApp, newObj, notNull, func, get, set, listSize, listAdd, 
-  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
-  listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
-  listSetFunc, printSt, state, loopState, emptyState, assign, assignToListIndex,
-  multiAssignError, decrement, increment, decrement1, increment1, varDec, 
-  varDecDef, listDec, listDecDef', objDecNew, objDecNewNoParams, constDecDef, 
-  discardInput, openFileR, openFileW, openFileA, closeFile, discardFileLine, 
-  stringListVals, stringListLists, returnState, multiReturnError, valState, 
-  comment, freeError, throw, initState, changeState, initObserverList, 
-  addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists, for, forRange, 
-  forEach, while, tryCatch, checkState, notifyObservers, construct, param, 
-  method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, 
-  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef,
-  constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
-  docClass, commentedClass, buildModule', modFromData, fileDoc, docMod, 
-  fileFromData)
+  selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
+  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
+  setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
+  listAccessFunc, listSetFunc, printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  increment1, varDec, varDecDef, listDec, listDecDef', objDecNew, 
+  objDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, openFileA,
+  closeFile, discardFileLine, stringListVals, stringListLists, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, changeState,
+  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
+  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
+  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
+  constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
+  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
+  privClass, pubClass, docClass, commentedClass, buildModule', modFromData, 
+  fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -381,6 +381,8 @@ instance ValueExpression CSharpCode where
   newObj = G.newObj newObjDocD
   extNewObj _ = newObj
 
+  lambda = G.lambda csLambda
+
   exists = notNull
   notNull = G.notNull
 
@@ -689,6 +691,10 @@ csInfileType = modifyReturn (addLangImportVS "System.IO") $
 csOutfileType :: (RenderSym repr) => VS (repr (Type repr))
 csOutfileType = modifyReturn (addLangImportVS "System.IO") $ 
   typeFromData File "StreamWriter" (text "StreamWriter")
+
+csLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
+  Doc
+csLambda ps ex = parens (variableList ps) <+> text "->" <+> valueDoc ex
 
 csCast :: VS (CSharpCode (Type CSharpCode)) -> 
   VS (CSharpCode (Value CSharpCode)) -> VS (CSharpCode (Value CSharpCode))

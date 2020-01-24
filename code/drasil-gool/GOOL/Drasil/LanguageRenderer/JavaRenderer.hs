@@ -67,12 +67,14 @@ import GOOL.Drasil.Helpers (angles, vibcat, emptyIfNull, toCode, toState,
   onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
   on3StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
   on1StateValue1List)
-import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, modifyReturnFunc, 
-  addODEFilePaths, addProgNameToPaths, addODEFile, getODEFiles,
-  addLangImport, addLangImportVS, addExceptionImports, addLibImport, addLibImports, 
-  getModuleName, setClassName, getClassName, setCurrMain, setODEDepVars, 
-  getODEDepVars, setODEOthVars, getODEOthVars, setOutputsDeclared, 
-  isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions)
+import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS,
+  lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, 
+  modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFile, 
+  getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
+  addLibImport, addLibImports, getModuleName, setClassName, getClassName, 
+  setCurrMain, setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
+  setOutputsDeclared, isOutputsDeclared, getExceptions, getMethodExcMap, 
+  addExceptions)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)

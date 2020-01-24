@@ -66,16 +66,21 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat,
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList, 
   on2StateLists, on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS,
-  lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, lensVStoMS, initialState, initialFS, modifyReturn, 
-  addODEFilePaths, addODEFile, getODEFiles, addLangImport, 
-  addLangImportVS, getLangImports, addLibImport, getLibImports, addModuleImport, addModuleImportVS,
+import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, 
+  lensFStoMS, lensFStoVS, lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, 
+  lensVStoMS, initialState, initialFS, modifyReturn, addODEFilePaths, 
+  addODEFile, getODEFiles, addLangImport, addLangImportVS, getLangImports, 
+  addLibImport, getLibImports, addModuleImport, addModuleImportVS,
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine, 
   getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
   addHeaderUsing, getHeaderUsing, setClassName, getClassName, setCurrMain, 
   getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc, setODEOthVars, getODEOthVars, setConstructorParams, getConstructorParams, addSelfAssignment, getSelfAssignments, setLeftAssignment, getLeftAssignment, setAssignedSelfVar, getAssignedSelfVar, setRightAssignment, getRightAssignment, addVariableAssigned, getVariablesAssigned)
+  getCurrMainFunc, setODEOthVars, getODEOthVars, setConstructorParams, 
+  getConstructorParams, addSelfAssignment, getSelfAssignments, 
+  setLeftAssignment, getLeftAssignment, setAssignedSelfVar, getAssignedSelfVar, 
+  setRightAssignment, getRightAssignment, addVariableAssigned, 
+  getVariablesAssigned)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)

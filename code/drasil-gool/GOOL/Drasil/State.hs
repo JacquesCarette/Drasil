@@ -1,21 +1,28 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module GOOL.Drasil.State (
-  GS, GOOLState(..), FS, CS, MS, VS, lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS, lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, lensVStoMS, headers, sources, mainMod, currMain, 
+  GS, GOOLState(..), FS, CS, MS, VS, lensFStoGS, lensGStoFS, lensFStoCS, 
+  lensFStoMS, lensFStoVS, lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS,
+  lensMStoVS, lensVStoFS, lensVStoMS, headers, sources, mainMod, currMain, 
   initialState, initialFS, modifyReturn, modifyReturnFunc, modifyReturnFunc2, 
-  modifyReturnList, addODEFilePaths, addFile, 
-  addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
-  addODEFile, getODEFiles, addLangImport, addLangImportVS, addExceptionImports, getLangImports, 
-  addLibImport, addLibImports, getLibImports, addModuleImport, addModuleImportVS, getModuleImports,
-  addHeaderLangImport, getHeaderLangImports, addHeaderLibImport, 
-  getHeaderLibImports, addHeaderModImport, getHeaderModImports, addDefine, 
-  getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
-  addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, setModuleName, 
-  getModuleName, setClassName, getClassName, setCurrMain, getCurrMain, addClass,
-  getClasses, updateClassMap, getClassMap, updateMethodExcMap, getMethodExcMap,
-  addParameter, getParameters, setOutputsDeclared, isOutputsDeclared, addException, 
-  addExceptions, getExceptions, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc, setConstructorParams, getConstructorParams, addSelfAssignment, getSelfAssignments, setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, setLeftAssignment, getLeftAssignment, setAssignedSelfVar, getAssignedSelfVar, setRightAssignment, getRightAssignment, addVariableAssigned, getVariablesAssigned
+  modifyReturnList, addODEFilePaths, addFile, addCombinedHeaderSource, 
+  addHeader, addSource, addProgNameToPaths, setMainMod,addODEFile, getODEFiles, 
+  addLangImport, addLangImportVS, addExceptionImports, getLangImports, 
+  addLibImport, addLibImports, getLibImports, addModuleImport, 
+  addModuleImportVS, getModuleImports, addHeaderLangImport, 
+  getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, 
+  addHeaderModImport, getHeaderModImports, addDefine, getDefines, 
+  addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
+  getHeaderUsing, setFilePath, getFilePath, setModuleName, getModuleName, 
+  setClassName, getClassName, setCurrMain, getCurrMain, addClass, getClasses, 
+  updateClassMap, getClassMap, updateMethodExcMap, getMethodExcMap,  
+  addParameter, getParameters, setOutputsDeclared, isOutputsDeclared, 
+  addException, addExceptions, getExceptions, setScope, getScope, 
+  setCurrMainFunc, getCurrMainFunc, setConstructorParams, getConstructorParams, 
+  addSelfAssignment, getSelfAssignments, setODEDepVars, getODEDepVars, 
+  setODEOthVars, getODEOthVars, setLeftAssignment, getLeftAssignment, 
+  setAssignedSelfVar, getAssignedSelfVar, setRightAssignment, 
+  getRightAssignment, addVariableAssigned, getVariablesAssigned
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..), FileData)

@@ -66,9 +66,9 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (MS, lensGStoFS, modifyReturn, tempStateChange, 
-  addLangImport, addLibImport, getClassName, setCurrMain, setODEDepVars, 
-  getODEDepVars)
+import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn, 
+  addLangImport, addLangImportVS, addLibImport, getClassName, setCurrMain, 
+  setODEDepVars, getODEDepVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -185,7 +185,7 @@ instance TypeSym CSharpCode where
   string = G.string
   infile = csInfileType
   outfile = csOutfileType
-  listType p t = modify (addLangImport "System.Collections.Generic") >> 
+  listType p t = modify (addLangImportVS "System.Collections.Generic") >> 
     G.listType p t
   listInnerType = G.listInnerType
   obj = G.obj
@@ -212,8 +212,8 @@ instance ControlBlockSym CSharpCode where
         varDecDef sol (extFuncApp "Ode" (csODEMethod $ solveMethod opts) odeT 
         [tInit info, 
         newObj vec [initVal info], 
-        join $ on2StateValues (\idv dpv -> newObj vec [tempStateChange 
-          (setODEDepVars [variableName dpv]) (ode info)] >>= (mkStateVal void .
+        join $ on2StateValues (\idv dpv -> newObj vec [modify 
+          (setODEDepVars [variableName dpv]) >> ode info] >>= (mkStateVal void .
           (parens (variableList [idv, dpv]) <+> text "=>" <+>) . valueDoc)) 
           iv dv,
         join $ on2StateValues (\abt rt -> mkStateVal (obj "Options") (new <+> 
@@ -472,10 +472,11 @@ instance StatementSym CSharpCode where
   (&++) = G.increment1
   (&~-) = G.decrement1
 
-  varDec v = v >>= (\v' -> csVarDec (variableBind v') $ G.varDec static_ 
-    dynamic_ v)
+  varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
+    G.varDec static_ dynamic_ v)
   varDecDef = G.varDecDef
-  listDec n v = v >>= (\v' -> G.listDec (listDecDocD v') (litInt n) v)
+  listDec n v = zoom lensMStoVS v >>= (\v' -> G.listDec (listDecDocD v') 
+    (litInt n) v)
   listDecDef = G.listDecDef'
   objDecDef = varDecDef
   objDecNew = G.objDecNew
@@ -569,7 +570,7 @@ instance InternalScope CSharpCode where
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
-  mType t = t
+  mType = zoom lensMStoVS 
   construct = G.construct
 
 instance ParameterSym CSharpCode where
@@ -665,8 +666,8 @@ instance BlockCommentSym CSharpCode where
 
   blockCommentDoc = unCSC
 
-addSystemImport :: MS a -> MS a
-addSystemImport = (>>) $ modify (addLangImport "System")
+addSystemImport :: VS a -> VS a
+addSystemImport = (>>) $ modify (addLangImportVS "System")
 
 csName :: String
 csName = "C#"
@@ -679,16 +680,16 @@ csODEMethod _ = error "Chosen ODE method unavailable in C#"
 csImport :: Label -> CSharpCode (Keyword CSharpCode) -> Doc
 csImport n end = text ("using " ++ n) <> keyDoc end
 
-csInfileType :: (RenderSym repr) => MS (repr (Type repr))
-csInfileType = modifyReturn (addLangImport "System.IO") $ 
+csInfileType :: (RenderSym repr) => VS (repr (Type repr))
+csInfileType = modifyReturn (addLangImportVS "System.IO") $ 
   typeFromData File "StreamReader" (text "StreamReader")
 
-csOutfileType :: (RenderSym repr) => MS (repr (Type repr))
-csOutfileType = modifyReturn (addLangImport "System.IO") $ 
+csOutfileType :: (RenderSym repr) => VS (repr (Type repr))
+csOutfileType = modifyReturn (addLangImportVS "System.IO") $ 
   typeFromData File "StreamWriter" (text "StreamWriter")
 
-csCast :: MS (CSharpCode (Type CSharpCode)) -> 
-  MS (CSharpCode (Value CSharpCode)) -> MS (CSharpCode (Value CSharpCode))
+csCast :: VS (CSharpCode (Type CSharpCode)) -> 
+  VS (CSharpCode (Value CSharpCode)) -> VS (CSharpCode (Value CSharpCode))
 csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
   where csCast' Float String _ _ = funcApp "Double.Parse" float [v]
@@ -711,13 +712,13 @@ csTryCatch tb cb = vcat [
 csDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
 csDiscardInput = valueDoc
 
-csFileInput :: (RenderSym repr) => MS (repr (Value repr)) -> 
-  MS (repr (Value repr))
+csFileInput :: (RenderSym repr) => VS (repr (Value repr)) -> 
+  VS (repr (Value repr))
 csFileInput = onStateValue (\f -> mkVal (valueType f) (valueDoc f <> dot <> 
   text "ReadLine()"))
 
-csInput :: (RenderSym repr) => MS (repr (Type repr)) -> MS (repr (Value repr)) 
-  -> MS (repr (Value repr))
+csInput :: (RenderSym repr) => VS (repr (Type repr)) -> VS (repr (Value repr)) 
+  -> VS (repr (Value repr))
 csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn 
   -> mkVal t $ text (csInput' (getType t)) <> parens (valueDoc inFn)) inF)
   where csInput' Integer = "Int32.Parse"
@@ -729,12 +730,12 @@ csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn
         csInputImport t = if t `elem` [Integer, Float, Boolean, Char] then 
           addSystemImport else id
 
-csOpenFileR :: (RenderSym repr) => MS (repr (Value repr)) -> 
-  MS (repr (Type repr)) -> MS (repr (Value repr))
+csOpenFileR :: (RenderSym repr) => VS (repr (Value repr)) -> 
+  VS (repr (Type repr)) -> VS (repr (Value repr))
 csOpenFileR n r = newObj r [n]
 
-csOpenFileWorA :: (RenderSym repr) => MS (repr (Value repr)) -> 
-  MS (repr (Type repr)) -> MS (repr (Value repr)) -> MS (repr (Value repr))
+csOpenFileWorA :: (RenderSym repr) => VS (repr (Value repr)) -> 
+  VS (repr (Type repr)) -> VS (repr (Value repr)) -> VS (repr (Value repr))
 csOpenFileWorA n w a = newObj w [n, a] 
 
 csRef :: Doc -> Doc
@@ -743,11 +744,11 @@ csRef p = text "ref" <+> p
 csOut :: Doc -> Doc
 csOut p = text "out" <+> p
 
-csInOutCall :: (Label -> MS (CSharpCode (Type CSharpCode)) -> 
-  [MS (CSharpCode (Value CSharpCode))] -> MS (CSharpCode (Value CSharpCode)))
-  -> Label -> [MS (CSharpCode (Value CSharpCode))] -> 
-  [MS (CSharpCode (Variable CSharpCode))] -> 
-  [MS (CSharpCode (Variable CSharpCode))] -> 
+csInOutCall :: (Label -> VS (CSharpCode (Type CSharpCode)) -> 
+  [VS (CSharpCode (Value CSharpCode))] -> VS (CSharpCode (Value CSharpCode)))
+  -> Label -> [VS (CSharpCode (Value CSharpCode))] -> 
+  [VS (CSharpCode (Variable CSharpCode))] -> 
+  [VS (CSharpCode (Variable CSharpCode))] -> 
   MS (CSharpCode (Statement CSharpCode))
 csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out) 
   ins
@@ -771,13 +772,13 @@ csObjVar o v = csObjVar' (variableBind v)
           (variableType v) (objVarDocD (variableDoc o) (variableDoc v))
 
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
-    -> MS (CSharpCode (Type CSharpCode)) -> 
+    -> VS (CSharpCode (Type CSharpCode)) -> 
     [MS (CSharpCode (Parameter CSharpCode))] 
     -> MS (CSharpCode (Body CSharpCode)) -> MS (CSharpCode (Method CSharpCode)))
   -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
-  [MS (CSharpCode (Variable CSharpCode))] -> 
-  [MS (CSharpCode (Variable CSharpCode))] -> 
-  [MS (CSharpCode (Variable CSharpCode))] -> 
+  [VS (CSharpCode (Variable CSharpCode))] -> 
+  [VS (CSharpCode (Variable CSharpCode))] -> 
+  [VS (CSharpCode (Variable CSharpCode))] -> 
   MS (CSharpCode (Body CSharpCode)) -> MS (CSharpCode (Method CSharpCode))
 csInOut f s p ins [v] [] b = f s p (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 

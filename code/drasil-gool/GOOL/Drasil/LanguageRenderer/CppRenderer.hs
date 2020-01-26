@@ -62,20 +62,25 @@ import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..),
   FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
-  toCode, toState, onCodeValue, onStateValue, on2CodeValues, on2StateValues, 
-  on3CodeValues, on3StateValues, onCodeList, onStateList, on2StateLists, 
-  on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (GOOLState, CS, MS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensMStoCS, initialState, initialFS, modifyReturn, 
-  tempStateChange, addODEFilePaths, addODEFile, getODEFiles, addLangImport, 
-  getLangImports, addLibImport, getLibImports, addModuleImport, 
+import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, 
+  emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
+  on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList, 
+  on2StateLists, on1CodeValue1List, on1StateValue1List)
+import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, 
+  lensFStoMS, lensFStoVS, lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, 
+  lensVStoMS, initialState, initialFS, modifyReturn, addODEFilePaths, 
+  addODEFile, getODEFiles, addLangImport, addLangImportVS, getLangImports, 
+  addLibImport, getLibImports, addModuleImport, addModuleImportVS,
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine, 
   getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
   addHeaderUsing, getHeaderUsing, setClassName, getClassName, setCurrMain, 
   getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc, setODEOthVars, getODEOthVars)
+  getCurrMainFunc, setODEOthVars, getODEOthVars, setConstructorParams, 
+  getConstructorParams, addSelfAssignment, getSelfAssignments, 
+  setLeftAssignment, getLeftAssignment, setAssignedSelfVar, getAssignedSelfVar, 
+  setRightAssignment, getRightAssignment, addVariableAssigned, 
+  getVariablesAssigned)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -227,23 +232,24 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
     (\s -> runStrategy l (zip (map fst strats) s) (fmap (onStateValue psnd) rv) 
       (fmap (onStateValue psnd) av)) (map snd strats)
 
-  listSlice' b e s = pair2 
+  listSlice' b e s vr vl = pair2 
     (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e) 
-      (fmap (onStateValue pfst) s)) 
+      (fmap (onStateValue pfst) s))
     (listSlice' (fmap (onStateValue psnd) b) (fmap (onStateValue psnd) e) 
-      (fmap (onStateValue psnd) s))
+      (fmap (onStateValue psnd) s)) 
+    (zoom lensMStoVS vr) (zoom lensMStoVS vl)
 
   solveODE info opts = do
-    piv <- indepVar info
-    pdv <- depVar info
-    povs <- sequence $ otherVars info
-    pti <- tInit info
-    ptf <- tFinal info
-    pinitv <- initVal info
-    pode <- ode info
-    patol <- absTol opts
-    prtol <- relTol opts
-    pss <- stepSize opts
+    piv <- zoom lensMStoVS $ indepVar info
+    pdv <- zoom lensMStoVS $ depVar info
+    povs <- mapM (zoom lensMStoVS) $ otherVars info
+    pti <- zoom lensMStoVS $ tInit info
+    ptf <- zoom lensMStoVS $ tFinal info
+    pinitv <- zoom lensMStoVS $ initVal info
+    pode <- zoom lensMStoVS $ ode info
+    patol <- zoom lensMStoVS $ absTol opts
+    prtol <- zoom lensMStoVS $ relTol opts
+    pss <- zoom lensMStoVS $ stepSize opts
     let m = solveMethod opts
         iv1 = toState $ pfst piv
         iv2 = toState $ psnd piv
@@ -271,21 +277,21 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
         solveODEHdr :: ODEInfo CppHdrCode -> ODEOptions CppHdrCode -> 
           MS (CppHdrCode (Block CppHdrCode))
         solveODEHdr = solveODE
-        odeInfoSrc :: MS (CppSrcCode (Variable CppSrcCode)) -> MS (CppSrcCode (Variable CppSrcCode)) -> 
-          [MS (CppSrcCode (Variable CppSrcCode))] -> MS (CppSrcCode (Value CppSrcCode)) -> 
-          MS (CppSrcCode (Value CppSrcCode)) -> MS (CppSrcCode (Value CppSrcCode)) -> 
-          MS (CppSrcCode (Value CppSrcCode)) -> ODEInfo CppSrcCode
+        odeInfoSrc :: VS (CppSrcCode (Variable CppSrcCode)) -> VS (CppSrcCode (Variable CppSrcCode)) -> 
+          [VS (CppSrcCode (Variable CppSrcCode))] -> VS (CppSrcCode (Value CppSrcCode)) -> 
+          VS (CppSrcCode (Value CppSrcCode)) -> VS (CppSrcCode (Value CppSrcCode)) -> 
+          VS (CppSrcCode (Value CppSrcCode)) -> ODEInfo CppSrcCode
         odeInfoSrc = odeInfo
-        odeOptionsSrc :: ODEMethod -> MS (CppSrcCode (Value CppSrcCode)) -> 
-          MS (CppSrcCode (Value CppSrcCode)) -> MS (CppSrcCode (Value CppSrcCode)) -> ODEOptions CppSrcCode
+        odeOptionsSrc :: ODEMethod -> VS (CppSrcCode (Value CppSrcCode)) -> 
+          VS (CppSrcCode (Value CppSrcCode)) -> VS (CppSrcCode (Value CppSrcCode)) -> ODEOptions CppSrcCode
         odeOptionsSrc = odeOptions
-        odeInfoHdr :: MS (CppHdrCode (Variable CppHdrCode)) -> MS (CppHdrCode (Variable CppHdrCode)) -> 
-          [MS (CppHdrCode (Variable CppHdrCode))] -> MS (CppHdrCode (Value CppHdrCode)) -> 
-          MS (CppHdrCode (Value CppHdrCode)) -> MS (CppHdrCode (Value CppHdrCode)) -> 
-          MS (CppHdrCode (Value CppHdrCode)) -> ODEInfo CppHdrCode
+        odeInfoHdr :: VS (CppHdrCode (Variable CppHdrCode)) -> VS (CppHdrCode (Variable CppHdrCode)) -> 
+          [VS (CppHdrCode (Variable CppHdrCode))] -> VS (CppHdrCode (Value CppHdrCode)) -> 
+          VS (CppHdrCode (Value CppHdrCode)) -> VS (CppHdrCode (Value CppHdrCode)) -> 
+          VS (CppHdrCode (Value CppHdrCode)) -> ODEInfo CppHdrCode
         odeInfoHdr = odeInfo
-        odeOptionsHdr :: ODEMethod -> MS (CppHdrCode (Value CppHdrCode)) -> 
-          MS (CppHdrCode (Value CppHdrCode)) -> MS (CppHdrCode (Value CppHdrCode)) -> ODEOptions CppHdrCode
+        odeOptionsHdr :: ODEMethod -> VS (CppHdrCode (Value CppHdrCode)) -> 
+          VS (CppHdrCode (Value CppHdrCode)) -> VS (CppHdrCode (Value CppHdrCode)) -> ODEOptions CppHdrCode
         odeOptionsHdr = odeOptions
     p1 <- solveODESrc
       (odeInfoSrc iv1 dv1 ovs1 ti1 tf1 initv1 ode1)
@@ -506,9 +512,10 @@ instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
   -- Another Maybe/State combination
-  printSt nl f = pair2
+  printSt nl f p v = pair2
     (printSt nl (fmap (onStateValue pfst) f)) 
-    (printSt nl (fmap (onStateValue psnd) f))
+    (printSt nl (fmap (onStateValue psnd) f)) 
+    (zoom lensMStoVS p) (zoom lensMStoVS v)
     
   state = pair1 state state
   loopState = pair1 loopState loopState
@@ -521,66 +528,87 @@ instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
-  assign = pair2 assign assign
-  assignToListIndex = pair3 assignToListIndex assignToListIndex
-  multiAssign = pair2Lists multiAssign multiAssign
-  (&=) = pair2 (&=) (&=)
-  (&-=) = pair2 (&-=) (&-=)
-  (&+=) = pair2 (&+=) (&+=)
-  (&++) = pair1 (&++) (&++)
-  (&~-) = pair1 (&~-) (&~-)
+  assign vr vl = pair2 assign assign (zoom lensMStoVS vr) (zoom lensMStoVS vl)
+  assignToListIndex lst i v = pair3 assignToListIndex assignToListIndex 
+    (zoom lensMStoVS lst) (zoom lensMStoVS i) (zoom lensMStoVS v)
+  multiAssign vrs vls = pair2Lists multiAssign multiAssign 
+    (map (zoom lensMStoVS) vrs) (map (zoom lensMStoVS) vls)
+  (&=) vr vl = pair2 (&=) (&=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
+  (&-=) vr vl = pair2 (&-=) (&-=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
+  (&+=) vr vl = pair2 (&+=) (&+=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
+  (&++) vl = pair1 (&++) (&++) (zoom lensMStoVS vl)
+  (&~-) vl = pair1 (&~-) (&~-) (zoom lensMStoVS vl)
 
-  varDec = pair1 varDec varDec
-  varDecDef = pair2 varDecDef varDecDef
-  listDec n = pair1 (listDec n) (listDec n)
-  listDecDef = pair1Val1List listDecDef listDecDef
-  objDecDef = pair2 objDecDef objDecDef
-  objDecNew = pair1Val1List objDecNew objDecNew
-  extObjDecNew lib = pair1Val1List (extObjDecNew lib) (extObjDecNew lib)
-  objDecNewNoParams = pair1 objDecNewNoParams objDecNewNoParams
+  varDec vr = pair1 varDec varDec (zoom lensMStoVS vr)
+  varDecDef vr vl = pair2 varDecDef varDecDef (zoom lensMStoVS vr) 
+    (zoom lensMStoVS vl)
+  listDec n vr = pair1 (listDec n) (listDec n) (zoom lensMStoVS vr)
+  listDecDef vr vs = pair1Val1List listDecDef listDecDef (zoom lensMStoVS vr) 
+    (map (zoom lensMStoVS) vs)
+  objDecDef o v = pair2 objDecDef objDecDef (zoom lensMStoVS o) 
+    (zoom lensMStoVS v)
+  objDecNew vr vs = pair1Val1List objDecNew objDecNew (zoom lensMStoVS vr) 
+    (map (zoom lensMStoVS) vs)
+  extObjDecNew lib vr vs = pair1Val1List (extObjDecNew lib) (extObjDecNew lib) 
+    (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
+  objDecNewNoParams = pair1 objDecNewNoParams objDecNewNoParams . 
+    zoom lensMStoVS
   extObjDecNewNoParams lib = pair1 
     (extObjDecNewNoParams lib) 
-    (extObjDecNewNoParams lib)
-  constDecDef = pair2 constDecDef constDecDef
+    (extObjDecNewNoParams lib) . zoom lensMStoVS
+  constDecDef vr vl = pair2 constDecDef constDecDef (zoom lensMStoVS vr) 
+    (zoom lensMStoVS vl)
 
-  print = pair1 print print
-  printLn = pair1 printLn printLn
+  print = pair1 print print . zoom lensMStoVS
+  printLn = pair1 printLn printLn . zoom lensMStoVS
   printStr s = on2StateValues pair (printStr s) (printStr s)
   printStrLn s = on2StateValues pair (printStrLn s) (printStrLn s)
 
-  printFile = pair2 printFile printFile 
-  printFileLn = pair2 printFileLn printFileLn
-  printFileStr f s = pair1 (`printFileStr` s) (`printFileStr` s) f
-  printFileStrLn f s = pair1 (`printFileStrLn` s) (`printFileStrLn` s) f
+  printFile f v = pair2 printFile printFile (zoom lensMStoVS f) 
+    (zoom lensMStoVS v)
+  printFileLn f v = pair2 printFileLn printFileLn (zoom lensMStoVS f) 
+    (zoom lensMStoVS v)
+  printFileStr f s = pair1 (`printFileStr` s) (`printFileStr` s) 
+    (zoom lensMStoVS f)
+  printFileStrLn f s = pair1 (`printFileStrLn` s) (`printFileStrLn` s) 
+    (zoom lensMStoVS f)
 
-  getInput = pair1 getInput getInput
+  getInput = pair1 getInput getInput . zoom lensMStoVS
   discardInput = on2StateValues pair discardInput discardInput
-  getFileInput = pair2 getFileInput getFileInput
-  discardFileInput = pair1 discardFileInput discardFileInput
+  getFileInput f v = pair2 getFileInput getFileInput (zoom lensMStoVS f) 
+    (zoom lensMStoVS v)
+  discardFileInput = pair1 discardFileInput discardFileInput . zoom lensMStoVS
 
-  openFileR = pair2 openFileR openFileR
-  openFileW = pair2 openFileW openFileW
-  openFileA = pair2 openFileA openFileA
-  closeFile = pair1 closeFile closeFile
+  openFileR f v = pair2 openFileR openFileR (zoom lensMStoVS f) 
+    (zoom lensMStoVS v)
+  openFileW f v = pair2 openFileW openFileW (zoom lensMStoVS f) 
+    (zoom lensMStoVS v)
+  openFileA f v = pair2 openFileA openFileA (zoom lensMStoVS f) 
+    (zoom lensMStoVS v)
+  closeFile = pair1 closeFile closeFile . zoom lensMStoVS
 
-  getFileInputLine = pair2 getFileInputLine getFileInputLine
-  discardFileLine = pair1 discardFileLine discardFileLine
-  stringSplit d = pair2 (stringSplit d) (stringSplit d)
+  getFileInputLine f v = pair2 getFileInputLine getFileInputLine 
+    (zoom lensMStoVS f) (zoom lensMStoVS v)
+  discardFileLine = pair1 discardFileLine discardFileLine . zoom lensMStoVS
+  stringSplit d vnew s = pair2 (stringSplit d) (stringSplit d) 
+    (zoom lensMStoVS vnew) (zoom lensMStoVS s)
 
-  stringListVals = pair1List1Val stringListVals stringListVals
-  stringListLists = pair1List1Val stringListLists stringListLists
+  stringListVals vars sl = pair1List1Val stringListVals stringListVals
+    (map (zoom lensMStoVS) vars) (zoom lensMStoVS sl)
+  stringListLists lsts sl = pair1List1Val stringListLists stringListLists
+    (map (zoom lensMStoVS) lsts) (zoom lensMStoVS sl)
 
   break = on2StateValues pair break break
   continue = on2StateValues pair continue continue
 
-  returnState = pair1 returnState returnState
-  multiReturn = pair1List multiReturn multiReturn
+  returnState = pair1 returnState returnState . zoom lensMStoVS
+  multiReturn = pair1List multiReturn multiReturn . map (zoom lensMStoVS)
 
-  valState = pair1 valState valState
+  valState = pair1 valState valState . zoom lensMStoVS
 
   comment cmt = on2StateValues pair (comment cmt) (comment cmt)
 
-  free = pair1 free free
+  free = pair1 free free . zoom lensMStoVS
 
   throw errMsg = on2StateValues pair (throw errMsg) (throw errMsg)
 
@@ -589,47 +617,60 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   changeState fsmName postState = on2StateValues pair 
     (changeState fsmName postState) (changeState fsmName postState)
 
-  initObserverList = pair1Val1List initObserverList initObserverList
-  addObserver = pair1 addObserver addObserver
+  initObserverList t vs = pair1Val1List initObserverList initObserverList 
+    (zoom lensMStoVS t) (map (zoom lensMStoVS) vs)
+  addObserver = pair1 addObserver addObserver . zoom lensMStoVS
 
-  inOutCall n = pair3Lists (inOutCall n) (inOutCall n)
-  selfInOutCall n = pair3Lists (selfInOutCall n) (selfInOutCall n)
-  extInOutCall m n = pair3Lists (extInOutCall m n) (extInOutCall m n) 
+  inOutCall n is os bs = pair3Lists (inOutCall n) (inOutCall n) 
+    (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
+    (map (zoom lensMStoVS) bs)
+  selfInOutCall n is os bs = pair3Lists (selfInOutCall n) (selfInOutCall n)
+    (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
+    (map (zoom lensMStoVS) bs)
+  extInOutCall m n is os bs = pair3Lists (extInOutCall m n) (extInOutCall m n) 
+    (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
+    (map (zoom lensMStoVS) bs)
 
   multi = pair1List multi multi
 
 instance (Pair p) => ControlStatementSym (p CppSrcCode CppHdrCode) where
   ifCond bs = pair2Lists1Val
     (\cs bods -> ifCond (zip cs bods)) 
-    (\cs bods -> ifCond (zip cs bods)) (map fst bs) (map snd bs)
+    (\cs bods -> ifCond (zip cs bods)) 
+    (map (zoom lensMStoVS . fst) bs) (map snd bs)
   ifNoElse bs = pair2Lists
     (\cs bods -> ifNoElse (zip cs bods))
-    (\cs bods -> ifNoElse (zip cs bods)) (map fst bs) (map snd bs) 
+    (\cs bods -> ifNoElse (zip cs bods)) 
+    (map (zoom lensMStoVS . fst) bs) (map snd bs) 
   switch v cs = pairVal2ListsVal 
     (\s cv cb -> switch s (zip cv cb))
     (\s cv cb -> switch s (zip cv cb))
-    v (map fst cs) (map snd cs)
+    (zoom lensMStoVS v) (map (zoom lensMStoVS . fst) cs) (map snd cs)
   switchAsIf v cs = pairVal2ListsVal
     (\s cv cb -> switchAsIf s (zip cv cb))
     (\s cv cb -> switchAsIf s (zip cv cb))
-    v (map fst cs) (map snd cs)
+    (zoom lensMStoVS v) (map (zoom lensMStoVS . fst) cs) (map snd cs)
 
-  ifExists = pair3 ifExists ifExists
+  ifExists v = pair3 ifExists ifExists (zoom lensMStoVS v)
 
-  for = pair4 for for
-  forRange = pair5 forRange forRange
-  forEach = pair3 forEach forEach
-  while = pair2 while while
+  for i initv = pair4 for for i (zoom lensMStoVS initv)
+  forRange i initv finalv stepv = pair5 forRange forRange (zoom lensMStoVS i) 
+    (zoom lensMStoVS initv) (zoom lensMStoVS finalv) (zoom lensMStoVS stepv)
+  forEach e v = pair3 forEach forEach (zoom lensMStoVS e) (zoom lensMStoVS v)
+  while v = pair2 while while (zoom lensMStoVS v)
 
   tryCatch = pair2 tryCatch tryCatch
 
   checkState l vs = pair2Lists1Val
     (\sts bods -> checkState l (zip sts bods))
-    (\sts bods -> checkState l (zip sts bods)) (map fst vs) (map snd vs)
+    (\sts bods -> checkState l (zip sts bods)) 
+    (map (zoom lensMStoVS . fst) vs) (map snd vs)
 
-  notifyObservers = pair2 notifyObservers notifyObservers
+  notifyObservers f t = pair2 notifyObservers notifyObservers 
+    (zoom lensMStoVS f) (zoom lensMStoVS t)
 
-  getFileInputAll = pair2 getFileInputAll getFileInputAll
+  getFileInputAll f v = pair2 getFileInputAll getFileInputAll 
+    (zoom lensMStoVS f) (zoom lensMStoVS v)
 
 instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
   type Scope (p CppSrcCode CppHdrCode) = (Doc, ScopeTag)
@@ -641,13 +682,13 @@ instance (Pair p) => InternalScope (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
   type MethodType (p CppSrcCode CppHdrCode) = TypeData
-  mType = pair1 mType mType
+  mType = pair1 mType mType . zoom lensMStoVS
   construct n = on2StateValues pair (construct n) (construct n)
 
 instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   type Parameter (p CppSrcCode CppHdrCode) = ParamData
-  param = pair1 param param
-  pointerParam = pair1 pointerParam pointerParam
+  param = pair1 param param . zoom lensMStoVS
+  pointerParam = pair1 pointerParam pointerParam . zoom lensMStoVS
 
 instance (Pair p) => InternalParam (p CppSrcCode CppHdrCode) where
   parameterName p = parameterName $ pfst p
@@ -657,43 +698,53 @@ instance (Pair p) => InternalParam (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   type Method (p CppSrcCode CppHdrCode) = MethodData
-  method n s p = pairValListVal
-    (method n (pfst s) (pfst p)) (method n (psnd s) (psnd p))
-  getMethod = pair1 getMethod getMethod
-  setMethod = pair1 setMethod setMethod
-  privMethod n = pairValListVal (privMethod n) (privMethod n)
-  pubMethod n = pairValListVal (pubMethod n) (pubMethod n)
+  method n s p t = pairValListVal
+    (method n (pfst s) (pfst p)) (method n (psnd s) (psnd p)) 
+    (zoom lensMStoVS t)
+  getMethod = pair1 getMethod getMethod . zoom lensMStoVS
+  setMethod = pair1 setMethod setMethod . zoom lensMStoVS
+  privMethod n t = pairValListVal (privMethod n) (privMethod n) 
+    (zoom lensMStoVS t)
+  pubMethod n t = pairValListVal (pubMethod n) (pubMethod n) 
+    (zoom lensMStoVS t)
   constructor = pair1List1Val constructor constructor
   destructor = pair1List destructor destructor . map (zoom lensMStoCS)
 
   docMain = pair1 docMain docMain
 
-  function n s p = pairValListVal 
-    (function n (pfst s) (pfst p)) (function n (psnd s) (psnd p))
+  function n s p t = pairValListVal 
+    (function n (pfst s) (pfst p)) (function n (psnd s) (psnd p)) 
+    (zoom lensMStoVS t)
   mainFunction = pair1 mainFunction mainFunction
 
   docFunc desc pComms rComm = pair1 (docFunc desc pComms rComm) 
     (docFunc desc pComms rComm)
 
-  inOutMethod n s p = pair3Lists1Val 
+  inOutMethod n s p is os bs = pair3Lists1Val 
     (inOutMethod n (pfst s) (pfst p)) (inOutMethod n (psnd s) (psnd p)) 
+    (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
+    (map (zoom lensMStoVS) bs)
 
   docInOutMethod n s p desc is os bs = pair3Lists1Val
     (\ins outs both -> docInOutMethod n (pfst s) (pfst p) desc (zip (map fst 
       is) ins) (zip (map fst os) outs) (zip (map fst bs) both))
     (\ins outs both -> docInOutMethod n (psnd s) (psnd p) desc (zip (map fst 
       is) ins) (zip (map fst os) outs) (zip (map fst bs) both))
-    (map snd is) (map snd os) (map snd bs)
+    (map (zoom lensMStoVS . snd) is) (map (zoom lensMStoVS . snd) os) 
+    (map (zoom lensMStoVS . snd) bs)
 
-  inOutFunc n s p = pair3Lists1Val
+  inOutFunc n s p is os bs = pair3Lists1Val
     (inOutFunc n (pfst s) (pfst p)) (inOutFunc n (psnd s) (psnd p))
+    (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
+    (map (zoom lensMStoVS) bs)
 
   docInOutFunc n s p desc is os bs = pair3Lists1Val 
     (\ins outs both -> docInOutFunc n (pfst s) (pfst p) desc (zip (map fst 
       is) ins) (zip (map fst os) outs) (zip (map fst bs) both))
     (\ins outs both -> docInOutFunc n (psnd s) (psnd p) desc (zip (map fst 
       is) ins) (zip (map fst os) outs) (zip (map fst bs) both))
-    (map snd is) (map snd os) (map snd bs)
+    (map (zoom lensMStoVS . snd) is) (map (zoom lensMStoVS . snd) os) 
+    (map (zoom lensMStoVS . snd) bs)
   
 instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
   intMethod m n s p = pairValListVal
@@ -708,15 +759,15 @@ instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
   stateVar s p = pair1 (stateVar (pfst s) (pfst p)) (stateVar (psnd s) (psnd p))
-    . zoom lensCStoMS
+    . zoom lensCStoVS
   stateVarDef n s p vr vl = pair2
     (stateVarDef n (pfst s) (pfst p)) 
-    (stateVarDef n (psnd s) (psnd p)) (zoom lensCStoMS vr) (zoom lensCStoMS vl)
+    (stateVarDef n (psnd s) (psnd p)) (zoom lensCStoVS vr) (zoom lensCStoVS vl)
   constVar n s vr vl = pair2 (constVar n (pfst s)) (constVar n (psnd s))
-    (zoom lensCStoMS vr) (zoom lensCStoMS vl)
-  privMVar = pair1 privMVar privMVar . zoom lensCStoMS
-  pubMVar = pair1 pubMVar pubMVar . zoom lensCStoMS
-  pubGVar = pair1 pubGVar pubGVar . zoom lensCStoMS
+    (zoom lensCStoVS vr) (zoom lensCStoVS vl)
+  privMVar = pair1 privMVar privMVar . zoom lensCStoVS
+  pubMVar = pair1 pubMVar pubMVar . zoom lensCStoVS
+  pubGVar = pair1 pubGVar pubGVar . zoom lensCStoVS
 
 instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
   stateVarDoc v = stateVarDoc $ pfst v
@@ -1015,8 +1066,7 @@ instance KeywordSym CppSrcCode where
 instance ImportSym CppSrcCode where
   type Import CppSrcCode = Doc
   langImport n = toCode $ inc <+> angles (text n)
-  modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt 
-    n)
+  modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt n)
 
   importDoc = unCPPSC
 
@@ -1054,16 +1104,16 @@ instance TypeSym CppSrcCode where
   int = G.int
   float = G.double
   char = G.char
-  string = modify (addUsing "string" . addLangImport "string") >> G.string
+  string = modify (addUsing "string" . addLangImportVS "string") >> G.string
   infile = modify (addUsing "ifstream") >> cppInfileType
   outfile = modify (addUsing "ofstream") >> cppOutfileType
-  listType p t = modify (addUsing lst . addLangImport lst) >> G.listType p t
+  listType p t = modify (addUsing lst . addLangImportVS lst) >> G.listType p t
     where lst = render $ keyDoc (list p)
   listInnerType = G.listInnerType
-  obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImport) 
+  obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
     (Map.lookup n cm) $ G.obj n)
   enumType = G.enumType
-  iterator t = modify (addLangImport "iterator") >> 
+  iterator t = modify (addLangImportVS "iterator") >> 
     (cppIterType . listType dynamic_) t
   void = G.void
 
@@ -1079,10 +1129,10 @@ instance ControlBlockSym CppSrcCode where
 
   listSlice' = G.listSlice
 
-  solveODE info opts = let (fl, s) = cppODEFile info cppsODEFunc dynamic_
+  solveODE info opts = let (fl, s) = cppODEFile info dynamic_
                            dv = depVar info
     in modify (addODEFilePaths s . addODEFile (unCPPSC fl) . addLibImport 
-    "boost/numeric/odeint") >> (dv >>= (\dpv -> 
+    "boost/numeric/odeint") >> (zoom lensMStoVS dv >>= (\dpv -> 
       let odeClassName = variableName dpv ++ "_ODE"
           odeVar = var "ode" (obj odeClassName)
           currVal = var "currVal" (listInnerType $ toState $ variableType dpv)
@@ -1147,20 +1197,22 @@ instance VariableSym CppSrcCode where
   var = G.var
   staticVar = G.staticVar
   const = var
-  extVar l n t = modify (addModuleImport l) >> var n t
+  extVar l n t = modify (addModuleImportVS l) >> var n t
   self = G.self
   enumVar = G.enumVar
   classVar = on2StateValues (\c v -> classVarCheckStatic (varFromData 
     (variableBind v) (getTypeString c ++ "::" ++ variableName v) 
     (variableType v) (cppClassVar (getTypeDoc c) (variableDoc v))))
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
-    addModuleImport) (Map.lookup (getTypeString t) cm) $ 
+    addModuleImportVS) (Map.lookup (getTypeString t) cm) $ 
     classVar (toState t) v) c getClassMap
   objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
     ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
-  objVarSelf = onStateValue (\v -> mkVar ("this->"++variableName v) 
-    (variableType v) (text "this->" <> variableDoc v))
+  objVarSelf v' = join $ on2StateValues (\v la -> modifyReturn (if la 
+    then setAssignedSelfVar (variableName v) else id) 
+    (mkVar ("this->"++variableName v) (variableType v) 
+    (text "this->" <> variableDoc v))) v' getLeftAssignment
   listVar = G.listVar
   listOf = G.listOf
   iterVar l t = mkStateVar l (iterator t) (text $ "(*" ++ l ++ ")")
@@ -1189,7 +1241,9 @@ instance ValueSym CppSrcCode where
 
   ($:) = enumElement
 
-  valueOf = G.valueOf
+  valueOf v = join $ on2StateValues (\v' ra -> modify (if ra then 
+    addVariableAssigned (variableName v') else id) >> G.valueOf v) 
+    v getRightAssignment
   arg n = G.arg (litInt $ n+1) argsList
   enumElement en e = mkStateVal (enumType en) (text e)
   
@@ -1240,9 +1294,9 @@ instance ValueExpression CppSrcCode where
   inlineIf = G.inlineIf
   funcApp = G.funcApp
   selfFuncApp = cppSelfFuncApp self
-  extFuncApp l n t vs = modify (addModuleImport l) >> funcApp n t vs
+  extFuncApp l n t vs = modify (addModuleImportVS l) >> funcApp n t vs
   newObj = G.newObj newObjDocD'
-  extNewObj l t vs = modify (addModuleImport l) >> newObj t vs
+  extNewObj l t vs = modify (addModuleImportVS l) >> newObj t vs
 
   exists = notNull
   notNull v = v
@@ -1267,7 +1321,7 @@ instance Selector CppSrcCode where
   listIndexExists = G.listIndexExists
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
-  indexOf l v = addAlgorithmImport $ funcApp "find" int 
+  indexOf l v = addAlgorithmImportVS $ funcApp "find" int 
     [iterBegin l, iterEnd l, v] #- iterBegin l
   
 instance InternalSelector CppSrcCode where
@@ -1328,7 +1382,13 @@ instance InternalStatement CppSrcCode where
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
-  assign = G.assign Semi
+  assign vr vl = getConstructorParams >>= (\cps -> zoom lensMStoVS (join $ 
+    (\_ ea asv vsa -> zoom lensVStoMS $ if all (`elem` cps) vsa && 
+    not (null asv) && not (null cps) then 
+    modify (addSelfAssignment asv (valueDoc ea)) >> emptyState else 
+    G.assign Semi vr vl) <$> 
+    (modify setLeftAssignment >> vr) <*> (modify setRightAssignment >> vl) <*> 
+    getAssignedSelfVar <*> getVariablesAssigned))
   assignToListIndex = G.assignToListIndex
   multiAssign _ _ = error $ G.multiAssignError cppName
   (&=) = assign
@@ -1365,13 +1425,16 @@ instance StatementSym CppSrcCode where
   discardFileInput f = addAlgorithmImport $ addLimitsImport $ 
     G.discardFileInput (cppDiscardInput " ") f
 
-  openFileR = on2StateValues (\f v -> mkSt $ cppOpenFile "std::fstream::in" f v)
-  openFileW = on2StateValues (\f v -> mkSt $ cppOpenFile "std::fstream::out" f v)
-  openFileA = on2StateValues (\f v -> mkSt $ cppOpenFile "std::fstream::app" f v)
-  closeFile = G.closeFile "close"
+  openFileR f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkSt $ 
+    cppOpenFile "std::fstream::in" f v) f' v'
+  openFileW f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkSt $ 
+    cppOpenFile "std::fstream::out" f v) f' v' 
+  openFileA f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkSt $ 
+    cppOpenFile "std::fstream::app" f v) f' v'
+  closeFile = G.closeFile "close" 
 
   getFileInputLine f v = valState $ funcApp "std::getline" string [f, valueOf v]
-  discardFileLine f = addLimitsImport $ onStateValue (mkSt .
+  discardFileLine f = addLimitsImport $ zoom lensMStoVS $ onStateValue (mkSt .
     cppDiscardInput "\\n") f
   stringSplit d vnew s = let l_ss = "ss"
                              var_ss = var l_ss (obj "std::stringstream")
@@ -1402,7 +1465,7 @@ instance StatementSym CppSrcCode where
 
   comment = G.comment commentStart
 
-  free = onStateValue (mkSt . freeDocD)
+  free = onStateValue (mkSt . freeDocD) . zoom lensMStoVS
 
   throw = G.throw cppThrowDoc Semi
 
@@ -1456,7 +1519,7 @@ instance InternalScope CppSrcCode where
 
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
-  mType t = t
+  mType = zoom lensMStoVS
   construct = G.construct
 
 instance ParameterSym CppSrcCode where
@@ -1477,7 +1540,8 @@ instance MethodSym CppSrcCode where
   setMethod = G.setMethod
   privMethod = G.privMethod
   pubMethod = G.pubMethod
-  constructor ps b = getClassName >>= (\n -> G.constructor n ps b)
+  constructor ps b = sequence ps >>= (\pms -> modify (setConstructorParams (map 
+    parameterName pms)) >> getClassName >>= (\n -> G.constructor n ps b))
   destructor vs = 
     let i = var "i" int
         deleteStatements = map (onStateValue (onCodeValue destructSts) . 
@@ -1513,9 +1577,9 @@ instance MethodSym CppSrcCode where
 
 instance InternalMethod CppSrcCode where
   intMethod m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
-    setCurrMain else id) >> (\c tp pms bod -> methodFromData 
-    (snd $ unCPPSC s) $ cppsMethod n c tp pms bod blockStart blockEnd) <$>
-    getClassName <*> t <*> sequence ps <*> b
+    setCurrMain else id) >> (\c tp pms bod sas -> methodFromData 
+    (snd $ unCPPSC s) $ cppsMethod n c tp pms bod sas blockStart blockEnd) <$>
+    getClassName <*> t <*> sequence ps <*> b <*> getSelfAssignments
   intFunc m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
     setCurrMainFunc m . setCurrMain else id) >> on3StateValues (\tp pms bod -> 
     methodFromData (snd $ unCPPSC s) $ cppsFunction n tp pms bod blockStart 
@@ -1531,11 +1595,11 @@ instance StateVarSym CppSrcCode where
     empty)) $ zoom lensCStoMS emptyState
   stateVarDef n s p v vl = on3StateValues (\vr val -> on3CodeValues svd 
     (onCodeValue snd s) (cppsStateVarDef n empty <$> p <*> vr <*> val <*>
-    endStatement)) (zoom lensCStoMS v) (zoom lensCStoMS vl) 
+    endStatement)) (zoom lensCStoVS v) (zoom lensCStoVS vl) 
     (zoom lensCStoMS emptyState)
   constVar n s v vl = on3StateValues (\vr val -> on3CodeValues svd (onCodeValue 
     snd s) (cppsStateVarDef n (text "const") <$> static_ <*> vr <*> val <*>
-    endStatement)) (zoom lensCStoMS v) (zoom lensCStoMS vl) 
+    endStatement)) (zoom lensCStoVS v) (zoom lensCStoVS vl) 
     (zoom lensCStoMS emptyState)
   privMVar = G.privMVar
   pubMVar = G.pubMVar
@@ -1719,7 +1783,7 @@ instance ControlBlockSym CppHdrCode where
 
   listSlice' _ _ _ _ _ = toState $ toCode empty
 
-  solveODE info _ = let (fl, s) = cppODEFile info cpphODEFunc dynamic_
+  solveODE info _ = let (fl, s) = cppODEFile info dynamic_
     in modify (addODEFilePaths s . addODEFile (unCPPHC fl)) >> 
     toState (toCode empty)
 
@@ -2050,13 +2114,14 @@ instance InternalScope CppHdrCode where
 
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = TypeData
-  mType t = t
+  mType = zoom lensMStoVS
   construct = G.construct
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
-  param = onStateValue (\v -> paramFromData v (paramDocD v))
-  pointerParam = onStateValue (\v -> paramFromData v (cppPointerParamDoc v))
+  param = onStateValue (\v -> paramFromData v (paramDocD v)) . zoom lensMStoVS
+  pointerParam = onStateValue (\v -> paramFromData v (cppPointerParamDoc v)) .
+    zoom lensMStoVS
 
 instance InternalParam CppHdrCode where
   parameterName = variableName . onCodeValue paramVar
@@ -2067,10 +2132,10 @@ instance InternalParam CppHdrCode where
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
   method = G.method
-  getMethod v = v >>= (\v' -> method (getterName $ variableName v') public 
-    dynamic_ (toState $ variableType v') [] (toState $ toCode empty))
-  setMethod v = v >>= (\v' -> method (setterName $ variableName v') public 
-    dynamic_ void [param v] (toState $ toCode empty))
+  getMethod v = zoom lensMStoVS v >>= (\v' -> method (getterName $ variableName 
+    v') public dynamic_ (toState $ variableType v') [] (toState $ toCode empty))
+  setMethod v = zoom lensMStoVS v >>= (\v' -> method (setterName $ variableName 
+    v') public dynamic_ void [param v] (toState $ toCode empty))
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor ps b = getClassName >>= (\n -> G.constructor n ps b)
@@ -2114,7 +2179,7 @@ instance StateVarSym CppHdrCode where
     (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyState)
   constVar _ s vr _ = on2StateValues (\v -> on3CodeValues svd (onCodeValue snd 
     s) (on3CodeValues (constVarDocD empty) (bindDoc <$> static_) v 
-    endStatement)) (zoom lensCStoMS vr) (zoom lensCStoMS emptyState)
+    endStatement)) (zoom lensCStoVS vr) (zoom lensCStoMS emptyState)
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar
@@ -2171,17 +2236,18 @@ instance BlockCommentSym CppHdrCode where
   blockCommentDoc = unCPPHC
 
 -- helpers
-toBasicVar :: MS (CppSrcCode (Variable CppSrcCode)) -> 
-  MS (CppSrcCode (Variable CppSrcCode))
+toBasicVar :: VS (CppSrcCode (Variable CppSrcCode)) -> 
+  VS (CppSrcCode (Variable CppSrcCode))
 toBasicVar v = v >>= (\v' -> var (variableName v') (onStateValue variableType v))
 
 isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
-getParam :: (RenderSym repr) => MS (repr (Variable repr)) -> 
+getParam :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   MS (repr (Parameter repr))
-getParam v = v >>= (\v' -> getParamFunc ((getType . variableType) v') v)
+getParam v = zoom lensMStoVS v >>= (\v' -> getParamFunc ((getType . 
+  variableType) v') v)
   where getParamFunc (List _) = pointerParam
         getParamFunc (Object _) = pointerParam
         getParamFunc _ = param
@@ -2191,17 +2257,23 @@ data MethodData = MthD {getMthdScp :: ScopeTag, mthdDoc :: Doc}
 mthd :: ScopeTag -> Doc -> MethodData
 mthd = MthD 
 
+algorithmImport :: String
+algorithmImport = "algorithm"
+
 addAlgorithmImport :: MS a -> MS a
-addAlgorithmImport = (>>) $ modify (addLangImport "algorithm")
+addAlgorithmImport = (>>) $ modify (addLangImport algorithmImport)
 
-addFStreamImport :: a -> MS a
-addFStreamImport = modifyReturn (addLangImport "fstream")
+addAlgorithmImportVS :: VS a -> VS a
+addAlgorithmImportVS = (>>) $ modify (addLangImportVS algorithmImport)
 
-addIOStreamImport :: MS a -> MS a
-addIOStreamImport = (>>) $ modify (addLangImport "iostream")
+addFStreamImport :: a -> VS a
+addFStreamImport = modifyReturn (addLangImportVS "fstream")
 
-addMathHImport :: MS a -> MS a
-addMathHImport = (>>) $ modify (addLangImport "math.h")
+addIOStreamImport :: VS a -> VS a
+addIOStreamImport = (>>) $ modify (addLangImportVS "iostream")
+
+addMathHImport :: VS a -> VS a
+addMathHImport = (>>) $ modify (addLangImportVS "math.h")
 
 addLimitsImport :: MS a -> MS a
 addLimitsImport = (>>) $ modify (addLangImport "limits")
@@ -2220,7 +2292,7 @@ odeNameSpace :: String
 odeNameSpace = "boost::numeric::odeint::"
 
 cppODEMethod :: ODEInfo CppSrcCode -> ODEOptions CppSrcCode -> 
-  MS (CppSrcCode (Value CppSrcCode))
+  VS (CppSrcCode (Value CppSrcCode))
 cppODEMethod info opts = listInnerType (onStateValue variableType $ depVar info)
   >>= (\dpt -> 
   let rkdp5 = "runge_kutta_dopri5"  
@@ -2234,10 +2306,9 @@ cppODEMethod info opts = listInnerType (onStateValue variableType $ depVar info)
       stepper _ = error "Chosen ODE method unavailable in C++"
   in stepper (solveMethod opts))  
 
-cppODEFile :: (RenderSym repr) => ODEInfo repr ->
-  (ODEInfo repr -> MS (repr (Method repr))) -> repr (Permanence repr) ->
+cppODEFile :: (RenderSym repr) => ODEInfo repr -> repr (Permanence repr) ->
   (repr (RenderFile repr), GOOLState)
-cppODEFile info f p = (fl, fst s)
+cppODEFile info p = (fl, fst s)
   where (fl, s) = runState odeFile (initialState, initialFS)
         olddv = depVar info
         oldiv = indepVar info
@@ -2252,37 +2323,22 @@ cppODEFile info f p = (fl, fst s)
               innerVarType = (listInnerType . toState . variableType)
               tElem = var t $ innerVarType idpv
               dvptr = var ('&':n) (onStateValue variableType dv)
-              dvElemPtr = var ('&':n) (innerVarType dpv)
-              othVars = map (tempStateChange (setODEOthVars (map variableName 
-                ovs))) ovars
+              dvElem = var n (innerVarType dpv)
+              othVars = map (modify (setODEOthVars (map variableName 
+                ovs)) >>) ovars
           in fileDoc (buildModule cn [] [pubClass cn Nothing 
             (pubMVar dv : map privMVar othVars) 
             [constructor (map param othVars) (bodyStatements (map (\v -> 
               objVarSelf v &= valueOf v) othVars)),
-            pubMethod "operator()" void [param $ var n $ innerVarType dpv, 
-              param $ var ('&':dn) float, param tElem] 
-              (oneLiner $ var dn float &= tempStateChange (setODEOthVars 
-              (map variableName ovs)) (ode info))], 
+            pubMethod "operator()" void [param dvElem, pointerParam $ var dn 
+              float, param tElem] (oneLiner $ var dn float &= (modify 
+              (setODEOthVars (map variableName ovs)) >> ode info))], 
           pubClass ("Populate_" ++ n) Nothing [pubMVar dvptr] 
-            [f info,
-            pubMethod "operator()" void [param dvElemPtr, param tElem] 
+            [constructor [pointerParam dv] (oneLiner $ objVarSelf dv &= valueOf dv),
+            pubMethod "operator()" void [pointerParam dvElem, param tElem] 
               (oneLiner $ valState $ listAppend (valueOf $ objVarSelf dv) 
               (valueOf dv))]]))
-          (zoom lensFStoMS olddv) (zoom lensFStoMS oldiv) (mapM (zoom lensFStoMS) ovars)
-
--- Need src and hdr versions of this function until I teach this renderer about
--- initializer lists
-cppsODEFunc :: ODEInfo CppSrcCode -> MS (CppSrcCode (Method CppSrcCode))
-cppsODEFunc info = depVar info >>= (\dpv -> on2StateValues (\n v -> 
-  methodFromData Pub (text (n ++ "::" ++ n) <+> parens (parameterDoc v) <+> 
-  colon <+> variableDoc dpv <> parens (variableDoc dpv) <+> braces empty)) 
-  getClassName (param $ var ('&':variableName dpv) (toState $ variableType dpv)))
-
-cpphODEFunc :: ODEInfo CppHdrCode -> MS (CppHdrCode (Method CppHdrCode))
-cpphODEFunc info = dv >>= (\dpv -> 
-  constructor [param $ var ('&':variableName dpv) (toState $ variableType dpv)]
-  (oneLiner $ objVarSelf dv &= valueOf dv))
-  where dv = depVar info
+          (zoom lensFStoVS olddv) (zoom lensFStoVS oldiv) (mapM (zoom lensFStoVS) ovars)
 
 cpphtop :: ModData -> Doc
 cpphtop m = vcat [
@@ -2299,19 +2355,19 @@ usingNameSpace n Nothing end = text "using namespace" <+> text n <> keyDoc end
 cppInherit :: Label -> Doc -> Doc
 cppInherit n pub = colon <+> pub <+> text n
 
-cppBoolType :: (RenderSym repr) => MS (repr (Type repr))
+cppBoolType :: (RenderSym repr) => VS (repr (Type repr))
 cppBoolType = toState $ typeFromData Boolean "bool" (text "bool")
 
-cppInfileType :: (RenderSym repr) => MS (repr (Type repr))
+cppInfileType :: (RenderSym repr) => VS (repr (Type repr))
 cppInfileType = addFStreamImport $ typeFromData File "ifstream" 
   (text "ifstream")
 
-cppOutfileType :: (RenderSym repr) => MS (repr (Type repr))
+cppOutfileType :: (RenderSym repr) => VS (repr (Type repr))
 cppOutfileType = addFStreamImport $ typeFromData File "ofstream" 
   (text "ofstream")
 
-cppIterType :: (RenderSym repr) => MS (repr (Type repr)) -> 
-  MS (repr (Type repr))
+cppIterType :: (RenderSym repr) => VS (repr (Type repr)) -> 
+  VS (repr (Type repr))
 cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t)) 
   (getTypeString t ++ "::iterator") (text "std::" <> getTypeDoc t <> text 
   "::iterator"))
@@ -2319,13 +2375,13 @@ cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t))
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c <> text "::" <> v
 
-cppSelfFuncApp :: (RenderSym repr) => MS (repr (Variable repr)) -> Label -> 
-  MS (repr (Type repr)) -> [MS (repr (Value repr))] -> MS (repr (Value repr))
+cppSelfFuncApp :: (RenderSym repr) => VS (repr (Variable repr)) -> Label -> 
+  VS (repr (Type repr)) -> [VS (repr (Value repr))] -> VS (repr (Value repr))
 cppSelfFuncApp s n t vs = s >>= 
   (\slf -> funcApp (variableName slf ++ "->" ++ n) t vs)
 
-cppCast :: MS (CppSrcCode (Type CppSrcCode)) -> 
-  MS (CppSrcCode (Value CppSrcCode)) -> MS (CppSrcCode (Value CppSrcCode))
+cppCast :: VS (CppSrcCode (Type CppSrcCode)) -> 
+  VS (CppSrcCode (Value CppSrcCode)) -> VS (CppSrcCode (Value CppSrcCode))
 cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
   where cppCast' Float String _ _ = funcApp "std::stod" float [v]
@@ -2341,10 +2397,10 @@ cppListDecDoc n = parens (valueDoc n)
 cppListDecDefDoc :: (RenderSym repr) => [repr (Value repr)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
-cppPrint :: (RenderSym repr) => Bool -> MS (repr (Value repr)) -> 
-  MS (repr (Value repr)) -> MS (repr (Statement repr))
-cppPrint newLn = on3StateValues (\e printFn v -> mkSt $ valueDoc printFn <+> 
-  text "<<" <+> val v (valueDoc v) <+> e) end
+cppPrint :: (RenderSym repr) => Bool -> VS (repr (Value repr)) -> 
+  VS (repr (Value repr)) -> MS (repr (Statement repr))
+cppPrint newLn  pf vl = zoom lensMStoVS $ on3StateValues (\e printFn v -> mkSt 
+  $ valueDoc printFn <+> text "<<" <+> val v (valueDoc v) <+> e) end pf vl
   where val v = if maybe False (< 9) (valuePrec v) then parens else id
         end = if newLn then addIOStreamImport (toState $ text "<<" <+> 
           text "std::endl") else toState empty
@@ -2365,11 +2421,11 @@ cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens
   (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
   quotes (text sep))
 
-cppInput :: (RenderSym repr) => repr (Keyword repr) -> MS (repr (Variable repr))
-  -> MS (repr (Value repr)) -> MS (repr (Statement repr))
-cppInput end vr i = addAlgorithmImport $ addLimitsImport $ on2StateValues 
-  (\v inFn -> mkSt $ vcat [valueDoc inFn <+> text ">>" <+> variableDoc v <> 
-  keyDoc end, valueDoc inFn <> dot <> 
+cppInput :: (RenderSym repr) => repr (Keyword repr) -> VS (repr (Variable repr))
+  -> VS (repr (Value repr)) -> MS (repr (Statement repr))
+cppInput end vr i = addAlgorithmImport $ addLimitsImport $ zoom lensMStoVS $ 
+  on2StateValues (\v inFn -> mkSt $ vcat [valueDoc inFn <+> text ">>" <+> 
+  variableDoc v <> keyDoc end, valueDoc inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]) vr i
 
 cppOpenFile :: (RenderSym repr) => Label -> repr (Variable repr) -> 
@@ -2381,14 +2437,17 @@ cppPointerParamDoc :: (RenderSym repr) => repr (Variable repr) -> Doc
 cppPointerParamDoc v = getTypeDoc (variableType v) <+> text "&" <> variableDoc v
 
 cppsMethod :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> Doc
-cppsMethod n c t ps b bStart bEnd = emptyIfEmpty (bodyDoc b) $ vcat [ttype <+> 
-  text c <> text "::" <> text n <> parens (parameterList ps) <+> keyDoc bStart,
+  [repr (Parameter repr)] -> repr (Body repr) -> [(String, Doc)] ->
+  repr (Keyword repr) -> repr (Keyword repr) -> Doc
+cppsMethod n c t ps b sas bStart bEnd = emptyIfEmpty (bodyDoc b <> initList) $ 
+  vcat [ttype <+> text c <> text "::" <> text n <> parens (parameterList ps) 
+  <+> emptyIfEmpty initList (colon <+> initList) <+> keyDoc bStart,
   indent (bodyDoc b),
   keyDoc bEnd]
   where ttype | isDtor n = empty
               | otherwise = getTypeDoc t
+        initList = hicat (text ", ") $ zipWith (\sv d -> text sv <> parens d) 
+          (map fst sas) (map snd sas)
 
 cppsFunction :: (RenderSym repr) => Label -> repr (Type repr) -> 
   [repr (Parameter repr)] -> repr (Body repr) -> repr (Keyword repr) -> 
@@ -2424,7 +2483,7 @@ cppsStateVarDef n cns p vr vl end = if bind p == Static then cns <+> typeDoc
   end else empty
 
 cpphStateVarDef :: (RenderSym repr) => Doc -> repr (Permanence repr) -> 
-  MS (repr (Variable repr)) -> MS (repr (Value repr)) -> CS Doc
+  VS (repr (Variable repr)) -> VS (repr (Value repr)) -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (stateVarDocD s (permDoc p) .  
   statementDoc) (zoom lensCStoMS $ state $ if binding p == Static then varDec 
   vr else varDecDef vr vl) 
@@ -2469,11 +2528,11 @@ cpphEnum n es bStart bEnd end = classFromData $ toState $ vcat [
   indent es,
   keyDoc bEnd <> keyDoc end]
 
-cppInOutCall :: (Label -> MS (CppSrcCode (Type CppSrcCode)) -> 
-  [MS (CppSrcCode (Value CppSrcCode))] -> MS (CppSrcCode (Value CppSrcCode))) 
-  -> Label -> [MS (CppSrcCode (Value CppSrcCode))] -> 
-  [MS (CppSrcCode (Variable CppSrcCode))] -> 
-  [MS (CppSrcCode (Variable CppSrcCode))] -> 
+cppInOutCall :: (Label -> VS (CppSrcCode (Type CppSrcCode)) -> 
+  [VS (CppSrcCode (Value CppSrcCode))] -> VS (CppSrcCode (Value CppSrcCode))) 
+  -> Label -> [VS (CppSrcCode (Value CppSrcCode))] -> 
+  [VS (CppSrcCode (Variable CppSrcCode))] -> 
+  [VS (CppSrcCode (Variable CppSrcCode))] -> 
   MS (CppSrcCode (Statement CppSrcCode))
 cppInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
@@ -2483,13 +2542,13 @@ cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins
   ++ map valueOf outs)
 
 cppsInOut :: (CppSrcCode (Scope CppSrcCode) -> 
-    CppSrcCode (Permanence CppSrcCode) -> MS (CppSrcCode (Type CppSrcCode)) -> 
+    CppSrcCode (Permanence CppSrcCode) -> VS (CppSrcCode (Type CppSrcCode)) -> 
     [MS (CppSrcCode (Parameter CppSrcCode))] -> 
     MS (CppSrcCode (Body CppSrcCode)) -> MS (CppSrcCode (Method CppSrcCode)))
   -> CppSrcCode (Scope CppSrcCode) -> CppSrcCode (Permanence CppSrcCode) -> 
-  [MS (CppSrcCode (Variable CppSrcCode))] ->
-  [MS (CppSrcCode (Variable CppSrcCode))] -> 
-  [MS (CppSrcCode (Variable CppSrcCode))] -> MS (CppSrcCode (Body CppSrcCode)) 
+  [VS (CppSrcCode (Variable CppSrcCode))] ->
+  [VS (CppSrcCode (Variable CppSrcCode))] -> 
+  [VS (CppSrcCode (Variable CppSrcCode))] -> MS (CppSrcCode (Body CppSrcCode)) 
   -> MS (CppSrcCode (Method CppSrcCode))
 cppsInOut f s p ins [v] [] b = f s p (onStateValue variableType v) 
   (cppInOutParams ins [v] []) (on3StateValues (on3CodeValues surroundBody) 
@@ -2500,13 +2559,13 @@ cppsInOut f s p ins [] [v] b = f s p (onStateValue variableType v)
 cppsInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
 
 cpphInOut :: (CppHdrCode (Scope CppHdrCode) -> 
-    CppHdrCode (Permanence CppHdrCode) -> MS (CppHdrCode (Type CppHdrCode)) -> 
+    CppHdrCode (Permanence CppHdrCode) -> VS (CppHdrCode (Type CppHdrCode)) -> 
     [MS (CppHdrCode (Parameter CppHdrCode))] -> 
     MS (CppHdrCode (Body CppHdrCode)) -> MS (CppHdrCode (Method CppHdrCode))) 
   -> CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Permanence CppHdrCode) -> 
-  [MS (CppHdrCode (Variable CppHdrCode))] -> 
-  [MS (CppHdrCode (Variable CppHdrCode))] -> 
-  [MS (CppHdrCode (Variable CppHdrCode))] -> MS (CppHdrCode (Body CppHdrCode)) 
+  [VS (CppHdrCode (Variable CppHdrCode))] -> 
+  [VS (CppHdrCode (Variable CppHdrCode))] -> 
+  [VS (CppHdrCode (Variable CppHdrCode))] -> MS (CppHdrCode (Body CppHdrCode)) 
   -> MS (CppHdrCode (Method CppHdrCode))
 cpphInOut f s p ins [v] [] b = f s p (onStateValue variableType v) 
   (cppInOutParams ins [v] []) b
@@ -2514,8 +2573,8 @@ cpphInOut f s p ins [] [v] b = f s p (onStateValue variableType v)
   (cppInOutParams ins [] [v]) b
 cpphInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
 
-cppInOutParams :: (RenderSym repr) => [MS (repr (Variable repr))] -> 
-  [MS (repr (Variable repr))] -> [MS (repr (Variable repr))] -> 
+cppInOutParams :: (RenderSym repr) => [VS (repr (Variable repr))] -> 
+  [VS (repr (Variable repr))] -> [VS (repr (Variable repr))] -> 
   [MS (repr (Parameter repr))]
 cppInOutParams ins [_] [] = map getParam ins
 cppInOutParams ins [] [v] = map getParam $ v : ins

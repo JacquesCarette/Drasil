@@ -39,8 +39,9 @@ import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod,
   updateModDoc, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
   onStateValue, getNestDegree)
-import GOOL.Drasil.State (MS, getParameters)
+import GOOL.Drasil.State (MS, VS, lensMStoVS, getParameters)
 
+import Control.Lens.Zoom (zoom)
 import Data.List (last)
 import Prelude hiding (break,print,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
@@ -152,8 +153,8 @@ bodyDocD bs = vibcat blocks
 printDoc :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> Doc
 printDoc printFn v = valueDoc printFn <> parens (valueDoc v)
 
-printListDoc :: (RenderSym repr) => Integer -> MS (repr (Value repr)) -> 
-  (MS (repr (Value repr)) -> MS (repr (Statement repr))) -> 
+printListDoc :: (RenderSym repr) => Integer -> VS (repr (Value repr)) -> 
+  (VS (repr (Value repr)) -> MS (repr (Statement repr))) -> 
   (String -> MS (repr (Statement repr))) -> 
   (String -> MS (repr (Statement repr))) -> MS (repr (Statement repr))
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
@@ -169,9 +170,9 @@ printObjDoc :: String -> (String -> MS (repr (Statement repr)))
   -> MS (repr (Statement repr))
 printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
-outDoc :: (RenderSym repr) => Bool -> Maybe (MS (repr (Value repr))) -> 
-  MS (repr (Value repr)) -> MS (repr (Value repr)) -> MS (repr (Statement repr))
-outDoc newLn f printFn v = v >>= outDoc' . getType . valueType
+outDoc :: (RenderSym repr) => Bool -> Maybe (VS (repr (Value repr))) -> 
+  VS (repr (Value repr)) -> VS (repr (Value repr)) -> MS (repr (Statement repr))
+outDoc newLn f printFn v = zoom lensMStoVS v >>= outDoc' . getType . valueType
   where outDoc' (List t) = printListDoc (getNestDegree 1 t) v prFn prStrFn 
           prLnFn
         outDoc' (Object n) = printObjDoc n prLnFn
@@ -286,23 +287,23 @@ mkSt = flip stateFromData Semi
 mkStNoEnd :: (RenderSym repr) => Doc -> repr (Statement repr)
 mkStNoEnd = flip stateFromData Empty
 
-mkStateVal :: (RenderSym repr) => MS (repr (Type repr)) -> Doc -> 
-  MS (repr (Value repr))
+mkStateVal :: (RenderSym repr) => VS (repr (Type repr)) -> Doc -> 
+  VS (repr (Value repr))
 mkStateVal t d = onStateValue (\tp -> valFromData Nothing tp d) t
 
 mkVal :: (RenderSym repr) => repr (Type repr) -> Doc -> repr (Value repr)
 mkVal = valFromData Nothing
 
-mkStateVar :: (RenderSym repr) => String -> MS (repr (Type repr)) -> Doc -> 
-  MS (repr (Variable repr))
+mkStateVar :: (RenderSym repr) => String -> VS (repr (Type repr)) -> Doc -> 
+  VS (repr (Variable repr))
 mkStateVar n t d = onStateValue (\tp -> varFromData Dynamic n tp d) t
 
 mkVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
   repr (Variable repr)
 mkVar = varFromData Dynamic
 
-mkStaticVar :: (RenderSym repr) => String -> MS (repr (Type repr)) -> Doc -> 
-  MS (repr (Variable repr))
+mkStaticVar :: (RenderSym repr) => String -> VS (repr (Type repr)) -> Doc -> 
+  VS (repr (Variable repr))
 mkStaticVar n t d = onStateValue (\tp -> varFromData Static n tp d) t
 
 -- Value Printers --
@@ -481,7 +482,7 @@ getterName s = "get" ++ capitalize s
 setterName :: String -> String
 setterName s = "set" ++ capitalize s
 
-intValue :: (RenderSym repr) => MS (repr (Value repr)) -> MS (repr (Value repr))
+intValue :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
 intValue i = i >>= intValue' . getType . valueType
   where intValue' Integer = i
         intValue' (Enum _) = cast S.int i

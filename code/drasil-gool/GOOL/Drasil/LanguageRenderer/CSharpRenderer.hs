@@ -12,15 +12,16 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
-  InternalPerm(..), BodySym(..), BlockSym(..), InternalBlock(..), 
-  ControlBlockSym(..), TypeSym(..), InternalType(..), UnaryOpSym(..), 
-  BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
-  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
-  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
+  InternalBlock(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
+  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
+  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  InternalSelector(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
+  InternalMethod(..), 
   StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
   ModuleSym(..), InternalMod(..), BlockCommentSym(..), ODEInfo(..), 
   ODEOptions(..), ODEMethod(..))
@@ -33,29 +34,30 @@ import GOOL.Drasil.LanguageRenderer (new, classDocD, multiStateDocD, bodyDocD,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD, 
   variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, block, multiBlock, bool, int, double, char, string, listType, 
-  listInnerType, obj, enumType, void, runStrategy, listSlice, notOp, negateOp, 
-  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
-  minusOp, multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, 
-  self, enumVar, classVar, objVarSelf, listVar, listOf, iterVar, pi, litTrue, 
-  litFalse, litChar, litFloat, litInt, litString, valueOf, arg, enumElement, 
-  argsList, inlineIf, objAccess, objMethodCall, objMethodCallNoParams, 
-  selfAccess, listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, 
-  newObj, notNull, func, get, set, listSize, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
-  iterBeginError, iterEndError, listAccessFunc, listSetFunc, printSt, state, 
-  loopState, emptyState, assign, assignToListIndex, multiAssignError, 
-  decrement, increment, decrement1, increment1, varDec, varDecDef, listDec, 
-  listDecDef', objDecNew, objDecNewNoParams,constDecDef, discardInput,
-  openFileR, openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
-  stringListLists, returnState, multiReturnError, valState, comment, freeError, 
-  throw, initState, changeState, initObserverList, addObserver, ifCond, 
-  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
-  tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
-  privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
+  oneLiner, multiBody, block, multiBlock, bool, int, double, char, string, 
+  listType, listInnerType, obj, enumType, void, runStrategy, 
+  listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
+  lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp,
+  var, staticVar, extVar, self, enumVar, classVar, objVarSelf, listVar, listOf, 
+  iterVar, pi, litTrue, litFalse, litChar, litFloat, litInt, litString, valueOf,
+  arg, enumElement, argsList, inlineIf, objAccess, objMethodCall, 
+  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
+  selfFuncApp, extFuncApp, newObj, notNull, func, get, set, listSize, 
+  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
+  setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
+  listAccessFunc, listSetFunc, printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  increment1, varDec, varDecDef, listDec, listDecDef', objDecNew, 
+  objDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, openFileA,
+  closeFile, discardFileLine, stringListVals, stringListLists, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, changeState,
+  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
+  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
+  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
+  constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
+  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
+  privClass, pubClass, docClass, commentedClass, buildModule', modFromData, 
+  fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -165,7 +167,10 @@ instance BodySym CSharpCode where
 
   addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 
+instance InternalBody CSharpCode where
   bodyDoc = unCSC
+  docBody = onStateValue toCode
+  multiBody = G.multiBody 
 
 instance BlockSym CSharpCode where
   type Block CSharpCode = Doc

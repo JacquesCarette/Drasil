@@ -6,17 +6,17 @@ module GOOL.Drasil.Symantics (
   -- Typeclasses
   ProgramSym(..), RenderSym, FileSym(..), InternalFile(..),  KeywordSym(..), 
   ImportSym(..), PermanenceSym(..), InternalPerm(..), BodySym(..), 
-  ControlBlockSym(..), listSlice, BlockSym(..), InternalBlock(..), TypeSym(..), 
-  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), 
-  Selector(..), InternalSelector(..), objMethodCall, objMethodCallNoParams,
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  InternalBody(..), BlockSym(..), InternalBlock(..), TypeSym(..), 
+  InternalType(..), ControlBlockSym(..), listSlice, UnaryOpSym(..), 
+  BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
+  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
-  InternalMod(..), BlockCommentSym(..),
+  InternalParam(..), MethodSym(..), initializer, nonInitConstructor, 
+  InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
+  InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..),
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..)
 ) where
 
@@ -30,12 +30,12 @@ import Text.PrettyPrint.HughesPJ (Doc)
 type Label = String
 type Library = String
 
-class (FileSym repr, InternalBlock repr, InternalClass repr, InternalFile repr, 
-  InternalFunction repr, InternalMethod repr, InternalMod repr, InternalOp repr,
-  InternalParam repr, InternalPerm repr, InternalScope repr, 
-  InternalStatement repr, InternalStateVar repr, InternalType repr, 
-  InternalValue repr, InternalVariable repr, KeywordSym repr, ImportSym repr, 
-  UnaryOpSym repr, BinaryOpSym repr) => RenderSym repr
+class (FileSym repr, InternalBlock repr, InternalBody repr, InternalClass repr, 
+  InternalFile repr, InternalFunction repr, InternalMethod repr, 
+  InternalMod repr, InternalOp repr, InternalParam repr, InternalPerm repr, 
+  InternalScope repr, InternalStatement repr, InternalStateVar repr, 
+  InternalType repr, InternalValue repr, InternalVariable repr, KeywordSym repr,
+  ImportSym repr, UnaryOpSym repr, BinaryOpSym repr) => RenderSym repr
 
 class (FileSym repr) => ProgramSym repr where
   type Program repr
@@ -112,7 +112,10 @@ class (BlockSym repr) => BodySym repr where
 
   addComments :: Label -> MS (repr (Body repr)) -> MS (repr (Body repr))
 
+class InternalBody repr where
   bodyDoc :: repr (Body repr) -> Doc
+  docBody :: MS Doc -> MS (repr (Body repr))
+  multiBody :: [MS (repr (Body repr))] -> MS (repr (Body repr))
 
 class (StatementSym repr) => BlockSym repr where
   type Block repr
@@ -665,8 +668,9 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr) =>
     -> MS (repr (Body repr)) -> MS (repr (Method repr))
   pubMethod   :: Label -> VS (repr (Type repr)) -> [MS (repr (Parameter repr))] 
     -> MS (repr (Body repr)) -> MS (repr (Method repr))
-  constructor :: [MS (repr (Parameter repr))] -> MS (repr (Body repr)) 
-    -> MS (repr (Method repr))
+  constructor :: [MS (repr (Parameter repr))] -> 
+    [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+    MS (repr (Body repr)) -> MS (repr (Method repr))
   destructor :: [CS (repr (StateVar repr))] -> MS (repr (Method repr))
 
   docMain :: MS (repr (Body repr)) -> MS (repr (Method repr))
@@ -700,6 +704,15 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr) =>
     String -> [(String, VS (repr (Variable repr)))] -> [(String, 
     VS (repr (Variable repr)))] -> [(String, VS (repr (Variable repr)))] -> 
     MS (repr (Body repr)) -> MS (repr (Method repr))
+
+initializer :: (MethodSym repr) => [MS (repr (Parameter repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  MS (repr (Method repr))
+initializer ps is = constructor ps is (body [])
+
+nonInitConstructor :: (MethodSym repr) => [MS (repr (Parameter repr))] -> 
+  MS (repr (Body repr)) -> MS (repr (Method repr))
+nonInitConstructor ps = constructor ps []
 
 class (MethodTypeSym repr, BlockCommentSym repr) => InternalMethod repr where
   intMethod     :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 

@@ -13,15 +13,16 @@ import Utils.Drasil (blank, indent, indentList)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
-  InternalPerm(..), BodySym(..), BlockSym(..), InternalBlock(..), 
-  ControlBlockSym(..), TypeSym(..), InternalType(..), UnaryOpSym(..), 
-  BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
-  objMethodCall, FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
+  InternalBlock(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
+  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
+  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), 
+  Selector(..), InternalSelector(..), objMethodCall, FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
+  InternalMethod(..), StateVarSym(..), 
   InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
   InternalMod(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
@@ -34,7 +35,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   commentedItem, addCommentsDocD, functionDox, commentedModD, valueList, 
   parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, block, multiBlock, int, double, char, string, listType, 
+  oneLiner, multiBody, block, multiBlock, int, double, char, string, listType, 
   listInnerType, obj, enumType, void, runStrategy, listSlice, notOp, negateOp, 
   sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, equalOp, 
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
@@ -178,7 +179,10 @@ instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
 
   addComments s = pair1 (addComments s) (addComments s)
 
+instance (Pair p) => InternalBody (p CppSrcCode CppHdrCode) where
   bodyDoc b = bodyDoc $ pfst b
+  docBody d = on2StateValues pair (docBody d) (docBody d)
+  multiBody = pair1List multiBody multiBody
 
 instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
   type Block (p CppSrcCode CppHdrCode) = Doc
@@ -1083,7 +1087,10 @@ instance BodySym CppSrcCode where
 
   addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 
+instance InternalBody CppSrcCode where
   bodyDoc = unCPPSC
+  docBody = onStateValue toCode
+  multiBody = G.multiBody 
 
 instance BlockSym CppSrcCode where
   type Block CppSrcCode = Doc
@@ -1724,7 +1731,10 @@ instance BodySym CppHdrCode where
 
   addComments _ _ = toState $ toCode empty
 
+instance InternalBody CppHdrCode where
   bodyDoc = unCPPHC
+  docBody = onStateValue toCode
+  multiBody = G.multiBody 
 
 instance BlockSym CppHdrCode where
   type Block CppHdrCode = Doc

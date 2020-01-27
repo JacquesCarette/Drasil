@@ -78,8 +78,6 @@ instance BodySym CodeInfo where
 
   addComments _ _ = noInfo
 
-  bodyDoc _ = empty
-
 instance BlockSym CodeInfo where
   type Block CodeInfo = ()
   block ss = do

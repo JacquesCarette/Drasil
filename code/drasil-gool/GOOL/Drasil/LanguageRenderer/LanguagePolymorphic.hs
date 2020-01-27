@@ -2,44 +2,45 @@
 
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
-  block, multiBlock, bool, int, float, double, char, string, fileType, listType,
-  listInnerType, obj, enumType, void, runStrategy, listSlice, unOpPrec, 
-  notOp, notOp', negateOp, sqrtOp, sqrtOp', absOp, absOp', expOp, expOp', sinOp,
-  sinOp', cosOp, cosOp', tanOp, tanOp', asinOp, asinOp', acosOp, acosOp', 
-  atanOp, atanOp', unExpr, unExpr', typeUnExpr, powerPrec, multPrec, andPrec, 
-  orPrec, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
-  plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, binExpr, 
-  binExpr', typeBinExpr, addmathImport, var, staticVar, extVar, self, enumVar, 
-  classVar, objVar, objVarSelf, listVar, listOf, iterVar, litTrue, litFalse, 
-  litChar, litFloat, litInt, litString, pi, valueOf, arg, enumElement, argsList,
-  inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, notNull, objAccess, 
-  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
-  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess,
-  listSet, getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, 
-  iterBeginError, iterEndError, listAccessFunc, listAccessFunc', listSetFunc, 
-  printSt, state, loopState, emptyState, assign, assignToListIndex, 
-  multiAssignError, decrement, increment, increment', increment1, increment1', 
-  decrement1, varDec, varDecDef, listDec, listDecDef, listDecDef', objDecNew, 
-  objDecNewNoParams, constDecDef, discardInput, discardFileInput, openFileR, 
-  openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
-  stringListLists, returnState, multiReturnError, valState, comment, freeError, 
-  throw, initState, changeState, initObserverList, addObserver, ifCond, 
-  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
-  tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
-  setMethod,privMethod, pubMethod, constructor, docMain, function, mainFunction,
-  docFunc, docInOutFunc, intFunc, stateVar,stateVarDef, constVar, privMVar, 
-  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule, buildModule', modFromData, fileDoc, docMod
+  multiBody, block, multiBlock, bool, int, float, double, char, string, 
+  fileType, listType, listInnerType, obj, enumType, void, runStrategy,
+  listSlice, unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', absOp, absOp', 
+  expOp, expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', asinOp, asinOp', 
+  acosOp, acosOp', atanOp, atanOp', unExpr, unExpr', typeUnExpr, powerPrec, 
+  multPrec, andPrec, orPrec, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
+  lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, 
+  andOp, orOp, binExpr, binExpr', typeBinExpr, addmathImport, var, staticVar, 
+  extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar,
+  litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, 
+  enumElement, argsList, inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, 
+  notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
+  listIndexExists, indexOf, func, get, set, listSize, listAdd, listAppend, 
+  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
+  listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
+  listAccessFunc', listSetFunc, printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, increment', 
+  increment1, increment1', decrement1, varDec, varDecDef, listDec, listDecDef, 
+  listDecDef', objDecNew, objDecNewNoParams, constDecDef, funcDecDef, 
+  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
+  discardFileLine, stringListVals, stringListLists, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, changeState,
+  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
+  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
+  construct, param, method, getMethod, setMethod,privMethod, pubMethod, 
+  constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
+  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
+  privClass, pubClass, docClass, commentedClass, buildModule, buildModule', 
+  modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
-  FileSym(RenderFile, commentedMod), BlockSym(Block), 
-  InternalBlock(docBlock, blockDoc), 
-  BodySym(Body, body, bodyStatements, bodyDoc), 
-  ImportSym(..), PermanenceSym(..), InternalPerm(..), 
+  FileSym(RenderFile, commentedMod), BodySym(Body, body, bodyStatements), 
+  InternalBody(bodyDoc, docBody), BlockSym(Block), 
+  InternalBlock(docBlock, blockDoc), ImportSym(..), 
+  PermanenceSym(..), InternalPerm(..), 
   TypeSym(Type, infile, outfile, iterator, getType, getTypeDoc, getTypeString), 
   InternalType(..), UnaryOpSym(UnaryOp), BinaryOpSym(BinaryOp), InternalOp(..),
   VariableSym(Variable, variableBind, variableName, variableType, variableDoc), 
@@ -108,6 +109,10 @@ import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 oneLiner :: (RenderSym repr) => MS (repr (Statement repr)) -> 
   MS (repr (Body repr))
 oneLiner s = bodyStatements [s]
+
+multiBody :: (RenderSym repr) => [MS (repr (Body repr))] -> 
+  MS (repr (Body repr))
+multiBody bs = docBody $ onStateList vibcat $ map (onStateValue bodyDoc) bs
 
 -- Blocks --
 
@@ -946,8 +951,9 @@ pubMethod :: (RenderSym repr) => Label -> VS (repr (Type repr)) ->
 pubMethod n = S.method n public dynamic_
 
 constructor :: (RenderSym repr) => Label -> [MS (repr (Parameter repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   MS (repr (Body repr)) -> MS (repr (Method repr))
-constructor fName ps b = getClassName >>= (\c -> intMethod False fName public 
+constructor fName ps is b = getClassName >>= (\c -> intMethod False fName public 
   dynamic_ (S.construct c) ps b)
 
 docMain :: (RenderSym repr) => MS (repr (Body repr)) -> MS (repr (Method repr))

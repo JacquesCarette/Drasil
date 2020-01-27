@@ -11,15 +11,16 @@ import Utils.Drasil (blank, indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
-  InternalPerm(..), BodySym(..), BlockSym(..), InternalBlock(..), 
-  ControlBlockSym(..), TypeSym(..), InternalType(..), UnaryOpSym(..), 
-  BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
-  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
-  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
+  InternalBlock(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
+  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
+  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  InternalSelector(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
+  InternalMethod(..), 
   StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
   ModuleSym(..), InternalMod(..), BlockCommentSym(..), ODEInfo(..), 
   ODEOptions(..), ODEMethod(..))
@@ -31,26 +32,26 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   addCommentsDocD, commentedModD, docFuncRepr, valueList, parameterList, 
   surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, block, multiBlock, int, float, listInnerType, obj, enumType, 
-  runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', sinOp', cosOp', 
-  tanOp', asinOp', acosOp', atanOp', equalOp, notEqualOp, greaterOp, 
-  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
-  moduloOp, var, staticVar, extVar, enumVar, classVar, objVar, objVarSelf, 
-  listVar, listOf, iterVar, litChar, litFloat, litInt, litString, valueOf, arg, 
-  enumElement, argsList, objAccess, objMethodCall, objMethodCallNoParams, 
-  selfAccess, listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, 
-  newObj, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
-  listSet, getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, 
-  iterEndError, listAccessFunc, listSetFunc, state, loopState, emptyState, 
-  assign, assignToListIndex, decrement, increment', increment1', decrement1, 
-  objDecNew, objDecNewNoParams, closeFile, discardFileLine, stringListVals, 
-  stringListLists, returnState, valState, comment, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switchAsIf, 
-  ifExists, tryCatch, checkState, construct, param, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, function, docFunc, stateVarDef,
-  constVar, privMVar, pubMVar, pubGVar, buildClass, privClass, pubClass, 
-  docClass, commentedClass, buildModule, modFromData, fileDoc, docMod, 
-  fileFromData)
+  oneLiner, multiBody, block, multiBlock, int, float, listInnerType, obj, 
+  enumType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', 
+  sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', equalOp, notEqualOp, 
+  greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
+  divideOp, moduloOp, var, staticVar, extVar, enumVar, classVar, objVar, 
+  objVarSelf, listVar, listOf, iterVar, litChar, litFloat, litInt, litString, 
+  valueOf, arg, enumElement, argsList, objAccess, objMethodCall, 
+  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
+  selfFuncApp, extFuncApp, newObj, func, get, set, listAdd, listAppend, 
+  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, 
+  listAppendFunc, iterBeginError, iterEndError, listAccessFunc, listSetFunc, 
+  state, loopState, emptyState, assign, assignToListIndex, decrement, 
+  increment', increment1', decrement1, objDecNew, objDecNewNoParams, closeFile, 
+  discardFileLine, stringListVals, stringListLists, returnState, valState, 
+  comment, throw, initState, changeState, initObserverList, addObserver, ifCond,
+  ifNoElse, switchAsIf, ifExists, tryCatch, checkState, construct, param, 
+  method, getMethod, setMethod, privMethod, pubMethod, constructor, function, 
+  docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
+  privClass, pubClass, docClass, commentedClass, buildModule, modFromData, 
+  fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, binExpr, 
   typeBinExpr, addmathImport)
@@ -162,7 +163,10 @@ instance BodySym PythonCode where
 
   addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 
+instance InternalBody PythonCode where
   bodyDoc = unPC
+  docBody = onStateValue toCode
+  multiBody = G.multiBody 
 
 instance BlockSym PythonCode where
   type Block PythonCode = Doc

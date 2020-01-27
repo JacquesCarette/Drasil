@@ -28,12 +28,13 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, Library, RenderSym, BodySym(..), 
-  PermanenceSym(..), InternalPerm(..), TypeSym(Type, getType, getTypeDoc), 
-  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), InternalValue(..), FunctionSym(..), 
-  SelectorFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), ParameterSym(..), 
-  InternalParam(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
+  InternalBody(..), PermanenceSym(..), InternalPerm(..), 
+  TypeSym(Type, getType, getTypeDoc), VariableSym(..), InternalVariable(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), InternalValue(..),
+  FunctionSym(..), SelectorFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateModDoc, TypeData(..), Binding(..), VarData(..))

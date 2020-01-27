@@ -523,6 +523,8 @@ class (SelectorFunction repr) => StatementSym repr where
     MS (repr (Statement repr))
   constDecDef      :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
     MS (repr (Statement repr))
+  funcDecDef       :: VS (repr (Variable repr)) -> [VS (repr (Variable repr))] 
+    -> VS (repr (Value repr)) -> MS (repr (Statement repr))
 
   print      :: VS (repr (Value repr)) -> MS (repr (Statement repr))
   printLn    :: VS (repr (Value repr)) -> MS (repr (Statement repr))

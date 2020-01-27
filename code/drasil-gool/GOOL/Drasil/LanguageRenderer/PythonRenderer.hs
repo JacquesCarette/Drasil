@@ -487,6 +487,9 @@ instance StatementSym PythonCode where
   extObjDecNewNoParams lib v = modify (addModuleImport lib) >> varDecDef v 
     (extNewObj lib (onStateValue variableType v) [])
   constDecDef = varDecDef
+  funcDecDef v ps r = onStateValue (mkStNoEnd . methodDoc) (zoom lensMStoVS v 
+    >>= (\vr -> function (variableName vr) private dynamic_ 
+    (toState $ variableType vr) (map param ps) (oneLiner $ returnState r)))
 
   print = pyOut False Nothing printFunc
   printLn = pyOut True Nothing printFunc

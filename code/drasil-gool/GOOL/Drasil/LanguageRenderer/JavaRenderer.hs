@@ -47,8 +47,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
   increment1, varDec, varDecDef, listDec, objDecNew, objDecNewNoParams, 
-  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnState, 
+  funcDecDef, discardInput, discardFileInput, openFileR, openFileW, openFileA, 
+  closeFile, discardFileLine, stringListVals, stringListLists, returnState, 
   multiReturnError, valState, comment, freeError, throw, initState, changeState,
   initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
   for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
@@ -539,6 +539,7 @@ instance StatementSym JavaCode where
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkSt $ 
     jConstDecDef vr vl) vr' vl'
+  funcDecDef = G.funcDecDef
 
   print = jOut False Nothing printFunc
   printLn = jOut True Nothing printLnFunc

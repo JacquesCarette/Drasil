@@ -20,17 +20,17 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   listAccessFunc', listSetFunc, printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, increment', 
   increment1, increment1', decrement1, varDec, varDecDef, listDec, listDecDef, 
-  listDecDef', objDecNew, objDecNewNoParams, constDecDef, discardInput, 
-  discardFileInput, openFileR, openFileW, openFileA, closeFile, discardFileLine,
-  stringListVals, stringListLists, returnState, multiReturnError, valState, 
-  comment, freeError, throw, initState, changeState, initObserverList, 
-  addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists, for, forRange, 
-  forEach, while, tryCatch, checkState, notifyObservers, construct, param, 
-  method, getMethod, setMethod,privMethod, pubMethod, constructor, docMain, 
-  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar,stateVarDef, 
-  constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
-  docClass, commentedClass, buildModule, buildModule', modFromData, fileDoc, 
-  docMod
+  listDecDef', objDecNew, objDecNewNoParams, constDecDef, funcDecDef, 
+  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
+  discardFileLine, stringListVals, stringListLists, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, changeState,
+  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
+  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
+  construct, param, method, getMethod, setMethod,privMethod, pubMethod, 
+  constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
+  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
+  privClass, pubClass, docClass, commentedClass, buildModule, buildModule', 
+  modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -61,8 +61,9 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   TypeSym(bool, int, float, char, string, listType, listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
   ValueSym(litTrue, litFalse, litInt, litString, valueOf),
-  ValueExpression(funcApp, newObj, notNull), Selector(objAccess), objMethodCall,
-  objMethodCallNoParams, FunctionSym(func, listSize, listAdd, listAppend),
+  ValueExpression(funcApp, newObj, notNull, lambda), Selector(objAccess), 
+  objMethodCall, objMethodCallNoParams, 
+  FunctionSym(func, listSize, listAdd, listAppend),
   SelectorFunction(listAccess, listSet),
   InternalFunction(getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, 
     listAccessFunc, listSetFunc),
@@ -712,6 +713,11 @@ constDecDef :: (RenderSym repr) => VS (repr (Variable repr)) ->
   VS (repr (Value repr)) -> MS (repr (Statement repr))
 constDecDef vr vl = zoom lensMStoVS $ on2StateValues (\v -> mkSt . 
   constDecDefDocD v) vr vl
+
+funcDecDef :: (RenderSym repr) => VS (repr (Variable repr)) -> 
+  [VS (repr (Variable repr))] -> VS (repr (Value repr)) -> 
+  MS (repr (Statement repr))
+funcDecDef v ps r = S.varDecDef v (S.lambda ps r)
 
 discardInput :: (RenderSym repr) => (repr (Value repr) -> Doc) ->
   MS (repr (Statement repr))

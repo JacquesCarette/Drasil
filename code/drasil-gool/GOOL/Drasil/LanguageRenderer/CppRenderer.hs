@@ -47,14 +47,14 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listSetFunc, state, loopState, emptyState, assign, assignToListIndex, 
   multiAssignError, decrement, increment, decrement1, increment1, varDec, 
   varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, constDecDef, 
-  discardInput, discardFileInput, closeFile, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
-  switchAsIf, for, forRange, while, tryCatch, notifyObservers, construct, param,
-  method, getMethod, setMethod, privMethod, pubMethod, constructor, function, 
-  docFunc, docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, 
-  pubClass, docClass, commentedClass, buildModule, modFromData, fileDoc, docMod,
-  fileFromData)
+  funcDecDef, discardInput, discardFileInput, closeFile, stringListVals, 
+  stringListLists, returnState, multiReturnError, valState, comment, throw, 
+  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
+  switch, switchAsIf, for, forRange, while, tryCatch, notifyObservers, 
+  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
+  constructor, function, docFunc, docInOutFunc, intFunc, privMVar, pubMVar, 
+  pubGVar, privClass, pubClass, docClass, commentedClass, buildModule, 
+  modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
@@ -561,6 +561,8 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (extObjDecNewNoParams lib) . zoom lensMStoVS
   constDecDef vr vl = pair2 constDecDef constDecDef (zoom lensMStoVS vr) 
     (zoom lensMStoVS vl)
+  funcDecDef v ps r = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
+    (map (zoom lensMStoVS) ps) (zoom lensMStoVS r)
 
   print = pair1 print print . zoom lensMStoVS
   printLn = pair1 printLn printLn . zoom lensMStoVS
@@ -1413,6 +1415,7 @@ instance StatementSym CppSrcCode where
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams l v = modify (addModuleImport l) >> objDecNewNoParams v
   constDecDef = G.constDecDef
+  funcDecDef = G.funcDecDef
 
   print = outDoc False Nothing printFunc
   printLn = outDoc True Nothing printLnFunc
@@ -2038,6 +2041,7 @@ instance StatementSym CppHdrCode where
   objDecNewNoParams _ = emptyState
   extObjDecNewNoParams _ _ = emptyState
   constDecDef = G.constDecDef
+  funcDecDef _ _ _ = emptyState
 
   print _ = emptyState
   printLn _ = emptyState

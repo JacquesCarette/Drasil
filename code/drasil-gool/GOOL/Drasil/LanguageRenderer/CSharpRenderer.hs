@@ -26,12 +26,12 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (new, classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
-  mkSt, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, classVarDocD, 
-  objVarDocD, newObjDocD, funcDocD, castDocD, listSetFuncDocD, castObjDocD, 
-  staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, dot, 
-  blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD, 
-  variableList, appendToBody, surroundBody)
+  mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
+  classVarDocD, objVarDocD, newObjDocD, funcDocD, castDocD, listSetFuncDocD, 
+  castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
+  dot, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
+  inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  commentedModD, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, multiBlock, bool, int, double, char, string, listType, 
   listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
@@ -77,7 +77,7 @@ import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (elemIndex)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty,
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   comma, equals, semi, vcat, braces, lbrace, rbrace, colon)
 
 csExt :: String
@@ -486,6 +486,7 @@ instance StatementSym CSharpCode where
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef = G.constDecDef
+  funcDecDef = csFuncDecDef blockStart blockEnd
 
   print = outDoc False Nothing printFunc
   printLn = outDoc True Nothing printLnFunc
@@ -701,6 +702,14 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
   where csCast' Float String _ _ = funcApp "Double.Parse" float [v]
         csCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
           tp)) (valueDoc vl))
+
+csFuncDecDef :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) 
+  -> VS (repr (Variable repr)) -> [VS (repr (Variable repr))] -> 
+  VS (repr (Value repr)) -> MS (repr (Statement repr))
+csFuncDecDef bStart bEnd v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
+  getTypeDoc (variableType vr) <+> text (variableName vr) <> parens 
+  (variableList pms) <+> keyDoc bStart $$ indent (bodyDoc b) $$ keyDoc bEnd) 
+  (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnState r)
 
 csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 

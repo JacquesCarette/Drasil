@@ -265,6 +265,7 @@ instance StatementSym CodeInfo where
   objDecNewNoParams _ = noInfo
   extObjDecNewNoParams _ _ = noInfo
   constDecDef _ _ = noInfo
+  funcDecDef _ _ _ = noInfo
 
   print _ = noInfo
   printLn _ = noInfo

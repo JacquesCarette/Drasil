@@ -67,8 +67,8 @@ import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn, 
-  addLangImport, addLangImportVS, addLibImport, getClassName, setCurrMain, 
-  setODEDepVars, getODEDepVars)
+  addLangImport, addLangImportVS, addLibImport, getClassName, 
+  setCurrMain, setODEDepVars, getODEDepVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)

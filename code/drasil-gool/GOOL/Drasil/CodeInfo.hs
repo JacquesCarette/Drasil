@@ -99,7 +99,7 @@ instance TypeSym CodeInfo where
   listInnerType _ = noInfo
   obj _ = noInfo
   enumType _ = noInfo
-  funcType _ = noInfo
+  funcType _ _ = noInfo
   iterator _ = noInfo
   void = noInfo
 

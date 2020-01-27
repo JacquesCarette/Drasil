@@ -207,7 +207,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   listInnerType = pair1 listInnerType listInnerType
   obj t = on2StateValues pair (obj t) (obj t)
   enumType t = on2StateValues pair (enumType t) (enumType t)
-  funcType = pair1List funcType funcType
+  funcType = pair1List1Val funcType funcType
   iterator = pair1 iterator iterator
   void = on2StateValues pair void void
 

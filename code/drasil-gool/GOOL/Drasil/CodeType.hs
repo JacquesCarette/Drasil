@@ -14,7 +14,7 @@ data CodeType = Boolean
               | Iterator CodeType
               | Object String
               | Enum String
-              | Func [CodeType]
+              | Func [CodeType] CodeType
               | Void deriving Eq
 
 isObject :: CodeType -> Bool

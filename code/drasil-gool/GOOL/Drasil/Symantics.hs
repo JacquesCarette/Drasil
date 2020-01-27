@@ -137,7 +137,8 @@ class (PermanenceSym repr) => TypeSym repr where
   listInnerType :: VS (repr (Type repr)) -> VS (repr (Type repr))
   obj           :: Label -> VS (repr (Type repr))
   enumType      :: Label -> VS (repr (Type repr))
-  funcType      :: [VS (repr (Type repr))] -> VS (repr (Type repr))
+  funcType      :: [VS (repr (Type repr))] -> VS (repr (Type repr)) -> 
+    VS (repr (Type repr))
   iterator      :: VS (repr (Type repr)) -> VS (repr (Type repr))
   void          :: VS (repr (Type repr))
 

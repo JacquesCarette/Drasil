@@ -161,7 +161,9 @@ enumType :: (RenderSym repr) => Label -> VS (repr (Type repr))
 enumType e = toState $ typeFromData (Enum e) e (text e)
 
 funcType :: (RenderSym repr) => [VS (repr (Type repr))] -> VS (repr (Type repr))
-funcType = onStateList (\sig -> typeFromData (Func (map getType sig)) "" empty)
+  -> VS (repr (Type repr))
+funcType ps' = on2StateValues (\ps r -> typeFromData (Func (map getType ps) 
+  (getType r)) "" empty) (sequence ps')
 
 void :: (RenderSym repr) => VS (repr (Type repr))
 void = toState $ typeFromData Void "void" (text "void")
@@ -497,7 +499,7 @@ lambda :: (RenderSym repr) => ([repr (Variable repr)] -> repr (Value repr) ->
   Doc) -> [VS (repr (Variable repr))] -> VS (repr (Value repr)) ->
   VS (repr (Value repr))
 lambda f ps' ex' = sequence ps' >>= (\ps -> ex' >>= (\ex -> funcType (map 
-  (toState . variableType) ps ++ [toState $ valueType ex]) >>= (\ft -> 
+  (toState . variableType) ps) (toState $ valueType ex) >>= (\ft -> 
   toState $ valFromData (Just 0) ft (f ps ex))))
 
 objAccess :: (RenderSym repr) => VS (repr (Value repr)) ->

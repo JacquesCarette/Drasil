@@ -30,30 +30,31 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   castDocD, castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, dot, new, classDec, elseIfLabel, forLabel, blockCmtStart, 
   blockCmtEnd, docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, commentedModD, docFuncRepr, parameterList, appendToBody, 
-  surroundBody, intValue)
+  addCommentsDocD, commentedModD, docFuncRepr, variableList, parameterList, 
+  appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, multiBlock, bool, int, double, char, listType, listInnerType,
-  obj, enumType, void, runStrategy, listSlice, notOp, negateOp, equalOp, 
-  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
-  multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, 
-  enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar, litTrue, 
-  litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, enumElement,
-  argsList, inlineIf, objAccess, objMethodCall, objMethodCallNoParams, 
-  selfAccess, listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, 
-  newObj, notNull, func, get, set, listSize, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
-  listAppendFunc, iterBeginError, iterEndError, listAccessFunc', printSt, state,
-  loopState, emptyState, assign, assignToListIndex, multiAssignError, decrement,
-  increment, decrement1, increment1, varDec, varDecDef, listDec, objDecNew, 
-  objDecNewNoParams, discardInput, discardFileInput, openFileR, openFileW, 
-  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, freeError, throw, initState,
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
-  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
-  pubMethod, constructor, docMain, function, mainFunction, docFunc, intFunc, 
-  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
+  obj, enumType, funcType, void, runStrategy, listSlice, notOp, negateOp, 
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
+  minusOp, multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, 
+  self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar, 
+  litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, 
+  enumElement, argsList, inlineIf, objAccess, objMethodCall, 
+  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
+  selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
+  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
+  setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
+  iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  increment1, varDec, varDecDef, listDec, objDecNew, objDecNewNoParams, 
+  funcDecDef, discardInput, discardFileInput, openFileR, openFileW, openFileA, 
+  closeFile, discardFileLine, stringListVals, stringListLists, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, changeState,
+  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
+  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
+  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
+  constructor, docMain, function, mainFunction, docFunc, intFunc, stateVar, 
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
   privClass, pubClass, docClass, commentedClass, buildModule', modFromData, 
   fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
@@ -199,6 +200,7 @@ instance TypeSym JavaCode where
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
+  funcType = G.funcType
   iterator t = t
   void = G.void
 
@@ -420,6 +422,8 @@ instance ValueExpression JavaCode where
     G.newObj newObjDocD ot vs
   extNewObj _ = newObj
 
+  lambda = G.lambda jLambda
+
   exists = notNull
   notNull = G.notNull
 
@@ -492,7 +496,7 @@ instance InternalFunction JavaCode where
   listSetFunc v i toVal = func "set" (onStateValue valueType v) [intValue i, 
     toVal]
 
-  functionType = onCodeValue funcType
+  functionType = onCodeValue fType
   functionDoc = funcDoc . unJC
 
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -535,6 +539,7 @@ instance StatementSym JavaCode where
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkSt $ 
     jConstDecDef vr vl) vr' vl'
+  funcDecDef = G.funcDecDef
 
   print = jOut False Nothing printFunc
   printLn = jOut True Nothing printLnFunc
@@ -833,6 +838,10 @@ jEquality :: VS (JavaCode (Value JavaCode)) -> VS (JavaCode (Value JavaCode))
 jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
         jEquality' _ = typeBinExpr equalOp bool v1 v2
+
+jLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
+  Doc
+jLambda ps ex = parens (variableList ps) <+> text "->" <+> valueDoc ex
 
 jCast :: VS (JavaCode (Type JavaCode)) -> VS (JavaCode (Value JavaCode)) -> 
   VS (JavaCode (Value JavaCode))

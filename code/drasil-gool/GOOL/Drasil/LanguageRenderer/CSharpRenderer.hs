@@ -26,36 +26,37 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (new, classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
-  mkSt, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, classVarDocD, 
-  objVarDocD, newObjDocD, funcDocD, castDocD, listSetFuncDocD, castObjDocD, 
-  staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, dot, 
-  blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD, 
-  variableList, appendToBody, surroundBody)
+  mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
+  classVarDocD, objVarDocD, newObjDocD, funcDocD, castDocD, listSetFuncDocD, 
+  castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
+  dot, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
+  inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  commentedModD, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, block, multiBlock, bool, int, double, char, string, listType, 
-  listInnerType, obj, enumType, void, runStrategy, listSlice, notOp, negateOp, 
-  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
-  minusOp, multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, 
-  self, enumVar, classVar, objVarSelf, listVar, listOf, iterVar, pi, litTrue, 
-  litFalse, litChar, litFloat, litInt, litString, valueOf, arg, enumElement, 
-  argsList, inlineIf, objAccess, objMethodCall, objMethodCallNoParams, 
-  selfAccess, listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, 
-  newObj, notNull, func, get, set, listSize, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
-  iterBeginError, iterEndError, listAccessFunc, listSetFunc, printSt, state, 
-  loopState, emptyState, assign, assignToListIndex, multiAssignError, 
-  decrement, increment, decrement1, increment1, varDec, varDecDef, listDec, 
-  listDecDef', objDecNew, objDecNewNoParams,constDecDef, discardInput,
-  openFileR, openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
-  stringListLists, returnState, multiReturnError, valState, comment, freeError, 
-  throw, initState, changeState, initObserverList, addObserver, ifCond, 
-  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
-  tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, constVar,
-  privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
+  listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
+  negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
+  plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, 
+  extVar, self, enumVar, classVar, objVarSelf, listVar, listOf, iterVar, pi, 
+  litTrue, litFalse, litChar, litFloat, litInt, litString, valueOf, arg, 
+  enumElement, argsList, inlineIf, objAccess, objMethodCall, 
+  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
+  selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
+  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
+  setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
+  listAccessFunc, listSetFunc, printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  increment1, varDec, varDecDef, listDec, listDecDef', objDecNew, 
+  objDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, openFileA,
+  closeFile, discardFileLine, stringListVals, stringListLists, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, changeState,
+  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
+  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
+  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
+  constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
+  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
+  privClass, pubClass, docClass, commentedClass, buildModule', modFromData, 
+  fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -76,7 +77,7 @@ import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (elemIndex)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty,
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   comma, equals, semi, vcat, braces, lbrace, rbrace, colon)
 
 csExt :: String
@@ -190,6 +191,7 @@ instance TypeSym CSharpCode where
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
+  funcType = G.funcType
   iterator t = t
   void = G.void
 
@@ -212,10 +214,8 @@ instance ControlBlockSym CSharpCode where
         varDecDef sol (extFuncApp "Ode" (csODEMethod $ solveMethod opts) odeT 
         [tInit info, 
         newObj vec [initVal info], 
-        join $ on2StateValues (\idv dpv -> newObj vec [modify 
-          (setODEDepVars [variableName dpv]) >> ode info] >>= (mkStateVal void .
-          (parens (variableList [idv, dpv]) <+> text "=>" <+>) . valueDoc)) 
-          iv dv,
+        lambda [iv, dv] (newObj vec [dv >>= (\dpv -> modify (setODEDepVars 
+          [variableName dpv]) >> ode info)]),
         join $ on2StateValues (\abt rt -> mkStateVal (obj "Options") (new <+> 
           text "Options" <+> braces (text "AbsoluteTolerance" <+> equals <+> 
           valueDoc abt <> comma <+> text "RelativeTolerance" <+> equals <+> 
@@ -379,6 +379,8 @@ instance ValueExpression CSharpCode where
   newObj = G.newObj newObjDocD
   extNewObj _ = newObj
 
+  lambda = G.lambda csLambda
+
   exists = notNull
   notNull = G.notNull
 
@@ -444,7 +446,7 @@ instance InternalFunction CSharpCode where
   listAccessFunc = G.listAccessFunc
   listSetFunc = G.listSetFunc listSetFuncDocD 
     
-  functionType = onCodeValue funcType
+  functionType = onCodeValue fType
   functionDoc = funcDoc . unCSC
 
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -484,6 +486,7 @@ instance StatementSym CSharpCode where
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef = G.constDecDef
+  funcDecDef = csFuncDecDef blockStart blockEnd
 
   print = outDoc False Nothing printFunc
   printLn = outDoc True Nothing printLnFunc
@@ -688,6 +691,10 @@ csOutfileType :: (RenderSym repr) => VS (repr (Type repr))
 csOutfileType = modifyReturn (addLangImportVS "System.IO") $ 
   typeFromData File "StreamWriter" (text "StreamWriter")
 
+csLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
+  Doc
+csLambda ps ex = parens (variableList ps) <+> text "=>" <+> valueDoc ex
+
 csCast :: VS (CSharpCode (Type CSharpCode)) -> 
   VS (CSharpCode (Value CSharpCode)) -> VS (CSharpCode (Value CSharpCode))
 csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $ 
@@ -695,6 +702,14 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
   where csCast' Float String _ _ = funcApp "Double.Parse" float [v]
         csCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
           tp)) (valueDoc vl))
+
+csFuncDecDef :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) 
+  -> VS (repr (Variable repr)) -> [VS (repr (Variable repr))] -> 
+  VS (repr (Value repr)) -> MS (repr (Statement repr))
+csFuncDecDef bStart bEnd v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
+  getTypeDoc (variableType vr) <+> text (variableName vr) <> parens 
+  (variableList pms) <+> keyDoc bStart $$ indent (bodyDoc b) $$ keyDoc bEnd) 
+  (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnState r)
 
 csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 

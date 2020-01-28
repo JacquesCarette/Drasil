@@ -107,5 +107,6 @@ convType (C.List t) = S.listType S.dynamic_ (convType t)
 convType (C.Iterator t) = S.iterator $ convType t
 convType (C.Object n) = S.obj n
 convType (C.Enum n) = S.enumType n
+convType (C.Func ps r) = S.funcType (map convType ps) (convType r)
 convType C.Void = S.void
 convType C.File = error "convType: File ?"

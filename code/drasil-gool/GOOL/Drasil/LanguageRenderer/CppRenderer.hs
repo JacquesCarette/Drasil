@@ -2435,9 +2435,9 @@ cppOpenFile mode f n = variableDoc f <> dot <> text "open" <>
 cppPointerParamDoc :: (RenderSym repr) => repr (Variable repr) -> Doc
 cppPointerParamDoc v = getTypeDoc (variableType v) <+> text "&" <> variableDoc v
 
-cppsMethod :: (RenderSym repr) => [Doc] -> Label -> Label -> repr (Type repr) 
-  -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> Doc
+cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode) 
+  -> [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
+  CppSrcCode (Keyword CppSrcCode) -> CppSrcCode (Keyword CppSrcCode) -> Doc
 cppsMethod is n c t ps b bStart bEnd = emptyIfEmpty (bodyDoc b <> initList) $ 
   vcat [ttype <+> text c <> text "::" <> text n <> parens (parameterList ps) 
   <+> emptyIfEmpty initList (colon <+> initList) <+> keyDoc bStart,
@@ -2447,14 +2447,16 @@ cppsMethod is n c t ps b bStart bEnd = emptyIfEmpty (bodyDoc b <> initList) $
               | otherwise = getTypeDoc t
         initList = hicat (text ", ") is
 
-cppConstructor :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr)
-  -> [MS (repr (Parameter repr))] -> [(VS (repr (Variable repr)), 
-  VS (repr (Value repr)))] -> MS (repr (Body repr)) -> MS (repr (Method repr))
+cppConstructor :: CppSrcCode (Keyword CppSrcCode) -> 
+  CppSrcCode (Keyword CppSrcCode) -> [MS (CppSrcCode (Parameter CppSrcCode))] 
+  -> [(VS (CppSrcCode (Variable CppSrcCode)), 
+  VS (CppSrcCode (Value CppSrcCode)))] -> 
+  MS (CppSrcCode (Body CppSrcCode)) -> MS (CppSrcCode (Method CppSrcCode))
 cppConstructor bStart bEnd ps is b = getClassName >>= (\n -> join $ (\tp pms 
   ivars ivals bod -> if null is then G.constructor n ps is b else modify 
   (setScope Pub) >> toState (methodFromData Pub (cppsMethod (zipWith 
   (\ivar ival -> variableDoc ivar <> parens (valueDoc ival)) ivars ivals) n n 
-  tp pms bod bStart bEnd))) <$> zoom lensMStoVS (obj n) <*> sequence ps <*> 
+  tp pms bod bStart bEnd))) <$> construct n <*> sequence ps <*> 
   mapM (zoom lensMStoVS . fst) is <*> mapM (zoom lensMStoVS . snd) is <*> b)
 
 cppsFunction :: (RenderSym repr) => Label -> repr (Type repr) -> 

@@ -596,7 +596,7 @@ instance MethodSym CSharpCode where
   setMethod = G.setMethod
   privMethod = G.privMethod
   pubMethod = G.pubMethod
-  constructor ps b = getClassName >>= (\n -> G.constructor n ps b)
+  constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
   destructor _ = error $ destructorError csName
 
   docMain = G.docMain

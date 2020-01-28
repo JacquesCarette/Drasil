@@ -953,8 +953,10 @@ pubMethod n = S.method n public dynamic_
 constructor :: (RenderSym repr) => Label -> [MS (repr (Parameter repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   MS (repr (Body repr)) -> MS (repr (Method repr))
-constructor fName ps is b = getClassName >>= (\c -> intMethod False fName public 
-  dynamic_ (S.construct c) ps b)
+constructor fName ps is b = getClassName >>= (\c -> intMethod False fName 
+  public dynamic_ (S.construct c) ps (multiBody [ib, b]))
+  where ib = bodyStatements (zipWith (\vr vl -> objVarSelf vr &= vl) 
+          (map fst is) (map snd is))
 
 docMain :: (RenderSym repr) => MS (repr (Body repr)) -> MS (repr (Method repr))
 docMain b = commentedFunc (docComment $ toState $ functionDox 

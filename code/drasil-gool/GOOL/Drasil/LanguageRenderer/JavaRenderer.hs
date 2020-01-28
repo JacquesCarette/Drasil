@@ -21,10 +21,9 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..), ODEInfo(..), 
-  ODEOptions(..), ODEMethod(..))
+  initializer, InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
+  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
+  BlockCommentSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
   bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, newObjDocD, 
@@ -647,7 +646,7 @@ instance MethodSym JavaCode where
   setMethod = G.setMethod
   privMethod = G.privMethod
   pubMethod = G.pubMethod
-  constructor ps b = getClassName >>= (\n -> G.constructor n ps b)
+  constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
   destructor _ = error $ destructorError jName
 
   docMain = G.docMain
@@ -779,8 +778,8 @@ jODEFile info = (unJC fl, fst s)
                 vibcat (map methodDoc mths)] 
               $$ keyDoc (blockEnd :: JavaCode (Keyword JavaCode))) 
               (map privMVar othVars) 
-              (map (zoom lensCStoMS) [constructor (map param othVars) 
-                (bodyStatements (map (\v -> objVarSelf v &= valueOf v) othVars)),
+              (map (zoom lensCStoMS) [initializer (map param othVars) 
+                (zip othVars (map valueOf othVars)),
               pubMethod "getDimension" int [] (oneLiner $ returnState $ 
                 litInt 1),
               pubMethod "computeDerivatives" void (map param [var "t" float, 

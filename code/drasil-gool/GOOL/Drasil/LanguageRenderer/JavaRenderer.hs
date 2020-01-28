@@ -47,7 +47,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
   increment1, varDec, varDecDef, listDec, objDecNew, objDecNewNoParams, 
-  funcDecDef, discardInput, discardFileInput, openFileR, openFileW, openFileA, 
+  discardInput, discardFileInput, openFileR, openFileW, openFileA, 
   closeFile, discardFileLine, stringListVals, stringListLists, returnState, 
   multiReturnError, valState, comment, freeError, throw, initState, changeState,
   initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,

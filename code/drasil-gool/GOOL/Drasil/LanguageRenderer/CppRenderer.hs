@@ -68,7 +68,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat,
   on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList, 
   on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS,
-  lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, initialState, initialFS, modifyReturn, 
+  lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, lensVStoMS, initialState, initialFS, modifyReturn, 
   addODEFilePaths, addODEFile, getODEFiles, addLangImport, 
   addLangImportVS, getLangImports, addLibImport, getLibImports, addModuleImport, addModuleImportVS,
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
@@ -1116,8 +1116,9 @@ instance TypeSym CppSrcCode where
   listType p t = modify (addUsing lst . addLangImportVS lst) >> G.listType p t
     where lst = render $ keyDoc (list p)
   listInnerType = G.listInnerType
-  obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
-    (Map.lookup n cm) $ G.obj n)
+  obj n = zoom lensVStoMS getClassName >>= (\cn -> if cn == n then G.obj n else 
+    getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
+    (Map.lookup n cm) (G.obj n)))
   enumType = G.enumType
   iterator t = modify (addLangImportVS "iterator") >> 
     (cppIterType . listType dynamic_) t
@@ -2443,7 +2444,7 @@ cppsMethod is n c t ps b bStart bEnd = emptyIfEmpty (bodyDoc b <> initList) $
   indent (bodyDoc b),
   keyDoc bEnd]
   where ttype | isDtor n = empty
-              | otherwise = getTypeDoc t   
+              | otherwise = getTypeDoc t
         initList = hicat (text ", ") is
 
 cppConstructor :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr)

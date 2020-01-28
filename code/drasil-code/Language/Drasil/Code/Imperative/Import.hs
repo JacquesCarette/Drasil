@@ -33,7 +33,7 @@ import GOOL.Drasil (Label, ProgramSym, FileSym(..), PermanenceSym(..),
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  convType, FS, MS, VS, onStateValue) 
+  nonInitConstructor, convType, FS, MS, VS, onStateValue) 
 import qualified GOOL.Drasil as C (CodeType(List))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -138,7 +138,7 @@ privateInOutMethod n = genInOutFunc (inOutMethod n) (docInOutMethod n)
 genConstructor :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   Label -> String -> [c] -> [MS (repr (Block repr))] -> 
   Reader DrasilState (MS (repr (Method repr)))
-genConstructor n desc p = genMethod constructor n desc p Nothing
+genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
 
 genMethod :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   ([MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 

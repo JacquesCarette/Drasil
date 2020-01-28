@@ -140,6 +140,8 @@ class (PermanenceSym repr) => TypeSym repr where
   listInnerType :: VS (repr (Type repr)) -> VS (repr (Type repr))
   obj           :: Label -> VS (repr (Type repr))
   enumType      :: Label -> VS (repr (Type repr))
+  funcType      :: [VS (repr (Type repr))] -> VS (repr (Type repr)) -> 
+    VS (repr (Type repr))
   iterator      :: VS (repr (Type repr)) -> VS (repr (Type repr))
   void          :: VS (repr (Type repr))
 
@@ -363,6 +365,9 @@ class (ValueSym repr, BooleanExpression repr) =>
   extNewObj  :: Library -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
     VS (repr (Value repr))
 
+  lambda :: [VS (repr (Variable repr))] -> VS (repr (Value repr)) -> 
+    VS (repr (Value repr))
+
   exists  :: VS (repr (Value repr)) -> VS (repr (Value repr))
   notNull :: VS (repr (Value repr)) -> VS (repr (Value repr))
 
@@ -521,6 +526,8 @@ class (SelectorFunction repr) => StatementSym repr where
     MS (repr (Statement repr))
   constDecDef      :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
     MS (repr (Statement repr))
+  funcDecDef       :: VS (repr (Variable repr)) -> [VS (repr (Variable repr))] 
+    -> VS (repr (Value repr)) -> MS (repr (Statement repr))
 
   print      :: VS (repr (Value repr)) -> MS (repr (Statement repr))
   printLn    :: VS (repr (Value repr)) -> MS (repr (Statement repr))

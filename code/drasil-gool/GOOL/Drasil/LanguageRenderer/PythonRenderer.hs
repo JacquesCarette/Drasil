@@ -29,18 +29,18 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, 
   newObjDocD', listSetFuncDocD, castObjDocD, dynamicDocD, bindingError, 
   classDec, dot, forLabel, inLabel, observerListName, commentedItem, 
-  addCommentsDocD, commentedModD, docFuncRepr, valueList, parameterList, 
-  surroundBody)
+  addCommentsDocD, commentedModD, docFuncRepr, valueList, variableList,
+  parameterList, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, int, float, listInnerType, obj, 
-  enumType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', 
+  enumType, funcType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', 
   sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', equalOp, notEqualOp, 
   greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
   divideOp, moduloOp, var, staticVar, extVar, enumVar, classVar, objVar, 
   objVarSelf, listVar, listOf, iterVar, litChar, litFloat, litInt, litString, 
   valueOf, arg, enumElement, argsList, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
-  selfFuncApp, extFuncApp, newObj, func, get, set, listAdd, listAppend, 
+  selfFuncApp, extFuncApp, newObj, lambda, func, get, set, listAdd, listAppend, 
   iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, 
   listAppendFunc, iterBeginError, iterEndError, listAccessFunc, listSetFunc, 
   state, loopState, emptyState, assign, assignToListIndex, decrement, 
@@ -191,6 +191,7 @@ instance TypeSym PythonCode where
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
+  funcType = G.funcType
   iterator t = t
   void = toState $ typeFromData Void "NoneType" (text "NoneType")
 
@@ -209,12 +210,9 @@ instance ControlBlockSym PythonCode where
     where getVal = fromMaybe (mkStateVal void empty)
 
   solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
-    docBlock $ onStateValue methodDoc $ function "f" public dynamic_ 
-      (onStateValue valueType $ ode info) [param iv, param dv] 
-      (oneLiner $ returnState $ ode info),
     block [
       r &= objMethodCall odeT (extNewObj odeLib odeT 
-      [valueOf $ var fname (onStateValue valueType $ ode info)]) 
+      [lambda [iv, dv] (ode info)]) 
         "set_integrator" (pyODEMethod (solveMethod opts) ++
           [absTol opts >>= (mkStateVal float . (text "atol=" <>) . valueDoc),
           relTol opts >>= (mkStateVal float . (text "rtol=" <>) . valueDoc)]),
@@ -230,8 +228,7 @@ instance ControlBlockSym PythonCode where
         ])
      ]
    ]
-   where fname = "f"
-         odeLib = "scipy.integrate"
+   where odeLib = "scipy.integrate"
          iv = indepVar info
          dv = depVar info
          odeT = obj "ode"
@@ -384,6 +381,8 @@ instance ValueExpression PythonCode where
   extNewObj l tp ps = modify (addModuleImportVS l) >> on1StateValue1List 
     (\t -> mkVal t . pyExtStateObj l (getTypeDoc t) . valueList) tp ps
 
+  lambda = G.lambda pyLambda
+
   exists v = v ?!= valueOf (var "None" void)
   notNull = exists
 
@@ -448,7 +447,7 @@ instance InternalFunction PythonCode where
   listAccessFunc = G.listAccessFunc
   listSetFunc = G.listSetFunc listSetFuncDocD
 
-  functionType = onCodeValue funcType
+  functionType = onCodeValue fType
   functionDoc = funcDoc . unPC
 
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -492,6 +491,9 @@ instance StatementSym PythonCode where
   extObjDecNewNoParams lib v = modify (addModuleImport lib) >> varDecDef v 
     (extNewObj lib (onStateValue variableType v) [])
   constDecDef = varDecDef
+  funcDecDef v ps r = onStateValue (mkStNoEnd . methodDoc) (zoom lensMStoVS v 
+    >>= (\vr -> function (variableName vr) private dynamic_ 
+    (toState $ variableType vr) (map param ps) (oneLiner $ returnState r)))
 
   print = pyOut False Nothing printFunc
   printLn = pyOut True Nothing printFunc
@@ -730,6 +732,10 @@ pyInlineIf :: (RenderSym repr) => VS (repr (Value repr)) ->
 pyInlineIf = on3StateValues (\c v1 v2 -> valFromData (valuePrec c) 
   (valueType v1) (valueDoc v1 <+> text "if" <+> valueDoc c <+> text "else" <+> 
   valueDoc v2))
+
+pyLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
+  Doc
+pyLambda ps ex = text "lambda" <+> variableList ps <> colon <+> valueDoc ex
 
 pyListSize :: Doc -> Doc -> Doc
 pyListSize v f = f <> parens v

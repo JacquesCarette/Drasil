@@ -58,7 +58,7 @@ fileD = FileD
 updateFileMod :: ModData -> FileData -> FileData
 updateFileMod m f = fileD (filePath f) m
 
-data FuncData = FD {funcType :: TypeData, funcDoc :: Doc}
+data FuncData = FD {fType :: TypeData, funcDoc :: Doc}
 
 fd :: TypeData -> Doc -> FuncData
 fd = FD

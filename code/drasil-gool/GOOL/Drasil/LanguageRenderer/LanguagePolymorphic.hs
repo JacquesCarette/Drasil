@@ -3,7 +3,7 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
-  fileType, listType, listInnerType, obj, enumType, void, runStrategy,
+  fileType, listType, listInnerType, obj, enumType, funcType, void, runStrategy,
   listSlice, unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', absOp, absOp', 
   expOp, expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', asinOp, asinOp', 
   acosOp, acosOp', atanOp, atanOp', unExpr, unExpr', typeUnExpr, powerPrec, 
@@ -13,14 +13,14 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar,
   litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, 
   enumElement, argsList, inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, 
-  notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
+  lambda, notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
   listIndexExists, indexOf, func, get, set, listSize, listAdd, listAppend, 
   iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
   listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
   listAccessFunc', listSetFunc, printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, increment', 
   increment1, increment1', decrement1, varDec, varDecDef, listDec, listDecDef, 
-  listDecDef', objDecNew, objDecNewNoParams, constDecDef, 
+  listDecDef', objDecNew, objDecNewNoParams, constDecDef, funcDecDef, 
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
   multiReturnError, valState, comment, freeError, throw, initState, changeState,
@@ -61,8 +61,9 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   TypeSym(bool, int, float, char, string, listType, listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
   ValueSym(litTrue, litFalse, litInt, litString, valueOf),
-  ValueExpression(funcApp, newObj, notNull), Selector(objAccess), objMethodCall,
-  objMethodCallNoParams, FunctionSym(func, listSize, listAdd, listAppend),
+  ValueExpression(funcApp, newObj, notNull, lambda), Selector(objAccess), 
+  objMethodCall, objMethodCallNoParams, 
+  FunctionSym(func, listSize, listAdd, listAppend),
   SelectorFunction(listAccess, listSet),
   InternalFunction(getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, 
     listAccessFunc, listSetFunc),
@@ -163,6 +164,11 @@ obj n = toState $ typeFromData (Object n) n (text n)
 
 enumType :: (RenderSym repr) => Label -> VS (repr (Type repr))
 enumType e = toState $ typeFromData (Enum e) e (text e)
+
+funcType :: (RenderSym repr) => [VS (repr (Type repr))] -> VS (repr (Type repr))
+  -> VS (repr (Type repr))
+funcType ps' = on2StateValues (\ps r -> typeFromData (Func (map getType ps) 
+  (getType r)) "" empty) (sequence ps')
 
 void :: (RenderSym repr) => VS (repr (Type repr))
 void = toState $ typeFromData Void "void" (text "void")
@@ -494,6 +500,13 @@ newObj f = on1StateValue1List (\t -> mkVal t . f t . valueList)
 notNull :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
 notNull v = v ?!= S.valueOf (S.var "null" $ onStateValue valueType v)
 
+lambda :: (RenderSym repr) => ([repr (Variable repr)] -> repr (Value repr) -> 
+  Doc) -> [VS (repr (Variable repr))] -> VS (repr (Value repr)) ->
+  VS (repr (Value repr))
+lambda f ps' ex' = sequence ps' >>= (\ps -> ex' >>= (\ex -> funcType (map 
+  (toState . variableType) ps) (toState $ valueType ex) >>= (\ft -> 
+  toState $ valFromData (Just 0) ft (f ps ex))))
+
 objAccess :: (RenderSym repr) => VS (repr (Value repr)) ->
   VS (repr (Function repr)) -> VS (repr (Value repr))
 objAccess = on2StateValues (\v f -> mkVal (functionType f) (objAccessDocD 
@@ -704,6 +717,11 @@ constDecDef :: (RenderSym repr) => VS (repr (Variable repr)) ->
   VS (repr (Value repr)) -> MS (repr (Statement repr))
 constDecDef vr vl = zoom lensMStoVS $ on2StateValues (\v -> mkSt . 
   constDecDefDocD v) vr vl
+
+funcDecDef :: (RenderSym repr) => VS (repr (Variable repr)) -> 
+  [VS (repr (Variable repr))] -> VS (repr (Value repr)) -> 
+  MS (repr (Statement repr))
+funcDecDef v ps r = S.varDecDef v (S.lambda ps r)
 
 discardInput :: (RenderSym repr) => (repr (Value repr) -> Doc) ->
   MS (repr (Statement repr))

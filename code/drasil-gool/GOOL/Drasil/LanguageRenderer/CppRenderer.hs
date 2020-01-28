@@ -36,26 +36,26 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, int, double, char, string, listType, 
-  listInnerType, obj, enumType, void, runStrategy, listSlice, notOp, negateOp, 
-  sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, equalOp, 
-  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
-  multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, staticVar, self, 
-  enumVar, objVar, listVar, listOf, litTrue, litFalse, litChar, litFloat, 
+  listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
+  negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, 
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
+  minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, staticVar, 
+  self, enumVar, objVar, listVar, listOf, litTrue, litFalse, litChar, litFloat, 
   litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, objMethodCall,
-  objMethodCallNoParams, selfAccess, listIndexExists, funcApp, newObj, func, 
-  get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
+  objMethodCallNoParams, selfAccess, listIndexExists, funcApp, newObj, lambda, 
+  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess,
   listSet, getFunc, setFunc, listSizeFunc, listAppendFunc, listAccessFunc', 
   listSetFunc, state, loopState, emptyState, assign, assignToListIndex, 
   multiAssignError, decrement, increment, decrement1, increment1, varDec, 
   varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, constDecDef, 
-  discardInput, discardFileInput, closeFile, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
-  switchAsIf, for, forRange, while, tryCatch, notifyObservers, construct, param,
-  method, getMethod, setMethod, privMethod, pubMethod, constructor, function, 
-  docFunc, docInOutFunc, intFunc, privMVar, pubMVar, pubGVar, privClass, 
-  pubClass, docClass, commentedClass, buildModule, modFromData, fileDoc, docMod,
-  fileFromData)
+  funcDecDef, discardInput, discardFileInput, closeFile, stringListVals, 
+  stringListLists, returnState, multiReturnError, valState, comment, throw, 
+  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
+  switch, switchAsIf, for, forRange, while, tryCatch, notifyObservers, 
+  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
+  constructor, function, docFunc, docInOutFunc, intFunc, privMVar, pubMVar, 
+  pubGVar, privClass, pubClass, docClass, commentedClass, buildModule, 
+  modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
@@ -206,6 +206,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   listInnerType = pair1 listInnerType listInnerType
   obj t = on2StateValues pair (obj t) (obj t)
   enumType t = on2StateValues pair (enumType t) (enumType t)
+  funcType = pair1List1Val funcType funcType
   iterator = pair1 iterator iterator
   void = on2StateValues pair void void
 
@@ -439,6 +440,8 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   newObj = pair1Val1List newObj newObj
   extNewObj l = pair1Val1List (extNewObj l) (extNewObj l)
 
+  lambda = pair1List1Val lambda lambda
+
   exists = pair1 exists exists
   notNull = pair1 notNull notNull
   
@@ -557,6 +560,8 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (extObjDecNewNoParams lib) . zoom lensMStoVS
   constDecDef vr vl = pair2 constDecDef constDecDef (zoom lensMStoVS vr) 
     (zoom lensMStoVS vl)
+  funcDecDef v ps r = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
+    (map (zoom lensMStoVS) ps) (zoom lensMStoVS r)
 
   print = pair1 print print . zoom lensMStoVS
   printLn = pair1 printLn printLn . zoom lensMStoVS
@@ -1120,6 +1125,7 @@ instance TypeSym CppSrcCode where
     getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
     (Map.lookup n cm) (G.obj n)))
   enumType = G.enumType
+  funcType = G.funcType
   iterator t = modify (addLangImportVS "iterator") >> 
     (cppIterType . listType dynamic_) t
   void = G.void
@@ -1301,6 +1307,8 @@ instance ValueExpression CppSrcCode where
   newObj = G.newObj newObjDocD'
   extNewObj l t vs = modify (addModuleImportVS l) >> newObj t vs
 
+  lambda = G.lambda (cppLambda blockStart blockEnd endStatement)
+
   exists = notNull
   notNull v = v
 
@@ -1366,7 +1374,7 @@ instance InternalFunction CppSrcCode where
   listAccessFunc = G.listAccessFunc' "at"
   listSetFunc = G.listSetFunc cppListSetDoc
 
-  functionType = onCodeValue funcType
+  functionType = onCodeValue fType
   functionDoc = funcDoc . unCPPSC
   
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -1404,6 +1412,7 @@ instance StatementSym CppSrcCode where
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams l v = modify (addModuleImport l) >> objDecNewNoParams v
   constDecDef = G.constDecDef
+  funcDecDef = G.funcDecDef
 
   print = outDoc False Nothing printFunc
   printLn = outDoc True Nothing printLnFunc
@@ -1766,6 +1775,7 @@ instance TypeSym CppHdrCode where
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
     (Map.lookup n cm) $ G.obj n)
   enumType = G.enumType
+  funcType = G.funcType
   iterator t = modify (addHeaderLangImport "iterator") >> 
     (cppIterType . listType dynamic_) t
   void = G.void
@@ -1927,6 +1937,8 @@ instance ValueExpression CppHdrCode where
   newObj _ _ = mkStateVal void empty
   extNewObj _ _ _ = mkStateVal void empty
 
+  lambda _ _ = mkStateVal void empty
+
   exists _ = mkStateVal void empty
   notNull _ = mkStateVal void empty
 
@@ -1990,7 +2002,7 @@ instance InternalFunction CppHdrCode where
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
   
-  functionType = onCodeValue funcType
+  functionType = onCodeValue fType
   functionDoc = funcDoc . unCPPHC
   
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -2028,6 +2040,7 @@ instance StatementSym CppHdrCode where
   objDecNewNoParams _ = emptyState
   extObjDecNewNoParams _ _ = emptyState
   constDecDef = G.constDecDef
+  funcDecDef _ _ _ = emptyState
 
   print _ = emptyState
   printLn _ = emptyState
@@ -2378,6 +2391,13 @@ cppSelfFuncApp :: (RenderSym repr) => VS (repr (Variable repr)) -> Label ->
   VS (repr (Type repr)) -> [VS (repr (Value repr))] -> VS (repr (Value repr))
 cppSelfFuncApp s n t vs = s >>= 
   (\slf -> funcApp (variableName slf ++ "->" ++ n) t vs)
+
+cppLambda :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
+  repr (Keyword repr) -> [repr (Variable repr)] -> repr (Value repr) -> Doc
+cppLambda bStart bEnd endSt ps ex = text "[]" <+> parens (hicat (text ",") $ 
+  zipWith (<+>) (map (getTypeDoc . variableType) ps) (map variableDoc ps)) <+> 
+  text "->" <+> keyDoc bStart <> text "return" <+> valueDoc ex <> keyDoc endSt 
+  <> keyDoc bEnd
 
 cppCast :: VS (CppSrcCode (Type CppSrcCode)) -> 
   VS (CppSrcCode (Value CppSrcCode)) -> VS (CppSrcCode (Value CppSrcCode))

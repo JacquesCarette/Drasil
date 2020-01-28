@@ -97,6 +97,7 @@ instance TypeSym CodeInfo where
   listInnerType _ = noInfo
   obj _ = noInfo
   enumType _ = noInfo
+  funcType _ _ = noInfo
   iterator _ = noInfo
   void = noInfo
 
@@ -202,6 +203,8 @@ instance ValueExpression CodeInfo where
   newObj _ _ = noInfo
   extNewObj _ _ _ = noInfo
 
+  lambda _ _ = noInfo
+
   exists _ = noInfo
   notNull _ = noInfo
 
@@ -260,6 +263,7 @@ instance StatementSym CodeInfo where
   objDecNewNoParams _ = noInfo
   extObjDecNewNoParams _ _ = noInfo
   constDecDef _ _ = noInfo
+  funcDecDef _ _ _ = noInfo
 
   print _ = noInfo
   printLn _ = noInfo

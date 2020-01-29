@@ -137,6 +137,7 @@ class (PermanenceSym repr) => TypeSym repr where
   outfile       :: VS (repr (Type repr))
   listType      :: repr (Permanence repr) -> VS (repr (Type repr)) -> 
     VS (repr (Type repr))
+  arrayType     :: VS (repr (Type repr)) -> VS (repr (Type repr))
   listInnerType :: VS (repr (Type repr)) -> VS (repr (Type repr))
   obj           :: Label -> VS (repr (Type repr))
   enumType      :: Label -> VS (repr (Type repr))

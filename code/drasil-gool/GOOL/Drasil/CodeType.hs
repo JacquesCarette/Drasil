@@ -11,6 +11,7 @@ data CodeType = Boolean
               | String
               | File
               | List CodeType
+              | Array CodeType
               | Iterator CodeType
               | Object String
               | Enum String

@@ -34,7 +34,7 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, double, char, listType, 
-  listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
+  arrayType, listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
   negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
   plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, 
   extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar,
@@ -68,12 +68,14 @@ import GOOL.Drasil.Helpers (angles, vibcat, emptyIfNull, toCode, toState,
   onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
   on3StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
   on1StateValue1List)
-import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, modifyReturnFunc, 
-  addODEFilePaths, addProgNameToPaths, addODEFile, getODEFiles,
-  addLangImport, addLangImportVS, addExceptionImports, addLibImport, addLibImports, 
-  getModuleName, setClassName, getClassName, setCurrMain, setODEDepVars, 
-  getODEDepVars, setODEOthVars, getODEOthVars, setOutputsDeclared, 
-  isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions)
+import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS,
+  lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, 
+  modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFile, 
+  getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
+  addLibImport, addLibImports, getModuleName, setClassName, getClassName, 
+  setCurrMain, setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
+  setOutputsDeclared, isOutputsDeclared, getExceptions, getMethodExcMap, 
+  addExceptions)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -198,6 +200,7 @@ instance TypeSym JavaCode where
   infile = jInfileType
   outfile = jOutfileType
   listType = jListType
+  arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
@@ -820,7 +823,6 @@ jListType p t = modify (addLangImportVS $ "java.util." ++ render lst) >>
           (lst <> angles (text "Double"))
         jListType' _ = G.listType p t
         lst = keyDoc $ list p
-
 
 jArrayType :: VS (JavaCode (Type JavaCode))
 jArrayType = toState $ typeFromData (List $ Object "Object") "Object" 

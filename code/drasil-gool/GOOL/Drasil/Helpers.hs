@@ -91,6 +91,7 @@ on1StateValue1List f a as = liftM2 f a (sequence as)
 
 getInnerType :: C.CodeType -> C.CodeType
 getInnerType (C.List innerT) = innerT
+getInnerType (C.Array innerT) = innerT
 getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
 
 getNestDegree :: Integer -> C.CodeType -> Integer
@@ -104,6 +105,7 @@ convType C.Float = S.float
 convType C.Char = S.char
 convType C.String = S.string
 convType (C.List t) = S.listType S.dynamic_ (convType t)
+convType (C.Array t) = S.arrayType (convType t)
 convType (C.Iterator t) = S.iterator $ convType t
 convType (C.Object n) = S.obj n
 convType (C.Enum n) = S.enumType n

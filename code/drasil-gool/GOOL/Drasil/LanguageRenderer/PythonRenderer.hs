@@ -188,6 +188,7 @@ instance TypeSym PythonCode where
   outfile = toState $ typeFromData File "" empty
   listType _ = onStateValue (\t -> typeFromData (List (getType t)) "[]" 
     (brackets empty))
+  arrayType = listType static_
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType

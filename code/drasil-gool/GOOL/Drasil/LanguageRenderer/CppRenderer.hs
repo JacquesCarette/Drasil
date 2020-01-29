@@ -203,6 +203,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   infile = on2StateValues pair infile infile
   outfile = on2StateValues pair outfile outfile
   listType p = pair1 (listType (pfst p)) (listType (psnd p))
+  arrayType = pair1 arrayType arrayType
   listInnerType = pair1 listInnerType listInnerType
   obj t = on2StateValues pair (obj t) (obj t)
   enumType t = on2StateValues pair (enumType t) (enumType t)
@@ -1120,6 +1121,7 @@ instance TypeSym CppSrcCode where
   outfile = modify (addUsing "ofstream") >> cppOutfileType
   listType p t = modify (addUsing lst . addLangImportVS lst) >> G.listType p t
     where lst = render $ keyDoc (list p)
+  arrayType = cppArrayType
   listInnerType = G.listInnerType
   obj n = zoom lensVStoMS getClassName >>= (\cn -> if cn == n then G.obj n else 
     getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
@@ -1771,6 +1773,7 @@ instance TypeSym CppHdrCode where
   listType p t = modify (addHeaderUsing lst . addHeaderLangImport lst) >> 
     G.listType p t
     where lst = render $ keyDoc (list p)
+  arrayType = cppArrayType
   listInnerType = G.listInnerType
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
     (Map.lookup n cm) $ G.obj n)
@@ -2377,6 +2380,11 @@ cppInfileType = addFStreamImport $ typeFromData File "ifstream"
 cppOutfileType :: (RenderSym repr) => VS (repr (Type repr))
 cppOutfileType = addFStreamImport $ typeFromData File "ofstream" 
   (text "ofstream")
+
+cppArrayType :: (RenderSym repr) => VS (repr (Type repr)) -> 
+  VS (repr (Type repr))
+cppArrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
+  (getTypeString t) (getTypeDoc t))
 
 cppIterType :: (RenderSym repr) => VS (repr (Type repr)) -> 
   VS (repr (Type repr))

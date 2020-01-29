@@ -35,7 +35,7 @@ import GOOL.Drasil.LanguageRenderer (new, classDocD, multiStateDocD, bodyDocD,
   commentedModD, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, double, char, string, 
-  listType, listInnerType, obj, enumType, funcType, void, runStrategy, 
+  listType, arrayType, listInnerType, obj, enumType, funcType, void, runStrategy, 
   listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
   lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp,
   var, staticVar, extVar, self, enumVar, classVar, objVarSelf, listVar, listOf, 
@@ -192,6 +192,7 @@ instance TypeSym CSharpCode where
   outfile = csOutfileType
   listType p t = modify (addLangImportVS "System.Collections.Generic") >> 
     G.listType p t
+  arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType

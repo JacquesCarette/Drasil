@@ -3,7 +3,7 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
-  fileType, listType, listInnerType, obj, enumType, funcType, void, runStrategy,
+  fileType, listType, arrayType, listInnerType, obj, enumType, funcType, void, runStrategy,
   listSlice, unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', absOp, absOp', 
   expOp, expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', asinOp, asinOp', 
   acosOp, acosOp', atanOp, atanOp', unExpr, unExpr', typeUnExpr, powerPrec, 
@@ -102,7 +102,7 @@ import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  braces, quotes, integer, vcat, semi, comma, equals, isEmpty)
+  brackets, braces, quotes, integer, vcat, semi, comma, equals, isEmpty)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
 -- Bodies --
@@ -154,6 +154,10 @@ listType :: (RenderSym repr) => repr (Permanence repr) -> VS (repr (Type repr))
 listType p = onStateValue (\t -> typeFromData (List (getType t)) (render 
   (keyDoc $ list p) ++ "<" ++ getTypeString t ++ ">") (keyDoc (list p) <> 
   angles (getTypeDoc t)))
+
+arrayType :: (RenderSym repr) => VS (repr (Type repr)) -> VS (repr (Type repr))
+arrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
+  (getTypeString t ++ "[]") (getTypeDoc t <> brackets empty)) 
 
 listInnerType :: (RenderSym repr) => VS (repr (Type repr)) -> 
   VS (repr (Type repr))

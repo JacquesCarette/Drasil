@@ -94,6 +94,7 @@ instance TypeSym CodeInfo where
   infile = noInfo
   outfile = noInfo
   listType _ _ = noInfo
+  arrayType _ = noInfo
   listInnerType _ = noInfo
   obj _ = noInfo
   enumType _ = noInfo

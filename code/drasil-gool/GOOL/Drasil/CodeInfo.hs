@@ -258,6 +258,8 @@ instance StatementSym CodeInfo where
   varDecDef _ _ = noInfo
   listDec _ _ = noInfo
   listDecDef _ _ = noInfo
+  arrayDec _ _ = noInfo
+  arrayDecDef _ _ = noInfo
   objDecDef _ _ = noInfo
   objDecNew _ _ = noInfo
   extObjDecNew _ _ _ = noInfo

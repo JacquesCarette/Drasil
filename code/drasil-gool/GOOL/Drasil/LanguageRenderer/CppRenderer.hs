@@ -84,8 +84,9 @@ import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (State, modify, runState)
 import qualified Data.Map as Map (lookup)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
-  empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, 
+  brackets, comma, empty, equals, semi, vcat, lbrace, rbrace, quotes, render, 
+  colon)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -547,6 +548,9 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (zoom lensMStoVS vl)
   listDec n vr = pair1 (listDec n) (listDec n) (zoom lensMStoVS vr)
   listDecDef vr vs = pair1Val1List listDecDef listDecDef (zoom lensMStoVS vr) 
+    (map (zoom lensMStoVS) vs)
+  arrayDec n vr = pair1 (arrayDec n) (arrayDec n) (zoom lensMStoVS vr)
+  arrayDecDef vr vs = pair1Val1List arrayDecDef arrayDecDef (zoom lensMStoVS vr)
     (map (zoom lensMStoVS) vs)
   objDecDef o v = pair2 objDecDef objDecDef (zoom lensMStoVS o) 
     (zoom lensMStoVS v)
@@ -1408,6 +1412,12 @@ instance StatementSym CppSrcCode where
   varDecDef = G.varDecDef 
   listDec n = G.listDec cppListDecDoc (litInt n)
   listDecDef = G.listDecDef cppListDecDefDoc
+  arrayDec n vr = zoom lensMStoVS $ on2StateValues (\sz v -> mkSt $ getTypeDoc 
+    (variableType v) <+> variableDoc v <> brackets (valueDoc sz)) 
+    (litInt n :: VS (CppSrcCode (Value CppSrcCode))) vr
+  arrayDecDef vr vals = on2StateValues (\vdc vs -> mkSt $ statementDoc vdc <+> 
+    equals <+> braces (valueList vs)) (arrayDec (toInteger $ length vals) vr) 
+    (mapM (zoom lensMStoVS) vals)
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew l v vs = modify (addModuleImport l) >> objDecNew v vs
@@ -2037,6 +2047,8 @@ instance StatementSym CppHdrCode where
   varDecDef = G.varDecDef
   listDec _ _ = emptyState
   listDecDef _ _ = emptyState
+  arrayDec _ _ = emptyState
+  arrayDecDef _ _ = emptyState
   objDecDef _ _ = emptyState
   objDecNew _ _ = emptyState
   extObjDecNew _ _ _ = emptyState

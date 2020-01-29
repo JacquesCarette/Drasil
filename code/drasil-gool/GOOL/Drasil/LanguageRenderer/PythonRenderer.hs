@@ -484,6 +484,8 @@ instance StatementSym PythonCode where
   listDec _ v = zoom lensMStoVS $ onStateValue (mkStNoEnd . pyListDec) v
   listDecDef v' vs' = zoom lensMStoVS $ on1StateValue1List (\v vs -> mkStNoEnd 
     $ pyListDecDef v vs) v' vs'
+  arrayDec = listDec
+  arrayDecDef = listDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v vs = modify (addModuleImport lib) >> varDecDef v 

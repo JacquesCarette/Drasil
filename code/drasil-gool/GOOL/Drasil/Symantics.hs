@@ -516,6 +516,10 @@ class (SelectorFunction repr) => StatementSym repr where
     MS (repr (Statement repr))
   listDecDef       :: VS (repr (Variable repr)) -> [VS (repr (Value repr))] -> 
     MS (repr (Statement repr))
+  arrayDec         :: Integer -> VS (repr (Variable repr)) -> 
+    MS (repr (Statement repr))
+  arrayDecDef      :: VS (repr (Variable repr)) -> [VS (repr (Value repr))] -> 
+    MS (repr (Statement repr))
   objDecDef        :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
     MS (repr (Statement repr))
   objDecNew        :: VS (repr (Variable repr)) -> [VS (repr (Value repr))] -> 

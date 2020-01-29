@@ -46,7 +46,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
   iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
-  increment1, varDec, varDecDef, listDec, objDecNew, objDecNewNoParams, 
+  increment1, varDec, varDecDef, listDec, arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, 
   funcDecDef, discardInput, discardFileInput, openFileR, openFileW, openFileA, 
   closeFile, discardFileLine, stringListVals, stringListLists, returnState, 
   multiReturnError, valState, comment, freeError, throw, initState, changeState,
@@ -84,7 +84,7 @@ import Control.Monad (join)
 import Control.Monad.State (modify, runState)
 import qualified Data.Map as Map (lookup)
 import Data.List (elemIndex, nub, intercalate, sort)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), braces, parens, 
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, 
   brackets, empty, equals, semi, vcat, lbrace, rbrace, render, colon, integer)
 
 jExt :: String
@@ -238,8 +238,7 @@ instance ControlBlockSym JavaCode where
       block [
         jODEMethod opts,
         objDecDef odeVar (newObj odeVarType (map valueOf $ otherVars info)),
-        zoom lensMStoVS initval >>= (\initv -> varDecDef odeDepVar (toState $ 
-          mkVal (variableType dpv) (braces (valueDoc initv)))),
+        arrayDecDef odeDepVar [initval],
         listDecDef dv [initval]],
       block [
         on3StateValues (\odec initf handlef -> mkSt $ statementDoc odec <+> 
@@ -535,6 +534,8 @@ instance StatementSym JavaCode where
   listDecDef v vs = modify (if null vs then id else addLangImport 
     "java.util.Arrays") >> objDecNew v [funcApp "Arrays.asList" 
     (onStateValue variableType v) vs | not (null vs)]
+  arrayDec n = G.arrayDec (litInt n)
+  arrayDecDef = G.arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew
@@ -959,8 +960,7 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
   where returnTp [x] = onStateValue variableType x
         returnTp _ = jArrayType
         returnSt [x] = returnState $ valueOf x
-        returnSt _ = multi (varDecDef outputs (valueOf (var 
-          ("new Object[" ++ show (length rets) ++ "]") jArrayType))
+        returnSt _ = multi (arrayDec (toInteger $ length rets) outputs
           : assignArray 0 (map valueOf rets)
           ++ [returnState (valueOf outputs)])
         assignArray :: Int -> [VS (JavaCode (Value JavaCode))] -> 

@@ -47,7 +47,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
   listAccessFunc, listSetFunc, printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
-  increment1, varDec, varDecDef, listDec, listDecDef', objDecNew, 
+  increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, objDecNew, 
   objDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, openFileA,
   closeFile, discardFileLine, stringListVals, stringListLists, returnState, 
   multiReturnError, valState, comment, freeError, throw, initState, changeState,
@@ -239,8 +239,7 @@ instance ControlBlockSym CSharpCode where
           odeT = obj "IEnumerable<SolPoint>"
           vec = obj "Vector"
           sol = var "sol" odeT
-          spArray = toState $ typeFromData (List (Object "SolPoint")) 
-            "SolPoint[]" (text "SolPoint[]")
+          spArray = arrayType (obj "SolPoint")
           points = var "points" spArray
           sp = var "sp" (obj "SolPoint")
 
@@ -485,6 +484,8 @@ instance StatementSym CSharpCode where
   listDec n v = zoom lensMStoVS v >>= (\v' -> G.listDec (listDecDocD v') 
     (litInt n) v)
   listDecDef = G.listDecDef'
+  arrayDec n = G.arrayDec (litInt n)
+  arrayDecDef = G.arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew

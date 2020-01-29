@@ -20,7 +20,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   listAccessFunc', listSetFunc, printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, increment', 
   increment1, increment1', decrement1, varDec, varDecDef, listDec, listDecDef, 
-  listDecDef', objDecNew, objDecNewNoParams, constDecDef, funcDecDef, 
+  listDecDef', arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, constDecDef, funcDecDef, 
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
   multiReturnError, valState, comment, freeError, throw, initState, changeState,
@@ -708,6 +708,17 @@ listDecDef' v vals = on3StateValues (\vd vr vs -> mkSt (statementDoc
   vd <+> equals <+> new <+> getTypeDoc (variableType vr) <+> braces 
   (valueList vs))) (S.varDec v) (zoom lensMStoVS v) (mapM (zoom lensMStoVS)
   vals)
+
+arrayDec :: (RenderSym repr) => VS (repr (Value repr)) -> 
+  VS (repr (Variable repr)) -> MS (repr (Statement repr))
+arrayDec n vr = zoom lensMStoVS $ on3StateValues (\sz v it -> mkSt (getTypeDoc 
+  (variableType v) <+> variableDoc v <+> equals <+> new <+> getTypeDoc it <> 
+  brackets (valueDoc sz))) n vr (listInnerType $ onStateValue variableType vr)
+
+arrayDecDef :: (RenderSym repr) => VS (repr (Variable repr)) -> 
+  [VS (repr (Value repr))] -> MS (repr (Statement repr))
+arrayDecDef v vals = on2StateValues (\vd vs -> mkSt (statementDoc vd <+> 
+  equals <+> braces (valueList vs))) (S.varDec v) (mapM (zoom lensMStoVS) vals)
 
 objDecNew :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   [VS (repr (Value repr))] -> MS (repr (Statement repr))

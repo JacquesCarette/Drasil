@@ -226,7 +226,7 @@ instance ControlBlockSym JavaCode where
     >>= (\dpv -> 
       let odeVarType = obj (odeClassName dpv)
           odeVar = var "ode" odeVarType
-          odeDepVar = var (odeVarName dpv) (toState dblArray)
+          odeDepVar = var (odeVarName dpv) (arrayType float)
           initval = initVal info
           integVal = valueOf $ jODEIntVar (solveMethod opts)
           hndlr = var "stepHandler" (obj stH)
@@ -239,8 +239,7 @@ instance ControlBlockSym JavaCode where
         jODEMethod opts,
         objDecDef odeVar (newObj odeVarType (map valueOf $ otherVars info)),
         zoom lensMStoVS initval >>= (\initv -> varDecDef odeDepVar (toState $ 
-          mkVal (variableType dpv) (new <+> getTypeDoc dblArray <+> braces
-          (valueDoc initv)))),
+          mkVal (variableType dpv) (braces (valueDoc initv)))),
         listDecDef dv [initval]],
       block [
         on3StateValues (\odec initf handlef -> mkSt $ statementDoc odec <+> 
@@ -249,12 +248,12 @@ instance ControlBlockSym JavaCode where
           keyDoc (blockEnd :: JavaCode Doc)) 
           (objDecDef hndlr (newObj (obj stH) [])) 
           (function "init" public dynamic_ void (map param [var "t0" float, 
-            var "y0" (toState dblArray), var "t" float]) (body []))
+            var "y0" (arrayType float), var "t" float]) (body []))
           (function "handleStep" public dynamic_ void (map param [interp, 
             var "isLast" (toState $ typeFromData Boolean "boolean" 
             (text "boolean"))]) (bodyStatements [
-              varDecDef (var (odeTempName dpv) (toState dblArray)) 
-                (objMethodCallNoParams (toState dblArray) (valueOf interp) 
+              varDecDef (var (odeTempName dpv) (arrayType float)) 
+                (objMethodCallNoParams (arrayType float) (valueOf interp) 
                 "getInterpolatedState"),
               valState $ listAppend (valueOf dv) (mkStateVal float 
                 (text $ odeTempName dpv ++ "[0]"))])),
@@ -739,9 +738,6 @@ instance BlockCommentSym JavaCode where
 odeImport :: String
 odeImport = "org.apache.commons.math3.ode."
 
-dblArray :: JavaCode (Type JavaCode)
-dblArray = typeFromData (List Float) "double[]" (text "double[]")
-
 jODEMethod :: ODEOptions JavaCode -> MS (JavaCode (Statement JavaCode))
 jODEMethod opts = modify (addLibImport (odeImport ++ "nonstiff." ++ it)) >> 
   varDecDef (jODEIntVar m) (newObj (obj it) (jODEParams m))
@@ -790,7 +786,7 @@ jODEFile info = (unJC fl, fst s)
               pubMethod "getDimension" int [] (oneLiner $ returnState $ 
                 litInt 1),
               pubMethod "computeDerivatives" void (map param [var "t" float, 
-                var n (toState dblArray), var dn (toState dblArray)]) (oneLiner 
+                var n (arrayType float), var dn (arrayType float)]) (oneLiner 
                 $ var (dn ++ "[0]") float &= (modify (setODEDepVars 
                 [variableName dpv, dn] . setODEOthVars (map variableName ovs)) 
                 >> ode info))]))])) 
@@ -825,8 +821,7 @@ jListType p t = modify (addLangImportVS $ "java.util." ++ render lst) >>
         lst = keyDoc $ list p
 
 jArrayType :: VS (JavaCode (Type JavaCode))
-jArrayType = toState $ typeFromData (List $ Object "Object") "Object" 
-  (text "Object[]")
+jArrayType = arrayType (obj "Object")
 
 jFileType :: (RenderSym repr) => VS (repr (Type repr))
 jFileType = modifyReturn (addLangImportVS "java.io.File") $ typeFromData File 

@@ -37,7 +37,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', equalOp, notEqualOp, 
   greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
   divideOp, moduloOp, var, staticVar, extVar, enumVar, classVar, objVar, 
-  objVarSelf, listVar, listOf, iterVar, litChar, litFloat, litInt, litString, 
+  objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litFloat, litInt, litString, 
   valueOf, arg, enumElement, argsList, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
   selfFuncApp, extFuncApp, newObj, lambda, func, get, set, listAdd, listAppend, 
@@ -299,6 +299,7 @@ instance VariableSym PythonCode where
   objVarSelf = G.objVarSelf
   listVar = G.listVar
   listOf = G.listOf
+  arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
 
   ($->) = objVar

@@ -235,6 +235,8 @@ class (TypeSym repr) => VariableSym repr where
     VS (repr (Variable repr))
   listOf       :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
   -- Use for iterator variables, i.e. in a forEach loop.
+  arrayElem    :: Integer -> VS (repr (Variable repr)) -> 
+    VS (repr (Variable repr))
   iterVar      :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
 
   ($->) :: VS (repr (Variable repr)) -> VS (repr (Variable repr)) -> VS (repr (Variable repr))

@@ -10,7 +10,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   multPrec, andPrec, orPrec, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
   lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, 
   andOp, orOp, binExpr, binExpr', typeBinExpr, addmathImport, var, staticVar, 
-  extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar,
+  extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar,
   litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, 
   enumElement, argsList, inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, 
   lambda, notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
@@ -436,6 +436,12 @@ listVar n p t = S.var n (listType p t)
 listOf :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   VS (repr (Variable repr))
 listOf n = S.listVar n static_
+
+arrayElem :: (RenderSym repr) => VS (repr (Value repr)) -> 
+  VS (repr (Variable repr)) -> VS (repr (Variable repr))
+arrayElem i' v' = join $ on2StateValues (\i v -> mkStateVar (variableName v ++ 
+  "[" ++ render (valueDoc i) ++ "]") (listInnerType $ toState $ variableType v) 
+  (variableDoc v <> brackets (valueDoc i))) i' v'
 
 iterVar :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   VS (repr (Variable repr))

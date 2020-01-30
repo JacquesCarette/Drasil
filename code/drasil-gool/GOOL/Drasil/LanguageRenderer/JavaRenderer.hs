@@ -37,7 +37,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   arrayType, listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
   negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
   plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, 
-  extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar,
+  extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar,
   litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, 
   enumElement, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
@@ -84,8 +84,8 @@ import Control.Monad (join)
 import Control.Monad.State (modify, runState)
 import qualified Data.Map as Map (lookup)
 import Data.List (elemIndex, nub, intercalate, sort)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, 
-  brackets, empty, equals, semi, vcat, lbrace, rbrace, render, colon, integer)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty, 
+  equals, semi, vcat, lbrace, rbrace, render, colon)
 
 jExt :: String
 jExt = "java"
@@ -324,6 +324,7 @@ instance VariableSym JavaCode where
   objVarSelf = G.objVarSelf
   listVar = G.listVar
   listOf = G.listOf
+  arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
 
   ($->) = objVar
@@ -349,9 +350,8 @@ instance ValueSym JavaCode where
 
   ($:) = enumElement
 
-  valueOf v = join $ on2StateValues (\dvs vr -> maybe (G.valueOf v) (mkStateVal 
-    (listInnerType $ toState $ variableType vr) . (variableDoc vr <>) . 
-    brackets . integer . toInteger) (elemIndex (variableName vr) dvs)) 
+  valueOf v = G.valueOf $ join $ on2StateValues (\dvs vr -> maybe v (\i -> 
+    arrayElem (toInteger i) v) (elemIndex (variableName vr) dvs)) 
     getODEDepVars v
   arg n = G.arg (litInt n) argsList
   enumElement = G.enumElement
@@ -768,6 +768,7 @@ jODEFile info = (unJC fl, fst s)
           let n = variableName dpv
               cn = n ++ "_ODE"
               dn = "d" ++ n 
+              ddv = var dn (arrayType float)
               othVars = map (modify (setODEOthVars (map variableName 
                 ovs)) >>) ovars
           in fileDoc (buildModule cn [] [zoom lensCStoMS (modify (addLibImport 
@@ -787,10 +788,9 @@ jODEFile info = (unJC fl, fst s)
               pubMethod "getDimension" int [] (oneLiner $ returnState $ 
                 litInt 1),
               pubMethod "computeDerivatives" void (map param [var "t" float, 
-                var n (arrayType float), var dn (arrayType float)]) (oneLiner 
-                $ var (dn ++ "[0]") float &= (modify (setODEDepVars 
-                [variableName dpv, dn] . setODEOthVars (map variableName ovs)) 
-                >> ode info))]))])) 
+                var n (arrayType float), ddv]) (oneLiner $ arrayElem 0 ddv &= 
+                (modify (setODEDepVars [variableName dpv, dn] . setODEOthVars 
+                (map variableName ovs)) >> ode info))]))])) 
             (zoom lensFStoVS dv) (map (zoom lensFStoVS) ovars)
 
 jName :: String
@@ -915,12 +915,12 @@ jMethod n es s p t ps b = vcat [
   indent $ bodyDoc b,
   rbrace]
 
-jAssignFromArray :: Int -> [VS (JavaCode (Variable JavaCode))] -> 
+jAssignFromArray :: Integer -> [VS (JavaCode (Variable JavaCode))] -> 
   [MS (JavaCode (Statement JavaCode))]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
-  (valueOf (var ("outputs[" ++ show c ++ "]") (onStateValue variableType v))))
-  : jAssignFromArray (c+1) vs
+  (valueOf $ arrayElem c outputs)) : jAssignFromArray (c+1) vs
+  where outputs = var "outputs" jArrayType
 
 jInOutCall :: (Label -> VS (JavaCode (Type JavaCode)) -> 
   [VS (JavaCode (Value JavaCode))] -> VS (JavaCode (Value JavaCode))) -> Label 
@@ -963,11 +963,10 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
         returnSt _ = multi (arrayDec (toInteger $ length rets) outputs
           : assignArray 0 (map valueOf rets)
           ++ [returnState (valueOf outputs)])
-        assignArray :: Int -> [VS (JavaCode (Value JavaCode))] -> 
+        assignArray :: Integer -> [VS (JavaCode (Value JavaCode))] -> 
           [MS (JavaCode (Statement JavaCode))]
         assignArray _ [] = []
-        assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
-          (onStateValue valueType v) &= v) : assignArray (c+1) vs
+        assignArray c (v:vs) = (arrayElem c outputs &= v) : assignArray (c+1) vs
         decls = multi $ map varDec outs
         rets = both ++ outs
         outputs = var "outputs" jArrayType

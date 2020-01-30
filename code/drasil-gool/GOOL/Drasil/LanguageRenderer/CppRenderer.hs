@@ -40,7 +40,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, 
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
   minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, staticVar, 
-  self, enumVar, objVar, listVar, listOf, litTrue, litFalse, litChar, litFloat, 
+  self, enumVar, objVar, listVar, listOf, arrayElem, litTrue, litFalse, litChar, litFloat, 
   litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, objMethodCall,
   objMethodCallNoParams, selfAccess, listIndexExists, funcApp, newObj, lambda, 
   func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess,
@@ -361,6 +361,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   objVarSelf = pair1 objVarSelf objVarSelf
   listVar n p = pair1 (listVar n (pfst p)) (listVar n (psnd p))
   listOf n = pair1 (n `listOf`) (n `listOf`)
+  arrayElem i = pair1 (arrayElem i) (arrayElem i)
   iterVar l = pair1 (iterVar l) (iterVar l)
   
   ($->) = pair2 ($->) ($->)
@@ -1232,6 +1233,7 @@ instance VariableSym CppSrcCode where
     (variableType v) (text "this->" <> variableDoc v))
   listVar = G.listVar
   listOf = G.listOf
+  arrayElem i = G.arrayElem (litInt i)
   iterVar l t = mkStateVar l (iterator t) (text $ "(*" ++ l ++ ")")
 
   ($->) = objVar
@@ -1869,6 +1871,7 @@ instance VariableSym CppHdrCode where
   objVarSelf _ = mkStateVar "" void empty
   listVar _ _ _ = mkStateVar "" void empty
   listOf _ _ = mkStateVar "" void empty
+  arrayElem _ _ = mkStateVar "" void empty
   iterVar _ _ = mkStateVar "" void empty
 
   ($->) _ _ = mkStateVar "" void empty

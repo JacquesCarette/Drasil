@@ -56,8 +56,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, 
   function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef,
   constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
-  docClass, commentedClass, buildModule', modFromData, fileDoc, docMod, 
-  fileFromData)
+  implementingClass, docClass, commentedClass, buildModule', modFromData, 
+  fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -77,7 +77,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
-import Data.List (elemIndex)
+import Data.List (elemIndex, intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   comma, equals, semi, vcat, braces, lbrace, rbrace, colon)
 
@@ -123,6 +123,7 @@ instance KeywordSym CSharpCode where
   endStatementLoop = toCode empty
 
   inherit n = toCode $ colon <+> text n
+  implements is = toCode $ colon <+> text (intercalate ", " is)
 
   list _ = toCode $ text "List"
 
@@ -649,6 +650,7 @@ instance ClassSym CSharpCode where
   enum = G.enum
   privClass = G.privClass
   pubClass = G.pubClass
+  implementingClass = G.implementingClass classDocD implements
 
   docClass = G.docClass
 

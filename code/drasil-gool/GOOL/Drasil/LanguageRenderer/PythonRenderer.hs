@@ -49,8 +49,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   ifNoElse, switchAsIf, ifExists, tryCatch, checkState, construct, param, 
   method, getMethod, setMethod, privMethod, pubMethod, constructor, function, 
   docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
-  privClass, pubClass, docClass, commentedClass, buildModule, modFromData, 
-  fileDoc, docMod, fileFromData)
+  privClass, pubClass, implementingClass, docClass, commentedClass, buildModule,
+  modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, binExpr, 
   typeBinExpr, addmathImport)
@@ -72,6 +72,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
+import Data.List (intercalate)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty)
@@ -118,6 +119,7 @@ instance KeywordSym PythonCode where
   endStatementLoop = toCode empty
 
   inherit n = toCode $ parens (text n)
+  implements is = toCode $ parens (text $ intercalate ", " is)
 
   list _ = toCode empty
 
@@ -669,6 +671,7 @@ instance ClassSym PythonCode where
     empty (scopeDoc s) (enumElementsDocD' es) empty)
   privClass = G.privClass
   pubClass = G.pubClass
+  implementingClass = G.implementingClass pyClass implements
 
   docClass = G.docClass
 

@@ -431,6 +431,7 @@ instance ClassSym CodeInfo where
     modify (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
+  implementingClass n _ s _ = buildClass n Nothing s [] 
 
   docClass _ c = do
     _ <- c

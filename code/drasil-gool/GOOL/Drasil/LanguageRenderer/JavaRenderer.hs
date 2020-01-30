@@ -55,8 +55,9 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
-  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
+  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, implementingClass, 
+  docClass, commentedClass, buildModule', modFromData, fileDoc, docMod, 
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -132,6 +133,7 @@ instance KeywordSym JavaCode where
   endStatementLoop = toCode empty
 
   inherit n = toCode $ text "extends" <+> text n
+  implements is = toCode $ text "implements" <+> text (intercalate ", " is) 
 
   list _ = toCode $ text "ArrayList"
 
@@ -709,6 +711,7 @@ instance ClassSym JavaCode where
   enum = G.enum
   privClass = G.privClass
   pubClass = G.pubClass
+  implementingClass = G.implementingClass classDocD implements
 
   docClass = G.docClass
 

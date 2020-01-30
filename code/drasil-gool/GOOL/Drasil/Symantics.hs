@@ -68,6 +68,7 @@ class (PermanenceSym repr) => KeywordSym repr where
   endStatementLoop :: repr (Keyword repr)
 
   inherit :: Label -> repr (Keyword repr)
+  implements :: [Label] -> repr (Keyword repr)
 
   list     :: repr (Permanence repr) -> repr (Keyword repr)
 
@@ -769,6 +770,9 @@ class (MethodSym repr) => ClassSym repr where
     -> [MS (repr (Method repr))] -> CS (repr (Class repr))
   pubClass :: Label -> Maybe Label -> [CS (repr (StateVar repr))] 
     -> [MS (repr (Method repr))] -> CS (repr (Class repr))
+  implementingClass :: Label -> [Label] -> repr (Scope repr) -> 
+    [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
+    CS (repr (Class repr))
 
   docClass :: String -> CS (repr (Class repr)) -> CS (repr (Class repr))
 

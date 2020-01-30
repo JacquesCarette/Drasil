@@ -86,7 +86,7 @@ import Control.Monad (join)
 import Control.Monad.State (State, modify, runState)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, 
-  brackets, comma, empty, equals, semi, vcat, lbrace, rbrace, quotes, render, 
+  brackets, comma, empty, equals, semi, hcat, vcat, lbrace, rbrace, quotes, render, 
   colon)
 
 cppHdrExt, cppSrcExt :: String
@@ -137,6 +137,7 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   endStatementLoop = pair endStatementLoop endStatementLoop
 
   inherit n = pair (inherit n) (inherit n)
+  implements is = pair (implements is) (implements is)
 
   list p = pair (list $ pfst p) (list $ psnd p)
 
@@ -802,6 +803,10 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   pubClass n p vs fs = modify (setClassName n) >> pair2Lists 
     (pubClass n p) (pubClass n p)
     vs (map (zoom lensCStoMS) fs)
+  implementingClass n is s vs fs = modify (setClassName n) >> pair2Lists
+    (implementingClass n is (pfst s))
+    (implementingClass n is (psnd s))
+    vs (map (zoom lensCStoMS) fs)
 
   docClass d = pair1 (docClass d) (docClass d)
 
@@ -1057,6 +1062,8 @@ instance KeywordSym CppSrcCode where
   endStatementLoop = toCode empty
 
   inherit n = onCodeValue (cppInherit n . fst) public
+  implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
+    . fst) public
 
   list _ = toCode $ text "vector"
 
@@ -1636,6 +1643,7 @@ instance ClassSym CppSrcCode where
   enum _ _ _ = toState $ toCode empty
   privClass = G.privClass
   pubClass = G.pubClass
+  implementingClass n _ = buildClass n Nothing 
 
   docClass = G.docClass
 
@@ -1714,6 +1722,9 @@ instance KeywordSym CppHdrCode where
   endStatementLoop = toCode empty
 
   inherit n = onCodeValue (cppInherit n . fst) public
+  implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
+    . fst) public
+
 
   list _ = toCode $ text "vector"
 
@@ -2222,13 +2233,20 @@ instance InternalStateVar CppHdrCode where
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
   buildClass n p _ vs mths = modify (setClassName n) >> on2StateLists 
-    (\vars funcs -> cpphClass n p vars funcs public private blockStart blockEnd 
-    endStatement) vs fs
+    (\vars funcs -> cpphClass n parent vars funcs public private 
+    blockStart blockEnd endStatement) vs fs
     where fs = map (zoom lensCStoMS) $ mths ++ [destructor vs]
+          parent = case p of Nothing -> toCode empty
+                             Just pn -> inherit pn
   enum n es _ = modify (setClassName n) >> cpphEnum n (enumElementsDocD es 
     enumsEqualInts) blockStart blockEnd endStatement
   privClass = G.privClass
   pubClass = G.pubClass
+  implementingClass n is _ vs mths = modify (setClassName n) >> on2StateLists 
+    (\vars funcs -> cpphClass n (implements is) vars funcs public private 
+    blockStart blockEnd endStatement) vs fs
+    where fs = map (zoom lensCStoMS) $ mths ++ [destructor vs]
+
 
   docClass = G.docClass
 
@@ -2555,14 +2573,13 @@ cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
   where vars = map stateVarDoc vs
         funcs = map methodDoc fs
 
-cpphClass :: Label -> Maybe Label -> [CppHdrCode (StateVar CppHdrCode)] -> 
-  [CppHdrCode (Method CppHdrCode)] -> CppHdrCode (Scope CppHdrCode) -> 
-  CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Keyword CppHdrCode) -> 
+cpphClass :: Label -> CppHdrCode (Keyword CppHdrCode) -> 
+  [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode (Method CppHdrCode)] -> 
+  CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Scope CppHdrCode) -> 
   CppHdrCode (Keyword CppHdrCode) -> CppHdrCode (Keyword CppHdrCode) -> 
-  CppHdrCode (Class CppHdrCode)
+  CppHdrCode (Keyword CppHdrCode) -> CppHdrCode (Class CppHdrCode)
 cpphClass n p vars funcs pub priv bStart bEnd end = toCode $ vcat [
-    classDec <+> text n <+> keyDoc (parent :: CppHdrCode (Keyword CppHdrCode)) 
-    <+> keyDoc bStart,
+    classDec <+> text n <+> keyDoc p <+> keyDoc bStart,
     indentList [
       scopeDoc pub <> colon,
       indent pubs,
@@ -2572,8 +2589,6 @@ cpphClass n p vars funcs pub priv bStart bEnd end = toCode $ vcat [
     keyDoc bEnd <> keyDoc end]
   where pubs = cpphVarsFuncsList Pub vars funcs
         privs = cpphVarsFuncsList Priv vars funcs
-        parent = case p of Nothing -> toCode empty
-                           Just pn -> inherit pn
 
 cpphEnum :: (RenderSym repr) => Label -> Doc -> repr (Keyword repr) -> 
   repr (Keyword repr) -> repr (Keyword repr) -> CS (repr (Class repr))

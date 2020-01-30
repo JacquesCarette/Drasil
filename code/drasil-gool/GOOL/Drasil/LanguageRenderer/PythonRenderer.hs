@@ -20,10 +20,9 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..), ODEInfo(..), 
-  ODEOptions(..), ODEMethod(..))
+  InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
+  InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..), 
+  ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
   bodyDocD, outDoc, destructorError, multiAssignDoc, returnDocD, mkStNoEnd,
   breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, 
@@ -37,8 +36,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', equalOp, notEqualOp, 
   greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
   divideOp, moduloOp, var, staticVar, extVar, enumVar, classVar, objVar, 
-  objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litFloat, litInt, litString, 
-  valueOf, arg, enumElement, argsList, objAccess, objMethodCall, 
+  objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litFloat, litInt, 
+  litString, valueOf, arg, enumElement, argsList, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
   selfFuncApp, extFuncApp, newObj, lambda, func, get, set, listAdd, listAppend, 
   iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, 
@@ -63,9 +62,9 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
-  addLangImportVS, getLangImports, 
-  addLibImport, getLibImports, addModuleImport, addModuleImportVS, getModuleImports, setClassName, 
-  getClassName, setCurrMain, getClassMap)
+  addLangImportVS, getLangImports, addLibImport, getLibImports, addModuleImport,
+  addModuleImportVS, getModuleImports, setClassName, getClassName, setCurrMain, 
+  getClassMap)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)

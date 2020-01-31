@@ -1,18 +1,21 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module GOOL.Drasil.State (
-  GS, GOOLState(..), FS, CS, MS, VS, lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS, lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, lensVStoMS, headers, sources, mainMod, currMain, 
+  GS, GOOLState(..), FS, CS, MS, VS, lensFStoGS, lensGStoFS, lensFStoCS, 
+  lensFStoMS, lensFStoVS, lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, 
+  lensMStoVS, lensVStoFS, lensVStoMS, headers, sources, mainMod, currMain, 
   initialState, initialFS, modifyReturn, modifyReturnFunc, modifyReturnFunc2, 
-  modifyReturnList, addODEFilePaths, addFile, 
-  addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
-  addODEFile, getODEFiles, addLangImport, addLangImportVS, addExceptionImports, getLangImports, 
-  addLibImport, addLibImports, getLibImports, addModuleImport, addModuleImportVS, getModuleImports,
-  addHeaderLangImport, getHeaderLangImports, addHeaderLibImport, 
-  getHeaderLibImports, addHeaderModImport, getHeaderModImports, addDefine, 
-  getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
-  addHeaderUsing, getHeaderUsing, setFilePath, getFilePath, setModuleName, 
-  getModuleName, setClassName, getClassName, setCurrMain, getCurrMain, addClass,
-  getClasses, updateClassMap, getClassMap, updateMethodExcMap, getMethodExcMap,
+  modifyReturnList, addODEFilePaths, addFile, addCombinedHeaderSource, 
+  addHeader, addSource, addProgNameToPaths, setMainMod, addODEFiles, 
+  getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
+  getLangImports, addLibImport, addLibImports, getLibImports, addModuleImport, 
+  addModuleImportVS, getModuleImports, addHeaderLangImport, 
+  getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, 
+  addHeaderModImport, getHeaderModImports, addDefine, getDefines, 
+  addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
+  getHeaderUsing, setFilePath, getFilePath, setModuleName, getModuleName, 
+  setClassName, getClassName, setCurrMain, getCurrMain, addClass, getClasses, 
+  updateClassMap, getClassMap, updateMethodExcMap, getMethodExcMap, 
   addParameter, getParameters, setODEDepVars, getODEDepVars, setODEOthVars, 
   getODEOthVars, setOutputsDeclared, isOutputsDeclared, addException, 
   addExceptions, getExceptions, setScope, getScope, setCurrMainFunc, 
@@ -332,9 +335,9 @@ setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
   "Multiple modules with main methods encountered")
 
-addODEFile :: FileData -> (((GOOLState, FileState), ClassState), MethodState) 
+addODEFiles :: [FileData] -> (((GOOLState, FileState), ClassState), MethodState)
   -> (((GOOLState, FileState), ClassState), MethodState)
-addODEFile f = over _1 $ over _1 $ over _1 $ over odeFiles (f:)
+addODEFiles f = over _1 $ over _1 $ over _1 $ over odeFiles (f++)
 
 getODEFiles :: GS [FileData]
 getODEFiles = gets (^. odeFiles)

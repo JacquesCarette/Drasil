@@ -65,13 +65,12 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
   updateModDoc, MethodData(..), mthd, updateMthdDoc, OpData(..), od, 
   ParamData(..), pd, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
   VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, vibcat, emptyIfNull, toCode, toState, 
-  onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
-  on3StateValues, onCodeList, onStateList, on1CodeValue1List, 
-  on1StateValue1List)
+import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
+  onCodeList, onStateList, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS,
   lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, 
-  modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFile, 
+  modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFiles, 
   getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
   addLibImport, addLibImports, getModuleName, getClassName, setCurrMain, 
   setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
@@ -85,7 +84,7 @@ import Control.Monad (join)
 import Control.Monad.State (modify, runState)
 import qualified Data.Map as Map (lookup)
 import Data.List (elemIndex, nub, intercalate, sort)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty, 
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
   equals, semi, vcat, lbrace, rbrace, render, colon)
 
 jExt :: String
@@ -222,48 +221,32 @@ instance ControlBlockSym JavaCode where
 
   listSlice' = G.listSlice
 
-  solveODE info opts = let (fl, s) = jODEFile info 
-    in modify (addODEFilePaths s . addODEFile fl . addLibImports 
-    (map ((odeImport ++ "sampling.") ++) [stH, stI])) >> (zoom lensMStoVS dv 
+  solveODE info opts = let (fls, s) = jODEFiles info 
+    in modify (addODEFilePaths s . addODEFiles fls) >> (zoom lensMStoVS dv 
     >>= (\dpv -> 
       let odeVarType = obj (odeClassName dpv)
           odeVar = var "ode" odeVarType
           odeDepVar = var (odeVarName dpv) (arrayType float)
           initval = initVal info
           integVal = valueOf $ jODEIntVar (solveMethod opts)
-          hndlr = var "stepHandler" (obj stH)
-          interp = var "interpolator" (obj stI)
+          shn = variableName dpv ++ "_" ++ stH
+          hndlr = var "stepHandler" (obj shn)
           odeClassName = ((++ "_ODE") . variableName)
           odeVarName = ((++ "_ode") . variableName)
-          odeTempName = ((++ "_curr") . variableName)
       in multiBlock [
       block [
         jODEMethod opts,
         objDecDef odeVar (newObj odeVarType (map valueOf $ otherVars info)),
         arrayDecDef odeDepVar [initval],
-        listDecDef dv [initval]],
+        varDec dv],
       block [
-        on3StateValues (\odec initf handlef -> mkSt $ statementDoc odec <+> 
-          keyDoc (blockStart :: JavaCode Doc) $$ 
-          vibcat (map (indent . methodDoc) [initf, handlef]) $$ 
-          keyDoc (blockEnd :: JavaCode Doc)) 
-          (objDecDef hndlr (newObj (obj stH) [])) 
-          (function "init" public dynamic_ void (map param [var "t0" float, 
-            var "y0" (arrayType float), var "t" float]) (body []))
-          (function "handleStep" public dynamic_ void (map param [interp, 
-            var "isLast" (toState $ typeFromData Boolean "boolean" 
-            (text "boolean"))]) (bodyStatements [
-              varDecDef (var (odeTempName dpv) (arrayType float)) 
-                (objMethodCallNoParams (arrayType float) (valueOf interp) 
-                "getInterpolatedState"),
-              valState $ listAppend (valueOf dv) (mkStateVal float 
-                (text $ odeTempName dpv ++ "[0]"))])),
+        objDecDef hndlr (newObj (obj shn) []),
         valState $ objMethodCall void integVal "addStepHandler" [valueOf hndlr],
         valState $ objMethodCall void integVal "integrate"   
           [valueOf odeVar, tInit info, valueOf odeDepVar, tFinal info, 
-          valueOf odeDepVar]]]))
+          valueOf odeDepVar],
+        dv &= valueOf (objVar hndlr dv)]]))
     where stH = "StepHandler"
-          stI = "StepInterpolator"
           dv = depVar info
 
 instance UnaryOpSym JavaCode where
@@ -761,22 +744,29 @@ jODEInt RK45 = "DormandPrince54Integrator"
 jODEInt Adams = "AdamsBashforthIntegrator"
 jODEInt _ = error "Chosen ODE method unavailable in Java"
 
-jODEFile :: ODEInfo JavaCode -> (FileData, GOOLState)
-jODEFile info = (unJC fl, fst s)
-  where (fl, s) = runState odeFile (initialState, initialFS)
+jODEFiles :: ODEInfo JavaCode -> ([FileData], GOOLState)
+jODEFiles info = (map unJC fls, fst s)
+  where (fls, s) = runState odeFiles (initialState, initialFS)
         fode = "FirstOrderDifferentialEquations"
         dv = depVar info
         ovars = otherVars info 
-        odeFile = join $ on1StateValue1List (\dpv ovs -> 
+        odeFiles = join $ on1StateValue1List (\dpv ovs -> 
           let n = variableName dpv
               cn = n ++ "_ODE"
               dn = "d" ++ n 
+              stH = "StepHandler"
+              stI = "StepInterpolator"
+              shn = n ++ "_" ++ stH
               ddv = var dn (arrayType float)
+              y0 = var "y0" (arrayType float)
+              interp = var "interpolator" (obj stI)
               othVars = map (modify (setODEOthVars (map variableName 
                 ovs)) >>) ovars
-          in fileDoc (buildModule cn [] [zoom lensCStoMS (modify (addLibImport 
-            (odeImport ++ fode))) >> implementingClass cn [fode] public
-              (map privMVar othVars) 
+              odeTempName = ((++ "_curr") . variableName)
+              odeTemp = var (odeTempName dpv) (arrayType float)
+          in sequence [fileDoc (buildModule cn [] [zoom lensCStoMS (modify 
+              (addLibImport (odeImport ++ fode))) >> implementingClass cn [fode]
+              public (map privMVar othVars) 
               [initializer (map param othVars) (zip othVars 
                 (map valueOf othVars)),
               pubMethod "getDimension" int [] (oneLiner $ returnState $ 
@@ -784,8 +774,23 @@ jODEFile info = (unJC fl, fst s)
               pubMethod "computeDerivatives" void (map param [var "t" float, 
                 var n (arrayType float), ddv]) (oneLiner $ arrayElem 0 ddv &= 
                 (modify (setODEDepVars [variableName dpv, dn] . setODEOthVars 
-                (map variableName ovs)) >> ode info))]])) 
-            (zoom lensFStoVS dv) (map (zoom lensFStoVS) ovars)
+                (map variableName ovs)) >> ode info))]]),
+            fileDoc (buildModule shn [] [zoom lensCStoMS (modify (addLibImports 
+              (map ((odeImport ++ "sampling.") ++) [stH, stI]))) >> 
+              implementingClass shn [stH] public [pubMVar dv] 
+                [pubMethod "init" void (map param [var "t0" float, y0, 
+                  var "t" float]) (modify (addLangImport "java.util.Arrays") >> 
+                    (oneLiner $ objVarSelf dv &= newObj (obj 
+                    (getTypeString $ variableType dpv)) [funcApp "Arrays.asList"
+                    (toState $ variableType dpv) [valueOf $ arrayElem 0 y0]])),
+                pubMethod "handleStep" void (map param [interp, var "isLast" 
+                  (toState $ typeFromData Boolean "boolean" (text "boolean"))]) 
+                  (bodyStatements [
+                    varDecDef odeTemp (objMethodCallNoParams (arrayType float) 
+                      (valueOf interp) "getInterpolatedState"),
+                    valState $ listAppend (valueOf $ objVarSelf dv) (valueOf 
+                      (arrayElem 0 odeTemp))])]])]) 
+          (zoom lensFStoVS dv) (map (zoom lensFStoVS) ovars)
 
 jName :: String
 jName = "Java"

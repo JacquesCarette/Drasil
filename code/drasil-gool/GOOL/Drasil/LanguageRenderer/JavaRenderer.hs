@@ -780,7 +780,7 @@ jODEFiles info = (map unJC fls, fst s)
               implementingClass shn [stH] public [pubMVar dv] 
                 [pubMethod "init" void (map param [var "t0" float, y0, 
                   var "t" float]) (modify (addLangImport "java.util.Arrays") >> 
-                    (oneLiner $ objVarSelf dv &= newObj (obj 
+                    oneLiner (objVarSelf dv &= newObj (obj 
                     (getTypeString $ variableType dpv)) [funcApp "Arrays.asList"
                     (toState $ variableType dpv) [valueOf $ arrayElem 0 y0]])),
                 pubMethod "handleStep" void (map param [interp, var "isLast" 

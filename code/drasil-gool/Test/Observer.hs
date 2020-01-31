@@ -23,12 +23,12 @@ selfX :: (VariableSym repr) => VS (repr (Variable repr))
 selfX = objVarSelf x
 
 helperClass :: (ClassSym repr) => CS (repr (Class repr))
-helperClass = pubClass observerName Nothing [stateVar public dynamic_ x]
+helperClass = pubClass observerName Nothing [stateVar public dynamic x]
   [observerConstructor, printNumMethod, getMethod x, setMethod x]
 
 observerConstructor :: (MethodSym repr) => MS (repr (Method repr))
 observerConstructor = initializer [] [(x, litInt 5)]
 
 printNumMethod :: (MethodSym repr) => MS (repr (Method repr))
-printNumMethod = method printNum public dynamic_ void [] $
+printNumMethod = method printNum public dynamic void [] $
   oneLiner $ printLn $ valueOf selfX

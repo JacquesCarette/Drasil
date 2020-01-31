@@ -149,8 +149,8 @@ instance ImportSym PythonCode where
 
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
-  static_ = toCode empty
-  dynamic_ = toCode dynamicDocD
+  static = toCode empty
+  dynamic = toCode dynamicDocD
 
 instance InternalPerm PythonCode where
   permDoc = unPC
@@ -189,7 +189,7 @@ instance TypeSym PythonCode where
   outfile = toState $ typeFromData File "" empty
   listType _ = onStateValue (\t -> typeFromData (List (getType t)) "[]" 
     (brackets empty))
-  arrayType = listType static_
+  arrayType = listType static
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
@@ -497,7 +497,7 @@ instance StatementSym PythonCode where
     (extNewObj lib (onStateValue variableType v) [])
   constDecDef = varDecDef
   funcDecDef v ps r = onStateValue (mkStNoEnd . methodDoc) (zoom lensMStoVS v 
-    >>= (\vr -> function (variableName vr) private dynamic_ 
+    >>= (\vr -> function (variableName vr) private dynamic 
     (toState $ variableType vr) (map param ps) (oneLiner $ returnState r)))
 
   print = pyOut False Nothing printFunc
@@ -523,7 +523,7 @@ instance StatementSym PythonCode where
   getFileInputLine = getFileInput
   discardFileLine = G.discardFileLine "readline"
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
-    (listType static_ string) [litString [d]]))  
+    (listType static string) [litString [d]]))  
 
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists
@@ -585,7 +585,7 @@ instance ControlStatementSym PythonCode where
           initv = litInt 0
           notify = oneLiner $ valState $ at obsList (valueOf index) $. f
 
-  getFileInputAll f v = v &= objMethodCall (listType static_ string) f
+  getFileInputAll f v = v &= objMethodCall (listType static string) f
     "readlines" []
 
 instance ScopeSym PythonCode where
@@ -655,7 +655,7 @@ instance StateVarSym PythonCode where
   stateVar _ _ _ = toState (toCode empty)
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (permDoc 
-    (static_ :: PythonCode (Permanence PythonCode)))
+    (static :: PythonCode (Permanence PythonCode)))
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar

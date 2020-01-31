@@ -117,23 +117,23 @@ mkVar v = variable (codeName v) (convType $ codeType v)
 publicFunc :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   Label -> VS (repr (Type repr)) -> String -> [c] -> Maybe String -> 
   [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
-publicFunc n t = genMethod (function n public static_ t) n
+publicFunc n t = genMethod (function n public static t) n
 
 privateMethod :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   Label -> VS (repr (Type repr)) -> String -> [c] -> Maybe String -> 
   [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
-privateMethod n t = genMethod (method n private dynamic_ t) n
+privateMethod n t = genMethod (method n private dynamic t) n
 
 publicInOutFunc :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) 
   => Label -> String -> [c] -> [c] -> [MS (repr (Block repr))] -> 
   Reader DrasilState (MS (repr (Method repr)))
-publicInOutFunc n = genInOutFunc (inOutFunc n) (docInOutFunc n) public static_ n
+publicInOutFunc n = genInOutFunc (inOutFunc n) (docInOutFunc n) public static n
 
 privateInOutMethod :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c,
   Eq c) => Label -> String -> [c] -> [c] -> [MS (repr (Block repr))] 
   -> Reader DrasilState (MS (repr (Method repr)))
 privateInOutMethod n = genInOutFunc (inOutMethod n) (docInOutMethod n) 
-  private dynamic_ n
+  private dynamic n
 
 genConstructor :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   Label -> String -> [c] -> [MS (repr (Block repr))] -> 
@@ -466,10 +466,10 @@ readData ddef = do
         var_line = var l_line string
         v_line = valueOf var_line
         l_lines = "lines"
-        var_lines = var l_lines (listType static_ string)
+        var_lines = var l_lines (listType static string)
         v_lines = valueOf var_lines
         l_linetokens = "linetokens"
-        var_linetokens = var l_linetokens (listType static_ string)
+        var_linetokens = var l_linetokens (listType static string)
         v_linetokens = valueOf var_linetokens
         l_infile = "infile"
         var_infile = var l_infile infile

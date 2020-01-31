@@ -98,8 +98,8 @@ class ImportSym repr where
 
 class PermanenceSym repr where
   type Permanence repr
-  static_  :: repr (Permanence repr)
-  dynamic_ :: repr (Permanence repr)
+  static  :: repr (Permanence repr)
+  dynamic :: repr (Permanence repr)
 
 class InternalPerm repr where
   permDoc :: repr (Permanence repr) -> Doc

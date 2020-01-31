@@ -166,7 +166,7 @@ genInputModCombined = do
 constVarFunc :: (ProgramSym repr) => ConstantRepr -> String ->
   (VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
   CS (repr (StateVar repr)))
-constVarFunc Var n = stateVarDef n public dynamic_
+constVarFunc Var n = stateVarDef n public dynamic
 constVarFunc Const n = constVar n public
 
 genInputClass :: (ProgramSym repr) => 

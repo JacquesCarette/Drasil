@@ -19,8 +19,8 @@ simpleODEMain = mainFunction (body [block [varDecDef odeConst (litFloat 3.5)],
 odeConst, odeDepVar, odeIndepVar :: (VariableSym repr) =>
   VS (repr (Variable repr))
 odeConst = var "c" float
-odeDepVar = var "T" (listType dynamic_ float)
-odeIndepVar = var "t" (listType dynamic_ float)
+odeDepVar = var "T" (listType dynamic float)
+odeIndepVar = var "t" (listType dynamic float)
 
 info :: (StatementSym repr) => ODEInfo repr
 info = odeInfo odeIndepVar odeDepVar [odeConst] (litFloat 0.0) (litFloat 10.0) 

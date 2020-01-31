@@ -61,8 +61,8 @@ instance FileSym CodeInfo where
 
 instance PermanenceSym CodeInfo where
   type Permanence CodeInfo = ()
-  static_ = toCode ()
-  dynamic_ = toCode ()
+  static = toCode ()
+  dynamic = toCode ()
 
 instance BodySym CodeInfo where
   type Body CodeInfo = ()

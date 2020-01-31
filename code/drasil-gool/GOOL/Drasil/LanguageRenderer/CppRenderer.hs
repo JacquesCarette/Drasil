@@ -167,8 +167,8 @@ instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
   type Permanence (p CppSrcCode CppHdrCode) = BindData
-  static_ = pair static_ static_
-  dynamic_ = pair dynamic_ dynamic_
+  static = pair static static
+  dynamic = pair dynamic dynamic
 
 instance (Pair p) => InternalPerm (p CppSrcCode CppHdrCode) where
   permDoc p = permDoc $ pfst p
@@ -1094,8 +1094,8 @@ instance ImportSym CppSrcCode where
 
 instance PermanenceSym CppSrcCode where
   type Permanence CppSrcCode = BindData
-  static_ = toCode $ bd Static staticDocD
-  dynamic_ = toCode $ bd Dynamic dynamicDocD
+  static = toCode $ bd Static staticDocD
+  dynamic = toCode $ bd Dynamic dynamicDocD
   
 instance InternalPerm CppSrcCode where
   permDoc = bindDoc . unCPPSC
@@ -1142,7 +1142,7 @@ instance TypeSym CppSrcCode where
   enumType = G.enumType
   funcType = G.funcType
   iterator t = modify (addLangImportVS "iterator") >> 
-    (cppIterType . listType dynamic_) t
+    (cppIterType . listType dynamic) t
   void = G.void
 
   getType = cType . unCPPSC
@@ -1157,7 +1157,7 @@ instance ControlBlockSym CppSrcCode where
 
   listSlice' = G.listSlice
 
-  solveODE info opts = let (fl, s) = cppODEFile info dynamic_
+  solveODE info opts = let (fl, s) = cppODEFile info dynamic
                            dv = depVar info
     in modify (addODEFilePaths s . addODEFiles [unCPPSC fl] . addLibImport 
     "boost/numeric/odeint") >> (zoom lensMStoVS dv >>= (\dpv -> 
@@ -1380,7 +1380,7 @@ instance InternalFunction CppSrcCode where
   setFunc = G.setFunc
 
   listSizeFunc = G.listSizeFunc
-  listAddFunc l i v = func "insert" (listType static_ $ onStateValue valueType  
+  listAddFunc l i v = func "insert" (listType static $ onStateValue valueType  
     v) [iterBegin l #+ i, v]
   listAppendFunc = G.listAppendFunc "push_back"
 
@@ -1418,7 +1418,7 @@ instance StatementSym CppSrcCode where
   (&++) = G.increment1
   (&~-) = G.decrement1
 
-  varDec = G.varDec static_ dynamic_
+  varDec = G.varDec static dynamic
   varDecDef = G.varDecDef 
   listDec n = G.listDec cppListDecDoc (litInt n)
   listDecDef = G.listDecDef cppListDecDefDoc
@@ -1585,7 +1585,7 @@ instance MethodSym CppSrcCode where
     ("argv", "List of command-line arguments")] ["exit code"]) (mainFunction b)
 
   function = G.function
-  mainFunction b = intFunc True "main" public static_ (mType int) 
+  mainFunction b = intFunc True "main" public static (mType int) 
     [param argc, param argv]
     (on2StateValues (on2CodeValues appendToBody) b (returnState $ litInt 0))
     where argc = var "argc" int
@@ -1625,7 +1625,7 @@ instance StateVarSym CppSrcCode where
     endStatement)) (zoom lensCStoVS v) (zoom lensCStoVS vl) 
     (zoom lensCStoMS emptyState)
   constVar n s v vl = on3StateValues (\vr val -> on3CodeValues svd (onCodeValue 
-    snd s) (cppsStateVarDef n (text "const") <$> static_ <*> vr <*> val <*>
+    snd s) (cppsStateVarDef n (text "const") <$> static <*> vr <*> val <*>
     endStatement)) (zoom lensCStoVS v) (zoom lensCStoVS vl) 
     (zoom lensCStoMS emptyState)
   privMVar = G.privMVar
@@ -1755,8 +1755,8 @@ instance ImportSym CppHdrCode where
 
 instance PermanenceSym CppHdrCode where
   type Permanence CppHdrCode = BindData
-  static_ = toCode $ bd Static staticDocD
-  dynamic_ = toCode $ bd Dynamic dynamicDocD
+  static = toCode $ bd Static staticDocD
+  dynamic = toCode $ bd Dynamic dynamicDocD
 
 instance InternalPerm CppHdrCode where
   permDoc = bindDoc . unCPPHC
@@ -1804,7 +1804,7 @@ instance TypeSym CppHdrCode where
   enumType = G.enumType
   funcType = G.funcType
   iterator t = modify (addHeaderLangImport "iterator") >> 
-    (cppIterType . listType dynamic_) t
+    (cppIterType . listType dynamic) t
   void = G.void
 
   getType = cType . unCPPHC
@@ -1819,7 +1819,7 @@ instance ControlBlockSym CppHdrCode where
 
   listSlice' _ _ _ _ _ = toState $ toCode empty
 
-  solveODE info _ = let (fl, s) = cppODEFile info dynamic_
+  solveODE info _ = let (fl, s) = cppODEFile info dynamic
     in modify (addODEFilePaths s . addODEFiles [unCPPHC fl]) >> 
     toState (toCode empty)
 
@@ -2058,7 +2058,7 @@ instance StatementSym CppHdrCode where
   (&++) _ = emptyState
   (&~-) _ = emptyState
 
-  varDec = G.varDec static_ dynamic_
+  varDec = G.varDec static dynamic
   varDecDef = G.varDecDef
   listDec _ _ = emptyState
   listDecDef _ _ = emptyState
@@ -2175,9 +2175,9 @@ instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
   method = G.method
   getMethod v = zoom lensMStoVS v >>= (\v' -> method (getterName $ variableName 
-    v') public dynamic_ (toState $ variableType v') [] (toState $ toCode empty))
+    v') public dynamic (toState $ variableType v') [] (toState $ toCode empty))
   setMethod v = zoom lensMStoVS v >>= (\v' -> method (setterName $ variableName 
-    v') public dynamic_ void [param v] (toState $ toCode empty))
+    v') public dynamic void [param v] (toState $ toCode empty))
   privMethod = G.privMethod
   pubMethod = G.pubMethod
   constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
@@ -2220,7 +2220,7 @@ instance StateVarSym CppHdrCode where
   stateVarDef _ s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
     (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyState)
   constVar _ s vr _ = on2StateValues (\v -> on3CodeValues svd (onCodeValue snd 
-    s) (on3CodeValues (constVarDocD empty) (bindDoc <$> static_) v 
+    s) (on3CodeValues (constVarDocD empty) (bindDoc <$> static) v 
     endStatement)) (zoom lensCStoVS vr) (zoom lensCStoMS emptyState)
   privMVar = G.privMVar
   pubMVar = G.pubMVar

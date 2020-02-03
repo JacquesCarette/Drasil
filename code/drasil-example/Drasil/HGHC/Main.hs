@@ -18,7 +18,7 @@ import Drasil.HGHC.Body (srs, printSetting) --thisSI
 thisChoices :: Choices
 thisChoices = Choices {
   lang             = [Python, Cpp, CSharp, Java],
-  modularity       = Modular,
+  modularity       = Modular Combined,
   impType          = Program,
   logFile          = "log.txt",
   logging          = LogNone,
@@ -30,7 +30,6 @@ thisChoices = Choices {
   inputStructure   = Bundled,
   constStructure   = Inline,
   constRepr        = Const,
-  inputModule      = Combined,
   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],
   auxFiles         = [SampleInput] 
 } -}

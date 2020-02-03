@@ -17,7 +17,7 @@ import Drasil.SSP.Body (srs, printSetting) -- si
 -- choices :: Choices
 -- choices = Choices {
 --   lang = [Python, Cpp, CSharp, Java],
---   modularity = Modular,
+--   modularity = Modular Combined,
 --   impType = Program,
 --   logFile = "log.txt",
 --   logging = LogNone,         -- LogNone, LogFunc
@@ -29,7 +29,6 @@ import Drasil.SSP.Body (srs, printSetting) -- si
 --   inputStructure = Unbundled,    -- Unbundled, Bundled
 --   constStructure = Inline,   -- Inline, WithInputs, Store Structure
 --   constRepr = Const,    -- Var, Const
---   inputModule = Combined,    -- Combined, Separated
 --   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
 --   auxFiles = [SampleInput]
 -- }

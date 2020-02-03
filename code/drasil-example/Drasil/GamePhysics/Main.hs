@@ -17,7 +17,7 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
 -- choices :: Choices
 -- choices = Choices {
 --   lang             = [Python, Cpp, CSharp, Java],
---   modularity       = Modular,
+--   modularity       = Modular Combined,
 --   impType          = Library,
 --   logFile          = "log.txt",
 --   logging          = LogNone,
@@ -29,7 +29,6 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
 --   inputStructure   = Unbundled,
 --   constStructure   = Inline,
 --   constRepr        = Const,
---   inputModule      = Combined,
 --   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],
 --   auxFiles         = [SampleInput]
 -- }       

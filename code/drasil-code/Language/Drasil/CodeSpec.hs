@@ -137,12 +137,11 @@ data Choices = Choices {
   inputStructure :: Structure,
   constStructure :: ConstantStructure,
   constRepr :: ConstantRepr,
-  inputModule :: InputModule,
   conceptMatch :: ConceptMatchMap,
   auxFiles :: [AuxFile]
 }
 
-data Modularity = Modular | Unmodular
+data Modularity = Modular InputModule | Unmodular
 
 data ImplementationType = Library
                         | Program
@@ -184,10 +183,15 @@ data AuxFile = SampleInput deriving Eq
 data Visibility = Show
                 | Hide
 
+inputModule :: Choices -> InputModule
+inputModule c = inputModule' $ modularity c
+  where inputModule' Unmodular = Combined
+        inputModule' (Modular im) = im
+
 defaultChoices :: Choices
 defaultChoices = Choices {
   lang = [Python],
-  modularity = Modular,
+  modularity = Modular Combined,
   impType = Program,
   logFile = "log.txt",
   logging = LogNone,
@@ -199,7 +203,6 @@ defaultChoices = Choices {
   inputStructure = Bundled,
   constStructure = Inline,
   constRepr = Const,
-  inputModule = Combined,
   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
   auxFiles = [SampleInput]
 }

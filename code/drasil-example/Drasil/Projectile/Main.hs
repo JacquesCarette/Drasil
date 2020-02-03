@@ -18,7 +18,7 @@ code = codeSpec si choices []
 choices :: Choices
 choices = Choices {
   lang = [Python, Cpp, CSharp, Java],
-  modularity = Modular,
+  modularity = Modular Combined,
   impType = Program,
   logFile = "log.txt",
   logging = LogNone,
@@ -30,7 +30,6 @@ choices = Choices {
   inputStructure = Bundled,
   constStructure = Store Unbundled,
   constRepr = Var,
-  inputModule = Combined,
   conceptMatch = matchConcepts [piConst] [[Pi]],
   auxFiles = [SampleInput]
 }

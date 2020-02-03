@@ -8,7 +8,7 @@ import Language.Drasil.Code.Imperative.GenerateGOOL (genDoxConfig)
 import Language.Drasil.Code.Imperative.Import (genModDef)
 import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstMod, 
   genMain, genOutputMod, genSampleInput)
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
@@ -34,7 +34,6 @@ generator dt sd chs spec = DrasilState {
   inStruct = inputStructure chs,
   conStruct = constStructure chs,
   conRepr = constRepr chs,
-  inMod = inputModule chs,
   logKind  = logging chs,
   commented = comments chs,
   doxOutput = doxVerbosity chs,

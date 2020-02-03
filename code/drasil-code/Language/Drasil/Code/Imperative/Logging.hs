@@ -2,7 +2,7 @@ module Language.Drasil.Code.Imperative.Logging (
   maybeLog, logBody, loggedMethod, varLogFile
 ) where
 
-import Language.Drasil.Code.Imperative.State (DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 
 import GOOL.Drasil (Label, ProgramSym, BodySym(..), BlockSym(..), 

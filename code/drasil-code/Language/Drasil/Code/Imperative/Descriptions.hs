@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.Descriptions (
 import Utils.Drasil (stringList)
 
 import Language.Drasil
-import Language.Drasil.Code.Imperative.State (DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), 
   InputModule(..), Structure(..))

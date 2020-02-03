@@ -125,6 +125,7 @@ codeSpec SI {_sys = sys
 
 data Choices = Choices {
   lang :: [Lang],
+  modularity :: Modularity,
   impType :: ImplementationType,
   logFile :: String,
   logging :: Logging,
@@ -140,6 +141,8 @@ data Choices = Choices {
   conceptMatch :: ConceptMatchMap,
   auxFiles :: [AuxFile]
 }
+
+data Modularity = Modular | Unmodular
 
 data ImplementationType = Library
                         | Program
@@ -184,6 +187,7 @@ data Visibility = Show
 defaultChoices :: Choices
 defaultChoices = Choices {
   lang = [Python],
+  modularity = Modular,
   impType = Program,
   logFile = "log.txt",
   logging = LogNone,

@@ -3,8 +3,9 @@ module Drasil.SWHS.Generate (generate) where
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),  
---   Logging(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
---   InputModule(..), matchConcepts, AuxFile(..), Visibility(..))
+--   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
+--   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
+--   Visibility(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -16,6 +17,7 @@ import Drasil.SWHS.Body (srs, printSetting) -- si
 -- choices :: Choices
 -- choices = Choices {
 --   lang = [Python, Cpp, CSharp, Java],
+--   modularity = Modular,
 --   impType = Program,
 --   logFile = "log.txt",
 --   logging = LogNone,         -- LogNone, LogFunc

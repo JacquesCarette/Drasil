@@ -70,7 +70,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat,
 import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, 
   lensFStoMS, lensFStoVS, lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, 
   lensVStoMS, initialState, initialFS, modifyReturn, addODEFilePaths, 
-  addODEFile, getODEFiles, addLangImport, addLangImportVS, getLangImports, 
+  addODEFiles, getODEFiles, addLangImport, addLangImportVS, getLangImports, 
   addLibImport, getLibImports, addModuleImport, addModuleImportVS,
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine, 
@@ -1159,7 +1159,7 @@ instance ControlBlockSym CppSrcCode where
 
   solveODE info opts = let (fl, s) = cppODEFile info dynamic_
                            dv = depVar info
-    in modify (addODEFilePaths s . addODEFile (unCPPSC fl) . addLibImport 
+    in modify (addODEFilePaths s . addODEFiles [unCPPSC fl] . addLibImport 
     "boost/numeric/odeint") >> (zoom lensMStoVS dv >>= (\dpv -> 
       let odeClassName = variableName dpv ++ "_ODE"
           odeVar = var "ode" (obj odeClassName)
@@ -1820,7 +1820,7 @@ instance ControlBlockSym CppHdrCode where
   listSlice' _ _ _ _ _ = toState $ toCode empty
 
   solveODE info _ = let (fl, s) = cppODEFile info dynamic_
-    in modify (addODEFilePaths s . addODEFile (unCPPHC fl)) >> 
+    in modify (addODEFilePaths s . addODEFiles [unCPPHC fl]) >> 
     toState (toCode empty)
 
 instance UnaryOpSym CppHdrCode where

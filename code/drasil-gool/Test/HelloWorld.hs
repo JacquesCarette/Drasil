@@ -29,32 +29,32 @@ helloInitVariables :: (ProgramSym repr) => MS (repr (Block repr))
 helloInitVariables = block [comment "Initializing variables",
   varDec $ var "a" int, 
   varDecDef (var "b" int) (litInt 5),
-  listDecDef (var "myOtherList" (listType static_ float)) [litFloat 1.0, 
+  listDecDef (var "myOtherList" (listType static float)) [litFloat 1.0, 
     litFloat 1.5],
   varDecDef (var "oneIndex" int) (indexOf (valueOf $ var "myOtherList" (listType 
-    static_ float)) (litFloat 1.0)),
+    static float)) (litFloat 1.0)),
   printLn (valueOf $ var "oneIndex" int),
-  var "a" int &= listSize (valueOf $ var "myOtherList" (listType static_ float)),
-  valState (listAdd (valueOf $ var "myOtherList" (listType static_ float))
+  var "a" int &= listSize (valueOf $ var "myOtherList" (listType static float)),
+  valState (listAdd (valueOf $ var "myOtherList" (listType static float))
     (litInt 2) (litFloat 2.0)),
-  valState (listAppend (valueOf $ var "myOtherList" (listType static_ float)) 
+  valState (listAppend (valueOf $ var "myOtherList" (listType static float)) 
     (litFloat 2.5)),
   varDec $ var "e" float,
   var "e" int &= listAccess (valueOf $ var "myOtherList"
-    (listType static_ float)) (litInt 1),
-  valState (listSet (valueOf $ var "myOtherList" (listType static_ float)) 
+    (listType static float)) (litInt 1),
+  valState (listSet (valueOf $ var "myOtherList" (listType static float)) 
     (litInt 1) (litFloat 17.4)),
-  listDec 7 (var "myName" (listType static_ string)),
-  stringSplit ' ' (var "myName" (listType static_ string)) (litString "Brooks Mac"),
-  printLn (valueOf $ var "myName" (listType static_ string)),
-  listDecDef (var "boringList" (listType dynamic_ bool)) 
+  listDec 7 (var "myName" (listType static string)),
+  stringSplit ' ' (var "myName" (listType static string)) (litString "Brooks Mac"),
+  printLn (valueOf $ var "myName" (listType static string)),
+  listDecDef (var "boringList" (listType dynamic bool)) 
     [litFalse, litFalse, litFalse, litFalse, litFalse],
-  printLn (valueOf $ var "boringList" (listType dynamic_ bool)),
-  listDec 2 $ var "mySlicedList" (listType static_ float)]
+  printLn (valueOf $ var "boringList" (listType dynamic bool)),
+  listDec 2 $ var "mySlicedList" (listType static float)]
 
 helloListSlice :: (ProgramSym repr) => MS (repr (Block repr))
-helloListSlice = listSlice (var "mySlicedList" (listType static_ float)) 
-  (valueOf $ var "myOtherList" (listType static_ float)) (Just (litInt 1)) 
+helloListSlice = listSlice (var "mySlicedList" (listType static float)) 
+  (valueOf $ var "myOtherList" (listType static float)) (Just (litInt 1)) 
   (Just (litInt 3)) Nothing
 
 helloIfBody :: (ProgramSym repr) => MS (repr (Body repr))
@@ -75,7 +75,7 @@ helloIfBody = addComments "If body" (body [
     (&~-) (var "c" int),
     (&~-) (var "b" int),
 
-    listDec 5 (var "myList" (listType static_ int)),
+    listDec 5 (var "myList" (listType static int)),
     objDecDef (var "myObj" char) (litChar 'o'),
     constDecDef (const "myConst" string) (litString "Imconstant"),
 
@@ -83,8 +83,8 @@ helloIfBody = addComments "If body" (body [
     printLn (valueOf $ var "b" int),
     printLn (valueOf $ var "c" int),
     printLn (valueOf $ var "d" int),
-    printLn (valueOf $ var "myOtherList" (listType static_ float)),
-    printLn (valueOf $ var "mySlicedList" (listType static_ float)),
+    printLn (valueOf $ var "myOtherList" (listType static float)),
+    printLn (valueOf $ var "mySlicedList" (listType static float)),
     
     printStrLn "Type an int",
     getInput (var "d" int),
@@ -129,7 +129,7 @@ helloElseBody :: (ProgramSym repr) => MS (repr (Body repr))
 helloElseBody = bodyStatements [printLn (arg 5)]
 
 helloIfExists :: (ProgramSym repr) => MS (repr (Statement repr))
-helloIfExists = ifExists (valueOf $ var "boringList" (listType dynamic_ bool)) 
+helloIfExists = ifExists (valueOf $ var "boringList" (listType dynamic bool)) 
   (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
 helloSwitch :: (ProgramSym repr) => MS (repr (Statement repr))
@@ -147,7 +147,7 @@ helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements
   [printStrLn "Hello", (&++) (var "a" int)]) 
 
 helloForEachLoop :: (ProgramSym repr) => MS (repr (Statement repr))
-helloForEachLoop = forEach i (valueOf $ listVar "myOtherList" static_ float) 
+helloForEachLoop = forEach i (valueOf $ listVar "myOtherList" static float) 
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" float [valueOf i, 
   litFloat 1.0])))
   where i = iterVar "num" float

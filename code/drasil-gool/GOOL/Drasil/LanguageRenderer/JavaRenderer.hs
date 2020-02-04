@@ -162,8 +162,8 @@ instance ImportSym JavaCode where
 
 instance PermanenceSym JavaCode where
   type Permanence JavaCode = Doc
-  static_ = toCode staticDocD
-  dynamic_ = toCode dynamicDocD
+  static = toCode staticDocD
+  dynamic = toCode dynamicDocD
 
 instance InternalPerm JavaCode where
   permDoc = unJC
@@ -512,7 +512,7 @@ instance StatementSym JavaCode where
   (&++) = G.increment1
   (&~-) = G.decrement1
 
-  varDec = G.varDec static_ dynamic_
+  varDec = G.varDec static dynamic
   varDecDef = G.varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> G.listDec (listDecDocD v') 
     (litInt n) v)
@@ -554,8 +554,8 @@ instance StatementSym JavaCode where
   discardFileLine = G.discardFileLine "nextLine"
   stringSplit d vnew s = modify (addLangImport "java.util.Arrays") >> 
     onStateValue mkSt (zoom lensMStoVS $ jStringSplit vnew (funcApp 
-    "Arrays.asList" (listType static_ string) 
-    [s $. func "split" (listType static_ string) [litString [d]]]))
+    "Arrays.asList" (listType static string) 
+    [s $. func "split" (listType static string) [litString [d]]]))
 
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists
@@ -679,7 +679,7 @@ instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
-  constVar _ = G.constVar (permDoc (static_ :: JavaCode (Permanence JavaCode)))
+  constVar _ = G.constVar (permDoc (static :: JavaCode (Permanence JavaCode)))
   privMVar = G.privMVar
   pubMVar = G.pubMVar
   pubGVar = G.pubGVar

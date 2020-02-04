@@ -30,13 +30,13 @@ writeStory = block [
   varDec $ var "fileLine" string,
   getFileInputLine (valueOf $ var "fileToRead" infile) (var "fileLine" string),
   discardFileLine (valueOf $ var "fileToRead" infile),
-  listDec 0 (var "fileContents" (listType dynamic_ string))]
+  listDec 0 (var "fileContents" (listType dynamic string))]
 
 readStory :: (ProgramSym repr) => MS (repr (Statement repr))
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile) 
-  (var "fileContents" (listType dynamic_ string))
+  (var "fileContents" (listType dynamic string))
 
 goodBye :: (ProgramSym repr) => MS (repr (Block repr))
 goodBye = block [
-  printLn (valueOf $ var "fileContents" (listType dynamic_ string)), 
+  printLn (valueOf $ var "fileContents" (listType dynamic string)), 
   closeFile (valueOf $ var "fileToRead" infile)]

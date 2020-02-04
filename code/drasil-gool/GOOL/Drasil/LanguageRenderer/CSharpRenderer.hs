@@ -153,8 +153,8 @@ instance ImportSym CSharpCode where
 
 instance PermanenceSym CSharpCode where
   type Permanence CSharpCode = Doc
-  static_ = toCode staticDocD
-  dynamic_ = toCode dynamicDocD
+  static = toCode staticDocD
+  dynamic = toCode dynamicDocD
 
 instance InternalPerm CSharpCode where
   permDoc = unCSC
@@ -481,7 +481,7 @@ instance StatementSym CSharpCode where
   (&~-) = G.decrement1
 
   varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
-    G.varDec static_ dynamic_ v)
+    G.varDec static dynamic v)
   varDecDef = G.varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> G.listDec (listDecDocD v') 
     (litInt n) v)
@@ -518,8 +518,8 @@ instance StatementSym CSharpCode where
 
   getFileInputLine = getFileInput
   discardFileLine = G.discardFileLine "ReadLine"
-  stringSplit d vnew s = assign vnew $ newObj (listType dynamic_ string) 
-    [s $. func "Split" (listType static_ string) [litChar d]]
+  stringSplit d vnew s = assign vnew $ newObj (listType dynamic string) 
+    [s $. func "Split" (listType static string) [litChar d]]
 
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists

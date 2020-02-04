@@ -436,7 +436,7 @@ listVar n p t = S.var n (listType p t)
 
 listOf :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   VS (repr (Variable repr))
-listOf n = S.listVar n static_
+listOf n = S.listVar n static
 
 arrayElem :: (RenderSym repr) => VS (repr (Value repr)) -> 
   VS (repr (Variable repr)) -> VS (repr (Variable repr))
@@ -483,7 +483,7 @@ enumElement :: (RenderSym repr) => Label -> Label -> VS (repr (Value repr))
 enumElement en e = mkStateVal (enumType en) (enumElemDocD en e)
 
 argsList :: (RenderSym repr) => String -> VS (repr (Value repr))
-argsList l = mkStateVal (listType static_ S.string) (text l)
+argsList l = mkStateVal (listType static S.string) (text l)
 
 inlineIf :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
   -> VS (repr (Value repr)) -> VS (repr (Value repr))
@@ -600,12 +600,12 @@ listSizeFunc = S.func "size" S.int []
 
 listAddFunc :: (RenderSym repr) => Label -> VS (repr (Value repr)) -> 
   VS (repr (Value repr)) -> VS (repr (Function repr))
-listAddFunc f i v = S.func f (listType static_ $ onStateValue valueType v) 
+listAddFunc f i v = S.func f (listType static $ onStateValue valueType v) 
   [i, v]
 
 listAppendFunc :: (RenderSym repr) => Label -> VS (repr (Value repr)) -> 
   VS (repr (Function repr))
-listAppendFunc f v = S.func f (listType static_ $ onStateValue valueType v) [v]
+listAppendFunc f v = S.func f (listType static $ onStateValue valueType v) [v]
 
 iterBeginError :: String -> String
 iterBeginError l = "Attempt to use iterBeginFunc in " ++ l ++ ", but " ++ l ++ 
@@ -846,7 +846,7 @@ changeState fsmName tState = S.var fsmName S.string &= S.litString tState
 
 initObserverList :: (RenderSym repr) => VS (repr (Type repr)) -> 
   [VS (repr (Value repr))] -> MS (repr (Statement repr))
-initObserverList t = S.listDecDef (S.var observerListName (S.listType static_ t))
+initObserverList t = S.listDecDef (S.var observerListName (S.listType static t))
 
 addObserver :: (RenderSym repr) => VS (repr (Value repr)) -> 
   MS (repr (Statement repr))
@@ -971,30 +971,30 @@ method n s p t = intMethod False n s p (mType t)
 getMethod :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   MS (repr (Method repr))
 getMethod v = zoom lensMStoVS v >>= (\vr -> S.method (getterName $ variableName 
-  vr) public dynamic_ (toState $ variableType vr) [] getBody)
+  vr) public dynamic (toState $ variableType vr) [] getBody)
   where getBody = S.oneLiner $ S.returnState (S.valueOf $ S.objVarSelf v)
 
 setMethod :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   MS (repr (Method repr))
 setMethod v = zoom lensMStoVS v >>= (\vr -> S.method (setterName $ variableName 
-  vr) public dynamic_ S.void [S.param v] setBody)
+  vr) public dynamic S.void [S.param v] setBody)
   where setBody = S.oneLiner $ S.objVarSelf v &= S.valueOf v
 
 privMethod :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   [MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
   MS (repr (Method repr))
-privMethod n = S.method n private dynamic_
+privMethod n = S.method n private dynamic
 
 pubMethod :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   [MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
   MS (repr (Method repr))
-pubMethod n = S.method n public dynamic_
+pubMethod n = S.method n public dynamic
 
 constructor :: (RenderSym repr) => Label -> [MS (repr (Parameter repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   MS (repr (Body repr)) -> MS (repr (Method repr))
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName 
-  public dynamic_ (S.construct c) ps (multiBody [ib, b]))
+  public dynamic (S.construct c) ps (multiBody [ib, b]))
   where ib = bodyStatements (zipWith (\vr vl -> objVarSelf vr &= vl) 
           (map fst is) (map snd is))
 
@@ -1011,7 +1011,7 @@ function n s p t = S.intFunc False n s p (mType t)
 
 mainFunction :: (RenderSym repr) => VS (repr (Type repr)) -> Label -> 
   MS (repr (Body repr)) -> MS (repr (Method repr))
-mainFunction s n = S.intFunc True n public static_ (mType S.void)
+mainFunction s n = S.intFunc True n public static (mType S.void)
   [S.param (S.var "args" (onStateValue (\argT -> typeFromData (List String) 
   (render (getTypeDoc argT) ++ "[]") (getTypeDoc argT <> text "[]")) s))]
 
@@ -1062,15 +1062,15 @@ constVar p s vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue
 
 privMVar :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   CS (repr (StateVar repr))
-privMVar = S.stateVar private dynamic_
+privMVar = S.stateVar private dynamic
 
 pubMVar :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   CS (repr (StateVar repr))
-pubMVar = S.stateVar public dynamic_
+pubMVar = S.stateVar public dynamic
 
 pubGVar :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   CS (repr (StateVar repr))
-pubGVar = S.stateVar public static_
+pubGVar = S.stateVar public static
 
 -- Classes --
 

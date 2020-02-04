@@ -12,7 +12,7 @@ helper = fileDoc (buildModule "Helper" [doubleAndAdd] [])
 doubleAndAdd :: (ProgramSym repr) => MS (repr (Method repr))
 doubleAndAdd = docFunc "This function adds two numbers" 
   ["First number to add", "Second number to add"] (Just "Sum") $ 
-  function "doubleAndAdd"  public static_ float
+  function "doubleAndAdd"  public static float
   [param $ var "num1" float, param $ var "num2" float]
   (bodyStatements [
     varDec $ var "doubledSum" float, 

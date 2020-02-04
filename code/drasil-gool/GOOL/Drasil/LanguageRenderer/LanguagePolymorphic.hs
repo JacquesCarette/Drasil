@@ -30,8 +30,8 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   construct, param, method, getMethod, setMethod,privMethod, pubMethod, 
   constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
   stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
-  privClass, pubClass, docClass, commentedClass, buildModule, buildModule', 
-  modFromData, fileDoc, docMod
+  privClass, pubClass, implementingClass, docClass, commentedClass, buildModule,
+  buildModule', modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -1099,6 +1099,15 @@ pubClass :: (RenderSym repr) => Label -> Maybe Label ->
   [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
   CS (repr (Class repr))
 pubClass n p = S.buildClass n p public
+
+implementingClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> 
+  Doc) -> ([Label] -> repr (Keyword repr)) -> Label -> [Label] -> 
+  repr (Scope repr) -> [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] 
+  -> CS (repr (Class repr))
+implementingClass f i n is s svs ms = modify (setClassName n) >> classFromData 
+  (on2StateValues (f n (keyDoc $ i is) (scopeDoc s)) (onStateList 
+  (stateVarListDocD . map stateVarDoc) svs) (onStateList (vibcat . map 
+  methodDoc) (map (zoom lensCStoMS) ms)))
 
 docClass :: (RenderSym repr) => String -> CS (repr (Class repr))
   -> CS (repr (Class repr))

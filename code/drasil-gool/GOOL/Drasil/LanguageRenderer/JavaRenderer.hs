@@ -7,7 +7,7 @@ module GOOL.Drasil.LanguageRenderer.JavaRenderer (
   JavaCode(..)
 ) where
 
-import Utils.Drasil (blank, indent, indentList)
+import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..), 
@@ -28,8 +28,8 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, newObjDocD, 
   castDocD, castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
-  publicDocD, dot, new, classDec, elseIfLabel, forLabel, blockCmtStart, 
-  blockCmtEnd, docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
+  docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, commentedModD, docFuncRepr, variableList, parameterList, 
   appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
@@ -55,8 +55,9 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
-  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
-  commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
+  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, implementingClass, 
+  docClass, commentedClass, buildModule', modFromData, fileDoc, docMod, 
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -66,14 +67,14 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
   VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, vibcat, emptyIfNull, toCode, toState, 
   onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
-  on3StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
+  on3StateValues, onCodeList, onStateList, on1CodeValue1List, 
   on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS,
   lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, 
   modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFile, 
   getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
-  addLibImport, addLibImports, getModuleName, setClassName, getClassName, 
-  setCurrMain, setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
+  addLibImport, addLibImports, getModuleName, getClassName, setCurrMain, 
+  setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
   setOutputsDeclared, isOutputsDeclared, getExceptions, getMethodExcMap, 
   addExceptions)
 
@@ -132,6 +133,7 @@ instance KeywordSym JavaCode where
   endStatementLoop = toCode empty
 
   inherit n = toCode $ text "extends" <+> text n
+  implements is = toCode $ text "implements" <+> text (intercalate ", " is) 
 
   list _ = toCode $ text "ArrayList"
 
@@ -709,6 +711,7 @@ instance ClassSym JavaCode where
   enum = G.enum
   privClass = G.privClass
   pubClass = G.pubClass
+  implementingClass = G.implementingClass classDocD implements
 
   docClass = G.docClass
 
@@ -772,25 +775,16 @@ jODEFile info = (unJC fl, fst s)
               othVars = map (modify (setODEOthVars (map variableName 
                 ovs)) >>) ovars
           in fileDoc (buildModule cn [] [zoom lensCStoMS (modify (addLibImport 
-            (odeImport ++ fode))) >> modify (setClassName cn) >> classFromData 
-            (on2StateLists (\svars mths 
-              -> scopeDoc (public :: JavaCode (Scope JavaCode)) <+> classDec 
-              <+> text cn <+> text "implements" <+> text fode <+> 
-              keyDoc (blockStart :: JavaCode (Keyword JavaCode)) $$ 
-              indentList [
-                vcat (map stateVarDoc svars), 
-                blank, 
-                vibcat (map methodDoc mths)] 
-              $$ keyDoc (blockEnd :: JavaCode (Keyword JavaCode))) 
+            (odeImport ++ fode))) >> implementingClass cn [fode] public
               (map privMVar othVars) 
-              (map (zoom lensCStoMS) [initializer (map param othVars) 
-                (zip othVars (map valueOf othVars)),
+              [initializer (map param othVars) (zip othVars 
+                (map valueOf othVars)),
               pubMethod "getDimension" int [] (oneLiner $ returnState $ 
                 litInt 1),
               pubMethod "computeDerivatives" void (map param [var "t" float, 
                 var n (arrayType float), ddv]) (oneLiner $ arrayElem 0 ddv &= 
                 (modify (setODEDepVars [variableName dpv, dn] . setODEOthVars 
-                (map variableName ovs)) >> ode info))]))])) 
+                (map variableName ovs)) >> ode info))]])) 
             (zoom lensFStoVS dv) (map (zoom lensFStoVS) ovars)
 
 jName :: String

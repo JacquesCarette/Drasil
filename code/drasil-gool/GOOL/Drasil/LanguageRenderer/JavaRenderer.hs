@@ -12,18 +12,18 @@ import Utils.Drasil (blank, indent, indentList)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..), 
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
-  InternalPerm(..), BodySym(..), BlockSym(..), InternalBlock(..), 
-  ControlBlockSym(..), TypeSym(..), InternalType(..), UnaryOpSym(..), 
-  BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
-  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
-  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..), ODEInfo(..), 
-  ODEOptions(..), ODEMethod(..))
+  InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
+  InternalBlock(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
+  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
+  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  InternalSelector(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
+  initializer, InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
+  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
+  BlockCommentSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
   bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, newObjDocD, 
@@ -33,11 +33,11 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   addCommentsDocD, commentedModD, docFuncRepr, variableList, parameterList, 
   appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, block, multiBlock, bool, int, double, char, listType, listInnerType,
-  obj, enumType, funcType, void, runStrategy, listSlice, notOp, negateOp, 
-  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
-  minusOp, multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, 
-  self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar, 
+  oneLiner, multiBody, block, multiBlock, bool, int, double, char, listType, 
+  listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
+  negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
+  plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, 
+  extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar,
   litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, 
   enumElement, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
@@ -68,14 +68,12 @@ import GOOL.Drasil.Helpers (angles, vibcat, emptyIfNull, toCode, toState,
   onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
   on3StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
   on1StateValue1List)
-import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS,
-  lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, 
-  modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFile, 
-  getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
-  addLibImport, addLibImports, getModuleName, setClassName, getClassName, 
-  setCurrMain, setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
-  setOutputsDeclared, isOutputsDeclared, getExceptions, getMethodExcMap, 
-  addExceptions)
+import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, modifyReturnFunc, 
+  addODEFilePaths, addProgNameToPaths, addODEFile, getODEFiles,
+  addLangImport, addLangImportVS, addExceptionImports, addLibImport, addLibImports, 
+  getModuleName, setClassName, getClassName, setCurrMain, setODEDepVars, 
+  getODEDepVars, setODEOthVars, getODEOthVars, setOutputsDeclared, 
+  isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -176,7 +174,10 @@ instance BodySym JavaCode where
 
   addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 
+instance InternalBody JavaCode where
   bodyDoc = unJC
+  docBody = onStateValue toCode
+  multiBody = G.multiBody 
 
 instance BlockSym JavaCode where
   type Block JavaCode = Doc
@@ -649,7 +650,7 @@ instance MethodSym JavaCode where
   setMethod = G.setMethod
   privMethod = G.privMethod
   pubMethod = G.pubMethod
-  constructor ps b = getClassName >>= (\n -> G.constructor n ps b)
+  constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
   destructor _ = error $ destructorError jName
 
   docMain = G.docMain
@@ -781,8 +782,8 @@ jODEFile info = (unJC fl, fst s)
                 vibcat (map methodDoc mths)] 
               $$ keyDoc (blockEnd :: JavaCode (Keyword JavaCode))) 
               (map privMVar othVars) 
-              (map (zoom lensCStoMS) [constructor (map param othVars) 
-                (bodyStatements (map (\v -> objVarSelf v &= valueOf v) othVars)),
+              (map (zoom lensCStoMS) [initializer (map param othVars) 
+                (zip othVars (map valueOf othVars)),
               pubMethod "getDimension" int [] (oneLiner $ returnState $ 
                 litInt 1),
               pubMethod "computeDerivatives" void (map param [var "t" float, 

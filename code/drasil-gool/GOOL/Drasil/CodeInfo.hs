@@ -78,8 +78,6 @@ instance BodySym CodeInfo where
 
   addComments _ _ = noInfo
 
-  bodyDoc _ = empty
-
 instance BlockSym CodeInfo where
   type Block CodeInfo = ()
   block ss = do
@@ -282,8 +280,7 @@ instance StatementSym CodeInfo where
   getFileInput _ _ = noInfo
   discardFileInput _ = noInfo
 
-  openFileR _ _ = modifyReturn (addException fnfExc) 
-    (toCode ())
+  openFileR _ _ = modifyReturn (addException fnfExc) (toCode ())
   openFileW _ _ = modifyReturn (addException ioExc) (toCode ())
   openFileA _ _ = modifyReturn (addException ioExc) (toCode ())
   closeFile _ = noInfo
@@ -381,7 +378,7 @@ instance MethodSym CodeInfo where
   setMethod _ = noInfo
   privMethod n _ _ = updateMEM n
   pubMethod n _ _ = updateMEM n
-  constructor _ b = do
+  constructor _ _ b = do
     _ <- b
     mn <- zoom lensMStoFS getModuleName
     modify (updateMethodExcMap mn)

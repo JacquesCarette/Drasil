@@ -12,15 +12,16 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
-  InternalPerm(..), BodySym(..), BlockSym(..), InternalBlock(..), 
-  ControlBlockSym(..), TypeSym(..), InternalType(..), UnaryOpSym(..), 
-  BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
-  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
-  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
+  InternalBlock(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
+  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
+  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  InternalSelector(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
+  InternalMethod(..), 
   StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
   ModuleSym(..), InternalMod(..), BlockCommentSym(..), ODEInfo(..), 
   ODEOptions(..), ODEMethod(..))
@@ -33,13 +34,13 @@ import GOOL.Drasil.LanguageRenderer (new, classDocD, multiStateDocD, bodyDocD,
   inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   commentedModD, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, block, multiBlock, bool, int, double, char, string, listType, 
-  listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
-  negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
-  plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, 
-  extVar, self, enumVar, classVar, objVarSelf, listVar, listOf, iterVar, pi, 
-  litTrue, litFalse, litChar, litFloat, litInt, litString, valueOf, arg, 
-  enumElement, argsList, inlineIf, objAccess, objMethodCall, 
+  oneLiner, multiBody, block, multiBlock, bool, int, double, char, string, 
+  listType, listInnerType, obj, enumType, funcType, void, runStrategy, 
+  listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
+  lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp,
+  var, staticVar, extVar, self, enumVar, classVar, objVarSelf, listVar, listOf, 
+  iterVar, pi, litTrue, litFalse, litChar, litFloat, litInt, litString, valueOf,
+  arg, enumElement, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
   selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
   listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
@@ -68,8 +69,8 @@ import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn, 
-  addLangImport, addLangImportVS, addLibImport, getClassName, setCurrMain, 
-  setODEDepVars, getODEDepVars)
+  addLangImport, addLangImportVS, addLibImport, getClassName, 
+  setCurrMain, setODEDepVars, getODEDepVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -166,7 +167,10 @@ instance BodySym CSharpCode where
 
   addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 
+instance InternalBody CSharpCode where
   bodyDoc = unCSC
+  docBody = onStateValue toCode
+  multiBody = G.multiBody 
 
 instance BlockSym CSharpCode where
   type Block CSharpCode = Doc
@@ -594,7 +598,7 @@ instance MethodSym CSharpCode where
   setMethod = G.setMethod
   privMethod = G.privMethod
   pubMethod = G.pubMethod
-  constructor ps b = getClassName >>= (\n -> G.constructor n ps b)
+  constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
   destructor _ = error $ destructorError csName
 
   docMain = G.docMain

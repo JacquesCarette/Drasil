@@ -5,9 +5,9 @@ module GOOL.Drasil (Label, ProgramSym(..), FileSym(..),
   StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), FunctionSym(..), SelectorFunction(..), ScopeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 
-  ModuleSym(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
-  odeOptions, ODEMethod(..),
+  ParameterSym(..), MethodSym(..), initializer, nonInitConstructor, 
+  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
+  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..),
   ScopeTag(..), ProgData(..), FileData(..), ModData(..),
   CodeType(..),
   GOOLState(..), GS, FS, CS, MS, VS, lensMStoVS, headers, sources, mainMod, 
@@ -21,9 +21,10 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), FileSym(..),
   listSlice, TypeSym(..), StatementSym(..), ControlStatementSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 
-  ModuleSym(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
-  odeOptions, ODEMethod(..))
+  ScopeSym(..), ParameterSym(..), MethodSym(..), initializer, 
+  nonInitConstructor, StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
+  ODEMethod(..))
 
 import GOOL.Drasil.Data (ScopeTag(..), FileData(..), ModData(..), ProgData(..))
 

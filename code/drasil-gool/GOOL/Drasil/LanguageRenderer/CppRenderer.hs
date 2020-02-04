@@ -13,18 +13,19 @@ import Utils.Drasil (blank, indent, indentList)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
-  InternalPerm(..), BodySym(..), BlockSym(..), InternalBlock(..), 
-  ControlBlockSym(..), TypeSym(..), InternalType(..), UnaryOpSym(..), 
-  BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
-  objMethodCall, FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  InternalParam(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
-  InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
-  InternalMod(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
-  odeOptions, ODEMethod(..))
+  InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
+  InternalBlock(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
+  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
+  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), 
+  Selector(..), InternalSelector(..), objMethodCall, FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
+  initializer, InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
+  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
+  BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
+  ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD, 
   bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, freeDocD, mkSt, 
   mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
@@ -34,7 +35,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   commentedItem, addCommentsDocD, functionDox, commentedModD, valueList, 
   parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, block, multiBlock, int, double, char, string, listType, 
+  oneLiner, multiBody, block, multiBlock, int, double, char, string, listType, 
   listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
   negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, 
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
@@ -66,21 +67,16 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat,
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList, 
   on2StateLists, on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, 
-  lensFStoMS, lensFStoVS, lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, 
-  lensVStoMS, initialState, initialFS, modifyReturn, addODEFilePaths, 
-  addODEFile, getODEFiles, addLangImport, addLangImportVS, getLangImports, 
-  addLibImport, getLibImports, addModuleImport, addModuleImportVS,
+import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS,
+  lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, lensVStoMS, initialState, initialFS, modifyReturn, 
+  addODEFilePaths, addODEFile, getODEFiles, addLangImport, 
+  addLangImportVS, getLangImports, addLibImport, getLibImports, addModuleImport, addModuleImportVS,
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine, 
   getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
   addHeaderUsing, getHeaderUsing, setClassName, getClassName, setCurrMain, 
   getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc, setODEOthVars, getODEOthVars, setConstructorParams, 
-  getConstructorParams, addSelfAssignment, getSelfAssignments, 
-  setLeftAssignment, getLeftAssignment, setAssignedSelfVar, getAssignedSelfVar, 
-  setRightAssignment, getRightAssignment, addVariableAssigned, 
-  getVariablesAssigned)
+  getCurrMainFunc, setODEOthVars, getODEOthVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -183,7 +179,10 @@ instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
 
   addComments s = pair1 (addComments s) (addComments s)
 
+instance (Pair p) => InternalBody (p CppSrcCode CppHdrCode) where
   bodyDoc b = bodyDoc $ pfst b
+  docBody d = on2StateValues pair (docBody d) (docBody d)
+  multiBody = pair1List multiBody multiBody
 
 instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
   type Block (p CppSrcCode CppHdrCode) = Doc
@@ -712,7 +711,10 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     (zoom lensMStoVS t)
   pubMethod n t = pairValListVal (pubMethod n) (pubMethod n) 
     (zoom lensMStoVS t)
-  constructor = pair1List1Val constructor constructor
+  constructor ps is = pair3Lists1Val 
+    (\pms ivars ivals -> constructor pms (zip ivars ivals))
+    (\pms ivars ivals -> constructor pms (zip ivars ivals)) 
+    ps (map (zoom lensMStoVS . fst) is) (map (zoom lensMStoVS . snd) is)
   destructor = pair1List destructor destructor . map (zoom lensMStoCS)
 
   docMain = pair1 docMain docMain
@@ -1071,7 +1073,8 @@ instance KeywordSym CppSrcCode where
 instance ImportSym CppSrcCode where
   type Import CppSrcCode = Doc
   langImport n = toCode $ inc <+> angles (text n)
-  modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt n)
+  modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt 
+    n)
 
   importDoc = unCPPSC
 
@@ -1092,7 +1095,10 @@ instance BodySym CppSrcCode where
 
   addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 
+instance InternalBody CppSrcCode where
   bodyDoc = unCPPSC
+  docBody = onStateValue toCode
+  multiBody = G.multiBody 
 
 instance BlockSym CppSrcCode where
   type Block CppSrcCode = Doc
@@ -1115,8 +1121,9 @@ instance TypeSym CppSrcCode where
   listType p t = modify (addUsing lst . addLangImportVS lst) >> G.listType p t
     where lst = render $ keyDoc (list p)
   listInnerType = G.listInnerType
-  obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
-    (Map.lookup n cm) $ G.obj n)
+  obj n = zoom lensVStoMS getClassName >>= (\cn -> if cn == n then G.obj n else 
+    getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
+    (Map.lookup n cm) (G.obj n)))
   enumType = G.enumType
   funcType = G.funcType
   iterator t = modify (addLangImportVS "iterator") >> 
@@ -1215,10 +1222,8 @@ instance VariableSym CppSrcCode where
   objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
     ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
-  objVarSelf v' = join $ on2StateValues (\v la -> modifyReturn (if la 
-    then setAssignedSelfVar (variableName v) else id) 
-    (mkVar ("this->"++variableName v) (variableType v) 
-    (text "this->" <> variableDoc v))) v' getLeftAssignment
+  objVarSelf = onStateValue (\v -> mkVar ("this->"++variableName v) 
+    (variableType v) (text "this->" <> variableDoc v))
   listVar = G.listVar
   listOf = G.listOf
   iterVar l t = mkStateVar l (iterator t) (text $ "(*" ++ l ++ ")")
@@ -1247,9 +1252,7 @@ instance ValueSym CppSrcCode where
 
   ($:) = enumElement
 
-  valueOf v = join $ on2StateValues (\v' ra -> modify (if ra then 
-    addVariableAssigned (variableName v') else id) >> G.valueOf v) 
-    v getRightAssignment
+  valueOf = G.valueOf
   arg n = G.arg (litInt $ n+1) argsList
   enumElement en e = mkStateVal (enumType en) (text e)
   
@@ -1390,13 +1393,7 @@ instance InternalStatement CppSrcCode where
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
-  assign vr vl = getConstructorParams >>= (\cps -> zoom lensMStoVS (join $ 
-    (\_ ea asv vsa -> zoom lensVStoMS $ if all (`elem` cps) vsa && 
-    not (null asv) && not (null cps) then 
-    modify (addSelfAssignment asv (valueDoc ea)) >> emptyState else 
-    G.assign Semi vr vl) <$> 
-    (modify setLeftAssignment >> vr) <*> (modify setRightAssignment >> vl) <*> 
-    getAssignedSelfVar <*> getVariablesAssigned))
+  assign = G.assign Semi
   assignToListIndex = G.assignToListIndex
   multiAssign _ _ = error $ G.multiAssignError cppName
   (&=) = assign
@@ -1549,8 +1546,7 @@ instance MethodSym CppSrcCode where
   setMethod = G.setMethod
   privMethod = G.privMethod
   pubMethod = G.pubMethod
-  constructor ps b = sequence ps >>= (\pms -> modify (setConstructorParams (map 
-    parameterName pms)) >> getClassName >>= (\n -> G.constructor n ps b))
+  constructor = cppConstructor blockStart blockEnd
   destructor vs = 
     let i = var "i" int
         deleteStatements = map (onStateValue (onCodeValue destructSts) . 
@@ -1586,9 +1582,9 @@ instance MethodSym CppSrcCode where
 
 instance InternalMethod CppSrcCode where
   intMethod m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
-    setCurrMain else id) >> (\c tp pms bod sas -> methodFromData 
-    (snd $ unCPPSC s) $ cppsMethod n c tp pms bod sas blockStart blockEnd) <$>
-    getClassName <*> t <*> sequence ps <*> b <*> getSelfAssignments
+    setCurrMain else id) >> (\c tp pms bod -> methodFromData 
+    (snd $ unCPPSC s) $ cppsMethod [] n c tp pms bod blockStart blockEnd) <$>
+    getClassName <*> t <*> sequence ps <*> b
   intFunc m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
     setCurrMainFunc m . setCurrMain else id) >> on3StateValues (\tp pms bod -> 
     methodFromData (snd $ unCPPSC s) $ cppsFunction n tp pms bod blockStart 
@@ -1748,7 +1744,10 @@ instance BodySym CppHdrCode where
 
   addComments _ _ = toState $ toCode empty
 
+instance InternalBody CppHdrCode where
   bodyDoc = unCPPHC
+  docBody = onStateValue toCode
+  multiBody = G.multiBody 
 
 instance BlockSym CppHdrCode where
   type Block CppHdrCode = Doc
@@ -2151,7 +2150,7 @@ instance MethodSym CppHdrCode where
     v') public dynamic_ void [param v] (toState $ toCode empty))
   privMethod = G.privMethod
   pubMethod = G.pubMethod
-  constructor ps b = getClassName >>= (\n -> G.constructor n ps b)
+  constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
   destructor vars = on1StateValue1List (\m vs -> toCode $ mthd Pub 
     (emptyIfEmpty (vcat (map (statementDoc . onCodeValue destructSts) vs)) 
     (methodDoc m))) (getClassName >>= (\n -> pubMethod ('~':n) void [] 
@@ -2341,13 +2340,13 @@ cppODEFile info p = (fl, fst s)
                 ovs)) >>) ovars
           in fileDoc (buildModule cn [] [pubClass cn Nothing 
             (pubMVar dv : map privMVar othVars) 
-            [constructor (map param othVars) (bodyStatements (map (\v -> 
-              objVarSelf v &= valueOf v) othVars)),
-            pubMethod "operator()" void [param dvElem, pointerParam $ var dn 
-              float, param tElem] (oneLiner $ var dn float &= (modify 
-              (setODEOthVars (map variableName ovs)) >> ode info))], 
+            [initializer (map param othVars) (zip othVars (map valueOf othVars)),
+            pubMethod "operator()" void [param dvElem, 
+              pointerParam $ var dn float, param tElem] 
+              (oneLiner $ var dn float &= (modify (setODEOthVars 
+              (map variableName ovs)) >> ode info))], 
           pubClass ("Populate_" ++ n) Nothing [pubMVar dvptr] 
-            [constructor [pointerParam dv] (oneLiner $ objVarSelf dv &= valueOf dv),
+            [initializer [pointerParam dv] [(dv, valueOf dv)],
             pubMethod "operator()" void [pointerParam dvElem, param tElem] 
               (oneLiner $ valState $ listAppend (valueOf $ objVarSelf dv) 
               (valueOf dv))]]))
@@ -2456,18 +2455,29 @@ cppOpenFile mode f n = variableDoc f <> dot <> text "open" <>
 cppPointerParamDoc :: (RenderSym repr) => repr (Variable repr) -> Doc
 cppPointerParamDoc v = getTypeDoc (variableType v) <+> text "&" <> variableDoc v
 
-cppsMethod :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> [(String, Doc)] ->
-  repr (Keyword repr) -> repr (Keyword repr) -> Doc
-cppsMethod n c t ps b sas bStart bEnd = emptyIfEmpty (bodyDoc b <> initList) $ 
+cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode) 
+  -> [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
+  CppSrcCode (Keyword CppSrcCode) -> CppSrcCode (Keyword CppSrcCode) -> Doc
+cppsMethod is n c t ps b bStart bEnd = emptyIfEmpty (bodyDoc b <> initList) $ 
   vcat [ttype <+> text c <> text "::" <> text n <> parens (parameterList ps) 
   <+> emptyIfEmpty initList (colon <+> initList) <+> keyDoc bStart,
   indent (bodyDoc b),
   keyDoc bEnd]
   where ttype | isDtor n = empty
               | otherwise = getTypeDoc t
-        initList = hicat (text ", ") $ zipWith (\sv d -> text sv <> parens d) 
-          (map fst sas) (map snd sas)
+        initList = hicat (text ", ") is
+
+cppConstructor :: CppSrcCode (Keyword CppSrcCode) -> 
+  CppSrcCode (Keyword CppSrcCode) -> [MS (CppSrcCode (Parameter CppSrcCode))] 
+  -> [(VS (CppSrcCode (Variable CppSrcCode)), 
+  VS (CppSrcCode (Value CppSrcCode)))] -> 
+  MS (CppSrcCode (Body CppSrcCode)) -> MS (CppSrcCode (Method CppSrcCode))
+cppConstructor bStart bEnd ps is b = getClassName >>= (\n -> join $ (\tp pms 
+  ivars ivals bod -> if null is then G.constructor n ps is b else modify 
+  (setScope Pub) >> toState (methodFromData Pub (cppsMethod (zipWith 
+  (\ivar ival -> variableDoc ivar <> parens (valueDoc ival)) ivars ivals) n n 
+  tp pms bod bStart bEnd))) <$> construct n <*> sequence ps <*> 
+  mapM (zoom lensMStoVS . fst) is <*> mapM (zoom lensMStoVS . snd) is <*> b)
 
 cppsFunction :: (RenderSym repr) => Label -> repr (Type repr) -> 
   [repr (Parameter repr)] -> repr (Body repr) -> repr (Keyword repr) -> 

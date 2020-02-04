@@ -40,22 +40,22 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, 
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
   minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, staticVar, 
-  self, enumVar, objVar, listVar, listOf, litTrue, litFalse, litChar, litFloat, 
-  litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, objMethodCall,
-  objMethodCallNoParams, selfAccess, listIndexExists, funcApp, newObj, lambda, 
-  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess,
-  listSet, getFunc, setFunc, listSizeFunc, listAppendFunc, listAccessFunc', 
-  listSetFunc, state, loopState, emptyState, assign, assignToListIndex, 
-  multiAssignError, decrement, increment, decrement1, increment1, varDec, 
-  varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, constDecDef, 
-  funcDecDef, discardInput, discardFileInput, closeFile, stringListVals, 
-  stringListLists, returnState, multiReturnError, valState, comment, throw, 
-  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
-  switch, switchAsIf, for, forRange, while, tryCatch, notifyObservers, 
-  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
-  constructor, function, docFunc, docInOutFunc, intFunc, privMVar, pubMVar, 
-  pubGVar, privClass, pubClass, docClass, commentedClass, buildModule, 
-  modFromData, fileDoc, docMod, fileFromData)
+  self, enumVar, objVar, listVar, listOf, arrayElem, litTrue, litFalse, litChar,
+  litFloat, litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, 
+  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, funcApp, 
+  newObj, lambda, func, get, set, listSize, listAdd, listAppend, iterBegin, 
+  iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, listAppendFunc, 
+  listAccessFunc', listSetFunc, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  objDecNewNoParams, constDecDef, funcDecDef, discardInput, discardFileInput, 
+  closeFile, stringListVals, stringListLists, returnState, multiReturnError, 
+  valState, comment, throw, initState, changeState, initObserverList, 
+  addObserver, ifCond, ifNoElse, switch, switchAsIf, for, forRange, while, 
+  tryCatch, notifyObservers, construct, param, method, getMethod, setMethod, 
+  privMethod, pubMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
+  privMVar, pubMVar, pubGVar, privClass, pubClass, docClass, commentedClass, 
+  buildModule, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
@@ -67,10 +67,11 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat,
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList, 
   on2StateLists, on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS,
-  lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, lensVStoMS, initialState, initialFS, modifyReturn, 
-  addODEFilePaths, addODEFile, getODEFiles, addLangImport, 
-  addLangImportVS, getLangImports, addLibImport, getLibImports, addModuleImport, addModuleImportVS,
+import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, 
+  lensFStoMS, lensFStoVS, lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, 
+  lensVStoMS, initialState, initialFS, modifyReturn, addODEFilePaths, 
+  addODEFile, getODEFiles, addLangImport, addLangImportVS, getLangImports, 
+  addLibImport, getLibImports, addModuleImport, addModuleImportVS,
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine, 
   getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
@@ -84,8 +85,9 @@ import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (State, modify, runState)
 import qualified Data.Map as Map (lookup)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
-  empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, 
+  brackets, comma, empty, equals, semi, vcat, lbrace, rbrace, quotes, render, 
+  colon)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -203,6 +205,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   infile = on2StateValues pair infile infile
   outfile = on2StateValues pair outfile outfile
   listType p = pair1 (listType (pfst p)) (listType (psnd p))
+  arrayType = pair1 arrayType arrayType
   listInnerType = pair1 listInnerType listInnerType
   obj t = on2StateValues pair (obj t) (obj t)
   enumType t = on2StateValues pair (enumType t) (enumType t)
@@ -359,6 +362,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   objVarSelf = pair1 objVarSelf objVarSelf
   listVar n p = pair1 (listVar n (pfst p)) (listVar n (psnd p))
   listOf n = pair1 (n `listOf`) (n `listOf`)
+  arrayElem i = pair1 (arrayElem i) (arrayElem i)
   iterVar l = pair1 (iterVar l) (iterVar l)
   
   ($->) = pair2 ($->) ($->)
@@ -546,6 +550,9 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (zoom lensMStoVS vl)
   listDec n vr = pair1 (listDec n) (listDec n) (zoom lensMStoVS vr)
   listDecDef vr vs = pair1Val1List listDecDef listDecDef (zoom lensMStoVS vr) 
+    (map (zoom lensMStoVS) vs)
+  arrayDec n vr = pair1 (arrayDec n) (arrayDec n) (zoom lensMStoVS vr)
+  arrayDecDef vr vs = pair1Val1List arrayDecDef arrayDecDef (zoom lensMStoVS vr)
     (map (zoom lensMStoVS) vs)
   objDecDef o v = pair2 objDecDef objDecDef (zoom lensMStoVS o) 
     (zoom lensMStoVS v)
@@ -1120,6 +1127,7 @@ instance TypeSym CppSrcCode where
   outfile = modify (addUsing "ofstream") >> cppOutfileType
   listType p t = modify (addUsing lst . addLangImportVS lst) >> G.listType p t
     where lst = render $ keyDoc (list p)
+  arrayType = cppArrayType
   listInnerType = G.listInnerType
   obj n = zoom lensVStoMS getClassName >>= (\cn -> if cn == n then G.obj n else 
     getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
@@ -1226,6 +1234,7 @@ instance VariableSym CppSrcCode where
     (variableType v) (text "this->" <> variableDoc v))
   listVar = G.listVar
   listOf = G.listOf
+  arrayElem i = G.arrayElem (litInt i)
   iterVar l t = mkStateVar l (iterator t) (text $ "(*" ++ l ++ ")")
 
   ($->) = objVar
@@ -1406,6 +1415,12 @@ instance StatementSym CppSrcCode where
   varDecDef = G.varDecDef 
   listDec n = G.listDec cppListDecDoc (litInt n)
   listDecDef = G.listDecDef cppListDecDefDoc
+  arrayDec n vr = zoom lensMStoVS $ on2StateValues (\sz v -> mkSt $ getTypeDoc 
+    (variableType v) <+> variableDoc v <> brackets (valueDoc sz)) 
+    (litInt n :: VS (CppSrcCode (Value CppSrcCode))) vr
+  arrayDecDef vr vals = on2StateValues (\vdc vs -> mkSt $ statementDoc vdc <+> 
+    equals <+> braces (valueList vs)) (arrayDec (toInteger $ length vals) vr) 
+    (mapM (zoom lensMStoVS) vals)
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew l v vs = modify (addModuleImport l) >> objDecNew v vs
@@ -1771,6 +1786,7 @@ instance TypeSym CppHdrCode where
   listType p t = modify (addHeaderUsing lst . addHeaderLangImport lst) >> 
     G.listType p t
     where lst = render $ keyDoc (list p)
+  arrayType = cppArrayType
   listInnerType = G.listInnerType
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
     (Map.lookup n cm) $ G.obj n)
@@ -1856,6 +1872,7 @@ instance VariableSym CppHdrCode where
   objVarSelf _ = mkStateVar "" void empty
   listVar _ _ _ = mkStateVar "" void empty
   listOf _ _ = mkStateVar "" void empty
+  arrayElem _ _ = mkStateVar "" void empty
   iterVar _ _ = mkStateVar "" void empty
 
   ($->) _ _ = mkStateVar "" void empty
@@ -2034,6 +2051,8 @@ instance StatementSym CppHdrCode where
   varDecDef = G.varDecDef
   listDec _ _ = emptyState
   listDecDef _ _ = emptyState
+  arrayDec _ _ = emptyState
+  arrayDecDef _ _ = emptyState
   objDecDef _ _ = emptyState
   objDecNew _ _ = emptyState
   extObjDecNew _ _ _ = emptyState
@@ -2377,6 +2396,11 @@ cppInfileType = addFStreamImport $ typeFromData File "ifstream"
 cppOutfileType :: (RenderSym repr) => VS (repr (Type repr))
 cppOutfileType = addFStreamImport $ typeFromData File "ofstream" 
   (text "ofstream")
+
+cppArrayType :: (RenderSym repr) => VS (repr (Type repr)) -> 
+  VS (repr (Type repr))
+cppArrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
+  (getTypeString t) (getTypeDoc t))
 
 cppIterType :: (RenderSym repr) => VS (repr (Type repr)) -> 
   VS (repr (Type repr))

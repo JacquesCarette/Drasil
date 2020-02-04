@@ -3,24 +3,25 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
-  fileType, listType, listInnerType, obj, enumType, funcType, void, runStrategy,
-  listSlice, unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', absOp, absOp', 
-  expOp, expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', asinOp, asinOp', 
-  acosOp, acosOp', atanOp, atanOp', unExpr, unExpr', typeUnExpr, powerPrec, 
-  multPrec, andPrec, orPrec, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
-  lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, 
-  andOp, orOp, binExpr, binExpr', typeBinExpr, addmathImport, var, staticVar, 
-  extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar,
-  litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, 
-  enumElement, argsList, inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, 
-  lambda, notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
-  listIndexExists, indexOf, func, get, set, listSize, listAdd, listAppend, 
-  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
-  listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
-  listAccessFunc', listSetFunc, printSt, state, loopState, emptyState, assign, 
-  assignToListIndex, multiAssignError, decrement, increment, increment', 
-  increment1, increment1', decrement1, varDec, varDecDef, listDec, listDecDef, 
-  listDecDef', objDecNew, objDecNewNoParams, constDecDef, funcDecDef, 
+  fileType, listType, arrayType, listInnerType, obj, enumType, funcType, void, 
+  runStrategy, listSlice, unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', 
+  absOp, absOp', expOp, expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', 
+  asinOp, asinOp', acosOp, acosOp', atanOp, atanOp', unExpr, unExpr', 
+  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOp, notEqualOp, 
+  greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
+  divideOp, moduloOp, powerOp, andOp, orOp, binExpr, binExpr', typeBinExpr, 
+  addmathImport, var, staticVar, extVar, self, enumVar, classVar, objVar, 
+  objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, litFalse, litChar, 
+  litFloat, litInt, litString, pi, valueOf, arg, enumElement, argsList, 
+  inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, lambda, notNull, 
+  objAccess, objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, 
+  indexOf, func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
+  listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
+  listAppendFunc, iterBeginError, iterEndError, listAccessFunc, listAccessFunc',
+  listSetFunc, printSt, state, loopState, emptyState, assign, assignToListIndex,
+  multiAssignError, decrement, increment, increment', increment1, increment1', 
+  decrement1, varDec, varDecDef, listDec, listDecDef, listDecDef', arrayDec, 
+  arrayDecDef, objDecNew, objDecNewNoParams, constDecDef, funcDecDef, 
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
   multiReturnError, valState, comment, freeError, throw, initState, changeState,
@@ -102,7 +103,7 @@ import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  braces, quotes, integer, vcat, semi, comma, equals, isEmpty)
+  brackets, braces, quotes, integer, vcat, semi, comma, equals, isEmpty)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
 -- Bodies --
@@ -154,6 +155,10 @@ listType :: (RenderSym repr) => repr (Permanence repr) -> VS (repr (Type repr))
 listType p = onStateValue (\t -> typeFromData (List (getType t)) (render 
   (keyDoc $ list p) ++ "<" ++ getTypeString t ++ ">") (keyDoc (list p) <> 
   angles (getTypeDoc t)))
+
+arrayType :: (RenderSym repr) => VS (repr (Type repr)) -> VS (repr (Type repr))
+arrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
+  (getTypeString t ++ "[]") (getTypeDoc t <> brackets empty)) 
 
 listInnerType :: (RenderSym repr) => VS (repr (Type repr)) -> 
   VS (repr (Type repr))
@@ -433,6 +438,12 @@ listOf :: (RenderSym repr) => Label -> VS (repr (Type repr)) ->
   VS (repr (Variable repr))
 listOf n = S.listVar n static_
 
+arrayElem :: (RenderSym repr) => VS (repr (Value repr)) -> 
+  VS (repr (Variable repr)) -> VS (repr (Variable repr))
+arrayElem i' v' = join $ on2StateValues (\i v -> mkStateVar (variableName v ++ 
+  "[" ++ render (valueDoc i) ++ "]") (listInnerType $ toState $ variableType v) 
+  (variableDoc v <> brackets (valueDoc i))) i' v'
+
 iterVar :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   VS (repr (Variable repr))
 iterVar n t = S.var n (iterator t)
@@ -704,6 +715,17 @@ listDecDef' v vals = on3StateValues (\vd vr vs -> mkSt (statementDoc
   vd <+> equals <+> new <+> getTypeDoc (variableType vr) <+> braces 
   (valueList vs))) (S.varDec v) (zoom lensMStoVS v) (mapM (zoom lensMStoVS)
   vals)
+
+arrayDec :: (RenderSym repr) => VS (repr (Value repr)) -> 
+  VS (repr (Variable repr)) -> MS (repr (Statement repr))
+arrayDec n vr = zoom lensMStoVS $ on3StateValues (\sz v it -> mkSt (getTypeDoc 
+  (variableType v) <+> variableDoc v <+> equals <+> new <+> getTypeDoc it <> 
+  brackets (valueDoc sz))) n vr (listInnerType $ onStateValue variableType vr)
+
+arrayDecDef :: (RenderSym repr) => VS (repr (Variable repr)) -> 
+  [VS (repr (Value repr))] -> MS (repr (Statement repr))
+arrayDecDef v vals = on2StateValues (\vd vs -> mkSt (statementDoc vd <+> 
+  equals <+> braces (valueList vs))) (S.varDec v) (mapM (zoom lensMStoVS) vals)
 
 objDecNew :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   [VS (repr (Value repr))] -> MS (repr (Statement repr))

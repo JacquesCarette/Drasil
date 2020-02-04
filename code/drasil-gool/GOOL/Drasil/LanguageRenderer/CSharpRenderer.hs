@@ -21,10 +21,9 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..), ODEInfo(..), 
-  ODEOptions(..), ODEMethod(..))
+  InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
+  InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..), 
+  ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (new, classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
   mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
@@ -35,29 +34,30 @@ import GOOL.Drasil.LanguageRenderer (new, classDocD, multiStateDocD, bodyDocD,
   commentedModD, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, double, char, string, 
-  listType, listInnerType, obj, enumType, funcType, void, runStrategy, 
-  listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
-  lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp,
-  var, staticVar, extVar, self, enumVar, classVar, objVarSelf, listVar, listOf, 
-  iterVar, pi, litTrue, litFalse, litChar, litFloat, litInt, litString, valueOf,
-  arg, enumElement, argsList, inlineIf, objAccess, objMethodCall, 
-  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
-  selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
-  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
-  setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
-  listAccessFunc, listSetFunc, printSt, state, loopState, emptyState, assign, 
-  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
-  increment1, varDec, varDecDef, listDec, listDecDef', objDecNew, 
-  objDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, openFileA,
-  closeFile, discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, initState, changeState,
-  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
-  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
-  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
-  constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
-  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
-  privClass, pubClass, docClass, commentedClass, buildModule', modFromData, 
-  fileDoc, docMod, fileFromData)
+  listType, arrayType, listInnerType, obj, enumType, funcType, void, 
+  runStrategy, listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, 
+  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
+  moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, classVar, 
+  objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, litFalse, 
+  litChar, litFloat, litInt, litString, valueOf, arg, enumElement, argsList, 
+  inlineIf, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
+  listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, newObj, lambda, 
+  notNull, func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
+  listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
+  iterBeginError, iterEndError, listAccessFunc, listSetFunc, printSt, state, 
+  loopState, emptyState, assign, assignToListIndex, multiAssignError, decrement,
+  increment, decrement1, increment1, varDec, varDecDef, listDec, listDecDef', 
+  arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, constDecDef, 
+  discardInput, openFileR, openFileW, openFileA, closeFile, discardFileLine, 
+  stringListVals, stringListLists, returnState, multiReturnError, valState, 
+  comment, freeError, throw, initState, changeState, initObserverList, 
+  addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists, for, forRange, 
+  forEach, while, tryCatch, checkState, notifyObservers, construct, param, 
+  method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, 
+  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef,
+  constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
+  docClass, commentedClass, buildModule', modFromData, fileDoc, docMod, 
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -192,6 +192,7 @@ instance TypeSym CSharpCode where
   outfile = csOutfileType
   listType p t = modify (addLangImportVS "System.Collections.Generic") >> 
     G.listType p t
+  arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
@@ -238,8 +239,7 @@ instance ControlBlockSym CSharpCode where
           odeT = obj "IEnumerable<SolPoint>"
           vec = obj "Vector"
           sol = var "sol" odeT
-          spArray = toState $ typeFromData (List (Object "SolPoint")) 
-            "SolPoint[]" (text "SolPoint[]")
+          spArray = arrayType (obj "SolPoint")
           points = var "points" spArray
           sp = var "sp" (obj "SolPoint")
 
@@ -301,6 +301,7 @@ instance VariableSym CSharpCode where
   objVarSelf = G.objVarSelf
   listVar  = G.listVar
   listOf = G.listOf
+  arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
 
   ($->) = objVar
@@ -484,6 +485,8 @@ instance StatementSym CSharpCode where
   listDec n v = zoom lensMStoVS v >>= (\v' -> G.listDec (listDecDocD v') 
     (litInt n) v)
   listDecDef = G.listDecDef'
+  arrayDec n = G.arrayDec (litInt n)
+  arrayDecDef = G.arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew

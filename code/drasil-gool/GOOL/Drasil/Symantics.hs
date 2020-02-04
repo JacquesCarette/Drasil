@@ -137,6 +137,7 @@ class (PermanenceSym repr) => TypeSym repr where
   outfile       :: VS (repr (Type repr))
   listType      :: repr (Permanence repr) -> VS (repr (Type repr)) -> 
     VS (repr (Type repr))
+  arrayType     :: VS (repr (Type repr)) -> VS (repr (Type repr))
   listInnerType :: VS (repr (Type repr)) -> VS (repr (Type repr))
   obj           :: Label -> VS (repr (Type repr))
   enumType      :: Label -> VS (repr (Type repr))
@@ -234,6 +235,8 @@ class (TypeSym repr) => VariableSym repr where
     VS (repr (Variable repr))
   listOf       :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
   -- Use for iterator variables, i.e. in a forEach loop.
+  arrayElem    :: Integer -> VS (repr (Variable repr)) -> 
+    VS (repr (Variable repr))
   iterVar      :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
 
   ($->) :: VS (repr (Variable repr)) -> VS (repr (Variable repr)) -> VS (repr (Variable repr))
@@ -514,6 +517,10 @@ class (SelectorFunction repr) => StatementSym repr where
   listDec          :: Integer -> VS (repr (Variable repr)) -> 
     MS (repr (Statement repr))
   listDecDef       :: VS (repr (Variable repr)) -> [VS (repr (Value repr))] -> 
+    MS (repr (Statement repr))
+  arrayDec         :: Integer -> VS (repr (Variable repr)) -> 
+    MS (repr (Statement repr))
+  arrayDecDef      :: VS (repr (Variable repr)) -> [VS (repr (Value repr))] -> 
     MS (repr (Statement repr))
   objDecDef        :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
     MS (repr (Statement repr))

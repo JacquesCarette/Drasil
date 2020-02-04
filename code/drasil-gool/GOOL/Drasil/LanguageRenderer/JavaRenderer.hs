@@ -34,29 +34,29 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, double, char, listType, 
-  listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
-  negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp,
-  plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp, var, staticVar, 
-  extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, listOf, iterVar,
-  litTrue, litFalse, litChar, litFloat, litInt, litString, pi, valueOf, arg, 
-  enumElement, argsList, inlineIf, objAccess, objMethodCall, 
-  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
-  selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
-  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
-  setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
+  arrayType, listInnerType, obj, enumType, funcType, void, runStrategy, 
+  listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
+  lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp,
+  var, staticVar, extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, 
+  listOf, arrayElem, iterVar, litTrue, litFalse, litChar, litFloat, litInt, 
+  litString, pi, valueOf, arg, enumElement, argsList, inlineIf, objAccess, 
+  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
+  funcApp, selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, 
+  listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
+  getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
   iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
-  increment1, varDec, varDecDef, listDec, objDecNew, objDecNewNoParams, 
-  funcDecDef, discardInput, discardFileInput, openFileR, openFileW, openFileA, 
-  closeFile, discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, initState, changeState,
-  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
-  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
-  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
-  constructor, docMain, function, mainFunction, docFunc, intFunc, stateVar, 
-  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
-  privClass, pubClass, docClass, commentedClass, buildModule', modFromData, 
-  fileDoc, docMod, fileFromData)
+  increment1, varDec, varDecDef, listDec, arrayDec, arrayDecDef, objDecNew, 
+  objDecNewNoParams, funcDecDef, discardInput, discardFileInput, openFileR, 
+  openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
+  stringListLists, returnState, multiReturnError, valState, comment, freeError, 
+  throw, initState, changeState, initObserverList, addObserver, ifCond, 
+  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
+  tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
+  setMethod, privMethod, pubMethod, constructor, docMain, function, 
+  mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
+  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, docClass, 
+  commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -68,12 +68,14 @@ import GOOL.Drasil.Helpers (angles, vibcat, emptyIfNull, toCode, toState,
   onCodeValue, onStateValue, on2CodeValues, on2StateValues, on3CodeValues, 
   on3StateValues, onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
   on1StateValue1List)
-import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, modifyReturnFunc, 
-  addODEFilePaths, addProgNameToPaths, addODEFile, getODEFiles,
-  addLangImport, addLangImportVS, addExceptionImports, addLibImport, addLibImports, 
-  getModuleName, setClassName, getClassName, setCurrMain, setODEDepVars, 
-  getODEDepVars, setODEOthVars, getODEOthVars, setOutputsDeclared, 
-  isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions)
+import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS,
+  lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, 
+  modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFile, 
+  getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
+  addLibImport, addLibImports, getModuleName, setClassName, getClassName, 
+  setCurrMain, setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
+  setOutputsDeclared, isOutputsDeclared, getExceptions, getMethodExcMap, 
+  addExceptions)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -82,8 +84,8 @@ import Control.Monad (join)
 import Control.Monad.State (modify, runState)
 import qualified Data.Map as Map (lookup)
 import Data.List (elemIndex, nub, intercalate, sort)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), braces, parens, 
-  brackets, empty, equals, semi, vcat, lbrace, rbrace, render, colon, integer)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty, 
+  equals, semi, vcat, lbrace, rbrace, render, colon)
 
 jExt :: String
 jExt = "java"
@@ -198,6 +200,7 @@ instance TypeSym JavaCode where
   infile = jInfileType
   outfile = jOutfileType
   listType = jListType
+  arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
@@ -223,7 +226,7 @@ instance ControlBlockSym JavaCode where
     >>= (\dpv -> 
       let odeVarType = obj (odeClassName dpv)
           odeVar = var "ode" odeVarType
-          odeDepVar = var (odeVarName dpv) (toState dblArray)
+          odeDepVar = var (odeVarName dpv) (arrayType float)
           initval = initVal info
           integVal = valueOf $ jODEIntVar (solveMethod opts)
           hndlr = var "stepHandler" (obj stH)
@@ -235,9 +238,7 @@ instance ControlBlockSym JavaCode where
       block [
         jODEMethod opts,
         objDecDef odeVar (newObj odeVarType (map valueOf $ otherVars info)),
-        zoom lensMStoVS initval >>= (\initv -> varDecDef odeDepVar (toState $ 
-          mkVal (variableType dpv) (new <+> getTypeDoc dblArray <+> braces
-          (valueDoc initv)))),
+        arrayDecDef odeDepVar [initval],
         listDecDef dv [initval]],
       block [
         on3StateValues (\odec initf handlef -> mkSt $ statementDoc odec <+> 
@@ -246,12 +247,12 @@ instance ControlBlockSym JavaCode where
           keyDoc (blockEnd :: JavaCode Doc)) 
           (objDecDef hndlr (newObj (obj stH) [])) 
           (function "init" public dynamic_ void (map param [var "t0" float, 
-            var "y0" (toState dblArray), var "t" float]) (body []))
+            var "y0" (arrayType float), var "t" float]) (body []))
           (function "handleStep" public dynamic_ void (map param [interp, 
             var "isLast" (toState $ typeFromData Boolean "boolean" 
             (text "boolean"))]) (bodyStatements [
-              varDecDef (var (odeTempName dpv) (toState dblArray)) 
-                (objMethodCallNoParams (toState dblArray) (valueOf interp) 
+              varDecDef (var (odeTempName dpv) (arrayType float)) 
+                (objMethodCallNoParams (arrayType float) (valueOf interp) 
                 "getInterpolatedState"),
               valState $ listAppend (valueOf dv) (mkStateVal float 
                 (text $ odeTempName dpv ++ "[0]"))])),
@@ -323,6 +324,7 @@ instance VariableSym JavaCode where
   objVarSelf = G.objVarSelf
   listVar = G.listVar
   listOf = G.listOf
+  arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
 
   ($->) = objVar
@@ -348,9 +350,8 @@ instance ValueSym JavaCode where
 
   ($:) = enumElement
 
-  valueOf v = join $ on2StateValues (\dvs vr -> maybe (G.valueOf v) (mkStateVal 
-    (listInnerType $ toState $ variableType vr) . (variableDoc vr <>) . 
-    brackets . integer . toInteger) (elemIndex (variableName vr) dvs)) 
+  valueOf v = G.valueOf $ join $ on2StateValues (\dvs vr -> maybe v (\i -> 
+    arrayElem (toInteger i) v) (elemIndex (variableName vr) dvs)) 
     getODEDepVars v
   arg n = G.arg (litInt n) argsList
   enumElement = G.enumElement
@@ -533,6 +534,8 @@ instance StatementSym JavaCode where
   listDecDef v vs = modify (if null vs then id else addLangImport 
     "java.util.Arrays") >> objDecNew v [funcApp "Arrays.asList" 
     (onStateValue variableType v) vs | not (null vs)]
+  arrayDec n = G.arrayDec (litInt n)
+  arrayDecDef = G.arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew
@@ -736,9 +739,6 @@ instance BlockCommentSym JavaCode where
 odeImport :: String
 odeImport = "org.apache.commons.math3.ode."
 
-dblArray :: JavaCode (Type JavaCode)
-dblArray = typeFromData (List Float) "double[]" (text "double[]")
-
 jODEMethod :: ODEOptions JavaCode -> MS (JavaCode (Statement JavaCode))
 jODEMethod opts = modify (addLibImport (odeImport ++ "nonstiff." ++ it)) >> 
   varDecDef (jODEIntVar m) (newObj (obj it) (jODEParams m))
@@ -768,6 +768,7 @@ jODEFile info = (unJC fl, fst s)
           let n = variableName dpv
               cn = n ++ "_ODE"
               dn = "d" ++ n 
+              ddv = var dn (arrayType float)
               othVars = map (modify (setODEOthVars (map variableName 
                 ovs)) >>) ovars
           in fileDoc (buildModule cn [] [zoom lensCStoMS (modify (addLibImport 
@@ -787,10 +788,9 @@ jODEFile info = (unJC fl, fst s)
               pubMethod "getDimension" int [] (oneLiner $ returnState $ 
                 litInt 1),
               pubMethod "computeDerivatives" void (map param [var "t" float, 
-                var n (toState dblArray), var dn (toState dblArray)]) (oneLiner 
-                $ var (dn ++ "[0]") float &= (modify (setODEDepVars 
-                [variableName dpv, dn] . setODEOthVars (map variableName ovs)) 
-                >> ode info))]))])) 
+                var n (arrayType float), ddv]) (oneLiner $ arrayElem 0 ddv &= 
+                (modify (setODEDepVars [variableName dpv, dn] . setODEOthVars 
+                (map variableName ovs)) >> ode info))]))])) 
             (zoom lensFStoVS dv) (map (zoom lensFStoVS) ovars)
 
 jName :: String
@@ -821,10 +821,8 @@ jListType p t = modify (addLangImportVS $ "java.util." ++ render lst) >>
         jListType' _ = G.listType p t
         lst = keyDoc $ list p
 
-
 jArrayType :: VS (JavaCode (Type JavaCode))
-jArrayType = toState $ typeFromData (List $ Object "Object") "Object" 
-  (text "Object[]")
+jArrayType = arrayType (obj "Object")
 
 jFileType :: (RenderSym repr) => VS (repr (Type repr))
 jFileType = modifyReturn (addLangImportVS "java.io.File") $ typeFromData File 
@@ -917,12 +915,12 @@ jMethod n es s p t ps b = vcat [
   indent $ bodyDoc b,
   rbrace]
 
-jAssignFromArray :: Int -> [VS (JavaCode (Variable JavaCode))] -> 
+jAssignFromArray :: Integer -> [VS (JavaCode (Variable JavaCode))] -> 
   [MS (JavaCode (Statement JavaCode))]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
-  (valueOf (var ("outputs[" ++ show c ++ "]") (onStateValue variableType v))))
-  : jAssignFromArray (c+1) vs
+  (valueOf $ arrayElem c outputs)) : jAssignFromArray (c+1) vs
+  where outputs = var "outputs" jArrayType
 
 jInOutCall :: (Label -> VS (JavaCode (Type JavaCode)) -> 
   [VS (JavaCode (Value JavaCode))] -> VS (JavaCode (Value JavaCode))) -> Label 
@@ -962,15 +960,13 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
   where returnTp [x] = onStateValue variableType x
         returnTp _ = jArrayType
         returnSt [x] = returnState $ valueOf x
-        returnSt _ = multi (varDecDef outputs (valueOf (var 
-          ("new Object[" ++ show (length rets) ++ "]") jArrayType))
+        returnSt _ = multi (arrayDec (toInteger $ length rets) outputs
           : assignArray 0 (map valueOf rets)
           ++ [returnState (valueOf outputs)])
-        assignArray :: Int -> [VS (JavaCode (Value JavaCode))] -> 
+        assignArray :: Integer -> [VS (JavaCode (Value JavaCode))] -> 
           [MS (JavaCode (Statement JavaCode))]
         assignArray _ [] = []
-        assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
-          (onStateValue valueType v) &= v) : assignArray (c+1) vs
+        assignArray c (v:vs) = (arrayElem c outputs &= v) : assignArray (c+1) vs
         decls = multi $ map varDec outs
         rets = both ++ outs
         outputs = var "outputs" jArrayType

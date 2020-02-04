@@ -20,10 +20,9 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  InternalMethod(..), 
-  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
-  ModuleSym(..), InternalMod(..), BlockCommentSym(..), ODEInfo(..), 
-  ODEOptions(..), ODEMethod(..))
+  InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
+  InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..), 
+  ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
   bodyDocD, outDoc, destructorError, multiAssignDoc, returnDocD, mkStNoEnd,
   breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, 
@@ -37,8 +36,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', equalOp, notEqualOp, 
   greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
   divideOp, moduloOp, var, staticVar, extVar, enumVar, classVar, objVar, 
-  objVarSelf, listVar, listOf, iterVar, litChar, litFloat, litInt, litString, 
-  valueOf, arg, enumElement, argsList, objAccess, objMethodCall, 
+  objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litFloat, litInt, 
+  litString, valueOf, arg, enumElement, argsList, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
   selfFuncApp, extFuncApp, newObj, lambda, func, get, set, listAdd, listAppend, 
   iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, 
@@ -63,9 +62,9 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
-  addLangImportVS, getLangImports, 
-  addLibImport, getLibImports, addModuleImport, addModuleImportVS, getModuleImports, setClassName, 
-  getClassName, setCurrMain, getClassMap)
+  addLangImportVS, getLangImports, addLibImport, getLibImports, addModuleImport,
+  addModuleImportVS, getModuleImports, setClassName, getClassName, setCurrMain, 
+  getClassMap)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -188,6 +187,7 @@ instance TypeSym PythonCode where
   outfile = toState $ typeFromData File "" empty
   listType _ = onStateValue (\t -> typeFromData (List (getType t)) "[]" 
     (brackets empty))
+  arrayType = listType static_
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
@@ -298,6 +298,7 @@ instance VariableSym PythonCode where
   objVarSelf = G.objVarSelf
   listVar = G.listVar
   listOf = G.listOf
+  arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
 
   ($->) = objVar
@@ -483,6 +484,8 @@ instance StatementSym PythonCode where
   listDec _ v = zoom lensMStoVS $ onStateValue (mkStNoEnd . pyListDec) v
   listDecDef v' vs' = zoom lensMStoVS $ on1StateValue1List (\v vs -> mkStNoEnd 
     $ pyListDecDef v vs) v' vs'
+  arrayDec = listDec
+  arrayDecDef = listDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew lib v vs = modify (addModuleImport lib) >> varDecDef v 

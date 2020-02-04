@@ -94,6 +94,7 @@ instance TypeSym CodeInfo where
   infile = noInfo
   outfile = noInfo
   listType _ _ = noInfo
+  arrayType _ = noInfo
   listInnerType _ = noInfo
   obj _ = noInfo
   enumType _ = noInfo
@@ -126,6 +127,7 @@ instance VariableSym CodeInfo where
   objVarSelf _ = noInfo
   listVar _ _ _ = noInfo
   listOf _ _ = noInfo
+  arrayElem _ _ = noInfo
   iterVar _ _ = noInfo
 
   ($->) _ _ = noInfo
@@ -257,6 +259,8 @@ instance StatementSym CodeInfo where
   varDecDef _ _ = noInfo
   listDec _ _ = noInfo
   listDecDef _ _ = noInfo
+  arrayDec _ _ = noInfo
+  arrayDecDef _ _ = noInfo
   objDecDef _ _ = noInfo
   objDecNew _ _ = noInfo
   extObjDecNew _ _ _ = noInfo

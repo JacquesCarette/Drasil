@@ -15,7 +15,6 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..),
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
-import Language.Drasil.Chunk.Code (programName)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Modularity(..), Visibility(..))
 
@@ -76,8 +75,7 @@ genPackage unRepr = do
   let info = unCI $ evalState ci initialState
       (reprPD, s) = runState p info
       pd = unRepr reprPD
-      -- Below line of code cannot be simplified because program has a generic type
-      n = case codeSpec g of CodeSpec {program = pr} -> programName pr
+      n = pName $ codeSpec g
       m = makefile (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig n s
@@ -87,8 +85,7 @@ genProgram :: (ProgramSym repr) => Reader DrasilState (GS (repr (Program repr)))
 genProgram = do
   g <- ask
   ms <- chooseModules $ modular g
-  -- Below line of code cannot be simplified because program has a generic type
-  let n = case codeSpec g of CodeSpec {program = p} -> programName p
+  let n = pName $ codeSpec g
   return $ prog n ms
 
 chooseModules :: (ProgramSym repr) => Modularity -> 
@@ -101,8 +98,7 @@ genUnmodular :: (ProgramSym repr) =>
 genUnmodular = do
   g <- ask
   let s = csi $ codeSpec g
-      -- Below line of code cannot be simplified because program has a generic type
-      n = case codeSpec g of CodeSpec {program = p} -> programName p
+      n = pName $ codeSpec g
   genModule n ("Contains the entire " ++ n ++ " program")
     (map (fmap Just) (genMainFunc : concatMap genModFuncs (mods s)) ++ 
     [genOutputFormat]) [genInputClass, genConstClass]

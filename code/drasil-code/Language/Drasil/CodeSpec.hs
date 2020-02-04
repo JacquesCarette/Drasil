@@ -9,8 +9,8 @@ import Language.Drasil.Development (dep, names', namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), 
-  ConstraintMap, codevar, quantvar, quantfunc, funcPrefix, codeName,
-  constraintMap)
+  ConstraintMap, programName, codevar, quantvar, quantfunc, funcPrefix, 
+  codeName, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
   codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
@@ -56,8 +56,8 @@ data CodeSystInfo where
   } -> CodeSystInfo
 
 data CodeSpec where
-  CodeSpec :: CommonIdea a => {
-  program :: a,
+  CodeSpec :: {
+  pName :: Name,
   relations :: [Def],
   fMap :: FunctionMap,
   vMap :: VarMap,
@@ -113,7 +113,7 @@ codeSpec SI {_sys = sys
         smplData = sd
       }
   in  CodeSpec {
-        program = sys,
+        pName = programName sys,
         relations = rels,
         fMap = assocToMap rels,
         vMap = assocToMap (map quantvar q ++ getAdditionalVars chs (mods csi')),

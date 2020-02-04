@@ -1,5 +1,6 @@
 module Language.Drasil.Code.Imperative.Modules (
-  genMain, chooseInModule, genConstMod, genOutputMod, genSampleInput
+  genMain, genMainFunc, chooseInModule, genInputClass, genConstMod, 
+  genConstClass, genOutputMod, genOutputFormat, genSampleInput
 ) where
 
 import Language.Drasil

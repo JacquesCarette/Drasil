@@ -3,7 +3,7 @@
 module Language.Drasil.Code.Imperative.Import (
   publicFunc, privateMethod, publicInOutFunc, privateInOutMethod, 
   genConstructor, mkVar, mkVal, convExpr, genCalcBlock, CalcType(..), genModDef,
-  readData, renderC
+  genModFuncs, readData, renderC
 ) where
 
 import Language.Drasil hiding (int, log, ln, exp,
@@ -324,6 +324,10 @@ genCaseBlock t v c cs = do
 genModDef :: (ProgramSym repr) => Mod -> 
   Reader DrasilState (FS (repr (RenderFile repr)))
 genModDef (Mod n desc fs) = genModule n desc (map (fmap Just . genFunc) fs) []
+
+genModFuncs :: (ProgramSym repr) => Mod -> 
+  [Reader DrasilState (MS (repr (Method repr)))]
+genModFuncs (Mod _ _ fs) = map genFunc fs
 
 genFunc :: (ProgramSym repr) => Func -> Reader DrasilState (MS (repr (Method repr)))
 genFunc (FDef (FuncDef n desc parms o rd s)) = do

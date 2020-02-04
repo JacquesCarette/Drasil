@@ -323,7 +323,7 @@ genCaseBlock t v c cs = do
 -- medium hacks --
 genModDef :: (ProgramSym repr) => Mod -> 
   Reader DrasilState (FS (repr (RenderFile repr)))
-genModDef (Mod n desc fs) = genModule n desc (Just $ mapM genFunc fs) Nothing
+genModDef (Mod n desc fs) = genModule n desc (map (fmap Just . genFunc) fs) []
 
 genFunc :: (ProgramSym repr) => Func -> Reader DrasilState (MS (repr (Method repr)))
 genFunc (FDef (FuncDef n desc parms o rd s)) = do

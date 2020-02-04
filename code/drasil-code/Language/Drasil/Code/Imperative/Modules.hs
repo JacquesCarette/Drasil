@@ -52,7 +52,7 @@ import Text.PrettyPrint.HughesPJ (render)
 
 genMain :: (ProgramSym repr) => Reader DrasilState (FS (repr (RenderFile repr)))
 genMain = genModule "Control" "Controls the flow of the program" 
-  (Just $ liftS genMainFunc) Nothing
+  [fmap Just genMainFunc] []
 
 genMainFunc :: (ProgramSym repr) => Reader DrasilState (MS (repr (Method repr)))
 genMainFunc = do
@@ -139,14 +139,10 @@ genInputModSeparated = do
   dvDesc <- modDesc (liftS derivedValuesDesc)
   icDesc <- modDesc (liftS inputConstraintsDesc)
   sequence 
-    [genModule "InputParameters" ipDesc 
-      Nothing (Just $ fmap maybeToList genInputClass),
-    genModule "InputFormat" ifDesc
-      (Just $ fmap maybeToList (genInputFormat Pub)) Nothing,
-    genModule "DerivedValues" dvDesc
-      (Just $ fmap maybeToList (genInputDerived Pub)) Nothing,
-    genModule "InputConstraints" icDesc 
-      (Just $ fmap maybeToList (genInputConstraints Pub)) Nothing]
+    [genModule "InputParameters" ipDesc [] [genInputClass],
+    genModule "InputFormat" ifDesc [genInputFormat Pub] [],
+    genModule "DerivedValues" dvDesc [genInputDerived Pub] [],
+    genModule "InputConstraints" icDesc [genInputConstraints Pub] []]
 
 genInputModCombined :: (ProgramSym repr) => 
   Reader DrasilState [FS (repr (RenderFile repr))]
@@ -155,11 +151,9 @@ genInputModCombined = do
   let cname = "InputParameters"
       genMod :: (ProgramSym repr) => Maybe (CS (repr (Class repr))) ->
         Reader DrasilState (FS (repr (RenderFile repr)))
-      genMod Nothing = genModule cname ipDesc (Just $ concat <$> mapM (fmap 
-        maybeToList) [genInputFormat Pub, genInputDerived 
-        Pub, genInputConstraints Pub]) 
-        Nothing
-      genMod _ = genModule cname ipDesc Nothing (Just $ fmap maybeToList genInputClass)
+      genMod Nothing = genModule cname ipDesc [genInputFormat Pub, 
+        genInputDerived Pub, genInputConstraints Pub] []
+      genMod _ = genModule cname ipDesc [] [genInputClass]
   ic <- genInputClass
   liftS $ genMod ic
 
@@ -385,8 +379,7 @@ genSampleInput = do
 genConstMod :: (ProgramSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
 genConstMod = do
   cDesc <- modDesc $ liftS constModDesc
-  liftS $ genModule "Constants" cDesc Nothing (Just $ fmap maybeToList 
-    genConstClass)
+  liftS $ genModule "Constants" cDesc [] [genConstClass]
 
 genConstClass :: (ProgramSym repr) => 
   Reader DrasilState (Maybe (CS (repr (Class repr))))
@@ -409,13 +402,11 @@ genConstClass = do
 
 ----- OUTPUT -------
 
-genOutputMod :: (ProgramSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
+genOutputMod :: (ProgramSym repr) => 
+  Reader DrasilState [FS (repr (RenderFile repr))]
 genOutputMod = do
-  outformat <- genOutputFormat
   ofDesc <- modDesc $ liftS outputFormatDesc
-  let outf = maybeToList outformat
-  liftS $ genModule "OutputFormat" ofDesc
-    (Just $ return outf) Nothing
+  liftS $ genModule "OutputFormat" ofDesc [genOutputFormat] []
 
 genOutputFormat :: (ProgramSym repr) => 
   Reader DrasilState (Maybe (MS (repr (Method repr))))

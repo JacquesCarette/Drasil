@@ -15,26 +15,26 @@ import GOOL.Drasil (Label, ProgramSym, FileSym(..), TypeSym(..),
 
 import Control.Lens.Zoom (zoom)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (maybe)
+import Data.Maybe (catMaybes)
 import Control.Monad.Reader (Reader, ask, withReader)
 
 genModule :: (ProgramSym repr) => Name -> String
-  -> Maybe (Reader DrasilState [MS (repr (Method repr))])
-  -> Maybe (Reader DrasilState [CS (repr (Class repr))])
+  -> [Reader DrasilState (Maybe (MS (repr (Method repr))))]
+  -> [Reader DrasilState (Maybe (CS (repr (Class repr))))]
   -> Reader DrasilState (FS (repr (RenderFile repr)))
 genModule n desc maybeMs maybeCs = do
   g <- ask
   let updateState = withReader (\s -> s { currentModule = n })
       -- Below line of code cannot be simplified because authors has a generic type
       as = case csi (codeSpec g) of CSI {authors = a} -> map name a
-  cs <- maybe (return []) updateState maybeCs
-  ms <- maybe (return []) updateState maybeMs
+  cs <- mapM updateState maybeCs
+  ms <- mapM updateState maybeMs
   let commMod | CommentMod `elem` commented g                   = docMod desc 
                   as (date g)
               | CommentFunc `elem` commented g && not (null ms) = docMod "" []  
                   (date g)
               | otherwise                                       = id
-  return $ commMod $ fileDoc $ buildModule n ms cs
+  return $ commMod $ fileDoc $ buildModule n (catMaybes ms) (catMaybes cs)
 
 genDoxConfig :: (AuxiliarySym repr) => String -> GOOLState ->
   Reader DrasilState [repr (Auxiliary repr)]

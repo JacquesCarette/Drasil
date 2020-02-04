@@ -75,7 +75,7 @@ genPackage unRepr = do
   let info = unCI $ evalState ci initialState
       (reprPD, s) = runState p info
       pd = unRepr reprPD
-      n = pName $ codeSpec g
+      n = pName $ csi $ codeSpec g
       m = makefile (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig n s
@@ -85,7 +85,7 @@ genProgram :: (ProgramSym repr) => Reader DrasilState (GS (repr (Program repr)))
 genProgram = do
   g <- ask
   ms <- chooseModules $ modular g
-  let n = pName $ codeSpec g
+  let n = pName $ csi $ codeSpec g
   return $ prog n ms
 
 chooseModules :: (ProgramSym repr) => Modularity -> 
@@ -98,7 +98,7 @@ genUnmodular :: (ProgramSym repr) =>
 genUnmodular = do
   g <- ask
   let s = csi $ codeSpec g
-      n = pName $ codeSpec g
+      n = pName $ csi $ codeSpec g
   genModule n ("Contains the entire " ++ n ++ " program")
     (map (fmap Just) (genMainFunc : concatMap genModFuncs (mods s)) ++ 
     [genOutputFormat]) [genInputClass, genConstClass]

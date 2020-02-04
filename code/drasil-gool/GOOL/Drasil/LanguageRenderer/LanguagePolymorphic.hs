@@ -75,7 +75,7 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   ParameterSym(param), MethodSym(method, mainFunction), InternalMethod(intFunc),
   StateVarSym(stateVar), ClassSym(buildClass, commentedClass), 
   InternalMod(modFromData))
-import GOOL.Drasil.Data (Binding(..), Terminator(..), FileType)
+import GOOL.Drasil.Data (Binding(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
   on2StateLists, on1StateValue1List, getInnerType, convType)
@@ -88,10 +88,10 @@ import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt,
   enumDocD, enumElementsDocD, fileDoc', docFuncRepr, commentDocD, commentedItem,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, intValue)
 import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS, 
-  lensCStoMS, lensMStoVS, lensVStoMS, currMain, modifyReturnFunc, 
+  lensCStoMS, lensMStoVS, lensVStoMS, currMain, currFileType, modifyReturnFunc, 
   modifyReturnFunc2, addFile, setMainMod, addLangImportVS, getLangImports, 
-  getLibImports, getModuleImports, setFilePath, getFilePath, setModuleName, 
-  getModuleName, setClassName, getClassName, addParameter)
+  getLibImports, getModuleImports, setModuleName, getModuleName, setClassName, 
+  getClassName, addParameter)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Bifunctor (first)
@@ -1141,24 +1141,24 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Files --
 
-fileDoc :: (RenderSym repr) => FileType -> String -> (repr (Module repr) -> 
+fileDoc :: (RenderSym repr) => String -> (repr (Module repr) -> 
   repr (Block repr)) -> repr (Block repr) -> FS (repr (Module repr)) -> 
   FS (repr (RenderFile repr))
-fileDoc ft ext topb botb = S.fileFromData ft (onStateValue (addExt ext) 
+fileDoc ext topb botb = S.fileFromData (onStateValue (addExt ext) 
   getModuleName) . onStateValue (\m -> updateModuleDoc (\d -> emptyIfEmpty d 
   (fileDoc' (blockDoc $ topb m) d (blockDoc botb))) m)
 
-docMod :: (RenderSym repr) => String -> [String] -> String -> 
+docMod :: (RenderSym repr) => String -> String -> [String] -> String -> 
   FS (repr (RenderFile repr)) -> FS (repr (RenderFile repr))
-docMod d a dt = commentedMod (docComment $ moduleDox d a dt <$> getFilePath)
+docMod e d a dt = commentedMod (docComment $ moduleDox d a dt . addExt e <$> 
+  getModuleName)
 
 fileFromData :: (RenderSym repr) => (repr (Module repr) -> FilePath -> 
-  repr (RenderFile repr)) -> FileType -> FS FilePath -> 
-  FS (repr (Module repr)) -> FS (repr (RenderFile repr))
-fileFromData f ft fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty 
-  (moduleDoc mdl) then id else (if snd s ^. currMain then over lensFStoGS 
-  (setMainMod fpath) else id) . over lensFStoGS (addFile ft fpath) . 
-  setFilePath fpath) s) f m fp 
+  repr (RenderFile repr)) -> FS FilePath -> FS (repr (Module repr)) -> 
+  FS (repr (RenderFile repr))
+fileFromData f fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty 
+  (moduleDoc mdl) then id else (if snd s ^. currMain && isSource (snd s ^. currFileType) then over lensFStoGS 
+  (setMainMod fpath) else id) . over lensFStoGS (addFile (snd s ^. currFileType) fpath)) s) f m fp 
 
 -- Helper functions
 

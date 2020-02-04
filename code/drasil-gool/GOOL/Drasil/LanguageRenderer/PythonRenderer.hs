@@ -63,8 +63,8 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   addLangImportVS, getLangImports, addLibImport, getLibImports, addModuleImport,
-  addModuleImportVS, getModuleImports, setClassName, getClassName, setCurrMain, 
-  getClassMap)
+  addModuleImportVS, getModuleImports, setFileType, setClassName, getClassName, 
+  setCurrMain, getClassMap)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -101,9 +101,9 @@ instance RenderSym PythonCode
 
 instance FileSym PythonCode where
   type RenderFile PythonCode = FileData
-  fileDoc = G.fileDoc Combined pyExt top bottom
+  fileDoc m = modify (setFileType Combined) >> G.fileDoc pyExt top bottom m
 
-  docMod = G.docMod
+  docMod = G.docMod pyExt
 
   commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 

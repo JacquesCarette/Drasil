@@ -72,10 +72,10 @@ import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS,
   lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, 
   modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFiles, 
   getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
-  addLibImport, addLibImports, getModuleName, getClassName, setCurrMain, 
-  setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
-  setOutputsDeclared, isOutputsDeclared, getExceptions, getMethodExcMap, 
-  addExceptions)
+  addLibImport, addLibImports, getModuleName, setFileType, setClassName, 
+  getClassName, setCurrMain, setODEDepVars, getODEDepVars, setODEOthVars, 
+  getODEOthVars, setOutputsDeclared, isOutputsDeclared, getExceptions, 
+  getMethodExcMap, addExceptions)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -114,9 +114,9 @@ instance RenderSym JavaCode
 
 instance FileSym JavaCode where
   type RenderFile JavaCode = FileData 
-  fileDoc = G.fileDoc Combined jExt top bottom
+  fileDoc m = modify (setFileType Combined) >> G.fileDoc jExt top bottom m
 
-  docMod = G.docMod
+  docMod = G.docMod jExt
 
   commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 

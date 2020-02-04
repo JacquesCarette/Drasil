@@ -69,7 +69,7 @@ import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn, 
-  addLangImport, addLangImportVS, addLibImport, getClassName, 
+  addLangImport, addLangImportVS, addLibImport, setFileType, getClassName, 
   setCurrMain, setODEDepVars, getODEDepVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -105,9 +105,9 @@ instance RenderSym CSharpCode
 
 instance FileSym CSharpCode where
   type RenderFile CSharpCode = FileData
-  fileDoc = G.fileDoc Combined csExt top bottom
+  fileDoc m = modify (setFileType Combined) >> G.fileDoc csExt top bottom m
 
-  docMod = G.docMod
+  docMod = G.docMod csExt
 
   commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 

@@ -21,7 +21,7 @@ module GOOL.Drasil.Symantics (
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
-import GOOL.Drasil.Data (Binding, Terminator, FileType, ScopeTag)
+import GOOL.Drasil.Data (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
 import Control.Monad.State (State)
@@ -58,8 +58,7 @@ class InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
 
-  fileFromData :: FileType -> FS FilePath -> 
-    FS (repr (Module repr)) -> 
+  fileFromData :: FS FilePath -> FS (repr (Module repr)) -> 
     FS (repr (RenderFile repr))
 
 class (PermanenceSym repr) => KeywordSym repr where

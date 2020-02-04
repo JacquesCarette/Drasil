@@ -4,22 +4,25 @@ module GOOL.Drasil.State (
   GS, GOOLState(..), FS, CS, MS, VS, lensFStoGS, lensGStoFS, lensFStoCS, 
   lensFStoMS, lensFStoVS, lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, 
   lensMStoVS, lensVStoFS, lensVStoMS, headers, sources, mainMod, currMain, 
-  initialState, initialFS, modifyReturn, modifyReturnFunc, modifyReturnFunc2, 
-  modifyReturnList, addODEFilePaths, addFile, addCombinedHeaderSource, 
-  addHeader, addSource, addProgNameToPaths, setMainMod, addODEFiles, 
-  getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
+  currFileType, initialState, initialFS, modifyReturn, modifyReturnFunc, 
+  modifyReturnFunc2, modifyReturnList, addODEFilePaths, addFile, 
+  addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
+  addODEFiles, getODEFiles, addLangImport, addLangImportVS, addExceptionImports,
   getLangImports, addLibImport, addLibImports, getLibImports, addModuleImport, 
   addModuleImportVS, getModuleImports, addHeaderLangImport, 
   getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, 
   addHeaderModImport, getHeaderModImports, addDefine, getDefines, 
   addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
-  getHeaderUsing, setFilePath, getFilePath, setModuleName, getModuleName, 
-  setClassName, getClassName, setCurrMain, getCurrMain, addClass, getClasses, 
-  updateClassMap, getClassMap, updateMethodExcMap, getMethodExcMap, 
-  addParameter, getParameters, setODEDepVars, getODEDepVars, setODEOthVars, 
-  getODEOthVars, setOutputsDeclared, isOutputsDeclared, addException, 
-  addExceptions, getExceptions, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc
+  getHeaderUsing, setFileType, setModuleName, getModuleName, setClassName, 
+  getClassName, setCurrMain, getCurrMain, addClass, getClasses, updateClassMap, 
+  getClassMap, updateMethodExcMap, getMethodExcMap, addParameter, getParameters,
+  setOutputsDeclared, isOutputsDeclared, addException, addExceptions, 
+  getExceptions, setScope, getScope, setCurrMainFunc, getCurrMainFunc, 
+  setConstructorParams, getConstructorParams, addSelfAssignment, 
+  getSelfAssignments, setODEDepVars, getODEDepVars, setODEOthVars, 
+  getODEOthVars, setLeftAssignment, getLeftAssignment, setAssignedSelfVar, 
+  getAssignedSelfVar, setRightAssignment, getRightAssignment, 
+  addVariableAssigned, getVariablesAssigned
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..), FileData)
@@ -63,7 +66,7 @@ makeLenses ''ClassState
 
 data FileState = FS {
   _currModName :: String,
-  _currFilePath :: FilePath,
+  _currFileType :: FileType,
   _currMain :: Bool,
   _currClasses :: [String],
   _langImports :: [String],
@@ -232,7 +235,7 @@ initialState = GS {
 initialFS :: FileState
 initialFS = FS {
   _currModName = "",
-  _currFilePath = "",
+  _currFileType = Combined,
   _currMain = False,
   _currClasses = [],
   _langImports = [],
@@ -451,11 +454,8 @@ addHeaderUsing u = over (_1 . _1 . _1 . _2 . headerUsing) (\us ->
 getHeaderUsing :: FS [String]
 getHeaderUsing = gets ((^. headerUsing) . snd)
 
-setFilePath :: FilePath -> (GOOLState, FileState) -> (GOOLState, FileState)
-setFilePath fp = over _2 (set currFilePath fp)
-
-getFilePath :: FS FilePath
-getFilePath = gets ((^. currFilePath) . snd)
+setFileType :: FileType -> (GOOLState, FileState) -> (GOOLState, FileState)
+setFileType ft = over _2 (set currFileType ft)
 
 setModuleName :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
 setModuleName n = over _2 (set currModName n)

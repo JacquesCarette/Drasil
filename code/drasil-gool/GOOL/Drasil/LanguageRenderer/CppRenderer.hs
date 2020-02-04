@@ -75,9 +75,13 @@ import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS,
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine, 
   getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
-  addHeaderUsing, getHeaderUsing, setClassName, getClassName, setCurrMain, 
-  getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc, setODEOthVars, getODEOthVars)
+  addHeaderUsing, getHeaderUsing, setFileType, setClassName, getClassName, 
+  setCurrMain, getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
+  getCurrMainFunc, setODEOthVars, getODEOthVars, setConstructorParams, 
+  getConstructorParams, addSelfAssignment, getSelfAssignments, 
+  setLeftAssignment, getLeftAssignment, setAssignedSelfVar, getAssignedSelfVar, 
+  setRightAssignment, getRightAssignment, addVariableAssigned, 
+  getVariablesAssigned)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -85,9 +89,8 @@ import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (State, modify, runState)
 import qualified Data.Map as Map (lookup)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, 
-  brackets, comma, empty, equals, semi, hcat, vcat, lbrace, rbrace, quotes, render, 
-  colon)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
+  empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -129,7 +132,7 @@ instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
   
-  fileFromData ft fp = pair1 (fileFromData ft fp) (fileFromData ft fp)
+  fileFromData fp = pair1 (fileFromData fp) (fileFromData fp)
 
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
@@ -1043,9 +1046,9 @@ instance RenderSym CppSrcCode
   
 instance FileSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
-  fileDoc = G.fileDoc Source cppSrcExt top bottom
+  fileDoc m = modify (setFileType Source) >> G.fileDoc cppSrcExt top bottom m
 
-  docMod = G.docMod
+  docMod = G.docMod cppSrcExt
 
   commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then on2CodeValues 
     commentedModD m cmt else m) mod cmnt getCurrMain
@@ -1703,12 +1706,13 @@ instance RenderSym CppHdrCode
 
 instance FileSym CppHdrCode where
   type RenderFile CppHdrCode = FileData
-  fileDoc = G.fileDoc Header cppHdrExt top bottom
+  fileDoc m = modify (setFileType Header) >> G.fileDoc cppHdrExt top bottom m
   
-  docMod = G.docMod
+  docMod = G.docMod cppHdrExt
 
-  commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then m else 
-    on2CodeValues commentedModD m cmt) mod cmnt getCurrMain
+  commentedMod cmnt mod = on2StateValues (\m cmt -> if isEmpty (moduleDoc $ 
+    onCodeValue fileMod m) then m else on2CodeValues commentedModD m cmt) 
+    mod cmnt
 
 instance InternalFile CppHdrCode where
   top = onCodeValue cpphtop
@@ -2203,9 +2207,9 @@ instance MethodSym CppHdrCode where
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
 instance InternalMethod CppHdrCode where
-  intMethod m n s _ t ps _ = modify (setScope (snd $ unCPPHC s) . if m then 
-    setCurrMain else id) >> on1StateValue1List (\tp pms -> methodFromData (snd 
-    $ unCPPHC s) $ cpphMethod n tp pms endStatement) t ps
+  intMethod _ n s _ t ps _ = modify (setScope (snd $ unCPPHC s)) >> 
+    on1StateValue1List (\tp pms -> methodFromData (snd $ unCPPHC s) $ 
+    cpphMethod n tp pms endStatement) t ps
   intFunc = G.intFunc
   commentedFunc = cppCommentedFunc Header
 

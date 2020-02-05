@@ -413,7 +413,7 @@ getDefInput :: Name -> Choices -> [Input] -> [ModDef]
 getDefInput _ _ [] = []
 getDefInput prn chs ins = inExp (modularity chs) (inputStructure chs) 
   where inExp _ Unbundled = []
-        inExp Unmodular _ = (ipName, prn) : inVarDefs prn
+        inExp Unmodular Bundled = (ipName, prn) : inVarDefs prn
         inExp (Modular Separated) Bundled = inVarDefs ipName
         inExp (Modular Combined) Bundled = (ipName , ipName) : inVarDefs ipName
         inVarDefs n = map codeName ins `zip` repeat n

@@ -172,8 +172,10 @@ genInputClass = do
       cs = constants $ csi $ codeSpec g
       cname = "InputParameters"
       filt :: (CodeIdea c) => [c] -> [c]
-      filt = filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
-        codeName)
+      filt = filter (flip member (eMap $ codeSpec g) . codeName)
+      includedConstants :: (CodeIdea c) => ConstantStructure -> [c] -> [c]
+      includedConstants WithInputs = filt
+      includedConstants _ = id
       methods :: (ProgramSym repr) => InputModule -> 
         Reader DrasilState [MS (repr (Method repr))]
       methods Separated = return []
@@ -194,7 +196,7 @@ genInputClass = do
         c <- publicClass icDesc cname Nothing (inputVars ++ constVars) 
           (methods $ inMod g)
         return $ Just c
-  genClass (filt ins) (filt cs)
+  genClass (filt ins) (includedConstants (conStruct g) cs)
 
 genInputConstructor :: (ProgramSym repr) => Reader DrasilState 
   (Maybe (MS (repr (Method repr))))

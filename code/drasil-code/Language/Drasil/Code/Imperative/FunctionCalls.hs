@@ -22,6 +22,7 @@ import GOOL.Drasil (ProgramSym, TypeSym(..), ValueSym(..), StatementSym(..),
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe, catMaybes)
+import Control.Applicative ((<|>))
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
@@ -100,6 +101,7 @@ getCall n = do
         codeSpec g)
       getCallExported m = return m
       getCallInClass Nothing = return Nothing
-      getCallInClass (Just c) = if c == currc then return (Just c) 
+      getCallInClass (Just c) = if c == currc then return $ Map.lookup c (eMap 
+        $ codeSpec g) <|> error (c ++ " class missing from export map")
         else return Nothing
   getCallExported $ Map.lookup n (eMap $ codeSpec g)

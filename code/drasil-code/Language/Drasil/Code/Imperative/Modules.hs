@@ -41,7 +41,7 @@ import GOOL.Drasil (ProgramSym, FileSym(..), BodySym(..), BlockSym(..),
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
-import Data.Map (member)
+import Data.Map (member, findWithDefault)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
 import Control.Applicative ((<$>))
@@ -85,7 +85,9 @@ getInputDecl = do
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
-      getDecl (_,[]) = return $ Just $ extObjDecNew cname v_params cps
+      getDecl ((i:_),[]) = return $ Just $ (if currentModule g == 
+        findWithDefault "" (codeName i) (eMap $ codeSpec g) then objDecNew 
+        else extObjDecNew cname) v_params cps
       getDecl _ = error ("Inputs or constants are only partially contained in " 
         ++ "a class")
       constIns ([],[]) _ _ = return Nothing
@@ -104,7 +106,7 @@ initConsts = do
       getDecl _ Inline = return Nothing
       getDecl _ WithInputs = return Nothing
       getDecl ([],[]) _ = return Nothing
-      getDecl (_,[]) _ = asks (constCont . conRepr)
+      getDecl ((c:_),[]) _ = asks (constCont c . conRepr)
       getDecl ([],cs) _ = do 
         vars <- mapM mkVar cs
         vals <- mapM (convExpr . codeEquat) cs
@@ -112,8 +114,9 @@ initConsts = do
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ 
           concat logs
       getDecl _ _ = error "Only some constants present in export map"
-      constCont Var = Just $ extObjDecNewNoParams cname v_consts
-      constCont Const = Nothing
+      constCont c Var = Just $ (if currentModule g == findWithDefault "" 
+        (codeName c) (eMap $ codeSpec g) then objDecNewNoParams else extObjDecNewNoParams cname) v_consts
+      constCont _ Const = Nothing
       defFunc Var = varDecDef
       defFunc Const = constDecDef
   getDecl (partition (flip member (eMap $ codeSpec g) . codeName) 

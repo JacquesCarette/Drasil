@@ -17,12 +17,12 @@ module GOOL.Drasil.State (
   getClassName, setCurrMain, getCurrMain, addClass, getClasses, updateClassMap, 
   getClassMap, updateMethodExcMap, getMethodExcMap, addParameter, getParameters,
   setOutputsDeclared, isOutputsDeclared, addException, addExceptions, 
-  getExceptions, setScope, getScope, setCurrMainFunc, getCurrMainFunc, 
-  setConstructorParams, getConstructorParams, addSelfAssignment, 
-  getSelfAssignments, setODEDepVars, getODEDepVars, setODEOthVars, 
-  getODEOthVars, setLeftAssignment, getLeftAssignment, setAssignedSelfVar, 
-  getAssignedSelfVar, setRightAssignment, getRightAssignment, 
-  addVariableAssigned, getVariablesAssigned
+  getExceptions, setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, 
+  getCurrMainFunc, setConstructorParams, getConstructorParams, 
+  addSelfAssignment, getSelfAssignments, setODEDepVars, getODEDepVars, 
+  setODEOthVars, getODEOthVars, setLeftAssignment, getLeftAssignment, 
+  setAssignedSelfVar, getAssignedSelfVar, setRightAssignment, 
+  getRightAssignment, addVariableAssigned, getVariablesAssigned
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..), FileData)
@@ -32,7 +32,9 @@ import Control.Lens.Tuple (_1, _2)
 import Control.Monad.State (State, modify, gets)
 import Data.List (sort, nub)
 import Data.Maybe (isNothing)
-import Data.Map (Map, fromList, empty, insert, union)
+import Data.Map (Map, fromList, insert, union)
+import qualified Data.Map as Map (empty)
+import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 data GOOLState = GS {
   _headers :: [FilePath],
@@ -72,6 +74,9 @@ data FileState = FS {
   _langImports :: [String],
   _libImports :: [String],
   _moduleImports :: [String],
+  
+  -- Only used for Python
+  _mainDoc :: Doc,
 
   -- C++ only
   _headerLangImports :: [String],
@@ -226,10 +231,10 @@ initialState = GS {
   _headers = [],
   _sources = [],
   _mainMod = Nothing,
-  _classMap = empty,
+  _classMap = Map.empty,
   _odeFiles = [],
 
-  _methodExceptionMap = empty
+  _methodExceptionMap = Map.empty
 }
 
 initialFS :: FileState
@@ -241,6 +246,8 @@ initialFS = FS {
   _langImports = [],
   _libImports = [],
   _moduleImports = [],
+  
+  _mainDoc = empty,
 
   _headerLangImports = [],
   _headerLibImports = [],
@@ -453,6 +460,13 @@ addHeaderUsing u = over (_1 . _1 . _1 . _2 . headerUsing) (\us ->
 
 getHeaderUsing :: FS [String]
 getHeaderUsing = gets ((^. headerUsing) . snd)
+
+setMainDoc :: Doc -> (((GOOLState, FileState), ClassState), MethodState) -> 
+  (((GOOLState, FileState), ClassState), MethodState)
+setMainDoc d = over (_1 . _1 . _2) $ set mainDoc d
+
+getMainDoc :: FS Doc
+getMainDoc = gets ((^. mainDoc) . snd)
 
 setFileType :: FileType -> (GOOLState, FileState) -> (GOOLState, FileState)
 setFileType ft = over _2 (set currFileType ft)

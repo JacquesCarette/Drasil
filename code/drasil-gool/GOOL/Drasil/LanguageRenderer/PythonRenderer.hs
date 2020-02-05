@@ -64,7 +64,7 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   addLangImportVS, getLangImports, addLibImport, getLibImports, addModuleImport,
   addModuleImportVS, getModuleImports, setFileType, setClassName, getClassName, 
-  setCurrMain, getClassMap)
+  setCurrMain, getClassMap, setMainDoc, getMainDoc)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -625,7 +625,11 @@ instance MethodSym PythonCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction b = modify setCurrMain >> onStateValue (onCodeValue mthd) b
+  mainFunction b = do
+    modify setCurrMain
+    bod <- b
+    modify (setMainDoc $ bodyDoc bod)
+    toState $ toCode $ mthd empty
 
   docFunc = G.docFunc
 
@@ -690,7 +694,7 @@ instance ModuleSym PythonCode where
       (langImport :: Label -> PythonCode (Import PythonCode))) libis),
     vcat (map (importDoc . 
       (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
-    getLangImports getLibImports getModuleImports)
+    getLangImports getLibImports getModuleImports) getMainDoc
 
 instance InternalMod PythonCode where
   moduleDoc = modDoc . unPC
@@ -888,4 +892,3 @@ pyDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr)
   MS (repr (Method repr))
 pyDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
   (map fst $ bs ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)
-  

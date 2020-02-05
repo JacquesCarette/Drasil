@@ -1120,11 +1120,12 @@ commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' ->
 
 -- Modules --
 
-buildModule :: (RenderSym repr) => Label -> FS Doc -> [MS (repr (Method repr))] 
-  -> [CS (repr (Class repr))] -> FS (repr (Module repr))
-buildModule n imps ms cs = S.modFromData n ((\cls fs is -> moduleDocD is 
-  (vibcat (map classDoc cls)) (vibcat (map methodDoc fs))) <$> 
-  mapM (zoom lensFStoCS) cs <*> mapM (zoom lensFStoMS) ms <*> imps)
+buildModule :: (RenderSym repr) => Label -> FS Doc -> FS Doc -> 
+  [MS (repr (Method repr))] -> [CS (repr (Class repr))] -> 
+  FS (repr (Module repr))
+buildModule n imps bot ms cs = S.modFromData n ((\cls fs is bt -> 
+  moduleDocD is (vibcat (map classDoc cls)) (vibcat (map methodDoc fs ++ [bt])))
+  <$> mapM (zoom lensFStoCS) cs <*> mapM (zoom lensFStoMS) ms <*> imps <*> bot)
 
 buildModule' :: (RenderSym repr) => Label -> (String -> repr (Import repr)) -> 
   [MS (repr (Method repr))] -> [CS (repr (Class repr))] -> 

@@ -1666,7 +1666,7 @@ instance ModuleSym CppSrcCode where
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppSrcCode (Keyword CppSrcCode))) us)]) 
     <$> getDefines <*> getLangImports <*> getLibImports <*> getModuleImports 
-    <*> getUsing <*> getCurrMain) ms cs
+    <*> getUsing <*> getCurrMain) (toState empty) ms cs
     where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
           mi = modImport
           li = langImport
@@ -2269,7 +2269,7 @@ instance ModuleSym CppHdrCode where
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppHdrCode (Keyword CppHdrCode))) us)]) 
     <$> getHeaderDefines <*> getHeaderLangImports <*> getHeaderLibImports <*> 
-    getHeaderModImports <*> getHeaderUsing)
+    getHeaderModImports <*> getHeaderUsing) (toState empty)
     where mi, li :: Label -> CppHdrCode (Import CppHdrCode)
           mi = modImport
           li = langImport

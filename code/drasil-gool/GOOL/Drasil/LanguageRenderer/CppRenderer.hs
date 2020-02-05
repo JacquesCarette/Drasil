@@ -1658,15 +1658,15 @@ instance InternalClass CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n = G.buildModule n ((\ds lis libis mis us mn -> vibcat [
-    if mn then empty else importDoc $ mi n,
+  buildModule n ms cs = G.buildModule n ((\ds lis libis mis us mn -> vibcat [
+    if mn && length ms + length cs == 1 then empty else importDoc $ mi n,
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
     vcat (map (importDoc . mi) (libis ++ mis)),
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppSrcCode (Keyword CppSrcCode))) us)]) 
     <$> getDefines <*> getLangImports <*> getLibImports <*> getModuleImports 
-    <*> getUsing <*> getCurrMain)
+    <*> getUsing <*> getCurrMain) ms cs
     where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
           mi = modImport
           li = langImport

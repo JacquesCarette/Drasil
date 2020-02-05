@@ -1,6 +1,7 @@
 module Language.Drasil.Code.Imperative.Modules (
-  genMain, genMainFunc, chooseInModule, genInputClass, genConstMod, 
-  genConstClass, genOutputMod, genOutputFormat, genSampleInput
+  genMain, genMainFunc, chooseInModule, genInputClass, genInputDerived, 
+  genInputConstraints, genInputFormat, genConstMod, genConstClass, genOutputMod,
+  genOutputFormat, genSampleInput
 ) where
 
 import Language.Drasil
@@ -175,8 +176,8 @@ genInputClass = withReader (\s -> s {currentClass = cname}) $ do
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter (flip member (eMap $ codeSpec g) . codeName)
       includedConstants :: (CodeIdea c) => ConstantStructure -> [c] -> [c]
-      includedConstants WithInputs = filt
-      includedConstants _ = id
+      includedConstants WithInputs cs' = filt cs'
+      includedConstants _ _ = []
       methods :: (ProgramSym repr) => InputModule -> 
         Reader DrasilState [MS (repr (Method repr))]
       methods Separated = return []
@@ -400,8 +401,8 @@ genConstClass = withReader (\s -> s {currentClass = cname}) $ do
         cDesc <- constClassDesc
         cls <- publicClass cDesc cname Nothing constVars (return [])
         return $ Just cls
-  genClass $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
-    codeName) cs
+  genClass $ filter (flip member (Map.filter (cname ==) (clsMap $ codeSpec g)) 
+    . codeName) cs
   where cname = "Constants"
 
 ----- OUTPUT -------

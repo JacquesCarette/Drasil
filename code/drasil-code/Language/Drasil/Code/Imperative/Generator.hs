@@ -8,8 +8,9 @@ import Language.Drasil.Code.Imperative.GenerateGOOL (genDoxConfig, genModule)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs)
 import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass, 
-  genConstMod, genInputClass, genMain, genMainFunc, genOutputFormat, 
-  genOutputMod, genSampleInput)
+  genConstMod, genInputClass, genInputConstraints, genInputDerived, 
+  genInputFormat, genMain, genMainFunc, genOutputFormat, genOutputMod, 
+  genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
@@ -18,13 +19,14 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Modularity(..), Visibility(..))
 
-import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), 
-  GS, FS, initialState, unCI)
+import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ScopeTag(..),
+  ProgData(..), GS, FS, initialState, unCI)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
   getCurrentDirectory)
 import Control.Monad.Reader (Reader, ask, runReader)
 import Control.Monad.State (evalState, runState)
+import Data.Map (member)
 
 generator :: String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator dt sd chs spec = DrasilState {
@@ -100,9 +102,13 @@ genUnmodular = do
   g <- ask
   let s = csi $ codeSpec g
       n = pName $ csi $ codeSpec g
+      cls = any (`member` clsMap (codeSpec g)) 
+        ["get_input", "derived_values", "input_constraints"]
   genModule n ("Contains the entire " ++ n ++ " program")
     (map (fmap Just) (genMainFunc : concatMap genModFuncs (mods s)) ++ 
-    [genOutputFormat]) [genInputClass, genConstClass]
+    ((if cls then [] else [genInputFormat Pub, genInputDerived Pub, 
+      genInputConstraints Pub]) ++ [genOutputFormat])) 
+    ([genInputClass | cls] ++ [genConstClass])
           
 genModules :: (ProgramSym repr) => 
   Reader DrasilState [FS (repr (RenderFile repr))]

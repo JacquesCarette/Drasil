@@ -79,20 +79,21 @@ getInputDecl = do
   constrParams <- getInConstructorParams 
   cps <- mapM mkVal constrParams
   let cname = "InputParameters"
-      getDecl ([],[]) = constIns (partition (flip member (Map.filter (cname ==) 
-        (eMap $ codeSpec g)) . codeName) (map codeChunk $ constants $ csi $ 
-        codeSpec g)) (conRepr g)
+      getDecl ([],[]) = constIns (partition (flip member (eMap $ codeSpec g) . 
+        codeName) (map codeChunk $ constants $ csi $ codeSpec g)) (conRepr g) 
+        (conStruct g)
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
       getDecl (_,[]) = return $ Just $ extObjDecNew cname v_params cps
       getDecl _ = error ("Inputs or constants are only partially contained in " 
-        ++ cname ++ " class")
-      constIns ([],[]) _ = return Nothing
-      constIns _ Const = return Nothing
-      constIns cs Var = getDecl cs 
-  getDecl (partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
-    . codeName) (inputs $ csi $ codeSpec g))
+        ++ "a class")
+      constIns ([],[]) _ _ = return Nothing
+      -- If Const is chosen, don't declare an object because constants are static and accessed through class
+      constIns cs Var WithInputs = getDecl cs
+      constIns _ _ _ = return Nothing 
+  getDecl (partition (flip member (eMap $ codeSpec g) . codeName) 
+    (inputs $ csi $ codeSpec g))
 
 initConsts :: (ProgramSym repr) => Reader DrasilState 
   (Maybe (MS (repr (Statement repr))))
@@ -101,24 +102,22 @@ initConsts = do
   v_consts <- mkVar (codevar consts)
   let cname = "Constants"
       getDecl _ Inline = return Nothing
+      getDecl _ WithInputs = return Nothing
       getDecl ([],[]) _ = return Nothing
       getDecl (_,[]) _ = asks (constCont . conRepr)
-      getDecl ([],cs) _ = getDecl' $ partition (flip member (eMap $ codeSpec g) 
-        . codeName) cs 
-      getDecl _ _ = error "Only some constants associated with Constants module in export map"
-      constCont Var = Just $ extObjDecNewNoParams cname v_consts
-      constCont Const = Nothing
-      getDecl' (_,[]) = return Nothing
-      getDecl' ([],cs) = do 
+      getDecl ([],cs) _ = do 
         vars <- mapM mkVar cs
         vals <- mapM (convExpr . codeEquat) cs
         logs <- mapM maybeLog vars
-        return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ concat logs
-      getDecl' _ = error "Only some constants present in export map"
+        return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ 
+          concat logs
+      getDecl _ _ = error "Only some constants present in export map"
+      constCont Var = Just $ extObjDecNewNoParams cname v_consts
+      constCont Const = Nothing
       defFunc Var = varDecDef
       defFunc Const = constDecDef
-  getDecl (partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
-    . codeName) (constants $ csi $ codeSpec g)) (conStruct g)
+  getDecl (partition (flip member (eMap $ codeSpec g) . codeName) 
+    (constants $ csi $ codeSpec g)) (conStruct g)
 
 initLogFileVar :: (ProgramSym repr) => Logging -> [MS (repr (Statement repr))]
 initLogFileVar LogVar = [varDec varLogFile]

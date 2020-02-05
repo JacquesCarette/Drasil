@@ -45,7 +45,7 @@ import Data.Map (member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
 import Control.Applicative ((<$>))
-import Control.Monad.Reader (Reader, ask, asks)
+import Control.Monad.Reader (Reader, ask, asks, withReader)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
 
@@ -165,11 +165,10 @@ constVarFunc Const n = constVar n public
 
 genInputClass :: (ProgramSym repr) => 
   Reader DrasilState (Maybe (CS (repr (Class repr))))
-genInputClass = do
+genInputClass = withReader (\s -> s {currentClass = cname}) $ do
   g <- ask
   let ins = inputs $ csi $ codeSpec g
       cs = constants $ csi $ codeSpec g
-      cname = "InputParameters"
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter (flip member (eMap $ codeSpec g) . codeName)
       includedConstants :: (CodeIdea c) => ConstantStructure -> [c] -> [c]
@@ -196,21 +195,21 @@ genInputClass = do
           (methods $ inMod g)
         return $ Just c
   genClass (filt ins) (includedConstants (conStruct g) cs)
+  where cname = "InputParameters"
 
 genInputConstructor :: (ProgramSym repr) => Reader DrasilState 
   (Maybe (MS (repr (Method repr))))
 genInputConstructor = do
   g <- ask
-  let dm = defMap $ codeSpec g
+  let dl = defList $ codeSpec g
       genCtor False = return Nothing
       genCtor True = do 
         cdesc <- inputConstructorDesc
         cparams <- getInConstructorParams    
         ics <- getAllInputCalls
-        ctor <- genConstructor "InputParameters" cdesc cparams 
-          [block ics]
+        ctor <- genConstructor "InputParameters" cdesc cparams [block ics]
         return $ Just ctor
-  genCtor $ any (`member` dm) ["get_input", "derived_values", 
+  genCtor $ any (`elem` dl) ["get_input", "derived_values", 
     "input_constraints"]
 
 genInputDerived :: (ProgramSym repr) => ScopeTag -> 
@@ -220,17 +219,17 @@ genInputDerived s = do
   let dvals = derivedInputs $ csi $ codeSpec g
       getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
-      genDerived :: (ProgramSym repr) => Maybe String -> Reader DrasilState 
+      genDerived :: (ProgramSym repr) => Bool -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
-      genDerived Nothing = return Nothing
-      genDerived (Just _) = do
+      genDerived False = return Nothing
+      genDerived _ = do
         ins <- getDerivedIns
         outs <- getDerivedOuts
         bod <- mapM (\x -> genCalcBlock CalcAssign x (codeEquat x)) dvals
         desc <- dvFuncDesc
         mthd <- getFunc s "derived_values" desc ins outs bod
         return $ Just mthd
-  genDerived $ Map.lookup "derived_values" (defMap $ codeSpec g)
+  genDerived $ "derived_values" `elem` defList (codeSpec g)
 
 genInputConstraints :: (ProgramSym repr) => ScopeTag ->
   Reader DrasilState (Maybe (MS (repr (Method repr))))
@@ -239,10 +238,10 @@ genInputConstraints s = do
   let cm = cMap $ csi $ codeSpec g
       getFunc Pub = publicFunc
       getFunc Priv = privateMethod
-      genConstraints :: (ProgramSym repr) => Maybe String -> Reader DrasilState 
+      genConstraints :: (ProgramSym repr) => Bool -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
-      genConstraints Nothing = return Nothing
-      genConstraints (Just _) = do
+      genConstraints False = return Nothing
+      genConstraints _ = do
         h <- ask
         parms <- getConstraintParams
         let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ 
@@ -255,7 +254,7 @@ genInputConstraints s = do
         mthd <- getFunc s "input_constraints" void desc parms 
           Nothing [block sf, block hw]
         return $ Just mthd
-  genConstraints $ Map.lookup "input_constraints" (defMap $ codeSpec g)
+  genConstraints $ "input_constraints" `elem` defList (codeSpec g)
 
 sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr) 
   => [(q,[Constraint])] -> Reader DrasilState [MS (repr (Statement repr))]
@@ -351,17 +350,17 @@ genInputFormat s = do
   dd <- genDataDesc
   let getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
-      genInFormat :: (ProgramSym repr) => Maybe String -> Reader DrasilState 
+      genInFormat :: (ProgramSym repr) => Bool -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
-      genInFormat Nothing = return Nothing
-      genInFormat (Just _) = do
+      genInFormat False = return Nothing
+      genInFormat _ = do
         ins <- getInputFormatIns
         outs <- getInputFormatOuts
         bod <- readData dd
         desc <- inFmtFuncDesc
         mthd <- getFunc s "get_input" desc ins outs bod
         return $ Just mthd
-  genInFormat $ Map.lookup "get_input" (defMap $ codeSpec g)
+  genInFormat $ "get_input" `elem` defList (codeSpec g)
 
 genDataDesc :: Reader DrasilState DataDesc
 genDataDesc = do
@@ -385,10 +384,9 @@ genConstMod = do
 
 genConstClass :: (ProgramSym repr) => 
   Reader DrasilState (Maybe (CS (repr (Class repr))))
-genConstClass = do
+genConstClass = withReader (\s -> s {currentClass = cname}) $ do
   g <- ask
   let cs = constants $ csi $ codeSpec g
-      cname = "Constants"
       genClass :: (ProgramSym repr) => [CodeDefinition] -> Reader DrasilState (Maybe 
         (CS (repr (Class repr))))
       genClass [] = return Nothing 
@@ -401,6 +399,7 @@ genConstClass = do
         return $ Just cls
   genClass $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
     codeName) cs
+  where cname = "Constants"
 
 ----- OUTPUT -------
 

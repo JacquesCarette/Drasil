@@ -61,8 +61,9 @@ data CodeSpec where
   relations :: [Def],
   fMap :: FunctionMap,
   vMap :: VarMap,
-  defMap :: ModDefinitionMap,
   eMap :: ModExportMap,
+  clsMap :: ClassDefinitionMap,
+  defList :: [Name],
   constMap :: FunctionMap,
   csi :: CodeSystInfo
   } -> CodeSpec
@@ -94,10 +95,11 @@ codeSpec SI {_sys = sys
         cnsts)
       derived = getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc ((defs' ++ map qdFromDD ddefs) \\ derived)
-      mdm = modDefMap csi' chs
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
+      mem = modExportMap csi' chs
+      cdm = clsDefMap csi' chs
       csi' = CSI {
         pName = n,
         authors = as,
@@ -118,8 +120,9 @@ codeSpec SI {_sys = sys
         relations = rels,
         fMap = assocToMap rels,
         vMap = assocToMap (map quantvar q ++ getAdditionalVars chs (mods csi')),
-        defMap = mdm,
-        eMap = modExportMap mdm n chs,
+        eMap = mem,
+        clsMap = cdm,
+        defList = nub $ Map.keys mem ++ Map.keys cdm,
         constMap = assocToMap const',
         csi = csi'
       }
@@ -307,11 +310,11 @@ getFuncParams (FCD _) = []
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
 
--- Like ModExportMap but includes variables/functions that are not exported
-type ModDefinitionMap = Map.Map String String
+-- name of variable/function maps to class name
+type ClassDefinitionMap = Map.Map String String
 
-modDefMap :: CodeSystInfo -> Choices -> ModDefinitionMap
-modDefMap cs@CSI {
+modExportMap :: CodeSystInfo -> Choices -> ModExportMap
+modExportMap cs@CSI {
   pName = prn,
   inputs = ins,
   extInputs = extIns,
@@ -320,24 +323,27 @@ modDefMap cs@CSI {
   } chs@Choices {
     modularity = m
   } = Map.fromList $ concatMap mpair (mods cs)
-    ++ getDefInput prn chs ins
-    ++ getDefConstants prn chs cns
-    ++ getDefDerived prn chs ds
-    ++ getDefConstraints prn chs (getConstraints (cMap cs) ins)
-    ++ getDefInputFormat prn chs extIns
-    ++ getDefOutput prn chs (outputs cs)
+    ++ getExpInput prn chs ins
+    ++ getExpConstants prn chs cns
+    ++ getExpDerived prn chs ds
+    ++ getExpConstraints prn chs (getConstraints (cMap cs) ins)
+    ++ getExpInputFormat prn chs extIns
+    ++ getExpOutput prn chs (outputs cs)
   where mpair (Mod n _ fs) = map fname fs `zip` repeat (defModName m n)
         defModName Unmodular _ = prn
         defModName _ nm = nm
 
-modExportMap :: ModDefinitionMap -> Name -> Choices -> ModExportMap
-modExportMap mdm n chs = Map.difference mdm $ Map.fromList $ removeDefs 
-  (modularity chs) (inputStructure chs)
-  where removeDefs Unmodular Bundled = zip inputFuncs (repeat n)
-        removeDefs (Modular Combined) Bundled = zip inputFuncs 
-          (repeat "InputParameters")
-        removeDefs _ _ = []
-        inputFuncs = ["get_input", "derived_values", "input_constraints"]
+clsDefMap :: CodeSystInfo -> Choices -> ClassDefinitionMap
+clsDefMap cs@CSI {
+  inputs = ins,
+  extInputs = extIns,
+  derivedInputs = ds,
+  constants = cns
+  } chs = Map.fromList $ getInputCls chs ins
+    ++ getConstantsCls chs cns
+    ++ getDerivedCls chs ds
+    ++ getConstraintsCls chs (getConstraints (cMap cs) ins)
+    ++ getInputFormatCls chs extIns
 
 fstdecl :: ChunkDB -> [FuncStmt] -> [CodeChunk]
 fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declared ctx) fsts) 
@@ -407,11 +413,12 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
                         ++ " and Knowns as " ++ show (map (^. uid) k) )
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
-type ModDef = (String, String)
+type ModExp = (String, String)
+type ClassDef = (String, String)
 
-getDefInput :: Name -> Choices -> [Input] -> [ModDef]
-getDefInput _ _ [] = []
-getDefInput prn chs ins = inExp (modularity chs) (inputStructure chs) 
+getExpInput :: Name -> Choices -> [Input] -> [ModExp]
+getExpInput _ _ [] = []
+getExpInput prn chs ins = inExp (modularity chs) (inputStructure chs) 
   where inExp _ Unbundled = []
         inExp Unmodular Bundled = (ipName, prn) : inVarDefs prn
         inExp (Modular Separated) Bundled = inVarDefs ipName
@@ -419,9 +426,18 @@ getDefInput prn chs ins = inExp (modularity chs) (inputStructure chs)
         inVarDefs n = map codeName ins `zip` repeat n
         ipName = "InputParameters"
 
-getDefConstants :: Name -> Choices -> [Const] -> [ModDef]
-getDefConstants _ _ [] = []
-getDefConstants n chs cs = cExp (modularity chs) (constStructure chs) 
+getInputCls :: Choices -> [Input] -> [ClassDef]
+getInputCls _ [] = []
+getInputCls chs ins = inCls (inputModule chs) (inputStructure chs) 
+  where inCls _ Unbundled = []
+        inCls Combined Bundled = (ipName, ipName) : inVarDefs
+        inCls Separated Bundled = inVarDefs
+        inVarDefs = map codeName ins `zip` repeat ipName
+        ipName = "InputParameters"
+
+getExpConstants :: Name -> Choices -> [Const] -> [ModExp]
+getExpConstants _ _ [] = []
+getExpConstants n chs cs = cExp (modularity chs) (constStructure chs) 
   (inputStructure chs)
   where cExp Unmodular (Store Bundled) _ = zipCs $ repeat n
         cExp Unmodular WithInputs Bundled = zipCs $ repeat n
@@ -430,30 +446,66 @@ getDefConstants n chs cs = cExp (modularity chs) (constStructure chs)
         cExp _ _ _ = []
         zipCs = zip (map codeName cs)
 
-getDefDerived :: Name -> Choices -> [Derived] -> [ModDef]
-getDefDerived _ _ [] = []
-getDefDerived n chs _ = [("derived_values", dMod $ modularity chs)]
-  where dMod Unmodular = n
-        dMod (Modular Combined) = "InputParameters"
-        dMod (Modular Separated) = "DerivedValues"
+getConstantsCls :: Choices -> [Const] -> [ClassDef]
+getConstantsCls _ [] = []
+getConstantsCls chs cs = cnCls (constStructure chs) (inputStructure chs)
+  where cnCls (Store Bundled) _ = zipCs $ repeat "Constants"
+        cnCls WithInputs Bundled = zipCs $ repeat "InputParameters"
+        cnCls _ _ = []
+        zipCs = zip (map codeName cs)
 
-getDefConstraints :: Name -> Choices -> [Constraint] -> [ModDef]
-getDefConstraints _ _ [] = []
-getDefConstraints n chs _ = [("input_constraints", cMod $ modularity chs)]
-  where cMod Unmodular = n
-        cMod (Modular Combined) = "InputParameters"
-        cMod (Modular Separated) = "InputConstraints"
+getExpDerived :: Name -> Choices -> [Derived] -> [ModExp]
+getExpDerived _ _ [] = []
+getExpDerived n chs _ = dMod (modularity chs) (inputStructure chs)
+  -- If input modules are separated, derived_values will always be exported.
+  -- If input modules are combined and inputs are bundled, derived_values will be a private method, not exported
+  -- If input modules are combined and inputs are unbundled, derived_values will be exported.
+  -- Similar logic for input_constraints and get_input below
+  where dMod (Modular Separated) _ = [(dvNm, "DerivedValues")]
+        dMod _ Bundled = []
+        dMod Unmodular _ = [(dvNm, n)]
+        dMod (Modular Combined) _ = [(dvNm, "InputParameters")]
+        dvNm = "derived_values"
+
+getDerivedCls :: Choices -> [Derived] -> [ClassDef]
+getDerivedCls _ [] = []
+getDerivedCls chs _ = dCls (inputModule chs) (inputStructure chs)
+  where dCls Combined Bundled = [("derived_values", "InputParameters")]
+        dCls _ _ = []
+
+getExpConstraints :: Name -> Choices -> [Constraint] -> [ModExp]
+getExpConstraints _ _ [] = []
+getExpConstraints n chs _ = cMod (modularity chs) (inputStructure chs)
+  where cMod (Modular Separated) _ = [(icNm, "InputConstraints")]
+        cMod _ Bundled = []
+        cMod Unmodular _ = [(icNm, n)]
+        cMod (Modular Combined) _ = [(icNm, "InputParameters")]
+        icNm = "input_constraints"
+
+getConstraintsCls :: Choices -> [Constraint] -> [ClassDef]
+getConstraintsCls _ [] = []
+getConstraintsCls chs _ = cCls (inputModule chs) (inputStructure chs)
+  where cCls Combined Bundled = [("input_constraints", "InputParameters")]
+        cCls _ _ = []
         
-getDefInputFormat :: Name -> Choices -> [Input] -> [ModDef]
-getDefInputFormat _ _ [] = []
-getDefInputFormat n chs _ = [("get_input", fMod $ modularity chs)]
-  where fMod Unmodular = n
-        fMod (Modular Combined) = "InputParameters"
-        fMod (Modular Separated) = "InputFormat"
+getExpInputFormat :: Name -> Choices -> [Input] -> [ModExp]
+getExpInputFormat _ _ [] = []
+getExpInputFormat n chs _ = fMod (modularity chs) (inputStructure chs)
+  where fMod (Modular Separated) _ = [(giNm, "InputFormat")]
+        fMod _ Bundled = []
+        fMod Unmodular _ = [(giNm, n)]
+        fMod (Modular Combined) _ = [(giNm, "InputParameters")]
+        giNm = "get_input"
 
-getDefOutput :: Name -> Choices -> [Output] -> [ModDef]
-getDefOutput _ _ [] = []
-getDefOutput n chs _ = [("write_output", oMod $ modularity chs)]
+getInputFormatCls :: Choices -> [Input] -> [ClassDef]
+getInputFormatCls _ [] = []
+getInputFormatCls chs _ = ifCls (inputModule chs) (inputStructure chs)
+  where ifCls Combined Bundled = [("get_input", "InputParameters")]
+        ifCls _ _ = []
+
+getExpOutput :: Name -> Choices -> [Output] -> [ModExp]
+getExpOutput _ _ [] = []
+getExpOutput n chs _ = [("write_output", oMod $ modularity chs)]
   where oMod Unmodular = n
         oMod _ = "OutputFormat"
 

@@ -43,6 +43,7 @@ generator dt sd chs spec = DrasilState {
   sampleData = sd,
   -- state
   currentModule = "",
+  currentClass = "",
 
   -- next depend on chs
   logName = logFile chs,

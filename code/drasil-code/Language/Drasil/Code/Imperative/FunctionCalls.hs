@@ -95,10 +95,11 @@ getInOutCall n inFunc outFunc = do
 getCall :: String -> Reader DrasilState (Maybe String)
 getCall n = do
   g <- ask
-  let getCallExported Nothing = getCallDefined (Map.lookup n $ defMap $ 
+  let currc = currentClass g
+      getCallExported Nothing = getCallInClass (Map.lookup n $ clsMap $ 
         codeSpec g)
       getCallExported m = return m
-      getCallDefined Nothing = return Nothing
-      getCallDefined (Just m) = if m == currentModule g then return (Just m)
+      getCallInClass Nothing = return Nothing
+      getCallInClass (Just c) = if c == currc then return (Just c) 
         else return Nothing
   getCallExported $ Map.lookup n (eMap $ codeSpec g)

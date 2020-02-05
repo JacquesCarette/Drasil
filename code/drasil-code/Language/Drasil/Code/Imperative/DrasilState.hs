@@ -23,6 +23,7 @@ data DrasilState = DrasilState {
   auxiliaries :: [AuxFile],
   sampleData :: [Expr],
   currentModule :: String,
+  currentClass :: String,
 
   onSfwrC :: ConstraintBehaviour,
   onPhysC :: ConstraintBehaviour

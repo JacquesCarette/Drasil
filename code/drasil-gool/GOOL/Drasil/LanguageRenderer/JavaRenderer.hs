@@ -392,10 +392,9 @@ instance ValueExpression JavaCode where
     modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ n) mem))
     G.funcApp n t vs
   selfFuncApp n t vs = do
-    slf <- self :: VS (JavaCode (Variable JavaCode))
+    cm <- zoom lensVStoFS getModuleName
     mem <- getMethodExcMap
-    let tp = getTypeString (variableType slf)
-    modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ n) mem))
+    modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ n) mem))
     G.selfFuncApp self n t vs
   extFuncApp l n t vs = do
     mem <- getMethodExcMap
@@ -614,6 +613,7 @@ instance ScopeSym JavaCode where
 
 instance InternalScope JavaCode where
   scopeDoc = unJC
+  scopeFromData _ = toCode
 
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData

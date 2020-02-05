@@ -1,5 +1,5 @@
 module Language.Drasil.Code.Imperative.GenerateGOOL (
-  genModule, genDoxConfig, publicClass, fApp, fAppInOut, mkParam
+  genModule, genDoxConfig, publicClass, privateClass, fApp, fAppInOut, mkParam
 ) where
 
 import Language.Drasil
@@ -11,7 +11,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  CodeType(..), GOOLState, FS, CS, MS, VS, lensMStoVS)
+  CodeType(..), ScopeTag(..), GOOLState, FS, CS, MS, VS, lensMStoVS)
 
 import Control.Lens.Zoom (zoom)
 import qualified Data.Map as Map (lookup)
@@ -44,15 +44,28 @@ genDoxConfig n s = do
       v = doxOutput g
   return [doxConfig n s v | not (null cms)]
 
+mkClass :: (ProgramSym repr) => ScopeTag -> String -> Label -> Maybe Label -> 
+  [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
+  -> Reader DrasilState (CS (repr (Class repr)))
+mkClass s desc n l vs mths = do
+  g <- ask
+  ms <- mths
+  let getFunc Pub = pubClass
+      getFunc Priv = privClass
+      f = getFunc s
+  return $ if CommentClass `elem` commented g 
+    then docClass desc (f n l vs ms) 
+    else f n l vs ms
+
 publicClass :: (ProgramSym repr) => String -> Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
   -> Reader DrasilState (CS (repr (Class repr)))
-publicClass desc n l vs mths = do
-  g <- ask
-  ms <- mths
-  return $ if CommentClass `elem` commented g 
-    then docClass desc (pubClass n l vs ms) 
-    else pubClass n l vs ms
+publicClass = mkClass Pub
+
+privateClass :: (ProgramSym repr) => String -> Label -> Maybe Label -> 
+  [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
+  -> Reader DrasilState (CS (repr (Class repr)))
+privateClass = mkClass Priv
 
 fApp :: (ProgramSym repr) => String -> String -> VS (repr (Type repr)) -> 
   [VS (repr (Value repr))] -> Reader DrasilState (VS (repr (Value repr)))

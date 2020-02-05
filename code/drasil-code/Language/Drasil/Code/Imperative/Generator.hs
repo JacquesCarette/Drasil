@@ -108,7 +108,7 @@ genUnmodular = do
     (map (fmap Just) (genMainFunc : concatMap genModFuncs (mods s)) ++ 
     ((if cls then [] else [genInputFormat Pub, genInputDerived Pub, 
       genInputConstraints Pub]) ++ [genOutputFormat])) 
-    ([genInputClass | cls] ++ [genConstClass])
+    [genInputClass Priv, genConstClass Priv]
           
 genModules :: (ProgramSym repr) => 
   Reader DrasilState [FS (repr (RenderFile repr))]

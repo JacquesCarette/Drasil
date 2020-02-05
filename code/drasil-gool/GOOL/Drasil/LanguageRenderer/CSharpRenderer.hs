@@ -578,6 +578,7 @@ instance ScopeSym CSharpCode where
 
 instance InternalScope CSharpCode where
   scopeDoc = unCSC
+  scopeFromData _ = toCode
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
@@ -648,7 +649,7 @@ instance ClassSym CSharpCode where
   type Class CSharpCode = Doc
   buildClass = G.buildClass classDocD inherit
   enum = G.enum
-  privClass = G.privClass
+  privClass = pubClass
   pubClass = G.pubClass
   implementingClass = G.implementingClass classDocD implements
 

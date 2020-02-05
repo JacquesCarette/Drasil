@@ -12,7 +12,8 @@ import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc)
 import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
   getAllInputCalls, getOutputCall)
-import Language.Drasil.Code.Imperative.GenerateGOOL (genModule, publicClass)
+import Language.Drasil.Code.Imperative.GenerateGOOL (genModule, publicClass, 
+  privateClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (CalcType(CalcAssign), convExpr,
   genCalcBlock, genConstructor, mkVal, mkVar, privateInOutMethod, privateMethod,
@@ -143,7 +144,7 @@ genInputModSeparated = do
   dvDesc <- modDesc (liftS derivedValuesDesc)
   icDesc <- modDesc (liftS inputConstraintsDesc)
   sequence 
-    [genModule "InputParameters" ipDesc [] [genInputClass],
+    [genModule "InputParameters" ipDesc [] [genInputClass Pub],
     genModule "InputFormat" ifDesc [genInputFormat Pub] [],
     genModule "DerivedValues" dvDesc [genInputDerived Pub] [],
     genModule "InputConstraints" icDesc [genInputConstraints Pub] []]
@@ -157,8 +158,8 @@ genInputModCombined = do
         Reader DrasilState (FS (repr (RenderFile repr)))
       genMod Nothing = genModule cname ipDesc [genInputFormat Pub, 
         genInputDerived Pub, genInputConstraints Pub] []
-      genMod _ = genModule cname ipDesc [] [genInputClass]
-  ic <- genInputClass
+      genMod _ = genModule cname ipDesc [] [genInputClass Pub]
+  ic <- genInputClass Pub
   liftS $ genMod ic
 
 constVarFunc :: (ProgramSym repr) => ConstantRepr -> String ->
@@ -167,9 +168,9 @@ constVarFunc :: (ProgramSym repr) => ConstantRepr -> String ->
 constVarFunc Var n = stateVarDef n public dynamic
 constVarFunc Const n = constVar n public
 
-genInputClass :: (ProgramSym repr) => 
+genInputClass :: (ProgramSym repr) => ScopeTag -> 
   Reader DrasilState (Maybe (CS (repr (Class repr))))
-genInputClass = withReader (\s -> s {currentClass = cname}) $ do
+genInputClass scp = withReader (\s -> s {currentClass = cname}) $ do
   g <- ask
   let ins = inputs $ csi $ codeSpec g
       cs = constants $ csi $ codeSpec g
@@ -183,20 +184,21 @@ genInputClass = withReader (\s -> s {currentClass = cname}) $ do
       methods Separated = return []
       methods Combined = concat <$> mapM (fmap maybeToList) 
         [genInputConstructor, genInputFormat Priv, 
-        genInputDerived Priv, 
-        genInputConstraints Priv]
+        genInputDerived Priv, genInputConstraints Priv]
       genClass :: (ProgramSym repr) => [CodeChunk] -> [CodeDefinition] -> 
         Reader DrasilState (Maybe (CS (repr (Class repr))))
       genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . codeEquat) csts
-        let inputVars = map (\x -> pubMVar (var (codeName x) (convType $ 
+        let getFunc Pub = publicClass
+            getFunc Priv = privateClass
+            f = getFunc scp
+            inputVars = map (\x -> pubMVar (var (codeName x) (convType $ 
               codeType x))) inps
             constVars = zipWith (\c vl -> constVarFunc (conRepr g) cname
               (var (codeName c) (convType $ codeType c)) vl) csts vals
         icDesc <- inputClassDesc
-        c <- publicClass icDesc cname Nothing (inputVars ++ constVars) 
-          (methods $ inMod g)
+        c <- f icDesc cname Nothing (inputVars ++ constVars) (methods $ inMod g)
         return $ Just c
   genClass (filt ins) (includedConstants (conStruct g) cs)
   where cname = "InputParameters"
@@ -384,11 +386,11 @@ genSampleInput = do
 genConstMod :: (ProgramSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
 genConstMod = do
   cDesc <- modDesc $ liftS constModDesc
-  liftS $ genModule "Constants" cDesc [] [genConstClass]
+  liftS $ genModule "Constants" cDesc [] [genConstClass Pub]
 
-genConstClass :: (ProgramSym repr) => 
+genConstClass :: (ProgramSym repr) => ScopeTag ->
   Reader DrasilState (Maybe (CS (repr (Class repr))))
-genConstClass = withReader (\s -> s {currentClass = cname}) $ do
+genConstClass scp = withReader (\s -> s {currentClass = cname}) $ do
   g <- ask
   let cs = constants $ csi $ codeSpec g
       genClass :: (ProgramSym repr) => [CodeDefinition] -> Reader DrasilState (Maybe 
@@ -398,8 +400,11 @@ genConstClass = withReader (\s -> s {currentClass = cname}) $ do
         vals <- mapM (convExpr . codeEquat) vs 
         let vars = map (\x -> var (codeName x) (convType $ codeType x)) vs
             constVars = zipWith (constVarFunc (conRepr g) cname) vars vals
+            getFunc Pub = publicClass
+            getFunc Priv = privateClass
+            f = getFunc scp
         cDesc <- constClassDesc
-        cls <- publicClass cDesc cname Nothing constVars (return [])
+        cls <- f cDesc cname Nothing constVars (return [])
         return $ Just cls
   genClass $ filter (flip member (Map.filter (cname ==) (clsMap $ codeSpec g)) 
     . codeName) cs

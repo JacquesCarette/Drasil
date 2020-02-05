@@ -595,6 +595,7 @@ instance ScopeSym PythonCode where
 
 instance InternalScope PythonCode where
   scopeDoc = unPC
+  scopeFromData _ = toCode
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData

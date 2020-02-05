@@ -75,7 +75,7 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   ParameterSym(param), MethodSym(method, mainFunction), InternalMethod(intFunc),
   StateVarSym(stateVar), ClassSym(buildClass, commentedClass), 
   InternalMod(modFromData))
-import GOOL.Drasil.Data (Binding(..), Terminator(..), isSource)
+import GOOL.Drasil.Data (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
   on2StateLists, on1StateValue1List, getInnerType, convType)
@@ -1093,7 +1093,7 @@ enum n es s = modify (setClassName n) >> classFromData (toState $ enumDocD n
 privClass :: (RenderSym repr) => Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> 
   [MS (repr (Method repr))] -> CS (repr (Class repr))
-privClass n p = S.buildClass n p private
+privClass n p = S.buildClass n p (scopeFromData Priv empty)
 
 pubClass :: (RenderSym repr) => Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 

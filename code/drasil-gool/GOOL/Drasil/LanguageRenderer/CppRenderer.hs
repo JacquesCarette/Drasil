@@ -694,6 +694,7 @@ instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => InternalScope (p CppSrcCode CppHdrCode) where
   scopeDoc s = scopeDoc $ pfst s
+  scopeFromData s d = pair (scopeFromData s d) (scopeFromData s d)
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
   type MethodType (p CppSrcCode CppHdrCode) = TypeData
@@ -1547,6 +1548,7 @@ instance ScopeSym CppSrcCode where
 
 instance InternalScope CppSrcCode where
   scopeDoc = fst . unCPPSC
+  scopeFromData s d = toCode (d, s)
 
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
@@ -2157,6 +2159,7 @@ instance ScopeSym CppHdrCode where
 
 instance InternalScope CppHdrCode where
   scopeDoc = fst . unCPPHC
+  scopeFromData s d = toCode (d, s)
 
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = TypeData

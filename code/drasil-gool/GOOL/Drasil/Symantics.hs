@@ -652,6 +652,7 @@ class ScopeSym repr where
 
 class InternalScope repr where
   scopeDoc :: repr (Scope repr) -> Doc
+  scopeFromData :: ScopeTag -> Doc -> repr (Scope repr)
 
 class (TypeSym repr) => MethodTypeSym repr where
   type MethodType repr

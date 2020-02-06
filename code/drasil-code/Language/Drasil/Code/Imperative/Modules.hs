@@ -87,7 +87,7 @@ getInputDecl = do
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
-      getDecl ((i:_),[]) = return $ Just $ (if currentModule g == 
+      getDecl (i:_,[]) = return $ Just $ (if currentModule g == 
         eMap (codeSpec g) ! codeName i then objDecNew 
         else extObjDecNew cname) v_params cps
       getDecl _ = error ("Inputs or constants are only partially contained in " 
@@ -108,7 +108,7 @@ initConsts = do
       getDecl _ Inline = return Nothing
       getDecl _ WithInputs = return Nothing
       getDecl ([],[]) _ = return Nothing
-      getDecl ((c:_),[]) _ = asks (constCont c . conRepr)
+      getDecl (c:_,[]) _ = asks (constCont c . conRepr)
       getDecl ([],cs) _ = do 
         vars <- mapM mkVar cs
         vals <- mapM (convExpr . codeEquat) cs

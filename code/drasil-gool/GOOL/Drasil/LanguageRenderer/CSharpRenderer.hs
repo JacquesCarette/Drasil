@@ -36,7 +36,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, double, char, string, 
   listType, arrayType, listInnerType, obj, enumType, funcType, void, 
   runStrategy, listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, 
-  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
+  greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, divideOp, 
   moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, classVar, 
   objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, litFalse, 
   litChar, litFloat, litInt, litString, valueOf, arg, enumElement, argsList, 
@@ -47,17 +47,17 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterBeginError, iterEndError, listAccessFunc, listSetFunc, printSt, state, 
   loopState, emptyState, assign, assignToListIndex, multiAssignError, decrement,
   increment, decrement1, increment1, varDec, varDecDef, listDec, listDecDef', 
-  arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, constDecDef, 
-  discardInput, openFileR, openFileW, openFileA, closeFile, discardFileLine, 
-  stringListVals, stringListLists, returnState, multiReturnError, valState, 
-  comment, freeError, throw, initState, changeState, initObserverList, 
-  addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists, for, forRange, 
-  forEach, while, tryCatch, checkState, notifyObservers, construct, param, 
-  method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, 
-  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef,
-  constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
-  implementingClass, docClass, commentedClass, buildModule', modFromData, 
-  fileDoc, docMod, fileFromData)
+  arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
+  extObjDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, 
+  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
+  returnState, multiReturnError, valState, comment, freeError, throw, initState,
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
+  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
+  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
+  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
+  pubGVar, buildClass, enum, pubClass, implementingClass, docClass, 
+  commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -490,9 +490,9 @@ instance StatementSym CSharpCode where
   arrayDecDef = G.arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew _ = objDecNew
+  extObjDecNew = G.extObjDecNew
   objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams _ = objDecNewNoParams
+  extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef = G.constDecDef
   funcDecDef = csFuncDecDef blockStart blockEnd
 

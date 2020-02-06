@@ -21,17 +21,17 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   listSetFunc, printSt, state, loopState, emptyState, assign, assignToListIndex,
   multiAssignError, decrement, increment, increment', increment1, increment1', 
   decrement1, varDec, varDecDef, listDec, listDecDef, listDecDef', arrayDec, 
-  arrayDecDef, objDecNew, objDecNewNoParams, constDecDef, funcDecDef, 
-  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, initState, changeState,
-  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
-  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
-  construct, param, method, getMethod, setMethod,privMethod, pubMethod, 
-  constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
-  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
-  privClass, pubClass, implementingClass, docClass, commentedClass, buildModule,
-  buildModule', modFromData, fileDoc, docMod
+  arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams,
+  constDecDef, funcDecDef, discardInput, discardFileInput, openFileR, openFileW,
+  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
+  returnState, multiReturnError, valState, comment, freeError, throw, initState,
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
+  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  notifyObservers, construct, param, method, getMethod, setMethod,privMethod, 
+  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
+  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
+  pubGVar, buildClass, enum, privClass, pubClass, implementingClass, docClass, 
+  commentedClass, buildModule, buildModule', modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -62,15 +62,15 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   TypeSym(bool, int, float, char, string, listType, listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
   ValueSym(litTrue, litFalse, litInt, litString, valueOf),
-  ValueExpression(funcApp, newObj, notNull, lambda), Selector(objAccess), 
-  objMethodCall, objMethodCallNoParams, 
+  ValueExpression(funcApp, newObj, extNewObj, notNull, lambda), 
+  Selector(objAccess), objMethodCall, objMethodCallNoParams, 
   FunctionSym(func, listSize, listAdd, listAppend),
   SelectorFunction(listAccess, listSet),
   InternalFunction(getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, 
     listAccessFunc, listSetFunc),
   InternalStatement(state, loopState, emptyState), 
   StatementSym(assign, varDec, varDecDef, listDec, listDecDef, objDecNew, 
-    constDecDef, valState, returnState),
+    extObjDecNew, constDecDef, valState, returnState),
   ControlStatementSym(ifCond, for, forRange, switch), MethodTypeSym(construct), 
   ParameterSym(param), MethodSym(method, mainFunction), InternalMethod(intFunc),
   StateVarSym(stateVar), ClassSym(buildClass, commentedClass), 
@@ -734,6 +734,15 @@ objDecNew v vs = S.varDecDef v (S.newObj (onStateValue variableType v) vs)
 objDecNewNoParams :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   MS (repr (Statement repr))
 objDecNewNoParams v = S.objDecNew v []
+
+extObjDecNew :: (RenderSym repr) => Library -> VS (repr (Variable repr)) -> 
+  [VS (repr (Value repr))] -> MS (repr (Statement repr))
+extObjDecNew l v vs = S.varDecDef v (S.extNewObj l (onStateValue variableType v)
+  vs)
+
+extObjDecNewNoParams :: (RenderSym repr) => Library -> VS (repr (Variable repr))
+  -> MS (repr (Statement repr))
+extObjDecNewNoParams l v = S.extObjDecNew l v []
 
 constDecDef :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   VS (repr (Value repr)) -> MS (repr (Statement repr))

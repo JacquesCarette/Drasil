@@ -13,13 +13,16 @@ import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.Data (Binding(Dynamic), ScopeTag(..), Exception(..),
   exception, stdExc)
 import GOOL.Drasil.Helpers (toCode, toState)
-import GOOL.Drasil.State (GOOLState, MS, lensGStoFS, lensFStoCS, lensFStoMS, 
-  lensCStoMS, lensMStoFS, modifyReturn, setClassName, setModuleName, 
-  getModuleName, addClass, updateClassMap, addException, updateMethodExcMap)
+import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
+  lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, modifyReturn, setClassName, 
+  setModuleName, getModuleName, addClass, updateClassMap, addException, 
+  updateMethodExcMap, updateCallMap, addCall, callMapTransClosure, 
+  updateMEMWithCalls)
 
 import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
 import Control.Lens.Zoom (zoom)
+import Data.Maybe (fromMaybe)
 import Text.PrettyPrint.HughesPJ (empty)
 
 newtype CodeInfo a = CI {unCI :: a} deriving Eq
@@ -39,25 +42,17 @@ instance ProgramSym CodeInfo where
   type Program CodeInfo = GOOLState
   prog _ fs = do
     mapM_ (zoom lensGStoFS) fs
+    modify (updateMEMWithCalls . callMapTransClosure)
     s <- S.get
     toState $ toCode s
-  
-noInfo :: State s (CodeInfo ())
-noInfo = toState $ toCode ()
 
 instance FileSym CodeInfo where
   type RenderFile CodeInfo = ()
-  fileDoc m = do
-    _ <- m
-    noInfo
+  fileDoc = execute1
   
-  docMod _ _ _ m = do
-    _ <- m
-    noInfo
+  docMod _ _ _ = execute1
 
-  commentedMod _ m = do
-    _ <- m
-    noInfo
+  commentedMod _ = execute1
 
 instance PermanenceSym CodeInfo where
   type Permanence CodeInfo = ()
@@ -66,50 +61,48 @@ instance PermanenceSym CodeInfo where
 
 instance BodySym CodeInfo where
   type Body CodeInfo = ()
-  body bs = do
-    sequence_ bs
-    noInfo
-  bodyStatements ss = do
-    sequence_ ss
-    noInfo
-  oneLiner s = do
-    _ <- s
-    noInfo
+  body = executeList
+  bodyStatements = executeList
+  oneLiner = execute1
 
   addComments _ _ = noInfo
 
 instance BlockSym CodeInfo where
   type Block CodeInfo = ()
-  block ss = do
-    sequence_ ss
-    noInfo
+  block = executeList
 
 instance TypeSym CodeInfo where
-  type Type CodeInfo = ()
-  bool = noInfo
-  int = noInfo
-  float = noInfo
-  char = noInfo
-  string = noInfo
-  infile = noInfo
-  outfile = noInfo
-  listType _ _ = noInfo
-  arrayType _ = noInfo
-  listInnerType _ = noInfo
-  obj _ = noInfo
-  enumType _ = noInfo
-  funcType _ _ = noInfo
-  iterator _ = noInfo
-  void = noInfo
+  type Type CodeInfo = String
+  bool = noInfoType
+  int = noInfoType
+  float = noInfoType
+  char = noInfoType
+  string = noInfoType
+  infile = noInfoType
+  outfile = noInfoType
+  listType _ _ = noInfoType
+  arrayType _ = noInfoType
+  listInnerType _ = noInfoType
+  obj = toState . toCode
+  enumType _ = noInfoType
+  funcType _ _ = noInfoType
+  iterator _ = noInfoType
+  void = noInfoType
 
   getType _ = Void
-  getTypeString _ = ""
+  getTypeString = unCI
   getTypeDoc _ = empty
 
 instance ControlBlockSym CodeInfo where
-  runStrategy _ _ _ _ = noInfo
+  runStrategy _ ss vl _ = do
+    mapM_ snd ss
+    _ <- zoom lensMStoVS $ fromMaybe noInfo vl
+    noInfo
 
-  listSlice' _ _ _ _ _ = noInfo
+  listSlice' b e s _ vl = zoom lensMStoVS $ do
+    mapM_ (fromMaybe noInfo) [b,e,s]
+    _ <- vl
+    noInfo
 
   solveODE _ _ = noInfo
 
@@ -134,7 +127,7 @@ instance VariableSym CodeInfo where
   
   variableBind _ = Dynamic
   variableName _ = ""
-  variableType _ = toCode ()
+  variableType _ = toCode ""
   variableDoc _ = empty
 
 instance ValueSym CodeInfo where
@@ -156,153 +149,162 @@ instance ValueSym CodeInfo where
   
   argsList = noInfo
 
-  valueType _ = toCode ()
+  valueType _ = toCode ""
   valueDoc _ = empty
 
 instance NumericExpression CodeInfo where
-  (#~) _ = noInfo
-  (#/^) _ = noInfo
-  (#|) _ = noInfo
-  (#+) _ _ = noInfo
-  (#-) _ _ = noInfo
-  (#*) _ _ = noInfo
-  (#/) _ _ = noInfo
-  (#%) _ _ = noInfo
-  (#^) _ _ = noInfo
+  (#~) = execute1
+  (#/^) = execute1
+  (#|) = execute1
+  (#+) = execute2
+  (#-) = execute2
+  (#*) = execute2
+  (#/) = execute2
+  (#%) = execute2
+  (#^) = execute2
 
-  log _ = noInfo
-  ln _ = noInfo
-  exp _ = noInfo
-  sin _ = noInfo
-  cos _ = noInfo
-  tan _ = noInfo
-  csc _ = noInfo
-  sec _ = noInfo
-  cot _ = noInfo
-  arcsin _ = noInfo
-  arccos _ = noInfo
-  arctan _ = noInfo
-  floor _ = noInfo
-  ceil _ = noInfo
+  log = execute1
+  ln = execute1
+  exp = execute1
+  sin = execute1
+  cos = execute1
+  tan = execute1
+  csc = execute1
+  sec = execute1
+  cot = execute1
+  arcsin = execute1
+  arccos = execute1
+  arctan = execute1
+  floor = execute1
+  ceil = execute1
 
 instance BooleanExpression CodeInfo where
-  (?!) _ = noInfo
-  (?&&) _ _ = noInfo
-  (?||) _ _ = noInfo
+  (?!) = execute1
+  (?&&) = execute2
+  (?||) = execute2
 
-  (?<) _ _ = noInfo
-  (?<=) _ _ = noInfo
-  (?>) _ _ = noInfo
-  (?>=) _ _ = noInfo
-  (?==) _ _ = noInfo
-  (?!=) _ _ = noInfo
+  (?<) = execute2
+  (?<=) = execute2
+  (?>) = execute2
+  (?>=) = execute2
+  (?==) = execute2
+  (?!=) = execute2
     
 instance ValueExpression CodeInfo where
-  inlineIf _ _ _ = noInfo
-  funcApp _ _ _ = noInfo
-  selfFuncApp _ _ _ = noInfo
-  extFuncApp _ _ _ _ = noInfo
-  newObj _ _ = noInfo
-  extNewObj _ _ _ = noInfo
+  inlineIf = execute3
+  funcApp n _ _ = addCurrModCall n
+  selfFuncApp n _ _ = addCurrModCall n
+  extFuncApp l n _ _ = addExternalCall l n
+  newObj ot vs = do
+    sequence_ vs
+    addCurrModConstructorCall ot
+  extNewObj l ot vs = do
+    sequence_ vs
+    addExternalConstructorCall l ot
 
-  lambda _ _ = noInfo
+  lambda _ = execute1
 
-  exists _ = noInfo
-  notNull _ = noInfo
+  exists = execute1
+  notNull = execute1
 
 instance Selector CodeInfo where
-  objAccess _ _ = noInfo
-  ($.) _ _ = noInfo
+  objAccess = execute2
+  ($.) = execute2
 
-  selfAccess _ = noInfo
+  selfAccess = execute1
 
-  listIndexExists _ _ = noInfo
+  listIndexExists = execute2
   argExists _ = noInfo
   
-  indexOf _ _ = noInfo
+  indexOf = execute2
   
 instance InternalSelector CodeInfo where
-  objMethodCall' _ _ _ _ = noInfo
-  objMethodCallNoParams' _ _ _ = noInfo
+  objMethodCall' n _ v vs = do
+    _ <- v
+    sequence_ vs
+    addCurrModCall n
+  objMethodCallNoParams' n _ v = do
+    _ <- v
+    addCurrModCall n
 
 instance FunctionSym CodeInfo where
   type Function CodeInfo = ()
-  func _ _ _ = noInfo
+  func _ _ = executeList
   
-  get _ _ = noInfo
-  set _ _ _ = noInfo
+  get v _ = execute1 v
+  set v _ = execute2 v
 
-  listSize _ = noInfo
-  listAdd _ _ _ = noInfo
-  listAppend _ _ = noInfo
+  listSize = execute1
+  listAdd = execute3
+  listAppend = execute2
 
-  iterBegin _ = noInfo
-  iterEnd _ = noInfo
+  iterBegin = execute1
+  iterEnd = execute1
 
 instance SelectorFunction CodeInfo where
-  listAccess _ _ = noInfo
-  listSet _ _ _ = noInfo
-  at _ _ = noInfo
+  listAccess = execute2
+  listSet = execute3
+  at = execute2
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()
-  assign _ _ = noInfo
-  assignToListIndex _ _ _ = noInfo
-  multiAssign _ _ = noInfo
-  (&=) _ _ = noInfo
-  (&-=) _ _ = noInfo
-  (&+=) _ _ = noInfo
+  assign _ = zoom lensMStoVS . execute1
+  assignToListIndex _ v = zoom lensMStoVS . execute2 v
+  multiAssign _ = zoom lensMStoVS . executeList
+  (&=) _ = zoom lensMStoVS . execute1
+  (&-=) _ = zoom lensMStoVS . execute1
+  (&+=) _ = zoom lensMStoVS . execute1
   (&++) _ = noInfo
   (&~-) _ = noInfo
 
   varDec _ = noInfo
-  varDecDef _ _ = noInfo
+  varDecDef _ = zoom lensMStoVS . execute1
   listDec _ _ = noInfo
-  listDecDef _ _ = noInfo
+  listDecDef _ = zoom lensMStoVS . executeList
   arrayDec _ _ = noInfo
-  arrayDecDef _ _ = noInfo
-  objDecDef _ _ = noInfo
-  objDecNew _ _ = noInfo
-  extObjDecNew _ _ _ = noInfo
+  arrayDecDef _ = zoom lensMStoVS . executeList
+  objDecDef _ = zoom lensMStoVS . execute1
+  objDecNew _ = zoom lensMStoVS . executeList
+  extObjDecNew _ _ = zoom lensMStoVS . executeList
   objDecNewNoParams _ = noInfo
   extObjDecNewNoParams _ _ = noInfo
-  constDecDef _ _ = noInfo
-  funcDecDef _ _ _ = noInfo
+  constDecDef _ = zoom lensMStoVS . execute1
+  funcDecDef _ _ = zoom lensMStoVS . execute1
 
-  print _ = noInfo
-  printLn _ = noInfo
+  print = zoom lensMStoVS . execute1
+  printLn = zoom lensMStoVS . execute1
   printStr _ = noInfo
   printStrLn _ = noInfo
 
-  printFile _ _ = noInfo
-  printFileLn _ _ = noInfo
-  printFileStr _ _ = noInfo
-  printFileStrLn _ _ = noInfo
+  printFile v = zoom lensMStoVS . execute2 v
+  printFileLn v = zoom lensMStoVS . execute2 v
+  printFileStr v _ = zoom lensMStoVS $ execute1 v
+  printFileStrLn v _ = zoom lensMStoVS $ execute1 v
 
   getInput _ = noInfo
   discardInput = noInfo
-  getFileInput _ _ = noInfo
-  discardFileInput _ = noInfo
+  getFileInput v _ = zoom lensMStoVS $ execute1 v
+  discardFileInput = zoom lensMStoVS . execute1
 
-  openFileR _ _ = modifyReturn (addException fnfExc) (toCode ())
-  openFileW _ _ = modifyReturn (addException ioExc) (toCode ())
-  openFileA _ _ = modifyReturn (addException ioExc) (toCode ())
-  closeFile _ = noInfo
+  openFileR _ v = modify (addException fnfExc) >> execute1 (zoom lensMStoVS v)
+  openFileW _ v = modify (addException ioExc) >> execute1 (zoom lensMStoVS v)
+  openFileA _ v = modify (addException ioExc) >> execute1 (zoom lensMStoVS v)
+  closeFile = zoom lensMStoVS . execute1
 
-  getFileInputLine _ _ = noInfo
-  discardFileLine _ = noInfo
-  stringSplit _ _ _ = noInfo
+  getFileInputLine v _ = zoom lensMStoVS $ execute1 v
+  discardFileLine = zoom lensMStoVS . execute1
+  stringSplit _ _ = zoom lensMStoVS . execute1
 
-  stringListVals _ _ = noInfo
-  stringListLists _ _ = noInfo
+  stringListVals _ = zoom lensMStoVS . execute1
+  stringListLists _ = zoom lensMStoVS . execute1
 
   break = noInfo
   continue = noInfo
 
-  returnState _ = noInfo
-  multiReturn _ = noInfo
+  returnState = zoom lensMStoVS . execute1
+  multiReturn = zoom lensMStoVS . executeList
 
-  valState _ = noInfo
+  valState = zoom lensMStoVS . execute1
 
   comment _ = noInfo
 
@@ -313,42 +315,41 @@ instance StatementSym CodeInfo where
   initState _ _ = noInfo
   changeState _ _ = noInfo
 
-  initObserverList _ _ = noInfo
-  addObserver _ = noInfo
+  initObserverList _ = zoom lensMStoVS . executeList
+  addObserver = zoom lensMStoVS . execute1
 
-  inOutCall _ _ _ _ = noInfo
-  selfInOutCall _ _ _ _ = noInfo
-  extInOutCall _ _ _ _ _ = noInfo
+  inOutCall n vs _ _ = zoom lensMStoVS $ do
+    sequence_ vs
+    addCurrModCall n
+  selfInOutCall n vs _ _ = zoom lensMStoVS $ do
+    sequence_ vs
+    addCurrModCall n
+  extInOutCall l n vs _ _ = zoom lensMStoVS $ do
+    sequence_ vs
+    addExternalCall l n
 
-  multi ss = do
-    sequence_ ss
-    noInfo
+  multi = executeList
 
 instance ControlStatementSym CodeInfo where
   ifCond = evalConds
   ifNoElse cs = do
+    mapM_ (zoom lensMStoVS . fst) cs
     mapM_ snd cs
     noInfo
-  switch _ = evalConds
-  switchAsIf _ = evalConds
+  switch v cs b = do
+    _ <- zoom lensMStoVS v
+    evalConds cs b
+  switchAsIf v cs b = do
+    _ <- zoom lensMStoVS v
+    evalConds cs b
 
-  ifExists _ ib eb = do
-    _ <- ib
-    _ <- eb
-    noInfo
+  ifExists v = execute3 (zoom lensMStoVS v)
 
-  for _ _ _ b = do
-    _ <- b
-    noInfo
-  forRange _ _ _ _ b = do
-    _ <- b
-    noInfo
-  forEach _ _ b = do
-    _ <- b
-    noInfo
-  while _ b = do
-    _ <- b
-    noInfo
+  for dec v = execute4 dec (zoom lensMStoVS v)
+  forRange _ b e s = execute4 (zoom lensMStoVS b) (zoom lensMStoVS e) 
+    (zoom lensMStoVS s)
+  forEach _ v = execute2 (zoom lensMStoVS v)
+  while v = execute2 (zoom lensMStoVS v)
 
   tryCatch _ cb = do
     _ <- cb
@@ -356,9 +357,9 @@ instance ControlStatementSym CodeInfo where
 
   checkState _ = evalConds
 
-  notifyObservers _ _ = noInfo
+  notifyObservers f _ = execute1 (zoom lensMStoVS f)
 
-  getFileInputAll _ _ = noInfo
+  getFileInputAll v _ = execute1 (zoom lensMStoVS v)
 
 instance ScopeSym CodeInfo where
   type Scope CodeInfo = ScopeTag
@@ -377,34 +378,35 @@ instance ParameterSym CodeInfo where
 
 instance MethodSym CodeInfo where
   type Method CodeInfo = ()
-  method n _ _ _ _ = updateMEM n
+  method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
-  privMethod n _ _ = updateMEM n
-  pubMethod n _ _ = updateMEM n
-  constructor _ _ b = do
+  privMethod n _ _ = updateMEMandCM n
+  pubMethod n _ _ = updateMEMandCM n
+  constructor _ il b = do
+    mapM_ (zoom lensMStoVS . snd) il
     _ <- b
     mn <- zoom lensMStoFS getModuleName
-    modify (updateMethodExcMap mn)
+    modify (updateCallMap mn . updateMethodExcMap mn)
     noInfo
   destructor _ = noInfo
 
-  docMain = updateMEM "main"
+  docMain = updateMEMandCM "main"
 
-  function n _ _ _ _ = updateMEM n
-  mainFunction = updateMEM "main"
+  function n _ _ _ _ = updateMEMandCM n
+  mainFunction = updateMEMandCM "main"
 
   docFunc _ _ _ f = do
     _ <- f
     noInfo
 
-  inOutMethod n _ _ _ _ _ = updateMEM n
+  inOutMethod n _ _ _ _ _ = updateMEMandCM n
 
-  docInOutMethod n _ _ _ _ _ _ = updateMEM n
+  docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
 
-  inOutFunc n _ _ _ _ _ = updateMEM n
+  inOutFunc n _ _ _ _ _ = updateMEMandCM n
 
-  docInOutFunc n _ _ _ _ _ _ = updateMEM n
+  docInOutFunc n _ _ _ _ _ _ = updateMEMandCM n
 
 instance StateVarSym CodeInfo where
   type StateVar CodeInfo = ()
@@ -459,21 +461,79 @@ instance BlockCommentSym CodeInfo where
 
 -- Helpers
 
+noInfo :: State s (CodeInfo ())
+noInfo = toState $ toCode ()
+
+noInfoType :: State s (CodeInfo String)
+noInfoType = toState $ toCode ""
+
 fnfExc, ioExc, genericExc :: Exception
 fnfExc = exception "java.io" "FileNotFoundException"
 ioExc = exception "java.io" "IOException"
 genericExc = stdExc "Exception"
 
-updateMEM :: String -> MS (CodeInfo (Body CodeInfo)) -> 
+updateMEMandCM :: String -> MS (CodeInfo (Body CodeInfo)) -> 
   MS (CodeInfo (Method CodeInfo))
-updateMEM n b = do
+updateMEMandCM n b = do
   _ <- b
-  modify (updateMethodExcMap n)
+  modify (updateCallMap n . updateMethodExcMap n)
   noInfo
 
-evalConds :: [(a, MS (CodeInfo (Body CodeInfo)))] -> 
-  MS (CodeInfo (Body CodeInfo)) -> MS (CodeInfo (Statement CodeInfo))
+evalConds :: [(VS (CodeInfo (Value CodeInfo)), MS (CodeInfo (Body CodeInfo)))] 
+  -> MS (CodeInfo (Body CodeInfo)) -> MS (CodeInfo (Statement CodeInfo))
 evalConds cs def = do
+  mapM_ (zoom lensMStoVS . fst) cs
   mapM_ snd cs
   _ <- def
   noInfo
+
+addCurrModCall :: String -> VS (CodeInfo (Value CodeInfo))
+addCurrModCall n = do
+  mn <- zoom lensVStoFS getModuleName 
+  modify (addCall (mn ++ "." ++ n)) 
+  noInfo
+
+addCurrModConstructorCall :: VS (CodeInfo (Type CodeInfo)) -> 
+  VS (CodeInfo (Value CodeInfo))
+addCurrModConstructorCall ot = do
+  t <- ot
+  let tp = getTypeString t
+  addCurrModCall tp
+
+addExternalCall :: String -> String -> VS (CodeInfo (Value CodeInfo))
+addExternalCall l n = modify (addCall (l ++ "." ++ n)) >> noInfo
+
+addExternalConstructorCall :: String -> VS (CodeInfo (Type CodeInfo)) -> 
+  VS (CodeInfo (Value CodeInfo))
+addExternalConstructorCall l ot = do
+  t <- ot
+  let tp = getTypeString t
+  addExternalCall l tp
+
+execute1 :: State a (CodeInfo ()) -> State a (CodeInfo ())
+execute1 s = do
+  _ <- s
+  noInfo
+
+executeList :: [State a (CodeInfo ())] -> State a (CodeInfo ())
+executeList l = do
+  sequence_ l
+  noInfo
+
+execute2 :: State a (CodeInfo ()) -> State a (CodeInfo ()) -> 
+  State a (CodeInfo ())
+execute2 s1 s2 = do
+  _ <- s1
+  execute1 s2
+
+execute3 :: State a (CodeInfo ()) -> State a (CodeInfo ()) -> 
+  State a (CodeInfo ()) -> State a (CodeInfo ())
+execute3 s1 s2 s3 = do
+  _ <- s1
+  execute2 s2 s3
+
+execute4 :: State a (CodeInfo ()) -> State a (CodeInfo ()) -> 
+  State a (CodeInfo ()) -> State a (CodeInfo ()) -> State a (CodeInfo ())
+execute4 s1 s2 s3 s4 = do
+  _ <- s1
+  execute3 s2 s3 s4

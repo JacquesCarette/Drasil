@@ -15,14 +15,12 @@ module GOOL.Drasil.State (
   addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
   getHeaderUsing, setFileType, setModuleName, getModuleName, setClassName, 
   getClassName, setCurrMain, getCurrMain, addClass, getClasses, updateClassMap, 
-  getClassMap, updateMethodExcMap, getMethodExcMap, addParameter, getParameters,
+  getClassMap, updateMethodExcMap, getMethodExcMap, updateCallMap, 
+  callMapTransClosure, updateMEMWithCalls, addParameter, getParameters, 
   setOutputsDeclared, isOutputsDeclared, addException, addExceptions, 
-  getExceptions, setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc, setConstructorParams, getConstructorParams, 
-  addSelfAssignment, getSelfAssignments, setODEDepVars, getODEDepVars, 
-  setODEOthVars, getODEOthVars, setLeftAssignment, getLeftAssignment, 
-  setAssignedSelfVar, getAssignedSelfVar, setRightAssignment, 
-  getRightAssignment, addVariableAssigned, getVariablesAssigned
+  getExceptions, addCall, setMainDoc, getMainDoc, setScope, getScope, 
+  setCurrMainFunc, getCurrMainFunc, setODEDepVars, getODEDepVars, 
+  setODEOthVars, getODEOthVars
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..), FileData)
@@ -32,8 +30,8 @@ import Control.Lens.Tuple (_1, _2)
 import Control.Monad.State (State, modify, gets)
 import Data.List (sort, nub)
 import Data.Maybe (isNothing)
-import Data.Map (Map, fromList, insert, union)
-import qualified Data.Map as Map (empty)
+import Data.Map (Map, fromList, insert, union, findWithDefault, mapWithKey)
+import qualified Data.Map as Map (empty, map)
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 data GOOLState = GS {
@@ -44,7 +42,8 @@ data GOOLState = GS {
   _odeFiles :: [FileData],
 
   -- Only used for Java
-  _methodExceptionMap :: Map String [Exception]
+  _methodExceptionMap :: Map String [Exception],
+  _callMap :: Map String [String]
 } 
 makeLenses ''GOOLState
 
@@ -54,6 +53,7 @@ data MethodState = MS {
   -- Only used for Java
   _outputsDeclared :: Bool,
   _exceptions :: [Exception],
+  _calls :: [String],
   
   -- Only used for C++
   _currScope :: ScopeTag,
@@ -234,7 +234,8 @@ initialState = GS {
   _classMap = Map.empty,
   _odeFiles = [],
 
-  _methodExceptionMap = Map.empty
+  _methodExceptionMap = Map.empty,
+  _callMap = Map.empty
 }
 
 initialFS :: FileState
@@ -269,6 +270,7 @@ initialMS = MS {
 
   _outputsDeclared = False,
   _exceptions = [],
+  _calls = [],
 
   _currScope = Priv,
   _currMainFunc = False
@@ -518,6 +520,28 @@ updateMethodExcMap n (((gs, fs), cs), ms) = over (_1 . _1 . _1 .
 getMethodExcMap :: VS (Map String [Exception])
 getMethodExcMap = gets ((^. methodExceptionMap) . fst . fst . fst . fst)
 
+updateCallMap :: String -> (((GOOLState, FileState), ClassState), MethodState) 
+  -> (((GOOLState, FileState), ClassState), MethodState)
+updateCallMap n (((gs, fs), cs), ms) = over (_1 . _1 . _1 . callMap) 
+  (insert (mn ++ "." ++ n) (ms ^. calls)) (((gs, fs), cs), ms)
+  where mn = fs ^. currModName
+
+callMapTransClosure :: GOOLState -> GOOLState
+callMapTransClosure = over callMap tClosure
+  where tClosure m = Map.map (traceCalls m) m
+        traceCalls :: Map String [String] -> [String] -> [String]
+        traceCalls _ [] = []
+        traceCalls cm (c:cs) = nub $ c : traceCalls cm (nub $ cs ++ 
+          findWithDefault [] c cm)
+
+updateMEMWithCalls :: GOOLState -> GOOLState
+updateMEMWithCalls s = over methodExceptionMap (\mem -> mapWithKey 
+  (addCallExcs mem (s ^. callMap)) mem) s
+  where addCallExcs :: Map String [Exception] -> Map String [String] -> String 
+          -> [Exception] -> [Exception]
+        addCallExcs mem cm f es = nub $ es ++ concatMap (\fn -> findWithDefault 
+          [] fn mem) (findWithDefault [] f cm)
+
 addParameter :: String -> (((GOOLState, FileState), ClassState), MethodState) 
   -> (((GOOLState, FileState), ClassState), MethodState)
 addParameter p = over _2 $ over currParameters (\ps -> if p `elem` ps then 
@@ -561,6 +585,11 @@ addExceptions es = over (_1 . _2 . exceptions) (\exs -> nub $ exs ++ es)
 
 getExceptions :: MS [Exception]
 getExceptions = gets ((^. exceptions) . snd)
+
+addCall :: String -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
+addCall f = over (_1 . _2 . calls) (f:)
 
 setScope :: ScopeTag -> (((GOOLState, FileState), ClassState), MethodState) -> 
   (((GOOLState, FileState), ClassState), MethodState)

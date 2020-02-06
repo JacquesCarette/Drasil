@@ -48,14 +48,15 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listAccessFunc', listSetFunc, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
   increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
-  objDecNewNoParams, constDecDef, funcDecDef, discardInput, discardFileInput, 
-  closeFile, stringListVals, stringListLists, returnState, multiReturnError, 
-  valState, comment, throw, initState, changeState, initObserverList, 
-  addObserver, ifCond, ifNoElse, switch, switchAsIf, for, forRange, while, 
-  tryCatch, notifyObservers, construct, param, method, getMethod, setMethod, 
-  privMethod, pubMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
-  privMVar, pubMVar, pubGVar, privClass, pubClass, docClass, commentedClass, 
-  buildModule, modFromData, fileDoc, docMod, fileFromData)
+  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, constDecDef, 
+  funcDecDef, discardInput, discardFileInput, closeFile, stringListVals, 
+  stringListLists, returnState, multiReturnError, valState, comment, throw, 
+  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
+  switch, switchAsIf, for, forRange, while, tryCatch, notifyObservers, 
+  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
+  constructor, function, docFunc, docInOutFunc, intFunc, privMVar, pubMVar, 
+  pubGVar, privClass, pubClass, docClass, commentedClass, buildModule, 
+  modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
@@ -77,11 +78,7 @@ import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS,
   getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
   addHeaderUsing, getHeaderUsing, setFileType, setClassName, getClassName, 
   setCurrMain, getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc, setODEOthVars, getODEOthVars, setConstructorParams, 
-  getConstructorParams, addSelfAssignment, getSelfAssignments, 
-  setLeftAssignment, getLeftAssignment, setAssignedSelfVar, getAssignedSelfVar, 
-  setRightAssignment, getRightAssignment, addVariableAssigned, 
-  getVariablesAssigned)
+  getCurrMainFunc, setODEOthVars, getODEOthVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -89,8 +86,9 @@ import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (State, modify, runState)
 import qualified Data.Map as Map (lookup)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
-  empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), hcat, brackets, 
+  braces, parens, comma, empty, equals, semi, vcat, lbrace, rbrace, quotes, 
+  render, colon, isEmpty)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -1434,9 +1432,9 @@ instance StatementSym CppSrcCode where
     (mapM (zoom lensMStoVS) vals)
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew l v vs = modify (addModuleImport l) >> objDecNew v vs
+  extObjDecNew = G.extObjDecNew
   objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams l v = modify (addModuleImport l) >> objDecNewNoParams v
+  extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef = G.constDecDef
   funcDecDef = G.funcDecDef
 

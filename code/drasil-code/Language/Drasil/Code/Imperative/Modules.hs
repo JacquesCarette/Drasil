@@ -43,7 +43,7 @@ import GOOL.Drasil (ProgramSym, FileSym(..), BodySym(..), BlockSym(..),
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
-import Data.Map (member, findWithDefault)
+import Data.Map ((!), member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
 import Control.Applicative ((<$>))
@@ -88,7 +88,7 @@ getInputDecl = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
       getDecl ((i:_),[]) = return $ Just $ (if currentModule g == 
-        findWithDefault "" (codeName i) (eMap $ codeSpec g) then objDecNew 
+        eMap (codeSpec g) ! codeName i then objDecNew 
         else extObjDecNew cname) v_params cps
       getDecl _ = error ("Inputs or constants are only partially contained in " 
         ++ "a class")
@@ -116,8 +116,9 @@ initConsts = do
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ 
           concat logs
       getDecl _ _ = error "Only some constants present in export map"
-      constCont c Var = Just $ (if currentModule g == findWithDefault "" 
-        (codeName c) (eMap $ codeSpec g) then objDecNewNoParams else extObjDecNewNoParams cname) v_consts
+      constCont c Var = Just $ (if currentModule g == eMap (codeSpec g) ! 
+        codeName c then objDecNewNoParams else extObjDecNewNoParams cname) 
+        v_consts
       constCont _ Const = Nothing
       defFunc Var = varDecDef
       defFunc Const = constDecDef

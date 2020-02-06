@@ -106,8 +106,8 @@ initConsts = do
   v_consts <- mkVar (codevar consts)
   let cname = "Constants"
       getDecl _ Inline = return Nothing
-      getDecl _ WithInputs = return Nothing
       getDecl ([],[]) _ = return Nothing
+      getDecl (_,[]) WithInputs = return Nothing
       getDecl (c:_,[]) _ = asks (constCont c . conRepr)
       getDecl ([],cs) _ = do 
         vars <- mapM mkVar cs

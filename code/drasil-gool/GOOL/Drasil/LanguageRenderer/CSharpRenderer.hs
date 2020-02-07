@@ -24,7 +24,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
   InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..), 
   ODEInfo(..), ODEOptions(..), ODEMethod(..))
-import GOOL.Drasil.LanguageRenderer (new, classDocD, multiStateDocD, bodyDocD, 
+import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
   mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
   classVarDocD, objVarDocD, newObjDocD, funcDocD, castDocD, listSetFuncDocD, 
@@ -79,7 +79,7 @@ import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (elemIndex, intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  comma, equals, semi, vcat, braces, lbrace, rbrace, colon)
+  semi, vcat, lbrace, rbrace, colon)
 
 csExt :: String
 csExt = "cs"
@@ -217,15 +217,16 @@ instance ControlBlockSym CSharpCode where
     addLangImport "System.Linq") >> 
     multiBlock [
       block [
+        objDecNewNoParams optsVar,
+        objVar optsVar (var "AbsoluteTolerance" float) &= absTol opts,
+        objVar optsVar (var "AbsoluteTolerance" float) &= relTol opts],
+      block [
         varDecDef sol (extFuncApp "Ode" (csODEMethod $ solveMethod opts) odeT 
         [tInit info, 
         newObj vec [initVal info], 
         lambda [iv, dv] (newObj vec [dv >>= (\dpv -> modify (setODEDepVars 
           [variableName dpv]) >> ode info)]),
-        join $ on2StateValues (\abt rt -> mkStateVal (obj "Options") (new <+> 
-          text "Options" <+> braces (text "AbsoluteTolerance" <+> equals <+> 
-          valueDoc abt <> comma <+> text "RelativeTolerance" <+> equals <+> 
-          valueDoc rt))) (absTol opts) (relTol opts)])],
+        valueOf optsVar])],
       block [
         varDecDef points (objMethodCallNoParams spArray 
         (objMethodCall void (valueOf sol) "SolveFromToStep" 
@@ -235,7 +236,8 @@ instance ControlBlockSym CSharpCode where
           (oneLiner $ valState $ listAppend (valueOf dv) (valueOf $ 
           objVar sp (var "X" (listInnerType $ onStateValue variableType dv))))]
     ]
-    where iv = indepVar info
+    where optsVar = var "opts" (obj "Options")
+          iv = indepVar info
           dv = depVar info
           odeT = obj "IEnumerable<SolPoint>"
           vec = obj "Vector"

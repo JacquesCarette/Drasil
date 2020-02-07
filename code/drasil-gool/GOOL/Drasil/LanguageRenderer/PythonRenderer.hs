@@ -121,7 +121,7 @@ instance KeywordSym PythonCode where
   inherit n = toCode $ parens (text n)
   implements is = toCode $ parens (text $ intercalate ", " is)
 
-  list _ = toCode empty
+  list = toCode empty
 
   blockStart = toCode colon
   blockEnd = toCode empty
@@ -187,9 +187,9 @@ instance TypeSym PythonCode where
   string = pyStringType
   infile = toState $ typeFromData File "" empty
   outfile = toState $ typeFromData File "" empty
-  listType _ = onStateValue (\t -> typeFromData (List (getType t)) "[]" 
+  listType = onStateValue (\t -> typeFromData (List (getType t)) "[]" 
     (brackets empty))
-  arrayType = listType static
+  arrayType = listType
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
@@ -523,7 +523,7 @@ instance StatementSym PythonCode where
   getFileInputLine = getFileInput
   discardFileLine = G.discardFileLine "readline"
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
-    (listType static string) [litString [d]]))  
+    (listType string) [litString [d]]))  
 
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists
@@ -585,7 +585,7 @@ instance ControlStatementSym PythonCode where
           initv = litInt 0
           notify = oneLiner $ valState $ at obsList (valueOf index) $. f
 
-  getFileInputAll f v = v &= objMethodCall (listType static string) f
+  getFileInputAll f v = v &= objMethodCall (listType string) f
     "readlines" []
 
 instance ScopeSym PythonCode where

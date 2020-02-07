@@ -1,7 +1,6 @@
 module Test.SimpleODE (simpleODE) where
 
-import GOOL.Drasil (
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
   TypeSym(..), ControlBlockSym(..), StatementSym(..), VariableSym(..), 
   ValueSym(..), NumericExpression(..), MethodSym(..), ModuleSym(..), ODEInfo, 
   odeInfo, ODEOptions, odeOptions, ODEMethod(RK45), GS, MS, VS)
@@ -19,8 +18,8 @@ simpleODEMain = mainFunction (body [block [varDecDef odeConst (litFloat 3.5)],
 odeConst, odeDepVar, odeIndepVar :: (VariableSym repr) =>
   VS (repr (Variable repr))
 odeConst = var "c" float
-odeDepVar = var "T" (listType dynamic float)
-odeIndepVar = var "t" (listType dynamic float)
+odeDepVar = var "T" (listType float)
+odeIndepVar = var "t" (listType float)
 
 info :: (StatementSym repr) => ODEInfo repr
 info = odeInfo odeIndepVar odeDepVar [odeConst] (litFloat 0.0) (litFloat 10.0) 

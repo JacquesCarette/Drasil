@@ -1,9 +1,8 @@
 module Test.FileTests (fileTests) where
 
-import GOOL.Drasil (ProgramSym(..), FileSym(..),
-  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
-  StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..), 
-  MethodSym(..), ModuleSym(..), GS, MS)
+import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
+  TypeSym(..), StatementSym(..), ControlStatementSym(..), VariableSym(..), 
+  ValueSym(..), MethodSym(..), ModuleSym(..), GS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 fileTests :: (ProgramSym repr) => GS (repr (Program repr))
@@ -30,13 +29,13 @@ writeStory = block [
   varDec $ var "fileLine" string,
   getFileInputLine (valueOf $ var "fileToRead" infile) (var "fileLine" string),
   discardFileLine (valueOf $ var "fileToRead" infile),
-  listDec 0 (var "fileContents" (listType dynamic string))]
+  listDec 0 (var "fileContents" (listType string))]
 
 readStory :: (ProgramSym repr) => MS (repr (Statement repr))
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile) 
-  (var "fileContents" (listType dynamic string))
+  (var "fileContents" (listType string))
 
 goodBye :: (ProgramSym repr) => MS (repr (Block repr))
 goodBye = block [
-  printLn (valueOf $ var "fileContents" (listType dynamic string)), 
+  printLn (valueOf $ var "fileContents" (listType string)), 
   closeFile (valueOf $ var "fileToRead" infile)]

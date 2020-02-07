@@ -3,7 +3,7 @@
 module Language.Drasil.Code.Imperative.Import (
   publicFunc, privateMethod, publicInOutFunc, privateInOutMethod, 
   genConstructor, mkVar, mkVal, convExpr, genCalcBlock, CalcType(..), genModDef,
-  readData, renderC
+  genModFuncs, readData, renderC
 ) where
 
 import Language.Drasil hiding (int, log, ln, exp,
@@ -15,7 +15,7 @@ import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, genModule, mkParam)
 import Language.Drasil.Code.Imperative.Helpers (getUpperBound, liftS, lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
-import Language.Drasil.Code.Imperative.State (DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType, codevar, 
   quantvar, quantfunc)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
@@ -38,7 +38,7 @@ import qualified GOOL.Drasil as C (CodeType(List))
 
 import Prelude hiding (sin, cos, tan, log, exp)
 import Data.List ((\\), intersect)
-import qualified Data.Map as Map (lookup, member)
+import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
 import Control.Applicative ((<$>))
 import Control.Monad (liftM2,liftM3)
@@ -76,10 +76,9 @@ inputVariable :: (ProgramSym repr) => Structure -> ConstantRepr ->
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
   g <- ask
-  let inModName = "InputParameters"
+  let inClsName = "InputParameters"
   ip <- mkVar (codevar inParams)
-  return $ if currentModule g == inModName && Map.member inModName 
-    (eMap $ codeSpec g) then objVarSelf v else ip $-> v
+  return $ if currentClass g == inClsName then objVarSelf v else ip $-> v
 inputVariable Bundled Const v = do
   ip <- mkVar (codevar inParams)
   classVariable ip v
@@ -323,7 +322,11 @@ genCaseBlock t v c cs = do
 -- medium hacks --
 genModDef :: (ProgramSym repr) => Mod -> 
   Reader DrasilState (FS (repr (RenderFile repr)))
-genModDef (Mod n desc fs) = genModule n desc (Just $ mapM genFunc fs) Nothing
+genModDef (Mod n desc fs) = genModule n desc (map (fmap Just . genFunc) fs) []
+
+genModFuncs :: (ProgramSym repr) => Mod -> 
+  [Reader DrasilState (MS (repr (Method repr)))]
+genModFuncs (Mod _ _ fs) = map genFunc fs
 
 genFunc :: (ProgramSym repr) => Func -> Reader DrasilState (MS (repr (Method repr)))
 genFunc (FDef (FuncDef n desc parms o rd s)) = do

@@ -5,6 +5,7 @@ package GlassBR;
     \brief Provides functions for calculating the outputs
 */
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,7 +32,7 @@ public class Calculations {
         \param inParams structure holding the input values
         \return applied load (demand): 3 second duration equivalent pressure (Pa)
     */
-    public static double func_q(InputParameters inParams) throws Exception, IOException {
+    public static double func_q(InputParameters inParams) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_q called with inputs: {");
@@ -68,7 +69,7 @@ public class Calculations {
         \param J_tol stress distribution factor (Function) based on Pbtol
         \return tolerable load
     */
-    public static double func_q_hat_tol(InputParameters inParams, double J_tol) throws Exception, IOException {
+    public static double func_q_hat_tol(InputParameters inParams, double J_tol) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_q_hat_tol called with inputs: {");
@@ -88,7 +89,7 @@ public class Calculations {
         \param q_hat dimensionless load
         \return stress distribution factor (Function)
     */
-    public static double func_J(InputParameters inParams, double q_hat) throws Exception, IOException {
+    public static double func_J(InputParameters inParams, double q_hat) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_J called with inputs: {");

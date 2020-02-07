@@ -10,7 +10,7 @@ import Language.Drasil.Code.Imperative.Logging (maybeLog)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams, 
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
   getInputFormatOuts, getOutputParams)
-import Language.Drasil.Code.Imperative.State (DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
@@ -22,6 +22,7 @@ import GOOL.Drasil (ProgramSym, TypeSym(..), ValueSym(..), StatementSym(..),
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe, catMaybes)
+import Control.Applicative ((<|>))
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
@@ -95,10 +96,12 @@ getInOutCall n inFunc outFunc = do
 getCall :: String -> Reader DrasilState (Maybe String)
 getCall n = do
   g <- ask
-  let getCallExported Nothing = getCallDefined (Map.lookup n $ defMap $ 
+  let currc = currentClass g
+      getCallExported Nothing = getCallInClass (Map.lookup n $ clsMap $ 
         codeSpec g)
       getCallExported m = return m
-      getCallDefined Nothing = return Nothing
-      getCallDefined (Just m) = if m == currentModule g then return (Just m)
+      getCallInClass Nothing = return Nothing
+      getCallInClass (Just c) = if c == currc then return $ Map.lookup c (eMap 
+        $ codeSpec g) <|> error (c ++ " class missing from export map")
         else return Nothing
   getCallExported $ Map.lookup n (eMap $ codeSpec g)

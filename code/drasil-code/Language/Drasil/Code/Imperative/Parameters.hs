@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 ) where
 
 import Language.Drasil 
-import Language.Drasil.Code.Imperative.State (DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), codevar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
@@ -28,7 +28,7 @@ getInConstructorParams = do
   let getCParams False = []
       getCParams True = [codevar inFileName]
   getParams In $ getCParams $ member "InputParameters" (eMap $ codeSpec g) && 
-    member "get_input" (defMap $ codeSpec g)
+    member "get_input" (clsMap $ codeSpec g)
 
 getInputFormatIns :: Reader DrasilState [CodeChunk]
 getInputFormatIns = do
@@ -97,9 +97,8 @@ getInputVars _ _ _ [] = return []
 getInputVars _ Unbundled _ cs = return cs
 getInputVars pt Bundled Var _ = do
   g <- ask
-  let mname = "InputParameters"
-  return [codevar inParams | not (currentModule g == mname && member mname 
-    (eMap $ codeSpec g)) && isIn pt]
+  let cname = "InputParameters"
+  return [codevar inParams | currentClass g /= cname && isIn pt]
 getInputVars _ Bundled Const _ = return []
 
 getConstVars :: ParamType -> ConstantStructure -> ConstantRepr -> [CodeChunk] 

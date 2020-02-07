@@ -47,17 +47,17 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
   increment1, varDec, varDecDef, listDec, arrayDec, arrayDecDef, objDecNew, 
-  objDecNewNoParams, funcDecDef, discardInput, discardFileInput, openFileR, 
-  openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
-  stringListLists, returnState, multiReturnError, valState, comment, freeError, 
-  throw, initState, changeState, initObserverList, addObserver, ifCond, 
-  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
-  tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
-  pubMVar, pubGVar, buildClass, enum, privClass, pubClass, implementingClass, 
-  docClass, commentedClass, buildModule', modFromData, fileDoc, docMod, 
-  fileFromData)
+  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, 
+  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
+  discardFileLine, stringListVals, stringListLists, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, changeState,
+  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
+  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
+  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
+  constructor, docMain, function, mainFunction, docFunc, intFunc, stateVar, 
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
+  privClass, pubClass, implementingClass, docClass, commentedClass, 
+  buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -72,8 +72,8 @@ import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS,
   lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, 
   modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFiles, 
   getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
-  addLibImport, addLibImports, getModuleName, getClassName, setCurrMain, 
-  setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
+  addLibImport, addLibImports, getModuleName, setFileType, getClassName, 
+  setCurrMain, setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
   setOutputsDeclared, isOutputsDeclared, getExceptions, getMethodExcMap, 
   addExceptions)
 
@@ -114,9 +114,9 @@ instance RenderSym JavaCode
 
 instance FileSym JavaCode where
   type RenderFile JavaCode = FileData 
-  fileDoc = G.fileDoc Combined jExt top bottom
+  fileDoc m = modify (setFileType Combined) >> G.fileDoc jExt top bottom m
 
-  docMod = G.docMod
+  docMod = G.docMod jExt
 
   commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
@@ -386,28 +386,24 @@ instance BooleanExpression JavaCode where
   
 instance ValueExpression JavaCode where
   inlineIf = G.inlineIf
-  funcApp n t vs = do
-    cm <- zoom lensVStoFS getModuleName
-    mem <- getMethodExcMap
-    modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ n) mem))
-    G.funcApp n t vs
-  selfFuncApp n t vs = do
-    slf <- self :: VS (JavaCode (Variable JavaCode))
-    mem <- getMethodExcMap
-    let tp = getTypeString (variableType slf)
-    modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ n) mem))
-    G.selfFuncApp self n t vs
+  -- Exceptions from function/method calls should already be in the exception 
+  -- map from the CodeInfo pass, but it's possible that one of the higher-level 
+  -- functions implicitly calls these functions in the Java renderer, so we 
+  -- also check here to add the exceptions from the called function to the map
+  funcApp n t vs = addCallExcsCurrMod n >> G.funcApp n t vs
+  selfFuncApp n t vs = addCallExcsCurrMod n >> G.selfFuncApp self n t vs
   extFuncApp l n t vs = do
     mem <- getMethodExcMap
     modify (maybe id addExceptions (Map.lookup (l ++ "." ++ n) mem))
     G.extFuncApp l n t vs
-  newObj ot vs = do
+  newObj ot vs = addConstructorCallExcsCurrMod ot (\t -> G.newObj newObjDocD t
+    vs)
+  extNewObj l ot vs = do
     t <- ot
     mem <- getMethodExcMap
     let tp = getTypeString t
-    modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ tp) mem))
-    G.newObj newObjDocD ot vs
-  extNewObj _ = newObj
+    modify (maybe id addExceptions (Map.lookup (l ++ "." ++ tp) mem))
+    newObj (toState t) vs
 
   lambda = G.lambda jLambda
 
@@ -523,9 +519,9 @@ instance StatementSym JavaCode where
   arrayDecDef = G.arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew _ = objDecNew
+  extObjDecNew = G.extObjDecNew
   objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams _ = objDecNewNoParams
+  extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkSt $ 
     jConstDecDef vr vl) vr' vl'
   funcDecDef = G.funcDecDef
@@ -614,6 +610,7 @@ instance ScopeSym JavaCode where
 
 instance InternalScope JavaCode where
   scopeDoc = unJC
+  scopeFromData _ = toCode
 
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
@@ -988,3 +985,19 @@ jDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
   rets (f s p (map snd is) (map snd os) (map snd bs) b)
   where rets = "array containing the following values:" : map fst bs ++ 
           map fst os
+
+addCallExcsCurrMod :: String -> VS ()
+addCallExcsCurrMod n = do
+  cm <- zoom lensVStoFS getModuleName
+  mem <- getMethodExcMap
+  modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ n) mem))
+
+addConstructorCallExcsCurrMod :: (RenderSym repr) => VS (repr (Type repr)) -> 
+  (VS (repr (Type repr)) -> VS (repr (Value repr))) -> VS (repr (Value repr))
+addConstructorCallExcsCurrMod ot f = do
+  t <- ot
+  cm <- zoom lensVStoFS getModuleName
+  mem <- getMethodExcMap
+  let tp = getTypeString t
+  modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ tp) mem))
+  f (toState t)

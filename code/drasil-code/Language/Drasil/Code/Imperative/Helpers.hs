@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.Helpers (
 
 import Language.Drasil
 import Database.Drasil (symbResolve)
-import Language.Drasil.Code.Imperative.State (DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..))
 
 import Control.Monad.Reader (Reader)

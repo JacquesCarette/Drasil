@@ -48,14 +48,15 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listAccessFunc', listSetFunc, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
   increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
-  objDecNewNoParams, constDecDef, funcDecDef, discardInput, discardFileInput, 
-  closeFile, stringListVals, stringListLists, returnState, multiReturnError, 
-  valState, comment, throw, initState, changeState, initObserverList, 
-  addObserver, ifCond, ifNoElse, switch, switchAsIf, for, forRange, while, 
-  tryCatch, notifyObservers, construct, param, method, getMethod, setMethod, 
-  privMethod, pubMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
-  privMVar, pubMVar, pubGVar, privClass, pubClass, docClass, commentedClass, 
-  buildModule, modFromData, fileDoc, docMod, fileFromData)
+  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, constDecDef, 
+  funcDecDef, discardInput, discardFileInput, closeFile, stringListVals, 
+  stringListLists, returnState, multiReturnError, valState, comment, throw, 
+  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
+  switch, switchAsIf, for, forRange, while, tryCatch, notifyObservers, 
+  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
+  constructor, function, docFunc, docInOutFunc, intFunc, privMVar, pubMVar, 
+  pubGVar, privClass, pubClass, docClass, commentedClass, buildModule, 
+  modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
@@ -75,8 +76,8 @@ import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS,
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine, 
   getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
-  addHeaderUsing, getHeaderUsing, setClassName, getClassName, setCurrMain, 
-  getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
+  addHeaderUsing, getHeaderUsing, setFileType, setClassName, getClassName, 
+  setCurrMain, getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
   getCurrMainFunc, setODEOthVars, getODEOthVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
@@ -85,9 +86,9 @@ import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (State, modify, runState)
 import qualified Data.Map as Map (lookup)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, 
-  brackets, comma, empty, equals, semi, hcat, vcat, lbrace, rbrace, quotes, render, 
-  colon)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), hcat, brackets, 
+  braces, parens, comma, empty, equals, semi, vcat, lbrace, rbrace, quotes, 
+  render, colon, isEmpty)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -129,7 +130,7 @@ instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
   
-  fileFromData ft fp = pair1 (fileFromData ft fp) (fileFromData ft fp)
+  fileFromData fp = pair1 (fileFromData fp) (fileFromData fp)
 
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
@@ -691,6 +692,7 @@ instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => InternalScope (p CppSrcCode CppHdrCode) where
   scopeDoc s = scopeDoc $ pfst s
+  scopeFromData s d = pair (scopeFromData s d) (scopeFromData s d)
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
   type MethodType (p CppSrcCode CppHdrCode) = TypeData
@@ -1043,9 +1045,9 @@ instance RenderSym CppSrcCode
   
 instance FileSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
-  fileDoc = G.fileDoc Source cppSrcExt top bottom
+  fileDoc m = modify (setFileType Source) >> G.fileDoc cppSrcExt top bottom m
 
-  docMod = G.docMod
+  docMod = G.docMod cppSrcExt
 
   commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then on2CodeValues 
     commentedModD m cmt else m) mod cmnt getCurrMain
@@ -1430,9 +1432,9 @@ instance StatementSym CppSrcCode where
     (mapM (zoom lensMStoVS) vals)
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew l v vs = modify (addModuleImport l) >> objDecNew v vs
+  extObjDecNew = G.extObjDecNew
   objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams l v = modify (addModuleImport l) >> objDecNewNoParams v
+  extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef = G.constDecDef
   funcDecDef = G.funcDecDef
 
@@ -1544,6 +1546,7 @@ instance ScopeSym CppSrcCode where
 
 instance InternalScope CppSrcCode where
   scopeDoc = fst . unCPPSC
+  scopeFromData s d = toCode (d, s)
 
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
@@ -1655,15 +1658,15 @@ instance InternalClass CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n = G.buildModule n ((\ds lis libis mis us mn -> vibcat [
-    if mn then empty else importDoc $ mi n,
+  buildModule n ms cs = G.buildModule n ((\ds lis libis mis us mn -> vibcat [
+    if mn && length ms + length cs == 1 then empty else importDoc $ mi n,
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
     vcat (map (importDoc . mi) (libis ++ mis)),
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppSrcCode (Keyword CppSrcCode))) us)]) 
     <$> getDefines <*> getLangImports <*> getLibImports <*> getModuleImports 
-    <*> getUsing <*> getCurrMain)
+    <*> getUsing <*> getCurrMain) (toState empty) ms cs
     where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
           mi = modImport
           li = langImport
@@ -1703,12 +1706,13 @@ instance RenderSym CppHdrCode
 
 instance FileSym CppHdrCode where
   type RenderFile CppHdrCode = FileData
-  fileDoc = G.fileDoc Header cppHdrExt top bottom
+  fileDoc m = modify (setFileType Header) >> G.fileDoc cppHdrExt top bottom m
   
-  docMod = G.docMod
+  docMod = G.docMod cppHdrExt
 
-  commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then m else 
-    on2CodeValues commentedModD m cmt) mod cmnt getCurrMain
+  commentedMod cmnt mod = on2StateValues (\m cmt -> if isEmpty (moduleDoc $ 
+    onCodeValue fileMod m) then m else on2CodeValues commentedModD m cmt) 
+    mod cmnt
 
 instance InternalFile CppHdrCode where
   top = onCodeValue cpphtop
@@ -2153,6 +2157,7 @@ instance ScopeSym CppHdrCode where
 
 instance InternalScope CppHdrCode where
   scopeDoc = fst . unCPPHC
+  scopeFromData s d = toCode (d, s)
 
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = TypeData
@@ -2203,9 +2208,9 @@ instance MethodSym CppHdrCode where
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
 instance InternalMethod CppHdrCode where
-  intMethod m n s _ t ps _ = modify (setScope (snd $ unCPPHC s) . if m then 
-    setCurrMain else id) >> on1StateValue1List (\tp pms -> methodFromData (snd 
-    $ unCPPHC s) $ cpphMethod n tp pms endStatement) t ps
+  intMethod _ n s _ t ps _ = modify (setScope (snd $ unCPPHC s)) >> 
+    on1StateValue1List (\tp pms -> methodFromData (snd $ unCPPHC s) $ 
+    cpphMethod n tp pms endStatement) t ps
   intFunc = G.intFunc
   commentedFunc = cppCommentedFunc Header
 
@@ -2265,7 +2270,7 @@ instance ModuleSym CppHdrCode where
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppHdrCode (Keyword CppHdrCode))) us)]) 
     <$> getHeaderDefines <*> getHeaderLangImports <*> getHeaderLibImports <*> 
-    getHeaderModImports <*> getHeaderUsing)
+    getHeaderModImports <*> getHeaderUsing) (toState empty)
     where mi, li :: Label -> CppHdrCode (Import CppHdrCode)
           mi = modImport
           li = langImport

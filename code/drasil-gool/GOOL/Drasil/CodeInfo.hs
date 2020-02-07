@@ -80,7 +80,7 @@ instance TypeSym CodeInfo where
   string = noInfoType
   infile = noInfoType
   outfile = noInfoType
-  listType _ _ = noInfoType
+  listType _ = noInfoType
   arrayType _ = noInfoType
   listInnerType _ = noInfoType
   obj = toState . toCode
@@ -118,7 +118,7 @@ instance VariableSym CodeInfo where
   extClassVar _ _ = noInfo
   objVar _ _ = noInfo
   objVarSelf _ = noInfo
-  listVar _ _ _ = noInfo
+  listVar _ _ = noInfo
   listOf _ _ = noInfo
   arrayElem _ _ = noInfo
   iterVar _ _ = noInfo

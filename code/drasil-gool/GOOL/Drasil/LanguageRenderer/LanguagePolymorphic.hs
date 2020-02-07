@@ -59,7 +59,7 @@ import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   InternalMod(moduleDoc, updateModuleDoc), BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData), 
   BodySym(oneLiner), BlockSym(block), 
-  TypeSym(bool, int, float, char, string, listType, listInnerType, void), 
+  TypeSym(bool, int, float, char, string, listType, arrayType, listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
   ValueSym(litTrue, litFalse, litInt, litString, valueOf),
   ValueExpression(funcApp, newObj, extNewObj, notNull, lambda), 
@@ -150,10 +150,10 @@ string = toState $ typeFromData String "string" (text "string")
 fileType :: (RenderSym repr) => VS (repr (Type repr))
 fileType = toState $ typeFromData File "File" (text "File")
 
-listType :: (RenderSym repr) => repr (Permanence repr) -> VS (repr (Type repr)) 
-  -> VS (repr (Type repr))
-listType p = onStateValue (\t -> typeFromData (List (getType t)) (render 
-  (keyDoc $ list p) ++ "<" ++ getTypeString t ++ ">") (keyDoc (list p) <> 
+listType :: (RenderSym repr) => repr (Keyword repr) -> VS (repr (Type repr)) -> 
+  VS (repr (Type repr))
+listType lst = onStateValue (\t -> typeFromData (List (getType t)) (render 
+  (keyDoc lst) ++ "<" ++ getTypeString t ++ ">") (keyDoc lst <> 
   angles (getTypeDoc t)))
 
 arrayType :: (RenderSym repr) => VS (repr (Type repr)) -> VS (repr (Type repr))
@@ -430,13 +430,13 @@ objVarSelf :: (RenderSym repr) => VS (repr (Variable repr)) ->
   VS (repr (Variable repr))
 objVarSelf = S.objVar S.self
 
-listVar :: (RenderSym repr) => Label -> repr (Permanence repr) -> 
-  VS (repr (Type repr)) -> VS (repr (Variable repr))
-listVar n p t = S.var n (listType p t)
+listVar :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
+  VS (repr (Variable repr))
+listVar n t = S.var n (S.listType t)
 
 listOf :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   VS (repr (Variable repr))
-listOf n = S.listVar n static
+listOf = S.listVar
 
 arrayElem :: (RenderSym repr) => VS (repr (Value repr)) -> 
   VS (repr (Variable repr)) -> VS (repr (Variable repr))
@@ -483,7 +483,7 @@ enumElement :: (RenderSym repr) => Label -> Label -> VS (repr (Value repr))
 enumElement en e = mkStateVal (enumType en) (enumElemDocD en e)
 
 argsList :: (RenderSym repr) => String -> VS (repr (Value repr))
-argsList l = mkStateVal (listType static S.string) (text l)
+argsList l = mkStateVal (S.arrayType S.string) (text l)
 
 inlineIf :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
   -> VS (repr (Value repr)) -> VS (repr (Value repr))
@@ -600,12 +600,12 @@ listSizeFunc = S.func "size" S.int []
 
 listAddFunc :: (RenderSym repr) => Label -> VS (repr (Value repr)) -> 
   VS (repr (Value repr)) -> VS (repr (Function repr))
-listAddFunc f i v = S.func f (listType static $ onStateValue valueType v) 
+listAddFunc f i v = S.func f (S.listType $ onStateValue valueType v) 
   [i, v]
 
 listAppendFunc :: (RenderSym repr) => Label -> VS (repr (Value repr)) -> 
   VS (repr (Function repr))
-listAppendFunc f v = S.func f (listType static $ onStateValue valueType v) [v]
+listAppendFunc f v = S.func f (S.listType $ onStateValue valueType v) [v]
 
 iterBeginError :: String -> String
 iterBeginError l = "Attempt to use iterBeginFunc in " ++ l ++ ", but " ++ l ++ 
@@ -855,7 +855,7 @@ changeState fsmName tState = S.var fsmName S.string &= S.litString tState
 
 initObserverList :: (RenderSym repr) => VS (repr (Type repr)) -> 
   [VS (repr (Value repr))] -> MS (repr (Statement repr))
-initObserverList t = S.listDecDef (S.var observerListName (S.listType static t))
+initObserverList t = S.listDecDef (S.var observerListName (S.listType t))
 
 addObserver :: (RenderSym repr) => VS (repr (Value repr)) -> 
   MS (repr (Statement repr))

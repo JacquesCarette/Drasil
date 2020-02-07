@@ -134,7 +134,7 @@ instance KeywordSym JavaCode where
   inherit n = toCode $ text "extends" <+> text n
   implements is = toCode $ text "implements" <+> text (intercalate ", " is) 
 
-  list _ = toCode $ text "ArrayList"
+  list = toCode $ text "ArrayList"
 
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
@@ -200,7 +200,7 @@ instance TypeSym JavaCode where
   string = jStringType
   infile = jInfileType
   outfile = jOutfileType
-  listType = jListType
+  listType = jListType list
   arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
@@ -550,8 +550,8 @@ instance StatementSym JavaCode where
   discardFileLine = G.discardFileLine "nextLine"
   stringSplit d vnew s = modify (addLangImport "java.util.Arrays") >> 
     onStateValue mkSt (zoom lensMStoVS $ jStringSplit vnew (funcApp 
-    "Arrays.asList" (listType static string) 
-    [s $. func "split" (listType static string) [litString [d]]]))
+    "Arrays.asList" (listType string) 
+    [s $. func "split" (listType string) [litString [d]]]))
 
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists
@@ -806,16 +806,15 @@ jOutfileType :: (RenderSym repr) => VS (repr (Type repr))
 jOutfileType = modifyReturn (addLangImportVS "java.io.PrintWriter") $ 
   typeFromData File "PrintWriter" (text "PrintWriter")
 
-jListType :: (RenderSym repr) => repr (Permanence repr) -> VS (repr (Type repr))
-  -> VS (repr (Type repr))
-jListType p t = modify (addLangImportVS $ "java.util." ++ render lst) >> 
+jListType :: (RenderSym repr) => repr (Keyword repr) -> VS (repr (Type repr)) -> VS (repr (Type repr))
+jListType l t = modify (addLangImportVS $ "java.util." ++ render lst) >> 
   (t >>= (jListType' . getType))
   where jListType' Integer = toState $ typeFromData (List Integer) (render lst 
           ++ "<Integer>") (lst <> angles (text "Integer"))
         jListType' Float = toState $ typeFromData (List Float) (render lst ++ "<Double>") 
           (lst <> angles (text "Double"))
-        jListType' _ = G.listType p t
-        lst = keyDoc $ list p
+        jListType' _ = G.listType l t
+        lst = keyDoc l
 
 jArrayType :: VS (JavaCode (Type JavaCode))
 jArrayType = arrayType (obj "Object")

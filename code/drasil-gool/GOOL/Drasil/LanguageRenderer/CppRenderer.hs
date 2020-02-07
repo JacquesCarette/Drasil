@@ -140,7 +140,7 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   inherit n = pair (inherit n) (inherit n)
   implements is = pair (implements is) (implements is)
 
-  list p = pair (list $ pfst p) (list $ psnd p)
+  list = pair list list
 
   blockStart = pair blockStart blockStart
   blockEnd = pair blockEnd blockEnd
@@ -206,7 +206,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   string = on2StateValues pair string string
   infile = on2StateValues pair infile infile
   outfile = on2StateValues pair outfile outfile
-  listType p = pair1 (listType (pfst p)) (listType (psnd p))
+  listType = pair1 listType listType
   arrayType = pair1 arrayType arrayType
   listInnerType = pair1 listInnerType listInnerType
   obj t = on2StateValues pair (obj t) (obj t)
@@ -362,7 +362,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   extClassVar = pair2 extClassVar extClassVar
   objVar = pair2 objVar objVar
   objVarSelf = pair1 objVarSelf objVarSelf
-  listVar n p = pair1 (listVar n (pfst p)) (listVar n (psnd p))
+  listVar n = pair1 (listVar n) (listVar n)
   listOf n = pair1 (n `listOf`) (n `listOf`)
   arrayElem i = pair1 (arrayElem i) (arrayElem i)
   iterVar l = pair1 (iterVar l) (iterVar l)
@@ -1067,7 +1067,7 @@ instance KeywordSym CppSrcCode where
   implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
     . fst) public
 
-  list _ = toCode $ text "vector"
+  list = toCode $ text "vector"
 
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
@@ -1134,8 +1134,8 @@ instance TypeSym CppSrcCode where
   string = modify (addUsing "string" . addLangImportVS "string") >> G.string
   infile = modify (addUsing "ifstream") >> cppInfileType
   outfile = modify (addUsing "ofstream") >> cppOutfileType
-  listType p t = modify (addUsing lst . addLangImportVS lst) >> G.listType p t
-    where lst = render $ keyDoc (list p)
+  listType t = modify (addUsing lst . addLangImportVS lst) >> G.listType list t
+    where lst = render $ keyDoc (list :: CppSrcCode (Keyword CppSrcCode))
   arrayType = cppArrayType
   listInnerType = G.listInnerType
   obj n = zoom lensVStoMS getClassName >>= (\cn -> if cn == n then G.obj n else 
@@ -1143,8 +1143,7 @@ instance TypeSym CppSrcCode where
     (Map.lookup n cm) (G.obj n)))
   enumType = G.enumType
   funcType = G.funcType
-  iterator t = modify (addLangImportVS "iterator") >> 
-    (cppIterType . listType dynamic) t
+  iterator t = modify (addLangImportVS "iterator") >> (cppIterType . listType) t
   void = G.void
 
   getType = cType . unCPPSC
@@ -1159,7 +1158,7 @@ instance ControlBlockSym CppSrcCode where
 
   listSlice' = G.listSlice
 
-  solveODE info opts = let (fl, s) = cppODEFile info dynamic
+  solveODE info opts = let (fl, s) = cppODEFile info
                            dv = depVar info
     in modify (addODEFilePaths s . addODEFiles [unCPPSC fl] . addLibImport 
     "boost/numeric/odeint") >> (zoom lensMStoVS dv >>= (\dpv -> 
@@ -1382,8 +1381,8 @@ instance InternalFunction CppSrcCode where
   setFunc = G.setFunc
 
   listSizeFunc = G.listSizeFunc
-  listAddFunc l i v = func "insert" (listType static $ onStateValue valueType  
-    v) [iterBegin l #+ i, v]
+  listAddFunc l i v = func "insert" (listType $ onStateValue valueType v) 
+    [iterBegin l #+ i, v]
   listAppendFunc = G.listAppendFunc "push_back"
 
   iterBeginFunc t = func "begin" (iterator t) []
@@ -1730,7 +1729,7 @@ instance KeywordSym CppHdrCode where
     . fst) public
 
 
-  list _ = toCode $ text "vector"
+  list = toCode $ text "vector"
 
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
@@ -1798,9 +1797,9 @@ instance TypeSym CppHdrCode where
     G.string
   infile = modify (addHeaderUsing "ifstream") >> cppInfileType
   outfile = modify (addHeaderUsing "ofstream") >> cppOutfileType
-  listType p t = modify (addHeaderUsing lst . addHeaderLangImport lst) >> 
-    G.listType p t
-    where lst = render $ keyDoc (list p)
+  listType t = modify (addHeaderUsing lst . addHeaderLangImport lst) >> 
+    G.listType list t
+    where lst = render $ keyDoc (list :: CppHdrCode (Keyword CppHdrCode))
   arrayType = cppArrayType
   listInnerType = G.listInnerType
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
@@ -1808,7 +1807,7 @@ instance TypeSym CppHdrCode where
   enumType = G.enumType
   funcType = G.funcType
   iterator t = modify (addHeaderLangImport "iterator") >> 
-    (cppIterType . listType dynamic) t
+    (cppIterType . listType) t
   void = G.void
 
   getType = cType . unCPPHC
@@ -1823,7 +1822,7 @@ instance ControlBlockSym CppHdrCode where
 
   listSlice' _ _ _ _ _ = toState $ toCode empty
 
-  solveODE info _ = let (fl, s) = cppODEFile info dynamic
+  solveODE info _ = let (fl, s) = cppODEFile info
     in modify (addODEFilePaths s . addODEFiles [unCPPHC fl]) >> 
     toState (toCode empty)
 
@@ -1885,7 +1884,7 @@ instance VariableSym CppHdrCode where
     ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
   objVarSelf _ = mkStateVar "" void empty
-  listVar _ _ _ = mkStateVar "" void empty
+  listVar _ _ = mkStateVar "" void empty
   listOf _ _ = mkStateVar "" void empty
   arrayElem _ _ = mkStateVar "" void empty
   iterVar _ _ = mkStateVar "" void empty
@@ -2360,9 +2359,9 @@ cppODEMethod info opts = listInnerType (onStateValue variableType $ depVar info)
       stepper _ = error "Chosen ODE method unavailable in C++"
   in stepper (solveMethod opts))  
 
-cppODEFile :: (RenderSym repr) => ODEInfo repr -> repr (Permanence repr) ->
+cppODEFile :: (RenderSym repr) => ODEInfo repr ->
   (repr (RenderFile repr), GOOLState)
-cppODEFile info p = (fl, fst s)
+cppODEFile info = (fl, fst s)
   where (fl, s) = runState odeFile (initialState, initialFS)
         olddv = depVar info
         oldiv = indepVar info
@@ -2371,7 +2370,7 @@ cppODEFile info p = (fl, fst s)
           let n = variableName dpv
               t = variableName idpv
               -- dv below is a hack. Needed to "rebuild" it because its state has already been evaluated higher up (for building the file where the ode solver is called) (the evaluation happens in the pair instance). This hack won't be necessary when we do things right as this file won't be built so deep in GOOL.
-              dv = var (variableName dpv) (listType p $ innerVarType dpv)
+              dv = var (variableName dpv) (listType $ innerVarType dpv)
               cn = n ++ "_ODE"
               dn = "d" ++ n ++ "d" ++ t
               innerVarType = (listInnerType . toState . variableType)

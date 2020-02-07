@@ -125,7 +125,7 @@ instance KeywordSym CSharpCode where
   inherit n = toCode $ colon <+> text n
   implements is = toCode $ colon <+> text (intercalate ", " is)
 
-  list _ = toCode $ text "List"
+  list = toCode $ text "List"
 
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
@@ -191,8 +191,8 @@ instance TypeSym CSharpCode where
   string = G.string
   infile = csInfileType
   outfile = csOutfileType
-  listType p t = modify (addLangImportVS "System.Collections.Generic") >> 
-    G.listType p t
+  listType t = modify (addLangImportVS "System.Collections.Generic") >> 
+    G.listType list t
   arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
@@ -518,8 +518,8 @@ instance StatementSym CSharpCode where
 
   getFileInputLine = getFileInput
   discardFileLine = G.discardFileLine "ReadLine"
-  stringSplit d vnew s = assign vnew $ newObj (listType dynamic string) 
-    [s $. func "Split" (listType static string) [litChar d]]
+  stringSplit d vnew s = assign vnew $ newObj (listType string) 
+    [s $. func "Split" (listType string) [litChar d]]
 
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists

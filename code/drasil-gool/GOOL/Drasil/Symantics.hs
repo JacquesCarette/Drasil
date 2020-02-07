@@ -69,7 +69,7 @@ class (PermanenceSym repr) => KeywordSym repr where
   inherit :: Label -> repr (Keyword repr)
   implements :: [Label] -> repr (Keyword repr)
 
-  list     :: repr (Permanence repr) -> repr (Keyword repr)
+  list     :: repr (Keyword repr)
 
   blockStart :: repr (Keyword repr)
   blockEnd   :: repr (Keyword repr)
@@ -135,8 +135,7 @@ class (PermanenceSym repr) => TypeSym repr where
   string        :: VS (repr (Type repr))
   infile        :: VS (repr (Type repr))
   outfile       :: VS (repr (Type repr))
-  listType      :: repr (Permanence repr) -> VS (repr (Type repr)) -> 
-    VS (repr (Type repr))
+  listType      :: VS (repr (Type repr)) -> VS (repr (Type repr))
   arrayType     :: VS (repr (Type repr)) -> VS (repr (Type repr))
   listInnerType :: VS (repr (Type repr)) -> VS (repr (Type repr))
   obj           :: Label -> VS (repr (Type repr))
@@ -231,8 +230,7 @@ class (TypeSym repr) => VariableSym repr where
     VS (repr (Variable repr))
   objVarSelf   :: VS (repr (Variable repr)) -> VS (repr (Variable repr))
   enumVar      :: Label -> Label -> VS (repr (Variable repr))
-  listVar      :: Label -> repr (Permanence repr) -> VS (repr (Type repr)) -> 
-    VS (repr (Variable repr))
+  listVar      :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
   listOf       :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
   -- Use for iterator variables, i.e. in a forEach loop.
   arrayElem    :: Integer -> VS (repr (Variable repr)) -> 

@@ -46,7 +46,7 @@ library
     multiplate >= 0.0.2,
     data-fix (>= 0.0.4 && <= 1.0),
     drasil-lang >= 0.1.59,
-    drasil-data >= 0.1.12,
+    drasil-data >= 0.1.13,
     drasil-database >= 0.1.1,
     drasil-theory >= 0.1.0,
     drasil-utils >= 0.1.0

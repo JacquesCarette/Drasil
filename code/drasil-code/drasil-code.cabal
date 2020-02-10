@@ -1,5 +1,5 @@
 Name:		  drasil-code
-Version:	0.1.8
+Version:	0.1.9
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -15,6 +15,7 @@ library
     , Language.Drasil.Code.Code
     , Language.Drasil.Code.CodeQuantityDicts
     , Language.Drasil.Code.DataDesc
+    , Language.Drasil.Code.ExternalLibrary
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
     , Language.Drasil.Code.Imperative.ConceptMatch

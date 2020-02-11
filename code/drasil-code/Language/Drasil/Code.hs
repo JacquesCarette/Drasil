@@ -15,9 +15,10 @@ module Language.Drasil.Code (
   FunctionInterface, Argument, externalLib, choiceStep, mandatoryStep, 
   libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
   loopConditionFunction, loopConditionMethod, loopedFunction, loopedMethod, 
-  loopedFunctionWithResult, loopedMethodWithResult, lockedArg, lockedNamedArg, 
-  inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, functionArg, 
-  customObjArg, recordArg, unknown, interface, methodInterface,
+  loopedFunctionWithResult, loopedMethodWithResult, libConstructor, lockedArg, 
+  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
+  functionArg, customObjArg, recordArg, unknown, interface, methodInterface,
+  iterateStep,
   PackageSym(..),
   CodeChunk, codevar, quantvar, CodeQuantityDict, implCQD,
   unPP, unJP, unCSP, unCPPP
@@ -39,9 +40,10 @@ import Language.Drasil.Code.ExternalLibrary (ExternalLibrary,
   FunctionInterface, Argument, externalLib, choiceStep, mandatoryStep, 
   libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
   loopConditionFunction, loopConditionMethod, loopedFunction, loopedMethod, 
-  loopedFunctionWithResult, loopedMethodWithResult, lockedArg, lockedNamedArg, 
-  inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, functionArg, 
-  customObjArg, recordArg, unknown, interface, methodInterface)
+  loopedFunctionWithResult, loopedMethodWithResult, libConstructor, lockedArg, 
+  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
+  functionArg, customObjArg, recordArg, unknown, interface, methodInterface,
+  iterateStep)
 
 import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec(..), 
   CodeSystInfo(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), Func, 

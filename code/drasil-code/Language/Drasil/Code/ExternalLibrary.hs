@@ -2,9 +2,10 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary,
   FunctionInterface, Argument, externalLib, choiceStep, mandatoryStep, 
   libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
   loopConditionFunction, loopConditionMethod, loopedFunction, loopedMethod, 
-  loopedFunctionWithResult, loopedMethodWithResult, lockedArg, lockedNamedArg, 
-  inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, functionArg, 
-  customObjArg, recordArg, unknown, interface, methodInterface
+  loopedFunctionWithResult, loopedMethodWithResult, libConstructor, lockedArg, 
+  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
+  functionArg, customObjArg, recordArg, unknown, interface, methodInterface,
+  iterateStep
 ) where
 
 import Language.Drasil
@@ -20,7 +21,9 @@ type Condition = Expr
 
 type ExternalLibrary = [Step]
 
-type Step = [FunctionInterface]
+data Step = Call [FunctionInterface]
+  -- A foreach loop - CodeChunk to iterate through, CodeChunk for iteration variable, loop body
+  | Iterate CodeChunk CodeChunk ([CodeChunk] -> [FuncStmt])
 
 data FunctionInterface = FI FuncType FuncName [Argument] [ContextAttribute]
 
@@ -42,16 +45,16 @@ data Interface = Unknown | Implements String [MethodInterface]
 
 data MethodInterface = MI FuncName [CodeChunk] CodeType -- Name, parameters, return type
 
-data FuncType = Function | Method CodeChunk
+data FuncType = Function | Method CodeChunk | Constructor
 
 externalLib :: [Step] -> ExternalLibrary
 externalLib = id
 
 choiceStep :: [FunctionInterface] -> Step
-choiceStep = id
+choiceStep = Call
 
 mandatoryStep :: FunctionInterface -> Step
-mandatoryStep f = [f]
+mandatoryStep f = Call [f]
 
 libFunction :: FuncName -> [Argument] -> FunctionInterface
 libFunction n ps = FI Function n ps []
@@ -93,6 +96,9 @@ loopedMethodWithResult :: CodeChunk -> FuncName -> [Argument] -> CodeChunk ->
 loopedMethodWithResult o n ps r loop = FI (Method o) n ps [Assignment r, 
   LoopBody loop]
 
+libConstructor :: FuncName -> [Argument] -> CodeChunk -> FunctionInterface
+libConstructor n as c = FI Constructor n as [Assignment c] 
+
 lockedArg :: Expr -> Argument
 lockedArg = Locked Nothing
 
@@ -128,3 +134,6 @@ interface = Implements
 
 methodInterface :: FuncName -> [CodeChunk] -> CodeType -> MethodInterface
 methodInterface = MI
+
+iterateStep :: CodeChunk -> CodeChunk -> ([CodeChunk] -> [FuncStmt]) -> Step
+iterateStep = Iterate

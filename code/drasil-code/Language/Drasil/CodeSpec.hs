@@ -241,6 +241,7 @@ data FuncDef where
  
 data FuncStmt where
   FAsg :: CodeChunk -> Expr -> FuncStmt
+  FAsgIndex :: CodeChunk -> Integer -> Expr -> FuncStmt
   FFor :: CodeChunk -> Expr -> [FuncStmt] -> FuncStmt
   FWhile :: Expr -> [FuncStmt] -> FuncStmt
   FCond :: Expr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
@@ -331,6 +332,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     fstvars :: ChunkDB -> FuncStmt -> [CodeChunk]
     fstvars _  (FDec cch) = [cch]
     fstvars sm (FAsg cch e) = cch:codevars' e sm
+    fstvars sm (FAsgIndex cch _ e) = cch:codevars' e sm
     fstvars sm (FFor cch e fs) = delete cch $ nub (codevars' e sm ++ concatMap (fstvars sm) fs)
     fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
     fstvars sm (FCond e tfs efs) = codevars' e sm ++ concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) efs
@@ -344,6 +346,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     declared :: ChunkDB -> FuncStmt -> [CodeChunk]
     declared _  (FDec cch) = [cch]
     declared _  (FAsg _ _) = []
+    declared _  (FAsgIndex _ _ _) = []
     declared sm (FFor _ _ fs) = concatMap (declared sm) fs
     declared sm (FWhile _ fs) = concatMap (declared sm) fs
     declared sm (FCond _ tfs efs) = concatMap (declared sm) tfs ++ concatMap (declared sm) efs

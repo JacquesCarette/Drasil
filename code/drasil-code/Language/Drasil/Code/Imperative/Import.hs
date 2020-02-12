@@ -340,6 +340,12 @@ convStmt (FAsg v e) = do
   v' <- mkVar v
   l <- maybeLog v'
   return $ multi $ assign v' e' : l
+convStmt (FAsgIndex v i e) = do
+  e' <- convExpr e
+  v' <- mkVar v
+  let vi = arrayElem i v'
+  l <- maybeLog vi
+  return $ multi $ assign vi e' : l
 convStmt (FFor v e st) = do
   stmts <- mapM convStmt st
   vari <- mkVar v

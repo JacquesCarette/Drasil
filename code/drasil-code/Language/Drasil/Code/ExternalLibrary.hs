@@ -4,8 +4,9 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary,
   loopConditionFunction, loopConditionMethod, loopedFunction, loopedMethod, 
   loopedFunctionWithResult, loopedMethodWithResult, libConstructor, lockedArg, 
   lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
-  functionArg, customObjArg, recordArg, unknown, interface, methodInterface,
-  iterateStep
+  functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
+  implementation, constructorInfo, methodInfo, iterateStep, statementStep,
+  lockedStatement
 ) where
 
 import Language.Drasil
@@ -24,6 +25,8 @@ type ExternalLibrary = [Step]
 data Step = Call [FunctionInterface]
   -- A foreach loop - CodeChunk to iterate through, CodeChunk for iteration variable, loop body
   | Iterate CodeChunk CodeChunk ([CodeChunk] -> [FuncStmt])
+  -- For when a statement is needed, but does not interface with the external library
+  | Statement ([CodeChunk] -> [Expr] -> FuncStmt)
 
 data FunctionInterface = FI FuncType FuncName [Argument] [ContextAttribute]
 
@@ -33,17 +36,22 @@ data ContextAttribute = Assignment CodeChunk -- CodeChunk is variable to assign
 
 data Argument = 
   -- Not dependent on use case, Maybe is name for the argument
-  Locked (Maybe VarName) Expr 
+  LockedArg (Maybe VarName) Expr 
   -- First Maybe is name for the argument (needed for named parameters)
   -- Second Maybe is the variable name if it needs to be declared and defined prior to calling
   | Basic (Maybe VarName) CodeType (Maybe CodeChunk) 
-  | Fn CodeChunk [CodeType] ([Expr] -> FuncStmt)
-  | Class CodeChunk Interface
+  | Fn CodeChunk [Parameter] ([Expr] -> FuncStmt)
+  | Class CodeChunk ClassInfo
   | Record FuncName CodeChunk [FieldName]
 
-data Interface = Unknown | Implements String [MethodInterface]
+data Parameter = LockedParam CodeChunk | NameableParam CodeType
 
-data MethodInterface = MI FuncName [CodeChunk] CodeType -- Name, parameters, return type
+data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
+
+-- Constructor body
+data MethodInfo = CI [Step]
+  -- Method name, parameters, return type, body
+  | MI FuncName [Parameter] CodeType [Step]
 
 data FuncType = Function | Method CodeChunk | Constructor
 
@@ -100,10 +108,10 @@ libConstructor :: FuncName -> [Argument] -> CodeChunk -> FunctionInterface
 libConstructor n as c = FI Constructor n as [Assignment c] 
 
 lockedArg :: Expr -> Argument
-lockedArg = Locked Nothing
+lockedArg = LockedArg Nothing
 
 lockedNamedArg :: VarName -> Expr -> Argument
-lockedNamedArg n = Locked (Just n)
+lockedNamedArg n = LockedArg (Just n)
 
 inlineArg :: CodeType -> Argument
 inlineArg t = Basic Nothing t Nothing
@@ -117,23 +125,38 @@ preDefinedArg t v = Basic Nothing t (Just v)
 preDefinedNamedArg :: VarName ->  CodeType -> CodeChunk -> Argument
 preDefinedNamedArg n t v = Basic (Just n) t (Just v)
 
-functionArg :: CodeChunk -> [CodeType] -> ([Expr] -> FuncStmt) -> Argument
+functionArg :: CodeChunk -> [Parameter] -> ([Expr] -> FuncStmt) -> Argument
 functionArg = Fn
 
-customObjArg :: CodeChunk -> Interface -> Argument
+customObjArg :: CodeChunk -> ClassInfo -> Argument
 customObjArg = Class
 
 recordArg :: FuncName -> CodeChunk -> [FieldName] -> Argument
 recordArg = Record
 
-unknown :: Interface
-unknown = Unknown
+lockedParam :: CodeChunk -> Parameter
+lockedParam = LockedParam
 
-interface :: String -> [MethodInterface] -> Interface
-interface = Implements
+unnamedParam :: CodeType -> Parameter
+unnamedParam = NameableParam
 
-methodInterface :: FuncName -> [CodeChunk] -> CodeType -> MethodInterface
-methodInterface = MI
+customClass :: [MethodInfo] -> ClassInfo
+customClass = Regular
+
+implementation :: String -> [MethodInfo] -> ClassInfo
+implementation = Implements
+
+constructorInfo :: [Step] -> MethodInfo
+constructorInfo = CI
+
+methodInfo :: FuncName -> [Parameter] -> CodeType -> [Step] -> MethodInfo
+methodInfo = MI
 
 iterateStep :: CodeChunk -> CodeChunk -> ([CodeChunk] -> [FuncStmt]) -> Step
 iterateStep = Iterate
+
+statementStep :: ([CodeChunk] -> [Expr] -> FuncStmt) -> Step
+statementStep = Statement
+
+lockedStatement :: FuncStmt -> Step
+lockedStatement s = Statement (\_ _ -> s)

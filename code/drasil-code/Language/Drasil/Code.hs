@@ -20,7 +20,7 @@ module Language.Drasil.Code (
   recordArg, lockedParam, unnamedParam, customClass, implementation, 
   constructorInfo, methodInfo, iterateStep, statementStep, lockedStatement,
   PackageSym(..),
-  CodeChunk, codevar, quantvar, CodeQuantityDict, implCQD,
+  CodeChunk, codevar, quantvar, ccObjVar, CodeQuantityDict, implCQD,
   unPP, unJP, unCSP, unCPPP
 ) where
 
@@ -55,7 +55,7 @@ import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec(..),
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
 
-import Language.Drasil.Chunk.Code (CodeChunk, codevar, quantvar)
+import Language.Drasil.Chunk.Code (CodeChunk, codevar, quantvar, ccObjVar)
 import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, implCQD)
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)

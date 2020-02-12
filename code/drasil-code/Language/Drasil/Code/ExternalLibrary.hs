@@ -1,12 +1,12 @@
 module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, 
-  FunctionInterface, Argument, externalLib, choiceStep, mandatoryStep, 
-  libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
-  loopConditionFunction, loopConditionMethod, loopedFunction, loopedMethod, 
-  loopedFunctionWithResult, loopedMethodWithResult, libConstructor, lockedArg, 
-  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
-  functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
-  implementation, constructorInfo, methodInfo, iterateStep, statementStep,
-  lockedStatement
+  FunctionInterface, Argument, externalLib, choiceSteps, choiceStep, 
+  mandatoryStep, libFunction, libMethod, libFunctionWithResult, 
+  libMethodWithResult, loopConditionFunction, loopConditionMethod, 
+  loopedFunction, loopedMethod, loopedFunctionWithResult, 
+  loopedMethodWithResult, libConstructor, lockedArg, lockedNamedArg, inlineArg, 
+  inlineNamedArg, preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, 
+  recordArg, lockedParam, unnamedParam, customClass, implementation, 
+  constructorInfo, methodInfo, iterateStep, statementStep, lockedStatement
 ) where
 
 import Language.Drasil
@@ -22,7 +22,7 @@ type Condition = Expr
 
 type ExternalLibrary = [Step]
 
-data Step = Call [FunctionInterface]
+data Step = Call [[FunctionInterface]]
   -- A foreach loop - CodeChunk to iterate through, CodeChunk for iteration variable, loop body
   | Iterate CodeChunk CodeChunk ([CodeChunk] -> [FuncStmt])
   -- For when a statement is needed, but does not interface with the external library
@@ -58,11 +58,14 @@ data FuncType = Function | Method CodeChunk | Constructor
 externalLib :: [Step] -> ExternalLibrary
 externalLib = id
 
+choiceSteps :: [[FunctionInterface]] -> Step
+choiceSteps = Call
+
 choiceStep :: [FunctionInterface] -> Step
-choiceStep = Call
+choiceStep = Call . map (: [])
 
 mandatoryStep :: FunctionInterface -> Step
-mandatoryStep f = Call [f]
+mandatoryStep f = Call [[f]]
 
 libFunction :: FuncName -> [Argument] -> FunctionInterface
 libFunction n ps = FI Function n ps []

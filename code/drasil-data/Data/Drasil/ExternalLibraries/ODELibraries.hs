@@ -1,16 +1,17 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
-  scipyODE, oslo, apacheODE
+  scipyODE, oslo, apacheODE, odeint
 ) where
 
 import Language.Drasil
 
 import Language.Drasil.Code (FuncStmt(..), ExternalLibrary, FunctionInterface, 
-  Argument, externalLib, mandatoryStep, choiceStep, libMethod, 
-  libFunctionWithResult, libMethodWithResult, loopConditionMethod, 
+  Argument, externalLib, mandatoryStep, choiceSteps, choiceStep, libFunction, 
+  libMethod, libFunctionWithResult, libMethodWithResult, loopConditionMethod, 
   loopedMethod, libConstructor, lockedArg, lockedNamedArg, inlineArg, 
   inlineNamedArg, functionArg, customObjArg, recordArg, lockedParam, 
-  unnamedParam, implementation, constructorInfo, methodInfo, iterateStep, 
-  statementStep, lockedStatement, CodeChunk, codevar, ccObjVar, implCQD)
+  unnamedParam, customClass, implementation, constructorInfo, methodInfo, 
+  iterateStep, statementStep, lockedStatement, CodeChunk, codevar, ccObjVar, 
+  implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Func, Void))
 import qualified GOOL.Drasil as C (CodeType(Boolean, Integer))
@@ -48,9 +49,9 @@ odeT :: CodeType
 odeT = Object "ode"
 
 f, r, rt, ry :: CodeChunk
-f = codevar $ implCQD "f_scipy" (nounPhrase "function representing ODE" 
-  "functions representing ODE") Nothing (Func [Float, Float] (List Float)) 
-  (Label "f") Nothing
+f = codevar $ implCQD "f_scipy" (nounPhrase "function representing ODE system" 
+  "functions representing ODE system") Nothing 
+  (Func [Float, Float] (List Float)) (Label "f") Nothing
 r = codevar $ implCQD "r_scipy" (nounPhrase "ODE object" "ODE objects") Nothing 
   odeT (Label "r") Nothing
 rt = ccObjVar r $ codevar $ implCQD "t_scipy" (nounPhrase 
@@ -80,18 +81,21 @@ odeArgs = [inlineArg Float, lockedArg (sy initv),
   -- Using Matrix here is an incorrect hack to make things compile for now
   -- The type I really need is Object "Vector", but Expr does not have a way of representing a constructor call, and shouldn't since constructor calls are very code-specific and Expr should not be code-specific
   -- Probably what I need to do is define a new type, CodeExpr, which extends Expr with some code-specific representations. Then both ExternalLibrary and FuncStmt would take arguments of type CodeExpr where they currently take Expr.
-  functionArg f (map unnamedParam [Float, Object "Vector"]) 
+  functionArg fOslo (map unnamedParam [Float, Object "Vector"]) 
     (\es -> FRet $ Matrix [es]),
   recordArg "Options" opts ["AbsoluteTolerance", "RelativeTolerance"]]
 
 solT :: CodeType
 solT = Object "IEnumerable<SolPoint>"
 
-initv, opts, sol, points, ptArray, sp, spX :: CodeChunk
+initv, fOslo, opts, sol, points, ptArray, sp, spX :: CodeChunk
 initv = codevar $ implCQD "initv_oslo" (nounPhrase 
   "vector containing the initial values of the dependent variables"
   "vectors containing the initial values of the dependent variables") Nothing
   (Object "Vector") (Label "initv") Nothing
+fOslo = codevar $ implCQD "f_oslo" (nounPhrase 
+  "function representing ODE system" "functions representing ODE system") 
+  Nothing (Func [Float, Object "Vector"] (Object "Vector")) (Label "f") Nothing
 opts = codevar $ implCQD "opts_oslo" (nounPhrase 
   "record containing options for ODE solving" 
   "records containing options for ODE solving") Nothing (Object "Options") 
@@ -152,7 +156,7 @@ it :: CodeChunk
 it = codevar $ implCQD "it_apache" (nounPhrase "integrator for solving ODEs"
   "integrators for solving ODEs") Nothing (Object foi) (Label "it") Nothing
 
-currVals, stepHandler, t0, y0, t, interpolator, isLast, curr, ode :: CodeChunk
+currVals, stepHandler, t0, y0, interpolator, isLast, curr :: CodeChunk
 currVals = codevar $ implCQD "curr_vals_apache" (nounPhrase 
   "array holding ODE solution values for the current step"
   "arrays holding ODE solution values for the current step") Nothing 
@@ -166,8 +170,6 @@ y0 = codevar $ implCQD "y0_apache" (nounPhrase
   "array of initial values for ODE solving" 
   "arrays of initial values for ODE solving") 
   Nothing (Array Float) (Label "y0") Nothing
-t = codevar $ implCQD "t_apache" (nounPhrase "current time in ODE solution"
-  "current times in ODE solution") Nothing Float (Label "t") Nothing
 interpolator = codevar $ implCQD "interpolator_apache" (nounPhrase 
   "step interpolator for ODE solving" "step interpolator for ODE solving")
   Nothing (Object "StepInterpolator") (Label "interpolator") Nothing
@@ -178,7 +180,62 @@ isLast = codevar $ implCQD "isLast_apache" (nounPhrase
 curr = codevar $ implCQD "curr_apache" (nounPhrase 
   "ODE solution array for current step" "ODE solution arrays for current step")
   Nothing (Array Float) (Label "curr") Nothing
-ode = codevar $ implCQD "ode_apache" (nounPhrase 
+
+-- odeint (C++) --
+
+odeint :: ExternalLibrary
+odeint = externalLib [
+  statementStep (\cdch _ -> FDec (head cdch)),
+  -- Need to declare variable holding initial value because odeint will update this variable at each step
+  statementStep (\_ e -> FAsg odeintCurrVals (Matrix [[head e]])),
+  choiceSteps [
+    [libConstructor (odeNameSpace ++ rkdp5) [] rk,
+    libFunctionWithResult (odeNameSpace ++ "make_controlled") [inlineArg Float, 
+      inlineArg Float, lockedArg (sy rk)] stepper],
+    [libConstructor (odeNameSpace ++ adamsBash) [] stepper]],
+  mandatoryStep $ libFunction (odeNameSpace ++ "integrate_const") [
+    lockedArg (sy stepper), 
+    customObjArg ode (customClass [
+      constructorInfo [],
+      methodInfo "operator()" [unnamedParam (List Float), 
+        unnamedParam (List Float), lockedParam t] Void [
+          statementStep (\cdch e -> FAsgIndex (head cdch) 0 (head e))]]),
+    lockedArg (sy odeintCurrVals),
+    inlineArg Float, inlineArg Float, inlineArg Float, 
+    customObjArg pop (customClass [
+      constructorInfo [],
+      methodInfo "operator()" [unnamedParam (List Float), lockedParam t] Void
+        [statementStep (\cdch _ -> FAppend (sy $ head cdch) 
+          (idx (sy $ head cdch) (int 0)))]])]]
+
+odeNameSpace, rkdp5, adamsBash :: String
+odeNameSpace = "boost::numeric::odeint::"
+rkdp5 = "runge_kutta_dopri5<vector<double>>"
+adamsBash = "adams_bashforth<3,vector<double>>"
+
+odeintCurrVals, rk, stepper, pop :: CodeChunk
+odeintCurrVals = codevar $ implCQD "currVals_odeint" (nounPhrase 
+  "vector holding ODE solution values for the current step"
+  "vectors holding ODE solution values for the current step") Nothing
+  (List Float) (Label "currVals") Nothing
+rk = codevar $ implCQD "rk_odeint" (nounPhrase 
+  "stepper for solving ODE system using Runge-Kutta-Dopri5 method"
+  "steppers for solving ODE system using Runge-Kutta-Dopri5 method") Nothing
+  (Object rkdp5) (Label "rk") Nothing
+stepper = codevar $ implCQD "stepper_odeint" (nounPhrase 
+  "stepper for solving ODE system" "steppers for solving ODE system") Nothing
+  (Object "auto") (Label "stepper") Nothing
+pop = codevar $ implCQD "pop_odeint" (nounPhrase 
+  "object to populate ODE solution vector" 
+  "objects to populate ODE solution vector") Nothing (Object "Populate") 
+  (Label "pop") Nothing
+
+
+-- CodeChunks used in multiple external libraries --
+
+ode, t :: CodeChunk
+ode = codevar $ implCQD "ode_obj" (nounPhrase 
   "object representing an ODE system" "objects representing an ODE system")
   Nothing (Object "ODE") (Label "ode") Nothing
-
+t = codevar $ implCQD "t_ode" (nounPhrase "current time in ODE solution"
+  "current times in ODE solution") Nothing Float (Label "t") Nothing

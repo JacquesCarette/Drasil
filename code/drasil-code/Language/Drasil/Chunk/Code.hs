@@ -13,7 +13,7 @@ import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp), CodeQuantityDict,
   cqw, implCQD)
 import Language.Drasil.Printers (symbolDoc, toPlainName)
 
-import GOOL.Drasil (CodeType)
+import GOOL.Drasil (CodeType(Object))
 
 import qualified Data.Map as Map
 import Text.PrettyPrint.HughesPJ (render)
@@ -65,10 +65,12 @@ quantfunc c = CodeC (cqw c) Func
 -- Combine an Object-type CodeChunk with another CodeChunk to create a new 
 -- CodeChunk which represents a field of the first. ex. ccObjVar obj f = obj.f
 ccObjVar :: CodeChunk -> CodeChunk -> CodeChunk
-ccObjVar c1 c2 = codevar $ implCQD (c1 ^. uid ++ "." ++ c2 ^. uid) 
-  (compoundPhrase (c1 ^. term) (c2 ^. term)) Nothing (codeType c2) 
-  (Concat [symbol c1 Implementation, Label ".", symbol c2 Implementation]) 
-  (getUnit c2) 
+ccObjVar c1 c2 = checkObj (codeType c1)
+  where checkObj (Object _) = codevar $ implCQD (c1 ^. uid ++ "." ++ c2 ^. uid) 
+          (compoundPhrase (c1 ^. term) (c2 ^. term)) Nothing (codeType c2) 
+          (Concat [symbol c1 Implementation, Label ".", symbol c2 
+          Implementation]) (getUnit c2) 
+        checkObj _ = error "First CodeChunk passed to ccObjVar must have Object type"
 
 type ConstraintMap = Map.Map UID [Constraint]
 

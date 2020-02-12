@@ -11,8 +11,8 @@ module Language.Drasil.Code (
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, 
   packmod, relToQD,
   junkLine, multiLine, repeated, singleLine, singleton,
-  ExternalLibrary, FunctionInterface, Argument, externalLib, choiceStep, 
-  mandatoryStep, libFunction, libMethod, libFunctionWithResult,
+  ExternalLibrary, FunctionInterface, Argument, externalLib, choiceSteps, 
+  choiceStep, mandatoryStep, libFunction, libMethod, libFunctionWithResult,
   libMethodWithResult, loopConditionFunction, loopConditionMethod,
   loopedFunction, loopedMethod, loopedFunctionWithResult, 
   loopedMethodWithResult, libConstructor, lockedArg, lockedNamedArg, inlineArg, 
@@ -37,14 +37,14 @@ import Language.Drasil.Code.DataDesc (junkLine, multiLine, repeated, singleLine,
   singleton)
 
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, 
-  FunctionInterface, Argument, externalLib, choiceStep, mandatoryStep, 
-  libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
-  loopConditionFunction, loopConditionMethod, loopedFunction, loopedMethod, 
-  loopedFunctionWithResult, loopedMethodWithResult, libConstructor, lockedArg, 
-  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
-  functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
-  implementation, constructorInfo, methodInfo, iterateStep, statementStep,
-  lockedStatement)
+  FunctionInterface, Argument, externalLib, choiceSteps, choiceStep, 
+  mandatoryStep, libFunction, libMethod, libFunctionWithResult, 
+  libMethodWithResult, loopConditionFunction, loopConditionMethod, 
+  loopedFunction, loopedMethod, loopedFunctionWithResult, 
+  loopedMethodWithResult, libConstructor, lockedArg, lockedNamedArg, inlineArg, 
+  inlineNamedArg, preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, 
+  recordArg, lockedParam, unnamedParam, customClass, implementation, 
+  constructorInfo, methodInfo, iterateStep, statementStep, lockedStatement)
 
 import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec(..), 
   CodeSystInfo(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), Func, 

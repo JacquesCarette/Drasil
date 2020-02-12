@@ -3,8 +3,9 @@ module Main where
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
---   Logging(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
---   InputModule(..), matchConcepts, AuxFile(..), Visibility(..))
+--   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
+--   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
+--   Visibility(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -16,6 +17,7 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
 -- choices :: Choices
 -- choices = Choices {
 --   lang             = [Python, Cpp, CSharp, Java],
+--   modularity       = Modular Combined,
 --   impType          = Library,
 --   logFile          = "log.txt",
 --   logging          = LogNone,
@@ -27,7 +29,6 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
 --   inputStructure   = Unbundled,
 --   constStructure   = Inline,
 --   constRepr        = Const,
---   inputModule      = Combined,
 --   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],
 --   auxFiles         = [SampleInput]
 -- }       

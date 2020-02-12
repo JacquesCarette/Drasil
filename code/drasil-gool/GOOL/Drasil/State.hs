@@ -4,22 +4,23 @@ module GOOL.Drasil.State (
   GS, GOOLState(..), FS, CS, MS, VS, lensFStoGS, lensGStoFS, lensFStoCS, 
   lensFStoMS, lensFStoVS, lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, 
   lensMStoVS, lensVStoFS, lensVStoMS, headers, sources, mainMod, currMain, 
-  initialState, initialFS, modifyReturn, modifyReturnFunc, modifyReturnFunc2, 
-  modifyReturnList, addODEFilePaths, addFile, addCombinedHeaderSource, 
-  addHeader, addSource, addProgNameToPaths, setMainMod, addODEFiles, 
-  getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
+  currFileType, initialState, initialFS, modifyReturn, modifyReturnFunc, 
+  modifyReturnFunc2, modifyReturnList, addODEFilePaths, addFile, 
+  addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
+  addODEFiles, getODEFiles, addLangImport, addLangImportVS, addExceptionImports,
   getLangImports, addLibImport, addLibImports, getLibImports, addModuleImport, 
   addModuleImportVS, getModuleImports, addHeaderLangImport, 
   getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, 
   addHeaderModImport, getHeaderModImports, addDefine, getDefines, 
   addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
-  getHeaderUsing, setFilePath, getFilePath, setModuleName, getModuleName, 
-  setClassName, getClassName, setCurrMain, getCurrMain, addClass, getClasses, 
-  updateClassMap, getClassMap, updateMethodExcMap, getMethodExcMap, 
-  addParameter, getParameters, setODEDepVars, getODEDepVars, setODEOthVars, 
-  getODEOthVars, setOutputsDeclared, isOutputsDeclared, addException, 
-  addExceptions, getExceptions, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc
+  getHeaderUsing, setFileType, setModuleName, getModuleName, setClassName, 
+  getClassName, setCurrMain, getCurrMain, addClass, getClasses, updateClassMap, 
+  getClassMap, updateMethodExcMap, getMethodExcMap, updateCallMap, 
+  callMapTransClosure, updateMEMWithCalls, addParameter, getParameters, 
+  setOutputsDeclared, isOutputsDeclared, addException, addExceptions, 
+  getExceptions, addCall, setMainDoc, getMainDoc, setScope, getScope, 
+  setCurrMainFunc, getCurrMainFunc, setODEDepVars, getODEDepVars, 
+  setODEOthVars, getODEOthVars
 ) where
 
 import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..), FileData)
@@ -29,7 +30,9 @@ import Control.Lens.Tuple (_1, _2)
 import Control.Monad.State (State, modify, gets)
 import Data.List (sort, nub)
 import Data.Maybe (isNothing)
-import Data.Map (Map, fromList, empty, insert, union)
+import Data.Map (Map, fromList, insert, union, findWithDefault, mapWithKey)
+import qualified Data.Map as Map (empty, map)
+import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 data GOOLState = GS {
   _headers :: [FilePath],
@@ -39,7 +42,8 @@ data GOOLState = GS {
   _odeFiles :: [FileData],
 
   -- Only used for Java
-  _methodExceptionMap :: Map String [Exception]
+  _methodExceptionMap :: Map String [Exception],
+  _callMap :: Map String [String]
 } 
 makeLenses ''GOOLState
 
@@ -49,6 +53,7 @@ data MethodState = MS {
   -- Only used for Java
   _outputsDeclared :: Bool,
   _exceptions :: [Exception],
+  _calls :: [String],
   
   -- Only used for C++
   _currScope :: ScopeTag,
@@ -63,12 +68,15 @@ makeLenses ''ClassState
 
 data FileState = FS {
   _currModName :: String,
-  _currFilePath :: FilePath,
+  _currFileType :: FileType,
   _currMain :: Bool,
   _currClasses :: [String],
   _langImports :: [String],
   _libImports :: [String],
   _moduleImports :: [String],
+  
+  -- Only used for Python
+  _mainDoc :: Doc,
 
   -- C++ only
   _headerLangImports :: [String],
@@ -223,21 +231,24 @@ initialState = GS {
   _headers = [],
   _sources = [],
   _mainMod = Nothing,
-  _classMap = empty,
+  _classMap = Map.empty,
   _odeFiles = [],
 
-  _methodExceptionMap = empty
+  _methodExceptionMap = Map.empty,
+  _callMap = Map.empty
 }
 
 initialFS :: FileState
 initialFS = FS {
   _currModName = "",
-  _currFilePath = "",
+  _currFileType = Combined,
   _currMain = False,
   _currClasses = [],
   _langImports = [],
   _libImports = [],
   _moduleImports = [],
+  
+  _mainDoc = empty,
 
   _headerLangImports = [],
   _headerLibImports = [],
@@ -259,6 +270,7 @@ initialMS = MS {
 
   _outputsDeclared = False,
   _exceptions = [],
+  _calls = [],
 
   _currScope = Priv,
   _currMainFunc = False
@@ -451,11 +463,15 @@ addHeaderUsing u = over (_1 . _1 . _1 . _2 . headerUsing) (\us ->
 getHeaderUsing :: FS [String]
 getHeaderUsing = gets ((^. headerUsing) . snd)
 
-setFilePath :: FilePath -> (GOOLState, FileState) -> (GOOLState, FileState)
-setFilePath fp = over _2 (set currFilePath fp)
+setMainDoc :: Doc -> (((GOOLState, FileState), ClassState), MethodState) -> 
+  (((GOOLState, FileState), ClassState), MethodState)
+setMainDoc d = over (_1 . _1 . _2) $ set mainDoc d
 
-getFilePath :: FS FilePath
-getFilePath = gets ((^. currFilePath) . snd)
+getMainDoc :: FS Doc
+getMainDoc = gets ((^. mainDoc) . snd)
+
+setFileType :: FileType -> (GOOLState, FileState) -> (GOOLState, FileState)
+setFileType ft = over _2 (set currFileType ft)
 
 setModuleName :: String -> (GOOLState, FileState) -> (GOOLState, FileState)
 setModuleName n = over _2 (set currModName n)
@@ -504,6 +520,28 @@ updateMethodExcMap n (((gs, fs), cs), ms) = over (_1 . _1 . _1 .
 getMethodExcMap :: VS (Map String [Exception])
 getMethodExcMap = gets ((^. methodExceptionMap) . fst . fst . fst . fst)
 
+updateCallMap :: String -> (((GOOLState, FileState), ClassState), MethodState) 
+  -> (((GOOLState, FileState), ClassState), MethodState)
+updateCallMap n (((gs, fs), cs), ms) = over (_1 . _1 . _1 . callMap) 
+  (insert (mn ++ "." ++ n) (ms ^. calls)) (((gs, fs), cs), ms)
+  where mn = fs ^. currModName
+
+callMapTransClosure :: GOOLState -> GOOLState
+callMapTransClosure = over callMap tClosure
+  where tClosure m = Map.map (traceCalls m) m
+        traceCalls :: Map String [String] -> [String] -> [String]
+        traceCalls _ [] = []
+        traceCalls cm (c:cs) = nub $ c : traceCalls cm (nub $ cs ++ 
+          findWithDefault [] c cm)
+
+updateMEMWithCalls :: GOOLState -> GOOLState
+updateMEMWithCalls s = over methodExceptionMap (\mem -> mapWithKey 
+  (addCallExcs mem (s ^. callMap)) mem) s
+  where addCallExcs :: Map String [Exception] -> Map String [String] -> String 
+          -> [Exception] -> [Exception]
+        addCallExcs mem cm f es = nub $ es ++ concatMap (\fn -> findWithDefault 
+          [] fn mem) (findWithDefault [] f cm)
+
 addParameter :: String -> (((GOOLState, FileState), ClassState), MethodState) 
   -> (((GOOLState, FileState), ClassState), MethodState)
 addParameter p = over _2 $ over currParameters (\ps -> if p `elem` ps then 
@@ -547,6 +585,11 @@ addExceptions es = over (_1 . _2 . exceptions) (\exs -> nub $ exs ++ es)
 
 getExceptions :: MS [Exception]
 getExceptions = gets ((^. exceptions) . snd)
+
+addCall :: String -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
+addCall f = over (_1 . _2 . calls) (f:)
 
 setScope :: ScopeTag -> (((GOOLState, FileState), ClassState), MethodState) -> 
   (((GOOLState, FileState), ClassState), MethodState)

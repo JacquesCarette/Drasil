@@ -21,17 +21,17 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   listSetFunc, printSt, state, loopState, emptyState, assign, assignToListIndex,
   multiAssignError, decrement, increment, increment', increment1, increment1', 
   decrement1, varDec, varDecDef, listDec, listDecDef, listDecDef', arrayDec, 
-  arrayDecDef, objDecNew, objDecNewNoParams, constDecDef, funcDecDef, 
-  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, initState, changeState,
-  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
-  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
-  construct, param, method, getMethod, setMethod,privMethod, pubMethod, 
-  constructor, docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, 
-  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum,
-  privClass, pubClass, implementingClass, docClass, commentedClass, buildModule,
-  buildModule', modFromData, fileDoc, docMod
+  arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams,
+  constDecDef, funcDecDef, discardInput, discardFileInput, openFileR, openFileW,
+  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
+  returnState, multiReturnError, valState, comment, freeError, throw, initState,
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
+  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  notifyObservers, construct, param, method, getMethod, setMethod,privMethod, 
+  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
+  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
+  pubGVar, buildClass, enum, privClass, pubClass, implementingClass, docClass, 
+  commentedClass, buildModule, buildModule', modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -59,23 +59,23 @@ import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   InternalMod(moduleDoc, updateModuleDoc), BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData), 
   BodySym(oneLiner), BlockSym(block), 
-  TypeSym(bool, int, float, char, string, listType, listInnerType, void), 
+  TypeSym(bool, int, float, char, string, listType, arrayType, listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
   ValueSym(litTrue, litFalse, litInt, litString, valueOf),
-  ValueExpression(funcApp, newObj, notNull, lambda), Selector(objAccess), 
-  objMethodCall, objMethodCallNoParams, 
+  ValueExpression(funcApp, newObj, extNewObj, notNull, lambda), 
+  Selector(objAccess), objMethodCall, objMethodCallNoParams, 
   FunctionSym(func, listSize, listAdd, listAppend),
   SelectorFunction(listAccess, listSet),
   InternalFunction(getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, 
     listAccessFunc, listSetFunc),
   InternalStatement(state, loopState, emptyState), 
   StatementSym(assign, varDec, varDecDef, listDec, listDecDef, objDecNew, 
-    constDecDef, valState, returnState),
+    extObjDecNew, constDecDef, valState, returnState),
   ControlStatementSym(ifCond, for, forRange, switch), MethodTypeSym(construct), 
   ParameterSym(param), MethodSym(method, mainFunction), InternalMethod(intFunc),
   StateVarSym(stateVar), ClassSym(buildClass, commentedClass), 
   InternalMod(modFromData))
-import GOOL.Drasil.Data (Binding(..), Terminator(..), FileType)
+import GOOL.Drasil.Data (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
   on2StateLists, on1StateValue1List, getInnerType, convType)
@@ -88,10 +88,10 @@ import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt,
   enumDocD, enumElementsDocD, fileDoc', docFuncRepr, commentDocD, commentedItem,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, intValue)
 import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS, 
-  lensCStoMS, lensMStoVS, lensVStoMS, currMain, modifyReturnFunc, 
+  lensCStoMS, lensMStoVS, lensVStoMS, currMain, currFileType, modifyReturnFunc, 
   modifyReturnFunc2, addFile, setMainMod, addLangImportVS, getLangImports, 
-  getLibImports, getModuleImports, setFilePath, getFilePath, setModuleName, 
-  getModuleName, setClassName, getClassName, addParameter)
+  getLibImports, getModuleImports, setModuleName, getModuleName, setClassName, 
+  getClassName, addParameter)
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Bifunctor (first)
@@ -150,10 +150,10 @@ string = toState $ typeFromData String "string" (text "string")
 fileType :: (RenderSym repr) => VS (repr (Type repr))
 fileType = toState $ typeFromData File "File" (text "File")
 
-listType :: (RenderSym repr) => repr (Permanence repr) -> VS (repr (Type repr)) 
-  -> VS (repr (Type repr))
-listType p = onStateValue (\t -> typeFromData (List (getType t)) (render 
-  (keyDoc $ list p) ++ "<" ++ getTypeString t ++ ">") (keyDoc (list p) <> 
+listType :: (RenderSym repr) => repr (Keyword repr) -> VS (repr (Type repr)) -> 
+  VS (repr (Type repr))
+listType lst = onStateValue (\t -> typeFromData (List (getType t)) (render 
+  (keyDoc lst) ++ "<" ++ getTypeString t ++ ">") (keyDoc lst <> 
   angles (getTypeDoc t)))
 
 arrayType :: (RenderSym repr) => VS (repr (Type repr)) -> VS (repr (Type repr))
@@ -430,13 +430,13 @@ objVarSelf :: (RenderSym repr) => VS (repr (Variable repr)) ->
   VS (repr (Variable repr))
 objVarSelf = S.objVar S.self
 
-listVar :: (RenderSym repr) => Label -> repr (Permanence repr) -> 
-  VS (repr (Type repr)) -> VS (repr (Variable repr))
-listVar n p t = S.var n (listType p t)
+listVar :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
+  VS (repr (Variable repr))
+listVar n t = S.var n (S.listType t)
 
 listOf :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   VS (repr (Variable repr))
-listOf n = S.listVar n static
+listOf = S.listVar
 
 arrayElem :: (RenderSym repr) => VS (repr (Value repr)) -> 
   VS (repr (Variable repr)) -> VS (repr (Variable repr))
@@ -483,7 +483,7 @@ enumElement :: (RenderSym repr) => Label -> Label -> VS (repr (Value repr))
 enumElement en e = mkStateVal (enumType en) (enumElemDocD en e)
 
 argsList :: (RenderSym repr) => String -> VS (repr (Value repr))
-argsList l = mkStateVal (listType static S.string) (text l)
+argsList l = mkStateVal (S.arrayType S.string) (text l)
 
 inlineIf :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
   -> VS (repr (Value repr)) -> VS (repr (Value repr))
@@ -600,12 +600,12 @@ listSizeFunc = S.func "size" S.int []
 
 listAddFunc :: (RenderSym repr) => Label -> VS (repr (Value repr)) -> 
   VS (repr (Value repr)) -> VS (repr (Function repr))
-listAddFunc f i v = S.func f (listType static $ onStateValue valueType v) 
+listAddFunc f i v = S.func f (S.listType $ onStateValue valueType v) 
   [i, v]
 
 listAppendFunc :: (RenderSym repr) => Label -> VS (repr (Value repr)) -> 
   VS (repr (Function repr))
-listAppendFunc f v = S.func f (listType static $ onStateValue valueType v) [v]
+listAppendFunc f v = S.func f (S.listType $ onStateValue valueType v) [v]
 
 iterBeginError :: String -> String
 iterBeginError l = "Attempt to use iterBeginFunc in " ++ l ++ ", but " ++ l ++ 
@@ -735,6 +735,15 @@ objDecNewNoParams :: (RenderSym repr) => VS (repr (Variable repr)) ->
   MS (repr (Statement repr))
 objDecNewNoParams v = S.objDecNew v []
 
+extObjDecNew :: (RenderSym repr) => Library -> VS (repr (Variable repr)) -> 
+  [VS (repr (Value repr))] -> MS (repr (Statement repr))
+extObjDecNew l v vs = S.varDecDef v (S.extNewObj l (onStateValue variableType v)
+  vs)
+
+extObjDecNewNoParams :: (RenderSym repr) => Library -> VS (repr (Variable repr))
+  -> MS (repr (Statement repr))
+extObjDecNewNoParams l v = S.extObjDecNew l v []
+
 constDecDef :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   VS (repr (Value repr)) -> MS (repr (Statement repr))
 constDecDef vr vl = zoom lensMStoVS $ on2StateValues (\v -> mkSt . 
@@ -846,7 +855,7 @@ changeState fsmName tState = S.var fsmName S.string &= S.litString tState
 
 initObserverList :: (RenderSym repr) => VS (repr (Type repr)) -> 
   [VS (repr (Value repr))] -> MS (repr (Statement repr))
-initObserverList t = S.listDecDef (S.var observerListName (S.listType static t))
+initObserverList t = S.listDecDef (S.var observerListName (S.listType t))
 
 addObserver :: (RenderSym repr) => VS (repr (Value repr)) -> 
   MS (repr (Statement repr))
@@ -1093,7 +1102,7 @@ enum n es s = modify (setClassName n) >> classFromData (toState $ enumDocD n
 privClass :: (RenderSym repr) => Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> 
   [MS (repr (Method repr))] -> CS (repr (Class repr))
-privClass n p = S.buildClass n p private
+privClass n p = S.buildClass n p (scopeFromData Priv empty)
 
 pubClass :: (RenderSym repr) => Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
@@ -1120,11 +1129,12 @@ commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' ->
 
 -- Modules --
 
-buildModule :: (RenderSym repr) => Label -> FS Doc -> [MS (repr (Method repr))] 
-  -> [CS (repr (Class repr))] -> FS (repr (Module repr))
-buildModule n imps ms cs = S.modFromData n ((\cls fs is -> moduleDocD is 
-  (vibcat (map classDoc cls)) (vibcat (map methodDoc fs))) <$> 
-  mapM (zoom lensFStoCS) cs <*> mapM (zoom lensFStoMS) ms <*> imps)
+buildModule :: (RenderSym repr) => Label -> FS Doc -> FS Doc -> 
+  [MS (repr (Method repr))] -> [CS (repr (Class repr))] -> 
+  FS (repr (Module repr))
+buildModule n imps bot ms cs = S.modFromData n ((\cls fs is bt -> 
+  moduleDocD is (vibcat (map classDoc cls)) (vibcat (map methodDoc fs ++ [bt])))
+  <$> mapM (zoom lensFStoCS) cs <*> mapM (zoom lensFStoMS) ms <*> imps <*> bot)
 
 buildModule' :: (RenderSym repr) => Label -> (String -> repr (Import repr)) -> 
   [MS (repr (Method repr))] -> [CS (repr (Class repr))] -> 
@@ -1141,24 +1151,24 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 -- Files --
 
-fileDoc :: (RenderSym repr) => FileType -> String -> (repr (Module repr) -> 
+fileDoc :: (RenderSym repr) => String -> (repr (Module repr) -> 
   repr (Block repr)) -> repr (Block repr) -> FS (repr (Module repr)) -> 
   FS (repr (RenderFile repr))
-fileDoc ft ext topb botb = S.fileFromData ft (onStateValue (addExt ext) 
+fileDoc ext topb botb = S.fileFromData (onStateValue (addExt ext) 
   getModuleName) . onStateValue (\m -> updateModuleDoc (\d -> emptyIfEmpty d 
   (fileDoc' (blockDoc $ topb m) d (blockDoc botb))) m)
 
-docMod :: (RenderSym repr) => String -> [String] -> String -> 
+docMod :: (RenderSym repr) => String -> String -> [String] -> String -> 
   FS (repr (RenderFile repr)) -> FS (repr (RenderFile repr))
-docMod d a dt = commentedMod (docComment $ moduleDox d a dt <$> getFilePath)
+docMod e d a dt = commentedMod (docComment $ moduleDox d a dt . addExt e <$> 
+  getModuleName)
 
 fileFromData :: (RenderSym repr) => (repr (Module repr) -> FilePath -> 
-  repr (RenderFile repr)) -> FileType -> FS FilePath -> 
-  FS (repr (Module repr)) -> FS (repr (RenderFile repr))
-fileFromData f ft fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty 
-  (moduleDoc mdl) then id else (if snd s ^. currMain then over lensFStoGS 
-  (setMainMod fpath) else id) . over lensFStoGS (addFile ft fpath) . 
-  setFilePath fpath) s) f m fp 
+  repr (RenderFile repr)) -> FS FilePath -> FS (repr (Module repr)) -> 
+  FS (repr (RenderFile repr))
+fileFromData f fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty 
+  (moduleDoc mdl) then id else (if snd s ^. currMain && isSource (snd s ^. currFileType) then over lensFStoGS 
+  (setMainMod fpath) else id) . over lensFStoGS (addFile (snd s ^. currFileType) fpath)) s) f m fp 
 
 -- Helper functions
 

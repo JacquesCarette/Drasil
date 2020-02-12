@@ -40,7 +40,7 @@ library
     , Language.Drasil.Code.Imperative.Logging
     , Language.Drasil.Code.Imperative.Modules
     , Language.Drasil.Code.Imperative.Parameters
-    , Language.Drasil.Code.Imperative.State
+    , Language.Drasil.Code.Imperative.DrasilState
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.CodeSpec
 

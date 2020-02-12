@@ -1,9 +1,9 @@
 module Language.Drasil.Code.Imperative.GenerateGOOL (
-  genModule, genDoxConfig, publicClass, fApp, fAppInOut, mkParam
+  genModule, genDoxConfig, publicClass, privateClass, fApp, fAppInOut, mkParam
 ) where
 
 import Language.Drasil
-import Language.Drasil.Code.Imperative.State (DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..), 
   Name)
@@ -11,30 +11,30 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  CodeType(..), GOOLState, FS, CS, MS, VS, lensMStoVS)
+  CodeType(..), ScopeTag(..), GOOLState, FS, CS, MS, VS, lensMStoVS)
 
 import Control.Lens.Zoom (zoom)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (maybe)
+import Data.Maybe (catMaybes)
 import Control.Monad.Reader (Reader, ask, withReader)
 
 genModule :: (ProgramSym repr) => Name -> String
-  -> Maybe (Reader DrasilState [MS (repr (Method repr))])
-  -> Maybe (Reader DrasilState [CS (repr (Class repr))])
+  -> [Reader DrasilState (Maybe (MS (repr (Method repr))))]
+  -> [Reader DrasilState (Maybe (CS (repr (Class repr))))]
   -> Reader DrasilState (FS (repr (RenderFile repr)))
 genModule n desc maybeMs maybeCs = do
   g <- ask
   let updateState = withReader (\s -> s { currentModule = n })
       -- Below line of code cannot be simplified because authors has a generic type
       as = case csi (codeSpec g) of CSI {authors = a} -> map name a
-  cs <- maybe (return []) updateState maybeCs
-  ms <- maybe (return []) updateState maybeMs
+  cs <- mapM updateState maybeCs
+  ms <- mapM updateState maybeMs
   let commMod | CommentMod `elem` commented g                   = docMod desc 
                   as (date g)
               | CommentFunc `elem` commented g && not (null ms) = docMod "" []  
                   (date g)
               | otherwise                                       = id
-  return $ commMod $ fileDoc $ buildModule n ms cs
+  return $ commMod $ fileDoc $ buildModule n (catMaybes ms) (catMaybes cs)
 
 genDoxConfig :: (AuxiliarySym repr) => String -> GOOLState ->
   Reader DrasilState [repr (Auxiliary repr)]
@@ -44,15 +44,28 @@ genDoxConfig n s = do
       v = doxOutput g
   return [doxConfig n s v | not (null cms)]
 
+mkClass :: (ProgramSym repr) => ScopeTag -> String -> Label -> Maybe Label -> 
+  [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
+  -> Reader DrasilState (CS (repr (Class repr)))
+mkClass s desc n l vs mths = do
+  g <- ask
+  ms <- mths
+  let getFunc Pub = pubClass
+      getFunc Priv = privClass
+      f = getFunc s
+  return $ if CommentClass `elem` commented g 
+    then docClass desc (f n l vs ms) 
+    else f n l vs ms
+
 publicClass :: (ProgramSym repr) => String -> Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
   -> Reader DrasilState (CS (repr (Class repr)))
-publicClass desc n l vs mths = do
-  g <- ask
-  ms <- mths
-  return $ if CommentClass `elem` commented g 
-    then docClass desc (pubClass n l vs ms) 
-    else pubClass n l vs ms
+publicClass = mkClass Pub
+
+privateClass :: (ProgramSym repr) => String -> Label -> Maybe Label -> 
+  [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
+  -> Reader DrasilState (CS (repr (Class repr)))
+privateClass = mkClass Priv
 
 fApp :: (ProgramSym repr) => String -> String -> VS (repr (Type repr)) -> 
   [VS (repr (Value repr))] -> Reader DrasilState (VS (repr (Value repr)))

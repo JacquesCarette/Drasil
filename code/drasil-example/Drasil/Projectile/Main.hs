@@ -2,9 +2,9 @@ module Main (main) where
 
 import Language.Drasil.Code (Choices(..), CodeSpec, Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Logging(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
-  InputModule(..), CodeConcept(..), matchConcepts, AuxFile(..), Visibility(..), 
-  codeSpec)
+  Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
+  ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, 
+  AuxFile(..), Visibility(..), codeSpec)
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
@@ -18,6 +18,7 @@ code = codeSpec si choices []
 choices :: Choices
 choices = Choices {
   lang = [Python, Cpp, CSharp, Java],
+  modularity = Modular Combined,
   impType = Program,
   logFile = "log.txt",
   logging = LogNone,
@@ -29,7 +30,6 @@ choices = Choices {
   inputStructure = Bundled,
   constStructure = Store Unbundled,
   constRepr = Var,
-  inputModule = Combined,
   conceptMatch = matchConcepts [piConst] [[Pi]],
   auxFiles = [SampleInput]
 }

@@ -63,8 +63,8 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   addLangImportVS, getLangImports, addLibImport, getLibImports, addModuleImport,
-  addModuleImportVS, getModuleImports, setClassName, getClassName, setCurrMain, 
-  getClassMap)
+  addModuleImportVS, getModuleImports, setFileType, setClassName, getClassName, 
+  setCurrMain, getClassMap, setMainDoc, getMainDoc)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -101,9 +101,9 @@ instance RenderSym PythonCode
 
 instance FileSym PythonCode where
   type RenderFile PythonCode = FileData
-  fileDoc = G.fileDoc Combined pyExt top bottom
+  fileDoc m = modify (setFileType Combined) >> G.fileDoc pyExt top bottom m
 
-  docMod = G.docMod
+  docMod = G.docMod pyExt
 
   commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
@@ -121,7 +121,7 @@ instance KeywordSym PythonCode where
   inherit n = toCode $ parens (text n)
   implements is = toCode $ parens (text $ intercalate ", " is)
 
-  list _ = toCode empty
+  list = toCode empty
 
   blockStart = toCode colon
   blockEnd = toCode empty
@@ -187,9 +187,9 @@ instance TypeSym PythonCode where
   string = pyStringType
   infile = toState $ typeFromData File "" empty
   outfile = toState $ typeFromData File "" empty
-  listType _ = onStateValue (\t -> typeFromData (List (getType t)) "[]" 
+  listType = onStateValue (\t -> typeFromData (List (getType t)) "[]" 
     (brackets empty))
-  arrayType = listType static
+  arrayType = listType
   listInnerType = G.listInnerType
   obj = G.obj
   enumType = G.enumType
@@ -523,7 +523,7 @@ instance StatementSym PythonCode where
   getFileInputLine = getFileInput
   discardFileLine = G.discardFileLine "readline"
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
-    (listType static string) [litString [d]]))  
+    (listType string) [litString [d]]))  
 
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists
@@ -585,7 +585,7 @@ instance ControlStatementSym PythonCode where
           initv = litInt 0
           notify = oneLiner $ valState $ at obsList (valueOf index) $. f
 
-  getFileInputAll f v = v &= objMethodCall (listType static string) f
+  getFileInputAll f v = v &= objMethodCall (listType string) f
     "readlines" []
 
 instance ScopeSym PythonCode where
@@ -595,6 +595,7 @@ instance ScopeSym PythonCode where
 
 instance InternalScope PythonCode where
   scopeDoc = unPC
+  scopeFromData _ = toCode
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
@@ -625,7 +626,11 @@ instance MethodSym PythonCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction b = modify setCurrMain >> onStateValue (onCodeValue mthd) b
+  mainFunction b = do
+    modify setCurrMain
+    bod <- b
+    modify (setMainDoc $ bodyDoc bod)
+    toState $ toCode $ mthd empty
 
   docFunc = G.docFunc
 
@@ -690,7 +695,7 @@ instance ModuleSym PythonCode where
       (langImport :: Label -> PythonCode (Import PythonCode))) libis),
     vcat (map (importDoc . 
       (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
-    getLangImports getLibImports getModuleImports)
+    getLangImports getLibImports getModuleImports) getMainDoc
 
 instance InternalMod PythonCode where
   moduleDoc = modDoc . unPC
@@ -888,4 +893,3 @@ pyDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr)
   MS (repr (Method repr))
 pyDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
   (map fst $ bs ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)
-  

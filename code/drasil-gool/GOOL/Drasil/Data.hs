@@ -1,5 +1,5 @@
 module GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), FileType(..), 
-  Exception(..), exception, stdExc, BindData(..), bd, FileData(..), 
+  isSource, Exception(..), exception, stdExc, BindData(..), bd, FileData(..), 
   fileD, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
   paramName, updateParamDoc, ProgData(..), progD, emptyProg, StateVarData(..), 
@@ -22,6 +22,10 @@ data Terminator = Semi | Empty
 data ScopeTag = Pub | Priv deriving Eq
 
 data FileType = Combined | Source | Header deriving Eq
+
+isSource :: FileType -> Bool
+isSource Header = False
+isSource _ = True
 
 data Binding = Static | Dynamic deriving Eq
 

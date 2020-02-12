@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.Comments (
 
 import Language.Drasil
 import Database.Drasil (defTable)
-import Language.Drasil.Code.Imperative.State (DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..))
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc, unitDoc)
 

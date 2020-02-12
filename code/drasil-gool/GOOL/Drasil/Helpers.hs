@@ -8,8 +8,7 @@ module GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat,
 import Utils.Drasil (blank)
 
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
-import qualified GOOL.Drasil.Symantics as S ( 
-  TypeSym(..), PermanenceSym(dynamic))
+import qualified GOOL.Drasil.Symantics as S (TypeSym(..))
 import GOOL.Drasil.State (VS)
 
 import Prelude hiding ((<>))
@@ -104,7 +103,7 @@ convType C.Integer = S.int
 convType C.Float = S.float
 convType C.Char = S.char
 convType C.String = S.string
-convType (C.List t) = S.listType S.dynamic (convType t)
+convType (C.List t) = S.listType (convType t)
 convType (C.Array t) = S.arrayType (convType t)
 convType (C.Iterator t) = S.iterator $ convType t
 convType (C.Object n) = S.obj n

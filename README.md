@@ -33,6 +33,10 @@ or take a look at
 
 ## Quick Start
 
+If you are on Windows, we recommend you use cygwin (MinGW probably works too,
+but we have not tested it).  `make` is required as well; on MacOS, you may
+need to install XCode to get that. Most linux installs have it by default.
+
 1. Ensure you have [Stack](https://www.haskell.org/downloads#stack) installed (if you have the Haskell Platform, you should already have Stack).
 2. Run `stack setup` while in **./code/**
 3. Use the `make` command to build the current version of Drasil. This will build and run all of the examples as well.

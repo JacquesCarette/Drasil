@@ -24,7 +24,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
   InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..), 
   ODEInfo(..), ODEOptions(..), ODEMethod(..))
-import GOOL.Drasil.LanguageRenderer (new, classDocD, multiStateDocD, bodyDocD, 
+import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
   mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
   classVarDocD, objVarDocD, newObjDocD, funcDocD, castDocD, listSetFuncDocD, 
@@ -36,7 +36,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, double, char, string, 
   listType, arrayType, listInnerType, obj, enumType, funcType, void, 
   runStrategy, listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, 
-  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
+  greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, divideOp, 
   moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, classVar, 
   objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, litFalse, 
   litChar, litFloat, litInt, litString, valueOf, arg, enumElement, argsList, 
@@ -47,17 +47,17 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterBeginError, iterEndError, listAccessFunc, listSetFunc, printSt, state, 
   loopState, emptyState, assign, assignToListIndex, multiAssignError, decrement,
   increment, decrement1, increment1, varDec, varDecDef, listDec, listDecDef', 
-  arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, constDecDef, 
-  discardInput, openFileR, openFileW, openFileA, closeFile, discardFileLine, 
-  stringListVals, stringListLists, returnState, multiReturnError, valState, 
-  comment, freeError, throw, initState, changeState, initObserverList, 
-  addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists, for, forRange, 
-  forEach, while, tryCatch, checkState, notifyObservers, construct, param, 
-  method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, 
-  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef,
-  constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
-  implementingClass, docClass, commentedClass, buildModule', modFromData, 
-  fileDoc, docMod, fileFromData)
+  arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
+  extObjDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, 
+  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
+  returnState, multiReturnError, valState, comment, freeError, throw, initState,
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
+  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
+  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
+  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
+  pubGVar, buildClass, enum, pubClass, implementingClass, docClass, 
+  commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -69,7 +69,7 @@ import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn, 
-  addLangImport, addLangImportVS, addLibImport, getClassName, 
+  addLangImport, addLangImportVS, addLibImport, setFileType, getClassName, 
   setCurrMain, setODEDepVars, getODEDepVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -79,7 +79,7 @@ import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (elemIndex, intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  comma, equals, semi, vcat, braces, lbrace, rbrace, colon)
+  semi, vcat, lbrace, rbrace, colon)
 
 csExt :: String
 csExt = "cs"
@@ -105,9 +105,9 @@ instance RenderSym CSharpCode
 
 instance FileSym CSharpCode where
   type RenderFile CSharpCode = FileData
-  fileDoc = G.fileDoc Combined csExt top bottom
+  fileDoc m = modify (setFileType Combined) >> G.fileDoc csExt top bottom m
 
-  docMod = G.docMod
+  docMod = G.docMod csExt
 
   commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
@@ -125,7 +125,7 @@ instance KeywordSym CSharpCode where
   inherit n = toCode $ colon <+> text n
   implements is = toCode $ colon <+> text (intercalate ", " is)
 
-  list _ = toCode $ text "List"
+  list = toCode $ text "List"
 
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
@@ -191,8 +191,8 @@ instance TypeSym CSharpCode where
   string = G.string
   infile = csInfileType
   outfile = csOutfileType
-  listType p t = modify (addLangImportVS "System.Collections.Generic") >> 
-    G.listType p t
+  listType t = modify (addLangImportVS "System.Collections.Generic") >> 
+    G.listType list t
   arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
@@ -217,15 +217,16 @@ instance ControlBlockSym CSharpCode where
     addLangImport "System.Linq") >> 
     multiBlock [
       block [
+        objDecNewNoParams optsVar,
+        objVar optsVar (var "AbsoluteTolerance" float) &= absTol opts,
+        objVar optsVar (var "AbsoluteTolerance" float) &= relTol opts],
+      block [
         varDecDef sol (extFuncApp "Ode" (csODEMethod $ solveMethod opts) odeT 
         [tInit info, 
         newObj vec [initVal info], 
         lambda [iv, dv] (newObj vec [dv >>= (\dpv -> modify (setODEDepVars 
           [variableName dpv]) >> ode info)]),
-        join $ on2StateValues (\abt rt -> mkStateVal (obj "Options") (new <+> 
-          text "Options" <+> braces (text "AbsoluteTolerance" <+> equals <+> 
-          valueDoc abt <> comma <+> text "RelativeTolerance" <+> equals <+> 
-          valueDoc rt))) (absTol opts) (relTol opts)])],
+        valueOf optsVar])],
       block [
         varDecDef points (objMethodCallNoParams spArray 
         (objMethodCall void (valueOf sol) "SolveFromToStep" 
@@ -235,7 +236,8 @@ instance ControlBlockSym CSharpCode where
           (oneLiner $ valState $ listAppend (valueOf dv) (valueOf $ 
           objVar sp (var "X" (listInnerType $ onStateValue variableType dv))))]
     ]
-    where iv = indepVar info
+    where optsVar = var "opts" (obj "Options")
+          iv = indepVar info
           dv = depVar info
           odeT = obj "IEnumerable<SolPoint>"
           vec = obj "Vector"
@@ -490,9 +492,9 @@ instance StatementSym CSharpCode where
   arrayDecDef = G.arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew _ = objDecNew
+  extObjDecNew = G.extObjDecNew
   objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams _ = objDecNewNoParams
+  extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef = G.constDecDef
   funcDecDef = csFuncDecDef blockStart blockEnd
 
@@ -518,8 +520,8 @@ instance StatementSym CSharpCode where
 
   getFileInputLine = getFileInput
   discardFileLine = G.discardFileLine "ReadLine"
-  stringSplit d vnew s = assign vnew $ newObj (listType dynamic string) 
-    [s $. func "Split" (listType static string) [litChar d]]
+  stringSplit d vnew s = assign vnew $ newObj (listType string) 
+    [s $. func "Split" (listType string) [litChar d]]
 
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists
@@ -578,6 +580,7 @@ instance ScopeSym CSharpCode where
 
 instance InternalScope CSharpCode where
   scopeDoc = unCSC
+  scopeFromData _ = toCode
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
@@ -648,7 +651,7 @@ instance ClassSym CSharpCode where
   type Class CSharpCode = Doc
   buildClass = G.buildClass classDocD inherit
   enum = G.enum
-  privClass = G.privClass
+  privClass = pubClass
   pubClass = G.pubClass
   implementingClass = G.implementingClass classDocD implements
 

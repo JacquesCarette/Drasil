@@ -4,6 +4,7 @@ package Projectile;
     \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
     \brief Controls the flow of the program
 */
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Control {
@@ -11,7 +12,7 @@ public class Control {
     /** \brief Controls the flow of the program
         \param args List of command-line arguments
     */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         String filename = args[0];
         InputParameters inParams = new InputParameters(filename);
         double g_vect = 9.8;

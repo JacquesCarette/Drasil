@@ -346,7 +346,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     declared :: ChunkDB -> FuncStmt -> [CodeChunk]
     declared _  (FDec cch) = [cch]
     declared _  (FAsg _ _) = []
-    declared _  (FAsgIndex _ _ _) = []
+    declared _  FAsgIndex {} = []
     declared sm (FFor _ _ fs) = concatMap (declared sm) fs
     declared sm (FWhile _ fs) = concatMap (declared sm) fs
     declared sm (FCond _ tfs efs) = concatMap (declared sm) tfs ++ concatMap (declared sm) efs

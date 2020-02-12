@@ -1,5 +1,5 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
-  scipyODE, osloODE, apacheODE
+  scipyODE, oslo, apacheODE
 ) where
 
 import Language.Drasil
@@ -27,7 +27,7 @@ scipyODE = externalLib [
     setIntegratorMethod [vode, methodArg "bdf", atol, rtol],
     setIntegratorMethod [lockedArg (str "dopri45"), atol, rtol]],
   mandatoryStep $ libMethod r "set_initial_value" [inlineArg Float],
-  statementStep (\cdch e -> FAsg (head cdch) (Matrix [[e!!1]])),
+  statementStep (\cdch e -> FAsg (head cdch) (Matrix [[head e]])),
   mandatoryStep $ loopConditionMethod r "successful" [] (\cdch -> 
     sy rt $< sy (head cdch)),
   mandatoryStep $ loopedMethod r "integrate" [inlineArg Float] (\cdch -> 
@@ -62,8 +62,8 @@ ry = ccObjVar r $ codevar $ implCQD "y_scipy" (nounPhrase
 
 -- Oslo (C#) --
 
-osloODE :: ExternalLibrary
-osloODE = externalLib [
+oslo :: ExternalLibrary
+oslo = externalLib [
   mandatoryStep $ libConstructor "Vector" [inlineArg Float] initv,
   choiceStep [
     libFunctionWithResult "Ode.RK547M" odeArgs sol,
@@ -117,7 +117,7 @@ apacheODE = externalLib [
   choiceStep [
     libConstructor adams (lockedArg (int 3) : itArgs) it,
     libConstructor dp54 itArgs it],
-  statementStep (\cdch e -> FAsg (head cdch) (Matrix [[e!!1]])),
+  statementStep (\_ e -> FAsg currVals (Matrix [[head e]])),
   mandatoryStep $ libMethod it "addStepHandler" [customObjArg stepHandler 
     (implementation sh [
       methodInfo "init" (map lockedParam [t0, y0, t]) Void [statementStep 
@@ -134,7 +134,8 @@ apacheODE = externalLib [
       methodInfo "computeDerivatives" [
         lockedParam t, unnamedParam (Array Float), unnamedParam (Array Float)]
         Void [statementStep (\cdch e -> FAsgIndex (head cdch) 0 (head e))]]) : 
-    map inlineArg [Float, Array Float, Float, Array Float]),
+    [inlineArg Float, lockedArg (sy currVals), inlineArg Float, 
+      lockedArg (sy currVals)]),
   statementStep (\cdch _ -> 
     FAsg (head cdch) (sy $ ccObjVar stepHandler (head cdch)))]
 
@@ -151,7 +152,11 @@ it :: CodeChunk
 it = codevar $ implCQD "it_apache" (nounPhrase "integrator for solving ODEs"
   "integrators for solving ODEs") Nothing (Object foi) (Label "it") Nothing
 
-stepHandler, t0, y0, t, interpolator, isLast, curr, ode :: CodeChunk
+currVals, stepHandler, t0, y0, t, interpolator, isLast, curr, ode :: CodeChunk
+currVals = codevar $ implCQD "curr_vals_apache" (nounPhrase 
+  "array holding ODE solution values for the current step"
+  "arrays holding ODE solution values for the current step") Nothing 
+  (Array Float) (Label "curr_vals") Nothing
 stepHandler = codevar $ implCQD "stepHandler_apache" (nounPhrase 
   "ODE step handler" "ODE step handlers") Nothing (Object sh)
   (Label "stepHandler") Nothing
@@ -176,3 +181,4 @@ curr = codevar $ implCQD "curr_apache" (nounPhrase
 ode = codevar $ implCQD "ode_apache" (nounPhrase 
   "object representing an ODE system" "objects representing an ODE system")
   Nothing (Object "ODE") (Label "ode") Nothing
+

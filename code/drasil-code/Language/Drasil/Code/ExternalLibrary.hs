@@ -10,7 +10,7 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary,
 ) where
 
 import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeChunk)
+import Language.Drasil.Chunk.Code (CodeChunk, codeType)
 import Language.Drasil.CodeSpec (FuncStmt)
 
 import GOOL.Drasil (CodeType)
@@ -38,7 +38,7 @@ data Argument =
   -- Not dependent on use case, Maybe is name for the argument
   LockedArg (Maybe VarName) Expr 
   -- First Maybe is name for the argument (needed for named parameters)
-  -- Second Maybe is the variable name if it needs to be declared and defined prior to calling
+  -- Second Maybe is the variable if it needs to be declared and defined prior to calling
   | Basic (Maybe VarName) CodeType (Maybe CodeChunk) 
   | Fn CodeChunk [Parameter] ([Expr] -> FuncStmt)
   | Class CodeChunk ClassInfo
@@ -48,8 +48,8 @@ data Parameter = LockedParam CodeChunk | NameableParam CodeType
 
 data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
 
--- Constructor body
-data MethodInfo = CI [Step]
+-- Constructor: known parameters, body
+data MethodInfo = CI [Parameter] [Step]
   -- Method name, parameters, return type, body
   | MI FuncName [Parameter] CodeType [Step]
 
@@ -122,11 +122,11 @@ inlineArg t = Basic Nothing t Nothing
 inlineNamedArg :: VarName ->  CodeType -> Argument
 inlineNamedArg n t = Basic (Just n) t Nothing
 
-preDefinedArg :: CodeType -> CodeChunk -> Argument
-preDefinedArg t v = Basic Nothing t (Just v)
+preDefinedArg :: CodeChunk -> Argument
+preDefinedArg v = Basic Nothing (codeType v) (Just v)
 
-preDefinedNamedArg :: VarName ->  CodeType -> CodeChunk -> Argument
-preDefinedNamedArg n t v = Basic (Just n) t (Just v)
+preDefinedNamedArg :: VarName -> CodeChunk -> Argument
+preDefinedNamedArg n v = Basic (Just n) (codeType v) (Just v)
 
 functionArg :: CodeChunk -> [Parameter] -> ([Expr] -> FuncStmt) -> Argument
 functionArg = Fn
@@ -149,7 +149,7 @@ customClass = Regular
 implementation :: String -> [MethodInfo] -> ClassInfo
 implementation = Implements
 
-constructorInfo :: [Step] -> MethodInfo
+constructorInfo :: [Parameter] -> [Step] -> MethodInfo
 constructorInfo = CI
 
 methodInfo :: FuncName -> [Parameter] -> CodeType -> [Step] -> MethodInfo

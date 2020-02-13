@@ -8,10 +8,10 @@ import Language.Drasil.Code (FuncStmt(..), ExternalLibrary, FunctionInterface,
   Argument, externalLib, mandatoryStep, choiceSteps, choiceStep, libFunction, 
   libMethod, libFunctionWithResult, libMethodWithResult, loopConditionMethod, 
   loopedMethod, libConstructor, lockedArg, lockedNamedArg, inlineArg, 
-  inlineNamedArg, functionArg, customObjArg, recordArg, lockedParam, 
-  unnamedParam, customClass, implementation, constructorInfo, methodInfo, 
-  iterateStep, statementStep, lockedStatement, CodeChunk, codevar, ccObjVar, 
-  implCQD)
+  inlineNamedArg, preDefinedArg, functionArg, customObjArg, recordArg, 
+  lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
+  methodInfo, iterateStep, statementStep, lockedStatement, CodeChunk, codevar, 
+  ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Func, Void))
 import qualified GOOL.Drasil as C (CodeType(Boolean, Integer))
@@ -121,7 +121,6 @@ apacheODE = externalLib [
   choiceStep [
     libConstructor adams (lockedArg (int 3) : itArgs) it,
     libConstructor dp54 itArgs it],
-  statementStep (\_ e -> FAsg currVals (Matrix [[head e]])),
   mandatoryStep $ libMethod it "addStepHandler" [customObjArg stepHandler 
     (implementation sh [
       methodInfo "init" (map lockedParam [t0, y0, t]) Void [statementStep 
@@ -133,13 +132,13 @@ apacheODE = externalLib [
           FAppend (sy $ head cdch) (idx (sy curr) (int 0)))]])],
   mandatoryStep $ libMethod it "integrate" (customObjArg ode
     (implementation "FirstOrderDifferentialEquations" [
-      constructorInfo [],
+      constructorInfo [] [],
       methodInfo "getDimension" [] C.Integer [lockedStatement $ FRet (int 1)],
       methodInfo "computeDerivatives" [
         lockedParam t, unnamedParam (Array Float), unnamedParam (Array Float)]
         Void [statementStep (\cdch e -> FAsgIndex (head cdch) 0 (head e))]]) : 
-    [inlineArg Float, lockedArg (sy currVals), inlineArg Float, 
-      lockedArg (sy currVals)]),
+    [inlineArg Float, preDefinedArg currVals, inlineArg Float, 
+      preDefinedArg currVals]),
   statementStep (\cdch _ -> 
     FAsg (head cdch) (sy $ ccObjVar stepHandler (head cdch)))]
 
@@ -185,9 +184,6 @@ curr = codevar $ implCQD "curr_apache" (nounPhrase
 
 odeint :: ExternalLibrary
 odeint = externalLib [
-  statementStep (\cdch _ -> FDec (head cdch)),
-  -- Need to declare variable holding initial value because odeint will update this variable at each step
-  statementStep (\_ e -> FAsg odeintCurrVals (Matrix [[head e]])),
   choiceSteps [
     [libConstructor (odeNameSpace ++ rkdp5) [] rk,
     libFunctionWithResult (odeNameSpace ++ "make_controlled") [inlineArg Float, 
@@ -196,14 +192,15 @@ odeint = externalLib [
   mandatoryStep $ libFunction (odeNameSpace ++ "integrate_const") [
     lockedArg (sy stepper), 
     customObjArg ode (customClass [
-      constructorInfo [],
-      methodInfo "operator()" [unnamedParam (List Float), 
+      constructorInfo [] [],
+      methodInfo "operator()" [unnamedParam (List Float),
         unnamedParam (List Float), lockedParam t] Void [
           statementStep (\cdch e -> FAsgIndex (head cdch) 0 (head e))]]),
-    lockedArg (sy odeintCurrVals),
+    -- Need to declare variable holding initial value because odeint will update this variable at each step
+    preDefinedArg odeintCurrVals,
     inlineArg Float, inlineArg Float, inlineArg Float, 
     customObjArg pop (customClass [
-      constructorInfo [],
+      constructorInfo [unnamedParam (List Float)] [],
       methodInfo "operator()" [unnamedParam (List Float), lockedParam t] Void
         [statementStep (\cdch _ -> FAppend (sy $ head cdch) 
           (idx (sy $ head cdch) (int 0)))]])]]

@@ -5,8 +5,8 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..), 
-  Name)
+import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..))
+import Language.Drasil.Mod (Name)
   
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 

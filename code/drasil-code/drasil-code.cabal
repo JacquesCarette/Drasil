@@ -43,6 +43,7 @@ library
     , Language.Drasil.Code.Imperative.DrasilState
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.CodeSpec
+    , Language.Drasil.Mod
 
   Build-Depends:
     base >= 4.7,

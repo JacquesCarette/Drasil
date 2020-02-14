@@ -10,7 +10,7 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
 
 import Language.Drasil
 import Language.Drasil.Chunk.Code (CodeChunk, codeType)
-import Language.Drasil.CodeSpec (FuncStmt)
+import Language.Drasil.Mod (FuncStmt)
 
 import GOOL.Drasil (CodeType)
 

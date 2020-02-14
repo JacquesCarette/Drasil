@@ -5,11 +5,12 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 
 import Language.Drasil 
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
-import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), codevar)
+import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), codevar,
+  codevars, codevars')
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Structure(..), 
-  InputModule(..), ConstantStructure(..), ConstantRepr(..), codevars, codevars',
+  InputModule(..), ConstantStructure(..), ConstantRepr(..),
   constraintvarsandfuncs, getConstraints)
 
 import Data.List (nub, (\\))

@@ -22,11 +22,12 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
-  ConstantRepr(..), ConstantStructure(..), Func(..), FuncData(..), FuncDef(..), 
-  FuncStmt(..), Mod(..), Name, Structure(..), asExpr, fstdecl)
+  ConstantRepr(..), ConstantStructure(..), Structure(..), asExpr)
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
+import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..), 
+  Mod(..), Name, fstdecl)
 
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), PermanenceSym(..), 
   BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 

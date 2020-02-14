@@ -27,9 +27,9 @@ written using a typical "manual" approach.  The full files for the case studies
 are available in [a separate case studies repo](https://github.com/smiths/caseStudies).
 
 For more information on Drasil, please read 
-[our position paper](https://github.com/JacquesCarette/Drasil/blob/master/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf)
+[our position paper](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf)
 or take a look at 
-[our poster](https://github.com/JacquesCarette/Drasil/blob/master/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
+[our poster](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
 
 ## Quick Start
 

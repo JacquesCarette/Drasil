@@ -1,12 +1,11 @@
-module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, 
+module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   FunctionInterface, Argument, externalLib, choiceSteps, choiceStep, 
-  mandatoryStep, libFunction, libMethod, libFunctionWithResult, 
-  libMethodWithResult, loopConditionFunction, loopConditionMethod, 
-  loopedFunction, loopedMethod, loopedFunctionWithResult, 
-  loopedMethodWithResult, libConstructor, lockedArg, lockedNamedArg, inlineArg, 
-  inlineNamedArg, preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, 
-  recordArg, lockedParam, unnamedParam, customClass, implementation, 
-  constructorInfo, methodInfo, iterateStep, statementStep, lockedStatement
+  mandatoryStep, callStep, loopStep, libFunction, libMethod, 
+  libFunctionWithResult, libMethodWithResult, libConstructor, lockedArg, 
+  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
+  functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
+  implementation, constructorInfo, methodInfo, iterateStep, statementStep, 
+  lockedStatement
 ) where
 
 import Language.Drasil
@@ -20,19 +19,20 @@ type FuncName = String
 type FieldName = String
 type Condition = Expr
 
-type ExternalLibrary = [Step]
+type ExternalLibrary = [StepGroup]
 
-data Step = Call [[FunctionInterface]]
+type StepGroup = [[Step]]
+
+data Step = Call FunctionInterface
+  -- A while loop -- function calls in the condition, other conditions, steps for the body
+  | Loop [FunctionInterface] ([CodeChunk] -> Condition) [Step]
   -- A foreach loop - CodeChunk to iterate through, CodeChunk for iteration variable, loop body
+  -- FIXME: This Node should be merged with Statement. Will do soon.
   | Iterate CodeChunk CodeChunk ([CodeChunk] -> [FuncStmt])
   -- For when a statement is needed, but does not interface with the external library
   | Statement ([CodeChunk] -> [Expr] -> FuncStmt)
 
-data FunctionInterface = FI FuncType FuncName [Argument] [ContextAttribute]
-
-data ContextAttribute = Assignment CodeChunk -- CodeChunk is variable to assign
-  | LoopCondition ([CodeChunk] -> Condition) -- Parameter is other conditions
-  | LoopBody ([CodeChunk] -> [FuncStmt]) -- Other statements to do in the loop, need to pass list of CodeChunk for use-case-specific variables
+data FunctionInterface = FI FuncType FuncName [Argument] (Maybe CodeChunk) -- Maybe CodeChunk to assign to
 
 data Argument = 
   -- Not dependent on use case, Maybe is name for the argument
@@ -55,60 +55,40 @@ data MethodInfo = CI [Parameter] [Step]
 
 data FuncType = Function | Method CodeChunk | Constructor
 
-externalLib :: [Step] -> ExternalLibrary
+externalLib :: [StepGroup] -> ExternalLibrary
 externalLib = id
 
-choiceSteps :: [[FunctionInterface]] -> Step
-choiceSteps = Call
+choiceSteps :: [[Step]] -> StepGroup
+choiceSteps = id
 
-choiceStep :: [FunctionInterface] -> Step
-choiceStep = Call . map (: [])
+choiceStep :: [Step] -> StepGroup
+choiceStep = map (: [])
 
-mandatoryStep :: FunctionInterface -> Step
-mandatoryStep f = Call [[f]]
+mandatoryStep :: Step -> StepGroup
+mandatoryStep f = [[f]]
+
+callStep :: FunctionInterface -> Step
+callStep = Call
+
+loopStep :: [FunctionInterface] -> ([CodeChunk] -> Condition) -> [Step] -> Step
+loopStep = Loop
 
 libFunction :: FuncName -> [Argument] -> FunctionInterface
-libFunction n ps = FI Function n ps []
+libFunction n ps = FI Function n ps Nothing
 
 libMethod :: CodeChunk -> FuncName -> [Argument] -> FunctionInterface
-libMethod o n ps = FI (Method o) n ps []
+libMethod o n ps = FI (Method o) n ps Nothing
 
 libFunctionWithResult :: FuncName -> [Argument] -> CodeChunk -> 
   FunctionInterface
-libFunctionWithResult n ps r = FI Function n ps [Assignment r]
+libFunctionWithResult n ps r = FI Function n ps (Just r)
 
 libMethodWithResult :: CodeChunk -> FuncName -> [Argument] -> CodeChunk -> 
   FunctionInterface
-libMethodWithResult o n ps r = FI (Method o) n ps [Assignment r]
-
-loopConditionFunction :: FuncName -> [Argument] -> 
-  ([CodeChunk] -> Condition) -> FunctionInterface
-loopConditionFunction n ps c = FI Function n ps [LoopCondition c]
-
-loopConditionMethod :: CodeChunk -> FuncName -> [Argument] -> 
-  ([CodeChunk] -> Condition) -> FunctionInterface
-loopConditionMethod o n ps c = FI (Method o) n ps [LoopCondition c]
-
-loopedFunction :: FuncName -> [Argument] -> 
-  ([CodeChunk] -> [FuncStmt]) -> FunctionInterface
-loopedFunction n ps loop = FI Function n ps [LoopBody loop]
-
-loopedMethod :: CodeChunk -> FuncName -> [Argument] -> 
-  ([CodeChunk] -> [FuncStmt]) -> FunctionInterface
-loopedMethod o n ps loop = FI (Method o) n ps [LoopBody loop]
-
-loopedFunctionWithResult :: FuncName -> [Argument] -> CodeChunk ->
-  ([CodeChunk] -> [FuncStmt]) -> FunctionInterface
-loopedFunctionWithResult n ps r loop = FI Function n ps [Assignment r, 
-  LoopBody loop]
-
-loopedMethodWithResult :: CodeChunk -> FuncName -> [Argument] -> CodeChunk ->
-  ([CodeChunk] -> [FuncStmt]) -> FunctionInterface
-loopedMethodWithResult o n ps r loop = FI (Method o) n ps [Assignment r, 
-  LoopBody loop]
+libMethodWithResult o n ps r = FI (Method o) n ps (Just r)
 
 libConstructor :: FuncName -> [Argument] -> CodeChunk -> FunctionInterface
-libConstructor n as c = FI Constructor n as [Assignment c] 
+libConstructor n as c = FI Constructor n as (Just c)
 
 lockedArg :: Expr -> Argument
 lockedArg = LockedArg Nothing

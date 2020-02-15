@@ -11,8 +11,15 @@ module Language.Drasil.Code (
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, 
   packmod, relToQD,
   junkLine, multiLine, repeated, singleLine, singleton,
+  ExternalLibrary, Step, FunctionInterface, Argument, externalLib, choiceSteps, 
+  choiceStep, mandatoryStep, callStep, loopStep, libFunction, libMethod, 
+  libFunctionWithResult, libMethodWithResult, libConstructor, lockedArg, 
+  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
+  functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
+  implementation, constructorInfo, methodInfo, iterateStep, statementStep, 
+  lockedStatement,
   PackageSym(..),
-  quantvar,
+  CodeChunk, codevar, quantvar, ccObjVar, CodeQuantityDict, implCQD,
   unPP, unJP, unCSP, unCPPP
 ) where
 
@@ -28,6 +35,15 @@ import Language.Drasil.Code.CodeGeneration (makeCode, createCodeFiles)
 import Language.Drasil.Code.DataDesc (junkLine, multiLine, repeated, singleLine,
   singleton)
 
+import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
+  FunctionInterface, Argument, externalLib, choiceSteps, choiceStep, 
+  mandatoryStep, callStep, loopStep, libFunction, libMethod, 
+  libFunctionWithResult, libMethodWithResult, libConstructor, lockedArg, 
+  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
+  functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
+  implementation, constructorInfo, methodInfo, iterateStep, statementStep, 
+  lockedStatement)
+
 import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec(..), 
   CodeSystInfo(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), Func, 
   FuncStmt(..), ImplementationType(..), Lang(..), Logging(..), Mod(Mod), 
@@ -38,7 +54,8 @@ import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec(..),
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
 
-import Language.Drasil.Chunk.Code (quantvar)
+import Language.Drasil.Chunk.Code (CodeChunk, codevar, quantvar, ccObjVar)
+import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, implCQD)
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)

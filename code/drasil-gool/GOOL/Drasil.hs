@@ -7,8 +7,8 @@ module GOOL.Drasil (Label, ProgramSym(..), FileSym(..),
   Selector(..), FunctionSym(..), SelectorFunction(..), ScopeSym(..), 
   ParameterSym(..), MethodSym(..), initializer, nonInitConstructor, 
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
-  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..),
-  ScopeTag(..), ProgData(..), FileData(..), ModData(..),
+  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), ProgData(..),
+  FileData(..), ModData(..),
   CodeType(..),
   GOOLState(..), GS, FS, CS, MS, VS, lensMStoVS, headers, sources, mainMod, 
   initialState,
@@ -26,7 +26,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), FileSym(..),
   BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
   ODEMethod(..))
 
-import GOOL.Drasil.Data (ScopeTag(..), FileData(..), ModData(..), ProgData(..))
+import GOOL.Drasil.Data (FileData(..), ModData(..), ProgData(..))
 
 import GOOL.Drasil.CodeType (CodeType(..))
 

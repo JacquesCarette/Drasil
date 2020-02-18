@@ -4,7 +4,8 @@ module Language.Drasil.Code.Imperative.Generator (
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
-import Language.Drasil.Code.Imperative.GenerateGOOL (genDoxConfig, genModule)
+import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
+  genDoxConfig, genModule)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs)
 import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass, 
@@ -19,8 +20,8 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Modularity(..), Visibility(..))
 
-import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ScopeTag(..),
-  ProgData(..), GS, FS, initialState, unCI)
+import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), GS, 
+  FS, initialState, unCI)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
   getCurrentDirectory)
@@ -106,9 +107,9 @@ genUnmodular = do
         ["get_input", "derived_values", "input_constraints"]
   genModule n ("Contains the entire " ++ n ++ " program")
     (map (fmap Just) (genMainFunc : concatMap genModFuncs (mods s)) ++ 
-    ((if cls then [] else [genInputFormat Pub, genInputDerived Pub, 
-      genInputConstraints Pub]) ++ [genOutputFormat])) 
-    [genInputClass Priv, genConstClass Priv]
+    ((if cls then [] else [genInputFormat Primary, genInputDerived Primary, 
+      genInputConstraints Primary]) ++ [genOutputFormat])) 
+    [genInputClass Auxiliary, genConstClass Auxiliary]
           
 genModules :: (ProgramSym repr) => 
   Reader DrasilState [FS (repr (RenderFile repr))]

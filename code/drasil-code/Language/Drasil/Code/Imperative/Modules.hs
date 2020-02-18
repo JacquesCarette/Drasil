@@ -12,8 +12,8 @@ import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
   inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc)
 import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
   getAllInputCalls, getOutputCall)
-import Language.Drasil.Code.Imperative.GenerateGOOL (genModule, publicClass, 
-  privateClass)
+import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), genModule, 
+  primaryClass, auxClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (CalcType(CalcAssign), convExpr,
   genCalcBlock, genConstructor, mkVal, mkVar, privateInOutMethod, privateMethod,
@@ -38,8 +38,8 @@ import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 import GOOL.Drasil (ProgramSym, FileSym(..), BodySym(..), BlockSym(..), 
   PermanenceSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   BooleanExpression(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ScopeTag(..), 
-  convType, FS, CS, MS, VS)
+  ScopeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), convType, FS, CS, 
+  MS, VS)
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
@@ -145,10 +145,10 @@ genInputModSeparated = do
   dvDesc <- modDesc (liftS derivedValuesDesc)
   icDesc <- modDesc (liftS inputConstraintsDesc)
   sequence 
-    [genModule "InputParameters" ipDesc [] [genInputClass Pub],
-    genModule "InputFormat" ifDesc [genInputFormat Pub] [],
-    genModule "DerivedValues" dvDesc [genInputDerived Pub] [],
-    genModule "InputConstraints" icDesc [genInputConstraints Pub] []]
+    [genModule "InputParameters" ipDesc [] [genInputClass Primary],
+    genModule "InputFormat" ifDesc [genInputFormat Primary] [],
+    genModule "DerivedValues" dvDesc [genInputDerived Primary] [],
+    genModule "InputConstraints" icDesc [genInputConstraints Primary] []]
 
 genInputModCombined :: (ProgramSym repr) => 
   Reader DrasilState [FS (repr (RenderFile repr))]
@@ -157,10 +157,10 @@ genInputModCombined = do
   let cname = "InputParameters"
       genMod :: (ProgramSym repr) => Maybe (CS (repr (Class repr))) ->
         Reader DrasilState (FS (repr (RenderFile repr)))
-      genMod Nothing = genModule cname ipDesc [genInputFormat Pub, 
-        genInputDerived Pub, genInputConstraints Pub] []
-      genMod _ = genModule cname ipDesc [] [genInputClass Pub]
-  ic <- genInputClass Pub
+      genMod Nothing = genModule cname ipDesc [genInputFormat Primary, 
+        genInputDerived Primary, genInputConstraints Primary] []
+      genMod _ = genModule cname ipDesc [] [genInputClass Primary]
+  ic <- genInputClass Primary
   liftS $ genMod ic
 
 constVarFunc :: (ProgramSym repr) => ConstantRepr -> String ->
@@ -169,7 +169,7 @@ constVarFunc :: (ProgramSym repr) => ConstantRepr -> String ->
 constVarFunc Var n = stateVarDef n public dynamic
 constVarFunc Const n = constVar n public
 
-genInputClass :: (ProgramSym repr) => ScopeTag -> 
+genInputClass :: (ProgramSym repr) => ClassType -> 
   Reader DrasilState (Maybe (CS (repr (Class repr))))
 genInputClass scp = withReader (\s -> s {currentClass = cname}) $ do
   g <- ask
@@ -184,15 +184,15 @@ genInputClass scp = withReader (\s -> s {currentClass = cname}) $ do
         Reader DrasilState [MS (repr (Method repr))]
       methods Separated = return []
       methods Combined = concat <$> mapM (fmap maybeToList) 
-        [genInputConstructor, genInputFormat Priv, 
-        genInputDerived Priv, genInputConstraints Priv]
+        [genInputConstructor, genInputFormat Auxiliary, 
+        genInputDerived Auxiliary, genInputConstraints Auxiliary]
       genClass :: (ProgramSym repr) => [CodeChunk] -> [CodeDefinition] -> 
         Reader DrasilState (Maybe (CS (repr (Class repr))))
       genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . codeEquat) csts
-        let getFunc Pub = publicClass
-            getFunc Priv = privateClass
+        let getFunc Primary = primaryClass
+            getFunc Auxiliary = auxClass
             f = getFunc scp
             inputVars = map (\x -> pubMVar (var (codeName x) (convType $ 
               codeType x))) inps
@@ -219,13 +219,13 @@ genInputConstructor = do
   genCtor $ any (`elem` dl) ["get_input", "derived_values", 
     "input_constraints"]
 
-genInputDerived :: (ProgramSym repr) => ScopeTag -> 
+genInputDerived :: (ProgramSym repr) => ClassType -> 
   Reader DrasilState (Maybe (MS (repr (Method repr))))
 genInputDerived s = do
   g <- ask
   let dvals = derivedInputs $ csi $ codeSpec g
-      getFunc Pub = publicInOutFunc
-      getFunc Priv = privateInOutMethod
+      getFunc Primary = publicInOutFunc
+      getFunc Auxiliary = privateInOutMethod
       genDerived :: (ProgramSym repr) => Bool -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
       genDerived False = return Nothing
@@ -238,13 +238,13 @@ genInputDerived s = do
         return $ Just mthd
   genDerived $ "derived_values" `elem` defList (codeSpec g)
 
-genInputConstraints :: (ProgramSym repr) => ScopeTag ->
+genInputConstraints :: (ProgramSym repr) => ClassType ->
   Reader DrasilState (Maybe (MS (repr (Method repr))))
 genInputConstraints s = do
   g <- ask
   let cm = cMap $ csi $ codeSpec g
-      getFunc Pub = publicFunc
-      getFunc Priv = privateMethod
+      getFunc Primary = publicFunc
+      getFunc Auxiliary = privateMethod
       genConstraints :: (ProgramSym repr) => Bool -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
       genConstraints False = return Nothing
@@ -350,13 +350,13 @@ printExpr (Int _) _ = []
 printExpr e db = [printStr $ " (" ++ render (exprDoc db Implementation Linear e)
   ++ ")"]
 
-genInputFormat :: (ProgramSym repr) => ScopeTag -> 
+genInputFormat :: (ProgramSym repr) => ClassType -> 
   Reader DrasilState (Maybe (MS (repr (Method repr))))
 genInputFormat s = do
   g <- ask
   dd <- genDataDesc
-  let getFunc Pub = publicInOutFunc
-      getFunc Priv = privateInOutMethod
+  let getFunc Primary = publicInOutFunc
+      getFunc Auxiliary = privateInOutMethod
       genInFormat :: (ProgramSym repr) => Bool -> Reader DrasilState 
         (Maybe (MS (repr (Method repr))))
       genInFormat False = return Nothing
@@ -387,9 +387,9 @@ genSampleInput = do
 genConstMod :: (ProgramSym repr) => Reader DrasilState [FS (repr (RenderFile repr))]
 genConstMod = do
   cDesc <- modDesc $ liftS constModDesc
-  liftS $ genModule "Constants" cDesc [] [genConstClass Pub]
+  liftS $ genModule "Constants" cDesc [] [genConstClass Primary]
 
-genConstClass :: (ProgramSym repr) => ScopeTag ->
+genConstClass :: (ProgramSym repr) => ClassType ->
   Reader DrasilState (Maybe (CS (repr (Class repr))))
 genConstClass scp = withReader (\s -> s {currentClass = cname}) $ do
   g <- ask
@@ -401,8 +401,8 @@ genConstClass scp = withReader (\s -> s {currentClass = cname}) $ do
         vals <- mapM (convExpr . codeEquat) vs 
         let vars = map (\x -> var (codeName x) (convType $ codeType x)) vs
             constVars = zipWith (constVarFunc (conRepr g) cname) vars vals
-            getFunc Pub = publicClass
-            getFunc Priv = privateClass
+            getFunc Primary = primaryClass
+            getFunc Auxiliary = auxClass
             f = getFunc scp
         cDesc <- constClassDesc
         cls <- f cDesc cname Nothing constVars (return [])

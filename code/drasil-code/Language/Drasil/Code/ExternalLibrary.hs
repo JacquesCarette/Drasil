@@ -1,11 +1,11 @@
 module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   FunctionInterface, Argument, externalLib, choiceSteps, choiceStep, 
-  mandatoryStep, callStep, loopStep, libFunction, libMethod, 
-  libFunctionWithResult, libMethodWithResult, libConstructor, lockedArg, 
-  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
-  functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
-  implementation, constructorInfo, methodInfo, iterateStep, statementStep, 
-  lockedStatement
+  mandatoryStep, callStep, callWithImport, callWithImports, loopStep, 
+  libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
+  libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
+  preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
+  lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
+  methodInfo, iterateStep, statementStep, lockedStatement
 ) where
 
 import Language.Drasil
@@ -18,12 +18,13 @@ type VarName = String
 type FuncName = String
 type FieldName = String
 type Condition = Expr
+type Import = String
 
 type ExternalLibrary = [StepGroup]
 
 type StepGroup = [[Step]]
 
-data Step = Call FunctionInterface
+data Step = Call [Import] FunctionInterface
   -- A while loop -- function calls in the condition, other conditions, steps for the body
   | Loop [FunctionInterface] ([CodeChunk] -> Condition) [Step]
   -- A foreach loop - CodeChunk to iterate through, CodeChunk for iteration variable, loop body
@@ -41,7 +42,7 @@ data Argument =
   -- Second Maybe is the variable if it needs to be declared and defined prior to calling
   | Basic (Maybe VarName) CodeType (Maybe CodeChunk) 
   | Fn CodeChunk [Parameter] ([Expr] -> FuncStmt)
-  | Class CodeChunk ClassInfo
+  | Class [Import] CodeChunk ClassInfo
   | Record FuncName CodeChunk [FieldName]
 
 data Parameter = LockedParam CodeChunk | NameableParam CodeType
@@ -68,7 +69,13 @@ mandatoryStep :: Step -> StepGroup
 mandatoryStep f = [[f]]
 
 callStep :: FunctionInterface -> Step
-callStep = Call
+callStep = Call []
+
+callWithImport :: Import -> FunctionInterface -> Step
+callWithImport i = Call [i]
+
+callWithImports :: [Import] -> FunctionInterface -> Step
+callWithImports = Call
 
 loopStep :: [FunctionInterface] -> ([CodeChunk] -> Condition) -> [Step] -> Step
 loopStep = Loop
@@ -111,7 +118,7 @@ preDefinedNamedArg n v = Basic (Just n) (codeType v) (Just v)
 functionArg :: CodeChunk -> [Parameter] -> ([Expr] -> FuncStmt) -> Argument
 functionArg = Fn
 
-customObjArg :: CodeChunk -> ClassInfo -> Argument
+customObjArg :: [Import] -> CodeChunk -> ClassInfo -> Argument
 customObjArg = Class
 
 recordArg :: FuncName -> CodeChunk -> [FieldName] -> Argument

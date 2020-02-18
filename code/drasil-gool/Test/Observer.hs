@@ -13,7 +13,7 @@ observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
 observer :: (ProgramSym repr) => FS (repr (RenderFile repr))
-observer = fileDoc (buildModule observerName [] [docClass observerDesc
+observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
 x :: (VariableSym repr) => VS (repr (Variable repr))

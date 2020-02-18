@@ -68,12 +68,12 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   onCodeList, onStateList, on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensCStoMS,
-  lensMStoFS, lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, 
+import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensMStoFS,
+  lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, 
   modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFiles, 
   getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
-  addLibImport, addLibImports, getModuleName, setFileType, getClassName, 
-  setCurrMain, setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
+  addLibImport, getModuleName, setFileType, getClassName, setCurrMain, 
+  setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
   setOutputsDeclared, isOutputsDeclared, getExceptions, getMethodExcMap, 
   addExceptions)
 
@@ -761,9 +761,8 @@ jODEFiles info = (map unJC fls, fst s)
                 ovs)) >>) ovars
               odeTempName = ((++ "_curr") . variableName)
               odeTemp = var (odeTempName dpv) (arrayType float)
-          in sequence [fileDoc (buildModule cn [] [zoom lensCStoMS (modify 
-              (addLibImport (odeImport ++ fode))) >> implementingClass cn [fode]
-              public (map privMVar othVars) 
+          in sequence [fileDoc (buildModule cn [odeImport ++ fode] [] 
+            [implementingClass cn [fode] public (map privMVar othVars) 
               [initializer (map param othVars) (zip othVars 
                 (map valueOf othVars)),
               pubMethod "getDimension" int [] (oneLiner $ returnState $ 
@@ -772,9 +771,8 @@ jODEFiles info = (map unJC fls, fst s)
                 var n (arrayType float), ddv]) (oneLiner $ arrayElem 0 ddv &= 
                 (modify (setODEDepVars [variableName dpv, dn] . setODEOthVars 
                 (map variableName ovs)) >> ode info))]]),
-            fileDoc (buildModule shn [] [zoom lensCStoMS (modify (addLibImports 
-              (map ((odeImport ++ "sampling.") ++) [stH, stI]))) >> 
-              implementingClass shn [stH] public [pubMVar dv] 
+            fileDoc (buildModule shn (map ((odeImport ++ "sampling.") ++) 
+              [stH, stI]) [] [implementingClass shn [stH] public [pubMVar dv] 
                 [pubMethod "init" void (map param [var "t0" float, y0, 
                   var "t" float]) (modify (addLangImport "java.util.Arrays") >> 
                     oneLiner (objVarSelf dv &= newObj (obj 

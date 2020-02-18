@@ -419,21 +419,17 @@ instance StateVarSym CodeInfo where
 
 instance ClassSym CodeInfo where
   type Class CodeInfo = ()
-  buildClass n _ s _ ms = do
-    modify ((if unCI s == Pub then addClass n else id) . setClassName n)
+  buildClass n _ _ ms = do
+    modify (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
   enum n _ s = if unCI s == Pub then modifyReturn (addClass n) (toCode ()) else 
     noInfo 
-  privClass n _ _ ms = do
+  extraClass n _ _ ms = do
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
-  pubClass n _ _ ms = do
-    modify (addClass n . setClassName n)
-    mapM_ (zoom lensCStoMS) ms
-    noInfo
-  implementingClass n _ s _ = buildClass n Nothing s [] 
+  implementingClass n _ _ = buildClass n Nothing [] 
 
   docClass _ c = do
     _ <- c

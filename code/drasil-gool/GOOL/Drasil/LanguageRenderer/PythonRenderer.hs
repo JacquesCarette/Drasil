@@ -49,7 +49,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   ifNoElse, switchAsIf, ifExists, tryCatch, checkState, construct, param, 
   method, getMethod, setMethod, privMethod, pubMethod, constructor, function, 
   docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
-  privClass, pubClass, implementingClass, docClass, commentedClass, buildModule,
+  implementingClass, docClass, commentedClass, intClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, binExpr, 
@@ -138,6 +138,7 @@ instance KeywordSym PythonCode where
   docCommentStart = toCode $ text "##"
   docCommentEnd = toCode empty
 
+  keyFromDoc = toCode
   keyDoc = unPC
 
 instance ImportSym PythonCode where
@@ -671,18 +672,18 @@ instance InternalStateVar PythonCode where
 
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
-  buildClass = G.buildClass pyClass inherit
+  buildClass = G.buildClass
   enum n es s = modify (setClassName n) >> classFromData (toState $ pyClass n 
     empty (scopeDoc s) (enumElementsDocD' es) empty)
-  privClass = G.privClass
-  pubClass = G.pubClass
-  implementingClass = G.implementingClass pyClass implements
+  extraClass = buildClass
+  implementingClass = G.implementingClass
 
   docClass = G.docClass
 
   commentedClass = G.commentedClass
 
 instance InternalClass PythonCode where
+  intClass = G.intClass pyClass
   classDoc = unPC
   classFromData = onStateValue toCode
 

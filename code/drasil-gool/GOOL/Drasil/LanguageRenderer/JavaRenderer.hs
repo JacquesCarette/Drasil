@@ -56,7 +56,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
   constructor, docMain, function, mainFunction, docFunc, intFunc, stateVar, 
   stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
-  privClass, pubClass, implementingClass, docClass, commentedClass, 
+  extraClass, implementingClass, docClass, commentedClass, intClass,
   buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
@@ -151,6 +151,7 @@ instance KeywordSym JavaCode where
   docCommentStart = toCode docCmtStart
   docCommentEnd = blockCommentEnd
 
+  keyFromDoc = toCode
   keyDoc = unJC
 
 instance ImportSym JavaCode where
@@ -687,17 +688,17 @@ instance InternalStateVar JavaCode where
 
 instance ClassSym JavaCode where
   type Class JavaCode = Doc
-  buildClass = G.buildClass classDocD inherit
+  buildClass = G.buildClass
   enum = G.enum
-  privClass = G.privClass
-  pubClass = G.pubClass
-  implementingClass = G.implementingClass classDocD implements
+  extraClass = G.extraClass
+  implementingClass = G.implementingClass
 
   docClass = G.docClass
 
   commentedClass = G.commentedClass
 
 instance InternalClass JavaCode where
+  intClass = G.intClass classDocD
   classDoc = unJC
   classFromData = onStateValue toCode
 
@@ -762,7 +763,7 @@ jODEFiles info = (map unJC fls, fst s)
               odeTempName = ((++ "_curr") . variableName)
               odeTemp = var (odeTempName dpv) (arrayType float)
           in sequence [fileDoc (buildModule cn [odeImport ++ fode] [] 
-            [implementingClass cn [fode] public (map privMVar othVars) 
+            [implementingClass cn [fode] (map privMVar othVars) 
               [initializer (map param othVars) (zip othVars 
                 (map valueOf othVars)),
               pubMethod "getDimension" int [] (oneLiner $ returnState $ 
@@ -772,7 +773,7 @@ jODEFiles info = (map unJC fls, fst s)
                 (modify (setODEDepVars [variableName dpv, dn] . setODEOthVars 
                 (map variableName ovs)) >> ode info))]]),
             fileDoc (buildModule shn (map ((odeImport ++ "sampling.") ++) 
-              [stH, stI]) [] [implementingClass shn [stH] public [pubMVar dv] 
+              [stH, stI]) [] [implementingClass shn [stH] [pubMVar dv] 
                 [pubMethod "init" void (map param [var "t0" float, y0, 
                   var "t" float]) (modify (addLangImport "java.util.Arrays") >> 
                     oneLiner (objVarSelf dv &= newObj (obj 

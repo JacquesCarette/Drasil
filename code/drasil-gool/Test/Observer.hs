@@ -23,7 +23,7 @@ selfX :: (VariableSym repr) => VS (repr (Variable repr))
 selfX = objVarSelf x
 
 helperClass :: (ClassSym repr) => CS (repr (Class repr))
-helperClass = pubClass observerName Nothing [stateVar public dynamic x]
+helperClass = buildClass observerName Nothing [stateVar public dynamic x]
   [observerConstructor, printNumMethod, getMethod x, setMethod x]
 
 observerConstructor :: (MethodSym repr) => MS (repr (Method repr))

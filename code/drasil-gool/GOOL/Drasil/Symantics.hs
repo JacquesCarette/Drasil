@@ -86,6 +86,7 @@ class (PermanenceSym repr) => KeywordSym repr where
   docCommentStart   :: repr (Keyword repr)
   docCommentEnd     :: repr (Keyword repr)
 
+  keyFromDoc :: Doc -> repr (Keyword repr)
   keyDoc :: repr (Keyword repr) -> Doc
 
 class ImportSym repr where
@@ -760,17 +761,13 @@ class InternalStateVar repr where
 
 class (MethodSym repr) => ClassSym repr where
   type Class repr
-  buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
-    [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
-    CS (repr (Class repr))
+  buildClass :: Label -> Maybe Label -> [CS (repr (StateVar repr))] 
+    -> [MS (repr (Method repr))] -> CS (repr (Class repr))
   enum :: Label -> [Label] -> repr (Scope repr) -> CS (repr (Class repr))
-  privClass :: Label -> Maybe Label -> [CS (repr (StateVar repr))] 
+  extraClass :: Label -> Maybe Label -> [CS (repr (StateVar repr))] 
     -> [MS (repr (Method repr))] -> CS (repr (Class repr))
-  pubClass :: Label -> Maybe Label -> [CS (repr (StateVar repr))] 
-    -> [MS (repr (Method repr))] -> CS (repr (Class repr))
-  implementingClass :: Label -> [Label] -> repr (Scope repr) -> 
-    [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
-    CS (repr (Class repr))
+  implementingClass :: Label -> [Label] -> [CS (repr (StateVar repr))] -> 
+    [MS (repr (Method repr))] -> CS (repr (Class repr))
 
   docClass :: String -> CS (repr (Class repr)) -> CS (repr (Class repr))
 
@@ -778,6 +775,10 @@ class (MethodSym repr) => ClassSym repr where
     CS (repr (Class repr)) -> CS (repr (Class repr))
 
 class InternalClass repr where
+  intClass :: Label -> repr (Scope repr) -> repr (Keyword repr) ->
+    [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
+    CS (repr (Class repr))
+
   classDoc :: repr (Class repr) -> Doc
   classFromData :: CS Doc -> CS (repr (Class repr))
 

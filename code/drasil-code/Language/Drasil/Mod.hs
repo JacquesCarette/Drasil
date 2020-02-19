@@ -16,7 +16,7 @@ import Language.Drasil.Printers (toPlainName)
 
 import GOOL.Drasil (CodeType)
 
-import Data.List ((\\), delete, nub)
+import Data.List ((\\), nub)
 
 type Name = String
 
@@ -51,6 +51,7 @@ data FuncStmt where
   FAsg :: CodeChunk -> Expr -> FuncStmt
   FAsgIndex :: CodeChunk -> Integer -> Expr -> FuncStmt
   FFor :: CodeChunk -> Expr -> [FuncStmt] -> FuncStmt
+  FForEach :: CodeChunk -> Expr -> [FuncStmt] -> FuncStmt
   FWhile :: Expr -> [FuncStmt] -> FuncStmt
   FCond :: Expr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
   FRet :: Expr -> FuncStmt
@@ -83,7 +84,8 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     fstvars _  (FDec cch) = [cch]
     fstvars sm (FAsg cch e) = cch:codevars' e sm
     fstvars sm (FAsgIndex cch _ e) = cch:codevars' e sm
-    fstvars sm (FFor cch e fs) = delete cch $ nub (codevars' e sm ++ concatMap (fstvars sm) fs)
+    fstvars sm (FFor cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
+    fstvars sm (FForEach cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
     fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
     fstvars sm (FCond e tfs efs) = codevars' e sm ++ concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) efs
     fstvars sm (FRet e) = codevars' e sm
@@ -97,7 +99,8 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     declared _  (FDec cch) = [cch]
     declared _  (FAsg _ _) = []
     declared _  FAsgIndex {} = []
-    declared sm (FFor _ _ fs) = concatMap (declared sm) fs
+    declared sm (FFor cch _ fs) = cch : concatMap (declared sm) fs
+    declared sm (FForEach cch _ fs) = cch : concatMap (declared sm) fs
     declared sm (FWhile _ fs) = concatMap (declared sm) fs
     declared sm (FCond _ tfs efs) = concatMap (declared sm) tfs ++ concatMap (declared sm) efs
     declared _  (FRet _) = []

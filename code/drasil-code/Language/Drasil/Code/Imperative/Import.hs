@@ -355,6 +355,11 @@ convStmt (FFor v e st) = do
   vari <- mkVar v
   e' <- convExpr $ getUpperBound e
   return $ forRange vari (litInt 0) e' (litInt 1) (bodyStatements stmts)
+convStmt (FForEach v e st) = do
+  stmts <- mapM convStmt st
+  vari <- mkVar v
+  e' <- convExpr e
+  return $ forEach vari e' (bodyStatements stmts)
 convStmt (FWhile e st) = do
   stmts <- mapM convStmt st
   e' <- convExpr e

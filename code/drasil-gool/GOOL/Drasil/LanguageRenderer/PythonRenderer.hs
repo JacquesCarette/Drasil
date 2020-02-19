@@ -28,8 +28,8 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, 
   newObjDocD', listSetFuncDocD, castObjDocD, dynamicDocD, bindingError, 
   classDec, dot, forLabel, inLabel, observerListName, commentedItem, 
-  addCommentsDocD, commentedModD, docFuncRepr, valueList, variableList,
-  parameterList, surroundBody)
+  addCommentsDocD, commentedModD, docFuncRepr, valueList, parameterList, 
+  surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, int, float, listInnerType, obj, 
   enumType, funcType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', 
@@ -213,8 +213,8 @@ instance ControlBlockSym PythonCode where
 
   solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
     block [
-      r &= objMethodCall odeT (extNewObj odeLib odeT 
-      [lambda [iv, dv] (ode info)]) 
+      binFuncDecDef f (ode info) iv dv,
+      r &= objMethodCall odeT (extNewObj odeLib odeT [valueOf f]) 
         "set_integrator" (pyODEMethod (solveMethod opts) ++
           [absTol opts >>= (mkStateVal float . (text "atol=" <>) . valueDoc),
           relTol opts >>= (mkStateVal float . (text "rtol=" <>) . valueDoc)]),
@@ -233,6 +233,8 @@ instance ControlBlockSym PythonCode where
    where odeLib = "scipy.integrate"
          iv = indepVar info
          dv = depVar info
+         f =  var "f" (funcType (map (fmap variableType) [iv, dv]) 
+           (fmap valueType (ode info iv dv)))
          odeT = obj "ode"
          r = var "r" odeT
          rVal = valueOf r
@@ -496,9 +498,8 @@ instance StatementSym PythonCode where
   extObjDecNewNoParams lib v = modify (addModuleImport lib) >> varDecDef v 
     (extNewObj lib (onStateValue variableType v) [])
   constDecDef = varDecDef
-  funcDecDef v ps r = onStateValue (mkStNoEnd . methodDoc) (zoom lensMStoVS v 
-    >>= (\vr -> function (variableName vr) private dynamic 
-    (toState $ variableType vr) (map param ps) (oneLiner $ returnState r)))
+  funcDecDef v f p = pyFuncDecDef v (f p) [p]
+  binFuncDecDef v f p1 p2 = pyFuncDecDef v (f p1 p2) [p1, p2]
 
   print = pyOut False Nothing printFunc
   printLn = pyOut True Nothing printFunc
@@ -744,9 +745,8 @@ pyInlineIf = on3StateValues (\c v1 v2 -> valFromData (valuePrec c)
   (valueType v1) (valueDoc v1 <+> text "if" <+> valueDoc c <+> text "else" <+> 
   valueDoc v2))
 
-pyLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
-  Doc
-pyLambda ps ex = text "lambda" <+> variableList ps <> colon <+> valueDoc ex
+pyLambda :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> Doc
+pyLambda p ex = text "lambda" <+> variableDoc p <> colon <+> valueDoc ex
 
 pyListSize :: Doc -> Doc -> Doc
 pyListSize v f = f <> parens v
@@ -760,6 +760,14 @@ pyListDec v = variableDoc v <+> equals <+> getTypeDoc (variableType v)
 pyListDecDef :: (RenderSym repr) => repr (Variable repr) -> [repr (Value repr)] 
   -> Doc
 pyListDecDef v vs = variableDoc v <+> equals <+> brackets (valueList vs)
+
+pyFuncDecDef :: (RenderSym repr) => VS (repr (Variable repr)) -> 
+  VS (repr (Value repr)) -> [VS (repr (Variable repr))] -> 
+  MS (repr (Statement repr))
+pyFuncDecDef v vl ps = onStateValue (mkStNoEnd . methodDoc) 
+  (zoom lensMStoVS v >>= (\vr -> function (variableName vr) private dynamic
+  (toState $ variableType vr) (map param ps) 
+  (oneLiner $ returnState vl)))
 
 pyPrint :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
   -> repr (Value repr) -> Doc

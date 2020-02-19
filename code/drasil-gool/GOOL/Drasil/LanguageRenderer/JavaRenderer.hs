@@ -30,8 +30,8 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   castDocD, castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
   publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
   docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, commentedModD, docFuncRepr, variableList, parameterList, 
-  appendToBody, surroundBody, intValue)
+  addCommentsDocD, commentedModD, docFuncRepr, parameterList, appendToBody, 
+  surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, double, char, listType, 
   arrayType, listInnerType, obj, enumType, funcType, void, runStrategy, 
@@ -48,16 +48,16 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
   increment1, varDec, varDecDef, listDec, arrayDec, arrayDecDef, objDecNew, 
   objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, 
-  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, initState, changeState,
-  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
-  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
-  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
-  constructor, docMain, function, mainFunction, docFunc, intFunc, stateVar, 
-  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
-  privClass, pubClass, implementingClass, docClass, commentedClass, 
-  buildModule', modFromData, fileDoc, docMod, fileFromData)
+  binFuncDecDef, discardInput, discardFileInput, openFileR, openFileW, 
+  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
+  returnState, multiReturnError, valState, comment, freeError, throw, 
+  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
+  switch, switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, 
+  checkState, notifyObservers, construct, param, method, getMethod, setMethod, 
+  privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
+  intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, 
+  buildClass, enum, privClass, pubClass, implementingClass, docClass, 
+  commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -525,6 +525,7 @@ instance StatementSym JavaCode where
   constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkSt $ 
     jConstDecDef vr vl) vr' vl'
   funcDecDef = G.funcDecDef
+  binFuncDecDef = G.binFuncDecDef
 
   print = jOut False Nothing printFunc
   printLn = jOut True Nothing printLnFunc
@@ -746,6 +747,7 @@ jODEFiles info = (map unJC fls, fst s)
   where (fls, s) = runState odeFiles (initialState, initialFS)
         fode = "FirstOrderDifferentialEquations"
         dv = depVar info
+        iv = indepVar info
         ovars = otherVars info 
         odeFiles = join $ on1StateValue1List (\dpv ovs -> 
           let n = variableName dpv
@@ -771,7 +773,7 @@ jODEFiles info = (map unJC fls, fst s)
               pubMethod "computeDerivatives" void (map param [var "t" float, 
                 var n (arrayType float), ddv]) (oneLiner $ arrayElem 0 ddv &= 
                 (modify (setODEDepVars [variableName dpv, dn] . setODEOthVars 
-                (map variableName ovs)) >> ode info))]]),
+                (map variableName ovs)) >> ode info iv dv))]]),
             fileDoc (buildModule shn [] [zoom lensCStoMS (modify (addLibImports 
               (map ((odeImport ++ "sampling.") ++) [stH, stI]))) >> 
               implementingClass shn [stH] public [pubMVar dv] 
@@ -833,9 +835,8 @@ jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
-  Doc
-jLambda ps ex = parens (variableList ps) <+> text "->" <+> valueDoc ex
+jLambda :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> Doc
+jLambda p ex = parens (variableDoc p) <+> text "->" <+> valueDoc ex
 
 jCast :: VS (JavaCode (Type JavaCode)) -> VS (JavaCode (Value JavaCode)) -> 
   VS (JavaCode (Value JavaCode))

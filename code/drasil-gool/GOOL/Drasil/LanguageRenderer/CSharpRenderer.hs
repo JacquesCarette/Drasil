@@ -31,7 +31,7 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
   dot, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
   inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  commentedModD, variableList, appendToBody, surroundBody)
+  commentedModD, parameterList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, double, char, string, 
   listType, arrayType, listInnerType, obj, enumType, funcType, void, 
@@ -68,9 +68,9 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn, 
-  addLangImport, addLangImportVS, addLibImport, setFileType, getClassName, 
-  setCurrMain, setODEDepVars, getODEDepVars)
+import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
+  modifyReturn, addLangImport, addLangImportVS, addLibImport, setFileType, 
+  getClassName, setCurrMain, setODEDepVars, getODEDepVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -221,11 +221,17 @@ instance ControlBlockSym CSharpCode where
         objVar optsVar (var "AbsoluteTolerance" float) &= absTol opts,
         objVar optsVar (var "AbsoluteTolerance" float) &= relTol opts],
       block [
+        zoom lensMStoVS (dv >>= (\dpv -> iv >>= (\idpv -> modify 
+          (setODEDepVars [variableName dpv]) >> 
+          let iv' = var (variableName idpv) (listInnerType $ toState $ 
+                variableType idpv)  
+              dv' = var (variableName dpv) vec
+          in zoom lensVStoMS $ binFuncDecDef f (fmap (fmap (newObj vec . (:[])))
+            (ode info)) iv' dv'))),
         varDecDef sol (extFuncApp "Ode" (csODEMethod $ solveMethod opts) odeT 
         [tInit info, 
         newObj vec [initVal info], 
-        lambda [iv, dv] (newObj vec [dv >>= (\dpv -> modify (setODEDepVars 
-          [variableName dpv]) >> ode info)]),
+        valueOf f,
         valueOf optsVar])],
       block [
         varDecDef points (objMethodCallNoParams spArray 
@@ -239,6 +245,7 @@ instance ControlBlockSym CSharpCode where
     where optsVar = var "opts" (obj "Options")
           iv = indepVar info
           dv = depVar info
+          f = var "f" (funcType [fmap variableType iv, vec] vec)
           odeT = obj "IEnumerable<SolPoint>"
           vec = obj "Vector"
           sol = var "sol" odeT
@@ -496,7 +503,9 @@ instance StatementSym CSharpCode where
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef = G.constDecDef
-  funcDecDef = csFuncDecDef blockStart blockEnd
+  funcDecDef v f p = csFuncDecDef blockStart blockEnd v (f p) [param p]
+  binFuncDecDef v f p1 p2 = csFuncDecDef blockStart blockEnd v (f p1 p2) 
+    (map param [p1, p2])
 
   print = outDoc False Nothing printFunc
   printLn = outDoc True Nothing printLnFunc
@@ -703,9 +712,8 @@ csOutfileType :: (RenderSym repr) => VS (repr (Type repr))
 csOutfileType = modifyReturn (addLangImportVS "System.IO") $ 
   typeFromData File "StreamWriter" (text "StreamWriter")
 
-csLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
-  Doc
-csLambda ps ex = parens (variableList ps) <+> text "=>" <+> valueDoc ex
+csLambda :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> Doc
+csLambda p ex = parens (variableDoc p) <+> text "=>" <+> valueDoc ex
 
 csCast :: VS (CSharpCode (Type CSharpCode)) -> 
   VS (CSharpCode (Value CSharpCode)) -> VS (CSharpCode (Value CSharpCode))
@@ -716,12 +724,12 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
           tp)) (valueDoc vl))
 
 csFuncDecDef :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) 
-  -> VS (repr (Variable repr)) -> [VS (repr (Variable repr))] -> 
-  VS (repr (Value repr)) -> MS (repr (Statement repr))
-csFuncDecDef bStart bEnd v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
-  getTypeDoc (variableType vr) <+> text (variableName vr) <> parens 
-  (variableList pms) <+> keyDoc bStart $$ indent (bodyDoc b) $$ keyDoc bEnd) 
-  (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnState r)
+  -> VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
+  [MS (repr (Parameter repr))] -> MS (repr (Statement repr))
+csFuncDecDef bStart bEnd v vl ps = (\vr pms b val -> mkStNoEnd $ getTypeDoc 
+  (valueType val) <+> text (variableName vr) <> parens (parameterList pms) <+> 
+  keyDoc bStart $$ indent (bodyDoc b) $$ keyDoc bEnd) <$> zoom lensMStoVS v <*> 
+  sequence ps <*> oneLiner (returnState vl) <*> zoom lensMStoVS vl
 
 csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 

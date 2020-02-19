@@ -10,9 +10,10 @@ module GOOL.Drasil.Symantics (
   InternalType(..), ControlBlockSym(..), listSlice, UnaryOpSym(..), 
   BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
-  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ValueExpression(..), binLambda, InternalValue(..), Selector(..), 
+  InternalSelector(..), objMethodCall, objMethodCallNoParams, 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
   InternalParam(..), MethodSym(..), initializer, nonInitConstructor, 
   InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
@@ -366,11 +367,17 @@ class (ValueSym repr, BooleanExpression repr) =>
   extNewObj  :: Library -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
     VS (repr (Value repr))
 
-  lambda :: [VS (repr (Variable repr))] -> VS (repr (Value repr)) -> 
-    VS (repr (Value repr))
+  lambda :: (VS (repr (Variable repr)) -> VS (repr (Value repr))) -> 
+    (VS (repr (Variable repr)) -> VS (repr (Value repr)))
 
   exists  :: VS (repr (Value repr)) -> VS (repr (Value repr))
   notNull :: VS (repr (Value repr)) -> VS (repr (Value repr))
+
+binLambda :: (ValueExpression repr) => (VS (repr (Variable repr)) -> 
+  VS (repr (Variable repr)) -> VS (repr (Value repr))) -> 
+  (VS (repr (Variable repr)) -> VS (repr (Variable repr)) -> 
+  VS (repr (Value repr)))
+binLambda f v1 v2 = lambda (\v -> lambda (f v) v2) v1
 
 class InternalValue repr where
   inputFunc       :: VS (repr (Value repr))
@@ -531,8 +538,13 @@ class (SelectorFunction repr) => StatementSym repr where
     MS (repr (Statement repr))
   constDecDef      :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
     MS (repr (Statement repr))
-  funcDecDef       :: VS (repr (Variable repr)) -> [VS (repr (Variable repr))] 
-    -> VS (repr (Value repr)) -> MS (repr (Statement repr))
+  funcDecDef       :: VS (repr (Variable repr)) -> (VS (repr (Variable repr)) 
+    -> VS (repr (Value repr))) -> VS (repr (Variable repr)) -> 
+    MS (repr (Statement repr))
+  binFuncDecDef    :: VS (repr (Variable repr)) -> (VS (repr (Variable repr)) 
+    -> VS (repr (Variable repr)) -> VS (repr (Value repr))) -> 
+    VS (repr (Variable repr)) -> VS (repr (Variable repr)) ->
+    MS (repr (Statement repr))
 
   print      :: VS (repr (Value repr)) -> MS (repr (Statement repr))
   printLn    :: VS (repr (Value repr)) -> MS (repr (Statement repr))
@@ -807,13 +819,14 @@ data ODEInfo repr = ODEInfo {
   tInit :: VS (repr (Value repr)),
   tFinal :: VS (repr (Value repr)),
   initVal :: VS (repr (Value repr)),
-  ode :: VS (repr (Value repr))
+  ode :: VS (repr (Variable repr)) -> VS (repr (Variable repr)) -> 
+    VS (repr (Value repr))
 }
 
 odeInfo :: VS (repr (Variable repr)) -> VS (repr (Variable repr)) -> 
   [VS (repr (Variable repr))] -> VS (repr (Value repr)) -> 
-  VS (repr (Value repr)) -> VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
-  ODEInfo repr
+  VS (repr (Value repr)) -> VS (repr (Value repr)) -> (VS (repr (Variable repr))
+  -> VS (repr (Variable repr)) ->VS (repr (Value repr))) -> ODEInfo repr
 odeInfo = ODEInfo
 
 data ODEOptions repr = ODEOptions {

@@ -202,7 +202,7 @@ instance ValueExpression CodeInfo where
     sequence_ vs
     addExternalConstructorCall l ot
 
-  lambda _ = execute1
+  lambda f p = execute1 (f p)
 
   exists = execute1
   notNull = execute1
@@ -269,7 +269,8 @@ instance StatementSym CodeInfo where
   objDecNewNoParams _ = noInfo
   extObjDecNewNoParams _ _ = noInfo
   constDecDef _ = zoom lensMStoVS . execute1
-  funcDecDef _ _ = zoom lensMStoVS . execute1
+  funcDecDef _ f p = zoom lensMStoVS $ execute1 (f p)
+  binFuncDecDef _ f p1 p2 = zoom lensMStoVS $ execute1 (f p1 p2)
 
   print = zoom lensMStoVS . execute1
   printLn = zoom lensMStoVS . execute1

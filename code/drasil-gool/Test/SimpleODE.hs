@@ -23,7 +23,7 @@ odeIndepVar = var "t" (listType float)
 
 info :: (StatementSym repr) => ODEInfo repr
 info = odeInfo odeIndepVar odeDepVar [odeConst] (litFloat 0.0) (litFloat 10.0) 
-  (litFloat 1.0) (valueOf odeDepVar #+ valueOf odeConst)
+  (litFloat 1.0) (\_ dv -> valueOf dv #+ valueOf odeConst)
 
 opts :: (StatementSym repr) => ODEOptions repr
 opts = odeOptions RK45 (litFloat 0.001) (litFloat 0.001) (litFloat 1.0)

@@ -22,16 +22,17 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   multiAssignError, decrement, increment, increment', increment1, increment1', 
   decrement1, varDec, varDecDef, listDec, listDecDef, listDecDef', arrayDec, 
   arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams,
-  constDecDef, funcDecDef, discardInput, discardFileInput, openFileR, openFileW,
-  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, freeError, throw, initState,
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
-  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod,privMethod, 
-  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, enum, privClass, pubClass, implementingClass, docClass, 
-  commentedClass, buildModule, buildModule', modFromData, fileDoc, docMod
+  constDecDef, funcDecDef, binFuncDecDef, discardInput, discardFileInput, 
+  openFileR, openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
+  stringListLists, returnState, multiReturnError, valState, comment, freeError, 
+  throw, initState, changeState, initObserverList, addObserver, ifCond, 
+  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
+  tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
+  setMethod,privMethod, pubMethod, constructor, docMain, function, 
+  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, 
+  constVar, privMVar, pubMVar, pubGVar, buildClass, enum, privClass, pubClass, 
+  implementingClass, docClass, commentedClass, buildModule, buildModule', 
+  modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -46,7 +47,7 @@ import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   InternalType(..), UnaryOpSym(UnaryOp), BinaryOpSym(BinaryOp), InternalOp(..),
   VariableSym(Variable, variableBind, variableName, variableType, variableDoc), 
   InternalVariable(varFromData), ValueSym(Value, valueDoc, valueType), 
-  NumericExpression(..), BooleanExpression(..), InternalValue(..), 
+  NumericExpression(..), BooleanExpression(..), binLambda, InternalValue(..), 
   Selector(($.)), FunctionSym(Function), SelectorFunction(at), 
   InternalFunction(iterBeginFunc, iterEndFunc, functionDoc, functionType, 
     funcFromData),
@@ -511,12 +512,12 @@ newObj f = on1StateValue1List (\t -> mkVal t . f t . valueList)
 notNull :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
 notNull v = v ?!= S.valueOf (S.var "null" $ onStateValue valueType v)
 
-lambda :: (RenderSym repr) => ([repr (Variable repr)] -> repr (Value repr) -> 
-  Doc) -> [VS (repr (Variable repr))] -> VS (repr (Value repr)) ->
-  VS (repr (Value repr))
-lambda f ps' ex' = sequence ps' >>= (\ps -> ex' >>= (\ex -> funcType (map 
-  (toState . variableType) ps) (toState $ valueType ex) >>= (\ft -> 
-  toState $ valFromData (Just 0) ft (f ps ex))))
+lambda :: (RenderSym repr) => (repr (Variable repr) -> repr (Value repr) -> 
+  Doc) -> (VS (repr (Variable repr)) -> VS (repr (Value repr))) -> 
+  VS (repr (Variable repr)) -> VS (repr (Value repr))
+lambda docf f' p' = p' >>= (\p -> f' p' >>= (\ex -> funcType 
+  [toState $ variableType p] (toState $ valueType ex) >>= (\ft -> 
+  toState $ valFromData (Just 0) ft (docf p ex))))
 
 objAccess :: (RenderSym repr) => VS (repr (Value repr)) ->
   VS (repr (Function repr)) -> VS (repr (Value repr))
@@ -750,9 +751,15 @@ constDecDef vr vl = zoom lensMStoVS $ on2StateValues (\v -> mkSt .
   constDecDefDocD v) vr vl
 
 funcDecDef :: (RenderSym repr) => VS (repr (Variable repr)) -> 
-  [VS (repr (Variable repr))] -> VS (repr (Value repr)) -> 
-  MS (repr (Statement repr))
-funcDecDef v ps r = S.varDecDef v (S.lambda ps r)
+  (VS (repr (Variable repr)) -> VS (repr (Value repr))) ->
+  VS (repr (Variable repr)) -> MS (repr (Statement repr))
+funcDecDef v f p  = S.varDecDef v (S.lambda f p)
+
+binFuncDecDef :: (RenderSym repr) => VS (repr (Variable repr)) -> 
+  (VS (repr (Variable repr)) -> VS (repr (Variable repr)) -> 
+  VS (repr (Value repr))) -> VS (repr (Variable repr)) -> 
+  VS (repr (Variable repr)) -> MS (repr (Statement repr))
+binFuncDecDef v f p1 p2  = S.varDecDef v (binLambda f p1 p2)
 
 discardInput :: (RenderSym repr) => (repr (Value repr) -> Doc) ->
   MS (repr (Statement repr))

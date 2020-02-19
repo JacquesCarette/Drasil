@@ -49,13 +49,13 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
   increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
   objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, constDecDef, 
-  funcDecDef, discardInput, discardFileInput, closeFile, stringListVals, 
-  stringListLists, returnState, multiReturnError, valState, comment, throw, 
-  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
-  switch, switchAsIf, for, forRange, while, tryCatch, notifyObservers, 
-  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
-  constructor, function, docFunc, docInOutFunc, intFunc, privMVar, pubMVar, 
-  pubGVar, privClass, pubClass, docClass, commentedClass, buildModule, 
+  funcDecDef, binFuncDecDef, discardInput, discardFileInput, closeFile, 
+  stringListVals, stringListLists, returnState, multiReturnError, valState, 
+  comment, throw, initState, changeState, initObserverList, addObserver, 
+  ifCond, ifNoElse, switch, switchAsIf, for, forRange, while, tryCatch, 
+  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
+  pubMethod, constructor, function, docFunc, docInOutFunc, intFunc, privMVar, 
+  pubMVar, pubGVar, privClass, pubClass, docClass, commentedClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
@@ -106,6 +106,9 @@ unCPPC (CPPC (CPPSC a) _) = a
 
 hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
+
+srcToHdr :: CppSrcCode a -> CppHdrCode a
+srcToHdr (CPPSC a) = CPPHC a
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
   type Program (p CppSrcCode CppHdrCode) = ProgData
@@ -251,7 +254,6 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
     pti <- zoom lensMStoVS $ tInit info
     ptf <- zoom lensMStoVS $ tFinal info
     pinitv <- zoom lensMStoVS $ initVal info
-    pode <- zoom lensMStoVS $ ode info
     patol <- zoom lensMStoVS $ absTol opts
     prtol <- zoom lensMStoVS $ relTol opts
     pss <- zoom lensMStoVS $ stepSize opts
@@ -268,8 +270,12 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
         tf2 = toState $ psnd ptf
         initv1 = toState $ pfst pinitv
         initv2 = toState $ psnd pinitv
-        ode1 = toState $ pfst pode
-        ode2 = toState $ psnd pode
+        ode1 v1 v2 = pfst <$> ode info 
+          (onStateValue (\v1' -> pair v1' (srcToHdr v1')) v1) 
+          (onStateValue (\v2' -> pair v2' (srcToHdr v2')) v2)
+        ode2 v1 v2 = psnd <$> ode info 
+          (onStateValue (\v1' -> pair (hdrToSrc v1') v1') v1)
+          (onStateValue (\v2' -> pair (hdrToSrc v2') v2') v2)
         atol1 = toState $ pfst patol
         atol2 = toState $ psnd patol
         rtol1 = toState $ pfst prtol
@@ -282,18 +288,28 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
         solveODEHdr :: ODEInfo CppHdrCode -> ODEOptions CppHdrCode -> 
           MS (CppHdrCode (Block CppHdrCode))
         solveODEHdr = solveODE
-        odeInfoSrc :: VS (CppSrcCode (Variable CppSrcCode)) -> VS (CppSrcCode (Variable CppSrcCode)) -> 
-          [VS (CppSrcCode (Variable CppSrcCode))] -> VS (CppSrcCode (Value CppSrcCode)) -> 
-          VS (CppSrcCode (Value CppSrcCode)) -> VS (CppSrcCode (Value CppSrcCode)) -> 
-          VS (CppSrcCode (Value CppSrcCode)) -> ODEInfo CppSrcCode
+        odeInfoSrc :: VS (CppSrcCode (Variable CppSrcCode)) -> 
+          VS (CppSrcCode (Variable CppSrcCode)) -> 
+          [VS (CppSrcCode (Variable CppSrcCode))] -> 
+          VS (CppSrcCode (Value CppSrcCode)) -> 
+          VS (CppSrcCode (Value CppSrcCode)) -> 
+          VS (CppSrcCode (Value CppSrcCode)) -> 
+          (VS (CppSrcCode (Variable CppSrcCode)) -> 
+          VS (CppSrcCode (Variable CppSrcCode)) ->
+          VS (CppSrcCode (Value CppSrcCode))) -> ODEInfo CppSrcCode
         odeInfoSrc = odeInfo
         odeOptionsSrc :: ODEMethod -> VS (CppSrcCode (Value CppSrcCode)) -> 
           VS (CppSrcCode (Value CppSrcCode)) -> VS (CppSrcCode (Value CppSrcCode)) -> ODEOptions CppSrcCode
         odeOptionsSrc = odeOptions
-        odeInfoHdr :: VS (CppHdrCode (Variable CppHdrCode)) -> VS (CppHdrCode (Variable CppHdrCode)) -> 
-          [VS (CppHdrCode (Variable CppHdrCode))] -> VS (CppHdrCode (Value CppHdrCode)) -> 
-          VS (CppHdrCode (Value CppHdrCode)) -> VS (CppHdrCode (Value CppHdrCode)) -> 
-          VS (CppHdrCode (Value CppHdrCode)) -> ODEInfo CppHdrCode
+        odeInfoHdr :: VS (CppHdrCode (Variable CppHdrCode)) -> 
+          VS (CppHdrCode (Variable CppHdrCode)) -> 
+          [VS (CppHdrCode (Variable CppHdrCode))] -> 
+          VS (CppHdrCode (Value CppHdrCode)) -> 
+          VS (CppHdrCode (Value CppHdrCode)) -> 
+          VS (CppHdrCode (Value CppHdrCode)) -> 
+          (VS (CppHdrCode (Variable CppHdrCode)) -> 
+          VS (CppHdrCode (Variable CppHdrCode)) -> 
+          VS (CppHdrCode (Value CppHdrCode))) -> ODEInfo CppHdrCode
         odeInfoHdr = odeInfo
         odeOptionsHdr :: ODEMethod -> VS (CppHdrCode (Value CppHdrCode)) -> 
           VS (CppHdrCode (Value CppHdrCode)) -> VS (CppHdrCode (Value CppHdrCode)) -> ODEOptions CppHdrCode
@@ -446,7 +462,9 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   newObj = pair1Val1List newObj newObj
   extNewObj l = pair1Val1List (extNewObj l) (extNewObj l)
 
-  lambda = pair1List1Val lambda lambda
+  lambda f = pair1 
+    (lambda (\v -> pfst <$> f (onStateValue (\v' -> pair v' (srcToHdr v')) v)))
+    (lambda (\v -> psnd <$> f (onStateValue (\v' -> pair (hdrToSrc v') v') v)))
 
   exists = pair1 exists exists
   notNull = pair1 notNull notNull
@@ -569,8 +587,20 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (extObjDecNewNoParams lib) . zoom lensMStoVS
   constDecDef vr vl = pair2 constDecDef constDecDef (zoom lensMStoVS vr) 
     (zoom lensMStoVS vl)
-  funcDecDef v ps r = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
-    (map (zoom lensMStoVS) ps) (zoom lensMStoVS r)
+  funcDecDef v f p = pair2 
+    (\v' -> funcDecDef v' (\p' -> pfst <$> 
+      f (onStateValue (\pm -> pair pm (srcToHdr pm)) p'))) 
+    (\v' -> funcDecDef v' (\p' -> psnd <$> 
+      f (onStateValue (\pm -> pair (hdrToSrc pm) pm) p'))) 
+    (zoom lensMStoVS v) (zoom lensMStoVS p)
+  binFuncDecDef v f p1 p2 = pair3 
+    (\v' -> binFuncDecDef v' (\p1' p2' -> pfst <$> 
+      f (onStateValue (\pm1 -> pair pm1 (srcToHdr pm1)) p1') 
+        (onStateValue (\pm2 -> pair pm2 (srcToHdr pm2)) p2'))) 
+    (\v' -> binFuncDecDef v' (\p1' p2' -> psnd <$> 
+      f (onStateValue (\pm1 -> pair (hdrToSrc pm1) pm1) p1')
+        (onStateValue (\pm2 -> pair (hdrToSrc pm2) pm2) p2'))) 
+    (zoom lensMStoVS v) (zoom lensMStoVS p1) (zoom lensMStoVS p2)
 
   print = pair1 print print . zoom lensMStoVS
   printLn = pair1 printLn printLn . zoom lensMStoVS
@@ -1436,6 +1466,7 @@ instance StatementSym CppSrcCode where
   extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef = G.constDecDef
   funcDecDef = G.funcDecDef
+  binFuncDecDef = G.binFuncDecDef
 
   print = outDoc False Nothing printFunc
   printLn = outDoc True Nothing printLnFunc
@@ -2074,6 +2105,7 @@ instance StatementSym CppHdrCode where
   extObjDecNewNoParams _ _ = emptyState
   constDecDef = G.constDecDef
   funcDecDef _ _ _ = emptyState
+  binFuncDecDef _ _ _ _ = emptyState
 
   print _ = emptyState
   printLn _ = emptyState
@@ -2369,8 +2401,9 @@ cppODEFile info = (fl, fst s)
         odeFile = join $ on3StateValues (\dpv idpv ovs ->
           let n = variableName dpv
               t = variableName idpv
-              -- dv below is a hack. Needed to "rebuild" it because its state has already been evaluated higher up (for building the file where the ode solver is called) (the evaluation happens in the pair instance). This hack won't be necessary when we do things right as this file won't be built so deep in GOOL.
+              -- dv and below are hacks. Needed to "rebuild" it because its state has already been evaluated higher up (for building the file where the ode solver is called) (the evaluation happens in the pair instance). This hack won't be necessary when we do things right as this file won't be built so deep in GOOL.
               dv = var (variableName dpv) (listType $ innerVarType dpv)
+              iv = var (variableName idpv) (listType $ innerVarType idpv)
               cn = n ++ "_ODE"
               dn = "d" ++ n ++ "d" ++ t
               innerVarType = (listInnerType . toState . variableType)
@@ -2385,7 +2418,7 @@ cppODEFile info = (fl, fst s)
             pubMethod "operator()" void [param dvElem, 
               pointerParam $ var dn float, param tElem] 
               (oneLiner $ var dn float &= (modify (setODEOthVars 
-              (map variableName ovs)) >> ode info))], 
+              (map variableName ovs)) >> ode info iv dv))], 
           pubClass ("Populate_" ++ n) Nothing [pubMVar dvptr] 
             [initializer [pointerParam dv] [(dv, valueOf dv)],
             pubMethod "operator()" void [pointerParam dvElem, param tElem] 
@@ -2439,11 +2472,10 @@ cppSelfFuncApp s n t vs = s >>=
   (\slf -> funcApp (variableName slf ++ "->" ++ n) t vs)
 
 cppLambda :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> [repr (Variable repr)] -> repr (Value repr) -> Doc
-cppLambda bStart bEnd endSt ps ex = text "[]" <+> parens (hicat (text ",") $ 
-  zipWith (<+>) (map (getTypeDoc . variableType) ps) (map variableDoc ps)) <+> 
-  text "->" <+> keyDoc bStart <> text "return" <+> valueDoc ex <> keyDoc endSt 
-  <> keyDoc bEnd
+  repr (Keyword repr) -> repr (Variable repr) -> repr (Value repr) -> Doc
+cppLambda bStart bEnd endSt p ex = text "[]" <+> parens (getTypeDoc 
+  (variableType p) <+> variableDoc p) <+> text "->" <+> keyDoc bStart <> 
+  text "return" <+> valueDoc ex <> keyDoc endSt <> keyDoc bEnd
 
 cppCast :: VS (CppSrcCode (Type CppSrcCode)) -> 
   VS (CppSrcCode (Value CppSrcCode)) -> VS (CppSrcCode (Value CppSrcCode))

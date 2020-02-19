@@ -10,8 +10,8 @@ import Language.Drasil.Code (FuncStmt(..), ExternalLibrary, Step, Argument,
   libFunctionWithResult, libMethodWithResult, libConstructor, lockedArg, 
   lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, functionArg, 
   customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
-  implementation, constructorInfo, methodInfo, iterateStep, statementStep, 
-  lockedStatement, CodeChunk, codevar, ccObjVar, implCQD)
+  implementation, constructorInfo, methodInfo, statementStep, lockedStatement, 
+  CodeChunk, codevar, ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Func, Void))
 import qualified GOOL.Drasil as C (CodeType(Boolean, Integer))
@@ -77,8 +77,8 @@ oslo = externalLib [
     "SolveFromToStep" (map inlineArg [Float, Float, Float]) points,
   mandatoryStep $ callStep $ libMethodWithResult points "ToArray" [] ptArray,
   mandatoryStep $ statementStep (\cdch _ -> FAsg (head cdch) (Matrix [[]])),
-  mandatoryStep $ iterateStep ptArray sp 
-    (\cdch -> [FAppend (sy $ head cdch) (idx (sy spX) (int 0))])]
+  mandatoryStep $ statementStep (\cdch _ -> FForEach sp (sy ptArray) 
+    [FAppend (sy $ head cdch) (idx (sy spX) (int 0))])]
 
 odeArgs :: [Argument]
 odeArgs = [inlineArg Float, lockedArg (sy initv),

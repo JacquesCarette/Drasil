@@ -5,7 +5,7 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
   lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
-  methodInfo, iterateStep, statementStep, lockedStatement
+  methodInfo, statementStep, lockedStatement
 ) where
 
 import Language.Drasil
@@ -27,9 +27,6 @@ type StepGroup = [[Step]]
 data Step = Call [Import] FunctionInterface
   -- A while loop -- function calls in the condition, other conditions, steps for the body
   | Loop [FunctionInterface] ([CodeChunk] -> Condition) [Step]
-  -- A foreach loop - CodeChunk to iterate through, CodeChunk for iteration variable, loop body
-  -- FIXME: This Node should be merged with Statement. Will do soon.
-  | Iterate CodeChunk CodeChunk ([CodeChunk] -> [FuncStmt])
   -- For when a statement is needed, but does not interface with the external library
   | Statement ([CodeChunk] -> [Expr] -> FuncStmt)
 
@@ -141,9 +138,6 @@ constructorInfo = CI
 
 methodInfo :: FuncName -> [Parameter] -> CodeType -> [Step] -> MethodInfo
 methodInfo = MI
-
-iterateStep :: CodeChunk -> CodeChunk -> ([CodeChunk] -> [FuncStmt]) -> Step
-iterateStep = Iterate
 
 statementStep :: ([CodeChunk] -> [Expr] -> FuncStmt) -> Step
 statementStep = Statement

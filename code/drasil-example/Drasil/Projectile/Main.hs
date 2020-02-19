@@ -14,6 +14,8 @@ import Data.Drasil.Quantities.Math (piConst)
 import Drasil.Projectile.Body (printSetting, si, srs)
 import Drasil.Projectile.Concepts (projectileTitle)
 
+import Data.List (intercalate)
+
 import System.Directory (createDirectoryIfMissing, getCurrentDirectory, 
   setCurrentDirectory)
 
@@ -21,18 +23,56 @@ main :: IO()
 main = do
   gen (DocSpec SRS     "Projectile_SRS") srs printSetting
   gen (DocSpec Website "Projectile_SRS") srs printSetting
-  genCodeWithChoices (zip choiceCombos [1..])
+  genCodeWithChoices choiceCombos
 
-genCodeWithChoices :: [(Choices, Int)] -> IO ()
+genCodeWithChoices :: [Choices] -> IO ()
 genCodeWithChoices [] = return ()
-genCodeWithChoices ((c,n):cns) = let dir = getAccStr projectileTitle ++ show n 
+genCodeWithChoices (c:cs) = let dir = codedDirName (getAccStr projectileTitle) c
   in do
     workingDir <- getCurrentDirectory
     createDirectoryIfMissing False dir
     setCurrentDirectory dir
     genCode c (codeSpec si c [])
     setCurrentDirectory workingDir
-    genCodeWithChoices cns
+    genCodeWithChoices cs
+
+codedDirName :: String -> Choices -> String
+codedDirName n Choices {
+  modularity = m,
+  logging = l,
+  comments = c,
+  inputStructure = is,
+  constStructure = cs,
+  constRepr = cr} = 
+  intercalate "_" [n, codedMod m, codedLog l, codedComm c, codedStruct is, 
+    codedConStruct cs, codedConRepr cr]
+  
+codedMod :: Modularity -> String
+codedMod Unmodular = "U"
+codedMod (Modular Combined) = "C"
+codedMod (Modular Separated) = "S"
+
+codedLog :: Logging -> String
+codedLog LogNone = "NoL"
+codedLog _ = "L"
+
+codedComm :: [Comments] -> String
+codedComm [] = "NoC"
+codedComm _ = "C"
+
+codedStruct :: Structure -> String
+codedStruct Bundled = "B"
+codedStruct Unbundled = "U"
+
+codedConStruct :: ConstantStructure -> String
+codedConStruct Inline = "I"
+codedConStruct WithInputs = "WI"
+codedConStruct (Store s) = codedStruct s
+
+codedConRepr :: ConstantRepr -> String
+codedConRepr Var = "V"
+codedConRepr Const = "C"
+
 
 choiceCombos :: [Choices]
 choiceCombos = [choices1, choices2, choices3, choices4, choices5]

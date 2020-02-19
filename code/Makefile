@@ -29,6 +29,8 @@ GAMEPHYSICS_DIR  = GamePhysics
 PROJECTILE_DIR = Projectile
 TEMPLATE_DIR = Template
 
+MULTI_SRC_DIRS = $(PROJECTILE_DIR) # Directories for examples with multiple src versions
+
 # and the name of their executables
 HGHC_EXE  = hghc
 GLASSBR_EXE = glassbr
@@ -162,7 +164,8 @@ tex: $(TEX_EXAMPLES)
 %$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFIX)
 	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" \
-	TARGET=$(TARGET) MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"code_build.sh
+	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" TARGET=$(TARGET) \
+	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"code_build.sh
 
 code: $(CODE_EXAMPLES)
 

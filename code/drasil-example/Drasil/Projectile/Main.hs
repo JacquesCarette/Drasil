@@ -40,11 +40,10 @@ codedDirName :: String -> Choices -> String
 codedDirName n Choices {
   modularity = m,
   logging = l,
-  comments = c,
   inputStructure = is,
   constStructure = cs,
   constRepr = cr} = 
-  intercalate "_" [n, codedMod m, codedLog l, codedComm c, codedStruct is, 
+  intercalate "_" [n, codedMod m, codedLog l, codedStruct is, 
     codedConStruct cs, codedConRepr cr]
   
 codedMod :: Modularity -> String
@@ -55,10 +54,6 @@ codedMod (Modular Separated) = "S"
 codedLog :: Logging -> String
 codedLog LogNone = "NoL"
 codedLog _ = "L"
-
-codedComm :: [Comments] -> String
-codedComm [] = "NoC"
-codedComm _ = "C"
 
 codedStruct :: Structure -> String
 codedStruct Bundled = "B"
@@ -72,7 +67,6 @@ codedConStruct (Store s) = codedStruct s
 codedConRepr :: ConstantRepr -> String
 codedConRepr Var = "V"
 codedConRepr Const = "C"
-
 
 choiceCombos :: [Choices]
 choiceCombos = [choices1, choices2, choices3, choices4, choices5]
@@ -141,7 +135,7 @@ choices4 = Choices {
   impType = Program,
   logFile = "log.txt",
   logging = LogNone,
-  comments = [],
+  comments = [CommentFunc, CommentClass, CommentMod],
   doxVerbosity = Quiet,
   dates = Hide,
   onSfwrConstraint = Warning,

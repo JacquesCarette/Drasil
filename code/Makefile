@@ -175,7 +175,6 @@ doxygen: $(CODE_EXAMPLES)
 %$(DCP_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(DCP_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
-# Print as formatted K/V for deploy to extract
 	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" EXAMPLE=$* \
 	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" \
 	"$(SHELL)" "$(SCRIPT_FOLDER)"code_path.sh

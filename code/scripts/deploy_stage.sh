@@ -83,6 +83,7 @@ copy_examples() {
       done
       src_stub
     fi
+    # For examples with multiple versions, directory structure is different
     if [[ "$MULTI_SRC_DIRS" == *"$example_name"* ]]; then
       for v in "$example/$example_name"*/; do
         v_name=$(basename "$v")

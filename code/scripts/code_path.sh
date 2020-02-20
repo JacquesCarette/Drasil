@@ -28,6 +28,7 @@ if [ -z "$EXAMPLE" ]; then
   exit 1
 fi
 
+# Print as formatted K/V for `make deploy` to extract
 if [ -d "$BUILD_FOLDER$EDIR/$EXAMPLE_CODE_SUBFOLDER" ]; then
   echo "$EDIR$DEPLOY_CODE_PATH_KV_SEP$(git rev-parse --show-prefix)stable/$EXAMPLE/$EXAMPLE_CODE_SUBFOLDER"
 fi

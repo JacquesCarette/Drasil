@@ -5,12 +5,12 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
   lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
-  methodInfo, statementStep, lockedStatement
+  methodInfo, fixedReturn, statementStep
 ) where
 
 import Language.Drasil
 import Language.Drasil.Chunk.Code (CodeChunk, codeType)
-import Language.Drasil.Mod (FuncStmt)
+import Language.Drasil.Mod (FuncStmt(..))
 
 import GOOL.Drasil (CodeType)
 
@@ -141,6 +141,9 @@ methodInfo = MI
 
 statementStep :: ([CodeChunk] -> [Expr] -> FuncStmt) -> Step
 statementStep = Statement
+
+fixedReturn :: Expr -> Step
+fixedReturn = lockedStatement . FRet
 
 lockedStatement :: FuncStmt -> Step
 lockedStatement s = Statement (\_ _ -> s)

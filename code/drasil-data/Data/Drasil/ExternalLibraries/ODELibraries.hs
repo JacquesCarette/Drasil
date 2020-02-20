@@ -10,7 +10,7 @@ import Language.Drasil.Code (FuncStmt(..), ExternalLibrary, Step, Argument,
   libFunctionWithResult, libMethodWithResult, libConstructor, lockedArg, 
   lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, functionArg, 
   customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
-  implementation, constructorInfo, methodInfo, statementStep, lockedStatement, 
+  implementation, constructorInfo, methodInfo, statementStep, fixedReturn, 
   CodeChunk, codevar, ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Func, Void))
@@ -140,7 +140,7 @@ apacheODE = externalLib [
   mandatoryStep $ callStep $ libMethod it "integrate" (customObjArg 
     [apacheImport ++ fode] ode (implementation fode [
       constructorInfo [] [],
-      methodInfo "getDimension" [] C.Integer [lockedStatement $ FRet (int 1)],
+      methodInfo "getDimension" [] C.Integer [fixedReturn (int 1)],
       methodInfo "computeDerivatives" [
         lockedParam t, unnamedParam (Array Float), unnamedParam (Array Float)]
         Void [statementStep (\cdch e -> FAsgIndex (head cdch) 0 (head e))]]) : 

@@ -18,7 +18,7 @@ module Language.Drasil.Code (
   libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
   lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
-  methodInfo, statementStep, lockedStatement,
+  methodInfo, fixedReturn, statementStep,
   PackageSym(..),
   CodeChunk, codevar, quantvar, ccObjVar, CodeQuantityDict, implCQD,
   unPP, unJP, unCSP, unCPPP
@@ -43,7 +43,7 @@ import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
   lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
-  methodInfo, statementStep, lockedStatement)
+  methodInfo, fixedReturn, statementStep)
 
 import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), CodeSystInfo(..), 
   Comments(..), Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), 

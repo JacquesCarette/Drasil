@@ -5,11 +5,11 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
   lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
-  methodInfo, fixedReturn, statementStep
+  methodInfo, appendCurrSol, populateSolList, fixedReturn, statementStep
 ) where
 
 import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeChunk, codeType)
+import Language.Drasil.Chunk.Code (CodeChunk, codeType, ccObjVar)
 import Language.Drasil.Mod (FuncStmt(..))
 
 import GOOL.Drasil (CodeType)
@@ -139,11 +139,24 @@ constructorInfo = CI
 methodInfo :: FuncName -> [Parameter] -> CodeType -> [Step] -> MethodInfo
 methodInfo = MI
 
-statementStep :: ([CodeChunk] -> [Expr] -> FuncStmt) -> Step
-statementStep = Statement
+appendCurrSol :: CodeChunk -> Step
+appendCurrSol curr = statementStep (\cdchs es -> case (cdchs, es) of
+    ([s], []) -> appendCurrSolFS curr s
+    (_,_) -> error "Fill for appendCurrSol should provide one CodeChunk and no Exprs")
+  
+populateSolList :: CodeChunk -> CodeChunk -> CodeChunk -> Step
+populateSolList arr el fld = statementStep (\cdchs es -> case (cdchs, es) of
+  ([s], []) -> FForEach el (sy arr) [appendCurrSolFS (ccObjVar el fld) s]
+  (_,_) -> error "Fill for populateSolList should provide one CodeChunk and no Exprs")
+
+appendCurrSolFS :: CodeChunk -> CodeChunk -> FuncStmt
+appendCurrSolFS cs s = FAppend (sy s) (idx (sy cs) (int 0))
 
 fixedReturn :: Expr -> Step
 fixedReturn = lockedStatement . FRet
+
+statementStep :: ([CodeChunk] -> [Expr] -> FuncStmt) -> Step
+statementStep = Statement
 
 lockedStatement :: FuncStmt -> Step
 lockedStatement s = Statement (\_ _ -> s)

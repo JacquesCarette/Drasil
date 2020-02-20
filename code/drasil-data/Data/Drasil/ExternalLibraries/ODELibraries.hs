@@ -10,7 +10,8 @@ import Language.Drasil.Code (FuncStmt(..), ExternalLibrary, Step, Argument,
   libFunctionWithResult, libMethodWithResult, libConstructor, lockedArg, 
   lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, functionArg, 
   customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
-  implementation, constructorInfo, methodInfo, statementStep, fixedReturn, 
+  implementation, constructorInfo, methodInfo, appendCurrSol, populateSolList, 
+  statementStep, fixedReturn, 
   CodeChunk, codevar, ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Func, Void))
@@ -33,7 +34,7 @@ scipyODE = externalLib [
   mandatoryStep $ loopStep [libMethod r "successful" []] 
     (\cdch -> sy rt $< sy (head cdch)) 
     [callStep $ libMethod r "integrate" [inlineArg Float],
-    statementStep (\cdch _ -> FAppend (sy $ head cdch) (idx (sy ry) (int 0)))]] 
+    appendCurrSol ry]] 
 
 scipyImport :: String
 scipyImport = "scipy.integrate"
@@ -58,12 +59,8 @@ f = codevar $ implCQD "f_scipy" (nounPhrase "function representing ODE system"
   (Func [Float, Float] (List Float)) (Label "f") Nothing
 r = codevar $ implCQD "r_scipy" (nounPhrase "ODE object" "ODE objects") Nothing 
   odeT (Label "r") Nothing
-rt = ccObjVar r $ codevar $ implCQD "t_scipy" (nounPhrase 
-  "current independent variable value" "current independent variable values") 
-  Nothing Float (Label "t") Nothing
-ry = ccObjVar r $ codevar $ implCQD "y_scipy" (nounPhrase 
-  "current dependent variable value" "current dependent variable values") 
-  Nothing (List Float) (Label "y") Nothing
+rt = ccObjVar r t
+ry = ccObjVar r y
 
 -- Oslo (C#) --
 
@@ -77,8 +74,7 @@ oslo = externalLib [
     "SolveFromToStep" (map inlineArg [Float, Float, Float]) points,
   mandatoryStep $ callStep $ libMethodWithResult points "ToArray" [] ptArray,
   mandatoryStep $ statementStep (\cdch _ -> FAsg (head cdch) (Matrix [[]])),
-  mandatoryStep $ statementStep (\cdch _ -> FForEach sp (sy ptArray) 
-    [FAppend (sy $ head cdch) (idx (sy spX) (int 0))])]
+  mandatoryStep $ populateSolList ptArray sp x]
 
 odeArgs :: [Argument]
 odeArgs = [inlineArg Float, lockedArg (sy initv),
@@ -92,7 +88,7 @@ odeArgs = [inlineArg Float, lockedArg (sy initv),
 solT :: CodeType
 solT = Object "IEnumerable<SolPoint>"
 
-initv, fOslo, opts, sol, points, ptArray, sp, spX :: CodeChunk
+initv, fOslo, opts, sol, points, ptArray, sp, x :: CodeChunk
 initv = codevar $ implCQD "initv_oslo" (nounPhrase 
   "vector containing the initial values of the dependent variables"
   "vectors containing the initial values of the dependent variables") Nothing
@@ -114,9 +110,8 @@ ptArray = codevar $ implCQD "ptArray_oslo" (nounPhrase
   Nothing (Array $ Object "SolPoint") (Label "ptArray") Nothing
 sp = codevar $ implCQD "sp_oslo" (nounPhrase "ODE solution point" 
   "ODE solution points") Nothing (Object "SolPoint") (Label "sp") Nothing
-spX = ccObjVar sp $ codevar $ implCQD "sp_X_oslo" (nounPhrase 
-  "dependent variable" "dependent variables") Nothing (Array Float) (Label "X") 
-  Nothing
+x = codevar $ implCQD "X_oslo" (nounPhrase "dependent variable" 
+  "dependent variables") Nothing (Array Float) (Label "X") Nothing
 
 -- Apache (Java) --
 
@@ -135,8 +130,7 @@ apacheODE = externalLib [
         methodInfo "handleStep" (map lockedParam [interpolator, isLast]) Void [
           callStep $ libMethodWithResult interpolator "getInterpolatedState" 
             [] curr,
-          statementStep (\cdch _ -> 
-            FAppend (sy $ head cdch) (idx (sy curr) (int 0)))]])],
+          appendCurrSol curr]])],
   mandatoryStep $ callStep $ libMethod it "integrate" (customObjArg 
     [apacheImport ++ fode] ode (implementation fode [
       constructorInfo [] [],
@@ -212,9 +206,8 @@ odeint = externalLib [
       inlineArg Float, inlineArg Float, inlineArg Float, 
       customObjArg [] pop (customClass [
         constructorInfo [unnamedParam (List Float)] [],
-        methodInfo "operator()" [unnamedParam (List Float), lockedParam t] Void
-          [statementStep (\cdch _ -> FAppend (sy $ head cdch) 
-            (idx (sy $ head cdch) (int 0)))]])]]
+        methodInfo "operator()" [lockedParam y, lockedParam t] Void
+          [appendCurrSol y]])]]
 
 odeNameSpace, rkdp5, adamsBash :: String
 odeNameSpace = "boost::numeric::odeint::"
@@ -241,9 +234,15 @@ pop = codevar $ implCQD "pop_odeint" (nounPhrase
 
 -- CodeChunks used in multiple external libraries --
 
-ode, t :: CodeChunk
+ode, t, y :: CodeChunk
 ode = codevar $ implCQD "ode_obj" (nounPhrase 
   "object representing an ODE system" "objects representing an ODE system")
   Nothing (Object "ODE") (Label "ode") Nothing
-t = codevar $ implCQD "t_ode" (nounPhrase "current time in ODE solution"
-  "current times in ODE solution") Nothing Float (Label "t") Nothing
+t = codevar $ implCQD "t_ode" (nounPhrase 
+  "current independent variable value in ODE solution"
+  "current independent variable value in ODE solution") 
+  Nothing Float (Label "t") Nothing
+y = codevar $ implCQD "y_ode" (nounPhrase 
+  "current dependent variable value in ODE solution"
+  "current dependent variable value in ODE solution") 
+  Nothing (List Float) (Label "y") Nothing

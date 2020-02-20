@@ -152,18 +152,30 @@ $-for(examples)$
           <a href="$url$">[$type$]</a>
         $-endfor$
       </li>
-      $-if(src)$
+      $-if(vers)$
         <li>
           Generated Code:
-          $-for(src)$
-            <a href="$path$">[$lang$]</a>
-          $-endfor$
+          <ul>
+            $-for(vers)$
+              <li>$verName$  
+                $-for(src)$
+                  <a href="$path$">[$lang$]</a>
+                $-endfor$
+              </li>
+            $-endfor$
+          </ul>
         </li>
         <li>
           Generated Code Documentation:
-          $-for(src)$
-            <a href="$doxPath$">[$lang$]</a>
-          $-endfor$
+          <ul>
+            $-for(vers)$
+              <li>$verName$  
+                $-for(src)$
+                  <a href="$doxPath$">[$lang$]</a>
+                $-endfor$
+              </li>
+            $-endfor$
+          </ul>
         </li>
       $-endif$
     </ul>

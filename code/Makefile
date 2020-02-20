@@ -1,4 +1,7 @@
 # For documentation on how to add to this, see Issue #1371
+
+SHELL=/bin/bash
+
 # List of all known packages
 PACKAGES = lang utils build gool code theory database printers gen data docLang example
 

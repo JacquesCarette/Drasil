@@ -53,6 +53,7 @@ data Expr where
   FCall    :: Expr -> [Expr] -> Expr -- F(x) is (FCall F [x]) or similar
                                   -- FCall accepts a list of params
                                   -- F(x,y) would be (FCall F [x,y]) or sim.
+  New      :: Expr -> [Expr] -> Expr -- Like FCall but function is a constructor
   Case     :: Completeness -> [(Expr,Relation)] -> Expr -- For multi-case 
                                                      -- expressions, each pair
                                                      -- represents one case

@@ -42,6 +42,7 @@ library
     , Language.Drasil.Code.Imperative.Parameters
     , Language.Drasil.Code.Imperative.DrasilState
     , Language.Drasil.Code.CodeGeneration
+    , Language.Drasil.CodeExpr
     , Language.Drasil.CodeSpec
     , Language.Drasil.Mod
 

@@ -22,7 +22,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
-  ConstantRepr(..), ConstantStructure(..), Structure(..), asExpr)
+  ConstantRepr(..), ConstantStructure(..), Structure(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
@@ -398,8 +398,8 @@ convStmt (FDecDef v e) = do
         return $ varDecDef v' e'
   dd <- convDecDef e
   return $ multi $ dd : l
-convStmt (FProcCall n l) = do
-  e' <- convExpr (FCall (asExpr n) l)
+convStmt (FVal e) = do
+  e' <- convExpr e
   return $ valState e'
 convStmt (FAppend a b) = do
   a' <- convExpr a

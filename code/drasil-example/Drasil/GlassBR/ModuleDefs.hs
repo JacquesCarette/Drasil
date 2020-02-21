@@ -109,7 +109,7 @@ getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Ex
 getCol a_ i_ p = apply (asExpr extractColumnCT) [sy a_, sy i_ + p]
 
 call :: Func -> [QuantityDict] -> FuncStmt
-call f l = FProcCall f $ map sy l
+call f l = FVal $ apply (asExpr f) $ map sy l
 
 find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> Expr
 find zv z_ = apply (asExpr findCT) [sy zv, sy z_]

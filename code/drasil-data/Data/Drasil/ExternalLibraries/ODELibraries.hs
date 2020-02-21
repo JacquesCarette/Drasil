@@ -5,14 +5,14 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 import Language.Drasil
 
 import Language.Drasil.Code (FuncStmt(..), ExternalLibrary, Step, Argument, 
-  externalLib, mandatoryStep, choiceSteps, choiceStep, callStep, 
+  externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep, callStep,
   callWithImport, callWithImports, loopStep, libFunction, libMethod, 
   libFunctionWithResult, libMethodWithResult, libConstructor, lockedArg, 
   lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, functionArg, 
   customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
   implementation, constructorInfo, methodInfo, appendCurrSol, populateSolList, 
-  statementStep, fixedReturn, 
-  CodeChunk, codevar, ccObjVar, implCQD)
+  assignArrayIndex, assignSolFromObj, initSolListFromArray, initSolListWithVal, 
+  fixedReturn, CodeChunk, codevar, ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Func, Void))
 import qualified GOOL.Drasil as C (CodeType(Boolean, Integer))
@@ -29,12 +29,11 @@ scipyODE = externalLib [
     setIntegratorMethod [vode, methodArg "adams", atol, rtol],
     setIntegratorMethod [vode, methodArg "bdf", atol, rtol],
     setIntegratorMethod [lockedArg (str "dopri45"), atol, rtol]],
-  mandatoryStep $ callStep $ libMethod r "set_initial_value" [inlineArg Float],
-  mandatoryStep $ statementStep (\cdch e -> FAsg (head cdch) (Matrix [[head e]])),
-  mandatoryStep $ loopStep [libMethod r "successful" []] 
-    (\cdch -> sy rt $< sy (head cdch)) 
-    [callStep $ libMethod r "integrate" [inlineArg Float],
-    appendCurrSol ry]] 
+  mandatorySteps [callStep $ libMethod r "set_initial_value" [inlineArg Float],
+    initSolListWithVal,
+    loopStep [libMethod r "successful" []] 
+      (\cdch -> sy rt $< sy (head cdch)) 
+      [callStep $ libMethod r "integrate" [inlineArg Float], appendCurrSol ry]]]
 
 scipyImport :: String
 scipyImport = "scipy.integrate"
@@ -70,11 +69,10 @@ oslo = externalLib [
     "Vector" [inlineArg Float] initv,
   choiceStep $ map (\s -> callStep $ libFunctionWithResult s odeArgs sol) 
     ["Ode.RK547M", "Ode.GearBDF"],
-  mandatoryStep $ callWithImport "System.Linq" $ libMethodWithResult sol 
-    "SolveFromToStep" (map inlineArg [Float, Float, Float]) points,
-  mandatoryStep $ callStep $ libMethodWithResult points "ToArray" [] ptArray,
-  mandatoryStep $ statementStep (\cdch _ -> FAsg (head cdch) (Matrix [[]])),
-  mandatoryStep $ populateSolList ptArray sp x]
+  mandatorySteps ([callWithImport "System.Linq" $ libMethodWithResult sol 
+      "SolveFromToStep" (map inlineArg [Float, Float, Float]) points,
+    callStep $ libMethodWithResult points "ToArray" [] ptArray]
+    ++ populateSolList ptArray sp x)]
 
 odeArgs :: [Argument]
 odeArgs = [inlineArg Float, lockedArg (sy initv),
@@ -122,26 +120,25 @@ apacheODE = externalLib [
       $ libConstructor adams (lockedArg (int 3) : itArgs) it,
     callWithImports [apacheImport ++ foi, apacheImport ++ "nonstiff." ++ dp54]
       $ libConstructor dp54 itArgs it],
-  mandatoryStep $ callStep $ libMethod it "addStepHandler" [
-    customObjArg (map ((apacheImport ++ "sampling.") ++) [sh, si]) stepHandler 
-      (implementation sh [
-        methodInfo "init" (map lockedParam [t0, y0, t]) Void [statementStep 
-          (\cdch _ -> FAsg (head cdch) (Matrix [[idx (sy y0) (int 0)]]))],
-        methodInfo "handleStep" (map lockedParam [interpolator, isLast]) Void [
-          callStep $ libMethodWithResult interpolator "getInterpolatedState" 
-            [] curr,
-          appendCurrSol curr]])],
-  mandatoryStep $ callStep $ libMethod it "integrate" (customObjArg 
-    [apacheImport ++ fode] ode (implementation fode [
-      constructorInfo [] [],
-      methodInfo "getDimension" [] C.Integer [fixedReturn (int 1)],
-      methodInfo "computeDerivatives" [
-        lockedParam t, unnamedParam (Array Float), unnamedParam (Array Float)]
-        Void [statementStep (\cdch e -> FAsgIndex (head cdch) 0 (head e))]]) : 
-    [inlineArg Float, preDefinedArg currVals, inlineArg Float, 
-      preDefinedArg currVals]),
-  mandatoryStep $ statementStep (\cdch _ -> 
-    FAsg (head cdch) (sy $ ccObjVar stepHandler (head cdch)))]
+  mandatorySteps [callStep $ libMethod it "addStepHandler" [
+      customObjArg (map ((apacheImport ++ "sampling.") ++) [sh, si]) 
+        stepHandler (implementation sh [
+          methodInfo "init" (map lockedParam [t0, y0, t]) Void 
+            [initSolListFromArray y0],
+          methodInfo "handleStep" (map lockedParam [interpolator, isLast]) Void 
+            [callStep $ libMethodWithResult interpolator "getInterpolatedState" 
+              [] curr,
+            appendCurrSol curr]])],
+    callStep $ libMethod it "integrate" (customObjArg 
+      [apacheImport ++ fode] ode (implementation fode [
+        constructorInfo [] [],
+        methodInfo "getDimension" [] C.Integer [fixedReturn (int 1)],
+        methodInfo "computeDerivatives" [
+          lockedParam t, unnamedParam (Array Float), unnamedParam (Array Float)]
+          Void [assignArrayIndex 0]]) : 
+      [inlineArg Float, preDefinedArg currVals, inlineArg Float, 
+        preDefinedArg currVals]),
+    assignSolFromObj stepHandler]]
 
 apacheImport :: String
 apacheImport = "org.apache.commons.math3.ode."
@@ -200,7 +197,7 @@ odeint = externalLib [
         constructorInfo [] [],
         methodInfo "operator()" [unnamedParam (List Float),
           unnamedParam (List Float), lockedParam t] Void [
-            statementStep (\cdch e -> FAsgIndex (head cdch) 0 (head e))]]),
+            assignArrayIndex 0]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
       preDefinedArg odeintCurrVals,
       inlineArg Float, inlineArg Float, inlineArg Float, 

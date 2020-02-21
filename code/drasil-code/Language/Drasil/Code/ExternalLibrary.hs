@@ -1,11 +1,12 @@
 module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   FunctionInterface, Argument, externalLib, choiceSteps, choiceStep, 
-  mandatoryStep, callStep, callWithImport, callWithImports, loopStep, 
-  libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
+  mandatoryStep, mandatorySteps, callStep, callWithImport, callWithImports, 
+  loopStep, libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
   libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
   lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
-  methodInfo, appendCurrSol, populateSolList, fixedReturn, statementStep
+  methodInfo, appendCurrSol, populateSolList, assignArrayIndex, 
+  assignSolFromObj, initSolListFromArray, initSolListWithVal, fixedReturn
 ) where
 
 import Language.Drasil
@@ -64,6 +65,9 @@ choiceStep = map (: [])
 
 mandatoryStep :: Step -> StepGroup
 mandatoryStep f = [[f]]
+
+mandatorySteps :: [Step] -> StepGroup
+mandatorySteps fs = [fs]
 
 callStep :: FunctionInterface -> Step
 callStep = Call []
@@ -144,10 +148,34 @@ appendCurrSol curr = statementStep (\cdchs es -> case (cdchs, es) of
     ([s], []) -> appendCurrSolFS curr s
     (_,_) -> error "Fill for appendCurrSol should provide one CodeChunk and no Exprs")
   
-populateSolList :: CodeChunk -> CodeChunk -> CodeChunk -> Step
-populateSolList arr el fld = statementStep (\cdchs es -> case (cdchs, es) of
-  ([s], []) -> FForEach el (sy arr) [appendCurrSolFS (ccObjVar el fld) s]
-  (_,_) -> error "Fill for populateSolList should provide one CodeChunk and no Exprs")
+populateSolList :: CodeChunk -> CodeChunk -> CodeChunk -> [Step]
+populateSolList arr el fld = [statementStep (\cdchs es -> case (cdchs, es) of
+    ([s], []) -> FDecDef s (Matrix [[]])
+    (_,_) -> error popErr),
+  statementStep (\cdchs es -> case (cdchs, es) of
+    ([s], []) -> FForEach el (sy arr) [appendCurrSolFS (ccObjVar el fld) s]
+    (_,_) -> error popErr)]
+  where popErr = "Fill for populateSolList should provide one CodeChunk and no Exprs"
+
+assignArrayIndex :: Integer -> Step
+assignArrayIndex i = statementStep (\cdchs es -> case (cdchs, es) of
+  ([a],[e]) -> FAsgIndex a i e
+  (_,_) -> error "Fill for assignArrayIndex should provide one CodeChunk and one Expr")
+
+assignSolFromObj :: CodeChunk -> Step
+assignSolFromObj o = statementStep (\cdchs es -> case (cdchs, es) of
+  ([s],[]) -> FAsg s (sy $ ccObjVar o s)
+  (_,_) -> error "Fill for assignSolFromObj should provide one CodeChunk and no Exprs")
+
+initSolListFromArray :: CodeChunk -> Step
+initSolListFromArray a = statementStep (\cdchs es -> case (cdchs, es) of
+  ([s],[]) -> FAsg s (Matrix [[idx (sy a) (int 0)]])
+  (_,_) -> error "Fill for initSolListFromArray should provide one CodeChunk and no Exprs")
+
+initSolListWithVal :: Step
+initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
+  ([s],[v]) -> FDecDef s (Matrix [[v]])
+  (_,_) -> error "Fill for initSolListWithVal should provide one CodeChunk and one Expr")
 
 appendCurrSolFS :: CodeChunk -> CodeChunk -> FuncStmt
 appendCurrSolFS cs s = FAppend (sy s) (idx (sy cs) (int 0))

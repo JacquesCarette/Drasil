@@ -59,6 +59,7 @@ data FuncStmt where
   FTry :: [FuncStmt] -> [FuncStmt] -> FuncStmt
   FContinue :: FuncStmt
   FDec :: CodeChunk -> FuncStmt
+  FDecDef :: CodeChunk -> Expr -> FuncStmt
   FProcCall :: Func -> [Expr] -> FuncStmt
   -- slight hack, for now
   FAppend :: Expr -> Expr -> FuncStmt
@@ -82,6 +83,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
   where
     fstvars :: ChunkDB -> FuncStmt -> [CodeChunk]
     fstvars _  (FDec cch) = [cch]
+    fstvars sm (FDecDef cch e) = cch:codevars' e sm
     fstvars sm (FAsg cch e) = cch:codevars' e sm
     fstvars sm (FAsgIndex cch _ e) = cch:codevars' e sm
     fstvars sm (FFor cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
@@ -97,6 +99,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
 
     declared :: ChunkDB -> FuncStmt -> [CodeChunk]
     declared _  (FDec cch) = [cch]
+    declared _  (FDecDef cch _) = [cch]
     declared _  (FAsg _ _) = []
     declared _  FAsgIndex {} = []
     declared sm (FFor cch _ fs) = cch : concatMap (declared sm) fs

@@ -1,12 +1,14 @@
+{-# LANGUAGE LambdaCase #-}
 module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   FunctionInterface, Argument, externalLib, choiceSteps, choiceStep, 
   mandatoryStep, mandatorySteps, callStep, callWithImport, callWithImports, 
-  loopStep, libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
+  libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
   libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
   lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
   methodInfo, appendCurrSol, populateSolList, assignArrayIndex, 
-  assignSolFromObj, initSolListFromArray, initSolListWithVal, fixedReturn
+  assignSolFromObj, initSolListFromArray, initSolListWithVal, 
+  solveAndPopulateWhile, fixedReturn
 ) where
 
 import Language.Drasil
@@ -176,6 +178,15 @@ initSolListWithVal :: Step
 initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
   ([s],[v]) -> FDecDef s (Matrix [[v]])
   (_,_) -> error "Fill for initSolListWithVal should provide one CodeChunk and one Expr")
+
+-- FunctionInterface for loop condition, CodeChunk for independent var,
+-- FunctionInterface for solving, CodeChunk for soln array to populate with
+solveAndPopulateWhile :: FunctionInterface -> CodeChunk -> FunctionInterface -> 
+  CodeChunk -> Step
+solveAndPopulateWhile lc iv slv popArr = loopStep [lc] (\case 
+  [ub] -> sy iv $< sy ub
+  _ -> error "Fill for solveAndPopulateWhile should provide one CodeChunk") 
+  [callStep slv, appendCurrSol popArr]
 
 appendCurrSolFS :: CodeChunk -> CodeChunk -> FuncStmt
 appendCurrSolFS cs s = FAppend (sy s) (idx (sy cs) (int 0))

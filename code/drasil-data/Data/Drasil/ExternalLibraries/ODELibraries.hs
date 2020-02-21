@@ -6,13 +6,13 @@ import Language.Drasil
 
 import Language.Drasil.Code (FuncStmt(..), ExternalLibrary, Step, Argument, 
   externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep, callStep,
-  callWithImport, callWithImports, loopStep, libFunction, libMethod, 
+  callWithImport, callWithImports, libFunction, libMethod, 
   libFunctionWithResult, libMethodWithResult, libConstructor, lockedArg, 
   lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, functionArg, 
   customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
   implementation, constructorInfo, methodInfo, appendCurrSol, populateSolList, 
   assignArrayIndex, assignSolFromObj, initSolListFromArray, initSolListWithVal, 
-  fixedReturn, CodeChunk, codevar, ccObjVar, implCQD)
+  solveAndPopulateWhile, fixedReturn, CodeChunk, codevar, ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Func, Void))
 import qualified GOOL.Drasil as C (CodeType(Boolean, Integer))
@@ -31,9 +31,8 @@ scipyODE = externalLib [
     setIntegratorMethod [lockedArg (str "dopri45"), atol, rtol]],
   mandatorySteps [callStep $ libMethod r "set_initial_value" [inlineArg Float],
     initSolListWithVal,
-    loopStep [libMethod r "successful" []] 
-      (\cdch -> sy rt $< sy (head cdch)) 
-      [callStep $ libMethod r "integrate" [inlineArg Float], appendCurrSol ry]]]
+    solveAndPopulateWhile (libMethod r "successful" []) rt 
+      (libMethod r "integrate" [inlineArg Float]) ry]]
 
 scipyImport :: String
 scipyImport = "scipy.integrate"

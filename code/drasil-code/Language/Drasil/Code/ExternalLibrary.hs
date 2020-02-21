@@ -3,12 +3,12 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   FunctionInterface, Argument, externalLib, choiceSteps, choiceStep, 
   mandatoryStep, mandatorySteps, callStep, callWithImport, callWithImports, 
   libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
-  libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
-  preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
-  lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
-  methodInfo, appendCurrSol, populateSolList, assignArrayIndex, 
-  assignSolFromObj, initSolListFromArray, initSolListWithVal, 
-  solveAndPopulateWhile, fixedReturn
+  libConstructor, constructAndReturn, lockedArg, lockedNamedArg, inlineArg, 
+  inlineNamedArg, preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, 
+  recordArg, lockedParam, unnamedParam, customClass, implementation, 
+  constructorInfo, methodInfo, appendCurrSol, populateSolList, 
+  assignArrayIndex, assignSolFromObj, initSolListFromArray, initSolListWithVal, 
+  solveAndPopulateWhile, returnExprList, fixedReturn
 ) where
 
 import Language.Drasil
@@ -33,7 +33,9 @@ data Step = Call [Import] FunctionInterface
   -- For when a statement is needed, but does not interface with the external library
   | Statement ([CodeChunk] -> [Expr] -> FuncStmt)
 
-data FunctionInterface = FI FuncType FuncName [Argument] (Maybe CodeChunk) -- Maybe CodeChunk to assign to
+data FunctionInterface = FI FuncType FuncName [Argument] (Maybe Result)
+
+data Result = Assign CodeChunk | Return 
 
 data Argument = 
   -- Not dependent on use case, Maybe is name for the argument
@@ -41,7 +43,7 @@ data Argument =
   -- First Maybe is name for the argument (needed for named parameters)
   -- Second Maybe is the variable if it needs to be declared and defined prior to calling
   | Basic (Maybe VarName) CodeType (Maybe CodeChunk) 
-  | Fn CodeChunk [Parameter] ([Expr] -> FuncStmt)
+  | Fn CodeChunk [Parameter] Step
   | Class [Import] CodeChunk ClassInfo
   | Record FuncName CodeChunk [FieldName]
 
@@ -91,14 +93,17 @@ libMethod o n ps = FI (Method o) n ps Nothing
 
 libFunctionWithResult :: FuncName -> [Argument] -> CodeChunk -> 
   FunctionInterface
-libFunctionWithResult n ps r = FI Function n ps (Just r)
+libFunctionWithResult n ps r = FI Function n ps (Just $ Assign r)
 
 libMethodWithResult :: CodeChunk -> FuncName -> [Argument] -> CodeChunk -> 
   FunctionInterface
-libMethodWithResult o n ps r = FI (Method o) n ps (Just r)
+libMethodWithResult o n ps r = FI (Method o) n ps (Just $ Assign r)
 
 libConstructor :: FuncName -> [Argument] -> CodeChunk -> FunctionInterface
-libConstructor n as c = FI Constructor n as (Just c)
+libConstructor n as c = FI Constructor n as (Just $ Assign c)
+
+constructAndReturn :: FuncName -> [Argument] -> FunctionInterface
+constructAndReturn n as = FI Constructor n as (Just Return)
 
 lockedArg :: Expr -> Argument
 lockedArg = LockedArg Nothing
@@ -118,7 +123,7 @@ preDefinedArg v = Basic Nothing (codeType v) (Just v)
 preDefinedNamedArg :: VarName -> CodeChunk -> Argument
 preDefinedNamedArg n v = Basic (Just n) (codeType v) (Just v)
 
-functionArg :: CodeChunk -> [Parameter] -> ([Expr] -> FuncStmt) -> Argument
+functionArg :: CodeChunk -> [Parameter] -> Step -> Argument
 functionArg = Fn
 
 customObjArg :: [Import] -> CodeChunk -> ClassInfo -> Argument
@@ -187,6 +192,11 @@ solveAndPopulateWhile lc iv slv popArr = loopStep [lc] (\case
   [ub] -> sy iv $< sy ub
   _ -> error "Fill for solveAndPopulateWhile should provide one CodeChunk") 
   [callStep slv, appendCurrSol popArr]
+
+returnExprList :: Step
+returnExprList = statementStep (\cdchs es -> case (cdchs, es) of
+  ([], _) -> FRet $ Matrix [es]
+  (_,_) -> error "Fill for returnExprList should provide no CodeChunks")
 
 appendCurrSolFS :: CodeChunk -> CodeChunk -> FuncStmt
 appendCurrSolFS cs s = FAppend (sy s) (idx (sy cs) (int 0))

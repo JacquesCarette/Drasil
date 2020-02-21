@@ -4,15 +4,16 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 
 import Language.Drasil
 
-import Language.Drasil.Code (FuncStmt(..), ExternalLibrary, Step, Argument, 
+import Language.Drasil.Code (ExternalLibrary, Step, Argument, 
   externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep, callStep,
   callWithImport, callWithImports, libFunction, libMethod, 
-  libFunctionWithResult, libMethodWithResult, libConstructor, lockedArg, 
-  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, functionArg, 
-  customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
-  implementation, constructorInfo, methodInfo, appendCurrSol, populateSolList, 
-  assignArrayIndex, assignSolFromObj, initSolListFromArray, initSolListWithVal, 
-  solveAndPopulateWhile, fixedReturn, CodeChunk, codevar, ccObjVar, implCQD)
+  libFunctionWithResult, libMethodWithResult, libConstructor, 
+  constructAndReturn, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
+  preDefinedArg, functionArg, customObjArg, recordArg, lockedParam, 
+  unnamedParam, customClass, implementation, constructorInfo, methodInfo, 
+  appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
+  initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
+  returnExprList, fixedReturn, CodeChunk, codevar, ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Func, Void))
 import qualified GOOL.Drasil as C (CodeType(Boolean, Integer))
@@ -24,7 +25,7 @@ scipyODE = externalLib [
   mandatoryStep $ callWithImport scipyImport $ libFunctionWithResult 
     (scipyImport ++ ".ode") [
       functionArg f (map unnamedParam [Float, Array Float]) 
-      (\es -> FRet $ Matrix [es])] r,
+      returnExprList] r,
   choiceStep [
     setIntegratorMethod [vode, methodArg "adams", atol, rtol],
     setIntegratorMethod [vode, methodArg "bdf", atol, rtol],
@@ -75,11 +76,8 @@ oslo = externalLib [
 
 odeArgs :: [Argument]
 odeArgs = [inlineArg Float, lockedArg (sy initv),
-  -- Using Matrix here is an incorrect hack to make things compile for now
-  -- The type I really need is Object "Vector", but Expr does not have a way of representing a constructor call, and shouldn't since constructor calls are very code-specific and Expr should not be code-specific
-  -- Probably what I need to do is define a new type, CodeExpr, which extends Expr with some code-specific representations. Then both ExternalLibrary and FuncStmt would take arguments of type CodeExpr where they currently take Expr.
   functionArg fOslo (map unnamedParam [Float, Object "Vector"]) 
-    (\es -> FRet $ Matrix [es]),
+    (callStep $ constructAndReturn "Vector" [inlineArg Float]),
   recordArg "Options" opts ["AbsoluteTolerance", "RelativeTolerance"]]
 
 solT :: CodeType

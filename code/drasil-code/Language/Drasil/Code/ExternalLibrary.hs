@@ -33,7 +33,7 @@ data Step = Call [Import] FunctionInterface
   -- For when a statement is needed, but does not interface with the external library
   | Statement ([CodeChunk] -> [Expr] -> FuncStmt)
 
-data FunctionInterface = FI FuncType FuncName [Argument] (Maybe Result)
+data FunctionInterface = FI FuncType CodeChunk [Argument] (Maybe Result)
 
 data Result = Assign CodeChunk | Return 
 
@@ -85,25 +85,25 @@ callWithImports = Call
 loopStep :: [FunctionInterface] -> ([CodeChunk] -> Condition) -> [Step] -> Step
 loopStep = Loop
 
-libFunction :: FuncName -> [Argument] -> FunctionInterface
-libFunction n ps = FI Function n ps Nothing
+libFunction :: CodeChunk -> [Argument] -> FunctionInterface
+libFunction f ps = FI Function f ps Nothing
 
-libMethod :: CodeChunk -> FuncName -> [Argument] -> FunctionInterface
-libMethod o n ps = FI (Method o) n ps Nothing
+libMethod :: CodeChunk -> CodeChunk -> [Argument] -> FunctionInterface
+libMethod o m ps = FI (Method o) m ps Nothing
 
-libFunctionWithResult :: FuncName -> [Argument] -> CodeChunk -> 
+libFunctionWithResult :: CodeChunk -> [Argument] -> CodeChunk -> 
   FunctionInterface
-libFunctionWithResult n ps r = FI Function n ps (Just $ Assign r)
+libFunctionWithResult f ps r = FI Function f ps (Just $ Assign r)
 
-libMethodWithResult :: CodeChunk -> FuncName -> [Argument] -> CodeChunk -> 
+libMethodWithResult :: CodeChunk -> CodeChunk -> [Argument] -> CodeChunk -> 
   FunctionInterface
-libMethodWithResult o n ps r = FI (Method o) n ps (Just $ Assign r)
+libMethodWithResult o m ps r = FI (Method o) m ps (Just $ Assign r)
 
-libConstructor :: FuncName -> [Argument] -> CodeChunk -> FunctionInterface
-libConstructor n as c = FI Constructor n as (Just $ Assign c)
+libConstructor :: CodeChunk -> [Argument] -> CodeChunk -> FunctionInterface
+libConstructor c as r = FI Constructor c as (Just $ Assign r)
 
-constructAndReturn :: FuncName -> [Argument] -> FunctionInterface
-constructAndReturn n as = FI Constructor n as (Just Return)
+constructAndReturn :: CodeChunk -> [Argument] -> FunctionInterface
+constructAndReturn c as = FI Constructor c as (Just Return)
 
 lockedArg :: Expr -> Argument
 lockedArg = LockedArg Nothing

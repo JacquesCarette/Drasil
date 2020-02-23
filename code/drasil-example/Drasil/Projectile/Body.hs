@@ -120,7 +120,7 @@ si = SI {
   _sysinfodb   = symbMap,
   _usedinfodb  = usedDB,
    refdb       = refDB,
-   sampleData  = "../../datafiles/Projectile/sampleInput.txt"
+   sampleData  = "../../../datafiles/Projectile/sampleInput.txt"
 }
 
 symbMap :: ChunkDB

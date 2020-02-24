@@ -3,13 +3,14 @@ module Language.Drasil.Code (
   makeCode, createCodeFiles, 
   generator, generateCode,
   readWithDataDesc, sampleInputDD,
-  ($:=), Choices(..), CodeSpec(..), CodeSystInfo(..), Comments(..), 
-  Verbosity(..), ConstraintBehaviour(..), Func, FuncStmt(..), 
-  ImplementationType(..), Lang(..), Logging(LogNone, LogAll), Mod(Mod), 
-  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
-  InputModule(..), CodeConcept(..), matchConcepts, AuxFile(..), Visibility(..),
-  asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, 
-  packmod, relToQD,
+  Choices(..), CodeSpec(..), CodeSystInfo(..), Comments(..), Verbosity(..), 
+  ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
+  Logging(LogNone, LogAll), Modularity(..), Structure(..), 
+  ConstantStructure(..), ConstantRepr(..), InputModule(..), CodeConcept(..), 
+  matchConcepts, AuxFile(..), Visibility(..), asExpr, asExpr', asVC, asVC', 
+  codeSpec, relToQD,
+  ($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, funcData, funcDef, 
+  packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
   ExternalLibrary, Step, FunctionInterface, Argument, externalLib, choiceSteps, 
   choiceStep, mandatoryStep, callStep, callRequiresJust, callRequires,
@@ -17,7 +18,7 @@ module Language.Drasil.Code (
   libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
   lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
-  methodInfo, iterateStep, statementStep, lockedStatement,
+  methodInfo, statementStep, lockedStatement,
   PackageSym(..),
   CodeChunk, codevar, quantvar, ccObjVar, CodeQuantityDict, implCQD,
   unPP, unJP, unCSP, unCPPP
@@ -42,15 +43,15 @@ import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
   lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
-  methodInfo, iterateStep, statementStep, lockedStatement)
+  methodInfo, statementStep, lockedStatement)
 
-import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec(..), 
-  CodeSystInfo(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), Func, 
-  FuncStmt(..), ImplementationType(..), Lang(..), Logging(..), Mod(Mod), 
-  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
-  InputModule(..), CodeConcept(..), matchConcepts, AuxFile(..), Visibility(..), 
-  asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, 
-  packmod, relToQD)
+import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), CodeSystInfo(..), 
+  Comments(..), Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), 
+  Lang(..), Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
+  ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, 
+  AuxFile(..), Visibility(..), asExpr, asExpr', asVC, asVC', codeSpec, relToQD)
+import Language.Drasil.Mod (($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, 
+  funcData, funcDef, packmod)
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
 

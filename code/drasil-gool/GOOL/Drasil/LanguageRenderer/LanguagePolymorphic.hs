@@ -1088,9 +1088,7 @@ pubGVar = S.stateVar public static
 buildClass :: (RenderSym repr) => Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
   CS (repr (Class repr))
-buildClass n p = S.intClass n public parent
-  where parent = case p of Nothing -> keyFromDoc empty
-                           Just pn -> inherit pn
+buildClass n = S.intClass n public . maybe (keyFromDoc empty) inherit
 
 enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
   CS (repr (Class repr))
@@ -1100,9 +1098,8 @@ enum n es s = modify (setClassName n) >> classFromData (toState $ enumDocD n
 extraClass :: (RenderSym repr) => Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
   CS (repr (Class repr))
-extraClass n p = S.intClass n (scopeFromData Priv empty) parent
-  where parent = case p of Nothing -> keyFromDoc empty
-                           Just pn -> inherit pn
+extraClass n = S.intClass n (scopeFromData Priv empty) . 
+  maybe (keyFromDoc empty) inherit
 
 implementingClass :: (RenderSym repr) => Label -> [Label] -> 
   [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] 

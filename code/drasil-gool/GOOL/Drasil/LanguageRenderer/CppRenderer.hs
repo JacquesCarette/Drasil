@@ -55,8 +55,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   switch, switchAsIf, for, forRange, while, tryCatch, notifyObservers, 
   construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
   constructor, function, docFunc, docInOutFunc, intFunc, privMVar, pubMVar, 
-  pubGVar, privClass, pubClass, docClass, commentedClass, buildModule, 
-  modFromData, fileDoc, docMod, fileFromData)
+  pubGVar, buildClass, implementingClass, docClass, commentedClass, 
+  buildModule, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
@@ -158,6 +158,7 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   docCommentStart = pair docCommentStart docCommentStart
   docCommentEnd = pair docCommentEnd docCommentEnd
 
+  keyFromDoc d = pair (keyFromDoc d) (keyFromDoc d)
   keyDoc k = keyDoc $ pfst k
 
 instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
@@ -794,21 +795,16 @@ instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   type Class (p CppSrcCode CppHdrCode) = Doc
-  buildClass n p s vs fs = modify (setClassName n) >> pair2Lists 
-    (buildClass n p (pfst s)) 
-    (buildClass n p (psnd s)) 
+  buildClass n p vs fs = modify (setClassName n) >> pair2Lists 
+    (buildClass n p) (buildClass n p)
     vs (map (zoom lensCStoMS) fs)
   enum l ls s = modify (setClassName l) >> on2StateValues pair 
     (enum l ls $ pfst s) (enum l ls $ psnd s)
-  privClass n p vs fs = modify (setClassName n) >> pair2Lists 
-    (privClass n p) (privClass n p)
+  extraClass n p vs fs = modify (setClassName n) >> pair2Lists 
+    (extraClass n p) (extraClass n p)
     vs (map (zoom lensCStoMS) fs)
-  pubClass n p vs fs = modify (setClassName n) >> pair2Lists 
-    (pubClass n p) (pubClass n p)
-    vs (map (zoom lensCStoMS) fs)
-  implementingClass n is s vs fs = modify (setClassName n) >> pair2Lists
-    (implementingClass n is (pfst s))
-    (implementingClass n is (psnd s))
+  implementingClass n is vs fs = modify (setClassName n) >> pair2Lists
+    (implementingClass n is) (implementingClass n is)
     vs (map (zoom lensCStoMS) fs)
 
   docClass d = pair1 (docClass d) (docClass d)
@@ -816,6 +812,9 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   commentedClass = pair2 commentedClass commentedClass
 
 instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
+  intClass n s i vs fs = pair2Lists 
+    (intClass n (pfst s) (pfst i)) (intClass n (psnd s) (psnd i)) 
+    vs (map (zoom lensCStoMS) fs)
   classDoc c = classDoc $ pfst c
   classFromData d = on2StateValues pair (classFromData d) (classFromData d)
 
@@ -1085,6 +1084,7 @@ instance KeywordSym CppSrcCode where
   docCommentStart = toCode docCmtStart
   docCommentEnd = blockCommentEnd
 
+  keyFromDoc = toCode
   keyDoc = unCPPSC
 
 instance ImportSym CppSrcCode where
@@ -1641,18 +1641,18 @@ instance InternalStateVar CppSrcCode where
 
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
-  buildClass n _ _ vs fs = modify (setClassName n) >> on2StateLists cppsClass 
-    vs (map (zoom lensCStoMS) $ fs ++ [destructor vs])
+  buildClass = G.buildClass
   enum _ _ _ = toState $ toCode empty
-  privClass = G.privClass
-  pubClass = G.pubClass
-  implementingClass n _ = buildClass n Nothing 
+  extraClass = buildClass
+  implementingClass = G.implementingClass
 
   docClass = G.docClass
 
   commentedClass _ cs = cs
 
 instance InternalClass CppSrcCode where
+  intClass n _ _ vs fs = modify (setClassName n) >> on2StateLists cppsClass 
+    vs (map (zoom lensCStoMS) $ fs ++ [destructor vs])
   classDoc = unCPPSC
   classFromData = onStateValue toCode
 
@@ -1747,6 +1747,7 @@ instance KeywordSym CppHdrCode where
   docCommentStart = toCode docCmtStart
   docCommentEnd = blockCommentEnd
 
+  keyFromDoc = toCode
   keyDoc = unCPPHC
 
 instance ImportSym CppHdrCode where
@@ -2237,27 +2238,21 @@ instance InternalStateVar CppHdrCode where
 
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
-  buildClass n p _ vs mths = modify (setClassName n) >> on2StateLists 
-    (\vars funcs -> cpphClass n parent vars funcs public private 
-    blockStart blockEnd endStatement) vs fs
-    where fs = map (zoom lensCStoMS) $ mths ++ [destructor vs]
-          parent = case p of Nothing -> toCode empty
-                             Just pn -> inherit pn
+  buildClass = G.buildClass
   enum n es _ = modify (setClassName n) >> cpphEnum n (enumElementsDocD es 
     enumsEqualInts) blockStart blockEnd endStatement
-  privClass = G.privClass
-  pubClass = G.pubClass
-  implementingClass n is _ vs mths = modify (setClassName n) >> on2StateLists 
-    (\vars funcs -> cpphClass n (implements is) vars funcs public private 
-    blockStart blockEnd endStatement) vs fs
-    where fs = map (zoom lensCStoMS) $ mths ++ [destructor vs]
-
+  extraClass = buildClass
+  implementingClass = G.implementingClass
 
   docClass = G.docClass
 
   commentedClass = G.commentedClass
 
 instance InternalClass CppHdrCode where
+  intClass n _ i vs mths = modify (setClassName n) >> on2StateLists 
+    (\vars funcs -> cpphClass n i vars funcs public private 
+    blockStart blockEnd endStatement) vs fs
+    where fs = map (zoom lensCStoMS) $ mths ++ [destructor vs]
   classDoc = unCPPHC
   classFromData = onStateValue toCode
 
@@ -2380,14 +2375,14 @@ cppODEFile info = (fl, fst s)
               dvElem = var n (innerVarType dpv)
               othVars = map (modify (setODEOthVars (map variableName 
                 ovs)) >>) ovars
-          in fileDoc (buildModule cn [] [] [pubClass cn Nothing 
+          in fileDoc (buildModule cn [] [] [buildClass cn Nothing 
             (pubMVar dv : map privMVar othVars) 
             [initializer (map param othVars) (zip othVars (map valueOf othVars)),
             pubMethod "operator()" void [param dvElem, 
               pointerParam $ var dn float, param tElem] 
               (oneLiner $ var dn float &= (modify (setODEOthVars 
               (map variableName ovs)) >> ode info))], 
-          pubClass ("Populate_" ++ n) Nothing [pubMVar dvptr] 
+          buildClass ("Populate_" ++ n) Nothing [pubMVar dvptr] 
             [initializer [pointerParam dv] [(dv, valueOf dv)],
             pubMethod "operator()" void [pointerParam dvElem, param tElem] 
               (oneLiner $ valState $ listAppend (valueOf $ objVarSelf dv) 

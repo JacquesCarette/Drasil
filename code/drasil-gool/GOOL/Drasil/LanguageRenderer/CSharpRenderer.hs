@@ -56,8 +56,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
   pubMethod, constructor, docMain, function, mainFunction, docFunc, 
   docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, enum, pubClass, implementingClass, docClass, 
-  commentedClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
+  pubGVar, buildClass, enum, implementingClass, docClass, commentedClass, 
+  intClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -142,6 +142,7 @@ instance KeywordSym CSharpCode where
   docCommentStart = toCode docCmtStart
   docCommentEnd = blockCommentEnd
 
+  keyFromDoc = toCode
   keyDoc = unCSC
 
 instance ImportSym CSharpCode where
@@ -649,17 +650,17 @@ instance InternalStateVar CSharpCode where
 
 instance ClassSym CSharpCode where
   type Class CSharpCode = Doc
-  buildClass = G.buildClass classDocD inherit
+  buildClass = G.buildClass
   enum = G.enum
-  privClass = pubClass
-  pubClass = G.pubClass
-  implementingClass = G.implementingClass classDocD implements
+  extraClass = buildClass
+  implementingClass = G.implementingClass
 
   docClass = G.docClass
 
   commentedClass = G.commentedClass
 
 instance InternalClass CSharpCode where
+  intClass = G.intClass classDocD
   classDoc = unCSC
   classFromData = onStateValue toCode
 

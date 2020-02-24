@@ -30,8 +30,9 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   notifyObservers, construct, param, method, getMethod, setMethod,privMethod, 
   pubMethod, constructor, docMain, function, mainFunction, docFunc, 
   docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, enum, privClass, pubClass, implementingClass, docClass, 
-  commentedClass, buildModule, buildModule', modFromData, fileDoc, docMod
+  pubGVar, buildClass, enum, extraClass, implementingClass, docClass, 
+  commentedClass, intClass, buildModule, buildModule', modFromData, fileDoc, 
+  docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -55,8 +56,8 @@ import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   InternalScope(..), MethodTypeSym(MethodType, mType), ParameterSym(Parameter), 
   InternalParam(paramFromData), MethodSym(Method), 
   InternalMethod(intMethod, commentedFunc, methodDoc), StateVarSym(StateVar), 
-  InternalStateVar(..), ClassSym(Class), InternalClass(..), ModuleSym(Module), 
-  InternalMod(moduleDoc, updateModuleDoc), BlockComment(..))
+  InternalStateVar(..), ClassSym(Class), InternalClass(classDoc, classFromData),
+  ModuleSym(Module), InternalMod(moduleDoc, updateModuleDoc), BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData), 
   BodySym(oneLiner), BlockSym(block), 
   TypeSym(bool, int, float, char, string, listType, arrayType, listInnerType, void), 
@@ -74,7 +75,7 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   ControlStatementSym(ifCond, for, forRange, switch), MethodTypeSym(construct), 
   ParameterSym(param), MethodSym(method, mainFunction), InternalMethod(intFunc),
   StateVarSym(stateVar), ClassSym(buildClass, commentedClass), 
-  InternalMod(modFromData))
+  InternalClass(intClass), InternalMod(modFromData))
 import GOOL.Drasil.Data (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
@@ -1084,40 +1085,26 @@ pubGVar = S.stateVar public static
 
 -- Classes --
 
-buildClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> 
-  (Label -> repr (Keyword repr)) -> Label -> Maybe Label -> repr (Scope repr) 
-  -> [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
+buildClass :: (RenderSym repr) => Label -> Maybe Label -> 
+  [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
   CS (repr (Class repr))
-buildClass f i n p s vs fs = modify (setClassName n) >> classFromData 
-  (on2StateValues (f n parent (scopeDoc s)) (onStateList (stateVarListDocD . 
-  map stateVarDoc) vs) (onStateList (vibcat . map methodDoc) (map (zoom 
-  lensCStoMS) fs)))
-  where parent = case p of Nothing -> empty
-                           Just pn -> keyDoc $ i pn
+buildClass n = S.intClass n public . maybe (keyFromDoc empty) inherit
 
 enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
   CS (repr (Class repr))
 enum n es s = modify (setClassName n) >> classFromData (toState $ enumDocD n 
   (enumElementsDocD es False) (scopeDoc s))
 
-privClass :: (RenderSym repr) => Label -> Maybe Label -> 
-  [CS (repr (StateVar repr))] -> 
-  [MS (repr (Method repr))] -> CS (repr (Class repr))
-privClass n p = S.buildClass n p (scopeFromData Priv empty)
-
-pubClass :: (RenderSym repr) => Label -> Maybe Label -> 
+extraClass :: (RenderSym repr) => Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
   CS (repr (Class repr))
-pubClass n p = S.buildClass n p public
+extraClass n = S.intClass n (scopeFromData Priv empty) . 
+  maybe (keyFromDoc empty) inherit
 
-implementingClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> 
-  Doc) -> ([Label] -> repr (Keyword repr)) -> Label -> [Label] -> 
-  repr (Scope repr) -> [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] 
+implementingClass :: (RenderSym repr) => Label -> [Label] -> 
+  [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] 
   -> CS (repr (Class repr))
-implementingClass f i n is s svs ms = modify (setClassName n) >> classFromData 
-  (on2StateValues (f n (keyDoc $ i is) (scopeDoc s)) (onStateList 
-  (stateVarListDocD . map stateVarDoc) svs) (onStateList (vibcat . map 
-  methodDoc) (map (zoom lensCStoMS) ms)))
+implementingClass n is = S.intClass n public (implements is)
 
 docClass :: (RenderSym repr) => String -> CS (repr (Class repr))
   -> CS (repr (Class repr))
@@ -1127,6 +1114,15 @@ commentedClass :: (RenderSym repr) => CS (repr (BlockComment repr))
   -> CS (repr (Class repr)) -> CS (repr (Class repr))
 commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' -> 
   commentedItem (blockCommentDoc cmt') (classDoc cs')) cmt cs)
+
+intClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> 
+  Label -> repr (Scope repr) -> repr (Keyword repr) -> 
+  [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] ->
+  CS (repr (Class repr))
+intClass f n s i svs ms = modify (setClassName n) >> classFromData 
+  (on2StateValues (f n (keyDoc i) (scopeDoc s)) (onStateList 
+  (stateVarListDocD . map stateVarDoc) svs) (onStateList (vibcat . map 
+  methodDoc) (map (zoom lensCStoMS) ms)))
 
 -- Modules --
 
@@ -1143,8 +1139,8 @@ buildModule' :: (RenderSym repr) => Label -> (String -> repr (Import repr)) ->
 buildModule' n inc is ms cs = S.modFromData n ((\cls lis libis mis -> vibcat [
     vcat (map (importDoc . inc) (lis ++ sort (is ++ libis) ++ mis)),
     vibcat (map classDoc cls)]) <$>
-  mapM (zoom lensFStoCS) (if null ms then cs else pubClass n Nothing [] ms : 
-  cs) <*> getLangImports <*> getLibImports <*> getModuleImports)
+  mapM (zoom lensFStoCS) (if null ms then cs else S.buildClass n Nothing [] ms 
+    : cs) <*> getLangImports <*> getLibImports <*> getModuleImports)
 
 modFromData :: Label -> (Doc -> repr (Module repr)) -> FS Doc -> 
   FS (repr (Module repr))

@@ -1,4 +1,7 @@
 # For documentation on how to add to this, see Issue #1371
+
+SHELL=/bin/bash
+
 # List of all known packages
 PACKAGES = lang utils build gool code theory database printers gen data docLang example
 
@@ -28,6 +31,8 @@ SSP_DIR   = SSP
 GAMEPHYSICS_DIR  = GamePhysics
 PROJECTILE_DIR = Projectile
 TEMPLATE_DIR = Template
+
+MULTI_SRC_DIRS = $(PROJECTILE_DIR) # Directories for examples with multiple src versions
 
 # and the name of their executables
 HGHC_EXE  = hghc
@@ -162,7 +167,8 @@ tex: $(TEX_EXAMPLES)
 %$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFIX)
 	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" \
-	TARGET=$(TARGET) MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"code_build.sh
+	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" TARGET=$(TARGET) \
+	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"code_build.sh
 
 code: $(CODE_EXAMPLES)
 
@@ -172,15 +178,16 @@ doxygen: $(CODE_EXAMPLES)
 %$(DCP_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(DCP_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
-# Print as formatted K/V for deploy to extract
-	@echo "$(EDIR)$(DEPLOY_CODE_PATH_KV_SEP)$(shell git rev-parse --show-prefix)stable/$*/src/"
+	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" EXAMPLE=$* \
+	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" \
+	"$(SHELL)" "$(SCRIPT_FOLDER)"code_path.sh
 
 deploy_code_path: $(DCP_EXAMPLES)
 
 deploy_lite:
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
-	DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
+	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
 
 # This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
 # dependencies exist. One of the downsides is we ensure all files are re-generated which means the TeX

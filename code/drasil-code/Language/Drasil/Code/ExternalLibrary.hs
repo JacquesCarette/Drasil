@@ -1,7 +1,7 @@
 {-# LANGUAGE LambdaCase #-}
 module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   FunctionInterface, Argument, externalLib, choiceSteps, choiceStep, 
-  mandatoryStep, mandatorySteps, callStep, callWithImport, callWithImports, 
+  mandatoryStep, mandatorySteps, callStep, callRequiresJust, callRequires, 
   libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
   libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
@@ -21,13 +21,13 @@ type VarName = String
 type FuncName = String
 type FieldName = String
 type Condition = Expr
-type Import = String
+type Requires = String
 
 type ExternalLibrary = [StepGroup]
 
 type StepGroup = [[Step]]
 
-data Step = Call [Import] FunctionInterface
+data Step = Call [Requires] FunctionInterface
   -- A while loop -- function calls in the condition, other conditions, steps for the body
   | Loop [FunctionInterface] ([CodeChunk] -> Condition) [Step]
   -- For when a statement is needed, but does not interface with the external library
@@ -40,9 +40,9 @@ data Argument =
   LockedArg (Maybe VarName) Expr 
   -- First Maybe is name for the argument (needed for named parameters)
   -- Second Maybe is the variable if it needs to be declared and defined prior to calling
-  | Basic (Maybe VarName) CodeType (Maybe CodeChunk) 
+  | Basic (Maybe VarName) CodeType (Maybe CodeChunk)
   | Fn CodeChunk [Parameter] ([Expr] -> FuncStmt)
-  | Class [Import] CodeChunk ClassInfo
+  | Class [Requires] CodeChunk ClassInfo
   | Record FuncName CodeChunk [FieldName]
 
 data Parameter = LockedParam CodeChunk | NameableParam CodeType
@@ -74,11 +74,11 @@ mandatorySteps fs = [fs]
 callStep :: FunctionInterface -> Step
 callStep = Call []
 
-callWithImport :: Import -> FunctionInterface -> Step
-callWithImport i = Call [i]
+callRequiresJust :: Requires -> FunctionInterface -> Step
+callRequiresJust i = Call [i]
 
-callWithImports :: [Import] -> FunctionInterface -> Step
-callWithImports = Call
+callRequires :: [Requires] -> FunctionInterface -> Step
+callRequires = Call
 
 loopStep :: [FunctionInterface] -> ([CodeChunk] -> Condition) -> [Step] -> Step
 loopStep = Loop
@@ -121,7 +121,7 @@ preDefinedNamedArg n v = Basic (Just n) (codeType v) (Just v)
 functionArg :: CodeChunk -> [Parameter] -> ([Expr] -> FuncStmt) -> Argument
 functionArg = Fn
 
-customObjArg :: [Import] -> CodeChunk -> ClassInfo -> Argument
+customObjArg :: [Requires] -> CodeChunk -> ClassInfo -> Argument
 customObjArg = Class
 
 recordArg :: FuncName -> CodeChunk -> [FieldName] -> Argument

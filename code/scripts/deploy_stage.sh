@@ -13,6 +13,11 @@ if [ -z "$GRAPH_FOLDER" ]; then
   exit 1
 fi
 
+if [ -z "$MULTI_SRC_DIRS" ]; then
+  echo "Missing MULTI_SRC_DIRS."
+  exit 1
+fi
+
 if [ -z "$DEPLOY_CODE_PATH_KV_SEP" ]; then
   echo "Missing DEPLOY_CODE_PATH_KV_SEP."
   exit 1
@@ -76,12 +81,30 @@ copy_examples() {
         mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name"
         cp -r "$lang/"html/. "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name/"
       done
+      src_stub
+    fi
+    # For examples with multiple versions, directory structure is different
+    if [[ "$MULTI_SRC_DIRS" == *"$example_name"* ]]; then
+      for v in "$example/$example_name"*/; do
+        v_name=$(basename "$v")
+        mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/"
+        for lang in "$v/"src/*; do
+          lang_name=$(basename "$lang")
+          mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name"
+          cp -r "$lang/"html/. "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name/"
+        done
+      done
+      src_stub
+    fi
+    src_stub() {
       # We don't expose code in deploy. It's more conveneient to link to GitHub's directory
       # We place a stub file which Hakyll will replace.
       REL_PATH=$(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-)
       # On a real deploy, `deploy` folder is itself a git repo, thus we need to ensure the path lookup is in the outer Drasil repo.
-      ls -d "$(cd "$CUR_DIR" && git rev-parse --show-toplevel)/$REL_PATH"*/ | rev | cut -d/ -f2 | rev | tr '\n' '\0' | xargs -0 printf "$REL_PATH%s\n" > "$EXAMPLE_DEST$example_name/src"
-    fi
+      for p in $REL_PATH; do
+        ls -d "$(cd "$CUR_DIR" && git rev-parse --show-toplevel)/$p"*/ | rev | cut -d/ -f2 | rev | tr '\n' '\0' | xargs -0 printf "$p%s\n" >> "$EXAMPLE_DEST$example_name/src"
+      done
+    }
   done
 }
 

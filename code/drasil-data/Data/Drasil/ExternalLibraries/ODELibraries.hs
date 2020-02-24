@@ -5,13 +5,13 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 import Language.Drasil
 
 import Language.Drasil.Code (FuncStmt(..), ExternalLibrary, Step, Argument, 
-  externalLib, mandatoryStep, choiceSteps, choiceStep, callStep, loopStep, 
-  libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
-  libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
-  preDefinedArg, functionArg, customObjArg, recordArg, lockedParam, 
-  unnamedParam, customClass, implementation, constructorInfo, methodInfo, 
-  iterateStep, statementStep, lockedStatement, CodeChunk, codevar, ccObjVar, 
-  implCQD)
+  externalLib, mandatoryStep, choiceSteps, choiceStep, callStep, 
+  callRequiresJust, callRequires, loopStep, libFunction, libMethod, 
+  libFunctionWithResult, libMethodWithResult, libConstructor, lockedArg, 
+  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, functionArg, 
+  customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
+  implementation, constructorInfo, methodInfo, iterateStep, statementStep, 
+  lockedStatement, CodeChunk, codevar, ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Func, Void))
 import qualified GOOL.Drasil as C (CodeType(Boolean, Integer))
@@ -20,9 +20,10 @@ import qualified GOOL.Drasil as C (CodeType(Boolean, Integer))
 
 scipyODE :: ExternalLibrary
 scipyODE = externalLib [
-  mandatoryStep $ callStep $ libFunctionWithResult "scipy.integrate.ode" [
-    functionArg f (map unnamedParam [Float, Array Float]) 
-    (\es -> FRet $ Matrix [es])] r,
+  mandatoryStep $ callRequiresJust scipyImport $ libFunctionWithResult 
+    (scipyImport ++ ".ode") [
+      functionArg f (map unnamedParam [Float, Array Float]) 
+      (\es -> FRet $ Matrix [es])] r,
   choiceStep [
     setIntegratorMethod [vode, methodArg "adams", atol, rtol],
     setIntegratorMethod [vode, methodArg "bdf", atol, rtol],
@@ -33,6 +34,9 @@ scipyODE = externalLib [
     (\cdch -> sy rt $< sy (head cdch)) 
     [callStep $ libMethod r "integrate" [inlineArg Float],
     statementStep (\cdch _ -> FAppend (sy $ head cdch) (idx (sy ry) (int 0)))]] 
+
+scipyImport :: String
+scipyImport = "scipy.integrate"
 
 atol, rtol, vode :: Argument
 vode = lockedArg (str "vode")
@@ -65,11 +69,12 @@ ry = ccObjVar r $ codevar $ implCQD "y_scipy" (nounPhrase
 
 oslo :: ExternalLibrary
 oslo = externalLib [
-  mandatoryStep $ callStep $ libConstructor "Vector" [inlineArg Float] initv,
+  mandatoryStep $ callRequiresJust "Microsoft.Research.Oslo" $ libConstructor 
+    "Vector" [inlineArg Float] initv,
   choiceStep $ map (\s -> callStep $ libFunctionWithResult s odeArgs sol) 
     ["Ode.RK547M", "Ode.GearBDF"],
-  mandatoryStep $ callStep $ libMethodWithResult sol "SolveFromToStep" 
-    (map inlineArg [Float, Float, Float]) points,
+  mandatoryStep $ callRequiresJust "System.Linq" $ libMethodWithResult sol 
+    "SolveFromToStep" (map inlineArg [Float, Float, Float]) points,
   mandatoryStep $ callStep $ libMethodWithResult points "ToArray" [] ptArray,
   mandatoryStep $ statementStep (\cdch _ -> FAsg (head cdch) (Matrix [[]])),
   mandatoryStep $ iterateStep ptArray sp 
@@ -117,20 +122,23 @@ spX = ccObjVar sp $ codevar $ implCQD "sp_X_oslo" (nounPhrase
 
 apacheODE :: ExternalLibrary
 apacheODE = externalLib [
-  choiceStep $ map callStep [
-    libConstructor adams (lockedArg (int 3) : itArgs) it,
-    libConstructor dp54 itArgs it],
+  choiceStep [
+    callRequires [apacheImport ++ foi, apacheImport ++ "nonstiff." ++ adams]
+      $ libConstructor adams (lockedArg (int 3) : itArgs) it,
+    callRequires [apacheImport ++ foi, apacheImport ++ "nonstiff." ++ dp54]
+      $ libConstructor dp54 itArgs it],
   mandatoryStep $ callStep $ libMethod it "addStepHandler" [
-    customObjArg stepHandler (implementation sh [
-      methodInfo "init" (map lockedParam [t0, y0, t]) Void [statementStep 
-        (\cdch _ -> FAsg (head cdch) (Matrix [[idx (sy y0) (int 0)]]))],
-      methodInfo "handleStep" (map lockedParam [interpolator, isLast]) Void [
-        callStep $ libMethodWithResult interpolator "getInterpolatedState" 
-          [] curr,
-        statementStep (\cdch _ -> 
-          FAppend (sy $ head cdch) (idx (sy curr) (int 0)))]])],
-  mandatoryStep $ callStep $ libMethod it "integrate" (customObjArg ode
-    (implementation "FirstOrderDifferentialEquations" [
+    customObjArg (map ((apacheImport ++ "sampling.") ++) [sh, si]) stepHandler 
+      (implementation sh [
+        methodInfo "init" (map lockedParam [t0, y0, t]) Void [statementStep 
+          (\cdch _ -> FAsg (head cdch) (Matrix [[idx (sy y0) (int 0)]]))],
+        methodInfo "handleStep" (map lockedParam [interpolator, isLast]) Void [
+          callStep $ libMethodWithResult interpolator "getInterpolatedState" 
+            [] curr,
+          statementStep (\cdch _ -> 
+            FAppend (sy $ head cdch) (idx (sy curr) (int 0)))]])],
+  mandatoryStep $ callStep $ libMethod it "integrate" (customObjArg 
+    [apacheImport ++ fode] ode (implementation fode [
       constructorInfo [] [],
       methodInfo "getDimension" [] C.Integer [lockedStatement $ FRet (int 1)],
       methodInfo "computeDerivatives" [
@@ -141,14 +149,19 @@ apacheODE = externalLib [
   mandatoryStep $ statementStep (\cdch _ -> 
     FAsg (head cdch) (sy $ ccObjVar stepHandler (head cdch)))]
 
+apacheImport :: String
+apacheImport = "org.apache.commons.math3.ode."
+
 itArgs :: [Argument]
 itArgs = map inlineArg [Float, Float, Float, Float]
 
-adams, dp54, foi, sh :: String
+adams, dp54, foi, sh, si, fode :: String
 adams = "AdamsBashforthIntegrator"
 dp54 = "DormandPrince54Integrator"
 foi = "FirstOrderIntegrator"
 sh = "StepHandler"
+si = "StepInterpolator"
+fode = "FirstOrderDifferentialEquations"
 
 it, currVals, stepHandler, t0, y0, interpolator, isLast, curr :: CodeChunk
 it = codevar $ implCQD "it_apache" (nounPhrase "integrator for solving ODEs"
@@ -168,7 +181,7 @@ y0 = codevar $ implCQD "y0_apache" (nounPhrase
   Nothing (Array Float) (Label "y0") Nothing
 interpolator = codevar $ implCQD "interpolator_apache" (nounPhrase 
   "step interpolator for ODE solving" "step interpolator for ODE solving")
-  Nothing (Object "StepInterpolator") (Label "interpolator") Nothing
+  Nothing (Object si) (Label "interpolator") Nothing
 isLast = codevar $ implCQD "isLast_apache" (nounPhrase 
   "boolean for whether the current step is the last step"
   "booleans for whether the current step is the last step")
@@ -186,21 +199,22 @@ odeint = externalLib [
     callStep $ libFunctionWithResult (odeNameSpace ++ "make_controlled") 
       [inlineArg Float, inlineArg Float, lockedArg (sy rk)] stepper],
     [callStep $ libConstructor (odeNameSpace ++ adamsBash) [] stepper]],
-  mandatoryStep $ callStep $ libFunction (odeNameSpace ++ "integrate_const") [
-    lockedArg (sy stepper), 
-    customObjArg ode (customClass [
-      constructorInfo [] [],
-      methodInfo "operator()" [unnamedParam (List Float),
-        unnamedParam (List Float), lockedParam t] Void [
-          statementStep (\cdch e -> FAsgIndex (head cdch) 0 (head e))]]),
-    -- Need to declare variable holding initial value because odeint will update this variable at each step
-    preDefinedArg odeintCurrVals,
-    inlineArg Float, inlineArg Float, inlineArg Float, 
-    customObjArg pop (customClass [
-      constructorInfo [unnamedParam (List Float)] [],
-      methodInfo "operator()" [unnamedParam (List Float), lockedParam t] Void
-        [statementStep (\cdch _ -> FAppend (sy $ head cdch) 
-          (idx (sy $ head cdch) (int 0)))]])]]
+  mandatoryStep $ callRequiresJust "boost/numeric/odeint.hpp" $ libFunction 
+    (odeNameSpace ++ "integrate_const") [
+      lockedArg (sy stepper), 
+      customObjArg [] ode (customClass [
+        constructorInfo [] [],
+        methodInfo "operator()" [unnamedParam (List Float),
+          unnamedParam (List Float), lockedParam t] Void [
+            statementStep (\cdch e -> FAsgIndex (head cdch) 0 (head e))]]),
+      -- Need to declare variable holding initial value because odeint will update this variable at each step
+      preDefinedArg odeintCurrVals,
+      inlineArg Float, inlineArg Float, inlineArg Float, 
+      customObjArg [] pop (customClass [
+        constructorInfo [unnamedParam (List Float)] [],
+        methodInfo "operator()" [unnamedParam (List Float), lockedParam t] Void
+          [statementStep (\cdch _ -> FAppend (sy $ head cdch) 
+            (idx (sy $ head cdch) (int 0)))]])]]
 
 odeNameSpace, rkdp5, adamsBash :: String
 odeNameSpace = "boost::numeric::odeint::"

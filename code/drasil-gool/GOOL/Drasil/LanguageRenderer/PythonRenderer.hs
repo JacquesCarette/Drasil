@@ -72,7 +72,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
-import Data.List (intercalate)
+import Data.List (intercalate, sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   vcat, colon, brackets, isEmpty)
@@ -688,11 +688,12 @@ instance InternalClass PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n = G.buildModule n (on3StateValues (\lis libis mis -> vibcat [
+  buildModule n is = G.buildModule n (on3StateValues (\lis libis mis -> vibcat [
     vcat (map (importDoc . 
       (langImport :: Label -> PythonCode (Import PythonCode))) lis),
     vcat (map (importDoc . 
-      (langImport :: Label -> PythonCode (Import PythonCode))) libis),
+      (langImport :: Label -> PythonCode (Import PythonCode))) (sort $ is ++ 
+      libis)),
     vcat (map (importDoc . 
       (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
     getLangImports getLibImports getModuleImports) getMainDoc

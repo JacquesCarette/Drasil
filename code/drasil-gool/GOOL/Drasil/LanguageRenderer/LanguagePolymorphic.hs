@@ -95,6 +95,7 @@ import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS,
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Bifunctor (first)
+import Data.List (sort)
 import Data.Map as Map (lookup, fromList)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative ((<|>))
@@ -1137,10 +1138,10 @@ buildModule n imps bot ms cs = S.modFromData n ((\cls fs is bt ->
   <$> mapM (zoom lensFStoCS) cs <*> mapM (zoom lensFStoMS) ms <*> imps <*> bot)
 
 buildModule' :: (RenderSym repr) => Label -> (String -> repr (Import repr)) -> 
-  [MS (repr (Method repr))] -> [CS (repr (Class repr))] -> 
+  [Label] -> [MS (repr (Method repr))] -> [CS (repr (Class repr))] -> 
   FS (repr (Module repr))
-buildModule' n inc ms cs = S.modFromData n ((\cls lis libis mis -> vibcat [
-    vcat (map (importDoc . inc) (lis ++ libis ++ mis)),
+buildModule' n inc is ms cs = S.modFromData n ((\cls lis libis mis -> vibcat [
+    vcat (map (importDoc . inc) (lis ++ sort (is ++ libis) ++ mis)),
     vibcat (map classDoc cls)]) <$>
   mapM (zoom lensFStoCS) (if null ms then cs else pubClass n Nothing [] ms : 
   cs) <*> getLangImports <*> getLibImports <*> getModuleImports)

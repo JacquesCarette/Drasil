@@ -7,8 +7,8 @@ import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..),
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 simpleODE :: (ProgramSym repr) => GS (repr (Program repr))
-simpleODE = prog "SimpleODE" [fileDoc (buildModule "SimpleODE" [simpleODEMain] 
-  [])]
+simpleODE = prog "SimpleODE" [fileDoc (buildModule "SimpleODE" []
+  [simpleODEMain] [])]
 
 simpleODEMain :: (MethodSym repr) => MS (repr (Method repr))
 simpleODEMain = mainFunction (body [block [varDecDef odeConst (litFloat 3.5)],

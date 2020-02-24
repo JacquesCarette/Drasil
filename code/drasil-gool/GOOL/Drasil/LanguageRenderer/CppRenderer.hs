@@ -85,6 +85,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (State, modify, runState)
+import Data.List (sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), hcat, brackets, 
   braces, parens, comma, empty, equals, semi, vcat, lbrace, rbrace, quotes, 
@@ -820,7 +821,7 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
-  buildModule n ms = pair2Lists (buildModule n) (buildModule n) 
+  buildModule n is ms = pair2Lists (buildModule n is) (buildModule n is) 
     (map (zoom lensFStoMS) ms) . map (zoom lensFStoCS)
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
@@ -1657,11 +1658,11 @@ instance InternalClass CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n ms cs = G.buildModule n ((\ds lis libis mis us mn -> vibcat [
+  buildModule n is ms cs = G.buildModule n ((\ds lis libis mis us mn -> vibcat [
     if mn && length ms + length cs == 1 then empty else importDoc $ mi n,
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
-    vcat (map (importDoc . mi) (libis ++ mis)),
+    vcat (map (importDoc . mi) (sort (is ++ libis) ++ mis)),
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppSrcCode (Keyword CppSrcCode))) us)]) 
     <$> getDefines <*> getLangImports <*> getLibImports <*> getModuleImports 
@@ -2262,10 +2263,10 @@ instance InternalClass CppHdrCode where
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
-  buildModule n = G.buildModule n ((\ds lis libis mis us -> vibcat [
+  buildModule n is = G.buildModule n ((\ds lis libis mis us -> vibcat [
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
-    vcat (map (importDoc . mi) (libis ++ mis)),
+    vcat (map (importDoc . mi) (sort (is ++ libis) ++ mis)),
     vcat (map (\i -> usingNameSpace "std" (Just i) 
       (endStatement :: CppHdrCode (Keyword CppHdrCode))) us)]) 
     <$> getHeaderDefines <*> getHeaderLangImports <*> getHeaderLibImports <*> 
@@ -2379,7 +2380,7 @@ cppODEFile info = (fl, fst s)
               dvElem = var n (innerVarType dpv)
               othVars = map (modify (setODEOthVars (map variableName 
                 ovs)) >>) ovars
-          in fileDoc (buildModule cn [] [pubClass cn Nothing 
+          in fileDoc (buildModule cn [] [] [pubClass cn Nothing 
             (pubMVar dv : map privMVar othVars) 
             [initializer (map param othVars) (zip othVars (map valueOf othVars)),
             pubMethod "operator()" void [param dvElem, 

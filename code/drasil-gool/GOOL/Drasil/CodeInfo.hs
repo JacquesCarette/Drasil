@@ -445,7 +445,7 @@ instance ClassSym CodeInfo where
 
 instance ModuleSym CodeInfo where
   type Module CodeInfo = ()
-  buildModule n fs cs = do
+  buildModule n _ fs cs = do
     modify (setModuleName n)
     mapM_ (zoom lensFStoCS) cs 
     mapM_ (zoom lensFStoMS) fs

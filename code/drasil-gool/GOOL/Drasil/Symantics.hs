@@ -783,7 +783,7 @@ class InternalClass repr where
 
 class (ClassSym repr) => ModuleSym repr where
   type Module repr
-  buildModule :: Label -> [MS (repr (Method repr))] -> 
+  buildModule :: Label -> [Label] -> [MS (repr (Method repr))] -> 
     [CS (repr (Class repr))] -> FS (repr (Module repr))
 
 class InternalMod repr where

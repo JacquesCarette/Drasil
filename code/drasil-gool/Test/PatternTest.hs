@@ -32,7 +32,7 @@ newObserver :: (ValueExpression repr) => VS (repr (Value repr))
 newObserver = extNewObj observerName observerType []
 
 patternTest :: (ProgramSym repr) => GS (repr (Program repr))
-patternTest = prog progName [fileDoc (buildModule progName 
+patternTest = prog progName [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
 patternTestMainMethod :: (MethodSym repr) => MS (repr (Method repr))

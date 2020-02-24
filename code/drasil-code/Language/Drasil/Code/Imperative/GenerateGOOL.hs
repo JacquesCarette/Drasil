@@ -34,7 +34,7 @@ genModule n desc maybeMs maybeCs = do
               | CommentFunc `elem` commented g && not (null ms) = docMod "" []  
                   (date g)
               | otherwise                                       = id
-  return $ commMod $ fileDoc $ buildModule n (catMaybes ms) (catMaybes cs)
+  return $ commMod $ fileDoc $ buildModule n [] (catMaybes ms) (catMaybes cs)
 
 genDoxConfig :: (AuxiliarySym repr) => String -> GOOLState ->
   Reader DrasilState [repr (Auxiliary repr)]

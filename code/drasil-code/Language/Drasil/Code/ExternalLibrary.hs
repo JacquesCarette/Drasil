@@ -31,7 +31,7 @@ type StepGroup = NonEmpty [Step]
 
 data Step = Call [Requires] FunctionInterface
   -- A while loop -- function calls in the condition, other conditions, steps for the body
-  | Loop [FunctionInterface] ([CodeChunk] -> Condition) [Step]
+  | Loop (NonEmpty FunctionInterface) ([CodeChunk] -> Condition) (NonEmpty Step)
   -- For when a statement is needed, but does not interface with the external library
   | Statement ([CodeChunk] -> [Expr] -> FuncStmt)
 
@@ -52,9 +52,9 @@ data Parameter = LockedParam CodeChunk | NameableParam CodeType
 data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
 
 -- Constructor: known parameters, body
-data MethodInfo = CI [Parameter] [Step]
+data MethodInfo = CI [Parameter] (NonEmpty Step)
   -- Method name, parameters, return type, body
-  | MI FuncName [Parameter] CodeType [Step]
+  | MI FuncName [Parameter] CodeType (NonEmpty Step)
 
 data FuncType = Function | Method CodeChunk | Constructor
 
@@ -85,7 +85,9 @@ callRequires :: [Requires] -> FunctionInterface -> Step
 callRequires = Call
 
 loopStep :: [FunctionInterface] -> ([CodeChunk] -> Condition) -> [Step] -> Step
-loopStep = Loop
+loopStep [] _ _ = error "loopStep should be called with a non-empty list of FunctionInterface"
+loopStep _ _ [] = error "loopStep should be called with a non-empty list of Step"
+loopStep fis c ss = Loop (fromList fis) c (fromList ss)
 
 libFunction :: FuncName -> [Argument] -> FunctionInterface
 libFunction n ps = FI Function n ps Nothing
@@ -144,10 +146,12 @@ implementation :: String -> [MethodInfo] -> ClassInfo
 implementation = Implements
 
 constructorInfo :: [Parameter] -> [Step] -> MethodInfo
-constructorInfo = CI
+constructorInfo _ [] = error "constructorInfo should be called with a non-empty list of Step"
+constructorInfo ps ss = CI ps (fromList ss)
 
 methodInfo :: FuncName -> [Parameter] -> CodeType -> [Step] -> MethodInfo
-methodInfo = MI
+methodInfo _ _ _ [] = error "methodInfo should be called with a non-empty list of Step"
+methodInfo n ps t ss = MI n ps t (fromList ss)
 
 appendCurrSol :: CodeChunk -> Step
 appendCurrSol curr = statementStep (\cdchs es -> case (cdchs, es) of

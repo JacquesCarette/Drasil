@@ -69,67 +69,25 @@ codedConRepr Var = "V"
 codedConRepr Const = "C"
 
 choiceCombos :: [Choices]
-choiceCombos = [choices1, choices2, choices3, choices4, choices5]
+choiceCombos = [baseChoices, 
+  baseChoices {
+    modularity = Modular Combined,
+    inputStructure = Bundled,
+    constStructure = Store Unbundled},
+  baseChoices {
+    modularity = Modular Separated,
+    constStructure = Store Unbundled},
+  baseChoices {
+    logging = LogAll,
+    inputStructure = Bundled,
+    constStructure = Store Bundled,
+    constRepr = Const},
+  baseChoices {
+    logging = LogAll,
+    inputStructure = Bundled}]
 
-choices1 :: Choices
-choices1 = Choices {
-  lang = [Python, Cpp, CSharp, Java],
-  modularity = Modular Combined,
-  impType = Program,
-  logFile = "log.txt",
-  logging = LogNone,
-  comments = [CommentFunc, CommentClass, CommentMod],
-  doxVerbosity = Quiet,
-  dates = Hide,
-  onSfwrConstraint = Warning,
-  onPhysConstraint = Warning,
-  inputStructure = Bundled,
-  constStructure = Store Unbundled,
-  constRepr = Var,
-  conceptMatch = matchConcepts [piConst] [[Pi]],
-  auxFiles = [SampleInput]
-}
-
-choices2 :: Choices
-choices2 = Choices {
-  lang = [Python, Cpp, CSharp, Java],
-  modularity = Modular Separated,
-  impType = Program,
-  logFile = "log.txt",
-  logging = LogNone,
-  comments = [CommentFunc, CommentClass, CommentMod],
-  doxVerbosity = Quiet,
-  dates = Hide,
-  onSfwrConstraint = Warning,
-  onPhysConstraint = Warning,
-  inputStructure = Unbundled,
-  constStructure = Store Unbundled,
-  constRepr = Var,
-  conceptMatch = matchConcepts [piConst] [[Pi]],
-  auxFiles = [SampleInput]
-}
-
-choices3 :: Choices
-choices3 = Choices {
-  lang = [Python, Cpp, CSharp, Java],
-  modularity = Unmodular,
-  impType = Program,
-  logFile = "log.txt",
-  logging = LogAll,
-  comments = [CommentFunc, CommentClass, CommentMod],
-  doxVerbosity = Quiet,
-  dates = Hide,
-  onSfwrConstraint = Warning,
-  onPhysConstraint = Warning,
-  inputStructure = Bundled,
-  constStructure = Store Bundled,
-  constRepr = Const,
-  conceptMatch = matchConcepts [piConst] [[Pi]],
-  auxFiles = [SampleInput]
-}
-
-choices4 :: Choices
-choices4 = Choices {
+baseChoices :: Choices
+baseChoices = Choices {
   lang = [Python, Cpp, CSharp, Java],
   modularity = Unmodular,
   impType = Program,
@@ -141,25 +99,6 @@ choices4 = Choices {
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
   inputStructure = Unbundled,
-  constStructure = WithInputs,
-  constRepr = Var,
-  conceptMatch = matchConcepts [piConst] [[Pi]],
-  auxFiles = [SampleInput]
-}
-
-choices5 :: Choices
-choices5 = Choices {
-  lang = [Python, Cpp, CSharp, Java],
-  modularity = Unmodular,
-  impType = Program,
-  logFile = "log.txt",
-  logging = LogAll,
-  comments = [CommentFunc, CommentClass, CommentMod],
-  doxVerbosity = Quiet,
-  dates = Hide,
-  onSfwrConstraint = Warning,
-  onPhysConstraint = Warning,
-  inputStructure = Bundled,
   constStructure = WithInputs,
   constRepr = Var,
   conceptMatch = matchConcepts [piConst] [[Pi]],

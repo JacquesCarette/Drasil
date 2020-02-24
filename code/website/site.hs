@@ -2,19 +2,20 @@
 
 import Control.Monad (filterM)
 import Data.Char (toUpper)
-import Data.List (sort, zip4)
+import Data.List (isInfixOf, sort, zip4, groupBy)
 import Data.Maybe (fromMaybe, fromJust, isJust)
 import Data.Monoid ((<>))
 import Data.String.Utils (rstrip, endswith)
 import Hakyll
-import System.Directory (doesDirectoryExist, doesFileExist, listDirectory)
+import System.Directory (doesDirectoryExist, doesFileExist, findFiles, listDirectory)
 import System.Environment (getEnv, lookupEnv)
-import System.FilePath (takeBaseName, takeExtension)
+import System.FilePath (takeBaseName, takeDirectory, takeExtension)
 
 -- type FilePath = String -- from System.FilePath
 type Name = String
 data CodeSource = CS {codePath :: FilePath, 
                       doxPath :: FilePath, 
+                      versionName :: String,
                       langName :: String}
 type SRSVariants = [(Name, String)]
 type Description = Maybe String
@@ -35,11 +36,13 @@ getExtensionName _ = error "Expected some extension."
 getSRS :: [Name] -> SRSVariants
 getSRS = map (\x -> (x, getExtensionName $ takeExtension x)) . filter (\x -> any (`endswith` x) [".pdf", ".html"])
 
--- returns a CodeSource with the path to the source code, doxygen page, and the name of the language
-getSrc :: String -> FilePath -> CodeSource
+-- returns a CodeSource with the path to the source code, doxygen page, version name if the corresponding example has multiple versions, and the name of the language
+getSrc :: [String] -> String -> FilePath -> CodeSource
 -- source comes in as a path, takeBaseName takes only rightmost folder name
-getSrc repoRoot source = CS (repoRoot ++ source)
-  (takeBaseName source ++ "/index.html")
+getSrc names repoRoot source = CS (repoRoot ++ source)
+  ((if null verName then "" else verName ++ "/") ++ takeBaseName source ++ 
+    "/index.html")
+  verName
   (lang $ takeBaseName source)
   where
     -- Some languages might be named differently than the folders they are stored in.
@@ -48,6 +51,8 @@ getSrc repoRoot source = CS (repoRoot ++ source)
     lang "python" = "Python"
     lang "java"   = "Java"
     lang x        = error ("No given display name for language: " ++ x)
+    eDir = takeBaseName $ takeDirectory $ takeDirectory source
+    verName = if any (`isInfixOf` eDir) names then eDir else ""
 
 mkExamples :: String -> FilePath -> FilePath -> IO [Example]
 mkExamples repoRoot localPath srsDir = do
@@ -57,10 +62,10 @@ mkExamples repoRoot localPath srsDir = do
 
   -- a list of lists of sources based on existence and contents of src file for each example.
   -- if no src file, then the inner list will be empty
-  sources <- mapM (\x -> doesFileExist (localPath ++ x ++ "/src") >>=
-    \y -> if y then map (getSrc repoRoot) . lines .
-    rstrip <$> readFile (localPath ++ x ++ "/src") else return []) names
-    
+  sources <- mapM (\x -> listDirectory (localPath ++ x) >>= \dirs -> 
+    findFiles ((localPath ++ x):dirs) "src" >>=
+    fmap (concatMap (map (getSrc names repoRoot) . lines . rstrip)) .
+    mapM readFile) names
 
   -- a list of Just descriptions or Nothing based on existence and contents of desc file.
   descriptions <- mapM (\x -> doesFileExist ("descriptions/" ++ x ++ ".txt") >>=
@@ -88,9 +93,9 @@ maybeField s f = Context $ \k _ i -> do
 
 -- List if non-empty
 maybeListFieldWith :: String -> Context a -> (Item b -> [c]) -> (Item b -> Compiler [Item a]) -> Context b
--- takes as input: the string to be replaced, the context to be used as is,
+-- takes as input: the string to be replaced, the context to be used for each item in the list,
 -- a function to be used on input to return a list to check for emptiness,
--- and the function to be used regularly on input
+-- and the function to be used to return a list of items from the input item, for when the checked list is not empty
 maybeListFieldWith s contxt checkNull f = listFieldWith s contxt
   -- If the list is empty, fail is used so as not to create a specific section
   (\x -> if null (checkNull x) then fail ("No instances of " ++ s) else f x)
@@ -125,16 +130,23 @@ mkExampleCtx exampleDir srsDir doxDir =
   -- returns the description of an example if Just, otherwise fails and does not add one
   maybeField "desc" (return . desc . itemBody) <>
 
-  -- Lists sources if they exist
-  maybeListFieldWith "src" (
-    -- return filepath from (filepath, language)
-    field "path" (return . codePath . snd . itemBody) <>
-    -- return language from (filepath, language)
-    field "lang" (return . langName . snd . itemBody) <>
-    field "doxPath" (return . (\x -> exDirPath exampleDir (name $ fst x) doxDir ++ doxPath (snd x)) . itemBody)
-  -- (src . itemBody) gets the list of sources to be checked for emptiness
-  -- (mapM makeItem . src . itemBody) rewraps every item in src to be used internally
-  ) (src . itemBody) ((\x -> mapM (makeItem . (x,)) $ src x) . itemBody)
+  -- Lists of source versions if they exist (may be none, one, or many)
+  maybeListFieldWith "vers" (
+    field "verName" (return . versionName . head . snd . itemBody) <>
+    -- List of srcs for a given language. Should be one for each generated code language
+    listFieldWith "src" (
+      -- return filepath
+      field "path" (return . codePath . snd . itemBody) <>
+      -- return language
+      field "lang" (return . langName . snd . itemBody) <>
+      field "doxPath" (return . (\x -> exDirPath exampleDir (name $ fst x) doxDir ++ doxPath (snd x)) . itemBody)
+      -- Extract each source individually and rewrap as an item
+      ) ((\(x,y) -> mapM (makeItem . (x,)) y) . itemBody)) 
+    -- (src . itemBody) gets the list of sources to be checked for emptiness
+    -- (mapM makeItem . src . itemBody) rewraps every item in src to be used internally
+    (src . itemBody) 
+    -- Srcs corresponding to the same version of an example should always be adjacent, so we use groupBy to group the srcs for each version in their own list, then rewrap as an Item
+    ((\x -> mapM (makeItem . (x,)) . groupBy (\a b -> versionName a == versionName b) $ src x) . itemBody)
   where
     name (E nm _ _ _) = nm
     src (E _ s _ _) = s

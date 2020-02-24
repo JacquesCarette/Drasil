@@ -6,7 +6,7 @@ import Language.Drasil
 
 import Language.Drasil.Code (FuncStmt(..), ExternalLibrary, Step, Argument, 
   externalLib, mandatoryStep, choiceSteps, choiceStep, callStep, 
-  callWithImport, callWithImports, loopStep, libFunction, libMethod, 
+  callRequiresJust, callRequires, loopStep, libFunction, libMethod, 
   libFunctionWithResult, libMethodWithResult, libConstructor, lockedArg, 
   lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, functionArg, 
   customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
@@ -20,7 +20,7 @@ import qualified GOOL.Drasil as C (CodeType(Boolean, Integer))
 
 scipyODE :: ExternalLibrary
 scipyODE = externalLib [
-  mandatoryStep $ callWithImport scipyImport $ libFunctionWithResult 
+  mandatoryStep $ callRequiresJust scipyImport $ libFunctionWithResult 
     (scipyImport ++ ".ode") [
       functionArg f (map unnamedParam [Float, Array Float]) 
       (\es -> FRet $ Matrix [es])] r,
@@ -69,11 +69,11 @@ ry = ccObjVar r $ codevar $ implCQD "y_scipy" (nounPhrase
 
 oslo :: ExternalLibrary
 oslo = externalLib [
-  mandatoryStep $ callWithImport "Microsoft.Research.Oslo" $ libConstructor 
+  mandatoryStep $ callRequiresJust "Microsoft.Research.Oslo" $ libConstructor 
     "Vector" [inlineArg Float] initv,
   choiceStep $ map (\s -> callStep $ libFunctionWithResult s odeArgs sol) 
     ["Ode.RK547M", "Ode.GearBDF"],
-  mandatoryStep $ callWithImport "System.Linq" $ libMethodWithResult sol 
+  mandatoryStep $ callRequiresJust "System.Linq" $ libMethodWithResult sol 
     "SolveFromToStep" (map inlineArg [Float, Float, Float]) points,
   mandatoryStep $ callStep $ libMethodWithResult points "ToArray" [] ptArray,
   mandatoryStep $ statementStep (\cdch _ -> FAsg (head cdch) (Matrix [[]])),
@@ -123,9 +123,9 @@ spX = ccObjVar sp $ codevar $ implCQD "sp_X_oslo" (nounPhrase
 apacheODE :: ExternalLibrary
 apacheODE = externalLib [
   choiceStep [
-    callWithImports [apacheImport ++ foi, apacheImport ++ "nonstiff." ++ adams]
+    callRequires [apacheImport ++ foi, apacheImport ++ "nonstiff." ++ adams]
       $ libConstructor adams (lockedArg (int 3) : itArgs) it,
-    callWithImports [apacheImport ++ foi, apacheImport ++ "nonstiff." ++ dp54]
+    callRequires [apacheImport ++ foi, apacheImport ++ "nonstiff." ++ dp54]
       $ libConstructor dp54 itArgs it],
   mandatoryStep $ callStep $ libMethod it "addStepHandler" [
     customObjArg (map ((apacheImport ++ "sampling.") ++) [sh, si]) stepHandler 
@@ -199,7 +199,7 @@ odeint = externalLib [
     callStep $ libFunctionWithResult (odeNameSpace ++ "make_controlled") 
       [inlineArg Float, inlineArg Float, lockedArg (sy rk)] stepper],
     [callStep $ libConstructor (odeNameSpace ++ adamsBash) [] stepper]],
-  mandatoryStep $ callWithImport "boost/numeric/odeint.hpp" $ libFunction 
+  mandatoryStep $ callRequiresJust "boost/numeric/odeint.hpp" $ libFunction 
     (odeNameSpace ++ "integrate_const") [
       lockedArg (sy stepper), 
       customObjArg [] ode (customClass [

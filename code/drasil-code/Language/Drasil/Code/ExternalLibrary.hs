@@ -17,6 +17,8 @@ import Language.Drasil.Mod (FuncStmt(..))
 
 import GOOL.Drasil (CodeType)
 
+import Data.List.NonEmpty (NonEmpty(..), fromList)
+
 type VarName = String
 type FuncName = String
 type FieldName = String
@@ -25,7 +27,7 @@ type Requires = String
 
 type ExternalLibrary = [StepGroup]
 
-type StepGroup = [[Step]]
+type StepGroup = NonEmpty [Step]
 
 data Step = Call [Requires] FunctionInterface
   -- A while loop -- function calls in the condition, other conditions, steps for the body
@@ -60,16 +62,18 @@ externalLib :: [StepGroup] -> ExternalLibrary
 externalLib = id
 
 choiceSteps :: [[Step]] -> StepGroup
-choiceSteps = id
+choiceSteps [] = error "choiceSteps should be called with a non-empty list"
+choiceSteps sg = fromList sg
 
 choiceStep :: [Step] -> StepGroup
-choiceStep = map (: [])
+choiceStep [] = error "choiceStep should be called with a non-empty list"
+choiceStep ss = fromList $ map (: []) ss
 
 mandatoryStep :: Step -> StepGroup
-mandatoryStep f = [[f]]
+mandatoryStep f = [f] :| []
 
 mandatorySteps :: [Step] -> StepGroup
-mandatorySteps fs = [fs]
+mandatorySteps fs = fs :| []
 
 callStep :: FunctionInterface -> Step
 callStep = Call []

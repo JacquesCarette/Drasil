@@ -15,14 +15,14 @@ module Language.Drasil.Code (
   ExternalLibrary, Step, FunctionInterface, Argument, externalLib, choiceSteps, 
   choiceStep, mandatoryStep, mandatorySteps, callStep, callRequiresJust, 
   callRequires, libFunction, libMethod, libFunctionWithResult, 
-  libMethodWithResult, libConstructor, lockedArg, lockedNamedArg, inlineArg, 
-  inlineNamedArg, preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, 
-  recordArg, lockedParam, unnamedParam, customClass, implementation, 
-  constructorInfo, methodInfo, appendCurrSol, populateSolList, 
+  libMethodWithResult, libConstructor, constructAndReturn, lockedArg, 
+  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
+  functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
+  implementation, constructorInfo, methodInfo, appendCurrSol, populateSolList, 
   assignArrayIndex, assignSolFromObj, initSolListFromArray, initSolListWithVal, 
-  solveAndPopulateWhile, fixedReturn,
+  solveAndPopulateWhile, returnExprList, fixedReturn,
   PackageSym(..),
-  CodeChunk, codevar, quantvar, ccObjVar, CodeQuantityDict, implCQD,
+  CodeChunk, codevar, codefunc, quantvar, ccObjVar, CodeQuantityDict, implCQD,
   unPP, unJP, unCSP, unCPPP
 ) where
 
@@ -42,12 +42,12 @@ import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   FunctionInterface, Argument, externalLib, choiceSteps, choiceStep, 
   mandatoryStep, mandatorySteps, callStep, callRequiresJust, callRequires, 
   libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
-  libConstructor, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
-  preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
-  lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
-  methodInfo, appendCurrSol, populateSolList, assignArrayIndex, 
-  assignSolFromObj, initSolListFromArray, initSolListWithVal, 
-  solveAndPopulateWhile, fixedReturn)
+  libConstructor, constructAndReturn, lockedArg, lockedNamedArg, inlineArg, 
+  inlineNamedArg, preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, 
+  recordArg, lockedParam, unnamedParam, customClass, implementation, 
+  constructorInfo, methodInfo, appendCurrSol, populateSolList, 
+  assignArrayIndex, assignSolFromObj, initSolListFromArray, initSolListWithVal, 
+  solveAndPopulateWhile, returnExprList, fixedReturn)
 
 import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), CodeSystInfo(..), 
   Comments(..), Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), 
@@ -59,7 +59,8 @@ import Language.Drasil.Mod (($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor,
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
 
-import Language.Drasil.Chunk.Code (CodeChunk, codevar, quantvar, ccObjVar)
+import Language.Drasil.Chunk.Code (CodeChunk, codevar, codefunc, quantvar, 
+  ccObjVar)
 import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, implCQD)
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)

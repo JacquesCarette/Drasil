@@ -14,7 +14,7 @@ import Language.Drasil.Code (FuncStmt(..), ExternalLibrary, Step, Argument,
   CodeChunk, codevar, ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Func, Void))
-import qualified GOOL.Drasil as C (CodeType(Boolean, Integer))
+import qualified GOOL.Drasil as C (CodeType(Boolean, Integer, String))
 
 -- SciPy -- 
 
@@ -40,11 +40,11 @@ scipyImport = "scipy.integrate"
 
 atol, rtol, vode :: Argument
 vode = lockedArg (str "vode")
-atol = inlineNamedArg "atol" Float
-rtol = inlineNamedArg "rtol" Float
+atol = inlineNamedArg atolArg Float
+rtol = inlineNamedArg rtolArg Float
 
 methodArg :: String -> Argument
-methodArg = lockedNamedArg "method" . str
+methodArg = lockedNamedArg mthdArg . str
 
 setIntegratorMethod :: [Argument] -> Step
 setIntegratorMethod = callStep . libMethod r "set_integrator"
@@ -52,10 +52,19 @@ setIntegratorMethod = callStep . libMethod r "set_integrator"
 odeT :: CodeType
 odeT = Object "ode"
 
-f, r, rt, ry :: CodeChunk
+f, mthdArg, atolArg, rtolArg, r, rt, ry :: CodeChunk
 f = codevar $ implCQD "f_scipy" (nounPhrase "function representing ODE system" 
   "functions representing ODE system") Nothing 
   (Func [Float, Float] (List Float)) (Label "f") Nothing
+mthdArg = codevar $ implCQD "method_scipy" (nounPhrase 
+  "chosen method for solving ODE" "chosen methods for solving ODE") 
+  Nothing C.String (Label "method") Nothing
+atolArg = codevar $ implCQD "atol_scipy" (nounPhrase 
+  "absolute tolerance for ODE solution" "absolute tolerances for ODE solution") 
+  Nothing Float (Label "atol") Nothing
+rtolArg = codevar $ implCQD "rtol_scipy" (nounPhrase 
+  "relative tolerance for ODE solution" "relative tolerances for ODE solution") 
+  Nothing Float (Label "rtol") Nothing
 r = codevar $ implCQD "r_scipy" (nounPhrase "ODE object" "ODE objects") Nothing 
   odeT (Label "r") Nothing
 rt = ccObjVar r $ codevar $ implCQD "t_scipy" (nounPhrase 
@@ -64,6 +73,7 @@ rt = ccObjVar r $ codevar $ implCQD "t_scipy" (nounPhrase
 ry = ccObjVar r $ codevar $ implCQD "y_scipy" (nounPhrase 
   "current dependent variable value" "current dependent variable values") 
   Nothing (List Float) (Label "y") Nothing
+
 
 -- Oslo (C#) --
 

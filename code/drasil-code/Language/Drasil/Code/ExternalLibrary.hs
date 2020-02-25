@@ -14,7 +14,6 @@ import Language.Drasil.Mod (FuncStmt)
 
 import GOOL.Drasil (CodeType)
 
-type VarName = String
 type FuncName = String
 type FieldName = String
 type Condition = Expr
@@ -34,10 +33,10 @@ data FunctionInterface = FI FuncType FuncName [Argument] (Maybe CodeChunk) -- Ma
 
 data Argument = 
   -- Not dependent on use case, Maybe is name for the argument
-  LockedArg (Maybe VarName) Expr 
+  LockedArg (Maybe CodeChunk) Expr 
   -- First Maybe is name for the argument (needed for named parameters)
   -- Second Maybe is the variable if it needs to be declared and defined prior to calling
-  | Basic (Maybe VarName) CodeType (Maybe CodeChunk)
+  | Basic (Maybe CodeChunk) CodeType (Maybe CodeChunk)
   | Fn CodeChunk [Parameter] ([Expr] -> FuncStmt)
   | Class [Requires] CodeChunk ClassInfo
   | Record FuncName CodeChunk [FieldName]
@@ -97,19 +96,19 @@ libConstructor n as c = FI Constructor n as (Just c)
 lockedArg :: Expr -> Argument
 lockedArg = LockedArg Nothing
 
-lockedNamedArg :: VarName -> Expr -> Argument
+lockedNamedArg :: CodeChunk -> Expr -> Argument
 lockedNamedArg n = LockedArg (Just n)
 
 inlineArg :: CodeType -> Argument
 inlineArg t = Basic Nothing t Nothing
 
-inlineNamedArg :: VarName ->  CodeType -> Argument
+inlineNamedArg :: CodeChunk ->  CodeType -> Argument
 inlineNamedArg n t = Basic (Just n) t Nothing
 
 preDefinedArg :: CodeChunk -> Argument
 preDefinedArg v = Basic Nothing (codeType v) (Just v)
 
-preDefinedNamedArg :: VarName -> CodeChunk -> Argument
+preDefinedNamedArg :: CodeChunk -> CodeChunk -> Argument
 preDefinedNamedArg n v = Basic (Just n) (codeType v) (Just v)
 
 functionArg :: CodeChunk -> [Parameter] -> ([Expr] -> FuncStmt) -> Argument

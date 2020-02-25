@@ -193,6 +193,8 @@ instance BooleanExpression CodeInfo where
 instance ValueExpression CodeInfo where
   inlineIf = execute3
   funcApp n _ _ = addCurrModCall n
+  funcAppNamedArgs n _ _ = addCurrModCall n
+  funcAppMixedArgs n _ _ _ = addCurrModCall n
   selfFuncApp n _ _ = addCurrModCall n
   extFuncApp l n _ _ = addExternalCall l n
   newObj ot vs = do

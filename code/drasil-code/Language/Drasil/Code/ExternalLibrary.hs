@@ -19,7 +19,6 @@ import GOOL.Drasil (CodeType)
 
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
-type FuncName = String
 type Condition = Expr
 type Requires = String
 
@@ -55,8 +54,8 @@ data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
 
 -- Constructor: known parameters, body
 data MethodInfo = CI [Parameter] (NonEmpty Step)
-  -- Method name, parameters, return type, body
-  | MI FuncName [Parameter] CodeType (NonEmpty Step)
+  -- Method, known parameters, body
+  | MI CodeChunk [Parameter] (NonEmpty Step)
 
 data FuncType = Function | Method CodeChunk | Constructor
 
@@ -154,9 +153,9 @@ constructorInfo :: [Parameter] -> [Step] -> MethodInfo
 constructorInfo _ [] = error "constructorInfo should be called with a non-empty list of Step"
 constructorInfo ps ss = CI ps (fromList ss)
 
-methodInfo :: FuncName -> [Parameter] -> CodeType -> [Step] -> MethodInfo
-methodInfo _ _ _ [] = error "methodInfo should be called with a non-empty list of Step"
-methodInfo n ps t ss = MI n ps t (fromList ss)
+methodInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo
+methodInfo _ _ [] = error "methodInfo should be called with a non-empty list of Step"
+methodInfo m ps ss = MI m ps (fromList ss)
 
 appendCurrSol :: CodeChunk -> Step
 appendCurrSol curr = statementStep (\cdchs es -> case (cdchs, es) of

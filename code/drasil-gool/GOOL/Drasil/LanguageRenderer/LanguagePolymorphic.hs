@@ -13,16 +13,17 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   addmathImport, var, staticVar, extVar, self, enumVar, classVar, objVar, 
   objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, litFalse, litChar, 
   litFloat, litInt, litString, pi, valueOf, arg, enumElement, argsList, 
-  inlineIf, funcApp, selfFuncApp, extFuncApp, newObj, lambda, notNull, 
-  objAccess, objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, 
-  indexOf, func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
-  listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
-  listAppendFunc, iterBeginError, iterEndError, listAccessFunc, listAccessFunc',
-  listSetFunc, printSt, state, loopState, emptyState, assign, assignToListIndex,
-  multiAssignError, decrement, increment, increment', increment1, increment1', 
-  decrement1, varDec, varDecDef, listDec, listDecDef, listDecDef', arrayDec, 
-  arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams,
-  constDecDef, funcDecDef, discardInput, discardFileInput, openFileR, openFileW,
+  inlineIf, funcApp, funcAppMixedArgs, namedArgError, selfFuncApp, extFuncApp, 
+  newObj, lambda, notNull, objAccess, objMethodCall, objMethodCallNoParams, 
+  selfAccess, listIndexExists, indexOf, func, get, set, listSize, listAdd, 
+  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
+  listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
+  listAccessFunc, listAccessFunc', listSetFunc, printSt, state, loopState, 
+  emptyState, assign, assignToListIndex, multiAssignError, decrement, 
+  increment, increment', increment1, increment1', decrement1, varDec, 
+  varDecDef, listDec, listDecDef, listDecDef', arrayDec, arrayDecDef, 
+  objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, constDecDef,
+  funcDecDef, discardInput, discardFileInput, openFileR, openFileW,
   openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
   returnState, multiReturnError, valState, comment, freeError, throw, initState,
   changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
@@ -96,7 +97,7 @@ import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS,
 
 import Prelude hiding (break,print,last,mod,pi,(<>))
 import Data.Bifunctor (first)
-import Data.List (sort)
+import Data.List (sort, intersperse)
 import Data.Map as Map (lookup, fromList)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative ((<|>))
@@ -105,7 +106,7 @@ import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  brackets, braces, quotes, integer, vcat, semi, comma, equals, isEmpty)
+  brackets, braces, quotes, integer, hcat, vcat, semi, comma, equals, isEmpty)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
 -- Bodies --
@@ -496,6 +497,19 @@ inlineIf = on3StateValues (\c v1 v2 -> valFromData (prec c) (valueType v1)
 funcApp :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   [VS (repr (Value repr))] -> VS (repr (Value repr))
 funcApp n = on1StateValue1List (\t -> mkVal t . funcAppDocD n)
+
+funcAppMixedArgs :: (RenderSym repr) => Doc -> Label -> VS (repr (Type repr)) 
+  -> [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))
+funcAppMixedArgs sep n t pas nas = (\tp pargs nms nargs -> mkVal tp $ text n <> 
+  parens (valueList pargs <+> (if null pas || null nas then empty else comma) 
+  <+> hcat (intersperse (text ", ") (zipWith (\nm a -> variableDoc nm <> sep <>
+  valueDoc a) nms nargs)))) <$> t <*> sequence pas <*> mapM fst nas <*> 
+  mapM snd nas
+
+namedArgError :: String -> String
+namedArgError l = "Named arguments not supported in " ++ l 
 
 selfFuncApp :: (RenderSym repr) => VS (repr (Variable repr)) -> Label -> 
   VS (repr (Type repr)) -> [VS (repr (Value repr))] -> VS (repr (Value repr))

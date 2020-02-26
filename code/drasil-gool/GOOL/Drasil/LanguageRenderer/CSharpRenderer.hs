@@ -41,23 +41,24 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, litFalse, 
   litChar, litFloat, litInt, litString, valueOf, arg, enumElement, argsList, 
   inlineIf, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
-  listIndexExists, indexOf, funcApp, selfFuncApp, extFuncApp, newObj, lambda, 
-  notNull, func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
-  listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
-  iterBeginError, iterEndError, listAccessFunc, listSetFunc, printSt, state, 
-  loopState, emptyState, assign, assignToListIndex, multiAssignError, decrement,
-  increment, decrement1, increment1, varDec, varDecDef, listDec, listDecDef', 
-  arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
-  extObjDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, 
-  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, freeError, throw, initState,
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
-  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
-  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, enum, implementingClass, docClass, commentedClass, 
-  intClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
+  listIndexExists, indexOf, funcApp, funcAppMixedArgs, selfFuncApp, extFuncApp, 
+  newObj, lambda, notNull, func, get, set, listSize, listAdd, listAppend, 
+  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, 
+  listAppendFunc, iterBeginError, iterEndError, listAccessFunc, listSetFunc, 
+  printSt, state, loopState, emptyState, assign, assignToListIndex, 
+  multiAssignError, decrement, increment, decrement1, increment1, varDec, 
+  varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, objDecNew, 
+  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, constDecDef, 
+  discardInput, openFileR, openFileW, openFileA, closeFile, discardFileLine, 
+  stringListVals, stringListLists, returnState, multiReturnError, valState, 
+  comment, freeError, throw, initState, changeState, initObserverList, 
+  addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists, for, forRange, 
+  forEach, while, tryCatch, checkState, notifyObservers, construct, param, 
+  method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, 
+  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
+  implementingClass, docClass, commentedClass, intClass, buildModule', 
+  modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -79,7 +80,7 @@ import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (elemIndex, intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  semi, vcat, lbrace, rbrace, colon)
+  semi, vcat, lbrace, rbrace, colon, space)
 
 csExt :: String
 csExt = "cs"
@@ -383,6 +384,8 @@ instance BooleanExpression CSharpCode where
 instance ValueExpression CSharpCode where
   inlineIf = G.inlineIf
   funcApp = G.funcApp
+  funcAppNamedArgs n t = funcAppMixedArgs n t []
+  funcAppMixedArgs = G.funcAppMixedArgs (colon <> space)
   selfFuncApp = G.selfFuncApp self
   extFuncApp = G.extFuncApp
   newObj = G.newObj newObjDocD

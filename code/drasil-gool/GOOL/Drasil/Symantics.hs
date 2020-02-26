@@ -358,7 +358,13 @@ class (ValueSym repr, BooleanExpression repr) =>
     VS (repr (Value repr)) -> VS (repr (Value repr))
   funcApp      :: Label -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
     VS (repr (Value repr))
-  selfFuncApp  :: Label -> VS (repr (Type repr)) -> 
+  funcAppNamedArgs :: Label -> VS (repr (Type repr)) -> 
+    [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+    VS (repr (Value repr))
+  funcAppMixedArgs :: Label -> VS (repr (Type repr)) -> [VS (repr (Value repr))]
+    -> [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+    VS (repr (Value repr))
+  selfFuncApp :: Label -> VS (repr (Type repr)) -> 
     [VS (repr (Value repr))] -> VS (repr (Value repr))
   extFuncApp   :: Library -> Label -> VS (repr (Type repr)) -> 
     [VS (repr (Value repr))] -> VS (repr (Value repr))

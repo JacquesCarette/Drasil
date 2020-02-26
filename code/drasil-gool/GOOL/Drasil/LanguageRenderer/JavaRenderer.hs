@@ -41,23 +41,24 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listOf, arrayElem, iterVar, litTrue, litFalse, litChar, litFloat, litInt, 
   litString, pi, valueOf, arg, enumElement, argsList, inlineIf, objAccess, 
   objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
-  funcApp, selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, 
-  listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
-  getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
-  iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
-  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
-  increment1, varDec, varDecDef, listDec, arrayDec, arrayDecDef, objDecNew, 
-  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, 
-  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, initState, changeState,
-  initObserverList, addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists,
-  for, forRange, forEach, while, tryCatch, checkState, notifyObservers, 
-  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
-  constructor, docMain, function, mainFunction, docFunc, intFunc, stateVar, 
-  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
-  extraClass, implementingClass, docClass, commentedClass, intClass,
-  buildModule', modFromData, fileDoc, docMod, fileFromData)
+  funcApp, namedArgError, selfFuncApp, extFuncApp, newObj, lambda, notNull, 
+  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
+  listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
+  listAppendFunc, iterBeginError, iterEndError, listAccessFunc', printSt, 
+  state, loopState, emptyState, assign, assignToListIndex, multiAssignError, 
+  decrement, increment, decrement1, increment1, varDec, varDecDef, listDec, 
+  arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
+  extObjDecNewNoParams, funcDecDef, discardInput, discardFileInput, openFileR, 
+  openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
+  stringListLists, returnState, multiReturnError, valState, comment, freeError, 
+  throw, initState, changeState, initObserverList, addObserver, ifCond, 
+  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
+  tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
+  setMethod, privMethod, pubMethod, constructor, docMain, function, 
+  mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
+  pubMVar, pubGVar, buildClass, enum, extraClass, implementingClass, docClass, 
+  commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
@@ -392,6 +393,8 @@ instance ValueExpression JavaCode where
   -- functions implicitly calls these functions in the Java renderer, so we 
   -- also check here to add the exceptions from the called function to the map
   funcApp n t vs = addCallExcsCurrMod n >> G.funcApp n t vs
+  funcAppNamedArgs = error $ G.namedArgError jName
+  funcAppMixedArgs = error $ G.namedArgError jName
   selfFuncApp n t vs = addCallExcsCurrMod n >> G.selfFuncApp self n t vs
   extFuncApp l n t vs = do
     mem <- getMethodExcMap

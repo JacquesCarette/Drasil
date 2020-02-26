@@ -20,7 +20,6 @@ import GOOL.Drasil (CodeType)
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
 type FuncName = String
-type FieldName = String
 type Condition = Expr
 type Requires = String
 
@@ -47,7 +46,7 @@ data ArgumentInfo =
   | Basic CodeType (Maybe CodeChunk) 
   | Fn CodeChunk [Parameter] Step
   | Class [Requires] CodeChunk ClassInfo
-  | Record FuncName CodeChunk [FieldName]
+  | Record FuncName CodeChunk [CodeChunk]
 
 data Parameter = LockedParam CodeChunk | NameableParam CodeType
 
@@ -135,7 +134,7 @@ functionArg f ps b = Arg Nothing (Fn f ps b)
 customObjArg :: [Requires] -> CodeChunk -> ClassInfo -> Argument
 customObjArg rs o ci = Arg Nothing (Class rs o ci)
 
-recordArg :: FuncName -> CodeChunk -> [FieldName] -> Argument
+recordArg :: FuncName -> CodeChunk -> [CodeChunk] -> Argument
 recordArg c o fs = Arg Nothing (Record c o fs)
 
 lockedParam :: CodeChunk -> Parameter

@@ -106,13 +106,13 @@ odeArgs :: [Argument]
 odeArgs = [inlineArg Float, lockedArg (sy initv),
   functionArg fOslo (map unnamedParam [Float, vecT]) 
     (callStep $ constructAndReturn vector [inlineArg Float]),
-  recordArg "Options" opts ["AbsoluteTolerance", "RelativeTolerance"]]
+  recordArg "Options" opts [aTol, rTol]]
 
 solT, vecT :: CodeType
 solT = Object "IEnumerable<SolPoint>"
 vecT = Object "Vector"
 
-initv, fOslo, opts, sol, points, sp, x, vector, rk547m, gearBDF, 
+initv, fOslo, opts, aTol, rTol, sol, points, sp, x, vector, rk547m, gearBDF, 
   solveFromToStep :: CodeChunk
 initv = codevar $ implCQD "initv_oslo" (nounPhrase 
   "vector containing the initial values of the dependent variables"
@@ -125,6 +125,12 @@ opts = codevar $ implCQD "opts_oslo" (nounPhrase
   "record containing options for ODE solving" 
   "records containing options for ODE solving") Nothing (Object "Options") 
   (Label "opts") Nothing
+aTol = codevar $ implCQD "aTol_oslo" (nounPhrase 
+  "absolute tolerance for ODE solution" "absolute tolerances for ODE solution")
+  Nothing Float (Label "AbsoluteTolerance") Nothing
+rTol = codevar $ implCQD "rTol_oslo" (nounPhrase 
+  "relative tolerance for ODE solution" "relative tolerances for ODE solution")
+  Nothing Float (Label "RelativeTolerance") Nothing
 sol = codevar $ implCQD "sol_oslo" (nounPhrase "container for ODE information" 
   "containers for ODE information") Nothing solT (Label "sol") Nothing
 points = codevar $ implCQD "points_oslo" (nounPhrase 

@@ -43,11 +43,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   self, enumVar, objVar, listVar, listOf, arrayElem, litTrue, litFalse, litChar,
   litFloat, litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, 
   objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, funcApp, 
-  newObj, lambda, func, get, set, listSize, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, listAppendFunc, 
-  listAccessFunc', listSetFunc, state, loopState, emptyState, assign, 
-  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
-  increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  namedArgError, newObj, lambda, func, get, set, listSize, listAdd, listAppend, 
+  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
+  listAppendFunc, listAccessFunc', listSetFunc, state, loopState, emptyState, 
+  assign, assignToListIndex, multiAssignError, decrement, increment, 
+  decrement1, increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
   objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, constDecDef, 
   funcDecDef, discardInput, discardFileInput, closeFile, stringListVals, 
   stringListLists, returnState, multiReturnError, valState, comment, throw, 
@@ -443,6 +443,14 @@ instance (Pair p) => BooleanExpression (p CppSrcCode CppHdrCode) where
 instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   inlineIf = pair3 inlineIf inlineIf
   funcApp n = pair1Val1List (funcApp n) (funcApp n)
+  funcAppNamedArgs n t as = pair1Val2Lists 
+    (\tp ns ars -> funcAppNamedArgs n tp (zip ns ars)) 
+    (\tp ns ars -> funcAppNamedArgs n tp (zip ns ars)) 
+    t (map fst as) (map snd as)
+  funcAppMixedArgs n t pas nas = pair1Val3Lists
+    (\tp pars ns nars -> funcAppMixedArgs n tp pars (zip ns nars)) 
+    (\tp pars ns nars -> funcAppMixedArgs n tp pars (zip ns nars)) 
+    t pas (map fst nas) (map snd nas)
   selfFuncApp n = pair1Val1List (selfFuncApp n) (selfFuncApp n)
   extFuncApp l n = pair1Val1List (extFuncApp l n) (extFuncApp l n)
   newObj = pair1Val1List newObj newObj
@@ -967,6 +975,19 @@ pair2Vals1List srcf hdrf stv1 stv2 stv3 = do
       sv1 = toState $ psnd v1
   pair1Val1List (srcf fv1) (hdrf sv1) stv2 stv3 
 
+pair1Val2Lists :: (Pair p) => (State r (CppSrcCode a) -> 
+  [State s (CppSrcCode b)] -> [State t (CppSrcCode c)] -> 
+  State u (CppSrcCode d)) -> (State r (CppHdrCode a) -> [State s (CppHdrCode b)]
+  -> [State t (CppHdrCode c)] -> State u (CppHdrCode d)) -> 
+  State u (p CppSrcCode CppHdrCode a) -> [State u (p CppSrcCode CppHdrCode b)] 
+  -> [State u (p CppSrcCode CppHdrCode c)] -> 
+  State u (p CppSrcCode CppHdrCode d)
+pair1Val2Lists srcf hdrf stv1 stv2 stv3 = do
+  v1 <- stv1
+  let fv1 = toState $ pfst v1
+      sv1 = toState $ psnd v1
+  pair2Lists (srcf fv1) (hdrf sv1) stv2 stv3
+
 pair2Lists1Val :: (Pair p) => ([State r (CppSrcCode a)] -> 
   [State s (CppSrcCode b)] -> State t (CppSrcCode c) -> State u (CppSrcCode d)) 
   -> ([State r (CppHdrCode a)] -> [State s (CppHdrCode b)] -> 
@@ -1004,6 +1025,20 @@ pair3Lists1Val srcf hdrf stv1 stv2 stv3 stv4 = do
   let fl1 = map (toState . pfst) v1
       sl1 = map (toState . psnd) v1
   pair2Lists1Val (srcf fl1) (hdrf sl1) stv2 stv3 stv4 
+
+pair1Val3Lists :: (Pair p) => (State r (CppSrcCode a) -> 
+  [State s (CppSrcCode b)] -> [State t (CppSrcCode c)] -> 
+  [State u (CppSrcCode d)] -> State v (CppSrcCode e)) -> (State r (CppHdrCode a)
+  -> [State s (CppHdrCode b)] -> [State t (CppHdrCode c)] -> 
+  [State u (CppHdrCode d)] -> State v (CppHdrCode e)) -> 
+  State v (p CppSrcCode CppHdrCode a) -> [State v (p CppSrcCode CppHdrCode b)]
+  -> [State v (p CppSrcCode CppHdrCode c)] -> 
+  [State v (p CppSrcCode CppHdrCode d)] -> State v (p CppSrcCode CppHdrCode e)
+pair1Val3Lists srcf hdrf stv1 stv2 stv3 stv4 = do
+  v1 <- stv1
+  let fv1 = toState $ pfst v1
+      sv1 = toState $ psnd v1
+  pair3Lists (srcf fv1) (hdrf sv1) stv2 stv3 stv4
 
 pairVal2ListsVal :: (Pair p) => (State r (CppSrcCode a) -> 
   [State s (CppSrcCode b)] -> [State t (CppSrcCode c)] -> State u (CppSrcCode d)
@@ -1320,6 +1355,8 @@ instance BooleanExpression CppSrcCode where
 instance ValueExpression CppSrcCode where
   inlineIf = G.inlineIf
   funcApp = G.funcApp
+  funcAppNamedArgs = error $ G.namedArgError cppName
+  funcAppMixedArgs = error $ G.namedArgError cppName
   selfFuncApp = cppSelfFuncApp self
   extFuncApp l n t vs = modify (addModuleImportVS l) >> funcApp n t vs
   newObj = G.newObj newObjDocD'
@@ -1965,6 +2002,8 @@ instance BooleanExpression CppHdrCode where
 instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = mkStateVal void empty
   funcApp _ _ _ = mkStateVal void empty
+  funcAppNamedArgs _ _ _ = mkStateVal void empty
+  funcAppMixedArgs _ _ _ _ = mkStateVal void empty
   selfFuncApp _ _ _ = mkStateVal void empty
   extFuncApp _ _ _ _ = mkStateVal void empty
   newObj _ _ = mkStateVal void empty

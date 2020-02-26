@@ -39,16 +39,17 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litFloat, litInt, 
   litString, valueOf, arg, enumElement, argsList, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
-  selfFuncApp, extFuncApp, newObj, lambda, func, get, set, listAdd, listAppend, 
-  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, 
-  listAppendFunc, iterBeginError, iterEndError, listAccessFunc, listSetFunc, 
-  state, loopState, emptyState, assign, assignToListIndex, decrement, 
-  increment', increment1', decrement1, objDecNew, objDecNewNoParams, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnState, valState, 
-  comment, throw, initState, changeState, initObserverList, addObserver, ifCond,
-  ifNoElse, switchAsIf, ifExists, tryCatch, checkState, construct, param, 
-  method, getMethod, setMethod, privMethod, pubMethod, constructor, function, 
-  docFunc, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
+  funcAppMixedArgs, selfFuncApp, extFuncApp, newObj, lambda, func, get, set, 
+  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
+  setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
+  listAccessFunc, listSetFunc, state, loopState, emptyState, assign, 
+  assignToListIndex, decrement, increment', increment1', decrement1, objDecNew, 
+  objDecNewNoParams, closeFile, discardFileLine, stringListVals, 
+  stringListLists, returnState, valState, comment, throw, initState, 
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switchAsIf, 
+  ifExists, tryCatch, checkState, construct, param, method, getMethod, 
+  setMethod, privMethod, pubMethod, constructor, function, docFunc, 
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
   implementingClass, docClass, commentedClass, intClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
@@ -379,6 +380,8 @@ instance BooleanExpression PythonCode where
 instance ValueExpression PythonCode where
   inlineIf = pyInlineIf
   funcApp = G.funcApp
+  funcAppNamedArgs n t = funcAppMixedArgs n t []
+  funcAppMixedArgs = G.funcAppMixedArgs equals 
   selfFuncApp = G.selfFuncApp self
   extFuncApp l n t ps = modify (addModuleImportVS l) >> G.extFuncApp l n t ps
   newObj = G.newObj newObjDocD'

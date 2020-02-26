@@ -387,6 +387,17 @@ convStmt (FDec v) = do
   let convDec (C.List _) = listDec 0 vari
       convDec _ = varDec vari
   return $ convDec (codeType v) 
+convStmt (FDecDef v e) = do
+  v' <- mkVar v
+  l <- maybeLog v'
+  let convDecDef (Matrix [lst]) = do
+        e' <- mapM convExpr lst
+        return $ listDecDef v' e'
+      convDecDef _ = do
+        e' <- convExpr e
+        return $ varDecDef v' e'
+  dd <- convDecDef e
+  return $ multi $ dd : l
 convStmt (FProcCall n l) = do
   e' <- convExpr (FCall (asExpr n) l)
   return $ valState e'

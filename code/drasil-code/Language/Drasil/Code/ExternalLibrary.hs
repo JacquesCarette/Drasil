@@ -52,8 +52,8 @@ data Parameter = LockedParam CodeChunk | NameableParam CodeType
 
 data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
 
--- Constructor: known parameters, body
-data MethodInfo = CI [Parameter] (NonEmpty Step)
+-- Constructor, known parameters, body
+data MethodInfo = CI CodeChunk [Parameter] (NonEmpty Step)
   -- Method, known parameters, body
   | MI CodeChunk [Parameter] (NonEmpty Step)
 
@@ -149,9 +149,9 @@ customClass = Regular
 implementation :: String -> [MethodInfo] -> ClassInfo
 implementation = Implements
 
-constructorInfo :: [Parameter] -> [Step] -> MethodInfo
-constructorInfo _ [] = error "constructorInfo should be called with a non-empty list of Step"
-constructorInfo ps ss = CI ps (fromList ss)
+constructorInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo
+constructorInfo _ _ [] = error "constructorInfo should be called with a non-empty list of Step"
+constructorInfo c ps ss = CI c ps (fromList ss)
 
 methodInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo
 methodInfo _ _ [] = error "methodInfo should be called with a non-empty list of Step"

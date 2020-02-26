@@ -179,7 +179,7 @@ apacheODE = externalLib [
             appendCurrSol curr]])],
     callStep $ libMethod it integrate (customObjArg 
       [apacheImport ++ fode] ode (implementation fode [
-        constructorInfo [] [],
+        constructorInfo odeCtor [] [],
         methodInfo getDimension [] [fixedReturn (int 1)],
         methodInfo computeDerivatives [
           lockedParam t, unnamedParam (Array Float), unnamedParam (Array Float)]
@@ -276,14 +276,14 @@ odeint = externalLib [
     integrateConst [
       lockedArg (sy stepper), 
       customObjArg [] ode (customClass [
-        constructorInfo [] [],
+        constructorInfo odeCtor [] [],
         methodInfo odeOp [unnamedParam (List Float), unnamedParam (List Float), 
           lockedParam t] [assignArrayIndex 0]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
       preDefinedArg odeintCurrVals,
       inlineArg Float, inlineArg Float, inlineArg Float, 
       customObjArg [] pop (customClass [
-        constructorInfo [unnamedParam (List Float)] [],
+        constructorInfo popCtor [unnamedParam (List Float)] [],
         methodInfo popOp [lockedParam y, lockedParam t] [appendCurrSol y]])]]
 
 odeNameSpace, rkdp5, adamsBash :: String
@@ -291,8 +291,11 @@ odeNameSpace = "boost::numeric::odeint::"
 rkdp5 = odeNameSpace ++ "runge_kutta_dopri5<vector<double>>"
 adamsBash = odeNameSpace ++ "adams_bashforth<3,vector<double>>"
 
+popT :: CodeType
+popT = Object "Populate"
+
 odeintCurrVals, rk, stepper, pop, rkdp5C, makeControlled, adamsBashC, 
-  integrateConst, odeOp, popOp :: CodeChunk
+  integrateConst, odeOp, popCtor, popOp :: CodeChunk
 odeintCurrVals = codevar $ implCQD "currVals_odeint" (nounPhrase 
   "vector holding ODE solution values for the current step"
   "vectors holding ODE solution values for the current step") Nothing
@@ -306,8 +309,7 @@ stepper = codevar $ implCQD "stepper_odeint" (nounPhrase
   (Object "auto") (Label "stepper") Nothing
 pop = codevar $ implCQD "pop_odeint" (nounPhrase 
   "object to populate ODE solution vector" 
-  "objects to populate ODE solution vector") Nothing (Object "Populate") 
-  (Label "pop") Nothing
+  "objects to populate ODE solution vector") Nothing popT (Label "pop") Nothing
 rkdp5C = codefunc $ implCQD "rkdp5_odeint" (nounPhrase
   "constructor for stepper using Runge-Kutta-Dopri5 method"
   "constructors for stepper using Runge-Kutta-Dopri5 method")
@@ -328,6 +330,10 @@ odeOp = codefunc $ implCQD "ode_operator_odeint" (nounPhrase
   "method defining override for calling ODE object"
   "methods defining override for calling ODE object") Nothing Void 
   (Label "operator()") Nothing
+popCtor = codefunc $ implCQD "Populate_odeint" (nounPhrase 
+  "constructor for Populate object for ODE solving with odeint" 
+  "constructors for Populate object for ODE solving with odeint")
+  Nothing popT (Label "Populate") Nothing
 popOp = codefunc $ implCQD "pop_operator_odeint" (nounPhrase
   "method defining override for calling Populate object"
   "methods defining override for calling Populate object") Nothing Void
@@ -335,10 +341,13 @@ popOp = codefunc $ implCQD "pop_operator_odeint" (nounPhrase
 
 -- CodeChunks used in multiple external libraries --
 
-ode, t, y :: CodeChunk
+odeCtor, ode, t, y :: CodeChunk
+odeCtor = codefunc $ implCQD "ODE_constructor" (nounPhrase
+  "constructor for ODE object" "constructors for ODE object") Nothing odeObj
+  (Label "ODE") Nothing
 ode = codevar $ implCQD "ode_obj" (nounPhrase 
   "object representing an ODE system" "objects representing an ODE system")
-  Nothing (Object "ODE") (Label "ode") Nothing
+  Nothing odeObj (Label "ode") Nothing
 t = codevar $ implCQD "t_ode" (nounPhrase 
   "current independent variable value in ODE solution"
   "current independent variable value in ODE solution") 
@@ -347,3 +356,6 @@ y = codevar $ implCQD "y_ode" (nounPhrase
   "current dependent variable value in ODE solution"
   "current dependent variable value in ODE solution") 
   Nothing (List Float) (Label "y") Nothing
+
+odeObj :: CodeType
+odeObj = Object "ODE"

@@ -11,8 +11,8 @@ import Language.Drasil hiding (int, log, ln, exp,
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (paramComment, returnComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
-import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, genModule, mkParam,
-  primaryClass, auxClass)
+import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, 
+  genModuleWithImports, mkParam, primaryClass)
 import Language.Drasil.Code.Imperative.Helpers (getUpperBound, liftS, lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
@@ -333,13 +333,15 @@ genCaseBlock t v c cs = do
 -- medium hacks --
 genModDef :: (ProgramSym repr) => Mod -> 
   Reader DrasilState (FS (repr (RenderFile repr)))
-genModDef (Mod n desc cs fs) = genModule n desc (map (fmap Just . genFunc) fs) 
+genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap 
+  Just . genFunc) fs) 
   (case cs of [] -> []
-              (cl:cls) -> fmap Just (genClass primaryClass cl) : map (fmap Just . genClass auxClass) cls)
+              (cl:cls) -> fmap Just (genClass primaryClass cl) : 
+                map (fmap Just . genClass auxClass) cls)
 
 genModFuncs :: (ProgramSym repr) => Mod -> 
   [Reader DrasilState (MS (repr (Method repr)))]
-genModFuncs (Mod _ _ _ fs) = map genFunc fs
+genModFuncs (Mod _ _ _ _ fs) = map genFunc fs
 
 genClass :: (ProgramSym repr) => (String -> Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 

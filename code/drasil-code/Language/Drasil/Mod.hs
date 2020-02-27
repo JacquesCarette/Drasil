@@ -2,7 +2,7 @@
 module Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
   FuncStmt(..), Initializer, Mod(..), Name, ($:=), classDef, classImplements, 
   ctorDef, ffor, fdec, fname, fstdecl, funcData, funcDef, funcQD, 
-  getFuncParams, packmod, prefixFunctions
+  getFuncParams, packmod, packmodRequires, prefixFunctions
 ) where
 
 import Language.Drasil
@@ -21,10 +21,14 @@ import Data.List ((\\), nub)
 
 type Name = String
 
-data Mod = Mod Name String [Class] [Func]
+-- Name, description, imports, classes, functions
+data Mod = Mod Name String [String] [Class] [Func]
 
 packmod :: Name -> String -> [Class] -> [Func] -> Mod
-packmod n = Mod (toPlainName n)
+packmod n d = packmodRequires n d []
+
+packmodRequires :: Name -> String -> [String] -> [Class] -> [Func] -> Mod
+packmodRequires n = Mod (toPlainName n)
 
 data Class = ClassDef {
   className :: Name, 
@@ -147,7 +151,7 @@ fname (FDef (CtorDef n _ _ _ _)) = n
 fname (FData (FuncData n _ _)) = n 
 
 prefixFunctions :: [Mod] -> [Mod]
-prefixFunctions = map (\(Mod nm desc cs fs) -> Mod nm desc cs $ map pfunc fs)
+prefixFunctions = map (\(Mod nm desc rs cs fs) -> Mod nm desc rs cs $ map pfunc fs)
   where pfunc (FData (FuncData n desc d)) = FData (FuncData (funcPrefix ++ n) 
           desc d)
         pfunc (FDef (FuncDef n desc a t rd f)) = FDef (FuncDef (funcPrefix ++ n)

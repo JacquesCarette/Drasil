@@ -247,7 +247,7 @@ getAdditionalVars chs ms = map codevar (inFileName
         inParamsVar Unbundled = []
         constsVar (Store Bundled) = [consts]
         constsVar _ = []
-        funcParams (Mod _ _ cs fs) = concatMap getFuncParams (fs ++ 
+        funcParams (Mod _ _ _ cs fs) = concatMap getFuncParams (fs ++ 
           concatMap methods cs)
 
 -- name of variable/function maps to module name
@@ -272,7 +272,7 @@ modExportMap cs@CSI {
     ++ getExpConstraints prn chs (getConstraints (cMap cs) ins)
     ++ getExpInputFormat prn chs extIns
     ++ getExpOutput prn chs (outputs cs)
-  where mpair (Mod n _ cls fs) = (map className cls ++ map fname (fs ++ 
+  where mpair (Mod n _ _ cls fs) = (map className cls ++ map fname (fs ++ 
           concatMap methods cls)) `zip` repeat (defModName m n)
         defModName Unmodular _ = prn
         defModName _ nm = nm

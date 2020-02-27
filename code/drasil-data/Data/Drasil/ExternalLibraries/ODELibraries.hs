@@ -1,5 +1,5 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
-  scipyODE, scipyCall, oslo, apacheODE, odeint, odeInfo, odeOptions
+  scipyODE, scipyCall, oslo, osloCall, apacheODE, odeint, odeInfo, odeOptions
 ) where
 
 import Language.Drasil
@@ -16,8 +16,9 @@ import Language.Drasil.Code (ODEMethod(..), FuncStmt(..), ExternalLibrary,
   returnExprList, fixedReturn,
   ExternalLibraryCall, externalLibCall, choiceStepFill, mandatoryStepFill, 
   mandatoryStepsFill, callStepFill, libCallFill, basicArgFill, functionArgFill, 
-  unnamedParamFill, initSolListWithValFill, solveAndPopulateWhileFill, 
-  returnExprListFill, CodeChunk, codevar, ccObjVar, implCQD)
+  recordArgFill, unnamedParamFill, populateSolListFill, initSolListWithValFill, 
+  solveAndPopulateWhileFill, returnExprListFill, CodeChunk, codevar, ccObjVar, 
+  implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Void))
 import qualified GOOL.Drasil as C (CodeType(Boolean, Integer, String))
@@ -124,6 +125,22 @@ oslo = externalLib [
   mandatorySteps (callRequiresJust "System.Linq" (libMethodWithResult sol 
       solveFromToStep (map inlineArg [Float, Float, Float]) points) :
     populateSolList points sp x)]
+
+osloCall :: ODEInfo -> ExternalLibraryCall
+osloCall info = externalLibCall [
+  mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ initVal info],
+  choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $ 
+    libCallFill [basicArgFill $ tInit info, 
+      functionArgFill (map unnamedParamFill [indepVar info, depVar info]) $ 
+        returnExprListFill (odeSyst info), 
+      recordArgFill [absTol $ odeOpts info, relTol $ odeOpts info]],
+  mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill 
+      [tInit info, tFinal info, stepSize $ odeOpts info],
+    populateSolListFill $ depVar info]]
+  where chooseMethod RK45 = 0
+        chooseMethod BDF = 1
+        chooseMethod _ = error $ "Chosen ODE solving method is not available" ++
+          " in chosen ODE solving library"
 
 odeArgs :: [Argument]
 odeArgs = [inlineArg Float, lockedArg (sy initv),

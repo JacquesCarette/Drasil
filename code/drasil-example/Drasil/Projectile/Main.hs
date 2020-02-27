@@ -5,7 +5,7 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, 
-  AuxFile(..), Visibility(..), codeSpec)
+  AuxFile(..), Visibility(..), defaultChoices, codeSpec)
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
@@ -87,7 +87,7 @@ choiceCombos = [baseChoices,
     inputStructure = Bundled}]
 
 baseChoices :: Choices
-baseChoices = Choices {
+baseChoices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java],
   modularity = Unmodular,
   impType = Program,

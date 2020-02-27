@@ -5,7 +5,7 @@ module Drasil.SWHS.Generate (generate) where
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..),  
 --   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
 --   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
---   Visibility(..))
+--   Visibility(..), defaultChoices)
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -15,7 +15,7 @@ import Drasil.SWHS.Body (srs, printSetting) -- si
 -- code = codeSpec si choices []
 
 -- choices :: Choices
--- choices = Choices {
+-- choices = defaultChoices {
 --   lang = [Python, Cpp, CSharp, Java],
 --   modularity = Modular Combined,
 --   impType = Program,

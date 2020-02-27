@@ -4,9 +4,9 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 
 import Language.Drasil
 
-import Language.Drasil.Code (ExternalLibrary, Step, Argument, 
-  externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep, callStep,
-  callRequiresJust, callRequires, libFunction, libMethod, 
+import Language.Drasil.Code (ODEMethod(..), FuncStmt(..), ExternalLibrary, 
+  Step, Argument, externalLib, mandatoryStep, mandatorySteps, choiceSteps, 
+  choiceStep, callStep, callRequiresJust, callRequires, libFunction, libMethod, 
   libFunctionWithResult, libMethodWithResult, libConstructor, 
   constructAndReturn, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, functionArg, customObjArg, recordArg, lockedParam, 
@@ -359,3 +359,33 @@ y = codevar $ implCQD "y_ode" (nounPhrase
 
 odeObj :: CodeType
 odeObj = Object "ODE"
+
+-- Data 
+
+-- This may be temporary, but need a structure to hold ODE info for now. 
+-- Goal will be for this info to be populated by the instance model for the ODE and the Choices structure.
+-- Probably doesn't belong here, but where?
+data ODEInfo = ODEInfo {
+  indepVar :: CodeChunk,
+  depVar :: CodeChunk,
+  otherVars :: [CodeChunk],
+  tInit :: Expr,
+  tFinal :: Expr,
+  initVal :: Expr,
+  odeExpr :: Expr,
+  odeOpts :: ODEOptions
+}
+
+odeInfo :: CodeChunk -> CodeChunk -> [CodeChunk] -> Expr -> Expr -> Expr -> Expr
+  -> ODEOptions -> ODEInfo
+odeInfo = ODEInfo
+
+data ODEOptions = ODEOpts {
+  solveMethod :: ODEMethod,
+  absTol :: Expr,
+  relTol :: Expr,
+  stepSize :: Expr
+}
+
+odeOptions :: ODEMethod -> Expr -> Expr -> Expr -> ODEOptions
+odeOptions = ODEOpts

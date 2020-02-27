@@ -171,14 +171,15 @@ apacheODE = externalLib [
       $ libConstructor dp54C itArgs it],
   mandatorySteps [callStep $ libMethod it addStepHandler [
       customObjArg (map ((apacheImport ++ "sampling.") ++) [sh, si]) 
+        "Class defining additional behaviour for each step of an ODE solution"
         stepHandler (implementation sh [
           methodInfo initMethod (map lockedParam [t0, y0, t]) 
             [initSolListFromArray y0],
           methodInfo handleStep (map lockedParam [interpolator, isLast]) 
             [callStep $ libMethodWithResult interpolator getInterpState [] curr,
             appendCurrSol curr]])],
-    callStep $ libMethod it integrate (customObjArg 
-      [apacheImport ++ fode] ode (implementation fode [
+    callStep $ libMethod it integrate (customObjArg [apacheImport ++ fode] 
+      "Class representing an ODE system" ode (implementation fode [
         constructorInfo odeCtor [] [],
         methodInfo getDimension [] [fixedReturn (int 1)],
         methodInfo computeDerivatives [
@@ -275,16 +276,18 @@ odeint = externalLib [
   mandatoryStep $ callRequiresJust "boost/numeric/odeint.hpp" $ libFunction 
     integrateConst [
       lockedArg (sy stepper), 
-      customObjArg [] ode (customClass [
+      customObjArg [] "Class representing an ODE system" ode (customClass [
         constructorInfo odeCtor [] [],
         methodInfo odeOp [unnamedParam (List Float), unnamedParam (List Float), 
           lockedParam t] [assignArrayIndex 0]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
       preDefinedArg odeintCurrVals,
       inlineArg Float, inlineArg Float, inlineArg Float, 
-      customObjArg [] pop (customClass [
-        constructorInfo popCtor [unnamedParam (List Float)] [],
-        methodInfo popOp [lockedParam y, lockedParam t] [appendCurrSol y]])]]
+      customObjArg [] 
+        "Class for populating a list during an ODE solution process" 
+        pop (customClass [
+          constructorInfo popCtor [unnamedParam (List Float)] [],
+          methodInfo popOp [lockedParam y, lockedParam t] [appendCurrSol y]])]]
 
 odeNameSpace, rkdp5, adamsBash :: String
 odeNameSpace = "boost::numeric::odeint::"

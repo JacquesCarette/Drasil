@@ -28,7 +28,7 @@ type StepGroup = NonEmpty [Step]
 
 data Step = Call [Requires] FunctionInterface
   -- A while loop -- function calls in the condition, other conditions, steps for the body
-  | Loop (NonEmpty FunctionInterface) ([CodeChunk] -> Condition) (NonEmpty Step)
+  | Loop (NonEmpty FunctionInterface) ([Expr] -> Condition) (NonEmpty Step)
   -- For when a statement is needed, but does not interface with the external library
   | Statement ([CodeChunk] -> [Expr] -> FuncStmt)
 
@@ -85,7 +85,7 @@ callRequiresJust i = Call [i]
 callRequires :: [Requires] -> FunctionInterface -> Step
 callRequires = Call
 
-loopStep :: [FunctionInterface] -> ([CodeChunk] -> Condition) -> [Step] -> Step
+loopStep :: [FunctionInterface] -> ([Expr] -> Condition) -> [Step] -> Step
 loopStep [] _ _ = error "loopStep should be called with a non-empty list of FunctionInterface"
 loopStep _ _ [] = error "loopStep should be called with a non-empty list of Step"
 loopStep fis c ss = Loop (fromList fis) c (fromList ss)
@@ -196,8 +196,8 @@ initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
 solveAndPopulateWhile :: FunctionInterface -> CodeChunk -> FunctionInterface -> 
   CodeChunk -> Step
 solveAndPopulateWhile lc iv slv popArr = loopStep [lc] (\case 
-  [ub] -> sy iv $< sy ub
-  _ -> error "Fill for solveAndPopulateWhile should provide one CodeChunk") 
+  [ub] -> sy iv $< ub
+  _ -> error "Fill for solveAndPopulateWhile should provide one Expr") 
   [callStep slv, appendCurrSol popArr]
 
 returnExprList :: Step

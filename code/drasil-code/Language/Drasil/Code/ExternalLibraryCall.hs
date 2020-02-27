@@ -27,7 +27,7 @@ type ExternalLibraryCall = [StepGroupFill]
 data StepGroupFill = SGF Integer [StepFill] -- Integer is to "choose" from the options in ExternalLibrary
 
 data StepFill = CallF FunctionIntFill
-  | LoopF (NonEmpty FunctionIntFill) [CodeChunk] (NonEmpty StepFill)
+  | LoopF (NonEmpty FunctionIntFill) [Expr] (NonEmpty StepFill)
   | StatementF [CodeChunk] [Expr]
 
 newtype FunctionIntFill = FIF [ArgumentFill]
@@ -64,7 +64,7 @@ mandatoryStepsFill = SGF 0
 callStepFill :: FunctionIntFill -> StepFill
 callStepFill = CallF
 
-loopStepFill :: [FunctionIntFill] -> [CodeChunk] -> [StepFill] -> StepFill
+loopStepFill :: [FunctionIntFill] -> [Expr] -> [StepFill] -> StepFill
 loopStepFill [] _ _ = error "loopStepFill should be called with a non-empty list of FunctionInterfaceFill"
 loopStepFill _ _ [] = error "loopStepFill should be called with a non-empty list of StepFill"
 loopStepFill fifs cdchs sfs = LoopF (fromList fifs) cdchs (fromList sfs)
@@ -123,7 +123,7 @@ initSolListFromArrayFill s = statementStepFill [s] []
 initSolListWithValFill :: CodeChunk -> Expr -> StepFill
 initSolListWithValFill s v = statementStepFill [s] [v]
 
-solveAndPopulateWhileFill :: FunctionIntFill -> CodeChunk -> FunctionIntFill -> 
+solveAndPopulateWhileFill :: FunctionIntFill -> Expr -> FunctionIntFill -> 
   CodeChunk -> StepFill
 solveAndPopulateWhileFill lcf ub slvf s = loopStepFill [lcf] [ub] 
   [callStepFill slvf, appendCurrSolFill s]

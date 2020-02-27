@@ -1,5 +1,5 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
-  scipyODE, oslo, apacheODE, odeint
+  scipyODE, scipyCall, oslo, apacheODE, odeint, odeInfo, odeOptions
 ) where
 
 import Language.Drasil
@@ -13,7 +13,11 @@ import Language.Drasil.Code (ODEMethod(..), FuncStmt(..), ExternalLibrary,
   unnamedParam, customClass, implementation, constructorInfo, methodInfo, 
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
-  returnExprList, fixedReturn, CodeChunk, codevar, codefunc, ccObjVar, implCQD)
+  returnExprList, fixedReturn,
+  ExternalLibraryCall, externalLibCall, choiceStepFill, mandatoryStepFill, 
+  mandatoryStepsFill, callStepFill, libCallFill, basicArgFill, functionArgFill, 
+  unnamedParamFill, initSolListWithValFill, solveAndPopulateWhileFill, 
+  returnExprListFill, CodeChunk, codevar, ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Void))
 import qualified GOOL.Drasil as C (CodeType(Boolean, Integer, String))
@@ -30,10 +34,29 @@ scipyODE = externalLib [
     setIntegratorMethod [vode, methodArg "adams", atol, rtol],
     setIntegratorMethod [vode, methodArg "bdf", atol, rtol],
     setIntegratorMethod [lockedArg (str "dopri45"), atol, rtol]],
-  mandatorySteps [callStep $ libMethod r setInitVal [inlineArg Float],
+  mandatorySteps [callStep $ libMethod r setInitVal 
+      [inlineArg Float, inlineArg Float],
     initSolListWithVal,
     solveAndPopulateWhile (libMethod r successful []) rt 
       (libMethod r integrateStep [inlineArg Float]) ry]]
+
+scipyCall :: ODEInfo -> ExternalLibraryCall
+scipyCall info = externalLibCall [
+  mandatoryStepFill $ callStepFill $ libCallFill [functionArgFill 
+    (map unnamedParamFill [indepVar info, depVar info]) 
+    (returnExprListFill $ odeSyst info)],
+  uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
+  mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill 
+      [initVal info, tInit info],
+    initSolListWithValFill (depVar info) (initVal info),
+    solveAndPopulateWhileFill (libCallFill []) (tFinal info) 
+      (libCallFill [basicArgFill (sy rt + stepSize (odeOpts info))]) 
+      (depVar info)]]
+  where chooseMethod Adams = (0, solveMethodFill)
+        chooseMethod BDF = (1, solveMethodFill)
+        chooseMethod RK45 = (2, solveMethodFill)
+        solveMethodFill = callStepFill $ libCallFill $ map basicArgFill 
+          [absTol $ odeOpts info, relTol $ odeOpts info]
 
 scipyImport :: String
 scipyImport = "scipy.integrate"
@@ -372,12 +395,12 @@ data ODEInfo = ODEInfo {
   tInit :: Expr,
   tFinal :: Expr,
   initVal :: Expr,
-  odeExpr :: Expr,
+  odeSyst :: [Expr],
   odeOpts :: ODEOptions
 }
 
-odeInfo :: CodeChunk -> CodeChunk -> [CodeChunk] -> Expr -> Expr -> Expr -> Expr
-  -> ODEOptions -> ODEInfo
+odeInfo :: CodeChunk -> CodeChunk -> [CodeChunk] -> Expr -> Expr -> Expr -> 
+  [Expr] -> ODEOptions -> ODEInfo
 odeInfo = ODEInfo
 
 data ODEOptions = ODEOpts {

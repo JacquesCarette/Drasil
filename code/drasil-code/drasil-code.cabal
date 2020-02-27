@@ -16,6 +16,7 @@ library
     , Language.Drasil.Code.CodeQuantityDicts
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.ExternalLibrary
+    , Language.Drasil.Code.ExternalLibraryCall
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
     , Language.Drasil.Code.Imperative.ConceptMatch

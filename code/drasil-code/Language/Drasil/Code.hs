@@ -21,6 +21,15 @@ module Language.Drasil.Code (
   implementation, constructorInfo, methodInfo, appendCurrSol, populateSolList, 
   assignArrayIndex, assignSolFromObj, initSolListFromArray, initSolListWithVal, 
   solveAndPopulateWhile, returnExprList, fixedReturn,
+  ExternalLibraryCall, StepGroupFill(..), StepFill(..), FunctionIntFill(..), 
+  ArgumentFill(..), ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..),
+  externalLibCall, choiceStepsFill, choiceStepFill, mandatoryStepFill, 
+  mandatoryStepsFill, callStepFill, libCallFill, basicArgFill, functionArgFill,
+  customObjArgFill, recordArgFill,  unnamedParamFill, userDefinedParamFill, 
+  customClassFill, implementationFill, constructorInfoFill, methodInfoFill, 
+  appendCurrSolFill, populateSolListFill, assignArrayIndexFill, 
+  assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill, 
+  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill,
   PackageSym(..),
   CodeChunk, codevar, codefunc, quantvar, ccObjVar, CodeQuantityDict, implCQD,
   unPP, unJP, unCSP, unCPPP
@@ -48,6 +57,17 @@ import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   constructorInfo, methodInfo, appendCurrSol, populateSolList, 
   assignArrayIndex, assignSolFromObj, initSolListFromArray, initSolListWithVal, 
   solveAndPopulateWhile, returnExprList, fixedReturn)
+import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
+  StepGroupFill(..), StepFill(..), FunctionIntFill(..), ArgumentFill(..),
+  ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..), externalLibCall, 
+  choiceStepsFill, choiceStepFill, mandatoryStepFill, mandatoryStepsFill, 
+  callStepFill, libCallFill, basicArgFill, functionArgFill, customObjArgFill, 
+  recordArgFill, unnamedParamFill, userDefinedParamFill, customClassFill, 
+  implementationFill, constructorInfoFill, methodInfoFill, appendCurrSolFill, 
+  populateSolListFill, assignArrayIndexFill, assignSolFromObjFill, 
+  initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill, 
+  returnExprListFill, fixedStatementFill)
+
 
 import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), CodeSystInfo(..), 
   Comments(..), Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), 

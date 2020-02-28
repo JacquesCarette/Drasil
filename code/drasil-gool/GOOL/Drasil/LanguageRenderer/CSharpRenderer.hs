@@ -33,8 +33,8 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   commentedModD, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, multiBody, block, multiBlock, bool, int, double, char, string, 
-  listType, arrayType, listInnerType, obj, enumType, funcType, void, 
+  oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
+  string, listType, arrayType, listInnerType, obj, enumType, funcType, void, 
   runStrategy, listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, 
   greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, divideOp, 
   moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, classVar, 
@@ -188,7 +188,8 @@ instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData
   bool = addSystemImport G.bool
   int = G.int
-  float = G.double
+  float = G.float
+  double = G.double
   char = G.char
   string = G.string
   infile = csInfileType

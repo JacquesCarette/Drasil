@@ -33,11 +33,12 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   addCommentsDocD, commentedModD, docFuncRepr, variableList, parameterList, 
   appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, multiBody, block, multiBlock, bool, int, double, char, listType, 
-  arrayType, listInnerType, obj, enumType, funcType, void, runStrategy, 
-  listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
-  lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp,
-  var, staticVar, extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, 
+  oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
+  listType, arrayType, listInnerType, obj, enumType, funcType, void, 
+  runStrategy, listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, 
+  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
+  moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, classVar, 
+  objVar, objVarSelf, listVar, 
   listOf, arrayElem, iterVar, litTrue, litFalse, litChar, litFloat, litInt, 
   litString, pi, valueOf, arg, enumElement, argsList, inlineIf, objAccess, 
   objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
@@ -197,7 +198,8 @@ instance TypeSym JavaCode where
   type Type JavaCode = TypeData
   bool = G.bool
   int = G.int
-  float = G.double
+  float = G.float
+  double = G.double
   char = G.char
   string = jStringType
   infile = jInfileType

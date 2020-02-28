@@ -76,6 +76,7 @@ instance TypeSym CodeInfo where
   bool = noInfoType
   int = noInfoType
   float = noInfoType
+  double = noInfoType
   char = noInfoType
   string = noInfoType
   infile = noInfoType

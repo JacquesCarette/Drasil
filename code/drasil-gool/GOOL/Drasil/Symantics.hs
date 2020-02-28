@@ -132,6 +132,7 @@ class (PermanenceSym repr) => TypeSym repr where
   bool          :: VS (repr (Type repr))
   int           :: VS (repr (Type repr))
   float         :: VS (repr (Type repr))
+  double        :: VS (repr (Type repr))
   char          :: VS (repr (Type repr))
   string        :: VS (repr (Type repr))
   infile        :: VS (repr (Type repr))

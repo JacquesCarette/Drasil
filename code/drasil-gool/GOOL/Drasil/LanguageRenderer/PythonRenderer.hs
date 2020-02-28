@@ -184,7 +184,8 @@ instance TypeSym PythonCode where
   type Type PythonCode = TypeData
   bool = toState $ typeFromData Boolean "" empty
   int = G.int
-  float = G.float
+  float = double -- map floats to doubles for now so current examples dont break
+  double = G.float
   char = toState $ typeFromData Char "" empty
   string = pyStringType
   infile = toState $ typeFromData File "" empty

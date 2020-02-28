@@ -35,12 +35,12 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   commentedItem, addCommentsDocD, functionDox, commentedModD, valueList, 
   parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, multiBody, block, multiBlock, int, double, char, string, listType, 
-  listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
-  negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, 
-  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
-  minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, staticVar, 
-  self, enumVar, objVar, listVar, listOf, arrayElem, litTrue, litFalse, litChar,
+  oneLiner, multiBody, block, multiBlock, int, float, double, char, string, 
+  listType, listInnerType, obj, enumType, funcType, void, runStrategy, 
+  listSlice, notOp, negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, 
+  asinOp, acosOp, atanOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
+  lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, 
+  andOp, orOp, var, staticVar, self, enumVar, objVar, listVar, listOf, arrayElem, litTrue, litFalse, litChar,
   litFloat, litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, 
   objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, funcApp, 
   namedArgError, newObj, lambda, func, get, set, listSize, listAdd, listAppend, 
@@ -204,6 +204,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   bool = on2StateValues pair bool bool
   int = on2StateValues pair int int
   float = on2StateValues pair float float
+  double = on2StateValues pair double double
   char = on2StateValues pair char char
   string = on2StateValues pair string string
   infile = on2StateValues pair infile infile
@@ -1165,7 +1166,8 @@ instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
   bool = cppBoolType
   int = G.int
-  float = G.double
+  float = G.float
+  double = G.double
   char = G.char
   string = modify (addUsing "string" . addLangImportVS "string") >> G.string
   infile = modify (addUsing "ifstream") >> cppInfileType
@@ -1830,7 +1832,8 @@ instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData
   bool = cppBoolType
   int = G.int
-  float = G.double
+  float = G.float
+  double = G.double
   char = G.char
   string = modify (addHeaderUsing "string" . addHeaderLangImport "string") >> 
     G.string

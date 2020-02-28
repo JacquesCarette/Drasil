@@ -815,8 +815,10 @@ jListType l t = modify (addLangImportVS $ "java.util." ++ render lst) >>
   (t >>= (jListType' . getType))
   where jListType' Integer = toState $ typeFromData (List Integer) (render lst 
           ++ "<Integer>") (lst <> angles (text "Integer"))
-        jListType' Float = toState $ typeFromData (List Float) (render lst ++ "<Double>") 
-          (lst <> angles (text "Double"))
+        jListType' Float = toState $ typeFromData (List Float) 
+          (render lst ++ "<Float>") (lst <> angles (text "Float"))
+        jListType' Double = toState $ typeFromData (List Double) 
+          (render lst ++ "<Double>") (lst <> angles (text "Double"))
         jListType' _ = G.listType l t
         lst = keyDoc l
 
@@ -845,7 +847,8 @@ jCast :: VS (JavaCode (Type JavaCode)) -> VS (JavaCode (Value JavaCode)) ->
   VS (JavaCode (Value JavaCode))
 jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
-  where jCast' Float String _ _ = funcApp "Double.parseDouble" float [v]
+  where jCast' Double String _ _ = funcApp "Double.parseDouble" double [v]
+        jCast' Float String _ _ = funcApp "Float.parseFloat" float [v]
         jCast' Integer (Enum _) _ _ = v $. func "ordinal" int []
         jCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
           tp)) (valueDoc vl))
@@ -883,8 +886,10 @@ jInput :: (RenderSym repr) => VS (repr (Type repr)) -> VS (repr (Value repr))
 jInput = on2StateValues (\t -> mkVal t . jInput' (getType t))
   where jInput' Integer inFn = text "Integer.parseInt" <> parens (valueDoc inFn 
           <> dot <> text "nextLine()")
-        jInput' Float inFn = text "Double.parseDouble" <> parens (valueDoc inFn 
+        jInput' Float inFn = text "Float.parseFloat" <> parens (valueDoc inFn 
           <> dot <> text "nextLine()")
+        jInput' Double inFn = text "Double.parseDouble" <> parens (valueDoc 
+          inFn <> dot <> text "nextLine()")
         jInput' Boolean inFn = valueDoc inFn <> dot <> text "nextBoolean()"
         jInput' String inFn = valueDoc inFn <> dot <> text "nextLine()"
         jInput' Char inFn = valueDoc inFn <> dot <> text "next().charAt(0)"

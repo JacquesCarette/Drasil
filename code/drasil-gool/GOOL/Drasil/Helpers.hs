@@ -101,6 +101,7 @@ convType :: (S.TypeSym repr) => C.CodeType -> VS (repr (S.Type repr))
 convType C.Boolean = S.bool
 convType C.Integer = S.int
 convType C.Float = S.float
+convType C.Double = S.double
 convType C.Char = S.char
 convType C.String = S.string
 convType (C.List t) = S.listType (convType t)

@@ -325,7 +325,7 @@ instance ValueSym PythonCode where
   litInt = G.litInt
   litString = G.litString
 
-  pi = addmathImport $ mkStateVal float (text "math.pi")
+  pi = addmathImport $ mkStateVal double (text "math.pi")
 
   ($:) = enumElement
 
@@ -784,7 +784,8 @@ pyInput :: VS (PythonCode (Value PythonCode)) ->
   MS (PythonCode (Statement PythonCode))
 pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
   where pyInput' Integer = funcApp "int" int [inSrc]
-        pyInput' Float = funcApp "float" float [inSrc]
+        pyInput' Float = funcApp "float" double [inSrc]
+        pyInput' Double = funcApp "float" double [inSrc]
         pyInput' Boolean = inSrc ?!= litString "0"
         pyInput' String = objMethodCall string inSrc "rstrip" []
         pyInput' Char = inSrc

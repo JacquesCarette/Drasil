@@ -1303,7 +1303,7 @@ instance ValueSym CppSrcCode where
   litString = G.litString
 
   pi = modify (addDefine "_USE_MATH_DEFINES") >> addMathHImport (mkStateVal 
-    float (text "M_PI"))
+    double (text "M_PI"))
 
   ($:) = enumElement
 
@@ -1951,7 +1951,7 @@ instance ValueSym CppHdrCode where
   litString = G.litString
 
   pi = modify (addHeaderDefine "_USE_MATH_DEFINES" . addHeaderLangImport 
-    "math.h") >> mkStateVal float (text "M_PI")
+    "math.h") >> mkStateVal double (text "M_PI")
 
   ($:) = enumElement
 
@@ -2487,7 +2487,8 @@ cppCast :: VS (CppSrcCode (Type CppSrcCode)) ->
   VS (CppSrcCode (Value CppSrcCode)) -> VS (CppSrcCode (Value CppSrcCode))
 cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
-  where cppCast' Float String _ _ = funcApp "std::stod" float [v]
+  where cppCast' Double String _ _ = funcApp "std::stod" double [v]
+        cppCast' Float String _ _ = funcApp "std::stof" float [v]
         cppCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD 
           (getTypeDoc tp)) (valueDoc vl))
 

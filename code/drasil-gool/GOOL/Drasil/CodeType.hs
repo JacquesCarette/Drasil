@@ -7,6 +7,7 @@ module GOOL.Drasil.CodeType (
 data CodeType = Boolean
               | Integer
               | Float
+              | Double
               | Char
               | String
               | File

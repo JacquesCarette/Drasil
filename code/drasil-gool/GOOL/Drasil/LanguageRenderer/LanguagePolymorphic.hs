@@ -61,7 +61,8 @@ import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   ModuleSym(Module), InternalMod(moduleDoc, updateModuleDoc), BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData), 
   BodySym(oneLiner), BlockSym(block), 
-  TypeSym(bool, int, float, char, string, listType, arrayType, listInnerType, void), 
+  TypeSym(bool, int, float, double, char, string, listType, arrayType, 
+    listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
   ValueSym(litTrue, litFalse, litInt, litString, valueOf),
   ValueExpression(funcApp, newObj, extNewObj, notNull, lambda), 
@@ -142,7 +143,7 @@ float :: (RenderSym repr) => VS (repr (Type repr))
 float = toState $ typeFromData Float "float" (text "float")
 
 double :: (RenderSym repr) => VS (repr (Type repr))
-double = toState $ typeFromData Float "double" (text "double")
+double = toState $ typeFromData Double "double" (text "double")
 
 char :: (RenderSym repr) => VS (repr (Type repr))
 char = toState $ typeFromData Char "char" (text "char")
@@ -472,7 +473,7 @@ litString :: (RenderSym repr) => String -> VS (repr (Value repr))
 litString s = mkStateVal S.string (doubleQuotedText s)
 
 pi :: (RenderSym repr) => VS (repr (Value repr))
-pi = mkStateVal S.float (text "Math.PI")
+pi = mkStateVal S.double (text "Math.PI")
 
 valueOf :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   VS (repr (Value repr))
@@ -1193,6 +1194,8 @@ numType t1 t2 = numericType (getType t1) (getType t2)
   where numericType Integer Integer = t1
         numericType Float _ = t1
         numericType _ Float = t2
+        numericType Double _ = t1
+        numericType _ Double = t2
         numericType _ _ = error "Numeric types required for numeric expression"
 
 mkExpr :: (RenderSym repr) => Int -> repr (Type repr) -> Doc -> 

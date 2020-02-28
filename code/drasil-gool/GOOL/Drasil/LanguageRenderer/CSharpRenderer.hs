@@ -716,7 +716,8 @@ csCast :: VS (CSharpCode (Type CSharpCode)) ->
   VS (CSharpCode (Value CSharpCode)) -> VS (CSharpCode (Value CSharpCode))
 csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
-  where csCast' Float String _ _ = funcApp "Double.Parse" float [v]
+  where csCast' Double String _ _ = funcApp "Double.Parse" double [v]
+        csCast' Float String _ _ = funcApp "Single.Parse" float [v]
         csCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
           tp)) (valueDoc vl))
 
@@ -754,13 +755,14 @@ csInput :: (RenderSym repr) => VS (repr (Type repr)) -> VS (repr (Value repr))
 csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn 
   -> mkVal t $ text (csInput' (getType t)) <> parens (valueDoc inFn)) inF)
   where csInput' Integer = "Int32.Parse"
-        csInput' Float = "Double.Parse"
+        csInput' Float = "Float.Parse"
+        csInput' Double = "Double.Parse"
         csInput' Boolean = "Boolean.Parse"
         csInput' String = ""
         csInput' Char = "Char.Parse"
         csInput' _ = error "Attempt to read value of unreadable type"
-        csInputImport t = if t `elem` [Integer, Float, Boolean, Char] then 
-          addSystemImport else id
+        csInputImport t = if t `elem` [Integer, Float, Double, Boolean, Char] 
+          then addSystemImport else id
 
 csOpenFileR :: (RenderSym repr) => VS (repr (Value repr)) -> 
   VS (repr (Type repr)) -> VS (repr (Value repr))

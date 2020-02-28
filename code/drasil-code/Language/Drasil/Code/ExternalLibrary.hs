@@ -53,7 +53,7 @@ data Parameter = LockedParam CodeChunk | NameableParam CodeType
 data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
 
 -- Constructor, known parameters, body
-data MethodInfo = CI CodeChunk [Parameter] (NonEmpty Step)
+data MethodInfo = CI CodeChunk [Parameter] [Step]
   -- Method, known parameters, body
   | MI CodeChunk [Parameter] (NonEmpty Step)
 
@@ -149,9 +149,8 @@ customClass = Regular
 implementation :: String -> [MethodInfo] -> ClassInfo
 implementation = Implements
 
-constructorInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo
-constructorInfo _ _ [] = error "constructorInfo should be called with a non-empty list of Step"
-constructorInfo c ps ss = CI c ps (fromList ss)
+constructorInfo :: [Parameter] -> [Step] -> MethodInfo
+constructorInfo = CI
 
 methodInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo
 methodInfo _ _ [] = error "methodInfo should be called with a non-empty list of Step"
@@ -171,10 +170,10 @@ populateSolList arr el fld = [statementStep (\cdchs es -> case (cdchs, es) of
     (_,_) -> error popErr)]
   where popErr = "Fill for populateSolList should provide one CodeChunk and no Exprs"
 
-assignArrayIndex :: Integer -> Step
-assignArrayIndex i = statementStep (\cdchs es -> case (cdchs, es) of
-  ([a],[e]) -> FAsgIndex a i e
-  (_,_) -> error "Fill for assignArrayIndex should provide one CodeChunk and one Expr")
+assignArrayIndex :: Step
+assignArrayIndex = statementStep (\cdchs es -> case (cdchs, es) of
+  ([a],vs) -> FMulti $ zipWith (FAsgIndex a) [0..] vs
+  (_,_) -> error "Fill for assignArrayIndex should provide one CodeChunk")
 
 assignSolFromObj :: CodeChunk -> Step
 assignSolFromObj o = statementStep (\cdchs es -> case (cdchs, es) of

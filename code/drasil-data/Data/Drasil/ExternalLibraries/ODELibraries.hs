@@ -1,5 +1,5 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
-  scipyODE, scipyCall, oslo, osloCall, apacheODE, odeint, odeInfo, odeOptions
+  scipyODE, scipyCall, oslo, osloCall, apacheODE, apacheODECall, odeint, odeInfo, odeOptions
 ) where
 
 import Language.Drasil
@@ -16,12 +16,17 @@ import Language.Drasil.Code (ODEMethod(..), FuncStmt(..), ExternalLibrary,
   returnExprList, fixedReturn,
   ExternalLibraryCall, externalLibCall, choiceStepFill, mandatoryStepFill, 
   mandatoryStepsFill, callStepFill, libCallFill, basicArgFill, functionArgFill, 
-  recordArgFill, unnamedParamFill, populateSolListFill, initSolListWithValFill, 
-  solveAndPopulateWhileFill, returnExprListFill, CodeChunk, codevar, ccObjVar, 
-  implCQD)
+  customObjArgFill, recordArgFill, unnamedParamFill, userDefinedParamFill, 
+  implementationFill, constructorInfoFill, methodInfoFill, appendCurrSolFill, 
+  populateSolListFill, assignArrayIndexFill, assignSolFromObjFill, 
+  initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill,
+  returnExprListFill, fixedStatementFill, CodeChunk, codeType, codevar, 
+  ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Void))
 import qualified GOOL.Drasil as C (CodeType(Boolean, Integer, String))
+
+import Control.Lens ((^.))
 
 -- SciPy -- 
 
@@ -139,8 +144,7 @@ osloCall info = externalLibCall [
     populateSolListFill $ depVar info]]
   where chooseMethod RK45 = 0
         chooseMethod BDF = 1
-        chooseMethod _ = error $ "Chosen ODE solving method is not available" ++
-          " in chosen ODE solving library"
+        chooseMethod _ = error odeMethodUnavailable
 
 odeArgs :: [Argument]
 odeArgs = [inlineArg Float, lockedArg (sy initv),
@@ -223,10 +227,34 @@ apacheODE = externalLib [
         methodInfo getDimension [] [fixedReturn (int 1)],
         methodInfo computeDerivatives [
           lockedParam t, unnamedParam (Array Float), unnamedParam (Array Float)]
-          [assignArrayIndex 0]]) : 
+          [assignArrayIndex]]) : 
       [inlineArg Float, preDefinedArg currVals, inlineArg Float, 
         preDefinedArg currVals]),
     assignSolFromObj stepHandler]]
+
+apacheODECall :: ODEInfo -> ExternalLibraryCall
+apacheODECall info = externalLibCall [
+  choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $ 
+    libCallFill (map (basicArgFill . ($ odeOpts info)) 
+      [stepSize, stepSize, absTol, relTol]),
+  mandatoryStepsFill [callStepFill $ libCallFill [
+      customObjArgFill [depVar info] (implementationFill [
+        methodInfoFill [] [initSolListFromArrayFill $ depVar info], methodInfoFill [] 
+          [callStepFill $ libCallFill [], appendCurrSolFill $ depVar info]])],
+    callStepFill $ libCallFill $ customObjArgFill (otherVars info) 
+      (implementationFill [
+        constructorInfoFill (map userDefinedParamFill $ otherVars info) 
+          (zip (otherVars info) (map sy $ otherVars info)) [], 
+        methodInfoFill [] [fixedStatementFill], 
+        methodInfoFill (map unnamedParamFill [depVar info, ddep]) 
+          [assignArrayIndexFill ddep (odeSyst info)]]) 
+      : map basicArgFill [tInit info, Matrix [[initVal info]], tFinal info, 
+        Matrix [[initVal info]]],
+    assignSolFromObjFill $ depVar info]]
+  where chooseMethod Adams = 0
+        chooseMethod RK45 = 1
+        chooseMethod _ = error odeMethodUnavailable
+        ddep = diffCodeChunk $ depVar info
 
 apacheImport :: String
 apacheImport = "org.apache.commons.math3.ode."
@@ -318,7 +346,7 @@ odeint = externalLib [
       customObjArg [] ode (customClass [
         constructorInfo odeCtor [] [],
         methodInfo odeOp [unnamedParam (List Float), unnamedParam (List Float), 
-          lockedParam t] [assignArrayIndex 0]]),
+          lockedParam t] [assignArrayIndex]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
       preDefinedArg odeintCurrVals,
       inlineArg Float, inlineArg Float, inlineArg Float, 
@@ -400,6 +428,10 @@ y = codevar $ implCQD "y_ode" (nounPhrase
 odeObj :: CodeType
 odeObj = Object "ODE"
 
+odeMethodUnavailable :: String
+odeMethodUnavailable = "Chosen ODE solving method is not available" ++
+          " in chosen ODE solving library"
+
 -- Data 
 
 -- This may be temporary, but need a structure to hold ODE info for now. 
@@ -429,3 +461,8 @@ data ODEOptions = ODEOpts {
 
 odeOptions :: ODEMethod -> Expr -> Expr -> Expr -> ODEOptions
 odeOptions = ODEOpts
+
+diffCodeChunk :: CodeChunk -> CodeChunk
+diffCodeChunk c = codevar $ implCQD ("d" ++ c ^. uid) 
+  (compoundPhrase (nounPhraseSP "change in") (c ^. term)) Nothing (codeType c)
+  (Concat [Label "d", symbol c Implementation]) (getUnit c) 

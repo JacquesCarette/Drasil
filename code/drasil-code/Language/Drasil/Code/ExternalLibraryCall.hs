@@ -41,7 +41,7 @@ data ParameterFill = NameableParamF CodeChunk | UserDefined CodeChunk
 
 data ClassInfoFill = RegularF [MethodInfoFill] | ImplementsF [MethodInfoFill]
 
-data MethodInfoFill = CIF [ParameterFill] [Initializer] (NonEmpty StepFill)
+data MethodInfoFill = CIF [ParameterFill] [Initializer] [StepFill]
   | MIF [ParameterFill] (NonEmpty StepFill)
 
 type Initializer = (CodeChunk, Expr)
@@ -98,8 +98,7 @@ implementationFill = ImplementsF
 
 constructorInfoFill :: [ParameterFill] -> [Initializer] -> [StepFill] -> 
   MethodInfoFill
-constructorInfoFill _ _ [] = error "constructorInfoFill should be called with non-empty list of StepFill"
-constructorInfoFill pfs is sfs = CIF pfs is (fromList sfs)
+constructorInfoFill = CIF
 
 methodInfoFill :: [ParameterFill] -> [StepFill] -> MethodInfoFill
 methodInfoFill _ [] = error "methodInfoFill should be called with non-empty list of StepFill"
@@ -111,8 +110,8 @@ appendCurrSolFill s = statementStepFill [s] []
 populateSolListFill :: CodeChunk -> StepFill
 populateSolListFill s = statementStepFill [s] []
 
-assignArrayIndexFill :: CodeChunk -> Expr -> StepFill
-assignArrayIndexFill a e = statementStepFill [a] [e]
+assignArrayIndexFill :: CodeChunk-> [Expr] -> StepFill
+assignArrayIndexFill a = statementStepFill [a]
 
 assignSolFromObjFill :: CodeChunk -> StepFill
 assignSolFromObjFill s = statementStepFill [s] []

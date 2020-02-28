@@ -149,7 +149,7 @@ customClass = Regular
 implementation :: String -> [MethodInfo] -> ClassInfo
 implementation = Implements
 
-constructorInfo :: [Parameter] -> [Step] -> MethodInfo
+constructorInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo
 constructorInfo = CI
 
 methodInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo

@@ -1,12 +1,13 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
-  scipyODE, scipyCall, oslo, osloCall, apacheODE, apacheODECall, odeint, odeInfo, odeOptions
+  scipyODE, scipyCall, oslo, osloCall, apacheODE, apacheODECall, odeint, 
+  odeintCall, odeInfo, odeOptions
 ) where
 
 import Language.Drasil
 
-import Language.Drasil.Code (ODEMethod(..), FuncStmt(..), ExternalLibrary, 
-  Step, Argument, externalLib, mandatoryStep, mandatorySteps, choiceSteps, 
-  choiceStep, callStep, callRequiresJust, callRequires, libFunction, libMethod, 
+import Language.Drasil.Code (ODEMethod(..), ExternalLibrary, Step, Argument, 
+  externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep,
+  callStep, callRequiresJust, callRequires, libFunction, libMethod, 
   libFunctionWithResult, libMethodWithResult, libConstructor, 
   constructAndReturn, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, functionArg, customObjArg, recordArg, lockedParam, 
@@ -14,14 +15,14 @@ import Language.Drasil.Code (ODEMethod(..), FuncStmt(..), ExternalLibrary,
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
   returnExprList, fixedReturn,
-  ExternalLibraryCall, externalLibCall, choiceStepFill, mandatoryStepFill, 
-  mandatoryStepsFill, callStepFill, libCallFill, basicArgFill, functionArgFill, 
-  customObjArgFill, recordArgFill, unnamedParamFill, userDefinedParamFill, 
-  implementationFill, constructorInfoFill, methodInfoFill, appendCurrSolFill, 
-  populateSolListFill, assignArrayIndexFill, assignSolFromObjFill, 
-  initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill,
-  returnExprListFill, fixedStatementFill, CodeChunk, codeType, codevar, 
-  ccObjVar, implCQD)
+  ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill, 
+  mandatoryStepFill, mandatoryStepsFill, callStepFill, libCallFill, 
+  basicArgFill, functionArgFill, customObjArgFill, recordArgFill, 
+  unnamedParamFill, userDefinedParamFill, customClassFill, implementationFill, 
+  constructorInfoFill, methodInfoFill, appendCurrSolFill, populateSolListFill, 
+  assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
+  initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, 
+  fixedStatementFill, CodeChunk, codeType, codevar, codefunc, ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Void))
 import qualified GOOL.Drasil as C (CodeType(Boolean, Integer, String))
@@ -353,6 +354,27 @@ odeint = externalLib [
       customObjArg [] pop (customClass [
         constructorInfo popCtor [unnamedParam (List Float)] [],
         methodInfo popOp [lockedParam y, lockedParam t] [appendCurrSol y]])]]
+
+odeintCall :: ODEInfo -> ExternalLibraryCall
+odeintCall info = externalLibCall [
+  uncurry choiceStepsFill (chooseMethod $ solveMethod $ odeOpts info),
+  mandatoryStepFill $ callStepFill $ libCallFill $
+    customObjArgFill (otherVars info) (customClassFill [
+      constructorInfoFill (map userDefinedParamFill $ otherVars info) 
+        (zip (otherVars info) (map sy $ otherVars info)) [], 
+      methodInfoFill (map unnamedParamFill [depVar info, ddep]) 
+        [assignArrayIndexFill ddep (odeSyst info)]]) :
+    map basicArgFill [Matrix [[initVal info]], tInit info, tFinal info, 
+      stepSize $ odeOpts info] ++ [
+    customObjArgFill [depVar info] (customClassFill [
+      constructorInfoFill [userDefinedParamFill $ depVar info] 
+        [(depVar info, sy $ depVar info)] [],
+      methodInfoFill [] [appendCurrSolFill $ depVar info]])]]
+  where chooseMethod RK45 = (0, map (callStepFill . libCallFill . map 
+          basicArgFill) [[], [absTol $ odeOpts info, relTol $ odeOpts info]])
+        chooseMethod Adams = (1, [callStepFill $ libCallFill []])
+        chooseMethod _ = error odeMethodUnavailable
+        ddep = diffCodeChunk $ depVar info
 
 odeNameSpace, rkdp5, adamsBash :: String
 odeNameSpace = "boost::numeric::odeint::"

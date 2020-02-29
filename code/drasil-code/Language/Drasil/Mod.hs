@@ -1,7 +1,8 @@
 {-# LANGUAGE GADTs #-}
-module Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..), 
-  Mod(..), Name, ($:=), ffor, fdec, fname, fstdecl, funcData, funcDef, funcQD, 
-  getFuncParams, packmod, prefixFunctions
+module Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
+  FuncStmt(..), Initializer, Mod(..), Name, ($:=), classDef, classImplements, 
+  ctorDef, ffor, fdec, fname, fstdecl, funcData, funcDef, funcQD, 
+  getFuncParams, packmod, packmodRequires, prefixFunctions
 ) where
 
 import Language.Drasil
@@ -20,10 +21,27 @@ import Data.List ((\\), nub)
 
 type Name = String
 
-data Mod = Mod Name String [Func]
+-- Name, description, imports, classes, functions
+data Mod = Mod Name String [String] [Class] [Func]
 
-packmod :: Name -> String -> [Func] -> Mod
-packmod n = Mod (toPlainName n)
+packmod :: Name -> String -> [Class] -> [Func] -> Mod
+packmod n d = packmodRequires n d []
+
+packmodRequires :: Name -> String -> [String] -> [Class] -> [Func] -> Mod
+packmodRequires n = Mod (toPlainName n)
+
+data Class = ClassDef {
+  className :: Name, 
+  implements :: Maybe Name,
+  classDesc :: String,
+  stateVars :: [CodeChunk],
+  methods :: [Func]}
+
+classDef :: Name -> String -> [CodeChunk] -> [Func] -> Class
+classDef n = ClassDef n Nothing
+
+classImplements :: Name -> Name -> String -> [CodeChunk] -> [Func] -> Class
+classImplements n i = ClassDef n (Just i)
      
 data Func = FCD CodeDefinition
           | FDef FuncDef
@@ -40,16 +58,26 @@ funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> Space ->
 funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc 
   (map quantvar i) (spaceToCodeType t) returnDesc fs 
 
+ctorDef :: Name -> String -> [CodeChunk] -> [Initializer] -> [FuncStmt] -> 
+  FuncDef
+ctorDef = CtorDef
+
 data FuncData where
   FuncData :: Name -> String -> DataDesc -> FuncData
   
 data FuncDef where
+  -- Name, description, parameters, return type, return description, statements
   FuncDef :: Name -> String -> [CodeChunk] -> CodeType -> Maybe String -> 
     [FuncStmt] -> FuncDef
+  CtorDef :: Name -> String -> [CodeChunk] -> [Initializer] -> [FuncStmt] -> 
+    FuncDef
+
+type Initializer = (CodeChunk, Expr)
  
 data FuncStmt where
   FAsg :: CodeChunk -> Expr -> FuncStmt
   FAsgIndex :: CodeChunk -> Integer -> Expr -> FuncStmt
+  FAsgObjVar :: CodeChunk -> CodeChunk -> Expr -> FuncStmt -- Object, field, value
   FFor :: CodeChunk -> Expr -> [FuncStmt] -> FuncStmt
   FForEach :: CodeChunk -> Expr -> [FuncStmt] -> FuncStmt
   FWhile :: Expr -> [FuncStmt] -> FuncStmt
@@ -75,6 +103,7 @@ fdec v  = FDec (quantvar v)
 
 getFuncParams :: Func -> [CodeChunk]
 getFuncParams (FDef (FuncDef _ _ ps _ _ _)) = ps
+getFuncParams (FDef (CtorDef _ _ ps _ _)) = ps
 getFuncParams (FData (FuncData _ _ d)) = getInputs d
 getFuncParams (FCD _) = []
 
@@ -86,6 +115,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     fstvars sm (FDecDef cch e) = cch:codevars' e sm
     fstvars sm (FAsg cch e) = cch:codevars' e sm
     fstvars sm (FAsgIndex cch _ e) = cch:codevars' e sm
+    fstvars sm (FAsgObjVar cch _ e) = cch:codevars' e sm
     fstvars sm (FFor cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
     fstvars sm (FForEach cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
     fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
@@ -102,6 +132,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     declared _  (FDecDef cch _) = [cch]
     declared _  (FAsg _ _) = []
     declared _  FAsgIndex {} = []
+    declared _  FAsgObjVar {} = []
     declared sm (FFor cch _ fs) = cch : concatMap (declared sm) fs
     declared sm (FForEach cch _ fs) = cch : concatMap (declared sm) fs
     declared sm (FWhile _ fs) = concatMap (declared sm) fs
@@ -116,12 +147,13 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
 fname :: Func -> Name       
 fname (FCD cd) = codeName cd
 fname (FDef (FuncDef n _ _ _ _ _)) = n
+fname (FDef (CtorDef n _ _ _ _)) = n
 fname (FData (FuncData n _ _)) = n 
 
 prefixFunctions :: [Mod] -> [Mod]
-prefixFunctions = map (\(Mod nm desc fs) -> Mod nm desc $ map pfunc fs)
-  where pfunc f@(FCD _) = f
-        pfunc (FData (FuncData n desc d)) = FData (FuncData (funcPrefix ++ n) 
+prefixFunctions = map (\(Mod nm desc rs cs fs) -> Mod nm desc rs cs $ map pfunc fs)
+  where pfunc (FData (FuncData n desc d)) = FData (FuncData (funcPrefix ++ n) 
           desc d)
         pfunc (FDef (FuncDef n desc a t rd f)) = FDef (FuncDef (funcPrefix ++ n)
           desc a t rd f)
+        pfunc f = f

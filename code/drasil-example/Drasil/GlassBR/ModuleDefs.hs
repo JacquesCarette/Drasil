@@ -23,7 +23,7 @@ implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
 
 readTableMod :: Mod
 readTableMod = packmod "ReadTable"
-  "Provides a function for reading glass ASTM data" [readTable]
+  "Provides a function for reading glass ASTM data" [] [readTable]
 
 readTable :: Func
 readTable = funcData "read_table"
@@ -215,5 +215,5 @@ interpZ = funcDef "interpZ"
 
 interpMod :: Mod
 interpMod = packmod "Interpolation" 
-  "Provides functions for linear interpolation on three-dimensional data" 
+  "Provides functions for linear interpolation on three-dimensional data" []
   [linInterpCT, findCT, extractColumnCT, interpY, interpZ]

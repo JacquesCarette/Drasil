@@ -38,12 +38,13 @@ data FunctionInterface = FI FuncType CodeChunk [Argument] (Maybe Result)
 
 data Result = Assign CodeChunk | Return 
 
-data Argument = 
+data Argument = Arg (Maybe CodeChunk) ArgumentInfo -- Maybe named argument
+
+data ArgumentInfo = 
   -- Not dependent on use case, Maybe is name for the argument
-  LockedArg (Maybe CodeChunk) Expr 
-  -- First Maybe is name for the argument (needed for named parameters)
-  -- Second Maybe is the variable if it needs to be declared and defined prior to calling
-  | Basic (Maybe CodeChunk) CodeType (Maybe CodeChunk) 
+  LockedArg Expr 
+  -- Maybe is the variable if it needs to be declared and defined prior to calling
+  | Basic CodeType (Maybe CodeChunk) 
   | Fn CodeChunk [Parameter] Step
   | Class [Requires] CodeChunk ClassInfo
   | Record FuncName CodeChunk [FieldName]
@@ -111,31 +112,31 @@ constructAndReturn :: CodeChunk -> [Argument] -> FunctionInterface
 constructAndReturn c as = FI Constructor c as (Just Return)
 
 lockedArg :: Expr -> Argument
-lockedArg = LockedArg Nothing
+lockedArg = Arg Nothing . LockedArg
 
 lockedNamedArg :: CodeChunk -> Expr -> Argument
-lockedNamedArg n = LockedArg (Just n)
+lockedNamedArg n = Arg (Just n) . LockedArg
 
 inlineArg :: CodeType -> Argument
-inlineArg t = Basic Nothing t Nothing
+inlineArg t = Arg Nothing $ Basic t Nothing
 
 inlineNamedArg :: CodeChunk ->  CodeType -> Argument
-inlineNamedArg n t = Basic (Just n) t Nothing
+inlineNamedArg n t = Arg (Just n) $ Basic t Nothing
 
 preDefinedArg :: CodeChunk -> Argument
-preDefinedArg v = Basic Nothing (codeType v) (Just v)
+preDefinedArg v = Arg Nothing $ Basic (codeType v) (Just v)
 
 preDefinedNamedArg :: CodeChunk -> CodeChunk -> Argument
-preDefinedNamedArg n v = Basic (Just n) (codeType v) (Just v)
+preDefinedNamedArg n v = Arg (Just n) $ Basic (codeType v) (Just v)
 
 functionArg :: CodeChunk -> [Parameter] -> Step -> Argument
-functionArg = Fn
+functionArg f ps b = Arg Nothing (Fn f ps b)
 
 customObjArg :: [Requires] -> CodeChunk -> ClassInfo -> Argument
-customObjArg = Class
+customObjArg rs o ci = Arg Nothing (Class rs o ci)
 
 recordArg :: FuncName -> CodeChunk -> [FieldName] -> Argument
-recordArg = Record
+recordArg c o fs = Arg Nothing (Record c o fs)
 
 lockedParam :: CodeChunk -> Parameter
 lockedParam = LockedParam

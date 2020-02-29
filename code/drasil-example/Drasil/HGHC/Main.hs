@@ -5,7 +5,7 @@ module Main (main) where
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
 --   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
 --   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
---   Visibility(..))
+--   Visibility(..), defaultChoices)
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -16,7 +16,7 @@ import Drasil.HGHC.Body (srs, printSetting) --thisSI
 
 {- When we want to actually generate code from this again, uncomment
 thisChoices :: Choices
-thisChoices = Choices {
+thisChoices = defaultChoices {
   lang             = [Python, Cpp, CSharp, Java],
   modularity       = Modular Combined,
   impType          = Program,

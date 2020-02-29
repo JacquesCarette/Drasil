@@ -444,6 +444,9 @@ convStmt (FDecDef v e) = do
 convStmt (FVal e) = do
   e' <- convExpr e
   return $ valState e'
+convStmt (FMulti ss) = do
+  stmts <- mapM convStmt ss
+  return $ multi stmts
 convStmt (FAppend a b) = do
   a' <- convExpr a
   b' <- convExpr b

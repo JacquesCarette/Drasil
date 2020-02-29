@@ -1,22 +1,33 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
-  scipyODE, oslo, apacheODE, odeint
+  scipyODE, scipyCall, oslo, osloCall, apacheODE, apacheODECall, odeint, 
+  odeintCall, odeInfo, odeOptions
 ) where
 
 import Language.Drasil
 
-import Language.Drasil.Code (ExternalLibrary, Step, Argument, 
-  externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep, callStep,
-  callRequiresJust, callRequires, libFunction, libMethod, 
+import Language.Drasil.Code (ODEMethod(..), ExternalLibrary, Step, Argument, 
+  externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep,
+  callStep, callRequiresJust, callRequires, libFunction, libMethod, 
   libFunctionWithResult, libMethodWithResult, libConstructor, 
   constructAndReturn, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, functionArg, customObjArg, recordArg, lockedParam, 
   unnamedParam, customClass, implementation, constructorInfo, methodInfo, 
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
-  returnExprList, fixedReturn, CodeChunk, codevar, codefunc, ccObjVar, implCQD)
+  returnExprList, fixedReturn,
+  ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill, 
+  mandatoryStepFill, mandatoryStepsFill, callStepFill, libCallFill, 
+  basicArgFill, functionArgFill, customObjArgFill, recordArgFill, 
+  unnamedParamFill, userDefinedParamFill, customClassFill, implementationFill, 
+  constructorInfoFill, methodInfoFill, appendCurrSolFill, populateSolListFill, 
+  assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
+  initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, 
+  fixedStatementFill, CodeChunk, codeType, codevar, codefunc, ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Void))
 import qualified GOOL.Drasil as C (CodeType(Boolean, Integer, String))
+
+import Control.Lens ((^.))
 
 -- SciPy -- 
 
@@ -30,10 +41,29 @@ scipyODE = externalLib [
     setIntegratorMethod [vode, methodArg "adams", atol, rtol],
     setIntegratorMethod [vode, methodArg "bdf", atol, rtol],
     setIntegratorMethod [lockedArg (str "dopri45"), atol, rtol]],
-  mandatorySteps [callStep $ libMethod r setInitVal [inlineArg Float],
+  mandatorySteps [callStep $ libMethod r setInitVal 
+      [inlineArg Float, inlineArg Float],
     initSolListWithVal,
     solveAndPopulateWhile (libMethod r successful []) rt 
       (libMethod r integrateStep [inlineArg Float]) ry]]
+
+scipyCall :: ODEInfo -> ExternalLibraryCall
+scipyCall info = externalLibCall [
+  mandatoryStepFill $ callStepFill $ libCallFill [functionArgFill 
+    (map unnamedParamFill [indepVar info, depVar info]) 
+    (returnExprListFill $ odeSyst info)],
+  uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
+  mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill 
+      [initVal info, tInit info],
+    initSolListWithValFill (depVar info) (initVal info),
+    solveAndPopulateWhileFill (libCallFill []) (tFinal info) 
+      (libCallFill [basicArgFill (sy rt + stepSize (odeOpts info))]) 
+      (depVar info)]]
+  where chooseMethod Adams = (0, solveMethodFill)
+        chooseMethod BDF = (1, solveMethodFill)
+        chooseMethod RK45 = (2, solveMethodFill)
+        solveMethodFill = callStepFill $ libCallFill $ map basicArgFill 
+          [absTol $ odeOpts info, relTol $ odeOpts info]
 
 scipyImport :: String
 scipyImport = "scipy.integrate"
@@ -101,6 +131,21 @@ oslo = externalLib [
   mandatorySteps (callRequiresJust "System.Linq" (libMethodWithResult sol 
       solveFromToStep (map inlineArg [Float, Float, Float]) points) :
     populateSolList points sp x)]
+
+osloCall :: ODEInfo -> ExternalLibraryCall
+osloCall info = externalLibCall [
+  mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ initVal info],
+  choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $ 
+    libCallFill [basicArgFill $ tInit info, 
+      functionArgFill (map unnamedParamFill [indepVar info, depVar info]) $ 
+        returnExprListFill (odeSyst info), 
+      recordArgFill [absTol $ odeOpts info, relTol $ odeOpts info]],
+  mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill 
+      [tInit info, tFinal info, stepSize $ odeOpts info],
+    populateSolListFill $ depVar info]]
+  where chooseMethod RK45 = 0
+        chooseMethod BDF = 1
+        chooseMethod _ = error odeMethodUnavailable
 
 odeArgs :: [Argument]
 odeArgs = [inlineArg Float, lockedArg (sy initv),
@@ -184,10 +229,34 @@ apacheODE = externalLib [
         methodInfo getDimension [] [fixedReturn (int 1)],
         methodInfo computeDerivatives [
           lockedParam t, unnamedParam (Array Float), unnamedParam (Array Float)]
-          [assignArrayIndex 0]]) : 
+          [assignArrayIndex]]) : 
       [inlineArg Float, preDefinedArg currVals, inlineArg Float, 
         preDefinedArg currVals]),
     assignSolFromObj stepHandler]]
+
+apacheODECall :: ODEInfo -> ExternalLibraryCall
+apacheODECall info = externalLibCall [
+  choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $ 
+    libCallFill (map (basicArgFill . ($ odeOpts info)) 
+      [stepSize, stepSize, absTol, relTol]),
+  mandatoryStepsFill [callStepFill $ libCallFill [
+      customObjArgFill [depVar info] (implementationFill [
+        methodInfoFill [] [initSolListFromArrayFill $ depVar info], methodInfoFill [] 
+          [callStepFill $ libCallFill [], appendCurrSolFill $ depVar info]])],
+    callStepFill $ libCallFill $ customObjArgFill (otherVars info) 
+      (implementationFill [
+        constructorInfoFill (map userDefinedParamFill $ otherVars info) 
+          (zip (otherVars info) (map sy $ otherVars info)) [], 
+        methodInfoFill [] [fixedStatementFill], 
+        methodInfoFill (map unnamedParamFill [depVar info, ddep]) 
+          [assignArrayIndexFill ddep (odeSyst info)]]) 
+      : map basicArgFill [tInit info, Matrix [[initVal info]], tFinal info, 
+        Matrix [[initVal info]]],
+    assignSolFromObjFill $ depVar info]]
+  where chooseMethod Adams = 0
+        chooseMethod RK45 = 1
+        chooseMethod _ = error odeMethodUnavailable
+        ddep = diffCodeChunk $ depVar info
 
 apacheImport :: String
 apacheImport = "org.apache.commons.math3.ode."
@@ -279,7 +348,7 @@ odeint = externalLib [
       customObjArg [] "Class representing an ODE system" ode (customClass [
         constructorInfo odeCtor [] [],
         methodInfo odeOp [unnamedParam (List Float), unnamedParam (List Float), 
-          lockedParam t] [assignArrayIndex 0]]),
+          lockedParam t] [assignArrayIndex]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
       preDefinedArg odeintCurrVals,
       inlineArg Float, inlineArg Float, inlineArg Float, 
@@ -288,6 +357,27 @@ odeint = externalLib [
         pop (customClass [
           constructorInfo popCtor [unnamedParam (List Float)] [],
           methodInfo popOp [lockedParam y, lockedParam t] [appendCurrSol y]])]]
+
+odeintCall :: ODEInfo -> ExternalLibraryCall
+odeintCall info = externalLibCall [
+  uncurry choiceStepsFill (chooseMethod $ solveMethod $ odeOpts info),
+  mandatoryStepFill $ callStepFill $ libCallFill $
+    customObjArgFill (otherVars info) (customClassFill [
+      constructorInfoFill (map userDefinedParamFill $ otherVars info) 
+        (zip (otherVars info) (map sy $ otherVars info)) [], 
+      methodInfoFill (map unnamedParamFill [depVar info, ddep]) 
+        [assignArrayIndexFill ddep (odeSyst info)]]) :
+    map basicArgFill [Matrix [[initVal info]], tInit info, tFinal info, 
+      stepSize $ odeOpts info] ++ [
+    customObjArgFill [depVar info] (customClassFill [
+      constructorInfoFill [userDefinedParamFill $ depVar info] 
+        [(depVar info, sy $ depVar info)] [],
+      methodInfoFill [] [appendCurrSolFill $ depVar info]])]]
+  where chooseMethod RK45 = (0, map (callStepFill . libCallFill . map 
+          basicArgFill) [[], [absTol $ odeOpts info, relTol $ odeOpts info]])
+        chooseMethod Adams = (1, [callStepFill $ libCallFill []])
+        chooseMethod _ = error odeMethodUnavailable
+        ddep = diffCodeChunk $ depVar info
 
 odeNameSpace, rkdp5, adamsBash :: String
 odeNameSpace = "boost::numeric::odeint::"
@@ -362,3 +452,42 @@ y = codevar $ implCQD "y_ode" (nounPhrase
 
 odeObj :: CodeType
 odeObj = Object "ODE"
+
+odeMethodUnavailable :: String
+odeMethodUnavailable = "Chosen ODE solving method is not available" ++
+          " in chosen ODE solving library"
+
+-- Data 
+
+-- This may be temporary, but need a structure to hold ODE info for now. 
+-- Goal will be for this info to be populated by the instance model for the ODE and the Choices structure.
+-- Probably doesn't belong here, but where?
+data ODEInfo = ODEInfo {
+  indepVar :: CodeChunk,
+  depVar :: CodeChunk,
+  otherVars :: [CodeChunk],
+  tInit :: Expr,
+  tFinal :: Expr,
+  initVal :: Expr,
+  odeSyst :: [Expr],
+  odeOpts :: ODEOptions
+}
+
+odeInfo :: CodeChunk -> CodeChunk -> [CodeChunk] -> Expr -> Expr -> Expr -> 
+  [Expr] -> ODEOptions -> ODEInfo
+odeInfo = ODEInfo
+
+data ODEOptions = ODEOpts {
+  solveMethod :: ODEMethod,
+  absTol :: Expr,
+  relTol :: Expr,
+  stepSize :: Expr
+}
+
+odeOptions :: ODEMethod -> Expr -> Expr -> Expr -> ODEOptions
+odeOptions = ODEOpts
+
+diffCodeChunk :: CodeChunk -> CodeChunk
+diffCodeChunk c = codevar $ implCQD ("d" ++ c ^. uid) 
+  (compoundPhrase (nounPhraseSP "change in") (c ^. term)) Nothing (codeType c)
+  (Concat [Label "d", symbol c Implementation]) (getUnit c) 

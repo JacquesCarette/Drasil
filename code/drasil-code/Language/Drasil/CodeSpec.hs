@@ -141,7 +141,8 @@ data Choices = Choices {
   constStructure :: ConstantStructure,
   constRepr :: ConstantRepr,
   conceptMatch :: ConceptMatchMap,
-  auxFiles :: [AuxFile]
+  auxFiles :: [AuxFile],
+  odeMethod :: [ODEMethod]
 }
 
 data Modularity = Modular InputModule | Unmodular
@@ -186,6 +187,8 @@ data AuxFile = SampleInput deriving Eq
 data Visibility = Show
                 | Hide
 
+data ODEMethod = RK45 | BDF | Adams
+
 inputModule :: Choices -> InputModule
 inputModule c = inputModule' $ modularity c
   where inputModule' Unmodular = Combined
@@ -207,7 +210,8 @@ defaultChoices = Choices {
   constStructure = Inline,
   constRepr = Const,
   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
-  auxFiles = [SampleInput]
+  auxFiles = [SampleInput],
+  odeMethod = [RK45]
 }
 
 -- medium hacks ---

@@ -4,7 +4,8 @@ import Language.Drasil (QDefinition)
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
-  ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), Visibility(..))
+  ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), Visibility(..),
+  defaultChoices)
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -15,7 +16,7 @@ code = codeSpec si choices []
 -- Sub interpolation mod into list when possible
 
 choices :: Choices
-choices = Choices {
+choices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java],
   modularity = Modular Combined,
   impType = Program,

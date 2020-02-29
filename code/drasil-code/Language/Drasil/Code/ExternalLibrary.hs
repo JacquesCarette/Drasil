@@ -29,7 +29,7 @@ type StepGroup = NonEmpty [Step]
 
 data Step = Call [Requires] FunctionInterface
   -- A while loop -- function calls in the condition, other conditions, steps for the body
-  | Loop (NonEmpty FunctionInterface) ([CodeChunk] -> Condition) (NonEmpty Step)
+  | Loop (NonEmpty FunctionInterface) ([Expr] -> Condition) (NonEmpty Step)
   -- For when a statement is needed, but does not interface with the external library
   | Statement ([CodeChunk] -> [Expr] -> FuncStmt)
 
@@ -54,7 +54,7 @@ data Parameter = LockedParam CodeChunk | NameableParam CodeType
 data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
 
 -- Constructor, known parameters, body
-data MethodInfo = CI CodeChunk [Parameter] (NonEmpty Step)
+data MethodInfo = CI CodeChunk [Parameter] [Step]
   -- Method, known parameters, body
   | MI CodeChunk [Parameter] (NonEmpty Step)
 
@@ -86,7 +86,7 @@ callRequiresJust i = Call [i]
 callRequires :: [Requires] -> FunctionInterface -> Step
 callRequires = Call
 
-loopStep :: [FunctionInterface] -> ([CodeChunk] -> Condition) -> [Step] -> Step
+loopStep :: [FunctionInterface] -> ([Expr] -> Condition) -> [Step] -> Step
 loopStep [] _ _ = error "loopStep should be called with a non-empty list of FunctionInterface"
 loopStep _ _ [] = error "loopStep should be called with a non-empty list of Step"
 loopStep fis c ss = Loop (fromList fis) c (fromList ss)
@@ -151,8 +151,7 @@ implementation :: String -> [MethodInfo] -> ClassInfo
 implementation = Implements
 
 constructorInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo
-constructorInfo _ _ [] = error "constructorInfo should be called with a non-empty list of Step"
-constructorInfo c ps ss = CI c ps (fromList ss)
+constructorInfo = CI
 
 methodInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo
 methodInfo _ _ [] = error "methodInfo should be called with a non-empty list of Step"
@@ -172,10 +171,10 @@ populateSolList arr el fld = [statementStep (\cdchs es -> case (cdchs, es) of
     (_,_) -> error popErr)]
   where popErr = "Fill for populateSolList should provide one CodeChunk and no Exprs"
 
-assignArrayIndex :: Integer -> Step
-assignArrayIndex i = statementStep (\cdchs es -> case (cdchs, es) of
-  ([a],[e]) -> FAsgIndex a i e
-  (_,_) -> error "Fill for assignArrayIndex should provide one CodeChunk and one Expr")
+assignArrayIndex :: Step
+assignArrayIndex = statementStep (\cdchs es -> case (cdchs, es) of
+  ([a],vs) -> FMulti $ zipWith (FAsgIndex a) [0..] vs
+  (_,_) -> error "Fill for assignArrayIndex should provide one CodeChunk")
 
 assignSolFromObj :: CodeChunk -> Step
 assignSolFromObj o = statementStep (\cdchs es -> case (cdchs, es) of
@@ -197,8 +196,8 @@ initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
 solveAndPopulateWhile :: FunctionInterface -> CodeChunk -> FunctionInterface -> 
   CodeChunk -> Step
 solveAndPopulateWhile lc iv slv popArr = loopStep [lc] (\case 
-  [ub] -> sy iv $< sy ub
-  _ -> error "Fill for solveAndPopulateWhile should provide one CodeChunk") 
+  [ub] -> sy iv $< ub
+  _ -> error "Fill for solveAndPopulateWhile should provide one Expr") 
   [callStep slv, appendCurrSol popArr]
 
 returnExprList :: Step

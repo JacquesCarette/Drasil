@@ -89,6 +89,7 @@ data FuncStmt where
   FDec :: CodeChunk -> FuncStmt
   FDecDef :: CodeChunk -> Expr -> FuncStmt
   FVal :: Expr -> FuncStmt
+  FMulti :: [FuncStmt] -> FuncStmt
   -- slight hack, for now
   FAppend :: Expr -> Expr -> FuncStmt
   
@@ -125,6 +126,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     fstvars _  (FThrow _) = [] -- is this right?
     fstvars _  FContinue = []
     fstvars sm (FVal v) = codevars' v sm
+    fstvars sm (FMulti ss) = concatMap (fstvars sm) ss
     fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
 
     declared :: ChunkDB -> FuncStmt -> [CodeChunk]
@@ -142,6 +144,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     declared _  (FThrow _) = [] -- is this right?
     declared _  FContinue = []
     declared _  (FVal _) = []
+    declared sm (FMulti ss) = concatMap (declared sm) ss
     declared _  (FAppend _ _) = []
        
 fname :: Func -> Name       

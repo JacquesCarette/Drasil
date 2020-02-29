@@ -1,5 +1,6 @@
 module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
-  genModule, genDoxConfig, primaryClass, auxClass, fApp, fAppInOut, mkParam
+  genModuleWithImports, genModule, genDoxConfig, primaryClass, auxClass, fApp, 
+  fAppInOut, mkParam
 ) where
 
 import Language.Drasil
@@ -18,11 +19,11 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Monad.Reader (Reader, ask, withReader)
 
-genModule :: (ProgramSym repr) => Name -> String
+genModuleWithImports :: (ProgramSym repr) => Name -> String -> [String]
   -> [Reader DrasilState (Maybe (MS (repr (Method repr))))]
   -> [Reader DrasilState (Maybe (CS (repr (Class repr))))]
   -> Reader DrasilState (FS (repr (RenderFile repr)))
-genModule n desc maybeMs maybeCs = do
+genModuleWithImports n desc is maybeMs maybeCs = do
   g <- ask
   let updateState = withReader (\s -> s { currentModule = n })
       -- Below line of code cannot be simplified because authors has a generic type
@@ -34,7 +35,13 @@ genModule n desc maybeMs maybeCs = do
               | CommentFunc `elem` commented g && not (null ms) = docMod "" []  
                   (date g)
               | otherwise                                       = id
-  return $ commMod $ fileDoc $ buildModule n [] (catMaybes ms) (catMaybes cs)
+  return $ commMod $ fileDoc $ buildModule n is (catMaybes ms) (catMaybes cs)
+
+genModule :: (ProgramSym repr) => Name -> String
+  -> [Reader DrasilState (Maybe (MS (repr (Method repr))))]
+  -> [Reader DrasilState (Maybe (CS (repr (Class repr))))]
+  -> Reader DrasilState (FS (repr (RenderFile repr)))
+genModule n desc = genModuleWithImports n desc []
 
 genDoxConfig :: (AuxiliarySym repr) => String -> GOOLState ->
   Reader DrasilState [repr (Auxiliary repr)]

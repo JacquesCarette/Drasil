@@ -11,7 +11,8 @@ import Language.Drasil hiding (int, log, ln, exp,
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (paramComment, returnComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
-import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, genModule, mkParam)
+import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, 
+  genModuleWithImports, mkParam, primaryClass)
 import Language.Drasil.Code.Imperative.Helpers (getUpperBound, liftS, lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
@@ -28,13 +29,15 @@ import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
   getPatternInputs)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..), 
   Mod(..), Name, fstdecl)
+import qualified Language.Drasil.Mod as M (Class(..))
 
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), PermanenceSym(..), 
   BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  nonInitConstructor, convType, FS, MS, VS, onStateValue) 
+  StateVarSym(..), ClassSym(..), nonInitConstructor, convType, FS, CS, MS, VS, 
+  onStateValue) 
 import qualified GOOL.Drasil as C (CodeType(List))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -139,6 +142,13 @@ genConstructor :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) =>
   Label -> String -> [c] -> [MS (repr (Block repr))] -> 
   Reader DrasilState (MS (repr (Method repr)))
 genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
+
+genInitConstructor :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) =>
+  Label -> String -> [c] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
+genInitConstructor n desc p is = genMethod (`constructor` is) n desc p 
+  Nothing
 
 genMethod :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   ([MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
@@ -323,11 +333,22 @@ genCaseBlock t v c cs = do
 -- medium hacks --
 genModDef :: (ProgramSym repr) => Mod -> 
   Reader DrasilState (FS (repr (RenderFile repr)))
-genModDef (Mod n desc fs) = genModule n desc (map (fmap Just . genFunc) fs) []
+genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap 
+  Just . genFunc) fs) 
+  (case cs of [] -> []
+              (cl:cls) -> fmap Just (genClass primaryClass cl) : 
+                map (fmap Just . genClass auxClass) cls)
 
 genModFuncs :: (ProgramSym repr) => Mod -> 
   [Reader DrasilState (MS (repr (Method repr)))]
-genModFuncs (Mod _ _ fs) = map genFunc fs
+genModFuncs (Mod _ _ _ _ fs) = map genFunc fs
+
+genClass :: (ProgramSym repr) => (String -> Label -> Maybe Label -> 
+  [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
+  -> Reader DrasilState (CS (repr (Class repr)))) -> M.Class -> 
+  Reader DrasilState (CS (repr (Class repr)))
+genClass f (M.ClassDef n i desc svs ms) = f n desc i (map (\v -> 
+  pubMVar $ var (codeName v) (convType $ codeType v)) svs) (mapM genFunc ms) 
 
 genFunc :: (ProgramSym repr) => Func -> Reader DrasilState (MS (repr (Method repr)))
 genFunc (FDef (FuncDef n desc parms o rd s)) = do
@@ -335,6 +356,15 @@ genFunc (FDef (FuncDef n desc parms o rd s)) = do
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ parms)
   publicFunc n (convType o) desc parms rd [block $ map varDec vars ++ stmts]
+genFunc (FDef (CtorDef n desc parms i s)) = do
+  g <- ask
+  inits <- mapM (convExpr . snd) i
+  let initvars = map ((\iv -> var (codeName iv) (convType $ codeType iv)) . 
+        fst) i
+  stmts <- mapM convStmt s
+  vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ parms)
+  genInitConstructor n desc parms (zip initvars inits) 
+    [block $ map varDec vars ++ stmts]
 genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 genFunc (FCD cd) = genCalcFunc cd
 
@@ -350,6 +380,12 @@ convStmt (FAsgIndex v i e) = do
   let vi = arrayElem i v'
   l <- maybeLog vi
   return $ multi $ assign vi e' : l
+convStmt (FAsgObjVar o v e) = do
+  e' <- convExpr e
+  o' <- mkVar o
+  let ov = objVar o' (var (codeName v) (convType $ codeType v))
+  l <- maybeLog ov
+  return $ multi $ assign ov e' : l
 convStmt (FFor v e st) = do
   stmts <- mapM convStmt st
   vari <- mkVar v

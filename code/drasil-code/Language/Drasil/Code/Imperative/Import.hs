@@ -207,14 +207,13 @@ convExpr (FCall (C c) x) = do
   maybe (error $ "Call to non-existent function" ++ funcNm) 
     (\f -> fApp f funcNm funcTp args) (Map.lookup funcNm mem)
 convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
-convExpr (New (C c) x) = do
+convExpr (New c x) = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
       funcCd = quantfunc (symbResolve info c)
       funcTp = convType $ codeType funcCd
   args <- mapM convExpr x
   return $ newObj funcTp args
-convExpr New{}   = return $ litString "**convExpr :: New unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ litFloat (fromIntegral a) #/ litFloat (fromIntegral b) -- hack to deal with integer division

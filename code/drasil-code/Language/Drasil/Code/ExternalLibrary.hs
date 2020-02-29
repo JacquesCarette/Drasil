@@ -19,8 +19,6 @@ import GOOL.Drasil (CodeType)
 
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
-type FuncName = String
-type FieldName = String
 type Condition = Expr
 type Requires = String
 
@@ -47,16 +45,17 @@ data ArgumentInfo =
   | Basic CodeType (Maybe CodeChunk) 
   | Fn CodeChunk [Parameter] Step
   | Class [Requires] CodeChunk ClassInfo
-  | Record FuncName CodeChunk [FieldName]
+  -- constructor, object, fields
+  | Record CodeChunk CodeChunk [CodeChunk]
 
 data Parameter = LockedParam CodeChunk | NameableParam CodeType
 
 data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
 
--- Constructor: known parameters, body
-data MethodInfo = CI [Parameter] (NonEmpty Step)
-  -- Method name, parameters, return type, body
-  | MI FuncName [Parameter] CodeType (NonEmpty Step)
+-- Constructor, known parameters, body
+data MethodInfo = CI CodeChunk [Parameter] (NonEmpty Step)
+  -- Method, known parameters, body
+  | MI CodeChunk [Parameter] (NonEmpty Step)
 
 data FuncType = Function | Method CodeChunk | Constructor
 
@@ -135,7 +134,7 @@ functionArg f ps b = Arg Nothing (Fn f ps b)
 customObjArg :: [Requires] -> CodeChunk -> ClassInfo -> Argument
 customObjArg rs o ci = Arg Nothing (Class rs o ci)
 
-recordArg :: FuncName -> CodeChunk -> [FieldName] -> Argument
+recordArg :: CodeChunk -> CodeChunk -> [CodeChunk] -> Argument
 recordArg c o fs = Arg Nothing (Record c o fs)
 
 lockedParam :: CodeChunk -> Parameter
@@ -150,13 +149,13 @@ customClass = Regular
 implementation :: String -> [MethodInfo] -> ClassInfo
 implementation = Implements
 
-constructorInfo :: [Parameter] -> [Step] -> MethodInfo
-constructorInfo _ [] = error "constructorInfo should be called with a non-empty list of Step"
-constructorInfo ps ss = CI ps (fromList ss)
+constructorInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo
+constructorInfo _ _ [] = error "constructorInfo should be called with a non-empty list of Step"
+constructorInfo c ps ss = CI c ps (fromList ss)
 
-methodInfo :: FuncName -> [Parameter] -> CodeType -> [Step] -> MethodInfo
-methodInfo _ _ _ [] = error "methodInfo should be called with a non-empty list of Step"
-methodInfo n ps t ss = MI n ps t (fromList ss)
+methodInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo
+methodInfo _ _ [] = error "methodInfo should be called with a non-empty list of Step"
+methodInfo m ps ss = MI m ps (fromList ss)
 
 appendCurrSol :: CodeChunk -> Step
 appendCurrSol curr = statementStep (\cdchs es -> case (cdchs, es) of

@@ -4,5 +4,7 @@ import Language.Drasil
 
 import Language.Drasil.Chunk.Code (CodeChunk)
 
+import Control.Lens ((^.))
+
 new :: CodeChunk -> [Expr] -> Expr
-new c = New (sy c)
+new c = New (c ^. uid)

@@ -15,8 +15,8 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc,
   codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
-import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name, fname, getFuncParams, packmod, 
-  prefixFunctions)
+import Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
+  Mod(..), Name, fname, getFuncParams, packmod, prefixFunctions)
 
 import GOOL.Drasil (CodeType)
 
@@ -110,7 +110,7 @@ codeSpec SI {_sys = sys
         cMap = constraintMap cs,
         constants = const',
         mods = prefixFunctions $ packmod "Calculations" 
-          "Provides functions for calculating the outputs" 
+          "Provides functions for calculating the outputs" []
           (map FCD exOrder) : ms,
         sysinfodb = db,
         smplData = sd
@@ -224,6 +224,7 @@ convertRel _ _ = error "Conversion failed"
 
 asVC :: Func -> QuantityDict
 asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
+asVC (FDef (CtorDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
 asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
 asVC (FCD _) = error "Can't make QuantityDict from FCD function" -- codeVC cd (codeSymb cd) (cd ^. typ)
 
@@ -237,6 +238,7 @@ asExpr' f = sy $ asVC' f
 -- FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
 asVC' (FDef (FuncDef n _ _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
+asVC' (FDef (CtorDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
@@ -249,7 +251,8 @@ getAdditionalVars chs ms = map codevar (inFileName
         inParamsVar Unbundled = []
         constsVar (Store Bundled) = [consts]
         constsVar _ = []
-        funcParams (Mod _ _ fs) = concatMap getFuncParams fs
+        funcParams (Mod _ _ _ cs fs) = concatMap getFuncParams (fs ++ 
+          concatMap methods cs)
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
@@ -273,7 +276,8 @@ modExportMap cs@CSI {
     ++ getExpConstraints prn chs (getConstraints (cMap cs) ins)
     ++ getExpInputFormat prn chs extIns
     ++ getExpOutput prn chs (outputs cs)
-  where mpair (Mod n _ fs) = map fname fs `zip` repeat (defModName m n)
+  where mpair (Mod n _ _ cls fs) = (map className cls ++ map fname (fs ++ 
+          concatMap methods cls)) `zip` repeat (defModName m n)
         defModName Unmodular _ = prn
         defModName _ nm = nm
 

@@ -16,7 +16,7 @@ import Language.Drasil.Code (ExternalLibrary, Step, Argument,
   returnExprList, fixedReturn, CodeChunk, codevar, codefunc, ccObjVar, implCQD)
 
 import GOOL.Drasil (CodeType(Float, List, Array, Object, Void))
-import qualified GOOL.Drasil as C (CodeType(Boolean, Integer))
+import qualified GOOL.Drasil as C (CodeType(Boolean, Integer, String))
 
 -- SciPy -- 
 
@@ -40,11 +40,11 @@ scipyImport = "scipy.integrate"
 
 atol, rtol, vode :: Argument
 vode = lockedArg (str "vode")
-atol = inlineNamedArg "atol" Float
-rtol = inlineNamedArg "rtol" Float
+atol = inlineNamedArg atolArg Float
+rtol = inlineNamedArg rtolArg Float
 
 methodArg :: String -> Argument
-methodArg = lockedNamedArg "method" . str
+methodArg = lockedNamedArg mthdArg . str
 
 setIntegratorMethod :: [Argument] -> Step
 setIntegratorMethod = callStep . libMethod r setIntegrator
@@ -52,10 +52,19 @@ setIntegratorMethod = callStep . libMethod r setIntegrator
 odeT :: CodeType
 odeT = Object "ode"
 
-f, r, rt, ry, odefunc, setIntegrator, setInitVal, successful, 
-  integrateStep :: CodeChunk
+f, mthdArg, atolArg, rtolArg, r, rt, ry, odefunc, setIntegrator, setInitVal, 
+  successful, integrateStep :: CodeChunk
 f = codevar $ implCQD "f_scipy" (nounPhrase "function representing ODE system" 
   "functions representing ODE system") Nothing (List Float) (Label "f") Nothing
+mthdArg = codevar $ implCQD "method_scipy" (nounPhrase 
+  "chosen method for solving ODE" "chosen methods for solving ODE") 
+  Nothing C.String (Label "method") Nothing
+atolArg = codevar $ implCQD "atol_scipy" (nounPhrase 
+  "absolute tolerance for ODE solution" "absolute tolerances for ODE solution") 
+  Nothing Float (Label "atol") Nothing
+rtolArg = codevar $ implCQD "rtol_scipy" (nounPhrase 
+  "relative tolerance for ODE solution" "relative tolerances for ODE solution") 
+  Nothing Float (Label "rtol") Nothing
 r = codevar $ implCQD "r_scipy" (nounPhrase "ODE object" "ODE objects") Nothing 
   odeT (Label "r") Nothing
 rt = ccObjVar r t
@@ -79,6 +88,7 @@ integrateStep = codefunc $ implCQD "integrate_scipy" (nounPhrase
   "method that performs one integration step on an ODE"
   "methods that perform one integration step on an ODE")
   Nothing Void (Label "integrate") Nothing
+
 
 -- Oslo (C#) --
 

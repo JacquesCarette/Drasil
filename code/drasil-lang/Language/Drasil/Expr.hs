@@ -53,6 +53,7 @@ data Expr where
   FCall    :: Expr -> [Expr] -> Expr -- F(x) is (FCall F [x]) or similar
                                   -- FCall accepts a list of params
                                   -- F(x,y) would be (FCall F [x,y]) or sim.
+  New      :: UID -> [Expr] -> Expr -- Actor creation given UID and parameters
   Case     :: Completeness -> [(Expr,Relation)] -> Expr -- For multi-case 
                                                      -- expressions, each pair
                                                      -- represents one case

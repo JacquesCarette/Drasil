@@ -23,7 +23,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
-  ConstantRepr(..), ConstantStructure(..), Structure(..), asExpr)
+  ConstantRepr(..), ConstantStructure(..), Structure(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
@@ -217,6 +217,13 @@ convExpr (FCall (C c) x) = do
   maybe (error $ "Call to non-existent function" ++ funcNm) 
     (\f -> fApp f funcNm funcTp args) (Map.lookup funcNm mem)
 convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
+convExpr (New c x) = do
+  g <- ask
+  let info = sysinfodb $ csi $ codeSpec g
+      funcCd = quantfunc (symbResolve info c)
+      funcTp = convType $ codeType funcCd
+  args <- mapM convExpr x
+  return $ newObj funcTp args
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ litFloat (fromIntegral a) #/ litFloat (fromIntegral b) -- hack to deal with integer division
@@ -434,8 +441,8 @@ convStmt (FDecDef v e) = do
         return $ varDecDef v' e'
   dd <- convDecDef e
   return $ multi $ dd : l
-convStmt (FProcCall n l) = do
-  e' <- convExpr (FCall (asExpr n) l)
+convStmt (FVal e) = do
+  e' <- convExpr e
   return $ valState e'
 convStmt (FAppend a b) = do
   a' <- convExpr a

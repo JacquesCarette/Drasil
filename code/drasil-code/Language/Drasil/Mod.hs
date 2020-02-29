@@ -88,7 +88,7 @@ data FuncStmt where
   FContinue :: FuncStmt
   FDec :: CodeChunk -> FuncStmt
   FDecDef :: CodeChunk -> Expr -> FuncStmt
-  FProcCall :: Func -> [Expr] -> FuncStmt
+  FVal :: Expr -> FuncStmt
   -- slight hack, for now
   FAppend :: Expr -> Expr -> FuncStmt
   
@@ -124,7 +124,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     fstvars sm (FTry tfs cfs) = concatMap (fstvars sm) tfs ++ concatMap (fstvars sm ) cfs
     fstvars _  (FThrow _) = [] -- is this right?
     fstvars _  FContinue = []
-    fstvars sm (FProcCall _ l) = concatMap (`codevars` sm) l
+    fstvars sm (FVal v) = codevars' v sm
     fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
 
     declared :: ChunkDB -> FuncStmt -> [CodeChunk]
@@ -141,7 +141,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     declared sm (FTry tfs cfs) = concatMap (declared sm) tfs ++ concatMap (declared sm) cfs
     declared _  (FThrow _) = [] -- is this right?
     declared _  FContinue = []
-    declared _  (FProcCall _ _) = []
+    declared _  (FVal _) = []
     declared _  (FAppend _ _) = []
        
 fname :: Func -> Name       

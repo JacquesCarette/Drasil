@@ -19,6 +19,7 @@ import GOOL.Drasil (CodeType)
 
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
+type Description = String
 type Condition = Expr
 type Requires = String
 
@@ -44,7 +45,7 @@ data ArgumentInfo =
   -- Maybe is the variable if it needs to be declared and defined prior to calling
   | Basic CodeType (Maybe CodeChunk) 
   | Fn CodeChunk [Parameter] Step
-  | Class [Requires] CodeChunk ClassInfo
+  | Class [Requires] Description CodeChunk ClassInfo
   -- constructor, object, fields
   | Record CodeChunk CodeChunk [CodeChunk]
 
@@ -131,8 +132,8 @@ preDefinedNamedArg n v = Arg (Just n) $ Basic (codeType v) (Just v)
 functionArg :: CodeChunk -> [Parameter] -> Step -> Argument
 functionArg f ps b = Arg Nothing (Fn f ps b)
 
-customObjArg :: [Requires] -> CodeChunk -> ClassInfo -> Argument
-customObjArg rs o ci = Arg Nothing (Class rs o ci)
+customObjArg :: [Requires] -> Description -> CodeChunk -> ClassInfo -> Argument
+customObjArg rs d o ci = Arg Nothing (Class rs d o ci)
 
 recordArg :: CodeChunk -> CodeChunk -> [CodeChunk] -> Argument
 recordArg c o fs = Arg Nothing (Record c o fs)

@@ -38,30 +38,30 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   runStrategy, listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, 
   greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
   moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, classVar, 
-  objVar, objVarSelf, listVar, 
-  listOf, arrayElem, iterVar, litTrue, litFalse, litChar, litFloat, litInt, 
-  litString, pi, valueOf, arg, enumElement, argsList, inlineIf, objAccess, 
-  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
-  funcApp, namedArgError, selfFuncApp, extFuncApp, newObj, lambda, notNull, 
-  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
-  listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
-  listAppendFunc, iterBeginError, iterEndError, listAccessFunc', printSt, 
-  state, loopState, emptyState, assign, assignToListIndex, multiAssignError, 
-  decrement, increment, decrement1, increment1, varDec, varDecDef, listDec, 
-  arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
-  extObjDecNewNoParams, funcDecDef, discardInput, discardFileInput, openFileR, 
-  openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
-  stringListLists, returnState, multiReturnError, valState, comment, freeError, 
-  throw, initState, changeState, initObserverList, addObserver, ifCond, 
-  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
-  tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
-  pubMVar, pubGVar, buildClass, enum, extraClass, implementingClass, docClass, 
-  commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
-  fileFromData)
+  objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, litFalse, 
+  litChar, litDouble, litFloat, litInt, litString, pi, valueOf, arg, 
+  enumElement, argsList, inlineIf, objAccess, objMethodCall, 
+  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
+  namedArgError, selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, 
+  set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
+  getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
+  iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  increment1, varDec, varDecDef, listDec, arrayDec, arrayDecDef, objDecNew, 
+  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, 
+  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
+  discardFileLine, stringListVals, stringListLists, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, 
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
+  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
+  pubMethod, constructor, docMain, function, mainFunction, docFunc, intFunc, 
+  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
+  enum, extraClass, implementingClass, docClass, commentedClass, intClass, 
+  buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
-  unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
+  unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
+  typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
   Exception(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, updateMthdDoc, OpData(..), od, 
@@ -331,6 +331,7 @@ instance ValueSym JavaCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
+  litDouble = G.litDouble
   litFloat = G.litFloat
   litInt = G.litInt
   litString = G.litString
@@ -352,27 +353,27 @@ instance ValueSym JavaCode where
 
 instance NumericExpression JavaCode where
   (#~) = unExpr' negateOp
-  (#/^) = unExpr sqrtOp
+  (#/^) = unExprNumDbl sqrtOp
   (#|) = unExpr absOp
   (#+) = binExpr plusOp
   (#-) = binExpr minusOp
   (#*) = binExpr multOp
   (#/) = binExpr divideOp
   (#%) = binExpr moduloOp
-  (#^) = binExpr' powerOp
+  (#^) = binExprNumDbl' powerOp
 
-  log = unExpr logOp
-  ln = unExpr lnOp
-  exp = unExpr expOp
-  sin = unExpr sinOp
-  cos = unExpr cosOp
-  tan = unExpr tanOp
+  log = unExprNumDbl logOp
+  ln = unExprNumDbl lnOp
+  exp = unExprNumDbl expOp
+  sin = unExprNumDbl sinOp
+  cos = unExprNumDbl cosOp
+  tan = unExprNumDbl tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin = unExpr asinOp
-  arccos = unExpr acosOp
-  arctan = unExpr atanOp
+  arcsin = unExprNumDbl asinOp
+  arccos = unExprNumDbl acosOp
+  arctan = unExprNumDbl atanOp
   floor = unExpr floorOp
   ceil = unExpr ceilOp
 

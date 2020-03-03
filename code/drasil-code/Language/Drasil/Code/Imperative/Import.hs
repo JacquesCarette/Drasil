@@ -193,7 +193,7 @@ genInOutFunc f docf s pr n desc ins' outs' b = do
     bComms bothVs) bod else f s pr inVs outVs bothVs bod
 
 convExpr :: (ProgramSym repr) => Expr -> Reader DrasilState (VS (repr (Value repr)))
-convExpr (Dbl d) = return $ litFloat d
+convExpr (Dbl d) = return $ litFloat (realToFrac d)
 convExpr (Int i) = return $ litInt i
 convExpr (Str s) = return $ litString s
 convExpr (Perc a b) = return $ litFloat $ fromIntegral a / (10 ** fromIntegral b)

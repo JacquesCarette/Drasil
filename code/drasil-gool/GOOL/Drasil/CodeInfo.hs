@@ -136,6 +136,7 @@ instance ValueSym CodeInfo where
   litTrue = noInfo
   litFalse = noInfo
   litChar _ = noInfo
+  litDouble _ = noInfo
   litFloat _ = noInfo
   litInt _ = noInfo
   litString _ = noInfo

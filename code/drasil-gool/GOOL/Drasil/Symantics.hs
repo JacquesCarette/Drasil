@@ -256,7 +256,8 @@ class (VariableSym repr) => ValueSym repr where
   litTrue   :: VS (repr (Value repr))
   litFalse  :: VS (repr (Value repr))
   litChar   :: Char -> VS (repr (Value repr))
-  litFloat  :: Double -> VS (repr (Value repr))
+  litDouble :: Double -> VS (repr (Value repr))
+  litFloat  :: Float -> VS (repr (Value repr))
   litInt    :: Integer -> VS (repr (Value repr))
   litString :: String -> VS (repr (Value repr))
 

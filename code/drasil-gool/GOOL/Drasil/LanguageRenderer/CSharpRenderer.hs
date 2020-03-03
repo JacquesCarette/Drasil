@@ -39,28 +39,29 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, divideOp, 
   moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, classVar, 
   objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, litFalse, 
-  litChar, litFloat, litInt, litString, valueOf, arg, enumElement, argsList, 
-  inlineIf, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
-  listIndexExists, indexOf, funcApp, funcAppMixedArgs, selfFuncApp, extFuncApp, 
-  newObj, lambda, notNull, func, get, set, listSize, listAdd, listAppend, 
-  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, 
-  listAppendFunc, iterBeginError, iterEndError, listAccessFunc, listSetFunc, 
-  printSt, state, loopState, emptyState, assign, assignToListIndex, 
-  multiAssignError, decrement, increment, decrement1, increment1, varDec, 
-  varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, objDecNew, 
-  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, constDecDef, 
-  discardInput, openFileR, openFileW, openFileA, closeFile, discardFileLine, 
-  stringListVals, stringListLists, returnState, multiReturnError, valState, 
-  comment, freeError, throw, initState, changeState, initObserverList, 
-  addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists, for, forRange, 
-  forEach, while, tryCatch, checkState, notifyObservers, construct, param, 
-  method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, 
-  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
-  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
-  implementingClass, docClass, commentedClass, intClass, buildModule', 
-  modFromData, fileDoc, docMod, fileFromData)
+  litChar, litDouble, litFloat, litInt, litString, valueOf, arg, enumElement, 
+  argsList, inlineIf, objAccess, objMethodCall, objMethodCallNoParams, 
+  selfAccess, listIndexExists, indexOf, funcApp, funcAppMixedArgs, selfFuncApp, 
+  extFuncApp, newObj, lambda, notNull, func, get, set, listSize, listAdd, 
+  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
+  listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
+  listSetFunc, printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, 
+  objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, 
+  constDecDef, discardInput, openFileR, openFileW, openFileA, closeFile, 
+  discardFileLine, stringListVals, stringListLists, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, 
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
+  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
+  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
+  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
+  pubGVar, buildClass, enum, implementingClass, docClass, commentedClass, 
+  intClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
-  unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
+  unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
+  typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
@@ -325,6 +326,7 @@ instance ValueSym CSharpCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
+  litDouble = G.litDouble
   litFloat = G.litFloat
   litInt = G.litInt
   litString = G.litString
@@ -346,27 +348,27 @@ instance ValueSym CSharpCode where
 
 instance NumericExpression CSharpCode where
   (#~) = unExpr' negateOp
-  (#/^) = unExpr sqrtOp
+  (#/^) = unExprNumDbl sqrtOp
   (#|) = unExpr absOp
   (#+) = binExpr plusOp
   (#-) = binExpr minusOp
   (#*) = binExpr multOp
   (#/) = binExpr divideOp
   (#%) = binExpr moduloOp
-  (#^) = binExpr' powerOp
+  (#^) = binExprNumDbl' powerOp
 
-  log = unExpr logOp
-  ln = unExpr lnOp
-  exp = unExpr expOp
-  sin = unExpr sinOp
-  cos = unExpr cosOp
-  tan = unExpr tanOp
+  log = unExprNumDbl logOp
+  ln = unExprNumDbl lnOp
+  exp = unExprNumDbl expOp
+  sin = unExprNumDbl sinOp
+  cos = unExprNumDbl cosOp
+  tan = unExprNumDbl tanOp
   csc v = litFloat 1.0 #/ sin v
   sec v = litFloat 1.0 #/ cos v
   cot v = litFloat 1.0 #/ tan v
-  arcsin = unExpr asinOp
-  arccos = unExpr acosOp
-  arctan = unExpr atanOp
+  arcsin = unExprNumDbl asinOp
+  arccos = unExprNumDbl acosOp
+  arctan = unExprNumDbl atanOp
   floor = unExpr floorOp
   ceil = unExpr ceilOp
 
@@ -755,7 +757,7 @@ csInput :: (RenderSym repr) => VS (repr (Type repr)) -> VS (repr (Value repr))
 csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn 
   -> mkVal t $ text (csInput' (getType t)) <> parens (valueDoc inFn)) inF)
   where csInput' Integer = "Int32.Parse"
-        csInput' Float = "Float.Parse"
+        csInput' Float = "Single.Parse"
         csInput' Double = "Double.Parse"
         csInput' Boolean = "Boolean.Parse"
         csInput' String = ""

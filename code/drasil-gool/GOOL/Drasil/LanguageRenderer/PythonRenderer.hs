@@ -36,7 +36,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', equalOp, notEqualOp, 
   greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
   divideOp, moduloOp, var, staticVar, extVar, enumVar, classVar, objVar, 
-  objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litFloat, litInt, 
+  objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litDouble, litInt, 
   litString, valueOf, arg, enumElement, argsList, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
   funcAppMixedArgs, selfFuncApp, extFuncApp, newObj, lambda, func, get, set, 
@@ -321,7 +321,8 @@ instance ValueSym PythonCode where
   litTrue = mkStateVal bool (text "True")
   litFalse = mkStateVal bool (text "False")
   litChar = G.litChar
-  litFloat = G.litFloat
+  litDouble = G.litDouble
+  litFloat = litDouble . realToFrac -- map to litDouble for now so current examples don't break
   litInt = G.litInt
   litString = G.litString
 
@@ -357,9 +358,9 @@ instance NumericExpression PythonCode where
   sin = unExpr sinOp
   cos = unExpr cosOp
   tan = unExpr tanOp
-  csc v = litFloat 1.0 #/ sin v
-  sec v = litFloat 1.0 #/ cos v
-  cot v = litFloat 1.0 #/ tan v
+  csc v = litDouble 1.0 #/ sin v
+  sec v = litDouble 1.0 #/ cos v
+  cot v = litDouble 1.0 #/ tan v
   arcsin = unExpr asinOp
   arccos = unExpr acosOp
   arctan = unExpr atanOp

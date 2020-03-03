@@ -40,14 +40,15 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listSlice, notOp, negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, 
   asinOp, acosOp, atanOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
   lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, 
-  andOp, orOp, var, staticVar, self, enumVar, objVar, listVar, listOf, arrayElem, litTrue, litFalse, litChar,
-  litFloat, litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, 
-  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, funcApp, 
-  namedArgError, newObj, lambda, func, get, set, listSize, listAdd, listAppend, 
-  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
-  listAppendFunc, listAccessFunc', listSetFunc, state, loopState, emptyState, 
-  assign, assignToListIndex, multiAssignError, decrement, increment, 
-  decrement1, increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  andOp, orOp, var, staticVar, self, enumVar, objVar, listVar, listOf, 
+  arrayElem, litTrue, litFalse, litChar, litDouble, litFloat, litInt, 
+  litString, valueOf, arg, argsList, inlineIf, objAccess, objMethodCall, 
+  objMethodCallNoParams, selfAccess, listIndexExists, funcApp, namedArgError, 
+  newObj, lambda, func, get, set, listSize, listAdd, listAppend, iterBegin, 
+  iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, listAppendFunc, 
+  listAccessFunc', listSetFunc, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
   objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, constDecDef, 
   funcDecDef, discardInput, discardFileInput, closeFile, stringListVals, 
   stringListLists, returnState, multiReturnError, valState, comment, throw, 
@@ -386,6 +387,7 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   litTrue = on2StateValues pair litTrue litTrue
   litFalse = on2StateValues pair litFalse litFalse
   litChar c = on2StateValues pair (litChar c) (litChar c)
+  litDouble v = on2StateValues pair (litDouble v) (litDouble v)
   litFloat v = on2StateValues pair (litFloat v) (litFloat v)
   litInt v =on2StateValues  pair (litInt v) (litInt v)
   litString s = on2StateValues pair (litString s) (litString s)
@@ -1298,6 +1300,7 @@ instance ValueSym CppSrcCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
+  litDouble = G.litDouble
   litFloat = G.litFloat
   litInt = G.litInt
   litString = G.litString
@@ -1946,6 +1949,7 @@ instance ValueSym CppHdrCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
+  litDouble = G.litDouble
   litFloat = G.litFloat
   litInt = G.litInt
   litString = G.litString

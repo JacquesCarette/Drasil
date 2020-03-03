@@ -6,36 +6,34 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   fileType, listType, arrayType, listInnerType, obj, enumType, funcType, void, 
   runStrategy, listSlice, unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', 
   absOp, absOp', expOp, expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', 
-  asinOp, asinOp', acosOp, acosOp', atanOp, atanOp', unExpr, unExpr', 
-  unExprNumDbl,
-  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOp, notEqualOp, 
-  greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
-  divideOp, moduloOp, powerOp, andOp, orOp, binExpr, binExpr', binExprNumDbl', 
-  typeBinExpr, 
-  addmathImport, var, staticVar, extVar, self, enumVar, classVar, objVar, 
-  objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, litFalse, litChar, 
-  litDouble, litFloat, litInt, litString, pi, valueOf, arg, enumElement, 
-  argsList, inlineIf, funcApp, funcAppMixedArgs, namedArgError, selfFuncApp, 
-  extFuncApp, newObj, lambda, notNull, objAccess, objMethodCall, 
-  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, func, get, set, 
-  listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
-  getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
-  iterEndError, listAccessFunc, listAccessFunc', listSetFunc, printSt, state, 
-  loopState, emptyState, assign, assignToListIndex, multiAssignError, 
-  decrement, increment, increment', increment1, increment1', decrement1, 
-  varDec, varDecDef, listDec, listDecDef, listDecDef', arrayDec, arrayDecDef, 
-  objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, constDecDef,
-  funcDecDef, discardInput, discardFileInput, openFileR, openFileW,
-  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, freeError, throw, initState,
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
-  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod,privMethod, 
-  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, enum, extraClass, implementingClass, docClass, 
-  commentedClass, intClass, buildModule, buildModule', modFromData, fileDoc, 
-  docMod
+  asinOp, asinOp', acosOp, acosOp', atanOp, atanOp', csc, sec, cot, unExpr, 
+  unExpr', unExprNumDbl, typeUnExpr, powerPrec, multPrec, andPrec, orPrec, 
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
+  minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, binExpr, binExpr', 
+  binExprNumDbl', typeBinExpr, addmathImport, var, staticVar, extVar, self, 
+  enumVar, classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, 
+  litTrue, litFalse, litChar, litDouble, litFloat, litInt, litString, pi, 
+  valueOf, arg, enumElement, argsList, inlineIf, funcApp, funcAppMixedArgs, 
+  namedArgError, selfFuncApp, extFuncApp, newObj, lambda, notNull, objAccess, 
+  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
+  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
+  listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
+  listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
+  listAccessFunc', listSetFunc, printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, increment', 
+  increment1, increment1', decrement1, varDec, varDecDef, listDec, listDecDef, 
+  listDecDef', arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, 
+  extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, discardInput, 
+  discardFileInput, openFileR, openFileW, openFileA, closeFile, discardFileLine,
+  stringListVals, stringListLists, returnState, multiReturnError, valState, 
+  comment, freeError, throw, initState, changeState, initObserverList, 
+  addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists, for, forRange, 
+  forEach, while, tryCatch, checkState, notifyObservers, construct, param, 
+  method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, 
+  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
+  extraClass, implementingClass, docClass, commentedClass, intClass, 
+  buildModule, buildModule', modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -50,8 +48,9 @@ import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   InternalType(..), UnaryOpSym(UnaryOp), BinaryOpSym(BinaryOp), InternalOp(..),
   VariableSym(Variable, variableBind, variableName, variableType, variableDoc), 
   InternalVariable(varFromData), ValueSym(Value, valueDoc, valueType), 
-  NumericExpression(..), BooleanExpression(..), InternalValue(..), 
-  Selector(($.)), FunctionSym(Function), SelectorFunction(at), 
+  NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), 
+  BooleanExpression(..), InternalValue(..), Selector(($.)), 
+  FunctionSym(Function), SelectorFunction(at), 
   InternalFunction(iterBeginFunc, iterEndFunc, functionDoc, functionType, 
     funcFromData),
   InternalStatement(statementDoc, statementTerm, stateFromData), 
@@ -98,7 +97,7 @@ import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS,
   getLibImports, getModuleImports, setModuleName, getModuleName, setClassName, 
   getClassName, addParameter)
 
-import Prelude hiding (break,print,last,mod,pi,(<>))
+import Prelude hiding (break,print,last,mod,pi,sin,cos,tan,(<>))
 import Data.Bifunctor (first)
 import Data.List (sort, intersperse)
 import Data.Map as Map (lookup, fromList)
@@ -287,6 +286,20 @@ atanOp = unOpPrec "atan"
 
 atanOp' :: (RenderSym repr) => VS (repr (UnaryOp repr))
 atanOp' = addmathImport $ unOpPrec "math.atan"
+
+csc :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
+csc v = valOfOne (fmap valueType v) #/ sin v
+
+sec :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
+sec v = valOfOne (fmap valueType v) #/ cos v
+
+cot :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
+cot v = valOfOne (fmap valueType v) #/ tan v
+
+valOfOne :: (RenderSym repr) => VS (repr (Type repr)) -> VS (repr (Value repr))
+valOfOne t = t >>= (getVal . getType)
+  where getVal Float = litFloat 1.0
+        getVal _ = litDouble 1.0
 
 unOpDocD :: Doc -> Doc -> Doc
 unOpDocD op v = op <> parens v

@@ -33,15 +33,15 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, int, float, listInnerType, obj, 
   enumType, funcType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', 
-  sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', equalOp, notEqualOp, 
-  greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
-  divideOp, moduloOp, var, staticVar, extVar, enumVar, classVar, objVar, 
-  objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litDouble, litInt, 
-  litString, valueOf, arg, enumElement, argsList, objAccess, objMethodCall, 
-  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
-  funcAppMixedArgs, selfFuncApp, extFuncApp, newObj, lambda, func, get, set, 
-  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
-  setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
+  sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', csc, sec, cot, equalOp, 
+  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
+  multOp, divideOp, moduloOp, var, staticVar, extVar, enumVar, classVar, 
+  objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litDouble, 
+  litInt, litString, valueOf, arg, enumElement, argsList, objAccess, 
+  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
+  funcApp, funcAppMixedArgs, selfFuncApp, extFuncApp, newObj, lambda, func, 
+  get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
+  getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
   listAccessFunc, listSetFunc, state, loopState, emptyState, assign, 
   assignToListIndex, decrement, increment', increment1', decrement1, objDecNew, 
   objDecNewNoParams, closeFile, discardFileLine, stringListVals, 
@@ -358,9 +358,9 @@ instance NumericExpression PythonCode where
   sin = unExpr sinOp
   cos = unExpr cosOp
   tan = unExpr tanOp
-  csc v = litDouble 1.0 #/ sin v
-  sec v = litDouble 1.0 #/ cos v
-  cot v = litDouble 1.0 #/ tan v
+  csc = G.csc
+  sec = G.sec
+  cot = G.cot
   arcsin = unExpr asinOp
   arccos = unExpr acosOp
   arctan = unExpr atanOp

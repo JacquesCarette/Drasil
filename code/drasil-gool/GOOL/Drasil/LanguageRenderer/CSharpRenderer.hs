@@ -35,27 +35,27 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
   string, listType, arrayType, listInnerType, obj, enumType, funcType, void, 
-  runStrategy, listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, 
-  greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, divideOp, 
-  moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, classVar, 
-  objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, litFalse, 
-  litChar, litDouble, litFloat, litInt, litString, valueOf, arg, enumElement, 
-  argsList, inlineIf, objAccess, objMethodCall, objMethodCallNoParams, 
-  selfAccess, listIndexExists, indexOf, funcApp, funcAppMixedArgs, selfFuncApp, 
-  extFuncApp, newObj, lambda, notNull, func, get, set, listSize, listAdd, 
-  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
-  listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
-  listSetFunc, printSt, state, loopState, emptyState, assign, 
-  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
-  increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, 
-  objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, 
-  constDecDef, discardInput, openFileR, openFileW, openFileA, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
-  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
-  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
+  runStrategy, listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, 
+  greaterOp, greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, 
+  divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, 
+  classVar, objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, 
+  litFalse, litChar, litDouble, litFloat, litInt, litString, valueOf, arg, 
+  enumElement, argsList, inlineIf, objAccess, objMethodCall, 
+  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
+  funcAppMixedArgs, selfFuncApp, extFuncApp, newObj, lambda, notNull, func, 
+  get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
+  listSet, getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, 
+  iterEndError, listAccessFunc, listSetFunc, printSt, state, loopState, 
+  emptyState, assign, assignToListIndex, multiAssignError, decrement, 
+  increment, decrement1, increment1, varDec, varDecDef, listDec, listDecDef', 
+  arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
+  extObjDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, 
+  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
+  returnState, multiReturnError, valState, comment, freeError, throw, 
+  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
+  switch, switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, 
+  checkState, notifyObservers, construct, param, method, getMethod, setMethod, 
+  privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
   docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
   pubGVar, buildClass, enum, implementingClass, docClass, commentedClass, 
   intClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
@@ -363,9 +363,9 @@ instance NumericExpression CSharpCode where
   sin = unExprNumDbl sinOp
   cos = unExprNumDbl cosOp
   tan = unExprNumDbl tanOp
-  csc v = litFloat 1.0 #/ sin v
-  sec v = litFloat 1.0 #/ cos v
-  cot v = litFloat 1.0 #/ tan v
+  csc = G.csc
+  sec = G.sec
+  cot = G.cot
   arcsin = unExprNumDbl asinOp
   arccos = unExprNumDbl acosOp
   arctan = unExprNumDbl atanOp

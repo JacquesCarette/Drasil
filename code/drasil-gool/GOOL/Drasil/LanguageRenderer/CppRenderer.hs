@@ -38,17 +38,17 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, int, float, double, char, string, 
   listType, listInnerType, obj, enumType, funcType, void, runStrategy, 
   listSlice, notOp, negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, 
-  asinOp, acosOp, atanOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
-  lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, 
-  andOp, orOp, var, staticVar, self, enumVar, objVar, listVar, listOf, 
-  arrayElem, litTrue, litFalse, litChar, litDouble, litFloat, litInt, 
-  litString, valueOf, arg, argsList, inlineIf, objAccess, objMethodCall, 
-  objMethodCallNoParams, selfAccess, listIndexExists, funcApp, namedArgError, 
-  newObj, lambda, func, get, set, listSize, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, listAppendFunc, 
-  listAccessFunc', listSetFunc, state, loopState, emptyState, assign, 
-  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
-  increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  asinOp, acosOp, atanOp, csc, sec, cot, equalOp, notEqualOp, greaterOp, 
+  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
+  moduloOp, powerOp, andOp, orOp, var, staticVar, self, enumVar, objVar, 
+  listVar, listOf, arrayElem, litTrue, litFalse, litChar, litDouble, litFloat, 
+  litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, 
+  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, funcApp, 
+  namedArgError, newObj, lambda, func, get, set, listSize, listAdd, listAppend, 
+  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
+  listAppendFunc, listAccessFunc', listSetFunc, state, loopState, emptyState, 
+  assign, assignToListIndex, multiAssignError, decrement, increment, 
+  decrement1, increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
   objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, constDecDef, 
   funcDecDef, discardInput, discardFileInput, closeFile, stringListVals, 
   stringListLists, returnState, multiReturnError, valState, comment, throw, 
@@ -1336,9 +1336,9 @@ instance NumericExpression CppSrcCode where
   sin = unExpr sinOp
   cos = unExpr cosOp
   tan = unExpr tanOp
-  csc v = litFloat 1.0 #/ sin v
-  sec v = litFloat 1.0 #/ cos v
-  cot v = litFloat 1.0 #/ tan v
+  csc = G.csc
+  sec = G.sec
+  cot = G.cot
   arcsin = unExpr asinOp
   arccos = unExpr acosOp
   arctan = unExpr atanOp

@@ -35,11 +35,11 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
   listType, arrayType, listInnerType, obj, enumType, funcType, void, 
-  runStrategy, listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, 
-  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
-  moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, classVar, 
-  objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, litFalse, 
-  litChar, litDouble, litFloat, litInt, litString, pi, valueOf, arg, 
+  runStrategy, listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, 
+  greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
+  divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, 
+  classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, 
+  litFalse, litChar, litDouble, litFloat, litInt, litString, pi, valueOf, arg, 
   enumElement, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
   namedArgError, selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, 
@@ -368,9 +368,9 @@ instance NumericExpression JavaCode where
   sin = unExprNumDbl sinOp
   cos = unExprNumDbl cosOp
   tan = unExprNumDbl tanOp
-  csc v = litFloat 1.0 #/ sin v
-  sec v = litFloat 1.0 #/ cos v
-  cot v = litFloat 1.0 #/ tan v
+  csc = G.csc
+  sec = G.sec
+  cot = G.cot
   arcsin = unExprNumDbl asinOp
   arccos = unExprNumDbl acosOp
   arctan = unExprNumDbl atanOp

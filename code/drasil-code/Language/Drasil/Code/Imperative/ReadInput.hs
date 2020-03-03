@@ -48,6 +48,7 @@ sampleInputDD cs = junkLine : intersperse junkLine (map dataDesc cs)
 strAsExpr :: C.CodeType -> String -> Expr
 strAsExpr C.Integer s = int (read s :: Integer)
 strAsExpr C.Float s = dbl (read s :: Double)
+strAsExpr C.Double s = dbl (read s :: Double)
 strAsExpr C.String s = str s
 strAsExpr _ _ = error "strAsExpr should only be called on integers, floats, or strings"
 

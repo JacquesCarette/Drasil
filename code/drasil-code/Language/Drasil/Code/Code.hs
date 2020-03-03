@@ -16,9 +16,9 @@ newtype Code = Code { unCode :: [(FilePath, Doc)]}
 spaceToCodeType :: S.Space -> CodeType
 spaceToCodeType S.Integer       = Integer
 spaceToCodeType S.Natural       = Integer
-spaceToCodeType S.Radians       = Float
-spaceToCodeType S.Real          = Float
-spaceToCodeType S.Rational      = Float
+spaceToCodeType S.Radians       = Double
+spaceToCodeType S.Real          = Double
+spaceToCodeType S.Rational      = Double
 spaceToCodeType S.Boolean       = Boolean
 spaceToCodeType S.Char          = Char
 spaceToCodeType S.String        = String

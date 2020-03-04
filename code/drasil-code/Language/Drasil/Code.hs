@@ -1,5 +1,6 @@
 -- | re-export smart constructors for external code writing
 module Language.Drasil.Code (
+  spaceToCodeType,
   makeCode, createCodeFiles, 
   generator, generateCode,
   readWithDataDesc, sampleInputDD,
@@ -7,8 +8,9 @@ module Language.Drasil.Code (
   ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(LogNone, LogAll), Modularity(..), Structure(..), 
   ConstantStructure(..), ConstantRepr(..), InputModule(..), CodeConcept(..), 
-  matchConcepts, AuxFile(..), Visibility(..), ODEMethod(..), defaultChoices, 
-  asExpr, asExpr', asVC, asVC', codeSpec, relToQD,
+  matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), Visibility(..), 
+  ODEMethod(..), defaultChoices, asExpr, asExpr', asVC, asVC', codeSpec, 
+  relToQD,
   ($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, funcData, funcDef, 
   packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
@@ -42,6 +44,8 @@ import Language.Drasil.Code.Imperative.Generator (generator, generateCode)
 import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc, 
   sampleInputDD)
 
+import Language.Drasil.Code.Code (spaceToCodeType)
+
 import Language.Drasil.Code.CodeGeneration (makeCode, createCodeFiles)
 
 import Language.Drasil.Code.DataDesc (junkLine, multiLine, repeated, singleLine,
@@ -72,9 +76,9 @@ import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
 import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), CodeSystInfo(..), 
   Comments(..), Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), 
   Lang(..), Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
-  ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, 
-  AuxFile(..), Visibility(..), ODEMethod(..), defaultChoices, asExpr, asExpr', 
-  asVC, asVC', codeSpec, relToQD)
+  ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
+  matchSpaces, AuxFile(..), Visibility(..), ODEMethod(..), defaultChoices, 
+  asExpr, asExpr', asVC, asVC', codeSpec, relToQD)
 import Language.Drasil.Mod (($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, 
   funcData, funcDef, packmod)
 

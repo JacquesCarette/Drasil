@@ -201,10 +201,22 @@ genInOutFunc f docf s pr n desc ins' outs' b = do
     bComms bothVs) bod else f s pr inVs outVs bothVs bod
 
 convExpr :: (ProgramSym repr) => Expr -> Reader DrasilState (VS (repr (Value repr)))
-convExpr (Dbl d) = return $ litDouble d
+convExpr (Dbl d) = do
+  g <- ask
+  let sm = spaceMatches g
+      getLiteral Double = litDouble d
+      getLiteral Float = litFloat (realToFrac d)
+      getLiteral _ = error "convExpr: Real space matched to invalid CodeType; should be Double or Float"
+  return $ getLiteral (sm Real)
 convExpr (Int i) = return $ litInt i
 convExpr (Str s) = return $ litString s
-convExpr (Perc a b) = return $ litDouble $ fromIntegral a / (10 ** fromIntegral b)
+convExpr (Perc a b) = do
+  g <- ask
+  let sm = spaceMatches g
+      getLiteral Double = litDouble
+      getLiteral Float = litFloat . realToFrac
+      getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
+  return $ getLiteral (sm Rational) (fromIntegral a / (10 ** fromIntegral b))
 convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
 convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
@@ -233,8 +245,13 @@ convExpr (New c x) = do
   args <- mapM convExpr x
   return $ newObj (convType funcTp) args
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
-convExpr (BinaryOp Frac (Int a) (Int b)) =
-  return $ litDouble (fromIntegral a) #/ litDouble (fromIntegral b) -- hack to deal with integer division
+convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
+  g <- ask
+  let sm = spaceMatches g
+      getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
+      getLiteral Float = litFloat (fromIntegral a) #/ litFloat (fromIntegral b)
+      getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
+  return $ getLiteral (sm Rational)
 convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr (Case c l)      = doit l -- FIXME this is sub-optimal
   where

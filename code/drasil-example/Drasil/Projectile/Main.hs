@@ -1,13 +1,16 @@
 module Main (main) where
 
-import Language.Drasil (getAccStr)
+import Language.Drasil (Space(..), getAccStr)
 import Language.Drasil.Code (Choices(..), Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
-  ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, 
-  AuxFile(..), Visibility(..), defaultChoices, codeSpec)
+  ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
+  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, 
+  spaceToCodeType)
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
+
+import GOOL.Drasil (CodeType(..))
 
 import Data.Drasil.Quantities.Math (piConst)
 
@@ -42,9 +45,10 @@ codedDirName n Choices {
   logging = l,
   inputStructure = is,
   constStructure = cs,
-  constRepr = cr} = 
+  constRepr = cr,
+  spaceMatch = sm} = 
   intercalate "_" [n, codedMod m, codedLog l, codedStruct is, 
-    codedConStruct cs, codedConRepr cr]
+    codedConStruct cs, codedConRepr cr] -- , codedSpaceMatch sm]
   
 codedMod :: Modularity -> String
 codedMod Unmodular = "U"
@@ -68,6 +72,12 @@ codedConRepr :: ConstantRepr -> String
 codedConRepr Var = "V"
 codedConRepr Const = "C"
 
+codedSpaceMatch :: SpaceMatch -> String
+codedSpaceMatch sm = case sm Real of [Double, Float] -> "D"
+                                     [Float, Double] -> "F" 
+                                     _ -> error 
+                                       "Unexpected SpaceMatch for Projectile"
+
 choiceCombos :: [Choices]
 choiceCombos = [baseChoices, 
   baseChoices {
@@ -76,7 +86,8 @@ choiceCombos = [baseChoices,
     constStructure = Store Unbundled},
   baseChoices {
     modularity = Modular Separated,
-    constStructure = Store Unbundled},
+    constStructure = Store Unbundled,
+    spaceMatch = matchToFloats},
   baseChoices {
     logging = LogAll,
     inputStructure = Bundled,
@@ -84,7 +95,12 @@ choiceCombos = [baseChoices,
     constRepr = Const},
   baseChoices {
     logging = LogAll,
-    inputStructure = Bundled}]
+    inputStructure = Bundled,
+    spaceMatch = matchToFloats}]
+
+matchToFloats :: SpaceMatch
+matchToFloats = matchSpaces [Real, Radians, Rational] 
+      (replicate 3 [Float, Double]) spaceToCodeType
 
 baseChoices :: Choices
 baseChoices = defaultChoices {

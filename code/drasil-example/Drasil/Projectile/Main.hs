@@ -48,7 +48,7 @@ codedDirName n Choices {
   constRepr = cr,
   spaceMatch = sm} = 
   intercalate "_" [n, codedMod m, codedLog l, codedStruct is, 
-    codedConStruct cs, codedConRepr cr] -- , codedSpaceMatch sm]
+    codedConStruct cs, codedConRepr cr, codedSpaceMatch sm]
   
 codedMod :: Modularity -> String
 codedMod Unmodular = "U"

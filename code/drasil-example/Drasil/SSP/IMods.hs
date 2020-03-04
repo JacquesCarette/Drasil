@@ -38,8 +38,6 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   waterDist, waterHght, waterWeight, watForceSum, xi, xMaxExtSlip, xMaxEtrSlip,
   xMinExtSlip, xMinEtrSlip, yi, yMaxSlip, yMinSlip)
 
-import Control.Lens ((^.))
-
 -----------------------
 --  Instance Models  --
 -----------------------

@@ -25,19 +25,19 @@ public class Projectile {
         outfile.println(" in module Projectile");
         outfile.close();
         InputParameters inParams = new InputParameters(filename);
-        double t_flight = func_t_flight(inParams);
+        float t_flight = func_t_flight(inParams);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 't_flight' assigned to ");
         outfile.print(t_flight);
         outfile.println(" in module Projectile");
         outfile.close();
-        double p_land = func_p_land(inParams);
+        float p_land = func_p_land(inParams);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'p_land' assigned to ");
         outfile.print(p_land);
         outfile.println(" in module Projectile");
         outfile.close();
-        double d_offset = func_d_offset(inParams, p_land);
+        float d_offset = func_d_offset(inParams, p_land);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'd_offset' assigned to ");
         outfile.print(d_offset);
@@ -56,7 +56,7 @@ public class Projectile {
         \param inParams structure holding the input values
         \return flight duration: the time when the projectile lands (s)
     */
-    public static double func_t_flight(InputParameters inParams) throws IOException {
+    public static float func_t_flight(InputParameters inParams) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_t_flight called with inputs: {");
@@ -65,14 +65,14 @@ public class Projectile {
         outfile.println("  }");
         outfile.close();
         
-        return 2 * inParams.v_launch * Math.sin(inParams.theta) / inParams.g_vect;
+        return 2 * inParams.v_launch * (float)(Math.sin(inParams.theta)) / inParams.g_vect;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
         \param inParams structure holding the input values
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
-    public static double func_p_land(InputParameters inParams) throws IOException {
+    public static float func_p_land(InputParameters inParams) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_p_land called with inputs: {");
@@ -81,7 +81,7 @@ public class Projectile {
         outfile.println("  }");
         outfile.close();
         
-        return 2 * Math.pow(inParams.v_launch, 2) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / inParams.g_vect;
+        return 2 * (float)(Math.pow(inParams.v_launch, 2)) * (float)(Math.sin(inParams.theta)) * (float)(Math.cos(inParams.theta)) / inParams.g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -89,7 +89,7 @@ public class Projectile {
         \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
         \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
     */
-    public static double func_d_offset(InputParameters inParams, double p_land) throws IOException {
+    public static float func_d_offset(InputParameters inParams, float p_land) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_d_offset called with inputs: {");
@@ -109,7 +109,7 @@ public class Projectile {
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
         \return output message as a string
     */
-    public static String func_s(InputParameters inParams, double d_offset) throws IOException {
+    public static String func_s(InputParameters inParams, float d_offset) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_s called with inputs: {");
@@ -136,7 +136,7 @@ public class Projectile {
         \param s output message as a string
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
     */
-    public static void write_output(String s, double d_offset) throws IOException {
+    public static void write_output(String s, float d_offset) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function write_output called with inputs: {");
@@ -161,11 +161,11 @@ public class Projectile {
 /** \brief Structure for holding the input values
 */
 class InputParameters {
-    public double v_launch;
-    public double theta;
-    public double p_target;
-    public double g_vect = 9.8;
-    public double epsilon = 2.0e-2;
+    public float v_launch;
+    public float theta;
+    public float p_target;
+    public float g_vect = 9.8f;
+    public float epsilon = 2.0e-2f;
     
     /** \brief Initializes input object by reading inputs and checking physical constraints and software constraints on the input
         \param filename name of the input file
@@ -198,21 +198,21 @@ class InputParameters {
         Scanner infile;
         infile = new Scanner(new File(filename));
         infile.nextLine();
-        this.v_launch = Double.parseDouble(infile.nextLine());
+        this.v_launch = Float.parseFloat(infile.nextLine());
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'this.v_launch' assigned to ");
         outfile.print(this.v_launch);
         outfile.println(" in module Projectile");
         outfile.close();
         infile.nextLine();
-        this.theta = Double.parseDouble(infile.nextLine());
+        this.theta = Float.parseFloat(infile.nextLine());
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'this.theta' assigned to ");
         outfile.print(this.theta);
         outfile.println(" in module Projectile");
         outfile.close();
         infile.nextLine();
-        this.p_target = Double.parseDouble(infile.nextLine());
+        this.p_target = Float.parseFloat(infile.nextLine());
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'this.p_target' assigned to ");
         outfile.print(this.p_target);

@@ -13,15 +13,15 @@ public class InputFormat {
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
         \param p_target target position: the distance from the launcher to the target (m)
     */
-    public static void get_input(string filename, out double v_launch, out double theta, out double p_target) {
+    public static void get_input(string filename, out float v_launch, out float theta, out float p_target) {
         StreamReader infile;
         infile = new StreamReader(filename);
         infile.ReadLine();
-        v_launch = Double.Parse(infile.ReadLine());
+        v_launch = Single.Parse(infile.ReadLine());
         infile.ReadLine();
-        theta = Double.Parse(infile.ReadLine());
+        theta = Single.Parse(infile.ReadLine());
         infile.ReadLine();
-        p_target = Double.Parse(infile.ReadLine());
+        p_target = Single.Parse(infile.ReadLine());
         infile.Close();
     }
 }

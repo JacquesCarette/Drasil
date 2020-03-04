@@ -121,19 +121,19 @@ int main(int argc, const char *argv[]) {
     outfile << " in module Projectile" << std::endl;
     outfile.close();
     InputParameters inParams = InputParameters(filename);
-    double t_flight = func_t_flight(inParams);
+    float t_flight = func_t_flight(inParams);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 't_flight' assigned to ";
     outfile << t_flight;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
-    double p_land = func_p_land(inParams);
+    float p_land = func_p_land(inParams);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'p_land' assigned to ";
     outfile << p_land;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
-    double d_offset = func_d_offset(inParams, p_land);
+    float d_offset = func_d_offset(inParams, p_land);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'd_offset' assigned to ";
     outfile << d_offset;
@@ -150,7 +150,7 @@ int main(int argc, const char *argv[]) {
     return 0;
 }
 
-double func_t_flight(InputParameters &inParams) {
+float func_t_flight(InputParameters &inParams) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function func_t_flight called with inputs: {" << std::endl;
@@ -162,7 +162,7 @@ double func_t_flight(InputParameters &inParams) {
     return 2 * inParams.v_launch * sin(inParams.theta) / inParams.g_vect;
 }
 
-double func_p_land(InputParameters &inParams) {
+float func_p_land(InputParameters &inParams) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function func_p_land called with inputs: {" << std::endl;
@@ -174,7 +174,7 @@ double func_p_land(InputParameters &inParams) {
     return 2 * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / inParams.g_vect;
 }
 
-double func_d_offset(InputParameters &inParams, double p_land) {
+float func_d_offset(InputParameters &inParams, float p_land) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function func_d_offset called with inputs: {" << std::endl;
@@ -189,7 +189,7 @@ double func_d_offset(InputParameters &inParams, double p_land) {
     return p_land - inParams.p_target;
 }
 
-string func_s(InputParameters &inParams, double d_offset) {
+string func_s(InputParameters &inParams, float d_offset) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function func_s called with inputs: {" << std::endl;
@@ -212,7 +212,7 @@ string func_s(InputParameters &inParams, double d_offset) {
     }
 }
 
-void write_output(string s, double d_offset) {
+void write_output(string s, float d_offset) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function write_output called with inputs: {" << std::endl;

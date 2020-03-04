@@ -11,7 +11,7 @@ public class InputConstraints {
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
         \param p_target target position: the distance from the launcher to the target (m)
     */
-    public static void input_constraints(double v_launch, double theta, double p_target) {
+    public static void input_constraints(float v_launch, float theta, float p_target) {
         if (!(v_launch > 0)) {
             System.out.print("Warning: ");
             System.out.print("v_launch has value ");

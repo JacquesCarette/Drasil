@@ -18,11 +18,11 @@ using std::string;
 */
 class InputParameters {
     public:
-        double v_launch;
-        double theta;
-        double p_target;
-        double g_vect = 9.8;
-        double epsilon = 2.0e-2;
+        float v_launch;
+        float theta;
+        float p_target;
+        float g_vect = 9.8f;
+        float epsilon = 2.0e-2f;
         
         /** \brief Initializes input object by reading inputs and checking physical constraints and software constraints on the input
             \param filename name of the input file
@@ -43,32 +43,32 @@ class InputParameters {
     \param inParams structure holding the input values
     \return flight duration: the time when the projectile lands (s)
 */
-double func_t_flight(InputParameters &inParams);
+float func_t_flight(InputParameters &inParams);
 
 /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
     \param inParams structure holding the input values
     \return landing position: the distance from the launcher to the final position of the projectile (m)
 */
-double func_p_land(InputParameters &inParams);
+float func_p_land(InputParameters &inParams);
 
 /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
     \param inParams structure holding the input values
     \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
     \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
 */
-double func_d_offset(InputParameters &inParams, double p_land);
+float func_d_offset(InputParameters &inParams, float p_land);
 
 /** \brief Calculates output message as a string
     \param inParams structure holding the input values
     \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
     \return output message as a string
 */
-string func_s(InputParameters &inParams, double d_offset);
+string func_s(InputParameters &inParams, float d_offset);
 
 /** \brief Writes the output values to output.txt
     \param s output message as a string
     \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
 */
-void write_output(string s, double d_offset);
+void write_output(string s, float d_offset);
 
 #endif

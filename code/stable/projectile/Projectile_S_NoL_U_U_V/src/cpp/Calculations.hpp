@@ -15,7 +15,7 @@ using std::string;
     \param g_vect gravitational acceleration (m/s^2)
     \return flight duration: the time when the projectile lands (s)
 */
-double func_t_flight(double v_launch, double theta, double g_vect);
+float func_t_flight(float v_launch, float theta, float g_vect);
 
 /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
     \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
@@ -23,14 +23,14 @@ double func_t_flight(double v_launch, double theta, double g_vect);
     \param g_vect gravitational acceleration (m/s^2)
     \return landing position: the distance from the launcher to the final position of the projectile (m)
 */
-double func_p_land(double v_launch, double theta, double g_vect);
+float func_p_land(float v_launch, float theta, float g_vect);
 
 /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
     \param p_target target position: the distance from the launcher to the target (m)
     \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
     \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
 */
-double func_d_offset(double p_target, double p_land);
+float func_d_offset(float p_target, float p_land);
 
 /** \brief Calculates output message as a string
     \param p_target target position: the distance from the launcher to the target (m)
@@ -38,6 +38,6 @@ double func_d_offset(double p_target, double p_land);
     \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
     \return output message as a string
 */
-string func_s(double p_target, double epsilon, double d_offset);
+string func_s(float p_target, float epsilon, float d_offset);
 
 #endif

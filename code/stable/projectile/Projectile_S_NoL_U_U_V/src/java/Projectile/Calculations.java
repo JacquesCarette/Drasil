@@ -12,8 +12,8 @@ public class Calculations {
         \param g_vect gravitational acceleration (m/s^2)
         \return flight duration: the time when the projectile lands (s)
     */
-    public static double func_t_flight(double v_launch, double theta, double g_vect) {
-        return 2 * v_launch * Math.sin(theta) / g_vect;
+    public static float func_t_flight(float v_launch, float theta, float g_vect) {
+        return 2 * v_launch * (float)(Math.sin(theta)) / g_vect;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -22,8 +22,8 @@ public class Calculations {
         \param g_vect gravitational acceleration (m/s^2)
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
-    public static double func_p_land(double v_launch, double theta, double g_vect) {
-        return 2 * Math.pow(v_launch, 2) * Math.sin(theta) * Math.cos(theta) / g_vect;
+    public static float func_p_land(float v_launch, float theta, float g_vect) {
+        return 2 * (float)(Math.pow(v_launch, 2)) * (float)(Math.sin(theta)) * (float)(Math.cos(theta)) / g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -31,7 +31,7 @@ public class Calculations {
         \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
         \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
     */
-    public static double func_d_offset(double p_target, double p_land) {
+    public static float func_d_offset(float p_target, float p_land) {
         return p_land - p_target;
     }
     
@@ -41,7 +41,7 @@ public class Calculations {
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
         \return output message as a string
     */
-    public static String func_s(double p_target, double epsilon, double d_offset) {
+    public static String func_s(float p_target, float epsilon, float d_offset) {
         if (Math.abs(d_offset / p_target) < epsilon) {
             return "The target was hit.";
         }

@@ -8,7 +8,7 @@
 
 using std::string;
 
-void input_constraints(double v_launch, double theta, double p_target) {
+void input_constraints(float v_launch, float theta, float p_target) {
     if (!(v_launch > 0)) {
         std::cout << "Warning: ";
         std::cout << "v_launch has value ";

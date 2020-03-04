@@ -18,16 +18,16 @@ using std::string;
 */
 int main(int argc, const char *argv[]) {
     string filename = argv[1];
-    double v_launch;
-    double theta;
-    double p_target;
-    double g_vect = 9.8;
-    double epsilon = 2.0e-2;
+    float v_launch;
+    float theta;
+    float p_target;
+    float g_vect = 9.8f;
+    float epsilon = 2.0e-2f;
     get_input(filename, v_launch, theta, p_target);
     input_constraints(v_launch, theta, p_target);
-    double t_flight = func_t_flight(v_launch, theta, g_vect);
-    double p_land = func_p_land(v_launch, theta, g_vect);
-    double d_offset = func_d_offset(p_target, p_land);
+    float t_flight = func_t_flight(v_launch, theta, g_vect);
+    float p_land = func_p_land(v_launch, theta, g_vect);
+    float d_offset = func_d_offset(p_target, p_land);
     string s = func_s(p_target, epsilon, d_offset);
     write_output(s, d_offset);
     

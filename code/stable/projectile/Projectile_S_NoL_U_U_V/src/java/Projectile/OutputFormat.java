@@ -15,7 +15,7 @@ public class OutputFormat {
         \param s output message as a string
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
     */
-    public static void write_output(String s, double d_offset) throws IOException {
+    public static void write_output(String s, float d_offset) throws IOException {
         PrintWriter outputfile;
         outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));
         outputfile.print("s = ");

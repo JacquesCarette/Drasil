@@ -18,18 +18,18 @@ public class InputFormat {
         \return target position: the distance from the launcher to the target (m)
     */
     public static Object[] get_input(String filename) throws FileNotFoundException {
-        double v_launch;
-        double theta;
-        double p_target;
+        float v_launch;
+        float theta;
+        float p_target;
         
         Scanner infile;
         infile = new Scanner(new File(filename));
         infile.nextLine();
-        v_launch = Double.parseDouble(infile.nextLine());
+        v_launch = Float.parseFloat(infile.nextLine());
         infile.nextLine();
-        theta = Double.parseDouble(infile.nextLine());
+        theta = Float.parseFloat(infile.nextLine());
         infile.nextLine();
-        p_target = Double.parseDouble(infile.nextLine());
+        p_target = Float.parseFloat(infile.nextLine());
         infile.close();
         
         Object[] outputs = new Object[3];

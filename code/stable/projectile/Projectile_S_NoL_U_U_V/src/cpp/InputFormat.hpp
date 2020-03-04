@@ -16,6 +16,6 @@ using std::string;
     \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     \param p_target target position: the distance from the launcher to the target (m)
 */
-void get_input(string filename, double &v_launch, double &theta, double &p_target);
+void get_input(string filename, float &v_launch, float &theta, float &p_target);
 
 #endif

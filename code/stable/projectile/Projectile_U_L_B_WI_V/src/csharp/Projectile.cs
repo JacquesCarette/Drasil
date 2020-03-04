@@ -19,19 +19,19 @@ public class Projectile {
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
         InputParameters inParams = new InputParameters(filename);
-        double t_flight = func_t_flight(inParams);
+        float t_flight = func_t_flight(inParams);
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 't_flight' assigned to ");
         outfile.Write(t_flight);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
-        double p_land = func_p_land(inParams);
+        float p_land = func_p_land(inParams);
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'p_land' assigned to ");
         outfile.Write(p_land);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
-        double d_offset = func_d_offset(inParams, p_land);
+        float d_offset = func_d_offset(inParams, p_land);
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'd_offset' assigned to ");
         outfile.Write(d_offset);
@@ -50,7 +50,7 @@ public class Projectile {
         \param inParams structure holding the input values
         \return flight duration: the time when the projectile lands (s)
     */
-    public static double func_t_flight(InputParameters inParams) {
+    public static float func_t_flight(InputParameters inParams) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function func_t_flight called with inputs: {");
@@ -59,14 +59,14 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2 * inParams.v_launch * Math.Sin(inParams.theta) / inParams.g_vect;
+        return 2 * inParams.v_launch * (float)(Math.Sin(inParams.theta)) / inParams.g_vect;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
         \param inParams structure holding the input values
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
-    public static double func_p_land(InputParameters inParams) {
+    public static float func_p_land(InputParameters inParams) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function func_p_land called with inputs: {");
@@ -75,7 +75,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2 * Math.Pow(inParams.v_launch, 2) * Math.Sin(inParams.theta) * Math.Cos(inParams.theta) / inParams.g_vect;
+        return 2 * (float)(Math.Pow(inParams.v_launch, 2)) * (float)(Math.Sin(inParams.theta)) * (float)(Math.Cos(inParams.theta)) / inParams.g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -83,7 +83,7 @@ public class Projectile {
         \param p_land landing position: the distance from the launcher to the final position of the projectile (m)
         \return distance between the target position and the landing position: the offset between the target position and the landing position (m)
     */
-    public static double func_d_offset(InputParameters inParams, double p_land) {
+    public static float func_d_offset(InputParameters inParams, float p_land) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function func_d_offset called with inputs: {");
@@ -103,7 +103,7 @@ public class Projectile {
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
         \return output message as a string
     */
-    public static string func_s(InputParameters inParams, double d_offset) {
+    public static string func_s(InputParameters inParams, float d_offset) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function func_s called with inputs: {");
@@ -130,7 +130,7 @@ public class Projectile {
         \param s output message as a string
         \param d_offset distance between the target position and the landing position: the offset between the target position and the landing position (m)
     */
-    public static void write_output(string s, double d_offset) {
+    public static void write_output(string s, float d_offset) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function write_output called with inputs: {");
@@ -155,11 +155,11 @@ public class Projectile {
 /** \brief Structure for holding the input values
 */
 public class InputParameters {
-    public double v_launch;
-    public double theta;
-    public double p_target;
-    public double g_vect = 9.8;
-    public double epsilon = 2.0e-2;
+    public float v_launch;
+    public float theta;
+    public float p_target;
+    public float g_vect = 9.8f;
+    public float epsilon = 2.0e-2f;
     
     /** \brief Initializes input object by reading inputs and checking physical constraints and software constraints on the input
         \param filename name of the input file
@@ -192,21 +192,21 @@ public class InputParameters {
         StreamReader infile;
         infile = new StreamReader(filename);
         infile.ReadLine();
-        this.v_launch = Double.Parse(infile.ReadLine());
+        this.v_launch = Single.Parse(infile.ReadLine());
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'this.v_launch' assigned to ");
         outfile.Write(this.v_launch);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
         infile.ReadLine();
-        this.theta = Double.Parse(infile.ReadLine());
+        this.theta = Single.Parse(infile.ReadLine());
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'this.theta' assigned to ");
         outfile.Write(this.theta);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
         infile.ReadLine();
-        this.p_target = Double.Parse(infile.ReadLine());
+        this.p_target = Single.Parse(infile.ReadLine());
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'this.p_target' assigned to ");
         outfile.Write(this.p_target);

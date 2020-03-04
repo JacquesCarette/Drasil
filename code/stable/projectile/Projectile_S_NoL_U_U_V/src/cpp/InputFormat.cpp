@@ -8,7 +8,7 @@
 using std::ifstream;
 using std::string;
 
-void get_input(string filename, double &v_launch, double &theta, double &p_target) {
+void get_input(string filename, float &v_launch, float &theta, float &p_target) {
     ifstream infile;
     infile.open(filename, std::fstream::in);
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');

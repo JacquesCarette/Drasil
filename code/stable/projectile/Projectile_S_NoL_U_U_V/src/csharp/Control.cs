@@ -9,16 +9,16 @@ public class Control {
     */
     public static void Main(string[] args) {
         string filename = args[0];
-        double v_launch;
-        double theta;
-        double p_target;
-        double g_vect = 9.8;
-        double epsilon = 2.0e-2;
+        float v_launch;
+        float theta;
+        float p_target;
+        float g_vect = 9.8f;
+        float epsilon = 2.0e-2f;
         InputFormat.get_input(filename, out v_launch, out theta, out p_target);
         InputConstraints.input_constraints(v_launch, theta, p_target);
-        double t_flight = Calculations.func_t_flight(v_launch, theta, g_vect);
-        double p_land = Calculations.func_p_land(v_launch, theta, g_vect);
-        double d_offset = Calculations.func_d_offset(p_target, p_land);
+        float t_flight = Calculations.func_t_flight(v_launch, theta, g_vect);
+        float p_land = Calculations.func_p_land(v_launch, theta, g_vect);
+        float d_offset = Calculations.func_d_offset(p_target, p_land);
         string s = Calculations.func_s(p_target, epsilon, d_offset);
         OutputFormat.write_output(s, d_offset);
     }

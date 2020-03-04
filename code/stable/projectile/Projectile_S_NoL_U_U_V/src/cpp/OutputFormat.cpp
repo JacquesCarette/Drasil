@@ -7,7 +7,7 @@
 using std::ofstream;
 using std::string;
 
-void write_output(string s, double d_offset) {
+void write_output(string s, float d_offset) {
     ofstream outputfile;
     outputfile.open("output.txt", std::fstream::out);
     outputfile << "s = ";

@@ -11,19 +11,19 @@ simpleODE = prog "SimpleODE" [fileDoc (buildModule "SimpleODE" []
   [simpleODEMain] [])]
 
 simpleODEMain :: (MethodSym repr) => MS (repr (Method repr))
-simpleODEMain = mainFunction (body [block [varDecDef odeConst (litFloat 3.5)],
+simpleODEMain = mainFunction (body [block [varDecDef odeConst (litDouble 3.5)],
   solveODE info opts,
   block [print $ valueOf odeDepVar]])
 
 odeConst, odeDepVar, odeIndepVar :: (VariableSym repr) =>
   VS (repr (Variable repr))
-odeConst = var "c" float
-odeDepVar = var "T" (listType float)
-odeIndepVar = var "t" (listType float)
+odeConst = var "c" double
+odeDepVar = var "T" (listType double)
+odeIndepVar = var "t" (listType double)
 
 info :: (StatementSym repr) => ODEInfo repr
-info = odeInfo odeIndepVar odeDepVar [odeConst] (litFloat 0.0) (litFloat 10.0) 
-  (litFloat 1.0) (valueOf odeDepVar #+ valueOf odeConst)
+info = odeInfo odeIndepVar odeDepVar [odeConst] (litDouble 0.0) (litDouble 10.0) 
+  (litDouble 1.0) (valueOf odeDepVar #+ valueOf odeConst)
 
 opts :: (StatementSym repr) => ODEOptions repr
-opts = odeOptions RK45 (litFloat 0.001) (litFloat 0.001) (litFloat 1.0)
+opts = odeOptions RK45 (litDouble 0.001) (litDouble 0.001) (litDouble 1.0)

@@ -54,6 +54,9 @@ data Expr where
                                   -- FCall accepts a list of params
                                   -- F(x,y) would be (FCall F [x,y]) or sim.
   New      :: UID -> [Expr] -> Expr -- Actor creation given UID and parameters
+  Message  :: UID -> UID -> [Expr] -> Expr -- Message an actor: 
+                                           -- 1st UID is the actor, 
+                                           -- 2nd UID is the method
   Case     :: Completeness -> [(Expr,Relation)] -> Expr -- For multi-case 
                                                      -- expressions, each pair
                                                      -- represents one case

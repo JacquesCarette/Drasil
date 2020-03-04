@@ -78,6 +78,6 @@ genCode chs spec = do
       genLangCode CSharp = genCall CSharp unCSC unCSP
       genLangCode Cpp = genCall Cpp unCPPC unCPPP
       genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr 
-        unPackRepr $ generator (showGregorian $ utctDay time) sampData chs spec
+        unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir

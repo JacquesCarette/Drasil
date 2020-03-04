@@ -193,10 +193,10 @@ genInOutFunc f docf s pr n desc ins' outs' b = do
     bComms bothVs) bod else f s pr inVs outVs bothVs bod
 
 convExpr :: (ProgramSym repr) => Expr -> Reader DrasilState (VS (repr (Value repr)))
-convExpr (Dbl d) = return $ litFloat d
+convExpr (Dbl d) = return $ litDouble d
 convExpr (Int i) = return $ litInt i
 convExpr (Str s) = return $ litString s
-convExpr (Perc a b) = return $ litFloat $ fromIntegral a / (10 ** fromIntegral b)
+convExpr (Perc a b) = return $ litDouble $ fromIntegral a / (10 ** fromIntegral b)
 convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
 convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
@@ -226,7 +226,7 @@ convExpr (New c x) = do
   return $ newObj funcTp args
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
-  return $ litFloat (fromIntegral a) #/ litFloat (fromIntegral b) -- hack to deal with integer division
+  return $ litDouble (fromIntegral a) #/ litDouble (fromIntegral b) -- hack to deal with integer division
 convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr (Case c l)      = doit l -- FIXME this is sub-optimal
   where

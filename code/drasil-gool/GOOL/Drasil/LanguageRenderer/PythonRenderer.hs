@@ -33,15 +33,15 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, int, float, listInnerType, obj, 
   enumType, funcType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', 
-  sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', equalOp, notEqualOp, 
-  greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
-  divideOp, moduloOp, var, staticVar, extVar, enumVar, classVar, objVar, 
-  objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litFloat, litInt, 
-  litString, valueOf, arg, enumElement, argsList, objAccess, objMethodCall, 
-  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
-  funcAppMixedArgs, selfFuncApp, extFuncApp, newObj, lambda, func, get, set, 
-  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
-  setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
+  sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', csc, sec, cot, equalOp, 
+  notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
+  multOp, divideOp, moduloOp, var, staticVar, extVar, enumVar, classVar, 
+  objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litDouble, 
+  litInt, litString, valueOf, arg, enumElement, argsList, objAccess, 
+  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
+  funcApp, funcAppMixedArgs, selfFuncApp, extFuncApp, newObj, lambda, func, 
+  get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
+  getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
   listAccessFunc, listSetFunc, state, loopState, emptyState, assign, 
   assignToListIndex, decrement, increment', increment1', decrement1, objDecNew, 
   objDecNewNoParams, closeFile, discardFileLine, stringListVals, 
@@ -184,7 +184,8 @@ instance TypeSym PythonCode where
   type Type PythonCode = TypeData
   bool = toState $ typeFromData Boolean "" empty
   int = G.int
-  float = G.float
+  float = double -- map floats to doubles for now so current examples dont break
+  double = G.float
   char = toState $ typeFromData Char "" empty
   string = pyStringType
   infile = toState $ typeFromData File "" empty
@@ -320,11 +321,12 @@ instance ValueSym PythonCode where
   litTrue = mkStateVal bool (text "True")
   litFalse = mkStateVal bool (text "False")
   litChar = G.litChar
-  litFloat = G.litFloat
+  litDouble = G.litDouble
+  litFloat = litDouble . realToFrac -- map to litDouble for now so current examples don't break
   litInt = G.litInt
   litString = G.litString
 
-  pi = addmathImport $ mkStateVal float (text "math.pi")
+  pi = addmathImport $ mkStateVal double (text "math.pi")
 
   ($:) = enumElement
 
@@ -356,9 +358,9 @@ instance NumericExpression PythonCode where
   sin = unExpr sinOp
   cos = unExpr cosOp
   tan = unExpr tanOp
-  csc v = litFloat 1.0 #/ sin v
-  sec v = litFloat 1.0 #/ cos v
-  cot v = litFloat 1.0 #/ tan v
+  csc = G.csc
+  sec = G.sec
+  cot = G.cot
   arcsin = unExpr asinOp
   arccos = unExpr acosOp
   arctan = unExpr atanOp
@@ -783,7 +785,8 @@ pyInput :: VS (PythonCode (Value PythonCode)) ->
   MS (PythonCode (Statement PythonCode))
 pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
   where pyInput' Integer = funcApp "int" int [inSrc]
-        pyInput' Float = funcApp "float" float [inSrc]
+        pyInput' Float = funcApp "float" double [inSrc]
+        pyInput' Double = funcApp "float" double [inSrc]
         pyInput' Boolean = inSrc ?!= litString "0"
         pyInput' String = objMethodCall string inSrc "rstrip" []
         pyInput' Char = inSrc

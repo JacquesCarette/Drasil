@@ -35,13 +35,14 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   commentedItem, addCommentsDocD, functionDox, commentedModD, valueList, 
   parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, multiBody, block, multiBlock, int, double, char, string, listType, 
-  listInnerType, obj, enumType, funcType, void, runStrategy, listSlice, notOp, 
-  negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, 
-  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
-  minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, staticVar, 
-  self, enumVar, objVar, listVar, listOf, arrayElem, litTrue, litFalse, litChar,
-  litFloat, litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, 
+  oneLiner, multiBody, block, multiBlock, int, float, double, char, string, 
+  listType, listInnerType, obj, enumType, funcType, void, runStrategy, 
+  listSlice, notOp, negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, 
+  asinOp, acosOp, atanOp, csc, sec, cot, equalOp, notEqualOp, greaterOp, 
+  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
+  moduloOp, powerOp, andOp, orOp, var, staticVar, self, enumVar, objVar, 
+  listVar, listOf, arrayElem, litTrue, litFalse, litChar, litDouble, litFloat, 
+  litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, 
   objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, funcApp, 
   namedArgError, newObj, lambda, func, get, set, listSize, listAdd, listAppend, 
   iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
@@ -204,6 +205,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   bool = on2StateValues pair bool bool
   int = on2StateValues pair int int
   float = on2StateValues pair float float
+  double = on2StateValues pair double double
   char = on2StateValues pair char char
   string = on2StateValues pair string string
   infile = on2StateValues pair infile infile
@@ -385,6 +387,7 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   litTrue = on2StateValues pair litTrue litTrue
   litFalse = on2StateValues pair litFalse litFalse
   litChar c = on2StateValues pair (litChar c) (litChar c)
+  litDouble v = on2StateValues pair (litDouble v) (litDouble v)
   litFloat v = on2StateValues pair (litFloat v) (litFloat v)
   litInt v =on2StateValues  pair (litInt v) (litInt v)
   litString s = on2StateValues pair (litString s) (litString s)
@@ -1165,7 +1168,8 @@ instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
   bool = cppBoolType
   int = G.int
-  float = G.double
+  float = G.float
+  double = G.double
   char = G.char
   string = modify (addUsing "string" . addLangImportVS "string") >> G.string
   infile = modify (addUsing "ifstream") >> cppInfileType
@@ -1296,12 +1300,13 @@ instance ValueSym CppSrcCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
+  litDouble = G.litDouble
   litFloat = G.litFloat
   litInt = G.litInt
   litString = G.litString
 
   pi = modify (addDefine "_USE_MATH_DEFINES") >> addMathHImport (mkStateVal 
-    float (text "M_PI"))
+    double (text "M_PI"))
 
   ($:) = enumElement
 
@@ -1331,9 +1336,9 @@ instance NumericExpression CppSrcCode where
   sin = unExpr sinOp
   cos = unExpr cosOp
   tan = unExpr tanOp
-  csc v = litFloat 1.0 #/ sin v
-  sec v = litFloat 1.0 #/ cos v
-  cot v = litFloat 1.0 #/ tan v
+  csc = G.csc
+  sec = G.sec
+  cot = G.cot
   arcsin = unExpr asinOp
   arccos = unExpr acosOp
   arctan = unExpr atanOp
@@ -1830,7 +1835,8 @@ instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData
   bool = cppBoolType
   int = G.int
-  float = G.double
+  float = G.float
+  double = G.double
   char = G.char
   string = modify (addHeaderUsing "string" . addHeaderLangImport "string") >> 
     G.string
@@ -1943,12 +1949,13 @@ instance ValueSym CppHdrCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
+  litDouble = G.litDouble
   litFloat = G.litFloat
   litInt = G.litInt
   litString = G.litString
 
   pi = modify (addHeaderDefine "_USE_MATH_DEFINES" . addHeaderLangImport 
-    "math.h") >> mkStateVal float (text "M_PI")
+    "math.h") >> mkStateVal double (text "M_PI")
 
   ($:) = enumElement
 
@@ -2484,7 +2491,8 @@ cppCast :: VS (CppSrcCode (Type CppSrcCode)) ->
   VS (CppSrcCode (Value CppSrcCode)) -> VS (CppSrcCode (Value CppSrcCode))
 cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
-  where cppCast' Float String _ _ = funcApp "std::stod" float [v]
+  where cppCast' Double String _ _ = funcApp "std::stod" double [v]
+        cppCast' Float String _ _ = funcApp "std::stof" float [v]
         cppCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD 
           (getTypeDoc tp)) (valueDoc vl))
 

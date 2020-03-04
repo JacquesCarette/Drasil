@@ -76,6 +76,7 @@ instance TypeSym CodeInfo where
   bool = noInfoType
   int = noInfoType
   float = noInfoType
+  double = noInfoType
   char = noInfoType
   string = noInfoType
   infile = noInfoType
@@ -135,6 +136,7 @@ instance ValueSym CodeInfo where
   litTrue = noInfo
   litFalse = noInfo
   litChar _ = noInfo
+  litDouble _ = noInfo
   litFloat _ = noInfo
   litInt _ = noInfo
   litString _ = noInfo

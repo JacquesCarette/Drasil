@@ -6,34 +6,34 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   fileType, listType, arrayType, listInnerType, obj, enumType, funcType, void, 
   runStrategy, listSlice, unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', 
   absOp, absOp', expOp, expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', 
-  asinOp, asinOp', acosOp, acosOp', atanOp, atanOp', unExpr, unExpr', 
-  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOp, notEqualOp, 
-  greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
-  divideOp, moduloOp, powerOp, andOp, orOp, binExpr, binExpr', typeBinExpr, 
-  addmathImport, var, staticVar, extVar, self, enumVar, classVar, objVar, 
-  objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, litFalse, litChar, 
-  litFloat, litInt, litString, pi, valueOf, arg, enumElement, argsList, 
-  inlineIf, funcApp, funcAppMixedArgs, namedArgError, selfFuncApp, extFuncApp, 
-  newObj, lambda, notNull, objAccess, objMethodCall, objMethodCallNoParams, 
-  selfAccess, listIndexExists, indexOf, func, get, set, listSize, listAdd, 
-  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
-  listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
-  listAccessFunc, listAccessFunc', listSetFunc, printSt, state, loopState, 
-  emptyState, assign, assignToListIndex, multiAssignError, decrement, 
-  increment, increment', increment1, increment1', decrement1, varDec, 
-  varDecDef, listDec, listDecDef, listDecDef', arrayDec, arrayDecDef, 
-  objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, constDecDef,
-  funcDecDef, discardInput, discardFileInput, openFileR, openFileW,
-  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, freeError, throw, initState,
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
-  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod,privMethod, 
-  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, enum, extraClass, implementingClass, docClass, 
-  commentedClass, intClass, buildModule, buildModule', modFromData, fileDoc, 
-  docMod
+  asinOp, asinOp', acosOp, acosOp', atanOp, atanOp', csc, sec, cot, unExpr, 
+  unExpr', unExprNumDbl, typeUnExpr, powerPrec, multPrec, andPrec, orPrec, 
+  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
+  minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, binExpr, binExpr', 
+  binExprNumDbl', typeBinExpr, addmathImport, var, staticVar, extVar, self, 
+  enumVar, classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, 
+  litTrue, litFalse, litChar, litDouble, litFloat, litInt, litString, pi, 
+  valueOf, arg, enumElement, argsList, inlineIf, funcApp, funcAppMixedArgs, 
+  namedArgError, selfFuncApp, extFuncApp, newObj, lambda, notNull, objAccess, 
+  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
+  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
+  listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
+  listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
+  listAccessFunc', listSetFunc, printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, increment', 
+  increment1, increment1', decrement1, varDec, varDecDef, listDec, listDecDef, 
+  listDecDef', arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, 
+  extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, discardInput, 
+  discardFileInput, openFileR, openFileW, openFileA, closeFile, discardFileLine,
+  stringListVals, stringListLists, returnState, multiReturnError, valState, 
+  comment, freeError, throw, initState, changeState, initObserverList, 
+  addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists, for, forRange, 
+  forEach, while, tryCatch, checkState, notifyObservers, construct, param, 
+  method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, 
+  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
+  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
+  extraClass, implementingClass, docClass, commentedClass, intClass, 
+  buildModule, buildModule', modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -48,8 +48,9 @@ import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   InternalType(..), UnaryOpSym(UnaryOp), BinaryOpSym(BinaryOp), InternalOp(..),
   VariableSym(Variable, variableBind, variableName, variableType, variableDoc), 
   InternalVariable(varFromData), ValueSym(Value, valueDoc, valueType), 
-  NumericExpression(..), BooleanExpression(..), InternalValue(..), 
-  Selector(($.)), FunctionSym(Function), SelectorFunction(at), 
+  NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), 
+  BooleanExpression(..), InternalValue(..), Selector(($.)), 
+  FunctionSym(Function), SelectorFunction(at), 
   InternalFunction(iterBeginFunc, iterEndFunc, functionDoc, functionType, 
     funcFromData),
   InternalStatement(statementDoc, statementTerm, stateFromData), 
@@ -61,7 +62,8 @@ import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   ModuleSym(Module), InternalMod(moduleDoc, updateModuleDoc), BlockComment(..))
 import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData), 
   BodySym(oneLiner), BlockSym(block), 
-  TypeSym(bool, int, float, char, string, listType, arrayType, listInnerType, void), 
+  TypeSym(bool, int, float, double, char, string, listType, arrayType, 
+    listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
   ValueSym(litTrue, litFalse, litInt, litString, valueOf),
   ValueExpression(funcApp, newObj, extNewObj, notNull, lambda), 
@@ -95,7 +97,7 @@ import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS,
   getLibImports, getModuleImports, setModuleName, getModuleName, setClassName, 
   getClassName, addParameter)
 
-import Prelude hiding (break,print,last,mod,pi,(<>))
+import Prelude hiding (break,print,last,mod,pi,sin,cos,tan,(<>))
 import Data.Bifunctor (first)
 import Data.List (sort, intersperse)
 import Data.Map as Map (lookup, fromList)
@@ -107,7 +109,7 @@ import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   brackets, braces, quotes, integer, hcat, vcat, semi, comma, equals, isEmpty)
-import qualified Text.PrettyPrint.HughesPJ as D (char, double)
+import qualified Text.PrettyPrint.HughesPJ as D (char, double, float)
 
 -- Bodies --
 
@@ -142,7 +144,7 @@ float :: (RenderSym repr) => VS (repr (Type repr))
 float = toState $ typeFromData Float "float" (text "float")
 
 double :: (RenderSym repr) => VS (repr (Type repr))
-double = toState $ typeFromData Float "double" (text "double")
+double = toState $ typeFromData Double "double" (text "double")
 
 char :: (RenderSym repr) => VS (repr (Type repr))
 char = toState $ typeFromData Char "char" (text "char")
@@ -285,6 +287,20 @@ atanOp = unOpPrec "atan"
 atanOp' :: (RenderSym repr) => VS (repr (UnaryOp repr))
 atanOp' = addmathImport $ unOpPrec "math.atan"
 
+csc :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
+csc v = valOfOne (fmap valueType v) #/ sin v
+
+sec :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
+sec v = valOfOne (fmap valueType v) #/ cos v
+
+cot :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
+cot v = valOfOne (fmap valueType v) #/ tan v
+
+valOfOne :: (RenderSym repr) => VS (repr (Type repr)) -> VS (repr (Value repr))
+valOfOne t = t >>= (getVal . getType)
+  where getVal Float = litFloat 1.0
+        getVal _ = litDouble 1.0
+
 unOpDocD :: Doc -> Doc -> Doc
 unOpDocD op v = op <> parens v
 
@@ -293,14 +309,27 @@ unOpDocD' op v = op <> v
 
 unExpr :: (RenderSym repr) => VS (repr (UnaryOp repr)) -> VS (repr (Value repr))
   -> VS (repr (Value repr))
-unExpr = on2StateValues (\u v -> mkExpr (uOpPrec u) (valueType v) (unOpDocD 
-  (uOpDoc u) (valueDoc v)))
+unExpr = on2StateValues (mkUnExpr unOpDocD)
 
 unExpr' :: (RenderSym repr) => VS (repr (UnaryOp repr)) -> 
   VS (repr (Value repr)) -> VS (repr (Value repr))
-unExpr' = on2StateValues (\u v -> mkExpr (uOpPrec u) (valueType v) (unOpDocD' 
-  (uOpDoc u) (valueDoc v)))
+unExpr' = on2StateValues (mkUnExpr unOpDocD')
 
+mkUnExpr :: (RenderSym repr) => (Doc -> Doc -> Doc) -> repr (UnaryOp repr) -> 
+  repr (Value repr) -> repr (Value repr)
+mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (uOpDoc u) (valueDoc v))
+
+unExprNumDbl :: (RenderSym repr) => VS (repr (UnaryOp repr)) -> 
+  VS (repr (Value repr)) -> VS (repr (Value repr))
+unExprNumDbl u' v' = u' >>= (\u -> v' >>= (\v -> 
+  unExprCastFloat (valueType v) $ return $ mkUnExpr unOpDocD u v))
+
+unExprCastFloat :: (RenderSym repr) => repr (Type repr) -> 
+  (VS (repr (Value repr)) -> VS (repr (Value repr)))
+unExprCastFloat t = castType $ getType t
+  where castType Float = cast float
+        castType _ = id
+  
 typeUnExpr :: (RenderSym repr) => VS (repr (UnaryOp repr)) -> 
   VS (repr (Type repr)) -> VS (repr (Value repr)) -> VS (repr (Value repr))
 typeUnExpr = on3StateValues (\u t -> mkExpr (uOpPrec u) t . unOpDocD (uOpDoc u) 
@@ -388,6 +417,21 @@ binExpr' :: (RenderSym repr) => VS (repr (BinaryOp repr)) ->
 binExpr' = on3StateValues (\b v1 v2 -> mkExpr 9 (numType (valueType v1) 
   (valueType v2)) (binOpDocD' (bOpDoc b) (valueDoc v1) (valueDoc v2)))
 
+binExprNumDbl' :: (RenderSym repr) => VS (repr (BinaryOp repr)) -> 
+  VS (repr (Value repr)) -> VS (repr (Value repr)) -> VS (repr (Value repr))
+binExprNumDbl' b' v1' v2' = b' >>= (\b -> v1' >>= (\v1 -> v2' >>= (\v2 -> 
+  let t1 = valueType v1
+      t2 = valueType v2
+  in binExprCastFloat t1 t2 $ return $ mkExpr 9 (numType t1 t2) 
+  (binOpDocD' (bOpDoc b) (valueDoc v1) (valueDoc v2)))))
+
+binExprCastFloat :: (RenderSym repr) => repr (Type repr) -> repr (Type repr) ->
+  (VS (repr (Value repr)) -> VS (repr (Value repr)))
+binExprCastFloat t1 t2 = castType (getType t1) (getType t2)
+  where castType Float _ = cast float
+        castType _ Float = cast float
+        castType _ _ = id
+
 typeBinExpr :: (RenderSym repr) => VS (repr (BinaryOp repr)) -> 
   VS (repr (Type repr)) -> VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
   VS (repr (Value repr))
@@ -462,8 +506,11 @@ litFalse = mkStateVal S.bool (text "false")
 litChar :: (RenderSym repr) => Char -> VS (repr (Value repr))
 litChar c = mkStateVal S.char (quotes $ D.char c)
 
-litFloat :: (RenderSym repr) => Double -> VS (repr (Value repr))
-litFloat f = mkStateVal S.float (D.double f)
+litDouble :: (RenderSym repr) => Double -> VS (repr (Value repr))
+litDouble d = mkStateVal S.double (D.double d)
+
+litFloat :: (RenderSym repr) => Float -> VS (repr (Value repr))
+litFloat f = mkStateVal S.float (D.float f <> text "f")
 
 litInt :: (RenderSym repr) => Integer -> VS (repr (Value repr))
 litInt i = mkStateVal S.int (integer i)
@@ -472,7 +519,7 @@ litString :: (RenderSym repr) => String -> VS (repr (Value repr))
 litString s = mkStateVal S.string (doubleQuotedText s)
 
 pi :: (RenderSym repr) => VS (repr (Value repr))
-pi = mkStateVal S.float (text "Math.PI")
+pi = mkStateVal S.double (text "Math.PI")
 
 valueOf :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   VS (repr (Value repr))
@@ -1193,6 +1240,8 @@ numType t1 t2 = numericType (getType t1) (getType t2)
   where numericType Integer Integer = t1
         numericType Float _ = t1
         numericType _ Float = t2
+        numericType Double _ = t1
+        numericType _ Double = t2
         numericType _ _ = error "Numeric types required for numeric expression"
 
 mkExpr :: (RenderSym repr) => Int -> repr (Type repr) -> Doc -> 

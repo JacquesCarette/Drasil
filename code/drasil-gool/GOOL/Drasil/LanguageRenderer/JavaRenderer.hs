@@ -33,34 +33,35 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   addCommentsDocD, commentedModD, docFuncRepr, variableList, parameterList, 
   appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, multiBody, block, multiBlock, bool, int, double, char, listType, 
-  arrayType, listInnerType, obj, enumType, funcType, void, runStrategy, 
-  listSlice, notOp, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
-  lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, andOp, orOp,
-  var, staticVar, extVar, self, enumVar, classVar, objVar, objVarSelf, listVar, 
-  listOf, arrayElem, iterVar, litTrue, litFalse, litChar, litFloat, litInt, 
-  litString, pi, valueOf, arg, enumElement, argsList, inlineIf, objAccess, 
-  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
-  funcApp, namedArgError, selfFuncApp, extFuncApp, newObj, lambda, notNull, 
-  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
-  listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
-  listAppendFunc, iterBeginError, iterEndError, listAccessFunc', printSt, 
-  state, loopState, emptyState, assign, assignToListIndex, multiAssignError, 
-  decrement, increment, decrement1, increment1, varDec, varDecDef, listDec, 
-  arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
-  extObjDecNewNoParams, funcDecDef, discardInput, discardFileInput, openFileR, 
-  openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
-  stringListLists, returnState, multiReturnError, valState, comment, freeError, 
-  throw, initState, changeState, initObserverList, addObserver, ifCond, 
-  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
-  tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, 
-  pubMVar, pubGVar, buildClass, enum, extraClass, implementingClass, docClass, 
-  commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
-  fileFromData)
+  oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
+  listType, arrayType, listInnerType, obj, enumType, funcType, void, 
+  runStrategy, listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, 
+  greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
+  divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, 
+  classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, 
+  litFalse, litChar, litDouble, litFloat, litInt, litString, pi, valueOf, arg, 
+  enumElement, argsList, inlineIf, objAccess, objMethodCall, 
+  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
+  namedArgError, selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, 
+  set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
+  getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
+  iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  increment1, varDec, varDecDef, listDec, arrayDec, arrayDecDef, objDecNew, 
+  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, 
+  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
+  discardFileLine, stringListVals, stringListLists, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, 
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
+  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
+  pubMethod, constructor, docMain, function, mainFunction, docFunc, intFunc, 
+  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
+  enum, extraClass, implementingClass, docClass, commentedClass, intClass, 
+  buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
-  unExpr', typeUnExpr, powerPrec, binExpr, binExpr', typeBinExpr)
+  unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
+  typeBinExpr)
 import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
   Exception(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, updateMthdDoc, OpData(..), od, 
@@ -197,7 +198,8 @@ instance TypeSym JavaCode where
   type Type JavaCode = TypeData
   bool = G.bool
   int = G.int
-  float = G.double
+  float = G.float
+  double = G.double
   char = G.char
   string = jStringType
   infile = jInfileType
@@ -329,6 +331,7 @@ instance ValueSym JavaCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
+  litDouble = G.litDouble
   litFloat = G.litFloat
   litInt = G.litInt
   litString = G.litString
@@ -350,27 +353,27 @@ instance ValueSym JavaCode where
 
 instance NumericExpression JavaCode where
   (#~) = unExpr' negateOp
-  (#/^) = unExpr sqrtOp
+  (#/^) = unExprNumDbl sqrtOp
   (#|) = unExpr absOp
   (#+) = binExpr plusOp
   (#-) = binExpr minusOp
   (#*) = binExpr multOp
   (#/) = binExpr divideOp
   (#%) = binExpr moduloOp
-  (#^) = binExpr' powerOp
+  (#^) = binExprNumDbl' powerOp
 
-  log = unExpr logOp
-  ln = unExpr lnOp
-  exp = unExpr expOp
-  sin = unExpr sinOp
-  cos = unExpr cosOp
-  tan = unExpr tanOp
-  csc v = litFloat 1.0 #/ sin v
-  sec v = litFloat 1.0 #/ cos v
-  cot v = litFloat 1.0 #/ tan v
-  arcsin = unExpr asinOp
-  arccos = unExpr acosOp
-  arctan = unExpr atanOp
+  log = unExprNumDbl logOp
+  ln = unExprNumDbl lnOp
+  exp = unExprNumDbl expOp
+  sin = unExprNumDbl sinOp
+  cos = unExprNumDbl cosOp
+  tan = unExprNumDbl tanOp
+  csc = G.csc
+  sec = G.sec
+  cot = G.cot
+  arcsin = unExprNumDbl asinOp
+  arccos = unExprNumDbl acosOp
+  arctan = unExprNumDbl atanOp
   floor = unExpr floorOp
   ceil = unExpr ceilOp
 
@@ -813,8 +816,10 @@ jListType l t = modify (addLangImportVS $ "java.util." ++ render lst) >>
   (t >>= (jListType' . getType))
   where jListType' Integer = toState $ typeFromData (List Integer) (render lst 
           ++ "<Integer>") (lst <> angles (text "Integer"))
-        jListType' Float = toState $ typeFromData (List Float) (render lst ++ "<Double>") 
-          (lst <> angles (text "Double"))
+        jListType' Float = toState $ typeFromData (List Float) 
+          (render lst ++ "<Float>") (lst <> angles (text "Float"))
+        jListType' Double = toState $ typeFromData (List Double) 
+          (render lst ++ "<Double>") (lst <> angles (text "Double"))
         jListType' _ = G.listType l t
         lst = keyDoc l
 
@@ -843,7 +848,8 @@ jCast :: VS (JavaCode (Type JavaCode)) -> VS (JavaCode (Value JavaCode)) ->
   VS (JavaCode (Value JavaCode))
 jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
-  where jCast' Float String _ _ = funcApp "Double.parseDouble" float [v]
+  where jCast' Double String _ _ = funcApp "Double.parseDouble" double [v]
+        jCast' Float String _ _ = funcApp "Float.parseFloat" float [v]
         jCast' Integer (Enum _) _ _ = v $. func "ordinal" int []
         jCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
           tp)) (valueDoc vl))
@@ -881,8 +887,10 @@ jInput :: (RenderSym repr) => VS (repr (Type repr)) -> VS (repr (Value repr))
 jInput = on2StateValues (\t -> mkVal t . jInput' (getType t))
   where jInput' Integer inFn = text "Integer.parseInt" <> parens (valueDoc inFn 
           <> dot <> text "nextLine()")
-        jInput' Float inFn = text "Double.parseDouble" <> parens (valueDoc inFn 
+        jInput' Float inFn = text "Float.parseFloat" <> parens (valueDoc inFn 
           <> dot <> text "nextLine()")
+        jInput' Double inFn = text "Double.parseDouble" <> parens (valueDoc 
+          inFn <> dot <> text "nextLine()")
         jInput' Boolean inFn = valueDoc inFn <> dot <> text "nextBoolean()"
         jInput' String inFn = valueDoc inFn <> dot <> text "nextLine()"
         jInput' Char inFn = valueDoc inFn <> dot <> text "next().charAt(0)"

@@ -38,6 +38,8 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   waterDist, waterHght, waterWeight, watForceSum, xi, xMaxExtSlip, xMaxEtrSlip,
   xMinExtSlip, xMinEtrSlip, yi, yMaxSlip, yMinSlip)
 
+import Control.Lens ((^.))
+
 -----------------------
 --  Instance Models  --
 -----------------------
@@ -592,7 +594,7 @@ crtSlpIdRC = makeRC "crtSlpIdRC" (nounPhraseSP "critical slip surface identifica
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 -- FIXME: critCoords should also be an output
 crtSlpIdRel :: Relation
-crtSlpIdRel = sy fsMin $= apply (sy minFunction) [sy slopeDist, 
+crtSlpIdRel = sy fsMin $= apply minFunction [sy slopeDist, 
   sy slopeHght, sy waterDist, sy waterHght, sy effCohesion, sy fricAngle, 
   sy dryWeight, sy satWeight, sy waterWeight, sy constF]
 

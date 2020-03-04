@@ -206,7 +206,7 @@ convExpr (C c)   = do
   g <- ask
   let v = quantvar (lookupC g c)
   mkVal v
-convExpr (FCall (C c) x) = do
+convExpr (FCall c x) = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
       mem = eMap $ codeSpec g
@@ -216,7 +216,6 @@ convExpr (FCall (C c) x) = do
   args <- mapM convExpr x
   maybe (error $ "Call to non-existent function" ++ funcNm) 
     (\f -> fApp f funcNm funcTp args) (Map.lookup funcNm mem)
-convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (New c x) = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g

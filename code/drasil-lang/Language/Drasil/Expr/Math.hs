@@ -7,6 +7,7 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), BinOp(..),
   ArithOper(..), UFunc(..), Completeness(..))
 import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 
 -- | Smart constructor to take the log of an expression
@@ -140,15 +141,18 @@ dgnl2x2 :: Expr -> Expr -> Expr
 dgnl2x2 a  = m2x2 a (Int 0) (Int 0)
 
 -- Some helper functions to do function application
-apply :: Expr -> [Expr] -> Expr
-apply = FCall
+
+-- FIXME: These constructors should check that the UID is associated with a
+-- chunk that is actually callable.
+apply :: (HasUID f, HasSymbol f) => f -> [Expr] -> Expr
+apply f = FCall (f ^. uid)
 
 apply1 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> Expr
-apply1 f a = FCall (sy f) [sy a]
+apply1 f a = FCall (f ^. uid) [sy a]
 
 apply2 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => 
     f -> a -> b -> Expr
-apply2 f a b = FCall (sy f) [sy a, sy b]
+apply2 f a b = FCall (f ^. uid) [sy a, sy b]
 
 -- Note how |sy| 'enforces' having a symbol
 sy :: (HasUID c, HasSymbol c) => c -> Expr

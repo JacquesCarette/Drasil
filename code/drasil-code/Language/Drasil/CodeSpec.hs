@@ -228,12 +228,12 @@ asVC (FDef (CtorDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
 asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
 asVC (FCD _) = error "Can't make QuantityDict from FCD function" -- codeVC cd (codeSymb cd) (cd ^. typ)
 
-asExpr :: Func -> Expr
-asExpr f = sy $ asVC f
+funcUID :: Func -> UID
+funcUID f = asVC f ^. uid
 
 -- FIXME: hack. Use for implementation-stage functions that need to be displayed in the SRS.
-asExpr' :: Func -> Expr
-asExpr' f = sy $ asVC' f
+funcUID' :: Func -> UID
+funcUID' f = asVC' f ^. uid
 
 -- FIXME: Part of above hack
 asVC' :: Func -> QuantityDict

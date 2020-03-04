@@ -5,10 +5,8 @@ module Language.Drasil.Code.Imperative.ReadInput (
 import Language.Drasil
 import Language.Drasil.Code.DataDesc (DataDesc, Data(..), DataItem, Delim,
   LinePattern(..), isJunk, junkLine, repeated, singleton, singleLine)
-import Language.Drasil.Chunk.Code (codeType)
 
-import qualified GOOL.Drasil as C (CodeType(..))
-
+import Control.Lens ((^.))
 import Data.List (intersperse, transpose)
 import Data.List.Split (wordsBy)
 
@@ -20,9 +18,9 @@ readWithDataDesc fp dd = do
       readDD ds [] = if all isJunk ds then [] 
         else error "some inputs missing in sample input file"
       readDD (JunkData : ds) (_:ls) = readDD ds ls
-      readDD (Singleton d : ds) (l:ls) = strAsExpr (codeType d) l : readDD ds ls
+      readDD (Singleton d : ds) (l:ls) = strAsExpr (d ^. typ) l : readDD ds ls
       readDD (Line (Straight dis) dl : ds) (l:ls) = zipWith strAsExpr (map 
-        codeType dis) (wordsBy (==dl) l) ++ readDD ds ls
+        (^. typ) dis) (wordsBy (==dl) l) ++ readDD ds ls
       readDD (Line (Repeat dis) dl : ds) (l:ls) = strListsAsExprs dis 
         (groupLists dis dl l) ++ readDD ds ls
       readDD (Lines (Straight dis) (Just n) dl : ds) ls = strListsAsExprs dis 
@@ -39,29 +37,31 @@ readWithDataDesc fp dd = do
 
 sampleInputDD :: [DataItem] -> DataDesc
 sampleInputDD cs = junkLine : intersperse junkLine (map dataDesc cs)
-  where dataDesc c = toDataDesc (codeType c) c
-        toDataDesc (C.List _) c = singleLine (repeated [c]) ','
+  where dataDesc c = toDataDesc (c ^. typ) c
+        toDataDesc (Vect _) c = singleLine (repeated [c]) ','
         toDataDesc _ c = singleton c
 
 -- helpers
 
-strAsExpr :: C.CodeType -> String -> Expr
-strAsExpr C.Integer s = int (read s :: Integer)
-strAsExpr C.Float s = dbl (read s :: Double)
-strAsExpr C.Double s = dbl (read s :: Double)
-strAsExpr C.String s = str s
-strAsExpr _ _ = error "strAsExpr should only be called on integers, floats, or strings"
+strAsExpr :: Space -> String -> Expr
+strAsExpr Integer s = int (read s :: Integer)
+strAsExpr Natural s = int (read s :: Integer)
+strAsExpr Radians s = dbl (read s :: Double)
+strAsExpr Real s = dbl (read s :: Double)
+strAsExpr Rational s = dbl (read s :: Double)
+strAsExpr String s = str s
+strAsExpr _ _ = error "strAsExpr should only be numeric space or string"
 
 strListsAsExprs :: [DataItem] -> [[String]] -> [Expr]
-strListsAsExprs cs = zipWith ($) (map (strListAsExpr . codeType) cs)
-  where strListAsExpr (C.List t) ss = Matrix [map (strAsExpr t) ss]
-        strListAsExpr _ _ = error "strListsAsExpr called on non-list type"
+strListsAsExprs cs = zipWith ($) (map (strListAsExpr . (^. typ)) cs)
+  where strListAsExpr (Vect t) ss = Matrix [map (strAsExpr t) ss]
+        strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
 
 strLists2DAsExprs :: [DataItem] -> [[[String]]] -> [Expr]
-strLists2DAsExprs cs = zipWith ($) (map (strList2DAsExpr . codeType) cs)
-  where strList2DAsExpr (C.List (C.List t)) sss = Matrix $ 
+strLists2DAsExprs cs = zipWith ($) (map (strList2DAsExpr . (^. typ)) cs)
+  where strList2DAsExpr (Vect (Vect t)) sss = Matrix $ 
           map (map (strAsExpr t)) sss
-        strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-list type"
+        strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"
 
 groupLists :: [DataItem] -> Delim ->  String -> [[String]]
 groupLists ds dl l = transpose $ groupAdjacent (wordsBy (==dl) l)

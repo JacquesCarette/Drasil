@@ -11,11 +11,8 @@ import Database.Drasil (ChunkDB)
 import Language.Drasil.Chunk.Code (CodeChunk, codeName, codevars, codevars', 
   funcPrefix, quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtoc)
-import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 import Language.Drasil.Printers (toPlainName)
-
-import GOOL.Drasil (CodeType)
 
 import Data.List ((\\), nub)
 
@@ -56,7 +53,7 @@ funcData n desc d = FData $ FuncData (toPlainName n) desc d
 funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> Space -> 
   Maybe String -> [FuncStmt] -> Func  
 funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc 
-  (map quantvar i) (spaceToCodeType t) returnDesc fs 
+  (map quantvar i) t returnDesc fs 
 
 ctorDef :: Name -> String -> [CodeChunk] -> [Initializer] -> [FuncStmt] -> 
   FuncDef
@@ -67,7 +64,7 @@ data FuncData where
   
 data FuncDef where
   -- Name, description, parameters, return type, return description, statements
-  FuncDef :: Name -> String -> [CodeChunk] -> CodeType -> Maybe String -> 
+  FuncDef :: Name -> String -> [CodeChunk] -> Space -> Maybe String -> 
     [FuncStmt] -> FuncDef
   CtorDef :: Name -> String -> [CodeChunk] -> [Initializer] -> [FuncStmt] -> 
     FuncDef

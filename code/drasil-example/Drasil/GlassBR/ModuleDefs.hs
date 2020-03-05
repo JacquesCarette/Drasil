@@ -7,7 +7,7 @@ module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
-  asExpr, funcDef, fdec, ffor, funcData, quantvar, 
+  asVC, funcDef, fdec, ffor, funcData, quantvar, 
   multiLine, packmod, repeated, singleLine)
 
 allMods :: [Mod]
@@ -106,16 +106,16 @@ aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, HasUID a, HasUID i, HasUID j) =
 aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 
 getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Expr
-getCol a_ i_ p = apply (asExpr extractColumnCT) [sy a_, sy i_ + p]
+getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, sy i_ + p]
 
 call :: Func -> [QuantityDict] -> FuncStmt
-call f l = FVal $ apply (asExpr f) $ map sy l
+call f l = FVal $ apply (asVC f) $ map sy l
 
 find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> Expr
-find zv z_ = apply (asExpr findCT) [sy zv, sy z_]
+find zv z_ = apply (asVC findCT) [sy zv, sy z_]
 
 linInterp :: [Expr] -> Expr
-linInterp = apply (asExpr linInterpCT)
+linInterp = apply (asVC linInterpCT)
 
 interpOver :: (HasUID ptx, HasUID pty, HasUID ind, HasUID vv,
   HasSymbol ptx, HasSymbol pty, HasSymbol ind, HasSymbol vv) =>

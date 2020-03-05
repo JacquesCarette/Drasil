@@ -8,7 +8,7 @@ module Language.Drasil.Code (
   Logging(LogNone, LogAll), Modularity(..), Structure(..), 
   ConstantStructure(..), ConstantRepr(..), InputModule(..), CodeConcept(..), 
   matchConcepts, AuxFile(..), Visibility(..), ODEMethod(..), defaultChoices, 
-  asExpr, asExpr', asVC, asVC', codeSpec, relToQD,
+  funcUID, funcUID', asVC, asVC', codeSpec, relToQD,
   ($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, funcData, funcDef, 
   packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
@@ -74,7 +74,7 @@ import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), CodeSystInfo(..),
   Comments(..), Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), 
   Lang(..), Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, 
-  AuxFile(..), Visibility(..), ODEMethod(..), defaultChoices, asExpr, asExpr', 
+  AuxFile(..), Visibility(..), ODEMethod(..), defaultChoices, funcUID, funcUID', 
   asVC, asVC', codeSpec, relToQD)
 import Language.Drasil.Mod (($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, 
   funcData, funcDef, packmod)

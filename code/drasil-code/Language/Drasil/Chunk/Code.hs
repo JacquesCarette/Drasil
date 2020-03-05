@@ -1,9 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
-    CodeIdea(..), CodeChunk(..), codeType, codevar, codefunc, quantvar, 
-    quantfunc, ccObjVar, codevars, codevars', funcResolve, varResolve, 
-    ConstraintMap, constraintMap, physLookup, sfwrLookup, programName, 
-    funcPrefix
+    CodeIdea(..), CodeChunk(..), VarOrFunc(..), codeType, codevar, codefunc, 
+    quantvar, quantfunc, ccObjVar, codevars, codevars', funcResolve, 
+    varResolve, ConstraintMap, constraintMap, physLookup, sfwrLookup, 
+    programName, funcPrefix
   ) where
 
 import Control.Lens ((^.),makeLenses,view)

@@ -53,6 +53,7 @@ eprec C{}               = 500
 eprec Deriv{}           = prec2 Frac
 eprec FCall{}           = 210
 eprec New{}             = 210
+eprec Message{}         = 210
 eprec Case{}            = 200
 eprec Matrix{}          = 220
 eprec (UnaryOp fn _)    = prec1 fn

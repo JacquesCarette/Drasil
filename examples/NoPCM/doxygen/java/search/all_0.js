@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['outputformat',['OutputFormat',['../class_s_w_h_s_1_1_output_format.html',1,'SWHS']]],
-  ['outputformat_2ejava',['OutputFormat.java',['../_output_format_8java.html',1,'']]]
+  ['constants',['Constants',['../class_s_w_h_s_1_1_constants.html',1,'SWHS']]],
+  ['constants_2ejava',['Constants.java',['../_constants_8java.html',1,'']]],
+  ['control',['Control',['../class_s_w_h_s_1_1_control.html',1,'SWHS']]],
+  ['control_2ejava',['Control.java',['../_control_8java.html',1,'']]]
 ];

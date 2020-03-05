@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['write_5foutput',['write_output',['../class_output_format.html#a13af2c998de691981c55f68fedf5e4aa',1,'OutputFormat']]]
+  ['get_5finput',['get_input',['../class_input_parameters.html#afa41efd2bfa451ca1919f2ebad45eb16',1,'InputParameters']]]
 ];

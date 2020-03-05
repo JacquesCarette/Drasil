@@ -89,43 +89,301 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>Contains the entire Projectile program.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;Projectile.hpp&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="_projectile_8hpp_source.html">Projectile.hpp</a>&quot;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;limits&gt;</code><br />
+<code>#include &lt;math.h&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ac0f2228420376f4db7e1274f2b41667c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8cpp.html#ac0f2228420376f4db7e1274f2b41667c">main</a> (int argc, const char *argv[])</td></tr>
 <tr class="memdesc:ac0f2228420376f4db7e1274f2b41667c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Controls the flow of the program.  <a href="#ac0f2228420376f4db7e1274f2b41667c">More...</a><br /></td></tr>
 <tr class="separator:ac0f2228420376f4db7e1274f2b41667c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5090d4511dc5efba33b614a82742cdc9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5090d4511dc5efba33b614a82742cdc9"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>func_t_flight</b> (double v_launch, double theta, double g_vect)</td></tr>
+<tr class="memitem:a5090d4511dc5efba33b614a82742cdc9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8cpp.html#a5090d4511dc5efba33b614a82742cdc9">func_t_flight</a> (double v_launch, double theta, double g_vect)</td></tr>
+<tr class="memdesc:a5090d4511dc5efba33b614a82742cdc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration: the time when the projectile lands (s)  <a href="#a5090d4511dc5efba33b614a82742cdc9">More...</a><br /></td></tr>
 <tr class="separator:a5090d4511dc5efba33b614a82742cdc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b955d26d9bb699e43e7d96b27c8c991"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b955d26d9bb699e43e7d96b27c8c991"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>func_p_land</b> (double v_launch, double theta, double g_vect)</td></tr>
+<tr class="memitem:a3b955d26d9bb699e43e7d96b27c8c991"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8cpp.html#a3b955d26d9bb699e43e7d96b27c8c991">func_p_land</a> (double v_launch, double theta, double g_vect)</td></tr>
+<tr class="memdesc:a3b955d26d9bb699e43e7d96b27c8c991"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position: the distance from the launcher to the final position of the projectile (m)  <a href="#a3b955d26d9bb699e43e7d96b27c8c991">More...</a><br /></td></tr>
 <tr class="separator:a3b955d26d9bb699e43e7d96b27c8c991"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f0e8ad727a838fbf8b331a963785add"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1f0e8ad727a838fbf8b331a963785add"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>func_d_offset</b> (double p_target, double p_land)</td></tr>
+<tr class="memitem:a1f0e8ad727a838fbf8b331a963785add"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8cpp.html#a1f0e8ad727a838fbf8b331a963785add">func_d_offset</a> (double p_target, double p_land)</td></tr>
+<tr class="memdesc:a1f0e8ad727a838fbf8b331a963785add"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)  <a href="#a1f0e8ad727a838fbf8b331a963785add">More...</a><br /></td></tr>
 <tr class="separator:a1f0e8ad727a838fbf8b331a963785add"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c9977bff2c7a17c8181db8e7ae96216"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c9977bff2c7a17c8181db8e7ae96216"></a>
-string&#160;</td><td class="memItemRight" valign="bottom"><b>func_s</b> (double p_target, double epsilon, double d_offset)</td></tr>
+<tr class="memitem:a7c9977bff2c7a17c8181db8e7ae96216"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8cpp.html#a7c9977bff2c7a17c8181db8e7ae96216">func_s</a> (double p_target, double epsilon, double d_offset)</td></tr>
+<tr class="memdesc:a7c9977bff2c7a17c8181db8e7ae96216"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates output message as a string.  <a href="#a7c9977bff2c7a17c8181db8e7ae96216">More...</a><br /></td></tr>
 <tr class="separator:a7c9977bff2c7a17c8181db8e7ae96216"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b8912e302ca71466768a1765c5e9c4f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b8912e302ca71466768a1765c5e9c4f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>get_input</b> (string filename, double &amp;v_launch, double &amp;theta, double &amp;p_target)</td></tr>
+<tr class="memitem:a8b8912e302ca71466768a1765c5e9c4f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8cpp.html#a8b8912e302ca71466768a1765c5e9c4f">get_input</a> (string filename, double &amp;v_launch, double &amp;theta, double &amp;p_target)</td></tr>
+<tr class="memdesc:a8b8912e302ca71466768a1765c5e9c4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads input from a file with the given file name.  <a href="#a8b8912e302ca71466768a1765c5e9c4f">More...</a><br /></td></tr>
 <tr class="separator:a8b8912e302ca71466768a1765c5e9c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afed50f49b6741ddd4ec881d60d08bd6c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afed50f49b6741ddd4ec881d60d08bd6c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>input_constraints</b> (double v_launch, double theta, double p_target)</td></tr>
+<tr class="memitem:afed50f49b6741ddd4ec881d60d08bd6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8cpp.html#afed50f49b6741ddd4ec881d60d08bd6c">input_constraints</a> (double v_launch, double theta, double p_target)</td></tr>
+<tr class="memdesc:afed50f49b6741ddd4ec881d60d08bd6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies that input values satisfy the physical constraints and software constraints.  <a href="#afed50f49b6741ddd4ec881d60d08bd6c">More...</a><br /></td></tr>
 <tr class="separator:afed50f49b6741ddd4ec881d60d08bd6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa18076548b8c0113f6c80aa54d385476"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa18076548b8c0113f6c80aa54d385476"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>write_output</b> (string s, double d_offset)</td></tr>
+<tr class="memitem:aa18076548b8c0113f6c80aa54d385476"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_projectile_8cpp.html#aa18076548b8c0113f6c80aa54d385476">write_output</a> (string s, double d_offset)</td></tr>
+<tr class="memdesc:aa18076548b8c0113f6c80aa54d385476"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="#aa18076548b8c0113f6c80aa54d385476">More...</a><br /></td></tr>
 <tr class="separator:aa18076548b8c0113f6c80aa54d385476"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains the entire Projectile program. </p>
 <dl class="section author"><dt>Author</dt><dd>Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a1f0e8ad727a838fbf8b331a963785add"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double func_d_offset </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>p_target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>p_land</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_target</td><td>target position: the distance from the launcher to the target (m) </td></tr>
+    <tr><td class="paramname">p_land</td><td>landing position: the distance from the launcher to the final position of the projectile (m) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>distance between the target position and the landing position: the offset between the target position and the landing position (m) </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3b955d26d9bb699e43e7d96b27c8c991"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double func_p_land </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>v_launch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>theta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>g_vect</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates landing position: the distance from the launcher to the final position of the projectile (m) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
+    <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
+    <tr><td class="paramname">g_vect</td><td>gravitational acceleration (m/s^2) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>landing position: the distance from the launcher to the final position of the projectile (m) </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7c9977bff2c7a17c8181db8e7ae96216"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string func_s </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>p_target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>epsilon</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>d_offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates output message as a string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_target</td><td>target position: the distance from the launcher to the target (m) </td></tr>
+    <tr><td class="paramname">epsilon</td><td>hit tolerance </td></tr>
+    <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position: the offset between the target position and the landing position (m) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>output message as a string </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5090d4511dc5efba33b614a82742cdc9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double func_t_flight </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>v_launch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>theta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>g_vect</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates flight duration: the time when the projectile lands (s) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
+    <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
+    <tr><td class="paramname">g_vect</td><td>gravitational acceleration (m/s^2) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>flight duration: the time when the projectile lands (s) </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a8b8912e302ca71466768a1765c5e9c4f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void get_input </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>v_launch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>theta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>p_target</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reads input from a file with the given file name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>name of the input file </td></tr>
+    <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
+    <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
+    <tr><td class="paramname">p_target</td><td>target position: the distance from the launcher to the target (m) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="afed50f49b6741ddd4ec881d60d08bd6c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void input_constraints </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>v_launch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>theta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>p_target</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Verifies that input values satisfy the physical constraints and software constraints. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">v_launch</td><td>launch speed: the initial speed of the projectile when launched (m/s) </td></tr>
+    <tr><td class="paramname">theta</td><td>launch angle: the angle between the launcher and a straight line from the launcher to the target (rad) </td></tr>
+    <tr><td class="paramname">p_target</td><td>target position: the distance from the launcher to the target (m) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="ac0f2228420376f4db7e1274f2b41667c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -159,6 +417,41 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>write_output</b> (str
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>exit code </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa18076548b8c0113f6c80aa54d385476"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void write_output </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>d_offset</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Writes the output values to output.txt. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>output message as a string </td></tr>
+    <tr><td class="paramname">d_offset</td><td>distance between the target position and the landing position: the offset between the target position and the landing position (m) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

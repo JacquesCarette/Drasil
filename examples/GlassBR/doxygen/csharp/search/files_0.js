@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['interpolation_2ecs',['Interpolation.cs',['../_interpolation_8cs.html',1,'']]]
+  ['calculations_2ecs',['Calculations.cs',['../_calculations_8cs.html',1,'']]],
+  ['control_2ecs',['Control.cs',['../_control_8cs.html',1,'']]]
 ];

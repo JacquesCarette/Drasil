@@ -23,21 +23,15 @@ data Data' = Datum DataItem'
                 -- is no corresponding delimiter for the 1-D list.
     Integer -- Degree of intermixing
             -- 0 <= degree of intermixing <= minimum dimension of the DataItems
-            -- Ex. 2 2-D lists with 1 degree of intermixing (and 0 intramixing):
+            -- Ex. 2 2-D lists with 1 degree of intermixing:
               -- x11 x12, y11 y12; x21 x22, y21 y22
-            -- Ex. 2 2-D lists with 2 degrees of intermixing (and 0 intramixing):
+            -- Ex. 2 2-D lists with 2 degrees of intermixing:
               -- x11, y11 x12, y12; x21, y21 x22, y22
     Delimiter -- Delimiter between elements from different lists
   | Junk -- Data that can be ignored/skipped over
 
 data DataItem' = DI 
   CodeChunk -- The datum being described
-  Integer -- Degree of intramixing
-          -- 0 <= degree of intramixing < dimension of datum
-          -- Ex. 2D list with 0 degree of intramixing:
-            -- x11, x12; x21, x22
-          -- Ex. 2D list with 1 degree of intramixing:
-            -- x11, x21; x12, x22
   [Delimiter] -- Delimiters between list elements. 
               -- Size of list should equal dimension of datum 
               -- Ex. a 1-D list needs 1 delimiter, a 2-D list needs 2 delimiters
@@ -53,10 +47,10 @@ dataDesc (d:ds) dlm = DD d dlm (dataDesc ds dlm)
 dataDesc [] _ = error "DataDesc must have at least one data item"
 
 singleton' :: CodeChunk -> Data'
-singleton' d = Datum $ DI d 0 []
+singleton' d = Datum $ DI d []
 
-list :: CodeChunk -> Delimiter -> Data'
-list d dlm = Datum $ DI d 0 [dlm]
+list :: CodeChunk -> [Delimiter] -> Data'
+list d dlms = Datum $ DI d dlms
 
 interwovenLists :: [DataItem'] -> Integer -> Delimiter -> Data'
 interwovenLists = Data

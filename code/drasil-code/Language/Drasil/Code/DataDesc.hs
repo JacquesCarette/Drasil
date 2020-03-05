@@ -4,8 +4,35 @@ import Language.Drasil.Chunk.Code (CodeVarChunk)
 
 import Data.List (nub)
 
-type DataDesc = [Data]
 type DataItem = CodeVarChunk
+
+-- New DataDesc
+
+data DataDesc' = DD Data' Delimiter DataDesc' | End Data'
+
+data Data' = Data Integer [DataItem] [Delimiter] | Junk 
+
+type Delimiter = String
+
+-- New constructors
+
+dataDesc :: [Data'] -> Delimiter -> DataDesc'
+dataDesc [d] _ = End d
+dataDesc (d:ds) dlm = DD d dlm (dataDesc ds dlm) 
+dataDesc [] _ = error "DataDesc must have at least one data item"
+
+singleton' :: DataItem -> Data'
+singleton' d = Data 0 [d] []
+
+list :: DataItem -> Delimiter -> Data
+list d dlm = Data 0 [d] [dlm]
+
+interwovenLists :: [DataItem] -> [Delimiter] -> Data'
+interwovenLists = Data (length d)
+
+-- Old DataDesc
+
+type DataDesc = [Data]
            
 type Delim = Char  -- delimiter
   
@@ -17,6 +44,8 @@ data Data = Singleton DataItem
           
 data LinePattern = Straight [DataItem] -- line of data with no pattern
                  | Repeat [DataItem]   -- line of data with repeated pattern       
+
+-- Old constructors/helpers
 
 singleton :: DataItem -> Data
 singleton = Singleton

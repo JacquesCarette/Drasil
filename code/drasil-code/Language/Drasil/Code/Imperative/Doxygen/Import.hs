@@ -843,7 +843,7 @@ makeDoxConfig prog s opt v =
   text "# spaces. See also FILE_PATTERNS and EXTENSION_MAPPING",
   text "# Note: If this tag is empty the current directory is searched.",
   blank,
-  text "INPUT                  =" <+> hcat (map text $ intersperse ", " fs),
+  text "INPUT                  =" <+> hcat (map text $ intersperse " " fs),
   blank,
   text "# This tag can be used to specify the character encoding of the source files",
   text "# that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses",

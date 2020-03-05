@@ -42,10 +42,10 @@ vArb        = makeVC "arb"        (nounPhrase "arb")        (Atomic "arb")
 
 arbiterGetCount = funcDef "arbiterGetCount" [arb] Rational
   [
-    FRet (FCall (asExpr getCount) [arb])
+    FRet (FCall (funcUID getCount) [arb])
   ]
 
 arbiterGetNormal = funcDef "arbiterGetNormal" [arb] Rational
   [
-    FRet (FCall (asExpr getNormal) [arb])
+    FRet (FCall (funcUID getNormal) [arb])
   ]

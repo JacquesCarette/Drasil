@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
-    CodeIdea(..), CodeChunk(..), codevar, codefunc, quantvar, 
+    CodeIdea(..), CodeChunk(..), VarOrFunc(..), codevar, codefunc, quantvar, 
     quantfunc, ccObjVar, codevars, codevars', funcResolve, varResolve, 
     ConstraintMap, constraintMap, physLookup, sfwrLookup, programName, 
     funcPrefix

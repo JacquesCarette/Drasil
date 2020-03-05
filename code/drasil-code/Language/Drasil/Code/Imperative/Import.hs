@@ -33,7 +33,7 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), PermanenceSym(..), 
   BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  objMethodCall, FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), nonInitConstructor, convType, CodeType(..), 
   FS, CS, MS, VS, onStateValue) 
@@ -226,7 +226,7 @@ convExpr (C c)   = do
   g <- ask
   let v = quantvar (lookupC g c)
   mkVal v
-convExpr (FCall (C c) x) = do
+convExpr (FCall c x) = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
       mem = eMap $ codeSpec g
@@ -236,7 +236,6 @@ convExpr (FCall (C c) x) = do
   args <- mapM convExpr x
   maybe (error $ "Call to non-existent function" ++ funcNm) 
     (\f -> fApp f funcNm (convType funcTp) args) (Map.lookup funcNm mem)
-convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (New c x) = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
@@ -244,6 +243,16 @@ convExpr (New c x) = do
   funcTp <- codeType funcCd
   args <- mapM convExpr x
   return $ newObj (convType funcTp) args
+convExpr (Message a m x) = do
+  g <- ask
+  let info = sysinfodb $ csi $ codeSpec g
+      objCd = quantvar (symbResolve info a)
+      mthdCd = quantfunc (symbResolve info m)
+      mthdNm = codeName mthdCd
+  mthdTp <- codeType mthdCd
+  args <- mapM convExpr x
+  o <- mkVal objCd
+  return $ objMethodCall (convType mthdTp) o mthdNm args
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
   g <- ask

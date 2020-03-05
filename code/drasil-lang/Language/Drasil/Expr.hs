@@ -50,10 +50,13 @@ data Expr where
   -- Type (Partial or total) -> principal part of change -> with respect to
   -- For example: Deriv Part y x1 would be (dy/dx1)
   C        :: UID -> Expr -- implicitly assumes has a symbol
-  FCall    :: Expr -> [Expr] -> Expr -- F(x) is (FCall F [x]) or similar
+  FCall    :: UID -> [Expr] -> Expr -- F(x) is (FCall F [x]) or similar
                                   -- FCall accepts a list of params
                                   -- F(x,y) would be (FCall F [x,y]) or sim.
   New      :: UID -> [Expr] -> Expr -- Actor creation given UID and parameters
+  Message  :: UID -> UID -> [Expr] -> Expr -- Message an actor: 
+                                           -- 1st UID is the actor, 
+                                           -- 2nd UID is the method
   Case     :: Completeness -> [(Expr,Relation)] -> Expr -- For multi-case 
                                                      -- expressions, each pair
                                                      -- represents one case

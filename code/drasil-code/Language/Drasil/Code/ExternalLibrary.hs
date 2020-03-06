@@ -12,7 +12,7 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
 ) where
 
 import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeChunk, ccObjVar)
+import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, ccObjVar)
 import Language.Drasil.Mod (FuncStmt(..))
 
 import Control.Lens ((^.))
@@ -30,34 +30,34 @@ data Step = Call [Requires] FunctionInterface
   -- A while loop -- function calls in the condition, other conditions, steps for the body
   | Loop (NonEmpty FunctionInterface) ([Expr] -> Condition) (NonEmpty Step)
   -- For when a statement is needed, but does not interface with the external library
-  | Statement ([CodeChunk] -> [Expr] -> FuncStmt)
+  | Statement ([CodeVarChunk] -> [Expr] -> FuncStmt)
 
-data FunctionInterface = FI FuncType CodeChunk [Argument] (Maybe Result)
+data FunctionInterface = FI FuncType CodeFuncChunk [Argument] (Maybe Result)
 
-data Result = Assign CodeChunk | Return 
+data Result = Assign CodeVarChunk | Return 
 
-data Argument = Arg (Maybe CodeChunk) ArgumentInfo -- Maybe named argument
+data Argument = Arg (Maybe CodeVarChunk) ArgumentInfo -- Maybe named argument
 
 data ArgumentInfo = 
   -- Not dependent on use case, Maybe is name for the argument
   LockedArg Expr 
   -- Maybe is the variable if it needs to be declared and defined prior to calling
-  | Basic Space (Maybe CodeChunk) 
-  | Fn CodeChunk [Parameter] Step
-  | Class [Requires] Description CodeChunk ClassInfo
+  | Basic Space (Maybe CodeVarChunk) 
+  | Fn CodeFuncChunk [Parameter] Step
+  | Class [Requires] Description CodeVarChunk ClassInfo
   -- constructor, object, fields
-  | Record CodeChunk CodeChunk [CodeChunk]
+  | Record CodeFuncChunk CodeVarChunk [CodeVarChunk]
 
-data Parameter = LockedParam CodeChunk | NameableParam Space
+data Parameter = LockedParam CodeVarChunk | NameableParam Space
 
 data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
 
 -- Constructor, known parameters, body
-data MethodInfo = CI CodeChunk [Parameter] [Step]
+data MethodInfo = CI CodeFuncChunk [Parameter] [Step]
   -- Method, known parameters, body
-  | MI CodeChunk [Parameter] (NonEmpty Step)
+  | MI CodeFuncChunk [Parameter] (NonEmpty Step)
 
-data FuncType = Function | Method CodeChunk | Constructor
+data FuncType = Function | Method CodeVarChunk | Constructor
 
 externalLib :: [StepGroup] -> ExternalLibrary
 externalLib = id
@@ -90,54 +90,56 @@ loopStep [] _ _ = error "loopStep should be called with a non-empty list of Func
 loopStep _ _ [] = error "loopStep should be called with a non-empty list of Step"
 loopStep fis c ss = Loop (fromList fis) c (fromList ss)
 
-libFunction :: CodeChunk -> [Argument] -> FunctionInterface
+libFunction :: CodeFuncChunk -> [Argument] -> FunctionInterface
 libFunction f ps = FI Function f ps Nothing
 
-libMethod :: CodeChunk -> CodeChunk -> [Argument] -> FunctionInterface
+libMethod :: CodeVarChunk -> CodeFuncChunk -> [Argument] -> FunctionInterface
 libMethod o m ps = FI (Method o) m ps Nothing
 
-libFunctionWithResult :: CodeChunk -> [Argument] -> CodeChunk -> 
+libFunctionWithResult :: CodeFuncChunk -> [Argument] -> CodeVarChunk -> 
   FunctionInterface
 libFunctionWithResult f ps r = FI Function f ps (Just $ Assign r)
 
-libMethodWithResult :: CodeChunk -> CodeChunk -> [Argument] -> CodeChunk -> 
-  FunctionInterface
+libMethodWithResult :: CodeVarChunk -> CodeFuncChunk -> [Argument] -> 
+  CodeVarChunk -> FunctionInterface
 libMethodWithResult o m ps r = FI (Method o) m ps (Just $ Assign r)
 
-libConstructor :: CodeChunk -> [Argument] -> CodeChunk -> FunctionInterface
+libConstructor :: CodeFuncChunk -> [Argument] -> CodeVarChunk -> 
+  FunctionInterface
 libConstructor c as r = FI Constructor c as (Just $ Assign r)
 
-constructAndReturn :: CodeChunk -> [Argument] -> FunctionInterface
+constructAndReturn :: CodeFuncChunk -> [Argument] -> FunctionInterface
 constructAndReturn c as = FI Constructor c as (Just Return)
 
 lockedArg :: Expr -> Argument
 lockedArg = Arg Nothing . LockedArg
 
-lockedNamedArg :: CodeChunk -> Expr -> Argument
+lockedNamedArg :: CodeVarChunk -> Expr -> Argument
 lockedNamedArg n = Arg (Just n) . LockedArg
 
 inlineArg :: Space -> Argument
 inlineArg t = Arg Nothing $ Basic t Nothing
 
-inlineNamedArg :: CodeChunk ->  Space -> Argument
+inlineNamedArg :: CodeVarChunk ->  Space -> Argument
 inlineNamedArg n t = Arg (Just n) $ Basic t Nothing
 
-preDefinedArg :: CodeChunk -> Argument
+preDefinedArg :: CodeVarChunk -> Argument
 preDefinedArg v = Arg Nothing $ Basic (v ^. typ) (Just v)
 
-preDefinedNamedArg :: CodeChunk -> CodeChunk -> Argument
+preDefinedNamedArg :: CodeVarChunk -> CodeVarChunk -> Argument
 preDefinedNamedArg n v = Arg (Just n) $ Basic (v ^. typ) (Just v)
 
-functionArg :: CodeChunk -> [Parameter] -> Step -> Argument
+functionArg :: CodeFuncChunk -> [Parameter] -> Step -> Argument
 functionArg f ps b = Arg Nothing (Fn f ps b)
 
-customObjArg :: [Requires] -> Description -> CodeChunk -> ClassInfo -> Argument
+customObjArg :: [Requires] -> Description -> CodeVarChunk -> ClassInfo -> 
+  Argument
 customObjArg rs d o ci = Arg Nothing (Class rs d o ci)
 
-recordArg :: CodeChunk -> CodeChunk -> [CodeChunk] -> Argument
+recordArg :: CodeFuncChunk -> CodeVarChunk -> [CodeVarChunk] -> Argument
 recordArg c o fs = Arg Nothing (Record c o fs)
 
-lockedParam :: CodeChunk -> Parameter
+lockedParam :: CodeVarChunk -> Parameter
 lockedParam = LockedParam
 
 unnamedParam :: Space -> Parameter
@@ -149,19 +151,19 @@ customClass = Regular
 implementation :: String -> [MethodInfo] -> ClassInfo
 implementation = Implements
 
-constructorInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo
+constructorInfo :: CodeFuncChunk -> [Parameter] -> [Step] -> MethodInfo
 constructorInfo = CI
 
-methodInfo :: CodeChunk -> [Parameter] -> [Step] -> MethodInfo
+methodInfo :: CodeFuncChunk -> [Parameter] -> [Step] -> MethodInfo
 methodInfo _ _ [] = error "methodInfo should be called with a non-empty list of Step"
 methodInfo m ps ss = MI m ps (fromList ss)
 
-appendCurrSol :: CodeChunk -> Step
+appendCurrSol :: CodeVarChunk -> Step
 appendCurrSol curr = statementStep (\cdchs es -> case (cdchs, es) of
     ([s], []) -> appendCurrSolFS curr s
     (_,_) -> error "Fill for appendCurrSol should provide one CodeChunk and no Exprs")
   
-populateSolList :: CodeChunk -> CodeChunk -> CodeChunk -> [Step]
+populateSolList :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk -> [Step]
 populateSolList arr el fld = [statementStep (\cdchs es -> case (cdchs, es) of
     ([s], []) -> FDecDef s (Matrix [[]])
     (_,_) -> error popErr),
@@ -175,12 +177,12 @@ assignArrayIndex = statementStep (\cdchs es -> case (cdchs, es) of
   ([a],vs) -> FMulti $ zipWith (FAsgIndex a) [0..] vs
   (_,_) -> error "Fill for assignArrayIndex should provide one CodeChunk")
 
-assignSolFromObj :: CodeChunk -> Step
+assignSolFromObj :: CodeVarChunk -> Step
 assignSolFromObj o = statementStep (\cdchs es -> case (cdchs, es) of
   ([s],[]) -> FAsg s (sy $ ccObjVar o s)
   (_,_) -> error "Fill for assignSolFromObj should provide one CodeChunk and no Exprs")
 
-initSolListFromArray :: CodeChunk -> Step
+initSolListFromArray :: CodeVarChunk -> Step
 initSolListFromArray a = statementStep (\cdchs es -> case (cdchs, es) of
   ([s],[]) -> FAsg s (Matrix [[idx (sy a) (int 0)]])
   (_,_) -> error "Fill for initSolListFromArray should provide one CodeChunk and no Exprs")
@@ -192,8 +194,8 @@ initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
 
 -- FunctionInterface for loop condition, CodeChunk for independent var,
 -- FunctionInterface for solving, CodeChunk for soln array to populate with
-solveAndPopulateWhile :: FunctionInterface -> CodeChunk -> FunctionInterface -> 
-  CodeChunk -> Step
+solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> FunctionInterface 
+  -> CodeVarChunk -> Step
 solveAndPopulateWhile lc iv slv popArr = loopStep [lc] (\case 
   [ub] -> sy iv $< ub
   _ -> error "Fill for solveAndPopulateWhile should provide one Expr") 
@@ -204,13 +206,13 @@ returnExprList = statementStep (\cdchs es -> case (cdchs, es) of
   ([], _) -> FRet $ Matrix [es]
   (_,_) -> error "Fill for returnExprList should provide no CodeChunks")
 
-appendCurrSolFS :: CodeChunk -> CodeChunk -> FuncStmt
+appendCurrSolFS :: CodeVarChunk -> CodeVarChunk -> FuncStmt
 appendCurrSolFS cs s = FAppend (sy s) (idx (sy cs) (int 0))
 
 fixedReturn :: Expr -> Step
 fixedReturn = lockedStatement . FRet
 
-statementStep :: ([CodeChunk] -> [Expr] -> FuncStmt) -> Step
+statementStep :: ([CodeVarChunk] -> [Expr] -> FuncStmt) -> Step
 statementStep = Statement
 
 lockedStatement :: FuncStmt -> Step

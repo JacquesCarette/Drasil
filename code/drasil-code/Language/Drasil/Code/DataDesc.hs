@@ -1,11 +1,11 @@
 module Language.Drasil.Code.DataDesc where
 
-import Language.Drasil.Chunk.Code (CodeChunk)
+import Language.Drasil.Chunk.Code (CodeVarChunk)
 
 import Data.List (nub)
 
 type DataDesc = [Data]
-type DataItem = CodeChunk
+type DataItem = CodeVarChunk
            
 type Delim = Char  -- delimiter
   

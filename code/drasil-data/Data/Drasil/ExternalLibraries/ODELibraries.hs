@@ -22,7 +22,8 @@ import Language.Drasil.Code (ODEMethod(..), ExternalLibrary, Step, Argument,
   constructorInfoFill, methodInfoFill, appendCurrSolFill, populateSolListFill, 
   assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
   initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, 
-  fixedStatementFill, CodeChunk, codevar, codefunc, ccObjVar, implCQD)
+  fixedStatementFill, CodeVarChunk, CodeFuncChunk, codevar, codefunc, ccObjVar, 
+  implCQD)
 
 import Control.Lens ((^.))
 
@@ -79,10 +80,7 @@ setIntegratorMethod = callStep . libMethod r setIntegrator
 odeT :: Space
 odeT = Actor "ode"
 
-f, mthdArg, atolArg, rtolArg, r, rt, ry, odefunc, setIntegrator, setInitVal, 
-  successful, integrateStep :: CodeChunk
-f = codevar $ implCQD "f_scipy" (nounPhrase "function representing ODE system" 
-  "functions representing ODE system") Nothing (Array Real) (Label "f") Nothing
+mthdArg, atolArg, rtolArg, r, rt, ry :: CodeVarChunk
 mthdArg = codevar $ implCQD "method_scipy" (nounPhrase 
   "chosen method for solving ODE" "chosen methods for solving ODE") 
   Nothing String (Label "method") Nothing
@@ -96,6 +94,11 @@ r = codevar $ implCQD "r_scipy" (nounPhrase "ODE object" "ODE objects") Nothing
   odeT (Label "r") Nothing
 rt = ccObjVar r t
 ry = ccObjVar r y
+
+f, odefunc, setIntegrator, setInitVal, successful, 
+  integrateStep :: CodeFuncChunk
+f = codefunc $ implCQD "f_scipy" (nounPhrase "function representing ODE system" 
+  "functions representing ODE system") Nothing (Array Real) (Label "f") Nothing
 odefunc = codefunc $ implCQD "ode_scipy" (nounPhrase 
   "function for defining an ODE for SciPy" 
   "functions for defining an ODE for SciPy") Nothing 
@@ -155,18 +158,11 @@ solT = Actor "IEnumerable<SolPoint>"
 vecT = Actor "Vector"
 optT = Actor "Options"
 
-initv, fOslo, options, opts, aTol, rTol, sol, points, sp, x, vector, rk547m, 
-  gearBDF, solveFromToStep :: CodeChunk
+initv, opts, aTol, rTol, sol, points, sp, x :: CodeVarChunk
 initv = codevar $ implCQD "initv_oslo" (nounPhrase 
   "vector containing the initial values of the dependent variables"
   "vectors containing the initial values of the dependent variables") Nothing
   vecT (Label "initv") Nothing
-fOslo = codevar $ implCQD "f_oslo" (nounPhrase 
-  "function representing ODE system" "functions representing ODE system") 
-  Nothing vecT (Label "f") Nothing
-options = codefunc $ implCQD "Options_oslo" (nounPhrase 
-  "constructor for Options record" "constructors for Options record")
-  Nothing optT (Label "Options") Nothing
 opts = codevar $ implCQD "opts_oslo" (nounPhrase 
   "record containing options for ODE solving" 
   "records containing options for ODE solving") Nothing optT 
@@ -186,6 +182,14 @@ sp = codevar $ implCQD "sp_oslo" (nounPhrase "ODE solution point"
   "ODE solution points") Nothing (Actor "SolPoint") (Label "sp") Nothing
 x = codevar $ implCQD "X_oslo" (nounPhrase "dependent variable" 
   "dependent variables") Nothing (Array Real) (Label "X") Nothing
+
+fOslo, options, vector, rk547m, gearBDF, solveFromToStep :: CodeFuncChunk
+fOslo = codefunc $ implCQD "f_oslo" (nounPhrase 
+  "function representing ODE system" "functions representing ODE system") 
+  Nothing vecT (Label "f") Nothing
+options = codefunc $ implCQD "Options_oslo" (nounPhrase 
+  "constructor for Options record" "constructors for Options record")
+  Nothing optT (Label "Options") Nothing
 vector = codefunc $ implCQD "Vector_oslo" (nounPhrase 
   "constructor for an OSLO Vector" "constructors for an OSLO Vector")
   Nothing vecT (Label "Vector") Nothing
@@ -269,9 +273,7 @@ sh = "StepHandler"
 si = "StepInterpolator"
 fode = "FirstOrderDifferentialEquations"
 
-it, currVals, stepHandler, t0, y0, interpolator, isLast, curr, adamsC, 
-  dp54C, addStepHandler, initMethod, handleStep, getInterpState, integrate,
-  getDimension, computeDerivatives :: CodeChunk
+it, currVals, stepHandler, t0, y0, interpolator, isLast, curr :: CodeVarChunk
 it = codevar $ implCQD "it_apache" (nounPhrase "integrator for solving ODEs"
   "integrators for solving ODEs") Nothing (Actor foi) (Label "it") Nothing
 currVals = codevar $ implCQD "curr_vals_apache" (nounPhrase 
@@ -297,6 +299,9 @@ isLast = codevar $ implCQD "isLast_apache" (nounPhrase
 curr = codevar $ implCQD "curr_apache" (nounPhrase 
   "ODE solution array for current step" "ODE solution arrays for current step")
   Nothing (Array Real) (Label "curr") Nothing
+
+adamsC, dp54C, addStepHandler, initMethod, handleStep, getInterpState, 
+  integrate, getDimension, computeDerivatives :: CodeFuncChunk
 adamsC = codefunc $ implCQD "adams_ctor_apache" (nounPhrase
   "constructor for an Adams-Bashforth integrator" 
   "constructors for an Adams-Bashforth integrator") 
@@ -384,8 +389,7 @@ adamsBash = odeNameSpace ++ "adams_bashforth<3,vector<double>>"
 popT :: Space
 popT = Actor "Populate"
 
-odeintCurrVals, rk, stepper, pop, rkdp5C, makeControlled, adamsBashC, 
-  integrateConst, odeOp, popCtor, popOp :: CodeChunk
+odeintCurrVals, rk, stepper, pop :: CodeVarChunk
 odeintCurrVals = codevar $ implCQD "currVals_odeint" (nounPhrase 
   "vector holding ODE solution values for the current step"
   "vectors holding ODE solution values for the current step") Nothing
@@ -400,6 +404,9 @@ stepper = codevar $ implCQD "stepper_odeint" (nounPhrase
 pop = codevar $ implCQD "pop_odeint" (nounPhrase 
   "object to populate ODE solution vector" 
   "objects to populate ODE solution vector") Nothing popT (Label "pop") Nothing
+
+rkdp5C, makeControlled, adamsBashC, integrateConst, odeOp, popCtor, 
+  popOp :: CodeFuncChunk
 rkdp5C = codefunc $ implCQD "rkdp5_odeint" (nounPhrase
   "constructor for stepper using Runge-Kutta-Dopri5 method"
   "constructors for stepper using Runge-Kutta-Dopri5 method")
@@ -431,10 +438,7 @@ popOp = codefunc $ implCQD "pop_operator_odeint" (nounPhrase
 
 -- CodeChunks used in multiple external libraries --
 
-odeCtor, ode, t, y :: CodeChunk
-odeCtor = codefunc $ implCQD "ODE_constructor" (nounPhrase
-  "constructor for ODE object" "constructors for ODE object") Nothing odeObj
-  (Label "ODE") Nothing
+ode, t, y :: CodeVarChunk
 ode = codevar $ implCQD "ode_obj" (nounPhrase 
   "object representing an ODE system" "objects representing an ODE system")
   Nothing odeObj (Label "ode") Nothing
@@ -446,6 +450,11 @@ y = codevar $ implCQD "y_ode" (nounPhrase
   "current dependent variable value in ODE solution"
   "current dependent variable value in ODE solution") 
   Nothing (Vect Real) (Label "y") Nothing
+
+odeCtor :: CodeFuncChunk
+odeCtor = codefunc $ implCQD "ODE_constructor" (nounPhrase
+  "constructor for ODE object" "constructors for ODE object") Nothing odeObj
+  (Label "ODE") Nothing
 
 odeObj :: Space
 odeObj = Actor "ODE"
@@ -460,9 +469,9 @@ odeMethodUnavailable = "Chosen ODE solving method is not available" ++
 -- Goal will be for this info to be populated by the instance model for the ODE and the Choices structure.
 -- Probably doesn't belong here, but where?
 data ODEInfo = ODEInfo {
-  indepVar :: CodeChunk,
-  depVar :: CodeChunk,
-  otherVars :: [CodeChunk],
+  indepVar :: CodeVarChunk,
+  depVar :: CodeVarChunk,
+  otherVars :: [CodeVarChunk],
   tInit :: Expr,
   tFinal :: Expr,
   initVal :: Expr,
@@ -470,8 +479,8 @@ data ODEInfo = ODEInfo {
   odeOpts :: ODEOptions
 }
 
-odeInfo :: CodeChunk -> CodeChunk -> [CodeChunk] -> Expr -> Expr -> Expr -> 
-  [Expr] -> ODEOptions -> ODEInfo
+odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> Expr -> Expr -> 
+  Expr -> [Expr] -> ODEOptions -> ODEInfo
 odeInfo = ODEInfo
 
 data ODEOptions = ODEOpts {
@@ -484,7 +493,7 @@ data ODEOptions = ODEOpts {
 odeOptions :: ODEMethod -> Expr -> Expr -> Expr -> ODEOptions
 odeOptions = ODEOpts
 
-diffCodeChunk :: CodeChunk -> CodeChunk
+diffCodeChunk :: CodeVarChunk -> CodeVarChunk
 diffCodeChunk c = codevar $ implCQD ("d" ++ c ^. uid) 
   (compoundPhrase (nounPhraseSP "change in") (c ^. term)) Nothing (c ^. typ)
   (Concat [Label "d", symbol c Implementation]) (getUnit c) 

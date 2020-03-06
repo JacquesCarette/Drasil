@@ -31,7 +31,7 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   addCommentsDocD, commentedModD, docFuncRepr, valueList, variableList,
   parameterList, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, multiBody, block, multiBlock, int, float, listInnerType, obj, 
+  oneLiner, multiBody, block, multiBlock, int, listInnerType, obj, 
   enumType, funcType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', 
   sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', csc, sec, cot, equalOp, 
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
@@ -184,8 +184,8 @@ instance TypeSym PythonCode where
   type Type PythonCode = TypeData
   bool = toState $ typeFromData Boolean "" empty
   int = G.int
-  float = double -- map floats to doubles for now so current examples dont break
-  double = G.float
+  float = error "Floats unavailable in Python, use Doubles instead"
+  double = toState $ typeFromData Double "float" (text "float")
   char = toState $ typeFromData Char "" empty
   string = pyStringType
   infile = toState $ typeFromData File "" empty
@@ -219,8 +219,8 @@ instance ControlBlockSym PythonCode where
       r &= objMethodCall odeT (extNewObj odeLib odeT 
       [lambda [iv, dv] (ode info)]) 
         "set_integrator" (pyODEMethod (solveMethod opts) ++
-          [absTol opts >>= (mkStateVal float . (text "atol=" <>) . valueDoc),
-          relTol opts >>= (mkStateVal float . (text "rtol=" <>) . valueDoc)]),
+          [absTol opts >>= (mkStateVal double . (text "atol=" <>) . valueDoc),
+          relTol opts >>= (mkStateVal double . (text "rtol=" <>) . valueDoc)]),
       valState $ objMethodCall odeT rVal "set_initial_value" [initVal info]],
     block [
       listDecDef iv [tInit info],
@@ -322,7 +322,7 @@ instance ValueSym PythonCode where
   litFalse = mkStateVal bool (text "False")
   litChar = G.litChar
   litDouble = G.litDouble
-  litFloat = litDouble . realToFrac -- map to litDouble for now so current examples don't break
+  litFloat = error "Floats unavailable in Python, use Doubles instead"
   litInt = G.litInt
   litString = G.litString
 

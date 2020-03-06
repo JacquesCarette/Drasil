@@ -22,10 +22,7 @@ import Language.Drasil.Code (ODEMethod(..), ExternalLibrary, Step, Argument,
   constructorInfoFill, methodInfoFill, appendCurrSolFill, populateSolListFill, 
   assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
   initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, 
-  fixedStatementFill, CodeChunk, codeType, codevar, codefunc, ccObjVar, implCQD)
-
-import GOOL.Drasil (CodeType(Float, List, Array, Object, Void))
-import qualified GOOL.Drasil as C (CodeType(Boolean, Integer, String))
+  fixedStatementFill, CodeChunk, codevar, codefunc, ccObjVar, implCQD)
 
 import Control.Lens ((^.))
 
@@ -35,17 +32,17 @@ scipyODE :: ExternalLibrary
 scipyODE = externalLib [
   mandatoryStep $ callRequiresJust scipyImport $ libFunctionWithResult 
     odefunc [
-      functionArg f (map unnamedParam [Float, Array Float]) 
+      functionArg f (map unnamedParam [Real, Array Real]) 
       returnExprList] r,
   choiceStep [
     setIntegratorMethod [vode, methodArg "adams", atol, rtol],
     setIntegratorMethod [vode, methodArg "bdf", atol, rtol],
     setIntegratorMethod [lockedArg (str "dopri45"), atol, rtol]],
   mandatorySteps [callStep $ libMethod r setInitVal 
-      [inlineArg Float, inlineArg Float],
+      [inlineArg Real, inlineArg Real],
     initSolListWithVal,
     solveAndPopulateWhile (libMethod r successful []) rt 
-      (libMethod r integrateStep [inlineArg Float]) ry]]
+      (libMethod r integrateStep [inlineArg Real]) ry]]
 
 scipyCall :: ODEInfo -> ExternalLibraryCall
 scipyCall info = externalLibCall [
@@ -70,8 +67,8 @@ scipyImport = "scipy.integrate"
 
 atol, rtol, vode :: Argument
 vode = lockedArg (str "vode")
-atol = inlineNamedArg atolArg Float
-rtol = inlineNamedArg rtolArg Float
+atol = inlineNamedArg atolArg Real
+rtol = inlineNamedArg rtolArg Real
 
 methodArg :: String -> Argument
 methodArg = lockedNamedArg mthdArg . str
@@ -79,22 +76,22 @@ methodArg = lockedNamedArg mthdArg . str
 setIntegratorMethod :: [Argument] -> Step
 setIntegratorMethod = callStep . libMethod r setIntegrator
 
-odeT :: CodeType
-odeT = Object "ode"
+odeT :: Space
+odeT = Actor "ode"
 
 f, mthdArg, atolArg, rtolArg, r, rt, ry, odefunc, setIntegrator, setInitVal, 
   successful, integrateStep :: CodeChunk
 f = codevar $ implCQD "f_scipy" (nounPhrase "function representing ODE system" 
-  "functions representing ODE system") Nothing (List Float) (Label "f") Nothing
+  "functions representing ODE system") Nothing (Array Real) (Label "f") Nothing
 mthdArg = codevar $ implCQD "method_scipy" (nounPhrase 
   "chosen method for solving ODE" "chosen methods for solving ODE") 
-  Nothing C.String (Label "method") Nothing
+  Nothing String (Label "method") Nothing
 atolArg = codevar $ implCQD "atol_scipy" (nounPhrase 
   "absolute tolerance for ODE solution" "absolute tolerances for ODE solution") 
-  Nothing Float (Label "atol") Nothing
+  Nothing Real (Label "atol") Nothing
 rtolArg = codevar $ implCQD "rtol_scipy" (nounPhrase 
   "relative tolerance for ODE solution" "relative tolerances for ODE solution") 
-  Nothing Float (Label "rtol") Nothing
+  Nothing Real (Label "rtol") Nothing
 r = codevar $ implCQD "r_scipy" (nounPhrase "ODE object" "ODE objects") Nothing 
   odeT (Label "r") Nothing
 rt = ccObjVar r t
@@ -113,7 +110,7 @@ setInitVal = codefunc $ implCQD "set_initial_value_scipy" (nounPhrase
 successful = codefunc $ implCQD "successful_scipy" (nounPhrase 
   "method returning True if integration is current successful"
   "methods returning True if integration is current successful")
-  Nothing C.Boolean (Label "successful") Nothing
+  Nothing Boolean (Label "successful") Nothing
 integrateStep = codefunc $ implCQD "integrate_scipy" (nounPhrase
   "method that performs one integration step on an ODE"
   "methods that perform one integration step on an ODE")
@@ -125,11 +122,11 @@ integrateStep = codefunc $ implCQD "integrate_scipy" (nounPhrase
 oslo :: ExternalLibrary
 oslo = externalLib [
   mandatoryStep $ callRequiresJust "Microsoft.Research.Oslo" $ libConstructor 
-    vector [inlineArg Float] initv,
+    vector [inlineArg Real] initv,
   choiceStep $ map (\s -> callStep $ libFunctionWithResult s odeArgs sol) 
     [rk547m, gearBDF],
   mandatorySteps (callRequiresJust "System.Linq" (libMethodWithResult sol 
-      solveFromToStep (map inlineArg [Float, Float, Float]) points) :
+      solveFromToStep (map inlineArg [Real, Real, Real]) points) :
     populateSolList points sp x)]
 
 osloCall :: ODEInfo -> ExternalLibraryCall
@@ -148,15 +145,15 @@ osloCall info = externalLibCall [
         chooseMethod _ = error odeMethodUnavailable
 
 odeArgs :: [Argument]
-odeArgs = [inlineArg Float, lockedArg (sy initv),
-  functionArg fOslo (map unnamedParam [Float, vecT]) 
-    (callStep $ constructAndReturn vector [inlineArg Float]),
+odeArgs = [inlineArg Real, lockedArg (sy initv),
+  functionArg fOslo (map unnamedParam [Real, vecT]) 
+    (callStep $ constructAndReturn vector [inlineArg Real]),
   recordArg options opts [aTol, rTol]]
 
-solT, vecT, optT :: CodeType
-solT = Object "IEnumerable<SolPoint>"
-vecT = Object "Vector"
-optT = Object "Options"
+solT, vecT, optT :: Space
+solT = Actor "IEnumerable<SolPoint>"
+vecT = Actor "Vector"
+optT = Actor "Options"
 
 initv, fOslo, options, opts, aTol, rTol, sol, points, sp, x, vector, rk547m, 
   gearBDF, solveFromToStep :: CodeChunk
@@ -176,19 +173,19 @@ opts = codevar $ implCQD "opts_oslo" (nounPhrase
   (Label "opts") Nothing
 aTol = codevar $ implCQD "aTol_oslo" (nounPhrase 
   "absolute tolerance for ODE solution" "absolute tolerances for ODE solution")
-  Nothing Float (Label "AbsoluteTolerance") Nothing
+  Nothing Real (Label "AbsoluteTolerance") Nothing
 rTol = codevar $ implCQD "rTol_oslo" (nounPhrase 
   "relative tolerance for ODE solution" "relative tolerances for ODE solution")
-  Nothing Float (Label "RelativeTolerance") Nothing
+  Nothing Real (Label "RelativeTolerance") Nothing
 sol = codevar $ implCQD "sol_oslo" (nounPhrase "container for ODE information" 
   "containers for ODE information") Nothing solT (Label "sol") Nothing
 points = codevar $ implCQD "points_oslo" (nounPhrase 
   "container holding ODE solution" "containers holding ODE solution") Nothing
   solT (Label "points") Nothing
 sp = codevar $ implCQD "sp_oslo" (nounPhrase "ODE solution point" 
-  "ODE solution points") Nothing (Object "SolPoint") (Label "sp") Nothing
+  "ODE solution points") Nothing (Actor "SolPoint") (Label "sp") Nothing
 x = codevar $ implCQD "X_oslo" (nounPhrase "dependent variable" 
-  "dependent variables") Nothing (Array Float) (Label "X") Nothing
+  "dependent variables") Nothing (Array Real) (Label "X") Nothing
 vector = codefunc $ implCQD "Vector_oslo" (nounPhrase 
   "constructor for an OSLO Vector" "constructors for an OSLO Vector")
   Nothing vecT (Label "Vector") Nothing
@@ -228,9 +225,9 @@ apacheODE = externalLib [
         constructorInfo odeCtor [] [],
         methodInfo getDimension [] [fixedReturn (int 1)],
         methodInfo computeDerivatives [
-          lockedParam t, unnamedParam (Array Float), unnamedParam (Array Float)]
+          lockedParam t, unnamedParam (Array Real), unnamedParam (Array Real)]
           [assignArrayIndex]]) : 
-      [inlineArg Float, preDefinedArg currVals, inlineArg Float, 
+      [inlineArg Real, preDefinedArg currVals, inlineArg Real, 
         preDefinedArg currVals]),
     assignSolFromObj stepHandler]]
 
@@ -262,7 +259,7 @@ apacheImport :: String
 apacheImport = "org.apache.commons.math3.ode."
 
 itArgs :: [Argument]
-itArgs = map inlineArg [Float, Float, Float, Float]
+itArgs = map inlineArg [Real, Real, Real, Real]
 
 adams, dp54, foi, sh, si, fode :: String
 adams = "AdamsBashforthIntegrator"
@@ -276,38 +273,38 @@ it, currVals, stepHandler, t0, y0, interpolator, isLast, curr, adamsC,
   dp54C, addStepHandler, initMethod, handleStep, getInterpState, integrate,
   getDimension, computeDerivatives :: CodeChunk
 it = codevar $ implCQD "it_apache" (nounPhrase "integrator for solving ODEs"
-  "integrators for solving ODEs") Nothing (Object foi) (Label "it") Nothing
+  "integrators for solving ODEs") Nothing (Actor foi) (Label "it") Nothing
 currVals = codevar $ implCQD "curr_vals_apache" (nounPhrase 
   "array holding ODE solution values for the current step"
   "arrays holding ODE solution values for the current step") Nothing 
-  (Array Float) (Label "curr_vals") Nothing
+  (Array Real) (Label "curr_vals") Nothing
 stepHandler = codevar $ implCQD "stepHandler_apache" (nounPhrase 
-  "ODE step handler" "ODE step handlers") Nothing (Object sh)
+  "ODE step handler" "ODE step handlers") Nothing (Actor sh)
   (Label "stepHandler") Nothing
 t0 = codevar $ implCQD "t0_apache" (nounPhrase "initial time for ODE solving"
-  "intial times for ODE solving") Nothing Float (Label "t0") Nothing
+  "intial times for ODE solving") Nothing Real (Label "t0") Nothing
 y0 = codevar $ implCQD "y0_apache" (nounPhrase 
   "array of initial values for ODE solving" 
   "arrays of initial values for ODE solving") 
-  Nothing (Array Float) (Label "y0") Nothing
+  Nothing (Array Real) (Label "y0") Nothing
 interpolator = codevar $ implCQD "interpolator_apache" (nounPhrase 
   "step interpolator for ODE solving" "step interpolator for ODE solving")
-  Nothing (Object si) (Label "interpolator") Nothing
+  Nothing (Actor si) (Label "interpolator") Nothing
 isLast = codevar $ implCQD "isLast_apache" (nounPhrase 
   "boolean for whether the current step is the last step"
   "booleans for whether the current step is the last step")
-  Nothing C.Boolean (Label "isLast") Nothing
+  Nothing Boolean (Label "isLast") Nothing
 curr = codevar $ implCQD "curr_apache" (nounPhrase 
   "ODE solution array for current step" "ODE solution arrays for current step")
-  Nothing (Array Float) (Label "curr") Nothing
+  Nothing (Array Real) (Label "curr") Nothing
 adamsC = codefunc $ implCQD "adams_ctor_apache" (nounPhrase
   "constructor for an Adams-Bashforth integrator" 
   "constructors for an Adams-Bashforth integrator") 
-  Nothing (Object adams) (Label adams) Nothing
+  Nothing (Actor adams) (Label adams) Nothing
 dp54C = codefunc $ implCQD "dp54_ctor_apache" (nounPhrase
   "constructor for a Dormand-Prince 5-4 integrator"
   "constructors for a Dormand-Prince 5-4 integrator")
-  Nothing (Object dp54) (Label dp54) Nothing
+  Nothing (Actor dp54) (Label dp54) Nothing
 addStepHandler = codefunc $ implCQD "addStepHandler_apache" (nounPhrase
   "method for adding a step handler to an integrator"
   "methods for adding a step handler to an integrator")
@@ -321,14 +318,14 @@ handleStep = codefunc $ implCQD "handleStep_apache" (nounPhrase
 getInterpState = codefunc $ implCQD "getInterpolatedState_apache" (nounPhrase
   "method for getting current state during ODE solving"
   "methods for getting current state during ODE solving")
-  Nothing (Array Float) (Label "getInterpolatedState") Nothing
+  Nothing (Array Real) (Label "getInterpolatedState") Nothing
 integrate = codefunc $ implCQD "integrate_apache" (nounPhrase
   "method for integrating an ODE" "methods for integrating an ODE")
   Nothing Void (Label "integrate") Nothing
 getDimension = codefunc $ implCQD "getDimension_apache" (nounPhrase
   "method returning the dimension of an ODE system"
   "methods returning the dimension of an ODE system")
-  Nothing C.Integer (Label "getDimension") Nothing
+  Nothing Natural (Label "getDimension") Nothing
 computeDerivatives = codefunc $ implCQD "computeDerivatives_apache" (nounPhrase 
   "method encoding an ODE system" "methods encoding an ODE system")
   Nothing Void (Label "computeDerivatives") Nothing
@@ -340,22 +337,22 @@ odeint = externalLib [
   choiceSteps [
     [callStep $ libConstructor rkdp5C [] rk,
     callStep $ libFunctionWithResult makeControlled 
-      [inlineArg Float, inlineArg Float, lockedArg (sy rk)] stepper],
+      [inlineArg Real, inlineArg Real, lockedArg (sy rk)] stepper],
     [callStep $ libConstructor adamsBashC [] stepper]],
   mandatoryStep $ callRequiresJust "boost/numeric/odeint.hpp" $ libFunction 
     integrateConst [
       lockedArg (sy stepper), 
       customObjArg [] "Class representing an ODE system" ode (customClass [
         constructorInfo odeCtor [] [],
-        methodInfo odeOp [unnamedParam (List Float), unnamedParam (List Float), 
+        methodInfo odeOp [unnamedParam (Vect Real), unnamedParam (Vect Real), 
           lockedParam t] [assignArrayIndex]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
       preDefinedArg odeintCurrVals,
-      inlineArg Float, inlineArg Float, inlineArg Float, 
+      inlineArg Real, inlineArg Real, inlineArg Real, 
       customObjArg [] 
         "Class for populating a list during an ODE solution process" 
         pop (customClass [
-          constructorInfo popCtor [unnamedParam (List Float)] [],
+          constructorInfo popCtor [unnamedParam (Vect Real)] [],
           methodInfo popOp [lockedParam y, lockedParam t] [appendCurrSol y]])]]
 
 odeintCall :: ODEInfo -> ExternalLibraryCall
@@ -384,37 +381,37 @@ odeNameSpace = "boost::numeric::odeint::"
 rkdp5 = odeNameSpace ++ "runge_kutta_dopri5<vector<double>>"
 adamsBash = odeNameSpace ++ "adams_bashforth<3,vector<double>>"
 
-popT :: CodeType
-popT = Object "Populate"
+popT :: Space
+popT = Actor "Populate"
 
 odeintCurrVals, rk, stepper, pop, rkdp5C, makeControlled, adamsBashC, 
   integrateConst, odeOp, popCtor, popOp :: CodeChunk
 odeintCurrVals = codevar $ implCQD "currVals_odeint" (nounPhrase 
   "vector holding ODE solution values for the current step"
   "vectors holding ODE solution values for the current step") Nothing
-  (List Float) (Label "currVals") Nothing
+  (Vect Real) (Label "currVals") Nothing
 rk = codevar $ implCQD "rk_odeint" (nounPhrase 
   "stepper for solving ODE system using Runge-Kutta-Dopri5 method"
   "steppers for solving ODE system using Runge-Kutta-Dopri5 method") Nothing
-  (Object rkdp5) (Label "rk") Nothing
+  (Actor rkdp5) (Label "rk") Nothing
 stepper = codevar $ implCQD "stepper_odeint" (nounPhrase 
   "stepper for solving ODE system" "steppers for solving ODE system") Nothing
-  (Object "auto") (Label "stepper") Nothing
+  (Actor "auto") (Label "stepper") Nothing
 pop = codevar $ implCQD "pop_odeint" (nounPhrase 
   "object to populate ODE solution vector" 
   "objects to populate ODE solution vector") Nothing popT (Label "pop") Nothing
 rkdp5C = codefunc $ implCQD "rkdp5_odeint" (nounPhrase
   "constructor for stepper using Runge-Kutta-Dopri5 method"
   "constructors for stepper using Runge-Kutta-Dopri5 method")
-  Nothing (Object rkdp5) (Label rkdp5) Nothing
+  Nothing (Actor rkdp5) (Label rkdp5) Nothing
 makeControlled = codefunc $ implCQD "make_controlled_odeint" (nounPhrase
   "function for adding error control to a stepper"
   "functions for adding error control to a stepper")
-  Nothing (Object "auto") (Label $ odeNameSpace ++ "make_controlled") Nothing
+  Nothing (Actor "auto") (Label $ odeNameSpace ++ "make_controlled") Nothing
 adamsBashC = codefunc $ implCQD "adamsBash_odeint" (nounPhrase
   "constructor for stepper using Adams-Bashforth method"
   "constructors for stepper using Adams-Bashforth method")
-  Nothing (Object adamsBash) (Label adamsBash) Nothing
+  Nothing (Actor adamsBash) (Label adamsBash) Nothing
 integrateConst = codefunc $ implCQD "integrate_const_odeint" (nounPhrase
   "function for integrating with a constant step size"
   "functions for integrating with a constant step size")
@@ -444,14 +441,14 @@ ode = codevar $ implCQD "ode_obj" (nounPhrase
 t = codevar $ implCQD "t_ode" (nounPhrase 
   "current independent variable value in ODE solution"
   "current independent variable value in ODE solution") 
-  Nothing Float (Label "t") Nothing
+  Nothing Real (Label "t") Nothing
 y = codevar $ implCQD "y_ode" (nounPhrase 
   "current dependent variable value in ODE solution"
   "current dependent variable value in ODE solution") 
-  Nothing (List Float) (Label "y") Nothing
+  Nothing (Vect Real) (Label "y") Nothing
 
-odeObj :: CodeType
-odeObj = Object "ODE"
+odeObj :: Space
+odeObj = Actor "ODE"
 
 odeMethodUnavailable :: String
 odeMethodUnavailable = "Chosen ODE solving method is not available" ++
@@ -489,5 +486,5 @@ odeOptions = ODEOpts
 
 diffCodeChunk :: CodeChunk -> CodeChunk
 diffCodeChunk c = codevar $ implCQD ("d" ++ c ^. uid) 
-  (compoundPhrase (nounPhraseSP "change in") (c ^. term)) Nothing (codeType c)
+  (compoundPhrase (nounPhraseSP "change in") (c ^. term)) Nothing (c ^. typ)
   (Concat [Label "d", symbol c Implementation]) (getUnit c) 

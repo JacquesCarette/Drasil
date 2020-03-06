@@ -1,5 +1,6 @@
 -- | re-export smart constructors for external code writing
 module Language.Drasil.Code (
+  spaceToCodeType,
   makeCode, createCodeFiles, 
   generator, generateCode,
   readWithDataDesc, sampleInputDD,
@@ -7,8 +8,9 @@ module Language.Drasil.Code (
   ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(LogNone, LogAll), Modularity(..), Structure(..), 
   ConstantStructure(..), ConstantRepr(..), InputModule(..), CodeConcept(..), 
-  matchConcepts, AuxFile(..), Visibility(..), ODEMethod(..), defaultChoices, 
-  funcUID, funcUID', asVC, asVC', codeSpec, relToQD,
+  matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), Visibility(..), 
+  ODEMethod(..), defaultChoices, funcUID, funcUID', asVC, asVC', codeSpec, 
+  relToQD,
   ($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, funcData, funcDef, 
   packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
@@ -31,8 +33,7 @@ module Language.Drasil.Code (
   assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill, 
   solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill,
   PackageSym(..),
-  CodeChunk, codeType, codevar, codefunc, quantvar, ccObjVar, CodeQuantityDict, 
-  implCQD,
+  CodeChunk, codevar, codefunc, quantvar, ccObjVar, CodeQuantityDict, implCQD,
   unPP, unJP, unCSP, unCPPP
 ) where
 
@@ -42,6 +43,8 @@ import Language.Drasil.Code.Imperative.Generator (generator, generateCode)
 
 import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc, 
   sampleInputDD)
+
+import Language.Drasil.Code.Code (spaceToCodeType)
 
 import Language.Drasil.Code.CodeGeneration (makeCode, createCodeFiles)
 
@@ -73,15 +76,15 @@ import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
 import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), CodeSystInfo(..), 
   Comments(..), Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), 
   Lang(..), Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
-  ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, 
-  AuxFile(..), Visibility(..), ODEMethod(..), defaultChoices, funcUID, funcUID', 
-  asVC, asVC', codeSpec, relToQD)
+  ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
+  matchSpaces, AuxFile(..), Visibility(..), ODEMethod(..), defaultChoices, 
+  funcUID, funcUID', asVC, asVC', codeSpec, relToQD)
 import Language.Drasil.Mod (($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, 
   funcData, funcDef, packmod)
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
 
-import Language.Drasil.Chunk.Code (CodeChunk, codeType, codevar, codefunc, 
+import Language.Drasil.Chunk.Code (CodeChunk, codevar, codefunc, 
   quantvar, ccObjVar)
 import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, implCQD)
 

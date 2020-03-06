@@ -4,6 +4,7 @@ module Language.Drasil.Code.Imperative.Generator (
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
+import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
   genDoxConfig, genModule)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
@@ -29,8 +30,8 @@ import Control.Monad.Reader (Reader, ask, runReader)
 import Control.Monad.State (evalState, runState)
 import Data.Map (member)
 
-generator :: String -> [Expr] -> Choices -> CodeSpec -> DrasilState
-generator dt sd chs spec = DrasilState {
+generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
+generator l dt sd chs spec = DrasilState {
   -- constants
   codeSpec = spec,
   date = showDate $ dates chs,
@@ -42,6 +43,7 @@ generator dt sd chs spec = DrasilState {
   commented = comments chs,
   doxOutput = doxVerbosity chs,
   concMatches = chooseConcept chs,
+  spaceMatches = chooseSpace l chs,
   auxiliaries = auxFiles chs,
   sampleData = sd,
   -- state

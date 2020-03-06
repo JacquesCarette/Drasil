@@ -18,7 +18,7 @@ writeStory = block [
 
   openFileW (var "fileToWrite" outfile) (litString "testText.txt"),
   printFile (valueOf $ var "fileToWrite" outfile) (litInt 0),
-  printFileLn (valueOf $ var "fileToWrite" outfile) (litFloat 0.89),
+  printFileLn (valueOf $ var "fileToWrite" outfile) (litDouble 0.89),
   printFileStr (valueOf $ var "fileToWrite" outfile) "ello",
   printFileStrLn (valueOf $ var "fileToWrite" outfile) "bye",
   printFileStrLn (valueOf $ var "fileToWrite" outfile) "!!",

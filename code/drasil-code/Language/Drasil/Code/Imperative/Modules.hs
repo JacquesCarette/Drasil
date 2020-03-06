@@ -15,9 +15,9 @@ import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), genModule, 
   primaryClass, auxClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
-import Language.Drasil.Code.Imperative.Import (CalcType(CalcAssign), convExpr,
-  genCalcBlock, genConstructor, mkVal, mkVar, privateInOutMethod, privateMethod,
-  publicFunc, publicInOutFunc, readData, renderC)
+import Language.Drasil.Code.Imperative.Import (CalcType(CalcAssign), codeType,
+  convExpr, genCalcBlock, genConstructor, mkVal, mkVar, privateInOutMethod, 
+  privateMethod, publicFunc, publicInOutFunc, readData, renderC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, varLogFile)
 import Language.Drasil.Code.Imperative.Parameters (getConstraintParams, 
   getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns, 
@@ -25,9 +25,8 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName, codeChunk), CodeChunk, 
-  codeType, codevar, physLookup, sfwrLookup)
+  codevar, physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
-import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
@@ -47,6 +46,7 @@ import Data.Map ((!), member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
 import Control.Applicative ((<$>))
+import Control.Monad (zipWithM)
 import Control.Monad.Reader (Reader, ask, asks, withReader)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
@@ -191,13 +191,14 @@ genInputClass scp = withReader (\s -> s {currentClass = cname}) $ do
       genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . codeEquat) csts
+        inputVars <- mapM (\x -> fmap (pubMVar . var (codeName x) . convType) 
+          (codeType x)) inps
+        constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g) 
+          cname (var (codeName c) (convType t)) vl) (codeType c)) 
+          csts vals
         let getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
             f = getFunc scp
-            inputVars = map (\x -> pubMVar (var (codeName x) (convType $ 
-              codeType x))) inps
-            constVars = zipWith (\c vl -> constVarFunc (conRepr g) cname
-              (var (codeName c) (convType $ codeType c)) vl) csts vals
         icDesc <- inputClassDesc
         c <- f icDesc cname Nothing (inputVars ++ constVars) (methods $ inMod g)
         return $ Just c
@@ -263,21 +264,21 @@ genInputConstraints s = do
         return $ Just mthd
   genConstraints $ "input_constraints" `elem` defList (codeSpec g)
 
-sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr) 
+sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, ProgramSym repr) 
   => [(q,[Constraint])] -> Reader DrasilState [MS (repr (Statement repr))]
 sfwrCBody cs = do
   g <- ask
   let cb = onSfwrC g
   chooseConstr cb cs
 
-physCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr) 
+physCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, ProgramSym repr) 
   => [(q,[Constraint])] -> Reader DrasilState [MS (repr (Statement repr))]
 physCBody cs = do
   g <- ask
   let cb = onPhysC g
   chooseConstr cb cs
 
-chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, 
+chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, 
   ProgramSym repr) => ConstraintBehaviour -> [(q,[Constraint])] -> 
   Reader DrasilState [MS (repr (Statement repr))]
 chooseConstr Warning   cs = do
@@ -287,7 +288,7 @@ chooseConstr Exception cs = do
   checks <- mapM constrExc cs
   return $ concat checks
 
-constrWarn :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr)
+constrWarn :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, ProgramSym repr)
   => (q,[Constraint]) -> Reader DrasilState [MS (repr (Statement repr))]
 constrWarn c = do
   let q = fst c
@@ -297,7 +298,7 @@ constrWarn c = do
   return $ zipWith (\cond m -> ifNoElse [((?!) cond, bodyStatements $
     printStr "Warning: " : m)]) conds msgs
 
-constrExc :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, ProgramSym repr) 
+constrExc :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, ProgramSym repr) 
   => (q,[Constraint]) -> Reader DrasilState [MS (repr (Statement repr))]
 constrExc c = do
   let q = fst c
@@ -307,7 +308,7 @@ constrExc c = do
   return $ zipWith (\cond m -> ifNoElse [((?!) cond, bodyStatements $ 
     m ++ [throw "InputError"])]) conds msgs
 
-constraintViolatedMsg :: (CodeIdea q, HasUID q, HasCodeType q, ProgramSym repr) 
+constraintViolatedMsg :: (CodeIdea q, HasUID q, HasSpace q, ProgramSym repr) 
   => q -> String -> Constraint -> Reader DrasilState 
   [MS (repr (Statement repr))]
 constraintViolatedMsg q s c = do
@@ -399,8 +400,8 @@ genConstClass scp = withReader (\s -> s {currentClass = cname}) $ do
       genClass [] = return Nothing 
       genClass vs = do
         vals <- mapM (convExpr . codeEquat) vs 
-        let vars = map (\x -> var (codeName x) (convType $ codeType x)) vs
-            constVars = zipWith (constVarFunc (conRepr g) cname) vars vals
+        vars <- mapM (\x -> fmap (var (codeName x) . convType) (codeType x)) vs
+        let constVars = zipWith (constVarFunc (conRepr g) cname) vars vals
             getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
             f = getFunc scp

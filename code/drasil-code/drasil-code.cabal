@@ -20,6 +20,7 @@ library
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
     , Language.Drasil.Code.Imperative.ConceptMatch
+    , Language.Drasil.Code.Imperative.SpaceMatch
     , Language.Drasil.Code.Imperative.Doxygen.Import
     , Language.Drasil.Code.Imperative.ReadInput
     , Language.Drasil.Code.Imperative.WriteInput

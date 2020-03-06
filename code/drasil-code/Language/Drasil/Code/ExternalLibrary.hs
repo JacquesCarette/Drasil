@@ -12,11 +12,10 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
 ) where
 
 import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeChunk, codeType, ccObjVar)
+import Language.Drasil.Chunk.Code (CodeChunk, ccObjVar)
 import Language.Drasil.Mod (FuncStmt(..))
 
-import GOOL.Drasil (CodeType)
-
+import Control.Lens ((^.))
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
 type Description = String
@@ -43,13 +42,13 @@ data ArgumentInfo =
   -- Not dependent on use case, Maybe is name for the argument
   LockedArg Expr 
   -- Maybe is the variable if it needs to be declared and defined prior to calling
-  | Basic CodeType (Maybe CodeChunk) 
+  | Basic Space (Maybe CodeChunk) 
   | Fn CodeChunk [Parameter] Step
   | Class [Requires] Description CodeChunk ClassInfo
   -- constructor, object, fields
   | Record CodeChunk CodeChunk [CodeChunk]
 
-data Parameter = LockedParam CodeChunk | NameableParam CodeType
+data Parameter = LockedParam CodeChunk | NameableParam Space
 
 data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
 
@@ -117,17 +116,17 @@ lockedArg = Arg Nothing . LockedArg
 lockedNamedArg :: CodeChunk -> Expr -> Argument
 lockedNamedArg n = Arg (Just n) . LockedArg
 
-inlineArg :: CodeType -> Argument
+inlineArg :: Space -> Argument
 inlineArg t = Arg Nothing $ Basic t Nothing
 
-inlineNamedArg :: CodeChunk ->  CodeType -> Argument
+inlineNamedArg :: CodeChunk ->  Space -> Argument
 inlineNamedArg n t = Arg (Just n) $ Basic t Nothing
 
 preDefinedArg :: CodeChunk -> Argument
-preDefinedArg v = Arg Nothing $ Basic (codeType v) (Just v)
+preDefinedArg v = Arg Nothing $ Basic (v ^. typ) (Just v)
 
 preDefinedNamedArg :: CodeChunk -> CodeChunk -> Argument
-preDefinedNamedArg n v = Arg (Just n) $ Basic (codeType v) (Just v)
+preDefinedNamedArg n v = Arg (Just n) $ Basic (v ^. typ) (Just v)
 
 functionArg :: CodeChunk -> [Parameter] -> Step -> Argument
 functionArg f ps b = Arg Nothing (Fn f ps b)
@@ -141,7 +140,7 @@ recordArg c o fs = Arg Nothing (Record c o fs)
 lockedParam :: CodeChunk -> Parameter
 lockedParam = LockedParam
 
-unnamedParam :: CodeType -> Parameter
+unnamedParam :: Space -> Parameter
 unnamedParam = NameableParam
 
 customClass :: [MethodInfo] -> ClassInfo

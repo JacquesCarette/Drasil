@@ -2,9 +2,7 @@ module Language.Drasil.CodeExpr (new, message) where
 
 import Language.Drasil
 
-import Language.Drasil.Chunk.Code (CodeChunk(..), VarOrFunc(..), codeType)
-
-import GOOL.Drasil (CodeType(Object))
+import Language.Drasil.Chunk.Code (CodeChunk(..), VarOrFunc(..))
 
 import Control.Lens ((^.))
 
@@ -16,9 +14,9 @@ new c ps = checkFunc (kind c)
 
 message :: CodeChunk -> CodeChunk -> [Expr] -> Expr
 message o m ps = checkKinds (kind o) (kind m) 
-  where checkKinds Var Func = checkObj (codeType o) 
+  where checkKinds Var Func = checkObj (o ^. typ) 
         checkKinds _ _ = error $ "Invalid actor message: message should be " ++
           "passed a Var and a Func"
-        checkObj (Object _) = Message (o ^. uid) (m ^. uid) ps
+        checkObj (Actor _) = Message (o ^. uid) (m ^. uid) ps
         checkObj _ = error $ "Invalid actor message: Actor should have " ++ 
-          "object type"
+          "Actor space"

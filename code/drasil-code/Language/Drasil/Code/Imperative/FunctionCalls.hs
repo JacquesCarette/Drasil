@@ -5,15 +5,14 @@ module Language.Drasil.Code.Imperative.FunctionCalls (
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppInOut)
-import Language.Drasil.Code.Imperative.Import (mkVal, mkVar)
+import Language.Drasil.Code.Imperative.Import (codeType, mkVal, mkVar)
 import Language.Drasil.Code.Imperative.Logging (maybeLog)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams, 
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType)
+import Language.Drasil.Chunk.Code (CodeIdea(codeName))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
-import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 
 import GOOL.Drasil (ProgramSym, TypeSym(..), ValueSym(..), StatementSym(..), 
@@ -52,7 +51,8 @@ getCalcCall :: (ProgramSym repr) => CodeDefinition -> Reader DrasilState
   (Maybe (MS (repr (Statement repr))))
 getCalcCall c = do
   g <- ask
-  val <- getFuncCall (codeName c) (convType $ codeType c) (getCalcParams c)
+  t <- codeType c
+  val <- getFuncCall (codeName c) (convType t) (getCalcParams c)
   v <- maybe (error $ (c ^. uid) ++ " missing from VarMap") mkVar 
     (Map.lookup (c ^. uid) (vMap $ codeSpec g))
   l <- maybeLog v
@@ -64,7 +64,7 @@ getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
   return $ fmap valState val
 
-getFuncCall :: (ProgramSym repr, HasUID c, HasCodeType c, CodeIdea c) => String 
+getFuncCall :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c) => String 
   -> VS (repr (Type repr)) -> Reader DrasilState [c] -> 
   Reader DrasilState (Maybe (VS (repr (Value repr))))
 getFuncCall n t funcPs = do
@@ -77,7 +77,7 @@ getFuncCall n t funcPs = do
         return $ Just val
   getFuncCall' mm
 
-getInOutCall :: (ProgramSym repr, HasCodeType c, CodeIdea c, Eq c) => String -> 
+getInOutCall :: (ProgramSym repr, HasSpace c, CodeIdea c, Eq c) => String -> 
   Reader DrasilState [c] -> Reader DrasilState [c] ->
   Reader DrasilState (Maybe (MS (repr (Statement repr))))
 getInOutCall n inFunc outFunc = do

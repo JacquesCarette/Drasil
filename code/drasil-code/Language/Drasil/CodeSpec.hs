@@ -13,7 +13,7 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk),
   codevars, codevars', funcResolve, varResolve, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
   codeEquat)
-import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
+import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
   Mod(..), Name, fname, getFuncParams, packmod, prefixFunctions)
@@ -37,7 +37,7 @@ data Lang = Cpp
           | CSharp
           | Java
           | Python
-          deriving Eq
+          deriving (Eq, Show)
 
 data CodeSystInfo where
   CSI :: (HasName a) => {
@@ -72,9 +72,6 @@ type VarMap      = Map.Map String CodeChunk
 
 assocToMap :: HasUID a => [a] -> Map.Map UID a
 assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
-        
-varType :: String -> VarMap -> CodeType
-varType cname m = maybe (error "Variable not found") (^. ctyp) (Map.lookup cname m)
 
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys = sys
@@ -141,6 +138,7 @@ data Choices = Choices {
   constStructure :: ConstantStructure,
   constRepr :: ConstantRepr,
   conceptMatch :: ConceptMatchMap,
+  spaceMatch :: SpaceMatch,
   auxFiles :: [AuxFile],
   odeMethod :: [ODEMethod]
 }
@@ -176,11 +174,22 @@ data InputModule = Combined
 
 type ConceptMatchMap = Map.Map UID [CodeConcept]
 type MatchedConceptMap = Map.Map UID CodeConcept
+type SpaceMatch = Space -> [CodeType]
+type MatchedSpaces = Space -> CodeType
 
 data CodeConcept = Pi
 
 matchConcepts :: (HasUID c) => [c] -> [[CodeConcept]] -> ConceptMatchMap
 matchConcepts cncs cdcs = Map.fromList (zip (map (^. uid) cncs) cdcs)
+
+matchSpace :: Space -> [CodeType] -> SpaceMatch -> SpaceMatch
+matchSpace _ [] _ = error "Must match each Space to at least one CodeType"
+matchSpace s ts sm = \sp -> if sp == s then ts else sm sp
+
+matchSpaces :: [Space] -> [[CodeType]] -> SpaceMatch -> SpaceMatch
+matchSpaces (s:ss) (ct:cts) sm = matchSpaces ss cts $ matchSpace s ct sm
+matchSpaces [] [] sm = sm
+matchSpaces _ _ _ = error "Lists passed to matchSpaces must have equal size"
 
 data AuxFile = SampleInput deriving Eq
              
@@ -210,6 +219,7 @@ defaultChoices = Choices {
   constStructure = Inline,
   constRepr = Const,
   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
+  spaceMatch = spaceToCodeType, 
   auxFiles = [SampleInput],
   odeMethod = [RK45]
 }

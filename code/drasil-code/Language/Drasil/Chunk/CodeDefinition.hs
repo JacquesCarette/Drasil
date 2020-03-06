@@ -6,7 +6,6 @@ module Language.Drasil.Chunk.CodeDefinition (
 import Language.Drasil
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk), 
   quantvar, quantfunc)
-import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -18,7 +17,7 @@ makeLenses ''CodeDefinition
 instance HasUID       CodeDefinition where uid = cchunk . uid
 instance NamedIdea    CodeDefinition where term = cchunk . term
 instance Idea         CodeDefinition where getA = getA . view cchunk
-instance HasCodeType  CodeDefinition where ctyp = cchunk . ctyp
+instance HasSpace     CodeDefinition where typ = cchunk . typ
 instance HasSymbol    CodeDefinition where symbol c = symbol (c ^. cchunk)
 instance CodeIdea     CodeDefinition where 
   codeName = codeName . view cchunk

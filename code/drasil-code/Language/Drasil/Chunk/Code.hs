@@ -1,9 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
-    CodeIdea(..), CodeChunk(..), VarOrFunc(..), codeType, codevar, codefunc, 
-    quantvar, quantfunc, ccObjVar, codevars, codevars', funcResolve, 
-    varResolve, ConstraintMap, constraintMap, physLookup, sfwrLookup, 
-    programName, funcPrefix
+    CodeIdea(..), CodeChunk(..), VarOrFunc(..), codevar, codefunc, quantvar, 
+    quantfunc, ccObjVar, codevars, codevars', funcResolve, varResolve, 
+    ConstraintMap, constraintMap, physLookup, sfwrLookup, programName, 
+    funcPrefix
   ) where
 
 import Control.Lens ((^.),makeLenses,view)
@@ -12,11 +12,8 @@ import Language.Drasil
 import Database.Drasil (ChunkDB, symbResolve)
 import Language.Drasil.Development (dep, names')
 
-import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp), CodeQuantityDict, 
-  cqw, implCQD)
+import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, cqw, implCQD)
 import Language.Drasil.Printers (symbolDoc, toPlainName)
-
-import GOOL.Drasil (CodeType(Object))
 
 import Data.List (nub)
 import qualified Data.Map as Map
@@ -42,7 +39,7 @@ makeLenses ''CodeChunk
 instance HasUID      CodeChunk where uid = qc . uid
 instance NamedIdea   CodeChunk where term = qc . term
 instance Idea        CodeChunk where getA = getA . view qc
-instance HasCodeType CodeChunk where ctyp = qc . ctyp
+instance HasSpace    CodeChunk where typ = qc . typ
 instance HasSymbol   CodeChunk where symbol c = symbol (c ^. qc)
 instance CodeIdea    CodeChunk where
   codeName (CodeC c Var) = render $ symbolDoc (codeSymb c)
@@ -50,9 +47,6 @@ instance CodeIdea    CodeChunk where
   codeChunk = id
 instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc
-
-codeType :: HasCodeType c => c -> CodeType
-codeType c = c ^. ctyp
 
 codevar :: CodeQuantityDict -> CodeChunk
 codevar c = CodeC c Var
@@ -69,12 +63,12 @@ quantfunc c = CodeC (cqw c) Func
 -- Combine an Object-type CodeChunk with another CodeChunk to create a new 
 -- CodeChunk which represents a field of the first. ex. ccObjVar obj f = obj.f
 ccObjVar :: CodeChunk -> CodeChunk -> CodeChunk
-ccObjVar c1 c2 = checkObj (codeType c1)
-  where checkObj (Object _) = codevar $ implCQD (c1 ^. uid ++ "." ++ c2 ^. uid) 
-          (compoundPhrase (c1 ^. term) (c2 ^. term)) Nothing (codeType c2) 
+ccObjVar c1 c2 = checkObj (c1 ^. typ)
+  where checkObj (Actor _) = codevar $ implCQD (c1 ^. uid ++ "." ++ c2 ^. uid) 
+          (compoundPhrase (c1 ^. term) (c2 ^. term)) Nothing (c2 ^. typ) 
           (Concat [symbol c1 Implementation, Label ".", symbol c2 
           Implementation]) (getUnit c2) 
-        checkObj _ = error "First CodeChunk passed to ccObjVar must have Object type"
+        checkObj _ = error "First CodeChunk passed to ccObjVar must have Actor space"
 
 -- | Get a list of CodeChunks from an equation
 codevars :: Expr -> ChunkDB -> [CodeChunk]

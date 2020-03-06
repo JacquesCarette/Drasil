@@ -40,13 +40,42 @@ instance HasUID      CodeChunk where uid = qc . uid
 instance NamedIdea   CodeChunk where term = qc . term
 instance Idea        CodeChunk where getA = getA . view qc
 instance HasSpace    CodeChunk where typ = qc . typ
-instance HasSymbol   CodeChunk where symbol c = symbol (c ^. qc)
+instance HasSymbol   CodeChunk where symbol = symbol . view qc
 instance CodeIdea    CodeChunk where
   codeName (CodeC c Var) = render $ symbolDoc (codeSymb c)
   codeName (CodeC c Func) = funcPrefix ++ render (symbolDoc (codeSymb c))
   codeChunk = id
 instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc
+
+newtype CodeVarChunk = CodeVC {_ccv :: CodeChunk}
+makeLenses ''CodeVarChunk
+
+instance HasUID      CodeVarChunk where uid = ccv . uid
+instance NamedIdea   CodeVarChunk where term = ccv . term
+instance Idea        CodeVarChunk where getA = getA . view ccv
+instance HasSpace    CodeVarChunk where typ = ccv . typ
+instance HasSymbol   CodeVarChunk where symbol = symbol . view ccv
+instance CodeIdea    CodeVarChunk where 
+  codeName = codeName . view ccv
+  codeChunk = codeChunk . view ccv
+instance Eq          CodeVarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance MayHaveUnit CodeVarChunk where getUnit = getUnit . view ccv
+
+newtype CodeFuncChunk = CodeFC {_ccf :: CodeChunk}
+makeLenses ''CodeFuncChunk
+
+instance HasUID      CodeFuncChunk where uid = ccf . uid
+instance NamedIdea   CodeFuncChunk where term = ccf . term
+instance Idea        CodeFuncChunk where getA = getA . view ccf
+instance HasSpace    CodeFuncChunk where typ = ccf . typ
+instance HasSymbol   CodeFuncChunk where symbol = symbol . view ccf
+instance Callable    CodeFuncChunk
+instance CodeIdea    CodeFuncChunk where 
+  codeName = codeName . view ccf
+  codeChunk = codeChunk . view ccf
+instance Eq          CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
 
 codevar :: CodeQuantityDict -> CodeChunk
 codevar c = CodeC c Var

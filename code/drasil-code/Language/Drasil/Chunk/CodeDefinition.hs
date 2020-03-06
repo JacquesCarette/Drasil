@@ -27,10 +27,10 @@ instance MayHaveUnit  CodeDefinition where getUnit = getUnit . view cchunk
 instance DefiningExpr CodeDefinition where defnExpr = def
 
 qtoc :: (Quantity q, DefiningExpr q, MayHaveUnit q) => q -> CodeDefinition
-qtoc q = CD (quantfunc q) (q ^. defnExpr)
+qtoc q = CD (codeChunk $ quantfunc q) (q ^. defnExpr)
 
 qtov :: QDefinition -> CodeDefinition
-qtov q = CD (quantvar q) (q ^. defnExpr)
+qtov q = CD (codeChunk $ quantvar q) (q ^. defnExpr)
 
 codeEquat :: CodeDefinition -> Expr
 codeEquat cd = cd ^. def

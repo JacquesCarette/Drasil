@@ -1,9 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
-    CodeIdea(..), CodeChunk(..), VarOrFunc(..), codevar, codefunc, quantvar, 
-    quantfunc, ccObjVar, codevars, codevars', funcResolve, varResolve, 
-    ConstraintMap, constraintMap, physLookup, sfwrLookup, programName, 
-    funcPrefix
+    CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), 
+    VarOrFunc(..), codevarC, codefuncC, codevar, codefunc, quantvar, quantfunc,
+    ccObjVar, codevars, codevars', funcResolve, varResolve, ConstraintMap, 
+    constraintMap, physLookup, sfwrLookup, programName, funcPrefix
   ) where
 
 import Control.Lens ((^.),makeLenses,view)
@@ -77,21 +77,27 @@ instance CodeIdea    CodeFuncChunk where
 instance Eq          CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
 
-codevar :: CodeQuantityDict -> CodeChunk
-codevar c = CodeC c Var
+codevarC :: (CodeIdea c) => c -> CodeVarChunk
+codevarC = CodeVC . codeChunk
 
-codefunc :: CodeQuantityDict -> CodeChunk
-codefunc c = CodeC c Func
+codefuncC :: (CodeIdea c) => c -> CodeFuncChunk
+codefuncC = CodeFC . codeChunk
 
-quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeChunk
-quantvar c = CodeC (cqw c) Var
+codevar :: CodeQuantityDict -> CodeVarChunk
+codevar c = CodeVC $ CodeC c Var
 
-quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeChunk
-quantfunc c = CodeC (cqw c) Func
+codefunc :: CodeQuantityDict -> CodeFuncChunk
+codefunc c = CodeFC $ CodeC c Func
+
+quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
+quantvar c = CodeVC $ CodeC (cqw c) Var
+
+quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
+quantfunc c = CodeFC $ CodeC (cqw c) Func
 
 -- Combine an Object-type CodeChunk with another CodeChunk to create a new 
 -- CodeChunk which represents a field of the first. ex. ccObjVar obj f = obj.f
-ccObjVar :: CodeChunk -> CodeChunk -> CodeChunk
+ccObjVar :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk
 ccObjVar c1 c2 = checkObj (c1 ^. typ)
   where checkObj (Actor _) = codevar $ implCQD (c1 ^. uid ++ "." ++ c2 ^. uid) 
           (compoundPhrase (c1 ^. term) (c2 ^. term)) Nothing (c2 ^. typ) 
@@ -100,16 +106,18 @@ ccObjVar c1 c2 = checkObj (c1 ^. typ)
         checkObj _ = error "First CodeChunk passed to ccObjVar must have Actor space"
 
 -- | Get a list of CodeChunks from an equation
-codevars :: Expr -> ChunkDB -> [CodeChunk]
+codevars :: Expr -> ChunkDB -> [CodeVarChunk]
 codevars e m = map (varResolve m) $ dep e
 
 -- | Get a list of CodeChunks from an equation (no functions)
-codevars' :: Expr -> ChunkDB -> [CodeChunk]
+codevars' :: Expr -> ChunkDB -> [CodeVarChunk]
 codevars' e m = map (varResolve m) $ nub $ names' e
 
-funcResolve, varResolve :: ChunkDB -> UID -> CodeChunk
+varResolve :: ChunkDB -> UID -> CodeVarChunk
+varResolve  m x = quantvar $ symbResolve m x
+
+funcResolve :: ChunkDB -> UID -> CodeFuncChunk
 funcResolve m x = quantfunc $ symbResolve m x
-varResolve  m x = quantvar  $ symbResolve m x
 
 type ConstraintMap = Map.Map UID [Constraint]
 

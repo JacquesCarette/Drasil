@@ -8,8 +8,8 @@ import Database.Drasil (ChunkDB, SystemInformation(SI), symbResolve,
 import Language.Drasil.Development (dep, namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
-import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), 
-  ConstraintMap, programName, codevar, quantvar, funcPrefix, codeName, 
+import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
+  ConstraintMap, programName, codevarC, codevar, quantvar, funcPrefix, codeName,
   codevars, codevars', funcResolve, varResolve, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
   codeEquat)
@@ -27,8 +27,8 @@ import Data.Maybe (mapMaybe)
 
 import Prelude hiding (const)
 
-type Input = CodeChunk
-type Output = CodeChunk
+type Input = CodeVarChunk
+type Output = CodeVarChunk
 type Const = CodeDefinition
 type Derived = CodeDefinition
 type Def = CodeDefinition
@@ -68,7 +68,7 @@ data CodeSpec where
   } -> CodeSpec
 
 type FunctionMap = Map.Map String CodeDefinition
-type VarMap      = Map.Map String CodeChunk
+type VarMap      = Map.Map String CodeVarChunk
 
 assocToMap :: HasUID a => [a] -> Map.Map UID a
 assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
@@ -252,7 +252,7 @@ asVC' (FDef (CtorDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
-getAdditionalVars :: Choices -> [Mod] -> [CodeChunk]
+getAdditionalVars :: Choices -> [Mod] -> [CodeVarChunk]
 getAdditionalVars chs ms = map codevar (inFileName 
   : inParamsVar (inputStructure chs) 
   ++ constsVar (constStructure chs))
@@ -305,13 +305,13 @@ clsDefMap cs@CSI {
 
 getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
-getDerivedInputs ddefs defs' ins cnsts sm  =
-  let refSet = ins ++ map codeChunk cnsts
+getDerivedInputs ddefs defs' ins cnsts sm =
+  let refSet = ins ++ map codevarC cnsts
   in  if null ddefs then filter ((`subsetOf` refSet) . flip codevars sm . (^.equat)) defs'
       else filter ((`subsetOf` refSet) . flip codevars sm . (^.defnExpr)) (map qdFromDD ddefs)
 
-type Known = CodeChunk
-type Need  = CodeChunk
+type Known = CodeVarChunk
+type Need  = CodeVarChunk
 
 getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
 getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
@@ -319,14 +319,14 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
         getExecOrder' ord defs' k n = 
           let new  = filter ((`subsetOf` k) . flip codevars' sm . codeEquat) 
                 defs'
-              cnew = map codeChunk new
+              cnew = map codevarC new
               kNew = k ++ cnew
               nNew = n \\ cnew
           in  if null new 
               then error ("Cannot find path from inputs to outputs: " ++
                         show (map (^. uid) n)
                         ++ " given Defs as " ++ show (map (^. uid) defs')
-                        ++ " and Knowns as " ++ show (map (^. uid) k) )
+                        ++ " and Knowns as " ++ show (map (^. uid) k))
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
 type ModExp = (String, String)
@@ -429,20 +429,20 @@ subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs
 
 -- | Get a list of Constraints for a list of CodeChunks
-getConstraints :: ConstraintMap -> [CodeChunk] -> [Constraint]
+getConstraints :: (HasUID c) => ConstraintMap -> [c] -> [Constraint]
 getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
 -- | Get a list of CodeChunks from an equation, where the CodeChunks are correctly parameterized by either Var or Func
 codevarsandfuncs :: Expr -> ChunkDB -> ModExportMap -> [CodeChunk]
 codevarsandfuncs e m mem = map resolve $ dep e
   where resolve x 
-          | Map.member (funcPrefix ++ x) mem = funcResolve m x
-          | otherwise = varResolve m x
+          | Map.member (funcPrefix ++ x) mem = codeChunk $ funcResolve m x
+          | otherwise = codeChunk $ varResolve m x
 
 -- | Get a list of CodeChunks from a constraint, where the CodeChunks are correctly parameterized by either Var or Func
 constraintvarsandfuncs :: Constraint -> ChunkDB -> ModExportMap -> [CodeChunk]
 constraintvarsandfuncs (Range _ ri) m mem = map resolve $ nub $ namesRI ri
   where resolve x 
-          | Map.member (funcPrefix ++ x) mem = funcResolve m x
-          | otherwise = varResolve m x
+          | Map.member (funcPrefix ++ x) mem = codeChunk $ funcResolve m x
+          | otherwise = codeChunk $ varResolve m x
 constraintvarsandfuncs _ _ _ = []

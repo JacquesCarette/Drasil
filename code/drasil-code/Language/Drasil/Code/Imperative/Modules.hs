@@ -24,8 +24,8 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
-import Language.Drasil.Chunk.Code (CodeIdea(codeName, codeChunk), CodeChunk, 
-  codevar, physLookup, sfwrLookup)
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk,
+  codevarC, codevar, physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
@@ -82,7 +82,7 @@ getInputDecl = do
   cps <- mapM mkVal constrParams
   let cname = "InputParameters"
       getDecl ([],[]) = constIns (partition (flip member (eMap $ codeSpec g) . 
-        codeName) (map codeChunk $ constants $ csi $ codeSpec g)) (conRepr g) 
+        codeName) (map codevarC $ constants $ csi $ codeSpec g)) (conRepr g) 
         (conStruct g)
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
@@ -186,7 +186,7 @@ genInputClass scp = withReader (\s -> s {currentClass = cname}) $ do
       methods Combined = concat <$> mapM (fmap maybeToList) 
         [genInputConstructor, genInputFormat Auxiliary, 
         genInputDerived Auxiliary, genInputConstraints Auxiliary]
-      genClass :: (ProgramSym repr) => [CodeChunk] -> [CodeDefinition] -> 
+      genClass :: (ProgramSym repr) => [CodeVarChunk] -> [CodeDefinition] -> 
         Reader DrasilState (Maybe (CS (repr (Class repr))))
       genClass [] [] = return Nothing
       genClass inps csts = do

@@ -18,7 +18,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), 
-  Selector(..), InternalSelector(..), objMethodCall, FunctionSym(..), 
+  Selector(..), InternalValueExp(..), objMethodCall, FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
@@ -29,11 +29,11 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
 import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD, 
   bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, freeDocD, mkSt, 
   mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
-  classVarCheckStatic, newObjDocD', castDocD, castObjDocD, staticDocD, 
-  dynamicDocD, privateDocD, publicDocD, classDec, dot, blockCmtStart, 
-  blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, blockCmtDoc, docCmtDoc, 
-  commentedItem, addCommentsDocD, functionDox, commentedModD, valueList, 
-  parameterList, appendToBody, surroundBody, getterName, setterName)
+  classVarCheckStatic, castDocD, castObjDocD, staticDocD, dynamicDocD, 
+  privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
+  docCmtStart, doubleSlash, elseIfLabel, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, functionDox, commentedModD, valueList, parameterList, 
+  appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, int, float, double, char, string, 
   listType, listInnerType, obj, enumType, funcType, void, runStrategy, 
@@ -43,20 +43,20 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   moduloOp, powerOp, andOp, orOp, var, staticVar, self, enumVar, objVar, 
   listVar, listOf, arrayElem, litTrue, litFalse, litChar, litDouble, litFloat, 
   litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, 
-  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, funcApp, 
-  namedArgError, newObj, lambda, func, get, set, listSize, listAdd, listAppend, 
-  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
-  listAppendFunc, listAccessFunc', listSetFunc, state, loopState, emptyState, 
-  assign, assignToListIndex, multiAssignError, decrement, increment, 
-  decrement1, increment1, varDec, varDecDef, listDec, listDecDef, objDecNew, 
-  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, constDecDef, 
-  funcDecDef, discardInput, discardFileInput, closeFile, stringListVals, 
-  stringListLists, returnState, multiReturnError, valState, comment, throw, 
-  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
-  switch, switchAsIf, for, forRange, while, tryCatch, notifyObservers, 
-  construct, param, method, getMethod, setMethod, privMethod, pubMethod, 
-  constructor, function, docFunc, docInOutFunc, intFunc, privMVar, pubMVar, 
-  pubGVar, buildClass, implementingClass, docClass, commentedClass, 
+  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, call', 
+  funcApp, selfFuncApp, newObj, lambda, func, get, set, listSize, listAdd, 
+  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
+  listSizeFunc, listAppendFunc, listAccessFunc', listSetFunc, state, loopState, 
+  emptyState, assign, assignToListIndex, multiAssignError, decrement, 
+  increment, decrement1, increment1, varDec, varDecDef, listDec, listDecDef, 
+  objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, 
+  constDecDef, funcDecDef, discardInput, discardFileInput, closeFile, 
+  stringListVals, stringListLists, returnState, multiReturnError, valState, 
+  comment, throw, initState, changeState, initObserverList, addObserver, 
+  ifCond, ifNoElse, switch, switchAsIf, for, forRange, while, tryCatch, 
+  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
+  pubMethod, constructor, function, docFunc, docInOutFunc, intFunc, privMVar, 
+  pubMVar, pubGVar, buildClass, implementingClass, docClass, commentedClass, 
   buildModule, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
@@ -455,9 +455,25 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
     (\tp pars ns nars -> funcAppMixedArgs n tp pars (zip ns nars)) 
     t pas (map fst nas) (map snd nas)
   selfFuncApp n = pair1Val1List (selfFuncApp n) (selfFuncApp n)
+  selfFuncAppMixedArgs n t pas nas = pair1Val3Lists
+    (\tp pars ns nars -> selfFuncAppMixedArgs n tp pars (zip ns nars)) 
+    (\tp pars ns nars -> selfFuncAppMixedArgs n tp pars (zip ns nars)) 
+    t pas (map fst nas) (map snd nas)
   extFuncApp l n = pair1Val1List (extFuncApp l n) (extFuncApp l n)
+  extFuncAppMixedArgs l n t pas nas = pair1Val3Lists
+    (\tp pars ns nars -> extFuncAppMixedArgs l n tp pars (zip ns nars)) 
+    (\tp pars ns nars -> extFuncAppMixedArgs l n tp pars (zip ns nars)) 
+    t pas (map fst nas) (map snd nas)
   newObj = pair1Val1List newObj newObj
+  newObjMixedArgs t pas nas = pair1Val3Lists
+    (\tp pars ns nars -> newObjMixedArgs tp pars (zip ns nars)) 
+    (\tp pars ns nars -> newObjMixedArgs tp pars (zip ns nars)) 
+    t pas (map fst nas) (map snd nas)
   extNewObj l = pair1Val1List (extNewObj l) (extNewObj l)
+  extNewObjMixedArgs l t pas nas = pair1Val3Lists
+    (\tp pars ns nars -> extNewObjMixedArgs l tp pars (zip ns nars)) 
+    (\tp pars ns nars -> extNewObjMixedArgs l tp pars (zip ns nars)) 
+    t pas (map fst nas) (map snd nas)
 
   lambda = pair1List1Val lambda lambda
 
@@ -473,6 +489,11 @@ instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
 
   cast = pair2 cast cast
 
+  call l n t o pas nas = pair1Val3Lists
+    (\tp pars ns nars -> call l n tp o pars (zip ns nars)) 
+    (\tp pars ns nars -> call l n tp o pars (zip ns nars)) 
+    t pas (map fst nas) (map snd nas)
+
   valuePrec v = valuePrec $ pfst v
   valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)
 
@@ -487,8 +508,11 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
   
   indexOf = pair2 indexOf indexOf
 
-instance (Pair p) => InternalSelector (p CppSrcCode CppHdrCode) where
-  objMethodCall' f = pair2Vals1List (objMethodCall' f) (objMethodCall' f)
+instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
+  objMethodCallMixedArgs' f t o pas nas = pair2Vals3Lists
+    (\tp ob pars ns nars -> objMethodCallMixedArgs' f tp ob pars (zip ns nars)) 
+    (\tp ob pars ns nars -> objMethodCallMixedArgs' f tp ob pars (zip ns nars)) 
+    t o pas (map fst nas) (map snd nas)
   objMethodCallNoParams' f = pair2 
     (objMethodCallNoParams' f) 
     (objMethodCallNoParams' f)
@@ -966,18 +990,6 @@ pair1Val1List srcf hdrf stv1 stv2 = do
       sv1 = toState $ psnd v1
   pair1List (srcf fv1) (hdrf sv1) stv2
 
-pair2Vals1List :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) 
-  -> [State t (CppSrcCode c)] -> State u (CppSrcCode d)) -> 
-  (State r (CppHdrCode a) -> State s (CppHdrCode b) -> [State t (CppHdrCode c)] 
-  -> State u (CppHdrCode d)) -> State u (p CppSrcCode CppHdrCode a) -> 
-  State u (p CppSrcCode CppHdrCode b) -> [State u (p CppSrcCode CppHdrCode c)] 
-  -> State u (p CppSrcCode CppHdrCode d)
-pair2Vals1List srcf hdrf stv1 stv2 stv3 = do
-  v1 <- stv1
-  let fv1 = toState $ pfst v1
-      sv1 = toState $ psnd v1
-  pair1Val1List (srcf fv1) (hdrf sv1) stv2 stv3 
-
 pair1Val2Lists :: (Pair p) => (State r (CppSrcCode a) -> 
   [State s (CppSrcCode b)] -> [State t (CppSrcCode c)] -> 
   State u (CppSrcCode d)) -> (State r (CppHdrCode a) -> [State s (CppHdrCode b)]
@@ -1042,6 +1054,22 @@ pair1Val3Lists srcf hdrf stv1 stv2 stv3 stv4 = do
   let fv1 = toState $ pfst v1
       sv1 = toState $ psnd v1
   pair3Lists (srcf fv1) (hdrf sv1) stv2 stv3 stv4
+
+pair2Vals3Lists :: (Pair p) => (State r (CppSrcCode a) -> 
+  State s (CppSrcCode b) -> [State t (CppSrcCode c)] -> 
+  [State u (CppSrcCode d)] -> [State v (CppSrcCode e)] -> 
+  State w (CppSrcCode f)) -> (State r (CppHdrCode a) -> State s (CppHdrCode b) 
+  -> [State t (CppHdrCode c)] -> [State u (CppHdrCode d)] -> 
+  [State v (CppHdrCode e)] -> State w (CppHdrCode f)) ->
+  State w (p CppSrcCode CppHdrCode a) -> State w (p CppSrcCode CppHdrCode b) ->
+  [State w (p CppSrcCode CppHdrCode c)] -> [State w (p CppSrcCode CppHdrCode d)]
+  -> [State w (p CppSrcCode CppHdrCode e)] -> 
+  State w (p CppSrcCode CppHdrCode f)
+pair2Vals3Lists srcf hdrf stv1 stv2 stv3 stv4 stv5 = do
+  v1 <- stv1
+  let fv1 = toState $ pfst v1
+      sv1 = toState $ psnd v1
+  pair1Val3Lists (srcf fv1) (hdrf sv1) stv2 stv3 stv4 stv5
 
 pairVal2ListsVal :: (Pair p) => (State r (CppSrcCode a) -> 
   [State s (CppSrcCode b)] -> [State t (CppSrcCode c)] -> State u (CppSrcCode d)
@@ -1359,13 +1387,19 @@ instance BooleanExpression CppSrcCode where
    
 instance ValueExpression CppSrcCode where
   inlineIf = G.inlineIf
-  funcApp = G.funcApp
-  funcAppNamedArgs = error $ G.namedArgError cppName
-  funcAppMixedArgs = error $ G.namedArgError cppName
-  selfFuncApp = cppSelfFuncApp self
-  extFuncApp l n t vs = modify (addModuleImportVS l) >> funcApp n t vs
-  newObj = G.newObj newObjDocD'
-  extNewObj l t vs = modify (addModuleImportVS l) >> newObj t vs
+  funcApp n t vs = funcAppMixedArgs n t vs []
+  funcAppNamedArgs n t = funcAppMixedArgs n t []
+  funcAppMixedArgs = G.funcApp
+  selfFuncApp n t vs = selfFuncAppMixedArgs n t vs []
+  selfFuncAppMixedArgs = G.selfFuncApp (text "->") self
+  extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
+  extFuncAppMixedArgs l n t vs ns = modify (addModuleImportVS l) >> 
+    funcAppMixedArgs n t vs ns
+  newObj t vs = newObjMixedArgs t vs []
+  newObjMixedArgs = G.newObj ""
+  extNewObj l t vs = extNewObjMixedArgs l t vs []
+  extNewObjMixedArgs l t vs ns = modify (addModuleImportVS l) >> 
+    newObjMixedArgs t vs ns
 
   lambda = G.lambda (cppLambda blockStart blockEnd endStatement)
 
@@ -1381,6 +1415,8 @@ instance InternalValue CppSrcCode where
 
   cast = cppCast
 
+  call = G.call' cppName
+
   valuePrec = valPrec . unCPPSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
@@ -1395,10 +1431,9 @@ instance Selector CppSrcCode where
   indexOf l v = addAlgorithmImportVS $ funcApp "find" int 
     [iterBegin l, iterEnd l, v] #- iterBegin l
   
-instance InternalSelector CppSrcCode where
-  objMethodCall' = G.objMethodCall
+instance InternalValueExp CppSrcCode where
+  objMethodCallMixedArgs' = G.objMethodCall
   objMethodCallNoParams' = G.objMethodCallNoParams
-
 
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
@@ -2012,9 +2047,13 @@ instance ValueExpression CppHdrCode where
   funcAppNamedArgs _ _ _ = mkStateVal void empty
   funcAppMixedArgs _ _ _ _ = mkStateVal void empty
   selfFuncApp _ _ _ = mkStateVal void empty
+  selfFuncAppMixedArgs _ _ _ _ = mkStateVal void empty
   extFuncApp _ _ _ _ = mkStateVal void empty
+  extFuncAppMixedArgs _ _ _ _ _ = mkStateVal void empty
   newObj _ _ = mkStateVal void empty
+  newObjMixedArgs _ _ _ = mkStateVal void empty
   extNewObj _ _ _ = mkStateVal void empty
+  extNewObjMixedArgs _ _ _ _ = mkStateVal void empty
 
   lambda _ _ = mkStateVal void empty
 
@@ -2030,6 +2069,8 @@ instance InternalValue CppHdrCode where
   
   cast _ _ = mkStateVal void empty
   
+  call _ _ _ _ _ _ = mkStateVal void empty
+
   valuePrec = valPrec . unCPPHC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
@@ -2044,8 +2085,8 @@ instance Selector CppHdrCode where
   
   indexOf _ _ = mkStateVal void empty
   
-instance InternalSelector CppHdrCode where
-  objMethodCall' _ _ _ _ = mkStateVal void empty
+instance InternalValueExp CppHdrCode where
+  objMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
   objMethodCallNoParams' _ _ _ = mkStateVal void empty
 
 instance FunctionSym CppHdrCode where
@@ -2474,11 +2515,6 @@ cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t))
 
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c <> text "::" <> v
-
-cppSelfFuncApp :: (RenderSym repr) => VS (repr (Variable repr)) -> Label -> 
-  VS (repr (Type repr)) -> [VS (repr (Value repr))] -> VS (repr (Value repr))
-cppSelfFuncApp s n t vs = s >>= 
-  (\slf -> funcApp (variableName slf ++ "->" ++ n) t vs)
 
 cppLambda :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
   repr (Keyword repr) -> [repr (Variable repr)] -> repr (Value repr) -> Doc

@@ -17,7 +17,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  InternalSelector(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
+  InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
@@ -26,12 +26,12 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   BlockCommentSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
   bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
-  mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, newObjDocD, 
-  castDocD, castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
-  publicDocD, dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, 
-  docCmtStart, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, commentedModD, docFuncRepr, variableList, parameterList, 
-  appendToBody, surroundBody, intValue)
+  mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, castDocD, 
+  castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
+  dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, 
+  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  commentedModD, docFuncRepr, variableList, parameterList, appendToBody, 
+  surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
   listType, arrayType, listInnerType, obj, enumType, funcType, void, 
@@ -41,10 +41,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, 
   litFalse, litChar, litDouble, litFloat, litInt, litString, pi, valueOf, arg, 
   enumElement, argsList, inlineIf, objAccess, objMethodCall, 
-  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
-  namedArgError, selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, 
-  set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
-  getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
+  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, call', funcApp, 
+  selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
+  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
+  setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
   iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
   increment1, varDec, varDecDef, listDec, arrayDec, arrayDecDef, objDecNew, 
@@ -395,22 +395,26 @@ instance ValueExpression JavaCode where
   -- map from the CodeInfo pass, but it's possible that one of the higher-level 
   -- functions implicitly calls these functions in the Java renderer, so we 
   -- also check here to add the exceptions from the called function to the map
-  funcApp n t vs = addCallExcsCurrMod n >> G.funcApp n t vs
-  funcAppNamedArgs = error $ G.namedArgError jName
-  funcAppMixedArgs = error $ G.namedArgError jName
-  selfFuncApp n t vs = addCallExcsCurrMod n >> G.selfFuncApp self n t vs
-  extFuncApp l n t vs = do
+  funcApp n t vs = funcAppMixedArgs n t vs []
+  funcAppNamedArgs n t = funcAppMixedArgs n t []
+  funcAppMixedArgs n t vs ns = addCallExcsCurrMod n >> G.funcApp n t vs ns
+  selfFuncApp n t vs = selfFuncAppMixedArgs n t vs []
+  selfFuncAppMixedArgs n t ps ns = addCallExcsCurrMod n >> G.selfFuncApp dot 
+    self n t ps ns
+  extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
+  extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
     modify (maybe id addExceptions (Map.lookup (l ++ "." ++ n) mem))
-    G.extFuncApp l n t vs
-  newObj ot vs = addConstructorCallExcsCurrMod ot (\t -> G.newObj newObjDocD t
-    vs)
-  extNewObj l ot vs = do
+    G.extFuncApp l n t vs ns
+  newObj ot vs = newObjMixedArgs ot vs []
+  newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t -> G.newObj "new " t vs ns)
+  extNewObj l ot vs = extNewObjMixedArgs l ot vs []
+  extNewObjMixedArgs l ot vs ns = do
     t <- ot
     mem <- getMethodExcMap
     let tp = getTypeString t
     modify (maybe id addExceptions (Map.lookup (l ++ "." ++ tp) mem))
-    newObj (toState t) vs
+    newObjMixedArgs (toState t) vs ns
 
   lambda = G.lambda jLambda
 
@@ -428,6 +432,8 @@ instance InternalValue JavaCode where
     valueDoc) void
   
   cast = jCast
+
+  call = G.call' jName
   
   valuePrec = valPrec . unJC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
@@ -443,13 +449,13 @@ instance Selector JavaCode where
   
   indexOf = G.indexOf "indexOf"
 
-instance InternalSelector JavaCode where
-  objMethodCall' f t o ps = do
+instance InternalValueExp JavaCode where
+  objMethodCallMixedArgs' f t o ps ns = do
     ob <- o
     mem <- getMethodExcMap
     let tp = getTypeString (valueType ob)
     modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ f) mem))
-    G.objMethodCall f t o ps
+    G.objMethodCall f t o ps ns
   objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym JavaCode where

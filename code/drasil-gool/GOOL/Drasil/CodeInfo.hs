@@ -5,7 +5,7 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 import GOOL.Drasil.Symantics (ProgramSym(..), FileSym(..), PermanenceSym(..), 
   BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), VariableSym(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), InternalSelector(..), FunctionSym(..), 
+  ValueExpression(..), Selector(..), InternalValueExp(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
@@ -194,16 +194,38 @@ instance BooleanExpression CodeInfo where
     
 instance ValueExpression CodeInfo where
   inlineIf = execute3
-  funcApp n _ _ = addCurrModCall n
-  funcAppNamedArgs n _ _ = addCurrModCall n
-  funcAppMixedArgs n _ _ _ = addCurrModCall n
-  selfFuncApp n _ _ = addCurrModCall n
-  extFuncApp l n _ _ = addExternalCall l n
+  funcApp n _ vs = do
+    sequence_ vs
+    addCurrModCall n
+  funcAppNamedArgs n _ ns = do
+    executePairList ns
+    addCurrModCall n
+  funcAppMixedArgs n _ vs ns = do
+    sequence_ vs
+    executePairList ns
+    addCurrModCall n
+  selfFuncApp = funcApp
+  selfFuncAppMixedArgs = funcAppMixedArgs
+  extFuncApp l n _ vs = do
+    sequence_ vs
+    addExternalCall l n
+  extFuncAppMixedArgs l n _ vs ns = do
+    sequence_ vs
+    executePairList ns
+    addExternalCall l n
   newObj ot vs = do
     sequence_ vs
     addCurrModConstructorCall ot
+  newObjMixedArgs ot vs ns = do
+    sequence_ vs
+    executePairList ns
+    addCurrModConstructorCall ot
   extNewObj l ot vs = do
     sequence_ vs
+    addExternalConstructorCall l ot
+  extNewObjMixedArgs l ot vs ns = do
+    sequence_ vs
+    executePairList ns
     addExternalConstructorCall l ot
 
   lambda _ = execute1
@@ -222,10 +244,11 @@ instance Selector CodeInfo where
   
   indexOf = execute2
   
-instance InternalSelector CodeInfo where
-  objMethodCall' n _ v vs = do
+instance InternalValueExp CodeInfo where
+  objMethodCallMixedArgs' n _ v vs ns = do
     _ <- v
     sequence_ vs
+    executePairList ns
     addCurrModCall n
   objMethodCallNoParams' n _ v = do
     _ <- v
@@ -518,6 +541,13 @@ execute1 s = do
 executeList :: [State a (CodeInfo ())] -> State a (CodeInfo ())
 executeList l = do
   sequence_ l
+  noInfo
+
+executePairList :: [(State a (CodeInfo ()), State a (CodeInfo ()))] -> 
+  State a (CodeInfo ())
+executePairList ps = do
+  mapM_ fst ps
+  mapM_ snd ps
   noInfo
 
 execute2 :: State a (CodeInfo ()) -> State a (CodeInfo ()) -> 

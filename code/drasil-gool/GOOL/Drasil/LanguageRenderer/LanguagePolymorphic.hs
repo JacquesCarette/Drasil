@@ -13,10 +13,10 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   binExprNumDbl', typeBinExpr, addmathImport, var, staticVar, extVar, self, 
   enumVar, classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, 
   litTrue, litFalse, litChar, litDouble, litFloat, litInt, litString, pi, 
-  valueOf, arg, enumElement, argsList, inlineIf, funcApp, funcAppMixedArgs, 
-  namedArgError, selfFuncApp, extFuncApp, newObj, lambda, notNull, objAccess, 
-  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
-  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
+  valueOf, arg, enumElement, argsList, inlineIf, call', call, funcApp, 
+  namedArgError, selfFuncApp, extFuncApp, newObj, extNewObj, lambda, notNull, 
+  objAccess, objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, 
+  indexOf, func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
   listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
   listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
   listAccessFunc', listSetFunc, printSt, state, loopState, emptyState, assign, 
@@ -49,8 +49,8 @@ import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   VariableSym(Variable, variableBind, variableName, variableType, variableDoc), 
   InternalVariable(varFromData), ValueSym(Value, valueDoc, valueType), 
   NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), 
-  BooleanExpression(..), InternalValue(..), Selector(($.)), 
-  FunctionSym(Function), SelectorFunction(at), 
+  BooleanExpression(..), InternalValue(inputFunc, cast, valuePrec, valFromData),
+  Selector(($.)), FunctionSym(Function), SelectorFunction(at), 
   InternalFunction(iterBeginFunc, iterEndFunc, functionDoc, functionType, 
     funcFromData),
   InternalStatement(statementDoc, statementTerm, stateFromData), 
@@ -67,8 +67,8 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
   ValueSym(litTrue, litFalse, litInt, litString, valueOf),
   ValueExpression(funcApp, newObj, extNewObj, notNull, lambda), 
-  Selector(objAccess), objMethodCall, objMethodCallNoParams, 
-  FunctionSym(func, listSize, listAdd, listAppend),
+  InternalValue(call), Selector(objAccess), objMethodCall, 
+  objMethodCallNoParams, FunctionSym(func, listSize, listAdd, listAppend),
   SelectorFunction(listAccess, listSet),
   InternalFunction(getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, 
     listAccessFunc, listSetFunc),
@@ -83,13 +83,13 @@ import GOOL.Drasil.Data (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
   on2StateLists, on1StateValue1List, getInnerType, convType)
-import GOOL.Drasil.LanguageRenderer (forLabel, new, observerListName, addExt, 
-  moduleDocD, blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, mkSt, 
-  mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, 
+import GOOL.Drasil.LanguageRenderer (dot, forLabel, new, observerListName, 
+  addExt, moduleDocD, blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, 
+  mkSt, mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, 
   extVarDocD, selfDocD, argDocD, enumElemDocD, classVarCheckStatic, objVarDocD, 
-  funcAppDocD, objAccessDocD, funcDocD, listAccessFuncDocD, constDecDefDocD, 
-  printDoc, returnDocD, getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, 
-  enumDocD, enumElementsDocD, fileDoc', docFuncRepr, commentDocD, commentedItem,
+  objAccessDocD, funcDocD, listAccessFuncDocD, constDecDefDocD, printDoc, 
+  returnDocD, getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, enumDocD, 
+  enumElementsDocD, fileDoc', docFuncRepr, commentDocD, commentedItem,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, intValue)
 import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensMStoVS, lensVStoMS, currMain, currFileType, modifyReturnFunc, 
@@ -541,35 +541,60 @@ inlineIf = on3StateValues (\c v1 v2 -> valFromData (prec c) (valueType v1)
   (valueDoc c <+> text "?" <+> valueDoc v1 <+> text ":" <+> valueDoc v2)) 
   where prec cd = valuePrec cd <|> Just 0
 
-funcApp :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
-  [VS (repr (Value repr))] -> VS (repr (Value repr))
-funcApp n = on1StateValue1List (\t -> mkVal t . funcAppDocD n)
+call' :: (RenderSym repr) => String -> Maybe Library -> Label -> 
+  VS (repr (Type repr)) -> Maybe Doc -> [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))
+call' l _ _ _ _ _ (_:_) = error $ namedArgError l
+call' _ l n t o ps ns = call empty l n t o ps ns
 
-funcAppMixedArgs :: (RenderSym repr) => Doc -> Label -> VS (repr (Type repr)) 
+call :: (RenderSym repr) => Doc -> Maybe Library -> Label -> 
+  VS (repr (Type repr)) -> Maybe Doc -> [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))
+call sep lib n t o pas nas = (\tp pargs nms nargs -> mkVal tp $ obDoc <> libDoc 
+  <> text n <> parens (valueList pargs <+> (if null pas || null nas then empty 
+  else comma) <+> hcat (intersperse (text ", ") (zipWith (\nm a -> 
+  variableDoc nm <> sep <> valueDoc a) nms nargs)))) <$> t <*> sequence pas <*> 
+  mapM fst nas <*> mapM snd nas
+  where libDoc = maybe empty (text . (++ ".")) lib
+        obDoc = fromMaybe empty o
+
+funcApp :: (RenderSym repr) => Label -> VS (repr (Type repr)) 
   -> [VS (repr (Value repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   VS (repr (Value repr))
-funcAppMixedArgs sep n t pas nas = (\tp pargs nms nargs -> mkVal tp $ text n <> 
-  parens (valueList pargs <+> (if null pas || null nas then empty else comma) 
-  <+> hcat (intersperse (text ", ") (zipWith (\nm a -> variableDoc nm <> sep <>
-  valueDoc a) nms nargs)))) <$> t <*> sequence pas <*> mapM fst nas <*> 
-  mapM snd nas
+funcApp n t = S.call Nothing n t Nothing
 
 namedArgError :: String -> String
 namedArgError l = "Named arguments not supported in " ++ l 
 
-selfFuncApp :: (RenderSym repr) => VS (repr (Variable repr)) -> Label -> 
-  VS (repr (Type repr)) -> [VS (repr (Value repr))] -> VS (repr (Value repr))
-selfFuncApp s n t vs = s >>= 
-  (\slf -> S.funcApp (variableName slf ++ "." ++ n) t vs)
+selfFuncApp :: (RenderSym repr) => Doc -> VS (repr (Variable repr)) -> Label -> 
+  VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))
+selfFuncApp d slf n t vs ns = slf >>= (\s -> S.call Nothing n t 
+  (Just $ variableDoc s <> d) vs ns)
 
 extFuncApp :: (RenderSym repr) => Library -> Label -> VS (repr (Type repr)) -> 
-  [VS (repr (Value repr))] -> VS (repr (Value repr))
-extFuncApp l n = S.funcApp (l ++ "." ++ n)
+  [VS (repr (Value repr))] ->
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))
+extFuncApp l n t = S.call (Just l) n t Nothing
 
-newObj :: (RenderSym repr) => (repr (Type repr) -> Doc -> Doc) -> 
-  VS (repr (Type repr)) -> [VS (repr (Value repr))] -> VS (repr (Value repr))
-newObj f = on1StateValue1List (\t -> mkVal t . f t . valueList)
+newObj :: (RenderSym repr) => String -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))
+newObj s tp vs ns = tp >>= (\t -> S.call Nothing (s ++ getTypeString t) 
+  (return t) Nothing vs ns)
+
+extNewObj :: (RenderSym repr) => String -> Library -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))
+extNewObj s l tp vs ns = tp >>= (\t -> S.call (Just l) (s ++ getTypeString t) 
+  (return t) Nothing vs ns)
 
 notNull :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
 notNull v = v ?!= S.valueOf (S.var "null" $ onStateValue valueType v)
@@ -587,8 +612,11 @@ objAccess = on2StateValues (\v f -> mkVal (functionType f) (objAccessDocD
   (valueDoc v) (functionDoc f)))
 
 objMethodCall :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
-  VS (repr (Value repr)) -> [VS (repr (Value repr))] -> VS (repr (Value repr))
-objMethodCall f t o ps = S.objAccess o (S.func f t ps)
+  VS (repr (Value repr)) -> [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))
+objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing f t 
+  (Just $ valueDoc o <> dot) vs ns)
 
 objMethodCallNoParams :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   VS (repr (Value repr)) -> VS (repr (Value repr))

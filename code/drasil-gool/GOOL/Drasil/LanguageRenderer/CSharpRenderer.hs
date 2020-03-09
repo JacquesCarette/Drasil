@@ -17,7 +17,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  InternalSelector(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
+  InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
@@ -27,11 +27,11 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
 import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
   mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
-  classVarDocD, objVarDocD, newObjDocD, funcDocD, castDocD, listSetFuncDocD, 
-  castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
-  dot, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, 
-  inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  commentedModD, variableList, appendToBody, surroundBody)
+  classVarDocD, objVarDocD, funcDocD, castDocD, listSetFuncDocD, castObjDocD, 
+  staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, dot, 
+  blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, 
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD, 
+  variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
   string, listType, arrayType, listInnerType, obj, enumType, funcType, void, 
@@ -41,21 +41,21 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   classVar, objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, 
   litFalse, litChar, litDouble, litFloat, litInt, litString, valueOf, arg, 
   enumElement, argsList, inlineIf, objAccess, objMethodCall, 
-  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, funcApp, 
-  funcAppMixedArgs, selfFuncApp, extFuncApp, newObj, lambda, notNull, func, 
-  get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
-  listSet, getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, 
-  iterEndError, listAccessFunc, listSetFunc, printSt, state, loopState, 
-  emptyState, assign, assignToListIndex, multiAssignError, decrement, 
-  increment, decrement1, increment1, varDec, varDecDef, listDec, listDecDef', 
-  arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
-  extObjDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, 
-  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, freeError, throw, 
-  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
-  switch, switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, 
-  checkState, notifyObservers, construct, param, method, getMethod, setMethod, 
-  privMethod, pubMethod, constructor, docMain, function, mainFunction, docFunc, 
+  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, call, funcApp, 
+  selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
+  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
+  setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
+  listAccessFunc, listSetFunc, printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, 
+  objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, 
+  constDecDef, discardInput, openFileR, openFileW, openFileA, closeFile, 
+  discardFileLine, stringListVals, stringListLists, returnState, 
+  multiReturnError, valState, comment, freeError, throw, initState, 
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
+  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
+  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
   docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
   pubGVar, buildClass, enum, implementingClass, docClass, commentedClass, 
   intClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
@@ -386,13 +386,17 @@ instance BooleanExpression CSharpCode where
   
 instance ValueExpression CSharpCode where
   inlineIf = G.inlineIf
-  funcApp = G.funcApp
-  funcAppNamedArgs n t = funcAppMixedArgs n t []
-  funcAppMixedArgs = G.funcAppMixedArgs (colon <> space)
-  selfFuncApp = G.selfFuncApp self
-  extFuncApp = G.extFuncApp
-  newObj = G.newObj newObjDocD
+  funcApp n t vs = G.funcApp n t vs []
+  funcAppNamedArgs n t = G.funcApp n t []
+  funcAppMixedArgs = G.funcApp
+  selfFuncApp n t vs = selfFuncAppMixedArgs n t vs []
+  selfFuncAppMixedArgs = G.selfFuncApp dot self
+  extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
+  extFuncAppMixedArgs = G.extFuncApp
+  newObj t vs = newObjMixedArgs t vs []
+  newObjMixedArgs = G.newObj "new "
   extNewObj _ = newObj
+  extNewObjMixedArgs _ = newObjMixedArgs
 
   lambda = G.lambda csLambda
 
@@ -409,6 +413,8 @@ instance InternalValue CSharpCode where
     valueDoc) void
   
   cast = csCast
+
+  call = G.call (colon <> space)
   
   valuePrec = valPrec . unCSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
@@ -424,8 +430,8 @@ instance Selector CSharpCode where
   
   indexOf = G.indexOf "IndexOf"
   
-instance InternalSelector CSharpCode where
-  objMethodCall' = G.objMethodCall
+instance InternalValueExp CSharpCode where
+  objMethodCallMixedArgs' = G.objMethodCall 
   objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym CSharpCode where

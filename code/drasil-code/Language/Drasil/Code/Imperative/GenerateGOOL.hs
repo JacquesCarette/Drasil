@@ -1,6 +1,6 @@
 module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
   genModuleWithImports, genModule, genDoxConfig, primaryClass, auxClass, fApp, 
-  fAppInOut, mkParam
+  ctorCall, fAppInOut, mkParam
 ) where
 
 import Language.Drasil
@@ -77,12 +77,25 @@ auxClass :: (ProgramSym repr) => String -> Label -> Maybe Label ->
 auxClass = mkClass Auxiliary
 
 fApp :: (ProgramSym repr) => String -> String -> VS (repr (Type repr)) -> 
-  [VS (repr (Value repr))] -> Reader DrasilState (VS (repr (Value repr)))
-fApp m s t vl = do
+  [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  Reader DrasilState (VS (repr (Value repr)))
+fApp m s t vl ns = do
   g <- ask
   let cm = currentModule g
-  return $ if m /= cm then extFuncApp m s t vl else if Map.lookup s 
-    (eMap $ codeSpec g) == Just cm then funcApp s t vl else selfFuncApp s t vl
+  return $ if m /= cm then extFuncAppMixedArgs m s t vl ns else if Map.lookup s 
+    (eMap $ codeSpec g) == Just cm then funcAppMixedArgs s t vl ns else 
+    selfFuncAppMixedArgs s t vl ns
+
+ctorCall :: (ProgramSym repr) => String -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  Reader DrasilState (VS (repr (Value repr)))
+ctorCall m t vl ns = do
+  g <- ask
+  let cm = currentModule g
+  return $ if m /= cm then extNewObjMixedArgs m t vl ns else 
+    newObjMixedArgs t vl ns
 
 fAppInOut :: (ProgramSym repr) => String -> String -> [VS (repr (Value repr))] 
   -> [VS (repr (Variable repr))] -> [VS (repr (Variable repr))] -> 

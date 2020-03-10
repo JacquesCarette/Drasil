@@ -11,7 +11,7 @@ import Language.Drasil hiding (int, log, ln, exp,
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (paramComment, returnComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
-import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, 
+import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,
   genModuleWithImports, mkParam, primaryClass)
 import Language.Drasil.Code.Imperative.Helpers (getUpperBound, liftS, lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
@@ -33,10 +33,10 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), PermanenceSym(..), 
   BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  objMethodCall, FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), nonInitConstructor, convType, CodeType(..), 
-  FS, CS, MS, VS, onStateValue) 
+  objMethodCallMixedArgs, FunctionSym(..), SelectorFunction(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), nonInitConstructor, convType, 
+  CodeType(..), FS, CS, MS, VS, onStateValue) 
 import qualified GOOL.Drasil as C (CodeType(List))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -226,33 +226,14 @@ convExpr (C c)   = do
   g <- ask
   let v = quantvar (lookupC g c)
   mkVal v
-convExpr (FCall c x) = do
-  g <- ask
-  let info = sysinfodb $ csi $ codeSpec g
-      mem = eMap $ codeSpec g
-      funcCd = quantfunc (symbResolve info c)
-      funcNm = codeName funcCd
-  funcTp <- codeType funcCd
-  args <- mapM convExpr x
-  maybe (error $ "Call to non-existent function" ++ funcNm) 
-    (\f -> fApp f funcNm (convType funcTp) args) (Map.lookup funcNm mem)
-convExpr (New c x) = do
-  g <- ask
-  let info = sysinfodb $ csi $ codeSpec g
-      funcCd = quantfunc (symbResolve info c)
-  funcTp <- codeType funcCd
-  args <- mapM convExpr x
-  return $ newObj (convType funcTp) args
-convExpr (Message a m x) = do
+convExpr (FCall c x ns) = convCall c x ns fApp
+convExpr (New c x ns) = convCall c x ns (\m _ -> ctorCall m)
+convExpr (Message a m x ns) = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
       objCd = quantvar (symbResolve info a)
-      mthdCd = quantfunc (symbResolve info m)
-      mthdNm = codeName mthdCd
-  mthdTp <- codeType mthdCd
-  args <- mapM convExpr x
   o <- mkVal objCd
-  return $ objMethodCall (convType mthdTp) o mthdNm args
+  convCall m x ns (\_ n t ps nas -> return (objMethodCallMixedArgs t o n ps nas))
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
   g <- ask
@@ -275,6 +256,24 @@ convExpr (RealI c ri)  = do
   g <- ask
   convExpr $ renderRealInt (lookupC g c) ri
 
+convCall :: (ProgramSym repr) => UID -> [Expr] -> [(UID, Expr)] -> 
+  (String -> String -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  Reader DrasilState (VS (repr (Value repr)))) -> 
+  Reader DrasilState (VS (repr (Value repr)))
+convCall c x ns f = do
+  g <- ask
+  let info = sysinfodb $ csi $ codeSpec g
+      mem = eMap $ codeSpec g
+      funcCd = quantfunc (symbResolve info c)
+      funcNm = codeName funcCd
+  funcTp <- codeType funcCd
+  args <- mapM convExpr x
+  nms <- mapM (mkVar . quantfunc . symbResolve info . fst) ns 
+  nargs <- mapM (convExpr . snd) ns
+  maybe (error $ "Call to non-existent function " ++ funcNm) (\m -> f m funcNm 
+    (convType funcTp) args (zip nms nargs)) (Map.lookup funcNm mem)
+  
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint -> Expr
 renderC s (Range _ rr)          = renderRealInt s rr
 renderC s (EnumeratedReal _ rr) = IsIn (sy s) (DiscreteD rr)

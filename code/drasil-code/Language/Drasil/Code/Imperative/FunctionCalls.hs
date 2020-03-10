@@ -73,7 +73,7 @@ getFuncCall n t funcPs = do
       getFuncCall' (Just m) = do
         cs <- funcPs
         pvals <- mapM mkVal cs
-        val <- fApp m n t pvals
+        val <- fApp m n t pvals []
         return $ Just val
   getFuncCall' mm
 

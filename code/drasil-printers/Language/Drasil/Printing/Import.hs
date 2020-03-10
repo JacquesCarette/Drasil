@@ -113,15 +113,12 @@ expr (Deriv Total a b)sm =
         (P.Row [P.Spc P.Thin, P.Ident "d", 
                 symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b]) 
 expr (C c)            sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
-expr (FCall f [x])    sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, 
+expr (FCall f [x] []) sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, 
   parens $ expr x sm]
-expr (FCall f l)      sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
-  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) l]
-expr (New c l)        sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c,
-  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) l]
-expr (Message a m l)  sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) a,
-  P.MO P.Point, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) m, 
-  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) l]
+expr (FCall f l ns)   sm = call sm f l ns
+expr (New c l ns)     sm = call sm c l ns
+expr (Message a m l ns) sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) a,
+  P.MO P.Point, call sm m l ns]
 expr (Case _ ps)      sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
@@ -219,6 +216,13 @@ indx sm (C c) i = f s
 --    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
     f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
+
+-- | For printing expressions that call something
+call :: PrintingInformation -> UID -> [Expr] -> [(UID,Expr)] -> P.Expr
+call sm f ps ns = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
+  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) ps ++ 
+  zipWith (\n a -> P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) n, 
+  P.MO P.Eq, expr a sm]) (map fst ns) (map snd ns)]
 
 -- | Helper function for translating 'EOperator's
 eop :: PrintingInformation -> ArithOper -> DomainDesc Expr Expr -> Expr -> P.Expr

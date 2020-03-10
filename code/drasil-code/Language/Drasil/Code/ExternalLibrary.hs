@@ -36,7 +36,7 @@ data FunctionInterface = FI FuncType CodeFuncChunk [Argument] (Maybe Result)
 
 data Result = Assign CodeVarChunk | Return 
 
-data Argument = Arg (Maybe CodeVarChunk) ArgumentInfo -- Maybe named argument
+data Argument = Arg (Maybe NamedArgument) ArgumentInfo -- Maybe named argument
 
 data ArgumentInfo = 
   -- Not dependent on use case, Maybe is name for the argument
@@ -114,19 +114,19 @@ constructAndReturn c as = FI Constructor c as (Just Return)
 lockedArg :: Expr -> Argument
 lockedArg = Arg Nothing . LockedArg
 
-lockedNamedArg :: CodeVarChunk -> Expr -> Argument
+lockedNamedArg :: NamedArgument -> Expr -> Argument
 lockedNamedArg n = Arg (Just n) . LockedArg
 
 inlineArg :: Space -> Argument
 inlineArg t = Arg Nothing $ Basic t Nothing
 
-inlineNamedArg :: CodeVarChunk ->  Space -> Argument
+inlineNamedArg :: NamedArgument ->  Space -> Argument
 inlineNamedArg n t = Arg (Just n) $ Basic t Nothing
 
 preDefinedArg :: CodeVarChunk -> Argument
 preDefinedArg v = Arg Nothing $ Basic (v ^. typ) (Just v)
 
-preDefinedNamedArg :: CodeVarChunk -> CodeVarChunk -> Argument
+preDefinedNamedArg :: NamedArgument -> CodeVarChunk -> Argument
 preDefinedNamedArg n v = Arg (Just n) $ Basic (v ^. typ) (Just v)
 
 functionArg :: CodeFuncChunk -> [Parameter] -> Step -> Argument

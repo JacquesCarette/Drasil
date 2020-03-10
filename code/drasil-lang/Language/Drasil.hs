@@ -54,6 +54,8 @@ module Language.Drasil (
   , sDom
   -- Chunk.CommonIdea
   , commonIdea, CI, getAcc, getAccStr, commonIdeaWithDict, prependAbrv
+  -- Chunk.NamedArgument
+  , NamedArgument, narg
   -- Chunk.NamedIdea
   , NamedChunk, short, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)
@@ -236,6 +238,7 @@ import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 
   fromEqnSt', equat, ec)
+import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)

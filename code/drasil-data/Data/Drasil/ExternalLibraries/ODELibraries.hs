@@ -12,9 +12,9 @@ import Language.Drasil.Code (ODEMethod(..), ExternalLibrary, Step, Argument,
   constructAndReturn, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
   preDefinedArg, functionArg, customObjArg, recordArg, lockedParam, 
   unnamedParam, customClass, implementation, constructorInfo, methodInfo, 
-  appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
-  initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
-  returnExprList, fixedReturn,
+  methodInfoNoReturn, appendCurrSol, populateSolList, assignArrayIndex, 
+  assignSolFromObj, initSolListFromArray, initSolListWithVal, 
+  solveAndPopulateWhile, returnExprList, fixedReturn,
   ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill, 
   mandatoryStepFill, mandatoryStepsFill, callStepFill, libCallFill, 
   basicArgFill, functionArgFill, customObjArgFill, recordArgFill, 
@@ -220,18 +220,23 @@ apacheODE = externalLib [
   mandatorySteps [callStep $ libMethod it addStepHandler [
       customObjArg (map ((apacheImport ++ "sampling.") ++) [sh, si]) 
         "Class defining additional behaviour for each step of an ODE solution"
-        stepHandler (implementation sh [
-          methodInfo initMethod (map lockedParam [t0, y0, t]) 
-            [initSolListFromArray y0],
-          methodInfo handleStep (map lockedParam [interpolator, isLast]) 
+        stepHandler stepHandlerCtor (implementation sh [
+          methodInfoNoReturn initMethod 
+            "initializes step handler with initial conditions" 
+            (map lockedParam [t0, y0, t]) [initSolListFromArray y0],
+          methodInfoNoReturn handleStep 
+            "appends solution point at each ODE solution step"
+            (map lockedParam [interpolator, isLast]) 
             [callStep $ libMethodWithResult interpolator getInterpState [] curr,
             appendCurrSol curr]])],
     callStep $ libMethod it integrate (customObjArg [apacheImport ++ fode] 
-      "Class representing an ODE system" ode (implementation fode [
+      "Class representing an ODE system" ode odeCtor (implementation fode [
         constructorInfo odeCtor [] [],
-        methodInfo getDimension [] [fixedReturn (int 1)],
-        methodInfo computeDerivatives [
-          lockedParam t, unnamedParam (Array Real), unnamedParam (Array Real)]
+        methodInfo getDimension "returns the ODE system dimension" 
+          [] "dimension of the ODE system" [fixedReturn (int 1)],
+        methodInfoNoReturn computeDerivatives 
+          "function representation of an ODE system" 
+          [lockedParam t, unnamedParam (Array Real), unnamedParam (Array Real)]
           [assignArrayIndex]]) : 
       [inlineArg Real, preDefinedArg currVals, inlineArg Real, 
         preDefinedArg currVals]),
@@ -302,8 +307,8 @@ curr = codevar $ implCQD "curr_apache" (nounPhrase
   "ODE solution array for current step" "ODE solution arrays for current step")
   Nothing (Array Real) (Label "curr") Nothing
 
-adamsC, dp54C, addStepHandler, initMethod, handleStep, getInterpState, 
-  integrate, getDimension, computeDerivatives :: CodeFuncChunk
+adamsC, dp54C, stepHandlerCtor, addStepHandler, initMethod, handleStep, 
+  getInterpState, integrate, getDimension, computeDerivatives :: CodeFuncChunk
 adamsC = codefunc $ implCQD "adams_ctor_apache" (nounPhrase
   "constructor for an Adams-Bashforth integrator" 
   "constructors for an Adams-Bashforth integrator") 
@@ -312,6 +317,9 @@ dp54C = codefunc $ implCQD "dp54_ctor_apache" (nounPhrase
   "constructor for a Dormand-Prince 5-4 integrator"
   "constructors for a Dormand-Prince 5-4 integrator")
   Nothing (Actor dp54) (Label dp54) Nothing
+stepHandlerCtor = codefunc $ implCQD "StepHandler_ctor_apache" (nounPhrase
+  "constructor for StepHandler" "constructors for StepHandler") Nothing 
+  (Actor sh) (Label "StepHandler") Nothing
 addStepHandler = codefunc $ implCQD "addStepHandler_apache" (nounPhrase
   "method for adding a step handler to an integrator"
   "methods for adding a step handler to an integrator")
@@ -349,18 +357,21 @@ odeint = externalLib [
   mandatoryStep $ callRequiresJust "boost/numeric/odeint.hpp" $ libFunction 
     integrateConst [
       lockedArg (sy stepper), 
-      customObjArg [] "Class representing an ODE system" ode (customClass [
-        constructorInfo odeCtor [] [],
-        methodInfo odeOp [unnamedParam (Vect Real), unnamedParam (Vect Real), 
-          lockedParam t] [assignArrayIndex]]),
+      customObjArg [] "Class representing an ODE system" ode odeCtor 
+        (customClass [constructorInfo odeCtor [] [],
+          methodInfoNoReturn odeOp "function representation of ODE system" 
+            [unnamedParam (Vect Real), unnamedParam (Vect Real), lockedParam t] 
+            [assignArrayIndex]]),
       -- Need to declare variable holding initial value because odeint will update this variable at each step
       preDefinedArg odeintCurrVals,
       inlineArg Real, inlineArg Real, inlineArg Real, 
       customObjArg [] 
         "Class for populating a list during an ODE solution process" 
-        pop (customClass [
+        pop popCtor (customClass [
           constructorInfo popCtor [unnamedParam (Vect Real)] [],
-          methodInfo popOp [lockedParam y, lockedParam t] [appendCurrSol y]])]]
+          methodInfoNoReturn popOp 
+            "appends solution point for current ODE solution step"
+            [lockedParam y, lockedParam t] [appendCurrSol y]])]]
 
 odeintCall :: ODEInfo -> ExternalLibraryCall
 odeintCall info = externalLibCall [

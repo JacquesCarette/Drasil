@@ -1,6 +1,7 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.Space
-  (Space(..), DomainDesc(..), RealInterval(..), RTopology(..), Inclusive(..)) where
+  (Space(..), DomainDesc(..), RealInterval(..), RTopology(..), Inclusive(..),
+  getActorName) where
 
 import Language.Drasil.Symbol (Symbol)
 
@@ -43,3 +44,7 @@ data RealInterval a b where
   Bounded :: (Inclusive, a) -> (Inclusive, b) -> RealInterval a b -- (x .. y)
   UpTo :: (Inclusive, a) -> RealInterval a b -- (-infinity .. x)
   UpFrom :: (Inclusive, b) -> RealInterval a b -- (x .. infinity)
+
+getActorName :: Space -> String
+getActorName (Actor n) = n
+getActorName _ = error "getActorName called on non-actor space"

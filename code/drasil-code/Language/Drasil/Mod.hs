@@ -56,8 +56,8 @@ funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc
   (map quantvar i) t returnDesc fs 
 
 ctorDef :: Name -> String -> [CodeVarChunk] -> [Initializer] -> 
-  [FuncStmt] -> FuncDef
-ctorDef  = CtorDef
+  [FuncStmt] -> Func
+ctorDef n desc ps is fs = FDef $ CtorDef n desc ps is fs
 
 data FuncData where
   FuncData :: Name -> String -> DataDesc -> FuncData

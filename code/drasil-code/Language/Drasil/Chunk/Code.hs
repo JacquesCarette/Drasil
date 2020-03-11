@@ -41,6 +41,7 @@ instance NamedIdea   CodeChunk where term = qc . term
 instance Idea        CodeChunk where getA = getA . view qc
 instance HasSpace    CodeChunk where typ = qc . typ
 instance HasSymbol   CodeChunk where symbol = symbol . view qc
+instance Quantity    CodeChunk
 instance CodeIdea    CodeChunk where
   codeName (CodeC c Var) = render $ symbolDoc (codeSymb c)
   codeName (CodeC c Func) = funcPrefix ++ render (symbolDoc (codeSymb c))
@@ -56,6 +57,7 @@ instance NamedIdea   CodeVarChunk where term = ccv . term
 instance Idea        CodeVarChunk where getA = getA . view ccv
 instance HasSpace    CodeVarChunk where typ = ccv . typ
 instance HasSymbol   CodeVarChunk where symbol = symbol . view ccv
+instance Quantity    CodeVarChunk
 instance CodeIdea    CodeVarChunk where 
   codeName = codeName . view ccv
   codeChunk = codeChunk . view ccv
@@ -70,6 +72,7 @@ instance NamedIdea   CodeFuncChunk where term = ccf . term
 instance Idea        CodeFuncChunk where getA = getA . view ccf
 instance HasSpace    CodeFuncChunk where typ = ccf . typ
 instance HasSymbol   CodeFuncChunk where symbol = symbol . view ccf
+instance Quantity    CodeFuncChunk
 instance Callable    CodeFuncChunk
 instance CodeIdea    CodeFuncChunk where 
   codeName = codeName . view ccf

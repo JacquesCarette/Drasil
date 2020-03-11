@@ -200,10 +200,7 @@ instance ValueExpression CodeInfo where
   funcAppNamedArgs n _ ns = do
     executePairList ns
     addCurrModCall n
-  funcAppMixedArgs n _ vs ns = do
-    sequence_ vs
-    executePairList ns
-    addCurrModCall n
+  funcAppMixedArgs n _ = currModCall n
   selfFuncApp = funcApp
   selfFuncAppMixedArgs = funcAppMixedArgs
   extFuncApp l n _ vs = do
@@ -247,9 +244,7 @@ instance Selector CodeInfo where
 instance InternalValueExp CodeInfo where
   objMethodCallMixedArgs' n _ v vs ns = do
     _ <- v
-    sequence_ vs
-    executePairList ns
-    addCurrModCall n
+    currModCall n vs ns
   objMethodCallNoParams' n _ v = do
     _ <- v
     addCurrModCall n
@@ -567,3 +562,10 @@ execute4 :: State a (CodeInfo ()) -> State a (CodeInfo ()) ->
 execute4 s1 s2 s3 s4 = do
   _ <- s1
   execute3 s2 s3 s4
+
+currModCall :: String -> [VS (CodeInfo ())] -> 
+  [(VS (CodeInfo ()), VS (CodeInfo ()))] -> VS (CodeInfo ())
+currModCall n ps ns = do
+  sequence_ ps
+  executePairList ns
+  addCurrModCall n

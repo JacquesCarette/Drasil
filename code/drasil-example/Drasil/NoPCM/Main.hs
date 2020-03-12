@@ -9,7 +9,7 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.NoPCM.Body (si, srs, printSetting)
+import Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo)
 
 code :: CodeSpec
 code = codeSpec si choices []
@@ -31,7 +31,8 @@ choices = defaultChoices {
   constStructure = Store Bundled,
   constRepr = Const,
   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
-  auxFiles = [SampleInput]
+  auxFiles = [SampleInput],
+  odes = [noPCMODEInfo]
 }       
        
 main :: IO ()            

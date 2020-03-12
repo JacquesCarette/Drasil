@@ -9,6 +9,9 @@ import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
 
+import Language.Drasil.Code (quantvar, ODEInfo, odeInfo, ODEOptions, 
+  odeOptions, ODEMethod(..))
+
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
@@ -56,8 +59,9 @@ import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, wa
 import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn, 
-  htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW, tempEnv, 
-  tempW, thFluxVect, volHtGen, watE, wMass, wVol, unitalChuncks, absTol, relTol)
+  htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW, tempC, 
+  tempEnv, tempInit, tempW, thFluxVect, timeFinal, timeStep, volHtGen, watE, 
+  wMass, wVol, unitalChuncks, absTol, relTol)
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
@@ -184,13 +188,21 @@ si = SI {
   _inputs = inputs ++ map qw [tempW, watE], --inputs ++ outputs?
   _outputs = map qw [tempW, watE],     --outputs
   _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
-  _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE],        --constrained
+  _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
   _constants = specParamValList,
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB,
    sampleData = "../../datafiles/NoPCM/sampleInput.txt"
 }
+
+noPCMODEOpts :: ODEOptions
+noPCMODEOpts = odeOptions RK45 (sy absTol) (sy relTol) (sy timeStep)
+
+noPCMODEInfo :: ODEInfo
+noPCMODEInfo = odeInfo (quantvar tempW) (quantvar time) 
+  [quantvar tauW, quantvar tempC] (dbl 0) (sy timeFinal) (sy tempInit) 
+  [1 / sy tauW * (sy tempC - sy tempW)] noPCMODEOpts
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

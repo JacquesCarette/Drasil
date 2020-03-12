@@ -1,11 +1,11 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
   scipyODE, scipyCall, oslo, osloCall, apacheODE, apacheODECall, odeint, 
-  odeintCall, odeInfo, odeOptions
+  odeintCall
 ) where
 
 import Language.Drasil
 
-import Language.Drasil.Code (ODEMethod(..), ExternalLibrary, Step, Argument, 
+import Language.Drasil.Code (ExternalLibrary, Step, Argument, 
   externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep,
   callStep, callRequiresJust, callRequires, libFunction, libMethod, 
   libFunctionWithResult, libMethodWithResult, libConstructor, 
@@ -23,7 +23,7 @@ import Language.Drasil.Code (ODEMethod(..), ExternalLibrary, Step, Argument,
   assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
   initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, 
   fixedStatementFill, CodeVarChunk, CodeFuncChunk, codevar, codefunc, ccObjVar, 
-  implCQD)
+  implCQD, ODEInfo(..), ODEOptions(..), ODEMethod(..))
 
 import Control.Lens ((^.))
 
@@ -475,36 +475,6 @@ odeObj = Actor "ODE"
 odeMethodUnavailable :: String
 odeMethodUnavailable = "Chosen ODE solving method is not available" ++
           " in chosen ODE solving library"
-
--- Data 
-
--- This may be temporary, but need a structure to hold ODE info for now. 
--- Goal will be for this info to be populated by the instance model for the ODE and the Choices structure.
--- Probably doesn't belong here, but where?
-data ODEInfo = ODEInfo {
-  indepVar :: CodeVarChunk,
-  depVar :: CodeVarChunk,
-  otherVars :: [CodeVarChunk],
-  tInit :: Expr,
-  tFinal :: Expr,
-  initVal :: Expr,
-  odeSyst :: [Expr],
-  odeOpts :: ODEOptions
-}
-
-odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> Expr -> Expr -> 
-  Expr -> [Expr] -> ODEOptions -> ODEInfo
-odeInfo = ODEInfo
-
-data ODEOptions = ODEOpts {
-  solveMethod :: ODEMethod,
-  absTol :: Expr,
-  relTol :: Expr,
-  stepSize :: Expr
-}
-
-odeOptions :: ODEMethod -> Expr -> Expr -> Expr -> ODEOptions
-odeOptions = ODEOpts
 
 diffCodeChunk :: CodeVarChunk -> CodeVarChunk
 diffCodeChunk c = codevar $ implCQD ("d" ++ c ^. uid) 

@@ -15,6 +15,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc,
   codeEquat)
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
+import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
   Mod(..), Name, fname, getFuncParams, packmod, prefixFunctions)
 
@@ -140,7 +141,10 @@ data Choices = Choices {
   conceptMatch :: ConceptMatchMap,
   spaceMatch :: SpaceMatch,
   auxFiles :: [AuxFile],
-  odeMethod :: [ODEMethod]
+  -- FIXME: ODEInfos should be automatically built from Instance models when 
+  -- needed, but we can't do that yet so I'm passing it through Choices instead.
+  -- This choice should really just be for an ODEMethod
+  odes :: [ODEInfo]
 }
 
 data Modularity = Modular InputModule | Unmodular
@@ -196,8 +200,6 @@ data AuxFile = SampleInput deriving Eq
 data Visibility = Show
                 | Hide
 
-data ODEMethod = RK45 | BDF | Adams
-
 inputModule :: Choices -> InputModule
 inputModule c = inputModule' $ modularity c
   where inputModule' Unmodular = Combined
@@ -221,7 +223,7 @@ defaultChoices = Choices {
   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
   spaceMatch = spaceToCodeType, 
   auxFiles = [SampleInput],
-  odeMethod = [RK45]
+  odes = []
 }
 
 -- medium hacks ---

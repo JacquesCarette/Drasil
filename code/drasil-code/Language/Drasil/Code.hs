@@ -9,8 +9,7 @@ module Language.Drasil.Code (
   Logging(LogNone, LogAll), Modularity(..), Structure(..), 
   ConstantStructure(..), ConstantRepr(..), InputModule(..), CodeConcept(..), 
   matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), Visibility(..), 
-  ODEMethod(..), defaultChoices, funcUID, funcUID', asVC, asVC', codeSpec, 
-  relToQD,
+  defaultChoices, funcUID, funcUID', asVC, asVC', codeSpec, relToQD,
   ($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, funcData, funcDef, 
   packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
@@ -36,6 +35,7 @@ module Language.Drasil.Code (
   PackageSym(..),
   CodeChunk, CodeVarChunk, CodeFuncChunk, codevar, codefunc, quantvar, 
   ccObjVar, CodeQuantityDict, implCQD,
+  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..),
   unPP, unJP, unCSP, unCPPP
 ) where
 
@@ -78,8 +78,8 @@ import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), CodeSystInfo(..),
   Comments(..), Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), 
   Lang(..), Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
-  matchSpaces, AuxFile(..), Visibility(..), ODEMethod(..), defaultChoices, 
-  funcUID, funcUID', asVC, asVC', codeSpec, relToQD)
+  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, funcUID, funcUID', 
+  asVC, asVC', codeSpec, relToQD)
 import Language.Drasil.Mod (($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, 
   funcData, funcDef, packmod)
 
@@ -88,6 +88,9 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeFuncChunk, 
   codevar, codefunc, quantvar, ccObjVar)
 import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, implCQD)
+
+import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, ODEOptions(..), 
+  odeOptions, ODEMethod(..))
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)

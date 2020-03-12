@@ -9,6 +9,9 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
+import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg, 
+  apacheODEPckg, odeintPckg)
+
 import Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo)
 
 code :: CodeSpec
@@ -32,6 +35,7 @@ choices = defaultChoices {
   constRepr = Const,
   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
   auxFiles = [SampleInput],
+  odeLib = [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg],
   odes = [noPCMODEInfo]
 }       
        

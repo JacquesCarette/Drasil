@@ -18,8 +18,9 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..),
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
-  Lang(..), Modularity(..), Visibility(..))
+  Modularity(..), Visibility(..))
 
 import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), GS, 
   FS, initialState, unCI)

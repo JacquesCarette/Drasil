@@ -18,6 +18,7 @@ library
     , Language.Drasil.Code.ExternalLibrary
     , Language.Drasil.Code.ExternalLibraryCall
     , Language.Drasil.Code.ExtLibImport
+    , Language.Drasil.Code.Lang
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
     , Language.Drasil.Code.Imperative.ConceptMatch

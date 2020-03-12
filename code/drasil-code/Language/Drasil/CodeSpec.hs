@@ -15,7 +15,8 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc,
   codeEquat)
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
-import Language.Drasil.Data.ODEInfo (ODEInfo)
+import Language.Drasil.Code.Lang (Lang(..))
+import Language.Drasil.Data.ODEInfo (ODEInfo, ODELibPckg)
 import Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
   Mod(..), Name, fname, getFuncParams, packmod, prefixFunctions)
 
@@ -33,12 +34,6 @@ type Output = CodeVarChunk
 type Const = CodeDefinition
 type Derived = CodeDefinition
 type Def = CodeDefinition
-
-data Lang = Cpp
-          | CSharp
-          | Java
-          | Python
-          deriving (Eq, Show)
 
 data CodeSystInfo where
   CSI :: (HasName a) => {
@@ -141,6 +136,7 @@ data Choices = Choices {
   conceptMatch :: ConceptMatchMap,
   spaceMatch :: SpaceMatch,
   auxFiles :: [AuxFile],
+  odeLib :: [ODELibPckg],
   -- FIXME: ODEInfos should be automatically built from Instance models when 
   -- needed, but we can't do that yet so I'm passing it through Choices instead.
   -- This choice should really just be for an ODEMethod
@@ -223,6 +219,7 @@ defaultChoices = Choices {
   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
   spaceMatch = spaceToCodeType, 
   auxFiles = [SampleInput],
+  odeLib = [],
   odes = []
 }
 

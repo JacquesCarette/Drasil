@@ -1,11 +1,10 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
-  scipyODE, scipyCall, oslo, osloCall, apacheODE, apacheODECall, odeint, 
-  odeintCall
+  scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg
 ) where
 
 import Language.Drasil
 
-import Language.Drasil.Code (ExternalLibrary, Step, Argument, 
+import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument, 
   externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep,
   callStep, callRequiresJust, callRequires, libFunction, libMethod, 
   libFunctionWithResult, libMethodWithResult, libConstructor, 
@@ -23,11 +22,14 @@ import Language.Drasil.Code (ExternalLibrary, Step, Argument,
   assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
   initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, 
   fixedStatementFill, CodeVarChunk, CodeFuncChunk, codevar, codefunc, ccObjVar, 
-  implCQD, ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  implCQD, ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib)
 
 import Control.Lens ((^.))
 
 -- SciPy -- 
+
+scipyODEPckg :: ODELibPckg
+scipyODEPckg = mkODELib scipyODE scipyCall [Python]
 
 scipyODE :: ExternalLibrary
 scipyODE = externalLib [
@@ -124,6 +126,9 @@ integrateStep = codefunc $ implCQD "integrate_scipy" (nounPhrase
 
 -- Oslo (C#) --
 
+osloPckg :: ODELibPckg
+osloPckg = mkODELib oslo osloCall [CSharp]
+
 oslo :: ExternalLibrary
 oslo = externalLib [
   mandatoryStep $ callRequiresJust "Microsoft.Research.Oslo" $ libConstructor 
@@ -209,6 +214,9 @@ solveFromToStep = codefunc $ implCQD "SolveFromToStep_oslo" (nounPhrase
   Nothing solT (Label "SolveFromToStep") Nothing
 
 -- Apache (Java) --
+
+apacheODEPckg :: ODELibPckg
+apacheODEPckg = mkODELib apacheODE apacheODECall [Java]
 
 apacheODE :: ExternalLibrary
 apacheODE = externalLib [
@@ -346,6 +354,9 @@ computeDerivatives = codefunc $ implCQD "computeDerivatives_apache" (nounPhrase
   Nothing Void (Label "computeDerivatives") Nothing
 
 -- odeint (C++) --
+
+odeintPckg :: ODELibPckg
+odeintPckg = mkODELib odeint odeintCall [Cpp]
 
 odeint :: ExternalLibrary
 odeint = externalLib [

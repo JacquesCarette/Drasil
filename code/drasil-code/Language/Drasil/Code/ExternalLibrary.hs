@@ -1,18 +1,21 @@
 {-# LANGUAGE LambdaCase #-}
-module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
-  FunctionInterface, Argument, externalLib, choiceSteps, choiceStep, 
-  mandatoryStep, mandatorySteps, callStep, callRequiresJust, callRequires, 
-  libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
-  libConstructor, constructAndReturn, lockedArg, lockedNamedArg, inlineArg, 
-  inlineNamedArg, preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, 
-  recordArg, lockedParam, unnamedParam, customClass, implementation, 
-  constructorInfo, methodInfo, appendCurrSol, populateSolList, 
+module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..), 
+  FunctionInterface(..), Result(..), Argument(..), ArgumentInfo(..), 
+  Parameter(..), ClassInfo(..), MethodInfo(..), FuncType(..), externalLib, 
+  choiceSteps, choiceStep, mandatoryStep, mandatorySteps, callStep, 
+  callRequiresJust, callRequires, libFunction, libMethod, 
+  libFunctionWithResult, libMethodWithResult, libConstructor, 
+  constructAndReturn, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
+  preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
+  lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
+  methodInfo, methodInfoNoReturn, appendCurrSol, populateSolList, 
   assignArrayIndex, assignSolFromObj, initSolListFromArray, initSolListWithVal, 
   solveAndPopulateWhile, returnExprList, fixedReturn
 ) where
 
 import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, ccObjVar)
+import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName, 
+  ccObjVar)
 import Language.Drasil.Mod (FuncStmt(..))
 
 import Control.Lens ((^.))
@@ -44,7 +47,8 @@ data ArgumentInfo =
   -- Maybe is the variable if it needs to be declared and defined prior to calling
   | Basic Space (Maybe CodeVarChunk) 
   | Fn CodeFuncChunk [Parameter] Step
-  | Class [Requires] Description CodeVarChunk ClassInfo
+  -- Requires, description, object, constructor, class info
+  | Class [Requires] Description CodeVarChunk CodeFuncChunk ClassInfo
   -- constructor, object, fields
   | Record CodeFuncChunk CodeVarChunk [CodeVarChunk]
 
@@ -52,10 +56,10 @@ data Parameter = LockedParam CodeVarChunk | NameableParam Space
 
 data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
 
--- Constructor, known parameters, body
-data MethodInfo = CI CodeFuncChunk [Parameter] [Step]
-  -- Method, known parameters, body
-  | MI CodeFuncChunk [Parameter] (NonEmpty Step)
+-- Constructor: description, known parameters, body. (CodeFuncChunk for constructor is not here because it is higher up in the AST, at the Class node)
+data MethodInfo = CI Description [Parameter] [Step]
+  -- Method, description, known parameters, maybe return description, body
+  | MI CodeFuncChunk Description [Parameter] (Maybe Description) (NonEmpty Step)
 
 data FuncType = Function | Method CodeVarChunk | Constructor
 
@@ -132,9 +136,9 @@ preDefinedNamedArg n v = Arg (Just n) $ Basic (v ^. typ) (Just v)
 functionArg :: CodeFuncChunk -> [Parameter] -> Step -> Argument
 functionArg f ps b = Arg Nothing (Fn f ps b)
 
-customObjArg :: [Requires] -> Description -> CodeVarChunk -> ClassInfo -> 
-  Argument
-customObjArg rs d o ci = Arg Nothing (Class rs d o ci)
+customObjArg :: [Requires] -> Description -> CodeVarChunk -> CodeFuncChunk -> 
+  ClassInfo -> Argument
+customObjArg rs d o c ci = Arg Nothing (Class rs d o c ci)
 
 recordArg :: CodeFuncChunk -> CodeVarChunk -> [CodeVarChunk] -> Argument
 recordArg c o fs = Arg Nothing (Record c o fs)
@@ -152,11 +156,17 @@ implementation :: String -> [MethodInfo] -> ClassInfo
 implementation = Implements
 
 constructorInfo :: CodeFuncChunk -> [Parameter] -> [Step] -> MethodInfo
-constructorInfo = CI
+constructorInfo c = CI ("Constructor for " ++ codeName c ++ " objects")
 
-methodInfo :: CodeFuncChunk -> [Parameter] -> [Step] -> MethodInfo
-methodInfo _ _ [] = error "methodInfo should be called with a non-empty list of Step"
-methodInfo m ps ss = MI m ps (fromList ss)
+methodInfo :: CodeFuncChunk -> Description -> [Parameter] -> Description -> 
+  [Step] -> MethodInfo
+methodInfo _ _ _ _ [] = error "methodInfo should be called with a non-empty list of Step"
+methodInfo m d ps rd ss = MI m d ps (Just rd) (fromList ss)
+
+methodInfoNoReturn :: CodeFuncChunk -> Description -> [Parameter] -> [Step] -> 
+  MethodInfo
+methodInfoNoReturn _ _ _ [] = error "methodInfoNoReturn should be called with a non-empty list of Step"
+methodInfoNoReturn m d ps ss = MI m d ps Nothing (fromList ss)
 
 appendCurrSol :: CodeVarChunk -> Step
 appendCurrSol curr = statementStep (\cdchs es -> case (cdchs, es) of

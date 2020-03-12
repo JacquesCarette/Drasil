@@ -14,7 +14,7 @@ module Language.Drasil (
   , realInterval
   , deriv, pderiv
   , sy -- old "Chunk" constructor C
-  , apply, apply1, apply2
+  , apply, apply1, apply2, applyWithNamedArgs
   , cross, m2x2, vec2D, dgnl2x2
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
@@ -126,8 +126,8 @@ module Language.Drasil (
   , mkFig
   , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI
   -- Space
-  , Space(..)
-  , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD)
+  , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
+  , DomainDesc(AllDD, BoundedDD), getActorName
   -- Symbol
   , Decoration(..), Symbol(..), autoStage, compsy, hat, prime, staged, sub, sup
   , unicodeConv, upperLeft, vec
@@ -191,7 +191,7 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec,
           dim, idx, int, dbl, str, perc, isin, completeCase, incompleteCase,
           sumAll, defsum, prodAll, defprod,
           realInterval,
-          apply, apply1, apply2,
+          apply, apply1, apply2, applyWithNamedArgs,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
 import Language.Drasil.Document (section, fig, figWithWidth
@@ -260,8 +260,8 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
   , month)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
-import Language.Drasil.Space (Space(..)
-  , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD))
+import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
+  RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
   (+:+.), (+:), capSent, ch, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?

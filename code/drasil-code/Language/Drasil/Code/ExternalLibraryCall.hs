@@ -25,7 +25,7 @@ type ExternalLibraryCall = [StepGroupFill]
 
 -- This AST mirrors the ExternalLibrary AST by intention.
 
-data StepGroupFill = SGF Integer [StepFill] -- Integer is to "choose" from the options in ExternalLibrary
+data StepGroupFill = SGF Int [StepFill] -- Int is to "choose" from the options in ExternalLibrary
 
 data StepFill = CallF FunctionIntFill
   | LoopF (NonEmpty FunctionIntFill) [Expr] (NonEmpty StepFill)
@@ -48,10 +48,10 @@ data MethodInfoFill = CIF [ParameterFill] [Initializer] [StepFill]
 externalLibCall :: [StepGroupFill] -> ExternalLibraryCall
 externalLibCall = id
 
-choiceStepsFill :: Integer -> [StepFill] -> StepGroupFill
+choiceStepsFill :: Int -> [StepFill] -> StepGroupFill
 choiceStepsFill = SGF
 
-choiceStepFill :: Integer -> StepFill -> StepGroupFill
+choiceStepFill :: Int -> StepFill -> StepGroupFill
 choiceStepFill i s = SGF i [s]
 
 mandatoryStepFill :: StepFill -> StepGroupFill

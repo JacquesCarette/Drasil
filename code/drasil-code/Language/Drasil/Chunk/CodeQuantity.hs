@@ -18,6 +18,7 @@ instance NamedIdea   CodeQuantityDict where term = id' . term
 instance Idea        CodeQuantityDict where getA  qd = getA (qd ^. id')
 instance HasSymbol   CodeQuantityDict where symbol = view symb'
 instance HasSpace    CodeQuantityDict where typ = typ'
+instance Quantity    CodeQuantityDict
 instance Eq          CodeQuantityDict where a == b = (a ^. uid) == (b ^. uid)
 instance MayHaveUnit CodeQuantityDict where getUnit = view unit'
 

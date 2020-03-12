@@ -80,16 +80,18 @@ setIntegratorMethod = callStep . libMethod r setIntegrator
 odeT :: Space
 odeT = Actor "ode"
 
-mthdArg, atolArg, rtolArg, r, rt, ry :: CodeVarChunk
-mthdArg = codevar $ implCQD "method_scipy" (nounPhrase 
+mthdArg, atolArg, rtolArg :: NamedArgument
+mthdArg = narg $ implCQD "method_scipy" (nounPhrase 
   "chosen method for solving ODE" "chosen methods for solving ODE") 
   Nothing String (Label "method") Nothing
-atolArg = codevar $ implCQD "atol_scipy" (nounPhrase 
+atolArg = narg $ implCQD "atol_scipy" (nounPhrase 
   "absolute tolerance for ODE solution" "absolute tolerances for ODE solution") 
   Nothing Real (Label "atol") Nothing
-rtolArg = codevar $ implCQD "rtol_scipy" (nounPhrase 
+rtolArg = narg $ implCQD "rtol_scipy" (nounPhrase 
   "relative tolerance for ODE solution" "relative tolerances for ODE solution") 
   Nothing Real (Label "rtol") Nothing
+
+r, rt, ry :: CodeVarChunk
 r = codevar $ implCQD "r_scipy" (nounPhrase "ODE object" "ODE objects") Nothing 
   odeT (Label "r") Nothing
 rt = ccObjVar r t

@@ -16,7 +16,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  InternalSelector(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
+  InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
@@ -26,10 +26,10 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
 import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
   bodyDocD, outDoc, destructorError, multiAssignDoc, returnDocD, mkStNoEnd,
   breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, 
-  newObjDocD', listSetFuncDocD, castObjDocD, dynamicDocD, bindingError, 
-  classDec, dot, forLabel, inLabel, observerListName, commentedItem, 
-  addCommentsDocD, commentedModD, docFuncRepr, valueList, variableList,
-  parameterList, surroundBody)
+  listSetFuncDocD, castObjDocD, dynamicDocD, bindingError, classDec, dot, 
+  forLabel, inLabel, observerListName, commentedItem, addCommentsDocD, 
+  commentedModD, docFuncRepr, valueList, variableList, parameterList, 
+  surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, int, listInnerType, obj, 
   enumType, funcType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', 
@@ -39,7 +39,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litDouble, 
   litInt, litString, valueOf, arg, enumElement, argsList, objAccess, 
   objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
-  funcApp, funcAppMixedArgs, selfFuncApp, extFuncApp, newObj, lambda, func, 
+  call, funcApp, selfFuncApp, extFuncApp, newObj, extNewObj, lambda, func, 
   get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
   getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
   listAccessFunc, listSetFunc, state, loopState, emptyState, assign, 
@@ -381,14 +381,19 @@ instance BooleanExpression PythonCode where
 
 instance ValueExpression PythonCode where
   inlineIf = pyInlineIf
-  funcApp = G.funcApp
+  funcApp n t ps = funcAppMixedArgs n t ps []
   funcAppNamedArgs n t = funcAppMixedArgs n t []
-  funcAppMixedArgs = G.funcAppMixedArgs equals 
-  selfFuncApp = G.selfFuncApp self
-  extFuncApp l n t ps = modify (addModuleImportVS l) >> G.extFuncApp l n t ps
-  newObj = G.newObj newObjDocD'
-  extNewObj l tp ps = modify (addModuleImportVS l) >> on1StateValue1List 
-    (\t -> mkVal t . pyExtStateObj l (getTypeDoc t) . valueList) tp ps
+  funcAppMixedArgs = G.funcApp
+  selfFuncApp n t ps = selfFuncAppMixedArgs n t ps []
+  selfFuncAppMixedArgs = G.selfFuncApp dot self
+  extFuncApp l n t ps = extFuncAppMixedArgs l n t ps []
+  extFuncAppMixedArgs l n t ps ns = modify (addModuleImportVS l) >> 
+    G.extFuncApp l n t ps ns
+  newObj t ps = newObjMixedArgs t ps []
+  newObjMixedArgs = G.newObj ""
+  extNewObj l tp ps = extNewObjMixedArgs l tp ps []
+  extNewObjMixedArgs l tp ps ns = modify (addModuleImportVS l) >> G.extNewObj 
+    "" l tp ps ns
 
   lambda = G.lambda pyLambda
 
@@ -404,6 +409,8 @@ instance InternalValue PythonCode where
   
   cast = on2StateValues (\t -> mkVal t . castObjDocD (getTypeDoc t) . valueDoc)
 
+  call = G.call equals
+
   valuePrec = valPrec . unPC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
@@ -418,8 +425,8 @@ instance Selector PythonCode where
   
   indexOf = G.indexOf "index"
 
-instance InternalSelector PythonCode where
-  objMethodCall' = G.objMethodCall
+instance InternalValueExp PythonCode where
+  objMethodCallMixedArgs' = G.objMethodCall
   objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym PythonCode where
@@ -741,9 +748,6 @@ pyLnOp = addmathImport $ unOpPrec "math.log"
 
 pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v
-
-pyExtStateObj :: Label -> Doc -> Doc -> Doc
-pyExtStateObj l t vs = text l <> dot <> t <> parens vs
 
 pyInlineIf :: (RenderSym repr) => VS (repr (Value repr)) -> 
   VS (repr (Value repr)) -> VS (repr (Value repr)) -> VS (repr (Value repr))

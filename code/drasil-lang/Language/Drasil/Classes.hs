@@ -21,6 +21,7 @@ module Language.Drasil.Classes (
   , Concept
   , Referable(refAdd, renderRef)
   , Callable
+  , IsArgumentName
 
   -- the unsorted rest
   , IsUnit(udefn, getUnits)
@@ -147,3 +148,5 @@ class ExprRelat c where
 -- This is the 'correct' version of ExprRelat.
 class DefiningExpr c where
   defnExpr :: Lens' c Expr
+
+class (HasSymbol c) => IsArgumentName c where

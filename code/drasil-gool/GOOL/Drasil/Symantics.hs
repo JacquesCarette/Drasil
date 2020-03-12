@@ -10,14 +10,15 @@ module GOOL.Drasil.Symantics (
   InternalType(..), ControlBlockSym(..), listSlice, UnaryOpSym(..), 
   BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), InternalSelector(..), 
-  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  InternalParam(..), MethodSym(..), initializer, nonInitConstructor, 
-  InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
-  InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..),
-  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..)
+  ValueExpression(..), InternalValue(..), Selector(..), InternalValueExp(..), 
+  objMethodCall, objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
+  initializer, nonInitConstructor, InternalMethod(..), StateVarSym(..), 
+  InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
+  InternalMod(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
+  odeOptions, ODEMethod(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -368,11 +369,26 @@ class (ValueSym repr, BooleanExpression repr) =>
     VS (repr (Value repr))
   selfFuncApp :: Label -> VS (repr (Type repr)) -> 
     [VS (repr (Value repr))] -> VS (repr (Value repr))
+  selfFuncAppMixedArgs :: Label -> VS (repr (Type repr)) -> 
+    [VS (repr (Value repr))] -> 
+    [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+    VS (repr (Value repr))
   extFuncApp   :: Library -> Label -> VS (repr (Type repr)) -> 
     [VS (repr (Value repr))] -> VS (repr (Value repr))
+  extFuncAppMixedArgs :: Library -> Label -> VS (repr (Type repr)) -> 
+    [VS (repr (Value repr))] -> 
+    [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+    VS (repr (Value repr))
   newObj     :: VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
     VS (repr (Value repr))
+  newObjMixedArgs ::  VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
+    [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+    VS (repr (Value repr))
   extNewObj  :: Library -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
+    VS (repr (Value repr))
+  extNewObjMixedArgs :: Library -> VS (repr (Type repr)) -> 
+    [VS (repr (Value repr))] -> 
+    [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
     VS (repr (Value repr))
 
   lambda :: [VS (repr (Variable repr))] -> VS (repr (Value repr)) -> 
@@ -389,6 +405,13 @@ class InternalValue repr where
   printFileLnFunc :: VS (repr (Value repr)) -> VS (repr (Value repr))
 
   cast :: VS (repr (Type repr)) -> VS (repr (Value repr)) -> 
+    VS (repr (Value repr))
+
+  -- Very generic internal function for generating calls, to reduce repeated code throughout generators
+  -- Maybe library, function name, return type, maybe object doc, regular arguments, named arguments
+  call :: Maybe Library -> Label -> VS (repr (Type repr)) -> 
+    Maybe Doc -> [VS (repr (Value repr))] -> 
+    [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
     VS (repr (Value repr))
 
   valuePrec :: repr (Value repr) -> Maybe Int
@@ -416,18 +439,26 @@ class (FunctionSym repr) => Selector repr where
   indexOf :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
     VS (repr (Value repr))
 
-class (FunctionSym repr) => InternalSelector repr where
-  objMethodCall' :: Label -> VS (repr (Type repr)) -> VS (repr (Value repr)) -> 
-    [VS (repr (Value repr))] -> VS (repr (Value repr))
+class (FunctionSym repr) => InternalValueExp repr where
+  objMethodCallMixedArgs' :: Label -> VS (repr (Type repr)) -> 
+    VS (repr (Value repr)) -> [VS (repr (Value repr))] -> 
+    [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+    VS (repr (Value repr))
   objMethodCallNoParams' :: Label -> VS (repr (Type repr)) -> 
     VS (repr (Value repr)) -> VS (repr (Value repr))
 
-objMethodCall :: (InternalSelector repr) => VS (repr (Type repr)) -> 
+objMethodCall :: (InternalValueExp repr) => VS (repr (Type repr)) -> 
   VS (repr (Value repr)) -> Label -> [VS (repr (Value repr))] -> 
   VS (repr (Value repr))
-objMethodCall t o f = objMethodCall' f t o
+objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
-objMethodCallNoParams :: (InternalSelector repr) => VS (repr (Type repr)) -> 
+objMethodCallMixedArgs :: (InternalValueExp repr) => VS (repr (Type repr)) -> 
+  VS (repr (Value repr)) -> Label -> [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))
+objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
+
+objMethodCallNoParams :: (InternalValueExp repr) => VS (repr (Type repr)) -> 
   VS (repr (Value repr)) -> Label -> VS (repr (Value repr))
 objMethodCallNoParams t o f = objMethodCallNoParams' f t o
 
@@ -450,7 +481,7 @@ class (ValueExpression repr) => FunctionSym repr where
   iterBegin :: VS (repr (Value repr)) -> VS (repr (Value repr))
   iterEnd   :: VS (repr (Value repr)) -> VS (repr (Value repr))
 
-class (Selector repr, InternalSelector repr) => SelectorFunction repr where
+class (Selector repr, InternalValueExp repr) => SelectorFunction repr where
   listAccess :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
     VS (repr (Value repr))
   listSet    :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 

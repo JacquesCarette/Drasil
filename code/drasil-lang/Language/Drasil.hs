@@ -47,12 +47,15 @@ module Language.Drasil (
   , HasUncertainty(unc)
   , Quantity
   , Callable
+  , IsArgumentName
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.Concept.Core
   , sDom
   -- Chunk.CommonIdea
   , commonIdea, CI, getAcc, getAccStr, commonIdeaWithDict, prependAbrv
+  -- Chunk.NamedArgument
+  , NamedArgument, narg
   -- Chunk.NamedIdea
   , NamedChunk, short, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)
@@ -208,7 +211,8 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ), Referable(refAdd, renderRef),
-  DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable)
+  DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
+  IsArgumentName)
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)
@@ -234,6 +238,7 @@ import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 
   fromEqnSt', equat, ec)
+import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)

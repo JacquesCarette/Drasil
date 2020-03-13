@@ -16,6 +16,8 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Lang (Lang(..))
+import Language.Drasil.Code.Imperative.DrasilState (ModExportMap, 
+  ClassDefinitionMap)
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)
 import Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
@@ -56,16 +58,12 @@ data CodeSpec where
   CodeSpec :: {
   relations :: [Def],
   fMap :: FunctionMap,
-  vMap :: VarMap,
-  eMap :: ModExportMap,
-  clsMap :: ClassDefinitionMap,
-  defList :: [Name],
+  codequants :: [CodeVarChunk],
   constMap :: FunctionMap,
   csi :: CodeSystInfo
   } -> CodeSpec
 
 type FunctionMap = Map.Map String CodeDefinition
-type VarMap      = Map.Map String CodeVarChunk
 
 assocToMap :: HasUID a => [a] -> Map.Map UID a
 assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
@@ -92,8 +90,6 @@ codeSpec SI {_sys = sys
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
-      mem = modExportMap csi' chs
-      cdm = clsDefMap csi' chs
       csi' = CSI {
         pName = n,
         authors = as,
@@ -113,10 +109,7 @@ codeSpec SI {_sys = sys
   in  CodeSpec {
         relations = rels,
         fMap = assocToMap rels,
-        vMap = assocToMap (map quantvar q ++ getAdditionalVars chs (mods csi')),
-        eMap = mem,
-        clsMap = cdm,
-        defList = nub $ Map.keys mem ++ Map.keys cdm,
+        codequants = map quantvar q,
         constMap = assocToMap const',
         csi = csi'
       }
@@ -265,13 +258,8 @@ getAdditionalVars chs ms = map codevar (inFileName
         funcParams (Mod _ _ _ cs fs) = concatMap getFuncParams (fs ++ 
           concatMap methods cs)
 
--- name of variable/function maps to module name
-type ModExportMap = Map.Map String String
-
--- name of variable/function maps to class name
-type ClassDefinitionMap = Map.Map String String
-
-modExportMap :: CodeSystInfo -> Choices -> ModExportMap
+modExportMap :: CodeSystInfo -> Choices -> [Mod] -> [(String, String)] -> 
+  ModExportMap
 modExportMap cs@CSI {
   pName = prn,
   inputs = ins,
@@ -280,29 +268,35 @@ modExportMap cs@CSI {
   constants = cns
   } chs@Choices {
     modularity = m
-  } = Map.fromList $ concatMap mpair (mods cs)
+  } ms mes = Map.fromList $ nub $ mes ++ concatMap mpair ms
     ++ getExpInput prn chs ins
     ++ getExpConstants prn chs cns
     ++ getExpDerived prn chs ds
     ++ getExpConstraints prn chs (getConstraints (cMap cs) ins)
     ++ getExpInputFormat prn chs extIns
     ++ getExpOutput prn chs (outputs cs)
-  where mpair (Mod n _ _ cls fs) = (map className cls ++ map fname (fs ++ 
+  where mpair (Mod n _ _ cls fs) = (map className cls ++ 
+          concatMap (map codeName . stateVars) cls ++ map fname (fs ++ 
           concatMap methods cls)) `zip` repeat (defModName m n)
         defModName Unmodular _ = prn
         defModName _ nm = nm
 
-clsDefMap :: CodeSystInfo -> Choices -> ClassDefinitionMap
+clsDefMap :: CodeSystInfo -> Choices -> [Mod] -> 
+  ClassDefinitionMap
 clsDefMap cs@CSI {
   inputs = ins,
   extInputs = extIns,
   derivedInputs = ds,
   constants = cns
-  } chs = Map.fromList $ getInputCls chs ins
+  } chs ms = Map.fromList $ nub $ concatMap modClasses ms
+    ++ getInputCls chs ins
     ++ getConstantsCls chs cns
     ++ getDerivedCls chs ds
     ++ getConstraintsCls chs (getConstraints (cMap cs) ins)
     ++ getInputFormatCls chs extIns
+    where modClasses (Mod n _ _ cls _) = map (\cl -> let cln = className cl in
+            (cln, cln) : map (\sv -> (codeName sv, cln)) (stateVars cl) ++ 
+            map (\m -> (fname m, cln)) (methods cl)) cls
 
 getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]

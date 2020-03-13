@@ -84,7 +84,7 @@ fApp m s t vl ns = do
   g <- ask
   let cm = currentModule g
   return $ if m /= cm then extFuncAppMixedArgs m s t vl ns else if Map.lookup s 
-    (eMap $ codeSpec g) == Just cm then funcAppMixedArgs s t vl ns else 
+    (eMap g) == Just cm then funcAppMixedArgs s t vl ns else 
     selfFuncAppMixedArgs s t vl ns
 
 ctorCall :: (ProgramSym repr) => String -> VS (repr (Type repr)) -> 
@@ -104,7 +104,7 @@ fAppInOut m n ins outs both = do
   g <- ask
   let cm = currentModule g
   return $ if m /= cm then extInOutCall m n ins outs both else if Map.lookup n
-    (eMap $ codeSpec g) == Just cm then inOutCall n ins outs both else 
+    (eMap g) == Just cm then inOutCall n ins outs both else 
     selfInOutCall n ins outs both
 
 mkParam :: (ProgramSym repr) => VS (repr (Variable repr)) -> 

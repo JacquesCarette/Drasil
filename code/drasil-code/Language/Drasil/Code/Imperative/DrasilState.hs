@@ -1,8 +1,9 @@
 module Language.Drasil.Code.Imperative.DrasilState (
-  DrasilState(..), inMod
+  DrasilState(..), inMod, ModExportMap, ClassDefinitionMap
 ) where
 
 import Language.Drasil
+import Language.Drasil.Chunk.Code (CodeVarChunk)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Modularity(..), Comments, 
   Verbosity, MatchedConceptMap, MatchedSpaces, ConstantRepr, ConstantStructure, 
@@ -13,6 +14,14 @@ import Data.Map (Map)
 
 -- Map from calculation function name to the ExtLibState containing the contents of the function
 type ExtLibMap = Map String ExtLibState
+
+type VarMap      = Map String CodeVarChunk
+
+-- name of variable/function maps to module name
+type ModExportMap = Map String String
+
+-- name of variable/function maps to class name
+type ClassDefinitionMap = Map String String
 
 -- Private State, used to push these options around the generator
 data DrasilState = DrasilState {
@@ -30,10 +39,14 @@ data DrasilState = DrasilState {
   spaceMatches :: MatchedSpaces,
   auxiliaries :: [AuxFile],
   sampleData :: [Expr],
-  currentModule :: String,
-  currentClass :: String,
   modules :: [Mod],
   extLibMap :: ExtLibMap,
+  vMap :: VarMap,
+  eMap :: ModExportMap,
+  cMap :: ClassDefinitionMap,
+  defList :: [Name],
+  currentModule :: String,
+  currentClass :: String,
 
   onSfwrC :: ConstraintBehaviour,
   onPhysC :: ConstraintBehaviour

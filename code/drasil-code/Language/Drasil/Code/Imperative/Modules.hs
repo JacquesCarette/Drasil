@@ -81,14 +81,14 @@ getInputDecl = do
   constrParams <- getInConstructorParams 
   cps <- mapM mkVal constrParams
   let cname = "InputParameters"
-      getDecl ([],[]) = constIns (partition (flip member (eMap $ codeSpec g) . 
+      getDecl ([],[]) = constIns (partition (flip member (eMap g) . 
         codeName) (map codevarC $ constants $ csi $ codeSpec g)) (conRepr g) 
         (conStruct g)
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
       getDecl (i:_,[]) = return $ Just $ (if currentModule g == 
-        eMap (codeSpec g) ! codeName i then objDecNew 
+        eMap g ! codeName i then objDecNew 
         else extObjDecNew cname) v_params cps
       getDecl _ = error ("Inputs or constants are only partially contained in " 
         ++ "a class")
@@ -96,7 +96,7 @@ getInputDecl = do
       -- If Const is chosen, don't declare an object because constants are static and accessed through class
       constIns cs Var WithInputs = getDecl cs
       constIns _ _ _ = return Nothing 
-  getDecl (partition (flip member (eMap $ codeSpec g) . codeName) 
+  getDecl (partition (flip member (eMap g) . codeName) 
     (inputs $ csi $ codeSpec g))
 
 initConsts :: (ProgramSym repr) => Reader DrasilState 
@@ -116,13 +116,12 @@ initConsts = do
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ 
           concat logs
       getDecl _ _ = error "Only some constants present in export map"
-      constCont c Var = Just $ (if currentModule g == eMap (codeSpec g) ! 
-        codeName c then objDecNewNoParams else extObjDecNewNoParams cname) 
-        v_consts
+      constCont c Var = Just $ (if currentModule g == eMap g ! codeName c 
+        then objDecNewNoParams else extObjDecNewNoParams cname) v_consts
       constCont _ Const = Nothing
       defFunc Var = varDecDef
       defFunc Const = constDecDef
-  getDecl (partition (flip member (eMap $ codeSpec g) . codeName) 
+  getDecl (partition (flip member (eMap g) . codeName) 
     (constants $ csi $ codeSpec g)) (conStruct g)
 
 initLogFileVar :: (ProgramSym repr) => Logging -> [MS (repr (Statement repr))]
@@ -176,7 +175,7 @@ genInputClass scp = withReader (\s -> s {currentClass = cname}) $ do
   let ins = inputs $ csi $ codeSpec g
       cs = constants $ csi $ codeSpec g
       filt :: (CodeIdea c) => [c] -> [c]
-      filt = filter (flip member (eMap $ codeSpec g) . codeName)
+      filt = filter (flip member (eMap g) . codeName)
       includedConstants :: (CodeIdea c) => ConstantStructure -> [c] -> [c]
       includedConstants WithInputs cs' = filt cs'
       includedConstants _ _ = []
@@ -209,7 +208,7 @@ genInputConstructor :: (ProgramSym repr) => Reader DrasilState
   (Maybe (MS (repr (Method repr))))
 genInputConstructor = do
   g <- ask
-  let dl = defList $ codeSpec g
+  let dl = defList g
       genCtor False = return Nothing
       genCtor True = do 
         cdesc <- inputConstructorDesc
@@ -237,7 +236,7 @@ genInputDerived s = do
         desc <- dvFuncDesc
         mthd <- getFunc s "derived_values" desc ins outs bod
         return $ Just mthd
-  genDerived $ "derived_values" `elem` defList (codeSpec g)
+  genDerived $ "derived_values" `elem` defList g
 
 genInputConstraints :: (ProgramSym repr) => ClassType ->
   Reader DrasilState (Maybe (MS (repr (Method repr))))
@@ -262,7 +261,7 @@ genInputConstraints s = do
         mthd <- getFunc s "input_constraints" void desc parms 
           Nothing [block sf, block hw]
         return $ Just mthd
-  genConstraints $ "input_constraints" `elem` defList (codeSpec g)
+  genConstraints $ "input_constraints" `elem` defList g
 
 sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, ProgramSym repr) 
   => [(q,[Constraint])] -> Reader DrasilState [MS (repr (Statement repr))]
@@ -368,7 +367,7 @@ genInputFormat s = do
         desc <- inFmtFuncDesc
         mthd <- getFunc s "get_input" desc ins outs bod
         return $ Just mthd
-  genInFormat $ "get_input" `elem` defList (codeSpec g)
+  genInFormat $ "get_input" `elem` defList g
 
 genDataDesc :: Reader DrasilState DataDesc
 genDataDesc = do
@@ -408,7 +407,7 @@ genConstClass scp = withReader (\s -> s {currentClass = cname}) $ do
         cDesc <- constClassDesc
         cls <- f cDesc cname Nothing constVars (return [])
         return $ Just cls
-  genClass $ filter (flip member (Map.filter (cname ==) (clsMap $ codeSpec g)) 
+  genClass $ filter (flip member (Map.filter (cname ==) (clsMap g)) 
     . codeName) cs
   where cname = "Constants"
 
@@ -444,4 +443,4 @@ genOutputFormat = do
           openFileW var_outfile (litString "output.txt") ] ++
           concat outp ++ [ closeFile v_outfile ]]
         return $ Just mthd
-  genOutput $ Map.lookup "write_output" (eMap $ codeSpec g)
+  genOutput $ Map.lookup "write_output" (eMap g)

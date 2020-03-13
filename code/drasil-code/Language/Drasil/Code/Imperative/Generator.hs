@@ -18,14 +18,15 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..),
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
-import Language.Drasil.Code.ExtLibImport (auxMods, imports,
+import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports, 
   genExternalLibraryCall)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Data.ODEInfo (ODEInfo(..))
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
-  Modularity(..), Visibility(..))
+  Modularity(..), Visibility(..), assocToMap, getAdditionalVars, modExportMap,
+  clsDefMap)
 import Language.Drasil.Mod (Func(..), packmodRequires)
 
 import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), GS, 
@@ -54,14 +55,16 @@ generator l dt sd chs spec = DrasilState {
   spaceMatches = chooseSpace l chs,
   auxiliaries = auxFiles chs,
   sampleData = sd,
+  modules = modules',
+  extLibMap = fromList elmap,
+  vMap = assocToMap (codequants spec ++ getAdditionalVars chs modules'),
+  eMap = mem,
+  clsMap = cdm,
+  defList = nub $ Map.keys mem ++ Map.keys cdm,
+  
   -- state
   currentModule = "",
   currentClass = "",
-  modules = packmodRequires "Calculations" 
-    "Provides functions for calculating the outputs" (concatMap (^. imports) 
-    els) [] (map FCD (execOrder $ csi spec)) 
-    : mods (csi spec) ++ concatMap (^. auxMods) els,
-  extLibMap = fromList elmap,
 
   -- next depend on chs
   logName = logFile chs,
@@ -73,10 +76,17 @@ generator l dt sd chs spec = DrasilState {
         ols = odeLib chs
         els = map snd elmap
         elmap = chooseODELib l ols
+        mem = modExportMap (csi spec) chs modules' 
+          (concatMap (^. modExports) els)
+        cdm = clsDefMap (csi spec) chs modules'
         chooseODELib _ [] = []
         chooseODELib lng (o:os) = if lng `elem` compatibleLangs o then 
           map (\ode -> (codeName $ depVar ode, genExternalLibraryCall 
           (libSpec o) $ libCall o ode)) (odes chs) else chooseODELib lng os
+        modules' = packmodRequires "Calculations" 
+          "Provides functions for calculating the outputs" 
+          (concatMap (^. imports) els) [] (map FCD (execOrder $ csi spec)) 
+          : mods (csi spec) ++ concatMap (^. auxMods) els
 
 generateCode :: (ProgramSym progRepr, PackageSym packRepr) => Lang -> 
   (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 
@@ -125,7 +135,7 @@ genUnmodular = do
   g <- ask
   let s = csi $ codeSpec g
       n = pName $ csi $ codeSpec g
-      cls = any (`member` clsMap (codeSpec g)) 
+      cls = any (`member` clsMap g)
         ["get_input", "derived_values", "input_constraints"]
   genModule n ("Contains the entire " ++ n ++ " program")
     (map (fmap Just) (genMainFunc : concatMap genModFuncs (mods s)) ++ 

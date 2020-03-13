@@ -113,7 +113,7 @@ classVariable c v = do
   let checkCurrent m = if currentModule g == m then classVar else extClassVar
   return $ v >>= (\v' -> maybe (error $ "Variable " ++ variableName v' ++ 
     " missing from export map") checkCurrent (Map.lookup (variableName v') 
-    (eMap $ codeSpec g)) (onStateValue variableType c) v)
+    (eMap g)) (onStateValue variableType c) v)
 
 mkVal :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c) => c -> 
   Reader DrasilState (VS (repr (Value repr)))
@@ -269,7 +269,7 @@ convCall :: (ProgramSym repr) => UID -> [Expr] -> [(UID, Expr)] ->
 convCall c x ns f = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
-      mem = eMap $ codeSpec g
+      mem = eMap g
       funcCd = quantfunc (symbResolve info c)
       funcNm = codeName funcCd
   funcTp <- codeType funcCd

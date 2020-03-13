@@ -54,7 +54,7 @@ getCalcCall c = do
   t <- codeType c
   val <- getFuncCall (codeName c) (convType t) (getCalcParams c)
   v <- maybe (error $ (c ^. uid) ++ " missing from VarMap") mkVar 
-    (Map.lookup (c ^. uid) (vMap $ codeSpec g))
+    (Map.lookup (c ^. uid) (vMap g))
   l <- maybeLog v
   return $ fmap (multi . (: l) . varDecDef v) val
 
@@ -97,11 +97,10 @@ getCall :: String -> Reader DrasilState (Maybe String)
 getCall n = do
   g <- ask
   let currc = currentClass g
-      getCallExported Nothing = getCallInClass (Map.lookup n $ clsMap $ 
-        codeSpec g)
+      getCallExported Nothing = getCallInClass (Map.lookup n $ clsMap g)
       getCallExported m = return m
       getCallInClass Nothing = return Nothing
       getCallInClass (Just c) = if c == currc then return $ Map.lookup c (eMap 
-        $ codeSpec g) <|> error (c ++ " class missing from export map")
+        g) <|> error (c ++ " class missing from export map")
         else return Nothing
-  getCallExported $ Map.lookup n (eMap $ codeSpec g)
+  getCallExported $ Map.lookup n (eMap g)

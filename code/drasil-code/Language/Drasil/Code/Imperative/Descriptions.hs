@@ -44,7 +44,7 @@ inputConstructorDesc = do
       idDesc True = "calculating derived values"
       icDesc False = ""
       icDesc True = "checking " ++ pAndS ++ " on the input"
-      dl = defList $ codeSpec g
+      dl = defList g
   return $ "Initializes input object by " ++ stringList [ 
     ifDesc ("get_input" `elem` dl),
     idDesc ("derived_values" `elem` dl),
@@ -55,14 +55,14 @@ inputFormatDesc = do
   g <- ask
   let ifDesc Nothing = ""
       ifDesc _ = "the function for reading inputs"
-  return $ ifDesc $ Map.lookup "get_input" (eMap $ codeSpec g)
+  return $ ifDesc $ Map.lookup "get_input" (eMap g)
 
 derivedValuesDesc :: Reader DrasilState String
 derivedValuesDesc = do
   g <- ask
   let dvDesc Nothing = ""
       dvDesc _ = "the function for calculating derived values"
-  return $ dvDesc $ Map.lookup "derived_values" (eMap $ codeSpec g)
+  return $ dvDesc $ Map.lookup "derived_values" (eMap g)
 
 inputConstraintsDesc :: Reader DrasilState String
 inputConstraintsDesc = do
@@ -71,14 +71,14 @@ inputConstraintsDesc = do
   let icDesc Nothing = ""
       icDesc _ = "the function for checking the " ++ pAndS ++ 
         " on the input"
-  return $ icDesc $ Map.lookup "input_constraints" (eMap $ codeSpec g)
+  return $ icDesc $ Map.lookup "input_constraints" (eMap g)
 
 constModDesc :: Reader DrasilState String
 constModDesc = do
   g <- ask
   let cDesc [] = ""
       cDesc _ = "the structure for holding constant values"
-  return $ cDesc $ filter (flip member (eMap $ codeSpec g) . codeName) 
+  return $ cDesc $ filter (flip member (eMap g) . codeName) 
     (constants $ csi $ codeSpec g)
 
 outputFormatDesc :: Reader DrasilState String
@@ -86,7 +86,7 @@ outputFormatDesc = do
   g <- ask
   let ofDesc Nothing = ""
       ofDesc _ = "the function for writing outputs"
-  return $ ofDesc $ Map.lookup "write_output" (eMap $ codeSpec g)
+  return $ ofDesc $ Map.lookup "write_output" (eMap g)
 
 inputClassDesc :: Reader DrasilState String
 inputClassDesc = do
@@ -95,9 +95,9 @@ inputClassDesc = do
       inClassD [] = ""
       inClassD _ = "Structure for holding the " ++ stringList [
         inPs $ extInputs $ csi $ codeSpec g,
-        dVs $ "derived_values" `elem` defList (codeSpec g),
+        dVs $ "derived_values" `elem` defList g,
         cVs $ filter (flip member (Map.filter (cname ==) 
-          (eMap $ codeSpec g)) . codeName) (constants $ csi $ codeSpec g)]
+          (eMap g)) . codeName) (constants $ csi $ codeSpec g)]
       inPs [] = ""
       inPs _ = "input values"
       dVs False = ""
@@ -111,7 +111,7 @@ constClassDesc = do
   g <- ask
   let ccDesc [] = ""
       ccDesc _ = "Structure for holding the constant values"
-  return $ ccDesc $ filter (flip member (eMap $ codeSpec g) . codeName) 
+  return $ ccDesc $ filter (flip member (eMap g) . codeName) 
     (constants $ csi $ codeSpec g)
 
 inFmtFuncDesc :: Reader DrasilState String
@@ -119,7 +119,7 @@ inFmtFuncDesc = do
   g <- ask
   let ifDesc False = ""
       ifDesc _ = "Reads input from a file with the given file name"
-  return $ ifDesc $ "get_input" `elem` defList (codeSpec g)
+  return $ ifDesc $ "get_input" `elem` defList g
 
 inConsFuncDesc :: Reader DrasilState String
 inConsFuncDesc = do
@@ -127,7 +127,7 @@ inConsFuncDesc = do
   pAndS <- physAndSfwrCons
   let icDesc False = ""
       icDesc _ = "Verifies that input values satisfy the " ++ pAndS
-  return $ icDesc $ "input_constraints" `elem` defList (codeSpec g)
+  return $ icDesc $ "input_constraints" `elem` defList g
 
 dvFuncDesc :: Reader DrasilState String
 dvFuncDesc = do
@@ -135,14 +135,14 @@ dvFuncDesc = do
   let dvDesc False = ""
       dvDesc _ = "Calculates values that can be immediately derived from the" ++
         " inputs"
-  return $ dvDesc $ "derived_values" `elem` defList (codeSpec g)
+  return $ dvDesc $ "derived_values" `elem` defList g
 
 woFuncDesc :: Reader DrasilState String
 woFuncDesc = do
   g <- ask
   let woDesc False = ""
       woDesc _ = "Writes the output values to output.txt"
-  return $ woDesc $ "write_output" `elem` defList (codeSpec g)
+  return $ woDesc $ "write_output" `elem` defList g
 
 physAndSfwrCons :: Reader DrasilState String
 physAndSfwrCons = do

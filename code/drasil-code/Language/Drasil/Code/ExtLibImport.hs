@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
 module Language.Drasil.Code.ExtLibImport (ExtLibState(..), auxMods, defs, 
-  imports, steps, genExternalLibraryCall) where
+  imports, modExports, steps, genExternalLibraryCall) where
 
 import Language.Drasil
 
@@ -29,7 +29,6 @@ data ExtLibState = ELS {
   _defined :: [Name],
   _imports :: [String],
   _modExports :: [(String, String)],
-  _classDefs :: [(String, String)],
   _steps :: [FuncStmt]
 }
 makeLenses ''ExtLibState
@@ -41,7 +40,6 @@ initELS = ELS {
   _defined = [],
   _imports = [],
   _modExports = [],
-  _classDefs = [],
   _steps = []
 }
 
@@ -70,12 +68,6 @@ addModExport e = over modExports (e:)
 
 addModExports :: [(String, String)] -> ExtLibState -> ExtLibState
 addModExports es = over modExports (es++)
-
-addClassDef :: (String, String) -> ExtLibState -> ExtLibState
-addClassDef d = over classDefs (d:)
-
-addClassDefs :: [(String, String)] -> ExtLibState -> ExtLibState
-addClassDefs ds = over classDefs (ds++)
 
 addSteps :: [FuncStmt] -> ExtLibState -> ExtLibState
 addSteps fs = over steps (fs++)
@@ -166,9 +158,7 @@ genClassInfo :: CodeVarChunk -> CodeFuncChunk -> String -> String ->
 genClassInfo o c n desc svs ci cif = let (mis, mifs, f) = genCI ci cif in 
   if length mis /= length mifs then error methodInfoNumberMismatch else do
     ms <- zipWithM (genMethodInfo o c n) mis mifs
-    modify (addModExports ((n,n) : zip (map codeName svs) (repeat n)) . 
-      addClassDefs ((n,n) : zip (map codeName svs) (repeat n)) . 
-      if any isConstructor mis then id else addDef (new c []) o)
+    modify (if any isConstructor mis then id else addDef (new c []) o)
     return (f desc svs (map fst ms), concatMap snd ms)
   where genCI (Regular mis') (RegularF mifs') = (mis', mifs', classDef n)
         genCI (Implements intn mis') (ImplementsF mifs') = (mis', mifs', 
@@ -186,7 +176,6 @@ genMethodInfo o c _ (CI desc ps ss) (CIF pfs is sfs) = do
 genMethodInfo _ _ n (MI m desc ps rDesc ss) (MIF pfs sfs) = do
   let prms = genParameters ps pfs
   (fs, newS) <- withLocalState (zipWithM genStep (toList ss) (toList sfs))
-  modify (addModExport (codeName m, n) . addClassDef (codeName m, n))
   return (funcDef (codeName m) desc prms (m ^. typ) rDesc (newS ^. defs ++ fs),
     newS ^. imports)
 genMethodInfo _ _ _ _ _ = error methodInfoMismatch

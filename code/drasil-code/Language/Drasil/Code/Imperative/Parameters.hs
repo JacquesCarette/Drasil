@@ -29,8 +29,8 @@ getInConstructorParams = do
   g <- ask
   let getCParams False = []
       getCParams True = [codevar inFileName]
-  getParams In $ getCParams $ member "InputParameters" (eMap $ codeSpec g) && 
-    member "get_input" (clsMap $ codeSpec g)
+  getParams In $ getCParams $ member "InputParameters" (eMap g) && 
+    member "get_input" (clsMap g)
 
 getInputFormatIns :: Reader DrasilState [CodeVarChunk]
 getInputFormatIns = do

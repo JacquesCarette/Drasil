@@ -45,7 +45,7 @@ getComment l m = do
 paramComment :: UID -> Reader DrasilState String
 paramComment l = do
   g <- ask
-  let m = vMap $ codeSpec g
+  let m = vMap g
   getComment l m
 
 returnComment :: UID -> Reader DrasilState String

@@ -19,8 +19,10 @@ import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), codevar, quantvar, 
   quantfunc)
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
+  defType, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
+import Language.Drasil.Code.ExtLibImport (defs, steps)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
   ConstantRepr(..), ConstantStructure(..), Structure(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
@@ -335,10 +337,15 @@ bfunc Index = listAccess
 genCalcFunc :: (ProgramSym repr) => CodeDefinition -> 
   Reader DrasilState (MS (repr (Method repr)))
 genCalcFunc cdef = do
+  g <- ask
   parms <- getCalcParams cdef
   let nm = codeName cdef
   tp <- codeType cdef
-  blck <- genCalcBlock CalcReturn cdef (codeEquat cdef)
+  blck <- case cdef ^. defType 
+            of Definition -> genCalcBlock CalcReturn cdef (codeEquat cdef)
+               ODE -> maybe (error $ nm ++ " missing from ExtLibMap") 
+                 (\el -> block <$> mapM convStmt (el ^. defs ++ el ^. steps))
+                 (Map.lookup nm (extLibMap g))
   desc <- returnComment $ cdef ^. uid
   publicFunc
     nm

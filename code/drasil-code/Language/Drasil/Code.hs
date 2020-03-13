@@ -94,7 +94,8 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeFuncChunk,
 import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, implCQD)
 
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, ODEOptions(..), 
-  odeOptions, ODEMethod(..), ODELibPckg(..), mkODELib)
+  odeOptions, ODEMethod(..))
+import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib)
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)

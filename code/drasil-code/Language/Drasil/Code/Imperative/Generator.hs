@@ -21,7 +21,9 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports,
   genExternalLibraryCall)
 import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.Data.ODEInfo (ODELibPckg(..))
+import Language.Drasil.Chunk.Code (codeName)
+import Language.Drasil.Data.ODEInfo (ODEInfo(..))
+import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Modularity(..), Visibility(..))
 import Language.Drasil.Mod (Func(..), packmodRequires)
@@ -34,7 +36,7 @@ import System.Directory (setCurrentDirectory, createDirectoryIfMissing,
 import Control.Lens ((^.))
 import Control.Monad.Reader (Reader, ask, runReader)
 import Control.Monad.State (evalState, runState)
-import Data.Map (member)
+import Data.Map (fromList, member)
 
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs spec = DrasilState {
@@ -59,6 +61,7 @@ generator l dt sd chs spec = DrasilState {
     "Provides functions for calculating the outputs" (concatMap (^. imports) 
     els) [] (map FCD (execOrder $ csi spec)) 
     : mods (csi spec) ++ concatMap (^. auxMods) els,
+  extLibMap = fromList elmap,
 
   -- next depend on chs
   logName = logFile chs,
@@ -68,11 +71,12 @@ generator l dt sd chs spec = DrasilState {
   where showDate Show = dt
         showDate Hide = ""
         ols = odeLib chs
-        els = chooseODELib l ols
+        els = map snd elmap
+        elmap = chooseODELib l ols
         chooseODELib _ [] = []
         chooseODELib lng (o:os) = if lng `elem` compatibleLangs o then 
-          map (genExternalLibraryCall (libSpec o) . libCall o) (odes chs) else
-          chooseODELib lng os
+          map (\ode -> (codeName $ depVar ode, genExternalLibraryCall 
+          (libSpec o) $ libCall o ode)) (odes chs) else chooseODELib lng os
 
 generateCode :: (ProgramSym progRepr, PackageSym packRepr) => Lang -> 
   (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 

@@ -7,7 +7,8 @@ import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk), codevarC, 
   codevar, codevars, codevars')
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs, 
+  codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Structure(..), 
   InputModule(..), ConstantStructure(..), ConstantRepr(..),
@@ -70,7 +71,8 @@ getConstraintParams = do
 getCalcParams :: CodeDefinition -> Reader DrasilState [CodeVarChunk]
 getCalcParams c = do
   g <- ask
-  getParams In $ codevars' (codeEquat c) $ sysinfodb $ csi $ codeSpec g
+  getParams In $ concatMap (`codevars'` (sysinfodb $ csi $ codeSpec g)) 
+    (codeEquat c : c ^. auxExprs)
 
 getOutputParams :: Reader DrasilState [CodeVarChunk]
 getOutputParams = do

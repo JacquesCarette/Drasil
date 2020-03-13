@@ -3,10 +3,16 @@ module Language.Drasil.Code.Imperative.DrasilState (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Modularity(..), Comments, 
   Verbosity, MatchedConceptMap, MatchedSpaces, ConstantRepr, ConstantStructure, 
   ConstraintBehaviour, InputModule(..), Logging, Structure)
 import Language.Drasil.Mod (Mod)
+
+import Data.Map (Map)
+
+-- Map from calculation function name to the ExtLibState containing the contents of the function
+type ExtLibMap = Map String ExtLibState
 
 -- Private State, used to push these options around the generator
 data DrasilState = DrasilState {
@@ -27,6 +33,7 @@ data DrasilState = DrasilState {
   currentModule :: String,
   currentClass :: String,
   modules :: [Mod],
+  extLibMap :: ExtLibMap,
 
   onSfwrC :: ConstraintBehaviour,
   onPhysC :: ConstraintBehaviour

@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
-module Language.Drasil.Code.ExtLibImport (ExtLibState(..), auxMods, imports,
-  genExternalLibraryCall) where
+module Language.Drasil.Code.ExtLibImport (ExtLibState(..), auxMods, defs, 
+  imports, steps, genExternalLibraryCall) where
 
 import Language.Drasil
 

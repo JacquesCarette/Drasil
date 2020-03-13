@@ -11,12 +11,13 @@ import Theory.Drasil (DataDefinition, qdFromDD)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
   ConstraintMap, programName, codevarC, codevar, quantvar, codeName, codevars, 
   codevars', varResolve, constraintMap)
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
-  codeEquat)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
+  auxExprs, codeEquat)
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.Data.ODEInfo (ODEInfo, ODELibPckg)
+import Language.Drasil.Data.ODEInfo (ODEInfo)
+import Language.Drasil.Data.ODELibPckg (ODELibPckg)
 import Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
   Mod(..), Name, fname, getFuncParams, packmod)
 
@@ -86,7 +87,8 @@ codeSpec SI {_sys = sys
       const' = map qtov (filter ((`Map.notMember` conceptMatch chs) . (^. uid)) 
         cnsts)
       derived = getDerivedInputs ddefs defs' inputs' const' db
-      rels = map qtoc ((defs' ++ map qdFromDD ddefs) \\ derived)
+      rels = map qtoc ((defs' ++ map qdFromDD ddefs) \\ derived) 
+        ++ map odeDef (odes chs)
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
@@ -316,8 +318,8 @@ getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
 getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
         getExecOrder' ord defs' k n = 
-          let new  = filter ((`subsetOf` k) . flip codevars' sm . codeEquat) 
-                defs'
+          let new  = filter (\def -> (`subsetOf` k) (concatMap (`codevars'` sm)
+                (codeEquat def : def ^. auxExprs) \\ [codevarC def])) defs'
               cnew = map codevarC new
               kNew = k ++ cnew
               nNew = n \\ cnew

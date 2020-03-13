@@ -47,6 +47,7 @@ library
     , Language.Drasil.Code.Imperative.DrasilState
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.Data.ODEInfo
+    , Language.Drasil.Data.ODELibPckg
     , Language.Drasil.CodeExpr
     , Language.Drasil.CodeSpec
     , Language.Drasil.Mod

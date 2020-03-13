@@ -8,29 +8,70 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 
+import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.Physics (energy, pressure)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
+import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
 import Drasil.SWHS.Unitals (aspectRatio, coilHTC, coilSA, diam, eta, htCapLP,
-  htCapSP, htCapW, htFusion, latentEP, meltFrac, pcmHTC, pcmMass, pcmSA,
-  tankLength, tauLP, tauSP, tauW, wMass)
+  htCapSP, htCapW, htFusion, latentEP, meltFrac, pcmHTC, pcmMass, pcmSA, pcmVol,
+  tankLength, tankVol, tauLP, tauSP, tauW, wDensity, wMass, wVol)
 
 refMDB :: ModelDB
 refMDB = mdb [] [] dataDefs []
 
 qDefs :: [QDefinition]
-qDefs = [balanceDecayRateQD, balanceDecayTimeQD, balanceSolidPCMQD,
-  balanceLiquidPCMQD, ddHtFusionQD, ddMeltFracQD, aspRatQD]
+qDefs = [waterMassQD, waterVolumeQD, tankVolumeQD, balanceDecayRateQD, 
+  balanceDecayTimeQD, balanceSolidPCMQD, balanceLiquidPCMQD, ddHtFusionQD, 
+  ddMeltFracQD, aspRatQD]
 
 dataDefs :: [DataDefinition] 
-dataDefs = [balanceDecayRate, balanceDecayTime, balanceSolidPCM,
-  balanceLiquidPCM, ddHtFusion, ddMeltFrac, aspRat]
+dataDefs = [waterMass, waterVolume, tankVolume, balanceDecayRate, 
+  balanceDecayTime, balanceSolidPCM, balanceLiquidPCM, ddHtFusion, ddMeltFrac, 
+  aspRat]
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
 --    I think this will need an overhaul after we fix Data Definitions.
+
+waterMassQD :: QDefinition
+waterMassQD = mkQuantDef wMass waterMassEqn
+
+waterMassEqn :: Expr
+waterMassEqn = sy wVol * sy wDensity
+
+waterMass :: DataDefinition
+waterMass = ddNoRefs waterMassQD Nothing "waterMass" []
+
+----
+
+waterVolumeQD :: QDefinition
+waterVolumeQD = mkQuantDef wVol waterVolumeEqn
+
+waterVolumeEqn :: Expr
+waterVolumeEqn = sy tankVol - sy pcmVol
+
+waterVolumeNotes :: Sentence
+waterVolumeNotes = foldlSent [S "Based on", makeRef2S assumpVCN]
+
+waterVolume :: DataDefinition
+waterVolume = ddNoRefs waterVolumeQD Nothing "waterVolume_pcm" 
+  [waterVolumeNotes]
+
+----
+
+tankVolumeQD :: QDefinition
+tankVolumeQD = mkQuantDef tankVol tankVolumeEqn
+
+tankVolumeEqn :: Expr
+tankVolumeEqn = sy pi_ * ((sy diam / 2) $^ 2) * sy tankLength
+
+tankVolume :: DataDefinition
+tankVolume = ddNoRefs tankVolumeQD Nothing "tankVolume" []
+
+----
 
 balanceDecayRateQD :: QDefinition
 balanceDecayRateQD = mkQuantDef tauW balanceDecayRateEqn

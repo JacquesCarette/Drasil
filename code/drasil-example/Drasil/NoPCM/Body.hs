@@ -27,10 +27,14 @@ import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalAnalysis, thermalConduction, thermocon)
 
+import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
+  apacheODESymbols, odeintSymbols)
+
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
 
-import Data.Drasil.Quantities.Math (gradient, pi_, surface, uNormalVect)
+import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface, 
+  uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 
@@ -99,7 +103,8 @@ symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ map qw specParamValList ++ 
-  map qw [coilSAMax] ++ map qw [tauW] ++ map qw [absTol, relTol]
+  map qw [coilSAMax] ++ map qw [tauW] ++ map qw [absTol, relTol] ++ 
+  scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
 
 concepts :: [UnitaryConceptDict]
 concepts = map ucw [density, tau, inSA, outSA,
@@ -185,11 +190,11 @@ si = SI {
   _concepts = symbols,
   _definitions = [],
   _datadefs = NoPCM.dataDefs,
-  _inputs = inputs ++ map qw [tempW, watE], --inputs ++ outputs?
+  _inputs = inputs ++ [qw watE], --inputs ++ outputs?
   _outputs = map qw [tempW, watE],     --outputs
   _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
   _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
-  _constants = specParamValList,
+  _constants = piConst : specParamValList,
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB,
@@ -200,7 +205,7 @@ noPCMODEOpts :: ODEOptions
 noPCMODEOpts = odeOptions RK45 (sy absTol) (sy relTol) (sy timeStep)
 
 noPCMODEInfo :: ODEInfo
-noPCMODEInfo = odeInfo (quantvar tempW) (quantvar time) 
+noPCMODEInfo = odeInfo (quantvar time) (quantvar tempW)
   [quantvar tauW, quantvar tempC] (dbl 0) (sy timeFinal) (sy tempInit) 
   [1 / sy tauW * (sy tempC - sy tempW)] noPCMODEOpts
 

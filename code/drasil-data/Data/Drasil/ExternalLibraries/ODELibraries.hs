@@ -1,5 +1,6 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
-  scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg
+  scipyODEPckg, scipyODESymbols, osloPckg, osloSymbols, apacheODEPckg, 
+  apacheODESymbols, odeintPckg, odeintSymbols
 ) where
 
 import Language.Drasil
@@ -81,6 +82,10 @@ setIntegratorMethod = callStep . libMethod r setIntegrator
 
 odeT :: Space
 odeT = Actor "ode"
+
+scipyODESymbols :: [QuantityDict]
+scipyODESymbols = map qw [mthdArg, atolArg, rtolArg] ++ map qw [r, t, y, rt, ry]
+  ++ map qw [f, odefunc, setIntegrator, setInitVal, successful, integrateStep]
 
 mthdArg, atolArg, rtolArg :: NamedArgument
 mthdArg = narg $ implCQD "method_scipy" (nounPhrase 
@@ -164,6 +169,10 @@ solT, vecT, optT :: Space
 solT = Actor "IEnumerable<SolPoint>"
 vecT = Actor "Vector"
 optT = Actor "Options"
+
+osloSymbols :: [QuantityDict]
+osloSymbols = map qw [initv, opts, aTol, rTol, sol, points, sp, x] ++ 
+  map qw [fOslo, options, vector, rk547m, gearBDF, solveFromToStep]
 
 initv, opts, aTol, rTol, sol, points, sp, x :: CodeVarChunk
 initv = codevar $ implCQD "initv_oslo" (nounPhrase 
@@ -287,6 +296,12 @@ foi = "FirstOrderIntegrator"
 sh = "StepHandler"
 si = "StepInterpolator"
 fode = "FirstOrderDifferentialEquations"
+
+apacheODESymbols :: [QuantityDict]
+apacheODESymbols = map qw [it, currVals, stepHandler, t0, y0, t, interpolator, 
+  isLast, curr, ode] ++ map qw [adamsC, dp54C, stepHandlerCtor, addStepHandler, 
+  initMethod, handleStep, getInterpState, integrate, getDimension, 
+  computeDerivatives]
 
 it, currVals, stepHandler, t0, y0, interpolator, isLast, curr :: CodeVarChunk
 it = codevar $ implCQD "it_apache" (nounPhrase "integrator for solving ODEs"
@@ -412,6 +427,10 @@ adamsBash = odeNameSpace ++ "adams_bashforth<3,vector<double>>"
 
 popT :: Space
 popT = Actor "Populate"
+
+odeintSymbols :: [QuantityDict]
+odeintSymbols = map qw [odeintCurrVals, rk, stepper, pop, t, y, ode] ++ map qw 
+  [rkdp5C, makeControlled, adamsBashC, integrateConst, odeOp, popCtor, popOp]
 
 odeintCurrVals, rk, stepper, pop :: CodeVarChunk
 odeintCurrVals = codevar $ implCQD "currVals_odeint" (nounPhrase 

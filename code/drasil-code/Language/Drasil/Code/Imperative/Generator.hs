@@ -18,15 +18,20 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..),
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+import Language.Drasil.Code.ExtLibImport (auxMods, imports,
+  genExternalLibraryCall)
 import Language.Drasil.Code.Lang (Lang(..))
+import Language.Drasil.Data.ODEInfo (ODELibPckg(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Modularity(..), Visibility(..))
+import Language.Drasil.Mod (Func(..), packmodRequires)
 
 import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), GS, 
   FS, initialState, unCI)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
   getCurrentDirectory)
+import Control.Lens ((^.))
 import Control.Monad.Reader (Reader, ask, runReader)
 import Control.Monad.State (evalState, runState)
 import Data.Map (member)
@@ -50,6 +55,10 @@ generator l dt sd chs spec = DrasilState {
   -- state
   currentModule = "",
   currentClass = "",
+  modules = packmodRequires "Calculations" 
+    "Provides functions for calculating the outputs" (concatMap (^. imports) 
+    els) [] (map FCD (execOrder $ csi spec)) 
+    : mods (csi spec) ++ concatMap (^. auxMods) els,
 
   -- next depend on chs
   logName = logFile chs,
@@ -58,6 +67,12 @@ generator l dt sd chs spec = DrasilState {
 }
   where showDate Show = dt
         showDate Hide = ""
+        ols = odeLib chs
+        els = chooseODELib l ols
+        chooseODELib _ [] = []
+        chooseODELib lng (o:os) = if lng `elem` compatibleLangs o then 
+          map (genExternalLibraryCall (libSpec o) . libCall o) (odes chs) else
+          chooseODELib lng os
 
 generateCode :: (ProgramSym progRepr, PackageSym packRepr) => Lang -> 
   (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 

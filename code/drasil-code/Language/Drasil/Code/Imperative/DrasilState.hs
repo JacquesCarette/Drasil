@@ -6,6 +6,7 @@ import Language.Drasil
 import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Modularity(..), Comments, 
   Verbosity, MatchedConceptMap, MatchedSpaces, ConstantRepr, ConstantStructure, 
   ConstraintBehaviour, InputModule(..), Logging, Structure)
+import Language.Drasil.Mod (Mod)
 
 -- Private State, used to push these options around the generator
 data DrasilState = DrasilState {
@@ -25,6 +26,7 @@ data DrasilState = DrasilState {
   sampleData :: [Expr],
   currentModule :: String,
   currentClass :: String,
+  modules :: [Mod],
 
   onSfwrC :: ConstraintBehaviour,
   onPhysC :: ConstraintBehaviour

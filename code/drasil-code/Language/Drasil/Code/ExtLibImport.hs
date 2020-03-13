@@ -1,5 +1,6 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
-module Language.Drasil.Code.ExtLibImport (genExternalLibraryCall) where
+module Language.Drasil.Code.ExtLibImport (ExtLibState(..), auxMods, imports,
+  genExternalLibraryCall) where
 
 import Language.Drasil
 
@@ -23,7 +24,7 @@ import Data.Maybe (isJust)
 import Prelude hiding ((!!))
 
 data ExtLibState = ELS {
-  _mods :: [Mod],
+  _auxMods :: [Mod],
   _defs :: [FuncStmt],
   _defined :: [Name],
   _imports :: [String],
@@ -35,7 +36,7 @@ makeLenses ''ExtLibState
 
 initELS :: ExtLibState
 initELS = ELS {
-  _mods = [],
+  _auxMods = [],
   _defs = [],
   _defined = [],
   _imports = [],
@@ -47,7 +48,7 @@ initELS = ELS {
 -- State Modifiers
 
 addMod :: Mod -> ExtLibState -> ExtLibState
-addMod m = over mods (m:)
+addMod m = over auxMods (m:)
 
 addDef :: Expr -> CodeVarChunk -> ExtLibState -> ExtLibState
 addDef e c s = if n `elem` (s ^. defined) then s else over defs (++ [FDecDef c 

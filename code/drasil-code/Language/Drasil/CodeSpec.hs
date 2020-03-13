@@ -5,12 +5,12 @@ import Language.Drasil
 import Database.Drasil (ChunkDB, SystemInformation(SI), symbResolve,
   _authors, _constants, _constraints, _datadefs, _definitions, _inputs,
   _outputs, _quants, _sys, _sysinfodb, sampleData)
-import Language.Drasil.Development (dep, namesRI)
+import Language.Drasil.Development (namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
-  ConstraintMap, programName, codevarC, codevar, quantvar, funcPrefix, codeName,
-  codevars, codevars', funcResolve, varResolve, constraintMap)
+  ConstraintMap, programName, codevarC, codevar, quantvar, codeName, codevars, 
+  codevars', varResolve, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
   codeEquat)
 import Language.Drasil.Code.Code (spaceToCodeType)
@@ -18,7 +18,7 @@ import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo, ODELibPckg)
 import Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
-  Mod(..), Name, fname, getFuncParams, packmod, prefixFunctions)
+  Mod(..), Name, fname, getFuncParams, packmod)
 
 import GOOL.Drasil (CodeType)
 
@@ -102,7 +102,7 @@ codeSpec SI {_sys = sys
         execOrder = exOrder,
         cMap = constraintMap cs,
         constants = const',
-        mods = prefixFunctions $ packmod "Calculations" 
+        mods = packmod "Calculations" 
           "Provides functions for calculating the outputs" []
           (map FCD exOrder) : ms,
         sysinfodb = db,
@@ -431,17 +431,8 @@ xs `subsetOf` ys = all (`elem` ys) xs
 getConstraints :: (HasUID c) => ConstraintMap -> [c] -> [Constraint]
 getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
--- | Get a list of CodeChunks from an equation, where the CodeChunks are correctly parameterized by either Var or Func
-codevarsandfuncs :: Expr -> ChunkDB -> ModExportMap -> [CodeChunk]
-codevarsandfuncs e m mem = map resolve $ dep e
-  where resolve x 
-          | Map.member (funcPrefix ++ x) mem = codeChunk $ funcResolve m x
-          | otherwise = codeChunk $ varResolve m x
-
--- | Get a list of CodeChunks from a constraint, where the CodeChunks are correctly parameterized by either Var or Func
-constraintvarsandfuncs :: Constraint -> ChunkDB -> ModExportMap -> [CodeChunk]
-constraintvarsandfuncs (Range _ ri) m mem = map resolve $ nub $ namesRI ri
-  where resolve x 
-          | Map.member (funcPrefix ++ x) mem = codeChunk $ funcResolve m x
-          | otherwise = codeChunk $ varResolve m x
-constraintvarsandfuncs _ _ _ = []
+-- | Get a list of CodeChunks from a constraint
+constraintvars :: Constraint -> ChunkDB -> [CodeChunk]
+constraintvars (Range _ ri) m = map (codeChunk . varResolve m) $ nub $ 
+  namesRI ri
+constraintvars _ _ = []

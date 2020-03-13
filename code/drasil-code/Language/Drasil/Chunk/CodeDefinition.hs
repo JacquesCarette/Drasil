@@ -4,8 +4,8 @@ module Language.Drasil.Chunk.CodeDefinition (
 ) where
 
 import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk), 
-  quantvar, quantfunc)
+import Language.Drasil.Chunk.Code (CodeChunk(..), CodeIdea(codeName, codeChunk),
+  VarOrFunc(..), quantvar, quantfunc, funcPrefix)
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -20,7 +20,8 @@ instance Idea         CodeDefinition where getA = getA . view cchunk
 instance HasSpace     CodeDefinition where typ = cchunk . typ
 instance HasSymbol    CodeDefinition where symbol c = symbol (c ^. cchunk)
 instance CodeIdea     CodeDefinition where 
-  codeName = codeName . view cchunk
+  codeName (CD c@(CodeC _ Var) _) = codeName c
+  codeName (CD c@(CodeC _ Func) _) = funcPrefix ++ codeName c
   codeChunk = view cchunk
 instance Eq           CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit  CodeDefinition where getUnit = getUnit . view cchunk

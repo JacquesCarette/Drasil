@@ -43,8 +43,7 @@ instance HasSpace    CodeChunk where typ = qc . typ
 instance HasSymbol   CodeChunk where symbol = symbol . view qc
 instance Quantity    CodeChunk
 instance CodeIdea    CodeChunk where
-  codeName (CodeC c Var) = render $ symbolDoc (codeSymb c)
-  codeName (CodeC c Func) = funcPrefix ++ render (symbolDoc (codeSymb c))
+  codeName = render . symbolDoc . codeSymb . view qc
   codeChunk = id
 instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc

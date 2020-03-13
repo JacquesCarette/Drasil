@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Structure(..), 
   InputModule(..), ConstantStructure(..), ConstantRepr(..),
-  constraintvarsandfuncs, getConstraints)
+  constraintvars, getConstraints)
 
 import Data.List (nub, (\\))
 import Data.Map (member, notMember)
@@ -61,11 +61,10 @@ getConstraintParams :: Reader DrasilState [CodeVarChunk]
 getConstraintParams = do 
   g <- ask
   let cm = cMap $ csi $ codeSpec g
-      mem = eMap $ codeSpec g
       db = sysinfodb $ csi $ codeSpec g
       varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ codeSpec g)
       reqdVals = nub $ varsList ++ map codevarC (concatMap (\v -> 
-        constraintvarsandfuncs v db mem) (getConstraints cm varsList))
+        constraintvars v db) (getConstraints cm varsList))
   getParams In reqdVals
 
 getCalcParams :: CodeDefinition -> Reader DrasilState [CodeVarChunk]

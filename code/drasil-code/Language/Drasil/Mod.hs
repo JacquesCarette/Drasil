@@ -2,14 +2,14 @@
 module Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
   FuncStmt(..), Initializer, Mod(..), Name, ($:=), classDef, classImplements, 
   ctorDef, ffor, fdec, fname, fstdecl, funcData, funcDef, funcQD, 
-  getFuncParams, packmod, packmodRequires, prefixFunctions
+  getFuncParams, packmod, packmodRequires
 ) where
 
 import Language.Drasil
 import Database.Drasil (ChunkDB)
 
 import Language.Drasil.Chunk.Code (CodeIdea(..), CodeVarChunk, codeName, 
-  codevars, codevars', funcPrefix, quantvar)
+  codevars, codevars', quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtoc)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 import Language.Drasil.Printers (toPlainName)
@@ -51,7 +51,7 @@ funcData :: Name -> String -> DataDesc -> Func
 funcData n desc d = FData $ FuncData (toPlainName n) desc d
 
 funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> 
-  Space -> Maybe String -> [FuncStmt] -> Func  
+  Space -> Maybe String -> [FuncStmt] -> Func
 funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc 
   (map quantvar i) t returnDesc fs 
 
@@ -149,11 +149,3 @@ fname (FCD cd) = codeName cd
 fname (FDef (FuncDef n _ _ _ _ _)) = n
 fname (FDef (CtorDef n _ _ _ _)) = n
 fname (FData (FuncData n _ _)) = n 
-
-prefixFunctions :: [Mod] -> [Mod]
-prefixFunctions = map (\(Mod nm desc rs cs fs) -> Mod nm desc rs cs $ map pfunc fs)
-  where pfunc (FData (FuncData n desc d)) = FData (FuncData (funcPrefix ++ n) 
-          desc d)
-        pfunc (FDef (FuncDef n desc a t rd f)) = FDef (FuncDef (funcPrefix ++ n)
-          desc a t rd f)
-        pfunc f = f

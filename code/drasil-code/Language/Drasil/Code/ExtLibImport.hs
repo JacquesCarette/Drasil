@@ -19,7 +19,7 @@ import Control.Lens (makeLenses, (^.), over)
 import Control.Monad (zipWithM)
 import Control.Monad.State (State, execState, get, modify)
 import Data.List (nub, partition)
-import Data.List.NonEmpty ((!!), toList)
+import Data.List.NonEmpty (NonEmpty(..), (!!), toList)
 import Data.Maybe (isJust)
 import Prelude hiding ((!!))
 
@@ -66,9 +66,6 @@ addImports is = over imports (\l -> nub $ l ++ is)
 addModExport :: (String, String) -> ExtLibState -> ExtLibState
 addModExport e = over modExports (e:)
 
-addModExports :: [(String, String)] -> ExtLibState -> ExtLibState
-addModExports es = over modExports (es++)
-
 addSteps :: [FuncStmt] -> ExtLibState -> ExtLibState
 addSteps fs = over steps (fs++)
 
@@ -97,9 +94,7 @@ genExtLibCall (sg:el) (SGF n sgf:elc) = let s = sg!!n in
 genExtLibCall _ _ = error stepNumberMismatch
 
 genStep :: Step -> StepFill -> State ExtLibState FuncStmt
-genStep (Call rs fi) (CallF fif) = do
-  modify (addImports rs) 
-  genFI fi fif
+genStep (Call fi) (CallF fif) = genFI fi fif
 genStep (Loop fis f ss) (LoopF fifs ccList sfs) = do
   es <- zipWithM genFIVal (toList fis) (toList fifs)
   fs <- zipWithM genStep (toList ss) (toList sfs)
@@ -108,10 +103,11 @@ genStep (Statement f) (StatementF ccList exList) = return $ f ccList exList
 genStep _ _ = error stepTypeMismatch
 
 genFIVal :: FunctionInterface -> FunctionIntFill -> State ExtLibState Expr
-genFIVal (FI ft f as _) (FIF afs) = do
+genFIVal (FI (r:|rs) ft f as _) (FIF afs) = do
   args <- genArguments as afs
   let isNamed = isJust . fst 
-      (ars, nas) = partition isNamed args
+      (nas, ars) = partition isNamed args
+  modify (addImports (r:rs) . addModExport (codeName f, r))
   return $ getCallFunc ft f (map snd ars) (map (\(n, e) -> 
     maybe (error "defective isNamed") (,e) n) nas) 
   where getCallFunc Function = applyWithNamedArgs 
@@ -119,7 +115,7 @@ genFIVal (FI ft f as _) (FIF afs) = do
         getCallFunc Constructor = newWithNamedArgs
 
 genFI :: FunctionInterface -> FunctionIntFill -> State ExtLibState FuncStmt
-genFI fi@(FI _ _ _ r) fif = do
+genFI fi@(FI _ _ _ _ r) fif = do
   fiEx <- genFIVal fi fif
   return $ maybeGenAssg r fiEx 
 
@@ -157,7 +153,7 @@ genClassInfo :: CodeVarChunk -> CodeFuncChunk -> String -> String ->
   State ExtLibState (Class, [String])
 genClassInfo o c n desc svs ci cif = let (mis, mifs, f) = genCI ci cif in 
   if length mis /= length mifs then error methodInfoNumberMismatch else do
-    ms <- zipWithM (genMethodInfo o c n) mis mifs
+    ms <- zipWithM (genMethodInfo o c) mis mifs
     modify (if any isConstructor mis then id else addDef (new c []) o)
     return (f desc svs (map fst ms), concatMap snd ms)
   where genCI (Regular mis') (RegularF mifs') = (mis', mifs', classDef n)
@@ -165,20 +161,20 @@ genClassInfo o c n desc svs ci cif = let (mis, mifs, f) = genCI ci cif in
           classImplements n intn)
         genCI _ _ = error classInfoMismatch
 
-genMethodInfo :: CodeVarChunk -> CodeFuncChunk -> String -> MethodInfo -> 
+genMethodInfo :: CodeVarChunk -> CodeFuncChunk -> MethodInfo -> 
   MethodInfoFill -> State ExtLibState (Func, [String])
-genMethodInfo o c _ (CI desc ps ss) (CIF pfs is sfs) = do
+genMethodInfo o c (CI desc ps ss) (CIF pfs is sfs) = do
   let prms = genParameters ps pfs
   (fs, newS) <- withLocalState $ zipWithM genStep ss sfs
   modify (addDef (new c (map sy prms)) o)
   return (ctorDef (codeName c) desc prms is (newS ^. defs ++ fs), 
     newS ^. imports)
-genMethodInfo _ _ n (MI m desc ps rDesc ss) (MIF pfs sfs) = do
+genMethodInfo _ _ (MI m desc ps rDesc ss) (MIF pfs sfs) = do
   let prms = genParameters ps pfs
   (fs, newS) <- withLocalState (zipWithM genStep (toList ss) (toList sfs))
   return (funcDef (codeName m) desc prms (m ^. typ) rDesc (newS ^. defs ++ fs),
     newS ^. imports)
-genMethodInfo _ _ _ _ _ = error methodInfoMismatch
+genMethodInfo _ _ _ _ = error methodInfoMismatch
 
 genParameters :: [Parameter] -> [ParameterFill] -> [CodeVarChunk]
 genParameters (LockedParam c:ps) pfs = c : genParameters ps pfs

@@ -13,7 +13,6 @@ import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
-import Language.Drasil.CodeSpec (CodeSpec(..))
 
 import GOOL.Drasil (ProgramSym, TypeSym(..), ValueSym(..), StatementSym(..), 
   MS, VS, convType)

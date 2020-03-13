@@ -3,14 +3,14 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   FunctionInterface(..), Result(..), Argument(..), ArgumentInfo(..), 
   Parameter(..), ClassInfo(..), MethodInfo(..), FuncType(..), externalLib, 
   choiceSteps, choiceStep, mandatoryStep, mandatorySteps, callStep, 
-  callRequiresJust, callRequires, libFunction, libMethod, 
-  libFunctionWithResult, libMethodWithResult, libConstructor, 
-  constructAndReturn, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
-  preDefinedArg, preDefinedNamedArg, functionArg, customObjArg, recordArg, 
-  lockedParam, unnamedParam, customClass, implementation, constructorInfo, 
-  methodInfo, methodInfoNoReturn, appendCurrSol, populateSolList, 
-  assignArrayIndex, assignSolFromObj, initSolListFromArray, initSolListWithVal, 
-  solveAndPopulateWhile, returnExprList, fixedReturn
+  libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
+  libConstructor, libConstructorMultiReqs, constructAndReturn, lockedArg, 
+  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, preDefinedNamedArg, 
+  functionArg, customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
+  implementation, constructorInfo, methodInfo, methodInfoNoReturn, 
+  appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
+  initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
+  returnExprList, fixedReturn
 ) where
 
 import Language.Drasil
@@ -29,13 +29,14 @@ type ExternalLibrary = [StepGroup]
 
 type StepGroup = NonEmpty [Step]
 
-data Step = Call [Requires] FunctionInterface
+data Step = Call FunctionInterface 
   -- A while loop -- function calls in the condition, other conditions, steps for the body
   | Loop (NonEmpty FunctionInterface) ([Expr] -> Condition) (NonEmpty Step)
   -- For when a statement is needed, but does not interface with the external library
   | Statement ([CodeVarChunk] -> [Expr] -> FuncStmt)
 
-data FunctionInterface = FI FuncType CodeFuncChunk [Argument] (Maybe Result)
+-- The first item in the requires list should where the function being called is defined
+data FunctionInterface = FI (NonEmpty Requires) FuncType CodeFuncChunk [Argument] (Maybe Result)
 
 data Result = Assign CodeVarChunk | Return 
 
@@ -81,39 +82,42 @@ mandatorySteps :: [Step] -> StepGroup
 mandatorySteps fs = fs :| []
 
 callStep :: FunctionInterface -> Step
-callStep = Call []
-
-callRequiresJust :: Requires -> FunctionInterface -> Step
-callRequiresJust i = Call [i]
-
-callRequires :: [Requires] -> FunctionInterface -> Step
-callRequires = Call
+callStep = Call
 
 loopStep :: [FunctionInterface] -> ([Expr] -> Condition) -> [Step] -> Step
 loopStep [] _ _ = error "loopStep should be called with a non-empty list of FunctionInterface"
 loopStep _ _ [] = error "loopStep should be called with a non-empty list of Step"
 loopStep fis c ss = Loop (fromList fis) c (fromList ss)
 
-libFunction :: CodeFuncChunk -> [Argument] -> FunctionInterface
-libFunction f ps = FI Function f ps Nothing
+libFunction :: Requires -> CodeFuncChunk -> [Argument] -> FunctionInterface
+libFunction rq f ps = FI (rq :| []) Function f ps Nothing
 
-libMethod :: CodeVarChunk -> CodeFuncChunk -> [Argument] -> FunctionInterface
-libMethod o m ps = FI (Method o) m ps Nothing
-
-libFunctionWithResult :: CodeFuncChunk -> [Argument] -> CodeVarChunk -> 
+libMethod :: Requires -> CodeVarChunk -> CodeFuncChunk -> [Argument] -> 
   FunctionInterface
-libFunctionWithResult f ps r = FI Function f ps (Just $ Assign r)
+libMethod rq o m ps = FI (rq :| []) (Method o) m ps Nothing
 
-libMethodWithResult :: CodeVarChunk -> CodeFuncChunk -> [Argument] -> 
+libFunctionWithResult :: Requires -> CodeFuncChunk -> [Argument] -> 
   CodeVarChunk -> FunctionInterface
-libMethodWithResult o m ps r = FI (Method o) m ps (Just $ Assign r)
+libFunctionWithResult rq f ps r = FI (rq :| []) Function f ps (Just $ Assign r)
 
-libConstructor :: CodeFuncChunk -> [Argument] -> CodeVarChunk -> 
+libMethodWithResult :: Requires -> CodeVarChunk -> CodeFuncChunk -> [Argument] 
+  -> CodeVarChunk -> FunctionInterface
+libMethodWithResult rq o m ps r = FI (rq :| []) (Method o) m ps (Just $ Assign r)
+
+libConstructor :: Requires -> CodeFuncChunk -> [Argument] -> CodeVarChunk -> 
   FunctionInterface
-libConstructor c as r = FI Constructor c as (Just $ Assign r)
+libConstructor rq c as r = FI (rq :| []) Constructor c as (Just $ Assign r)
 
-constructAndReturn :: CodeFuncChunk -> [Argument] -> FunctionInterface
-constructAndReturn c as = FI Constructor c as (Just Return)
+libConstructorMultiReqs :: [Requires] -> CodeFuncChunk -> [Argument] -> 
+  CodeVarChunk -> FunctionInterface
+libConstructorMultiReqs [] _ _ _ = error $ "libConstructorMultiReqs should" ++
+  " be called with a non-empty list of Requires"
+libConstructorMultiReqs rqs c as r = FI (fromList rqs) Constructor c as 
+  (Just $ Assign r)
+
+constructAndReturn :: Requires -> CodeFuncChunk -> [Argument] -> 
+  FunctionInterface
+constructAndReturn rq c as = FI (rq :| []) Constructor c as (Just Return)
 
 lockedArg :: Expr -> Argument
 lockedArg = Arg Nothing . LockedArg

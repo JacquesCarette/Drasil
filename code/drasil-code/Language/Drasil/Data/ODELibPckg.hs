@@ -2,8 +2,6 @@ module Language.Drasil.Data.ODELibPckg (
   ODELibPckg(..), mkODELib
 ) where
 
-import Language.Drasil
-
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary)
 import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall)
 import Language.Drasil.Code.Lang (Lang)

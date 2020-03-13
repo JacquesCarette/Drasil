@@ -13,7 +13,8 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
   genConstMod, genInputClass, genInputConstraints, genInputDerived, 
   genInputFormat, genMain, genMainFunc, genOutputFormat, genOutputMod, 
   genSampleInput)
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod,
+  modExportMap, clsDefMap)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
@@ -25,8 +26,7 @@ import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Data.ODEInfo (ODEInfo(..))
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
-  Modularity(..), Visibility(..), assocToMap, getAdditionalVars, modExportMap,
-  clsDefMap)
+  Modularity(..), Visibility(..), assocToMap, getAdditionalVars)
 import Language.Drasil.Mod (Func(..), packmodRequires)
 
 import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), GS, 
@@ -37,7 +37,8 @@ import System.Directory (setCurrentDirectory, createDirectoryIfMissing,
 import Control.Lens ((^.))
 import Control.Monad.Reader (Reader, ask, runReader)
 import Control.Monad.State (evalState, runState)
-import Data.Map (fromList, member)
+import Data.List (nub)
+import Data.Map (fromList, member, keys)
 
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs spec = DrasilState {
@@ -60,7 +61,7 @@ generator l dt sd chs spec = DrasilState {
   vMap = assocToMap (codequants spec ++ getAdditionalVars chs modules'),
   eMap = mem,
   clsMap = cdm,
-  defList = nub $ Map.keys mem ++ Map.keys cdm,
+  defList = nub $ keys mem ++ keys cdm,
   
   -- state
   currentModule = "",

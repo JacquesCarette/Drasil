@@ -37,7 +37,7 @@ import GOOL.Drasil (Label, ProgramSym, FileSym(..), PermanenceSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), nonInitConstructor, convType, 
   CodeType(..), FS, CS, MS, VS, onStateValue) 
-import qualified GOOL.Drasil as C (CodeType(List))
+import qualified GOOL.Drasil as C (CodeType(List, Array))
 
 import Prelude hiding (sin, cos, tan, log, exp)
 import Data.List ((\\), intersect)
@@ -249,6 +249,9 @@ convExpr (Case c l)      = doit l -- FIXME this is sub-optimal
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 inlineIf (convExpr cond) (convExpr e) 
       (convExpr (Case c xs))
+convExpr (Matrix [(e:es)]) = do
+  (el:els) <- mapM convExpr (e:es)
+  return $ litArray (fmap valueType el) els
 convExpr Matrix{}    = error "convExpr: Matrix"
 convExpr Operator{} = error "convExpr: Operator"
 convExpr IsIn{}    = error "convExpr: IsIn"
@@ -412,6 +415,15 @@ genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 genFunc (FCD cd) = genCalcFunc cd
 
 convStmt :: (ProgramSym repr) => FuncStmt -> Reader DrasilState (MS (repr (Statement repr)))
+convStmt (FAsg v (Matrix [es]))  = do
+  els <- mapM convExpr es
+  v' <- mkVar v
+  t <- codeType v
+  let listFunc (C.List _) = litList
+      listFunc (C.Array _) = litArray
+      listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
+  l <- maybeLog v'
+  return $ multi $ assign v' (listFunc t (fmap variableType v') els) : l
 convStmt (FAsg v e) = do
   e' <- convExpr e
   v' <- mkVar v
@@ -465,14 +477,20 @@ convStmt FContinue = return continue
 convStmt (FDec v) = do
   vari <- mkVar v
   let convDec (C.List _) = listDec 0 vari
+      convDec (C.Array _) = arrayDec 0 vari
       convDec _ = varDec vari
   fmap convDec (codeType v) 
+convStmt (FDecDef v (Matrix [[]])) = convStmt (FDec v)
 convStmt (FDecDef v e) = do
   v' <- mkVar v
   l <- maybeLog v'
+  t <- codeType v
   let convDecDef (Matrix [lst]) = do
+        let contDecDef (C.List _) = listDecDef
+            contDecDef (C.Array _) = arrayDecDef
+            contDecDef _ = error "Type mismatch between variable and value in declare-define FuncStmt"
         e' <- mapM convExpr lst
-        return $ listDecDef v' e'
+        return $ contDecDef t v' e'
       convDecDef _ = do
         e' <- convExpr e
         return $ varDecDef v' e'

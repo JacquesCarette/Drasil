@@ -67,7 +67,7 @@ addModExport :: (String, String) -> ExtLibState -> ExtLibState
 addModExport e = over modExports (e:)
 
 addSteps :: [FuncStmt] -> ExtLibState -> ExtLibState
-addSteps fs = over steps (fs++)
+addSteps fs = over steps (++fs)
 
 refreshLocal :: ExtLibState -> ExtLibState
 refreshLocal s = s {_defs = [], _defined = [], _imports = []}
@@ -91,7 +91,7 @@ genExtLibCall (sg:el) (SGF n sgf:elc) = let s = sg!!n in
     fs <- zipWithM genStep s sgf
     modify (addSteps fs)
     genExtLibCall el elc
-genExtLibCall _ _ = error stepNumberMismatch
+genExtLibCall _ _ = error $ stepNumberMismatch
 
 genStep :: Step -> StepFill -> State ExtLibState FuncStmt
 genStep (Call fi) (CallF fif) = genFI fi fif
@@ -205,7 +205,7 @@ isConstructor _ = False
 elAndElc, stepNumberMismatch, stepTypeMismatch, argumentMismatch, 
   paramMismatch, recordFieldsMismatch, ciAndCif, classInfoMismatch, 
   methodInfoNumberMismatch, methodInfoMismatch :: String
-elAndElc = "ExternalLibrary and ExternalLibraStepryCall have different "
+elAndElc = "ExternalLibrary and ExternalLibraryCall have different "
 stepNumberMismatch = elAndElc ++ "number of steps"
 stepTypeMismatch = elAndElc ++ "order of steps"
 argumentMismatch = "FunctionInterface and FunctionIntFill have different number or types of arguments"

@@ -110,8 +110,8 @@ methodInfoFill pfs sfs = MIF pfs (fromList sfs)
 appendCurrSolFill :: CodeVarChunk -> StepFill
 appendCurrSolFill s = statementStepFill [s] []
 
-populateSolListFill :: CodeVarChunk -> StepFill
-populateSolListFill s = statementStepFill [s] []
+populateSolListFill :: CodeVarChunk -> [StepFill]
+populateSolListFill s = replicate 2 (statementStepFill [s] [])
 
 assignArrayIndexFill :: CodeVarChunk-> [Expr] -> StepFill
 assignArrayIndexFill a = statementStepFill [a]

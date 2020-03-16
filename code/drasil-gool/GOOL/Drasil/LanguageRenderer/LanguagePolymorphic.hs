@@ -12,13 +12,13 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, binExpr, binExpr', 
   binExprNumDbl', typeBinExpr, addmathImport, var, staticVar, extVar, self, 
   enumVar, classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, 
-  litTrue, litFalse, litChar, litDouble, litFloat, litInt, litString, pi, 
-  valueOf, arg, enumElement, argsList, inlineIf, call', call, funcApp, 
-  namedArgError, selfFuncApp, extFuncApp, newObj, extNewObj, lambda, notNull, 
-  objAccess, objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, 
-  indexOf, func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
-  listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
-  listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
+  litTrue, litFalse, litChar, litDouble, litFloat, litInt, litString, litArray, 
+  litList, pi, valueOf, arg, enumElement, argsList, inlineIf, call', call, 
+  funcApp, namedArgError, selfFuncApp, extFuncApp, newObj, extNewObj, lambda, 
+  notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
+  listIndexExists, indexOf, func, get, set, listSize, listAdd, listAppend, 
+  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
+  listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
   listAccessFunc', listSetFunc, printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, increment', 
   increment1, increment1', decrement1, varDec, varDecDef, listDec, listDecDef, 
@@ -65,7 +65,7 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   TypeSym(bool, int, float, double, char, string, listType, arrayType, 
     listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
-  ValueSym(litTrue, litFalse, litInt, litString, valueOf),
+  ValueSym(litTrue, litFalse, litInt, litString, litList, valueOf),
   ValueExpression(funcApp, newObj, extNewObj, notNull, lambda), 
   InternalValue(call), Selector(objAccess), objMethodCall, 
   objMethodCallNoParams, FunctionSym(func, listSize, listAdd, listAppend),
@@ -518,6 +518,16 @@ litInt i = mkStateVal S.int (integer i)
 litString :: (RenderSym repr) => String -> VS (repr (Value repr))
 litString s = mkStateVal S.string (doubleQuotedText s)
 
+litArray :: (RenderSym repr) => VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> VS (repr (Value repr))
+litArray t es = sequence es >>= (\elems -> mkStateVal (S.arrayType t) 
+  (braces $ valueList elems))
+
+litList :: (RenderSym repr) => (VS (repr (Type repr)) -> VS (repr (Type repr)))
+  -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> VS (repr (Value repr))
+litList f t = on1StateValue1List (\lt es -> mkVal lt (new <+> getTypeDoc lt <+> 
+  braces (valueList es))) (f t)
+
 pi :: (RenderSym repr) => VS (repr (Value repr))
 pi = mkStateVal S.double (text "Math.PI")
 
@@ -802,10 +812,8 @@ listDecDef f v vls = on1StateValue1List (\vd vs -> mkSt (statementDoc vd <>
 
 listDecDef' :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   [VS (repr (Value repr))] -> MS (repr (Statement repr))
-listDecDef' v vals = on3StateValues (\vd vr vs -> mkSt (statementDoc
-  vd <+> equals <+> new <+> getTypeDoc (variableType vr) <+> braces 
-  (valueList vs))) (S.varDec v) (zoom lensMStoVS v) (mapM (zoom lensMStoVS)
-  vals)
+listDecDef' v vals = zoom lensMStoVS v >>= (\vr -> S.varDecDef (return vr) 
+  (S.litList (listInnerType $ return $ variableType vr) vals))
 
 arrayDec :: (RenderSym repr) => VS (repr (Value repr)) -> 
   VS (repr (Variable repr)) -> MS (repr (Statement repr))

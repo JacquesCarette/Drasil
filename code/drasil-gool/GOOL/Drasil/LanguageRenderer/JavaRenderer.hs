@@ -39,16 +39,16 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
   divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, 
   classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, 
-  litFalse, litChar, litDouble, litFloat, litInt, litString, pi, valueOf, arg, 
-  enumElement, argsList, inlineIf, objAccess, objMethodCall, 
+  litFalse, litChar, litDouble, litFloat, litInt, litString, litArray, pi, 
+  valueOf, arg, enumElement, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, call', funcApp, 
   selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
   listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
   setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
   iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
-  increment1, varDec, varDecDef, listDec, arrayDec, arrayDecDef, objDecNew, 
-  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, 
+  increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, 
+  objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, 
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
   multiReturnError, valState, comment, freeError, throw, initState, 
@@ -71,7 +71,7 @@ import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   onCodeList, onStateList, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensMStoFS,
-  lensMStoVS, lensVStoFS, initialState, initialFS, modifyReturn, 
+  lensMStoVS, lensVStoFS, lensVStoMS, initialState, initialFS, modifyReturn, 
   modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFiles, 
   getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
   addLibImport, getModuleName, setFileType, getClassName, setCurrMain, 
@@ -335,6 +335,10 @@ instance ValueSym JavaCode where
   litFloat = G.litFloat
   litInt = G.litInt
   litString = G.litString
+  litArray = G.litArray
+  litList t es = zoom lensVStoMS (modify (if null es then id else addLangImport 
+    "java.util.Arrays")) >> newObj (listType t) [funcApp "Arrays.asList" 
+    (listType t) es | not (null es)]
 
   pi = G.pi
 
@@ -525,9 +529,7 @@ instance StatementSym JavaCode where
   varDecDef = G.varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> G.listDec (listDecDocD v') 
     (litInt n) v)
-  listDecDef v vs = modify (if null vs then id else addLangImport 
-    "java.util.Arrays") >> objDecNew v [funcApp "Arrays.asList" 
-    (onStateValue variableType v) vs | not (null vs)]
+  listDecDef = G.listDecDef'
   arrayDec n = G.arrayDec (litInt n)
   arrayDecDef = G.arrayDecDef
   objDecDef = varDecDef

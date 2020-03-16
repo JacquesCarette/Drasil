@@ -43,12 +43,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
   getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
   listAccessFunc, listSetFunc, state, loopState, emptyState, assign, 
-  assignToListIndex, decrement, increment', increment1', decrement1, objDecNew, 
-  objDecNewNoParams, closeFile, discardFileLine, stringListVals, 
-  stringListLists, returnState, valState, comment, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switchAsIf, 
-  ifExists, tryCatch, checkState, construct, param, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, function, docFunc, 
+  assignToListIndex, decrement, increment', increment1', decrement1, 
+  listDecDef', objDecNew, objDecNewNoParams, closeFile, discardFileLine, 
+  stringListVals, stringListLists, returnState, valState, comment, throw, 
+  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
+  switchAsIf, ifExists, tryCatch, checkState, construct, param, method, 
+  getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
   stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
   implementingClass, docClass, commentedClass, intClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
@@ -325,6 +325,9 @@ instance ValueSym PythonCode where
   litFloat = error "Floats unavailable in Python, use Doubles instead"
   litInt = G.litInt
   litString = G.litString
+  litArray t es = sequence es >>= (\elems -> mkStateVal (arrayType t) 
+    (brackets $ valueList elems))
+  litList = litArray
 
   pi = addmathImport $ mkStateVal double (text "math.pi")
 
@@ -497,8 +500,7 @@ instance StatementSym PythonCode where
   varDec _ = toState $ mkStNoEnd empty
   varDecDef = assign
   listDec _ v = zoom lensMStoVS $ onStateValue (mkStNoEnd . pyListDec) v
-  listDecDef v' vs' = zoom lensMStoVS $ on1StateValue1List (\v vs -> mkStNoEnd 
-    $ pyListDecDef v vs) v' vs'
+  listDecDef = G.listDecDef'
   arrayDec = listDec
   arrayDecDef = listDecDef
   objDecDef = varDecDef
@@ -767,10 +769,6 @@ pyStringType = toState $ typeFromData String "str" (text "str")
 
 pyListDec :: (RenderSym repr) => repr (Variable repr) -> Doc
 pyListDec v = variableDoc v <+> equals <+> getTypeDoc (variableType v)
-
-pyListDecDef :: (RenderSym repr) => repr (Variable repr) -> [repr (Value repr)] 
-  -> Doc
-pyListDecDef v vs = variableDoc v <+> equals <+> brackets (valueList vs)
 
 pyPrint :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
   -> repr (Value repr) -> Doc

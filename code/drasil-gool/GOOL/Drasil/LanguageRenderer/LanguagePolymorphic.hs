@@ -678,8 +678,14 @@ iterEnd v = v $. iterEndFunc (S.listInnerType $ onStateValue valueType v)
 
 listAccess :: (RenderSym repr) => VS (repr (Value repr)) -> 
   VS (repr (Value repr)) -> VS (repr (Value repr))
-listAccess v i = v $. S.listAccessFunc (S.listInnerType $ onStateValue 
-  valueType v) i
+listAccess v i = do
+  v' <- v
+  let checkType (List _) = S.listAccessFunc (S.listInnerType $ return $ 
+        valueType v') i
+      checkType (Array _) = i >>= (\ix -> funcFromData (brackets (valueDoc ix)) 
+        (S.listInnerType $ return $ valueType v'))
+      checkType _ = error "listAccess called on non-list-type value"
+  v $. checkType (getType (valueType v'))
 
 listSet :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr)) 
   -> VS (repr (Value repr)) -> VS (repr (Value repr))

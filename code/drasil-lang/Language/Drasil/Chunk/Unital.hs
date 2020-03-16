@@ -1,11 +1,11 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Unital 
-  ( UnitalChunk(..) , makeUCWDS , uc , uc' , ucs , ucs', ucsWS) where
+  ( UnitalChunk(..) , makeUCWDS , uc , uc' , ucStaged, ucs , ucs', ucsWS) where
 
 import Control.Lens (makeLenses, view, (^.))
 
 import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd)
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
@@ -15,6 +15,7 @@ import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Sentence (Sentence)
+import Language.Drasil.Stages (Stage)
 
 -- | UnitalChunks are Unitary DefinedQuantityDict
 data UnitalChunk = UC { _defq' :: DefinedQuantityDict
@@ -47,9 +48,14 @@ ucs' a sym space c = UC (dqd (cw a) sym space un) un
 
 -- | Same as 'uc', except it builds the Concept portion of the UnitalChunk
 -- from a given uid, term, and defn. Those are the first three arguments
-uc' :: (IsUnit u) => String -> NP -> String -> Symbol ->
-  u -> UnitalChunk
+uc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk
 uc' i t d s u = UC (dqd (dcc i t d) s Real un) un
+ where un = unitWrapper u
+
+-- | Same as uc', but symbol is dependent on the Stage
+ucStaged :: (IsUnit u) => String -> NP -> String -> (Stage -> Symbol) -> u -> 
+  UnitalChunk
+ucStaged i t d s u = UC (dqd' (dcc i t d) s Real (Just un)) un
  where un = unitWrapper u
 
 -- | Same as 'uc'', but does not assume the 'Space'

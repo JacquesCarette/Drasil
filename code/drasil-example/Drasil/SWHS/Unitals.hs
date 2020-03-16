@@ -169,23 +169,23 @@ deltaT = uc' "deltaT" (nounPhraseSP "change in temperature")
   "change in the average kinetic energy of a given material"
   (Concat [cDelta, eqSymb temp]) centigrade
 
-tau = uc' "tau" (nounPhraseSP "dummy variable for integration over time")
+tau = ucStaged "tau" (nounPhraseSP "dummy variable for integration over time")
   "binary value representing the presence or absence of integration over time"
-  lTau second
+  (autoStage lTau) second
 --Not sure how to define anything after this point
 
-tauLP = uc' "tauLP" (nounPhraseSP "ODE parameter for liquid PCM")
+tauLP = ucStaged "tauLP" (nounPhraseSP "ODE parameter for liquid PCM")
   ("derived through melting of phase change material, which " ++
   "changes ODE parameter for solid PCM into parameter for liquid")
-  (sup (sub lTau lPCM) lLiquid) second
+  (autoStage $ sup (sub lTau lPCM) lLiquid) second
 
-tauSP = uc' "tauSP" (nounPhraseSP "ODE parameter for solid PCM")
+tauSP = ucStaged "tauSP" (nounPhraseSP "ODE parameter for solid PCM")
   "derived parameter based on rate of change of temperature of phase change material"
-  (sup (sub lTau lPCM) lSolid) second
+  (autoStage $ sup (sub lTau lPCM) lSolid) second
 
-tauW = uc' "tauW" (nounPhraseSP "ODE parameter for water related to decay time")
+tauW = ucStaged "tauW" (nounPhraseSP "ODE parameter for water related to decay time")
   "derived parameter based on rate of change of temperature of water"
-  (sub lTau lWater) second
+  (autoStage $ sub lTau lWater) second
 
 simTime = uc' "simTime" (compoundPhrase' (simulation ^. term)
   (time ^. term)) "time over which the simulation runs"
@@ -415,7 +415,7 @@ outputs = [tempW, tempPCM, watE, pcmE]
 tempW = cuc' "tempW"
   (nounPhraseSP "temperature of the water")
   "the average kinetic energy of the particles within the water" 
-  (sub (eqSymb temp) lWater) centigrade Rational
+  (sub (eqSymb temp) lWater) centigrade (Vect Rational)
   [physc $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (dbl 0)
 
 -- Constraint 19

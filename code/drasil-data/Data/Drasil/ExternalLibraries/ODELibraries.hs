@@ -17,13 +17,14 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   returnExprList, fixedReturn,
   ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill, 
   mandatoryStepFill, mandatoryStepsFill, callStepFill, libCallFill, 
-  basicArgFill, functionArgFill, customObjArgFill, recordArgFill, 
-  unnamedParamFill, userDefinedParamFill, customClassFill, implementationFill, 
-  constructorInfoFill, methodInfoFill, appendCurrSolFill, populateSolListFill, 
-  assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
-  initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, 
-  fixedStatementFill, CodeVarChunk, CodeFuncChunk, codevar, codefunc, ccObjVar, 
-  implCQD, ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib)
+  userDefinedArgFill, basicArgFill, functionArgFill, customObjArgFill, 
+  recordArgFill, unnamedParamFill, userDefinedParamFill, customClassFill, 
+  implementationFill, constructorInfoFill, methodInfoFill, appendCurrSolFill, 
+  populateSolListFill, assignArrayIndexFill, assignSolFromObjFill, 
+  initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill, 
+  returnExprListFill, fixedStatementFill, CodeVarChunk, CodeFuncChunk, codevar, 
+  codefunc, ccObjVar, implCQD, ODEInfo(..), ODEOptions(..), ODEMethod(..), 
+  ODELibPckg, mkODELib, pubStateVar, privStateVar)
 
 import Control.Lens ((^.))
 
@@ -150,7 +151,7 @@ osloCall info = externalLibCall [
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $ 
     libCallFill [basicArgFill $ tInit info, 
       functionArgFill (map unnamedParamFill [indepVar info, depVar info]) $ 
-        returnExprListFill (odeSyst info), 
+        callStepFill $ libCallFill $ map userDefinedArgFill (odeSyst info), 
       recordArgFill [absTol $ odeOpts info, relTol $ odeOpts info]],
   mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill 
       [tInit info, tFinal info, stepSize $ odeOpts info],
@@ -162,7 +163,7 @@ osloCall info = externalLibCall [
 odeArgs :: [Argument]
 odeArgs = [inlineArg Real, lockedArg (sy initv),
   functionArg fOslo (map unnamedParam [Real, vecT]) 
-    (callStep $ constructAndReturn osloImport vector [inlineArg Real]),
+    (callStep $ constructAndReturn osloImport vector []),
   recordArg options opts [aTol, rTol]]
 
 solT, vecT, optT :: Space
@@ -269,10 +270,11 @@ apacheODECall info = externalLibCall [
     libCallFill (map (basicArgFill . ($ odeOpts info)) 
       [stepSize, stepSize, absTol, relTol]),
   mandatoryStepsFill [callStepFill $ libCallFill [
-      customObjArgFill [depVar info] (implementationFill [
+      customObjArgFill [pubStateVar $ depVar info] (implementationFill [
         methodInfoFill [] [initSolListFromArrayFill $ depVar info], methodInfoFill [] 
           [callStepFill $ libCallFill [], appendCurrSolFill $ depVar info]])],
-    callStepFill $ libCallFill $ customObjArgFill (otherVars info) 
+    callStepFill $ libCallFill $ customObjArgFill 
+      (map privStateVar $ otherVars info) 
       (implementationFill [
         constructorInfoFill (map userDefinedParamFill $ otherVars info) 
           (zip (otherVars info) (map sy $ otherVars info)) [], 
@@ -409,15 +411,15 @@ odeintCall :: ODEInfo -> ExternalLibraryCall
 odeintCall info = externalLibCall [
   uncurry choiceStepsFill (chooseMethod $ solveMethod $ odeOpts info),
   mandatoryStepFill $ callStepFill $ libCallFill $
-    customObjArgFill (otherVars info) (customClassFill [
+    customObjArgFill (map privStateVar $ otherVars info) (customClassFill [
       constructorInfoFill (map userDefinedParamFill $ otherVars info) 
         (zip (otherVars info) (map sy $ otherVars info)) [], 
       methodInfoFill (map unnamedParamFill [depVar info, ddep]) 
         [assignArrayIndexFill ddep (odeSyst info)]]) :
     map basicArgFill [Matrix [[initVal info]], tInit info, tFinal info, 
       stepSize $ odeOpts info] ++ [
-    customObjArgFill [depVar info] (customClassFill [
-      constructorInfoFill [userDefinedParamFill $ depVar info] 
+    customObjArgFill [privStateVar $ depVar info] (customClassFill [
+      constructorInfoFill [unnamedParamFill $ depVar info] 
         [(depVar info, sy $ depVar info)] [],
       methodInfoFill [] [appendCurrSolFill $ depVar info]])]]
   where chooseMethod RK45 = (0, map (callStepFill . libCallFill . map 

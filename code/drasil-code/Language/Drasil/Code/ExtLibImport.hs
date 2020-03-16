@@ -121,32 +121,30 @@ genFI fi@(FI _ _ _ _ r) fif = do
 
 genArguments :: [Argument] -> [ArgumentFill] -> 
   State ExtLibState [(Maybe NamedArgument, Expr)]
-genArguments as afs = fmap (zip (map getName as)) (genArgumentInfos (map getAI as) afs)
-
-genArgumentInfos :: [ArgumentInfo] -> [ArgumentFill] -> State ExtLibState [Expr]
-genArgumentInfos (LockedArg e:as) afs = fmap (e:) (genArgumentInfos as afs)
-genArgumentInfos (Basic _ v:as) (BasicF e:afs) = do
+genArguments (Arg n (LockedArg e):as) afs = fmap ((n,e):) (genArguments as afs)
+genArguments as (UserDefinedArgF n e:afs) = fmap ((n,e):) (genArguments as afs)
+genArguments (Arg n (Basic _ v):as) (BasicF e:afs) = do
   modify (maybe id (addDef e) v)
-  fmap (e:) (genArgumentInfos as afs)
+  fmap ((n,e):) (genArguments as afs)
 -- FIXME: funcexpr needs to be defined, a function-valued expression
 -- Uncomment the below when funcexpr is added
-genArgumentInfos (Fn c _ _{-ps s-}:as) (FnF _ _{-pfs sf-}:afs) = -- do
+genArguments (Arg n (Fn c _ _{-ps s-}):as) (FnF _ _{-pfs sf-}:afs) = -- do
   -- let prms = genParameters ps pfs
   -- st <- genStep s sf
   -- modify (addDef (funcexpr prms st) c)
-  fmap (sy c:) (genArgumentInfos as afs)
-genArgumentInfos (Class rs desc o ctor ci:as) (ClassF svs cif:afs) = do
-  (c, is) <- genClassInfo o ctor n desc svs ci cif
-  modify (addMod (packmodRequires n desc (rs ++ is) [c] []))
-  fmap (sy o:) (genArgumentInfos as afs)
-  where n = getActorName (o ^. typ)
-genArgumentInfos (Record n r fs:as) (RecordF es:afs) = 
+  fmap ((n, sy c):) (genArguments as afs)
+genArguments (Arg n (Class rs desc o ctor ci):as) (ClassF svs cif:afs) = do
+  (c, is) <- genClassInfo o ctor an desc svs ci cif
+  modify (addMod (packmodRequires an desc (rs ++ is) [c] []))
+  fmap ((n, sy o):) (genArguments as afs)
+  where an = getActorName (o ^. typ)
+genArguments (Arg n (Record rn r fs):as) (RecordF es:afs) = 
   if length fs /= length es then error recordFieldsMismatch else do
-    modify (addDef (new n []) r)
+    modify (addDef (new rn []) r)
     modify (addFieldAsgs r fs es)
-    fmap (sy r:) (genArgumentInfos as afs)
-genArgumentInfos [] [] = return []
-genArgumentInfos _ _ = error argumentMismatch
+    fmap ((n, sy r):) (genArguments as afs)
+genArguments [] [] = return []
+genArguments _ _ = error argumentMismatch
   
 genClassInfo :: CodeVarChunk -> CodeFuncChunk -> String -> String -> 
   [StateVariable] -> ClassInfo -> ClassInfoFill -> 
@@ -199,12 +197,6 @@ withLocalState st = do
   newS <- get
   modify (returnLocal s)
   return (st', newS)
-
-getName :: Argument -> Maybe NamedArgument
-getName (Arg n _) = n
-
-getAI :: Argument -> ArgumentInfo
-getAI (Arg _ ai) = ai
 
 isConstructor :: MethodInfo -> Bool
 isConstructor CI {} = True

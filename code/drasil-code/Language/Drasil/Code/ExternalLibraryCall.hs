@@ -3,12 +3,12 @@ module Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   StepGroupFill(..), StepFill(..), FunctionIntFill(..), ArgumentFill(..),
   ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..), externalLibCall, 
   choiceStepsFill, choiceStepFill, mandatoryStepFill, mandatoryStepsFill, 
-  callStepFill, libCallFill, basicArgFill, functionArgFill, customObjArgFill, 
-  recordArgFill, unnamedParamFill, userDefinedParamFill, customClassFill, 
-  implementationFill, constructorInfoFill, methodInfoFill, appendCurrSolFill, 
-  populateSolListFill, assignArrayIndexFill, assignSolFromObjFill, 
-  initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill, 
-  returnExprListFill, fixedStatementFill
+  callStepFill, libCallFill, userDefinedArgFill, basicArgFill, functionArgFill, 
+  customObjArgFill, recordArgFill, unnamedParamFill, userDefinedParamFill, 
+  customClassFill, implementationFill, constructorInfoFill, methodInfoFill, 
+  appendCurrSolFill, populateSolListFill, assignArrayIndexFill, 
+  assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill, 
+  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill
 ) where
 
 import Language.Drasil
@@ -33,7 +33,8 @@ data StepFill = CallF FunctionIntFill
 
 newtype FunctionIntFill = FIF [ArgumentFill]
 
-data ArgumentFill = BasicF Expr 
+data ArgumentFill = UserDefinedArgF (Maybe NamedArgument) Expr -- For arguments that are completely dependent on use case
+  | BasicF Expr 
   | FnF [ParameterFill] StepFill -- Fills in the names for the unnamed parameters
   | ClassF [StateVariable] ClassInfoFill -- List of CodeChunk for state variables
   | RecordF [Expr] -- Fills in the field values
@@ -70,6 +71,9 @@ loopStepFill fifs cdchs sfs = LoopF (fromList fifs) cdchs (fromList sfs)
 
 libCallFill :: [ArgumentFill] -> FunctionIntFill
 libCallFill = FIF
+
+userDefinedArgFill :: Expr -> ArgumentFill
+userDefinedArgFill = UserDefinedArgF Nothing
 
 basicArgFill :: Expr -> ArgumentFill
 basicArgFill = BasicF

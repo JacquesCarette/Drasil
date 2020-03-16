@@ -4,6 +4,8 @@ module Language.Drasil.Code.Imperative.DrasilState (
 ) where
 
 import Language.Drasil
+import GOOL.Drasil (ScopeTag(..))
+
 import Language.Drasil.Chunk.Code (CodeVarChunk, codeName)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Choices(..), 
@@ -11,7 +13,7 @@ import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Choices(..),
   MatchedConceptMap, MatchedSpaces, ConstantRepr, ConstantStructure(..), 
   ConstraintBehaviour, InputModule(..), Logging, Structure(..), getConstraints,
   inputModule)
-import Language.Drasil.Mod (Mod(..), Name, Class(..), fname)
+import Language.Drasil.Mod (Mod(..), Name, Class(..), StateVariable(..), fname)
 
 import Data.List (nub)
 import Data.Map (Map, fromList)
@@ -79,8 +81,9 @@ modExportMap cs@CSI {
     ++ getExpInputFormat prn chs extIns
     ++ getExpOutput prn chs (outputs cs)
   where mpair (Mod n _ _ cls fs) = (map className cls ++ 
-          concatMap (map codeName . stateVars) cls ++ map fname (fs ++ 
-          concatMap methods cls)) `zip` repeat (defModName m n)
+          concatMap (map (codeName . stVar) . filter ((== Pub) . svScope) . 
+          stateVars) cls ++ map fname (fs ++ concatMap methods cls)) `zip` 
+          repeat (defModName m n)
         defModName Unmodular _ = prn
         defModName _ nm = nm
 
@@ -99,8 +102,8 @@ clsDefMap cs@CSI {
     ++ getInputFormatCls chs extIns
     where modClasses (Mod _ _ _ cls _) = concatMap (\cl -> 
             let cln = className cl in
-            (cln, cln) : map (\sv -> (codeName sv, cln)) (stateVars cl) ++ 
-            map (\m -> (fname m, cln)) (methods cl)) cls
+            (cln, cln) : map (\sv -> (codeName (stVar sv), cln)) (stateVars cl) 
+              ++ map (\m -> (fname m, cln)) (methods cl)) cls
 
 type ModExp = (String, String)
 type ClassDef = (String, String)

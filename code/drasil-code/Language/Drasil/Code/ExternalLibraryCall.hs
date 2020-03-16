@@ -14,7 +14,7 @@ module Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
 import Language.Drasil
 
 import Language.Drasil.Chunk.Code (CodeVarChunk)
-import Language.Drasil.Mod (Initializer)
+import Language.Drasil.Mod (Initializer, StateVariable)
 
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
@@ -35,7 +35,7 @@ newtype FunctionIntFill = FIF [ArgumentFill]
 
 data ArgumentFill = BasicF Expr 
   | FnF [ParameterFill] StepFill -- Fills in the names for the unnamed parameters
-  | ClassF [CodeVarChunk] ClassInfoFill -- List of CodeChunk for state variables
+  | ClassF [StateVariable] ClassInfoFill -- List of CodeChunk for state variables
   | RecordF [Expr] -- Fills in the field values
 
 data ParameterFill = NameableParamF CodeVarChunk | UserDefined CodeVarChunk
@@ -77,7 +77,7 @@ basicArgFill = BasicF
 functionArgFill :: [ParameterFill] -> StepFill -> ArgumentFill
 functionArgFill = FnF
 
-customObjArgFill :: [CodeVarChunk] -> ClassInfoFill -> ArgumentFill
+customObjArgFill :: [StateVariable] -> ClassInfoFill -> ArgumentFill
 customObjArgFill = ClassF
 
 recordArgFill :: [Expr] -> ArgumentFill

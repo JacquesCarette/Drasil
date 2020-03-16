@@ -1,12 +1,14 @@
 {-# LANGUAGE GADTs #-}
-module Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
-  FuncStmt(..), Initializer, Mod(..), Name, ($:=), classDef, classImplements, 
-  ctorDef, ffor, fdec, fname, fstdecl, funcData, funcDef, funcQD, 
-  getFuncParams, packmod, packmodRequires
+module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..), 
+  FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name, ($:=), 
+  pubStateVar, privStateVar, classDef, classImplements, ctorDef, ffor, fdec, 
+  fname, fstdecl, funcData, funcDef, funcQD, getFuncParams, packmod, 
+  packmodRequires
 ) where
 
 import Language.Drasil
 import Database.Drasil (ChunkDB)
+import GOOL.Drasil (ScopeTag(..))
 
 import Language.Drasil.Chunk.Code (CodeIdea(..), CodeVarChunk, codeName, 
   codevars, codevars', quantvar)
@@ -31,13 +33,23 @@ data Class = ClassDef {
   className :: Name, 
   implements :: Maybe Name,
   classDesc :: String,
-  stateVars :: [CodeVarChunk],
+  stateVars :: [StateVariable],
   methods :: [Func]}
 
-classDef :: Name -> String -> [CodeVarChunk] -> [Func] -> Class
+data StateVariable = SV {
+  svScope :: ScopeTag,
+  stVar :: CodeVarChunk}
+
+pubStateVar :: CodeVarChunk -> StateVariable
+pubStateVar = SV Pub
+
+privStateVar :: CodeVarChunk -> StateVariable
+privStateVar = SV Priv
+
+classDef :: Name -> String -> [StateVariable] -> [Func] -> Class
 classDef n = ClassDef n Nothing
 
-classImplements :: Name -> Name -> String -> [CodeVarChunk] -> [Func] -> Class
+classImplements :: Name -> Name -> String -> [StateVariable] -> [Func] -> Class
 classImplements n i = ClassDef n (Just i)
      
 data Func = FCD CodeDefinition

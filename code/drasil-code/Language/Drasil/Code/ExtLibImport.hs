@@ -6,8 +6,8 @@ import Language.Drasil
 
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
 import Language.Drasil.CodeExpr (new, newWithNamedArgs, msgWithNamedArgs)
-import Language.Drasil.Mod (Class, Func(..), Mod, Name, packmodRequires, 
-  classDef, classImplements, FuncStmt(..), funcDef, ctorDef)
+import Language.Drasil.Mod (Class, StateVariable, Func(..), Mod, Name, 
+  packmodRequires, classDef, classImplements, FuncStmt(..), funcDef, ctorDef)
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..), 
   FunctionInterface(..), Result(..), Argument(..), ArgumentInfo(..), 
   Parameter(..), ClassInfo(..), MethodInfo(..), FuncType(..))
@@ -149,7 +149,7 @@ genArgumentInfos [] [] = return []
 genArgumentInfos _ _ = error argumentMismatch
   
 genClassInfo :: CodeVarChunk -> CodeFuncChunk -> String -> String -> 
-  [CodeVarChunk] -> ClassInfo -> ClassInfoFill -> 
+  [StateVariable] -> ClassInfo -> ClassInfoFill -> 
   State ExtLibState (Class, [String])
 genClassInfo o c n desc svs ci cif = let (mis, mifs, f) = genCI ci cif in 
   if length mis /= length mifs then error methodInfoNumberMismatch else do

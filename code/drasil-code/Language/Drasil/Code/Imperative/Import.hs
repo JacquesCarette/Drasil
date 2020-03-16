@@ -29,7 +29,7 @@ import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..), 
-  Mod(..), Name, fstdecl)
+  Mod(..), Name, StateVariable(..), fstdecl)
 import qualified Language.Drasil.Mod as M (Class(..))
 
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), PermanenceSym(..), 
@@ -38,7 +38,7 @@ import GOOL.Drasil (Label, ProgramSym, FileSym(..), PermanenceSym(..),
   objMethodCallMixedArgs, FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), nonInitConstructor, convType, 
-  CodeType(..), FS, CS, MS, VS, onStateValue) 
+  ScopeTag(..), CodeType(..), FS, CS, MS, VS, onStateValue) 
 import qualified GOOL.Drasil as C (CodeType(List, Array))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -397,9 +397,11 @@ genClass :: (ProgramSym repr) => (String -> Label -> Maybe Label ->
   [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
   -> Reader DrasilState (CS (repr (Class repr)))) -> M.Class -> 
   Reader DrasilState (CS (repr (Class repr)))
-genClass f (M.ClassDef n i desc svs ms) = do
-  svrs <- mapM (\v -> fmap (pubMVar . var (codeName v) . convType) (codeType v))
-    svs
+genClass f (M.ClassDef n i desc svs ms) = let svar Pub = pubMVar
+                                              svar Priv = privMVar 
+  in do
+  svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) . convType) 
+    (codeType v)) svs
   f n desc i svrs (mapM genFunc ms) 
 
 genFunc :: (ProgramSym repr) => Func -> Reader DrasilState (MS (repr (Method repr)))

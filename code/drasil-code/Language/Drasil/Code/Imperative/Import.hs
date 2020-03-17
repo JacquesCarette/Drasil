@@ -402,14 +402,14 @@ genCaseBlock t v c cs = do
 genModDef :: (ProgramSym repr) => Mod -> 
   Reader DrasilState (FS (repr (RenderFile repr)))
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap 
-  Just . genFunc) fs) 
+  Just . genFunc []) fs) 
   (case cs of [] -> []
               (cl:cls) -> fmap Just (genClass primaryClass cl) : 
                 map (fmap Just . genClass auxClass) cls)
 
 genModFuncs :: (ProgramSym repr) => Mod -> 
   [Reader DrasilState (MS (repr (Method repr)))]
-genModFuncs (Mod _ _ _ _ fs) = map genFunc fs
+genModFuncs (Mod _ _ _ _ fs) = map (genFunc []) fs
 
 genClass :: (ProgramSym repr) => (String -> Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
@@ -420,26 +420,29 @@ genClass f (M.ClassDef n i desc svs ms) = let svar Pub = pubMVar
   in do
   svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) . convType) 
     (codeType v)) svs
-  f desc n i svrs (mapM genFunc ms) 
+  f desc n i svrs (mapM (genFunc svs) ms) 
 
-genFunc :: (ProgramSym repr) => Func -> Reader DrasilState (MS (repr (Method repr)))
-genFunc (FDef (FuncDef n desc parms o rd s)) = do
+genFunc :: (ProgramSym repr) => [StateVariable] -> Func -> 
+  Reader DrasilState (MS (repr (Method repr)))
+genFunc svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- ask
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ parms)
+  vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s 
+    \\ (parms ++ map stVar svs))
   publicFunc n (convType $ spaceMatches g o) desc parms rd 
     [block $ map varDec vars ++ stmts]
-genFunc (FDef (CtorDef n desc parms i s)) = do
+genFunc svs (FDef (CtorDef n desc parms i s)) = do
   g <- ask
   inits <- mapM (convExpr . snd) i
   initvars <- mapM ((\iv -> fmap (var (codeName iv) . convType) (codeType iv))
     . fst) i
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ parms)
+  vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s 
+    \\ (parms ++ map stVar svs))
   genInitConstructor n desc parms (zip initvars inits) 
     [block $ map varDec vars ++ stmts]
-genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
-genFunc (FCD cd) = genCalcFunc cd
+genFunc _ (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
+genFunc _ (FCD cd) = genCalcFunc cd
 
 convStmt :: (ProgramSym repr) => FuncStmt -> Reader DrasilState (MS (repr (Statement repr)))
 convStmt (FAsg v (Matrix [es]))  = do

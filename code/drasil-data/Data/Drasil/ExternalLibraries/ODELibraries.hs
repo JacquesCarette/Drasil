@@ -23,8 +23,8 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   populateSolListFill, assignArrayIndexFill, assignSolFromObjFill, 
   initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill, 
   returnExprListFill, fixedStatementFill, CodeVarChunk, CodeFuncChunk, codevar, 
-  codefunc, ccObjVar, implCQD, ODEInfo(..), ODEOptions(..), ODEMethod(..), 
-  ODELibPckg, mkODELib, pubStateVar, privStateVar, field)
+  codefunc, implCQD, ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, 
+  mkODELib, pubStateVar, privStateVar, field)
 
 import Control.Lens ((^.))
 

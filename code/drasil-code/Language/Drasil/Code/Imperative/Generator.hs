@@ -60,6 +60,7 @@ generator l dt sd chs spec = DrasilState {
   extLibMap = fromList elmap,
   vMap = assocToMap (codequants spec ++ getAdditionalVars chs modules'),
   eMap = mem,
+  libEMap = lem,
   clsMap = cdm,
   defList = nub $ keys mem ++ keys cdm,
   
@@ -78,7 +79,7 @@ generator l dt sd chs spec = DrasilState {
         els = map snd elmap
         elmap = chooseODELib l ols
         mem = modExportMap (csi spec) chs modules' 
-          (concatMap (^. modExports) els)
+        lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap (csi spec) chs modules'
         chooseODELib _ [] = []
         chooseODELib lng (o:os) = if lng `elem` compatibleLangs o then 

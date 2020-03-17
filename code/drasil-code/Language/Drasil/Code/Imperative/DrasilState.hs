@@ -49,6 +49,7 @@ data DrasilState = DrasilState {
   extLibMap :: ExtLibMap,
   vMap :: VarMap,
   eMap :: ModExportMap,
+  libEMap :: ModExportMap, 
   clsMap :: ClassDefinitionMap,
   defList :: [Name],
   currentModule :: String,
@@ -63,8 +64,7 @@ inMod ds = inMod' $ modular ds
   where inMod' Unmodular = Combined
         inMod' (Modular im) = im
 
-modExportMap :: CodeSystInfo -> Choices -> [Mod] -> [(String, String)] -> 
-  ModExportMap
+modExportMap :: CodeSystInfo -> Choices -> [Mod] -> ModExportMap
 modExportMap cs@CSI {
   pName = prn,
   inputs = ins,
@@ -73,7 +73,7 @@ modExportMap cs@CSI {
   constants = cns
   } chs@Choices {
     modularity = m
-  } ms mes = fromList $ nub $ mes ++ concatMap mpair ms
+  } ms = fromList $ nub $ concatMap mpair ms
     ++ getExpInput prn chs ins
     ++ getExpConstants prn chs cns
     ++ getExpDerived prn chs ds

@@ -231,14 +231,17 @@ convExpr (C c)   = do
   g <- ask
   let v = quantvar (lookupC g c)
   mkVal v
-convExpr (FCall c x ns) = convCall c x ns fApp
-convExpr (New c x ns) = convCall c x ns (\m _ -> ctorCall m)
+convExpr (FCall c x ns) = convCall c x ns fApp libFuncAppMixedArgs
+convExpr (New c x ns) = convCall c x ns (\m _ -> ctorCall m) 
+  (\m _ -> libNewObjMixedArgs m)
 convExpr (Message a m x ns) = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
       objCd = quantvar (symbResolve info a)
   o <- mkVal objCd
-  convCall m x ns (\_ n t ps nas -> return (objMethodCallMixedArgs t o n ps nas))
+  convCall m x ns 
+    (\_ n t ps nas -> return (objMethodCallMixedArgs t o n ps nas)) 
+    (\_ n t -> objMethodCallMixedArgs t o n)
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
   g <- ask
@@ -268,19 +271,25 @@ convCall :: (ProgramSym repr) => UID -> [Expr] -> [(UID, Expr)] ->
   (String -> String -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   Reader DrasilState (VS (repr (Value repr)))) -> 
-  Reader DrasilState (VS (repr (Value repr)))
-convCall c x ns f = do
+  (String -> String -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))) -> Reader DrasilState (VS (repr (Value repr)))
+convCall c x ns f libf = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
       mem = eMap g
+      lem = libEMap g
       funcCd = quantfunc (symbResolve info c)
       funcNm = codeName funcCd
   funcTp <- codeType funcCd
   args <- mapM convExpr x
   nms <- mapM (mkVar . quantvar . symbResolve info . fst) ns 
   nargs <- mapM (convExpr . snd) ns
-  maybe (error $ "Call to non-existent function " ++ funcNm) (\m -> f m funcNm 
-    (convType funcTp) args (zip nms nargs)) (Map.lookup funcNm mem)
+  maybe (maybe (error $ "Call to non-existent function " ++ funcNm) 
+      (\m -> return $ libf m funcNm (convType funcTp) args (zip nms args)) 
+      (Map.lookup funcNm lem))
+    (\m -> f m funcNm (convType funcTp) args (zip nms nargs)) 
+    (Map.lookup funcNm mem)
   
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint -> Expr
 renderC s (Range _ rr)          = renderRealInt s rr

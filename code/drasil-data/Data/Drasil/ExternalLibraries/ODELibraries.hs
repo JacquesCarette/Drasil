@@ -112,7 +112,7 @@ f = codefunc $ implCQD "f_scipy" (nounPhrase "function representing ODE system"
 odefunc = codefunc $ implCQD "ode_scipy" (nounPhrase 
   "function for defining an ODE for SciPy" 
   "functions for defining an ODE for SciPy") Nothing 
-  odeT (Label (scipyImport ++ ".ode")) Nothing
+  odeT (Label "ode") Nothing
 setIntegrator = codefunc $ implCQD "set_integrator_scipy" (nounPhrase
   "method for setting SciPy integrator" "methods for setting SciPy integrator")
   Nothing Void (Label "set_integrator") Nothing
@@ -429,7 +429,7 @@ odeintCall info = externalLibCall [
         ddep = diffCodeChunk $ depVar info
 
 odeintImport, odeNameSpace, rkdp5, adamsBash :: String
-odeintImport = "boost/numeric/odeint.hpp"
+odeintImport = "boost/numeric/odeint"
 odeNameSpace = "boost::numeric::odeint::"
 rkdp5 = odeNameSpace ++ "runge_kutta_dopri5<vector<double>>"
 adamsBash = odeNameSpace ++ "adams_bashforth<3,vector<double>>"

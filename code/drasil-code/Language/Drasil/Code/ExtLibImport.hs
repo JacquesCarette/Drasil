@@ -108,7 +108,7 @@ genFIVal (FI (r:|rs) ft f as _) (FIF afs) = do
   args <- genArguments as afs
   let isNamed = isJust . fst 
       (nas, ars) = partition isNamed args
-  modify (addImports (r:rs) . addModExport (codeName f, r))
+  modify (addImports rs . addModExport (codeName f, r))
   return $ getCallFunc ft f (map snd ars) (map (\(n, e) -> 
     maybe (error "defective isNamed") (,e) n) nas) 
   where getCallFunc Function = applyWithNamedArgs 
@@ -144,7 +144,7 @@ genArguments (Arg n (Class rs desc o ctor ci):as) (ClassF svs cif:afs) = do
 genArguments (Arg n (Record (rq:|rqs) rn r fs):as) (RecordF es:afs) = 
   if length fs /= length es then error recordFieldsMismatch else do
     modify (addFieldAsgs r fs es . addDef (new rn []) r . 
-      addModExport (codeName rn, rq) . addImports (rq:rqs))
+      addModExport (codeName rn, rq) . addImports rqs)
     fmap ((n, sy r):) (genArguments as afs)
 genArguments [] [] = return []
 genArguments _ _ = error argumentMismatch

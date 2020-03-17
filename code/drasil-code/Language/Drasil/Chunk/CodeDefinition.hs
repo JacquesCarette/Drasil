@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.CodeDefinition (
 
 import Language.Drasil
 import Language.Drasil.Chunk.Code (CodeChunk(..), CodeIdea(codeName, codeChunk),
-  VarOrFunc(..), quantvar, quantfunc, funcPrefix)
+  VarOrFunc(..), codefuncC, quantvar, quantfunc, funcPrefix)
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..))
 
 import Control.Lens ((^.), makeLenses, view)
@@ -40,7 +40,7 @@ qtov :: QDefinition -> CodeDefinition
 qtov q = CD (codeChunk $ quantvar q) (q ^. defnExpr) [] Definition
 
 odeDef :: ODEInfo -> CodeDefinition
-odeDef info = CD (codeChunk $ depVar info) (Matrix [odeSyst info]) 
+odeDef info = CD (codeChunk $ codefuncC $ depVar info) (Matrix [odeSyst info]) 
   (map ($ info) [tInit, tFinal, initVal, absTol . odeOpts, relTol . odeOpts, 
   stepSize . odeOpts]) ODE
 

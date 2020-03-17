@@ -60,7 +60,7 @@ instance HasSymbol   CodeVarChunk where symbol = symbol . view ccv
 instance Quantity    CodeVarChunk
 instance CodeIdea    CodeVarChunk where 
   codeName = codeName . view ccv
-  codeChunk = codeChunk . view ccv
+  codeChunk c = CodeC (view qc $ view ccv c) Var
 instance Eq          CodeVarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeVarChunk where getUnit = getUnit . view ccv
 
@@ -76,7 +76,7 @@ instance Quantity    CodeFuncChunk
 instance Callable    CodeFuncChunk
 instance CodeIdea    CodeFuncChunk where 
   codeName = codeName . view ccf
-  codeChunk = codeChunk . view ccf
+  codeChunk c = CodeC (view qc $ view ccf c) Func
 instance Eq          CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
 

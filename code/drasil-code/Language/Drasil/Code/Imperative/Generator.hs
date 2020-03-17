@@ -23,7 +23,7 @@ import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports,
   genExternalLibraryCall)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Chunk.Code (codeName)
-import Language.Drasil.Data.ODEInfo (ODEInfo(..))
+import Language.Drasil.Chunk.CodeDefinition (odeDef)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Modularity(..), Visibility(..), assocToMap, getAdditionalVars)
@@ -82,7 +82,7 @@ generator l dt sd chs spec = DrasilState {
         cdm = clsDefMap (csi spec) chs modules'
         chooseODELib _ [] = []
         chooseODELib lng (o:os) = if lng `elem` compatibleLangs o then 
-          map (\ode -> (codeName $ depVar ode, genExternalLibraryCall 
+          map (\ode -> (codeName $ odeDef ode, genExternalLibraryCall 
           (libSpec o) $ libCall o ode)) (odes chs) else chooseODELib lng os
         modules' = packmodRequires "Calculations" 
           "Provides functions for calculating the outputs" 

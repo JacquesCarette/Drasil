@@ -405,7 +405,7 @@ genClass f (M.ClassDef n i desc svs ms) = let svar Pub = pubMVar
   in do
   svrs <- mapM (\(SV s v) -> fmap (svar s . var (codeName v) . convType) 
     (codeType v)) svs
-  f n desc i svrs (mapM genFunc ms) 
+  f desc n i svrs (mapM genFunc ms) 
 
 genFunc :: (ProgramSym repr) => Func -> Reader DrasilState (MS (repr (Method repr)))
 genFunc (FDef (FuncDef n desc parms o rd s)) = do

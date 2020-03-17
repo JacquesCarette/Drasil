@@ -187,7 +187,7 @@ genParameters _ _ = error paramMismatch
 
 maybeGenAssg :: Maybe Result -> (Expr -> FuncStmt)
 maybeGenAssg Nothing = FVal
-maybeGenAssg (Just (Assign c)) = FAsg c
+maybeGenAssg (Just (Assign c)) = FDecDef c
 maybeGenAssg (Just Return)  = FRet
 
 -- Helpers

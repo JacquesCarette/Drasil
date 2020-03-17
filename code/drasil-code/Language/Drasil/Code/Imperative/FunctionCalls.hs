@@ -11,7 +11,7 @@ import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
-import Language.Drasil.Chunk.Code (CodeIdea(codeName))
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 
 import GOOL.Drasil (ProgramSym, TypeSym(..), ValueSym(..), StatementSym(..), 
@@ -76,8 +76,8 @@ getFuncCall n t funcPs = do
         return $ Just val
   getFuncCall' mm
 
-getInOutCall :: (ProgramSym repr, HasSpace c, CodeIdea c, Eq c) => String -> 
-  Reader DrasilState [c] -> Reader DrasilState [c] ->
+getInOutCall :: (ProgramSym repr) => String -> 
+  Reader DrasilState [CodeVarChunk] -> Reader DrasilState [CodeVarChunk] ->
   Reader DrasilState (Maybe (MS (repr (Statement repr))))
 getInOutCall n inFunc outFunc = do
   mm <- getCall n

@@ -85,7 +85,7 @@ odeT :: Space
 odeT = Actor "ode"
 
 scipyODESymbols :: [QuantityDict]
-scipyODESymbols = map qw [mthdArg, atolArg, rtolArg] ++ map qw [r, t, y, rt, ry]
+scipyODESymbols = map qw [mthdArg, atolArg, rtolArg] ++ map qw [r, t, y]
   ++ map qw [f, odefunc, setIntegrator, setInitVal, successful, integrateStep]
 
 mthdArg, atolArg, rtolArg :: NamedArgument
@@ -153,9 +153,9 @@ osloCall info = externalLibCall [
       functionArgFill (map unnamedParamFill [indepVar info, depVar info]) $ 
         callStepFill $ libCallFill $ map userDefinedArgFill (odeSyst info), 
       recordArgFill [absTol $ odeOpts info, relTol $ odeOpts info]],
-  mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill 
-      [tInit info, tFinal info, stepSize $ odeOpts info],
-    populateSolListFill $ depVar info]]
+  mandatoryStepsFill (callStepFill (libCallFill $ map basicArgFill 
+      [tInit info, tFinal info, stepSize $ odeOpts info]) :
+    populateSolListFill (depVar info))]
   where chooseMethod RK45 = 0
         chooseMethod BDF = 1
         chooseMethod _ = error odeMethodUnavailable
@@ -308,7 +308,7 @@ fode = "FirstOrderDifferentialEquations"
 apacheODESymbols :: [QuantityDict]
 apacheODESymbols = map qw [it, currVals, stepHandler, t0, y0, t, interpolator, 
   isLast, curr, ode] ++ map qw [adamsC, dp54C, stepHandlerCtor, addStepHandler, 
-  initMethod, handleStep, getInterpState, integrate, getDimension, 
+  initMethod, handleStep, getInterpState, integrate, odeCtor, getDimension, 
   computeDerivatives]
 
 it, currVals, stepHandler, t0, y0, interpolator, isLast, curr :: CodeVarChunk
@@ -439,7 +439,8 @@ popT = Actor "Populate"
 
 odeintSymbols :: [QuantityDict]
 odeintSymbols = map qw [odeintCurrVals, rk, stepper, pop, t, y, ode] ++ map qw 
-  [rkdp5C, makeControlled, adamsBashC, integrateConst, odeOp, popCtor, popOp]
+  [rkdp5C, makeControlled, adamsBashC, integrateConst, odeCtor, odeOp, popCtor, 
+  popOp]
 
 odeintCurrVals, rk, stepper, pop :: CodeVarChunk
 odeintCurrVals = codevar $ implCQD "currVals_odeint" (nounPhrase 

@@ -110,7 +110,7 @@ initConsts = do
       getDecl (_,[]) WithInputs = return Nothing
       getDecl (c:_,[]) _ = asks (constCont c . conRepr)
       getDecl ([],cs) _ = do 
-        vars <- mapM mkVar cs
+        vars <- mapM (mkVar . codevarC) cs
         vals <- mapM (convExpr . codeEquat) cs
         logs <- mapM maybeLog vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ 

@@ -423,7 +423,8 @@ convStmt (FAsg v (Matrix [es]))  = do
       listFunc (C.Array _) = litArray
       listFunc _ = error "Type mismatch between variable and value in assignment FuncStmt"
   l <- maybeLog v'
-  return $ multi $ assign v' (listFunc t (fmap variableType v') els) : l
+  return $ multi $ assign v' (listFunc t (listInnerType $ fmap variableType v') 
+    els) : l
 convStmt (FAsg v e) = do
   e' <- convExpr e
   v' <- mkVar v

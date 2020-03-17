@@ -92,7 +92,7 @@ genExtLibCall (sg:el) (SGF n sgf:elc) = let s = sg!!n in
     fs <- zipWithM genStep s sgf
     modify (addSteps fs)
     genExtLibCall el elc
-genExtLibCall _ _ = error $ stepNumberMismatch
+genExtLibCall _ _ = error stepNumberMismatch
 
 genStep :: Step -> StepFill -> State ExtLibState FuncStmt
 genStep (Call fi) (CallF fif) = genFI fi fif
@@ -141,8 +141,8 @@ genArguments (Arg n (Class rs desc o ctor ci):as) (ClassF svs cif:afs) = do
   where an = getActorName (o ^. typ)
 genArguments (Arg n (Record (rq:|rqs) rn r fs):as) (RecordF es:afs) = 
   if length fs /= length es then error recordFieldsMismatch else do
-    modify (addDef (new rn []) r . addModExport (codeName rn, rq) . 
-      addFieldAsgs r fs es . addImports (rq:rqs))
+    modify (addFieldAsgs r fs es . addDef (new rn []) r . 
+      addModExport (codeName rn, rq) . addImports (rq:rqs))
     fmap ((n, sy r):) (genArguments as afs)
 genArguments [] [] = return []
 genArguments _ _ = error argumentMismatch

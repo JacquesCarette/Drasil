@@ -14,26 +14,29 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   enumVar, classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, 
   litTrue, litFalse, litChar, litDouble, litFloat, litInt, litString, litArray, 
   litList, pi, valueOf, arg, enumElement, argsList, inlineIf, call', call, 
-  funcApp, namedArgError, selfFuncApp, extFuncApp, newObj, extNewObj, lambda, 
-  notNull, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
-  listIndexExists, indexOf, func, get, set, listSize, listAdd, listAppend, 
-  iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
-  listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
-  listAccessFunc', listSetFunc, printSt, state, loopState, emptyState, assign, 
-  assignToListIndex, multiAssignError, decrement, increment, increment', 
-  increment1, increment1', decrement1, varDec, varDecDef, listDec, listDecDef, 
-  listDecDef', arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, 
-  extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, discardInput, 
-  discardFileInput, openFileR, openFileW, openFileA, closeFile, discardFileLine,
-  stringListVals, stringListLists, returnState, multiReturnError, valState, 
-  comment, freeError, throw, initState, changeState, initObserverList, 
-  addObserver, ifCond, ifNoElse, switch, switchAsIf, ifExists, for, forRange, 
-  forEach, while, tryCatch, checkState, notifyObservers, construct, param, 
-  method, getMethod, setMethod, privMethod, pubMethod, constructor, docMain, 
-  function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
-  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, enum, 
-  extraClass, implementingClass, docClass, commentedClass, intClass, 
-  buildModule, buildModule', modFromData, fileDoc, docMod
+  funcApp, funcAppMixedArgs, namedArgError, selfFuncApp, selfFuncAppMixedArgs, 
+  extFuncApp, extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
+  newObjMixedArgs, extNewObj, extNewObjMixedArgs, libNewObj, 
+  libNewObjMixedArgs, lambda, notNull, objAccess, objMethodCall, 
+  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, func, get, set, 
+  listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
+  getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
+  iterEndError, listAccessFunc, listAccessFunc', listSetFunc, printSt, state, 
+  loopState, emptyState, assign, assignToListIndex, multiAssignError, 
+  decrement, increment, increment', increment1, increment1', decrement1, 
+  varDec, varDecDef, listDec, listDecDef, listDecDef', arrayDec, arrayDecDef, 
+  objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, 
+  constDecDef, funcDecDef, discardInput, discardFileInput, openFileR, 
+  openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
+  stringListLists, returnState, multiReturnError, valState, comment, freeError, 
+  throw, initState, changeState, initObserverList, addObserver, ifCond, 
+  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
+  tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
+  setMethod, privMethod, pubMethod, constructor, docMain, function, 
+  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, 
+  constVar, privMVar, pubMVar, pubGVar, buildClass, enum, extraClass, 
+  implementingClass, docClass, commentedClass, intClass, buildModule, 
+  buildModule', modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -66,7 +69,9 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
     listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
   ValueSym(litTrue, litFalse, litInt, litString, litList, valueOf),
-  ValueExpression(funcApp, newObj, extNewObj, notNull, lambda), 
+  ValueExpression(funcApp, funcAppMixedArgs, selfFuncAppMixedArgs, 
+    extFuncAppMixedArgs, libFuncAppMixedArgs, newObj, newObjMixedArgs, 
+    extNewObj, extNewObjMixedArgs, libNewObjMixedArgs, notNull, lambda), 
   InternalValue(call), Selector(objAccess), objMethodCall, 
   objMethodCallNoParams, FunctionSym(func, listSize, listAdd, listAppend),
   SelectorFunction(listAccess, listSet),
@@ -94,8 +99,8 @@ import GOOL.Drasil.LanguageRenderer (dot, forLabel, new, observerListName,
 import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensMStoVS, lensVStoMS, currMain, currFileType, modifyReturnFunc, 
   modifyReturnFunc2, addFile, setMainMod, addLangImportVS, getLangImports, 
-  getLibImports, getModuleImports, setModuleName, getModuleName, setClassName, 
-  getClassName, addParameter)
+  addLibImportVS, getLibImports, getModuleImports, setModuleName, 
+  getModuleName, setClassName, getClassName, addParameter)
 
 import Prelude hiding (break,print,last,mod,pi,sin,cos,tan,(<>))
 import Data.Bifunctor (first)
@@ -571,40 +576,82 @@ call sep lib n t o pas nas = (\tp pargs nms nargs -> mkVal tp $ obDoc <> libDoc
         obDoc = fromMaybe empty o
 
 funcApp :: (RenderSym repr) => Label -> VS (repr (Type repr)) 
+  -> [VS (repr (Value repr))] -> VS (repr (Value repr))
+funcApp n t vs = S.funcAppMixedArgs n t vs []
+
+funcAppMixedArgs :: (RenderSym repr) => Label -> VS (repr (Type repr)) 
   -> [VS (repr (Value repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   VS (repr (Value repr))
-funcApp n t = S.call Nothing n t Nothing
+funcAppMixedArgs n t = S.call Nothing n t Nothing
 
 namedArgError :: String -> String
 namedArgError l = "Named arguments not supported in " ++ l 
 
-selfFuncApp :: (RenderSym repr) => Doc -> VS (repr (Variable repr)) -> Label -> 
-  VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
+selfFuncApp :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> VS (repr (Value repr))
+selfFuncApp n t vs = S.selfFuncAppMixedArgs n t vs []
+
+selfFuncAppMixedArgs :: (RenderSym repr) => Doc -> VS (repr (Variable repr)) -> 
+  Label -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   VS (repr (Value repr))
-selfFuncApp d slf n t vs ns = slf >>= (\s -> S.call Nothing n t 
+selfFuncAppMixedArgs d slf n t vs ns = slf >>= (\s -> S.call Nothing n t 
   (Just $ variableDoc s <> d) vs ns)
 
 extFuncApp :: (RenderSym repr) => Library -> Label -> VS (repr (Type repr)) -> 
-  [VS (repr (Value repr))] ->
+  [VS (repr (Value repr))] -> VS (repr (Value repr))
+extFuncApp l n t vs = S.extFuncAppMixedArgs l n t vs []
+
+extFuncAppMixedArgs :: (RenderSym repr) => Library -> Label ->
+  VS (repr (Type repr)) -> [VS (repr (Value repr))] ->
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   VS (repr (Value repr))
-extFuncApp l n t = S.call (Just l) n t Nothing
+extFuncAppMixedArgs l n t = S.call (Just l) n t Nothing
 
-newObj :: (RenderSym repr) => String -> VS (repr (Type repr)) -> 
+libFuncApp :: (RenderSym repr) => Library -> Label -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> VS (repr (Value repr))
+libFuncApp l n t vs = S.libFuncAppMixedArgs l n t vs []
+
+libFuncAppMixedArgs :: (RenderSym repr) => Library -> Label ->
+  VS (repr (Type repr)) -> [VS (repr (Value repr))] ->
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))
+libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >> 
+  S.funcAppMixedArgs n t vs ns
+
+newObj :: (RenderSym repr) => VS (repr (Type repr)) -> [VS (repr (Value repr))] 
+  -> VS (repr (Value repr))
+newObj t vs = S.newObjMixedArgs t vs []
+
+newObjMixedArgs :: (RenderSym repr) => String -> VS (repr (Type repr)) -> 
   [VS (repr (Value repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   VS (repr (Value repr))
-newObj s tp vs ns = tp >>= (\t -> S.call Nothing (s ++ getTypeString t) 
-  (return t) Nothing vs ns)
+newObjMixedArgs s tp vs ns = tp >>= 
+  (\t -> S.call Nothing (s ++ getTypeString t) (return t) Nothing vs ns)
 
-extNewObj :: (RenderSym repr) => String -> Library -> VS (repr (Type repr)) -> 
+extNewObj :: (RenderSym repr) => Library -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> VS (repr (Value repr))
+extNewObj l t vs = S.extNewObjMixedArgs l t vs []
+
+extNewObjMixedArgs :: (RenderSym repr) => Library -> VS (repr (Type repr)) -> 
   [VS (repr (Value repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   VS (repr (Value repr))
-extNewObj s l tp vs ns = tp >>= (\t -> S.call (Just l) (s ++ getTypeString t) 
+extNewObjMixedArgs l tp vs ns = tp >>= (\t -> S.call (Just l) (getTypeString t) 
   (return t) Nothing vs ns)
+
+libNewObj :: (RenderSym repr) => Library -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> VS (repr (Value repr))
+libNewObj l t vs = S.libNewObjMixedArgs l t vs []
+
+libNewObjMixedArgs :: (RenderSym repr) => Library -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))
+libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >> 
+  S.newObjMixedArgs tp vs ns
 
 notNull :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
 notNull v = v ?!= S.valueOf (S.var "null" $ onStateValue valueType v)

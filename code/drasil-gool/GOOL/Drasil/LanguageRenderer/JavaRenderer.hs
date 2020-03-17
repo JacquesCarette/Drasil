@@ -42,14 +42,17 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   litFalse, litChar, litDouble, litFloat, litInt, litString, litArray, pi, 
   valueOf, arg, enumElement, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, call', funcApp, 
-  selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
-  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
-  setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
-  iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
-  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
-  increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, 
-  objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, 
-  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
+  funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, extFuncApp, 
+  extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
+  newObjMixedArgs, extNewObj, libNewObj, libNewObjMixedArgs, lambda, notNull, 
+  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
+  listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
+  listAppendFunc, iterBeginError, iterEndError, listAccessFunc', printSt, 
+  state, loopState, emptyState, assign, assignToListIndex, multiAssignError, 
+  decrement, increment, decrement1, increment1, varDec, varDecDef, listDec, 
+  listDecDef', arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, 
+  extObjDecNew, extObjDecNewNoParams, funcDecDef, discardInput, 
+  discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
   multiReturnError, valState, comment, freeError, throw, initState, 
   changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
@@ -399,26 +402,32 @@ instance ValueExpression JavaCode where
   -- map from the CodeInfo pass, but it's possible that one of the higher-level 
   -- functions implicitly calls these functions in the Java renderer, so we 
   -- also check here to add the exceptions from the called function to the map
-  funcApp n t vs = funcAppMixedArgs n t vs []
+  funcApp = G.funcApp
   funcAppNamedArgs n t = funcAppMixedArgs n t []
-  funcAppMixedArgs n t vs ns = addCallExcsCurrMod n >> G.funcApp n t vs ns
-  selfFuncApp n t vs = selfFuncAppMixedArgs n t vs []
-  selfFuncAppMixedArgs n t ps ns = addCallExcsCurrMod n >> G.selfFuncApp dot 
-    self n t ps ns
-  extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
+  funcAppMixedArgs n t vs ns = addCallExcsCurrMod n >> 
+    G.funcAppMixedArgs n t vs ns
+  selfFuncApp = G.selfFuncApp
+  selfFuncAppMixedArgs n t ps ns = addCallExcsCurrMod n >> 
+    G.selfFuncAppMixedArgs dot self n t ps ns
+  extFuncApp = G.extFuncApp
   extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
     modify (maybe id addExceptions (Map.lookup (l ++ "." ++ n) mem))
-    G.extFuncApp l n t vs ns
-  newObj ot vs = newObjMixedArgs ot vs []
-  newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t -> G.newObj "new " t vs ns)
-  extNewObj l ot vs = extNewObjMixedArgs l ot vs []
+    G.extFuncAppMixedArgs l n t vs ns
+  libFuncApp = G.libFuncApp
+  libFuncAppMixedArgs = G.libFuncAppMixedArgs
+  newObj = G.newObj
+  newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t -> 
+    G.newObjMixedArgs "new " t vs ns)
+  extNewObj = G.extNewObj
   extNewObjMixedArgs l ot vs ns = do
     t <- ot
     mem <- getMethodExcMap
     let tp = getTypeString t
     modify (maybe id addExceptions (Map.lookup (l ++ "." ++ tp) mem))
     newObjMixedArgs (toState t) vs ns
+  libNewObj = G.libNewObj
+  libNewObjMixedArgs = G.libNewObjMixedArgs
 
   lambda = G.lambda jLambda
 

@@ -124,9 +124,11 @@ genArguments :: [Argument] -> [ArgumentFill] ->
   State ExtLibState [(Maybe NamedArgument, Expr)]
 genArguments (Arg n (LockedArg e):as) afs = fmap ((n,e):) (genArguments as afs)
 genArguments as (UserDefinedArgF n e:afs) = fmap ((n,e):) (genArguments as afs)
-genArguments (Arg n (Basic _ v):as) (BasicF e:afs) = do
-  modify (maybe id (addDef e) v)
-  fmap ((n,e):) (genArguments as afs)
+genArguments (Arg n (Basic _ Nothing):as) (BasicF e:afs) = fmap ((n,e):) 
+  (genArguments as afs)
+genArguments (Arg n (Basic _ (Just v)):as) (BasicF e:afs) = do
+  modify (addDef e v)
+  fmap ((n,sy v):) (genArguments as afs)
 -- FIXME: funcexpr needs to be defined, a function-valued expression
 -- Uncomment the below when funcexpr is added
 genArguments (Arg n (Fn c _ _{-ps s-}):as) (FnF _ _{-pfs sf-}:afs) = -- do

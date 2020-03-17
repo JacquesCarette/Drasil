@@ -24,7 +24,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill, 
   returnExprListFill, fixedStatementFill, CodeVarChunk, CodeFuncChunk, codevar, 
   codefunc, ccObjVar, implCQD, ODEInfo(..), ODEOptions(..), ODEMethod(..), 
-  ODELibPckg, mkODELib, pubStateVar, privStateVar)
+  ODELibPckg, mkODELib, pubStateVar, privStateVar, field)
 
 import Control.Lens ((^.))
 
@@ -46,8 +46,8 @@ scipyODE = externalLib [
   mandatorySteps [callStep $ libMethod scipyImport r 
       setInitVal [inlineArg Real, inlineArg Real],
     initSolListWithVal,
-    solveAndPopulateWhile (libMethod scipyImport r successful []) rt 
-      (libMethod scipyImport r integrateStep [inlineArg Real]) ry]]
+    solveAndPopulateWhile (libMethod scipyImport r successful []) r t 
+      (libMethod scipyImport r integrateStep [inlineArg Real]) y]]
 
 scipyCall :: ODEInfo -> ExternalLibraryCall
 scipyCall info = externalLibCall [
@@ -59,7 +59,7 @@ scipyCall info = externalLibCall [
       [initVal info, tInit info],
     initSolListWithValFill (depVar info) (initVal info),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info) 
-      (libCallFill [basicArgFill (sy rt + stepSize (odeOpts info))]) 
+      (libCallFill [basicArgFill (field r t + stepSize (odeOpts info))]) 
       (depVar info)]]
   where chooseMethod Adams = (0, solveMethodFill)
         chooseMethod BDF = (1, solveMethodFill)
@@ -99,11 +99,9 @@ rtolArg = narg $ implCQD "rtol_scipy" (nounPhrase
   "relative tolerance for ODE solution" "relative tolerances for ODE solution") 
   Nothing Real (Label "rtol") Nothing
 
-r, rt, ry :: CodeVarChunk
+r :: CodeVarChunk
 r = codevar $ implCQD "r_scipy" (nounPhrase "ODE object" "ODE objects") Nothing 
   odeT (Label "r") Nothing
-rt = ccObjVar r t
-ry = ccObjVar r y
 
 f, odefunc, setIntegrator, setInitVal, successful, 
   integrateStep :: CodeFuncChunk
@@ -250,7 +248,7 @@ apacheODE = externalLib [
             (map lockedParam [interpolator, isLast]) 
             [callStep $ libMethodWithResult siImp interpolator getInterpState 
               [] curr,
-            appendCurrSol curr]])],
+            appendCurrSol (sy curr)]])],
     callStep $ libMethod foiImp it integrate (customObjArg [apacheImport ++ 
       fode] "Class representing an ODE system" ode odeCtor (implementation fode 
         [constructorInfo odeCtor [] [],
@@ -405,7 +403,7 @@ odeint = externalLib [
           constructorInfo popCtor [unnamedParam (Vect Real)] [],
           methodInfoNoReturn popOp 
             "appends solution point for current ODE solution step"
-            [lockedParam y, lockedParam t] [appendCurrSol y]])]]
+            [lockedParam y, lockedParam t] [appendCurrSol (sy y)]])]]
 
 odeintCall :: ODEInfo -> ExternalLibraryCall
 odeintCall info = externalLibCall [

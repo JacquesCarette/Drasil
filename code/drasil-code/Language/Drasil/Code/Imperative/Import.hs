@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv, 
-  codevar, codevarC, quantvar, quantfunc)
+  codevar, codevarC, quantvar, quantfunc, ccObjVar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
   defType, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
@@ -242,6 +242,12 @@ convExpr (Message a m x ns) = do
   convCall m x ns 
     (\_ n t ps nas -> return (objMethodCallMixedArgs t o n ps nas)) 
     (\_ n t -> objMethodCallMixedArgs t o n)
+convExpr (Field o f) = do
+  g <- ask
+  let ob = quantvar (lookupC g o)
+      fld = quantvar (lookupC g f)
+  v <- mkVar (ccObjVar ob fld)
+  return $ valueOf v
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
   g <- ask

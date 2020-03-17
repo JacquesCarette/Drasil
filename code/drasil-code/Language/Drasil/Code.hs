@@ -37,6 +37,7 @@ module Language.Drasil.Code (
   PackageSym(..),
   CodeChunk, CodeVarChunk, CodeFuncChunk, codevar, codefunc, quantvar, 
   ccObjVar, CodeQuantityDict, implCQD,
+  field,
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), 
   ODELibPckg(..), mkODELib,
   unPP, unJP, unCSP, unCPPP
@@ -94,6 +95,8 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeFuncChunk, 
   codevar, codefunc, quantvar, ccObjVar)
 import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, implCQD)
+
+import Language.Drasil.CodeExpr (field)
 
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))

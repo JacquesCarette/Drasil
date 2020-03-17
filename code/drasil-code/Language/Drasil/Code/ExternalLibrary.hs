@@ -14,8 +14,8 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
 ) where
 
 import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName, 
-  ccObjVar)
+import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
+import Language.Drasil.CodeExpr (field)
 import Language.Drasil.Mod (FuncStmt(..))
 
 import Control.Lens ((^.))
@@ -173,7 +173,7 @@ methodInfoNoReturn :: CodeFuncChunk -> Description -> [Parameter] -> [Step] ->
 methodInfoNoReturn _ _ _ [] = error "methodInfoNoReturn should be called with a non-empty list of Step"
 methodInfoNoReturn m d ps ss = MI m d ps Nothing (fromList ss)
 
-appendCurrSol :: CodeVarChunk -> Step
+appendCurrSol :: Expr -> Step
 appendCurrSol curr = statementStep (\cdchs es -> case (cdchs, es) of
     ([s], []) -> appendCurrSolFS curr s
     (_,_) -> error "Fill for appendCurrSol should provide one CodeChunk and no Exprs")
@@ -183,7 +183,7 @@ populateSolList arr el fld = [statementStep (\cdchs es -> case (cdchs, es) of
     ([s], []) -> FDecDef s (Matrix [[]])
     (_,_) -> error popErr),
   statementStep (\cdchs es -> case (cdchs, es) of
-    ([s], []) -> FForEach el (sy arr) [appendCurrSolFS (ccObjVar el fld) s]
+    ([s], []) -> FForEach el (sy arr) [appendCurrSolFS (field el fld) s]
     (_,_) -> error popErr)]
   where popErr = "Fill for populateSolList should provide one CodeChunk and no Exprs"
 
@@ -194,7 +194,7 @@ assignArrayIndex = statementStep (\cdchs es -> case (cdchs, es) of
 
 assignSolFromObj :: CodeVarChunk -> Step
 assignSolFromObj o = statementStep (\cdchs es -> case (cdchs, es) of
-  ([s],[]) -> FAsg s (sy $ ccObjVar o s)
+  ([s],[]) -> FAsg s (field o s)
   (_,_) -> error "Fill for assignSolFromObj should provide one CodeChunk and no Exprs")
 
 initSolListFromArray :: CodeVarChunk -> Step
@@ -207,22 +207,23 @@ initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
   ([s],[v]) -> FDecDef s (Matrix [[v]])
   (_,_) -> error "Fill for initSolListWithVal should provide one CodeChunk and one Expr")
 
--- FunctionInterface for loop condition, CodeChunk for independent var,
--- FunctionInterface for solving, CodeChunk for soln array to populate with
-solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> FunctionInterface 
-  -> CodeVarChunk -> Step
-solveAndPopulateWhile lc iv slv popArr = loopStep [lc] (\case 
-  [ub] -> sy iv $< ub
+-- FunctionInterface for loop condition, CodeChunk for solution object, 
+-- CodeChunk for independent var, FunctionInterface for solving, 
+-- CodeChunk for soln array to populate with
+solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> CodeVarChunk -> 
+  FunctionInterface -> CodeVarChunk -> Step
+solveAndPopulateWhile lc ob iv slv popArr = loopStep [lc] (\case 
+  [ub] -> field ob iv $< ub
   _ -> error "Fill for solveAndPopulateWhile should provide one Expr") 
-  [callStep slv, appendCurrSol popArr]
+  [callStep slv, appendCurrSol (field ob popArr)]
 
 returnExprList :: Step
 returnExprList = statementStep (\cdchs es -> case (cdchs, es) of
   ([], _) -> FRet $ Matrix [es]
   (_,_) -> error "Fill for returnExprList should provide no CodeChunks")
 
-appendCurrSolFS :: CodeVarChunk -> CodeVarChunk -> FuncStmt
-appendCurrSolFS cs s = FAppend (sy s) (idx (sy cs) (int 0))
+appendCurrSolFS :: Expr -> CodeVarChunk -> FuncStmt
+appendCurrSolFS cs s = FAppend (sy s) (idx cs (int 0))
 
 fixedReturn :: Expr -> Step
 fixedReturn = lockedStatement . FRet

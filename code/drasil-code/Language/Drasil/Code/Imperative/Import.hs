@@ -448,13 +448,6 @@ convStmt (FAsgIndex v i e) = do
   let vi = arrayElem i v'
   l <- maybeLog vi
   return $ multi $ assign vi e' : l
-convStmt (FAsgObjVar o v e) = do
-  e' <- convExpr e
-  o' <- mkVar o
-  t <- codeType v
-  let ov = objVar o' (var (codeName v) (convType t))
-  l <- maybeLog ov
-  return $ multi $ assign ov e' : l
 convStmt (FFor v e st) = do
   stmts <- mapM convStmt st
   vari <- mkVar v

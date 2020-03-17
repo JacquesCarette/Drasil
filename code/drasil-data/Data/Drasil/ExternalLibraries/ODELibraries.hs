@@ -164,7 +164,7 @@ odeArgs :: [Argument]
 odeArgs = [inlineArg Real, lockedArg (sy initv),
   functionArg fOslo (map unnamedParam [Real, vecT]) 
     (callStep $ constructAndReturn osloImport vector []),
-  recordArg options opts [aTol, rTol]]
+  recordArg osloImport options opts [aTol, rTol]]
 
 solT, vecT, optT :: Space
 solT = Actor "IEnumerable<SolPoint>"

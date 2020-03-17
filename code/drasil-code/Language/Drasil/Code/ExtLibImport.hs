@@ -4,7 +4,8 @@ module Language.Drasil.Code.ExtLibImport (ExtLibState(..), auxMods, defs,
 
 import Language.Drasil
 
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
+import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName, 
+  ccObjVar)
 import Language.Drasil.CodeExpr (new, newWithNamedArgs, msgWithNamedArgs)
 import Language.Drasil.Mod (Class, StateVariable, Func(..), Mod, Name, 
   packmodRequires, classDef, classImplements, FuncStmt(..), funcDef, ctorDef)
@@ -55,7 +56,7 @@ addDef e c s = if n `elem` (s ^. defined) then s else over defs (++ [FDecDef c
 
 addFieldAsgs :: CodeVarChunk -> [CodeVarChunk] -> [Expr] -> ExtLibState -> 
   ExtLibState
-addFieldAsgs o cs es = over defs (++ zipWith (FAsgObjVar o) cs es)
+addFieldAsgs o cs es = over defs (++ zipWith FAsg (map (ccObjVar o) cs) es)
 
 addDefined :: String -> ExtLibState -> ExtLibState
 addDefined n = over defined (n:)
@@ -138,10 +139,10 @@ genArguments (Arg n (Class rs desc o ctor ci):as) (ClassF svs cif:afs) = do
   modify (addMod (packmodRequires an desc (rs ++ is) [c] []))
   fmap ((n, sy o):) (genArguments as afs)
   where an = getActorName (o ^. typ)
-genArguments (Arg n (Record rn r fs):as) (RecordF es:afs) = 
+genArguments (Arg n (Record (rq:|rqs) rn r fs):as) (RecordF es:afs) = 
   if length fs /= length es then error recordFieldsMismatch else do
-    modify (addDef (new rn []) r)
-    modify (addFieldAsgs r fs es)
+    modify (addDef (new rn []) r . addModExport (codeName rn, rq) . 
+      addFieldAsgs r fs es . addImports (rq:rqs))
     fmap ((n, sy r):) (genArguments as afs)
 genArguments [] [] = return []
 genArguments _ _ = error argumentMismatch

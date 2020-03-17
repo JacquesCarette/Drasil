@@ -35,7 +35,7 @@ data Step = Call FunctionInterface
   -- For when a statement is needed, but does not interface with the external library
   | Statement ([CodeVarChunk] -> [Expr] -> FuncStmt)
 
--- The first item in the requires list should where the function being called is defined
+-- The first item in the requires list should be where the function being called is defined
 data FunctionInterface = FI (NonEmpty Requires) FuncType CodeFuncChunk [Argument] (Maybe Result)
 
 data Result = Assign CodeVarChunk | Return 
@@ -50,8 +50,8 @@ data ArgumentInfo =
   | Fn CodeFuncChunk [Parameter] Step
   -- Requires, description, object, constructor, class info
   | Class [Requires] Description CodeVarChunk CodeFuncChunk ClassInfo
-  -- constructor, object, fields
-  | Record CodeFuncChunk CodeVarChunk [CodeVarChunk]
+  -- Requires, constructor, object, fields. First Require should be where the record type is defined.
+  | Record (NonEmpty Requires) CodeFuncChunk CodeVarChunk [CodeVarChunk]
 
 data Parameter = LockedParam CodeVarChunk | NameableParam Space
 
@@ -144,8 +144,9 @@ customObjArg :: [Requires] -> Description -> CodeVarChunk -> CodeFuncChunk ->
   ClassInfo -> Argument
 customObjArg rs d o c ci = Arg Nothing (Class rs d o c ci)
 
-recordArg :: CodeFuncChunk -> CodeVarChunk -> [CodeVarChunk] -> Argument
-recordArg c o fs = Arg Nothing (Record c o fs)
+recordArg :: Requires -> CodeFuncChunk -> CodeVarChunk -> [CodeVarChunk] -> 
+  Argument
+recordArg rq c o fs = Arg Nothing (Record (rq :| []) c o fs)
 
 lockedParam :: CodeVarChunk -> Parameter
 lockedParam = LockedParam

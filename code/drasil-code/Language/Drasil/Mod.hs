@@ -86,7 +86,6 @@ type Initializer = (CodeVarChunk, Expr)
 data FuncStmt where
   FAsg :: CodeVarChunk -> Expr -> FuncStmt
   FAsgIndex :: CodeVarChunk -> Integer -> Expr -> FuncStmt
-  FAsgObjVar :: CodeVarChunk -> CodeVarChunk -> Expr -> FuncStmt -- Object, field, value
   FFor :: CodeVarChunk -> Expr -> [FuncStmt] -> FuncStmt
   FForEach :: CodeVarChunk -> Expr -> [FuncStmt] -> FuncStmt
   FWhile :: Expr -> [FuncStmt] -> FuncStmt
@@ -125,7 +124,6 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     fstvars sm (FDecDef cch e) = cch:codevars' e sm
     fstvars sm (FAsg cch e) = cch:codevars' e sm
     fstvars sm (FAsgIndex cch _ e) = cch:codevars' e sm
-    fstvars sm (FAsgObjVar cch _ e) = cch:codevars' e sm
     fstvars sm (FFor cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
     fstvars sm (FForEach cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
     fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
@@ -143,7 +141,6 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     declared _  (FDecDef cch _) = [cch]
     declared _  (FAsg _ _) = []
     declared _  FAsgIndex {} = []
-    declared _  FAsgObjVar {} = []
     declared sm (FFor cch _ fs) = cch : concatMap (declared sm) fs
     declared sm (FForEach cch _ fs) = cch : concatMap (declared sm) fs
     declared sm (FWhile _ fs) = concatMap (declared sm) fs

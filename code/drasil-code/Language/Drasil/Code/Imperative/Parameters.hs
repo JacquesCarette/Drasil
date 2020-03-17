@@ -14,7 +14,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Structure(..),
   InputModule(..), ConstantStructure(..), ConstantRepr(..),
   constraintvars, getConstraints)
 
-import Data.List (nub, (\\))
+import Data.List (nub, (\\), delete)
 import Data.Map (member, notMember)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
@@ -71,8 +71,8 @@ getConstraintParams = do
 getCalcParams :: CodeDefinition -> Reader DrasilState [CodeVarChunk]
 getCalcParams c = do
   g <- ask
-  getParams In $ concatMap (`codevars'` (sysinfodb $ csi $ codeSpec g)) 
-    (codeEquat c : c ^. auxExprs)
+  getParams In $ delete (codevarC c) $ concatMap (`codevars'` (sysinfodb $ csi 
+    $ codeSpec g)) (codeEquat c : c ^. auxExprs)
 
 getOutputParams :: Reader DrasilState [CodeVarChunk]
 getOutputParams = do

@@ -134,12 +134,11 @@ genUnmodular :: (ProgramSym repr) =>
   Reader DrasilState (FS (repr (RenderFile repr)))
 genUnmodular = do
   g <- ask
-  let s = csi $ codeSpec g
-      n = pName $ csi $ codeSpec g
+  let n = pName $ csi $ codeSpec g
       cls = any (`member` clsMap g)
         ["get_input", "derived_values", "input_constraints"]
   genModule n ("Contains the entire " ++ n ++ " program")
-    (map (fmap Just) (genMainFunc : concatMap genModFuncs (mods s)) ++ 
+    (map (fmap Just) (genMainFunc : concatMap genModFuncs (modules g)) ++ 
     ((if cls then [] else [genInputFormat Primary, genInputDerived Primary, 
       genInputConstraints Primary]) ++ [genOutputFormat])) 
     [genInputClass Auxiliary, genConstClass Auxiliary]
@@ -148,12 +147,11 @@ genModules :: (ProgramSym repr) =>
   Reader DrasilState [FS (repr (RenderFile repr))]
 genModules = do
   g <- ask
-  let s = csi $ codeSpec g
   mn     <- genMain
   inp    <- chooseInModule $ inMod g
   con    <- genConstMod 
   out    <- genOutputMod
-  moddef <- traverse genModDef (mods s) -- hack ?
+  moddef <- traverse genModDef (modules g) -- hack ?
   return $ mn : inp ++ con ++ out ++ moddef
 
 -- private utilities used in generateCode

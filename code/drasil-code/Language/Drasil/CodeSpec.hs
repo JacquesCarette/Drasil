@@ -19,7 +19,7 @@ import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)
 import Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
-  Mod(..), Name, getFuncParams, packmod)
+  Mod(..), Name, getFuncParams)
 
 import GOOL.Drasil (CodeType)
 
@@ -98,9 +98,7 @@ codeSpec SI {_sys = sys
         execOrder = exOrder,
         cMap = constraintMap cs,
         constants = const',
-        mods = packmod "Calculations" 
-          "Provides functions for calculating the outputs" []
-          (map FCD exOrder) : ms,
+        mods = ms,
         sysinfodb = db,
         smplData = sd
       }

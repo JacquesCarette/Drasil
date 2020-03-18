@@ -568,7 +568,7 @@ call :: (RenderSym repr) => Doc -> Maybe Library -> Label ->
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   VS (repr (Value repr))
 call sep lib n t o pas nas = (\tp pargs nms nargs -> mkVal tp $ obDoc <> libDoc 
-  <> text n <> parens (valueList pargs <+> (if null pas || null nas then empty 
+  <> text n <> parens (valueList pargs <> (if null pas || null nas then empty 
   else comma) <+> hcat (intersperse (text ", ") (zipWith (\nm a -> 
   variableDoc nm <> sep <> valueDoc a) nms nargs)))) <$> t <*> sequence pas <*> 
   mapM fst nas <*> mapM snd nas

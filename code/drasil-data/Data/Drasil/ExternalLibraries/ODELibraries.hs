@@ -43,7 +43,7 @@ scipyODE = externalLib [
   choiceStep [
     setIntegratorMethod [vode, methodArg "adams", atol, rtol],
     setIntegratorMethod [vode, methodArg "bdf", atol, rtol],
-    setIntegratorMethod [lockedArg (str "dopri45"), atol, rtol]],
+    setIntegratorMethod [lockedArg (str "dopri5"), atol, rtol]],
   mandatorySteps [callStep $ libMethod scipyImport r 
       setInitVal [inlineArg Real, inlineArg Real],
     initSolListWithVal,

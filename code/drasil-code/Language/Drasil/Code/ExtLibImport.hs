@@ -108,7 +108,7 @@ genStep _ _ = error stepTypeMismatch
 genFIVal :: FunctionInterface -> FunctionIntFill -> State ExtLibState Expr
 genFIVal (FI (r:|rs) ft f as _) (FIF afs) = do
   args <- genArguments as afs
-  let isNamed = isJust . fst 
+  let isNamed = isJust . fst
       (nas, ars) = partition isNamed args
   modify (addImports rs . addModExport (codeName f, r))
   return $ getCallFunc ft f (map snd ars) (map (\(n, e) -> 

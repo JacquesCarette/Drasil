@@ -301,7 +301,7 @@ convCall c x ns f libf = do
   nms <- mapM (mkVar . quantvar . symbResolve info . fst) ns 
   nargs <- mapM (convExpr . snd) ns
   maybe (maybe (error $ "Call to non-existent function " ++ funcNm) 
-      (\m -> return $ libf m funcNm (convType funcTp) args (zip nms args)) 
+      (\m -> return $ libf m funcNm (convType funcTp) args (zip nms nargs)) 
       (Map.lookup funcNm lem))
     (\m -> f m funcNm (convType funcTp) args (zip nms nargs)) 
     (Map.lookup funcNm mem)

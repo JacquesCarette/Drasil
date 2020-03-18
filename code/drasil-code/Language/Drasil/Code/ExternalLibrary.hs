@@ -180,7 +180,7 @@ appendCurrSol curr = statementStep (\cdchs es -> case (cdchs, es) of
   
 populateSolList :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk -> [Step]
 populateSolList arr el fld = [statementStep (\cdchs es -> case (cdchs, es) of
-    ([s], []) -> FDecDef s (Matrix [[]])
+    ([s], []) -> FAsg s (Matrix [[]])
     (_,_) -> error popErr),
   statementStep (\cdchs es -> case (cdchs, es) of
     ([s], []) -> FForEach el (sy arr) [appendCurrSolFS (field el fld) s]

@@ -359,10 +359,12 @@ genCalcFunc cdef = do
   parms <- getCalcParams cdef
   let nm = codeName cdef
   tp <- codeType cdef
+  v <- mkVar (codevarC cdef)
   blck <- case cdef ^. defType 
             of Definition -> genCalcBlock CalcReturn cdef (codeEquat cdef)
-               ODE -> maybe (error $ nm ++ " missing from ExtLibMap") 
-                 (\el -> block <$> mapM convStmt (el ^. defs ++ el ^. steps))
+               ODE -> maybe (error $ nm ++ " missing from ExtLibMap") (\el -> 
+                   (\ss -> block (varDec v : ss ++ [returnState (valueOf v)])) 
+                   <$> mapM convStmt (el ^. defs ++ el ^. steps))
                  (Map.lookup nm (extLibMap g))
   desc <- returnComment $ cdef ^. uid
   publicFunc

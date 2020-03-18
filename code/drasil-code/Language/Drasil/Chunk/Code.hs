@@ -3,7 +3,8 @@ module Language.Drasil.Chunk.Code (
   CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), 
   VarOrFunc(..), obv, codevarC, codefuncC, codevar, codefunc, quantvar, 
   quantfunc, ccObjVar, codevars, codevars', funcResolve, varResolve, 
-  ConstraintMap, constraintMap, physLookup, sfwrLookup, programName, funcPrefix
+  listToArray, ConstraintMap, constraintMap, physLookup, sfwrLookup, 
+  programName, funcPrefix
 ) where
 
 import Control.Lens ((^.),makeLenses,view)
@@ -12,7 +13,7 @@ import Language.Drasil
 import Database.Drasil (ChunkDB, symbResolve)
 import Language.Drasil.Development (dep, names')
 
-import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, cqw)
+import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, cqd, cqw)
 import Language.Drasil.Printers (symbolDoc, toPlainName)
 
 import Data.List (nub)
@@ -118,6 +119,12 @@ varResolve  m x = quantvar $ symbResolve m x
 
 funcResolve :: ChunkDB -> UID -> CodeFuncChunk
 funcResolve m x = quantfunc $ symbResolve m x
+
+listToArray :: CodeVarChunk -> CodeVarChunk
+listToArray c = newSpc (c ^. typ) 
+  where newSpc (Vect t) = CodeVC (CodeC (cqd (c ^. uid ++ "_array") (c ^. term) (getA c) 
+          (Array t) (symbol c) (getUnit c)) Var) (c ^. obv)
+        newSpc _ = c
 
 type ConstraintMap = Map.Map UID [Constraint]
 

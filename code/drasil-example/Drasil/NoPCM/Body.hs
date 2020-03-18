@@ -9,8 +9,8 @@ import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
 
-import Language.Drasil.Code (quantvar, ODEInfo, odeInfo, ODEOptions, 
-  odeOptions, ODEMethod(..))
+import Language.Drasil.Code (quantvar, listToArray, ODEInfo, odeInfo, 
+  ODEOptions, odeOptions, ODEMethod(..))
 
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
@@ -104,7 +104,8 @@ symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ map qw specParamValList ++ 
   map qw [coilSAMax] ++ map qw [tauW] ++ map qw [absTol, relTol] ++ 
-  scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
+  scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++ 
+  [qw $ listToArray $ quantvar tempW]
 
 concepts :: [UnitaryConceptDict]
 concepts = map ucw [density, tau, inSA, outSA,
@@ -207,7 +208,7 @@ noPCMODEOpts = odeOptions RK45 (sy absTol) (sy relTol) (sy timeStep)
 noPCMODEInfo :: ODEInfo
 noPCMODEInfo = odeInfo (quantvar time) (quantvar tempW)
   [quantvar tauW, quantvar tempC] (dbl 0) (sy timeFinal) (sy tempInit) 
-  [1 / sy tauW * (sy tempC - sy tempW)] noPCMODEOpts
+  [1 / sy tauW * (sy tempC - idx (sy tempW) (int 0))] noPCMODEOpts
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

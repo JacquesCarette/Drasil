@@ -465,9 +465,13 @@ convStmt (FAsg v e) = do
 convStmt (FAsgIndex v i e) = do
   e' <- convExpr e
   v' <- mkVar v
-  let vi = arrayElem i v'
+  t <- codeType v
+  let asgFunc (C.List _) = valState $ listSet (valueOf v') (litInt i) e'
+      asgFunc (C.Array _) = assign (arrayElem i v') e'
+      asgFunc _ = error "FAsgIndex used with non-indexed value"
+      vi = arrayElem i v'
   l <- maybeLog vi
-  return $ multi $ assign vi e' : l
+  return $ multi $ asgFunc t : l
 convStmt (FFor v e st) = do
   stmts <- mapM convStmt st
   vari <- mkVar v

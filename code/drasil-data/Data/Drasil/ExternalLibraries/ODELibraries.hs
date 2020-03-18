@@ -23,10 +23,10 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   populateSolListFill, assignArrayIndexFill, assignSolFromObjFill, 
   initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill, 
   returnExprListFill, fixedStatementFill, CodeVarChunk, CodeFuncChunk, codevar, 
-  codefunc, implCQD, ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, 
-  mkODELib, pubStateVar, privStateVar, field)
+  codefunc, listToArray, implCQD, ODEInfo(..), ODEOptions(..), ODEMethod(..), 
+  ODELibPckg, mkODELib, pubStateVar, privStateVar, field)
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), _1, _2, over)
 
 -- SciPy -- 
 
@@ -149,7 +149,7 @@ osloCall info = externalLibCall [
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $ 
     libCallFill [basicArgFill $ tInit info, 
       functionArgFill (map unnamedParamFill [indepVar info, depVar info]) $ 
-        callStepFill $ libCallFill $ map userDefinedArgFill (odeSyst info), 
+        callStepFill $ libCallFill $ map userDefinedArgFill (arrayODESyst info),
       recordArgFill [absTol $ odeOpts info, relTol $ odeOpts info]],
   mandatoryStepsFill (callStepFill (libCallFill $ map basicArgFill 
       [tInit info, tFinal info, stepSize $ odeOpts info]) :
@@ -277,8 +277,8 @@ apacheODECall info = externalLibCall [
         constructorInfoFill (map userDefinedParamFill $ otherVars info) 
           (zip (otherVars info) (map sy $ otherVars info)) [], 
         methodInfoFill [] [fixedStatementFill], 
-        methodInfoFill (map unnamedParamFill [depVar info, ddep]) 
-          [assignArrayIndexFill ddep (odeSyst info)]]) 
+        methodInfoFill (map (unnamedParamFill . listToArray) [depVar info, ddep]) 
+          [assignArrayIndexFill (listToArray ddep) (arrayODESyst info)]]) 
       : map basicArgFill [tInit info, Matrix [[initVal info]], tFinal info, 
         Matrix [[initVal info]]],
     assignSolFromObjFill $ depVar info]]
@@ -518,3 +518,29 @@ diffCodeChunk :: CodeVarChunk -> CodeVarChunk
 diffCodeChunk c = codevar $ implCQD ("d" ++ c ^. uid) 
   (compoundPhrase (nounPhraseSP "change in") (c ^. term)) Nothing (c ^. typ)
   (Concat [Label "d", symbol c Implementation]) (getUnit c) 
+
+-- FIXME: This is surely a hack, but I can't think of a better way right now.
+-- Some libraries use an array instead of a list to internally represent the ODE
+-- So we need a way to switch the dependent variable from list to array,
+-- and the array version must have a distinct UID so it can be stored in the DB
+arrayODESyst :: ODEInfo -> [Expr]
+arrayODESyst info = map replaceDepVar (odeSyst info)
+  where replaceDepVar (C c) = if c == depVar info ^. uid then C (c ++ "_array")
+          else C c
+        replaceDepVar (AssocA a es) = AssocA a (map replaceDepVar es)
+        replaceDepVar (AssocB b es) = AssocB b (map replaceDepVar es)
+        replaceDepVar (Deriv dt e u) = Deriv dt (replaceDepVar e) u
+        replaceDepVar (FCall u es nes) = FCall u (map replaceDepVar es) 
+          (map (over _2 replaceDepVar) nes)
+        replaceDepVar (New u es nes) = New u (map replaceDepVar es) 
+          (map (over _2 replaceDepVar) nes)
+        replaceDepVar (Message au mu es nes) = Message au mu 
+          (map replaceDepVar es) (map (over _2 replaceDepVar) nes)
+        replaceDepVar (Case c cs) = Case c (map (over _1 replaceDepVar) cs)
+        replaceDepVar (Matrix es) = Matrix $ map (map replaceDepVar) es
+        replaceDepVar (UnaryOp u e) = UnaryOp u $ replaceDepVar e
+        replaceDepVar (BinaryOp b e1 e2) = BinaryOp b (replaceDepVar e1) 
+          (replaceDepVar e2)
+        replaceDepVar (Operator ao dd e) = Operator ao dd $ replaceDepVar e 
+        replaceDepVar (IsIn e s) = IsIn (replaceDepVar e) s
+        replaceDepVar e = e

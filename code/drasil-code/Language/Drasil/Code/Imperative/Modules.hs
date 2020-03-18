@@ -27,6 +27,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk,
   codevarC, codevar, physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
+import Language.Drasil.Chunk.Parameter (pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
@@ -214,7 +215,8 @@ genInputConstructor = do
         cdesc <- inputConstructorDesc
         cparams <- getInConstructorParams    
         ics <- getAllInputCalls
-        ctor <- genConstructor "InputParameters" cdesc cparams [block ics]
+        ctor <- genConstructor "InputParameters" cdesc (map pcAuto cparams)
+          [block ics]
         return $ Just ctor
   genCtor $ any (`elem` dl) ["get_input", "derived_values", 
     "input_constraints"]
@@ -258,7 +260,7 @@ genInputConstraints s = do
         sf <- sfwrCBody sfwrCs
         hw <- physCBody physCs
         desc <- inConsFuncDesc
-        mthd <- getFunc s "input_constraints" void desc parms 
+        mthd <- getFunc s "input_constraints" void desc (map pcAuto parms) 
           Nothing [block sf, block hw]
         return $ Just mthd
   genConstraints $ "input_constraints" `elem` defList g
@@ -437,7 +439,7 @@ genOutputFormat = do
                    printFileLn v_outfile v
                  ] ) (outputs $ csi $ codeSpec g)
         desc <- woFuncDesc
-        mthd <- publicFunc "write_output" void desc parms Nothing 
+        mthd <- publicFunc "write_output" void desc (map pcAuto parms) Nothing 
           [block $ [
           varDec var_outfile,
           openFileW var_outfile (litString "output.txt") ] ++

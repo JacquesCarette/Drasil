@@ -6,13 +6,13 @@ module Language.Drasil.Code.Imperative.Import (codeType,
   genModFuncs, readData, renderC
 ) where
 
-import Language.Drasil hiding (int, log, ln, exp,
+import Language.Drasil hiding (Ref, int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (paramComment, returnComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,
-  genModuleWithImports, mkParam, primaryClass)
+  genModuleWithImports, primaryClass)
 import Language.Drasil.Code.Imperative.Helpers (getUpperBound, liftS, lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
@@ -21,6 +21,7 @@ import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
   codevar, codevarC, quantvar, quantfunc, ccObjVar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
   defType, codeEquat)
+import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.ExtLibImport (defs, steps)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
@@ -132,13 +133,21 @@ mkVar v = do
           (var (codeName v) (convType t))
   toGOOLVar (v ^. obv)
 
+mkParam :: (ProgramSym repr) => ParameterChunk -> 
+  Reader DrasilState (MS (repr (Parameter repr)))
+mkParam p = do
+  v <- mkVar (codevarC p)
+  return $ paramFunc (passBy p) v
+  where paramFunc Ref = pointerParam
+        paramFunc Val = param
+
 publicFunc :: (ProgramSym repr) => Label -> VS (repr (Type repr)) -> String -> 
-  [CodeVarChunk] -> Maybe String -> [MS (repr (Block repr))] -> 
+  [ParameterChunk] -> Maybe String -> [MS (repr (Block repr))] -> 
   Reader DrasilState (MS (repr (Method repr)))
 publicFunc n t = genMethod (function n public static t) n
 
 privateMethod :: (ProgramSym repr) => Label -> VS (repr (Type repr)) -> String 
-  -> [CodeVarChunk] -> Maybe String -> [MS (repr (Block repr))] -> 
+  -> [ParameterChunk] -> Maybe String -> [MS (repr (Block repr))] -> 
   Reader DrasilState (MS (repr (Method repr)))
 privateMethod n t = genMethod (method n private dynamic t) n
 
@@ -153,26 +162,26 @@ privateInOutMethod :: (ProgramSym repr) => Label -> String -> [CodeVarChunk] ->
 privateInOutMethod n = genInOutFunc (inOutMethod n) (docInOutMethod n) 
   private dynamic n
 
-genConstructor :: (ProgramSym repr) => Label -> String -> [CodeVarChunk] -> 
+genConstructor :: (ProgramSym repr) => Label -> String -> [ParameterChunk] -> 
   [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
 genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
 
-genInitConstructor :: (ProgramSym repr) => Label -> String -> [CodeVarChunk] -> 
-  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+genInitConstructor :: (ProgramSym repr) => Label -> String -> [ParameterChunk] 
+  -> [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p 
   Nothing
 
 genMethod :: (ProgramSym repr) => ([MS (repr (Parameter repr))] -> 
   MS (repr (Body repr)) -> MS (repr (Method repr))) -> Label -> String -> 
-  [CodeVarChunk] -> Maybe String -> [MS (repr (Block repr))] -> 
+  [ParameterChunk] -> Maybe String -> [MS (repr (Block repr))] -> 
   Reader DrasilState (MS (repr (Method repr)))
 genMethod f n desc p r b = do
   g <- ask
-  vars <- mapM mkVar p
+  vars <- mapM (mkVar . codevarC) p
+  ps <- mapM mkParam p
   bod <- logBody n vars b
-  let ps = map mkParam vars
-      fn = f ps bod
+  let fn = f ps bod
   pComms <- mapM (paramComment . (^. uid)) p
   return $ if CommentFunc `elem` commented g
     then docFunc desc pComms r fn else fn
@@ -371,7 +380,7 @@ genCalcFunc cdef = do
     nm
     (convType tp)
     ("Calculates " ++ desc)
-    parms
+    (map pcAuto parms)
     (Just desc)
     [blck]
 
@@ -430,7 +439,7 @@ genFunc svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- ask
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s 
-    \\ (parms ++ map stVar svs))
+    \\ (map codevarC parms ++ map stVar svs))
   publicFunc n (convType $ spaceMatches g o) desc parms rd 
     [block $ map varDec vars ++ stmts]
 genFunc svs (FDef (CtorDef n desc parms i s)) = do
@@ -440,7 +449,7 @@ genFunc svs (FDef (CtorDef n desc parms i s)) = do
     . fst) i
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s 
-    \\ (parms ++ map stVar svs))
+    \\ (map codevarC parms ++ map stVar svs))
   genInitConstructor n desc parms (zip initvars inits) 
     [block $ map varDec vars ++ stmts]
 genFunc _ (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
@@ -542,7 +551,8 @@ genDataFunc :: (ProgramSym repr) => Name -> String -> DataDesc ->
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readData ddef
-  publicFunc nameTitle void desc (codevar inFileName : parms) Nothing bod
+  publicFunc nameTitle void desc (map pcAuto $ codevar inFileName : parms) 
+    Nothing bod
 
 -- this is really ugly!!
 readData :: (ProgramSym repr) => DataDesc -> Reader DrasilState

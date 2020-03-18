@@ -1,6 +1,6 @@
 module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
   genModuleWithImports, genModule, genDoxConfig, primaryClass, auxClass, fApp, 
-  ctorCall, fAppInOut, mkParam
+  ctorCall, fAppInOut
 ) where
 
 import Language.Drasil
@@ -11,10 +11,9 @@ import Language.Drasil.Mod (Name)
   
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  CodeType(..), GOOLState, FS, CS, MS, VS, lensMStoVS)
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), GOOLState, FS, 
+  CS, MS, VS)
 
-import Control.Lens.Zoom (zoom)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Monad.Reader (Reader, ask, withReader)
@@ -106,11 +105,3 @@ fAppInOut m n ins outs both = do
   return $ if m /= cm then extInOutCall m n ins outs both else if Map.lookup n
     (eMap g) == Just cm then inOutCall n ins outs both else 
     selfInOutCall n ins outs both
-
-mkParam :: (ProgramSym repr) => VS (repr (Variable repr)) -> 
-  MS (repr (Parameter repr))
-mkParam v = zoom lensMStoVS v >>= (\v' -> paramFunc (getType $ variableType v') 
-  v)
-  where paramFunc (List _) = pointerParam
-        paramFunc (Object _) = pointerParam
-        paramFunc _ = param

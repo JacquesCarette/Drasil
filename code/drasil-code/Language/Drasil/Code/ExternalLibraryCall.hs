@@ -4,16 +4,17 @@ module Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..), externalLibCall, 
   choiceStepsFill, choiceStepFill, mandatoryStepFill, mandatoryStepsFill, 
   callStepFill, libCallFill, userDefinedArgFill, basicArgFill, functionArgFill, 
-  customObjArgFill, recordArgFill, unnamedParamFill, userDefinedParamFill, 
-  customClassFill, implementationFill, constructorInfoFill, methodInfoFill, 
-  appendCurrSolFill, populateSolListFill, assignArrayIndexFill, 
-  assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill, 
-  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill
+  customObjArgFill, recordArgFill, unnamedParamFill, unnamedParamPBVFill, 
+  userDefinedParamFill, customClassFill, implementationFill, 
+  constructorInfoFill, methodInfoFill, appendCurrSolFill, populateSolListFill, 
+  assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
+  initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill
 ) where
 
 import Language.Drasil
 
 import Language.Drasil.Chunk.Code (CodeVarChunk)
+import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto, pcVal)
 import Language.Drasil.Mod (Initializer, StateVariable)
 
 import Data.List.NonEmpty (NonEmpty(..), fromList)
@@ -39,7 +40,7 @@ data ArgumentFill = UserDefinedArgF (Maybe NamedArgument) Expr -- For arguments 
   | ClassF [StateVariable] ClassInfoFill -- List of CodeChunk for state variables
   | RecordF [Expr] -- Fills in the field values
 
-data ParameterFill = NameableParamF CodeVarChunk | UserDefined CodeVarChunk
+data ParameterFill = NameableParamF ParameterChunk | UserDefined ParameterChunk
 
 data ClassInfoFill = RegularF [MethodInfoFill] | ImplementsF [MethodInfoFill]
 
@@ -88,10 +89,13 @@ recordArgFill :: [Expr] -> ArgumentFill
 recordArgFill = RecordF
 
 unnamedParamFill :: CodeVarChunk -> ParameterFill
-unnamedParamFill = NameableParamF
+unnamedParamFill = NameableParamF . pcAuto
+
+unnamedParamPBVFill :: CodeVarChunk -> ParameterFill
+unnamedParamPBVFill = NameableParamF . pcVal
 
 userDefinedParamFill :: CodeVarChunk -> ParameterFill
-userDefinedParamFill = UserDefined
+userDefinedParamFill = UserDefined . pcAuto
 
 customClassFill :: [MethodInfoFill] -> ClassInfoFill
 customClassFill = RegularF

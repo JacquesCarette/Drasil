@@ -18,13 +18,14 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill, 
   mandatoryStepFill, mandatoryStepsFill, callStepFill, libCallFill, 
   userDefinedArgFill, basicArgFill, functionArgFill, customObjArgFill, 
-  recordArgFill, unnamedParamFill, userDefinedParamFill, customClassFill, 
-  implementationFill, constructorInfoFill, methodInfoFill, appendCurrSolFill, 
-  populateSolListFill, assignArrayIndexFill, assignSolFromObjFill, 
-  initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill, 
-  returnExprListFill, fixedStatementFill, CodeVarChunk, CodeFuncChunk, codevar, 
-  codefunc, listToArray, implCQD, ODEInfo(..), ODEOptions(..), ODEMethod(..), 
-  ODELibPckg, mkODELib, pubStateVar, privStateVar, field)
+  recordArgFill, unnamedParamFill, unnamedParamPBVFill, userDefinedParamFill, 
+  customClassFill, implementationFill, constructorInfoFill, methodInfoFill, 
+  appendCurrSolFill, populateSolListFill, assignArrayIndexFill, 
+  assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill, 
+  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill, 
+  CodeVarChunk, CodeFuncChunk, codevar, codefunc, listToArray, implCQD, 
+  ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib, 
+  pubStateVar, privStateVar, field)
 
 import Control.Lens ((^.), _1, _2, over)
 
@@ -412,7 +413,7 @@ odeintCall info = externalLibCall [
     customObjArgFill (map privStateVar $ otherVars info) (customClassFill [
       constructorInfoFill (map userDefinedParamFill $ otherVars info) 
         (zip (otherVars info) (map sy $ otherVars info)) [], 
-      methodInfoFill (map unnamedParamFill [depVar info, ddep]) 
+      methodInfoFill [unnamedParamPBVFill $ depVar info, unnamedParamFill ddep]
         [assignArrayIndexFill ddep (odeSyst info)]]) :
     map basicArgFill [Matrix [[initVal info]], tInit info, tFinal info, 
       stepSize $ odeOpts info] ++ [

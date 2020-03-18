@@ -15,6 +15,7 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
 
 import Language.Drasil
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
+import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.CodeExpr (field)
 import Language.Drasil.Mod (FuncStmt(..))
 
@@ -53,7 +54,7 @@ data ArgumentInfo =
   -- Requires, constructor, object, fields. First Require should be where the record type is defined.
   | Record (NonEmpty Requires) CodeFuncChunk CodeVarChunk [CodeVarChunk]
 
-data Parameter = LockedParam CodeVarChunk | NameableParam Space
+data Parameter = LockedParam ParameterChunk | NameableParam Space
 
 data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
 
@@ -149,7 +150,7 @@ recordArg :: Requires -> CodeFuncChunk -> CodeVarChunk -> [CodeVarChunk] ->
 recordArg rq c o fs = Arg Nothing (Record (rq :| []) c o fs)
 
 lockedParam :: CodeVarChunk -> Parameter
-lockedParam = LockedParam
+lockedParam = LockedParam . pcAuto
 
 unnamedParam :: Space -> Parameter
 unnamedParam = NameableParam

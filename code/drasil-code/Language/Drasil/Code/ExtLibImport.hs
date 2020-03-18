@@ -6,9 +6,11 @@ import Language.Drasil
 
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName, 
   ccObjVar)
+import Language.Drasil.Chunk.Parameter (ParameterChunk)
 import Language.Drasil.CodeExpr (new, newWithNamedArgs, msgWithNamedArgs)
 import Language.Drasil.Mod (Class, StateVariable, Func(..), Mod, Name, 
-  packmodRequires, classDef, classImplements, FuncStmt(..), funcDef, ctorDef)
+  packmodRequires, classDef, classImplements, FuncStmt(..), funcDefParams, 
+  ctorDef)
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..), 
   FunctionInterface(..), Result(..), Argument(..), ArgumentInfo(..), 
   Parameter(..), ClassInfo(..), MethodInfo(..), FuncType(..))
@@ -173,11 +175,11 @@ genMethodInfo o c (CI desc ps ss) (CIF pfs is sfs) = do
 genMethodInfo _ _ (MI m desc ps rDesc ss) (MIF pfs sfs) = do
   let prms = genParameters ps pfs
   (fs, newS) <- withLocalState (zipWithM genStep (toList ss) (toList sfs))
-  return (funcDef (codeName m) desc prms (m ^. typ) rDesc (newS ^. defs ++ fs),
-    newS ^. imports)
+  return (funcDefParams (codeName m) desc prms (m ^. typ) rDesc (
+    newS ^. defs ++ fs), newS ^. imports)
 genMethodInfo _ _ _ _ = error methodInfoMismatch
 
-genParameters :: [Parameter] -> [ParameterFill] -> [CodeVarChunk]
+genParameters :: [Parameter] -> [ParameterFill] -> [ParameterChunk]
 genParameters (LockedParam c:ps) pfs = c : genParameters ps pfs
 genParameters ps (UserDefined c:pfs) = c : genParameters ps pfs
 genParameters (NameableParam _:ps) (NameableParamF c:pfs) = c : 

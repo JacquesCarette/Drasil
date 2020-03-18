@@ -2,8 +2,8 @@
 module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..), 
   FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name, ($:=), 
   pubStateVar, privStateVar, classDef, classImplements, ctorDef, ffor, fdec, 
-  fname, fstdecl, funcData, funcDef, funcQD, getFuncParams, packmod, 
-  packmodRequires
+  fname, fstdecl, funcData, funcDef, funcDefParams, funcQD, getFuncParams, 
+  packmod, packmodRequires
 ) where
 
 import Language.Drasil
@@ -11,8 +11,9 @@ import Database.Drasil (ChunkDB)
 import GOOL.Drasil (ScopeTag(..))
 
 import Language.Drasil.Chunk.Code (CodeIdea(..), CodeVarChunk, codeName, 
-  codevars, codevars', quantvar)
+  codevarC, codevars, codevars', quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtoc)
+import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 import Language.Drasil.Printers (toPlainName)
 
@@ -65,9 +66,14 @@ funcData n desc d = FData $ FuncData (toPlainName n) desc d
 funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> 
   Space -> Maybe String -> [FuncStmt] -> Func
 funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc 
-  (map quantvar i) t returnDesc fs 
+  (map (pcAuto . quantvar) i) t returnDesc fs 
 
-ctorDef :: Name -> String -> [CodeVarChunk] -> [Initializer] -> 
+funcDefParams :: Name -> String -> [ParameterChunk] -> Space -> Maybe String -> 
+  [FuncStmt] -> Func
+funcDefParams s desc ps t returnDesc fs = FDef $ FuncDef (toPlainName s) desc 
+  ps t returnDesc fs
+
+ctorDef :: Name -> String -> [ParameterChunk] -> [Initializer] -> 
   [FuncStmt] -> Func
 ctorDef n desc ps is fs = FDef $ CtorDef n desc ps is fs
 
@@ -76,10 +82,10 @@ data FuncData where
   
 data FuncDef where
   -- Name, description, parameters, return type, return description, statements
-  FuncDef :: Name -> String -> [CodeVarChunk] -> Space -> Maybe String -> 
+  FuncDef :: Name -> String -> [ParameterChunk] -> Space -> Maybe String -> 
     [FuncStmt] -> FuncDef
-  CtorDef :: Name -> String -> [CodeVarChunk] -> [Initializer] -> [FuncStmt] -> 
-    FuncDef
+  CtorDef :: Name -> String -> [ParameterChunk] -> [Initializer] -> [FuncStmt] 
+    -> FuncDef
 
 type Initializer = (CodeVarChunk, Expr)
  
@@ -111,8 +117,8 @@ fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
 fdec v  = FDec (quantvar v)
 
 getFuncParams :: Func -> [CodeVarChunk]
-getFuncParams (FDef (FuncDef _ _ ps _ _ _)) = ps
-getFuncParams (FDef (CtorDef _ _ ps _ _)) = ps
+getFuncParams (FDef (FuncDef _ _ ps _ _ _)) = map codevarC ps
+getFuncParams (FDef (CtorDef _ _ ps _ _)) = map codevarC ps
 getFuncParams (FData (FuncData _ _ d)) = getInputs d
 getFuncParams (FCD _) = []
 

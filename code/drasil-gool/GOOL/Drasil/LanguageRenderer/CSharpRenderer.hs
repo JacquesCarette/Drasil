@@ -39,8 +39,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   greaterOp, greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, 
   divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, 
   classVar, objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, 
-  litFalse, litChar, litDouble, litFloat, litInt, litString, valueOf, arg, 
-  enumElement, argsList, inlineIf, objAccess, objMethodCall, 
+  litFalse, litChar, litDouble, litFloat, litInt, litString, litList, valueOf, 
+  arg, enumElement, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, call, funcApp, 
   selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
   listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
@@ -330,6 +330,8 @@ instance ValueSym CSharpCode where
   litFloat = G.litFloat
   litInt = G.litInt
   litString = G.litString
+  litArray = G.litList arrayType
+  litList = G.litList listType
 
   pi = G.pi
 

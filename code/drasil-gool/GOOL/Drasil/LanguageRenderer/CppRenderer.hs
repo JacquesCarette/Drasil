@@ -42,7 +42,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
   moduloOp, powerOp, andOp, orOp, var, staticVar, self, enumVar, objVar, 
   listVar, listOf, arrayElem, litTrue, litFalse, litChar, litDouble, litFloat, 
-  litInt, litString, valueOf, arg, argsList, inlineIf, objAccess, 
+  litInt, litString, litArray, valueOf, arg, argsList, inlineIf, objAccess, 
   objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, call', 
   funcApp, selfFuncApp, newObj, lambda, func, get, set, listSize, listAdd, 
   listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
@@ -391,6 +391,8 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   litFloat v = on2StateValues pair (litFloat v) (litFloat v)
   litInt v =on2StateValues  pair (litInt v) (litInt v)
   litString s = on2StateValues pair (litString s) (litString s)
+  litArray = pair1Val1List litArray litArray
+  litList = pair1Val1List litList litList
 
   pi = on2StateValues pair pi pi
 
@@ -1332,6 +1334,8 @@ instance ValueSym CppSrcCode where
   litFloat = G.litFloat
   litInt = G.litInt
   litString = G.litString
+  litArray = G.litArray
+  litList _ _ = error $ "List literals not supported in " ++ cppName
 
   pi = modify (addDefine "_USE_MATH_DEFINES") >> addMathHImport (mkStateVal 
     double (text "M_PI"))
@@ -1988,6 +1992,8 @@ instance ValueSym CppHdrCode where
   litFloat = G.litFloat
   litInt = G.litInt
   litString = G.litString
+  litArray = G.litArray
+  litList _ _ = error $ "List literals not supported in " ++ cppName
 
   pi = modify (addHeaderDefine "_USE_MATH_DEFINES" . addHeaderLangImport 
     "math.h") >> mkStateVal double (text "M_PI")

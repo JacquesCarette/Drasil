@@ -140,6 +140,8 @@ instance ValueSym CodeInfo where
   litFloat _ = noInfo
   litInt _ = noInfo
   litString _ = noInfo
+  litArray _ = executeList
+  litList _ = executeList
 
   pi = noInfo
 

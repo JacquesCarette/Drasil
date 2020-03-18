@@ -235,9 +235,9 @@ class (TypeSym repr) => VariableSym repr where
   enumVar      :: Label -> Label -> VS (repr (Variable repr))
   listVar      :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
   listOf       :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
-  -- Use for iterator variables, i.e. in a forEach loop.
   arrayElem    :: Integer -> VS (repr (Variable repr)) -> 
     VS (repr (Variable repr))
+  -- Use for iterator variables, i.e. in a forEach loop.
   iterVar      :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
 
   ($->) :: VS (repr (Variable repr)) -> VS (repr (Variable repr)) -> VS (repr (Variable repr))
@@ -261,6 +261,10 @@ class (VariableSym repr) => ValueSym repr where
   litFloat  :: Float -> VS (repr (Value repr))
   litInt    :: Integer -> VS (repr (Value repr))
   litString :: String -> VS (repr (Value repr))
+  litArray  :: VS (repr (Type repr)) -> [VS (repr (Value repr))] ->
+    VS (repr (Value repr))
+  litList   :: VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
+    VS (repr (Value repr))
 
   pi :: VS (repr (Value repr))
 

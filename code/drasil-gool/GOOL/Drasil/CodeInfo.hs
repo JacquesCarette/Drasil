@@ -211,7 +211,9 @@ instance ValueExpression CodeInfo where
   extFuncAppMixedArgs l n _ vs ns = do
     sequence_ vs
     executePairList ns
-    addExternalCall l n
+    addExternalCall l n  
+  libFuncApp = extFuncApp
+  libFuncAppMixedArgs = extFuncAppMixedArgs
   newObj ot vs = do
     sequence_ vs
     addCurrModConstructorCall ot
@@ -226,6 +228,8 @@ instance ValueExpression CodeInfo where
     sequence_ vs
     executePairList ns
     addExternalConstructorCall l ot
+  libNewObj = extNewObj
+  libNewObjMixedArgs = extNewObjMixedArgs
 
   lambda _ = execute1
 

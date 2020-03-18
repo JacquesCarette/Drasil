@@ -42,9 +42,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   litFalse, litChar, litDouble, litFloat, litInt, litString, litList, valueOf, 
   arg, enumElement, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, call, funcApp, 
-  selfFuncApp, extFuncApp, newObj, lambda, notNull, func, get, set, listSize, 
-  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
-  setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
+  funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, extFuncApp, 
+  extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
+  newObjMixedArgs, libNewObj, libNewObjMixedArgs, lambda, notNull, func, get, 
+  set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
+  getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
   listAccessFunc, listSetFunc, printSt, state, loopState, emptyState, assign, 
   assignToListIndex, multiAssignError, decrement, increment, decrement1, 
   increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, 
@@ -388,17 +390,21 @@ instance BooleanExpression CSharpCode where
   
 instance ValueExpression CSharpCode where
   inlineIf = G.inlineIf
-  funcApp n t vs = G.funcApp n t vs []
-  funcAppNamedArgs n t = G.funcApp n t []
-  funcAppMixedArgs = G.funcApp
-  selfFuncApp n t vs = selfFuncAppMixedArgs n t vs []
-  selfFuncAppMixedArgs = G.selfFuncApp dot self
-  extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
-  extFuncAppMixedArgs = G.extFuncApp
-  newObj t vs = newObjMixedArgs t vs []
-  newObjMixedArgs = G.newObj "new "
+  funcApp = G.funcApp
+  funcAppNamedArgs n t = funcAppMixedArgs n t []
+  funcAppMixedArgs = G.funcAppMixedArgs
+  selfFuncApp = G.selfFuncApp
+  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
+  extFuncApp = G.extFuncApp
+  extFuncAppMixedArgs = G.extFuncAppMixedArgs
+  libFuncApp = G.libFuncApp
+  libFuncAppMixedArgs = G.libFuncAppMixedArgs
+  newObj = G.newObj
+  newObjMixedArgs = G.newObjMixedArgs "new "
   extNewObj _ = newObj
   extNewObjMixedArgs _ = newObjMixedArgs
+  libNewObj = G.libNewObj
+  libNewObjMixedArgs = G.libNewObjMixedArgs
 
   lambda = G.lambda csLambda
 

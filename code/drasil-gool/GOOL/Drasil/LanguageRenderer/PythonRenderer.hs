@@ -39,16 +39,18 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litDouble, 
   litInt, litString, valueOf, arg, enumElement, argsList, objAccess, 
   objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
-  call, funcApp, selfFuncApp, extFuncApp, newObj, extNewObj, lambda, func, 
-  get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
-  getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
-  listAccessFunc, listSetFunc, state, loopState, emptyState, assign, 
-  assignToListIndex, decrement, increment', increment1', decrement1, 
-  listDecDef', objDecNew, objDecNewNoParams, closeFile, discardFileLine, 
-  stringListVals, stringListLists, returnState, valState, comment, throw, 
-  initState, changeState, initObserverList, addObserver, ifCond, ifNoElse, 
-  switchAsIf, ifExists, tryCatch, checkState, construct, param, method, 
-  getMethod, setMethod, privMethod, pubMethod, constructor, function, docFunc, 
+  call, funcApp, funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, 
+  extFuncApp, extFuncAppMixedArgs, libFuncApp, newObj, newObjMixedArgs, 
+  extNewObj, extNewObjMixedArgs, libNewObj, lambda, func, get, set, listAdd, 
+  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
+  listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
+  listSetFunc, state, loopState, emptyState, assign, assignToListIndex, 
+  decrement, increment', increment1', decrement1, listDecDef', objDecNew, 
+  objDecNewNoParams, closeFile, discardFileLine, stringListVals, 
+  stringListLists, returnState, valState, comment, throw, initState, 
+  changeState, initObserverList, addObserver, ifCond, ifNoElse, switchAsIf, 
+  ifExists, tryCatch, checkState, construct, param, method, getMethod, 
+  setMethod, privMethod, pubMethod, constructor, function, docFunc, 
   stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
   implementingClass, docClass, commentedClass, intClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
@@ -63,9 +65,9 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
-  addLangImportVS, getLangImports, addLibImport, getLibImports, addModuleImport,
-  addModuleImportVS, getModuleImports, setFileType, setClassName, getClassName, 
-  setCurrMain, getClassMap, setMainDoc, getMainDoc)
+  addLangImportVS, getLangImports, addLibImport, addLibImportVS, getLibImports, 
+  addModuleImport, addModuleImportVS, getModuleImports, setFileType, 
+  setClassName, getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -384,19 +386,25 @@ instance BooleanExpression PythonCode where
 
 instance ValueExpression PythonCode where
   inlineIf = pyInlineIf
-  funcApp n t ps = funcAppMixedArgs n t ps []
+  funcApp = G.funcApp
   funcAppNamedArgs n t = funcAppMixedArgs n t []
-  funcAppMixedArgs = G.funcApp
-  selfFuncApp n t ps = selfFuncAppMixedArgs n t ps []
-  selfFuncAppMixedArgs = G.selfFuncApp dot self
-  extFuncApp l n t ps = extFuncAppMixedArgs l n t ps []
+  funcAppMixedArgs = G.funcAppMixedArgs
+  selfFuncApp = G.selfFuncApp
+  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
+  extFuncApp = G.extFuncApp
   extFuncAppMixedArgs l n t ps ns = modify (addModuleImportVS l) >> 
-    G.extFuncApp l n t ps ns
-  newObj t ps = newObjMixedArgs t ps []
-  newObjMixedArgs = G.newObj ""
-  extNewObj l tp ps = extNewObjMixedArgs l tp ps []
-  extNewObjMixedArgs l tp ps ns = modify (addModuleImportVS l) >> G.extNewObj 
-    "" l tp ps ns
+    G.extFuncAppMixedArgs l n t ps ns
+  libFuncApp = G.libFuncApp
+  libFuncAppMixedArgs l n t ps ns = modify (addLibImportVS l) >> 
+    G.extFuncAppMixedArgs l n t ps ns
+  newObj = G.newObj
+  newObjMixedArgs = G.newObjMixedArgs ""
+  extNewObj = G.extNewObj
+  extNewObjMixedArgs l tp ps ns = modify (addModuleImportVS l) >> 
+    G.extNewObjMixedArgs l tp ps ns
+  libNewObj = G.libNewObj
+  libNewObjMixedArgs l tp ps ns = modify (addLibImportVS l) >> 
+    G.extNewObjMixedArgs l tp ps ns
 
   lambda = G.lambda pyLambda
 

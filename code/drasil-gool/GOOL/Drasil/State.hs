@@ -8,8 +8,8 @@ module GOOL.Drasil.State (
   modifyReturnFunc2, modifyReturnList, addODEFilePaths, addFile, 
   addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
   addODEFiles, getODEFiles, addLangImport, addLangImportVS, addExceptionImports,
-  getLangImports, addLibImport, addLibImports, getLibImports, addModuleImport, 
-  addModuleImportVS, getModuleImports, addHeaderLangImport, 
+  getLangImports, addLibImport, addLibImportVS, addLibImports, getLibImports, 
+  addModuleImport, addModuleImportVS, getModuleImports, addHeaderLangImport, 
   getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, 
   addHeaderModImport, getHeaderModImports, addDefine, getDefines, 
   addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
@@ -379,6 +379,12 @@ addLibImport :: String -> (((GOOLState, FileState), ClassState), MethodState)
   -> (((GOOLState, FileState), ClassState), MethodState)
 addLibImport i = over _1 $ over _1 $ over _2 $ over libImports (\is -> 
   if i `elem` is then is else sort $ i:is)
+
+addLibImportVS :: String -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
+  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
+addLibImportVS i = over _1 $ over _1 $ over _1 $ over _2 $ over libImports 
+  (\is -> if i `elem` is then is else sort $ i:is)
 
 addLibImports :: [String] -> (((GOOLState, FileState), ClassState), MethodState)
   -> (((GOOLState, FileState), ClassState), MethodState)

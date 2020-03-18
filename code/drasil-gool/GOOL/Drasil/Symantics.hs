@@ -383,6 +383,12 @@ class (ValueSym repr, BooleanExpression repr) =>
     [VS (repr (Value repr))] -> 
     [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
     VS (repr (Value repr))
+  libFuncApp :: Library -> Label -> VS (repr (Type repr)) -> 
+    [VS (repr (Value repr))] -> VS (repr (Value repr))
+  libFuncAppMixedArgs :: Library -> Label -> VS (repr (Type repr)) -> 
+    [VS (repr (Value repr))] -> 
+    [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+    VS (repr (Value repr))
   newObj     :: VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
     VS (repr (Value repr))
   newObjMixedArgs ::  VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
@@ -391,6 +397,12 @@ class (ValueSym repr, BooleanExpression repr) =>
   extNewObj  :: Library -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
     VS (repr (Value repr))
   extNewObjMixedArgs :: Library -> VS (repr (Type repr)) -> 
+    [VS (repr (Value repr))] -> 
+    [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+    VS (repr (Value repr))
+  libNewObj :: Library -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
+    VS (repr (Value repr))
+  libNewObjMixedArgs :: Library -> VS (repr (Type repr)) -> 
     [VS (repr (Value repr))] -> 
     [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
     VS (repr (Value repr))

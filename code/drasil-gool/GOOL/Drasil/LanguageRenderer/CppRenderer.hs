@@ -1517,7 +1517,7 @@ instance StatementSym CppSrcCode where
   (&++) = G.increment1
   (&~-) = G.decrement1
 
-  varDec = G.varDec static dynamic
+  varDec = G.varDec static dynamic empty
   varDecDef = G.varDecDef 
   listDec n = G.listDec cppListDecDoc (litInt n)
   listDecDef = G.listDecDef cppListDecDefDoc
@@ -2176,7 +2176,7 @@ instance StatementSym CppHdrCode where
   (&++) _ = emptyState
   (&~-) _ = emptyState
 
-  varDec = G.varDec static dynamic
+  varDec = G.varDec static dynamic empty
   varDecDef = G.varDecDef
   listDec _ _ = emptyState
   listDecDef _ _ = emptyState
@@ -2335,7 +2335,8 @@ instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar s p v = on2StateValues (\dec -> on3CodeValues svd (onCodeValue snd s)
     (toCode $ stateVarDocD empty (permDoc p) (statementDoc dec)))
-    (zoom lensCStoMS $ state $ varDec v) (zoom lensCStoMS emptyState)
+    (zoom lensCStoMS $ state $ G.varDec static dynamic (text "&") v) 
+    (zoom lensCStoMS emptyState)
   stateVarDef _ s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
     (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyState)
   constVar _ s vr _ = on2StateValues (\v -> on3CodeValues svd (onCodeValue snd 

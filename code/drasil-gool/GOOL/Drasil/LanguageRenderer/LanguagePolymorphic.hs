@@ -840,11 +840,14 @@ decrement1 :: (RenderSym repr) => VS (repr (Variable repr)) ->
 decrement1 v = v &= (S.valueOf v #- S.litInt 1)
 
 varDec :: (RenderSym repr) => repr (Permanence repr) -> repr (Permanence repr) 
-  -> VS (repr (Variable repr)) -> MS (repr (Statement repr))
-varDec s d v' = onStateValue (\v -> mkSt (permDoc (bind $ variableBind v) 
-  <+> getTypeDoc (variableType v) <+> variableDoc v)) (zoom lensMStoVS v')
+  -> Doc -> VS (repr (Variable repr)) -> MS (repr (Statement repr))
+varDec s d pdoc v' = onStateValue (\v -> mkSt (permDoc (bind $ variableBind v) 
+  <+> getTypeDoc (variableType v) <+> (ptrdoc (getType (variableType v)) <> 
+  variableDoc v))) (zoom lensMStoVS v')
   where bind Static = s
         bind Dynamic = d
+        ptrdoc (List _) = pdoc
+        ptrdoc _ = empty
 
 varDecDef :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   VS (repr (Value repr)) -> MS (repr (Statement repr))

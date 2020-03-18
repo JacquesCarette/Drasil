@@ -534,7 +534,7 @@ instance StatementSym JavaCode where
   (&++) = G.increment1
   (&~-) = G.decrement1
 
-  varDec = G.varDec static dynamic
+  varDec = G.varDec static dynamic empty
   varDecDef = G.varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> G.listDec (listDecDocD v') 
     (litInt n) v)

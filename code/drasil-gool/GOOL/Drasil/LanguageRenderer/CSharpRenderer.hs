@@ -504,7 +504,7 @@ instance StatementSym CSharpCode where
   (&~-) = G.decrement1
 
   varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
-    G.varDec static dynamic v)
+    G.varDec static dynamic empty v)
   varDecDef = G.varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> G.listDec (listDecDocD v') 
     (litInt n) v)

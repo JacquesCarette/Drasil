@@ -21,6 +21,7 @@ names (New c x ns)       = c : concatMap names x ++ map fst ns ++
                            concatMap (names . snd) ns
 names (Message a m x ns) = a : m : concatMap names x ++ map fst ns ++ 
                            concatMap (names . snd) ns
+names (Field o f)        = [o, f]
 names (Case _ ls)        = concatMap (names . fst) ls ++ concatMap (names . snd) ls
 names (UnaryOp _ u)      = names u
 names (BinaryOp _ a b)   = names a ++ names b
@@ -52,6 +53,7 @@ names' (New _ x ns)       = concatMap names' x ++ map fst ns ++
                             concatMap (names .snd) ns
 names' (Message a _ x ns) = a : concatMap names' x ++ map fst ns ++ 
                             concatMap (names .snd) ns
+names' (Field o f)        = [o, f]
 names' (Case _ ls)        = concatMap (names' . fst) ls ++ 
                             concatMap (names' . snd) ls
 names' (UnaryOp _ u)      = names' u

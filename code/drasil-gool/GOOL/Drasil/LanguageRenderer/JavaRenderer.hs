@@ -33,7 +33,7 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   commentedModD, docFuncRepr, variableList, parameterList, appendToBody, 
   surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
+  oneLiner, multiBody, block, multiBlock, bool', int, float, double, char, 
   listType, arrayType, listInnerType, obj, enumType, funcType, void, 
   runStrategy, listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, 
   greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
@@ -199,7 +199,7 @@ instance InternalBlock JavaCode where
 
 instance TypeSym JavaCode where
   type Type JavaCode = TypeData
-  bool = G.bool
+  bool = G.bool'
   int = G.int
   float = G.float
   double = G.double

@@ -2,7 +2,7 @@
 
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
-  multiBody, block, multiBlock, bool, int, float, double, char, string, 
+  multiBody, block, multiBlock, bool, bool', int, float, double, char, string, 
   fileType, listType, arrayType, listInnerType, obj, enumType, funcType, void, 
   runStrategy, listSlice, unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', 
   absOp, absOp', expOp, expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', 
@@ -141,6 +141,9 @@ multiBlock bs = docBlock $ onStateList vibcat $ map (onStateValue blockDoc) bs
 
 bool :: (RenderSym repr) => VS (repr (Type repr))
 bool = toState $ typeFromData Boolean "Boolean" (text "Boolean")
+
+bool' :: (RenderSym repr) => VS (repr (Type repr))
+bool' = toState $ typeFromData Boolean "boolean" (text "boolean")
 
 int :: (RenderSym repr) => VS (repr (Type repr))
 int = toState $ typeFromData Integer "int" (text "int")

@@ -55,15 +55,17 @@ data ClassType = Primary | Auxiliary
 mkClass :: (ProgramSym repr) => ClassType -> String -> Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
   -> Reader DrasilState (CS (repr (Class repr)))
-mkClass s desc n l vs mths = do
+mkClass s desc n i vs mths = do
   g <- ask
   ms <- mths
-  let getFunc Primary = buildClass
-      getFunc Auxiliary = extraClass
+  let getFunc Primary = getFunc' i
+      getFunc Auxiliary = extraClass n Nothing
+      getFunc' Nothing = buildClass n Nothing
+      getFunc' (Just intfc) = implementingClass n [intfc]
       f = getFunc s
   return $ if CommentClass `elem` commented g 
-    then docClass desc (f n l vs ms) 
-    else f n l vs ms
+    then docClass desc (f vs ms) 
+    else f vs ms
 
 primaryClass :: (ProgramSym repr) => String -> Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 

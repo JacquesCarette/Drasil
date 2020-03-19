@@ -318,7 +318,7 @@ currVals = codevar $ implCQD "curr_vals_apache" (nounPhrase
   "arrays holding ODE solution values for the current step") Nothing 
   (Array Real) (Label "curr_vals") Nothing
 stepHandler = codevar $ implCQD "stepHandler_apache" (nounPhrase 
-  "ODE step handler" "ODE step handlers") Nothing (Actor sh)
+  "ODE step handler" "ODE step handlers") Nothing (Actor $ "ODE" ++ sh)
   (Label "stepHandler") Nothing
 t0 = codevar $ implCQD "t0_apache" (nounPhrase "initial time for ODE solving"
   "intial times for ODE solving") Nothing Real (Label "t0") Nothing
@@ -349,7 +349,7 @@ dp54C = codefunc $ implCQD "dp54_ctor_apache" (nounPhrase
   Nothing (Actor dp54) (Label dp54) Nothing
 stepHandlerCtor = codefunc $ implCQD "StepHandler_ctor_apache" (nounPhrase
   "constructor for StepHandler" "constructors for StepHandler") Nothing 
-  (Actor sh) (Label "StepHandler") Nothing
+  (Actor $ "ODE" ++ sh) (Label $ "ODE" ++ sh) Nothing
 addStepHandler = codefunc $ implCQD "addStepHandler_apache" (nounPhrase
   "method for adding a step handler to an integrator"
   "methods for adding a step handler to an integrator")

@@ -2,7 +2,7 @@ package SWHS;
 
 /** \file InputParameters.java
     \author Thulasi Jegatheesan
-    \brief Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input
+    \brief Provides the function for reading inputs, the function for calculating derived values, and the function for checking the physical constraints and software constraints on the input
 */
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,7 +25,6 @@ public class InputParameters {
         \return diameter of tank: the diameter of the tank (m)
         \return absolute tolerance
         \return relative tolerance
-        \return temperature of the water: the average kinetic energy of the particles within the water (degreeC)
         \return change in heat energy in the water: change in thermal energy within the water (J)
     */
     public static Object[] get_input(String filename) throws FileNotFoundException {
@@ -41,7 +40,6 @@ public class InputParameters {
         double D;
         double A_tol;
         double R_tol;
-        double T_W;
         double E_W;
         
         Scanner infile;
@@ -71,12 +69,10 @@ public class InputParameters {
         infile.nextLine();
         R_tol = Double.parseDouble(infile.nextLine());
         infile.nextLine();
-        T_W = Double.parseDouble(infile.nextLine());
-        infile.nextLine();
         E_W = Double.parseDouble(infile.nextLine());
         infile.close();
         
-        Object[] outputs = new Object[14];
+        Object[] outputs = new Object[13];
         outputs[0] = A_C;
         outputs[1] = C_W;
         outputs[2] = h_C;
@@ -89,9 +85,21 @@ public class InputParameters {
         outputs[9] = D;
         outputs[10] = A_tol;
         outputs[11] = R_tol;
-        outputs[12] = T_W;
-        outputs[13] = E_W;
+        outputs[12] = E_W;
         return outputs;
+    }
+    
+    /** \brief Calculates values that can be immediately derived from the inputs
+        \param D diameter of tank: the diameter of the tank (m)
+        \param L length of tank: the length of the tank (m)
+        \return volume of the cylindrical tank: the amount of space encompassed by a tank (m^3)
+    */
+    public static double derived_values(double D, double L) {
+        double V_tank;
+        
+        V_tank = Constants.pi * Math.pow(D / 2, 2) * L;
+        
+        return V_tank;
     }
     
     /** \brief Verifies that input values satisfy the physical constraints and software constraints
@@ -105,10 +113,9 @@ public class InputParameters {
         \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
         \param rho_W density of water: nass per unit volume of water (kg/m^3)
         \param D diameter of tank: the diameter of the tank (m)
-        \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
         \param E_W change in heat energy in the water: change in thermal energy within the water (J)
     */
-    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
+    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double E_W) {
         if (!(A_C <= Constants.A_C_max)) {
             System.out.print("Warning: ");
             System.out.print("A_C has value ");
@@ -290,19 +297,6 @@ public class InputParameters {
             System.out.print(" but suggested to be ");
             System.out.print("above ");
             System.out.print(0);
-            System.out.println(".");
-        }
-        if (!(T_init <= T_W && T_W <= T_C)) {
-            System.out.print("Warning: ");
-            System.out.print("T_W has value ");
-            System.out.print(T_W);
-            System.out.print(" but suggested to be ");
-            System.out.print("between ");
-            System.out.print(T_init);
-            System.out.print(" (T_init)");
-            System.out.print(" and ");
-            System.out.print(T_C);
-            System.out.print(" (T_C)");
             System.out.println(".");
         }
         if (!(E_W >= 0)) {

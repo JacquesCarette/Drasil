@@ -32,7 +32,7 @@ double func_q(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return func_interpY("TSD.txt", inParams.SD, inParams.w_TNT);
+    return interpY("TSD.txt", inParams.SD, inParams.w_TNT);
 }
 
 double func_q_hat(InputParameters &inParams, double q) {
@@ -62,7 +62,7 @@ double func_q_hat_tol(InputParameters &inParams, double J_tol) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return func_interpY("SDF.txt", inParams.AR, J_tol);
+    return interpY("SDF.txt", inParams.AR, J_tol);
 }
 
 double func_J(InputParameters &inParams, double q_hat) {
@@ -77,7 +77,7 @@ double func_J(InputParameters &inParams, double q_hat) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return func_interpZ("SDF.txt", inParams.AR, q_hat);
+    return interpZ("SDF.txt", inParams.AR, q_hat);
 }
 
 double func_NFL(InputParameters &inParams, double q_hat_tol) {

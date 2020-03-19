@@ -6,9 +6,9 @@
 # \param z_vector list of z values
 # \param x_matrix lists of x values at different z values
 # \param y_matrix lists of y values at different z values
-def func_read_table(filename, z_vector, x_matrix, y_matrix):
+def read_table(filename, z_vector, x_matrix, y_matrix):
     outfile = open("log.txt", "a")
-    print("function func_read_table called with inputs: {", file=outfile)
+    print("function read_table called with inputs: {", file=outfile)
     print("  filename = ", end='', file=outfile)
     print(filename, end='', file=outfile)
     print(", ", file=outfile)

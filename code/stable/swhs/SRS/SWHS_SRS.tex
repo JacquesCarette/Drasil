@@ -390,7 +390,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Volume-Change-Melting-PCM-Negligible:\phantomsection\label{assumpVCMPN}]{The volume change of the PCM due to melting is negligible. (RefBy: \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)}
 \item[No-Gaseous-State-PCM:\phantomsection\label{assumpNGSP}]{The PCM is either in a liquid state or a solid state but not a gaseous state. (RefBy: \hyperref[unlikeChgWPFS]{UC: Water-PCM-Fixed-States}, \hyperref[unlikeChgNGS]{UC: No-Gaseous-State}, \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)}
 \item[Atmospheric-Pressure-Tank:\phantomsection\label{assumpAPT}]{The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively. (RefBy: \hyperref[IM:heatEInWtr]{IM: heatEInWtr} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
-\item[Volume-Coil-Negligible:\phantomsection\label{assumpVCN}]{When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: \hyperref[findMass]{FR: Find-Mass}.)}
+\item[Volume-Coil-Negligible:\phantomsection\label{assumpVCN}]{When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: \hyperref[DD:waterVolume.pcm]{DD: waterVolume\_pcm}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -701,6 +701,118 @@ RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and \hyperref[IM:eBalance
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:waterMass}
+\phantomsection 
+\label{DD:waterMass}
+\\ \midrule \\
+Label & Mass of water
+        
+\\ \midrule \\
+Symbol & ${m_{\text{W}}}$
+         
+\\ \midrule \\
+Units & kg
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${m_{\text{W}}}$ is the mass of water (kg)}
+              \item{${V_{\text{W}}}$ is the volume of water ($\text{m}^{3}$)}
+              \item{${ρ_{\text{W}}}$ is the density of water ($\frac{\text{kg}}{\text{m}^{3}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[findMass]{FR: Find-Mass}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:waterVolume.pcm}
+\phantomsection 
+\label{DD:waterVolume.pcm}
+\\ \midrule \\
+Label & Volume of water
+        
+\\ \midrule \\
+Symbol & ${V_{\text{W}}}$
+         
+\\ \midrule \\
+Units & $\text{m}^{3}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {V_{\text{W}}}={V_{\text{tank}}}-{V_{\text{P}}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${V_{\text{W}}}$ is the volume of water ($\text{m}^{3}$)}
+              \item{${V_{\text{tank}}}$ is the volume of the cylindrical tank ($\text{m}^{3}$)}
+              \item{${V_{\text{P}}}$ is the volume of PCM ($\text{m}^{3}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & Based on \hyperref[assumpVCN]{A: Volume-Coil-Negligible}. ${V_{\text{tank}}}$ is defined in \hyperref[DD:tankVolume]{DD: tankVolume}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[findMass]{FR: Find-Mass}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:tankVolume}
+\phantomsection 
+\label{DD:tankVolume}
+\\ \midrule \\
+Label & Volume of the cylindrical tank
+        
+\\ \midrule \\
+Symbol & ${V_{\text{tank}}}$
+         
+\\ \midrule \\
+Units & $\text{m}^{3}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${V_{\text{tank}}}$ is the volume of the cylindrical tank ($\text{m}^{3}$)}
+              \item{$π$ is the ratio of circumference to diameter for any circle (Unitless)}
+              \item{$D$ is the diameter of tank (m)}
+              \item{$L$ is the length of tank (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[DD:waterVolume.pcm]{DD: waterVolume\_pcm} and \hyperref[findMass]{FR: Find-Mass}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
 
 \vspace{\baselineskip}
 \noindent
@@ -1382,7 +1494,7 @@ This section provides the functional requirements, the tasks and behaviours that
 
 \begin{itemize}
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the tank parameters, material properties, and initial conditions.}
-\item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputValues]{FR: Input-Values} to find the masses needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, using ${m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}=\left({V_{\text{tank}}}-{V_{\text{P}}}\right) {ρ_{\text{W}}}=\left(π \left(\frac{D}{2}\right)^{2} L-{V_{\text{P}}}\right) {ρ_{\text{W}}}$, ${m_{\text{P}}}={V_{\text{P}}} {ρ_{\text{P}}}$, and \hyperref[assumpVCN]{A: Volume-Coil-Negligible}, where ${V_{\text{W}}}$ is the volume of water and ${V_{\text{tank}}}$ is the volume of the cylindrical tank.}
+\item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputValues]{FR: Input-Values} to find the masses needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, using \hyperref[DD:waterMass]{DD: waterMass}, \hyperref[DD:waterVolume.pcm]{DD: waterVolume\_pcm}, and \hyperref[DD:tankVolume]{DD: tankVolume}.}
 \item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]{Verify that the inputs satisfy the required physical constraints shown in \hyperref[Sec:DataConstraints]{Section: Data Constraints}.}
 \item[Output-Input-Derived-Values:\phantomsection\label{outputInputDerivVals}]{Output the input values and derived values in the following list: the values from \hyperref[inputValues]{FR: Input-Values}, the masses from \hyperref[findMass]{FR: Find-Mass}, ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}), $η$ (from \hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}), ${{τ_{\text{P}}}^{\text{S}}}$ (from \hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}), and ${{τ_{\text{P}}}^{\text{L}}}$ (from \hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}).}
 \item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]{Calculate and output the temperature of the water (${T_{\text{W}}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).}
@@ -1485,6 +1597,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \midrule
 \endhead
+\hyperref[DD:waterMass]{DD: waterMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:waterVolume.pcm]{DD: waterVolume\_pcm} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
+\\
+\hyperref[DD:tankVolume]{DD: tankVolume} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
 \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:balanceDecayTime]{DD: balanceDecayTime} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1523,7 +1641,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[inputValues]{FR: Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[findMass]{FR: Find-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
+\hyperref[findMass]{FR: Find-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1575,97 +1693,103 @@ The purpose of the traceability matrices is to provide easy references on what h
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:TraceMatAvsAll}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD: htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD: meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD: aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM: latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}} & \textbf{\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM: heatEInPCM}}
+\textbf{} & \textbf{\hyperref[DD:waterMass]{DD: waterMass}} & \textbf{\hyperref[DD:waterVolume.pcm]{DD: waterVolume\_pcm}} & \textbf{\hyperref[DD:tankVolume]{DD: tankVolume}} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD: htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD: meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD: aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM: latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}} & \textbf{\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM: heatEInPCM}}
 \\
 \midrule
 \endhead
-\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:waterMass]{DD: waterMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:balanceDecayTime]{DD: balanceDecayTime} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:waterVolume.pcm]{DD: waterVolume\_pcm} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:tankVolume]{DD: tankVolume} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:htFusion]{DD: htFusion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:balanceDecayTime]{DD: balanceDecayTime} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:meltFrac]{DD: meltFrac} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:aspectRatio]{DD: aspectRatio} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:consThermE]{TM: consThermE} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:htFusion]{DD: htFusion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:sensHtE]{TM: sensHtE} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[DD:meltFrac]{DD: meltFrac} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:latentHtE]{TM: latentHtE} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:aspectRatio]{DD: aspectRatio} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:nwtnCooling]{TM: nwtnCooling} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:consThermE]{TM: consThermE} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  &  &  &  &  &  & X &  &  &  & X &  &  &  &  &  & 
+\hyperref[TM:sensHtE]{TM: sensHtE} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[TM:latentHtE]{TM: latentHtE} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[TM:nwtnCooling]{TM: nwtnCooling} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & X & X &  &  &  &  &  &  &  &  &  & X & X & X & X & X &  & 
+\hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  &  &  &  &  &  &  &  &  & X &  &  &  & X &  &  &  &  &  & 
 \\
-\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} &  &  & X & X &  & X &  &  &  &  &  & X &  & X & X &  &  & X
+\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[IM:heatEInWtr]{IM: heatEInWtr} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater} &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[IM:heatEInPCM]{IM: heatEInPCM} &  &  &  &  & X &  &  &  & X & X &  &  &  &  &  &  &  & 
+\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} &  &  &  & X & X &  &  &  &  &  &  &  &  &  & X & X & X & X & X &  & 
+\\
+\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} &  &  &  &  &  & X & X &  & X &  &  &  &  &  & X &  & X & X &  &  & X
+\\
+\hyperref[IM:heatEInWtr]{IM: heatEInWtr} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[IM:heatEInPCM]{IM: heatEInPCM} &  &  &  &  &  &  &  & X &  &  &  & X & X &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD: htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD: meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD: aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM: latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}} & \textbf{\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM: heatEInPCM}} & \textbf{\hyperref[inputValues]{FR: Input-Values}} & \textbf{\hyperref[findMass]{FR: Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivVals]{FR: Output-Input-Derived-Values}} & \textbf{\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}} & \textbf{\hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time}} & \textbf{\hyperref[verifyEnergyOutput]{FR: Verify-Energy-Output-Follow-Conservation-of-Energy}} & \textbf{\hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time}} & \textbf{\hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
+\textbf{} & \textbf{\hyperref[DD:waterMass]{DD: waterMass}} & \textbf{\hyperref[DD:waterVolume.pcm]{DD: waterVolume\_pcm}} & \textbf{\hyperref[DD:tankVolume]{DD: tankVolume}} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD: htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD: meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD: aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM: latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}} & \textbf{\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM: heatEInPCM}} & \textbf{\hyperref[inputValues]{FR: Input-Values}} & \textbf{\hyperref[findMass]{FR: Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivVals]{FR: Output-Input-Derived-Values}} & \textbf{\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}} & \textbf{\hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time}} & \textbf{\hyperref[verifyEnergyOutput]{FR: Verify-Energy-Output-Follow-Conservation-of-Energy}} & \textbf{\hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time}} & \textbf{\hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
 \\
 \midrule
 \endhead
-\hyperref[waterTempGS]{GS: Predict-Water-Temperature} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[waterTempGS]{GS: Predict-Water-Temperature} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[pcmTempGS]{GS: Predict-PCM-Temperature} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[pcmTempGS]{GS: Predict-PCM-Temperature} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[waterEnergyGS]{GS: Predict-Water-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[waterEnergyGS]{GS: Predict-Water-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[pcmEnergyGS]{GS: Predict-PCM-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[pcmEnergyGS]{GS: Predict-PCM-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR: Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR: Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[findMass]{FR: Find-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[findMass]{FR: Find-Mass} & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputInputDerivVals]{FR: Output-Input-Derived-Values} & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputInputDerivVals]{FR: Output-Input-Derived-Values} &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyEnergyOutput]{FR: Verify-Energy-Output-Follow-Conservation-of-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyEnergyOutput]{FR: Verify-Energy-Output-Follow-Conservation-of-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifiable]{NFR: Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifiable]{NFR: Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}

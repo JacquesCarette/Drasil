@@ -9,6 +9,7 @@
 */
 class Constants {
     public:
+        static const double pi;
         static const double L_min;
         static const double L_max;
         static const double rho_W_min;

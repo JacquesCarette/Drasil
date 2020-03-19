@@ -1,6 +1,6 @@
 /** \file InputParameters.hpp
     \author Thulasi Jegatheesan
-    \brief Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input
+    \brief Provides the function for reading inputs, the function for calculating derived values, and the function for checking the physical constraints and software constraints on the input
 */
 #ifndef InputParameters_h
 #define InputParameters_h
@@ -26,10 +26,16 @@ using std::string;
     \param D diameter of tank: the diameter of the tank (m)
     \param A_tol absolute tolerance
     \param R_tol relative tolerance
-    \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
     \param E_W change in heat energy in the water: change in thermal energy within the water (J)
 */
-void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T_init, double &t_final, double &L, double &T_C, double &t_step, double &rho_W, double &D, double &A_tol, double &R_tol, double &T_W, double &E_W);
+void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T_init, double &t_final, double &L, double &T_C, double &t_step, double &rho_W, double &D, double &A_tol, double &R_tol, double &E_W);
+
+/** \brief Calculates values that can be immediately derived from the inputs
+    \param D diameter of tank: the diameter of the tank (m)
+    \param L length of tank: the length of the tank (m)
+    \return volume of the cylindrical tank: the amount of space encompassed by a tank (m^3)
+*/
+double derived_values(double D, double L);
 
 /** \brief Verifies that input values satisfy the physical constraints and software constraints
     \param A_C heating coil surface area: area covered by the outermost layer of the coil (m^2)
@@ -42,9 +48,8 @@ void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T
     \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
     \param rho_W density of water: nass per unit volume of water (kg/m^3)
     \param D diameter of tank: the diameter of the tank (m)
-    \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
     \param E_W change in heat energy in the water: change in thermal energy within the water (J)
 */
-void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W);
+void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double E_W);
 
 #endif

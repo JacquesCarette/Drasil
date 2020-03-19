@@ -64,8 +64,8 @@ getConstraintParams = do
   let cm = cMap $ csi $ codeSpec g
       db = sysinfodb $ csi $ codeSpec g
       varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ codeSpec g)
-      reqdVals = nub $ varsList ++ map codevarC (concatMap (\v -> 
-        constraintvars v db) (getConstraints cm varsList))
+      reqdVals = nub $ varsList ++ map codevarC (concatMap (`constraintvars` db)
+        (getConstraints cm varsList))
   getParams In reqdVals
 
 getCalcParams :: CodeDefinition -> Reader DrasilState [CodeVarChunk]

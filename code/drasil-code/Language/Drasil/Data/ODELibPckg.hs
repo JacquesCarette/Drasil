@@ -1,5 +1,5 @@
 module Language.Drasil.Data.ODELibPckg (
-  ODELibPckg(..), mkODELib
+  ODELibPckg(..), mkODELib, mkODELibNoPath
 ) where
 
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary)
@@ -10,6 +10,7 @@ import Language.Drasil.Data.ODEInfo (ODEInfo)
 data ODELibPckg = ODELib {
   libSpec :: ExternalLibrary,
   libCall :: ODEInfo -> ExternalLibraryCall,
+  libPath :: Maybe FilePath,
   -- It has been said that language information should be in language-related 
   -- file, but this needs more thought. The language would need to declare 
   -- which libraries it is compatible with, but how could it refer to a 
@@ -22,6 +23,10 @@ data ODELibPckg = ODELib {
   compatibleLangs :: [Lang]
 }
 
-mkODELib :: ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> 
-  ODELibPckg
-mkODELib = ODELib
+mkODELib :: ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> 
+  [Lang] -> ODELibPckg
+mkODELib e c f = ODELib e c (Just f)
+
+mkODELibNoPath :: ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] 
+  -> ODELibPckg
+mkODELibNoPath e c = ODELib e c Nothing

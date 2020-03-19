@@ -45,7 +45,7 @@ instance AuxiliarySym PythonProject where
 
   optimizeDox = return yes
 
-  makefile = G.makefile Nothing pyRunnable
+  makefile _ = G.makefile Nothing pyRunnable
 
   auxHelperDoc = unPP
   auxFromData fp d = return $ ad fp d

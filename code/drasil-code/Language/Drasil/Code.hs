@@ -39,7 +39,7 @@ module Language.Drasil.Code (
   ccObjVar, listToArray, CodeQuantityDict, implCQD,
   field,
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), 
-  ODELibPckg(..), mkODELib,
+  ODELibPckg(..), mkODELib, mkODELibNoPath,
   unPP, unJP, unCSP, unCPPP
 ) where
 
@@ -101,7 +101,8 @@ import Language.Drasil.CodeExpr (field)
 
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
-import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib)
+import Language.Drasil.Data.ODELibPckg (ODELibPckg(..), mkODELib, 
+  mkODELibNoPath)
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)

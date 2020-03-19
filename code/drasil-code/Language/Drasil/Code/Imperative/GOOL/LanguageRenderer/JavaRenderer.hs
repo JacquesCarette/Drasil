@@ -20,6 +20,7 @@ import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
 import GOOL.Drasil (onCodeList)
 
+import Data.List (intercalate)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -54,15 +55,19 @@ instance AuxiliarySym JavaProject where
 
   optimizeDox = return yes
 
-  makefile = G.makefile jBuildConfig jRunnable
+  makefile fs = G.makefile (jBuildConfig fs) (jRunnable fs)
 
   auxHelperDoc = unJP
   auxFromData fp d = return $ ad fp d
 
-jBuildConfig :: Maybe BuildConfig
-jBuildConfig = buildSingle (\i _ -> asFragment "javac" : i) $
-  inCodePackage mainModuleFile
+jBuildConfig :: [FilePath] -> Maybe BuildConfig
+jBuildConfig fs = buildSingle (\i _ -> asFragment "javac" : map asFragment
+  (classPath fs) ++ i) $ inCodePackage mainModuleFile
 
-jRunnable :: Runnable
-jRunnable = interp (flip withExt ".class" $ inCodePackage mainModule) 
-  jNameOpts "java"
+jRunnable :: [FilePath] -> Runnable
+jRunnable fs = interp (flip withExt ".class" $ inCodePackage mainModule) 
+  jNameOpts "java" (classPath fs)
+
+classPath :: [FilePath] -> [String]
+classPath fs = if null fs then [] else 
+  ["-cp", "\"" ++ intercalate ":" (fs ++ ["."]) ++ "\""]

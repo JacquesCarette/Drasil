@@ -18,7 +18,7 @@ data BuildDependencies = BcSource
 data BuildConfig = BuildConfig ([CommandFragment] -> CommandFragment -> BuildCommand) BuildDependencies
 
 data RunType = Standalone
-             | Interpreter CommandFragment
+             | Interpreter [CommandFragment]
 
 data Runnable = Runnable BuildName NameOpts RunType
 
@@ -35,6 +35,7 @@ nameOpts = NameOpts {
 
 type BuildCommand = [CommandFragment]
 type InterpreterCommand = String
+type InterpreterOption = String
 
 asFragment :: String -> CommandFragment
 asFragment = makeS
@@ -52,11 +53,12 @@ nativeBinary :: Runnable
 nativeBinary = Runnable (BWithExt BPackName $ OtherExt $
   osClassDefault "TARGET_EXTENSION" ".exe" "") nameOpts Standalone
 
-interp :: BuildName -> NameOpts -> InterpreterCommand -> Runnable
-interp b n = Runnable b n . Interpreter . makeS
+interp :: BuildName -> NameOpts -> InterpreterCommand -> [InterpreterOption]
+  -> Runnable
+interp b n c = Runnable b n . Interpreter . map makeS . (c:)
 
 interpMM :: InterpreterCommand -> Runnable
-interpMM = Runnable mainModuleFile nameOpts . Interpreter . makeS
+interpMM = Runnable mainModuleFile nameOpts . Interpreter . (:[]) . makeS
 
 mainModule :: BuildName
 mainModule = BMain

@@ -27,7 +27,8 @@ class AuxiliarySym repr where
 
   optimizeDox :: repr (AuxHelper repr)
 
-  makefile :: [Comments] -> GOOLState -> ProgData -> repr (Auxiliary repr)
+  makefile :: [FilePath] -> [Comments] -> GOOLState -> ProgData -> 
+    repr (Auxiliary repr)
 
   auxHelperDoc :: repr (AuxHelper repr) -> Doc
   auxFromData :: FilePath -> Doc -> repr (Auxiliary repr)

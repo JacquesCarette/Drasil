@@ -48,14 +48,14 @@ instance AuxiliarySym CSharpProject where
 
   optimizeDox = return no
 
-  makefile = G.makefile csBuildConfig csRunnable
+  makefile fs = G.makefile (csBuildConfig fs) csRunnable
 
   auxHelperDoc = unCSP
   auxFromData fp d = return $ ad fp d
 
-csBuildConfig :: Maybe BuildConfig
-csBuildConfig = buildAll $ \i o -> [osClassDefault "CSC" "csc" "mcs", 
-  asFragment "-out:" P.<> o] ++ i
+csBuildConfig :: [FilePath] -> Maybe BuildConfig
+csBuildConfig fs = buildAll $ \i o -> [osClassDefault "CSC" "csc" "mcs", 
+  asFragment "-out:" P.<> o] ++ map (asFragment . ("-r:" ++)) fs ++ i
 
 csRunnable :: Runnable
 csRunnable = nativeBinary

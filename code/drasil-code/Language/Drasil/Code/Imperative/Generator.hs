@@ -39,6 +39,7 @@ import Control.Monad.Reader (Reader, ask, runReader)
 import Control.Monad.State (evalState, runState)
 import Data.List (nub)
 import Data.Map (fromList, member, keys)
+import Data.Maybe (maybeToList)
 
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs spec = DrasilState {
@@ -58,6 +59,7 @@ generator l dt sd chs spec = DrasilState {
   sampleData = sd,
   modules = modules',
   extLibMap = fromList elmap,
+  libPaths = maybeToList pth,
   vMap = assocToMap (codequants spec ++ getAdditionalVars chs modules'),
   eMap = mem,
   libEMap = lem,
@@ -77,14 +79,15 @@ generator l dt sd chs spec = DrasilState {
         showDate Hide = ""
         ols = odeLib chs
         els = map snd elmap
-        elmap = chooseODELib l ols
+        (pth, elmap) = chooseODELib l ols
         mem = modExportMap (csi spec) chs modules' 
         lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap (csi spec) chs modules'
-        chooseODELib _ [] = []
+        chooseODELib _ [] = (Nothing, [])
         chooseODELib lng (o:os) = if lng `elem` compatibleLangs o then 
-          map (\ode -> (codeName $ odeDef ode, genExternalLibraryCall 
-          (libSpec o) $ libCall o ode)) (odes chs) else chooseODELib lng os
+          (libPath o, map (\ode -> (codeName $ odeDef ode, 
+          genExternalLibraryCall (libSpec o) $ libCall o ode)) (odes chs)) else 
+          chooseODELib lng os
         modules' = packmodRequires "Calculations" 
           "Provides functions for calculating the outputs" 
           (concatMap (^. imports) els) [] (map FCD (execOrder $ csi spec)) 
@@ -114,7 +117,7 @@ genPackage unRepr = do
       (reprPD, s) = runState p info
       pd = unRepr reprPD
       n = pName $ csi $ codeSpec g
-      m = makefile (commented g) s pd
+      m = makefile (libPaths g) (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig n s
   return $ package pd (m:i++d)

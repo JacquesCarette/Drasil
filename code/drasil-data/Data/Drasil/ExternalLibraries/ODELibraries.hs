@@ -25,14 +25,14 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill, 
   CodeVarChunk, CodeFuncChunk, codevar, codefunc, listToArray, implCQD, 
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib, 
-  pubStateVar, privStateVar, field)
+  mkODELibNoPath, pubStateVar, privStateVar, field)
 
 import Control.Lens ((^.), _1, _2, over)
 
 -- SciPy -- 
 
 scipyODEPckg :: ODELibPckg
-scipyODEPckg = mkODELib scipyODE scipyCall [Python]
+scipyODEPckg = mkODELibNoPath scipyODE scipyCall [Python]
 
 scipyODE :: ExternalLibrary
 scipyODE = externalLib [
@@ -132,7 +132,7 @@ integrateStep = codefunc $ implCQD "integrate_scipy" (nounPhrase
 -- Oslo (C#) --
 
 osloPckg :: ODELibPckg
-osloPckg = mkODELib oslo osloCall [CSharp]
+osloPckg = mkODELib oslo osloCall "Microsoft.Research.Oslo.dll" [CSharp]
 
 oslo :: ExternalLibrary
 oslo = externalLib [
@@ -228,7 +228,8 @@ solveFromToStep = codefunc $ implCQD "SolveFromToStep_oslo" (nounPhrase
 -- Apache (Java) --
 
 apacheODEPckg :: ODELibPckg
-apacheODEPckg = mkODELib apacheODE apacheODECall [Java]
+apacheODEPckg = mkODELib apacheODE apacheODECall "lib/commons-math3-3.6.1.jar" 
+  [Java]
 
 apacheODE :: ExternalLibrary
 apacheODE = externalLib [
@@ -378,7 +379,7 @@ computeDerivatives = codefunc $ implCQD "computeDerivatives_apache" (nounPhrase
 -- odeint (C++) --
 
 odeintPckg :: ODELibPckg
-odeintPckg = mkODELib odeint odeintCall [Cpp]
+odeintPckg = mkODELib odeint odeintCall "." [Cpp]
 
 odeint :: ExternalLibrary
 odeint = externalLib [

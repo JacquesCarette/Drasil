@@ -48,16 +48,16 @@ instance AuxiliarySym CppProject where
 
   optimizeDox = return no
   
-  makefile = G.makefile cppBuildConfig cppRunnable
+  makefile fs = G.makefile (cppBuildConfig fs) cppRunnable
   
   auxHelperDoc = unCPPP
   auxFromData fp d = return $ ad fp d
 
 -- helpers
 
-cppBuildConfig :: Maybe BuildConfig
-cppBuildConfig = buildAll $ \i o -> cppCompiler : i ++ map asFragment
-  ["--std=c++11", "-o"] ++ [o]
+cppBuildConfig :: [FilePath] -> Maybe BuildConfig
+cppBuildConfig fs = buildAll $ \i o -> cppCompiler : i ++ map asFragment
+  ["--std=c++11", "-o"] ++ [o] ++ concatMap (\f -> map asFragment ["-I", f]) fs
 
 cppRunnable :: Runnable
 cppRunnable = nativeBinary

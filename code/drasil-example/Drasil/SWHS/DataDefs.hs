@@ -42,6 +42,9 @@ waterMassQD = mkQuantDef wMass waterMassEqn
 waterMassEqn :: Expr
 waterMassEqn = sy wVol * sy wDensity
 
+waterMassNotes :: Sentence
+waterMassNotes = foldlSent [ch wVol, S "is defined in", makeRef2S waterVolume]
+
 waterMass :: DataDefinition
 waterMass = ddNoRefs waterMassQD Nothing "waterMass" []
 
@@ -54,7 +57,8 @@ waterVolumeEqn :: Expr
 waterVolumeEqn = sy tankVol - sy pcmVol
 
 waterVolumeNotes :: Sentence
-waterVolumeNotes = foldlSent [S "Based on", makeRef2S assumpVCN]
+waterVolumeNotes = foldlSent [S "Based on" +:+. makeRef2S assumpVCN, 
+  ch tankVol, S "is defined in", makeRef2S tankVolume]
 
 waterVolume :: DataDefinition
 waterVolume = ddNoRefs waterVolumeQD Nothing "waterVolume_pcm" 
@@ -78,6 +82,10 @@ balanceDecayRateQD = mkQuantDef tauW balanceDecayRateEqn
 
 balanceDecayRateEqn :: Expr
 balanceDecayRateEqn = sy wMass * sy htCapW / (sy coilHTC * sy coilSA)
+
+balanceDecayRateNotes :: Sentence
+balanceDecayRateNotes = foldlSent [ch wMass, S "is defined in", 
+  makeRef2S waterMass]
 
 balanceDecayRate :: DataDefinition
 balanceDecayRate = dd balanceDecayRateQD [makeCite koothoor2013]

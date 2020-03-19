@@ -104,8 +104,8 @@ symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ map qw specParamValList ++ 
   map qw [coilSAMax] ++ map qw [tauW] ++ map qw [absTol, relTol] ++ 
-  scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols ++ 
-  [qw $ listToArray $ quantvar tempW]
+  scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
+  ++ [qw $ listToArray $ quantvar tempW]
 
 concepts :: [UnitaryConceptDict]
 concepts = map ucw [density, tau, inSA, outSA,
@@ -185,9 +185,9 @@ si = SI {
   _kind = Doc.srs,
   _authors = [thulasi],
   -- FIXME: Everything after (and including) \\ should be removed when
-  -- #1658 is resolved. Basically, _quants is used here, but neither tankVol
-  -- or tau appear in the document and thus should not be displayed.
-  _quants = (map qw unconstrained ++ map qw symbolsAll) \\ map qw [tankVol, tau],
+  -- #1658 is resolved. Basically, _quants is used here, but 
+  -- tau does not appear in the document and thus should not be displayed.
+  _quants = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
   _concepts = symbols,
   _definitions = [],
   _datadefs = NoPCM.dataDefs,

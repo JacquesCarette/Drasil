@@ -13,7 +13,7 @@ import Language.Drasil
 import Database.Drasil (ChunkDB, symbResolve)
 import Language.Drasil.Development (dep, names')
 
-import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, cqd, cqw)
+import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, implCQD, cqw)
 import Language.Drasil.Printers (symbolDoc, toPlainName)
 
 import Data.List (nub)
@@ -122,8 +122,9 @@ funcResolve m x = quantfunc $ symbResolve m x
 
 listToArray :: CodeVarChunk -> CodeVarChunk
 listToArray c = newSpc (c ^. typ) 
-  where newSpc (Vect t) = CodeVC (CodeC (cqd (c ^. uid ++ "_array") (c ^. term) (getA c) 
-          (Array t) (symbol c) (getUnit c)) Var) (c ^. obv)
+  where newSpc (Vect t) = CodeVC (CodeC (implCQD (c ^. uid ++ "_array") 
+          (c ^. term) (getA c) (Array t) (symbol c Implementation) (getUnit c)) 
+          Var) (c ^. obv)
         newSpc _ = c
 
 type ConstraintMap = Map.Map UID [Constraint]

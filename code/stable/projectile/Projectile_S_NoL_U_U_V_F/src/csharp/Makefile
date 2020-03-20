@@ -1,27 +1,24 @@
 ifeq "$(OS)" "Windows_NT"
-    TARGET_EXTENSION=.exe
+    LIB_EXTENSION=.dll
     CSC=csc
 else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S), Linux)
-        TARGET_EXTENSION=
+        LIB_EXTENSION=.so
         CSC=mcs
     endif
     ifeq ($(UNAME_S), Darwin)
-        TARGET_EXTENSION=
+        LIB_EXTENSION=.dylib
         CSC=mcs
     endif
 endif
 
-build: Projectile$(TARGET_EXTENSION)
+build: Projectile$(LIB_EXTENSION)
 
-Projectile$(TARGET_EXTENSION): Control.cs InputFormat.cs InputConstraints.cs OutputFormat.cs Calculations.cs
-	$(CSC) -out:Projectile$(TARGET_EXTENSION) Control.cs InputFormat.cs InputConstraints.cs OutputFormat.cs Calculations.cs
+Projectile$(LIB_EXTENSION): InputFormat.cs InputConstraints.cs OutputFormat.cs Calculations.cs
+	$(CSC) -t:library -out:Projectile$(LIB_EXTENSION) InputFormat.cs InputConstraints.cs OutputFormat.cs Calculations.cs
 
-run: build
-	./Projectile$(TARGET_EXTENSION) $(RUNARGS)
-
-doc: doxConfig Control.cs InputFormat.cs InputConstraints.cs OutputFormat.cs Calculations.cs
+doc: doxConfig InputFormat.cs InputConstraints.cs OutputFormat.cs Calculations.cs
 	doxygen doxConfig
 
-.PHONY: build run doc
+.PHONY: build doc

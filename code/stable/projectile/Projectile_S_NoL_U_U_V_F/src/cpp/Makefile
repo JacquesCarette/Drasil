@@ -1,24 +1,21 @@
 ifeq "$(OS)" "Windows_NT"
-    TARGET_EXTENSION=.exe
+    LIB_EXTENSION=.dll
 else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S), Linux)
-        TARGET_EXTENSION=
+        LIB_EXTENSION=.so
     endif
     ifeq ($(UNAME_S), Darwin)
-        TARGET_EXTENSION=
+        LIB_EXTENSION=.dylib
     endif
 endif
 
-build: Projectile$(TARGET_EXTENSION)
+build: Projectile$(LIB_EXTENSION)
 
-Projectile$(TARGET_EXTENSION): InputFormat.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp Control.cpp InputFormat.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp
-	"$(CXX)" Control.cpp InputFormat.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp --std=c++11 -o Projectile$(TARGET_EXTENSION)
+Projectile$(LIB_EXTENSION): InputFormat.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp InputFormat.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp
+	"$(CXX)" InputFormat.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp --std=c++11 -shared -o Projectile$(LIB_EXTENSION)
 
-run: build
-	./Projectile$(TARGET_EXTENSION) $(RUNARGS)
-
-doc: doxConfig InputFormat.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp Control.cpp
+doc: doxConfig InputFormat.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp
 	doxygen doxConfig
 
-.PHONY: build run doc
+.PHONY: build doc

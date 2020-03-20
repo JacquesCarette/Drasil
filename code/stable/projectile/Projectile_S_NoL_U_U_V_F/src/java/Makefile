@@ -1,12 +1,10 @@
-build: Projectile/Control.class
+build: Projectile.jar
 
-Projectile/Control.class: Projectile/Control.java Projectile/InputFormat.java Projectile/InputConstraints.java Projectile/OutputFormat.java Projectile/Calculations.java
-	javac Projectile/Control.java
+Projectile.jar: Projectile/InputFormat.java Projectile/InputConstraints.java Projectile/OutputFormat.java Projectile/Calculations.java
+	javac Projectile/InputFormat.java Projectile/InputConstraints.java Projectile/OutputFormat.java Projectile/Calculations.java
+	jar -cvf Projectile.jar Projectile
 
-run: build
-	java Projectile.Control $(RUNARGS)
-
-doc: doxConfig Projectile/Control.java Projectile/InputFormat.java Projectile/InputConstraints.java Projectile/OutputFormat.java Projectile/Calculations.java
+doc: doxConfig Projectile/InputFormat.java Projectile/InputConstraints.java Projectile/OutputFormat.java Projectile/Calculations.java
 	doxygen doxConfig
 
-.PHONY: build run doc
+.PHONY: build doc

@@ -83,7 +83,7 @@ genPackage unRepr = do
       (reprPD, s) = runState p info
       pd = unRepr reprPD
       n = pName $ csi $ codeSpec g
-      m = makefile (commented g) s pd
+      m = makefile (implType g) (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig n s
   return $ package pd (m:i++d)

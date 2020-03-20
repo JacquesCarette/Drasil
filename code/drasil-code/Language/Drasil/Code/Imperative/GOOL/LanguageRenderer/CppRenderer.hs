@@ -7,15 +7,16 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
   CppProject(..)
 ) where
 
+import Language.Drasil.CodeSpec (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..),
   AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, sampleInput, makefile)
+  G (doxConfig, sampleInput, makefile, noRunIfLib)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, 
   PackData(..), packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
-  asFragment, buildAll, cppCompiler, nativeBinary)
+  asFragment, buildAll, cppCompiler, nativeBinary, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
 import GOOL.Drasil (onCodeList)
@@ -48,16 +49,20 @@ instance AuxiliarySym CppProject where
 
   optimizeDox = return no
   
-  makefile = G.makefile cppBuildConfig cppRunnable
+  makefile it = G.makefile (cppBuildConfig it) (G.noRunIfLib it cppRunnable)
   
   auxHelperDoc = unCPPP
   auxFromData fp d = return $ ad fp d
 
 -- helpers
 
-cppBuildConfig :: Maybe BuildConfig
-cppBuildConfig = buildAll $ \i o -> cppCompiler : i ++ map asFragment
-  ["--std=c++11", "-o"] ++ [o]
+cppBuildConfig :: ImplementationType -> Maybe BuildConfig
+cppBuildConfig it = buildAll (\i o -> [cppCompiler : i ++ map asFragment
+  ["--std=c++11", target it, "-o"] ++ [o]]) (outName it)
+  where target Library = "-shared"
+        target Program = ""
+        outName Library = sharedLibrary
+        outName Program = executable
 
-cppRunnable :: Runnable
+cppRunnable :: Maybe Runnable
 cppRunnable = nativeBinary

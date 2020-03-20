@@ -19,7 +19,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..),
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
-  Lang(..), Modularity(..), Visibility(..))
+  Lang(..), Modularity(..), ImplementationType(..), Visibility(..))
 
 import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), GS, 
   FS, initialState, unCI)
@@ -36,6 +36,7 @@ generator l dt sd chs spec = DrasilState {
   codeSpec = spec,
   date = showDate $ dates chs,
   modular = modularity chs,
+  implType = impType chs,
   inStruct = inputStructure chs,
   conStruct = constStructure chs,
   conRepr = constRepr chs,
@@ -107,9 +108,13 @@ genUnmodular = do
       n = pName $ csi $ codeSpec g
       cls = any (`member` clsMap (codeSpec g)) 
         ["get_input", "derived_values", "input_constraints"]
-  genModule n ("Contains the entire " ++ n ++ " program")
-    (map (fmap Just) (genMainFunc : concatMap genModFuncs (mods s)) ++ 
-    ((if cls then [] else [genInputFormat Primary, genInputDerived Primary, 
+      getDesc Library = "library"
+      getDesc Program = "program"
+      mainIfExe Library = []
+      mainIfExe Program = [genMainFunc]
+  genModule n ("Contains the entire " ++ n ++ " " ++ getDesc (implType g))
+    (map (fmap Just) (mainIfExe (implType g) ++ concatMap genModFuncs (mods s)) 
+    ++ ((if cls then [] else [genInputFormat Primary, genInputDerived Primary, 
       genInputConstraints Primary]) ++ [genOutputFormat])) 
     [genInputClass Auxiliary, genConstClass Auxiliary]
           
@@ -118,12 +123,14 @@ genModules :: (ProgramSym repr) =>
 genModules = do
   g <- ask
   let s = csi $ codeSpec g
-  mn     <- genMain
+      mainIfExe Library = return []
+      mainIfExe Program = sequence [genMain]
+  mn     <- mainIfExe $ implType g
   inp    <- chooseInModule $ inMod g
   con    <- genConstMod 
   out    <- genOutputMod
   moddef <- traverse genModDef (mods s) -- hack ?
-  return $ mn : inp ++ con ++ out ++ moddef
+  return $ mn ++ inp ++ con ++ out ++ moddef
 
 -- private utilities used in generateCode
 getDir :: Lang -> String

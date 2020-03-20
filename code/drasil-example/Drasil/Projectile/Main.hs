@@ -86,6 +86,7 @@ choiceCombos = [baseChoices,
     constStructure = Store Unbundled},
   baseChoices {
     modularity = Modular Separated,
+    impType = Library,
     constStructure = Store Unbundled,
     spaceMatch = matchToFloats},
   baseChoices {

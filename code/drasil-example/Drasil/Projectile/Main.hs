@@ -42,18 +42,23 @@ genCodeWithChoices (c:cs) = let dir = codedDirName (getAccStr projectileTitle) c
 codedDirName :: String -> Choices -> String
 codedDirName n Choices {
   modularity = m,
+  impType = it,
   logging = l,
   inputStructure = is,
   constStructure = cs,
   constRepr = cr,
   spaceMatch = sm} = 
-  intercalate "_" [n, codedMod m, codedLog l, codedStruct is, 
+  intercalate "_" [n, codedMod m, codedImpTp it, codedLog l, codedStruct is, 
     codedConStruct cs, codedConRepr cr, codedSpaceMatch sm]
   
 codedMod :: Modularity -> String
 codedMod Unmodular = "U"
 codedMod (Modular Combined) = "C"
 codedMod (Modular Separated) = "S"
+
+codedImpTp :: ImplementationType -> String
+codedImpTp Program = "P"
+codedImpTp Library = "L"
 
 codedLog :: Logging -> String
 codedLog LogNone = "NoL"

@@ -384,11 +384,11 @@ odeintPckg = mkODELib odeint odeintCall "." [Cpp]
 odeint :: ExternalLibrary
 odeint = externalLib [
   choiceSteps [
-    [callStep $ libConstructor odeintImport rkdp5C [] rk,
-    callStep $ libFunctionWithResult odeintImport makeControlled 
+    [callStep $ libConstructor (odeintImport ++ "/stepper/runge_kutta_dopri5") rkdp5C [] rk,
+    callStep $ libFunctionWithResult (odeintImport ++ "/stepper/generation") makeControlled 
       [inlineArg Real, inlineArg Real, lockedArg (sy rk)] stepper],
-    [callStep $ libConstructor odeintImport adamsBashC [] stepper]],
-  mandatoryStep $ callStep $ libFunction odeintImport
+    [callStep $ libConstructor (odeintImport ++ "/stepper/adams_bashforth") adamsBashC [] stepper]],
+  mandatoryStep $ callStep $ libFunction (odeintImport ++ "/integrate/integrate_const")
     integrateConst [
       lockedArg (sy stepper), 
       customObjArg [] "Class representing an ODE system" ode odeCtor 

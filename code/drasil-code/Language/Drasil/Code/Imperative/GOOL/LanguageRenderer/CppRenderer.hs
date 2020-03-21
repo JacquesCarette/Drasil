@@ -58,9 +58,9 @@ instance AuxiliarySym CppProject where
 
 cppBuildConfig :: ImplementationType -> Maybe BuildConfig
 cppBuildConfig it = buildAll (\i o -> [cppCompiler : i ++ map asFragment
-  ["--std=c++11", target it, "-o"] ++ [o]]) (outName it)
-  where target Library = "-shared"
-        target Program = ""
+  ("--std=c++11" : target it ++ ["-o"]) ++ [o]]) (outName it)
+  where target Library = ["-shared", "-fPIC"]
+        target Program = []
         outName Library = sharedLibrary
         outName Program = executable
 

@@ -13,7 +13,7 @@ endif
 build: Projectile$(LIB_EXTENSION)
 
 Projectile$(LIB_EXTENSION): InputFormat.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp InputFormat.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp
-	"$(CXX)" InputFormat.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp --std=c++11 -shared -o Projectile$(LIB_EXTENSION)
+	"$(CXX)" InputFormat.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp --std=c++11 -shared -fPIC -o Projectile$(LIB_EXTENSION)
 
 doc: doxConfig InputFormat.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp
 	doxygen doxConfig

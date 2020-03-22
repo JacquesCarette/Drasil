@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.GOOL.Symantics (
 import Language.Drasil (Expr)
 import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.DataDesc (DataDesc)
-import Language.Drasil.CodeSpec (Comments, Verbosity)
+import Language.Drasil.CodeSpec (Comments, ImplementationType, Verbosity)
 
 import GOOL.Drasil (ProgData, GOOLState)
 
@@ -27,7 +27,8 @@ class AuxiliarySym repr where
 
   optimizeDox :: repr (AuxHelper repr)
 
-  makefile :: [Comments] -> GOOLState -> ProgData -> repr (Auxiliary repr)
+  makefile :: ImplementationType -> [Comments] -> GOOLState -> ProgData -> 
+    repr (Auxiliary repr)
 
   auxHelperDoc :: repr (AuxHelper repr) -> Doc
   auxFromData :: FilePath -> Doc -> repr (Auxiliary repr)

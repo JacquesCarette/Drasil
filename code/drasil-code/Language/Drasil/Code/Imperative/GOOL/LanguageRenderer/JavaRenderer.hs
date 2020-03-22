@@ -6,16 +6,18 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
   JavaProject(..)
 ) where
 
+import Language.Drasil.CodeSpec (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, sampleInput, makefile)
+  G (doxConfig, sampleInput, makefile, noRunIfLib)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
-import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
-  NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
-  interp, mainModule, mainModuleFile, packSep, withExt)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..), 
+  Ext(..), Runnable, NameOpts(NameOpts), asFragment, buildSingle, 
+  buildAllAdditionalName, includeExt, inCodePackage, interp, mainModule, 
+  mainModuleFile, packSep, withExt)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
 import GOOL.Drasil (onCodeList)
@@ -54,15 +56,18 @@ instance AuxiliarySym JavaProject where
 
   optimizeDox = return yes
 
-  makefile = G.makefile jBuildConfig jRunnable
+  makefile it = G.makefile (jBuildConfig it) (G.noRunIfLib it jRunnable)
 
   auxHelperDoc = unJP
   auxFromData fp d = return $ ad fp d
 
-jBuildConfig :: Maybe BuildConfig
-jBuildConfig = buildSingle (\i _ -> asFragment "javac" : i) $
-  inCodePackage mainModuleFile
+jBuildConfig :: ImplementationType -> Maybe BuildConfig
+jBuildConfig Program = buildSingle (\i _ -> [asFragment "javac" : i]) 
+  (withExt (inCodePackage mainModule) ".class") $ inCodePackage mainModuleFile
+jBuildConfig Library = buildAllAdditionalName (\i o a -> 
+  [asFragment "javac" : i, map asFragment ["jar", "-cvf"] ++ [o, a]]) 
+  (BWithExt BPackName $ OtherExt $ asFragment ".jar") BPackName
 
-jRunnable :: Runnable
+jRunnable :: Maybe Runnable
 jRunnable = interp (flip withExt ".class" $ inCodePackage mainModule) 
   jNameOpts "java"

@@ -5,13 +5,15 @@ module Language.Drasil.Code.Imperative.DrasilState (
 import Language.Drasil
 import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Modularity(..), Comments, 
   Verbosity, MatchedConceptMap, MatchedSpaces, ConstantRepr, ConstantStructure, 
-  ConstraintBehaviour, InputModule(..), Logging, Structure)
+  ConstraintBehaviour, InputModule(..), Logging, Structure, 
+  ImplementationType(..))
 
 -- Private State, used to push these options around the generator
 data DrasilState = DrasilState {
   codeSpec :: CodeSpec,
   date :: String,
   modular :: Modularity,
+  implType :: ImplementationType,
   inStruct :: Structure,
   conStruct :: ConstantStructure,
   conRepr :: ConstantRepr,

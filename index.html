@@ -50,6 +50,7 @@ td {
   <tr>
     <th>Case Study</th>
     <th>Modularity</th>
+    <th>Implementation Type</th>
     <th>Logging</th>
     <th>Input Structure</th>
     <th>Constant Structure</th>
@@ -59,6 +60,7 @@ td {
   <tr>
     <td>GlassBR</td>
     <td>S</td>
+    <td>P</td>
     <td>L</td>
     <td>B</td>
     <td>I</td>
@@ -68,6 +70,7 @@ td {
   <tr>
     <td>NoPCM</td>
     <td>C</td>
+    <td>P</td>
     <td>NoL</td>
     <td>U</td>
     <td>B</td>
@@ -75,8 +78,9 @@ td {
     <td>D</td>
   </tr>
   <tr>
-    <td>Projectile_C_NoL_B_U_V_D</td>
+    <td>Projectile_C_P_NoL_B_U_V_D</td>
     <td>C</td>
+    <td>P</td>
     <td>NoL</td>
     <td>B</td>
     <td>U</td>
@@ -84,8 +88,9 @@ td {
     <td>D</td>
   </tr>
   <tr>
-    <td>Projectile_S_NoL_U_U_V_F</td>
+    <td>Projectile_S_L_NoL_U_U_V_F</td>
     <td>S</td>
+    <td>L</td>
     <td>NoL</td>
     <td>U</td>
     <td>U</td>
@@ -93,8 +98,9 @@ td {
     <td>F</td>
   </tr>
   <tr>
-    <td>Projectile_U_L_B_B_C_D</td>
+    <td>Projectile_U_P_L_B_B_C_D</td>
     <td>U</td>
+    <td>P</td>
     <td>L</td>
     <td>B</td>
     <td>B</td>
@@ -102,8 +108,9 @@ td {
     <td>D</td>
   </tr>
   <tr>
-    <td>Projectile_U_NoL_U_WI_V_D</td>
+    <td>Projectile_U_P_NoL_U_WI_V_D</td>
     <td>U</td>
+    <td>P</td>
     <td>NoL</td>
     <td>U</td>
     <td>WI</td>
@@ -111,8 +118,9 @@ td {
     <td>D</td>
   </tr>
   <tr>
-    <td>Projectile_U_L_B_WI_V_F</td>
+    <td>Projectile_U_P_L_B_WI_V_F</td>
     <td>U</td>
+    <td>P</td>
     <td>L</td>
     <td>B</td>
     <td>WI</td>
@@ -126,6 +134,12 @@ td {
       <li>U - Unmodular</li>
       <li>C - Modular with Combined input module</li>
       <li>S - Modular with Separated input module</li>
+    </ul>
+  </li>
+  <li>Implementation Type
+    <ul>
+      <li>P - Program</li>
+      <li>L - Library</li>
     </ul>
   </li>
   <li>Logging
@@ -188,10 +202,10 @@ td {
           Generated Code:
           <ul>
               <li>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/glassbr/src/cpp">[C++]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/glassbr/src/csharp">[C#]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/glassbr/src/java">[Java]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/glassbr/src/python">[Python]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/glassbr/src/cpp">[C++]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/glassbr/src/csharp">[C#]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/glassbr/src/java">[Java]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/glassbr/src/python">[Python]</a>
               </li>
           </ul>
         </li>
@@ -232,10 +246,10 @@ td {
           Generated Code:
           <ul>
               <li>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/nopcm/src/cpp">[C++]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/nopcm/src/csharp">[C#]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/nopcm/src/java">[Java]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/nopcm/src/python">[Python]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/nopcm/src/cpp">[C++]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/nopcm/src/csharp">[C#]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/nopcm/src/java">[Java]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/nopcm/src/python">[Python]</a>
               </li>
           </ul>
         </li>
@@ -264,70 +278,70 @@ td {
         <li>
           Generated Code:
           <ul>
-              <li>Projectile_C_NoL_B_U_V_D
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_C_NoL_B_U_V_D/src/cpp">[C++]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_C_NoL_B_U_V_D/src/csharp">[C#]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_C_NoL_B_U_V_D/src/java">[Java]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_C_NoL_B_U_V_D/src/python">[Python]</a>
+              <li>Projectile_C_P_NoL_B_U_V_D
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_C_P_NoL_B_U_V_D/src/cpp">[C++]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_C_P_NoL_B_U_V_D/src/csharp">[C#]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_C_P_NoL_B_U_V_D/src/java">[Java]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_C_P_NoL_B_U_V_D/src/python">[Python]</a>
               </li>
-              <li>Projectile_S_NoL_U_U_V_F
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_S_NoL_U_U_V_F/src/cpp">[C++]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_S_NoL_U_U_V_F/src/csharp">[C#]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_S_NoL_U_U_V_F/src/java">[Java]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_S_NoL_U_U_V_F/src/python">[Python]</a>
+              <li>Projectile_S_L_NoL_U_U_V_F
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_S_L_NoL_U_U_V_F/src/cpp">[C++]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_S_L_NoL_U_U_V_F/src/csharp">[C#]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_S_L_NoL_U_U_V_F/src/java">[Java]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_S_L_NoL_U_U_V_F/src/python">[Python]</a>
               </li>
-              <li>Projectile_U_L_B_B_C_D
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_U_L_B_B_C_D/src/cpp">[C++]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_U_L_B_B_C_D/src/csharp">[C#]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_U_L_B_B_C_D/src/java">[Java]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_U_L_B_B_C_D/src/python">[Python]</a>
+              <li>Projectile_U_P_L_B_B_C_D
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_U_P_L_B_B_C_D/src/cpp">[C++]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_U_P_L_B_B_C_D/src/csharp">[C#]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_U_P_L_B_B_C_D/src/java">[Java]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_U_P_L_B_B_C_D/src/python">[Python]</a>
               </li>
-              <li>Projectile_U_L_B_WI_V_F
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_U_L_B_WI_V_F/src/cpp">[C++]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_U_L_B_WI_V_F/src/csharp">[C#]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_U_L_B_WI_V_F/src/java">[Java]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_U_L_B_WI_V_F/src/python">[Python]</a>
+              <li>Projectile_U_P_L_B_WI_V_F
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_U_P_L_B_WI_V_F/src/cpp">[C++]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_U_P_L_B_WI_V_F/src/csharp">[C#]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_U_P_L_B_WI_V_F/src/java">[Java]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_U_P_L_B_WI_V_F/src/python">[Python]</a>
               </li>
-              <li>Projectile_U_NoL_U_WI_V_D
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_U_NoL_U_WI_V_D/src/cpp">[C++]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_U_NoL_U_WI_V_D/src/csharp">[C#]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_U_NoL_U_WI_V_D/src/java">[Java]</a>
-                  <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/code/stable/projectile/Projectile_U_NoL_U_WI_V_D/src/python">[Python]</a>
+              <li>Projectile_U_P_NoL_U_WI_V_D
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_U_P_NoL_U_WI_V_D/src/cpp">[C++]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_U_P_NoL_U_WI_V_D/src/csharp">[C#]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_U_P_NoL_U_WI_V_D/src/java">[Java]</a>
+                  <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/code/stable/projectile/Projectile_U_P_NoL_U_WI_V_D/src/python">[Python]</a>
               </li>
           </ul>
         </li>
         <li>
           Generated Code Documentation:
           <ul>
-              <li>Projectile_C_NoL_B_U_V_D
-                  <a href="examples/Projectile/doxygen/Projectile_C_NoL_B_U_V_D/cpp/index.html">[C++]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_C_NoL_B_U_V_D/csharp/index.html">[C#]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_C_NoL_B_U_V_D/java/index.html">[Java]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_C_NoL_B_U_V_D/python/index.html">[Python]</a>
+              <li>Projectile_C_P_NoL_B_U_V_D
+                  <a href="examples/Projectile/doxygen/Projectile_C_P_NoL_B_U_V_D/cpp/index.html">[C++]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_C_P_NoL_B_U_V_D/csharp/index.html">[C#]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_C_P_NoL_B_U_V_D/java/index.html">[Java]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_C_P_NoL_B_U_V_D/python/index.html">[Python]</a>
               </li>
-              <li>Projectile_S_NoL_U_U_V_F
-                  <a href="examples/Projectile/doxygen/Projectile_S_NoL_U_U_V_F/cpp/index.html">[C++]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_S_NoL_U_U_V_F/csharp/index.html">[C#]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_S_NoL_U_U_V_F/java/index.html">[Java]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_S_NoL_U_U_V_F/python/index.html">[Python]</a>
+              <li>Projectile_S_L_NoL_U_U_V_F
+                  <a href="examples/Projectile/doxygen/Projectile_S_L_NoL_U_U_V_F/cpp/index.html">[C++]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_S_L_NoL_U_U_V_F/csharp/index.html">[C#]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_S_L_NoL_U_U_V_F/java/index.html">[Java]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_S_L_NoL_U_U_V_F/python/index.html">[Python]</a>
               </li>
-              <li>Projectile_U_L_B_B_C_D
-                  <a href="examples/Projectile/doxygen/Projectile_U_L_B_B_C_D/cpp/index.html">[C++]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_U_L_B_B_C_D/csharp/index.html">[C#]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_U_L_B_B_C_D/java/index.html">[Java]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_U_L_B_B_C_D/python/index.html">[Python]</a>
+              <li>Projectile_U_P_L_B_B_C_D
+                  <a href="examples/Projectile/doxygen/Projectile_U_P_L_B_B_C_D/cpp/index.html">[C++]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_U_P_L_B_B_C_D/csharp/index.html">[C#]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_U_P_L_B_B_C_D/java/index.html">[Java]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_U_P_L_B_B_C_D/python/index.html">[Python]</a>
               </li>
-              <li>Projectile_U_L_B_WI_V_F
-                  <a href="examples/Projectile/doxygen/Projectile_U_L_B_WI_V_F/cpp/index.html">[C++]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_U_L_B_WI_V_F/csharp/index.html">[C#]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_U_L_B_WI_V_F/java/index.html">[Java]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_U_L_B_WI_V_F/python/index.html">[Python]</a>
+              <li>Projectile_U_P_L_B_WI_V_F
+                  <a href="examples/Projectile/doxygen/Projectile_U_P_L_B_WI_V_F/cpp/index.html">[C++]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_U_P_L_B_WI_V_F/csharp/index.html">[C#]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_U_P_L_B_WI_V_F/java/index.html">[Java]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_U_P_L_B_WI_V_F/python/index.html">[Python]</a>
               </li>
-              <li>Projectile_U_NoL_U_WI_V_D
-                  <a href="examples/Projectile/doxygen/Projectile_U_NoL_U_WI_V_D/cpp/index.html">[C++]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_U_NoL_U_WI_V_D/csharp/index.html">[C#]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_U_NoL_U_WI_V_D/java/index.html">[Java]</a>
-                  <a href="examples/Projectile/doxygen/Projectile_U_NoL_U_WI_V_D/python/index.html">[Python]</a>
+              <li>Projectile_U_P_NoL_U_WI_V_D
+                  <a href="examples/Projectile/doxygen/Projectile_U_P_NoL_U_WI_V_D/cpp/index.html">[C++]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_U_P_NoL_U_WI_V_D/csharp/index.html">[C#]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_U_P_NoL_U_WI_V_D/java/index.html">[Java]</a>
+                  <a href="examples/Projectile/doxygen/Projectile_U_P_NoL_U_WI_V_D/python/index.html">[Python]</a>
               </li>
           </ul>
         </li>
@@ -388,7 +402,7 @@ td {
 </ul>
 <hr>
     <footer>
-      Generated by <a href="https://travis-ci.org/JacquesCarette/Drasil/builds/664169316">Build 7845</a> from <a href="https://github.com/JacquesCarette/Drasil/tree/7fa1a591fba90b79d763468a969bffb6f0b85fe4/">7fa1a591fba90b79d763468a969bffb6f0b85fe4</a>.
+      Generated by <a href="https://travis-ci.org/JacquesCarette/Drasil/builds/665642564">Build 7860</a> from <a href="https://github.com/JacquesCarette/Drasil/tree/dff4eb9419145669ce9bedf4d406e39251aad023/">dff4eb9419145669ce9bedf4d406e39251aad023</a>.
     </footer>
   </body>
 </html>

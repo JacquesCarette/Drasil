@@ -26,7 +26,8 @@ import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Chunk.CodeDefinition (odeDef)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
-  Modularity(..), Visibility(..), assocToMap, getAdditionalVars)
+  Modularity(..), ImplementationType(..), Visibility(..), assocToMap, 
+  getAdditionalVars)
 import Language.Drasil.Mod (Func(..), packmodRequires)
 
 import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), GS, 
@@ -47,6 +48,7 @@ generator l dt sd chs spec = DrasilState {
   codeSpec = spec,
   date = showDate $ dates chs,
   modular = modularity chs,
+  implType = impType chs,
   inStruct = inputStructure chs,
   conStruct = constStructure chs,
   conRepr = constRepr chs,
@@ -117,7 +119,7 @@ genPackage unRepr = do
       (reprPD, s) = runState p info
       pd = unRepr reprPD
       n = pName $ csi $ codeSpec g
-      m = makefile (libPaths g) (commented g) s pd
+      m = makefile (libPaths g) (implType g) (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig n s
   return $ package pd (m:i++d)
@@ -141,22 +143,29 @@ genUnmodular = do
   let n = pName $ csi $ codeSpec g
       cls = any (`member` clsMap g)
         ["get_input", "derived_values", "input_constraints"]
-  genModule n ("Contains the entire " ++ n ++ " program")
-    (map (fmap Just) (genMainFunc : concatMap genModFuncs (modules g)) ++ 
-    ((if cls then [] else [genInputFormat Primary, genInputDerived Primary, 
-      genInputConstraints Primary]) ++ [genOutputFormat])) 
+      getDesc Library = "library"
+      getDesc Program = "program"
+      mainIfExe Library = []
+      mainIfExe Program = [genMainFunc]
+  genModule n ("Contains the entire " ++ n ++ " " ++ getDesc (implType g))
+    (map (fmap Just) (mainIfExe (implType g) ++ concatMap genModFuncs 
+    (modules g)) ++ ((if cls then [] else [genInputFormat Primary, 
+      genInputDerived Primary, genInputConstraints Primary]) ++ 
+      [genOutputFormat])) 
     [genInputClass Auxiliary, genConstClass Auxiliary]
           
 genModules :: (ProgramSym repr) => 
   Reader DrasilState [FS (repr (RenderFile repr))]
 genModules = do
   g <- ask
-  mn     <- genMain
+  let mainIfExe Library = return []
+      mainIfExe Program = sequence [genMain]
+  mn     <- mainIfExe $ implType g
   inp    <- chooseInModule $ inMod g
   con    <- genConstMod 
   out    <- genOutputMod
   moddef <- traverse genModDef (modules g) -- hack ?
-  return $ mn : inp ++ con ++ out ++ moddef
+  return $ mn ++ inp ++ con ++ out ++ moddef
 
 -- private utilities used in generateCode
 getDir :: Lang -> String

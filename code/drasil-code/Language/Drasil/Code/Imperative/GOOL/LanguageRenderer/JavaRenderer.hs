@@ -6,16 +6,18 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
   JavaProject(..)
 ) where
 
+import Language.Drasil.CodeSpec (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, sampleInput, makefile)
+  G (doxConfig, sampleInput, makefile, noRunIfLib)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
-import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
-  NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
-  interp, mainModule, mainModuleFile, packSep, withExt)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..), 
+  Ext(..), Runnable, NameOpts(NameOpts), asFragment, buildSingle, 
+  buildAllAdditionalName, includeExt, inCodePackage, interp, mainModule, 
+  mainModuleFile, packSep, withExt)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
 import GOOL.Drasil (onCodeList)
@@ -55,16 +57,22 @@ instance AuxiliarySym JavaProject where
 
   optimizeDox = return yes
 
-  makefile fs = G.makefile (jBuildConfig fs) (jRunnable fs)
+  makefile fs it = G.makefile (jBuildConfig fs it) 
+    (G.noRunIfLib it (jRunnable fs))
 
   auxHelperDoc = unJP
   auxFromData fp d = return $ ad fp d
 
-jBuildConfig :: [FilePath] -> Maybe BuildConfig
-jBuildConfig fs = buildSingle (\i _ -> asFragment "javac" : map asFragment
-  (classPath fs) ++ i) $ inCodePackage mainModuleFile
+jBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
+jBuildConfig fs Program = buildSingle (\i _ -> [asFragment "javac" : map 
+  asFragment (classPath fs) ++ i]) (withExt (inCodePackage mainModule) 
+  ".class") $ inCodePackage mainModuleFile
+jBuildConfig fs Library = buildAllAdditionalName (\i o a -> 
+  [asFragment "javac" : map asFragment (classPath fs) ++ i,
+    map asFragment ["jar", "-cvf"] ++ [o, a]]) 
+  (BWithExt BPackName $ OtherExt $ asFragment ".jar") BPackName
 
-jRunnable :: [FilePath] -> Runnable
+jRunnable :: [FilePath] -> Maybe Runnable
 jRunnable fs = interp (flip withExt ".class" $ inCodePackage mainModule) 
   jNameOpts "java" (classPath fs)
 

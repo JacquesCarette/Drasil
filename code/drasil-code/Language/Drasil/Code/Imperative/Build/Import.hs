@@ -3,9 +3,9 @@ module Language.Drasil.Code.Imperative.Build.Import (
 ) where
 
 import Language.Drasil.CodeSpec (Comments)
-import Language.Drasil.Code.Imperative.Build.AST (BuildConfig(BuildConfig),
-  BuildDependencies(..), Ext(..), includeExt, NameOpts, nameOpts, packSep,
-  Runnable(Runnable), BuildName(..), RunType(..))
+import Language.Drasil.Code.Imperative.Build.AST (asFragment, 
+  BuildConfig(BuildConfig), BuildDependencies(..), Ext(..), includeExt, 
+  NameOpts, nameOpts, packSep, Runnable(Runnable), BuildName(..), RunType(..))
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName)
 
 import GOOL.Drasil (FileData(..), ProgData(..), GOOLState(..), headers, sources,
@@ -22,31 +22,29 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 data CodeHarness = Ch {
   buildConfig :: Maybe BuildConfig,
-  runnable :: Runnable, 
+  runnable :: Maybe Runnable, 
   goolState :: GOOLState,
   progData :: ProgData,
   cmts :: [Comments]}
 
 instance RuleTransformer CodeHarness where
-  makeRule (Ch b r s m cms) = [
-    mkRule buildTarget (map (const $ renderBuildName s m nameOpts nm) 
-      $ maybeToList b) []
-    ] ++
-    maybe [] (\(BuildConfig comp bt) -> [
-    mkFile (renderBuildName s m nameOpts nm) (map (makeS . filePath) (progMods m))
-      [
-      mkCheckedCommand $ foldr (+:+) mempty $ comp (getCompilerInput bt s m) $
-        renderBuildName s m nameOpts nm
-      ]
-    ]) b ++ [
+  makeRule (Ch b r s m cms) = maybe [mkRule buildTarget [] []] 
+    (\(BuildConfig comp onm anm bt) -> 
+    let outnm = maybe (asFragment "") (renderBuildName s m nameOpts) onm
+        addnm = maybe (asFragment "") (renderBuildName s m nameOpts) anm
+    in [
+    mkRule buildTarget [outnm] [],
+    mkFile outnm (map (makeS . filePath) (progMods m)) $
+      map (mkCheckedCommand . foldr (+:+) mempty) $ 
+        comp (getCompilerInput bt s m) outnm addnm
+    ]) b ++ maybe [] (\(Runnable nm no ty) -> [
     mkRule (makeS "run") [buildTarget] [
       mkCheckedCommand $ buildRunTarget (renderBuildName s m no nm) ty +:+ mkFreeVar "RUNARGS"
       ]
-    ] ++ [
+    ]) r ++ [
     mkRule (makeS "doc") (getCommentedFiles s)
       [mkCheckedCommand $ makeS $ "doxygen " ++ doxConfigName] | not (null cms)
     ] where
-      (Runnable nm no ty) = r
       buildTarget = makeS "build"
 
 renderBuildName :: GOOLState -> ProgData -> NameOpts -> BuildName -> MakeString
@@ -56,8 +54,9 @@ renderBuildName _ p _ BPackName = makeS (progName p)
 renderBuildName s p o (BPack a) = renderBuildName s p o BPackName <> 
   makeS (packSep o) <> renderBuildName s p o a
 renderBuildName s p o (BWithExt a e) = renderBuildName s p o a <> 
-  if includeExt o then maybe (error "Main module missing") (renderExt e) 
-  (s ^. mainMod) else makeS ""
+  if includeExt o then renderExt e (takeSrc $ s ^. sources) else makeS ""
+  where takeSrc (src:_) = src
+        takeSrc [] = error "Generated code has no source files"
 
 renderExt :: Ext -> FilePath -> MakeString
 renderExt CodeExt f = makeS $ takeExtension f
@@ -75,7 +74,7 @@ buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn
 buildRunTarget fn (Interpreter i) = foldr (+:+) mempty $ i ++ [fn]
 
-makeBuild :: [Comments] -> Maybe BuildConfig -> Runnable -> GOOLState -> 
+makeBuild :: [Comments] -> Maybe BuildConfig -> Maybe Runnable -> GOOLState -> 
   ProgData -> Doc
 makeBuild cms b r s p = genMake [Ch {
   buildConfig = b,

@@ -39,6 +39,9 @@ makeS = Mr
 mkWindowsVar :: VarName -> VarVal -> VarVal -> MakeString
 mkWindowsVar n w e = Mv $ Os n w e e
 
+mkOSVar :: VarName -> VarVal -> VarVal -> VarVal -> MakeString
+mkOSVar n w m l = Mv $ Os n w m l
+
 mkImplicitVar :: VarName -> MakeString
 mkImplicitVar = Mv . Implicit
 

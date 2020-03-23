@@ -9,10 +9,10 @@ import GOOL.Drasil (ScopeTag(..))
 import Language.Drasil.Chunk.Code (CodeVarChunk, codeName)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Choices(..), 
-  AuxFile, CodeSpec, CodeSystInfo(..), Modularity(..), Comments, Verbosity, 
-  MatchedConceptMap, MatchedSpaces, ConstantRepr, ConstantStructure(..), 
-  ConstraintBehaviour, InputModule(..), Logging, Structure(..), getConstraints,
-  inputModule)
+  AuxFile, CodeSpec, CodeSystInfo(..), Modularity(..), ImplementationType(..), 
+  Comments, Verbosity, MatchedConceptMap, MatchedSpaces, ConstantRepr, 
+  ConstantStructure(..), ConstraintBehaviour, InputModule(..), Logging, 
+  Structure(..), getConstraints, inputModule)
 import Language.Drasil.Mod (Mod(..), Name, Class(..), StateVariable(..), fname)
 
 import Data.List (nub)
@@ -34,6 +34,7 @@ data DrasilState = DrasilState {
   codeSpec :: CodeSpec,
   date :: String,
   modular :: Modularity,
+  implType :: ImplementationType,
   inStruct :: Structure,
   conStruct :: ConstantStructure,
   conRepr :: ConstantRepr,

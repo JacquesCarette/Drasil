@@ -31,7 +31,7 @@ data Data' = Datum DataItem'
   | Junk -- Data that can be ignored/skipped over
 
 data DataItem' = DI 
-  CodeChunk -- The datum being described
+  CodeVarChunk -- The datum being described
   [Delimiter] -- Delimiters between list elements. 
               -- Size of list should equal dimension of datum 
               -- Ex. a 1-D list needs 1 delimiter, a 2-D list needs 2 delimiters
@@ -46,10 +46,10 @@ dataDesc [d] _ = End d
 dataDesc (d:ds) dlm = DD d dlm (dataDesc ds dlm) 
 dataDesc [] _ = error "DataDesc must have at least one data item"
 
-singleton' :: CodeChunk -> Data'
+singleton' :: CodeVarChunk -> Data'
 singleton' d = Datum $ DI d []
 
-list :: CodeChunk -> [Delimiter] -> Data'
+list :: CodeVarChunk -> [Delimiter] -> Data'
 list d dlms = Datum $ DI d dlms
 
 interwovenLists :: [DataItem'] -> Integer -> Delimiter -> Data'

@@ -4,7 +4,9 @@
 
 #include "ODE.hpp"
 #include "Populate.hpp"
-#include "boost/numeric/odeint.hpp"
+#include "boost/numeric/odeint/integrate/integrate_const.hpp"
+#include "boost/numeric/odeint/stepper/generation.hpp"
+#include "boost/numeric/odeint/stepper/runge_kutta_dopri5.hpp"
 
 using std::vector;
 

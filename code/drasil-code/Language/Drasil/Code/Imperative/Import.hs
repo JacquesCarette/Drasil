@@ -24,7 +24,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.ExtLibImport (defs, steps)
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
+import Language.Drasil.CodeSpec (CodeSpec(..), Comments(..),
   ConstantRepr(..), ConstantStructure(..), Structure(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
@@ -73,12 +73,12 @@ variable :: (ProgramSym repr) => String -> VS (repr (Type repr)) ->
   Reader DrasilState (VS (repr (Variable repr)))
 variable s t = do
   g <- ask
-  let cs = csi $ codeSpec g
+  let cs = codeSpec g
       defFunc Var = var
       defFunc Const = staticVar
   if s `elem` map codeName (inputs cs) 
     then inputVariable (inStruct g) Var (var s t)
-    else if s `elem` map codeName (constants $ csi $ codeSpec g)
+    else if s `elem` map codeName (constants $ codeSpec g)
       then constVariable (conStruct g) (conRepr g) ((defFunc $ conRepr g) s t)
       else return $ var s t
   
@@ -250,7 +250,7 @@ convExpr (New c x ns) = convCall c x ns (\m _ -> ctorCall m)
   (\m _ -> libNewObjMixedArgs m)
 convExpr (Message a m x ns) = do
   g <- ask
-  let info = sysinfodb $ csi $ codeSpec g
+  let info = sysinfodb $ codeSpec g
       objCd = quantvar (symbResolve info a)
   o <- mkVal objCd
   convCall m x ns 
@@ -296,7 +296,7 @@ convCall :: (ProgramSym repr) => UID -> [Expr] -> [(UID, Expr)] ->
   VS (repr (Value repr))) -> Reader DrasilState (VS (repr (Value repr)))
 convCall c x ns f libf = do
   g <- ask
-  let info = sysinfodb $ csi $ codeSpec g
+  let info = sysinfodb $ codeSpec g
       mem = eMap g
       lem = libEMap g
       funcCd = quantfunc (symbResolve info c)
@@ -445,7 +445,7 @@ genFunc :: (ProgramSym repr) => (Label -> VS (repr (Type repr)) -> String ->
 genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- ask
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s 
+  vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s 
     \\ (map codevarC parms ++ map stVar svs))
   f n (convType $ spaceMatches g o) desc parms rd 
     [block $ map varDec vars ++ stmts]
@@ -455,7 +455,7 @@ genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   initvars <- mapM ((\iv -> fmap (var (codeName iv) . convType) (codeType iv))
     . fst) i
   stmts <- mapM convStmt s
-  vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s 
+  vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s 
     \\ (map codevarC parms ++ map stVar svs))
   genInitConstructor n desc parms (zip initvars inits) 
     [block $ map varDec vars ++ stmts]

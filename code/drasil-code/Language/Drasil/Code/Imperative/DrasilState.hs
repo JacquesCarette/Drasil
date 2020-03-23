@@ -9,7 +9,7 @@ import GOOL.Drasil (ScopeTag(..))
 import Language.Drasil.Chunk.Code (CodeVarChunk, codeName)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Choices(..), 
-  AuxFile, CodeSpec, CodeSystInfo(..), Modularity(..), ImplementationType(..), 
+  AuxFile, CodeSpec(..), Modularity(..), ImplementationType(..), 
   Comments, Verbosity, MatchedConceptMap, MatchedSpaces, ConstantRepr, 
   ConstantStructure(..), ConstraintBehaviour, InputModule(..), Logging, 
   Structure(..), getConstraints, inputModule)
@@ -66,8 +66,8 @@ inMod ds = inMod' $ modular ds
   where inMod' Unmodular = Combined
         inMod' (Modular im) = im
 
-modExportMap :: CodeSystInfo -> Choices -> [Mod] -> ModExportMap
-modExportMap cs@CSI {
+modExportMap :: CodeSpec -> Choices -> [Mod] -> ModExportMap
+modExportMap cs@CodeSpec {
   pName = prn,
   inputs = ins,
   extInputs = extIns,
@@ -89,9 +89,8 @@ modExportMap cs@CSI {
         defModName Unmodular _ = prn
         defModName _ nm = nm
 
-clsDefMap :: CodeSystInfo -> Choices -> [Mod] -> 
-  ClassDefinitionMap
-clsDefMap cs@CSI {
+clsDefMap :: CodeSpec -> Choices -> [Mod] -> ClassDefinitionMap
+clsDefMap cs@CodeSpec {
   inputs = ins,
   extInputs = extIns,
   derivedInputs = ds,

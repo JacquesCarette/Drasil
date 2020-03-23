@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..))
+import Language.Drasil.CodeSpec (CodeSpec(..), Comments(..))
 import Language.Drasil.Mod (Name)
   
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), TypeSym(..), 
@@ -26,7 +26,7 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   g <- ask
   let updateState = withReader (\s -> s { currentModule = n })
       -- Below line of code cannot be simplified because authors has a generic type
-      as = case csi (codeSpec g) of CSI {authors = a} -> map name a
+      as = case codeSpec g of CodeSpec {authors = a} -> map name a
   cs <- mapM updateState maybeCs
   ms <- mapM updateState maybeMs
   let commMod | CommentMod `elem` commented g                   = docMod desc 

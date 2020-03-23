@@ -30,7 +30,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.Parameter (pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
-import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
+import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), 
   Comments(CommentFunc), ConstantStructure(..), ConstantRepr(..), 
   ConstraintBehaviour(..), InputModule(..), Logging(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
@@ -66,7 +66,7 @@ genMainFunc = do
     ip <- getInputDecl
     co <- initConsts
     ics <- getAllInputCalls
-    varDef <- mapM getCalcCall (execOrder $ csi $ codeSpec g)
+    varDef <- mapM getCalcCall (execOrder $ codeSpec g)
     wo <- getOutputCall
     return $ (if CommentFunc `elem` commented g then docMain else mainFunction)
       $ bodyStatements $
@@ -83,7 +83,7 @@ getInputDecl = do
   cps <- mapM mkVal constrParams
   let cname = "InputParameters"
       getDecl ([],[]) = constIns (partition (flip member (eMap g) . 
-        codeName) (map codevarC $ constants $ csi $ codeSpec g)) (conRepr g) 
+        codeName) (map codevarC $ constants $ codeSpec g)) (conRepr g) 
         (conStruct g)
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
@@ -98,7 +98,7 @@ getInputDecl = do
       constIns cs Var WithInputs = getDecl cs
       constIns _ _ _ = return Nothing 
   getDecl (partition (flip member (eMap g) . codeName) 
-    (inputs $ csi $ codeSpec g))
+    (inputs $ codeSpec g))
 
 initConsts :: (ProgramSym repr) => Reader DrasilState 
   (Maybe (MS (repr (Statement repr))))
@@ -123,7 +123,7 @@ initConsts = do
       defFunc Var = varDecDef
       defFunc Const = constDecDef
   getDecl (partition (flip member (eMap g) . codeName) 
-    (constants $ csi $ codeSpec g)) (conStruct g)
+    (constants $ codeSpec g)) (conStruct g)
 
 initLogFileVar :: (ProgramSym repr) => Logging -> [MS (repr (Statement repr))]
 initLogFileVar LogVar = [varDec varLogFile]
@@ -173,8 +173,8 @@ genInputClass :: (ProgramSym repr) => ClassType ->
   Reader DrasilState (Maybe (CS (repr (Class repr))))
 genInputClass scp = withReader (\s -> s {currentClass = cname}) $ do
   g <- ask
-  let ins = inputs $ csi $ codeSpec g
-      cs = constants $ csi $ codeSpec g
+  let ins = inputs $ codeSpec g
+      cs = constants $ codeSpec g
       filt :: (CodeIdea c) => [c] -> [c]
       filt = filter (flip member (eMap g) . codeName)
       includedConstants :: (CodeIdea c) => ConstantStructure -> [c] -> [c]
@@ -225,7 +225,7 @@ genInputDerived :: (ProgramSym repr) => ClassType ->
   Reader DrasilState (Maybe (MS (repr (Method repr))))
 genInputDerived s = do
   g <- ask
-  let dvals = derivedInputs $ csi $ codeSpec g
+  let dvals = derivedInputs $ codeSpec g
       getFunc Primary = publicInOutFunc
       getFunc Auxiliary = privateInOutMethod
       genDerived :: (ProgramSym repr) => Bool -> Reader DrasilState 
@@ -244,7 +244,7 @@ genInputConstraints :: (ProgramSym repr) => ClassType ->
   Reader DrasilState (Maybe (MS (repr (Method repr))))
 genInputConstraints s = do
   g <- ask
-  let cm = cMap $ csi $ codeSpec g
+  let cm = cMap $ codeSpec g
       getFunc Primary = publicFunc
       getFunc Auxiliary = privateMethod
       genConstraints :: (ProgramSym repr) => Bool -> Reader DrasilState 
@@ -253,8 +253,7 @@ genInputConstraints s = do
       genConstraints _ = do
         h <- ask
         parms <- getConstraintParams
-        let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ 
-              codeSpec h)
+        let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec h)
             sfwrCs   = map (sfwrLookup cm) varsList
             physCs   = map (physLookup cm) varsList
         sf <- sfwrCBody sfwrCs
@@ -323,7 +322,7 @@ printConstraint :: (ProgramSym repr) => Constraint ->
   Reader DrasilState [MS (repr (Statement repr))]
 printConstraint c = do
   g <- ask
-  let db = sysinfodb $ csi $ codeSpec g
+  let db = sysinfodb $ codeSpec g
       printConstraint' :: (ProgramSym repr) => Constraint -> Reader DrasilState 
         [MS (repr (Statement repr))]
       printConstraint' (Range _ (Bounded (_,e1) (_,e2))) = do
@@ -375,13 +374,13 @@ genDataDesc :: Reader DrasilState DataDesc
 genDataDesc = do
   g <- ask
   return $ junkLine : 
-    intersperse junkLine (map singleton (extInputs $ csi $ codeSpec g))
+    intersperse junkLine (map singleton (extInputs $ codeSpec g))
 
 genSampleInput :: (AuxiliarySym repr) => Reader DrasilState [repr (Auxiliary repr)]
 genSampleInput = do
   g <- ask
   dd <- genDataDesc
-  return [sampleInput (sysinfodb $ csi $ codeSpec g) dd (sampleData g) | SampleInput `elem` 
+  return [sampleInput (sysinfodb $ codeSpec g) dd (sampleData g) | SampleInput `elem` 
     auxiliaries g]
 
 ----- CONSTANTS -----
@@ -395,7 +394,7 @@ genConstClass :: (ProgramSym repr) => ClassType ->
   Reader DrasilState (Maybe (CS (repr (Class repr))))
 genConstClass scp = withReader (\s -> s {currentClass = cname}) $ do
   g <- ask
-  let cs = constants $ csi $ codeSpec g
+  let cs = constants $ codeSpec g
       genClass :: (ProgramSym repr) => [CodeDefinition] -> Reader DrasilState (Maybe 
         (CS (repr (Class repr))))
       genClass [] = return Nothing 
@@ -437,7 +436,7 @@ genOutputFormat = do
           v <- mkVal x
           return [ printFileStr v_outfile (codeName x ++ " = "),
                    printFileLn v_outfile v
-                 ] ) (outputs $ csi $ codeSpec g)
+                 ] ) (outputs $ codeSpec g)
         desc <- woFuncDesc
         mthd <- publicFunc "write_output" void desc (map pcAuto parms) Nothing 
           [block $ [

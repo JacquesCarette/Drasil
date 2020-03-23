@@ -36,8 +36,8 @@ type Const = CodeDefinition
 type Derived = CodeDefinition
 type Def = CodeDefinition
 
-data CodeSystInfo where
-  CSI :: (HasName a) => {
+data CodeSpec where
+  CodeSpec :: (HasName a) => {
   pName :: Name,
   authors :: [a], 
   inputs :: [Input],
@@ -46,19 +46,14 @@ data CodeSystInfo where
   outputs :: [Output],
   execOrder :: [Def],
   cMap :: ConstraintMap,
-  constants :: [Const],
-  mods :: [Mod],  -- medium hack
-  sysinfodb :: ChunkDB,
-  smplData :: FilePath
-  } -> CodeSystInfo
-
-data CodeSpec where
-  CodeSpec :: {
   relations :: [Def],
   fMap :: FunctionMap,
   codequants :: [CodeVarChunk],
+  constants :: [Const],
   constMap :: FunctionMap,
-  csi :: CodeSystInfo
+  mods :: [Mod],  -- medium hack
+  sysinfodb :: ChunkDB,
+  smplData :: FilePath
   } -> CodeSpec
 
 type FunctionMap = Map.Map String CodeDefinition
@@ -88,7 +83,7 @@ codeSpec SI {_sys = sys
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
-      csi' = CSI {
+  in  CodeSpec {
         pName = n,
         authors = as,
         inputs = allInputs,
@@ -97,17 +92,14 @@ codeSpec SI {_sys = sys
         outputs = outs',
         execOrder = exOrder,
         cMap = constraintMap cs,
-        constants = const',
-        mods = ms,
-        sysinfodb = db,
-        smplData = sd
-      }
-  in  CodeSpec {
         relations = rels,
         fMap = assocToMap rels,
         codequants = map quantvar q,
+        constants = const',
         constMap = assocToMap const',
-        csi = csi'
+        mods = ms,
+        sysinfodb = db,
+        smplData = sd
       }
 
 data Choices = Choices {

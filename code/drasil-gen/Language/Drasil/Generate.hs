@@ -14,8 +14,7 @@ import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec),
   DocType(SRS, MG, MIS, Website), Filename, makeCSS, genHTML,
   genTeX, PrintingInformation)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
-  CodeSystInfo(..), Lang(..), readWithDataDesc, sampleInputDD, unPP, unJP, 
-  unCSP, unCPPP)
+  Lang(..), readWithDataDesc, sampleInputDD, unPP, unJP, unCSP, unCPPP)
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC)
 
@@ -70,7 +69,7 @@ genCode :: Choices -> CodeSpec -> IO ()
 genCode chs spec = do 
   workingDir <- getCurrentDirectory
   time <- getCurrentTime
-  sampData <- readWithDataDesc (smplData $ csi spec) $ sampleInputDD (extInputs $ csi spec)
+  sampData <- readWithDataDesc (smplData spec) $ sampleInputDD (extInputs spec)
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
   let genLangCode Java = genCall Java unJC unJP

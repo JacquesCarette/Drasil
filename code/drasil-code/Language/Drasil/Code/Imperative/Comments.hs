@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.Comments (
 import Language.Drasil
 import Database.Drasil (defTable)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..))
+import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc, unitDoc)
 
 import Data.Map (Map)
@@ -19,14 +19,14 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), colon, empty, parens, render,
 getTermDoc :: (NamedIdea c) => UID -> Map UID c -> Reader DrasilState Doc
 getTermDoc cname m = do
   g <- ask
-  let db = sysinfodb $ csi $ codeSpec g
+  let db = sysinfodb $ codeSpec g
   return $ (maybe (text "No description given") (sentenceDoc db 
     Implementation Linear . phraseNP . view term) . Map.lookup cname) m
 
 getDefnDoc :: UID -> Reader DrasilState Doc
 getDefnDoc cname = do
   g <- ask
-  let db = sysinfodb $ csi $ codeSpec g
+  let db = sysinfodb $ codeSpec g
   return $ maybe empty ((<+>) colon . sentenceDoc db Implementation Linear . 
     view defn . fst) (Map.lookup cname $ defTable db)
 

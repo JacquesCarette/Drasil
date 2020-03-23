@@ -10,8 +10,7 @@ import Utils.Drasil (stringList)
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName))
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), 
-  InputModule(..), Structure(..))
+import Language.Drasil.CodeSpec (CodeSpec(..), InputModule(..), Structure(..))
 
 import Data.Map (member)
 import qualified Data.Map as Map (filter, lookup, elems)
@@ -79,7 +78,7 @@ constModDesc = do
   let cDesc [] = ""
       cDesc _ = "the structure for holding constant values"
   return $ cDesc $ filter (flip member (eMap g) . codeName) 
-    (constants $ csi $ codeSpec g)
+    (constants $ codeSpec g)
 
 outputFormatDesc :: Reader DrasilState String
 outputFormatDesc = do
@@ -94,17 +93,17 @@ inputClassDesc = do
   let cname = "InputParameters"
       inClassD [] = ""
       inClassD _ = "Structure for holding the " ++ stringList [
-        inPs $ extInputs $ csi $ codeSpec g,
+        inPs $ extInputs $ codeSpec g,
         dVs $ "derived_values" `elem` defList g,
         cVs $ filter (flip member (Map.filter (cname ==) 
-          (eMap g)) . codeName) (constants $ csi $ codeSpec g)]
+          (eMap g)) . codeName) (constants $ codeSpec g)]
       inPs [] = ""
       inPs _ = "input values"
       dVs False = ""
       dVs _ = "derived values"
       cVs [] = ""
       cVs _ = "constant values"
-  return $ inClassD $ inputs $ csi $ codeSpec g
+  return $ inClassD $ inputs $ codeSpec g
 
 constClassDesc :: Reader DrasilState String
 constClassDesc = do
@@ -112,7 +111,7 @@ constClassDesc = do
   let ccDesc [] = ""
       ccDesc _ = "Structure for holding the constant values"
   return $ ccDesc $ filter (flip member (eMap g) . codeName) 
-    (constants $ csi $ codeSpec g)
+    (constants $ codeSpec g)
 
 inFmtFuncDesc :: Reader DrasilState String
 inFmtFuncDesc = do
@@ -147,7 +146,7 @@ woFuncDesc = do
 physAndSfwrCons :: Reader DrasilState String
 physAndSfwrCons = do
   g <- ask
-  let cns = concat $ Map.elems (cMap $ csi $ codeSpec g)
+  let cns = concat $ Map.elems (cMap $ codeSpec g)
   return $ stringList [
     if null (map isPhysC cns) then "" else "physical constraints",
     if null (map isSfwrC cns) then "" else "software constraints"]

@@ -25,9 +25,8 @@ import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Chunk.CodeDefinition (odeDef)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
-  Modularity(..), ImplementationType(..), Visibility(..), assocToMap, 
-  getAdditionalVars)
+import Language.Drasil.CodeSpec (CodeSpec(..), Choices(..), Modularity(..), 
+  ImplementationType(..), Visibility(..), assocToMap, getAdditionalVars)
 import Language.Drasil.Mod (Func(..), packmodRequires)
 
 import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), GS, 
@@ -82,9 +81,9 @@ generator l dt sd chs spec = DrasilState {
         ols = odeLib chs
         els = map snd elmap
         (pth, elmap) = chooseODELib l ols
-        mem = modExportMap (csi spec) chs modules' 
+        mem = modExportMap spec chs modules' 
         lem = fromList (concatMap (^. modExports) els)
-        cdm = clsDefMap (csi spec) chs modules'
+        cdm = clsDefMap spec chs modules'
         chooseODELib _ [] = (Nothing, [])
         chooseODELib lng (o:os) = if lng `elem` compatibleLangs o then 
           (libPath o, map (\ode -> (codeName $ odeDef ode, 
@@ -92,8 +91,8 @@ generator l dt sd chs spec = DrasilState {
           chooseODELib lng os
         modules' = packmodRequires "Calculations" 
           "Provides functions for calculating the outputs" 
-          (concatMap (^. imports) els) [] (map FCD (execOrder $ csi spec)) 
-          : mods (csi spec) ++ concatMap (^. auxMods) els
+          (concatMap (^. imports) els) [] (map FCD (execOrder spec)) 
+          : mods spec ++ concatMap (^. auxMods) els
 
 generateCode :: (ProgramSym progRepr, PackageSym packRepr) => Lang -> 
   (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 
@@ -118,7 +117,7 @@ genPackage unRepr = do
   let info = unCI $ evalState ci initialState
       (reprPD, s) = runState p info
       pd = unRepr reprPD
-      n = pName $ csi $ codeSpec g
+      n = pName $ codeSpec g
       m = makefile (libPaths g) (implType g) (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig n s
@@ -128,7 +127,7 @@ genProgram :: (ProgramSym repr) => Reader DrasilState (GS (repr (Program repr)))
 genProgram = do
   g <- ask
   ms <- chooseModules $ modular g
-  let n = pName $ csi $ codeSpec g
+  let n = pName $ codeSpec g
   return $ prog n ms
 
 chooseModules :: (ProgramSym repr) => Modularity -> 
@@ -140,7 +139,7 @@ genUnmodular :: (ProgramSym repr) =>
   Reader DrasilState (FS (repr (RenderFile repr)))
 genUnmodular = do
   g <- ask
-  let n = pName $ csi $ codeSpec g
+  let n = pName $ codeSpec g
       cls = any (`member` clsMap g)
         ["get_input", "derived_values", "input_constraints"]
       getDesc Library = "library"

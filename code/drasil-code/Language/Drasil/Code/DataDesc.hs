@@ -3,6 +3,7 @@ module Language.Drasil.Code.DataDesc where
 import Language.Drasil.Chunk.Code (CodeVarChunk)
 
 import Data.List (nub)
+import Data.List.NonEmpty (NonEmpty(..), fromList)
 
 type DataItem = CodeVarChunk
 
@@ -13,7 +14,7 @@ data DataDesc' = DD Data' Delimiter DataDesc' | End Data'
 data Data' = Datum DataItem' 
   | Data -- To be used in cases where multiple list-type data have their 
          -- elements intermixed, and thus need to be described together
-    [DataItem'] -- The DataItems being simultaneously described. 
+    (NonEmpty DataItem') -- The DataItems being simultaneously described. 
                 -- The intra-list delimiters for any shared dimensions should 
                 -- be the same between the DataItems. For example, if mixing 2 
                 -- lists of same dimension, the intra-list delimiters must be 
@@ -53,7 +54,8 @@ list :: CodeVarChunk -> [Delimiter] -> Data'
 list d dlms = Datum $ DI d dlms
 
 interwovenLists :: [DataItem'] -> Integer -> Delimiter -> Data'
-interwovenLists = Data
+interwovenLists [] _ _ = error "interwovenLists must be passed a non-empty list"
+interwovenLists ds i dl = Data (fromList ds) i dl
 
 junk :: Data'
 junk = Junk

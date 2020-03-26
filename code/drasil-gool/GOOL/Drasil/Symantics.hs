@@ -22,7 +22,7 @@ module GOOL.Drasil.Symantics (
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
-import GOOL.Drasil.Data (Binding, Terminator, ScopeTag)
+import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
 import Control.Monad.State (State)
@@ -142,7 +142,7 @@ class (PermanenceSym repr) => TypeSym repr where
   arrayType     :: VS (repr (Type repr)) -> VS (repr (Type repr))
   listInnerType :: VS (repr (Type repr)) -> VS (repr (Type repr))
   obj           :: Label -> VS (repr (Type repr))
-  enumType      :: Label -> VS (repr (Type repr))
+  -- enumType      :: Label -> VS (repr (Type repr))
   funcType      :: [VS (repr (Type repr))] -> VS (repr (Type repr)) -> 
     VS (repr (Type repr))
   iterator      :: VS (repr (Type repr)) -> VS (repr (Type repr))
@@ -232,7 +232,7 @@ class (TypeSym repr) => VariableSym repr where
   objVar       :: VS (repr (Variable repr)) -> VS (repr (Variable repr)) -> 
     VS (repr (Variable repr))
   objVarSelf   :: VS (repr (Variable repr)) -> VS (repr (Variable repr))
-  enumVar      :: Label -> Label -> VS (repr (Variable repr))
+  -- enumVar      :: Label -> Label -> VS (repr (Variable repr))
   listVar      :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
   listOf       :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
   arrayElem    :: Integer -> VS (repr (Variable repr)) -> 
@@ -269,13 +269,13 @@ class (VariableSym repr) => ValueSym repr where
   pi :: VS (repr (Value repr))
 
   --other operators ($)
-  ($:)  :: Label -> Label -> VS (repr (Value repr))
-  infixl 9 $:
+  -- ($:)  :: Label -> Label -> VS (repr (Value repr))
+  -- infixl 9 $:
 
   valueOf       :: VS (repr (Variable repr)) -> VS (repr (Value repr))
 --  global       :: Label -> repr (Value repr)         -- not sure how this one works, but in GOOL it was hardcoded to give an error so I'm leaving it out for now
   arg          :: Integer -> VS (repr (Value repr))
-  enumElement  :: Label -> Label -> VS (repr (Value repr))
+  -- enumElement  :: Label -> Label -> VS (repr (Value repr))
 
   argsList  :: VS (repr (Value repr))
 
@@ -818,7 +818,7 @@ class (MethodSym repr) => ClassSym repr where
   type Class repr
   buildClass :: Label -> Maybe Label -> [CS (repr (StateVar repr))] 
     -> [MS (repr (Method repr))] -> CS (repr (Class repr))
-  enum :: Label -> [Label] -> repr (Scope repr) -> CS (repr (Class repr))
+  -- enum :: Label -> [Label] -> repr (Scope repr) -> CS (repr (Class repr))
   extraClass :: Label -> Maybe Label -> [CS (repr (StateVar repr))] 
     -> [MS (repr (Method repr))] -> CS (repr (Class repr))
   implementingClass :: Label -> [Label] -> [CS (repr (StateVar repr))] -> 

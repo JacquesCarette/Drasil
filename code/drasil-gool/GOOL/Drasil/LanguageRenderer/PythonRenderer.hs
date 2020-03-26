@@ -23,7 +23,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
   InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..), 
   ODEInfo(..), ODEOptions(..), ODEMethod(..))
-import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
+import GOOL.Drasil.LanguageRenderer (multiStateDocD, 
   bodyDocD, outDoc, destructorError, multiAssignDoc, returnDocD, mkStNoEnd,
   breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, 
   listSetFuncDocD, castObjDocD, dynamicDocD, bindingError, classDec, dot, 
@@ -32,12 +32,12 @@ import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD,
   surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, int, listInnerType, obj, 
-  enumType, funcType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', 
+  funcType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', 
   sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', csc, sec, cot, equalOp, 
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
-  multOp, divideOp, moduloOp, var, staticVar, extVar, enumVar, classVar, 
+  multOp, divideOp, moduloOp, var, staticVar, extVar, classVar, 
   objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litDouble, 
-  litInt, litString, valueOf, arg, enumElement, argsList, objAccess, 
+  litInt, litString, valueOf, arg, argsList, objAccess, 
   objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
   call, funcApp, funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, 
   extFuncApp, extFuncAppMixedArgs, libFuncApp, newObj, newObjMixedArgs, 
@@ -57,7 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, binExpr, 
   typeBinExpr, addmathImport)
-import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
+import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
@@ -67,7 +67,7 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   addLangImportVS, getLangImports, addLibImport, addLibImportVS, getLibImports, 
   addModuleImport, addModuleImportVS, getModuleImports, setFileType, 
-  setClassName, getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
+  getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -197,7 +197,7 @@ instance TypeSym PythonCode where
   arrayType = listType
   listInnerType = G.listInnerType
   obj = G.obj
-  enumType = G.enumType
+  -- enumType = G.enumType
   funcType = G.funcType
   iterator t = t
   void = toState $ typeFromData Void "NoneType" (text "NoneType")
@@ -296,7 +296,7 @@ instance VariableSym PythonCode where
   const = var
   extVar l n t = modify (addModuleImportVS l) >> G.extVar l n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar "self" (obj l) (text "self"))
-  enumVar = G.enumVar
+  -- enumVar = G.enumVar
   classVar = G.classVar classVarDocD
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $ 
@@ -333,11 +333,11 @@ instance ValueSym PythonCode where
 
   pi = addmathImport $ mkStateVal double (text "math.pi")
 
-  ($:) = enumElement
+  -- ($:) = enumElement
 
   valueOf = G.valueOf
   arg n = G.arg (litInt $ n+1) argsList
-  enumElement = G.enumElement
+  -- enumElement = G.enumElement
   argsList = modify (addLangImportVS "sys") >> G.argsList "sys.argv"
 
   valueType = onCodeValue valType
@@ -695,8 +695,8 @@ instance InternalStateVar PythonCode where
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
   buildClass = G.buildClass
-  enum n es s = modify (setClassName n) >> classFromData (toState $ pyClass n 
-    empty (scopeDoc s) (enumElementsDocD' es) empty)
+  -- enum n es s = modify (setClassName n) >> classFromData (toState $ pyClass n 
+  --   empty (scopeDoc s) (enumElementsDocD' es) empty)
   extraClass = buildClass
   implementingClass = G.implementingClass
 

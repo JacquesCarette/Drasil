@@ -10,7 +10,7 @@ import GOOL.Drasil.Symantics (ProgramSym(..), FileSym(..), PermanenceSym(..),
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
-import GOOL.Drasil.Data (Binding(Dynamic), ScopeTag(..), Exception(..),
+import GOOL.Drasil.AST (Binding(Dynamic), ScopeTag(..), Exception(..),
   exception, stdExc)
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -85,7 +85,7 @@ instance TypeSym CodeInfo where
   arrayType _ = noInfoType
   listInnerType _ = noInfoType
   obj = toState . toCode
-  enumType _ = noInfoType
+  -- enumType _ = noInfoType
   funcType _ _ = noInfoType
   iterator _ = noInfoType
   void = noInfoType
@@ -114,7 +114,7 @@ instance VariableSym CodeInfo where
   const _ _ = noInfo
   extVar _ _ _ = noInfo
   self = noInfo
-  enumVar _ _ = noInfo
+  -- enumVar _ _ = noInfo
   classVar _ _ = noInfo
   extClassVar _ _ = noInfo
   objVar _ _ = noInfo
@@ -145,11 +145,11 @@ instance ValueSym CodeInfo where
 
   pi = noInfo
 
-  ($:) _ _ = noInfo
+  -- ($:) _ _ = noInfo
 
   valueOf _ = noInfo
   arg _ = noInfo
-  enumElement _ _ = noInfo
+  -- enumElement _ _ = noInfo
   
   argsList = noInfo
 
@@ -451,8 +451,8 @@ instance ClassSym CodeInfo where
     modify (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
-  enum n _ s = if unCI s == Pub then modifyReturn (addClass n) (toCode ()) else 
-    noInfo 
+  -- enum n _ s = if unCI s == Pub then modifyReturn (addClass n) (toCode ()) else 
+  --   noInfo 
   extraClass n _ _ ms = do
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) ms

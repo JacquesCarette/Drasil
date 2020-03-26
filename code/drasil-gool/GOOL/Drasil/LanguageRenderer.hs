@@ -7,14 +7,14 @@ module GOOL.Drasil.LanguageRenderer (
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, addExt,
   
   -- * Default Functions available for use in renderers
-  packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
-  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, 
+  packageDocD, fileDoc', moduleDocD, classDocD, 
+  multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, 
   printFileDocD, destructorError, paramDocD, methodDocD, stateVarDocD, 
   constVarDocD, stateVarListDocD, switchDocD, assignDocD, multiAssignDoc, 
   plusEqualsDocD, plusPlusDocD, listDecDocD, statementDocD, getTermDoc, 
   returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd, mkStateVal, mkVal, 
   mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, selfDocD, argDocD,
-  enumElemDocD, classVarCheckStatic, classVarDocD, objVarDocD, funcAppDocD, 
+  classVarCheckStatic, classVarDocD, objVarDocD, funcAppDocD, 
   newObjDocD, newObjDocD', constDecDefDocD, funcDocD, castDocD, 
   listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
@@ -36,7 +36,7 @@ import GOOL.Drasil.Symantics (Label, Library, RenderSym, BodySym(..),
   ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
   BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(int))
-import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
+import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateModDoc, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
   onStateValue, getNestDegree)
@@ -46,8 +46,7 @@ import Control.Lens.Zoom (zoom)
 import Data.List (last)
 import Prelude hiding (break,print,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
-  space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, int, 
-  colon)
+  space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, colon)
 
 ----------------------------------------
 -- Syntax common to several renderers --
@@ -108,23 +107,23 @@ classDocD n p s vs fs = vcat [
     fs],
   rbrace]
 
-enumDocD :: Label -> Doc -> Doc -> Doc
-enumDocD n es s = vcat [
-  s <+> text "enum" <+> text n <+> lbrace,
-  indent es,
-  rbrace]
+-- enumDocD :: Label -> Doc -> Doc -> Doc
+-- enumDocD n es s = vcat [
+--   s <+> text "enum" <+> text n <+> lbrace,
+--   indent es,
+--   rbrace]
 
-enumElementsDocD :: [Label] -> Bool -> Doc
-enumElementsDocD es enumsEqualInts = vcat $
-  zipWith (\e i -> text e <+> equalsInt i <> interComma i) es nums
-  where nums = [0..length es - 1]
-        equalsInt i = if enumsEqualInts then equals <+> int i else empty 
-        interComma i = if i < length es - 1 then text "," else empty
+-- enumElementsDocD :: [Label] -> Bool -> Doc
+-- enumElementsDocD es enumsEqualInts = vcat $
+--   zipWith (\e i -> text e <+> equalsInt i <> interComma i) es nums
+--   where nums = [0..length es - 1]
+--         equalsInt i = if enumsEqualInts then equals <+> int i else empty 
+--         interComma i = if i < length es - 1 then text "," else empty
 
-enumElementsDocD' :: [Label] -> Doc
-enumElementsDocD' es = vcat $
-  zipWith (\e i -> text e <+> equals <+> int i) es nums
-    where nums = [0..length es - 1]
+-- enumElementsDocD' :: [Label] -> Doc
+-- enumElementsDocD' es = vcat $
+--   zipWith (\e i -> text e <+> equals <+> int i) es nums
+--     where nums = [0..length es - 1]
 
 -- Groupings --
 
@@ -321,8 +320,8 @@ selfDocD = text "this"
 argDocD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> Doc
 argDocD n args = valueDoc args <> brackets (valueDoc n)
 
-enumElemDocD :: Label -> Label -> Doc
-enumElemDocD en e = text en <> dot <> text e
+-- enumElemDocD :: Label -> Label -> Doc
+-- enumElemDocD en e = text en <> dot <> text e
 
 classVarCheckStatic :: (VariableSym repr) => repr (Variable repr) -> 
   repr (Variable repr)
@@ -486,7 +485,7 @@ setterName s = "set" ++ capitalize s
 intValue :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
 intValue i = i >>= intValue' . getType . valueType
   where intValue' Integer = i
-        intValue' (Enum _) = cast S.int i
+        -- intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
 
 doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String

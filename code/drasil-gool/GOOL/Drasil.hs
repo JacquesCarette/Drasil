@@ -26,7 +26,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), FileSym(..),
   BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
   ODEMethod(..))
 
-import GOOL.Drasil.Data (FileData(..), ModData(..), ProgData(..))
+import GOOL.Drasil.AST (FileData(..), ModData(..), ProgData(..))
 
 import GOOL.Drasil.CodeType (CodeType(..))
 

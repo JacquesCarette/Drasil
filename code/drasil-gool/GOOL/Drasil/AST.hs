@@ -1,4 +1,4 @@
-module GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), FileType(..), 
+module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
   isSource, Exception(..), exception, stdExc, BindData(..), bd, FileData(..), 
   fileD, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
@@ -12,13 +12,10 @@ import GOOL.Drasil.CodeType (CodeType)
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 
-class Pair p where
-  pfst :: p x y a -> x a
-  psnd :: p x y b -> y b
-  pair :: x a -> y a -> p x y a
- 
+-- For how statement endings are printed
 data Terminator = Semi | Empty
 
+-- Used for state variables
 data ScopeTag = Pub | Priv deriving Eq
 
 data FileType = Combined | Source | Header deriving Eq

@@ -34,13 +34,13 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
-  listType, arrayType, listInnerType, obj, enumType, funcType, void, 
+  listType, arrayType, listInnerType, obj, funcType, void, 
   runStrategy, listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, 
   greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
-  divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, 
+  divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, 
   classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, 
   litFalse, litChar, litDouble, litFloat, litInt, litString, litArray, pi, 
-  valueOf, arg, enumElement, argsList, inlineIf, objAccess, objMethodCall, 
+  valueOf, arg, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, call', funcApp, 
   funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, extFuncApp, 
   extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
@@ -60,12 +60,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
   pubMethod, constructor, docMain, function, mainFunction, docFunc, intFunc, 
   stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
-  enum, extraClass, implementingClass, docClass, commentedClass, intClass, 
+  extraClass, implementingClass, docClass, commentedClass, intClass, 
   buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
   typeBinExpr)
-import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
+import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
   Exception(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, updateMthdDoc, OpData(..), od, 
   ParamData(..), pd, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
@@ -211,7 +211,7 @@ instance TypeSym JavaCode where
   arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
-  enumType = G.enumType
+  -- enumType = G.enumType
   funcType = G.funcType
   iterator t = t
   void = G.void
@@ -307,7 +307,7 @@ instance VariableSym JavaCode where
   const = var
   extVar = G.extVar
   self = G.self
-  enumVar = G.enumVar
+  -- enumVar = G.enumVar
   classVar = G.classVar classVarDocD
   extClassVar = classVar
   objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
@@ -345,13 +345,13 @@ instance ValueSym JavaCode where
 
   pi = G.pi
 
-  ($:) = enumElement
+  -- ($:) = enumElement
 
   valueOf v = G.valueOf $ join $ on2StateValues (\dvs vr -> maybe v (\i -> 
     arrayElem (toInteger i) v) (elemIndex (variableName vr) dvs)) 
     getODEDepVars v
   arg n = G.arg (litInt n) argsList
-  enumElement = G.enumElement
+  -- enumElement = G.enumElement
 
   argsList = G.argsList "args"
 
@@ -712,7 +712,7 @@ instance InternalStateVar JavaCode where
 instance ClassSym JavaCode where
   type Class JavaCode = Doc
   buildClass = G.buildClass
-  enum = G.enum
+  -- enum = G.enum
   extraClass = G.extraClass
   implementingClass = G.implementingClass
 
@@ -867,7 +867,7 @@ jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $
   valueType vl) tp vl) t v
   where jCast' Double String _ _ = funcApp "Double.parseDouble" double [v]
         jCast' Float String _ _ = funcApp "Float.parseFloat" float [v]
-        jCast' Integer (Enum _) _ _ = v $. func "ordinal" int []
+        -- jCast' Integer (Enum _) _ _ = v $. func "ordinal" int []
         jCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
           tp)) (valueDoc vl))
 

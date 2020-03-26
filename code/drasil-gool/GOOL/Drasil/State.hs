@@ -23,7 +23,7 @@ module GOOL.Drasil.State (
   setODEOthVars, getODEOthVars
 ) where
 
-import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..), FileData)
+import GOOL.Drasil.AST (FileType(..), ScopeTag(..), Exception(..), FileData)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)

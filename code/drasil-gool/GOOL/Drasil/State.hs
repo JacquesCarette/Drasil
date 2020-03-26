@@ -23,7 +23,8 @@ module GOOL.Drasil.State (
   setODEOthVars, getODEOthVars
 ) where
 
-import GOOL.Drasil.AST (FileType(..), ScopeTag(..), Exception(..), FileData)
+import GOOL.Drasil.AST (FileType(..), ScopeTag(..), FileData)
+import GOOL.Drasil.CodeAnalysis (Exception, printExc, hasLoc)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
@@ -369,8 +370,7 @@ addExceptionImports :: [Exception] ->
   (((GOOLState, FileState), ClassState), MethodState)
 addExceptionImports es = over (_1 . _1 . _2 . langImports) (\is -> sort $ nub $ 
   is ++ imps)
-  where mkImport l e = if null l then "" else l ++ "." ++ e
-        imps = filter (not . null) $ zipWith mkImport (map loc es) (map exc es)
+  where imps = map printExc $ filter hasLoc es
 
 getLangImports :: FS [String]
 getLangImports = gets ((^. langImports) . snd)

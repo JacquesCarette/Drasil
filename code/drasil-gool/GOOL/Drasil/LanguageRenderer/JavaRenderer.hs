@@ -66,10 +66,10 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr,
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
   typeBinExpr)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
-  Exception(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, updateMthdDoc, OpData(..), od, 
-  ParamData(..), pd, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
-  VarData(..), vard)
+  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
+  ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
+import GOOL.Drasil.CodeAnalysis (Exception(..))
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   onCodeList, onStateList, on1CodeValue1List, on1StateValue1List)

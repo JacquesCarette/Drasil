@@ -1,10 +1,9 @@
 module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
-  isSource, Exception(..), exception, stdExc, BindData(..), bd, FileData(..), 
-  fileD, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
-  paramName, updateParamDoc, ProgData(..), progD, emptyProg, StateVarData(..), 
-  svd, TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), 
-  VarData(..), vard
+  isSource, BindData(..), bd, FileData(..), fileD, updateFileMod, FuncData(..), 
+  fd, ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
+  OpData(..), od, ParamData(..), pd, paramName, updateParamDoc, ProgData(..), 
+  progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
+  updateValDoc, Binding(..), onBinding, VarData(..), vard
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -15,33 +14,26 @@ import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 -- For how statement endings are printed
 data Terminator = Semi | Empty
 
--- Used for state variables
+-- Used for state variables and methods
+-- Eq is needed for organizing methods and state variables into public and 
+-- private groups for C++ class rendering
 data ScopeTag = Pub | Priv deriving Eq
 
-data FileType = Combined | Source | Header deriving Eq
+-- In C++ Source and Header files are separate, other languages have a single 
+-- (Combined) file
+data FileType = Combined | Source | Header -- deriving Eq
 
 isSource :: FileType -> Bool
 isSource Header = False
 isSource _ = True
 
-data Binding = Static | Dynamic deriving Eq
+-- Static means bound at compile-time, Dynamic at run-time, used in BindData 
+-- and VarData
+data Binding = Static | Dynamic
 
-data Exception = Exc {
-  loc :: String,
-  exc :: String
-}
-
-instance Eq Exception where
-  (Exc l1 e1) == (Exc l2 e2) = l1 == l2 && e1 == e2
-
-instance Show Exception where
-  show (Exc l e) = l ++ "." ++ e
-
-exception :: String -> String -> Exception
-exception = Exc
-
-stdExc :: String -> Exception
-stdExc = Exc ""
+onBinding :: Binding -> a -> a -> a
+onBinding Static s _ = s
+onBinding Dynamic _ d = d
 
 data BindData = BD {bind :: Binding, bindDoc :: Doc}
 
@@ -87,9 +79,6 @@ od = OD
 
 data ParamData = PD {paramVar :: VarData, paramDoc :: Doc}
 
-instance Eq ParamData where
-  PD v1 _ == PD v2 _ = v1 == v2
-
 pd :: VarData -> Doc -> ParamData
 pd = PD 
 
@@ -131,9 +120,6 @@ updateValDoc f v = vd (valPrec v) (valType v) ((f . valDoc) v)
 
 data VarData = VarD {varBind :: Binding, varName :: String, 
   varType :: TypeData, varDoc :: Doc}
-
-instance Eq VarData where
-  VarD p1 n1 t1 _ == VarD p2 n2 t2 _ = p1 == p2 && n1 == n2 && t1 == t2
 
 vard :: Binding -> String -> TypeData -> Doc -> VarData
 vard = VarD

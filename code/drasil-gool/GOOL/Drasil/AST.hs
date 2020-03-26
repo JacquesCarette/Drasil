@@ -1,9 +1,12 @@
-module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
-  isSource, BindData(..), bd, FileData(..), fileD, updateFileMod, FuncData(..), 
-  fd, ModData(..), md, updateModDoc, MethodData(..), mthd, updateMthdDoc, 
-  OpData(..), od, ParamData(..), pd, paramName, updateParamDoc, ProgData(..), 
-  progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
-  updateValDoc, Binding(..), onBinding, VarData(..), vard
+module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), isSource, 
+  Binding(..), onBinding, BindData(bind, bindDoc), bd, 
+  FileData(filePath, fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), 
+  fd, ModData(name, modDoc), md, updateModDoc, MethodData(mthdDoc), mthd, 
+  updateMthdDoc, OpData(opPrec, opDoc), od, ParamData(paramVar, paramDoc), pd, 
+  paramName, updateParamDoc, ProgData(progName, progMods), progD, emptyProg, 
+  StateVarData(getStVarScp, stVarDoc, destructSts), svd, 
+  TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valType, valDoc), 
+  vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -35,27 +38,29 @@ onBinding :: Binding -> a -> a -> a
 onBinding Static s _ = s
 onBinding Dynamic _ d = d
 
+-- Used as the underlying data type for Permanence in the C++ renderer
 data BindData = BD {bind :: Binding, bindDoc :: Doc}
 
 bd :: Binding -> Doc -> BindData
 bd = BD
 
+-- Used as the underlying data type for Files in all renderers
 data FileData = FileD {filePath :: FilePath, fileMod :: ModData}
 
-instance Eq FileData where
-  FileD p1 _ == FileD p2 _ = p1 == p2
-
-fileD :: String -> ModData -> FileData
+fileD :: FilePath -> ModData -> FileData
 fileD = FileD
 
+-- Replace a FileData's ModData with a new ModData
 updateFileMod :: ModData -> FileData -> FileData
 updateFileMod m f = fileD (filePath f) m
 
+-- Used as the underlying data type for Functions in all renderers
 data FuncData = FD {fType :: TypeData, funcDoc :: Doc}
 
 fd :: TypeData -> Doc -> FuncData
 fd = FD
 
+-- Used as the underlying data type for Modules in all renderers
 data ModData = MD {name :: String, modDoc :: Doc}
 
 md :: String -> Doc -> ModData
@@ -64,6 +69,7 @@ md = MD
 updateModDoc :: (Doc -> Doc) -> ModData -> ModData
 updateModDoc f m = md (name m) (f $ modDoc m)
 
+-- Used as the underlying data type for Methods in all renderers except C++
 newtype MethodData = MthD {mthdDoc :: Doc}
 
 mthd :: Doc -> MethodData
@@ -72,11 +78,13 @@ mthd = MthD
 updateMthdDoc :: MethodData -> (Doc -> Doc) -> MethodData
 updateMthdDoc m f = mthd ((f . mthdDoc) m)
 
+-- Used as the underlying data type for UnaryOp and BinaryOp in all renderers
 data OpData = OD {opPrec :: Int, opDoc :: Doc}
 
 od :: Int -> Doc -> OpData
 od = OD
 
+-- Used as the underlying data type for Parameters in all renderers
 data ParamData = PD {paramVar :: VarData, paramDoc :: Doc}
 
 pd :: VarData -> Doc -> ParamData
@@ -88,6 +96,7 @@ paramName = varName . paramVar
 updateParamDoc :: (Doc -> Doc) -> ParamData -> ParamData
 updateParamDoc f v = pd (paramVar v) ((f . paramDoc) v)
 
+-- Used as the underlying data type for Programs in all renderers
 data ProgData = ProgD {progName :: String, progMods :: [FileData]}
 
 progD :: String -> [FileData] -> ProgData
@@ -96,20 +105,20 @@ progD n fs = ProgD n (filter (not . isEmpty . modDoc . fileMod) fs)
 emptyProg :: ProgData
 emptyProg = progD "" []
 
+-- Used as the underlying data type for StateVars in the C++ renderer
 data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc, 
   destructSts :: (Doc, Terminator)}
 
 svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
 
+-- Used as the underlying data type for Types in all renderers
 data TypeData = TD {cType :: CodeType, typeString :: String, typeDoc :: Doc}
-
-instance Eq TypeData where
-  TD t1 _ _ == TD t2 _ _ = t1 == t2
 
 td :: CodeType -> String -> Doc -> TypeData
 td = TD
 
+-- Used as the underlying data type for Values in all renderers
 data ValData = VD {valPrec :: Maybe Int, valType :: TypeData, valDoc :: Doc}
 
 vd :: Maybe Int -> TypeData -> Doc -> ValData
@@ -118,6 +127,7 @@ vd = VD
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 updateValDoc f v = vd (valPrec v) (valType v) ((f . valDoc) v)
 
+-- Used as the underlying data type for Variables in all renderers
 data VarData = VarD {varBind :: Binding, varName :: String, 
   varType :: TypeData, varDoc :: Doc}
 

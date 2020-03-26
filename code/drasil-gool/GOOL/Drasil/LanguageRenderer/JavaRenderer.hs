@@ -17,13 +17,12 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  initializer, InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
-  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
-  BlockCommentSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  InternalValueExp(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
   bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, castDocD, 
@@ -72,21 +71,19 @@ import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..),
   VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
-  onCodeList, onStateList, on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensMStoFS,
-  lensMStoVS, lensVStoFS, lensVStoMS, initialState, initialFS, modifyReturn, 
-  modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFiles, 
+  onCodeList, onStateList, on1CodeValue1List)
+import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoFS, lensMStoVS, 
+  lensVStoFS, lensVStoMS, modifyReturn, modifyReturnFunc, addProgNameToPaths, 
   getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
-  addLibImport, getModuleName, setFileType, getClassName, setCurrMain, 
-  setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
-  setOutputsDeclared, isOutputsDeclared, getExceptions, getMethodExcMap, 
-  addExceptions)
+  getModuleName, setFileType, getClassName, setCurrMain, getODEDepVars, 
+  getODEOthVars, setOutputsDeclared, isOutputsDeclared, getExceptions, 
+  getMethodExcMap, addExceptions)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
-import Control.Monad.State (modify, runState)
+import Control.Monad.State (modify)
 import qualified Data.Map as Map (lookup)
 import Data.List (elemIndex, nub, intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
@@ -227,34 +224,6 @@ instance ControlBlockSym JavaCode where
   runStrategy = G.runStrategy
 
   listSlice' = G.listSlice
-
-  solveODE info opts = let (fls, s) = jODEFiles info 
-    in modify (addODEFilePaths s . addODEFiles fls) >> (zoom lensMStoVS dv 
-    >>= (\dpv -> 
-      let odeVarType = obj (odeClassName dpv)
-          odeVar = var "ode" odeVarType
-          odeDepVar = var (odeVarName dpv) (arrayType float)
-          initval = initVal info
-          integVal = valueOf $ jODEIntVar (solveMethod opts)
-          shn = variableName dpv ++ "_" ++ stH
-          hndlr = var "stepHandler" (obj shn)
-          odeClassName = ((++ "_ODE") . variableName)
-          odeVarName = ((++ "_ode") . variableName)
-      in multiBlock [
-      block [
-        jODEMethod opts,
-        objDecDef odeVar (newObj odeVarType (map valueOf $ otherVars info)),
-        arrayDecDef odeDepVar [initval],
-        varDec dv],
-      block [
-        objDecDef hndlr (newObj (obj shn) []),
-        valState $ objMethodCall void integVal "addStepHandler" [valueOf hndlr],
-        valState $ objMethodCall void integVal "integrate"   
-          [valueOf odeVar, tInit info, valueOf odeDepVar, tFinal info, 
-          valueOf odeDepVar],
-        dv &= valueOf (objVar hndlr dv)]]))
-    where stH = "StepHandler"
-          dv = depVar info
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
@@ -742,74 +711,6 @@ instance BlockCommentSym JavaCode where
     docCommentStart docCommentEnd)
 
   blockCommentDoc = unJC
-
-odeImport :: String
-odeImport = "org.apache.commons.math3.ode."
-
-jODEMethod :: ODEOptions JavaCode -> MS (JavaCode (Statement JavaCode))
-jODEMethod opts = modify (addLibImport (odeImport ++ "nonstiff." ++ it)) >> 
-  varDecDef (jODEIntVar m) (newObj (obj it) (jODEParams m))
-  where m = solveMethod opts
-        it = jODEInt m
-        jODEParams RK45 = [stepSize opts, stepSize opts, absTol opts, 
-          relTol opts]
-        jODEParams Adams = [litInt 3, stepSize opts, stepSize opts, absTol opts,
-          relTol opts]
-        jODEParams _ = error "Chosen ODE method unavailable in Java"
-
-jODEIntVar :: ODEMethod -> VS (JavaCode (Variable JavaCode))
-jODEIntVar m = var "it" (obj $ jODEInt m)
-
-jODEInt :: ODEMethod -> String
-jODEInt RK45 = "DormandPrince54Integrator"
-jODEInt Adams = "AdamsBashforthIntegrator"
-jODEInt _ = error "Chosen ODE method unavailable in Java"
-
-jODEFiles :: ODEInfo JavaCode -> ([FileData], GOOLState)
-jODEFiles info = (map unJC fls, fst s)
-  where (fls, s) = runState odeFiles (initialState, initialFS)
-        fode = "FirstOrderDifferentialEquations"
-        dv = depVar info
-        ovars = otherVars info 
-        odeFiles = join $ on1StateValue1List (\dpv ovs -> 
-          let n = variableName dpv
-              cn = n ++ "_ODE"
-              dn = "d" ++ n 
-              stH = "StepHandler"
-              stI = "StepInterpolator"
-              shn = n ++ "_" ++ stH
-              ddv = var dn (arrayType float)
-              y0 = var "y0" (arrayType float)
-              interp = var "interpolator" (obj stI)
-              othVars = map (modify (setODEOthVars (map variableName 
-                ovs)) >>) ovars
-              odeTempName = ((++ "_curr") . variableName)
-              odeTemp = var (odeTempName dpv) (arrayType float)
-          in sequence [fileDoc (buildModule cn [odeImport ++ fode] [] 
-            [implementingClass cn [fode] (map privMVar othVars) 
-              [initializer (map param othVars) (zip othVars 
-                (map valueOf othVars)),
-              pubMethod "getDimension" int [] (oneLiner $ returnState $ 
-                litInt 1),
-              pubMethod "computeDerivatives" void (map param [var "t" float, 
-                var n (arrayType float), ddv]) (oneLiner $ arrayElem 0 ddv &= 
-                (modify (setODEDepVars [variableName dpv, dn] . setODEOthVars 
-                (map variableName ovs)) >> ode info))]]),
-            fileDoc (buildModule shn (map ((odeImport ++ "sampling.") ++) 
-              [stH, stI]) [] [implementingClass shn [stH] [pubMVar dv] 
-                [pubMethod "init" void (map param [var "t0" float, y0, 
-                  var "t" float]) (modify (addLangImport "java.util.Arrays") >> 
-                    oneLiner (objVarSelf dv &= newObj (obj 
-                    (getTypeString $ variableType dpv)) [funcApp "Arrays.asList"
-                    (toState $ variableType dpv) [valueOf $ arrayElem 0 y0]])),
-                pubMethod "handleStep" void (map param [interp, var "isLast" 
-                  (toState $ typeFromData Boolean "boolean" (text "boolean"))]) 
-                  (bodyStatements [
-                    varDecDef odeTemp (objMethodCallNoParams (arrayType float) 
-                      (valueOf interp) "getInterpolatedState"),
-                    valState $ listAppend (valueOf $ objVarSelf dv) (valueOf 
-                      (arrayElem 0 odeTemp))])]])]) 
-          (zoom lensFStoVS dv) (map (zoom lensFStoVS) ovars)
 
 jName :: String
 jName = "Java"

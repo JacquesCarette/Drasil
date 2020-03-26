@@ -17,13 +17,12 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
-  InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..), 
-  ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  InternalValueExp(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
   mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
@@ -73,8 +72,8 @@ import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn, 
-  addLangImport, addLangImportVS, addLibImport, setFileType, getClassName, 
-  setCurrMain, setODEDepVars, getODEDepVars)
+  addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain, 
+  getODEDepVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -218,39 +217,6 @@ instance ControlBlockSym CSharpCode where
   runStrategy = G.runStrategy
 
   listSlice' = G.listSlice
-
-  solveODE info opts = modify (addLibImport "Microsoft.Research.Oslo" . 
-    addLangImport "System.Linq") >> 
-    multiBlock [
-      block [
-        objDecNewNoParams optsVar,
-        objVar optsVar (var "AbsoluteTolerance" float) &= absTol opts,
-        objVar optsVar (var "AbsoluteTolerance" float) &= relTol opts],
-      block [
-        varDecDef sol (extFuncApp "Ode" (csODEMethod $ solveMethod opts) odeT 
-        [tInit info, 
-        newObj vec [initVal info], 
-        lambda [iv, dv] (newObj vec [dv >>= (\dpv -> modify (setODEDepVars 
-          [variableName dpv]) >> ode info)]),
-        valueOf optsVar])],
-      block [
-        varDecDef points (objMethodCallNoParams spArray 
-        (objMethodCall void (valueOf sol) "SolveFromToStep" 
-          [tInit info, tFinal info, stepSize opts]) "ToArray"),
-        listDecDef dv [],
-        forEach sp (valueOf points) 
-          (oneLiner $ valState $ listAppend (valueOf dv) (valueOf $ 
-          objVar sp (var "X" (listInnerType $ onStateValue variableType dv))))]
-    ]
-    where optsVar = var "opts" (obj "Options")
-          iv = indepVar info
-          dv = depVar info
-          odeT = obj "IEnumerable<SolPoint>"
-          vec = obj "Vector"
-          sol = var "sol" odeT
-          spArray = arrayType (obj "SolPoint")
-          points = var "points" spArray
-          sp = var "sp" (obj "SolPoint")
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
@@ -707,11 +673,6 @@ addSystemImport = (>>) $ modify (addLangImportVS "System")
 
 csName :: String
 csName = "C#"
-
-csODEMethod :: ODEMethod -> String
-csODEMethod RK45 = "RK547M"
-csODEMethod BDF = "GearBDF"
-csODEMethod _ = error "Chosen ODE method unavailable in C#"
 
 csImport :: Label -> CSharpCode (Keyword CSharpCode) -> Doc
 csImport n end = text ("using " ++ n) <> keyDoc end

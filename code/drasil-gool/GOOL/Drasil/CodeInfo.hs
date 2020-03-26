@@ -105,8 +105,6 @@ instance ControlBlockSym CodeInfo where
     _ <- vl
     noInfo
 
-  solveODE _ _ = noInfo
-
 instance VariableSym CodeInfo where
   type Variable CodeInfo = ()
   var _ _ = noInfo

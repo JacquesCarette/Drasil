@@ -42,7 +42,6 @@ executable codegenTest
       Test.HelloWorld
     , Test.FileTests
     , Test.PatternTest
-    , Test.SimpleODE
     , Test.Observer
     , Test.Helper
     , GOOL.Drasil

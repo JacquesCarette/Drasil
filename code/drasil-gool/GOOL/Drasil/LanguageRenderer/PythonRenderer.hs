@@ -16,13 +16,12 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
   InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
-  InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..), 
-  ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  InternalValueExp(..), objMethodCall, FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
+  StateVarSym(..), InternalStateVar(..), ClassSym(..), InternalClass(..), 
+  ModuleSym(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (enumElementsDocD', multiStateDocD, 
   bodyDocD, outDoc, destructorError, multiAssignDoc, returnDocD, mkStNoEnd,
   breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, 
@@ -65,7 +64,7 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
-  addLangImportVS, getLangImports, addLibImport, addLibImportVS, getLibImports, 
+  addLangImportVS, getLangImports, addLibImportVS, getLibImports, 
   addModuleImport, addModuleImportVS, getModuleImports, setFileType, 
   setClassName, getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
 
@@ -215,35 +214,6 @@ instance ControlBlockSym PythonCode where
   listSlice' b e s vnew vold = docBlock $ zoom lensMStoVS $ pyListSlice vnew 
     vold (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
-
-  solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
-    block [
-      r &= objMethodCall odeT (extNewObj odeLib odeT 
-      [lambda [iv, dv] (ode info)]) 
-        "set_integrator" (pyODEMethod (solveMethod opts) ++
-          [absTol opts >>= (mkStateVal double . (text "atol=" <>) . valueDoc),
-          relTol opts >>= (mkStateVal double . (text "rtol=" <>) . valueDoc)]),
-      valState $ objMethodCall odeT rVal "set_initial_value" [initVal info]],
-    block [
-      listDecDef iv [tInit info],
-      listDecDef dv [initVal info],
-      while (objMethodCallNoParams bool rVal "successful" ?&& 
-        r_t ?< tFinal info) (bodyStatements [
-          valState $ objMethodCall odeT rVal "integrate" [r_t #+ stepSize opts],
-          valState $ listAppend (valueOf iv) r_t,
-          valState $ listAppend (valueOf dv) (listAccess r_y $ litInt 0)
-        ])
-     ]
-   ]
-   where odeLib = "scipy.integrate"
-         iv = indepVar info
-         dv = depVar info
-         odeT = obj "ode"
-         r = var "r" odeT
-         rVal = valueOf r
-         r_t = valueOf $ objVar r (var "t" $ listInnerType $ onStateValue 
-           variableType iv)
-         r_y = valueOf $ objVar r (var "y" $ onStateValue variableType dv)
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData
@@ -740,15 +710,6 @@ initName = "__init__"
 
 pyName :: String
 pyName = "Python"
-
-pyODEMethod :: ODEMethod -> [VS (PythonCode (Value PythonCode))]
-pyODEMethod RK45 = [litString "dopri5"]
-pyODEMethod BDF = [litString "vode", 
-  (litString "bdf" :: VS (PythonCode (Value PythonCode))) >>= 
-  (mkStateVal string . (text "method=" <>) . valueDoc)]
-pyODEMethod Adams = [litString "vode", 
-  (litString "adams" :: VS (PythonCode (Value PythonCode))) >>= 
-  (mkStateVal string . (text "method=" <>) . valueDoc)]
 
 pyLogOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
 pyLogOp = addmathImport $ unOpPrec "math.log10"

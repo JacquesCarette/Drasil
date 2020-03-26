@@ -72,15 +72,14 @@ import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn, 
-  addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain, 
-  getODEDepVars)
+  addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
-import Data.List (elemIndex, intercalate)
+import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   semi, vcat, lbrace, rbrace, colon, space)
 
@@ -305,9 +304,7 @@ instance ValueSym CSharpCode where
 
   ($:) = enumElement
 
-  valueOf v = join $ on2StateValues (\dvs vr -> maybe (G.valueOf v) (listAccess 
-    (G.valueOf v) . litInt . toInteger) (elemIndex (variableName vr) dvs)) 
-    getODEDepVars v
+  valueOf = G.valueOf 
   arg n = G.arg (litInt n) argsList
   enumElement = G.enumElement
   

@@ -5,11 +5,11 @@ module GOOL.Drasil.State (
   lensFStoMS, lensFStoVS, lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, 
   lensMStoVS, lensVStoFS, lensVStoMS, headers, sources, mainMod, currMain, 
   currFileType, initialState, initialFS, modifyReturn, modifyReturnFunc, 
-  modifyReturnFunc2, modifyReturnList, addODEFilePaths, addFile, 
-  addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
-  addODEFiles, getODEFiles, addLangImport, addLangImportVS, addExceptionImports,
-  getLangImports, addLibImport, addLibImportVS, addLibImports, getLibImports, 
-  addModuleImport, addModuleImportVS, getModuleImports, addHeaderLangImport, 
+  modifyReturnFunc2, modifyReturnList, addFile, addCombinedHeaderSource, 
+  addHeader, addSource, addProgNameToPaths, setMainMod, addLangImport, 
+  addLangImportVS, addExceptionImports, getLangImports, addLibImport, 
+  addLibImportVS, addLibImports, getLibImports, addModuleImport, 
+  addModuleImportVS, getModuleImports, addHeaderLangImport, 
   getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, 
   addHeaderModImport, getHeaderModImports, addDefine, getDefines, 
   addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
@@ -19,11 +19,10 @@ module GOOL.Drasil.State (
   callMapTransClosure, updateMEMWithCalls, addParameter, getParameters, 
   setOutputsDeclared, isOutputsDeclared, addException, addExceptions, 
   getExceptions, addCall, setMainDoc, getMainDoc, setScope, getScope, 
-  setCurrMainFunc, getCurrMainFunc, setODEDepVars, getODEDepVars, 
-  setODEOthVars, getODEOthVars
+  setCurrMainFunc, getCurrMainFunc
 ) where
 
-import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..), FileData)
+import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..))
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
@@ -39,7 +38,6 @@ data GOOLState = GS {
   _sources :: [FilePath],
   _mainMod :: Maybe FilePath,
   _classMap :: Map String String,
-  _odeFiles :: [FileData],
 
   -- Only used for Java
   _methodExceptionMap :: Map String [Exception],
@@ -89,11 +87,13 @@ data FileState = FS {
 }
 makeLenses ''FileState
 
-data ValueState = VS {
-  _currODEDepVars :: [String],
-  _currODEOthVars :: [String]
+-- This was once used, but now is not. However it would be a pain to revert all 
+-- of the types back to MS from VS, and it is likely that this level of state 
+-- will be useful in the future, so I'm just putting in a placeholder.
+newtype ValueState = VS {
+  _placeholder :: ()
 }
-makeLenses ''ValueState
+-- makeLenses ''ValueState
 
 type GS = State GOOLState
 type FS = State (GOOLState, FileState)
@@ -232,7 +232,6 @@ initialState = GS {
   _sources = [],
   _mainMod = Nothing,
   _classMap = Map.empty,
-  _odeFiles = [],
 
   _methodExceptionMap = Map.empty,
   _callMap = Map.empty
@@ -278,8 +277,7 @@ initialMS = MS {
 
 initialVS :: ValueState
 initialVS = VS {
-  _currODEDepVars = [],
-  _currODEOthVars = []
+  _placeholder = ()
 }
 
 -------------------------------
@@ -316,12 +314,6 @@ modifyReturnList l sf vf = do
 ------- State Modifiers -------
 -------------------------------
 
-addODEFilePaths :: GOOLState -> 
-  (((GOOLState, FileState), ClassState), MethodState) -> 
-  (((GOOLState, FileState), ClassState), MethodState)
-addODEFilePaths s = over (_1 . _1 . _1 . headers) (s ^. headers ++)
-  . over (_1 . _1 . _1 . sources) (s ^. sources ++)
-
 addFile :: FileType -> FilePath -> GOOLState -> GOOLState
 addFile Combined = addCombinedHeaderSource
 addFile Source = addSource
@@ -346,13 +338,6 @@ addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
 setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
   "Multiple modules with main methods encountered")
-
-addODEFiles :: [FileData] -> (((GOOLState, FileState), ClassState), MethodState)
-  -> (((GOOLState, FileState), ClassState), MethodState)
-addODEFiles f = over _1 $ over _1 $ over _1 $ over odeFiles (f++)
-
-getODEFiles :: GS [FileData]
-getODEFiles = gets (^. odeFiles)
 
 addLangImport :: String -> (((GOOLState, FileState), ClassState), MethodState) 
   -> (((GOOLState, FileState), ClassState), MethodState)
@@ -555,22 +540,6 @@ addParameter p = over _2 $ over currParameters (\ps -> if p `elem` ps then
 
 getParameters :: MS [String]
 getParameters = gets ((^. currParameters) . snd)
-
-setODEDepVars :: [String] -> 
-  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
-  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
-setODEDepVars vs = over _2 $ set currODEDepVars vs
-
-getODEDepVars :: VS [String]
-getODEDepVars = gets ((^. currODEDepVars) . snd)
-
-setODEOthVars :: [String] -> 
-  ((((GOOLState, FileState), ClassState), MethodState), ValueState) -> 
-  ((((GOOLState, FileState), ClassState), MethodState), ValueState)
-setODEOthVars vs = over _2 $ set currODEOthVars vs
-
-getODEOthVars :: VS [String]
-getODEOthVars = gets ((^. currODEOthVars) . snd)
 
 setOutputsDeclared :: (((GOOLState, FileState), ClassState), MethodState) -> 
   (((GOOLState, FileState), ClassState), MethodState)

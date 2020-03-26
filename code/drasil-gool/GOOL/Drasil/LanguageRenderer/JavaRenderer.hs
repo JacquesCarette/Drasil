@@ -73,11 +73,10 @@ import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   onCodeList, onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoFS, lensMStoVS, 
-  lensVStoFS, lensVStoMS, modifyReturn, modifyReturnFunc, addProgNameToPaths, 
-  getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
-  getModuleName, setFileType, getClassName, setCurrMain, getODEDepVars, 
-  getODEOthVars, setOutputsDeclared, isOutputsDeclared, getExceptions, 
-  getMethodExcMap, addExceptions)
+  lensVStoFS, lensVStoMS, modifyReturn, modifyReturnList, addProgNameToPaths, 
+  addLangImport, addLangImportVS, addExceptionImports, getModuleName, 
+  setFileType, getClassName, setCurrMain, setOutputsDeclared, 
+  isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Lens.Zoom (zoom)
@@ -85,7 +84,7 @@ import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
 import qualified Data.Map as Map (lookup)
-import Data.List (elemIndex, nub, intercalate, sort)
+import Data.List (nub, intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
   equals, semi, vcat, lbrace, rbrace, render, colon)
 
@@ -107,10 +106,8 @@ instance Monad JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
-  prog n fs = modifyReturnFunc (\_ -> addProgNameToPaths n)
+  prog n fs = modifyReturnList (map (zoom lensGStoFS) fs) (addProgNameToPaths n)
     (on1CodeValue1List (\end -> progD n . map (packageDocD n end)) endStatement)
-    (on2StateValues (++) (mapM (zoom lensGStoFS) fs) (onStateValue (map toCode) 
-    getODEFiles))
 
 instance RenderSym JavaCode
 
@@ -279,9 +276,7 @@ instance VariableSym JavaCode where
   enumVar = G.enumVar
   classVar = G.classVar classVarDocD
   extClassVar = classVar
-  objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
-    ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
-    (toState vr)) getODEOthVars o v
+  objVar = G.objVar
   objVarSelf = G.objVarSelf
   listVar = G.listVar
   listOf = G.listOf
@@ -316,9 +311,7 @@ instance ValueSym JavaCode where
 
   ($:) = enumElement
 
-  valueOf v = G.valueOf $ join $ on2StateValues (\dvs vr -> maybe v (\i -> 
-    arrayElem (toInteger i) v) (elemIndex (variableName vr) dvs)) 
-    getODEDepVars v
+  valueOf = G.valueOf
   arg n = G.arg (litInt n) argsList
   enumElement = G.enumElement
 

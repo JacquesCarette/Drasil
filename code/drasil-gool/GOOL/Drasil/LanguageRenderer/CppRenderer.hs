@@ -72,14 +72,14 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat,
 import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, 
   lensFStoMS, lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, 
   lensVStoMS, modifyReturn, 
-  getODEFiles, addLangImport, addLangImportVS, getLangImports, 
+  addLangImport, addLangImportVS, getLangImports, 
   getLibImports, addModuleImportVS, 
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
   addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine, 
   getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
   addHeaderUsing, getHeaderUsing, setFileType, setClassName, getClassName, 
   setCurrMain, getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc, getODEOthVars)
+  getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
 import Control.Lens.Zoom (zoom)
@@ -1054,8 +1054,7 @@ instance Monad CppSrcCode where
 
 instance ProgramSym CppSrcCode where
   type Program CppSrcCode = ProgData
-  prog n fs = onStateValue (onCodeList (progD n)) (on2StateValues (++) 
-    (mapM (zoom lensGStoFS) fs) (onStateValue (map toCode) getODEFiles))
+  prog n = onStateList (onCodeList (progD n)) . map (zoom lensGStoFS)
 
 instance RenderSym CppSrcCode
   
@@ -1234,9 +1233,7 @@ instance VariableSym CppSrcCode where
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $ 
     classVar (toState t) v) c getClassMap
-  objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
-    ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
-    (toState vr)) getODEOthVars o v
+  objVar = G.objVar
   objVarSelf = onStateValue (\v -> mkVar ("this->"++variableName v) 
     (variableType v) (text "this->" <> variableDoc v))
   listVar = G.listVar
@@ -1893,9 +1890,7 @@ instance VariableSym CppHdrCode where
   enumVar _ _ = mkStateVar "" void empty
   classVar _ _ = mkStateVar "" void empty
   extClassVar _ _ = mkStateVar "" void empty
-  objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
-    ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
-    (toState vr)) getODEOthVars o v
+  objVar = G.objVar
   objVarSelf _ = mkStateVar "" void empty
   listVar _ _ = mkStateVar "" void empty
   listOf _ _ = mkStateVar "" void empty

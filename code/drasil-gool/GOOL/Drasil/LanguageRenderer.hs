@@ -26,7 +26,7 @@ module GOOL.Drasil.LanguageRenderer (
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
-import GOOL.Drasil.CodeType (CodeType(..))
+import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.Symantics (Label, Library, RenderSym, BodySym(..), 
   InternalBody(..), PermanenceSym(..), InternalPerm(..), 
   TypeSym(Type, getType, getTypeDoc), VariableSym(..), InternalVariable(..), 
@@ -166,7 +166,7 @@ printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[",
   where l_i = "list_i" ++ show n
         i = var l_i S.int
 
-printObjDoc :: String -> (String -> MS (repr (Statement repr)))
+printObjDoc :: ClassName -> (String -> MS (repr (Statement repr)))
   -> MS (repr (Statement repr))
 printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 

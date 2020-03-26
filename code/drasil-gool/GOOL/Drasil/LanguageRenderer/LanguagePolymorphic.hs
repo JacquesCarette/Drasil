@@ -41,7 +41,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
 
 import Utils.Drasil (indent)
 
-import GOOL.Drasil.CodeType (CodeType(..))
+import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   FileSym(RenderFile, commentedMod), BodySym(Body, body, bodyStatements), 
   InternalBody(bodyDoc, docBody), BlockSym(Block), 
@@ -174,7 +174,7 @@ listInnerType :: (RenderSym repr) => VS (repr (Type repr)) ->
   VS (repr (Type repr))
 listInnerType t = t >>= (convType . getInnerType . getType)
 
-obj :: (RenderSym repr) => Label -> VS (repr (Type repr))
+obj :: (RenderSym repr) => ClassName -> VS (repr (Type repr))
 obj n = toState $ typeFromData (Object n) n (text n)
 
 -- enumType :: (RenderSym repr) => Label -> VS (repr (Type repr))

@@ -12,9 +12,9 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
   InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
-  InternalBlock(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
-  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
-  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  InternalBlock(..), ControlBlockSym(..), InternalControlBlock(..), TypeSym(..),
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
@@ -212,10 +212,6 @@ instance InternalType PythonCode where
 instance ControlBlockSym PythonCode where
   runStrategy = G.runStrategy
 
-  listSlice' b e s vnew vold = docBlock $ zoom lensMStoVS $ pyListSlice vnew 
-    vold (getVal b) (getVal e) (getVal s)
-    where getVal = fromMaybe (mkStateVal void empty)
-
   solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
     block [
       r &= objMethodCall odeT (extNewObj odeLib odeT 
@@ -244,6 +240,11 @@ instance ControlBlockSym PythonCode where
          r_t = valueOf $ objVar r (var "t" $ listInnerType $ onStateValue 
            variableType iv)
          r_y = valueOf $ objVar r (var "y" $ onStateValue variableType dv)
+
+instance InternalControlBlock PythonCode where
+  listSlice' b e s vnew vold = docBlock $ zoom lensMStoVS $ pyListSlice vnew 
+    vold (getVal b) (getVal e) (getVal s)
+    where getVal = fromMaybe (mkStateVal void empty)
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData

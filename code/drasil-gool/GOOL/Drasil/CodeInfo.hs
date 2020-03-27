@@ -3,12 +3,13 @@
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.Symantics (ProgramSym(..), FileSym(..), PermanenceSym(..), 
-  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), InternalValueExp(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  BodySym(..), BlockSym(..), ControlBlockSym(..), InternalControlBlock(..), 
+  TypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), Selector(..), 
+  InternalValueExp(..), FunctionSym(..), SelectorFunction(..), StatementSym(..),
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (Binding(Dynamic), ScopeTag(..))
 import GOOL.Drasil.CodeAnalysis (Exception(..), exception, stdExc)
@@ -100,12 +101,13 @@ instance ControlBlockSym CodeInfo where
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
     noInfo
 
+  solveODE _ _ = noInfo
+
+instance InternalControlBlock CodeInfo where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl
     noInfo
-
-  solveODE _ _ = noInfo
 
 instance VariableSym CodeInfo where
   type Variable CodeInfo = ()

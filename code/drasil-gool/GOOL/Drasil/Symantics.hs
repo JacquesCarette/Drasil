@@ -7,18 +7,19 @@ module GOOL.Drasil.Symantics (
   ProgramSym(..), RenderSym, FileSym(..), InternalFile(..),  KeywordSym(..), 
   ImportSym(..), PermanenceSym(..), InternalPerm(..), BodySym(..), 
   InternalBody(..), BlockSym(..), InternalBlock(..), TypeSym(..), 
-  InternalType(..), ControlBlockSym(..), listSlice, UnaryOpSym(..), 
-  BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), InternalValueExp(..), 
-  objMethodCall, objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  initializer, nonInitConstructor, InternalMethod(..), StateVarSym(..), 
-  InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
-  InternalMod(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
-  odeOptions, ODEMethod(..)
+  InternalType(..), ControlBlockSym(..), InternalControlBlock(..), listSlice, 
+  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
+  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
+  objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), InternalParam(..), MethodSym(..), initializer, 
+  nonInitConstructor, InternalMethod(..), StateVarSym(..), InternalStateVar(..),
+  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
+  BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
+  ODEMethod(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType, ClassName)
@@ -160,14 +161,15 @@ class (ControlStatementSym repr) => ControlBlockSym repr where
     Maybe (VS (repr (Value repr))) -> Maybe (VS (repr (Variable repr))) -> 
     MS (repr (Block repr))
 
+  solveODE :: ODEInfo repr -> ODEOptions repr -> MS (repr (Block repr))
+
+class (ControlStatementSym repr) => InternalControlBlock repr where
   listSlice'      :: Maybe (VS (repr (Value repr))) -> 
     Maybe (VS (repr (Value repr))) -> Maybe (VS (repr (Value repr))) ->
     VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
     MS (repr (Block repr))
-
-  solveODE :: ODEInfo repr -> ODEOptions repr -> MS (repr (Block repr))
   
-listSlice :: (ControlBlockSym repr) => VS (repr (Variable repr)) -> 
+listSlice :: (InternalControlBlock repr) => VS (repr (Variable repr)) -> 
   VS (repr (Value repr)) -> Maybe (VS (repr (Value repr))) -> 
   Maybe (VS (repr (Value repr))) -> Maybe (VS (repr (Value repr))) -> 
   MS (repr (Block repr))
@@ -282,8 +284,7 @@ class (VariableSym repr) => ValueSym repr where
   valueType :: repr (Value repr) -> repr (Type repr)
   valueDoc :: repr (Value repr) -> Doc
 
-class (ValueSym repr) => 
-  NumericExpression repr where
+class (ValueSym repr) => NumericExpression repr where
   (#~)  :: VS (repr (Value repr)) -> VS (repr (Value repr))
   infixl 8 #~
   (#/^) :: VS (repr (Value repr)) -> VS (repr (Value repr))
@@ -329,8 +330,7 @@ class (ValueSym repr) =>
 -- BooleanComparisons of BooleanExpressions and also BooleanExpressions of BooleanComparisons.
 -- This has the drawback of requiring a NumericExpression constraint for the first
 -- 3 functions here, even though they don't really need it.
-class (ValueSym repr, NumericExpression repr) => 
-  BooleanExpression repr where
+class (NumericExpression repr) => BooleanExpression repr where
   (?!)  :: VS (repr (Value repr)) -> VS (repr (Value repr))
   infixr 6 ?!
   (?&&) :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
@@ -359,8 +359,8 @@ class (ValueSym repr, NumericExpression repr) =>
     VS (repr (Value repr))
   infixl 3 ?!=
 
-class (ValueSym repr, BooleanExpression repr) => 
-  ValueExpression repr where -- for values that can include expressions
+-- for values that can include expressions
+class (BooleanExpression repr) => ValueExpression repr where
   inlineIf     :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
     VS (repr (Value repr)) -> VS (repr (Value repr))
   funcApp      :: Label -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
@@ -725,8 +725,8 @@ class InternalParam repr where
   parameterDoc  :: repr (Parameter repr) -> Doc
   paramFromData :: repr (Variable repr) -> Doc -> repr (Parameter repr)
 
-class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr) => 
-  MethodSym repr where
+class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr, 
+  InternalControlBlock repr) => MethodSym repr where
   type Method repr
   method      :: Label -> repr (Scope repr) -> repr (Permanence repr) 
     -> VS (repr (Type repr)) -> [MS (repr (Parameter repr))] -> 
@@ -796,8 +796,7 @@ class (MethodTypeSym repr, BlockCommentSym repr) => InternalMethod repr where
   methodDoc :: repr (Method repr) -> Doc
   methodFromData :: ScopeTag -> Doc -> repr (Method repr)
 
-class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr) =>
-  StateVarSym repr where
+class (ScopeSym repr, StatementSym repr) => StateVarSym repr where
   type StateVar repr
   stateVar :: repr (Scope repr) -> repr (Permanence repr) ->
     VS (repr (Variable repr)) -> CS (repr (StateVar repr))

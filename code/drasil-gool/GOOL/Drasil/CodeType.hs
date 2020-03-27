@@ -1,10 +1,10 @@
 -- | Defines the 'CodeType' data type
 module GOOL.Drasil.CodeType (
-    CodeType(..),
+    ClassName, CodeType(..)
     ) where
 
 type ClassName = String
-type EnumName = String
+-- type EnumName = String
 
 data CodeType = Boolean
               | Integer -- Maps to 32-bit signed integer in all languages but

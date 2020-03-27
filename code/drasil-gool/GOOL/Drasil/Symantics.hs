@@ -21,7 +21,7 @@ module GOOL.Drasil.Symantics (
   odeOptions, ODEMethod(..)
 ) where
 
-import GOOL.Drasil.CodeType (CodeType)
+import GOOL.Drasil.CodeType (CodeType, ClassName)
 import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
@@ -141,7 +141,7 @@ class (PermanenceSym repr) => TypeSym repr where
   listType      :: VS (repr (Type repr)) -> VS (repr (Type repr))
   arrayType     :: VS (repr (Type repr)) -> VS (repr (Type repr))
   listInnerType :: VS (repr (Type repr)) -> VS (repr (Type repr))
-  obj           :: Label -> VS (repr (Type repr))
+  obj           :: ClassName -> VS (repr (Type repr))
   -- enumType      :: Label -> VS (repr (Type repr))
   funcType      :: [VS (repr (Type repr))] -> VS (repr (Type repr)) -> 
     VS (repr (Type repr))

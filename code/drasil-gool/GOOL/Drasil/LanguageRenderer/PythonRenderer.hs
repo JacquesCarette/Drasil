@@ -311,12 +311,12 @@ instance VariableSym PythonCode where
 
   ($->) = objVar
 
-  variableBind = varBind . unPC
   variableName = varName . unPC
   variableType = onCodeValue varType
-  variableDoc = varDoc . unPC
 
 instance InternalVariable PythonCode where
+  variableBind = varBind . unPC
+  variableDoc = varDoc . unPC
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym PythonCode where

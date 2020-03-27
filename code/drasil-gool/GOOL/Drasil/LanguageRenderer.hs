@@ -323,7 +323,7 @@ argDocD n args = valueDoc args <> brackets (valueDoc n)
 -- enumElemDocD :: Label -> Label -> Doc
 -- enumElemDocD en e = text en <> dot <> text e
 
-classVarCheckStatic :: (VariableSym repr) => repr (Variable repr) -> 
+classVarCheckStatic :: (RenderSym repr) => repr (Variable repr) -> 
   repr (Variable repr)
 classVarCheckStatic v = classVarCS (variableBind v)
   where classVarCS Dynamic = error

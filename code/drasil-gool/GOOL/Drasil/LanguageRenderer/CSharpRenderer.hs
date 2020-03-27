@@ -316,12 +316,12 @@ instance VariableSym CSharpCode where
 
   ($->) = objVar
 
-  variableBind = varBind . unCSC
   variableName = varName . unCSC
   variableType = onCodeValue varType
-  variableDoc = varDoc . unCSC
 
 instance InternalVariable CSharpCode where
+  variableBind = varBind . unCSC
+  variableDoc = varDoc . unCSC
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CSharpCode where

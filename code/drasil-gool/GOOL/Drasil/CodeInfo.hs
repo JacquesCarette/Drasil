@@ -11,7 +11,7 @@ import GOOL.Drasil.Symantics (ProgramSym(..), FileSym(..), PermanenceSym(..),
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
-import GOOL.Drasil.AST (Binding(Dynamic), ScopeTag(..))
+import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.CodeAnalysis (Exception(..), exception, stdExc)
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -128,10 +128,8 @@ instance VariableSym CodeInfo where
 
   ($->) _ _ = noInfo
   
-  variableBind _ = Dynamic
   variableName _ = ""
   variableType _ = toCode ""
-  variableDoc _ = empty
 
 instance ValueSym CodeInfo where
   type Value CodeInfo = ()

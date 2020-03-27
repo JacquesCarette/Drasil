@@ -377,12 +377,12 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   
   ($->) = pair2 ($->) ($->)
 
-  variableBind v = variableBind $ pfst v
   variableName v = variableName $ pfst v
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
-  variableDoc v = variableDoc $ pfst v
 
 instance (Pair p) => InternalVariable (p CppSrcCode CppHdrCode) where
+  variableBind v = variableBind $ pfst v
+  variableDoc v = variableDoc $ pfst v
   varFromData b n t d = pair (varFromData b n (pfst t) d) 
     (varFromData b n (psnd t) d)
 
@@ -1332,12 +1332,12 @@ instance VariableSym CppSrcCode where
 
   ($->) = objVar
 
-  variableBind = varBind . unCPPSC
   variableName = varName . unCPPSC
   variableType = onCodeValue varType
-  variableDoc = varDoc . unCPPSC
 
 instance InternalVariable CppSrcCode where
+  variableBind = varBind . unCPPSC
+  variableDoc = varDoc . unCPPSC
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppSrcCode where
@@ -1995,12 +1995,12 @@ instance VariableSym CppHdrCode where
 
   ($->) _ _ = mkStateVar "" void empty
   
-  variableBind = varBind . unCPPHC
   variableName = varName . unCPPHC
   variableType = onCodeValue varType
-  variableDoc = varDoc . unCPPHC
 
 instance InternalVariable CppHdrCode where
+  variableBind = varBind . unCPPHC
+  variableDoc = varDoc . unCPPHC
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppHdrCode where

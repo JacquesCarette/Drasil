@@ -322,12 +322,12 @@ instance VariableSym JavaCode where
 
   ($->) = objVar
 
-  variableBind = varBind . unJC
   variableName = varName . unJC
   variableType = onCodeValue varType
-  variableDoc = varDoc . unJC
   
 instance InternalVariable JavaCode where
+  variableBind = varBind . unJC
+  variableDoc = varDoc . unJC
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JavaCode where

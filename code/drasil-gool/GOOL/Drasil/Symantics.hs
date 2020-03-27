@@ -244,13 +244,13 @@ class (TypeSym repr) => VariableSym repr where
 
   ($->) :: VS (repr (Variable repr)) -> VS (repr (Variable repr)) -> VS (repr (Variable repr))
   infixl 9 $->
-
-  variableBind :: repr (Variable repr) -> Binding
+  
   variableName :: repr (Variable repr) -> String
   variableType :: repr (Variable repr) -> repr (Type repr)
-  variableDoc  :: repr (Variable repr) -> Doc
 
 class InternalVariable repr where
+  variableBind :: repr (Variable repr) -> Binding
+  variableDoc  :: repr (Variable repr) -> Doc
   varFromData :: Binding -> String -> repr (Type repr) -> Doc -> 
     repr (Variable repr)
 

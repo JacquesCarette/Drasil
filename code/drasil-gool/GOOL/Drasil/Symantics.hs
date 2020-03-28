@@ -131,7 +131,9 @@ class InternalBlock repr where
 class (PermanenceSym repr) => TypeSym repr where
   type Type repr
   bool          :: VS (repr (Type repr))
-  int           :: VS (repr (Type repr))
+  int           :: VS (repr (Type repr)) -- This is 32-bit signed ints except
+                                         -- in Python, which has unlimited 
+                                         -- precision ints
   float         :: VS (repr (Type repr))
   double        :: VS (repr (Type repr))
   char          :: VS (repr (Type repr))

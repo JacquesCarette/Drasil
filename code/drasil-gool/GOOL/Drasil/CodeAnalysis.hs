@@ -3,15 +3,12 @@ module GOOL.Drasil.CodeAnalysis (
 ) where
 
 -- Stores exception information
+-- Eq is needed so that the same exception doesn't get added multiple times 
+-- to the list of exceptions for a given method.
 data Exception = Exc {
   loc :: String, -- import string where the exception is defined
   exc :: String -- name of the exception
-}
-
--- This is needed so that the same exception doesn't get added multiple times 
--- to the list of exceptions for a given method.
-instance Eq Exception where
-  (Exc l1 e1) == (Exc l2 e2) = l1 == l2 && e1 == e2
+} deriving Eq
 
 printExc :: Exception -> String
 printExc (Exc l e) = if null l then e else l ++ "." ++ e

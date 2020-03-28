@@ -7,7 +7,8 @@ type ClassName = String
 -- type EnumName = String
 
 data CodeType = Boolean
-              | Integer
+              | Integer -- Maps to 32-bit signed integer in all languages but
+                        -- Python, where integers have unlimited precision
               | Float
               | Double
               | Char

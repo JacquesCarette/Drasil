@@ -13,6 +13,7 @@ library
     , GOOL.Drasil.AST
     , GOOL.Drasil.Classes
     , GOOL.Drasil.Helpers
+    , GOOL.Drasil.CodeAnalysis
     , GOOL.Drasil.CodeInfo
     , GOOL.Drasil.LanguageRenderer.LanguagePolymorphic
     , GOOL.Drasil.LanguageRenderer
@@ -51,6 +52,7 @@ executable codegenTest
     , GOOL.Drasil.AST
     , GOOL.Drasil.Classes
     , GOOL.Drasil.Helpers
+    , GOOL.Drasil.CodeAnalysis
     , GOOL.Drasil.CodeInfo
     , GOOL.Drasil.LanguageRenderer.LanguagePolymorphic
     , GOOL.Drasil.LanguageRenderer

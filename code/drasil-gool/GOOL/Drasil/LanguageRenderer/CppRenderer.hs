@@ -63,7 +63,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), 
-  Binding(..), BindData(..), bd, FileType(..), FileData(..), fileD, 
+  Binding(..), onBinding, BindData(..), bd, FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
@@ -2660,15 +2660,15 @@ cppCommentedFunc ft cmt fn = do
   ret ft
 
 cppsStateVarDef :: Label -> Doc -> BindData -> VarData -> ValData -> Doc -> Doc
-cppsStateVarDef n cns p vr vl end = if bind p == Static then cns <+> typeDoc 
+cppsStateVarDef n cns p vr vl end = onBinding (bind p) (cns <+> typeDoc 
   (varType vr) <+> text (n ++ "::") <> varDoc vr <+> equals <+> valDoc vl <>
-  end else empty
+  end) empty
 
 cpphStateVarDef :: (RenderSym repr) => Doc -> repr (Permanence repr) -> 
   VS (repr (Variable repr)) -> VS (repr (Value repr)) -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (stateVarDocD s (permDoc p) .  
-  statementDoc) (zoom lensCStoMS $ state $ if binding p == Static then varDec 
-  vr else varDecDef vr vl) 
+  statementDoc) (zoom lensCStoMS $ state $ onBinding (binding p) (varDec 
+  vr) (varDecDef vr vl)) 
 
 cpphVarsFuncsList :: ScopeTag -> [CppHdrCode (StateVar CppHdrCode)] -> 
   [CppHdrCode (Method CppHdrCode)] -> Doc

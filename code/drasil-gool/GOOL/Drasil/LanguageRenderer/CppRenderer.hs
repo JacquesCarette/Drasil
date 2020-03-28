@@ -14,9 +14,9 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
   InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
-  InternalBlock(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
-  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
-  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  InternalBlock(..), ControlBlockSym(..), InternalControlBlock(..), TypeSym(..),
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), 
   Selector(..), InternalValueExp(..), objMethodCall, FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
@@ -244,13 +244,6 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
     (\s -> runStrategy l (zip (map fst strats) s) (fmap (onStateValue psnd) rv) 
       (fmap (onStateValue psnd) av)) (map snd strats)
 
-  listSlice' b e s vr vl = pair2 
-    (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e) 
-      (fmap (onStateValue pfst) s))
-    (listSlice' (fmap (onStateValue psnd) b) (fmap (onStateValue psnd) e) 
-      (fmap (onStateValue psnd) s)) 
-    (zoom lensMStoVS vr) (zoom lensMStoVS vl)
-
   solveODE info opts = do
     piv <- zoom lensMStoVS $ indepVar info
     pdv <- zoom lensMStoVS $ depVar info
@@ -312,6 +305,14 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
       (odeInfoHdr iv2 dv2 ovs2 ti2 tf2 initv2 ode2)
       (odeOptionsHdr m atol2 rtol2 ss2)
     toState $ pair p1 p2
+
+instance (Pair p) => InternalControlBlock (p CppSrcCode CppHdrCode) where
+  listSlice' b e s vr vl = pair2 
+    (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e) 
+      (fmap (onStateValue pfst) s))
+    (listSlice' (fmap (onStateValue psnd) b) (fmap (onStateValue psnd) e) 
+      (fmap (onStateValue psnd) s)) 
+    (zoom lensMStoVS vr) (zoom lensMStoVS vl)
 
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
   type UnaryOp (p CppSrcCode CppHdrCode) = OpData
@@ -376,12 +377,12 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   
   ($->) = pair2 ($->) ($->)
 
-  variableBind v = variableBind $ pfst v
   variableName v = variableName $ pfst v
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
-  variableDoc v = variableDoc $ pfst v
 
 instance (Pair p) => InternalVariable (p CppSrcCode CppHdrCode) where
+  variableBind v = variableBind $ pfst v
+  variableDoc v = variableDoc $ pfst v
   varFromData b n t d = pair (varFromData b n (pfst t) d) 
     (varFromData b n (psnd t) d)
 
@@ -1239,8 +1240,6 @@ instance InternalType CppSrcCode where
 instance ControlBlockSym CppSrcCode where
   runStrategy = G.runStrategy
 
-  listSlice' = G.listSlice
-
   solveODE info opts = let (fl, s) = cppODEFile info
                            dv = depVar info
     in modify (addODEFilePaths s . addODEFiles [unCPPSC fl] . addLibImport 
@@ -1259,6 +1258,9 @@ instance ControlBlockSym CppSrcCode where
           [cppODEMethod info opts, valueOf odeVar, valueOf currVal, 
           tInit info, tFinal info, stepSize opts, 
           newObj (obj $ "Populate_" ++ variableName dpv) [valueOf dv]]]))
+
+instance InternalControlBlock CppSrcCode where
+  listSlice' = G.listSlice
 
 instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
@@ -1330,12 +1332,12 @@ instance VariableSym CppSrcCode where
 
   ($->) = objVar
 
-  variableBind = varBind . unCPPSC
   variableName = varName . unCPPSC
   variableType = onCodeValue varType
-  variableDoc = varDoc . unCPPSC
 
 instance InternalVariable CppSrcCode where
+  variableBind = varBind . unCPPSC
+  variableDoc = varDoc . unCPPSC
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppSrcCode where
@@ -1921,11 +1923,12 @@ instance InternalType CppHdrCode where
 instance ControlBlockSym CppHdrCode where
   runStrategy _ _ _ _ = toState $ toCode empty
 
-  listSlice' _ _ _ _ _ = toState $ toCode empty
-
   solveODE info _ = let (fl, s) = cppODEFile info
     in modify (addODEFilePaths s . addODEFiles [unCPPHC fl]) >> 
     toState (toCode empty)
+
+instance InternalControlBlock CppHdrCode where
+  listSlice' _ _ _ _ _ = toState $ toCode empty
 
 instance UnaryOpSym CppHdrCode where
   type UnaryOp CppHdrCode = OpData
@@ -1992,12 +1995,12 @@ instance VariableSym CppHdrCode where
 
   ($->) _ _ = mkStateVar "" void empty
   
-  variableBind = varBind . unCPPHC
   variableName = varName . unCPPHC
   variableType = onCodeValue varType
-  variableDoc = varDoc . unCPPHC
 
 instance InternalVariable CppHdrCode where
+  variableBind = varBind . unCPPHC
+  variableDoc = varDoc . unCPPHC
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppHdrCode where

@@ -13,9 +13,9 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
   InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
-  InternalBlock(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
-  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
-  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  InternalBlock(..), ControlBlockSym(..), InternalControlBlock(..), TypeSym(..),
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
@@ -217,8 +217,6 @@ instance InternalType CSharpCode where
 instance ControlBlockSym CSharpCode where
   runStrategy = G.runStrategy
 
-  listSlice' = G.listSlice
-
   solveODE info opts = modify (addLibImport "Microsoft.Research.Oslo" . 
     addLangImport "System.Linq") >> 
     multiBlock [
@@ -251,6 +249,9 @@ instance ControlBlockSym CSharpCode where
           spArray = arrayType (obj "SolPoint")
           points = var "points" spArray
           sp = var "sp" (obj "SolPoint")
+
+instance InternalControlBlock CSharpCode where
+  listSlice' = G.listSlice
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
@@ -315,12 +316,12 @@ instance VariableSym CSharpCode where
 
   ($->) = objVar
 
-  variableBind = varBind . unCSC
   variableName = varName . unCSC
   variableType = onCodeValue varType
-  variableDoc = varDoc . unCSC
 
 instance InternalVariable CSharpCode where
+  variableBind = varBind . unCSC
+  variableDoc = varDoc . unCSC
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CSharpCode where

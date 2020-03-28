@@ -13,9 +13,9 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..), 
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
   InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
-  InternalBlock(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
-  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
-  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  InternalBlock(..), ControlBlockSym(..), InternalControlBlock(..), TypeSym(..),
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
@@ -226,8 +226,6 @@ instance InternalType JavaCode where
 instance ControlBlockSym JavaCode where
   runStrategy = G.runStrategy
 
-  listSlice' = G.listSlice
-
   solveODE info opts = let (fls, s) = jODEFiles info 
     in modify (addODEFilePaths s . addODEFiles fls) >> (zoom lensMStoVS dv 
     >>= (\dpv -> 
@@ -255,6 +253,9 @@ instance ControlBlockSym JavaCode where
         dv &= valueOf (objVar hndlr dv)]]))
     where stH = "StepHandler"
           dv = depVar info
+
+instance InternalControlBlock JavaCode where
+  listSlice' = G.listSlice
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
@@ -321,12 +322,12 @@ instance VariableSym JavaCode where
 
   ($->) = objVar
 
-  variableBind = varBind . unJC
   variableName = varName . unJC
   variableType = onCodeValue varType
-  variableDoc = varDoc . unJC
   
 instance InternalVariable JavaCode where
+  variableBind = varBind . unJC
+  variableDoc = varDoc . unJC
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JavaCode where

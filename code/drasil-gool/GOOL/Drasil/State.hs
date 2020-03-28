@@ -37,48 +37,59 @@ import qualified Data.Map as Map (empty, map)
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 data GOOLState = GS {
-  _headers :: [FilePath],
-  _sources :: [FilePath],
-  _mainMod :: Maybe FilePath,
-  _classMap :: Map String ClassName,
+  _headers :: [FilePath], -- Used by Drasil for doxygen config gen
+  _sources :: [FilePath], -- Used by Drasil for doxygen config and Makefile gen
+  _mainMod :: Maybe FilePath, -- Used by Drasil generator to access main 
+                              -- mod file path (needed in Makefile generation)
+  _classMap :: Map String ClassName, -- Used to determine whether an import is 
+                                     -- needed when using extClassVar and obj
   _odeFiles :: [FileData],
 
-  -- Only used for Java
-  _methodExceptionMap :: Map String [Exception],
-  _callMap :: Map String [String]
+  -- Only used for Java, to generate correct "throws Exception" declarations
+  -- Key format in both maps is ModuleName.MethodName
+  _methodExceptionMap :: Map String [Exception], -- Method to exceptions thrown
+  _callMap :: Map String [String] -- Method to other methods it calls
 } 
 makeLenses ''GOOLState
 
 data MethodState = MS {
-  _currParameters :: [String],
+  _currParameters :: [String], -- Used to get parameter names when generating 
+                               -- function documentation
 
   -- Only used for Java
-  _outputsDeclared :: Bool,
-  _exceptions :: [Exception],
-  _calls :: [String],
+  _outputsDeclared :: Bool, -- So Java doesn't redeclare outputs variable when using inOutCall
+  _exceptions :: [Exception], -- Used to build methodExceptionMap
+  _calls :: [String], -- Used to build CallMap
   
   -- Only used for C++
-  _currScope :: ScopeTag,
-  _currMainFunc :: Bool
+  _currScope :: ScopeTag, -- Used to maintain correct scope when adding 
+                          -- documentation to function in C++
+  _currMainFunc :: Bool -- Used by C++ to put documentation for the main
+                        -- function in source instead of header file
 }
 makeLenses ''MethodState
 
 newtype ClassState = CS {
-  _currClassName :: ClassName
+  _currClassName :: ClassName -- So class name is accessible when generating 
+                              -- constructor or self 
 }
 makeLenses ''ClassState
 
 data FileState = FS {
-  _currModName :: String,
-  _currFileType :: FileType,
-  _currMain :: Bool,
-  _currClasses :: [ClassName],
+  _currModName :: String, -- Used by fileDoc to insert the module name in the 
+                          -- file path, and by CodeInfo/Java when building
+                          -- method exception map and call map
+  _currFileType :: FileType, -- Used when populating headers and sources in GOOLState
+  _currMain :: Bool, -- Used to set mainMod in GOOLState, 
+                     -- and in C++ to put documentation for the main 
+                     -- module in the source file instead of header
+  _currClasses :: [ClassName], -- Used to update classMap
   _langImports :: [String],
   _libImports :: [String],
   _moduleImports :: [String],
   
   -- Only used for Python
-  _mainDoc :: Doc,
+  _mainDoc :: Doc, -- To print Python's "main" last
 
   -- C++ only
   _headerLangImports :: [String],

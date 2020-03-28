@@ -23,7 +23,8 @@ module GOOL.Drasil.State (
   setODEOthVars, getODEOthVars
 ) where
 
-import GOOL.Drasil.Data (FileType(..), ScopeTag(..), Exception(..), FileData)
+import GOOL.Drasil.AST (FileType(..), ScopeTag(..), Exception(..), FileData)
+import GOOL.Drasil.CodeType (ClassName)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Lens.Tuple (_1, _2)
@@ -38,7 +39,7 @@ data GOOLState = GS {
   _headers :: [FilePath],
   _sources :: [FilePath],
   _mainMod :: Maybe FilePath,
-  _classMap :: Map String String,
+  _classMap :: Map String ClassName,
   _odeFiles :: [FileData],
 
   -- Only used for Java
@@ -62,7 +63,7 @@ data MethodState = MS {
 makeLenses ''MethodState
 
 newtype ClassState = CS {
-  _currClassName :: String
+  _currClassName :: ClassName
 }
 makeLenses ''ClassState
 
@@ -70,7 +71,7 @@ data FileState = FS {
   _currModName :: String,
   _currFileType :: FileType,
   _currMain :: Bool,
-  _currClasses :: [String],
+  _currClasses :: [ClassName],
   _langImports :: [String],
   _libImports :: [String],
   _moduleImports :: [String],
@@ -489,7 +490,7 @@ setClassName :: String -> ((GOOLState, FileState), ClassState) ->
   ((GOOLState, FileState), ClassState)
 setClassName n = over _2 (set currClassName n)
 
-getClassName :: MS String
+getClassName :: MS ClassName
 getClassName = gets ((^. currClassName) . snd . fst)
 
 setCurrMain :: (((GOOLState, FileState), ClassState), MethodState) -> 

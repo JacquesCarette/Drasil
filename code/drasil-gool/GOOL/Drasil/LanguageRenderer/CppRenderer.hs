@@ -26,7 +26,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
   BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
   ODEMethod(..))
-import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD, 
+import GOOL.Drasil.LanguageRenderer (addExt, multiStateDocD, 
   bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, freeDocD, mkSt, 
   mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
   classVarCheckStatic, castDocD, castObjDocD, staticDocD, dynamicDocD, 
@@ -36,11 +36,11 @@ import GOOL.Drasil.LanguageRenderer (addExt, enumElementsDocD, multiStateDocD,
   appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, int, float, double, char, string, 
-  listType, listInnerType, obj, enumType, funcType, void, runStrategy, 
+  listType, listInnerType, obj, funcType, void, runStrategy, 
   listSlice, notOp, negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, 
   asinOp, acosOp, atanOp, csc, sec, cot, equalOp, notEqualOp, greaterOp, 
   greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
-  moduloOp, powerOp, andOp, orOp, var, staticVar, self, enumVar, objVar, 
+  moduloOp, powerOp, andOp, orOp, var, staticVar, self, objVar, 
   listVar, listOf, arrayElem, litTrue, litFalse, litChar, litDouble, litFloat, 
   litInt, litString, litArray, valueOf, arg, argsList, inlineIf, objAccess, 
   objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, call', 
@@ -62,11 +62,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   buildModule, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
-import GOOL.Drasil.Data (Pair(..), Terminator(..), ScopeTag(..), 
+import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
+import GOOL.Drasil.Classes (Pair(..))
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, 
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList, 
@@ -216,7 +217,7 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   arrayType = pair1 arrayType arrayType
   listInnerType = pair1 listInnerType listInnerType
   obj t = on2StateValues pair (obj t) (obj t)
-  enumType t = on2StateValues pair (enumType t) (enumType t)
+  -- enumType t = on2StateValues pair (enumType t) (enumType t)
   funcType = pair1List1Val funcType funcType
   iterator = pair1 iterator iterator
   void = on2StateValues pair void void
@@ -363,7 +364,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   const n = pair1 (const n) (const n)
   extVar l n = pair1 (extVar l n) (extVar l n)
   self = on2StateValues pair self self
-  enumVar e en = on2StateValues pair (enumVar e en) (enumVar e en)
+  -- enumVar e en = on2StateValues pair (enumVar e en) (enumVar e en)
   classVar = pair2 classVar classVar
   extClassVar = pair2 extClassVar extClassVar
   objVar = pair2 objVar objVar
@@ -398,11 +399,11 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
 
   pi = on2StateValues pair pi pi
 
-  ($:) l1 l2 = on2StateValues pair (($:) l1 l2) (($:) l1 l2)
+  -- ($:) l1 l2 = on2StateValues pair (($:) l1 l2) (($:) l1 l2)
 
   valueOf = pair1 valueOf valueOf
   arg n = on2StateValues pair (arg n) (arg n)
-  enumElement en e = on2StateValues pair (enumElement en e) (enumElement en e)
+  -- enumElement en e = on2StateValues pair (enumElement en e) (enumElement en e)
   
   argsList = on2StateValues pair argsList argsList
 
@@ -847,8 +848,8 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   buildClass n p vs fs = modify (setClassName n) >> pair2Lists 
     (buildClass n p) (buildClass n p)
     vs (map (zoom lensCStoMS) fs)
-  enum l ls s = modify (setClassName l) >> on2StateValues pair 
-    (enum l ls $ pfst s) (enum l ls $ psnd s)
+  -- enum l ls s = modify (setClassName l) >> on2StateValues pair 
+  --   (enum l ls $ pfst s) (enum l ls $ psnd s)
   extraClass n p vs fs = modify (setClassName n) >> pair2Lists 
     (extraClass n p) (extraClass n p)
     vs (map (zoom lensCStoMS) fs)
@@ -1223,7 +1224,7 @@ instance TypeSym CppSrcCode where
   obj n = zoom lensVStoMS getClassName >>= (\cn -> if cn == n then G.obj n else 
     getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
     (Map.lookup n cm) (G.obj n)))
-  enumType = G.enumType
+  -- enumType = G.enumType
   funcType = G.funcType
   iterator t = modify (addLangImportVS "iterator") >> (cppIterType . listType) t
   void = G.void
@@ -1310,7 +1311,7 @@ instance VariableSym CppSrcCode where
   const = var
   extVar l n t = modify (addModuleImportVS l) >> var n t
   self = G.self
-  enumVar = G.enumVar
+  -- enumVar = G.enumVar
   classVar = on2StateValues (\c v -> classVarCheckStatic (varFromData 
     (variableBind v) (getTypeString c ++ "::" ++ variableName v) 
     (variableType v) (cppClassVar (getTypeDoc c) (variableDoc v))))
@@ -1352,11 +1353,11 @@ instance ValueSym CppSrcCode where
   pi = modify (addDefine "_USE_MATH_DEFINES") >> addMathHImport (mkStateVal 
     double (text "M_PI"))
 
-  ($:) = enumElement
+  -- ($:) = enumElement
 
   valueOf = G.valueOf
   arg n = G.arg (litInt $ n+1) argsList
-  enumElement en e = mkStateVal (enumType en) (text e)
+  -- enumElement en e = mkStateVal (enumType en) (text e)
   
   argsList = G.argsList "argv"
 
@@ -1739,7 +1740,7 @@ instance InternalStateVar CppSrcCode where
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
   buildClass = G.buildClass
-  enum _ _ _ = toState $ toCode empty
+  -- enum _ _ _ = toState $ toCode empty
   extraClass = buildClass
   implementingClass = G.implementingClass
 
@@ -1904,7 +1905,7 @@ instance TypeSym CppHdrCode where
   listInnerType = G.listInnerType
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
     (Map.lookup n cm) $ G.obj n)
-  enumType = G.enumType
+  -- enumType = G.enumType
   funcType = G.funcType
   iterator t = modify (addHeaderLangImport "iterator") >> 
     (cppIterType . listType) t
@@ -1977,7 +1978,7 @@ instance VariableSym CppHdrCode where
   const _ _ = mkStateVar "" void empty
   extVar _ _ _ = mkStateVar "" void empty
   self = mkStateVar "" void empty
-  enumVar _ _ = mkStateVar "" void empty
+  -- enumVar _ _ = mkStateVar "" void empty
   classVar _ _ = mkStateVar "" void empty
   extClassVar _ _ = mkStateVar "" void empty
   objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
@@ -2014,11 +2015,11 @@ instance ValueSym CppHdrCode where
   pi = modify (addHeaderDefine "_USE_MATH_DEFINES" . addHeaderLangImport 
     "math.h") >> mkStateVal double (text "M_PI")
 
-  ($:) = enumElement
+  -- ($:) = enumElement
 
   valueOf = G.valueOf
   arg n = G.arg (litInt $ n+1) argsList
-  enumElement en e = mkStateVal (enumType en) (text e)
+  -- enumElement en e = mkStateVal (enumType en) (text e)
   
   argsList = G.argsList "argv"
 
@@ -2352,8 +2353,8 @@ instance InternalStateVar CppHdrCode where
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
   buildClass = G.buildClass
-  enum n es _ = modify (setClassName n) >> cpphEnum n (enumElementsDocD es 
-    enumsEqualInts) blockStart blockEnd endStatement
+  -- enum n es _ = modify (setClassName n) >> cpphEnum n (enumElementsDocD es 
+  --   enumsEqualInts) blockStart blockEnd endStatement
   extraClass = buildClass
   implementingClass = G.implementingClass
 
@@ -2444,8 +2445,8 @@ addLimitsImport = (>>) $ modify (addLangImport "limits")
 cppName :: String
 cppName = "C++" 
 
-enumsEqualInts :: Bool
-enumsEqualInts = False
+-- enumsEqualInts :: Bool
+-- enumsEqualInts = False
 
 inc :: Doc
 inc = text "#include"
@@ -2699,12 +2700,12 @@ cpphClass n p vars funcs pub priv bStart bEnd end = toCode $ vcat [
   where pubs = cpphVarsFuncsList Pub vars funcs
         privs = cpphVarsFuncsList Priv vars funcs
 
-cpphEnum :: (RenderSym repr) => Label -> Doc -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> repr (Keyword repr) -> CS (repr (Class repr))
-cpphEnum n es bStart bEnd end = classFromData $ toState $ vcat [
-  text "enum" <+> text n <+> keyDoc bStart,
-  indent es,
-  keyDoc bEnd <> keyDoc end]
+-- cpphEnum :: (RenderSym repr) => Label -> Doc -> repr (Keyword repr) -> 
+--   repr (Keyword repr) -> repr (Keyword repr) -> CS (repr (Class repr))
+-- cpphEnum n es bStart bEnd end = classFromData $ toState $ vcat [
+--   text "enum" <+> text n <+> keyDoc bStart,
+--   indent es,
+--   keyDoc bEnd <> keyDoc end]
 
 cppInOutCall :: (Label -> VS (CppSrcCode (Type CppSrcCode)) -> 
   [VS (CppSrcCode (Value CppSrcCode))] -> VS (CppSrcCode (Value CppSrcCode))) 

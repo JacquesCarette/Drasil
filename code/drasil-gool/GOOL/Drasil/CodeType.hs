@@ -1,8 +1,10 @@
 -- | Defines the 'CodeType' data type
 module GOOL.Drasil.CodeType (
-    CodeType(..),
-    isObject
+    ClassName, CodeType(..)
     ) where
+
+type ClassName = String
+-- type EnumName = String
 
 data CodeType = Boolean
               | Integer
@@ -14,11 +16,7 @@ data CodeType = Boolean
               | List CodeType
               | Array CodeType
               | Iterator CodeType
-              | Object String
-              | Enum String
+              | Object ClassName
+              -- | Enum EnumName
               | Func [CodeType] CodeType
               | Void deriving Eq
-
-isObject :: CodeType -> Bool
-isObject (Object _) = True
-isObject _ = False

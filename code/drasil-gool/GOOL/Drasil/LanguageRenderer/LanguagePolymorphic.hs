@@ -3,7 +3,7 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
-  fileType, listType, arrayType, listInnerType, obj, enumType, funcType, void, 
+  fileType, listType, arrayType, listInnerType, obj, funcType, void, 
   runStrategy, listSlice, unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', 
   absOp, absOp', expOp, expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', 
   asinOp, asinOp', acosOp, acosOp', atanOp, atanOp', csc, sec, cot, unExpr, 
@@ -11,9 +11,9 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
   minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, binExpr, binExpr', 
   binExprNumDbl', typeBinExpr, addmathImport, var, staticVar, extVar, self, 
-  enumVar, classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, 
+  classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, 
   litTrue, litFalse, litChar, litDouble, litFloat, litInt, litString, litArray, 
-  litList, pi, valueOf, arg, enumElement, argsList, inlineIf, call', call, 
+  litList, pi, valueOf, arg, argsList, inlineIf, call', call, 
   funcApp, funcAppMixedArgs, namedArgError, selfFuncApp, selfFuncAppMixedArgs, 
   extFuncApp, extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
   newObjMixedArgs, extNewObj, extNewObjMixedArgs, libNewObj, 
@@ -34,14 +34,14 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, 
-  constVar, privMVar, pubMVar, pubGVar, buildClass, enum, extraClass, 
+  constVar, privMVar, pubMVar, pubGVar, buildClass, extraClass, 
   implementingClass, docClass, commentedClass, intClass, buildModule, 
   buildModule', modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
 
-import GOOL.Drasil.CodeType (CodeType(..))
+import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.Symantics (Label, Library, KeywordSym(..), RenderSym,
   FileSym(RenderFile, commentedMod), BodySym(Body, body, bodyStatements), 
   InternalBody(bodyDoc, docBody), BlockSym(Block), 
@@ -84,17 +84,17 @@ import qualified GOOL.Drasil.Symantics as S (InternalFile(fileFromData),
   ParameterSym(param), MethodSym(method, mainFunction), InternalMethod(intFunc),
   StateVarSym(stateVar), ClassSym(buildClass, commentedClass), 
   InternalClass(intClass), InternalMod(modFromData))
-import GOOL.Drasil.Data (Binding(..), ScopeTag(..), Terminator(..), isSource)
+import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
   on2StateLists, on1StateValue1List, getInnerType, convType)
 import GOOL.Drasil.LanguageRenderer (dot, forLabel, new, observerListName, 
   addExt, moduleDocD, blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, 
   mkSt, mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, 
-  extVarDocD, selfDocD, argDocD, enumElemDocD, classVarCheckStatic, objVarDocD, 
+  extVarDocD, selfDocD, argDocD, classVarCheckStatic, objVarDocD, 
   objAccessDocD, funcDocD, listAccessFuncDocD, constDecDefDocD, printDoc, 
-  returnDocD, getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, enumDocD, 
-  enumElementsDocD, fileDoc', docFuncRepr, commentDocD, commentedItem,
+  returnDocD, getTermDoc, switchDocD, stateVarDocD, stateVarListDocD, 
+  fileDoc', docFuncRepr, commentDocD, commentedItem,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, intValue)
 import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensMStoVS, lensVStoMS, currMain, currFileType, modifyReturnFunc, 
@@ -174,11 +174,11 @@ listInnerType :: (RenderSym repr) => VS (repr (Type repr)) ->
   VS (repr (Type repr))
 listInnerType t = t >>= (convType . getInnerType . getType)
 
-obj :: (RenderSym repr) => Label -> VS (repr (Type repr))
+obj :: (RenderSym repr) => ClassName -> VS (repr (Type repr))
 obj n = toState $ typeFromData (Object n) n (text n)
 
-enumType :: (RenderSym repr) => Label -> VS (repr (Type repr))
-enumType e = toState $ typeFromData (Enum e) e (text e)
+-- enumType :: (RenderSym repr) => Label -> VS (repr (Type repr))
+-- enumType e = toState $ typeFromData (Enum e) e (text e)
 
 funcType :: (RenderSym repr) => [VS (repr (Type repr))] -> VS (repr (Type repr))
   -> VS (repr (Type repr))
@@ -464,8 +464,8 @@ extVar l n t = mkStateVar (l ++ "." ++ n) t (extVarDocD l n)
 self :: (RenderSym repr) => VS (repr (Variable repr))
 self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar "this" (obj l) selfDocD)
 
-enumVar :: (RenderSym repr) => Label -> Label -> VS (repr (Variable repr))
-enumVar e en = S.var e (enumType en)
+-- enumVar :: (RenderSym repr) => Label -> Label -> VS (repr (Variable repr))
+-- enumVar e en = S.var e (enumType en)
 
 classVar :: (RenderSym repr) => (Doc -> Doc -> Doc) -> VS (repr (Type repr)) -> 
   VS (repr (Variable repr)) -> VS (repr (Variable repr))
@@ -544,8 +544,8 @@ arg :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr)) ->
   VS (repr (Value repr))
 arg = on3StateValues (\s n args -> mkVal s (argDocD n args)) S.string
 
-enumElement :: (RenderSym repr) => Label -> Label -> VS (repr (Value repr))
-enumElement en e = mkStateVal (enumType en) (enumElemDocD en e)
+-- enumElement :: (RenderSym repr) => Label -> Label -> VS (repr (Value repr))
+-- enumElement en e = mkStateVal (enumType en) (enumElemDocD en e)
 
 argsList :: (RenderSym repr) => String -> VS (repr (Value repr))
 argsList l = mkStateVal (S.arrayType S.string) (text l)
@@ -1240,10 +1240,10 @@ buildClass :: (RenderSym repr) => Label -> Maybe Label ->
   CS (repr (Class repr))
 buildClass n = S.intClass n public . maybe (keyFromDoc empty) inherit
 
-enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
-  CS (repr (Class repr))
-enum n es s = modify (setClassName n) >> classFromData (toState $ enumDocD n 
-  (enumElementsDocD es False) (scopeDoc s))
+-- enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
+--   CS (repr (Class repr))
+-- enum n es s = modify (setClassName n) >> classFromData (toState $ enumDocD n 
+--   (enumElementsDocD es False) (scopeDoc s))
 
 extraClass :: (RenderSym repr) => Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 

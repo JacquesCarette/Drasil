@@ -7,21 +7,22 @@ module GOOL.Drasil.Symantics (
   ProgramSym(..), RenderSym, FileSym(..), InternalFile(..),  KeywordSym(..), 
   ImportSym(..), PermanenceSym(..), InternalPerm(..), BodySym(..), 
   InternalBody(..), BlockSym(..), InternalBlock(..), TypeSym(..), 
-  InternalType(..), ControlBlockSym(..), listSlice, UnaryOpSym(..), 
-  BinaryOpSym(..), InternalOp(..), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), InternalValueExp(..), 
-  objMethodCall, objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  initializer, nonInitConstructor, InternalMethod(..), StateVarSym(..), 
-  InternalStateVar(..), ClassSym(..), InternalClass(..), ModuleSym(..), 
-  InternalMod(..), BlockCommentSym(..)
+  InternalType(..), ControlBlockSym(..), InternalControlBlock(..), listSlice, 
+  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
+  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
+  objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), InternalParam(..), MethodSym(..), initializer, 
+  nonInitConstructor, InternalMethod(..), StateVarSym(..), InternalStateVar(..),
+  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
+  BlockCommentSym(..)
 ) where
 
-import GOOL.Drasil.CodeType (CodeType)
-import GOOL.Drasil.Data (Binding, Terminator, ScopeTag)
+import GOOL.Drasil.CodeType (CodeType, ClassName)
+import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
 import Control.Monad.State (State)
@@ -130,7 +131,9 @@ class InternalBlock repr where
 class (PermanenceSym repr) => TypeSym repr where
   type Type repr
   bool          :: VS (repr (Type repr))
-  int           :: VS (repr (Type repr))
+  int           :: VS (repr (Type repr)) -- This is 32-bit signed ints except
+                                         -- in Python, which has unlimited 
+                                         -- precision ints
   float         :: VS (repr (Type repr))
   double        :: VS (repr (Type repr))
   char          :: VS (repr (Type repr))
@@ -140,8 +143,8 @@ class (PermanenceSym repr) => TypeSym repr where
   listType      :: VS (repr (Type repr)) -> VS (repr (Type repr))
   arrayType     :: VS (repr (Type repr)) -> VS (repr (Type repr))
   listInnerType :: VS (repr (Type repr)) -> VS (repr (Type repr))
-  obj           :: Label -> VS (repr (Type repr))
-  enumType      :: Label -> VS (repr (Type repr))
+  obj           :: ClassName -> VS (repr (Type repr))
+  -- enumType      :: Label -> VS (repr (Type repr))
   funcType      :: [VS (repr (Type repr))] -> VS (repr (Type repr)) -> 
     VS (repr (Type repr))
   iterator      :: VS (repr (Type repr)) -> VS (repr (Type repr))
@@ -159,12 +162,13 @@ class (ControlStatementSym repr) => ControlBlockSym repr where
     Maybe (VS (repr (Value repr))) -> Maybe (VS (repr (Variable repr))) -> 
     MS (repr (Block repr))
 
+class (ControlStatementSym repr) => InternalControlBlock repr where
   listSlice'      :: Maybe (VS (repr (Value repr))) -> 
     Maybe (VS (repr (Value repr))) -> Maybe (VS (repr (Value repr))) ->
     VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
     MS (repr (Block repr))
   
-listSlice :: (ControlBlockSym repr) => VS (repr (Variable repr)) -> 
+listSlice :: (InternalControlBlock repr) => VS (repr (Variable repr)) -> 
   VS (repr (Value repr)) -> Maybe (VS (repr (Value repr))) -> 
   Maybe (VS (repr (Value repr))) -> Maybe (VS (repr (Value repr))) -> 
   MS (repr (Block repr))
@@ -229,7 +233,7 @@ class (TypeSym repr) => VariableSym repr where
   objVar       :: VS (repr (Variable repr)) -> VS (repr (Variable repr)) -> 
     VS (repr (Variable repr))
   objVarSelf   :: VS (repr (Variable repr)) -> VS (repr (Variable repr))
-  enumVar      :: Label -> Label -> VS (repr (Variable repr))
+  -- enumVar      :: Label -> Label -> VS (repr (Variable repr))
   listVar      :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
   listOf       :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
   arrayElem    :: Integer -> VS (repr (Variable repr)) -> 
@@ -239,13 +243,13 @@ class (TypeSym repr) => VariableSym repr where
 
   ($->) :: VS (repr (Variable repr)) -> VS (repr (Variable repr)) -> VS (repr (Variable repr))
   infixl 9 $->
-
-  variableBind :: repr (Variable repr) -> Binding
+  
   variableName :: repr (Variable repr) -> String
   variableType :: repr (Variable repr) -> repr (Type repr)
-  variableDoc  :: repr (Variable repr) -> Doc
 
 class InternalVariable repr where
+  variableBind :: repr (Variable repr) -> Binding
+  variableDoc  :: repr (Variable repr) -> Doc
   varFromData :: Binding -> String -> repr (Type repr) -> Doc -> 
     repr (Variable repr)
 
@@ -266,21 +270,20 @@ class (VariableSym repr) => ValueSym repr where
   pi :: VS (repr (Value repr))
 
   --other operators ($)
-  ($:)  :: Label -> Label -> VS (repr (Value repr))
-  infixl 9 $:
+  -- ($:)  :: Label -> Label -> VS (repr (Value repr))
+  -- infixl 9 $:
 
   valueOf       :: VS (repr (Variable repr)) -> VS (repr (Value repr))
 --  global       :: Label -> repr (Value repr)         -- not sure how this one works, but in GOOL it was hardcoded to give an error so I'm leaving it out for now
   arg          :: Integer -> VS (repr (Value repr))
-  enumElement  :: Label -> Label -> VS (repr (Value repr))
+  -- enumElement  :: Label -> Label -> VS (repr (Value repr))
 
   argsList  :: VS (repr (Value repr))
 
   valueType :: repr (Value repr) -> repr (Type repr)
   valueDoc :: repr (Value repr) -> Doc
 
-class (ValueSym repr) => 
-  NumericExpression repr where
+class (ValueSym repr) => NumericExpression repr where
   (#~)  :: VS (repr (Value repr)) -> VS (repr (Value repr))
   infixl 8 #~
   (#/^) :: VS (repr (Value repr)) -> VS (repr (Value repr))
@@ -326,8 +329,7 @@ class (ValueSym repr) =>
 -- BooleanComparisons of BooleanExpressions and also BooleanExpressions of BooleanComparisons.
 -- This has the drawback of requiring a NumericExpression constraint for the first
 -- 3 functions here, even though they don't really need it.
-class (ValueSym repr, NumericExpression repr) => 
-  BooleanExpression repr where
+class (NumericExpression repr) => BooleanExpression repr where
   (?!)  :: VS (repr (Value repr)) -> VS (repr (Value repr))
   infixr 6 ?!
   (?&&) :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
@@ -356,8 +358,8 @@ class (ValueSym repr, NumericExpression repr) =>
     VS (repr (Value repr))
   infixl 3 ?!=
 
-class (ValueSym repr, BooleanExpression repr) => 
-  ValueExpression repr where -- for values that can include expressions
+-- for values that can include expressions
+class (BooleanExpression repr) => ValueExpression repr where
   inlineIf     :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
     VS (repr (Value repr)) -> VS (repr (Value repr))
   funcApp      :: Label -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
@@ -551,8 +553,8 @@ class (SelectorFunction repr) => StatementSym repr where
   infixl 1 &+=
   (&++)  :: VS (repr (Variable repr)) -> MS (repr (Statement repr))
   infixl 8 &++
-  (&~-)  :: VS (repr (Variable repr)) -> MS (repr (Statement repr))
-  infixl 8 &~-
+  (&--)  :: VS (repr (Variable repr)) -> MS (repr (Statement repr))
+  infixl 8 &--
 
   assign            :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
     MS (repr (Statement repr))
@@ -721,8 +723,8 @@ class InternalParam repr where
   parameterDoc  :: repr (Parameter repr) -> Doc
   paramFromData :: repr (Variable repr) -> Doc -> repr (Parameter repr)
 
-class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr) => 
-  MethodSym repr where
+class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr, 
+  InternalControlBlock repr) => MethodSym repr where
   type Method repr
   method      :: Label -> repr (Scope repr) -> repr (Permanence repr) 
     -> VS (repr (Type repr)) -> [MS (repr (Parameter repr))] -> 
@@ -792,8 +794,7 @@ class (MethodTypeSym repr, BlockCommentSym repr) => InternalMethod repr where
   methodDoc :: repr (Method repr) -> Doc
   methodFromData :: ScopeTag -> Doc -> repr (Method repr)
 
-class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr) =>
-  StateVarSym repr where
+class (ScopeSym repr, StatementSym repr) => StateVarSym repr where
   type StateVar repr
   stateVar :: repr (Scope repr) -> repr (Permanence repr) ->
     VS (repr (Variable repr)) -> CS (repr (StateVar repr))
@@ -814,7 +815,7 @@ class (MethodSym repr) => ClassSym repr where
   type Class repr
   buildClass :: Label -> Maybe Label -> [CS (repr (StateVar repr))] 
     -> [MS (repr (Method repr))] -> CS (repr (Class repr))
-  enum :: Label -> [Label] -> repr (Scope repr) -> CS (repr (Class repr))
+  -- enum :: Label -> [Label] -> repr (Scope repr) -> CS (repr (Class repr))
   extraClass :: Label -> Maybe Label -> [CS (repr (StateVar repr))] 
     -> [MS (repr (Method repr))] -> CS (repr (Class repr))
   implementingClass :: Label -> [Label] -> [CS (repr (StateVar repr))] -> 

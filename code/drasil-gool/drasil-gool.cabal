@@ -10,8 +10,10 @@ library
       GOOL.Drasil
   other-modules:
       GOOL.Drasil.CodeType
-    , GOOL.Drasil.Data
+    , GOOL.Drasil.AST
+    , GOOL.Drasil.Classes
     , GOOL.Drasil.Helpers
+    , GOOL.Drasil.CodeAnalysis
     , GOOL.Drasil.CodeInfo
     , GOOL.Drasil.LanguageRenderer.LanguagePolymorphic
     , GOOL.Drasil.LanguageRenderer
@@ -46,8 +48,10 @@ executable codegenTest
     , Test.Helper
     , GOOL.Drasil
     , GOOL.Drasil.CodeType
-    , GOOL.Drasil.Data
+    , GOOL.Drasil.AST
+    , GOOL.Drasil.Classes
     , GOOL.Drasil.Helpers
+    , GOOL.Drasil.CodeAnalysis
     , GOOL.Drasil.CodeInfo
     , GOOL.Drasil.LanguageRenderer.LanguagePolymorphic
     , GOOL.Drasil.LanguageRenderer

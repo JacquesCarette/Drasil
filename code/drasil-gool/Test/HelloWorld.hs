@@ -72,8 +72,8 @@ helloIfBody = addComments "If body" (body [
     var "c" int &+= litInt 17,
     (&++) (var "a" int),
     (&++) (var "d" int),
-    (&~-) (var "c" int),
-    (&~-) (var "b" int),
+    (&--) (var "c" int),
+    (&--) (var "b" int),
 
     listDec 5 (var "myList" (listType int)),
     objDecDef (var "myObj" char) (litChar 'o'),

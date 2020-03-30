@@ -13,9 +13,9 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
   InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
-  InternalBlock(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
-  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
-  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  InternalBlock(..), ControlBlockSym(..), InternalControlBlock(..), TypeSym(..),
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   InternalValueExp(..), FunctionSym(..), SelectorFunction(..), 
   InternalFunction(..), InternalStatement(..), StatementSym(..), 
@@ -33,13 +33,13 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
-  string, listType, arrayType, listInnerType, obj, enumType, funcType, void, 
+  string, listType, arrayType, listInnerType, obj, funcType, void, 
   runStrategy, listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, 
   greaterOp, greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, 
-  divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, 
+  divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, 
   classVar, objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, 
   litFalse, litChar, litDouble, litFloat, litInt, litString, litList, valueOf, 
-  arg, enumElement, argsList, inlineIf, objAccess, objMethodCall, 
+  arg, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, selfAccess, listIndexExists, indexOf, call, funcApp, 
   funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, extFuncApp, 
   extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
@@ -58,12 +58,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
   pubMethod, constructor, docMain, function, mainFunction, docFunc, 
   docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, enum, implementingClass, docClass, commentedClass, 
+  pubGVar, buildClass, implementingClass, docClass, commentedClass, 
   intClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
   typeBinExpr)
-import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
+import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
   updateParamDoc, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
@@ -200,7 +200,7 @@ instance TypeSym CSharpCode where
   arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
-  enumType = G.enumType
+  -- enumType = G.enumType
   funcType = G.funcType
   iterator t = t
   void = G.void
@@ -214,7 +214,8 @@ instance InternalType CSharpCode where
 
 instance ControlBlockSym CSharpCode where
   runStrategy = G.runStrategy
-
+  
+instance InternalControlBlock CSharpCode where
   listSlice' = G.listSlice
 
 instance UnaryOpSym CSharpCode where
@@ -268,7 +269,7 @@ instance VariableSym CSharpCode where
   const = var
   extVar = G.extVar
   self = G.self
-  enumVar = G.enumVar
+  -- enumVar = G.enumVar
   classVar = G.classVar classVarDocD
   extClassVar = classVar
   objVar = on2StateValues csObjVar
@@ -280,12 +281,12 @@ instance VariableSym CSharpCode where
 
   ($->) = objVar
 
-  variableBind = varBind . unCSC
   variableName = varName . unCSC
   variableType = onCodeValue varType
-  variableDoc = varDoc . unCSC
 
 instance InternalVariable CSharpCode where
+  variableBind = varBind . unCSC
+  variableDoc = varDoc . unCSC
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CSharpCode where
@@ -302,11 +303,11 @@ instance ValueSym CSharpCode where
 
   pi = G.pi
 
-  ($:) = enumElement
+  -- ($:) = enumElement
 
   valueOf = G.valueOf 
   arg n = G.arg (litInt n) argsList
-  enumElement = G.enumElement
+  -- enumElement = G.enumElement
   
   argsList = G.argsList "args"
 
@@ -464,7 +465,7 @@ instance StatementSym CSharpCode where
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
-  (&~-) = G.decrement1
+  (&--) = G.decrement1
 
   varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
     G.varDec static dynamic empty v)
@@ -634,7 +635,7 @@ instance InternalStateVar CSharpCode where
 instance ClassSym CSharpCode where
   type Class CSharpCode = Doc
   buildClass = G.buildClass
-  enum = G.enum
+  -- enum = G.enum
   extraClass = buildClass
   implementingClass = G.implementingClass
 

@@ -3,15 +3,16 @@
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.Symantics (ProgramSym(..), FileSym(..), PermanenceSym(..), 
-  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), InternalValueExp(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  BodySym(..), BlockSym(..), ControlBlockSym(..), InternalControlBlock(..), 
+  TypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), Selector(..), 
+  InternalValueExp(..), FunctionSym(..), SelectorFunction(..), StatementSym(..),
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
-import GOOL.Drasil.Data (Binding(Dynamic), ScopeTag(..), Exception(..),
-  exception, stdExc)
+import GOOL.Drasil.AST (ScopeTag(..))
+import GOOL.Drasil.CodeAnalysis (Exception(..), exception, stdExc)
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, modifyReturn, setClassName, 
@@ -85,7 +86,7 @@ instance TypeSym CodeInfo where
   arrayType _ = noInfoType
   listInnerType _ = noInfoType
   obj = toState . toCode
-  enumType _ = noInfoType
+  -- enumType _ = noInfoType
   funcType _ _ = noInfoType
   iterator _ = noInfoType
   void = noInfoType
@@ -100,6 +101,7 @@ instance ControlBlockSym CodeInfo where
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
     noInfo
 
+instance InternalControlBlock CodeInfo where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl
@@ -112,7 +114,7 @@ instance VariableSym CodeInfo where
   const _ _ = noInfo
   extVar _ _ _ = noInfo
   self = noInfo
-  enumVar _ _ = noInfo
+  -- enumVar _ _ = noInfo
   classVar _ _ = noInfo
   extClassVar _ _ = noInfo
   objVar _ _ = noInfo
@@ -124,10 +126,8 @@ instance VariableSym CodeInfo where
 
   ($->) _ _ = noInfo
   
-  variableBind _ = Dynamic
   variableName _ = ""
   variableType _ = toCode ""
-  variableDoc _ = empty
 
 instance ValueSym CodeInfo where
   type Value CodeInfo = ()
@@ -143,11 +143,11 @@ instance ValueSym CodeInfo where
 
   pi = noInfo
 
-  ($:) _ _ = noInfo
+  -- ($:) _ _ = noInfo
 
   valueOf _ = noInfo
   arg _ = noInfo
-  enumElement _ _ = noInfo
+  -- enumElement _ _ = noInfo
   
   argsList = noInfo
 
@@ -281,7 +281,7 @@ instance StatementSym CodeInfo where
   (&-=) _ = zoom lensMStoVS . execute1
   (&+=) _ = zoom lensMStoVS . execute1
   (&++) _ = noInfo
-  (&~-) _ = noInfo
+  (&--) _ = noInfo
 
   varDec _ = noInfo
   varDecDef _ = zoom lensMStoVS . execute1
@@ -449,8 +449,8 @@ instance ClassSym CodeInfo where
     modify (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
-  enum n _ s = if unCI s == Pub then modifyReturn (addClass n) (toCode ()) else 
-    noInfo 
+  -- enum n _ s = if unCI s == Pub then modifyReturn (addClass n) (toCode ()) else 
+  --   noInfo 
   extraClass n _ _ ms = do
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) ms

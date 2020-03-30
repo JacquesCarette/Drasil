@@ -13,9 +13,9 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..), 
   InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
   InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
-  InternalBlock(..), ControlBlockSym(..), TypeSym(..), InternalType(..), 
-  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
-  InternalVariable(..), ValueSym(..), NumericExpression(..), 
+  InternalBlock(..), ControlBlockSym(..), InternalControlBlock(..), TypeSym(..),
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   InternalValueExp(..), FunctionSym(..), SelectorFunction(..), 
   InternalFunction(..), InternalStatement(..), StatementSym(..), 
@@ -33,25 +33,24 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, bool', int, float, double, char, 
-  listType, arrayType, listInnerType, obj, enumType, funcType, void, 
-  runStrategy, listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, 
-  greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
-  divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, enumVar, 
-  classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, 
-  litFalse, litChar, litDouble, litFloat, litInt, litString, litArray, pi, 
-  valueOf, arg, enumElement, argsList, inlineIf, objAccess, objMethodCall, 
-  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, call', funcApp, 
-  funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, extFuncApp, 
-  extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
-  newObjMixedArgs, extNewObj, libNewObj, libNewObjMixedArgs, lambda, notNull, 
-  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
-  listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
-  listAppendFunc, iterBeginError, iterEndError, listAccessFunc', printSt, 
-  state, loopState, emptyState, assign, assignToListIndex, multiAssignError, 
-  decrement, increment, decrement1, increment1, varDec, varDecDef, listDec, 
-  listDecDef', arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, 
-  extObjDecNew, extObjDecNewNoParams, funcDecDef, discardInput, 
-  discardFileInput, openFileR, openFileW, openFileA, closeFile, 
+  listType, arrayType, listInnerType, obj, funcType, void, runStrategy, 
+  listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, greaterOp, 
+  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
+  moduloOp, andOp, orOp, var, staticVar, extVar, self, classVar, objVar, 
+  objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, litFalse, litChar, 
+  litDouble, litFloat, litInt, litString, litArray, pi, valueOf, arg, argsList, 
+  inlineIf, objAccess, objMethodCall, objMethodCallNoParams, selfAccess, 
+  listIndexExists, indexOf, call', funcApp, funcAppMixedArgs, selfFuncApp, 
+  selfFuncAppMixedArgs, extFuncApp, extFuncAppMixedArgs, libFuncApp, 
+  libFuncAppMixedArgs, newObj, newObjMixedArgs, extNewObj, libNewObj, 
+  libNewObjMixedArgs, lambda, notNull, func, get, set, listSize, listAdd, 
+  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
+  listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
+  listAccessFunc', printSt, state, loopState, emptyState, assign, 
+  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, 
+  objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, 
+  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
   multiReturnError, valState, comment, freeError, throw, initState, 
   changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
@@ -59,16 +58,16 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
   pubMethod, constructor, docMain, function, mainFunction, docFunc, intFunc, 
   stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
-  enum, extraClass, implementingClass, docClass, commentedClass, intClass, 
+  extraClass, implementingClass, docClass, commentedClass, intClass, 
   buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
   typeBinExpr)
-import GOOL.Drasil.Data (Terminator(..), ScopeTag(..), FileType(..), 
-  Exception(..), FileData(..), fileD, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, updateMthdDoc, OpData(..), od, 
-  ParamData(..), pd, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
-  VarData(..), vard)
+import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
+  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
+  ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
+import GOOL.Drasil.CodeAnalysis (Exception(..))
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   onCodeList, onStateList, on1CodeValue1List)
@@ -205,7 +204,7 @@ instance TypeSym JavaCode where
   arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
-  enumType = G.enumType
+  -- enumType = G.enumType
   funcType = G.funcType
   iterator t = t
   void = G.void
@@ -220,6 +219,7 @@ instance InternalType JavaCode where
 instance ControlBlockSym JavaCode where
   runStrategy = G.runStrategy
 
+instance InternalControlBlock JavaCode where
   listSlice' = G.listSlice
 
 instance UnaryOpSym JavaCode where
@@ -273,7 +273,7 @@ instance VariableSym JavaCode where
   const = var
   extVar = G.extVar
   self = G.self
-  enumVar = G.enumVar
+  -- enumVar = G.enumVar
   classVar = G.classVar classVarDocD
   extClassVar = classVar
   objVar = G.objVar
@@ -285,12 +285,12 @@ instance VariableSym JavaCode where
 
   ($->) = objVar
 
-  variableBind = varBind . unJC
   variableName = varName . unJC
   variableType = onCodeValue varType
-  variableDoc = varDoc . unJC
   
 instance InternalVariable JavaCode where
+  variableBind = varBind . unJC
+  variableDoc = varDoc . unJC
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JavaCode where
@@ -309,11 +309,11 @@ instance ValueSym JavaCode where
 
   pi = G.pi
 
-  ($:) = enumElement
+  -- ($:) = enumElement
 
   valueOf = G.valueOf
   arg n = G.arg (litInt n) argsList
-  enumElement = G.enumElement
+  -- enumElement = G.enumElement
 
   argsList = G.argsList "args"
 
@@ -494,7 +494,7 @@ instance StatementSym JavaCode where
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
-  (&~-) = G.decrement1
+  (&--) = G.decrement1
 
   varDec = G.varDec static dynamic empty
   varDecDef = G.varDecDef
@@ -674,7 +674,7 @@ instance InternalStateVar JavaCode where
 instance ClassSym JavaCode where
   type Class JavaCode = Doc
   buildClass = G.buildClass
-  enum = G.enum
+  -- enum = G.enum
   extraClass = G.extraClass
   implementingClass = G.implementingClass
 
@@ -761,7 +761,7 @@ jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $
   valueType vl) tp vl) t v
   where jCast' Double String _ _ = funcApp "Double.parseDouble" double [v]
         jCast' Float String _ _ = funcApp "Float.parseFloat" float [v]
-        jCast' Integer (Enum _) _ _ = v $. func "ordinal" int []
+        -- jCast' Integer (Enum _) _ _ = v $. func "ordinal" int []
         jCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
           tp)) (valueDoc vl))
 

@@ -24,7 +24,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), FileSym(..),
   initializer, nonInitConstructor, StateVarSym(..), ClassSym(..), ModuleSym(..),
   BlockCommentSym(..))
 
-import GOOL.Drasil.Data (FileData(..), ModData(..), ProgData(..), ScopeTag(..))
+import GOOL.Drasil.AST (FileData(..), ModData(..), ProgData(..), ScopeTag(..))
 
 import GOOL.Drasil.CodeType (CodeType(..))
 

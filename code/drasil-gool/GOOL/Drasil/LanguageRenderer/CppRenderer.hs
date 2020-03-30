@@ -598,7 +598,7 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   (&-=) vr vl = pair2 (&-=) (&-=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&+=) vr vl = pair2 (&+=) (&+=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&++) vl = pair1 (&++) (&++) (zoom lensMStoVS vl)
-  (&~-) vl = pair1 (&~-) (&~-) (zoom lensMStoVS vl)
+  (&--) vl = pair1 (&--) (&--) (zoom lensMStoVS vl)
 
   varDec vr = pair1 varDec varDec (zoom lensMStoVS vr)
   varDecDef vr vl = pair2 varDecDef varDecDef (zoom lensMStoVS vr) 
@@ -1518,7 +1518,7 @@ instance StatementSym CppSrcCode where
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
-  (&~-) = G.decrement1
+  (&--) = G.decrement1
 
   varDec = G.varDec static dynamic
   varDecDef = G.varDecDef 
@@ -2178,7 +2178,7 @@ instance StatementSym CppHdrCode where
   (&-=) _ _ = emptyState
   (&+=) _ _ = emptyState
   (&++) _ = emptyState
-  (&~-) _ = emptyState
+  (&--) _ = emptyState
 
   varDec = G.varDec static dynamic
   varDecDef = G.varDecDef

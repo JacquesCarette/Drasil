@@ -557,8 +557,8 @@ class (SelectorFunction repr) => StatementSym repr where
   infixl 1 &+=
   (&++)  :: VS (repr (Variable repr)) -> MS (repr (Statement repr))
   infixl 8 &++
-  (&~-)  :: VS (repr (Variable repr)) -> MS (repr (Statement repr))
-  infixl 8 &~-
+  (&--)  :: VS (repr (Variable repr)) -> MS (repr (Statement repr))
+  infixl 8 &--
 
   assign            :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
     MS (repr (Statement repr))

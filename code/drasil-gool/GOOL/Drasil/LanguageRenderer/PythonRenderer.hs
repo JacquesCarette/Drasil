@@ -504,7 +504,7 @@ instance StatementSym PythonCode where
   (&-=) = G.decrement
   (&+=) = G.increment'
   (&++) = G.increment1'
-  (&~-) = G.decrement1
+  (&--) = G.decrement1
 
   varDec _ = toState $ mkStNoEnd empty
   varDecDef = assign

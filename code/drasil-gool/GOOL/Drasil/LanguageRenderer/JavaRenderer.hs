@@ -533,7 +533,7 @@ instance StatementSym JavaCode where
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
-  (&~-) = G.decrement1
+  (&--) = G.decrement1
 
   varDec = G.varDec static dynamic
   varDecDef = G.varDecDef

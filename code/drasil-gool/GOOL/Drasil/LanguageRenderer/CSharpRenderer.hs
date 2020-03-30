@@ -502,7 +502,7 @@ instance StatementSym CSharpCode where
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
-  (&~-) = G.decrement1
+  (&--) = G.decrement1
 
   varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
     G.varDec static dynamic v)

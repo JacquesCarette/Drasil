@@ -283,7 +283,7 @@ instance StatementSym CodeInfo where
   (&-=) _ = zoom lensMStoVS . execute1
   (&+=) _ = zoom lensMStoVS . execute1
   (&++) _ = noInfo
-  (&~-) _ = noInfo
+  (&--) _ = noInfo
 
   varDec _ = noInfo
   varDecDef _ = zoom lensMStoVS . execute1

@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 import Language.Drasil 
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk), codevarC, 
-  codevar, codevars, codevars')
+  quantvar, codevars, codevars')
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Structure(..), 
@@ -27,7 +27,7 @@ getInConstructorParams :: Reader DrasilState [CodeVarChunk]
 getInConstructorParams = do
   g <- ask
   let getCParams False = []
-      getCParams True = [codevar inFileName]
+      getCParams True = [quantvar inFileName]
   getParams In $ getCParams $ member "InputParameters" (eMap $ codeSpec g) && 
     member "get_input" (clsMap $ codeSpec g)
 
@@ -35,9 +35,9 @@ getInputFormatIns :: Reader DrasilState [CodeVarChunk]
 getInputFormatIns = do
   g <- ask
   let getIns :: Structure -> InputModule -> [CodeVarChunk]
-      getIns Bundled Separated = [codevar inParams]
+      getIns Bundled Separated = [quantvar inParams]
       getIns _ _ = []
-  getParams In $ codevar inFileName : getIns (inStruct g) (inMod g)
+  getParams In $ quantvar inFileName : getIns (inStruct g) (inMod g)
 
 getInputFormatOuts :: Reader DrasilState [CodeVarChunk]
 getInputFormatOuts = do
@@ -99,14 +99,14 @@ getInputVars _ Unbundled _ cs = return cs
 getInputVars pt Bundled Var _ = do
   g <- ask
   let cname = "InputParameters"
-  return [codevar inParams | currentClass g /= cname && isIn pt]
+  return [quantvar inParams | currentClass g /= cname && isIn pt]
 getInputVars _ Bundled Const _ = return []
 
 getConstVars :: ParamType -> ConstantStructure -> ConstantRepr -> 
   [CodeVarChunk] -> Reader DrasilState [CodeVarChunk]
 getConstVars _ _ _ [] = return []
 getConstVars _ (Store Unbundled) _ cs = return cs
-getConstVars pt (Store Bundled) Var _ = return [codevar consts | isIn pt]
+getConstVars pt (Store Bundled) Var _ = return [quantvar consts | isIn pt]
 getConstVars _ (Store Bundled) Const _ = return []
 getConstVars pt WithInputs cr cs = do
   g <- ask

@@ -25,7 +25,7 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk,
-  codevarC, codevar, physLookup, sfwrLookup)
+  codevarC, quantvar, physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
@@ -60,7 +60,7 @@ genMain = genModule "Control" "Controls the flow of the program"
 genMainFunc :: (ProgramSym repr) => Reader DrasilState (MS (repr (Method repr)))
 genMainFunc = do
     g <- ask
-    v_filename <- mkVar $ codevar inFileName
+    v_filename <- mkVar $ quantvar inFileName
     logInFile <- maybeLog v_filename
     ip <- getInputDecl
     co <- initConsts
@@ -77,7 +77,7 @@ getInputDecl :: (ProgramSym repr) => Reader DrasilState
   (Maybe (MS (repr (Statement repr))))
 getInputDecl = do
   g <- ask
-  v_params <- mkVar (codevar inParams)
+  v_params <- mkVar (quantvar inParams)
   constrParams <- getInConstructorParams 
   cps <- mapM mkVal constrParams
   let cname = "InputParameters"
@@ -103,7 +103,7 @@ initConsts :: (ProgramSym repr) => Reader DrasilState
   (Maybe (MS (repr (Statement repr))))
 initConsts = do
   g <- ask
-  v_consts <- mkVar (codevar consts)
+  v_consts <- mkVar (quantvar consts)
   let cname = "Constants"
       getDecl _ Inline = return Nothing
       getDecl ([],[]) _ = return Nothing

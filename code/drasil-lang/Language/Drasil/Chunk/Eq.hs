@@ -47,12 +47,12 @@ fromEqn' nm desc def symb sp = EC (mkQuant nm desc symb sp Nothing Nothing) def
 fromEqnSt :: (IsUnit u) => String -> NP -> Sentence -> (Stage -> Symbol) -> 
   Space -> u -> Expr -> QDefinition
 fromEqnSt nm desc def symb sp un = 
-  EC (mkQuant' nm desc symb sp (Just $ unitWrapper un) Nothing) def
+  EC (mkQuant' nm desc Nothing sp symb (Just $ unitWrapper un)) def
 
 -- | Same as fromEqn', but symbol depends on stage
 fromEqnSt' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr -> 
   QDefinition
-fromEqnSt' nm desc def symb sp = EC (mkQuant' nm desc symb sp Nothing Nothing) 
+fromEqnSt' nm desc def symb sp = EC (mkQuant' nm desc Nothing sp symb Nothing) 
   def
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 

@@ -34,8 +34,7 @@ module Language.Drasil.Code (
   assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill, 
   solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill,
   PackageSym(..),
-  CodeChunk, CodeVarChunk, CodeFuncChunk, codevar, codefunc, quantvar, 
-  ccObjVar, CodeQuantityDict, implCQD,
+  CodeChunk, CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, ccObjVar, 
   unPP, unJP, unCSP, unCPPP
 ) where
 
@@ -86,8 +85,7 @@ import Language.Drasil.Mod (($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor,
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeFuncChunk, 
-  codevar, codefunc, quantvar, ccObjVar)
-import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, implCQD)
+  quantvar, quantfunc, ccObjVar)
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)

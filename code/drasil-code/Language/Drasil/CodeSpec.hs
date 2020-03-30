@@ -9,7 +9,7 @@ import Language.Drasil.Development (dep, namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
-  ConstraintMap, programName, codevarC, codevar, quantvar, funcPrefix, codeName,
+  ConstraintMap, programName, codevarC, quantvar, funcPrefix, codeName,
   codevars, codevars', funcResolve, varResolve, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
   codeEquat)
@@ -233,9 +233,9 @@ convertRel sm (BinaryOp Eq (C x) r) = ec (symbResolve sm x) r
 convertRel _ _ = error "Conversion failed"
 
 asVC :: Func -> QuantityDict
-asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
-asVC (FDef (CtorDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
-asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
+asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
+asVC (FDef (CtorDef n _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
+asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
 asVC (FCD _) = error "Can't make QuantityDict from FCD function" -- codeVC cd (codeSymb cd) (cd ^. typ)
 
 funcUID :: Func -> UID
@@ -253,7 +253,7 @@ asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
 getAdditionalVars :: Choices -> [Mod] -> [CodeVarChunk]
-getAdditionalVars chs ms = map codevar (inFileName 
+getAdditionalVars chs ms = map quantvar (inFileName 
   : inParamsVar (inputStructure chs) 
   ++ constsVar (constStructure chs))
   ++ concatMap funcParams ms

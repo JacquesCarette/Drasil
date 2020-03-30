@@ -39,7 +39,7 @@ one = Integ 1
 two = Integ 2
 
 var :: String -> String -> Symbol -> Space -> QuantityDict
-var nam np = implVar nam (nounPhraseSP np)
+var nam np symb sp = implVar nam (nounPhraseSP np) sp symb
 
 y_2, y_1, x_2, x_1, x :: QuantityDict
 y_1  = var "y1" "lower y-coordinate"             (sub lY one) Real

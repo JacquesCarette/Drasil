@@ -4,7 +4,7 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil
 import Database.Drasil (ChunkDB, SystemInformation(SI), symbResolve,
   _authors, _constants, _constraints, _datadefs, _definitions, _inputs,
-  _outputs, _quants, _sys, _sysinfodb, sampleData)
+  _outputs, _sys, _sysinfodb, sampleData)
 import Language.Drasil.Development (dep, namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
@@ -14,9 +14,8 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
   codeEquat)
 import Language.Drasil.Code.Code (spaceToCodeType)
-import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
-  Mod(..), Name, fname, getFuncParams, packmod, prefixFunctions)
+  Mod(..), Name, fname, packmod, prefixFunctions)
 
 import GOOL.Drasil (CodeType)
 
@@ -57,18 +56,14 @@ data CodeSystInfo where
 
 data CodeSpec where
   CodeSpec :: {
-  relations :: [Def],
-  fMap :: FunctionMap,
-  vMap :: VarMap,
   eMap :: ModExportMap,
   clsMap :: ClassDefinitionMap,
   defList :: [Name],
-  constMap :: FunctionMap,
+  constMap :: ConstantMap,
   csi :: CodeSystInfo
   } -> CodeSpec
 
-type FunctionMap = Map.Map String CodeDefinition
-type VarMap      = Map.Map String CodeVarChunk
+type ConstantMap = Map.Map String CodeDefinition
 
 assocToMap :: HasUID a => [a] -> Map.Map UID a
 assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
@@ -76,7 +71,6 @@ assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys = sys
               , _authors = as
-              , _quants = q
               , _definitions = defs'
               , _datadefs = ddefs
               , _inputs = ins
@@ -113,9 +107,6 @@ codeSpec SI {_sys = sys
         smplData = sd
       }
   in  CodeSpec {
-        relations = rels,
-        fMap = assocToMap rels,
-        vMap = assocToMap (map quantvar q ++ getAdditionalVars chs (mods csi')),
         eMap = mem,
         clsMap = cdm,
         defList = nub $ Map.keys mem ++ Map.keys cdm,
@@ -251,18 +242,6 @@ asVC' (FDef (FuncDef n _ _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FDef (CtorDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
-
-getAdditionalVars :: Choices -> [Mod] -> [CodeVarChunk]
-getAdditionalVars chs ms = map quantvar (inFileName 
-  : inParamsVar (inputStructure chs) 
-  ++ constsVar (constStructure chs))
-  ++ concatMap funcParams ms
-  where inParamsVar Bundled = [inParams]
-        inParamsVar Unbundled = []
-        constsVar (Store Bundled) = [consts]
-        constsVar _ = []
-        funcParams (Mod _ _ _ cs fs) = concatMap getFuncParams (fs ++ 
-          concatMap methods cs)
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String

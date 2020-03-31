@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.Import (codeType,
 import Language.Drasil hiding (int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil (symbResolve)
-import Language.Drasil.Code.Imperative.Comments (paramComment, returnComment)
+import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,
   genModuleWithImports, mkParam, primaryClass)
@@ -124,40 +124,39 @@ mkVar v = do
   t <- codeType v
   variable (codeName v) (convType t)
 
-publicFunc :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c) => 
+publicFunc :: (ProgramSym repr, HasSpace c, CodeIdea c) => 
   Label -> VS (repr (Type repr)) -> String -> [c] -> Maybe String -> 
   [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
 publicFunc n t = genMethod (function n public static t) n
 
-privateMethod :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c) => 
+privateMethod :: (ProgramSym repr, HasSpace c, CodeIdea c) => 
   Label -> VS (repr (Type repr)) -> String -> [c] -> Maybe String -> 
   [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
 privateMethod n t = genMethod (method n private dynamic t) n
 
-publicInOutFunc :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c, Eq c) 
+publicInOutFunc :: (ProgramSym repr, HasSpace c, CodeIdea c, Eq c) 
   => Label -> String -> [c] -> [c] -> [MS (repr (Block repr))] -> 
   Reader DrasilState (MS (repr (Method repr)))
 publicInOutFunc n = genInOutFunc (inOutFunc n) (docInOutFunc n) public static n
 
-privateInOutMethod :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c,
+privateInOutMethod :: (ProgramSym repr, HasSpace c, CodeIdea c,
   Eq c) => Label -> String -> [c] -> [c] -> [MS (repr (Block repr))] 
   -> Reader DrasilState (MS (repr (Method repr)))
 privateInOutMethod n = genInOutFunc (inOutMethod n) (docInOutMethod n) 
   private dynamic n
 
-genConstructor :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c) => 
+genConstructor :: (ProgramSym repr, HasSpace c, CodeIdea c) => 
   Label -> String -> [c] -> [MS (repr (Block repr))] -> 
   Reader DrasilState (MS (repr (Method repr)))
 genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
 
-genInitConstructor :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c) =>
-  Label -> String -> [c] -> 
-  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+genInitConstructor :: (ProgramSym repr, HasSpace c, CodeIdea c) => Label -> 
+  String -> [c] -> [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p 
   Nothing
 
-genMethod :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c) => 
+genMethod :: (ProgramSym repr, HasSpace c, CodeIdea c) => 
   ([MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
   MS (repr (Method repr))) -> Label -> String -> [c] -> Maybe String -> 
   [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
@@ -167,11 +166,11 @@ genMethod f n desc p r b = do
   bod <- logBody n vars b
   let ps = map mkParam vars
       fn = f ps bod
-  pComms <- mapM (paramComment . (^. uid)) p
+  pComms <- mapM getComment p
   return $ if CommentFunc `elem` commented g
     then docFunc desc pComms r fn else fn
 
-genInOutFunc :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c, Eq c) => 
+genInOutFunc :: (ProgramSym repr, HasSpace c, CodeIdea c, Eq c) => 
   (repr (Scope repr) -> repr (Permanence repr) -> [VS (repr (Variable repr))] 
     -> [VS (repr (Variable repr))] -> [VS (repr (Variable repr))] -> 
     MS (repr (Body repr)) -> MS (repr (Method repr))) -> 
@@ -192,9 +191,9 @@ genInOutFunc f docf s pr n desc ins' outs' b = do
   outVs <- mapM mkVar outs
   bothVs <- mapM mkVar both
   bod <- logBody n (bothVs ++ inVs) b
-  pComms <- mapM (paramComment . (^. uid)) ins
-  oComms <- mapM (paramComment . (^. uid)) outs
-  bComms <- mapM (paramComment . (^. uid)) both
+  pComms <- mapM getComment ins
+  oComms <- mapM getComment outs
+  bComms <- mapM getComment both
   return $ if CommentFunc `elem` commented g 
     then docf s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
     bComms bothVs) bod else f s pr inVs outVs bothVs bod
@@ -338,7 +337,7 @@ genCalcFunc cdef = do
   let nm = codeName cdef
   tp <- codeType cdef
   blck <- genCalcBlock CalcReturn cdef (codeEquat cdef)
-  desc <- returnComment $ cdef ^. uid
+  desc <- getComment cdef
   publicFunc
     nm
     (convType tp)

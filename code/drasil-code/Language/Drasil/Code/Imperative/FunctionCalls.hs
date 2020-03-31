@@ -11,7 +11,7 @@ import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
-import Language.Drasil.Chunk.Code (CodeIdea(codeName))
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 
@@ -20,10 +20,9 @@ import GOOL.Drasil (ProgramSym, TypeSym(..), ValueSym(..), StatementSym(..),
 
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (maybe, catMaybes)
+import Data.Maybe (catMaybes)
 import Control.Applicative ((<|>))
 import Control.Monad.Reader (Reader, ask)
-import Control.Lens ((^.))
 
 getAllInputCalls :: (ProgramSym repr) => Reader DrasilState 
   [MS (repr (Statement repr))]
@@ -50,11 +49,9 @@ getConstraintCall = do
 getCalcCall :: (ProgramSym repr) => CodeDefinition -> Reader DrasilState 
   (Maybe (MS (repr (Statement repr))))
 getCalcCall c = do
-  g <- ask
   t <- codeType c
   val <- getFuncCall (codeName c) (convType t) (getCalcParams c)
-  v <- maybe (error $ (c ^. uid) ++ " missing from VarMap") mkVar 
-    (Map.lookup (c ^. uid) (vMap $ codeSpec g))
+  v <- mkVar $ quantvar c
   l <- maybeLog v
   return $ fmap (multi . (: l) . varDecDef v) val
 

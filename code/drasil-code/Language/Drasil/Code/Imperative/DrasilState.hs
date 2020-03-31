@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.DrasilState (
 import Language.Drasil
 import GOOL.Drasil (ScopeTag(..))
 
-import Language.Drasil.Chunk.Code (CodeVarChunk, codeName)
+import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Choices(..), 
   AuxFile, CodeSpec(..), Modularity(..), ImplementationType(..), 
@@ -20,8 +20,6 @@ import Data.Map (Map, fromList)
 
 -- Map from calculation function name to the ExtLibState containing the contents of the function
 type ExtLibMap = Map String ExtLibState
-
-type VarMap      = Map String CodeVarChunk
 
 -- name of variable/function maps to module name
 type ModExportMap = Map String String
@@ -49,7 +47,6 @@ data DrasilState = DrasilState {
   modules :: [Mod],
   extLibMap :: ExtLibMap,
   libPaths :: [FilePath],
-  vMap :: VarMap,
   eMap :: ModExportMap,
   libEMap :: ModExportMap, 
   clsMap :: ClassDefinitionMap,

@@ -25,7 +25,7 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk,
-  codevarC, quantvar, physLookup, sfwrLookup)
+  quantvar, physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.Parameter (pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
@@ -83,7 +83,7 @@ getInputDecl = do
   cps <- mapM mkVal constrParams
   let cname = "InputParameters"
       getDecl ([],[]) = constIns (partition (flip member (eMap g) . 
-        codeName) (map codevarC $ constants $ codeSpec g)) (conRepr g) 
+        codeName) (map quantvar $ constants $ codeSpec g)) (conRepr g) 
         (conStruct g)
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
@@ -111,7 +111,7 @@ initConsts = do
       getDecl (_,[]) WithInputs = return Nothing
       getDecl (c:_,[]) _ = asks (constCont c . conRepr)
       getDecl ([],cs) _ = do 
-        vars <- mapM (mkVar . codevarC) cs
+        vars <- mapM (mkVar . quantvar) cs
         vals <- mapM (convExpr . codeEquat) cs
         logs <- mapM maybeLog vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ 

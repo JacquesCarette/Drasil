@@ -26,7 +26,7 @@ import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Chunk.CodeDefinition (odeDef)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), Choices(..), Modularity(..), 
-  ImplementationType(..), Visibility(..), assocToMap, getAdditionalVars)
+  ImplementationType(..), Visibility(..))
 import Language.Drasil.Mod (Func(..), packmodRequires)
 
 import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), GS, 
@@ -61,7 +61,6 @@ generator l dt sd chs spec = DrasilState {
   modules = modules',
   extLibMap = fromList elmap,
   libPaths = maybeToList pth,
-  vMap = assocToMap (codequants spec ++ getAdditionalVars chs modules'),
   eMap = mem,
   libEMap = lem,
   clsMap = cdm,

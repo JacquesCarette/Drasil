@@ -1,9 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
   CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), 
-  VarOrFunc(..), obv, codevarC, codefuncC, quantvar, quantfunc, ccObjVar, 
-  codevars, codevars', funcResolve, varResolve, listToArray, ConstraintMap, 
-  constraintMap, physLookup, sfwrLookup, programName, funcPrefix
+  VarOrFunc(..), obv, quantvar, quantfunc, ccObjVar, codevars, codevars', 
+  funcResolve, varResolve, listToArray, ConstraintMap, constraintMap, 
+  physLookup, sfwrLookup, programName, funcPrefix
 ) where
 
 import Control.Lens ((^.),makeLenses,view)
@@ -78,12 +78,6 @@ instance CodeIdea    CodeFuncChunk where
   codeChunk c = CodeC (view qc $ view ccf c) Func
 instance Eq          CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
-
-codevarC :: (CodeIdea c) => c -> CodeVarChunk
-codevarC c = CodeVC (codeChunk c) Nothing
-
-codefuncC :: (CodeIdea c) => c -> CodeFuncChunk
-codefuncC = CodeFC . codeChunk
 
 quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
 quantvar c = CodeVC (CodeC (qw c) Var) Nothing

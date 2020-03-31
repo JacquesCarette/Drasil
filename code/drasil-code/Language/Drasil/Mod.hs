@@ -2,8 +2,8 @@
 module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..), 
   FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name, ($:=), 
   pubStateVar, privStateVar, classDef, classImplements, ctorDef, ffor, fdec, 
-  fname, fstdecl, funcData, funcDef, funcDefParams, funcQD, getFuncParams, 
-  packmod, packmodRequires
+  fname, fstdecl, funcData, funcDef, funcDefParams, funcQD, packmod, 
+  packmodRequires
 ) where
 
 import Language.Drasil
@@ -11,10 +11,10 @@ import Database.Drasil (ChunkDB)
 import GOOL.Drasil (ScopeTag(..))
 
 import Language.Drasil.Chunk.Code (CodeIdea(..), CodeVarChunk, codeName, 
-  codevarC, codevars, codevars', quantvar)
+  codevars, codevars', quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtoc)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
-import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
+import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Printers (toPlainName)
 
 import Data.List ((\\), nub)
@@ -115,12 +115,6 @@ ffor v = FFor (quantvar  v)
 
 fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
 fdec v  = FDec (quantvar v)
-
-getFuncParams :: Func -> [CodeVarChunk]
-getFuncParams (FDef (FuncDef _ _ ps _ _ _)) = map codevarC ps
-getFuncParams (FDef (CtorDef _ _ ps _ _)) = map codevarC ps
-getFuncParams (FData (FuncData _ _ d)) = getInputs d
-getFuncParams (FCD _) = []
 
 fstdecl :: ChunkDB -> [FuncStmt] -> [CodeVarChunk]
 fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declared ctx) fsts) 

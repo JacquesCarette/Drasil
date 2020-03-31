@@ -4,22 +4,20 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil
 import Database.Drasil (ChunkDB, SystemInformation(SI), symbResolve,
   _authors, _constants, _constraints, _datadefs, _definitions, _inputs,
-  _outputs, _quants, _sys, _sysinfodb, sampleData)
+  _outputs, _sys, _sysinfodb, sampleData)
 import Language.Drasil.Development (namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
-  ConstraintMap, programName, codevarC, quantvar, codevars, codevars', 
+  ConstraintMap, programName, quantvar, codevars, codevars', 
   varResolve, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs, codeEquat)
 import Language.Drasil.Code.Code (spaceToCodeType)
-import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg)
-import Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
-  Mod(..), Name, getFuncParams)
+import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
 import GOOL.Drasil (CodeType)
 
@@ -46,17 +44,14 @@ data CodeSpec where
   outputs :: [Output],
   execOrder :: [Def],
   cMap :: ConstraintMap,
-  relations :: [Def],
-  fMap :: FunctionMap,
-  codequants :: [CodeVarChunk],
   constants :: [Const],
-  constMap :: FunctionMap,
+  constMap :: ConstantMap,
   mods :: [Mod],  -- medium hack
   sysinfodb :: ChunkDB,
   smplData :: FilePath
   } -> CodeSpec
 
-type FunctionMap = Map.Map String CodeDefinition
+type ConstantMap = Map.Map String CodeDefinition
 
 assocToMap :: HasUID a => [a] -> Map.Map UID a
 assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
@@ -64,7 +59,6 @@ assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys = sys
               , _authors = as
-              , _quants = q
               , _definitions = defs'
               , _datadefs = ddefs
               , _inputs = ins
@@ -92,9 +86,6 @@ codeSpec SI {_sys = sys
         outputs = outs',
         execOrder = exOrder,
         cMap = constraintMap cs,
-        relations = rels,
-        fMap = assocToMap rels,
-        codequants = map quantvar q,
         constants = const',
         constMap = assocToMap const',
         mods = ms,
@@ -234,22 +225,10 @@ asVC' (FDef (CtorDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
-getAdditionalVars :: Choices -> [Mod] -> [CodeVarChunk]
-getAdditionalVars chs ms = map quantvar (inFileName 
-  : inParamsVar (inputStructure chs) 
-  ++ constsVar (constStructure chs))
-  ++ concatMap funcParams ms
-  where inParamsVar Bundled = [inParams]
-        inParamsVar Unbundled = []
-        constsVar (Store Bundled) = [consts]
-        constsVar _ = []
-        funcParams (Mod _ _ _ cs fs) = concatMap getFuncParams (fs ++ 
-          concatMap methods cs)
-
 getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
 getDerivedInputs ddefs defs' ins cnsts sm =
-  let refSet = ins ++ map codevarC cnsts
+  let refSet = ins ++ map quantvar cnsts
   in  if null ddefs then filter ((`subsetOf` refSet) . flip codevars sm . (^.equat)) defs'
       else filter ((`subsetOf` refSet) . flip codevars sm . (^.defnExpr)) (map qdFromDD ddefs)
 
@@ -261,8 +240,8 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
         getExecOrder' ord defs' k n = 
           let new  = filter (\def -> (`subsetOf` k) (concatMap (`codevars'` sm)
-                (codeEquat def : def ^. auxExprs) \\ [codevarC def])) defs'
-              cnew = map codevarC new
+                (codeEquat def : def ^. auxExprs) \\ [quantvar def])) defs'
+              cnew = map quantvar new
               kNew = k ++ cnew
               nNew = n \\ cnew
           in  if null new 

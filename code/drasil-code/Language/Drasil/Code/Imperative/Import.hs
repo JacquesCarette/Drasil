@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.Import (codeType,
 import Language.Drasil hiding (Ref, int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil (symbResolve)
-import Language.Drasil.Code.Imperative.Comments (paramComment, returnComment)
+import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,
   genModuleWithImports, primaryClass)
@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv, 
-  codevarC, quantvar, quantfunc, ccObjVar)
+  quantvar, quantfunc, ccObjVar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
   defType, codeEquat)
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
@@ -136,7 +136,7 @@ mkVar v = do
 mkParam :: (ProgramSym repr) => ParameterChunk -> 
   Reader DrasilState (MS (repr (Parameter repr)))
 mkParam p = do
-  v <- mkVar (codevarC p)
+  v <- mkVar (quantvar p)
   return $ paramFunc (passBy p) v
   where paramFunc Ref = pointerParam
         paramFunc Val = param
@@ -183,11 +183,11 @@ genMethod :: (ProgramSym repr) => ([MS (repr (Parameter repr))] ->
   Reader DrasilState (MS (repr (Method repr)))
 genMethod f n desc p r b = do
   g <- ask
-  vars <- mapM (mkVar . codevarC) p
+  vars <- mapM (mkVar . quantvar) p
   ps <- mapM mkParam p
   bod <- logBody n vars b
   let fn = f ps bod
-  pComms <- mapM (paramComment . (^. uid)) p
+  pComms <- mapM getComment p
   return $ if CommentFunc `elem` commented g
     then docFunc desc pComms r fn else fn
 
@@ -212,9 +212,9 @@ genInOutFunc f docf s pr n desc ins' outs' b = do
   outVs <- mapM mkVar outs
   bothVs <- mapM mkVar both
   bod <- logBody n (bothVs ++ inVs) b
-  pComms <- mapM (paramComment . (^. uid)) ins
-  oComms <- mapM (paramComment . (^. uid)) outs
-  bComms <- mapM (paramComment . (^. uid)) both
+  pComms <- mapM getComment ins
+  oComms <- mapM getComment outs
+  bComms <- mapM getComment both
   return $ if CommentFunc `elem` commented g 
     then docf s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
     bComms bothVs) bod else f s pr inVs outVs bothVs bod
@@ -373,14 +373,14 @@ genCalcFunc cdef = do
   parms <- getCalcParams cdef
   let nm = codeName cdef
   tp <- codeType cdef
-  v <- mkVar (codevarC cdef)
+  v <- mkVar (quantvar cdef)
   blck <- case cdef ^. defType 
             of Definition -> genCalcBlock CalcReturn cdef (codeEquat cdef)
                ODE -> maybe (error $ nm ++ " missing from ExtLibMap") (\el -> 
                    (\ss -> block (varDec v : ss ++ [returnState (valueOf v)])) 
                    <$> mapM convStmt (el ^. defs ++ el ^. steps))
                  (Map.lookup nm (extLibMap g))
-  desc <- returnComment $ cdef ^. uid
+  desc <- getComment cdef
   publicFunc
     nm
     (convType tp)
@@ -395,7 +395,7 @@ genCalcBlock :: (ProgramSym repr) => CalcType -> CodeDefinition -> Expr ->
   Reader DrasilState (MS (repr (Block repr)))
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock t v e
-    | t == CalcAssign  = fmap block $ liftS $ do { vv <- mkVar (codevarC v); 
+    | t == CalcAssign  = fmap block $ liftS $ do { vv <- mkVar (quantvar v); 
       ee <- convExpr e; l <- maybeLog vv; return $ multi $ assign vv ee : l}
     | otherwise        = block <$> liftS (returnState <$> convExpr e)
 
@@ -446,7 +446,7 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- ask
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s 
-    \\ (map codevarC parms ++ map stVar svs))
+    \\ (map quantvar parms ++ map stVar svs))
   f n (convType $ spaceMatches g o) desc parms rd 
     [block $ map varDec vars ++ stmts]
 genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
@@ -456,7 +456,7 @@ genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
     . fst) i
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s 
-    \\ (map codevarC parms ++ map stVar svs))
+    \\ (map quantvar parms ++ map stVar svs))
   genInitConstructor n desc parms (zip initvars inits) 
     [block $ map varDec vars ++ stmts]
 genFunc _ _ (FData (FuncData n desc ddef)) = genDataFunc n desc ddef

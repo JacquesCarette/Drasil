@@ -9,7 +9,7 @@ import Language.Drasil.Development (dep, namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
-  ConstraintMap, programName, codevarC, quantvar, funcPrefix, codeName,
+  ConstraintMap, programName, quantvar, funcPrefix, codeName,
   codevars, codevars', funcResolve, varResolve, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
   codeEquat)
@@ -306,7 +306,7 @@ clsDefMap cs@CSI {
 getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
 getDerivedInputs ddefs defs' ins cnsts sm =
-  let refSet = ins ++ map codevarC cnsts
+  let refSet = ins ++ map quantvar cnsts
   in  if null ddefs then filter ((`subsetOf` refSet) . flip codevars sm . (^.equat)) defs'
       else filter ((`subsetOf` refSet) . flip codevars sm . (^.defnExpr)) (map qdFromDD ddefs)
 
@@ -319,7 +319,7 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
         getExecOrder' ord defs' k n = 
           let new  = filter ((`subsetOf` k) . flip codevars' sm . codeEquat) 
                 defs'
-              cnew = map codevarC new
+              cnew = map quantvar new
               kNew = k ++ cnew
               nNew = n \\ cnew
           in  if null new 

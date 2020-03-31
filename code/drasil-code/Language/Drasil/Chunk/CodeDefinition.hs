@@ -19,6 +19,7 @@ instance NamedIdea    CodeDefinition where term = cchunk . term
 instance Idea         CodeDefinition where getA = getA . view cchunk
 instance HasSpace     CodeDefinition where typ = cchunk . typ
 instance HasSymbol    CodeDefinition where symbol c = symbol (c ^. cchunk)
+instance Quantity     CodeDefinition
 instance CodeIdea     CodeDefinition where 
   codeName = codeName . view cchunk
   codeChunk = view cchunk

@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 
 import Language.Drasil 
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk), codevarC, 
+import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk), 
   quantvar, codevars, codevars')
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
@@ -64,7 +64,7 @@ getConstraintParams = do
       mem = eMap $ codeSpec g
       db = sysinfodb $ csi $ codeSpec g
       varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ codeSpec g)
-      reqdVals = nub $ varsList ++ map codevarC (concatMap (\v -> 
+      reqdVals = nub $ varsList ++ map quantvar (concatMap (\v -> 
         constraintvarsandfuncs v db mem) (getConstraints cm varsList))
   getParams In reqdVals
 
@@ -78,12 +78,13 @@ getOutputParams = do
   g <- ask
   getParams In $ outputs $ csi $ codeSpec g
 
-getParams :: (CodeIdea c) => ParamType -> [c] -> Reader DrasilState [CodeVarChunk]
+getParams :: (Quantity c, MayHaveUnit c) => ParamType -> [c] -> 
+  Reader DrasilState [CodeVarChunk]
 getParams pt cs' = do
   g <- ask
-  let cs = map codevarC cs'
+  let cs = map quantvar cs'
       ins = inputs $ csi $ codeSpec g
-      cnsnts = map codevarC $ constants $ csi $ codeSpec g
+      cnsnts = map quantvar $ constants $ csi $ codeSpec g
       inpVars = filter (`elem` ins) cs
       conVars = filter (`elem` cnsnts) cs
       csSubIns = filter ((`notMember` concMatches g) . (^. uid)) 

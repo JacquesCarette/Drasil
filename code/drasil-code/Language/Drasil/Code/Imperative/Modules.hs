@@ -25,7 +25,7 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk,
-  codevarC, quantvar, physLookup, sfwrLookup)
+  quantvar, physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
@@ -82,7 +82,7 @@ getInputDecl = do
   cps <- mapM mkVal constrParams
   let cname = "InputParameters"
       getDecl ([],[]) = constIns (partition (flip member (eMap $ codeSpec g) . 
-        codeName) (map codevarC $ constants $ csi $ codeSpec g)) (conRepr g) 
+        codeName) (map quantvar $ constants $ csi $ codeSpec g)) (conRepr g) 
         (conStruct g)
       getDecl ([],ins) = do
         vars <- mapM mkVar ins

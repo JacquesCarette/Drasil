@@ -57,7 +57,6 @@ data CodeSystInfo where
 
 data CodeSpec where
   CodeSpec :: {
-  relations :: [Def],
   fMap :: FunctionMap,
   vMap :: VarMap,
   eMap :: ModExportMap,
@@ -113,7 +112,6 @@ codeSpec SI {_sys = sys
         smplData = sd
       }
   in  CodeSpec {
-        relations = rels,
         fMap = assocToMap rels,
         vMap = assocToMap (map quantvar q ++ getAdditionalVars chs (mods csi')),
         eMap = mem,

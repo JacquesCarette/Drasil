@@ -107,8 +107,7 @@ si = SI {
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
-  -- because _quants are only used relative to #1658 and in code gen. And
-  -- Gamephysics is not in a place to be able to do codegen.
+  -- because _quants are only used relative to #1658.
   _quants =  [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,

@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv, 
-  codevar, codevarC, quantvar, quantfunc, ccObjVar)
+  codevarC, quantvar, quantfunc, ccObjVar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
   defType, codeEquat)
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
@@ -88,19 +88,19 @@ inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
   g <- ask
   let inClsName = "InputParameters"
-  ip <- mkVar (codevar inParams)
+  ip <- mkVar (quantvar inParams)
   return $ if currentClass g == inClsName then objVarSelf v else ip $-> v
 inputVariable Bundled Const v = do
-  ip <- mkVar (codevar inParams)
+  ip <- mkVar (quantvar inParams)
   classVariable ip v
 
 constVariable :: (ProgramSym repr) => ConstantStructure -> ConstantRepr -> 
   VS (repr (Variable repr)) -> Reader DrasilState (VS (repr (Variable repr)))
 constVariable (Store Bundled) Var v = do
-  cs <- mkVar (codevar consts)
+  cs <- mkVar (quantvar consts)
   return $ cs $-> v
 constVariable (Store Bundled) Const v = do
-  cs <- mkVar (codevar consts)
+  cs <- mkVar (quantvar consts)
   classVariable cs v
 constVariable WithInputs cr v = do
   g <- ask
@@ -558,7 +558,7 @@ genDataFunc :: (ProgramSym repr) => Name -> String -> DataDesc ->
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readData ddef
-  publicFunc nameTitle void desc (map pcAuto $ codevar inFileName : parms) 
+  publicFunc nameTitle void desc (map pcAuto $ quantvar inFileName : parms) 
     Nothing bod
 
 -- this is really ugly!!
@@ -566,7 +566,7 @@ readData :: (ProgramSym repr) => DataDesc -> Reader DrasilState
   [MS (repr (Block repr))]
 readData ddef = do
   inD <- mapM inData ddef
-  v_filename <- mkVal $ codevar inFileName
+  v_filename <- mkVal $ quantvar inFileName
   return [block $ 
     varDec var_infile :
     (if any (\d -> isLine d || isLines d) ddef then [varDec var_line, listDec 0 var_linetokens] else []) ++

@@ -1,10 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
   CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), 
-  VarOrFunc(..), obv, codevarC, codefuncC, codevar, codefunc, quantvar, 
-  quantfunc, ccObjVar, codevars, codevars', funcResolve, varResolve, 
-  listToArray, ConstraintMap, constraintMap, physLookup, sfwrLookup, 
-  programName, funcPrefix
+  VarOrFunc(..), obv, codevarC, codefuncC, quantvar, quantfunc, ccObjVar, 
+  codevars, codevars', funcResolve, varResolve, listToArray, ConstraintMap, 
+  constraintMap, physLookup, sfwrLookup, programName, funcPrefix
 ) where
 
 import Control.Lens ((^.),makeLenses,view)
@@ -13,7 +12,6 @@ import Language.Drasil
 import Database.Drasil (ChunkDB, symbResolve)
 import Language.Drasil.Development (dep, names')
 
-import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, implCQD, cqw)
 import Language.Drasil.Printers (symbolDoc, toPlainName)
 
 import Data.List (nub)
@@ -32,7 +30,7 @@ funcPrefix :: String
 funcPrefix = "func_"
  
 data VarOrFunc = Var | Func
-data CodeChunk = CodeC { _qc :: CodeQuantityDict
+data CodeChunk = CodeC { _qc :: QuantityDict
                        , kind :: VarOrFunc
                        }
 makeLenses ''CodeChunk
@@ -87,17 +85,11 @@ codevarC c = CodeVC (codeChunk c) Nothing
 codefuncC :: (CodeIdea c) => c -> CodeFuncChunk
 codefuncC = CodeFC . codeChunk
 
-codevar :: CodeQuantityDict -> CodeVarChunk
-codevar c = CodeVC (CodeC c Var) Nothing
-
-codefunc :: CodeQuantityDict -> CodeFuncChunk
-codefunc c = CodeFC $ CodeC c Func
-
 quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
-quantvar c = CodeVC (CodeC (cqw c) Var) Nothing
+quantvar c = CodeVC (CodeC (qw c) Var) Nothing
 
 quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
-quantfunc c = CodeFC $ CodeC (cqw c) Func
+quantfunc c = CodeFC $ CodeC (qw c) Func
 
 -- Combine an Object-type CodeChunk with another CodeChunk to create a new 
 -- CodeChunk which represents a field of the first. ex. ccObjVar obj f = obj.f
@@ -122,7 +114,7 @@ funcResolve m x = quantfunc $ symbResolve m x
 
 listToArray :: CodeVarChunk -> CodeVarChunk
 listToArray c = newSpc (c ^. typ) 
-  where newSpc (Vect t) = CodeVC (CodeC (implCQD (c ^. uid ++ "_array") 
+  where newSpc (Vect t) = CodeVC (CodeC (implVar' (c ^. uid ++ "_array") 
           (c ^. term) (getA c) (Array t) (symbol c Implementation) (getUnit c)) 
           Var) (c ^. obv)
         newSpc _ = c

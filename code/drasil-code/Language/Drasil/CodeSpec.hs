@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc,
   codeEquat)
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
-  Mod(..), Name, fname, packmod, prefixFunctions)
+  Mod(..), Name, fname, prefixFunctions)
 
 import GOOL.Drasil (CodeType)
 
@@ -100,9 +100,7 @@ codeSpec SI {_sys = sys
         execOrder = exOrder,
         cMap = constraintMap cs,
         constants = const',
-        mods = prefixFunctions $ packmod "Calculations" 
-          "Provides functions for calculating the outputs" []
-          (map FCD exOrder) : ms,
+        mods = prefixFunctions ms,
         sysinfodb = db,
         smplData = sd
       }
@@ -227,7 +225,6 @@ asVC :: Func -> QuantityDict
 asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
 asVC (FDef (CtorDef n _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
 asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
-asVC (FCD _) = error "Can't make QuantityDict from FCD function" -- codeVC cd (codeSymb cd) (cd ^. typ)
 
 funcUID :: Func -> UID
 funcUID f = asVC f ^. uid
@@ -241,7 +238,6 @@ asVC' :: Func -> QuantityDict
 asVC' (FDef (FuncDef n _ _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FDef (CtorDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
-asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
@@ -264,6 +260,7 @@ modExportMap cs@CSI {
     ++ getExpDerived prn chs ds
     ++ getExpConstraints prn chs (getConstraints (cMap cs) ins)
     ++ getExpInputFormat prn chs extIns
+    ++ getExpCalcs prn chs (execOrder cs)
     ++ getExpOutput prn chs (outputs cs)
   where mpair (Mod n _ _ cls fs) = (map className cls ++ map fname (fs ++ 
           concatMap methods cls)) `zip` repeat (defModName m n)
@@ -397,6 +394,12 @@ getInputFormatCls _ [] = []
 getInputFormatCls chs _ = ifCls (inputModule chs) (inputStructure chs)
   where ifCls Combined Bundled = [("get_input", "InputParameters")]
         ifCls _ _ = []
+
+getExpCalcs :: Name -> Choices -> [Def] -> [ModExp]
+getExpCalcs n chs = map (\d -> (codeName d, calMod))
+  where calMod = cMod $ modularity chs
+        cMod Unmodular = n
+        cMod _ = "Calculations"
 
 getExpOutput :: Name -> Choices -> [Output] -> [ModExp]
 getExpOutput _ _ [] = []

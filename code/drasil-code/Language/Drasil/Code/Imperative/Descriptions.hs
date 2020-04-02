@@ -2,7 +2,7 @@ module Language.Drasil.Code.Imperative.Descriptions (
   modDesc, inputParametersDesc, inputConstructorDesc, inputFormatDesc, 
   derivedValuesDesc, inputConstraintsDesc, constModDesc, outputFormatDesc, 
   inputClassDesc, constClassDesc, inFmtFuncDesc, inConsFuncDesc, dvFuncDesc, 
-  woFuncDesc
+  calcModDesc, woFuncDesc
 ) where
 
 import Utils.Drasil (stringList)
@@ -136,6 +136,9 @@ dvFuncDesc = do
       dvDesc _ = "Calculates values that can be immediately derived from the" ++
         " inputs"
   return $ dvDesc $ "derived_values" `elem` defList (codeSpec g)
+
+calcModDesc :: String
+calcModDesc = "Provides functions for calculating the outputs"
 
 woFuncDesc :: Reader DrasilState String
 woFuncDesc = do

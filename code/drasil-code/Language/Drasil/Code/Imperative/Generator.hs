@@ -11,8 +11,8 @@ import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs)
 import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass, 
   genConstMod, genInputClass, genInputConstraints, genInputDerived, 
-  genInputFormat, genMain, genMainFunc, genOutputFormat, genOutputMod, 
-  genSampleInput)
+  genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc, 
+  genOutputFormat, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
@@ -113,9 +113,10 @@ genUnmodular = do
       mainIfExe Library = []
       mainIfExe Program = [genMainFunc]
   genModule n ("Contains the entire " ++ n ++ " " ++ getDesc (implType g))
-    (map (fmap Just) (mainIfExe (implType g) ++ concatMap genModFuncs (mods s)) 
-    ++ ((if cls then [] else [genInputFormat Primary, genInputDerived Primary, 
-      genInputConstraints Primary]) ++ [genOutputFormat])) 
+    (map (fmap Just) (mainIfExe (implType g) ++ map genCalcFunc (execOrder $ 
+    csi $ codeSpec g) ++ concatMap genModFuncs (mods s)) ++ ((if cls then [] 
+      else [genInputFormat Primary, genInputDerived Primary, 
+        genInputConstraints Primary]) ++ [genOutputFormat])) 
     [genInputClass Auxiliary, genConstClass Auxiliary]
           
 genModules :: (ProgramSym repr) => 
@@ -128,9 +129,10 @@ genModules = do
   mn     <- mainIfExe $ implType g
   inp    <- chooseInModule $ inMod g
   con    <- genConstMod 
+  cal    <- genCalcMod
   out    <- genOutputMod
   moddef <- traverse genModDef (mods s) -- hack ?
-  return $ mn ++ inp ++ con ++ out ++ moddef
+  return $ mn ++ inp ++ con ++ cal : out ++ moddef
 
 -- private utilities used in generateCode
 getDir :: Lang -> String

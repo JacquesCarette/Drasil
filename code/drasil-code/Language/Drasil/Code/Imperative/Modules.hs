@@ -1,27 +1,28 @@
 module Language.Drasil.Code.Imperative.Modules (
   genMain, genMainFunc, chooseInModule, genInputClass, genInputDerived, 
-  genInputConstraints, genInputFormat, genConstMod, genConstClass, genOutputMod,
-  genOutputFormat, genSampleInput
+  genInputConstraints, genInputFormat, genConstMod, genConstClass, genCalcMod, 
+  genCalcFunc, genOutputMod, genOutputFormat, genSampleInput
 ) where
 
 import Language.Drasil
 import Database.Drasil (ChunkDB)
+import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc, 
   constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, 
   inputClassDesc, inputConstraintsDesc, inputConstructorDesc, inputFormatDesc, 
-  inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc)
+  inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc, calcModDesc)
 import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
   getAllInputCalls, getOutputCall)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), genModule, 
   primaryClass, auxClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
-import Language.Drasil.Code.Imperative.Import (CalcType(CalcAssign), codeType,
-  convExpr, genCalcBlock, genConstructor, mkVal, mkVar, privateInOutMethod, 
-  privateMethod, publicFunc, publicInOutFunc, readData, renderC)
+import Language.Drasil.Code.Imperative.Import (codeType, convExpr, 
+  genConstructor, mkVal, mkVar, privateInOutMethod, privateMethod, publicFunc, 
+  publicInOutFunc, readData, renderC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, varLogFile)
 import Language.Drasil.Code.Imperative.Parameters (getConstraintParams, 
   getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns, 
-  getInputFormatOuts, getOutputParams)
+  getInputFormatOuts, getCalcParams, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk,
@@ -46,7 +47,7 @@ import Data.Map ((!), member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
 import Control.Applicative ((<$>))
-import Control.Monad (zipWithM)
+import Control.Monad (liftM2, zipWithM)
 import Control.Monad.Reader (Reader, ask, asks, withReader)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
@@ -411,6 +412,56 @@ genConstClass scp = withReader (\s -> s {currentClass = cname}) $ do
   genClass $ filter (flip member (Map.filter (cname ==) (clsMap $ codeSpec g)) 
     . codeName) cs
   where cname = "Constants"
+
+------- CALC ----------
+
+genCalcMod :: (ProgramSym repr) => 
+  Reader DrasilState (FS (repr (RenderFile repr)))
+genCalcMod = do
+  g <- ask
+  genModule "Calculations" calcModDesc (map (fmap Just . genCalcFunc) 
+    (execOrder $ csi $ codeSpec g)) []
+
+genCalcFunc :: (ProgramSym repr) => CodeDefinition -> 
+  Reader DrasilState (MS (repr (Method repr)))
+genCalcFunc cdef = do
+  parms <- getCalcParams cdef
+  let nm = codeName cdef
+  tp <- codeType cdef
+  blck <- genCalcBlock CalcReturn cdef (codeEquat cdef)
+  desc <- getComment cdef
+  publicFunc
+    nm
+    (convType tp)
+    ("Calculates " ++ desc)
+    parms
+    (Just desc)
+    [blck]
+
+data CalcType = CalcAssign | CalcReturn deriving Eq
+
+genCalcBlock :: (ProgramSym repr) => CalcType -> CodeDefinition -> Expr ->
+  Reader DrasilState (MS (repr (Block repr)))
+genCalcBlock t v (Case c e) = genCaseBlock t v c e
+genCalcBlock t v e
+    | t == CalcAssign  = fmap block $ liftS $ do { vv <- mkVar v; ee <-
+      convExpr e; l <- maybeLog vv; return $ multi $ assign vv ee : l}
+    | otherwise        = block <$> liftS (returnState <$> convExpr e)
+
+genCaseBlock :: (ProgramSym repr) => CalcType -> CodeDefinition -> Completeness 
+  -> [(Expr,Relation)] -> Reader DrasilState (MS (repr (Block repr)))
+genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
+  " in code generator"
+genCaseBlock t v c cs = do
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (calcBody e)) (ifEs c)
+  els <- elseE c
+  return $ block [ifCond ifs els]
+  where calcBody e = fmap body $ liftS $ genCalcBlock t v e
+        ifEs Complete = init cs
+        ifEs Incomplete = cs
+        elseE Complete = calcBody $ fst $ last cs
+        elseE Incomplete = return $ oneLiner $ throw $  
+          "Undefined case encountered in function " ++ codeName v
 
 ----- OUTPUT -------
 

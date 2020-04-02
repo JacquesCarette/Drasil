@@ -272,13 +272,23 @@ clsDefMap cs@CSI {
   inputs = ins,
   extInputs = extIns,
   derivedInputs = ds,
-  constants = cns
-  } chs = Map.fromList $ getInputCls chs ins
+  constants = cns,
+  mods = ms
+  } chs = Map.fromList $ concatMap mclasses ms
+    ++ getInputCls chs ins
     ++ getConstantsCls chs cns
     ++ getDerivedCls chs ds
     ++ getConstraintsCls chs (getConstraints (cMap cs) ins)
     ++ getInputFormatCls chs extIns
+  where mclasses (Mod _ _ _ cls _) = concatMap (\c -> let cln = className c in
+          map (svclass cln) (stateVars c) ++ map (mthclass cln) (methods c)) cls
+        svclass cln sv = (codeName sv, cln)
+        mthclass cln m = (fname m, cln)
+        
 
+-- Determines the derived inputs, which can be immediately calculated from the 
+-- knowns (inputs and constants). If there are DDs, the derived inputs will 
+-- come from those. If there are none, then the QDefinitions are used instead.
 getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
 getDerivedInputs ddefs defs' ins cnsts sm =

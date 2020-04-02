@@ -15,13 +15,13 @@ endif
 
 build: Projectile$(TARGET_EXTENSION)
 
-Projectile$(TARGET_EXTENSION): Control.cs InputParameters.cs OutputFormat.cs Calculations.cs
-	$(CSC) -out:Projectile$(TARGET_EXTENSION) Control.cs InputParameters.cs OutputFormat.cs Calculations.cs
+Projectile$(TARGET_EXTENSION): Control.cs InputParameters.cs Calculations.cs OutputFormat.cs
+	$(CSC) -out:Projectile$(TARGET_EXTENSION) Control.cs InputParameters.cs Calculations.cs OutputFormat.cs
 
 run: build
 	./Projectile$(TARGET_EXTENSION) $(RUNARGS)
 
-doc: doxConfig Control.cs InputParameters.cs OutputFormat.cs Calculations.cs
+doc: doxConfig Control.cs InputParameters.cs Calculations.cs OutputFormat.cs
 	doxygen doxConfig
 
 .PHONY: build run doc

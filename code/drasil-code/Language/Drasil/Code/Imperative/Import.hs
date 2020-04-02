@@ -2,7 +2,7 @@
 {-# LANGUAGE Rank2Types #-}
 module Language.Drasil.Code.Imperative.Import (codeType, publicFunc, 
   privateMethod, publicInOutFunc, privateInOutMethod, genConstructor, mkVar, 
-  mkVal, convExpr, genModDef, genModFuncs, readData, renderC
+  mkVal, convExpr, genModDef, genModFuncs, genModClasses, readData, renderC
 ) where
 
 import Language.Drasil hiding (int, log, ln, exp,
@@ -338,6 +338,10 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
 genModFuncs :: (ProgramSym repr) => Mod -> 
   [Reader DrasilState (MS (repr (Method repr)))]
 genModFuncs (Mod _ _ _ _ fs) = map genFunc fs
+
+genModClasses :: (ProgramSym repr) => Mod -> 
+  [Reader DrasilState (CS (repr (Class repr)))]
+genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 genClass :: (ProgramSym repr) => (String -> Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 

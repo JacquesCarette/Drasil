@@ -8,7 +8,8 @@ import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
   genDoxConfig, genModule)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
-import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs)
+import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs,
+  genModClasses)
 import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass, 
   genConstMod, genInputClass, genInputConstraints, genInputDerived, 
   genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc, 
@@ -117,7 +118,8 @@ genUnmodular = do
     csi $ codeSpec g) ++ concatMap genModFuncs (mods s)) ++ ((if cls then [] 
       else [genInputFormat Primary, genInputDerived Primary, 
         genInputConstraints Primary]) ++ [genOutputFormat])) 
-    [genInputClass Auxiliary, genConstClass Auxiliary]
+    ([genInputClass Auxiliary, genConstClass Auxiliary] 
+    ++ map (fmap Just) (concatMap genModClasses $ mods s))
           
 genModules :: (ProgramSym repr) => 
   Reader DrasilState [FS (repr (RenderFile repr))]

@@ -8,8 +8,8 @@ import GOOL.Drasil (ScopeTag(..))
 
 import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
-import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Choices(..), 
-  AuxFile, CodeSpec(..), Modularity(..), ImplementationType(..), 
+import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def, 
+  Choices(..), AuxFile, CodeSpec(..), Modularity(..), ImplementationType(..), 
   Comments, Verbosity, MatchedConceptMap, MatchedSpaces, ConstantRepr, 
   ConstantStructure(..), ConstraintBehaviour, InputModule(..), Logging, 
   Structure(..), getConstraints, inputModule)
@@ -78,6 +78,7 @@ modExportMap cs@CodeSpec {
     ++ getExpDerived prn chs ds
     ++ getExpConstraints prn chs (getConstraints (cMap cs) ins)
     ++ getExpInputFormat prn chs extIns
+    ++ getExpCalcs prn chs (execOrder cs)
     ++ getExpOutput prn chs (outputs cs)
   where mpair (Mod n _ _ cls fs) = (map className cls ++ 
           concatMap (map (codeName . stVar) . filter ((== Pub) . svScope) . 
@@ -192,6 +193,12 @@ getInputFormatCls _ [] = []
 getInputFormatCls chs _ = ifCls (inputModule chs) (inputStructure chs)
   where ifCls Combined Bundled = [("get_input", "InputParameters")]
         ifCls _ _ = []
+
+getExpCalcs :: Name -> Choices -> [Def] -> [ModExp]
+getExpCalcs n chs = map (\d -> (codeName d, calMod))
+  where calMod = cMod $ modularity chs
+        cMod Unmodular = n
+        cMod _ = "Calculations"
 
 getExpOutput :: Name -> Choices -> [Output] -> [ModExp]
 getExpOutput _ _ [] = []

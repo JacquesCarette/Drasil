@@ -15,13 +15,13 @@ endif
 
 build: SWHS$(TARGET_EXTENSION)
 
-SWHS$(TARGET_EXTENSION): Control.cs InputParameters.cs Constants.cs OutputFormat.cs Calculations.cs
-	$(CSC) -out:SWHS$(TARGET_EXTENSION) -r:Microsoft.Research.Oslo.dll Control.cs InputParameters.cs Constants.cs OutputFormat.cs Calculations.cs
+SWHS$(TARGET_EXTENSION): Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
+	$(CSC) -out:SWHS$(TARGET_EXTENSION) -r:Microsoft.Research.Oslo.dll Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
 
 run: build
 	./SWHS$(TARGET_EXTENSION) $(RUNARGS)
 
-doc: doxConfig Control.cs InputParameters.cs Constants.cs OutputFormat.cs Calculations.cs
+doc: doxConfig Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
 	doxygen doxConfig
 
 .PHONY: build run doc

@@ -209,7 +209,6 @@ asVC :: Func -> QuantityDict
 asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
 asVC (FDef (CtorDef n _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
 asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
-asVC (FCD _) = error "Can't make QuantityDict from FCD function" -- codeVC cd (codeSymb cd) (cd ^. typ)
 
 funcUID :: Func -> UID
 funcUID f = asVC f ^. uid
@@ -223,8 +222,11 @@ asVC' :: Func -> QuantityDict
 asVC' (FDef (FuncDef n _ _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FDef (CtorDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
-asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
+        
 
+-- Determines the derived inputs, which can be immediately calculated from the 
+-- knowns (inputs and constants). If there are DDs, the derived inputs will 
+-- come from those. If there are none, then the QDefinitions are used instead.
 getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
 getDerivedInputs ddefs defs' ins cnsts sm =

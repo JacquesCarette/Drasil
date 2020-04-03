@@ -2,17 +2,14 @@
 module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..), 
   FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name, ($:=), 
   pubStateVar, privStateVar, classDef, classImplements, ctorDef, ffor, fdec, 
-  fname, fstdecl, funcData, funcDef, funcDefParams, funcQD, packmod, 
-  packmodRequires
+  fname, fstdecl, funcData, funcDef, funcDefParams, packmod, packmodRequires
 ) where
 
 import Language.Drasil
 import Database.Drasil (ChunkDB)
 import GOOL.Drasil (ScopeTag(..))
 
-import Language.Drasil.Chunk.Code (CodeIdea(..), CodeVarChunk, codeName, 
-  codevars, codevars', quantvar)
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtoc)
+import Language.Drasil.Chunk.Code (CodeVarChunk, codevars, codevars', quantvar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Printers (toPlainName)
@@ -53,12 +50,8 @@ classDef n = ClassDef n Nothing
 classImplements :: Name -> Name -> String -> [StateVariable] -> [Func] -> Class
 classImplements n i = ClassDef n (Just i)
      
-data Func = FCD CodeDefinition
-          | FDef FuncDef
+data Func = FDef FuncDef
           | FData FuncData
-
-funcQD :: QDefinition -> Func
-funcQD qd = FCD $ qtoc qd 
 
 funcData :: Name -> String -> DataDesc -> Func
 funcData n desc d = FData $ FuncData (toPlainName n) desc d
@@ -153,8 +146,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     declared sm (FMulti ss) = concatMap (declared sm) ss
     declared _  (FAppend _ _) = []
        
-fname :: Func -> Name       
-fname (FCD cd) = codeName cd
+fname :: Func -> Name
 fname (FDef (FuncDef n _ _ _ _ _)) = n
 fname (FDef (CtorDef n _ _ _ _)) = n
 fname (FData (FuncData n _ _)) = n 

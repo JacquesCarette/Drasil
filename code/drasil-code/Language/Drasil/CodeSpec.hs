@@ -262,8 +262,8 @@ modExportMap cs@CSI {
     ++ getExpInputFormat prn chs extIns
     ++ getExpCalcs prn chs (execOrder cs)
     ++ getExpOutput prn chs (outputs cs)
-  where mpair (Mod n _ _ cls fs) = (map className cls ++ map fname (fs ++ 
-          concatMap methods cls)) `zip` repeat (defModName m n)
+  where mpair (Mod n _ _ cls fs) = (concatMap (map codeName . stateVars) cls ++ 
+          map fname (fs ++ concatMap methods cls)) `zip` repeat (defModName m n)
         defModName Unmodular _ = prn
         defModName _ nm = nm
 

@@ -1,9 +1,8 @@
 {-# LANGUAGE PostfixOperators #-}
 {-# LANGUAGE Rank2Types #-}
-module Language.Drasil.Code.Imperative.Import (codeType,
-  publicFunc, privateMethod, publicInOutFunc, privateInOutMethod, 
-  genConstructor, mkVar, mkVal, convExpr, genCalcBlock, CalcType(..), genModDef,
-  genModFuncs, readData, renderC
+module Language.Drasil.Code.Imperative.Import (codeType, publicFunc, 
+  privateMethod, publicInOutFunc, privateInOutMethod, genConstructor, mkVar, 
+  mkVal, convExpr, genModDef, genModFuncs, genModClasses, readData, renderC
 ) where
 
 import Language.Drasil hiding (int, log, ln, exp,
@@ -13,12 +12,11 @@ import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,
   genModuleWithImports, mkParam, primaryClass)
-import Language.Drasil.Code.Imperative.Helpers (getUpperBound, liftS, lookupC)
+import Language.Drasil.Code.Imperative.Helpers (getUpperBound, lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
-import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), quantvar, quantfunc)
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
+import Language.Drasil.Chunk.CodeDefinition (codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
   ConstantRepr(..), ConstantStructure(..), Structure(..))
@@ -328,49 +326,6 @@ bfunc Dot   = error "convExpr DotProduct"
 bfunc Frac  = (#/)
 bfunc Index = listAccess
 
-------- CALC ----------
-
-genCalcFunc :: (ProgramSym repr) => CodeDefinition -> 
-  Reader DrasilState (MS (repr (Method repr)))
-genCalcFunc cdef = do
-  parms <- getCalcParams cdef
-  let nm = codeName cdef
-  tp <- codeType cdef
-  blck <- genCalcBlock CalcReturn cdef (codeEquat cdef)
-  desc <- getComment cdef
-  publicFunc
-    nm
-    (convType tp)
-    ("Calculates " ++ desc)
-    parms
-    (Just desc)
-    [blck]
-
-data CalcType = CalcAssign | CalcReturn deriving Eq
-
-genCalcBlock :: (ProgramSym repr) => CalcType -> CodeDefinition -> Expr ->
-  Reader DrasilState (MS (repr (Block repr)))
-genCalcBlock t v (Case c e) = genCaseBlock t v c e
-genCalcBlock t v e
-    | t == CalcAssign  = fmap block $ liftS $ do { vv <- mkVar v; ee <-
-      convExpr e; l <- maybeLog vv; return $ multi $ assign vv ee : l}
-    | otherwise        = block <$> liftS (returnState <$> convExpr e)
-
-genCaseBlock :: (ProgramSym repr) => CalcType -> CodeDefinition -> Completeness 
-  -> [(Expr,Relation)] -> Reader DrasilState (MS (repr (Block repr)))
-genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
-  " in code generator"
-genCaseBlock t v c cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (calcBody e)) (ifEs c)
-  els <- elseE c
-  return $ block [ifCond ifs els]
-  where calcBody e = fmap body $ liftS $ genCalcBlock t v e
-        ifEs Complete = init cs
-        ifEs Incomplete = cs
-        elseE Complete = calcBody $ fst $ last cs
-        elseE Incomplete = return $ oneLiner $ throw $  
-          "Undefined case encountered in function " ++ codeName v
-
 -- medium hacks --
 genModDef :: (ProgramSym repr) => Mod -> 
   Reader DrasilState (FS (repr (RenderFile repr)))
@@ -383,6 +338,10 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
 genModFuncs :: (ProgramSym repr) => Mod -> 
   [Reader DrasilState (MS (repr (Method repr)))]
 genModFuncs (Mod _ _ _ _ fs) = map genFunc fs
+
+genModClasses :: (ProgramSym repr) => Mod -> 
+  [Reader DrasilState (CS (repr (Class repr)))]
+genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 genClass :: (ProgramSym repr) => (String -> Label -> Maybe Label -> 
   [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
@@ -410,7 +369,6 @@ genFunc (FDef (CtorDef n desc parms i s)) = do
   genInitConstructor n desc parms (zip initvars inits) 
     [block $ map varDec vars ++ stmts]
 genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
-genFunc (FCD cd) = genCalcFunc cd
 
 convStmt :: (ProgramSym repr) => FuncStmt -> Reader DrasilState (MS (repr (Statement repr)))
 convStmt (FAsg v (Matrix [es]))  = do

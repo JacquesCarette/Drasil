@@ -34,7 +34,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, docMain, function, 
   mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, 
-  constVar, privMVar, pubMVar, pubGVar, buildClass, extraClass, 
+  constVar, buildClass, extraClass, 
   implementingClass, docClass, commentedClass, intClass, buildModule, 
   buildModule', modFromData, fileDoc, docMod
 ) where
@@ -70,7 +70,7 @@ import qualified GOOL.Drasil.ClassInterface as S (
     extObjDecNew, constDecDef, valState, returnState),
   ControlStatementSym(ifCond, for, forRange, switch),
   ParameterSym(param), MethodSym(method, mainFunction),
-  StateVarSym(stateVar), ClassSym(buildClass, commentedClass))
+  ClassSym(buildClass, commentedClass))
 import GOOL.Drasil.RendererClasses (KeywordSym(..), RenderSym, 
   InternalBody(bodyDoc, docBody), InternalBlock(docBlock, blockDoc), 
   ImportSym(..), InternalPerm(..), InternalType(..), UnaryOpSym(UnaryOp), 
@@ -1226,18 +1226,6 @@ constVar :: (RenderSym repr) => Doc -> repr (Scope repr) ->
   CS (repr (StateVar repr))
 constVar p s vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue 
   (stateVarDocD (scopeDoc s) p . statementDoc) (S.state $ S.constDecDef vr vl))
-
-privMVar :: (RenderSym repr) => VS (repr (Variable repr)) -> 
-  CS (repr (StateVar repr))
-privMVar = S.stateVar private dynamic
-
-pubMVar :: (RenderSym repr) => VS (repr (Variable repr)) -> 
-  CS (repr (StateVar repr))
-pubMVar = S.stateVar public dynamic
-
-pubGVar :: (RenderSym repr) => VS (repr (Variable repr)) -> 
-  CS (repr (StateVar repr))
-pubGVar = S.stateVar public static
 
 -- Classes --
 

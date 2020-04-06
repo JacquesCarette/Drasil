@@ -53,7 +53,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   changeState, initObserverList, addObserver, ifCond, ifNoElse, switchAsIf, 
   ifExists, tryCatch, checkState, construct, param, method, getMethod, 
   setMethod, privMethod, pubMethod, constructor, function, docFunc, 
-  stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
+  stateVarDef, constVar, buildClass, 
   implementingClass, docClass, commentedClass, intClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
@@ -687,9 +687,6 @@ instance StateVarSym PythonCode where
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (permDoc 
     (static :: PythonCode (Permanence PythonCode)))
-  privMVar = G.privMVar
-  pubMVar = G.pubMVar
-  pubGVar = G.pubGVar
 
 instance InternalStateVar PythonCode where
   stateVarDoc = unPC

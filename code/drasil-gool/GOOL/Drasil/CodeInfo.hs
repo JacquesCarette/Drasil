@@ -436,9 +436,6 @@ instance StateVarSym CodeInfo where
   stateVar _ _ _ = noInfo
   stateVarDef _ _ _ _ _ = noInfo
   constVar _ _ _ _ = noInfo
-  privMVar _ = noInfo
-  pubMVar _ = noInfo
-  pubGVar _ = noInfo
 
 instance ClassSym CodeInfo where
   type Class CodeInfo = ()

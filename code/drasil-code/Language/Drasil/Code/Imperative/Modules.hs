@@ -38,8 +38,8 @@ import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 import GOOL.Drasil (ProgramSym, FileSym(..), BodySym(..), BlockSym(..), 
   PermanenceSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   BooleanExpression(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), convType, FS, CS, 
-  MS, VS)
+  ScopeSym(..), MethodSym(..), StateVarSym(..), pubMVar, ClassSym(..), 
+  convType, FS, CS, MS, VS)
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)

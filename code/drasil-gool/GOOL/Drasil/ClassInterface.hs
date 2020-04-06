@@ -11,9 +11,9 @@ module GOOL.Drasil.ClassInterface (
   InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), initializer, nonInitConstructor, StateVarSym(..), ClassSym(..),
-  ModuleSym(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
-  odeOptions, ODEMethod(..)
+  MethodSym(..), initializer, nonInitConstructor, StateVarSym(..), privMVar, 
+  pubMVar, pubGVar, ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
+  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType, ClassName)
@@ -593,9 +593,18 @@ class (ScopeSym repr, StatementSym repr) => StateVarSym repr where
     CS (repr (StateVar repr))
   constVar :: Label -> repr (Scope repr) ->  VS (repr (Variable repr)) -> 
     VS (repr (Value repr)) -> CS (repr (StateVar repr))
-  privMVar :: VS (repr (Variable repr)) -> CS (repr (StateVar repr))
-  pubMVar  :: VS (repr (Variable repr)) -> CS (repr (StateVar repr))
-  pubGVar  :: VS (repr (Variable repr)) -> CS (repr (StateVar repr))
+
+privMVar :: (StateVarSym repr) => VS (repr (Variable repr)) -> 
+  CS (repr (StateVar repr))
+privMVar = stateVar private dynamic
+
+pubMVar  :: (StateVarSym repr) => VS (repr (Variable repr)) -> 
+  CS (repr (StateVar repr))
+pubMVar = stateVar public dynamic
+
+pubGVar  :: (StateVarSym repr) => VS (repr (Variable repr)) -> 
+  CS (repr (StateVar repr))
+pubGVar = stateVar public static
 
 class (MethodSym repr) => ClassSym repr where
   type Class repr

@@ -32,8 +32,8 @@ import GOOL.Drasil (Label, ProgramSym, FileSym(..), PermanenceSym(..),
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   objMethodCallMixedArgs, FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), nonInitConstructor, convType, 
-  CodeType(..), FS, CS, MS, VS, onStateValue) 
+  MethodSym(..), StateVarSym(..), pubMVar, ClassSym(..), nonInitConstructor, 
+  convType, CodeType(..), FS, CS, MS, VS, onStateValue) 
 import qualified GOOL.Drasil as C (CodeType(List, Array))
 
 import Prelude hiding (sin, cos, tan, log, exp)

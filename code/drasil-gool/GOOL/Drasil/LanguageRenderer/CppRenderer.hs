@@ -17,9 +17,9 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), objMethodCall, FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), initializer, StateVarSym(..), ClassSym(..), 
-  ModuleSym(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
-  odeOptions, ODEMethod(..))
+  ParameterSym(..), MethodSym(..), initializer, StateVarSym(..), privMVar, 
+  pubMVar, ClassSym(..), ModuleSym(..), BlockCommentSym(..), ODEInfo(..), 
+  odeInfo, ODEOptions(..), odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
@@ -58,8 +58,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   comment, throw, initState, changeState, initObserverList, addObserver, 
   ifCond, ifNoElse, switch, switchAsIf, for, forRange, while, tryCatch, 
   notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
-  pubMethod, constructor, function, docFunc, docInOutFunc, intFunc, privMVar, 
-  pubMVar, pubGVar, buildClass, implementingClass, docClass, commentedClass, 
+  pubMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
+  buildClass, implementingClass, docClass, commentedClass, 
   buildModule, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
@@ -836,9 +836,6 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
     (stateVarDef n (psnd s) (psnd p)) (zoom lensCStoVS vr) (zoom lensCStoVS vl)
   constVar n s vr vl = pair2 (constVar n (pfst s)) (constVar n (psnd s))
     (zoom lensCStoVS vr) (zoom lensCStoVS vl)
-  privMVar = pair1 privMVar privMVar . zoom lensCStoVS
-  pubMVar = pair1 pubMVar pubMVar . zoom lensCStoVS
-  pubGVar = pair1 pubGVar pubGVar . zoom lensCStoVS
 
 instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
   stateVarDoc v = stateVarDoc $ pfst v
@@ -1732,9 +1729,6 @@ instance StateVarSym CppSrcCode where
     snd s) (cppsStateVarDef n (text "const") <$> static <*> vr <*> val <*>
     endStatement)) (zoom lensCStoVS v) (zoom lensCStoVS vl) 
     (zoom lensCStoMS emptyState)
-  privMVar = G.privMVar
-  pubMVar = G.pubMVar
-  pubGVar = G.pubGVar
 
 instance InternalStateVar CppSrcCode where
   stateVarDoc = stVarDoc . unCPPSC
@@ -2346,9 +2340,6 @@ instance StateVarSym CppHdrCode where
   constVar _ s vr _ = on2StateValues (\v -> on3CodeValues svd (onCodeValue snd 
     s) (on3CodeValues (constVarDocD empty) (bindDoc <$> static) v 
     endStatement)) (zoom lensCStoVS vr) (zoom lensCStoMS emptyState)
-  privMVar = G.privMVar
-  pubMVar = G.pubMVar
-  pubGVar = G.pubGVar
 
 instance InternalStateVar CppHdrCode where
   stateVarDoc = stVarDoc . unCPPHC

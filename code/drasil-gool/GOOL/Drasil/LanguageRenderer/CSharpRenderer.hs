@@ -60,8 +60,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
   notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
   pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, implementingClass, docClass, commentedClass, 
+  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, buildClass, implementingClass, docClass, commentedClass, 
   intClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
@@ -663,9 +662,6 @@ instance StateVarSym CSharpCode where
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar empty
-  privMVar = G.privMVar
-  pubMVar = G.pubMVar
-  pubGVar = G.pubGVar
 
 instance InternalStateVar CSharpCode where
   stateVarDoc = unCSC

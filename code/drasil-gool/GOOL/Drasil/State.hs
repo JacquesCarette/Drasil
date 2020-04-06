@@ -28,7 +28,6 @@ import GOOL.Drasil.CodeAnalysis (Exception, printExc, hasLoc)
 import GOOL.Drasil.CodeType (ClassName)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
-import Control.Lens.Tuple (_1, _2)
 import Control.Monad.State (State, modify, gets)
 import Data.List (sort, nub)
 import Data.Maybe (isNothing)
@@ -106,6 +105,7 @@ data MethodState = MS {
 makeLenses ''MethodState
 
 data ValueState = VS {
+  _methodState :: MethodState,
   _currODEDepVars :: [String],
   _currODEOthVars :: [String]
 }
@@ -115,8 +115,7 @@ type GS = State GOOLState
 type FS = State FileState
 type CS = State ClassState
 type MS = State MethodState
-type VS = State (MethodState, 
-  ValueState)
+type VS = State ValueState
 
 -------------------------------
 ---- Lenses between States ----
@@ -156,55 +155,33 @@ lensMStoCS = classState
 
 -- FS - VS --
 
-getVSfromFS :: FileState ->
-  (MethodState, ValueState)
-getVSfromFS fs = (initialMS {_classState = initialCS {_fileState = fs}}, initialVS)
-
-setVSfromFS :: FileState ->
-  (MethodState, ValueState) -> 
-  FileState
-setVSfromFS _ (ms, _) = ms ^. (classState . fileState)
-
 lensFStoVS :: Lens' FileState
-  (MethodState, ValueState)
-lensFStoVS = lens getVSfromFS setVSfromFS
+  ValueState
+lensFStoVS = lens 
+  (\fs -> initialVS {_methodState = initialMS {_classState = initialCS {
+    _fileState = fs}}}) 
+  (const (^. (methodState . classState . fileState)))
 
-lensVStoFS :: Lens' (MethodState, ValueState) FileState
-lensVStoFS = _1 . classState . fileState
+lensVStoFS :: Lens' ValueState FileState
+lensVStoFS = methodState . classState . fileState
 
 -- CS - VS --
 
-getVSfromCS :: ClassState ->
-  (MethodState, ValueState)
-getVSfromCS cs = (initialMS {_classState = cs}, initialVS)
-
-setVSfromCS :: ClassState ->
-  (MethodState, ValueState) -> 
-  ClassState
-setVSfromCS _ (ms, _) = ms ^. classState
-
 lensCStoVS :: Lens' ClassState
-  (MethodState, ValueState)
-lensCStoVS = lens getVSfromCS setVSfromCS
+  ValueState
+lensCStoVS = lens 
+  (\cs -> initialVS {_methodState = initialMS {_classState = cs}}) 
+  (const (^. (methodState . classState)))
 
 -- MS - VS --
 
-getVSfromMS :: MethodState ->
-  (MethodState, ValueState)
-getVSfromMS ms = (ms, initialVS)
-
-setVSfromMS :: MethodState ->
-  (MethodState, ValueState) -> 
-  MethodState
-setVSfromMS _ (ms, _) = ms
-
 lensMStoVS :: Lens' MethodState
-  (MethodState, ValueState)
-lensMStoVS = lens getVSfromMS setVSfromMS
+  ValueState
+lensMStoVS = lens (\ms -> initialVS {_methodState = ms}) 
+  (const (^. methodState))
 
-lensVStoMS :: Lens' (MethodState, 
-  ValueState) MethodState
-lensVStoMS = _1
+lensVStoMS :: Lens' ValueState MethodState
+lensVStoMS = methodState
 
 -------------------------------
 ------- Initial States -------
@@ -265,6 +242,7 @@ initialMS = MS {
 
 initialVS :: ValueState
 initialVS = VS {
+  _methodState = initialMS,
   _currODEDepVars = [],
   _currODEOthVars = []
 }
@@ -348,9 +326,9 @@ addLangImport i = over (classState . fileState . langImports) (\is ->
   if i `elem` is then is else sort $ i:is)
   
 addLangImportVS :: String -> 
-  (MethodState, ValueState) 
-  -> (MethodState, ValueState)
-addLangImportVS i = over _1 (addLangImport i)
+  ValueState 
+  -> ValueState
+addLangImportVS i = over methodState (addLangImport i)
 
 addExceptionImports :: [Exception] -> 
   MethodState -> 
@@ -368,9 +346,9 @@ addLibImport i = over classState $ over fileState $ over libImports (\is ->
   if i `elem` is then is else sort $ i:is)
 
 addLibImportVS :: String -> 
-  (MethodState, ValueState) -> 
-  (MethodState, ValueState)
-addLibImportVS i = over _1 $ over classState $ over fileState $ over libImports 
+  ValueState -> 
+  ValueState
+addLibImportVS i = over methodState $ over classState $ over fileState $ over libImports 
   (\is -> if i `elem` is then is else sort $ i:is)
 
 addLibImports :: [String] -> MethodState
@@ -386,17 +364,17 @@ addModuleImport i = over (classState . fileState . moduleImports) (\is ->
   if i `elem` is then is else sort $ i:is)
 
 addModuleImportVS :: String -> 
-  (MethodState, ValueState)
-  -> (MethodState, ValueState)
-addModuleImportVS i = over _1 (addModuleImport i)
+  ValueState
+  -> ValueState
+addModuleImportVS i = over methodState (addModuleImport i)
 
 getModuleImports :: FS [String]
 getModuleImports = gets (^. moduleImports)
 
 addHeaderLangImport :: String -> 
-  (MethodState, ValueState) -> 
-  (MethodState, ValueState)
-addHeaderLangImport i = over (_1 . classState . fileState . headerLangImports) 
+  ValueState -> 
+  ValueState
+addHeaderLangImport i = over (methodState . classState . fileState . headerLangImports) 
   (\is -> if i `elem` is then is else sort $ i:is)
 
 getHeaderLangImports :: FS [String]
@@ -412,45 +390,45 @@ getHeaderLibImports :: FS [String]
 getHeaderLibImports = gets (^. headerLibImports)
 
 addHeaderModImport :: String -> 
-  (MethodState, ValueState) -> 
-  (MethodState, ValueState)
-addHeaderModImport i = over (_1 . classState . fileState . headerModImports) 
+  ValueState -> 
+  ValueState
+addHeaderModImport i = over (methodState . classState . fileState . headerModImports) 
   (\is -> if i `elem` is then is else sort $ i:is)
 
 getHeaderModImports :: FS [String]
 getHeaderModImports = gets (^. headerModImports)
 
 addDefine :: String -> 
-  (MethodState, ValueState) -> 
-  (MethodState, ValueState)
-addDefine d = over (_1 . classState . fileState . defines) (\ds -> if d `elem` ds 
+  ValueState -> 
+  ValueState
+addDefine d = over (methodState . classState . fileState . defines) (\ds -> if d `elem` ds 
   then ds else sort $ d:ds)
 
 getDefines :: FS [String]
 getDefines = gets (^. defines)
   
 addHeaderDefine :: String -> 
-  (MethodState, ValueState) ->
-  (MethodState, ValueState)
-addHeaderDefine d = over (_1 . classState . fileState . headerDefines) (\ds -> 
+  ValueState ->
+  ValueState
+addHeaderDefine d = over (methodState . classState . fileState . headerDefines) (\ds -> 
   if d `elem` ds then ds else sort $ d:ds)
 
 getHeaderDefines :: FS [String]
 getHeaderDefines = gets (^. headerDefines)
 
 addUsing :: String -> 
-  (MethodState, ValueState) -> 
-  (MethodState, ValueState)
-addUsing u = over (_1 . classState . fileState . using) (\us -> if u `elem` us 
+  ValueState -> 
+  ValueState
+addUsing u = over (methodState . classState . fileState . using) (\us -> if u `elem` us 
   then us else sort $ u:us)
 
 getUsing :: FS [String]
 getUsing = gets (^. using)
 
 addHeaderUsing :: String -> 
-  (MethodState, ValueState) -> 
-  (MethodState, ValueState)
-addHeaderUsing u = over (_1 . classState . fileState . headerUsing) (\us -> 
+  ValueState -> 
+  ValueState
+addHeaderUsing u = over (methodState . classState . fileState . headerUsing) (\us -> 
   if u `elem` us then us else sort $ u:us)
 
 getHeaderUsing :: FS [String]
@@ -499,7 +477,7 @@ updateClassMap n fs = over goolState (over classMap (union (fromList $
   zip (repeat n) (fs ^. currClasses)))) fs
 
 getClassMap :: VS (Map String String)
-getClassMap = gets ((^. (classState . fileState . goolState . classMap)) . fst)
+getClassMap = gets (^. (methodState . classState . fileState . goolState . classMap))
 
 updateMethodExcMap :: String ->
   MethodState 
@@ -509,8 +487,8 @@ updateMethodExcMap n ms = over (classState . fileState . goolState .
   where mn = ms ^. (classState . fileState . currModName)
 
 getMethodExcMap :: VS (Map String [Exception])
-getMethodExcMap = gets ((^. (classState . fileState . goolState . 
-  methodExceptionMap)) . fst)
+getMethodExcMap = gets (^. (methodState . classState . fileState . goolState . 
+  methodExceptionMap))
 
 updateCallMap :: String -> MethodState 
   -> MethodState
@@ -543,20 +521,20 @@ getParameters :: MS [String]
 getParameters = gets (^. currParameters)
 
 setODEDepVars :: [String] -> 
-  (MethodState, ValueState) -> 
-  (MethodState, ValueState)
-setODEDepVars vs = over _2 $ set currODEDepVars vs
+  ValueState -> 
+  ValueState
+setODEDepVars = set currODEDepVars
 
 getODEDepVars :: VS [String]
-getODEDepVars = gets ((^. currODEDepVars) . snd)
+getODEDepVars = gets (^. currODEDepVars)
 
 setODEOthVars :: [String] -> 
-  (MethodState, ValueState) -> 
-  (MethodState, ValueState)
-setODEOthVars vs = over _2 $ set currODEOthVars vs
+  ValueState -> 
+  ValueState
+setODEOthVars = set currODEOthVars
 
 getODEOthVars :: VS [String]
-getODEOthVars = gets ((^. currODEOthVars) . snd)
+getODEOthVars = gets (^. currODEOthVars)
 
 setOutputsDeclared :: MethodState -> 
   MethodState
@@ -571,17 +549,17 @@ addException e = over exceptions (\es -> if e `elem` es then es else
   es ++ [e])
 
 addExceptions :: [Exception] -> 
-  (MethodState, ValueState) -> 
-  (MethodState, ValueState)
-addExceptions es = over (_1 . exceptions) (\exs -> nub $ exs ++ es)
+  ValueState -> 
+  ValueState
+addExceptions es = over (methodState . exceptions) (\exs -> nub $ exs ++ es)
 
 getExceptions :: MS [Exception]
 getExceptions = gets (^. exceptions)
 
 addCall :: String -> 
-  (MethodState, ValueState) -> 
-  (MethodState, ValueState)
-addCall f = over (_1 . calls) (f:)
+  ValueState -> 
+  ValueState
+addCall f = over (methodState . calls) (f:)
 
 setScope :: ScopeTag -> MethodState -> 
   MethodState

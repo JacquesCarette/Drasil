@@ -29,7 +29,7 @@ import GOOL.Drasil.CodeType (ClassName)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Monad.State (State, modify, gets)
-import Data.List (sort, nub)
+import Data.List (nub)
 import Data.List.Ordered (nubSort)
 import Data.Maybe (isNothing)
 import Data.Map (Map, fromList, insert, union, findWithDefault, mapWithKey)
@@ -316,8 +316,7 @@ getODEFiles :: GS [FileData]
 getODEFiles = gets (^. odeFiles)
 
 addLangImport :: String -> MethodState -> MethodState
-addLangImport i = over (lensMStoFS . langImports) (\is -> 
-  if i `elem` is then is else sort $ i:is)
+addLangImport i = over (lensMStoFS . langImports) (\is -> nubSort $ i:is)
   
 addLangImportVS :: String -> ValueState -> ValueState
 addLangImportVS i = over methodState (addLangImport i)
@@ -331,12 +330,10 @@ getLangImports :: FS [String]
 getLangImports = gets (^. langImports)
 
 addLibImport :: String -> MethodState -> MethodState
-addLibImport i = over (lensMStoFS . libImports) (\is -> 
-  if i `elem` is then is else sort $ i:is)
+addLibImport i = over (lensMStoFS . libImports) (\is -> nubSort $ i:is)
 
 addLibImportVS :: String -> ValueState -> ValueState
-addLibImportVS i = over (lensVStoFS . libImports) 
-  (\is -> if i `elem` is then is else sort $ i:is)
+addLibImportVS i = over (lensVStoFS . libImports) (\is -> nubSort $ i:is)
 
 addLibImports :: [String] -> MethodState -> MethodState
 addLibImports is s = foldl (flip addLibImport) s is
@@ -345,8 +342,7 @@ getLibImports :: FS [String]
 getLibImports = gets (^. libImports)
 
 addModuleImport :: String -> MethodState -> MethodState
-addModuleImport i = over (lensMStoFS . moduleImports) (\is -> 
-  if i `elem` is then is else sort $ i:is)
+addModuleImport i = over (lensMStoFS . moduleImports) (\is -> nubSort $ i:is)
 
 addModuleImportVS :: String -> ValueState -> ValueState
 addModuleImportVS i = over methodState (addModuleImport i)
@@ -356,49 +352,45 @@ getModuleImports = gets (^. moduleImports)
 
 addHeaderLangImport :: String -> ValueState -> ValueState
 addHeaderLangImport i = over (lensVStoFS . headerLangImports) 
-  (\is -> if i `elem` is then is else sort $ i:is)
+  (\is -> nubSort $ i:is)
 
 getHeaderLangImports :: FS [String]
 getHeaderLangImports = gets (^. headerLangImports)
 
 addHeaderLibImport :: String -> MethodState -> MethodState
 addHeaderLibImport i = over (lensMStoFS . headerLibImports)
-  (\is -> if i `elem` is then is else sort $ i:is)
+  (\is -> nubSort $ i:is)
 
 getHeaderLibImports :: FS [String]
 getHeaderLibImports = gets (^. headerLibImports)
 
 addHeaderModImport :: String -> ValueState -> ValueState
-addHeaderModImport i = over (lensVStoFS . headerModImports) 
-  (\is -> if i `elem` is then is else sort $ i:is)
+addHeaderModImport i = over (lensVStoFS . headerModImports)
+  (\is -> nubSort $ i:is)
 
 getHeaderModImports :: FS [String]
 getHeaderModImports = gets (^. headerModImports)
 
 addDefine :: String -> ValueState -> ValueState
-addDefine d = over (lensVStoFS . defines) (\ds -> if d `elem` ds then ds else 
-  sort $ d:ds)
+addDefine d = over (lensVStoFS . defines) (\ds -> nubSort $ d:ds)
 
 getDefines :: FS [String]
 getDefines = gets (^. defines)
   
 addHeaderDefine :: String -> ValueState -> ValueState
-addHeaderDefine d = over (lensVStoFS . headerDefines) (\ds -> 
-  if d `elem` ds then ds else sort $ d:ds)
+addHeaderDefine d = over (lensVStoFS . headerDefines) (\ds -> nubSort $ d:ds)
 
 getHeaderDefines :: FS [String]
 getHeaderDefines = gets (^. headerDefines)
 
 addUsing :: String -> ValueState -> ValueState
-addUsing u = over (lensVStoFS . using) (\us -> if u `elem` us then us else 
-  sort $ u:us)
+addUsing u = over (lensVStoFS . using) (\us -> nubSort $ u:us)
 
 getUsing :: FS [String]
 getUsing = gets (^. using)
 
 addHeaderUsing :: String -> ValueState -> ValueState
-addHeaderUsing u = over (lensVStoFS . headerUsing) (\us -> 
-  if u `elem` us then us else sort $ u:us)
+addHeaderUsing u = over (lensVStoFS . headerUsing) (\us -> nubSort $ u:us)
 
 getHeaderUsing :: FS [String]
 getHeaderUsing = gets (^. headerUsing)
@@ -500,7 +492,7 @@ isOutputsDeclared :: MS Bool
 isOutputsDeclared = gets (^. outputsDeclared)
 
 addException :: Exception -> MethodState -> MethodState
-addException e = over exceptions (\es -> if e `elem` es then es else e : es)
+addException e = over exceptions (\es -> nub $ e : es)
 
 addExceptions :: [Exception] -> ValueState -> ValueState
 addExceptions es = over (methodState . exceptions) (\exs -> nub $ es ++ exs)

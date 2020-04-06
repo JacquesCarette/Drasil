@@ -16,7 +16,7 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), objMethodCall, FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
+  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), switchAsIf, ScopeSym(..),
   ParameterSym(..), MethodSym(..), pubMethod, initializer, StateVarSym(..), 
   privMVar, pubMVar, ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..))
@@ -56,11 +56,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   constDecDef, funcDecDef, discardInput, discardFileInput, closeFile, 
   stringListVals, stringListLists, returnState, multiReturnError, valState, 
   comment, throw, initState, changeState, initObserverList, addObserver, 
-  ifCond, ifNoElse, switch, switchAsIf, for, forRange, while, tryCatch, 
-  notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
-  function, docFunc, docInOutFunc, intFunc, buildClass, implementingClass, 
-  docClass, commentedClass, buildModule, modFromData, fileDoc, docMod, 
-  fileFromData)
+  ifCond, switch, for, forRange, while, tryCatch, notifyObservers, construct, 
+  param, method, getMethod, setMethod, constructor, function, docFunc, 
+  docInOutFunc, intFunc, buildClass, implementingClass, docClass, 
+  commentedClass, buildModule, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), 
@@ -705,17 +704,9 @@ instance (Pair p) => ControlStatementSym (p CppSrcCode CppHdrCode) where
     (\cs bods -> ifCond (zip cs bods)) 
     (\cs bods -> ifCond (zip cs bods)) 
     (map (zoom lensMStoVS . fst) bs) (map snd bs)
-  ifNoElse bs = pair2Lists
-    (\cs bods -> ifNoElse (zip cs bods))
-    (\cs bods -> ifNoElse (zip cs bods)) 
-    (map (zoom lensMStoVS . fst) bs) (map snd bs) 
   switch v cs = pairVal2ListsVal 
     (\s cv cb -> switch s (zip cv cb))
     (\s cv cb -> switch s (zip cv cb))
-    (zoom lensMStoVS v) (map (zoom lensMStoVS . fst) cs) (map snd cs)
-  switchAsIf v cs = pairVal2ListsVal
-    (\s cv cb -> switchAsIf s (zip cv cb))
-    (\s cv cb -> switchAsIf s (zip cv cb))
     (zoom lensMStoVS v) (map (zoom lensMStoVS . fst) cs) (map snd cs)
 
   ifExists v = pair3 ifExists ifExists (zoom lensMStoVS v)
@@ -1607,9 +1598,7 @@ instance StatementSym CppSrcCode where
 
 instance ControlStatementSym CppSrcCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
-  ifNoElse = G.ifNoElse
   switch = G.switch
-  switchAsIf = G.switchAsIf
 
   ifExists _ ifBody _ = onStateValue (mkStNoEnd . bodyDoc) ifBody -- All variables are initialized in C++
 
@@ -2238,9 +2227,7 @@ instance StatementSym CppHdrCode where
 
 instance ControlStatementSym CppHdrCode where
   ifCond _ _ = emptyState
-  ifNoElse _ = emptyState
   switch _ _ _ = emptyState
-  switchAsIf _ _ _ = emptyState
 
   ifExists _ _ _ = emptyState
 

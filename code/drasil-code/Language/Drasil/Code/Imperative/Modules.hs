@@ -37,7 +37,7 @@ import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import GOOL.Drasil (ProgramSym, FileSym(..), BodySym(..), BlockSym(..), 
   PermanenceSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
-  BooleanExpression(..), StatementSym(..), ControlStatementSym(..), 
+  BooleanExpression(..), StatementSym(..), ControlStatementSym(..), ifNoElse,
   ScopeSym(..), MethodSym(..), StateVarSym(..), pubMVar, ClassSym(..), 
   convType, FS, CS, MS, VS)
 

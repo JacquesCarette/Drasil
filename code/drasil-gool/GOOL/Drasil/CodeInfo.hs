@@ -360,14 +360,7 @@ instance StatementSym CodeInfo where
 
 instance ControlStatementSym CodeInfo where
   ifCond = evalConds
-  ifNoElse cs = do
-    mapM_ (zoom lensMStoVS . fst) cs
-    mapM_ snd cs
-    noInfo
   switch v cs b = do
-    _ <- zoom lensMStoVS v
-    evalConds cs b
-  switchAsIf v cs b = do
     _ <- zoom lensMStoVS v
     evalConds cs b
 

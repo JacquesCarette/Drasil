@@ -15,9 +15,9 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
-  ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  ControlStatementSym(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
@@ -50,7 +50,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   decrement, increment', increment1', decrement1, listDecDef', objDecNew, 
   objDecNewNoParams, closeFile, discardFileLine, stringListVals, 
   stringListLists, returnState, valState, comment, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switchAsIf, 
+  changeState, initObserverList, addObserver, ifCond,
   ifExists, tryCatch, checkState, construct, param, method, getMethod, 
   setMethod, constructor, function, docFunc, stateVarDef, constVar, buildClass, 
   implementingClass, docClass, commentedClass, intClass, buildModule, 
@@ -582,9 +582,7 @@ instance StatementSym PythonCode where
 
 instance ControlStatementSym PythonCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
-  ifNoElse = G.ifNoElse
   switch = switchAsIf
-  switchAsIf = G.switchAsIf
 
   ifExists = G.ifExists
 

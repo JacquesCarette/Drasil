@@ -10,17 +10,18 @@ module GOOL.Drasil.ClassInterface (
   BooleanExpression(..), ValueExpression(..), Selector(..), 
   InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
-  StateVarSym(..), privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
-  ODEMethod(..)
+  StatementSym(..), ControlStatementSym(..), ifNoElse, switchAsIf, ScopeSym(..),
+  ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer, 
+  nonInitConstructor, StateVarSym(..), privMVar, pubMVar, pubGVar, ClassSym(..),
+  ModuleSym(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
+  odeOptions, ODEMethod(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType, ClassName)
 import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
 import Control.Monad.State (State)
+import Data.Bifunctor (first)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
@@ -482,14 +483,9 @@ class (SelectorFunction repr) => StatementSym repr where
 class (BodySym repr) => ControlStatementSym repr where
   ifCond     :: [(VS (repr (Value repr)), MS (repr (Body repr)))] -> 
     MS (repr (Body repr)) -> MS (repr (Statement repr))
-  ifNoElse   :: [(VS (repr (Value repr)), MS (repr (Body repr)))] -> 
-    MS (repr (Statement repr))
   switch     :: VS (repr (Value repr)) -> [(VS (repr (Value repr)), 
     MS (repr (Body repr)))] -> MS (repr (Body repr)) -> 
     MS (repr (Statement repr)) -- is there value in separating Literals into their own type?
-  switchAsIf :: VS (repr (Value repr)) -> [(VS (repr (Value repr)), 
-    MS (repr (Body repr)))] -> MS (repr (Body repr)) -> 
-    MS (repr (Statement repr))
 
   ifExists :: VS (repr (Value repr)) -> MS (repr (Body repr)) -> 
     MS (repr (Body repr)) -> MS (repr (Statement repr))
@@ -515,6 +511,16 @@ class (BodySym repr) => ControlStatementSym repr where
 
   getFileInputAll  :: VS (repr (Value repr)) -> VS (repr (Variable repr)) -> 
     MS (repr (Statement repr))
+
+ifNoElse :: (ControlStatementSym repr) => 
+  [(VS (repr (Value repr)), MS (repr (Body repr)))] 
+  -> MS (repr (Statement repr))
+ifNoElse bs = ifCond bs $ body []
+
+switchAsIf :: (ControlStatementSym repr) => 
+  VS (repr (Value repr)) -> [(VS (repr (Value repr)), MS (repr (Body repr)))] 
+  -> MS (repr (Body repr)) -> MS (repr (Statement repr))
+switchAsIf v = ifCond . map (first (v ?==))
 
 class ScopeSym repr where
   type Scope repr

@@ -30,7 +30,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
   stringListLists, returnState, multiReturnError, valState, comment, freeError, 
   throw, initState, changeState, initObserverList, addObserver, ifCond, 
-  ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
+  switch, ifExists, for, forRange, forEach, while, 
   tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
   setMethod, constructor, docMain, function, mainFunction, docFunc, 
   docInOutFunc, intFunc, stateVar, stateVarDef, constVar, buildClass, 
@@ -42,7 +42,7 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, 
-  FileSym(RenderFile, commentedMod), BodySym(Body, body, bodyStatements), 
+  FileSym(RenderFile, commentedMod), BodySym(Body, bodyStatements), 
   BlockSym(Block), PermanenceSym(..), 
   TypeSym(Type, infile, outfile, iterator, getType, getTypeDoc, getTypeString), 
   VariableSym(Variable, variableName, variableType), 
@@ -108,7 +108,6 @@ import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS,
   getModuleName, setClassName, getClassName, addParameter)
 
 import Prelude hiding (break,print,last,mod,pi,sin,cos,tan,(<>))
-import Data.Bifunctor (first)
 import Data.List (sort, intersperse)
 import Data.Map as Map (lookup, fromList)
 import Data.Maybe (fromMaybe, maybeToList)
@@ -1046,22 +1045,12 @@ ifCond ifst elseif blEnd (c:cs) eBody =
     in onStateList (mkStNoEnd . vcat)
       (ifSect c : map elseIfSect cs ++ [elseSect])
 
-ifNoElse :: (RenderSym repr) => [(VS (repr (Value repr)), 
-  MS (repr (Body repr)))] -> MS (repr (Statement repr))
-ifNoElse bs = S.ifCond bs $ body []
-
 switch :: (RenderSym repr) => VS (repr (Value repr)) -> 
   [(VS (repr (Value repr)), MS (repr (Body repr)))] -> MS (repr (Body repr)) -> 
   MS (repr (Statement repr))
 switch v cs bod = (\b val css de -> mkSt (switchDocD b val de css)) <$>
   S.state break <*> zoom lensMStoVS v <*> on2StateLists zip (map (zoom 
   lensMStoVS . fst) cs) (map snd cs) <*> bod
-
-switchAsIf :: (RenderSym repr) => VS (repr (Value repr)) -> 
-  [(VS (repr (Value repr)), MS (repr (Body repr)))] -> MS (repr (Body repr)) -> 
-  MS (repr (Statement repr))
-switchAsIf v cs = S.ifCond cases
-  where cases = map (first (v ?==)) cs
 
 ifExists :: (RenderSym repr) => VS (repr (Value repr)) -> MS (repr (Body repr)) 
   -> MS (repr (Body repr)) -> MS (repr (Statement repr))

@@ -56,8 +56,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   constDecDef, discardInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
   multiReturnError, valState, comment, freeError, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
-  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  changeState, initObserverList, addObserver, ifCond, switch, 
+  ifExists, for, forRange, forEach, while, tryCatch, checkState, 
   notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
   docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
   stateVarDef, constVar, buildClass, implementingClass, docClass, 
@@ -578,9 +578,7 @@ instance StatementSym CSharpCode where
 
 instance ControlStatementSym CSharpCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
-  ifNoElse = G.ifNoElse
   switch = G.switch
-  switchAsIf = G.switchAsIf
 
   ifExists = G.ifExists
 

@@ -491,7 +491,6 @@ instance FunctionSym JavaCode where
 instance SelectorFunction JavaCode where
   listAccess = G.listAccess
   listSet = G.listSet
-  at = listAccess
 
 instance InternalFunction JavaCode where
   getFunc = G.getFunc

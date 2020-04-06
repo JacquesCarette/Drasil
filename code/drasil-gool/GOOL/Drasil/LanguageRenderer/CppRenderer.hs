@@ -550,7 +550,6 @@ instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
   listAccess = pair2 listAccess listAccess
   listSet = pair3 listSet listSet
-  at = pair2 at at
 
 instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where  
   getFunc = pair1 getFunc getFunc
@@ -1448,7 +1447,6 @@ instance FunctionSym CppSrcCode where
 instance SelectorFunction CppSrcCode where
   listAccess = G.listAccess
   listSet = G.listSet
-  at = listAccess
 
 instance InternalFunction CppSrcCode where
   getFunc = G.getFunc
@@ -2094,7 +2092,6 @@ instance FunctionSym CppHdrCode where
 instance SelectorFunction CppHdrCode where
   listAccess _ _ = mkStateVal void empty
   listSet _ _ _ = mkStateVal void empty
-  at _ _ = mkStateVal void empty
 
 instance InternalFunction CppHdrCode where
   getFunc _ = funcFromData empty void

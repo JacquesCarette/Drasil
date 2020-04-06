@@ -14,7 +14,7 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), (&=), observerListName,
+  FunctionSym(..), SelectorFunction(..), at, StatementSym(..), (&=), observerListName,
   ControlStatementSym(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
@@ -458,7 +458,6 @@ instance FunctionSym PythonCode where
 instance SelectorFunction PythonCode where
   listAccess = G.listAccess
   listSet = G.listSet
-  at = listAccess
 
 instance InternalFunction PythonCode where
   getFunc = G.getFunc

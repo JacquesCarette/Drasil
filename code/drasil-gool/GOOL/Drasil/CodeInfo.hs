@@ -272,7 +272,6 @@ instance FunctionSym CodeInfo where
 instance SelectorFunction CodeInfo where
   listAccess = execute2
   listSet = execute3
-  at = execute2
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()

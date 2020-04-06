@@ -9,7 +9,7 @@ module GOOL.Drasil.ClassInterface (
   listSlice, VariableSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), 
   InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
-  objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
+  objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), at,
   StatementSym(..), (&=), assignToListIndex, initState, changeState, observerListName, initObserverList, 
   addObserver, ControlStatementSym(..), ifNoElse, switchAsIf, ScopeSym(..),
   ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer, 
@@ -359,8 +359,10 @@ class (Selector repr, InternalValueExp repr) => SelectorFunction repr where
     VS (repr (Value repr))
   listSet    :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
     VS (repr (Value repr)) -> VS (repr (Value repr))
-  at         :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
-    VS (repr (Value repr))
+
+at :: (SelectorFunction repr) => VS (repr (Value repr)) -> 
+  VS (repr (Value repr)) -> VS (repr (Value repr))
+at = listAccess
 
 class (SelectorFunction repr) => StatementSym repr where
   type Statement repr

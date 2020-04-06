@@ -461,7 +461,6 @@ instance FunctionSym CSharpCode where
 instance SelectorFunction CSharpCode where
   listAccess = G.listAccess
   listSet = G.listSet
-  at = listAccess
 
 instance InternalFunction CSharpCode where
   getFunc = G.getFunc

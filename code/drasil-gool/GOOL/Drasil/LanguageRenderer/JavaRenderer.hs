@@ -74,7 +74,7 @@ import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   onCodeList, onStateList, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensMStoFS,
-  lensMStoVS, lensVStoFS, lensVStoMS, initialState, initialFS, modifyReturn, 
+  lensMStoVS, lensVStoFS, lensVStoMS, initialFS, modifyReturn, goolState,
   modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFiles, 
   getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
   addLibImport, getModuleName, setFileType, getClassName, setCurrMain, 
@@ -83,6 +83,7 @@ import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensMStoFS,
   addExceptions)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import Control.Lens ((^.))
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
@@ -767,8 +768,8 @@ jODEInt Adams = "AdamsBashforthIntegrator"
 jODEInt _ = error "Chosen ODE method unavailable in Java"
 
 jODEFiles :: ODEInfo JavaCode -> ([FileData], GOOLState)
-jODEFiles info = (map unJC fls, fst s)
-  where (fls, s) = runState odeFiles (initialState, initialFS)
+jODEFiles info = (map unJC fls, s ^. goolState)
+  where (fls, s) = runState odeFiles initialFS
         fode = "FirstOrderDifferentialEquations"
         dv = depVar info
         ovars = otherVars info 

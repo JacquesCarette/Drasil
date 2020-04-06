@@ -74,7 +74,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat,
   on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, 
   lensFStoMS, lensFStoVS, lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, 
-  lensVStoMS, initialState, initialFS, modifyReturn, addODEFilePaths, 
+  lensVStoMS, initialFS, modifyReturn, goolState, addODEFilePaths, 
   addODEFiles, getODEFiles, addLangImport, addLangImportVS, getLangImports, 
   addLibImport, getLibImports, addModuleImport, addModuleImportVS, 
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
@@ -85,6 +85,7 @@ import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS,
   getCurrMainFunc, setODEOthVars, getODEOthVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
+import Control.Lens ((^.))
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
@@ -2474,8 +2475,8 @@ cppODEMethod info opts = listInnerType (onStateValue variableType $ depVar info)
 
 cppODEFile :: (RenderSym repr) => ODEInfo repr ->
   (repr (RenderFile repr), GOOLState)
-cppODEFile info = (fl, fst s)
-  where (fl, s) = runState odeFile (initialState, initialFS)
+cppODEFile info = (fl, s ^. goolState)
+  where (fl, s) = runState odeFile initialFS
         olddv = depVar info
         oldiv = indepVar info
         ovars = otherVars info

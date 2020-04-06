@@ -138,7 +138,7 @@ lensFStoCS = lens (\fs -> initialCS {_fileState = fs}) (const (^. fileState))
 
 lensFStoMS :: Lens' FileState MethodState
 lensFStoMS = lens (\fs -> initialMS {_classState = initialCS {_fileState = fs}})
-  (const (^. (classState . fileState)))
+  (const (^. lensMStoFS))
 
 lensMStoFS :: Lens' MethodState FileState 
 lensMStoFS = classState . fileState
@@ -160,10 +160,10 @@ lensFStoVS :: Lens' FileState
 lensFStoVS = lens 
   (\fs -> initialVS {_methodState = initialMS {_classState = initialCS {
     _fileState = fs}}}) 
-  (const (^. (methodState . classState . fileState)))
+  (const (^. lensVStoFS))
 
 lensVStoFS :: Lens' ValueState FileState
-lensVStoFS = methodState . classState . fileState
+lensVStoFS = methodState . lensMStoFS
 
 -- CS - VS --
 
@@ -284,9 +284,9 @@ modifyReturnList l sf vf = do
 addODEFilePaths :: GOOLState -> 
   MethodState -> 
   MethodState
-addODEFilePaths s = over (classState . fileState . goolState . headers) 
+addODEFilePaths s = over (lensMStoFS . goolState . headers) 
   (s ^. headers ++)
-  . over (classState . fileState . goolState . sources) (s ^. sources ++)
+  . over (lensMStoFS . goolState . sources) (s ^. sources ++)
 
 addFile :: FileType -> FilePath -> GOOLState -> GOOLState
 addFile Combined = addCombinedHeaderSource
@@ -315,14 +315,14 @@ setMainMod n = over mainMod (\m -> if isNothing m then Just n else error
 
 addODEFiles :: [FileData] -> MethodState
   -> MethodState
-addODEFiles f = over (classState . fileState . goolState . odeFiles) (f++)
+addODEFiles f = over (lensMStoFS . goolState . odeFiles) (f++)
 
 getODEFiles :: GS [FileData]
 getODEFiles = gets (^. odeFiles)
 
 addLangImport :: String -> MethodState 
   -> MethodState
-addLangImport i = over (classState . fileState . langImports) (\is -> 
+addLangImport i = over (lensMStoFS . langImports) (\is -> 
   if i `elem` is then is else sort $ i:is)
   
 addLangImportVS :: String -> 
@@ -333,7 +333,7 @@ addLangImportVS i = over methodState (addLangImport i)
 addExceptionImports :: [Exception] -> 
   MethodState -> 
   MethodState
-addExceptionImports es = over (classState . fileState . langImports) (\is -> sort $ nub $ 
+addExceptionImports es = over (lensMStoFS . langImports) (\is -> sort $ nub $ 
   is ++ imps)
   where imps = map printExc $ filter hasLoc es
 
@@ -342,13 +342,13 @@ getLangImports = gets (^. langImports)
 
 addLibImport :: String -> MethodState
   -> MethodState
-addLibImport i = over (classState . fileState . libImports) (\is -> 
+addLibImport i = over (lensMStoFS . libImports) (\is -> 
   if i `elem` is then is else sort $ i:is)
 
 addLibImportVS :: String -> 
   ValueState -> 
   ValueState
-addLibImportVS i = over (methodState . classState . fileState . libImports) 
+addLibImportVS i = over (lensVStoFS . libImports) 
   (\is -> if i `elem` is then is else sort $ i:is)
 
 addLibImports :: [String] -> MethodState
@@ -360,7 +360,7 @@ getLibImports = gets (^. libImports)
 
 addModuleImport :: String -> MethodState
   -> MethodState
-addModuleImport i = over (classState . fileState . moduleImports) (\is -> 
+addModuleImport i = over (lensMStoFS . moduleImports) (\is -> 
   if i `elem` is then is else sort $ i:is)
 
 addModuleImportVS :: String -> 
@@ -374,7 +374,7 @@ getModuleImports = gets (^. moduleImports)
 addHeaderLangImport :: String -> 
   ValueState -> 
   ValueState
-addHeaderLangImport i = over (methodState . classState . fileState . headerLangImports) 
+addHeaderLangImport i = over (lensVStoFS . headerLangImports) 
   (\is -> if i `elem` is then is else sort $ i:is)
 
 getHeaderLangImports :: FS [String]
@@ -383,7 +383,7 @@ getHeaderLangImports = gets (^. headerLangImports)
 addHeaderLibImport :: String -> 
   MethodState -> 
   MethodState
-addHeaderLibImport i = over (classState . fileState . headerLibImports)
+addHeaderLibImport i = over (lensMStoFS . headerLibImports)
   (\is -> if i `elem` is then is else sort $ i:is)
 
 getHeaderLibImports :: FS [String]
@@ -392,7 +392,7 @@ getHeaderLibImports = gets (^. headerLibImports)
 addHeaderModImport :: String -> 
   ValueState -> 
   ValueState
-addHeaderModImport i = over (methodState . classState . fileState . headerModImports) 
+addHeaderModImport i = over (lensVStoFS . headerModImports) 
   (\is -> if i `elem` is then is else sort $ i:is)
 
 getHeaderModImports :: FS [String]
@@ -401,7 +401,7 @@ getHeaderModImports = gets (^. headerModImports)
 addDefine :: String -> 
   ValueState -> 
   ValueState
-addDefine d = over (methodState . classState . fileState . defines) (\ds -> if d `elem` ds 
+addDefine d = over (lensVStoFS . defines) (\ds -> if d `elem` ds 
   then ds else sort $ d:ds)
 
 getDefines :: FS [String]
@@ -410,7 +410,7 @@ getDefines = gets (^. defines)
 addHeaderDefine :: String -> 
   ValueState ->
   ValueState
-addHeaderDefine d = over (methodState . classState . fileState . headerDefines) (\ds -> 
+addHeaderDefine d = over (lensVStoFS . headerDefines) (\ds -> 
   if d `elem` ds then ds else sort $ d:ds)
 
 getHeaderDefines :: FS [String]
@@ -419,7 +419,7 @@ getHeaderDefines = gets (^. headerDefines)
 addUsing :: String -> 
   ValueState -> 
   ValueState
-addUsing u = over (methodState . classState . fileState . using) (\us -> if u `elem` us 
+addUsing u = over (lensVStoFS . using) (\us -> if u `elem` us 
   then us else sort $ u:us)
 
 getUsing :: FS [String]
@@ -428,7 +428,7 @@ getUsing = gets (^. using)
 addHeaderUsing :: String -> 
   ValueState -> 
   ValueState
-addHeaderUsing u = over (methodState . classState . fileState . headerUsing) (\us -> 
+addHeaderUsing u = over (lensVStoFS . headerUsing) (\us -> 
   if u `elem` us then us else sort $ u:us)
 
 getHeaderUsing :: FS [String]
@@ -436,7 +436,7 @@ getHeaderUsing = gets (^. headerUsing)
 
 setMainDoc :: Doc -> MethodState -> 
   MethodState
-setMainDoc d = over (classState . fileState) $ set mainDoc d
+setMainDoc d = over (lensMStoFS) $ set mainDoc d
 
 getMainDoc :: FS Doc
 getMainDoc = gets (^. mainDoc)
@@ -459,7 +459,7 @@ getClassName = gets (^. (classState . currClassName))
 
 setCurrMain :: MethodState -> 
   MethodState
-setCurrMain = over (classState . fileState . currMain) (\b -> if b then 
+setCurrMain = over (lensMStoFS . currMain) (\b -> if b then 
   error "Multiple main functions defined" else not b)
 
 getCurrMain :: FS Bool
@@ -477,24 +477,24 @@ updateClassMap n fs = over (goolState . classMap) (union (fromList $
   zip (repeat n) (fs ^. currClasses))) fs
 
 getClassMap :: VS (Map String String)
-getClassMap = gets (^. (methodState . classState . fileState . goolState . classMap))
+getClassMap = gets (^. (lensVStoFS . goolState . classMap))
 
 updateMethodExcMap :: String ->
   MethodState 
   -> MethodState
-updateMethodExcMap n ms = over (classState . fileState . goolState . 
+updateMethodExcMap n ms = over (lensMStoFS . goolState . 
   methodExceptionMap) (insert (mn ++ "." ++ n) (ms ^. exceptions)) ms
-  where mn = ms ^. (classState . fileState . currModName)
+  where mn = ms ^. (lensMStoFS . currModName)
 
 getMethodExcMap :: VS (Map String [Exception])
-getMethodExcMap = gets (^. (methodState . classState . fileState . goolState . 
+getMethodExcMap = gets (^. (lensVStoFS . goolState . 
   methodExceptionMap))
 
 updateCallMap :: String -> MethodState 
   -> MethodState
-updateCallMap n ms = over (classState . fileState . goolState . callMap) 
+updateCallMap n ms = over (lensMStoFS . goolState . callMap) 
   (insert (mn ++ "." ++ n) (ms ^. calls)) ms
-  where mn = ms ^. (classState . fileState . currModName)
+  where mn = ms ^. (lensMStoFS . currModName)
 
 callMapTransClosure :: GOOLState -> GOOLState
 callMapTransClosure = over callMap tClosure

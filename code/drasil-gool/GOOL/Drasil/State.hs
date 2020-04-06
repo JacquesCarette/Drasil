@@ -52,29 +52,6 @@ data GOOLState = GS {
 } 
 makeLenses ''GOOLState
 
-data MethodState = MS {
-  _currParameters :: [String], -- Used to get parameter names when generating 
-                               -- function documentation
-
-  -- Only used for Java
-  _outputsDeclared :: Bool, -- So Java doesn't redeclare outputs variable when using inOutCall
-  _exceptions :: [Exception], -- Used to build methodExceptionMap
-  _calls :: [String], -- Used to build CallMap
-  
-  -- Only used for C++
-  _currScope :: ScopeTag, -- Used to maintain correct scope when adding 
-                          -- documentation to function in C++
-  _currMainFunc :: Bool -- Used by C++ to put documentation for the main
-                        -- function in source instead of header file
-}
-makeLenses ''MethodState
-
-newtype ClassState = CS {
-  _currClassName :: ClassName -- So class name is accessible when generating 
-                              -- constructor or self 
-}
-makeLenses ''ClassState
-
 data FileState = FS {
   _currModName :: String, -- Used by fileDoc to insert the module name in the 
                           -- file path, and by CodeInfo/Java when building
@@ -101,6 +78,29 @@ data FileState = FS {
   _headerUsing :: [String]
 }
 makeLenses ''FileState
+
+newtype ClassState = CS {
+  _currClassName :: ClassName -- So class name is accessible when generating 
+                              -- constructor or self 
+}
+makeLenses ''ClassState
+
+data MethodState = MS {
+  _currParameters :: [String], -- Used to get parameter names when generating 
+                               -- function documentation
+
+  -- Only used for Java
+  _outputsDeclared :: Bool, -- So Java doesn't redeclare outputs variable when using inOutCall
+  _exceptions :: [Exception], -- Used to build methodExceptionMap
+  _calls :: [String], -- Used to build CallMap
+  
+  -- Only used for C++
+  _currScope :: ScopeTag, -- Used to maintain correct scope when adding 
+                          -- documentation to function in C++
+  _currMainFunc :: Bool -- Used by C++ to put documentation for the main
+                        -- function in source instead of header file
+}
+makeLenses ''MethodState
 
 data ValueState = VS {
   _currODEDepVars :: [String],

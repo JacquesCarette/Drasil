@@ -315,7 +315,7 @@ setMainMod n = over mainMod (\m -> if isNothing m then Just n else error
 
 addODEFiles :: [FileData] -> MethodState
   -> MethodState
-addODEFiles f = over classState $ over fileState $ over goolState $ over odeFiles (f++)
+addODEFiles f = over (classState . fileState . goolState . odeFiles) (f++)
 
 getODEFiles :: GS [FileData]
 getODEFiles = gets (^. odeFiles)
@@ -342,13 +342,13 @@ getLangImports = gets (^. langImports)
 
 addLibImport :: String -> MethodState
   -> MethodState
-addLibImport i = over classState $ over fileState $ over libImports (\is -> 
+addLibImport i = over (classState . fileState . libImports) (\is -> 
   if i `elem` is then is else sort $ i:is)
 
 addLibImportVS :: String -> 
   ValueState -> 
   ValueState
-addLibImportVS i = over methodState $ over classState $ over fileState $ over libImports 
+addLibImportVS i = over (methodState . classState . fileState . libImports) 
   (\is -> if i `elem` is then is else sort $ i:is)
 
 addLibImports :: [String] -> MethodState
@@ -383,7 +383,7 @@ getHeaderLangImports = gets (^. headerLangImports)
 addHeaderLibImport :: String -> 
   MethodState -> 
   MethodState
-addHeaderLibImport i = over classState $ over fileState $ over headerLibImports 
+addHeaderLibImport i = over (classState . fileState . headerLibImports)
   (\is -> if i `elem` is then is else sort $ i:is)
 
 getHeaderLibImports :: FS [String]
@@ -459,22 +459,22 @@ getClassName = gets (^. (classState . currClassName))
 
 setCurrMain :: MethodState -> 
   MethodState
-setCurrMain = over classState $ over fileState $ over currMain (\b -> if b then 
+setCurrMain = over (classState . fileState . currMain) (\b -> if b then 
   error "Multiple main functions defined" else not b)
 
 getCurrMain :: FS Bool
 getCurrMain = gets (^. currMain)
 
 addClass :: String -> ClassState -> ClassState
-addClass c = over fileState $ over currClasses (\cs -> if c `elem` cs then 
+addClass c = over (fileState . currClasses) (\cs -> if c `elem` cs then 
   error "Multiple classes with same name in same file" else c:cs)
 
 getClasses :: FS [String]
 getClasses = gets (^. currClasses)
 
 updateClassMap :: String -> FileState -> FileState
-updateClassMap n fs = over goolState (over classMap (union (fromList $ 
-  zip (repeat n) (fs ^. currClasses)))) fs
+updateClassMap n fs = over (goolState . classMap) (union (fromList $ 
+  zip (repeat n) (fs ^. currClasses))) fs
 
 getClassMap :: VS (Map String String)
 getClassMap = gets (^. (methodState . classState . fileState . goolState . classMap))

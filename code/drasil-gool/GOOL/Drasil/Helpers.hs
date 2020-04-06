@@ -8,7 +8,7 @@ module GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat,
 import Utils.Drasil (blank)
 
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
-import qualified GOOL.Drasil.Symantics as S (TypeSym(..))
+import qualified GOOL.Drasil.ClassInterface as S (TypeSym(..))
 import GOOL.Drasil.State (VS)
 
 import Prelude hiding ((<>))

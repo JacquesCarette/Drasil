@@ -1,29 +1,22 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module GOOL.Drasil.Symantics (
+module GOOL.Drasil.ClassInterface (
   -- Types
   Label, Library,
   -- Typeclasses
-  ProgramSym(..), RenderSym, FileSym(..), InternalFile(..),  KeywordSym(..), 
-  ImportSym(..), PermanenceSym(..), InternalPerm(..), BodySym(..), 
-  InternalBody(..), BlockSym(..), InternalBlock(..), TypeSym(..), 
-  InternalType(..), ControlBlockSym(..), InternalControlBlock(..), listSlice, 
-  UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), VariableSym(..), 
-  InternalVariable(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
+  BlockSym(..), TypeSym(..), ControlBlockSym(..), InternalControlBlock(..), 
+  listSlice, VariableSym(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), Selector(..), 
   InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
-  ParameterSym(..), InternalParam(..), MethodSym(..), initializer, 
-  nonInitConstructor, InternalMethod(..), StateVarSym(..), InternalStateVar(..),
-  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
-  BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
-  ODEMethod(..)
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), initializer, nonInitConstructor, StateVarSym(..), ClassSym(..),
+  ModuleSym(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
+  odeOptions, ODEMethod(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType, ClassName)
-import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
 import Control.Monad.State (State)
@@ -31,13 +24,6 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
 type Library = String
-
-class (FileSym repr, InternalBlock repr, InternalBody repr, InternalClass repr, 
-  InternalFile repr, InternalFunction repr, InternalMethod repr, 
-  InternalMod repr, InternalOp repr, InternalParam repr, InternalPerm repr, 
-  InternalScope repr, InternalStatement repr, InternalStateVar repr, 
-  InternalType repr, InternalValue repr, InternalVariable repr, KeywordSym repr,
-  ImportSym repr, UnaryOpSym repr, BinaryOpSym repr) => RenderSym repr
 
 class (FileSym repr) => ProgramSym repr where
   type Program repr
@@ -56,56 +42,10 @@ class (ModuleSym repr) => FileSym repr where
   commentedMod :: FS (repr (BlockComment repr)) -> FS (repr (RenderFile repr)) 
     -> FS (repr (RenderFile repr))
 
-class InternalFile repr where
-  top :: repr (Module repr) -> repr (Block repr)
-  bottom :: repr (Block repr)
-
-  fileFromData :: FS FilePath -> FS (repr (Module repr)) -> 
-    FS (repr (RenderFile repr))
-
-class (PermanenceSym repr) => KeywordSym repr where
-  type Keyword repr
-  endStatement     :: repr (Keyword repr)
-  endStatementLoop :: repr (Keyword repr)
-
-  inherit :: Label -> repr (Keyword repr)
-  implements :: [Label] -> repr (Keyword repr)
-
-  list     :: repr (Keyword repr)
-
-  blockStart :: repr (Keyword repr)
-  blockEnd   :: repr (Keyword repr)
-
-  ifBodyStart :: repr (Keyword repr)
-  elseIf      :: repr (Keyword repr)
-
-  iterForEachLabel :: repr (Keyword repr)
-  iterInLabel      :: repr (Keyword repr)
-
-  commentStart      :: repr (Keyword repr)
-  blockCommentStart :: repr (Keyword repr)
-  blockCommentEnd   :: repr (Keyword repr)
-  docCommentStart   :: repr (Keyword repr)
-  docCommentEnd     :: repr (Keyword repr)
-
-  keyFromDoc :: Doc -> repr (Keyword repr)
-  keyDoc :: repr (Keyword repr) -> Doc
-
-class ImportSym repr where
-  type Import repr
-  langImport :: Label -> repr (Import repr)
-  modImport :: Label -> repr (Import repr)
-
-  importDoc :: repr (Import repr) -> Doc
-
 class PermanenceSym repr where
   type Permanence repr
   static  :: repr (Permanence repr)
   dynamic :: repr (Permanence repr)
-
-class InternalPerm repr where
-  permDoc :: repr (Permanence repr) -> Doc
-  binding :: repr (Permanence repr) -> Binding
 
 class (BlockSym repr) => BodySym repr where
   type Body repr
@@ -115,19 +55,9 @@ class (BlockSym repr) => BodySym repr where
 
   addComments :: Label -> MS (repr (Body repr)) -> MS (repr (Body repr))
 
-class InternalBody repr where
-  bodyDoc :: repr (Body repr) -> Doc
-  docBody :: MS Doc -> MS (repr (Body repr))
-  multiBody :: [MS (repr (Body repr))] -> MS (repr (Body repr))
-
 class (StatementSym repr) => BlockSym repr where
   type Block repr
   block   :: [MS (repr (Statement repr))] -> MS (repr (Block repr))
-
-class InternalBlock repr where
-  blockDoc :: repr (Block repr) -> Doc
-  docBlock :: MS Doc -> MS (repr (Block repr))
-  multiBlock :: [MS (repr (Block repr))] -> MS (repr (Block repr))
 
 class (PermanenceSym repr) => TypeSym repr where
   type Type repr
@@ -155,9 +85,6 @@ class (PermanenceSym repr) => TypeSym repr where
   getTypeString :: repr (Type repr) -> String
   getTypeDoc :: repr (Type repr) -> Doc
 
-class InternalType repr where
-  typeFromData :: CodeType -> String -> Doc -> repr (Type repr)
-
 class (ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, MS (repr (Body repr)))] -> 
     Maybe (VS (repr (Value repr))) -> Maybe (VS (repr (Variable repr))) -> 
@@ -176,50 +103,6 @@ listSlice :: (InternalControlBlock repr) => VS (repr (Variable repr)) ->
   Maybe (VS (repr (Value repr))) -> Maybe (VS (repr (Value repr))) -> 
   MS (repr (Block repr))
 listSlice vnew vold b e s = listSlice' b e s vnew vold
-
-class UnaryOpSym repr where
-  type UnaryOp repr
-  notOp    :: VS (repr (UnaryOp repr))
-  negateOp :: VS (repr (UnaryOp repr))
-  sqrtOp   :: VS (repr (UnaryOp repr))
-  absOp    :: VS (repr (UnaryOp repr))
-  logOp    :: VS (repr (UnaryOp repr))
-  lnOp     :: VS (repr (UnaryOp repr))
-  expOp    :: VS (repr (UnaryOp repr))
-  sinOp    :: VS (repr (UnaryOp repr))
-  cosOp    :: VS (repr (UnaryOp repr))
-  tanOp    :: VS (repr (UnaryOp repr))
-  asinOp   :: VS (repr (UnaryOp repr))
-  acosOp   :: VS (repr (UnaryOp repr))
-  atanOp   :: VS (repr (UnaryOp repr))
-  floorOp  :: VS (repr (UnaryOp repr))
-  ceilOp   :: VS (repr (UnaryOp repr))
-
-class BinaryOpSym repr where
-  type BinaryOp repr
-  equalOp        :: VS (repr (BinaryOp repr))
-  notEqualOp     :: VS (repr (BinaryOp repr))
-  greaterOp      :: VS (repr (BinaryOp repr))
-  greaterEqualOp :: VS (repr (BinaryOp repr))
-  lessOp         :: VS (repr (BinaryOp repr))
-  lessEqualOp    :: VS (repr (BinaryOp repr))
-  plusOp         :: VS (repr (BinaryOp repr))
-  minusOp        :: VS (repr (BinaryOp repr))
-  multOp         :: VS (repr (BinaryOp repr))
-  divideOp       :: VS (repr (BinaryOp repr))
-  powerOp        :: VS (repr (BinaryOp repr))
-  moduloOp       :: VS (repr (BinaryOp repr))
-  andOp          :: VS (repr (BinaryOp repr))
-  orOp           :: VS (repr (BinaryOp repr))
-
-class InternalOp repr where
-  uOpDoc :: repr (UnaryOp repr) -> Doc
-  bOpDoc :: repr (BinaryOp repr) -> Doc
-  uOpPrec :: repr (UnaryOp repr) -> Int
-  bOpPrec :: repr (BinaryOp repr) -> Int
-
-  uOpFromData :: Int -> Doc -> VS (repr (UnaryOp repr))
-  bOpFromData :: Int -> Doc -> VS (repr (BinaryOp repr))
 
 class (TypeSym repr) => VariableSym repr where
   type Variable repr
@@ -249,12 +132,6 @@ class (TypeSym repr) => VariableSym repr where
   
   variableName :: repr (Variable repr) -> String
   variableType :: repr (Variable repr) -> repr (Type repr)
-
-class InternalVariable repr where
-  variableBind :: repr (Variable repr) -> Binding
-  variableDoc  :: repr (Variable repr) -> Doc
-  varFromData :: Binding -> String -> repr (Type repr) -> Doc -> 
-    repr (Variable repr)
 
 class (VariableSym repr) => ValueSym repr where
   type Value repr
@@ -415,32 +292,6 @@ class (BooleanExpression repr) => ValueExpression repr where
   exists  :: VS (repr (Value repr)) -> VS (repr (Value repr))
   notNull :: VS (repr (Value repr)) -> VS (repr (Value repr))
 
-class InternalValue repr where
-  inputFunc       :: VS (repr (Value repr))
-  printFunc       :: VS (repr (Value repr))
-  printLnFunc     :: VS (repr (Value repr))
-  printFileFunc   :: VS (repr (Value repr)) -> VS (repr (Value repr))
-  printFileLnFunc :: VS (repr (Value repr)) -> VS (repr (Value repr))
-
-  cast :: VS (repr (Type repr)) -> VS (repr (Value repr)) -> 
-    VS (repr (Value repr))
-
-  -- Very generic internal function for generating calls, to reduce repeated code throughout generators
-  -- Maybe library, function name, return type, maybe object doc, regular arguments, named arguments
-  call :: Maybe Library -> Label -> VS (repr (Type repr)) -> 
-    Maybe Doc -> [VS (repr (Value repr))] -> 
-    [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
-    VS (repr (Value repr))
-
-  valuePrec :: repr (Value repr) -> Maybe Int
-  valFromData :: Maybe Int -> repr (Type repr) -> Doc -> repr (Value repr)
-
--- The cyclic constraints issue arises here too. I've constrained this by ValueExpression,
--- but really one might want one of these values as part of an expression, so the
--- constraint would have to go both ways. I'm not sure what the solution is for
--- these sorts of problems, other than removing the constraints altogether, but 
--- then what is the purpose of splitting the typeclasses into smaller typeclasses?
--- I'm leaving it as is for now, even though I suspect this will change in the future.
 class (FunctionSym repr) => Selector repr where
   objAccess :: VS (repr (Value repr)) -> VS (repr (Function repr)) -> 
     VS (repr (Value repr))
@@ -506,43 +357,6 @@ class (Selector repr, InternalValueExp repr) => SelectorFunction repr where
     VS (repr (Value repr)) -> VS (repr (Value repr))
   at         :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
     VS (repr (Value repr))
-
-class InternalFunction repr where
-  getFunc        :: VS (repr (Variable repr)) -> VS (repr (Function repr))
-  setFunc        :: VS (repr (Type repr)) -> VS (repr (Variable repr)) -> 
-    VS (repr (Value repr)) -> VS (repr (Function repr))
-
-  listSizeFunc       :: VS (repr (Function repr))
-  listAddFunc        :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
-    VS (repr (Value repr)) -> VS (repr (Function repr))
-  listAppendFunc         :: VS (repr (Value repr)) -> VS (repr (Function repr))
-
-  iterBeginFunc :: VS (repr (Type repr)) -> VS (repr (Function repr))
-  iterEndFunc   :: VS (repr (Type repr)) -> VS (repr (Function repr))
-
-  listAccessFunc :: VS (repr (Type repr)) -> VS (repr (Value repr)) -> 
-    VS (repr (Function repr))
-  listSetFunc    :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
-    VS (repr (Value repr)) -> VS (repr (Function repr))
-
-  functionType :: repr (Function repr) -> repr (Type repr)
-  functionDoc :: repr (Function repr) -> Doc
-
-  funcFromData :: Doc -> VS (repr (Type repr)) -> VS (repr (Function repr))
-
-class InternalStatement repr where
-  -- newLn, maybe a file to print to, printFunc, value to print
-  printSt :: Bool -> Maybe (VS (repr (Value repr))) -> VS (repr (Value repr)) 
-    -> VS (repr (Value repr)) -> MS (repr (Statement repr))
-
-  state     :: MS (repr (Statement repr)) -> MS (repr (Statement repr))
-  loopState :: MS (repr (Statement repr)) -> MS (repr (Statement repr))
-
-  emptyState   :: MS (repr (Statement repr))
-  statementDoc :: repr (Statement repr) -> Doc
-  statementTerm :: repr (Statement repr) -> Terminator
-
-  stateFromData :: Doc -> Terminator -> repr (Statement repr)
 
 class (SelectorFunction repr) => StatementSym repr where
   type Statement repr
@@ -706,26 +520,11 @@ class ScopeSym repr where
   private :: repr (Scope repr)
   public  :: repr (Scope repr)
 
-class InternalScope repr where
-  scopeDoc :: repr (Scope repr) -> Doc
-  scopeFromData :: ScopeTag -> Doc -> repr (Scope repr)
-
-class (TypeSym repr) => MethodTypeSym repr where
-  type MethodType repr
-  mType    :: VS (repr (Type repr)) -> MS (repr (MethodType repr))
-  construct :: Label -> MS (repr (MethodType repr))
-
 class ParameterSym repr where
   type Parameter repr
   param :: VS (repr (Variable repr)) -> MS (repr (Parameter repr))
   -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
   pointerParam :: VS (repr (Variable repr)) -> MS (repr (Parameter repr))
-
-class InternalParam repr where
-  parameterName :: repr (Parameter repr) -> Label
-  parameterType :: repr (Parameter repr) -> repr (Type repr)
-  parameterDoc  :: repr (Parameter repr) -> Doc
-  paramFromData :: repr (Variable repr) -> Doc -> repr (Parameter repr)
 
 class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr, 
   InternalControlBlock repr) => MethodSym repr where
@@ -785,19 +584,6 @@ nonInitConstructor :: (MethodSym repr) => [MS (repr (Parameter repr))] ->
   MS (repr (Body repr)) -> MS (repr (Method repr))
 nonInitConstructor ps = constructor ps []
 
-class (MethodTypeSym repr, BlockCommentSym repr) => InternalMethod repr where
-  intMethod     :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
-    -> MS (repr (MethodType repr)) -> [MS (repr (Parameter repr))] -> 
-    MS (repr (Body repr)) -> MS (repr (Method repr))
-  intFunc       :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
-    -> MS (repr (MethodType repr)) -> [MS (repr (Parameter repr))] -> 
-    MS (repr (Body repr)) -> MS (repr (Method repr))
-  commentedFunc :: MS (repr (BlockComment repr)) -> MS (repr (Method repr)) -> 
-    MS (repr (Method repr))
-
-  methodDoc :: repr (Method repr) -> Doc
-  methodFromData :: ScopeTag -> Doc -> repr (Method repr)
-
 class (ScopeSym repr, StatementSym repr) => StateVarSym repr where
   type StateVar repr
   stateVar :: repr (Scope repr) -> repr (Permanence repr) ->
@@ -810,10 +596,6 @@ class (ScopeSym repr, StatementSym repr) => StateVarSym repr where
   privMVar :: VS (repr (Variable repr)) -> CS (repr (StateVar repr))
   pubMVar  :: VS (repr (Variable repr)) -> CS (repr (StateVar repr))
   pubGVar  :: VS (repr (Variable repr)) -> CS (repr (StateVar repr))
-
-class InternalStateVar repr where
-  stateVarDoc :: repr (StateVar repr) -> Doc
-  stateVarFromData :: CS Doc -> CS (repr (StateVar repr))
 
 class (MethodSym repr) => ClassSym repr where
   type Class repr
@@ -830,24 +612,11 @@ class (MethodSym repr) => ClassSym repr where
   commentedClass :: CS (repr (BlockComment repr)) -> 
     CS (repr (Class repr)) -> CS (repr (Class repr))
 
-class InternalClass repr where
-  intClass :: Label -> repr (Scope repr) -> repr (Keyword repr) ->
-    [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
-    CS (repr (Class repr))
-
-  classDoc :: repr (Class repr) -> Doc
-  classFromData :: CS Doc -> CS (repr (Class repr))
-
 class (ClassSym repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [Label] -> [MS (repr (Method repr))] -> 
     [CS (repr (Class repr))] -> FS (repr (Module repr))
 
-class InternalMod repr where
-  moduleDoc :: repr (Module repr) -> Doc
-  modFromData :: String -> FS Doc -> FS (repr (Module repr))
-  updateModuleDoc :: (Doc -> Doc) -> repr (Module repr) -> repr (Module repr)
-    
 class BlockCommentSym repr where
   type BlockComment repr
   blockComment :: [String] -> repr (BlockComment repr)

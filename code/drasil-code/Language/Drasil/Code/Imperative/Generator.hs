@@ -15,7 +15,7 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
   genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc, 
   genOutputFormat, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
-import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)

@@ -2,13 +2,13 @@
 
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
-import GOOL.Drasil.Symantics (ProgramSym(..), FileSym(..), PermanenceSym(..), 
-  BodySym(..), BlockSym(..), ControlBlockSym(..), InternalControlBlock(..), 
-  TypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), 
-  InternalValueExp(..), FunctionSym(..), SelectorFunction(..), StatementSym(..),
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+import GOOL.Drasil.ClassInterface (ProgramSym(..), FileSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  InternalControlBlock(..), TypeSym(..), VariableSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  Selector(..), InternalValueExp(..), FunctionSym(..), SelectorFunction(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   BlockCommentSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..))
@@ -393,11 +393,6 @@ instance ScopeSym CodeInfo where
   type Scope CodeInfo = ScopeTag
   private = toCode Priv
   public = toCode Pub
-
-instance MethodTypeSym CodeInfo where
-  type MethodType CodeInfo = ()
-  mType _ = noInfo
-  construct _ = noInfo
 
 instance ParameterSym CodeInfo where
   type Parameter CodeInfo = ()

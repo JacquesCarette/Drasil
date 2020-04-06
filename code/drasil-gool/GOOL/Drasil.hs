@@ -1,7 +1,6 @@
 -- | re-export smart constructors for external code writing
-module GOOL.Drasil (Label, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(runStrategy, solveODE), listSlice, TypeSym(..), 
+module GOOL.Drasil (Label, ProgramSym(..), FileSym(..), PermanenceSym(..), 
+  BodySym(..), BlockSym(..), ControlBlockSym(..), listSlice, TypeSym(..), 
   StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), objMethodCallMixedArgs, FunctionSym(..), SelectorFunction(..), 
@@ -16,7 +15,7 @@ module GOOL.Drasil (Label, ProgramSym(..), FileSym(..),
   unCI, unPC, unJC, unCSC, unCPPC
 ) where
 
-import GOOL.Drasil.Symantics (Label, ProgramSym(..), FileSym(..),
+import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
   listSlice, TypeSym(..), StatementSym(..), ControlStatementSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 

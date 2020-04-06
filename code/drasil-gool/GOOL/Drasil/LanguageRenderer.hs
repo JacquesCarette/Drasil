@@ -27,15 +27,16 @@ module GOOL.Drasil.LanguageRenderer (
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
-import GOOL.Drasil.Symantics (Label, Library, RenderSym, BodySym(..), 
-  InternalBody(..), PermanenceSym(..), InternalPerm(..), 
-  TypeSym(Type, getType, getTypeDoc), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), InternalValue(..),
-  FunctionSym(..), SelectorFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
-  BlockCommentSym(..))
-import qualified GOOL.Drasil.Symantics as S (TypeSym(int))
+import GOOL.Drasil.ClassInterface (Label, Library, BodySym(..),
+  PermanenceSym(..), TypeSym(Type, getType, getTypeDoc), VariableSym(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), FunctionSym(..), 
+  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), BlockCommentSym(..))
+import qualified GOOL.Drasil.ClassInterface as S (TypeSym(int))
+import GOOL.Drasil.RendererClasses (RenderSym, InternalBody(..), 
+  InternalPerm(..), InternalVariable(..), InternalValue(..), 
+  InternalStatement(..), InternalScope(..), InternalParam(..), 
+  InternalMethod(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateModDoc, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,

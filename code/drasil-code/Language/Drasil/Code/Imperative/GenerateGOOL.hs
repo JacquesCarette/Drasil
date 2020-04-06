@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
-import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..))
 import Language.Drasil.Mod (Name)
   

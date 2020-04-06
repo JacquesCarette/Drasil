@@ -11,21 +11,22 @@ module GOOL.Drasil.LanguageRenderer.CppRenderer (
 import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
-  InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
-  InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
-  InternalBlock(..), ControlBlockSym(..), InternalControlBlock(..), TypeSym(..),
-  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), 
+import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
+  ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), objMethodCall, FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  initializer, InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
-  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
-  BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
-  ODEMethod(..))
+  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
+  ParameterSym(..), MethodSym(..), initializer, StateVarSym(..), ClassSym(..), 
+  ModuleSym(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
+  odeOptions, ODEMethod(..))
+import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
+  ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  InternalVariable(..), InternalValue(..), InternalFunction(..), 
+  InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
+  InternalParam(..), InternalMethod(..), InternalStateVar(..), 
+  InternalClass(..), InternalMod(..))
 import GOOL.Drasil.LanguageRenderer (addExt, multiStateDocD, 
   bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, freeDocD, mkSt, 
   mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 

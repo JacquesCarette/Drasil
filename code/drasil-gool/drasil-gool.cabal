@@ -22,7 +22,8 @@ library
     , GOOL.Drasil.LanguageRenderer.CSharpRenderer
     , GOOL.Drasil.LanguageRenderer.CppRenderer
     , GOOL.Drasil.State
-    , GOOL.Drasil.Symantics
+    , GOOL.Drasil.ClassInterface
+    , GOOL.Drasil.RendererClasses
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -61,7 +62,8 @@ executable codegenTest
     , GOOL.Drasil.LanguageRenderer.CSharpRenderer
     , GOOL.Drasil.LanguageRenderer.CppRenderer
     , GOOL.Drasil.State
-    , GOOL.Drasil.Symantics
+    , GOOL.Drasil.ClassInterface
+    , GOOL.Drasil.RendererClasses
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

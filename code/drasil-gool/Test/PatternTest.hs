@@ -1,7 +1,7 @@
 module Test.PatternTest (patternTest) where
 
 import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), TypeSym(..), StatementSym(..), ControlStatementSym(..), 
+  ControlBlockSym(..), TypeSym(..), StatementSym(..), initState, changeState, initObserverList, addObserver, ControlStatementSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), FunctionSym(..), 
   MethodSym(..), ModuleSym(..), GS, MS, VS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)

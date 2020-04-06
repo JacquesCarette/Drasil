@@ -55,7 +55,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, 
   constDecDef, funcDecDef, discardInput, discardFileInput, closeFile, 
   stringListVals, stringListLists, returnState, multiReturnError, valState, 
-  comment, throw, initState, changeState, initObserverList, addObserver, 
+  comment, throw,
   ifCond, switch, for, forRange, while, tryCatch, notifyObservers, construct, 
   param, method, getMethod, setMethod, constructor, function, docFunc, 
   docInOutFunc, intFunc, buildClass, implementingClass, docClass, 
@@ -677,15 +677,6 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   free = pair1 free free . zoom lensMStoVS
 
   throw errMsg = on2StateValues pair (throw errMsg) (throw errMsg)
-
-  initState fsmName iState = on2StateValues pair 
-    (initState fsmName iState) (initState fsmName iState)
-  changeState fsmName postState = on2StateValues pair 
-    (changeState fsmName postState) (changeState fsmName postState)
-
-  initObserverList t vs = pair1Val1List initObserverList initObserverList 
-    (zoom lensMStoVS t) (map (zoom lensMStoVS) vs)
-  addObserver = pair1 addObserver addObserver . zoom lensMStoVS
 
   inOutCall n is os bs = pair3Lists (inOutCall n) (inOutCall n) 
     (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
@@ -1584,12 +1575,6 @@ instance StatementSym CppSrcCode where
 
   throw = G.throw cppThrowDoc Semi
 
-  initState = G.initState
-  changeState = G.changeState
-
-  initObserverList = G.initObserverList
-  addObserver = G.addObserver
-
   inOutCall = cppInOutCall funcApp
   selfInOutCall = cppInOutCall selfFuncApp
   extInOutCall m = cppInOutCall (extFuncApp m)
@@ -2212,12 +2197,6 @@ instance StatementSym CppHdrCode where
   free _ = emptyState
 
   throw _ = emptyState
-
-  initState _ _ = emptyState
-  changeState _ _ = emptyState
-
-  initObserverList _ _ = emptyState
-  addObserver _ = emptyState
 
   inOutCall _ _ _ _ = emptyState
   selfInOutCall _ _ _ _ = emptyState

@@ -14,7 +14,7 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), observerListName,
   ControlStatementSym(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
@@ -29,9 +29,8 @@ import GOOL.Drasil.LanguageRenderer (multiStateDocD,
   bodyDocD, outDoc, destructorError, multiAssignDoc, returnDocD, mkStNoEnd,
   breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, 
   listSetFuncDocD, castObjDocD, dynamicDocD, bindingError, classDec, dot, 
-  forLabel, inLabel, observerListName, commentedItem, addCommentsDocD, 
-  commentedModD, docFuncRepr, valueList, variableList, parameterList, 
-  surroundBody)
+  forLabel, inLabel, commentedItem, addCommentsDocD, commentedModD, 
+  docFuncRepr, valueList, variableList, parameterList, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   oneLiner, multiBody, block, multiBlock, int, listInnerType, obj, 
   funcType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', 
@@ -49,8 +48,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listSetFunc, state, loopState, emptyState, assign, assignToListIndex, 
   decrement, increment', increment1', decrement1, listDecDef', objDecNew, 
   objDecNewNoParams, closeFile, discardFileLine, stringListVals, 
-  stringListLists, returnState, valState, comment, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond,
+  stringListLists, returnState, valState, comment, throw, ifCond,
   ifExists, tryCatch, checkState, construct, param, method, getMethod, 
   setMethod, constructor, function, docFunc, stateVarDef, constVar, buildClass, 
   implementingClass, docClass, commentedClass, intClass, buildModule, 
@@ -567,12 +565,6 @@ instance StatementSym PythonCode where
   free v = v &= valueOf (var "None" void)
 
   throw = G.throw pyThrow Empty
-
-  initState = G.initState
-  changeState = G.changeState
-
-  initObserverList = G.initObserverList
-  addObserver = G.addObserver
 
   inOutCall = pyInOutCall funcApp
   selfInOutCall = pyInOutCall selfFuncApp

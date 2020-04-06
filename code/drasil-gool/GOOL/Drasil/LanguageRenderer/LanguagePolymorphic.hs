@@ -29,8 +29,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   constDecDef, funcDecDef, discardInput, discardFileInput, openFileR, 
   openFileW, openFileA, closeFile, discardFileLine, stringListVals, 
   stringListLists, returnState, multiReturnError, valState, comment, freeError, 
-  throw, initState, changeState, initObserverList, addObserver, ifCond, 
-  switch, ifExists, for, forRange, forEach, while, 
+  throw, ifCond, switch, ifExists, for, forRange, forEach, while, 
   tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
   setMethod, constructor, docMain, function, mainFunction, docFunc, 
   docInOutFunc, intFunc, stateVar, stateVarDef, constVar, buildClass, 
@@ -50,9 +49,9 @@ import GOOL.Drasil.ClassInterface (Label, Library,
   NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), 
   BooleanExpression(..), Selector(($.)), FunctionSym(Function), 
   SelectorFunction(at), 
-  StatementSym(Statement, (&=), (&+=), (&++), break, multi), ScopeSym(..),
+  StatementSym(Statement, (&=), (&+=), (&++), break, multi), observerListName, ScopeSym(..),
   ParameterSym(Parameter), MethodSym(Method), StateVarSym(StateVar), 
-  ClassSym(Class), ModuleSym(Module), BlockComment(..))
+  ClassSym(Class), ModuleSym(Module), BlockComment(..), convType)
 import qualified GOOL.Drasil.ClassInterface as S (
   BodySym(oneLiner), BlockSym(block), 
   TypeSym(bool, int, float, double, char, string, listType, arrayType, 
@@ -63,10 +62,10 @@ import qualified GOOL.Drasil.ClassInterface as S (
     extFuncAppMixedArgs, libFuncAppMixedArgs, newObj, newObjMixedArgs, 
     extNewObj, extNewObjMixedArgs, libNewObjMixedArgs, notNull, lambda), 
   Selector(objAccess), objMethodCall, 
-  objMethodCallNoParams, FunctionSym(func, listSize, listAdd, listAppend),
+  objMethodCallNoParams, FunctionSym(func, listSize, listAppend),
   SelectorFunction(listAccess, listSet),
-  StatementSym(assign, varDec, varDecDef, listDec, listDecDef, objDecNew, 
-    extObjDecNew, constDecDef, valState, returnState),
+  StatementSym(assign, varDec, varDecDef, listDec, objDecNew, extObjDecNew, 
+    constDecDef, valState, returnState),
   ControlStatementSym(ifCond, for, forRange, switch),
   ParameterSym(param), MethodSym(method, mainFunction),
   ClassSym(buildClass, commentedClass))
@@ -92,8 +91,8 @@ import qualified GOOL.Drasil.RendererClasses as S (InternalFile(fileFromData),
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
-  on2StateLists, on1StateValue1List, getInnerType, convType)
-import GOOL.Drasil.LanguageRenderer (dot, forLabel, new, observerListName, 
+  on2StateLists, on1StateValue1List, getInnerType)
+import GOOL.Drasil.LanguageRenderer (dot, forLabel, new, 
   addExt, moduleDocD, blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, 
   mkSt, mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, 
   extVarDocD, selfDocD, argDocD, classVarCheckStatic, objVarDocD, 
@@ -1001,24 +1000,6 @@ throw :: (RenderSym repr) => (repr (Value repr) -> Doc) -> Terminator ->
   Label -> MS (repr (Statement repr))
 throw f t = onStateValue (\msg -> stateFromData (f msg) t) . zoom lensMStoVS . 
   S.litString
-
-initState :: (RenderSym repr) => Label -> Label -> MS (repr (Statement repr))
-initState fsmName initialState = S.varDecDef (S.var fsmName S.string) 
-  (S.litString initialState)
-
-changeState :: (RenderSym repr) => Label -> Label -> MS (repr (Statement repr))
-changeState fsmName tState = S.var fsmName S.string &= S.litString tState
-
-initObserverList :: (RenderSym repr) => VS (repr (Type repr)) -> 
-  [VS (repr (Value repr))] -> MS (repr (Statement repr))
-initObserverList t = S.listDecDef (S.var observerListName (S.listType t))
-
-addObserver :: (RenderSym repr) => VS (repr (Value repr)) -> 
-  MS (repr (Statement repr))
-addObserver o = S.valState $ S.listAdd obsList lastelem o
-  where obsList = S.valueOf $ observerListName `S.listOf` onStateValue 
-          valueType o
-        lastelem = S.listSize obsList
 
 -- ControlStatements --
 

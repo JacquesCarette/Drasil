@@ -340,12 +340,6 @@ instance StatementSym CodeInfo where
 
   throw _ = modifyReturn (addException genericExc) (toCode ())
 
-  initState _ _ = noInfo
-  changeState _ _ = noInfo
-
-  initObserverList _ = zoom lensMStoVS . executeList
-  addObserver = zoom lensMStoVS . execute1
-
   inOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n

@@ -55,8 +55,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, 
   constDecDef, discardInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond, switch, 
+  multiReturnError, valState, comment, freeError, throw, ifCond, switch, 
   ifExists, for, forRange, forEach, while, tryCatch, checkState, 
   notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
   docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
@@ -563,12 +562,6 @@ instance StatementSym CSharpCode where
   free _ = error $ G.freeError csName -- could set variable to null? Might be misleading.
 
   throw msg = modify (addLangImport "System") >> G.throw csThrowDoc Semi msg
-
-  initState = G.initState
-  changeState = G.changeState
-
-  initObserverList = G.initObserverList
-  addObserver = G.addObserver
 
   inOutCall = csInOutCall funcApp
   selfInOutCall = csInOutCall selfFuncApp

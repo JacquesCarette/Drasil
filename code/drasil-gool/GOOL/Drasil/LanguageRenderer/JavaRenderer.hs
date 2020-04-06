@@ -57,8 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   extObjDecNew, extObjDecNewNoParams, funcDecDef, discardInput, 
   discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond, switch, 
+  multiReturnError, valState, comment, freeError, throw, ifCond, switch, 
   ifExists, for, forRange, forEach, while, tryCatch, checkState, 
   notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
   docMain, function, mainFunction, docFunc, intFunc, stateVar, stateVarDef, 
@@ -597,12 +596,6 @@ instance StatementSym JavaCode where
   free _ = error $ G.freeError jName -- could set variable to null? Might be misleading.
 
   throw = G.throw jThrowDoc Semi
-
-  initState = G.initState
-  changeState = G.changeState
-
-  initObserverList = G.initObserverList
-  addObserver = G.addObserver
 
   inOutCall = jInOutCall funcApp
   selfInOutCall = jInOutCall selfFuncApp

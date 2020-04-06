@@ -10,14 +10,16 @@ module GOOL.Drasil.ClassInterface (
   BooleanExpression(..), ValueExpression(..), Selector(..), 
   InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
-  StatementSym(..), ControlStatementSym(..), ifNoElse, switchAsIf, ScopeSym(..),
+  StatementSym(..), initState, changeState, observerListName, initObserverList, 
+  addObserver, ControlStatementSym(..), ifNoElse, switchAsIf, ScopeSym(..),
   ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer, 
   nonInitConstructor, StateVarSym(..), privMVar, pubMVar, pubGVar, ClassSym(..),
   ModuleSym(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
-  odeOptions, ODEMethod(..)
+  odeOptions, ODEMethod(..), convType
 ) where
 
-import GOOL.Drasil.CodeType (CodeType, ClassName)
+import GOOL.Drasil.CodeType (CodeType(..), ClassName)
+import GOOL.Drasil.Helpers (onStateValue)
 import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
 import Control.Monad.State (State)
@@ -461,13 +463,6 @@ class (SelectorFunction repr) => StatementSym repr where
 
   throw :: Label -> MS (repr (Statement repr))
 
-  initState   :: Label -> Label -> MS (repr (Statement repr))
-  changeState :: Label -> Label -> MS (repr (Statement repr))
-
-  initObserverList :: VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
-    MS (repr (Statement repr))
-  addObserver      :: VS (repr (Value repr)) -> MS (repr (Statement repr))
-
   -- The three lists are inputs, outputs, and both, respectively
   inOutCall :: Label -> [VS (repr (Value repr))] -> [VS (repr (Variable repr))] 
     -> [VS (repr (Variable repr))] -> MS (repr (Statement repr))
@@ -479,6 +474,28 @@ class (SelectorFunction repr) => StatementSym repr where
     MS (repr (Statement repr))
 
   multi     :: [MS (repr (Statement repr))] -> MS (repr (Statement repr))
+
+initState :: (StatementSym repr) => Label -> Label -> MS (repr (Statement repr))
+initState fsmName initialState = varDecDef (var fsmName string) 
+  (litString initialState)
+
+changeState :: (StatementSym repr) => Label -> Label -> 
+  MS (repr (Statement repr))
+changeState fsmName toState = var fsmName string &= litString toState
+
+observerListName :: Label
+observerListName = "observerList"
+
+initObserverList :: (StatementSym repr) => VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> MS (repr (Statement repr))
+initObserverList t = listDecDef (var observerListName (listType t))
+
+addObserver :: (StatementSym repr) => VS (repr (Value repr)) -> 
+  MS (repr (Statement repr))
+addObserver o = valState $ listAdd obsList lastelem o
+  where obsList = valueOf $ observerListName `listOf` onStateValue 
+          valueType o
+        lastelem = listSize obsList
 
 class (BodySym repr) => ControlStatementSym repr where
   ifCond     :: [(VS (repr (Value repr)), MS (repr (Body repr)))] -> 
@@ -676,3 +693,21 @@ odeOptions :: ODEMethod -> VS (repr (Value repr)) -> VS (repr (Value repr)) ->
 odeOptions = ODEOptions
 
 data ODEMethod = RK45 | BDF | Adams
+
+-- Utility
+
+convType :: (TypeSym repr) => CodeType -> VS (repr (Type repr))
+convType Boolean = bool
+convType Integer = int
+convType Float = float
+convType Double = double
+convType Char = char
+convType String = string
+convType (List t) = listType (convType t)
+convType (Array t) = arrayType (convType t)
+convType (Iterator t) = iterator $ convType t
+convType (Object n) = obj n
+-- convType (Enum n) = enumType n
+convType (Func ps r) = funcType (map convType ps) (convType r)
+convType Void = void
+convType File = error "convType: File ?"

@@ -4,7 +4,7 @@
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, doubleSlash, elseIfLabel, forLabel, inLabel, new, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, addExt,
+  blockCmtStart, blockCmtEnd, docCmtStart, addExt,
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, 
@@ -65,9 +65,6 @@ new = text "new"
 blockCmtStart = text "/*"
 blockCmtEnd = text "*/"
 docCmtStart = text "/**"
-
-observerListName :: Label
-observerListName = "observerList"
 
 addExt :: String -> String -> String
 addExt ext nm = nm ++ "." ++ ext

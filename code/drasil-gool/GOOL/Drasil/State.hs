@@ -476,10 +476,10 @@ updateMEMWithCalls s = over methodExceptionMap (\mem -> mapWithKey
 
 addParameter :: String -> MethodState -> MethodState
 addParameter p = over currParameters (\ps -> if p `elem` ps then 
-  error $ "Function has duplicate parameter: " ++ p else ps ++ [p])
+  error $ "Function has duplicate parameter: " ++ p else p : ps)
 
 getParameters :: MS [String]
-getParameters = gets (^. currParameters)
+getParameters = reverse <$> gets (^. currParameters)
 
 setODEDepVars :: [String] -> ValueState -> ValueState
 setODEDepVars = set currODEDepVars
@@ -500,10 +500,10 @@ isOutputsDeclared :: MS Bool
 isOutputsDeclared = gets (^. outputsDeclared)
 
 addException :: Exception -> MethodState -> MethodState
-addException e = over exceptions (\es -> if e `elem` es then es else es ++ [e])
+addException e = over exceptions (\es -> if e `elem` es then es else e : es)
 
 addExceptions :: [Exception] -> ValueState -> ValueState
-addExceptions es = over (methodState . exceptions) (\exs -> nub $ exs ++ es)
+addExceptions es = over (methodState . exceptions) (\exs -> nub $ es ++ exs)
 
 getExceptions :: MS [Exception]
 getExceptions = gets (^. exceptions)

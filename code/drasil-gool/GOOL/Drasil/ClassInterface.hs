@@ -11,9 +11,10 @@ module GOOL.Drasil.ClassInterface (
   InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), initializer, nonInitConstructor, StateVarSym(..), privMVar, 
-  pubMVar, pubGVar, ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
-  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..)
+  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
+  StateVarSym(..), privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
+  ODEMethod(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType, ClassName)
@@ -534,10 +535,6 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr,
     MS (repr (Body repr)) -> MS (repr (Method repr))
   getMethod   :: VS (repr (Variable repr)) -> MS (repr (Method repr))
   setMethod   :: VS (repr (Variable repr)) -> MS (repr (Method repr)) 
-  privMethod  :: Label -> VS (repr (Type repr)) -> [MS (repr (Parameter repr))] 
-    -> MS (repr (Body repr)) -> MS (repr (Method repr))
-  pubMethod   :: Label -> VS (repr (Type repr)) -> [MS (repr (Parameter repr))] 
-    -> MS (repr (Body repr)) -> MS (repr (Method repr))
   constructor :: [MS (repr (Parameter repr))] -> 
     [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
     MS (repr (Body repr)) -> MS (repr (Method repr))
@@ -575,6 +572,16 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr,
     VS (repr (Variable repr)))] -> [(String, VS (repr (Variable repr)))] -> 
     MS (repr (Body repr)) -> MS (repr (Method repr))
 
+privMethod :: (MethodSym repr) => Label -> VS (repr (Type repr)) -> 
+  [MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
+  MS (repr (Method repr))
+privMethod n = method n private dynamic
+
+pubMethod :: (MethodSym repr) => Label -> VS (repr (Type repr)) -> 
+  [MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
+  MS (repr (Method repr))
+pubMethod n = method n public dynamic
+
 initializer :: (MethodSym repr) => [MS (repr (Parameter repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   MS (repr (Method repr))
@@ -598,11 +605,11 @@ privMVar :: (StateVarSym repr) => VS (repr (Variable repr)) ->
   CS (repr (StateVar repr))
 privMVar = stateVar private dynamic
 
-pubMVar  :: (StateVarSym repr) => VS (repr (Variable repr)) -> 
+pubMVar :: (StateVarSym repr) => VS (repr (Variable repr)) -> 
   CS (repr (StateVar repr))
 pubMVar = stateVar public dynamic
 
-pubGVar  :: (StateVarSym repr) => VS (repr (Variable repr)) -> 
+pubGVar :: (StateVarSym repr) => VS (repr (Variable repr)) -> 
   CS (repr (StateVar repr))
 pubGVar = stateVar public static
 

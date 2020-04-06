@@ -17,9 +17,9 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), objMethodCall, FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
-  ParameterSym(..), MethodSym(..), initializer, StateVarSym(..), privMVar, 
-  pubMVar, ClassSym(..), ModuleSym(..), BlockCommentSym(..), ODEInfo(..), 
-  odeInfo, ODEOptions(..), odeOptions, ODEMethod(..))
+  ParameterSym(..), MethodSym(..), pubMethod, initializer, StateVarSym(..), 
+  privMVar, pubMVar, ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
+  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
@@ -57,10 +57,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   stringListVals, stringListLists, returnState, multiReturnError, valState, 
   comment, throw, initState, changeState, initObserverList, addObserver, 
   ifCond, ifNoElse, switch, switchAsIf, for, forRange, while, tryCatch, 
-  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
-  pubMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
-  buildClass, implementingClass, docClass, commentedClass, 
-  buildModule, modFromData, fileDoc, docMod, fileFromData)
+  notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
+  function, docFunc, docInOutFunc, intFunc, buildClass, implementingClass, 
+  docClass, commentedClass, buildModule, modFromData, fileDoc, docMod, 
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), 
@@ -771,10 +771,6 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     (zoom lensMStoVS t)
   getMethod = pair1 getMethod getMethod . zoom lensMStoVS
   setMethod = pair1 setMethod setMethod . zoom lensMStoVS
-  privMethod n t = pairValListVal (privMethod n) (privMethod n) 
-    (zoom lensMStoVS t)
-  pubMethod n t = pairValListVal (pubMethod n) (pubMethod n) 
-    (zoom lensMStoVS t)
   constructor ps is = pair3Lists1Val 
     (\pms ivars ivals -> constructor pms (zip ivars ivals))
     (\pms ivars ivals -> constructor pms (zip ivars ivals)) 
@@ -1667,8 +1663,6 @@ instance MethodSym CppSrcCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  privMethod = G.privMethod
-  pubMethod = G.pubMethod
   constructor = cppConstructor blockStart blockEnd
   destructor vs = 
     let i = var "i" int
@@ -2296,8 +2290,6 @@ instance MethodSym CppHdrCode where
     v') public dynamic (toState $ variableType v') [] (toState $ toCode empty))
   setMethod v = zoom lensMStoVS v >>= (\v' -> method (setterName $ variableName 
     v') public dynamic void [param v] (toState $ toCode empty))
-  privMethod = G.privMethod
-  pubMethod = G.pubMethod
   constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
   destructor vars = on1StateValue1List (\m vs -> toCode $ mthd Pub 
     (emptyIfEmpty (vcat (map (statementDoc . onCodeValue destructSts) vs)) 

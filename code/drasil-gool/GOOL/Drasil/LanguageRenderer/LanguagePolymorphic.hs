@@ -32,11 +32,10 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   throw, initState, changeState, initObserverList, addObserver, ifCond, 
   ifNoElse, switch, switchAsIf, ifExists, for, forRange, forEach, while, 
   tryCatch, checkState, notifyObservers, construct, param, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, docMain, function, 
-  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, 
-  constVar, buildClass, extraClass, 
-  implementingClass, docClass, commentedClass, intClass, buildModule, 
-  buildModule', modFromData, fileDoc, docMod
+  setMethod, constructor, docMain, function, mainFunction, docFunc, 
+  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, buildClass, 
+  extraClass, implementingClass, docClass, commentedClass, intClass, 
+  buildModule, buildModule', modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -1146,16 +1145,6 @@ setMethod :: (RenderSym repr) => VS (repr (Variable repr)) ->
 setMethod v = zoom lensMStoVS v >>= (\vr -> S.method (setterName $ variableName 
   vr) public dynamic S.void [S.param v] setBody)
   where setBody = S.oneLiner $ S.objVarSelf v &= S.valueOf v
-
-privMethod :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
-  [MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
-  MS (repr (Method repr))
-privMethod n = S.method n private dynamic
-
-pubMethod :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
-  [MS (repr (Parameter repr))] -> MS (repr (Body repr)) -> 
-  MS (repr (Method repr))
-pubMethod n = S.method n public dynamic
 
 constructor :: (RenderSym repr) => Label -> [MS (repr (Parameter repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 

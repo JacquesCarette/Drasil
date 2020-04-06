@@ -58,10 +58,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiReturnError, valState, comment, freeError, throw, initState, 
   changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
   switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
-  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, buildClass, implementingClass, docClass, commentedClass, 
-  intClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
+  notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
+  docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
+  stateVarDef, constVar, buildClass, implementingClass, docClass, 
+  commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
   typeBinExpr)
@@ -626,8 +627,6 @@ instance MethodSym CSharpCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  privMethod = G.privMethod
-  pubMethod = G.pubMethod
   constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
   destructor _ = error $ destructorError csName
 

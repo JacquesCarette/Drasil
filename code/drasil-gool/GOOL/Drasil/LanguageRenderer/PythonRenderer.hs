@@ -52,8 +52,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   stringListLists, returnState, valState, comment, throw, initState, 
   changeState, initObserverList, addObserver, ifCond, ifNoElse, switchAsIf, 
   ifExists, tryCatch, checkState, construct, param, method, getMethod, 
-  setMethod, privMethod, pubMethod, constructor, function, docFunc, 
-  stateVarDef, constVar, buildClass, 
+  setMethod, constructor, function, docFunc, stateVarDef, constVar, buildClass, 
   implementingClass, docClass, commentedClass, intClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
@@ -644,8 +643,6 @@ instance MethodSym PythonCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  privMethod = G.privMethod
-  pubMethod = G.pubMethod
   constructor = G.constructor initName
   destructor _ = error $ destructorError pyName
 

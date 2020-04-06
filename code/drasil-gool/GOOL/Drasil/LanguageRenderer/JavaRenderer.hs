@@ -17,8 +17,9 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   Selector(..), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), 
+  ModuleSym(..), BlockCommentSym(..), ODEInfo(..), ODEOptions(..), 
+  ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
@@ -59,11 +60,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiReturnError, valState, comment, freeError, throw, initState, 
   changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
   switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
-  pubMethod, constructor, docMain, function, mainFunction, docFunc, intFunc, 
-  stateVar, stateVarDef, constVar, buildClass, 
-  extraClass, implementingClass, docClass, commentedClass, intClass, 
-  buildModule', modFromData, fileDoc, docMod, fileFromData)
+  notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
+  docMain, function, mainFunction, docFunc, intFunc, stateVar, stateVarDef, 
+  constVar, buildClass, extraClass, implementingClass, docClass, 
+  commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
   typeBinExpr)
@@ -660,8 +661,6 @@ instance MethodSym JavaCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  privMethod = G.privMethod
-  pubMethod = G.pubMethod
   constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
   destructor _ = error $ destructorError jName
 

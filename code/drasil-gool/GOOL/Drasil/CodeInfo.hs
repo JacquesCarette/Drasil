@@ -404,8 +404,6 @@ instance MethodSym CodeInfo where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
-  privMethod n _ _ = updateMEMandCM n
-  pubMethod n _ _ = updateMEMandCM n
   constructor _ il b = do
     mapM_ (zoom lensMStoVS . snd) il
     _ <- b

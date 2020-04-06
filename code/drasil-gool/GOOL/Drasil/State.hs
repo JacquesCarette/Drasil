@@ -30,6 +30,7 @@ import GOOL.Drasil.CodeType (ClassName)
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Monad.State (State, modify, gets)
 import Data.List (sort, nub)
+import Data.List.Ordered (nubSort)
 import Data.Maybe (isNothing)
 import Data.Map (Map, fromList, insert, union, findWithDefault, mapWithKey)
 import qualified Data.Map as Map (empty, map)
@@ -145,18 +146,15 @@ lensMStoFS = classState . fileState
 
 -- CS - MS --
 
-lensCStoMS :: Lens' ClassState 
-  MethodState
+lensCStoMS :: Lens' ClassState MethodState
 lensCStoMS = lens (\cs -> initialMS {_classState = cs}) (const (^. classState))
 
-lensMStoCS :: Lens' MethodState
-  ClassState
+lensMStoCS :: Lens' MethodState ClassState
 lensMStoCS = classState
 
 -- FS - VS --
 
-lensFStoVS :: Lens' FileState
-  ValueState
+lensFStoVS :: Lens' FileState ValueState
 lensFStoVS = lens 
   (\fs -> initialVS {_methodState = initialMS {_classState = initialCS {
     _fileState = fs}}}) 
@@ -167,16 +165,14 @@ lensVStoFS = methodState . lensMStoFS
 
 -- CS - VS --
 
-lensCStoVS :: Lens' ClassState
-  ValueState
+lensCStoVS :: Lens' ClassState ValueState
 lensCStoVS = lens 
   (\cs -> initialVS {_methodState = initialMS {_classState = cs}}) 
   (const (^. (methodState . classState)))
 
 -- MS - VS --
 
-lensMStoVS :: Lens' MethodState
-  ValueState
+lensMStoVS :: Lens' MethodState ValueState
 lensMStoVS = lens (\ms -> initialVS {_methodState = ms}) 
   (const (^. methodState))
 
@@ -281,11 +277,8 @@ modifyReturnList l sf vf = do
 ------- State Modifiers -------
 -------------------------------
 
-addODEFilePaths :: GOOLState -> 
-  MethodState -> 
-  MethodState
-addODEFilePaths s = over (lensMStoFS . goolState . headers) 
-  (s ^. headers ++)
+addODEFilePaths :: GOOLState -> MethodState -> MethodState
+addODEFilePaths s = over (lensMStoFS . goolState . headers) (s ^. headers ++)
   . over (lensMStoFS . goolState . sources) (s ^. sources ++)
 
 addFile :: FileType -> FilePath -> GOOLState -> GOOLState
@@ -313,130 +306,102 @@ setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
   "Multiple modules with main methods encountered")
 
-addODEFiles :: [FileData] -> MethodState
-  -> MethodState
+addODEFiles :: [FileData] -> MethodState -> MethodState
 addODEFiles f = over (lensMStoFS . goolState . odeFiles) (f++)
 
 getODEFiles :: GS [FileData]
 getODEFiles = gets (^. odeFiles)
 
-addLangImport :: String -> MethodState 
-  -> MethodState
+addLangImport :: String -> MethodState -> MethodState
 addLangImport i = over (lensMStoFS . langImports) (\is -> 
   if i `elem` is then is else sort $ i:is)
   
-addLangImportVS :: String -> 
-  ValueState 
-  -> ValueState
+addLangImportVS :: String -> ValueState -> ValueState
 addLangImportVS i = over methodState (addLangImport i)
 
-addExceptionImports :: [Exception] -> 
-  MethodState -> 
-  MethodState
-addExceptionImports es = over (lensMStoFS . langImports) (\is -> sort $ nub $ 
-  is ++ imps)
+addExceptionImports :: [Exception] -> MethodState -> MethodState
+addExceptionImports es = over (lensMStoFS . langImports) 
+  (\is -> nubSort $ is ++ imps)
   where imps = map printExc $ filter hasLoc es
 
 getLangImports :: FS [String]
 getLangImports = gets (^. langImports)
 
-addLibImport :: String -> MethodState
-  -> MethodState
+addLibImport :: String -> MethodState -> MethodState
 addLibImport i = over (lensMStoFS . libImports) (\is -> 
   if i `elem` is then is else sort $ i:is)
 
-addLibImportVS :: String -> 
-  ValueState -> 
-  ValueState
+addLibImportVS :: String -> ValueState -> ValueState
 addLibImportVS i = over (lensVStoFS . libImports) 
   (\is -> if i `elem` is then is else sort $ i:is)
 
-addLibImports :: [String] -> MethodState
-  -> MethodState
+addLibImports :: [String] -> MethodState -> MethodState
 addLibImports is s = foldl (flip addLibImport) s is
 
 getLibImports :: FS [String]
 getLibImports = gets (^. libImports)
 
-addModuleImport :: String -> MethodState
-  -> MethodState
+addModuleImport :: String -> MethodState -> MethodState
 addModuleImport i = over (lensMStoFS . moduleImports) (\is -> 
   if i `elem` is then is else sort $ i:is)
 
-addModuleImportVS :: String -> 
-  ValueState
-  -> ValueState
+addModuleImportVS :: String -> ValueState -> ValueState
 addModuleImportVS i = over methodState (addModuleImport i)
 
 getModuleImports :: FS [String]
 getModuleImports = gets (^. moduleImports)
 
-addHeaderLangImport :: String -> 
-  ValueState -> 
-  ValueState
+addHeaderLangImport :: String -> ValueState -> ValueState
 addHeaderLangImport i = over (lensVStoFS . headerLangImports) 
   (\is -> if i `elem` is then is else sort $ i:is)
 
 getHeaderLangImports :: FS [String]
 getHeaderLangImports = gets (^. headerLangImports)
 
-addHeaderLibImport :: String -> 
-  MethodState -> 
-  MethodState
+addHeaderLibImport :: String -> MethodState -> MethodState
 addHeaderLibImport i = over (lensMStoFS . headerLibImports)
   (\is -> if i `elem` is then is else sort $ i:is)
 
 getHeaderLibImports :: FS [String]
 getHeaderLibImports = gets (^. headerLibImports)
 
-addHeaderModImport :: String -> 
-  ValueState -> 
-  ValueState
+addHeaderModImport :: String -> ValueState -> ValueState
 addHeaderModImport i = over (lensVStoFS . headerModImports) 
   (\is -> if i `elem` is then is else sort $ i:is)
 
 getHeaderModImports :: FS [String]
 getHeaderModImports = gets (^. headerModImports)
 
-addDefine :: String -> 
-  ValueState -> 
-  ValueState
-addDefine d = over (lensVStoFS . defines) (\ds -> if d `elem` ds 
-  then ds else sort $ d:ds)
+addDefine :: String -> ValueState -> ValueState
+addDefine d = over (lensVStoFS . defines) (\ds -> if d `elem` ds then ds else 
+  sort $ d:ds)
 
 getDefines :: FS [String]
 getDefines = gets (^. defines)
   
-addHeaderDefine :: String -> 
-  ValueState ->
-  ValueState
+addHeaderDefine :: String -> ValueState -> ValueState
 addHeaderDefine d = over (lensVStoFS . headerDefines) (\ds -> 
   if d `elem` ds then ds else sort $ d:ds)
 
 getHeaderDefines :: FS [String]
 getHeaderDefines = gets (^. headerDefines)
 
-addUsing :: String -> 
-  ValueState -> 
-  ValueState
-addUsing u = over (lensVStoFS . using) (\us -> if u `elem` us 
-  then us else sort $ u:us)
+addUsing :: String -> ValueState -> ValueState
+addUsing u = over (lensVStoFS . using) (\us -> if u `elem` us then us else 
+  sort $ u:us)
 
 getUsing :: FS [String]
 getUsing = gets (^. using)
 
-addHeaderUsing :: String -> 
-  ValueState -> 
-  ValueState
+addHeaderUsing :: String -> ValueState -> ValueState
 addHeaderUsing u = over (lensVStoFS . headerUsing) (\us -> 
   if u `elem` us then us else sort $ u:us)
 
 getHeaderUsing :: FS [String]
 getHeaderUsing = gets (^. headerUsing)
 
-setMainDoc :: Doc -> MethodState -> 
-  MethodState
-setMainDoc d = over (lensMStoFS) $ set mainDoc d
+setMainDoc :: Doc -> MethodState -> MethodState
+setMainDoc d = over lensMStoFS $ set mainDoc d
 
 getMainDoc :: FS Doc
 getMainDoc = gets (^. mainDoc)
@@ -450,15 +415,13 @@ setModuleName = set currModName
 getModuleName :: FS String
 getModuleName = gets (^. currModName)
 
-setClassName :: String -> ClassState -> 
-  ClassState
+setClassName :: String -> ClassState -> ClassState
 setClassName = set currClassName
 
 getClassName :: MS ClassName
 getClassName = gets (^. (classState . currClassName))
 
-setCurrMain :: MethodState -> 
-  MethodState
+setCurrMain :: MethodState -> MethodState
 setCurrMain = over (lensMStoFS . currMain) (\b -> if b then 
   error "Multiple main functions defined" else not b)
 
@@ -479,19 +442,15 @@ updateClassMap n fs = over (goolState . classMap) (union (fromList $
 getClassMap :: VS (Map String String)
 getClassMap = gets (^. (lensVStoFS . goolState . classMap))
 
-updateMethodExcMap :: String ->
-  MethodState 
-  -> MethodState
-updateMethodExcMap n ms = over (lensMStoFS . goolState . 
-  methodExceptionMap) (insert (mn ++ "." ++ n) (ms ^. exceptions)) ms
+updateMethodExcMap :: String -> MethodState -> MethodState
+updateMethodExcMap n ms = over (lensMStoFS . goolState . methodExceptionMap) 
+  (insert (mn ++ "." ++ n) (ms ^. exceptions)) ms
   where mn = ms ^. (lensMStoFS . currModName)
 
 getMethodExcMap :: VS (Map String [Exception])
-getMethodExcMap = gets (^. (lensVStoFS . goolState . 
-  methodExceptionMap))
+getMethodExcMap = gets (^. (lensVStoFS . goolState . methodExceptionMap))
 
-updateCallMap :: String -> MethodState 
-  -> MethodState
+updateCallMap :: String -> MethodState -> MethodState
 updateCallMap n ms = over (lensMStoFS . goolState . callMap) 
   (insert (mn ++ "." ++ n) (ms ^. calls)) ms
   where mn = ms ^. (lensMStoFS . currModName)
@@ -512,64 +471,50 @@ updateMEMWithCalls s = over methodExceptionMap (\mem -> mapWithKey
         addCallExcs mem cm f es = nub $ es ++ concatMap (\fn -> findWithDefault 
           [] fn mem) (findWithDefault [] f cm)
 
-addParameter :: String -> MethodState 
-  -> MethodState
+addParameter :: String -> MethodState -> MethodState
 addParameter p = over currParameters (\ps -> if p `elem` ps then 
   error $ "Function has duplicate parameter: " ++ p else ps ++ [p])
 
 getParameters :: MS [String]
 getParameters = gets (^. currParameters)
 
-setODEDepVars :: [String] -> 
-  ValueState -> 
-  ValueState
+setODEDepVars :: [String] -> ValueState -> ValueState
 setODEDepVars = set currODEDepVars
 
 getODEDepVars :: VS [String]
 getODEDepVars = gets (^. currODEDepVars)
 
-setODEOthVars :: [String] -> 
-  ValueState -> 
-  ValueState
+setODEOthVars :: [String] -> ValueState -> ValueState
 setODEOthVars = set currODEOthVars
 
 getODEOthVars :: VS [String]
 getODEOthVars = gets (^. currODEOthVars)
 
-setOutputsDeclared :: MethodState -> 
-  MethodState
+setOutputsDeclared :: MethodState -> MethodState
 setOutputsDeclared = set outputsDeclared True
 
 isOutputsDeclared :: MS Bool
 isOutputsDeclared = gets (^. outputsDeclared)
 
-addException :: Exception -> MethodState
-  -> MethodState
-addException e = over exceptions (\es -> if e `elem` es then es else 
-  es ++ [e])
+addException :: Exception -> MethodState -> MethodState
+addException e = over exceptions (\es -> if e `elem` es then es else es ++ [e])
 
-addExceptions :: [Exception] -> 
-  ValueState -> 
-  ValueState
+addExceptions :: [Exception] -> ValueState -> ValueState
 addExceptions es = over (methodState . exceptions) (\exs -> nub $ exs ++ es)
 
 getExceptions :: MS [Exception]
 getExceptions = gets (^. exceptions)
 
-addCall :: String -> 
-  ValueState -> 
-  ValueState
+addCall :: String -> ValueState -> ValueState
 addCall f = over (methodState . calls) (f:)
 
-setScope :: ScopeTag -> MethodState -> 
-  MethodState
+setScope :: ScopeTag -> MethodState -> MethodState
 setScope = set currScope
 
 getScope :: MS ScopeTag
 getScope = gets (^. currScope)
 
-setCurrMainFunc :: Bool -> MethodState 
-  -> MethodState
+setCurrMainFunc :: Bool -> MethodState -> MethodState
 setCurrMainFunc = set currMainFunc
 
 getCurrMainFunc :: MS Bool

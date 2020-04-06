@@ -290,12 +290,12 @@ addFile Source = addSource
 addFile Header = addHeader
 
 addHeader :: FilePath -> GOOLState -> GOOLState
-addHeader fp = over headers (\h -> if fp `elem` h then 
-  error $ "Multiple files with same name encountered: " ++ fp else fp : h)
+addHeader fp = over headers (\h -> ifElemError fp h $
+  "Multiple files with same name encountered: " ++ fp)
 
 addSource :: FilePath -> GOOLState -> GOOLState
-addSource fp = over sources (\s -> if fp `elem` s then 
-  error $ "Multiple files with same name encountered: " ++ fp else fp : s)
+addSource fp = over sources (\s -> ifElemError fp s $
+  "Multiple files with same name encountered: " ++ fp)
 
 addCombinedHeaderSource :: FilePath -> GOOLState -> GOOLState
 addCombinedHeaderSource fp = addSource fp . addHeader fp 
@@ -432,8 +432,8 @@ getCurrMain :: FS Bool
 getCurrMain = gets (^. currMain)
 
 addClass :: String -> ClassState -> ClassState
-addClass c = over (fileState . currClasses) (\cs -> if c `elem` cs then 
-  error "Multiple classes with same name in same file" else c:cs)
+addClass c = over (fileState . currClasses) (\cs -> ifElemError c cs 
+  "Multiple classes with same name in same file")
 
 getClasses :: FS [String]
 getClasses = gets (^. currClasses)
@@ -475,8 +475,8 @@ updateMEMWithCalls s = over methodExceptionMap (\mem -> mapWithKey
           [] fn mem) (findWithDefault [] f cm)
 
 addParameter :: String -> MethodState -> MethodState
-addParameter p = over currParameters (\ps -> if p `elem` ps then 
-  error $ "Function has duplicate parameter: " ++ p else p : ps)
+addParameter p = over currParameters (\ps -> ifElemError p ps $ 
+  "Function has duplicate parameter: " ++ p)
 
 getParameters :: MS [String]
 getParameters = reverse <$> gets (^. currParameters)
@@ -522,3 +522,8 @@ setCurrMainFunc = set currMainFunc
 
 getCurrMainFunc :: MS Bool
 getCurrMainFunc = gets (^. currMainFunc)
+
+-- Helpers
+
+ifElemError :: (Eq a) => a -> [a] -> String -> [a]
+ifElemError e es err = if e `elem` es then error err else e : es

@@ -75,7 +75,7 @@ import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue,
   onCodeList, onStateList, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoVS, lensMStoFS,
   lensMStoVS, lensVStoFS, lensVStoMS, initialFS, modifyReturn, goolState,
-  modifyReturnFunc, addODEFilePaths, addProgNameToPaths, addODEFiles, 
+  modifyReturnFunc, revFiles, addODEFilePaths, addProgNameToPaths, addODEFiles, 
   getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
   addLibImport, getModuleName, setFileType, getClassName, setCurrMain, 
   setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
@@ -111,7 +111,7 @@ instance Monad JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
-  prog n fs = modifyReturnFunc (\_ -> addProgNameToPaths n)
+  prog n fs = modifyReturnFunc (\_ -> revFiles . addProgNameToPaths n)
     (on1CodeValue1List (\end -> progD n . map (packageDocD n end)) endStatement)
     (on2StateValues (++) (mapM (zoom lensGStoFS) fs) (onStateValue (map toCode) 
     getODEFiles))

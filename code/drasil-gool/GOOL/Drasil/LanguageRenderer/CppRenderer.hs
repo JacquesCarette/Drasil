@@ -74,7 +74,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat,
   on2StateLists, on1CodeValue1List, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, 
   lensFStoMS, lensFStoVS, lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, 
-  lensVStoMS, initialFS, modifyReturn, goolState, addODEFilePaths, 
+  lensVStoMS, initialFS, modifyReturn, goolState, revFiles, addODEFilePaths, 
   addODEFiles, getODEFiles, addLangImport, addLangImportVS, getLangImports, 
   addLibImport, getLibImports, addModuleImport, addModuleImportVS, 
   getModuleImports, addHeaderLangImport, getHeaderLangImports, 
@@ -120,6 +120,7 @@ instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
     let fm = map pfst m
         sm = map (hdrToSrc . psnd) m
     p1 <- prog n $ map toState sm ++ map toState fm
+    modify revFiles
     toState $ pair p1 (toCode emptyProg)
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode)

@@ -5,7 +5,7 @@ module GOOL.Drasil.State (
   lensFStoMS, lensFStoVS, lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, 
   lensMStoVS, lensVStoFS, lensVStoMS, headers, sources, mainMod, goolState, currMain, 
   currFileType, initialState, initialFS, modifyReturn, modifyReturnFunc, 
-  modifyReturnFunc2, modifyReturnList, addODEFilePaths, addFile, 
+  modifyReturnFunc2, modifyReturnList, revFiles, addODEFilePaths, addFile, 
   addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, setMainMod,
   addODEFiles, getODEFiles, addLangImport, addLangImportVS, addExceptionImports,
   getLangImports, addLibImport, addLibImportVS, addLibImports, getLibImports, 
@@ -277,6 +277,9 @@ modifyReturnList l sf vf = do
 ------- State Modifiers -------
 -------------------------------
 
+revFiles :: GOOLState -> GOOLState
+revFiles = over headers reverse . over sources reverse
+
 addODEFilePaths :: GOOLState -> MethodState -> MethodState
 addODEFilePaths s = over (lensMStoFS . goolState . headers) (s ^. headers ++)
   . over (lensMStoFS . goolState . sources) (s ^. sources ++)
@@ -288,11 +291,11 @@ addFile Header = addHeader
 
 addHeader :: FilePath -> GOOLState -> GOOLState
 addHeader fp = over headers (\h -> if fp `elem` h then 
-  error $ "Multiple files with same name encountered: " ++ fp else h ++ [fp])
+  error $ "Multiple files with same name encountered: " ++ fp else fp : h)
 
 addSource :: FilePath -> GOOLState -> GOOLState
 addSource fp = over sources (\s -> if fp `elem` s then 
-  error $ "Multiple files with same name encountered: " ++ fp else s ++ [fp])
+  error $ "Multiple files with same name encountered: " ++ fp else fp : s)
 
 addCombinedHeaderSource :: FilePath -> GOOLState -> GOOLState
 addCombinedHeaderSource fp = addSource fp . addHeader fp 

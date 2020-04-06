@@ -64,7 +64,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
+import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
   addLangImportVS, getLangImports, addLibImport, addLibImportVS, getLibImports, 
   addModuleImport, addModuleImportVS, getModuleImports, setFileType, 
   getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
@@ -98,7 +98,10 @@ instance Monad PythonCode where
 
 instance ProgramSym PythonCode where
   type Program PythonCode = ProgData 
-  prog n = onStateList (onCodeList (progD n)) . map (zoom lensGStoFS)
+  prog n files = do
+    fs <- mapM (zoom lensGStoFS) files
+    modify revFiles
+    return $ onCodeList (progD n) fs
 
 instance RenderSym PythonCode
 

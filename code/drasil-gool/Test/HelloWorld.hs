@@ -3,7 +3,7 @@
 module Test.HelloWorld (helloWorld) where
 
 import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
-  listSlice, TypeSym(..), StatementSym(..), ControlStatementSym(..), 
+  listSlice, TypeSym(..), StatementSym(..), (&=), ControlStatementSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
   MethodSym(..), ModuleSym(..), GS, MS)

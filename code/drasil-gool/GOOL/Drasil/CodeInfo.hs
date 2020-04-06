@@ -277,9 +277,7 @@ instance SelectorFunction CodeInfo where
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()
   assign _ = zoom lensMStoVS . execute1
-  assignToListIndex _ v = zoom lensMStoVS . execute2 v
   multiAssign _ = zoom lensMStoVS . executeList
-  (&=) _ = zoom lensMStoVS . execute1
   (&-=) _ = zoom lensMStoVS . execute1
   (&+=) _ = zoom lensMStoVS . execute1
   (&++) _ = noInfo

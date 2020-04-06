@@ -16,7 +16,7 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), objMethodCall, FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), switchAsIf, ScopeSym(..),
+  SelectorFunction(..), StatementSym(..), (&=), ControlStatementSym(..), switchAsIf, ScopeSym(..),
   ParameterSym(..), MethodSym(..), pubMethod, initializer, StateVarSym(..), 
   privMVar, pubMVar, ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..))
@@ -50,7 +50,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   libNewObj, libNewObjMixedArgs, lambda, func, get, set, listSize, listAdd, 
   listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
   listSizeFunc, listAppendFunc, listAccessFunc', listSetFunc, state, loopState, 
-  emptyState, assign, assignToListIndex, multiAssignError, decrement, 
+  emptyState, assign, multiAssignError, decrement, 
   increment, decrement1, increment1, varDec, varDecDef, listDec, listDecDef, 
   objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, 
   constDecDef, funcDecDef, discardInput, discardFileInput, closeFile, 
@@ -590,11 +590,8 @@ instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
   assign vr vl = pair2 assign assign (zoom lensMStoVS vr) (zoom lensMStoVS vl)
-  assignToListIndex lst i v = pair3 assignToListIndex assignToListIndex 
-    (zoom lensMStoVS lst) (zoom lensMStoVS i) (zoom lensMStoVS v)
   multiAssign vrs vls = pair2Lists multiAssign multiAssign 
     (map (zoom lensMStoVS) vrs) (map (zoom lensMStoVS) vls)
-  (&=) vr vl = pair2 (&=) (&=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&-=) vr vl = pair2 (&-=) (&-=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&+=) vr vl = pair2 (&+=) (&+=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&++) vl = pair1 (&++) (&++) (zoom lensMStoVS vl)
@@ -1488,9 +1485,7 @@ instance InternalStatement CppSrcCode where
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
   assign = G.assign Semi
-  assignToListIndex = G.assignToListIndex
   multiAssign _ _ = error $ G.multiAssignError cppName
-  (&=) = assign
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
@@ -2135,9 +2130,7 @@ instance InternalStatement CppHdrCode where
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
   assign _ _ = emptyState
-  assignToListIndex _ _ _ = emptyState
   multiAssign _ _ = emptyState
-  (&=) _ _ = emptyState
   (&-=) _ _ = emptyState
   (&+=) _ _ = emptyState
   (&++) _ = emptyState

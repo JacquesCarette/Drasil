@@ -15,7 +15,7 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), (&=), 
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
   ODEInfo(..), ODEOptions(..), ODEMethod(..))
@@ -50,7 +50,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
   getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
   listAccessFunc, listSetFunc, printSt, state, loopState, emptyState, assign, 
-  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
+  multiAssignError, decrement, increment, decrement1, 
   increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, 
   objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, 
   constDecDef, discardInput, openFileR, openFileW, openFileA, closeFile, 
@@ -497,9 +497,7 @@ instance InternalStatement CSharpCode where
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
   assign = G.assign Semi
-  assignToListIndex = G.assignToListIndex
   multiAssign _ _ = error $ G.multiAssignError csName
-  (&=) = assign
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1

@@ -15,7 +15,7 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), (&=),
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), 
   ModuleSym(..), BlockCommentSym(..), ODEInfo(..), ODEOptions(..), 
@@ -51,7 +51,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
   listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
   listAppendFunc, iterBeginError, iterEndError, listAccessFunc', printSt, 
-  state, loopState, emptyState, assign, assignToListIndex, multiAssignError, 
+  state, loopState, emptyState, assign, multiAssignError, 
   decrement, increment, decrement1, increment1, varDec, varDecDef, listDec, 
   listDecDef', arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, 
   extObjDecNew, extObjDecNewNoParams, funcDecDef, discardInput, 
@@ -529,9 +529,7 @@ instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
   assign = G.assign Semi
-  assignToListIndex = G.assignToListIndex
   multiAssign _ _ = error $ G.multiAssignError jName
-  (&=) = assign
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1

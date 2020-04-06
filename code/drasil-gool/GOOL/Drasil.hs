@@ -1,7 +1,7 @@
 -- | re-export smart constructors for external code writing
 module GOOL.Drasil (Label, ProgramSym(..), FileSym(..), PermanenceSym(..), 
   BodySym(..), BlockSym(..), ControlBlockSym(..), listSlice, TypeSym(..), 
-  StatementSym(..), initState, changeState, initObserverList, addObserver, 
+  StatementSym(..), (&=), assignToListIndex, initState, changeState, initObserverList, addObserver, 
   ControlStatementSym(..), ifNoElse, switchAsIf, 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), objMethodCallMixedArgs, FunctionSym(..), 
@@ -19,7 +19,7 @@ module GOOL.Drasil (Label, ProgramSym(..), FileSym(..), PermanenceSym(..),
 
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  listSlice, TypeSym(..), StatementSym(..), initState, changeState, initObserverList, addObserver, ControlStatementSym(..), switchAsIf,
+  listSlice, TypeSym(..), StatementSym(..), (&=), assignToListIndex, initState, changeState, initObserverList, addObserver, ControlStatementSym(..), switchAsIf,
   ifNoElse, VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), objMethodCallMixedArgs, FunctionSym(..), 
   SelectorFunction(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 

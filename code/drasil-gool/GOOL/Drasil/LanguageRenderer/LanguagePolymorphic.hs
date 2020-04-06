@@ -22,7 +22,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
   getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
   iterEndError, listAccessFunc, listAccessFunc', listSetFunc, printSt, state, 
-  loopState, emptyState, assign, assignToListIndex, multiAssignError, 
+  loopState, emptyState, assign, multiAssignError, 
   decrement, increment, increment', increment1, increment1', decrement1, 
   varDec, varDecDef, listDec, listDecDef, listDecDef', arrayDec, arrayDecDef, 
   objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, 
@@ -49,7 +49,7 @@ import GOOL.Drasil.ClassInterface (Label, Library,
   NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), 
   BooleanExpression(..), Selector(($.)), FunctionSym(Function), 
   SelectorFunction(at), 
-  StatementSym(Statement, (&=), (&+=), (&++), break, multi), observerListName, ScopeSym(..),
+  StatementSym(Statement, (&+=), (&++), break, multi), (&=), observerListName, ScopeSym(..),
   ParameterSym(Parameter), MethodSym(Method), StateVarSym(StateVar), 
   ClassSym(Class), ModuleSym(Module), BlockComment(..), convType)
 import qualified GOOL.Drasil.ClassInterface as S (
@@ -61,9 +61,8 @@ import qualified GOOL.Drasil.ClassInterface as S (
   ValueExpression(funcApp, funcAppMixedArgs, selfFuncAppMixedArgs, 
     extFuncAppMixedArgs, libFuncAppMixedArgs, newObj, newObjMixedArgs, 
     extNewObj, extNewObjMixedArgs, libNewObjMixedArgs, notNull, lambda), 
-  Selector(objAccess), objMethodCall, 
-  objMethodCallNoParams, FunctionSym(func, listSize, listAppend),
-  SelectorFunction(listAccess, listSet),
+  Selector(objAccess), objMethodCall, objMethodCallNoParams, 
+  FunctionSym(func, listSize, listAppend), SelectorFunction(listAccess),
   StatementSym(assign, varDec, varDecDef, listDec, objDecNew, extObjDecNew, 
     constDecDef, valState, returnState),
   ControlStatementSym(ifCond, for, forRange, switch),
@@ -809,10 +808,6 @@ assign :: (RenderSym repr) => Terminator -> VS (repr (Variable repr)) ->
   VS (repr (Value repr)) -> MS (repr (Statement repr))
 assign t vr vl = zoom lensMStoVS $ on2StateValues (\vr' vl' -> stateFromData 
   (assignDocD vr' vl') t) vr vl
-
-assignToListIndex :: (RenderSym repr) => VS (repr (Variable repr)) -> 
-  VS (repr (Value repr)) -> VS (repr (Value repr)) -> MS (repr (Statement repr))
-assignToListIndex lst index v = S.valState $ S.listSet (S.valueOf lst) index v
 
 multiAssignError :: String -> String
 multiAssignError l = "No multiple assignment statements in " ++ l

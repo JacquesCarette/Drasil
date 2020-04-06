@@ -10,7 +10,7 @@ module GOOL.Drasil.ClassInterface (
   BooleanExpression(..), ValueExpression(..), Selector(..), 
   InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
-  StatementSym(..), initState, changeState, observerListName, initObserverList, 
+  StatementSym(..), (&=), assignToListIndex, initState, changeState, observerListName, initObserverList, 
   addObserver, ControlStatementSym(..), ifNoElse, switchAsIf, ScopeSym(..),
   ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer, 
   nonInitConstructor, StateVarSym(..), privMVar, pubMVar, pubGVar, ClassSym(..),
@@ -364,9 +364,6 @@ class (Selector repr, InternalValueExp repr) => SelectorFunction repr where
 
 class (SelectorFunction repr) => StatementSym repr where
   type Statement repr
-  (&=)   :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
-    MS (repr (Statement repr))
-  infixr 1 &=
   (&-=)  :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
     MS (repr (Statement repr))
   infixl 1 &-=
@@ -380,10 +377,8 @@ class (SelectorFunction repr) => StatementSym repr where
 
   assign            :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
     MS (repr (Statement repr))
-  assignToListIndex :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
-    VS (repr (Value repr)) -> MS (repr (Statement repr))
-  multiAssign       :: [VS (repr (Variable repr))] -> [VS (repr (Value repr))] ->
-    MS (repr (Statement repr)) 
+  multiAssign       :: [VS (repr (Variable repr))] -> [VS (repr (Value repr))] 
+    -> MS (repr (Statement repr)) 
 
   varDec           :: VS (repr (Variable repr)) -> MS (repr (Statement repr))
   varDecDef        :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
@@ -474,6 +469,15 @@ class (SelectorFunction repr) => StatementSym repr where
     MS (repr (Statement repr))
 
   multi     :: [MS (repr (Statement repr))] -> MS (repr (Statement repr))
+
+(&=) :: (StatementSym repr) => VS (repr (Variable repr)) -> 
+  VS (repr (Value repr)) -> MS (repr (Statement repr))
+infixr 1 &=
+(&=) = assign
+
+assignToListIndex :: (StatementSym repr) => VS (repr (Variable repr)) -> 
+  VS (repr (Value repr)) -> VS (repr (Value repr)) -> MS (repr (Statement repr))
+assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
 
 initState :: (StatementSym repr) => Label -> Label -> MS (repr (Statement repr))
 initState fsmName initialState = varDecDef (var fsmName string) 

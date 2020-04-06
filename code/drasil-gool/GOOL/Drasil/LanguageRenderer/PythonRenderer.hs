@@ -14,7 +14,7 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), observerListName,
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), (&=), observerListName,
   ControlStatementSym(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
@@ -45,7 +45,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   extNewObj, extNewObjMixedArgs, libNewObj, lambda, func, get, set, listAdd, 
   listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
   listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
-  listSetFunc, state, loopState, emptyState, assign, assignToListIndex, 
+  listSetFunc, state, loopState, emptyState, assign, 
   decrement, increment', increment1', decrement1, listDecDef', objDecNew, 
   objDecNewNoParams, closeFile, discardFileLine, stringListVals, 
   stringListLists, returnState, valState, comment, throw, ifCond,
@@ -496,10 +496,8 @@ instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   assign = G.assign Empty
-  assignToListIndex = G.assignToListIndex
   multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
     mkStNoEnd (multiAssignDoc vrs vls)) vars vals
-  (&=) = assign
   (&-=) = G.decrement
   (&+=) = G.increment'
   (&++) = G.increment1'

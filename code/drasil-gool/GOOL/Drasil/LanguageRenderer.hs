@@ -28,15 +28,15 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, BodySym(..), bodyStatements,oneLiner,
-  PermanenceSym(..), TypeSym(Type, getType, getTypeDoc), VariableSym(..), 
+  PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ifNoElse, 
-  ScopeSym(..), ParameterSym(..), MethodSym(..), BlockCommentSym(..))
+  ScopeSym(..), ParameterSym(..), MethodSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(int))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalBody(..), 
-  InternalPerm(..), InternalVariable(..), InternalValue(..), 
+  InternalPerm(..), InternalType(..), InternalVariable(..), InternalValue(..), 
   InternalStatement(..), InternalScope(..), InternalParam(..), 
-  InternalMethod(..))
+  InternalMethod(..), BlockCommentSym(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateModDoc, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,

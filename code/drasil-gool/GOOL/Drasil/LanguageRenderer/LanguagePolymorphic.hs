@@ -41,16 +41,16 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, 
-  FileSym(RenderFile, commentedMod), BodySym(Body), bodyStatements, oneLiner,
+  FileSym(RenderFile), BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), PermanenceSym(..), 
-  TypeSym(Type, infile, outfile, iterator, getType, getTypeDoc, getTypeString), 
+  TypeSym(Type, infile, outfile, iterator, getType, getTypeString), 
   VariableSym(Variable, variableName, variableType), listOf,
-  ValueSym(Value, valueDoc, valueType), 
+  ValueSym(Value, valueType),
   NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), 
   BooleanExpression(..), funcApp, newObj, extNewObj, ($.), FunctionSym(Function), at, 
   StatementSym(Statement, (&+=), (&++), break, multi), (&=), observerListName, ScopeSym(..),
   ParameterSym(Parameter), MethodSym(Method), StateVarSym(StateVar), 
-  ClassSym(Class), ModuleSym(Module), BlockComment(..), convType)
+  ClassSym(Class), ModuleSym(Module), convType)
 import qualified GOOL.Drasil.ClassInterface as S (
   BlockSym(block), 
   TypeSym(bool, int, float, double, char, string, listType, arrayType, 
@@ -64,13 +64,13 @@ import qualified GOOL.Drasil.ClassInterface as S (
     constDecDef, valState, returnState),
   ControlStatementSym(ifCond, for, forRange, switch),
   ParameterSym(param), MethodSym(method, mainFunction),
-  ClassSym(buildClass, commentedClass))
-import GOOL.Drasil.RendererClasses (KeywordSym(..), RenderSym, 
+  ClassSym(buildClass))
+import GOOL.Drasil.RendererClasses (InternalFile(commentedMod), KeywordSym(..), RenderSym, 
   InternalBody(bodyDoc, docBody), InternalBlock(docBlock, blockDoc), 
   ImportSym(..), InternalPerm(..), InternalType(..), UnaryOpSym(UnaryOp), 
   BinaryOpSym(BinaryOp), InternalOp(..), 
   InternalVariable(variableBind, variableDoc, varFromData), 
-  InternalValue(inputFunc, cast, valuePrec, valFromData),
+  InternalValue(inputFunc, cast, valuePrec, valueDoc, valFromData),
   InternalFunction(iterBeginFunc, iterEndFunc, functionDoc, functionType, 
     funcFromData),
   InternalStatement(statementDoc, statementTerm, stateFromData), 
@@ -78,12 +78,12 @@ import GOOL.Drasil.RendererClasses (KeywordSym(..), RenderSym,
   InternalParam(paramFromData), 
   InternalMethod(intMethod, commentedFunc, methodDoc), InternalStateVar(..), 
   InternalClass(classDoc, classFromData), 
-  InternalMod(moduleDoc, updateModuleDoc))
+  InternalMod(moduleDoc, updateModuleDoc), BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (InternalFile(fileFromData), 
   InternalValue(call), InternalFunction(getFunc, setFunc, listSizeFunc, 
     listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
   InternalStatement(state, loopState, emptyState), MethodTypeSym(construct), 
-  InternalMethod(intFunc), InternalClass(intClass), InternalMod(modFromData))
+  InternalMethod(intFunc), InternalClass(intClass, commentedClass), InternalMod(modFromData))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toState, onStateValue, on2StateValues, on3StateValues, onStateList, 

@@ -17,14 +17,14 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   FunctionSym(..), SelectorFunction(..), at, StatementSym(..), (&=), observerListName,
   ControlStatementSym(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalFunction(..), 
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
-  InternalClass(..), InternalMod(..))
+  InternalClass(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (multiStateDocD, 
   bodyDocD, outDoc, destructorError, multiAssignDoc, returnDocD, mkStNoEnd,
   breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, 
@@ -107,11 +107,11 @@ instance FileSym PythonCode where
 
   docMod = G.docMod pyExt
 
-  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
-
 instance InternalFile PythonCode where
   top _ = toCode empty
   bottom = toCode empty
+  
+  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
@@ -201,9 +201,9 @@ instance TypeSym PythonCode where
 
   getType = cType . unPC
   getTypeString = typeString . unPC
-  getTypeDoc = typeDoc . unPC
 
 instance InternalType PythonCode where
+  getTypeDoc = typeDoc . unPC
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym PythonCode where
@@ -336,7 +336,6 @@ instance ValueSym PythonCode where
   argsList = modify (addLangImportVS "sys") >> G.argsList "sys.argv"
 
   valueType = onCodeValue valType
-  valueDoc = valDoc . unPC
 
 instance NumericExpression PythonCode where
   (#~) = unExpr' negateOp
@@ -410,6 +409,7 @@ instance InternalValue PythonCode where
   call = G.call equals
 
   valuePrec = valPrec . unPC
+  valueDoc = valDoc . unPC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector PythonCode where
@@ -614,7 +614,6 @@ instance MethodSym PythonCode where
   getMethod = G.getMethod
   setMethod = G.setMethod
   constructor = G.constructor initName
-  destructor _ = error $ destructorError pyName
 
   docMain = mainFunction
 
@@ -644,6 +643,8 @@ instance InternalMethod PythonCode where
     b ps
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
+    
+  destructor _ = error $ destructorError pyName
 
   methodDoc = mthdDoc . unPC
   methodFromData _ = toCode . mthd
@@ -669,10 +670,9 @@ instance ClassSym PythonCode where
 
   docClass = G.docClass
 
-  commentedClass = G.commentedClass
-
 instance InternalClass PythonCode where
   intClass = G.intClass pyClass
+  commentedClass = G.commentedClass
   classDoc = unPC
   classFromData = onStateValue toCode
 

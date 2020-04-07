@@ -8,8 +8,7 @@ import GOOL.Drasil.ClassInterface (ProgramSym(..), FileSym(..),
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  BlockCommentSym(..))
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.CodeAnalysis (Exception(..), exception, stdExc)
@@ -24,7 +23,6 @@ import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (fromMaybe)
-import Text.PrettyPrint.HughesPJ (empty)
 
 newtype CodeInfo a = CI {unCI :: a} deriving Eq
 
@@ -52,8 +50,6 @@ instance FileSym CodeInfo where
   fileDoc = execute1
   
   docMod _ _ _ = execute1
-
-  commentedMod _ = execute1
 
 instance PermanenceSym CodeInfo where
   type Permanence CodeInfo = ()
@@ -91,7 +87,6 @@ instance TypeSym CodeInfo where
 
   getType _ = Void
   getTypeString = unCI
-  getTypeDoc _ = empty
 
 instance ControlBlockSym CodeInfo where
   runStrategy _ ss vl _ = do
@@ -149,7 +144,6 @@ instance ValueSym CodeInfo where
   argsList = noInfo
 
   valueType _ = toCode ""
-  valueDoc _ = empty
 
 instance NumericExpression CodeInfo where
   (#~) = execute1
@@ -366,7 +360,6 @@ instance MethodSym CodeInfo where
     mn <- zoom lensMStoFS getModuleName
     modify (updateCallMap mn . updateMethodExcMap mn)
     noInfo
-  destructor _ = noInfo
 
   docMain = updateMEMandCM "main"
 
@@ -409,10 +402,6 @@ instance ClassSym CodeInfo where
     _ <- c
     noInfo
 
-  commentedClass _ c = do
-    _ <- c
-    noInfo
-
 instance ModuleSym CodeInfo where
   type Module CodeInfo = ()
   buildModule n _ fs cs = do
@@ -420,14 +409,6 @@ instance ModuleSym CodeInfo where
     mapM_ (zoom lensFStoCS) cs 
     mapM_ (zoom lensFStoMS) fs
     modifyReturn (updateClassMap n) (toCode ())
-
-instance BlockCommentSym CodeInfo where
-  type BlockComment CodeInfo = ()
-  blockComment _ = toCode ()
-  docComment _ = noInfo
-
-  blockCommentDoc _ = empty
-
 
 -- Helpers
 

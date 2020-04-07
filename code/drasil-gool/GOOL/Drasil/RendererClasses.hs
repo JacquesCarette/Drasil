@@ -6,18 +6,18 @@ module GOOL.Drasil.RendererClasses (
   BinaryOpSym(..), InternalOp(..), InternalVariable(..), InternalValue(..),
   InternalFunction(..), InternalStatement(..), InternalScope(..), 
   MethodTypeSym(..), InternalParam(..), InternalMethod(..), 
-  InternalStateVar(..), InternalClass(..), InternalMod(..)
+  InternalStateVar(..), InternalClass(..), InternalMod(..), BlockCommentSym(..)
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, Library, FileSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), 
   ValueSym(..), FunctionSym(..), StatementSym(..), ScopeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  BlockCommentSym(..),)
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (FS, CS, MS, VS)
 
+import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 class (FileSym repr, InternalBlock repr, InternalBody repr, InternalClass repr, 
@@ -27,9 +27,12 @@ class (FileSym repr, InternalBlock repr, InternalBody repr, InternalClass repr,
   InternalType repr, InternalValue repr, InternalVariable repr, KeywordSym repr,
   ImportSym repr, UnaryOpSym repr, BinaryOpSym repr) => RenderSym repr
 
-class InternalFile repr where
+class (BlockCommentSym repr) => InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
+
+  commentedMod :: FS (repr (BlockComment repr)) -> FS (repr (RenderFile repr)) 
+    -> FS (repr (RenderFile repr))
 
   fileFromData :: FS FilePath -> FS (repr (Module repr)) -> 
     FS (repr (RenderFile repr))
@@ -84,6 +87,7 @@ class InternalBlock repr where
   multiBlock :: [MS (repr (Block repr))] -> MS (repr (Block repr))
 
 class InternalType repr where
+  getTypeDoc :: repr (Type repr) -> Doc
   typeFromData :: CodeType -> String -> Doc -> repr (Type repr)
 
 class UnaryOpSym repr where
@@ -154,6 +158,7 @@ class InternalValue repr where
     VS (repr (Value repr))
 
   valuePrec :: repr (Value repr) -> Maybe Int
+  valueDoc :: repr (Value repr) -> Doc
   valFromData :: Maybe Int -> repr (Type repr) -> Doc -> repr (Value repr)
 
 class InternalFunction repr where
@@ -217,6 +222,8 @@ class (MethodTypeSym repr, BlockCommentSym repr) => InternalMethod repr where
     MS (repr (Body repr)) -> MS (repr (Method repr))
   commentedFunc :: MS (repr (BlockComment repr)) -> MS (repr (Method repr)) -> 
     MS (repr (Method repr))
+    
+  destructor :: [CS (repr (StateVar repr))] -> MS (repr (Method repr))
 
   methodDoc :: repr (Method repr) -> Doc
   methodFromData :: ScopeTag -> Doc -> repr (Method repr)
@@ -225,10 +232,13 @@ class InternalStateVar repr where
   stateVarDoc :: repr (StateVar repr) -> Doc
   stateVarFromData :: CS Doc -> CS (repr (StateVar repr))
 
-class InternalClass repr where
+class (BlockCommentSym repr) => InternalClass repr where
   intClass :: Label -> repr (Scope repr) -> repr (Keyword repr) ->
     [CS (repr (StateVar repr))] -> [MS (repr (Method repr))] -> 
     CS (repr (Class repr))
+
+  commentedClass :: CS (repr (BlockComment repr)) -> 
+    CS (repr (Class repr)) -> CS (repr (Class repr))
 
   classDoc :: repr (Class repr) -> Doc
   classFromData :: CS Doc -> CS (repr (Class repr))
@@ -237,3 +247,10 @@ class InternalMod repr where
   moduleDoc :: repr (Module repr) -> Doc
   modFromData :: String -> FS Doc -> FS (repr (Module repr))
   updateModuleDoc :: (Doc -> Doc) -> repr (Module repr) -> repr (Module repr)
+
+class BlockCommentSym repr where
+  type BlockComment repr
+  blockComment :: [String] -> repr (BlockComment repr)
+  docComment :: State a [String] -> State a (repr (BlockComment repr))
+
+  blockCommentDoc :: repr (BlockComment repr) -> Doc

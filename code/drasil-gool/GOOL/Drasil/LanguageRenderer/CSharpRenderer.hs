@@ -17,7 +17,7 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), (&=), 
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
+  StateVarSym(..), ClassSym(..), ModuleSym(..), 
   ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
@@ -25,7 +25,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
   InternalVariable(..), InternalValue(..), InternalFunction(..), 
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
-  InternalClass(..), InternalMod(..))
+  InternalClass(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
   mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
@@ -114,11 +114,11 @@ instance FileSym CSharpCode where
 
   docMod = G.docMod csExt
 
-  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
-
 instance InternalFile CSharpCode where
   top _ = toCode empty
   bottom = toCode empty
+
+  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
@@ -208,9 +208,9 @@ instance TypeSym CSharpCode where
 
   getType = cType . unCSC
   getTypeString = typeString . unCSC
-  getTypeDoc = typeDoc . unCSC
   
 instance InternalType CSharpCode where
+  getTypeDoc = typeDoc . unCSC
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym CSharpCode where
@@ -345,7 +345,6 @@ instance ValueSym CSharpCode where
   argsList = G.argsList "args"
 
   valueType = onCodeValue valType
-  valueDoc = valDoc . unCSC
 
 instance NumericExpression CSharpCode where
   (#~) = unExpr' negateOp
@@ -414,6 +413,7 @@ instance InternalValue CSharpCode where
   call = G.call (colon <> space)
   
   valuePrec = valPrec . unCSC
+  valueDoc = valDoc . unCSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CSharpCode where
@@ -599,7 +599,6 @@ instance MethodSym CSharpCode where
   getMethod = G.getMethod
   setMethod = G.setMethod
   constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
-  destructor _ = error $ destructorError csName
 
   docMain = G.docMain
  
@@ -623,6 +622,8 @@ instance InternalMethod CSharpCode where
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
+    
+  destructor _ = error $ destructorError csName
   
   methodDoc = mthdDoc . unCSC
   methodFromData _ = toCode . mthd
@@ -646,10 +647,9 @@ instance ClassSym CSharpCode where
 
   docClass = G.docClass
 
-  commentedClass = G.commentedClass
-
 instance InternalClass CSharpCode where
   intClass = G.intClass classDocD
+  commentedClass = G.commentedClass
   classDoc = unCSC
   classFromData = onStateValue toCode
 

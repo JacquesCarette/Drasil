@@ -18,7 +18,7 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   FunctionSym(..), SelectorFunction(..), StatementSym(..), (&=),
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), 
-  ModuleSym(..), BlockCommentSym(..), ODEInfo(..), ODEOptions(..), 
+  ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
@@ -26,7 +26,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
   InternalVariable(..), InternalValue(..), InternalFunction(..), 
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
-  InternalClass(..), InternalMod(..))
+  InternalClass(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
   bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, castDocD, 
@@ -125,11 +125,11 @@ instance FileSym JavaCode where
 
   docMod = G.docMod jExt
 
-  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
-
 instance InternalFile JavaCode where
   top _ = toCode empty
   bottom = toCode empty
+  
+  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
   
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
@@ -218,9 +218,9 @@ instance TypeSym JavaCode where
 
   getType = cType . unJC
   getTypeString = typeString . unJC
-  getTypeDoc = typeDoc . unJC
   
 instance InternalType JavaCode where
+  getTypeDoc = typeDoc . unJC
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym JavaCode where
@@ -354,7 +354,6 @@ instance ValueSym JavaCode where
   argsList = G.argsList "args"
 
   valueType = onCodeValue valType
-  valueDoc = valDoc . unJC
 
 instance NumericExpression JavaCode where
   (#~) = unExpr' negateOp
@@ -439,6 +438,7 @@ instance InternalValue JavaCode where
   call = G.call' jName
   
   valuePrec = valPrec . unJC
+  valueDoc = valDoc . unJC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector JavaCode where
@@ -633,7 +633,6 @@ instance MethodSym JavaCode where
   getMethod = G.getMethod
   setMethod = G.setMethod
   constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
-  destructor _ = error $ destructorError jName
 
   docMain = G.docMain
 
@@ -665,6 +664,8 @@ instance InternalMethod JavaCode where
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
     (onStateValue (onCodeValue commentedItem) cmt)
+    
+  destructor _ = error $ destructorError jName
   
   methodDoc = mthdDoc . unJC
   methodFromData _ = toCode . mthd
@@ -688,10 +689,9 @@ instance ClassSym JavaCode where
 
   docClass = G.docClass
 
-  commentedClass = G.commentedClass
-
 instance InternalClass JavaCode where
   intClass = G.intClass classDocD
+  commentedClass = G.commentedClass
   classDoc = unJC
   classFromData = onStateValue toCode
 

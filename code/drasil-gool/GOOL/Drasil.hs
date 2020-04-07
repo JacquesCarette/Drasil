@@ -7,7 +7,7 @@ module GOOL.Drasil (Label, ProgramSym(..), FileSym(..), PermanenceSym(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, Selector(..), ($.), selfAccess, objMethodCallMixedArgs, FunctionSym(..), listIndexExists,
   SelectorFunction(..), at, ScopeSym(..), ParameterSym(..), MethodSym(..), 
   privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
-  privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
+  privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..),
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), convType,
   ProgData(..), FileData(..), ModData(..), 
   CodeType(..),
@@ -24,7 +24,7 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, Selector(..), ($.), selfAccess, objMethodCallMixedArgs, FunctionSym(..), 
   listIndexExists, SelectorFunction(..), at, ScopeSym(..), ParameterSym(..), MethodSym(..), 
   privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
-  privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
+  privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..),
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), convType)
 
 import GOOL.Drasil.AST (FileData(..), ModData(..), ProgData(..))

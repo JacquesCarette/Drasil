@@ -15,7 +15,7 @@ module GOOL.Drasil.ClassInterface (
   addObserver, ControlStatementSym(..), ifNoElse, switchAsIf, ScopeSym(..),
   ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer, 
   nonInitConstructor, StateVarSym(..), privMVar, pubMVar, pubGVar, ClassSym(..),
-  ModuleSym(..), BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
+  ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..), convType
 ) where
 
@@ -23,9 +23,7 @@ import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.Helpers (onStateValue)
 import GOOL.Drasil.State (GS, FS, CS, MS, VS)
 
-import Control.Monad.State (State)
 import Data.Bifunctor (first)
-import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
 type Library = String
@@ -43,9 +41,6 @@ class (ModuleSym repr) => FileSym repr where
   docMod :: String -> [String] -> String -> 
     FS (repr (RenderFile repr)) -> 
     FS (repr (RenderFile repr))
-
-  commentedMod :: FS (repr (BlockComment repr)) -> FS (repr (RenderFile repr)) 
-    -> FS (repr (RenderFile repr))
 
 class PermanenceSym repr where
   type Permanence repr
@@ -94,7 +89,6 @@ class (PermanenceSym repr) => TypeSym repr where
 
   getType :: repr (Type repr) -> CodeType
   getTypeString :: repr (Type repr) -> String
-  getTypeDoc :: repr (Type repr) -> Doc
 
 class (ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, MS (repr (Body repr)))] -> 
@@ -177,7 +171,6 @@ class (VariableSym repr) => ValueSym repr where
   argsList  :: VS (repr (Value repr))
 
   valueType :: repr (Value repr) -> repr (Type repr)
-  valueDoc :: repr (Value repr) -> Doc
 
 class (ValueSym repr) => NumericExpression repr where
   (#~)  :: VS (repr (Value repr)) -> VS (repr (Value repr))
@@ -605,7 +598,6 @@ class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr,
   constructor :: [MS (repr (Parameter repr))] -> 
     [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
     MS (repr (Body repr)) -> MS (repr (Method repr))
-  destructor :: [CS (repr (StateVar repr))] -> MS (repr (Method repr))
 
   docMain :: MS (repr (Body repr)) -> MS (repr (Method repr))
 
@@ -692,20 +684,10 @@ class (MethodSym repr) => ClassSym repr where
 
   docClass :: String -> CS (repr (Class repr)) -> CS (repr (Class repr))
 
-  commentedClass :: CS (repr (BlockComment repr)) -> 
-    CS (repr (Class repr)) -> CS (repr (Class repr))
-
 class (ClassSym repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [Label] -> [MS (repr (Method repr))] -> 
     [CS (repr (Class repr))] -> FS (repr (Module repr))
-
-class BlockCommentSym repr where
-  type BlockComment repr
-  blockComment :: [String] -> repr (BlockComment repr)
-  docComment :: State a [String] -> State a (repr (BlockComment repr))
-
-  blockCommentDoc :: repr (BlockComment repr) -> Doc
 
 -- Data
 

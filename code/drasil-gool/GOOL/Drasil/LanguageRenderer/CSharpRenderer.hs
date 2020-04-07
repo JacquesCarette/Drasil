@@ -697,8 +697,7 @@ csLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) ->
   Doc
 csLambda ps ex = parens (variableList ps) <+> text "=>" <+> valueDoc ex
 
-csCast :: VSType CSharpCode -> 
-  SValue CSharpCode -> SValue CSharpCode
+csCast :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
 csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
   where csCast' Double String _ _ = funcApp "Double.Parse" double [v]
@@ -707,8 +706,7 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
           tp)) (valueDoc vl))
 
 csFuncDecDef :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) 
-  -> SVariable repr -> [SVariable repr] -> 
-  SValue repr -> MSStatement repr
+  -> SVariable repr -> [SVariable repr] -> SValue repr -> MSStatement repr
 csFuncDecDef bStart bEnd v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
   getTypeDoc (variableType vr) <+> text (variableName vr) <> parens 
   (variableList pms) <+> keyDoc bStart $$ indent (bodyDoc b) $$ keyDoc bEnd) 
@@ -730,13 +728,11 @@ csTryCatch tb cb = vcat [
 csDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
 csDiscardInput = valueDoc
 
-csFileInput :: (RenderSym repr) => SValue repr -> 
-  SValue repr
+csFileInput :: (RenderSym repr) => SValue repr -> SValue repr
 csFileInput = onStateValue (\f -> mkVal (valueType f) (valueDoc f <> dot <> 
   text "ReadLine()"))
 
-csInput :: (RenderSym repr) => VSType repr -> SValue repr 
-  -> SValue repr
+csInput :: (RenderSym repr) => VSType repr -> SValue repr -> SValue repr
 csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn 
   -> mkVal t $ text (csInput' (getType t)) <> parens (valueDoc inFn)) inF)
   where csInput' Integer = "Int32.Parse"
@@ -749,12 +745,11 @@ csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn
         csInputImport t = if t `elem` [Integer, Float, Double, Boolean, Char] 
           then addSystemImport else id
 
-csOpenFileR :: (RenderSym repr) => SValue repr -> 
-  VSType repr -> SValue repr
+csOpenFileR :: (RenderSym repr) => SValue repr -> VSType repr -> SValue repr
 csOpenFileR n r = newObj r [n]
 
-csOpenFileWorA :: (RenderSym repr) => SValue repr -> 
-  VSType repr -> SValue repr -> SValue repr
+csOpenFileWorA :: (RenderSym repr) => SValue repr -> VSType repr -> SValue repr 
+  -> SValue repr
 csOpenFileWorA n w a = newObj w [n, a] 
 
 csRef :: Doc -> Doc
@@ -763,12 +758,9 @@ csRef p = text "ref" <+> p
 csOut :: Doc -> Doc
 csOut p = text "out" <+> p
 
-csInOutCall :: (Label -> VSType CSharpCode -> 
-  [SValue CSharpCode] -> SValue CSharpCode)
-  -> Label -> [SValue CSharpCode] -> 
-  [SVariable CSharpCode] -> 
-  [SVariable CSharpCode] -> 
-  MSStatement CSharpCode
+csInOutCall :: (Label -> VSType CSharpCode -> [SValue CSharpCode] -> 
+  SValue CSharpCode) -> Label -> [SValue CSharpCode] -> [SVariable CSharpCode] 
+  -> [SVariable CSharpCode] -> MSStatement CSharpCode
 csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out) 
   ins
 csInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out) 
@@ -777,8 +769,7 @@ csInOutCall f n ins outs both = valState $ f n void (map (onStateValue
   (onCodeValue (updateValDoc csRef)) . valueOf) both ++ ins ++ map 
   (onStateValue (onCodeValue (updateValDoc csOut)) . valueOf) outs)
 
-csVarDec :: Binding -> MSStatement CSharpCode -> 
-  MSStatement CSharpCode
+csVarDec :: Binding -> MSStatement CSharpCode -> MSStatement CSharpCode
 csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
 csVarDec Dynamic d = d
 
@@ -791,13 +782,10 @@ csObjVar o v = csObjVar' (variableBind v)
           (variableType v) (objVarDocD (variableDoc o) (variableDoc v))
 
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
-    -> VSType CSharpCode -> 
-    [MSParameter CSharpCode] 
-    -> MSBody CSharpCode -> SMethod CSharpCode)
+    -> VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode -> 
+    SMethod CSharpCode)
   -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
-  [SVariable CSharpCode] -> 
-  [SVariable CSharpCode] -> 
-  [SVariable CSharpCode] -> 
+  [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] -> 
   MSBody CSharpCode -> SMethod CSharpCode
 csInOut f s p ins [v] [] b = f s p (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 

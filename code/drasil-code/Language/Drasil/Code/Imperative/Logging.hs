@@ -39,8 +39,8 @@ loggedVar v = do
       printFileStrLn valLogFile (" in module " ++ currentModule g),
       closeFile valLogFile ]
 
-logBody :: (ProgramSym repr) => Label -> [SVariable repr] -> 
-  [MSBlock repr] -> Reader DrasilState (MSBody repr)
+logBody :: (ProgramSym repr) => Label -> [SVariable repr] -> [MSBlock repr] -> 
+  Reader DrasilState (MSBody repr)
 logBody n vars b = do
   g <- ask
   let loggedBody LogFunc = loggedMethod (logName g) n vars b
@@ -48,9 +48,8 @@ logBody n vars b = do
       loggedBody _       = b
   return $ body $ loggedBody $ logKind g
 
-loggedMethod :: (ProgramSym repr) => Label -> Label -> 
-  [SVariable repr] -> [MSBlock repr] -> 
-  [MSBlock repr]
+loggedMethod :: (ProgramSym repr) => Label -> Label -> [SVariable repr] -> 
+  [MSBlock repr] -> [MSBlock repr]
 loggedMethod lName n vars b = block [
       varDec varLogFile,
       openFileA varLogFile (litString lName),

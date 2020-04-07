@@ -2408,13 +2408,11 @@ cppOutfileType :: (RenderSym repr) => VSType repr
 cppOutfileType = addFStreamImport $ typeFromData File "ofstream" 
   (text "ofstream")
 
-cppArrayType :: (RenderSym repr) => VSType repr -> 
-  VSType repr
+cppArrayType :: (RenderSym repr) => VSType repr -> VSType repr
 cppArrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
   (getTypeString t) (getTypeDoc t))
 
-cppIterType :: (RenderSym repr) => VSType repr -> 
-  VSType repr
+cppIterType :: (RenderSym repr) => VSType repr -> VSType repr
 cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t)) 
   (getTypeString t ++ "::iterator") (text "std::" <> getTypeDoc t <> text 
   "::iterator"))
@@ -2429,8 +2427,7 @@ cppLambda bStart bEnd endSt ps ex = text "[]" <+> parens (hicat (text ",") $
   text "->" <+> keyDoc bStart <> text "return" <+> valueDoc ex <> keyDoc endSt 
   <> keyDoc bEnd
 
-cppCast :: VSType CppSrcCode -> 
-  SValue CppSrcCode -> SValue CppSrcCode
+cppCast :: VSType CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
 cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
   where cppCast' Double String _ _ = funcApp "std::stod" double [v]
@@ -2447,8 +2444,8 @@ cppListDecDoc n = parens (valueDoc n)
 cppListDecDefDoc :: (RenderSym repr) => [repr (Value repr)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
-cppPrint :: (RenderSym repr) => Bool -> SValue repr -> 
-  SValue repr -> MSStatement repr
+cppPrint :: (RenderSym repr) => Bool -> SValue repr -> SValue repr -> 
+  MSStatement repr
 cppPrint newLn  pf vl = zoom lensMStoVS $ on3StateValues (\e printFn v -> mkSt 
   $ valueDoc printFn <+> text "<<" <+> val v (valueDoc v) <+> e) end pf vl
   where val v = if maybe False (< 9) (valuePrec v) then parens else id
@@ -2499,10 +2496,9 @@ cppsMethod is n c t ps b bStart bEnd = emptyIfEmpty (bodyDoc b <> initList) $
         initList = hicat (text ", ") is
 
 cppConstructor :: CppSrcCode (Keyword CppSrcCode) -> 
-  CppSrcCode (Keyword CppSrcCode) -> [MSParameter CppSrcCode] 
-  -> [(SVariable CppSrcCode, 
-  SValue CppSrcCode)] -> 
-  MSBody CppSrcCode -> SMethod CppSrcCode
+  CppSrcCode (Keyword CppSrcCode) -> [MSParameter CppSrcCode] -> 
+  [(SVariable CppSrcCode, SValue CppSrcCode)] -> MSBody CppSrcCode -> 
+  SMethod CppSrcCode
 cppConstructor bStart bEnd ps is b = getClassName >>= (\n -> join $ (\tp pms 
   ivars ivals bod -> if null is then G.constructor n ps is b else modify 
   (setScope Pub) >> toState (methodFromData Pub (cppsMethod (zipWith 
@@ -2524,8 +2520,7 @@ cpphMethod n t ps end = (if isDtor n then empty else getTypeDoc t) <+> text n
   <> parens (parameterList ps) <> keyDoc end
 
 cppCommentedFunc :: (RenderSym repr) => FileType -> 
-  MS (repr (BlockComment repr)) -> SMethod repr -> 
-  SMethod repr
+  MS (repr (BlockComment repr)) -> SMethod repr -> SMethod repr
 cppCommentedFunc ft cmt fn = do
   f <- fn
   mn <- getCurrMainFunc
@@ -2586,12 +2581,9 @@ cpphClass n p vars funcs pub priv bStart bEnd end = toCode $ vcat [
 --   indent es,
 --   keyDoc bEnd <> keyDoc end]
 
-cppInOutCall :: (Label -> VSType CppSrcCode -> 
-  [SValue CppSrcCode] -> SValue CppSrcCode) 
-  -> Label -> [SValue CppSrcCode] -> 
-  [SVariable CppSrcCode] -> 
-  [SVariable CppSrcCode] -> 
-  MSStatement CppSrcCode
+cppInOutCall :: (Label -> VSType CppSrcCode -> [SValue CppSrcCode] -> 
+  SValue CppSrcCode) -> Label -> [SValue CppSrcCode] -> [SVariable CppSrcCode] 
+  -> [SVariable CppSrcCode] -> MSStatement CppSrcCode
 cppInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
 cppInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)
@@ -2601,13 +2593,10 @@ cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins
 
 cppsInOut :: (CppSrcCode (Scope CppSrcCode) -> 
     CppSrcCode (Permanence CppSrcCode) -> VSType CppSrcCode -> 
-    [MSParameter CppSrcCode] -> 
-    MSBody CppSrcCode -> SMethod CppSrcCode)
+    [MSParameter CppSrcCode] -> MSBody CppSrcCode -> SMethod CppSrcCode)
   -> CppSrcCode (Scope CppSrcCode) -> CppSrcCode (Permanence CppSrcCode) -> 
-  [SVariable CppSrcCode] ->
-  [SVariable CppSrcCode] -> 
-  [SVariable CppSrcCode] -> MSBody CppSrcCode 
-  -> SMethod CppSrcCode
+  [SVariable CppSrcCode] -> [SVariable CppSrcCode] -> [SVariable CppSrcCode] -> 
+  MSBody CppSrcCode -> SMethod CppSrcCode
 cppsInOut f s p ins [v] [] b = f s p (onStateValue variableType v) 
   (cppInOutParams ins [v] []) (on3StateValues (on3CodeValues surroundBody) 
   (varDec v) b (returnState $ valueOf v))
@@ -2618,22 +2607,18 @@ cppsInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
 
 cpphInOut :: (CppHdrCode (Scope CppHdrCode) -> 
     CppHdrCode (Permanence CppHdrCode) -> VSType CppHdrCode -> 
-    [MSParameter CppHdrCode] -> 
-    MSBody CppHdrCode -> SMethod CppHdrCode) 
+    [MSParameter CppHdrCode] -> MSBody CppHdrCode -> SMethod CppHdrCode) 
   -> CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Permanence CppHdrCode) -> 
-  [SVariable CppHdrCode] -> 
-  [SVariable CppHdrCode] -> 
-  [SVariable CppHdrCode] -> MSBody CppHdrCode 
-  -> SMethod CppHdrCode
+  [SVariable CppHdrCode] -> [SVariable CppHdrCode] -> [SVariable CppHdrCode] -> 
+  MSBody CppHdrCode -> SMethod CppHdrCode
 cpphInOut f s p ins [v] [] b = f s p (onStateValue variableType v) 
   (cppInOutParams ins [v] []) b
 cpphInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
   (cppInOutParams ins [] [v]) b
 cpphInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
 
-cppInOutParams :: (RenderSym repr) => [SVariable repr] -> 
-  [SVariable repr] -> [SVariable repr] -> 
-  [MSParameter repr]
+cppInOutParams :: (RenderSym repr) => [SVariable repr] -> [SVariable repr] -> 
+  [SVariable repr] -> [MSParameter repr]
 cppInOutParams ins [_] [] = map getParam ins
 cppInOutParams ins [] [v] = map getParam $ v : ins
 cppInOutParams ins outs both = map pointerParam both ++ map getParam ins ++ 

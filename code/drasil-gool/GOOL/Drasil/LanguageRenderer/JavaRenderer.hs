@@ -820,8 +820,7 @@ jFileWriterType :: (RenderSym repr) => VSType repr
 jFileWriterType = modifyReturn (addLangImportVS "java.io.FileWriter") $ 
   typeFromData File "FileWriter" (text "FileWriter")
 
-jEquality :: SValue JavaCode -> SValue JavaCode 
-  -> SValue JavaCode
+jEquality :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode
 jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
         jEquality' _ = typeBinExpr equalOp bool v1 v2
@@ -830,8 +829,7 @@ jLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) ->
   Doc
 jLambda ps ex = parens (variableList ps) <+> text "->" <+> valueDoc ex
 
-jCast :: VSType JavaCode -> SValue JavaCode -> 
-  SValue JavaCode
+jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
 jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
   where jCast' Double String _ _ = funcApp "Double.parseDouble" double [v]
@@ -858,8 +856,8 @@ jTryCatch tb cb = vcat [
   indent $ bodyDoc cb,
   rbrace]
 
-jOut :: (RenderSym repr) => Bool -> Maybe (SValue repr) -> 
-  SValue repr -> SValue repr -> MSStatement repr
+jOut :: (RenderSym repr) => Bool -> Maybe (SValue repr) -> SValue repr -> 
+  SValue repr -> MSStatement repr
 jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getType . valueType
   where jOut' (List (Object _)) = outDoc newLn f printFn v
         jOut' (List _) = printSt newLn f printFn v
@@ -868,8 +866,7 @@ jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getType . valueType
 jDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
 jDiscardInput inFn = valueDoc inFn <> dot <> text "next()"
 
-jInput :: (RenderSym repr) => VSType repr -> SValue repr 
-  -> SValue repr
+jInput :: (RenderSym repr) => VSType repr -> SValue repr -> SValue repr
 jInput = on2StateValues (\t -> mkVal t . jInput' (getType t))
   where jInput' Integer inFn = text "Integer.parseInt" <> parens (valueDoc inFn 
           <> dot <> text "nextLine()")
@@ -882,17 +879,15 @@ jInput = on2StateValues (\t -> mkVal t . jInput' (getType t))
         jInput' Char inFn = valueDoc inFn <> dot <> text "next().charAt(0)"
         jInput' _ _ = error "Attempt to read value of unreadable type"
 
-jOpenFileR :: (RenderSym repr) => SValue repr -> 
-  VSType repr -> SValue repr
+jOpenFileR :: (RenderSym repr) => SValue repr -> VSType repr -> SValue repr
 jOpenFileR n t = newObj t [newObj jFileType [n]]
 
-jOpenFileWorA :: (RenderSym repr) => SValue repr -> 
-  VSType repr -> SValue repr -> SValue repr
+jOpenFileWorA :: (RenderSym repr) => SValue repr -> VSType repr -> SValue repr 
+  -> SValue repr
 jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n], 
   wa]]
 
-jStringSplit :: (RenderSym repr) => SVariable repr -> 
-  SValue repr -> VS Doc
+jStringSplit :: (RenderSym repr) => SVariable repr -> SValue repr -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> variableDoc vnew <+> equals <+> new 
   <+> getTypeDoc (variableType vnew) <> parens (valueDoc s))
 
@@ -906,16 +901,14 @@ jMethod n es s p t ps b = vcat [
   indent $ bodyDoc b,
   rbrace]
 
-jAssignFromArray :: Integer -> [SVariable JavaCode] -> 
-  [MSStatement JavaCode]
+jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MSStatement JavaCode]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
   (valueOf $ arrayElem c outputs)) : jAssignFromArray (c+1) vs
   where outputs = var "outputs" jArrayType
 
-jInOutCall :: (Label -> VSType JavaCode -> 
-  [SValue JavaCode] -> SValue JavaCode) -> Label 
-  -> [SValue JavaCode] -> [SVariable JavaCode] -> 
+jInOutCall :: (Label -> VSType JavaCode -> [SValue JavaCode] -> 
+  SValue JavaCode) -> Label -> [SValue JavaCode] -> [SVariable JavaCode] -> 
   [SVariable JavaCode] -> MSStatement JavaCode
 jInOutCall f n ins [] [] = valState $ f n void ins
 jInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out) 
@@ -932,12 +925,11 @@ jInOutCall f n ins outs both = fCall rets
           jAssignFromArray 0 xs))
 
 jInOut :: (JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
-    VSType JavaCode -> [MSParameter JavaCode] -> 
-    MSBody JavaCode -> SMethod JavaCode) 
+    VSType JavaCode -> [MSParameter JavaCode] -> MSBody JavaCode -> 
+    SMethod JavaCode) 
   -> JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
-  [SVariable JavaCode] -> [SVariable JavaCode] -> 
-  [SVariable JavaCode] -> MSBody JavaCode -> 
-  SMethod JavaCode
+  [SVariable JavaCode] -> [SVariable JavaCode] -> [SVariable JavaCode] -> 
+  MSBody JavaCode -> SMethod JavaCode
 jInOut f s p ins [] [] b = f s p void (map param ins) b
 jInOut f s p ins [v] [] b = f s p (onStateValue variableType v) (map param ins) 
   (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 
@@ -963,13 +955,11 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
         outputs = var "outputs" jArrayType
 
 jDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
-    -> [SVariable repr] -> [SVariable repr] -> 
-    [SVariable repr] -> MSBody repr -> 
-    SMethod repr)
+    -> [SVariable repr] -> [SVariable repr] -> [SVariable repr] -> MSBody repr 
+    -> SMethod repr)
   -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
   [(String, SVariable repr)] -> [(String, SVariable repr)]
-  -> [(String, SVariable repr)] -> MSBody repr -> 
-  SMethod repr
+  -> [(String, SVariable repr)] -> MSBody repr -> SMethod repr
 jDocInOut f s p desc is [] [] b = docFuncRepr desc (map fst is) [] 
   (f s p (map snd is) [] [] b)
 jDocInOut f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 

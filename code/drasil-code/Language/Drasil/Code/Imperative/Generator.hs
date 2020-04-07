@@ -101,8 +101,7 @@ chooseModules :: (ProgramSym repr) => Modularity ->
 chooseModules Unmodular = liftS genUnmodular
 chooseModules (Modular _) = genModules
 
-genUnmodular :: (ProgramSym repr) => 
-  Reader DrasilState (SFile repr)
+genUnmodular :: (ProgramSym repr) => Reader DrasilState (SFile repr)
 genUnmodular = do
   g <- ask
   let s = csi $ codeSpec g
@@ -121,8 +120,7 @@ genUnmodular = do
     ([genInputClass Auxiliary, genConstClass Auxiliary] 
     ++ map (fmap Just) (concatMap genModClasses $ mods s))
           
-genModules :: (ProgramSym repr) => 
-  Reader DrasilState [SFile repr]
+genModules :: (ProgramSym repr) => Reader DrasilState [SFile repr]
 genModules = do
   g <- ask
   let s = csi $ codeSpec g

@@ -102,8 +102,8 @@ constVariable WithInputs cr v = do
   inputVariable (inStruct g) cr v
 constVariable _ _ v = return v
 
-classVariable :: (ProgramSym repr) => SVariable repr -> 
-  SVariable repr -> Reader DrasilState (SVariable repr)
+classVariable :: (ProgramSym repr) => SVariable repr -> SVariable repr -> 
+  Reader DrasilState (SVariable repr)
 classVariable c v = do
   g <- ask
   let checkCurrent m = if currentModule g == m then classVar else extClassVar
@@ -123,41 +123,37 @@ mkVar v = do
   t <- codeType v
   variable (codeName v) (convType t)
 
-publicFunc :: (ProgramSym repr, HasSpace c, CodeIdea c) => 
-  Label -> VSType repr -> String -> [c] -> Maybe String -> 
-  [MSBlock repr] -> Reader DrasilState (SMethod repr)
+publicFunc :: (ProgramSym repr, HasSpace c, CodeIdea c) => Label -> VSType repr 
+  -> String -> [c] -> Maybe String -> [MSBlock repr] -> 
+  Reader DrasilState (SMethod repr)
 publicFunc n t = genMethod (function n public static t) n
 
-privateMethod :: (ProgramSym repr, HasSpace c, CodeIdea c) => 
-  Label -> VSType repr -> String -> [c] -> Maybe String -> 
-  [MSBlock repr] -> Reader DrasilState (SMethod repr)
+privateMethod :: (ProgramSym repr, HasSpace c, CodeIdea c) => Label -> 
+  VSType repr -> String -> [c] -> Maybe String -> [MSBlock repr] -> 
+  Reader DrasilState (SMethod repr)
 privateMethod n t = genMethod (method n private dynamic t) n
 
-publicInOutFunc :: (ProgramSym repr, HasSpace c, CodeIdea c, Eq c) 
-  => Label -> String -> [c] -> [c] -> [MSBlock repr] -> 
-  Reader DrasilState (SMethod repr)
+publicInOutFunc :: (ProgramSym repr, HasSpace c, CodeIdea c, Eq c) => Label -> 
+  String -> [c] -> [c] -> [MSBlock repr] -> Reader DrasilState (SMethod repr)
 publicInOutFunc n = genInOutFunc (inOutFunc n) (docInOutFunc n) public static n
 
-privateInOutMethod :: (ProgramSym repr, HasSpace c, CodeIdea c,
-  Eq c) => Label -> String -> [c] -> [c] -> [MSBlock repr] 
-  -> Reader DrasilState (SMethod repr)
+privateInOutMethod :: (ProgramSym repr, HasSpace c, CodeIdea c, Eq c) => Label 
+  -> String -> [c] -> [c] -> [MSBlock repr] -> Reader DrasilState (SMethod repr)
 privateInOutMethod n = genInOutFunc (inOutMethod n) (docInOutMethod n) 
   private dynamic n
 
-genConstructor :: (ProgramSym repr, HasSpace c, CodeIdea c) => 
-  Label -> String -> [c] -> [MSBlock repr] -> 
-  Reader DrasilState (SMethod repr)
+genConstructor :: (ProgramSym repr, HasSpace c, CodeIdea c) => Label -> String 
+  -> [c] -> [MSBlock repr] -> Reader DrasilState (SMethod repr)
 genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
 
 genInitConstructor :: (ProgramSym repr, HasSpace c, CodeIdea c) => Label -> 
-  String -> [c] -> [(SVariable repr, SValue repr)] -> 
-  [MSBlock repr] -> Reader DrasilState (SMethod repr)
+  String -> [c] -> [(SVariable repr, SValue repr)] -> [MSBlock repr] -> 
+  Reader DrasilState (SMethod repr)
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p 
   Nothing
 
-genMethod :: (ProgramSym repr, HasSpace c, CodeIdea c) => 
-  ([MSParameter repr] -> MSBody repr -> 
-  SMethod repr) -> Label -> String -> [c] -> Maybe String -> 
+genMethod :: (ProgramSym repr, HasSpace c, CodeIdea c) => ([MSParameter repr] 
+  -> MSBody repr -> SMethod repr) -> Label -> String -> [c] -> Maybe String -> 
   [MSBlock repr] -> Reader DrasilState (SMethod repr)
 genMethod f n desc p r b = do
   g <- ask
@@ -171,16 +167,12 @@ genMethod f n desc p r b = do
 
 genInOutFunc :: (ProgramSym repr, HasSpace c, CodeIdea c, Eq c) => 
   (repr (Scope repr) -> repr (Permanence repr) -> [SVariable repr] 
-    -> [SVariable repr] -> [SVariable repr] -> 
-    MSBody repr -> SMethod repr) -> 
+    -> [SVariable repr] -> [SVariable repr] -> MSBody repr -> SMethod repr) -> 
   (repr (Scope repr) -> repr (Permanence repr) -> String -> 
-    [(String, SVariable repr)] -> 
-    [(String, SVariable repr)] -> 
-    [(String, SVariable repr)] -> MSBody repr -> 
-    SMethod repr) -> 
+    [(String, SVariable repr)] -> [(String, SVariable repr)] -> 
+    [(String, SVariable repr)] -> MSBody repr -> SMethod repr) -> 
   repr (Scope repr) -> repr (Permanence repr) -> Label -> String -> [c] -> 
-  [c] -> [MSBlock repr] -> 
-  Reader DrasilState (SMethod repr)
+  [c] -> [MSBlock repr] -> Reader DrasilState (SMethod repr)
 genInOutFunc f docf s pr n desc ins' outs' b = do
   g <- ask
   let ins = ins' \\ outs'
@@ -256,11 +248,9 @@ convExpr (RealI c ri)  = do
   g <- ask
   convExpr $ renderRealInt (lookupC g c) ri
 
-convCall :: (ProgramSym repr) => UID -> [Expr] -> [(UID, Expr)] -> 
-  (String -> String -> VSType repr -> [SValue repr] -> 
-  [(SVariable repr, SValue repr)] -> 
-  Reader DrasilState (SValue repr)) -> 
-  Reader DrasilState (SValue repr)
+convCall :: (ProgramSym repr) => UID -> [Expr] -> [(UID, Expr)] -> (String -> 
+  String -> VSType repr -> [SValue repr] -> [(SVariable repr, SValue repr)] -> 
+  Reader DrasilState (SValue repr)) -> Reader DrasilState (SValue repr)
 convCall c x ns f = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
@@ -289,8 +279,7 @@ renderRealInt s (UpTo (Exc,a))    = sy s $< a
 renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
 renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
-unop :: (ProgramSym repr) => UFunc -> (SValue repr -> 
-  SValue repr)
+unop :: (ProgramSym repr) => UFunc -> (SValue repr -> SValue repr)
 unop Sqrt = (#/^)
 unop Log  = log
 unop Ln   = ln
@@ -310,8 +299,8 @@ unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
 
-bfunc :: (ProgramSym repr) => BinOp -> (SValue repr -> 
-  SValue repr -> SValue repr)
+bfunc :: (ProgramSym repr) => BinOp -> (SValue repr -> SValue repr -> 
+  SValue repr)
 bfunc Eq    = (?==)
 bfunc NEq   = (?!=)
 bfunc Gt    = (?>)
@@ -328,25 +317,22 @@ bfunc Frac  = (#/)
 bfunc Index = listAccess
 
 -- medium hacks --
-genModDef :: (ProgramSym repr) => Mod -> 
-  Reader DrasilState (SFile repr)
+genModDef :: (ProgramSym repr) => Mod -> Reader DrasilState (SFile repr)
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap 
   Just . genFunc) fs) 
   (case cs of [] -> []
               (cl:cls) -> fmap Just (genClass primaryClass cl) : 
                 map (fmap Just . genClass auxClass) cls)
 
-genModFuncs :: (ProgramSym repr) => Mod -> 
-  [Reader DrasilState (SMethod repr)]
+genModFuncs :: (ProgramSym repr) => Mod -> [Reader DrasilState (SMethod repr)]
 genModFuncs (Mod _ _ _ _ fs) = map genFunc fs
 
-genModClasses :: (ProgramSym repr) => Mod -> 
-  [Reader DrasilState (SClass repr)]
+genModClasses :: (ProgramSym repr) => Mod -> [Reader DrasilState (SClass repr)]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 genClass :: (ProgramSym repr) => (String -> Label -> Maybe Label -> 
-  [CSStateVar repr] -> Reader DrasilState [SMethod repr] 
-  -> Reader DrasilState (SClass repr)) -> M.Class -> 
+  [CSStateVar repr] -> Reader DrasilState [SMethod repr] -> 
+  Reader DrasilState (SClass repr)) -> M.Class -> 
   Reader DrasilState (SClass repr)
 genClass f (M.ClassDef n i desc svs ms) = do
   svrs <- mapM (\v -> fmap (pubMVar . var (codeName v) . convType) (codeType v))
@@ -473,8 +459,7 @@ genDataFunc nameTitle desc ddef = do
   publicFunc nameTitle void desc (quantvar inFileName : parms) Nothing bod
 
 -- this is really ugly!!
-readData :: (ProgramSym repr) => DataDesc -> Reader DrasilState
-  [MSBlock repr]
+readData :: (ProgramSym repr) => DataDesc -> Reader DrasilState [MSBlock repr]
 readData ddef = do
   inD <- mapM inData ddef
   v_filename <- mkVal $ quantvar inFileName

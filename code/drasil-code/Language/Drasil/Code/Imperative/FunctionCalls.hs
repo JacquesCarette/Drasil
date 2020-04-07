@@ -24,8 +24,7 @@ import Data.Maybe (catMaybes)
 import Control.Applicative ((<|>))
 import Control.Monad.Reader (Reader, ask)
 
-getAllInputCalls :: (ProgramSym repr) => Reader DrasilState 
-  [MSStatement repr]
+getAllInputCalls :: (ProgramSym repr) => Reader DrasilState [MSStatement repr]
 getAllInputCalls = do
   gi <- getInputCall
   dv <- getDerivedCall

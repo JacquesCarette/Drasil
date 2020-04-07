@@ -9,10 +9,12 @@ module GOOL.Drasil.RendererClasses (
   InternalStateVar(..), InternalClass(..), InternalMod(..), BlockCommentSym(..)
 ) where
 
-import GOOL.Drasil.ClassInterface (Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, FSModule, FileSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), 
-  ValueSym(..), FunctionSym(..), StatementSym(..), ScopeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
+  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
+  CSStateVar, SClass, FSModule, FileSym(..), PermanenceSym(..), BodySym(..), 
+  BlockSym(..), TypeSym(..), VariableSym(..), ValueSym(..), FunctionSym(..), 
+  StatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (FS, CS, MS, VS)
@@ -31,11 +33,9 @@ class (BlockCommentSym repr) => InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
 
-  commentedMod :: FS (repr (BlockComment repr)) -> SFile repr 
-    -> SFile repr
+  commentedMod :: FS (repr (BlockComment repr)) -> SFile repr -> SFile repr
 
-  fileFromData :: FS FilePath -> FSModule repr -> 
-    SFile repr
+  fileFromData :: FS FilePath -> FSModule repr -> SFile repr
 
 class KeywordSym repr where
   type Keyword repr
@@ -147,15 +147,12 @@ class InternalValue repr where
   printFileFunc   :: SValue repr -> SValue repr
   printFileLnFunc :: SValue repr -> SValue repr
 
-  cast :: VSType repr -> SValue repr -> 
-    SValue repr
+  cast :: VSType repr -> SValue repr -> SValue repr
 
   -- Very generic internal function for generating calls, to reduce repeated code throughout generators
   -- Maybe library, function name, return type, maybe object doc, regular arguments, named arguments
-  call :: Maybe Library -> Label -> VSType repr -> 
-    Maybe Doc -> [SValue repr] -> 
-    [(SVariable repr, SValue repr)] -> 
-    SValue repr
+  call :: Maybe Library -> Label -> VSType repr -> Maybe Doc -> [SValue repr] 
+    -> [(SVariable repr, SValue repr)] -> SValue repr
 
   valuePrec :: repr (Value repr) -> Maybe Int
   valueDoc :: repr (Value repr) -> Doc
@@ -163,21 +160,18 @@ class InternalValue repr where
 
 class InternalFunction repr where
   getFunc        :: SVariable repr -> VSFunction repr
-  setFunc        :: VSType repr -> SVariable repr -> 
-    SValue repr -> VSFunction repr
+  setFunc        :: VSType repr -> SVariable repr -> SValue repr -> 
+    VSFunction repr
 
-  listSizeFunc       :: VSFunction repr
-  listAddFunc        :: SValue repr -> SValue repr -> 
-    SValue repr -> VSFunction repr
-  listAppendFunc         :: SValue repr -> VSFunction repr
+  listSizeFunc   :: VSFunction repr
+  listAddFunc    :: SValue repr -> SValue repr -> SValue repr -> VSFunction repr
+  listAppendFunc :: SValue repr -> VSFunction repr
 
   iterBeginFunc :: VSType repr -> VSFunction repr
   iterEndFunc   :: VSType repr -> VSFunction repr
 
-  listAccessFunc :: VSType repr -> SValue repr -> 
-    VSFunction repr
-  listSetFunc    :: SValue repr -> SValue repr -> 
-    SValue repr -> VSFunction repr
+  listAccessFunc :: VSType repr -> SValue repr -> VSFunction repr
+  listSetFunc    :: SValue repr -> SValue repr -> SValue repr -> VSFunction repr
 
   functionType :: repr (Function repr) -> repr (Type repr)
   functionDoc :: repr (Function repr) -> Doc
@@ -186,8 +180,8 @@ class InternalFunction repr where
 
 class InternalStatement repr where
   -- newLn, maybe a file to print to, printFunc, value to print
-  printSt :: Bool -> Maybe (SValue repr) -> SValue repr 
-    -> SValue repr -> MSStatement repr
+  printSt :: Bool -> Maybe (SValue repr) -> SValue repr -> SValue repr -> 
+    MSStatement repr
     
   multiAssign       :: [SVariable repr] -> [SValue repr] -> MSStatement repr 
   multiReturn :: [SValue repr] -> MSStatement repr
@@ -218,13 +212,12 @@ class InternalParam repr where
 
 class (MethodTypeSym repr, BlockCommentSym repr) => InternalMethod repr where
   intMethod     :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
-    -> MS (repr (MethodType repr)) -> [MSParameter repr] -> 
-    MSBody repr -> SMethod repr
-  intFunc       :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
-    -> MS (repr (MethodType repr)) -> [MSParameter repr] -> 
-    MSBody repr -> SMethod repr
-  commentedFunc :: MS (repr (BlockComment repr)) -> SMethod repr -> 
+    -> MS (repr (MethodType repr)) -> [MSParameter repr] -> MSBody repr -> 
     SMethod repr
+  intFunc       :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
+    -> MS (repr (MethodType repr)) -> [MSParameter repr] -> MSBody repr -> 
+    SMethod repr
+  commentedFunc :: MS (repr (BlockComment repr)) -> SMethod repr -> SMethod repr
     
   destructor :: [CSStateVar repr] -> SMethod repr
 
@@ -237,11 +230,9 @@ class InternalStateVar repr where
 
 class (BlockCommentSym repr) => InternalClass repr where
   intClass :: Label -> repr (Scope repr) -> repr (Keyword repr) ->
-    [CSStateVar repr] -> [SMethod repr] -> 
-    SClass repr
+    [CSStateVar repr] -> [SMethod repr] -> SClass repr
 
-  commentedClass :: CS (repr (BlockComment repr)) -> 
-    SClass repr -> SClass repr
+  commentedClass :: CS (repr (BlockComment repr)) -> SClass repr -> SClass repr
 
   classDoc :: repr (Class repr) -> Doc
   classFromData :: CS Doc -> SClass repr

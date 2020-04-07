@@ -100,8 +100,7 @@ getInputDecl = do
   getDecl (partition (flip member (eMap $ codeSpec g) . codeName) 
     (inputs $ csi $ codeSpec g))
 
-initConsts :: (ProgramSym repr) => Reader DrasilState 
-  (Maybe (MSStatement repr))
+initConsts :: (ProgramSym repr) => Reader DrasilState (Maybe (MSStatement repr))
 initConsts = do
   g <- ask
   v_consts <- mkVar (quantvar consts)
@@ -138,8 +137,7 @@ chooseInModule :: (ProgramSym repr) => InputModule -> Reader DrasilState
 chooseInModule Combined = genInputModCombined
 chooseInModule Separated = genInputModSeparated
 
-genInputModSeparated :: (ProgramSym repr) => 
-  Reader DrasilState [SFile repr]
+genInputModSeparated :: (ProgramSym repr) => Reader DrasilState [SFile repr]
 genInputModSeparated = do
   ipDesc <- modDesc inputParametersDesc
   ifDesc <- modDesc (liftS inputFormatDesc)
@@ -151,8 +149,7 @@ genInputModSeparated = do
     genModule "DerivedValues" dvDesc [genInputDerived Primary] [],
     genModule "InputConstraints" icDesc [genInputConstraints Primary] []]
 
-genInputModCombined :: (ProgramSym repr) => 
-  Reader DrasilState [SFile repr]
+genInputModCombined :: (ProgramSym repr) => Reader DrasilState [SFile repr]
 genInputModCombined = do
   ipDesc <- modDesc inputParametersDesc
   let cname = "InputParameters"
@@ -165,8 +162,7 @@ genInputModCombined = do
   liftS $ genMod ic
 
 constVarFunc :: (ProgramSym repr) => ConstantRepr -> String ->
-  (SVariable repr -> SValue repr -> 
-  CSStateVar repr)
+  (SVariable repr -> SValue repr -> CSStateVar repr)
 constVarFunc Var n = stateVarDef n public dynamic
 constVarFunc Const n = constVar n public
 
@@ -415,8 +411,7 @@ genConstClass scp = withReader (\s -> s {currentClass = cname}) $ do
 
 ------- CALC ----------
 
-genCalcMod :: (ProgramSym repr) => 
-  Reader DrasilState (SFile repr)
+genCalcMod :: (ProgramSym repr) => Reader DrasilState (SFile repr)
 genCalcMod = do
   g <- ask
   genModule "Calculations" calcModDesc (map (fmap Just . genCalcFunc) 
@@ -465,14 +460,12 @@ genCaseBlock t v c cs = do
 
 ----- OUTPUT -------
 
-genOutputMod :: (ProgramSym repr) => 
-  Reader DrasilState [SFile repr]
+genOutputMod :: (ProgramSym repr) => Reader DrasilState [SFile repr]
 genOutputMod = do
   ofDesc <- modDesc $ liftS outputFormatDesc
   liftS $ genModule "OutputFormat" ofDesc [genOutputFormat] []
 
-genOutputFormat :: (ProgramSym repr) => 
-  Reader DrasilState (Maybe (SMethod repr))
+genOutputFormat :: (ProgramSym repr) => Reader DrasilState (Maybe (SMethod repr))
 genOutputFormat = do
   g <- ask
   let genOutput :: (ProgramSym repr) => Maybe String -> Reader DrasilState 

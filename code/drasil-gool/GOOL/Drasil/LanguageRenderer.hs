@@ -27,9 +27,10 @@ module GOOL.Drasil.LanguageRenderer (
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
-import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, MSStatement, SMethod, BodySym(..), bodyStatements,
-  oneLiner, PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), FunctionSym(..), 
+import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
+  MSStatement, SMethod, BodySym(..), bodyStatements, oneLiner, 
+  PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatement(..), ifNoElse, 
   ScopeSym(..), ParameterSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(int))
@@ -151,9 +152,8 @@ bodyDocD bs = vibcat blocks
 printDoc :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> Doc
 printDoc printFn v = valueDoc printFn <> parens (valueDoc v)
 
-printListDoc :: (RenderSym repr) => Integer -> SValue repr -> 
-  (SValue repr -> MSStatement repr) -> 
-  (String -> MSStatement repr) -> 
+printListDoc :: (RenderSym repr) => Integer -> SValue repr -> (SValue repr -> 
+  MSStatement repr) -> (String -> MSStatement repr) -> 
   (String -> MSStatement repr) -> MSStatement repr
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
   for (varDecDef i (litInt 0)) (valueOf i ?< (listSize v #- litInt 1))
@@ -164,12 +164,11 @@ printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[",
   where l_i = "list_i" ++ show n
         i = var l_i S.int
 
-printObjDoc :: ClassName -> (String -> MSStatement repr)
-  -> MSStatement repr
+printObjDoc :: ClassName -> (String -> MSStatement repr) -> MSStatement repr
 printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
-outDoc :: (RenderSym repr) => Bool -> Maybe (SValue repr) -> 
-  SValue repr -> SValue repr -> MSStatement repr
+outDoc :: (RenderSym repr) => Bool -> Maybe (SValue repr) -> SValue repr -> 
+  SValue repr -> MSStatement repr
 outDoc newLn f printFn v = zoom lensMStoVS v >>= outDoc' . getType . valueType
   where outDoc' (List t) = printListDoc (getNestDegree 1 t) v prFn prStrFn 
           prLnFn
@@ -285,15 +284,13 @@ mkSt = flip stateFromData Semi
 mkStNoEnd :: (RenderSym repr) => Doc -> repr (Statement repr)
 mkStNoEnd = flip stateFromData Empty
 
-mkStateVal :: (RenderSym repr) => VSType repr -> Doc -> 
-  SValue repr
+mkStateVal :: (RenderSym repr) => VSType repr -> Doc -> SValue repr
 mkStateVal t d = onStateValue (\tp -> valFromData Nothing tp d) t
 
 mkVal :: (RenderSym repr) => repr (Type repr) -> Doc -> repr (Value repr)
 mkVal = valFromData Nothing
 
-mkStateVar :: (RenderSym repr) => String -> VSType repr -> Doc -> 
-  SVariable repr
+mkStateVar :: (RenderSym repr) => String -> VSType repr -> Doc -> SVariable repr
 mkStateVar n t d = onStateValue (\tp -> varFromData Dynamic n tp d) t
 
 mkVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 

@@ -20,10 +20,9 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Monad.Reader (Reader, ask, withReader)
 
-genModuleWithImports :: (ProgramSym repr) => Name -> String -> [String]
-  -> [Reader DrasilState (Maybe (SMethod repr))]
-  -> [Reader DrasilState (Maybe (SClass repr))]
-  -> Reader DrasilState (SFile repr)
+genModuleWithImports :: (ProgramSym repr) => Name -> String -> [String] -> 
+  [Reader DrasilState (Maybe (SMethod repr))] -> 
+  [Reader DrasilState (Maybe (SClass repr))] -> Reader DrasilState (SFile repr)
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- ask
   let updateState = withReader (\s -> s { currentModule = n })
@@ -38,10 +37,9 @@ genModuleWithImports n desc is maybeMs maybeCs = do
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n is (catMaybes ms) (catMaybes cs)
 
-genModule :: (ProgramSym repr) => Name -> String
-  -> [Reader DrasilState (Maybe (SMethod repr))]
-  -> [Reader DrasilState (Maybe (SClass repr))]
-  -> Reader DrasilState (SFile repr)
+genModule :: (ProgramSym repr) => Name -> String -> 
+  [Reader DrasilState (Maybe (SMethod repr))] -> 
+  [Reader DrasilState (Maybe (SClass repr))] -> Reader DrasilState (SFile repr)
 genModule n desc = genModuleWithImports n desc []
 
 genDoxConfig :: (AuxiliarySym repr) => String -> GOOLState ->
@@ -55,8 +53,8 @@ genDoxConfig n s = do
 data ClassType = Primary | Auxiliary
 
 mkClass :: (ProgramSym repr) => ClassType -> String -> Label -> Maybe Label -> 
-  [CSStateVar repr] -> Reader DrasilState [SMethod repr] 
-  -> Reader DrasilState (SClass repr)
+  [CSStateVar repr] -> Reader DrasilState [SMethod repr] -> 
+  Reader DrasilState (SClass repr)
 mkClass s desc n l vs mths = do
   g <- ask
   ms <- mths
@@ -68,19 +66,17 @@ mkClass s desc n l vs mths = do
     else f n l vs ms
 
 primaryClass :: (ProgramSym repr) => String -> Label -> Maybe Label -> 
-  [CSStateVar repr] -> Reader DrasilState [SMethod repr] 
-  -> Reader DrasilState (SClass repr)
+  [CSStateVar repr] -> Reader DrasilState [SMethod repr] -> 
+  Reader DrasilState (SClass repr)
 primaryClass = mkClass Primary
 
 auxClass :: (ProgramSym repr) => String -> Label -> Maybe Label -> 
-  [CSStateVar repr] -> Reader DrasilState [SMethod repr] 
-  -> Reader DrasilState (SClass repr)
+  [CSStateVar repr] -> Reader DrasilState [SMethod repr] -> 
+  Reader DrasilState (SClass repr)
 auxClass = mkClass Auxiliary
 
-fApp :: (ProgramSym repr) => String -> String -> VSType repr -> 
-  [SValue repr] -> 
-  [(SVariable repr, SValue repr)] -> 
-  Reader DrasilState (SValue repr)
+fApp :: (ProgramSym repr) => String -> String -> VSType repr -> [SValue repr] 
+  -> [(SVariable repr, SValue repr)] -> Reader DrasilState (SValue repr)
 fApp m s t vl ns = do
   g <- ask
   let cm = currentModule g
@@ -88,19 +84,16 @@ fApp m s t vl ns = do
     (eMap $ codeSpec g) == Just cm then funcAppMixedArgs s t vl ns else 
     selfFuncAppMixedArgs s t vl ns
 
-ctorCall :: (ProgramSym repr) => String -> VSType repr -> 
-  [SValue repr] -> 
-  [(SVariable repr, SValue repr)] -> 
-  Reader DrasilState (SValue repr)
+ctorCall :: (ProgramSym repr) => String -> VSType repr -> [SValue repr] -> 
+  [(SVariable repr, SValue repr)] -> Reader DrasilState (SValue repr)
 ctorCall m t vl ns = do
   g <- ask
   let cm = currentModule g
   return $ if m /= cm then extNewObjMixedArgs m t vl ns else 
     newObjMixedArgs t vl ns
 
-fAppInOut :: (ProgramSym repr) => String -> String -> [SValue repr] 
-  -> [SVariable repr] -> [SVariable repr] -> 
-  Reader DrasilState (MSStatement repr)
+fAppInOut :: (ProgramSym repr) => String -> String -> [SValue repr] -> 
+  [SVariable repr] -> [SVariable repr] -> Reader DrasilState (MSStatement repr)
 fAppInOut m n ins outs both = do
   g <- ask
   let cm = currentModule g
@@ -108,8 +101,7 @@ fAppInOut m n ins outs both = do
     (eMap $ codeSpec g) == Just cm then inOutCall n ins outs both else 
     selfInOutCall n ins outs both
 
-mkParam :: (ProgramSym repr) => SVariable repr -> 
-  MSParameter repr
+mkParam :: (ProgramSym repr) => SVariable repr -> MSParameter repr
 mkParam v = zoom lensMStoVS v >>= (\v' -> paramFunc (getType $ variableType v') 
   v)
   where paramFunc (List _) = pointerParam

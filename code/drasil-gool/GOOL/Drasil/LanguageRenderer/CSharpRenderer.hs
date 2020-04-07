@@ -12,11 +12,11 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
-  ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
+  ControlBlock(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp,
   selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), 
   objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
-  StatementSym(..), (&=), ControlStatementSym(..), ScopeSym(..), 
+  StatementSym(..), (&=), ControlStatement(..), ScopeSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
@@ -211,7 +211,7 @@ instance InternalType CSharpCode where
   getTypeDoc = typeDoc . unCSC
   typeFromData t s d = toCode $ td t s d
 
-instance ControlBlockSym CSharpCode where
+instance ControlBlock CSharpCode where
   runStrategy = G.runStrategy
 
   solveODE info opts = modify (addLibImport "Microsoft.Research.Oslo" . 
@@ -548,7 +548,7 @@ instance StatementSym CSharpCode where
 
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
-instance ControlStatementSym CSharpCode where
+instance ControlStatement CSharpCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
   switch = G.switch
 

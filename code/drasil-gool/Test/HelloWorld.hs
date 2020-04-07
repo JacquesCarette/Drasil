@@ -4,7 +4,7 @@ module Test.HelloWorld (helloWorld) where
 
 import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), listSlice, TypeSym(..), StatementSym(..), (&=), 
-  ControlStatementSym(..), VariableSym(..), ValueSym(..), NumericExpression(..),
+  ControlStatement(..), VariableSym(..), ValueSym(..), NumericExpression(..),
   BooleanExpression(..), ValueExpression(..), extFuncApp, Selector(..), 
   FunctionSym(..), SelectorFunction(..), MethodSym(..), ModuleSym(..), GS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)

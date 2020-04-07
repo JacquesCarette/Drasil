@@ -5,7 +5,7 @@ module GOOL.Drasil.ClassInterface (
   Label, Library,
   -- Typeclasses
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
-  oneLiner, BlockSym(..), TypeSym(..), ControlBlockSym(..), 
+  oneLiner, BlockSym(..), TypeSym(..), ControlBlock(..), 
   InternalControlBlock(..), listSlice, VariableSym(..), ($->), listOf, 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
@@ -13,7 +13,7 @@ module GOOL.Drasil.ClassInterface (
   selfAccess, InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), listIndexExists, SelectorFunction(..),
   at, StatementSym(..), (&=), assignToListIndex, initState, changeState, 
-  observerListName, initObserverList, addObserver, ControlStatementSym(..), 
+  observerListName, initObserverList, addObserver, ControlStatement(..), 
   ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), 
   privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
   privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..), ODEInfo(..), 
@@ -91,14 +91,14 @@ class (PermanenceSym repr) => TypeSym repr where
   getType :: repr (Type repr) -> CodeType
   getTypeString :: repr (Type repr) -> String
 
-class (ControlStatementSym repr) => ControlBlockSym repr where
+class (ControlStatement repr) => ControlBlock repr where
   runStrategy     :: Label -> [(Label, MS (repr (Body repr)))] -> 
     Maybe (VS (repr (Value repr))) -> Maybe (VS (repr (Variable repr))) -> 
     MS (repr (Block repr))
 
   solveODE :: ODEInfo repr -> ODEOptions repr -> MS (repr (Block repr))
 
-class (ControlStatementSym repr) => InternalControlBlock repr where
+class (ControlStatement repr) => InternalControlBlock repr where
   listSlice'      :: Maybe (VS (repr (Value repr))) -> 
     Maybe (VS (repr (Value repr))) -> Maybe (VS (repr (Value repr))) ->
     VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
@@ -532,7 +532,7 @@ addObserver o = valState $ listAdd obsList lastelem o
           valueType o
         lastelem = listSize obsList
 
-class (BodySym repr) => ControlStatementSym repr where
+class (BodySym repr) => ControlStatement repr where
   ifCond     :: [(VS (repr (Value repr)), MS (repr (Body repr)))] -> 
     MS (repr (Body repr)) -> MS (repr (Statement repr))
   switch     :: VS (repr (Value repr)) -> [(VS (repr (Value repr)), 
@@ -564,12 +564,12 @@ class (BodySym repr) => ControlStatementSym repr where
   getFileInputAll  :: VS (repr (Value repr)) -> VS (repr (Variable repr)) -> 
     MS (repr (Statement repr))
 
-ifNoElse :: (ControlStatementSym repr) => 
+ifNoElse :: (ControlStatement repr) => 
   [(VS (repr (Value repr)), MS (repr (Body repr)))] 
   -> MS (repr (Statement repr))
 ifNoElse bs = ifCond bs $ body []
 
-switchAsIf :: (ControlStatementSym repr) => 
+switchAsIf :: (ControlStatement repr) => 
   VS (repr (Value repr)) -> [(VS (repr (Value repr)), MS (repr (Body repr)))] 
   -> MS (repr (Body repr)) -> MS (repr (Statement repr))
 switchAsIf v = ifCond . map (first (v ?==))
@@ -585,7 +585,7 @@ class ParameterSym repr where
   -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
   pointerParam :: VS (repr (Variable repr)) -> MS (repr (Parameter repr))
 
-class (StateVarSym repr, ParameterSym repr, ControlBlockSym repr, 
+class (StateVarSym repr, ParameterSym repr, ControlBlock repr, 
   InternalControlBlock repr) => MethodSym repr where
   type Method repr
   method      :: Label -> repr (Scope repr) -> repr (Permanence repr) 

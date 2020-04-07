@@ -30,7 +30,7 @@ import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, BodySym(..), bodyStatements,
   oneLiner, PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ifNoElse, 
+  SelectorFunction(..), StatementSym(..), ControlStatement(..), ifNoElse, 
   ScopeSym(..), ParameterSym(..), MethodSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(int))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalBody(..), 

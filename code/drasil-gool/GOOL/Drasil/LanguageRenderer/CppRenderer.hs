@@ -13,11 +13,11 @@ import Utils.Drasil (blank, indent, indentList)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), 
+  TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
   ($.), InternalValueExp(..), objMethodCall, FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), (&=), ControlStatementSym(..), 
+  SelectorFunction(..), StatementSym(..), (&=), ControlStatement(..), 
   switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), pubMethod, 
   initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), ModuleSym(..), 
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..))
@@ -225,7 +225,7 @@ instance (Pair p) => InternalType (p CppSrcCode CppHdrCode) where
   getTypeDoc s = getTypeDoc $ pfst s
   typeFromData t s d = pair (typeFromData t s d) (typeFromData t s d)
 
-instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
+instance (Pair p) => ControlBlock (p CppSrcCode CppHdrCode) where
   -- How I handle values with both State and Maybe might cause problems later on, 
   -- because it will make the state transitions run twice for the value in the 
   -- Maybe. For now, given what we store in the State for Values/Variables, this 
@@ -665,7 +665,7 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
 
   multi = pair1List multi multi
 
-instance (Pair p) => ControlStatementSym (p CppSrcCode CppHdrCode) where
+instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
   ifCond bs = pair2Lists1Val
     (\cs bods -> ifCond (zip cs bods)) 
     (\cs bods -> ifCond (zip cs bods)) 
@@ -1173,7 +1173,7 @@ instance InternalType CppSrcCode where
   getTypeDoc = typeDoc . unCPPSC
   typeFromData t s d = toCode $ td t s d
 
-instance ControlBlockSym CppSrcCode where
+instance ControlBlock CppSrcCode where
   runStrategy = G.runStrategy
 
   solveODE info opts = let (fl, s) = cppODEFile info
@@ -1525,7 +1525,7 @@ instance StatementSym CppSrcCode where
 
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
-instance ControlStatementSym CppSrcCode where
+instance ControlStatement CppSrcCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
   switch = G.switch
 
@@ -1825,7 +1825,7 @@ instance InternalType CppHdrCode where
   getTypeDoc = typeDoc . unCPPHC
   typeFromData t s d = toCode $ td t s d
 
-instance ControlBlockSym CppHdrCode where
+instance ControlBlock CppHdrCode where
   runStrategy _ _ _ _ = toState $ toCode empty
 
   solveODE info _ = let (fl, s) = cppODEFile info
@@ -2129,7 +2129,7 @@ instance StatementSym CppHdrCode where
 
   multi _ = emptyState
 
-instance ControlStatementSym CppHdrCode where
+instance ControlStatement CppHdrCode where
   ifCond _ _ = emptyState
   switch _ _ _ = emptyState
 

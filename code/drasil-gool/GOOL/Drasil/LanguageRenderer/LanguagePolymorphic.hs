@@ -60,7 +60,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   FunctionSym(func, listSize, listAppend), SelectorFunction(listAccess),
   StatementSym(assign, varDec, varDecDef, listDec, objDecNew, extObjDecNew, 
     constDecDef, valState, returnState),
-  ControlStatementSym(ifCond, for, forRange, switch), ParameterSym(param), 
+  ControlStatement(ifCond, for, forRange, switch), ParameterSym(param), 
   MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (InternalFile(commentedMod), KeywordSym(..), 
   RenderSym, InternalBody(bodyDoc, docBody), InternalBlock(docBlock, blockDoc), 

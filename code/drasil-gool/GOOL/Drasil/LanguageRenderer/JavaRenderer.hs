@@ -12,12 +12,12 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), 
+  TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
   ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), (&=),
-  ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), 
   ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
@@ -220,7 +220,7 @@ instance InternalType JavaCode where
   getTypeDoc = typeDoc . unJC
   typeFromData t s d = toCode $ td t s d
 
-instance ControlBlockSym JavaCode where
+instance ControlBlock JavaCode where
   runStrategy = G.runStrategy
 
   solveODE info opts = let (fls, s) = jODEFiles info 
@@ -581,7 +581,7 @@ instance StatementSym JavaCode where
 
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
-instance ControlStatementSym JavaCode where
+instance ControlStatement JavaCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
   switch  = G.switch
 

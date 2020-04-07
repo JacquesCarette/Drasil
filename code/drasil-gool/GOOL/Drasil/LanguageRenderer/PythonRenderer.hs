@@ -11,12 +11,12 @@ import Utils.Drasil (blank, indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), 
+  TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
   listOf, ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
   Selector(..), ($.), InternalValueExp(..), objMethodCall,
   objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), at, 
-  StatementSym(..), (&=), observerListName, ControlStatementSym(..), 
+  StatementSym(..), (&=), observerListName, ControlStatement(..), 
   switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
@@ -204,7 +204,7 @@ instance InternalType PythonCode where
   getTypeDoc = typeDoc . unPC
   typeFromData t s d = toCode $ td t s d
 
-instance ControlBlockSym PythonCode where
+instance ControlBlock PythonCode where
   runStrategy = G.runStrategy
 
   solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
@@ -551,7 +551,7 @@ instance StatementSym PythonCode where
 
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
-instance ControlStatementSym PythonCode where
+instance ControlStatement PythonCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
   switch = switchAsIf
 

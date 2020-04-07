@@ -1,7 +1,7 @@
 module Test.SimpleODE (simpleODE) where
 
 import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
-  TypeSym(..), ControlBlockSym(..), StatementSym(..), VariableSym(..), 
+  TypeSym(..), ControlBlock(..), StatementSym(..), VariableSym(..), 
   ValueSym(..), NumericExpression(..), MethodSym(..), ModuleSym(..), ODEInfo, 
   odeInfo, ODEOptions, odeOptions, ODEMethod(RK45), GS, MS, VS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)

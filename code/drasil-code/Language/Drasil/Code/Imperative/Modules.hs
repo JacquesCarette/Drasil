@@ -38,7 +38,7 @@ import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 import GOOL.Drasil (ProgramSym, FileSym(..), BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), 
   ValueSym(..), BooleanExpression(..), StatementSym(..), 
-  ControlStatementSym(..), ifNoElse, ScopeSym(..), MethodSym(..), 
+  ControlStatement(..), ifNoElse, ScopeSym(..), MethodSym(..), 
   StateVarSym(..), pubMVar, ClassSym(..), convType, FS, CS, MS, VS)
 
 import Prelude hiding (print)

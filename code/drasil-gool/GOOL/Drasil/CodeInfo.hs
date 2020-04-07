@@ -3,11 +3,11 @@
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlock(..), 
   InternalControlBlock(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), FunctionSym(..), SelectorFunction(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
+  StatementSym(..), ControlStatement(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..))
@@ -88,7 +88,7 @@ instance TypeSym CodeInfo where
   getType _ = Void
   getTypeString = unCI
 
-instance ControlBlockSym CodeInfo where
+instance ControlBlock CodeInfo where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
@@ -313,7 +313,7 @@ instance StatementSym CodeInfo where
 
   multi = executeList
 
-instance ControlStatementSym CodeInfo where
+instance ControlStatement CodeInfo where
   ifCond = evalConds
   switch v cs b = do
     _ <- zoom lensMStoVS v

@@ -31,7 +31,7 @@ import GOOL.Drasil (Label, ProgramSym, FileSym(..), PermanenceSym(..),
   BodySym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..), 
   ($->), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), objMethodCallMixedArgs, FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ifNoElse, 
+  SelectorFunction(..), StatementSym(..), ControlStatement(..), ifNoElse, 
   ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), pubMVar, 
   ClassSym(..), nonInitConstructor, convType, CodeType(..), FS, CS, MS, VS, 
   onStateValue) 

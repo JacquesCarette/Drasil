@@ -141,7 +141,6 @@ instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
   endStatement = pair endStatement endStatement
-  endStatementLoop = pair endStatementLoop endStatementLoop
 
   inherit n = pair (inherit n) (inherit n)
   implements is = pair (implements is) (implements is)
@@ -149,17 +148,7 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   blockStart = pair blockStart blockStart
   blockEnd = pair blockEnd blockEnd
 
-  ifBodyStart = pair ifBodyStart ifBodyStart
-  elseIf = pair elseIf elseIf
-  
-  iterForEachLabel = pair iterForEachLabel iterForEachLabel
-  iterInLabel = pair iterInLabel iterInLabel
-
   commentStart = pair commentStart commentStart
-  blockCommentStart = pair blockCommentStart blockCommentStart
-  blockCommentEnd = pair blockCommentEnd blockCommentEnd
-  docCommentStart = pair docCommentStart docCommentStart
-  docCommentEnd = pair docCommentEnd docCommentEnd
 
   keyFromDoc d = pair (keyFromDoc d) (keyFromDoc d)
   keyDoc k = keyDoc $ pfst k
@@ -1082,7 +1071,6 @@ instance InternalFile CppSrcCode where
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
   endStatement = toCode semi
-  endStatementLoop = toCode empty
 
   inherit n = onCodeValue (cppInherit n . fst) public
   implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
@@ -1091,17 +1079,7 @@ instance KeywordSym CppSrcCode where
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
 
-  ifBodyStart = blockStart
-  elseIf = toCode elseIfLabel
-  
-  iterForEachLabel = toCode empty
-  iterInLabel = toCode empty
-
   commentStart = toCode doubleSlash
-  blockCommentStart = toCode blockCmtStart
-  blockCommentEnd = toCode blockCmtEnd
-  docCommentStart = toCode docCmtStart
-  docCommentEnd = blockCommentEnd
 
   keyFromDoc = toCode
   keyDoc = unCPPSC
@@ -1525,7 +1503,7 @@ instance StatementSym CppSrcCode where
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
 instance ControlStatement CppSrcCode where
-  ifCond = G.ifCond ifBodyStart elseIf blockEnd
+  ifCond = G.ifCond blockStart elseIfLabel blockEnd
   switch = G.switch
 
   ifExists _ ifBody _ = onStateValue (mkStNoEnd . bodyDoc) ifBody -- All variables are initialized in C++
@@ -1684,10 +1662,9 @@ instance InternalMod CppSrcCode where
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
-  blockComment lns = on2CodeValues (blockCmtDoc lns) blockCommentStart 
-    blockCommentEnd
-  docComment = onStateValue (\lns -> on2CodeValues (docCmtDoc lns) 
-    docCommentStart docCommentEnd)
+  blockComment lns = toCode $ blockCmtDoc lns blockCmtStart blockCmtEnd
+  docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
+    blockCmtEnd)
 
   blockCommentDoc = unCPPSC
 
@@ -1729,7 +1706,6 @@ instance InternalFile CppHdrCode where
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
   endStatement = toCode semi
-  endStatementLoop = toCode empty
 
   inherit n = onCodeValue (cppInherit n . fst) public
   implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
@@ -1738,17 +1714,7 @@ instance KeywordSym CppHdrCode where
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
 
-  ifBodyStart = toCode empty
-  elseIf = toCode empty
-  
-  iterForEachLabel = toCode empty
-  iterInLabel = toCode empty
-
   commentStart = toCode empty
-  blockCommentStart = toCode blockCmtStart
-  blockCommentEnd = toCode blockCmtEnd
-  docCommentStart = toCode docCmtStart
-  docCommentEnd = blockCommentEnd
 
   keyFromDoc = toCode
   keyDoc = unCPPHC
@@ -2265,10 +2231,9 @@ instance InternalMod CppHdrCode where
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc
-  blockComment lns = on2CodeValues (blockCmtDoc lns) blockCommentStart 
-    blockCommentEnd
-  docComment = onStateValue (\lns -> on2CodeValues (docCmtDoc lns) 
-    docCommentStart docCommentEnd)
+  blockComment lns = toCode $ blockCmtDoc lns blockCmtStart blockCmtEnd
+  docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
+    blockCmtEnd)
 
   blockCommentDoc = unCPPHC
 

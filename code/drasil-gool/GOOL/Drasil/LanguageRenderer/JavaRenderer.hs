@@ -135,7 +135,6 @@ instance InternalFile JavaCode where
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
   endStatement = toCode semi
-  endStatementLoop = toCode empty
 
   inherit n = toCode $ text "extends" <+> text n
   implements is = toCode $ text "implements" <+> text (intercalate ", " is)
@@ -143,17 +142,7 @@ instance KeywordSym JavaCode where
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
 
-  ifBodyStart = blockStart
-  elseIf = toCode elseIfLabel
-  
-  iterForEachLabel = toCode forLabel
-  iterInLabel = toCode colon
-
   commentStart = toCode doubleSlash
-  blockCommentStart = toCode blockCmtStart
-  blockCommentEnd = toCode blockCmtEnd
-  docCommentStart = toCode docCmtStart
-  docCommentEnd = blockCommentEnd
 
   keyFromDoc = toCode
   keyDoc = unJC
@@ -582,14 +571,14 @@ instance StatementSym JavaCode where
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
 instance ControlStatement JavaCode where
-  ifCond = G.ifCond ifBodyStart elseIf blockEnd
+  ifCond = G.ifCond blockStart elseIfLabel blockEnd
   switch  = G.switch
 
   ifExists = G.ifExists
 
   for = G.for blockStart blockEnd
   forRange = G.forRange 
-  forEach = G.forEach blockStart blockEnd iterForEachLabel iterInLabel
+  forEach = G.forEach blockStart blockEnd forLabel colon
   while = G.while blockStart blockEnd
 
   tryCatch = G.tryCatch jTryCatch
@@ -704,10 +693,9 @@ instance InternalMod JavaCode where
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc
-  blockComment lns = on2CodeValues (blockCmtDoc lns) blockCommentStart 
-    blockCommentEnd
-  docComment = onStateValue (\lns -> on2CodeValues (docCmtDoc lns) 
-    docCommentStart docCommentEnd)
+  blockComment lns = toCode $ blockCmtDoc lns blockCmtStart blockCmtEnd
+  docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
+    blockCmtEnd)
 
   blockCommentDoc = unJC
 

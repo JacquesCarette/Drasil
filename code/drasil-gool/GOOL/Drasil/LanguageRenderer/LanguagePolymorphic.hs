@@ -881,13 +881,11 @@ throw f t = onStateValue (\msg -> stateFromData (f msg) t) . zoom lensMStoVS .
 
 -- ControlStatements --
 
-ifCond :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> [(SValue repr, MSBody repr)] -> MSBody repr -> 
-  MSStatement repr
+ifCond :: (RenderSym repr) => repr (Keyword repr) -> Doc -> repr (Keyword repr) 
+  -> [(SValue repr, MSBody repr)] -> MSBody repr -> MSStatement repr
 ifCond _ _ _ [] _ = error "if condition created with no cases"
-ifCond ifst elseif blEnd (c:cs) eBody = 
+ifCond ifst elif blEnd (c:cs) eBody = 
     let ifStart = keyDoc ifst
-        elif = keyDoc elseif
         bEnd = keyDoc blEnd
         ifSect (v, b) = on2StateValues (\val bd -> vcat [
           text "if" <+> parens (valueDoc val) <+> ifStart,
@@ -930,11 +928,10 @@ forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?<
   finalv) (i &+= stepv)
 
 forEach :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> repr (Keyword repr) -> SVariable repr -> SValue repr 
-  -> MSBody repr -> MSStatement repr
+  Doc -> Doc -> SVariable repr -> SValue repr -> MSBody repr -> MSStatement repr
 forEach bStart bEnd forEachLabel inLbl e' v' = on3StateValues (\e v b -> 
-  mkStNoEnd (vcat [keyDoc forEachLabel <+> parens (getTypeDoc (variableType e) 
-    <+> variableDoc e <+> keyDoc inLbl <+> valueDoc v) <+> keyDoc bStart,
+  mkStNoEnd (vcat [forEachLabel <+> parens (getTypeDoc (variableType e) 
+    <+> variableDoc e <+> inLbl <+> valueDoc v) <+> keyDoc bStart,
   indent $ bodyDoc b,
   keyDoc bEnd])) (zoom lensMStoVS e') (zoom lensMStoVS v') 
 

@@ -40,7 +40,6 @@ class (BlockCommentSym repr) => InternalFile repr where
 class KeywordSym repr where
   type Keyword repr
   endStatement     :: repr (Keyword repr)
-  endStatementLoop :: repr (Keyword repr)
 
   inherit :: Label -> repr (Keyword repr)
   implements :: [Label] -> repr (Keyword repr)
@@ -48,17 +47,7 @@ class KeywordSym repr where
   blockStart :: repr (Keyword repr)
   blockEnd   :: repr (Keyword repr)
 
-  ifBodyStart :: repr (Keyword repr)
-  elseIf      :: repr (Keyword repr)
-
-  iterForEachLabel :: repr (Keyword repr)
-  iterInLabel      :: repr (Keyword repr)
-
-  commentStart      :: repr (Keyword repr)
-  blockCommentStart :: repr (Keyword repr)
-  blockCommentEnd   :: repr (Keyword repr)
-  docCommentStart   :: repr (Keyword repr)
-  docCommentEnd     :: repr (Keyword repr)
+  commentStart :: repr (Keyword repr)
 
   keyFromDoc :: Doc -> repr (Keyword repr)
   keyDoc :: repr (Keyword repr) -> Doc

@@ -120,7 +120,6 @@ instance InternalFile PythonCode where
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
   endStatement = toCode empty
-  endStatementLoop = toCode empty
 
   inherit n = toCode $ parens (text n)
   implements is = toCode $ parens (text $ intercalate ", " is)
@@ -128,17 +127,7 @@ instance KeywordSym PythonCode where
   blockStart = toCode colon
   blockEnd = toCode empty
 
-  ifBodyStart = blockStart
-  elseIf = toCode $ text "elif"
-  
-  iterForEachLabel = toCode forLabel
-  iterInLabel = toCode inLabel
-
   commentStart = toCode $ text "#"
-  blockCommentStart = toCode empty
-  blockCommentEnd = toCode empty
-  docCommentStart = toCode $ text "##"
-  docCommentEnd = toCode empty
 
   keyFromDoc = toCode
   keyDoc = unPC
@@ -554,19 +543,16 @@ instance StatementSym PythonCode where
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
 instance ControlStatement PythonCode where
-  ifCond = G.ifCond ifBodyStart elseIf blockEnd
+  ifCond = G.ifCond blockStart (text "elif") blockEnd
   switch = switchAsIf
 
   ifExists = G.ifExists
 
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"
-  forRange it initval finalval step bod = (\i initv finalv stepv b -> mkStNoEnd 
-    (pyForRange iterInLabel i initv finalv stepv b)) <$> zoom lensMStoVS it <*> 
-    zoom lensMStoVS initval <*> zoom lensMStoVS finalval <*> 
-    zoom lensMStoVS step <*> bod
-  forEach i' v' = on3StateValues (\i v b -> mkStNoEnd (pyForEach 
-    iterForEachLabel iterInLabel i v b)) 
+  forRange i initv finalv stepv = forEach i
+    (funcApp "range" (listType int) [initv, finalv, stepv])
+  forEach i' v' = on3StateValues (\i v b -> mkStNoEnd (pyForEach i v b)) 
     (zoom lensMStoVS i') (zoom lensMStoVS v')
   while v' = on2StateValues (\v b -> mkStNoEnd (pyWhile v b)) 
     (zoom lensMStoVS v')
@@ -697,8 +683,8 @@ instance InternalMod PythonCode where
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
   blockComment lns = onCodeValue (pyBlockComment lns) commentStart
-  docComment = onStateValue (\lns -> on2CodeValues (pyDocComment lns) 
-    docCommentStart commentStart)
+  docComment = onStateValue (\lns -> onCodeValue (pyDocComment lns (text "##")) 
+    commentStart)
 
   blockCommentDoc = unPC
 
@@ -771,20 +757,10 @@ pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
 pyThrow :: (RenderSym repr) => repr (Value repr) -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valueDoc errMsg)
 
-pyForRange :: (RenderSym repr) => repr (Keyword repr) -> repr (Variable repr)
-  -> repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
+pyForEach :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
   repr (Body repr) -> Doc
-pyForRange inLbl i initv finalv stepv b = vcat [
-  forLabel <+> variableDoc i <+> keyDoc inLbl <+> text "range" <> parens 
-    (valueDoc initv <> text ", " <> valueDoc finalv <> text ", " <> valueDoc 
-    stepv) <> colon,
-  indent $ bodyDoc b]
-
-pyForEach :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  repr (Variable repr) -> repr (Value repr) -> repr (Body repr) -> Doc
-pyForEach forEachLabel inLbl i lstVar b = vcat [
-  keyDoc forEachLabel <+> variableDoc i <+> keyDoc inLbl <+> valueDoc lstVar <> 
-    colon,
+pyForEach i lstVar b = vcat [
+  forLabel <+> variableDoc i <+> inLabel <+> valueDoc lstVar <> colon,
   indent $ bodyDoc b]
 
 pyWhile :: (RenderSym repr) => repr (Value repr) -> repr (Body repr) -> Doc

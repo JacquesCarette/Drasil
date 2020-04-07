@@ -127,7 +127,6 @@ instance InternalFile CSharpCode where
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
   endStatement = toCode semi
-  endStatementLoop = toCode empty
 
   inherit n = toCode $ colon <+> text n
   implements is = toCode $ colon <+> text (intercalate ", " is)
@@ -135,17 +134,7 @@ instance KeywordSym CSharpCode where
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
 
-  ifBodyStart = blockStart
-  elseIf = toCode elseIfLabel
-  
-  iterForEachLabel = toCode $ text "foreach"
-  iterInLabel = toCode inLabel
-
   commentStart = toCode doubleSlash
-  blockCommentStart = toCode blockCmtStart
-  blockCommentEnd = toCode blockCmtEnd
-  docCommentStart = toCode docCmtStart
-  docCommentEnd = blockCommentEnd
 
   keyFromDoc = toCode
   keyDoc = unCSC
@@ -551,14 +540,14 @@ instance StatementSym CSharpCode where
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
 instance ControlStatement CSharpCode where
-  ifCond = G.ifCond ifBodyStart elseIf blockEnd
+  ifCond = G.ifCond blockStart elseIfLabel blockEnd
   switch = G.switch
 
   ifExists = G.ifExists
 
   for = G.for blockStart blockEnd
   forRange = G.forRange
-  forEach = G.forEach blockStart blockEnd iterForEachLabel iterInLabel 
+  forEach = G.forEach blockStart blockEnd (text "foreach") inLabel 
   while = G.while blockStart blockEnd
 
   tryCatch = G.tryCatch csTryCatch
@@ -665,10 +654,9 @@ instance InternalMod CSharpCode where
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
-  blockComment lns = on2CodeValues (blockCmtDoc lns) blockCommentStart 
-    blockCommentEnd
-  docComment = onStateValue (\lns -> on2CodeValues (docCmtDoc lns) 
-    docCommentStart docCommentEnd)
+  blockComment lns = toCode $ blockCmtDoc lns blockCmtStart blockCmtEnd
+  docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
+    blockCmtEnd)
 
   blockCommentDoc = unCSC
 

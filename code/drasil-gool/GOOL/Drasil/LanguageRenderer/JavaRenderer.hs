@@ -494,6 +494,9 @@ instance InternalFunction JavaCode where
 
 instance InternalStatement JavaCode where
   printSt _ _ = G.printSt
+  
+  multiAssign _ _ = error $ G.multiAssignError jName
+  multiReturn _ = error $ G.multiReturnError jName
 
   state = G.state
   loopState = G.loopState
@@ -508,7 +511,6 @@ instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
   assign = G.assign Semi
-  multiAssign _ _ = error $ G.multiAssignError jName
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
@@ -564,7 +566,6 @@ instance StatementSym JavaCode where
   continue = toState $ mkSt continueDocD
 
   returnState = G.returnState Semi
-  multiReturn _ = error $ G.multiReturnError jName
 
   valState = G.valState Semi
 

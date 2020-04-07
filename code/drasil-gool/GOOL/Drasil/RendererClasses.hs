@@ -188,6 +188,10 @@ class InternalStatement repr where
   -- newLn, maybe a file to print to, printFunc, value to print
   printSt :: Bool -> Maybe (VS (repr (Value repr))) -> VS (repr (Value repr)) 
     -> VS (repr (Value repr)) -> MS (repr (Statement repr))
+  
+  multiAssign :: [VS (repr (Variable repr))] -> [VS (repr (Value repr))] 
+    -> MS (repr (Statement repr)) 
+  multiReturn :: [VS (repr (Value repr))] -> MS (repr (Statement repr))
 
   state     :: MS (repr (Statement repr)) -> MS (repr (Statement repr))
   loopState :: MS (repr (Statement repr)) -> MS (repr (Statement repr))

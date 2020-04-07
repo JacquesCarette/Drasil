@@ -464,6 +464,9 @@ instance InternalFunction CSharpCode where
 
 instance InternalStatement CSharpCode where
   printSt _ _ = G.printSt
+  
+  multiAssign _ _ = error $ G.multiAssignError csName
+  multiReturn _ = error $ G.multiReturnError csName 
 
   state = G.state
   loopState = G.loopState
@@ -477,7 +480,6 @@ instance InternalStatement CSharpCode where
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
   assign = G.assign Semi
-  multiAssign _ _ = error $ G.multiAssignError csName
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
@@ -531,7 +533,6 @@ instance StatementSym CSharpCode where
   continue = toState $ mkSt continueDocD
 
   returnState = G.returnState Semi
-  multiReturn _ = error $ G.multiReturnError csName 
 
   valState = G.valState Semi
 

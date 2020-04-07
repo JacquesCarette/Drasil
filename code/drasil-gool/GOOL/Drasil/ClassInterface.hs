@@ -411,8 +411,6 @@ class (SelectorFunction repr) => StatementSym repr where
 
   assign            :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
     MS (repr (Statement repr))
-  multiAssign       :: [VS (repr (Variable repr))] -> [VS (repr (Value repr))] 
-    -> MS (repr (Statement repr)) 
 
   varDec           :: VS (repr (Variable repr)) -> MS (repr (Statement repr))
   varDecDef        :: VS (repr (Variable repr)) -> VS (repr (Value repr)) -> 
@@ -482,7 +480,6 @@ class (SelectorFunction repr) => StatementSym repr where
   continue :: MS (repr (Statement repr))
 
   returnState :: VS (repr (Value repr)) -> MS (repr (Statement repr))
-  multiReturn :: [VS (repr (Value repr))] -> MS (repr (Statement repr))
 
   valState :: VS (repr (Value repr)) -> MS (repr (Statement repr))
 

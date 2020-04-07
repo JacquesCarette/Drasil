@@ -554,6 +554,10 @@ instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
     (printSt nl (fmap (onStateValue pfst) f)) 
     (printSt nl (fmap (onStateValue psnd) f)) 
     (zoom lensMStoVS p) (zoom lensMStoVS v)
+
+  multiAssign vrs vls = pair2Lists multiAssign multiAssign 
+    (map (zoom lensMStoVS) vrs) (map (zoom lensMStoVS) vls)
+  multiReturn = pair1List multiReturn multiReturn . map (zoom lensMStoVS)
     
   state = pair1 state state
   loopState = pair1 loopState loopState
@@ -567,8 +571,6 @@ instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
   assign vr vl = pair2 assign assign (zoom lensMStoVS vr) (zoom lensMStoVS vl)
-  multiAssign vrs vls = pair2Lists multiAssign multiAssign 
-    (map (zoom lensMStoVS) vrs) (map (zoom lensMStoVS) vls)
   (&-=) vr vl = pair2 (&-=) (&-=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&+=) vr vl = pair2 (&+=) (&+=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&++) vl = pair1 (&++) (&++) (zoom lensMStoVS vl)
@@ -642,7 +644,6 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   continue = on2StateValues pair continue continue
 
   returnState = pair1 returnState returnState . zoom lensMStoVS
-  multiReturn = pair1List multiReturn multiReturn . map (zoom lensMStoVS)
 
   valState = pair1 valState valState . zoom lensMStoVS
 
@@ -1420,6 +1421,9 @@ instance InternalFunction CppSrcCode where
 instance InternalStatement CppSrcCode where
   printSt nl _ = cppPrint nl
 
+  multiAssign _ _ = error $ G.multiAssignError cppName
+  multiReturn _ = error $ G.multiReturnError cppName
+
   state = G.state
   loopState = G.loopState
 
@@ -1432,7 +1436,6 @@ instance InternalStatement CppSrcCode where
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
   assign = G.assign Semi
-  multiAssign _ _ = error $ G.multiAssignError cppName
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
@@ -1507,7 +1510,6 @@ instance StatementSym CppSrcCode where
   continue = toState $ mkSt continueDocD
 
   returnState = G.returnState Semi
-  multiReturn _ = error $ G.multiReturnError cppName
 
   valState = G.valState Semi
 
@@ -2046,6 +2048,9 @@ instance InternalFunction CppHdrCode where
 
 instance InternalStatement CppHdrCode where
   printSt _ _ _ _ = emptyState
+  
+  multiAssign _ _ = emptyState
+  multiReturn _ = emptyState
 
   state = G.state
   loopState _ = emptyState
@@ -2059,7 +2064,6 @@ instance InternalStatement CppHdrCode where
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
   assign _ _ = emptyState
-  multiAssign _ _ = emptyState
   (&-=) _ _ = emptyState
   (&+=) _ _ = emptyState
   (&++) _ = emptyState
@@ -2110,7 +2114,6 @@ instance StatementSym CppHdrCode where
   continue = emptyState
 
   returnState _ = emptyState
-  multiReturn _ = emptyState
 
   valState _ = emptyState
 

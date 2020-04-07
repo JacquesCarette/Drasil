@@ -462,6 +462,11 @@ instance InternalFunction PythonCode where
 instance InternalStatement PythonCode where
   printSt nl f p v = zoom lensMStoVS $ on3StateValues (\f' p' v' -> mkStNoEnd $ 
     pyPrint nl p' v' f') (fromMaybe (mkStateVal void empty) f) p v
+  
+  multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
+    mkStNoEnd (multiAssignDoc vrs vls)) vars vals
+  multiReturn [] = error "Attempt to write return statement with no return variables"
+  multiReturn vs = zoom lensMStoVS $ onStateList (mkStNoEnd . returnDocD) vs
 
   state = G.state
   loopState = G.loopState
@@ -476,8 +481,6 @@ instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   assign = G.assign Empty
-  multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
-    mkStNoEnd (multiAssignDoc vrs vls)) vars vals
   (&-=) = G.decrement
   (&+=) = G.increment'
   (&++) = G.increment1'
@@ -533,8 +536,6 @@ instance StatementSym PythonCode where
   continue = toState $ mkStNoEnd continueDocD
 
   returnState = G.returnState Empty
-  multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs = zoom lensMStoVS $ onStateList (mkStNoEnd . returnDocD) vs
 
   valState = G.valState Empty
 

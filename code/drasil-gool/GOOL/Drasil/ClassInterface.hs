@@ -7,9 +7,10 @@ module GOOL.Drasil.ClassInterface (
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   BlockSym(..), TypeSym(..), ControlBlockSym(..), InternalControlBlock(..), 
   listSlice, VariableSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), 
+  BooleanExpression(..), ValueExpression(..), Selector(..), ($.), selfAccess,
   InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
-  objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), at,
+  objMethodCallNoParams, FunctionSym(..), listIndexExists, SelectorFunction(..),
+  at,
   StatementSym(..), (&=), assignToListIndex, initState, changeState, observerListName, initObserverList, 
   addObserver, ControlStatementSym(..), ifNoElse, switchAsIf, ScopeSym(..),
   ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer, 
@@ -299,18 +300,20 @@ class (BooleanExpression repr) => ValueExpression repr where
 class (FunctionSym repr) => Selector repr where
   objAccess :: VS (repr (Value repr)) -> VS (repr (Function repr)) -> 
     VS (repr (Value repr))
-  ($.)      :: VS (repr (Value repr)) -> VS (repr (Function repr)) -> 
-    VS (repr (Value repr))
-  infixl 9 $.
 
-  selfAccess :: VS (repr (Function repr)) -> VS (repr (Value repr))
-
-  listIndexExists :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
-    VS (repr (Value repr))
-  argExists       :: Integer -> VS (repr (Value repr))
+  argExists :: Integer -> VS (repr (Value repr))
 
   indexOf :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
     VS (repr (Value repr))
+
+($.) :: (Selector repr) => VS (repr (Value repr)) -> VS (repr (Function repr)) 
+  -> VS (repr (Value repr))
+infixl 9 $.
+($.) = objAccess
+
+selfAccess :: (Selector repr) => VS (repr (Function repr)) ->
+  VS (repr (Value repr))
+selfAccess = objAccess (valueOf self)
 
 class (FunctionSym repr) => InternalValueExp repr where
   objMethodCallMixedArgs' :: Label -> VS (repr (Type repr)) -> 
@@ -353,6 +356,10 @@ class (ValueExpression repr) => FunctionSym repr where
 
   iterBegin :: VS (repr (Value repr)) -> VS (repr (Value repr))
   iterEnd   :: VS (repr (Value repr)) -> VS (repr (Value repr))
+
+listIndexExists :: (FunctionSym repr) => VS (repr (Value repr)) -> 
+  VS (repr (Value repr)) -> VS (repr (Value repr))
+listIndexExists lst index = listSize lst ?> index
 
 class (Selector repr, InternalValueExp repr) => SelectorFunction repr where
   listAccess :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 

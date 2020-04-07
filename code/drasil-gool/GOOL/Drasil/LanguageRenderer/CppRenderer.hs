@@ -15,7 +15,7 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), InternalValueExp(..), objMethodCall, FunctionSym(..), 
+  Selector(..), ($.), InternalValueExp(..), objMethodCall, FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), (&=), ControlStatementSym(..), switchAsIf, ScopeSym(..),
   ParameterSym(..), MethodSym(..), pubMethod, initializer, StateVarSym(..), 
   privMVar, pubMVar, ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
@@ -44,7 +44,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   moduloOp, powerOp, andOp, orOp, var, staticVar, self, objVar, 
   listVar, listOf, arrayElem, litTrue, litFalse, litChar, litDouble, litFloat, 
   litInt, litString, litArray, valueOf, arg, argsList, inlineIf, objAccess, 
-  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, call', 
+  objMethodCall, objMethodCallNoParams, call', 
   funcApp, funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, extFuncApp, 
   libFuncApp, libFuncAppMixedArgs, newObj, newObjMixedArgs, extNewObj, 
   libNewObj, libNewObjMixedArgs, lambda, func, get, set, listSize, listAdd, 
@@ -515,11 +515,7 @@ instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
   objAccess = pair2 objAccess objAccess
-  ($.) = pair2 ($.) ($.)
 
-  selfAccess = pair1 selfAccess selfAccess
-
-  listIndexExists = pair2 listIndexExists listIndexExists
   argExists i = on2StateValues pair (argExists i) (argExists i)
   
   indexOf = pair2 indexOf indexOf
@@ -1417,10 +1413,7 @@ instance InternalValue CppSrcCode where
 
 instance Selector CppSrcCode where
   objAccess = G.objAccess
-  ($.) = G.objAccess
-  selfAccess = G.selfAccess
 
-  listIndexExists = G.listIndexExists
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf l v = addAlgorithmImportVS $ funcApp "find" int 
@@ -2062,11 +2055,7 @@ instance InternalValue CppHdrCode where
 
 instance Selector CppHdrCode where
   objAccess _ _ = mkStateVal void empty
-  ($.) _ _ = mkStateVal void empty
-
-  selfAccess _ = mkStateVal void empty
-
-  listIndexExists _ _ = mkStateVal void empty
+  
   argExists _ = mkStateVal void empty
   
   indexOf _ _ = mkStateVal void empty

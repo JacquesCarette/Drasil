@@ -18,7 +18,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   extFuncApp, extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
   newObjMixedArgs, extNewObj, extNewObjMixedArgs, libNewObj, 
   libNewObjMixedArgs, lambda, notNull, objAccess, objMethodCall, 
-  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, func, get, set, 
+  objMethodCallNoParams, indexOf, func, get, set, 
   listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
   getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
   iterEndError, listAccessFunc, listAccessFunc', listSetFunc, printSt, state, 
@@ -47,7 +47,7 @@ import GOOL.Drasil.ClassInterface (Label, Library,
   VariableSym(Variable, variableName, variableType), 
   ValueSym(Value, valueDoc, valueType), 
   NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), 
-  BooleanExpression(..), Selector(($.)), FunctionSym(Function), at, 
+  BooleanExpression(..), ($.), FunctionSym(Function), at, 
   StatementSym(Statement, (&+=), (&++), break, multi), (&=), observerListName, ScopeSym(..),
   ParameterSym(Parameter), MethodSym(Method), StateVarSym(StateVar), 
   ClassSym(Class), ModuleSym(Module), BlockComment(..), convType)
@@ -679,14 +679,6 @@ objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing f t
 objMethodCallNoParams :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   VS (repr (Value repr)) -> VS (repr (Value repr))
 objMethodCallNoParams f t o = S.objMethodCall t o f []
-
-selfAccess :: (RenderSym repr) => VS (repr (Function repr)) -> 
-  VS (repr (Value repr))
-selfAccess = S.objAccess (S.valueOf S.self)
-
-listIndexExists :: (RenderSym repr) => VS (repr (Value repr)) -> 
-  VS (repr (Value repr)) -> VS (repr (Value repr))
-listIndexExists lst index = S.listSize lst ?> index
 
 indexOf :: (RenderSym repr) => Label -> VS (repr (Value repr)) -> 
   VS (repr (Value repr)) -> VS (repr (Value repr))

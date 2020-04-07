@@ -238,11 +238,7 @@ instance ValueExpression CodeInfo where
 
 instance Selector CodeInfo where
   objAccess = execute2
-  ($.) = execute2
-
-  selfAccess = execute1
-
-  listIndexExists = execute2
+  
   argExists _ = noInfo
   
   indexOf = execute2

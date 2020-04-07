@@ -13,7 +13,7 @@ import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
+  Selector(..), ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), SelectorFunction(..), at, StatementSym(..), (&=), observerListName,
   ControlStatementSym(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
@@ -39,7 +39,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multOp, divideOp, moduloOp, var, staticVar, extVar, classVar, 
   objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litDouble, 
   litInt, litString, valueOf, arg, argsList, objAccess, 
-  objMethodCall, objMethodCallNoParams, selfAccess, listIndexExists, indexOf, 
+  objMethodCall, objMethodCallNoParams, indexOf, 
   call, funcApp, funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, 
   extFuncApp, extFuncAppMixedArgs, libFuncApp, newObj, newObjMixedArgs, 
   extNewObj, extNewObjMixedArgs, libNewObj, lambda, func, get, set, listAdd, 
@@ -427,11 +427,7 @@ instance InternalValue PythonCode where
 
 instance Selector PythonCode where
   objAccess = G.objAccess
-  ($.) = objAccess 
 
-  selfAccess = G.selfAccess
-
-  listIndexExists = G.listIndexExists
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf = G.indexOf "index"

@@ -122,11 +122,8 @@ instance VariableSym CodeInfo where
   objVar _ _ = noInfo
   objVarSelf _ = noInfo
   listVar _ _ = noInfo
-  listOf _ _ = noInfo
   arrayElem _ _ = noInfo
   iterVar _ _ = noInfo
-
-  ($->) _ _ = noInfo
   
   variableName _ = ""
   variableType _ = toCode ""

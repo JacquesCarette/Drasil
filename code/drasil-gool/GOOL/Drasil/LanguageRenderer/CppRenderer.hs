@@ -42,7 +42,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   asinOp, acosOp, atanOp, csc, sec, cot, equalOp, notEqualOp, greaterOp, 
   greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
   moduloOp, powerOp, andOp, orOp, var, staticVar, self, objVar, 
-  listVar, listOf, arrayElem, litTrue, litFalse, litChar, litDouble, litFloat, 
+  listVar, arrayElem, litTrue, litFalse, litChar, litDouble, litFloat, 
   litInt, litString, litArray, valueOf, arg, argsList, inlineIf, objAccess, 
   objMethodCall, objMethodCallNoParams, call', funcAppMixedArgs, selfFuncAppMixedArgs, 
   libFuncAppMixedArgs, newObjMixedArgs, 
@@ -370,11 +370,8 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   objVar = pair2 objVar objVar
   objVarSelf = pair1 objVarSelf objVarSelf
   listVar n = pair1 (listVar n) (listVar n)
-  listOf n = pair1 (n `listOf`) (n `listOf`)
   arrayElem i = pair1 (arrayElem i) (arrayElem i)
   iterVar l = pair1 (iterVar l) (iterVar l)
-  
-  ($->) = pair2 ($->) ($->)
 
   variableName v = variableName $ pfst v
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
@@ -1269,11 +1266,8 @@ instance VariableSym CppSrcCode where
   objVarSelf = onStateValue (\v -> mkVar ("this->"++variableName v) 
     (variableType v) (text "this->" <> variableDoc v))
   listVar = G.listVar
-  listOf = G.listOf
   arrayElem i = G.arrayElem (litInt i)
   iterVar l t = mkStateVar l (iterator t) (text $ "(*" ++ l ++ ")")
-
-  ($->) = objVar
 
   variableName = varName . unCPPSC
   variableType = onCodeValue varType
@@ -1905,11 +1899,8 @@ instance VariableSym CppHdrCode where
     (toState vr)) getODEOthVars o v
   objVarSelf _ = mkStateVar "" void empty
   listVar _ _ = mkStateVar "" void empty
-  listOf _ _ = mkStateVar "" void empty
   arrayElem _ _ = mkStateVar "" void empty
   iterVar _ _ = mkStateVar "" void empty
-
-  ($->) _ _ = mkStateVar "" void empty
   
   variableName = varName . unCPPHC
   variableType = onCodeValue varType

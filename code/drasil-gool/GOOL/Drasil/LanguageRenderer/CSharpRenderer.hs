@@ -40,7 +40,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   runStrategy, listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, 
   greaterOp, greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, 
   divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, 
-  classVar, objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, 
+  classVar, objVarSelf, listVar, arrayElem, iterVar, pi, litTrue, 
   litFalse, litChar, litDouble, litFloat, litInt, litString, litList, valueOf, 
   arg, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, indexOf, call, 
@@ -311,11 +311,8 @@ instance VariableSym CSharpCode where
   objVar = on2StateValues csObjVar
   objVarSelf = G.objVarSelf
   listVar  = G.listVar
-  listOf = G.listOf
   arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
-
-  ($->) = objVar
 
   variableName = varName . unCSC
   variableType = onCodeValue varType

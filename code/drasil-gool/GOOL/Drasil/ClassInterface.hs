@@ -6,7 +6,7 @@ module GOOL.Drasil.ClassInterface (
   -- Typeclasses
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   BlockSym(..), TypeSym(..), ControlBlockSym(..), InternalControlBlock(..), 
-  listSlice, VariableSym(..), ValueSym(..), NumericExpression(..), 
+  listSlice, VariableSym(..), ($->), listOf, ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, Selector(..), ($.), selfAccess,
   InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), listIndexExists, SelectorFunction(..),
@@ -126,17 +126,22 @@ class (TypeSym repr) => VariableSym repr where
   objVarSelf   :: VS (repr (Variable repr)) -> VS (repr (Variable repr))
   -- enumVar      :: Label -> Label -> VS (repr (Variable repr))
   listVar      :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
-  listOf       :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
   arrayElem    :: Integer -> VS (repr (Variable repr)) -> 
     VS (repr (Variable repr))
   -- Use for iterator variables, i.e. in a forEach loop.
   iterVar      :: Label -> VS (repr (Type repr)) -> VS (repr (Variable repr))
-
-  ($->) :: VS (repr (Variable repr)) -> VS (repr (Variable repr)) -> VS (repr (Variable repr))
-  infixl 9 $->
   
   variableName :: repr (Variable repr) -> String
   variableType :: repr (Variable repr) -> repr (Type repr)
+
+($->) :: (VariableSym repr) => VS (repr (Variable repr)) -> 
+  VS (repr (Variable repr)) -> VS (repr (Variable repr))
+infixl 9 $->
+($->) = objVar
+
+listOf :: (VariableSym repr) => Label -> VS (repr (Type repr)) -> 
+  VS (repr (Variable repr))
+listOf = listVar
 
 class (VariableSym repr) => ValueSym repr where
   type Value repr

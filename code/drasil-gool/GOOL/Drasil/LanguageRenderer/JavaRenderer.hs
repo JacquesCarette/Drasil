@@ -41,7 +41,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   runStrategy, listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, 
   greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
   divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, 
-  classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, 
+  classVar, objVar, objVarSelf, listVar, arrayElem, iterVar, litTrue, 
   litFalse, litChar, litDouble, litFloat, litInt, litString, litArray, pi, 
   valueOf, arg, argsList, inlineIf, objAccess, objMethodCall, 
   objMethodCallNoParams, indexOf, call', 
@@ -318,11 +318,8 @@ instance VariableSym JavaCode where
     (toState vr)) getODEOthVars o v
   objVarSelf = G.objVarSelf
   listVar = G.listVar
-  listOf = G.listOf
   arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
-
-  ($->) = objVar
 
   variableName = varName . unJC
   variableType = onCodeValue varType

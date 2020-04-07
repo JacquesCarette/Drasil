@@ -11,7 +11,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
   minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, binExpr, binExpr', 
   binExprNumDbl', typeBinExpr, addmathImport, var, staticVar, extVar, self, 
-  classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, 
+  classVar, objVar, objVarSelf, listVar, arrayElem, iterVar, 
   litTrue, litFalse, litChar, litDouble, litFloat, litInt, litString, litArray, 
   litList, pi, valueOf, arg, argsList, inlineIf, call', call, 
   funcAppMixedArgs, namedArgError, selfFuncAppMixedArgs, 
@@ -44,7 +44,7 @@ import GOOL.Drasil.ClassInterface (Label, Library,
   FileSym(RenderFile, commentedMod), BodySym(Body, bodyStatements), 
   BlockSym(Block), PermanenceSym(..), 
   TypeSym(Type, infile, outfile, iterator, getType, getTypeDoc, getTypeString), 
-  VariableSym(Variable, variableName, variableType), 
+  VariableSym(Variable, variableName, variableType), listOf,
   ValueSym(Value, valueDoc, valueType), 
   NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), 
   BooleanExpression(..), funcApp, newObj, extNewObj, ($.), FunctionSym(Function), at, 
@@ -55,7 +55,7 @@ import qualified GOOL.Drasil.ClassInterface as S (
   BodySym(oneLiner), BlockSym(block), 
   TypeSym(bool, int, float, double, char, string, listType, arrayType, 
     listInnerType, void), 
-  VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
+  VariableSym(var, self, objVar, objVarSelf),
   ValueSym(litTrue, litFalse, litInt, litString, litList, valueOf),
   ValueExpression(funcAppMixedArgs, newObjMixedArgs, notNull, lambda), 
   Selector(objAccess), objMethodCall, objMethodCallNoParams, 
@@ -484,10 +484,6 @@ objVarSelf = S.objVar S.self
 listVar :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   VS (repr (Variable repr))
 listVar n t = S.var n (S.listType t)
-
-listOf :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
-  VS (repr (Variable repr))
-listOf = S.listVar
 
 arrayElem :: (RenderSym repr) => VS (repr (Value repr)) -> 
   VS (repr (Variable repr)) -> VS (repr (Variable repr))
@@ -1038,7 +1034,7 @@ notifyObservers :: (RenderSym repr) => VS (repr (Function repr)) ->
   VS (repr (Type repr)) -> MS (repr (Statement repr))
 notifyObservers f t = S.for initv (v_index ?< S.listSize obsList) 
   (var_index &++) notify
-  where obsList = S.valueOf $ observerListName `S.listOf` t 
+  where obsList = S.valueOf $ observerListName `listOf` t 
         var_index = S.var "observerIndex" S.int
         v_index = S.valueOf var_index
         initv = S.varDecDef var_index $ S.litInt 0

@@ -11,7 +11,7 @@ import Utils.Drasil (blank, indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
-  ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
+  ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), listOf, ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
   Selector(..), ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), SelectorFunction(..), at, StatementSym(..), (&=), observerListName,
@@ -37,7 +37,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', csc, sec, cot, equalOp, 
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
   multOp, divideOp, moduloOp, var, staticVar, extVar, classVar, 
-  objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litDouble, 
+  objVar, objVarSelf, listVar, arrayElem, iterVar, litChar, litDouble, 
   litInt, litString, valueOf, arg, argsList, objAccess, 
   objMethodCall, objMethodCallNoParams, indexOf, 
   call, funcAppMixedArgs, selfFuncAppMixedArgs, 
@@ -304,11 +304,8 @@ instance VariableSym PythonCode where
   objVar = G.objVar
   objVarSelf = G.objVarSelf
   listVar = G.listVar
-  listOf = G.listOf
   arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
-
-  ($->) = objVar
 
   variableName = varName . unPC
   variableType = onCodeValue varType

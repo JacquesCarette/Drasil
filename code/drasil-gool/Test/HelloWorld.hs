@@ -5,7 +5,7 @@ module Test.HelloWorld (helloWorld) where
 import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
   listSlice, TypeSym(..), StatementSym(..), (&=), ControlStatementSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  ValueExpression(..), extFuncApp, Selector(..), FunctionSym(..), SelectorFunction(..), 
   MethodSym(..), ModuleSym(..), GS, MS)
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)

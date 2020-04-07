@@ -12,7 +12,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
   Selector(..), ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), SelectorFunction(..), at, StatementSym(..), (&=), observerListName,
   ControlStatementSym(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
@@ -40,9 +40,9 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litChar, litDouble, 
   litInt, litString, valueOf, arg, argsList, objAccess, 
   objMethodCall, objMethodCallNoParams, indexOf, 
-  call, funcApp, funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, 
-  extFuncApp, extFuncAppMixedArgs, libFuncApp, newObj, newObjMixedArgs, 
-  extNewObj, extNewObjMixedArgs, libNewObj, lambda, func, get, set, listAdd, 
+  call, funcAppMixedArgs, selfFuncAppMixedArgs, 
+  extFuncAppMixedArgs, newObjMixedArgs, 
+  extNewObjMixedArgs, lambda, func, get, set, listAdd, 
   listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
   listAddFunc, listAppendFunc, iterBeginError, iterEndError, listAccessFunc, 
   listSetFunc, state, loopState, emptyState, assign, 
@@ -386,30 +386,22 @@ instance BooleanExpression PythonCode where
 
 instance ValueExpression PythonCode where
   inlineIf = pyInlineIf
-  funcApp = G.funcApp
-  funcAppNamedArgs n t = funcAppMixedArgs n t []
+
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncApp = G.selfFuncApp
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
-  extFuncApp = G.extFuncApp
   extFuncAppMixedArgs l n t ps ns = modify (addModuleImportVS l) >> 
     G.extFuncAppMixedArgs l n t ps ns
-  libFuncApp = G.libFuncApp
   libFuncAppMixedArgs l n t ps ns = modify (addLibImportVS l) >> 
     G.extFuncAppMixedArgs l n t ps ns
-  newObj = G.newObj
   newObjMixedArgs = G.newObjMixedArgs ""
-  extNewObj = G.extNewObj
   extNewObjMixedArgs l tp ps ns = modify (addModuleImportVS l) >> 
     G.extNewObjMixedArgs l tp ps ns
-  libNewObj = G.libNewObj
   libNewObjMixedArgs l tp ps ns = modify (addLibImportVS l) >> 
     G.extNewObjMixedArgs l tp ps ns
 
   lambda = G.lambda pyLambda
 
-  exists v = v ?!= valueOf (var "None" void)
-  notNull = exists
+  notNull v = v ?!= valueOf (var "None" void)
 
 instance InternalValue PythonCode where
   inputFunc = mkStateVal string (text "input()") -- raw_input() for < Python 3.0

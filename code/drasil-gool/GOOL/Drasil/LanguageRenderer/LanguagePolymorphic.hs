@@ -14,9 +14,9 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
   classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, 
   litTrue, litFalse, litChar, litDouble, litFloat, litInt, litString, litArray, 
   litList, pi, valueOf, arg, argsList, inlineIf, call', call, 
-  funcApp, funcAppMixedArgs, namedArgError, selfFuncApp, selfFuncAppMixedArgs, 
-  extFuncApp, extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
-  newObjMixedArgs, extNewObj, extNewObjMixedArgs, libNewObj, 
+  funcAppMixedArgs, namedArgError, selfFuncAppMixedArgs, 
+  extFuncAppMixedArgs, libFuncAppMixedArgs, 
+  newObjMixedArgs, extNewObjMixedArgs, 
   libNewObjMixedArgs, lambda, notNull, objAccess, objMethodCall, 
   objMethodCallNoParams, indexOf, func, get, set, 
   listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
@@ -47,7 +47,7 @@ import GOOL.Drasil.ClassInterface (Label, Library,
   VariableSym(Variable, variableName, variableType), 
   ValueSym(Value, valueDoc, valueType), 
   NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), 
-  BooleanExpression(..), ($.), FunctionSym(Function), at, 
+  BooleanExpression(..), funcApp, newObj, extNewObj, ($.), FunctionSym(Function), at, 
   StatementSym(Statement, (&+=), (&++), break, multi), (&=), observerListName, ScopeSym(..),
   ParameterSym(Parameter), MethodSym(Method), StateVarSym(StateVar), 
   ClassSym(Class), ModuleSym(Module), BlockComment(..), convType)
@@ -57,9 +57,7 @@ import qualified GOOL.Drasil.ClassInterface as S (
     listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf, listVar, listOf),
   ValueSym(litTrue, litFalse, litInt, litString, litList, valueOf),
-  ValueExpression(funcApp, funcAppMixedArgs, selfFuncAppMixedArgs, 
-    extFuncAppMixedArgs, libFuncAppMixedArgs, newObj, newObjMixedArgs, 
-    extNewObj, extNewObjMixedArgs, libNewObjMixedArgs, notNull, lambda), 
+  ValueExpression(funcAppMixedArgs, newObjMixedArgs, notNull, lambda), 
   Selector(objAccess), objMethodCall, objMethodCallNoParams, 
   FunctionSym(func, listSize, listAppend), SelectorFunction(listAccess),
   StatementSym(assign, varDec, varDecDef, listDec, objDecNew, extObjDecNew, 
@@ -576,10 +574,6 @@ call sep lib n t o pas nas = (\tp pargs nms nargs -> mkVal tp $ obDoc <> libDoc
   where libDoc = maybe empty (text . (++ ".")) lib
         obDoc = fromMaybe empty o
 
-funcApp :: (RenderSym repr) => Label -> VS (repr (Type repr)) 
-  -> [VS (repr (Value repr))] -> VS (repr (Value repr))
-funcApp n t vs = S.funcAppMixedArgs n t vs []
-
 funcAppMixedArgs :: (RenderSym repr) => Label -> VS (repr (Type repr)) 
   -> [VS (repr (Value repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
@@ -589,10 +583,6 @@ funcAppMixedArgs n t = S.call Nothing n t Nothing
 namedArgError :: String -> String
 namedArgError l = "Named arguments not supported in " ++ l 
 
-selfFuncApp :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
-  [VS (repr (Value repr))] -> VS (repr (Value repr))
-selfFuncApp n t vs = S.selfFuncAppMixedArgs n t vs []
-
 selfFuncAppMixedArgs :: (RenderSym repr) => Doc -> VS (repr (Variable repr)) -> 
   Label -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
@@ -600,19 +590,11 @@ selfFuncAppMixedArgs :: (RenderSym repr) => Doc -> VS (repr (Variable repr)) ->
 selfFuncAppMixedArgs d slf n t vs ns = slf >>= (\s -> S.call Nothing n t 
   (Just $ variableDoc s <> d) vs ns)
 
-extFuncApp :: (RenderSym repr) => Library -> Label -> VS (repr (Type repr)) -> 
-  [VS (repr (Value repr))] -> VS (repr (Value repr))
-extFuncApp l n t vs = S.extFuncAppMixedArgs l n t vs []
-
 extFuncAppMixedArgs :: (RenderSym repr) => Library -> Label ->
   VS (repr (Type repr)) -> [VS (repr (Value repr))] ->
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   VS (repr (Value repr))
 extFuncAppMixedArgs l n t = S.call (Just l) n t Nothing
-
-libFuncApp :: (RenderSym repr) => Library -> Label -> VS (repr (Type repr)) -> 
-  [VS (repr (Value repr))] -> VS (repr (Value repr))
-libFuncApp l n t vs = S.libFuncAppMixedArgs l n t vs []
 
 libFuncAppMixedArgs :: (RenderSym repr) => Library -> Label ->
   VS (repr (Type repr)) -> [VS (repr (Value repr))] ->
@@ -621,10 +603,6 @@ libFuncAppMixedArgs :: (RenderSym repr) => Library -> Label ->
 libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >> 
   S.funcAppMixedArgs n t vs ns
 
-newObj :: (RenderSym repr) => VS (repr (Type repr)) -> [VS (repr (Value repr))] 
-  -> VS (repr (Value repr))
-newObj t vs = S.newObjMixedArgs t vs []
-
 newObjMixedArgs :: (RenderSym repr) => String -> VS (repr (Type repr)) -> 
   [VS (repr (Value repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
@@ -632,20 +610,12 @@ newObjMixedArgs :: (RenderSym repr) => String -> VS (repr (Type repr)) ->
 newObjMixedArgs s tp vs ns = tp >>= 
   (\t -> S.call Nothing (s ++ getTypeString t) (return t) Nothing vs ns)
 
-extNewObj :: (RenderSym repr) => Library -> VS (repr (Type repr)) -> 
-  [VS (repr (Value repr))] -> VS (repr (Value repr))
-extNewObj l t vs = S.extNewObjMixedArgs l t vs []
-
 extNewObjMixedArgs :: (RenderSym repr) => Library -> VS (repr (Type repr)) -> 
   [VS (repr (Value repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
   VS (repr (Value repr))
 extNewObjMixedArgs l tp vs ns = tp >>= (\t -> S.call (Just l) (getTypeString t) 
   (return t) Nothing vs ns)
-
-libNewObj :: (RenderSym repr) => Library -> VS (repr (Type repr)) -> 
-  [VS (repr (Value repr))] -> VS (repr (Value repr))
-libNewObj l t vs = S.libNewObjMixedArgs l t vs []
 
 libNewObjMixedArgs :: (RenderSym repr) => Library -> VS (repr (Type repr)) -> 
   [VS (repr (Value repr))] -> 
@@ -688,7 +658,7 @@ indexOf f l v = S.objAccess l (S.func f S.int [v])
 
 func :: (RenderSym repr) => Label -> VS (repr (Type repr)) -> 
   [VS (repr (Value repr))] -> VS (repr (Function repr))
-func l t vs = S.funcApp l t vs >>= ((`funcFromData` t) . funcDocD . valueDoc)
+func l t vs = funcApp l t vs >>= ((`funcFromData` t) . funcDocD . valueDoc)
 
 get :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Variable repr)) 
   -> VS (repr (Value repr))
@@ -870,7 +840,7 @@ arrayDecDef v vals = on2StateValues (\vd vs -> mkSt (statementDoc vd <+>
 
 objDecNew :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   [VS (repr (Value repr))] -> MS (repr (Statement repr))
-objDecNew v vs = S.varDecDef v (S.newObj (onStateValue variableType v) vs)
+objDecNew v vs = S.varDecDef v (newObj (onStateValue variableType v) vs)
 
 objDecNewNoParams :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   MS (repr (Statement repr))
@@ -878,7 +848,7 @@ objDecNewNoParams v = S.objDecNew v []
 
 extObjDecNew :: (RenderSym repr) => Library -> VS (repr (Variable repr)) -> 
   [VS (repr (Value repr))] -> MS (repr (Statement repr))
-extObjDecNew l v vs = S.varDecDef v (S.extNewObj l (onStateValue variableType v)
+extObjDecNew l v vs = S.varDecDef v (extNewObj l (onStateValue variableType v)
   vs)
 
 extObjDecNewNoParams :: (RenderSym repr) => Library -> VS (repr (Variable repr))

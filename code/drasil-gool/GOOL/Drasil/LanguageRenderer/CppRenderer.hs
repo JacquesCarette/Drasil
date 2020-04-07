@@ -14,8 +14,8 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), ($.), InternalValueExp(..), objMethodCall, FunctionSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp,
+  selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), objMethodCall, FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), (&=), ControlStatementSym(..), switchAsIf, ScopeSym(..),
   ParameterSym(..), MethodSym(..), pubMethod, initializer, StateVarSym(..), 
   privMVar, pubMVar, ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
@@ -44,10 +44,9 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   moduloOp, powerOp, andOp, orOp, var, staticVar, self, objVar, 
   listVar, listOf, arrayElem, litTrue, litFalse, litChar, litDouble, litFloat, 
   litInt, litString, litArray, valueOf, arg, argsList, inlineIf, objAccess, 
-  objMethodCall, objMethodCallNoParams, call', 
-  funcApp, funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, extFuncApp, 
-  libFuncApp, libFuncAppMixedArgs, newObj, newObjMixedArgs, extNewObj, 
-  libNewObj, libNewObjMixedArgs, lambda, func, get, set, listSize, listAdd, 
+  objMethodCall, objMethodCallNoParams, call', funcAppMixedArgs, selfFuncAppMixedArgs, 
+  libFuncAppMixedArgs, newObjMixedArgs, 
+  libNewObjMixedArgs, lambda, func, get, set, listSize, listAdd, 
   listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
   listSizeFunc, listAppendFunc, listAccessFunc', listSetFunc, state, loopState, 
   emptyState, assign, multiAssignError, decrement, 
@@ -451,41 +450,31 @@ instance (Pair p) => BooleanExpression (p CppSrcCode CppHdrCode) where
   
 instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   inlineIf = pair3 inlineIf inlineIf
-  funcApp n = pair1Val1List (funcApp n) (funcApp n)
-  funcAppNamedArgs n t as = pair1Val2Lists 
-    (\tp ns ars -> funcAppNamedArgs n tp (zip ns ars)) 
-    (\tp ns ars -> funcAppNamedArgs n tp (zip ns ars)) 
-    t (map fst as) (map snd as)
+
   funcAppMixedArgs n t pas nas = pair1Val3Lists
     (\tp pars ns nars -> funcAppMixedArgs n tp pars (zip ns nars)) 
     (\tp pars ns nars -> funcAppMixedArgs n tp pars (zip ns nars)) 
     t pas (map fst nas) (map snd nas)
-  selfFuncApp n = pair1Val1List (selfFuncApp n) (selfFuncApp n)
   selfFuncAppMixedArgs n t pas nas = pair1Val3Lists
     (\tp pars ns nars -> selfFuncAppMixedArgs n tp pars (zip ns nars)) 
     (\tp pars ns nars -> selfFuncAppMixedArgs n tp pars (zip ns nars)) 
     t pas (map fst nas) (map snd nas)
-  extFuncApp l n = pair1Val1List (extFuncApp l n) (extFuncApp l n)
   extFuncAppMixedArgs l n t pas nas = pair1Val3Lists
     (\tp pars ns nars -> extFuncAppMixedArgs l n tp pars (zip ns nars)) 
     (\tp pars ns nars -> extFuncAppMixedArgs l n tp pars (zip ns nars)) 
     t pas (map fst nas) (map snd nas)
-  libFuncApp l n = pair1Val1List (extFuncApp l n) (extFuncApp l n)
   libFuncAppMixedArgs l n t pas nas = pair1Val3Lists
     (\tp pars ns nars -> extFuncAppMixedArgs l n tp pars (zip ns nars)) 
     (\tp pars ns nars -> extFuncAppMixedArgs l n tp pars (zip ns nars)) 
     t pas (map fst nas) (map snd nas)
-  newObj = pair1Val1List newObj newObj
   newObjMixedArgs t pas nas = pair1Val3Lists
     (\tp pars ns nars -> newObjMixedArgs tp pars (zip ns nars)) 
     (\tp pars ns nars -> newObjMixedArgs tp pars (zip ns nars)) 
     t pas (map fst nas) (map snd nas)
-  extNewObj l = pair1Val1List (extNewObj l) (extNewObj l)
   extNewObjMixedArgs l t pas nas = pair1Val3Lists
     (\tp pars ns nars -> extNewObjMixedArgs l tp pars (zip ns nars)) 
     (\tp pars ns nars -> extNewObjMixedArgs l tp pars (zip ns nars)) 
     t pas (map fst nas) (map snd nas)
-  libNewObj l = pair1Val1List (extNewObj l) (extNewObj l)
   libNewObjMixedArgs l t pas nas = pair1Val3Lists
     (\tp pars ns nars -> extNewObjMixedArgs l tp pars (zip ns nars)) 
     (\tp pars ns nars -> extNewObjMixedArgs l tp pars (zip ns nars)) 
@@ -493,7 +482,6 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
 
   lambda = pair1List1Val lambda lambda
 
-  exists = pair1 exists exists
   notNull = pair1 notNull notNull
   
 instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
@@ -974,19 +962,6 @@ pair1Val1List srcf hdrf stv1 stv2 = do
       sv1 = toState $ psnd v1
   pair1List (srcf fv1) (hdrf sv1) stv2
 
-pair1Val2Lists :: (Pair p) => (State r (CppSrcCode a) -> 
-  [State s (CppSrcCode b)] -> [State t (CppSrcCode c)] -> 
-  State u (CppSrcCode d)) -> (State r (CppHdrCode a) -> [State s (CppHdrCode b)]
-  -> [State t (CppHdrCode c)] -> State u (CppHdrCode d)) -> 
-  State u (p CppSrcCode CppHdrCode a) -> [State u (p CppSrcCode CppHdrCode b)] 
-  -> [State u (p CppSrcCode CppHdrCode c)] -> 
-  State u (p CppSrcCode CppHdrCode d)
-pair1Val2Lists srcf hdrf stv1 stv2 stv3 = do
-  v1 <- stv1
-  let fv1 = toState $ pfst v1
-      sv1 = toState $ psnd v1
-  pair2Lists (srcf fv1) (hdrf sv1) stv2 stv3
-
 pair2Lists1Val :: (Pair p) => ([State r (CppSrcCode a)] -> 
   [State s (CppSrcCode b)] -> State t (CppSrcCode c) -> State u (CppSrcCode d)) 
   -> ([State r (CppHdrCode a)] -> [State s (CppHdrCode b)] -> 
@@ -1374,27 +1349,19 @@ instance BooleanExpression CppSrcCode where
    
 instance ValueExpression CppSrcCode where
   inlineIf = G.inlineIf
-  funcApp = G.funcApp
-  funcAppNamedArgs n t = funcAppMixedArgs n t []
+
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncApp = G.selfFuncApp
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs (text "->") self
-  extFuncApp = G.extFuncApp
   extFuncAppMixedArgs l n t vs ns = modify (addModuleImportVS l) >> 
     funcAppMixedArgs n t vs ns
-  libFuncApp = G.libFuncApp
   libFuncAppMixedArgs = G.libFuncAppMixedArgs
-  newObj = G.newObj
   newObjMixedArgs = G.newObjMixedArgs ""
-  extNewObj = G.extNewObj
   extNewObjMixedArgs l t vs ns = modify (addModuleImportVS l) >> 
     newObjMixedArgs t vs ns
-  libNewObj = G.libNewObj
   libNewObjMixedArgs = G.libNewObjMixedArgs
 
   lambda = G.lambda (cppLambda blockStart blockEnd endStatement)
 
-  exists = notNull
   notNull v = v
 
 instance InternalValue CppSrcCode where
@@ -2018,25 +1985,17 @@ instance BooleanExpression CppHdrCode where
    
 instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = mkStateVal void empty
-  funcApp _ _ _ = mkStateVal void empty
-  funcAppNamedArgs _ _ _ = mkStateVal void empty
+
   funcAppMixedArgs _ _ _ _ = mkStateVal void empty
-  selfFuncApp _ _ _ = mkStateVal void empty
   selfFuncAppMixedArgs _ _ _ _ = mkStateVal void empty
-  extFuncApp _ _ _ _ = mkStateVal void empty
   extFuncAppMixedArgs _ _ _ _ _ = mkStateVal void empty
-  libFuncApp _ _ _ _ = mkStateVal void empty
   libFuncAppMixedArgs _ _ _ _ _ = mkStateVal void empty
-  newObj _ _ = mkStateVal void empty
   newObjMixedArgs _ _ _ = mkStateVal void empty
-  extNewObj _ _ _ = mkStateVal void empty
   extNewObjMixedArgs _ _ _ _ = mkStateVal void empty
-  libNewObj _ _ _ = mkStateVal void empty
   libNewObjMixedArgs _ _ _ _ = mkStateVal void empty
 
   lambda _ _ = mkStateVal void empty
 
-  exists _ = mkStateVal void empty
   notNull _ = mkStateVal void empty
 
 instance InternalValue CppHdrCode where

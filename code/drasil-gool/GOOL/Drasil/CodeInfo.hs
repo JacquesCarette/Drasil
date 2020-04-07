@@ -196,44 +196,25 @@ instance BooleanExpression CodeInfo where
     
 instance ValueExpression CodeInfo where
   inlineIf = execute3
-  funcApp n _ vs = do
-    sequence_ vs
-    addCurrModCall n
-  funcAppNamedArgs n _ ns = do
-    executePairList ns
-    addCurrModCall n
   funcAppMixedArgs n _ = currModCall n
-  selfFuncApp = funcApp
   selfFuncAppMixedArgs = funcAppMixedArgs
-  extFuncApp l n _ vs = do
-    sequence_ vs
-    addExternalCall l n
   extFuncAppMixedArgs l n _ vs ns = do
     sequence_ vs
     executePairList ns
     addExternalCall l n  
-  libFuncApp = extFuncApp
   libFuncAppMixedArgs = extFuncAppMixedArgs
-  newObj ot vs = do
-    sequence_ vs
-    addCurrModConstructorCall ot
   newObjMixedArgs ot vs ns = do
     sequence_ vs
     executePairList ns
     addCurrModConstructorCall ot
-  extNewObj l ot vs = do
-    sequence_ vs
-    addExternalConstructorCall l ot
   extNewObjMixedArgs l ot vs ns = do
     sequence_ vs
     executePairList ns
     addExternalConstructorCall l ot
-  libNewObj = extNewObj
   libNewObjMixedArgs = extNewObjMixedArgs
 
   lambda _ = execute1
 
-  exists = execute1
   notNull = execute1
 
 instance Selector CodeInfo where

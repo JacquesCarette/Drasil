@@ -13,8 +13,8 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp,
+  selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), (&=),
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), 
@@ -44,10 +44,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, 
   litFalse, litChar, litDouble, litFloat, litInt, litString, litArray, pi, 
   valueOf, arg, argsList, inlineIf, objAccess, objMethodCall, 
-  objMethodCallNoParams, indexOf, call', funcApp, 
-  funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, extFuncApp, 
-  extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
-  newObjMixedArgs, extNewObj, libNewObj, libNewObjMixedArgs, lambda, notNull, 
+  objMethodCallNoParams, indexOf, call', 
+  funcAppMixedArgs, selfFuncAppMixedArgs, 
+  extFuncAppMixedArgs, libFuncAppMixedArgs, 
+  newObjMixedArgs, libNewObjMixedArgs, lambda, notNull, 
   func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
   listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
   listAppendFunc, iterBeginError, iterEndError, listAccessFunc', printSt, 
@@ -401,40 +401,32 @@ instance BooleanExpression JavaCode where
   
 instance ValueExpression JavaCode where
   inlineIf = G.inlineIf
+
   -- Exceptions from function/method calls should already be in the exception 
   -- map from the CodeInfo pass, but it's possible that one of the higher-level 
   -- functions implicitly calls these functions in the Java renderer, so we 
   -- also check here to add the exceptions from the called function to the map
-  funcApp = G.funcApp
-  funcAppNamedArgs n t = funcAppMixedArgs n t []
   funcAppMixedArgs n t vs ns = addCallExcsCurrMod n >> 
     G.funcAppMixedArgs n t vs ns
-  selfFuncApp = G.selfFuncApp
   selfFuncAppMixedArgs n t ps ns = addCallExcsCurrMod n >> 
     G.selfFuncAppMixedArgs dot self n t ps ns
-  extFuncApp = G.extFuncApp
   extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
     modify (maybe id addExceptions (Map.lookup (l ++ "." ++ n) mem))
     G.extFuncAppMixedArgs l n t vs ns
-  libFuncApp = G.libFuncApp
   libFuncAppMixedArgs = G.libFuncAppMixedArgs
-  newObj = G.newObj
   newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t -> 
     G.newObjMixedArgs "new " t vs ns)
-  extNewObj = G.extNewObj
   extNewObjMixedArgs l ot vs ns = do
     t <- ot
     mem <- getMethodExcMap
     let tp = getTypeString t
     modify (maybe id addExceptions (Map.lookup (l ++ "." ++ tp) mem))
     newObjMixedArgs (toState t) vs ns
-  libNewObj = G.libNewObj
   libNewObjMixedArgs = G.libNewObjMixedArgs
 
   lambda = G.lambda jLambda
 
-  exists = notNull
   notNull = G.notNull
 
 instance InternalValue JavaCode where

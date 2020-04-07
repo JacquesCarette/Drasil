@@ -13,8 +13,8 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp,
+  selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), (&=), 
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
@@ -43,10 +43,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   classVar, objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, 
   litFalse, litChar, litDouble, litFloat, litInt, litString, litList, valueOf, 
   arg, argsList, inlineIf, objAccess, objMethodCall, 
-  objMethodCallNoParams, indexOf, call, funcApp, 
-  funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, extFuncApp, 
-  extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
-  newObjMixedArgs, libNewObj, libNewObjMixedArgs, lambda, notNull, func, get, 
+  objMethodCallNoParams, indexOf, call, 
+  funcAppMixedArgs, selfFuncAppMixedArgs, 
+  extFuncAppMixedArgs, libFuncAppMixedArgs, 
+  newObjMixedArgs, libNewObjMixedArgs, lambda, notNull, func, get, 
   set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
   getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
   listAccessFunc, listSetFunc, printSt, state, loopState, emptyState, assign, 
@@ -392,25 +392,17 @@ instance BooleanExpression CSharpCode where
   
 instance ValueExpression CSharpCode where
   inlineIf = G.inlineIf
-  funcApp = G.funcApp
-  funcAppNamedArgs n t = funcAppMixedArgs n t []
+
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncApp = G.selfFuncApp
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
-  extFuncApp = G.extFuncApp
   extFuncAppMixedArgs = G.extFuncAppMixedArgs
-  libFuncApp = G.libFuncApp
   libFuncAppMixedArgs = G.libFuncAppMixedArgs
-  newObj = G.newObj
   newObjMixedArgs = G.newObjMixedArgs "new "
-  extNewObj _ = newObj
   extNewObjMixedArgs _ = newObjMixedArgs
-  libNewObj = G.libNewObj
   libNewObjMixedArgs = G.libNewObjMixedArgs
 
   lambda = G.lambda csLambda
 
-  exists = notNull
   notNull = G.notNull
 
 instance InternalValue CSharpCode where

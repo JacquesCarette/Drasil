@@ -7,7 +7,7 @@ module GOOL.Drasil.ClassInterface (
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   BlockSym(..), TypeSym(..), ControlBlockSym(..), InternalControlBlock(..), 
   listSlice, VariableSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), ($.), selfAccess,
+  BooleanExpression(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, Selector(..), ($.), selfAccess,
   InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), listIndexExists, SelectorFunction(..),
   at,
@@ -247,44 +247,28 @@ class (NumericExpression repr) => BooleanExpression repr where
 class (BooleanExpression repr) => ValueExpression repr where
   inlineIf     :: VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
     VS (repr (Value repr)) -> VS (repr (Value repr))
-  funcApp      :: Label -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
-    VS (repr (Value repr))
-  funcAppNamedArgs :: Label -> VS (repr (Type repr)) -> 
-    [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
-    VS (repr (Value repr))
+  
   funcAppMixedArgs :: Label -> VS (repr (Type repr)) -> [VS (repr (Value repr))]
     -> [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
     VS (repr (Value repr))
-  selfFuncApp :: Label -> VS (repr (Type repr)) -> 
-    [VS (repr (Value repr))] -> VS (repr (Value repr))
   selfFuncAppMixedArgs :: Label -> VS (repr (Type repr)) -> 
     [VS (repr (Value repr))] -> 
     [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
     VS (repr (Value repr))
-  extFuncApp   :: Library -> Label -> VS (repr (Type repr)) -> 
-    [VS (repr (Value repr))] -> VS (repr (Value repr))
   extFuncAppMixedArgs :: Library -> Label -> VS (repr (Type repr)) -> 
     [VS (repr (Value repr))] -> 
     [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
     VS (repr (Value repr))
-  libFuncApp :: Library -> Label -> VS (repr (Type repr)) -> 
-    [VS (repr (Value repr))] -> VS (repr (Value repr))
   libFuncAppMixedArgs :: Library -> Label -> VS (repr (Type repr)) -> 
     [VS (repr (Value repr))] -> 
     [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
     VS (repr (Value repr))
-  newObj     :: VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
-    VS (repr (Value repr))
   newObjMixedArgs ::  VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
     [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
-    VS (repr (Value repr))
-  extNewObj  :: Library -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
     VS (repr (Value repr))
   extNewObjMixedArgs :: Library -> VS (repr (Type repr)) -> 
     [VS (repr (Value repr))] -> 
     [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
-    VS (repr (Value repr))
-  libNewObj :: Library -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
     VS (repr (Value repr))
   libNewObjMixedArgs :: Library -> VS (repr (Type repr)) -> 
     [VS (repr (Value repr))] -> 
@@ -294,8 +278,44 @@ class (BooleanExpression repr) => ValueExpression repr where
   lambda :: [VS (repr (Variable repr))] -> VS (repr (Value repr)) -> 
     VS (repr (Value repr))
 
-  exists  :: VS (repr (Value repr)) -> VS (repr (Value repr))
   notNull :: VS (repr (Value repr)) -> VS (repr (Value repr))
+
+funcApp :: (ValueExpression repr) => Label -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> VS (repr (Value repr))
+funcApp n t vs = funcAppMixedArgs n t vs []
+
+funcAppNamedArgs :: (ValueExpression repr) => Label -> VS (repr (Type repr)) -> 
+  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
+  VS (repr (Value repr))
+funcAppNamedArgs n t = funcAppMixedArgs n t []
+
+selfFuncApp :: (ValueExpression repr) => Label -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> VS (repr (Value repr))
+selfFuncApp n t vs = selfFuncAppMixedArgs n t vs []
+
+extFuncApp :: (ValueExpression repr) => Library -> Label -> 
+  VS (repr (Type repr)) -> [VS (repr (Value repr))] -> VS (repr (Value repr))
+extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
+
+libFuncApp :: (ValueExpression repr) => Library -> Label -> 
+  VS (repr (Type repr)) -> [VS (repr (Value repr))] -> VS (repr (Value repr))
+libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
+
+newObj :: (ValueExpression repr) => VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> VS (repr (Value repr))
+newObj t vs = newObjMixedArgs t vs []
+
+extNewObj  :: (ValueExpression repr) => Library -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> VS (repr (Value repr))
+extNewObj l t vs = extNewObjMixedArgs l t vs []
+
+libNewObj :: (ValueExpression repr) => Library -> VS (repr (Type repr)) -> 
+  [VS (repr (Value repr))] -> VS (repr (Value repr))
+libNewObj l t vs = libNewObjMixedArgs l t vs []
+
+exists :: (ValueExpression repr) => VS (repr (Value repr)) -> 
+  VS (repr (Value repr))
+exists = notNull
 
 class (FunctionSym repr) => Selector repr where
   objAccess :: VS (repr (Value repr)) -> VS (repr (Function repr)) -> 

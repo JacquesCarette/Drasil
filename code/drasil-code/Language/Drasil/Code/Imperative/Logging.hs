@@ -5,30 +5,30 @@ module Language.Drasil.Code.Imperative.Logging (
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.CodeSpec hiding (codeSpec)
 
-import GOOL.Drasil (Label, ProgramSym, BodySym(..), BlockSym(..), 
-  TypeSym(..), VariableSym(..), ValueSym(..), StatementSym(..), MS, VS,
-  lensMStoVS)
+import GOOL.Drasil (Label, MSBody, MSBlock, SVariable, SValue, MSStatement, 
+  ProgramSym, BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), 
+  ValueSym(..), StatementSym(..), lensMStoVS)
 
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (maybeToList)
 import Control.Applicative ((<$>))
 import Control.Monad.Reader (Reader, ask)
 
-maybeLog :: (ProgramSym repr) => VS (repr (Variable repr)) ->
-  Reader DrasilState [MS (repr (Statement repr))]
+maybeLog :: (ProgramSym repr) => SVariable repr ->
+  Reader DrasilState [MSStatement repr]
 maybeLog v = do
   g <- ask
   l <- chooseLogging (logKind g) v
   return $ maybeToList l
 
-chooseLogging :: (ProgramSym repr) => Logging -> (VS (repr (Variable repr)) -> 
-  Reader DrasilState (Maybe (MS (repr (Statement repr)))))
+chooseLogging :: (ProgramSym repr) => Logging -> (SVariable repr -> 
+  Reader DrasilState (Maybe (MSStatement repr)))
 chooseLogging LogVar v = Just <$> loggedVar v
 chooseLogging LogAll v = Just <$> loggedVar v
 chooseLogging _      _ = return Nothing
 
-loggedVar :: (ProgramSym repr) => VS (repr (Variable repr)) -> 
-  Reader DrasilState (MS (repr (Statement repr)))
+loggedVar :: (ProgramSym repr) => SVariable repr -> 
+  Reader DrasilState (MSStatement repr)
 loggedVar v = do
     g <- ask
     return $ multi [
@@ -39,8 +39,8 @@ loggedVar v = do
       printFileStrLn valLogFile (" in module " ++ currentModule g),
       closeFile valLogFile ]
 
-logBody :: (ProgramSym repr) => Label -> [VS (repr (Variable repr))] -> 
-  [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Body repr)))
+logBody :: (ProgramSym repr) => Label -> [SVariable repr] -> 
+  [MSBlock repr] -> Reader DrasilState (MSBody repr)
 logBody n vars b = do
   g <- ask
   let loggedBody LogFunc = loggedMethod (logName g) n vars b
@@ -49,8 +49,8 @@ logBody n vars b = do
   return $ body $ loggedBody $ logKind g
 
 loggedMethod :: (ProgramSym repr) => Label -> Label -> 
-  [VS (repr (Variable repr))] -> [MS (repr (Block repr))] -> 
-  [MS (repr (Block repr))]
+  [SVariable repr] -> [MSBlock repr] -> 
+  [MSBlock repr]
 loggedMethod lName n vars b = block [
       varDec varLogFile,
       openFileA varLogFile (litString lName),
@@ -71,8 +71,8 @@ loggedMethod lName n vars b = block [
       printFile valLogFile (valueOf v), 
       printFileStrLn valLogFile ", "] ++ printInputs vs
 
-varLogFile :: (ProgramSym repr) => VS (repr (Variable repr))
+varLogFile :: (ProgramSym repr) => SVariable repr
 varLogFile = var "outfile" outfile
 
-valLogFile :: (ProgramSym repr) => VS (repr (Value repr))
+valLogFile :: (ProgramSym repr) => SValue repr
 valLogFile = valueOf varLogFile

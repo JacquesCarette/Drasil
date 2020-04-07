@@ -9,7 +9,8 @@ module GOOL.Drasil.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
+import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
+  MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
   listOf, ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -61,7 +62,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
-import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
+import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   addLangImportVS, getLangImports, addLibImport, addLibImportVS, getLibImports, 
   addModuleImport, addModuleImportVS, getModuleImports, setFileType, 
   getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
@@ -707,13 +708,13 @@ initName = "__init__"
 pyName :: String
 pyName = "Python"
 
-pyODEMethod :: ODEMethod -> [VS (PythonCode (Value PythonCode))]
+pyODEMethod :: ODEMethod -> [SValue PythonCode]
 pyODEMethod RK45 = [litString "dopri5"]
 pyODEMethod BDF = [litString "vode", 
-  (litString "bdf" :: VS (PythonCode (Value PythonCode))) >>= 
+  (litString "bdf" :: SValue PythonCode) >>= 
   (mkStateVal string . (text "method=" <>) . valueDoc)]
 pyODEMethod Adams = [litString "vode", 
-  (litString "adams" :: VS (PythonCode (Value PythonCode))) >>= 
+  (litString "adams" :: SValue PythonCode) >>= 
   (mkStateVal string . (text "method=" <>) . valueDoc)]
 
 pyLogOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
@@ -725,8 +726,8 @@ pyLnOp = addmathImport $ unOpPrec "math.log"
 pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v
 
-pyInlineIf :: (RenderSym repr) => VS (repr (Value repr)) -> 
-  VS (repr (Value repr)) -> VS (repr (Value repr)) -> VS (repr (Value repr))
+pyInlineIf :: (RenderSym repr) => SValue repr -> 
+  SValue repr -> SValue repr -> SValue repr
 pyInlineIf = on3StateValues (\c v1 v2 -> valFromData (valuePrec c) 
   (valueType v1) (valueDoc v1 <+> text "if" <+> valueDoc c <+> text "else" <+> 
   valueDoc v2))
@@ -738,7 +739,7 @@ pyLambda ps ex = text "lambda" <+> variableList ps <> colon <+> valueDoc ex
 pyListSize :: Doc -> Doc -> Doc
 pyListSize v f = f <> parens v
 
-pyStringType :: (RenderSym repr) => VS (repr (Type repr))
+pyStringType :: (RenderSym repr) => VSType repr
 pyStringType = toState $ typeFromData String "str" (text "str")
 
 pyListDec :: (RenderSym repr) => repr (Variable repr) -> Doc
@@ -750,15 +751,15 @@ pyPrint newLn prf v f = valueDoc prf <> parens (valueDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
         fl = emptyIfEmpty (valueDoc f) $ text ", file=" <> valueDoc f
 
-pyOut :: (RenderSym repr) => Bool -> Maybe (VS (repr (Value repr))) -> 
-  VS (repr (Value repr)) -> VS (repr (Value repr)) -> MS (repr (Statement repr))
+pyOut :: (RenderSym repr) => Bool -> Maybe (SValue repr) -> 
+  SValue repr -> SValue repr -> MSStatement repr
 pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getType . valueType
   where pyOut' (List _) = printSt newLn f printFn v
         pyOut' _ = outDoc newLn f printFn v
 
-pyInput :: VS (PythonCode (Value PythonCode)) ->
-  VS (PythonCode (Variable PythonCode)) -> 
-  MS (PythonCode (Statement PythonCode))
+pyInput :: SValue PythonCode ->
+  SVariable PythonCode -> 
+  MSStatement PythonCode
 pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
   where pyInput' Integer = funcApp "int" int [inSrc]
         pyInput' Float = funcApp "float" double [inSrc]
@@ -799,9 +800,9 @@ pyTryCatch tryB catchB = vcat [
   text "except" <+> text "Exception" <+> colon,
   indent $ bodyDoc catchB]
 
-pyListSlice :: (RenderSym repr) => VS (repr (Variable repr)) -> 
-  VS (repr (Value repr)) -> VS (repr (Value repr)) -> VS (repr (Value repr)) -> 
-  VS (repr (Value repr)) -> VS Doc
+pyListSlice :: (RenderSym repr) => SVariable repr -> 
+  SValue repr -> SValue repr -> SValue repr -> 
+  SValue repr -> VS Doc
 pyListSlice vn vo beg end step = (\vnew vold b e s -> variableDoc vnew <+> 
   equals <+> valueDoc vold <> brackets (valueDoc b <> colon <> valueDoc e <> 
   colon <> valueDoc s)) <$> vn <*> vo <*> beg <*> end <*> step
@@ -833,12 +834,12 @@ pyClass n pn s vs fs = vcat [
                 | isEmpty fs = vs
                 | otherwise = vcat [vs, blank, fs]
 
-pyInOutCall :: (Label -> VS (PythonCode (Type PythonCode)) -> 
-  [VS (PythonCode (Value PythonCode))] -> VS (PythonCode (Value PythonCode))) 
-  -> Label -> [VS (PythonCode (Value PythonCode))] -> 
-  [VS (PythonCode (Variable PythonCode))] -> 
-  [VS (PythonCode (Variable PythonCode))] -> 
-  MS (PythonCode (Statement PythonCode))
+pyInOutCall :: (Label -> VSType PythonCode -> 
+  [SValue PythonCode] -> SValue PythonCode) 
+  -> Label -> [SValue PythonCode] -> 
+  [SVariable PythonCode] -> 
+  [SVariable PythonCode] -> 
+  MSStatement PythonCode
 pyInOutCall f n ins [] [] = valState $ f n void ins
 pyInOutCall f n ins outs both = multiAssign rets [f n void (map valueOf both ++ 
   ins)]
@@ -853,14 +854,14 @@ pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid .
   text) lns
 
 pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) 
-    -> VS (PythonCode (Type PythonCode)) -> 
-    [MS (PythonCode (Parameter PythonCode))] 
-    -> MS (PythonCode (Body PythonCode)) -> MS (PythonCode (Method PythonCode)))
+    -> VSType PythonCode -> 
+    [MSParameter PythonCode] 
+    -> MSBody PythonCode -> SMethod PythonCode)
   -> PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) -> 
-  [VS (PythonCode (Variable PythonCode))] -> 
-  [VS (PythonCode (Variable PythonCode))] -> 
-  [VS (PythonCode (Variable PythonCode))] -> MS (PythonCode (Body PythonCode)) 
-  -> MS (PythonCode (Method PythonCode))
+  [SVariable PythonCode] -> 
+  [SVariable PythonCode] -> 
+  [SVariable PythonCode] -> MSBody PythonCode 
+  -> SMethod PythonCode
 pyInOut f s p ins [] [] b = f s p void (map param ins) b
 pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins) 
   (on3StateValues (on3CodeValues surroundBody) (multi $ map varDec outs) b 
@@ -868,12 +869,12 @@ pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins)
   where rets = both ++ outs
 
 pyDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
-    -> [VS (repr (Variable repr))] -> [VS (repr (Variable repr))] -> 
-    [VS (repr (Variable repr))] -> MS (repr (Body repr)) -> 
-    MS (repr (Method repr)))
+    -> [SVariable repr] -> [SVariable repr] -> 
+    [SVariable repr] -> MSBody repr -> 
+    SMethod repr)
   -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
-  [(String, VS (repr (Variable repr)))] -> [(String, VS (repr (Variable repr)))]
-  -> [(String, VS (repr (Variable repr)))] -> MS (repr (Body repr)) -> 
-  MS (repr (Method repr))
+  [(String, SVariable repr)] -> [(String, SVariable repr)]
+  -> [(String, SVariable repr)] -> MSBody repr -> 
+  SMethod repr
 pyDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
   (map fst $ bs ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)

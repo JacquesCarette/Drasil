@@ -22,8 +22,8 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Modularity(..), ImplementationType(..), Visibility(..))
 
-import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), GS, 
-  FS, initialState, unCI)
+import GOOL.Drasil (GSProgram, SFile, ProgramSym(..), ProgramSym, ProgData(..), 
+  initialState, unCI)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
   getCurrentDirectory)
@@ -89,7 +89,7 @@ genPackage unRepr = do
   d <- genDoxConfig n s
   return $ package pd (m:i++d)
 
-genProgram :: (ProgramSym repr) => Reader DrasilState (GS (repr (Program repr)))
+genProgram :: (ProgramSym repr) => Reader DrasilState (GSProgram repr)
 genProgram = do
   g <- ask
   ms <- chooseModules $ modular g
@@ -97,12 +97,12 @@ genProgram = do
   return $ prog n ms
 
 chooseModules :: (ProgramSym repr) => Modularity -> 
-  Reader DrasilState [FS (repr (RenderFile repr))]
+  Reader DrasilState [SFile repr]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules (Modular _) = genModules
 
 genUnmodular :: (ProgramSym repr) => 
-  Reader DrasilState (FS (repr (RenderFile repr)))
+  Reader DrasilState (SFile repr)
 genUnmodular = do
   g <- ask
   let s = csi $ codeSpec g
@@ -122,7 +122,7 @@ genUnmodular = do
     ++ map (fmap Just) (concatMap genModClasses $ mods s))
           
 genModules :: (ProgramSym repr) => 
-  Reader DrasilState [FS (repr (RenderFile repr))]
+  Reader DrasilState [SFile repr]
 genModules = do
   g <- ask
   let s = csi $ codeSpec g

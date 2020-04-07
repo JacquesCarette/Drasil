@@ -1,22 +1,21 @@
 module Test.SimpleODE (simpleODE) where
 
-import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
+import GOOL.Drasil (GSProgram, SVariable, SMethod, ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
   TypeSym(..), ControlBlock(..), StatementSym(..), VariableSym(..), 
   ValueSym(..), NumericExpression(..), MethodSym(..), ModuleSym(..), ODEInfo, 
-  odeInfo, ODEOptions, odeOptions, ODEMethod(RK45), GS, MS, VS)
+  odeInfo, ODEOptions, odeOptions, ODEMethod(RK45))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-simpleODE :: (ProgramSym repr) => GS (repr (Program repr))
+simpleODE :: (ProgramSym repr) => GSProgram repr
 simpleODE = prog "SimpleODE" [fileDoc (buildModule "SimpleODE" []
   [simpleODEMain] [])]
 
-simpleODEMain :: (MethodSym repr) => MS (repr (Method repr))
+simpleODEMain :: (MethodSym repr) => SMethod repr
 simpleODEMain = mainFunction (body [block [varDecDef odeConst (litDouble 3.5)],
   solveODE info opts,
   block [print $ valueOf odeDepVar]])
 
-odeConst, odeDepVar, odeIndepVar :: (VariableSym repr) =>
-  VS (repr (Variable repr))
+odeConst, odeDepVar, odeIndepVar :: (VariableSym repr) => SVariable repr
 odeConst = var "c" double
 odeDepVar = var "T" (listType double)
 odeIndepVar = var "t" (listType double)

@@ -4,19 +4,20 @@ module GOOL.Drasil.ClassInterface (
   -- Types
   Label, Library,
   -- Typeclasses
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, oneLiner,
-  BlockSym(..), TypeSym(..), ControlBlockSym(..), InternalControlBlock(..), 
-  listSlice, VariableSym(..), ($->), listOf, ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, Selector(..), ($.), selfAccess,
-  InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
+  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
+  oneLiner, BlockSym(..), TypeSym(..), ControlBlockSym(..), 
+  InternalControlBlock(..), listSlice, VariableSym(..), ($->), listOf, 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
+  libFuncApp, newObj, extNewObj, libNewObj, exists, Selector(..), ($.), 
+  selfAccess, InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), listIndexExists, SelectorFunction(..),
-  at,
-  StatementSym(..), (&=), assignToListIndex, initState, changeState, observerListName, initObserverList, 
-  addObserver, ControlStatementSym(..), ifNoElse, switchAsIf, ScopeSym(..),
-  ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer, 
-  nonInitConstructor, StateVarSym(..), privMVar, pubMVar, pubGVar, ClassSym(..),
-  ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
-  odeOptions, ODEMethod(..), convType
+  at, StatementSym(..), (&=), assignToListIndex, initState, changeState, 
+  observerListName, initObserverList, addObserver, ControlStatementSym(..), 
+  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
+  privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..), ODEInfo(..), 
+  odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), convType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)

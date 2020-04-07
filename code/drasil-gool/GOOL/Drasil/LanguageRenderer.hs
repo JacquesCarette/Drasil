@@ -27,8 +27,8 @@ module GOOL.Drasil.LanguageRenderer (
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
-import GOOL.Drasil.ClassInterface (Label, Library, BodySym(..), bodyStatements,oneLiner,
-  PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), 
+import GOOL.Drasil.ClassInterface (Label, Library, BodySym(..), bodyStatements,
+  oneLiner, PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ifNoElse, 
   ScopeSym(..), ParameterSym(..), MethodSym(..))

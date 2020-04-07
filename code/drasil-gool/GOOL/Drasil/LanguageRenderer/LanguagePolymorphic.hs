@@ -153,11 +153,9 @@ string = toState $ typeFromData String "string" (text "string")
 fileType :: (RenderSym repr) => VSType repr
 fileType = toState $ typeFromData File "File" (text "File")
 
-listType :: (RenderSym repr) => repr (Keyword repr) -> VSType repr -> 
-  VSType repr
-listType lst = onStateValue (\t -> typeFromData (List (getType t)) (render 
-  (keyDoc lst) ++ "<" ++ getTypeString t ++ ">") (keyDoc lst <> 
-  angles (getTypeDoc t)))
+listType :: (RenderSym repr) => String -> VSType repr -> VSType repr
+listType lst = onStateValue (\t -> typeFromData (List (getType t)) (lst ++ "<" 
+  ++ getTypeString t ++ ">") (text lst <> angles (getTypeDoc t)))
 
 arrayType :: (RenderSym repr) => VSType repr -> VSType repr
 arrayType = onStateValue (\t -> typeFromData (Array (getType t)) 

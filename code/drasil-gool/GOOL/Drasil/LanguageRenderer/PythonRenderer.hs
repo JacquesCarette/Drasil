@@ -125,8 +125,6 @@ instance KeywordSym PythonCode where
   inherit n = toCode $ parens (text n)
   implements is = toCode $ parens (text $ intercalate ", " is)
 
-  list = toCode empty
-
   blockStart = toCode colon
   blockEnd = toCode empty
 

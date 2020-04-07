@@ -91,7 +91,7 @@ import Control.Monad.State (modify, runState)
 import qualified Data.Map as Map (lookup)
 import Data.List (elemIndex, nub, intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
-  equals, semi, vcat, lbrace, rbrace, render, colon)
+  equals, semi, vcat, lbrace, rbrace, colon)
 
 jExt :: String
 jExt = "java"
@@ -138,9 +138,7 @@ instance KeywordSym JavaCode where
   endStatementLoop = toCode empty
 
   inherit n = toCode $ text "extends" <+> text n
-  implements is = toCode $ text "implements" <+> text (intercalate ", " is) 
-
-  list = toCode $ text "ArrayList"
+  implements is = toCode $ text "implements" <+> text (intercalate ", " is)
 
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
@@ -206,7 +204,7 @@ instance TypeSym JavaCode where
   string = jStringType
   infile = jInfileType
   outfile = jOutfileType
-  listType = jListType list
+  listType = jListType "ArrayList"
   arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
@@ -798,17 +796,17 @@ jOutfileType :: (RenderSym repr) => VSType repr
 jOutfileType = modifyReturn (addLangImportVS "java.io.PrintWriter") $ 
   typeFromData File "PrintWriter" (text "PrintWriter")
 
-jListType :: (RenderSym repr) => repr (Keyword repr) -> VSType repr -> VSType repr
-jListType l t = modify (addLangImportVS $ "java.util." ++ render lst) >> 
+jListType :: (RenderSym repr) => String -> VSType repr -> VSType repr
+jListType l t = modify (addLangImportVS $ "java.util." ++ l) >> 
   (t >>= (jListType' . getType))
-  where jListType' Integer = toState $ typeFromData (List Integer) (render lst 
-          ++ "<Integer>") (lst <> angles (text "Integer"))
+  where jListType' Integer = toState $ typeFromData (List Integer) 
+          (l ++ "<Integer>") (lst <> angles (text "Integer"))
         jListType' Float = toState $ typeFromData (List Float) 
-          (render lst ++ "<Float>") (lst <> angles (text "Float"))
+          (l ++ "<Float>") (lst <> angles (text "Float"))
         jListType' Double = toState $ typeFromData (List Double) 
-          (render lst ++ "<Double>") (lst <> angles (text "Double"))
+          (l ++ "<Double>") (lst <> angles (text "Double"))
         jListType' _ = G.listType l t
-        lst = keyDoc l
+        lst = text l
 
 jArrayType :: VSType JavaCode
 jArrayType = arrayType (obj "Object")

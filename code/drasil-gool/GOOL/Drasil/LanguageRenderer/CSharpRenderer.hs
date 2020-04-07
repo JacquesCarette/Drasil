@@ -132,8 +132,6 @@ instance KeywordSym CSharpCode where
   inherit n = toCode $ colon <+> text n
   implements is = toCode $ colon <+> text (intercalate ", " is)
 
-  list = toCode $ text "List"
-
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
 
@@ -199,7 +197,7 @@ instance TypeSym CSharpCode where
   infile = csInfileType
   outfile = csOutfileType
   listType t = modify (addLangImportVS "System.Collections.Generic") >> 
-    G.listType list t
+    G.listType "List" t
   arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj

@@ -93,7 +93,7 @@ import Data.List (sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), hcat, brackets, 
   braces, parens, comma, empty, equals, semi, vcat, lbrace, rbrace, quotes, 
-  render, colon, isEmpty)
+  colon, isEmpty)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -145,8 +145,6 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
 
   inherit n = pair (inherit n) (inherit n)
   implements is = pair (implements is) (implements is)
-
-  list = pair list list
 
   blockStart = pair blockStart blockStart
   blockEnd = pair blockEnd blockEnd
@@ -1090,8 +1088,6 @@ instance KeywordSym CppSrcCode where
   implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
     . fst) public
 
-  list = toCode $ text "vector"
-
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
 
@@ -1157,8 +1153,8 @@ instance TypeSym CppSrcCode where
   string = modify (addUsing "string" . addLangImportVS "string") >> G.string
   infile = modify (addUsing "ifstream") >> cppInfileType
   outfile = modify (addUsing "ofstream") >> cppOutfileType
-  listType t = modify (addUsing lst . addLangImportVS lst) >> G.listType list t
-    where lst = render $ keyDoc (list :: CppSrcCode (Keyword CppSrcCode))
+  listType t = modify (addUsing vec . addLangImportVS vec) >> G.listType vec t
+    where vec = "vector"
   arrayType = cppArrayType
   listInnerType = G.listInnerType
   obj n = zoom lensVStoMS getClassName >>= (\cn -> if cn == n then G.obj n else 
@@ -1739,9 +1735,6 @@ instance KeywordSym CppHdrCode where
   implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
     . fst) public
 
-
-  list = toCode $ text "vector"
-
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
 
@@ -1808,9 +1801,9 @@ instance TypeSym CppHdrCode where
     G.string
   infile = modify (addHeaderUsing "ifstream") >> cppInfileType
   outfile = modify (addHeaderUsing "ofstream") >> cppOutfileType
-  listType t = modify (addHeaderUsing lst . addHeaderLangImport lst) >> 
-    G.listType list t
-    where lst = render $ keyDoc (list :: CppHdrCode (Keyword CppHdrCode))
+  listType t = modify (addHeaderUsing vec . addHeaderLangImport vec) >> 
+    G.listType vec t
+    where vec = "vector"
   arrayType = cppArrayType
   listInnerType = G.listInnerType
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 

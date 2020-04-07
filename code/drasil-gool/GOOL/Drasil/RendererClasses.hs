@@ -45,8 +45,6 @@ class KeywordSym repr where
   inherit :: Label -> repr (Keyword repr)
   implements :: [Label] -> repr (Keyword repr)
 
-  list     :: repr (Keyword repr)
-
   blockStart :: repr (Keyword repr)
   blockEnd   :: repr (Keyword repr)
 

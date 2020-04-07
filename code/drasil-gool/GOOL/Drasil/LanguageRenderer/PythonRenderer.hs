@@ -10,7 +10,7 @@ import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
+  PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..), 
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), listOf, ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
   Selector(..), ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
@@ -32,7 +32,7 @@ import GOOL.Drasil.LanguageRenderer (multiStateDocD,
   forLabel, inLabel, commentedItem, addCommentsDocD, commentedModD, 
   docFuncRepr, valueList, variableList, parameterList, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, multiBody, block, multiBlock, int, listInnerType, obj, 
+  multiBody, block, multiBlock, int, listInnerType, obj, 
   funcType, runStrategy, notOp', negateOp, sqrtOp', absOp', expOp', 
   sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', csc, sec, cot, equalOp, 
   notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, 
@@ -162,8 +162,6 @@ instance InternalPerm PythonCode where
 instance BodySym PythonCode where
   type Body PythonCode = Doc
   body = onStateList (onCodeList bodyDocD)
-  bodyStatements = block
-  oneLiner = G.oneLiner
 
   addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 

@@ -12,7 +12,7 @@ import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
+  PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), TypeSym(..), 
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp,
   selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), objMethodCall, FunctionSym(..), 
@@ -36,7 +36,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, multiStateDocD,
   addCommentsDocD, functionDox, commentedModD, valueList, parameterList, 
   appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, multiBody, block, multiBlock, int, float, double, char, string, 
+  multiBody, block, multiBlock, int, float, double, char, string, 
   listType, listInnerType, obj, funcType, void, runStrategy, 
   listSlice, notOp, negateOp, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, 
   asinOp, acosOp, atanOp, csc, sec, cot, equalOp, notEqualOp, greaterOp, 
@@ -183,8 +183,6 @@ instance (Pair p) => InternalPerm (p CppSrcCode CppHdrCode) where
 instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
   type Body (p CppSrcCode CppHdrCode) = Doc
   body = pair1List body body
-  bodyStatements = pair1List bodyStatements bodyStatements
-  oneLiner = pair1 oneLiner oneLiner
 
   addComments s = pair1 (addComments s) (addComments s)
 
@@ -1129,8 +1127,6 @@ instance InternalPerm CppSrcCode where
 instance BodySym CppSrcCode where
   type Body CppSrcCode = Doc
   body = onStateList (onCodeList bodyDocD)
-  bodyStatements = block
-  oneLiner = G.oneLiner
 
   addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 
@@ -1780,8 +1776,6 @@ instance InternalPerm CppHdrCode where
 instance BodySym CppHdrCode where
   type Body CppHdrCode = Doc
   body _ = toState $ toCode empty
-  bodyStatements _ = toState $ toCode empty
-  oneLiner _ = toState $ toCode empty
 
   addComments _ _ = toState $ toCode empty
 

@@ -4,7 +4,7 @@ module GOOL.Drasil.ClassInterface (
   -- Types
   Label, Library,
   -- Typeclasses
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
+  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, oneLiner,
   BlockSym(..), TypeSym(..), ControlBlockSym(..), InternalControlBlock(..), 
   listSlice, VariableSym(..), ($->), listOf, ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, Selector(..), ($.), selfAccess,
@@ -55,10 +55,16 @@ class PermanenceSym repr where
 class (BlockSym repr) => BodySym repr where
   type Body repr
   body           :: [MS (repr (Block repr))] -> MS (repr (Body repr))
-  bodyStatements :: [MS (repr (Statement repr))] -> MS (repr (Body repr))
-  oneLiner       :: MS (repr (Statement repr)) -> MS (repr (Body repr))
 
   addComments :: Label -> MS (repr (Body repr)) -> MS (repr (Body repr))
+
+bodyStatements :: (BodySym repr) => [MS (repr (Statement repr))] -> 
+  MS (repr (Body repr))
+bodyStatements sts = body [block sts]
+
+oneLiner :: (BodySym repr) => MS (repr (Statement repr)) -> 
+  MS (repr (Body repr))
+oneLiner s = bodyStatements [s]
 
 class (StatementSym repr) => BlockSym repr where
   type Block repr

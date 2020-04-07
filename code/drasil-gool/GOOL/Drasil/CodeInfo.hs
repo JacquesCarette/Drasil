@@ -63,8 +63,6 @@ instance PermanenceSym CodeInfo where
 instance BodySym CodeInfo where
   type Body CodeInfo = ()
   body = executeList
-  bodyStatements = executeList
-  oneLiner = execute1
 
   addComments _ _ = noInfo
 

@@ -1,6 +1,6 @@
 -- | re-export smart constructors for external code writing
 module GOOL.Drasil (Label, ProgramSym(..), FileSym(..), PermanenceSym(..), 
-  BodySym(..), BlockSym(..), ControlBlockSym(..), listSlice, TypeSym(..), 
+  BodySym(..), bodyStatements, oneLiner, BlockSym(..), ControlBlockSym(..), listSlice, TypeSym(..), 
   StatementSym(..), (&=), assignToListIndex, initState, changeState, initObserverList, addObserver, 
   ControlStatementSym(..), ifNoElse, switchAsIf, 
   VariableSym(..), ($->), listOf, ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -18,7 +18,7 @@ module GOOL.Drasil (Label, ProgramSym(..), FileSym(..), PermanenceSym(..),
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..),
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), ControlBlockSym(..), 
   listSlice, TypeSym(..), StatementSym(..), (&=), assignToListIndex, initState, changeState, initObserverList, addObserver, ControlStatementSym(..), switchAsIf,
   ifNoElse, VariableSym(..), ($->), listOf, ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, Selector(..), ($.), selfAccess, objMethodCallMixedArgs, FunctionSym(..), 

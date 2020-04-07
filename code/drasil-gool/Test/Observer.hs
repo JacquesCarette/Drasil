@@ -1,7 +1,7 @@
 module Test.Observer (observer, observerName, printNum, x) where
 
 import GOOL.Drasil (
-  ProgramSym, FileSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
+  ProgramSym, FileSym(..), PermanenceSym(..), oneLiner, TypeSym(..), 
   StatementSym(..), VariableSym(..), ValueSym(..), ScopeSym(..), 
   MethodSym(..), initializer, StateVarSym(..), ClassSym(..), ModuleSym(..), FS, 
   CS, MS, VS)

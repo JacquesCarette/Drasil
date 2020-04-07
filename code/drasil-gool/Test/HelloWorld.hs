@@ -2,7 +2,7 @@
 
 module Test.HelloWorld (helloWorld) where
 
-import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
+import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   listSlice, TypeSym(..), StatementSym(..), (&=), ControlStatementSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), extFuncApp, Selector(..), FunctionSym(..), SelectorFunction(..), 

@@ -11,7 +11,7 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
+  PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
   ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp,
   selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
@@ -35,7 +35,7 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD, 
   variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
+  multiBody, block, multiBlock, bool, int, float, double, char, 
   string, listType, arrayType, listInnerType, obj, funcType, void, 
   runStrategy, listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, 
   greaterOp, greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, 
@@ -169,8 +169,6 @@ instance InternalPerm CSharpCode where
 instance BodySym CSharpCode where
   type Body CSharpCode = Doc
   body = onStateList (onCodeList bodyDocD)
-  bodyStatements = block
-  oneLiner = G.oneLiner
 
   addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 

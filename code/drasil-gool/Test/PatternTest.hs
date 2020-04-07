@@ -1,6 +1,6 @@
 module Test.PatternTest (patternTest) where
 
-import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
+import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..), 
   ControlBlockSym(..), TypeSym(..), StatementSym(..), initState, changeState, initObserverList, addObserver, ControlStatementSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), extNewObj, FunctionSym(..), 
   MethodSym(..), ModuleSym(..), GS, MS, VS)

@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The structure for a class of renderers is defined here.
-module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData, oneLiner,
+module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
   fileType, listType, arrayType, listInnerType, obj, funcType, void, 
   runStrategy, listSlice, unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', 
@@ -41,7 +41,7 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, 
-  FileSym(RenderFile, commentedMod), BodySym(Body, bodyStatements), 
+  FileSym(RenderFile, commentedMod), BodySym(Body), bodyStatements, oneLiner,
   BlockSym(Block), PermanenceSym(..), 
   TypeSym(Type, infile, outfile, iterator, getType, getTypeDoc, getTypeString), 
   VariableSym(Variable, variableName, variableType), listOf,
@@ -52,7 +52,7 @@ import GOOL.Drasil.ClassInterface (Label, Library,
   ParameterSym(Parameter), MethodSym(Method), StateVarSym(StateVar), 
   ClassSym(Class), ModuleSym(Module), BlockComment(..), convType)
 import qualified GOOL.Drasil.ClassInterface as S (
-  BodySym(oneLiner), BlockSym(block), 
+  BlockSym(block), 
   TypeSym(bool, int, float, double, char, string, listType, arrayType, 
     listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf),
@@ -116,10 +116,6 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
 import qualified Text.PrettyPrint.HughesPJ as D (char, double, float)
 
 -- Bodies --
-
-oneLiner :: (RenderSym repr) => MS (repr (Statement repr)) -> 
-  MS (repr (Body repr))
-oneLiner s = bodyStatements [s]
 
 multiBody :: (RenderSym repr) => [MS (repr (Body repr))] -> 
   MS (repr (Body repr))
@@ -220,7 +216,7 @@ listSlice b e s vnew vold =
       S.listDec 0 var_temp,
       S.for (S.varDecDef var_i (fromMaybe (S.litInt 0) b)) 
         (v_i ?< fromMaybe (S.listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
-        (S.oneLiner $ S.valState $ S.listAppend v_temp (S.listAccess vold v_i)),
+        (oneLiner $ S.valState $ S.listAppend v_temp (S.listAccess vold v_i)),
       vnew &= v_temp]
 
 -- Unary Operators --
@@ -1038,7 +1034,7 @@ notifyObservers f t = S.for initv (v_index ?< S.listSize obsList)
         var_index = S.var "observerIndex" S.int
         v_index = S.valueOf var_index
         initv = S.varDecDef var_index $ S.litInt 0
-        notify = S.oneLiner $ S.valState $ at obsList v_index $. f
+        notify = oneLiner $ S.valState $ at obsList v_index $. f
 
 -- Methods --
 
@@ -1060,13 +1056,13 @@ getMethod :: (RenderSym repr) => VS (repr (Variable repr)) ->
   MS (repr (Method repr))
 getMethod v = zoom lensMStoVS v >>= (\vr -> S.method (getterName $ variableName 
   vr) public dynamic (toState $ variableType vr) [] getBody)
-  where getBody = S.oneLiner $ S.returnState (S.valueOf $ S.objVarSelf v)
+  where getBody = oneLiner $ S.returnState (S.valueOf $ S.objVarSelf v)
 
 setMethod :: (RenderSym repr) => VS (repr (Variable repr)) -> 
   MS (repr (Method repr))
 setMethod v = zoom lensMStoVS v >>= (\vr -> S.method (setterName $ variableName 
   vr) public dynamic S.void [S.param v] setBody)
-  where setBody = S.oneLiner $ S.objVarSelf v &= S.valueOf v
+  where setBody = oneLiner $ S.objVarSelf v &= S.valueOf v
 
 constructor :: (RenderSym repr) => Label -> [MS (repr (Parameter repr))] -> 
   [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 

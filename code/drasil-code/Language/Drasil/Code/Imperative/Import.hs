@@ -28,7 +28,7 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 
 import GOOL.Drasil (Label, ProgramSym, FileSym(..), PermanenceSym(..), 
-  BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), ($->), ValueSym(..), 
+  BodySym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..), ($->), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   objMethodCallMixedArgs, FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), ControlStatementSym(..), ifNoElse, ScopeSym(..), 

@@ -136,15 +136,11 @@ instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
   endStatement = toCode semi
 
-  inherit n = toCode $ text "extends" <+> text n
-  implements is = toCode $ text "implements" <+> text (intercalate ", " is)
-
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
 
   commentStart = toCode doubleSlash
 
-  keyFromDoc = toCode
   keyDoc = unJC
 
 instance ImportSym JavaCode where
@@ -678,9 +674,14 @@ instance ClassSym JavaCode where
 
 instance InternalClass JavaCode where
   intClass = G.intClass classDocD
+  
+  inherit n = toCode $ maybe empty ((text "extends" <+>) . text) n
+  implements is = toCode $ text "implements" <+> text (intercalate ", " is)
+
   commentedClass = G.commentedClass
+
   classDoc = unJC
-  classFromData = onStateValue toCode
+  classFromData d = d
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData

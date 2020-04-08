@@ -121,15 +121,11 @@ instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
   endStatement = toCode empty
 
-  inherit n = toCode $ parens (text n)
-  implements is = toCode $ parens (text $ intercalate ", " is)
-
   blockStart = toCode colon
   blockEnd = toCode empty
 
   commentStart = toCode $ text "#"
 
-  keyFromDoc = toCode
   keyDoc = unPC
 
 instance ImportSym PythonCode where
@@ -659,9 +655,14 @@ instance ClassSym PythonCode where
 
 instance InternalClass PythonCode where
   intClass = G.intClass pyClass
+
+  inherit n = toCode $ maybe empty (parens . text) n
+  implements is = toCode $ parens (text $ intercalate ", " is)
+
   commentedClass = G.commentedClass
+
   classDoc = unPC
-  classFromData = onStateValue toCode
+  classFromData d = d
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData

@@ -27,7 +27,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalFunction(..), 
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
-  InternalParam(..), InternalMethod(..), InternalStateVar(..), 
+  InternalParam(..), InternalMethod(..), InternalStateVar(..), ParentSpec,
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, multiStateDocD, 
   bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, freeDocD, mkSt, 
@@ -142,15 +142,11 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
   endStatement = pair endStatement endStatement
 
-  inherit n = pair (inherit n) (inherit n)
-  implements is = pair (implements is) (implements is)
-
   blockStart = pair blockStart blockStart
   blockEnd = pair blockEnd blockEnd
 
   commentStart = pair commentStart commentStart
 
-  keyFromDoc d = pair (keyFromDoc d) (keyFromDoc d)
   keyDoc k = keyDoc $ pfst k
 
 instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
@@ -806,9 +802,14 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
   intClass n s i vs fs = pair2Lists 
     (intClass n (pfst s) (pfst i)) (intClass n (psnd s) (psnd i)) 
     vs (map (zoom lensCStoMS) fs)
+
+  inherit n = pair (inherit n) (inherit n)
+  implements is = pair (implements is) (implements is)
+
   commentedClass = pair2 commentedClass commentedClass
+
   classDoc c = classDoc $ pfst c
-  classFromData d = on2StateValues pair (classFromData d) (classFromData d)
+  classFromData = pair1 classFromData classFromData
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
@@ -1072,16 +1073,11 @@ instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
   endStatement = toCode semi
 
-  inherit n = onCodeValue (cppInherit n . fst) public
-  implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
-    . fst) public
-
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
 
   commentStart = toCode doubleSlash
 
-  keyFromDoc = toCode
   keyDoc = unCPPSC
 
 instance ImportSym CppSrcCode where
@@ -1636,9 +1632,15 @@ instance ClassSym CppSrcCode where
 instance InternalClass CppSrcCode where
   intClass n _ _ vs fs = modify (setClassName n) >> on2StateLists cppsClass 
     vs (map (zoom lensCStoMS) $ fs ++ [destructor vs])
+
+  inherit n = onCodeValue (cppInherit n . fst) public
+  implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
+    . fst) public
+
   commentedClass _ cs = cs
+
   classDoc = unCPPSC
-  classFromData = onStateValue toCode
+  classFromData d = d
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
@@ -1707,16 +1709,11 @@ instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
   endStatement = toCode semi
 
-  inherit n = onCodeValue (cppInherit n . fst) public
-  implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
-    . fst) public
-
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
 
   commentStart = toCode empty
 
-  keyFromDoc = toCode
   keyDoc = unCPPHC
 
 instance ImportSym CppHdrCode where
@@ -2206,9 +2203,15 @@ instance InternalClass CppHdrCode where
     (\vars funcs -> cpphClass n i vars funcs public private 
     blockStart blockEnd endStatement) vs fs
     where fs = map (zoom lensCStoMS) $ mths ++ [destructor vs]
+
+  inherit n = onCodeValue (cppInherit n . fst) public
+  implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
+    . fst) public
+
   commentedClass = G.commentedClass
+
   classDoc = unCPPHC
-  classFromData = onStateValue toCode
+  classFromData d = d
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
@@ -2354,8 +2357,8 @@ usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <>
   text m <> keyDoc end
 usingNameSpace n Nothing end = text "using namespace" <+> text n <> keyDoc end
 
-cppInherit :: Label -> Doc -> Doc
-cppInherit n pub = colon <+> pub <+> text n
+cppInherit :: Maybe Label -> Doc -> Doc
+cppInherit n pub = maybe empty ((colon <+> pub <+>) . text) n
 
 cppBoolType :: (RenderSym repr) => VSType repr
 cppBoolType = toState $ typeFromData Boolean "bool" (text "bool")
@@ -2517,20 +2520,20 @@ cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
   where vars = map stateVarDoc vs
         funcs = map methodDoc fs
 
-cpphClass :: Label -> CppHdrCode (Keyword CppHdrCode) -> 
+cpphClass :: Label -> CppHdrCode ParentSpec -> 
   [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode (Method CppHdrCode)] -> 
   CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Scope CppHdrCode) -> 
   CppHdrCode (Keyword CppHdrCode) -> CppHdrCode (Keyword CppHdrCode) -> 
   CppHdrCode (Keyword CppHdrCode) -> CppHdrCode (Class CppHdrCode)
-cpphClass n p vars funcs pub priv bStart bEnd end = toCode $ vcat [
-    classDec <+> text n <+> keyDoc p <+> keyDoc bStart,
+cpphClass n ps vars funcs pub priv bStart bEnd end = onCodeValue (\p -> vcat [
+    classDec <+> text n <+> p <+> keyDoc bStart,
     indentList [
       scopeDoc pub <> colon,
       indent pubs,
       blank,
       scopeDoc priv <> colon,
       indent privs],
-    keyDoc bEnd <> keyDoc end]
+    keyDoc bEnd <> keyDoc end]) ps
   where pubs = cpphVarsFuncsList Pub vars funcs
         privs = cpphVarsFuncsList Priv vars funcs
 

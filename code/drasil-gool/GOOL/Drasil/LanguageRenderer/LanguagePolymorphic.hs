@@ -76,7 +76,7 @@ import GOOL.Drasil.RendererClasses (InternalFile(commentedMod), KeywordSym(..),
   InternalScope(..), MethodTypeSym(MethodType, mType), 
   InternalParam(paramFromData), 
   InternalMethod(intMethod, commentedFunc, methodDoc), InternalStateVar(..), 
-  InternalClass(classDoc, classFromData), 
+  ParentSpec, InternalClass(inherit, implements, classDoc, classFromData), 
   InternalMod(moduleDoc, updateModuleDoc), BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (InternalFile(fileFromData), 
   InternalValue(call), InternalFunction(getFunc, setFunc, listSizeFunc, 
@@ -86,8 +86,8 @@ import qualified GOOL.Drasil.RendererClasses as S (InternalFile(fileFromData),
   InternalMod(modFromData))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
-  toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
-  on2StateLists, on1StateValue1List, getInnerType)
+  toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
+  onStateList, on2StateLists, on1StateValue1List, getInnerType)
 import GOOL.Drasil.LanguageRenderer (dot, forLabel, new, addExt, moduleDocD, 
   blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, mkSt, mkStNoEnd, 
   mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, 
@@ -1052,7 +1052,7 @@ constVar p s vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue
 
 buildClass :: (RenderSym repr) => Label -> Maybe Label -> [CSStateVar repr] -> 
   [SMethod repr] -> SClass repr
-buildClass n = S.intClass n public . maybe (keyFromDoc empty) inherit
+buildClass n = S.intClass n public . inherit
 
 -- enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
 --   SClass repr
@@ -1061,8 +1061,7 @@ buildClass n = S.intClass n public . maybe (keyFromDoc empty) inherit
 
 extraClass :: (RenderSym repr) => Label -> Maybe Label -> [CSStateVar repr] -> 
   [SMethod repr] -> SClass repr
-extraClass n = S.intClass n (scopeFromData Priv empty) . 
-  maybe (keyFromDoc empty) inherit
+extraClass n = S.intClass n (scopeFromData Priv empty) . inherit
 
 implementingClass :: (RenderSym repr) => Label -> [Label] -> [CSStateVar repr] 
   -> [SMethod repr] -> SClass repr
@@ -1071,18 +1070,18 @@ implementingClass n is = S.intClass n public (implements is)
 docClass :: (RenderSym repr) => String -> SClass repr -> SClass repr
 docClass d = S.commentedClass (docComment $ toState $ classDox d)
 
-commentedClass :: (RenderSym repr) => CS (repr (BlockComment repr)) -> 
-  SClass repr -> SClass repr
-commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' -> 
+commentedClass :: (RenderSym repr, Monad repr) => CS (repr (BlockComment repr)) 
+  -> SClass repr -> SClass repr
+commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' -> toCode $
   commentedItem (blockCommentDoc cmt') (classDoc cs')) cmt cs)
 
-intClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> 
-  Label -> repr (Scope repr) -> repr (Keyword repr) -> [CSStateVar repr] -> 
-  [SMethod repr] -> SClass repr
-intClass f n s i svs ms = modify (setClassName n) >> classFromData 
-  (on2StateValues (f n (keyDoc i) (scopeDoc s)) (onStateList 
-  (stateVarListDocD . map stateVarDoc) svs) (onStateList (vibcat . map 
-  methodDoc) (map (zoom lensCStoMS) ms)))
+intClass :: (RenderSym repr, Monad repr) => (Label -> Doc -> Doc -> Doc -> Doc 
+  -> Doc) -> Label -> repr (Scope repr) -> repr ParentSpec -> [CSStateVar repr] 
+  -> [SMethod repr] -> SClass repr
+intClass f n s i svrs mths = modify (setClassName n) >> classFromData 
+  (on2StateValues (\svs ms -> onCodeValue (\p -> f n p (scopeDoc s) svs ms) i) 
+  (onStateList (stateVarListDocD . map stateVarDoc) svrs) 
+  (onStateList (vibcat . map methodDoc) (map (zoom lensCStoMS) mths)))
 
 -- Modules --
 

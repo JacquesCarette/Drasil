@@ -128,15 +128,11 @@ instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
   endStatement = toCode semi
 
-  inherit n = toCode $ colon <+> text n
-  implements is = toCode $ colon <+> text (intercalate ", " is)
-
   blockStart = toCode lbrace
   blockEnd = toCode rbrace
 
   commentStart = toCode doubleSlash
 
-  keyFromDoc = toCode
   keyDoc = unCSC
 
 instance ImportSym CSharpCode where
@@ -639,9 +635,14 @@ instance ClassSym CSharpCode where
 
 instance InternalClass CSharpCode where
   intClass = G.intClass classDocD
+
+  inherit n = toCode $ maybe empty ((colon <+>) . text) n
+  implements is = toCode $ colon <+> text (intercalate ", " is)
+
   commentedClass = G.commentedClass
+
   classDoc = unCSC
-  classFromData = onStateValue toCode
+  classFromData d = d
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData

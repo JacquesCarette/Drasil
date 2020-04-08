@@ -126,7 +126,7 @@ type VS = State ValueState
 -- GS - FS --
 
 lensGStoFS :: Lens' GOOLState FileState
-lensGStoFS = lens (\gs -> initialFS {_goolState = gs}) (const (^. goolState))
+lensGStoFS = lens (\gs -> set goolState gs initialFS) (const (^. goolState))
 
 lensFStoGS :: Lens' FileState GOOLState
 lensFStoGS = goolState
@@ -134,13 +134,12 @@ lensFStoGS = goolState
 -- FS - CS --
 
 lensFStoCS :: Lens' FileState ClassState
-lensFStoCS = lens (\fs -> initialCS {_fileState = fs}) (const (^. fileState))
+lensFStoCS = lens (\fs -> set fileState fs initialCS) (const (^. fileState))
 
 -- FS - MS --
 
 lensFStoMS :: Lens' FileState MethodState
-lensFStoMS = lens (\fs -> initialMS {_classState = initialCS {_fileState = fs}})
-  (const (^. lensMStoFS))
+lensFStoMS = lens (\fs -> set lensMStoFS fs initialMS) (const (^. lensMStoFS))
 
 lensMStoFS :: Lens' MethodState FileState 
 lensMStoFS = classState . fileState
@@ -148,7 +147,7 @@ lensMStoFS = classState . fileState
 -- CS - MS --
 
 lensCStoMS :: Lens' ClassState MethodState
-lensCStoMS = lens (\cs -> initialMS {_classState = cs}) (const (^. classState))
+lensCStoMS = lens (\cs -> set classState cs initialMS) (const (^. classState))
 
 lensMStoCS :: Lens' MethodState ClassState
 lensMStoCS = classState
@@ -156,10 +155,7 @@ lensMStoCS = classState
 -- FS - VS --
 
 lensFStoVS :: Lens' FileState ValueState
-lensFStoVS = lens 
-  (\fs -> initialVS {_methodState = initialMS {_classState = initialCS {
-    _fileState = fs}}}) 
-  (const (^. lensVStoFS))
+lensFStoVS = lens (\fs -> set lensVStoFS fs initialVS) (const (^. lensVStoFS))
 
 lensVStoFS :: Lens' ValueState FileState
 lensVStoFS = methodState . lensMStoFS
@@ -167,15 +163,13 @@ lensVStoFS = methodState . lensMStoFS
 -- CS - VS --
 
 lensCStoVS :: Lens' ClassState ValueState
-lensCStoVS = lens 
-  (\cs -> initialVS {_methodState = initialMS {_classState = cs}}) 
+lensCStoVS = lens (\cs -> set (methodState . classState) cs initialVS) 
   (const (^. (methodState . classState)))
 
 -- MS - VS --
 
 lensMStoVS :: Lens' MethodState ValueState
-lensMStoVS = lens (\ms -> initialVS {_methodState = ms}) 
-  (const (^. methodState))
+lensMStoVS = lens (\ms -> set methodState ms initialVS) (const (^. methodState))
 
 lensVStoMS :: Lens' ValueState MethodState
 lensVStoMS = methodState

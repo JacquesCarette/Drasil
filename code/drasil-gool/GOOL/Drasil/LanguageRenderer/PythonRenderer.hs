@@ -58,8 +58,8 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr,
   unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, binExpr, 
   typeBinExpr, addmathImport)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
-  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
+  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
+  MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
@@ -342,7 +342,7 @@ instance ValueSym PythonCode where
   argsList = modify (addLangImportVS "sys") >> G.argsList "sys.argv"
 
   valueType = onCodeValue valType
-  valueDoc = valDoc . unPC
+  valueDoc = val . unPC
 
 instance NumericExpression PythonCode where
   (#~) = unExpr' negateOp
@@ -673,7 +673,7 @@ instance InternalMethod PythonCode where
   intFunc m n _ _ _ ps b = modify (if m then setCurrMain else id) >>
     on1StateValue1List (\bd pms -> methodFromData Pub $ pyFunction n pms bd) 
     b ps
-  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
+  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue commentedItem) cmt)
 
   methodDoc = mthdDoc . unPC
@@ -725,7 +725,7 @@ instance ModuleSym PythonCode where
 instance InternalMod PythonCode where
   moduleDoc = modDoc . unPC
   modFromData n = G.modFromData n (toCode . md n)
-  updateModuleDoc f = onCodeValue (updateModDoc f)
+  updateModuleDoc f = onCodeValue (updateMod f)
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc

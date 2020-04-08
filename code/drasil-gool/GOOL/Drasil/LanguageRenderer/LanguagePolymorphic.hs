@@ -1315,8 +1315,8 @@ fileFromData :: (RenderSym repr) => (repr (Module repr) -> FilePath ->
   repr (RenderFile repr)) -> FS FilePath -> FS (repr (Module repr)) -> 
   FS (repr (RenderFile repr))
 fileFromData f fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty 
-  (moduleDoc mdl) then id else (if snd s ^. currMain && isSource (snd s ^. currFileType) then over lensFStoGS 
-  (setMainMod fpath) else id) . over lensFStoGS (addFile (snd s ^. currFileType) fpath)) s) f m fp 
+  (moduleDoc mdl) then id else (if s ^. currMain && isSource (s ^. currFileType) then over lensFStoGS 
+  (setMainMod fpath) else id) . over lensFStoGS (addFile (s ^. currFileType) fpath)) s) f m fp 
 
 -- Helper functions
 

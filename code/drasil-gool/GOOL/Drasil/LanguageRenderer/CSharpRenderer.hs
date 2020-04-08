@@ -73,8 +73,8 @@ import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue,
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
   onStateList, on1CodeValue1List)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, modifyReturn, 
-  addLangImport, addLangImportVS, addLibImport, setFileType, getClassName, 
-  setCurrMain, setODEDepVars, getODEDepVars)
+  revFiles, addLangImport, addLangImportVS, addLibImport, setFileType, 
+  getClassName, setCurrMain, setODEDepVars, getODEDepVars)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -103,7 +103,10 @@ instance Monad CSharpCode where
 
 instance ProgramSym CSharpCode where
   type Program CSharpCode = ProgData
-  prog n = onStateList (onCodeList (progD n)) . map (zoom lensGStoFS)
+  prog n files = do
+    fs <- mapM (zoom lensGStoFS) files
+    modify revFiles
+    return $ onCodeList (progD n) fs
 
 instance RenderSym CSharpCode
 

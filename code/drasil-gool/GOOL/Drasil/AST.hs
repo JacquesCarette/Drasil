@@ -1,11 +1,11 @@
 module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), isSource, 
   Binding(..), onBinding, BindData(bind, bindDoc), bd, 
   FileData(filePath, fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), 
-  fd, ModData(name, modDoc), md, updateModDoc, MethodData(mthdDoc), mthd, 
-  updateMthdDoc, OpData(opPrec, opDoc), od, ParamData(paramVar, paramDoc), pd, 
-  paramName, updateParamDoc, ProgData(progName, progMods), progD, emptyProg, 
-  StateVarData(getStVarScp, stVarDoc, destructSts), svd, 
-  TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valType, valDoc), 
+  fd, ModData(name, modDoc), md, updateMod, MethodData(mthdDoc), mthd, 
+  updateMthd, OpData(opPrec, opDoc), od, ParamData(paramVar, paramDoc), pd, 
+  paramName, updateParam, ProgData(progName, progMods), progD, emptyProg, 
+  StateVarData(getStVarScp, stVar, destructSts), svd, 
+  TypeData(cType, typeString, typeDoc), td, ValData(valPrec, valType, val), 
   vd, updateValDoc, VarData(varBind, varName, varType, varDoc), vard
 ) where
 
@@ -66,8 +66,8 @@ data ModData = MD {name :: String, modDoc :: Doc}
 md :: String -> Doc -> ModData
 md = MD
 
-updateModDoc :: (Doc -> Doc) -> ModData -> ModData
-updateModDoc f m = md (name m) (f $ modDoc m)
+updateMod :: (Doc -> Doc) -> ModData -> ModData
+updateMod f m = md (name m) (f $ modDoc m)
 
 -- Used as the underlying data type for Methods in all renderers except C++
 newtype MethodData = MthD {mthdDoc :: Doc}
@@ -75,8 +75,8 @@ newtype MethodData = MthD {mthdDoc :: Doc}
 mthd :: Doc -> MethodData
 mthd = MthD 
 
-updateMthdDoc :: MethodData -> (Doc -> Doc) -> MethodData
-updateMthdDoc m f = mthd ((f . mthdDoc) m)
+updateMthd :: MethodData -> (Doc -> Doc) -> MethodData
+updateMthd m f = mthd ((f . mthdDoc) m)
 
 -- Used as the underlying data type for UnaryOp and BinaryOp in all renderers
 data OpData = OD {opPrec :: Int, opDoc :: Doc}
@@ -93,8 +93,8 @@ pd = PD
 paramName :: ParamData -> String
 paramName = varName . paramVar
 
-updateParamDoc :: (Doc -> Doc) -> ParamData -> ParamData
-updateParamDoc f v = pd (paramVar v) ((f . paramDoc) v)
+updateParam :: (Doc -> Doc) -> ParamData -> ParamData
+updateParam f v = pd (paramVar v) ((f . paramDoc) v)
 
 -- Used as the underlying data type for Programs in all renderers
 data ProgData = ProgD {progName :: String, progMods :: [FileData]}
@@ -106,7 +106,7 @@ emptyProg :: ProgData
 emptyProg = progD "" []
 
 -- Used as the underlying data type for StateVars in the C++ renderer
-data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc, 
+data StateVarData = SVD {getStVarScp :: ScopeTag, stVar :: Doc, 
   destructSts :: (Doc, Terminator)}
 
 svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
@@ -119,13 +119,13 @@ td :: CodeType -> String -> Doc -> TypeData
 td = TD
 
 -- Used as the underlying data type for Values in all renderers
-data ValData = VD {valPrec :: Maybe Int, valType :: TypeData, valDoc :: Doc}
+data ValData = VD {valPrec :: Maybe Int, valType :: TypeData, val :: Doc}
 
 vd :: Maybe Int -> TypeData -> Doc -> ValData
 vd = VD
 
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
-updateValDoc f v = vd (valPrec v) (valType v) ((f . valDoc) v)
+updateValDoc f v = vd (valPrec v) (valType v) ((f . val) v)
 
 -- Used as the underlying data type for Variables in all renderers
 data VarData = VarD {varBind :: Binding, varName :: String, 

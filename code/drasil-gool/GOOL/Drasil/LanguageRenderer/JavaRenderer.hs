@@ -65,8 +65,8 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr,
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
   typeBinExpr)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
-  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
+  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
+  MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.CodeAnalysis (Exception(..))
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
@@ -435,7 +435,7 @@ instance InternalValue JavaCode where
   call = G.call' jName
   
   valuePrec = valPrec . unJC
-  valueDoc = valDoc . unJC
+  valueDoc = val . unJC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector JavaCode where
@@ -660,7 +660,7 @@ instance InternalMethod JavaCode where
     modify ((if m then setCurrMain else id) . addExceptionImports excs) 
     toState $ methodFromData Pub $ jMethod n (map exc excs) s p tp pms bd
   intFunc = G.intFunc
-  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
+  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue commentedItem) cmt)
     
   destructor _ = error $ destructorError jName
@@ -700,7 +700,7 @@ instance ModuleSym JavaCode where
 instance InternalMod JavaCode where
   moduleDoc = modDoc . unJC
   modFromData n = G.modFromData n (toCode . md n)
-  updateModuleDoc f = onCodeValue (updateModDoc f)
+  updateModuleDoc f = onCodeValue (updateMod f)
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc

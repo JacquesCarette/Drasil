@@ -15,7 +15,7 @@ printExc (Exc l e) = if null l then e else l ++ "." ++ e
 
 hasLoc :: Exception -> Bool
 hasLoc (Exc [] _) = False
-hasLoc _ = True
+hasLoc (Exc (_:_) _) = True
 
 exception :: String -> String -> Exception
 exception = Exc

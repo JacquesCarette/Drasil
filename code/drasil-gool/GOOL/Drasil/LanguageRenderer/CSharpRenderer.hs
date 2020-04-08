@@ -64,9 +64,9 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr,
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
   typeBinExpr)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
-  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, updateMthdDoc, OpData(..), od, ParamData(..), pd, 
-  updateParamDoc, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
+  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
+  MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
+  updateParam, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
   updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
@@ -411,7 +411,7 @@ instance InternalValue CSharpCode where
   call = G.call (colon <> space)
   
   valuePrec = valPrec . unCSC
-  valueDoc = valDoc . unCSC
+  valueDoc = val . unCSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CSharpCode where
@@ -619,7 +619,7 @@ instance InternalMethod CSharpCode where
     on3StateValues (\tp pms bd -> methodFromData Pub $ methodDocD n s p tp pms 
     bd) t (sequence ps) b
   intFunc = G.intFunc
-  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthdDoc) m 
+  commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue commentedItem) cmt)
     
   destructor _ = error $ destructorError csName
@@ -659,7 +659,7 @@ instance ModuleSym CSharpCode where
 instance InternalMod CSharpCode where
   moduleDoc = modDoc . unCSC
   modFromData n = G.modFromData n (toCode . md n)
-  updateModuleDoc f = onCodeValue (updateModDoc f)
+  updateModuleDoc f = onCodeValue (updateMod f)
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
@@ -805,5 +805,5 @@ csInOut f s p ins [] [v] b = f s p (onStateValue variableType v)
   (map param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b 
   (returnState $ valueOf v))
 csInOut f s p ins outs both b = f s p void (map (onStateValue (onCodeValue 
-  (updateParamDoc csRef)) . param) both ++ map param ins ++ map (onStateValue 
-  (onCodeValue (updateParamDoc csOut)) . param) outs) b
+  (updateParam csRef)) . param) both ++ map param ins ++ map (onStateValue 
+  (onCodeValue (updateParam csOut)) . param) outs) b

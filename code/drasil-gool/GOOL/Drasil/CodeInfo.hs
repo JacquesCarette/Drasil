@@ -2,18 +2,18 @@
 
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
-import GOOL.Drasil.ClassInterface (ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, SMethod, ProgramSym(..), FileSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlock(..), 
   InternalControlBlock(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), InternalValueExp(..), FunctionSym(..), SelectorFunction(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
+  StatementSym(..), ControlStatement(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.CodeAnalysis (Exception(..), exception, stdExc)
 import GOOL.Drasil.Helpers (toCode, toState)
-import GOOL.Drasil.State (GOOLState, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
+import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, modifyReturn, setClassName, 
   setModuleName, getModuleName, addClass, updateClassMap, addException, 
   updateMethodExcMap, updateCallMap, addCall, callMapTransClosure, 
@@ -88,7 +88,7 @@ instance TypeSym CodeInfo where
   getType _ = Void
   getTypeString = unCI
 
-instance ControlBlockSym CodeInfo where
+instance ControlBlock CodeInfo where
   runStrategy _ ss vl _ = do
     mapM_ snd ss
     _ <- zoom lensMStoVS $ fromMaybe noInfo vl
@@ -313,7 +313,7 @@ instance StatementSym CodeInfo where
 
   multi = executeList
 
-instance ControlStatementSym CodeInfo where
+instance ControlStatement CodeInfo where
   ifCond = evalConds
   switch v cs b = do
     _ <- zoom lensMStoVS v
@@ -421,39 +421,36 @@ fnfExc = exception "java.io" "FileNotFoundException"
 ioExc = exception "java.io" "IOException"
 genericExc = stdExc "Exception"
 
-updateMEMandCM :: String -> MS (CodeInfo (Body CodeInfo)) -> 
-  MS (CodeInfo (Method CodeInfo))
+updateMEMandCM :: String -> MSBody CodeInfo -> SMethod CodeInfo
 updateMEMandCM n b = do
   _ <- b
   modify (updateCallMap n . updateMethodExcMap n)
   noInfo
 
-evalConds :: [(VS (CodeInfo (Value CodeInfo)), MS (CodeInfo (Body CodeInfo)))] 
-  -> MS (CodeInfo (Body CodeInfo)) -> MS (CodeInfo (Statement CodeInfo))
+evalConds :: [(SValue CodeInfo, MSBody CodeInfo)] -> MSBody CodeInfo -> 
+  MSStatement CodeInfo
 evalConds cs def = do
   mapM_ (zoom lensMStoVS . fst) cs
   mapM_ snd cs
   _ <- def
   noInfo
 
-addCurrModCall :: String -> VS (CodeInfo (Value CodeInfo))
+addCurrModCall :: String -> SValue CodeInfo
 addCurrModCall n = do
   mn <- zoom lensVStoFS getModuleName 
   modify (addCall (mn ++ "." ++ n)) 
   noInfo
 
-addCurrModConstructorCall :: VS (CodeInfo (Type CodeInfo)) -> 
-  VS (CodeInfo (Value CodeInfo))
+addCurrModConstructorCall :: VSType CodeInfo -> SValue CodeInfo
 addCurrModConstructorCall ot = do
   t <- ot
   let tp = getTypeString t
   addCurrModCall tp
 
-addExternalCall :: String -> String -> VS (CodeInfo (Value CodeInfo))
+addExternalCall :: String -> String -> SValue CodeInfo
 addExternalCall l n = modify (addCall (l ++ "." ++ n)) >> noInfo
 
-addExternalConstructorCall :: String -> VS (CodeInfo (Type CodeInfo)) -> 
-  VS (CodeInfo (Value CodeInfo))
+addExternalConstructorCall :: String -> VSType CodeInfo -> SValue CodeInfo
 addExternalConstructorCall l ot = do
   t <- ot
   let tp = getTypeString t

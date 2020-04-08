@@ -1626,7 +1626,7 @@ instance ModuleSym CppSrcCode where
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
     vcat (map (importDoc . mi) (sort (is ++ libis) ++ mis)),
-    vcat (map (\i -> usingNameSpace "std" (Just i)) us)]) 
+    vcat (map (usingNameSpace "std" . Just) us)]) 
     <$> getDefines <*> getLangImports <*> getLibImports <*> getModuleImports 
     <*> getUsing <*> getCurrMain) (toState empty) ms cs
     where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
@@ -2184,7 +2184,7 @@ instance ModuleSym CppHdrCode where
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
     vcat (map (importDoc . mi) (sort (is ++ libis) ++ mis)),
-    vcat (map (\i -> usingNameSpace "std" (Just i)) us)]) 
+    vcat (map (usingNameSpace "std" . Just) us)]) 
     <$> getHeaderDefines <*> getHeaderLangImports <*> getHeaderLibImports <*> 
     getHeaderModImports <*> getHeaderUsing) (toState empty)
     where mi, li :: Label -> CppHdrCode (Import CppHdrCode)

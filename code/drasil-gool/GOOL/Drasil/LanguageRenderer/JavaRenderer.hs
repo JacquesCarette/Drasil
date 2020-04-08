@@ -17,10 +17,11 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
   ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), (&=),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), 
-  ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), AssignStatement(..), 
+  (&=), DeclStatement(..), IOStatement(..), FuncAppStatement(..), 
+  MiscStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, 
+  ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
@@ -484,12 +485,15 @@ instance InternalStatement JavaCode where
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
+
+instance AssignStatement JavaCode where
   assign = G.assign Semi
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
   (&--) = G.decrement1
 
+instance DeclStatement JavaCode where
   varDec = G.varDec static dynamic
   varDecDef = G.varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> G.listDec (listDecDocD v') 
@@ -506,6 +510,7 @@ instance StatementSym JavaCode where
     jConstDecDef vr vl) vr' vl'
   funcDecDef = G.funcDecDef
 
+instance IOStatement JavaCode where
   print = jOut False Nothing printFunc
   printLn = jOut True Nothing printLnFunc
   printStr = jOut False Nothing printFunc . litString
@@ -536,26 +541,28 @@ instance StatementSym JavaCode where
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists
 
-  break = toState $ mkSt breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
-  continue = toState $ mkSt continueDocD
+instance FuncAppStatement JavaCode where
+  inOutCall = jInOutCall funcApp
+  selfInOutCall = jInOutCall selfFuncApp
+  extInOutCall m = jInOutCall (extFuncApp m)
 
-  returnState = G.returnState Semi
-
+instance MiscStatement JavaCode where
   valState = G.valState Semi
 
   comment = G.comment commentStart
 
   free _ = error $ G.freeError jName -- could set variable to null? Might be misleading.
 
-  throw = G.throw jThrowDoc Semi
-
-  inOutCall = jInOutCall funcApp
-  selfInOutCall = jInOutCall selfFuncApp
-  extInOutCall m = jInOutCall (extFuncApp m)
-
   multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement JavaCode where
+  break = toState $ mkSt breakDocD 
+  continue = toState $ mkSt continueDocD
+
+  returnState = G.returnState Semi
+  
+  throw = G.throw jThrowDoc Semi
+
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch  = G.switch
 

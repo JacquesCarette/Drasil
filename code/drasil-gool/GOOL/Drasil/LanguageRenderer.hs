@@ -31,8 +31,9 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   MSStatement, SMethod, BodySym(..), bodyStatements, oneLiner, 
   PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatement(..), ifNoElse, 
-  ScopeSym(..), ParameterSym(..))
+  SelectorFunction(..), StatementSym(..), AssignStatement(..), 
+  DeclStatement(..), IOStatement(..), MiscStatement(..), ControlStatement(..), 
+  ifNoElse, ScopeSym(..), ParameterSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(int))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalBody(..), 
   InternalPerm(..), InternalType(..), InternalVariable(..), InternalValue(..), 

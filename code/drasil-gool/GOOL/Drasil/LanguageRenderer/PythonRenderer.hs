@@ -17,9 +17,11 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
   Selector(..), ($.), InternalValueExp(..), objMethodCall,
   objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), at, 
-  StatementSym(..), (&=), observerListName, ControlStatement(..), 
-  switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
+  IOStatement(..), FuncAppStatement(..), MiscStatement(..), observerListName, 
+  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), 
+  ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
@@ -456,12 +458,15 @@ instance InternalStatement PythonCode where
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
+
+instance AssignStatement PythonCode where
   assign = G.assign Empty
   (&-=) = G.decrement
   (&+=) = G.increment'
   (&++) = G.increment1'
   (&--) = G.decrement1
 
+instance DeclStatement PythonCode where
   varDec _ = toState $ mkStNoEnd empty
   varDecDef = assign
   listDec _ v = zoom lensMStoVS $ onStateValue (mkStNoEnd . pyListDec) v
@@ -480,6 +485,7 @@ instance StatementSym PythonCode where
     >>= (\vr -> function (variableName vr) private dynamic 
     (toState $ variableType vr) (map param ps) (oneLiner $ returnState r)))
 
+instance IOStatement PythonCode where
   print = pyOut False Nothing printFunc
   printLn = pyOut True Nothing printFunc
   printStr = print . litString
@@ -508,26 +514,28 @@ instance StatementSym PythonCode where
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists
 
-  break = toState $ mkStNoEnd breakDocD
-  continue = toState $ mkStNoEnd continueDocD
+instance FuncAppStatement PythonCode where
+  inOutCall = pyInOutCall funcApp
+  selfInOutCall = pyInOutCall selfFuncApp
+  extInOutCall m = pyInOutCall (extFuncApp m)
 
-  returnState = G.returnState Empty
-
+instance MiscStatement PythonCode where
   valState = G.valState Empty
 
   comment = G.comment pyCommentStart
 
   free v = v &= valueOf (var "None" void)
 
-  throw = G.throw pyThrow Empty
-
-  inOutCall = pyInOutCall funcApp
-  selfInOutCall = pyInOutCall selfFuncApp
-  extInOutCall m = pyInOutCall (extFuncApp m)
-
   multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement PythonCode where
+  break = toState $ mkStNoEnd breakDocD
+  continue = toState $ mkStNoEnd continueDocD
+
+  returnState = G.returnState Empty
+
+  throw = G.throw pyThrow Empty
+
   ifCond = G.ifCond pyBodyStart (text "elif") pyBodyEnd
   switch = switchAsIf
 

@@ -18,10 +18,12 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
   ($.), InternalValueExp(..), objMethodCall, FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), (&=), ControlStatement(..), 
-  switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), pubMethod, 
-  initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), ModuleSym(..), 
-  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..))
+  SelectorFunction(..), StatementSym(..), AssignStatement(..), (&=), 
+  DeclStatement(..), IOStatement(..), FuncAppStatement(..), MiscStatement(..),
+  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, 
+  ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
+  odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
@@ -546,12 +548,15 @@ instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
+
+instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) where
   assign vr vl = pair2 assign assign (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&-=) vr vl = pair2 (&-=) (&-=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&+=) vr vl = pair2 (&+=) (&+=) (zoom lensMStoVS vr) (zoom lensMStoVS vl)
   (&++) vl = pair1 (&++) (&++) (zoom lensMStoVS vl)
   (&--) vl = pair1 (&--) (&--) (zoom lensMStoVS vl)
 
+instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
   varDec vr = pair1 varDec varDec (zoom lensMStoVS vr)
   varDecDef vr vl = pair2 varDecDef varDecDef (zoom lensMStoVS vr) 
     (zoom lensMStoVS vl)
@@ -577,6 +582,7 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   funcDecDef v ps r = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
     (map (zoom lensMStoVS) ps) (zoom lensMStoVS r)
 
+instance (Pair p) => IOStatement (p CppSrcCode CppHdrCode) where
   print = pair1 print print . zoom lensMStoVS
   printLn = pair1 printLn printLn . zoom lensMStoVS
   printStr s = on2StateValues pair (printStr s) (printStr s)
@@ -616,19 +622,7 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   stringListLists lsts sl = pair1List1Val stringListLists stringListLists
     (map (zoom lensMStoVS) lsts) (zoom lensMStoVS sl)
 
-  break = on2StateValues pair break break
-  continue = on2StateValues pair continue continue
-
-  returnState = pair1 returnState returnState . zoom lensMStoVS
-
-  valState = pair1 valState valState . zoom lensMStoVS
-
-  comment cmt = on2StateValues pair (comment cmt) (comment cmt)
-
-  free = pair1 free free . zoom lensMStoVS
-
-  throw errMsg = on2StateValues pair (throw errMsg) (throw errMsg)
-
+instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) where
   inOutCall n is os bs = pair3Lists (inOutCall n) (inOutCall n) 
     (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
     (map (zoom lensMStoVS) bs)
@@ -639,9 +633,23 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
     (map (zoom lensMStoVS) bs)
 
+instance (Pair p) => MiscStatement (p CppSrcCode CppHdrCode) where
+  valState = pair1 valState valState . zoom lensMStoVS
+
+  comment cmt = on2StateValues pair (comment cmt) (comment cmt)
+
+  free = pair1 free free . zoom lensMStoVS
+
   multi = pair1List multi multi
 
 instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
+  break = on2StateValues pair break break  
+  continue = on2StateValues pair continue continue
+
+  returnState = pair1 returnState returnState . zoom lensMStoVS
+
+  throw errMsg = on2StateValues pair (throw errMsg) (throw errMsg)
+
   ifCond bs = pair2Lists1Val
     (\cs bods -> ifCond (zip cs bods)) 
     (\cs bods -> ifCond (zip cs bods)) 
@@ -1387,12 +1395,15 @@ instance InternalStatement CppSrcCode where
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
+
+instance AssignStatement CppSrcCode where
   assign = G.assign Semi
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
   (&--) = G.decrement1
 
+instance DeclStatement CppSrcCode where
   varDec = G.varDec static dynamic
   varDecDef = G.varDecDef 
   listDec n = G.listDec cppListDecDoc (litInt n)
@@ -1411,6 +1422,7 @@ instance StatementSym CppSrcCode where
   constDecDef = G.constDecDef
   funcDecDef = G.funcDecDef
 
+instance IOStatement CppSrcCode where
   print = outDoc False Nothing printFunc
   printLn = outDoc True Nothing printLnFunc
   printStr = outDoc False Nothing printFunc . litString
@@ -1458,26 +1470,28 @@ instance StatementSym CppSrcCode where
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists
 
-  break = toState $ mkSt breakDocD
-  continue = toState $ mkSt continueDocD
+instance FuncAppStatement CppSrcCode where
+  inOutCall = cppInOutCall funcApp
+  selfInOutCall = cppInOutCall selfFuncApp
+  extInOutCall m = cppInOutCall (extFuncApp m)
 
-  returnState = G.returnState Semi
-
+instance MiscStatement CppSrcCode where
   valState = G.valState Semi
 
   comment = G.comment commentStart
 
   free = onStateValue (mkSt . freeDocD) . zoom lensMStoVS
 
-  throw = G.throw cppThrowDoc Semi
-
-  inOutCall = cppInOutCall funcApp
-  selfInOutCall = cppInOutCall selfFuncApp
-  extInOutCall m = cppInOutCall (extFuncApp m)
-
   multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement CppSrcCode where
+  break = toState $ mkSt breakDocD
+  continue = toState $ mkSt continueDocD
+
+  returnState = G.returnState Semi
+
+  throw = G.throw cppThrowDoc Semi
+
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch = G.switch
 
@@ -1988,12 +2002,15 @@ instance InternalStatement CppHdrCode where
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
+
+instance AssignStatement CppHdrCode where
   assign _ _ = emptyState
   (&-=) _ _ = emptyState
   (&+=) _ _ = emptyState
   (&++) _ = emptyState
   (&--) _ = emptyState
 
+instance DeclStatement CppHdrCode where
   varDec = G.varDec static dynamic
   varDecDef = G.varDecDef
   listDec _ _ = emptyState
@@ -2008,6 +2025,7 @@ instance StatementSym CppHdrCode where
   constDecDef = G.constDecDef
   funcDecDef _ _ _ = emptyState
 
+instance IOStatement CppHdrCode where
   print _ = emptyState
   printLn _ = emptyState
   printStr _ = emptyState
@@ -2035,26 +2053,28 @@ instance StatementSym CppHdrCode where
   stringListVals _ _ = emptyState
   stringListLists _ _ = emptyState
 
-  break = emptyState
-  continue = emptyState
+instance FuncAppStatement CppHdrCode where
+  inOutCall _ _ _ _ = emptyState
+  selfInOutCall _ _ _ _ = emptyState
+  extInOutCall _ _ _ _ _ = emptyState
 
-  returnState _ = emptyState
-
+instance MiscStatement CppHdrCode where
   valState _ = emptyState
 
   comment _ = emptyState
 
   free _ = emptyState
 
-  throw _ = emptyState
-
-  inOutCall _ _ _ _ = emptyState
-  selfInOutCall _ _ _ _ = emptyState
-  extInOutCall _ _ _ _ _ = emptyState
-
   multi _ = emptyState
 
 instance ControlStatement CppHdrCode where
+  break = emptyState
+  continue = emptyState
+
+  returnState _ = emptyState
+
+  throw _ = emptyState
+
   ifCond _ _ = emptyState
   switch _ _ _ = emptyState
 

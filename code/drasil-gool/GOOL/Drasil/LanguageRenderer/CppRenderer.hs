@@ -22,21 +22,22 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), pubMethod, 
   initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), ModuleSym(..), 
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
+import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalFunction(..), 
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
-  InternalParam(..), InternalMethod(..), InternalStateVar(..), 
+  InternalParam(..), InternalMethod(..), InternalStateVar(..), ParentSpec,
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, multiStateDocD, 
   bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, freeDocD, mkSt, 
   mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
   classVarCheckStatic, castDocD, castObjDocD, staticDocD, dynamicDocD, 
   privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
-  docCmtStart, doubleSlash, elseIfLabel, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, commentedModD, valueList, parameterList, 
-  appendToBody, surroundBody, getterName, setterName)
+  docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, 
+  commentedModD, valueList, parameterList, appendToBody, surroundBody, 
+  getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, float, double, char, string, listType, 
   listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, negateOp,
@@ -70,7 +71,7 @@ import GOOL.Drasil.Classes (Pair(..))
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, 
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList, 
-  on2StateLists, on1CodeValue1List, on1StateValue1List)
+  on2StateLists, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, 
   lensFStoMS, lensFStoVS, lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, 
   lensVStoMS, initialFS, modifyReturn, goolState, revFiles, addODEFilePaths, 
@@ -92,8 +93,8 @@ import Control.Monad.State (State, modify, runState)
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), hcat, brackets, 
-  braces, parens, comma, empty, equals, semi, vcat, lbrace, rbrace, quotes, 
-  render, colon, isEmpty)
+  braces, parens, comma, empty, equals, vcat, lbrace, rbrace, quotes, colon, 
+  isEmpty)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -137,34 +138,6 @@ instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
   commentedMod = pair2 commentedMod commentedMod
 
   fileFromData fp = pair1 (fileFromData fp) (fileFromData fp)
-
-instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
-  type Keyword (p CppSrcCode CppHdrCode) = Doc
-  endStatement = pair endStatement endStatement
-  endStatementLoop = pair endStatementLoop endStatementLoop
-
-  inherit n = pair (inherit n) (inherit n)
-  implements is = pair (implements is) (implements is)
-
-  list = pair list list
-
-  blockStart = pair blockStart blockStart
-  blockEnd = pair blockEnd blockEnd
-
-  ifBodyStart = pair ifBodyStart ifBodyStart
-  elseIf = pair elseIf elseIf
-  
-  iterForEachLabel = pair iterForEachLabel iterForEachLabel
-  iterInLabel = pair iterInLabel iterInLabel
-
-  commentStart = pair commentStart commentStart
-  blockCommentStart = pair blockCommentStart blockCommentStart
-  blockCommentEnd = pair blockCommentEnd blockCommentEnd
-  docCommentStart = pair docCommentStart docCommentStart
-  docCommentEnd = pair docCommentEnd docCommentEnd
-
-  keyFromDoc d = pair (keyFromDoc d) (keyFromDoc d)
-  keyDoc k = keyDoc $ pfst k
 
 instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
   type Import (p CppSrcCode CppHdrCode) = Doc
@@ -819,9 +792,14 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
   intClass n s i vs fs = pair2Lists 
     (intClass n (pfst s) (pfst i)) (intClass n (psnd s) (psnd i)) 
     vs (map (zoom lensCStoMS) fs)
+
+  inherit n = pair (inherit n) (inherit n)
+  implements is = pair (implements is) (implements is)
+
   commentedClass = pair2 commentedClass commentedClass
+
   classDoc c = classDoc $ pfst c
-  classFromData d = on2StateValues pair (classFromData d) (classFromData d)
+  classFromData = pair1 classFromData classFromData
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
@@ -1081,35 +1059,6 @@ instance InternalFile CppSrcCode where
   
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
-instance KeywordSym CppSrcCode where
-  type Keyword CppSrcCode = Doc
-  endStatement = toCode semi
-  endStatementLoop = toCode empty
-
-  inherit n = onCodeValue (cppInherit n . fst) public
-  implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
-    . fst) public
-
-  list = toCode $ text "vector"
-
-  blockStart = toCode lbrace
-  blockEnd = toCode rbrace
-
-  ifBodyStart = blockStart
-  elseIf = toCode elseIfLabel
-  
-  iterForEachLabel = toCode empty
-  iterInLabel = toCode empty
-
-  commentStart = toCode doubleSlash
-  blockCommentStart = toCode blockCmtStart
-  blockCommentEnd = toCode blockCmtEnd
-  docCommentStart = toCode docCmtStart
-  docCommentEnd = blockCommentEnd
-
-  keyFromDoc = toCode
-  keyDoc = unCPPSC
-
 instance ImportSym CppSrcCode where
   type Import CppSrcCode = Doc
   langImport n = toCode $ inc <+> angles (text n)
@@ -1131,7 +1080,7 @@ instance BodySym CppSrcCode where
   type Body CppSrcCode = Doc
   body = onStateList (onCodeList bodyDocD)
 
-  addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
+  addComments s = onStateValue (onCodeValue (addCommentsDocD s commentStart))
 
 instance InternalBody CppSrcCode where
   bodyDoc = unCPPSC
@@ -1140,7 +1089,7 @@ instance InternalBody CppSrcCode where
 
 instance BlockSym CppSrcCode where
   type Block CppSrcCode = Doc
-  block = G.block endStatement
+  block = G.block
 
 instance InternalBlock CppSrcCode where
   blockDoc = unCPPSC
@@ -1157,8 +1106,8 @@ instance TypeSym CppSrcCode where
   string = modify (addUsing "string" . addLangImportVS "string") >> G.string
   infile = modify (addUsing "ifstream") >> cppInfileType
   outfile = modify (addUsing "ofstream") >> cppOutfileType
-  listType t = modify (addUsing lst . addLangImportVS lst) >> G.listType list t
-    where lst = render $ keyDoc (list :: CppSrcCode (Keyword CppSrcCode))
+  listType t = modify (addUsing vec . addLangImportVS vec) >> G.listType vec t
+    where vec = "vector"
   arrayType = cppArrayType
   listInnerType = G.listInnerType
   obj n = zoom lensVStoMS getClassName >>= (\cn -> if cn == n then G.obj n else 
@@ -1352,7 +1301,7 @@ instance ValueExpression CppSrcCode where
     newObjMixedArgs t vs ns
   libNewObjMixedArgs = G.libNewObjMixedArgs
 
-  lambda = G.lambda (cppLambda blockStart blockEnd endStatement)
+  lambda = G.lambda cppLambda
 
   notNull v = v
 
@@ -1472,10 +1421,10 @@ instance StatementSym CppSrcCode where
   printFileStr f = outDoc False (Just f) (printFileFunc f) . litString
   printFileStrLn f = outDoc True (Just f) (printFileLnFunc f) . litString
 
-  getInput v = cppInput endStatement v inputFunc
+  getInput v = cppInput v inputFunc
   discardInput = addAlgorithmImport $ addLimitsImport $ G.discardInput 
     (cppDiscardInput "\\n")
-  getFileInput f v = cppInput endStatement v f
+  getFileInput f v = cppInput v f
   discardFileInput f = addAlgorithmImport $ addLimitsImport $ 
     G.discardFileInput (cppDiscardInput " ") f
 
@@ -1526,20 +1475,20 @@ instance StatementSym CppSrcCode where
   selfInOutCall = cppInOutCall selfFuncApp
   extInOutCall m = cppInOutCall (extFuncApp m)
 
-  multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement CppSrcCode where
-  ifCond = G.ifCond ifBodyStart elseIf blockEnd
+  ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch = G.switch
 
   ifExists _ ifBody _ = onStateValue (mkStNoEnd . bodyDoc) ifBody -- All variables are initialized in C++
 
-  for = G.for blockStart blockEnd 
+  for = G.for bodyStart bodyEnd 
   forRange = G.forRange
   forEach i v = for (varDecDef e (iterBegin v)) (valueOf e ?!= iterEnd v) 
     (e &++)
     where e = toBasicVar i
-  while = G.while blockStart blockEnd
+  while = G.while bodyStart bodyEnd
 
   tryCatch = G.tryCatch cppTryCatch
 
@@ -1584,7 +1533,7 @@ instance MethodSym CppSrcCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  constructor = cppConstructor blockStart blockEnd
+  constructor = cppConstructor
 
   docMain b = commentedFunc (docComment $ toState $ functionDox 
     "Controls the flow of the program" 
@@ -1612,12 +1561,12 @@ instance MethodSym CppSrcCode where
 instance InternalMethod CppSrcCode where
   intMethod m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
     setCurrMain else id) >> (\c tp pms bod -> methodFromData 
-    (snd $ unCPPSC s) $ cppsMethod [] n c tp pms bod blockStart blockEnd) <$>
-    getClassName <*> t <*> sequence ps <*> b
+    (snd $ unCPPSC s) $ cppsMethod [] n c tp pms bod) <$> getClassName <*> t 
+    <*> sequence ps <*> b
   intFunc m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
     setCurrMainFunc m . setCurrMain else id) >> on3StateValues (\tp pms bod -> 
-    methodFromData (snd $ unCPPSC s) $ cppsFunction n tp pms bod blockStart 
-    blockEnd) t (sequence ps) b
+    methodFromData (snd $ unCPPSC s) $ cppsFunction n tp pms bod) t 
+    (sequence ps) b
   commentedFunc = cppCommentedFunc Source
   
   destructor vs = 
@@ -1638,13 +1587,11 @@ instance StateVarSym CppSrcCode where
   stateVar s _ _ = onStateValue (on3CodeValues svd (onCodeValue snd s) (toCode 
     empty)) $ zoom lensCStoMS emptyState
   stateVarDef n s p v vl' = on3StateValues (\vr vl -> on3CodeValues svd 
-    (onCodeValue snd s) (cppsStateVarDef n empty <$> p <*> vr <*> vl <*>
-    endStatement)) (zoom lensCStoVS v) (zoom lensCStoVS vl') 
-    (zoom lensCStoMS emptyState)
+    (onCodeValue snd s) (cppsStateVarDef n empty <$> p <*> vr <*> vl)) 
+    (zoom lensCStoVS v) (zoom lensCStoVS vl') (zoom lensCStoMS emptyState)
   constVar n s v vl' = on3StateValues (\vr vl -> on3CodeValues svd (onCodeValue 
-    snd s) (cppsStateVarDef n (text "const") <$> static <*> vr <*> vl <*>
-    endStatement)) (zoom lensCStoVS v) (zoom lensCStoVS vl') 
-    (zoom lensCStoMS emptyState)
+    snd s) (cppsStateVarDef n (text "const") <$> static <*> vr <*> vl)) 
+    (zoom lensCStoVS v) (zoom lensCStoVS vl') (zoom lensCStoMS emptyState)
 
 instance InternalStateVar CppSrcCode where
   stateVarDoc = stVar . unCPPSC
@@ -1662,9 +1609,15 @@ instance ClassSym CppSrcCode where
 instance InternalClass CppSrcCode where
   intClass n _ _ vs fs = modify (setClassName n) >> on2StateLists cppsClass 
     vs (map (zoom lensCStoMS) $ fs ++ [destructor vs])
+
+  inherit n = onCodeValue (cppInherit n . fst) public
+  implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
+    . fst) public
+
   commentedClass _ cs = cs
+
   classDoc = unCPPSC
-  classFromData = onStateValue toCode
+  classFromData d = d
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
@@ -1673,8 +1626,7 @@ instance ModuleSym CppSrcCode where
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
     vcat (map (importDoc . mi) (sort (is ++ libis) ++ mis)),
-    vcat (map (\i -> usingNameSpace "std" (Just i) 
-      (endStatement :: CppSrcCode (Keyword CppSrcCode))) us)]) 
+    vcat (map (\i -> usingNameSpace "std" (Just i)) us)]) 
     <$> getDefines <*> getLangImports <*> getLibImports <*> getModuleImports 
     <*> getUsing <*> getCurrMain) (toState empty) ms cs
     where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
@@ -1688,10 +1640,9 @@ instance InternalMod CppSrcCode where
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
-  blockComment lns = on2CodeValues (blockCmtDoc lns) blockCommentStart 
-    blockCommentEnd
-  docComment = onStateValue (\lns -> on2CodeValues (docCmtDoc lns) 
-    docCommentStart docCommentEnd)
+  blockComment lns = toCode $ blockCmtDoc lns blockCmtStart blockCmtEnd
+  docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
+    blockCmtEnd)
 
   blockCommentDoc = unCPPSC
 
@@ -1730,36 +1681,6 @@ instance InternalFile CppHdrCode where
 
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
-instance KeywordSym CppHdrCode where
-  type Keyword CppHdrCode = Doc
-  endStatement = toCode semi
-  endStatementLoop = toCode empty
-
-  inherit n = onCodeValue (cppInherit n . fst) public
-  implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
-    . fst) public
-
-
-  list = toCode $ text "vector"
-
-  blockStart = toCode lbrace
-  blockEnd = toCode rbrace
-
-  ifBodyStart = toCode empty
-  elseIf = toCode empty
-  
-  iterForEachLabel = toCode empty
-  iterInLabel = toCode empty
-
-  commentStart = toCode empty
-  blockCommentStart = toCode blockCmtStart
-  blockCommentEnd = toCode blockCmtEnd
-  docCommentStart = toCode docCmtStart
-  docCommentEnd = blockCommentEnd
-
-  keyFromDoc = toCode
-  keyDoc = unCPPHC
-
 instance ImportSym CppHdrCode where
   type Import CppHdrCode = Doc
   langImport n = toCode $ inc <+> angles (text n)
@@ -1784,6 +1705,7 @@ instance BodySym CppHdrCode where
   addComments _ _ = toState $ toCode empty
 
 instance InternalBody CppHdrCode where
+
   bodyDoc = unCPPHC
   docBody = onStateValue toCode
   multiBody = G.multiBody 
@@ -1808,9 +1730,9 @@ instance TypeSym CppHdrCode where
     G.string
   infile = modify (addHeaderUsing "ifstream") >> cppInfileType
   outfile = modify (addHeaderUsing "ofstream") >> cppOutfileType
-  listType t = modify (addHeaderUsing lst . addHeaderLangImport lst) >> 
-    G.listType list t
-    where lst = render $ keyDoc (list :: CppHdrCode (Keyword CppHdrCode))
+  listType t = modify (addHeaderUsing vec . addHeaderLangImport vec) >> 
+    G.listType vec t
+    where vec = "vector"
   arrayType = cppArrayType
   listInnerType = G.listInnerType
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
@@ -2204,7 +2126,7 @@ instance MethodSym CppHdrCode where
 instance InternalMethod CppHdrCode where
   intMethod _ n s _ t ps _ = modify (setScope (snd $ unCPPHC s)) >> 
     on1StateValue1List (\tp pms -> methodFromData (snd $ unCPPHC s) $ 
-    cpphMethod n tp pms endStatement) t ps
+    cpphMethod n tp pms) t ps
   intFunc = G.intFunc
   commentedFunc = cppCommentedFunc Header
 
@@ -2224,9 +2146,9 @@ instance StateVarSym CppHdrCode where
     (zoom lensCStoMS $ state $ varDec v) (zoom lensCStoMS emptyState)
   stateVarDef _ s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
     (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyState)
-  constVar _ s vr _ = on2StateValues (\v -> on3CodeValues svd (onCodeValue snd 
-    s) (on3CodeValues (constVarDocD empty) (bindDoc <$> static) v 
-    endStatement)) (zoom lensCStoVS vr) (zoom lensCStoMS emptyState)
+  constVar _ s vr _ = on2StateValues (on3CodeValues svd (onCodeValue snd s) . 
+    on2CodeValues (constVarDocD empty endStatement) (bindDoc <$> static))
+    (zoom lensCStoVS vr) (zoom lensCStoMS emptyState)
 
 instance InternalStateVar CppHdrCode where
   stateVarDoc = stVar . unCPPHC
@@ -2236,7 +2158,7 @@ instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
   buildClass = G.buildClass
   -- enum n es _ = modify (setClassName n) >> cpphEnum n (enumElementsDocD es 
-  --   enumsEqualInts) blockStart blockEnd endStatement
+  --   enumsEqualInts) bodyStart bodyEnd endStatement
   extraClass = buildClass
   implementingClass = G.implementingClass
 
@@ -2244,12 +2166,17 @@ instance ClassSym CppHdrCode where
 
 instance InternalClass CppHdrCode where
   intClass n _ i vs mths = modify (setClassName n) >> on2StateLists 
-    (\vars funcs -> cpphClass n i vars funcs public private 
-    blockStart blockEnd endStatement) vs fs
+    (\vars funcs -> cpphClass n i vars funcs public private) vs fs
     where fs = map (zoom lensCStoMS) $ mths ++ [destructor vs]
+
+  inherit n = onCodeValue (cppInherit n . fst) public
+  implements is = onCodeValue ((\p -> colon <+> hcat (map ((p <+>) . text) is)) 
+    . fst) public
+
   commentedClass = G.commentedClass
+
   classDoc = unCPPHC
-  classFromData = onStateValue toCode
+  classFromData d = d
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
@@ -2257,8 +2184,7 @@ instance ModuleSym CppHdrCode where
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (importDoc . li) lis),
     vcat (map (importDoc . mi) (sort (is ++ libis) ++ mis)),
-    vcat (map (\i -> usingNameSpace "std" (Just i) 
-      (endStatement :: CppHdrCode (Keyword CppHdrCode))) us)]) 
+    vcat (map (\i -> usingNameSpace "std" (Just i)) us)]) 
     <$> getHeaderDefines <*> getHeaderLangImports <*> getHeaderLibImports <*> 
     getHeaderModImports <*> getHeaderUsing) (toState empty)
     where mi, li :: Label -> CppHdrCode (Import CppHdrCode)
@@ -2272,10 +2198,9 @@ instance InternalMod CppHdrCode where
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc
-  blockComment lns = on2CodeValues (blockCmtDoc lns) blockCommentStart 
-    blockCommentEnd
-  docComment = onStateValue (\lns -> on2CodeValues (docCmtDoc lns) 
-    docCommentStart docCommentEnd)
+  blockComment lns = toCode $ blockCmtDoc lns blockCmtStart blockCmtEnd
+  docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
+    blockCmtEnd)
 
   blockCommentDoc = unCPPHC
 
@@ -2390,14 +2315,13 @@ cpphtop m = vcat [
   text "#define" <+> text n <> text "_h"]
   where n = name m
 
-usingNameSpace :: (RenderSym repr) => Label -> Maybe Label -> 
-  repr (Keyword repr) -> Doc
-usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <>
-  text m <> keyDoc end
-usingNameSpace n Nothing end = text "using namespace" <+> text n <> keyDoc end
+usingNameSpace :: Label -> Maybe Label -> Doc
+usingNameSpace n (Just m) = text "using" <+> text n <> colon <> colon <>
+  text m <> endStatement
+usingNameSpace n Nothing = text "using namespace" <+> text n <> endStatement
 
-cppInherit :: Label -> Doc -> Doc
-cppInherit n pub = colon <+> pub <+> text n
+cppInherit :: Maybe Label -> Doc -> Doc
+cppInherit n pub = maybe empty ((colon <+> pub <+>) . text) n
 
 cppBoolType :: (RenderSym repr) => VSType repr
 cppBoolType = toState $ typeFromData Boolean "bool" (text "bool")
@@ -2422,12 +2346,11 @@ cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t))
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c <> text "::" <> v
 
-cppLambda :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> [repr (Variable repr)] -> repr (Value repr) -> Doc
-cppLambda bStart bEnd endSt ps ex = text "[]" <+> parens (hicat (text ",") $ 
-  zipWith (<+>) (map (getTypeDoc . variableType) ps) (map variableDoc ps)) <+> 
-  text "->" <+> keyDoc bStart <> text "return" <+> valueDoc ex <> keyDoc endSt 
-  <> keyDoc bEnd
+cppLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
+  Doc
+cppLambda ps ex = text "[]" <+> parens (hicat (text ",") $ zipWith (<+>) 
+  (map (getTypeDoc . variableType) ps) (map variableDoc ps)) <+> text "->" <+> 
+  bodyStart <> text "return" <+> valueDoc ex <> endStatement <> bodyEnd
 
 cppCast :: VSType CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
 cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $ 
@@ -2470,11 +2393,11 @@ cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens
   (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
   quotes (text sep))
 
-cppInput :: (RenderSym repr) => repr (Keyword repr) -> SVariable repr
-  -> SValue repr -> MSStatement repr
-cppInput end vr i = addAlgorithmImport $ addLimitsImport $ zoom lensMStoVS $ 
+cppInput :: (RenderSym repr) => SVariable repr -> SValue repr -> 
+  MSStatement repr
+cppInput vr i = addAlgorithmImport $ addLimitsImport $ zoom lensMStoVS $ 
   on2StateValues (\v inFn -> mkSt $ vcat [valueDoc inFn <+> text ">>" <+> 
-  variableDoc v <> keyDoc end, valueDoc inFn <> dot <> 
+  variableDoc v <> endStatement, valueDoc inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]) vr i
 
 cppOpenFile :: (RenderSym repr) => Label -> repr (Variable repr) -> 
@@ -2486,40 +2409,36 @@ cppPointerParamDoc :: (RenderSym repr) => repr (Variable repr) -> Doc
 cppPointerParamDoc v = getTypeDoc (variableType v) <+> text "&" <> variableDoc v
 
 cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode) 
-  -> [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
-  CppSrcCode (Keyword CppSrcCode) -> CppSrcCode (Keyword CppSrcCode) -> Doc
-cppsMethod is n c t ps b bStart bEnd = emptyIfEmpty (bodyDoc b <> initList) $ 
+  -> [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc
+cppsMethod is n c t ps b = emptyIfEmpty (bodyDoc b <> initList) $ 
   vcat [ttype <+> text c <> text "::" <> text n <> parens (parameterList ps) 
-  <+> emptyIfEmpty initList (colon <+> initList) <+> keyDoc bStart,
+  <+> emptyIfEmpty initList (colon <+> initList) <+> bodyStart,
   indent (bodyDoc b),
-  keyDoc bEnd]
+  bodyEnd]
   where ttype | isDtor n = empty
               | otherwise = getTypeDoc t
         initList = hicat (text ", ") is
 
-cppConstructor :: CppSrcCode (Keyword CppSrcCode) -> 
-  CppSrcCode (Keyword CppSrcCode) -> [MSParameter CppSrcCode] -> 
-  [(SVariable CppSrcCode, SValue CppSrcCode)] -> MSBody CppSrcCode -> 
-  SMethod CppSrcCode
-cppConstructor bStart bEnd ps is b = getClassName >>= (\n -> join $ (\tp pms 
-  ivars ivals bod -> if null is then G.constructor n ps is b else modify 
-  (setScope Pub) >> toState (methodFromData Pub (cppsMethod (zipWith 
-  (\ivar ival -> variableDoc ivar <> parens (valueDoc ival)) ivars ivals) n n 
-  tp pms bod bStart bEnd))) <$> construct n <*> sequence ps <*> 
-  mapM (zoom lensMStoVS . fst) is <*> mapM (zoom lensMStoVS . snd) is <*> b)
+cppConstructor :: [MSParameter CppSrcCode] -> [(SVariable CppSrcCode, 
+  SValue CppSrcCode)] -> MSBody CppSrcCode -> SMethod CppSrcCode
+cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals 
+  bod -> if null is then G.constructor n ps is b else modify (setScope Pub) >> 
+  toState (methodFromData Pub (cppsMethod (zipWith (\ivar ival -> variableDoc 
+  ivar <> parens (valueDoc ival)) ivars ivals) n n tp pms bod))) <$> construct 
+  n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom 
+  lensMStoVS . snd) is <*> b)
 
 cppsFunction :: (RenderSym repr) => Label -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> Doc
-cppsFunction n t ps b bStart bEnd = vcat [
-  getTypeDoc t <+> text n <> parens (parameterList ps) <+> keyDoc bStart,
+  [repr (Parameter repr)] -> repr (Body repr) -> Doc
+cppsFunction n t ps b = vcat [
+  getTypeDoc t <+> text n <> parens (parameterList ps) <+> bodyStart,
   indent (bodyDoc b),
-  keyDoc bEnd]
+  bodyEnd]
 
 cpphMethod :: (RenderSym repr) => Label -> repr (Type repr) ->
-  [repr (Parameter repr)] -> repr (Keyword repr) -> Doc
-cpphMethod n t ps end = (if isDtor n then empty else getTypeDoc t) <+> text n 
-  <> parens (parameterList ps) <> keyDoc end
+  [repr (Parameter repr)] -> Doc
+cpphMethod n t ps = (if isDtor n then empty else getTypeDoc t) <+> text n 
+  <> parens (parameterList ps) <> endStatement
 
 cppCommentedFunc :: (RenderSym repr) => FileType -> 
   MS (repr (BlockComment repr)) -> SMethod repr -> SMethod repr
@@ -2535,10 +2454,10 @@ cppCommentedFunc ft cmt fn = do
       ret Combined = error "Combined passed to cppCommentedFunc"
   ret ft
 
-cppsStateVarDef :: Label -> Doc -> BindData -> VarData -> ValData -> Doc -> Doc
-cppsStateVarDef n cns p vr vl end = onBinding (bind p) (cns <+> typeDoc 
+cppsStateVarDef :: Label -> Doc -> BindData -> VarData -> ValData -> Doc
+cppsStateVarDef n cns p vr vl = onBinding (bind p) (cns <+> typeDoc 
   (varType vr) <+> text (n ++ "::") <> varDoc vr <+> equals <+> val vl <>
-  end) empty
+  endStatement) empty
 
 cpphStateVarDef :: (RenderSym repr) => Doc -> repr (Permanence repr) -> 
   SVariable repr -> SValue repr -> CS Doc
@@ -2559,20 +2478,19 @@ cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
   where vars = map stateVarDoc vs
         funcs = map methodDoc fs
 
-cpphClass :: Label -> CppHdrCode (Keyword CppHdrCode) -> 
+cpphClass :: Label -> CppHdrCode ParentSpec -> 
   [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode (Method CppHdrCode)] -> 
   CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Scope CppHdrCode) -> 
-  CppHdrCode (Keyword CppHdrCode) -> CppHdrCode (Keyword CppHdrCode) -> 
-  CppHdrCode (Keyword CppHdrCode) -> CppHdrCode (Class CppHdrCode)
-cpphClass n p vars funcs pub priv bStart bEnd end = toCode $ vcat [
-    classDec <+> text n <+> keyDoc p <+> keyDoc bStart,
+  CppHdrCode (Class CppHdrCode)
+cpphClass n ps vars funcs pub priv = onCodeValue (\p -> vcat [
+    classDec <+> text n <+> p <+> bodyStart,
     indentList [
       scopeDoc pub <> colon,
       indent pubs,
       blank,
       scopeDoc priv <> colon,
       indent privs],
-    keyDoc bEnd <> keyDoc end]
+    bodyEnd <> endStatement]) ps
   where pubs = cpphVarsFuncsList Pub vars funcs
         privs = cpphVarsFuncsList Priv vars funcs
 

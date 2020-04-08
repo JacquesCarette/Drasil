@@ -3,25 +3,25 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
-  classDec, dot, doubleSlash, elseIfLabel, forLabel, inLabel, new, 
-  blockCmtStart, blockCmtEnd, docCmtStart, addExt,
+  classDec, dot, commentStart, elseIfLabel, forLabel, inLabel, new,
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
+  addExt,
   
   -- * Default Functions available for use in renderers
-  packageDocD, fileDoc', moduleDocD, classDocD, 
-  multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, 
-  printFileDocD, destructorError, paramDocD, methodDocD, stateVarDocD, 
-  constVarDocD, stateVarListDocD, switchDocD, assignDocD, multiAssignDoc, 
-  plusEqualsDocD, plusPlusDocD, listDecDocD, statementDocD, getTermDoc, 
-  returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd, mkStateVal, mkVal, 
-  mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, selfDocD, argDocD,
-  classVarCheckStatic, classVarDocD, objVarDocD, funcAppDocD, 
-  newObjDocD, newObjDocD', constDecDefDocD, funcDocD, castDocD, 
-  listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, includeD, 
-  breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
-  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDox, classDox, moduleDox, commentedModD, docFuncRepr, valueList, 
-  variableList, parameterList, prependToBody, appendToBody, surroundBody, 
-  getterName, setterName, intValue
+  packageDocD, fileDoc', moduleDocD, classDocD, multiStateDocD, blockDocD, 
+  bodyDocD, outDoc, printDoc, printFileDocD, destructorError, paramDocD, 
+  methodDocD, stateVarDocD, constVarDocD, stateVarListDocD, switchDocD, 
+  assignDocD, multiAssignDoc, plusEqualsDocD, plusPlusDocD, listDecDocD, 
+  statementDocD, getTermDoc, returnDocD, commentDocD, freeDocD, mkSt, 
+  mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, 
+  extVarDocD, selfDocD, argDocD, classVarCheckStatic, classVarDocD, objVarDocD, 
+  funcAppDocD, newObjDocD, newObjDocD', constDecDefDocD, funcDocD, castDocD, 
+  listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, 
+  classDox, moduleDox, commentedModD, docFuncRepr, valueList, variableList, 
+  parameterList, prependToBody, appendToBody, surroundBody, getterName, 
+  setterName, intValue
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -54,11 +54,11 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec, dot, doubleSlash, elseIfLabel, forLabel, inLabel, new, blockCmtStart, 
-  blockCmtEnd, docCmtStart :: Doc
+classDec, dot, commentStart, elseIfLabel, forLabel, inLabel, new, blockCmtStart,
+  blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement :: Doc
 classDec = text "class"
 dot = text "."
-doubleSlash = text "//"
+commentStart = text "//"
 elseIfLabel = text "else if"
 forLabel = text "for"
 inLabel = text "in"
@@ -66,6 +66,9 @@ new = text "new"
 blockCmtStart = text "/*"
 blockCmtEnd = text "*/"
 docCmtStart = text "/**"
+bodyStart = lbrace
+bodyEnd = rbrace
+endStatement = semi
 
 addExt :: String -> String -> String
 addExt ext nm = nm ++ "." ++ ext
@@ -126,26 +129,21 @@ classDocD n p s vs fs = vcat [
 
 -- Groupings --
 
-multiStateDocD :: Doc -> [(Doc, Terminator)] -> (Doc, Terminator)
-multiStateDocD end sts = (vcat (applyEnd statements), needsEnd statements)
+multiStateDocD :: [(Doc, Terminator)] -> (Doc, Terminator)
+multiStateDocD sts = (vcat (applyEnd statements), needsEnd statements)
   where applyEnd [] = []
         applyEnd [(s, _)] = [s]
         applyEnd ((s, t):ss) = (s <> getTermDoc t) : applyEnd ss
         needsEnd [] = Empty
         needsEnd ss = snd (last ss)
         statements = filter notNullStatement sts
-        notNullStatement s = not (isEmpty (fst s)) && 
-          (render (fst s) /= render end)
+        notNullStatement s = not (isEmpty (fst s))
 
-blockDocD :: Doc -> [Doc] -> Doc
-blockDocD end sts = vcat statements
-  where statements = filter notNullStatement sts
-        notNullStatement s = not (isEmpty s) && (render s /= render end)
+blockDocD :: [Doc] -> Doc
+blockDocD sts = vcat $ filter (not . isEmpty) sts
 
 bodyDocD :: [Doc] -> Doc
-bodyDocD bs = vibcat blocks
-  where blocks = filter notNullBlock bs
-        notNullBlock b = not $ isEmpty b
+bodyDocD bs = vibcat $ filter (not . isEmpty) bs
 
 -- IO --
 
@@ -206,8 +204,8 @@ destructorError l = "Destructors not allowed in " ++ l
 stateVarDocD :: Doc -> Doc -> Doc -> Doc
 stateVarDocD s p dec = s <+> p <+> dec
 
-constVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
-constVarDocD s p v end = s <+> p <+> text "const" <+> typeDoc (varType v) <+>
+constVarDocD :: Doc -> Doc -> Doc -> VarData -> Doc
+constVarDocD s end p v = s <+> p <+> text "const" <+> typeDoc (varType v) <+>
   varDoc v <> end
 
 stateVarListDocD :: [Doc] -> Doc
@@ -359,11 +357,6 @@ objAccessDocD v f = v <> f
 
 castObjDocD :: Doc -> Doc -> Doc
 castObjDocD t v = t <> parens v
-
--- Keywords --
-
-includeD :: Label -> Label -> Doc
-includeD incl n = text incl <+> text n
 
 -- Permanence --
 

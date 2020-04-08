@@ -64,7 +64,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
     constDecDef, valState, returnState),
   ControlStatement(ifCond, for, forRange, switch), ParameterSym(param), 
   MethodSym(method, mainFunction), ClassSym(buildClass))
-import GOOL.Drasil.RendererClasses (InternalFile(commentedMod), KeywordSym(..), 
+import GOOL.Drasil.RendererClasses (InternalFile(commentedMod),
   RenderSym, InternalBody(bodyDoc, docBody), InternalBlock(docBlock, blockDoc), 
   ImportSym(..), InternalPerm(..), InternalType(..), UnaryOpSym(UnaryOp), 
   BinaryOpSym(BinaryOp), InternalOp(..), 
@@ -76,7 +76,7 @@ import GOOL.Drasil.RendererClasses (InternalFile(commentedMod), KeywordSym(..),
   InternalScope(..), MethodTypeSym(MethodType, mType), 
   InternalParam(paramFromData), 
   InternalMethod(intMethod, commentedFunc, methodDoc), InternalStateVar(..), 
-  InternalClass(classDoc, classFromData), 
+  ParentSpec, InternalClass(inherit, implements, classDoc, classFromData), 
   InternalMod(moduleDoc, updateModuleDoc), BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (InternalFile(fileFromData), 
   InternalValue(call), InternalFunction(getFunc, setFunc, listSizeFunc, 
@@ -86,8 +86,8 @@ import qualified GOOL.Drasil.RendererClasses as S (InternalFile(fileFromData),
   InternalMod(modFromData))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
-  toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
-  on2StateLists, on1StateValue1List, getInnerType)
+  toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
+  onStateList, on2StateLists, on1StateValue1List, getInnerType)
 import GOOL.Drasil.LanguageRenderer (dot, forLabel, new, addExt, moduleDocD, 
   blockDocD, assignDocD, plusEqualsDocD, plusPlusDocD, mkSt, mkStNoEnd, 
   mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, 
@@ -122,10 +122,9 @@ multiBody bs = docBody $ onStateList vibcat $ map (onStateValue bodyDoc) bs
 
 -- Blocks --
 
-block :: (RenderSym repr) => repr (Keyword repr) -> [MSStatement repr] -> 
-  MSBlock repr
-block end sts = docBlock $ onStateList (blockDocD (keyDoc end) . map 
-  statementDoc) (map S.state sts)
+block :: (RenderSym repr) => [MSStatement repr] -> MSBlock repr
+block sts = docBlock $ onStateList (blockDocD . map statementDoc) 
+  (map S.state sts)
 
 multiBlock :: (RenderSym repr) => [MSBlock repr] -> MSBlock repr
 multiBlock bs = docBlock $ onStateList vibcat $ map (onStateValue blockDoc) bs
@@ -153,11 +152,9 @@ string = toState $ typeFromData String "string" (text "string")
 fileType :: (RenderSym repr) => VSType repr
 fileType = toState $ typeFromData File "File" (text "File")
 
-listType :: (RenderSym repr) => repr (Keyword repr) -> VSType repr -> 
-  VSType repr
-listType lst = onStateValue (\t -> typeFromData (List (getType t)) (render 
-  (keyDoc lst) ++ "<" ++ getTypeString t ++ ">") (keyDoc lst <> 
-  angles (getTypeDoc t)))
+listType :: (RenderSym repr) => String -> VSType repr -> VSType repr
+listType lst = onStateValue (\t -> typeFromData (List (getType t)) (lst ++ "<" 
+  ++ getTypeString t ++ ">") (text lst <> angles (getTypeDoc t)))
 
 arrayType :: (RenderSym repr) => VSType repr -> VSType repr
 arrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
@@ -870,8 +867,8 @@ valState :: (RenderSym repr) => Terminator -> SValue repr -> MSStatement repr
 valState t v' = zoom lensMStoVS $ onStateValue (\v -> stateFromData (valueDoc v)
   t) v'
 
-comment :: (RenderSym repr) => repr (Keyword repr) -> Label -> MSStatement repr
-comment cs c = toState $ mkStNoEnd (commentDocD c (keyDoc cs))
+comment :: (RenderSym repr) => Doc -> Label -> MSStatement repr
+comment cs c = toState $ mkStNoEnd (commentDocD c cs)
 
 freeError :: String -> String
 freeError l = "Cannot free variables in " ++ l
@@ -883,15 +880,11 @@ throw f t = onStateValue (\msg -> stateFromData (f msg) t) . zoom lensMStoVS .
 
 -- ControlStatements --
 
-ifCond :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> [(SValue repr, MSBody repr)] -> MSBody repr -> 
-  MSStatement repr
+ifCond :: (RenderSym repr) => Doc -> Doc -> Doc
+  -> [(SValue repr, MSBody repr)] -> MSBody repr -> MSStatement repr
 ifCond _ _ _ [] _ = error "if condition created with no cases"
-ifCond ifst elseif blEnd (c:cs) eBody = 
-    let ifStart = keyDoc ifst
-        elif = keyDoc elseif
-        bEnd = keyDoc blEnd
-        ifSect (v, b) = on2StateValues (\val bd -> vcat [
+ifCond ifStart elif bEnd (c:cs) eBody =
+    let ifSect (v, b) = on2StateValues (\val bd -> vcat [
           text "if" <+> parens (valueDoc val) <+> ifStart,
           indent $ bodyDoc bd,
           bEnd]) (zoom lensMStoVS v) b
@@ -916,14 +909,13 @@ ifExists :: (RenderSym repr) => SValue repr -> MSBody repr -> MSBody repr ->
   MSStatement repr
 ifExists v ifBody = S.ifCond [(S.notNull v, ifBody)]
 
-for :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  MSStatement repr -> SValue repr -> MSStatement repr -> MSBody repr -> 
-  MSStatement repr
+for :: (RenderSym repr) => Doc -> Doc -> MSStatement repr -> SValue repr -> 
+  MSStatement repr -> MSBody repr -> MSStatement repr
 for bStart bEnd sInit vGuard sUpdate b = (\initl guard upd bod -> mkStNoEnd 
   (vcat [forLabel <+> parens (statementDoc initl <> semi <+> valueDoc guard <> 
-    semi <+> statementDoc upd) <+> keyDoc bStart,
+    semi <+> statementDoc upd) <+> bStart,
   indent $ bodyDoc bod,
-  keyDoc bEnd])) <$> S.loopState sInit <*> zoom lensMStoVS vGuard <*> 
+  bEnd])) <$> S.loopState sInit <*> zoom lensMStoVS vGuard <*> 
   S.loopState sUpdate <*> b
 
 forRange :: (RenderSym repr) => SVariable repr -> SValue repr -> SValue repr -> 
@@ -931,21 +923,20 @@ forRange :: (RenderSym repr) => SVariable repr -> SValue repr -> SValue repr ->
 forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?< 
   finalv) (i &+= stepv)
 
-forEach :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> repr (Keyword repr) -> SVariable repr -> SValue repr 
-  -> MSBody repr -> MSStatement repr
-forEach bStart bEnd forEachLabel inLbl e' v' = on3StateValues (\e v b -> 
-  mkStNoEnd (vcat [keyDoc forEachLabel <+> parens (getTypeDoc (variableType e) 
-    <+> variableDoc e <+> keyDoc inLbl <+> valueDoc v) <+> keyDoc bStart,
-  indent $ bodyDoc b,
-  keyDoc bEnd])) (zoom lensMStoVS e') (zoom lensMStoVS v') 
-
-while :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
+forEach :: (RenderSym repr) => Doc -> Doc -> Doc -> Doc -> SVariable repr -> 
   SValue repr -> MSBody repr -> MSStatement repr
-while bStart bEnd v' = on2StateValues (\v b -> mkStNoEnd (vcat [
-  text "while" <+> parens (valueDoc v) <+> keyDoc bStart,
+forEach bStart bEnd forEachLabel inLbl e' v' = on3StateValues (\e v b -> 
+  mkStNoEnd (vcat [forEachLabel <+> parens (getTypeDoc (variableType e) 
+    <+> variableDoc e <+> inLbl <+> valueDoc v) <+> bStart,
   indent $ bodyDoc b,
-  keyDoc bEnd])) (zoom lensMStoVS v')
+  bEnd])) (zoom lensMStoVS e') (zoom lensMStoVS v') 
+
+while :: (RenderSym repr) => Doc -> Doc -> SValue repr -> MSBody repr -> 
+  MSStatement repr
+while bStart bEnd v' = on2StateValues (\v b -> mkStNoEnd (vcat [
+  text "while" <+> parens (valueDoc v) <+> bStart,
+  indent $ bodyDoc b,
+  bEnd])) (zoom lensMStoVS v')
 
 tryCatch :: (RenderSym repr) => (repr (Body repr) -> repr (Body repr) -> Doc) ->
   MSBody repr -> MSBody repr -> MSStatement repr
@@ -1057,7 +1048,7 @@ constVar p s vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue
 
 buildClass :: (RenderSym repr) => Label -> Maybe Label -> [CSStateVar repr] -> 
   [SMethod repr] -> SClass repr
-buildClass n = S.intClass n public . maybe (keyFromDoc empty) inherit
+buildClass n = S.intClass n public . inherit
 
 -- enum :: (RenderSym repr) => Label -> [Label] -> repr (Scope repr) -> 
 --   SClass repr
@@ -1066,8 +1057,7 @@ buildClass n = S.intClass n public . maybe (keyFromDoc empty) inherit
 
 extraClass :: (RenderSym repr) => Label -> Maybe Label -> [CSStateVar repr] -> 
   [SMethod repr] -> SClass repr
-extraClass n = S.intClass n (scopeFromData Priv empty) . 
-  maybe (keyFromDoc empty) inherit
+extraClass n = S.intClass n (scopeFromData Priv empty) . inherit
 
 implementingClass :: (RenderSym repr) => Label -> [Label] -> [CSStateVar repr] 
   -> [SMethod repr] -> SClass repr
@@ -1076,18 +1066,18 @@ implementingClass n is = S.intClass n public (implements is)
 docClass :: (RenderSym repr) => String -> SClass repr -> SClass repr
 docClass d = S.commentedClass (docComment $ toState $ classDox d)
 
-commentedClass :: (RenderSym repr) => CS (repr (BlockComment repr)) -> 
-  SClass repr -> SClass repr
-commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' -> 
+commentedClass :: (RenderSym repr, Monad repr) => CS (repr (BlockComment repr)) 
+  -> SClass repr -> SClass repr
+commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' -> toCode $
   commentedItem (blockCommentDoc cmt') (classDoc cs')) cmt cs)
 
-intClass :: (RenderSym repr) => (Label -> Doc -> Doc -> Doc -> Doc -> Doc) -> 
-  Label -> repr (Scope repr) -> repr (Keyword repr) -> [CSStateVar repr] -> 
-  [SMethod repr] -> SClass repr
-intClass f n s i svs ms = modify (setClassName n) >> classFromData 
-  (on2StateValues (f n (keyDoc i) (scopeDoc s)) (onStateList 
-  (stateVarListDocD . map stateVarDoc) svs) (onStateList (vibcat . map 
-  methodDoc) (map (zoom lensCStoMS) ms)))
+intClass :: (RenderSym repr, Monad repr) => (Label -> Doc -> Doc -> Doc -> Doc 
+  -> Doc) -> Label -> repr (Scope repr) -> repr ParentSpec -> [CSStateVar repr] 
+  -> [SMethod repr] -> SClass repr
+intClass f n s i svrs mths = modify (setClassName n) >> classFromData 
+  (on2StateValues (\svs ms -> onCodeValue (\p -> f n p (scopeDoc s) svs ms) i) 
+  (onStateList (stateVarListDocD . map stateVarDoc) svrs) 
+  (onStateList (vibcat . map methodDoc) (map (zoom lensCStoMS) mths)))
 
 -- Modules --
 

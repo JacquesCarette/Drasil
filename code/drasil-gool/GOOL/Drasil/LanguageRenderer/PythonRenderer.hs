@@ -20,7 +20,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StatementSym(..), (&=), observerListName, ControlStatement(..), 
   switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
+import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalFunction(..), 
@@ -61,7 +61,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..),
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
+  onCodeList, onStateList, on2StateLists, on1StateValue1List)
 import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
   addLangImportVS, getLangImports, addLibImport, addLibImportVS, getLibImports, 
   addModuleImport, addModuleImportVS, getModuleImports, setFileType, 
@@ -117,34 +117,6 @@ instance InternalFile PythonCode where
 
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
-instance KeywordSym PythonCode where
-  type Keyword PythonCode = Doc
-  endStatement = toCode empty
-  endStatementLoop = toCode empty
-
-  inherit n = toCode $ parens (text n)
-  implements is = toCode $ parens (text $ intercalate ", " is)
-
-  list = toCode empty
-
-  blockStart = toCode colon
-  blockEnd = toCode empty
-
-  ifBodyStart = blockStart
-  elseIf = toCode $ text "elif"
-  
-  iterForEachLabel = toCode forLabel
-  iterInLabel = toCode inLabel
-
-  commentStart = toCode $ text "#"
-  blockCommentStart = toCode empty
-  blockCommentEnd = toCode empty
-  docCommentStart = toCode $ text "##"
-  docCommentEnd = toCode empty
-
-  keyFromDoc = toCode
-  keyDoc = unPC
-
 instance ImportSym PythonCode where
   type Import PythonCode = Doc
   langImport n = toCode $ text $ "import " ++ n
@@ -165,7 +137,7 @@ instance BodySym PythonCode where
   type Body PythonCode = Doc
   body = onStateList (onCodeList bodyDocD)
 
-  addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
+  addComments s = onStateValue (onCodeValue (addCommentsDocD s pyCommentStart))
 
 instance InternalBody PythonCode where
   bodyDoc = unPC
@@ -174,7 +146,7 @@ instance InternalBody PythonCode where
 
 instance BlockSym PythonCode where
   type Block PythonCode = Doc
-  block = G.block endStatement
+  block = G.block
 
 instance InternalBlock PythonCode where
   blockDoc = unPC
@@ -543,7 +515,7 @@ instance StatementSym PythonCode where
 
   valState = G.valState Empty
 
-  comment = G.comment commentStart
+  comment = G.comment pyCommentStart
 
   free v = v &= valueOf (var "None" void)
 
@@ -553,22 +525,19 @@ instance StatementSym PythonCode where
   selfInOutCall = pyInOutCall selfFuncApp
   extInOutCall m = pyInOutCall (extFuncApp m)
 
-  multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement PythonCode where
-  ifCond = G.ifCond ifBodyStart elseIf blockEnd
+  ifCond = G.ifCond pyBodyStart (text "elif") pyBodyEnd
   switch = switchAsIf
 
   ifExists = G.ifExists
 
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"
-  forRange it initval finalval step bod = (\i initv finalv stepv b -> mkStNoEnd 
-    (pyForRange iterInLabel i initv finalv stepv b)) <$> zoom lensMStoVS it <*> 
-    zoom lensMStoVS initval <*> zoom lensMStoVS finalval <*> 
-    zoom lensMStoVS step <*> bod
-  forEach i' v' = on3StateValues (\i v b -> mkStNoEnd (pyForEach 
-    iterForEachLabel iterInLabel i v b)) 
+  forRange i initv finalv stepv = forEach i
+    (funcApp "range" (listType int) [initv, finalv, stepv])
+  forEach i' v' = on3StateValues (\i v b -> mkStNoEnd (pyForEach i v b)) 
     (zoom lensMStoVS i') (zoom lensMStoVS v')
   while v' = on2StateValues (\v b -> mkStNoEnd (pyWhile v b)) 
     (zoom lensMStoVS v')
@@ -675,9 +644,14 @@ instance ClassSym PythonCode where
 
 instance InternalClass PythonCode where
   intClass = G.intClass pyClass
+
+  inherit n = toCode $ maybe empty (parens . text) n
+  implements is = toCode $ parens (text $ intercalate ", " is)
+
   commentedClass = G.commentedClass
+
   classDoc = unPC
-  classFromData = onStateValue toCode
+  classFromData d = d
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
@@ -698,9 +672,9 @@ instance InternalMod PythonCode where
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
-  blockComment lns = onCodeValue (pyBlockComment lns) commentStart
-  docComment = onStateValue (\lns -> on2CodeValues (pyDocComment lns) 
-    docCommentStart commentStart)
+  blockComment lns = toCode $ pyBlockComment lns pyCommentStart
+  docComment = onStateValue (\lns -> toCode $ pyDocComment lns (text "##") 
+    pyCommentStart)
 
   blockCommentDoc = unPC
 
@@ -710,6 +684,11 @@ initName = "__init__"
 
 pyName :: String
 pyName = "Python"
+
+pyBodyStart, pyBodyEnd, pyCommentStart :: Doc
+pyBodyStart = colon
+pyBodyEnd = empty
+pyCommentStart = text "#"
 
 pyODEMethod :: ODEMethod -> [SValue PythonCode]
 pyODEMethod RK45 = [litString "dopri5"]
@@ -773,20 +752,10 @@ pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
 pyThrow :: (RenderSym repr) => repr (Value repr) -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valueDoc errMsg)
 
-pyForRange :: (RenderSym repr) => repr (Keyword repr) -> repr (Variable repr)
-  -> repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
+pyForEach :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
   repr (Body repr) -> Doc
-pyForRange inLbl i initv finalv stepv b = vcat [
-  forLabel <+> variableDoc i <+> keyDoc inLbl <+> text "range" <> parens 
-    (valueDoc initv <> text ", " <> valueDoc finalv <> text ", " <> valueDoc 
-    stepv) <> colon,
-  indent $ bodyDoc b]
-
-pyForEach :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  repr (Variable repr) -> repr (Value repr) -> repr (Body repr) -> Doc
-pyForEach forEachLabel inLbl i lstVar b = vcat [
-  keyDoc forEachLabel <+> variableDoc i <+> keyDoc inLbl <+> valueDoc lstVar <> 
-    colon,
+pyForEach i lstVar b = vcat [
+  forLabel <+> variableDoc i <+> inLabel <+> valueDoc lstVar <> colon,
   indent $ bodyDoc b]
 
 pyWhile :: (RenderSym repr) => repr (Value repr) -> repr (Body repr) -> Doc

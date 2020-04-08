@@ -1,12 +1,13 @@
 {-# LANGUAGE TypeFamilies #-}
 
 module GOOL.Drasil.RendererClasses (
-  RenderSym, InternalFile(..), KeywordSym(..), ImportSym(..), InternalPerm(..),
+  RenderSym, InternalFile(..), ImportSym(..), InternalPerm(..), 
   InternalBody(..), InternalBlock(..), InternalType(..), UnaryOpSym(..), 
   BinaryOpSym(..), InternalOp(..), InternalVariable(..), InternalValue(..),
   InternalFunction(..), InternalStatement(..), InternalScope(..), 
   MethodTypeSym(..), InternalParam(..), InternalMethod(..), 
-  InternalStateVar(..), InternalClass(..), InternalMod(..), BlockCommentSym(..)
+  InternalStateVar(..), ParentSpec, InternalClass(..), InternalMod(..), 
+  BlockCommentSym(..)
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
@@ -26,7 +27,7 @@ class (FileSym repr, InternalBlock repr, InternalBody repr, InternalClass repr,
   InternalFile repr, InternalFunction repr, InternalMethod repr, 
   InternalMod repr, InternalOp repr, InternalParam repr, InternalPerm repr, 
   InternalScope repr, InternalStatement repr, InternalStateVar repr, 
-  InternalType repr, InternalValue repr, InternalVariable repr, KeywordSym repr,
+  InternalType repr, InternalValue repr, InternalVariable repr,
   ImportSym repr, UnaryOpSym repr, BinaryOpSym repr) => RenderSym repr
 
 class (BlockCommentSym repr) => InternalFile repr where
@@ -36,34 +37,6 @@ class (BlockCommentSym repr) => InternalFile repr where
   commentedMod :: FS (repr (BlockComment repr)) -> SFile repr -> SFile repr
 
   fileFromData :: FS FilePath -> FSModule repr -> SFile repr
-
-class KeywordSym repr where
-  type Keyword repr
-  endStatement     :: repr (Keyword repr)
-  endStatementLoop :: repr (Keyword repr)
-
-  inherit :: Label -> repr (Keyword repr)
-  implements :: [Label] -> repr (Keyword repr)
-
-  list     :: repr (Keyword repr)
-
-  blockStart :: repr (Keyword repr)
-  blockEnd   :: repr (Keyword repr)
-
-  ifBodyStart :: repr (Keyword repr)
-  elseIf      :: repr (Keyword repr)
-
-  iterForEachLabel :: repr (Keyword repr)
-  iterInLabel      :: repr (Keyword repr)
-
-  commentStart      :: repr (Keyword repr)
-  blockCommentStart :: repr (Keyword repr)
-  blockCommentEnd   :: repr (Keyword repr)
-  docCommentStart   :: repr (Keyword repr)
-  docCommentEnd     :: repr (Keyword repr)
-
-  keyFromDoc :: Doc -> repr (Keyword repr)
-  keyDoc :: repr (Keyword repr) -> Doc
 
 class ImportSym repr where
   type Import repr
@@ -228,14 +201,19 @@ class InternalStateVar repr where
   stateVarDoc :: repr (StateVar repr) -> Doc
   stateVarFromData :: CS Doc -> CSStateVar repr
 
+type ParentSpec = Doc
+
 class (BlockCommentSym repr) => InternalClass repr where
-  intClass :: Label -> repr (Scope repr) -> repr (Keyword repr) ->
-    [CSStateVar repr] -> [SMethod repr] -> SClass repr
+  intClass :: Label -> repr (Scope repr) -> repr ParentSpec -> [CSStateVar repr]
+    -> [SMethod repr] -> SClass repr
+    
+  inherit :: Maybe Label -> repr ParentSpec
+  implements :: [Label] -> repr ParentSpec
 
   commentedClass :: CS (repr (BlockComment repr)) -> SClass repr -> SClass repr
 
   classDoc :: repr (Class repr) -> Doc
-  classFromData :: CS Doc -> SClass repr
+  classFromData :: CS (repr Doc) -> SClass repr
 
 class InternalMod repr where
   moduleDoc :: repr (Module repr) -> Doc

@@ -20,7 +20,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StatementSym(..), (&=), ControlStatement(..), ScopeSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   ODEInfo(..), ODEOptions(..), ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
+import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalFunction(..), 
@@ -32,9 +32,9 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
   classVarDocD, objVarDocD, funcDocD, castDocD, listSetFuncDocD, castObjDocD, 
   staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, dot, 
-  blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD, 
-  variableList, appendToBody, surroundBody)
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
+  commentStart, elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, commentedModD, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
   listType, arrayType, listInnerType, obj, funcType, void, runStrategy, 
@@ -71,8 +71,8 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..),
   updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
-  onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles, 
+  onStateList)
+import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
   addLangImport, addLangImportVS, addLibImport, setFileType, getClassName, 
   setCurrMain, setODEDepVars, getODEDepVars)
 
@@ -83,7 +83,7 @@ import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (elemIndex, intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  semi, vcat, lbrace, rbrace, colon, space)
+  vcat, lbrace, rbrace, colon, space)
 
 csExt :: String
 csExt = "cs"
@@ -124,37 +124,9 @@ instance InternalFile CSharpCode where
 
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
-instance KeywordSym CSharpCode where
-  type Keyword CSharpCode = Doc
-  endStatement = toCode semi
-  endStatementLoop = toCode empty
-
-  inherit n = toCode $ colon <+> text n
-  implements is = toCode $ colon <+> text (intercalate ", " is)
-
-  list = toCode $ text "List"
-
-  blockStart = toCode lbrace
-  blockEnd = toCode rbrace
-
-  ifBodyStart = blockStart
-  elseIf = toCode elseIfLabel
-  
-  iterForEachLabel = toCode $ text "foreach"
-  iterInLabel = toCode inLabel
-
-  commentStart = toCode doubleSlash
-  blockCommentStart = toCode blockCmtStart
-  blockCommentEnd = toCode blockCmtEnd
-  docCommentStart = toCode docCmtStart
-  docCommentEnd = blockCommentEnd
-
-  keyFromDoc = toCode
-  keyDoc = unCSC
-
 instance ImportSym CSharpCode where
   type Import CSharpCode = Doc
-  langImport n = toCode $ csImport n endStatement
+  langImport n = toCode $ csImport n
   modImport = langImport
 
   importDoc = unCSC
@@ -172,7 +144,7 @@ instance BodySym CSharpCode where
   type Body CSharpCode = Doc
   body = onStateList (onCodeList bodyDocD)
 
-  addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
+  addComments s = onStateValue (onCodeValue (addCommentsDocD s commentStart))
 
 instance InternalBody CSharpCode where
   bodyDoc = unCSC
@@ -181,7 +153,7 @@ instance InternalBody CSharpCode where
 
 instance BlockSym CSharpCode where
   type Block CSharpCode = Doc
-  block = G.block endStatement
+  block = G.block
 
 instance InternalBlock CSharpCode where
   blockDoc = unCSC
@@ -199,7 +171,7 @@ instance TypeSym CSharpCode where
   infile = csInfileType
   outfile = csOutfileType
   listType t = modify (addLangImportVS "System.Collections.Generic") >> 
-    G.listType list t
+    G.listType "List" t
   arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
@@ -503,7 +475,7 @@ instance StatementSym CSharpCode where
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef = G.constDecDef
-  funcDecDef = csFuncDecDef blockStart blockEnd
+  funcDecDef = csFuncDecDef
 
   print = outDoc False Nothing printFunc
   printLn = outDoc True Nothing printLnFunc
@@ -550,18 +522,18 @@ instance StatementSym CSharpCode where
   selfInOutCall = csInOutCall selfFuncApp
   extInOutCall m = csInOutCall (extFuncApp m)
 
-  multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement CSharpCode where
-  ifCond = G.ifCond ifBodyStart elseIf blockEnd
+  ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch = G.switch
 
   ifExists = G.ifExists
 
-  for = G.for blockStart blockEnd
+  for = G.for bodyStart bodyEnd
   forRange = G.forRange
-  forEach = G.forEach blockStart blockEnd iterForEachLabel iterInLabel 
-  while = G.while blockStart blockEnd
+  forEach = G.forEach bodyStart bodyEnd (text "foreach") inLabel 
+  while = G.while bodyStart bodyEnd
 
   tryCatch = G.tryCatch csTryCatch
 
@@ -652,9 +624,14 @@ instance ClassSym CSharpCode where
 
 instance InternalClass CSharpCode where
   intClass = G.intClass classDocD
+
+  inherit n = toCode $ maybe empty ((colon <+>) . text) n
+  implements is = toCode $ colon <+> text (intercalate ", " is)
+
   commentedClass = G.commentedClass
+
   classDoc = unCSC
-  classFromData = onStateValue toCode
+  classFromData d = d
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
@@ -667,10 +644,9 @@ instance InternalMod CSharpCode where
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
-  blockComment lns = on2CodeValues (blockCmtDoc lns) blockCommentStart 
-    blockCommentEnd
-  docComment = onStateValue (\lns -> on2CodeValues (docCmtDoc lns) 
-    docCommentStart docCommentEnd)
+  blockComment lns = toCode $ blockCmtDoc lns blockCmtStart blockCmtEnd
+  docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
+    blockCmtEnd)
 
   blockCommentDoc = unCSC
 
@@ -685,8 +661,8 @@ csODEMethod RK45 = "RK547M"
 csODEMethod BDF = "GearBDF"
 csODEMethod _ = error "Chosen ODE method unavailable in C#"
 
-csImport :: Label -> CSharpCode (Keyword CSharpCode) -> Doc
-csImport n end = text ("using " ++ n) <> keyDoc end
+csImport :: Label -> Doc
+csImport n = text ("using " ++ n) <> endStatement
 
 csInfileType :: (RenderSym repr) => VSType repr
 csInfileType = modifyReturn (addLangImportVS "System.IO") $ 
@@ -708,11 +684,11 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
         csCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
           tp)) (valueDoc vl))
 
-csFuncDecDef :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) 
-  -> SVariable repr -> [SVariable repr] -> SValue repr -> MSStatement repr
-csFuncDecDef bStart bEnd v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
+csFuncDecDef :: (RenderSym repr) => SVariable repr -> 
+  [SVariable repr] -> SValue repr -> MSStatement repr
+csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
   getTypeDoc (variableType vr) <+> text (variableName vr) <> parens 
-  (variableList pms) <+> keyDoc bStart $$ indent (bodyDoc b) $$ keyDoc bEnd) 
+  (variableList pms) <+> bodyStart $$ indent (bodyDoc b) $$ bodyEnd) 
   (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnState r)
 
 csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc

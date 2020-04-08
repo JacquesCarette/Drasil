@@ -56,13 +56,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, 
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, ifCond, switch, 
-  ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
-  docMain, function, mainFunction, docFunc, intFunc, stateVar, stateVarDef, 
-  constVar, buildClass, extraClass, implementingClass, docClass, 
-  commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
-  fileFromData)
+  multiReturnError, valState, comment, throw, ifCond, switch, ifExists, for, 
+  forRange, forEach, while, tryCatch, checkState, notifyObservers, construct, 
+  param, method, getMethod, setMethod, constructor, docMain, function, 
+  mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, buildClass, 
+  extraClass, implementingClass, docClass, commentedClass, intClass, 
+  buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
   typeBinExpr)
@@ -550,8 +549,6 @@ instance MiscStatement JavaCode where
   valState = G.valState Semi
 
   comment = G.comment commentStart
-
-  free _ = error $ G.freeError jName -- could set variable to null? Might be misleading.
 
   multi = onStateList (onCodeList multiStateDocD)
 

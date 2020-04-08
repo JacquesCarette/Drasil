@@ -431,7 +431,6 @@ class (StatementSym repr) => FuncAppStatement repr where
 class (StatementSym repr) => MiscStatement repr where
   valState :: SValue repr -> MSStatement repr
   comment :: Label -> MSStatement repr
-  free :: SVariable repr -> MSStatement repr
   multi     :: [MSStatement repr] -> MSStatement repr
 
 initState :: (DeclStatement repr) => Label -> Label -> MSStatement repr

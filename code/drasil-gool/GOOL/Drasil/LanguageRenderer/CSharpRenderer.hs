@@ -56,8 +56,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
   extObjDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, 
   openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, freeError, throw, ifCond, 
-  switch, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  returnState, multiReturnError, valState, comment, throw, ifCond, switch, 
+  ifExists, for, forRange, forEach, while, tryCatch, checkState, 
   notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
   docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
   stateVarDef, constVar, buildClass, implementingClass, docClass, 
@@ -521,8 +521,6 @@ instance MiscStatement CSharpCode where
 
   comment = G.comment commentStart
 
-  free _ = error $ G.freeError csName -- could set variable to null? Might be misleading.
-  
   multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement CSharpCode where

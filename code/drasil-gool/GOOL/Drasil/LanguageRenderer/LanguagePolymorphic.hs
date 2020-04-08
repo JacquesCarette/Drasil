@@ -27,11 +27,11 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   extObjDecNewNoParams, constDecDef, funcDecDef, discardInput, 
   discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, ifCond, switch, 
-  ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
-  docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
-  stateVarDef, constVar, buildClass, extraClass, implementingClass, docClass, 
+  multiReturnError, valState, comment, throw, ifCond, switch, ifExists, for, 
+  forRange, forEach, while, tryCatch, checkState, notifyObservers, construct, 
+  param, method, getMethod, setMethod, constructor, docMain, function, 
+  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, 
+  constVar, buildClass, extraClass, implementingClass, docClass, 
   commentedClass, intClass, buildModule, buildModule', modFromData, fileDoc, 
   docMod
 ) where
@@ -870,9 +870,6 @@ valState t v' = zoom lensMStoVS $ onStateValue (\v -> stateFromData (valueDoc v)
 
 comment :: (RenderSym repr) => Doc -> Label -> MSStatement repr
 comment cs c = toState $ mkStNoEnd (commentDocD c cs)
-
-freeError :: String -> String
-freeError l = "Cannot free variables in " ++ l
 
 throw :: (RenderSym repr) => (repr (Value repr) -> Doc) -> Terminator -> 
   Label -> MSStatement repr

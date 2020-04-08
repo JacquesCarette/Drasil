@@ -310,8 +310,6 @@ instance MiscStatement CodeInfo where
 
   comment _ = noInfo
 
-  free _ = noInfo
-
   multi = executeList
 
 instance ControlStatement CodeInfo where
@@ -321,7 +319,7 @@ instance ControlStatement CodeInfo where
   returnState = zoom lensMStoVS . execute1
 
   throw _ = modifyReturn (addException genericExc) (toCode ())
-  
+
   ifCond = evalConds
   switch v cs b = do
     _ <- zoom lensMStoVS v

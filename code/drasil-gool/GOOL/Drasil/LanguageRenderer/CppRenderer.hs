@@ -32,8 +32,8 @@ import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   InternalParam(..), InternalMethod(..), InternalStateVar(..), ParentSpec,
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, multiStateDocD, 
-  bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, freeDocD, mkSt, 
-  mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
+  bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, mkSt, mkStNoEnd, 
+  breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
   classVarCheckStatic, castDocD, castObjDocD, staticDocD, dynamicDocD, 
   privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -637,8 +637,6 @@ instance (Pair p) => MiscStatement (p CppSrcCode CppHdrCode) where
   valState = pair1 valState valState . zoom lensMStoVS
 
   comment cmt = on2StateValues pair (comment cmt) (comment cmt)
-
-  free = pair1 free free . zoom lensMStoVS
 
   multi = pair1List multi multi
 
@@ -1480,8 +1478,6 @@ instance MiscStatement CppSrcCode where
 
   comment = G.comment commentStart
 
-  free = onStateValue (mkSt . freeDocD) . zoom lensMStoVS
-
   multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement CppSrcCode where
@@ -2062,8 +2058,6 @@ instance MiscStatement CppHdrCode where
   valState _ = emptyState
 
   comment _ = emptyState
-
-  free _ = emptyState
 
   multi _ = emptyState
 

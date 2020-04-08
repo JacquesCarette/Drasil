@@ -524,8 +524,6 @@ instance MiscStatement PythonCode where
 
   comment = G.comment pyCommentStart
 
-  free v = v &= valueOf (var "None" void)
-
   multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement PythonCode where

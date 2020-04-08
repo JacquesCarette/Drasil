@@ -12,9 +12,9 @@ module GOOL.Drasil.LanguageRenderer (
   bodyDocD, outDoc, printDoc, printFileDocD, destructorError, paramDocD, 
   methodDocD, stateVarDocD, constVarDocD, stateVarListDocD, switchDocD, 
   assignDocD, multiAssignDoc, plusEqualsDocD, plusPlusDocD, listDecDocD, 
-  statementDocD, getTermDoc, returnDocD, commentDocD, freeDocD, mkSt, 
-  mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, 
-  extVarDocD, selfDocD, argDocD, classVarCheckStatic, classVarDocD, objVarDocD, 
+  statementDocD, getTermDoc, returnDocD, commentDocD, mkSt, mkStNoEnd, 
+  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, 
+  selfDocD, argDocD, classVarCheckStatic, classVarDocD, objVarDocD, 
   funcAppDocD, newObjDocD, newObjDocD', constDecDefDocD, funcDocD, castDocD, 
   listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
   continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
@@ -266,9 +266,6 @@ returnDocD vs = text "return" <+> valueList vs
 
 commentDocD :: Label -> Doc -> Doc
 commentDocD cmt cStart = cStart <+> text cmt
-
-freeDocD :: (RenderSym repr) => repr (Variable repr) -> Doc
-freeDocD v = text "delete" <+> text "&" <> variableDoc v
 
 statementDocD :: (Doc, Terminator) -> (Doc, Terminator)
 statementDocD (s, t) = (s <> getTermDoc t, Empty)

@@ -42,8 +42,6 @@ class KeywordSym repr where
   type Keyword repr
   endStatement     :: repr (Keyword repr)
 
-  commentStart :: repr (Keyword repr)
-
   keyDoc :: repr (Keyword repr) -> Doc
 
 class ImportSym repr where

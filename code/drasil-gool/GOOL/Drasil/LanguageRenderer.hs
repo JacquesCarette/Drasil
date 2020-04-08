@@ -3,7 +3,7 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
-  classDec, dot, doubleSlash, elseIfLabel, forLabel, inLabel, new, 
+  classDec, dot, commentStart, elseIfLabel, forLabel, inLabel, new,
   blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, addExt,
   
   -- * Default Functions available for use in renderers
@@ -54,11 +54,11 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec, dot, doubleSlash, elseIfLabel, forLabel, inLabel, new, blockCmtStart, 
+classDec, dot, commentStart, elseIfLabel, forLabel, inLabel, new, blockCmtStart,
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd :: Doc
 classDec = text "class"
 dot = text "."
-doubleSlash = text "//"
+commentStart = text "//"
 elseIfLabel = text "else if"
 forLabel = text "for"
 inLabel = text "in"

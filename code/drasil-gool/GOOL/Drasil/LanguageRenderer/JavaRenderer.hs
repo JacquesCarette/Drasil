@@ -33,7 +33,7 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, castDocD, 
   castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
   dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, 
-  bodyStart, bodyEnd, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  bodyStart, bodyEnd, commentStart, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, commentedModD, docFuncRepr, variableList, parameterList, 
   appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
@@ -136,8 +136,6 @@ instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
   endStatement = toCode semi
 
-  commentStart = toCode doubleSlash
-
   keyDoc = unJC
 
 instance ImportSym JavaCode where
@@ -160,7 +158,7 @@ instance BodySym JavaCode where
   type Body JavaCode = Doc
   body = onStateList (onCodeList bodyDocD)
 
-  addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
+  addComments s = onStateValue (onCodeValue (addCommentsDocD s commentStart))
 
 instance InternalBody JavaCode where
   bodyDoc = unJC

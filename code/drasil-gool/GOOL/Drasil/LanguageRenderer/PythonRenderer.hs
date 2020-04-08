@@ -121,8 +121,6 @@ instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
   endStatement = toCode empty
 
-  commentStart = toCode $ text "#"
-
   keyDoc = unPC
 
 instance ImportSym PythonCode where
@@ -145,7 +143,7 @@ instance BodySym PythonCode where
   type Body PythonCode = Doc
   body = onStateList (onCodeList bodyDocD)
 
-  addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
+  addComments s = onStateValue (onCodeValue (addCommentsDocD s pyCommentStart))
 
 instance InternalBody PythonCode where
   bodyDoc = unPC
@@ -523,7 +521,7 @@ instance StatementSym PythonCode where
 
   valState = G.valState Empty
 
-  comment = G.comment commentStart
+  comment = G.comment pyCommentStart
 
   free v = v &= valueOf (var "None" void)
 
@@ -680,9 +678,9 @@ instance InternalMod PythonCode where
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
-  blockComment lns = onCodeValue (pyBlockComment lns) commentStart
-  docComment = onStateValue (\lns -> onCodeValue (pyDocComment lns (text "##")) 
-    commentStart)
+  blockComment lns = toCode $ pyBlockComment lns pyCommentStart
+  docComment = onStateValue (\lns -> toCode $ pyDocComment lns (text "##") 
+    pyCommentStart)
 
   blockCommentDoc = unPC
 
@@ -693,9 +691,10 @@ initName = "__init__"
 pyName :: String
 pyName = "Python"
 
-pyBodyStart, pyBodyEnd :: Doc
+pyBodyStart, pyBodyEnd, pyCommentStart :: Doc
 pyBodyStart = colon
 pyBodyEnd = empty
+pyCommentStart = text "#"
 
 pyODEMethod :: ODEMethod -> [SValue PythonCode]
 pyODEMethod RK45 = [litString "dopri5"]

@@ -32,7 +32,7 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
   classVarDocD, objVarDocD, funcDocD, castDocD, listSetFuncDocD, castObjDocD, 
   staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, dot, 
-  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, doubleSlash, 
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, commentStart, 
   elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   commentedModD, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
@@ -128,8 +128,6 @@ instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
   endStatement = toCode semi
 
-  commentStart = toCode doubleSlash
-
   keyDoc = unCSC
 
 instance ImportSym CSharpCode where
@@ -152,7 +150,7 @@ instance BodySym CSharpCode where
   type Body CSharpCode = Doc
   body = onStateList (onCodeList bodyDocD)
 
-  addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
+  addComments s = onStateValue (onCodeValue (addCommentsDocD s commentStart))
 
 instance InternalBody CSharpCode where
   bodyDoc = unCSC

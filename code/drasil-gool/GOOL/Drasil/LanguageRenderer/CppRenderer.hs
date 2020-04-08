@@ -34,7 +34,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, multiStateDocD,
   mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
   classVarCheckStatic, castDocD, castObjDocD, staticDocD, dynamicDocD, 
   privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
-  docCmtStart, bodyStart, bodyEnd, doubleSlash, elseIfLabel, blockCmtDoc, 
+  docCmtStart, bodyStart, bodyEnd, commentStart, elseIfLabel, blockCmtDoc, 
   docCmtDoc, commentedItem, addCommentsDocD, functionDox, commentedModD, 
   valueList, parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
@@ -141,8 +141,6 @@ instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
   endStatement = pair endStatement endStatement
-
-  commentStart = pair commentStart commentStart
 
   keyDoc k = keyDoc $ pfst k
 
@@ -1070,8 +1068,6 @@ instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
   endStatement = toCode semi
 
-  commentStart = toCode doubleSlash
-
   keyDoc = unCPPSC
 
 instance ImportSym CppSrcCode where
@@ -1095,7 +1091,7 @@ instance BodySym CppSrcCode where
   type Body CppSrcCode = Doc
   body = onStateList (onCodeList bodyDocD)
 
-  addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
+  addComments s = onStateValue (onCodeValue (addCommentsDocD s commentStart))
 
 instance InternalBody CppSrcCode where
   bodyDoc = unCPPSC
@@ -1702,8 +1698,6 @@ instance InternalFile CppHdrCode where
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
   endStatement = toCode semi
-
-  commentStart = toCode empty
 
   keyDoc = unCPPHC
 

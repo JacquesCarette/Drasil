@@ -868,8 +868,8 @@ valState :: (RenderSym repr) => Terminator -> SValue repr -> MSStatement repr
 valState t v' = zoom lensMStoVS $ onStateValue (\v -> stateFromData (valueDoc v)
   t) v'
 
-comment :: (RenderSym repr) => repr (Keyword repr) -> Label -> MSStatement repr
-comment cs c = toState $ mkStNoEnd (commentDocD c (keyDoc cs))
+comment :: (RenderSym repr) => Doc -> Label -> MSStatement repr
+comment cs c = toState $ mkStNoEnd (commentDocD c cs)
 
 freeError :: String -> String
 freeError l = "Cannot free variables in " ++ l

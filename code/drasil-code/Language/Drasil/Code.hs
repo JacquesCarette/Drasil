@@ -91,7 +91,7 @@ import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), Comments(..),
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), 
   pubStateVar, privStateVar, fdec, ffor, funcData, funcDef, packmod)
 
-import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..))
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeFuncChunk, 
   quantvar, quantfunc, ccObjVar, listToArray)

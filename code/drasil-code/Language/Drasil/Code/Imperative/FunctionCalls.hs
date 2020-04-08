@@ -14,8 +14,8 @@ import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 
-import GOOL.Drasil (ProgramSym, TypeSym(..), ValueSym(..), StatementSym(..), 
-  MS, VS, convType)
+import GOOL.Drasil (VSType, SValue, MSStatement, ProgramSym, TypeSym(..), 
+  ValueSym(..), StatementSym(..), convType)
 
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
@@ -23,8 +23,7 @@ import Data.Maybe (catMaybes)
 import Control.Applicative ((<|>))
 import Control.Monad.Reader (Reader, ask)
 
-getAllInputCalls :: (ProgramSym repr) => Reader DrasilState 
-  [MS (repr (Statement repr))]
+getAllInputCalls :: (ProgramSym repr) => Reader DrasilState [MSStatement repr]
 getAllInputCalls = do
   gi <- getInputCall
   dv <- getDerivedCall
@@ -32,21 +31,21 @@ getAllInputCalls = do
   return $ catMaybes [gi, dv, ic]
 
 getInputCall :: (ProgramSym repr) => Reader DrasilState 
-  (Maybe (MS (repr (Statement repr))))
+  (Maybe (MSStatement repr))
 getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
 
 getDerivedCall :: (ProgramSym repr) => Reader DrasilState 
-  (Maybe (MS (repr (Statement repr))))
+  (Maybe (MSStatement repr))
 getDerivedCall = getInOutCall "derived_values" getDerivedIns getDerivedOuts
 
 getConstraintCall :: (ProgramSym repr) => Reader DrasilState 
-  (Maybe (MS (repr (Statement repr))))
+  (Maybe (MSStatement repr))
 getConstraintCall = do
   val <- getFuncCall "input_constraints" void getConstraintParams
   return $ fmap valState val
 
 getCalcCall :: (ProgramSym repr) => CodeDefinition -> Reader DrasilState 
-  (Maybe (MS (repr (Statement repr))))
+  (Maybe (MSStatement repr))
 getCalcCall c = do
   t <- codeType c
   val <- getFuncCall (codeName c) (convType t) (getCalcParams c)
@@ -55,14 +54,14 @@ getCalcCall c = do
   return $ fmap (multi . (: l) . varDecDef v) val
 
 getOutputCall :: (ProgramSym repr) => Reader DrasilState 
-  (Maybe (MS (repr (Statement repr))))
+  (Maybe (MSStatement repr))
 getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
   return $ fmap valState val
 
 getFuncCall :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c) => String 
-  -> VS (repr (Type repr)) -> Reader DrasilState [c] -> 
-  Reader DrasilState (Maybe (VS (repr (Value repr))))
+  -> VSType repr -> Reader DrasilState [c] -> 
+  Reader DrasilState (Maybe (SValue repr))
 getFuncCall n t funcPs = do
   mm <- getCall n
   let getFuncCall' Nothing = return Nothing
@@ -75,7 +74,7 @@ getFuncCall n t funcPs = do
 
 getInOutCall :: (ProgramSym repr) => String -> 
   Reader DrasilState [CodeVarChunk] -> Reader DrasilState [CodeVarChunk] ->
-  Reader DrasilState (Maybe (MS (repr (Statement repr))))
+  Reader DrasilState (Maybe (MSStatement repr))
 getInOutCall n inFunc outFunc = do
   mm <- getCall n
   let getInOutCall' Nothing = return Nothing

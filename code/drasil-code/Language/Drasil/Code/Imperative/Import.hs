@@ -30,13 +30,14 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
   Mod(..), Name, StateVariable(..), fstdecl)
 import qualified Language.Drasil.Mod as M (Class(..))
 
-import GOOL.Drasil (Label, ProgramSym, FileSym(..), PermanenceSym(..), 
-  BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  objMethodCallMixedArgs, FunctionSym(..), SelectorFunction(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), nonInitConstructor, convType, 
-  ScopeTag(..), CodeType(..), FS, CS, MS, VS, onStateValue) 
+import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
+  MSStatement, MSParameter, SMethod, CSStateVar, SClass, ProgramSym, 
+  PermanenceSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
+  ($->), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), objMethodCallMixedArgs, FunctionSym(..), 
+  SelectorFunction(..), StatementSym(..), ControlStatement(..), ifNoElse, 
+  ScopeSym(..), ParameterSym(..), MethodSym(..), pubMVar, privMVar, 
+  nonInitConstructor, convType, ScopeTag(..), CodeType(..), onStateValue) 
 import qualified GOOL.Drasil as C (CodeType(List, Array))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -53,8 +54,8 @@ codeType c = do
   g <- ask
   return $ spaceMatches g (c ^. typ)
 
-value :: (ProgramSym repr) => UID -> String -> VS (repr (Type repr)) -> 
-  Reader DrasilState (VS (repr (Value repr)))
+value :: (ProgramSym repr) => UID -> String -> VSType repr -> 
+  Reader DrasilState (SValue repr)
 value u s t = do
   g <- ask
   let cs = codeSpec g
@@ -66,8 +67,8 @@ value u s t = do
     (convExpr . codeEquat) (Map.lookup u mm >>= maybeInline (conStruct g))) 
     (return . conceptToGOOL) (Map.lookup u cm)
 
-variable :: (ProgramSym repr) => String -> VS (repr (Type repr)) -> 
-  Reader DrasilState (VS (repr (Variable repr)))
+variable :: (ProgramSym repr) => String -> VSType repr -> 
+  Reader DrasilState (SVariable repr)
 variable s t = do
   g <- ask
   let cs = codeSpec g
@@ -80,7 +81,7 @@ variable s t = do
       else return $ var s t
   
 inputVariable :: (ProgramSym repr) => Structure -> ConstantRepr -> 
-  VS (repr (Variable repr)) -> Reader DrasilState (VS (repr (Variable repr)))
+  SVariable repr -> Reader DrasilState (SVariable repr)
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
   g <- ask
@@ -92,7 +93,7 @@ inputVariable Bundled Const v = do
   classVariable ip v
 
 constVariable :: (ProgramSym repr) => ConstantStructure -> ConstantRepr -> 
-  VS (repr (Variable repr)) -> Reader DrasilState (VS (repr (Variable repr)))
+  SVariable repr -> Reader DrasilState (SVariable repr)
 constVariable (Store Bundled) Var v = do
   cs <- mkVar (quantvar consts)
   return $ cs $-> v
@@ -104,8 +105,8 @@ constVariable WithInputs cr v = do
   inputVariable (inStruct g) cr v
 constVariable _ _ v = return v
 
-classVariable :: (ProgramSym repr) => VS (repr (Variable repr)) -> 
-  VS (repr (Variable repr)) -> Reader DrasilState (VS (repr (Variable repr)))
+classVariable :: (ProgramSym repr) => SVariable repr -> SVariable repr -> 
+  Reader DrasilState (SVariable repr)
 classVariable c v = do
   g <- ask
   let checkCurrent m = if currentModule g == m then classVar else extClassVar
@@ -114,13 +115,13 @@ classVariable c v = do
     (eMap g)) (onStateValue variableType c) v)
 
 mkVal :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c) => c -> 
-  Reader DrasilState (VS (repr (Value repr)))
+  Reader DrasilState (SValue repr)
 mkVal v = do
   t <- codeType v
   value (v ^. uid) (codeName v) (convType t)
 
 mkVar :: (ProgramSym repr) => CodeVarChunk -> 
-  Reader DrasilState (VS (repr (Variable repr)))
+  Reader DrasilState (SVariable repr)
 mkVar v = do
   t <- codeType v
   let toGOOLVar Nothing = variable (codeName v) (convType t)
@@ -131,53 +132,50 @@ mkVar v = do
   toGOOLVar (v ^. obv)
 
 mkParam :: (ProgramSym repr) => ParameterChunk -> 
-  Reader DrasilState (MS (repr (Parameter repr)))
+  Reader DrasilState (MSParameter repr)
 mkParam p = do
   v <- mkVar (quantvar p)
   return $ paramFunc (passBy p) v
   where paramFunc Ref = pointerParam
         paramFunc Val = param
 
-publicFunc :: (ProgramSym repr) => Label -> VS (repr (Type repr)) -> String -> 
-  [ParameterChunk] -> Maybe String -> [MS (repr (Block repr))] -> 
-  Reader DrasilState (MS (repr (Method repr)))
+publicFunc :: (ProgramSym repr) => Label -> VSType repr -> String -> 
+  [ParameterChunk] -> Maybe String -> [MSBlock repr] -> 
+  Reader DrasilState (SMethod repr)
 publicFunc n t = genMethod (function n public static t) n
 
-publicMethod :: (ProgramSym repr) => Label -> VS (repr (Type repr)) -> String 
-  -> [ParameterChunk] -> Maybe String -> [MS (repr (Block repr))] -> 
-  Reader DrasilState (MS (repr (Method repr)))
+publicMethod :: (ProgramSym repr) => Label -> VSType repr -> String -> 
+  [ParameterChunk] -> Maybe String -> [MSBlock repr] -> 
+  Reader DrasilState (SMethod repr)
 publicMethod n t = genMethod (method n public dynamic t) n
 
-privateMethod :: (ProgramSym repr) => Label -> VS (repr (Type repr)) -> String 
-  -> [ParameterChunk] -> Maybe String -> [MS (repr (Block repr))] -> 
-  Reader DrasilState (MS (repr (Method repr)))
+privateMethod :: (ProgramSym repr) => Label -> VSType repr -> String -> 
+  [ParameterChunk] -> Maybe String -> [MSBlock repr] -> 
+  Reader DrasilState (SMethod repr)
 privateMethod n t = genMethod (method n private dynamic t) n
 
 publicInOutFunc :: (ProgramSym repr) => Label -> String -> [CodeVarChunk] -> 
-  [CodeVarChunk] -> [MS (repr (Block repr))] -> 
-  Reader DrasilState (MS (repr (Method repr)))
+  [CodeVarChunk] -> [MSBlock repr] -> Reader DrasilState (SMethod repr)
 publicInOutFunc n = genInOutFunc (inOutFunc n) (docInOutFunc n) public static n
 
 privateInOutMethod :: (ProgramSym repr) => Label -> String -> [CodeVarChunk] -> 
-  [CodeVarChunk] -> [MS (repr (Block repr))] ->
-  Reader DrasilState (MS (repr (Method repr)))
+  [CodeVarChunk] -> [MSBlock repr] -> Reader DrasilState (SMethod repr)
 privateInOutMethod n = genInOutFunc (inOutMethod n) (docInOutMethod n) 
   private dynamic n
 
 genConstructor :: (ProgramSym repr) => Label -> String -> [ParameterChunk] -> 
-  [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
+  [MSBlock repr] -> Reader DrasilState (SMethod repr)
 genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
 
 genInitConstructor :: (ProgramSym repr) => Label -> String -> [ParameterChunk] 
-  -> [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
-  [MS (repr (Block repr))] -> Reader DrasilState (MS (repr (Method repr)))
+  -> [(SVariable repr, SValue repr)] -> [MSBlock repr] -> 
+  Reader DrasilState (SMethod repr)
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p 
   Nothing
 
-genMethod :: (ProgramSym repr) => ([MS (repr (Parameter repr))] -> 
-  MS (repr (Body repr)) -> MS (repr (Method repr))) -> Label -> String -> 
-  [ParameterChunk] -> Maybe String -> [MS (repr (Block repr))] -> 
-  Reader DrasilState (MS (repr (Method repr)))
+genMethod :: (ProgramSym repr) => ([MSParameter repr] -> MSBody repr -> 
+  SMethod repr) -> Label -> String -> [ParameterChunk] -> Maybe String -> 
+  [MSBlock repr] -> Reader DrasilState (SMethod repr)
 genMethod f n desc p r b = do
   g <- ask
   vars <- mapM (mkVar . quantvar) p
@@ -189,17 +187,14 @@ genMethod f n desc p r b = do
     then docFunc desc pComms r fn else fn
 
 genInOutFunc :: (ProgramSym repr) => 
-  (repr (Scope repr) -> repr (Permanence repr) -> [VS (repr (Variable repr))] 
-    -> [VS (repr (Variable repr))] -> [VS (repr (Variable repr))] -> 
-    MS (repr (Body repr)) -> MS (repr (Method repr))) -> 
+  (repr (Scope repr) -> repr (Permanence repr) -> [SVariable repr] 
+    -> [SVariable repr] -> [SVariable repr] -> MSBody repr -> SMethod repr) -> 
   (repr (Scope repr) -> repr (Permanence repr) -> String -> 
-    [(String, VS (repr (Variable repr)))] -> 
-    [(String, VS (repr (Variable repr)))] -> 
-    [(String, VS (repr (Variable repr)))] -> MS (repr (Body repr)) -> 
-    MS (repr (Method repr))) -> 
+    [(String, SVariable repr)] -> [(String, SVariable repr)] -> 
+    [(String, SVariable repr)] -> MSBody repr -> SMethod repr) -> 
   repr (Scope repr) -> repr (Permanence repr) -> Label -> String -> 
-  [CodeVarChunk] -> [CodeVarChunk] -> [MS (repr (Block repr))] -> 
-  Reader DrasilState (MS (repr (Method repr)))
+  [CodeVarChunk] -> [CodeVarChunk] -> [MSBlock repr] -> 
+  Reader DrasilState (SMethod repr)
 genInOutFunc f docf s pr n desc ins' outs' b = do
   g <- ask
   let ins = ins' \\ outs'
@@ -216,7 +211,7 @@ genInOutFunc f docf s pr n desc ins' outs' b = do
     then docf s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
     bComms bothVs) bod else f s pr inVs outVs bothVs bod
 
-convExpr :: (ProgramSym repr) => Expr -> Reader DrasilState (VS (repr (Value repr)))
+convExpr :: (ProgramSym repr) => Expr -> Reader DrasilState (SValue repr)
 convExpr (Dbl d) = do
   g <- ask
   let sm = spaceMatches g
@@ -285,12 +280,10 @@ convExpr (RealI c ri)  = do
   convExpr $ renderRealInt (lookupC g c) ri
 
 convCall :: (ProgramSym repr) => UID -> [Expr] -> [(UID, Expr)] -> 
-  (String -> String -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
-  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
-  Reader DrasilState (VS (repr (Value repr)))) -> 
-  (String -> String -> VS (repr (Type repr)) -> [VS (repr (Value repr))] -> 
-  [(VS (repr (Variable repr)), VS (repr (Value repr)))] -> 
-  VS (repr (Value repr))) -> Reader DrasilState (VS (repr (Value repr)))
+  (String -> String -> VSType repr -> [SValue repr] -> [(SVariable repr, 
+  SValue repr)] -> Reader DrasilState (SValue repr)) -> (String -> String -> 
+  VSType repr -> [SValue repr] -> [(SVariable repr, SValue repr)] -> 
+  SValue repr) -> Reader DrasilState (SValue repr)
 convCall c x ns f libf = do
   g <- ask
   let info = sysinfodb $ codeSpec g
@@ -323,8 +316,7 @@ renderRealInt s (UpTo (Exc,a))    = sy s $< a
 renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
 renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
-unop :: (ProgramSym repr) => UFunc -> (VS (repr (Value repr)) -> 
-  VS (repr (Value repr)))
+unop :: (ProgramSym repr) => UFunc -> (SValue repr -> SValue repr)
 unop Sqrt = (#/^)
 unop Log  = log
 unop Ln   = ln
@@ -344,8 +336,8 @@ unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
 
-bfunc :: (ProgramSym repr) => BinOp -> (VS (repr (Value repr)) -> 
-  VS (repr (Value repr)) -> VS (repr (Value repr)))
+bfunc :: (ProgramSym repr) => BinOp -> (SValue repr -> SValue repr -> 
+  SValue repr)
 bfunc Eq    = (?==)
 bfunc NEq   = (?!=)
 bfunc Gt    = (?>)
@@ -362,26 +354,23 @@ bfunc Frac  = (#/)
 bfunc Index = listAccess
 
 -- medium hacks --
-genModDef :: (ProgramSym repr) => Mod -> 
-  Reader DrasilState (FS (repr (RenderFile repr)))
+genModDef :: (ProgramSym repr) => Mod -> Reader DrasilState (SFile repr)
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap 
   Just . genFunc publicFunc []) fs) 
   (case cs of [] -> []
               (cl:cls) -> fmap Just (genClass primaryClass cl) : 
                 map (fmap Just . genClass auxClass) cls)
 
-genModFuncs :: (ProgramSym repr) => Mod -> 
-  [Reader DrasilState (MS (repr (Method repr)))]
+genModFuncs :: (ProgramSym repr) => Mod -> [Reader DrasilState (SMethod repr)]
 genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
-genModClasses :: (ProgramSym repr) => Mod -> 
-  [Reader DrasilState (CS (repr (Class repr)))]
+genModClasses :: (ProgramSym repr) => Mod -> [Reader DrasilState (SClass repr)]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
 genClass :: (ProgramSym repr) => (String -> Label -> Maybe Label -> 
-  [CS (repr (StateVar repr))] -> Reader DrasilState [MS (repr (Method repr))] 
-  -> Reader DrasilState (CS (repr (Class repr)))) -> M.Class -> 
-  Reader DrasilState (CS (repr (Class repr)))
+  [CSStateVar repr] -> Reader DrasilState [SMethod repr] -> 
+  Reader DrasilState (SClass repr)) -> M.Class -> 
+  Reader DrasilState (SClass repr)
 genClass f (M.ClassDef n i desc svs ms) = let svar Pub = pubMVar
                                               svar Priv = privMVar 
   in do
@@ -389,10 +378,10 @@ genClass f (M.ClassDef n i desc svs ms) = let svar Pub = pubMVar
     (codeType v)) svs
   f desc n i svrs (mapM (genFunc publicMethod svs) ms)
 
-genFunc :: (ProgramSym repr) => (Label -> VS (repr (Type repr)) -> String -> 
-  [ParameterChunk] -> Maybe String -> [MS (repr (Block repr))] -> 
-  Reader DrasilState (MS (repr (Method repr)))) -> [StateVariable] -> Func -> 
-  Reader DrasilState (MS (repr (Method repr)))
+genFunc :: (ProgramSym repr) => (Label -> VSType repr -> String -> 
+  [ParameterChunk] -> Maybe String -> [MSBlock repr] -> 
+  Reader DrasilState (SMethod repr)) -> [StateVariable] -> Func -> 
+  Reader DrasilState (SMethod repr)
 genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   g <- ask
   stmts <- mapM convStmt s
@@ -412,7 +401,7 @@ genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
     [block $ map varDec vars ++ stmts]
 genFunc _ _ (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 
-convStmt :: (ProgramSym repr) => FuncStmt -> Reader DrasilState (MS (repr (Statement repr)))
+convStmt :: (ProgramSym repr) => FuncStmt -> Reader DrasilState (MSStatement repr)
 convStmt (FAsg v (Matrix [es]))  = do
   els <- mapM convExpr es
   v' <- mkVar v
@@ -504,7 +493,7 @@ convStmt (FAppend a b) = do
   return $ valState $ listAppend a' b'
 
 genDataFunc :: (ProgramSym repr) => Name -> String -> DataDesc -> 
-  Reader DrasilState (MS (repr (Method repr)))
+  Reader DrasilState (SMethod repr)
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readData ddef
@@ -512,8 +501,7 @@ genDataFunc nameTitle desc ddef = do
     Nothing bod
 
 -- this is really ugly!!
-readData :: (ProgramSym repr) => DataDesc -> Reader DrasilState
-  [MS (repr (Block repr))]
+readData :: (ProgramSym repr) => DataDesc -> Reader DrasilState [MSBlock repr]
 readData ddef = do
   inD <- mapM inData ddef
   v_filename <- mkVal $ quantvar inFileName
@@ -524,7 +512,7 @@ readData ddef = do
     openFileR var_infile v_filename :
     concat inD ++ [
     closeFile v_infile ]]
-  where inData :: (ProgramSym repr) => Data -> Reader DrasilState [MS (repr (Statement repr))]
+  where inData :: (ProgramSym repr) => Data -> Reader DrasilState [MSStatement repr]
         inData (Singleton v) = do
             vv <- mkVar v
             l <- maybeLog vv
@@ -551,7 +539,7 @@ readData ddef = do
           return $ readLines ls ++ logs
         ---------------
         lineData :: (ProgramSym repr) => Maybe String -> LinePattern -> 
-          Reader DrasilState [MS (repr (Statement repr))]
+          Reader DrasilState [MSStatement repr]
         lineData s p@(Straight _) = do
           vs <- getEntryVars s p
           return [stringListVals vs v_linetokens]
@@ -561,31 +549,31 @@ readData ddef = do
             : appendTemps s ds
         ---------------
         clearTemps :: (ProgramSym repr) => Maybe String -> [DataItem] -> 
-          [Reader DrasilState (MS (repr (Statement repr)))]
+          [Reader DrasilState (MSStatement repr)]
         clearTemps Nothing _ = []
         clearTemps (Just sfx) es = map (clearTemp sfx) es
         ---------------
         clearTemp :: (ProgramSym repr) => String -> DataItem -> 
-          Reader DrasilState (MS (repr (Statement repr)))
+          Reader DrasilState (MSStatement repr)
         clearTemp sfx v = fmap (\t -> listDecDef (var (codeName v ++ sfx) 
           (listInnerType $ convType t)) []) (codeType v)
         ---------------
         appendTemps :: (ProgramSym repr) => Maybe String -> [DataItem] -> 
-          [Reader DrasilState (MS (repr (Statement repr)))]
+          [Reader DrasilState (MSStatement repr)]
         appendTemps Nothing _ = []
         appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
         appendTemp :: (ProgramSym repr) => String -> DataItem -> 
-          Reader DrasilState (MS (repr (Statement repr)))
+          Reader DrasilState (MSStatement repr)
         appendTemp sfx v = fmap (\t -> valState $ listAppend 
           (valueOf $ var (codeName v) (convType t)) 
           (valueOf $ var (codeName v ++ sfx) (convType t))) (codeType v)
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_i :: Label
         var_line, var_lines, var_linetokens, var_infile, var_i :: 
-          (ProgramSym repr) => VS (repr (Variable repr))
+          (ProgramSym repr) => SVariable repr
         v_line, v_lines, v_linetokens, v_infile, v_i ::
-          (ProgramSym repr) => VS (repr (Value repr))
+          (ProgramSym repr) => SValue repr
         l_line = "line"
         var_line = var l_line string
         v_line = valueOf var_line
@@ -603,12 +591,12 @@ readData ddef = do
         v_i = valueOf var_i
 
 getEntryVars :: (ProgramSym repr) => Maybe String -> LinePattern -> 
-  Reader DrasilState [VS (repr (Variable repr))]
+  Reader DrasilState [SVariable repr]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>= (variable 
   (codeName v ++ st) . listInnerType . convType)) s) (getPatternInputs lp)
 
 getEntryVarLogs :: (ProgramSym repr) => LinePattern -> 
-  Reader DrasilState [MS (repr (Statement repr))]
+  Reader DrasilState [MSStatement repr]
 getEntryVarLogs lp = do
   vs <- getEntryVars Nothing lp
   logs <- mapM maybeLog vs

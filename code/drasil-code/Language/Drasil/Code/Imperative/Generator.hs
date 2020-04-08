@@ -16,7 +16,7 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
   genOutputFormat, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod,
   modExportMap, clsDefMap)
-import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
@@ -29,8 +29,8 @@ import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), Choices(..), Modularity(..), 
   ImplementationType(..), Visibility(..))
 
-import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), GS, 
-  FS, initialState, unCI)
+import GOOL.Drasil (GSProgram, SFile, ProgramSym(..), ProgramSym, ProgData(..), 
+  initialState, unCI)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
   getCurrentDirectory)
@@ -119,7 +119,7 @@ genPackage unRepr = do
   d <- genDoxConfig n s
   return $ package pd (m:i++d)
 
-genProgram :: (ProgramSym repr) => Reader DrasilState (GS (repr (Program repr)))
+genProgram :: (ProgramSym repr) => Reader DrasilState (GSProgram repr)
 genProgram = do
   g <- ask
   ms <- chooseModules $ modular g
@@ -127,12 +127,11 @@ genProgram = do
   return $ prog n ms
 
 chooseModules :: (ProgramSym repr) => Modularity -> 
-  Reader DrasilState [FS (repr (RenderFile repr))]
+  Reader DrasilState [SFile repr]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules (Modular _) = genModules
 
-genUnmodular :: (ProgramSym repr) => 
-  Reader DrasilState (FS (repr (RenderFile repr)))
+genUnmodular :: (ProgramSym repr) => Reader DrasilState (SFile repr)
 genUnmodular = do
   g <- ask
   let n = pName $ codeSpec g
@@ -150,8 +149,7 @@ genUnmodular = do
     ([genInputClass Auxiliary, genConstClass Auxiliary] 
     ++ map (fmap Just) (concatMap genModClasses $ modules g))
           
-genModules :: (ProgramSym repr) => 
-  Reader DrasilState [FS (repr (RenderFile repr))]
+genModules :: (ProgramSym repr) => Reader DrasilState [SFile repr]
 genModules = do
   g <- ask
   let mainIfExe Library = return []

@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
 ) where
 
 import Language.Drasil.CodeSpec (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
   AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 

@@ -33,7 +33,7 @@ library
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer
-    , Language.Drasil.Code.Imperative.GOOL.Symantics
+    , Language.Drasil.Code.Imperative.GOOL.ClassInterface
     , Language.Drasil.Code.Imperative.Comments
     , Language.Drasil.Code.Imperative.Descriptions
     , Language.Drasil.Code.Imperative.FunctionCalls

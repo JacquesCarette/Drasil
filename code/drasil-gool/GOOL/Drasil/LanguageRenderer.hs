@@ -3,44 +3,46 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
-  classDec, dot, doubleSlash, elseIfLabel, forLabel, inLabel, new, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, addExt,
+  classDec, dot, commentStart, elseIfLabel, forLabel, inLabel, new,
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
+  addExt,
   
   -- * Default Functions available for use in renderers
-  packageDocD, fileDoc', moduleDocD, classDocD, 
-  multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, 
-  printFileDocD, destructorError, paramDocD, methodDocD, stateVarDocD, 
-  constVarDocD, stateVarListDocD, switchDocD, assignDocD, multiAssignDoc, 
-  plusEqualsDocD, plusPlusDocD, listDecDocD, statementDocD, getTermDoc, 
-  returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd, mkStateVal, mkVal, 
-  mkStateVar, mkVar, mkStaticVar, varDocD, extVarDocD, selfDocD, argDocD,
-  classVarCheckStatic, classVarDocD, objVarDocD, funcAppDocD, 
-  newObjDocD, newObjDocD', constDecDefDocD, funcDocD, castDocD, 
-  listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, includeD, 
-  breakDocD, continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, 
-  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDox, classDox, moduleDox, commentedModD, docFuncRepr, valueList, 
-  variableList, parameterList, prependToBody, appendToBody, surroundBody, 
-  getterName, setterName, intValue
+  packageDocD, fileDoc', moduleDocD, classDocD, multiStateDocD, blockDocD, 
+  bodyDocD, outDoc, printDoc, printFileDocD, destructorError, paramDocD, 
+  methodDocD, stateVarDocD, constVarDocD, stateVarListDocD, switchDocD, 
+  assignDocD, multiAssignDoc, plusEqualsDocD, plusPlusDocD, listDecDocD, 
+  statementDocD, getTermDoc, returnDocD, commentDocD, freeDocD, mkSt, 
+  mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, varDocD, 
+  extVarDocD, selfDocD, argDocD, classVarCheckStatic, classVarDocD, objVarDocD, 
+  funcAppDocD, newObjDocD, newObjDocD', constDecDefDocD, funcDocD, castDocD, 
+  listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, 
+  classDox, moduleDox, commentedModD, docFuncRepr, valueList, variableList, 
+  parameterList, prependToBody, appendToBody, surroundBody, getterName, 
+  setterName, intValue
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
-import GOOL.Drasil.Symantics (Label, Library, RenderSym, BodySym(..), 
-  InternalBody(..), PermanenceSym(..), InternalPerm(..), 
-  TypeSym(Type, getType, getTypeDoc), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), InternalValue(..),
-  FunctionSym(..), SelectorFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
-  BlockCommentSym(..))
-import qualified GOOL.Drasil.Symantics as S (TypeSym(int))
+import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
+  MSStatement, SMethod, BodySym(..), bodyStatements, oneLiner, 
+  PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), FunctionSym(..), 
+  SelectorFunction(..), StatementSym(..), ControlStatement(..), ifNoElse, 
+  ScopeSym(..), ParameterSym(..))
+import qualified GOOL.Drasil.ClassInterface as S (TypeSym(int))
+import GOOL.Drasil.RendererClasses (RenderSym, InternalBody(..), 
+  InternalPerm(..), InternalType(..), InternalVariable(..), InternalValue(..), 
+  InternalStatement(..), InternalScope(..), InternalParam(..), 
+  InternalMethod(..), BlockCommentSym(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
-  updateModDoc, TypeData(..), Binding(..), VarData(..))
+  updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
   onStateValue, getNestDegree)
-import GOOL.Drasil.State (MS, VS, lensMStoVS, getParameters)
+import GOOL.Drasil.State (lensMStoVS, getParameters)
 
 import Control.Lens.Zoom (zoom)
 import Data.List (last)
@@ -52,11 +54,11 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec, dot, doubleSlash, elseIfLabel, forLabel, inLabel, new, blockCmtStart, 
-  blockCmtEnd, docCmtStart :: Doc
+classDec, dot, commentStart, elseIfLabel, forLabel, inLabel, new, blockCmtStart,
+  blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement :: Doc
 classDec = text "class"
 dot = text "."
-doubleSlash = text "//"
+commentStart = text "//"
 elseIfLabel = text "else if"
 forLabel = text "for"
 inLabel = text "in"
@@ -64,9 +66,9 @@ new = text "new"
 blockCmtStart = text "/*"
 blockCmtEnd = text "*/"
 docCmtStart = text "/**"
-
-observerListName :: Label
-observerListName = "observerList"
+bodyStart = lbrace
+bodyEnd = rbrace
+endStatement = semi
 
 addExt :: String -> String -> String
 addExt ext nm = nm ++ "." ++ ext
@@ -76,7 +78,7 @@ addExt ext nm = nm ++ "." ++ ext
 ----------------------------------
 
 packageDocD :: Label -> Doc -> FileData -> FileData
-packageDocD n end f = fileD (n ++ "/" ++ filePath f) (updateModDoc 
+packageDocD n end f = fileD (n ++ "/" ++ filePath f) (updateMod 
   (\d -> emptyIfEmpty d (vibcat [text "package" <+> text n <> end, d])) 
   (fileMod f))
 
@@ -127,36 +129,30 @@ classDocD n p s vs fs = vcat [
 
 -- Groupings --
 
-multiStateDocD :: Doc -> [(Doc, Terminator)] -> (Doc, Terminator)
-multiStateDocD end sts = (vcat (applyEnd statements), needsEnd statements)
+multiStateDocD :: [(Doc, Terminator)] -> (Doc, Terminator)
+multiStateDocD sts = (vcat (applyEnd statements), needsEnd statements)
   where applyEnd [] = []
         applyEnd [(s, _)] = [s]
         applyEnd ((s, t):ss) = (s <> getTermDoc t) : applyEnd ss
         needsEnd [] = Empty
         needsEnd ss = snd (last ss)
         statements = filter notNullStatement sts
-        notNullStatement s = not (isEmpty (fst s)) && 
-          (render (fst s) /= render end)
+        notNullStatement s = not (isEmpty (fst s))
 
-blockDocD :: Doc -> [Doc] -> Doc
-blockDocD end sts = vcat statements
-  where statements = filter notNullStatement sts
-        notNullStatement s = not (isEmpty s) && (render s /= render end)
+blockDocD :: [Doc] -> Doc
+blockDocD sts = vcat $ filter (not . isEmpty) sts
 
 bodyDocD :: [Doc] -> Doc
-bodyDocD bs = vibcat blocks
-  where blocks = filter notNullBlock bs
-        notNullBlock b = not $ isEmpty b
+bodyDocD bs = vibcat $ filter (not . isEmpty) bs
 
 -- IO --
 
 printDoc :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> Doc
 printDoc printFn v = valueDoc printFn <> parens (valueDoc v)
 
-printListDoc :: (RenderSym repr) => Integer -> VS (repr (Value repr)) -> 
-  (VS (repr (Value repr)) -> MS (repr (Statement repr))) -> 
-  (String -> MS (repr (Statement repr))) -> 
-  (String -> MS (repr (Statement repr))) -> MS (repr (Statement repr))
+printListDoc :: (RenderSym repr) => Integer -> SValue repr -> (SValue repr -> 
+  MSStatement repr) -> (String -> MSStatement repr) -> 
+  (String -> MSStatement repr) -> MSStatement repr
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
   for (varDecDef i (litInt 0)) (valueOf i ?< (listSize v #- litInt 1))
     (i &++) (bodyStatements [prFn (listAccess v (valueOf i)), prStrFn ", "]), 
@@ -166,12 +162,11 @@ printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[",
   where l_i = "list_i" ++ show n
         i = var l_i S.int
 
-printObjDoc :: ClassName -> (String -> MS (repr (Statement repr)))
-  -> MS (repr (Statement repr))
+printObjDoc :: ClassName -> (String -> MSStatement repr) -> MSStatement repr
 printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
-outDoc :: (RenderSym repr) => Bool -> Maybe (VS (repr (Value repr))) -> 
-  VS (repr (Value repr)) -> VS (repr (Value repr)) -> MS (repr (Statement repr))
+outDoc :: (RenderSym repr) => Bool -> Maybe (SValue repr) -> SValue repr -> 
+  SValue repr -> MSStatement repr
 outDoc newLn f printFn v = zoom lensMStoVS v >>= outDoc' . getType . valueType
   where outDoc' (List t) = printListDoc (getNestDegree 1 t) v prFn prStrFn 
           prLnFn
@@ -209,8 +204,8 @@ destructorError l = "Destructors not allowed in " ++ l
 stateVarDocD :: Doc -> Doc -> Doc -> Doc
 stateVarDocD s p dec = s <+> p <+> dec
 
-constVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
-constVarDocD s p v end = s <+> p <+> text "const" <+> typeDoc (varType v) <+>
+constVarDocD :: Doc -> Doc -> Doc -> VarData -> Doc
+constVarDocD s end p v = s <+> p <+> text "const" <+> typeDoc (varType v) <+>
   varDoc v <> end
 
 stateVarListDocD :: [Doc] -> Doc
@@ -287,23 +282,21 @@ mkSt = flip stateFromData Semi
 mkStNoEnd :: (RenderSym repr) => Doc -> repr (Statement repr)
 mkStNoEnd = flip stateFromData Empty
 
-mkStateVal :: (RenderSym repr) => VS (repr (Type repr)) -> Doc -> 
-  VS (repr (Value repr))
+mkStateVal :: (RenderSym repr) => VSType repr -> Doc -> SValue repr
 mkStateVal t d = onStateValue (\tp -> valFromData Nothing tp d) t
 
 mkVal :: (RenderSym repr) => repr (Type repr) -> Doc -> repr (Value repr)
 mkVal = valFromData Nothing
 
-mkStateVar :: (RenderSym repr) => String -> VS (repr (Type repr)) -> Doc -> 
-  VS (repr (Variable repr))
+mkStateVar :: (RenderSym repr) => String -> VSType repr -> Doc -> SVariable repr
 mkStateVar n t d = onStateValue (\tp -> varFromData Dynamic n tp d) t
 
 mkVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
   repr (Variable repr)
 mkVar = varFromData Dynamic
 
-mkStaticVar :: (RenderSym repr) => String -> VS (repr (Type repr)) -> Doc -> 
-  VS (repr (Variable repr))
+mkStaticVar :: (RenderSym repr) => String -> VSType repr -> Doc -> 
+  SVariable repr
 mkStaticVar n t d = onStateValue (\tp -> varFromData Static n tp d) t
 
 -- Value Printers --
@@ -364,11 +357,6 @@ objAccessDocD v f = v <> f
 
 castObjDocD :: Doc -> Doc -> Doc
 castObjDocD t v = t <> parens v
-
--- Keywords --
-
-includeD :: Label -> Label -> Doc
-includeD incl n = text incl <+> text n
 
 -- Permanence --
 
@@ -447,10 +435,10 @@ moduleDox desc as date m = (doxFile ++ m) :
   [doxBrief ++ desc | not (null desc)]
 
 commentedModD :: FileData -> Doc -> FileData
-commentedModD m cmt = updateFileMod (updateModDoc (commentedItem cmt) (fileMod m)) m
+commentedModD m cmt = updateFileMod (updateMod (commentedItem cmt) (fileMod m)) m
 
 docFuncRepr :: (RenderSym repr) => String -> [String] -> [String] -> 
-  MS (repr (Method repr)) -> MS (repr (Method repr))
+  SMethod repr -> SMethod repr
 docFuncRepr desc pComms rComms = commentedFunc (docComment $ onStateValue 
   (\ps -> functionDox desc (zip ps pComms) rComms) getParameters)
 
@@ -482,7 +470,7 @@ getterName s = "get" ++ capitalize s
 setterName :: String -> String
 setterName s = "set" ++ capitalize s
 
-intValue :: (RenderSym repr) => VS (repr (Value repr)) -> VS (repr (Value repr))
+intValue :: (RenderSym repr) => SValue repr -> SValue repr
 intValue i = i >>= intValue' . getType . valueType
   where intValue' Integer = i
         -- intValue' (Enum _) = cast S.int i

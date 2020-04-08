@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module Language.Drasil.Code.Imperative.GOOL.Symantics (
+module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   -- Typeclasses
   PackageSym(..), AuxiliarySym(..)
 ) where

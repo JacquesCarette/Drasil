@@ -1,8 +1,8 @@
 module GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat, 
   vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
-  onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
-  on1StateValue1List, getInnerType, getNestDegree
+  onCodeList, onStateList, on2StateLists, on1StateValue1List, getInnerType, 
+  getNestDegree
 ) where
 
 import Utils.Drasil (blank)
@@ -79,9 +79,6 @@ onStateList f as = f <$> sequence as
 
 on2StateLists :: ([a] -> [b] -> c) -> [State s a] -> [State s b] -> State s c
 on2StateLists f as bs = liftM2 f (sequence as) (sequence bs)
-
-on1CodeValue1List :: Monad m => (a -> [b] -> c) -> m a -> [m b] -> m c
-on1CodeValue1List f a as = liftA2 f a (sequence as)
 
 on1StateValue1List :: (a -> [b] -> c) -> State s a -> [State s b] -> State s c
 on1StateValue1List f a as = liftM2 f a (sequence as)

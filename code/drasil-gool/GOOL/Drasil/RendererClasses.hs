@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 
 module GOOL.Drasil.RendererClasses (
-  RenderSym, InternalFile(..), KeywordSym(..), ImportSym(..), InternalPerm(..),
+  RenderSym, InternalFile(..), ImportSym(..), InternalPerm(..), 
   InternalBody(..), InternalBlock(..), InternalType(..), UnaryOpSym(..), 
   BinaryOpSym(..), InternalOp(..), InternalVariable(..), InternalValue(..),
   InternalFunction(..), InternalStatement(..), InternalScope(..), 
@@ -27,7 +27,7 @@ class (FileSym repr, InternalBlock repr, InternalBody repr, InternalClass repr,
   InternalFile repr, InternalFunction repr, InternalMethod repr, 
   InternalMod repr, InternalOp repr, InternalParam repr, InternalPerm repr, 
   InternalScope repr, InternalStatement repr, InternalStateVar repr, 
-  InternalType repr, InternalValue repr, InternalVariable repr, KeywordSym repr,
+  InternalType repr, InternalValue repr, InternalVariable repr,
   ImportSym repr, UnaryOpSym repr, BinaryOpSym repr) => RenderSym repr
 
 class (BlockCommentSym repr) => InternalFile repr where
@@ -37,12 +37,6 @@ class (BlockCommentSym repr) => InternalFile repr where
   commentedMod :: FS (repr (BlockComment repr)) -> SFile repr -> SFile repr
 
   fileFromData :: FS FilePath -> FSModule repr -> SFile repr
-
-class KeywordSym repr where
-  type Keyword repr
-  endStatement     :: repr (Keyword repr)
-
-  keyDoc :: repr (Keyword repr) -> Doc
 
 class ImportSym repr where
   type Import repr

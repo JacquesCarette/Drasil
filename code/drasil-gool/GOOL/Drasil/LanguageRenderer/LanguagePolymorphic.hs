@@ -64,7 +64,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
     constDecDef, valState, returnState),
   ControlStatement(ifCond, for, forRange, switch), ParameterSym(param), 
   MethodSym(method, mainFunction), ClassSym(buildClass))
-import GOOL.Drasil.RendererClasses (InternalFile(commentedMod), KeywordSym(..), 
+import GOOL.Drasil.RendererClasses (InternalFile(commentedMod),
   RenderSym, InternalBody(bodyDoc, docBody), InternalBlock(docBlock, blockDoc), 
   ImportSym(..), InternalPerm(..), InternalType(..), UnaryOpSym(UnaryOp), 
   BinaryOpSym(BinaryOp), InternalOp(..), 
@@ -122,10 +122,9 @@ multiBody bs = docBody $ onStateList vibcat $ map (onStateValue bodyDoc) bs
 
 -- Blocks --
 
-block :: (RenderSym repr) => repr (Keyword repr) -> [MSStatement repr] -> 
-  MSBlock repr
-block end sts = docBlock $ onStateList (blockDocD (keyDoc end) . map 
-  statementDoc) (map S.state sts)
+block :: (RenderSym repr) => [MSStatement repr] -> MSBlock repr
+block sts = docBlock $ onStateList (blockDocD . map statementDoc) 
+  (map S.state sts)
 
 multiBlock :: (RenderSym repr) => [MSBlock repr] -> MSBlock repr
 multiBlock bs = docBlock $ onStateList vibcat $ map (onStateValue blockDoc) bs

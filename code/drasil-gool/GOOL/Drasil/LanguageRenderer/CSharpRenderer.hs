@@ -20,7 +20,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StatementSym(..), (&=), ControlStatement(..), ScopeSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   ODEInfo(..), ODEOptions(..), ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
+import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalFunction(..), 
@@ -32,9 +32,9 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
   classVarDocD, objVarDocD, funcDocD, castDocD, listSetFuncDocD, castObjDocD, 
   staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, dot, 
-  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, commentStart, 
-  elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  commentedModD, variableList, appendToBody, surroundBody)
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
+  commentStart, elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, commentedModD, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
   listType, arrayType, listInnerType, obj, funcType, void, runStrategy, 
@@ -71,8 +71,8 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..),
   updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
-  onStateList, on1CodeValue1List)
-import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles, 
+  onStateList)
+import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
   addLangImport, addLangImportVS, addLibImport, setFileType, getClassName, 
   setCurrMain, setODEDepVars, getODEDepVars)
 
@@ -83,7 +83,7 @@ import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (elemIndex, intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  semi, vcat, lbrace, rbrace, colon, space)
+  vcat, lbrace, rbrace, colon, space)
 
 csExt :: String
 csExt = "cs"
@@ -124,15 +124,9 @@ instance InternalFile CSharpCode where
 
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
-instance KeywordSym CSharpCode where
-  type Keyword CSharpCode = Doc
-  endStatement = toCode semi
-
-  keyDoc = unCSC
-
 instance ImportSym CSharpCode where
   type Import CSharpCode = Doc
-  langImport n = toCode $ csImport n endStatement
+  langImport n = toCode $ csImport n
   modImport = langImport
 
   importDoc = unCSC
@@ -159,7 +153,7 @@ instance InternalBody CSharpCode where
 
 instance BlockSym CSharpCode where
   type Block CSharpCode = Doc
-  block = G.block endStatement
+  block = G.block
 
 instance InternalBlock CSharpCode where
   blockDoc = unCSC
@@ -528,7 +522,7 @@ instance StatementSym CSharpCode where
   selfInOutCall = csInOutCall selfFuncApp
   extInOutCall m = csInOutCall (extFuncApp m)
 
-  multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement CSharpCode where
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
@@ -667,8 +661,8 @@ csODEMethod RK45 = "RK547M"
 csODEMethod BDF = "GearBDF"
 csODEMethod _ = error "Chosen ODE method unavailable in C#"
 
-csImport :: Label -> CSharpCode (Keyword CSharpCode) -> Doc
-csImport n end = text ("using " ++ n) <> keyDoc end
+csImport :: Label -> Doc
+csImport n = text ("using " ++ n) <> endStatement
 
 csInfileType :: (RenderSym repr) => VSType repr
 csInfileType = modifyReturn (addLangImportVS "System.IO") $ 

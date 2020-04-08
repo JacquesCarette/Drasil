@@ -20,7 +20,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StatementSym(..), (&=), observerListName, ControlStatement(..), 
   switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
+import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalFunction(..), 
@@ -61,7 +61,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..),
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  onCodeList, onStateList, on2StateLists, on1CodeValue1List, on1StateValue1List)
+  onCodeList, onStateList, on2StateLists, on1StateValue1List)
 import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
   addLangImportVS, getLangImports, addLibImport, addLibImportVS, getLibImports, 
   addModuleImport, addModuleImportVS, getModuleImports, setFileType, 
@@ -117,12 +117,6 @@ instance InternalFile PythonCode where
 
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
-instance KeywordSym PythonCode where
-  type Keyword PythonCode = Doc
-  endStatement = toCode empty
-
-  keyDoc = unPC
-
 instance ImportSym PythonCode where
   type Import PythonCode = Doc
   langImport n = toCode $ text $ "import " ++ n
@@ -152,7 +146,7 @@ instance InternalBody PythonCode where
 
 instance BlockSym PythonCode where
   type Block PythonCode = Doc
-  block = G.block endStatement
+  block = G.block
 
 instance InternalBlock PythonCode where
   blockDoc = unPC
@@ -531,7 +525,7 @@ instance StatementSym PythonCode where
   selfInOutCall = pyInOutCall selfFuncApp
   extInOutCall m = pyInOutCall (extFuncApp m)
 
-  multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement PythonCode where
   ifCond = G.ifCond pyBodyStart (text "elif") pyBodyEnd

@@ -21,7 +21,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), 
   ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
+import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalFunction(..), 
@@ -33,9 +33,9 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, castDocD, 
   castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
   dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, 
-  bodyStart, bodyEnd, commentStart, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, commentedModD, docFuncRepr, variableList, parameterList, 
-  appendToBody, surroundBody, intValue)
+  bodyStart, bodyEnd, endStatement, commentStart, blockCmtDoc, docCmtDoc, 
+  commentedItem, addCommentsDocD, commentedModD, docFuncRepr, variableList, 
+  parameterList, appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, listType, 
   arrayType, listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, 
@@ -72,7 +72,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..),
 import GOOL.Drasil.CodeAnalysis (Exception(..))
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
-  onCodeList, onStateList, on1CodeValue1List, on1StateValue1List)
+  onCodeList, onStateList, on1StateValue1List)
 import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoVS, lensMStoFS,
   lensMStoVS, lensVStoFS, lensVStoMS, initialFS, modifyReturn, goolState,
   modifyReturnFunc, revFiles, addODEFilePaths, addProgNameToPaths, addODEFiles, 
@@ -91,7 +91,7 @@ import Control.Monad.State (modify, runState)
 import qualified Data.Map as Map (lookup)
 import Data.List (elemIndex, nub, intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
-  equals, semi, vcat, lbrace, rbrace, colon)
+  equals, vcat, lbrace, rbrace, colon)
 
 jExt :: String
 jExt = "java"
@@ -112,7 +112,7 @@ instance Monad JavaCode where
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
   prog n fs = modifyReturnFunc (\_ -> revFiles . addProgNameToPaths n)
-    (on1CodeValue1List (\end -> progD n . map (packageDocD n end)) endStatement)
+    (onCodeList (progD n . map (packageDocD n endStatement)))
     (on2StateValues (++) (mapM (zoom lensGStoFS) fs) (onStateValue (map toCode) 
     getODEFiles))
 
@@ -132,15 +132,9 @@ instance InternalFile JavaCode where
   
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
-instance KeywordSym JavaCode where
-  type Keyword JavaCode = Doc
-  endStatement = toCode semi
-
-  keyDoc = unJC
-
 instance ImportSym JavaCode where
   type Import JavaCode = Doc
-  langImport n = toCode $ jImport n endStatement
+  langImport n = toCode $ jImport n
   modImport = langImport
 
   importDoc = unJC
@@ -167,7 +161,7 @@ instance InternalBody JavaCode where
 
 instance BlockSym JavaCode where
   type Block JavaCode = Doc
-  block = G.block endStatement
+  block = G.block
 
 instance InternalBlock JavaCode where
   blockDoc = unJC
@@ -559,7 +553,7 @@ instance StatementSym JavaCode where
   selfInOutCall = jInOutCall selfFuncApp
   extInOutCall m = jInOutCall (extFuncApp m)
 
-  multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement JavaCode where
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
@@ -766,8 +760,8 @@ jODEFiles info = (map unJC fls, s ^. goolState)
 jName :: String
 jName = "Java"
 
-jImport :: Label -> JavaCode (Keyword JavaCode) -> Doc
-jImport n end = text ("import " ++ n) <> keyDoc end
+jImport :: Label -> Doc
+jImport n = text ("import " ++ n) <> endStatement
 
 jStringType :: (RenderSym repr) => VSType repr
 jStringType = toState $ typeFromData String "String" (text "String")

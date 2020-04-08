@@ -4,7 +4,7 @@
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, doubleSlash, elseIfLabel, forLabel, inLabel, new, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, addExt,
+  blockCmtStart, blockCmtEnd, docCmtStart, addExt,
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, 
@@ -27,15 +27,16 @@ module GOOL.Drasil.LanguageRenderer (
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
-import GOOL.Drasil.Symantics (Label, Library, RenderSym, BodySym(..), 
-  InternalBody(..), PermanenceSym(..), InternalPerm(..), 
-  TypeSym(Type, getType, getTypeDoc), VariableSym(..), InternalVariable(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), InternalValue(..),
-  FunctionSym(..), SelectorFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  ParameterSym(..), InternalParam(..), MethodSym(..), InternalMethod(..), 
-  BlockCommentSym(..))
-import qualified GOOL.Drasil.Symantics as S (TypeSym(int))
+import GOOL.Drasil.ClassInterface (Label, Library, BodySym(..), bodyStatements,
+  oneLiner, PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), FunctionSym(..), 
+  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ifNoElse, 
+  ScopeSym(..), ParameterSym(..), MethodSym(..))
+import qualified GOOL.Drasil.ClassInterface as S (TypeSym(int))
+import GOOL.Drasil.RendererClasses (RenderSym, InternalBody(..), 
+  InternalPerm(..), InternalType(..), InternalVariable(..), InternalValue(..), 
+  InternalStatement(..), InternalScope(..), InternalParam(..), 
+  InternalMethod(..), BlockCommentSym(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
@@ -64,9 +65,6 @@ new = text "new"
 blockCmtStart = text "/*"
 blockCmtEnd = text "*/"
 docCmtStart = text "/**"
-
-observerListName :: Label
-observerListName = "observerList"
 
 addExt :: String -> String -> String
 addExt ext nm = nm ++ "." ++ ext

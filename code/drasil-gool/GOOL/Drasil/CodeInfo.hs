@@ -2,14 +2,13 @@
 
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
-import GOOL.Drasil.Symantics (ProgramSym(..), FileSym(..), PermanenceSym(..), 
-  BodySym(..), BlockSym(..), ControlBlockSym(..), InternalControlBlock(..), 
-  TypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), 
-  InternalValueExp(..), FunctionSym(..), SelectorFunction(..), StatementSym(..),
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..))
+import GOOL.Drasil.ClassInterface (ProgramSym(..), FileSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  InternalControlBlock(..), TypeSym(..), VariableSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  Selector(..), InternalValueExp(..), FunctionSym(..), SelectorFunction(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.CodeAnalysis (Exception(..), exception, stdExc)
@@ -24,7 +23,6 @@ import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (fromMaybe)
-import Text.PrettyPrint.HughesPJ (empty)
 
 newtype CodeInfo a = CI {unCI :: a} deriving Eq
 
@@ -53,8 +51,6 @@ instance FileSym CodeInfo where
   
   docMod _ _ _ = execute1
 
-  commentedMod _ = execute1
-
 instance PermanenceSym CodeInfo where
   type Permanence CodeInfo = ()
   static = toCode ()
@@ -63,8 +59,6 @@ instance PermanenceSym CodeInfo where
 instance BodySym CodeInfo where
   type Body CodeInfo = ()
   body = executeList
-  bodyStatements = executeList
-  oneLiner = execute1
 
   addComments _ _ = noInfo
 
@@ -93,7 +87,6 @@ instance TypeSym CodeInfo where
 
   getType _ = Void
   getTypeString = unCI
-  getTypeDoc _ = empty
 
 instance ControlBlockSym CodeInfo where
   runStrategy _ ss vl _ = do
@@ -122,11 +115,8 @@ instance VariableSym CodeInfo where
   objVar _ _ = noInfo
   objVarSelf _ = noInfo
   listVar _ _ = noInfo
-  listOf _ _ = noInfo
   arrayElem _ _ = noInfo
   iterVar _ _ = noInfo
-
-  ($->) _ _ = noInfo
   
   variableName _ = ""
   variableType _ = toCode ""
@@ -154,7 +144,6 @@ instance ValueSym CodeInfo where
   argsList = noInfo
 
   valueType _ = toCode ""
-  valueDoc _ = empty
 
 instance NumericExpression CodeInfo where
   (#~) = execute1
@@ -196,53 +185,30 @@ instance BooleanExpression CodeInfo where
     
 instance ValueExpression CodeInfo where
   inlineIf = execute3
-  funcApp n _ vs = do
-    sequence_ vs
-    addCurrModCall n
-  funcAppNamedArgs n _ ns = do
-    executePairList ns
-    addCurrModCall n
   funcAppMixedArgs n _ = currModCall n
-  selfFuncApp = funcApp
   selfFuncAppMixedArgs = funcAppMixedArgs
-  extFuncApp l n _ vs = do
-    sequence_ vs
-    addExternalCall l n
   extFuncAppMixedArgs l n _ vs ns = do
     sequence_ vs
     executePairList ns
     addExternalCall l n  
-  libFuncApp = extFuncApp
   libFuncAppMixedArgs = extFuncAppMixedArgs
-  newObj ot vs = do
-    sequence_ vs
-    addCurrModConstructorCall ot
   newObjMixedArgs ot vs ns = do
     sequence_ vs
     executePairList ns
     addCurrModConstructorCall ot
-  extNewObj l ot vs = do
-    sequence_ vs
-    addExternalConstructorCall l ot
   extNewObjMixedArgs l ot vs ns = do
     sequence_ vs
     executePairList ns
     addExternalConstructorCall l ot
-  libNewObj = extNewObj
   libNewObjMixedArgs = extNewObjMixedArgs
 
   lambda _ = execute1
 
-  exists = execute1
   notNull = execute1
 
 instance Selector CodeInfo where
   objAccess = execute2
-  ($.) = execute2
-
-  selfAccess = execute1
-
-  listIndexExists = execute2
+  
   argExists _ = noInfo
   
   indexOf = execute2
@@ -272,14 +238,10 @@ instance FunctionSym CodeInfo where
 instance SelectorFunction CodeInfo where
   listAccess = execute2
   listSet = execute3
-  at = execute2
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()
   assign _ = zoom lensMStoVS . execute1
-  assignToListIndex _ v = zoom lensMStoVS . execute2 v
-  multiAssign _ = zoom lensMStoVS . executeList
-  (&=) _ = zoom lensMStoVS . execute1
   (&-=) _ = zoom lensMStoVS . execute1
   (&+=) _ = zoom lensMStoVS . execute1
   (&++) _ = noInfo
@@ -330,7 +292,6 @@ instance StatementSym CodeInfo where
   continue = noInfo
 
   returnState = zoom lensMStoVS . execute1
-  multiReturn = zoom lensMStoVS . executeList
 
   valState = zoom lensMStoVS . execute1
 
@@ -339,12 +300,6 @@ instance StatementSym CodeInfo where
   free _ = noInfo
 
   throw _ = modifyReturn (addException genericExc) (toCode ())
-
-  initState _ _ = noInfo
-  changeState _ _ = noInfo
-
-  initObserverList _ = zoom lensMStoVS . executeList
-  addObserver = zoom lensMStoVS . execute1
 
   inOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
@@ -360,14 +315,7 @@ instance StatementSym CodeInfo where
 
 instance ControlStatementSym CodeInfo where
   ifCond = evalConds
-  ifNoElse cs = do
-    mapM_ (zoom lensMStoVS . fst) cs
-    mapM_ snd cs
-    noInfo
   switch v cs b = do
-    _ <- zoom lensMStoVS v
-    evalConds cs b
-  switchAsIf v cs b = do
     _ <- zoom lensMStoVS v
     evalConds cs b
 
@@ -394,11 +342,6 @@ instance ScopeSym CodeInfo where
   private = toCode Priv
   public = toCode Pub
 
-instance MethodTypeSym CodeInfo where
-  type MethodType CodeInfo = ()
-  mType _ = noInfo
-  construct _ = noInfo
-
 instance ParameterSym CodeInfo where
   type Parameter CodeInfo = ()
   param _ = noInfo
@@ -409,15 +352,12 @@ instance MethodSym CodeInfo where
   method n _ _ _ _ = updateMEMandCM n
   getMethod _ = noInfo
   setMethod _ = noInfo
-  privMethod n _ _ = updateMEMandCM n
-  pubMethod n _ _ = updateMEMandCM n
   constructor _ il b = do
     mapM_ (zoom lensMStoVS . snd) il
     _ <- b
     mn <- zoom lensMStoFS getModuleName
     modify (updateCallMap mn . updateMethodExcMap mn)
     noInfo
-  destructor _ = noInfo
 
   docMain = updateMEMandCM "main"
 
@@ -441,9 +381,6 @@ instance StateVarSym CodeInfo where
   stateVar _ _ _ = noInfo
   stateVarDef _ _ _ _ _ = noInfo
   constVar _ _ _ _ = noInfo
-  privMVar _ = noInfo
-  pubMVar _ = noInfo
-  pubGVar _ = noInfo
 
 instance ClassSym CodeInfo where
   type Class CodeInfo = ()
@@ -463,10 +400,6 @@ instance ClassSym CodeInfo where
     _ <- c
     noInfo
 
-  commentedClass _ c = do
-    _ <- c
-    noInfo
-
 instance ModuleSym CodeInfo where
   type Module CodeInfo = ()
   buildModule n _ fs cs = do
@@ -474,14 +407,6 @@ instance ModuleSym CodeInfo where
     mapM_ (zoom lensFStoCS) cs 
     mapM_ (zoom lensFStoMS) fs
     modifyReturn (updateClassMap n) (toCode ())
-
-instance BlockCommentSym CodeInfo where
-  type BlockComment CodeInfo = ()
-  blockComment _ = toCode ()
-  docComment _ = noInfo
-
-  blockCommentDoc _ = empty
-
 
 -- Helpers
 

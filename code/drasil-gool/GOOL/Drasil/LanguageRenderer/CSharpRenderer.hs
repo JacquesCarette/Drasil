@@ -10,20 +10,22 @@ module GOOL.Drasil.LanguageRenderer.CSharpRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..),
-  InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
-  InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
-  InternalBlock(..), ControlBlockSym(..), InternalControlBlock(..), TypeSym(..),
-  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  InternalMethod(..), StateVarSym(..), InternalStateVar(..), ClassSym(..), 
-  InternalClass(..), ModuleSym(..), InternalMod(..), BlockCommentSym(..), 
+import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
+  PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
+  ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp,
+  selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), 
+  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
+  StatementSym(..), (&=), ControlStatementSym(..), ScopeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   ODEInfo(..), ODEOptions(..), ODEMethod(..))
+import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
+  ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  InternalVariable(..), InternalValue(..), InternalFunction(..), 
+  InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
+  InternalParam(..), InternalMethod(..), InternalStateVar(..), 
+  InternalClass(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD, 
   outDoc, printFileDocD, destructorError, paramDocD, methodDocD, listDecDocD, 
   mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
@@ -33,34 +35,31 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD, 
   variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
-  string, listType, arrayType, listInnerType, obj, funcType, void, 
-  runStrategy, listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, 
-  greaterOp, greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, 
-  divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, 
-  classVar, objVarSelf, listVar, listOf, arrayElem, iterVar, pi, litTrue, 
-  litFalse, litChar, litDouble, litFloat, litInt, litString, litList, valueOf, 
-  arg, argsList, inlineIf, objAccess, objMethodCall, 
-  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, call, funcApp, 
-  funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, extFuncApp, 
-  extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
-  newObjMixedArgs, libNewObj, libNewObjMixedArgs, lambda, notNull, func, get, 
-  set, listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
-  getFunc, setFunc, listAddFunc, listAppendFunc, iterBeginError, iterEndError, 
-  listAccessFunc, listSetFunc, printSt, state, loopState, emptyState, assign, 
-  assignToListIndex, multiAssignError, decrement, increment, decrement1, 
-  increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, 
-  objDecNew, objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, 
-  constDecDef, discardInput, openFileR, openFileW, openFileA, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
-  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
-  pubMethod, constructor, docMain, function, mainFunction, docFunc, 
-  docInOutFunc, intFunc, stateVar, stateVarDef, constVar, privMVar, pubMVar, 
-  pubGVar, buildClass, implementingClass, docClass, commentedClass, 
-  intClass, buildModule', modFromData, fileDoc, docMod, fileFromData)
+  multiBody, block, multiBlock, bool, int, float, double, char, string, 
+  listType, arrayType, listInnerType, obj, funcType, void, runStrategy, 
+  listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, greaterOp, 
+  greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, divideOp, 
+  moduloOp, andOp, orOp, var, staticVar, extVar, self, classVar, objVarSelf, 
+  listVar, arrayElem, iterVar, pi, litTrue, litFalse, litChar, litDouble, 
+  litFloat, litInt, litString, litList, valueOf, arg, argsList, inlineIf, 
+  objAccess, objMethodCall, objMethodCallNoParams, indexOf, call, 
+  funcAppMixedArgs, selfFuncAppMixedArgs, extFuncAppMixedArgs, 
+  libFuncAppMixedArgs, newObjMixedArgs, libNewObjMixedArgs, lambda, notNull, 
+  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
+  listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
+  iterBeginError, iterEndError, listAccessFunc, listSetFunc, printSt, state, 
+  loopState, emptyState, assign, multiAssignError, decrement, increment, 
+  decrement1, increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, 
+  arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
+  extObjDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, 
+  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
+  returnState, multiReturnError, valState, comment, freeError, throw, ifCond, 
+  switch, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
+  docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
+  stateVarDef, constVar, buildClass, implementingClass, docClass, 
+  commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
   typeBinExpr)
@@ -116,11 +115,11 @@ instance FileSym CSharpCode where
 
   docMod = G.docMod csExt
 
-  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
-
 instance InternalFile CSharpCode where
   top _ = toCode empty
   bottom = toCode empty
+
+  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
 
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
@@ -171,8 +170,6 @@ instance InternalPerm CSharpCode where
 instance BodySym CSharpCode where
   type Body CSharpCode = Doc
   body = onStateList (onCodeList bodyDocD)
-  bodyStatements = block
-  oneLiner = G.oneLiner
 
   addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 
@@ -212,9 +209,9 @@ instance TypeSym CSharpCode where
 
   getType = cType . unCSC
   getTypeString = typeString . unCSC
-  getTypeDoc = typeDoc . unCSC
   
 instance InternalType CSharpCode where
+  getTypeDoc = typeDoc . unCSC
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym CSharpCode where
@@ -313,11 +310,8 @@ instance VariableSym CSharpCode where
   objVar = on2StateValues csObjVar
   objVarSelf = G.objVarSelf
   listVar  = G.listVar
-  listOf = G.listOf
   arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
-
-  ($->) = objVar
 
   variableName = varName . unCSC
   variableType = onCodeValue varType
@@ -352,7 +346,6 @@ instance ValueSym CSharpCode where
   argsList = G.argsList "args"
 
   valueType = onCodeValue valType
-  valueDoc = val . unCSC
 
 instance NumericExpression CSharpCode where
   (#~) = unExpr' negateOp
@@ -394,25 +387,17 @@ instance BooleanExpression CSharpCode where
   
 instance ValueExpression CSharpCode where
   inlineIf = G.inlineIf
-  funcApp = G.funcApp
-  funcAppNamedArgs n t = funcAppMixedArgs n t []
+
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncApp = G.selfFuncApp
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
-  extFuncApp = G.extFuncApp
   extFuncAppMixedArgs = G.extFuncAppMixedArgs
-  libFuncApp = G.libFuncApp
   libFuncAppMixedArgs = G.libFuncAppMixedArgs
-  newObj = G.newObj
   newObjMixedArgs = G.newObjMixedArgs "new "
-  extNewObj _ = newObj
   extNewObjMixedArgs _ = newObjMixedArgs
-  libNewObj = G.libNewObj
   libNewObjMixedArgs = G.libNewObjMixedArgs
 
   lambda = G.lambda csLambda
 
-  exists = notNull
   notNull = G.notNull
 
 instance InternalValue CSharpCode where
@@ -429,15 +414,12 @@ instance InternalValue CSharpCode where
   call = G.call (colon <> space)
   
   valuePrec = valPrec . unCSC
+  valueDoc = val . unCSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CSharpCode where
   objAccess = G.objAccess
-  ($.) = objAccess
 
-  selfAccess = G.selfAccess
-
-  listIndexExists = G.listIndexExists
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf = G.indexOf "IndexOf"
@@ -463,7 +445,6 @@ instance FunctionSym CSharpCode where
 instance SelectorFunction CSharpCode where
   listAccess = G.listAccess
   listSet = G.listSet
-  at = listAccess
 
 instance InternalFunction CSharpCode where
   getFunc = G.getFunc
@@ -486,6 +467,9 @@ instance InternalFunction CSharpCode where
 
 instance InternalStatement CSharpCode where
   printSt _ _ = G.printSt
+  
+  multiAssign _ _ = error $ G.multiAssignError csName
+  multiReturn _ = error $ G.multiReturnError csName 
 
   state = G.state
   loopState = G.loopState
@@ -499,9 +483,6 @@ instance InternalStatement CSharpCode where
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
   assign = G.assign Semi
-  assignToListIndex = G.assignToListIndex
-  multiAssign _ _ = error $ G.multiAssignError csName
-  (&=) = assign
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
@@ -555,7 +536,6 @@ instance StatementSym CSharpCode where
   continue = toState $ mkSt continueDocD
 
   returnState = G.returnState Semi
-  multiReturn _ = error $ G.multiReturnError csName 
 
   valState = G.valState Semi
 
@@ -565,12 +545,6 @@ instance StatementSym CSharpCode where
 
   throw msg = modify (addLangImport "System") >> G.throw csThrowDoc Semi msg
 
-  initState = G.initState
-  changeState = G.changeState
-
-  initObserverList = G.initObserverList
-  addObserver = G.addObserver
-
   inOutCall = csInOutCall funcApp
   selfInOutCall = csInOutCall selfFuncApp
   extInOutCall m = csInOutCall (extFuncApp m)
@@ -579,9 +553,7 @@ instance StatementSym CSharpCode where
 
 instance ControlStatementSym CSharpCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
-  ifNoElse = G.ifNoElse
   switch = G.switch
-  switchAsIf = G.switchAsIf
 
   ifExists = G.ifExists
 
@@ -628,10 +600,7 @@ instance MethodSym CSharpCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  privMethod = G.privMethod
-  pubMethod = G.pubMethod
   constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
-  destructor _ = error $ destructorError csName
 
   docMain = G.docMain
  
@@ -655,6 +624,8 @@ instance InternalMethod CSharpCode where
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue commentedItem) cmt)
+    
+  destructor _ = error $ destructorError csName
   
   methodDoc = mthdDoc . unCSC
   methodFromData _ = toCode . mthd
@@ -664,9 +635,6 @@ instance StateVarSym CSharpCode where
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar empty
-  privMVar = G.privMVar
-  pubMVar = G.pubMVar
-  pubGVar = G.pubGVar
 
 instance InternalStateVar CSharpCode where
   stateVarDoc = unCSC
@@ -681,10 +649,9 @@ instance ClassSym CSharpCode where
 
   docClass = G.docClass
 
-  commentedClass = G.commentedClass
-
 instance InternalClass CSharpCode where
   intClass = G.intClass classDocD
+  commentedClass = G.commentedClass
   classDoc = unCSC
   classFromData = onStateValue toCode
 

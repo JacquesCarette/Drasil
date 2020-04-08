@@ -24,7 +24,7 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns, 
   getInputFormatOuts, getCalcParams, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
-import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk,
   quantvar, physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
@@ -35,11 +35,11 @@ import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
   ConstraintBehaviour(..), InputModule(..), Logging(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
-import GOOL.Drasil (ProgramSym, FileSym(..), BodySym(..), BlockSym(..), 
-  PermanenceSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
-  BooleanExpression(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), convType, FS, CS, 
-  MS, VS)
+import GOOL.Drasil (ProgramSym, FileSym(..), BodySym(..), bodyStatements, 
+  oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), 
+  ValueSym(..), BooleanExpression(..), StatementSym(..), 
+  ControlStatementSym(..), ifNoElse, ScopeSym(..), MethodSym(..), 
+  StateVarSym(..), pubMVar, ClassSym(..), convType, FS, CS, MS, VS)
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)

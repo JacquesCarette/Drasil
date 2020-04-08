@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName, 
   makefileName, sampleInputName)
-import Language.Drasil.Code.Imperative.GOOL.Symantics (
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
 
 doxConfig :: (AuxiliarySym repr) => repr (AuxHelper repr) -> String -> 

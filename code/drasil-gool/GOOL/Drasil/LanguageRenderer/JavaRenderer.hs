@@ -10,20 +10,23 @@ module GOOL.Drasil.LanguageRenderer.JavaRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym, FileSym(..), 
-  InternalFile(..), KeywordSym(..), ImportSym(..), PermanenceSym(..), 
-  InternalPerm(..), BodySym(..), InternalBody(..), BlockSym(..), 
-  InternalBlock(..), ControlBlockSym(..), InternalControlBlock(..), TypeSym(..),
+import GOOL.Drasil.ClassInterface (Label, ProgramSym(..), FileSym(..), 
+  PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
+  TypeSym(..), ControlBlockSym(..), InternalControlBlock(..), VariableSym(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
+  ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), (&=),
+  ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), 
+  ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
+import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), KeywordSym(..),
+  ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  VariableSym(..), InternalVariable(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), InternalParam(..), MethodSym(..), 
-  initializer, InternalMethod(..), StateVarSym(..), InternalStateVar(..), 
-  ClassSym(..), InternalClass(..), ModuleSym(..), InternalMod(..), 
-  BlockCommentSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  InternalVariable(..), InternalValue(..), InternalFunction(..), 
+  InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
+  InternalParam(..), InternalMethod(..), InternalStateVar(..), 
+  InternalClass(..), InternalMod(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD, 
   bodyDocD, outDoc, printFileDocD, destructorError, paramDocD, listDecDocD, 
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, castDocD, 
@@ -33,35 +36,31 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   commentedModD, docFuncRepr, variableList, parameterList, appendToBody, 
   surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  oneLiner, multiBody, block, multiBlock, bool, int, float, double, char, 
-  listType, arrayType, listInnerType, obj, funcType, void, 
-  runStrategy, listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, 
-  greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, 
-  divideOp, moduloOp, andOp, orOp, var, staticVar, extVar, self, 
-  classVar, objVar, objVarSelf, listVar, listOf, arrayElem, iterVar, litTrue, 
-  litFalse, litChar, litDouble, litFloat, litInt, litString, litArray, pi, 
-  valueOf, arg, argsList, inlineIf, objAccess, objMethodCall, 
-  objMethodCallNoParams, selfAccess, listIndexExists, indexOf, call', funcApp, 
-  funcAppMixedArgs, selfFuncApp, selfFuncAppMixedArgs, extFuncApp, 
-  extFuncAppMixedArgs, libFuncApp, libFuncAppMixedArgs, newObj, 
-  newObjMixedArgs, extNewObj, libNewObj, libNewObjMixedArgs, lambda, notNull, 
-  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
-  listAccess, listSet, getFunc, setFunc, listSizeFunc, listAddFunc, 
-  listAppendFunc, iterBeginError, iterEndError, listAccessFunc', printSt, 
-  state, loopState, emptyState, assign, assignToListIndex, multiAssignError, 
-  decrement, increment, decrement1, increment1, varDec, varDecDef, listDec, 
-  listDecDef', arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, 
-  extObjDecNew, extObjDecNewNoParams, funcDecDef, discardInput, 
-  discardFileInput, openFileR, openFileW, openFileA, closeFile, 
+  multiBody, block, multiBlock, bool, int, float, double, char, listType, 
+  arrayType, listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, 
+  csc, sec, cot, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
+  lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, andOp, 
+  orOp, var, staticVar, extVar, self, classVar, objVar, objVarSelf, listVar, 
+  arrayElem, iterVar, litTrue, litFalse, litChar, litDouble, litFloat, litInt, 
+  litString, litArray, pi, valueOf, arg, argsList, inlineIf, objAccess, 
+  objMethodCall, objMethodCallNoParams, indexOf, call', funcAppMixedArgs, 
+  selfFuncAppMixedArgs, extFuncAppMixedArgs, libFuncAppMixedArgs, 
+  newObjMixedArgs, libNewObjMixedArgs, lambda, notNull, func, get, set, 
+  listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
+  getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
+  iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
+  multiAssignError, decrement, increment, decrement1, increment1, varDec, 
+  varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, objDecNew, 
+  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, 
+  discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, initState, 
-  changeState, initObserverList, addObserver, ifCond, ifNoElse, switch, 
-  switchAsIf, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, privMethod, 
-  pubMethod, constructor, docMain, function, mainFunction, docFunc, intFunc, 
-  stateVar, stateVarDef, constVar, privMVar, pubMVar, pubGVar, buildClass, 
-  extraClass, implementingClass, docClass, commentedClass, intClass, 
-  buildModule', modFromData, fileDoc, docMod, fileFromData)
+  multiReturnError, valState, comment, freeError, throw, ifCond, switch, 
+  ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
+  docMain, function, mainFunction, docFunc, intFunc, stateVar, stateVarDef, 
+  constVar, buildClass, extraClass, implementingClass, docClass, 
+  commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
+  fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
   typeBinExpr)
@@ -124,11 +123,11 @@ instance FileSym JavaCode where
 
   docMod = G.docMod jExt
 
-  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
-
 instance InternalFile JavaCode where
   top _ = toCode empty
   bottom = toCode empty
+  
+  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
   
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
@@ -179,8 +178,6 @@ instance InternalPerm JavaCode where
 instance BodySym JavaCode where
   type Body JavaCode = Doc
   body = onStateList (onCodeList bodyDocD)
-  bodyStatements = block
-  oneLiner = G.oneLiner
 
   addComments s = onStateValue (on2CodeValues (addCommentsDocD s) commentStart)
 
@@ -219,9 +216,9 @@ instance TypeSym JavaCode where
 
   getType = cType . unJC
   getTypeString = typeString . unJC
-  getTypeDoc = typeDoc . unJC
   
 instance InternalType JavaCode where
+  getTypeDoc = typeDoc . unJC
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlockSym JavaCode where
@@ -317,11 +314,8 @@ instance VariableSym JavaCode where
     (toState vr)) getODEOthVars o v
   objVarSelf = G.objVarSelf
   listVar = G.listVar
-  listOf = G.listOf
   arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
-
-  ($->) = objVar
 
   variableName = varName . unJC
   variableType = onCodeValue varType
@@ -358,7 +352,6 @@ instance ValueSym JavaCode where
   argsList = G.argsList "args"
 
   valueType = onCodeValue valType
-  valueDoc = val . unJC
 
 instance NumericExpression JavaCode where
   (#~) = unExpr' negateOp
@@ -400,40 +393,32 @@ instance BooleanExpression JavaCode where
   
 instance ValueExpression JavaCode where
   inlineIf = G.inlineIf
+
   -- Exceptions from function/method calls should already be in the exception 
   -- map from the CodeInfo pass, but it's possible that one of the higher-level 
   -- functions implicitly calls these functions in the Java renderer, so we 
   -- also check here to add the exceptions from the called function to the map
-  funcApp = G.funcApp
-  funcAppNamedArgs n t = funcAppMixedArgs n t []
   funcAppMixedArgs n t vs ns = addCallExcsCurrMod n >> 
     G.funcAppMixedArgs n t vs ns
-  selfFuncApp = G.selfFuncApp
   selfFuncAppMixedArgs n t ps ns = addCallExcsCurrMod n >> 
     G.selfFuncAppMixedArgs dot self n t ps ns
-  extFuncApp = G.extFuncApp
   extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
     modify (maybe id addExceptions (Map.lookup (l ++ "." ++ n) mem))
     G.extFuncAppMixedArgs l n t vs ns
-  libFuncApp = G.libFuncApp
   libFuncAppMixedArgs = G.libFuncAppMixedArgs
-  newObj = G.newObj
   newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t -> 
     G.newObjMixedArgs "new " t vs ns)
-  extNewObj = G.extNewObj
   extNewObjMixedArgs l ot vs ns = do
     t <- ot
     mem <- getMethodExcMap
     let tp = getTypeString t
     modify (maybe id addExceptions (Map.lookup (l ++ "." ++ tp) mem))
     newObjMixedArgs (toState t) vs ns
-  libNewObj = G.libNewObj
   libNewObjMixedArgs = G.libNewObjMixedArgs
 
   lambda = G.lambda jLambda
 
-  exists = notNull
   notNull = G.notNull
 
 instance InternalValue JavaCode where
@@ -451,15 +436,12 @@ instance InternalValue JavaCode where
   call = G.call' jName
   
   valuePrec = valPrec . unJC
+  valueDoc = val . unJC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector JavaCode where
   objAccess = G.objAccess
-  ($.) = objAccess
 
-  selfAccess = G.selfAccess
-
-  listIndexExists = G.listIndexExists
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf = G.indexOf "indexOf"
@@ -490,7 +472,6 @@ instance FunctionSym JavaCode where
 instance SelectorFunction JavaCode where
   listAccess = G.listAccess
   listSet = G.listSet
-  at = listAccess
 
 instance InternalFunction JavaCode where
   getFunc = G.getFunc
@@ -514,6 +495,9 @@ instance InternalFunction JavaCode where
 
 instance InternalStatement JavaCode where
   printSt _ _ = G.printSt
+  
+  multiAssign _ _ = error $ G.multiAssignError jName
+  multiReturn _ = error $ G.multiReturnError jName
 
   state = G.state
   loopState = G.loopState
@@ -528,9 +512,6 @@ instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
   assign = G.assign Semi
-  assignToListIndex = G.assignToListIndex
-  multiAssign _ _ = error $ G.multiAssignError jName
-  (&=) = assign
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
@@ -586,7 +567,6 @@ instance StatementSym JavaCode where
   continue = toState $ mkSt continueDocD
 
   returnState = G.returnState Semi
-  multiReturn _ = error $ G.multiReturnError jName
 
   valState = G.valState Semi
 
@@ -596,12 +576,6 @@ instance StatementSym JavaCode where
 
   throw = G.throw jThrowDoc Semi
 
-  initState = G.initState
-  changeState = G.changeState
-
-  initObserverList = G.initObserverList
-  addObserver = G.addObserver
-
   inOutCall = jInOutCall funcApp
   selfInOutCall = jInOutCall selfFuncApp
   extInOutCall m = jInOutCall (extFuncApp m)
@@ -610,9 +584,7 @@ instance StatementSym JavaCode where
 
 instance ControlStatementSym JavaCode where
   ifCond = G.ifCond ifBodyStart elseIf blockEnd
-  ifNoElse = G.ifNoElse
   switch  = G.switch
-  switchAsIf = G.switchAsIf
 
   ifExists = G.ifExists
 
@@ -659,10 +631,7 @@ instance MethodSym JavaCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  privMethod = G.privMethod
-  pubMethod = G.pubMethod
   constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
-  destructor _ = error $ destructorError jName
 
   docMain = G.docMain
 
@@ -694,6 +663,8 @@ instance InternalMethod JavaCode where
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue commentedItem) cmt)
+    
+  destructor _ = error $ destructorError jName
   
   methodDoc = mthdDoc . unJC
   methodFromData _ = toCode . mthd
@@ -703,9 +674,6 @@ instance StateVarSym JavaCode where
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (permDoc (static :: JavaCode (Permanence JavaCode)))
-  privMVar = G.privMVar
-  pubMVar = G.pubMVar
-  pubGVar = G.pubGVar
 
 instance InternalStateVar JavaCode where
   stateVarDoc = unJC
@@ -720,10 +688,9 @@ instance ClassSym JavaCode where
 
   docClass = G.docClass
 
-  commentedClass = G.commentedClass
-
 instance InternalClass JavaCode where
   intClass = G.intClass classDocD
+  commentedClass = G.commentedClass
   classDoc = unJC
   classFromData = onStateValue toCode
 

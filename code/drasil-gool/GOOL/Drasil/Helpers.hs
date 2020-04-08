@@ -2,14 +2,12 @@ module GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vicat, vibcat,
   vmap, vimap, emptyIfEmpty, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   onCodeList, onStateList, on2StateLists, on1CodeValue1List, 
-  on1StateValue1List, getInnerType, getNestDegree, convType
+  on1StateValue1List, getInnerType, getNestDegree
 ) where
 
 import Utils.Drasil (blank)
 
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
-import qualified GOOL.Drasil.Symantics as S (TypeSym(..))
-import GOOL.Drasil.State (VS)
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
@@ -96,19 +94,3 @@ getInnerType _ = error "Attempt to extract inner type of list from a non-list ty
 getNestDegree :: Integer -> C.CodeType -> Integer
 getNestDegree n (C.List t) = getNestDegree (n+1) t
 getNestDegree n _ = n
-
-convType :: (S.TypeSym repr) => C.CodeType -> VS (repr (S.Type repr))
-convType C.Boolean = S.bool
-convType C.Integer = S.int
-convType C.Float = S.float
-convType C.Double = S.double
-convType C.Char = S.char
-convType C.String = S.string
-convType (C.List t) = S.listType (convType t)
-convType (C.Array t) = S.arrayType (convType t)
-convType (C.Iterator t) = S.iterator $ convType t
-convType (C.Object n) = S.obj n
--- convType (C.Enum n) = S.enumType n
-convType (C.Func ps r) = S.funcType (map convType ps) (convType r)
-convType C.Void = S.void
-convType C.File = error "convType: File ?"

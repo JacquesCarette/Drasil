@@ -39,7 +39,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, InternalBody(..),
   InternalStatement(..), InternalScope(..), InternalParam(..), 
   InternalMethod(..), BlockCommentSym(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
-  updateModDoc, TypeData(..), Binding(..), VarData(..))
+  updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
   onStateValue, getNestDegree)
 import GOOL.Drasil.State (lensMStoVS, getParameters)
@@ -75,7 +75,7 @@ addExt ext nm = nm ++ "." ++ ext
 ----------------------------------
 
 packageDocD :: Label -> Doc -> FileData -> FileData
-packageDocD n end f = fileD (n ++ "/" ++ filePath f) (updateModDoc 
+packageDocD n end f = fileD (n ++ "/" ++ filePath f) (updateMod 
   (\d -> emptyIfEmpty d (vibcat [text "package" <+> text n <> end, d])) 
   (fileMod f))
 
@@ -442,7 +442,7 @@ moduleDox desc as date m = (doxFile ++ m) :
   [doxBrief ++ desc | not (null desc)]
 
 commentedModD :: FileData -> Doc -> FileData
-commentedModD m cmt = updateFileMod (updateModDoc (commentedItem cmt) (fileMod m)) m
+commentedModD m cmt = updateFileMod (updateMod (commentedItem cmt) (fileMod m)) m
 
 docFuncRepr :: (RenderSym repr) => String -> [String] -> [String] -> 
   SMethod repr -> SMethod repr

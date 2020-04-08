@@ -63,7 +63,7 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr,
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), 
   Binding(..), onBinding, BindData(..), bd, FileType(..), FileData(..), fileD, 
-  FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, 
+  FuncData(..), fd, ModData(..), md, updateMod, OpData(..), od, 
   ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Classes (Pair(..))
@@ -1366,7 +1366,7 @@ instance InternalValue CppSrcCode where
   call = G.call' cppName
 
   valuePrec = valPrec . unCPPSC
-  valueDoc = valDoc . unCPPSC
+  valueDoc = val . unCPPSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CppSrcCode where
@@ -1635,17 +1635,17 @@ instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
   stateVar s _ _ = onStateValue (on3CodeValues svd (onCodeValue snd s) (toCode 
     empty)) $ zoom lensCStoMS emptyState
-  stateVarDef n s p v vl = on3StateValues (\vr val -> on3CodeValues svd 
-    (onCodeValue snd s) (cppsStateVarDef n empty <$> p <*> vr <*> val <*>
-    endStatement)) (zoom lensCStoVS v) (zoom lensCStoVS vl) 
+  stateVarDef n s p v vl' = on3StateValues (\vr vl -> on3CodeValues svd 
+    (onCodeValue snd s) (cppsStateVarDef n empty <$> p <*> vr <*> vl <*>
+    endStatement)) (zoom lensCStoVS v) (zoom lensCStoVS vl') 
     (zoom lensCStoMS emptyState)
-  constVar n s v vl = on3StateValues (\vr val -> on3CodeValues svd (onCodeValue 
-    snd s) (cppsStateVarDef n (text "const") <$> static <*> vr <*> val <*>
-    endStatement)) (zoom lensCStoVS v) (zoom lensCStoVS vl) 
+  constVar n s v vl' = on3StateValues (\vr vl -> on3CodeValues svd (onCodeValue 
+    snd s) (cppsStateVarDef n (text "const") <$> static <*> vr <*> vl <*>
+    endStatement)) (zoom lensCStoVS v) (zoom lensCStoVS vl') 
     (zoom lensCStoMS emptyState)
 
 instance InternalStateVar CppSrcCode where
-  stateVarDoc = stVarDoc . unCPPSC
+  stateVarDoc = stVar . unCPPSC
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppSrcCode where
@@ -1682,7 +1682,7 @@ instance ModuleSym CppSrcCode where
 instance InternalMod CppSrcCode where
   moduleDoc = modDoc . unCPPSC
   modFromData n = G.modFromData n (toCode . md n)
-  updateModuleDoc f = onCodeValue (updateModDoc f)
+  updateModuleDoc f = onCodeValue (updateMod f)
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
@@ -1996,7 +1996,7 @@ instance InternalValue CppHdrCode where
   call _ _ _ _ _ _ = mkStateVal void empty
 
   valuePrec = valPrec . unCPPHC
-  valueDoc = valDoc . unCPPHC
+  valueDoc = val . unCPPHC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance Selector CppHdrCode where
@@ -2227,7 +2227,7 @@ instance StateVarSym CppHdrCode where
     endStatement)) (zoom lensCStoVS vr) (zoom lensCStoMS emptyState)
 
 instance InternalStateVar CppHdrCode where
-  stateVarDoc = stVarDoc . unCPPHC
+  stateVarDoc = stVar . unCPPHC
   stateVarFromData = error "stateVarFromData unimplemented in C++"
 
 instance ClassSym CppHdrCode where
@@ -2266,7 +2266,7 @@ instance ModuleSym CppHdrCode where
 instance InternalMod CppHdrCode where
   moduleDoc = modDoc . unCPPHC
   modFromData n = G.modFromData n (toCode . md n)
-  updateModuleDoc f = onCodeValue (updateModDoc f)
+  updateModuleDoc f = onCodeValue (updateMod f)
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc
@@ -2447,8 +2447,8 @@ cppListDecDefDoc vs = braces (valueList vs)
 cppPrint :: (RenderSym repr) => Bool -> SValue repr -> SValue repr -> 
   MSStatement repr
 cppPrint newLn  pf vl = zoom lensMStoVS $ on3StateValues (\e printFn v -> mkSt 
-  $ valueDoc printFn <+> text "<<" <+> val v (valueDoc v) <+> e) end pf vl
-  where val v = if maybe False (< 9) (valuePrec v) then parens else id
+  $ valueDoc printFn <+> text "<<" <+> pars v (valueDoc v) <+> e) end pf vl
+  where pars v = if maybe False (< 9) (valuePrec v) then parens else id
         end = if newLn then addIOStreamImport (toState $ text "<<" <+> 
           text "std::endl") else toState empty
 
@@ -2535,7 +2535,7 @@ cppCommentedFunc ft cmt fn = do
 
 cppsStateVarDef :: Label -> Doc -> BindData -> VarData -> ValData -> Doc -> Doc
 cppsStateVarDef n cns p vr vl end = onBinding (bind p) (cns <+> typeDoc 
-  (varType vr) <+> text (n ++ "::") <> varDoc vr <+> equals <+> valDoc vl <>
+  (varType vr) <+> text (n ++ "::") <> varDoc vr <+> equals <+> val vl <>
   end) empty
 
 cpphStateVarDef :: (RenderSym repr) => Doc -> repr (Permanence repr) -> 

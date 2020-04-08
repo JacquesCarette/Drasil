@@ -42,9 +42,6 @@ class KeywordSym repr where
   type Keyword repr
   endStatement     :: repr (Keyword repr)
 
-  blockStart :: repr (Keyword repr)
-  blockEnd   :: repr (Keyword repr)
-
   commentStart :: repr (Keyword repr)
 
   keyDoc :: repr (Keyword repr) -> Doc

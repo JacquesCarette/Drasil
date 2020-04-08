@@ -4,7 +4,7 @@
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, doubleSlash, elseIfLabel, forLabel, inLabel, new, 
-  blockCmtStart, blockCmtEnd, docCmtStart, addExt,
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, addExt,
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, 
@@ -55,7 +55,7 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 ----------------------------------------
 
 classDec, dot, doubleSlash, elseIfLabel, forLabel, inLabel, new, blockCmtStart, 
-  blockCmtEnd, docCmtStart :: Doc
+  blockCmtEnd, docCmtStart, bodyStart, bodyEnd :: Doc
 classDec = text "class"
 dot = text "."
 doubleSlash = text "//"
@@ -66,6 +66,8 @@ new = text "new"
 blockCmtStart = text "/*"
 blockCmtEnd = text "*/"
 docCmtStart = text "/**"
+bodyStart = lbrace
+bodyEnd = rbrace
 
 addExt :: String -> String -> String
 addExt ext nm = nm ++ "." ++ ext

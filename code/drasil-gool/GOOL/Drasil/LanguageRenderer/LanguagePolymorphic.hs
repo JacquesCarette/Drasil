@@ -881,13 +881,11 @@ throw f t = onStateValue (\msg -> stateFromData (f msg) t) . zoom lensMStoVS .
 
 -- ControlStatements --
 
-ifCond :: (RenderSym repr) => repr (Keyword repr) -> Doc -> repr (Keyword repr) 
+ifCond :: (RenderSym repr) => Doc -> Doc -> Doc
   -> [(SValue repr, MSBody repr)] -> MSBody repr -> MSStatement repr
 ifCond _ _ _ [] _ = error "if condition created with no cases"
-ifCond ifst elif blEnd (c:cs) eBody = 
-    let ifStart = keyDoc ifst
-        bEnd = keyDoc blEnd
-        ifSect (v, b) = on2StateValues (\val bd -> vcat [
+ifCond ifStart elif bEnd (c:cs) eBody =
+    let ifSect (v, b) = on2StateValues (\val bd -> vcat [
           text "if" <+> parens (valueDoc val) <+> ifStart,
           indent $ bodyDoc bd,
           bEnd]) (zoom lensMStoVS v) b
@@ -912,14 +910,13 @@ ifExists :: (RenderSym repr) => SValue repr -> MSBody repr -> MSBody repr ->
   MSStatement repr
 ifExists v ifBody = S.ifCond [(S.notNull v, ifBody)]
 
-for :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  MSStatement repr -> SValue repr -> MSStatement repr -> MSBody repr -> 
-  MSStatement repr
+for :: (RenderSym repr) => Doc -> Doc -> MSStatement repr -> SValue repr -> 
+  MSStatement repr -> MSBody repr -> MSStatement repr
 for bStart bEnd sInit vGuard sUpdate b = (\initl guard upd bod -> mkStNoEnd 
   (vcat [forLabel <+> parens (statementDoc initl <> semi <+> valueDoc guard <> 
-    semi <+> statementDoc upd) <+> keyDoc bStart,
+    semi <+> statementDoc upd) <+> bStart,
   indent $ bodyDoc bod,
-  keyDoc bEnd])) <$> S.loopState sInit <*> zoom lensMStoVS vGuard <*> 
+  bEnd])) <$> S.loopState sInit <*> zoom lensMStoVS vGuard <*> 
   S.loopState sUpdate <*> b
 
 forRange :: (RenderSym repr) => SVariable repr -> SValue repr -> SValue repr -> 
@@ -927,20 +924,20 @@ forRange :: (RenderSym repr) => SVariable repr -> SValue repr -> SValue repr ->
 forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?< 
   finalv) (i &+= stepv)
 
-forEach :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  Doc -> Doc -> SVariable repr -> SValue repr -> MSBody repr -> MSStatement repr
+forEach :: (RenderSym repr) => Doc -> Doc -> Doc -> Doc -> SVariable repr -> 
+  SValue repr -> MSBody repr -> MSStatement repr
 forEach bStart bEnd forEachLabel inLbl e' v' = on3StateValues (\e v b -> 
   mkStNoEnd (vcat [forEachLabel <+> parens (getTypeDoc (variableType e) 
-    <+> variableDoc e <+> inLbl <+> valueDoc v) <+> keyDoc bStart,
+    <+> variableDoc e <+> inLbl <+> valueDoc v) <+> bStart,
   indent $ bodyDoc b,
-  keyDoc bEnd])) (zoom lensMStoVS e') (zoom lensMStoVS v') 
+  bEnd])) (zoom lensMStoVS e') (zoom lensMStoVS v') 
 
-while :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  SValue repr -> MSBody repr -> MSStatement repr
+while :: (RenderSym repr) => Doc -> Doc -> SValue repr -> MSBody repr -> 
+  MSStatement repr
 while bStart bEnd v' = on2StateValues (\v b -> mkStNoEnd (vcat [
-  text "while" <+> parens (valueDoc v) <+> keyDoc bStart,
+  text "while" <+> parens (valueDoc v) <+> bStart,
   indent $ bodyDoc b,
-  keyDoc bEnd])) (zoom lensMStoVS v')
+  bEnd])) (zoom lensMStoVS v')
 
 tryCatch :: (RenderSym repr) => (repr (Body repr) -> repr (Body repr) -> Doc) ->
   MSBody repr -> MSBody repr -> MSStatement repr

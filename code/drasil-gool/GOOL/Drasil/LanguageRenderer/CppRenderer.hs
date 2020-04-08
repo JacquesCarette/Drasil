@@ -34,9 +34,9 @@ import GOOL.Drasil.LanguageRenderer (addExt, multiStateDocD,
   mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
   classVarCheckStatic, castDocD, castObjDocD, staticDocD, dynamicDocD, 
   privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
-  docCmtStart, doubleSlash, elseIfLabel, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, commentedModD, valueList, parameterList, 
-  appendToBody, surroundBody, getterName, setterName)
+  docCmtStart, bodyStart, bodyEnd, doubleSlash, elseIfLabel, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDox, commentedModD, 
+  valueList, parameterList, appendToBody, surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, float, double, char, string, listType, 
   listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, negateOp,
@@ -141,9 +141,6 @@ instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
   endStatement = pair endStatement endStatement
-
-  blockStart = pair blockStart blockStart
-  blockEnd = pair blockEnd blockEnd
 
   commentStart = pair commentStart commentStart
 
@@ -1073,9 +1070,6 @@ instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
   endStatement = toCode semi
 
-  blockStart = toCode lbrace
-  blockEnd = toCode rbrace
-
   commentStart = toCode doubleSlash
 
   keyDoc = unCPPSC
@@ -1322,7 +1316,7 @@ instance ValueExpression CppSrcCode where
     newObjMixedArgs t vs ns
   libNewObjMixedArgs = G.libNewObjMixedArgs
 
-  lambda = G.lambda (cppLambda blockStart blockEnd endStatement)
+  lambda = G.lambda (cppLambda endStatement)
 
   notNull v = v
 
@@ -1499,17 +1493,17 @@ instance StatementSym CppSrcCode where
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
 instance ControlStatement CppSrcCode where
-  ifCond = G.ifCond blockStart elseIfLabel blockEnd
+  ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch = G.switch
 
   ifExists _ ifBody _ = onStateValue (mkStNoEnd . bodyDoc) ifBody -- All variables are initialized in C++
 
-  for = G.for blockStart blockEnd 
+  for = G.for bodyStart bodyEnd 
   forRange = G.forRange
   forEach i v = for (varDecDef e (iterBegin v)) (valueOf e ?!= iterEnd v) 
     (e &++)
     where e = toBasicVar i
-  while = G.while blockStart blockEnd
+  while = G.while bodyStart bodyEnd
 
   tryCatch = G.tryCatch cppTryCatch
 
@@ -1554,7 +1548,7 @@ instance MethodSym CppSrcCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  constructor = cppConstructor blockStart blockEnd
+  constructor = cppConstructor
 
   docMain b = commentedFunc (docComment $ toState $ functionDox 
     "Controls the flow of the program" 
@@ -1582,12 +1576,12 @@ instance MethodSym CppSrcCode where
 instance InternalMethod CppSrcCode where
   intMethod m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
     setCurrMain else id) >> (\c tp pms bod -> methodFromData 
-    (snd $ unCPPSC s) $ cppsMethod [] n c tp pms bod blockStart blockEnd) <$>
-    getClassName <*> t <*> sequence ps <*> b
+    (snd $ unCPPSC s) $ cppsMethod [] n c tp pms bod) <$> getClassName <*> t 
+    <*> sequence ps <*> b
   intFunc m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
     setCurrMainFunc m . setCurrMain else id) >> on3StateValues (\tp pms bod -> 
-    methodFromData (snd $ unCPPSC s) $ cppsFunction n tp pms bod blockStart 
-    blockEnd) t (sequence ps) b
+    methodFromData (snd $ unCPPSC s) $ cppsFunction n tp pms bod) t 
+    (sequence ps) b
   commentedFunc = cppCommentedFunc Source
   
   destructor vs = 
@@ -1709,9 +1703,6 @@ instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
   endStatement = toCode semi
 
-  blockStart = toCode lbrace
-  blockEnd = toCode rbrace
-
   commentStart = toCode empty
 
   keyDoc = unCPPHC
@@ -1740,6 +1731,7 @@ instance BodySym CppHdrCode where
   addComments _ _ = toState $ toCode empty
 
 instance InternalBody CppHdrCode where
+
   bodyDoc = unCPPHC
   docBody = onStateValue toCode
   multiBody = G.multiBody 
@@ -2192,7 +2184,7 @@ instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
   buildClass = G.buildClass
   -- enum n es _ = modify (setClassName n) >> cpphEnum n (enumElementsDocD es 
-  --   enumsEqualInts) blockStart blockEnd endStatement
+  --   enumsEqualInts) bodyStart bodyEnd endStatement
   extraClass = buildClass
   implementingClass = G.implementingClass
 
@@ -2200,8 +2192,7 @@ instance ClassSym CppHdrCode where
 
 instance InternalClass CppHdrCode where
   intClass n _ i vs mths = modify (setClassName n) >> on2StateLists 
-    (\vars funcs -> cpphClass n i vars funcs public private 
-    blockStart blockEnd endStatement) vs fs
+    (\vars funcs -> cpphClass n i vars funcs public private endStatement) vs fs
     where fs = map (zoom lensCStoMS) $ mths ++ [destructor vs]
 
   inherit n = onCodeValue (cppInherit n . fst) public
@@ -2383,12 +2374,12 @@ cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t))
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c <> text "::" <> v
 
-cppLambda :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> [repr (Variable repr)] -> repr (Value repr) -> Doc
-cppLambda bStart bEnd endSt ps ex = text "[]" <+> parens (hicat (text ",") $ 
+cppLambda :: (RenderSym repr) => repr (Keyword repr) -> [repr (Variable repr)] 
+  -> repr (Value repr) -> Doc
+cppLambda endSt ps ex = text "[]" <+> parens (hicat (text ",") $ 
   zipWith (<+>) (map (getTypeDoc . variableType) ps) (map variableDoc ps)) <+> 
-  text "->" <+> keyDoc bStart <> text "return" <+> valueDoc ex <> keyDoc endSt 
-  <> keyDoc bEnd
+  text "->" <+> bodyStart <> text "return" <+> valueDoc ex <> keyDoc endSt 
+  <> bodyEnd
 
 cppCast :: VSType CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
 cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $ 
@@ -2447,35 +2438,31 @@ cppPointerParamDoc :: (RenderSym repr) => repr (Variable repr) -> Doc
 cppPointerParamDoc v = getTypeDoc (variableType v) <+> text "&" <> variableDoc v
 
 cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode) 
-  -> [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> 
-  CppSrcCode (Keyword CppSrcCode) -> CppSrcCode (Keyword CppSrcCode) -> Doc
-cppsMethod is n c t ps b bStart bEnd = emptyIfEmpty (bodyDoc b <> initList) $ 
+  -> [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc
+cppsMethod is n c t ps b = emptyIfEmpty (bodyDoc b <> initList) $ 
   vcat [ttype <+> text c <> text "::" <> text n <> parens (parameterList ps) 
-  <+> emptyIfEmpty initList (colon <+> initList) <+> keyDoc bStart,
+  <+> emptyIfEmpty initList (colon <+> initList) <+> bodyStart,
   indent (bodyDoc b),
-  keyDoc bEnd]
+  bodyEnd]
   where ttype | isDtor n = empty
               | otherwise = getTypeDoc t
         initList = hicat (text ", ") is
 
-cppConstructor :: CppSrcCode (Keyword CppSrcCode) -> 
-  CppSrcCode (Keyword CppSrcCode) -> [MSParameter CppSrcCode] -> 
-  [(SVariable CppSrcCode, SValue CppSrcCode)] -> MSBody CppSrcCode -> 
-  SMethod CppSrcCode
-cppConstructor bStart bEnd ps is b = getClassName >>= (\n -> join $ (\tp pms 
-  ivars ivals bod -> if null is then G.constructor n ps is b else modify 
-  (setScope Pub) >> toState (methodFromData Pub (cppsMethod (zipWith 
-  (\ivar ival -> variableDoc ivar <> parens (valueDoc ival)) ivars ivals) n n 
-  tp pms bod bStart bEnd))) <$> construct n <*> sequence ps <*> 
-  mapM (zoom lensMStoVS . fst) is <*> mapM (zoom lensMStoVS . snd) is <*> b)
+cppConstructor :: [MSParameter CppSrcCode] -> [(SVariable CppSrcCode, 
+  SValue CppSrcCode)] -> MSBody CppSrcCode -> SMethod CppSrcCode
+cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals 
+  bod -> if null is then G.constructor n ps is b else modify (setScope Pub) >> 
+  toState (methodFromData Pub (cppsMethod (zipWith (\ivar ival -> variableDoc 
+  ivar <> parens (valueDoc ival)) ivars ivals) n n tp pms bod))) <$> construct 
+  n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom 
+  lensMStoVS . snd) is <*> b)
 
 cppsFunction :: (RenderSym repr) => Label -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> repr (Keyword repr) -> 
-  repr (Keyword repr) -> Doc
-cppsFunction n t ps b bStart bEnd = vcat [
-  getTypeDoc t <+> text n <> parens (parameterList ps) <+> keyDoc bStart,
+  [repr (Parameter repr)] -> repr (Body repr) -> Doc
+cppsFunction n t ps b = vcat [
+  getTypeDoc t <+> text n <> parens (parameterList ps) <+> bodyStart,
   indent (bodyDoc b),
-  keyDoc bEnd]
+  bodyEnd]
 
 cpphMethod :: (RenderSym repr) => Label -> repr (Type repr) ->
   [repr (Parameter repr)] -> repr (Keyword repr) -> Doc
@@ -2523,17 +2510,16 @@ cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
 cpphClass :: Label -> CppHdrCode ParentSpec -> 
   [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode (Method CppHdrCode)] -> 
   CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Scope CppHdrCode) -> 
-  CppHdrCode (Keyword CppHdrCode) -> CppHdrCode (Keyword CppHdrCode) -> 
   CppHdrCode (Keyword CppHdrCode) -> CppHdrCode (Class CppHdrCode)
-cpphClass n ps vars funcs pub priv bStart bEnd end = onCodeValue (\p -> vcat [
-    classDec <+> text n <+> p <+> keyDoc bStart,
+cpphClass n ps vars funcs pub priv end = onCodeValue (\p -> vcat [
+    classDec <+> text n <+> p <+> bodyStart,
     indentList [
       scopeDoc pub <> colon,
       indent pubs,
       blank,
       scopeDoc priv <> colon,
       indent privs],
-    keyDoc bEnd <> keyDoc end]) ps
+    bodyEnd <> keyDoc end]) ps
   where pubs = cpphVarsFuncsList Pub vars funcs
         privs = cpphVarsFuncsList Priv vars funcs
 

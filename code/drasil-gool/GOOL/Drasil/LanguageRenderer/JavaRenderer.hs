@@ -33,9 +33,9 @@ import GOOL.Drasil.LanguageRenderer (packageDocD, classDocD, multiStateDocD,
   mkSt, breakDocD, continueDocD, mkStateVal, mkVal, classVarDocD, castDocD, 
   castObjDocD, staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, 
   dot, new, elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, 
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  commentedModD, docFuncRepr, variableList, parameterList, appendToBody, 
-  surroundBody, intValue)
+  bodyStart, bodyEnd, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, commentedModD, docFuncRepr, variableList, parameterList, 
+  appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, listType, 
   arrayType, listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, 
@@ -135,9 +135,6 @@ instance InternalFile JavaCode where
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
   endStatement = toCode semi
-
-  blockStart = toCode lbrace
-  blockEnd = toCode rbrace
 
   commentStart = toCode doubleSlash
 
@@ -567,15 +564,15 @@ instance StatementSym JavaCode where
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
 instance ControlStatement JavaCode where
-  ifCond = G.ifCond blockStart elseIfLabel blockEnd
+  ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch  = G.switch
 
   ifExists = G.ifExists
 
-  for = G.for blockStart blockEnd
+  for = G.for bodyStart bodyEnd
   forRange = G.forRange 
-  forEach = G.forEach blockStart blockEnd forLabel colon
-  while = G.while blockStart blockEnd
+  forEach = G.forEach bodyStart bodyEnd forLabel colon
+  while = G.while bodyStart bodyEnd
 
   tryCatch = G.tryCatch jTryCatch
   

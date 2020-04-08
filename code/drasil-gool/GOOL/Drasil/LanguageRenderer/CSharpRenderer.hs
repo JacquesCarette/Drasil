@@ -32,9 +32,9 @@ import GOOL.Drasil.LanguageRenderer (classDocD, multiStateDocD, bodyDocD,
   mkSt, mkStNoEnd, breakDocD, continueDocD, mkStateVal, mkVal, mkVar, 
   classVarDocD, objVarDocD, funcDocD, castDocD, listSetFuncDocD, castObjDocD, 
   staticDocD, dynamicDocD, bindingError, privateDocD, publicDocD, dot, 
-  blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, commentedModD, 
-  variableList, appendToBody, surroundBody)
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, doubleSlash, 
+  elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  commentedModD, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
   listType, arrayType, listInnerType, obj, funcType, void, runStrategy, 
@@ -127,9 +127,6 @@ instance InternalFile CSharpCode where
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
   endStatement = toCode semi
-
-  blockStart = toCode lbrace
-  blockEnd = toCode rbrace
 
   commentStart = toCode doubleSlash
 
@@ -486,7 +483,7 @@ instance StatementSym CSharpCode where
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef = G.constDecDef
-  funcDecDef = csFuncDecDef blockStart blockEnd
+  funcDecDef = csFuncDecDef
 
   print = outDoc False Nothing printFunc
   printLn = outDoc True Nothing printLnFunc
@@ -536,15 +533,15 @@ instance StatementSym CSharpCode where
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
 instance ControlStatement CSharpCode where
-  ifCond = G.ifCond blockStart elseIfLabel blockEnd
+  ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch = G.switch
 
   ifExists = G.ifExists
 
-  for = G.for blockStart blockEnd
+  for = G.for bodyStart bodyEnd
   forRange = G.forRange
-  forEach = G.forEach blockStart blockEnd (text "foreach") inLabel 
-  while = G.while blockStart blockEnd
+  forEach = G.forEach bodyStart bodyEnd (text "foreach") inLabel 
+  while = G.while bodyStart bodyEnd
 
   tryCatch = G.tryCatch csTryCatch
 
@@ -695,11 +692,11 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
         csCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
           tp)) (valueDoc vl))
 
-csFuncDecDef :: (RenderSym repr) => repr (Keyword repr) -> repr (Keyword repr) 
-  -> SVariable repr -> [SVariable repr] -> SValue repr -> MSStatement repr
-csFuncDecDef bStart bEnd v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
+csFuncDecDef :: (RenderSym repr) => SVariable repr -> 
+  [SVariable repr] -> SValue repr -> MSStatement repr
+csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
   getTypeDoc (variableType vr) <+> text (variableName vr) <> parens 
-  (variableList pms) <+> keyDoc bStart $$ indent (bodyDoc b) $$ keyDoc bEnd) 
+  (variableList pms) <+> bodyStart $$ indent (bodyDoc b) $$ bodyEnd) 
   (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnState r)
 
 csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc

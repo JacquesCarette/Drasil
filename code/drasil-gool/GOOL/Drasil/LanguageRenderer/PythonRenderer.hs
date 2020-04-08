@@ -121,9 +121,6 @@ instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
   endStatement = toCode empty
 
-  blockStart = toCode colon
-  blockEnd = toCode empty
-
   commentStart = toCode $ text "#"
 
   keyDoc = unPC
@@ -539,7 +536,7 @@ instance StatementSym PythonCode where
   multi = onStateList (on1CodeValue1List multiStateDocD endStatement)
 
 instance ControlStatement PythonCode where
-  ifCond = G.ifCond blockStart (text "elif") blockEnd
+  ifCond = G.ifCond pyBodyStart (text "elif") pyBodyEnd
   switch = switchAsIf
 
   ifExists = G.ifExists
@@ -695,6 +692,10 @@ initName = "__init__"
 
 pyName :: String
 pyName = "Python"
+
+pyBodyStart, pyBodyEnd :: Doc
+pyBodyStart = colon
+pyBodyEnd = empty
 
 pyODEMethod :: ODEMethod -> [SValue PythonCode]
 pyODEMethod RK45 = [litString "dopri5"]

@@ -75,8 +75,8 @@ class (PermanenceSym repr) => TypeSym repr where
   type Type repr
   bool          :: VSType repr
   int           :: VSType repr -- This is 32-bit signed ints except
-                                         -- in Python, which has unlimited 
-                                         -- precision ints
+                               -- in Python, which has unlimited 
+                               -- precision ints
   float         :: VSType repr
   double        :: VSType repr
   char          :: VSType repr

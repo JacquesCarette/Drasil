@@ -7,7 +7,8 @@ import Language.Drasil.CodeSpec hiding (codeSpec)
 
 import GOOL.Drasil (Label, MSBody, MSBlock, SVariable, SValue, MSStatement, 
   ProgramSym, BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), 
-  ValueSym(..), StatementSym(..), lensMStoVS)
+  ValueSym(..), DeclStatement(..), IOStatement(..), MiscStatement(..), 
+  lensMStoVS)
 
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (maybeToList)

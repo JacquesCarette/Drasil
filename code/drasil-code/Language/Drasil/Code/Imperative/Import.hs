@@ -34,7 +34,7 @@ import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   ValueExpression(..), objMethodCallMixedArgs, FunctionSym(..), 
   SelectorFunction(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   MiscStatement(..), ControlStatement(..), ifNoElse, ScopeSym(..), 
-  MethodSym(..), pubMVar, nonInitConstructor, convType, CodeType(..), 
+  MethodSym(..), pubDVar, nonInitConstructor, convType, CodeType(..), 
   onStateValue) 
 import qualified GOOL.Drasil as C (CodeType(List, Array))
 
@@ -336,7 +336,7 @@ genClass :: (ProgramSym repr) => (String -> Label -> Maybe Label ->
   Reader DrasilState (SClass repr)) -> M.Class -> 
   Reader DrasilState (SClass repr)
 genClass f (M.ClassDef n i desc svs ms) = do
-  svrs <- mapM (\v -> fmap (pubMVar . var (codeName v) . convType) (codeType v))
+  svrs <- mapM (\v -> fmap (pubDVar . var (codeName v) . convType) (codeType v))
     svs
   f n desc i svrs (mapM genFunc ms) 
 

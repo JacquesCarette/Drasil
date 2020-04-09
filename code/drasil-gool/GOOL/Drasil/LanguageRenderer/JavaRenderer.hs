@@ -20,7 +20,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   FunctionSym(..), SelectorFunction(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), FuncAppStatement(..), 
   MiscStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, 
+  MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
@@ -736,7 +736,7 @@ jODEFiles info = (map unJC fls, s ^. goolState)
               odeTempName = ((++ "_curr") . variableName)
               odeTemp = var (odeTempName dpv) (arrayType float)
           in sequence [fileDoc (buildModule cn [odeImport ++ fode] [] 
-            [implementingClass cn [fode] (map privMVar othVars) 
+            [implementingClass cn [fode] (map privDVar othVars) 
               [initializer (map param othVars) (zip othVars 
                 (map valueOf othVars)),
               pubMethod "getDimension" int [] (oneLiner $ returnState $ 
@@ -746,7 +746,7 @@ jODEFiles info = (map unJC fls, s ^. goolState)
                 (modify (setODEDepVars [variableName dpv, dn] . setODEOthVars 
                 (map variableName ovs)) >> ode info))]]),
             fileDoc (buildModule shn (map ((odeImport ++ "sampling.") ++) 
-              [stH, stI]) [] [implementingClass shn [stH] [pubMVar dv] 
+              [stH, stI]) [] [implementingClass shn [stH] [pubDVar dv] 
                 [pubMethod "init" void (map param [var "t0" float, y0, 
                   var "t" float]) (modify (addLangImport "java.util.Arrays") >> 
                     oneLiner (objVarSelf dv &= newObj (obj 

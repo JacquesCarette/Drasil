@@ -18,7 +18,7 @@ module GOOL.Drasil.ClassInterface (
   initState, changeState, observerListName, initObserverList, addObserver, 
   ControlStatement(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
-  StateVarSym(..), privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..), 
+  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), convType
 ) where
 
@@ -566,14 +566,14 @@ class (ScopeSym repr, DeclStatement repr) => StateVarSym repr where
   constVar :: Label -> repr (Scope repr) ->  SVariable repr -> SValue repr -> 
     CSStateVar repr
 
-privMVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
-privMVar = stateVar private dynamic
+privDVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
+privDVar = stateVar private dynamic
 
-pubMVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
-pubMVar = stateVar public dynamic
+pubDVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
+pubDVar = stateVar public dynamic
 
-pubGVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
-pubGVar = stateVar public static
+pubSVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
+pubSVar = stateVar public static
 
 type SClass a = CS (a (Class a))
 

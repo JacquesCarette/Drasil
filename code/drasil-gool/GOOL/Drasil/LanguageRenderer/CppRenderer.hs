@@ -21,7 +21,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   SelectorFunction(..), StatementSym(..), AssignStatement(..), (&=), 
   DeclStatement(..), IOStatement(..), FuncAppStatement(..), MiscStatement(..),
   ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, 
+  MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
@@ -2310,13 +2310,13 @@ cppODEFile info = (fl, s ^. goolState)
               othVars = map (modify (setODEOthVars (map variableName 
                 ovs)) >>) ovars
           in fileDoc (buildModule cn [] [] [buildClass cn Nothing 
-            (pubMVar dv : map privMVar othVars) 
+            (pubDVar dv : map privDVar othVars) 
             [initializer (map param othVars) (zip othVars (map valueOf othVars)),
             pubMethod "operator()" void [param dvElem, 
               pointerParam $ var dn float, param tElem] 
               (oneLiner $ var dn float &= (modify (setODEOthVars 
               (map variableName ovs)) >> ode info))], 
-          buildClass ("Populate_" ++ n) Nothing [pubMVar dvptr] 
+          buildClass ("Populate_" ++ n) Nothing [pubDVar dvptr] 
             [initializer [pointerParam dv] [(dv, valueOf dv)],
             pubMethod "operator()" void [pointerParam dvElem, param tElem] 
               (oneLiner $ valState $ listAppend (valueOf $ objVarSelf dv) 

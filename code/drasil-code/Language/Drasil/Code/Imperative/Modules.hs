@@ -40,7 +40,7 @@ import GOOL.Drasil (SFile, MSBlock, SVariable, SValue, MSStatement, SMethod,
   BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   BooleanExpression(..), AssignStatement(..), DeclStatement(..), 
   IOStatement(..), MiscStatement(..), ControlStatement(..), ifNoElse, 
-  ScopeSym(..), MethodSym(..), StateVarSym(..), pubMVar, convType)
+  ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType)
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
@@ -189,7 +189,7 @@ genInputClass scp = withReader (\s -> s {currentClass = cname}) $ do
       genClass [] [] = return Nothing
       genClass inps csts = do
         vals <- mapM (convExpr . codeEquat) csts
-        inputVars <- mapM (\x -> fmap (pubMVar . var (codeName x) . convType) 
+        inputVars <- mapM (\x -> fmap (pubDVar . var (codeName x) . convType) 
           (codeType x)) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g) 
           cname (var (codeName c) (convType t)) vl) (codeType c)) 

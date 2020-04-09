@@ -35,9 +35,10 @@ import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   PermanenceSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
   ($->), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), objMethodCallMixedArgs, FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatement(..), ifNoElse, 
-  ScopeSym(..), ParameterSym(..), MethodSym(..), pubMVar, privMVar, 
-  nonInitConstructor, convType, ScopeTag(..), CodeType(..), onStateValue) 
+  SelectorFunction(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
+  MiscStatement(..), ControlStatement(..), ifNoElse, ScopeSym(..), 
+  ParameterSym(..), MethodSym(..), pubMVar, privMVar, nonInitConstructor, 
+  convType, ScopeTag(..), CodeType(..), onStateValue) 
 import qualified GOOL.Drasil as C (CodeType(List, Array))
 
 import Prelude hiding (sin, cos, tan, log, exp)

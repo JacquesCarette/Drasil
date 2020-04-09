@@ -13,11 +13,13 @@ module GOOL.Drasil.ClassInterface (
   libFuncApp, newObj, extNewObj, libNewObj, exists, Selector(..), ($.), 
   selfAccess, InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), listIndexExists, SelectorFunction(..),
-  at, StatementSym(..), (&=), assignToListIndex, initState, changeState, 
-  observerListName, initObserverList, addObserver, ControlStatement(..), 
-  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
-  privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..), convType
+  at, StatementSym(..), AssignStatement(..), (&=), assignToListIndex,
+  DeclStatement(..), IOStatement(..), FuncAppStatement(..), MiscStatement(..), 
+  initState, changeState, observerListName, initObserverList, addObserver, 
+  ControlStatement(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
+  StateVarSym(..), privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..), 
+  convType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
@@ -65,7 +67,8 @@ oneLiner s = bodyStatements [s]
 
 type MSBlock a = MS (a (Block a))
 
-class (StatementSym repr) => BlockSym repr where
+class (AssignStatement repr, DeclStatement repr, IOStatement repr, 
+  FuncAppStatement repr, MiscStatement repr) => BlockSym repr where
   type Block repr
   block   :: [MSStatement repr] -> MSBlock repr
 
@@ -347,6 +350,8 @@ type MSStatement a = MS (a (Statement a))
 
 class (SelectorFunction repr) => StatementSym repr where
   type Statement repr
+
+class (StatementSym repr) => AssignStatement repr where
   (&-=)  :: SVariable repr -> SValue repr -> MSStatement repr
   infixl 1 &-=
   (&+=)  :: SVariable repr -> SValue repr -> MSStatement repr
@@ -358,6 +363,16 @@ class (SelectorFunction repr) => StatementSym repr where
 
   assign            :: SVariable repr -> SValue repr -> MSStatement repr
 
+(&=) :: (AssignStatement repr) => SVariable repr -> SValue repr -> 
+  MSStatement repr
+infixr 1 &=
+(&=) = assign
+
+assignToListIndex :: (MiscStatement repr) => SVariable repr -> SValue repr -> 
+  SValue repr -> MSStatement repr
+assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
+
+class (StatementSym repr) => DeclStatement repr where
   varDec           :: SVariable repr -> MSStatement repr
   varDecDef        :: SVariable repr -> SValue repr -> MSStatement repr
   listDec          :: Integer -> SVariable repr -> MSStatement repr
@@ -374,6 +389,7 @@ class (SelectorFunction repr) => StatementSym repr where
   funcDecDef       :: SVariable repr -> [SVariable repr] -> SValue repr -> 
     MSStatement repr
 
+class (StatementSym repr) => IOStatement repr where
   print      :: SValue repr -> MSStatement repr
   printLn    :: SValue repr -> MSStatement repr
   printStr   :: String -> MSStatement repr
@@ -401,19 +417,7 @@ class (SelectorFunction repr) => StatementSym repr where
   stringListVals :: [SVariable repr] -> SValue repr -> MSStatement repr
   stringListLists :: [SVariable repr] -> SValue repr -> MSStatement repr
 
-  break :: MSStatement repr
-  continue :: MSStatement repr
-
-  returnState :: SValue repr -> MSStatement repr
-
-  valState :: SValue repr -> MSStatement repr
-
-  comment :: Label -> MSStatement repr
-
-  free :: SVariable repr -> MSStatement repr
-
-  throw :: Label -> MSStatement repr
-
+class (StatementSym repr) => FuncAppStatement repr where
   -- The three lists are inputs, outputs, and both, respectively
   inOutCall :: Label -> [SValue repr] -> [SVariable repr] -> [SVariable repr] 
     -> MSStatement repr
@@ -421,38 +425,39 @@ class (SelectorFunction repr) => StatementSym repr where
     [SVariable repr] -> MSStatement repr
   extInOutCall :: Library -> Label -> [SValue repr] -> [SVariable repr] -> 
     [SVariable repr] -> MSStatement repr
-
+  
+class (StatementSym repr) => MiscStatement repr where
+  valState :: SValue repr -> MSStatement repr
+  comment :: Label -> MSStatement repr
   multi     :: [MSStatement repr] -> MSStatement repr
 
-(&=) :: (StatementSym repr) => SVariable repr -> SValue repr -> MSStatement repr
-infixr 1 &=
-(&=) = assign
-
-assignToListIndex :: (StatementSym repr) => SVariable repr -> SValue repr -> 
-  SValue repr -> MSStatement repr
-assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
-
-initState :: (StatementSym repr) => Label -> Label -> MSStatement repr
+initState :: (DeclStatement repr) => Label -> Label -> MSStatement repr
 initState fsmName initialState = varDecDef (var fsmName string) 
   (litString initialState)
 
-changeState :: (StatementSym repr) => Label -> Label -> MSStatement repr
+changeState :: (AssignStatement repr) => Label -> Label -> MSStatement repr
 changeState fsmName toState = var fsmName string &= litString toState
 
 observerListName :: Label
 observerListName = "observerList"
 
-initObserverList :: (StatementSym repr) => VSType repr -> [SValue repr] -> 
+initObserverList :: (DeclStatement repr) => VSType repr -> [SValue repr] -> 
   MSStatement repr
 initObserverList t = listDecDef (var observerListName (listType t))
 
-addObserver :: (StatementSym repr) => SValue repr -> MSStatement repr
+addObserver :: (MiscStatement repr) => SValue repr -> MSStatement repr
 addObserver o = valState $ listAdd obsList lastelem o
-  where obsList = valueOf $ observerListName `listOf` onStateValue 
-          valueType o
+  where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
         lastelem = listSize obsList
 
 class (BodySym repr) => ControlStatement repr where
+  break :: MSStatement repr
+  continue :: MSStatement repr
+
+  returnState :: SValue repr -> MSStatement repr
+
+  throw :: Label -> MSStatement repr
+
   ifCond     :: [(SValue repr, MSBody repr)] -> MSBody repr -> MSStatement repr
   switch     :: SValue repr -> [(SValue repr, MSBody repr)] -> MSBody repr -> 
     MSStatement repr -- is there value in separating Literals into their own type?
@@ -550,7 +555,7 @@ nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
 
-class (ScopeSym repr, StatementSym repr) => StateVarSym repr where
+class (ScopeSym repr, DeclStatement repr) => StateVarSym repr where
   type StateVar repr
   stateVar :: repr (Scope repr) -> repr (Permanence repr) -> SVariable repr -> 
     CSStateVar repr

@@ -2,10 +2,10 @@ module Test.PatternTest (patternTest) where
 
 import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, 
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..), 
-  ControlBlock(..), TypeSym(..), StatementSym(..), initState, changeState, 
-  initObserverList, addObserver, ControlStatement(..), VariableSym(..), 
-  ValueSym(..), ValueExpression(..), extNewObj, FunctionSym(..), MethodSym(..), 
-  ModuleSym(..))
+  ControlBlock(..), TypeSym(..), DeclStatement(..), IOStatement(..), 
+  MiscStatement(..), initState, changeState, initObserverList, addObserver, 
+  ControlStatement(..), VariableSym(..), ValueSym(..), ValueExpression(..), 
+  extNewObj, FunctionSym(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer, observerName, printNum, x)
 

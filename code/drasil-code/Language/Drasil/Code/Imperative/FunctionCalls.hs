@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 
 import GOOL.Drasil (VSType, SValue, MSStatement, ProgramSym, TypeSym(..), 
-  ValueSym(..), StatementSym(..), convType)
+  ValueSym(..), DeclStatement(..), MiscStatement(..), convType)
 
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)

@@ -11,7 +11,7 @@ import Language.Drasil.Mod (Name)
   
 import GOOL.Drasil (Label, SFile, VSType, SVariable, SValue, MSStatement, 
   SMethod, CSStateVar, SClass, ProgramSym, FileSym(..), ValueExpression(..), 
-  StatementSym(..), ClassSym(..), ModuleSym(..), GOOLState)
+  FuncAppStatement(..), ClassSym(..), ModuleSym(..), GOOLState)
 
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)

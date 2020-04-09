@@ -1,7 +1,7 @@
 module Test.Observer (observer, observerName, printNum, x) where
 
 import GOOL.Drasil (SFile, SVariable, SMethod, SClass, ProgramSym, FileSym(..), 
-  PermanenceSym(..), oneLiner, TypeSym(..), StatementSym(..), VariableSym(..), 
+  PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..), 
   ValueSym(..), ScopeSym(..), MethodSym(..), initializer, StateVarSym(..), 
   ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)

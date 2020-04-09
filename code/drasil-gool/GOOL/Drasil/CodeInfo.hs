@@ -2,13 +2,15 @@
 
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
-import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, SMethod, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlock(..), 
-  InternalControlBlock(..), TypeSym(..), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), InternalValueExp(..), FunctionSym(..), SelectorFunction(..), 
-  StatementSym(..), ControlStatement(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
+  SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
+  BlockSym(..), ControlBlock(..), InternalControlBlock(..), TypeSym(..), 
+  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), Selector(..), InternalValueExp(..), FunctionSym(..), 
+  SelectorFunction(..), StatementSym(..), AssignStatement(..), 
+  DeclStatement(..), IOStatement(..), FuncAppStatement(..), MiscStatement(..), 
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.CodeAnalysis (Exception(..), exception, stdExc)
@@ -241,12 +243,15 @@ instance SelectorFunction CodeInfo where
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()
+
+instance AssignStatement CodeInfo where
   assign _ = zoom lensMStoVS . execute1
   (&-=) _ = zoom lensMStoVS . execute1
   (&+=) _ = zoom lensMStoVS . execute1
   (&++) _ = noInfo
   (&--) _ = noInfo
 
+instance DeclStatement CodeInfo where
   varDec _ = noInfo
   varDecDef _ = zoom lensMStoVS . execute1
   listDec _ _ = noInfo
@@ -261,6 +266,7 @@ instance StatementSym CodeInfo where
   constDecDef _ = zoom lensMStoVS . execute1
   funcDecDef _ _ = zoom lensMStoVS . execute1
 
+instance IOStatement CodeInfo where
   print = zoom lensMStoVS . execute1
   printLn = zoom lensMStoVS . execute1
   printStr _ = noInfo
@@ -288,19 +294,7 @@ instance StatementSym CodeInfo where
   stringListVals _ = zoom lensMStoVS . execute1
   stringListLists _ = zoom lensMStoVS . execute1
 
-  break = noInfo
-  continue = noInfo
-
-  returnState = zoom lensMStoVS . execute1
-
-  valState = zoom lensMStoVS . execute1
-
-  comment _ = noInfo
-
-  free _ = noInfo
-
-  throw _ = modifyReturn (addException genericExc) (toCode ())
-
+instance FuncAppStatement CodeInfo where
   inOutCall n vs _ _ = zoom lensMStoVS $ do
     sequence_ vs
     addCurrModCall n
@@ -311,9 +305,21 @@ instance StatementSym CodeInfo where
     sequence_ vs
     addExternalCall l n
 
+instance MiscStatement CodeInfo where
+  valState = zoom lensMStoVS . execute1
+
+  comment _ = noInfo
+
   multi = executeList
 
 instance ControlStatement CodeInfo where
+  break = noInfo
+  continue = noInfo
+
+  returnState = zoom lensMStoVS . execute1
+
+  throw _ = modifyReturn (addException genericExc) (toCode ())
+
   ifCond = evalConds
   switch v cs b = do
     _ <- zoom lensMStoVS v

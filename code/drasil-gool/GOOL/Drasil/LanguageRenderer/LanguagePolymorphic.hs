@@ -27,11 +27,11 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   extObjDecNewNoParams, constDecDef, funcDecDef, discardInput, 
   discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, ifCond, switch, 
-  ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
-  docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
-  stateVarDef, constVar, buildClass, extraClass, implementingClass, docClass, 
+  multiReturnError, valState, comment, throw, ifCond, switch, ifExists, for, 
+  forRange, forEach, while, tryCatch, checkState, notifyObservers, construct, 
+  param, method, getMethod, setMethod, constructor, docMain, function, 
+  mainFunction, docFunc, docInOutFunc, intFunc, stateVar, stateVarDef, 
+  constVar, buildClass, extraClass, implementingClass, docClass, 
   commentedClass, intClass, buildModule, buildModule', modFromData, fileDoc, 
   docMod
 ) where
@@ -47,11 +47,10 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   VariableSym(Variable, variableName, variableType), listOf,
   ValueSym(Value, valueType), 
   NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), 
-  BooleanExpression(..), funcApp, newObj, extNewObj, ($.), 
-  at, 
-  StatementSym((&+=), (&++), break, multi), (&=), observerListName, 
-  ScopeSym(..),
-  ModuleSym(Module), convType)
+  BooleanExpression(..), funcApp, newObj, extNewObj, ($.), at, 
+  AssignStatement((&+=), (&++)), (&=), MiscStatement(multi), 
+  ControlStatement(break), observerListName, ScopeSym(..), ModuleSym(Module), 
+  convType)
 import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block), 
   TypeSym(bool, int, float, double, char, string, listType, arrayType, 
     listInnerType, void), 
@@ -60,10 +59,12 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   ValueExpression(funcAppMixedArgs, newObjMixedArgs, notNull, lambda), 
   Selector(objAccess), objMethodCall, objMethodCallNoParams, 
   FunctionSym(func, listSize, listAppend), SelectorFunction(listAccess),
-  StatementSym(assign, varDec, varDecDef, listDec, objDecNew, extObjDecNew, 
-    constDecDef, valState, returnState),
-  ControlStatement(ifCond, for, forRange, switch), ParameterSym(param), 
-  MethodSym(method, mainFunction), ClassSym(buildClass))
+  AssignStatement(assign),
+  DeclStatement(varDec, varDecDef, listDec, objDecNew, extObjDecNew, 
+    constDecDef),
+  MiscStatement(valState),
+  ControlStatement(returnState, ifCond, for, forRange, switch), 
+  ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (InternalFile(commentedMod),
   RenderSym, InternalBody(bodyDoc, docBody), InternalBlock(docBlock, blockDoc), 
   ImportSym(..), InternalPerm(..), InternalType(..), UnaryOpSym(UnaryOp), 
@@ -869,9 +870,6 @@ valState t v' = zoom lensMStoVS $ onStateValue (\v -> stateFromData (valueDoc v)
 
 comment :: (RenderSym repr) => Doc -> Label -> MSStatement repr
 comment cs c = toState $ mkStNoEnd (commentDocD c cs)
-
-freeError :: String -> String
-freeError l = "Cannot free variables in " ++ l
 
 throw :: (RenderSym repr) => (repr (Value repr) -> Doc) -> Terminator -> 
   Label -> MSStatement repr

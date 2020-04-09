@@ -17,9 +17,11 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp,
   selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), 
   objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
-  StatementSym(..), (&=), ControlStatement(..), ScopeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
+  IOStatement(..), FuncAppStatement(..), MiscStatement(..), 
+  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
+  ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
@@ -54,8 +56,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
   extObjDecNewNoParams, constDecDef, discardInput, openFileR, openFileW, 
   openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, freeError, throw, ifCond, 
-  switch, ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  returnState, multiReturnError, valState, comment, throw, ifCond, switch, 
+  ifExists, for, forRange, forEach, while, tryCatch, checkState, 
   notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
   docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
   stateVarDef, constVar, buildClass, implementingClass, docClass, 
@@ -455,12 +457,15 @@ instance InternalStatement CSharpCode where
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
+
+instance AssignStatement CSharpCode where
   assign = G.assign Semi
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
   (&--) = G.decrement1
 
+instance DeclStatement CSharpCode where
   varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
     G.varDec static dynamic v)
   varDecDef = G.varDecDef
@@ -477,6 +482,7 @@ instance StatementSym CSharpCode where
   constDecDef = G.constDecDef
   funcDecDef = csFuncDecDef
 
+instance IOStatement CSharpCode where
   print = outDoc False Nothing printFunc
   printLn = outDoc True Nothing printLnFunc
   printStr = outDoc False Nothing printFunc . litString
@@ -505,26 +511,26 @@ instance StatementSym CSharpCode where
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists
 
-  break = toState $ mkSt breakDocD
-  continue = toState $ mkSt continueDocD
-
-  returnState = G.returnState Semi
-
-  valState = G.valState Semi
-
-  comment = G.comment commentStart
-
-  free _ = error $ G.freeError csName -- could set variable to null? Might be misleading.
-
-  throw msg = modify (addLangImport "System") >> G.throw csThrowDoc Semi msg
-
+instance FuncAppStatement CSharpCode where
   inOutCall = csInOutCall funcApp
   selfInOutCall = csInOutCall selfFuncApp
   extInOutCall m = csInOutCall (extFuncApp m)
 
+instance MiscStatement CSharpCode where
+  valState = G.valState Semi
+
+  comment = G.comment commentStart
+
   multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement CSharpCode where
+  break = toState $ mkSt breakDocD
+  continue = toState $ mkSt continueDocD
+
+  returnState = G.returnState Semi
+  
+  throw msg = modify (addLangImport "System") >> G.throw csThrowDoc Semi msg
+
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch = G.switch
 

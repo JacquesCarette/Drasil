@@ -2,8 +2,9 @@ module Test.Helper (helper) where
 
 import GOOL.Drasil (SFile, SMethod,
   ProgramSym, FileSym(..), PermanenceSym(..), bodyStatements, TypeSym(..), 
-  StatementSym(..), (&=), VariableSym(..), ValueSym(..), NumericExpression(..), 
-  ScopeSym(..), ParameterSym(..), MethodSym(..), ModuleSym(..))
+  DeclStatement(..), ControlStatement(..), (&=), VariableSym(..), ValueSym(..), 
+  NumericExpression(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 helper :: (ProgramSym repr) => SFile repr

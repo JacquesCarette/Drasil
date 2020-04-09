@@ -1,9 +1,9 @@
 module Test.FileTests (fileTests) where
 
 import GOOL.Drasil (GSProgram, MSBlock, MSStatement, SMethod, ProgramSym(..), 
-  FileSym(..), BodySym(..), BlockSym(..), TypeSym(..), StatementSym(..), 
-  ControlStatement(..), VariableSym(..), ValueSym(..), MethodSym(..), 
-  ModuleSym(..))
+  FileSym(..), BodySym(..), BlockSym(..), TypeSym(..), DeclStatement(..), 
+  IOStatement(..), ControlStatement(..), VariableSym(..), ValueSym(..), 
+  MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 fileTests :: (ProgramSym repr) => GSProgram repr

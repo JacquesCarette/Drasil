@@ -17,10 +17,11 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
   ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), (&=),
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, ClassSym(..), 
-  ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), AssignStatement(..), 
+  (&=), DeclStatement(..), IOStatement(..), FuncAppStatement(..), 
+  MiscStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), pubMethod, initializer, StateVarSym(..), privMVar, pubMVar, 
+  ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
@@ -55,13 +56,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, 
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, freeError, throw, ifCond, switch, 
-  ifExists, for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
-  docMain, function, mainFunction, docFunc, intFunc, stateVar, stateVarDef, 
-  constVar, buildClass, extraClass, implementingClass, docClass, 
-  commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
-  fileFromData)
+  multiReturnError, valState, comment, throw, ifCond, switch, ifExists, for, 
+  forRange, forEach, while, tryCatch, checkState, notifyObservers, construct, 
+  param, method, getMethod, setMethod, constructor, docMain, function, 
+  mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, buildClass, 
+  extraClass, implementingClass, docClass, commentedClass, intClass, 
+  buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
   typeBinExpr)
@@ -484,12 +484,15 @@ instance InternalStatement JavaCode where
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
+
+instance AssignStatement JavaCode where
   assign = G.assign Semi
   (&-=) = G.decrement
   (&+=) = G.increment
   (&++) = G.increment1
   (&--) = G.decrement1
 
+instance DeclStatement JavaCode where
   varDec = G.varDec static dynamic
   varDecDef = G.varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> G.listDec (listDecDocD v') 
@@ -506,6 +509,7 @@ instance StatementSym JavaCode where
     jConstDecDef vr vl) vr' vl'
   funcDecDef = G.funcDecDef
 
+instance IOStatement JavaCode where
   print = jOut False Nothing printFunc
   printLn = jOut True Nothing printLnFunc
   printStr = jOut False Nothing printFunc . litString
@@ -536,26 +540,26 @@ instance StatementSym JavaCode where
   stringListVals = G.stringListVals
   stringListLists = G.stringListLists
 
-  break = toState $ mkSt breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
-  continue = toState $ mkSt continueDocD
-
-  returnState = G.returnState Semi
-
-  valState = G.valState Semi
-
-  comment = G.comment commentStart
-
-  free _ = error $ G.freeError jName -- could set variable to null? Might be misleading.
-
-  throw = G.throw jThrowDoc Semi
-
+instance FuncAppStatement JavaCode where
   inOutCall = jInOutCall funcApp
   selfInOutCall = jInOutCall selfFuncApp
   extInOutCall m = jInOutCall (extFuncApp m)
 
+instance MiscStatement JavaCode where
+  valState = G.valState Semi
+
+  comment = G.comment commentStart
+
   multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement JavaCode where
+  break = toState $ mkSt breakDocD 
+  continue = toState $ mkSt continueDocD
+
+  returnState = G.returnState Semi
+  
+  throw = G.throw jThrowDoc Semi
+
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch  = G.switch
 

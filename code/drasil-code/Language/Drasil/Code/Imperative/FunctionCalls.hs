@@ -3,7 +3,6 @@ module Language.Drasil.Code.Imperative.FunctionCalls (
   getCalcCall, getOutputCall
 ) where
 
-import Language.Drasil
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppInOut)
 import Language.Drasil.Code.Imperative.Import (codeType, mkVal, mkVar)
 import Language.Drasil.Code.Imperative.Logging (maybeLog)
@@ -59,9 +58,8 @@ getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
   return $ fmap valState val
 
-getFuncCall :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c) => String 
-  -> VSType repr -> Reader DrasilState [c] -> 
-  Reader DrasilState (Maybe (SValue repr))
+getFuncCall :: (ProgramSym repr) => String -> VSType repr -> 
+  Reader DrasilState [CodeVarChunk] -> Reader DrasilState (Maybe (SValue repr))
 getFuncCall n t funcPs = do
   mm <- getCall n
   let getFuncCall' Nothing = return Nothing

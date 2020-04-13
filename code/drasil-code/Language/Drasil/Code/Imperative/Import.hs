@@ -115,11 +115,15 @@ classVariable c v = do
     " missing from export map") checkCurrent (Map.lookup (variableName v') 
     (eMap g)) (onStateValue variableType c) v)
 
-mkVal :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c) => c -> 
-  Reader DrasilState (SValue repr)
+mkVal :: (ProgramSym repr) => CodeVarChunk -> Reader DrasilState (SValue repr)
 mkVal v = do
   t <- codeType v
-  value (v ^. uid) (codeName v) (convType t)
+  let toGOOLVal Nothing = value (v ^. uid) (codeName v) (convType t)
+      toGOOLVal (Just o) = do
+        ot <- codeType o
+        return $ valueOf $ objVar (var (codeName o) (convType ot)) 
+          (var (codeName v) (convType t))
+  toGOOLVal (v ^. obv)
 
 mkVar :: (ProgramSym repr) => CodeVarChunk -> 
   Reader DrasilState (SVariable repr)

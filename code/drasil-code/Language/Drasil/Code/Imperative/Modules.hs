@@ -439,10 +439,12 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 genCalcBlock :: (ProgramSym repr) => CalcType -> CodeDefinition -> Expr ->
   Reader DrasilState (MSBlock repr)
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
-genCalcBlock t v e
-    | t == CalcAssign  = fmap block $ liftS $ do { vv <- mkVar v; ee <-
-      convExpr e; l <- maybeLog vv; return $ multi $ assign vv ee : l}
-    | otherwise        = block <$> liftS (returnState <$> convExpr e)
+genCalcBlock CalcAssign v e = do
+  vv <- mkVar v
+  ee <- convExpr e
+  l <- maybeLog vv
+  return $ block $ assign vv ee : l
+genCalcBlock CalcReturn _ e = block <$> liftS (returnState <$> convExpr e)
 
 genCaseBlock :: (ProgramSym repr) => CalcType -> CodeDefinition -> Completeness 
   -> [(Expr,Relation)] -> Reader DrasilState (MSBlock repr)

@@ -13,7 +13,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
-  listOf, ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  listOf, ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
   Selector(..), ($.), InternalValueExp(..), objMethodCall,
   objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), at, 
@@ -314,7 +314,7 @@ instance VariableValue PythonCode where
 instance CommandLineArgs PythonCode where
   arg n = G.arg (litInt $ n+1) argsList
   argsList = modify (addLangImportVS "sys") >> G.argsList "sys.argv"
-  argExists i = listSize argsList ?>= litInt (fromIntegral $ i+2)
+  argExists i = listSize argsList ?> litInt (fromIntegral $ i+1)
 
 instance NumericExpression PythonCode where
   (#~) = unExpr' negateOp
@@ -350,6 +350,7 @@ instance BooleanExpression PythonCode where
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
 
+instance Comparison PythonCode where
   (?<) = typeBinExpr lessOp bool
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool

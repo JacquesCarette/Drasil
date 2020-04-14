@@ -15,7 +15,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   SValue, MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
   ($.), InternalValueExp(..), objMethodCall, FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), AssignStatement(..), (&=), 
@@ -414,6 +414,7 @@ instance (Pair p) => BooleanExpression (p CppSrcCode CppHdrCode) where
   (?&&) = pair2 (?&&) (?&&)
   (?||) = pair2 (?||) (?||)
 
+instance (Pair p) => Comparison (p CppSrcCode CppHdrCode) where
   (?<) = pair2 (?<) (?<)
   (?<=) = pair2 (?<=) (?<=)
   (?>) = pair2 (?>) (?>)
@@ -1257,7 +1258,7 @@ instance VariableValue CppSrcCode where
 instance CommandLineArgs CppSrcCode where
   arg n = G.arg (litInt $ n+1) argsList
   argsList = G.argsList "argv"
-  argExists i = listSize argsList ?>= litInt (fromIntegral $ i+2)
+  argExists i = listSize argsList ?> litInt (fromIntegral $ i+1)
 
 instance NumericExpression CppSrcCode where
   (#~) = unExpr' negateOp
@@ -1290,6 +1291,7 @@ instance BooleanExpression CppSrcCode where
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
 
+instance Comparison CppSrcCode where
   (?<) = typeBinExpr lessOp bool
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool
@@ -1900,6 +1902,7 @@ instance BooleanExpression CppHdrCode where
   (?&&) _ _ = mkStateVal void empty
   (?||) _ _ = mkStateVal void empty
 
+instance Comparison CppHdrCode where
   (?<) _ _ = mkStateVal void empty
   (?<=) _ _ = mkStateVal void empty
   (?>) _ _ = mkStateVal void empty

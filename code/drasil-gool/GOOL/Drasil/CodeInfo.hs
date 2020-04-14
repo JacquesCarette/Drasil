@@ -6,7 +6,7 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   BlockSym(..), ControlBlock(..), InternalControlBlock(..), TypeSym(..), 
-  VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), Selector(..), InternalValueExp(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), AssignStatement(..), 
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), 
@@ -180,6 +180,7 @@ instance BooleanExpression CodeInfo where
   (?&&) = execute2
   (?||) = execute2
 
+instance Comparison CodeInfo where
   (?<) = execute2
   (?<=) = execute2
   (?>) = execute2

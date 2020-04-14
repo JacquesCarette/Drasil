@@ -47,7 +47,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   VariableSym(Variable, variableName, variableType), listOf,
   ValueSym(Value, valueType), 
   NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), 
-  BooleanExpression(..), funcApp, newObj, extNewObj, ($.), at, 
+  Comparison(..), funcApp, newObj, extNewObj, ($.), at, 
   AssignStatement((&+=), (&++)), (&=), MiscStatement(multi), 
   ControlStatement(break), observerListName, ScopeSym(..), ModuleSym(Module), 
   convType)

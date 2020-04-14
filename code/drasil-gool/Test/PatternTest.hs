@@ -30,7 +30,7 @@ n = var nName int
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
-newObserver :: (ValueExpression repr) => SValue repr
+newObserver :: (ValueExpression repr, TypeSym repr) => SValue repr
 newObserver = extNewObj observerName observerType []
 
 patternTest :: (ProgramSym repr) => GSProgram repr
@@ -39,7 +39,8 @@ patternTest = prog progName [fileDoc (buildModule progName []
 
 patternTestMainMethod :: (MethodSym repr, AssignStatement repr, 
   DeclStatement repr, ControlStatement repr, IOStatement repr, 
-  MiscStatement repr, ControlBlock repr, Literal repr, VariableValue repr) => 
+  MiscStatement repr, ControlBlock repr, Literal repr, VariableValue repr, 
+  ValueExpression repr) => 
   SMethod repr
 patternTestMainMethod = mainFunction (body [block [
   varDec n,

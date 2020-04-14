@@ -6,7 +6,7 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod,
   ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner, 
   BlockSym(..), listSlice, TypeSym(..), AssignStatement(..), (&=), 
   DeclStatement(..), IOStatement(..), StringStatement(..), MiscStatement(..), ControlStatement(..), 
-  VariableSym(..), Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  VariableSym(..), Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), extFuncApp, Selector(..), FunctionSym(..), 
   SelectorFunction(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)

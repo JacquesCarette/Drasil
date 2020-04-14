@@ -14,7 +14,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
   ControlBlock(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp,
+  NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), 
   objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
@@ -322,7 +322,7 @@ instance VariableValue CSharpCode where
 instance CommandLineArgs CSharpCode where
   arg n = G.arg (litInt n) argsList
   argsList = G.argsList "args"
-  argExists i = listSize argsList ?>= litInt (fromIntegral $ i+1)
+  argExists i = listSize argsList ?> litInt (fromIntegral i)
 
 instance NumericExpression CSharpCode where
   (#~) = unExpr' negateOp
@@ -355,6 +355,7 @@ instance BooleanExpression CSharpCode where
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
 
+instance Comparison CSharpCode where
   (?<) = typeBinExpr lessOp bool
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool

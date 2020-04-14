@@ -8,7 +8,7 @@ module GOOL.Drasil.ClassInterface (
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), TypeSym(..), ControlBlock(..), 
   InternalControlBlock(..), listSlice, VariableSym(..), ($->), listOf, 
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
   libFuncApp, newObj, extNewObj, libNewObj, exists, Selector(..), ($.), 
   selfAccess, InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
@@ -42,7 +42,8 @@ type SFile a = FS (a (RenderFile a))
 
 class (ModuleSym repr, ControlBlock repr, AssignStatement repr, 
   DeclStatement repr, IOStatement repr, StringStatement repr, FuncAppStatement repr,
-  MiscStatement repr, ControlStatement repr, InternalControlBlock repr, Literal repr, MathConstant repr, VariableValue repr, CommandLineArgs repr) => 
+  MiscStatement repr, ControlStatement repr, InternalControlBlock repr, Literal repr, MathConstant repr, VariableValue repr, CommandLineArgs repr, NumericExpression repr, BooleanExpression repr, Comparison repr, 
+  ValueExpression repr) => 
   FileSym repr where 
   type RenderFile repr
   fileDoc :: FSModule repr -> SFile repr
@@ -206,12 +207,7 @@ class (ValueSym repr) => NumericExpression repr where
   floor  :: SValue repr -> SValue repr
   ceil   :: SValue repr -> SValue repr
 
--- I considered having two separate classes, BooleanExpressions and BooleanComparisons,
--- but this would require cyclic constraints, since it is feasible to have
--- BooleanComparisons of BooleanExpressions and also BooleanExpressions of BooleanComparisons.
--- This has the drawback of requiring a NumericExpression constraint for the first
--- 3 functions here, even though they don't really need it.
-class (NumericExpression repr) => BooleanExpression repr where
+class (ValueSym repr) => BooleanExpression repr where
   (?!)  :: SValue repr -> SValue repr
   infixr 6 ?!
   (?&&) :: SValue repr -> SValue repr -> SValue repr
@@ -219,6 +215,7 @@ class (NumericExpression repr) => BooleanExpression repr where
   (?||) :: SValue repr -> SValue repr -> SValue repr
   infixl 1 ?||
 
+class (ValueSym repr) => Comparison repr where
   (?<)  :: SValue repr -> SValue repr -> SValue repr
   infixl 4 ?<
   (?<=) :: SValue repr -> SValue repr -> SValue repr
@@ -233,7 +230,7 @@ class (NumericExpression repr) => BooleanExpression repr where
   infixl 3 ?!=
 
 -- for values that can include expressions
-class (BooleanExpression repr) => ValueExpression repr where
+class ValueExpression repr where
   inlineIf     :: SValue repr -> SValue repr -> SValue repr -> SValue repr
   
   funcAppMixedArgs :: Label -> VSType repr -> [SValue repr] -> 
@@ -320,7 +317,7 @@ objMethodCallNoParams t o f = objMethodCallNoParams' f t o
 
 type VSFunction a = VS (a (Function a))
 
-class (ValueExpression repr) => FunctionSym repr where
+class (ValueSym repr) => FunctionSym repr where
   type Function repr
   func :: Label -> VSType repr -> [SValue repr] -> VSFunction repr
 
@@ -334,8 +331,8 @@ class (ValueExpression repr) => FunctionSym repr where
   iterBegin :: SValue repr -> SValue repr
   iterEnd   :: SValue repr -> SValue repr
 
-listIndexExists :: (FunctionSym repr) => SValue repr -> SValue repr -> 
-  SValue repr
+listIndexExists :: (FunctionSym repr, Comparison repr) => SValue repr -> 
+  SValue repr -> SValue repr
 listIndexExists lst index = listSize lst ?> index
 
 class (Selector repr, InternalValueExp repr) => SelectorFunction repr where
@@ -485,7 +482,7 @@ ifNoElse :: (ControlStatement repr) => [(SValue repr, MSBody repr)]
   -> MSStatement repr
 ifNoElse bs = ifCond bs $ body []
 
-switchAsIf :: (ControlStatement repr) => SValue repr -> 
+switchAsIf :: (ControlStatement repr, Comparison repr) => SValue repr -> 
   [(SValue repr, MSBody repr)] -> MSBody repr -> MSStatement repr
 switchAsIf v = ifCond . map (first (v ?==))
 

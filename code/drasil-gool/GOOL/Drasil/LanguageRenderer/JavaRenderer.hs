@@ -14,7 +14,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
   ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), AssignStatement(..), 
@@ -327,7 +327,7 @@ instance VariableValue JavaCode where
 instance CommandLineArgs JavaCode where
   arg n = G.arg (litInt n) argsList
   argsList = G.argsList "args"
-  argExists i = listSize argsList ?>= litInt (fromIntegral $ i+1)
+  argExists i = listSize argsList ?> litInt (fromIntegral i)
 
 instance NumericExpression JavaCode where
   (#~) = unExpr' negateOp
@@ -360,6 +360,7 @@ instance BooleanExpression JavaCode where
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
 
+instance Comparison JavaCode where
   (?<) = typeBinExpr lessOp bool
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool

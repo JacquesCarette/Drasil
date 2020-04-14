@@ -4,6 +4,7 @@ module GOOL.Drasil.ClassInterface (
   -- Types
   Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, FSModule,
+  NamedArg, Initializer, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
   -- Typeclasses
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), TypeSym(..), ControlBlock(..), VariableSym(..), ($->), listOf, 
@@ -217,58 +218,55 @@ class (ValueSym repr) => Comparison repr where
   (?!=) :: SValue repr -> SValue repr -> SValue repr
   infixl 3 ?!=
 
+type NamedArg r = (SVariable r, SValue r)
+-- Function call with both positional and named arguments
+type MixedCall r = Label -> VSType r -> [SValue r] -> [NamedArg r] -> SValue r
+-- Constructor call with both positional and named arguments
+type MixedCtorCall r = VSType r -> [SValue r] -> [NamedArg r] -> SValue r
+-- Function call with only positional arguments
+type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
+-- Constructor call with only positional arguments
+type PosCtorCall r = VSType r -> [SValue r] -> SValue r
+
 -- for values that can include expressions
 class ValueExpression repr where
   inlineIf     :: SValue repr -> SValue repr -> SValue repr -> SValue repr
   
-  funcAppMixedArgs :: Label -> VSType repr -> [SValue repr] -> 
-    [(SVariable repr, SValue repr)] -> SValue repr
-  selfFuncAppMixedArgs :: Label -> VSType repr -> [SValue repr] -> 
-    [(SVariable repr, SValue repr)] -> SValue repr
-  extFuncAppMixedArgs :: Library -> Label -> VSType repr -> [SValue repr] -> 
-    [(SVariable repr, SValue repr)] -> SValue repr
-  libFuncAppMixedArgs :: Library -> Label -> VSType repr -> [SValue repr] -> 
-    [(SVariable repr, SValue repr)] -> SValue repr
-  newObjMixedArgs ::  VSType repr -> [SValue repr] -> 
-    [(SVariable repr, SValue repr)] -> SValue repr
-  extNewObjMixedArgs :: Library -> VSType repr -> [SValue repr] -> 
-    [(SVariable repr, SValue repr)] -> SValue repr
-  libNewObjMixedArgs :: Library -> VSType repr -> [SValue repr] -> 
-    [(SVariable repr, SValue repr)] -> SValue repr
+  funcAppMixedArgs     ::            MixedCall repr
+  selfFuncAppMixedArgs ::            MixedCall repr
+  extFuncAppMixedArgs  :: Library -> MixedCall repr
+  libFuncAppMixedArgs  :: Library -> MixedCall repr
+  newObjMixedArgs      ::            MixedCtorCall repr
+  extNewObjMixedArgs   :: Library -> MixedCtorCall repr
+  libNewObjMixedArgs   :: Library -> MixedCtorCall repr
 
   lambda :: [SVariable repr] -> SValue repr -> SValue repr
 
   notNull :: SValue repr -> SValue repr
 
-funcApp :: (ValueExpression repr) => Label -> VSType repr -> [SValue repr] -> 
-  SValue repr
+funcApp          :: (ValueExpression repr) =>            PosCall repr
 funcApp n t vs = funcAppMixedArgs n t vs []
 
-funcAppNamedArgs :: (ValueExpression repr) => Label -> VSType repr -> 
-  [(SVariable repr, SValue repr)] -> SValue repr
+funcAppNamedArgs :: (ValueExpression repr) =>            Label -> VSType repr ->
+  [NamedArg repr] -> SValue repr
 funcAppNamedArgs n t = funcAppMixedArgs n t []
 
-selfFuncApp :: (ValueExpression repr) => Label -> VSType repr -> [SValue repr] 
-  -> SValue repr
+selfFuncApp      :: (ValueExpression repr) =>            PosCall repr
 selfFuncApp n t vs = selfFuncAppMixedArgs n t vs []
 
-extFuncApp :: (ValueExpression repr) => Library -> Label -> VSType repr -> 
-  [SValue repr] -> SValue repr
+extFuncApp       :: (ValueExpression repr) => Library -> PosCall repr
 extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
 
-libFuncApp :: (ValueExpression repr) => Library -> Label -> VSType repr -> 
-  [SValue repr] -> SValue repr
+libFuncApp       :: (ValueExpression repr) => Library -> PosCall repr
 libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
 
-newObj :: (ValueExpression repr) => VSType repr -> [SValue repr] -> SValue repr
+newObj           :: (ValueExpression repr) =>            PosCtorCall repr
 newObj t vs = newObjMixedArgs t vs []
 
-extNewObj  :: (ValueExpression repr) => Library -> VSType repr -> [SValue repr] 
-  -> SValue repr
+extNewObj        :: (ValueExpression repr) => Library -> PosCtorCall repr
 extNewObj l t vs = extNewObjMixedArgs l t vs []
 
-libNewObj :: (ValueExpression repr) => Library -> VSType repr -> [SValue repr] 
-  -> SValue repr
+libNewObj        :: (ValueExpression repr) => Library -> PosCtorCall repr
 libNewObj l t vs = libNewObjMixedArgs l t vs []
 
 exists :: (ValueExpression repr) => SValue repr -> SValue repr
@@ -276,7 +274,7 @@ exists = notNull
 
 class (FunctionSym repr) => InternalValueExp repr where
   objMethodCallMixedArgs' :: Label -> VSType repr -> SValue repr -> 
-    [SValue repr] -> [(SVariable repr, SValue repr)] -> SValue repr
+    [SValue repr] -> [NamedArg repr] -> SValue repr
   objMethodCallNoParams' :: Label -> VSType repr -> SValue repr -> SValue repr
 
 objMethodCall :: (InternalValueExp repr) => VSType repr -> SValue repr -> Label 
@@ -284,7 +282,7 @@ objMethodCall :: (InternalValueExp repr) => VSType repr -> SValue repr -> Label
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
 objMethodCallMixedArgs :: (InternalValueExp repr) => VSType repr -> SValue repr 
-  -> Label -> [SValue repr] -> [(SVariable repr, SValue repr)] -> SValue repr
+  -> Label -> [SValue repr] -> [NamedArg repr] -> SValue repr
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
 objMethodCallNoParams :: (InternalValueExp repr) => VSType repr -> SValue repr 
@@ -507,6 +505,7 @@ class ParameterSym repr where
   pointerParam :: SVariable repr -> MSParameter repr
 
 type SMethod a = MS (a (Method a))
+type Initializer r = (SVariable r, SValue r)
 
 class (BodySym repr, ParameterSym repr, ScopeSym repr, PermanenceSym repr) => MethodSym repr where
   type Method repr
@@ -514,8 +513,8 @@ class (BodySym repr, ParameterSym repr, ScopeSym repr, PermanenceSym repr) => Me
     VSType repr -> [MSParameter repr] -> MSBody repr -> SMethod repr
   getMethod   :: SVariable repr -> SMethod repr
   setMethod   :: SVariable repr -> SMethod repr 
-  constructor :: [MSParameter repr] -> [(SVariable repr, SValue repr)] -> 
-    MSBody repr -> SMethod repr
+  constructor :: [MSParameter repr] -> [Initializer repr] -> MSBody repr -> 
+    SMethod repr
 
   docMain :: MSBody repr -> SMethod repr
 
@@ -550,8 +549,8 @@ pubMethod :: (MethodSym repr) => Label -> VSType repr -> [MSParameter repr] ->
   MSBody repr -> SMethod repr
 pubMethod n = method n public dynamic
 
-initializer :: (MethodSym repr) => [MSParameter repr] -> 
-  [(SVariable repr, SValue repr)] -> SMethod repr
+initializer :: (MethodSym repr) => [MSParameter repr] -> [Initializer repr] -> 
+  SMethod repr
 initializer ps is = constructor ps is (body [])
 
 nonInitConstructor :: (MethodSym repr) => [MSParameter repr] -> MSBody repr -> 

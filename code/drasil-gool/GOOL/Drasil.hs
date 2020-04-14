@@ -1,7 +1,7 @@
 -- | re-export smart constructors for external code writing
 module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType, 
   SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, 
-  SClass, FSModule, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..),
+  SClass, FSModule, NamedArg, Initializer, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..),
   bodyStatements, oneLiner, BlockSym(..), ControlBlock(..), listSlice, 
   TypeSym(..), StatementSym(..), AssignStatement(..), (&=), assignToListIndex, 
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
@@ -28,7 +28,7 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
 
 import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock, 
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
-  CSStateVar, SClass, FSModule, ProgramSym(..), FileSym(..), PermanenceSym(..), 
+  CSStateVar, SClass, FSModule, NamedArg, Initializer, ProgramSym(..), FileSym(..), PermanenceSym(..), 
   BodySym(..), bodyStatements, oneLiner, BlockSym(..), ControlBlock(..), 
   listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=), 
   assignToListIndex, DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),

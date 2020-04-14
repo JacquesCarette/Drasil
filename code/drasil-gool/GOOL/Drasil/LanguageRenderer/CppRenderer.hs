@@ -12,7 +12,7 @@ import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
-  SValue, MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
+  SValue, MSStatement, MSParameter, SMethod, NamedArg, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), ControlBlock(..), VariableSym(..), 
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..),
@@ -2451,8 +2451,8 @@ cppsMethod is n c t ps b = emptyIfEmpty (bodyDoc b <> initList) $
               | otherwise = getTypeDoc t
         initList = hicat (text ", ") is
 
-cppConstructor :: [MSParameter CppSrcCode] -> [(SVariable CppSrcCode, 
-  SValue CppSrcCode)] -> MSBody CppSrcCode -> SMethod CppSrcCode
+cppConstructor :: [MSParameter CppSrcCode] -> [NamedArg CppSrcCode] -> 
+  MSBody CppSrcCode -> SMethod CppSrcCode
 cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals 
   bod -> if null is then G.constructor n ps is b else modify (setScope Pub) >> 
   toState (methodFromData Pub (cppsMethod (zipWith (\ivar ival -> variableDoc 

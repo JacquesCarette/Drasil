@@ -10,7 +10,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..))
 import Language.Drasil.Mod (Name)
   
 import GOOL.Drasil (Label, SFile, VSType, SVariable, SValue, MSStatement, 
-  MSParameter, SMethod, CSStateVar, SClass, ProgramSym, FileSym(..), 
+  MSParameter, SMethod, CSStateVar, SClass, NamedArg, ProgramSym, FileSym(..), 
   TypeSym(..), VariableSym(..), ValueExpression(..), FuncAppStatement(..), 
   ParameterSym(..), ClassSym(..), ModuleSym(..), CodeType(..), GOOLState, 
   lensMStoVS)
@@ -84,7 +84,7 @@ auxClass = mkClass Auxiliary
 --   calling a method on self. This assumes all private methods are dynamic, 
 --   which is true for this generator.
 fApp :: (ProgramSym repr) => String -> String -> VSType repr -> [SValue repr] 
-  -> [(SVariable repr, SValue repr)] -> Reader DrasilState (SValue repr)
+  -> [NamedArg repr] -> Reader DrasilState (SValue repr)
 fApp m s t vl ns = do
   g <- ask
   let cm = currentModule g
@@ -95,7 +95,7 @@ fApp m s t vl ns = do
 -- Logic similar to fApp above, but self case not required here 
 -- (because constructor will never be private)
 ctorCall :: (ProgramSym repr) => String -> VSType repr -> [SValue repr] -> 
-  [(SVariable repr, SValue repr)] -> Reader DrasilState (SValue repr)
+  [NamedArg repr] -> Reader DrasilState (SValue repr)
 ctorCall m t vl ns = do
   g <- ask
   let cm = currentModule g

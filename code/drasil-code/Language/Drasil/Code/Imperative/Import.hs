@@ -28,7 +28,7 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 
 import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, CSStateVar, SClass, ProgramSym, 
+  MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArg, Initializer, ProgramSym, 
   PermanenceSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
   ($->), ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..), Comparison(..), 
   ValueExpression(..), objMethodCallMixedArgs, List(..), StatementSym(..),
@@ -148,7 +148,7 @@ genConstructor :: (ProgramSym repr, HasSpace c, CodeIdea c) => Label -> String
 genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
 
 genInitConstructor :: (ProgramSym repr, HasSpace c, CodeIdea c) => Label -> 
-  String -> [c] -> [(SVariable repr, SValue repr)] -> [MSBlock repr] -> 
+  String -> [c] -> [Initializer repr] -> [MSBlock repr] -> 
   Reader DrasilState (SMethod repr)
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p 
   Nothing
@@ -250,7 +250,7 @@ convExpr (RealI c ri)  = do
   convExpr $ renderRealInt (lookupC g c) ri
 
 convCall :: (ProgramSym repr) => UID -> [Expr] -> [(UID, Expr)] -> (String -> 
-  String -> VSType repr -> [SValue repr] -> [(SVariable repr, SValue repr)] -> 
+  String -> VSType repr -> [SValue repr] -> [NamedArg repr] -> 
   Reader DrasilState (SValue repr)) -> Reader DrasilState (SValue repr)
 convCall c x ns f = do
   g <- ask

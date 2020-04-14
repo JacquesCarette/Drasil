@@ -41,7 +41,7 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
-  CSStateVar, SClass, FSModule, FileSym(RenderFile), BodySym(Body), 
+  CSStateVar, SClass, FSModule, NamedArg, Initializer, MixedCall, MixedCtorCall, FileSym(RenderFile), BodySym(Body), 
   bodyStatements, oneLiner, BlockSym(Block), PermanenceSym(..), 
   TypeSym(Type, infile, outfile, iterator, getType, getTypeString), 
   VariableSym(Variable, variableName, variableType), listOf,
@@ -516,7 +516,7 @@ arg :: (RenderSym repr) => SValue repr -> SValue repr -> SValue repr
 arg = on3StateValues (\s n args -> mkVal s (argDocD n args)) S.string
 
 -- enumElement :: (RenderSym repr) => Label -> Label -> SValue repr
--- enumElement en e = mkStateVal (enumType en) (enumElemDocD en e)
+-- enumElement en (e = mkStateVal (enumType en) (enumElemDocD en e)
 
 argsList :: (RenderSym repr) => String -> SValue repr
 argsList l = mkStateVal (S.arrayType S.string) (text l)
@@ -528,12 +528,12 @@ inlineIf = on3StateValues (\c v1 v2 -> valFromData (prec c) (valueType v1)
   where prec cd = valuePrec cd <|> Just 0
 
 call' :: (RenderSym repr) => String -> Maybe Library -> Label -> VSType repr -> 
-  Maybe Doc -> [SValue repr] -> [(SVariable repr, SValue repr)] -> SValue repr
+  Maybe Doc -> [SValue repr] -> [NamedArg repr] -> SValue repr
 call' l _ _ _ _ _ (_:_) = error $ namedArgError l
 call' _ l n t o ps ns = call empty l n t o ps ns
 
 call :: (RenderSym repr) => Doc -> Maybe Library -> Label -> VSType repr -> 
-  Maybe Doc -> [SValue repr] -> [(SVariable repr, SValue repr)] -> SValue repr
+  Maybe Doc -> [SValue repr] -> [NamedArg repr] -> SValue repr
 call sep lib n t o pas nas = (\tp pargs nms nargs -> mkVal tp $ obDoc <> libDoc 
   <> text n <> parens (valueList pargs <+> (if null pas || null nas then empty 
   else comma) <+> hcat (intersperse (text ", ") (zipWith (\nm a -> 
@@ -542,39 +542,32 @@ call sep lib n t o pas nas = (\tp pargs nms nargs -> mkVal tp $ obDoc <> libDoc
   where libDoc = maybe empty (text . (++ ".")) lib
         obDoc = fromMaybe empty o
 
-funcAppMixedArgs :: (RenderSym repr) => Label -> VSType repr -> [SValue repr] 
-  -> [(SVariable repr, SValue repr)] -> SValue repr
+funcAppMixedArgs :: (RenderSym repr) => MixedCall repr
 funcAppMixedArgs n t = S.call Nothing n t Nothing
 
 namedArgError :: String -> String
 namedArgError l = "Named arguments not supported in " ++ l 
 
-selfFuncAppMixedArgs :: (RenderSym repr) => Doc -> SVariable repr -> Label -> 
-  VSType repr -> [SValue repr] -> [(SVariable repr, SValue repr)] -> SValue repr
+selfFuncAppMixedArgs :: (RenderSym repr) => Doc -> SVariable repr -> MixedCall repr
 selfFuncAppMixedArgs d slf n t vs ns = slf >>= (\s -> S.call Nothing n t 
   (Just $ variableDoc s <> d) vs ns)
 
-extFuncAppMixedArgs :: (RenderSym repr) => Library -> Label -> VSType repr -> 
-  [SValue repr] -> [(SVariable repr, SValue repr)] -> SValue repr
+extFuncAppMixedArgs :: (RenderSym repr) => Library -> MixedCall repr
 extFuncAppMixedArgs l n t = S.call (Just l) n t Nothing
 
-libFuncAppMixedArgs :: (RenderSym repr) => Library -> Label -> VSType repr -> 
-  [SValue repr] -> [(SVariable repr, SValue repr)] -> SValue repr
+libFuncAppMixedArgs :: (RenderSym repr) => Library -> MixedCall repr
 libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >> 
   S.funcAppMixedArgs n t vs ns
 
-newObjMixedArgs :: (RenderSym repr) => String -> VSType repr -> [SValue repr] 
-  -> [(SVariable repr, SValue repr)] -> SValue repr
+newObjMixedArgs :: (RenderSym repr) => String -> MixedCtorCall repr
 newObjMixedArgs s tp vs ns = tp >>= 
   (\t -> S.call Nothing (s ++ getTypeString t) (return t) Nothing vs ns)
 
-extNewObjMixedArgs :: (RenderSym repr) => Library -> VSType repr -> 
-  [SValue repr] -> [(SVariable repr, SValue repr)] -> SValue repr
+extNewObjMixedArgs :: (RenderSym repr) => Library -> MixedCtorCall repr
 extNewObjMixedArgs l tp vs ns = tp >>= (\t -> S.call (Just l) (getTypeString t) 
   (return t) Nothing vs ns)
 
-libNewObjMixedArgs :: (RenderSym repr) => Library -> VSType repr -> 
-  [SValue repr] -> [(SVariable repr, SValue repr)] -> SValue repr
+libNewObjMixedArgs :: (RenderSym repr) => Library -> MixedCtorCall repr
 libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >> 
   S.newObjMixedArgs tp vs ns
 
@@ -592,7 +585,7 @@ objAccess = on2StateValues (\v f -> mkVal (functionType f) (objAccessDocD
   (valueDoc v) (functionDoc f)))
 
 objMethodCall :: (RenderSym repr) => Label -> VSType repr -> SValue repr -> 
-  [SValue repr] -> [(SVariable repr, SValue repr)] -> SValue repr
+  [SValue repr] -> [NamedArg repr] -> SValue repr
 objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing f t 
   (Just $ valueDoc o <> dot) vs ns)
 
@@ -981,7 +974,7 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> S.method (setterName $ variableName
   where setBody = oneLiner $ S.objVarSelf v &= S.valueOf v
 
 constructor :: (RenderSym repr) => Label -> [MSParameter repr] -> 
-  [(SVariable repr, SValue repr)] -> MSBody repr -> SMethod repr
+  [Initializer repr] -> MSBody repr -> SMethod repr
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName 
   public dynamic (S.construct c) ps (multiBody [ib, b]))
   where ib = bodyStatements (zipWith (\vr vl -> objVarSelf vr &= vl) 

@@ -13,7 +13,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
-  ControlBlock(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
+  ControlBlock(..), InternalList(..), VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
   NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   selfFuncApp, extFuncApp, newObj, InternalValueExp(..), 
   objMethodCall, objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), Iterator(..), 
@@ -223,7 +223,7 @@ instance ControlBlock CSharpCode where
           points = var "points" spArray
           sp = var "sp" (obj "SolPoint")
 
-instance InternalControlBlock CSharpCode where
+instance InternalList CSharpCode where
   listSlice' = G.listSlice
 
 instance UnaryOpSym CSharpCode where

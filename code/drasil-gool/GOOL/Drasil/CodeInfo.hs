@@ -5,7 +5,7 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlock(..), InternalControlBlock(..), TypeSym(..), 
+  BlockSym(..), ControlBlock(..), InternalList(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
   GetSet(..), List(..), Iterator(..), StatementSym(..), AssignStatement(..), 
@@ -94,7 +94,7 @@ instance TypeSym CodeInfo where
 instance ControlBlock CodeInfo where
   solveODE _ _ = noInfo
 
-instance InternalControlBlock CodeInfo where
+instance InternalList CodeInfo where
   listSlice' b e s _ vl = zoom lensMStoVS $ do
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl

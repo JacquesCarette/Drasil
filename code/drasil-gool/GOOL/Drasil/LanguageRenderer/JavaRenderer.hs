@@ -13,7 +13,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
+  TypeSym(..), ControlBlock(..), InternalList(..), VariableSym(..), 
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj,
   InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
@@ -224,7 +224,7 @@ instance ControlBlock JavaCode where
     where stH = "StepHandler"
           dv = depVar info
 
-instance InternalControlBlock JavaCode where
+instance InternalList JavaCode where
   listSlice' = G.listSlice
 
 instance UnaryOpSym JavaCode where

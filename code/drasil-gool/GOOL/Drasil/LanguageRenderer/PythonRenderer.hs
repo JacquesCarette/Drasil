@@ -12,7 +12,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
+  TypeSym(..), ControlBlock(..), InternalList(..), VariableSym(..), 
   listOf, ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
   InternalValueExp(..), objMethodCall,
@@ -212,7 +212,7 @@ instance ControlBlock PythonCode where
            variableType iv)
          r_y = valueOf $ objVar r (var "y" $ onStateValue variableType dv)
 
-instance InternalControlBlock PythonCode where
+instance InternalList PythonCode where
   listSlice' b e s vnew vold = docBlock $ zoom lensMStoVS $ pyListSlice vnew 
     vold (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)

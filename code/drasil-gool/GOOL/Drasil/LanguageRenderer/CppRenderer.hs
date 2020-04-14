@@ -14,7 +14,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
+  TypeSym(..), ControlBlock(..), InternalList(..), VariableSym(..), 
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..),
   ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
@@ -262,7 +262,7 @@ instance (Pair p) => ControlBlock (p CppSrcCode CppHdrCode) where
       (odeOptionsHdr m atol2 rtol2 ss2)
     toState $ pair p1 p2
 
-instance (Pair p) => InternalControlBlock (p CppSrcCode CppHdrCode) where
+instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
   listSlice' b e s vr vl = pair2 
     (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e) 
       (fmap (onStateValue pfst) s))
@@ -1150,7 +1150,7 @@ instance ControlBlock CppSrcCode where
           tInit info, tFinal info, stepSize opts, 
           newObj (obj $ "Populate_" ++ variableName dpv) [valueOf dv]]]))
 
-instance InternalControlBlock CppSrcCode where
+instance InternalList CppSrcCode where
   listSlice' = G.listSlice
 
 instance UnaryOpSym CppSrcCode where
@@ -1768,7 +1768,7 @@ instance ControlBlock CppHdrCode where
     in modify (addODEFilePaths s . addODEFiles [unCPPHC fl]) >> 
     toState (toCode empty)
 
-instance InternalControlBlock CppHdrCode where
+instance InternalList CppHdrCode where
   listSlice' _ _ _ _ _ = toState $ toCode empty
 
 instance UnaryOpSym CppHdrCode where
@@ -2092,7 +2092,7 @@ instance ObserverPattern CppHdrCode where
 
 instance StrategyPattern CppHdrCode where
   runStrategy _ _ _ _ = toState $ toCode empty
-  
+
 instance ScopeSym CppHdrCode where
   type Scope CppHdrCode = (Doc, ScopeTag)
   private = toCode (privateDocD, Priv)

@@ -7,7 +7,7 @@ module GOOL.Drasil.ClassInterface (
   -- Typeclasses
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), TypeSym(..), ControlBlock(..), 
-  InternalControlBlock(..), listSlice, VariableSym(..), ($->), listOf, 
+  InternalList(..), listSlice, VariableSym(..), ($->), listOf, 
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
   extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
@@ -42,7 +42,7 @@ type SFile a = FS (a (RenderFile a))
 
 class (ModuleSym repr, ControlBlock repr, AssignStatement repr, 
   DeclStatement repr, IOStatement repr, StringStatement repr, FuncAppStatement repr,
-  MiscStatement repr, ControlStatement repr, InternalControlBlock repr, Literal repr, MathConstant repr, VariableValue repr, CommandLineArgs repr, NumericExpression repr, BooleanExpression repr, Comparison repr, 
+  MiscStatement repr, ControlStatement repr, InternalList repr, Literal repr, MathConstant repr, VariableValue repr, CommandLineArgs repr, NumericExpression repr, BooleanExpression repr, Comparison repr, 
   ValueExpression repr, InternalValueExp repr, GetSet repr, List repr, 
   Iterator repr, StatePattern repr, ObserverPattern repr, StrategyPattern repr) => 
   FileSym repr where 
@@ -103,15 +103,6 @@ class TypeSym repr where
 
 class (BodySym repr) => ControlBlock repr where
   solveODE :: ODEInfo repr -> ODEOptions repr -> MSBlock repr
-
-class (ValueSym repr) => InternalControlBlock repr where
-  listSlice'      :: Maybe (SValue repr) -> Maybe (SValue repr) -> 
-    Maybe (SValue repr) -> SVariable repr -> SValue repr -> MSBlock repr
-  
-listSlice :: (InternalControlBlock repr) => SVariable repr -> SValue repr -> 
-  Maybe (SValue repr) -> Maybe (SValue repr) -> Maybe (SValue repr) -> 
-  MSBlock repr
-listSlice vnew vold b e s = listSlice' b e s vnew vold
 
 type SVariable a = VS (a (Variable a))
 
@@ -328,6 +319,15 @@ class (ValueSym repr) => List repr where
   listSet    :: SValue repr -> SValue repr -> SValue repr -> SValue repr
   
   indexOf :: SValue repr -> SValue repr -> SValue repr
+
+class (ValueSym repr) => InternalList repr where
+  listSlice'      :: Maybe (SValue repr) -> Maybe (SValue repr) -> 
+    Maybe (SValue repr) -> SVariable repr -> SValue repr -> MSBlock repr
+  
+listSlice :: (InternalList repr) => SVariable repr -> SValue repr -> 
+  Maybe (SValue repr) -> Maybe (SValue repr) -> Maybe (SValue repr) -> 
+  MSBlock repr
+listSlice vnew vold b e s = listSlice' b e s vnew vold
 
 listIndexExists :: (List repr, Comparison repr) => SValue repr -> SValue repr 
   -> SValue repr

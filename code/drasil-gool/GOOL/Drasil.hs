@@ -12,7 +12,7 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   libNewObj, exists, Selector(..), ($.), selfAccess, objMethodCallMixedArgs, 
   FunctionSym(..), listIndexExists, SelectorFunction(..), at, ScopeSym(..), 
   ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer, 
-  nonInitConstructor, StateVarSym(..), privMVar, pubMVar, pubGVar, ClassSym(..),
+  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..),
   ModuleSym(..), convType,
   ProgData(..), FileData(..), ModData(..), ScopeTag(..),
   CodeType(..),
@@ -36,7 +36,7 @@ import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock,
   selfAccess, objMethodCallMixedArgs, FunctionSym(..), listIndexExists, 
   SelectorFunction(..), at, ScopeSym(..), ParameterSym(..), MethodSym(..), 
   privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
-  privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..), convType)
+  privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType)
 
 import GOOL.Drasil.AST (FileData(..), ModData(..), ProgData(..), ScopeTag(..))
 

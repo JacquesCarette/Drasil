@@ -74,6 +74,14 @@ auxClass :: (ProgramSym repr) => String -> Label -> Maybe Label ->
   Reader DrasilState (SClass repr)
 auxClass = mkClass Auxiliary
 
+-- m parameter is the module where the function is defined
+-- if m is not current module, use GOOL's function for calling functions from 
+--   external modules
+-- if m is current module and the function is in export map, use GOOL's basic 
+--   function for function applications
+-- if m is current module and function is not exported, use GOOL's function for 
+--   calling a method on self. This assumes all private methods are dynamic, 
+--   which is true for this generator.
 fApp :: (ProgramSym repr) => String -> String -> VSType repr -> [SValue repr] 
   -> [(SVariable repr, SValue repr)] -> Reader DrasilState (SValue repr)
 fApp m s t vl ns = do
@@ -83,6 +91,8 @@ fApp m s t vl ns = do
     (eMap g) == Just cm then funcAppMixedArgs s t vl ns else 
     selfFuncAppMixedArgs s t vl ns
 
+-- Logic similar to fApp above, but self case not required here 
+-- (because constructor will never be private)
 ctorCall :: (ProgramSym repr) => String -> VSType repr -> [SValue repr] -> 
   [(SVariable repr, SValue repr)] -> Reader DrasilState (SValue repr)
 ctorCall m t vl ns = do
@@ -91,6 +101,7 @@ ctorCall m t vl ns = do
   return $ if m /= cm then extNewObjMixedArgs m t vl ns else 
     newObjMixedArgs t vl ns
 
+-- Logic similar to fApp above
 fAppInOut :: (ProgramSym repr) => String -> String -> [SValue repr] -> 
   [SVariable repr] -> [SVariable repr] -> Reader DrasilState (MSStatement repr)
 fAppInOut m n ins outs both = do

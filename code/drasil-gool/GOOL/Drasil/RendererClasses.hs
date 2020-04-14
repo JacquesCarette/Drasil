@@ -183,7 +183,8 @@ class InternalParam repr where
   parameterDoc  :: repr (Parameter repr) -> Doc
   paramFromData :: repr (Variable repr) -> Doc -> repr (Parameter repr)
 
-class (MethodTypeSym repr, BlockCommentSym repr) => InternalMethod repr where
+class (MethodTypeSym repr, BlockCommentSym repr, StateVarSym repr) => 
+  InternalMethod repr where
   intMethod     :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
     -> MS (repr (MethodType repr)) -> [MSParameter repr] -> MSBody repr -> 
     SMethod repr

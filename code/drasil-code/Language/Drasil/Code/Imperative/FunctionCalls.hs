@@ -85,7 +85,13 @@ getInOutCall n inFunc outFunc = do
         stmt <- fAppInOut m n (map valueOf ins) outs both
         return $ Just stmt
   getInOutCall' mm
-
+  
+-- Gets the name of the module containing the function being called
+-- If the function is not in either module export map or class definition map, 
+--   return Nothing
+-- If the function is not in module export map but is in class definition map, 
+-- that means it is a private function, so return Nothing unless it is in the 
+-- current class
 getCall :: String -> Reader DrasilState (Maybe String)
 getCall n = do
   g <- ask

@@ -18,7 +18,7 @@ module GOOL.Drasil.ClassInterface (
   initState, changeState, observerListName, initObserverList, addObserver, 
   ControlStatement(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
-  StateVarSym(..), privMVar, pubMVar, pubGVar, ClassSym(..), ModuleSym(..), 
+  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
   convType
 ) where
 
@@ -74,7 +74,7 @@ class (AssignStatement repr, DeclStatement repr, IOStatement repr,
 
 type VSType a = VS (a (Type a))
 
-class (PermanenceSym repr) => TypeSym repr where
+class TypeSym repr where
   type Type repr
   bool          :: VSType repr
   int           :: VSType repr -- This is 32-bit signed ints except
@@ -502,8 +502,8 @@ class ParameterSym repr where
 
 type SMethod a = MS (a (Method a))
 
-class (StateVarSym repr, ParameterSym repr, ControlBlock repr, 
-  InternalControlBlock repr) => MethodSym repr where
+class (ParameterSym repr, ControlBlock repr, InternalControlBlock repr,
+  ScopeSym repr, PermanenceSym repr) => MethodSym repr where
   type Method repr
   method      :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     VSType repr -> [MSParameter repr] -> MSBody repr -> SMethod repr
@@ -555,7 +555,7 @@ nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
 
-class (ScopeSym repr, DeclStatement repr) => StateVarSym repr where
+class (ScopeSym repr, PermanenceSym repr) => StateVarSym repr where
   type StateVar repr
   stateVar :: repr (Scope repr) -> repr (Permanence repr) -> SVariable repr -> 
     CSStateVar repr
@@ -564,18 +564,18 @@ class (ScopeSym repr, DeclStatement repr) => StateVarSym repr where
   constVar :: Label -> repr (Scope repr) ->  SVariable repr -> SValue repr -> 
     CSStateVar repr
 
-privMVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
-privMVar = stateVar private dynamic
+privDVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
+privDVar = stateVar private dynamic
 
-pubMVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
-pubMVar = stateVar public dynamic
+pubDVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
+pubDVar = stateVar public dynamic
 
-pubGVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
-pubGVar = stateVar public static
+pubSVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
+pubSVar = stateVar public static
 
 type SClass a = CS (a (Class a))
 
-class (MethodSym repr) => ClassSym repr where
+class (MethodSym repr, StateVarSym repr) => ClassSym repr where
   type Class repr
   buildClass :: Label -> Maybe Label -> [CSStateVar repr] -> [SMethod repr] -> 
     SClass repr

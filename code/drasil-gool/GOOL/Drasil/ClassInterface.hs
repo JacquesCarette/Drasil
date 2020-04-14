@@ -6,17 +6,16 @@ module GOOL.Drasil.ClassInterface (
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, FSModule,
   -- Typeclasses
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
-  oneLiner, BlockSym(..), TypeSym(..), ControlBlock(..), 
-  InternalList(..), listSlice, VariableSym(..), ($->), listOf, 
+  oneLiner, BlockSym(..), TypeSym(..), ControlBlock(..), VariableSym(..), ($->), listOf, 
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
   extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
   InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), ($.), 
-  selfAccess, GetSet(..), List(..), listIndexExists, 
+  selfAccess, GetSet(..), List(..), InternalList(..), listSlice, listIndexExists, 
   at, Iterator(..), StatementSym(..), AssignStatement(..), (&=), assignToListIndex,
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  MiscStatement(..), 
+  CommentStatement(..), 
   ControlStatement(..), StatePattern(..), initState, changeState, ObserverPattern(..), observerListName, initObserverList, addObserver, StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
   StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
@@ -42,7 +41,7 @@ type SFile a = FS (a (RenderFile a))
 
 class (ModuleSym repr, ControlBlock repr, AssignStatement repr, 
   DeclStatement repr, IOStatement repr, StringStatement repr, FuncAppStatement repr,
-  MiscStatement repr, ControlStatement repr, InternalList repr, Literal repr, MathConstant repr, VariableValue repr, CommandLineArgs repr, NumericExpression repr, BooleanExpression repr, Comparison repr, 
+  CommentStatement repr, ControlStatement repr, InternalList repr, Literal repr, MathConstant repr, VariableValue repr, CommandLineArgs repr, NumericExpression repr, BooleanExpression repr, Comparison repr, 
   ValueExpression repr, InternalValueExp repr, GetSet repr, List repr, 
   Iterator repr, StatePattern repr, ObserverPattern repr, StrategyPattern repr) => 
   FileSym repr where 
@@ -344,6 +343,8 @@ type MSStatement a = MS (a (Statement a))
 
 class (ValueSym repr) => StatementSym repr where
   type Statement repr
+  valState :: SValue repr -> MSStatement repr -- converts value to statement
+  multi     :: [MSStatement repr] -> MSStatement repr
 
 class (VariableSym repr, StatementSym repr) => AssignStatement repr where
   (&-=)  :: SVariable repr -> SValue repr -> MSStatement repr
@@ -362,7 +363,7 @@ class (VariableSym repr, StatementSym repr) => AssignStatement repr where
 infixr 1 &=
 (&=) = assign
 
-assignToListIndex :: (MiscStatement repr, VariableValue repr, List repr) => 
+assignToListIndex :: (StatementSym repr, VariableValue repr, List repr) => 
   SVariable repr -> SValue repr -> SValue repr -> MSStatement repr
 assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
 
@@ -425,10 +426,8 @@ class (VariableSym repr, StatementSym repr) => FuncAppStatement repr where
 
 type Comment = String  
 
-class (StatementSym repr) => MiscStatement repr where
-  valState :: SValue repr -> MSStatement repr -- converts value to statement
+class (StatementSym repr) => CommentStatement repr where
   comment :: Comment -> MSStatement repr
-  multi     :: [MSStatement repr] -> MSStatement repr
 
 class (BodySym repr) => ControlStatement repr where
   break :: MSStatement repr
@@ -484,7 +483,7 @@ initObserverList :: (DeclStatement repr) => VSType repr -> [SValue repr] ->
   MSStatement repr
 initObserverList t = listDecDef (var observerListName (listType t))
 
-addObserver :: (MiscStatement repr, VariableValue repr, List repr) => 
+addObserver :: (StatementSym repr, VariableValue repr, List repr) => 
   SValue repr -> MSStatement repr
 addObserver o = valState $ listAdd obsList lastelem o
   where obsList = valueOf $ observerListName `listOf` onStateValue valueType o

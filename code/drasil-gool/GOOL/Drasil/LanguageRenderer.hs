@@ -32,7 +32,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), ValueSym(..), Literal(..), VariableValue(..),
   NumericExpression(..), Comparison(..), List(..),
   StatementSym(..), AssignStatement(..), 
-  DeclStatement(..), IOStatement(..), MiscStatement(..), ControlStatement(..), 
+  DeclStatement(..), IOStatement(..), ControlStatement(..), 
   ifNoElse, ScopeSym(..), ParameterSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(int))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalBody(..), 

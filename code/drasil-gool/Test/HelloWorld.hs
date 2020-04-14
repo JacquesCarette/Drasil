@@ -4,8 +4,8 @@ module Test.HelloWorld (helloWorld) where
 
 import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, 
   ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner, 
-  BlockSym(..), listSlice, TypeSym(..), AssignStatement(..), (&=), 
-  DeclStatement(..), IOStatement(..), StringStatement(..), MiscStatement(..), ControlStatement(..), 
+  BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=), 
+  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..), ControlStatement(..), 
   VariableSym(..), Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), extFuncApp, List(..),
   MethodSym(..), ModuleSym(..))

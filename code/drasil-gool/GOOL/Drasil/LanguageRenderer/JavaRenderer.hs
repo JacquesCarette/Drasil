@@ -13,14 +13,14 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlock(..), InternalList(..), VariableSym(..), 
+  TypeSym(..), ControlBlock(..), VariableSym(..), 
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj,
   InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
-  FunctionSym(..), ($.), GetSet(..), List(..), Iterator(..), StatementSym(..), AssignStatement(..), 
+  FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
   FuncAppStatement(..), 
-  MiscStatement(..), ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
+  CommentStatement(..), ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
@@ -223,9 +223,6 @@ instance ControlBlock JavaCode where
         dv &= valueOf (objVar hndlr dv)]]))
     where stH = "StepHandler"
           dv = depVar info
-
-instance InternalList JavaCode where
-  listSlice' = G.listSlice
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
@@ -440,6 +437,9 @@ instance List JavaCode where
   listSet = G.listSet
   indexOf = G.indexOf "indexOf"
 
+instance InternalList JavaCode where
+  listSlice' = G.listSlice
+
 instance Iterator JavaCode where
   iterBegin = G.iterBegin
   iterEnd = G.iterEnd
@@ -482,6 +482,8 @@ instance InternalStatement JavaCode where
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
+  valState = G.valState Semi
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance AssignStatement JavaCode where
   assign = G.assign Semi
@@ -547,12 +549,8 @@ instance FuncAppStatement JavaCode where
   selfInOutCall = jInOutCall selfFuncApp
   extInOutCall m = jInOutCall (extFuncApp m)
 
-instance MiscStatement JavaCode where
-  valState = G.valState Semi
-
+instance CommentStatement JavaCode where
   comment = G.comment commentStart
-
-  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement JavaCode where
   break = toState $ mkSt breakDocD 

@@ -5,11 +5,11 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlock(..), InternalList(..), TypeSym(..), 
+  BlockSym(..), ControlBlock(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
-  GetSet(..), List(..), Iterator(..), StatementSym(..), AssignStatement(..), 
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), 
+  GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
   ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
@@ -93,12 +93,6 @@ instance TypeSym CodeInfo where
 
 instance ControlBlock CodeInfo where
   solveODE _ _ = noInfo
-
-instance InternalList CodeInfo where
-  listSlice' b e s _ vl = zoom lensMStoVS $ do
-    mapM_ (fromMaybe noInfo) [b,e,s]
-    _ <- vl
-    noInfo
 
 instance VariableSym CodeInfo where
   type Variable CodeInfo = ()
@@ -230,6 +224,12 @@ instance List CodeInfo where
   listAccess = execute2
   listSet = execute3
   indexOf = execute2
+  
+instance InternalList CodeInfo where
+  listSlice' b e s _ vl = zoom lensMStoVS $ do
+    mapM_ (fromMaybe noInfo) [b,e,s]
+    _ <- vl
+    noInfo
 
 instance Iterator CodeInfo where
   iterBegin = execute1
@@ -237,7 +237,9 @@ instance Iterator CodeInfo where
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()
-
+  valState = zoom lensMStoVS . execute1
+  multi = executeList
+  
 instance AssignStatement CodeInfo where
   assign _ = zoom lensMStoVS . execute1
   (&-=) _ = zoom lensMStoVS . execute1
@@ -302,12 +304,8 @@ instance FuncAppStatement CodeInfo where
     sequence_ vs
     addExternalCall l n
 
-instance MiscStatement CodeInfo where
-  valState = zoom lensMStoVS . execute1
-
+instance CommentStatement CodeInfo where
   comment _ = noInfo
-
-  multi = executeList
 
 instance ControlStatement CodeInfo where
   break = noInfo

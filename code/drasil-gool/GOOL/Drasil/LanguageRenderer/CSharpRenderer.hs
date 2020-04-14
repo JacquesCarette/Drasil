@@ -13,12 +13,12 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
-  ControlBlock(..), InternalList(..), VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
+  ControlBlock(..), VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
   NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
   selfFuncApp, extFuncApp, newObj, InternalValueExp(..), 
-  objMethodCall, objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), Iterator(..), 
+  objMethodCall, objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), 
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
   ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
@@ -223,9 +223,6 @@ instance ControlBlock CSharpCode where
           points = var "points" spArray
           sp = var "sp" (obj "SolPoint")
 
-instance InternalList CSharpCode where
-  listSlice' = G.listSlice
-
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
   notOp = G.notOp
@@ -413,6 +410,9 @@ instance List CSharpCode where
   listAccess = G.listAccess
   listSet = G.listSet
   indexOf = G.indexOf "IndexOf"
+  
+instance InternalList CSharpCode where
+  listSlice' = G.listSlice
 
 instance Iterator CSharpCode where
   iterBegin = G.iterBegin
@@ -454,6 +454,8 @@ instance InternalStatement CSharpCode where
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
+  valState = G.valState Semi
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance AssignStatement CSharpCode where
   assign = G.assign Semi
@@ -517,12 +519,8 @@ instance FuncAppStatement CSharpCode where
   selfInOutCall = csInOutCall selfFuncApp
   extInOutCall m = csInOutCall (extFuncApp m)
 
-instance MiscStatement CSharpCode where
-  valState = G.valState Semi
-
+instance CommentStatement CSharpCode where
   comment = G.comment commentStart
-
-  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement CSharpCode where
   break = toState $ mkSt breakDocD

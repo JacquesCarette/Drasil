@@ -14,8 +14,8 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlock(..), InternalList(..), VariableSym(..), 
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..),
+  TypeSym(..), ControlBlock(..), VariableSym(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
@@ -262,14 +262,6 @@ instance (Pair p) => ControlBlock (p CppSrcCode CppHdrCode) where
       (odeOptionsHdr m atol2 rtol2 ss2)
     toState $ pair p1 p2
 
-instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
-  listSlice' b e s vr vl = pair2 
-    (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e) 
-      (fmap (onStateValue pfst) s))
-    (listSlice' (fmap (onStateValue psnd) b) (fmap (onStateValue psnd) e) 
-      (fmap (onStateValue psnd) s)) 
-    (zoom lensMStoVS vr) (zoom lensMStoVS vl)
-
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
   type UnaryOp (p CppSrcCode CppHdrCode) = OpData
   notOp = on2StateValues pair notOp notOp
@@ -484,6 +476,14 @@ instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSet = pair3 listSet listSet
   indexOf = pair2 indexOf indexOf
 
+instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
+  listSlice' b e s vr vl = pair2 
+    (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e) 
+      (fmap (onStateValue pfst) s))
+    (listSlice' (fmap (onStateValue psnd) b) (fmap (onStateValue psnd) e) 
+      (fmap (onStateValue psnd) s)) 
+    (zoom lensMStoVS vr) (zoom lensMStoVS vl)
+
 instance (Pair p) => Iterator (p CppSrcCode CppHdrCode) where
   iterBegin = pair1 iterBegin iterBegin
   iterEnd = pair1 iterEnd iterEnd
@@ -529,6 +529,8 @@ instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
+  valState = pair1 valState valState . zoom lensMStoVS
+  multi = pair1List multi multi
 
 instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) where
   assign vr vl = pair2 assign assign (zoom lensMStoVS vr) (zoom lensMStoVS vl)
@@ -618,12 +620,8 @@ instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) where
     (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
     (map (zoom lensMStoVS) bs)
 
-instance (Pair p) => MiscStatement (p CppSrcCode CppHdrCode) where
-  valState = pair1 valState valState . zoom lensMStoVS
-
+instance (Pair p) => CommentStatement (p CppSrcCode CppHdrCode) where
   comment cmt = on2StateValues pair (comment cmt) (comment cmt)
-
-  multi = pair1List multi multi
 
 instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
   break = on2StateValues pair break break  
@@ -1150,9 +1148,6 @@ instance ControlBlock CppSrcCode where
           tInit info, tFinal info, stepSize opts, 
           newObj (obj $ "Populate_" ++ variableName dpv) [valueOf dv]]]))
 
-instance InternalList CppSrcCode where
-  listSlice' = G.listSlice
-
 instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
   notOp = G.notOp
@@ -1347,6 +1342,9 @@ instance List CppSrcCode where
   listSet = G.listSet
   indexOf l v = addAlgorithmImportVS $ funcApp "find" int 
     [iterBegin l, iterEnd l, v] #- iterBegin l
+    
+instance InternalList CppSrcCode where
+  listSlice' = G.listSlice
 
 instance Iterator CppSrcCode where
   iterBegin = G.iterBegin
@@ -1389,6 +1387,8 @@ instance InternalStatement CppSrcCode where
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
+  valState = G.valState Semi
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance AssignStatement CppSrcCode where
   assign = G.assign Semi
@@ -1478,12 +1478,8 @@ instance FuncAppStatement CppSrcCode where
   selfInOutCall = cppInOutCall selfFuncApp
   extInOutCall m = cppInOutCall (extFuncApp m)
 
-instance MiscStatement CppSrcCode where
-  valState = G.valState Semi
-
+instance CommentStatement CppSrcCode where
   comment = G.comment commentStart
-
-  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement CppSrcCode where
   break = toState $ mkSt breakDocD
@@ -1768,9 +1764,6 @@ instance ControlBlock CppHdrCode where
     in modify (addODEFilePaths s . addODEFiles [unCPPHC fl]) >> 
     toState (toCode empty)
 
-instance InternalList CppHdrCode where
-  listSlice' _ _ _ _ _ = toState $ toCode empty
-
 instance UnaryOpSym CppHdrCode where
   type UnaryOp CppHdrCode = OpData
   notOp = uOpFromData 0 empty
@@ -1957,6 +1950,9 @@ instance List CppHdrCode where
   listAccess _ _ = mkStateVal void empty
   listSet _ _ _ = mkStateVal void empty
   indexOf _ _ = mkStateVal void empty
+  
+instance InternalList CppHdrCode where
+  listSlice' _ _ _ _ _ = toState $ toCode empty
 
 instance Iterator CppHdrCode where
   iterBegin _ = mkStateVal void empty
@@ -1998,6 +1994,8 @@ instance InternalStatement CppHdrCode where
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
+  valState _ = emptyState
+  multi _ = emptyState
 
 instance AssignStatement CppHdrCode where
   assign _ _ = emptyState
@@ -2057,12 +2055,8 @@ instance FuncAppStatement CppHdrCode where
   selfInOutCall _ _ _ _ = emptyState
   extInOutCall _ _ _ _ _ = emptyState
 
-instance MiscStatement CppHdrCode where
-  valState _ = emptyState
-
+instance CommentStatement CppHdrCode where
   comment _ = emptyState
-
-  multi _ = emptyState
 
 instance ControlStatement CppHdrCode where
   break = emptyState

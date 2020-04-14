@@ -12,13 +12,13 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlock(..), InternalList(..), VariableSym(..), 
+  TypeSym(..), ControlBlock(..), VariableSym(..), 
   listOf, ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
   InternalValueExp(..), objMethodCall,
-  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), at, Iterator(..),
+  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), at, Iterator(..),
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), observerListName, 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), observerListName, 
   ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), 
   ODEOptions(..), ODEMethod(..))
@@ -211,11 +211,6 @@ instance ControlBlock PythonCode where
          r_t = valueOf $ objVar r (var "t" $ listInnerType $ onStateValue 
            variableType iv)
          r_y = valueOf $ objVar r (var "y" $ onStateValue variableType dv)
-
-instance InternalList PythonCode where
-  listSlice' b e s vnew vold = docBlock $ zoom lensMStoVS $ pyListSlice vnew 
-    vold (getVal b) (getVal e) (getVal s)
-    where getVal = fromMaybe (mkStateVal void empty)
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData
@@ -412,6 +407,11 @@ instance List PythonCode where
   listSet = G.listSet
   indexOf = G.indexOf "index"
 
+instance InternalList PythonCode where
+  listSlice' b e s vnew vold = docBlock $ zoom lensMStoVS $ pyListSlice vnew 
+    vold (getVal b) (getVal e) (getVal s)
+    where getVal = fromMaybe (mkStateVal void empty)
+
 instance Iterator PythonCode where
   iterBegin = G.iterBegin
   iterEnd = G.iterEnd
@@ -456,6 +456,8 @@ instance InternalStatement PythonCode where
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
+  valState = G.valState Empty
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance AssignStatement PythonCode where
   assign = G.assign Empty
@@ -521,12 +523,8 @@ instance FuncAppStatement PythonCode where
   selfInOutCall = pyInOutCall selfFuncApp
   extInOutCall m = pyInOutCall (extFuncApp m)
 
-instance MiscStatement PythonCode where
-  valState = G.valState Empty
-
+instance CommentStatement PythonCode where
   comment = G.comment pyCommentStart
-
-  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement PythonCode where
   break = toState $ mkStNoEnd breakDocD

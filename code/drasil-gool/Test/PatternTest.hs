@@ -2,8 +2,8 @@ module Test.PatternTest (patternTest) where
 
 import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, 
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..), 
-  TypeSym(..), AssignStatement, DeclStatement(..), 
-  IOStatement(..), MiscStatement(..), initState, changeState, initObserverList, 
+  TypeSym(..), StatementSym(..), AssignStatement, DeclStatement(..), 
+  IOStatement(..), initState, changeState, initObserverList, 
   addObserver, VariableSym(..), Literal(..), VariableValue(..), 
   ValueExpression(..), extNewObj, FunctionSym(..), GetSet(..), List, StatePattern(..), ObserverPattern(..), StrategyPattern(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
@@ -38,7 +38,7 @@ patternTest = prog progName [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
 patternTestMainMethod :: (MethodSym repr, AssignStatement repr, 
-  DeclStatement repr, IOStatement repr, MiscStatement repr, Literal repr, VariableValue repr, ValueExpression repr, GetSet repr, List repr, 
+  DeclStatement repr, IOStatement repr, Literal repr, VariableValue repr, ValueExpression repr, GetSet repr, List repr, 
   StatePattern repr, ObserverPattern repr, StrategyPattern repr) => 
   SMethod repr
 patternTestMainMethod = mainFunction (body [block [

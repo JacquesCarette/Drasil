@@ -15,9 +15,9 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
-  ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), AssignStatement(..), 
+  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj,
+  InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
+  FunctionSym(..), ($.), GetSet(..), List(..), Iterator(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
   FuncAppStatement(..), 
   MiscStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..), 
@@ -416,11 +416,6 @@ instance InternalValue JavaCode where
   valueDoc = val . unJC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
-instance Selector JavaCode where
-  objAccess = G.objAccess
-  
-  indexOf = G.indexOf "indexOf"
-
 instance InternalValueExp JavaCode where
   objMethodCallMixedArgs' f t o ps ns = do
     ob <- o
@@ -433,20 +428,23 @@ instance InternalValueExp JavaCode where
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
   func = G.func
+  objAccess = G.objAccess
 
+instance GetSet JavaCode where
   get = G.get
   set = G.set
 
+instance List JavaCode where
   listSize = G.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
-
-  iterBegin = G.iterBegin
-  iterEnd = G.iterEnd
-
-instance SelectorFunction JavaCode where
   listAccess = G.listAccess
   listSet = G.listSet
+  indexOf = G.indexOf "indexOf"
+
+instance Iterator JavaCode where
+  iterBegin = G.iterBegin
+  iterEnd = G.iterEnd
 
 instance InternalFunction JavaCode where
   getFunc = G.getFunc

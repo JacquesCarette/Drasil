@@ -15,8 +15,8 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
   ControlBlock(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
   NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), 
-  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
+  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), 
+  objMethodCall, objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), Iterator(..), 
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
   IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), 
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
@@ -394,11 +394,6 @@ instance InternalValue CSharpCode where
   valuePrec = valPrec . unCSC
   valueDoc = val . unCSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
-
-instance Selector CSharpCode where
-  objAccess = G.objAccess
-  
-  indexOf = G.indexOf "IndexOf"
   
 instance InternalValueExp CSharpCode where
   objMethodCallMixedArgs' = G.objMethodCall 
@@ -407,20 +402,23 @@ instance InternalValueExp CSharpCode where
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
   func = G.func
-
+  objAccess = G.objAccess
+  
+instance GetSet CSharpCode where
   get = G.get
   set = G.set
 
+instance List CSharpCode where
   listSize = G.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
-
-  iterBegin = G.iterBegin
-  iterEnd = G.iterEnd
-
-instance SelectorFunction CSharpCode where
   listAccess = G.listAccess
   listSet = G.listSet
+  indexOf = G.indexOf "IndexOf"
+
+instance Iterator CSharpCode where
+  iterBegin = G.iterBegin
+  iterEnd = G.iterEnd
 
 instance InternalFunction CSharpCode where
   getFunc = G.getFunc

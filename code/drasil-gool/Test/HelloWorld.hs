@@ -7,8 +7,8 @@ import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod,
   BlockSym(..), listSlice, TypeSym(..), AssignStatement(..), (&=), 
   DeclStatement(..), IOStatement(..), StringStatement(..), MiscStatement(..), ControlStatement(..), 
   VariableSym(..), Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), extFuncApp, Selector(..), FunctionSym(..), 
-  SelectorFunction(..), MethodSym(..), ModuleSym(..))
+  ValueExpression(..), extFuncApp, List(..),
+  MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 

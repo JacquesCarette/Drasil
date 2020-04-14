@@ -15,8 +15,8 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
   listOf, ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
-  Selector(..), ($.), InternalValueExp(..), objMethodCall,
-  objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), at, 
+  InternalValueExp(..), objMethodCall,
+  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), at, Iterator(..),
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
   IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), observerListName, 
   ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
@@ -392,11 +392,6 @@ instance InternalValue PythonCode where
   valueDoc = val . unPC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
-instance Selector PythonCode where
-  objAccess = G.objAccess
-  
-  indexOf = G.indexOf "index"
-
 instance InternalValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
   objMethodCallNoParams' = G.objMethodCallNoParams
@@ -404,21 +399,24 @@ instance InternalValueExp PythonCode where
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
   func = G.func
+  objAccess = G.objAccess
 
+instance GetSet PythonCode where
   get = G.get
   set = G.set
 
+instance List PythonCode where
   listSize = on2StateValues (\f v -> mkVal (functionType f) 
     (pyListSize (valueDoc v) (functionDoc f))) listSizeFunc
   listAdd = G.listAdd
   listAppend = G.listAppend
-
-  iterBegin = G.iterBegin
-  iterEnd = G.iterEnd
-
-instance SelectorFunction PythonCode where
   listAccess = G.listAccess
   listSet = G.listSet
+  indexOf = G.indexOf "index"
+
+instance Iterator PythonCode where
+  iterBegin = G.iterBegin
+  iterEnd = G.iterEnd
 
 instance InternalFunction PythonCode where
   getFunc = G.getFunc

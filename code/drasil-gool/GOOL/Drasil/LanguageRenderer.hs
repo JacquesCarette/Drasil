@@ -30,8 +30,8 @@ import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
   MSStatement, SMethod, BodySym(..), bodyStatements, oneLiner, 
   PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), ValueSym(..), Literal(..), VariableValue(..),
-  NumericExpression(..), Comparison(..), FunctionSym(..),
-  SelectorFunction(..), StatementSym(..), AssignStatement(..), 
+  NumericExpression(..), Comparison(..), List(..),
+  StatementSym(..), AssignStatement(..), 
   DeclStatement(..), IOStatement(..), MiscStatement(..), ControlStatement(..), 
   ifNoElse, ScopeSym(..), ParameterSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(int))

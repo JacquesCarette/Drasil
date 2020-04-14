@@ -7,8 +7,8 @@ import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement,
   SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   BlockSym(..), ControlBlock(..), InternalControlBlock(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), Selector(..), InternalValueExp(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), AssignStatement(..), 
+  ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
+  GetSet(..), List(..), Iterator(..), StatementSym(..), AssignStatement(..), 
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), 
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
@@ -210,11 +210,6 @@ instance ValueExpression CodeInfo where
   lambda _ = execute1
 
   notNull = execute1
-
-instance Selector CodeInfo where
-  objAccess = execute2
-  
-  indexOf = execute2
   
 instance InternalValueExp CodeInfo where
   objMethodCallMixedArgs' n _ v vs ns = do
@@ -227,20 +222,23 @@ instance InternalValueExp CodeInfo where
 instance FunctionSym CodeInfo where
   type Function CodeInfo = ()
   func _ _ = executeList
+  objAccess = execute2
   
+instance GetSet CodeInfo where
   get v _ = execute1 v
   set v _ = execute2 v
 
+instance List CodeInfo where
   listSize = execute1
   listAdd = execute3
   listAppend = execute2
-
-  iterBegin = execute1
-  iterEnd = execute1
-
-instance SelectorFunction CodeInfo where
   listAccess = execute2
   listSet = execute3
+  indexOf = execute2
+
+instance Iterator CodeInfo where
+  iterBegin = execute1
+  iterEnd = execute1
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()

@@ -8,12 +8,13 @@ module GOOL.Drasil.ClassInterface (
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), TypeSym(..), ControlBlock(..), 
   InternalControlBlock(..), listSlice, VariableSym(..), ($->), listOf, 
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
-  libFuncApp, newObj, extNewObj, libNewObj, exists, Selector(..), ($.), 
-  selfAccess, InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
-  objMethodCallNoParams, FunctionSym(..), listIndexExists, SelectorFunction(..),
-  at, StatementSym(..), AssignStatement(..), (&=), assignToListIndex,
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
+  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
+  InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
+  objMethodCallNoParams, FunctionSym(..), ($.), 
+  selfAccess, GetSet(..), List(..), listIndexExists, 
+  at, Iterator(..), StatementSym(..), AssignStatement(..), (&=), assignToListIndex,
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
   MiscStatement(..), 
   initState, changeState, observerListName, initObserverList, addObserver, 
@@ -43,7 +44,8 @@ type SFile a = FS (a (RenderFile a))
 class (ModuleSym repr, ControlBlock repr, AssignStatement repr, 
   DeclStatement repr, IOStatement repr, StringStatement repr, FuncAppStatement repr,
   MiscStatement repr, ControlStatement repr, InternalControlBlock repr, Literal repr, MathConstant repr, VariableValue repr, CommandLineArgs repr, NumericExpression repr, BooleanExpression repr, Comparison repr, 
-  ValueExpression repr) => 
+  ValueExpression repr, InternalValueExp repr, GetSet repr, List repr, 
+  Iterator repr) => 
   FileSym repr where 
   type RenderFile repr
   fileDoc :: FSModule repr -> SFile repr
@@ -286,18 +288,6 @@ libNewObj l t vs = libNewObjMixedArgs l t vs []
 exists :: (ValueExpression repr) => SValue repr -> SValue repr
 exists = notNull
 
-class (FunctionSym repr) => Selector repr where
-  objAccess :: SValue repr -> VSFunction repr -> SValue repr
-
-  indexOf :: SValue repr -> SValue repr -> SValue repr
-
-($.) :: (Selector repr) => SValue repr -> VSFunction repr -> SValue repr
-infixl 9 $.
-($.) = objAccess
-
-selfAccess :: (VariableValue repr, Selector repr) => VSFunction repr -> SValue repr
-selfAccess = objAccess (valueOf self)
-
 class (FunctionSym repr) => InternalValueExp repr where
   objMethodCallMixedArgs' :: Label -> VSType repr -> SValue repr -> 
     [SValue repr] -> [(SVariable repr, SValue repr)] -> SValue repr
@@ -320,31 +310,43 @@ type VSFunction a = VS (a (Function a))
 class (ValueSym repr) => FunctionSym repr where
   type Function repr
   func :: Label -> VSType repr -> [SValue repr] -> VSFunction repr
+  objAccess :: SValue repr -> VSFunction repr -> SValue repr
 
+($.) :: (FunctionSym repr) => SValue repr -> VSFunction repr -> SValue repr
+infixl 9 $.
+($.) = objAccess
+
+selfAccess :: (VariableValue repr, FunctionSym repr) => VSFunction repr -> 
+  SValue repr
+selfAccess = objAccess (valueOf self)
+
+class (ValueSym repr, VariableSym repr) => GetSet repr where
   get :: SValue repr -> SVariable repr -> SValue repr
   set :: SValue repr -> SVariable repr -> SValue repr -> SValue repr
 
+class (ValueSym repr) => List repr where
   listSize   :: SValue repr -> SValue repr
   listAdd    :: SValue repr -> SValue repr -> SValue repr -> SValue repr
   listAppend :: SValue repr -> SValue repr -> SValue repr
+  listAccess :: SValue repr -> SValue repr -> SValue repr
+  listSet    :: SValue repr -> SValue repr -> SValue repr -> SValue repr
+  
+  indexOf :: SValue repr -> SValue repr -> SValue repr
 
+listIndexExists :: (List repr, Comparison repr) => SValue repr -> SValue repr 
+  -> SValue repr
+listIndexExists lst index = listSize lst ?> index
+
+at :: (List repr) => SValue repr -> SValue repr -> SValue repr
+at = listAccess
+
+class (ValueSym repr) => Iterator repr where
   iterBegin :: SValue repr -> SValue repr
   iterEnd   :: SValue repr -> SValue repr
 
-listIndexExists :: (FunctionSym repr, Comparison repr) => SValue repr -> 
-  SValue repr -> SValue repr
-listIndexExists lst index = listSize lst ?> index
-
-class (Selector repr, InternalValueExp repr) => SelectorFunction repr where
-  listAccess :: SValue repr -> SValue repr -> SValue repr
-  listSet    :: SValue repr -> SValue repr -> SValue repr -> SValue repr
-
-at :: (SelectorFunction repr) => SValue repr -> SValue repr -> SValue repr
-at = listAccess
-
 type MSStatement a = MS (a (Statement a))
 
-class (SelectorFunction repr) => StatementSym repr where
+class (ValueSym repr) => StatementSym repr where
   type Statement repr
 
 class (StatementSym repr) => AssignStatement repr where
@@ -364,8 +366,8 @@ class (StatementSym repr) => AssignStatement repr where
 infixr 1 &=
 (&=) = assign
 
-assignToListIndex :: (MiscStatement repr, VariableValue repr) => SVariable repr -> SValue repr -> 
-  SValue repr -> MSStatement repr
+assignToListIndex :: (MiscStatement repr, VariableValue repr, List repr) => 
+  SVariable repr -> SValue repr -> SValue repr -> MSStatement repr
 assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
 
 class (StatementSym repr) => DeclStatement repr where
@@ -446,7 +448,8 @@ initObserverList :: (DeclStatement repr) => VSType repr -> [SValue repr] ->
   MSStatement repr
 initObserverList t = listDecDef (var observerListName (listType t))
 
-addObserver :: (MiscStatement repr, VariableValue repr) => SValue repr -> MSStatement repr
+addObserver :: (MiscStatement repr, VariableValue repr, List repr) => 
+  SValue repr -> MSStatement repr
 addObserver o = valState $ listAdd obsList lastelem o
   where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
         lastelem = listSize obsList

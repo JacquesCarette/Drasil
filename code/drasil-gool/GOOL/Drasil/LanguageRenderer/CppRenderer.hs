@@ -15,11 +15,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   SValue, MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
-  ($.), InternalValueExp(..), objMethodCall, FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), AssignStatement(..), (&=), 
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..),
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..),
   ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
@@ -476,11 +472,6 @@ instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
   valueDoc v = valueDoc $ pfst v
   valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)
 
-instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
-  objAccess = pair2 objAccess objAccess
-  
-  indexOf = pair2 indexOf indexOf
-
 instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
   objMethodCallMixedArgs' f t o pas nas = pair2Vals3Lists
     (\tp ob pars ns nars -> objMethodCallMixedArgs' f tp ob pars (zip ns nars)) 
@@ -493,20 +484,23 @@ instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
   func l = pair1Val1List (func l) (func l)
-
+  objAccess = pair2 objAccess objAccess
+  
+instance (Pair p) => GetSet (p CppSrcCode CppHdrCode) where
   get = pair2 get get
   set = pair3 set set
 
+instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
   listAdd = pair3 listAdd listAdd
   listAppend = pair2 listAppend listAppend
-
-  iterBegin = pair1 iterBegin iterBegin
-  iterEnd = pair1 iterEnd iterEnd
-
-instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
   listAccess = pair2 listAccess listAccess
   listSet = pair3 listSet listSet
+  indexOf = pair2 indexOf indexOf
+
+instance (Pair p) => Iterator (p CppSrcCode CppHdrCode) where
+  iterBegin = pair1 iterBegin iterBegin
+  iterEnd = pair1 iterEnd iterEnd
 
 instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where  
   getFunc = pair1 getFunc getFunc
@@ -1331,12 +1325,6 @@ instance InternalValue CppSrcCode where
   valueDoc = val . unCPPSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
-instance Selector CppSrcCode where
-  objAccess = G.objAccess
-  
-  indexOf l v = addAlgorithmImportVS $ funcApp "find" int 
-    [iterBegin l, iterEnd l, v] #- iterBegin l
-  
 instance InternalValueExp CppSrcCode where
   objMethodCallMixedArgs' = G.objMethodCall
   objMethodCallNoParams' = G.objMethodCallNoParams
@@ -1344,20 +1332,24 @@ instance InternalValueExp CppSrcCode where
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
   func = G.func
+  objAccess = G.objAccess
 
+instance GetSet CppSrcCode where
   get = G.get
   set = G.set
 
+instance List CppSrcCode where
   listSize v = cast int (G.listSize v)
   listAdd = G.listAdd
-  listAppend = G.listAppend
-
-  iterBegin = G.iterBegin
-  iterEnd = G.iterEnd
-
-instance SelectorFunction CppSrcCode where
+  listAppend = G.listAppend 
   listAccess = G.listAccess
   listSet = G.listSet
+  indexOf l v = addAlgorithmImportVS $ funcApp "find" int 
+    [iterBegin l, iterEnd l, v] #- iterBegin l
+
+instance Iterator CppSrcCode where
+  iterBegin = G.iterBegin
+  iterEnd = G.iterEnd
 
 instance InternalFunction CppSrcCode where
   getFunc = G.getFunc
@@ -1939,11 +1931,6 @@ instance InternalValue CppHdrCode where
   valuePrec = valPrec . unCPPHC
   valueDoc = val . unCPPHC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
-
-instance Selector CppHdrCode where
-  objAccess _ _ = mkStateVal void empty
-  
-  indexOf _ _ = mkStateVal void empty
   
 instance InternalValueExp CppHdrCode where
   objMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
@@ -1952,20 +1939,23 @@ instance InternalValueExp CppHdrCode where
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
   func _ _ _ = funcFromData empty void
-  
+  objAccess _ _ = mkStateVal void empty
+
+instance GetSet CppHdrCode where
   get _ _ = mkStateVal void empty
   set _ _ _ = mkStateVal void empty
 
+instance List CppHdrCode where
   listSize _ = mkStateVal void empty
   listAdd _ _ _ = mkStateVal void empty
   listAppend _ _ = mkStateVal void empty
-
-  iterBegin _ = mkStateVal void empty
-  iterEnd _ = mkStateVal void empty
-
-instance SelectorFunction CppHdrCode where
   listAccess _ _ = mkStateVal void empty
   listSet _ _ _ = mkStateVal void empty
+  indexOf _ _ = mkStateVal void empty
+
+instance Iterator CppHdrCode where
+  iterBegin _ = mkStateVal void empty
+  iterEnd _ = mkStateVal void empty
 
 instance InternalFunction CppHdrCode where
   getFunc _ = funcFromData empty void

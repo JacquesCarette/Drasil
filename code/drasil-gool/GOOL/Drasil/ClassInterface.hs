@@ -413,14 +413,14 @@ class (VariableSym repr, StatementSym repr) => StringStatement repr where
   stringListVals  :: [SVariable repr] -> SValue repr -> MSStatement repr
   stringListLists :: [SVariable repr] -> SValue repr -> MSStatement repr
 
+type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> 
+  MSStatement r
+
 class (VariableSym repr, StatementSym repr) => FuncAppStatement repr where
   -- The three lists are inputs, outputs, and both, respectively
-  inOutCall :: Label -> [SValue repr] -> [SVariable repr] -> [SVariable repr] 
-    -> MSStatement repr
-  selfInOutCall :: Label -> [SValue repr] -> [SVariable repr] -> 
-    [SVariable repr] -> MSStatement repr
-  extInOutCall :: Library -> Label -> [SValue repr] -> [SVariable repr] -> 
-    [SVariable repr] -> MSStatement repr
+  inOutCall     ::            InOutCall repr
+  selfInOutCall ::            InOutCall repr
+  extInOutCall  :: Library -> InOutCall repr
 
 type Comment = String  
 
@@ -507,6 +507,17 @@ class ParameterSym repr where
 type SMethod a = MS (a (Method a))
 type Initializer r = (SVariable r, SValue r)
 
+-- The three lists are inputs, outputs, and both, respectively
+type InOutFunc r = Label -> r (Scope r) -> r (Permanence r) -> [SVariable r] -> 
+  [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r
+-- Parameters are: function name, scope, permanence, brief description, 
+-- input descriptions and variables, output descriptions and variables, 
+-- descriptions and variables for parameters that are both input and output, 
+-- function body
+type DocInOutFunc r = Label -> r (Scope r) -> r (Permanence r) -> String -> 
+  [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] 
+  -> MSBody r -> SMethod r
+
 class (BodySym repr, ParameterSym repr, ScopeSym repr, PermanenceSym repr) => MethodSym repr where
   type Method repr
   method      :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
@@ -525,21 +536,10 @@ class (BodySym repr, ParameterSym repr, ScopeSym repr, PermanenceSym repr) => Me
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> SMethod repr -> SMethod repr
 
-  inOutMethod :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    [SVariable repr] -> [SVariable repr] -> [SVariable repr] -> MSBody repr -> 
-    SMethod repr
-  docInOutMethod :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    String -> [(String, SVariable repr)] -> [(String, SVariable repr)] -> 
-    [(String, SVariable repr)] -> MSBody repr -> SMethod repr
-
-  -- The three lists are inputs, outputs, and both, respectively
-  inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    [SVariable repr] -> [SVariable repr] -> [SVariable repr] -> MSBody repr -> 
-    SMethod repr
-  -- Parameters are: function name, scope, permanence, brief description, input descriptions and variables, output descriptions and variables, descriptions and variables for parameters that are both input and output, function body
-  docInOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    String -> [(String, SVariable repr)] -> [(String, SVariable repr)] -> 
-    [(String, SVariable repr)] -> MSBody repr -> SMethod repr
+  inOutMethod :: InOutFunc repr
+  docInOutMethod :: DocInOutFunc repr
+  inOutFunc :: InOutFunc repr
+  docInOutFunc :: DocInOutFunc repr
 
 privMethod :: (MethodSym repr) => Label -> VSType repr -> [MSParameter repr] -> 
   MSBody repr -> SMethod repr

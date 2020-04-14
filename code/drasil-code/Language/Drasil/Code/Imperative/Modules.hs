@@ -35,10 +35,10 @@ import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
   ConstraintBehaviour(..), InputModule(..), Logging(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
-import GOOL.Drasil (SFile, MSBlock, SVariable, SValue, MSStatement, SMethod, 
-  CSStateVar, SClass, ProgramSym, BodySym(..), bodyStatements, oneLiner, 
-  BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
-  BooleanExpression(..), AssignStatement(..), DeclStatement(..), 
+import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 
+  SMethod, CSStateVar, SClass, ProgramSym, BodySym(..), bodyStatements, 
+  oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), 
+  ValueSym(..), BooleanExpression(..), AssignStatement(..), DeclStatement(..), 
   IOStatement(..), MiscStatement(..), ControlStatement(..), ifNoElse, 
   ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType)
 
@@ -279,32 +279,29 @@ physCBody cs = do
 chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, 
   ProgramSym repr) => ConstraintBehaviour -> [(q,[Constraint])] -> 
   Reader DrasilState [MSStatement repr]
-chooseConstr Warning   cs = do
-  checks <- mapM constrWarn cs
-  return $ concat checks
-chooseConstr Exception cs = do
-  checks <- mapM constrExc cs
-  return $ concat checks
+chooseConstr cb cs = do
+  conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
+  bods <- mapM (chooseCB cb) cs
+  return $ concat $ zipWith (zipWith (\cond bod -> ifNoElse [((?!) cond, bod)]))
+    conds bods
+  where chooseCB Warning = constrWarn
+        chooseCB Exception = constrExc 
 
-constrWarn :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, ProgramSym repr)
-  => (q,[Constraint]) -> Reader DrasilState [MSStatement repr]
+constrWarn :: (HasUID q, CodeIdea q, HasSpace q, ProgramSym repr)
+  => (q,[Constraint]) -> Reader DrasilState [MSBody repr]
 constrWarn c = do
   let q = fst c
       cs = snd c
-  conds <- mapM (convExpr . renderC q) cs
   msgs <- mapM (constraintViolatedMsg q "suggested") cs
-  return $ zipWith (\cond m -> ifNoElse [((?!) cond, bodyStatements $
-    printStr "Warning: " : m)]) conds msgs
+  return $ map (bodyStatements . (printStr "Warning: " :)) msgs
 
-constrExc :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, ProgramSym repr) 
-  => (q,[Constraint]) -> Reader DrasilState [MSStatement repr]
+constrExc :: (HasUID q, CodeIdea q, HasSpace q, ProgramSym repr) 
+  => (q,[Constraint]) -> Reader DrasilState [MSBody repr]
 constrExc c = do
   let q = fst c
       cs = snd c
-  conds <- mapM (convExpr . renderC q) cs
   msgs <- mapM (constraintViolatedMsg q "expected") cs
-  return $ zipWith (\cond m -> ifNoElse [((?!) cond, bodyStatements $ 
-    m ++ [throw "InputError"])]) conds msgs
+  return $ map (bodyStatements . (++ [throw "InputError"])) msgs
 
 constraintViolatedMsg :: (CodeIdea q, HasUID q, HasSpace q, ProgramSym repr) 
   => q -> String -> Constraint -> Reader DrasilState 
@@ -439,10 +436,12 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 genCalcBlock :: (ProgramSym repr) => CalcType -> CodeDefinition -> Expr ->
   Reader DrasilState (MSBlock repr)
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
-genCalcBlock t v e
-    | t == CalcAssign  = fmap block $ liftS $ do { vv <- mkVar v; ee <-
-      convExpr e; l <- maybeLog vv; return $ multi $ assign vv ee : l}
-    | otherwise        = block <$> liftS (returnState <$> convExpr e)
+genCalcBlock CalcAssign v e = do
+  vv <- mkVar v
+  ee <- convExpr e
+  l <- maybeLog vv
+  return $ block $ assign vv ee : l
+genCalcBlock CalcReturn _ e = block <$> liftS (returnState <$> convExpr e)
 
 genCaseBlock :: (ProgramSym repr) => CalcType -> CodeDefinition -> Completeness 
   -> [(Expr,Relation)] -> Reader DrasilState (MSBlock repr)

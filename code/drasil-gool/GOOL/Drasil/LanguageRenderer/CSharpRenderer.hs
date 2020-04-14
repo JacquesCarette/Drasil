@@ -18,7 +18,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), 
   objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), FuncAppStatement(..), MiscStatement(..), 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), 
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
@@ -505,6 +505,10 @@ instance IOStatement CSharpCode where
 
   getFileInputLine = getFileInput
   discardFileLine = G.discardFileLine "ReadLine"
+  getFileInputAll f v = while ((f $. funcFromData (text ".EndOfStream") bool) 
+    ?!) (oneLiner $ valState $ listAppend (valueOf v) (csFileInput f))
+
+instance StringStatement CSharpCode where
   stringSplit d vnew s = assign vnew $ newObj (listType string) 
     [s $. func "Split" (listType string) [litChar d]]
 
@@ -545,9 +549,6 @@ instance ControlStatement CSharpCode where
 
   checkState = G.checkState
   notifyObservers = G.notifyObservers
-
-  getFileInputAll f v = while ((f $. funcFromData (text ".EndOfStream") bool) 
-    ?!) (oneLiner $ valState $ listAppend (valueOf v) (csFileInput f))
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc

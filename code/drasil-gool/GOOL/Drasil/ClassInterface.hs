@@ -14,7 +14,8 @@ module GOOL.Drasil.ClassInterface (
   selfAccess, InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), listIndexExists, SelectorFunction(..),
   at, StatementSym(..), AssignStatement(..), (&=), assignToListIndex,
-  DeclStatement(..), IOStatement(..), FuncAppStatement(..), MiscStatement(..), 
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  MiscStatement(..), 
   initState, changeState, observerListName, initObserverList, addObserver, 
   ControlStatement(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
@@ -40,7 +41,7 @@ class (FileSym repr) => ProgramSym repr where
 type SFile a = FS (a (RenderFile a))
 
 class (ModuleSym repr, ControlBlock repr, AssignStatement repr, 
-  DeclStatement repr, IOStatement repr, FuncAppStatement repr,
+  DeclStatement repr, IOStatement repr, StringStatement repr, FuncAppStatement repr,
   MiscStatement repr, ControlStatement repr, InternalControlBlock repr) => 
   FileSym repr where 
   type RenderFile repr
@@ -416,9 +417,12 @@ class (StatementSym repr) => IOStatement repr where
 
   getFileInputLine :: SValue repr -> SVariable repr -> MSStatement repr
   discardFileLine  :: SValue repr -> MSStatement repr
-  stringSplit      :: Char -> SVariable repr -> SValue repr -> MSStatement repr
+  getFileInputAll  :: SValue repr -> SVariable repr -> MSStatement repr
 
-  stringListVals :: [SVariable repr] -> SValue repr -> MSStatement repr
+class (StatementSym repr) => StringStatement repr where
+  stringSplit :: Char -> SVariable repr -> SValue repr -> MSStatement repr
+
+  stringListVals  :: [SVariable repr] -> SValue repr -> MSStatement repr
   stringListLists :: [SVariable repr] -> SValue repr -> MSStatement repr
 
 class (StatementSym repr) => FuncAppStatement repr where
@@ -482,8 +486,6 @@ class (BodySym repr) => ControlStatement repr where
   checkState      :: Label -> [(SValue repr, MSBody repr)] -> MSBody repr -> 
     MSStatement repr
   notifyObservers :: VSFunction repr -> VSType repr -> MSStatement repr
-
-  getFileInputAll  :: SValue repr -> SVariable repr -> MSStatement repr
 
 ifNoElse :: (ControlStatement repr) => [(SValue repr, MSBody repr)] 
   -> MSStatement repr

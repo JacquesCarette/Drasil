@@ -18,7 +18,8 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
   ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), AssignStatement(..), 
-  (&=), DeclStatement(..), IOStatement(..), FuncAppStatement(..), 
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
+  FuncAppStatement(..), 
   MiscStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
@@ -532,6 +533,10 @@ instance IOStatement JavaCode where
 
   getFileInputLine f v = v &= f $. func "nextLine" string []
   discardFileLine = G.discardFileLine "nextLine"
+  getFileInputAll f v = while (f $. func "hasNextLine" bool [])
+    (oneLiner $ valState $ listAppend (valueOf v) (f $. func "nextLine" string []))
+
+instance StringStatement JavaCode where
   stringSplit d vnew s = modify (addLangImport "java.util.Arrays") >> 
     onStateValue mkSt (zoom lensMStoVS $ jStringSplit vnew (funcApp 
     "Arrays.asList" (listType string) 
@@ -574,9 +579,6 @@ instance ControlStatement JavaCode where
   
   checkState = G.checkState
   notifyObservers = G.notifyObservers
-
-  getFileInputAll f v = while (f $. func "hasNextLine" bool [])
-    (oneLiner $ valState $ listAppend (valueOf v) (f $. func "nextLine" string []))
 
 instance ScopeSym JavaCode where
   type Scope JavaCode = Doc

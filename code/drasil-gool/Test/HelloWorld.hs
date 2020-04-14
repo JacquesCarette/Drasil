@@ -5,7 +5,7 @@ module Test.HelloWorld (helloWorld) where
 import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, 
   ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner, 
   BlockSym(..), listSlice, TypeSym(..), AssignStatement(..), (&=), 
-  DeclStatement(..), IOStatement(..), MiscStatement(..), ControlStatement(..), 
+  DeclStatement(..), IOStatement(..), StringStatement(..), MiscStatement(..), ControlStatement(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), extFuncApp, Selector(..), FunctionSym(..), 
   SelectorFunction(..), MethodSym(..), ModuleSym(..))

@@ -110,24 +110,6 @@ classDocD n p s vs fs = vcat [
     fs],
   rbrace]
 
--- enumDocD :: Label -> Doc -> Doc -> Doc
--- enumDocD n es s = vcat [
---   s <+> text "enum" <+> text n <+> lbrace,
---   indent es,
---   rbrace]
-
--- enumElementsDocD :: [Label] -> Bool -> Doc
--- enumElementsDocD es enumsEqualInts = vcat $
---   zipWith (\e i -> text e <+> equalsInt i <> interComma i) es nums
---   where nums = [0..length es - 1]
---         equalsInt i = if enumsEqualInts then equals <+> int i else empty 
---         interComma i = if i < length es - 1 then text "," else empty
-
--- enumElementsDocD' :: [Label] -> Doc
--- enumElementsDocD' es = vcat $
---   zipWith (\e i -> text e <+> equals <+> int i) es nums
---     where nums = [0..length es - 1]
-
 -- Groupings --
 
 multiStateDocD :: [(Doc, Terminator)] -> (Doc, Terminator)

@@ -18,7 +18,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   Selector(..), ($.), InternalValueExp(..), objMethodCall,
   objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), at, 
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), FuncAppStatement(..), MiscStatement(..), observerListName, 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), observerListName, 
   ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), 
   ODEOptions(..), ODEMethod(..))
@@ -508,6 +508,10 @@ instance IOStatement PythonCode where
 
   getFileInputLine = getFileInput
   discardFileLine = G.discardFileLine "readline"
+  getFileInputAll f v = v &= objMethodCall (listType string) f
+    "readlines" []
+  
+instance StringStatement PythonCode where
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
     (listType string) [litString [d]]))  
 
@@ -557,9 +561,6 @@ instance ControlStatement PythonCode where
           index = var "observerIndex" int
           initv = litInt 0
           notify = oneLiner $ valState $ at obsList (valueOf index) $. f
-
-  getFileInputAll f v = v &= objMethodCall (listType string) f
-    "readlines" []
 
 instance ScopeSym PythonCode where
   type Scope PythonCode = Doc

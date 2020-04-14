@@ -19,7 +19,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
   ($.), InternalValueExp(..), objMethodCall, FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), AssignStatement(..), (&=), 
-  DeclStatement(..), IOStatement(..), FuncAppStatement(..), MiscStatement(..),
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..),
   ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
@@ -614,6 +614,10 @@ instance (Pair p) => IOStatement (p CppSrcCode CppHdrCode) where
   getFileInputLine f v = pair2 getFileInputLine getFileInputLine 
     (zoom lensMStoVS f) (zoom lensMStoVS v)
   discardFileLine = pair1 discardFileLine discardFileLine . zoom lensMStoVS
+  getFileInputAll f v = pair2 getFileInputAll getFileInputAll 
+    (zoom lensMStoVS f) (zoom lensMStoVS v)
+
+instance (Pair p) => StringStatement (p CppSrcCode CppHdrCode) where
   stringSplit d vnew s = pair2 (stringSplit d) (stringSplit d) 
     (zoom lensMStoVS vnew) (zoom lensMStoVS s)
 
@@ -674,9 +678,6 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
 
   notifyObservers f t = pair2 notifyObservers notifyObservers 
     (zoom lensMStoVS f) (zoom lensMStoVS t)
-
-  getFileInputAll f v = pair2 getFileInputAll getFileInputAll 
-    (zoom lensMStoVS f) (zoom lensMStoVS v)
 
 instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
   type Scope (p CppSrcCode CppHdrCode) = (Doc, ScopeTag)
@@ -1449,6 +1450,15 @@ instance IOStatement CppSrcCode where
   getFileInputLine f v = valState $ funcApp "std::getline" string [f, valueOf v]
   discardFileLine f = addLimitsImport $ zoom lensMStoVS $ onStateValue (mkSt .
     cppDiscardInput "\\n") f
+  getFileInputAll f v = let l_line = "nextLine"
+                            var_line = var l_line string
+                            v_line = valueOf var_line
+                        in
+    multi [varDec var_line,
+      while (funcApp "std::getline" string [f, v_line])
+      (oneLiner $ valState $ listAppend (valueOf v) v_line)]
+
+instance StringStatement CppSrcCode where
   stringSplit d vnew s = let l_ss = "ss"
                              var_ss = var l_ss (obj "std::stringstream")
                              v_ss = valueOf var_ss
@@ -1504,14 +1514,6 @@ instance ControlStatement CppSrcCode where
 
   checkState l = switchAsIf (valueOf $ var l string) 
   notifyObservers = G.notifyObservers
-
-  getFileInputAll f v = let l_line = "nextLine"
-                            var_line = var l_line string
-                            v_line = valueOf var_line
-                        in
-    multi [varDec var_line,
-      while (funcApp "std::getline" string [f, v_line])
-      (oneLiner $ valState $ listAppend (valueOf v) v_line)]
 
 instance ScopeSym CppSrcCode where
   type Scope CppSrcCode = (Doc, ScopeTag)
@@ -2044,6 +2046,9 @@ instance IOStatement CppHdrCode where
 
   getFileInputLine _ _ = emptyState
   discardFileLine _ = emptyState
+  getFileInputAll _ _ = emptyState
+
+instance StringStatement CppHdrCode where
   stringSplit _ _ _ = emptyState
 
   stringListVals _ _ = emptyState
@@ -2084,8 +2089,6 @@ instance ControlStatement CppHdrCode where
   checkState _ _ _ = emptyState
 
   notifyObservers _ _ = emptyState
-
-  getFileInputAll _ _ = emptyState
 
 instance ScopeSym CppHdrCode where
   type Scope CppHdrCode = (Doc, ScopeTag)

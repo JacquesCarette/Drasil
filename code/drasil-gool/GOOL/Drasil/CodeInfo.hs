@@ -1,5 +1,6 @@
 {-# LANGUAGE TypeFamilies, Rank2Types #-}
 
+-- Performs code analysis on the GOOL code
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
@@ -8,7 +9,7 @@ import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement,
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), InternalValueExp(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), AssignStatement(..), 
-  DeclStatement(..), IOStatement(..), FuncAppStatement(..), MiscStatement(..), 
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), 
   ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
@@ -289,6 +290,9 @@ instance IOStatement CodeInfo where
 
   getFileInputLine v _ = zoom lensMStoVS $ execute1 v
   discardFileLine = zoom lensMStoVS . execute1
+  getFileInputAll v _ = execute1 (zoom lensMStoVS v)
+
+instance StringStatement CodeInfo where
   stringSplit _ _ = zoom lensMStoVS . execute1
 
   stringListVals _ = zoom lensMStoVS . execute1
@@ -340,8 +344,6 @@ instance ControlStatement CodeInfo where
   checkState _ = evalConds
 
   notifyObservers f _ = execute1 (zoom lensMStoVS f)
-
-  getFileInputAll v _ = execute1 (zoom lensMStoVS v)
 
 instance ScopeSym CodeInfo where
   type Scope CodeInfo = ScopeTag

@@ -33,7 +33,7 @@ import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue,
   ($->), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), objMethodCallMixedArgs, FunctionSym(..), 
   SelectorFunction(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  MiscStatement(..), ControlStatement(..), ifNoElse, ScopeSym(..), 
+  StringStatement(..), MiscStatement(..), ControlStatement(..), ifNoElse, ScopeSym(..), 
   MethodSym(..), pubDVar, nonInitConstructor, convType, CodeType(..), 
   onStateValue) 
 import qualified GOOL.Drasil as C (CodeType(List, Array))

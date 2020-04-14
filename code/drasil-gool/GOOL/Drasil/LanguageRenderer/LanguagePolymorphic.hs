@@ -65,7 +65,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
     constDecDef),
   ControlStatement(returnState, ifCond, for, forRange, switch), 
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
-import GOOL.Drasil.RendererClasses (InternalFile(commentedMod),
+import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, InternalFile(commentedMod),
   RenderSym, InternalBody(bodyDoc, docBody), InternalBlock(docBlock, blockDoc), 
   ImportSym(..), InternalPerm(..), InternalType(..), UnaryOpSym(UnaryOp), 
   BinaryOpSym(BinaryOp), InternalOp(..), 
@@ -213,70 +213,70 @@ listSlice b e s vnew vold =
 
 -- Unary Operators --
 
-unOpPrec :: (RenderSym repr) => String -> VS (repr (UnaryOp repr))
+unOpPrec :: (RenderSym repr) => String -> VSUnOp repr
 unOpPrec = uOpFromData 9 . text
 
-notOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+notOp :: (RenderSym repr) => VSUnOp repr
 notOp = unOpPrec "!"
 
-notOp' :: (RenderSym repr) => VS (repr (UnaryOp repr))
+notOp' :: (RenderSym repr) => VSUnOp repr
 notOp' = unOpPrec "not"
 
-negateOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+negateOp :: (RenderSym repr) => VSUnOp repr
 negateOp = unOpPrec "-"
 
-sqrtOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+sqrtOp :: (RenderSym repr) => VSUnOp repr
 sqrtOp = unOpPrec "sqrt"
 
-sqrtOp' :: (RenderSym repr) => VS (repr (UnaryOp repr))
+sqrtOp' :: (RenderSym repr) => VSUnOp repr
 sqrtOp' = addmathImport $ unOpPrec "math.sqrt"
 
-absOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+absOp :: (RenderSym repr) => VSUnOp repr
 absOp = unOpPrec "fabs"
 
-absOp' :: (RenderSym repr) => VS (repr (UnaryOp repr))
+absOp' :: (RenderSym repr) => VSUnOp repr
 absOp' = addmathImport $ unOpPrec "math.fabs"
 
-expOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+expOp :: (RenderSym repr) => VSUnOp repr
 expOp = unOpPrec "exp"
 
-expOp' :: (RenderSym repr) => VS (repr (UnaryOp repr))
+expOp' :: (RenderSym repr) => VSUnOp repr
 expOp' = addmathImport $ unOpPrec "math.exp"
 
-sinOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+sinOp :: (RenderSym repr) => VSUnOp repr
 sinOp = unOpPrec "sin"
 
-sinOp' :: (RenderSym repr) => VS (repr (UnaryOp repr))
+sinOp' :: (RenderSym repr) => VSUnOp repr
 sinOp' = addmathImport $ unOpPrec "math.sin"
 
-cosOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+cosOp :: (RenderSym repr) => VSUnOp repr
 cosOp = unOpPrec "cos"
 
-cosOp' :: (RenderSym repr) => VS (repr (UnaryOp repr))
+cosOp' :: (RenderSym repr) => VSUnOp repr
 cosOp' = addmathImport $ unOpPrec "math.cos"
 
-tanOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+tanOp :: (RenderSym repr) => VSUnOp repr
 tanOp = unOpPrec "tan"
 
-tanOp' :: (RenderSym repr) => VS (repr (UnaryOp repr))
+tanOp' :: (RenderSym repr) => VSUnOp repr
 tanOp' = addmathImport $ unOpPrec "math.tan"
 
-asinOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+asinOp :: (RenderSym repr) => VSUnOp repr
 asinOp = unOpPrec "asin"
 
-asinOp' :: (RenderSym repr) => VS (repr (UnaryOp repr))
+asinOp' :: (RenderSym repr) => VSUnOp repr
 asinOp' = addmathImport $ unOpPrec "math.asin"
 
-acosOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+acosOp :: (RenderSym repr) => VSUnOp repr
 acosOp = unOpPrec "acos"
 
-acosOp' :: (RenderSym repr) => VS (repr (UnaryOp repr))
+acosOp' :: (RenderSym repr) => VSUnOp repr
 acosOp' = addmathImport $ unOpPrec "math.acos"
 
-atanOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+atanOp :: (RenderSym repr) => VSUnOp repr
 atanOp = unOpPrec "atan"
 
-atanOp' :: (RenderSym repr) => VS (repr (UnaryOp repr))
+atanOp' :: (RenderSym repr) => VSUnOp repr
 atanOp' = addmathImport $ unOpPrec "math.atan"
 
 csc :: (RenderSym repr) => SValue repr -> SValue repr
@@ -299,11 +299,11 @@ unOpDocD op v = op <> parens v
 unOpDocD' :: Doc -> Doc -> Doc
 unOpDocD' op v = op <> v
 
-unExpr :: (RenderSym repr) => VS (repr (UnaryOp repr)) -> SValue repr
+unExpr :: (RenderSym repr) => VSUnOp repr -> SValue repr
   -> SValue repr
 unExpr = on2StateValues (mkUnExpr unOpDocD)
 
-unExpr' :: (RenderSym repr) => VS (repr (UnaryOp repr)) -> SValue repr -> 
+unExpr' :: (RenderSym repr) => VSUnOp repr -> SValue repr -> 
   SValue repr
 unExpr' = on2StateValues (mkUnExpr unOpDocD')
 
@@ -311,7 +311,7 @@ mkUnExpr :: (RenderSym repr) => (Doc -> Doc -> Doc) -> repr (UnaryOp repr) ->
   repr (Value repr) -> repr (Value repr)
 mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (uOpDoc u) (valueDoc v))
 
-unExprNumDbl :: (RenderSym repr) => VS (repr (UnaryOp repr)) -> SValue repr -> 
+unExprNumDbl :: (RenderSym repr) => VSUnOp repr -> SValue repr -> 
   SValue repr
 unExprNumDbl u' v' = u' >>= (\u -> v' >>= (\v -> 
   unExprCastFloat (valueType v) $ return $ mkUnExpr unOpDocD u v))
@@ -322,74 +322,74 @@ unExprCastFloat t = castType $ getType t
   where castType Float = cast float
         castType _ = id
   
-typeUnExpr :: (RenderSym repr) => VS (repr (UnaryOp repr)) -> VSType repr -> 
+typeUnExpr :: (RenderSym repr) => VSUnOp repr -> VSType repr -> 
   SValue repr -> SValue repr
 typeUnExpr = on3StateValues (\u t -> mkExpr (uOpPrec u) t . unOpDocD (uOpDoc u) 
   . valueDoc)
 
 -- Binary Operators --
 
-compEqualPrec :: (RenderSym repr) => String -> VS (repr (BinaryOp repr))
+compEqualPrec :: (RenderSym repr) => String -> VSBinOp repr
 compEqualPrec = bOpFromData 4 . text
 
-compPrec :: (RenderSym repr) => String -> VS (repr (BinaryOp repr))
+compPrec :: (RenderSym repr) => String -> VSBinOp repr
 compPrec = bOpFromData 5 . text
 
-addPrec :: (RenderSym repr) => String -> VS (repr (BinaryOp repr))
+addPrec :: (RenderSym repr) => String -> VSBinOp repr
 addPrec = bOpFromData 6 . text
 
-multPrec :: (RenderSym repr) => String -> VS (repr (BinaryOp repr))
+multPrec :: (RenderSym repr) => String -> VSBinOp repr
 multPrec = bOpFromData 7 . text
 
-powerPrec :: (RenderSym repr) => String -> VS (repr (BinaryOp repr))
+powerPrec :: (RenderSym repr) => String -> VSBinOp repr
 powerPrec = bOpFromData 8 . text
 
-andPrec :: (RenderSym repr) => String -> VS (repr (BinaryOp repr)) 
+andPrec :: (RenderSym repr) => String -> VSBinOp repr 
 andPrec = bOpFromData 3 . text
 
-orPrec :: (RenderSym repr) => String -> VS (repr (BinaryOp repr))
+orPrec :: (RenderSym repr) => String -> VSBinOp repr
 orPrec = bOpFromData 2 . text
 
-equalOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+equalOp :: (RenderSym repr) => VSBinOp repr
 equalOp = compEqualPrec "=="
 
-notEqualOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+notEqualOp :: (RenderSym repr) => VSBinOp repr
 notEqualOp = compEqualPrec "!="
 
-greaterOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+greaterOp :: (RenderSym repr) => VSBinOp repr
 greaterOp = compPrec ">"
 
-greaterEqualOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+greaterEqualOp :: (RenderSym repr) => VSBinOp repr
 greaterEqualOp = compPrec ">="
 
-lessOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+lessOp :: (RenderSym repr) => VSBinOp repr
 lessOp = compPrec "<"
 
-lessEqualOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+lessEqualOp :: (RenderSym repr) => VSBinOp repr
 lessEqualOp = compPrec "<="
 
-plusOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+plusOp :: (RenderSym repr) => VSBinOp repr
 plusOp = addPrec "+"
 
-minusOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+minusOp :: (RenderSym repr) => VSBinOp repr
 minusOp = addPrec "-"
 
-multOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+multOp :: (RenderSym repr) => VSBinOp repr
 multOp = multPrec "*"
 
-divideOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+divideOp :: (RenderSym repr) => VSBinOp repr
 divideOp = multPrec "/"
 
-moduloOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+moduloOp :: (RenderSym repr) => VSBinOp repr
 moduloOp = multPrec "%"
 
-powerOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+powerOp :: (RenderSym repr) => VSBinOp repr
 powerOp = powerPrec "pow"
 
-andOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+andOp :: (RenderSym repr) => VSBinOp repr
 andOp = andPrec "&&"
 
-orOp :: (RenderSym repr) => VS (repr (BinaryOp repr))
+orOp :: (RenderSym repr) => VSBinOp repr
 orOp = orPrec "||"
 
 binOpDocD :: Doc -> Doc -> Doc -> Doc
@@ -398,18 +398,18 @@ binOpDocD op v1 v2 = v1 <+> op <+> v2
 binOpDocD' :: Doc -> Doc -> Doc -> Doc
 binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
 
-binExpr :: (RenderSym repr) => VS (repr (BinaryOp repr)) -> SValue repr -> 
+binExpr :: (RenderSym repr) => VSBinOp repr -> SValue repr -> 
   SValue repr -> SValue repr
 binExpr = on3StateValues (\b v1 v2 -> mkExpr (bOpPrec b) (numType (valueType v1)
   (valueType v2)) (binOpDocD (bOpDoc b) (exprParensL b v1 $ valueDoc v1) 
   (exprParensR b v2 $ valueDoc v2)))
 
-binExpr' :: (RenderSym repr) => VS (repr (BinaryOp repr)) -> SValue repr -> 
+binExpr' :: (RenderSym repr) => VSBinOp repr -> SValue repr -> 
   SValue repr -> SValue repr
 binExpr' = on3StateValues (\b v1 v2 -> mkExpr 9 (numType (valueType v1) 
   (valueType v2)) (binOpDocD' (bOpDoc b) (valueDoc v1) (valueDoc v2)))
 
-binExprNumDbl' :: (RenderSym repr) => VS (repr (BinaryOp repr)) -> SValue repr 
+binExprNumDbl' :: (RenderSym repr) => VSBinOp repr -> SValue repr 
   -> SValue repr -> SValue repr
 binExprNumDbl' b' v1' v2' = b' >>= (\b -> v1' >>= (\v1 -> v2' >>= (\v2 -> 
   let t1 = valueType v1
@@ -424,7 +424,7 @@ binExprCastFloat t1 t2 = castType (getType t1) (getType t2)
         castType _ Float = cast float
         castType _ _ = id
 
-typeBinExpr :: (RenderSym repr) => VS (repr (BinaryOp repr)) -> VSType repr -> 
+typeBinExpr :: (RenderSym repr) => VSBinOp repr -> VSType repr -> 
   SValue repr -> SValue repr -> SValue repr
 typeBinExpr bod tp vl1 vl2 = (\b t v1 v2 -> mkExpr (bOpPrec b) t (binOpDocD 
   (bOpDoc b) (exprParensL b v1 $ valueDoc v1) (exprParensR b v2 $ valueDoc v2)))

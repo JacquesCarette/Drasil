@@ -2,8 +2,8 @@
 
 module GOOL.Drasil.RendererClasses (
   RenderSym, InternalFile(..), ImportSym(..), InternalPerm(..), 
-  InternalBody(..), InternalBlock(..), InternalType(..), UnaryOpSym(..), 
-  BinaryOpSym(..), InternalOp(..), InternalVariable(..), InternalValue(..),
+  InternalBody(..), InternalBlock(..), InternalType(..), VSUnOp, UnaryOpSym(..),
+  VSBinOp, BinaryOpSym(..), InternalOp(..), InternalVariable(..), InternalValue(..),
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), InternalScope(..), 
   MethodTypeSym(..), InternalParam(..), InternalMethod(..), 
   InternalStateVar(..), ParentSpec, InternalClass(..), InternalMod(..), 
@@ -63,40 +63,44 @@ class InternalType repr where
   getTypeDoc :: repr (Type repr) -> Doc
   typeFromData :: CodeType -> String -> Doc -> repr (Type repr)
 
+type VSUnOp a = VS (a (UnaryOp a))
+
 class UnaryOpSym repr where
   type UnaryOp repr
-  notOp    :: VS (repr (UnaryOp repr))
-  negateOp :: VS (repr (UnaryOp repr))
-  sqrtOp   :: VS (repr (UnaryOp repr))
-  absOp    :: VS (repr (UnaryOp repr))
-  logOp    :: VS (repr (UnaryOp repr))
-  lnOp     :: VS (repr (UnaryOp repr))
-  expOp    :: VS (repr (UnaryOp repr))
-  sinOp    :: VS (repr (UnaryOp repr))
-  cosOp    :: VS (repr (UnaryOp repr))
-  tanOp    :: VS (repr (UnaryOp repr))
-  asinOp   :: VS (repr (UnaryOp repr))
-  acosOp   :: VS (repr (UnaryOp repr))
-  atanOp   :: VS (repr (UnaryOp repr))
-  floorOp  :: VS (repr (UnaryOp repr))
-  ceilOp   :: VS (repr (UnaryOp repr))
+  notOp    :: VSUnOp repr
+  negateOp :: VSUnOp repr
+  sqrtOp   :: VSUnOp repr
+  absOp    :: VSUnOp repr
+  logOp    :: VSUnOp repr
+  lnOp     :: VSUnOp repr
+  expOp    :: VSUnOp repr
+  sinOp    :: VSUnOp repr
+  cosOp    :: VSUnOp repr
+  tanOp    :: VSUnOp repr
+  asinOp   :: VSUnOp repr
+  acosOp   :: VSUnOp repr
+  atanOp   :: VSUnOp repr
+  floorOp  :: VSUnOp repr
+  ceilOp   :: VSUnOp repr
+
+type VSBinOp a = VS (a (BinaryOp a))
 
 class BinaryOpSym repr where
   type BinaryOp repr
-  equalOp        :: VS (repr (BinaryOp repr))
-  notEqualOp     :: VS (repr (BinaryOp repr))
-  greaterOp      :: VS (repr (BinaryOp repr))
-  greaterEqualOp :: VS (repr (BinaryOp repr))
-  lessOp         :: VS (repr (BinaryOp repr))
-  lessEqualOp    :: VS (repr (BinaryOp repr))
-  plusOp         :: VS (repr (BinaryOp repr))
-  minusOp        :: VS (repr (BinaryOp repr))
-  multOp         :: VS (repr (BinaryOp repr))
-  divideOp       :: VS (repr (BinaryOp repr))
-  powerOp        :: VS (repr (BinaryOp repr))
-  moduloOp       :: VS (repr (BinaryOp repr))
-  andOp          :: VS (repr (BinaryOp repr))
-  orOp           :: VS (repr (BinaryOp repr))
+  equalOp        :: VSBinOp repr
+  notEqualOp     :: VSBinOp repr
+  greaterOp      :: VSBinOp repr
+  greaterEqualOp :: VSBinOp repr
+  lessOp         :: VSBinOp repr
+  lessEqualOp    :: VSBinOp repr
+  plusOp         :: VSBinOp repr
+  minusOp        :: VSBinOp repr
+  multOp         :: VSBinOp repr
+  divideOp       :: VSBinOp repr
+  powerOp        :: VSBinOp repr
+  moduloOp       :: VSBinOp repr
+  andOp          :: VSBinOp repr
+  orOp           :: VSBinOp repr
 
 class InternalOp repr where
   uOpDoc :: repr (UnaryOp repr) -> Doc
@@ -104,8 +108,8 @@ class InternalOp repr where
   uOpPrec :: repr (UnaryOp repr) -> Int
   bOpPrec :: repr (BinaryOp repr) -> Int
 
-  uOpFromData :: Int -> Doc -> VS (repr (UnaryOp repr))
-  bOpFromData :: Int -> Doc -> VS (repr (BinaryOp repr))
+  uOpFromData :: Int -> Doc -> VSUnOp repr
+  bOpFromData :: Int -> Doc -> VSBinOp repr
 
 class InternalVariable repr where
   variableBind :: repr (Variable repr) -> Binding

@@ -22,7 +22,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), 
   ODEOptions(..), ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
+import GOOL.Drasil.RendererClasses (VSUnOp, RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
@@ -714,10 +714,10 @@ pyODEMethod Adams = [litString "vode",
   (litString "adams" :: SValue PythonCode) >>= 
   (mkStateVal string . (text "method=" <>) . valueDoc)]
 
-pyLogOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+pyLogOp :: (RenderSym repr) => VSUnOp repr
 pyLogOp = addmathImport $ unOpPrec "math.log10"
 
-pyLnOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+pyLnOp :: (RenderSym repr) => VSUnOp repr
 pyLnOp = addmathImport $ unOpPrec "math.log"
 
 pyClassVar :: Doc -> Doc -> Doc

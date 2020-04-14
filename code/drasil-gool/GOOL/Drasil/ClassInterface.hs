@@ -39,7 +39,10 @@ class (FileSym repr) => ProgramSym repr where
 
 type SFile a = FS (a (RenderFile a))
 
-class (ModuleSym repr) => FileSym repr where 
+class (ModuleSym repr, ControlBlock repr, AssignStatement repr, 
+  DeclStatement repr, IOStatement repr, FuncAppStatement repr,
+  MiscStatement repr, ControlStatement repr, InternalControlBlock repr) => 
+  FileSym repr where 
   type RenderFile repr
   fileDoc :: FSModule repr -> SFile repr
 
@@ -67,8 +70,7 @@ oneLiner s = bodyStatements [s]
 
 type MSBlock a = MS (a (Block a))
 
-class (AssignStatement repr, DeclStatement repr, IOStatement repr, 
-  FuncAppStatement repr, MiscStatement repr) => BlockSym repr where
+class (StatementSym repr) => BlockSym repr where
   type Block repr
   block   :: [MSStatement repr] -> MSBlock repr
 
@@ -98,13 +100,13 @@ class TypeSym repr where
   getType :: repr (Type repr) -> CodeType
   getTypeString :: repr (Type repr) -> String
 
-class (ControlStatement repr) => ControlBlock repr where
+class (BodySym repr) => ControlBlock repr where
   runStrategy     :: Label -> [(Label, MSBody repr)] -> Maybe (SValue repr) -> 
     Maybe (SVariable repr) -> MSBlock repr
 
   solveODE :: ODEInfo repr -> ODEOptions repr -> MSBlock repr
 
-class (ControlStatement repr) => InternalControlBlock repr where
+class (ValueSym repr) => InternalControlBlock repr where
   listSlice'      :: Maybe (SValue repr) -> Maybe (SValue repr) -> 
     Maybe (SValue repr) -> SVariable repr -> SValue repr -> MSBlock repr
   
@@ -427,10 +429,12 @@ class (StatementSym repr) => FuncAppStatement repr where
     [SVariable repr] -> MSStatement repr
   extInOutCall :: Library -> Label -> [SValue repr] -> [SVariable repr] -> 
     [SVariable repr] -> MSStatement repr
-  
+
+type Comment = String  
+
 class (StatementSym repr) => MiscStatement repr where
-  valState :: SValue repr -> MSStatement repr
-  comment :: Label -> MSStatement repr
+  valState :: SValue repr -> MSStatement repr -- converts value to statement
+  comment :: Comment -> MSStatement repr
   multi     :: [MSStatement repr] -> MSStatement repr
 
 initState :: (DeclStatement repr) => Label -> Label -> MSStatement repr
@@ -504,8 +508,7 @@ class ParameterSym repr where
 
 type SMethod a = MS (a (Method a))
 
-class (ParameterSym repr, ControlBlock repr, InternalControlBlock repr,
-  ScopeSym repr, PermanenceSym repr) => MethodSym repr where
+class (BodySym repr, ParameterSym repr, ScopeSym repr, PermanenceSym repr) => MethodSym repr where
   type Method repr
   method      :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     VSType repr -> [MSParameter repr] -> MSBody repr -> SMethod repr

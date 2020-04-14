@@ -21,13 +21,13 @@ x = var "x" int
 selfX :: (VariableSym repr) => SVariable repr
 selfX = objVarSelf x
 
-helperClass :: (ClassSym repr) => SClass repr
+helperClass :: (ClassSym repr, IOStatement repr) => SClass repr
 helperClass = buildClass observerName Nothing [stateVar public dynamic x]
   [observerConstructor, printNumMethod, getMethod x, setMethod x]
 
 observerConstructor :: (MethodSym repr) => SMethod repr
 observerConstructor = initializer [] [(x, litInt 5)]
 
-printNumMethod :: (MethodSym repr) => SMethod repr
+printNumMethod :: (MethodSym repr, IOStatement repr) => SMethod repr
 printNumMethod = method printNum public dynamic void [] $
   oneLiner $ printLn $ valueOf selfX

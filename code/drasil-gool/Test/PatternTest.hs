@@ -2,10 +2,10 @@ module Test.PatternTest (patternTest) where
 
 import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, 
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..), 
-  ControlBlock(..), TypeSym(..), DeclStatement(..), IOStatement(..), 
-  MiscStatement(..), initState, changeState, initObserverList, addObserver, 
-  ControlStatement(..), VariableSym(..), ValueSym(..), ValueExpression(..), 
-  extNewObj, FunctionSym(..), MethodSym(..), ModuleSym(..))
+  ControlBlock(..), TypeSym(..), AssignStatement, DeclStatement(..), 
+  IOStatement(..), MiscStatement(..), initState, changeState, initObserverList, 
+  addObserver, ControlStatement(..), VariableSym(..), ValueSym(..), 
+  ValueExpression(..), extNewObj, FunctionSym(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer, observerName, printNum, x)
 
@@ -37,7 +37,9 @@ patternTest :: (ProgramSym repr) => GSProgram repr
 patternTest = prog progName [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
-patternTestMainMethod :: (MethodSym repr) => SMethod repr
+patternTestMainMethod :: (MethodSym repr, AssignStatement repr, 
+  DeclStatement repr, ControlStatement repr, IOStatement repr, 
+  MiscStatement repr, ControlBlock repr) => SMethod repr
 patternTestMainMethod = mainFunction (body [block [
   varDec n,
   initState fsmName offState, 

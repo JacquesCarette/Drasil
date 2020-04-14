@@ -23,7 +23,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), ParentSpec,
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -488,20 +488,22 @@ instance (Pair p) => Iterator (p CppSrcCode CppHdrCode) where
   iterBegin = pair1 iterBegin iterBegin
   iterEnd = pair1 iterEnd iterEnd
 
-instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where  
+instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) where  
   getFunc = pair1 getFunc getFunc
   setFunc = pair3 setFunc setFunc
 
+instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where  
   listSizeFunc = on2StateValues pair listSizeFunc listSizeFunc
   listAddFunc = pair3 listAddFunc listAddFunc
   listAppendFunc = pair1 listAppendFunc listAppendFunc
-
-  iterBeginFunc = pair1 iterBeginFunc iterBeginFunc
-  iterEndFunc = pair1 iterEndFunc iterEndFunc
-
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
 
+instance (Pair p) => InternalIterator (p CppSrcCode CppHdrCode) where  
+  iterBeginFunc = pair1 iterBeginFunc iterBeginFunc
+  iterEndFunc = pair1 iterEndFunc iterEndFunc
+
+instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where  
   functionType f = pair (functionType $ pfst f) (functionType $ psnd f)
   functionDoc f = functionDoc $ pfst f
   
@@ -1354,21 +1356,23 @@ instance Iterator CppSrcCode where
   iterBegin = G.iterBegin
   iterEnd = G.iterEnd
 
-instance InternalFunction CppSrcCode where
+instance InternalGetSet CppSrcCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
+instance InternalListFunc CppSrcCode where
   listSizeFunc = G.listSizeFunc
   listAddFunc l i v = func "insert" (listType $ onStateValue valueType v) 
     [iterBegin l #+ i, v]
   listAppendFunc = G.listAppendFunc "push_back"
-
-  iterBeginFunc t = func "begin" (iterator t) []
-  iterEndFunc t = func "end" (iterator t) []
-
   listAccessFunc = G.listAccessFunc' "at"
   listSetFunc = G.listSetFunc cppListSetDoc
 
+instance InternalIterator CppSrcCode where
+  iterBeginFunc t = func "begin" (iterator t) []
+  iterEndFunc t = func "end" (iterator t) []
+
+instance InternalFunction CppSrcCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unCPPSC
   
@@ -1966,20 +1970,22 @@ instance Iterator CppHdrCode where
   iterBegin _ = mkStateVal void empty
   iterEnd _ = mkStateVal void empty
 
-instance InternalFunction CppHdrCode where
+instance InternalGetSet CppHdrCode where
   getFunc _ = funcFromData empty void
   setFunc _ _ _ = funcFromData empty void
 
+instance InternalListFunc CppHdrCode where
   listSizeFunc = funcFromData empty void
   listAddFunc _ _ _ = funcFromData empty void
   listAppendFunc _ = funcFromData empty void
-
-  iterBeginFunc _ = funcFromData empty void
-  iterEndFunc _ = funcFromData empty void
-
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
+
+instance InternalIterator CppHdrCode where
+  iterBeginFunc _ = funcFromData empty void
+  iterEndFunc _ = funcFromData empty void
   
+instance InternalFunction CppHdrCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unCPPHC
   

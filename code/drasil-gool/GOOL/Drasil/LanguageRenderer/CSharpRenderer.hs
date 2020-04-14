@@ -25,7 +25,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -418,20 +418,22 @@ instance Iterator CSharpCode where
   iterBegin = G.iterBegin
   iterEnd = G.iterEnd
 
-instance InternalFunction CSharpCode where
+instance InternalGetSet CSharpCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
+instance InternalListFunc CSharpCode where
   listSizeFunc = funcFromData (funcDocD (text "Count")) int
   listAddFunc _ = G.listAddFunc "Insert"
   listAppendFunc = G.listAppendFunc "Add"
-
-  iterBeginFunc _ = error $ G.iterBeginError csName
-  iterEndFunc _ = error $ G.iterEndError csName
-
   listAccessFunc = G.listAccessFunc
   listSetFunc = G.listSetFunc listSetFuncDocD 
+
+instance InternalIterator CSharpCode where
+  iterBeginFunc _ = error $ G.iterBeginError csName
+  iterEndFunc _ = error $ G.iterEndError csName
     
+instance InternalFunction CSharpCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unCSC
 

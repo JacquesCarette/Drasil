@@ -26,7 +26,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -444,21 +444,23 @@ instance Iterator JavaCode where
   iterBegin = G.iterBegin
   iterEnd = G.iterEnd
 
-instance InternalFunction JavaCode where
+instance InternalGetSet JavaCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
+instance InternalListFunc JavaCode where
   listSizeFunc = G.listSizeFunc
   listAddFunc _ = G.listAddFunc "add"
   listAppendFunc = G.listAppendFunc "add"
-
-  iterBeginFunc _ = error $ G.iterBeginError jName
-  iterEndFunc _ = error $ G.iterEndError jName
-  
   listAccessFunc = G.listAccessFunc' "get"
   listSetFunc v i toVal = func "set" (onStateValue valueType v) [intValue i, 
     toVal]
 
+instance InternalIterator JavaCode where
+  iterBeginFunc _ = error $ G.iterBeginError jName
+  iterEndFunc _ = error $ G.iterEndError jName
+
+instance InternalFunction JavaCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unJC
 
@@ -466,7 +468,7 @@ instance InternalFunction JavaCode where
 
 instance InternalAssignStmt JavaCode where
   multiAssign _ _ = error $ G.multiAssignError jName
-  
+
 instance InternalIOStmt JavaCode where
   printSt _ _ = G.printSt
 

@@ -25,7 +25,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -416,20 +416,22 @@ instance Iterator PythonCode where
   iterBegin = G.iterBegin
   iterEnd = G.iterEnd
 
-instance InternalFunction PythonCode where
+instance InternalGetSet PythonCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
+instance InternalListFunc PythonCode where
   listSizeFunc = funcFromData (text "len") int
   listAddFunc _ = G.listAddFunc "insert"
   listAppendFunc = G.listAppendFunc "append"
-
-  iterBeginFunc _ = error $ G.iterBeginError pyName
-  iterEndFunc _ = error $ G.iterEndError pyName
-
   listAccessFunc = G.listAccessFunc
   listSetFunc = G.listSetFunc listSetFuncDocD
 
+instance InternalIterator PythonCode where
+  iterBeginFunc _ = error $ G.iterBeginError pyName
+  iterEndFunc _ = error $ G.iterEndError pyName
+
+instance InternalFunction PythonCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unPC
 

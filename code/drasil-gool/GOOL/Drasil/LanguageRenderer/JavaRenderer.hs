@@ -26,7 +26,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalFunction(..), 
+  InternalVariable(..), InternalValue(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -464,12 +464,16 @@ instance InternalFunction JavaCode where
 
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance InternalStatement JavaCode where
-  printSt _ _ = G.printSt
-  
+instance InternalAssignStmt JavaCode where
   multiAssign _ _ = error $ G.multiAssignError jName
+  
+instance InternalIOStmt JavaCode where
+  printSt _ _ = G.printSt
+
+instance InternalControlStmt JavaCode where
   multiReturn _ = error $ G.multiReturnError jName
 
+instance InternalStatement JavaCode where
   state = G.state
   loopState = G.loopState
 

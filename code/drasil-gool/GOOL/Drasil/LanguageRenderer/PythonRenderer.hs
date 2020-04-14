@@ -25,7 +25,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalFunction(..), 
+  InternalVariable(..), InternalValue(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -435,15 +435,19 @@ instance InternalFunction PythonCode where
 
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance InternalStatement PythonCode where
+instance InternalAssignStmt PythonCode where
+  multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
+    mkStNoEnd (multiAssignDoc vrs vls)) vars vals
+
+instance InternalIOStmt PythonCode where
   printSt nl f p v = zoom lensMStoVS $ on3StateValues (\f' p' v' -> mkStNoEnd $ 
     pyPrint nl p' v' f') (fromMaybe (mkStateVal void empty) f) p v
   
-  multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
-    mkStNoEnd (multiAssignDoc vrs vls)) vars vals
+instance InternalControlStmt PythonCode where
   multiReturn [] = error "Attempt to write return statement with no return variables"
   multiReturn vs = zoom lensMStoVS $ onStateList (mkStNoEnd . returnDocD) vs
 
+instance InternalStatement PythonCode where
   state = G.state
   loopState = G.loopState
   

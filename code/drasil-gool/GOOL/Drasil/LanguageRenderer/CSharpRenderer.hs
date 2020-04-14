@@ -25,7 +25,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalFunction(..), 
+  InternalVariable(..), InternalValue(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -437,12 +437,16 @@ instance InternalFunction CSharpCode where
 
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance InternalStatement CSharpCode where
+instance InternalAssignStmt CSharpCode where
+  multiAssign _ _ = error $ G.multiAssignError csName
+
+instance InternalIOStmt CSharpCode where
   printSt _ _ = G.printSt
   
-  multiAssign _ _ = error $ G.multiAssignError csName
+instance InternalControlStmt CSharpCode where
   multiReturn _ = error $ G.multiReturnError csName 
 
+instance InternalStatement CSharpCode where
   state = G.state
   loopState = G.loopState
 

@@ -23,7 +23,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalFunction(..), 
+  InternalVariable(..), InternalValue(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), ParentSpec,
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -507,17 +507,21 @@ instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where
   
   funcFromData d = pair1 (funcFromData d) (funcFromData d)
 
-instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
+instance (Pair p) => InternalAssignStmt (p CppSrcCode CppHdrCode) where
+  multiAssign vrs vls = pair2Lists multiAssign multiAssign 
+    (map (zoom lensMStoVS) vrs) (map (zoom lensMStoVS) vls)
+    
+instance (Pair p) => InternalIOStmt (p CppSrcCode CppHdrCode) where
   -- Another Maybe/State combination
   printSt nl f p v = pair2
     (printSt nl (fmap (onStateValue pfst) f)) 
     (printSt nl (fmap (onStateValue psnd) f)) 
     (zoom lensMStoVS p) (zoom lensMStoVS v)
 
-  multiAssign vrs vls = pair2Lists multiAssign multiAssign 
-    (map (zoom lensMStoVS) vrs) (map (zoom lensMStoVS) vls)
+instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) where
   multiReturn = pair1List multiReturn multiReturn . map (zoom lensMStoVS)
     
+instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
   state = pair1 state state
   loopState = pair1 loopState loopState
 
@@ -1370,12 +1374,16 @@ instance InternalFunction CppSrcCode where
   
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance InternalStatement CppSrcCode where
+instance InternalAssignStmt CppSrcCode where
+  multiAssign _ _ = error $ G.multiAssignError cppName
+
+instance InternalIOStmt CppSrcCode where
   printSt nl _ = cppPrint nl
 
-  multiAssign _ _ = error $ G.multiAssignError cppName
+instance InternalControlStmt CppSrcCode where
   multiReturn _ = error $ G.multiReturnError cppName
 
+instance InternalStatement CppSrcCode where
   state = G.state
   loopState = G.loopState
 
@@ -1977,12 +1985,16 @@ instance InternalFunction CppHdrCode where
   
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance InternalStatement CppHdrCode where
+instance InternalAssignStmt CppHdrCode where
+  multiAssign _ _ = emptyState
+
+instance InternalIOStmt CppHdrCode where
   printSt _ _ _ _ = emptyState
   
-  multiAssign _ _ = emptyState
+instance InternalControlStmt CppHdrCode where
   multiReturn _ = emptyState
 
+instance InternalStatement CppHdrCode where
   state = G.state
   loopState _ = emptyState
 

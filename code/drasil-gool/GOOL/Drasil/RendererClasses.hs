@@ -4,7 +4,7 @@ module GOOL.Drasil.RendererClasses (
   RenderSym, InternalFile(..), ImportSym(..), InternalPerm(..), 
   InternalBody(..), InternalBlock(..), InternalType(..), UnaryOpSym(..), 
   BinaryOpSym(..), InternalOp(..), InternalVariable(..), InternalValue(..),
-  InternalFunction(..), InternalStatement(..), InternalScope(..), 
+  InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), InternalScope(..), 
   MethodTypeSym(..), InternalParam(..), InternalMethod(..), 
   InternalStateVar(..), ParentSpec, InternalClass(..), InternalMod(..), 
   BlockCommentSym(..)
@@ -26,7 +26,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 class (FileSym repr, InternalBlock repr, InternalBody repr, InternalClass repr, 
   InternalFile repr, InternalFunction repr, InternalMethod repr, 
   InternalMod repr, InternalOp repr, InternalParam repr, InternalPerm repr, 
-  InternalScope repr, InternalStatement repr, InternalStateVar repr, 
+  InternalScope repr, InternalAssignStmt repr, InternalIOStmt repr, InternalControlStmt repr, InternalStatement repr, InternalStateVar repr, 
   InternalType repr, InternalValue repr, InternalVariable repr,
   ImportSym repr, UnaryOpSym repr, BinaryOpSym repr) => RenderSym repr
 
@@ -151,14 +151,18 @@ class InternalFunction repr where
 
   funcFromData :: Doc -> VSType repr -> VSFunction repr
 
-class InternalStatement repr where
+class InternalAssignStmt repr where
+  multiAssign       :: [SVariable repr] -> [SValue repr] -> MSStatement repr 
+
+class InternalIOStmt repr where
   -- newLn, maybe a file to print to, printFunc, value to print
   printSt :: Bool -> Maybe (SValue repr) -> SValue repr -> SValue repr -> 
     MSStatement repr
     
-  multiAssign       :: [SVariable repr] -> [SValue repr] -> MSStatement repr 
+class InternalControlStmt repr where
   multiReturn :: [SValue repr] -> MSStatement repr
 
+class InternalStatement repr where
   state     :: MSStatement repr -> MSStatement repr
   loopState :: MSStatement repr -> MSStatement repr
 

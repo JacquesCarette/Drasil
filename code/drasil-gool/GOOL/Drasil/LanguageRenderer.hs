@@ -37,7 +37,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(int))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalBody(..), 
   InternalPerm(..), InternalType(..), InternalVariable(..), InternalValue(..), 
-  InternalStatement(..), InternalScope(..), InternalParam(..), 
+  InternalIOStmt(..), InternalStatement(..), InternalScope(..), InternalParam(..), 
   InternalMethod(..), BlockCommentSym(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))

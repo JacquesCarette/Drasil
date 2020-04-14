@@ -13,19 +13,19 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
-  ControlBlock(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp,
-  selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), 
-  objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
+  ControlBlock(..), VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
+  NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
+  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), 
+  objMethodCall, objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), 
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), FuncAppStatement(..), MiscStatement(..), 
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
+  ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalFunction(..), 
+  InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -190,8 +190,6 @@ instance InternalType CSharpCode where
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlock CSharpCode where
-  runStrategy = G.runStrategy
-
   solveODE info opts = modify (addLibImport "Microsoft.Research.Oslo" . 
     addLangImport "System.Linq") >> 
     multiBlock [
@@ -224,9 +222,6 @@ instance ControlBlock CSharpCode where
           spArray = arrayType (obj "SolPoint")
           points = var "points" spArray
           sp = var "sp" (obj "SolPoint")
-
-instance InternalControlBlock CSharpCode where
-  listSlice' = G.listSlice
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
@@ -298,6 +293,9 @@ instance InternalVariable CSharpCode where
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
+  valueType = onCodeValue valType
+
+instance Literal CSharpCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
@@ -308,19 +306,18 @@ instance ValueSym CSharpCode where
   litArray = G.litList arrayType
   litList = G.litList listType
 
+instance MathConstant CSharpCode where
   pi = G.pi
 
-  -- ($:) = enumElement
-
+instance VariableValue CSharpCode where
   valueOf v = join $ on2StateValues (\dvs vr -> maybe (G.valueOf v) (listAccess 
     (G.valueOf v) . litInt . toInteger) (elemIndex (variableName vr) dvs)) 
     getODEDepVars v
-  arg n = G.arg (litInt n) argsList
-  -- enumElement = G.enumElement
-  
-  argsList = G.argsList "args"
 
-  valueType = onCodeValue valType
+instance CommandLineArgs CSharpCode where
+  arg n = G.arg (litInt n) argsList
+  argsList = G.argsList "args"
+  argExists i = listSize argsList ?> litInt (fromIntegral i)
 
 instance NumericExpression CSharpCode where
   (#~) = unExpr' negateOp
@@ -353,6 +350,7 @@ instance BooleanExpression CSharpCode where
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
 
+instance Comparison CSharpCode where
   (?<) = typeBinExpr lessOp bool
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool
@@ -391,13 +389,6 @@ instance InternalValue CSharpCode where
   valuePrec = valPrec . unCSC
   valueDoc = val . unCSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
-
-instance Selector CSharpCode where
-  objAccess = G.objAccess
-
-  argExists i = listAccess argsList (litInt $ fromIntegral i)
-  
-  indexOf = G.indexOf "IndexOf"
   
 instance InternalValueExp CSharpCode where
   objMethodCallMixedArgs' = G.objMethodCall 
@@ -406,46 +397,58 @@ instance InternalValueExp CSharpCode where
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
   func = G.func
+  objAccess = G.objAccess
 
+instance GetSet CSharpCode where
   get = G.get
   set = G.set
 
+instance List CSharpCode where
   listSize = G.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
+  listAccess = G.listAccess
+  listSet = G.listSet
+  indexOf = G.indexOf "IndexOf"
+  
+instance InternalList CSharpCode where
+  listSlice' = G.listSlice
 
+instance Iterator CSharpCode where
   iterBegin = G.iterBegin
   iterEnd = G.iterEnd
 
-instance SelectorFunction CSharpCode where
-  listAccess = G.listAccess
-  listSet = G.listSet
-
-instance InternalFunction CSharpCode where
+instance InternalGetSet CSharpCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
+instance InternalListFunc CSharpCode where
   listSizeFunc = funcFromData (funcDocD (text "Count")) int
   listAddFunc _ = G.listAddFunc "Insert"
   listAppendFunc = G.listAppendFunc "Add"
-
-  iterBeginFunc _ = error $ G.iterBeginError csName
-  iterEndFunc _ = error $ G.iterEndError csName
-
   listAccessFunc = G.listAccessFunc
   listSetFunc = G.listSetFunc listSetFuncDocD 
+
+instance InternalIterator CSharpCode where
+  iterBeginFunc _ = error $ G.iterBeginError csName
+  iterEndFunc _ = error $ G.iterEndError csName
     
+instance InternalFunction CSharpCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unCSC
 
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance InternalStatement CSharpCode where
+instance InternalAssignStmt CSharpCode where
+  multiAssign _ _ = error $ G.multiAssignError csName
+
+instance InternalIOStmt CSharpCode where
   printSt _ _ = G.printSt
   
-  multiAssign _ _ = error $ G.multiAssignError csName
+instance InternalControlStmt CSharpCode where
   multiReturn _ = error $ G.multiReturnError csName 
 
+instance InternalStatement CSharpCode where
   state = G.state
   loopState = G.loopState
 
@@ -457,6 +460,8 @@ instance InternalStatement CSharpCode where
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
+  valState = G.valState Semi
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance AssignStatement CSharpCode where
   assign = G.assign Semi
@@ -505,6 +510,10 @@ instance IOStatement CSharpCode where
 
   getFileInputLine = getFileInput
   discardFileLine = G.discardFileLine "ReadLine"
+  getFileInputAll f v = while ((f $. funcFromData (text ".EndOfStream") bool) 
+    ?!) (oneLiner $ valState $ listAppend (valueOf v) (csFileInput f))
+
+instance StringStatement CSharpCode where
   stringSplit d vnew s = assign vnew $ newObj (listType string) 
     [s $. func "Split" (listType string) [litChar d]]
 
@@ -516,12 +525,8 @@ instance FuncAppStatement CSharpCode where
   selfInOutCall = csInOutCall selfFuncApp
   extInOutCall m = csInOutCall (extFuncApp m)
 
-instance MiscStatement CSharpCode where
-  valState = G.valState Semi
-
+instance CommentStatement CSharpCode where
   comment = G.comment commentStart
-
-  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement CSharpCode where
   break = toState $ mkSt breakDocD
@@ -543,11 +548,14 @@ instance ControlStatement CSharpCode where
 
   tryCatch = G.tryCatch csTryCatch
 
+instance StatePattern CSharpCode where 
   checkState = G.checkState
+
+instance ObserverPattern CSharpCode where
   notifyObservers = G.notifyObservers
 
-  getFileInputAll f v = while ((f $. funcFromData (text ".EndOfStream") bool) 
-    ?!) (oneLiner $ valState $ listAppend (valueOf v) (csFileInput f))
+instance StrategyPattern CSharpCode where
+  runStrategy = G.runStrategy
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc

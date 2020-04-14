@@ -12,20 +12,20 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
-  listOf, ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  TypeSym(..), ControlBlock(..), VariableSym(..), 
+  listOf, ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
-  Selector(..), ($.), InternalValueExp(..), objMethodCall,
-  objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), at, 
+  InternalValueExp(..), objMethodCall,
+  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), at, Iterator(..),
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), FuncAppStatement(..), MiscStatement(..), observerListName, 
-  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), observerListName, 
+  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), 
   ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalFunction(..), 
+  InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -183,8 +183,6 @@ instance InternalType PythonCode where
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlock PythonCode where
-  runStrategy = G.runStrategy
-
   solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
     block [
       r &= objMethodCall odeT (extNewObj odeLib odeT 
@@ -213,11 +211,6 @@ instance ControlBlock PythonCode where
          r_t = valueOf $ objVar r (var "t" $ listInnerType $ onStateValue 
            variableType iv)
          r_y = valueOf $ objVar r (var "y" $ onStateValue variableType dv)
-
-instance InternalControlBlock PythonCode where
-  listSlice' b e s vnew vold = docBlock $ zoom lensMStoVS $ pyListSlice vnew 
-    vold (getVal b) (getVal e) (getVal s)
-    where getVal = fromMaybe (mkStateVal void empty)
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData
@@ -291,6 +284,9 @@ instance InternalVariable PythonCode where
 
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
+  valueType = onCodeValue valType
+
+instance Literal PythonCode where
   litTrue = mkStateVal bool (text "True")
   litFalse = mkStateVal bool (text "False")
   litChar = G.litChar
@@ -302,16 +298,16 @@ instance ValueSym PythonCode where
     (brackets $ valueList elems))
   litList = litArray
 
+instance MathConstant PythonCode where
   pi = addmathImport $ mkStateVal double (text "math.pi")
 
-  -- ($:) = enumElement
-
+instance VariableValue PythonCode where
   valueOf = G.valueOf
-  arg n = G.arg (litInt $ n+1) argsList
-  -- enumElement = G.enumElement
-  argsList = modify (addLangImportVS "sys") >> G.argsList "sys.argv"
 
-  valueType = onCodeValue valType
+instance CommandLineArgs PythonCode where
+  arg n = G.arg (litInt $ n+1) argsList
+  argsList = modify (addLangImportVS "sys") >> G.argsList "sys.argv"
+  argExists i = listSize argsList ?> litInt (fromIntegral $ i+1)
 
 instance NumericExpression PythonCode where
   (#~) = unExpr' negateOp
@@ -347,6 +343,7 @@ instance BooleanExpression PythonCode where
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
 
+instance Comparison PythonCode where
   (?<) = typeBinExpr lessOp bool
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool
@@ -388,13 +385,6 @@ instance InternalValue PythonCode where
   valueDoc = val . unPC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
-instance Selector PythonCode where
-  objAccess = G.objAccess
-
-  argExists i = listAccess argsList (litInt $ fromIntegral i)
-  
-  indexOf = G.indexOf "index"
-
 instance InternalValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
   objMethodCallNoParams' = G.objMethodCallNoParams
@@ -402,50 +392,64 @@ instance InternalValueExp PythonCode where
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
   func = G.func
+  objAccess = G.objAccess
 
+instance GetSet PythonCode where
   get = G.get
   set = G.set
 
+instance List PythonCode where
   listSize = on2StateValues (\f v -> mkVal (functionType f) 
     (pyListSize (valueDoc v) (functionDoc f))) listSizeFunc
   listAdd = G.listAdd
   listAppend = G.listAppend
+  listAccess = G.listAccess
+  listSet = G.listSet
+  indexOf = G.indexOf "index"
 
+instance InternalList PythonCode where
+  listSlice' b e s vnew vold = docBlock $ zoom lensMStoVS $ pyListSlice vnew 
+    vold (getVal b) (getVal e) (getVal s)
+    where getVal = fromMaybe (mkStateVal void empty)
+
+instance Iterator PythonCode where
   iterBegin = G.iterBegin
   iterEnd = G.iterEnd
 
-instance SelectorFunction PythonCode where
-  listAccess = G.listAccess
-  listSet = G.listSet
-
-instance InternalFunction PythonCode where
+instance InternalGetSet PythonCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
+instance InternalListFunc PythonCode where
   listSizeFunc = funcFromData (text "len") int
   listAddFunc _ = G.listAddFunc "insert"
   listAppendFunc = G.listAppendFunc "append"
-
-  iterBeginFunc _ = error $ G.iterBeginError pyName
-  iterEndFunc _ = error $ G.iterEndError pyName
-
   listAccessFunc = G.listAccessFunc
   listSetFunc = G.listSetFunc listSetFuncDocD
 
+instance InternalIterator PythonCode where
+  iterBeginFunc _ = error $ G.iterBeginError pyName
+  iterEndFunc _ = error $ G.iterEndError pyName
+
+instance InternalFunction PythonCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unPC
 
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance InternalStatement PythonCode where
+instance InternalAssignStmt PythonCode where
+  multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
+    mkStNoEnd (multiAssignDoc vrs vls)) vars vals
+
+instance InternalIOStmt PythonCode where
   printSt nl f p v = zoom lensMStoVS $ on3StateValues (\f' p' v' -> mkStNoEnd $ 
     pyPrint nl p' v' f') (fromMaybe (mkStateVal void empty) f) p v
   
-  multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
-    mkStNoEnd (multiAssignDoc vrs vls)) vars vals
+instance InternalControlStmt PythonCode where
   multiReturn [] = error "Attempt to write return statement with no return variables"
   multiReturn vs = zoom lensMStoVS $ onStateList (mkStNoEnd . returnDocD) vs
 
+instance InternalStatement PythonCode where
   state = G.state
   loopState = G.loopState
   
@@ -458,6 +462,8 @@ instance InternalStatement PythonCode where
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
+  valState = G.valState Empty
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance AssignStatement PythonCode where
   assign = G.assign Empty
@@ -508,6 +514,10 @@ instance IOStatement PythonCode where
 
   getFileInputLine = getFileInput
   discardFileLine = G.discardFileLine "readline"
+  getFileInputAll f v = v &= objMethodCall (listType string) f
+    "readlines" []
+  
+instance StringStatement PythonCode where
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
     (listType string) [litString [d]]))  
 
@@ -519,12 +529,8 @@ instance FuncAppStatement PythonCode where
   selfInOutCall = pyInOutCall selfFuncApp
   extInOutCall m = pyInOutCall (extFuncApp m)
 
-instance MiscStatement PythonCode where
-  valState = G.valState Empty
-
+instance CommentStatement PythonCode where
   comment = G.comment pyCommentStart
-
-  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement PythonCode where
   break = toState $ mkStNoEnd breakDocD
@@ -550,7 +556,10 @@ instance ControlStatement PythonCode where
 
   tryCatch = G.tryCatch pyTryCatch
 
+instance StatePattern PythonCode where 
   checkState = G.checkState
+
+instance ObserverPattern PythonCode where
   notifyObservers f t = forRange index initv (listSize obsList) 
     (litInt 1) notify
     where obsList = valueOf $ observerListName `listOf` t
@@ -558,8 +567,8 @@ instance ControlStatement PythonCode where
           initv = litInt 0
           notify = oneLiner $ valState $ at obsList (valueOf index) $. f
 
-  getFileInputAll f v = v &= objMethodCall (listType string) f
-    "readlines" []
+instance StrategyPattern PythonCode where
+  runStrategy = G.runStrategy
 
 instance ScopeSym PythonCode where
   type Scope PythonCode = Doc

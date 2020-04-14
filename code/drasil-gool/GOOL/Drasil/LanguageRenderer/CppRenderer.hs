@@ -14,20 +14,16 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
-  ($.), InternalValueExp(..), objMethodCall, FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), AssignStatement(..), (&=), 
-  DeclStatement(..), IOStatement(..), FuncAppStatement(..), MiscStatement(..),
-  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
+  TypeSym(..), ControlBlock(..), VariableSym(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalFunction(..), 
+  InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), ParentSpec,
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -204,20 +200,6 @@ instance (Pair p) => InternalType (p CppSrcCode CppHdrCode) where
   typeFromData t s d = pair (typeFromData t s d) (typeFromData t s d)
 
 instance (Pair p) => ControlBlock (p CppSrcCode CppHdrCode) where
-  -- How I handle values with both State and Maybe might cause problems later on, 
-  -- because it will make the state transitions run twice for the value in the 
-  -- Maybe. For now, given what we store in the State for Values/Variables, this 
-  -- doesn't matter. If problems occur in the future, an alternative way to do 
-  -- this (which wouldn't duplicate state transitions) would be to unwrap the 
-  -- maybes, pass them to a function like pair2, and then have the anonymous 
-  -- functions rewrap the values in Maybes. This would be messy so I don't want to 
-  -- do it unless there's a need.
-  runStrategy l strats rv av = pair1List
-    (\s -> runStrategy l (zip (map fst strats) s) (fmap (onStateValue pfst) rv)
-      (fmap (onStateValue pfst) av)) 
-    (\s -> runStrategy l (zip (map fst strats) s) (fmap (onStateValue psnd) rv) 
-      (fmap (onStateValue psnd) av)) (map snd strats)
-
   solveODE info opts = do
     piv <- zoom lensMStoVS $ indepVar info
     pdv <- zoom lensMStoVS $ depVar info
@@ -279,14 +261,6 @@ instance (Pair p) => ControlBlock (p CppSrcCode CppHdrCode) where
       (odeInfoHdr iv2 dv2 ovs2 ti2 tf2 initv2 ode2)
       (odeOptionsHdr m atol2 rtol2 ss2)
     toState $ pair p1 p2
-
-instance (Pair p) => InternalControlBlock (p CppSrcCode CppHdrCode) where
-  listSlice' b e s vr vl = pair2 
-    (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e) 
-      (fmap (onStateValue pfst) s))
-    (listSlice' (fmap (onStateValue psnd) b) (fmap (onStateValue psnd) e) 
-      (fmap (onStateValue psnd) s)) 
-    (zoom lensMStoVS vr) (zoom lensMStoVS vl)
 
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
   type UnaryOp (p CppSrcCode CppHdrCode) = OpData
@@ -359,6 +333,9 @@ instance (Pair p) => InternalVariable (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   type Value (p CppSrcCode CppHdrCode) = ValData
+  valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
+
+instance (Pair p) => Literal (p CppSrcCode CppHdrCode) where
   litTrue = on2StateValues pair litTrue litTrue
   litFalse = on2StateValues pair litFalse litFalse
   litChar c = on2StateValues pair (litChar c) (litChar c)
@@ -369,17 +346,16 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   litArray = pair1Val1List litArray litArray
   litList = pair1Val1List litList litList
 
+instance (Pair p) => MathConstant (p CppSrcCode CppHdrCode) where
   pi = on2StateValues pair pi pi
 
-  -- ($:) l1 l2 = on2StateValues pair (($:) l1 l2) (($:) l1 l2)
-
+instance (Pair p) => VariableValue (p CppSrcCode CppHdrCode) where
   valueOf = pair1 valueOf valueOf
-  arg n = on2StateValues pair (arg n) (arg n)
-  -- enumElement en e = on2StateValues pair (enumElement en e) (enumElement en e)
   
+instance (Pair p) => CommandLineArgs (p CppSrcCode CppHdrCode) where
+  arg n = on2StateValues pair (arg n) (arg n)
   argsList = on2StateValues pair argsList argsList
-
-  valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
+  argExists i = on2StateValues pair (argExists i) (argExists i)
 
 instance (Pair p) => NumericExpression (p CppSrcCode CppHdrCode) where
   (#~) = pair1 (#~) (#~)
@@ -412,6 +388,7 @@ instance (Pair p) => BooleanExpression (p CppSrcCode CppHdrCode) where
   (?&&) = pair2 (?&&) (?&&)
   (?||) = pair2 (?||) (?||)
 
+instance (Pair p) => Comparison (p CppSrcCode CppHdrCode) where
   (?<) = pair2 (?<) (?<)
   (?<=) = pair2 (?<=) (?<=)
   (?>) = pair2 (?>) (?>)
@@ -473,13 +450,6 @@ instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
   valueDoc v = valueDoc $ pfst v
   valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)
 
-instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
-  objAccess = pair2 objAccess objAccess
-
-  argExists i = on2StateValues pair (argExists i) (argExists i)
-  
-  indexOf = pair2 indexOf indexOf
-
 instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
   objMethodCallMixedArgs' f t o pas nas = pair2Vals3Lists
     (\tp ob pars ns nars -> objMethodCallMixedArgs' f tp ob pars (zip ns nars)) 
@@ -492,51 +462,68 @@ instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
   func l = pair1Val1List (func l) (func l)
-
+  objAccess = pair2 objAccess objAccess
+  
+instance (Pair p) => GetSet (p CppSrcCode CppHdrCode) where
   get = pair2 get get
   set = pair3 set set
 
+instance (Pair p) => List (p CppSrcCode CppHdrCode) where
   listSize = pair1 listSize listSize
   listAdd = pair3 listAdd listAdd
   listAppend = pair2 listAppend listAppend
+  listAccess = pair2 listAccess listAccess
+  listSet = pair3 listSet listSet
+  indexOf = pair2 indexOf indexOf
 
+instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
+  listSlice' b e s vr vl = pair2 
+    (listSlice' (fmap (onStateValue pfst) b) (fmap (onStateValue pfst) e) 
+      (fmap (onStateValue pfst) s))
+    (listSlice' (fmap (onStateValue psnd) b) (fmap (onStateValue psnd) e) 
+      (fmap (onStateValue psnd) s)) 
+    (zoom lensMStoVS vr) (zoom lensMStoVS vl)
+
+instance (Pair p) => Iterator (p CppSrcCode CppHdrCode) where
   iterBegin = pair1 iterBegin iterBegin
   iterEnd = pair1 iterEnd iterEnd
 
-instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
-  listAccess = pair2 listAccess listAccess
-  listSet = pair3 listSet listSet
-
-instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where  
+instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) where  
   getFunc = pair1 getFunc getFunc
   setFunc = pair3 setFunc setFunc
 
+instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where  
   listSizeFunc = on2StateValues pair listSizeFunc listSizeFunc
   listAddFunc = pair3 listAddFunc listAddFunc
   listAppendFunc = pair1 listAppendFunc listAppendFunc
-
-  iterBeginFunc = pair1 iterBeginFunc iterBeginFunc
-  iterEndFunc = pair1 iterEndFunc iterEndFunc
-
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
 
+instance (Pair p) => InternalIterator (p CppSrcCode CppHdrCode) where  
+  iterBeginFunc = pair1 iterBeginFunc iterBeginFunc
+  iterEndFunc = pair1 iterEndFunc iterEndFunc
+
+instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where  
   functionType f = pair (functionType $ pfst f) (functionType $ psnd f)
   functionDoc f = functionDoc $ pfst f
   
   funcFromData d = pair1 (funcFromData d) (funcFromData d)
 
-instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
+instance (Pair p) => InternalAssignStmt (p CppSrcCode CppHdrCode) where
+  multiAssign vrs vls = pair2Lists multiAssign multiAssign 
+    (map (zoom lensMStoVS) vrs) (map (zoom lensMStoVS) vls)
+    
+instance (Pair p) => InternalIOStmt (p CppSrcCode CppHdrCode) where
   -- Another Maybe/State combination
   printSt nl f p v = pair2
     (printSt nl (fmap (onStateValue pfst) f)) 
     (printSt nl (fmap (onStateValue psnd) f)) 
     (zoom lensMStoVS p) (zoom lensMStoVS v)
 
-  multiAssign vrs vls = pair2Lists multiAssign multiAssign 
-    (map (zoom lensMStoVS) vrs) (map (zoom lensMStoVS) vls)
+instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) where
   multiReturn = pair1List multiReturn multiReturn . map (zoom lensMStoVS)
     
+instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
   state = pair1 state state
   loopState = pair1 loopState loopState
 
@@ -548,6 +535,8 @@ instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
+  valState = pair1 valState valState . zoom lensMStoVS
+  multi = pair1List multi multi
 
 instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) where
   assign vr vl = pair2 assign assign (zoom lensMStoVS vr) (zoom lensMStoVS vl)
@@ -614,6 +603,10 @@ instance (Pair p) => IOStatement (p CppSrcCode CppHdrCode) where
   getFileInputLine f v = pair2 getFileInputLine getFileInputLine 
     (zoom lensMStoVS f) (zoom lensMStoVS v)
   discardFileLine = pair1 discardFileLine discardFileLine . zoom lensMStoVS
+  getFileInputAll f v = pair2 getFileInputAll getFileInputAll 
+    (zoom lensMStoVS f) (zoom lensMStoVS v)
+
+instance (Pair p) => StringStatement (p CppSrcCode CppHdrCode) where
   stringSplit d vnew s = pair2 (stringSplit d) (stringSplit d) 
     (zoom lensMStoVS vnew) (zoom lensMStoVS s)
 
@@ -633,12 +626,8 @@ instance (Pair p) => FuncAppStatement (p CppSrcCode CppHdrCode) where
     (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
     (map (zoom lensMStoVS) bs)
 
-instance (Pair p) => MiscStatement (p CppSrcCode CppHdrCode) where
-  valState = pair1 valState valState . zoom lensMStoVS
-
+instance (Pair p) => CommentStatement (p CppSrcCode CppHdrCode) where
   comment cmt = on2StateValues pair (comment cmt) (comment cmt)
-
-  multi = pair1List multi multi
 
 instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
   break = on2StateValues pair break break  
@@ -667,16 +656,30 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
 
   tryCatch = pair2 tryCatch tryCatch
 
+instance (Pair p) => StatePattern (p CppSrcCode CppHdrCode) where
   checkState l vs = pair2Lists1Val
     (\sts bods -> checkState l (zip sts bods))
     (\sts bods -> checkState l (zip sts bods)) 
     (map (zoom lensMStoVS . fst) vs) (map snd vs)
 
+instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) where
   notifyObservers f t = pair2 notifyObservers notifyObservers 
     (zoom lensMStoVS f) (zoom lensMStoVS t)
 
-  getFileInputAll f v = pair2 getFileInputAll getFileInputAll 
-    (zoom lensMStoVS f) (zoom lensMStoVS v)
+instance (Pair p) => StrategyPattern (p CppSrcCode CppHdrCode) where
+  -- How I handle values with both State and Maybe might cause problems later on, 
+  -- because it will make the state transitions run twice for the value in the 
+  -- Maybe. For now, given what we store in the State for Values/Variables, this 
+  -- doesn't matter. If problems occur in the future, an alternative way to do 
+  -- this (which wouldn't duplicate state transitions) would be to unwrap the 
+  -- maybes, pass them to a function like pair2, and then have the anonymous 
+  -- functions rewrap the values in Maybes. This would be messy so I don't want to 
+  -- do it unless there's a need.
+  runStrategy l strats rv av = pair1List
+    (\s -> runStrategy l (zip (map fst strats) s) (fmap (onStateValue pfst) rv)
+      (fmap (onStateValue pfst) av)) 
+    (\s -> runStrategy l (zip (map fst strats) s) (fmap (onStateValue psnd) rv) 
+      (fmap (onStateValue psnd) av)) (map snd strats)
 
 instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
   type Scope (p CppSrcCode CppHdrCode) = (Doc, ScopeTag)
@@ -1132,8 +1135,6 @@ instance InternalType CppSrcCode where
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlock CppSrcCode where
-  runStrategy = G.runStrategy
-
   solveODE info opts = let (fl, s) = cppODEFile info
                            dv = depVar info
     in modify (addODEFilePaths s . addODEFiles [unCPPSC fl] . addLibImport 
@@ -1152,9 +1153,6 @@ instance ControlBlock CppSrcCode where
           [cppODEMethod info opts, valueOf odeVar, valueOf currVal, 
           tInit info, tFinal info, stepSize opts, 
           newObj (obj $ "Populate_" ++ variableName dpv) [valueOf dv]]]))
-
-instance InternalControlBlock CppSrcCode where
-  listSlice' = G.listSlice
 
 instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
@@ -1233,6 +1231,9 @@ instance InternalVariable CppSrcCode where
 
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
+  valueType = onCodeValue valType
+
+instance Literal CppSrcCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
@@ -1243,18 +1244,17 @@ instance ValueSym CppSrcCode where
   litArray = G.litArray
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
+instance MathConstant CppSrcCode where
   pi = modify (addDefine "_USE_MATH_DEFINES") >> addMathHImport (mkStateVal 
     double (text "M_PI"))
 
-  -- ($:) = enumElement
-
+instance VariableValue CppSrcCode where
   valueOf = G.valueOf
-  arg n = G.arg (litInt $ n+1) argsList
-  -- enumElement en e = mkStateVal (enumType en) (text e)
-  
-  argsList = G.argsList "argv"
 
-  valueType = onCodeValue valType
+instance CommandLineArgs CppSrcCode where
+  arg n = G.arg (litInt $ n+1) argsList
+  argsList = G.argsList "argv"
+  argExists i = listSize argsList ?> litInt (fromIntegral $ i+1)
 
 instance NumericExpression CppSrcCode where
   (#~) = unExpr' negateOp
@@ -1287,6 +1287,7 @@ instance BooleanExpression CppSrcCode where
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
 
+instance Comparison CppSrcCode where
   (?<) = typeBinExpr lessOp bool
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool
@@ -1326,14 +1327,6 @@ instance InternalValue CppSrcCode where
   valueDoc = val . unCPPSC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
-instance Selector CppSrcCode where
-  objAccess = G.objAccess
-
-  argExists i = listAccess argsList (litInt $ fromIntegral i)
-  
-  indexOf l v = addAlgorithmImportVS $ funcApp "find" int 
-    [iterBegin l, iterEnd l, v] #- iterBegin l
-  
 instance InternalValueExp CppSrcCode where
   objMethodCallMixedArgs' = G.objMethodCall
   objMethodCallNoParams' = G.objMethodCallNoParams
@@ -1341,47 +1334,60 @@ instance InternalValueExp CppSrcCode where
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
   func = G.func
+  objAccess = G.objAccess
 
+instance GetSet CppSrcCode where
   get = G.get
   set = G.set
 
+instance List CppSrcCode where
   listSize v = cast int (G.listSize v)
   listAdd = G.listAdd
-  listAppend = G.listAppend
+  listAppend = G.listAppend 
+  listAccess = G.listAccess
+  listSet = G.listSet
+  indexOf l v = addAlgorithmImportVS $ funcApp "find" int 
+    [iterBegin l, iterEnd l, v] #- iterBegin l
+    
+instance InternalList CppSrcCode where
+  listSlice' = G.listSlice
 
+instance Iterator CppSrcCode where
   iterBegin = G.iterBegin
   iterEnd = G.iterEnd
 
-instance SelectorFunction CppSrcCode where
-  listAccess = G.listAccess
-  listSet = G.listSet
-
-instance InternalFunction CppSrcCode where
+instance InternalGetSet CppSrcCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
+instance InternalListFunc CppSrcCode where
   listSizeFunc = G.listSizeFunc
   listAddFunc l i v = func "insert" (listType $ onStateValue valueType v) 
     [iterBegin l #+ i, v]
   listAppendFunc = G.listAppendFunc "push_back"
-
-  iterBeginFunc t = func "begin" (iterator t) []
-  iterEndFunc t = func "end" (iterator t) []
-
   listAccessFunc = G.listAccessFunc' "at"
   listSetFunc = G.listSetFunc cppListSetDoc
 
+instance InternalIterator CppSrcCode where
+  iterBeginFunc t = func "begin" (iterator t) []
+  iterEndFunc t = func "end" (iterator t) []
+
+instance InternalFunction CppSrcCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unCPPSC
   
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance InternalStatement CppSrcCode where
+instance InternalAssignStmt CppSrcCode where
+  multiAssign _ _ = error $ G.multiAssignError cppName
+
+instance InternalIOStmt CppSrcCode where
   printSt nl _ = cppPrint nl
 
-  multiAssign _ _ = error $ G.multiAssignError cppName
+instance InternalControlStmt CppSrcCode where
   multiReturn _ = error $ G.multiReturnError cppName
 
+instance InternalStatement CppSrcCode where
   state = G.state
   loopState = G.loopState
 
@@ -1393,6 +1399,8 @@ instance InternalStatement CppSrcCode where
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
+  valState = G.valState Semi
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance AssignStatement CppSrcCode where
   assign = G.assign Semi
@@ -1449,6 +1457,15 @@ instance IOStatement CppSrcCode where
   getFileInputLine f v = valState $ funcApp "std::getline" string [f, valueOf v]
   discardFileLine f = addLimitsImport $ zoom lensMStoVS $ onStateValue (mkSt .
     cppDiscardInput "\\n") f
+  getFileInputAll f v = let l_line = "nextLine"
+                            var_line = var l_line string
+                            v_line = valueOf var_line
+                        in
+    multi [varDec var_line,
+      while (funcApp "std::getline" string [f, v_line])
+      (oneLiner $ valState $ listAppend (valueOf v) v_line)]
+
+instance StringStatement CppSrcCode where
   stringSplit d vnew s = let l_ss = "ss"
                              var_ss = var l_ss (obj "std::stringstream")
                              v_ss = valueOf var_ss
@@ -1473,12 +1490,8 @@ instance FuncAppStatement CppSrcCode where
   selfInOutCall = cppInOutCall selfFuncApp
   extInOutCall m = cppInOutCall (extFuncApp m)
 
-instance MiscStatement CppSrcCode where
-  valState = G.valState Semi
-
+instance CommentStatement CppSrcCode where
   comment = G.comment commentStart
-
-  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement CppSrcCode where
   break = toState $ mkSt breakDocD
@@ -1502,16 +1515,14 @@ instance ControlStatement CppSrcCode where
 
   tryCatch = G.tryCatch cppTryCatch
 
+instance StatePattern CppSrcCode where 
   checkState l = switchAsIf (valueOf $ var l string) 
+
+instance ObserverPattern CppSrcCode where
   notifyObservers = G.notifyObservers
 
-  getFileInputAll f v = let l_line = "nextLine"
-                            var_line = var l_line string
-                            v_line = valueOf var_line
-                        in
-    multi [varDec var_line,
-      while (funcApp "std::getline" string [f, v_line])
-      (oneLiner $ valState $ listAppend (valueOf v) v_line)]
+instance StrategyPattern CppSrcCode where
+  runStrategy = G.runStrategy
 
 instance ScopeSym CppSrcCode where
   type Scope CppSrcCode = (Doc, ScopeTag)
@@ -1761,14 +1772,9 @@ instance InternalType CppHdrCode where
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlock CppHdrCode where
-  runStrategy _ _ _ _ = toState $ toCode empty
-
   solveODE info _ = let (fl, s) = cppODEFile info
     in modify (addODEFilePaths s . addODEFiles [unCPPHC fl]) >> 
     toState (toCode empty)
-
-instance InternalControlBlock CppHdrCode where
-  listSlice' _ _ _ _ _ = toState $ toCode empty
 
 instance UnaryOpSym CppHdrCode where
   type UnaryOp CppHdrCode = OpData
@@ -1842,6 +1848,9 @@ instance InternalVariable CppHdrCode where
 
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
+  valueType = onCodeValue valType
+
+instance Literal CppHdrCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
@@ -1852,18 +1861,17 @@ instance ValueSym CppHdrCode where
   litArray = G.litArray
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
+instance MathConstant CppHdrCode where
   pi = modify (addHeaderDefine "_USE_MATH_DEFINES" . addHeaderLangImport 
     "math.h") >> mkStateVal double (text "M_PI")
 
-  -- ($:) = enumElement
-
+instance VariableValue CppHdrCode where
   valueOf = G.valueOf
-  arg n = G.arg (litInt $ n+1) argsList
-  -- enumElement en e = mkStateVal (enumType en) (text e)
-  
-  argsList = G.argsList "argv"
 
-  valueType = onCodeValue valType
+instance CommandLineArgs CppHdrCode where
+  arg n = G.arg (litInt $ n+1) argsList
+  argsList = G.argsList "argv"
+  argExists _ = mkStateVal void empty
 
 instance NumericExpression CppHdrCode where
   (#~) _ = mkStateVal void empty
@@ -1896,6 +1904,7 @@ instance BooleanExpression CppHdrCode where
   (?&&) _ _ = mkStateVal void empty
   (?||) _ _ = mkStateVal void empty
 
+instance Comparison CppHdrCode where
   (?<) _ _ = mkStateVal void empty
   (?<=) _ _ = mkStateVal void empty
   (?>) _ _ = mkStateVal void empty
@@ -1932,13 +1941,6 @@ instance InternalValue CppHdrCode where
   valuePrec = valPrec . unCPPHC
   valueDoc = val . unCPPHC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
-
-instance Selector CppHdrCode where
-  objAccess _ _ = mkStateVal void empty
-  
-  argExists _ = mkStateVal void empty
-  
-  indexOf _ _ = mkStateVal void empty
   
 instance InternalValueExp CppHdrCode where
   objMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
@@ -1947,46 +1949,58 @@ instance InternalValueExp CppHdrCode where
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
   func _ _ _ = funcFromData empty void
-  
+  objAccess _ _ = mkStateVal void empty
+
+instance GetSet CppHdrCode where
   get _ _ = mkStateVal void empty
   set _ _ _ = mkStateVal void empty
 
+instance List CppHdrCode where
   listSize _ = mkStateVal void empty
   listAdd _ _ _ = mkStateVal void empty
   listAppend _ _ = mkStateVal void empty
+  listAccess _ _ = mkStateVal void empty
+  listSet _ _ _ = mkStateVal void empty
+  indexOf _ _ = mkStateVal void empty
+  
+instance InternalList CppHdrCode where
+  listSlice' _ _ _ _ _ = toState $ toCode empty
 
+instance Iterator CppHdrCode where
   iterBegin _ = mkStateVal void empty
   iterEnd _ = mkStateVal void empty
 
-instance SelectorFunction CppHdrCode where
-  listAccess _ _ = mkStateVal void empty
-  listSet _ _ _ = mkStateVal void empty
-
-instance InternalFunction CppHdrCode where
+instance InternalGetSet CppHdrCode where
   getFunc _ = funcFromData empty void
   setFunc _ _ _ = funcFromData empty void
 
+instance InternalListFunc CppHdrCode where
   listSizeFunc = funcFromData empty void
   listAddFunc _ _ _ = funcFromData empty void
   listAppendFunc _ = funcFromData empty void
-
-  iterBeginFunc _ = funcFromData empty void
-  iterEndFunc _ = funcFromData empty void
-
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
+
+instance InternalIterator CppHdrCode where
+  iterBeginFunc _ = funcFromData empty void
+  iterEndFunc _ = funcFromData empty void
   
+instance InternalFunction CppHdrCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unCPPHC
   
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance InternalStatement CppHdrCode where
+instance InternalAssignStmt CppHdrCode where
+  multiAssign _ _ = emptyState
+
+instance InternalIOStmt CppHdrCode where
   printSt _ _ _ _ = emptyState
   
-  multiAssign _ _ = emptyState
+instance InternalControlStmt CppHdrCode where
   multiReturn _ = emptyState
 
+instance InternalStatement CppHdrCode where
   state = G.state
   loopState _ = emptyState
 
@@ -1998,6 +2012,8 @@ instance InternalStatement CppHdrCode where
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
+  valState _ = emptyState
+  multi _ = emptyState
 
 instance AssignStatement CppHdrCode where
   assign _ _ = emptyState
@@ -2044,6 +2060,9 @@ instance IOStatement CppHdrCode where
 
   getFileInputLine _ _ = emptyState
   discardFileLine _ = emptyState
+  getFileInputAll _ _ = emptyState
+
+instance StringStatement CppHdrCode where
   stringSplit _ _ _ = emptyState
 
   stringListVals _ _ = emptyState
@@ -2054,12 +2073,8 @@ instance FuncAppStatement CppHdrCode where
   selfInOutCall _ _ _ _ = emptyState
   extInOutCall _ _ _ _ _ = emptyState
 
-instance MiscStatement CppHdrCode where
-  valState _ = emptyState
-
+instance CommentStatement CppHdrCode where
   comment _ = emptyState
-
-  multi _ = emptyState
 
 instance ControlStatement CppHdrCode where
   break = emptyState
@@ -2081,11 +2096,14 @@ instance ControlStatement CppHdrCode where
 
   tryCatch _ _ = emptyState
 
+instance StatePattern CppHdrCode where
   checkState _ _ _ = emptyState
 
+instance ObserverPattern CppHdrCode where
   notifyObservers _ _ = emptyState
 
-  getFileInputAll _ _ = emptyState
+instance StrategyPattern CppHdrCode where
+  runStrategy _ _ _ _ = toState $ toCode empty
 
 instance ScopeSym CppHdrCode where
   type Scope CppHdrCode = (Doc, ScopeTag)

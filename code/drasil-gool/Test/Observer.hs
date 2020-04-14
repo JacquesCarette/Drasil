@@ -2,7 +2,7 @@ module Test.Observer (observer, observerName, printNum, x) where
 
 import GOOL.Drasil (SFile, SVariable, SMethod, SClass, ProgramSym, FileSym(..), 
   PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..), 
-  ValueSym(..), ScopeSym(..), MethodSym(..), initializer, StateVarSym(..), 
+  Literal(..), VariableValue(..), ScopeSym(..), MethodSym(..), initializer, StateVarSym(..), 
   ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
@@ -21,13 +21,14 @@ x = var "x" int
 selfX :: (VariableSym repr) => SVariable repr
 selfX = objVarSelf x
 
-helperClass :: (ClassSym repr) => SClass repr
+helperClass :: (ClassSym repr, IOStatement repr, Literal repr, VariableValue repr) => SClass repr
 helperClass = buildClass observerName Nothing [stateVar public dynamic x]
   [observerConstructor, printNumMethod, getMethod x, setMethod x]
 
-observerConstructor :: (MethodSym repr) => SMethod repr
+observerConstructor :: (MethodSym repr, VariableSym repr, Literal repr) => 
+  SMethod repr
 observerConstructor = initializer [] [(x, litInt 5)]
 
-printNumMethod :: (MethodSym repr) => SMethod repr
+printNumMethod :: (MethodSym repr, IOStatement repr, VariableValue repr) => SMethod repr
 printNumMethod = method printNum public dynamic void [] $
   oneLiner $ printLn $ valueOf selfX

@@ -1,15 +1,16 @@
 {-# LANGUAGE TypeFamilies, Rank2Types #-}
 
+-- Performs code analysis on the GOOL code
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlock(..), InternalControlBlock(..), TypeSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), InternalValueExp(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), AssignStatement(..), 
-  DeclStatement(..), IOStatement(..), FuncAppStatement(..), MiscStatement(..), 
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  BlockSym(..), ControlBlock(..), TypeSym(..), 
+  VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
+  GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
+  ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..))
@@ -91,18 +92,7 @@ instance TypeSym CodeInfo where
   getTypeString = unCI
 
 instance ControlBlock CodeInfo where
-  runStrategy _ ss vl _ = do
-    mapM_ snd ss
-    _ <- zoom lensMStoVS $ fromMaybe noInfo vl
-    noInfo
-
   solveODE _ _ = noInfo
-
-instance InternalControlBlock CodeInfo where
-  listSlice' b e s _ vl = zoom lensMStoVS $ do
-    mapM_ (fromMaybe noInfo) [b,e,s]
-    _ <- vl
-    noInfo
 
 instance VariableSym CodeInfo where
   type Variable CodeInfo = ()
@@ -111,7 +101,6 @@ instance VariableSym CodeInfo where
   const _ _ = noInfo
   extVar _ _ _ = noInfo
   self = noInfo
-  -- enumVar _ _ = noInfo
   classVar _ _ = noInfo
   extClassVar _ _ = noInfo
   objVar _ _ = noInfo
@@ -125,6 +114,9 @@ instance VariableSym CodeInfo where
 
 instance ValueSym CodeInfo where
   type Value CodeInfo = ()
+  valueType _ = toCode ""
+
+instance Literal CodeInfo where
   litTrue = noInfo
   litFalse = noInfo
   litChar _ = noInfo
@@ -135,17 +127,16 @@ instance ValueSym CodeInfo where
   litArray _ = executeList
   litList _ = executeList
 
+instance MathConstant CodeInfo where
   pi = noInfo
 
-  -- ($:) _ _ = noInfo
-
+instance VariableValue CodeInfo where
   valueOf _ = noInfo
-  arg _ = noInfo
-  -- enumElement _ _ = noInfo
-  
-  argsList = noInfo
 
-  valueType _ = toCode ""
+instance CommandLineArgs CodeInfo where
+  arg _ = noInfo
+  argsList = noInfo
+  argExists _ = noInfo
 
 instance NumericExpression CodeInfo where
   (#~) = execute1
@@ -178,6 +169,7 @@ instance BooleanExpression CodeInfo where
   (?&&) = execute2
   (?||) = execute2
 
+instance Comparison CodeInfo where
   (?<) = execute2
   (?<=) = execute2
   (?>) = execute2
@@ -207,13 +199,6 @@ instance ValueExpression CodeInfo where
   lambda _ = execute1
 
   notNull = execute1
-
-instance Selector CodeInfo where
-  objAccess = execute2
-  
-  argExists _ = noInfo
-  
-  indexOf = execute2
   
 instance InternalValueExp CodeInfo where
   objMethodCallMixedArgs' n _ v vs ns = do
@@ -226,24 +211,35 @@ instance InternalValueExp CodeInfo where
 instance FunctionSym CodeInfo where
   type Function CodeInfo = ()
   func _ _ = executeList
+  objAccess = execute2
   
+instance GetSet CodeInfo where
   get v _ = execute1 v
   set v _ = execute2 v
 
+instance List CodeInfo where
   listSize = execute1
   listAdd = execute3
   listAppend = execute2
+  listAccess = execute2
+  listSet = execute3
+  indexOf = execute2
+  
+instance InternalList CodeInfo where
+  listSlice' b e s _ vl = zoom lensMStoVS $ do
+    mapM_ (fromMaybe noInfo) [b,e,s]
+    _ <- vl
+    noInfo
 
+instance Iterator CodeInfo where
   iterBegin = execute1
   iterEnd = execute1
 
-instance SelectorFunction CodeInfo where
-  listAccess = execute2
-  listSet = execute3
-
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()
-
+  valState = zoom lensMStoVS . execute1
+  multi = executeList
+  
 instance AssignStatement CodeInfo where
   assign _ = zoom lensMStoVS . execute1
   (&-=) _ = zoom lensMStoVS . execute1
@@ -289,6 +285,9 @@ instance IOStatement CodeInfo where
 
   getFileInputLine v _ = zoom lensMStoVS $ execute1 v
   discardFileLine = zoom lensMStoVS . execute1
+  getFileInputAll v _ = execute1 (zoom lensMStoVS v)
+
+instance StringStatement CodeInfo where
   stringSplit _ _ = zoom lensMStoVS . execute1
 
   stringListVals _ = zoom lensMStoVS . execute1
@@ -305,12 +304,8 @@ instance FuncAppStatement CodeInfo where
     sequence_ vs
     addExternalCall l n
 
-instance MiscStatement CodeInfo where
-  valState = zoom lensMStoVS . execute1
-
+instance CommentStatement CodeInfo where
   comment _ = noInfo
-
-  multi = executeList
 
 instance ControlStatement CodeInfo where
   break = noInfo
@@ -337,11 +332,17 @@ instance ControlStatement CodeInfo where
     _ <- cb
     noInfo
 
+instance StatePattern CodeInfo where
   checkState _ = evalConds
 
+instance ObserverPattern CodeInfo where
   notifyObservers f _ = execute1 (zoom lensMStoVS f)
-
-  getFileInputAll v _ = execute1 (zoom lensMStoVS v)
+  
+instance StrategyPattern CodeInfo where
+  runStrategy _ ss vl _ = do
+    mapM_ snd ss
+    _ <- zoom lensMStoVS $ fromMaybe noInfo vl
+    noInfo
 
 instance ScopeSym CodeInfo where
   type Scope CodeInfo = ScopeTag

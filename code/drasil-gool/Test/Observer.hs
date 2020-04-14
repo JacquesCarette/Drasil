@@ -11,24 +11,24 @@ observerName = "Observer"
 observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
-observer :: (ProgramSym repr) => SFile repr
+observer :: (ProgramSym r) => SFile r
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
-x :: (VariableSym repr) => SVariable repr
+x :: (VariableSym r) => SVariable r
 x = var "x" int
 
-selfX :: (VariableSym repr) => SVariable repr
+selfX :: (VariableSym r) => SVariable r
 selfX = objVarSelf x
 
-helperClass :: (ClassSym repr, IOStatement repr, Literal repr, VariableValue repr) => SClass repr
+helperClass :: (ClassSym r, IOStatement r, Literal r, VariableValue r) => SClass r
 helperClass = buildClass observerName Nothing [stateVar public dynamic x]
   [observerConstructor, printNumMethod, getMethod x, setMethod x]
 
-observerConstructor :: (MethodSym repr, VariableSym repr, Literal repr) => 
-  SMethod repr
+observerConstructor :: (MethodSym r, VariableSym r, Literal r) => 
+  SMethod r
 observerConstructor = initializer [] [(x, litInt 5)]
 
-printNumMethod :: (MethodSym repr, IOStatement repr, VariableValue repr) => SMethod repr
+printNumMethod :: (MethodSym r, IOStatement r, VariableValue r) => SMethod r
 printNumMethod = method printNum public dynamic void [] $
   oneLiner $ printLn $ valueOf selfX

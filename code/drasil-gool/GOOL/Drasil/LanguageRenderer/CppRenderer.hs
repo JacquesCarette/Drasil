@@ -2245,8 +2245,8 @@ isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
-getParam :: (RenderSym repr) => SVariable repr -> 
-  MSParameter repr
+getParam :: (RenderSym r) => SVariable r -> 
+  MSParameter r
 getParam v = zoom lensMStoVS v >>= (\v' -> getParamFunc ((getType . 
   variableType) v') v)
   where getParamFunc (List _) = pointerParam
@@ -2307,8 +2307,8 @@ cppODEMethod info opts = listInnerType (onStateValue variableType $ depVar info)
       stepper _ = error "Chosen ODE method unavailable in C++"
   in stepper (solveMethod opts))  
 
-cppODEFile :: (RenderSym repr) => ODEInfo repr ->
-  (repr (RenderFile repr), GOOLState)
+cppODEFile :: (RenderSym r) => ODEInfo r ->
+  (r (RenderFile r), GOOLState)
 cppODEFile info = (fl, s ^. goolState)
   where (fl, s) = runState odeFile initialFS
         olddv = depVar info
@@ -2355,22 +2355,22 @@ usingNameSpace n Nothing = text "using namespace" <+> text n <> endStatement
 cppInherit :: Maybe Label -> Doc -> Doc
 cppInherit n pub = maybe empty ((colon <+> pub <+>) . text) n
 
-cppBoolType :: (RenderSym repr) => VSType repr
+cppBoolType :: (RenderSym r) => VSType r
 cppBoolType = toState $ typeFromData Boolean "bool" (text "bool")
 
-cppInfileType :: (RenderSym repr) => VSType repr
+cppInfileType :: (RenderSym r) => VSType r
 cppInfileType = addFStreamImport $ typeFromData File "ifstream" 
   (text "ifstream")
 
-cppOutfileType :: (RenderSym repr) => VSType repr
+cppOutfileType :: (RenderSym r) => VSType r
 cppOutfileType = addFStreamImport $ typeFromData File "ofstream" 
   (text "ofstream")
 
-cppArrayType :: (RenderSym repr) => VSType repr -> VSType repr
+cppArrayType :: (RenderSym r) => VSType r -> VSType r
 cppArrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
   (getTypeString t) (getTypeDoc t))
 
-cppIterType :: (RenderSym repr) => VSType repr -> VSType repr
+cppIterType :: (RenderSym r) => VSType r -> VSType r
 cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t)) 
   (getTypeString t ++ "::iterator") (text "std::" <> getTypeDoc t <> text 
   "::iterator"))
@@ -2378,7 +2378,7 @@ cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t))
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c <> text "::" <> v
 
-cppLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
+cppLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> 
   Doc
 cppLambda ps ex = text "[]" <+> parens (hicat (text ",") $ zipWith (<+>) 
   (map (getTypeDoc . variableType) ps) (map variableDoc ps)) <+> text "->" <+> 
@@ -2395,24 +2395,24 @@ cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $
 cppListSetDoc :: Doc -> Doc -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens i <+> equals <+> v
 
-cppListDecDoc :: (RenderSym repr) => repr (Value repr) -> Doc
+cppListDecDoc :: (RenderSym r) => r (Value r) -> Doc
 cppListDecDoc n = parens (valueDoc n)
 
-cppListDecDefDoc :: (RenderSym repr) => [repr (Value repr)] -> Doc
+cppListDecDefDoc :: (RenderSym r) => [r (Value r)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
-cppPrint :: (RenderSym repr) => Bool -> SValue repr -> SValue repr -> 
-  MSStatement repr
+cppPrint :: (RenderSym r) => Bool -> SValue r -> SValue r -> 
+  MSStatement r
 cppPrint newLn  pf vl = zoom lensMStoVS $ on3StateValues (\e printFn v -> mkSt 
   $ valueDoc printFn <+> text "<<" <+> pars v (valueDoc v) <+> e) end pf vl
   where pars v = if maybe False (< 9) (valuePrec v) then parens else id
         end = if newLn then addIOStreamImport (toState $ text "<<" <+> 
           text "std::endl") else toState empty
 
-cppThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
+cppThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 cppThrowDoc errMsg = text "throw" <> parens (valueDoc errMsg)
 
-cppTryCatch :: (RenderSym repr) => repr (Body repr) -> repr (Body repr) -> Doc
+cppTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 cppTryCatch tb cb = vcat [
   text "try" <+> lbrace,
   indent $ bodyDoc tb,
@@ -2420,24 +2420,24 @@ cppTryCatch tb cb = vcat [
   indent $ bodyDoc cb,
   rbrace]
 
-cppDiscardInput :: (RenderSym repr) => Label -> repr (Value repr) -> Doc
+cppDiscardInput :: (RenderSym r) => Label -> r (Value r) -> Doc
 cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens 
   (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
   quotes (text sep))
 
-cppInput :: (RenderSym repr) => SVariable repr -> SValue repr -> 
-  MSStatement repr
+cppInput :: (RenderSym r) => SVariable r -> SValue r -> 
+  MSStatement r
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ zoom lensMStoVS $ 
   on2StateValues (\v inFn -> mkSt $ vcat [valueDoc inFn <+> text ">>" <+> 
   variableDoc v <> endStatement, valueDoc inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]) vr i
 
-cppOpenFile :: (RenderSym repr) => Label -> repr (Variable repr) -> 
-  repr (Value repr) -> Doc
+cppOpenFile :: (RenderSym r) => Label -> r (Variable r) -> 
+  r (Value r) -> Doc
 cppOpenFile mode f n = variableDoc f <> dot <> text "open" <> 
   parens (valueDoc n <> comma <+> text mode)
 
-cppPointerParamDoc :: (RenderSym repr) => repr (Variable repr) -> Doc
+cppPointerParamDoc :: (RenderSym r) => r (Variable r) -> Doc
 cppPointerParamDoc v = getTypeDoc (variableType v) <+> text "&" <> variableDoc v
 
 cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode) 
@@ -2460,20 +2460,20 @@ cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom 
   lensMStoVS . snd) is <*> b)
 
-cppsFunction :: (RenderSym repr) => Label -> repr (Type repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> Doc
+cppsFunction :: (RenderSym r) => Label -> r (Type r) -> 
+  [r (Parameter r)] -> r (Body r) -> Doc
 cppsFunction n t ps b = vcat [
   getTypeDoc t <+> text n <> parens (parameterList ps) <+> bodyStart,
   indent (bodyDoc b),
   bodyEnd]
 
-cpphMethod :: (RenderSym repr) => Label -> repr (Type repr) ->
-  [repr (Parameter repr)] -> Doc
+cpphMethod :: (RenderSym r) => Label -> r (Type r) ->
+  [r (Parameter r)] -> Doc
 cpphMethod n t ps = (if isDtor n then empty else getTypeDoc t) <+> text n 
   <> parens (parameterList ps) <> endStatement
 
-cppCommentedFunc :: (RenderSym repr) => FileType -> 
-  MS (repr (BlockComment repr)) -> SMethod repr -> SMethod repr
+cppCommentedFunc :: (RenderSym r) => FileType -> 
+  MS (r (BlockComment r)) -> SMethod r -> SMethod r
 cppCommentedFunc ft cmt fn = do
   f <- fn
   mn <- getCurrMainFunc
@@ -2491,8 +2491,8 @@ cppsStateVarDef n cns p vr vl = onBinding (bind p) (cns <+> typeDoc
   (varType vr) <+> text (n ++ "::") <> varDoc vr <+> equals <+> val vl <>
   endStatement) empty
 
-cpphStateVarDef :: (RenderSym repr) => Doc -> repr (Permanence repr) -> 
-  SVariable repr -> SValue repr -> CS Doc
+cpphStateVarDef :: (RenderSym r) => Doc -> r (Permanence r) -> 
+  SVariable r -> SValue r -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (stateVarDocD s (permDoc p) .  
   statementDoc) (zoom lensCStoMS $ state $ onBinding (binding p) (varDec 
   vr) (varDecDef vr vl)) 
@@ -2526,8 +2526,8 @@ cpphClass n ps vars funcs pub priv = onCodeValue (\p -> vcat [
   where pubs = cpphVarsFuncsList Pub vars funcs
         privs = cpphVarsFuncsList Priv vars funcs
 
--- cpphEnum :: (RenderSym repr) => Label -> Doc -> repr (Keyword repr) -> 
---   repr (Keyword repr) -> repr (Keyword repr) -> SClass repr
+-- cpphEnum :: (RenderSym r) => Label -> Doc -> r (Keyword r) -> 
+--   r (Keyword r) -> r (Keyword r) -> SClass r
 -- cpphEnum n es bStart bEnd end = classFromData $ toState $ vcat [
 --   text "enum" <+> text n <+> keyDoc bStart,
 --   indent es,
@@ -2569,8 +2569,8 @@ cpphInOut f s p ins [] [v] b = f s p (onStateValue variableType v)
   (cppInOutParams ins [] [v]) b
 cpphInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
 
-cppInOutParams :: (RenderSym repr) => [SVariable repr] -> [SVariable repr] -> 
-  [SVariable repr] -> [MSParameter repr]
+cppInOutParams :: (RenderSym r) => [SVariable r] -> [SVariable r] -> 
+  [SVariable r] -> [MSParameter r]
 cppInOutParams ins [_] [] = map getParam ins
 cppInOutParams ins [] [v] = map getParam $ v : ins
 cppInOutParams ins outs both = map pointerParam both ++ map getParam ins ++ 

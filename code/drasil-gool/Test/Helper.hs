@@ -7,10 +7,10 @@ import GOOL.Drasil (SFile, SMethod,
   ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-helper :: (ProgramSym repr) => SFile repr
+helper :: (ProgramSym r) => SFile r
 helper = fileDoc (buildModule "Helper" [] [doubleAndAdd] [])
 
-doubleAndAdd :: (ProgramSym repr) => SMethod repr
+doubleAndAdd :: (ProgramSym r) => SMethod r
 doubleAndAdd = docFunc "This function adds two numbers" 
   ["First number to add", "Second number to add"] (Just "Sum") $ 
   function "doubleAndAdd"  public static double

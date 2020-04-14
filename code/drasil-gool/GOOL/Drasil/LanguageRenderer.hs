@@ -130,12 +130,12 @@ bodyDocD bs = vibcat $ filter (not . isEmpty) bs
 
 -- IO --
 
-printDoc :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> Doc
+printDoc :: (RenderSym r) => r (Value r) -> r (Value r) -> Doc
 printDoc printFn v = valueDoc printFn <> parens (valueDoc v)
 
-printListDoc :: (RenderSym repr) => Integer -> SValue repr -> (SValue repr -> 
-  MSStatement repr) -> (String -> MSStatement repr) -> 
-  (String -> MSStatement repr) -> MSStatement repr
+printListDoc :: (RenderSym r) => Integer -> SValue r -> (SValue r -> 
+  MSStatement r) -> (String -> MSStatement r) -> 
+  (String -> MSStatement r) -> MSStatement r
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
   for (varDecDef i (litInt 0)) (valueOf i ?< (listSize v #- litInt 1))
     (i &++) (bodyStatements [prFn (listAccess v (valueOf i)), prStrFn ", "]), 
@@ -145,11 +145,11 @@ printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[",
   where l_i = "list_i" ++ show n
         i = var l_i S.int
 
-printObjDoc :: ClassName -> (String -> MSStatement repr) -> MSStatement repr
+printObjDoc :: ClassName -> (String -> MSStatement r) -> MSStatement r
 printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
-outDoc :: (RenderSym repr) => Bool -> Maybe (SValue repr) -> SValue repr -> 
-  SValue repr -> MSStatement repr
+outDoc :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> 
+  SValue r -> MSStatement r
 outDoc newLn f printFn v = zoom lensMStoVS v >>= outDoc' . getType . valueType
   where outDoc' (List t) = printListDoc (getNestDegree 1 t) v prFn prStrFn 
           prLnFn
@@ -165,14 +165,14 @@ printFileDocD fn f = f <> dot <> text fn
 
 -- Parameters --
 
-paramDocD :: (RenderSym repr) => repr (Variable repr) -> Doc
+paramDocD :: (RenderSym r) => r (Variable r) -> Doc
 paramDocD v = getTypeDoc (variableType v) <+> variableDoc v
 
 -- Method --
 
-methodDocD :: (RenderSym repr) => Label -> repr (Scope repr) -> 
-  repr (Permanence repr) -> repr (Type repr) -> [repr (Parameter repr)] -> 
-  repr (Body repr) -> Doc
+methodDocD :: (RenderSym r) => Label -> r (Scope r) -> 
+  r (Permanence r) -> r (Type r) -> [r (Parameter r)] -> 
+  r (Body r) -> Doc
 methodDocD n s p t ps b = vcat [
   scopeDoc s <+> permDoc p <+> getTypeDoc t <+> text n <> 
     parens (parameterList ps) <+> lbrace,
@@ -196,8 +196,8 @@ stateVarListDocD = vcat
 
 -- Controls --
 
-switchDocD :: (RenderSym repr) => repr (Statement repr) -> repr (Value repr) -> 
-  repr (Body repr) -> [(repr (Value repr), repr (Body repr))] -> Doc
+switchDocD :: (RenderSym r) => r (Statement r) -> r (Value r) -> 
+  r (Body r) -> [(r (Value r), r (Body r))] -> Doc
 switchDocD breakState v defBody cs = 
   let caseDoc (l, result) = vcat [
         text "case" <+> valueDoc l <> colon,
@@ -218,32 +218,32 @@ switchDocD breakState v defBody cs =
 
 -- Statements --
 
-assignDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
+assignDocD :: (RenderSym r) => r (Variable r) -> r (Value r) -> 
   Doc
 assignDocD vr vl = variableDoc vr <+> equals <+> valueDoc vl
 
-multiAssignDoc :: (RenderSym repr) => [repr (Variable repr)] -> 
-  [repr (Value repr)] -> Doc
+multiAssignDoc :: (RenderSym r) => [r (Variable r)] -> 
+  [r (Value r)] -> Doc
 multiAssignDoc vrs vls = variableList vrs <+> equals <+> valueList vls
 
-plusEqualsDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) 
+plusEqualsDocD :: (RenderSym r) => r (Variable r) -> r (Value r) 
   -> Doc
 plusEqualsDocD vr vl = variableDoc vr <+> text "+=" <+> valueDoc vl
 
-plusPlusDocD :: (RenderSym repr) => repr (Variable repr) -> Doc
+plusPlusDocD :: (RenderSym r) => r (Variable r) -> Doc
 plusPlusDocD v = variableDoc v <> text "++"
 
-listDecDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
+listDecDocD :: (RenderSym r) => r (Variable r) -> r (Value r) -> 
   Doc
 listDecDocD v n = space <> equals <+> new <+> getTypeDoc (variableType v) 
   <> parens (valueDoc n)
 
-constDecDefDocD :: (RenderSym repr) => repr (Variable repr) -> 
-  repr (Value repr) -> Doc
+constDecDefDocD :: (RenderSym r) => r (Variable r) -> 
+  r (Value r) -> Doc
 constDecDefDocD v def = text "const" <+> getTypeDoc (variableType v) <+> 
   variableDoc v <+> equals <+> valueDoc def
 
-returnDocD :: (RenderSym repr) => [repr (Value repr)] -> Doc
+returnDocD :: (RenderSym r) => [r (Value r)] -> Doc
 returnDocD vs = text "return" <+> valueList vs
 
 commentDocD :: Label -> Doc -> Doc
@@ -256,27 +256,27 @@ getTermDoc :: Terminator -> Doc
 getTermDoc Semi = semi
 getTermDoc Empty = empty
 
-mkSt :: (RenderSym repr) => Doc -> repr (Statement repr)
+mkSt :: (RenderSym r) => Doc -> r (Statement r)
 mkSt = flip stateFromData Semi
 
-mkStNoEnd :: (RenderSym repr) => Doc -> repr (Statement repr)
+mkStNoEnd :: (RenderSym r) => Doc -> r (Statement r)
 mkStNoEnd = flip stateFromData Empty
 
-mkStateVal :: (RenderSym repr) => VSType repr -> Doc -> SValue repr
+mkStateVal :: (RenderSym r) => VSType r -> Doc -> SValue r
 mkStateVal t d = onStateValue (\tp -> valFromData Nothing tp d) t
 
-mkVal :: (RenderSym repr) => repr (Type repr) -> Doc -> repr (Value repr)
+mkVal :: (RenderSym r) => r (Type r) -> Doc -> r (Value r)
 mkVal = valFromData Nothing
 
-mkStateVar :: (RenderSym repr) => String -> VSType repr -> Doc -> SVariable repr
+mkStateVar :: (RenderSym r) => String -> VSType r -> Doc -> SVariable r
 mkStateVar n t d = onStateValue (\tp -> varFromData Dynamic n tp d) t
 
-mkVar :: (RenderSym repr) => String -> repr (Type repr) -> Doc -> 
-  repr (Variable repr)
+mkVar :: (RenderSym r) => String -> r (Type r) -> Doc -> 
+  r (Variable r)
 mkVar = varFromData Dynamic
 
-mkStaticVar :: (RenderSym repr) => String -> VSType repr -> Doc -> 
-  SVariable repr
+mkStaticVar :: (RenderSym r) => String -> VSType r -> Doc -> 
+  SVariable r
 mkStaticVar n t d = onStateValue (\tp -> varFromData Static n tp d) t
 
 -- Value Printers --
@@ -290,14 +290,14 @@ extVarDocD l n = text l <> dot <> text n
 selfDocD :: Doc
 selfDocD = text "this"
 
-argDocD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> Doc
+argDocD :: (RenderSym r) => r (Value r) -> r (Value r) -> Doc
 argDocD n args = valueDoc args <> brackets (valueDoc n)
 
 -- enumElemDocD :: Label -> Label -> Doc
 -- enumElemDocD en e = text en <> dot <> text e
 
-classVarCheckStatic :: (RenderSym repr) => repr (Variable repr) -> 
-  repr (Variable repr)
+classVarCheckStatic :: (RenderSym r) => r (Variable r) -> 
+  r (Variable r)
 classVarCheckStatic v = classVarCS (variableBind v)
   where classVarCS Dynamic = error
           "classVar can only be used to access static variables"
@@ -309,13 +309,13 @@ classVarDocD c v = c <> dot <> v
 objVarDocD :: Doc -> Doc ->  Doc
 objVarDocD n1 n2 = n1 <> dot <> n2
 
-funcAppDocD :: (RenderSym repr) => Label -> [repr (Value repr)] -> Doc
+funcAppDocD :: (RenderSym r) => Label -> [r (Value r)] -> Doc
 funcAppDocD n vs = text n <> parens (valueList vs)
 
-newObjDocD :: (RenderSym repr) => repr (Type repr) -> Doc -> Doc
+newObjDocD :: (RenderSym r) => r (Type r) -> Doc -> Doc
 newObjDocD st vs = new <+> newObjDocD' st vs
 
-newObjDocD' :: (RenderSym repr) => repr (Type repr) -> Doc -> Doc
+newObjDocD' :: (RenderSym r) => r (Type r) -> Doc -> Doc
 newObjDocD' st vs = getTypeDoc st <> parens vs
 
 -- Functions --
@@ -326,7 +326,7 @@ funcDocD fnApp = dot <> fnApp
 castDocD :: Doc -> Doc
 castDocD = parens
 
-listAccessFuncDocD :: (RenderSym repr) => repr (Value repr) -> Doc
+listAccessFuncDocD :: (RenderSym r) => r (Value r) -> Doc
 listAccessFuncDocD v = brackets $ valueDoc v
 
 listSetFuncDocD :: Doc -> Doc -> Doc
@@ -417,20 +417,20 @@ moduleDox desc as date m = (doxFile ++ m) :
 commentedModD :: FileData -> Doc -> FileData
 commentedModD m cmt = updateFileMod (updateMod (commentedItem cmt) (fileMod m)) m
 
-docFuncRepr :: (RenderSym repr) => String -> [String] -> [String] -> 
-  SMethod repr -> SMethod repr
+docFuncRepr :: (RenderSym r) => String -> [String] -> [String] -> 
+  SMethod r -> SMethod r
 docFuncRepr desc pComms rComms = commentedFunc (docComment $ onStateValue 
   (\ps -> functionDox desc (zip ps pComms) rComms) getParameters)
 
 -- Helper Functions --
 
-valueList :: (RenderSym repr) => [repr (Value repr)] -> Doc
+valueList :: (RenderSym r) => [r (Value r)] -> Doc
 valueList = hicat (text ", ") . map valueDoc
 
-variableList :: (RenderSym repr) => [repr (Variable repr)] -> Doc
+variableList :: (RenderSym r) => [r (Variable r)] -> Doc
 variableList = hicat (text ", ") . map variableDoc
 
-parameterList :: (RenderSym repr) => [repr (Parameter repr)] -> Doc
+parameterList :: (RenderSym r) => [r (Parameter r)] -> Doc
 parameterList = hicat (text ", ") . map parameterDoc
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
@@ -450,7 +450,7 @@ getterName s = "get" ++ capitalize s
 setterName :: String -> String
 setterName s = "set" ++ capitalize s
 
-intValue :: (RenderSym repr) => SValue repr -> SValue repr
+intValue :: (RenderSym r) => SValue r -> SValue r
 intValue i = i >>= intValue' . getType . valueType
   where intValue' Integer = i
         -- intValue' (Enum _) = cast S.int i

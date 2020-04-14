@@ -23,216 +23,216 @@ import GOOL.Drasil.State (FS, CS, MS, VS)
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (FileSym repr, InternalBlock repr, InternalBody repr, InternalClass repr, 
-  InternalFile repr, InternalGetSet repr, InternalListFunc repr, InternalIterator repr, InternalFunction repr, InternalMethod repr, 
-  InternalMod repr, InternalOp repr, InternalParam repr, InternalPerm repr, 
-  InternalScope repr, InternalAssignStmt repr, InternalIOStmt repr, InternalControlStmt repr, InternalStatement repr, InternalStateVar repr, 
-  InternalType repr, InternalValue repr, InternalVariable repr,
-  ImportSym repr, UnaryOpSym repr, BinaryOpSym repr) => RenderSym repr
+class (FileSym r, InternalBlock r, InternalBody r, InternalClass r, 
+  InternalFile r, InternalGetSet r, InternalListFunc r, InternalIterator r, InternalFunction r, InternalMethod r, 
+  InternalMod r, InternalOp r, InternalParam r, InternalPerm r, 
+  InternalScope r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, InternalStateVar r, 
+  InternalType r, InternalValue r, InternalVariable r,
+  ImportSym r, UnaryOpSym r, BinaryOpSym r) => RenderSym r
 
-class (BlockCommentSym repr) => InternalFile repr where
-  top :: repr (Module repr) -> repr (Block repr)
-  bottom :: repr (Block repr)
+class (BlockCommentSym r) => InternalFile r where
+  top :: r (Module r) -> r (Block r)
+  bottom :: r (Block r)
 
-  commentedMod :: FS (repr (BlockComment repr)) -> SFile repr -> SFile repr
+  commentedMod :: FS (r (BlockComment r)) -> SFile r -> SFile r
 
-  fileFromData :: FS FilePath -> FSModule repr -> SFile repr
+  fileFromData :: FS FilePath -> FSModule r -> SFile r
 
-class ImportSym repr where
-  type Import repr
-  langImport :: Label -> repr (Import repr)
-  modImport :: Label -> repr (Import repr)
+class ImportSym r where
+  type Import r
+  langImport :: Label -> r (Import r)
+  modImport :: Label -> r (Import r)
 
-  importDoc :: repr (Import repr) -> Doc
+  importDoc :: r (Import r) -> Doc
 
-class InternalPerm repr where
-  permDoc :: repr (Permanence repr) -> Doc
-  binding :: repr (Permanence repr) -> Binding
+class InternalPerm r where
+  permDoc :: r (Permanence r) -> Doc
+  binding :: r (Permanence r) -> Binding
 
-class InternalBody repr where
-  bodyDoc :: repr (Body repr) -> Doc
-  docBody :: MS Doc -> MSBody repr
-  multiBody :: [MSBody repr] -> MSBody repr
+class InternalBody r where
+  bodyDoc :: r (Body r) -> Doc
+  docBody :: MS Doc -> MSBody r
+  multiBody :: [MSBody r] -> MSBody r
 
-class InternalBlock repr where
-  blockDoc :: repr (Block repr) -> Doc
-  docBlock :: MS Doc -> MSBlock repr
-  multiBlock :: [MSBlock repr] -> MSBlock repr
+class InternalBlock r where
+  blockDoc :: r (Block r) -> Doc
+  docBlock :: MS Doc -> MSBlock r
+  multiBlock :: [MSBlock r] -> MSBlock r
 
-class InternalType repr where
-  getTypeDoc :: repr (Type repr) -> Doc
-  typeFromData :: CodeType -> String -> Doc -> repr (Type repr)
+class InternalType r where
+  getTypeDoc :: r (Type r) -> Doc
+  typeFromData :: CodeType -> String -> Doc -> r (Type r)
 
 type VSUnOp a = VS (a (UnaryOp a))
 
-class UnaryOpSym repr where
-  type UnaryOp repr
-  notOp    :: VSUnOp repr
-  negateOp :: VSUnOp repr
-  sqrtOp   :: VSUnOp repr
-  absOp    :: VSUnOp repr
-  logOp    :: VSUnOp repr
-  lnOp     :: VSUnOp repr
-  expOp    :: VSUnOp repr
-  sinOp    :: VSUnOp repr
-  cosOp    :: VSUnOp repr
-  tanOp    :: VSUnOp repr
-  asinOp   :: VSUnOp repr
-  acosOp   :: VSUnOp repr
-  atanOp   :: VSUnOp repr
-  floorOp  :: VSUnOp repr
-  ceilOp   :: VSUnOp repr
+class UnaryOpSym r where
+  type UnaryOp r
+  notOp    :: VSUnOp r
+  negateOp :: VSUnOp r
+  sqrtOp   :: VSUnOp r
+  absOp    :: VSUnOp r
+  logOp    :: VSUnOp r
+  lnOp     :: VSUnOp r
+  expOp    :: VSUnOp r
+  sinOp    :: VSUnOp r
+  cosOp    :: VSUnOp r
+  tanOp    :: VSUnOp r
+  asinOp   :: VSUnOp r
+  acosOp   :: VSUnOp r
+  atanOp   :: VSUnOp r
+  floorOp  :: VSUnOp r
+  ceilOp   :: VSUnOp r
 
 type VSBinOp a = VS (a (BinaryOp a))
 
-class BinaryOpSym repr where
-  type BinaryOp repr
-  equalOp        :: VSBinOp repr
-  notEqualOp     :: VSBinOp repr
-  greaterOp      :: VSBinOp repr
-  greaterEqualOp :: VSBinOp repr
-  lessOp         :: VSBinOp repr
-  lessEqualOp    :: VSBinOp repr
-  plusOp         :: VSBinOp repr
-  minusOp        :: VSBinOp repr
-  multOp         :: VSBinOp repr
-  divideOp       :: VSBinOp repr
-  powerOp        :: VSBinOp repr
-  moduloOp       :: VSBinOp repr
-  andOp          :: VSBinOp repr
-  orOp           :: VSBinOp repr
+class BinaryOpSym r where
+  type BinaryOp r
+  equalOp        :: VSBinOp r
+  notEqualOp     :: VSBinOp r
+  greaterOp      :: VSBinOp r
+  greaterEqualOp :: VSBinOp r
+  lessOp         :: VSBinOp r
+  lessEqualOp    :: VSBinOp r
+  plusOp         :: VSBinOp r
+  minusOp        :: VSBinOp r
+  multOp         :: VSBinOp r
+  divideOp       :: VSBinOp r
+  powerOp        :: VSBinOp r
+  moduloOp       :: VSBinOp r
+  andOp          :: VSBinOp r
+  orOp           :: VSBinOp r
 
-class InternalOp repr where
-  uOpDoc :: repr (UnaryOp repr) -> Doc
-  bOpDoc :: repr (BinaryOp repr) -> Doc
-  uOpPrec :: repr (UnaryOp repr) -> Int
-  bOpPrec :: repr (BinaryOp repr) -> Int
+class InternalOp r where
+  uOpDoc :: r (UnaryOp r) -> Doc
+  bOpDoc :: r (BinaryOp r) -> Doc
+  uOpPrec :: r (UnaryOp r) -> Int
+  bOpPrec :: r (BinaryOp r) -> Int
 
-  uOpFromData :: Int -> Doc -> VSUnOp repr
-  bOpFromData :: Int -> Doc -> VSBinOp repr
+  uOpFromData :: Int -> Doc -> VSUnOp r
+  bOpFromData :: Int -> Doc -> VSBinOp r
 
-class InternalVariable repr where
-  variableBind :: repr (Variable repr) -> Binding
-  variableDoc  :: repr (Variable repr) -> Doc
-  varFromData :: Binding -> String -> repr (Type repr) -> Doc -> 
-    repr (Variable repr)
+class InternalVariable r where
+  variableBind :: r (Variable r) -> Binding
+  variableDoc  :: r (Variable r) -> Doc
+  varFromData :: Binding -> String -> r (Type r) -> Doc -> 
+    r (Variable r)
 
-class InternalValue repr where
-  inputFunc       :: SValue repr
-  printFunc       :: SValue repr
-  printLnFunc     :: SValue repr
-  printFileFunc   :: SValue repr -> SValue repr
-  printFileLnFunc :: SValue repr -> SValue repr
+class InternalValue r where
+  inputFunc       :: SValue r
+  printFunc       :: SValue r
+  printLnFunc     :: SValue r
+  printFileFunc   :: SValue r -> SValue r
+  printFileLnFunc :: SValue r -> SValue r
 
-  cast :: VSType repr -> SValue repr -> SValue repr
+  cast :: VSType r -> SValue r -> SValue r
 
   -- Very generic internal function for generating calls, to reduce repeated code throughout generators
   -- Maybe library, function name, return type, maybe object doc, regular arguments, named arguments
-  call :: Maybe Library -> Label -> VSType repr -> Maybe Doc -> [SValue repr] 
-    -> [NamedArg repr] -> SValue repr
+  call :: Maybe Library -> Label -> VSType r -> Maybe Doc -> [SValue r] 
+    -> [NamedArg r] -> SValue r
 
-  valuePrec :: repr (Value repr) -> Maybe Int
-  valueDoc :: repr (Value repr) -> Doc
-  valFromData :: Maybe Int -> repr (Type repr) -> Doc -> repr (Value repr)
+  valuePrec :: r (Value r) -> Maybe Int
+  valueDoc :: r (Value r) -> Doc
+  valFromData :: Maybe Int -> r (Type r) -> Doc -> r (Value r)
 
-class InternalGetSet repr where
-  getFunc :: SVariable repr -> VSFunction repr
-  setFunc :: VSType repr -> SVariable repr -> SValue repr -> VSFunction repr
+class InternalGetSet r where
+  getFunc :: SVariable r -> VSFunction r
+  setFunc :: VSType r -> SVariable r -> SValue r -> VSFunction r
 
-class InternalListFunc repr where
-  listSizeFunc   :: VSFunction repr
-  listAddFunc    :: SValue repr -> SValue repr -> SValue repr -> VSFunction repr
-  listAppendFunc :: SValue repr -> VSFunction repr
-  listAccessFunc :: VSType repr -> SValue repr -> VSFunction repr
-  listSetFunc    :: SValue repr -> SValue repr -> SValue repr -> VSFunction repr
+class InternalListFunc r where
+  listSizeFunc   :: VSFunction r
+  listAddFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
+  listAppendFunc :: SValue r -> VSFunction r
+  listAccessFunc :: VSType r -> SValue r -> VSFunction r
+  listSetFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
 
-class InternalIterator repr where
-  iterBeginFunc :: VSType repr -> VSFunction repr
-  iterEndFunc   :: VSType repr -> VSFunction repr
+class InternalIterator r where
+  iterBeginFunc :: VSType r -> VSFunction r
+  iterEndFunc   :: VSType r -> VSFunction r
 
-class InternalFunction repr where
-  functionType :: repr (Function repr) -> repr (Type repr)
-  functionDoc :: repr (Function repr) -> Doc
+class InternalFunction r where
+  functionType :: r (Function r) -> r (Type r)
+  functionDoc :: r (Function r) -> Doc
 
-  funcFromData :: Doc -> VSType repr -> VSFunction repr
+  funcFromData :: Doc -> VSType r -> VSFunction r
 
-class InternalAssignStmt repr where
-  multiAssign       :: [SVariable repr] -> [SValue repr] -> MSStatement repr 
+class InternalAssignStmt r where
+  multiAssign       :: [SVariable r] -> [SValue r] -> MSStatement r 
 
-class InternalIOStmt repr where
+class InternalIOStmt r where
   -- newLn, maybe a file to print to, printFunc, value to print
-  printSt :: Bool -> Maybe (SValue repr) -> SValue repr -> SValue repr -> 
-    MSStatement repr
+  printSt :: Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
+    MSStatement r
     
-class InternalControlStmt repr where
-  multiReturn :: [SValue repr] -> MSStatement repr
+class InternalControlStmt r where
+  multiReturn :: [SValue r] -> MSStatement r
 
-class InternalStatement repr where
-  state     :: MSStatement repr -> MSStatement repr
-  loopState :: MSStatement repr -> MSStatement repr
+class InternalStatement r where
+  state     :: MSStatement r -> MSStatement r
+  loopState :: MSStatement r -> MSStatement r
 
-  emptyState   :: MSStatement repr
-  statementDoc :: repr (Statement repr) -> Doc
-  statementTerm :: repr (Statement repr) -> Terminator
+  emptyState   :: MSStatement r
+  statementDoc :: r (Statement r) -> Doc
+  statementTerm :: r (Statement r) -> Terminator
 
-  stateFromData :: Doc -> Terminator -> repr (Statement repr)
+  stateFromData :: Doc -> Terminator -> r (Statement r)
 
-class InternalScope repr where
-  scopeDoc :: repr (Scope repr) -> Doc
-  scopeFromData :: ScopeTag -> Doc -> repr (Scope repr)
+class InternalScope r where
+  scopeDoc :: r (Scope r) -> Doc
+  scopeFromData :: ScopeTag -> Doc -> r (Scope r)
 
-class (TypeSym repr) => MethodTypeSym repr where
-  type MethodType repr
-  mType    :: VSType repr -> MS (repr (MethodType repr))
-  construct :: Label -> MS (repr (MethodType repr))
+class (TypeSym r) => MethodTypeSym r where
+  type MethodType r
+  mType    :: VSType r -> MS (r (MethodType r))
+  construct :: Label -> MS (r (MethodType r))
 
-class InternalParam repr where
-  parameterName :: repr (Parameter repr) -> Label
-  parameterType :: repr (Parameter repr) -> repr (Type repr)
-  parameterDoc  :: repr (Parameter repr) -> Doc
-  paramFromData :: repr (Variable repr) -> Doc -> repr (Parameter repr)
+class InternalParam r where
+  parameterName :: r (Parameter r) -> Label
+  parameterType :: r (Parameter r) -> r (Type r)
+  parameterDoc  :: r (Parameter r) -> Doc
+  paramFromData :: r (Variable r) -> Doc -> r (Parameter r)
 
-class (MethodTypeSym repr, BlockCommentSym repr, StateVarSym repr) => 
-  InternalMethod repr where
-  intMethod     :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
-    -> MS (repr (MethodType repr)) -> [MSParameter repr] -> MSBody repr -> 
-    SMethod repr
-  intFunc       :: Bool -> Label -> repr (Scope repr) -> repr (Permanence repr) 
-    -> MS (repr (MethodType repr)) -> [MSParameter repr] -> MSBody repr -> 
-    SMethod repr
-  commentedFunc :: MS (repr (BlockComment repr)) -> SMethod repr -> SMethod repr
+class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) => 
+  InternalMethod r where
+  intMethod     :: Bool -> Label -> r (Scope r) -> r (Permanence r) 
+    -> MS (r (MethodType r)) -> [MSParameter r] -> MSBody r -> 
+    SMethod r
+  intFunc       :: Bool -> Label -> r (Scope r) -> r (Permanence r) 
+    -> MS (r (MethodType r)) -> [MSParameter r] -> MSBody r -> 
+    SMethod r
+  commentedFunc :: MS (r (BlockComment r)) -> SMethod r -> SMethod r
     
-  destructor :: [CSStateVar repr] -> SMethod repr
+  destructor :: [CSStateVar r] -> SMethod r
 
-  methodDoc :: repr (Method repr) -> Doc
-  methodFromData :: ScopeTag -> Doc -> repr (Method repr)
+  methodDoc :: r (Method r) -> Doc
+  methodFromData :: ScopeTag -> Doc -> r (Method r)
 
-class InternalStateVar repr where
-  stateVarDoc :: repr (StateVar repr) -> Doc
-  stateVarFromData :: CS Doc -> CSStateVar repr
+class InternalStateVar r where
+  stateVarDoc :: r (StateVar r) -> Doc
+  stateVarFromData :: CS Doc -> CSStateVar r
 
 type ParentSpec = Doc
 
-class (BlockCommentSym repr) => InternalClass repr where
-  intClass :: Label -> repr (Scope repr) -> repr ParentSpec -> [CSStateVar repr]
-    -> [SMethod repr] -> SClass repr
+class (BlockCommentSym r) => InternalClass r where
+  intClass :: Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r]
+    -> [SMethod r] -> SClass r
     
-  inherit :: Maybe Label -> repr ParentSpec
-  implements :: [Label] -> repr ParentSpec
+  inherit :: Maybe Label -> r ParentSpec
+  implements :: [Label] -> r ParentSpec
 
-  commentedClass :: CS (repr (BlockComment repr)) -> SClass repr -> SClass repr
+  commentedClass :: CS (r (BlockComment r)) -> SClass r -> SClass r
 
-  classDoc :: repr (Class repr) -> Doc
-  classFromData :: CS (repr Doc) -> SClass repr
+  classDoc :: r (Class r) -> Doc
+  classFromData :: CS (r Doc) -> SClass r
 
-class InternalMod repr where
-  moduleDoc :: repr (Module repr) -> Doc
-  modFromData :: String -> FS Doc -> FSModule repr
-  updateModuleDoc :: (Doc -> Doc) -> repr (Module repr) -> repr (Module repr)
+class InternalMod r where
+  moduleDoc :: r (Module r) -> Doc
+  modFromData :: String -> FS Doc -> FSModule r
+  updateModuleDoc :: (Doc -> Doc) -> r (Module r) -> r (Module r)
 
-class BlockCommentSym repr where
-  type BlockComment repr
-  blockComment :: [String] -> repr (BlockComment repr)
-  docComment :: State a [String] -> State a (repr (BlockComment repr))
+class BlockCommentSym r where
+  type BlockComment r
+  blockComment :: [String] -> r (BlockComment r)
+  docComment :: State a [String] -> State a (r (BlockComment r))
 
-  blockCommentDoc :: repr (BlockComment repr) -> Doc
+  blockCommentDoc :: r (BlockComment r) -> Doc

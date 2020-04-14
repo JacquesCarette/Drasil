@@ -6,14 +6,14 @@ import GOOL.Drasil (GSProgram, MSBlock, MSStatement, SMethod, ProgramSym(..),
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-fileTests :: (ProgramSym repr) => GSProgram repr
+fileTests :: (ProgramSym r) => GSProgram r
 fileTests = prog "FileTests" [fileDoc (buildModule "FileTests" [] 
   [fileTestMethod] [])]
 
-fileTestMethod :: (ProgramSym repr) => SMethod repr
+fileTestMethod :: (ProgramSym r) => SMethod r
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 
-writeStory :: (ProgramSym repr) => MSBlock repr
+writeStory :: (ProgramSym r) => MSBlock r
 writeStory = block [
   varDec $ var "fileToWrite" outfile,
 
@@ -32,11 +32,11 @@ writeStory = block [
   discardFileLine (valueOf $ var "fileToRead" infile),
   listDec 0 (var "fileContents" (listType string))]
 
-readStory :: (ProgramSym repr) => MSStatement repr
+readStory :: (ProgramSym r) => MSStatement r
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile) 
   (var "fileContents" (listType string))
 
-goodBye :: (ProgramSym repr) => MSBlock repr
+goodBye :: (ProgramSym r) => MSBlock r
 goodBye = block [
   printLn (valueOf $ var "fileContents" (listType string)), 
   closeFile (valueOf $ var "fileToRead" infile)]

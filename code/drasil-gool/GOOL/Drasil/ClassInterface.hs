@@ -34,188 +34,190 @@ type Library = String
 
 type GSProgram a = GS (a (Program a))
 
-class (FileSym repr) => ProgramSym repr where
-  type Program repr
-  prog :: Label -> [SFile repr] -> GSProgram repr
+-- In relation to GOOL, the type variable r can be considered as short for "representation"
+
+class (FileSym r) => ProgramSym r where
+  type Program r
+  prog :: Label -> [SFile r] -> GSProgram r
 
 type SFile a = FS (a (RenderFile a))
 
-class (ModuleSym repr, ControlBlock repr, AssignStatement repr, 
-  DeclStatement repr, IOStatement repr, StringStatement repr, FuncAppStatement repr,
-  CommentStatement repr, ControlStatement repr, InternalList repr, Literal repr, MathConstant repr, VariableValue repr, CommandLineArgs repr, NumericExpression repr, BooleanExpression repr, Comparison repr, 
-  ValueExpression repr, InternalValueExp repr, GetSet repr, List repr, 
-  Iterator repr, StatePattern repr, ObserverPattern repr, StrategyPattern repr) => 
-  FileSym repr where 
-  type RenderFile repr
-  fileDoc :: FSModule repr -> SFile repr
+class (ModuleSym r, ControlBlock r, AssignStatement r, 
+  DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r,
+  CommentStatement r, ControlStatement r, InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, 
+  ValueExpression r, InternalValueExp r, GetSet r, List r, 
+  Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r) => 
+  FileSym r where 
+  type RenderFile r
+  fileDoc :: FSModule r -> SFile r
 
   -- Module description, list of author names, date as a String, file to comment
-  docMod :: String -> [String] -> String -> SFile repr -> SFile repr
+  docMod :: String -> [String] -> String -> SFile r -> SFile r
 
-class PermanenceSym repr where
-  type Permanence repr
-  static  :: repr (Permanence repr)
-  dynamic :: repr (Permanence repr)
+class PermanenceSym r where
+  type Permanence r
+  static  :: r (Permanence r)
+  dynamic :: r (Permanence r)
 
 type MSBody a = MS (a (Body a))
 
-class (BlockSym repr) => BodySym repr where
-  type Body repr
-  body           :: [MSBlock repr] -> MSBody repr
+class (BlockSym r) => BodySym r where
+  type Body r
+  body           :: [MSBlock r] -> MSBody r
 
-  addComments :: Label -> MSBody repr -> MSBody repr
+  addComments :: Label -> MSBody r -> MSBody r
 
-bodyStatements :: (BodySym repr) => [MSStatement repr] -> MSBody repr
+bodyStatements :: (BodySym r) => [MSStatement r] -> MSBody r
 bodyStatements sts = body [block sts]
 
-oneLiner :: (BodySym repr) => MSStatement repr -> MSBody repr
+oneLiner :: (BodySym r) => MSStatement r -> MSBody r
 oneLiner s = bodyStatements [s]
 
 type MSBlock a = MS (a (Block a))
 
-class (StatementSym repr) => BlockSym repr where
-  type Block repr
-  block   :: [MSStatement repr] -> MSBlock repr
+class (StatementSym r) => BlockSym r where
+  type Block r
+  block   :: [MSStatement r] -> MSBlock r
 
 type VSType a = VS (a (Type a))
 
-class TypeSym repr where
-  type Type repr
-  bool          :: VSType repr
-  int           :: VSType repr -- This is 32-bit signed ints except in Python, 
+class TypeSym r where
+  type Type r
+  bool          :: VSType r
+  int           :: VSType r -- This is 32-bit signed ints except in Python, 
                                -- which has unlimited precision ints
-  float         :: VSType repr
-  double        :: VSType repr
-  char          :: VSType repr
-  string        :: VSType repr
-  infile        :: VSType repr
-  outfile       :: VSType repr
-  listType      :: VSType repr -> VSType repr
-  arrayType     :: VSType repr -> VSType repr
-  listInnerType :: VSType repr -> VSType repr
-  obj           :: ClassName -> VSType repr
-  funcType      :: [VSType repr] -> VSType repr -> VSType repr
-  iterator      :: VSType repr -> VSType repr
-  void          :: VSType repr
+  float         :: VSType r
+  double        :: VSType r
+  char          :: VSType r
+  string        :: VSType r
+  infile        :: VSType r
+  outfile       :: VSType r
+  listType      :: VSType r -> VSType r
+  arrayType     :: VSType r -> VSType r
+  listInnerType :: VSType r -> VSType r
+  obj           :: ClassName -> VSType r
+  funcType      :: [VSType r] -> VSType r -> VSType r
+  iterator      :: VSType r -> VSType r
+  void          :: VSType r
 
-  getType :: repr (Type repr) -> CodeType
-  getTypeString :: repr (Type repr) -> String
+  getType :: r (Type r) -> CodeType
+  getTypeString :: r (Type r) -> String
 
-class (BodySym repr) => ControlBlock repr where
-  solveODE :: ODEInfo repr -> ODEOptions repr -> MSBlock repr
+class (BodySym r) => ControlBlock r where
+  solveODE :: ODEInfo r -> ODEOptions r -> MSBlock r
 
 type SVariable a = VS (a (Variable a))
 
-class (TypeSym repr) => VariableSym repr where
-  type Variable repr
-  var          :: Label -> VSType repr -> SVariable repr
-  staticVar    :: Label -> VSType repr -> SVariable repr
-  const        :: Label -> VSType repr -> SVariable repr
-  extVar       :: Library -> Label -> VSType repr -> SVariable repr
-  self         :: SVariable repr
-  classVar     :: VSType repr -> SVariable repr -> SVariable repr
-  extClassVar  :: VSType repr -> SVariable repr -> SVariable repr
-  objVar       :: SVariable repr -> SVariable repr -> SVariable repr
-  objVarSelf   :: SVariable repr -> SVariable repr
-  listVar      :: Label -> VSType repr -> SVariable repr
-  arrayElem    :: Integer -> SVariable repr -> SVariable repr
+class (TypeSym r) => VariableSym r where
+  type Variable r
+  var          :: Label -> VSType r -> SVariable r
+  staticVar    :: Label -> VSType r -> SVariable r
+  const        :: Label -> VSType r -> SVariable r
+  extVar       :: Library -> Label -> VSType r -> SVariable r
+  self         :: SVariable r
+  classVar     :: VSType r -> SVariable r -> SVariable r
+  extClassVar  :: VSType r -> SVariable r -> SVariable r
+  objVar       :: SVariable r -> SVariable r -> SVariable r
+  objVarSelf   :: SVariable r -> SVariable r
+  listVar      :: Label -> VSType r -> SVariable r
+  arrayElem    :: Integer -> SVariable r -> SVariable r
   -- Use for iterator variables, i.e. in a forEach loop.
-  iterVar      :: Label -> VSType repr -> SVariable repr
+  iterVar      :: Label -> VSType r -> SVariable r
   
-  variableName :: repr (Variable repr) -> String
-  variableType :: repr (Variable repr) -> repr (Type repr)
+  variableName :: r (Variable r) -> String
+  variableType :: r (Variable r) -> r (Type r)
 
-($->) :: (VariableSym repr) => SVariable repr -> SVariable repr -> 
-  SVariable repr
+($->) :: (VariableSym r) => SVariable r -> SVariable r -> 
+  SVariable r
 infixl 9 $->
 ($->) = objVar
 
-listOf :: (VariableSym repr) => Label -> VSType repr -> SVariable repr
+listOf :: (VariableSym r) => Label -> VSType r -> SVariable r
 listOf = listVar
 
 type SValue a = VS (a (Value a))
 
-class (TypeSym repr) => ValueSym repr where
-  type Value repr
-  valueType :: repr (Value repr) -> repr (Type repr)
+class (TypeSym r) => ValueSym r where
+  type Value r
+  valueType :: r (Value r) -> r (Type r)
 
-class (ValueSym repr) => Literal repr where
-  litTrue   :: SValue repr
-  litFalse  :: SValue repr
-  litChar   :: Char -> SValue repr
-  litDouble :: Double -> SValue repr
-  litFloat  :: Float -> SValue repr
-  litInt    :: Integer -> SValue repr
-  litString :: String -> SValue repr
-  litArray  :: VSType repr -> [SValue repr] -> SValue repr
-  litList   :: VSType repr -> [SValue repr] -> SValue repr
+class (ValueSym r) => Literal r where
+  litTrue   :: SValue r
+  litFalse  :: SValue r
+  litChar   :: Char -> SValue r
+  litDouble :: Double -> SValue r
+  litFloat  :: Float -> SValue r
+  litInt    :: Integer -> SValue r
+  litString :: String -> SValue r
+  litArray  :: VSType r -> [SValue r] -> SValue r
+  litList   :: VSType r -> [SValue r] -> SValue r
 
-class (ValueSym repr) => MathConstant repr where
-  pi :: SValue repr
+class (ValueSym r) => MathConstant r where
+  pi :: SValue r
 
-class (VariableSym repr, ValueSym repr) => VariableValue repr where
-  valueOf       :: SVariable repr -> SValue repr
+class (VariableSym r, ValueSym r) => VariableValue r where
+  valueOf       :: SVariable r -> SValue r
 
-class (ValueSym repr) => CommandLineArgs repr where
-  arg          :: Integer -> SValue repr
-  argsList     :: SValue repr
-  argExists    :: Integer -> SValue repr
+class (ValueSym r) => CommandLineArgs r where
+  arg          :: Integer -> SValue r
+  argsList     :: SValue r
+  argExists    :: Integer -> SValue r
 
-class (ValueSym repr) => NumericExpression repr where
-  (#~)  :: SValue repr -> SValue repr
+class (ValueSym r) => NumericExpression r where
+  (#~)  :: SValue r -> SValue r
   infixl 8 #~
-  (#/^) :: SValue repr -> SValue repr
+  (#/^) :: SValue r -> SValue r
   infixl 7 #/^
-  (#|)  :: SValue repr -> SValue repr
+  (#|)  :: SValue r -> SValue r
   infixl 7 #|
-  (#+)  :: SValue repr -> SValue repr -> SValue repr
+  (#+)  :: SValue r -> SValue r -> SValue r
   infixl 5 #+
-  (#-)  :: SValue repr -> SValue repr -> SValue repr
+  (#-)  :: SValue r -> SValue r -> SValue r
   infixl 5 #-
-  (#*)  :: SValue repr -> SValue repr -> SValue repr
+  (#*)  :: SValue r -> SValue r -> SValue r
   infixl 6 #*
-  (#/)  :: SValue repr -> SValue repr -> SValue repr
+  (#/)  :: SValue r -> SValue r -> SValue r
   infixl 6 #/
-  (#%)  :: SValue repr -> SValue repr -> SValue repr
+  (#%)  :: SValue r -> SValue r -> SValue r
   infixl 6 #%
-  (#^)  :: SValue repr -> SValue repr -> SValue repr
+  (#^)  :: SValue r -> SValue r -> SValue r
   infixl 7 #^
 
-  log    :: SValue repr -> SValue repr
-  ln     :: SValue repr -> SValue repr
-  exp    :: SValue repr -> SValue repr
-  sin    :: SValue repr -> SValue repr
-  cos    :: SValue repr -> SValue repr
-  tan    :: SValue repr -> SValue repr
-  csc    :: SValue repr -> SValue repr
-  sec    :: SValue repr -> SValue repr
-  cot    :: SValue repr -> SValue repr
-  arcsin :: SValue repr -> SValue repr
-  arccos :: SValue repr -> SValue repr
-  arctan :: SValue repr -> SValue repr
-  floor  :: SValue repr -> SValue repr
-  ceil   :: SValue repr -> SValue repr
+  log    :: SValue r -> SValue r
+  ln     :: SValue r -> SValue r
+  exp    :: SValue r -> SValue r
+  sin    :: SValue r -> SValue r
+  cos    :: SValue r -> SValue r
+  tan    :: SValue r -> SValue r
+  csc    :: SValue r -> SValue r
+  sec    :: SValue r -> SValue r
+  cot    :: SValue r -> SValue r
+  arcsin :: SValue r -> SValue r
+  arccos :: SValue r -> SValue r
+  arctan :: SValue r -> SValue r
+  floor  :: SValue r -> SValue r
+  ceil   :: SValue r -> SValue r
 
-class (ValueSym repr) => BooleanExpression repr where
-  (?!)  :: SValue repr -> SValue repr
+class (ValueSym r) => BooleanExpression r where
+  (?!)  :: SValue r -> SValue r
   infixr 6 ?!
-  (?&&) :: SValue repr -> SValue repr -> SValue repr
+  (?&&) :: SValue r -> SValue r -> SValue r
   infixl 2 ?&&
-  (?||) :: SValue repr -> SValue repr -> SValue repr
+  (?||) :: SValue r -> SValue r -> SValue r
   infixl 1 ?||
 
-class (ValueSym repr) => Comparison repr where
-  (?<)  :: SValue repr -> SValue repr -> SValue repr
+class (ValueSym r) => Comparison r where
+  (?<)  :: SValue r -> SValue r -> SValue r
   infixl 4 ?<
-  (?<=) :: SValue repr -> SValue repr -> SValue repr
+  (?<=) :: SValue r -> SValue r -> SValue r
   infixl 4 ?<=
-  (?>)  :: SValue repr -> SValue repr -> SValue repr
+  (?>)  :: SValue r -> SValue r -> SValue r
   infixl 4 ?>
-  (?>=) :: SValue repr -> SValue repr -> SValue repr
+  (?>=) :: SValue r -> SValue r -> SValue r
   infixl 4 ?>=
-  (?==) :: SValue repr -> SValue repr -> SValue repr
+  (?==) :: SValue r -> SValue r -> SValue r
   infixl 3 ?==
-  (?!=) :: SValue repr -> SValue repr -> SValue repr
+  (?!=) :: SValue r -> SValue r -> SValue r
   infixl 3 ?!=
 
 type NamedArg r = (SVariable r, SValue r)
@@ -229,280 +231,280 @@ type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 
 -- for values that can include expressions
-class ValueExpression repr where
-  inlineIf     :: SValue repr -> SValue repr -> SValue repr -> SValue repr
+class ValueExpression r where
+  inlineIf     :: SValue r -> SValue r -> SValue r -> SValue r
   
-  funcAppMixedArgs     ::            MixedCall repr
-  selfFuncAppMixedArgs ::            MixedCall repr
-  extFuncAppMixedArgs  :: Library -> MixedCall repr
-  libFuncAppMixedArgs  :: Library -> MixedCall repr
-  newObjMixedArgs      ::            MixedCtorCall repr
-  extNewObjMixedArgs   :: Library -> MixedCtorCall repr
-  libNewObjMixedArgs   :: Library -> MixedCtorCall repr
+  funcAppMixedArgs     ::            MixedCall r
+  selfFuncAppMixedArgs ::            MixedCall r
+  extFuncAppMixedArgs  :: Library -> MixedCall r
+  libFuncAppMixedArgs  :: Library -> MixedCall r
+  newObjMixedArgs      ::            MixedCtorCall r
+  extNewObjMixedArgs   :: Library -> MixedCtorCall r
+  libNewObjMixedArgs   :: Library -> MixedCtorCall r
 
-  lambda :: [SVariable repr] -> SValue repr -> SValue repr
+  lambda :: [SVariable r] -> SValue r -> SValue r
 
-  notNull :: SValue repr -> SValue repr
+  notNull :: SValue r -> SValue r
 
-funcApp          :: (ValueExpression repr) =>            PosCall repr
+funcApp          :: (ValueExpression r) =>            PosCall r
 funcApp n t vs = funcAppMixedArgs n t vs []
 
-funcAppNamedArgs :: (ValueExpression repr) =>            Label -> VSType repr ->
-  [NamedArg repr] -> SValue repr
+funcAppNamedArgs :: (ValueExpression r) =>            Label -> VSType r ->
+  [NamedArg r] -> SValue r
 funcAppNamedArgs n t = funcAppMixedArgs n t []
 
-selfFuncApp      :: (ValueExpression repr) =>            PosCall repr
+selfFuncApp      :: (ValueExpression r) =>            PosCall r
 selfFuncApp n t vs = selfFuncAppMixedArgs n t vs []
 
-extFuncApp       :: (ValueExpression repr) => Library -> PosCall repr
+extFuncApp       :: (ValueExpression r) => Library -> PosCall r
 extFuncApp l n t vs = extFuncAppMixedArgs l n t vs []
 
-libFuncApp       :: (ValueExpression repr) => Library -> PosCall repr
+libFuncApp       :: (ValueExpression r) => Library -> PosCall r
 libFuncApp l n t vs = libFuncAppMixedArgs l n t vs []
 
-newObj           :: (ValueExpression repr) =>            PosCtorCall repr
+newObj           :: (ValueExpression r) =>            PosCtorCall r
 newObj t vs = newObjMixedArgs t vs []
 
-extNewObj        :: (ValueExpression repr) => Library -> PosCtorCall repr
+extNewObj        :: (ValueExpression r) => Library -> PosCtorCall r
 extNewObj l t vs = extNewObjMixedArgs l t vs []
 
-libNewObj        :: (ValueExpression repr) => Library -> PosCtorCall repr
+libNewObj        :: (ValueExpression r) => Library -> PosCtorCall r
 libNewObj l t vs = libNewObjMixedArgs l t vs []
 
-exists :: (ValueExpression repr) => SValue repr -> SValue repr
+exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
 
-class (FunctionSym repr) => InternalValueExp repr where
-  objMethodCallMixedArgs' :: Label -> VSType repr -> SValue repr -> 
-    [SValue repr] -> [NamedArg repr] -> SValue repr
-  objMethodCallNoParams' :: Label -> VSType repr -> SValue repr -> SValue repr
+class (FunctionSym r) => InternalValueExp r where
+  objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> 
+    [SValue r] -> [NamedArg r] -> SValue r
+  objMethodCallNoParams' :: Label -> VSType r -> SValue r -> SValue r
 
-objMethodCall :: (InternalValueExp repr) => VSType repr -> SValue repr -> Label 
-  -> [SValue repr] -> SValue repr
+objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+  -> [SValue r] -> SValue r
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
-objMethodCallMixedArgs :: (InternalValueExp repr) => VSType repr -> SValue repr 
-  -> Label -> [SValue repr] -> [NamedArg repr] -> SValue repr
+objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r 
+  -> Label -> [SValue r] -> [NamedArg r] -> SValue r
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
-objMethodCallNoParams :: (InternalValueExp repr) => VSType repr -> SValue repr 
-  -> Label -> SValue repr
+objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r 
+  -> Label -> SValue r
 objMethodCallNoParams t o f = objMethodCallNoParams' f t o
 
 type VSFunction a = VS (a (Function a))
 
-class (ValueSym repr) => FunctionSym repr where
-  type Function repr
-  func :: Label -> VSType repr -> [SValue repr] -> VSFunction repr
-  objAccess :: SValue repr -> VSFunction repr -> SValue repr
+class (ValueSym r) => FunctionSym r where
+  type Function r
+  func :: Label -> VSType r -> [SValue r] -> VSFunction r
+  objAccess :: SValue r -> VSFunction r -> SValue r
 
-($.) :: (FunctionSym repr) => SValue repr -> VSFunction repr -> SValue repr
+($.) :: (FunctionSym r) => SValue r -> VSFunction r -> SValue r
 infixl 9 $.
 ($.) = objAccess
 
-selfAccess :: (VariableValue repr, FunctionSym repr) => VSFunction repr -> 
-  SValue repr
+selfAccess :: (VariableValue r, FunctionSym r) => VSFunction r -> 
+  SValue r
 selfAccess = objAccess (valueOf self)
 
-class (ValueSym repr, VariableSym repr) => GetSet repr where
-  get :: SValue repr -> SVariable repr -> SValue repr
-  set :: SValue repr -> SVariable repr -> SValue repr -> SValue repr
+class (ValueSym r, VariableSym r) => GetSet r where
+  get :: SValue r -> SVariable r -> SValue r
+  set :: SValue r -> SVariable r -> SValue r -> SValue r
 
-class (ValueSym repr) => List repr where
-  listSize   :: SValue repr -> SValue repr
-  listAdd    :: SValue repr -> SValue repr -> SValue repr -> SValue repr
-  listAppend :: SValue repr -> SValue repr -> SValue repr
-  listAccess :: SValue repr -> SValue repr -> SValue repr
-  listSet    :: SValue repr -> SValue repr -> SValue repr -> SValue repr
+class (ValueSym r) => List r where
+  listSize   :: SValue r -> SValue r
+  listAdd    :: SValue r -> SValue r -> SValue r -> SValue r
+  listAppend :: SValue r -> SValue r -> SValue r
+  listAccess :: SValue r -> SValue r -> SValue r
+  listSet    :: SValue r -> SValue r -> SValue r -> SValue r
   
-  indexOf :: SValue repr -> SValue repr -> SValue repr
+  indexOf :: SValue r -> SValue r -> SValue r
 
-class (ValueSym repr) => InternalList repr where
-  listSlice'      :: Maybe (SValue repr) -> Maybe (SValue repr) -> 
-    Maybe (SValue repr) -> SVariable repr -> SValue repr -> MSBlock repr
+class (ValueSym r) => InternalList r where
+  listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> 
+    Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
   
-listSlice :: (InternalList repr) => SVariable repr -> SValue repr -> 
-  Maybe (SValue repr) -> Maybe (SValue repr) -> Maybe (SValue repr) -> 
-  MSBlock repr
+listSlice :: (InternalList r) => SVariable r -> SValue r -> 
+  Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> 
+  MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold
 
-listIndexExists :: (List repr, Comparison repr) => SValue repr -> SValue repr 
-  -> SValue repr
+listIndexExists :: (List r, Comparison r) => SValue r -> SValue r 
+  -> SValue r
 listIndexExists lst index = listSize lst ?> index
 
-at :: (List repr) => SValue repr -> SValue repr -> SValue repr
+at :: (List r) => SValue r -> SValue r -> SValue r
 at = listAccess
 
-class (ValueSym repr) => Iterator repr where
-  iterBegin :: SValue repr -> SValue repr
-  iterEnd   :: SValue repr -> SValue repr
+class (ValueSym r) => Iterator r where
+  iterBegin :: SValue r -> SValue r
+  iterEnd   :: SValue r -> SValue r
 
 type MSStatement a = MS (a (Statement a))
 
-class (ValueSym repr) => StatementSym repr where
-  type Statement repr
-  valState :: SValue repr -> MSStatement repr -- converts value to statement
-  multi     :: [MSStatement repr] -> MSStatement repr
+class (ValueSym r) => StatementSym r where
+  type Statement r
+  valState :: SValue r -> MSStatement r -- converts value to statement
+  multi     :: [MSStatement r] -> MSStatement r
 
-class (VariableSym repr, StatementSym repr) => AssignStatement repr where
-  (&-=)  :: SVariable repr -> SValue repr -> MSStatement repr
+class (VariableSym r, StatementSym r) => AssignStatement r where
+  (&-=)  :: SVariable r -> SValue r -> MSStatement r
   infixl 1 &-=
-  (&+=)  :: SVariable repr -> SValue repr -> MSStatement repr
+  (&+=)  :: SVariable r -> SValue r -> MSStatement r
   infixl 1 &+=
-  (&++)  :: SVariable repr -> MSStatement repr
+  (&++)  :: SVariable r -> MSStatement r
   infixl 8 &++
-  (&--)  :: SVariable repr -> MSStatement repr
+  (&--)  :: SVariable r -> MSStatement r
   infixl 8 &--
 
-  assign :: SVariable repr -> SValue repr -> MSStatement repr
+  assign :: SVariable r -> SValue r -> MSStatement r
 
-(&=) :: (AssignStatement repr) => SVariable repr -> SValue repr -> 
-  MSStatement repr
+(&=) :: (AssignStatement r) => SVariable r -> SValue r -> 
+  MSStatement r
 infixr 1 &=
 (&=) = assign
 
-assignToListIndex :: (StatementSym repr, VariableValue repr, List repr) => 
-  SVariable repr -> SValue repr -> SValue repr -> MSStatement repr
+assignToListIndex :: (StatementSym r, VariableValue r, List r) => 
+  SVariable r -> SValue r -> SValue r -> MSStatement r
 assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
 
-class (VariableSym repr, StatementSym repr) => DeclStatement repr where
-  varDec           :: SVariable repr -> MSStatement repr
-  varDecDef        :: SVariable repr -> SValue repr -> MSStatement repr
-  listDec          :: Integer -> SVariable repr -> MSStatement repr
-  listDecDef       :: SVariable repr -> [SValue repr] -> MSStatement repr
-  arrayDec         :: Integer -> SVariable repr -> MSStatement repr
-  arrayDecDef      :: SVariable repr -> [SValue repr] -> MSStatement repr
-  objDecDef        :: SVariable repr -> SValue repr -> MSStatement repr
-  objDecNew        :: SVariable repr -> [SValue repr] -> MSStatement repr
-  extObjDecNew     :: Library -> SVariable repr -> [SValue repr] -> 
-    MSStatement repr
-  objDecNewNoParams    :: SVariable repr -> MSStatement repr
-  extObjDecNewNoParams :: Library -> SVariable repr -> MSStatement repr
-  constDecDef      :: SVariable repr -> SValue repr -> MSStatement repr
-  funcDecDef       :: SVariable repr -> [SVariable repr] -> SValue repr -> 
-    MSStatement repr
+class (VariableSym r, StatementSym r) => DeclStatement r where
+  varDec           :: SVariable r -> MSStatement r
+  varDecDef        :: SVariable r -> SValue r -> MSStatement r
+  listDec          :: Integer -> SVariable r -> MSStatement r
+  listDecDef       :: SVariable r -> [SValue r] -> MSStatement r
+  arrayDec         :: Integer -> SVariable r -> MSStatement r
+  arrayDecDef      :: SVariable r -> [SValue r] -> MSStatement r
+  objDecDef        :: SVariable r -> SValue r -> MSStatement r
+  objDecNew        :: SVariable r -> [SValue r] -> MSStatement r
+  extObjDecNew     :: Library -> SVariable r -> [SValue r] -> 
+    MSStatement r
+  objDecNewNoParams    :: SVariable r -> MSStatement r
+  extObjDecNewNoParams :: Library -> SVariable r -> MSStatement r
+  constDecDef      :: SVariable r -> SValue r -> MSStatement r
+  funcDecDef       :: SVariable r -> [SVariable r] -> SValue r -> 
+    MSStatement r
 
-class (VariableSym repr, StatementSym repr) => IOStatement repr where
-  print      :: SValue repr -> MSStatement repr
-  printLn    :: SValue repr -> MSStatement repr
-  printStr   :: String -> MSStatement repr
-  printStrLn :: String -> MSStatement repr
+class (VariableSym r, StatementSym r) => IOStatement r where
+  print      :: SValue r -> MSStatement r
+  printLn    :: SValue r -> MSStatement r
+  printStr   :: String -> MSStatement r
+  printStrLn :: String -> MSStatement r
 
-  printFile      :: SValue repr -> SValue repr -> MSStatement repr
-  printFileLn    :: SValue repr -> SValue repr -> MSStatement repr
-  printFileStr   :: SValue repr -> String -> MSStatement repr
-  printFileStrLn :: SValue repr -> String -> MSStatement repr
+  printFile      :: SValue r -> SValue r -> MSStatement r
+  printFileLn    :: SValue r -> SValue r -> MSStatement r
+  printFileStr   :: SValue r -> String -> MSStatement r
+  printFileStrLn :: SValue r -> String -> MSStatement r
 
-  getInput         :: SVariable repr -> MSStatement repr
-  discardInput     :: MSStatement repr
-  getFileInput     :: SValue repr -> SVariable repr -> MSStatement repr
-  discardFileInput :: SValue repr -> MSStatement repr
+  getInput         :: SVariable r -> MSStatement r
+  discardInput     :: MSStatement r
+  getFileInput     :: SValue r -> SVariable r -> MSStatement r
+  discardFileInput :: SValue r -> MSStatement r
 
-  openFileR :: SVariable repr -> SValue repr -> MSStatement repr
-  openFileW :: SVariable repr -> SValue repr -> MSStatement repr
-  openFileA :: SVariable repr -> SValue repr -> MSStatement repr
-  closeFile :: SValue repr -> MSStatement repr
+  openFileR :: SVariable r -> SValue r -> MSStatement r
+  openFileW :: SVariable r -> SValue r -> MSStatement r
+  openFileA :: SVariable r -> SValue r -> MSStatement r
+  closeFile :: SValue r -> MSStatement r
 
-  getFileInputLine :: SValue repr -> SVariable repr -> MSStatement repr
-  discardFileLine  :: SValue repr -> MSStatement repr
-  getFileInputAll  :: SValue repr -> SVariable repr -> MSStatement repr
+  getFileInputLine :: SValue r -> SVariable r -> MSStatement r
+  discardFileLine  :: SValue r -> MSStatement r
+  getFileInputAll  :: SValue r -> SVariable r -> MSStatement r
 
-class (VariableSym repr, StatementSym repr) => StringStatement repr where
-  stringSplit :: Char -> SVariable repr -> SValue repr -> MSStatement repr
+class (VariableSym r, StatementSym r) => StringStatement r where
+  stringSplit :: Char -> SVariable r -> SValue r -> MSStatement r
 
-  stringListVals  :: [SVariable repr] -> SValue repr -> MSStatement repr
-  stringListLists :: [SVariable repr] -> SValue repr -> MSStatement repr
+  stringListVals  :: [SVariable r] -> SValue r -> MSStatement r
+  stringListLists :: [SVariable r] -> SValue r -> MSStatement r
 
 type InOutCall r = Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> 
   MSStatement r
 
-class (VariableSym repr, StatementSym repr) => FuncAppStatement repr where
+class (VariableSym r, StatementSym r) => FuncAppStatement r where
   -- The three lists are inputs, outputs, and both, respectively
-  inOutCall     ::            InOutCall repr
-  selfInOutCall ::            InOutCall repr
-  extInOutCall  :: Library -> InOutCall repr
+  inOutCall     ::            InOutCall r
+  selfInOutCall ::            InOutCall r
+  extInOutCall  :: Library -> InOutCall r
 
 type Comment = String  
 
-class (StatementSym repr) => CommentStatement repr where
-  comment :: Comment -> MSStatement repr
+class (StatementSym r) => CommentStatement r where
+  comment :: Comment -> MSStatement r
 
-class (BodySym repr) => ControlStatement repr where
-  break :: MSStatement repr
-  continue :: MSStatement repr
+class (BodySym r) => ControlStatement r where
+  break :: MSStatement r
+  continue :: MSStatement r
 
-  returnState :: SValue repr -> MSStatement repr
+  returnState :: SValue r -> MSStatement r
 
-  throw :: Label -> MSStatement repr
+  throw :: Label -> MSStatement r
 
-  ifCond     :: [(SValue repr, MSBody repr)] -> MSBody repr -> MSStatement repr
-  switch     :: SValue repr -> [(SValue repr, MSBody repr)] -> MSBody repr -> 
-    MSStatement repr -- is there value in separating Literals into their own type?
+  ifCond     :: [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+  switch     :: SValue r -> [(SValue r, MSBody r)] -> MSBody r -> 
+    MSStatement r -- is there value in separating Literals into their own type?
 
-  ifExists :: SValue repr -> MSBody repr -> MSBody repr -> MSStatement repr
+  ifExists :: SValue r -> MSBody r -> MSBody r -> MSStatement r
 
-  for      :: MSStatement repr -> SValue repr -> MSStatement repr -> 
-    MSBody repr -> MSStatement repr
-  forRange :: SVariable repr -> SValue repr -> SValue repr -> SValue repr ->
-    MSBody repr -> MSStatement repr
-  forEach  :: SVariable repr -> SValue repr -> MSBody repr -> MSStatement repr
-  while    :: SValue repr -> MSBody repr -> MSStatement repr 
+  for      :: MSStatement r -> SValue r -> MSStatement r -> 
+    MSBody r -> MSStatement r
+  forRange :: SVariable r -> SValue r -> SValue r -> SValue r ->
+    MSBody r -> MSStatement r
+  forEach  :: SVariable r -> SValue r -> MSBody r -> MSStatement r
+  while    :: SValue r -> MSBody r -> MSStatement r 
 
-  tryCatch :: MSBody repr -> MSBody repr -> MSStatement repr
+  tryCatch :: MSBody r -> MSBody r -> MSStatement r
 
-ifNoElse :: (ControlStatement repr) => [(SValue repr, MSBody repr)] 
-  -> MSStatement repr
+ifNoElse :: (ControlStatement r) => [(SValue r, MSBody r)] 
+  -> MSStatement r
 ifNoElse bs = ifCond bs $ body []
 
-switchAsIf :: (ControlStatement repr, Comparison repr) => SValue repr -> 
-  [(SValue repr, MSBody repr)] -> MSBody repr -> MSStatement repr
+switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> 
+  [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 switchAsIf v = ifCond . map (first (v ?==))
 
-class (BodySym repr) => StatePattern repr where
-  checkState      :: Label -> [(SValue repr, MSBody repr)] -> MSBody repr -> 
-    MSStatement repr
+class (BodySym r) => StatePattern r where
+  checkState      :: Label -> [(SValue r, MSBody r)] -> MSBody r -> 
+    MSStatement r
 
-initState :: (DeclStatement repr, Literal repr) => Label -> Label -> 
-  MSStatement repr
+initState :: (DeclStatement r, Literal r) => Label -> Label -> 
+  MSStatement r
 initState fsmName initialState = varDecDef (var fsmName string) 
   (litString initialState)
 
-changeState :: (AssignStatement repr, Literal repr) => Label -> Label -> 
-  MSStatement repr
+changeState :: (AssignStatement r, Literal r) => Label -> Label -> 
+  MSStatement r
 changeState fsmName toState = var fsmName string &= litString toState
 
-class (StatementSym repr, FunctionSym repr) => ObserverPattern repr where
-  notifyObservers :: VSFunction repr -> VSType repr -> MSStatement repr
+class (StatementSym r, FunctionSym r) => ObserverPattern r where
+  notifyObservers :: VSFunction r -> VSType r -> MSStatement r
 
 observerListName :: Label
 observerListName = "observerList"
 
-initObserverList :: (DeclStatement repr) => VSType repr -> [SValue repr] -> 
-  MSStatement repr
+initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> 
+  MSStatement r
 initObserverList t = listDecDef (var observerListName (listType t))
 
-addObserver :: (StatementSym repr, VariableValue repr, List repr) => 
-  SValue repr -> MSStatement repr
+addObserver :: (StatementSym r, VariableValue r, List r) => 
+  SValue r -> MSStatement r
 addObserver o = valState $ listAdd obsList lastelem o
   where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
         lastelem = listSize obsList
 
-class (BodySym repr, VariableSym repr) => StrategyPattern repr where
-  runStrategy     :: Label -> [(Label, MSBody repr)] -> Maybe (SValue repr) -> 
-    Maybe (SVariable repr) -> MSBlock repr
+class (BodySym r, VariableSym r) => StrategyPattern r where
+  runStrategy     :: Label -> [(Label, MSBody r)] -> Maybe (SValue r) -> 
+    Maybe (SVariable r) -> MSBlock r
 
-class ScopeSym repr where
-  type Scope repr
-  private :: repr (Scope repr)
-  public  :: repr (Scope repr)
+class ScopeSym r where
+  type Scope r
+  private :: r (Scope r)
+  public  :: r (Scope r)
 
 type MSParameter a = MS (a (Parameter a))
 
-class ParameterSym repr where
-  type Parameter repr
-  param :: SVariable repr -> MSParameter repr
-  -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
-  pointerParam :: SVariable repr -> MSParameter repr
+class ParameterSym r where
+  type Parameter r
+  param :: SVariable r -> MSParameter r
+  -- funcParam  :: Label -> r (MethodType r) -> [r (Parameter r)] -> r (Parameter r) -- not implemented in GOOL
+  pointerParam :: SVariable r -> MSParameter r
 
 type SMethod a = MS (a (Method a))
 type Initializer r = (SVariable r, SValue r)
@@ -518,120 +520,120 @@ type DocInOutFunc r = Label -> r (Scope r) -> r (Permanence r) -> String ->
   [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] 
   -> MSBody r -> SMethod r
 
-class (BodySym repr, ParameterSym repr, ScopeSym repr, PermanenceSym repr) => MethodSym repr where
-  type Method repr
-  method      :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    VSType repr -> [MSParameter repr] -> MSBody repr -> SMethod repr
-  getMethod   :: SVariable repr -> SMethod repr
-  setMethod   :: SVariable repr -> SMethod repr 
-  constructor :: [MSParameter repr] -> [Initializer repr] -> MSBody repr -> 
-    SMethod repr
+class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r where
+  type Method r
+  method      :: Label -> r (Scope r) -> r (Permanence r) -> 
+    VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+  getMethod   :: SVariable r -> SMethod r
+  setMethod   :: SVariable r -> SMethod r 
+  constructor :: [MSParameter r] -> [Initializer r] -> MSBody r -> 
+    SMethod r
 
-  docMain :: MSBody repr -> SMethod repr
+  docMain :: MSBody r -> SMethod r
 
-  function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    VSType repr -> [MSParameter repr] -> MSBody repr -> SMethod repr
-  mainFunction  :: MSBody repr -> SMethod repr
+  function :: Label -> r (Scope r) -> r (Permanence r) -> 
+    VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+  mainFunction  :: MSBody r -> SMethod r
   -- Parameters are: function description, parameter descriptions, 
   --   return value description if applicable, function
-  docFunc :: String -> [String] -> Maybe String -> SMethod repr -> SMethod repr
+  docFunc :: String -> [String] -> Maybe String -> SMethod r -> SMethod r
 
-  inOutMethod :: InOutFunc repr
-  docInOutMethod :: DocInOutFunc repr
-  inOutFunc :: InOutFunc repr
-  docInOutFunc :: DocInOutFunc repr
+  inOutMethod :: InOutFunc r
+  docInOutMethod :: DocInOutFunc r
+  inOutFunc :: InOutFunc r
+  docInOutFunc :: DocInOutFunc r
 
-privMethod :: (MethodSym repr) => Label -> VSType repr -> [MSParameter repr] -> 
-  MSBody repr -> SMethod repr
+privMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> 
+  MSBody r -> SMethod r
 privMethod n = method n private dynamic
 
-pubMethod :: (MethodSym repr) => Label -> VSType repr -> [MSParameter repr] -> 
-  MSBody repr -> SMethod repr
+pubMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> 
+  MSBody r -> SMethod r
 pubMethod n = method n public dynamic
 
-initializer :: (MethodSym repr) => [MSParameter repr] -> [Initializer repr] -> 
-  SMethod repr
+initializer :: (MethodSym r) => [MSParameter r] -> [Initializer r] -> 
+  SMethod r
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (MethodSym repr) => [MSParameter repr] -> MSBody repr -> 
-  SMethod repr
+nonInitConstructor :: (MethodSym r) => [MSParameter r] -> MSBody r -> 
+  SMethod r
 nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
 
-class (ScopeSym repr, PermanenceSym repr) => StateVarSym repr where
-  type StateVar repr
-  stateVar :: repr (Scope repr) -> repr (Permanence repr) -> SVariable repr -> 
-    CSStateVar repr
-  stateVarDef :: Label -> repr (Scope repr) -> repr (Permanence repr) ->
-    SVariable repr -> SValue repr -> CSStateVar repr
-  constVar :: Label -> repr (Scope repr) ->  SVariable repr -> SValue repr -> 
-    CSStateVar repr
+class (ScopeSym r, PermanenceSym r) => StateVarSym r where
+  type StateVar r
+  stateVar :: r (Scope r) -> r (Permanence r) -> SVariable r -> 
+    CSStateVar r
+  stateVarDef :: Label -> r (Scope r) -> r (Permanence r) ->
+    SVariable r -> SValue r -> CSStateVar r
+  constVar :: Label -> r (Scope r) ->  SVariable r -> SValue r -> 
+    CSStateVar r
 
-privDVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
+privDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
 privDVar = stateVar private dynamic
 
-pubDVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
+pubDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
 pubDVar = stateVar public dynamic
 
-pubSVar :: (StateVarSym repr) => SVariable repr -> CSStateVar repr
+pubSVar :: (StateVarSym r) => SVariable r -> CSStateVar r
 pubSVar = stateVar public static
 
 type SClass a = CS (a (Class a))
 
-class (MethodSym repr, StateVarSym repr) => ClassSym repr where
-  type Class repr
-  buildClass :: Label -> Maybe Label -> [CSStateVar repr] -> [SMethod repr] -> 
-    SClass repr
-  -- enum :: Label -> [Label] -> repr (Scope repr) -> SClass repr
-  extraClass :: Label -> Maybe Label -> [CSStateVar repr] -> [SMethod repr] -> 
-    SClass repr
-  implementingClass :: Label -> [Label] -> [CSStateVar repr] -> [SMethod repr] 
-    -> SClass repr
+class (MethodSym r, StateVarSym r) => ClassSym r where
+  type Class r
+  buildClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+    SClass r
+  -- enum :: Label -> [Label] -> r (Scope r) -> SClass r
+  extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+    SClass r
+  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] 
+    -> SClass r
 
-  docClass :: String -> SClass repr -> SClass repr
+  docClass :: String -> SClass r -> SClass r
 
 type FSModule a = FS (a (Module a))
 
-class (ClassSym repr) => ModuleSym repr where
-  type Module repr
-  buildModule :: Label -> [Label] -> [SMethod repr] -> [SClass repr] -> 
-    FSModule repr
+class (ClassSym r) => ModuleSym r where
+  type Module r
+  buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> 
+    FSModule r
 
 -- Data
 
-data ODEInfo repr = ODEInfo {
-  indepVar :: SVariable repr,
-  depVar :: SVariable repr,
-  otherVars :: [SVariable repr],
-  tInit :: SValue repr,
-  tFinal :: SValue repr,
-  initVal :: SValue repr,
-  ode :: SValue repr
+data ODEInfo r = ODEInfo {
+  indepVar :: SVariable r,
+  depVar :: SVariable r,
+  otherVars :: [SVariable r],
+  tInit :: SValue r,
+  tFinal :: SValue r,
+  initVal :: SValue r,
+  ode :: SValue r
 }
 
-odeInfo :: SVariable repr -> SVariable repr -> 
-  [SVariable repr] -> SValue repr -> 
-  SValue repr -> SValue repr -> SValue repr -> 
-  ODEInfo repr
+odeInfo :: SVariable r -> SVariable r -> 
+  [SVariable r] -> SValue r -> 
+  SValue r -> SValue r -> SValue r -> 
+  ODEInfo r
 odeInfo = ODEInfo
 
-data ODEOptions repr = ODEOptions {
+data ODEOptions r = ODEOptions {
   solveMethod :: ODEMethod,
-  absTol :: SValue repr,
-  relTol :: SValue repr,
-  stepSize :: SValue repr
+  absTol :: SValue r,
+  relTol :: SValue r,
+  stepSize :: SValue r
 }
 
-odeOptions :: ODEMethod -> SValue repr -> SValue repr -> 
-  SValue repr -> ODEOptions repr
+odeOptions :: ODEMethod -> SValue r -> SValue r -> 
+  SValue r -> ODEOptions r
 odeOptions = ODEOptions
 
 data ODEMethod = RK45 | BDF | Adams
 
 -- Utility
 
-convType :: (TypeSym repr) => CodeType -> VSType repr
+convType :: (TypeSym r) => CodeType -> VSType r
 convType Boolean = bool
 convType Integer = int
 convType Float = float

@@ -22,25 +22,25 @@ obs1Name = "obs1"
 obs2Name = "obs2"
 nName = "n"
 
-observerType :: (TypeSym repr) => VSType repr
+observerType :: (TypeSym r) => VSType r
 observerType = obj observerName
 
-n, obs1, obs2 :: (VariableSym repr) => SVariable repr
+n, obs1, obs2 :: (VariableSym r) => SVariable r
 n = var nName int
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
-newObserver :: (ValueExpression repr, TypeSym repr) => SValue repr
+newObserver :: (ValueExpression r, TypeSym r) => SValue r
 newObserver = extNewObj observerName observerType []
 
-patternTest :: (ProgramSym repr) => GSProgram repr
+patternTest :: (ProgramSym r) => GSProgram r
 patternTest = prog progName [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
-patternTestMainMethod :: (MethodSym repr, AssignStatement repr, 
-  DeclStatement repr, IOStatement repr, Literal repr, VariableValue repr, ValueExpression repr, GetSet repr, List repr, 
-  StatePattern repr, ObserverPattern repr, StrategyPattern repr) => 
-  SMethod repr
+patternTestMainMethod :: (MethodSym r, AssignStatement r, 
+  DeclStatement r, IOStatement r, Literal r, VariableValue r, ValueExpression r, GetSet r, List r, 
+  StatePattern r, ObserverPattern r, StrategyPattern r) => 
+  SMethod r
 patternTestMainMethod = mainFunction (body [block [
   varDec n,
   initState fsmName offState, 

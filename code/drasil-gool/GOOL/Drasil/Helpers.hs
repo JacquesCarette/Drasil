@@ -44,27 +44,27 @@ emptyIfEmpty ifDoc elseDoc = if isEmpty ifDoc then empty else elseDoc
 emptyIfNull :: [a] -> Doc -> Doc
 emptyIfNull lst elseDoc = if null lst then empty else elseDoc
 
-toCode :: (Monad repr) => a -> repr a
+toCode :: (Monad r) => a -> r a
 toCode = return
 
 toState :: a -> State s a
 toState = return
 
-onCodeValue :: (Functor repr) => (a -> b) -> repr a -> repr b
+onCodeValue :: (Functor r) => (a -> b) -> r a -> r b
 onCodeValue = fmap
 
 onStateValue :: (a -> b) -> State s a -> State s b
 onStateValue = fmap
 
-on2CodeValues :: (Applicative repr) => (a -> b -> c) -> repr a -> repr b -> 
-  repr c
+on2CodeValues :: (Applicative r) => (a -> b -> c) -> r a -> r b -> 
+  r c
 on2CodeValues = liftA2
 
 on2StateValues :: (a -> b -> c) -> State s a -> State s b -> State s c
 on2StateValues = liftM2
 
-on3CodeValues :: (Applicative repr) => (a -> b -> c -> d) -> repr a -> repr b 
-  -> repr c -> repr d
+on3CodeValues :: (Applicative r) => (a -> b -> c -> d) -> r a -> r b 
+  -> r c -> r d
 on3CodeValues = liftA3
 
 on3StateValues :: (a -> b -> c -> d) -> State s a -> State s b -> State s c ->

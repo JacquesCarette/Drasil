@@ -17,6 +17,6 @@ chooseConcept chs = Map.map (chooseConcept' chs) (conceptMatch chs)
           "ConceptMatchMap"
         chooseConcept' _ cs = head cs
 
-conceptToGOOL :: (ProgramSym repr) => CodeConcept -> SValue repr
+conceptToGOOL :: (ProgramSym r) => CodeConcept -> SValue r
 conceptToGOOL Pi = pi
 

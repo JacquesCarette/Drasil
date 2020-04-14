@@ -20,7 +20,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   FunctionSym(..), ($.), GetSet(..), List(..), Iterator(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
   FuncAppStatement(..), 
-  MiscStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..), 
+  MiscStatement(..), ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
@@ -196,8 +196,6 @@ instance InternalType JavaCode where
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlock JavaCode where
-  runStrategy = G.runStrategy
-
   solveODE info opts = let (fls, s) = jODEFiles info 
     in modify (addODEFilePaths s . addODEFiles fls) >> (zoom lensMStoVS dv 
     >>= (\dpv -> 
@@ -576,8 +574,14 @@ instance ControlStatement JavaCode where
 
   tryCatch = G.tryCatch jTryCatch
   
+instance StatePattern JavaCode where 
   checkState = G.checkState
+
+instance ObserverPattern JavaCode where
   notifyObservers = G.notifyObservers
+
+instance StrategyPattern JavaCode where
+  runStrategy = G.runStrategy
 
 instance ScopeSym JavaCode where
   type Scope JavaCode = Doc

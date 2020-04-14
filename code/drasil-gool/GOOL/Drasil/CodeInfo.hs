@@ -10,7 +10,7 @@ import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement,
   ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
   GetSet(..), List(..), Iterator(..), StatementSym(..), AssignStatement(..), 
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), 
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..))
@@ -92,11 +92,6 @@ instance TypeSym CodeInfo where
   getTypeString = unCI
 
 instance ControlBlock CodeInfo where
-  runStrategy _ ss vl _ = do
-    mapM_ snd ss
-    _ <- zoom lensMStoVS $ fromMaybe noInfo vl
-    noInfo
-
   solveODE _ _ = noInfo
 
 instance InternalControlBlock CodeInfo where
@@ -339,9 +334,17 @@ instance ControlStatement CodeInfo where
     _ <- cb
     noInfo
 
+instance StatePattern CodeInfo where
   checkState _ = evalConds
 
+instance ObserverPattern CodeInfo where
   notifyObservers f _ = execute1 (zoom lensMStoVS f)
+  
+instance StrategyPattern CodeInfo where
+  runStrategy _ ss vl _ = do
+    mapM_ snd ss
+    _ <- zoom lensMStoVS $ fromMaybe noInfo vl
+    noInfo
 
 instance ScopeSym CodeInfo where
   type Scope CodeInfo = ScopeTag

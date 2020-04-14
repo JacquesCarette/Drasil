@@ -19,7 +19,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   objMethodCall, objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), Iterator(..), 
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
   IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), 
-  ControlStatement(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
@@ -190,8 +190,6 @@ instance InternalType CSharpCode where
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlock CSharpCode where
-  runStrategy = G.runStrategy
-
   solveODE info opts = modify (addLibImport "Microsoft.Research.Oslo" . 
     addLangImport "System.Linq") >> 
     multiBlock [
@@ -403,7 +401,7 @@ instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
   func = G.func
   objAccess = G.objAccess
-  
+
 instance GetSet CSharpCode where
   get = G.get
   set = G.set
@@ -546,8 +544,14 @@ instance ControlStatement CSharpCode where
 
   tryCatch = G.tryCatch csTryCatch
 
+instance StatePattern CSharpCode where 
   checkState = G.checkState
+
+instance ObserverPattern CSharpCode where
   notifyObservers = G.notifyObservers
+
+instance StrategyPattern CSharpCode where
+  runStrategy = G.runStrategy
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc

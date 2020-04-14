@@ -19,7 +19,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), at, Iterator(..),
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
   IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), observerListName, 
-  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
+  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), 
   ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
@@ -183,8 +183,6 @@ instance InternalType PythonCode where
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlock PythonCode where
-  runStrategy = G.runStrategy
-
   solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
     block [
       r &= objMethodCall odeT (extNewObj odeLib odeT 
@@ -554,13 +552,19 @@ instance ControlStatement PythonCode where
 
   tryCatch = G.tryCatch pyTryCatch
 
+instance StatePattern PythonCode where 
   checkState = G.checkState
+
+instance ObserverPattern PythonCode where
   notifyObservers f t = forRange index initv (listSize obsList) 
     (litInt 1) notify
     where obsList = valueOf $ observerListName `listOf` t
           index = var "observerIndex" int
           initv = litInt 0
           notify = oneLiner $ valState $ at obsList (valueOf index) $. f
+
+instance StrategyPattern PythonCode where
+  runStrategy = G.runStrategy
 
 instance ScopeSym PythonCode where
   type Scope PythonCode = Doc

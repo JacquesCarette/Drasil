@@ -16,7 +16,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..),
-  ControlStatement(..), switchAsIf, ScopeSym(..), ParameterSym(..), 
+  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
@@ -200,20 +200,6 @@ instance (Pair p) => InternalType (p CppSrcCode CppHdrCode) where
   typeFromData t s d = pair (typeFromData t s d) (typeFromData t s d)
 
 instance (Pair p) => ControlBlock (p CppSrcCode CppHdrCode) where
-  -- How I handle values with both State and Maybe might cause problems later on, 
-  -- because it will make the state transitions run twice for the value in the 
-  -- Maybe. For now, given what we store in the State for Values/Variables, this 
-  -- doesn't matter. If problems occur in the future, an alternative way to do 
-  -- this (which wouldn't duplicate state transitions) would be to unwrap the 
-  -- maybes, pass them to a function like pair2, and then have the anonymous 
-  -- functions rewrap the values in Maybes. This would be messy so I don't want to 
-  -- do it unless there's a need.
-  runStrategy l strats rv av = pair1List
-    (\s -> runStrategy l (zip (map fst strats) s) (fmap (onStateValue pfst) rv)
-      (fmap (onStateValue pfst) av)) 
-    (\s -> runStrategy l (zip (map fst strats) s) (fmap (onStateValue psnd) rv) 
-      (fmap (onStateValue psnd) av)) (map snd strats)
-
   solveODE info opts = do
     piv <- zoom lensMStoVS $ indepVar info
     pdv <- zoom lensMStoVS $ depVar info
@@ -666,13 +652,30 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
 
   tryCatch = pair2 tryCatch tryCatch
 
+instance (Pair p) => StatePattern (p CppSrcCode CppHdrCode) where
   checkState l vs = pair2Lists1Val
     (\sts bods -> checkState l (zip sts bods))
     (\sts bods -> checkState l (zip sts bods)) 
     (map (zoom lensMStoVS . fst) vs) (map snd vs)
 
+instance (Pair p) => ObserverPattern (p CppSrcCode CppHdrCode) where
   notifyObservers f t = pair2 notifyObservers notifyObservers 
     (zoom lensMStoVS f) (zoom lensMStoVS t)
+
+instance (Pair p) => StrategyPattern (p CppSrcCode CppHdrCode) where
+  -- How I handle values with both State and Maybe might cause problems later on, 
+  -- because it will make the state transitions run twice for the value in the 
+  -- Maybe. For now, given what we store in the State for Values/Variables, this 
+  -- doesn't matter. If problems occur in the future, an alternative way to do 
+  -- this (which wouldn't duplicate state transitions) would be to unwrap the 
+  -- maybes, pass them to a function like pair2, and then have the anonymous 
+  -- functions rewrap the values in Maybes. This would be messy so I don't want to 
+  -- do it unless there's a need.
+  runStrategy l strats rv av = pair1List
+    (\s -> runStrategy l (zip (map fst strats) s) (fmap (onStateValue pfst) rv)
+      (fmap (onStateValue pfst) av)) 
+    (\s -> runStrategy l (zip (map fst strats) s) (fmap (onStateValue psnd) rv) 
+      (fmap (onStateValue psnd) av)) (map snd strats)
 
 instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
   type Scope (p CppSrcCode CppHdrCode) = (Doc, ScopeTag)
@@ -1128,8 +1131,6 @@ instance InternalType CppSrcCode where
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlock CppSrcCode where
-  runStrategy = G.runStrategy
-
   solveODE info opts = let (fl, s) = cppODEFile info
                            dv = depVar info
     in modify (addODEFilePaths s . addODEFiles [unCPPSC fl] . addLibImport 
@@ -1506,8 +1507,14 @@ instance ControlStatement CppSrcCode where
 
   tryCatch = G.tryCatch cppTryCatch
 
+instance StatePattern CppSrcCode where 
   checkState l = switchAsIf (valueOf $ var l string) 
+
+instance ObserverPattern CppSrcCode where
   notifyObservers = G.notifyObservers
+
+instance StrategyPattern CppSrcCode where
+  runStrategy = G.runStrategy
 
 instance ScopeSym CppSrcCode where
   type Scope CppSrcCode = (Doc, ScopeTag)
@@ -1757,8 +1764,6 @@ instance InternalType CppHdrCode where
   typeFromData t s d = toCode $ td t s d
 
 instance ControlBlock CppHdrCode where
-  runStrategy _ _ _ _ = toState $ toCode empty
-
   solveODE info _ = let (fl, s) = cppODEFile info
     in modify (addODEFilePaths s . addODEFiles [unCPPHC fl]) >> 
     toState (toCode empty)
@@ -2079,10 +2084,15 @@ instance ControlStatement CppHdrCode where
 
   tryCatch _ _ = emptyState
 
+instance StatePattern CppHdrCode where
   checkState _ _ _ = emptyState
 
+instance ObserverPattern CppHdrCode where
   notifyObservers _ _ = emptyState
 
+instance StrategyPattern CppHdrCode where
+  runStrategy _ _ _ _ = toState $ toCode empty
+  
 instance ScopeSym CppHdrCode where
   type Scope CppHdrCode = (Doc, ScopeTag)
   private = toCode (privateDocD, Priv)

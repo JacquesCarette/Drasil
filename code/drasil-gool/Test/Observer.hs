@@ -25,7 +25,8 @@ helperClass :: (ClassSym repr, IOStatement repr, Literal repr, VariableValue rep
 helperClass = buildClass observerName Nothing [stateVar public dynamic x]
   [observerConstructor, printNumMethod, getMethod x, setMethod x]
 
-observerConstructor :: (MethodSym repr, Literal repr) => SMethod repr
+observerConstructor :: (MethodSym repr, VariableSym repr, Literal repr) => 
+  SMethod repr
 observerConstructor = initializer [] [(x, litInt 5)]
 
 printNumMethod :: (MethodSym repr, IOStatement repr, VariableValue repr) => SMethod repr

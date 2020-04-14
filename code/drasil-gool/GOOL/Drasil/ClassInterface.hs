@@ -17,8 +17,7 @@ module GOOL.Drasil.ClassInterface (
   at, Iterator(..), StatementSym(..), AssignStatement(..), (&=), assignToListIndex,
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
   MiscStatement(..), 
-  initState, changeState, observerListName, initObserverList, addObserver, 
-  ControlStatement(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
+  ControlStatement(..), StatePattern(..), initState, changeState, ObserverPattern(..), observerListName, initObserverList, addObserver, StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
   StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), convType
@@ -45,7 +44,7 @@ class (ModuleSym repr, ControlBlock repr, AssignStatement repr,
   DeclStatement repr, IOStatement repr, StringStatement repr, FuncAppStatement repr,
   MiscStatement repr, ControlStatement repr, InternalControlBlock repr, Literal repr, MathConstant repr, VariableValue repr, CommandLineArgs repr, NumericExpression repr, BooleanExpression repr, Comparison repr, 
   ValueExpression repr, InternalValueExp repr, GetSet repr, List repr, 
-  Iterator repr) => 
+  Iterator repr, StatePattern repr, ObserverPattern repr, StrategyPattern repr) => 
   FileSym repr where 
   type RenderFile repr
   fileDoc :: FSModule repr -> SFile repr
@@ -103,9 +102,6 @@ class TypeSym repr where
   getTypeString :: repr (Type repr) -> String
 
 class (BodySym repr) => ControlBlock repr where
-  runStrategy     :: Label -> [(Label, MSBody repr)] -> Maybe (SValue repr) -> 
-    Maybe (SVariable repr) -> MSBlock repr
-
   solveODE :: ODEInfo repr -> ODEOptions repr -> MSBlock repr
 
 class (ValueSym repr) => InternalControlBlock repr where
@@ -148,7 +144,7 @@ listOf = listVar
 
 type SValue a = VS (a (Value a))
 
-class (VariableSym repr) => ValueSym repr where
+class (TypeSym repr) => ValueSym repr where
   type Value repr
   valueType :: repr (Value repr) -> repr (Type repr)
 
@@ -349,7 +345,7 @@ type MSStatement a = MS (a (Statement a))
 class (ValueSym repr) => StatementSym repr where
   type Statement repr
 
-class (StatementSym repr) => AssignStatement repr where
+class (VariableSym repr, StatementSym repr) => AssignStatement repr where
   (&-=)  :: SVariable repr -> SValue repr -> MSStatement repr
   infixl 1 &-=
   (&+=)  :: SVariable repr -> SValue repr -> MSStatement repr
@@ -359,7 +355,7 @@ class (StatementSym repr) => AssignStatement repr where
   (&--)  :: SVariable repr -> MSStatement repr
   infixl 8 &--
 
-  assign            :: SVariable repr -> SValue repr -> MSStatement repr
+  assign :: SVariable repr -> SValue repr -> MSStatement repr
 
 (&=) :: (AssignStatement repr) => SVariable repr -> SValue repr -> 
   MSStatement repr
@@ -370,7 +366,7 @@ assignToListIndex :: (MiscStatement repr, VariableValue repr, List repr) =>
   SVariable repr -> SValue repr -> SValue repr -> MSStatement repr
 assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
 
-class (StatementSym repr) => DeclStatement repr where
+class (VariableSym repr, StatementSym repr) => DeclStatement repr where
   varDec           :: SVariable repr -> MSStatement repr
   varDecDef        :: SVariable repr -> SValue repr -> MSStatement repr
   listDec          :: Integer -> SVariable repr -> MSStatement repr
@@ -387,7 +383,7 @@ class (StatementSym repr) => DeclStatement repr where
   funcDecDef       :: SVariable repr -> [SVariable repr] -> SValue repr -> 
     MSStatement repr
 
-class (StatementSym repr) => IOStatement repr where
+class (VariableSym repr, StatementSym repr) => IOStatement repr where
   print      :: SValue repr -> MSStatement repr
   printLn    :: SValue repr -> MSStatement repr
   printStr   :: String -> MSStatement repr
@@ -412,13 +408,13 @@ class (StatementSym repr) => IOStatement repr where
   discardFileLine  :: SValue repr -> MSStatement repr
   getFileInputAll  :: SValue repr -> SVariable repr -> MSStatement repr
 
-class (StatementSym repr) => StringStatement repr where
+class (VariableSym repr, StatementSym repr) => StringStatement repr where
   stringSplit :: Char -> SVariable repr -> SValue repr -> MSStatement repr
 
   stringListVals  :: [SVariable repr] -> SValue repr -> MSStatement repr
   stringListLists :: [SVariable repr] -> SValue repr -> MSStatement repr
 
-class (StatementSym repr) => FuncAppStatement repr where
+class (VariableSym repr, StatementSym repr) => FuncAppStatement repr where
   -- The three lists are inputs, outputs, and both, respectively
   inOutCall :: Label -> [SValue repr] -> [SVariable repr] -> [SVariable repr] 
     -> MSStatement repr
@@ -433,26 +429,6 @@ class (StatementSym repr) => MiscStatement repr where
   valState :: SValue repr -> MSStatement repr -- converts value to statement
   comment :: Comment -> MSStatement repr
   multi     :: [MSStatement repr] -> MSStatement repr
-
-initState :: (DeclStatement repr, Literal repr) => Label -> Label -> MSStatement repr
-initState fsmName initialState = varDecDef (var fsmName string) 
-  (litString initialState)
-
-changeState :: (AssignStatement repr, Literal repr) => Label -> Label -> MSStatement repr
-changeState fsmName toState = var fsmName string &= litString toState
-
-observerListName :: Label
-observerListName = "observerList"
-
-initObserverList :: (DeclStatement repr) => VSType repr -> [SValue repr] -> 
-  MSStatement repr
-initObserverList t = listDecDef (var observerListName (listType t))
-
-addObserver :: (MiscStatement repr, VariableValue repr, List repr) => 
-  SValue repr -> MSStatement repr
-addObserver o = valState $ listAdd obsList lastelem o
-  where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
-        lastelem = listSize obsList
 
 class (BodySym repr) => ControlStatement repr where
   break :: MSStatement repr
@@ -477,10 +453,6 @@ class (BodySym repr) => ControlStatement repr where
 
   tryCatch :: MSBody repr -> MSBody repr -> MSStatement repr
 
-  checkState      :: Label -> [(SValue repr, MSBody repr)] -> MSBody repr -> 
-    MSStatement repr
-  notifyObservers :: VSFunction repr -> VSType repr -> MSStatement repr
-
 ifNoElse :: (ControlStatement repr) => [(SValue repr, MSBody repr)] 
   -> MSStatement repr
 ifNoElse bs = ifCond bs $ body []
@@ -488,6 +460,39 @@ ifNoElse bs = ifCond bs $ body []
 switchAsIf :: (ControlStatement repr, Comparison repr) => SValue repr -> 
   [(SValue repr, MSBody repr)] -> MSBody repr -> MSStatement repr
 switchAsIf v = ifCond . map (first (v ?==))
+
+class (BodySym repr) => StatePattern repr where
+  checkState      :: Label -> [(SValue repr, MSBody repr)] -> MSBody repr -> 
+    MSStatement repr
+
+initState :: (DeclStatement repr, Literal repr) => Label -> Label -> 
+  MSStatement repr
+initState fsmName initialState = varDecDef (var fsmName string) 
+  (litString initialState)
+
+changeState :: (AssignStatement repr, Literal repr) => Label -> Label -> 
+  MSStatement repr
+changeState fsmName toState = var fsmName string &= litString toState
+
+class (StatementSym repr, FunctionSym repr) => ObserverPattern repr where
+  notifyObservers :: VSFunction repr -> VSType repr -> MSStatement repr
+
+observerListName :: Label
+observerListName = "observerList"
+
+initObserverList :: (DeclStatement repr) => VSType repr -> [SValue repr] -> 
+  MSStatement repr
+initObserverList t = listDecDef (var observerListName (listType t))
+
+addObserver :: (MiscStatement repr, VariableValue repr, List repr) => 
+  SValue repr -> MSStatement repr
+addObserver o = valState $ listAdd obsList lastelem o
+  where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
+        lastelem = listSize obsList
+
+class (BodySym repr, VariableSym repr) => StrategyPattern repr where
+  runStrategy     :: Label -> [(Label, MSBody repr)] -> Maybe (SValue repr) -> 
+    Maybe (SVariable repr) -> MSBlock repr
 
 class ScopeSym repr where
   type Scope repr

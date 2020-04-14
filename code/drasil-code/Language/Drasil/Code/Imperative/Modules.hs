@@ -38,7 +38,7 @@ import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 
   SMethod, CSStateVar, SClass, ProgramSym, BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), 
-  ValueSym(..), BooleanExpression(..), AssignStatement(..), DeclStatement(..), 
+  Literal(..), VariableValue(..), CommandLineArgs(..), BooleanExpression(..), AssignStatement(..), DeclStatement(..), 
   IOStatement(..), MiscStatement(..), ControlStatement(..), ifNoElse, 
   ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType)
 

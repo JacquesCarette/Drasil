@@ -13,7 +13,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
-  listOf, ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  listOf, ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
   Selector(..), ($.), InternalValueExp(..), objMethodCall,
   objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), at, 
@@ -291,6 +291,9 @@ instance InternalVariable PythonCode where
 
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
+  valueType = onCodeValue valType
+
+instance Literal PythonCode where
   litTrue = mkStateVal bool (text "True")
   litFalse = mkStateVal bool (text "False")
   litChar = G.litChar
@@ -302,16 +305,16 @@ instance ValueSym PythonCode where
     (brackets $ valueList elems))
   litList = litArray
 
+instance MathConstant PythonCode where
   pi = addmathImport $ mkStateVal double (text "math.pi")
 
-  -- ($:) = enumElement
-
+instance VariableValue PythonCode where
   valueOf = G.valueOf
-  arg n = G.arg (litInt $ n+1) argsList
-  -- enumElement = G.enumElement
-  argsList = modify (addLangImportVS "sys") >> G.argsList "sys.argv"
 
-  valueType = onCodeValue valType
+instance CommandLineArgs PythonCode where
+  arg n = G.arg (litInt $ n+1) argsList
+  argsList = modify (addLangImportVS "sys") >> G.argsList "sys.argv"
+  argExists i = listSize argsList ?>= litInt (fromIntegral $ i+2)
 
 instance NumericExpression PythonCode where
   (#~) = unExpr' negateOp
@@ -390,8 +393,6 @@ instance InternalValue PythonCode where
 
 instance Selector PythonCode where
   objAccess = G.objAccess
-
-  argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf = G.indexOf "index"
 

@@ -6,7 +6,7 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   BlockSym(..), ControlBlock(..), InternalControlBlock(..), TypeSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), InternalValueExp(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), AssignStatement(..), 
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), MiscStatement(..), 
@@ -112,7 +112,6 @@ instance VariableSym CodeInfo where
   const _ _ = noInfo
   extVar _ _ _ = noInfo
   self = noInfo
-  -- enumVar _ _ = noInfo
   classVar _ _ = noInfo
   extClassVar _ _ = noInfo
   objVar _ _ = noInfo
@@ -126,6 +125,9 @@ instance VariableSym CodeInfo where
 
 instance ValueSym CodeInfo where
   type Value CodeInfo = ()
+  valueType _ = toCode ""
+
+instance Literal CodeInfo where
   litTrue = noInfo
   litFalse = noInfo
   litChar _ = noInfo
@@ -136,17 +138,16 @@ instance ValueSym CodeInfo where
   litArray _ = executeList
   litList _ = executeList
 
+instance MathConstant CodeInfo where
   pi = noInfo
 
-  -- ($:) _ _ = noInfo
-
+instance VariableValue CodeInfo where
   valueOf _ = noInfo
-  arg _ = noInfo
-  -- enumElement _ _ = noInfo
-  
-  argsList = noInfo
 
-  valueType _ = toCode ""
+instance CommandLineArgs CodeInfo where
+  arg _ = noInfo
+  argsList = noInfo
+  argExists _ = noInfo
 
 instance NumericExpression CodeInfo where
   (#~) = execute1
@@ -211,8 +212,6 @@ instance ValueExpression CodeInfo where
 
 instance Selector CodeInfo where
   objAccess = execute2
-  
-  argExists _ = noInfo
   
   indexOf = execute2
   

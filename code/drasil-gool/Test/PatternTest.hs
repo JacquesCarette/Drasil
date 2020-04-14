@@ -4,7 +4,7 @@ import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod,
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..), 
   ControlBlock(..), TypeSym(..), AssignStatement, DeclStatement(..), 
   IOStatement(..), MiscStatement(..), initState, changeState, initObserverList, 
-  addObserver, ControlStatement(..), VariableSym(..), ValueSym(..), 
+  addObserver, ControlStatement(..), VariableSym(..), Literal(..), VariableValue(..), 
   ValueExpression(..), extNewObj, FunctionSym(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer, observerName, printNum, x)
@@ -39,7 +39,8 @@ patternTest = prog progName [fileDoc (buildModule progName []
 
 patternTestMainMethod :: (MethodSym repr, AssignStatement repr, 
   DeclStatement repr, ControlStatement repr, IOStatement repr, 
-  MiscStatement repr, ControlBlock repr) => SMethod repr
+  MiscStatement repr, ControlBlock repr, Literal repr, VariableValue repr) => 
+  SMethod repr
 patternTestMainMethod = mainFunction (body [block [
   varDec n,
   initState fsmName offState, 

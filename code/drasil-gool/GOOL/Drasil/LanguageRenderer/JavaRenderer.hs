@@ -14,7 +14,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
   ($.), InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), AssignStatement(..), 
@@ -301,6 +301,9 @@ instance InternalVariable JavaCode where
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
+  valueType = onCodeValue valType
+
+instance Literal JavaCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
@@ -313,19 +316,18 @@ instance ValueSym JavaCode where
     "java.util.Arrays")) >> newObj (listType t) [funcApp "Arrays.asList" 
     (listType t) es | not (null es)]
 
+instance MathConstant JavaCode where
   pi = G.pi
 
-  -- ($:) = enumElement
-
+instance VariableValue JavaCode where
   valueOf v = G.valueOf $ join $ on2StateValues (\dvs vr -> maybe v (\i -> 
     arrayElem (toInteger i) v) (elemIndex (variableName vr) dvs)) 
     getODEDepVars v
+
+instance CommandLineArgs JavaCode where
   arg n = G.arg (litInt n) argsList
-  -- enumElement = G.enumElement
-
   argsList = G.argsList "args"
-
-  valueType = onCodeValue valType
+  argExists i = listSize argsList ?>= litInt (fromIntegral $ i+1)
 
 instance NumericExpression JavaCode where
   (#~) = unExpr' negateOp
@@ -415,8 +417,6 @@ instance InternalValue JavaCode where
 
 instance Selector JavaCode where
   objAccess = G.objAccess
-
-  argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf = G.indexOf "indexOf"
 

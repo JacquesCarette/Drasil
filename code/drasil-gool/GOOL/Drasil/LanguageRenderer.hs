@@ -29,7 +29,7 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
   MSStatement, SMethod, BodySym(..), bodyStatements, oneLiner, 
-  PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), ValueSym(..), 
+  PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), ValueSym(..), Literal(..), VariableValue(..),
   NumericExpression(..), BooleanExpression(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), AssignStatement(..), 
   DeclStatement(..), IOStatement(..), MiscStatement(..), ControlStatement(..), 

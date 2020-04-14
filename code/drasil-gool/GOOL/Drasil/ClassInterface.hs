@@ -8,7 +8,7 @@ module GOOL.Drasil.ClassInterface (
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), TypeSym(..), ControlBlock(..), 
   InternalControlBlock(..), listSlice, VariableSym(..), ($->), listOf, 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
   libFuncApp, newObj, extNewObj, libNewObj, exists, Selector(..), ($.), 
   selfAccess, InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
@@ -42,7 +42,7 @@ type SFile a = FS (a (RenderFile a))
 
 class (ModuleSym repr, ControlBlock repr, AssignStatement repr, 
   DeclStatement repr, IOStatement repr, StringStatement repr, FuncAppStatement repr,
-  MiscStatement repr, ControlStatement repr, InternalControlBlock repr) => 
+  MiscStatement repr, ControlStatement repr, InternalControlBlock repr, Literal repr, MathConstant repr, VariableValue repr, CommandLineArgs repr) => 
   FileSym repr where 
   type RenderFile repr
   fileDoc :: FSModule repr -> SFile repr
@@ -80,9 +80,8 @@ type VSType a = VS (a (Type a))
 class TypeSym repr where
   type Type repr
   bool          :: VSType repr
-  int           :: VSType repr -- This is 32-bit signed ints except
-                                         -- in Python, which has unlimited 
-                                         -- precision ints
+  int           :: VSType repr -- This is 32-bit signed ints except in Python, 
+                               -- which has unlimited precision ints
   float         :: VSType repr
   double        :: VSType repr
   char          :: VSType repr
@@ -93,7 +92,6 @@ class TypeSym repr where
   arrayType     :: VSType repr -> VSType repr
   listInnerType :: VSType repr -> VSType repr
   obj           :: ClassName -> VSType repr
-  -- enumType      :: Label -> VSType repr
   funcType      :: [VSType repr] -> VSType repr -> VSType repr
   iterator      :: VSType repr -> VSType repr
   void          :: VSType repr
@@ -129,7 +127,6 @@ class (TypeSym repr) => VariableSym repr where
   extClassVar  :: VSType repr -> SVariable repr -> SVariable repr
   objVar       :: SVariable repr -> SVariable repr -> SVariable repr
   objVarSelf   :: SVariable repr -> SVariable repr
-  -- enumVar      :: Label -> Label -> SVariable repr
   listVar      :: Label -> VSType repr -> SVariable repr
   arrayElem    :: Integer -> SVariable repr -> SVariable repr
   -- Use for iterator variables, i.e. in a forEach loop.
@@ -150,6 +147,9 @@ type SValue a = VS (a (Value a))
 
 class (VariableSym repr) => ValueSym repr where
   type Value repr
+  valueType :: repr (Value repr) -> repr (Type repr)
+
+class (ValueSym repr) => Literal repr where
   litTrue   :: SValue repr
   litFalse  :: SValue repr
   litChar   :: Char -> SValue repr
@@ -160,20 +160,16 @@ class (VariableSym repr) => ValueSym repr where
   litArray  :: VSType repr -> [SValue repr] -> SValue repr
   litList   :: VSType repr -> [SValue repr] -> SValue repr
 
+class (ValueSym repr) => MathConstant repr where
   pi :: SValue repr
 
-  --other operators ($)
-  -- ($:)  :: Label -> Label -> SValue repr
-  -- infixl 9 $:
-
+class (VariableSym repr, ValueSym repr) => VariableValue repr where
   valueOf       :: SVariable repr -> SValue repr
---  global       :: Label -> repr (Value repr)         -- not sure how this one works, but in GOOL it was hardcoded to give an error so I'm leaving it out for now
+
+class (ValueSym repr) => CommandLineArgs repr where
   arg          :: Integer -> SValue repr
-  -- enumElement  :: Label -> Label -> SValue repr
-
-  argsList  :: SValue repr
-
-  valueType :: repr (Value repr) -> repr (Type repr)
+  argsList     :: SValue repr
+  argExists    :: Integer -> SValue repr
 
 class (ValueSym repr) => NumericExpression repr where
   (#~)  :: SValue repr -> SValue repr
@@ -296,15 +292,13 @@ exists = notNull
 class (FunctionSym repr) => Selector repr where
   objAccess :: SValue repr -> VSFunction repr -> SValue repr
 
-  argExists :: Integer -> SValue repr
-
   indexOf :: SValue repr -> SValue repr -> SValue repr
 
 ($.) :: (Selector repr) => SValue repr -> VSFunction repr -> SValue repr
 infixl 9 $.
 ($.) = objAccess
 
-selfAccess :: (Selector repr) => VSFunction repr -> SValue repr
+selfAccess :: (VariableValue repr, Selector repr) => VSFunction repr -> SValue repr
 selfAccess = objAccess (valueOf self)
 
 class (FunctionSym repr) => InternalValueExp repr where
@@ -373,7 +367,7 @@ class (StatementSym repr) => AssignStatement repr where
 infixr 1 &=
 (&=) = assign
 
-assignToListIndex :: (MiscStatement repr) => SVariable repr -> SValue repr -> 
+assignToListIndex :: (MiscStatement repr, VariableValue repr) => SVariable repr -> SValue repr -> 
   SValue repr -> MSStatement repr
 assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
 
@@ -441,11 +435,11 @@ class (StatementSym repr) => MiscStatement repr where
   comment :: Comment -> MSStatement repr
   multi     :: [MSStatement repr] -> MSStatement repr
 
-initState :: (DeclStatement repr) => Label -> Label -> MSStatement repr
+initState :: (DeclStatement repr, Literal repr) => Label -> Label -> MSStatement repr
 initState fsmName initialState = varDecDef (var fsmName string) 
   (litString initialState)
 
-changeState :: (AssignStatement repr) => Label -> Label -> MSStatement repr
+changeState :: (AssignStatement repr, Literal repr) => Label -> Label -> MSStatement repr
 changeState fsmName toState = var fsmName string &= litString toState
 
 observerListName :: Label
@@ -455,7 +449,7 @@ initObserverList :: (DeclStatement repr) => VSType repr -> [SValue repr] ->
   MSStatement repr
 initObserverList t = listDecDef (var observerListName (listType t))
 
-addObserver :: (MiscStatement repr) => SValue repr -> MSStatement repr
+addObserver :: (MiscStatement repr, VariableValue repr) => SValue repr -> MSStatement repr
 addObserver o = valState $ listAdd obsList lastelem o
   where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
         lastelem = listSize obsList

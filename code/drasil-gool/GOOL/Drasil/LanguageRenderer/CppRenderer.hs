@@ -15,7 +15,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   SValue, MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), ControlBlock(..), InternalControlBlock(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, Selector(..), 
   ($.), InternalValueExp(..), objMethodCall, FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), AssignStatement(..), (&=), 
@@ -359,6 +359,9 @@ instance (Pair p) => InternalVariable (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   type Value (p CppSrcCode CppHdrCode) = ValData
+  valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
+
+instance (Pair p) => Literal (p CppSrcCode CppHdrCode) where
   litTrue = on2StateValues pair litTrue litTrue
   litFalse = on2StateValues pair litFalse litFalse
   litChar c = on2StateValues pair (litChar c) (litChar c)
@@ -369,17 +372,16 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   litArray = pair1Val1List litArray litArray
   litList = pair1Val1List litList litList
 
+instance (Pair p) => MathConstant (p CppSrcCode CppHdrCode) where
   pi = on2StateValues pair pi pi
 
-  -- ($:) l1 l2 = on2StateValues pair (($:) l1 l2) (($:) l1 l2)
-
+instance (Pair p) => VariableValue (p CppSrcCode CppHdrCode) where
   valueOf = pair1 valueOf valueOf
-  arg n = on2StateValues pair (arg n) (arg n)
-  -- enumElement en e = on2StateValues pair (enumElement en e) (enumElement en e)
   
+instance (Pair p) => CommandLineArgs (p CppSrcCode CppHdrCode) where
+  arg n = on2StateValues pair (arg n) (arg n)
   argsList = on2StateValues pair argsList argsList
-
-  valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
+  argExists i = on2StateValues pair (argExists i) (argExists i)
 
 instance (Pair p) => NumericExpression (p CppSrcCode CppHdrCode) where
   (#~) = pair1 (#~) (#~)
@@ -475,8 +477,6 @@ instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
   objAccess = pair2 objAccess objAccess
-
-  argExists i = on2StateValues pair (argExists i) (argExists i)
   
   indexOf = pair2 indexOf indexOf
 
@@ -1234,6 +1234,9 @@ instance InternalVariable CppSrcCode where
 
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
+  valueType = onCodeValue valType
+
+instance Literal CppSrcCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
@@ -1244,18 +1247,17 @@ instance ValueSym CppSrcCode where
   litArray = G.litArray
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
+instance MathConstant CppSrcCode where
   pi = modify (addDefine "_USE_MATH_DEFINES") >> addMathHImport (mkStateVal 
     double (text "M_PI"))
 
-  -- ($:) = enumElement
-
+instance VariableValue CppSrcCode where
   valueOf = G.valueOf
-  arg n = G.arg (litInt $ n+1) argsList
-  -- enumElement en e = mkStateVal (enumType en) (text e)
-  
-  argsList = G.argsList "argv"
 
-  valueType = onCodeValue valType
+instance CommandLineArgs CppSrcCode where
+  arg n = G.arg (litInt $ n+1) argsList
+  argsList = G.argsList "argv"
+  argExists i = listSize argsList ?>= litInt (fromIntegral $ i+2)
 
 instance NumericExpression CppSrcCode where
   (#~) = unExpr' negateOp
@@ -1329,8 +1331,6 @@ instance InternalValue CppSrcCode where
 
 instance Selector CppSrcCode where
   objAccess = G.objAccess
-
-  argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf l v = addAlgorithmImportVS $ funcApp "find" int 
     [iterBegin l, iterEnd l, v] #- iterBegin l
@@ -1844,6 +1844,9 @@ instance InternalVariable CppHdrCode where
 
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
+  valueType = onCodeValue valType
+
+instance Literal CppHdrCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
@@ -1854,18 +1857,17 @@ instance ValueSym CppHdrCode where
   litArray = G.litArray
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
+instance MathConstant CppHdrCode where
   pi = modify (addHeaderDefine "_USE_MATH_DEFINES" . addHeaderLangImport 
     "math.h") >> mkStateVal double (text "M_PI")
 
-  -- ($:) = enumElement
-
+instance VariableValue CppHdrCode where
   valueOf = G.valueOf
-  arg n = G.arg (litInt $ n+1) argsList
-  -- enumElement en e = mkStateVal (enumType en) (text e)
-  
-  argsList = G.argsList "argv"
 
-  valueType = onCodeValue valType
+instance CommandLineArgs CppHdrCode where
+  arg n = G.arg (litInt $ n+1) argsList
+  argsList = G.argsList "argv"
+  argExists _ = mkStateVal void empty
 
 instance NumericExpression CppHdrCode where
   (#~) _ = mkStateVal void empty
@@ -1937,8 +1939,6 @@ instance InternalValue CppHdrCode where
 
 instance Selector CppHdrCode where
   objAccess _ _ = mkStateVal void empty
-  
-  argExists _ = mkStateVal void empty
   
   indexOf _ _ = mkStateVal void empty
   

@@ -13,7 +13,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
-  ControlBlock(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
+  ControlBlock(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp,
   selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), 
   objMethodCall, objMethodCallNoParams, FunctionSym(..), SelectorFunction(..), 
@@ -298,6 +298,9 @@ instance InternalVariable CSharpCode where
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
+  valueType = onCodeValue valType
+
+instance Literal CSharpCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
@@ -308,19 +311,18 @@ instance ValueSym CSharpCode where
   litArray = G.litList arrayType
   litList = G.litList listType
 
+instance MathConstant CSharpCode where
   pi = G.pi
 
-  -- ($:) = enumElement
-
+instance VariableValue CSharpCode where
   valueOf v = join $ on2StateValues (\dvs vr -> maybe (G.valueOf v) (listAccess 
     (G.valueOf v) . litInt . toInteger) (elemIndex (variableName vr) dvs)) 
     getODEDepVars v
-  arg n = G.arg (litInt n) argsList
-  -- enumElement = G.enumElement
-  
-  argsList = G.argsList "args"
 
-  valueType = onCodeValue valType
+instance CommandLineArgs CSharpCode where
+  arg n = G.arg (litInt n) argsList
+  argsList = G.argsList "args"
+  argExists i = listSize argsList ?>= litInt (fromIntegral $ i+1)
 
 instance NumericExpression CSharpCode where
   (#~) = unExpr' negateOp
@@ -394,8 +396,6 @@ instance InternalValue CSharpCode where
 
 instance Selector CSharpCode where
   objAccess = G.objAccess
-
-  argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf = G.indexOf "IndexOf"
   

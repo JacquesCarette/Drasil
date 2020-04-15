@@ -10,7 +10,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..))
 import Language.Drasil.Mod (Name)
   
 import GOOL.Drasil (Label, SFile, VSType, SVariable, SValue, MSStatement, 
-  MSParameter, SMethod, CSStateVar, SClass, ProgramSym, FileSym(..), 
+  MSParameter, SMethod, CSStateVar, SClass, NamedArgs, ProgramSym, FileSym(..), 
   TypeSym(..), VariableSym(..), ValueExpression(..), FuncAppStatement(..), 
   ParameterSym(..), ClassSym(..), ModuleSym(..), CodeType(..), GOOLState, 
   lensMStoVS)
@@ -20,9 +20,9 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Monad.Reader (Reader, ask, withReader)
 
-genModuleWithImports :: (ProgramSym repr) => Name -> String -> [String] -> 
-  [Reader DrasilState (Maybe (SMethod repr))] -> 
-  [Reader DrasilState (Maybe (SClass repr))] -> Reader DrasilState (SFile repr)
+genModuleWithImports :: (ProgramSym r) => Name -> String -> [String] -> 
+  [Reader DrasilState (Maybe (SMethod r))] -> 
+  [Reader DrasilState (Maybe (SClass r))] -> Reader DrasilState (SFile r)
 genModuleWithImports n desc is maybeMs maybeCs = do
   g <- ask
   let updateState = withReader (\s -> s { currentModule = n })
@@ -37,13 +37,13 @@ genModuleWithImports n desc is maybeMs maybeCs = do
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n is (catMaybes ms) (catMaybes cs)
 
-genModule :: (ProgramSym repr) => Name -> String -> 
-  [Reader DrasilState (Maybe (SMethod repr))] -> 
-  [Reader DrasilState (Maybe (SClass repr))] -> Reader DrasilState (SFile repr)
+genModule :: (ProgramSym r) => Name -> String -> 
+  [Reader DrasilState (Maybe (SMethod r))] -> 
+  [Reader DrasilState (Maybe (SClass r))] -> Reader DrasilState (SFile r)
 genModule n desc = genModuleWithImports n desc []
 
-genDoxConfig :: (AuxiliarySym repr) => String -> GOOLState ->
-  Reader DrasilState [repr (Auxiliary repr)]
+genDoxConfig :: (AuxiliarySym r) => String -> GOOLState ->
+  Reader DrasilState [r (Auxiliary r)]
 genDoxConfig n s = do
   g <- ask
   let cms = commented g
@@ -52,9 +52,9 @@ genDoxConfig n s = do
 
 data ClassType = Primary | Auxiliary
 
-mkClass :: (ProgramSym repr) => ClassType -> String -> Label -> Maybe Label -> 
-  [CSStateVar repr] -> Reader DrasilState [SMethod repr] -> 
-  Reader DrasilState (SClass repr)
+mkClass :: (ProgramSym r) => ClassType -> String -> Label -> Maybe Label -> 
+  [CSStateVar r] -> Reader DrasilState [SMethod r] -> 
+  Reader DrasilState (SClass r)
 mkClass s desc n l vs mths = do
   g <- ask
   ms <- mths
@@ -65,14 +65,14 @@ mkClass s desc n l vs mths = do
     then docClass desc (f n l vs ms) 
     else f n l vs ms
 
-primaryClass :: (ProgramSym repr) => String -> Label -> Maybe Label -> 
-  [CSStateVar repr] -> Reader DrasilState [SMethod repr] -> 
-  Reader DrasilState (SClass repr)
+primaryClass :: (ProgramSym r) => String -> Label -> Maybe Label -> 
+  [CSStateVar r] -> Reader DrasilState [SMethod r] -> 
+  Reader DrasilState (SClass r)
 primaryClass = mkClass Primary
 
-auxClass :: (ProgramSym repr) => String -> Label -> Maybe Label -> 
-  [CSStateVar repr] -> Reader DrasilState [SMethod repr] -> 
-  Reader DrasilState (SClass repr)
+auxClass :: (ProgramSym r) => String -> Label -> Maybe Label -> 
+  [CSStateVar r] -> Reader DrasilState [SMethod r] -> 
+  Reader DrasilState (SClass r)
 auxClass = mkClass Auxiliary
 
 -- m parameter is the module where the function is defined
@@ -83,8 +83,8 @@ auxClass = mkClass Auxiliary
 -- if m is current module and function is not exported, use GOOL's function for 
 --   calling a method on self. This assumes all private methods are dynamic, 
 --   which is true for this generator.
-fApp :: (ProgramSym repr) => String -> String -> VSType repr -> [SValue repr] 
-  -> [(SVariable repr, SValue repr)] -> Reader DrasilState (SValue repr)
+fApp :: (ProgramSym r) => String -> String -> VSType r -> [SValue r] 
+  -> NamedArgs r -> Reader DrasilState (SValue r)
 fApp m s t vl ns = do
   g <- ask
   let cm = currentModule g
@@ -94,8 +94,8 @@ fApp m s t vl ns = do
 
 -- Logic similar to fApp above, but self case not required here 
 -- (because constructor will never be private)
-ctorCall :: (ProgramSym repr) => String -> VSType repr -> [SValue repr] -> 
-  [(SVariable repr, SValue repr)] -> Reader DrasilState (SValue repr)
+ctorCall :: (ProgramSym r) => String -> VSType r -> [SValue r] -> 
+  NamedArgs r -> Reader DrasilState (SValue r)
 ctorCall m t vl ns = do
   g <- ask
   let cm = currentModule g
@@ -103,8 +103,8 @@ ctorCall m t vl ns = do
     newObjMixedArgs t vl ns
 
 -- Logic similar to fApp above
-fAppInOut :: (ProgramSym repr) => String -> String -> [SValue repr] -> 
-  [SVariable repr] -> [SVariable repr] -> Reader DrasilState (MSStatement repr)
+fAppInOut :: (ProgramSym r) => String -> String -> [SValue r] -> 
+  [SVariable r] -> [SVariable r] -> Reader DrasilState (MSStatement r)
 fAppInOut m n ins outs both = do
   g <- ask
   let cm = currentModule g
@@ -112,7 +112,7 @@ fAppInOut m n ins outs both = do
     (eMap $ codeSpec g) == Just cm then inOutCall n ins outs both else 
     selfInOutCall n ins outs both
 
-mkParam :: (ProgramSym repr) => SVariable repr -> MSParameter repr
+mkParam :: (ProgramSym r) => SVariable r -> MSParameter r
 mkParam v = zoom lensMStoVS v >>= (\v' -> paramFunc (getType $ variableType v') 
   v)
   where paramFunc (List _) = pointerParam

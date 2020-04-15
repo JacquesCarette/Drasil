@@ -89,19 +89,19 @@ genPackage unRepr = do
   d <- genDoxConfig n s
   return $ package pd (m:i++d)
 
-genProgram :: (ProgramSym repr) => Reader DrasilState (GSProgram repr)
+genProgram :: (ProgramSym r) => Reader DrasilState (GSProgram r)
 genProgram = do
   g <- ask
   ms <- chooseModules $ modular g
   let n = pName $ csi $ codeSpec g
   return $ prog n ms
 
-chooseModules :: (ProgramSym repr) => Modularity -> 
-  Reader DrasilState [SFile repr]
+chooseModules :: (ProgramSym r) => Modularity -> 
+  Reader DrasilState [SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules (Modular _) = genModules
 
-genUnmodular :: (ProgramSym repr) => Reader DrasilState (SFile repr)
+genUnmodular :: (ProgramSym r) => Reader DrasilState (SFile r)
 genUnmodular = do
   g <- ask
   let s = csi $ codeSpec g
@@ -120,7 +120,7 @@ genUnmodular = do
     ([genInputClass Auxiliary, genConstClass Auxiliary] 
     ++ map (fmap Just) (concatMap genModClasses $ mods s))
           
-genModules :: (ProgramSym repr) => Reader DrasilState [SFile repr]
+genModules :: (ProgramSym r) => Reader DrasilState [SFile r]
 genModules = do
   g <- ask
   let s = csi $ codeSpec g

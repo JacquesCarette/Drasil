@@ -15,21 +15,21 @@ import Data.Maybe (maybeToList)
 import Control.Applicative ((<$>))
 import Control.Monad.Reader (Reader, ask)
 
-maybeLog :: (ProgramSym repr) => SVariable repr ->
-  Reader DrasilState [MSStatement repr]
+maybeLog :: (ProgramSym r) => SVariable r ->
+  Reader DrasilState [MSStatement r]
 maybeLog v = do
   g <- ask
   l <- chooseLogging (logKind g) v
   return $ maybeToList l
 
-chooseLogging :: (ProgramSym repr) => Logging -> (SVariable repr -> 
-  Reader DrasilState (Maybe (MSStatement repr)))
+chooseLogging :: (ProgramSym r) => Logging -> (SVariable r -> 
+  Reader DrasilState (Maybe (MSStatement r)))
 chooseLogging LogVar v = Just <$> loggedVar v
 chooseLogging LogAll v = Just <$> loggedVar v
 chooseLogging _      _ = return Nothing
 
-loggedVar :: (ProgramSym repr) => SVariable repr -> 
-  Reader DrasilState (MSStatement repr)
+loggedVar :: (ProgramSym r) => SVariable r -> 
+  Reader DrasilState (MSStatement r)
 loggedVar v = do
     g <- ask
     return $ multi [
@@ -40,8 +40,8 @@ loggedVar v = do
       printFileStrLn valLogFile (" in module " ++ currentModule g),
       closeFile valLogFile ]
 
-logBody :: (ProgramSym repr) => Label -> [SVariable repr] -> [MSBlock repr] -> 
-  Reader DrasilState (MSBody repr)
+logBody :: (ProgramSym r) => Label -> [SVariable r] -> [MSBlock r] -> 
+  Reader DrasilState (MSBody r)
 logBody n vars b = do
   g <- ask
   let loggedBody LogFunc = loggedMethod (logName g) n vars b
@@ -49,8 +49,8 @@ logBody n vars b = do
       loggedBody _       = b
   return $ body $ loggedBody $ logKind g
 
-loggedMethod :: (ProgramSym repr) => Label -> Label -> [SVariable repr] -> 
-  [MSBlock repr] -> [MSBlock repr]
+loggedMethod :: (ProgramSym r) => Label -> Label -> [SVariable r] -> 
+  [MSBlock r] -> [MSBlock r]
 loggedMethod lName n vars b = block [
       varDec varLogFile,
       openFileA varLogFile (litString lName),
@@ -71,8 +71,8 @@ loggedMethod lName n vars b = block [
       printFile valLogFile (valueOf v), 
       printFileStrLn valLogFile ", "] ++ printInputs vs
 
-varLogFile :: (ProgramSym repr) => SVariable repr
+varLogFile :: (ProgramSym r) => SVariable r
 varLogFile = var "outfile" outfile
 
-valLogFile :: (ProgramSym repr) => SValue repr
+valLogFile :: (ProgramSym r) => SValue r
 valLogFile = valueOf varLogFile

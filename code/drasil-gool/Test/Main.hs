@@ -38,7 +38,7 @@ genCode :: [ProgData] -> IO()
 genCode files = createCodeFiles (concatMap (\p -> replicate (length $ progMods 
   p) (progName p)) files) $ makeCode (concatMap progMods files)
 
-classes :: (ProgramSym repr) => (repr (Program repr) -> ProgData) -> [ProgData]
+classes :: (ProgramSym r) => (r (Program r) -> ProgData) -> [ProgData]
 classes unRepr = zipWith (\p gs -> unRepr (evalState p gs)) [helloWorld, patternTest, fileTests, simpleODE] 
   (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, simpleODE])
 

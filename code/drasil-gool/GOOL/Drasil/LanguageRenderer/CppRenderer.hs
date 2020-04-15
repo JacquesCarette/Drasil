@@ -21,7 +21,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
-  ImportSym(..), ImportElim(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
+  ImportSym(..), ImportElim(..), PermElim(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
@@ -150,7 +150,7 @@ instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
   static = pair static static
   dynamic = pair dynamic dynamic
 
-instance (Pair p) => InternalPerm (p CppSrcCode CppHdrCode) where
+instance (Pair p) => PermElim (p CppSrcCode CppHdrCode) where
   permDoc p = permDoc $ pfst p
   binding p = binding $ pfst p
 
@@ -1083,7 +1083,7 @@ instance PermanenceSym CppSrcCode where
   static = toCode $ bd Static staticDocD
   dynamic = toCode $ bd Dynamic dynamicDocD
   
-instance InternalPerm CppSrcCode where
+instance PermElim CppSrcCode where
   permDoc = bindDoc . unCPPSC
   binding = bind . unCPPSC
 
@@ -1718,7 +1718,7 @@ instance PermanenceSym CppHdrCode where
   static = toCode $ bd Static staticDocD
   dynamic = toCode $ bd Dynamic dynamicDocD
 
-instance InternalPerm CppHdrCode where
+instance PermElim CppHdrCode where
   permDoc = bindDoc . unCPPHC
   binding = bind . unCPPHC
 

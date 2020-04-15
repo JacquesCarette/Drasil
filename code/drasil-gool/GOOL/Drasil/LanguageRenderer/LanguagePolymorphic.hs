@@ -67,7 +67,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, InternalFile(commentedMod),
   RenderSym, InternalBody(bodyDoc, docBody), InternalBlock(docBlock, blockDoc), 
-  ImportSym(..), ImportElim(..), InternalPerm(..), InternalType(..), UnaryOpSym(UnaryOp), 
+  ImportSym(..), ImportElim(..), PermElim(..), InternalType(..), UnaryOpSym(UnaryOp), 
   BinaryOpSym(BinaryOp), InternalOp(..), 
   InternalVariable(variableBind, variableDoc, varFromData), 
   InternalValue(inputFunc, cast, valuePrec, valueDoc, valFromData),

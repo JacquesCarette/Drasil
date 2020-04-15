@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 
 module GOOL.Drasil.RendererClasses (
-  RenderSym, InternalFile(..), ImportSym(..), ImportElim(..), InternalPerm(..), 
+  RenderSym, InternalFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
   InternalBody(..), InternalBlock(..), InternalType(..), VSUnOp, UnaryOpSym(..),
   VSBinOp, BinaryOpSym(..), InternalOp(..), InternalVariable(..), InternalValue(..),
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), InternalScope(..), 
@@ -25,7 +25,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 class (FileSym r, InternalBlock r, InternalBody r, InternalClass r, 
   InternalFile r, InternalGetSet r, InternalListFunc r, InternalIterator r, InternalFunction r, InternalMethod r, 
-  InternalMod r, InternalOp r, InternalParam r, InternalPerm r, 
+  InternalMod r, InternalOp r, InternalParam r, PermElim r, 
   InternalScope r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, InternalStateVar r, 
   InternalType r, InternalValue r, InternalVariable r,
   ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r) => RenderSym r
@@ -49,7 +49,7 @@ class ImportSym r where
 class ImportElim r where
   importDoc :: r (Import r) -> Doc
 
-class InternalPerm r where
+class PermElim r where
   permDoc :: r (Permanence r) -> Doc
   binding :: r (Permanence r) -> Binding
 

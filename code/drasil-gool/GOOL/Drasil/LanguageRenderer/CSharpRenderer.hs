@@ -23,7 +23,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
-  ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
+  ImportSym(..), ImportElim(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
@@ -131,6 +131,7 @@ instance ImportSym CSharpCode where
   langImport n = toCode $ csImport n
   modImport = langImport
 
+instance ImportElim CSharpCode where
   importDoc = unCSC
 
 instance PermanenceSym CSharpCode where

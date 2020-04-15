@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 
 module GOOL.Drasil.RendererClasses (
-  RenderSym, InternalFile(..), ImportSym(..), InternalPerm(..), 
+  RenderSym, InternalFile(..), ImportSym(..), ImportElim(..), InternalPerm(..), 
   InternalBody(..), InternalBlock(..), InternalType(..), VSUnOp, UnaryOpSym(..),
   VSBinOp, BinaryOpSym(..), InternalOp(..), InternalVariable(..), InternalValue(..),
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), InternalScope(..), 
@@ -28,10 +28,13 @@ class (FileSym r, InternalBlock r, InternalBody r, InternalClass r,
   InternalMod r, InternalOp r, InternalParam r, InternalPerm r, 
   InternalScope r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, InternalStateVar r, 
   InternalType r, InternalValue r, InternalVariable r,
-  ImportSym r, UnaryOpSym r, BinaryOpSym r) => RenderSym r
+  ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r) => RenderSym r
 
 class (BlockCommentSym r) => InternalFile r where
-  top :: r (Module r) -> r (Block r)
+  -- top and bottom are only used for pre-processor guards for C++ header 
+  -- files. FIXME: Remove them (generation of pre-processor guards can be 
+  -- handled by fileDoc instead)
+  top :: r (Module r) -> r (Block r) 
   bottom :: r (Block r)
 
   commentedMod :: FS (r (BlockComment r)) -> SFile r -> SFile r
@@ -43,6 +46,7 @@ class ImportSym r where
   langImport :: Label -> r (Import r)
   modImport :: Label -> r (Import r)
 
+class ImportElim r where
   importDoc :: r (Import r) -> Doc
 
 class InternalPerm r where

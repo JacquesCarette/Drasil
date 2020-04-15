@@ -21,7 +21,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
-  ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
+  ImportSym(..), ImportElim(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
@@ -142,6 +142,7 @@ instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
   langImport n = pair (langImport n) (langImport n)
   modImport n = pair (modImport n) (modImport n)
 
+instance (Pair p) => ImportElim (p CppSrcCode CppHdrCode) where
   importDoc i = importDoc $ pfst i
 
 instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
@@ -1074,6 +1075,7 @@ instance ImportSym CppSrcCode where
   modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt 
     n)
 
+instance ImportElim CppSrcCode where
   importDoc = unCPPSC
 
 instance PermanenceSym CppSrcCode where
@@ -1708,6 +1710,7 @@ instance ImportSym CppHdrCode where
   modImport n = toCode $ inc <+> doubleQuotedText (addExt cppHdrExt 
     n)
 
+instance ImportElim CppHdrCode where
   importDoc = unCPPHC
 
 instance PermanenceSym CppHdrCode where

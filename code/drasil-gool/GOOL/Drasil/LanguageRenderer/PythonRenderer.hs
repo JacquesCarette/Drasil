@@ -23,7 +23,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), 
   ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (VSUnOp, RenderSym, InternalFile(..),
-  ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
+  ImportSym(..), ImportElim(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
@@ -124,6 +124,7 @@ instance ImportSym PythonCode where
   langImport n = toCode $ text $ "import " ++ n
   modImport = langImport
 
+instance ImportElim PythonCode where
   importDoc = unPC
 
 instance PermanenceSym PythonCode where

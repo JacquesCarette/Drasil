@@ -679,9 +679,11 @@ instance ModuleSym CSharpCode where
   buildModule n = G.buildModule' n langImport
   
 instance InternalMod CSharpCode where
-  moduleDoc = modDoc . unCSC
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
+  
+instance ModuleElim CSharpCode where
+  moduleDoc = modDoc . unCSC
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
@@ -689,6 +691,7 @@ instance BlockCommentSym CSharpCode where
   docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
     blockCmtEnd)
 
+instance BlockCommentElim CSharpCode where
   blockCommentDoc = unCSC
 
 addSystemImport :: VS a -> VS a

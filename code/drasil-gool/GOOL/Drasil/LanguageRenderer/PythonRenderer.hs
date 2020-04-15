@@ -708,9 +708,11 @@ instance ModuleSym PythonCode where
     getLangImports getLibImports getModuleImports) getMainDoc
 
 instance InternalMod PythonCode where
-  moduleDoc = modDoc . unPC
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
+  
+instance ModuleElim PythonCode where
+  moduleDoc = modDoc . unPC
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
@@ -718,6 +720,7 @@ instance BlockCommentSym PythonCode where
   docComment = onStateValue (\lns -> toCode $ pyDocComment lns (text "##") 
     pyCommentStart)
 
+instance BlockCommentSym PythonCode where
   blockCommentDoc = unPC
 
 -- convenience

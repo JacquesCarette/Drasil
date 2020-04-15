@@ -844,16 +844,19 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
     (map (zoom lensFStoMS) ms) . map (zoom lensFStoCS)
   
 instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
-  moduleDoc m = moduleDoc $ pfst m
   modFromData n d = on2StateValues pair (modFromData n d) (modFromData n d)
   updateModuleDoc f m = pair 
     (updateModuleDoc f $ pfst m) (updateModuleDoc f $ psnd m)
+    
+instance (Pair p) => ModuleElim (p CppSrcCode CppHdrCode) where
+  moduleDoc m = moduleDoc $ pfst m
 
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   type BlockComment (p CppSrcCode CppHdrCode) = Doc
   blockComment lns = pair (blockComment lns) (blockComment lns)
   docComment lns = on2StateValues pair (docComment lns) (docComment lns)
 
+instance (Pair p) => BlockCommentElim (p CppSrcCode CppHdrCode) where
   blockCommentDoc c = blockCommentDoc $ pfst c
 
 -- Helpers for pair instance
@@ -1710,9 +1713,11 @@ instance ModuleSym CppSrcCode where
           li = langImport
 
 instance InternalMod CppSrcCode where
-  moduleDoc = modDoc . unCPPSC
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
+  
+instance ModuleElim CppSrcCode where
+  moduleDoc = modDoc . unCPPSC
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
@@ -1720,6 +1725,7 @@ instance BlockCommentSym CppSrcCode where
   docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
     blockCmtEnd)
 
+instance BlockCommentSym CppSrcCode where
   blockCommentDoc = unCPPSC
 
 -----------------
@@ -2305,9 +2311,11 @@ instance ModuleSym CppHdrCode where
           li = langImport
 
 instance InternalMod CppHdrCode where
-  moduleDoc = modDoc . unCPPHC
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
+  
+instance ModuleElim CppHdrCode where
+  moduleDoc = modDoc . unCPPHC
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc
@@ -2315,6 +2323,7 @@ instance BlockCommentSym CppHdrCode where
   docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
     blockCmtEnd)
 
+instance BlockCommentElim CppHdrCode where
   blockCommentDoc = unCPPHC
 
 -- helpers

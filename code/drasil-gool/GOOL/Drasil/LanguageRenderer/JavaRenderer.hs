@@ -717,9 +717,11 @@ instance ModuleSym JavaCode where
   buildModule n = G.buildModule' n langImport
   
 instance InternalMod JavaCode where
-  moduleDoc = modDoc . unJC
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
+  
+instance ModuleElim JavaCode where
+  moduleDoc = modDoc . unJC
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc
@@ -727,6 +729,7 @@ instance BlockCommentSym JavaCode where
   docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
     blockCmtEnd)
 
+instance BlockCommentElim JavaCode where
   blockCommentDoc = unJC
 
 odeImport :: String

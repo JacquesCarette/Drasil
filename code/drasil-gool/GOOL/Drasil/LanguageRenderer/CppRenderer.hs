@@ -14,19 +14,25 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
   SValue, MSStatement, MSParameter, SMethod, NamedArgs, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlock(..), VariableSym(..), 
+  TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), VariableElim(..), 
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
-  ImportSym(..), ImportElim(..), PermElim(..), InternalBody(..), InternalBlock(..), 
-  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(..), 
-  InternalVarElim(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
-  InternalParam(..), InternalMethod(..), InternalStateVar(..), ParentSpec,
-  InternalClass(..), InternalMod(..), BlockCommentSym(..))
+import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
+  ImportElim(..), PermElim(..), InternalBody(..), BodyElim(..), 
+  InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(..), OpIntro(..), 
+  InternalVariable(..), InternalVarElim(..), InternalValue(..), ValueElim(..), 
+  InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
+  InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), 
+  InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), 
+  StatementElim(..), InternalScope(..), ScopeElim(..), MethodTypeSym(..), 
+  InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..), 
+  InternalStateVar(..), StateVarElim(..), ParentSpec, InternalClass(..), 
+  ClassElim(..), InternalMod(..), ModuleElim(..), BlockCommentSym(..), 
+  BlockCommentElim(..))
 import GOOL.Drasil.LanguageRenderer (addExt, multiStateDocD, 
   bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, mkSt, mkStNoEnd, 
   breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
@@ -202,7 +208,6 @@ instance (Pair p) => TypeElim (p CppSrcCode CppHdrCode) where
   getTypeString s = getTypeString $ pfst s
   
 instance (Pair p) => InternalType (p CppSrcCode CppHdrCode) where
-  getTypeDoc s = getTypeDoc $ pfst s
   typeFromData t s d = pair (typeFromData t s d) (typeFromData t s d)
 
 instance (Pair p) => InternalTypeElim (p CppSrcCode CppHdrCode) where
@@ -1725,7 +1730,7 @@ instance BlockCommentSym CppSrcCode where
   docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
     blockCmtEnd)
 
-instance BlockCommentSym CppSrcCode where
+instance BlockCommentElim CppSrcCode where
   blockCommentDoc = unCPPSC
 
 -----------------

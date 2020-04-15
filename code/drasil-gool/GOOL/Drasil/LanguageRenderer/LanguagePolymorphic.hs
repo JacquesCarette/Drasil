@@ -43,8 +43,8 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
   CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall, FileSym(RenderFile), BodySym(Body), 
   bodyStatements, oneLiner, BlockSym(Block), PermanenceSym(..), 
-  TypeSym(Type, infile, outfile, iterator, getType, getTypeString), 
-  VariableSym(Variable, variableName, variableType), listOf,
+  TypeSym(Type, infile, outfile, iterator), TypeElim(getType, getTypeString), 
+  VariableSym(Variable), VariableElim(variableName, variableType), listOf,
   ValueSym(Value, valueType), 
   NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), 
   Comparison(..), funcApp, newObj, extNewObj, ($.), at, StatementSym(multi), 
@@ -66,21 +66,22 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   ControlStatement(returnState, ifCond, for, forRange, switch), 
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, InternalFile(commentedMod),
-  RenderSym, InternalBody(bodyDoc, docBody), InternalBlock(docBlock, blockDoc), 
-  ImportSym(..), ImportElim(..), PermElim(..), InternalType(..), UnaryOpSym(UnaryOp), 
-  BinaryOpSym(BinaryOp), OpElim(..), 
-  InternalVarElim(variableBind, variableDoc, varFromData), 
-  InternalValue(inputFunc, cast, valuePrec, valueDoc, valFromData),
+  RenderSym, InternalBody(docBody), BodyElim(..), InternalBlock(docBlock), BlockElim(..), 
+  ImportSym(..), ImportElim(..), PermElim(..), InternalType(..), InternalTypeElim(..), UnaryOpSym(UnaryOp), 
+  BinaryOpSym(BinaryOp), OpElim(..), OpIntro(..), InternalVariable(varFromData),
+  InternalVarElim(variableBind, variableDoc), 
+  InternalValue(inputFunc, cast, valFromData), ValueElim(valuePrec, valueDoc),
   InternalIterator(iterBeginFunc, iterEndFunc),
-  InternalFunction(functionDoc, functionType, funcFromData),
-  InternalStatement(statementDoc, statementTerm, stateFromData), 
-  InternalScope(..), MethodTypeSym(MethodType, mType), 
+  InternalFunction(funcFromData), FunctionElim(functionDoc, functionType),
+  InternalStatement(stateFromData), StatementElim(statementDoc, statementTerm),
+  InternalScope(..), ScopeElim(..), MethodTypeSym(MethodType, mType), 
   InternalParam(paramFromData), 
-  InternalMethod(intMethod, commentedFunc, methodDoc), InternalStateVar(..), 
-  ParentSpec, InternalClass(inherit, implements, classDoc, classFromData), 
-  InternalMod(moduleDoc, updateModuleDoc), BlockCommentSym(..))
+  InternalMethod(intMethod, commentedFunc), MethodElim(methodDoc), 
+  InternalStateVar(..), StateVarElim(..), ParentSpec, 
+  InternalClass(inherit, implements, classFromData), ClassElim(classDoc),
+  InternalMod(updateModuleDoc), ModuleElim(moduleDoc), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as S (InternalFile(fileFromData), 
-  InternalValue(call), InternalGetSet(getFunc, setFunc),
+  InternalBody(multiBody), InternalValue(call), InternalGetSet(getFunc, setFunc),
   InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc, listAccessFunc, 
     listSetFunc),
   InternalStatement(state, loopState, emptyState), MethodTypeSym(construct), 
@@ -976,7 +977,7 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> S.method (setterName $ variableName
 constructor :: (RenderSym r) => Label -> [MSParameter r] -> 
   Initializers r -> MSBody r -> SMethod r
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName 
-  public dynamic (S.construct c) ps (multiBody [ib, b]))
+  public dynamic (S.construct c) ps (S.multiBody [ib, b]))
   where ib = bodyStatements (zipWith (\vr vl -> objVarSelf vr &= vl) 
           (map fst is) (map snd is))
 

@@ -2,12 +2,17 @@
 
 module GOOL.Drasil.RendererClasses (
   RenderSym, InternalFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
-  InternalBody(..), BodyElim(..), InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..),
-  VSBinOp, BinaryOpSym(..), OpElim(..), OpIntro(..), InternalVarElim(..), InternalValue(..), ValueElim(..),
-  InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), StatementElim(..), InternalScope(..), ScopeElim(..),
-  MethodTypeSym(..), InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..),
-  InternalStateVar(..), StateVarElim(..), ParentSpec, InternalClass(..), ClassElim(..), InternalMod(..), ModuleElim(..),
-  BlockCommentSym(..), BlockCommentElim(..)
+  InternalBody(..), BodyElim(..), InternalBlock(..), BlockElim(..), 
+  InternalType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, 
+  BinaryOpSym(..), OpElim(..), OpIntro(..), InternalVariable(..), 
+  InternalVarElim(..), InternalValue(..), ValueElim(..), InternalGetSet(..), 
+  InternalListFunc(..), InternalIterator(..), InternalFunction(..), 
+  FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
+  InternalControlStmt(..), InternalStatement(..), StatementElim(..), 
+  InternalScope(..), ScopeElim(..), MethodTypeSym(..), InternalParam(..), 
+  ParamElim(..), InternalMethod(..), MethodElim(..), InternalStateVar(..), 
+  StateVarElim(..), ParentSpec, InternalClass(..), ClassElim(..), 
+  InternalMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..)
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
@@ -23,12 +28,16 @@ import GOOL.Drasil.State (FS, CS, MS, VS)
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (FileSym r, InternalBlock r, BlockElim r, InternalBody r, BodyElim r, InternalClass r, ClassElim r, 
-  InternalFile r, InternalGetSet r, InternalListFunc r, InternalIterator r, InternalFunction r, FunctionElim r, InternalMethod r, MethodElim r,
-  InternalMod r, ModuleElim r, OpElim r, OpIntro r, InternalParam r, ParamElim r, PermElim r, 
-  InternalScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, StatementElim r, InternalStateVar r, StateVarElim r, 
-  InternalType r, InternalTypeElim r, InternalValue r, ValueElim r, InternaVariable r, InternalVarElim r,
-  ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r, BlockCommentElim r) => RenderSym r
+class (FileSym r, InternalBlock r, BlockElim r, InternalBody r, BodyElim r, 
+  InternalClass r, ClassElim r, InternalFile r, InternalGetSet r, 
+  InternalListFunc r, InternalIterator r, InternalFunction r, FunctionElim r, 
+  InternalMethod r, MethodElim r, InternalMod r, ModuleElim r, OpElim r, 
+  OpIntro r, InternalParam r, ParamElim r, PermElim r, InternalScope r, 
+  ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, 
+  InternalStatement r, StatementElim r, InternalStateVar r, StateVarElim r, 
+  InternalType r, InternalTypeElim r, InternalValue r, ValueElim r, 
+  InternalVariable r, InternalVarElim r, ImportSym r, ImportElim r, 
+  UnaryOpSym r, BinaryOpSym r, BlockCommentElim r) => RenderSym r
 
 class (BlockCommentSym r) => InternalFile r where
   -- top and bottom are only used for pre-processor guards for C++ header 

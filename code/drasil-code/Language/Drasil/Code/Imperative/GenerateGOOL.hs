@@ -11,7 +11,7 @@ import Language.Drasil.Mod (Name)
   
 import GOOL.Drasil (Label, SFile, VSType, SVariable, SValue, MSStatement, 
   MSParameter, SMethod, CSStateVar, SClass, NamedArgs, ProgramSym, FileSym(..), 
-  TypeSym(..), VariableSym(..), ValueExpression(..), FuncAppStatement(..), 
+  TypeElim(..), VariableElim(..), ValueExpression(..), FuncAppStatement(..), 
   ParameterSym(..), ClassSym(..), ModuleSym(..), CodeType(..), GOOLState, 
   lensMStoVS)
 

@@ -30,7 +30,7 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs, Initializers, ProgramSym, 
   PermanenceSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
-  ($->), ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..), Comparison(..), 
+  VariableElim(..), ($->), ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..), Comparison(..), 
   ValueExpression(..), objMethodCallMixedArgs, List(..), StatementSym(..),
   AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), ControlStatement(..), ifNoElse, ScopeSym(..), 

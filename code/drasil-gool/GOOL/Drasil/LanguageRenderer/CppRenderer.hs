@@ -23,7 +23,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), ImportElim(..), PermElim(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(..), 
-  InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
+  InternalVarElim(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), ParentSpec,
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -332,12 +332,15 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   arrayElem i = pair1 (arrayElem i) (arrayElem i)
   iterVar l = pair1 (iterVar l) (iterVar l)
 
+instance (Pair p) => VariableElim (p CppSrcCode CppHdrCode) where
   variableName v = variableName $ pfst v
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
 
-instance (Pair p) => InternalVariable (p CppSrcCode CppHdrCode) where
+instance (Pair p) => InternalVarElim (p CppSrcCode CppHdrCode) where
   variableBind v = variableBind $ pfst v
   variableDoc v = variableDoc $ pfst v
+
+instance (Pair p) => InternalVariable (p CppSrcCode CppHdrCode) where
   varFromData b n t d = pair (varFromData b n (pfst t) d) 
     (varFromData b n (psnd t) d)
 
@@ -1240,12 +1243,15 @@ instance VariableSym CppSrcCode where
   arrayElem i = G.arrayElem (litInt i)
   iterVar l t = mkStateVar l (iterator t) (text $ "(*" ++ l ++ ")")
 
+instance VariableElim CppSrcCode where
   variableName = varName . unCPPSC
   variableType = onCodeValue varType
 
-instance InternalVariable CppSrcCode where
+instance InternalVarElim CppSrcCode where
   variableBind = varBind . unCPPSC
   variableDoc = varDoc . unCPPSC
+
+instance InternalVariable CppSrcCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppSrcCode where
@@ -1865,12 +1871,15 @@ instance VariableSym CppHdrCode where
   arrayElem _ _ = mkStateVar "" void empty
   iterVar _ _ = mkStateVar "" void empty
   
+instance VariableElim CppHdrCode where
   variableName = varName . unCPPHC
   variableType = onCodeValue varType
 
-instance InternalVariable CppHdrCode where
+instance InternalVarElim CppHdrCode where
   variableBind = varBind . unCPPHC
   variableDoc = varDoc . unCPPHC
+
+instance InternalVariable CppHdrCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppHdrCode where

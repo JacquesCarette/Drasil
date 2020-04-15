@@ -90,6 +90,7 @@ instance TypeSym CodeInfo where
   iterator      _   = noInfoType
   void              = noInfoType
 
+instance TypeElim CodeInfo where
   getType _     = Void
   getTypeString = unCI
 
@@ -111,6 +112,7 @@ instance VariableSym CodeInfo where
   arrayElem   _ _   = noInfo
   iterVar     _ _   = noInfo
   
+instance VariableElim CodeInfo where
   variableName _ = ""
   variableType _ = toCode ""
 

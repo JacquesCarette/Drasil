@@ -7,7 +7,7 @@ module GOOL.Drasil.ClassInterface (
   NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
   -- Typeclasses
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), ($->), listOf, 
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), VariableElim(..), ($->), listOf, 
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
   extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
@@ -46,7 +46,7 @@ class (ModuleSym r, ControlBlock r, AssignStatement r,
   DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r,
   CommentStatement r, ControlStatement r, InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, 
   ValueExpression r, InternalValueExp r, GetSet r, List r, 
-  Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r) => 
+  Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => 
   FileSym r where 
   type RenderFile r
   fileDoc :: FSModule r -> SFile r
@@ -125,6 +125,7 @@ class (TypeSym r) => VariableSym r where
   -- Use for iterator variables, i.e. in a forEach loop.
   iterVar      :: Label -> VSType r -> SVariable r
   
+class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
   variableType :: r (Variable r) -> r (Type r)
 

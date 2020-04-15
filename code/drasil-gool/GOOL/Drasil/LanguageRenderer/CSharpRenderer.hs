@@ -448,10 +448,11 @@ instance InternalIterator CSharpCode where
   iterEndFunc _ = error $ G.iterEndError csName
     
 instance InternalFunction CSharpCode where
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
+  
+instance FunctionElim CSharpCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unCSC
-
-  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalAssignStmt CSharpCode where
   multiAssign _ _ = error $ G.multiAssignError csName

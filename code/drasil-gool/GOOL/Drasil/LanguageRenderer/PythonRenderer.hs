@@ -446,10 +446,11 @@ instance InternalIterator PythonCode where
   iterEndFunc _ = error $ G.iterEndError pyName
 
 instance InternalFunction PythonCode where
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
+  
+instance FunctionElim PythonCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unPC
-
-  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalAssignStmt PythonCode where
   multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 

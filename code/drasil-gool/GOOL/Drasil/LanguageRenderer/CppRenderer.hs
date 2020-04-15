@@ -519,10 +519,11 @@ instance (Pair p) => InternalIterator (p CppSrcCode CppHdrCode) where
   iterEndFunc = pair1 iterEndFunc iterEndFunc
 
 instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where  
+  funcFromData d = pair1 (funcFromData d) (funcFromData d)
+  
+instance (Pair p) => FunctionElim (p CppSrcCode CppHdrCode) where  
   functionType f = pair (functionType $ pfst f) (functionType $ psnd f)
   functionDoc f = functionDoc $ pfst f
-  
-  funcFromData d = pair1 (funcFromData d) (funcFromData d)
 
 instance (Pair p) => InternalAssignStmt (p CppSrcCode CppHdrCode) where
   multiAssign vrs vls = pair2Lists multiAssign multiAssign 
@@ -1402,10 +1403,11 @@ instance InternalIterator CppSrcCode where
   iterEndFunc t = func "end" (iterator t) []
 
 instance InternalFunction CppSrcCode where
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
+  
+instance FunctionElim CppSrcCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unCPPSC
-  
-  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalAssignStmt CppSrcCode where
   multiAssign _ _ = error $ G.multiAssignError cppName
@@ -2028,10 +2030,11 @@ instance InternalIterator CppHdrCode where
   iterEndFunc _ = funcFromData empty void
   
 instance InternalFunction CppHdrCode where
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
+  
+instance FunctionElim CppHdrCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unCPPHC
-  
-  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalAssignStmt CppHdrCode where
   multiAssign _ _ = emptyState

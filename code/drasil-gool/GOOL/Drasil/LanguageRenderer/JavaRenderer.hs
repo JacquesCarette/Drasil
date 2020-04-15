@@ -475,10 +475,11 @@ instance InternalIterator JavaCode where
   iterEndFunc _ = error $ G.iterEndError jName
 
 instance InternalFunction JavaCode where
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
+  
+instance FunctionElim JavaCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unJC
-
-  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalAssignStmt JavaCode where
   multiAssign _ _ = error $ G.multiAssignError jName

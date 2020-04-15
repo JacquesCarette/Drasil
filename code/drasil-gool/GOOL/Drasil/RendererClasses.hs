@@ -3,7 +3,7 @@
 module GOOL.Drasil.RendererClasses (
   RenderSym, InternalFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
   InternalBody(..), BodyElim(..), InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..),
-  VSBinOp, BinaryOpSym(..), InternalOp(..), InternalVariable(..), InternalValue(..),
+  VSBinOp, BinaryOpSym(..), OpElim(..), OpIntro(..), InternalVariable(..), InternalValue(..),
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), InternalScope(..), 
   MethodTypeSym(..), InternalParam(..), InternalMethod(..), 
   InternalStateVar(..), ParentSpec, InternalClass(..), InternalMod(..), 
@@ -25,7 +25,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 class (FileSym r, InternalBlock r, BlockElim r, InternalBody r, BodyElim r, InternalClass r, 
   InternalFile r, InternalGetSet r, InternalListFunc r, InternalIterator r, InternalFunction r, InternalMethod r, 
-  InternalMod r, InternalOp r, InternalParam r, PermElim r, 
+  InternalMod r, OpElim r, OpIntro r, InternalParam r, PermElim r, 
   InternalScope r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, InternalStateVar r, 
   InternalType r, InternalTypeElim r, InternalValue r, InternalVariable r,
   ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r) => RenderSym r
@@ -112,12 +112,13 @@ class BinaryOpSym r where
   andOp          :: VSBinOp r
   orOp           :: VSBinOp r
 
-class InternalOp r where
+class OpElim r where
   uOpDoc :: r (UnaryOp r) -> Doc
   bOpDoc :: r (BinaryOp r) -> Doc
   uOpPrec :: r (UnaryOp r) -> Int
   bOpPrec :: r (BinaryOp r) -> Int
 
+class OpIntro r where
   uOpFromData :: Int -> Doc -> VSUnOp r
   bOpFromData :: Int -> Doc -> VSBinOp r
 

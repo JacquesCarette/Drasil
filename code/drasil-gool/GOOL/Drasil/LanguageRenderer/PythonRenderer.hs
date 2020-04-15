@@ -24,7 +24,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (VSUnOp, RenderSym, InternalFile(..),
   ImportSym(..), ImportElim(..), PermElim(..), InternalBody(..), InternalBlock(..), 
-  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(..), 
   InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
@@ -255,12 +255,13 @@ instance BinaryOpSym PythonCode where
   andOp = andPrec "and"
   orOp = orPrec "or"
 
-instance InternalOp PythonCode where
+instance OpElim PythonCode where
   uOpDoc = opDoc . unPC
   bOpDoc = opDoc . unPC
   uOpPrec = opPrec . unPC
   bOpPrec = opPrec . unPC
   
+instance OpIntro PythonCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 

@@ -25,7 +25,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), ImportElim(..), PermElim(..), InternalBody(..), InternalBlock(..), 
-  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(..), 
   InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
@@ -267,12 +267,13 @@ instance BinaryOpSym JavaCode where
   andOp = G.andOp
   orOp = G.orOp
 
-instance InternalOp JavaCode where
+instance OpElim JavaCode where
   uOpDoc = opDoc . unJC
   bOpDoc = opDoc . unJC
   uOpPrec = opPrec . unJC
   bOpPrec = opPrec . unJC
   
+instance OpIntro JavaCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 

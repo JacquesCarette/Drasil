@@ -24,7 +24,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), ImportElim(..), PermElim(..), InternalBody(..), InternalBlock(..), 
-  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(..), 
   InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
@@ -266,12 +266,13 @@ instance BinaryOpSym CSharpCode where
   andOp = G.andOp
   orOp = G.orOp
 
-instance InternalOp CSharpCode where
+instance OpElim CSharpCode where
   uOpDoc = opDoc . unCSC
   bOpDoc = opDoc . unCSC
   uOpPrec = opPrec . unCSC
   bOpPrec = opPrec . unCSC
   
+instance OpIntro CSharpCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 

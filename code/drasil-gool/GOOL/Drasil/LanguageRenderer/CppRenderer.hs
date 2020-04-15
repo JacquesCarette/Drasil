@@ -22,7 +22,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), ImportElim(..), PermElim(..), InternalBody(..), InternalBlock(..), 
-  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
+  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), OpElim(..), 
   InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), ParentSpec,
@@ -306,12 +306,13 @@ instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
   andOp = on2StateValues pair andOp andOp
   orOp = on2StateValues pair orOp orOp
 
-instance (Pair p) => InternalOp (p CppSrcCode CppHdrCode) where
+instance (Pair p) => OpElim (p CppSrcCode CppHdrCode) where
   uOpDoc o = uOpDoc $ pfst o
   bOpDoc o = bOpDoc $ pfst o
   uOpPrec o = uOpPrec $ pfst o
   bOpPrec o = bOpPrec $ pfst o
   
+instance (Pair p) => OpIntro (p CppSrcCode CppHdrCode) where
   uOpFromData p d = on2StateValues pair (uOpFromData p d) (uOpFromData p d)
   bOpFromData p d = on2StateValues pair (bOpFromData p d) (bOpFromData p d)
 
@@ -1206,12 +1207,13 @@ instance BinaryOpSym CppSrcCode where
   andOp = G.andOp
   orOp = G.orOp
 
-instance InternalOp CppSrcCode where
+instance OpElim CppSrcCode where
   uOpDoc = opDoc . unCPPSC
   bOpDoc = opDoc . unCPPSC
   uOpPrec = opPrec . unCPPSC
   bOpPrec = opPrec . unCPPSC
   
+instance OpIntro CppSrcCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 
@@ -1835,12 +1837,13 @@ instance BinaryOpSym CppHdrCode where
   andOp = bOpFromData 0 empty
   orOp = bOpFromData 0 empty
 
-instance InternalOp CppHdrCode where
+instance OpElim CppHdrCode where
   uOpDoc = opDoc . unCPPHC
   bOpDoc = opDoc . unCPPHC
   uOpPrec = opPrec . unCPPHC
   bOpPrec = opPrec . unCPPHC
   
+instance OpIntro CppHdrCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 

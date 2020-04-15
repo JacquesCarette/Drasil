@@ -197,12 +197,16 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   iterator = pair1 iterator iterator
   void = on2StateValues pair void void
 
+instance (Pair p) => TypeElim (p CppSrcCode CppHdrCode) where
   getType s = getType $ pfst s
   getTypeString s = getTypeString $ pfst s
   
 instance (Pair p) => InternalType (p CppSrcCode CppHdrCode) where
   getTypeDoc s = getTypeDoc $ pfst s
   typeFromData t s d = pair (typeFromData t s d) (typeFromData t s d)
+
+instance (Pair p) => InternalTypeElim (p CppSrcCode CppHdrCode) where
+  getTypeDoc s = getTypeDoc $ pfst s
 
 instance (Pair p) => ControlBlock (p CppSrcCode CppHdrCode) where
   solveODE info opts = do
@@ -1137,12 +1141,15 @@ instance TypeSym CppSrcCode where
   iterator t = modify (addLangImportVS "iterator") >> (cppIterType . listType) t
   void = G.void
 
+instance TypeElim CppSrcCode where
   getType = cType . unCPPSC
   getTypeString = typeString . unCPPSC
   
 instance InternalType CppSrcCode where
-  getTypeDoc = typeDoc . unCPPSC
   typeFromData t s d = toCode $ td t s d
+
+instance InternalTypeElim CppSrcCode where
+  getTypeDoc = typeDoc . unCPPSC
 
 instance ControlBlock CppSrcCode where
   solveODE info opts = let (fl, s) = cppODEFile info
@@ -1778,12 +1785,15 @@ instance TypeSym CppHdrCode where
     (cppIterType . listType) t
   void = G.void
 
+instance TypeElim CppHdrCode where
   getType = cType . unCPPHC
   getTypeString = typeString . unCPPHC
   
 instance InternalType CppHdrCode where
-  getTypeDoc = typeDoc . unCPPHC
   typeFromData t s d = toCode $ td t s d
+
+instance InternalTypeElim CppHdrCode where
+  getTypeDoc = typeDoc . unCPPHC
 
 instance ControlBlock CppHdrCode where
   solveODE info _ = let (fl, s) = cppODEFile info

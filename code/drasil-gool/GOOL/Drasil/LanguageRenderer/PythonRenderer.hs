@@ -180,12 +180,15 @@ instance TypeSym PythonCode where
   iterator t = t
   void = toState $ typeFromData Void "NoneType" (text "NoneType")
 
+instance TypeElim PythonCode where
   getType = cType . unPC
   getTypeString = typeString . unPC
 
 instance InternalType PythonCode where
-  getTypeDoc = typeDoc . unPC
   typeFromData t s d = toCode $ td t s d
+
+instance InternalTypeElim PythonCode where
+  getTypeDoc = typeDoc . unPC
 
 instance ControlBlock PythonCode where
   solveODE info opts = modify (addLibImport odeLib) >> multiBlock [

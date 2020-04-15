@@ -7,7 +7,7 @@ module GOOL.Drasil.ClassInterface (
   NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
   -- Typeclasses
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
-  oneLiner, BlockSym(..), TypeSym(..), ControlBlock(..), VariableSym(..), ($->), listOf, 
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), ($->), listOf, 
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
   extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
@@ -46,7 +46,7 @@ class (ModuleSym r, ControlBlock r, AssignStatement r,
   DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r,
   CommentStatement r, ControlStatement r, InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, 
   ValueExpression r, InternalValueExp r, GetSet r, List r, 
-  Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r) => 
+  Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r) => 
   FileSym r where 
   type RenderFile r
   fileDoc :: FSModule r -> SFile r
@@ -100,6 +100,7 @@ class TypeSym r where
   iterator      :: VSType r -> VSType r
   void          :: VSType r
 
+class (TypeSym r) => TypeElim r where
   getType :: r (Type r) -> CodeType
   getTypeString :: r (Type r) -> String
 

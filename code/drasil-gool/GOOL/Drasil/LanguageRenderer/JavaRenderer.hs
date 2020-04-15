@@ -193,12 +193,15 @@ instance TypeSym JavaCode where
   iterator t = t
   void = G.void
 
+instance TypeElim JavaCode where
   getType = cType . unJC
   getTypeString = typeString . unJC
   
 instance InternalType JavaCode where
-  getTypeDoc = typeDoc . unJC
   typeFromData t s d = toCode $ td t s d
+
+instance InternalTypeElim JavaCode where
+  getTypeDoc = typeDoc . unJC
 
 instance ControlBlock JavaCode where
   solveODE info opts = let (fls, s) = jODEFiles info 

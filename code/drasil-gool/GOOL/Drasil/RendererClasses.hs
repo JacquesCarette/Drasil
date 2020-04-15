@@ -2,7 +2,7 @@
 
 module GOOL.Drasil.RendererClasses (
   RenderSym, InternalFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
-  InternalBody(..), BodyElim(..), InternalBlock(..), BlockElim(..), InternalType(..), VSUnOp, UnaryOpSym(..),
+  InternalBody(..), BodyElim(..), InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..),
   VSBinOp, BinaryOpSym(..), InternalOp(..), InternalVariable(..), InternalValue(..),
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), InternalScope(..), 
   MethodTypeSym(..), InternalParam(..), InternalMethod(..), 
@@ -27,7 +27,7 @@ class (FileSym r, InternalBlock r, BlockElim r, InternalBody r, BodyElim r, Inte
   InternalFile r, InternalGetSet r, InternalListFunc r, InternalIterator r, InternalFunction r, InternalMethod r, 
   InternalMod r, InternalOp r, InternalParam r, PermElim r, 
   InternalScope r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, InternalStateVar r, 
-  InternalType r, InternalValue r, InternalVariable r,
+  InternalType r, InternalTypeElim r, InternalValue r, InternalVariable r,
   ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r) => RenderSym r
 
 class (BlockCommentSym r) => InternalFile r where
@@ -68,8 +68,10 @@ class BlockElim r where
   blockDoc :: r (Block r) -> Doc
 
 class InternalType r where
-  getTypeDoc :: r (Type r) -> Doc
   typeFromData :: CodeType -> String -> Doc -> r (Type r)
+
+class InternalTypeElim r where
+  getTypeDoc :: r (Type r) -> Doc
 
 type VSUnOp a = VS (a (UnaryOp a))
 

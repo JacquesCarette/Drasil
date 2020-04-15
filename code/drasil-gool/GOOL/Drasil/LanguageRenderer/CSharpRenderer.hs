@@ -187,12 +187,15 @@ instance TypeSym CSharpCode where
   iterator t = t
   void = G.void
 
+instance TypeElim CSharpCode where
   getType = cType . unCSC
   getTypeString = typeString . unCSC
   
 instance InternalType CSharpCode where
-  getTypeDoc = typeDoc . unCSC
   typeFromData t s d = toCode $ td t s d
+
+instance InternalTypeElim CSharpCode where
+  getTypeDoc = typeDoc . unCSC
 
 instance ControlBlock CSharpCode where
   solveODE info opts = modify (addLibImport "Microsoft.Research.Oslo" . 

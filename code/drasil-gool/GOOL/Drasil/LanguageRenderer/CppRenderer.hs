@@ -705,8 +705,10 @@ instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
   public = pair public public
 
 instance (Pair p) => InternalScope (p CppSrcCode CppHdrCode) where
-  scopeDoc s = scopeDoc $ pfst s
   scopeFromData s d = pair (scopeFromData s d) (scopeFromData s d)
+  
+instance (Pair p) => ScopeElim (p CppSrcCode CppHdrCode) where
+  scopeDoc s = scopeDoc $ pfst s
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
   type MethodType (p CppSrcCode CppHdrCode) = TypeData
@@ -719,10 +721,12 @@ instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   pointerParam = pair1 pointerParam pointerParam . zoom lensMStoVS
 
 instance (Pair p) => InternalParam (p CppSrcCode CppHdrCode) where
+  paramFromData v d = pair (paramFromData (pfst v) d) (paramFromData (psnd v) d)
+  
+instance (Pair p) => ParamElim (p CppSrcCode CppHdrCode) where
   parameterName p = parameterName $ pfst p
   parameterType p = pair (parameterType $ pfst p) (parameterType $ psnd p)
   parameterDoc p = parameterDoc $ pfst p
-  paramFromData v d = pair (paramFromData (pfst v) d) (paramFromData (psnd v) d)
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   type Method (p CppSrcCode CppHdrCode) = MethodData
@@ -1565,8 +1569,10 @@ instance ScopeSym CppSrcCode where
   public = toCode (publicDocD, Pub)
 
 instance InternalScope CppSrcCode where
-  scopeDoc = fst . unCPPSC
   scopeFromData s d = toCode (d, s)
+  
+instance ScopeElim CppSrcCode where
+  scopeDoc = fst . unCPPSC
 
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
@@ -1579,10 +1585,12 @@ instance ParameterSym CppSrcCode where
   pointerParam = G.param cppPointerParamDoc
 
 instance InternalParam CppSrcCode where
+  paramFromData v d = on2CodeValues pd v (toCode d)
+  
+instance ParamElim CppSrcCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameterDoc = paramDoc . unCPPSC
-  paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
@@ -2162,8 +2170,10 @@ instance ScopeSym CppHdrCode where
   public = toCode (publicDocD, Pub)
 
 instance InternalScope CppHdrCode where
-  scopeDoc = fst . unCPPHC
   scopeFromData s d = toCode (d, s)
+  
+instance ScopeElim CppHdrCode where
+  scopeDoc = fst . unCPPHC
 
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = TypeData
@@ -2177,10 +2187,12 @@ instance ParameterSym CppHdrCode where
     zoom lensMStoVS
 
 instance InternalParam CppHdrCode where
+  paramFromData v d = on2CodeValues pd v (toCode d)
+  
+instance ParamElim CppHdrCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameterDoc = paramDoc . unCPPHC
-  paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData

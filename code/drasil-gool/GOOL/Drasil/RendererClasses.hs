@@ -25,8 +25,8 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 class (FileSym r, InternalBlock r, BlockElim r, InternalBody r, BodyElim r, InternalClass r, 
   InternalFile r, InternalGetSet r, InternalListFunc r, InternalIterator r, InternalFunction r, FunctionElim r, InternalMethod r, 
-  InternalMod r, OpElim r, OpIntro r, InternalParam r, PermElim r, 
-  InternalScope r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, StatementElim r, InternalStateVar r, 
+  InternalMod r, OpElim r, OpIntro r, InternalParam r, ParamElim r, PermElim r, 
+  InternalScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, StatementElim r, InternalStateVar r, 
   InternalType r, InternalTypeElim r, InternalValue r, ValueElim r, InternaVariable r, InternalVarElim r,
   ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r) => RenderSym r
 
@@ -196,8 +196,10 @@ class StatementElim r where
   statementTerm :: r (Statement r) -> Terminator
 
 class InternalScope r where
-  scopeDoc :: r (Scope r) -> Doc
   scopeFromData :: ScopeTag -> Doc -> r (Scope r)
+  
+class ScopeElim r where
+  scopeDoc :: r (Scope r) -> Doc
 
 class (TypeSym r) => MethodTypeSym r where
   type MethodType r
@@ -205,10 +207,12 @@ class (TypeSym r) => MethodTypeSym r where
   construct :: Label -> MS (r (MethodType r))
 
 class InternalParam r where
+  paramFromData :: r (Variable r) -> Doc -> r (Parameter r)
+  
+class ParamElim r where
   parameterName :: r (Parameter r) -> Label
   parameterType :: r (Parameter r) -> r (Type r)
   parameterDoc  :: r (Parameter r) -> Doc
-  paramFromData :: r (Variable r) -> Doc -> r (Parameter r)
 
 class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) => 
   InternalMethod r where

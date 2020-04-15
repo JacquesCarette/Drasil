@@ -580,8 +580,10 @@ instance ScopeSym CSharpCode where
   public = toCode publicDocD
 
 instance InternalScope CSharpCode where
-  scopeDoc = unCSC
   scopeFromData _ = toCode
+  
+instance ScopeElim CSharpCode where
+  scopeDoc = unCSC
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
@@ -594,10 +596,12 @@ instance ParameterSym CSharpCode where
   pointerParam = param
 
 instance InternalParam CSharpCode where
+  paramFromData v d = on2CodeValues pd v (toCode d)
+
+instance ParamElim CSharpCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameterDoc = paramDoc . unCSC
-  paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData

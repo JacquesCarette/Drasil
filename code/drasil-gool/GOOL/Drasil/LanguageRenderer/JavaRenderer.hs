@@ -610,8 +610,10 @@ instance ScopeSym JavaCode where
   public = toCode publicDocD
 
 instance InternalScope JavaCode where
-  scopeDoc = unJC
   scopeFromData _ = toCode
+  
+instance ScopeElim JavaCode where
+  scopeDoc = unJC
 
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
@@ -624,10 +626,12 @@ instance ParameterSym JavaCode where
   pointerParam = param
 
 instance InternalParam JavaCode where
+  paramFromData v d = on2CodeValues pd v (toCode d)
+
+instance ParamElim JavaCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameterDoc = paramDoc . unJC
-  paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData

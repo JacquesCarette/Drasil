@@ -593,8 +593,10 @@ instance ScopeSym PythonCode where
   public = toCode empty
 
 instance InternalScope PythonCode where
-  scopeDoc = unPC
   scopeFromData _ = toCode
+
+instance ScopeElim PythonCode where
+  scopeDoc = unPC
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
@@ -607,10 +609,12 @@ instance ParameterSym PythonCode where
   pointerParam = param
 
 instance InternalParam PythonCode where
+  paramFromData v d = on2CodeValues pd v (toCode d)
+  
+instance ParamElim PythonCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameterDoc = paramDoc . unPC
-  paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData

@@ -14,21 +14,21 @@ import GOOL.Drasil (ProgData, GOOLState)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (AuxiliarySym repr) => PackageSym repr where
-  type Package repr 
-  package :: ProgData -> [repr (Auxiliary repr)] -> 
-    repr (Package repr)
+class (AuxiliarySym r) => PackageSym r where
+  type Package r 
+  package :: ProgData -> [r (Auxiliary r)] -> 
+    r (Package r)
 
-class AuxiliarySym repr where
-  type Auxiliary repr
-  type AuxHelper repr
-  doxConfig :: String -> GOOLState -> Verbosity -> repr (Auxiliary repr)
-  sampleInput :: ChunkDB -> DataDesc -> [Expr] -> repr (Auxiliary repr)
+class AuxiliarySym r where
+  type Auxiliary r
+  type AuxHelper r
+  doxConfig :: String -> GOOLState -> Verbosity -> r (Auxiliary r)
+  sampleInput :: ChunkDB -> DataDesc -> [Expr] -> r (Auxiliary r)
 
-  optimizeDox :: repr (AuxHelper repr)
+  optimizeDox :: r (AuxHelper r)
 
   makefile :: [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> 
-    ProgData -> repr (Auxiliary repr)
+    ProgData -> r (Auxiliary r)
 
-  auxHelperDoc :: repr (AuxHelper repr) -> Doc
-  auxFromData :: FilePath -> Doc -> repr (Auxiliary repr)
+  auxHelperDoc :: r (AuxHelper r) -> Doc
+  auxFromData :: FilePath -> Doc -> r (Auxiliary r)

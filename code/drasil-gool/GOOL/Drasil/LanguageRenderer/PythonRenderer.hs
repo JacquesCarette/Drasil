@@ -21,7 +21,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), observerListName, 
   ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
+import GOOL.Drasil.RendererClasses (VSUnOp, RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
   InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
@@ -674,42 +674,42 @@ pyBodyStart = colon
 pyBodyEnd = empty
 pyCommentStart = text "#"
 
-pyLogOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+pyLogOp :: (RenderSym r) => VSUnOp r
 pyLogOp = addmathImport $ unOpPrec "math.log10"
 
-pyLnOp :: (RenderSym repr) => VS (repr (UnaryOp repr))
+pyLnOp :: (RenderSym r) => VSUnOp r
 pyLnOp = addmathImport $ unOpPrec "math.log"
 
 pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v
 
-pyInlineIf :: (RenderSym repr) => SValue repr -> SValue repr -> SValue repr -> 
-  SValue repr
+pyInlineIf :: (RenderSym r) => SValue r -> SValue r -> SValue r -> 
+  SValue r
 pyInlineIf = on3StateValues (\c v1 v2 -> valFromData (valuePrec c) 
   (valueType v1) (valueDoc v1 <+> text "if" <+> valueDoc c <+> text "else" <+> 
   valueDoc v2))
 
-pyLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
+pyLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> 
   Doc
 pyLambda ps ex = text "lambda" <+> variableList ps <> colon <+> valueDoc ex
 
 pyListSize :: Doc -> Doc -> Doc
 pyListSize v f = f <> parens v
 
-pyStringType :: (RenderSym repr) => VSType repr
+pyStringType :: (RenderSym r) => VSType r
 pyStringType = toState $ typeFromData String "str" (text "str")
 
-pyListDec :: (RenderSym repr) => repr (Variable repr) -> Doc
+pyListDec :: (RenderSym r) => r (Variable r) -> Doc
 pyListDec v = variableDoc v <+> equals <+> getTypeDoc (variableType v)
 
-pyPrint :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
-  -> repr (Value repr) -> Doc
+pyPrint :: (RenderSym r) => Bool -> r (Value r) -> r (Value r) 
+  -> r (Value r) -> Doc
 pyPrint newLn prf v f = valueDoc prf <> parens (valueDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
         fl = emptyIfEmpty (valueDoc f) $ text ", file=" <> valueDoc f
 
-pyOut :: (RenderSym repr) => Bool -> Maybe (SValue repr) -> SValue repr -> 
-  SValue repr -> MSStatement repr
+pyOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> 
+  SValue r -> MSStatement r
 pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getType . valueType
   where pyOut' (List _) = printSt newLn f printFn v
         pyOut' _ = outDoc newLn f printFn v
@@ -724,35 +724,35 @@ pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
         pyInput' Char = inSrc
         pyInput' _ = error "Attempt to read a value of unreadable type"
 
-pyThrow :: (RenderSym repr) => repr (Value repr) -> Doc
+pyThrow :: (RenderSym r) => r (Value r) -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valueDoc errMsg)
 
-pyForEach :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
-  repr (Body repr) -> Doc
+pyForEach :: (RenderSym r) => r (Variable r) -> r (Value r) -> 
+  r (Body r) -> Doc
 pyForEach i lstVar b = vcat [
   forLabel <+> variableDoc i <+> inLabel <+> valueDoc lstVar <> colon,
   indent $ bodyDoc b]
 
-pyWhile :: (RenderSym repr) => repr (Value repr) -> repr (Body repr) -> Doc
+pyWhile :: (RenderSym r) => r (Value r) -> r (Body r) -> Doc
 pyWhile v b = vcat [
   text "while" <+> valueDoc v <> colon,
   indent $ bodyDoc b]
 
-pyTryCatch :: (RenderSym repr) => repr (Body repr) -> repr (Body repr) -> Doc
+pyTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 pyTryCatch tryB catchB = vcat [
   text "try" <+> colon,
   indent $ bodyDoc tryB,
   text "except" <+> text "Exception" <+> colon,
   indent $ bodyDoc catchB]
 
-pyListSlice :: (RenderSym repr) => SVariable repr -> SValue repr -> SValue repr 
-  -> SValue repr -> SValue repr -> VS Doc
+pyListSlice :: (RenderSym r) => SVariable r -> SValue r -> SValue r 
+  -> SValue r -> SValue r -> VS Doc
 pyListSlice vn vo beg end step = (\vnew vold b e s -> variableDoc vnew <+> 
   equals <+> valueDoc vold <> brackets (valueDoc b <> colon <> valueDoc e <> 
   colon <> valueDoc s)) <$> vn <*> vo <*> beg <*> end <*> step
 
-pyMethod :: (RenderSym repr) => Label -> repr (Variable repr) -> 
-  [repr (Parameter repr)] -> repr (Body repr) -> Doc
+pyMethod :: (RenderSym r) => Label -> r (Variable r) -> 
+  [r (Parameter r)] -> r (Body r) -> Doc
 pyMethod n slf ps b = vcat [
   text "def" <+> text n <> parens (variableDoc slf <> oneParam <> pms) <> colon,
   indent bodyD]
@@ -761,8 +761,8 @@ pyMethod n slf ps b = vcat [
             bodyD | isEmpty (bodyDoc b) = text "None"
                   | otherwise = bodyDoc b
 
-pyFunction :: (RenderSym repr) => Label -> [repr (Parameter repr)] -> 
-  repr (Body repr) -> Doc
+pyFunction :: (RenderSym r) => Label -> [r (Parameter r)] -> 
+  r (Body r) -> Doc
 pyFunction n ps b = vcat [
   text "def" <+> text n <> parens (parameterList ps) <> colon,
   indent bodyD]
@@ -806,11 +806,11 @@ pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins)
   (multiReturn $ map valueOf rets))
   where rets = both ++ outs
 
-pyDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
-    -> [SVariable repr] -> [SVariable repr] -> [SVariable repr] -> MSBody repr 
-    -> SMethod repr)
-  -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
-  [(String, SVariable repr)] -> [(String, SVariable repr)]
-  -> [(String, SVariable repr)] -> MSBody repr -> SMethod repr
+pyDocInOut :: (RenderSym r) => (r (Scope r) -> r (Permanence r) 
+    -> [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r 
+    -> SMethod r)
+  -> r (Scope r) -> r (Permanence r) -> String -> 
+  [(String, SVariable r)] -> [(String, SVariable r)]
+  -> [(String, SVariable r)] -> MSBody r -> SMethod r
 pyDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
   (map fst $ bs ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)

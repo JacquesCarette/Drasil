@@ -670,18 +670,18 @@ jName = "Java"
 jImport :: Label -> Doc
 jImport n = text ("import " ++ n) <> endStatement
 
-jStringType :: (RenderSym repr) => VSType repr
+jStringType :: (RenderSym r) => VSType r
 jStringType = toState $ typeFromData String "String" (text "String")
 
-jInfileType :: (RenderSym repr) => VSType repr
+jInfileType :: (RenderSym r) => VSType r
 jInfileType = modifyReturn (addLangImportVS "java.util.Scanner") $ 
   typeFromData File "Scanner" (text "Scanner")
 
-jOutfileType :: (RenderSym repr) => VSType repr
+jOutfileType :: (RenderSym r) => VSType r
 jOutfileType = modifyReturn (addLangImportVS "java.io.PrintWriter") $ 
   typeFromData File "PrintWriter" (text "PrintWriter")
 
-jListType :: (RenderSym repr) => String -> VSType repr -> VSType repr
+jListType :: (RenderSym r) => String -> VSType r -> VSType r
 jListType l t = modify (addLangImportVS $ "java.util." ++ l) >> 
   (t >>= (jListType' . getType))
   where jListType' Integer = toState $ typeFromData (List Integer) 
@@ -696,11 +696,11 @@ jListType l t = modify (addLangImportVS $ "java.util." ++ l) >>
 jArrayType :: VSType JavaCode
 jArrayType = arrayType (obj "Object")
 
-jFileType :: (RenderSym repr) => VSType repr
+jFileType :: (RenderSym r) => VSType r
 jFileType = modifyReturn (addLangImportVS "java.io.File") $ typeFromData File 
   "File" (text "File")
 
-jFileWriterType :: (RenderSym repr) => VSType repr
+jFileWriterType :: (RenderSym r) => VSType r
 jFileWriterType = modifyReturn (addLangImportVS "java.io.FileWriter") $ 
   typeFromData File "FileWriter" (text "FileWriter")
 
@@ -709,7 +709,7 @@ jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
-jLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
+jLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> 
   Doc
 jLambda ps ex = parens (variableList ps) <+> text "->" <+> valueDoc ex
 
@@ -722,16 +722,16 @@ jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $
         jCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
           tp)) (valueDoc vl))
 
-jConstDecDef :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) 
+jConstDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) 
   -> Doc
 jConstDecDef v def = text "final" <+> getTypeDoc (variableType v) <+> 
   variableDoc v <+> equals <+> valueDoc def
 
-jThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
+jThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (valueDoc 
   errMsg)
 
-jTryCatch :: (RenderSym repr) => repr (Body repr) -> repr (Body repr) -> Doc
+jTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 jTryCatch tb cb = vcat [
   text "try" <+> lbrace,
   indent $ bodyDoc tb,
@@ -740,17 +740,17 @@ jTryCatch tb cb = vcat [
   indent $ bodyDoc cb,
   rbrace]
 
-jOut :: (RenderSym repr) => Bool -> Maybe (SValue repr) -> SValue repr -> 
-  SValue repr -> MSStatement repr
+jOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> 
+  SValue r -> MSStatement r
 jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getType . valueType
   where jOut' (List (Object _)) = outDoc newLn f printFn v
         jOut' (List _) = printSt newLn f printFn v
         jOut' _ = outDoc newLn f printFn v
 
-jDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
+jDiscardInput :: (RenderSym r) => r (Value r) -> Doc
 jDiscardInput inFn = valueDoc inFn <> dot <> text "next()"
 
-jInput :: (RenderSym repr) => VSType repr -> SValue repr -> SValue repr
+jInput :: (RenderSym r) => VSType r -> SValue r -> SValue r
 jInput = on2StateValues (\t -> mkVal t . jInput' (getType t))
   where jInput' Integer inFn = text "Integer.parseInt" <> parens (valueDoc inFn 
           <> dot <> text "nextLine()")
@@ -763,21 +763,21 @@ jInput = on2StateValues (\t -> mkVal t . jInput' (getType t))
         jInput' Char inFn = valueDoc inFn <> dot <> text "next().charAt(0)"
         jInput' _ _ = error "Attempt to read value of unreadable type"
 
-jOpenFileR :: (RenderSym repr) => SValue repr -> VSType repr -> SValue repr
+jOpenFileR :: (RenderSym r) => SValue r -> VSType r -> SValue r
 jOpenFileR n t = newObj t [newObj jFileType [n]]
 
-jOpenFileWorA :: (RenderSym repr) => SValue repr -> VSType repr -> SValue repr 
-  -> SValue repr
+jOpenFileWorA :: (RenderSym r) => SValue r -> VSType r -> SValue r 
+  -> SValue r
 jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n], 
   wa]]
 
-jStringSplit :: (RenderSym repr) => SVariable repr -> SValue repr -> VS Doc
+jStringSplit :: (RenderSym r) => SVariable r -> SValue r -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> variableDoc vnew <+> equals <+> new 
   <+> getTypeDoc (variableType vnew) <> parens (valueDoc s))
 
-jMethod :: (RenderSym repr) => Label -> [String] -> repr (Scope repr) -> 
-  repr (Permanence repr) -> repr (Type repr) -> [repr (Parameter repr)] -> 
-  repr (Body repr) -> Doc
+jMethod :: (RenderSym r) => Label -> [String] -> r (Scope r) -> 
+  r (Permanence r) -> r (Type r) -> [r (Parameter r)] -> 
+  r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
   scopeDoc s <+> permDoc p <+> getTypeDoc t <+> text n <> 
     parens (parameterList ps) <+> emptyIfNull es (text "throws" <+> 
@@ -838,12 +838,12 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
         rets = both ++ outs
         outputs = var "outputs" jArrayType
 
-jDocInOut :: (RenderSym repr) => (repr (Scope repr) -> repr (Permanence repr) 
-    -> [SVariable repr] -> [SVariable repr] -> [SVariable repr] -> MSBody repr 
-    -> SMethod repr)
-  -> repr (Scope repr) -> repr (Permanence repr) -> String -> 
-  [(String, SVariable repr)] -> [(String, SVariable repr)]
-  -> [(String, SVariable repr)] -> MSBody repr -> SMethod repr
+jDocInOut :: (RenderSym r) => (r (Scope r) -> r (Permanence r) 
+    -> [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r 
+    -> SMethod r)
+  -> r (Scope r) -> r (Permanence r) -> String -> 
+  [(String, SVariable r)] -> [(String, SVariable r)]
+  -> [(String, SVariable r)] -> MSBody r -> SMethod r
 jDocInOut f s p desc is [] [] b = docFuncRepr desc (map fst is) [] 
   (f s p (map snd is) [] [] b)
 jDocInOut f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
@@ -861,8 +861,8 @@ addCallExcsCurrMod n = do
   mem <- getMethodExcMap
   modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ n) mem))
 
-addConstructorCallExcsCurrMod :: (RenderSym repr) => VSType repr -> 
-  (VSType repr -> SValue repr) -> SValue repr
+addConstructorCallExcsCurrMod :: (RenderSym r) => VSType r -> 
+  (VSType r -> SValue r) -> SValue r
 addConstructorCallExcsCurrMod ot f = do
   t <- ot
   cm <- zoom lensVStoFS getModuleName

@@ -635,15 +635,15 @@ csName = "C#"
 csImport :: Label -> Doc
 csImport n = text ("using " ++ n) <> endStatement
 
-csInfileType :: (RenderSym repr) => VSType repr
+csInfileType :: (RenderSym r) => VSType r
 csInfileType = modifyReturn (addLangImportVS "System.IO") $ 
   typeFromData File "StreamReader" (text "StreamReader")
 
-csOutfileType :: (RenderSym repr) => VSType repr
+csOutfileType :: (RenderSym r) => VSType r
 csOutfileType = modifyReturn (addLangImportVS "System.IO") $ 
   typeFromData File "StreamWriter" (text "StreamWriter")
 
-csLambda :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr) -> 
+csLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> 
   Doc
 csLambda ps ex = parens (variableList ps) <+> text "=>" <+> valueDoc ex
 
@@ -655,18 +655,18 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
         csCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD (getTypeDoc 
           tp)) (valueDoc vl))
 
-csFuncDecDef :: (RenderSym repr) => SVariable repr -> 
-  [SVariable repr] -> SValue repr -> MSStatement repr
+csFuncDecDef :: (RenderSym r) => SVariable r -> 
+  [SVariable r] -> SValue r -> MSStatement r
 csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
   getTypeDoc (variableType vr) <+> text (variableName vr) <> parens 
   (variableList pms) <+> bodyStart $$ indent (bodyDoc b) $$ bodyEnd) 
   (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnState r)
 
-csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
+csThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
   parens (valueDoc errMsg)
 
-csTryCatch :: (RenderSym repr) => repr (Body repr) -> repr (Body repr) -> Doc
+csTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 csTryCatch tb cb = vcat [
   text "try" <+> lbrace,
   indent $ bodyDoc tb,
@@ -675,14 +675,14 @@ csTryCatch tb cb = vcat [
   indent $ bodyDoc cb,
   rbrace]
 
-csDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
+csDiscardInput :: (RenderSym r) => r (Value r) -> Doc
 csDiscardInput = valueDoc
 
-csFileInput :: (RenderSym repr) => SValue repr -> SValue repr
+csFileInput :: (RenderSym r) => SValue r -> SValue r
 csFileInput = onStateValue (\f -> mkVal (valueType f) (valueDoc f <> dot <> 
   text "ReadLine()"))
 
-csInput :: (RenderSym repr) => VSType repr -> SValue repr -> SValue repr
+csInput :: (RenderSym r) => VSType r -> SValue r -> SValue r
 csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn 
   -> mkVal t $ text (csInput' (getType t)) <> parens (valueDoc inFn)) inF)
   where csInput' Integer = "Int32.Parse"
@@ -695,11 +695,11 @@ csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn
         csInputImport t = if t `elem` [Integer, Float, Double, Boolean, Char] 
           then addSystemImport else id
 
-csOpenFileR :: (RenderSym repr) => SValue repr -> VSType repr -> SValue repr
+csOpenFileR :: (RenderSym r) => SValue r -> VSType r -> SValue r
 csOpenFileR n r = newObj r [n]
 
-csOpenFileWorA :: (RenderSym repr) => SValue repr -> VSType repr -> SValue repr 
-  -> SValue repr
+csOpenFileWorA :: (RenderSym r) => SValue r -> VSType r -> SValue r 
+  -> SValue r
 csOpenFileWorA n w a = newObj w [n, a] 
 
 csRef :: Doc -> Doc
@@ -723,8 +723,8 @@ csVarDec :: Binding -> MSStatement CSharpCode -> MSStatement CSharpCode
 csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
 csVarDec Dynamic d = d
 
-csObjVar :: (RenderSym repr) => repr (Variable repr) -> repr (Variable repr) -> 
-  repr (Variable repr)
+csObjVar :: (RenderSym r) => r (Variable r) -> r (Variable r) -> 
+  r (Variable r)
 csObjVar o v = csObjVar' (variableBind v)
   where csObjVar' Static = error 
           "Cannot use objVar to access static variables through an object in C#"

@@ -495,10 +495,12 @@ instance InternalStatement JavaCode where
   loopState = G.loopState
 
   emptyState = G.emptyState
-  statementDoc = fst . unJC
-  statementTerm = snd . unJC
   
   stateFromData d t = toCode (d, t)
+
+instance StatementElim JavaCode where
+  statementDoc = fst . unJC
+  statementTerm = snd . unJC
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end

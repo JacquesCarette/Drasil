@@ -468,10 +468,12 @@ instance InternalStatement CSharpCode where
   loopState = G.loopState
 
   emptyState = G.emptyState
-  statementDoc = fst . unCSC
-  statementTerm = snd . unCSC
   
   stateFromData d t = toCode (d, t)
+
+instance StatementElim CSharpCode where
+  statementDoc = fst . unCSC
+  statementTerm = snd . unCSC
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)

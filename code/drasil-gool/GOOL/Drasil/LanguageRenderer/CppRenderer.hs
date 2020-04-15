@@ -544,10 +544,12 @@ instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
   loopState = pair1 loopState loopState
 
   emptyState = on2StateValues pair emptyState emptyState
-  statementDoc s = statementDoc $ pfst s
-  statementTerm s = statementTerm $ pfst s
   
   stateFromData d t = pair (stateFromData d t) (stateFromData d t)
+
+instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) where
+  statementDoc s = statementDoc $ pfst s
+  statementTerm s = statementTerm $ pfst s
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -1423,10 +1425,12 @@ instance InternalStatement CppSrcCode where
   loopState = G.loopState
 
   emptyState = G.emptyState
+
+  stateFromData d t = toCode (d, t)
+  
+instance StatementElim CppSrcCode where
   statementDoc = fst . unCPPSC
   statementTerm = snd . unCPPSC
-  
-  stateFromData d t = toCode (d, t)
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -2050,10 +2054,12 @@ instance InternalStatement CppHdrCode where
   loopState _ = emptyState
 
   emptyState = G.emptyState
-  statementDoc = fst . unCPPHC
-  statementTerm = snd . unCPPHC
   
   stateFromData d t = toCode (d, t)
+  
+instance StatementElim CppHdrCode where
+  statementDoc = fst . unCPPHC
+  statementTerm = snd . unCPPHC
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)

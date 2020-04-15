@@ -469,10 +469,12 @@ instance InternalStatement PythonCode where
   loopState = G.loopState
   
   emptyState = G.emptyState
-  statementDoc = fst . unPC
-  statementTerm = snd . unPC
 
   stateFromData d t = toCode (d, t)
+
+instance StatementElim PythonCode where
+  statementDoc = fst . unPC
+  statementTerm = snd . unPC
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end

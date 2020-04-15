@@ -4,7 +4,7 @@ module GOOL.Drasil.RendererClasses (
   RenderSym, InternalFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
   InternalBody(..), BodyElim(..), InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..),
   VSBinOp, BinaryOpSym(..), OpElim(..), OpIntro(..), InternalVarElim(..), InternalValue(..), ValueElim(..),
-  InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), InternalScope(..), 
+  InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), StatementElim(..), InternalScope(..), 
   MethodTypeSym(..), InternalParam(..), InternalMethod(..), 
   InternalStateVar(..), ParentSpec, InternalClass(..), InternalMod(..), 
   BlockCommentSym(..)
@@ -26,7 +26,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 class (FileSym r, InternalBlock r, BlockElim r, InternalBody r, BodyElim r, InternalClass r, 
   InternalFile r, InternalGetSet r, InternalListFunc r, InternalIterator r, InternalFunction r, FunctionElim r, InternalMethod r, 
   InternalMod r, OpElim r, OpIntro r, InternalParam r, PermElim r, 
-  InternalScope r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, InternalStateVar r, 
+  InternalScope r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, StatementElim r, InternalStateVar r, 
   InternalType r, InternalTypeElim r, InternalValue r, ValueElim r, InternaVariable r, InternalVarElim r,
   ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r) => RenderSym r
 
@@ -188,10 +188,12 @@ class InternalStatement r where
   loopState :: MSStatement r -> MSStatement r
 
   emptyState   :: MSStatement r
-  statementDoc :: r (Statement r) -> Doc
-  statementTerm :: r (Statement r) -> Terminator
 
   stateFromData :: Doc -> Terminator -> r (Statement r)
+
+class StatementElim r where
+  statementDoc :: r (Statement r) -> Doc
+  statementTerm :: r (Statement r) -> Terminator
 
 class InternalScope r where
   scopeDoc :: r (Scope r) -> Doc

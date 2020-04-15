@@ -143,18 +143,22 @@ instance BodySym PythonCode where
   addComments s = onStateValue (onCodeValue (addCommentsDocD s pyCommentStart))
 
 instance InternalBody PythonCode where
-  bodyDoc = unPC
   docBody = onStateValue toCode
   multiBody = G.multiBody 
+
+instance BodyElim PythonCode where
+  bodyDoc = unPC
 
 instance BlockSym PythonCode where
   type Block PythonCode = Doc
   block = G.block
 
 instance InternalBlock PythonCode where
-  blockDoc = unPC
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
+
+instance BlockElim PythonCode where
+  blockDoc = unPC
 
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData

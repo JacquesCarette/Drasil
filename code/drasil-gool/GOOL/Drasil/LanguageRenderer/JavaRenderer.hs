@@ -157,18 +157,22 @@ instance BodySym JavaCode where
   addComments s = onStateValue (onCodeValue (addCommentsDocD s commentStart))
 
 instance InternalBody JavaCode where
-  bodyDoc = unJC
   docBody = onStateValue toCode
   multiBody = G.multiBody 
+
+instance BodyElim JavaCode where
+  bodyDoc = unJC
 
 instance BlockSym JavaCode where
   type Block JavaCode = Doc
   block = G.block
 
 instance InternalBlock JavaCode where
-  blockDoc = unJC
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
+
+instance BlockElim JavaCode where
+  blockDoc = unJC
 
 instance TypeSym JavaCode where
   type Type JavaCode = TypeData

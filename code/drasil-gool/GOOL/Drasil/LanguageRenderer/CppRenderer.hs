@@ -161,18 +161,22 @@ instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
   addComments s = pair1 (addComments s) (addComments s)
 
 instance (Pair p) => InternalBody (p CppSrcCode CppHdrCode) where
-  bodyDoc b = bodyDoc $ pfst b
   docBody d = on2StateValues pair (docBody d) (docBody d)
   multiBody = pair1List multiBody multiBody
+
+instance (Pair p) => BodyElim (p CppSrcCode CppHdrCode) where
+  bodyDoc b = bodyDoc $ pfst b
 
 instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
   type Block (p CppSrcCode CppHdrCode) = Doc
   block = pair1List block block
 
 instance (Pair p) => InternalBlock (p CppSrcCode CppHdrCode) where
-  blockDoc b = blockDoc $ pfst b
   docBlock d = on2StateValues pair (docBlock d) (docBlock d)
   multiBlock = pair1List multiBlock multiBlock
+
+instance (Pair p) => BlockElim (p CppSrcCode CppHdrCode) where
+  blockDoc b = blockDoc $ pfst b
 
 instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   type Type (p CppSrcCode CppHdrCode) = TypeData
@@ -1094,18 +1098,22 @@ instance BodySym CppSrcCode where
   addComments s = onStateValue (onCodeValue (addCommentsDocD s commentStart))
 
 instance InternalBody CppSrcCode where
-  bodyDoc = unCPPSC
   docBody = onStateValue toCode
   multiBody = G.multiBody 
+
+instance BodyElim CppSrcCode where
+  bodyDoc = unCPPSC
 
 instance BlockSym CppSrcCode where
   type Block CppSrcCode = Doc
   block = G.block
 
 instance InternalBlock CppSrcCode where
-  blockDoc = unCPPSC
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
+
+instance BlockElim CppSrcCode where
+  blockDoc = unCPPSC
 
 instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
@@ -1729,19 +1737,22 @@ instance BodySym CppHdrCode where
   addComments _ _ = toState $ toCode empty
 
 instance InternalBody CppHdrCode where
-
-  bodyDoc = unCPPHC
   docBody = onStateValue toCode
   multiBody = G.multiBody 
+
+instance BodyElim CppHdrCode where
+  bodyDoc = unCPPHC
 
 instance BlockSym CppHdrCode where
   type Block CppHdrCode = Doc
   block _ = toState $ toCode empty
 
 instance InternalBlock CppHdrCode where
-  blockDoc = unCPPHC
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
+
+instance BlockElim CppHdrCode where
+  blockDoc = unCPPHC
 
 instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData

@@ -2,7 +2,7 @@
 
 module GOOL.Drasil.RendererClasses (
   RenderSym, InternalFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
-  InternalBody(..), InternalBlock(..), InternalType(..), VSUnOp, UnaryOpSym(..),
+  InternalBody(..), BodyElim(..), InternalBlock(..), BlockElim(..), InternalType(..), VSUnOp, UnaryOpSym(..),
   VSBinOp, BinaryOpSym(..), InternalOp(..), InternalVariable(..), InternalValue(..),
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), InternalScope(..), 
   MethodTypeSym(..), InternalParam(..), InternalMethod(..), 
@@ -23,7 +23,7 @@ import GOOL.Drasil.State (FS, CS, MS, VS)
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (FileSym r, InternalBlock r, InternalBody r, InternalClass r, 
+class (FileSym r, InternalBlock r, BlockElim r, InternalBody r, BodyElim r, InternalClass r, 
   InternalFile r, InternalGetSet r, InternalListFunc r, InternalIterator r, InternalFunction r, InternalMethod r, 
   InternalMod r, InternalOp r, InternalParam r, PermElim r, 
   InternalScope r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, InternalStateVar r, 
@@ -54,14 +54,18 @@ class PermElim r where
   binding :: r (Permanence r) -> Binding
 
 class InternalBody r where
-  bodyDoc :: r (Body r) -> Doc
   docBody :: MS Doc -> MSBody r
   multiBody :: [MSBody r] -> MSBody r
 
+class BodyElim r where
+  bodyDoc :: r (Body r) -> Doc
+
 class InternalBlock r where
-  blockDoc :: r (Block r) -> Doc
   docBlock :: MS Doc -> MSBlock r
   multiBlock :: [MSBlock r] -> MSBlock r
+
+class BlockElim r where
+  blockDoc :: r (Block r) -> Doc
 
 class InternalType r where
   getTypeDoc :: r (Type r) -> Doc

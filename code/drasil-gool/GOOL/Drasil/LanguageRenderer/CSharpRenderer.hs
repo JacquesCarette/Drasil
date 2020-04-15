@@ -150,18 +150,22 @@ instance BodySym CSharpCode where
   addComments s = onStateValue (onCodeValue (addCommentsDocD s commentStart))
 
 instance InternalBody CSharpCode where
-  bodyDoc = unCSC
   docBody = onStateValue toCode
   multiBody = G.multiBody 
+
+instance BodyElim CSharpCode where
+  bodyDoc = unCSC
 
 instance BlockSym CSharpCode where
   type Block CSharpCode = Doc
   block = G.block
 
 instance InternalBlock CSharpCode where
-  blockDoc = unCSC
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
+
+instance BlockElim CSharpCode where
+  blockDoc = unCSC
 
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData

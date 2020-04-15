@@ -41,7 +41,7 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
-  CSStateVar, SClass, FSModule, NamedArgs, Initializer, MixedCall, MixedCtorCall, FileSym(RenderFile), BodySym(Body), 
+  CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall, MixedCtorCall, FileSym(RenderFile), BodySym(Body), 
   bodyStatements, oneLiner, BlockSym(Block), PermanenceSym(..), 
   TypeSym(Type, infile, outfile, iterator, getType, getTypeString), 
   VariableSym(Variable, variableName, variableType), listOf,
@@ -974,7 +974,7 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> S.method (setterName $ variableName
   where setBody = oneLiner $ S.objVarSelf v &= S.valueOf v
 
 constructor :: (RenderSym r) => Label -> [MSParameter r] -> 
-  [Initializer r] -> MSBody r -> SMethod r
+  Initializers r -> MSBody r -> SMethod r
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName 
   public dynamic (S.construct c) ps (multiBody [ib, b]))
   where ib = bodyStatements (zipWith (\vr vl -> objVarSelf vr &= vl) 

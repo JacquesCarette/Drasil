@@ -28,7 +28,7 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 
 import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs, Initializer, ProgramSym, 
+  MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs, Initializers, ProgramSym, 
   PermanenceSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
   ($->), ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..), Comparison(..), 
   ValueExpression(..), objMethodCallMixedArgs, List(..), StatementSym(..),
@@ -148,7 +148,7 @@ genConstructor :: (ProgramSym r, HasSpace c, CodeIdea c) => Label -> String
 genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
 
 genInitConstructor :: (ProgramSym r, HasSpace c, CodeIdea c) => Label -> 
-  String -> [c] -> [Initializer r] -> [MSBlock r] -> 
+  String -> [c] -> Initializers r -> [MSBlock r] -> 
   Reader DrasilState (SMethod r)
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p 
   Nothing

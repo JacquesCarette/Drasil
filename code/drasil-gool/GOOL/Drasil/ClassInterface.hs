@@ -4,7 +4,7 @@ module GOOL.Drasil.ClassInterface (
   -- Types
   Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, FSModule,
-  NamedArgs, Initializer, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
+  NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
   -- Typeclasses
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), TypeSym(..), ControlBlock(..), VariableSym(..), ($->), listOf, 
@@ -507,7 +507,7 @@ class ParameterSym r where
   pointerParam :: SVariable r -> MSParameter r
 
 type SMethod a = MS (a (Method a))
-type Initializer r = (SVariable r, SValue r)
+type Initializers r = [(SVariable r, SValue r)]
 
 -- The three lists are inputs, outputs, and both, respectively
 type InOutFunc r = Label -> r (Scope r) -> r (Permanence r) -> [SVariable r] -> 
@@ -526,7 +526,7 @@ class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r wh
     VSType r -> [MSParameter r] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
   setMethod   :: SVariable r -> SMethod r 
-  constructor :: [MSParameter r] -> [Initializer r] -> MSBody r -> 
+  constructor :: [MSParameter r] -> Initializers r -> MSBody r -> 
     SMethod r
 
   docMain :: MSBody r -> SMethod r
@@ -551,7 +551,7 @@ pubMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] ->
   MSBody r -> SMethod r
 pubMethod n = method n public dynamic
 
-initializer :: (MethodSym r) => [MSParameter r] -> [Initializer r] -> 
+initializer :: (MethodSym r) => [MSParameter r] -> Initializers r -> 
   SMethod r
 initializer ps is = constructor ps is (body [])
 

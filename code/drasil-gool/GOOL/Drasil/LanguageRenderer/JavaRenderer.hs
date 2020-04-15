@@ -673,8 +673,10 @@ instance InternalMethod JavaCode where
     
   destructor _ = error $ destructorError jName
   
-  methodDoc = mthdDoc . unJC
   methodFromData _ = toCode . mthd
+  
+instance MethodElim JavaCode where
+  methodDoc = mthdDoc . unJC
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
@@ -683,8 +685,10 @@ instance StateVarSym JavaCode where
   constVar _ = G.constVar (permDoc (static :: JavaCode (Permanence JavaCode)))
 
 instance InternalStateVar JavaCode where
-  stateVarDoc = unJC
   stateVarFromData = onStateValue toCode
+  
+instance StateVarElim JavaCode where
+  stateVarDoc = unJC
 
 instance ClassSym JavaCode where
   type Class JavaCode = Doc

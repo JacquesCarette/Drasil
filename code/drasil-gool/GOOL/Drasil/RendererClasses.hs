@@ -4,9 +4,9 @@ module GOOL.Drasil.RendererClasses (
   RenderSym, InternalFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
   InternalBody(..), BodyElim(..), InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..),
   VSBinOp, BinaryOpSym(..), OpElim(..), OpIntro(..), InternalVarElim(..), InternalValue(..), ValueElim(..),
-  InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), StatementElim(..), InternalScope(..), 
-  MethodTypeSym(..), InternalParam(..), InternalMethod(..), 
-  InternalStateVar(..), ParentSpec, InternalClass(..), InternalMod(..), 
+  InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), StatementElim(..), InternalScope(..), ScopeElim(..),
+  MethodTypeSym(..), InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..),
+  InternalStateVar(..), StateVarElim(..), ParentSpec, InternalClass(..), InternalMod(..), 
   BlockCommentSym(..)
 ) where
 
@@ -24,9 +24,9 @@ import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 class (FileSym r, InternalBlock r, BlockElim r, InternalBody r, BodyElim r, InternalClass r, 
-  InternalFile r, InternalGetSet r, InternalListFunc r, InternalIterator r, InternalFunction r, FunctionElim r, InternalMethod r, 
+  InternalFile r, InternalGetSet r, InternalListFunc r, InternalIterator r, InternalFunction r, FunctionElim r, InternalMethod r, MethodElim r,
   InternalMod r, OpElim r, OpIntro r, InternalParam r, ParamElim r, PermElim r, 
-  InternalScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, StatementElim r, InternalStateVar r, 
+  InternalScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, StatementElim r, InternalStateVar r, StateVarElim r, 
   InternalType r, InternalTypeElim r, InternalValue r, ValueElim r, InternaVariable r, InternalVarElim r,
   ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r) => RenderSym r
 
@@ -226,12 +226,16 @@ class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) =>
     
   destructor :: [CSStateVar r] -> SMethod r
 
-  methodDoc :: r (Method r) -> Doc
   methodFromData :: ScopeTag -> Doc -> r (Method r)
 
+class MethodElim r where
+  methodDoc :: r (Method r) -> Doc
+
 class InternalStateVar r where
-  stateVarDoc :: r (StateVar r) -> Doc
   stateVarFromData :: CS Doc -> CSStateVar r
+
+class StateVarElim r where  
+  stateVarDoc :: r (StateVar r) -> Doc
 
 type ParentSpec = Doc
 

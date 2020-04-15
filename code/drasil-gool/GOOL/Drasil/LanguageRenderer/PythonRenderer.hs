@@ -654,8 +654,10 @@ instance InternalMethod PythonCode where
     
   destructor _ = error $ destructorError pyName
 
-  methodDoc = mthdDoc . unPC
   methodFromData _ = toCode . mthd
+  
+instance MethodElim PythonCode where
+  methodDoc = mthdDoc . unPC
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
@@ -665,8 +667,10 @@ instance StateVarSym PythonCode where
     (static :: PythonCode (Permanence PythonCode)))
 
 instance InternalStateVar PythonCode where
-  stateVarDoc = unPC
   stateVarFromData = onStateValue toCode
+  
+instance StateVarElim PythonCode where
+  stateVarDoc = unPC
 
 instance ClassSym PythonCode where
   type Class PythonCode = Doc

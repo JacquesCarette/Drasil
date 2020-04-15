@@ -635,8 +635,10 @@ instance InternalMethod CSharpCode where
     
   destructor _ = error $ destructorError csName
   
-  methodDoc = mthdDoc . unCSC
   methodFromData _ = toCode . mthd
+  
+instance MethodElim CSharpCode where
+  methodDoc = mthdDoc . unCSC
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
@@ -645,8 +647,10 @@ instance StateVarSym CSharpCode where
   constVar _ = G.constVar empty
 
 instance InternalStateVar CSharpCode where
-  stateVarDoc = unCSC
   stateVarFromData = onStateValue toCode
+  
+instance StateVarElim CSharpCode where
+  stateVarDoc = unCSC
 
 instance ClassSym CSharpCode where
   type Class CSharpCode = Doc

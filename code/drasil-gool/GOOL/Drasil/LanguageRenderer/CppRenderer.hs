@@ -785,8 +785,10 @@ instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
   
   destructor = pair1List destructor destructor . map (zoom lensMStoCS)
     
-  methodDoc m = methodDoc $ pfst m
   methodFromData s d = pair (methodFromData s d) (methodFromData s d)
+  
+instance (Pair p) => MethodElim (p CppSrcCode CppHdrCode) where
+  methodDoc m = methodDoc $ pfst m
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
@@ -799,9 +801,11 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
     (zoom lensCStoVS vr) (zoom lensCStoVS vl)
 
 instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
-  stateVarDoc v = stateVarDoc $ pfst v
   stateVarFromData d = on2StateValues pair (stateVarFromData d) 
     (stateVarFromData d)
+
+instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) where
+  stateVarDoc v = stateVarDoc $ pfst v
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   type Class (p CppSrcCode CppHdrCode) = Doc
@@ -1643,8 +1647,10 @@ instance InternalMethod CppSrcCode where
           bodyStatements $ loopIndexDec : deleteStatements
     in getClassName >>= (\n -> pubMethod ('~':n) void [] dbody)
  
-  methodDoc = mthdDoc . unCPPSC
   methodFromData s d = toCode $ mthd s d
+  
+instance MethodElim CppSrcCode where
+  methodDoc = mthdDoc . unCPPSC
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1658,8 +1664,10 @@ instance StateVarSym CppSrcCode where
     (zoom lensCStoVS v) (zoom lensCStoVS vl') (zoom lensCStoMS emptyState)
 
 instance InternalStateVar CppSrcCode where
-  stateVarDoc = stVar . unCPPSC
   stateVarFromData = error "stateVarFromData unimplemented in C++"
+  
+instance StateVarElim CppSrcCode where
+  stateVarDoc = stVar . unCPPSC
 
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
@@ -2231,8 +2239,10 @@ instance InternalMethod CppHdrCode where
     (toState (toCode empty)) :: SMethod CppHdrCode)) 
     (map (zoom lensMStoCS) vars)
 
-  methodDoc = mthdDoc . unCPPHC
   methodFromData s d = toCode $ mthd s d
+  
+instance MethodElim CppHdrCode where
+  methodDoc = mthdDoc . unCPPHC
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
@@ -2246,8 +2256,10 @@ instance StateVarSym CppHdrCode where
     (zoom lensCStoVS vr) (zoom lensCStoMS emptyState)
 
 instance InternalStateVar CppHdrCode where
-  stateVarDoc = stVar . unCPPHC
   stateVarFromData = error "stateVarFromData unimplemented in C++"
+  
+instance StateVarElim CppHdrCode where
+  stateVarDoc = stVar . unCPPHC
 
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc

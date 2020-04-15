@@ -459,9 +459,11 @@ instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
     (\tp pars ns nars -> call l n tp o pars (zip ns nars)) 
     t pas (map fst nas) (map snd nas)
 
+  valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)
+
+instance (Pair p) => ValueElim (p CppSrcCode CppHdrCode) where
   valuePrec v = valuePrec $ pfst v
   valueDoc v = valueDoc $ pfst v
-  valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)
 
 instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
   objMethodCallMixedArgs' f t o pas nas = pair2Vals3Lists
@@ -1348,9 +1350,11 @@ instance InternalValue CppSrcCode where
 
   call = G.call' cppName
 
+  valFromData p t d = on2CodeValues (vd p) t (toCode d)
+  
+instance ValueElim CppSrcCode where
   valuePrec = valPrec . unCPPSC
   valueDoc = val . unCPPSC
-  valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance InternalValueExp CppSrcCode where
   objMethodCallMixedArgs' = G.objMethodCall
@@ -1974,9 +1978,11 @@ instance InternalValue CppHdrCode where
   
   call _ _ _ _ _ _ = mkStateVal void empty
 
+  valFromData p t d = on2CodeValues (vd p) t (toCode d)
+  
+instance ValueElim CppHdrCode where
   valuePrec = valPrec . unCPPHC
   valueDoc = val . unCPPHC
-  valFromData p t d = on2CodeValues (vd p) t (toCode d)
   
 instance InternalValueExp CppHdrCode where
   objMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty

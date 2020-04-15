@@ -419,9 +419,11 @@ instance InternalValue JavaCode where
 
   call = G.call' jName
   
+  valFromData p t d = on2CodeValues (vd p) t (toCode d)
+
+instance ValueElim JavaCode where
   valuePrec = valPrec . unJC
   valueDoc = val . unJC
-  valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance InternalValueExp JavaCode where
   objMethodCallMixedArgs' f t o ps ns = do

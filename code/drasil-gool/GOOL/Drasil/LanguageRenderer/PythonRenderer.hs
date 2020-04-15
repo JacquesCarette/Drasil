@@ -393,9 +393,11 @@ instance InternalValue PythonCode where
 
   call = G.call equals
 
+  valFromData p t d = on2CodeValues (vd p) t (toCode d)
+
+instance ValueElim PythonCode where
   valuePrec = valPrec . unPC
   valueDoc = val . unPC
-  valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance InternalValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall

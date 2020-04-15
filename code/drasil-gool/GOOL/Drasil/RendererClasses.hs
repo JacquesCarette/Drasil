@@ -3,7 +3,7 @@
 module GOOL.Drasil.RendererClasses (
   RenderSym, InternalFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
   InternalBody(..), BodyElim(..), InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..),
-  VSBinOp, BinaryOpSym(..), OpElim(..), OpIntro(..), InternalVarElim(..), InternalValue(..),
+  VSBinOp, BinaryOpSym(..), OpElim(..), OpIntro(..), InternalVarElim(..), InternalValue(..), ValueElim(..),
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), InternalScope(..), 
   MethodTypeSym(..), InternalParam(..), InternalMethod(..), 
   InternalStateVar(..), ParentSpec, InternalClass(..), InternalMod(..), 
@@ -27,7 +27,7 @@ class (FileSym r, InternalBlock r, BlockElim r, InternalBody r, BodyElim r, Inte
   InternalFile r, InternalGetSet r, InternalListFunc r, InternalIterator r, InternalFunction r, InternalMethod r, 
   InternalMod r, OpElim r, OpIntro r, InternalParam r, PermElim r, 
   InternalScope r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, InternalStateVar r, 
-  InternalType r, InternalTypeElim r, InternalValue r, InternaVariable r, InternalVarElim r,
+  InternalType r, InternalTypeElim r, InternalValue r, ValueElim r, InternaVariable r, InternalVarElim r,
   ImportSym r, ImportElim r, UnaryOpSym r, BinaryOpSym r) => RenderSym r
 
 class (BlockCommentSym r) => InternalFile r where
@@ -144,9 +144,11 @@ class InternalValue r where
   call :: Maybe Library -> Label -> VSType r -> Maybe Doc -> [SValue r] 
     -> NamedArgs r -> SValue r
 
+  valFromData :: Maybe Int -> r (Type r) -> Doc -> r (Value r)
+
+class ValueElim r where
   valuePrec :: r (Value r) -> Maybe Int
   valueDoc :: r (Value r) -> Doc
-  valFromData :: Maybe Int -> r (Type r) -> Doc -> r (Value r)
 
 class InternalGetSet r where
   getFunc :: SVariable r -> VSFunction r

@@ -398,9 +398,11 @@ instance InternalValue CSharpCode where
 
   call = G.call (colon <> space)
   
+  valFromData p t d = on2CodeValues (vd p) t (toCode d)
+  
+instance ValueElim CSharpCode where
   valuePrec = valPrec . unCSC
   valueDoc = val . unCSC
-  valFromData p t d = on2CodeValues (vd p) t (toCode d)
   
 instance InternalValueExp CSharpCode where
   objMethodCallMixedArgs' = G.objMethodCall 

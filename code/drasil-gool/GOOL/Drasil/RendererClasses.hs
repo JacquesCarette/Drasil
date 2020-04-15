@@ -12,7 +12,7 @@ module GOOL.Drasil.RendererClasses (
 
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
-  CSStateVar, SClass, FSModule, NamedArg, FileSym(..), PermanenceSym(..), BodySym(..), 
+  CSStateVar, SClass, FSModule, NamedArgs, FileSym(..), PermanenceSym(..), BodySym(..), 
   BlockSym(..), TypeSym(..), VariableSym(..), ValueSym(..), FunctionSym(..), 
   StatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
@@ -129,7 +129,7 @@ class InternalValue r where
   -- Very generic internal function for generating calls, to reduce repeated code throughout generators
   -- Maybe library, function name, return type, maybe object doc, regular arguments, named arguments
   call :: Maybe Library -> Label -> VSType r -> Maybe Doc -> [SValue r] 
-    -> [NamedArg r] -> SValue r
+    -> NamedArgs r -> SValue r
 
   valuePrec :: r (Value r) -> Maybe Int
   valueDoc :: r (Value r) -> Doc

@@ -4,7 +4,7 @@ module GOOL.Drasil.ClassInterface (
   -- Types
   Label, Library, GSProgram, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, FSModule,
-  NamedArg, Initializer, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
+  NamedArgs, Initializer, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
   -- Typeclasses
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), TypeSym(..), ControlBlock(..), VariableSym(..), ($->), listOf, 
@@ -220,11 +220,11 @@ class (ValueSym r) => Comparison r where
   (?!=) :: SValue r -> SValue r -> SValue r
   infixl 3 ?!=
 
-type NamedArg r = (SVariable r, SValue r)
+type NamedArgs r = [(SVariable r, SValue r)]
 -- Function call with both positional and named arguments
-type MixedCall r = Label -> VSType r -> [SValue r] -> [NamedArg r] -> SValue r
+type MixedCall r = Label -> VSType r -> [SValue r] -> NamedArgs r -> SValue r
 -- Constructor call with both positional and named arguments
-type MixedCtorCall r = VSType r -> [SValue r] -> [NamedArg r] -> SValue r
+type MixedCtorCall r = VSType r -> [SValue r] -> NamedArgs r -> SValue r
 -- Function call with only positional arguments
 type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 -- Constructor call with only positional arguments
@@ -250,7 +250,7 @@ funcApp          :: (ValueExpression r) =>            PosCall r
 funcApp n t vs = funcAppMixedArgs n t vs []
 
 funcAppNamedArgs :: (ValueExpression r) =>            Label -> VSType r ->
-  [NamedArg r] -> SValue r
+  NamedArgs r -> SValue r
 funcAppNamedArgs n t = funcAppMixedArgs n t []
 
 selfFuncApp      :: (ValueExpression r) =>            PosCall r
@@ -276,7 +276,7 @@ exists = notNull
 
 class (FunctionSym r) => InternalValueExp r where
   objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> 
-    [SValue r] -> [NamedArg r] -> SValue r
+    [SValue r] -> NamedArgs r -> SValue r
   objMethodCallNoParams' :: Label -> VSType r -> SValue r -> SValue r
 
 objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label 
@@ -284,7 +284,7 @@ objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
 objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r 
-  -> Label -> [SValue r] -> [NamedArg r] -> SValue r
+  -> Label -> [SValue r] -> NamedArgs r -> SValue r
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
 objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r 

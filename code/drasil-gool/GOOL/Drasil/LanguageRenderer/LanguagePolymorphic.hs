@@ -41,7 +41,7 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
-  CSStateVar, SClass, FSModule, NamedArg, Initializer, MixedCall, MixedCtorCall, FileSym(RenderFile), BodySym(Body), 
+  CSStateVar, SClass, FSModule, NamedArgs, Initializer, MixedCall, MixedCtorCall, FileSym(RenderFile), BodySym(Body), 
   bodyStatements, oneLiner, BlockSym(Block), PermanenceSym(..), 
   TypeSym(Type, infile, outfile, iterator, getType, getTypeString), 
   VariableSym(Variable, variableName, variableType), listOf,
@@ -528,12 +528,12 @@ inlineIf = on3StateValues (\c v1 v2 -> valFromData (prec c) (valueType v1)
   where prec cd = valuePrec cd <|> Just 0
 
 call' :: (RenderSym r) => String -> Maybe Library -> Label -> VSType r -> 
-  Maybe Doc -> [SValue r] -> [NamedArg r] -> SValue r
+  Maybe Doc -> [SValue r] -> NamedArgs r -> SValue r
 call' l _ _ _ _ _ (_:_) = error $ namedArgError l
 call' _ l n t o ps ns = call empty l n t o ps ns
 
 call :: (RenderSym r) => Doc -> Maybe Library -> Label -> VSType r -> 
-  Maybe Doc -> [SValue r] -> [NamedArg r] -> SValue r
+  Maybe Doc -> [SValue r] -> NamedArgs r -> SValue r
 call sep lib n t o pas nas = (\tp pargs nms nargs -> mkVal tp $ obDoc <> libDoc 
   <> text n <> parens (valueList pargs <+> (if null pas || null nas then empty 
   else comma) <+> hcat (intersperse (text ", ") (zipWith (\nm a -> 
@@ -585,7 +585,7 @@ objAccess = on2StateValues (\v f -> mkVal (functionType f) (objAccessDocD
   (valueDoc v) (functionDoc f)))
 
 objMethodCall :: (RenderSym r) => Label -> VSType r -> SValue r -> 
-  [SValue r] -> [NamedArg r] -> SValue r
+  [SValue r] -> NamedArgs r -> SValue r
 objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing f t 
   (Just $ valueDoc o <> dot) vs ns)
 

@@ -28,7 +28,7 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 
 import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArg, Initializer, ProgramSym, 
+  MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs, Initializer, ProgramSym, 
   PermanenceSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
   ($->), ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..), Comparison(..), 
   ValueExpression(..), objMethodCallMixedArgs, List(..), StatementSym(..),
@@ -250,7 +250,7 @@ convExpr (RealI c ri)  = do
   convExpr $ renderRealInt (lookupC g c) ri
 
 convCall :: (ProgramSym r) => UID -> [Expr] -> [(UID, Expr)] -> (String -> 
-  String -> VSType r -> [SValue r] -> [NamedArg r] -> 
+  String -> VSType r -> [SValue r] -> NamedArgs r -> 
   Reader DrasilState (SValue r)) -> Reader DrasilState (SValue r)
 convCall c x ns f = do
   g <- ask

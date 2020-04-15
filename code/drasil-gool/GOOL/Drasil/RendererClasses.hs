@@ -6,7 +6,7 @@ module GOOL.Drasil.RendererClasses (
   VSBinOp, BinaryOpSym(..), OpElim(..), OpIntro(..), InternalVarElim(..), InternalValue(..), ValueElim(..),
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), StatementElim(..), InternalScope(..), ScopeElim(..),
   MethodTypeSym(..), InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..),
-  InternalStateVar(..), StateVarElim(..), ParentSpec, InternalClass(..), InternalMod(..), 
+  InternalStateVar(..), StateVarElim(..), ParentSpec, InternalClass(..), ClassElim(..), InternalMod(..), 
   BlockCommentSym(..)
 ) where
 
@@ -23,7 +23,7 @@ import GOOL.Drasil.State (FS, CS, MS, VS)
 import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
-class (FileSym r, InternalBlock r, BlockElim r, InternalBody r, BodyElim r, InternalClass r, 
+class (FileSym r, InternalBlock r, BlockElim r, InternalBody r, BodyElim r, InternalClass r, ClassElim r, 
   InternalFile r, InternalGetSet r, InternalListFunc r, InternalIterator r, InternalFunction r, FunctionElim r, InternalMethod r, MethodElim r,
   InternalMod r, OpElim r, OpIntro r, InternalParam r, ParamElim r, PermElim r, 
   InternalScope r, ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, InternalStatement r, StatementElim r, InternalStateVar r, StateVarElim r, 
@@ -248,8 +248,10 @@ class (BlockCommentSym r) => InternalClass r where
 
   commentedClass :: CS (r (BlockComment r)) -> SClass r -> SClass r
 
-  classDoc :: r (Class r) -> Doc
   classFromData :: CS (r Doc) -> SClass r
+  
+class ClassElim r where
+  classDoc :: r (Class r) -> Doc
 
 class InternalMod r where
   moduleDoc :: r (Module r) -> Doc

@@ -669,8 +669,10 @@ instance InternalClass CSharpCode where
 
   commentedClass = G.commentedClass
 
-  classDoc = unCSC
   classFromData d = d
+  
+instance ClassElim CSharpCode where
+  classDoc = unCSC
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData

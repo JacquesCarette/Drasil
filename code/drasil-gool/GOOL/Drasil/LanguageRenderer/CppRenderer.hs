@@ -833,8 +833,10 @@ instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
 
   commentedClass = pair2 commentedClass commentedClass
 
-  classDoc c = classDoc $ pfst c
   classFromData = pair1 classFromData classFromData
+  
+instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
+  classDoc c = classDoc $ pfst c
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
@@ -1688,8 +1690,10 @@ instance InternalClass CppSrcCode where
 
   commentedClass _ cs = cs
 
-  classDoc = unCPPSC
   classFromData d = d
+  
+instance ClassElim CppSrcCode where
+  classDoc = unCPPSC
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
@@ -2282,8 +2286,10 @@ instance InternalClass CppHdrCode where
 
   commentedClass = G.commentedClass
 
-  classDoc = unCPPHC
   classFromData d = d
+  
+instance ClassElim CppHdrCode where
+  classDoc = unCPPHC
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData

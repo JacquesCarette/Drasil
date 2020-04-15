@@ -690,8 +690,10 @@ instance InternalClass PythonCode where
 
   commentedClass = G.commentedClass
 
-  classDoc = unPC
   classFromData d = d
+  
+instance ClassElim PythonCode where
+  classDoc = unPC
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData

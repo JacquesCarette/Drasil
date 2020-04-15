@@ -707,8 +707,10 @@ instance InternalClass JavaCode where
 
   commentedClass = G.commentedClass
 
-  classDoc = unJC
   classFromData d = d
+  
+instance ClassElim JavaCode where
+  classDoc = unJC
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData

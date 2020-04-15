@@ -41,8 +41,8 @@ import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 
   SMethod, CSStateVar, SClass, ProgramSym, BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), 
-  ValueSym(..), BooleanExpression(..), AssignStatement(..), DeclStatement(..), 
-  IOStatement(..), MiscStatement(..), ControlStatement(..), ifNoElse, 
+  Literal(..), VariableValue(..), CommandLineArgs(..), BooleanExpression(..), StatementSym(..), AssignStatement(..), DeclStatement(..), 
+  IOStatement(..), ControlStatement(..), ifNoElse, 
   ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType)
 
 import Prelude hiding (print)
@@ -264,23 +264,22 @@ genInputConstraints s = do
         return $ Just mthd
   genConstraints $ "input_constraints" `elem` defList g
 
-sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, ProgramSym repr) 
-  => [(q,[Constraint])] -> Reader DrasilState [MSStatement repr]
+sfwrCBody :: (ProgramSym repr) => [(CodeVarChunk,[Constraint])] -> 
+  Reader DrasilState [MSStatement repr]
 sfwrCBody cs = do
   g <- ask
   let cb = onSfwrC g
   chooseConstr cb cs
 
-physCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, ProgramSym repr) 
-  => [(q,[Constraint])] -> Reader DrasilState [MSStatement repr]
+physCBody :: (ProgramSym repr) => [(CodeVarChunk,[Constraint])] -> 
+  Reader DrasilState [MSStatement repr]
 physCBody cs = do
   g <- ask
   let cb = onPhysC g
   chooseConstr cb cs
 
-chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, 
-  ProgramSym repr) => ConstraintBehaviour -> [(q,[Constraint])] -> 
-  Reader DrasilState [MSStatement repr]
+chooseConstr :: (ProgramSym repr) => ConstraintBehaviour -> 
+  [(CodeVarChunk,[Constraint])] -> Reader DrasilState [MSStatement repr]
 chooseConstr cb cs = do
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
@@ -289,28 +288,27 @@ chooseConstr cb cs = do
   where chooseCB Warning = constrWarn
         chooseCB Exception = constrExc 
 
-constrWarn :: (HasUID q, CodeIdea q, HasSpace q, ProgramSym repr)
-  => (q,[Constraint]) -> Reader DrasilState [MSBody repr]
+constrWarn :: (ProgramSym repr) => (CodeVarChunk,[Constraint]) -> 
+  Reader DrasilState [MSBody repr]
 constrWarn c = do
   let q = fst c
       cs = snd c
   msgs <- mapM (constraintViolatedMsg q "suggested") cs
   return $ map (bodyStatements . (printStr "Warning: " :)) msgs
 
-constrExc :: (HasUID q, CodeIdea q, HasSpace q, ProgramSym repr) 
-  => (q,[Constraint]) -> Reader DrasilState [MSBody repr]
+constrExc :: (ProgramSym repr) => (CodeVarChunk,[Constraint]) -> 
+  Reader DrasilState [MSBody repr]
 constrExc c = do
   let q = fst c
       cs = snd c
   msgs <- mapM (constraintViolatedMsg q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
 
-constraintViolatedMsg :: (CodeIdea q, HasUID q, HasSpace q, ProgramSym repr) 
-  => q -> String -> Constraint -> Reader DrasilState 
-  [MSStatement repr]
+constraintViolatedMsg :: (ProgramSym repr) => CodeVarChunk -> String -> 
+  Constraint -> Reader DrasilState [MSStatement repr]
 constraintViolatedMsg q s c = do
   pc <- printConstraint c 
-  v <- mkVal q
+  v <- mkVal (quantvar q)
   return $ [printStr $ codeName q ++ " has value ",
     print v,
     printStr $ " but " ++ s ++ " to be "] ++ pc

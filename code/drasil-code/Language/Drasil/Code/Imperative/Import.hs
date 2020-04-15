@@ -33,10 +33,11 @@ import qualified Language.Drasil.Mod as M (Class(..))
 import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, CSStateVar, SClass, ProgramSym, 
   PermanenceSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
-  ($->), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), objMethodCallMixedArgs, FunctionSym(..), 
-  SelectorFunction(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
-  MiscStatement(..), ControlStatement(..), ifNoElse, ScopeSym(..), 
+  ($->), ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), 
+  ValueExpression(..), objMethodCallMixedArgs, List(..), StatementSym(..),
+  AssignStatement(..), DeclStatement(..), IOStatement(..),
+  StringStatement(..), ControlStatement(..), ifNoElse, ScopeSym(..), 
   ParameterSym(..), MethodSym(..), pubDVar, privDVar, nonInitConstructor, 
   convType, ScopeTag(..), CodeType(..), onStateValue) 
 import qualified GOOL.Drasil as C (CodeType(List, Array))

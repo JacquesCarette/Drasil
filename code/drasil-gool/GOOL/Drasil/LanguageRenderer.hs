@@ -29,15 +29,15 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
   MSStatement, SMethod, BodySym(..), bodyStatements, oneLiner, 
-  PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), AssignStatement(..), 
-  DeclStatement(..), IOStatement(..), MiscStatement(..), ControlStatement(..), 
+  PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), ValueSym(..), Literal(..), VariableValue(..),
+  NumericExpression(..), Comparison(..), List(..),
+  StatementSym(..), AssignStatement(..), 
+  DeclStatement(..), IOStatement(..), ControlStatement(..), 
   ifNoElse, ScopeSym(..), ParameterSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(int))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalBody(..), 
   InternalPerm(..), InternalType(..), InternalVariable(..), InternalValue(..), 
-  InternalStatement(..), InternalScope(..), InternalParam(..), 
+  InternalIOStmt(..), InternalStatement(..), InternalScope(..), InternalParam(..), 
   InternalMethod(..), BlockCommentSym(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))
@@ -109,24 +109,6 @@ classDocD n p s vs fs = vcat [
     blank,
     fs],
   rbrace]
-
--- enumDocD :: Label -> Doc -> Doc -> Doc
--- enumDocD n es s = vcat [
---   s <+> text "enum" <+> text n <+> lbrace,
---   indent es,
---   rbrace]
-
--- enumElementsDocD :: [Label] -> Bool -> Doc
--- enumElementsDocD es enumsEqualInts = vcat $
---   zipWith (\e i -> text e <+> equalsInt i <> interComma i) es nums
---   where nums = [0..length es - 1]
---         equalsInt i = if enumsEqualInts then equals <+> int i else empty 
---         interComma i = if i < length es - 1 then text "," else empty
-
--- enumElementsDocD' :: [Label] -> Doc
--- enumElementsDocD' es = vcat $
---   zipWith (\e i -> text e <+> equals <+> int i) es nums
---     where nums = [0..length es - 1]
 
 -- Groupings --
 

@@ -12,18 +12,21 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
-  ControlBlock(..), InternalControlBlock(..), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), funcApp, 
-  selfFuncApp, extFuncApp, newObj, Selector(..), ($.), InternalValueExp(..), 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), AssignStatement(..), 
-  (&=), DeclStatement(..), IOStatement(..), FuncAppStatement(..), 
-  MiscStatement(..), ControlStatement(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), 
+  TypeSym(..), VariableSym(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj,
+  InternalValueExp(..), 
+  FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
+  FuncAppStatement(..), 
+  CommentStatement(..), ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..),
+  ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..),
   ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
   InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalFunction(..), 
+  InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
   InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
   InternalParam(..), InternalMethod(..), InternalStateVar(..), 
   InternalClass(..), InternalMod(..), BlockCommentSym(..))
@@ -187,12 +190,6 @@ instance InternalType JavaCode where
   getTypeDoc = typeDoc . unJC
   typeFromData t s d = toCode $ td t s d
 
-instance ControlBlock JavaCode where
-  runStrategy = G.runStrategy
-
-instance InternalControlBlock JavaCode where
-  listSlice' = G.listSlice
-
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
   notOp = G.notOp
@@ -263,6 +260,9 @@ instance InternalVariable JavaCode where
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
+  valueType = onCodeValue valType
+
+instance Literal JavaCode where
   litTrue = G.litTrue
   litFalse = G.litFalse
   litChar = G.litChar
@@ -275,17 +275,16 @@ instance ValueSym JavaCode where
     "java.util.Arrays")) >> newObj (listType t) [funcApp "Arrays.asList" 
     (listType t) es | not (null es)]
 
+instance MathConstant JavaCode where
   pi = G.pi
 
-  -- ($:) = enumElement
-
+instance VariableValue JavaCode where
   valueOf = G.valueOf
+
+instance CommandLineArgs JavaCode where
   arg n = G.arg (litInt n) argsList
-  -- enumElement = G.enumElement
-
   argsList = G.argsList "args"
-
-  valueType = onCodeValue valType
+  argExists i = listSize argsList ?> litInt (fromIntegral i)
 
 instance NumericExpression JavaCode where
   (#~) = unExpr' negateOp
@@ -318,6 +317,7 @@ instance BooleanExpression JavaCode where
   (?&&) = typeBinExpr andOp bool
   (?||) = typeBinExpr orOp bool
 
+instance Comparison JavaCode where
   (?<) = typeBinExpr lessOp bool
   (?<=) = typeBinExpr lessEqualOp bool
   (?>) = typeBinExpr greaterOp bool
@@ -373,13 +373,6 @@ instance InternalValue JavaCode where
   valueDoc = val . unJC
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
-instance Selector JavaCode where
-  objAccess = G.objAccess
-
-  argExists i = listAccess argsList (litInt $ fromIntegral i)
-  
-  indexOf = G.indexOf "indexOf"
-
 instance InternalValueExp JavaCode where
   objMethodCallMixedArgs' f t o ps ns = do
     ob <- o
@@ -392,47 +385,59 @@ instance InternalValueExp JavaCode where
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
   func = G.func
+  objAccess = G.objAccess
 
+instance GetSet JavaCode where
   get = G.get
   set = G.set
 
+instance List JavaCode where
   listSize = G.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
+  listAccess = G.listAccess
+  listSet = G.listSet
+  indexOf = G.indexOf "indexOf"
 
+instance InternalList JavaCode where
+  listSlice' = G.listSlice
+
+instance Iterator JavaCode where
   iterBegin = G.iterBegin
   iterEnd = G.iterEnd
 
-instance SelectorFunction JavaCode where
-  listAccess = G.listAccess
-  listSet = G.listSet
-
-instance InternalFunction JavaCode where
+instance InternalGetSet JavaCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
 
+instance InternalListFunc JavaCode where
   listSizeFunc = G.listSizeFunc
   listAddFunc _ = G.listAddFunc "add"
   listAppendFunc = G.listAppendFunc "add"
-
-  iterBeginFunc _ = error $ G.iterBeginError jName
-  iterEndFunc _ = error $ G.iterEndError jName
-  
   listAccessFunc = G.listAccessFunc' "get"
   listSetFunc v i toVal = func "set" (onStateValue valueType v) [intValue i, 
     toVal]
 
+instance InternalIterator JavaCode where
+  iterBeginFunc _ = error $ G.iterBeginError jName
+  iterEndFunc _ = error $ G.iterEndError jName
+
+instance InternalFunction JavaCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unJC
 
   funcFromData d = onStateValue (onCodeValue (`fd` d))
 
-instance InternalStatement JavaCode where
-  printSt _ _ = G.printSt
-  
+instance InternalAssignStmt JavaCode where
   multiAssign _ _ = error $ G.multiAssignError jName
+
+instance InternalIOStmt JavaCode where
+  printSt _ _ = G.printSt
+
+instance InternalControlStmt JavaCode where
   multiReturn _ = error $ G.multiReturnError jName
 
+instance InternalStatement JavaCode where
   state = G.state
   loopState = G.loopState
 
@@ -445,6 +450,8 @@ instance InternalStatement JavaCode where
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
+  valState = G.valState Semi
+  multi = onStateList (onCodeList multiStateDocD)
 
 instance AssignStatement JavaCode where
   assign = G.assign Semi
@@ -493,6 +500,10 @@ instance IOStatement JavaCode where
 
   getFileInputLine f v = v &= f $. func "nextLine" string []
   discardFileLine = G.discardFileLine "nextLine"
+  getFileInputAll f v = while (f $. func "hasNextLine" bool [])
+    (oneLiner $ valState $ listAppend (valueOf v) (f $. func "nextLine" string []))
+
+instance StringStatement JavaCode where
   stringSplit d vnew s = modify (addLangImport "java.util.Arrays") >> 
     onStateValue mkSt (zoom lensMStoVS $ jStringSplit vnew (funcApp 
     "Arrays.asList" (listType string) 
@@ -506,12 +517,8 @@ instance FuncAppStatement JavaCode where
   selfInOutCall = jInOutCall selfFuncApp
   extInOutCall m = jInOutCall (extFuncApp m)
 
-instance MiscStatement JavaCode where
-  valState = G.valState Semi
-
+instance CommentStatement JavaCode where
   comment = G.comment commentStart
-
-  multi = onStateList (onCodeList multiStateDocD)
 
 instance ControlStatement JavaCode where
   break = toState $ mkSt breakDocD 
@@ -533,11 +540,14 @@ instance ControlStatement JavaCode where
 
   tryCatch = G.tryCatch jTryCatch
   
+instance StatePattern JavaCode where 
   checkState = G.checkState
+
+instance ObserverPattern JavaCode where
   notifyObservers = G.notifyObservers
 
-  getFileInputAll f v = while (f $. func "hasNextLine" bool [])
-    (oneLiner $ valState $ listAppend (valueOf v) (f $. func "nextLine" string []))
+instance StrategyPattern JavaCode where
+  runStrategy = G.runStrategy
 
 instance ScopeSym JavaCode where
   type Scope JavaCode = Doc

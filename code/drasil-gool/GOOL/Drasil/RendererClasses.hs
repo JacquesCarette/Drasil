@@ -4,7 +4,7 @@ module GOOL.Drasil.RendererClasses (
   RenderSym, InternalFile(..), ImportSym(..), InternalPerm(..), 
   InternalBody(..), InternalBlock(..), InternalType(..), UnaryOpSym(..), 
   BinaryOpSym(..), InternalOp(..), InternalVariable(..), InternalValue(..),
-  InternalFunction(..), InternalStatement(..), InternalScope(..), 
+  InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), InternalScope(..), 
   MethodTypeSym(..), InternalParam(..), InternalMethod(..), 
   InternalStateVar(..), ParentSpec, InternalClass(..), InternalMod(..), 
   BlockCommentSym(..)
@@ -24,9 +24,9 @@ import Control.Monad.State (State)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 class (FileSym repr, InternalBlock repr, InternalBody repr, InternalClass repr, 
-  InternalFile repr, InternalFunction repr, InternalMethod repr, 
+  InternalFile repr, InternalGetSet repr, InternalListFunc repr, InternalIterator repr, InternalFunction repr, InternalMethod repr, 
   InternalMod repr, InternalOp repr, InternalParam repr, InternalPerm repr, 
-  InternalScope repr, InternalStatement repr, InternalStateVar repr, 
+  InternalScope repr, InternalAssignStmt repr, InternalIOStmt repr, InternalControlStmt repr, InternalStatement repr, InternalStateVar repr, 
   InternalType repr, InternalValue repr, InternalVariable repr,
   ImportSym repr, UnaryOpSym repr, BinaryOpSym repr) => RenderSym repr
 
@@ -131,34 +131,39 @@ class InternalValue repr where
   valueDoc :: repr (Value repr) -> Doc
   valFromData :: Maybe Int -> repr (Type repr) -> Doc -> repr (Value repr)
 
-class InternalFunction repr where
-  getFunc        :: SVariable repr -> VSFunction repr
-  setFunc        :: VSType repr -> SVariable repr -> SValue repr -> 
-    VSFunction repr
+class InternalGetSet repr where
+  getFunc :: SVariable repr -> VSFunction repr
+  setFunc :: VSType repr -> SVariable repr -> SValue repr -> VSFunction repr
 
+class InternalListFunc repr where
   listSizeFunc   :: VSFunction repr
   listAddFunc    :: SValue repr -> SValue repr -> SValue repr -> VSFunction repr
   listAppendFunc :: SValue repr -> VSFunction repr
-
-  iterBeginFunc :: VSType repr -> VSFunction repr
-  iterEndFunc   :: VSType repr -> VSFunction repr
-
   listAccessFunc :: VSType repr -> SValue repr -> VSFunction repr
   listSetFunc    :: SValue repr -> SValue repr -> SValue repr -> VSFunction repr
 
+class InternalIterator repr where
+  iterBeginFunc :: VSType repr -> VSFunction repr
+  iterEndFunc   :: VSType repr -> VSFunction repr
+
+class InternalFunction repr where
   functionType :: repr (Function repr) -> repr (Type repr)
   functionDoc :: repr (Function repr) -> Doc
 
   funcFromData :: Doc -> VSType repr -> VSFunction repr
 
-class InternalStatement repr where
+class InternalAssignStmt repr where
+  multiAssign       :: [SVariable repr] -> [SValue repr] -> MSStatement repr 
+
+class InternalIOStmt repr where
   -- newLn, maybe a file to print to, printFunc, value to print
   printSt :: Bool -> Maybe (SValue repr) -> SValue repr -> SValue repr -> 
     MSStatement repr
     
-  multiAssign       :: [SVariable repr] -> [SValue repr] -> MSStatement repr 
+class InternalControlStmt repr where
   multiReturn :: [SValue repr] -> MSStatement repr
 
+class InternalStatement repr where
   state     :: MSStatement repr -> MSStatement repr
   loopState :: MSStatement repr -> MSStatement repr
 

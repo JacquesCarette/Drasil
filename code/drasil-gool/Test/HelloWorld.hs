@@ -4,11 +4,11 @@ module Test.HelloWorld (helloWorld) where
 
 import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, 
   ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner, 
-  BlockSym(..), listSlice, TypeSym(..), AssignStatement(..), (&=), 
-  DeclStatement(..), IOStatement(..), MiscStatement(..), ControlStatement(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), extFuncApp, Selector(..), FunctionSym(..), 
-  SelectorFunction(..), MethodSym(..), ModuleSym(..))
+  BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=), 
+  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..), ControlStatement(..), 
+  VariableSym(..), Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), extFuncApp, List(..),
+  MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 

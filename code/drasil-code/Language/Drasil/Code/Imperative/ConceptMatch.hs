@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.ConceptMatch (
 import Language.Drasil.CodeSpec (Choices(..), CodeConcept(..), 
   MatchedConceptMap)
 
-import GOOL.Drasil (SValue, ProgramSym, ValueSym(..))
+import GOOL.Drasil (SValue, ProgramSym, MathConstant(..))
 
 import Prelude hiding (pi)
 import qualified Data.Map as Map (map)

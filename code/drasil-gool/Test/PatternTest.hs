@@ -2,10 +2,10 @@ module Test.PatternTest (patternTest) where
 
 import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, 
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..), 
-  ControlBlock(..), TypeSym(..), DeclStatement(..), IOStatement(..), 
-  MiscStatement(..), initState, changeState, initObserverList, addObserver, 
-  ControlStatement(..), VariableSym(..), ValueSym(..), ValueExpression(..), 
-  extNewObj, FunctionSym(..), MethodSym(..), ModuleSym(..))
+  TypeSym(..), StatementSym(..), AssignStatement, DeclStatement(..), 
+  IOStatement(..), initState, changeState, initObserverList, 
+  addObserver, VariableSym(..), Literal(..), VariableValue(..), 
+  ValueExpression(..), extNewObj, FunctionSym(..), GetSet(..), List, StatePattern(..), ObserverPattern(..), StrategyPattern(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer, observerName, printNum, x)
 
@@ -30,14 +30,17 @@ n = var nName int
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
-newObserver :: (ValueExpression repr) => SValue repr
+newObserver :: (ValueExpression repr, TypeSym repr) => SValue repr
 newObserver = extNewObj observerName observerType []
 
 patternTest :: (ProgramSym repr) => GSProgram repr
 patternTest = prog progName [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
-patternTestMainMethod :: (MethodSym repr) => SMethod repr
+patternTestMainMethod :: (MethodSym repr, AssignStatement repr, 
+  DeclStatement repr, IOStatement repr, Literal repr, VariableValue repr, ValueExpression repr, GetSet repr, List repr, 
+  StatePattern repr, ObserverPattern repr, StrategyPattern repr) => 
+  SMethod repr
 patternTestMainMethod = mainFunction (body [block [
   varDec n,
   initState fsmName offState, 

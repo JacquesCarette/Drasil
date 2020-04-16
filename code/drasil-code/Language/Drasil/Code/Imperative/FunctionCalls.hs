@@ -29,12 +29,10 @@ getAllInputCalls = do
   ic <- getConstraintCall
   return $ catMaybes [gi, dv, ic]
 
-getInputCall :: (ProgramSym r) => Reader DrasilState 
-  (Maybe (MSStatement r))
+getInputCall :: (ProgramSym r) => Reader DrasilState (Maybe (MSStatement r))
 getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
 
-getDerivedCall :: (ProgramSym r) => Reader DrasilState 
-  (Maybe (MSStatement r))
+getDerivedCall :: (ProgramSym r) => Reader DrasilState (Maybe (MSStatement r))
 getDerivedCall = getInOutCall "derived_values" getDerivedIns getDerivedOuts
 
 getConstraintCall :: (ProgramSym r) => Reader DrasilState 
@@ -52,8 +50,7 @@ getCalcCall c = do
   l <- maybeLog v
   return $ fmap (multi . (: l) . varDecDef v) val
 
-getOutputCall :: (ProgramSym r) => Reader DrasilState 
-  (Maybe (MSStatement r))
+getOutputCall :: (ProgramSym r) => Reader DrasilState (Maybe (MSStatement r))
 getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
   return $ fmap valState val

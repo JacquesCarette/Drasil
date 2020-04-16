@@ -51,7 +51,7 @@ genDoxConfig n s = do
 data ClassType = Primary | Auxiliary
 
 mkClass :: (ProgramSym r) => ClassType -> String -> Label -> Maybe Label -> 
-  [CSStateVar r] -> Reader DrasilState [SMethod r] -> 
+  [CSStateVar r] -> Reader DrasilState [SMethod r] ->
   Reader DrasilState (SClass r)
 mkClass s desc n i vs mths = do
   g <- ask
@@ -83,8 +83,8 @@ auxClass = mkClass Auxiliary
 -- if m is current module and function is not exported, use GOOL's function for 
 --   calling a method on self. This assumes all private methods are dynamic, 
 --   which is true for this generator.
-fApp :: (ProgramSym r) => String -> String -> VSType r -> [SValue r] 
-  -> NamedArgs r -> Reader DrasilState (SValue r)
+fApp :: (ProgramSym r) => String -> String -> VSType r -> [SValue r] -> 
+  NamedArgs r -> Reader DrasilState (SValue r)
 fApp m s t vl ns = do
   g <- ask
   let cm = currentModule g
@@ -94,8 +94,8 @@ fApp m s t vl ns = do
 
 -- Logic similar to fApp above, but self case not required here 
 -- (because constructor will never be private)
-ctorCall :: (ProgramSym r) => String -> VSType r -> [SValue r] -> 
-  NamedArgs r -> Reader DrasilState (SValue r)
+ctorCall :: (ProgramSym r) => String -> VSType r -> [SValue r] -> NamedArgs r 
+  -> Reader DrasilState (SValue r)
 ctorCall m t vl ns = do
   g <- ask
   let cm = currentModule g

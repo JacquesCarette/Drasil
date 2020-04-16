@@ -5,16 +5,18 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), TypeSym(..), 
-  VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
-  GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
+  GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), 
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..), 
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..))
-import GOOL.Drasil.CodeAnalysis (Exception(..), exception, stdExc)
+import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, modifyReturn, setClassName, 
@@ -90,6 +92,7 @@ instance TypeSym CodeInfo where
   iterator      _   = noInfoType
   void              = noInfoType
 
+instance TypeElim CodeInfo where
   getType _     = Void
   getTypeString = unCI
 
@@ -108,6 +111,7 @@ instance VariableSym CodeInfo where
   arrayElem   _ _   = noInfo
   iterVar     _ _   = noInfo
   
+instance VariableElim CodeInfo where
   variableName _ = ""
   variableType _ = toCode ""
 
@@ -273,9 +277,10 @@ instance IOStatement CodeInfo where
   getFileInput v _ = zoom lensMStoVS $ execute1 v
   discardFileInput = zoom lensMStoVS . execute1
 
-  openFileR _ v = modify (addException fnfExc) >> execute1 (zoom lensMStoVS v)
-  openFileW _ v = modify (addException ioExc) >> execute1 (zoom lensMStoVS v)
-  openFileA _ v = modify (addException ioExc) >> execute1 (zoom lensMStoVS v)
+  openFileR _ v = modify (addException FileNotFound) >> 
+    execute1 (zoom lensMStoVS v)
+  openFileW _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
+  openFileA _ v = modify (addException IO) >> execute1 (zoom lensMStoVS v)
   closeFile     = zoom lensMStoVS . execute1
 
   getFileInputLine v _ = zoom lensMStoVS $ execute1 v
@@ -308,7 +313,7 @@ instance ControlStatement CodeInfo where
 
   returnState = zoom lensMStoVS . execute1
 
-  throw _ = modifyReturn (addException genericExc) (toCode ())
+  throw _ = modifyReturn (addException Standard) (toCode ())
 
   ifCond = evalConds
   switch v cs b = do
@@ -390,8 +395,6 @@ instance ClassSym CodeInfo where
     modify (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
-  -- enum n _ s = if unCI s == Pub then modifyReturn (addClass n) (toCode ()) else 
-  --   noInfo 
   extraClass n _ _ ms = do
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) ms
@@ -417,11 +420,6 @@ noInfo = toState $ toCode ()
 
 noInfoType :: State s (CodeInfo String)
 noInfoType = toState $ toCode ""
-
-fnfExc, ioExc, genericExc :: Exception
-fnfExc = exception "java.io" "FileNotFoundException"
-ioExc = exception "java.io" "IOException"
-genericExc = stdExc "Exception"
 
 updateMEMandCM :: String -> MSBody CodeInfo -> SMethod CodeInfo
 updateMEMandCM n b = do

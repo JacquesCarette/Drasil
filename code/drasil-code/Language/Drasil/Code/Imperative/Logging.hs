@@ -7,8 +7,8 @@ import Language.Drasil.CodeSpec hiding (codeSpec)
 
 import GOOL.Drasil (Label, MSBody, MSBlock, SVariable, SValue, MSStatement, 
   ProgramSym, BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), 
-  Literal(..), VariableValue(..), StatementSym(..), DeclStatement(..), 
-  IOStatement(..), lensMStoVS)
+  VariableElim(..), Literal(..), VariableValue(..), StatementSym(..), 
+  DeclStatement(..), IOStatement(..), lensMStoVS)
 
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (maybeToList)
@@ -28,8 +28,7 @@ chooseLogging LogVar v = Just <$> loggedVar v
 chooseLogging LogAll v = Just <$> loggedVar v
 chooseLogging _      _ = return Nothing
 
-loggedVar :: (ProgramSym r) => SVariable r -> 
-  Reader DrasilState (MSStatement r)
+loggedVar :: (ProgramSym r) => SVariable r -> Reader DrasilState (MSStatement r)
 loggedVar v = do
     g <- ask
     return $ multi [

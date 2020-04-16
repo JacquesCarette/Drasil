@@ -96,8 +96,7 @@ genProgram = do
   let n = pName $ csi $ codeSpec g
   return $ prog n ms
 
-chooseModules :: (ProgramSym r) => Modularity -> 
-  Reader DrasilState [SFile r]
+chooseModules :: (ProgramSym r) => Modularity -> Reader DrasilState [SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules (Modular _) = genModules
 

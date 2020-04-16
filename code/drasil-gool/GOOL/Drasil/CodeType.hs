@@ -4,7 +4,6 @@ module GOOL.Drasil.CodeType (
     ) where
 
 type ClassName = String
--- type EnumName = String
 
 data CodeType = Boolean
               | Integer -- Maps to 32-bit signed integer in all languages but
@@ -18,6 +17,5 @@ data CodeType = Boolean
               | Array CodeType
               | Iterator CodeType
               | Object ClassName
-              -- | Enum EnumName
               | Func [CodeType] CodeType
               | Void deriving Eq

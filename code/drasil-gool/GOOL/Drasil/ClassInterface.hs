@@ -7,17 +7,20 @@ module GOOL.Drasil.ClassInterface (
   NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
   -- Typeclasses
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), VariableElim(..), ($->), listOf, 
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
-  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
-  InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
-  objMethodCallNoParams, FunctionSym(..), ($.), 
-  selfAccess, GetSet(..), List(..), InternalList(..), listSlice, listIndexExists, 
-  at, Iterator(..), StatementSym(..), AssignStatement(..), (&=), assignToListIndex,
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), initState, changeState, ObserverPattern(..), observerListName, initObserverList, addObserver, StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), 
+  VariableSym(..), VariableElim(..), ($->), listOf, ValueSym(..), Literal(..), 
+  MathConstant(..), VariableValue(..), CommandLineArgs(..), 
+  NumericExpression(..), BooleanExpression(..), Comparison(..), 
+  ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
+  libFuncApp, newObj, extNewObj, libNewObj, exists, InternalValueExp(..), 
+  objMethodCall, objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
+  ($.), selfAccess, GetSet(..), List(..), InternalList(..), listSlice, 
+  listIndexExists, at, Iterator(..), StatementSym(..), AssignStatement(..), 
+  (&=), assignToListIndex, DeclStatement(..), IOStatement(..), 
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
+  ControlStatement(..), StatePattern(..), initState, changeState, 
+  ObserverPattern(..), observerListName, initObserverList, addObserver, 
+  StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
   MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
   StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), convType
@@ -42,12 +45,13 @@ class (FileSym r) => ProgramSym r where
 
 type SFile a = FS (a (RenderFile a))
 
-class (ModuleSym r, ControlBlock r, AssignStatement r, 
-  DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r,
-  CommentStatement r, ControlStatement r, InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, 
-  ValueExpression r, InternalValueExp r, GetSet r, List r, 
-  Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => 
-  FileSym r where 
+class (ModuleSym r, ControlBlock r, AssignStatement r, DeclStatement r, 
+  IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, 
+  ControlStatement r, InternalList r, Literal r, MathConstant r, 
+  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, 
+  Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, 
+  Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, 
+  VariableElim r) => FileSym r where 
   type RenderFile r
   fileDoc :: FSModule r -> SFile r
 
@@ -129,8 +133,7 @@ class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
   variableType :: r (Variable r) -> r (Type r)
 
-($->) :: (VariableSym r) => SVariable r -> SVariable r -> 
-  SVariable r
+($->) :: (VariableSym r) => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
 ($->) = objVar
 
@@ -277,20 +280,20 @@ exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
 
 class (FunctionSym r) => InternalValueExp r where
-  objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> 
-    [SValue r] -> NamedArgs r -> SValue r
+  objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
+    NamedArgs r -> SValue r
   objMethodCallNoParams' :: Label -> VSType r -> SValue r -> SValue r
 
-objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label 
-  -> [SValue r] -> SValue r
+objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
+  [SValue r] -> SValue r
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
-objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r 
-  -> Label -> [SValue r] -> NamedArgs r -> SValue r
+objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+  -> [SValue r] -> NamedArgs r -> SValue r
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
-objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r 
-  -> Label -> SValue r
+objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+  -> SValue r
 objMethodCallNoParams t o f = objMethodCallNoParams' f t o
 
 type VSFunction a = VS (a (Function a))
@@ -304,8 +307,7 @@ class (ValueSym r) => FunctionSym r where
 infixl 9 $.
 ($.) = objAccess
 
-selfAccess :: (VariableValue r, FunctionSym r) => VSFunction r -> 
-  SValue r
+selfAccess :: (VariableValue r, FunctionSym r) => VSFunction r -> SValue r
 selfAccess = objAccess (valueOf self)
 
 class (ValueSym r, VariableSym r) => GetSet r where
@@ -322,16 +324,14 @@ class (ValueSym r) => List r where
   indexOf :: SValue r -> SValue r -> SValue r
 
 class (ValueSym r) => InternalList r where
-  listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> 
-    Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
+  listSlice'      :: Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) 
+    -> SVariable r -> SValue r -> MSBlock r
   
-listSlice :: (InternalList r) => SVariable r -> SValue r -> 
-  Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> 
-  MSBlock r
+listSlice :: (InternalList r) => SVariable r -> SValue r -> Maybe (SValue r) -> 
+  Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listSlice vnew vold b e s = listSlice' b e s vnew vold
 
-listIndexExists :: (List r, Comparison r) => SValue r -> SValue r 
-  -> SValue r
+listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 listIndexExists lst index = listSize lst ?> index
 
 at :: (List r) => SValue r -> SValue r -> SValue r
@@ -360,30 +360,28 @@ class (VariableSym r, StatementSym r) => AssignStatement r where
 
   assign :: SVariable r -> SValue r -> MSStatement r
 
-(&=) :: (AssignStatement r) => SVariable r -> SValue r -> 
-  MSStatement r
+(&=) :: (AssignStatement r) => SVariable r -> SValue r -> MSStatement r
 infixr 1 &=
 (&=) = assign
 
-assignToListIndex :: (StatementSym r, VariableValue r, List r) => 
-  SVariable r -> SValue r -> SValue r -> MSStatement r
+assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r 
+  -> SValue r -> SValue r -> MSStatement r
 assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
 
 class (VariableSym r, StatementSym r) => DeclStatement r where
-  varDec           :: SVariable r -> MSStatement r
-  varDecDef        :: SVariable r -> SValue r -> MSStatement r
-  listDec          :: Integer -> SVariable r -> MSStatement r
-  listDecDef       :: SVariable r -> [SValue r] -> MSStatement r
-  arrayDec         :: Integer -> SVariable r -> MSStatement r
-  arrayDecDef      :: SVariable r -> [SValue r] -> MSStatement r
-  objDecDef        :: SVariable r -> SValue r -> MSStatement r
-  objDecNew        :: SVariable r -> [SValue r] -> MSStatement r
-  extObjDecNew     :: Library -> SVariable r -> [SValue r] -> 
-    MSStatement r
+  varDec               :: SVariable r -> MSStatement r
+  varDecDef            :: SVariable r -> SValue r -> MSStatement r
+  listDec              :: Integer -> SVariable r -> MSStatement r
+  listDecDef           :: SVariable r -> [SValue r] -> MSStatement r
+  arrayDec             :: Integer -> SVariable r -> MSStatement r
+  arrayDecDef          :: SVariable r -> [SValue r] -> MSStatement r
+  objDecDef            :: SVariable r -> SValue r -> MSStatement r
+  objDecNew            :: SVariable r -> [SValue r] -> MSStatement r
+  extObjDecNew         :: Library -> SVariable r -> [SValue r] -> MSStatement r
   objDecNewNoParams    :: SVariable r -> MSStatement r
   extObjDecNewNoParams :: Library -> SVariable r -> MSStatement r
-  constDecDef      :: SVariable r -> SValue r -> MSStatement r
-  funcDecDef       :: SVariable r -> [SVariable r] -> SValue r -> 
+  constDecDef          :: SVariable r -> SValue r -> MSStatement r
+  funcDecDef           :: SVariable r -> [SVariable r] -> SValue r -> 
     MSStatement r
 
 class (VariableSym r, StatementSym r) => IOStatement r where
@@ -440,22 +438,20 @@ class (BodySym r) => ControlStatement r where
   throw :: Label -> MSStatement r
 
   ifCond     :: [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
-  switch     :: SValue r -> [(SValue r, MSBody r)] -> MSBody r -> 
-    MSStatement r -- is there value in separating Literals into their own type?
+  switch     :: SValue r -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 
   ifExists :: SValue r -> MSBody r -> MSBody r -> MSStatement r
 
-  for      :: MSStatement r -> SValue r -> MSStatement r -> 
-    MSBody r -> MSStatement r
-  forRange :: SVariable r -> SValue r -> SValue r -> SValue r ->
-    MSBody r -> MSStatement r
+  for      :: MSStatement r -> SValue r -> MSStatement r -> MSBody r -> 
+    MSStatement r
+  forRange :: SVariable r -> SValue r -> SValue r -> SValue r -> MSBody r -> 
+    MSStatement r
   forEach  :: SVariable r -> SValue r -> MSBody r -> MSStatement r
   while    :: SValue r -> MSBody r -> MSStatement r 
 
   tryCatch :: MSBody r -> MSBody r -> MSStatement r
 
-ifNoElse :: (ControlStatement r) => [(SValue r, MSBody r)] 
-  -> MSStatement r
+ifNoElse :: (ControlStatement r) => [(SValue r, MSBody r)] -> MSStatement r
 ifNoElse bs = ifCond bs $ body []
 
 switchAsIf :: (ControlStatement r, Comparison r) => SValue r -> 
@@ -466,13 +462,11 @@ class (BodySym r) => StatePattern r where
   checkState      :: Label -> [(SValue r, MSBody r)] -> MSBody r -> 
     MSStatement r
 
-initState :: (DeclStatement r, Literal r) => Label -> Label -> 
-  MSStatement r
+initState :: (DeclStatement r, Literal r) => Label -> Label -> MSStatement r
 initState fsmName initialState = varDecDef (var fsmName string) 
   (litString initialState)
 
-changeState :: (AssignStatement r, Literal r) => Label -> Label -> 
-  MSStatement r
+changeState :: (AssignStatement r, Literal r) => Label -> Label -> MSStatement r
 changeState fsmName toState = var fsmName string &= litString toState
 
 class (StatementSym r, FunctionSym r) => ObserverPattern r where
@@ -481,12 +475,11 @@ class (StatementSym r, FunctionSym r) => ObserverPattern r where
 observerListName :: Label
 observerListName = "observerList"
 
-initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> 
-  MSStatement r
+initObserverList :: (DeclStatement r) => VSType r -> [SValue r] -> MSStatement r
 initObserverList t = listDecDef (var observerListName (listType t))
 
-addObserver :: (StatementSym r, VariableValue r, List r) => 
-  SValue r -> MSStatement r
+addObserver :: (StatementSym r, VariableValue r, List r) => SValue r -> 
+  MSStatement r
 addObserver o = valState $ listAdd obsList lastelem o
   where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
         lastelem = listSize obsList
@@ -522,14 +515,14 @@ type DocInOutFunc r = Label -> r (Scope r) -> r (Permanence r) -> String ->
   [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] 
   -> MSBody r -> SMethod r
 
-class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r where
+class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r 
+  where
   type Method r
-  method      :: Label -> r (Scope r) -> r (Permanence r) -> 
-    VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+  method      :: Label -> r (Scope r) -> r (Permanence r) -> VSType r -> 
+    [MSParameter r] -> MSBody r -> SMethod r
   getMethod   :: SVariable r -> SMethod r
   setMethod   :: SVariable r -> SMethod r 
-  constructor :: [MSParameter r] -> Initializers r -> MSBody r -> 
-    SMethod r
+  constructor :: [MSParameter r] -> Initializers r -> MSBody r -> SMethod r
 
   docMain :: MSBody r -> SMethod r
 
@@ -545,32 +538,28 @@ class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r wh
   inOutFunc :: InOutFunc r
   docInOutFunc :: DocInOutFunc r
 
-privMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> 
-  MSBody r -> SMethod r
+privMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
+  -> SMethod r
 privMethod n = method n private dynamic
 
-pubMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> 
-  MSBody r -> SMethod r
+pubMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
+  -> SMethod r
 pubMethod n = method n public dynamic
 
-initializer :: (MethodSym r) => [MSParameter r] -> Initializers r -> 
-  SMethod r
+initializer :: (MethodSym r) => [MSParameter r] -> Initializers r -> SMethod r
 initializer ps is = constructor ps is (body [])
 
-nonInitConstructor :: (MethodSym r) => [MSParameter r] -> MSBody r -> 
-  SMethod r
+nonInitConstructor :: (MethodSym r) => [MSParameter r] -> MSBody r -> SMethod r
 nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
 
 class (ScopeSym r, PermanenceSym r) => StateVarSym r where
   type StateVar r
-  stateVar :: r (Scope r) -> r (Permanence r) -> SVariable r -> 
-    CSStateVar r
-  stateVarDef :: Label -> r (Scope r) -> r (Permanence r) ->
-    SVariable r -> SValue r -> CSStateVar r
-  constVar :: Label -> r (Scope r) ->  SVariable r -> SValue r -> 
-    CSStateVar r
+  stateVar :: r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
+  stateVarDef :: Label -> r (Scope r) -> r (Permanence r) -> SVariable r -> 
+    SValue r -> CSStateVar r
+  constVar :: Label -> r (Scope r) ->  SVariable r -> SValue r -> CSStateVar r
 
 privDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
 privDVar = stateVar private dynamic
@@ -587,11 +576,10 @@ class (MethodSym r, StateVarSym r) => ClassSym r where
   type Class r
   buildClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
     SClass r
-  -- enum :: Label -> [Label] -> r (Scope r) -> SClass r
   extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
     SClass r
-  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] 
-    -> SClass r
+  implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> 
+    SClass r
 
   docClass :: String -> SClass r -> SClass r
 
@@ -599,8 +587,7 @@ type FSModule a = FS (a (Module a))
 
 class (ClassSym r) => ModuleSym r where
   type Module r
-  buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> 
-    FSModule r
+  buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
 
 -- Data
 
@@ -646,7 +633,6 @@ convType (List t) = listType (convType t)
 convType (Array t) = arrayType (convType t)
 convType (Iterator t) = iterator $ convType t
 convType (Object n) = obj n
--- convType (Enum n) = enumType n
 convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void
 convType File = error "convType: File ?"

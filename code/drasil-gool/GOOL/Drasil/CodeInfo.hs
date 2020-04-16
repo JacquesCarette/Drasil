@@ -5,13 +5,16 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlock(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
-  GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  BlockSym(..), ControlBlock(..), TypeSym(..), TypeElim(..), VariableSym(..), 
+  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
+  BooleanExpression(..), Comparison(..), ValueExpression(..), 
+  InternalValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..),
+  Iterator(..), StatementSym(..), AssignStatement(..), DeclStatement(..), 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
+  CommentStatement(..), ControlStatement(..), StatePattern(..), 
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.CodeAnalysis (Exception(..), exception, stdExc)
@@ -395,8 +398,6 @@ instance ClassSym CodeInfo where
     modify (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
-  -- enum n _ s = if unCI s == Pub then modifyReturn (addClass n) (toCode ()) else 
-  --   noInfo 
   extraClass n _ _ ms = do
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) ms

@@ -438,7 +438,7 @@ genCalcBlock CalcAssign v e = do
   ee <- convExpr e
   l <- maybeLog vv
   return $ block $ assign vv ee : l
-genCalcBlock CalcReturn _ e = block <$> liftS (returnState <$> convExpr e)
+genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 
 genCaseBlock :: (ProgramSym r) => CalcType -> CodeDefinition -> Completeness 
   -> [(Expr,Relation)] -> Reader DrasilState (MSBlock r)

@@ -67,5 +67,5 @@ patternTestMainMethod = mainFunction (body [block [
     notifyObservers (func printNum void []) observerType],
     
   block [
-    valState $ set (valueOf obs1) x (litInt 10),
+    valStmt $ set (valueOf obs1) x (litInt 10),
     print $ get (valueOf obs1) x]])

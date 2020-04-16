@@ -345,7 +345,7 @@ type MSStatement a = MS (a (Statement a))
 
 class (ValueSym r) => StatementSym r where
   type Statement r
-  valState :: SValue r -> MSStatement r -- converts value to statement
+  valStmt :: SValue r -> MSStatement r -- converts value to statement
   multi     :: [MSStatement r] -> MSStatement r
 
 class (VariableSym r, StatementSym r) => AssignStatement r where
@@ -366,7 +366,7 @@ infixr 1 &=
 
 assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r 
   -> SValue r -> SValue r -> MSStatement r
-assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
+assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
 class (VariableSym r, StatementSym r) => DeclStatement r where
   varDec               :: SVariable r -> MSStatement r
@@ -433,7 +433,7 @@ class (BodySym r) => ControlStatement r where
   break :: MSStatement r
   continue :: MSStatement r
 
-  returnState :: SValue r -> MSStatement r
+  returnStmt :: SValue r -> MSStatement r
 
   throw :: Label -> MSStatement r
 
@@ -480,7 +480,7 @@ initObserverList t = listDecDef (var observerListName (listType t))
 
 addObserver :: (StatementSym r, VariableValue r, List r) => SValue r -> 
   MSStatement r
-addObserver o = valState $ listAdd obsList lastelem o
+addObserver o = valStmt $ listAdd obsList lastelem o
   where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
         lastelem = listSize obsList
 

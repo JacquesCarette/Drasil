@@ -240,7 +240,7 @@ instance Iterator CodeInfo where
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()
-  valState = zoom lensMStoVS . execute1
+  valStmt = zoom lensMStoVS . execute1
   multi    = executeList
   
 instance AssignStatement CodeInfo where
@@ -315,7 +315,7 @@ instance ControlStatement CodeInfo where
   break    = noInfo
   continue = noInfo
 
-  returnState = zoom lensMStoVS . execute1
+  returnStmt = zoom lensMStoVS . execute1
 
   throw _ = modifyReturn (addException Standard) (toCode ())
 

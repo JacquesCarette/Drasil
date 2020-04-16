@@ -65,7 +65,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
   extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, print, 
   discardInput, discardFileInput, closeFile, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, throw, ifCond, switch, for, 
+  returnStmt, multiReturnError, valStmt, comment, throw, ifCond, switch, for, 
   forRange, while, tryCatch, notifyObservers, construct, param, method, 
   getMethod, setMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
   buildClass, implementingClass, docClass, commentedClass, buildModule, 
@@ -562,7 +562,7 @@ instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
-  valState = pair1 valState valState . zoom lensMStoVS
+  valStmt = pair1 valStmt valStmt . zoom lensMStoVS
   multi = pair1List multi multi
 
 instance (Pair p) => AssignStatement (p CppSrcCode CppHdrCode) where
@@ -660,7 +660,7 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
   break = on2StateValues pair break break  
   continue = on2StateValues pair continue continue
 
-  returnState = pair1 returnState returnState . zoom lensMStoVS
+  returnStmt = pair1 returnStmt returnStmt . zoom lensMStoVS
 
   throw errMsg = on2StateValues pair (throw errMsg) (throw errMsg)
 
@@ -1194,7 +1194,7 @@ instance ControlBlock CppSrcCode where
         -- The initial value MUST be assigned to a variable because odeint will 
         -- update that variable at each step.
         varDecDef currVal (initVal info),
-        valState $ funcApp (odeNameSpace ++ "integrate_const") void 
+        valStmt $ funcApp (odeNameSpace ++ "integrate_const") void 
           [cppODEMethod info opts, valueOf odeVar, valueOf currVal, 
           tInit info, tFinal info, stepSize opts, 
           newObj (obj $ "Populate_" ++ variableName dpv) [valueOf dv]]]))
@@ -1452,7 +1452,7 @@ instance StatementElim CppSrcCode where
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
-  valState = G.valState Semi
+  valStmt = G.valStmt Semi
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement CppSrcCode where
@@ -1507,7 +1507,7 @@ instance IOStatement CppSrcCode where
     cppOpenFile "std::fstream::app" f v) f' v'
   closeFile = G.closeFile "close" 
 
-  getFileInputLine f v = valState $ funcApp "std::getline" string [f, valueOf v]
+  getFileInputLine f v = valStmt $ funcApp "std::getline" string [f, valueOf v]
   discardFileLine f = addLimitsImport $ zoom lensMStoVS $ onStateValue (mkSt .
     cppDiscardInput "\\n") f
   getFileInputAll f v = let l_line = "nextLine"
@@ -1516,7 +1516,7 @@ instance IOStatement CppSrcCode where
                         in
     multi [varDec var_line,
       while (funcApp "std::getline" string [f, v_line])
-      (oneLiner $ valState $ listAppend (valueOf v) v_line)]
+      (oneLiner $ valStmt $ listAppend (valueOf v) v_line)]
 
 instance StringStatement CppSrcCode where
   stringSplit d vnew s = let l_ss = "ss"
@@ -1527,12 +1527,12 @@ instance StringStatement CppSrcCode where
                              v_word = valueOf var_word
                          in
     modify (addLangImport "sstream") >> multi [
-      valState $ valueOf vnew $. func "clear" void [],
+      valStmt $ valueOf vnew $. func "clear" void [],
       varDec var_ss,
-      valState $ objMethodCall string v_ss "str" [s],
+      valStmt $ objMethodCall string v_ss "str" [s],
       varDec var_word,
       while (funcApp "std::getline" string [v_ss, v_word, litChar d]) 
-        (oneLiner $ valState $ listAppend (valueOf vnew) v_word)
+        (oneLiner $ valStmt $ listAppend (valueOf vnew) v_word)
     ]
 
   stringListVals = G.stringListVals
@@ -1550,7 +1550,7 @@ instance ControlStatement CppSrcCode where
   break = toState $ mkSt R.break
   continue = toState $ mkSt R.continue
 
-  returnState = G.returnState Semi
+  returnStmt = G.returnStmt Semi
 
   throw = G.throw cppThrowDoc Semi
 
@@ -1621,7 +1621,7 @@ instance MethodSym CppSrcCode where
   function = G.function
   mainFunction b = intFunc True "main" public static (mType int) 
     [param argc, param argv]
-    (on2StateValues (on2CodeValues appendToBody) b (returnState $ litInt 0))
+    (on2StateValues (on2CodeValues appendToBody) b (returnStmt $ litInt 0))
     where argc = var "argc" int
           argv = toState $ mkVar "argv" (typeFromData (List String) 
             "const char" (text "const char")) (text "*argv[]")
@@ -2091,7 +2091,7 @@ instance StatementElim CppHdrCode where
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
-  valState _ = emptyStmt
+  valStmt _ = emptyStmt
   multi _ = emptyStmt
 
 instance AssignStatement CppHdrCode where
@@ -2159,7 +2159,7 @@ instance ControlStatement CppHdrCode where
   break = emptyStmt
   continue = emptyStmt
 
-  returnState _ = emptyStmt
+  returnStmt _ = emptyStmt
 
   throw _ = emptyStmt
 
@@ -2422,7 +2422,7 @@ cppODEFile info = (fl, s ^. goolState)
           buildClass ("Populate_" ++ n) Nothing [pubDVar dvptr] 
             [initializer [pointerParam dv] [(dv, valueOf dv)],
             pubMethod "operator()" void [pointerParam dvElem, param tElem] 
-              (oneLiner $ valState $ listAppend (valueOf $ objVarSelf dv) 
+              (oneLiner $ valStmt $ listAppend (valueOf $ objVarSelf dv) 
               (valueOf dv))]]))
           (zoom lensFStoVS olddv) (zoom lensFStoVS oldiv) (mapM (zoom lensFStoVS) ovars)
 
@@ -2613,7 +2613,7 @@ cppInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
 cppInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)
   (valueOf out : ins)
-cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins 
+cppInOutCall f n ins outs both = valStmt $ f n void (map valueOf both ++ ins 
   ++ map valueOf outs)
 
 cppsInOut :: (CppSrcCode (Scope CppSrcCode) -> 
@@ -2624,10 +2624,10 @@ cppsInOut :: (CppSrcCode (Scope CppSrcCode) ->
   MSBody CppSrcCode -> SMethod CppSrcCode
 cppsInOut f s p ins [v] [] b = f s p (onStateValue variableType v) 
   (cppInOutParams ins [v] []) (on3StateValues (on3CodeValues surroundBody) 
-  (varDec v) b (returnState $ valueOf v))
+  (varDec v) b (returnStmt $ valueOf v))
 cppsInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
   (cppInOutParams ins [] [v]) (on2StateValues (on2CodeValues appendToBody) b 
-  (returnState $ valueOf v))
+  (returnStmt $ valueOf v))
 cppsInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
 
 cpphInOut :: (CppHdrCode (Scope CppHdrCode) -> 

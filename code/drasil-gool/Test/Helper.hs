@@ -19,4 +19,4 @@ doubleAndAdd = docFunc "This function adds two numbers"
     varDec $ var "doubledSum" double, 
     var "doubledSum" double &= ((litDouble 2.0 #* valueOf (var "num1" double)) #+ 
       (litDouble 2.0 #* valueOf (var "num2" double))),
-    returnState (valueOf (var "doubledSum" double))])
+    returnStmt (valueOf (var "doubledSum" double))])

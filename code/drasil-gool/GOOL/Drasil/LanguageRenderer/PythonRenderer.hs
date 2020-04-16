@@ -180,7 +180,6 @@ instance TypeSym PythonCode where
   arrayType = listType
   listInnerType = G.listInnerType
   obj = G.obj
-  -- enumType = G.enumType
   funcType = G.funcType
   iterator t = t
   void = toState $ typeFromData Void "NoneType" (text "NoneType")
@@ -679,8 +678,6 @@ instance StateVarElim PythonCode where
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
   buildClass = G.buildClass
-  -- enum n es s = modify (setClassName n) >> classFromData (toState $ pyClass n 
-  --   empty (scopeDoc s) (enumElementsDocD' es) empty)
   extraClass = buildClass
   implementingClass = G.implementingClass
 

@@ -194,7 +194,6 @@ instance TypeSym JavaCode where
   arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
-  -- enumType = G.enumType
   funcType = G.funcType
   iterator t = t
   void = G.void
@@ -290,7 +289,6 @@ instance VariableSym JavaCode where
   const = var
   extVar = G.extVar
   self = G.self
-  -- enumVar = G.enumVar
   classVar = G.classVar R.classVar
   extClassVar = classVar
   objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
@@ -699,7 +697,6 @@ instance StateVarElim JavaCode where
 instance ClassSym JavaCode where
   type Class JavaCode = Doc
   buildClass = G.buildClass
-  -- enum = G.enum
   extraClass = G.extraClass
   implementingClass = G.implementingClass
 

@@ -198,7 +198,6 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   arrayType = pair1 arrayType arrayType
   listInnerType = pair1 listInnerType listInnerType
   obj t = on2StateValues pair (obj t) (obj t)
-  -- enumType t = on2StateValues pair (enumType t) (enumType t)
   funcType = pair1List1Val funcType funcType
   iterator = pair1 iterator iterator
   void = on2StateValues pair void void
@@ -328,7 +327,6 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   const n = pair1 (const n) (const n)
   extVar l n = pair1 (extVar l n) (extVar l n)
   self = on2StateValues pair self self
-  -- enumVar e en = on2StateValues pair (enumVar e en) (enumVar e en)
   classVar = pair2 classVar classVar
   extClassVar = pair2 extClassVar extClassVar
   objVar = pair2 objVar objVar
@@ -817,8 +815,6 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   buildClass n p vs fs = modify (setClassName n) >> pair2Lists 
     (buildClass n p) (buildClass n p)
     vs (map (zoom lensCStoMS) fs)
-  -- enum l ls s = modify (setClassName l) >> on2StateValues pair 
-  --   (enum l ls $ pfst s) (enum l ls $ psnd s)
   extraClass n p vs fs = modify (setClassName n) >> pair2Lists 
     (extraClass n p) (extraClass n p)
     vs (map (zoom lensCStoMS) fs)
@@ -1163,7 +1159,6 @@ instance TypeSym CppSrcCode where
   obj n = zoom lensVStoMS getClassName >>= (\cn -> if cn == n then G.obj n else 
     getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
     (Map.lookup n cm) (G.obj n)))
-  -- enumType = G.enumType
   funcType = G.funcType
   iterator t = modify (addLangImportVS "iterator") >> (cppIterType . listType) t
   void = G.void
@@ -1681,7 +1676,6 @@ instance StateVarElim CppSrcCode where
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
   buildClass = G.buildClass
-  -- enum _ _ _ = toState $ toCode empty
   extraClass = buildClass
   implementingClass = G.implementingClass
 
@@ -1827,7 +1821,6 @@ instance TypeSym CppHdrCode where
   listInnerType = G.listInnerType
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
     (Map.lookup n cm) $ G.obj n)
-  -- enumType = G.enumType
   funcType = G.funcType
   iterator t = modify (addHeaderLangImport "iterator") >> 
     (cppIterType . listType) t
@@ -1900,7 +1893,6 @@ instance VariableSym CppHdrCode where
   const _ _ = mkStateVar "" void empty
   extVar _ _ _ = mkStateVar "" void empty
   self = mkStateVar "" void empty
-  -- enumVar _ _ = mkStateVar "" void empty
   classVar _ _ = mkStateVar "" void empty
   extClassVar _ _ = mkStateVar "" void empty
   objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
@@ -2278,8 +2270,6 @@ instance StateVarElim CppHdrCode where
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
   buildClass = G.buildClass
-  -- enum n es _ = modify (setClassName n) >> cpphEnum n (enumElementsDocD es 
-  --   enumsEqualInts) bodyStart bodyEnd endStatement
   extraClass = buildClass
   implementingClass = G.implementingClass
 
@@ -2376,9 +2366,6 @@ addLimitsImport = (>>) $ modify (addLangImport "limits")
 -- convenience
 cppName :: String
 cppName = "C++" 
-
--- enumsEqualInts :: Bool
--- enumsEqualInts = False
 
 inc :: Doc
 inc = text "#include"
@@ -2619,13 +2606,6 @@ cpphClass n ps vars funcs pub priv = onCodeValue (\p -> vcat [
     bodyEnd <> endStatement]) ps
   where pubs = cpphVarsFuncsList Pub vars funcs
         privs = cpphVarsFuncsList Priv vars funcs
-
--- cpphEnum :: (RenderSym r) => Label -> Doc -> r (Keyword r) -> 
---   r (Keyword r) -> r (Keyword r) -> SClass r
--- cpphEnum n es bStart bEnd end = classFromData $ toState $ vcat [
---   text "enum" <+> text n <+> keyDoc bStart,
---   indent es,
---   keyDoc bEnd <> keyDoc end]
 
 cppInOutCall :: (Label -> VSType CppSrcCode -> [SValue CppSrcCode] -> 
   SValue CppSrcCode) -> Label -> [SValue CppSrcCode] -> [SVariable CppSrcCode] 

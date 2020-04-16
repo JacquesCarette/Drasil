@@ -587,7 +587,6 @@ class (MethodSym r, StateVarSym r) => ClassSym r where
   type Class r
   buildClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
     SClass r
-  -- enum :: Label -> [Label] -> r (Scope r) -> SClass r
   extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
     SClass r
   implementingClass :: Label -> [Label] -> [CSStateVar r] -> [SMethod r] 
@@ -646,7 +645,6 @@ convType (List t) = listType (convType t)
 convType (Array t) = arrayType (convType t)
 convType (Iterator t) = iterator $ convType t
 convType (Object n) = obj n
--- convType (Enum n) = enumType n
 convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void
 convType File = error "convType: File ?"

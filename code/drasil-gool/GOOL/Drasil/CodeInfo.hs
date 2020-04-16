@@ -395,8 +395,6 @@ instance ClassSym CodeInfo where
     modify (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
-  -- enum n _ s = if unCI s == Pub then modifyReturn (addClass n) (toCode ()) else 
-  --   noInfo 
   extraClass n _ _ ms = do
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) ms

@@ -389,7 +389,7 @@ setterName s = "set" ++ capitalize s
 intValue :: (RenderSym r) => SValue r -> SValue r
 intValue i = i >>= intValue' . getType . valueType
   where intValue' Integer = i
-        intValue' _ = error "Value passed must be Integer or Enum"
+        intValue' _ = error "Value passed to intValue must be Integer"
 
 doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String
 doxCommand = "\\"

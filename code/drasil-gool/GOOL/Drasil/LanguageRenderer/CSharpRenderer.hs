@@ -188,7 +188,6 @@ instance TypeSym CSharpCode where
   arrayType = G.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
-  -- enumType = G.enumType
   funcType = G.funcType
   iterator t = t
   void = G.void
@@ -289,7 +288,6 @@ instance VariableSym CSharpCode where
   const = var
   extVar = G.extVar
   self = G.self
-  -- enumVar = G.enumVar
   classVar = G.classVar R.classVar
   extClassVar = classVar
   objVar = on2StateValues csObjVar
@@ -661,7 +659,6 @@ instance StateVarElim CSharpCode where
 instance ClassSym CSharpCode where
   type Class CSharpCode = Doc
   buildClass = G.buildClass
-  -- enum = G.enum
   extraClass = buildClass
   implementingClass = G.implementingClass
 

@@ -173,9 +173,6 @@ listInnerType t = t >>= (convType . getInnerType . getType)
 obj :: (RenderSym r) => ClassName -> VSType r
 obj n = toState $ typeFromData (Object n) n (text n)
 
--- enumType :: (RenderSym r) => Label -> VSType r
--- enumType e = toState $ typeFromData (Enum e) e (text e)
-
 funcType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
 funcType ps' = on2StateValues (\ps r -> typeFromData (Func (map getType ps) 
   (getType r)) "" empty) (sequence ps')
@@ -527,9 +524,6 @@ valueOf = onStateValue (\v -> mkVal (variableType v) (variableDoc v))
 
 arg :: (RenderSym r) => SValue r -> SValue r -> SValue r
 arg = on3StateValues (\s n args -> mkVal s (R.arg n args)) S.string
-
--- enumElement :: (RenderSym r) => Label -> Label -> SValue r
--- enumElement en (e = mkStateVal (enumType en) (enumElemDocD en e)
 
 argsList :: (RenderSym r) => String -> SValue r
 argsList l = mkStateVal (S.arrayType S.string) (text l)
@@ -1086,11 +1080,6 @@ constVar p s vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue
 buildClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
   [SMethod r] -> SClass r
 buildClass n = S.intClass n public . inherit
-
--- enum :: (RenderSym r) => Label -> [Label] -> r (Scope r) -> 
---   SClass r
--- enum n es s = modify (setClassName n) >> classFromData (toState $ enumDocD n 
---   (enumElementsDocD es False) (scopeDoc s))
 
 extraClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
   [SMethod r] -> SClass r

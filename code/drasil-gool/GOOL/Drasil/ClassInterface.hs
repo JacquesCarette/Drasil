@@ -165,11 +165,11 @@ class (ValueSym r) => CommandLineArgs r where
 
 class (ValueSym r) => NumericExpression r where
   (#~)  :: SValue r -> SValue r
-  infixl 8 #~
+  infixl 8 #~ -- Negation
   (#/^) :: SValue r -> SValue r
-  infixl 7 #/^
+  infixl 7 #/^ -- Square root
   (#|)  :: SValue r -> SValue r
-  infixl 7 #|
+  infixl 7 #| -- Absolute value
   (#+)  :: SValue r -> SValue r -> SValue r
   infixl 5 #+
   (#-)  :: SValue r -> SValue r -> SValue r
@@ -179,9 +179,9 @@ class (ValueSym r) => NumericExpression r where
   (#/)  :: SValue r -> SValue r -> SValue r
   infixl 6 #/
   (#%)  :: SValue r -> SValue r -> SValue r
-  infixl 6 #%
+  infixl 6 #% -- Modulo
   (#^)  :: SValue r -> SValue r -> SValue r
-  infixl 7 #^
+  infixl 7 #^ -- Exponentiation
 
   log    :: SValue r -> SValue r
   ln     :: SValue r -> SValue r
@@ -200,7 +200,7 @@ class (ValueSym r) => NumericExpression r where
 
 class (ValueSym r) => BooleanExpression r where
   (?!)  :: SValue r -> SValue r
-  infixr 6 ?!
+  infixr 6 ?! -- Boolean 'not'
   (?&&) :: SValue r -> SValue r -> SValue r
   infixl 2 ?&&
   (?||) :: SValue r -> SValue r -> SValue r

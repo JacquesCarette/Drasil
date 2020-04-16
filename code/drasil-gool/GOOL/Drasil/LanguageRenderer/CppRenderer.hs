@@ -33,15 +33,15 @@ import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..),
   InternalStateVar(..), StateVarElim(..), ParentSpec, InternalClass(..), 
   ClassElim(..), InternalMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
-import GOOL.Drasil.LanguageRenderer (addExt, multiStateDocD, 
-  bodyDocD, outDoc, paramDocD, stateVarDocD, constVarDocD, mkSt, mkStNoEnd, 
-  breakDocD, continueDocD, mkStateVal, mkVal, mkStateVar, mkVar, 
-  classVarCheckStatic, castDocD, castObjDocD, staticDocD, dynamicDocD, 
-  privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
+import GOOL.Drasil.LanguageRenderer (addExt, 
+  mkSt, mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, 
+  classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, 
-  commentedModD, valueList, parameterList, appendToBody, surroundBody, 
+  functionDox, valueList, parameterList, appendToBody, surroundBody, 
   getterName, setterName)
+import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body, param, 
+  stateVar, constVar, cast, castObj, static, dynamic, break, continue, 
+  private, public, blockCmt, docCmt, addComments, commentedMod, commentedItem)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, float, double, char, string, listType, 
   listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, negateOp,
@@ -57,15 +57,15 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listAppendFunc, listAccessFunc', listSetFunc, state, loopState, emptyState, 
   assign, multiAssignError, decrement, increment, decrement1, increment1, 
   varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
-  extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, discardInput, 
-  discardFileInput, closeFile, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, throw, ifCond, switch, for, forRange, 
-  while, tryCatch, notifyObservers, construct, param, method, getMethod, 
-  setMethod, constructor, function, docFunc, docInOutFunc, intFunc, buildClass, 
-  implementingClass, docClass, commentedClass, buildModule, modFromData, 
-  fileDoc, docMod, fileFromData)
+  extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, print, 
+  discardInput, discardFileInput, closeFile, stringListVals, stringListLists, 
+  returnState, multiReturnError, valState, comment, throw, ifCond, switch, for, 
+  forRange, while, tryCatch, notifyObservers, construct, param, method, 
+  getMethod, setMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
+  buildClass, implementingClass, docClass, commentedClass, buildModule, 
+  modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
-  unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
+  unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr, classVarCheckStatic)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), 
   Binding(..), onBinding, BindData(..), bd, FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, OpData(..), od, 
@@ -1100,7 +1100,7 @@ instance InternalFile CppSrcCode where
   bottom = toCode empty
 
   commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then on2CodeValues 
-    commentedModD m cmt else m) mod cmnt getCurrMain
+    R.commentedMod m cmt else m) mod cmnt getCurrMain
   
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
@@ -1115,8 +1115,8 @@ instance ImportElim CppSrcCode where
 
 instance PermanenceSym CppSrcCode where
   type Permanence CppSrcCode = BindData
-  static = toCode $ bd Static staticDocD
-  dynamic = toCode $ bd Dynamic dynamicDocD
+  static = toCode $ bd Static R.static
+  dynamic = toCode $ bd Dynamic R.dynamic
   
 instance PermElim CppSrcCode where
   permDoc = bindDoc . unCPPSC
@@ -1124,9 +1124,9 @@ instance PermElim CppSrcCode where
 
 instance BodySym CppSrcCode where
   type Body CppSrcCode = Doc
-  body = onStateList (onCodeList bodyDocD)
+  body = onStateList (onCodeList R.body)
 
-  addComments s = onStateValue (onCodeValue (addCommentsDocD s commentStart))
+  addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
 instance InternalBody CppSrcCode where
   docBody = onStateValue toCode
@@ -1250,7 +1250,6 @@ instance VariableSym CppSrcCode where
   const = var
   extVar l n t = modify (addModuleImportVS l) >> var n t
   self = G.self
-  -- enumVar = G.enumVar
   classVar = on2StateValues (\c v -> classVarCheckStatic (varFromData 
     (variableBind v) (getTypeString c ++ "::" ++ variableName v) 
     (variableType v) (cppClassVar (getTypeDoc c) (variableDoc v))))
@@ -1453,7 +1452,7 @@ instance StatementElim CppSrcCode where
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
   valState = G.valState Semi
-  multi = onStateList (onCodeList multiStateDocD)
+  multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement CppSrcCode where
   assign = G.assign Semi
@@ -1482,15 +1481,15 @@ instance DeclStatement CppSrcCode where
   funcDecDef = G.funcDecDef
 
 instance IOStatement CppSrcCode where
-  print = outDoc False Nothing printFunc
-  printLn = outDoc True Nothing printLnFunc
-  printStr = outDoc False Nothing printFunc . litString
-  printStrLn = outDoc True Nothing printLnFunc . litString
+  print = G.print False Nothing printFunc
+  printLn = G.print True Nothing printLnFunc
+  printStr = G.print False Nothing printFunc . litString
+  printStrLn = G.print True Nothing printLnFunc . litString
 
-  printFile f = outDoc False (Just f) (printFileFunc f)
-  printFileLn f = outDoc True (Just f) (printFileLnFunc f)
-  printFileStr f = outDoc False (Just f) (printFileFunc f) . litString
-  printFileStrLn f = outDoc True (Just f) (printFileLnFunc f) . litString
+  printFile f = G.print False (Just f) (printFileFunc f)
+  printFileLn f = G.print True (Just f) (printFileLnFunc f)
+  printFileStr f = G.print False (Just f) (printFileFunc f) . litString
+  printFileStrLn f = G.print True (Just f) (printFileLnFunc f) . litString
 
   getInput v = cppInput v inputFunc
   discardInput = addAlgorithmImport $ addLimitsImport $ G.discardInput 
@@ -1547,8 +1546,8 @@ instance CommentStatement CppSrcCode where
   comment = G.comment commentStart
 
 instance ControlStatement CppSrcCode where
-  break = toState $ mkSt breakDocD
-  continue = toState $ mkSt continueDocD
+  break = toState $ mkSt R.break
+  continue = toState $ mkSt R.continue
 
   returnState = G.returnState Semi
 
@@ -1579,8 +1578,8 @@ instance StrategyPattern CppSrcCode where
 
 instance ScopeSym CppSrcCode where
   type Scope CppSrcCode = (Doc, ScopeTag)
-  private = toCode (privateDocD, Priv)
-  public = toCode (publicDocD, Pub)
+  private = toCode (R.private, Priv)
+  public = toCode (R.public, Pub)
 
 instance InternalScope CppSrcCode where
   scopeFromData s d = toCode (d, s)
@@ -1595,7 +1594,7 @@ instance MethodTypeSym CppSrcCode where
 
 instance ParameterSym CppSrcCode where
   type Parameter CppSrcCode = ParamData
-  param = G.param paramDocD
+  param = G.param R.param
   pointerParam = G.param cppPointerParamDoc
 
 instance InternalParam CppSrcCode where
@@ -1726,8 +1725,8 @@ instance ModuleElim CppSrcCode where
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
-  blockComment lns = toCode $ blockCmtDoc lns blockCmtStart blockCmtEnd
-  docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
+  blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
+  docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart 
     blockCmtEnd)
 
 instance BlockCommentElim CppSrcCode where
@@ -1763,7 +1762,7 @@ instance InternalFile CppHdrCode where
   bottom = toCode $ text "#endif"
   
   commentedMod cmnt mod = on2StateValues (\m cmt -> if isEmpty (moduleDoc $ 
-    onCodeValue fileMod m) then m else on2CodeValues commentedModD m cmt) 
+    onCodeValue fileMod m) then m else on2CodeValues R.commentedMod m cmt) 
     mod cmnt
 
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
@@ -1779,8 +1778,8 @@ instance ImportElim CppHdrCode where
 
 instance PermanenceSym CppHdrCode where
   type Permanence CppHdrCode = BindData
-  static = toCode $ bd Static staticDocD
-  dynamic = toCode $ bd Dynamic dynamicDocD
+  static = toCode $ bd Static R.static
+  dynamic = toCode $ bd Dynamic R.dynamic
 
 instance PermElim CppHdrCode where
   permDoc = bindDoc . unCPPHC
@@ -2189,8 +2188,8 @@ instance StrategyPattern CppHdrCode where
 
 instance ScopeSym CppHdrCode where
   type Scope CppHdrCode = (Doc, ScopeTag)
-  private = toCode (privateDocD, Priv)
-  public = toCode (publicDocD, Pub)
+  private = toCode (R.private, Priv)
+  public = toCode (R.public, Pub)
 
 instance InternalScope CppHdrCode where
   scopeFromData s d = toCode (d, s)
@@ -2205,7 +2204,7 @@ instance MethodTypeSym CppHdrCode where
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
-  param = onStateValue (\v -> paramFromData v (paramDocD v)) . zoom lensMStoVS
+  param = onStateValue (\v -> paramFromData v (R.param v)) . zoom lensMStoVS
   pointerParam = onStateValue (\v -> paramFromData v (cppPointerParamDoc v)) .
     zoom lensMStoVS
 
@@ -2262,12 +2261,12 @@ instance MethodElim CppHdrCode where
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar s p v = on2StateValues (\dec -> on3CodeValues svd (onCodeValue snd s)
-    (toCode $ stateVarDocD empty (permDoc p) (statementDoc dec)))
+    (toCode $ R.stateVar empty (permDoc p) (statementDoc dec)))
     (zoom lensCStoMS $ state $ varDec v) (zoom lensCStoMS emptyState)
   stateVarDef _ s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
     (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyState)
   constVar _ s vr _ = on2StateValues (on3CodeValues svd (onCodeValue snd s) . 
-    on2CodeValues (constVarDocD empty endStatement) (bindDoc <$> static))
+    on2CodeValues (R.constVar empty endStatement) (bindDoc <$> static))
     (zoom lensCStoVS vr) (zoom lensCStoMS emptyState)
 
 instance InternalStateVar CppHdrCode where
@@ -2324,8 +2323,8 @@ instance ModuleElim CppHdrCode where
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc
-  blockComment lns = toCode $ blockCmtDoc lns blockCmtStart blockCmtEnd
-  docComment = onStateValue (\lns -> toCode $ docCmtDoc lns docCmtStart 
+  blockComment lns = toCode $ R.blockCmt lns blockCmtStart blockCmtEnd
+  docComment = onStateValue (\lns -> toCode $ R.docCmt lns docCmtStart 
     blockCmtEnd)
 
 instance BlockCommentElim CppHdrCode where
@@ -2484,8 +2483,8 @@ cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $
   valueType vl) tp vl) t v
   where cppCast' Double String _ _ = funcApp "std::stod" double [v]
         cppCast' Float String _ _ = funcApp "std::stof" float [v]
-        cppCast' _ _ tp vl = mkStateVal t (castObjDocD (castDocD 
-          (getTypeDoc tp)) (valueDoc vl))
+        cppCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (getTypeDoc tp)) 
+          (valueDoc vl))
 
 cppListSetDoc :: Doc -> Doc -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens i <+> equals <+> v
@@ -2574,8 +2573,8 @@ cppCommentedFunc ft cmt fn = do
   mn <- getCurrMainFunc
   scp <- getScope
   cmnt <- cmt
-  let cf = toState (methodFromData scp $ commentedItem (blockCommentDoc cmnt) $ 
-        methodDoc f)
+  let cf = toState (methodFromData scp $ R.commentedItem (blockCommentDoc cmnt)
+        $ methodDoc f)
       ret Source = if mn then cf else toState f
       ret Header = if mn then toState f else cf
       ret Combined = error "Combined passed to cppCommentedFunc"
@@ -2588,7 +2587,7 @@ cppsStateVarDef n cns p vr vl = onBinding (bind p) (cns <+> typeDoc
 
 cpphStateVarDef :: (RenderSym r) => Doc -> r (Permanence r) -> 
   SVariable r -> SValue r -> CS Doc
-cpphStateVarDef s p vr vl = onStateValue (stateVarDocD s (permDoc p) .  
+cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (permDoc p) .  
   statementDoc) (zoom lensCStoMS $ state $ onBinding (binding p) (varDec 
   vr) (varDecDef vr vl)) 
 

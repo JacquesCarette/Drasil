@@ -34,12 +34,12 @@ import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..),
   InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..), 
   InternalStateVar(..), StateVarElim(..), InternalClass(..), ClassElim(..), 
   InternalMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
-import GOOL.Drasil.LanguageRenderer (multiStateDocD, bodyDocD, outDoc, 
-  destructorError, multiAssignDoc, returnDocD, mkStNoEnd, breakDocD, 
-  continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, listSetFuncDocD, 
-  castObjDocD, dynamicDocD, bindingError, classDec, dot, forLabel, inLabel, 
-  commentedItem, addCommentsDocD, commentedModD, docFuncRepr, valueList, 
-  variableList, parameterList, surroundBody)
+import GOOL.Drasil.LanguageRenderer (
+  mkStNoEnd, mkStateVal, mkVal, mkStateVar, classDec, dot, forLabel, inLabel, 
+  valueList, variableList, parameterList, surroundBody)
+import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body, 
+  multiAssign, return', classVar, listSetFunc, castObj, dynamic, break, 
+  continue, addComments, commentedMod, commentedItem)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, listInnerType, obj, funcType, runStrategy, 
   notOp', negateOp, sqrtOp', absOp', expOp', sinOp', cosOp', tanOp', asinOp', 
@@ -53,7 +53,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
   iterBeginError, iterEndError, listAccessFunc, listSetFunc, state, loopState, 
   emptyState, assign, decrement, increment', increment1', decrement1, 
-  listDecDef', objDecNew, objDecNewNoParams, closeFile, discardFileLine, 
+  listDecDef', objDecNew, objDecNewNoParams, print, closeFile, discardFileLine, 
   stringListVals, stringListLists, returnState, valState, comment, throw, 
   ifCond, ifExists, tryCatch, checkState, construct, param, method, getMethod, 
   setMethod, constructor, function, docFunc, stateVarDef, constVar, buildClass, 
@@ -61,7 +61,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, binExpr, 
-  typeBinExpr, addmathImport)
+  typeBinExpr, addmathImport, bindingError, destructorError, docFuncRepr)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
@@ -120,7 +120,7 @@ instance InternalFile PythonCode where
   top _ = toCode empty
   bottom = toCode empty
   
-  commentedMod cmt m = on2StateValues (on2CodeValues commentedModD) m cmt
+  commentedMod cmt m = on2StateValues (on2CodeValues R.commentedMod) m cmt
 
   fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
 
@@ -135,7 +135,7 @@ instance ImportElim PythonCode where
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
   static = toCode empty
-  dynamic = toCode dynamicDocD
+  dynamic = toCode R.dynamic
 
 instance PermElim PythonCode where
   permDoc = unPC
@@ -143,9 +143,9 @@ instance PermElim PythonCode where
 
 instance BodySym PythonCode where
   type Body PythonCode = Doc
-  body = onStateList (onCodeList bodyDocD)
+  body = onStateList (onCodeList R.body)
 
-  addComments s = onStateValue (onCodeValue (addCommentsDocD s pyCommentStart))
+  addComments s = onStateValue (onCodeValue (R.addComments s pyCommentStart))
 
 instance InternalBody PythonCode where
   docBody = onStateValue toCode
@@ -277,8 +277,7 @@ instance VariableSym PythonCode where
   const = var
   extVar l n t = modify (addModuleImportVS l) >> G.extVar l n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar "self" (obj l) (text "self"))
-  -- enumVar = G.enumVar
-  classVar = G.classVar classVarDocD
+  classVar = G.classVar R.classVar
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $ 
     G.classVar pyClassVar (toState t) v) c getClassMap
@@ -394,7 +393,7 @@ instance InternalValue PythonCode where
   printFileFunc _ = mkStateVal void empty
   printFileLnFunc _ = mkStateVal void empty
   
-  cast = on2StateValues (\t -> mkVal t . castObjDocD (getTypeDoc t) . valueDoc)
+  cast = on2StateValues (\t -> mkVal t . R.castObj (getTypeDoc t) . valueDoc)
 
   call = G.call equals
 
@@ -444,7 +443,7 @@ instance InternalListFunc PythonCode where
   listAddFunc _ = G.listAddFunc "insert"
   listAppendFunc = G.listAppendFunc "append"
   listAccessFunc = G.listAccessFunc
-  listSetFunc = G.listSetFunc listSetFuncDocD
+  listSetFunc = G.listSetFunc R.listSetFunc
 
 instance InternalIterator PythonCode where
   iterBeginFunc _ = error $ G.iterBeginError pyName
@@ -459,7 +458,7 @@ instance FunctionElim PythonCode where
 
 instance InternalAssignStmt PythonCode where
   multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
-    mkStNoEnd (multiAssignDoc vrs vls)) vars vals
+    mkStNoEnd (R.multiAssign vrs vls)) vars vals
 
 instance InternalIOStmt PythonCode where
   printSt nl f p v = zoom lensMStoVS $ on3StateValues (\f' p' v' -> mkStNoEnd $ 
@@ -467,7 +466,7 @@ instance InternalIOStmt PythonCode where
   
 instance InternalControlStmt PythonCode where
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs = zoom lensMStoVS $ onStateList (mkStNoEnd . returnDocD) vs
+  multiReturn vs = zoom lensMStoVS $ onStateList (mkStNoEnd . R.return') vs
 
 instance InternalStatement PythonCode where
   state = G.state
@@ -485,7 +484,7 @@ instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   valState = G.valState Empty
-  multi = onStateList (onCodeList multiStateDocD)
+  multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement PythonCode where
   assign = G.assign Empty
@@ -555,8 +554,8 @@ instance CommentStatement PythonCode where
   comment = G.comment pyCommentStart
 
 instance ControlStatement PythonCode where
-  break = toState $ mkStNoEnd breakDocD
-  continue = toState $ mkStNoEnd continueDocD
+  break = toState $ mkStNoEnd R.break
+  continue = toState $ mkStNoEnd R.continue
 
   returnState = G.returnState Empty
 
@@ -655,7 +654,7 @@ instance InternalMethod PythonCode where
     on1StateValue1List (\bd pms -> methodFromData Pub $ pyFunction n pms bd) 
     b ps
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
-    (onStateValue (onCodeValue commentedItem) cmt)
+    (onStateValue (onCodeValue R.commentedItem) cmt)
     
   destructor _ = error $ destructorError pyName
 
@@ -787,7 +786,7 @@ pyOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r ->
   SValue r -> MSStatement r
 pyOut newLn f printFn v = zoom lensMStoVS v >>= pyOut' . getType . valueType
   where pyOut' (List _) = printSt newLn f printFn v
-        pyOut' _ = outDoc newLn f printFn v
+        pyOut' _ = G.print newLn f printFn v
 
 pyInput :: SValue PythonCode -> SVariable PythonCode -> MSStatement PythonCode
 pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)

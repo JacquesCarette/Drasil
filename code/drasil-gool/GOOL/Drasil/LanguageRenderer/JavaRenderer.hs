@@ -78,7 +78,8 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
-import GOOL.Drasil.CodeAnalysis (Exception(..))
+import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
+  stdExc, HasException(..))
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   onCodeList, onStateList, on1StateValue1List)
@@ -669,7 +670,8 @@ instance InternalMethod JavaCode where
     mem <- zoom lensMStoVS getMethodExcMap
     es <- getExceptions
     mn <- zoom lensMStoFS getModuleName
-    let excs = maybe es (nub . (++ es)) (Map.lookup (key mn n) mem) 
+    let excs = map (unJC . toConcreteExc) $ maybe es (nub . (++ es)) 
+          (Map.lookup (key mn n) mem) 
         key mnm nm = mnm ++ "." ++ nm
     modify ((if m then setCurrMain else id) . addExceptionImports excs) 
     toState $ methodFromData Pub $ jMethod n (map exc excs) s p tp pms bd
@@ -736,6 +738,12 @@ instance BlockCommentSym JavaCode where
 
 instance BlockCommentElim JavaCode where
   blockCommentDoc = unJC
+
+instance HasException JavaCode where
+  toConcreteExc Standard = toCode $ stdExc "Exception"
+  toConcreteExc FileNotFound = toCode $ exception "java.io" 
+    "FileNotFoundException"
+  toConcreteExc IO = toCode $ exception "java.io" "IOException"
 
 odeImport :: String
 odeImport = "org.apache.commons.math3.ode."

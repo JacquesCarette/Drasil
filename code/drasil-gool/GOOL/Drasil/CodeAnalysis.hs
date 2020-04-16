@@ -1,14 +1,17 @@
 module GOOL.Drasil.CodeAnalysis (
-  Exception(loc, exc), printExc, hasLoc, exception, stdExc
+  ExceptionType(..), Exception(loc, exc), printExc, hasLoc, exception, stdExc,
+  HasException(..)
 ) where
 
--- Stores exception information
 -- Eq is needed so that the same exception doesn't get added multiple times 
 -- to the list of exceptions for a given method.
+data ExceptionType = Standard | FileNotFound | IO deriving Eq
+
+-- Stores exception information
 data Exception = Exc {
   loc :: String, -- import string where the exception is defined
   exc :: String -- name of the exception
-} deriving Eq
+}
 
 printExc :: Exception -> String
 printExc (Exc l e) = if null l then e else l ++ "." ++ e
@@ -22,3 +25,6 @@ exception = Exc
 
 stdExc :: String -> Exception
 stdExc = Exc ""
+
+class HasException r where
+  toConcreteExc :: ExceptionType -> r Exception

@@ -25,7 +25,7 @@ module GOOL.Drasil.State (
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..), FileData)
-import GOOL.Drasil.CodeAnalysis (Exception, printExc, hasLoc)
+import GOOL.Drasil.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import GOOL.Drasil.CodeType (ClassName)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
@@ -48,7 +48,7 @@ data GOOLState = GS {
 
   -- Only used for Java, to generate correct "throws Exception" declarations
   -- Key format in both maps is ModuleName.MethodName
-  _methodExceptionMap :: Map String [Exception], -- Method to exceptions thrown
+  _methodExceptionMap :: Map String [ExceptionType], -- Method to exceptions thrown
   _callMap :: Map String [String] -- Method to other methods it calls
 } 
 makeLenses ''GOOLState
@@ -95,7 +95,7 @@ data MethodState = MS {
 
   -- Only used for Java
   _outputsDeclared :: Bool, -- So Java doesn't redeclare outputs variable when using inOutCall
-  _exceptions :: [Exception], -- Used to build methodExceptionMap
+  _exceptions :: [ExceptionType], -- Used to build methodExceptionMap
   _calls :: [String], -- Used to build CallMap
   
   -- Only used for C++
@@ -437,7 +437,7 @@ updateMethodExcMap n ms = over (lensMStoFS . goolState . methodExceptionMap)
   (insert (mn ++ "." ++ n) (ms ^. exceptions)) ms
   where mn = ms ^. (lensMStoFS . currModName)
 
-getMethodExcMap :: VS (Map String [Exception])
+getMethodExcMap :: VS (Map String [ExceptionType])
 getMethodExcMap = gets (^. (lensVStoFS . goolState . methodExceptionMap))
 
 updateCallMap :: String -> MethodState -> MethodState
@@ -456,8 +456,8 @@ callMapTransClosure = over callMap tClosure
 updateMEMWithCalls :: GOOLState -> GOOLState
 updateMEMWithCalls s = over methodExceptionMap (\mem -> mapWithKey 
   (addCallExcs mem (s ^. callMap)) mem) s
-  where addCallExcs :: Map String [Exception] -> Map String [String] -> String 
-          -> [Exception] -> [Exception]
+  where addCallExcs :: Map String [ExceptionType] -> Map String [String] -> 
+          String -> [ExceptionType] -> [ExceptionType]
         addCallExcs mem cm f es = nub $ es ++ concatMap (\fn -> findWithDefault 
           [] fn mem) (findWithDefault [] f cm)
 
@@ -486,13 +486,13 @@ setOutputsDeclared = set outputsDeclared True
 isOutputsDeclared :: MS Bool
 isOutputsDeclared = gets (^. outputsDeclared)
 
-addException :: Exception -> MethodState -> MethodState
+addException :: ExceptionType -> MethodState -> MethodState
 addException e = over exceptions (\es -> nub $ e : es)
 
-addExceptions :: [Exception] -> ValueState -> ValueState
+addExceptions :: [ExceptionType] -> ValueState -> ValueState
 addExceptions es = over (methodState . exceptions) (\exs -> nub $ es ++ exs)
 
-getExceptions :: MS [Exception]
+getExceptions :: MS [ExceptionType]
 getExceptions = gets (^. exceptions)
 
 addCall :: String -> ValueState -> ValueState

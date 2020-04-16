@@ -29,16 +29,17 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
   MSStatement, SMethod, BodySym(..), bodyStatements, oneLiner, 
-  PermanenceSym(..), TypeSym(Type, getType), VariableSym(..), ValueSym(..), Literal(..), VariableValue(..),
+  PermanenceSym(..), TypeSym(Type), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), VariableValue(..),
   NumericExpression(..), Comparison(..), List(..),
   StatementSym(..), AssignStatement(..), 
   DeclStatement(..), IOStatement(..), ControlStatement(..), 
   ifNoElse, ScopeSym(..), ParameterSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(int))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalBody(..), 
-  InternalPerm(..), InternalType(..), InternalVariable(..), InternalValue(..), 
-  InternalIOStmt(..), InternalStatement(..), InternalScope(..), InternalParam(..), 
-  InternalMethod(..), BlockCommentSym(..))
+import GOOL.Drasil.RendererClasses (RenderSym, BodyElim(..), PermElim(..), 
+  InternalTypeElim(..), InternalVariable(..), InternalVarElim(..), 
+  InternalValue(..), ValueElim(..), InternalIOStmt(..), InternalStatement(..), 
+  StatementElim(..), ScopeElim(..), ParamElim(..), InternalMethod(..), 
+  BlockCommentSym(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,

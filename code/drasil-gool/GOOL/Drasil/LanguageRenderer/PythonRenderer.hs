@@ -12,7 +12,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), ControlBlock(..), VariableSym(..), 
+  TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), VariableElim(..),
   listOf, ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
   InternalValueExp(..), objMethodCall,
@@ -22,13 +22,18 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), 
   ODEOptions(..), ODEMethod(..))
-import GOOL.Drasil.RendererClasses (VSUnOp, RenderSym, InternalFile(..),
-  ImportSym(..), InternalPerm(..), InternalBody(..), InternalBlock(..), 
-  InternalType(..), UnaryOpSym(..), BinaryOpSym(..), InternalOp(..), 
-  InternalVariable(..), InternalValue(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..), InternalFunction(..), InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..),
-  InternalStatement(..), InternalScope(..), MethodTypeSym(..), 
-  InternalParam(..), InternalMethod(..), InternalStateVar(..), 
-  InternalClass(..), InternalMod(..), BlockCommentSym(..))
+import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
+  ImportElim(..), PermElim(..), InternalBody(..), BodyElim(..), 
+  InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), 
+  VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(..), OpIntro(..), 
+  InternalVariable(..), InternalVarElim(..), InternalValue(..), ValueElim(..), 
+  InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
+  InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), 
+  InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), 
+  StatementElim(..), InternalScope(..), ScopeElim(..), MethodTypeSym(..), 
+  InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..), 
+  InternalStateVar(..), StateVarElim(..), InternalClass(..), ClassElim(..), 
+  InternalMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import GOOL.Drasil.LanguageRenderer (multiStateDocD, bodyDocD, outDoc, 
   destructorError, multiAssignDoc, returnDocD, mkStNoEnd, breakDocD, 
   continueDocD, mkStateVal, mkVal, mkStateVar, classVarDocD, listSetFuncDocD, 
@@ -124,6 +129,7 @@ instance ImportSym PythonCode where
   langImport n = toCode $ text $ "import " ++ n
   modImport = langImport
 
+instance ImportElim PythonCode where
   importDoc = unPC
 
 instance PermanenceSym PythonCode where
@@ -131,7 +137,7 @@ instance PermanenceSym PythonCode where
   static = toCode empty
   dynamic = toCode dynamicDocD
 
-instance InternalPerm PythonCode where
+instance PermElim PythonCode where
   permDoc = unPC
   binding = error $ bindingError pyName
 
@@ -142,18 +148,22 @@ instance BodySym PythonCode where
   addComments s = onStateValue (onCodeValue (addCommentsDocD s pyCommentStart))
 
 instance InternalBody PythonCode where
-  bodyDoc = unPC
   docBody = onStateValue toCode
   multiBody = G.multiBody 
+
+instance BodyElim PythonCode where
+  bodyDoc = unPC
 
 instance BlockSym PythonCode where
   type Block PythonCode = Doc
   block = G.block
 
 instance InternalBlock PythonCode where
-  blockDoc = unPC
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
+
+instance BlockElim PythonCode where
+  blockDoc = unPC
 
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData
@@ -175,12 +185,15 @@ instance TypeSym PythonCode where
   iterator t = t
   void = toState $ typeFromData Void "NoneType" (text "NoneType")
 
+instance TypeElim PythonCode where
   getType = cType . unPC
   getTypeString = typeString . unPC
 
 instance InternalType PythonCode where
-  getTypeDoc = typeDoc . unPC
   typeFromData t s d = toCode $ td t s d
+
+instance InternalTypeElim PythonCode where
+  getTypeDoc = typeDoc . unPC
 
 instance ControlBlock PythonCode where
   solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
@@ -247,12 +260,13 @@ instance BinaryOpSym PythonCode where
   andOp = andPrec "and"
   orOp = orPrec "or"
 
-instance InternalOp PythonCode where
+instance OpElim PythonCode where
   uOpDoc = opDoc . unPC
   bOpDoc = opDoc . unPC
   uOpPrec = opPrec . unPC
   bOpPrec = opPrec . unPC
   
+instance OpIntro PythonCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 
@@ -274,12 +288,15 @@ instance VariableSym PythonCode where
   arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
 
+instance VariableElim PythonCode where
   variableName = varName . unPC
   variableType = onCodeValue varType
 
-instance InternalVariable PythonCode where
+instance InternalVarElim PythonCode where
   variableBind = varBind . unPC
   variableDoc = varDoc . unPC
+
+instance InternalVariable PythonCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym PythonCode where
@@ -381,9 +398,11 @@ instance InternalValue PythonCode where
 
   call = G.call equals
 
+  valFromData p t d = on2CodeValues (vd p) t (toCode d)
+
+instance ValueElim PythonCode where
   valuePrec = valPrec . unPC
   valueDoc = val . unPC
-  valFromData p t d = on2CodeValues (vd p) t (toCode d)
 
 instance InternalValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
@@ -432,10 +451,11 @@ instance InternalIterator PythonCode where
   iterEndFunc _ = error $ G.iterEndError pyName
 
 instance InternalFunction PythonCode where
+  funcFromData d = onStateValue (onCodeValue (`fd` d))
+  
+instance FunctionElim PythonCode where
   functionType = onCodeValue fType
   functionDoc = funcDoc . unPC
-
-  funcFromData d = onStateValue (onCodeValue (`fd` d))
 
 instance InternalAssignStmt PythonCode where
   multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
@@ -454,10 +474,12 @@ instance InternalStatement PythonCode where
   loopState = G.loopState
   
   emptyState = G.emptyState
-  statementDoc = fst . unPC
-  statementTerm = snd . unPC
 
   stateFromData d t = toCode (d, t)
+
+instance StatementElim PythonCode where
+  statementDoc = fst . unPC
+  statementTerm = snd . unPC
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
@@ -576,8 +598,10 @@ instance ScopeSym PythonCode where
   public = toCode empty
 
 instance InternalScope PythonCode where
-  scopeDoc = unPC
   scopeFromData _ = toCode
+
+instance ScopeElim PythonCode where
+  scopeDoc = unPC
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
@@ -590,10 +614,12 @@ instance ParameterSym PythonCode where
   pointerParam = param
 
 instance InternalParam PythonCode where
+  paramFromData v d = on2CodeValues pd v (toCode d)
+  
+instance ParamElim PythonCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
   parameterDoc = paramDoc . unPC
-  paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
@@ -633,8 +659,10 @@ instance InternalMethod PythonCode where
     
   destructor _ = error $ destructorError pyName
 
-  methodDoc = mthdDoc . unPC
   methodFromData _ = toCode . mthd
+  
+instance MethodElim PythonCode where
+  methodDoc = mthdDoc . unPC
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
@@ -644,8 +672,10 @@ instance StateVarSym PythonCode where
     (static :: PythonCode (Permanence PythonCode)))
 
 instance InternalStateVar PythonCode where
-  stateVarDoc = unPC
   stateVarFromData = onStateValue toCode
+  
+instance StateVarElim PythonCode where
+  stateVarDoc = unPC
 
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
@@ -665,8 +695,10 @@ instance InternalClass PythonCode where
 
   commentedClass = G.commentedClass
 
-  classDoc = unPC
   classFromData d = d
+  
+instance ClassElim PythonCode where
+  classDoc = unPC
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
@@ -681,9 +713,11 @@ instance ModuleSym PythonCode where
     getLangImports getLibImports getModuleImports) getMainDoc
 
 instance InternalMod PythonCode where
-  moduleDoc = modDoc . unPC
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
+  
+instance ModuleElim PythonCode where
+  moduleDoc = modDoc . unPC
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
@@ -691,6 +725,7 @@ instance BlockCommentSym PythonCode where
   docComment = onStateValue (\lns -> toCode $ pyDocComment lns (text "##") 
     pyCommentStart)
 
+instance BlockCommentElim PythonCode where
   blockCommentDoc = unPC
 
 -- convenience

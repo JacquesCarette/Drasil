@@ -5,8 +5,8 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlock(..), TypeSym(..), 
-  VariableSym(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
+  BlockSym(..), ControlBlock(..), TypeSym(..), TypeElim(..),
+  VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
   ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
   GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
@@ -90,6 +90,7 @@ instance TypeSym CodeInfo where
   iterator      _   = noInfoType
   void              = noInfoType
 
+instance TypeElim CodeInfo where
   getType _     = Void
   getTypeString = unCI
 
@@ -111,6 +112,7 @@ instance VariableSym CodeInfo where
   arrayElem   _ _   = noInfo
   iterVar     _ _   = noInfo
   
+instance VariableElim CodeInfo where
   variableName _ = ""
   variableType _ = toCode ""
 

@@ -54,7 +54,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   funcAppMixedArgs, selfFuncAppMixedArgs, libFuncAppMixedArgs, newObjMixedArgs, 
   libNewObjMixedArgs, lambda, func, get, set, listSize, listAdd, listAppend, 
   iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
-  listAppendFunc, listAccessFunc', listSetFunc, state, loopState, emptyState, 
+  listAppendFunc, listAccessFunc', listSetFunc, stmt, loopStmt, emptyStmt, 
   assign, multiAssignError, decrement, increment, decrement1, increment1, 
   varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
   extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, print, 
@@ -545,12 +545,12 @@ instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) where
   multiReturn = pair1List multiReturn multiReturn . map (zoom lensMStoVS)
     
 instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
-  state = pair1 state state
-  loopState = pair1 loopState loopState
+  stmt = pair1 stmt stmt
+  loopStmt = pair1 loopStmt loopStmt
 
-  emptyState = on2StateValues pair emptyState emptyState
+  emptyStmt = on2StateValues pair emptyStmt emptyStmt
   
-  stateFromData d t = pair (stateFromData d t) (stateFromData d t)
+  stmtFromData d t = pair (stmtFromData d t) (stmtFromData d t)
 
 instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) where
   statementDoc s = statementDoc $ pfst s
@@ -1438,12 +1438,12 @@ instance InternalControlStmt CppSrcCode where
   multiReturn _ = error $ G.multiReturnError cppName
 
 instance InternalStatement CppSrcCode where
-  state = G.state
-  loopState = G.loopState
+  stmt = G.stmt
+  loopStmt = G.loopStmt
 
-  emptyState = G.emptyState
+  emptyStmt = G.emptyStmt
 
-  stateFromData d t = toCode (d, t)
+  stmtFromData d t = toCode (d, t)
   
 instance StatementElim CppSrcCode where
   statementDoc = fst . unCPPSC
@@ -1664,13 +1664,13 @@ instance MethodElim CppSrcCode where
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
   stateVar s _ _ = onStateValue (on3CodeValues svd (onCodeValue snd s) (toCode 
-    empty)) $ zoom lensCStoMS emptyState
+    empty)) $ zoom lensCStoMS emptyStmt
   stateVarDef n s p v vl' = on3StateValues (\vr vl -> on3CodeValues svd 
     (onCodeValue snd s) (cppsStateVarDef n empty <$> p <*> vr <*> vl)) 
-    (zoom lensCStoVS v) (zoom lensCStoVS vl') (zoom lensCStoMS emptyState)
+    (zoom lensCStoVS v) (zoom lensCStoVS vl') (zoom lensCStoMS emptyStmt)
   constVar n s v vl' = on3StateValues (\vr vl -> on3CodeValues svd (onCodeValue 
     snd s) (cppsStateVarDef n (text "const") <$> static <*> vr <*> vl)) 
-    (zoom lensCStoVS v) (zoom lensCStoVS vl') (zoom lensCStoMS emptyState)
+    (zoom lensCStoVS v) (zoom lensCStoVS vl') (zoom lensCStoMS emptyStmt)
 
 instance InternalStateVar CppSrcCode where
   stateVarFromData = error "stateVarFromData unimplemented in C++"
@@ -2071,21 +2071,21 @@ instance FunctionElim CppHdrCode where
   functionDoc = funcDoc . unCPPHC
 
 instance InternalAssignStmt CppHdrCode where
-  multiAssign _ _ = emptyState
+  multiAssign _ _ = emptyStmt
 
 instance InternalIOStmt CppHdrCode where
-  printSt _ _ _ _ = emptyState
+  printSt _ _ _ _ = emptyStmt
   
 instance InternalControlStmt CppHdrCode where
-  multiReturn _ = emptyState
+  multiReturn _ = emptyStmt
 
 instance InternalStatement CppHdrCode where
-  state = G.state
-  loopState _ = emptyState
+  stmt = G.stmt
+  loopStmt _ = emptyStmt
 
-  emptyState = G.emptyState
+  emptyStmt = G.emptyStmt
   
-  stateFromData d t = toCode (d, t)
+  stmtFromData d t = toCode (d, t)
   
 instance StatementElim CppHdrCode where
   statementDoc = fst . unCPPHC
@@ -2093,95 +2093,95 @@ instance StatementElim CppHdrCode where
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
-  valState _ = emptyState
-  multi _ = emptyState
+  valState _ = emptyStmt
+  multi _ = emptyStmt
 
 instance AssignStatement CppHdrCode where
-  assign _ _ = emptyState
-  (&-=) _ _ = emptyState
-  (&+=) _ _ = emptyState
-  (&++) _ = emptyState
-  (&--) _ = emptyState
+  assign _ _ = emptyStmt
+  (&-=) _ _ = emptyStmt
+  (&+=) _ _ = emptyStmt
+  (&++) _ = emptyStmt
+  (&--) _ = emptyStmt
 
 instance DeclStatement CppHdrCode where
   varDec = G.varDec static dynamic
   varDecDef = G.varDecDef
-  listDec _ _ = emptyState
-  listDecDef _ _ = emptyState
-  arrayDec _ _ = emptyState
-  arrayDecDef _ _ = emptyState
-  objDecDef _ _ = emptyState
-  objDecNew _ _ = emptyState
-  extObjDecNew _ _ _ = emptyState
-  objDecNewNoParams _ = emptyState
-  extObjDecNewNoParams _ _ = emptyState
+  listDec _ _ = emptyStmt
+  listDecDef _ _ = emptyStmt
+  arrayDec _ _ = emptyStmt
+  arrayDecDef _ _ = emptyStmt
+  objDecDef _ _ = emptyStmt
+  objDecNew _ _ = emptyStmt
+  extObjDecNew _ _ _ = emptyStmt
+  objDecNewNoParams _ = emptyStmt
+  extObjDecNewNoParams _ _ = emptyStmt
   constDecDef = G.constDecDef
-  funcDecDef _ _ _ = emptyState
+  funcDecDef _ _ _ = emptyStmt
 
 instance IOStatement CppHdrCode where
-  print _ = emptyState
-  printLn _ = emptyState
-  printStr _ = emptyState
-  printStrLn _ = emptyState
+  print _ = emptyStmt
+  printLn _ = emptyStmt
+  printStr _ = emptyStmt
+  printStrLn _ = emptyStmt
 
-  printFile _ _ = emptyState
-  printFileLn _ _ = emptyState
-  printFileStr _ _ = emptyState
-  printFileStrLn _ _ = emptyState
+  printFile _ _ = emptyStmt
+  printFileLn _ _ = emptyStmt
+  printFileStr _ _ = emptyStmt
+  printFileStrLn _ _ = emptyStmt
 
-  getInput _ = emptyState
-  discardInput = emptyState
-  getFileInput _ _ = emptyState
-  discardFileInput _ = emptyState
+  getInput _ = emptyStmt
+  discardInput = emptyStmt
+  getFileInput _ _ = emptyStmt
+  discardFileInput _ = emptyStmt
 
-  openFileR _ _ = emptyState
-  openFileW _ _ = emptyState
-  openFileA _ _ = emptyState
-  closeFile _ = emptyState
+  openFileR _ _ = emptyStmt
+  openFileW _ _ = emptyStmt
+  openFileA _ _ = emptyStmt
+  closeFile _ = emptyStmt
 
-  getFileInputLine _ _ = emptyState
-  discardFileLine _ = emptyState
-  getFileInputAll _ _ = emptyState
+  getFileInputLine _ _ = emptyStmt
+  discardFileLine _ = emptyStmt
+  getFileInputAll _ _ = emptyStmt
 
 instance StringStatement CppHdrCode where
-  stringSplit _ _ _ = emptyState
+  stringSplit _ _ _ = emptyStmt
 
-  stringListVals _ _ = emptyState
-  stringListLists _ _ = emptyState
+  stringListVals _ _ = emptyStmt
+  stringListLists _ _ = emptyStmt
 
 instance FuncAppStatement CppHdrCode where
-  inOutCall _ _ _ _ = emptyState
-  selfInOutCall _ _ _ _ = emptyState
-  extInOutCall _ _ _ _ _ = emptyState
+  inOutCall _ _ _ _ = emptyStmt
+  selfInOutCall _ _ _ _ = emptyStmt
+  extInOutCall _ _ _ _ _ = emptyStmt
 
 instance CommentStatement CppHdrCode where
-  comment _ = emptyState
+  comment _ = emptyStmt
 
 instance ControlStatement CppHdrCode where
-  break = emptyState
-  continue = emptyState
+  break = emptyStmt
+  continue = emptyStmt
 
-  returnState _ = emptyState
+  returnState _ = emptyStmt
 
-  throw _ = emptyState
+  throw _ = emptyStmt
 
-  ifCond _ _ = emptyState
-  switch _ _ _ = emptyState
+  ifCond _ _ = emptyStmt
+  switch _ _ _ = emptyStmt
 
-  ifExists _ _ _ = emptyState
+  ifExists _ _ _ = emptyStmt
 
-  for _ _ _ _ = emptyState
-  forRange _ _ _ _ _ = emptyState
-  forEach _ _ _ = emptyState
-  while _ _ = emptyState
+  for _ _ _ _ = emptyStmt
+  forRange _ _ _ _ _ = emptyStmt
+  forEach _ _ _ = emptyStmt
+  while _ _ = emptyStmt
 
-  tryCatch _ _ = emptyState
+  tryCatch _ _ = emptyStmt
 
 instance StatePattern CppHdrCode where
-  checkState _ _ _ = emptyState
+  checkState _ _ _ = emptyStmt
 
 instance ObserverPattern CppHdrCode where
-  notifyObservers _ _ = emptyState
+  notifyObservers _ _ = emptyStmt
 
 instance StrategyPattern CppHdrCode where
   runStrategy _ _ _ _ = toState $ toCode empty
@@ -2262,12 +2262,12 @@ instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar s p v = on2StateValues (\dec -> on3CodeValues svd (onCodeValue snd s)
     (toCode $ R.stateVar empty (permDoc p) (statementDoc dec)))
-    (zoom lensCStoMS $ state $ varDec v) (zoom lensCStoMS emptyState)
+    (zoom lensCStoMS $ stmt $ varDec v) (zoom lensCStoMS emptyStmt)
   stateVarDef _ s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
-    (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyState)
+    (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyStmt)
   constVar _ s vr _ = on2StateValues (on3CodeValues svd (onCodeValue snd s) . 
     on2CodeValues (R.constVar empty endStatement) (bindDoc <$> static))
-    (zoom lensCStoVS vr) (zoom lensCStoMS emptyState)
+    (zoom lensCStoVS vr) (zoom lensCStoMS emptyStmt)
 
 instance InternalStateVar CppHdrCode where
   stateVarFromData = error "stateVarFromData unimplemented in C++"
@@ -2588,7 +2588,7 @@ cppsStateVarDef n cns p vr vl = onBinding (bind p) (cns <+> typeDoc
 cpphStateVarDef :: (RenderSym r) => Doc -> r (Permanence r) -> 
   SVariable r -> SValue r -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (permDoc p) .  
-  statementDoc) (zoom lensCStoMS $ state $ onBinding (binding p) (varDec 
+  statementDoc) (zoom lensCStoMS $ stmt $ onBinding (binding p) (varDec 
   vr) (varDecDef vr vl)) 
 
 cpphVarsFuncsList :: ScopeTag -> [CppHdrCode (StateVar CppHdrCode)] -> 

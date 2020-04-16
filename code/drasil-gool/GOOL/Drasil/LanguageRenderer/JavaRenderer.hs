@@ -57,7 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   newObjMixedArgs, libNewObjMixedArgs, lambda, notNull, func, get, set, 
   listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
   getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
-  iterEndError, listAccessFunc', printSt, state, loopState, emptyState, assign, 
+  iterEndError, listAccessFunc', printSt, stmt, loopStmt, emptyStmt, assign, 
   multiAssignError, decrement, increment, decrement1, increment1, varDec, 
   varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, objDecNew, 
   objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, print,
@@ -497,12 +497,12 @@ instance InternalControlStmt JavaCode where
   multiReturn _ = error $ G.multiReturnError jName
 
 instance InternalStatement JavaCode where
-  state = G.state
-  loopState = G.loopState
+  stmt = G.stmt
+  loopStmt = G.loopStmt
 
-  emptyState = G.emptyState
+  emptyStmt = G.emptyStmt
   
-  stateFromData d t = toCode (d, t)
+  stmtFromData d t = toCode (d, t)
 
 instance StatementElim JavaCode where
   statementDoc = fst . unJC

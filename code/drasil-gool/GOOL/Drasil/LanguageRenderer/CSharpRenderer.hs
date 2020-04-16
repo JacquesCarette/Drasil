@@ -56,8 +56,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   libFuncAppMixedArgs, newObjMixedArgs, libNewObjMixedArgs, lambda, notNull, 
   func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
   listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
-  iterBeginError, iterEndError, listAccessFunc, listSetFunc, printSt, state, 
-  loopState, emptyState, assign, multiAssignError, decrement, increment, 
+  iterBeginError, iterEndError, listAccessFunc, listSetFunc, printSt, stmt, 
+  loopStmt, emptyStmt, assign, multiAssignError, decrement, increment, 
   decrement1, increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, 
   arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
   extObjDecNewNoParams, constDecDef, print, discardInput, openFileR, openFileW, 
@@ -470,12 +470,12 @@ instance InternalControlStmt CSharpCode where
   multiReturn _ = error $ G.multiReturnError csName 
 
 instance InternalStatement CSharpCode where
-  state = G.state
-  loopState = G.loopState
+  stmt = G.stmt
+  loopStmt = G.loopStmt
 
-  emptyState = G.emptyState
+  emptyStmt = G.emptyStmt
   
-  stateFromData d t = toCode (d, t)
+  stmtFromData d t = toCode (d, t)
 
 instance StatementElim CSharpCode where
   statementDoc = fst . unCSC

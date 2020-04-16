@@ -51,8 +51,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   funcAppMixedArgs, selfFuncAppMixedArgs, extFuncAppMixedArgs, newObjMixedArgs, 
   extNewObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
   iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
-  iterBeginError, iterEndError, listAccessFunc, listSetFunc, state, loopState, 
-  emptyState, assign, decrement, increment', increment1', decrement1, 
+  iterBeginError, iterEndError, listAccessFunc, listSetFunc, stmt, loopStmt, 
+  emptyStmt, assign, decrement, increment', increment1', decrement1, 
   listDecDef', objDecNew, objDecNewNoParams, print, closeFile, discardFileLine, 
   stringListVals, stringListLists, returnState, valState, comment, throw, 
   ifCond, ifExists, tryCatch, checkState, construct, param, method, getMethod, 
@@ -469,12 +469,12 @@ instance InternalControlStmt PythonCode where
   multiReturn vs = zoom lensMStoVS $ onStateList (mkStNoEnd . R.return') vs
 
 instance InternalStatement PythonCode where
-  state = G.state
-  loopState = G.loopState
+  stmt = G.stmt
+  loopStmt = G.loopStmt
   
-  emptyState = G.emptyState
+  emptyStmt = G.emptyStmt
 
-  stateFromData d t = toCode (d, t)
+  stmtFromData d t = toCode (d, t)
 
 instance StatementElim PythonCode where
   statementDoc = fst . unPC

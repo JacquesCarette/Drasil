@@ -20,8 +20,8 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   objMethodCall, objMethodCallNoParams, indexOf, func, get, set, listSize, 
   listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
   setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
-  iterEndError, listAccessFunc, listAccessFunc', listSetFunc, printSt, state, 
-  loopState, emptyState, assign, multiAssignError, decrement, increment, 
+  iterEndError, listAccessFunc, listAccessFunc', listSetFunc, printSt, stmt, 
+  loopStmt, emptyStmt, assign, multiAssignError, decrement, increment, 
   increment', increment1, increment1', decrement1, varDec, varDecDef, listDec, 
   listDecDef, listDecDef', arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, 
   extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, print, 
@@ -75,7 +75,7 @@ import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, InternalFile(commentedMod),
   InternalValue(inputFunc, cast, valFromData), ValueElim(valuePrec, valueDoc),
   InternalIterator(iterBeginFunc, iterEndFunc),
   InternalFunction(funcFromData), FunctionElim(functionDoc, functionType),
-  InternalStatement(stateFromData), StatementElim(statementDoc, statementTerm),
+  InternalStatement(stmtFromData), StatementElim(statementDoc, statementTerm),
   InternalScope(..), ScopeElim(..), MethodTypeSym(MethodType, mType), 
   InternalParam(paramFromData), 
   InternalMethod(intMethod, commentedFunc), MethodElim(methodDoc), 
@@ -86,7 +86,7 @@ import qualified GOOL.Drasil.RendererClasses as S (InternalFile(fileFromData),
   InternalBody(multiBody), InternalValue(call), InternalGetSet(getFunc, setFunc),
   InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc, listAccessFunc, 
     listSetFunc),
-  InternalStatement(state, loopState, emptyState), 
+  InternalStatement(stmt, loopStmt, emptyStmt), 
   InternalIOStmt(..), MethodTypeSym(construct), 
   InternalMethod(intFunc), InternalClass(intClass, commentedClass), 
   InternalMod(modFromData))
@@ -131,7 +131,7 @@ multiBody bs = docBody $ onStateList vibcat $ map (onStateValue bodyDoc) bs
 
 block :: (RenderSym r) => [MSStatement r] -> MSBlock r
 block sts = docBlock $ onStateList (R.block . map statementDoc) 
-  (map S.state sts)
+  (map S.stmt sts)
 
 multiBlock :: (RenderSym r) => [MSBlock r] -> MSBlock r
 multiBlock bs = docBlock $ onStateList vibcat $ map (onStateValue blockDoc) bs
@@ -193,8 +193,8 @@ runStrategy :: (RenderSym r) => String -> [(Label, MSBody r)]
   -> Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy") 
-  (strat (S.state resultState)) (Map.lookup l (Map.fromList strats))
-  where resultState = maybe S.emptyState asgState av
+  (strat (S.stmt resultState)) (Map.lookup l (Map.fromList strats))
+  where resultState = maybe S.emptyStmt asgState av
         asgState v = maybe (strError l 
           "Attempt to assign null return to a Value") (v &=) rv
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
@@ -700,19 +700,19 @@ listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
 printSt :: (RenderSym r) => SValue r -> SValue r -> MSStatement r
 printSt p v = zoom lensMStoVS $ on2StateValues (\p' -> mkSt . R.print p') p v
 
-state :: (RenderSym r) => MSStatement r -> MSStatement r
-state = onStateValue (\s -> mkStNoEnd (statementDoc s <> R.getTerm 
+stmt :: (RenderSym r) => MSStatement r -> MSStatement r
+stmt = onStateValue (\s -> mkStNoEnd (statementDoc s <> R.getTerm 
   (statementTerm s)))
   
-loopState :: (RenderSym r) => MSStatement r -> MSStatement r
-loopState = S.state . setEmpty
+loopStmt :: (RenderSym r) => MSStatement r -> MSStatement r
+loopStmt = S.stmt . setEmpty
 
-emptyState :: (RenderSym r) => MSStatement r
-emptyState = toState $ mkStNoEnd empty
+emptyStmt :: (RenderSym r) => MSStatement r
+emptyStmt = toState $ mkStNoEnd empty
 
 assign :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
   MSStatement r
-assign t vr vl = zoom lensMStoVS $ on2StateValues (\vr' vl' -> stateFromData 
+assign t vr vl = zoom lensMStoVS $ on2StateValues (\vr' vl' -> stmtFromData 
   (R.assign vr' vl') t) vr vl
 
 multiAssignError :: String -> String
@@ -889,14 +889,14 @@ stringListLists lsts sl = zoom lensMStoVS sl >>= (\slst -> checkList (getType $
         v_i = S.valueOf var_i
 
 returnState :: (RenderSym r) => Terminator -> SValue r -> MSStatement r
-returnState t v' = zoom lensMStoVS $ onStateValue (\v -> stateFromData 
+returnState t v' = zoom lensMStoVS $ onStateValue (\v -> stmtFromData 
   (R.return' [v]) t) v'
 
 multiReturnError :: String -> String
 multiReturnError l = "Cannot return multiple values in " ++ l
 
 valState :: (RenderSym r) => Terminator -> SValue r -> MSStatement r
-valState t v' = zoom lensMStoVS $ onStateValue (\v -> stateFromData (valueDoc v)
+valState t v' = zoom lensMStoVS $ onStateValue (\v -> stmtFromData (valueDoc v)
   t) v'
 
 comment :: (RenderSym r) => Doc -> Label -> MSStatement r
@@ -904,7 +904,7 @@ comment cs c = toState $ mkStNoEnd (R.comment c cs)
 
 throw :: (RenderSym r) => (r (Value r) -> Doc) -> Terminator -> 
   Label -> MSStatement r
-throw f t = onStateValue (\msg -> stateFromData (f msg) t) . zoom lensMStoVS . 
+throw f t = onStateValue (\msg -> stmtFromData (f msg) t) . zoom lensMStoVS . 
   S.litString
 
 -- ControlStatements --
@@ -931,7 +931,7 @@ ifCond ifStart elif bEnd (c:cs) eBody =
 switch :: (RenderSym r) => SValue r -> [(SValue r, MSBody r)] -> 
   MSBody r -> MSStatement r
 switch v cs bod = (\b val css de -> mkSt (R.switch b val de css)) <$>
-  S.state break <*> zoom lensMStoVS v <*> on2StateLists zip (map (zoom 
+  S.stmt break <*> zoom lensMStoVS v <*> on2StateLists zip (map (zoom 
   lensMStoVS . fst) cs) (map snd cs) <*> bod
 
 ifExists :: (RenderSym r) => SValue r -> MSBody r -> MSBody r -> 
@@ -944,8 +944,8 @@ for bStart bEnd sInit vGuard sUpdate b = (\initl guard upd bod -> mkStNoEnd
   (vcat [forLabel <+> parens (statementDoc initl <> semi <+> valueDoc guard <> 
     semi <+> statementDoc upd) <+> bStart,
   indent $ bodyDoc bod,
-  bEnd])) <$> S.loopState sInit <*> zoom lensMStoVS vGuard <*> 
-  S.loopState sUpdate <*> b
+  bEnd])) <$> S.loopStmt sInit <*> zoom lensMStoVS vGuard <*> 
+  S.loopStmt sUpdate <*> b
 
 forRange :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> 
   SValue r -> MSBody r -> MSStatement r
@@ -1068,18 +1068,18 @@ intFunc = intMethod
 stateVar :: (RenderSym r) => r (Scope r) -> r (Permanence r) ->
   SVariable r -> CSStateVar r
 stateVar s p v = stateVarFromData (zoom lensCStoMS $ onStateValue (R.stateVar 
-  (scopeDoc s) (permDoc p) . statementDoc) (S.state $ S.varDec v))
+  (scopeDoc s) (permDoc p) . statementDoc) (S.stmt $ S.varDec v))
 
 stateVarDef :: (RenderSym r) => r (Scope r) -> r (Permanence r) 
   -> SVariable r -> SValue r -> CSStateVar r
 stateVarDef s p vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue 
-  (R.stateVar (scopeDoc s) (permDoc p) . statementDoc) (S.state $ S.varDecDef 
+  (R.stateVar (scopeDoc s) (permDoc p) . statementDoc) (S.stmt $ S.varDecDef 
   vr vl))
 
 constVar :: (RenderSym r) => Doc -> r (Scope r) -> SVariable r -> 
   SValue r -> CSStateVar r
 constVar p s vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue 
-  (R.stateVar (scopeDoc s) p . statementDoc) (S.state $ S.constDecDef vr vl))
+  (R.stateVar (scopeDoc s) p . statementDoc) (S.stmt $ S.constDecDef vr vl))
 
 -- Classes --
 

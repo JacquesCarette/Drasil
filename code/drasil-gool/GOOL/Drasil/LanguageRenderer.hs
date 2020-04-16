@@ -220,10 +220,10 @@ getTerm Semi = semi
 getTerm Empty = empty
 
 mkSt :: (RenderSym r) => Doc -> r (Statement r)
-mkSt = flip stateFromData Semi
+mkSt = flip stmtFromData Semi
 
 mkStNoEnd :: (RenderSym r) => Doc -> r (Statement r)
-mkStNoEnd = flip stateFromData Empty
+mkStNoEnd = flip stmtFromData Empty
 
 mkStateVal :: (RenderSym r) => VSType r -> Doc -> SValue r
 mkStateVal t d = onStateValue (\tp -> valFromData Nothing tp d) t

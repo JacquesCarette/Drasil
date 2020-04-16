@@ -193,12 +193,12 @@ class InternalControlStmt r where
   multiReturn :: [SValue r] -> MSStatement r
 
 class InternalStatement r where
-  state     :: MSStatement r -> MSStatement r
-  loopState :: MSStatement r -> MSStatement r
+  stmt     :: MSStatement r -> MSStatement r
+  loopStmt :: MSStatement r -> MSStatement r
 
-  emptyState   :: MSStatement r
+  emptyStmt   :: MSStatement r
 
-  stateFromData :: Doc -> Terminator -> r (Statement r)
+  stmtFromData :: Doc -> Terminator -> r (Statement r)
 
 class StatementElim r where
   statementDoc :: r (Statement r) -> Doc

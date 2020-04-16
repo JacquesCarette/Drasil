@@ -12,16 +12,19 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
-  ControlBlock(..), VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp,
-  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), 
-  objMethodCall, objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), 
+  PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
+  TypeElim(..), ControlBlock(..), VariableSym(..), VariableElim(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, 
+  newObj, InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
+  FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), 
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
-  ODEMethod(..))
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
+  CommentStatement(..), ControlStatement(..), StatePattern(..), 
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), 
+  ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
   ImportElim(..), PermElim(..), InternalBody(..), BodyElim(..), 
   InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), 
@@ -34,11 +37,10 @@ import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..),
   InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..), 
   InternalStateVar(..), StateVarElim(..), InternalClass(..), ClassElim(..), 
   InternalMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
-import GOOL.Drasil.LanguageRenderer (
-  mkSt, mkStNoEnd, mkStateVal, mkVal, mkVar, dot, 
-  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
-  commentStart, elseIfLabel, inLabel, 
-  variableList, appendToBody, surroundBody)
+import GOOL.Drasil.LanguageRenderer (mkSt, mkStNoEnd, mkStateVal, mkVal, mkVar, 
+  dot, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
+  endStatement, commentStart, elseIfLabel, inLabel, variableList, appendToBody, 
+  surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body, 
   printFile, param, method, listDec, classVar, objVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
@@ -229,7 +231,7 @@ instance ControlBlock CSharpCode where
     where optsVar = var "opts" (obj "Options")
           iv = indepVar info
           dv = depVar info
-          odeT = obj "IEnumerable<SolPoint>"
+          odeT = obj "Idrasierable<SolPoint>"
           vec = obj "Vector"
           sol = var "sol" odeT
           spArray = arrayType (obj "SolPoint")
@@ -719,8 +721,7 @@ csOutfileType :: (RenderSym r) => VSType r
 csOutfileType = modifyReturn (addLangImportVS "System.IO") $ 
   typeFromData File "StreamWriter" (text "StreamWriter")
 
-csLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> 
-  Doc
+csLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 csLambda ps ex = parens (variableList ps) <+> text "=>" <+> valueDoc ex
 
 csCast :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
@@ -731,8 +732,8 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
         csCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (getTypeDoc tp)) 
           (valueDoc vl))
 
-csFuncDecDef :: (RenderSym r) => SVariable r -> 
-  [SVariable r] -> SValue r -> MSStatement r
+csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
+  MSStatement r
 csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
   getTypeDoc (variableType vr) <+> text (variableName vr) <> parens 
   (variableList pms) <+> bodyStart $$ indent (bodyDoc b) $$ bodyEnd) 
@@ -774,8 +775,7 @@ csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn
 csOpenFileR :: (RenderSym r) => SValue r -> VSType r -> SValue r
 csOpenFileR n r = newObj r [n]
 
-csOpenFileWorA :: (RenderSym r) => SValue r -> VSType r -> SValue r 
-  -> SValue r
+csOpenFileWorA :: (RenderSym r) => SValue r -> VSType r -> SValue r -> SValue r
 csOpenFileWorA n w a = newObj w [n, a] 
 
 csRef :: Doc -> Doc
@@ -799,8 +799,7 @@ csVarDec :: Binding -> MSStatement CSharpCode -> MSStatement CSharpCode
 csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
 csVarDec Dynamic d = d
 
-csObjVar :: (RenderSym r) => r (Variable r) -> r (Variable r) -> 
-  r (Variable r)
+csObjVar :: (RenderSym r) => r (Variable r) -> r (Variable r) -> r (Variable r)
 csObjVar o v = csObjVar' (variableBind v)
   where csObjVar' Static = error 
           "Cannot use objVar to access static variables through an object in C#"

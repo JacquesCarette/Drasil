@@ -28,11 +28,12 @@ import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..),
 import qualified Language.Drasil.Mod as M (Class(..))
 
 import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs, Initializers, ProgramSym, 
-  PermanenceSym(..), bodyStatements, BlockSym(..), TypeSym(..), VariableSym(..),
-  VariableElim(..), ($->), ValueSym(..), Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..), Comparison(..), 
-  ValueExpression(..), objMethodCallMixedArgs, List(..), StatementSym(..),
-  AssignStatement(..), DeclStatement(..), IOStatement(..),
+  MSStatement, MSParameter, SMethod, CSStateVar, SClass, NamedArgs, 
+  Initializers, ProgramSym, PermanenceSym(..), bodyStatements, BlockSym(..), 
+  TypeSym(..), VariableSym(..), VariableElim(..), ($->), ValueSym(..), 
+  Literal(..), VariableValue(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), objMethodCallMixedArgs, List(..), 
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..),
   StringStatement(..), ControlStatement(..), ifNoElse, ScopeSym(..), 
   MethodSym(..), pubDVar, nonInitConstructor, convType, CodeType(..), 
   onStateValue) 
@@ -78,8 +79,8 @@ variable s t = do
       then constVariable (conStruct g) (conRepr g) ((defFunc $ conRepr g) s t)
       else return $ var s t
   
-inputVariable :: (ProgramSym r) => Structure -> ConstantRepr -> 
-  SVariable r -> Reader DrasilState (SVariable r)
+inputVariable :: (ProgramSym r) => Structure -> ConstantRepr -> SVariable r -> 
+  Reader DrasilState (SVariable r)
 inputVariable Unbundled _ v = return v
 inputVariable Bundled Var v = do
   g <- ask
@@ -124,37 +125,34 @@ mkVar v = do
   t <- codeType v
   variable (codeName v) (convType t)
 
-publicFunc :: (ProgramSym r, HasSpace c, CodeIdea c) => Label -> VSType r 
-  -> String -> [c] -> Maybe String -> [MSBlock r] -> 
-  Reader DrasilState (SMethod r)
+publicFunc :: (ProgramSym r, HasSpace c, CodeIdea c) => Label -> VSType r -> 
+  String -> [c] -> Maybe String -> [MSBlock r] -> Reader DrasilState (SMethod r)
 publicFunc n t = genMethod (function n public static t) n
 
-privateMethod :: (ProgramSym r, HasSpace c, CodeIdea c) => Label -> 
-  VSType r -> String -> [c] -> Maybe String -> [MSBlock r] -> 
-  Reader DrasilState (SMethod r)
+privateMethod :: (ProgramSym r, HasSpace c, CodeIdea c) => Label -> VSType r -> 
+  String -> [c] -> Maybe String -> [MSBlock r] -> Reader DrasilState (SMethod r)
 privateMethod n t = genMethod (method n private dynamic t) n
 
 publicInOutFunc :: (ProgramSym r, HasSpace c, CodeIdea c, Eq c) => Label -> 
   String -> [c] -> [c] -> [MSBlock r] -> Reader DrasilState (SMethod r)
 publicInOutFunc n = genInOutFunc (inOutFunc n) (docInOutFunc n) public static n
 
-privateInOutMethod :: (ProgramSym r, HasSpace c, CodeIdea c, Eq c) => Label 
-  -> String -> [c] -> [c] -> [MSBlock r] -> Reader DrasilState (SMethod r)
+privateInOutMethod :: (ProgramSym r, HasSpace c, CodeIdea c, Eq c) => Label -> 
+  String -> [c] -> [c] -> [MSBlock r] -> Reader DrasilState (SMethod r)
 privateInOutMethod n = genInOutFunc (inOutMethod n) (docInOutMethod n) 
   private dynamic n
 
-genConstructor :: (ProgramSym r, HasSpace c, CodeIdea c) => Label -> String 
-  -> [c] -> [MSBlock r] -> Reader DrasilState (SMethod r)
+genConstructor :: (ProgramSym r, HasSpace c, CodeIdea c) => Label -> String -> 
+  [c] -> [MSBlock r] -> Reader DrasilState (SMethod r)
 genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
 
-genInitConstructor :: (ProgramSym r, HasSpace c, CodeIdea c) => Label -> 
-  String -> [c] -> Initializers r -> [MSBlock r] -> 
-  Reader DrasilState (SMethod r)
+genInitConstructor :: (ProgramSym r, HasSpace c, CodeIdea c) => Label -> String 
+  -> [c] -> Initializers r -> [MSBlock r] -> Reader DrasilState (SMethod r)
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p 
   Nothing
 
-genMethod :: (ProgramSym r, HasSpace c, CodeIdea c) => ([MSParameter r] 
-  -> MSBody r -> SMethod r) -> Label -> String -> [c] -> Maybe String -> 
+genMethod :: (ProgramSym r, HasSpace c, CodeIdea c) => ([MSParameter r] -> 
+  MSBody r -> SMethod r) -> Label -> String -> [c] -> Maybe String -> 
   [MSBlock r] -> Reader DrasilState (SMethod r)
 genMethod f n desc p r b = do
   g <- ask
@@ -166,14 +164,13 @@ genMethod f n desc p r b = do
   return $ if CommentFunc `elem` commented g
     then docFunc desc pComms r fn else fn
 
-genInOutFunc :: (ProgramSym r, HasSpace c, CodeIdea c, Eq c) => 
-  (r (Scope r) -> r (Permanence r) -> [SVariable r] 
-    -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) -> 
-  (r (Scope r) -> r (Permanence r) -> String -> 
-    [(String, SVariable r)] -> [(String, SVariable r)] -> 
-    [(String, SVariable r)] -> MSBody r -> SMethod r) -> 
-  r (Scope r) -> r (Permanence r) -> Label -> String -> [c] -> 
-  [c] -> [MSBlock r] -> Reader DrasilState (SMethod r)
+genInOutFunc :: (ProgramSym r, HasSpace c, CodeIdea c, Eq c) => (r (Scope r) -> 
+    r (Permanence r) -> [SVariable r] -> [SVariable r] -> [SVariable r] -> 
+    MSBody r -> SMethod r) -> 
+  (r (Scope r) -> r (Permanence r) -> String -> [(String, SVariable r)] -> 
+    [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r)
+  -> r (Scope r) -> r (Permanence r) -> Label -> String -> [c] -> [c] -> 
+  [MSBlock r] -> Reader DrasilState (SMethod r)
 genInOutFunc f docf s pr n desc ins' outs' b = do
   g <- ask
   let ins = ins' \\ outs'
@@ -300,8 +297,7 @@ unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
 
-bfunc :: (ProgramSym r) => BinOp -> (SValue r -> SValue r -> 
-  SValue r)
+bfunc :: (ProgramSym r) => BinOp -> (SValue r -> SValue r -> SValue r)
 bfunc Eq    = (?==)
 bfunc NEq   = (?!=)
 bfunc Gt    = (?>)
@@ -331,10 +327,9 @@ genModFuncs (Mod _ _ _ _ fs) = map genFunc fs
 genModClasses :: (ProgramSym r) => Mod -> [Reader DrasilState (SClass r)]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
-genClass :: (ProgramSym r) => (String -> Label -> Maybe Label -> 
-  [CSStateVar r] -> Reader DrasilState [SMethod r] -> 
-  Reader DrasilState (SClass r)) -> M.Class -> 
-  Reader DrasilState (SClass r)
+genClass :: (ProgramSym r) => (String -> Label -> Maybe Label -> [CSStateVar r] 
+  -> Reader DrasilState [SMethod r] -> Reader DrasilState (SClass r)) -> 
+  M.Class -> Reader DrasilState (SClass r)
 genClass f (M.ClassDef n i desc svs ms) = do
   svrs <- mapM (\v -> fmap (pubDVar . var (codeName v) . convType) (codeType v))
     svs

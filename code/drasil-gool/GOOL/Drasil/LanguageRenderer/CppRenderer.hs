@@ -12,11 +12,18 @@ import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
-  SValue, MSStatement, MSParameter, SMethod, NamedArgs, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), VariableElim(..), 
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
+  SValue, MSStatement, MSParameter, SMethod, NamedArgs, ProgramSym(..), 
+  FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, 
+  BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), 
+  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
+  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, 
+  FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), 
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
+  CommentStatement(..), ControlStatement(..), switchAsIf, StatePattern(..), 
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
@@ -33,9 +40,8 @@ import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..),
   InternalStateVar(..), StateVarElim(..), ParentSpec, InternalClass(..), 
   ClassElim(..), InternalMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
-import GOOL.Drasil.LanguageRenderer (addExt, 
-  mkSt, mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, 
-  classDec, dot, blockCmtStart, blockCmtEnd, 
+import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
+  mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
   functionDox, valueList, parameterList, appendToBody, surroundBody, 
   getterName, setterName)
@@ -66,11 +72,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
   unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr, classVarCheckStatic)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), 
-  Binding(..), onBinding, BindData(..), bd, FileType(..), FileData(..), fileD, 
-  FuncData(..), fd, ModData(..), md, updateMod, OpData(..), od, 
-  ParamData(..), pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
-  TypeData(..), td, ValData(..), vd, VarData(..), vard)
+import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
+  BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd, 
+  ModData(..), md, updateMod, OpData(..), od, ParamData(..), pd, ProgData(..), 
+  progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
+  VarData(..), vard)
 import GOOL.Drasil.Classes (Pair(..))
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, 
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
@@ -2321,16 +2327,14 @@ instance BlockCommentElim CppHdrCode where
   blockCommentDoc = unCPPHC
 
 -- helpers
-toBasicVar :: SVariable CppSrcCode -> 
-  SVariable CppSrcCode
+toBasicVar :: SVariable CppSrcCode -> SVariable CppSrcCode
 toBasicVar v = v >>= (\v' -> var (variableName v') (onStateValue variableType v))
 
 isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
-getParam :: (RenderSym r) => SVariable r -> 
-  MSParameter r
+getParam :: (RenderSym r) => SVariable r -> MSParameter r
 getParam v = zoom lensMStoVS v >>= (\v' -> getParamFunc ((getType . 
   variableType) v') v)
   where getParamFunc (List _) = pointerParam
@@ -2459,8 +2463,7 @@ cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t))
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c <> text "::" <> v
 
-cppLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> 
-  Doc
+cppLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 cppLambda ps ex = text "[]" <+> parens (hicat (text ",") $ zipWith (<+>) 
   (map (getTypeDoc . variableType) ps) (map variableDoc ps)) <+> text "->" <+> 
   bodyStart <> text "return" <+> valueDoc ex <> endStatement <> bodyEnd
@@ -2482,8 +2485,7 @@ cppListDecDoc n = parens (valueDoc n)
 cppListDecDefDoc :: (RenderSym r) => [r (Value r)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
-cppPrint :: (RenderSym r) => Bool -> SValue r -> SValue r -> 
-  MSStatement r
+cppPrint :: (RenderSym r) => Bool -> SValue r -> SValue r -> MSStatement r
 cppPrint newLn  pf vl = zoom lensMStoVS $ on3StateValues (\e printFn v -> mkSt 
   $ valueDoc printFn <+> text "<<" <+> pars v (valueDoc v) <+> e) end pf vl
   where pars v = if maybe False (< 9) (valuePrec v) then parens else id
@@ -2506,15 +2508,13 @@ cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens
   (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
   quotes (text sep))
 
-cppInput :: (RenderSym r) => SVariable r -> SValue r -> 
-  MSStatement r
+cppInput :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ zoom lensMStoVS $ 
   on2StateValues (\v inFn -> mkSt $ vcat [valueDoc inFn <+> text ">>" <+> 
   variableDoc v <> endStatement, valueDoc inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]) vr i
 
-cppOpenFile :: (RenderSym r) => Label -> r (Variable r) -> 
-  r (Value r) -> Doc
+cppOpenFile :: (RenderSym r) => Label -> r (Variable r) -> r (Value r) -> Doc
 cppOpenFile mode f n = variableDoc f <> dot <> text "open" <> 
   parens (valueDoc n <> comma <+> text mode)
 
@@ -2541,20 +2541,19 @@ cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom 
   lensMStoVS . snd) is <*> b)
 
-cppsFunction :: (RenderSym r) => Label -> r (Type r) -> 
-  [r (Parameter r)] -> r (Body r) -> Doc
+cppsFunction :: (RenderSym r) => Label -> r (Type r) -> [r (Parameter r)] -> 
+  r (Body r) -> Doc
 cppsFunction n t ps b = vcat [
   getTypeDoc t <+> text n <> parens (parameterList ps) <+> bodyStart,
   indent (bodyDoc b),
   bodyEnd]
 
-cpphMethod :: (RenderSym r) => Label -> r (Type r) ->
-  [r (Parameter r)] -> Doc
+cpphMethod :: (RenderSym r) => Label -> r (Type r) -> [r (Parameter r)] -> Doc
 cpphMethod n t ps = (if isDtor n then empty else getTypeDoc t) <+> text n 
   <> parens (parameterList ps) <> endStatement
 
-cppCommentedFunc :: (RenderSym r) => FileType -> 
-  MS (r (BlockComment r)) -> SMethod r -> SMethod r
+cppCommentedFunc :: (RenderSym r) => FileType -> MS (r (BlockComment r)) -> 
+  SMethod r -> SMethod r
 cppCommentedFunc ft cmt fn = do
   f <- fn
   mn <- getCurrMainFunc
@@ -2572,8 +2571,8 @@ cppsStateVarDef n cns p vr vl = onBinding (bind p) (cns <+> typeDoc
   (varType vr) <+> text (n ++ "::") <> varDoc vr <+> equals <+> val vl <>
   endStatement) empty
 
-cpphStateVarDef :: (RenderSym r) => Doc -> r (Permanence r) -> 
-  SVariable r -> SValue r -> CS Doc
+cpphStateVarDef :: (RenderSym r) => Doc -> r (Permanence r) -> SVariable r -> 
+  SValue r -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (permDoc p) .  
   statementDoc) (zoom lensCStoMS $ stmt $ onBinding (binding p) (varDec 
   vr) (varDecDef vr vl)) 

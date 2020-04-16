@@ -25,8 +25,8 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getInputFormatOuts, getCalcParams, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk,
-  quantvar, physLookup, sfwrLookup)
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar, 
+  physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
@@ -38,9 +38,10 @@ import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 
   SMethod, CSStateVar, SClass, ProgramSym, BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), 
-  Literal(..), VariableValue(..), CommandLineArgs(..), BooleanExpression(..), StatementSym(..), AssignStatement(..), DeclStatement(..), 
-  IOStatement(..), ControlStatement(..), ifNoElse, 
-  ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType)
+  Literal(..), VariableValue(..), CommandLineArgs(..), BooleanExpression(..), 
+  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..), 
+  ControlStatement(..), ifNoElse, ScopeSym(..), MethodSym(..), StateVarSym(..), 
+  pubDVar, convType)
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
@@ -75,8 +76,7 @@ genMainFunc = do
       varDecDef v_filename (arg 0) : logInFile ++
       catMaybes [ip, co] ++ ics ++ catMaybes (varDef ++ [wo])
 
-getInputDecl :: (ProgramSym r) => Reader DrasilState 
-  (Maybe (MSStatement r))
+getInputDecl :: (ProgramSym r) => Reader DrasilState (Maybe (MSStatement r))
 getInputDecl = do
   g <- ask
   v_params <- mkVar (quantvar inParams)
@@ -178,8 +178,7 @@ genInputClass scp = withReader (\s -> s {currentClass = cname}) $ do
       includedConstants :: (CodeIdea c) => ConstantStructure -> [c] -> [c]
       includedConstants WithInputs cs' = filt cs'
       includedConstants _ _ = []
-      methods :: (ProgramSym r) => InputModule -> 
-        Reader DrasilState [SMethod r]
+      methods :: (ProgramSym r) => InputModule -> Reader DrasilState [SMethod r]
       methods Separated = return []
       methods Combined = concat <$> mapM (fmap maybeToList) 
         [genInputConstructor, genInputFormat Auxiliary, 
@@ -203,8 +202,7 @@ genInputClass scp = withReader (\s -> s {currentClass = cname}) $ do
   genClass (filt ins) (includedConstants (conStruct g) cs)
   where cname = "InputParameters"
 
-genInputConstructor :: (ProgramSym r) => Reader DrasilState 
-  (Maybe (SMethod r))
+genInputConstructor :: (ProgramSym r) => Reader DrasilState (Maybe (SMethod r))
 genInputConstructor = do
   g <- ask
   let dl = defList $ codeSpec g
@@ -218,7 +216,7 @@ genInputConstructor = do
   genCtor $ any (`elem` dl) ["get_input", "derived_values", 
     "input_constraints"]
 
-genInputDerived :: (ProgramSym r) => ClassType -> 
+genInputDerived :: (ProgramSym r) => ClassType ->
   Reader DrasilState (Maybe (SMethod r))
 genInputDerived s = do
   g <- ask
@@ -276,8 +274,8 @@ physCBody cs = do
   let cb = onPhysC g
   chooseConstr cb cs
 
-chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, 
-  ProgramSym r) => ConstraintBehaviour -> [(q,[Constraint])] -> 
+chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, ProgramSym r) 
+  => ConstraintBehaviour -> [(q,[Constraint])] -> 
   Reader DrasilState [MSStatement r]
 chooseConstr cb cs = do
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
@@ -304,8 +302,7 @@ constrExc c = do
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
 
 constraintViolatedMsg :: (CodeIdea q, HasUID q, HasSpace q, ProgramSym r) 
-  => q -> String -> Constraint -> Reader DrasilState 
-  [MSStatement r]
+  => q -> String -> Constraint -> Reader DrasilState [MSStatement r]
 constraintViolatedMsg q s c = do
   pc <- printConstraint c 
   v <- mkVal q
@@ -313,7 +310,7 @@ constraintViolatedMsg q s c = do
     print v,
     printStr $ " but " ++ s ++ " to be "] ++ pc
 
-printConstraint :: (ProgramSym r) => Constraint -> 
+printConstraint :: (ProgramSym r) => Constraint ->
   Reader DrasilState [MSStatement r]
 printConstraint c = do
   g <- ask
@@ -390,8 +387,8 @@ genConstClass :: (ProgramSym r) => ClassType ->
 genConstClass scp = withReader (\s -> s {currentClass = cname}) $ do
   g <- ask
   let cs = constants $ csi $ codeSpec g
-      genClass :: (ProgramSym r) => [CodeDefinition] -> Reader DrasilState (Maybe 
-        (SClass r))
+      genClass :: (ProgramSym r) => [CodeDefinition] -> Reader DrasilState 
+        (Maybe (SClass r))
       genClass [] = return Nothing 
       genClass vs = do
         vals <- mapM (convExpr . codeEquat) vs 

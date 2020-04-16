@@ -5,13 +5,16 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlock(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
-  GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  BlockSym(..), ControlBlock(..), TypeSym(..), TypeElim(..), VariableSym(..), 
+  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
+  BooleanExpression(..), Comparison(..), ValueExpression(..), 
+  InternalValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..),
+  Iterator(..), StatementSym(..), AssignStatement(..), DeclStatement(..), 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
+  CommentStatement(..), ControlStatement(..), StatePattern(..), 
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.CodeAnalysis (Exception(..), exception, stdExc)

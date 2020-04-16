@@ -28,8 +28,7 @@ chooseLogging LogVar v = Just <$> loggedVar v
 chooseLogging LogAll v = Just <$> loggedVar v
 chooseLogging _      _ = return Nothing
 
-loggedVar :: (ProgramSym r) => SVariable r -> 
-  Reader DrasilState (MSStatement r)
+loggedVar :: (ProgramSym r) => SVariable r -> Reader DrasilState (MSStatement r)
 loggedVar v = do
     g <- ask
     return $ multi [

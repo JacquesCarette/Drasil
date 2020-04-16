@@ -8,20 +8,15 @@ module GOOL.Drasil.LanguageRenderer (
   addExt,
   
   -- * Default Functions available for use in renderers
-  package, file, module', class', multiStmt, block, 
-  body, print, printFile, param, 
-  method, stateVar, constVar, stateVarList, switch, 
-  assign, multiAssign, addAssign, increment, listDec, 
-  getTerm, return', comment, mkSt, mkStNoEnd, 
-  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, var, extVar, 
-  self, arg, classVar, objVar, 
-  constDecDef, func, cast, 
-  listAccessFunc, listSetFunc, objAccess, castObj, break, 
-  continue, static, dynamic, private, public, 
-  blockCmt, docCmt, commentedItem, addComments, functionDox, 
-  classDox, moduleDox, commentedMod, valueList, variableList, 
-  parameterList, prependToBody, appendToBody, surroundBody, getterName, 
-  setterName, intValue
+  package, file, module', class', multiStmt, block, body, print, printFile, 
+  param, method, stateVar, constVar, stateVarList, switch, assign, multiAssign, 
+  addAssign, increment, listDec, getTerm, return', comment, mkSt, mkStNoEnd, 
+  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, var, extVar, self, arg, 
+  classVar, objVar, constDecDef, func, cast, listAccessFunc, listSetFunc, 
+  objAccess, castObj, break, continue, static, dynamic, private, public, 
+  blockCmt, docCmt, commentedItem, addComments, functionDox, classDox, 
+  moduleDox, commentedMod, valueList, variableList, parameterList, 
+  prependToBody, appendToBody, surroundBody, getterName, setterName, intValue
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -163,8 +158,8 @@ stateVarList = vcat
 
 -- Controls --
 
-switch :: (RenderSym r) => r (Statement r) -> r (Value r) -> 
-  r (Body r) -> [(r (Value r), r (Body r))] -> Doc
+switch :: (RenderSym r) => r (Statement r) -> r (Value r) -> r (Body r) -> 
+  [(r (Value r), r (Body r))] -> Doc
 switch breakState v defBody cs = 
   let caseDoc (l, result) = vcat [
         text "case" <+> valueDoc l <> colon,
@@ -201,8 +196,7 @@ listDec :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 listDec v n = space <> equals <+> new <+> getTypeDoc (variableType v) 
   <> parens (valueDoc n)
 
-constDecDef :: (RenderSym r) => r (Variable r) -> 
-  r (Value r) -> Doc
+constDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 constDecDef v def = text "const" <+> getTypeDoc (variableType v) <+> 
   variableDoc v <+> equals <+> valueDoc def
 
@@ -234,12 +228,10 @@ mkVal = valFromData Nothing
 mkStateVar :: (RenderSym r) => String -> VSType r -> Doc -> SVariable r
 mkStateVar n t d = onStateValue (\tp -> varFromData Dynamic n tp d) t
 
-mkVar :: (RenderSym r) => String -> r (Type r) -> Doc -> 
-  r (Variable r)
+mkVar :: (RenderSym r) => String -> r (Type r) -> Doc -> r (Variable r)
 mkVar = varFromData Dynamic
 
-mkStaticVar :: (RenderSym r) => String -> VSType r -> Doc -> 
-  SVariable r
+mkStaticVar :: (RenderSym r) => String -> VSType r -> Doc -> SVariable r
 mkStaticVar n t d = onStateValue (\tp -> varFromData Static n tp d) t
 
 -- Value Printers --

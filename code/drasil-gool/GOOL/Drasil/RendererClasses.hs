@@ -9,18 +9,19 @@ module GOOL.Drasil.RendererClasses (
   InternalListFunc(..), InternalIterator(..), InternalFunction(..), 
   FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
   InternalControlStmt(..), InternalStatement(..), StatementElim(..), 
-  InternalScope(..), ScopeElim(..), MethodTypeSym(..), InternalParam(..), 
-  ParamElim(..), InternalMethod(..), MethodElim(..), InternalStateVar(..), 
-  StateVarElim(..), ParentSpec, InternalClass(..), ClassElim(..), 
-  InternalMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..)
+  InternalScope(..), ScopeElim(..), MSMthdType, MethodTypeSym(..), 
+  InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..), 
+  InternalStateVar(..), StateVarElim(..), ParentSpec, InternalClass(..), 
+  ClassElim(..), InternalMod(..), ModuleElim(..), BlockCommentSym(..), 
+  BlockCommentElim(..)
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
-  CSStateVar, SClass, FSModule, NamedArgs, FileSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), TypeSym(..), VariableSym(..), ValueSym(..), FunctionSym(..), 
-  StatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  CSStateVar, SClass, FSModule, NamedArgs, FileSym(..), PermanenceSym(..), 
+  BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
+  FunctionSym(..), StatementSym(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (FS, CS, MS, VS)
@@ -132,8 +133,7 @@ class OpIntro r where
   bOpFromData :: Int -> Doc -> VSBinOp r
   
 class InternalVariable r where
-  varFromData :: Binding -> String -> r (Type r) -> Doc -> 
-    r (Variable r)
+  varFromData :: Binding -> String -> r (Type r) -> Doc -> r (Variable r)
     
 class InternalVarElim r where
   variableBind :: r (Variable r) -> Binding
@@ -186,8 +186,7 @@ class InternalAssignStmt r where
 
 class InternalIOStmt r where
   -- newLn, maybe a file to print to, printFunc, value to print
-  printSt :: Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
-    MSStatement r
+  printSt :: Bool -> Maybe (SValue r) -> SValue r -> SValue r -> MSStatement r
     
 class InternalControlStmt r where
   multiReturn :: [SValue r] -> MSStatement r
@@ -210,10 +209,12 @@ class InternalScope r where
 class ScopeElim r where
   scopeDoc :: r (Scope r) -> Doc
 
+type MSMthdType a = MS (a (MethodType a))
+
 class (TypeSym r) => MethodTypeSym r where
   type MethodType r
-  mType    :: VSType r -> MS (r (MethodType r))
-  construct :: Label -> MS (r (MethodType r))
+  mType    :: VSType r -> MSMthdType r
+  construct :: Label -> MSMthdType r
 
 class InternalParam r where
   paramFromData :: r (Variable r) -> Doc -> r (Parameter r)
@@ -225,12 +226,10 @@ class ParamElim r where
 
 class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) => 
   InternalMethod r where
-  intMethod     :: Bool -> Label -> r (Scope r) -> r (Permanence r) 
-    -> MS (r (MethodType r)) -> [MSParameter r] -> MSBody r -> 
-    SMethod r
+  intMethod     :: Bool -> Label -> r (Scope r) -> r (Permanence r) -> 
+    MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
   intFunc       :: Bool -> Label -> r (Scope r) -> r (Permanence r) 
-    -> MS (r (MethodType r)) -> [MSParameter r] -> MSBody r -> 
-    SMethod r
+    -> MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
   commentedFunc :: MS (r (BlockComment r)) -> SMethod r -> SMethod r
     
   destructor :: [CSStateVar r] -> SMethod r
@@ -249,7 +248,7 @@ class StateVarElim r where
 type ParentSpec = Doc
 
 class (BlockCommentSym r) => InternalClass r where
-  intClass :: Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r]
+  intClass :: Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] 
     -> [SMethod r] -> SClass r
     
   inherit :: Maybe Label -> r ParentSpec

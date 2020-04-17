@@ -12,15 +12,16 @@ import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), 
   InputModule(..), Structure(..))
+import Language.Drasil.Mod (Description)
 
 import Data.Map (member)
 import qualified Data.Map as Map (filter, lookup, elems)
 import Control.Monad.Reader (Reader, ask)
 
-modDesc :: Reader DrasilState [String] -> Reader DrasilState String
+modDesc :: Reader DrasilState [Description] -> Reader DrasilState Description
 modDesc = fmap ((++) "Provides " . stringList)
 
-inputParametersDesc :: Reader DrasilState [String]
+inputParametersDesc :: Reader DrasilState [Description]
 inputParametersDesc = do
   g <- ask
   ifDesc <- inputFormatDesc
@@ -34,7 +35,7 @@ inputParametersDesc = do
       inDesc Unbundled = [""]
   return $ ipDesc im
 
-inputConstructorDesc :: Reader DrasilState String
+inputConstructorDesc :: Reader DrasilState Description
 inputConstructorDesc = do
   g <- ask
   pAndS <- physAndSfwrCons
@@ -50,21 +51,21 @@ inputConstructorDesc = do
     idDesc ("derived_values" `elem` dl),
     icDesc ("input_constraints" `elem` dl)]
 
-inputFormatDesc :: Reader DrasilState String
+inputFormatDesc :: Reader DrasilState Description
 inputFormatDesc = do
   g <- ask
   let ifDesc Nothing = ""
       ifDesc _ = "the function for reading inputs"
   return $ ifDesc $ Map.lookup "get_input" (eMap $ codeSpec g)
 
-derivedValuesDesc :: Reader DrasilState String
+derivedValuesDesc :: Reader DrasilState Description
 derivedValuesDesc = do
   g <- ask
   let dvDesc Nothing = ""
       dvDesc _ = "the function for calculating derived values"
   return $ dvDesc $ Map.lookup "derived_values" (eMap $ codeSpec g)
 
-inputConstraintsDesc :: Reader DrasilState String
+inputConstraintsDesc :: Reader DrasilState Description
 inputConstraintsDesc = do
   g <- ask
   pAndS <- physAndSfwrCons
@@ -73,7 +74,7 @@ inputConstraintsDesc = do
         " on the input"
   return $ icDesc $ Map.lookup "input_constraints" (eMap $ codeSpec g)
 
-constModDesc :: Reader DrasilState String
+constModDesc :: Reader DrasilState Description
 constModDesc = do
   g <- ask
   let cDesc [] = ""
@@ -81,14 +82,14 @@ constModDesc = do
   return $ cDesc $ filter (flip member (eMap $ codeSpec g) . codeName) 
     (constants $ csi $ codeSpec g)
 
-outputFormatDesc :: Reader DrasilState String
+outputFormatDesc :: Reader DrasilState Description
 outputFormatDesc = do
   g <- ask
   let ofDesc Nothing = ""
       ofDesc _ = "the function for writing outputs"
   return $ ofDesc $ Map.lookup "write_output" (eMap $ codeSpec g)
 
-inputClassDesc :: Reader DrasilState String
+inputClassDesc :: Reader DrasilState Description
 inputClassDesc = do
   g <- ask
   let cname = "InputParameters"
@@ -106,7 +107,7 @@ inputClassDesc = do
       cVs _ = "constant values"
   return $ inClassD $ inputs $ csi $ codeSpec g
 
-constClassDesc :: Reader DrasilState String
+constClassDesc :: Reader DrasilState Description
 constClassDesc = do
   g <- ask
   let ccDesc [] = ""
@@ -114,14 +115,14 @@ constClassDesc = do
   return $ ccDesc $ filter (flip member (eMap $ codeSpec g) . codeName) 
     (constants $ csi $ codeSpec g)
 
-inFmtFuncDesc :: Reader DrasilState String
+inFmtFuncDesc :: Reader DrasilState Description
 inFmtFuncDesc = do
   g <- ask
   let ifDesc False = ""
       ifDesc _ = "Reads input from a file with the given file name"
   return $ ifDesc $ "get_input" `elem` defList (codeSpec g)
 
-inConsFuncDesc :: Reader DrasilState String
+inConsFuncDesc :: Reader DrasilState Description
 inConsFuncDesc = do
   g <- ask
   pAndS <- physAndSfwrCons
@@ -129,7 +130,7 @@ inConsFuncDesc = do
       icDesc _ = "Verifies that input values satisfy the " ++ pAndS
   return $ icDesc $ "input_constraints" `elem` defList (codeSpec g)
 
-dvFuncDesc :: Reader DrasilState String
+dvFuncDesc :: Reader DrasilState Description
 dvFuncDesc = do
   g <- ask
   let dvDesc False = ""
@@ -137,17 +138,17 @@ dvFuncDesc = do
         " inputs"
   return $ dvDesc $ "derived_values" `elem` defList (codeSpec g)
 
-calcModDesc :: String
+calcModDesc :: Description
 calcModDesc = "Provides functions for calculating the outputs"
 
-woFuncDesc :: Reader DrasilState String
+woFuncDesc :: Reader DrasilState Description
 woFuncDesc = do
   g <- ask
   let woDesc False = ""
       woDesc _ = "Writes the output values to output.txt"
   return $ woDesc $ "write_output" `elem` defList (codeSpec g)
 
-physAndSfwrCons :: Reader DrasilState String
+physAndSfwrCons :: Reader DrasilState Description
 physAndSfwrCons = do
   g <- ask
   let cns = concat $ Map.elems (cMap $ csi $ codeSpec g)

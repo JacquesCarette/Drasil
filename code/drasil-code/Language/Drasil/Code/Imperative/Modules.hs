@@ -197,7 +197,7 @@ genInputClass scp = withReader (\s -> s {currentClass = cname}) $ do
             getFunc Auxiliary = auxClass
             f = getFunc scp
         icDesc <- inputClassDesc
-        c <- f icDesc cname Nothing (inputVars ++ constVars) (methods $ inMod g)
+        c <- f cname Nothing icDesc (inputVars ++ constVars) (methods $ inMod g)
         return $ Just c
   genClass (filt ins) (includedConstants (conStruct g) cs)
   where cname = "InputParameters"
@@ -398,7 +398,7 @@ genConstClass scp = withReader (\s -> s {currentClass = cname}) $ do
             getFunc Auxiliary = auxClass
             f = getFunc scp
         cDesc <- constClassDesc
-        cls <- f cDesc cname Nothing constVars (return [])
+        cls <- f cname Nothing cDesc constVars (return [])
         return $ Just cls
   genClass $ filter (flip member (Map.filter (cname ==) (clsMap $ codeSpec g)) 
     . codeName) cs

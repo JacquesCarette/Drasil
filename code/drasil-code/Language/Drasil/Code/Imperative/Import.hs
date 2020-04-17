@@ -327,13 +327,13 @@ genModFuncs (Mod _ _ _ _ fs) = map genFunc fs
 genModClasses :: (OOProg r) => Mod -> [Reader DrasilState (SClass r)]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
-genClass :: (OOProg r) => (String -> Label -> Maybe Label -> [CSStateVar r] 
+genClass :: (OOProg r) => (Label -> Maybe Label -> String -> [CSStateVar r] 
   -> Reader DrasilState [SMethod r] -> Reader DrasilState (SClass r)) -> 
   M.Class -> Reader DrasilState (SClass r)
 genClass f (M.ClassDef n i desc svs ms) = do
   svrs <- mapM (\v -> fmap (pubDVar . var (codeName v) . convType) (codeType v))
     svs
-  f n desc i svrs (mapM genFunc ms) 
+  f n i desc svrs (mapM genFunc ms) 
 
 genFunc :: (OOProg r) => Func -> Reader DrasilState (SMethod r)
 genFunc (FDef (FuncDef n desc parms o rd s)) = do

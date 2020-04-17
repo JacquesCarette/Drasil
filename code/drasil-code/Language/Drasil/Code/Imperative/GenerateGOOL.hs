@@ -52,10 +52,10 @@ genDoxConfig n s = do
 
 data ClassType = Primary | Auxiliary
 
-mkClass :: (OOProg r) => ClassType -> String -> Label -> Maybe Label -> 
+mkClass :: (OOProg r) => ClassType -> Label -> Maybe Label -> String -> 
   [CSStateVar r] -> Reader DrasilState [SMethod r] ->
   Reader DrasilState (SClass r)
-mkClass s desc n l vs mths = do
+mkClass s n l desc vs mths = do
   g <- ask
   ms <- mths
   let getFunc Primary = buildClass
@@ -65,12 +65,12 @@ mkClass s desc n l vs mths = do
     then docClass desc (f n l vs ms) 
     else f n l vs ms
 
-primaryClass :: (OOProg r) => String -> Label -> Maybe Label -> 
+primaryClass :: (OOProg r) => Label -> Maybe Label -> String -> 
   [CSStateVar r] -> Reader DrasilState [SMethod r] -> 
   Reader DrasilState (SClass r)
 primaryClass = mkClass Primary
 
-auxClass :: (OOProg r) => String -> Label -> Maybe Label -> 
+auxClass :: (OOProg r) => Label -> Maybe Label -> String -> 
   [CSStateVar r] -> Reader DrasilState [SMethod r] -> 
   Reader DrasilState (SClass r)
 auxClass = mkClass Auxiliary

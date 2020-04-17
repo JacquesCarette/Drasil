@@ -41,7 +41,7 @@ getConstraintCall :: (ProgramSym r) => Reader DrasilState
   (Maybe (MSStatement r))
 getConstraintCall = do
   val <- getFuncCall "input_constraints" void getConstraintParams
-  return $ fmap valState val
+  return $ fmap valStmt val
 
 getCalcCall :: (ProgramSym r) => CodeDefinition -> Reader DrasilState 
   (Maybe (MSStatement r))
@@ -55,7 +55,7 @@ getCalcCall c = do
 getOutputCall :: (ProgramSym r) => Reader DrasilState (Maybe (MSStatement r))
 getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
-  return $ fmap valState val
+  return $ fmap valStmt val
 
 getFuncCall :: (ProgramSym r, HasUID c, HasSpace c, CodeIdea c) => String -> 
   VSType r -> Reader DrasilState [c] -> Reader DrasilState (Maybe (SValue r))

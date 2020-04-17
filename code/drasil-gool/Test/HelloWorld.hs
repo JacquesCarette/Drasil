@@ -37,14 +37,14 @@ helloInitVariables = block [comment "Initializing variables",
     (listType double)) (litDouble 1.0)),
   printLn (valueOf $ var "oneIndex" int),
   var "a" int &= listSize (valueOf $ var "myOtherList" (listType double)),
-  valState (listAdd (valueOf $ var "myOtherList" (listType double))
+  valStmt (listAdd (valueOf $ var "myOtherList" (listType double))
     (litInt 2) (litDouble 2.0)),
-  valState (listAppend (valueOf $ var "myOtherList" (listType double)) 
+  valStmt (listAppend (valueOf $ var "myOtherList" (listType double)) 
     (litDouble 2.5)),
   varDec $ var "e" double,
   var "e" int &= listAccess (valueOf $ var "myOtherList"
     (listType double)) (litInt 1),
-  valState (listSet (valueOf $ var "myOtherList" (listType double)) 
+  valStmt (listSet (valueOf $ var "myOtherList" (listType double)) 
     (litInt 1) (litDouble 17.4)),
   listDec 7 (var "myName" (listType string)),
   stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),

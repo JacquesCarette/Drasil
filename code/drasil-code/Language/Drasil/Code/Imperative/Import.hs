@@ -407,7 +407,7 @@ convStmt (FCond e tSt eSt) = do
   return $ ifCond [(e', bodyStatements stmt1)] (bodyStatements stmt2)
 convStmt (FRet e) = do
   e' <- convExpr e
-  return $ returnState e'
+  return $ returnStmt e'
 convStmt (FThrow s) = return $ throw s
 convStmt (FTry t c) = do
   stmt1 <- mapM convStmt t
@@ -438,14 +438,14 @@ convStmt (FDecDef v e) = do
   return $ multi $ dd : l
 convStmt (FVal e) = do
   e' <- convExpr e
-  return $ valState e'
+  return $ valStmt e'
 convStmt (FMulti ss) = do
   stmts <- mapM convStmt ss
   return $ multi stmts
 convStmt (FAppend a b) = do
   a' <- convExpr a
   b' <- convExpr b
-  return $ valState $ listAppend a' b'
+  return $ valStmt $ listAppend a' b'
 
 genDataFunc :: (ProgramSym r) => Name -> String -> DataDesc -> 
   Reader DrasilState (SMethod r)
@@ -519,7 +519,7 @@ readData ddef = do
         ---------------
         appendTemp :: (ProgramSym r) => String -> DataItem -> 
           Reader DrasilState (MSStatement r)
-        appendTemp sfx v = fmap (\t -> valState $ listAppend 
+        appendTemp sfx v = fmap (\t -> valStmt $ listAppend 
           (valueOf $ var (codeName v) (convType t)) 
           (valueOf $ var (codeName v ++ sfx) (convType t))) (codeType v)
         ---------------

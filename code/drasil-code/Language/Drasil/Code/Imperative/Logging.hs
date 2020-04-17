@@ -6,7 +6,7 @@ import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.CodeSpec hiding (codeSpec)
 
 import GOOL.Drasil (Label, MSBody, MSBlock, SVariable, SValue, MSStatement, 
-  ProgramSym, BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), 
+  OOProg, BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), 
   VariableElim(..), Literal(..), VariableValue(..), StatementSym(..), 
   DeclStatement(..), IOStatement(..), lensMStoVS)
 
@@ -15,20 +15,20 @@ import Data.Maybe (maybeToList)
 import Control.Applicative ((<$>))
 import Control.Monad.Reader (Reader, ask)
 
-maybeLog :: (ProgramSym r) => SVariable r ->
+maybeLog :: (OOProg r) => SVariable r ->
   Reader DrasilState [MSStatement r]
 maybeLog v = do
   g <- ask
   l <- chooseLogging (logKind g) v
   return $ maybeToList l
 
-chooseLogging :: (ProgramSym r) => Logging -> (SVariable r -> 
+chooseLogging :: (OOProg r) => Logging -> (SVariable r -> 
   Reader DrasilState (Maybe (MSStatement r)))
 chooseLogging LogVar v = Just <$> loggedVar v
 chooseLogging LogAll v = Just <$> loggedVar v
 chooseLogging _      _ = return Nothing
 
-loggedVar :: (ProgramSym r) => SVariable r -> Reader DrasilState (MSStatement r)
+loggedVar :: (OOProg r) => SVariable r -> Reader DrasilState (MSStatement r)
 loggedVar v = do
     g <- ask
     return $ multi [
@@ -39,7 +39,7 @@ loggedVar v = do
       printFileStrLn valLogFile (" in module " ++ currentModule g),
       closeFile valLogFile ]
 
-logBody :: (ProgramSym r) => Label -> [SVariable r] -> [MSBlock r] -> 
+logBody :: (OOProg r) => Label -> [SVariable r] -> [MSBlock r] -> 
   Reader DrasilState (MSBody r)
 logBody n vars b = do
   g <- ask
@@ -48,7 +48,7 @@ logBody n vars b = do
       loggedBody _       = b
   return $ body $ loggedBody $ logKind g
 
-loggedMethod :: (ProgramSym r) => Label -> Label -> [SVariable r] -> 
+loggedMethod :: (OOProg r) => Label -> Label -> [SVariable r] -> 
   [MSBlock r] -> [MSBlock r]
 loggedMethod lName n vars b = block [
       varDec varLogFile,
@@ -70,8 +70,8 @@ loggedMethod lName n vars b = block [
       printFile valLogFile (valueOf v), 
       printFileStrLn valLogFile ", "] ++ printInputs vs
 
-varLogFile :: (ProgramSym r) => SVariable r
+varLogFile :: (OOProg r) => SVariable r
 varLogFile = var "outfile" outfile
 
-valLogFile :: (ProgramSym r) => SValue r
+valLogFile :: (OOProg r) => SValue r
 valLogFile = valueOf varLogFile

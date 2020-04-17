@@ -4,7 +4,7 @@
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
-  SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
+  SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   BlockSym(..), ControlBlock(..), TypeSym(..), TypeElim(..), VariableSym(..), 
   VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
@@ -45,6 +45,8 @@ instance Applicative CodeInfo where
 instance Monad CodeInfo where
   return = CI
   CI x >>= f = f x
+
+instance OOProg CodeInfo where
 
 instance ProgramSym CodeInfo where
   type Program CodeInfo = GOOLState

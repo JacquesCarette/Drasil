@@ -50,7 +50,7 @@ import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
 import Control.Applicative ((<$>))
 import Control.Monad (liftM2, zipWithM)
-import Control.Monad.Reader (Reader, ask, asks, withReader)
+import Control.Monad.Reader (Reader, ask, asks)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
 
@@ -169,7 +169,7 @@ constVarFunc Const n = constVar n public
 
 genInputClass :: (OOProg r) => ClassType -> 
   Reader DrasilState (Maybe (SClass r))
-genInputClass scp = withReader (\s -> s {currentClass = cname}) $ do
+genInputClass scp = do
   g <- ask
   let ins = inputs $ csi $ codeSpec g
       cs = constants $ csi $ codeSpec g
@@ -384,7 +384,7 @@ genConstMod = do
 
 genConstClass :: (OOProg r) => ClassType ->
   Reader DrasilState (Maybe (SClass r))
-genConstClass scp = withReader (\s -> s {currentClass = cname}) $ do
+genConstClass scp = do
   g <- ask
   let cs = constants $ csi $ codeSpec g
       genClass :: (OOProg r) => [CodeDefinition] -> Reader DrasilState 

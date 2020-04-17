@@ -57,7 +57,7 @@ mkClass :: (OOProg r) => ClassType -> Label -> Maybe Label -> String ->
   Reader DrasilState (SClass r)
 mkClass s n l desc vs mths = do
   g <- ask
-  ms <- mths
+  ms <- withReader (\ds -> ds {currentClass = n}) mths
   let getFunc Primary = buildClass
       getFunc Auxiliary = extraClass
       f = getFunc s

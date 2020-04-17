@@ -341,7 +341,7 @@ genFunc (FDef (FuncDef n desc parms o rd s)) = do
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ parms)
   publicFunc n (convType $ spaceMatches g o) desc parms rd 
-    [block $ map varDec vars ++ stmts]
+    [block $ map varDec vars, block stmts]
 genFunc (FDef (CtorDef n desc parms i s)) = do
   g <- ask
   inits <- mapM (convExpr . snd) i
@@ -350,7 +350,7 @@ genFunc (FDef (CtorDef n desc parms i s)) = do
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ parms)
   genInitConstructor n desc parms (zip initvars inits) 
-    [block $ map varDec vars ++ stmts]
+    [block $ map varDec vars, block stmts]
 genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 
 convStmt :: (ProgramSym r) => FuncStmt -> Reader DrasilState (MSStatement r)

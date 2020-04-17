@@ -11,7 +11,7 @@ module Language.Drasil.Code (
   matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), Visibility(..), 
   ODEMethod(..), defaultChoices, funcUID, funcUID', asVC, asVC', codeSpec, 
   relToQD,
-  ($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, funcData, funcDef, 
+  ($:=), Mod(Mod), Func, FuncStmt(..), fDecDef, ffor, funcData, funcDef, 
   packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
   ExternalLibrary, Step, FunctionInterface, Argument, externalLib, choiceSteps, 
@@ -79,7 +79,7 @@ import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), CodeSystInfo(..),
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
   matchSpaces, AuxFile(..), Visibility(..), ODEMethod(..), defaultChoices, 
   funcUID, funcUID', asVC, asVC', codeSpec, relToQD)
-import Language.Drasil.Mod (($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, 
+import Language.Drasil.Mod (($:=), Mod(Mod), Func, FuncStmt(..), fDecDef, ffor, 
   funcData, funcDef, packmod)
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..))

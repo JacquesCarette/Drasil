@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
   FuncStmt(..), Initializer, Mod(..), Name, ($:=), classDef, classImplements, 
-  ctorDef, ffor, fdec, fname, fstdecl, funcData, funcDef, packmod, 
+  ctorDef, ffor, fDecDef, fname, fstdecl, funcData, funcDef, packmod, 
   packmodRequires, prefixFunctions
 ) where
 
@@ -91,8 +91,8 @@ v $:= e = FAsg (quantvar v) e
 ffor :: (Quantity c, MayHaveUnit c) => c -> Expr -> [FuncStmt] -> FuncStmt
 ffor v = FFor (quantvar  v)
 
-fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
-fdec v  = FDec (quantvar v)
+fDecDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt
+fDecDef v  = FDecDef (quantvar v)
 
 fstdecl :: ChunkDB -> [FuncStmt] -> [CodeVarChunk]
 fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declared ctx) fsts) 

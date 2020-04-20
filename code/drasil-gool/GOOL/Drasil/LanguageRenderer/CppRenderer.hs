@@ -43,14 +43,15 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
-  mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
-  docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
-  functionDox, valueList, parameterList, appendToBody, surroundBody, 
-  getterName, setterName)
+import GOOL.Drasil.LanguageRenderer (addExt, classDec, dot, blockCmtStart, 
+  blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, 
+  elseIfLabel, functionDox, valueList, parameterList, appendToBody, 
+  surroundBody, getterName, setterName)
 import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body, param, 
   stateVar, constVar, cast, castObj, static, dynamic, break, continue, 
   private, public, blockCmt, docCmt, addComments, commentedMod, commentedItem)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkSt, mkStNoEnd, mkStateVal, 
+  mkVal, mkStateVar, mkVar,)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, float, double, char, string, listType, 
   listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, negateOp,

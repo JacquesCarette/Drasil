@@ -10,9 +10,8 @@ module GOOL.Drasil.LanguageRenderer (
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
   param, method, stateVar, constVar, stateVarList, switch, assign, multiAssign, 
-  addAssign, increment, listDec, getTerm, return', comment, mkSt, mkStNoEnd, 
-  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, var, extVar, self, arg, 
-  classVar, objVar, constDecDef, func, cast, listAccessFunc, listSetFunc, 
+  addAssign, increment, listDec, getTerm, return', comment, var, extVar, self, 
+  arg, classVar, objVar, constDecDef, func, cast, listAccessFunc, listSetFunc, 
   objAccess, castObj, break, continue, static, dynamic, private, public, 
   blockCmt, docCmt, commentedItem, addComments, functionDox, classDox, 
   moduleDox, commentedMod, valueList, variableList, parameterList, 
@@ -22,20 +21,17 @@ module GOOL.Drasil.LanguageRenderer (
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
-  BodySym(Body), PermanenceSym(Permanence), TypeSym(Type), TypeElim(..), 
-  VariableSym(Variable), VariableElim(..), ValueSym(..), 
-  StatementSym(Statement), ScopeSym(Scope), ParameterSym(Parameter))
-import GOOL.Drasil.RendererClasses (RenderSym,
-  RenderVariable(..),
-  RenderValue(valFromData), RenderStatement(..))
+import GOOL.Drasil.ClassInterface (Label, Library, SValue, BodySym(Body), 
+  PermanenceSym(Permanence), TypeSym(Type), TypeElim(..), VariableSym(Variable),
+  VariableElim(..), ValueSym(..), StatementSym(Statement), ScopeSym(Scope), 
+  ParameterSym(Parameter))
+import GOOL.Drasil.RendererClasses (RenderSym)
 import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
   InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
   ScopeElim(..), ParamElim(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
-  updateMod, TypeData(..), Binding(..), VarData(..))
-import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
-  onStateValue)
+  updateMod, TypeData(..), VarData(..))
+import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 
 import Data.List (last)
 import Prelude hiding (break,print,last,mod,(<>))
@@ -214,27 +210,6 @@ statement (s, t) = (s <> getTerm t, Empty)
 getTerm :: Terminator -> Doc
 getTerm Semi = semi
 getTerm Empty = empty
-
-mkSt :: (RenderSym r) => Doc -> r (Statement r)
-mkSt = flip stmtFromData Semi
-
-mkStNoEnd :: (RenderSym r) => Doc -> r (Statement r)
-mkStNoEnd = flip stmtFromData Empty
-
-mkStateVal :: (RenderSym r) => VSType r -> Doc -> SValue r
-mkStateVal t d = onStateValue (\tp -> valFromData Nothing tp d) t
-
-mkVal :: (RenderSym r) => r (Type r) -> Doc -> r (Value r)
-mkVal = valFromData Nothing
-
-mkStateVar :: (RenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStateVar n t d = onStateValue (\tp -> varFromData Dynamic n tp d) t
-
-mkVar :: (RenderSym r) => String -> r (Type r) -> Doc -> r (Variable r)
-mkVar = varFromData Dynamic
-
-mkStaticVar :: (RenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStaticVar n t d = onStateValue (\tp -> varFromData Static n tp d) t
 
 -- Value Printers --
 

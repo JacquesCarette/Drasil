@@ -101,13 +101,14 @@ import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
   onStateList, on2StateLists, on1StateValue1List, getInnerType, getNestDegree)
-import GOOL.Drasil.LanguageRenderer (dot, forLabel, new, addExt, mkSt, 
-  mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, functionDox, 
+import GOOL.Drasil.LanguageRenderer (dot, forLabel, new, addExt, functionDox, 
   classDox, moduleDox, getterName, setterName, valueList, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (file, module', block, 
   print, stateVar, stateVarList, switch, assign, addAssign, increment, 
   constDecDef, return', comment, getTerm, var, extVar, self, arg, objVar, func, 
   listAccessFunc, objAccess, commentedItem)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkSt, mkStNoEnd, mkStateVal, 
+  mkVal, mkStateVar, mkVar, mkStaticVar,)
 import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensMStoVS, lensVStoMS, currMain, currFileType, modifyReturnFunc, 
   modifyReturnFunc2, addFile, setMainMod, addLangImportVS, getLangImports, 

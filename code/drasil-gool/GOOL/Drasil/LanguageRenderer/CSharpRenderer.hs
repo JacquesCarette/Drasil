@@ -40,14 +40,15 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (mkSt, mkStNoEnd, mkStateVal, mkVal, mkVar, 
-  dot, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
-  endStatement, commentStart, elseIfLabel, inLabel, variableList, appendToBody, 
-  surroundBody)
+import GOOL.Drasil.LanguageRenderer (dot, blockCmtStart, blockCmtEnd, 
+  docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
+  inLabel, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body, 
   printFile, param, method, listDec, classVar, objVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
   addComments, commentedMod, commentedItem)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkSt, mkStNoEnd, mkStateVal, 
+  mkVal, mkVar)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
   listType, arrayType, listInnerType, obj, funcType, void, runStrategy, 

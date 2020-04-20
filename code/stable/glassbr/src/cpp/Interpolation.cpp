@@ -130,6 +130,7 @@ double func_interpY(string filename, double x, double z) {
     int k_2;
     double y_1;
     double y_2;
+    
     vector<vector<double>> x_matrix(0);
     vector<vector<double>> y_matrix(0);
     vector<double> z_vector(0);
@@ -250,6 +251,7 @@ double func_interpZ(string filename, double x, double y) {
     int k_2;
     double y_1;
     double y_2;
+    
     vector<vector<double>> x_matrix(0);
     vector<vector<double>> y_matrix(0);
     vector<double> z_vector(0);

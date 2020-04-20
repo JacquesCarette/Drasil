@@ -151,6 +151,7 @@ public class Interpolation {
         int k_2;
         double y_1;
         double y_2;
+        
         List<List<double>> x_matrix = new List<List<double>>(0);
         List<List<double>> y_matrix = new List<List<double>>(0);
         List<double> z_vector = new List<double>(0);
@@ -277,6 +278,7 @@ public class Interpolation {
         int k_2;
         double y_1;
         double y_2;
+        
         List<List<double>> x_matrix = new List<List<double>>(0);
         List<List<double>> y_matrix = new List<List<double>>(0);
         List<double> z_vector = new List<double>(0);

@@ -342,7 +342,7 @@ genFunc (FDef (FuncDef n desc parms o rd s)) = do
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ parms)
   publicFunc n (convType $ spaceMatches g o) desc parms rd 
-    [block $ map varDec vars ++ stmts]
+    [block $ map varDec vars, block stmts]
 genFunc (FDef (CtorDef n desc parms i s)) = do
   g <- ask
   inits <- mapM (convExpr . snd) i
@@ -351,7 +351,7 @@ genFunc (FDef (CtorDef n desc parms i s)) = do
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ parms)
   genInitConstructor n desc parms (zip initvars inits) 
-    [block $ map varDec vars ++ stmts]
+    [block $ map varDec vars, block stmts]
 genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 
 convStmt :: (OOProg r) => FuncStmt -> Reader DrasilState (MSStatement r)
@@ -415,13 +415,12 @@ convStmt (FTry t c) = do
   stmt2 <- mapM convStmt c
   return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
 convStmt FContinue = return continue
-convStmt (FDec v) = do
+convStmt (FDecDef v (Matrix [[]])) = do
   vari <- mkVar v
   let convDec (C.List _) = listDec 0 vari
       convDec (C.Array _) = arrayDec 0 vari
       convDec _ = varDec vari
   fmap convDec (codeType v) 
-convStmt (FDecDef v (Matrix [[]])) = convStmt (FDec v)
 convStmt (FDecDef v e) = do
   v' <- mkVar v
   l <- maybeLog v'

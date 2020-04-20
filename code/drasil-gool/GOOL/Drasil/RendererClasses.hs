@@ -81,7 +81,7 @@ class RenderBody r where
   multiBody :: [MSBody r] -> MSBody r
 
 class BodyElim r where
-  bodyDoc :: r (Body r) -> Doc
+  body :: r (Body r) -> Doc
 
 class RenderBlock r where
   docBlock :: MS Doc -> MSBlock r

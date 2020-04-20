@@ -37,6 +37,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
+import qualified GOOL.Drasil.RendererClasses as RC (body)
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -157,7 +158,7 @@ instance RenderBody PythonCode where
   multiBody = G.multiBody 
 
 instance BodyElim PythonCode where
-  bodyDoc = unPC
+  body = unPC
 
 instance BlockSym PythonCode where
   type Block PythonCode = Doc
@@ -637,7 +638,7 @@ instance MethodSym PythonCode where
   mainFunction b = do
     modify setCurrMain
     bod <- b
-    modify (setMainDoc $ bodyDoc bod)
+    modify (setMainDoc $ RC.body bod)
     toState $ toCode $ mthd empty
 
   docFunc = G.docFunc
@@ -804,19 +805,19 @@ pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valueDoc errMsg)
 pyForEach :: (RenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
 pyForEach i lstVar b = vcat [
   forLabel <+> variableDoc i <+> inLabel <+> valueDoc lstVar <> colon,
-  indent $ bodyDoc b]
+  indent $ RC.body b]
 
 pyWhile :: (RenderSym r) => r (Value r) -> r (Body r) -> Doc
 pyWhile v b = vcat [
   text "while" <+> valueDoc v <> colon,
-  indent $ bodyDoc b]
+  indent $ RC.body b]
 
 pyTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 pyTryCatch tryB catchB = vcat [
   text "try" <+> colon,
-  indent $ bodyDoc tryB,
+  indent $ RC.body tryB,
   text "except" <+> text "Exception" <+> colon,
-  indent $ bodyDoc catchB]
+  indent $ RC.body catchB]
 
 pyListSlice :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r 
   -> SValue r -> VS Doc
@@ -831,15 +832,15 @@ pyMethod n slf ps b = vcat [
   indent bodyD]
       where pms = parameterList ps
             oneParam = emptyIfEmpty pms $ text ", "
-            bodyD | isEmpty (bodyDoc b) = text "None"
-                  | otherwise = bodyDoc b
+            bodyD | isEmpty (RC.body b) = text "None"
+                  | otherwise = RC.body b
 
 pyFunction :: (RenderSym r) => Label -> [r (Parameter r)] -> r (Body r) -> Doc
 pyFunction n ps b = vcat [
   text "def" <+> text n <> parens (parameterList ps) <> colon,
   indent bodyD]
-  where bodyD | isEmpty (bodyDoc b) = text "None"
-              | otherwise = bodyDoc b
+  where bodyD | isEmpty (RC.body b) = text "None"
+              | otherwise = RC.body b
 
 pyClass :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 pyClass n pn s vs fs = vcat [

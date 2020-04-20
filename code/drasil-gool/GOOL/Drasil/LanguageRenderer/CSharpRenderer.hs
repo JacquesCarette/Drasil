@@ -37,6 +37,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
+import qualified GOOL.Drasil.RendererClasses as RC (body)
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStNoEnd, mkStateVal, mkVal, mkVar, 
   dot, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
   endStatement, commentStart, elseIfLabel, inLabel, variableList, appendToBody, 
@@ -164,7 +165,7 @@ instance RenderBody CSharpCode where
   multiBody = G.multiBody 
 
 instance BodyElim CSharpCode where
-  bodyDoc = unCSC
+  body = unCSC
 
 instance BlockSym CSharpCode where
   type Block CSharpCode = Doc
@@ -738,7 +739,7 @@ csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r ->
   MSStatement r
 csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
   getTypeDoc (variableType vr) <+> text (variableName vr) <> parens 
-  (variableList pms) <+> bodyStart $$ indent (bodyDoc b) $$ bodyEnd) 
+  (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd) 
   (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnStmt r)
 
 csThrowDoc :: (RenderSym r) => r (Value r) -> Doc
@@ -748,10 +749,10 @@ csThrowDoc errMsg = text "throw new" <+> text "Exception" <>
 csTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 csTryCatch tb cb = vcat [
   text "try" <+> lbrace,
-  indent $ bodyDoc tb,
+  indent $ RC.body tb,
   rbrace <+> text "catch" <+> 
     lbrace,
-  indent $ bodyDoc cb,
+  indent $ RC.body cb,
   rbrace]
 
 csDiscardInput :: (RenderSym r) => r (Value r) -> Doc

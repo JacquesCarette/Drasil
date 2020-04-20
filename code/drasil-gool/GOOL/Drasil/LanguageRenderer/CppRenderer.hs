@@ -28,7 +28,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
+  ImportElim(..), PermElim(..), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
@@ -40,6 +40,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
+import qualified GOOL.Drasil.RendererClasses as RC (body)
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -179,7 +180,7 @@ instance (Pair p) => RenderBody (p CppSrcCode CppHdrCode) where
   multiBody = pair1List multiBody multiBody
 
 instance (Pair p) => BodyElim (p CppSrcCode CppHdrCode) where
-  bodyDoc b = bodyDoc $ pfst b
+  body b = RC.body $ pfst b
 
 instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
   type Block (p CppSrcCode CppHdrCode) = Doc
@@ -1137,7 +1138,7 @@ instance RenderBody CppSrcCode where
   multiBody = G.multiBody 
 
 instance BodyElim CppSrcCode where
-  bodyDoc = unCPPSC
+  body = unCPPSC
 
 instance BlockSym CppSrcCode where
   type Block CppSrcCode = Doc
@@ -1559,7 +1560,7 @@ instance ControlStatement CppSrcCode where
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch = G.switch
 
-  ifExists _ ifBody _ = onStateValue (mkStNoEnd . bodyDoc) ifBody -- All variables are initialized in C++
+  ifExists _ ifBody _ = onStateValue (mkStNoEnd . RC.body) ifBody -- All variables are initialized in C++
 
   for = G.for bodyStart bodyEnd 
   forRange = G.forRange
@@ -1798,7 +1799,7 @@ instance RenderBody CppHdrCode where
   multiBody = G.multiBody 
 
 instance BodyElim CppHdrCode where
-  bodyDoc = unCPPHC
+  body = unCPPHC
 
 instance BlockSym CppHdrCode where
   type Block CppHdrCode = Doc
@@ -2500,9 +2501,9 @@ cppThrowDoc errMsg = text "throw" <> parens (valueDoc errMsg)
 cppTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 cppTryCatch tb cb = vcat [
   text "try" <+> lbrace,
-  indent $ bodyDoc tb,
+  indent $ RC.body tb,
   rbrace <+> text "catch" <+> parens (text "...") <+> lbrace,
-  indent $ bodyDoc cb,
+  indent $ RC.body cb,
   rbrace]
 
 cppDiscardInput :: (RenderSym r) => Label -> r (Value r) -> Doc
@@ -2525,10 +2526,10 @@ cppPointerParamDoc v = getTypeDoc (variableType v) <+> text "&" <> variableDoc v
 
 cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode) 
   -> [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc
-cppsMethod is n c t ps b = emptyIfEmpty (bodyDoc b <> initList) $ 
+cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $ 
   vcat [ttype <+> text c <> text "::" <> text n <> parens (parameterList ps) 
   <+> emptyIfEmpty initList (colon <+> initList) <+> bodyStart,
-  indent (bodyDoc b),
+  indent (RC.body b),
   bodyEnd]
   where ttype | isDtor n = empty
               | otherwise = getTypeDoc t
@@ -2547,7 +2548,7 @@ cppsFunction :: (RenderSym r) => Label -> r (Type r) -> [r (Parameter r)] ->
   r (Body r) -> Doc
 cppsFunction n t ps b = vcat [
   getTypeDoc t <+> text n <> parens (parameterList ps) <+> bodyStart,
-  indent (bodyDoc b),
+  indent (RC.body b),
   bodyEnd]
 
 cpphMethod :: (RenderSym r) => Label -> r (Type r) -> [r (Parameter r)] -> Doc

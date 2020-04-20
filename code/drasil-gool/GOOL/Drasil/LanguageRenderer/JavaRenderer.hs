@@ -38,6 +38,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
+import qualified GOOL.Drasil.RendererClasses as RC (body)
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStateVal, mkVal, dot, new, 
   elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
   bodyEnd, endStatement, commentStart, variableList, parameterList, 
@@ -172,7 +173,7 @@ instance RenderBody JavaCode where
   multiBody = G.multiBody 
 
 instance BodyElim JavaCode where
-  bodyDoc = unJC
+  body = unJC
 
 instance BlockSym JavaCode where
   type Block JavaCode = Doc
@@ -882,10 +883,10 @@ jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (valueDoc
 jTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 jTryCatch tb cb = vcat [
   text "try" <+> lbrace,
-  indent $ bodyDoc tb,
+  indent $ RC.body tb,
   rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> 
     lbrace,
-  indent $ bodyDoc cb,
+  indent $ RC.body cb,
   rbrace]
 
 jOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
@@ -928,7 +929,7 @@ jMethod n es s p t ps b = vcat [
   scopeDoc s <+> permDoc p <+> getTypeDoc t <+> text n <> 
     parens (parameterList ps) <+> emptyIfNull es (text "throws" <+> 
     text (intercalate ", " (sort es))) <+> lbrace,
-  indent $ bodyDoc b,
+  indent $ RC.body b,
   rbrace]
 
 jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MSStatement JavaCode]

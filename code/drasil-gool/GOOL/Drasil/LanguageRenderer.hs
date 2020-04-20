@@ -26,10 +26,11 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   BodySym(Body), PermanenceSym(Permanence), TypeSym(Type), TypeElim(..), 
   VariableSym(Variable), VariableElim(..), ValueSym(..), 
   StatementSym(Statement), ScopeSym(Scope), ParameterSym(Parameter))
-import GOOL.Drasil.RendererClasses (RenderSym, BodyElim(..), PermElim(..), 
+import GOOL.Drasil.RendererClasses (RenderSym, PermElim(..), 
   InternalTypeElim(..), RenderVariable(..), InternalVarElim(..), 
   RenderValue(valFromData), ValueElim(..), RenderStatement(..),
   StatementElim(..), ScopeElim(..), ParamElim(..))
+import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
@@ -141,7 +142,7 @@ method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) ->
 method n s p t ps b = vcat [
   scopeDoc s <+> permDoc p <+> getTypeDoc t <+> text n <> 
     parens (parameterList ps) <+> lbrace,
-  indent (bodyDoc b),
+  indent (RC.body b),
   rbrace]
 
 -- StateVar --
@@ -164,12 +165,12 @@ switch breakState v defBody cs =
   let caseDoc (l, result) = vcat [
         text "case" <+> valueDoc l <> colon,
         indentList [
-          bodyDoc result,
+          RC.body result,
           statementDoc breakState]]
       defaultSection = vcat [
         text "default" <> colon,
         indentList [
-          bodyDoc defBody,
+          RC.body defBody,
           statementDoc breakState]]
   in vcat [
       text "switch" <> parens (valueDoc v) <+> lbrace,

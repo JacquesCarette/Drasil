@@ -123,7 +123,7 @@ import qualified Text.PrettyPrint.HughesPJ as D (char, double, float)
 -- Bodies --
 
 multiBody :: (RenderSym r) => [MSBody r] -> MSBody r
-multiBody bs = docBody $ onStateList vibcat $ map (onStateValue bodyDoc) bs
+multiBody bs = docBody $ onStateList vibcat $ map (onStateValue body) bs
 
 -- Blocks --
 
@@ -181,7 +181,7 @@ void = toState $ typeFromData Void "void" (text "void")
 -- ControlBlock --
 
 strat :: (RenderSym r) => MSStatement r -> MSBody r -> MSBlock r
-strat r bd = docBlock $ on2StateValues (\result b -> vcat [bodyDoc b, 
+strat r bd = docBlock $ on2StateValues (\result b -> vcat [body b, 
   statementDoc result]) r bd
 
 runStrategy :: (RenderSym r) => String -> [(Label, MSBody r)] -> 
@@ -879,15 +879,15 @@ ifCond _ _ _ [] _ = error "if condition created with no cases"
 ifCond ifStart elif bEnd (c:cs) eBody =
     let ifSect (v, b) = on2StateValues (\val bd -> vcat [
           text "if" <+> parens (valueDoc val) <+> ifStart,
-          indent $ bodyDoc bd,
+          indent $ body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
           elif <+> parens (valueDoc val) <+> ifStart,
-          indent $ bodyDoc bd,
+          indent $ body bd,
           bEnd]) (zoom lensMStoVS v) b
-        elseSect = onStateValue (\bd -> emptyIfEmpty (bodyDoc bd) $ vcat [
+        elseSect = onStateValue (\bd -> emptyIfEmpty (body bd) $ vcat [
           text "else" <+> ifStart,
-          indent $ bodyDoc bd,
+          indent $ body bd,
           bEnd]) eBody
     in onStateList (mkStNoEnd . vcat)
       (ifSect c : map elseIfSect cs ++ [elseSect])
@@ -906,7 +906,7 @@ for :: (RenderSym r) => Doc -> Doc -> MSStatement r -> SValue r ->
 for bStart bEnd sInit vGuard sUpdate b = (\initl guard upd bod -> mkStNoEnd 
   (vcat [forLabel <+> parens (statementDoc initl <> semi <+> valueDoc guard <> 
     semi <+> statementDoc upd) <+> bStart,
-  indent $ bodyDoc bod,
+  indent $ body bod,
   bEnd])) <$> S.loopStmt sInit <*> zoom lensMStoVS vGuard <*> 
   S.loopStmt sUpdate <*> b
 
@@ -920,13 +920,13 @@ forEach :: (RenderSym r) => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r
 forEach bStart bEnd forEachLabel inLbl e' v' = on3StateValues (\e v b -> 
   mkStNoEnd (vcat [forEachLabel <+> parens (getTypeDoc (variableType e) 
     <+> variableDoc e <+> inLbl <+> valueDoc v) <+> bStart,
-  indent $ bodyDoc b,
+  indent $ body b,
   bEnd])) (zoom lensMStoVS e') (zoom lensMStoVS v') 
 
 while :: (RenderSym r) => Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
 while bStart bEnd v' = on2StateValues (\v b -> mkStNoEnd (vcat [
   text "while" <+> parens (valueDoc v) <+> bStart,
-  indent $ bodyDoc b,
+  indent $ body b,
   bEnd])) (zoom lensMStoVS v')
 
 tryCatch :: (RenderSym r) => (r (Body r) -> r (Body r) -> Doc) -> MSBody r -> 

@@ -250,13 +250,13 @@ class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) =>
   methodFromData :: ScopeTag -> Doc -> r (Method r)
 
 class MethodElim r where
-  methodDoc :: r (Method r) -> Doc
+  method :: r (Method r) -> Doc
 
 class RenderStateVar r where
   stateVarFromData :: CS Doc -> CSStateVar r
 
 class StateVarElim r where  
-  stateVarDoc :: r (StateVar r) -> Doc
+  stateVar :: r (StateVar r) -> Doc
 
 type ParentSpec = Doc
 

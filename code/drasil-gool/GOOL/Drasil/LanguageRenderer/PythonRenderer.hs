@@ -34,11 +34,12 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
-  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim(..), 
-  RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
+  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
+  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
-  type', uOp, bOp, variable, value, function, statement, scope, parameter)
+  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  method, stateVar)
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -514,7 +515,7 @@ instance DeclStatement PythonCode where
   extObjDecNewNoParams lib v = modify (addModuleImport lib) >> varDecDef v 
     (extNewObj lib (onStateValue variableType v) [])
   constDecDef = varDecDef
-  funcDecDef v ps r = onStateValue (mkStNoEnd . methodDoc) (zoom lensMStoVS v 
+  funcDecDef v ps r = onStateValue (mkStNoEnd . RC.method) (zoom lensMStoVS v 
     >>= (\vr -> function (variableName vr) private dynamic 
     (toState $ variableType vr) (map param ps) (oneLiner $ returnStmt r)))
 
@@ -667,7 +668,7 @@ instance RenderMethod PythonCode where
   methodFromData _ = toCode . mthd
   
 instance MethodElim PythonCode where
-  methodDoc = mthdDoc . unPC
+  method = mthdDoc . unPC
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
@@ -680,7 +681,7 @@ instance RenderStateVar PythonCode where
   stateVarFromData = onStateValue toCode
   
 instance StateVarElim PythonCode where
-  stateVarDoc = unPC
+  stateVar = unPC
 
 instance ClassSym PythonCode where
   type Class PythonCode = Doc

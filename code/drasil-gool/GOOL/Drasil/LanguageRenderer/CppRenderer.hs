@@ -36,12 +36,13 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(statementTerm), RenderScope(..), ScopeElim, 
-  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim(..), 
-  RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
+  RenderStateVar(..), StateVarElim, ParentSpec, RenderClass(..), 
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement, scope, parameter)
+  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  method, stateVar)
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -801,7 +802,7 @@ instance (Pair p) => RenderMethod (p CppSrcCode CppHdrCode) where
   methodFromData s d = pair (methodFromData s d) (methodFromData s d)
   
 instance (Pair p) => MethodElim (p CppSrcCode CppHdrCode) where
-  methodDoc m = methodDoc $ pfst m
+  method m = RC.method $ pfst m
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
@@ -818,7 +819,7 @@ instance (Pair p) => RenderStateVar (p CppSrcCode CppHdrCode) where
     (stateVarFromData d)
 
 instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) where
-  stateVarDoc v = stateVarDoc $ pfst v
+  stateVar v = RC.stateVar $ pfst v
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   type Class (p CppSrcCode CppHdrCode) = Doc
@@ -1664,7 +1665,7 @@ instance RenderMethod CppSrcCode where
   methodFromData s d = toCode $ mthd s d
   
 instance MethodElim CppSrcCode where
-  methodDoc = mthdDoc . unCPPSC
+  method = mthdDoc . unCPPSC
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1681,7 +1682,7 @@ instance RenderStateVar CppSrcCode where
   stateVarFromData = error "stateVarFromData unimplemented in C++"
   
 instance StateVarElim CppSrcCode where
-  stateVarDoc = stVar . unCPPSC
+  stateVar = stVar . unCPPSC
 
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
@@ -2251,14 +2252,14 @@ instance RenderMethod CppHdrCode where
 
   destructor vars = on1StateValue1List (\m vs -> toCode $ mthd Pub 
     (emptyIfEmpty (vcat (map (RC.statement . onCodeValue destructSts) vs)) 
-    (methodDoc m))) (getClassName >>= (\n -> pubMethod ('~':n) void [] 
+    (RC.method m))) (getClassName >>= (\n -> pubMethod ('~':n) void [] 
     (toState (toCode empty)) :: SMethod CppHdrCode)) 
     (map (zoom lensMStoCS) vars)
 
   methodFromData s d = toCode $ mthd s d
   
 instance MethodElim CppHdrCode where
-  methodDoc = mthdDoc . unCPPHC
+  method = mthdDoc . unCPPHC
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
@@ -2275,7 +2276,7 @@ instance RenderStateVar CppHdrCode where
   stateVarFromData = error "stateVarFromData unimplemented in C++"
   
 instance StateVarElim CppHdrCode where
-  stateVarDoc = stVar . unCPPHC
+  stateVar = stVar . unCPPHC
 
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
@@ -2564,7 +2565,7 @@ cppCommentedFunc ft cmt fn = do
   scp <- getScope
   cmnt <- cmt
   let cf = toState (methodFromData scp $ R.commentedItem (blockCommentDoc cmnt)
-        $ methodDoc f)
+        $ RC.method f)
       ret Source = if mn then cf else toState f
       ret Header = if mn then toState f else cf
       ret Combined = error "Combined passed to cppCommentedFunc"
@@ -2584,15 +2585,15 @@ cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .
 cpphVarsFuncsList :: ScopeTag -> [CppHdrCode (StateVar CppHdrCode)] -> 
   [CppHdrCode (Method CppHdrCode)] -> Doc
 cpphVarsFuncsList st vs fs = 
-  let scopedVs = [stateVarDoc v | v <- vs, getStVarScp (unCPPHC v) == st]
-      scopedFs = [methodDoc f | f <- fs, getMthdScp (unCPPHC f) == st]
+  let scopedVs = [RC.stateVar v | v <- vs, getStVarScp (unCPPHC v) == st]
+      scopedFs = [RC.method f | f <- fs, getMthdScp (unCPPHC f) == st]
   in vcat $ scopedVs ++ (if null scopedVs then empty else blank) : scopedFs
 
 cppsClass :: [CppSrcCode (StateVar CppSrcCode)] -> 
   [CppSrcCode (Method CppSrcCode)] -> CppSrcCode (Class CppSrcCode)
 cppsClass vs fs = toCode $ vibcat $ vcat vars : funcs
-  where vars = map stateVarDoc vs
-        funcs = map methodDoc fs
+  where vars = map RC.stateVar vs
+        funcs = map RC.method fs
 
 cpphClass :: Label -> CppHdrCode ParentSpec -> 
   [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode (Method CppHdrCode)] -> 

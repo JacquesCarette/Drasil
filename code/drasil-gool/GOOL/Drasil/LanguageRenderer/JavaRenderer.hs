@@ -35,11 +35,12 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
-  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim(..), 
-  RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
+  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
+  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement, scope, parameter)
+  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  method, stateVar)
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStateVal, mkVal, dot, new, 
   elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
   bodyEnd, endStatement, commentStart, variableList, parameterList, 
@@ -688,7 +689,7 @@ instance RenderMethod JavaCode where
   methodFromData _ = toCode . mthd
   
 instance MethodElim JavaCode where
-  methodDoc = mthdDoc . unJC
+  method = mthdDoc . unJC
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
@@ -700,7 +701,7 @@ instance RenderStateVar JavaCode where
   stateVarFromData = onStateValue toCode
   
 instance StateVarElim JavaCode where
-  stateVarDoc = unJC
+  stateVar = unJC
 
 instance ClassSym JavaCode where
   type Class JavaCode = Doc

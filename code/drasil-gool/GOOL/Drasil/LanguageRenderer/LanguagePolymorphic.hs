@@ -79,7 +79,7 @@ import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym,
   FunctionElim(functionType), RenderStatement(stmtFromData), 
   StatementElim(statementTerm), RenderScope(..),
   MethodTypeSym(mType), RenderParam(paramFromData), 
-  RenderMethod(intMethod, commentedFunc), MethodElim(methodDoc), 
+  RenderMethod(intMethod, commentedFunc), 
   RenderStateVar(..), StateVarElim(..), ParentSpec, 
   RenderClass(inherit, implements, classFromData), ClassElim(classDoc),
   RenderMod(updateModuleDoc), ModuleElim(moduleDoc), BlockCommentSym(..), BlockCommentElim(..))
@@ -94,7 +94,8 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
   PermElim(..), BodyElim(..), BlockElim(..), InternalTypeElim(..), 
   OpElim(uOp, bOp), InternalVarElim(variable), ValueElim(value), 
-  FunctionElim(function), StatementElim(statement), ScopeElim(..))
+  FunctionElim(function), StatementElim(statement), ScopeElim(..), 
+  MethodElim(..))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
@@ -1068,15 +1069,15 @@ intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc ->
   -> SClass r
 intClass f n s i svrs mths = modify (setClassName n) >> classFromData 
   (on2StateValues (\svs ms -> onCodeValue (\p -> f n p (RC.scope s) svs ms) i) 
-  (onStateList (R.stateVarList . map stateVarDoc) svrs) 
-  (onStateList (vibcat . map methodDoc) (map (zoom lensCStoMS) mths)))
+  (onStateList (R.stateVarList . map stateVar) svrs) 
+  (onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)))
 
 -- Modules --
 
 buildModule :: (RenderSym r) => Label -> FS Doc -> FS Doc -> [SMethod r] -> 
   [SClass r] -> FSModule r
 buildModule n imps bot ms cs = S.modFromData n ((\cls fs is bt -> 
-  R.module' is (vibcat (map classDoc cls)) (vibcat (map methodDoc fs ++ [bt])))
+  R.module' is (vibcat (map classDoc cls)) (vibcat (map RC.method fs ++ [bt])))
   <$> mapM (zoom lensFStoCS) cs <*> mapM (zoom lensFStoMS) ms <*> imps <*> bot)
 
 buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label] 

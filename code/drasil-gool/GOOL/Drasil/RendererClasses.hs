@@ -272,14 +272,14 @@ class (BlockCommentSym r) => RenderClass r where
   classFromData :: CS (r Doc) -> SClass r
   
 class ClassElim r where
-  classDoc :: r (Class r) -> Doc
+  class' :: r (Class r) -> Doc
 
 class RenderMod r where
   modFromData :: String -> FS Doc -> FSModule r
   updateModuleDoc :: (Doc -> Doc) -> r (Module r) -> r (Module r)
   
 class ModuleElim r where
-  moduleDoc :: r (Module r) -> Doc
+  module' :: r (Module r) -> Doc
 
 class BlockCommentSym r where
   type BlockComment r
@@ -287,4 +287,4 @@ class BlockCommentSym r where
   docComment :: State a [String] -> State a (r (BlockComment r))
 
 class BlockCommentElim r where
-  blockCommentDoc :: r (BlockComment r) -> Doc
+  blockComment' :: r (BlockComment r) -> Doc

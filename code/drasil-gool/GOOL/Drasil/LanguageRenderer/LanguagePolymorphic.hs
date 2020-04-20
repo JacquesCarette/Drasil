@@ -80,9 +80,9 @@ import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym,
   StatementElim(statementTerm), RenderScope(..),
   MethodTypeSym(mType), RenderParam(paramFromData), 
   RenderMethod(intMethod, commentedFunc), 
-  RenderStateVar(..), StateVarElim(..), ParentSpec, 
-  RenderClass(inherit, implements, classFromData), ClassElim(classDoc),
-  RenderMod(updateModuleDoc), ModuleElim(moduleDoc), BlockCommentSym(..), BlockCommentElim(..))
+  RenderStateVar(..), ParentSpec, 
+  RenderClass(inherit, implements, classFromData),
+  RenderMod(updateModuleDoc), BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData), 
   RenderBody(multiBody), RenderValue(call), 
   InternalGetSet(getFunc, setFunc),
@@ -95,7 +95,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
   PermElim(..), BodyElim(..), BlockElim(..), InternalTypeElim(..), 
   OpElim(uOp, bOp), InternalVarElim(variable), ValueElim(value), 
   FunctionElim(function), StatementElim(statement), ScopeElim(..), 
-  MethodElim(..))
+  MethodElim(..), StateVarElim(..), ClassElim(..), ModuleElim(..), 
+  BlockCommentElim(..))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
@@ -1062,14 +1063,14 @@ docClass d = S.commentedClass (docComment $ toState $ classDox d)
 commentedClass :: (RenderSym r, Monad r) => CS (r (BlockComment r)) -> SClass r 
   -> SClass r
 commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' -> toCode $
-  R.commentedItem (blockCommentDoc cmt') (classDoc cs')) cmt cs)
+  R.commentedItem (RC.blockComment' cmt') (RC.class' cs')) cmt cs)
 
 intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> 
   Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] 
   -> SClass r
 intClass f n s i svrs mths = modify (setClassName n) >> classFromData 
   (on2StateValues (\svs ms -> onCodeValue (\p -> f n p (RC.scope s) svs ms) i) 
-  (onStateList (R.stateVarList . map stateVar) svrs) 
+  (onStateList (R.stateVarList . map RC.stateVar) svrs) 
   (onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)))
 
 -- Modules --
@@ -1077,14 +1078,14 @@ intClass f n s i svrs mths = modify (setClassName n) >> classFromData
 buildModule :: (RenderSym r) => Label -> FS Doc -> FS Doc -> [SMethod r] -> 
   [SClass r] -> FSModule r
 buildModule n imps bot ms cs = S.modFromData n ((\cls fs is bt -> 
-  R.module' is (vibcat (map classDoc cls)) (vibcat (map RC.method fs ++ [bt])))
+  R.module' is (vibcat (map RC.class' cls)) (vibcat (map RC.method fs ++ [bt])))
   <$> mapM (zoom lensFStoCS) cs <*> mapM (zoom lensFStoMS) ms <*> imps <*> bot)
 
 buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label] 
   -> [SMethod r] -> [SClass r] -> FSModule r
 buildModule' n inc is ms cs = S.modFromData n ((\cls lis libis mis -> vibcat [
     vcat (map (RC.import' . inc) (lis ++ sort (is ++ libis) ++ mis)),
-    vibcat (map classDoc cls)]) <$>
+    vibcat (map RC.class' cls)]) <$>
   mapM (zoom lensFStoCS) (if null ms then cs else S.buildClass n Nothing [] ms 
     : cs) <*> getLangImports <*> getLibImports <*> getModuleImports)
 
@@ -1107,7 +1108,7 @@ docMod e d a dt = commentedMod (docComment $ moduleDox d a dt . addExt e <$>
 fileFromData :: (RenderSym r) => (r (Module r) -> FilePath -> r (File r)) 
   -> FS FilePath -> FSModule r -> SFile r
 fileFromData f fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty 
-  (moduleDoc mdl) then id else (if s ^. currMain && isSource (s ^. currFileType) then over lensFStoGS 
+  (RC.module' mdl) then id else (if s ^. currMain && isSource (s ^. currFileType) then over lensFStoGS 
   (setMainMod fpath) else id) . over lensFStoGS (addFile (s ^. currFileType) fpath)) s) f m fp 
 
 -- Helper functions

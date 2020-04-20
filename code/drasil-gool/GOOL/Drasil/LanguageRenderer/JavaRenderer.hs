@@ -36,11 +36,11 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
-  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim(..), 
-  RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
+  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim, 
+  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
-  method, stateVar)
+  method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStateVal, mkVal, dot, new, 
   elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
   bodyEnd, endStatement, commentStart, variableList, parameterList, 
@@ -722,7 +722,7 @@ instance RenderClass JavaCode where
   classFromData d = d
   
 instance ClassElim JavaCode where
-  classDoc = unJC
+  class' = unJC
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
@@ -733,7 +733,7 @@ instance RenderMod JavaCode where
   updateModuleDoc f = onCodeValue (updateMod f)
   
 instance ModuleElim JavaCode where
-  moduleDoc = modDoc . unJC
+  module' = modDoc . unJC
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc
@@ -742,7 +742,7 @@ instance BlockCommentSym JavaCode where
     blockCmtEnd)
 
 instance BlockCommentElim JavaCode where
-  blockCommentDoc = unJC
+  blockComment' = unJC
 
 instance HasException JavaCode where
   toConcreteExc Standard = toCode $ stdExc "Exception"

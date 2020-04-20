@@ -38,11 +38,11 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   StatementElim(statementTerm), RenderScope(..), ScopeElim, 
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
   RenderStateVar(..), StateVarElim, ParentSpec, RenderClass(..), 
-  ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
-  BlockCommentElim(..))
+  ClassElim, RenderMod(..), ModuleElim, BlockCommentSym(..), 
+  BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
-  method, stateVar)
+  method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -848,7 +848,7 @@ instance (Pair p) => RenderClass (p CppSrcCode CppHdrCode) where
   classFromData = pair1 classFromData classFromData
   
 instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
-  classDoc c = classDoc $ pfst c
+  class' c = RC.class' $ pfst c
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
@@ -861,7 +861,7 @@ instance (Pair p) => RenderMod (p CppSrcCode CppHdrCode) where
     (updateModuleDoc f $ pfst m) (updateModuleDoc f $ psnd m)
     
 instance (Pair p) => ModuleElim (p CppSrcCode CppHdrCode) where
-  moduleDoc m = moduleDoc $ pfst m
+  module' m = RC.module' $ pfst m
 
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   type BlockComment (p CppSrcCode CppHdrCode) = Doc
@@ -869,7 +869,7 @@ instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   docComment lns = on2StateValues pair (docComment lns) (docComment lns)
 
 instance (Pair p) => BlockCommentElim (p CppSrcCode CppHdrCode) where
-  blockCommentDoc c = blockCommentDoc $ pfst c
+  blockComment' c = RC.blockComment' $ pfst c
 
 -- Helpers for pair instance
 
@@ -1705,7 +1705,7 @@ instance RenderClass CppSrcCode where
   classFromData d = d
   
 instance ClassElim CppSrcCode where
-  classDoc = unCPPSC
+  class' = unCPPSC
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
@@ -1726,7 +1726,7 @@ instance RenderMod CppSrcCode where
   updateModuleDoc f = onCodeValue (updateMod f)
   
 instance ModuleElim CppSrcCode where
-  moduleDoc = modDoc . unCPPSC
+  module' = modDoc . unCPPSC
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
@@ -1735,7 +1735,7 @@ instance BlockCommentSym CppSrcCode where
     blockCmtEnd)
 
 instance BlockCommentElim CppSrcCode where
-  blockCommentDoc = unCPPSC
+  blockComment' = unCPPSC
 
 -----------------
 -- Header File --
@@ -1766,7 +1766,7 @@ instance RenderFile CppHdrCode where
   top = onCodeValue cpphtop
   bottom = toCode $ text "#endif"
   
-  commentedMod cmnt mod = on2StateValues (\m cmt -> if isEmpty (moduleDoc $ 
+  commentedMod cmnt mod = on2StateValues (\m cmt -> if isEmpty (RC.module' $ 
     onCodeValue fileMod m) then m else on2CodeValues R.commentedMod m cmt) 
     mod cmnt
 
@@ -2300,7 +2300,7 @@ instance RenderClass CppHdrCode where
   classFromData d = d
   
 instance ClassElim CppHdrCode where
-  classDoc = unCPPHC
+  class' = unCPPHC
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
@@ -2320,7 +2320,7 @@ instance RenderMod CppHdrCode where
   updateModuleDoc f = onCodeValue (updateMod f)
   
 instance ModuleElim CppHdrCode where
-  moduleDoc = modDoc . unCPPHC
+  module' = modDoc . unCPPHC
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc
@@ -2329,7 +2329,7 @@ instance BlockCommentSym CppHdrCode where
     blockCmtEnd)
 
 instance BlockCommentElim CppHdrCode where
-  blockCommentDoc = unCPPHC
+  blockComment' = unCPPHC
 
 -- helpers
 toBasicVar :: SVariable CppSrcCode -> SVariable CppSrcCode
@@ -2564,7 +2564,7 @@ cppCommentedFunc ft cmt fn = do
   mn <- getCurrMainFunc
   scp <- getScope
   cmnt <- cmt
-  let cf = toState (methodFromData scp $ R.commentedItem (blockCommentDoc cmnt)
+  let cf = toState (methodFromData scp $ R.commentedItem (RC.blockComment' cmnt)
         $ RC.method f)
       ret Source = if mn then cf else toState f
       ret Header = if mn then toState f else cf

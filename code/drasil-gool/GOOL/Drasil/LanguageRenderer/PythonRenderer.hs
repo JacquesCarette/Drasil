@@ -35,11 +35,11 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
-  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim(..), 
-  RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
+  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim, 
+  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
-  method, stateVar)
+  method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -702,7 +702,7 @@ instance RenderClass PythonCode where
   classFromData d = d
   
 instance ClassElim PythonCode where
-  classDoc = unPC
+  class' = unPC
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
@@ -721,7 +721,7 @@ instance RenderMod PythonCode where
   updateModuleDoc f = onCodeValue (updateMod f)
   
 instance ModuleElim PythonCode where
-  moduleDoc = modDoc . unPC
+  module' = modDoc . unPC
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
@@ -730,7 +730,7 @@ instance BlockCommentSym PythonCode where
     pyCommentStart)
 
 instance BlockCommentElim PythonCode where
-  blockCommentDoc = unPC
+  blockComment' = unPC
 
 -- convenience
 initName :: Label

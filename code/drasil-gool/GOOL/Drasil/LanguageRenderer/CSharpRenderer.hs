@@ -35,11 +35,11 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
-  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim(..), 
-  RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
+  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim, 
+  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
-  method, stateVar)
+  method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStNoEnd, mkStateVal, mkVal, mkVar, 
   dot, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
   endStatement, commentStart, elseIfLabel, inLabel, variableList, appendToBody, 
@@ -682,7 +682,7 @@ instance RenderClass CSharpCode where
   classFromData d = d
   
 instance ClassElim CSharpCode where
-  classDoc = unCSC
+  class' = unCSC
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
@@ -693,7 +693,7 @@ instance RenderMod CSharpCode where
   updateModuleDoc f = onCodeValue (updateMod f)
   
 instance ModuleElim CSharpCode where
-  moduleDoc = modDoc . unCSC
+  module' = modDoc . unCSC
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
@@ -702,7 +702,7 @@ instance BlockCommentSym CSharpCode where
     blockCmtEnd)
 
 instance BlockCommentElim CSharpCode where
-  blockCommentDoc = unCSC
+  blockComment' = unCSC
 
 addSystemImport :: VS a -> VS a
 addSystemImport = (>>) $ modify (addLangImportVS "System")

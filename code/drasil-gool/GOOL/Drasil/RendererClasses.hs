@@ -70,7 +70,7 @@ class ImportSym r where
   modImport :: Label -> r (Import r)
 
 class ImportElim r where
-  importDoc :: r (Import r) -> Doc
+  import' :: r (Import r) -> Doc
 
 class PermElim r where
   permDoc :: r (Permanence r) -> Doc

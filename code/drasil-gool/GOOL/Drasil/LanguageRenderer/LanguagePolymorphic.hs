@@ -69,7 +69,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym, 
   RenderFile(commentedMod), RenderBody(docBody), BodyElim(..), 
-  RenderBlock(docBlock), ImportSym(..), ImportElim(..), 
+  RenderBlock(docBlock), ImportSym(..),  
   PermElim(..), RenderType(..), InternalTypeElim(..), UnaryOpSym(UnaryOp), 
   BinaryOpSym(BinaryOp), OpElim(..), RenderOp(..), RenderVariable(varFromData),
   InternalVarElim(variableBind, variableDoc), 
@@ -90,7 +90,8 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
   RenderStatement(stmt, loopStmt, emptyStmt), InternalIOStmt(..), 
   MethodTypeSym(construct), RenderMethod(intFunc), 
   RenderClass(intClass, commentedClass), RenderMod(modFromData))
-import qualified GOOL.Drasil.RendererClasses as RC (BlockElim(..))
+import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
+  BlockElim(..))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
@@ -1078,7 +1079,7 @@ buildModule n imps bot ms cs = S.modFromData n ((\cls fs is bt ->
 buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label] 
   -> [SMethod r] -> [SClass r] -> FSModule r
 buildModule' n inc is ms cs = S.modFromData n ((\cls lis libis mis -> vibcat [
-    vcat (map (importDoc . inc) (lis ++ sort (is ++ libis) ++ mis)),
+    vcat (map (RC.import' . inc) (lis ++ sort (is ++ libis) ++ mis)),
     vibcat (map classDoc cls)]) <$>
   mapM (zoom lensFStoCS) (if null ms then cs else S.buildClass n Nothing [] ms 
     : cs) <*> getLangImports <*> getLibImports <*> getModuleImports)

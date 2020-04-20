@@ -28,7 +28,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), RenderBody(..), BodyElim, 
+  ImportElim, PermElim(..), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..), 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
@@ -40,7 +40,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (body, block)
+import qualified GOOL.Drasil.RendererClasses as RC (import', body, block)
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -158,7 +158,7 @@ instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
   modImport n = pair (modImport n) (modImport n)
 
 instance (Pair p) => ImportElim (p CppSrcCode CppHdrCode) where
-  importDoc i = importDoc $ pfst i
+  import' i = RC.import' $ pfst i
 
 instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
   type Permanence (p CppSrcCode CppHdrCode) = BindData
@@ -1116,7 +1116,7 @@ instance ImportSym CppSrcCode where
     n)
 
 instance ImportElim CppSrcCode where
-  importDoc = unCPPSC
+  import' = unCPPSC
 
 instance PermanenceSym CppSrcCode where
   type Permanence CppSrcCode = BindData
@@ -1708,10 +1708,10 @@ instance ClassElim CppSrcCode where
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
   buildModule n is ms cs = G.buildModule n ((\ds lis libis mis us mn -> vibcat [
-    if mn && length ms + length cs == 1 then empty else importDoc $ mi n,
+    if mn && length ms + length cs == 1 then empty else RC.import' $ mi n,
     vcat (map ((text "#define" <+>) . text) ds),
-    vcat (map (importDoc . li) lis),
-    vcat (map (importDoc . mi) (sort (is ++ libis) ++ mis)),
+    vcat (map (RC.import' . li) lis),
+    vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
     vcat (map (usingNameSpace "std" . Just) us)]) 
     <$> getDefines <*> getLangImports <*> getLibImports <*> getModuleImports 
     <*> getUsing <*> getCurrMain) (toState empty) ms cs
@@ -1777,7 +1777,7 @@ instance ImportSym CppHdrCode where
     n)
 
 instance ImportElim CppHdrCode where
-  importDoc = unCPPHC
+  import' = unCPPHC
 
 instance PermanenceSym CppHdrCode where
   type Permanence CppHdrCode = BindData
@@ -2304,8 +2304,8 @@ instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
   buildModule n is = G.buildModule n ((\ds lis libis mis us -> vibcat [
     vcat (map ((text "#define" <+>) . text) ds),
-    vcat (map (importDoc . li) lis),
-    vcat (map (importDoc . mi) (sort (is ++ libis) ++ mis)),
+    vcat (map (RC.import' . li) lis),
+    vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
     vcat (map (usingNameSpace "std" . Just) us)]) 
     <$> getHeaderDefines <*> getHeaderLangImports <*> getHeaderLibImports <*> 
     getHeaderModImports <*> getHeaderUsing) (toState empty)

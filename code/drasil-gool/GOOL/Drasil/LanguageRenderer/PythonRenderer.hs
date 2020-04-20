@@ -26,7 +26,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), RenderBody(..), BodyElim, 
+  ImportElim, PermElim(..), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..), 
   VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
@@ -37,7 +37,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (body, block)
+import qualified GOOL.Drasil.RendererClasses as RC (import', body, block)
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -136,7 +136,7 @@ instance ImportSym PythonCode where
   modImport = langImport
 
 instance ImportElim PythonCode where
-  importDoc = unPC
+  import' = unPC
 
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
@@ -705,12 +705,12 @@ instance ClassElim PythonCode where
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
   buildModule n is = G.buildModule n (on3StateValues (\lis libis mis -> vibcat [
-    vcat (map (importDoc . 
+    vcat (map (RC.import' . 
       (langImport :: Label -> PythonCode (Import PythonCode))) lis),
-    vcat (map (importDoc . 
+    vcat (map (RC.import' . 
       (langImport :: Label -> PythonCode (Import PythonCode))) (sort $ is ++ 
       libis)),
-    vcat (map (importDoc . 
+    vcat (map (RC.import' . 
       (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
     getLangImports getLibImports getModuleImports) getMainDoc
 

@@ -49,7 +49,7 @@ import qualified GOOL.Drasil.LanguageRenderer as R (package, class', multiStmt,
   body, printFile, param, listDec, classVar, cast, castObj, static, dynamic, 
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkSt, mkStateVal, mkVal)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, listType, 
   arrayType, listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, 
@@ -541,7 +541,7 @@ instance DeclStatement JavaCode where
   extObjDecNew = G.extObjDecNew
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams = G.extObjDecNewNoParams
-  constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkSt $ 
+  constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkStmt $ 
     jConstDecDef vr vl) vr' vl'
   funcDecDef = G.funcDecDef
 
@@ -573,7 +573,7 @@ instance IOStatement JavaCode where
 
 instance StringStatement JavaCode where
   stringSplit d vnew s = modify (addLangImport "java.util.Arrays") >> 
-    onStateValue mkSt (zoom lensMStoVS $ jStringSplit vnew (funcApp 
+    onStateValue mkStmt (zoom lensMStoVS $ jStringSplit vnew (funcApp 
     "Arrays.asList" (listType string) 
     [s $. func "split" (listType string) [litString [d]]]))
 
@@ -589,8 +589,8 @@ instance CommentStatement JavaCode where
   comment = G.comment commentStart
 
 instance ControlStatement JavaCode where
-  break = toState $ mkSt R.break
-  continue = toState $ mkSt R.continue
+  break = toState $ mkStmt R.break
+  continue = toState $ mkStmt R.continue
 
   returnStmt = G.returnStmt Semi
   

@@ -45,7 +45,7 @@ import GOOL.Drasil.LanguageRenderer (classDec, dot, forLabel, inLabel,
 import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body, 
   multiAssign, return', classVar, listSetFunc, castObj, dynamic, break, 
   continue, addComments, commentedMod, commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStNoEnd, mkStateVal, mkVal, 
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, mkVal, 
   mkStateVar)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, listInnerType, obj, funcType, runStrategy, 
@@ -466,15 +466,15 @@ instance FunctionElim PythonCode where
 
 instance InternalAssignStmt PythonCode where
   multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
-    mkStNoEnd (R.multiAssign vrs vls)) vars vals
+    mkStmtNoEnd (R.multiAssign vrs vls)) vars vals
 
 instance InternalIOStmt PythonCode where
-  printSt nl f p v = zoom lensMStoVS $ on3StateValues (\f' p' v' -> mkStNoEnd $ 
+  printSt nl f p v = zoom lensMStoVS $ on3StateValues (\f' p' v' -> mkStmtNoEnd $ 
     pyPrint nl p' v' f') (fromMaybe (mkStateVal void empty) f) p v
   
 instance InternalControlStmt PythonCode where
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs = zoom lensMStoVS $ onStateList (mkStNoEnd . R.return') vs
+  multiReturn vs = zoom lensMStoVS $ onStateList (mkStmtNoEnd . R.return') vs
 
 instance RenderStatement PythonCode where
   stmt = G.stmt
@@ -502,9 +502,9 @@ instance AssignStatement PythonCode where
   (&--) = G.decrement1
 
 instance DeclStatement PythonCode where
-  varDec _ = toState $ mkStNoEnd empty
+  varDec _ = toState $ mkStmtNoEnd empty
   varDecDef = assign
-  listDec _ v = zoom lensMStoVS $ onStateValue (mkStNoEnd . pyListDec) v
+  listDec _ v = zoom lensMStoVS $ onStateValue (mkStmtNoEnd . pyListDec) v
   listDecDef = G.listDecDef'
   arrayDec = listDec
   arrayDecDef = listDecDef
@@ -516,7 +516,7 @@ instance DeclStatement PythonCode where
   extObjDecNewNoParams lib v = modify (addModuleImport lib) >> varDecDef v 
     (extNewObj lib (onStateValue variableType v) [])
   constDecDef = varDecDef
-  funcDecDef v ps r = onStateValue (mkStNoEnd . RC.method) (zoom lensMStoVS v 
+  funcDecDef v ps r = onStateValue (mkStmtNoEnd . RC.method) (zoom lensMStoVS v 
     >>= (\vr -> function (variableName vr) private dynamic 
     (toState $ variableType vr) (map param ps) (oneLiner $ returnStmt r)))
 
@@ -562,8 +562,8 @@ instance CommentStatement PythonCode where
   comment = G.comment pyCommentStart
 
 instance ControlStatement PythonCode where
-  break = toState $ mkStNoEnd R.break
-  continue = toState $ mkStNoEnd R.continue
+  break = toState $ mkStmtNoEnd R.break
+  continue = toState $ mkStmtNoEnd R.continue
 
   returnStmt = G.returnStmt Empty
 
@@ -578,9 +578,9 @@ instance ControlStatement PythonCode where
     "use forRange, forEach, or while instead"
   forRange i initv finalv stepv = forEach i
     (funcApp "range" (listType int) [initv, finalv, stepv])
-  forEach i' v' = on3StateValues (\i v b -> mkStNoEnd (pyForEach i v b)) 
+  forEach i' v' = on3StateValues (\i v b -> mkStmtNoEnd (pyForEach i v b)) 
     (zoom lensMStoVS i') (zoom lensMStoVS v')
-  while v' = on2StateValues (\v b -> mkStNoEnd (pyWhile v b)) 
+  while v' = on2StateValues (\v b -> mkStmtNoEnd (pyWhile v b)) 
     (zoom lensMStoVS v')
 
   tryCatch = G.tryCatch pyTryCatch

@@ -1,6 +1,6 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module GOOL.Drasil.LanguageRenderer.Constructors (
-  mkSt, mkStNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar
+  mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar
 ) where
 
 import GOOL.Drasil.ClassInterface (VSType, SVariable, SValue, TypeSym(..), 
@@ -12,11 +12,11 @@ import GOOL.Drasil.Helpers (onStateValue)
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
-mkSt :: (RenderSym r) => Doc -> r (Statement r)
-mkSt = flip stmtFromData Semi
+mkStmt :: (RenderSym r) => Doc -> r (Statement r)
+mkStmt = flip stmtFromData Semi
 
-mkStNoEnd :: (RenderSym r) => Doc -> r (Statement r)
-mkStNoEnd = flip stmtFromData Empty
+mkStmtNoEnd :: (RenderSym r) => Doc -> r (Statement r)
+mkStmtNoEnd = flip stmtFromData Empty
 
 mkStateVal :: (RenderSym r) => VSType r -> Doc -> SValue r
 mkStateVal t d = onStateValue (\tp -> valFromData Nothing tp d) t

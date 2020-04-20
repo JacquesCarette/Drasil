@@ -107,7 +107,7 @@ import qualified GOOL.Drasil.LanguageRenderer as R (file, module', block,
   print, stateVar, stateVarList, switch, assign, addAssign, increment, 
   constDecDef, return', comment, getTerm, var, extVar, self, arg, objVar, func, 
   listAccessFunc, objAccess, commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkSt, mkStNoEnd, mkStateVal, 
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, mkStaticVar,)
 import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensMStoVS, lensVStoMS, currMain, currFileType, modifyReturnFunc, 
@@ -681,17 +681,17 @@ listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData
 -- Statements --
 
 printSt :: (RenderSym r) => SValue r -> SValue r -> MSStatement r
-printSt p v = zoom lensMStoVS $ on2StateValues (\p' -> mkSt . R.print p') p v
+printSt p v = zoom lensMStoVS $ on2StateValues (\p' -> mkStmt . R.print p') p v
 
 stmt :: (RenderSym r) => MSStatement r -> MSStatement r
-stmt = onStateValue (\s -> mkStNoEnd (RC.statement s <> R.getTerm 
+stmt = onStateValue (\s -> mkStmtNoEnd (RC.statement s <> R.getTerm 
   (statementTerm s)))
   
 loopStmt :: (RenderSym r) => MSStatement r -> MSStatement r
 loopStmt = S.stmt . setEmpty
 
 emptyStmt :: (RenderSym r) => MSStatement r
-emptyStmt = toState $ mkStNoEnd empty
+emptyStmt = toState $ mkStmtNoEnd empty
 
 assign :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
   MSStatement r
@@ -705,11 +705,11 @@ decrement :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 decrement vr vl = vr &= (S.valueOf vr #- vl)
 
 increment :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-increment vr vl = zoom lensMStoVS $ on2StateValues (\vr' -> mkSt . 
+increment vr vl = zoom lensMStoVS $ on2StateValues (\vr' -> mkStmt . 
   R.addAssign vr') vr vl
 
 increment1 :: (RenderSym r) => SVariable r -> MSStatement r
-increment1 vr = zoom lensMStoVS $ onStateValue (mkSt . R.increment) vr
+increment1 vr = zoom lensMStoVS $ onStateValue (mkStmt . R.increment) vr
 
 increment' :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 increment' vr vl = vr &= S.valueOf vr #+ vl
@@ -722,23 +722,23 @@ decrement1 v = v &= (S.valueOf v #- S.litInt 1)
 
 varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> SVariable r 
   -> MSStatement r
-varDec s d v' = onStateValue (\v -> mkSt (RC.perm (bind $ variableBind v) 
+varDec s d v' = onStateValue (\v -> mkStmt (RC.perm (bind $ variableBind v) 
   <+> RC.type' (variableType v) <+> RC.variable v)) (zoom lensMStoVS v')
   where bind Static = s
         bind Dynamic = d
 
 varDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-varDecDef vr vl' = on2StateValues (\vd vl -> mkSt (RC.statement vd <+> equals 
+varDecDef vr vl' = on2StateValues (\vd vl -> mkStmt (RC.statement vd <+> equals 
   <+> RC.value vl)) (S.varDec vr) (zoom lensMStoVS vl')
 
 listDec :: (RenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> 
   MSStatement r
-listDec f vl v = on2StateValues (\sz vd -> mkSt (RC.statement vd <> f 
+listDec f vl v = on2StateValues (\sz vd -> mkStmt (RC.statement vd <> f 
   sz)) (zoom lensMStoVS vl) (S.varDec v)
 
 listDecDef :: (RenderSym r) => ([r (Value r)] -> Doc) -> SVariable r -> 
   [SValue r] -> MSStatement r
-listDecDef f v vls = on1StateValue1List (\vd vs -> mkSt (RC.statement vd <> 
+listDecDef f v vls = on1StateValue1List (\vd vs -> mkStmt (RC.statement vd <> 
   f vs)) (S.varDec v) (map (zoom lensMStoVS) vls)
 
 listDecDef' :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
@@ -746,12 +746,12 @@ listDecDef' v vals = zoom lensMStoVS v >>= (\vr -> S.varDecDef (return vr)
   (S.litList (listInnerType $ return $ variableType vr) vals))
 
 arrayDec :: (RenderSym r) => SValue r -> SVariable r -> MSStatement r
-arrayDec n vr = zoom lensMStoVS $ on3StateValues (\sz v it -> mkSt (RC.type' 
+arrayDec n vr = zoom lensMStoVS $ on3StateValues (\sz v it -> mkStmt (RC.type' 
   (variableType v) <+> RC.variable v <+> equals <+> new <+> RC.type' it <> 
   brackets (RC.value sz))) n vr (listInnerType $ onStateValue variableType vr)
 
 arrayDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-arrayDecDef v vals = on2StateValues (\vd vs -> mkSt (RC.statement vd <+> 
+arrayDecDef v vals = on2StateValues (\vd vs -> mkStmt (RC.statement vd <+> 
   equals <+> braces (valueList vs))) (S.varDec v) (mapM (zoom lensMStoVS) vals)
 
 objDecNew :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
@@ -769,7 +769,7 @@ extObjDecNewNoParams :: (RenderSym r) => Library -> SVariable r -> MSStatement r
 extObjDecNewNoParams l v = S.extObjDecNew l v []
 
 constDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-constDecDef vr vl = zoom lensMStoVS $ on2StateValues (\v -> mkSt . 
+constDecDef vr vl = zoom lensMStoVS $ on2StateValues (\v -> mkStmt . 
   R.constDecDef v) vr vl
 
 funcDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
@@ -804,11 +804,11 @@ print newLn f printFn v = zoom lensMStoVS v >>= print' . getType . valueType
           printStr printFileStr f 
 
 discardInput :: (RenderSym r) => (r (Value r) -> Doc) -> MSStatement r
-discardInput f = zoom lensMStoVS $ onStateValue (mkSt . f) inputFunc
+discardInput f = zoom lensMStoVS $ onStateValue (mkStmt . f) inputFunc
 
 discardFileInput :: (RenderSym r) => (r (Value r) -> Doc) -> SValue r -> 
   MSStatement r
-discardFileInput f v = zoom lensMStoVS $ onStateValue (mkSt . f) v
+discardFileInput f v = zoom lensMStoVS $ onStateValue (mkStmt . f) v
 
 openFileR :: (RenderSym r) => (SValue r -> VSType r -> SValue r) -> SVariable r 
   -> SValue r -> MSStatement r
@@ -872,7 +872,7 @@ valStmt t v' = zoom lensMStoVS $ onStateValue (\v -> stmtFromData (RC.value v)
   t) v'
 
 comment :: (RenderSym r) => Doc -> Label -> MSStatement r
-comment cs c = toState $ mkStNoEnd (R.comment c cs)
+comment cs c = toState $ mkStmtNoEnd (R.comment c cs)
 
 throw :: (RenderSym r) => (r (Value r) -> Doc) -> Terminator -> Label -> 
   MSStatement r
@@ -897,12 +897,12 @@ ifCond ifStart elif bEnd (c:cs) eBody =
           text "else" <+> ifStart,
           indent $ RC.body bd,
           bEnd]) eBody
-    in onStateList (mkStNoEnd . vcat)
+    in onStateList (mkStmtNoEnd . vcat)
       (ifSect c : map elseIfSect cs ++ [elseSect])
 
 switch :: (RenderSym r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> 
   MSStatement r
-switch v cs bod = (\b val css de -> mkSt (R.switch b val de css)) <$>
+switch v cs bod = (\b val css de -> mkStmt (R.switch b val de css)) <$>
   S.stmt break <*> zoom lensMStoVS v <*> on2StateLists zip (map (zoom 
   lensMStoVS . fst) cs) (map snd cs) <*> bod
 
@@ -911,7 +911,7 @@ ifExists v ifBody = S.ifCond [(S.notNull v, ifBody)]
 
 for :: (RenderSym r) => Doc -> Doc -> MSStatement r -> SValue r -> 
   MSStatement r -> MSBody r -> MSStatement r
-for bStart bEnd sInit vGuard sUpdate b = (\initl guard upd bod -> mkStNoEnd 
+for bStart bEnd sInit vGuard sUpdate b = (\initl guard upd bod -> mkStmtNoEnd 
   (vcat [forLabel <+> parens (RC.statement initl <> semi <+> RC.value guard <> 
     semi <+> RC.statement upd) <+> bStart,
   indent $ RC.body bod,
@@ -926,20 +926,20 @@ forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?<
 forEach :: (RenderSym r) => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r 
   -> MSBody r -> MSStatement r
 forEach bStart bEnd forEachLabel inLbl e' v' = on3StateValues (\e v b -> 
-  mkStNoEnd (vcat [forEachLabel <+> parens (RC.type' (variableType e) 
+  mkStmtNoEnd (vcat [forEachLabel <+> parens (RC.type' (variableType e) 
     <+> RC.variable e <+> inLbl <+> RC.value v) <+> bStart,
   indent $ RC.body b,
   bEnd])) (zoom lensMStoVS e') (zoom lensMStoVS v') 
 
 while :: (RenderSym r) => Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
-while bStart bEnd v' = on2StateValues (\v b -> mkStNoEnd (vcat [
+while bStart bEnd v' = on2StateValues (\v b -> mkStmtNoEnd (vcat [
   text "while" <+> parens (RC.value v) <+> bStart,
   indent $ RC.body b,
   bEnd])) (zoom lensMStoVS v')
 
 tryCatch :: (RenderSym r) => (r (Body r) -> r (Body r) -> Doc) -> MSBody r -> 
   MSBody r -> MSStatement r
-tryCatch f = on2StateValues (\tb -> mkStNoEnd . f tb)
+tryCatch f = on2StateValues (\tb -> mkStmtNoEnd . f tb)
 
 checkState :: (RenderSym r) => Label -> [(SValue r, MSBody r)] -> MSBody r -> 
   MSStatement r
@@ -1115,7 +1115,7 @@ fileFromData f fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty
 -- Helper functions
 
 setEmpty :: (RenderSym r) => MSStatement r -> MSStatement r
-setEmpty = onStateValue (mkStNoEnd . RC.statement)
+setEmpty = onStateValue (mkStmtNoEnd . RC.statement)
 
 numType :: (RenderSym r) => r (Type r) -> r (Type r) -> r (Type r)
 numType t1 t2 = numericType (getType t1) (getType t2)

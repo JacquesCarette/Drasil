@@ -47,7 +47,7 @@ import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body,
   printFile, param, method, listDec, classVar, objVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
   addComments, commentedMod, commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkSt, mkStNoEnd, mkStateVal, 
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, mkStateVal, 
   mkVal, mkVar)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
@@ -558,8 +558,8 @@ instance CommentStatement CSharpCode where
   comment = G.comment commentStart
 
 instance ControlStatement CSharpCode where
-  break = toState $ mkSt R.break
-  continue = toState $ mkSt R.continue
+  break = toState $ mkStmt R.break
+  continue = toState $ mkStmt R.continue
 
   returnStmt = G.returnStmt Semi
   
@@ -740,7 +740,7 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
 
 csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
   MSStatement r
-csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
+csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStmtNoEnd $ 
   RC.type' (variableType vr) <+> text (variableName vr) <> parens 
   (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd) 
   (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnStmt r)

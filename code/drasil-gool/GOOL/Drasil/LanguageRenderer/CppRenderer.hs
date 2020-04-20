@@ -50,7 +50,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
 import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body, param, 
   stateVar, constVar, cast, castObj, static, dynamic, break, continue, 
   private, public, blockCmt, docCmt, addComments, commentedMod, commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkSt, mkStNoEnd, mkStateVal, 
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar,)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, float, double, char, string, listType, 
@@ -1473,10 +1473,10 @@ instance DeclStatement CppSrcCode where
   varDecDef = G.varDecDef 
   listDec n = G.listDec cppListDecDoc (litInt n)
   listDecDef = G.listDecDef cppListDecDefDoc
-  arrayDec n vr = zoom lensMStoVS $ on2StateValues (\sz v -> mkSt $ RC.type' 
+  arrayDec n vr = zoom lensMStoVS $ on2StateValues (\sz v -> mkStmt $ RC.type' 
     (variableType v) <+> RC.variable v <> brackets (RC.value sz)) 
     (litInt n :: SValue CppSrcCode) vr
-  arrayDecDef vr vals = on2StateValues (\vdc vs -> mkSt $ RC.statement vdc <+> 
+  arrayDecDef vr vals = on2StateValues (\vdc vs -> mkStmt $ RC.statement vdc <+> 
     equals <+> braces (valueList vs)) (arrayDec (toInteger $ length vals) vr) 
     (mapM (zoom lensMStoVS) vals)
   objDecDef = varDecDef
@@ -1505,16 +1505,16 @@ instance IOStatement CppSrcCode where
   discardFileInput f = addAlgorithmImport $ addLimitsImport $ 
     G.discardFileInput (cppDiscardInput " ") f
 
-  openFileR f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkSt $ 
+  openFileR f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkStmt $ 
     cppOpenFile "std::fstream::in" f v) f' v'
-  openFileW f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkSt $ 
+  openFileW f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkStmt $ 
     cppOpenFile "std::fstream::out" f v) f' v' 
-  openFileA f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkSt $ 
+  openFileA f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkStmt $ 
     cppOpenFile "std::fstream::app" f v) f' v'
   closeFile = G.closeFile "close" 
 
   getFileInputLine f v = valStmt $ funcApp "std::getline" string [f, valueOf v]
-  discardFileLine f = addLimitsImport $ zoom lensMStoVS $ onStateValue (mkSt .
+  discardFileLine f = addLimitsImport $ zoom lensMStoVS $ onStateValue (mkStmt .
     cppDiscardInput "\\n") f
   getFileInputAll f v = let l_line = "nextLine"
                             var_line = var l_line string
@@ -1553,8 +1553,8 @@ instance CommentStatement CppSrcCode where
   comment = G.comment commentStart
 
 instance ControlStatement CppSrcCode where
-  break = toState $ mkSt R.break
-  continue = toState $ mkSt R.continue
+  break = toState $ mkStmt R.break
+  continue = toState $ mkStmt R.continue
 
   returnStmt = G.returnStmt Semi
 
@@ -1563,7 +1563,7 @@ instance ControlStatement CppSrcCode where
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch = G.switch
 
-  ifExists _ ifBody _ = onStateValue (mkStNoEnd . RC.body) ifBody -- All variables are initialized in C++
+  ifExists _ ifBody _ = onStateValue (mkStmtNoEnd . RC.body) ifBody -- All variables are initialized in C++
 
   for = G.for bodyStart bodyEnd 
   forRange = G.forRange
@@ -2492,7 +2492,7 @@ cppListDecDefDoc :: (RenderSym r) => [r (Value r)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
 cppPrint :: (RenderSym r) => Bool -> SValue r -> SValue r -> MSStatement r
-cppPrint newLn  pf vl = zoom lensMStoVS $ on3StateValues (\e printFn v -> mkSt 
+cppPrint newLn  pf vl = zoom lensMStoVS $ on3StateValues (\e printFn v -> mkStmt 
   $ RC.value printFn <+> text "<<" <+> pars v (RC.value v) <+> e) end pf vl
   where pars v = if maybe False (< 9) (valuePrec v) then parens else id
         end = if newLn then addIOStreamImport (toState $ text "<<" <+> 
@@ -2516,7 +2516,7 @@ cppDiscardInput sep inFn = RC.value inFn <> dot <> text "ignore" <> parens
 
 cppInput :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ zoom lensMStoVS $ 
-  on2StateValues (\v inFn -> mkSt $ vcat [RC.value inFn <+> text ">>" <+> 
+  on2StateValues (\v inFn -> mkStmt $ vcat [RC.value inFn <+> text ">>" <+> 
   RC.variable v <> endStatement, RC.value inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]) vr i
 

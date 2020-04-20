@@ -29,9 +29,9 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
 import GOOL.Drasil.RendererClasses (RenderSym,
   RenderVariable(..),
   RenderValue(valFromData), RenderStatement(..),
-  StatementElim(..), ScopeElim(..), ParamElim(..))
+  ScopeElim(..), ParamElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
-  InternalTypeElim(..), InternalVarElim(..), ValueElim(..))
+  InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
@@ -167,12 +167,12 @@ switch breakState v defBody cs =
         text "case" <+> RC.value l <> colon,
         indentList [
           RC.body result,
-          statementDoc breakState]]
+          RC.statement breakState]]
       defaultSection = vcat [
         text "default" <> colon,
         indentList [
           RC.body defBody,
-          statementDoc breakState]]
+          RC.statement breakState]]
   in vcat [
       text "switch" <> parens (RC.value v) <+> lbrace,
       indentList [

@@ -35,13 +35,14 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
-  StatementElim(..), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
+  StatementElim(statementTerm), RenderScope(..), ScopeElim(..), 
+  MethodTypeSym(..), 
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function)
+  type', uOp, bOp, variable, value, function, statement)
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -561,7 +562,7 @@ instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) where
   stmtFromData d t = pair (stmtFromData d t) (stmtFromData d t)
 
 instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) where
-  statementDoc s = statementDoc $ pfst s
+  statement s = RC.statement $ pfst s
   statementTerm s = statementTerm $ pfst s
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
@@ -1451,7 +1452,7 @@ instance RenderStatement CppSrcCode where
   stmtFromData d t = toCode (d, t)
   
 instance StatementElim CppSrcCode where
-  statementDoc = fst . unCPPSC
+  statement = fst . unCPPSC
   statementTerm = snd . unCPPSC
 
 instance StatementSym CppSrcCode where
@@ -1474,7 +1475,7 @@ instance DeclStatement CppSrcCode where
   arrayDec n vr = zoom lensMStoVS $ on2StateValues (\sz v -> mkSt $ RC.type' 
     (variableType v) <+> RC.variable v <> brackets (RC.value sz)) 
     (litInt n :: SValue CppSrcCode) vr
-  arrayDecDef vr vals = on2StateValues (\vdc vs -> mkSt $ statementDoc vdc <+> 
+  arrayDecDef vr vals = on2StateValues (\vdc vs -> mkSt $ RC.statement vdc <+> 
     equals <+> braces (valueList vs)) (arrayDec (toInteger $ length vals) vr) 
     (mapM (zoom lensMStoVS) vals)
   objDecDef = varDecDef
@@ -2090,7 +2091,7 @@ instance RenderStatement CppHdrCode where
   stmtFromData d t = toCode (d, t)
   
 instance StatementElim CppHdrCode where
-  statementDoc = fst . unCPPHC
+  statement = fst . unCPPHC
   statementTerm = snd . unCPPHC
 
 instance StatementSym CppHdrCode where
@@ -2250,7 +2251,7 @@ instance RenderMethod CppHdrCode where
   commentedFunc = cppCommentedFunc Header
 
   destructor vars = on1StateValue1List (\m vs -> toCode $ mthd Pub 
-    (emptyIfEmpty (vcat (map (statementDoc . onCodeValue destructSts) vs)) 
+    (emptyIfEmpty (vcat (map (RC.statement . onCodeValue destructSts) vs)) 
     (methodDoc m))) (getClassName >>= (\n -> pubMethod ('~':n) void [] 
     (toState (toCode empty)) :: SMethod CppHdrCode)) 
     (map (zoom lensMStoCS) vars)
@@ -2263,7 +2264,7 @@ instance MethodElim CppHdrCode where
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar s p v = on2StateValues (\dec -> on3CodeValues svd (onCodeValue snd s)
-    (toCode $ R.stateVar empty (RC.perm p) (statementDoc dec)))
+    (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec)))
     (zoom lensCStoMS $ stmt $ varDec v) (zoom lensCStoMS emptyStmt)
   stateVarDef _ s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
     (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyStmt)
@@ -2578,7 +2579,7 @@ cppsStateVarDef n cns p vr vl = onBinding (bind p) (cns <+> typeDoc
 cpphStateVarDef :: (RenderSym r) => Doc -> r (Permanence r) -> SVariable r -> 
   SValue r -> CS Doc
 cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .  
-  statementDoc) (zoom lensCStoMS $ stmt $ onBinding (binding p) (varDec 
+  RC.statement) (zoom lensCStoMS $ stmt $ onBinding (binding p) (varDec 
   vr) (varDecDef vr vl)) 
 
 cpphVarsFuncsList :: ScopeTag -> [CppHdrCode (StateVar CppHdrCode)] -> 

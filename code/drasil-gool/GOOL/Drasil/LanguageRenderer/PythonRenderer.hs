@@ -33,12 +33,12 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ValueElim(valuePrec), InternalGetSet(..), InternalListFunc(..), InternalIterator(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
-  StatementElim(..), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
+  StatementElim(statementTerm), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
-  type', uOp, bOp, variable, value, function)
+  type', uOp, bOp, variable, value, function, statement)
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -483,7 +483,7 @@ instance RenderStatement PythonCode where
   stmtFromData d t = toCode (d, t)
 
 instance StatementElim PythonCode where
-  statementDoc = fst . unPC
+  statement = fst . unPC
   statementTerm = snd . unPC
 
 instance StatementSym PythonCode where

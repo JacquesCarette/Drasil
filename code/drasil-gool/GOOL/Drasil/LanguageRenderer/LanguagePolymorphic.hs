@@ -77,7 +77,7 @@ import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym,
   RenderValue(inputFunc, cast, valFromData), ValueElim(valuePrec),
   InternalIterator(iterBeginFunc, iterEndFunc), RenderFunction(funcFromData), 
   FunctionElim(functionType), RenderStatement(stmtFromData), 
-  StatementElim(statementDoc, statementTerm), RenderScope(..), ScopeElim(..), 
+  StatementElim(statementTerm), RenderScope(..), ScopeElim(..), 
   MethodTypeSym(mType), RenderParam(paramFromData), 
   RenderMethod(intMethod, commentedFunc), MethodElim(methodDoc), 
   RenderStateVar(..), StateVarElim(..), ParentSpec, 
@@ -94,7 +94,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
   PermElim(..), BodyElim(..), BlockElim(..), InternalTypeElim(..), 
   OpElim(uOp, bOp), InternalVarElim(variable), ValueElim(value), 
-  FunctionElim(function))
+  FunctionElim(function), StatementElim(statement))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
@@ -133,7 +133,7 @@ multiBody bs = docBody $ onStateList vibcat $ map (onStateValue RC.body) bs
 -- Blocks --
 
 block :: (RenderSym r) => [MSStatement r] -> MSBlock r
-block sts = docBlock $ onStateList (R.block . map statementDoc) 
+block sts = docBlock $ onStateList (R.block . map RC.statement) 
   (map S.stmt sts)
 
 multiBlock :: (RenderSym r) => [MSBlock r] -> MSBlock r
@@ -187,7 +187,7 @@ void = toState $ typeFromData Void "void" (text "void")
 
 strat :: (RenderSym r) => MSStatement r -> MSBody r -> MSBlock r
 strat r bd = docBlock $ on2StateValues (\result b -> vcat [RC.body b, 
-  statementDoc result]) r bd
+  RC.statement result]) r bd
 
 runStrategy :: (RenderSym r) => String -> [(Label, MSBody r)] -> 
   Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
@@ -681,7 +681,7 @@ printSt :: (RenderSym r) => SValue r -> SValue r -> MSStatement r
 printSt p v = zoom lensMStoVS $ on2StateValues (\p' -> mkSt . R.print p') p v
 
 stmt :: (RenderSym r) => MSStatement r -> MSStatement r
-stmt = onStateValue (\s -> mkStNoEnd (statementDoc s <> R.getTerm 
+stmt = onStateValue (\s -> mkStNoEnd (RC.statement s <> R.getTerm 
   (statementTerm s)))
   
 loopStmt :: (RenderSym r) => MSStatement r -> MSStatement r
@@ -725,17 +725,17 @@ varDec s d v' = onStateValue (\v -> mkSt (RC.perm (bind $ variableBind v)
         bind Dynamic = d
 
 varDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-varDecDef vr vl' = on2StateValues (\vd vl -> mkSt (statementDoc vd <+> equals 
+varDecDef vr vl' = on2StateValues (\vd vl -> mkSt (RC.statement vd <+> equals 
   <+> RC.value vl)) (S.varDec vr) (zoom lensMStoVS vl')
 
 listDec :: (RenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> 
   MSStatement r
-listDec f vl v = on2StateValues (\sz vd -> mkSt (statementDoc vd <> f 
+listDec f vl v = on2StateValues (\sz vd -> mkSt (RC.statement vd <> f 
   sz)) (zoom lensMStoVS vl) (S.varDec v)
 
 listDecDef :: (RenderSym r) => ([r (Value r)] -> Doc) -> SVariable r -> 
   [SValue r] -> MSStatement r
-listDecDef f v vls = on1StateValue1List (\vd vs -> mkSt (statementDoc vd <> 
+listDecDef f v vls = on1StateValue1List (\vd vs -> mkSt (RC.statement vd <> 
   f vs)) (S.varDec v) (map (zoom lensMStoVS) vls)
 
 listDecDef' :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
@@ -748,7 +748,7 @@ arrayDec n vr = zoom lensMStoVS $ on3StateValues (\sz v it -> mkSt (RC.type'
   brackets (RC.value sz))) n vr (listInnerType $ onStateValue variableType vr)
 
 arrayDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-arrayDecDef v vals = on2StateValues (\vd vs -> mkSt (statementDoc vd <+> 
+arrayDecDef v vals = on2StateValues (\vd vs -> mkSt (RC.statement vd <+> 
   equals <+> braces (valueList vs))) (S.varDec v) (mapM (zoom lensMStoVS) vals)
 
 objDecNew :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
@@ -909,8 +909,8 @@ ifExists v ifBody = S.ifCond [(S.notNull v, ifBody)]
 for :: (RenderSym r) => Doc -> Doc -> MSStatement r -> SValue r -> 
   MSStatement r -> MSBody r -> MSStatement r
 for bStart bEnd sInit vGuard sUpdate b = (\initl guard upd bod -> mkStNoEnd 
-  (vcat [forLabel <+> parens (statementDoc initl <> semi <+> RC.value guard <> 
-    semi <+> statementDoc upd) <+> bStart,
+  (vcat [forLabel <+> parens (RC.statement initl <> semi <+> RC.value guard <> 
+    semi <+> RC.statement upd) <+> bStart,
   indent $ RC.body bod,
   bEnd])) <$> S.loopStmt sInit <*> zoom lensMStoVS vGuard <*> 
   S.loopStmt sUpdate <*> b
@@ -1028,18 +1028,18 @@ intFunc = intMethod
 stateVar :: (RenderSym r) => r (Scope r) -> r (Permanence r) -> SVariable r -> 
   CSStateVar r
 stateVar s p v = stateVarFromData (zoom lensCStoMS $ onStateValue (R.stateVar 
-  (scopeDoc s) (RC.perm p) . statementDoc) (S.stmt $ S.varDec v))
+  (scopeDoc s) (RC.perm p) . RC.statement) (S.stmt $ S.varDec v))
 
 stateVarDef :: (RenderSym r) => r (Scope r) -> r (Permanence r) -> SVariable r 
   -> SValue r -> CSStateVar r
 stateVarDef s p vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue 
-  (R.stateVar (scopeDoc s) (RC.perm p) . statementDoc) (S.stmt $ S.varDecDef 
+  (R.stateVar (scopeDoc s) (RC.perm p) . RC.statement) (S.stmt $ S.varDecDef 
   vr vl))
 
 constVar :: (RenderSym r) => Doc -> r (Scope r) -> SVariable r -> SValue r -> 
   CSStateVar r
 constVar p s vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue 
-  (R.stateVar (scopeDoc s) p . statementDoc) (S.stmt $ S.constDecDef vr vl))
+  (R.stateVar (scopeDoc s) p . RC.statement) (S.stmt $ S.constDecDef vr vl))
 
 -- Classes --
 
@@ -1112,7 +1112,7 @@ fileFromData f fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty
 -- Helper functions
 
 setEmpty :: (RenderSym r) => MSStatement r -> MSStatement r
-setEmpty = onStateValue (mkStNoEnd . statementDoc)
+setEmpty = onStateValue (mkStNoEnd . RC.statement)
 
 numType :: (RenderSym r) => r (Type r) -> r (Type r) -> r (Type r)
 numType t1 t2 = numericType (getType t1) (getType t2)

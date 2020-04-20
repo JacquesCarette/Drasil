@@ -213,7 +213,7 @@ class RenderStatement r where
   stmtFromData :: Doc -> Terminator -> r (Statement r)
 
 class StatementElim r where
-  statementDoc :: r (Statement r) -> Doc
+  statement :: r (Statement r) -> Doc
   statementTerm :: r (Statement r) -> Terminator
 
 class RenderScope r where

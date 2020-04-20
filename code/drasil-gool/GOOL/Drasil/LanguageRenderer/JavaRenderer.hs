@@ -11,7 +11,7 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
+  MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..),
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), 
   MathConstant(..), VariableValue(..), CommandLineArgs(..), 
@@ -61,8 +61,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, objDecNew, 
   objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, print,
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, throw, ifCond, switch, ifExists, for, 
+  discardFileLine, stringListVals, stringListLists, returnStmt, 
+  multiReturnError, valStmt, comment, throw, ifCond, switch, ifExists, for, 
   forRange, forEach, while, tryCatch, checkState, notifyObservers, construct, 
   param, method, getMethod, setMethod, constructor, docMain, function, 
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, buildClass, 
@@ -111,6 +111,8 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   return = JC
   JC x >>= f = f x
+
+instance OOProg JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
@@ -471,7 +473,7 @@ instance StatementElim JavaCode where
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
-  valState = G.valState Semi
+  valStmt = G.valStmt Semi
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement JavaCode where
@@ -522,7 +524,7 @@ instance IOStatement JavaCode where
   getFileInputLine f v = v &= f $. func "nextLine" string []
   discardFileLine = G.discardFileLine "nextLine"
   getFileInputAll f v = while (f $. func "hasNextLine" bool [])
-    (oneLiner $ valState $ listAppend (valueOf v) (f $. func "nextLine" string []))
+    (oneLiner $ valStmt $ listAppend (valueOf v) (f $. func "nextLine" string []))
 
 instance StringStatement JavaCode where
   stringSplit d vnew s = modify (addLangImport "java.util.Arrays") >> 
@@ -545,7 +547,7 @@ instance ControlStatement JavaCode where
   break = toState $ mkSt R.break
   continue = toState $ mkSt R.continue
 
-  returnState = G.returnState Semi
+  returnStmt = G.returnStmt Semi
   
   throw = G.throw jThrowDoc Semi
 
@@ -829,7 +831,7 @@ jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
 jInOutCall :: (Label -> VSType JavaCode -> [SValue JavaCode] -> 
   SValue JavaCode) -> Label -> [SValue JavaCode] -> [SVariable JavaCode] -> 
   [SVariable JavaCode] -> MSStatement JavaCode
-jInOutCall f n ins [] [] = valState $ f n void ins
+jInOutCall f n ins [] [] = valStmt $ f n void ins
 jInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out) 
   ins
 jInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out) 
@@ -851,20 +853,20 @@ jInOut :: (JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) ->
   MSBody JavaCode -> SMethod JavaCode
 jInOut f s p ins [] [] b = f s p void (map param ins) b
 jInOut f s p ins [v] [] b = f s p (onStateValue variableType v) (map param ins) 
-  (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 
+  (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnStmt $ 
   valueOf v))
 jInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
   (map param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b 
-  (returnState $ valueOf v))
+  (returnStmt $ valueOf v))
 jInOut f s p ins outs both b = f s p (returnTp rets)
   (map param $ both ++ ins) (on3StateValues (on3CodeValues surroundBody) decls 
   b (returnSt rets))
   where returnTp [x] = onStateValue variableType x
         returnTp _ = jArrayType
-        returnSt [x] = returnState $ valueOf x
+        returnSt [x] = returnStmt $ valueOf x
         returnSt _ = multi (arrayDec (toInteger $ length rets) outputs
           : assignArray 0 (map valueOf rets)
-          ++ [returnState (valueOf outputs)])
+          ++ [returnStmt (valueOf outputs)])
         assignArray :: Integer -> [SValue JavaCode] -> [MSStatement JavaCode]
         assignArray _ [] = []
         assignArray c (v:vs) = (arrayElem c outputs &= v) : assignArray (c+1) vs

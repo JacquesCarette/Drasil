@@ -1,7 +1,7 @@
 module Test.Main (main) where
 
-import GOOL.Drasil (Label, ProgramSym(..), unCI, unJC, unPC, unCSC, unCPPC, 
-  FileData(..), ModData(..), ProgData(..), initialState)
+import GOOL.Drasil (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC, 
+  unCPPC, FileData(..), ModData(..), ProgData(..), initialState)
 
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import Control.Monad.State (evalState)
@@ -37,7 +37,7 @@ genCode :: [ProgData] -> IO()
 genCode files = createCodeFiles (concatMap (\p -> replicate (length $ progMods 
   p) (progName p)) files) $ makeCode (concatMap progMods files)
 
-classes :: (ProgramSym r) => (r (Program r) -> ProgData) -> [ProgData]
+classes :: (OOProg r) => (r (Program r) -> ProgData) -> [ProgData]
 classes unRepr = zipWith (\p gs -> unRepr (evalState p gs)) [helloWorld, patternTest, fileTests] 
   (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests])
 

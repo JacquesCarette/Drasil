@@ -26,8 +26,8 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   listDecDef, listDecDef', arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, 
   extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, print, 
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnState, 
-  multiReturnError, valState, comment, throw, ifCond, switch, ifExists, for, 
+  discardFileLine, stringListVals, stringListLists, returnStmt, 
+  multiReturnError, valStmt, comment, throw, ifCond, switch, ifExists, for, 
   forRange, forEach, while, tryCatch, checkState, notifyObservers, construct, 
   param, method, getMethod, setMethod, constructor, destructorError, docMain, 
   function, mainFunction, docFuncRepr, docFunc, docInOutFunc, intFunc, stateVar,
@@ -60,12 +60,12 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   VariableValue(valueOf),
   ValueExpression(funcAppMixedArgs, newObjMixedArgs, notNull, lambda), 
   objMethodCall, objMethodCallNoParams, FunctionSym(func, objAccess), 
-  List(listSize, listAppend, listAccess), StatementSym(valState), 
+  List(listSize, listAppend, listAccess), StatementSym(valStmt), 
   AssignStatement(assign),
   DeclStatement(varDec, varDecDef, listDec, objDecNew, extObjDecNew, 
     constDecDef), 
   IOStatement(print),
-  ControlStatement(returnState, ifCond, for, forRange, switch), 
+  ControlStatement(returnStmt, ifCond, for, forRange, switch), 
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym, 
   InternalFile(commentedMod), InternalBody(docBody), BodyElim(..), 
@@ -211,7 +211,7 @@ listSlice b e s vnew vold =
       S.listDec 0 var_temp,
       S.for (S.varDecDef var_i (fromMaybe (S.litInt 0) b)) 
         (v_i ?< fromMaybe (S.listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
-        (oneLiner $ S.valState $ S.listAppend v_temp (S.listAccess vold v_i)),
+        (oneLiner $ S.valStmt $ S.listAppend v_temp (S.listAccess vold v_i)),
       vnew &= v_temp]
 
 -- Unary Operators --
@@ -821,10 +821,10 @@ openFileA :: (RenderSym r) => (SValue r -> VSType r -> SValue r -> SValue r) ->
 openFileA f vr vl = vr &= f vl outfile S.litTrue
 
 closeFile :: (RenderSym r) => Label -> SValue r -> MSStatement r
-closeFile n f = S.valState $ S.objMethodCallNoParams S.void f n
+closeFile n f = S.valStmt $ S.objMethodCallNoParams S.void f n
 
 discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
-discardFileLine n f = S.valState $ S.objMethodCallNoParams S.string f n 
+discardFileLine n f = S.valStmt $ S.objMethodCallNoParams S.string f n 
 
 stringListVals :: (RenderSym r) => [SVariable r] -> SValue r -> MSStatement r
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList 
@@ -850,7 +850,7 @@ stringListLists lsts sl = zoom lensMStoVS sl >>= (\slst -> checkList (getType $
         loop = S.forRange var_i (S.litInt 0) (S.listSize sl #/ numLists) 
           (S.litInt 1) (bodyStatements $ appendLists (map S.valueOf lsts) 0)
         appendLists [] _ = []
-        appendLists (v:vs) n = S.valState (S.listAppend v (cast 
+        appendLists (v:vs) n = S.valStmt (S.listAppend v (cast 
           (S.listInnerType $ onStateValue valueType v)
           (S.listAccess sl ((v_i #* numLists) #+ S.litInt n)))) 
           : appendLists vs (n+1)
@@ -858,15 +858,15 @@ stringListLists lsts sl = zoom lensMStoVS sl >>= (\slst -> checkList (getType $
         var_i = S.var "stringlist_i" S.int
         v_i = S.valueOf var_i
 
-returnState :: (RenderSym r) => Terminator -> SValue r -> MSStatement r
-returnState t v' = zoom lensMStoVS $ onStateValue (\v -> stmtFromData 
+returnStmt :: (RenderSym r) => Terminator -> SValue r -> MSStatement r
+returnStmt t v' = zoom lensMStoVS $ onStateValue (\v -> stmtFromData 
   (R.return' [v]) t) v'
 
 multiReturnError :: String -> String
 multiReturnError l = "Cannot return multiple values in " ++ l
 
-valState :: (RenderSym r) => Terminator -> SValue r -> MSStatement r
-valState t v' = zoom lensMStoVS $ onStateValue (\v -> stmtFromData (valueDoc v)
+valStmt :: (RenderSym r) => Terminator -> SValue r -> MSStatement r
+valStmt t v' = zoom lensMStoVS $ onStateValue (\v -> stmtFromData (valueDoc v)
   t) v'
 
 comment :: (RenderSym r) => Doc -> Label -> MSStatement r
@@ -950,7 +950,7 @@ notifyObservers f t = S.for initv (v_index ?< S.listSize obsList)
         var_index = S.var "observerIndex" S.int
         v_index = S.valueOf var_index
         initv = S.varDecDef var_index $ S.litInt 0
-        notify = oneLiner $ S.valState $ at obsList v_index $. f
+        notify = oneLiner $ S.valStmt $ at obsList v_index $. f
 
 -- Methods --
 
@@ -969,7 +969,7 @@ method n s p t = intMethod False n s p (mType t)
 getMethod :: (RenderSym r) => SVariable r -> SMethod r
 getMethod v = zoom lensMStoVS v >>= (\vr -> S.method (getterName $ variableName 
   vr) public dynamic (toState $ variableType vr) [] getBody)
-  where getBody = oneLiner $ S.returnState (S.valueOf $ S.objVarSelf v)
+  where getBody = oneLiner $ S.returnStmt (S.valueOf $ S.objVarSelf v)
 
 setMethod :: (RenderSym r) => SVariable r -> SMethod r
 setMethod v = zoom lensMStoVS v >>= (\vr -> S.method (setterName $ variableName 

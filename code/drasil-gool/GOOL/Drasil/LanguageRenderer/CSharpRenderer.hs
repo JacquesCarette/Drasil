@@ -11,7 +11,7 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
+  MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
   TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), 
   MathConstant(..), VariableValue(..), CommandLineArgs(..), 
@@ -62,7 +62,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
   extObjDecNewNoParams, constDecDef, print, discardInput, openFileR, openFileW, 
   openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
-  returnState, multiReturnError, valState, comment, throw, ifCond, switch, 
+  returnStmt, multiReturnError, valStmt, comment, throw, ifCond, switch, 
   ifExists, for, forRange, forEach, while, tryCatch, checkState, 
   notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
   docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
@@ -107,6 +107,8 @@ instance Applicative CSharpCode where
 instance Monad CSharpCode where
   return = CSC
   CSC x >>= f = f x
+
+instance OOProg CSharpCode where
 
 instance ProgramSym CSharpCode where
   type Program CSharpCode = ProgData
@@ -444,7 +446,7 @@ instance StatementElim CSharpCode where
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
-  valState = G.valState Semi
+  valStmt = G.valStmt Semi
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement CSharpCode where
@@ -485,7 +487,7 @@ instance IOStatement CSharpCode where
   getInput v = v &= csInput (onStateValue variableType v) inputFunc
   discardInput = G.discardInput csDiscardInput
   getFileInput f v = v &= csInput (onStateValue variableType v) (csFileInput f)
-  discardFileInput f = valState $ csFileInput f
+  discardFileInput f = valStmt $ csFileInput f
 
   openFileR = G.openFileR csOpenFileR
   openFileW = G.openFileW csOpenFileWorA
@@ -495,7 +497,7 @@ instance IOStatement CSharpCode where
   getFileInputLine = getFileInput
   discardFileLine = G.discardFileLine "ReadLine"
   getFileInputAll f v = while ((f $. funcFromData (text ".EndOfStream") bool) 
-    ?!) (oneLiner $ valState $ listAppend (valueOf v) (csFileInput f))
+    ?!) (oneLiner $ valStmt $ listAppend (valueOf v) (csFileInput f))
 
 instance StringStatement CSharpCode where
   stringSplit d vnew s = assign vnew $ newObj (listType string) 
@@ -516,7 +518,7 @@ instance ControlStatement CSharpCode where
   break = toState $ mkSt R.break
   continue = toState $ mkSt R.continue
 
-  returnState = G.returnState Semi
+  returnStmt = G.returnStmt Semi
   
   throw msg = modify (addLangImport "System") >> G.throw csThrowDoc Semi msg
 
@@ -693,7 +695,7 @@ csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r ->
 csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
   getTypeDoc (variableType vr) <+> text (variableName vr) <> parens 
   (variableList pms) <+> bodyStart $$ indent (bodyDoc b) $$ bodyEnd) 
-  (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnState r)
+  (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnStmt r)
 
 csThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
@@ -747,7 +749,7 @@ csInOutCall f n ins [out] [] = assign out $ f n (onStateValue variableType out)
   ins
 csInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out) 
   (valueOf out : ins)
-csInOutCall f n ins outs both = valState $ f n void (map (onStateValue 
+csInOutCall f n ins outs both = valStmt $ f n void (map (onStateValue 
   (onCodeValue (updateValDoc csRef)) . valueOf) both ++ ins ++ map 
   (onStateValue (onCodeValue (updateValDoc csOut)) . valueOf) outs)
 
@@ -769,11 +771,11 @@ csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode)
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] -> 
   MSBody CSharpCode -> SMethod CSharpCode
 csInOut f s p ins [v] [] b = f s p (onStateValue variableType v) (map param ins)
-  (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnState $ 
+  (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnStmt $ 
   valueOf v))
 csInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
   (map param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b 
-  (returnState $ valueOf v))
+  (returnStmt $ valueOf v))
 csInOut f s p ins outs both b = f s p void (map (onStateValue (onCodeValue 
   (updateParam csRef)) . param) both ++ map param ins ++ map (onStateValue 
   (onCodeValue (updateParam csOut)) . param) outs) b

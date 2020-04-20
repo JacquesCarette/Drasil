@@ -4,7 +4,7 @@
 module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
-  SMethod, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
+  SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
@@ -44,6 +44,8 @@ instance Applicative CodeInfo where
 instance Monad CodeInfo where
   return = CI
   CI x >>= f = f x
+
+instance OOProg CodeInfo where
 
 instance ProgramSym CodeInfo where
   type Program CodeInfo = GOOLState
@@ -236,7 +238,7 @@ instance Iterator CodeInfo where
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()
-  valState = zoom lensMStoVS . execute1
+  valStmt = zoom lensMStoVS . execute1
   multi    = executeList
   
 instance AssignStatement CodeInfo where
@@ -311,7 +313,7 @@ instance ControlStatement CodeInfo where
   break    = noInfo
   continue = noInfo
 
-  returnState = zoom lensMStoVS . execute1
+  returnStmt = zoom lensMStoVS . execute1
 
   throw _ = modifyReturn (addException Standard) (toCode ())
 

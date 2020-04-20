@@ -1,6 +1,6 @@
 module Test.PatternTest (patternTest) where
 
-import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, 
+import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
   ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..), 
   TypeSym(..), StatementSym(..), AssignStatement, DeclStatement(..), 
   IOStatement(..), initState, changeState, initObserverList, 
@@ -30,17 +30,16 @@ n = var nName int
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
-newObserver :: (ValueExpression r, TypeSym r) => SValue r
+newObserver :: (ValueExpression r) => SValue r
 newObserver = extNewObj observerName observerType []
 
-patternTest :: (ProgramSym r) => GSProgram r
+patternTest :: (OOProg r) => GSProgram r
 patternTest = prog progName [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
-patternTestMainMethod :: (MethodSym r, AssignStatement r, 
-  DeclStatement r, IOStatement r, Literal r, VariableValue r, ValueExpression r, GetSet r, List r, 
-  StatePattern r, ObserverPattern r, StrategyPattern r) => 
-  SMethod r
+patternTestMainMethod :: (MethodSym r, AssignStatement r, DeclStatement r, 
+  IOStatement r, Literal r, VariableValue r, ValueExpression r, GetSet r, 
+  List r, StatePattern r, ObserverPattern r, StrategyPattern r) => SMethod r
 patternTestMainMethod = mainFunction (body [block [
   varDec n,
   initState fsmName offState, 
@@ -67,5 +66,5 @@ patternTestMainMethod = mainFunction (body [block [
     notifyObservers (func printNum void []) observerType],
     
   block [
-    valState $ set (valueOf obs1) x (litInt 10),
+    valStmt $ set (valueOf obs1) x (litInt 10),
     print $ get (valueOf obs1) x]])

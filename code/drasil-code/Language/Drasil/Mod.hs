@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..), 
   FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name, ($:=), 
-  pubStateVar, privStateVar, classDef, classImplements, ctorDef, ffor, fdec, 
+  pubStateVar, privStateVar, classDef, classImplements, ctorDef, ffor, fDecDef, 
   fname, fstdecl, funcData, funcDef, funcDefParams, packmod, packmodRequires
 ) where
 
@@ -93,7 +93,6 @@ data FuncStmt where
   FThrow :: String -> FuncStmt
   FTry :: [FuncStmt] -> [FuncStmt] -> FuncStmt
   FContinue :: FuncStmt
-  FDec :: CodeVarChunk -> FuncStmt
   FDecDef :: CodeVarChunk -> Expr -> FuncStmt
   FVal :: Expr -> FuncStmt
   FMulti :: [FuncStmt] -> FuncStmt
@@ -106,14 +105,13 @@ v $:= e = FAsg (quantvar v) e
 ffor :: (Quantity c, MayHaveUnit c) => c -> Expr -> [FuncStmt] -> FuncStmt
 ffor v = FFor (quantvar  v)
 
-fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
-fdec v  = FDec (quantvar v)
+fDecDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt
+fDecDef v  = FDecDef (quantvar v)
 
 fstdecl :: ChunkDB -> [FuncStmt] -> [CodeVarChunk]
 fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declared ctx) fsts) 
   where
     fstvars :: ChunkDB -> FuncStmt -> [CodeVarChunk]
-    fstvars _  (FDec cch) = [cch]
     fstvars sm (FDecDef cch e) = cch:codevars' e sm
     fstvars sm (FAsg cch e) = cch:codevars' e sm
     fstvars sm (FAsgIndex cch _ e) = cch:codevars' e sm
@@ -130,7 +128,6 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
 
     declared :: ChunkDB -> FuncStmt -> [CodeVarChunk]
-    declared _  (FDec cch) = [cch]
     declared _  (FDecDef cch _) = [cch]
     declared _  (FAsg _ _) = []
     declared _  FAsgIndex {} = []

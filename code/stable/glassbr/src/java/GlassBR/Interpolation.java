@@ -124,6 +124,7 @@ public class Interpolation {
         int k_2;
         double y_1;
         double y_2;
+        
         ArrayList<ArrayList<Double>> x_matrix = new ArrayList<ArrayList<Double>>(0);
         ArrayList<ArrayList<Double>> y_matrix = new ArrayList<ArrayList<Double>>(0);
         ArrayList<Double> z_vector = new ArrayList<Double>(0);
@@ -218,6 +219,7 @@ public class Interpolation {
         int k_2;
         double y_1;
         double y_2;
+        
         ArrayList<ArrayList<Double>> x_matrix = new ArrayList<ArrayList<Double>>(0);
         ArrayList<ArrayList<Double>> y_matrix = new ArrayList<ArrayList<Double>>(0);
         ArrayList<Double> z_vector = new ArrayList<Double>(0);

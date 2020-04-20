@@ -6,15 +6,15 @@ module GOOL.Drasil.ClassInterface (
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, FSModule,
   NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
   -- Typeclasses
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
-  VariableElim(..), ($->), listOf, ValueSym(..), Literal(..), MathConstant(..), 
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
-  funcAppNamedArgs, selfFuncApp, extFuncApp, libFuncApp, newObj, extNewObj, 
-  libNewObj, exists, InternalValueExp(..), objMethodCall, 
-  objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.), 
-  selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
+  OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
+  VariableSym(..), VariableElim(..), ($->), listOf, ValueSym(..), Literal(..), 
+  MathConstant(..), VariableValue(..), CommandLineArgs(..), 
+  NumericExpression(..), BooleanExpression(..), Comparison(..), 
+  ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
+  libFuncApp, newObj, extNewObj, libNewObj, exists, InternalValueExp(..), 
+  objMethodCall, objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
+  ($.), selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
   listIndexExists, at, Iterator(..), StatementSym(..), AssignStatement(..), 
   (&=), assignToListIndex, DeclStatement(..), IOStatement(..), 
   StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
@@ -39,19 +39,20 @@ type GSProgram a = GS (a (Program a))
 
 -- In relation to GOOL, the type variable r can be considered as short for "representation"
 
+class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, 
+  StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
+  InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
+  NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, 
+  InternalValueExp r, GetSet r, List r, Iterator r, StatePattern r, 
+  ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
+
 class (FileSym r) => ProgramSym r where
   type Program r
   prog :: Label -> [SFile r] -> GSProgram r
 
 type SFile a = FS (a (RenderFile a))
 
-class (ModuleSym r, AssignStatement r, DeclStatement r, IOStatement r, 
-  StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
-  InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
-  NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, 
-  InternalValueExp r, GetSet r, List r, Iterator r, StatePattern r, 
-  ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => 
-  FileSym r where 
+class (ModuleSym r) => FileSym r where 
   type RenderFile r
   fileDoc :: FSModule r -> SFile r
 
@@ -233,7 +234,7 @@ type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 
 -- for values that can include expressions
-class ValueExpression r where
+class (VariableSym r, ValueSym r) => ValueExpression r where
   inlineIf     :: SValue r -> SValue r -> SValue r -> SValue r
   
   funcAppMixedArgs     ::            MixedCall r
@@ -342,7 +343,7 @@ type MSStatement a = MS (a (Statement a))
 
 class (ValueSym r) => StatementSym r where
   type Statement r
-  valState :: SValue r -> MSStatement r -- converts value to statement
+  valStmt :: SValue r -> MSStatement r -- converts value to statement
   multi     :: [MSStatement r] -> MSStatement r
 
 class (VariableSym r, StatementSym r) => AssignStatement r where
@@ -363,7 +364,7 @@ infixr 1 &=
 
 assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r 
   -> SValue r -> SValue r -> MSStatement r
-assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
+assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
 class (VariableSym r, StatementSym r) => DeclStatement r where
   varDec               :: SVariable r -> MSStatement r
@@ -430,7 +431,7 @@ class (BodySym r) => ControlStatement r where
   break :: MSStatement r
   continue :: MSStatement r
 
-  returnState :: SValue r -> MSStatement r
+  returnStmt :: SValue r -> MSStatement r
 
   throw :: Label -> MSStatement r
 
@@ -477,7 +478,7 @@ initObserverList t = listDecDef (var observerListName (listType t))
 
 addObserver :: (StatementSym r, VariableValue r, List r) => SValue r -> 
   MSStatement r
-addObserver o = valState $ listAdd obsList lastelem o
+addObserver o = valStmt $ listAdd obsList lastelem o
   where obsList = valueOf $ observerListName `listOf` onStateValue valueType o
         lastelem = listSize obsList
 
@@ -492,10 +493,9 @@ class ScopeSym r where
 
 type MSParameter a = MS (a (Parameter a))
 
-class ParameterSym r where
+class (VariableSym r) => ParameterSym r where
   type Parameter r
   param :: SVariable r -> MSParameter r
-  -- funcParam  :: Label -> r (MethodType r) -> [r (Parameter r)] -> r (Parameter r) -- not implemented in GOOL
   pointerParam :: SVariable r -> MSParameter r
 
 type SMethod a = MS (a (Method a))
@@ -551,7 +551,7 @@ nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
 
-class (ScopeSym r, PermanenceSym r) => StateVarSym r where
+class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where
   type StateVar r
   stateVar :: r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
   stateVarDef :: Label -> r (Scope r) -> r (Permanence r) -> SVariable r -> 

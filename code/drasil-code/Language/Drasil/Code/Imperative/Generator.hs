@@ -29,7 +29,7 @@ import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), Choices(..), Modularity(..), 
   ImplementationType(..), Visibility(..))
 
-import GOOL.Drasil (GSProgram, SFile, ProgramSym(..), ProgramSym, ProgData(..), 
+import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ProgData(..), 
   initialState, unCI)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
@@ -90,7 +90,7 @@ generator l dt sd chs spec = DrasilState {
           chooseODELib lng os
         modules' = mods spec ++ concatMap (^. auxMods) els
 
-generateCode :: (ProgramSym progRepr, PackageSym packRepr) => Lang -> 
+generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> 
   (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 
   PackData) -> DrasilState -> IO ()
 generateCode l unReprProg unReprPack g = do 
@@ -103,7 +103,7 @@ generateCode l unReprProg unReprPack g = do
         code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
           unReprPack pckg)
 
-genPackage :: (ProgramSym progRepr, PackageSym packRepr) => 
+genPackage :: (OOProg progRepr, PackageSym packRepr) => 
   (progRepr (Program progRepr) -> ProgData) -> 
   Reader DrasilState (packRepr (Package packRepr))
 genPackage unRepr = do
@@ -119,18 +119,18 @@ genPackage unRepr = do
   d <- genDoxConfig n s
   return $ package pd (m:i++d)
 
-genProgram :: (ProgramSym r) => Reader DrasilState (GSProgram r)
+genProgram :: (OOProg r) => Reader DrasilState (GSProgram r)
 genProgram = do
   g <- ask
   ms <- chooseModules $ modular g
   let n = pName $ codeSpec g
   return $ prog n ms
 
-chooseModules :: (ProgramSym r) => Modularity -> Reader DrasilState [SFile r]
+chooseModules :: (OOProg r) => Modularity -> Reader DrasilState [SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules (Modular _) = genModules
 
-genUnmodular :: (ProgramSym r) => Reader DrasilState (SFile r)
+genUnmodular :: (OOProg r) => Reader DrasilState (SFile r)
 genUnmodular = do
   g <- ask
   let n = pName $ codeSpec g
@@ -148,7 +148,7 @@ genUnmodular = do
     ([genInputClass Auxiliary, genConstClass Auxiliary] 
     ++ map (fmap Just) (concatMap genModClasses $ modules g))
           
-genModules :: (ProgramSym r) => Reader DrasilState [SFile r]
+genModules :: (OOProg r) => Reader DrasilState [SFile r]
 genModules = do
   g <- ask
   let mainIfExe Library = return []

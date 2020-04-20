@@ -10,7 +10,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..), Comments(..))
 import Language.Drasil.Mod (Name)
   
 import GOOL.Drasil (Label, SFile, VSType, SVariable, SValue, MSStatement, 
-  SMethod, CSStateVar, SClass, NamedArgs, ProgramSym, FileSym(..), 
+  SMethod, CSStateVar, SClass, NamedArgs, OOProg, FileSym(..), 
   ValueExpression(..), FuncAppStatement(..), ClassSym(..), ModuleSym(..), 
   GOOLState)
 
@@ -18,7 +18,7 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Monad.Reader (Reader, ask, withReader)
 
-genModuleWithImports :: (ProgramSym r) => Name -> String -> [String] -> 
+genModuleWithImports :: (OOProg r) => Name -> String -> [String] -> 
   [Reader DrasilState (Maybe (SMethod r))] -> 
   [Reader DrasilState (Maybe (SClass r))] -> Reader DrasilState (SFile r)
 genModuleWithImports n desc is maybeMs maybeCs = do
@@ -35,7 +35,7 @@ genModuleWithImports n desc is maybeMs maybeCs = do
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n is (catMaybes ms) (catMaybes cs)
 
-genModule :: (ProgramSym r) => Name -> String -> 
+genModule :: (OOProg r) => Name -> String -> 
   [Reader DrasilState (Maybe (SMethod r))] -> 
   [Reader DrasilState (Maybe (SClass r))] -> Reader DrasilState (SFile r)
 genModule n desc = genModuleWithImports n desc []
@@ -50,7 +50,7 @@ genDoxConfig n s = do
 
 data ClassType = Primary | Auxiliary
 
-mkClass :: (ProgramSym r) => ClassType -> String -> Label -> Maybe Label -> 
+mkClass :: (OOProg r) => ClassType -> String -> Label -> Maybe Label -> 
   [CSStateVar r] -> Reader DrasilState [SMethod r] ->
   Reader DrasilState (SClass r)
 mkClass s desc n i vs mths = do
@@ -65,12 +65,12 @@ mkClass s desc n i vs mths = do
     then docClass desc (f vs ms) 
     else f vs ms
 
-primaryClass :: (ProgramSym r) => String -> Label -> Maybe Label -> 
+primaryClass :: (OOProg r) => String -> Label -> Maybe Label -> 
   [CSStateVar r] -> Reader DrasilState [SMethod r] -> 
   Reader DrasilState (SClass r)
 primaryClass = mkClass Primary
 
-auxClass :: (ProgramSym r) => String -> Label -> Maybe Label -> 
+auxClass :: (OOProg r) => String -> Label -> Maybe Label -> 
   [CSStateVar r] -> Reader DrasilState [SMethod r] -> 
   Reader DrasilState (SClass r)
 auxClass = mkClass Auxiliary
@@ -83,7 +83,7 @@ auxClass = mkClass Auxiliary
 -- if m is current module and function is not exported, use GOOL's function for 
 --   calling a method on self. This assumes all private methods are dynamic, 
 --   which is true for this generator.
-fApp :: (ProgramSym r) => String -> String -> VSType r -> [SValue r] -> 
+fApp :: (OOProg r) => String -> String -> VSType r -> [SValue r] -> 
   NamedArgs r -> Reader DrasilState (SValue r)
 fApp m s t vl ns = do
   g <- ask
@@ -94,7 +94,7 @@ fApp m s t vl ns = do
 
 -- Logic similar to fApp above, but self case not required here 
 -- (because constructor will never be private)
-ctorCall :: (ProgramSym r) => String -> VSType r -> [SValue r] -> NamedArgs r 
+ctorCall :: (OOProg r) => String -> VSType r -> [SValue r] -> NamedArgs r 
   -> Reader DrasilState (SValue r)
 ctorCall m t vl ns = do
   g <- ask
@@ -103,7 +103,7 @@ ctorCall m t vl ns = do
     newObjMixedArgs t vl ns
 
 -- Logic similar to fApp above
-fAppInOut :: (ProgramSym r) => String -> String -> [SValue r] -> 
+fAppInOut :: (OOProg r) => String -> String -> [SValue r] -> 
   [SVariable r] -> [SVariable r] -> Reader DrasilState (MSStatement r)
 fAppInOut m n ins outs both = do
   g <- ask

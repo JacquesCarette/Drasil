@@ -10,7 +10,7 @@ import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
+  MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
   TypeElim(..), VariableSym(..), VariableElim(..), listOf, ValueSym(..), 
   Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
@@ -55,7 +55,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterBeginError, iterEndError, listAccessFunc, listSetFunc, stmt, loopStmt, 
   emptyStmt, assign, decrement, increment', increment1', decrement1, 
   listDecDef', objDecNew, objDecNewNoParams, print, closeFile, discardFileLine, 
-  stringListVals, stringListLists, returnState, valState, comment, throw, 
+  stringListVals, stringListLists, returnStmt, valStmt, comment, throw, 
   ifCond, ifExists, tryCatch, checkState, construct, param, method, getMethod, 
   setMethod, constructor, function, docFunc, stateVarDef, constVar, buildClass, 
   implementingClass, docClass, commentedClass, intClass, buildModule, 
@@ -101,6 +101,8 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   return = PC
   PC x >>= f = f x
+
+instance OOProg PythonCode
 
 instance ProgramSym PythonCode where
   type Program PythonCode = ProgData 
@@ -453,7 +455,7 @@ instance StatementElim PythonCode where
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
-  valState = G.valState Empty
+  valStmt = G.valStmt Empty
   multi = onStateList (onCodeList R.multiStmt)
 
 instance AssignStatement PythonCode where
@@ -480,7 +482,7 @@ instance DeclStatement PythonCode where
   constDecDef = varDecDef
   funcDecDef v ps r = onStateValue (mkStNoEnd . methodDoc) (zoom lensMStoVS v 
     >>= (\vr -> function (variableName vr) private dynamic 
-    (toState $ variableType vr) (map param ps) (oneLiner $ returnState r)))
+    (toState $ variableType vr) (map param ps) (oneLiner $ returnStmt r)))
 
 instance IOStatement PythonCode where
   print = pyOut False Nothing printFunc
@@ -494,9 +496,9 @@ instance IOStatement PythonCode where
   printFileStrLn f = printFileLn f . litString
 
   getInput = pyInput inputFunc
-  discardInput = valState inputFunc
+  discardInput = valStmt inputFunc
   getFileInput f = pyInput (objMethodCall string f "readline" [])
-  discardFileInput f = valState (objMethodCall string f "readline" [])
+  discardFileInput f = valStmt (objMethodCall string f "readline" [])
 
   openFileR f n = f &= funcApp "open" infile [n, litString "r"]
   openFileW f n = f &= funcApp "open" outfile [n, litString "w"]
@@ -527,7 +529,7 @@ instance ControlStatement PythonCode where
   break = toState $ mkStNoEnd R.break
   continue = toState $ mkStNoEnd R.continue
 
-  returnState = G.returnState Empty
+  returnStmt = G.returnStmt Empty
 
   throw = G.throw pyThrow Empty
 
@@ -556,7 +558,7 @@ instance ObserverPattern PythonCode where
     where obsList = valueOf $ observerListName `listOf` t
           index = var "observerIndex" int
           initv = litInt 0
-          notify = oneLiner $ valState $ at obsList (valueOf index) $. f
+          notify = oneLiner $ valStmt $ at obsList (valueOf index) $. f
 
 instance StrategyPattern PythonCode where
   runStrategy = G.runStrategy
@@ -810,7 +812,7 @@ pyClass n pn s vs fs = vcat [
 pyInOutCall :: (Label -> VSType PythonCode -> [SValue PythonCode] -> 
   SValue PythonCode) -> Label -> [SValue PythonCode] -> [SVariable PythonCode] 
   -> [SVariable PythonCode] -> MSStatement PythonCode
-pyInOutCall f n ins [] [] = valState $ f n void ins
+pyInOutCall f n ins [] [] = valStmt $ f n void ins
 pyInOutCall f n ins outs both = multiAssign rets [f n void (map valueOf both ++ 
   ins)]
   where rets = both ++ outs

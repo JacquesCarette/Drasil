@@ -27,8 +27,8 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   privDVar, pubDVar, ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
-  RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
+  ImportElim(..), PermElim(..), RenderBody(..), BodyElim, 
+  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..), 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
@@ -38,7 +38,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (body)
+import qualified GOOL.Drasil.RendererClasses as RC (body, block)
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStateVal, mkVal, dot, new, 
   elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
   bodyEnd, endStatement, commentStart, variableList, parameterList, 
@@ -184,7 +184,7 @@ instance RenderBlock JavaCode where
   multiBlock = G.multiBlock
 
 instance BlockElim JavaCode where
-  blockDoc = unJC
+  block = unJC
 
 instance TypeSym JavaCode where
   type Type JavaCode = TypeData

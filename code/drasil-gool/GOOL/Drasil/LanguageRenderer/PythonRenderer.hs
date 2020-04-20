@@ -26,8 +26,8 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
-  RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
+  ImportElim(..), PermElim(..), RenderBody(..), BodyElim, 
+  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..), 
   VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
@@ -37,7 +37,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (body)
+import qualified GOOL.Drasil.RendererClasses as RC (body, block)
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -169,7 +169,7 @@ instance RenderBlock PythonCode where
   multiBlock = G.multiBlock
 
 instance BlockElim PythonCode where
-  blockDoc = unPC
+  block = unPC
 
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData

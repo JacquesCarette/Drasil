@@ -69,7 +69,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym, 
   RenderFile(commentedMod), RenderBody(docBody), BodyElim(..), 
-  RenderBlock(docBlock), BlockElim(..), ImportSym(..), ImportElim(..), 
+  RenderBlock(docBlock), ImportSym(..), ImportElim(..), 
   PermElim(..), RenderType(..), InternalTypeElim(..), UnaryOpSym(UnaryOp), 
   BinaryOpSym(BinaryOp), OpElim(..), RenderOp(..), RenderVariable(varFromData),
   InternalVarElim(variableBind, variableDoc), 
@@ -90,6 +90,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
   RenderStatement(stmt, loopStmt, emptyStmt), InternalIOStmt(..), 
   MethodTypeSym(construct), RenderMethod(intFunc), 
   RenderClass(intClass, commentedClass), RenderMod(modFromData))
+import qualified GOOL.Drasil.RendererClasses as RC (BlockElim(..))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
@@ -132,7 +133,7 @@ block sts = docBlock $ onStateList (R.block . map statementDoc)
   (map S.stmt sts)
 
 multiBlock :: (RenderSym r) => [MSBlock r] -> MSBlock r
-multiBlock bs = docBlock $ onStateList vibcat $ map (onStateValue blockDoc) bs
+multiBlock bs = docBlock $ onStateList vibcat $ map (onStateValue RC.block) bs
 
 -- Types --
 
@@ -1091,7 +1092,7 @@ fileDoc :: (RenderSym r) => String -> (r (Module r) -> r (Block r)) ->
   r (Block r) -> FSModule r -> SFile r
 fileDoc ext topb botb = S.fileFromData (onStateValue (addExt ext) 
   getModuleName) . onStateValue (\m -> updateModuleDoc (\d -> emptyIfEmpty d 
-  (R.file (blockDoc $ topb m) d (blockDoc botb))) m)
+  (R.file (RC.block $ topb m) d (RC.block botb))) m)
 
 docMod :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> 
   SFile r

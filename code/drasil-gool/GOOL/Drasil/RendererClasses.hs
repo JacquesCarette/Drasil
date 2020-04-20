@@ -88,7 +88,7 @@ class RenderBlock r where
   multiBlock :: [MSBlock r] -> MSBlock r
 
 class BlockElim r where
-  blockDoc :: r (Block r) -> Doc
+  block :: r (Block r) -> Doc
 
 class RenderType r where
   typeFromData :: CodeType -> String -> Doc -> r (Type r)

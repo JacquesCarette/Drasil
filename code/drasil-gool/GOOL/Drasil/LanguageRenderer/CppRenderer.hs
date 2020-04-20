@@ -29,7 +29,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim(..), PermElim(..), RenderBody(..), BodyElim, 
-  RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
+  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..), 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
@@ -40,7 +40,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (body)
+import qualified GOOL.Drasil.RendererClasses as RC (body, block)
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -191,7 +191,7 @@ instance (Pair p) => RenderBlock (p CppSrcCode CppHdrCode) where
   multiBlock = pair1List multiBlock multiBlock
 
 instance (Pair p) => BlockElim (p CppSrcCode CppHdrCode) where
-  blockDoc b = blockDoc $ pfst b
+  block b = RC.block $ pfst b
 
 instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   type Type (p CppSrcCode CppHdrCode) = TypeData
@@ -1149,7 +1149,7 @@ instance RenderBlock CppSrcCode where
   multiBlock = G.multiBlock
 
 instance BlockElim CppSrcCode where
-  blockDoc = unCPPSC
+  block = unCPPSC
 
 instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
@@ -1810,7 +1810,7 @@ instance RenderBlock CppHdrCode where
   multiBlock = G.multiBlock
 
 instance BlockElim CppHdrCode where
-  blockDoc = unCPPHC
+  block = unCPPHC
 
 instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData

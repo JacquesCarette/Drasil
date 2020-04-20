@@ -73,7 +73,7 @@ import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym,
   RenderType(..), UnaryOpSym(UnaryOp), 
   BinaryOpSym(BinaryOp), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
   RenderVariable(varFromData),
-  InternalVarElim(variableBind, variableDoc), 
+  InternalVarElim(variableBind), 
   RenderValue(inputFunc, cast, valFromData), ValueElim(valuePrec, valueDoc),
   InternalIterator(iterBeginFunc, iterEndFunc), RenderFunction(funcFromData), 
   FunctionElim(functionDoc, functionType), RenderStatement(stmtFromData), 
@@ -93,7 +93,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
   RenderClass(intClass, commentedClass), RenderMod(modFromData))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
   PermElim(..), BodyElim(..), BlockElim(..), InternalTypeElim(..), 
-  OpElim(uOp, bOp))
+  OpElim(uOp, bOp), InternalVarElim(variable))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
@@ -458,11 +458,11 @@ classVar :: (RenderSym r) => (Doc -> Doc -> Doc) -> VSType r -> SVariable r ->
   SVariable r
 classVar f = on2StateValues (\c v -> classVarCheckStatic $ varFromData 
   (variableBind v) (getTypeString c ++ "." ++ variableName v) 
-  (variableType v) (f (RC.type' c) (variableDoc v)))
+  (variableType v) (f (RC.type' c) (RC.variable v)))
 
 objVar :: (RenderSym r) => SVariable r -> SVariable r -> SVariable r
 objVar = on2StateValues (\o v -> mkVar (variableName o ++ "." ++ variableName 
-  v) (variableType v) (R.objVar (variableDoc o) (variableDoc v)))
+  v) (variableType v) (R.objVar (RC.variable o) (RC.variable v)))
 
 objVarSelf :: (RenderSym r) => SVariable r -> SVariable r
 objVarSelf = S.objVar S.self
@@ -473,7 +473,7 @@ listVar n t = S.var n (S.listType t)
 arrayElem :: (RenderSym r) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = join $ on2StateValues (\i v -> mkStateVar (variableName v ++ 
   "[" ++ render (valueDoc i) ++ "]") (listInnerType $ toState $ variableType v) 
-  (variableDoc v <> brackets (valueDoc i))) i' v'
+  (RC.variable v <> brackets (valueDoc i))) i' v'
 
 iterVar :: (RenderSym r) => Label -> VSType r -> SVariable r
 iterVar n t = S.var n (iterator t)
@@ -514,7 +514,7 @@ pi :: (RenderSym r) => SValue r
 pi = mkStateVal S.double (text "Math.PI")
 
 valueOf :: (RenderSym r) => SVariable r -> SValue r
-valueOf = onStateValue (\v -> mkVal (variableType v) (variableDoc v))
+valueOf = onStateValue (\v -> mkVal (variableType v) (RC.variable v))
 
 arg :: (RenderSym r) => SValue r -> SValue r -> SValue r
 arg = on3StateValues (\s n args -> mkVal s (R.arg n args)) S.string
@@ -537,7 +537,7 @@ call :: (RenderSym r) => Doc -> Maybe Library -> Label -> VSType r ->
 call sep lib n t o pas nas = (\tp pargs nms nargs -> mkVal tp $ obDoc <> libDoc 
   <> text n <> parens (valueList pargs <+> (if null pas || null nas then empty 
   else comma) <+> hcat (intersperse (text ", ") (zipWith (\nm a -> 
-  variableDoc nm <> sep <> valueDoc a) nms nargs)))) <$> t <*> sequence pas <*> 
+  RC.variable nm <> sep <> valueDoc a) nms nargs)))) <$> t <*> sequence pas <*> 
   mapM fst nas <*> mapM snd nas
   where libDoc = maybe empty (text . (++ ".")) lib
         obDoc = fromMaybe empty o
@@ -550,7 +550,7 @@ namedArgError l = "Named arguments not supported in " ++ l
 
 selfFuncAppMixedArgs :: (RenderSym r) => Doc -> SVariable r -> MixedCall r
 selfFuncAppMixedArgs d slf n t vs ns = slf >>= (\s -> S.call Nothing n t 
-  (Just $ variableDoc s <> d) vs ns)
+  (Just $ RC.variable s <> d) vs ns)
 
 extFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
 extFuncAppMixedArgs l n t = S.call (Just l) n t Nothing
@@ -719,7 +719,7 @@ decrement1 v = v &= (S.valueOf v #- S.litInt 1)
 varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> SVariable r 
   -> MSStatement r
 varDec s d v' = onStateValue (\v -> mkSt (RC.perm (bind $ variableBind v) 
-  <+> RC.type' (variableType v) <+> variableDoc v)) (zoom lensMStoVS v')
+  <+> RC.type' (variableType v) <+> RC.variable v)) (zoom lensMStoVS v')
   where bind Static = s
         bind Dynamic = d
 
@@ -743,7 +743,7 @@ listDecDef' v vals = zoom lensMStoVS v >>= (\vr -> S.varDecDef (return vr)
 
 arrayDec :: (RenderSym r) => SValue r -> SVariable r -> MSStatement r
 arrayDec n vr = zoom lensMStoVS $ on3StateValues (\sz v it -> mkSt (RC.type' 
-  (variableType v) <+> variableDoc v <+> equals <+> new <+> RC.type' it <> 
+  (variableType v) <+> RC.variable v <+> equals <+> new <+> RC.type' it <> 
   brackets (valueDoc sz))) n vr (listInnerType $ onStateValue variableType vr)
 
 arrayDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
@@ -923,7 +923,7 @@ forEach :: (RenderSym r) => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r
   -> MSBody r -> MSStatement r
 forEach bStart bEnd forEachLabel inLbl e' v' = on3StateValues (\e v b -> 
   mkStNoEnd (vcat [forEachLabel <+> parens (RC.type' (variableType e) 
-    <+> variableDoc e <+> inLbl <+> valueDoc v) <+> bStart,
+    <+> RC.variable e <+> inLbl <+> valueDoc v) <+> bStart,
   indent $ RC.body b,
   bEnd])) (zoom lensMStoVS e') (zoom lensMStoVS v') 
 

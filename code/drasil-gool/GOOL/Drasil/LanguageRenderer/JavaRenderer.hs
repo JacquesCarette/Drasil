@@ -30,7 +30,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
-  RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
+  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
@@ -39,7 +39,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp)
+  type', uOp, bOp, variable)
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStateVal, mkVal, dot, new, 
   elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
   bodyEnd, endStatement, commentStart, variableList, parameterList, 
@@ -312,7 +312,7 @@ instance VariableElim JavaCode where
   
 instance InternalVarElim JavaCode where
   variableBind = varBind . unJC
-  variableDoc = varDoc . unJC
+  variable = varDoc . unJC
 
 instance RenderVariable JavaCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
@@ -875,7 +875,7 @@ jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $
 
 jConstDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 jConstDecDef v def = text "final" <+> RC.type' (variableType v) <+> 
-  variableDoc v <+> equals <+> valueDoc def
+  RC.variable v <+> equals <+> valueDoc def
 
 jThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (valueDoc 
@@ -921,7 +921,7 @@ jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n],
   wa]]
 
 jStringSplit :: (RenderSym r) => SVariable r -> SValue r -> VS Doc
-jStringSplit = on2StateValues (\vnew s -> variableDoc vnew <+> equals <+> new 
+jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+> new 
   <+> RC.type' (variableType vnew) <> parens (valueDoc s))
 
 jMethod :: (RenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)

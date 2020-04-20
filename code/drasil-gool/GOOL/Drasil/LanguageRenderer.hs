@@ -27,11 +27,11 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   VariableSym(Variable), VariableElim(..), ValueSym(..), 
   StatementSym(Statement), ScopeSym(Scope), ParameterSym(Parameter))
 import GOOL.Drasil.RendererClasses (RenderSym,
-  RenderVariable(..), InternalVarElim(..), 
+  RenderVariable(..),
   RenderValue(valFromData), ValueElim(..), RenderStatement(..),
   StatementElim(..), ScopeElim(..), ParamElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
-  InternalTypeElim(..))
+  InternalTypeElim(..), InternalVarElim(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
@@ -134,7 +134,7 @@ printFile fn f = f <> dot <> text fn
 -- Parameters --
 
 param :: (RenderSym r) => r (Variable r) -> Doc
-param v = RC.type' (variableType v) <+> variableDoc v
+param v = RC.type' (variableType v) <+> RC.variable v
 
 -- Method --
 
@@ -183,16 +183,16 @@ switch breakState v defBody cs =
 -- Statements --
 
 assign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-assign vr vl = variableDoc vr <+> equals <+> valueDoc vl
+assign vr vl = RC.variable vr <+> equals <+> valueDoc vl
 
 multiAssign :: (RenderSym r) => [r (Variable r)] -> [r (Value r)] -> Doc
 multiAssign vrs vls = variableList vrs <+> equals <+> valueList vls
 
 addAssign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-addAssign vr vl = variableDoc vr <+> text "+=" <+> valueDoc vl
+addAssign vr vl = RC.variable vr <+> text "+=" <+> valueDoc vl
 
 increment :: (RenderSym r) => r (Variable r) -> Doc
-increment v = variableDoc v <> text "++"
+increment v = RC.variable v <> text "++"
 
 listDec :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 listDec v n = space <> equals <+> new <+> RC.type' (variableType v) 
@@ -200,7 +200,7 @@ listDec v n = space <> equals <+> new <+> RC.type' (variableType v)
 
 constDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 constDecDef v def = text "const" <+> RC.type' (variableType v) <+> 
-  variableDoc v <+> equals <+> valueDoc def
+  RC.variable v <+> equals <+> valueDoc def
 
 return' :: (RenderSym r) => [r (Value r)] -> Doc
 return' vs = text "return" <+> valueList vs
@@ -358,7 +358,7 @@ valueList :: (RenderSym r) => [r (Value r)] -> Doc
 valueList = hicat (text ", ") . map valueDoc
 
 variableList :: (RenderSym r) => [r (Variable r)] -> Doc
-variableList = hicat (text ", ") . map variableDoc
+variableList = hicat (text ", ") . map RC.variable
 
 parameterList :: (RenderSym r) => [r (Parameter r)] -> Doc
 parameterList = hicat (text ", ") . map parameterDoc

@@ -150,7 +150,7 @@ class RenderVariable r where
     
 class InternalVarElim r where
   variableBind :: r (Variable r) -> Binding
-  variableDoc  :: r (Variable r) -> Doc
+  variable  :: r (Variable r) -> Doc
 
 class RenderValue r where
   inputFunc       :: SValue r

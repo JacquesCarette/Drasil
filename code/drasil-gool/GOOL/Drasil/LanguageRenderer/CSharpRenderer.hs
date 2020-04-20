@@ -29,7 +29,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
-  RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
+  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
@@ -38,7 +38,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp)
+  type', uOp, bOp, variable)
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStNoEnd, mkStateVal, mkVal, mkVar, 
   dot, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
   endStatement, commentStart, elseIfLabel, inLabel, variableList, appendToBody, 
@@ -308,7 +308,7 @@ instance VariableElim CSharpCode where
 
 instance InternalVarElim CSharpCode where
   variableBind = varBind . unCSC
-  variableDoc = varDoc . unCSC
+  variable = varDoc . unCSC
 
 instance RenderVariable CSharpCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
@@ -808,7 +808,7 @@ csObjVar o v = csObjVar' (variableBind v)
   where csObjVar' Static = error 
           "Cannot use objVar to access static variables through an object in C#"
         csObjVar' Dynamic = mkVar (variableName o ++ "." ++ variableName v) 
-          (variableType v) (R.objVar (variableDoc o) (variableDoc v))
+          (variableType v) (R.objVar (RC.variable o) (RC.variable v))
 
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
     -> VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode -> 

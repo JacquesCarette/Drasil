@@ -29,7 +29,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), 
-  RenderOp(..), RenderVariable(..), InternalVarElim(..), RenderValue(..), 
+  RenderOp(..), RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), 
   ValueElim(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..),
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
@@ -38,7 +38,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
-  type', uOp, bOp)
+  type', uOp, bOp, variable)
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -299,7 +299,7 @@ instance VariableElim PythonCode where
 
 instance InternalVarElim PythonCode where
   variableBind = varBind . unPC
-  variableDoc = varDoc . unPC
+  variable = varDoc . unPC
 
 instance RenderVariable PythonCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
@@ -615,7 +615,7 @@ instance MethodTypeSym PythonCode where
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
-  param = G.param variableDoc
+  param = G.param RC.variable
   pointerParam = param
 
 instance RenderParam PythonCode where
@@ -776,7 +776,7 @@ pyStringType :: (RenderSym r) => VSType r
 pyStringType = toState $ typeFromData String "str" (text "str")
 
 pyListDec :: (RenderSym r) => r (Variable r) -> Doc
-pyListDec v = variableDoc v <+> equals <+> RC.type' (variableType v)
+pyListDec v = RC.variable v <+> equals <+> RC.type' (variableType v)
 
 pyPrint :: (RenderSym r) => Bool -> r (Value r) -> r (Value r) -> r (Value r) 
   -> Doc
@@ -805,7 +805,7 @@ pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valueDoc errMsg)
 
 pyForEach :: (RenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
 pyForEach i lstVar b = vcat [
-  forLabel <+> variableDoc i <+> inLabel <+> valueDoc lstVar <> colon,
+  forLabel <+> RC.variable i <+> inLabel <+> valueDoc lstVar <> colon,
   indent $ RC.body b]
 
 pyWhile :: (RenderSym r) => r (Value r) -> r (Body r) -> Doc
@@ -822,14 +822,14 @@ pyTryCatch tryB catchB = vcat [
 
 pyListSlice :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r 
   -> SValue r -> VS Doc
-pyListSlice vn vo beg end step = (\vnew vold b e s -> variableDoc vnew <+> 
+pyListSlice vn vo beg end step = (\vnew vold b e s -> RC.variable vnew <+> 
   equals <+> valueDoc vold <> brackets (valueDoc b <> colon <> valueDoc e <> 
   colon <> valueDoc s)) <$> vn <*> vo <*> beg <*> end <*> step
 
 pyMethod :: (RenderSym r) => Label -> r (Variable r) -> [r (Parameter r)] ->
   r (Body r) -> Doc
 pyMethod n slf ps b = vcat [
-  text "def" <+> text n <> parens (variableDoc slf <> oneParam <> pms) <> colon,
+  text "def" <+> text n <> parens (RC.variable slf <> oneParam <> pms) <> colon,
   indent bodyD]
       where pms = parameterList ps
             oneParam = emptyIfEmpty pms $ text ", "

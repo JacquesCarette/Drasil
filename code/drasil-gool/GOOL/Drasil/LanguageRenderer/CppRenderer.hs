@@ -31,7 +31,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
-  RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
+  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
@@ -41,7 +41,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp)
+  type', uOp, bOp, variable)
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -351,7 +351,7 @@ instance (Pair p) => VariableElim (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => InternalVarElim (p CppSrcCode CppHdrCode) where
   variableBind v = variableBind $ pfst v
-  variableDoc v = variableDoc $ pfst v
+  variable v = RC.variable $ pfst v
 
 instance (Pair p) => RenderVariable (p CppSrcCode CppHdrCode) where
   varFromData b n t d = pair (varFromData b n (pfst t) d) 
@@ -1257,7 +1257,7 @@ instance VariableSym CppSrcCode where
   self = G.self
   classVar = on2StateValues (\c v -> classVarCheckStatic (varFromData 
     (variableBind v) (getTypeString c ++ "::" ++ variableName v) 
-    (variableType v) (cppClassVar (RC.type' c) (variableDoc v))))
+    (variableType v) (cppClassVar (RC.type' c) (RC.variable v))))
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $ 
     classVar (toState t) v) c getClassMap
@@ -1265,7 +1265,7 @@ instance VariableSym CppSrcCode where
     ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
   objVarSelf = onStateValue (\v -> mkVar ("this->"++variableName v) 
-    (variableType v) (text "this->" <> variableDoc v))
+    (variableType v) (text "this->" <> RC.variable v))
   listVar = G.listVar
   arrayElem i = G.arrayElem (litInt i)
   iterVar l t = mkStateVar l (iterator t) (text $ "(*" ++ l ++ ")")
@@ -1276,7 +1276,7 @@ instance VariableElim CppSrcCode where
 
 instance InternalVarElim CppSrcCode where
   variableBind = varBind . unCPPSC
-  variableDoc = varDoc . unCPPSC
+  variable = varDoc . unCPPSC
 
 instance RenderVariable CppSrcCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
@@ -1472,7 +1472,7 @@ instance DeclStatement CppSrcCode where
   listDec n = G.listDec cppListDecDoc (litInt n)
   listDecDef = G.listDecDef cppListDecDefDoc
   arrayDec n vr = zoom lensMStoVS $ on2StateValues (\sz v -> mkSt $ RC.type' 
-    (variableType v) <+> variableDoc v <> brackets (valueDoc sz)) 
+    (variableType v) <+> RC.variable v <> brackets (valueDoc sz)) 
     (litInt n :: SValue CppSrcCode) vr
   arrayDecDef vr vals = on2StateValues (\vdc vs -> mkSt $ statementDoc vdc <+> 
     equals <+> braces (valueList vs)) (arrayDec (toInteger $ length vals) vr) 
@@ -1919,7 +1919,7 @@ instance VariableElim CppHdrCode where
 
 instance InternalVarElim CppHdrCode where
   variableBind = varBind . unCPPHC
-  variableDoc = varDoc . unCPPHC
+  variable = varDoc . unCPPHC
 
 instance RenderVariable CppHdrCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
@@ -2469,7 +2469,7 @@ cppClassVar c v = c <> text "::" <> v
 
 cppLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 cppLambda ps ex = text "[]" <+> parens (hicat (text ",") $ zipWith (<+>) 
-  (map (RC.type' . variableType) ps) (map variableDoc ps)) <+> text "->" <+> 
+  (map (RC.type' . variableType) ps) (map RC.variable ps)) <+> text "->" <+> 
   bodyStart <> text "return" <+> valueDoc ex <> endStatement <> bodyEnd
 
 cppCast :: VSType CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
@@ -2515,15 +2515,15 @@ cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens
 cppInput :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ zoom lensMStoVS $ 
   on2StateValues (\v inFn -> mkSt $ vcat [valueDoc inFn <+> text ">>" <+> 
-  variableDoc v <> endStatement, valueDoc inFn <> dot <> 
+  RC.variable v <> endStatement, valueDoc inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]) vr i
 
 cppOpenFile :: (RenderSym r) => Label -> r (Variable r) -> r (Value r) -> Doc
-cppOpenFile mode f n = variableDoc f <> dot <> text "open" <> 
+cppOpenFile mode f n = RC.variable f <> dot <> text "open" <> 
   parens (valueDoc n <> comma <+> text mode)
 
 cppPointerParamDoc :: (RenderSym r) => r (Variable r) -> Doc
-cppPointerParamDoc v = RC.type' (variableType v) <+> text "&" <> variableDoc v
+cppPointerParamDoc v = RC.type' (variableType v) <+> text "&" <> RC.variable v
 
 cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode) 
   -> [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc
@@ -2540,7 +2540,7 @@ cppConstructor :: [MSParameter CppSrcCode] -> NamedArgs CppSrcCode ->
   MSBody CppSrcCode -> SMethod CppSrcCode
 cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals 
   bod -> if null is then G.constructor n ps is b else modify (setScope Pub) >> 
-  toState (methodFromData Pub (cppsMethod (zipWith (\ivar ival -> variableDoc 
+  toState (methodFromData Pub (cppsMethod (zipWith (\ivar ival -> RC.variable 
   ivar <> parens (valueDoc ival)) ivars ivals) n n tp pms bod))) <$> construct 
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom 
   lensMStoVS . snd) is <*> b)

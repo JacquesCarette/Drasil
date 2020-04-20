@@ -9,7 +9,7 @@ import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement,
   VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), 
-  InternalValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..),
+  RenderValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..),
   Iterator(..), StatementSym(..), AssignStatement(..), DeclStatement(..), 
   IOStatement(..), StringStatement(..), FuncAppStatement(..), 
   CommentStatement(..), ControlStatement(..), StatePattern(..), 
@@ -209,7 +209,7 @@ instance ValueExpression CodeInfo where
 
   notNull = execute1
   
-instance InternalValueExp CodeInfo where
+instance RenderValueExp CodeInfo where
   objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
   objMethodCallNoParams' n _ v = v >> addCurrModCall n
 

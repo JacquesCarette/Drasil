@@ -4,15 +4,15 @@ module GOOL.Drasil.RendererClasses (
   RenderSym, RenderFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), 
   RenderType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, 
-  BinaryOpSym(..), OpElim(..), RenderOp(..), InternalVariable(..), 
-  InternalVarElim(..), InternalValue(..), ValueElim(..), InternalGetSet(..), 
-  InternalListFunc(..), InternalIterator(..), InternalFunction(..), 
+  BinaryOpSym(..), OpElim(..), RenderOp(..), RenderVariable(..), 
+  InternalVarElim(..), RenderValue(..), ValueElim(..), InternalGetSet(..), 
+  InternalListFunc(..), InternalIterator(..), RenderFunction(..), 
   FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), InternalStatement(..), StatementElim(..), 
-  InternalScope(..), ScopeElim(..), MSMthdType, MethodTypeSym(..), 
-  InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..), 
-  InternalStateVar(..), StateVarElim(..), ParentSpec, InternalClass(..), 
-  ClassElim(..), InternalMod(..), ModuleElim(..), BlockCommentSym(..), 
+  InternalControlStmt(..), RenderStatement(..), StatementElim(..), 
+  RenderScope(..), ScopeElim(..), MSMthdType, MethodTypeSym(..), 
+  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
+  RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
+  ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..)
 ) where
 
@@ -23,7 +23,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), 
   MathConstant(..), VariableValue(..), CommandLineArgs(..), 
   NumericExpression(..), BooleanExpression(..), Comparison(..), 
-  ValueExpression(..), InternalValueExp(..), FunctionSym(..), GetSet(..), 
+  ValueExpression(..), RenderValueExp(..), FunctionSym(..), GetSet(..), 
   List(..), InternalList(..), Iterator(..), StatementSym(..), 
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..), 
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
@@ -40,17 +40,17 @@ class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r,
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
   Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
   NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, 
-  InternalValueExp r, GetSet r, List r, InternalList r, Iterator r, 
+  RenderValueExp r, GetSet r, List r, InternalList r, Iterator r, 
   StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, 
   VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, 
-  InternalClass r, ClassElim r, RenderFile r, InternalGetSet r, 
-  InternalListFunc r, InternalIterator r, InternalFunction r, FunctionElim r, 
-  InternalMethod r, MethodElim r, InternalMod r, ModuleElim r, OpElim r, 
-  RenderOp r, InternalParam r, ParamElim r, PermElim r, InternalScope r, 
+  RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, 
+  InternalListFunc r, InternalIterator r, RenderFunction r, FunctionElim r, 
+  RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, 
+  RenderOp r, RenderParam r, ParamElim r, PermElim r, RenderScope r, 
   ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, 
-  InternalStatement r, StatementElim r, InternalStateVar r, StateVarElim r, 
-  RenderType r, InternalTypeElim r, InternalValue r, ValueElim r, 
-  InternalVariable r, InternalVarElim r, ImportSym r, ImportElim r, 
+  RenderStatement r, StatementElim r, RenderStateVar r, StateVarElim r, 
+  RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, 
+  RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, 
   UnaryOpSym r, BinaryOpSym r, BlockCommentElim r) => RenderSym r
 
 class (BlockCommentSym r) => RenderFile r where
@@ -145,14 +145,14 @@ class RenderOp r where
   uOpFromData :: Int -> Doc -> VSUnOp r
   bOpFromData :: Int -> Doc -> VSBinOp r
   
-class InternalVariable r where
+class RenderVariable r where
   varFromData :: Binding -> String -> r (Type r) -> Doc -> r (Variable r)
     
 class InternalVarElim r where
   variableBind :: r (Variable r) -> Binding
   variableDoc  :: r (Variable r) -> Doc
 
-class InternalValue r where
+class RenderValue r where
   inputFunc       :: SValue r
   printFunc       :: SValue r
   printLnFunc     :: SValue r
@@ -187,7 +187,7 @@ class InternalIterator r where
   iterBeginFunc :: VSType r -> VSFunction r
   iterEndFunc   :: VSType r -> VSFunction r
 
-class InternalFunction r where
+class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r
   
 class FunctionElim r where
@@ -204,7 +204,7 @@ class InternalIOStmt r where
 class InternalControlStmt r where
   multiReturn :: [SValue r] -> MSStatement r
 
-class InternalStatement r where
+class RenderStatement r where
   stmt     :: MSStatement r -> MSStatement r
   loopStmt :: MSStatement r -> MSStatement r
 
@@ -216,7 +216,7 @@ class StatementElim r where
   statementDoc :: r (Statement r) -> Doc
   statementTerm :: r (Statement r) -> Terminator
 
-class InternalScope r where
+class RenderScope r where
   scopeFromData :: ScopeTag -> Doc -> r (Scope r)
   
 class ScopeElim r where
@@ -229,7 +229,7 @@ class (TypeSym r) => MethodTypeSym r where
   mType    :: VSType r -> MSMthdType r
   construct :: Label -> MSMthdType r
 
-class InternalParam r where
+class RenderParam r where
   paramFromData :: r (Variable r) -> Doc -> r (Parameter r)
   
 class ParamElim r where
@@ -238,7 +238,7 @@ class ParamElim r where
   parameterDoc  :: r (Parameter r) -> Doc
 
 class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) => 
-  InternalMethod r where
+  RenderMethod r where
   intMethod     :: Bool -> Label -> r (Scope r) -> r (Permanence r) -> 
     MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r
   intFunc       :: Bool -> Label -> r (Scope r) -> r (Permanence r) 
@@ -252,7 +252,7 @@ class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) =>
 class MethodElim r where
   methodDoc :: r (Method r) -> Doc
 
-class InternalStateVar r where
+class RenderStateVar r where
   stateVarFromData :: CS Doc -> CSStateVar r
 
 class StateVarElim r where  
@@ -260,7 +260,7 @@ class StateVarElim r where
 
 type ParentSpec = Doc
 
-class (BlockCommentSym r) => InternalClass r where
+class (BlockCommentSym r) => RenderClass r where
   intClass :: Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] 
     -> [SMethod r] -> SClass r
     
@@ -274,7 +274,7 @@ class (BlockCommentSym r) => InternalClass r where
 class ClassElim r where
   classDoc :: r (Class r) -> Doc
 
-class InternalMod r where
+class RenderMod r where
   modFromData :: String -> FS Doc -> FSModule r
   updateModuleDoc :: (Doc -> Doc) -> r (Module r) -> r (Module r)
   

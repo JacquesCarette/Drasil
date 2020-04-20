@@ -18,7 +18,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
-  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, 
+  selfFuncApp, extFuncApp, newObj, RenderValueExp(..), objMethodCall, 
   FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), 
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
   IOStatement(..), StringStatement(..), FuncAppStatement(..), 
@@ -31,14 +31,14 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
   RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
-  InternalVariable(..), InternalVarElim(..), InternalValue(..), ValueElim(..), 
+  RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
-  InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), 
-  InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), 
-  StatementElim(..), InternalScope(..), ScopeElim(..), MethodTypeSym(..), 
-  InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..), 
-  InternalStateVar(..), StateVarElim(..), ParentSpec, InternalClass(..), 
-  ClassElim(..), InternalMod(..), ModuleElim(..), BlockCommentSym(..), 
+  RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
+  StatementElim(..), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
+  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
+  RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
+  ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
@@ -351,7 +351,7 @@ instance (Pair p) => InternalVarElim (p CppSrcCode CppHdrCode) where
   variableBind v = variableBind $ pfst v
   variableDoc v = variableDoc $ pfst v
 
-instance (Pair p) => InternalVariable (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderVariable (p CppSrcCode CppHdrCode) where
   varFromData b n t d = pair (varFromData b n (pfst t) d) 
     (varFromData b n (psnd t) d)
 
@@ -456,7 +456,7 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
 
   notNull = pair1 notNull notNull
   
-instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderValue (p CppSrcCode CppHdrCode) where
   inputFunc = on2StateValues pair inputFunc inputFunc
   printFunc = on2StateValues pair printFunc printFunc
   printLnFunc = on2StateValues pair printLnFunc printLnFunc
@@ -476,7 +476,7 @@ instance (Pair p) => ValueElim (p CppSrcCode CppHdrCode) where
   valuePrec v = valuePrec $ pfst v
   valueDoc v = valueDoc $ pfst v
 
-instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderValueExp (p CppSrcCode CppHdrCode) where
   objMethodCallMixedArgs' f t o pas nas = pair2Vals3Lists
     (\tp ob pars ns nars -> objMethodCallMixedArgs' f tp ob pars (zip ns nars)) 
     (\tp ob pars ns nars -> objMethodCallMixedArgs' f tp ob pars (zip ns nars)) 
@@ -529,7 +529,7 @@ instance (Pair p) => InternalIterator (p CppSrcCode CppHdrCode) where
   iterBeginFunc = pair1 iterBeginFunc iterBeginFunc
   iterEndFunc = pair1 iterEndFunc iterEndFunc
 
-instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where  
+instance (Pair p) => RenderFunction (p CppSrcCode CppHdrCode) where  
   funcFromData d = pair1 (funcFromData d) (funcFromData d)
   
 instance (Pair p) => FunctionElim (p CppSrcCode CppHdrCode) where  
@@ -550,7 +550,7 @@ instance (Pair p) => InternalIOStmt (p CppSrcCode CppHdrCode) where
 instance (Pair p) => InternalControlStmt (p CppSrcCode CppHdrCode) where
   multiReturn = pair1List multiReturn multiReturn . map (zoom lensMStoVS)
     
-instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) where
   stmt = pair1 stmt stmt
   loopStmt = pair1 loopStmt loopStmt
 
@@ -715,7 +715,7 @@ instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
   private = pair private private
   public = pair public public
 
-instance (Pair p) => InternalScope (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderScope (p CppSrcCode CppHdrCode) where
   scopeFromData s d = pair (scopeFromData s d) (scopeFromData s d)
   
 instance (Pair p) => ScopeElim (p CppSrcCode CppHdrCode) where
@@ -731,7 +731,7 @@ instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   param = pair1 param param . zoom lensMStoVS
   pointerParam = pair1 pointerParam pointerParam . zoom lensMStoVS
 
-instance (Pair p) => InternalParam (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderParam (p CppSrcCode CppHdrCode) where
   paramFromData v d = pair (paramFromData (pfst v) d) (paramFromData (psnd v) d)
   
 instance (Pair p) => ParamElim (p CppSrcCode CppHdrCode) where
@@ -787,7 +787,7 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     (map (zoom lensMStoVS . snd) is) (map (zoom lensMStoVS . snd) os) 
     (map (zoom lensMStoVS . snd) bs)
   
-instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderMethod (p CppSrcCode CppHdrCode) where
   intMethod m n s p = pairValListVal
     (intMethod m n (pfst s) (pfst p)) (intMethod m n (psnd s) (psnd p))
   intFunc m n s p = pairValListVal
@@ -811,7 +811,7 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   constVar n s vr vl = pair2 (constVar n (pfst s)) (constVar n (psnd s))
     (zoom lensCStoVS vr) (zoom lensCStoVS vl)
 
-instance (Pair p) => InternalStateVar (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderStateVar (p CppSrcCode CppHdrCode) where
   stateVarFromData d = on2StateValues pair (stateVarFromData d) 
     (stateVarFromData d)
 
@@ -832,7 +832,7 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
 
   docClass d = pair1 (docClass d) (docClass d)
 
-instance (Pair p) => InternalClass (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderClass (p CppSrcCode CppHdrCode) where
   intClass n s i vs fs = pair2Lists 
     (intClass n (pfst s) (pfst i)) (intClass n (psnd s) (psnd i)) 
     vs (map (zoom lensCStoMS) fs)
@@ -852,7 +852,7 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   buildModule n is ms = pair2Lists (buildModule n is) (buildModule n is) 
     (map (zoom lensFStoMS) ms) . map (zoom lensFStoCS)
   
-instance (Pair p) => InternalMod (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderMod (p CppSrcCode CppHdrCode) where
   modFromData n d = on2StateValues pair (modFromData n d) (modFromData n d)
   updateModuleDoc f m = pair 
     (updateModuleDoc f $ pfst m) (updateModuleDoc f $ psnd m)
@@ -1276,7 +1276,7 @@ instance InternalVarElim CppSrcCode where
   variableBind = varBind . unCPPSC
   variableDoc = varDoc . unCPPSC
 
-instance InternalVariable CppSrcCode where
+instance RenderVariable CppSrcCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppSrcCode where
@@ -1362,7 +1362,7 @@ instance ValueExpression CppSrcCode where
 
   notNull v = v
 
-instance InternalValue CppSrcCode where
+instance RenderValue CppSrcCode where
   inputFunc = addIOStreamImport $ mkStateVal string (text "std::cin")
   printFunc = addIOStreamImport $ mkStateVal void (text "std::cout")
   printLnFunc = addIOStreamImport $ mkStateVal void (text "std::cout")
@@ -1379,7 +1379,7 @@ instance ValueElim CppSrcCode where
   valuePrec = valPrec . unCPPSC
   valueDoc = val . unCPPSC
 
-instance InternalValueExp CppSrcCode where
+instance RenderValueExp CppSrcCode where
   objMethodCallMixedArgs' = G.objMethodCall
   objMethodCallNoParams' = G.objMethodCallNoParams
 
@@ -1424,7 +1424,7 @@ instance InternalIterator CppSrcCode where
   iterBeginFunc t = func "begin" (iterator t) []
   iterEndFunc t = func "end" (iterator t) []
 
-instance InternalFunction CppSrcCode where
+instance RenderFunction CppSrcCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   
 instance FunctionElim CppSrcCode where
@@ -1440,7 +1440,7 @@ instance InternalIOStmt CppSrcCode where
 instance InternalControlStmt CppSrcCode where
   multiReturn _ = error $ G.multiReturnError cppName
 
-instance InternalStatement CppSrcCode where
+instance RenderStatement CppSrcCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
 
@@ -1584,7 +1584,7 @@ instance ScopeSym CppSrcCode where
   private = toCode (R.private, Priv)
   public = toCode (R.public, Pub)
 
-instance InternalScope CppSrcCode where
+instance RenderScope CppSrcCode where
   scopeFromData s d = toCode (d, s)
   
 instance ScopeElim CppSrcCode where
@@ -1600,7 +1600,7 @@ instance ParameterSym CppSrcCode where
   param = G.param R.param
   pointerParam = G.param cppPointerParamDoc
 
-instance InternalParam CppSrcCode where
+instance RenderParam CppSrcCode where
   paramFromData v d = on2CodeValues pd v (toCode d)
   
 instance ParamElim CppSrcCode where
@@ -1638,7 +1638,7 @@ instance MethodSym CppSrcCode where
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
-instance InternalMethod CppSrcCode where
+instance RenderMethod CppSrcCode where
   intMethod m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
     setCurrMain else id) >> (\c tp pms bod -> methodFromData 
     (snd $ unCPPSC s) $ cppsMethod [] n c tp pms bod) <$> getClassName <*> t 
@@ -1675,7 +1675,7 @@ instance StateVarSym CppSrcCode where
     snd s) (cppsStateVarDef n (text "const") <$> static <*> vr <*> vl)) 
     (zoom lensCStoVS v) (zoom lensCStoVS vl') (zoom lensCStoMS emptyStmt)
 
-instance InternalStateVar CppSrcCode where
+instance RenderStateVar CppSrcCode where
   stateVarFromData = error "stateVarFromData unimplemented in C++"
   
 instance StateVarElim CppSrcCode where
@@ -1689,7 +1689,7 @@ instance ClassSym CppSrcCode where
 
   docClass = G.docClass
 
-instance InternalClass CppSrcCode where
+instance RenderClass CppSrcCode where
   intClass n _ _ vs fs = modify (setClassName n) >> on2StateLists cppsClass 
     vs (map (zoom lensCStoMS) $ fs ++ [destructor vs])
 
@@ -1718,7 +1718,7 @@ instance ModuleSym CppSrcCode where
           mi = modImport
           li = langImport
 
-instance InternalMod CppSrcCode where
+instance RenderMod CppSrcCode where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
   
@@ -1919,7 +1919,7 @@ instance InternalVarElim CppHdrCode where
   variableBind = varBind . unCPPHC
   variableDoc = varDoc . unCPPHC
 
-instance InternalVariable CppHdrCode where
+instance RenderVariable CppHdrCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppHdrCode where
@@ -2003,7 +2003,7 @@ instance ValueExpression CppHdrCode where
 
   notNull _ = mkStateVal void empty
 
-instance InternalValue CppHdrCode where
+instance RenderValue CppHdrCode where
   inputFunc = mkStateVal void empty
   printFunc = mkStateVal void empty
   printLnFunc = mkStateVal void empty
@@ -2020,7 +2020,7 @@ instance ValueElim CppHdrCode where
   valuePrec = valPrec . unCPPHC
   valueDoc = val . unCPPHC
   
-instance InternalValueExp CppHdrCode where
+instance RenderValueExp CppHdrCode where
   objMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
   objMethodCallNoParams' _ _ _ = mkStateVal void empty
 
@@ -2063,7 +2063,7 @@ instance InternalIterator CppHdrCode where
   iterBeginFunc _ = funcFromData empty void
   iterEndFunc _ = funcFromData empty void
   
-instance InternalFunction CppHdrCode where
+instance RenderFunction CppHdrCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   
 instance FunctionElim CppHdrCode where
@@ -2079,7 +2079,7 @@ instance InternalIOStmt CppHdrCode where
 instance InternalControlStmt CppHdrCode where
   multiReturn _ = emptyStmt
 
-instance InternalStatement CppHdrCode where
+instance RenderStatement CppHdrCode where
   stmt = G.stmt
   loopStmt _ = emptyStmt
 
@@ -2191,7 +2191,7 @@ instance ScopeSym CppHdrCode where
   private = toCode (R.private, Priv)
   public = toCode (R.public, Pub)
 
-instance InternalScope CppHdrCode where
+instance RenderScope CppHdrCode where
   scopeFromData s d = toCode (d, s)
   
 instance ScopeElim CppHdrCode where
@@ -2208,7 +2208,7 @@ instance ParameterSym CppHdrCode where
   pointerParam = onStateValue (\v -> paramFromData v (cppPointerParamDoc v)) .
     zoom lensMStoVS
 
-instance InternalParam CppHdrCode where
+instance RenderParam CppHdrCode where
   paramFromData v d = on2CodeValues pd v (toCode d)
   
 instance ParamElim CppHdrCode where
@@ -2240,7 +2240,7 @@ instance MethodSym CppHdrCode where
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
-instance InternalMethod CppHdrCode where
+instance RenderMethod CppHdrCode where
   intMethod _ n s _ t ps _ = modify (setScope (snd $ unCPPHC s)) >> 
     on1StateValue1List (\tp pms -> methodFromData (snd $ unCPPHC s) $ 
     cpphMethod n tp pms) t ps
@@ -2269,7 +2269,7 @@ instance StateVarSym CppHdrCode where
     on2CodeValues (R.constVar empty endStatement) (bindDoc <$> static))
     (zoom lensCStoVS vr) (zoom lensCStoMS emptyStmt)
 
-instance InternalStateVar CppHdrCode where
+instance RenderStateVar CppHdrCode where
   stateVarFromData = error "stateVarFromData unimplemented in C++"
   
 instance StateVarElim CppHdrCode where
@@ -2283,7 +2283,7 @@ instance ClassSym CppHdrCode where
 
   docClass = G.docClass
 
-instance InternalClass CppHdrCode where
+instance RenderClass CppHdrCode where
   intClass n _ i vs mths = modify (setClassName n) >> on2StateLists 
     (\vars funcs -> cpphClass n i vars funcs public private) vs fs
     where fs = map (zoom lensCStoMS) $ mths ++ [destructor vs]
@@ -2312,7 +2312,7 @@ instance ModuleSym CppHdrCode where
           mi = modImport
           li = langImport
 
-instance InternalMod CppHdrCode where
+instance RenderMod CppHdrCode where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
   

@@ -31,14 +31,14 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), 
   RenderOp(..), RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), 
   ValueElim(valuePrec), InternalGetSet(..), InternalListFunc(..), InternalIterator(..),
-  RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
+  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(..), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
-  type', uOp, bOp, variable, value)
+  type', uOp, bOp, variable, value, function)
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -424,7 +424,7 @@ instance GetSet PythonCode where
 
 instance List PythonCode where
   listSize = on2StateValues (\f v -> mkVal (functionType f) 
-    (pyListSize (RC.value v) (functionDoc f))) listSizeFunc
+    (pyListSize (RC.value v) (RC.function f))) listSizeFunc
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess
@@ -460,7 +460,7 @@ instance RenderFunction PythonCode where
   
 instance FunctionElim PythonCode where
   functionType = onCodeValue fType
-  functionDoc = funcDoc . unPC
+  function = funcDoc . unPC
 
 instance InternalAssignStmt PythonCode where
   multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 

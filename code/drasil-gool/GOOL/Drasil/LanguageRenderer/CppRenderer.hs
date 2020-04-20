@@ -33,7 +33,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
   RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
-  RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
+  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(..), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
@@ -41,7 +41,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value)
+  type', uOp, bOp, variable, value, function)
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -536,7 +536,7 @@ instance (Pair p) => RenderFunction (p CppSrcCode CppHdrCode) where
   
 instance (Pair p) => FunctionElim (p CppSrcCode CppHdrCode) where  
   functionType f = pair (functionType $ pfst f) (functionType $ psnd f)
-  functionDoc f = functionDoc $ pfst f
+  function f = RC.function $ pfst f
 
 instance (Pair p) => InternalAssignStmt (p CppSrcCode CppHdrCode) where
   multiAssign vrs vls = pair2Lists multiAssign multiAssign 
@@ -1431,7 +1431,7 @@ instance RenderFunction CppSrcCode where
   
 instance FunctionElim CppSrcCode where
   functionType = onCodeValue fType
-  functionDoc = funcDoc . unCPPSC
+  function = funcDoc . unCPPSC
 
 instance InternalAssignStmt CppSrcCode where
   multiAssign _ _ = error $ G.multiAssignError cppName
@@ -2070,7 +2070,7 @@ instance RenderFunction CppHdrCode where
   
 instance FunctionElim CppHdrCode where
   functionType = onCodeValue fType
-  functionDoc = funcDoc . unCPPHC
+  function = funcDoc . unCPPHC
 
 instance InternalAssignStmt CppHdrCode where
   multiAssign _ _ = emptyStmt

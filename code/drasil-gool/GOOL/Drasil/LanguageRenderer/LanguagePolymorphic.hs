@@ -76,7 +76,7 @@ import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym,
   InternalVarElim(variableBind), 
   RenderValue(inputFunc, cast, valFromData), ValueElim(valuePrec),
   InternalIterator(iterBeginFunc, iterEndFunc), RenderFunction(funcFromData), 
-  FunctionElim(functionDoc, functionType), RenderStatement(stmtFromData), 
+  FunctionElim(functionType), RenderStatement(stmtFromData), 
   StatementElim(statementDoc, statementTerm), RenderScope(..), ScopeElim(..), 
   MethodTypeSym(mType), RenderParam(paramFromData), 
   RenderMethod(intMethod, commentedFunc), MethodElim(methodDoc), 
@@ -93,7 +93,8 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
   RenderClass(intClass, commentedClass), RenderMod(modFromData))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
   PermElim(..), BodyElim(..), BlockElim(..), InternalTypeElim(..), 
-  OpElim(uOp, bOp), InternalVarElim(variable), ValueElim(value))
+  OpElim(uOp, bOp), InternalVarElim(variable), ValueElim(value), 
+  FunctionElim(function))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
@@ -582,7 +583,7 @@ lambda f ps' ex' = sequence ps' >>= (\ps -> ex' >>= (\ex -> funcType (map
 
 objAccess :: (RenderSym r) => SValue r -> VSFunction r -> SValue r
 objAccess = on2StateValues (\v f -> mkVal (functionType f) (R.objAccess 
-  (RC.value v) (functionDoc f)))
+  (RC.value v) (RC.function f)))
 
 objMethodCall :: (RenderSym r) => Label -> VSType r -> SValue r -> [SValue r] 
   -> NamedArgs r -> SValue r

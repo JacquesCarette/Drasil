@@ -192,7 +192,7 @@ class RenderFunction r where
   
 class FunctionElim r where
   functionType :: r (Function r) -> r (Type r)
-  functionDoc :: r (Function r) -> Doc
+  function :: r (Function r) -> Doc
 
 class InternalAssignStmt r where
   multiAssign       :: [SVariable r] -> [SValue r] -> MSStatement r 

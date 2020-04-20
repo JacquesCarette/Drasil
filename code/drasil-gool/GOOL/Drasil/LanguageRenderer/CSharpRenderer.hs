@@ -25,7 +25,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), 
   ODEOptions(..), ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
+import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
   RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
@@ -123,12 +123,12 @@ instance ProgramSym CSharpCode where
 instance RenderSym CSharpCode
 
 instance FileSym CSharpCode where
-  type RenderFile CSharpCode = FileData
+  type File CSharpCode = FileData
   fileDoc m = modify (setFileType Combined) >> G.fileDoc csExt top bottom m
 
   docMod = G.docMod csExt
 
-instance InternalFile CSharpCode where
+instance RenderFile CSharpCode where
   top _ = toCode empty
   bottom = toCode empty
 

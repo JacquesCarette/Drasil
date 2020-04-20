@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 
 module GOOL.Drasil.RendererClasses (
-  RenderSym, InternalFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
+  RenderSym, RenderFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), 
   RenderType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, 
   BinaryOpSym(..), OpElim(..), RenderOp(..), InternalVariable(..), 
@@ -43,7 +43,7 @@ class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r,
   InternalValueExp r, GetSet r, List r, InternalList r, Iterator r, 
   StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, 
   VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, 
-  InternalClass r, ClassElim r, InternalFile r, InternalGetSet r, 
+  InternalClass r, ClassElim r, RenderFile r, InternalGetSet r, 
   InternalListFunc r, InternalIterator r, InternalFunction r, FunctionElim r, 
   InternalMethod r, MethodElim r, InternalMod r, ModuleElim r, OpElim r, 
   RenderOp r, InternalParam r, ParamElim r, PermElim r, InternalScope r, 
@@ -53,7 +53,7 @@ class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r,
   InternalVariable r, InternalVarElim r, ImportSym r, ImportElim r, 
   UnaryOpSym r, BinaryOpSym r, BlockCommentElim r) => RenderSym r
 
-class (BlockCommentSym r) => InternalFile r where
+class (BlockCommentSym r) => RenderFile r where
   -- top and bottom are only used for pre-processor guards for C++ header 
   -- files. FIXME: Remove them (generation of pre-processor guards can be 
   -- handled by fileDoc instead)

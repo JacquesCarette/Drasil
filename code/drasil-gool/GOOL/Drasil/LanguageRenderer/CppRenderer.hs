@@ -27,7 +27,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   MethodSym(..), pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, 
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
+import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
   RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
@@ -138,12 +138,12 @@ instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode)
 
 instance (Pair p) => FileSym (p CppSrcCode CppHdrCode) where
-  type RenderFile (p CppSrcCode CppHdrCode) = FileData
+  type File (p CppSrcCode CppHdrCode) = FileData
   fileDoc = pair1 fileDoc fileDoc
 
   docMod d a dt = pair1 (docMod d a dt) (docMod d a dt)
 
-instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
   
@@ -1094,12 +1094,12 @@ instance ProgramSym CppSrcCode where
 instance RenderSym CppSrcCode
   
 instance FileSym CppSrcCode where
-  type RenderFile CppSrcCode = FileData
+  type File CppSrcCode = FileData
   fileDoc m = modify (setFileType Source) >> G.fileDoc cppSrcExt top bottom m
 
   docMod = G.docMod cppSrcExt
 
-instance InternalFile CppSrcCode where
+instance RenderFile CppSrcCode where
   top _ = toCode empty
   bottom = toCode empty
 
@@ -1754,12 +1754,12 @@ instance Monad CppHdrCode where
 instance RenderSym CppHdrCode
 
 instance FileSym CppHdrCode where
-  type RenderFile CppHdrCode = FileData
+  type File CppHdrCode = FileData
   fileDoc m = modify (setFileType Header) >> G.fileDoc cppHdrExt top bottom m
   
   docMod = G.docMod cppHdrExt
 
-instance InternalFile CppHdrCode where
+instance RenderFile CppHdrCode where
   top = onCodeValue cpphtop
   bottom = toCode $ text "#endif"
   
@@ -2395,7 +2395,7 @@ cppODEMethod info opts = listInnerType (onStateValue variableType $ depVar info)
   in stepper (solveMethod opts))  
 
 cppODEFile :: (RenderSym r) => ODEInfo r ->
-  (r (RenderFile r), GOOLState)
+  (r (File r), GOOLState)
 cppODEFile info = (fl, s ^. goolState)
   where (fl, s) = runState odeFile initialFS
         olddv = depVar info

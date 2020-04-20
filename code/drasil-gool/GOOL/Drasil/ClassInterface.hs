@@ -52,10 +52,10 @@ class (FileSym r) => ProgramSym r where
   type Program r
   prog :: Label -> [SFile r] -> GSProgram r
 
-type SFile a = FS (a (RenderFile a))
+type SFile a = FS (a (File a))
 
 class (ModuleSym r) => FileSym r where 
-  type RenderFile r
+  type File r
   fileDoc :: FSModule r -> SFile r
 
   -- Module description, list of author names, date as a String, file to comment

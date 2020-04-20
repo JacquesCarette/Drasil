@@ -25,7 +25,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
+import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
   RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
   VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
@@ -116,12 +116,12 @@ instance ProgramSym PythonCode where
 instance RenderSym PythonCode
 
 instance FileSym PythonCode where
-  type RenderFile PythonCode = FileData
+  type File PythonCode = FileData
   fileDoc m = modify (setFileType Combined) >> G.fileDoc pyExt top bottom m
 
   docMod = G.docMod pyExt
 
-instance InternalFile PythonCode where
+instance RenderFile PythonCode where
   top _ = toCode empty
   bottom = toCode empty
   

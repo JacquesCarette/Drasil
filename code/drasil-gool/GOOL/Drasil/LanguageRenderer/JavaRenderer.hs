@@ -26,7 +26,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ParameterSym(..), MethodSym(..), pubMethod, initializer, StateVarSym(..), 
   privDVar, pubDVar, ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
+import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
   RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
@@ -131,12 +131,12 @@ instance ProgramSym JavaCode where
 instance RenderSym JavaCode
 
 instance FileSym JavaCode where
-  type RenderFile JavaCode = FileData 
+  type File JavaCode = FileData 
   fileDoc m = modify (setFileType Combined) >> G.fileDoc jExt top bottom m
 
   docMod = G.docMod jExt
 
-instance InternalFile JavaCode where
+instance RenderFile JavaCode where
   top _ = toCode empty
   bottom = toCode empty
   

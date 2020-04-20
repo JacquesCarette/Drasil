@@ -57,7 +57,7 @@ instance ProgramSym CodeInfo where
     toState $ toCode s
 
 instance FileSym CodeInfo where
-  type RenderFile CodeInfo = ()
+  type File CodeInfo = ()
   fileDoc = execute1
   
   docMod _ _ _ = execute1

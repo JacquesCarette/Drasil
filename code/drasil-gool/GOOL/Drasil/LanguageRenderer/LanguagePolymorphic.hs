@@ -42,7 +42,7 @@ import GOOL.Drasil.CodeType (CodeType(..), ClassName)
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
   CSStateVar, SClass, FSModule, NamedArgs, Initializers, MixedCall, 
-  MixedCtorCall, FileSym(RenderFile), BodySym(Body), bodyStatements, oneLiner, 
+  MixedCtorCall, FileSym(File), BodySym(Body), bodyStatements, oneLiner, 
   BlockSym(Block), PermanenceSym(..), TypeSym(Type, infile, outfile, iterator), 
   TypeElim(getType, getTypeString), VariableSym(Variable), 
   VariableElim(variableName, variableType), listOf, ValueSym(Value, valueType), 
@@ -68,7 +68,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   ControlStatement(returnStmt, ifCond, for, forRange, switch), 
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym, 
-  InternalFile(commentedMod), RenderBody(docBody), BodyElim(..), 
+  RenderFile(commentedMod), RenderBody(docBody), BodyElim(..), 
   RenderBlock(docBlock), BlockElim(..), ImportSym(..), ImportElim(..), 
   PermElim(..), RenderType(..), InternalTypeElim(..), UnaryOpSym(UnaryOp), 
   BinaryOpSym(BinaryOp), OpElim(..), RenderOp(..), InternalVariable(varFromData),
@@ -82,7 +82,7 @@ import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym,
   InternalStateVar(..), StateVarElim(..), ParentSpec, 
   InternalClass(inherit, implements, classFromData), ClassElim(classDoc),
   InternalMod(updateModuleDoc), ModuleElim(moduleDoc), BlockCommentSym(..), BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as S (InternalFile(fileFromData), 
+import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData), 
   RenderBody(multiBody), InternalValue(call), 
   InternalGetSet(getFunc, setFunc),
   InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc, listAccessFunc, 
@@ -1098,7 +1098,7 @@ docMod :: (RenderSym r) => String -> String -> [String] -> String -> SFile r ->
 docMod e d a dt = commentedMod (docComment $ moduleDox d a dt . addExt e <$> 
   getModuleName)
 
-fileFromData :: (RenderSym r) => (r (Module r) -> FilePath -> r (RenderFile r)) 
+fileFromData :: (RenderSym r) => (r (Module r) -> FilePath -> r (File r)) 
   -> FS FilePath -> FSModule r -> SFile r
 fileFromData f fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty 
   (moduleDoc mdl) then id else (if s ^. currMain && isSource (s ^. currFileType) then over lensFStoGS 

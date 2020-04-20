@@ -6,11 +6,9 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   fileType, listType, arrayType, listInnerType, obj, funcType, void, 
   runStrategy, listSlice, unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', 
   absOp, absOp', expOp, expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', 
-  asinOp, asinOp', acosOp, acosOp', atanOp, atanOp', csc, sec, cot, unExpr, 
-  unExpr', unExprNumDbl, typeUnExpr, powerPrec, multPrec, andPrec, orPrec, 
+  asinOp, asinOp', acosOp, acosOp', atanOp, atanOp', csc, sec, cot, powerPrec, multPrec, andPrec, orPrec, 
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
-  minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, binExpr, binExpr', 
-  binExprNumDbl', typeBinExpr, addmathImport, bindingError, var, staticVar, 
+  minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, addmathImport, bindingError, var, staticVar, 
   extVar, self, classVarCheckStatic, classVar, objVar, objVarSelf, listVar, 
   arrayElem, iterVar, litTrue, litFalse, litChar, litDouble, litFloat, litInt, 
   litString, litArray, litList, pi, valueOf, arg, argsList, inlineIf, call', 
@@ -70,8 +68,8 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
 import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym, 
   RenderFile(commentedMod), RenderBody(docBody),
   RenderBlock(docBlock), ImportSym(..),  
-  RenderType(..), UnaryOpSym(UnaryOp), 
-  BinaryOpSym(BinaryOp), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
+  RenderType(..),
+  RenderOp(..), 
   RenderVariable(varFromData),
   InternalVarElim(variableBind), 
   RenderValue(inputFunc, cast, valFromData), ValueElim(valuePrec),
@@ -93,7 +91,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
   RenderClass(intClass, commentedClass), RenderMod(modFromData))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
   PermElim(..), BodyElim(..), BlockElim(..), InternalTypeElim(..), 
-  OpElim(uOp, bOp), InternalVarElim(variable), ValueElim(value), 
+  InternalVarElim(variable), ValueElim(value), 
   FunctionElim(function), StatementElim(statement), ScopeElim(..), 
   MethodElim(..), StateVarElim(..), ClassElim(..), ModuleElim(..), 
   BlockCommentElim(..))
@@ -107,8 +105,8 @@ import qualified GOOL.Drasil.LanguageRenderer as R (file, module', block,
   print, stateVar, stateVarList, switch, assign, addAssign, increment, 
   constDecDef, return', comment, getTerm, var, extVar, self, arg, objVar, func, 
   listAccessFunc, objAccess, commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, mkStateVal, 
-  mkVal, mkStateVar, mkVar, mkStaticVar,)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
+  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar,)
 import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensMStoVS, lensVStoMS, currMain, currFileType, modifyReturnFunc, 
   modifyReturnFunc2, addFile, setMainMod, addLangImportVS, getLangImports, 
@@ -301,35 +299,6 @@ valOfOne t = t >>= (getVal . getType)
   where getVal Float = litFloat 1.0
         getVal _ = litDouble 1.0
 
-unOpDocD :: Doc -> Doc -> Doc
-unOpDocD op v = op <> parens v
-
-unOpDocD' :: Doc -> Doc -> Doc
-unOpDocD' op v = op <> v
-
-unExpr :: (RenderSym r) => VSUnOp r -> SValue r -> SValue r
-unExpr = on2StateValues (mkUnExpr unOpDocD)
-
-unExpr' :: (RenderSym r) => VSUnOp r -> SValue r -> SValue r
-unExpr' = on2StateValues (mkUnExpr unOpDocD')
-
-mkUnExpr :: (RenderSym r) => (Doc -> Doc -> Doc) -> r (UnaryOp r) -> 
-  r (Value r) -> r (Value r)
-mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
-
-unExprNumDbl :: (RenderSym r) => VSUnOp r -> SValue r -> SValue r
-unExprNumDbl u' v' = u' >>= (\u -> v' >>= (\v -> 
-  unExprCastFloat (valueType v) $ return $ mkUnExpr unOpDocD u v))
-
-unExprCastFloat :: (RenderSym r) => r (Type r) -> (SValue r -> SValue r)
-unExprCastFloat t = castType $ getType t
-  where castType Float = cast float
-        castType _ = id
-  
-typeUnExpr :: (RenderSym r) => VSUnOp r -> VSType r -> SValue r -> SValue r
-typeUnExpr = on3StateValues (\u t -> mkExpr (uOpPrec u) t . unOpDocD (RC.uOp u) 
-  . RC.value)
-
 -- Binary Operators --
 
 compEqualPrec :: (RenderSym r) => String -> VSBinOp r
@@ -394,41 +363,6 @@ andOp = andPrec "&&"
 
 orOp :: (RenderSym r) => VSBinOp r
 orOp = orPrec "||"
-
-binOpDocD :: Doc -> Doc -> Doc -> Doc
-binOpDocD op v1 v2 = v1 <+> op <+> v2
-
-binOpDocD' :: Doc -> Doc -> Doc -> Doc
-binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
-
-binExpr :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExpr = on3StateValues (\b v1 v2 -> mkExpr (bOpPrec b) (numType (valueType v1)
-  (valueType v2)) (binOpDocD (RC.bOp b) (exprParensL b v1 $ RC.value v1) 
-  (exprParensR b v2 $ RC.value v2)))
-
-binExpr' :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExpr' = on3StateValues (\b v1 v2 -> mkExpr 9 (numType (valueType v1) 
-  (valueType v2)) (binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)))
-
-binExprNumDbl' :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExprNumDbl' b' v1' v2' = b' >>= (\b -> v1' >>= (\v1 -> v2' >>= (\v2 -> 
-  let t1 = valueType v1
-      t2 = valueType v2
-  in binExprCastFloat t1 t2 $ return $ mkExpr 9 (numType t1 t2) 
-  (binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)))))
-
-binExprCastFloat :: (RenderSym r) => r (Type r) -> r (Type r) ->
-  (SValue r -> SValue r)
-binExprCastFloat t1 t2 = castType (getType t1) (getType t2)
-  where castType Float _ = cast float
-        castType _ Float = cast float
-        castType _ _ = id
-
-typeBinExpr :: (RenderSym r) => VSBinOp r -> VSType r -> SValue r -> SValue r 
-  -> SValue r
-typeBinExpr bod tp vl1 vl2 = (\b t v1 v2 -> mkExpr (bOpPrec b) t (binOpDocD 
-  (RC.bOp b) (exprParensL b v1 $ RC.value v1) (exprParensR b v2 $ RC.value v2)))
-  <$> bod <*> tp <*> vl1 <*> vl2 
 
 addmathImport :: VS a -> VS a
 addmathImport = (>>) $ modify (addLangImportVS "math")
@@ -1116,22 +1050,3 @@ fileFromData f fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty
 
 setEmpty :: (RenderSym r) => MSStatement r -> MSStatement r
 setEmpty = onStateValue (mkStmtNoEnd . RC.statement)
-
-numType :: (RenderSym r) => r (Type r) -> r (Type r) -> r (Type r)
-numType t1 t2 = numericType (getType t1) (getType t2)
-  where numericType Integer Integer = t1
-        numericType Float _ = t1
-        numericType _ Float = t2
-        numericType Double _ = t1
-        numericType _ Double = t2
-        numericType _ _ = error "Numeric types required for numeric expression"
-
-mkExpr :: (RenderSym r) => Int -> r (Type r) -> Doc -> r (Value r)
-mkExpr p = valFromData (Just p)
-
-exprParensL :: (RenderSym r) => r (BinaryOp r) -> r (Value r) -> (Doc -> Doc)
-exprParensL o v = if maybe False (< bOpPrec o) (valuePrec v) then parens else id
-
-exprParensR :: (RenderSym r) => r (BinaryOp r) -> r (Value r) -> (Doc -> Doc)
-exprParensR o v = if maybe False (<= bOpPrec o) (valuePrec v) then parens else 
-  id

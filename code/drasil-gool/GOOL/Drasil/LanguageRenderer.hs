@@ -11,11 +11,12 @@ module GOOL.Drasil.LanguageRenderer (
   package, file, module', class', multiStmt, block, body, print, printFile, 
   param, method, stateVar, constVar, stateVarList, switch, assign, multiAssign, 
   addAssign, increment, listDec, getTerm, return', comment, var, extVar, self, 
-  arg, classVar, objVar, constDecDef, func, cast, listAccessFunc, listSetFunc, 
-  objAccess, castObj, break, continue, static, dynamic, private, public, 
-  blockCmt, docCmt, commentedItem, addComments, functionDox, classDox, 
-  moduleDox, commentedMod, valueList, variableList, parameterList, 
-  prependToBody, appendToBody, surroundBody, getterName, setterName, intValue
+  arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, binOpDocD', 
+  constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, castObj, 
+  break, continue, static, dynamic, private, public, blockCmt, docCmt, 
+  commentedItem, addComments, functionDox, classDox, moduleDox, commentedMod, 
+  valueList, variableList, parameterList, prependToBody, appendToBody, 
+  surroundBody, getterName, setterName, intValue
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -36,7 +37,8 @@ import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 import Data.List (last)
 import Prelude hiding (break,print,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
-  space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, colon)
+  space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, colon,
+  comma)
 
 ----------------------------------------
 -- Syntax common to several renderers --
@@ -230,6 +232,18 @@ classVar c v = c <> dot <> v
 
 objVar :: Doc -> Doc ->  Doc
 objVar n1 n2 = n1 <> dot <> n2
+
+unOpDocD :: Doc -> Doc -> Doc
+unOpDocD op v = op <> parens v
+
+unOpDocD' :: Doc -> Doc -> Doc
+unOpDocD' op v = op <> v
+
+binOpDocD :: Doc -> Doc -> Doc -> Doc
+binOpDocD op v1 v2 = v1 <+> op <+> v2
+
+binOpDocD' :: Doc -> Doc -> Doc -> Doc
+binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
 
 -- Functions --
 

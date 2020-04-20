@@ -74,8 +74,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   getMethod, setMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
   buildClass, implementingClass, docClass, commentedClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
-  unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr, classVarCheckStatic)
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec,  
+  classVarCheckStatic)
+import GOOL.Drasil.LanguageRenderer.Constructors (unExpr, unExpr', typeUnExpr, 
+  binExpr, binExpr', typeBinExpr)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd, 
   ModData(..), md, updateMod, OpData(..), od, ParamData(..), pd, ProgData(..), 

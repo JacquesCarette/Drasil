@@ -27,10 +27,11 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   VariableSym(Variable), VariableElim(..), ValueSym(..), 
   StatementSym(Statement), ScopeSym(Scope), ParameterSym(Parameter))
 import GOOL.Drasil.RendererClasses (RenderSym,
-  InternalTypeElim(..), RenderVariable(..), InternalVarElim(..), 
+  RenderVariable(..), InternalVarElim(..), 
   RenderValue(valFromData), ValueElim(..), RenderStatement(..),
   StatementElim(..), ScopeElim(..), ParamElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..))
+import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
+  InternalTypeElim(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
@@ -133,14 +134,14 @@ printFile fn f = f <> dot <> text fn
 -- Parameters --
 
 param :: (RenderSym r) => r (Variable r) -> Doc
-param v = getTypeDoc (variableType v) <+> variableDoc v
+param v = RC.type' (variableType v) <+> variableDoc v
 
 -- Method --
 
 method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> 
   r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 method n s p t ps b = vcat [
-  scopeDoc s <+> RC.perm p <+> getTypeDoc t <+> text n <> 
+  scopeDoc s <+> RC.perm p <+> RC.type' t <+> text n <> 
     parens (parameterList ps) <+> lbrace,
   indent (RC.body b),
   rbrace]
@@ -194,11 +195,11 @@ increment :: (RenderSym r) => r (Variable r) -> Doc
 increment v = variableDoc v <> text "++"
 
 listDec :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-listDec v n = space <> equals <+> new <+> getTypeDoc (variableType v) 
+listDec v n = space <> equals <+> new <+> RC.type' (variableType v) 
   <> parens (valueDoc n)
 
 constDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-constDecDef v def = text "const" <+> getTypeDoc (variableType v) <+> 
+constDecDef v def = text "const" <+> RC.type' (variableType v) <+> 
   variableDoc v <+> equals <+> valueDoc def
 
 return' :: (RenderSym r) => [r (Value r)] -> Doc

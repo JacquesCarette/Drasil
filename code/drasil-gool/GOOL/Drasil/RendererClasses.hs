@@ -94,7 +94,7 @@ class RenderType r where
   typeFromData :: CodeType -> String -> Doc -> r (Type r)
 
 class InternalTypeElim r where
-  getTypeDoc :: r (Type r) -> Doc
+  type' :: r (Type r) -> Doc
 
 type VSUnOp a = VS (a (UnaryOp a))
 

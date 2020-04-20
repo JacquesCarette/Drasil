@@ -27,7 +27,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
-  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..), 
+  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
@@ -37,7 +37,8 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block)
+import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
+  type')
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStNoEnd, mkStateVal, mkVal, mkVar, 
   dot, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
   endStatement, commentStart, elseIfLabel, inLabel, variableList, appendToBody, 
@@ -205,7 +206,7 @@ instance RenderType CSharpCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim CSharpCode where
-  getTypeDoc = typeDoc . unCSC
+  type' = typeDoc . unCSC
 
 instance ControlBlock CSharpCode where
   solveODE info opts = modify (addLibImport "Microsoft.Research.Oslo" . 
@@ -732,13 +733,13 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
   valueType vl) tp vl) t v
   where csCast' Double String _ _ = funcApp "Double.Parse" double [v]
         csCast' Float String _ _ = funcApp "Single.Parse" float [v]
-        csCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (getTypeDoc tp)) 
+        csCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' tp)) 
           (valueDoc vl))
 
 csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
   MSStatement r
 csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
-  getTypeDoc (variableType vr) <+> text (variableName vr) <> parens 
+  RC.type' (variableType vr) <+> text (variableName vr) <> parens 
   (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd) 
   (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnStmt r)
 

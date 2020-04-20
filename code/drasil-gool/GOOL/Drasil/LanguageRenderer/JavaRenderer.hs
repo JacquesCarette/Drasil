@@ -28,7 +28,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
-  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..), 
+  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
@@ -38,7 +38,8 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block)
+import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
+  type')
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStateVal, mkVal, dot, new, 
   elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
   bodyEnd, endStatement, commentStart, variableList, parameterList, 
@@ -212,7 +213,7 @@ instance RenderType JavaCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim JavaCode where
-  getTypeDoc = typeDoc . unJC
+  type' = typeDoc . unJC
 
 instance ControlBlock JavaCode where
   solveODE info opts = let (fls, s) = jODEFiles info 
@@ -869,11 +870,11 @@ jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $
   valueType vl) tp vl) t v
   where jCast' Double String _ _ = funcApp "Double.parseDouble" double [v]
         jCast' Float String _ _ = funcApp "Float.parseFloat" float [v]
-        jCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (getTypeDoc 
+        jCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' 
           tp)) (valueDoc vl))
 
 jConstDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-jConstDecDef v def = text "final" <+> getTypeDoc (variableType v) <+> 
+jConstDecDef v def = text "final" <+> RC.type' (variableType v) <+> 
   variableDoc v <+> equals <+> valueDoc def
 
 jThrowDoc :: (RenderSym r) => r (Value r) -> Doc
@@ -921,12 +922,12 @@ jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n],
 
 jStringSplit :: (RenderSym r) => SVariable r -> SValue r -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> variableDoc vnew <+> equals <+> new 
-  <+> getTypeDoc (variableType vnew) <> parens (valueDoc s))
+  <+> RC.type' (variableType vnew) <> parens (valueDoc s))
 
 jMethod :: (RenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
-  scopeDoc s <+> RC.perm p <+> getTypeDoc t <+> text n <> 
+  scopeDoc s <+> RC.perm p <+> RC.type' t <+> text n <> 
     parens (parameterList ps) <+> emptyIfNull es (text "throws" <+> 
     text (intercalate ", " (sort es))) <+> lbrace,
   indent $ RC.body b,

@@ -27,7 +27,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
-  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..), 
+  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
@@ -37,7 +37,8 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block)
+import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
+  type')
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -198,7 +199,7 @@ instance RenderType PythonCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim PythonCode where
-  getTypeDoc = typeDoc . unPC
+  type' = typeDoc . unPC
 
 instance ControlBlock PythonCode where
   solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
@@ -398,7 +399,7 @@ instance RenderValue PythonCode where
   printFileFunc _ = mkStateVal void empty
   printFileLnFunc _ = mkStateVal void empty
   
-  cast = on2StateValues (\t -> mkVal t . R.castObj (getTypeDoc t) . valueDoc)
+  cast = on2StateValues (\t -> mkVal t . R.castObj (RC.type' t) . valueDoc)
 
   call = G.call equals
 
@@ -775,7 +776,7 @@ pyStringType :: (RenderSym r) => VSType r
 pyStringType = toState $ typeFromData String "str" (text "str")
 
 pyListDec :: (RenderSym r) => r (Variable r) -> Doc
-pyListDec v = variableDoc v <+> equals <+> getTypeDoc (variableType v)
+pyListDec v = variableDoc v <+> equals <+> RC.type' (variableType v)
 
 pyPrint :: (RenderSym r) => Bool -> r (Value r) -> r (Value r) -> r (Value r) 
   -> Doc

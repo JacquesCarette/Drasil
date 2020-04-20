@@ -70,7 +70,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
 import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym, 
   RenderFile(commentedMod), RenderBody(docBody),
   RenderBlock(docBlock), ImportSym(..),  
-  RenderType(..), InternalTypeElim(..), UnaryOpSym(UnaryOp), 
+  RenderType(..), UnaryOpSym(UnaryOp), 
   BinaryOpSym(BinaryOp), OpElim(..), RenderOp(..), RenderVariable(varFromData),
   InternalVarElim(variableBind, variableDoc), 
   RenderValue(inputFunc, cast, valFromData), ValueElim(valuePrec, valueDoc),
@@ -91,7 +91,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
   MethodTypeSym(construct), RenderMethod(intFunc), 
   RenderClass(intClass, commentedClass), RenderMod(modFromData))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
-  PermElim(..), BodyElim(..), BlockElim(..))
+  PermElim(..), BodyElim(..), BlockElim(..), InternalTypeElim(..))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
@@ -161,11 +161,11 @@ fileType = toState $ typeFromData File "File" (text "File")
 
 listType :: (RenderSym r) => String -> VSType r -> VSType r
 listType lst = onStateValue (\t -> typeFromData (List (getType t)) (lst ++ "<" 
-  ++ getTypeString t ++ ">") (text lst <> angles (getTypeDoc t)))
+  ++ getTypeString t ++ ">") (text lst <> angles (RC.type' t)))
 
 arrayType :: (RenderSym r) => VSType r -> VSType r
 arrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
-  (getTypeString t ++ "[]") (getTypeDoc t <> brackets empty)) 
+  (getTypeString t ++ "[]") (RC.type' t <> brackets empty)) 
 
 listInnerType :: (RenderSym r) => VSType r -> VSType r
 listInnerType t = t >>= (convType . getInnerType . getType)
@@ -456,7 +456,7 @@ classVar :: (RenderSym r) => (Doc -> Doc -> Doc) -> VSType r -> SVariable r ->
   SVariable r
 classVar f = on2StateValues (\c v -> classVarCheckStatic $ varFromData 
   (variableBind v) (getTypeString c ++ "." ++ variableName v) 
-  (variableType v) (f (getTypeDoc c) (variableDoc v)))
+  (variableType v) (f (RC.type' c) (variableDoc v)))
 
 objVar :: (RenderSym r) => SVariable r -> SVariable r -> SVariable r
 objVar = on2StateValues (\o v -> mkVar (variableName o ++ "." ++ variableName 
@@ -505,7 +505,7 @@ litArray t es = sequence es >>= (\elems -> mkStateVal (S.arrayType t)
 
 litList :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] -> 
   SValue r
-litList f t = on1StateValue1List (\lt es -> mkVal lt (new <+> getTypeDoc lt <+> 
+litList f t = on1StateValue1List (\lt es -> mkVal lt (new <+> RC.type' lt <+> 
   braces (valueList es))) (f t)
 
 pi :: (RenderSym r) => SValue r
@@ -717,7 +717,7 @@ decrement1 v = v &= (S.valueOf v #- S.litInt 1)
 varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> SVariable r 
   -> MSStatement r
 varDec s d v' = onStateValue (\v -> mkSt (RC.perm (bind $ variableBind v) 
-  <+> getTypeDoc (variableType v) <+> variableDoc v)) (zoom lensMStoVS v')
+  <+> RC.type' (variableType v) <+> variableDoc v)) (zoom lensMStoVS v')
   where bind Static = s
         bind Dynamic = d
 
@@ -740,8 +740,8 @@ listDecDef' v vals = zoom lensMStoVS v >>= (\vr -> S.varDecDef (return vr)
   (S.litList (listInnerType $ return $ variableType vr) vals))
 
 arrayDec :: (RenderSym r) => SValue r -> SVariable r -> MSStatement r
-arrayDec n vr = zoom lensMStoVS $ on3StateValues (\sz v it -> mkSt (getTypeDoc 
-  (variableType v) <+> variableDoc v <+> equals <+> new <+> getTypeDoc it <> 
+arrayDec n vr = zoom lensMStoVS $ on3StateValues (\sz v it -> mkSt (RC.type' 
+  (variableType v) <+> variableDoc v <+> equals <+> new <+> RC.type' it <> 
   brackets (valueDoc sz))) n vr (listInnerType $ onStateValue variableType vr)
 
 arrayDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
@@ -920,7 +920,7 @@ forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?<
 forEach :: (RenderSym r) => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r 
   -> MSBody r -> MSStatement r
 forEach bStart bEnd forEachLabel inLbl e' v' = on3StateValues (\e v b -> 
-  mkStNoEnd (vcat [forEachLabel <+> parens (getTypeDoc (variableType e) 
+  mkStNoEnd (vcat [forEachLabel <+> parens (RC.type' (variableType e) 
     <+> variableDoc e <+> inLbl <+> valueDoc v) <+> bStart,
   indent $ RC.body b,
   bEnd])) (zoom lensMStoVS e') (zoom lensMStoVS v') 
@@ -994,7 +994,7 @@ function n s p t = S.intFunc False n s p (mType t)
 mainFunction :: (RenderSym r) => VSType r -> Label -> MSBody r -> SMethod r
 mainFunction s n = S.intFunc True n public static (mType S.void)
   [S.param (S.var "args" (onStateValue (\argT -> typeFromData (List String) 
-  (render (getTypeDoc argT) ++ "[]") (getTypeDoc argT <> text "[]")) s))]
+  (render (RC.type' argT) ++ "[]") (RC.type' argT <> text "[]")) s))]
   
 docFuncRepr :: (RenderSym r) => String -> [String] -> [String] -> SMethod r -> 
   SMethod r

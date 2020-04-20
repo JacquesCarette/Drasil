@@ -29,7 +29,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
-  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..), 
+  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
@@ -40,7 +40,8 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block)
+import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
+  type')
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -219,7 +220,7 @@ instance (Pair p) => RenderType (p CppSrcCode CppHdrCode) where
   typeFromData t s d = pair (typeFromData t s d) (typeFromData t s d)
 
 instance (Pair p) => InternalTypeElim (p CppSrcCode CppHdrCode) where
-  getTypeDoc s = getTypeDoc $ pfst s
+  type' s = RC.type' $ pfst s
 
 instance (Pair p) => ControlBlock (p CppSrcCode CppHdrCode) where
   solveODE info opts = do
@@ -1180,7 +1181,7 @@ instance RenderType CppSrcCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim CppSrcCode where
-  getTypeDoc = typeDoc . unCPPSC
+  type' = typeDoc . unCPPSC
 
 instance ControlBlock CppSrcCode where
   solveODE info opts = let (fl, s) = cppODEFile info
@@ -1256,7 +1257,7 @@ instance VariableSym CppSrcCode where
   self = G.self
   classVar = on2StateValues (\c v -> classVarCheckStatic (varFromData 
     (variableBind v) (getTypeString c ++ "::" ++ variableName v) 
-    (variableType v) (cppClassVar (getTypeDoc c) (variableDoc v))))
+    (variableType v) (cppClassVar (RC.type' c) (variableDoc v))))
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $ 
     classVar (toState t) v) c getClassMap
@@ -1470,7 +1471,7 @@ instance DeclStatement CppSrcCode where
   varDecDef = G.varDecDef 
   listDec n = G.listDec cppListDecDoc (litInt n)
   listDecDef = G.listDecDef cppListDecDefDoc
-  arrayDec n vr = zoom lensMStoVS $ on2StateValues (\sz v -> mkSt $ getTypeDoc 
+  arrayDec n vr = zoom lensMStoVS $ on2StateValues (\sz v -> mkSt $ RC.type' 
     (variableType v) <+> variableDoc v <> brackets (valueDoc sz)) 
     (litInt n :: SValue CppSrcCode) vr
   arrayDecDef vr vals = on2StateValues (\vdc vs -> mkSt $ statementDoc vdc <+> 
@@ -1843,7 +1844,7 @@ instance RenderType CppHdrCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim CppHdrCode where
-  getTypeDoc = typeDoc . unCPPHC
+  type' = typeDoc . unCPPHC
 
 instance ControlBlock CppHdrCode where
   solveODE info _ = let (fl, s) = cppODEFile info
@@ -2456,11 +2457,11 @@ cppOutfileType = addFStreamImport $ typeFromData File "ofstream"
 
 cppArrayType :: (RenderSym r) => VSType r -> VSType r
 cppArrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
-  (getTypeString t) (getTypeDoc t))
+  (getTypeString t) (RC.type' t))
 
 cppIterType :: (RenderSym r) => VSType r -> VSType r
 cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t)) 
-  (getTypeString t ++ "::iterator") (text "std::" <> getTypeDoc t <> text 
+  (getTypeString t ++ "::iterator") (text "std::" <> RC.type' t <> text 
   "::iterator"))
 
 cppClassVar :: Doc -> Doc -> Doc
@@ -2468,7 +2469,7 @@ cppClassVar c v = c <> text "::" <> v
 
 cppLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 cppLambda ps ex = text "[]" <+> parens (hicat (text ",") $ zipWith (<+>) 
-  (map (getTypeDoc . variableType) ps) (map variableDoc ps)) <+> text "->" <+> 
+  (map (RC.type' . variableType) ps) (map variableDoc ps)) <+> text "->" <+> 
   bodyStart <> text "return" <+> valueDoc ex <> endStatement <> bodyEnd
 
 cppCast :: VSType CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
@@ -2476,7 +2477,7 @@ cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $
   valueType vl) tp vl) t v
   where cppCast' Double String _ _ = funcApp "std::stod" double [v]
         cppCast' Float String _ _ = funcApp "std::stof" float [v]
-        cppCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (getTypeDoc tp)) 
+        cppCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' tp)) 
           (valueDoc vl))
 
 cppListSetDoc :: Doc -> Doc -> Doc
@@ -2522,7 +2523,7 @@ cppOpenFile mode f n = variableDoc f <> dot <> text "open" <>
   parens (valueDoc n <> comma <+> text mode)
 
 cppPointerParamDoc :: (RenderSym r) => r (Variable r) -> Doc
-cppPointerParamDoc v = getTypeDoc (variableType v) <+> text "&" <> variableDoc v
+cppPointerParamDoc v = RC.type' (variableType v) <+> text "&" <> variableDoc v
 
 cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode) 
   -> [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc
@@ -2532,7 +2533,7 @@ cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $
   indent (RC.body b),
   bodyEnd]
   where ttype | isDtor n = empty
-              | otherwise = getTypeDoc t
+              | otherwise = RC.type' t
         initList = hicat (text ", ") is
 
 cppConstructor :: [MSParameter CppSrcCode] -> NamedArgs CppSrcCode -> 
@@ -2547,12 +2548,12 @@ cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals
 cppsFunction :: (RenderSym r) => Label -> r (Type r) -> [r (Parameter r)] -> 
   r (Body r) -> Doc
 cppsFunction n t ps b = vcat [
-  getTypeDoc t <+> text n <> parens (parameterList ps) <+> bodyStart,
+  RC.type' t <+> text n <> parens (parameterList ps) <+> bodyStart,
   indent (RC.body b),
   bodyEnd]
 
 cpphMethod :: (RenderSym r) => Label -> r (Type r) -> [r (Parameter r)] -> Doc
-cpphMethod n t ps = (if isDtor n then empty else getTypeDoc t) <+> text n 
+cpphMethod n t ps = (if isDtor n then empty else RC.type' t) <+> text n 
   <> parens (parameterList ps) <> endStatement
 
 cppCommentedFunc :: (RenderSym r) => FileType -> MS (r (BlockComment r)) -> 

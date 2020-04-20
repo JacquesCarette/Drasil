@@ -26,11 +26,11 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   BodySym(Body), PermanenceSym(Permanence), TypeSym(Type), TypeElim(..), 
   VariableSym(Variable), VariableElim(..), ValueSym(..), 
   StatementSym(Statement), ScopeSym(Scope), ParameterSym(Parameter))
-import GOOL.Drasil.RendererClasses (RenderSym, PermElim(..), 
+import GOOL.Drasil.RendererClasses (RenderSym,
   InternalTypeElim(..), RenderVariable(..), InternalVarElim(..), 
   RenderValue(valFromData), ValueElim(..), RenderStatement(..),
   StatementElim(..), ScopeElim(..), ParamElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..))
+import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
@@ -140,7 +140,7 @@ param v = getTypeDoc (variableType v) <+> variableDoc v
 method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> 
   r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 method n s p t ps b = vcat [
-  scopeDoc s <+> permDoc p <+> getTypeDoc t <+> text n <> 
+  scopeDoc s <+> RC.perm p <+> getTypeDoc t <+> text n <> 
     parens (parameterList ps) <+> lbrace,
   indent (RC.body b),
   rbrace]

@@ -73,7 +73,7 @@ class ImportElim r where
   import' :: r (Import r) -> Doc
 
 class PermElim r where
-  permDoc :: r (Permanence r) -> Doc
+  perm :: r (Permanence r) -> Doc
   binding :: r (Permanence r) -> Binding
 
 class RenderBody r where

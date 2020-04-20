@@ -27,7 +27,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   privDVar, pubDVar, ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
-  ImportElim, PermElim(..), RenderBody(..), BodyElim, 
+  ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..), 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
@@ -38,7 +38,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (import', body, block)
+import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block)
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStateVal, mkVal, dot, new, 
   elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
   bodyEnd, endStatement, commentStart, variableList, parameterList, 
@@ -159,7 +159,7 @@ instance PermanenceSym JavaCode where
   dynamic = toCode R.dynamic
 
 instance PermElim JavaCode where
-  permDoc = unJC
+  perm = unJC
   binding = error $ bindingError jName
 
 instance BodySym JavaCode where
@@ -693,7 +693,7 @@ instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
-  constVar _ = G.constVar (permDoc (static :: JavaCode (Permanence JavaCode)))
+  constVar _ = G.constVar (RC.perm (static :: JavaCode (Permanence JavaCode)))
 
 instance RenderStateVar JavaCode where
   stateVarFromData = onStateValue toCode
@@ -926,7 +926,7 @@ jStringSplit = on2StateValues (\vnew s -> variableDoc vnew <+> equals <+> new
 jMethod :: (RenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
-  scopeDoc s <+> permDoc p <+> getTypeDoc t <+> text n <> 
+  scopeDoc s <+> RC.perm p <+> getTypeDoc t <+> text n <> 
     parens (parameterList ps) <+> emptyIfNull es (text "throws" <+> 
     text (intercalate ", " (sort es))) <+> lbrace,
   indent $ RC.body b,

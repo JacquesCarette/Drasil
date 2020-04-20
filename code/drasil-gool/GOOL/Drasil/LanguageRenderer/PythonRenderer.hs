@@ -26,7 +26,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
-  ImportElim, PermElim(..), RenderBody(..), BodyElim, 
+  ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..), 
   VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
@@ -37,7 +37,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (import', body, block)
+import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block)
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -144,7 +144,7 @@ instance PermanenceSym PythonCode where
   dynamic = toCode R.dynamic
 
 instance PermElim PythonCode where
-  permDoc = unPC
+  perm = unPC
   binding = error $ bindingError pyName
 
 instance BodySym PythonCode where
@@ -672,7 +672,7 @@ instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ = toState (toCode empty)
   stateVarDef _ = G.stateVarDef
-  constVar _ = G.constVar (permDoc 
+  constVar _ = G.constVar (RC.perm 
     (static :: PythonCode (Permanence PythonCode)))
 
 instance RenderStateVar PythonCode where

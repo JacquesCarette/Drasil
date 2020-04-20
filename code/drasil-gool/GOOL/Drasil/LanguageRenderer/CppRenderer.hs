@@ -28,7 +28,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
-  ImportElim, PermElim(..), RenderBody(..), BodyElim, 
+  ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim(..), 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
@@ -40,7 +40,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
-import qualified GOOL.Drasil.RendererClasses as RC (import', body, block)
+import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block)
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -166,7 +166,7 @@ instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
   dynamic = pair dynamic dynamic
 
 instance (Pair p) => PermElim (p CppSrcCode CppHdrCode) where
-  permDoc p = permDoc $ pfst p
+  perm p = RC.perm $ pfst p
   binding p = binding $ pfst p
 
 instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
@@ -1124,7 +1124,7 @@ instance PermanenceSym CppSrcCode where
   dynamic = toCode $ bd Dynamic R.dynamic
   
 instance PermElim CppSrcCode where
-  permDoc = bindDoc . unCPPSC
+  perm = bindDoc . unCPPSC
   binding = bind . unCPPSC
 
 instance BodySym CppSrcCode where
@@ -1785,7 +1785,7 @@ instance PermanenceSym CppHdrCode where
   dynamic = toCode $ bd Dynamic R.dynamic
 
 instance PermElim CppHdrCode where
-  permDoc = bindDoc . unCPPHC
+  perm = bindDoc . unCPPHC
   binding = bind . unCPPHC
 
 instance BodySym CppHdrCode where
@@ -2262,7 +2262,7 @@ instance MethodElim CppHdrCode where
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar s p v = on2StateValues (\dec -> on3CodeValues svd (onCodeValue snd s)
-    (toCode $ R.stateVar empty (permDoc p) (statementDoc dec)))
+    (toCode $ R.stateVar empty (RC.perm p) (statementDoc dec)))
     (zoom lensCStoMS $ stmt $ varDec v) (zoom lensCStoMS emptyStmt)
   stateVarDef _ s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
     (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyStmt)
@@ -2576,7 +2576,7 @@ cppsStateVarDef n cns p vr vl = onBinding (bind p) (cns <+> typeDoc
 
 cpphStateVarDef :: (RenderSym r) => Doc -> r (Permanence r) -> SVariable r -> 
   SValue r -> CS Doc
-cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (permDoc p) .  
+cpphStateVarDef s p vr vl = onStateValue (R.stateVar s (RC.perm p) .  
   statementDoc) (zoom lensCStoMS $ stmt $ onBinding (binding p) (varDec 
   vr) (varDecDef vr vl)) 
 

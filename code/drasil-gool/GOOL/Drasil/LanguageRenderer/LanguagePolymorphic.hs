@@ -68,9 +68,9 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   ControlStatement(returnStmt, ifCond, for, forRange, switch), 
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym, 
-  RenderFile(commentedMod), RenderBody(docBody), BodyElim(..), 
+  RenderFile(commentedMod), RenderBody(docBody),
   RenderBlock(docBlock), ImportSym(..),  
-  PermElim(..), RenderType(..), InternalTypeElim(..), UnaryOpSym(UnaryOp), 
+  RenderType(..), InternalTypeElim(..), UnaryOpSym(UnaryOp), 
   BinaryOpSym(BinaryOp), OpElim(..), RenderOp(..), RenderVariable(varFromData),
   InternalVarElim(variableBind, variableDoc), 
   RenderValue(inputFunc, cast, valFromData), ValueElim(valuePrec, valueDoc),
@@ -91,7 +91,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
   MethodTypeSym(construct), RenderMethod(intFunc), 
   RenderClass(intClass, commentedClass), RenderMod(modFromData))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
-  BlockElim(..))
+  PermElim(..), BodyElim(..), BlockElim(..))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
@@ -125,7 +125,7 @@ import qualified Text.PrettyPrint.HughesPJ as D (char, double, float)
 -- Bodies --
 
 multiBody :: (RenderSym r) => [MSBody r] -> MSBody r
-multiBody bs = docBody $ onStateList vibcat $ map (onStateValue body) bs
+multiBody bs = docBody $ onStateList vibcat $ map (onStateValue RC.body) bs
 
 -- Blocks --
 
@@ -183,7 +183,7 @@ void = toState $ typeFromData Void "void" (text "void")
 -- ControlBlock --
 
 strat :: (RenderSym r) => MSStatement r -> MSBody r -> MSBlock r
-strat r bd = docBlock $ on2StateValues (\result b -> vcat [body b, 
+strat r bd = docBlock $ on2StateValues (\result b -> vcat [RC.body b, 
   statementDoc result]) r bd
 
 runStrategy :: (RenderSym r) => String -> [(Label, MSBody r)] -> 
@@ -716,7 +716,7 @@ decrement1 v = v &= (S.valueOf v #- S.litInt 1)
 
 varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> SVariable r 
   -> MSStatement r
-varDec s d v' = onStateValue (\v -> mkSt (permDoc (bind $ variableBind v) 
+varDec s d v' = onStateValue (\v -> mkSt (RC.perm (bind $ variableBind v) 
   <+> getTypeDoc (variableType v) <+> variableDoc v)) (zoom lensMStoVS v')
   where bind Static = s
         bind Dynamic = d
@@ -881,15 +881,15 @@ ifCond _ _ _ [] _ = error "if condition created with no cases"
 ifCond ifStart elif bEnd (c:cs) eBody =
     let ifSect (v, b) = on2StateValues (\val bd -> vcat [
           text "if" <+> parens (valueDoc val) <+> ifStart,
-          indent $ body bd,
+          indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
           elif <+> parens (valueDoc val) <+> ifStart,
-          indent $ body bd,
+          indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
-        elseSect = onStateValue (\bd -> emptyIfEmpty (body bd) $ vcat [
+        elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) $ vcat [
           text "else" <+> ifStart,
-          indent $ body bd,
+          indent $ RC.body bd,
           bEnd]) eBody
     in onStateList (mkStNoEnd . vcat)
       (ifSect c : map elseIfSect cs ++ [elseSect])
@@ -908,7 +908,7 @@ for :: (RenderSym r) => Doc -> Doc -> MSStatement r -> SValue r ->
 for bStart bEnd sInit vGuard sUpdate b = (\initl guard upd bod -> mkStNoEnd 
   (vcat [forLabel <+> parens (statementDoc initl <> semi <+> valueDoc guard <> 
     semi <+> statementDoc upd) <+> bStart,
-  indent $ body bod,
+  indent $ RC.body bod,
   bEnd])) <$> S.loopStmt sInit <*> zoom lensMStoVS vGuard <*> 
   S.loopStmt sUpdate <*> b
 
@@ -922,13 +922,13 @@ forEach :: (RenderSym r) => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r
 forEach bStart bEnd forEachLabel inLbl e' v' = on3StateValues (\e v b -> 
   mkStNoEnd (vcat [forEachLabel <+> parens (getTypeDoc (variableType e) 
     <+> variableDoc e <+> inLbl <+> valueDoc v) <+> bStart,
-  indent $ body b,
+  indent $ RC.body b,
   bEnd])) (zoom lensMStoVS e') (zoom lensMStoVS v') 
 
 while :: (RenderSym r) => Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
 while bStart bEnd v' = on2StateValues (\v b -> mkStNoEnd (vcat [
   text "while" <+> parens (valueDoc v) <+> bStart,
-  indent $ body b,
+  indent $ RC.body b,
   bEnd])) (zoom lensMStoVS v')
 
 tryCatch :: (RenderSym r) => (r (Body r) -> r (Body r) -> Doc) -> MSBody r -> 
@@ -1025,12 +1025,12 @@ intFunc = intMethod
 stateVar :: (RenderSym r) => r (Scope r) -> r (Permanence r) -> SVariable r -> 
   CSStateVar r
 stateVar s p v = stateVarFromData (zoom lensCStoMS $ onStateValue (R.stateVar 
-  (scopeDoc s) (permDoc p) . statementDoc) (S.stmt $ S.varDec v))
+  (scopeDoc s) (RC.perm p) . statementDoc) (S.stmt $ S.varDec v))
 
 stateVarDef :: (RenderSym r) => r (Scope r) -> r (Permanence r) -> SVariable r 
   -> SValue r -> CSStateVar r
 stateVarDef s p vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue 
-  (R.stateVar (scopeDoc s) (permDoc p) . statementDoc) (S.stmt $ S.varDecDef 
+  (R.stateVar (scopeDoc s) (RC.perm p) . statementDoc) (S.stmt $ S.varDecDef 
   vr vl))
 
 constVar :: (RenderSym r) => Doc -> r (Scope r) -> SVariable r -> SValue r -> 

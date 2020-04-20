@@ -36,13 +36,12 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(statementTerm), RenderScope(..), ScopeElim, 
-  MethodTypeSym(..), 
-  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
+  MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement, scope)
+  type', uOp, bOp, variable, value, function, statement, scope, parameter)
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -740,7 +739,7 @@ instance (Pair p) => RenderParam (p CppSrcCode CppHdrCode) where
 instance (Pair p) => ParamElim (p CppSrcCode CppHdrCode) where
   parameterName p = parameterName $ pfst p
   parameterType p = pair (parameterType $ pfst p) (parameterType $ psnd p)
-  parameterDoc p = parameterDoc $ pfst p
+  parameter p = RC.parameter $ pfst p
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   type Method (p CppSrcCode CppHdrCode) = MethodData
@@ -1609,7 +1608,7 @@ instance RenderParam CppSrcCode where
 instance ParamElim CppSrcCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
-  parameterDoc = paramDoc . unCPPSC
+  parameter = paramDoc . unCPPSC
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
@@ -2217,7 +2216,7 @@ instance RenderParam CppHdrCode where
 instance ParamElim CppHdrCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
-  parameterDoc = paramDoc . unCPPHC
+  parameter = paramDoc . unCPPHC
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData

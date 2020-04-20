@@ -235,7 +235,7 @@ class RenderParam r where
 class ParamElim r where
   parameterName :: r (Parameter r) -> Label
   parameterType :: r (Parameter r) -> r (Type r)
-  parameterDoc  :: r (Parameter r) -> Doc
+  parameter     :: r (Parameter r) -> Doc
 
 class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) => 
   RenderMethod r where

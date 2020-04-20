@@ -28,11 +28,10 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   StatementSym(Statement), ScopeSym(Scope), ParameterSym(Parameter))
 import GOOL.Drasil.RendererClasses (RenderSym,
   RenderVariable(..),
-  RenderValue(valFromData), RenderStatement(..),
-  ParamElim(..))
+  RenderValue(valFromData), RenderStatement(..))
 import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
   InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
-  ScopeElim(..))
+  ScopeElim(..), ParamElim(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
@@ -362,7 +361,7 @@ variableList :: (RenderSym r) => [r (Variable r)] -> Doc
 variableList = hicat (text ", ") . map RC.variable
 
 parameterList :: (RenderSym r) => [r (Parameter r)] -> Doc
-parameterList = hicat (text ", ") . map parameterDoc
+parameterList = hicat (text ", ") . map RC.parameter
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 prependToBody s b = vcat [fst $ statement s, maybeBlank, b]

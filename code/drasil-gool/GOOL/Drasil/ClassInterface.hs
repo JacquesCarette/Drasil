@@ -6,24 +6,25 @@ module GOOL.Drasil.ClassInterface (
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, FSModule,
   NamedArgs, Initializers, MixedCall, MixedCtorCall, PosCall, PosCtorCall,
   -- Typeclasses
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), 
-  VariableSym(..), VariableElim(..), ($->), listOf, ValueSym(..), Literal(..), 
-  MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), Comparison(..), 
-  ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
-  libFuncApp, newObj, extNewObj, libNewObj, exists, InternalValueExp(..), 
-  objMethodCall, objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
-  ($.), selfAccess, GetSet(..), List(..), InternalList(..), listSlice, 
-  listIndexExists, at, Iterator(..), StatementSym(..), AssignStatement(..), 
-  (&=), assignToListIndex, DeclStatement(..), IOStatement(..), 
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), initState, changeState, 
-  ObserverPattern(..), observerListName, initObserverList, addObserver, 
-  StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
-  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
-  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), convType
+  OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
+  ControlBlock(..), VariableSym(..), VariableElim(..), ($->), listOf, 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
+  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
+  InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
+  objMethodCallNoParams, FunctionSym(..), ($.), selfAccess, GetSet(..), 
+  List(..), InternalList(..), listSlice, listIndexExists, at, Iterator(..), 
+  StatementSym(..), AssignStatement(..), (&=), assignToListIndex, 
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), StatePattern(..), initState, 
+  changeState, ObserverPattern(..), observerListName, initObserverList, 
+  addObserver, StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), 
+  ParameterSym(..), MethodSym(..), privMethod, pubMethod, initializer, 
+  nonInitConstructor, StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..),
+  ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
+  ODEMethod(..), convType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
@@ -39,19 +40,21 @@ type GSProgram a = GS (a (Program a))
 
 -- In relation to GOOL, the type variable r can be considered as short for "representation"
 
+class (ProgramSym r, ControlBlock r, AssignStatement r, DeclStatement r, 
+  IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, 
+  ControlStatement r, InternalList r, Literal r, MathConstant r, 
+  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, 
+  Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, 
+  Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, 
+  VariableElim r) => OOProg r
+
 class (FileSym r) => ProgramSym r where
   type Program r
   prog :: Label -> [SFile r] -> GSProgram r
 
 type SFile a = FS (a (RenderFile a))
 
-class (ModuleSym r, ControlBlock r, AssignStatement r, DeclStatement r, 
-  IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, 
-  ControlStatement r, InternalList r, Literal r, MathConstant r, 
-  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, 
-  Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, 
-  Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, 
-  VariableElim r) => FileSym r where 
+class (ModuleSym r) => FileSym r where 
   type RenderFile r
   fileDoc :: FSModule r -> SFile r
 
@@ -89,7 +92,7 @@ class TypeSym r where
   type Type r
   bool          :: VSType r
   int           :: VSType r -- This is 32-bit signed ints except in Python, 
-                               -- which has unlimited precision ints
+                            -- which has unlimited precision ints
   float         :: VSType r
   double        :: VSType r
   char          :: VSType r
@@ -236,7 +239,7 @@ type PosCall r = Label -> VSType r -> [SValue r] -> SValue r
 type PosCtorCall r = VSType r -> [SValue r] -> SValue r
 
 -- for values that can include expressions
-class ValueExpression r where
+class (VariableSym r, ValueSym r) => ValueExpression r where
   inlineIf     :: SValue r -> SValue r -> SValue r -> SValue r
   
   funcAppMixedArgs     ::            MixedCall r
@@ -495,10 +498,9 @@ class ScopeSym r where
 
 type MSParameter a = MS (a (Parameter a))
 
-class ParameterSym r where
+class (VariableSym r) => ParameterSym r where
   type Parameter r
   param :: SVariable r -> MSParameter r
-  -- funcParam  :: Label -> r (MethodType r) -> [r (Parameter r)] -> r (Parameter r) -- not implemented in GOOL
   pointerParam :: SVariable r -> MSParameter r
 
 type SMethod a = MS (a (Method a))
@@ -554,7 +556,7 @@ nonInitConstructor ps = constructor ps []
 
 type CSStateVar a = CS (a (StateVar a))
 
-class (ScopeSym r, PermanenceSym r) => StateVarSym r where
+class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where
   type StateVar r
   stateVar :: r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
   stateVarDef :: Label -> r (Scope r) -> r (Permanence r) -> SVariable r -> 

@@ -12,7 +12,7 @@ import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
-  SValue, MSStatement, MSParameter, SMethod, NamedArgs, ProgramSym(..), 
+  SValue, MSStatement, MSParameter, SMethod, NamedArgs, OOProg, ProgramSym(..), 
   FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, 
   BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), 
   VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
@@ -122,6 +122,8 @@ unCPPC (CPPC (CPPSC a) _) = a
 
 hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
+
+instance (Pair p) => OOProg (p CppSrcCode CppHdrCode)
 
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
   type Program (p CppSrcCode CppHdrCode) = ProgData

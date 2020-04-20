@@ -10,7 +10,7 @@ import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
+  MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), 
   VariableElim(..), listOf, ValueSym(..), Literal(..), MathConstant(..), 
@@ -103,6 +103,8 @@ instance Applicative PythonCode where
 instance Monad PythonCode where
   return = PC
   PC x >>= f = f x
+
+instance OOProg PythonCode
 
 instance ProgramSym PythonCode where
   type Program PythonCode = ProgData 

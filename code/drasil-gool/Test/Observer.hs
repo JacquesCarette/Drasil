@@ -1,6 +1,6 @@
 module Test.Observer (observer, observerName, printNum, x) where
 
-import GOOL.Drasil (SFile, SVariable, SMethod, SClass, ProgramSym, FileSym(..), 
+import GOOL.Drasil (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..), 
   PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..), 
   Literal(..), VariableValue(..), ScopeSym(..), MethodSym(..), initializer, StateVarSym(..), 
   ClassSym(..), ModuleSym(..))
@@ -11,7 +11,7 @@ observerName = "Observer"
 observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
-observer :: (ProgramSym r) => SFile r
+observer :: (OOProg r) => SFile r
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
@@ -25,8 +25,7 @@ helperClass :: (ClassSym r, IOStatement r, Literal r, VariableValue r) => SClass
 helperClass = buildClass observerName Nothing [stateVar public dynamic x]
   [observerConstructor, printNumMethod, getMethod x, setMethod x]
 
-observerConstructor :: (MethodSym r, VariableSym r, Literal r) => 
-  SMethod r
+observerConstructor :: (MethodSym r, Literal r) => SMethod r
 observerConstructor = initializer [] [(x, litInt 5)]
 
 printNumMethod :: (MethodSym r, IOStatement r, VariableValue r) => SMethod r

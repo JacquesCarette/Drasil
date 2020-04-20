@@ -11,7 +11,7 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, ProgramSym(..), FileSym(..), 
+  MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
   TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), 
   VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
@@ -118,6 +118,8 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   return = JC
   JC x >>= f = f x
+
+instance OOProg JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData

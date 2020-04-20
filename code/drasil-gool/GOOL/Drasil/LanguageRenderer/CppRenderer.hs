@@ -35,14 +35,14 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
-  StatementElim(statementTerm), RenderScope(..), ScopeElim(..), 
+  StatementElim(statementTerm), RenderScope(..), ScopeElim, 
   MethodTypeSym(..), 
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement)
+  type', uOp, bOp, variable, value, function, statement, scope)
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -722,7 +722,7 @@ instance (Pair p) => RenderScope (p CppSrcCode CppHdrCode) where
   scopeFromData s d = pair (scopeFromData s d) (scopeFromData s d)
   
 instance (Pair p) => ScopeElim (p CppSrcCode CppHdrCode) where
-  scopeDoc s = scopeDoc $ pfst s
+  scope s = RC.scope $ pfst s
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
   type MethodType (p CppSrcCode CppHdrCode) = TypeData
@@ -1591,7 +1591,7 @@ instance RenderScope CppSrcCode where
   scopeFromData s d = toCode (d, s)
   
 instance ScopeElim CppSrcCode where
-  scopeDoc = fst . unCPPSC
+  scope = fst . unCPPSC
 
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
@@ -2198,7 +2198,7 @@ instance RenderScope CppHdrCode where
   scopeFromData s d = toCode (d, s)
   
 instance ScopeElim CppHdrCode where
-  scopeDoc = fst . unCPPHC
+  scope = fst . unCPPHC
 
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = TypeData
@@ -2602,10 +2602,10 @@ cpphClass :: Label -> CppHdrCode ParentSpec ->
 cpphClass n ps vars funcs pub priv = onCodeValue (\p -> vcat [
     classDec <+> text n <+> p <+> bodyStart,
     indentList [
-      scopeDoc pub <> colon,
+      RC.scope pub <> colon,
       indent pubs,
       blank,
-      scopeDoc priv <> colon,
+      RC.scope priv <> colon,
       indent privs],
     bodyEnd <> endStatement]) ps
   where pubs = cpphVarsFuncsList Pub vars funcs

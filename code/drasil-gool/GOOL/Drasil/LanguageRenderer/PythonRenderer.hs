@@ -33,12 +33,12 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ValueElim(valuePrec), InternalGetSet(..), InternalListFunc(..), InternalIterator(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
-  StatementElim(statementTerm), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
+  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
-  type', uOp, bOp, variable, value, function, statement)
+  type', uOp, bOp, variable, value, function, statement, scope)
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -606,7 +606,7 @@ instance RenderScope PythonCode where
   scopeFromData _ = toCode
 
 instance ScopeElim PythonCode where
-  scopeDoc = unPC
+  scope = unPC
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData

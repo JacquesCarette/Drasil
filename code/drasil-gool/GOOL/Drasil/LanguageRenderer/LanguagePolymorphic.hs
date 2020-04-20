@@ -77,7 +77,7 @@ import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym,
   RenderValue(inputFunc, cast, valFromData), ValueElim(valuePrec),
   InternalIterator(iterBeginFunc, iterEndFunc), RenderFunction(funcFromData), 
   FunctionElim(functionType), RenderStatement(stmtFromData), 
-  StatementElim(statementTerm), RenderScope(..), ScopeElim(..), 
+  StatementElim(statementTerm), RenderScope(..),
   MethodTypeSym(mType), RenderParam(paramFromData), 
   RenderMethod(intMethod, commentedFunc), MethodElim(methodDoc), 
   RenderStateVar(..), StateVarElim(..), ParentSpec, 
@@ -94,7 +94,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
   PermElim(..), BodyElim(..), BlockElim(..), InternalTypeElim(..), 
   OpElim(uOp, bOp), InternalVarElim(variable), ValueElim(value), 
-  FunctionElim(function), StatementElim(statement))
+  FunctionElim(function), StatementElim(statement), ScopeElim(..))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
@@ -1028,18 +1028,18 @@ intFunc = intMethod
 stateVar :: (RenderSym r) => r (Scope r) -> r (Permanence r) -> SVariable r -> 
   CSStateVar r
 stateVar s p v = stateVarFromData (zoom lensCStoMS $ onStateValue (R.stateVar 
-  (scopeDoc s) (RC.perm p) . RC.statement) (S.stmt $ S.varDec v))
+  (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ S.varDec v))
 
 stateVarDef :: (RenderSym r) => r (Scope r) -> r (Permanence r) -> SVariable r 
   -> SValue r -> CSStateVar r
 stateVarDef s p vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue 
-  (R.stateVar (scopeDoc s) (RC.perm p) . RC.statement) (S.stmt $ S.varDecDef 
+  (R.stateVar (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ S.varDecDef 
   vr vl))
 
 constVar :: (RenderSym r) => Doc -> r (Scope r) -> SVariable r -> SValue r -> 
   CSStateVar r
 constVar p s vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue 
-  (R.stateVar (scopeDoc s) p . RC.statement) (S.stmt $ S.constDecDef vr vl))
+  (R.stateVar (RC.scope s) p . RC.statement) (S.stmt $ S.constDecDef vr vl))
 
 -- Classes --
 
@@ -1067,7 +1067,7 @@ intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc ->
   Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] 
   -> SClass r
 intClass f n s i svrs mths = modify (setClassName n) >> classFromData 
-  (on2StateValues (\svs ms -> onCodeValue (\p -> f n p (scopeDoc s) svs ms) i) 
+  (on2StateValues (\svs ms -> onCodeValue (\p -> f n p (RC.scope s) svs ms) i) 
   (onStateList (R.stateVarList . map stateVarDoc) svrs) 
   (onStateList (vibcat . map methodDoc) (map (zoom lensCStoMS) mths)))
 

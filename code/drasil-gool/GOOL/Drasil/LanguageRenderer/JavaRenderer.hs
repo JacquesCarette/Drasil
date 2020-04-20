@@ -34,12 +34,12 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
-  StatementElim(statementTerm), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
+  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement)
+  type', uOp, bOp, variable, value, function, statement, scope)
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStateVal, mkVal, dot, new, 
   elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
   bodyEnd, endStatement, commentStart, variableList, parameterList, 
@@ -624,7 +624,7 @@ instance RenderScope JavaCode where
   scopeFromData _ = toCode
   
 instance ScopeElim JavaCode where
-  scopeDoc = unJC
+  scope = unJC
 
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
@@ -927,7 +927,7 @@ jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+> new
 jMethod :: (RenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
-  scopeDoc s <+> RC.perm p <+> RC.type' t <+> text n <> 
+  RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <> 
     parens (parameterList ps) <+> emptyIfNull es (text "throws" <+> 
     text (intercalate ", " (sort es))) <+> lbrace,
   indent $ RC.body b,

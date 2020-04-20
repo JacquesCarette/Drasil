@@ -33,12 +33,12 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
-  StatementElim(statementTerm), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
+  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable, value, function, statement)
+  type', uOp, bOp, variable, value, function, statement, scope)
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStNoEnd, mkStateVal, mkVal, mkVar, 
   dot, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
   endStatement, commentStart, elseIfLabel, inLabel, variableList, appendToBody, 
@@ -593,7 +593,7 @@ instance RenderScope CSharpCode where
   scopeFromData _ = toCode
   
 instance ScopeElim CSharpCode where
-  scopeDoc = unCSC
+  scope = unCSC
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData

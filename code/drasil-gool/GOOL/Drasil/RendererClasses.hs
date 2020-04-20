@@ -220,7 +220,7 @@ class RenderScope r where
   scopeFromData :: ScopeTag -> Doc -> r (Scope r)
   
 class ScopeElim r where
-  scopeDoc :: r (Scope r) -> Doc
+  scope :: r (Scope r) -> Doc
 
 type MSMthdType a = MS (a (MethodType a))
 

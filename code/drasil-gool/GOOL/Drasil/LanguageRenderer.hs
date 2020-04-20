@@ -29,9 +29,10 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
 import GOOL.Drasil.RendererClasses (RenderSym,
   RenderVariable(..),
   RenderValue(valFromData), RenderStatement(..),
-  ScopeElim(..), ParamElim(..))
+  ParamElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
-  InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..))
+  InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
+  ScopeElim(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
@@ -141,7 +142,7 @@ param v = RC.type' (variableType v) <+> RC.variable v
 method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> 
   r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 method n s p t ps b = vcat [
-  scopeDoc s <+> RC.perm p <+> RC.type' t <+> text n <> 
+  RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <> 
     parens (parameterList ps) <+> lbrace,
   indent (RC.body b),
   rbrace]

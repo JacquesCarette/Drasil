@@ -26,9 +26,9 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), InternalBody(..), BodyElim(..), 
-  InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), 
-  VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(..), OpIntro(..), 
+  ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
+  RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
+  VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   InternalVariable(..), InternalVarElim(..), InternalValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), 
@@ -152,7 +152,7 @@ instance BodySym PythonCode where
 
   addComments s = onStateValue (onCodeValue (R.addComments s pyCommentStart))
 
-instance InternalBody PythonCode where
+instance RenderBody PythonCode where
   docBody = onStateValue toCode
   multiBody = G.multiBody 
 
@@ -163,7 +163,7 @@ instance BlockSym PythonCode where
   type Block PythonCode = Doc
   block = G.block
 
-instance InternalBlock PythonCode where
+instance RenderBlock PythonCode where
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
@@ -193,7 +193,7 @@ instance TypeElim PythonCode where
   getType = cType . unPC
   getTypeString = typeString . unPC
 
-instance InternalType PythonCode where
+instance RenderType PythonCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim PythonCode where
@@ -270,7 +270,7 @@ instance OpElim PythonCode where
   uOpPrec = opPrec . unPC
   bOpPrec = opPrec . unPC
   
-instance OpIntro PythonCode where
+instance RenderOp PythonCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 

@@ -28,9 +28,9 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   ClassSym(..), ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), 
   odeOptions, ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), InternalBody(..), BodyElim(..), 
-  InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), 
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(..), OpIntro(..), 
+  ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
+  RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   InternalVariable(..), InternalVarElim(..), InternalValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), 
@@ -174,7 +174,7 @@ instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
 
   addComments s = pair1 (addComments s) (addComments s)
 
-instance (Pair p) => InternalBody (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderBody (p CppSrcCode CppHdrCode) where
   docBody d = on2StateValues pair (docBody d) (docBody d)
   multiBody = pair1List multiBody multiBody
 
@@ -185,7 +185,7 @@ instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
   type Block (p CppSrcCode CppHdrCode) = Doc
   block = pair1List block block
 
-instance (Pair p) => InternalBlock (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderBlock (p CppSrcCode CppHdrCode) where
   docBlock d = on2StateValues pair (docBlock d) (docBlock d)
   multiBlock = pair1List multiBlock multiBlock
 
@@ -214,7 +214,7 @@ instance (Pair p) => TypeElim (p CppSrcCode CppHdrCode) where
   getType s = getType $ pfst s
   getTypeString s = getTypeString $ pfst s
   
-instance (Pair p) => InternalType (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderType (p CppSrcCode CppHdrCode) where
   typeFromData t s d = pair (typeFromData t s d) (typeFromData t s d)
 
 instance (Pair p) => InternalTypeElim (p CppSrcCode CppHdrCode) where
@@ -324,7 +324,7 @@ instance (Pair p) => OpElim (p CppSrcCode CppHdrCode) where
   uOpPrec o = uOpPrec $ pfst o
   bOpPrec o = bOpPrec $ pfst o
   
-instance (Pair p) => OpIntro (p CppSrcCode CppHdrCode) where
+instance (Pair p) => RenderOp (p CppSrcCode CppHdrCode) where
   uOpFromData p d = on2StateValues pair (uOpFromData p d) (uOpFromData p d)
   bOpFromData p d = on2StateValues pair (bOpFromData p d) (bOpFromData p d)
 
@@ -1132,7 +1132,7 @@ instance BodySym CppSrcCode where
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
-instance InternalBody CppSrcCode where
+instance RenderBody CppSrcCode where
   docBody = onStateValue toCode
   multiBody = G.multiBody 
 
@@ -1143,7 +1143,7 @@ instance BlockSym CppSrcCode where
   type Block CppSrcCode = Doc
   block = G.block
 
-instance InternalBlock CppSrcCode where
+instance RenderBlock CppSrcCode where
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
@@ -1175,7 +1175,7 @@ instance TypeElim CppSrcCode where
   getType = cType . unCPPSC
   getTypeString = typeString . unCPPSC
   
-instance InternalType CppSrcCode where
+instance RenderType CppSrcCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim CppSrcCode where
@@ -1242,7 +1242,7 @@ instance OpElim CppSrcCode where
   uOpPrec = opPrec . unCPPSC
   bOpPrec = opPrec . unCPPSC
   
-instance OpIntro CppSrcCode where
+instance RenderOp CppSrcCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 
@@ -1793,7 +1793,7 @@ instance BodySym CppHdrCode where
 
   addComments _ _ = toState $ toCode empty
 
-instance InternalBody CppHdrCode where
+instance RenderBody CppHdrCode where
   docBody = onStateValue toCode
   multiBody = G.multiBody 
 
@@ -1804,7 +1804,7 @@ instance BlockSym CppHdrCode where
   type Block CppHdrCode = Doc
   block _ = toState $ toCode empty
 
-instance InternalBlock CppHdrCode where
+instance RenderBlock CppHdrCode where
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
@@ -1838,7 +1838,7 @@ instance TypeElim CppHdrCode where
   getType = cType . unCPPHC
   getTypeString = typeString . unCPPHC
   
-instance InternalType CppHdrCode where
+instance RenderType CppHdrCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim CppHdrCode where
@@ -1890,7 +1890,7 @@ instance OpElim CppHdrCode where
   uOpPrec = opPrec . unCPPHC
   bOpPrec = opPrec . unCPPHC
   
-instance OpIntro CppHdrCode where
+instance RenderOp CppHdrCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 

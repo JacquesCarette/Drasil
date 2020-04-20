@@ -26,9 +26,9 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), 
   ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), InternalBody(..), BodyElim(..), 
-  InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), 
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(..), OpIntro(..), 
+  ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
+  RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   InternalVariable(..), InternalVarElim(..), InternalValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), 
@@ -159,7 +159,7 @@ instance BodySym CSharpCode where
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
-instance InternalBody CSharpCode where
+instance RenderBody CSharpCode where
   docBody = onStateValue toCode
   multiBody = G.multiBody 
 
@@ -170,7 +170,7 @@ instance BlockSym CSharpCode where
   type Block CSharpCode = Doc
   block = G.block
 
-instance InternalBlock CSharpCode where
+instance RenderBlock CSharpCode where
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
@@ -200,7 +200,7 @@ instance TypeElim CSharpCode where
   getType = cType . unCSC
   getTypeString = typeString . unCSC
   
-instance InternalType CSharpCode where
+instance RenderType CSharpCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim CSharpCode where
@@ -281,7 +281,7 @@ instance OpElim CSharpCode where
   uOpPrec = opPrec . unCSC
   bOpPrec = opPrec . unCSC
   
-instance OpIntro CSharpCode where
+instance RenderOp CSharpCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 

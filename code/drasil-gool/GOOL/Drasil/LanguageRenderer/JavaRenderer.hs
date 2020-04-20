@@ -27,9 +27,9 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   privDVar, pubDVar, ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), InternalBody(..), BodyElim(..), 
-  InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), 
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(..), OpIntro(..), 
+  ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
+  RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
   InternalVariable(..), InternalVarElim(..), InternalValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), 
@@ -167,7 +167,7 @@ instance BodySym JavaCode where
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
-instance InternalBody JavaCode where
+instance RenderBody JavaCode where
   docBody = onStateValue toCode
   multiBody = G.multiBody 
 
@@ -178,7 +178,7 @@ instance BlockSym JavaCode where
   type Block JavaCode = Doc
   block = G.block
 
-instance InternalBlock JavaCode where
+instance RenderBlock JavaCode where
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
@@ -207,7 +207,7 @@ instance TypeElim JavaCode where
   getType = cType . unJC
   getTypeString = typeString . unJC
   
-instance InternalType JavaCode where
+instance RenderType JavaCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim JavaCode where
@@ -283,7 +283,7 @@ instance OpElim JavaCode where
   uOpPrec = opPrec . unJC
   bOpPrec = opPrec . unJC
   
-instance OpIntro JavaCode where
+instance RenderOp JavaCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 

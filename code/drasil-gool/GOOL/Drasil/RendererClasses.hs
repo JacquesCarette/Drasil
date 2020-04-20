@@ -2,9 +2,9 @@
 
 module GOOL.Drasil.RendererClasses (
   RenderSym, InternalFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
-  InternalBody(..), BodyElim(..), InternalBlock(..), BlockElim(..), 
-  InternalType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, 
-  BinaryOpSym(..), OpElim(..), OpIntro(..), InternalVariable(..), 
+  RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), 
+  RenderType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, 
+  BinaryOpSym(..), OpElim(..), RenderOp(..), InternalVariable(..), 
   InternalVarElim(..), InternalValue(..), ValueElim(..), InternalGetSet(..), 
   InternalListFunc(..), InternalIterator(..), InternalFunction(..), 
   FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
@@ -42,14 +42,14 @@ class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r,
   NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, 
   InternalValueExp r, GetSet r, List r, InternalList r, Iterator r, 
   StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, 
-  VariableElim r, InternalBlock r, BlockElim r, InternalBody r, BodyElim r, 
+  VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, 
   InternalClass r, ClassElim r, InternalFile r, InternalGetSet r, 
   InternalListFunc r, InternalIterator r, InternalFunction r, FunctionElim r, 
   InternalMethod r, MethodElim r, InternalMod r, ModuleElim r, OpElim r, 
-  OpIntro r, InternalParam r, ParamElim r, PermElim r, InternalScope r, 
+  RenderOp r, InternalParam r, ParamElim r, PermElim r, InternalScope r, 
   ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, 
   InternalStatement r, StatementElim r, InternalStateVar r, StateVarElim r, 
-  InternalType r, InternalTypeElim r, InternalValue r, ValueElim r, 
+  RenderType r, InternalTypeElim r, InternalValue r, ValueElim r, 
   InternalVariable r, InternalVarElim r, ImportSym r, ImportElim r, 
   UnaryOpSym r, BinaryOpSym r, BlockCommentElim r) => RenderSym r
 
@@ -76,21 +76,21 @@ class PermElim r where
   permDoc :: r (Permanence r) -> Doc
   binding :: r (Permanence r) -> Binding
 
-class InternalBody r where
+class RenderBody r where
   docBody :: MS Doc -> MSBody r
   multiBody :: [MSBody r] -> MSBody r
 
 class BodyElim r where
   bodyDoc :: r (Body r) -> Doc
 
-class InternalBlock r where
+class RenderBlock r where
   docBlock :: MS Doc -> MSBlock r
   multiBlock :: [MSBlock r] -> MSBlock r
 
 class BlockElim r where
   blockDoc :: r (Block r) -> Doc
 
-class InternalType r where
+class RenderType r where
   typeFromData :: CodeType -> String -> Doc -> r (Type r)
 
 class InternalTypeElim r where
@@ -141,7 +141,7 @@ class OpElim r where
   uOpPrec :: r (UnaryOp r) -> Int
   bOpPrec :: r (BinaryOp r) -> Int
 
-class OpIntro r where
+class RenderOp r where
   uOpFromData :: Int -> Doc -> VSUnOp r
   bOpFromData :: Int -> Doc -> VSBinOp r
   

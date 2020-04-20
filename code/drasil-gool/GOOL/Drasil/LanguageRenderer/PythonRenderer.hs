@@ -45,8 +45,8 @@ import GOOL.Drasil.LanguageRenderer (classDec, dot, forLabel, inLabel,
 import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body, 
   multiAssign, return', classVar, listSetFunc, castObj, dynamic, break, 
   continue, addComments, commentedMod, commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, mkVal, 
-  mkStateVar)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
+  mkVal, mkStateVar, unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, listInnerType, obj, funcType, runStrategy, 
   notOp', negateOp, sqrtOp', absOp', expOp', sinOp', cosOp', tanOp', asinOp', 
@@ -69,8 +69,6 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, powerPrec, 
   multPrec, andPrec, orPrec, addmathImport, bindingError, destructorError, 
   docFuncRepr)
-import GOOL.Drasil.LanguageRenderer.Constructors (unExpr, unExpr', typeUnExpr, 
-  binExpr, typeBinExpr)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 

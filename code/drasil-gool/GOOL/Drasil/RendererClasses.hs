@@ -136,8 +136,8 @@ class BinaryOpSym r where
   orOp           :: VSBinOp r
 
 class OpElim r where
-  uOpDoc :: r (UnaryOp r) -> Doc
-  bOpDoc :: r (BinaryOp r) -> Doc
+  uOp :: r (UnaryOp r) -> Doc
+  bOp :: r (BinaryOp r) -> Doc
   uOpPrec :: r (UnaryOp r) -> Int
   bOpPrec :: r (BinaryOp r) -> Int
 

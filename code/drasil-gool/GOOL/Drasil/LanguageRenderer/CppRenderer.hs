@@ -30,7 +30,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
   RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
@@ -41,7 +41,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type')
+  type', uOp, bOp)
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -321,8 +321,8 @@ instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
   orOp = on2StateValues pair orOp orOp
 
 instance (Pair p) => OpElim (p CppSrcCode CppHdrCode) where
-  uOpDoc o = uOpDoc $ pfst o
-  bOpDoc o = bOpDoc $ pfst o
+  uOp o = RC.uOp $ pfst o
+  bOp o = RC.bOp $ pfst o
   uOpPrec o = uOpPrec $ pfst o
   bOpPrec o = bOpPrec $ pfst o
   
@@ -1239,8 +1239,8 @@ instance BinaryOpSym CppSrcCode where
   orOp = G.orOp
 
 instance OpElim CppSrcCode where
-  uOpDoc = opDoc . unCPPSC
-  bOpDoc = opDoc . unCPPSC
+  uOp = opDoc . unCPPSC
+  bOp = opDoc . unCPPSC
   uOpPrec = opPrec . unCPPSC
   bOpPrec = opPrec . unCPPSC
   
@@ -1887,8 +1887,8 @@ instance BinaryOpSym CppHdrCode where
   orOp = bOpFromData 0 empty
 
 instance OpElim CppHdrCode where
-  uOpDoc = opDoc . unCPPHC
-  bOpDoc = opDoc . unCPPHC
+  uOp = opDoc . unCPPHC
+  bOp = opDoc . unCPPHC
   uOpPrec = opPrec . unCPPHC
   bOpPrec = opPrec . unCPPHC
   

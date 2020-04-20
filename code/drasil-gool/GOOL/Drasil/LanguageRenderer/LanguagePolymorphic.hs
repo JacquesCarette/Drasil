@@ -71,7 +71,8 @@ import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym,
   RenderFile(commentedMod), RenderBody(docBody),
   RenderBlock(docBlock), ImportSym(..),  
   RenderType(..), UnaryOpSym(UnaryOp), 
-  BinaryOpSym(BinaryOp), OpElim(..), RenderOp(..), RenderVariable(varFromData),
+  BinaryOpSym(BinaryOp), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
+  RenderVariable(varFromData),
   InternalVarElim(variableBind, variableDoc), 
   RenderValue(inputFunc, cast, valFromData), ValueElim(valuePrec, valueDoc),
   InternalIterator(iterBeginFunc, iterEndFunc), RenderFunction(funcFromData), 
@@ -91,7 +92,8 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
   MethodTypeSym(construct), RenderMethod(intFunc), 
   RenderClass(intClass, commentedClass), RenderMod(modFromData))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
-  PermElim(..), BodyElim(..), BlockElim(..), InternalTypeElim(..))
+  PermElim(..), BodyElim(..), BlockElim(..), InternalTypeElim(..), 
+  OpElim(uOp, bOp))
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
@@ -309,7 +311,7 @@ unExpr' = on2StateValues (mkUnExpr unOpDocD')
 
 mkUnExpr :: (RenderSym r) => (Doc -> Doc -> Doc) -> r (UnaryOp r) -> 
   r (Value r) -> r (Value r)
-mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (uOpDoc u) (valueDoc v))
+mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (valueDoc v))
 
 unExprNumDbl :: (RenderSym r) => VSUnOp r -> SValue r -> SValue r
 unExprNumDbl u' v' = u' >>= (\u -> v' >>= (\v -> 
@@ -321,7 +323,7 @@ unExprCastFloat t = castType $ getType t
         castType _ = id
   
 typeUnExpr :: (RenderSym r) => VSUnOp r -> VSType r -> SValue r -> SValue r
-typeUnExpr = on3StateValues (\u t -> mkExpr (uOpPrec u) t . unOpDocD (uOpDoc u) 
+typeUnExpr = on3StateValues (\u t -> mkExpr (uOpPrec u) t . unOpDocD (RC.uOp u) 
   . valueDoc)
 
 -- Binary Operators --
@@ -397,19 +399,19 @@ binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
 
 binExpr :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
 binExpr = on3StateValues (\b v1 v2 -> mkExpr (bOpPrec b) (numType (valueType v1)
-  (valueType v2)) (binOpDocD (bOpDoc b) (exprParensL b v1 $ valueDoc v1) 
+  (valueType v2)) (binOpDocD (RC.bOp b) (exprParensL b v1 $ valueDoc v1) 
   (exprParensR b v2 $ valueDoc v2)))
 
 binExpr' :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
 binExpr' = on3StateValues (\b v1 v2 -> mkExpr 9 (numType (valueType v1) 
-  (valueType v2)) (binOpDocD' (bOpDoc b) (valueDoc v1) (valueDoc v2)))
+  (valueType v2)) (binOpDocD' (RC.bOp b) (valueDoc v1) (valueDoc v2)))
 
 binExprNumDbl' :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
 binExprNumDbl' b' v1' v2' = b' >>= (\b -> v1' >>= (\v1 -> v2' >>= (\v2 -> 
   let t1 = valueType v1
       t2 = valueType v2
   in binExprCastFloat t1 t2 $ return $ mkExpr 9 (numType t1 t2) 
-  (binOpDocD' (bOpDoc b) (valueDoc v1) (valueDoc v2)))))
+  (binOpDocD' (RC.bOp b) (valueDoc v1) (valueDoc v2)))))
 
 binExprCastFloat :: (RenderSym r) => r (Type r) -> r (Type r) ->
   (SValue r -> SValue r)
@@ -421,7 +423,7 @@ binExprCastFloat t1 t2 = castType (getType t1) (getType t2)
 typeBinExpr :: (RenderSym r) => VSBinOp r -> VSType r -> SValue r -> SValue r 
   -> SValue r
 typeBinExpr bod tp vl1 vl2 = (\b t v1 v2 -> mkExpr (bOpPrec b) t (binOpDocD 
-  (bOpDoc b) (exprParensL b v1 $ valueDoc v1) (exprParensR b v2 $ valueDoc v2)))
+  (RC.bOp b) (exprParensL b v1 $ valueDoc v1) (exprParensR b v2 $ valueDoc v2)))
   <$> bod <*> tp <*> vl1 <*> vl2 
 
 addmathImport :: VS a -> VS a

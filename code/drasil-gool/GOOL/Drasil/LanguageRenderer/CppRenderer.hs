@@ -31,7 +31,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
-  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(..), 
+  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
@@ -41,7 +41,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable)
+  type', uOp, bOp, variable, value)
 import GOOL.Drasil.LanguageRenderer (addExt, mkSt, mkStNoEnd, mkStateVal, 
   mkVal, mkStateVar, mkVar, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
@@ -476,7 +476,7 @@ instance (Pair p) => RenderValue (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ValueElim (p CppSrcCode CppHdrCode) where
   valuePrec v = valuePrec $ pfst v
-  valueDoc v = valueDoc $ pfst v
+  value v = RC.value $ pfst v
 
 instance (Pair p) => RenderValueExp (p CppSrcCode CppHdrCode) where
   objMethodCallMixedArgs' f t o pas nas = pair2Vals3Lists
@@ -1368,8 +1368,8 @@ instance RenderValue CppSrcCode where
   inputFunc = addIOStreamImport $ mkStateVal string (text "std::cin")
   printFunc = addIOStreamImport $ mkStateVal void (text "std::cout")
   printLnFunc = addIOStreamImport $ mkStateVal void (text "std::cout")
-  printFileFunc = on2StateValues (\v -> mkVal v . valueDoc) void
-  printFileLnFunc = on2StateValues (\v -> mkVal v . valueDoc) void
+  printFileFunc = on2StateValues (\v -> mkVal v . RC.value) void
+  printFileLnFunc = on2StateValues (\v -> mkVal v . RC.value) void
 
   cast = cppCast
 
@@ -1379,7 +1379,7 @@ instance RenderValue CppSrcCode where
   
 instance ValueElim CppSrcCode where
   valuePrec = valPrec . unCPPSC
-  valueDoc = val . unCPPSC
+  value = val . unCPPSC
 
 instance RenderValueExp CppSrcCode where
   objMethodCallMixedArgs' = G.objMethodCall
@@ -1472,7 +1472,7 @@ instance DeclStatement CppSrcCode where
   listDec n = G.listDec cppListDecDoc (litInt n)
   listDecDef = G.listDecDef cppListDecDefDoc
   arrayDec n vr = zoom lensMStoVS $ on2StateValues (\sz v -> mkSt $ RC.type' 
-    (variableType v) <+> RC.variable v <> brackets (valueDoc sz)) 
+    (variableType v) <+> RC.variable v <> brackets (RC.value sz)) 
     (litInt n :: SValue CppSrcCode) vr
   arrayDecDef vr vals = on2StateValues (\vdc vs -> mkSt $ statementDoc vdc <+> 
     equals <+> braces (valueList vs)) (arrayDec (toInteger $ length vals) vr) 
@@ -2020,7 +2020,7 @@ instance RenderValue CppHdrCode where
   
 instance ValueElim CppHdrCode where
   valuePrec = valPrec . unCPPHC
-  valueDoc = val . unCPPHC
+  value = val . unCPPHC
   
 instance RenderValueExp CppHdrCode where
   objMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
@@ -2470,7 +2470,7 @@ cppClassVar c v = c <> text "::" <> v
 cppLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 cppLambda ps ex = text "[]" <+> parens (hicat (text ",") $ zipWith (<+>) 
   (map (RC.type' . variableType) ps) (map RC.variable ps)) <+> text "->" <+> 
-  bodyStart <> text "return" <+> valueDoc ex <> endStatement <> bodyEnd
+  bodyStart <> text "return" <+> RC.value ex <> endStatement <> bodyEnd
 
 cppCast :: VSType CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
 cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $ 
@@ -2478,26 +2478,26 @@ cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $
   where cppCast' Double String _ _ = funcApp "std::stod" double [v]
         cppCast' Float String _ _ = funcApp "std::stof" float [v]
         cppCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' tp)) 
-          (valueDoc vl))
+          (RC.value vl))
 
 cppListSetDoc :: Doc -> Doc -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens i <+> equals <+> v
 
 cppListDecDoc :: (RenderSym r) => r (Value r) -> Doc
-cppListDecDoc n = parens (valueDoc n)
+cppListDecDoc n = parens (RC.value n)
 
 cppListDecDefDoc :: (RenderSym r) => [r (Value r)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
 
 cppPrint :: (RenderSym r) => Bool -> SValue r -> SValue r -> MSStatement r
 cppPrint newLn  pf vl = zoom lensMStoVS $ on3StateValues (\e printFn v -> mkSt 
-  $ valueDoc printFn <+> text "<<" <+> pars v (valueDoc v) <+> e) end pf vl
+  $ RC.value printFn <+> text "<<" <+> pars v (RC.value v) <+> e) end pf vl
   where pars v = if maybe False (< 9) (valuePrec v) then parens else id
         end = if newLn then addIOStreamImport (toState $ text "<<" <+> 
           text "std::endl") else toState empty
 
 cppThrowDoc :: (RenderSym r) => r (Value r) -> Doc
-cppThrowDoc errMsg = text "throw" <> parens (valueDoc errMsg)
+cppThrowDoc errMsg = text "throw" <> parens (RC.value errMsg)
 
 cppTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 cppTryCatch tb cb = vcat [
@@ -2508,19 +2508,19 @@ cppTryCatch tb cb = vcat [
   rbrace]
 
 cppDiscardInput :: (RenderSym r) => Label -> r (Value r) -> Doc
-cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens 
+cppDiscardInput sep inFn = RC.value inFn <> dot <> text "ignore" <> parens 
   (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
   quotes (text sep))
 
 cppInput :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ zoom lensMStoVS $ 
-  on2StateValues (\v inFn -> mkSt $ vcat [valueDoc inFn <+> text ">>" <+> 
-  RC.variable v <> endStatement, valueDoc inFn <> dot <> 
+  on2StateValues (\v inFn -> mkSt $ vcat [RC.value inFn <+> text ">>" <+> 
+  RC.variable v <> endStatement, RC.value inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]) vr i
 
 cppOpenFile :: (RenderSym r) => Label -> r (Variable r) -> r (Value r) -> Doc
 cppOpenFile mode f n = RC.variable f <> dot <> text "open" <> 
-  parens (valueDoc n <> comma <+> text mode)
+  parens (RC.value n <> comma <+> text mode)
 
 cppPointerParamDoc :: (RenderSym r) => r (Variable r) -> Doc
 cppPointerParamDoc v = RC.type' (variableType v) <+> text "&" <> RC.variable v
@@ -2541,7 +2541,7 @@ cppConstructor :: [MSParameter CppSrcCode] -> NamedArgs CppSrcCode ->
 cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals 
   bod -> if null is then G.constructor n ps is b else modify (setScope Pub) >> 
   toState (methodFromData Pub (cppsMethod (zipWith (\ivar ival -> RC.variable 
-  ivar <> parens (valueDoc ival)) ivars ivals) n n tp pms bod))) <$> construct 
+  ivar <> parens (RC.value ival)) ivars ivals) n n tp pms bod))) <$> construct 
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom 
   lensMStoVS . snd) is <*> b)
 

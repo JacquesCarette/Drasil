@@ -29,7 +29,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
-  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(..), 
+  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
@@ -38,7 +38,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable)
+  type', uOp, bOp, variable, value)
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStNoEnd, mkStateVal, mkVal, mkVar, 
   dot, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
   endStatement, commentStart, elseIfLabel, inLabel, variableList, appendToBody, 
@@ -400,9 +400,9 @@ instance RenderValue CSharpCode where
   printFunc = addSystemImport $ mkStateVal void (text "Console.Write")
   printLnFunc = addSystemImport $ mkStateVal void (text "Console.WriteLine")
   printFileFunc = on2StateValues (\v -> mkVal v . R.printFile "Write" . 
-    valueDoc) void
+    RC.value) void
   printFileLnFunc = on2StateValues (\v -> mkVal v . R.printFile "WriteLine" . 
-    valueDoc) void
+    RC.value) void
   
   cast = csCast
 
@@ -412,7 +412,7 @@ instance RenderValue CSharpCode where
   
 instance ValueElim CSharpCode where
   valuePrec = valPrec . unCSC
-  valueDoc = val . unCSC
+  value = val . unCSC
   
 instance RenderValueExp CSharpCode where
   objMethodCallMixedArgs' = G.objMethodCall 
@@ -726,7 +726,7 @@ csOutfileType = modifyReturn (addLangImportVS "System.IO") $
   typeFromData File "StreamWriter" (text "StreamWriter")
 
 csLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-csLambda ps ex = parens (variableList ps) <+> text "=>" <+> valueDoc ex
+csLambda ps ex = parens (variableList ps) <+> text "=>" <+> RC.value ex
 
 csCast :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
 csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $ 
@@ -734,7 +734,7 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
   where csCast' Double String _ _ = funcApp "Double.Parse" double [v]
         csCast' Float String _ _ = funcApp "Single.Parse" float [v]
         csCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' tp)) 
-          (valueDoc vl))
+          (RC.value vl))
 
 csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
   MSStatement r
@@ -745,7 +745,7 @@ csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStNoEnd $
 
 csThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
-  parens (valueDoc errMsg)
+  parens (RC.value errMsg)
 
 csTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 csTryCatch tb cb = vcat [
@@ -757,15 +757,15 @@ csTryCatch tb cb = vcat [
   rbrace]
 
 csDiscardInput :: (RenderSym r) => r (Value r) -> Doc
-csDiscardInput = valueDoc
+csDiscardInput = RC.value
 
 csFileInput :: (RenderSym r) => SValue r -> SValue r
-csFileInput = onStateValue (\f -> mkVal (valueType f) (valueDoc f <> dot <> 
+csFileInput = onStateValue (\f -> mkVal (valueType f) (RC.value f <> dot <> 
   text "ReadLine()"))
 
 csInput :: (RenderSym r) => VSType r -> SValue r -> SValue r
 csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn 
-  -> mkVal t $ text (csInput' (getType t)) <> parens (valueDoc inFn)) inF)
+  -> mkVal t $ text (csInput' (getType t)) <> parens (RC.value inFn)) inF)
   where csInput' Integer = "Int32.Parse"
         csInput' Float = "Single.Parse"
         csInput' Double = "Double.Parse"

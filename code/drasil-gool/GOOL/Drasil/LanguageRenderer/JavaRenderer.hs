@@ -30,7 +30,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
-  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(..), 
+  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
@@ -39,7 +39,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
-  type', uOp, bOp, variable)
+  type', uOp, bOp, variable, value)
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStateVal, mkVal, dot, new, 
   elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
   bodyEnd, endStatement, commentStart, variableList, parameterList, 
@@ -422,9 +422,9 @@ instance RenderValue JavaCode where
   printFunc = mkStateVal void (text "System.out.print")
   printLnFunc = mkStateVal void (text "System.out.println")
   printFileFunc = on2StateValues (\v -> mkVal v . R.printFile "print" . 
-    valueDoc) void
+    RC.value) void
   printFileLnFunc = on2StateValues (\v -> mkVal v . R.printFile "println" . 
-    valueDoc) void
+    RC.value) void
   
   cast = jCast
 
@@ -434,7 +434,7 @@ instance RenderValue JavaCode where
 
 instance ValueElim JavaCode where
   valuePrec = valPrec . unJC
-  valueDoc = val . unJC
+  value = val . unJC
 
 instance RenderValueExp JavaCode where
   objMethodCallMixedArgs' f t o ps ns = do
@@ -863,7 +863,7 @@ jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
 jLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-jLambda ps ex = parens (variableList ps) <+> text "->" <+> valueDoc ex
+jLambda ps ex = parens (variableList ps) <+> text "->" <+> RC.value ex
 
 jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
 jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $ 
@@ -871,14 +871,14 @@ jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $
   where jCast' Double String _ _ = funcApp "Double.parseDouble" double [v]
         jCast' Float String _ _ = funcApp "Float.parseFloat" float [v]
         jCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' 
-          tp)) (valueDoc vl))
+          tp)) (RC.value vl))
 
 jConstDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 jConstDecDef v def = text "final" <+> RC.type' (variableType v) <+> 
-  RC.variable v <+> equals <+> valueDoc def
+  RC.variable v <+> equals <+> RC.value def
 
 jThrowDoc :: (RenderSym r) => r (Value r) -> Doc
-jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (valueDoc 
+jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (RC.value 
   errMsg)
 
 jTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
@@ -898,19 +898,19 @@ jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getType . valueType
         jOut' _ = G.print newLn f printFn v
 
 jDiscardInput :: (RenderSym r) => r (Value r) -> Doc
-jDiscardInput inFn = valueDoc inFn <> dot <> text "next()"
+jDiscardInput inFn = RC.value inFn <> dot <> text "next()"
 
 jInput :: (RenderSym r) => VSType r -> SValue r -> SValue r
 jInput = on2StateValues (\t -> mkVal t . jInput' (getType t))
-  where jInput' Integer inFn = text "Integer.parseInt" <> parens (valueDoc inFn 
+  where jInput' Integer inFn = text "Integer.parseInt" <> parens (RC.value inFn 
           <> dot <> text "nextLine()")
-        jInput' Float inFn = text "Float.parseFloat" <> parens (valueDoc inFn 
+        jInput' Float inFn = text "Float.parseFloat" <> parens (RC.value inFn 
           <> dot <> text "nextLine()")
-        jInput' Double inFn = text "Double.parseDouble" <> parens (valueDoc 
+        jInput' Double inFn = text "Double.parseDouble" <> parens (RC.value 
           inFn <> dot <> text "nextLine()")
-        jInput' Boolean inFn = valueDoc inFn <> dot <> text "nextBoolean()"
-        jInput' String inFn = valueDoc inFn <> dot <> text "nextLine()"
-        jInput' Char inFn = valueDoc inFn <> dot <> text "next().charAt(0)"
+        jInput' Boolean inFn = RC.value inFn <> dot <> text "nextBoolean()"
+        jInput' String inFn = RC.value inFn <> dot <> text "nextLine()"
+        jInput' Char inFn = RC.value inFn <> dot <> text "next().charAt(0)"
         jInput' _ _ = error "Attempt to read value of unreadable type"
 
 jOpenFileR :: (RenderSym r) => SValue r -> VSType r -> SValue r
@@ -922,7 +922,7 @@ jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n],
 
 jStringSplit :: (RenderSym r) => SVariable r -> SValue r -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+> new 
-  <+> RC.type' (variableType vnew) <> parens (valueDoc s))
+  <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
 jMethod :: (RenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc

@@ -170,7 +170,7 @@ class RenderValue r where
 
 class ValueElim r where
   valuePrec :: r (Value r) -> Maybe Int
-  valueDoc :: r (Value r) -> Doc
+  value :: r (Value r) -> Doc
 
 class InternalGetSet r where
   getFunc :: SVariable r -> VSFunction r

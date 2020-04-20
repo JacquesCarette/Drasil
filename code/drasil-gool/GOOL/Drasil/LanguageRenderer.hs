@@ -28,10 +28,10 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   StatementSym(Statement), ScopeSym(Scope), ParameterSym(Parameter))
 import GOOL.Drasil.RendererClasses (RenderSym,
   RenderVariable(..),
-  RenderValue(valFromData), ValueElim(..), RenderStatement(..),
+  RenderValue(valFromData), RenderStatement(..),
   StatementElim(..), ScopeElim(..), ParamElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
-  InternalTypeElim(..), InternalVarElim(..))
+  InternalTypeElim(..), InternalVarElim(..), ValueElim(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
@@ -126,7 +126,7 @@ body bs = vibcat $ filter (not . isEmpty) bs
 -- IO --
 
 print :: (RenderSym r) => r (Value r) -> r (Value r) -> Doc
-print printFn v = valueDoc printFn <> parens (valueDoc v)
+print printFn v = RC.value printFn <> parens (RC.value v)
 
 printFile :: Label -> Doc -> Doc
 printFile fn f = f <> dot <> text fn
@@ -164,7 +164,7 @@ switch :: (RenderSym r) => r (Statement r) -> r (Value r) -> r (Body r) ->
   [(r (Value r), r (Body r))] -> Doc
 switch breakState v defBody cs = 
   let caseDoc (l, result) = vcat [
-        text "case" <+> valueDoc l <> colon,
+        text "case" <+> RC.value l <> colon,
         indentList [
           RC.body result,
           statementDoc breakState]]
@@ -174,7 +174,7 @@ switch breakState v defBody cs =
           RC.body defBody,
           statementDoc breakState]]
   in vcat [
-      text "switch" <> parens (valueDoc v) <+> lbrace,
+      text "switch" <> parens (RC.value v) <+> lbrace,
       indentList [
         vmap caseDoc cs,
         defaultSection],
@@ -183,24 +183,24 @@ switch breakState v defBody cs =
 -- Statements --
 
 assign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-assign vr vl = RC.variable vr <+> equals <+> valueDoc vl
+assign vr vl = RC.variable vr <+> equals <+> RC.value vl
 
 multiAssign :: (RenderSym r) => [r (Variable r)] -> [r (Value r)] -> Doc
 multiAssign vrs vls = variableList vrs <+> equals <+> valueList vls
 
 addAssign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-addAssign vr vl = RC.variable vr <+> text "+=" <+> valueDoc vl
+addAssign vr vl = RC.variable vr <+> text "+=" <+> RC.value vl
 
 increment :: (RenderSym r) => r (Variable r) -> Doc
 increment v = RC.variable v <> text "++"
 
 listDec :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 listDec v n = space <> equals <+> new <+> RC.type' (variableType v) 
-  <> parens (valueDoc n)
+  <> parens (RC.value n)
 
 constDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 constDecDef v def = text "const" <+> RC.type' (variableType v) <+> 
-  RC.variable v <+> equals <+> valueDoc def
+  RC.variable v <+> equals <+> RC.value def
 
 return' :: (RenderSym r) => [r (Value r)] -> Doc
 return' vs = text "return" <+> valueList vs
@@ -248,7 +248,7 @@ self :: Doc
 self = text "this"
 
 arg :: (RenderSym r) => r (Value r) -> r (Value r) -> Doc
-arg n args = valueDoc args <> brackets (valueDoc n)
+arg n args = RC.value args <> brackets (RC.value n)
 
 classVar :: Doc -> Doc -> Doc
 classVar c v = c <> dot <> v
@@ -265,7 +265,7 @@ cast :: Doc -> Doc
 cast = parens
 
 listAccessFunc :: (RenderSym r) => r (Value r) -> Doc
-listAccessFunc v = brackets $ valueDoc v
+listAccessFunc v = brackets $ RC.value v
 
 listSetFunc :: Doc -> Doc -> Doc
 listSetFunc i v = brackets i <+> equals <+> v
@@ -355,7 +355,7 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem cmt) (fileMod m)) m
 -- Helper Functions --
 
 valueList :: (RenderSym r) => [r (Value r)] -> Doc
-valueList = hicat (text ", ") . map valueDoc
+valueList = hicat (text ", ") . map RC.value
 
 variableList :: (RenderSym r) => [r (Variable r)] -> Doc
 variableList = hicat (text ", ") . map RC.variable

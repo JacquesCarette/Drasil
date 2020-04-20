@@ -30,7 +30,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), 
   RenderOp(..), RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), 
-  ValueElim(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..),
+  ValueElim(valuePrec), InternalGetSet(..), InternalListFunc(..), InternalIterator(..),
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(..), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
@@ -38,7 +38,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
   RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
-  type', uOp, bOp, variable)
+  type', uOp, bOp, variable, value)
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -207,8 +207,8 @@ instance ControlBlock PythonCode where
       r &= objMethodCall odeT (extNewObj odeLib odeT 
       [lambda [iv, dv] (ode info)]) 
         "set_integrator" (pyODEMethod (solveMethod opts) ++
-          [absTol opts >>= (mkStateVal double . (text "atol=" <>) . valueDoc),
-          relTol opts >>= (mkStateVal double . (text "rtol=" <>) . valueDoc)]),
+          [absTol opts >>= (mkStateVal double . (text "atol=" <>) . RC.value),
+          relTol opts >>= (mkStateVal double . (text "rtol=" <>) . RC.value)]),
       valStmt $ objMethodCall odeT rVal "set_initial_value" [initVal info]],
     block [
       listDecDef iv [tInit info],
@@ -399,7 +399,7 @@ instance RenderValue PythonCode where
   printFileFunc _ = mkStateVal void empty
   printFileLnFunc _ = mkStateVal void empty
   
-  cast = on2StateValues (\t -> mkVal t . R.castObj (RC.type' t) . valueDoc)
+  cast = on2StateValues (\t -> mkVal t . R.castObj (RC.type' t) . RC.value)
 
   call = G.call equals
 
@@ -407,7 +407,7 @@ instance RenderValue PythonCode where
 
 instance ValueElim PythonCode where
   valuePrec = valPrec . unPC
-  valueDoc = val . unPC
+  value = val . unPC
 
 instance RenderValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
@@ -424,7 +424,7 @@ instance GetSet PythonCode where
 
 instance List PythonCode where
   listSize = on2StateValues (\f v -> mkVal (functionType f) 
-    (pyListSize (valueDoc v) (functionDoc f))) listSizeFunc
+    (pyListSize (RC.value v) (functionDoc f))) listSizeFunc
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess
@@ -747,10 +747,10 @@ pyODEMethod :: ODEMethod -> [SValue PythonCode]
 pyODEMethod RK45 = [litString "dopri5"]
 pyODEMethod BDF = [litString "vode", 
   (litString "bdf" :: SValue PythonCode) >>= 
-  (mkStateVal string . (text "method=" <>) . valueDoc)]
+  (mkStateVal string . (text "method=" <>) . RC.value)]
 pyODEMethod Adams = [litString "vode", 
   (litString "adams" :: SValue PythonCode) >>= 
-  (mkStateVal string . (text "method=" <>) . valueDoc)]
+  (mkStateVal string . (text "method=" <>) . RC.value)]
 
 pyLogOp :: (RenderSym r) => VSUnOp r
 pyLogOp = addmathImport $ unOpPrec "math.log10"
@@ -763,11 +763,11 @@ pyClassVar c v = c <> dot <> c <> dot <> v
 
 pyInlineIf :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 pyInlineIf = on3StateValues (\c v1 v2 -> valFromData (valuePrec c) 
-  (valueType v1) (valueDoc v1 <+> text "if" <+> valueDoc c <+> text "else" <+> 
-  valueDoc v2))
+  (valueType v1) (RC.value v1 <+> text "if" <+> RC.value c <+> text "else" <+> 
+  RC.value v2))
 
 pyLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-pyLambda ps ex = text "lambda" <+> variableList ps <> colon <+> valueDoc ex
+pyLambda ps ex = text "lambda" <+> variableList ps <> colon <+> RC.value ex
 
 pyListSize :: Doc -> Doc -> Doc
 pyListSize v f = f <> parens v
@@ -780,9 +780,9 @@ pyListDec v = RC.variable v <+> equals <+> RC.type' (variableType v)
 
 pyPrint :: (RenderSym r) => Bool -> r (Value r) -> r (Value r) -> r (Value r) 
   -> Doc
-pyPrint newLn prf v f = valueDoc prf <> parens (valueDoc v <> nl <> fl)
+pyPrint newLn prf v f = RC.value prf <> parens (RC.value v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
-        fl = emptyIfEmpty (valueDoc f) $ text ", file=" <> valueDoc f
+        fl = emptyIfEmpty (RC.value f) $ text ", file=" <> RC.value f
 
 pyOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
   MSStatement r
@@ -801,16 +801,16 @@ pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
         pyInput' _ = error "Attempt to read a value of unreadable type"
 
 pyThrow :: (RenderSym r) => r (Value r) -> Doc
-pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valueDoc errMsg)
+pyThrow errMsg = text "raise" <+> text "Exception" <> parens (RC.value errMsg)
 
 pyForEach :: (RenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
 pyForEach i lstVar b = vcat [
-  forLabel <+> RC.variable i <+> inLabel <+> valueDoc lstVar <> colon,
+  forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <> colon,
   indent $ RC.body b]
 
 pyWhile :: (RenderSym r) => r (Value r) -> r (Body r) -> Doc
 pyWhile v b = vcat [
-  text "while" <+> valueDoc v <> colon,
+  text "while" <+> RC.value v <> colon,
   indent $ RC.body b]
 
 pyTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
@@ -823,8 +823,8 @@ pyTryCatch tryB catchB = vcat [
 pyListSlice :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r 
   -> SValue r -> VS Doc
 pyListSlice vn vo beg end step = (\vnew vold b e s -> RC.variable vnew <+> 
-  equals <+> valueDoc vold <> brackets (valueDoc b <> colon <> valueDoc e <> 
-  colon <> valueDoc s)) <$> vn <*> vo <*> beg <*> end <*> step
+  equals <+> RC.value vold <> brackets (RC.value b <> colon <> RC.value e <> 
+  colon <> RC.value s)) <$> vn <*> vo <*> beg <*> end <*> step
 
 pyMethod :: (RenderSym r) => Label -> r (Variable r) -> [r (Parameter r)] ->
   r (Body r) -> Doc

@@ -179,7 +179,6 @@ instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
   addComments s = pair1 (addComments s) (addComments s)
 
 instance (Pair p) => RenderBody (p CppSrcCode CppHdrCode) where
-  docBody d = on2StateValues pair (docBody d) (docBody d)
   multiBody = pair1List multiBody multiBody
 
 instance (Pair p) => BodyElim (p CppSrcCode CppHdrCode) where
@@ -1137,7 +1136,6 @@ instance BodySym CppSrcCode where
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
 instance RenderBody CppSrcCode where
-  docBody = onStateValue toCode
   multiBody = G.multiBody 
 
 instance BodyElim CppSrcCode where
@@ -1798,7 +1796,6 @@ instance BodySym CppHdrCode where
   addComments _ _ = toState $ toCode empty
 
 instance RenderBody CppHdrCode where
-  docBody = onStateValue toCode
   multiBody = G.multiBody 
 
 instance BodyElim CppHdrCode where

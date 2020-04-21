@@ -173,7 +173,6 @@ instance BodySym JavaCode where
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
 instance RenderBody JavaCode where
-  docBody = onStateValue toCode
   multiBody = G.multiBody 
 
 instance BodyElim JavaCode where

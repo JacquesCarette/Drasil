@@ -66,7 +66,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   ControlStatement(returnStmt, ifCond, for, forRange, switch), 
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym, 
-  RenderFile(commentedMod), RenderBody(docBody),
+  RenderFile(commentedMod),
   RenderBlock(docBlock), ImportSym(..),  
   RenderType(..),
   RenderVariable(varFromData),
@@ -128,8 +128,8 @@ import qualified Text.PrettyPrint.HughesPJ as D (char, double, float)
 
 -- Bodies --
 
-multiBody :: (RenderSym r) => [MSBody r] -> MSBody r
-multiBody bs = docBody $ onStateList vibcat $ map (onStateValue RC.body) bs
+multiBody :: (RenderSym r, Monad r) => [MSBody r] -> MS (r Doc)
+multiBody bs = onStateList (toCode . vibcat) $ map (onStateValue RC.body) bs
 
 -- Blocks --
 

@@ -164,7 +164,6 @@ instance BodySym CSharpCode where
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
 instance RenderBody CSharpCode where
-  docBody = onStateValue toCode
   multiBody = G.multiBody 
 
 instance BodyElim CSharpCode where

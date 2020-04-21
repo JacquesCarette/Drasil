@@ -157,7 +157,6 @@ instance BodySym PythonCode where
   addComments s = onStateValue (onCodeValue (R.addComments s pyCommentStart))
 
 instance RenderBody PythonCode where
-  docBody = onStateValue toCode
   multiBody = G.multiBody 
 
 instance BodyElim PythonCode where

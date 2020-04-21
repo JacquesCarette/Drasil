@@ -77,7 +77,6 @@ class PermElim r where
   binding :: r (Permanence r) -> Binding
 
 class RenderBody r where
-  docBody :: MS Doc -> MSBody r
   multiBody :: [MSBody r] -> MSBody r
 
 class BodyElim r where

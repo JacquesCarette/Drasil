@@ -1096,7 +1096,7 @@ instance RenderFile CppSrcCode where
   commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then on2CodeValues 
     R.commentedMod m cmt else m) mod cmnt getCurrMain
   
-  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
+  fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CppSrcCode where
   type Import CppSrcCode = Doc
@@ -1743,7 +1743,7 @@ instance RenderFile CppHdrCode where
     onCodeValue fileMod m) then m else on2CodeValues R.commentedMod m cmt) 
     mod cmnt
 
-  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
+  fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CppHdrCode where
   type Import CppHdrCode = Doc

@@ -97,9 +97,10 @@ import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
 import GOOL.Drasil.AST (Binding(..), ScopeTag(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, vibcat, emptyIfEmpty, 
   toCode, toState, onCodeValue, onStateValue, on2StateValues, on3StateValues, 
-  onStateList, on2StateLists, on1StateValue1List, getInnerType, getNestDegree)
+  onStateList, on1StateValue1List, getInnerType, getNestDegree)
 import GOOL.Drasil.LanguageRenderer (dot, forLabel, new, addExt, functionDox, 
-  classDox, moduleDox, getterName, setterName, valueList, intValue)
+  classDox, moduleDox, getterName, setterName, valueList, namedArgList, 
+  intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (file, module', block, 
   print, stateVar, stateVarList, switch, assign, addAssign, increment, 
   constDecDef, return', comment, getTerm, var, extVar, self, arg, objVar, func, 
@@ -109,12 +110,12 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   compEqualPrec, compPrec, addPrec, multPrec, powerPrec, andPrec, orPrec)
 import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensMStoVS, lensVStoMS, currMain, currFileType, modifyReturnFunc, 
-  modifyReturnFunc2, addFile, setMainMod, addLangImportVS, getLangImports, 
-  addLibImportVS, getLibImports, getModuleImports, setModuleName, 
-  getModuleName, setClassName, getClassName, addParameter, getParameters)
+  addFile, setMainMod, addLangImportVS, getLangImports, addLibImportVS, 
+  getLibImports, getModuleImports, setModuleName, getModuleName, setClassName, 
+  getClassName, addParameter, getParameters)
 
 import Prelude hiding (break,print,last,mod,pi,sin,cos,tan,(<>))
-import Data.List (sort, intersperse)
+import Data.List (sort)
 import Data.Map as Map (lookup, fromList)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative ((<|>))
@@ -123,7 +124,7 @@ import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  brackets, braces, quotes, integer, hcat, vcat, semi, comma, equals, isEmpty)
+  brackets, braces, quotes, integer, vcat, semi, comma, equals, isEmpty)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double, float)
 
 -- Bodies --
@@ -361,6 +362,8 @@ extVar l n t = mkStateVar (l ++ "." ++ n) t (R.extVar l n)
 self :: (RenderSym r) => SVariable r
 self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar "this" (obj l) R.self)
 
+-- | To be used in classVar implementations. Throws an error if the variable is 
+-- not static since classVar is for accessing static variables from a class
 classVarCheckStatic :: (RenderSym r) => r (Variable r) -> r (Variable r)
 classVarCheckStatic v = classVarCS (variableBind v)
   where classVarCS Dynamic = error
@@ -384,9 +387,13 @@ listVar :: (RenderSym r) => Label -> VSType r -> SVariable r
 listVar n t = S.var n (S.listType t)
 
 arrayElem :: (RenderSym r) => SValue r -> SVariable r -> SVariable r
-arrayElem i' v' = join $ on2StateValues (\i v -> mkStateVar (variableName v ++ 
-  "[" ++ render (RC.value i) ++ "]") (listInnerType $ toState $ variableType v) 
-  (RC.variable v <> brackets (RC.value i))) i' v'
+arrayElem i' v' = do
+  i <- i'
+  v <- v'
+  let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"
+      vType = listInnerType $ toState $ variableType v
+      vRender = RC.variable v <> brackets (RC.value i)
+  mkStateVar vName vType vRender
 
 iterVar :: (RenderSym r) => Label -> VSType r -> SVariable r
 iterVar n t = S.var n (iterator t)
@@ -445,15 +452,21 @@ call' :: (RenderSym r) => String -> Maybe Library -> Label -> VSType r ->
 call' l _ _ _ _ _ (_:_) = error $ namedArgError l
 call' _ l n t o ps ns = call empty l n t o ps ns
 
+-- | Parameters are: separator between name and value for named arguments, 
+-- maybe name of external module, name of function, return type of function, 
+-- maybe Doc for object variable (including separator between object and 
+-- function) for method calls, arguments, named arguments
 call :: (RenderSym r) => Doc -> Maybe Library -> Label -> VSType r -> 
   Maybe Doc -> [SValue r] -> NamedArgs r -> SValue r
-call sep lib n t o pas nas = (\tp pargs nms nargs -> mkVal tp $ obDoc <> libDoc 
-  <> text n <> parens (valueList pargs <+> (if null pas || null nas then empty 
-  else comma) <+> hcat (intersperse (text ", ") (zipWith (\nm a -> 
-  RC.variable nm <> sep <> RC.value a) nms nargs)))) <$> t <*> sequence pas <*> 
-  mapM fst nas <*> mapM snd nas
-  where libDoc = maybe empty (text . (++ ".")) lib
-        obDoc = fromMaybe empty o
+call sep lib n t o pas nas = do
+  pargs <- sequence pas
+  nms <- mapM fst nas
+  nargs <- mapM snd nas
+  let libDoc = maybe empty (text . (++ ".")) lib
+      obDoc = fromMaybe empty o
+  mkStateVal t $ obDoc <> libDoc <> text n <> parens (valueList pargs <+> 
+    (if null pas || null nas then empty else comma) <+> namedArgList sep 
+    (zip nms nargs))
 
 funcAppMixedArgs :: (RenderSym r) => MixedCall r
 funcAppMixedArgs n t = S.call Nothing n t Nothing
@@ -655,9 +668,13 @@ listDecDef' v vals = zoom lensMStoVS v >>= (\vr -> S.varDecDef (return vr)
   (S.litList (listInnerType $ return $ variableType vr) vals))
 
 arrayDec :: (RenderSym r) => SValue r -> SVariable r -> MSStatement r
-arrayDec n vr = zoom lensMStoVS $ on3StateValues (\sz v it -> mkStmt (RC.type' 
-  (variableType v) <+> RC.variable v <+> equals <+> new <+> RC.type' it <> 
-  brackets (RC.value sz))) n vr (listInnerType $ onStateValue variableType vr)
+arrayDec n vr = zoom lensMStoVS $ do
+  sz <- n 
+  v <- vr 
+  let tp = variableType v
+  innerTp <- listInnerType $ toState tp
+  toState $ mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new <+> 
+    RC.type' innerTp <> brackets (RC.value sz)
 
 arrayDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 arrayDecDef v vals = on2StateValues (\vd vs -> mkStmt (RC.statement vd <+> 
@@ -811,21 +828,29 @@ ifCond ifStart elif bEnd (c:cs) eBody =
 
 switch :: (RenderSym r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> 
   MSStatement r
-switch v cs bod = (\b val css de -> mkStmt (R.switch b val de css)) <$>
-  S.stmt break <*> zoom lensMStoVS v <*> on2StateLists zip (map (zoom 
-  lensMStoVS . fst) cs) (map snd cs) <*> bod
+switch v cs bod = do
+  brk <- S.stmt break
+  val <- zoom lensMStoVS v
+  vals <- mapM (zoom lensMStoVS . fst) cs
+  bods <- mapM snd cs
+  dflt <- bod
+  toState $ mkStmt $ R.switch brk val dflt (zip vals bods)
 
 ifExists :: (RenderSym r) => SValue r -> MSBody r -> MSBody r -> MSStatement r
 ifExists v ifBody = S.ifCond [(S.notNull v, ifBody)]
 
 for :: (RenderSym r) => Doc -> Doc -> MSStatement r -> SValue r -> 
   MSStatement r -> MSBody r -> MSStatement r
-for bStart bEnd sInit vGuard sUpdate b = (\initl guard upd bod -> mkStmtNoEnd 
-  (vcat [forLabel <+> parens (RC.statement initl <> semi <+> RC.value guard <> 
-    semi <+> RC.statement upd) <+> bStart,
-  indent $ RC.body bod,
-  bEnd])) <$> S.loopStmt sInit <*> zoom lensMStoVS vGuard <*> 
-  S.loopStmt sUpdate <*> b
+for bStart bEnd sInit vGuard sUpdate b = do
+  initl <- S.loopStmt sInit
+  guard <- zoom lensMStoVS vGuard
+  upd <- S.loopStmt sUpdate
+  bod <- b
+  toState $ mkStmtNoEnd $ vcat [
+    forLabel <+> parens (RC.statement initl <> semi <+> RC.value guard <> 
+      semi <+> RC.statement upd) <+> bStart,
+    indent $ RC.body bod,
+    bEnd]
 
 forRange :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r -> 
   MSBody r -> MSStatement r
@@ -834,11 +859,15 @@ forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?<
 
 forEach :: (RenderSym r) => Doc -> Doc -> Doc -> Doc -> SVariable r -> SValue r 
   -> MSBody r -> MSStatement r
-forEach bStart bEnd forEachLabel inLbl e' v' = on3StateValues (\e v b -> 
-  mkStmtNoEnd (vcat [forEachLabel <+> parens (RC.type' (variableType e) 
-    <+> RC.variable e <+> inLbl <+> RC.value v) <+> bStart,
-  indent $ RC.body b,
-  bEnd])) (zoom lensMStoVS e') (zoom lensMStoVS v') 
+forEach bStart bEnd forEachLabel inLbl e' v' b' = do
+  e <- zoom lensMStoVS e'
+  v <- zoom lensMStoVS v'
+  b <- b'
+  toState $ mkStmtNoEnd $ vcat [
+    forEachLabel <+> parens (RC.type' (variableType e) <+> RC.variable e <+> 
+      inLbl <+> RC.value v) <+> bStart,
+    indent $ RC.body b,
+    bEnd] 
 
 while :: (RenderSym r) => Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
 while bStart bEnd v' = on2StateValues (\v b -> mkStmtNoEnd (vcat [
@@ -977,26 +1006,35 @@ commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem
 intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> 
   Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] 
   -> CS (r Doc)
-intClass f n s i svrs mths = modify (setClassName n) >> on2StateValues 
-  (\svs ms -> onCodeValue (\p -> f n p (RC.scope s) svs ms) i) 
-  (onStateList (R.stateVarList . map RC.stateVar) svrs) 
-  (onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths))
+intClass f n s i svrs mths = do
+  modify (setClassName n) 
+  svs <- onStateList (R.stateVarList . map RC.stateVar) svrs
+  ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)
+  toState $ onCodeValue (\p -> f n p (RC.scope s) svs ms) i 
 
 -- Modules --
 
 buildModule :: (RenderSym r) => Label -> FS Doc -> FS Doc -> [SMethod r] -> 
   [SClass r] -> FSModule r
-buildModule n imps bot ms cs = S.modFromData n ((\cls fs is bt -> 
-  R.module' is (vibcat (map RC.class' cls)) (vibcat (map RC.method fs ++ [bt])))
-  <$> mapM (zoom lensFStoCS) cs <*> mapM (zoom lensFStoMS) ms <*> imps <*> bot)
+buildModule n imps bot fs cs = S.modFromData n (do
+  cls <- mapM (zoom lensFStoCS) cs
+  fns <- mapM (zoom lensFStoMS) fs
+  is <- imps
+  bt <- bot
+  toState $ R.module' is (vibcat (map RC.class' cls)) 
+    (vibcat (map RC.method fns ++ [bt])))
 
 buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label] 
   -> [SMethod r] -> [SClass r] -> FSModule r
-buildModule' n inc is ms cs = S.modFromData n ((\cls lis libis mis -> vibcat [
+buildModule' n inc is ms cs = S.modFromData n (do
+  cls <- mapM (zoom lensFStoCS) 
+          (if null ms then cs else S.buildClass n Nothing [] ms : cs) 
+  lis <- getLangImports
+  libis <- getLibImports
+  mis <- getModuleImports
+  toState $ vibcat [
     vcat (map (RC.import' . inc) (lis ++ sort (is ++ libis) ++ mis)),
-    vibcat (map RC.class' cls)]) <$>
-  mapM (zoom lensFStoCS) (if null ms then cs else S.buildClass n Nothing [] ms 
-    : cs) <*> getLangImports <*> getLibImports <*> getModuleImports)
+    vibcat (map RC.class' cls)])
 
 modFromData :: Label -> (Doc -> r (Module r)) -> FS Doc -> FSModule r
 modFromData n f d = modify (setModuleName n) >> onStateValue f d
@@ -1014,11 +1052,19 @@ docMod :: (RenderSym r) => String -> String -> [String] -> String -> SFile r ->
 docMod e d a dt = commentedMod (docComment $ moduleDox d a dt . addExt e <$> 
   getModuleName)
 
-fileFromData :: (RenderSym r) => (r (Module r) -> FilePath -> r (File r)) 
+fileFromData :: (RenderSym r) => (FilePath -> r (Module r) -> r (File r)) 
   -> FS FilePath -> FSModule r -> SFile r
-fileFromData f fp m = modifyReturnFunc2 (\mdl fpath s -> (if isEmpty 
-  (RC.module' mdl) then id else (if s ^. currMain && isSource (s ^. currFileType) then over lensFStoGS 
-  (setMainMod fpath) else id) . over lensFStoGS (addFile (s ^. currFileType) fpath)) s) f m fp 
+fileFromData f fp m = do
+  mdl <- m
+  fpath <- fp
+  modify (\s -> if isEmpty (RC.module' mdl) 
+    then s
+    else over lensFStoGS (addFile (s ^. currFileType) fpath) $ 
+      if s ^. currMain && isSource (s ^. currFileType) 
+        then over lensFStoGS (setMainMod fpath) s
+        else s)
+  toState $ f fpath mdl
+
 
 -- Helper functions
 

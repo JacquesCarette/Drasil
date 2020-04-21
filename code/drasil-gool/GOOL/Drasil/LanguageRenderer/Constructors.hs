@@ -23,28 +23,35 @@ import Text.PrettyPrint.HughesPJ (Doc, parens, text)
 
 -- Statements
 
+-- | Constructs a statement terminated by a semi-colon
 mkStmt :: (RenderSym r) => Doc -> r (Statement r)
 mkStmt = flip stmtFromData Semi
 
+-- | Constructs a statement without a termination character
 mkStmtNoEnd :: (RenderSym r) => Doc -> r (Statement r)
 mkStmtNoEnd = flip stmtFromData Empty
 
 -- Values --
 
+-- | Constructs a value in a stateful context
 mkStateVal :: (RenderSym r) => VSType r -> Doc -> SValue r
 mkStateVal t d = onStateValue (\tp -> valFromData Nothing tp d) t
 
+-- | Constructs a value in a non-stateful context
 mkVal :: (RenderSym r) => r (Type r) -> Doc -> r (Value r)
 mkVal = valFromData Nothing
 
 -- Variables --
 
+-- | Constructs a dynamic variable in a stateful context
 mkStateVar :: (RenderSym r) => String -> VSType r -> Doc -> SVariable r
 mkStateVar n t d = onStateValue (\tp -> varFromData Dynamic n tp d) t
 
+-- | Constructs a dynamic variable in a non-stateful context
 mkVar :: (RenderSym r) => String -> r (Type r) -> Doc -> r (Variable r)
 mkVar = varFromData Dynamic
 
+-- | Constructs a static variable in a stateful context
 mkStaticVar :: (RenderSym r) => String -> VSType r -> Doc -> SVariable r
 mkStaticVar n t d = onStateValue (\tp -> varFromData Static n tp d) t
 
@@ -52,30 +59,39 @@ mkStaticVar n t d = onStateValue (\tp -> varFromData Static n tp d) t
 
 type VSOp r = VS (r OpData)
 
+-- | Construct an operator with given precedence and rendering
 mkOp :: (Monad r) => Int -> Doc -> VSOp r
 mkOp p d = toState $ toCode $ od p d
 
+-- | Construct an operator with typical unary-operator precedence
 unOpPrec :: (Monad r) => String -> VSOp r
 unOpPrec = mkOp 9 . text
 
+-- | Construct an operator with equality-comparison-level precedence
 compEqualPrec :: (Monad r) => String -> VSOp r
 compEqualPrec = mkOp 4 . text
 
+-- | Construct an operator with comparison-level precedence
 compPrec :: (Monad r) => String -> VSOp r
 compPrec = mkOp 5 . text
 
+-- | Construct an operator with addition-level precedence
 addPrec :: (Monad r) => String -> VSOp r
 addPrec = mkOp 6 . text
 
+-- | Construct an operator with multiplication-level precedence
 multPrec :: (Monad r) => String -> VSOp r
 multPrec = mkOp 7 . text
 
+-- | Construct an operator with exponentiation-level precedence
 powerPrec :: (Monad r) => String -> VSOp r
 powerPrec = mkOp 8 . text
 
+-- | Construct an operator with conjunction-level precedence
 andPrec :: (Monad r) => String -> VSOp r 
 andPrec = mkOp 3 . text
 
+-- | Construct an operator with disjunction-level precedence
 orPrec :: (Monad r) => String -> VSOp r
 orPrec = mkOp 2 . text
 

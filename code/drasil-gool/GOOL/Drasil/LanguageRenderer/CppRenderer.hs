@@ -51,8 +51,8 @@ import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body, param,
   stateVar, constVar, cast, castObj, static, dynamic, break, continue, 
   private, public, blockCmt, docCmt, addComments, commentedMod, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkVal, mkStateVar, mkVar, unExpr, unExpr', typeUnExpr, binExpr, 
-  binExpr', typeBinExpr)
+  mkStateVal, mkVal, mkStateVar, mkVar, unOpPrec, unExpr, unExpr', typeUnExpr, 
+  binExpr, binExpr', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, float, double, char, string, listType, 
   listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, negateOp,
@@ -75,8 +75,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   getMethod, setMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
   buildClass, implementingClass, docClass, commentedClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec,  
-  classVarCheckStatic)
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd, 
   ModData(..), md, updateMod, OpData(..), od, ParamData(..), pd, ProgData(..), 

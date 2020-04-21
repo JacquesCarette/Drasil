@@ -4,9 +4,9 @@
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
   fileType, listType, arrayType, listInnerType, obj, funcType, void, 
-  runStrategy, listSlice, unOpPrec, notOp, notOp', negateOp, sqrtOp, sqrtOp', 
+  runStrategy, listSlice, notOp, notOp', negateOp, sqrtOp, sqrtOp', 
   absOp, absOp', expOp, expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', 
-  asinOp, asinOp', acosOp, acosOp', atanOp, atanOp', csc, sec, cot, powerPrec, multPrec, andPrec, orPrec, 
+  asinOp, asinOp', acosOp, acosOp', atanOp, atanOp', csc, sec, cot, 
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
   minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, addmathImport, bindingError, var, staticVar, 
   extVar, self, classVarCheckStatic, classVar, objVar, objVarSelf, listVar, 
@@ -69,7 +69,6 @@ import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym,
   RenderFile(commentedMod), RenderBody(docBody),
   RenderBlock(docBlock), ImportSym(..),  
   RenderType(..),
-  RenderOp(..), 
   RenderVariable(varFromData),
   InternalVarElim(variableBind), 
   RenderValue(inputFunc, cast, valFromData), ValueElim(valuePrec),
@@ -106,7 +105,8 @@ import qualified GOOL.Drasil.LanguageRenderer as R (file, module', block,
   constDecDef, return', comment, getTerm, var, extVar, self, arg, objVar, func, 
   listAccessFunc, objAccess, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar,)
+  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, unOpPrec, compEqualPrec, 
+  compPrec, addPrec, multPrec, powerPrec, andPrec, orPrec)
 import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensMStoVS, lensVStoMS, currMain, currFileType, modifyReturnFunc, 
   modifyReturnFunc2, addFile, setMainMod, addLangImportVS, getLangImports, 
@@ -219,9 +219,6 @@ listSlice b e s vnew vold =
 
 -- Unary Operators --
 
-unOpPrec :: (RenderSym r) => String -> VSUnOp r
-unOpPrec = uOpFromData 9 . text
-
 notOp :: (RenderSym r) => VSUnOp r
 notOp = unOpPrec "!"
 
@@ -300,27 +297,6 @@ valOfOne t = t >>= (getVal . getType)
         getVal _ = litDouble 1.0
 
 -- Binary Operators --
-
-compEqualPrec :: (RenderSym r) => String -> VSBinOp r
-compEqualPrec = bOpFromData 4 . text
-
-compPrec :: (RenderSym r) => String -> VSBinOp r
-compPrec = bOpFromData 5 . text
-
-addPrec :: (RenderSym r) => String -> VSBinOp r
-addPrec = bOpFromData 6 . text
-
-multPrec :: (RenderSym r) => String -> VSBinOp r
-multPrec = bOpFromData 7 . text
-
-powerPrec :: (RenderSym r) => String -> VSBinOp r
-powerPrec = bOpFromData 8 . text
-
-andPrec :: (RenderSym r) => String -> VSBinOp r 
-andPrec = bOpFromData 3 . text
-
-orPrec :: (RenderSym r) => String -> VSBinOp r
-orPrec = bOpFromData 2 . text
 
 equalOp :: (RenderSym r) => VSBinOp r
 equalOp = compEqualPrec "=="

@@ -48,8 +48,8 @@ import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body,
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
   addComments, commentedMod, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkVal, mkVar, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, 
-  binExprNumDbl', typeBinExpr)
+  mkStateVal, mkVal, mkVar, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, 
+  typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
   listType, arrayType, listInnerType, obj, funcType, void, runStrategy, 
@@ -76,8 +76,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   stateVarDef, constVar, buildClass, implementingClass, docClass, 
   commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
   fileFromData)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, powerPrec,  
-  bindingError, destructorError)
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
+  destructorError)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 

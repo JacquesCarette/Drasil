@@ -1,21 +1,24 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module GOOL.Drasil.LanguageRenderer.Constructors (
   mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, 
-  unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, binExpr', binExprNumDbl', 
-  typeBinExpr, 
+  unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec, andPrec, 
+  orPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, binExpr', 
+  binExprNumDbl', typeBinExpr
 ) where
 
 import GOOL.Drasil.ClassInterface (VSType, SVariable, SValue, TypeSym(..), 
   TypeElim(..), VariableSym(..), ValueSym(..), StatementSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, VSUnOp, VSBinOp, UnaryOpSym(..),
-  BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
+  BinaryOpSym(..), RenderOp(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
 import qualified GOOL.Drasil.RendererClasses as RC (uOp, bOp, value)
 import GOOL.Drasil.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
 import GOOL.Drasil.AST (Terminator(..), Binding(..))
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.Helpers (onStateValue, on2StateValues, on3StateValues)
 
-import Text.PrettyPrint.HughesPJ (Doc, parens)
+import Text.PrettyPrint.HughesPJ (Doc, parens, text)
+
+-- Statements
 
 mkStmt :: (RenderSym r) => Doc -> r (Statement r)
 mkStmt = flip stmtFromData Semi
@@ -23,11 +26,15 @@ mkStmt = flip stmtFromData Semi
 mkStmtNoEnd :: (RenderSym r) => Doc -> r (Statement r)
 mkStmtNoEnd = flip stmtFromData Empty
 
+-- Values --
+
 mkStateVal :: (RenderSym r) => VSType r -> Doc -> SValue r
 mkStateVal t d = onStateValue (\tp -> valFromData Nothing tp d) t
 
 mkVal :: (RenderSym r) => r (Type r) -> Doc -> r (Value r)
 mkVal = valFromData Nothing
+
+-- Variables --
 
 mkStateVar :: (RenderSym r) => String -> VSType r -> Doc -> SVariable r
 mkStateVar n t d = onStateValue (\tp -> varFromData Dynamic n tp d) t
@@ -37,6 +44,34 @@ mkVar = varFromData Dynamic
 
 mkStaticVar :: (RenderSym r) => String -> VSType r -> Doc -> SVariable r
 mkStaticVar n t d = onStateValue (\tp -> varFromData Static n tp d) t
+
+-- Operators --
+
+unOpPrec :: (RenderSym r) => String -> VSUnOp r
+unOpPrec = uOpFromData 9 . text
+
+compEqualPrec :: (RenderSym r) => String -> VSBinOp r
+compEqualPrec = bOpFromData 4 . text
+
+compPrec :: (RenderSym r) => String -> VSBinOp r
+compPrec = bOpFromData 5 . text
+
+addPrec :: (RenderSym r) => String -> VSBinOp r
+addPrec = bOpFromData 6 . text
+
+multPrec :: (RenderSym r) => String -> VSBinOp r
+multPrec = bOpFromData 7 . text
+
+powerPrec :: (RenderSym r) => String -> VSBinOp r
+powerPrec = bOpFromData 8 . text
+
+andPrec :: (RenderSym r) => String -> VSBinOp r 
+andPrec = bOpFromData 3 . text
+
+orPrec :: (RenderSym r) => String -> VSBinOp r
+orPrec = bOpFromData 2 . text
+
+-- Expressions --
 
 unExpr :: (RenderSym r) => VSUnOp r -> SValue r -> SValue r
 unExpr = on2StateValues (mkUnExpr unOpDocD)

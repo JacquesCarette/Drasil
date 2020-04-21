@@ -183,7 +183,6 @@ instance BlockSym JavaCode where
   block = G.block
 
 instance RenderBlock JavaCode where
-  docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
 instance BlockElim JavaCode where

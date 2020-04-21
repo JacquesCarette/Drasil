@@ -189,7 +189,6 @@ instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
   block = pair1List block block
 
 instance (Pair p) => RenderBlock (p CppSrcCode CppHdrCode) where
-  docBlock d = on2StateValues pair (docBlock d) (docBlock d)
   multiBlock = pair1List multiBlock multiBlock
 
 instance (Pair p) => BlockElim (p CppSrcCode CppHdrCode) where
@@ -1146,7 +1145,6 @@ instance BlockSym CppSrcCode where
   block = G.block
 
 instance RenderBlock CppSrcCode where
-  docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
 instance BlockElim CppSrcCode where
@@ -1806,7 +1804,6 @@ instance BlockSym CppHdrCode where
   block _ = toState $ toCode empty
 
 instance RenderBlock CppHdrCode where
-  docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
 instance BlockElim CppHdrCode where

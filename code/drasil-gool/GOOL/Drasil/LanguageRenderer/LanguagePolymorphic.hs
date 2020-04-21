@@ -67,7 +67,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym, 
   RenderFile(commentedMod),
-  RenderBlock(docBlock), ImportSym(..),  
+  ImportSym(..),  
   RenderType(..),
   RenderVariable(varFromData),
   InternalVarElim(variableBind), 
@@ -133,12 +133,11 @@ multiBody bs = onStateList (toCode . vibcat) $ map (onStateValue RC.body) bs
 
 -- Blocks --
 
-block :: (RenderSym r) => [MSStatement r] -> MSBlock r
-block sts = docBlock $ onStateList (R.block . map RC.statement) 
-  (map S.stmt sts)
+block :: (RenderSym r, Monad r) => [MSStatement r] -> MS (r Doc)
+block sts = onStateList (toCode . R.block . map RC.statement) (map S.stmt sts)
 
-multiBlock :: (RenderSym r) => [MSBlock r] -> MSBlock r
-multiBlock bs = docBlock $ onStateList vibcat $ map (onStateValue RC.block) bs
+multiBlock :: (RenderSym r, Monad r) => [MSBlock r] -> MS (r Doc)
+multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
 
@@ -186,12 +185,12 @@ void = toState $ typeFromData Void "void" (text "void")
 
 -- ControlBlock --
 
-strat :: (RenderSym r) => MSStatement r -> MSBody r -> MSBlock r
-strat r bd = docBlock $ on2StateValues (\result b -> vcat [RC.body b, 
-  RC.statement result]) r bd
+strat :: (RenderSym r, Monad r) => MSStatement r -> MSBody r -> MS (r Doc)
+strat = on2StateValues (\result b -> toCode $ vcat [RC.body b, 
+  RC.statement result])
 
-runStrategy :: (RenderSym r) => String -> [(Label, MSBody r)] -> 
-  Maybe (SValue r) -> Maybe (SVariable r) -> MSBlock r
+runStrategy :: (RenderSym r, Monad r) => String -> [(Label, MSBody r)] -> 
+  Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy") 
   (strat (S.stmt resultState)) (Map.lookup l (Map.fromList strats))

@@ -83,7 +83,6 @@ class BodyElim r where
   body :: r (Body r) -> Doc
 
 class RenderBlock r where
-  docBlock :: MS Doc -> MSBlock r
   multiBlock :: [MSBlock r] -> MSBlock r
 
 class BlockElim r where

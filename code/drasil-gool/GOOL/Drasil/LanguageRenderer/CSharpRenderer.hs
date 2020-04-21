@@ -174,7 +174,6 @@ instance BlockSym CSharpCode where
   block = G.block
 
 instance RenderBlock CSharpCode where
-  docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
 instance BlockElim CSharpCode where

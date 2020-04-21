@@ -167,7 +167,6 @@ instance BlockSym PythonCode where
   block = G.block
 
 instance RenderBlock PythonCode where
-  docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
 instance BlockElim PythonCode where
@@ -433,8 +432,8 @@ instance List PythonCode where
   indexOf = G.indexOf "index"
 
 instance InternalList PythonCode where
-  listSlice' b e s vnew vold = docBlock $ zoom lensMStoVS $ pyListSlice vnew 
-    vold (getVal b) (getVal e) (getVal s)
+  listSlice' b e s vnew vold = onStateValue toCode $ zoom lensMStoVS $ 
+    pyListSlice vnew vold (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 
 instance Iterator PythonCode where

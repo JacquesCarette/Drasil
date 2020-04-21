@@ -35,7 +35,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
-  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim, 
+  StateVarElim, RenderClass(..), ClassElim, 
   RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
@@ -672,9 +672,6 @@ instance StateVarSym PythonCode where
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (RC.perm 
     (static :: PythonCode (Permanence PythonCode)))
-
-instance RenderStateVar PythonCode where
-  stateVarFromData = onStateValue toCode
   
 instance StateVarElim PythonCode where
   stateVar = unPC

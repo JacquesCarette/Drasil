@@ -37,7 +37,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(statementTerm), RenderScope(..), ScopeElim, 
   MethodTypeSym(..), RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
-  RenderStateVar(..), StateVarElim, ParentSpec, RenderClass(..), 
+  StateVarElim, ParentSpec, RenderClass(..), 
   ClassElim, RenderMod(..), ModuleElim, BlockCommentSym(..), 
   BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
@@ -810,10 +810,6 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
     (stateVarDef n (psnd s) (psnd p)) (zoom lensCStoVS vr) (zoom lensCStoVS vl)
   constVar n s vr vl = pair2 (constVar n (pfst s)) (constVar n (psnd s))
     (zoom lensCStoVS vr) (zoom lensCStoVS vl)
-
-instance (Pair p) => RenderStateVar (p CppSrcCode CppHdrCode) where
-  stateVarFromData d = on2StateValues pair (stateVarFromData d) 
-    (stateVarFromData d)
 
 instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) where
   stateVar v = RC.stateVar $ pfst v
@@ -1669,9 +1665,6 @@ instance StateVarSym CppSrcCode where
   constVar n s v vl' = on3StateValues (\vr vl -> on3CodeValues svd (onCodeValue 
     snd s) (cppsStateVarDef n (text "const") <$> static <*> vr <*> vl)) 
     (zoom lensCStoVS v) (zoom lensCStoVS vl') (zoom lensCStoMS emptyStmt)
-
-instance RenderStateVar CppSrcCode where
-  stateVarFromData = error "stateVarFromData unimplemented in C++"
   
 instance StateVarElim CppSrcCode where
   stateVar = stVar . unCPPSC
@@ -2259,9 +2252,6 @@ instance StateVarSym CppHdrCode where
   constVar _ s vr _ = on2StateValues (on3CodeValues svd (onCodeValue snd s) . 
     on2CodeValues (R.constVar empty endStatement) (bindDoc <$> static))
     (zoom lensCStoVS vr) (zoom lensCStoMS emptyStmt)
-
-instance RenderStateVar CppHdrCode where
-  stateVarFromData = error "stateVarFromData unimplemented in C++"
   
 instance StateVarElim CppHdrCode where
   stateVar = stVar . unCPPHC

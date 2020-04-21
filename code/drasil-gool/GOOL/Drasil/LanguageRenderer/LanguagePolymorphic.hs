@@ -77,7 +77,7 @@ import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym,
   StatementElim(statementTerm), RenderScope(..),
   MethodTypeSym(mType), RenderParam(paramFromData), 
   RenderMethod(intMethod, commentedFunc), 
-  RenderStateVar(..), ParentSpec, 
+  ParentSpec, 
   RenderClass(inherit, implements, classFromData),
   RenderMod(updateModuleDoc), BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData), 
@@ -937,21 +937,20 @@ intFunc = intMethod
 
 -- State Variables --
 
-stateVar :: (RenderSym r) => r (Scope r) -> r (Permanence r) -> SVariable r -> 
-  CSStateVar r
-stateVar s p v = stateVarFromData (zoom lensCStoMS $ onStateValue (R.stateVar 
-  (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ S.varDec v))
+stateVar :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) -> 
+  SVariable r -> CS (r Doc)
+stateVar s p v = zoom lensCStoMS $ onStateValue (toCode . R.stateVar 
+  (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ S.varDec v)
 
-stateVarDef :: (RenderSym r) => r (Scope r) -> r (Permanence r) -> SVariable r 
-  -> SValue r -> CSStateVar r
-stateVarDef s p vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue 
-  (R.stateVar (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ S.varDecDef 
-  vr vl))
+stateVarDef :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) -> 
+  SVariable r -> SValue r -> CS (r Doc)
+stateVarDef s p vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar 
+  (RC.scope s) (RC.perm p) . RC.statement) (S.stmt $ S.varDecDef vr vl)
 
-constVar :: (RenderSym r) => Doc -> r (Scope r) -> SVariable r -> SValue r -> 
-  CSStateVar r
-constVar p s vr vl = stateVarFromData (zoom lensCStoMS $ onStateValue 
-  (R.stateVar (RC.scope s) p . RC.statement) (S.stmt $ S.constDecDef vr vl))
+constVar :: (RenderSym r, Monad r) => Doc -> r (Scope r) -> SVariable r -> 
+  SValue r -> CS (r Doc)
+constVar p s vr vl = zoom lensCStoMS $ onStateValue (toCode . R.stateVar 
+  (RC.scope s) p . RC.statement) (S.stmt $ S.constDecDef vr vl)
 
 -- Classes --
 

@@ -36,7 +36,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
-  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim, 
+  StateVarElim, RenderClass(..), ClassElim, 
   RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
@@ -694,9 +694,6 @@ instance StateVarSym JavaCode where
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (RC.perm (static :: JavaCode (Permanence JavaCode)))
-
-instance RenderStateVar JavaCode where
-  stateVarFromData = onStateValue toCode
   
 instance StateVarElim JavaCode where
   stateVar = unJC

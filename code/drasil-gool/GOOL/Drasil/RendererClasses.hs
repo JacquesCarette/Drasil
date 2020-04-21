@@ -11,7 +11,7 @@ module GOOL.Drasil.RendererClasses (
   InternalControlStmt(..), RenderStatement(..), StatementElim(..), 
   RenderScope(..), ScopeElim(..), MSMthdType, MethodTypeSym(..), 
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
-  RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
+  StateVarElim(..), ParentSpec, RenderClass(..), 
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..)
 ) where
@@ -48,7 +48,7 @@ class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r,
   RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, 
   RenderOp r, RenderParam r, ParamElim r, PermElim r, RenderScope r, 
   ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, 
-  RenderStatement r, StatementElim r, RenderStateVar r, StateVarElim r, 
+  RenderStatement r, StatementElim r, StateVarElim r, 
   RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, 
   RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, 
   UnaryOpSym r, BinaryOpSym r, BlockCommentElim r) => RenderSym r
@@ -247,9 +247,6 @@ class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) =>
 
 class MethodElim r where
   method :: r (Method r) -> Doc
-
-class RenderStateVar r where
-  stateVarFromData :: CS Doc -> CSStateVar r
 
 class StateVarElim r where  
   stateVar :: r (StateVar r) -> Doc

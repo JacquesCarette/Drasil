@@ -28,8 +28,8 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
-  VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), 
-  RenderOp(..), RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), 
+  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), 
   ValueElim(valuePrec), InternalGetSet(..), InternalListFunc(..), InternalIterator(..),
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
@@ -46,8 +46,8 @@ import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body,
   multiAssign, return', classVar, listSetFunc, castObj, dynamic, break, 
   continue, addComments, commentedMod, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
-  mkVal, mkStateVar, unOpPrec, powerPrec, multPrec, andPrec, orPrec, unExpr, 
-  unExpr', typeUnExpr, binExpr, typeBinExpr)
+  mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
+  unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, listInnerType, obj, funcType, runStrategy, 
   notOp', negateOp, sqrtOp', absOp', expOp', sinOp', cosOp', tanOp', asinOp', 
@@ -71,7 +71,7 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (addmathImport,
   bindingError, destructorError, docFuncRepr)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
-  MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
+  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
@@ -271,10 +271,6 @@ instance OpElim PythonCode where
   bOp = opDoc . unPC
   uOpPrec = opPrec . unPC
   bOpPrec = opPrec . unPC
-  
-instance RenderOp PythonCode where
-  uOpFromData p d = toState $ toCode $ od p d
-  bOpFromData p d = toState $ toCode $ od p d
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
@@ -744,10 +740,10 @@ pyODEMethod Adams = [litString "vode",
   (litString "adams" :: SValue PythonCode) >>= 
   (mkStateVal string . (text "method=" <>) . RC.value)]
 
-pyLogOp :: (RenderSym r) => VSUnOp r
+pyLogOp :: (Monad r) => VSOp r
 pyLogOp = addmathImport $ unOpPrec "math.log10"
 
-pyLnOp :: (RenderSym r) => VSUnOp r
+pyLnOp :: (Monad r) => VSOp r
 pyLnOp = addmathImport $ unOpPrec "math.log"
 
 pyClassVar :: Doc -> Doc -> Doc

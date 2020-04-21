@@ -1,20 +1,22 @@
 -- | Generic constructors and smart constructors to be used in renderers
 module GOOL.Drasil.LanguageRenderer.Constructors (
   mkStmt, mkStmtNoEnd, mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, 
-  unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec, andPrec, 
-  orPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, binExpr', 
-  binExprNumDbl', typeBinExpr
+  VSOp, mkOp, unOpPrec, compEqualPrec, compPrec, addPrec, multPrec, powerPrec, 
+  andPrec, orPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, 
+  binExpr', binExprNumDbl', typeBinExpr
 ) where
 
 import GOOL.Drasil.ClassInterface (VSType, SVariable, SValue, TypeSym(..), 
   TypeElim(..), VariableSym(..), ValueSym(..), StatementSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, VSUnOp, VSBinOp, UnaryOpSym(..),
-  BinaryOpSym(..), RenderOp(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
+  BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
 import qualified GOOL.Drasil.RendererClasses as RC (uOp, bOp, value)
 import GOOL.Drasil.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
-import GOOL.Drasil.AST (Terminator(..), Binding(..))
+import GOOL.Drasil.AST (Terminator(..), Binding(..), OpData, od)
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.Helpers (onStateValue, on2StateValues, on3StateValues)
+import GOOL.Drasil.Helpers (toCode, toState, onStateValue, on2StateValues, 
+  on3StateValues)
+import GOOL.Drasil.State (VS)
 
 import Text.PrettyPrint.HughesPJ (Doc, parens, text)
 
@@ -47,29 +49,34 @@ mkStaticVar n t d = onStateValue (\tp -> varFromData Static n tp d) t
 
 -- Operators --
 
-unOpPrec :: (RenderSym r) => String -> VSUnOp r
-unOpPrec = uOpFromData 9 . text
+type VSOp r = VS (r OpData)
 
-compEqualPrec :: (RenderSym r) => String -> VSBinOp r
-compEqualPrec = bOpFromData 4 . text
+mkOp :: (Monad r) => Int -> Doc -> VSOp r
+mkOp p d = toState $ toCode $ od p d
 
-compPrec :: (RenderSym r) => String -> VSBinOp r
-compPrec = bOpFromData 5 . text
+unOpPrec :: (Monad r) => String -> VSOp r
+unOpPrec = mkOp 9 . text
 
-addPrec :: (RenderSym r) => String -> VSBinOp r
-addPrec = bOpFromData 6 . text
+compEqualPrec :: (Monad r) => String -> VSOp r
+compEqualPrec = mkOp 4 . text
 
-multPrec :: (RenderSym r) => String -> VSBinOp r
-multPrec = bOpFromData 7 . text
+compPrec :: (Monad r) => String -> VSOp r
+compPrec = mkOp 5 . text
 
-powerPrec :: (RenderSym r) => String -> VSBinOp r
-powerPrec = bOpFromData 8 . text
+addPrec :: (Monad r) => String -> VSOp r
+addPrec = mkOp 6 . text
 
-andPrec :: (RenderSym r) => String -> VSBinOp r 
-andPrec = bOpFromData 3 . text
+multPrec :: (Monad r) => String -> VSOp r
+multPrec = mkOp 7 . text
 
-orPrec :: (RenderSym r) => String -> VSBinOp r
-orPrec = bOpFromData 2 . text
+powerPrec :: (Monad r) => String -> VSOp r
+powerPrec = mkOp 8 . text
+
+andPrec :: (Monad r) => String -> VSOp r 
+andPrec = mkOp 3 . text
+
+orPrec :: (Monad r) => String -> VSOp r
+orPrec = mkOp 2 . text
 
 -- Expressions --
 

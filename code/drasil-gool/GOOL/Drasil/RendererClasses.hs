@@ -4,7 +4,7 @@ module GOOL.Drasil.RendererClasses (
   RenderSym, RenderFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), 
   RenderType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, 
-  BinaryOpSym(..), OpElim(..), RenderOp(..), RenderVariable(..), 
+  BinaryOpSym(..), OpElim(..), RenderVariable(..), 
   InternalVarElim(..), RenderValue(..), ValueElim(..), InternalGetSet(..), 
   InternalListFunc(..), InternalIterator(..), RenderFunction(..), 
   FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
@@ -46,7 +46,7 @@ class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r,
   RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, 
   InternalListFunc r, InternalIterator r, RenderFunction r, FunctionElim r, 
   RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, 
-  RenderOp r, RenderParam r, ParamElim r, PermElim r, RenderScope r, 
+  RenderParam r, ParamElim r, PermElim r, RenderScope r, 
   ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, 
   RenderStatement r, StatementElim r, StateVarElim r, 
   RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, 
@@ -138,10 +138,6 @@ class OpElim r where
   bOp :: r (BinaryOp r) -> Doc
   uOpPrec :: r (UnaryOp r) -> Int
   bOpPrec :: r (BinaryOp r) -> Int
-
-class RenderOp r where
-  uOpFromData :: Int -> Doc -> VSUnOp r
-  bOpFromData :: Int -> Doc -> VSBinOp r
   
 class RenderVariable r where
   varFromData :: Binding -> String -> r (Type r) -> Doc -> r (Variable r)

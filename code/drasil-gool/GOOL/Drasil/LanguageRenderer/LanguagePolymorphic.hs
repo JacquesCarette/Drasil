@@ -65,7 +65,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   IOStatement(print),
   ControlStatement(returnStmt, ifCond, for, forRange, switch), 
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
-import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym, 
+import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, 
   RenderFile(commentedMod),
   ImportSym(..),  
   RenderType(..),
@@ -105,8 +105,8 @@ import qualified GOOL.Drasil.LanguageRenderer as R (file, module', block,
   constDecDef, return', comment, getTerm, var, extVar, self, arg, objVar, func, 
   listAccessFunc, objAccess, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, unOpPrec, compEqualPrec, 
-  compPrec, addPrec, multPrec, powerPrec, andPrec, orPrec)
+  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, VSOp, unOpPrec, 
+  compEqualPrec, compPrec, addPrec, multPrec, powerPrec, andPrec, orPrec)
 import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensMStoVS, lensVStoMS, currMain, currFileType, modifyReturnFunc, 
   modifyReturnFunc2, addFile, setMainMod, addLangImportVS, getLangImports, 
@@ -218,67 +218,67 @@ listSlice b e s vnew vold =
 
 -- Unary Operators --
 
-notOp :: (RenderSym r) => VSUnOp r
+notOp :: (Monad r) => VSOp r
 notOp = unOpPrec "!"
 
-notOp' :: (RenderSym r) => VSUnOp r
+notOp' :: (Monad r) => VSOp r
 notOp' = unOpPrec "not"
 
-negateOp :: (RenderSym r) => VSUnOp r
+negateOp :: (Monad r) => VSOp r
 negateOp = unOpPrec "-"
 
-sqrtOp :: (RenderSym r) => VSUnOp r
+sqrtOp :: (Monad r) => VSOp r
 sqrtOp = unOpPrec "sqrt"
 
-sqrtOp' :: (RenderSym r) => VSUnOp r
+sqrtOp' :: (Monad r) => VSOp r
 sqrtOp' = addmathImport $ unOpPrec "math.sqrt"
 
-absOp :: (RenderSym r) => VSUnOp r
+absOp :: (Monad r) => VSOp r
 absOp = unOpPrec "fabs"
 
-absOp' :: (RenderSym r) => VSUnOp r
+absOp' :: (Monad r) => VSOp r
 absOp' = addmathImport $ unOpPrec "math.fabs"
 
-expOp :: (RenderSym r) => VSUnOp r
+expOp :: (Monad r) => VSOp r
 expOp = unOpPrec "exp"
 
-expOp' :: (RenderSym r) => VSUnOp r
+expOp' :: (Monad r) => VSOp r
 expOp' = addmathImport $ unOpPrec "math.exp"
 
-sinOp :: (RenderSym r) => VSUnOp r
+sinOp :: (Monad r) => VSOp r
 sinOp = unOpPrec "sin"
 
-sinOp' :: (RenderSym r) => VSUnOp r
+sinOp' :: (Monad r) => VSOp r
 sinOp' = addmathImport $ unOpPrec "math.sin"
 
-cosOp :: (RenderSym r) => VSUnOp r
+cosOp :: (Monad r) => VSOp r
 cosOp = unOpPrec "cos"
 
-cosOp' :: (RenderSym r) => VSUnOp r
+cosOp' :: (Monad r) => VSOp r
 cosOp' = addmathImport $ unOpPrec "math.cos"
 
-tanOp :: (RenderSym r) => VSUnOp r
+tanOp :: (Monad r) => VSOp r
 tanOp = unOpPrec "tan"
 
-tanOp' :: (RenderSym r) => VSUnOp r
+tanOp' :: (Monad r) => VSOp r
 tanOp' = addmathImport $ unOpPrec "math.tan"
 
-asinOp :: (RenderSym r) => VSUnOp r
+asinOp :: (Monad r) => VSOp r
 asinOp = unOpPrec "asin"
 
-asinOp' :: (RenderSym r) => VSUnOp r
+asinOp' :: (Monad r) => VSOp r
 asinOp' = addmathImport $ unOpPrec "math.asin"
 
-acosOp :: (RenderSym r) => VSUnOp r
+acosOp :: (Monad r) => VSOp r
 acosOp = unOpPrec "acos"
 
-acosOp' :: (RenderSym r) => VSUnOp r
+acosOp' :: (Monad r) => VSOp r
 acosOp' = addmathImport $ unOpPrec "math.acos"
 
-atanOp :: (RenderSym r) => VSUnOp r
+atanOp :: (Monad r) => VSOp r
 atanOp = unOpPrec "atan"
 
-atanOp' :: (RenderSym r) => VSUnOp r
+atanOp' :: (Monad r) => VSOp r
 atanOp' = addmathImport $ unOpPrec "math.atan"
 
 csc :: (RenderSym r) => SValue r -> SValue r
@@ -297,46 +297,46 @@ valOfOne t = t >>= (getVal . getType)
 
 -- Binary Operators --
 
-equalOp :: (RenderSym r) => VSBinOp r
+equalOp :: (Monad r) => VSOp r
 equalOp = compEqualPrec "=="
 
-notEqualOp :: (RenderSym r) => VSBinOp r
+notEqualOp :: (Monad r) => VSOp r
 notEqualOp = compEqualPrec "!="
 
-greaterOp :: (RenderSym r) => VSBinOp r
+greaterOp :: (Monad r) => VSOp r
 greaterOp = compPrec ">"
 
-greaterEqualOp :: (RenderSym r) => VSBinOp r
+greaterEqualOp :: (Monad r) => VSOp r
 greaterEqualOp = compPrec ">="
 
-lessOp :: (RenderSym r) => VSBinOp r
+lessOp :: (Monad r) => VSOp r
 lessOp = compPrec "<"
 
-lessEqualOp :: (RenderSym r) => VSBinOp r
+lessEqualOp :: (Monad r) => VSOp r
 lessEqualOp = compPrec "<="
 
-plusOp :: (RenderSym r) => VSBinOp r
+plusOp :: (Monad r) => VSOp r
 plusOp = addPrec "+"
 
-minusOp :: (RenderSym r) => VSBinOp r
+minusOp :: (Monad r) => VSOp r
 minusOp = addPrec "-"
 
-multOp :: (RenderSym r) => VSBinOp r
+multOp :: (Monad r) => VSOp r
 multOp = multPrec "*"
 
-divideOp :: (RenderSym r) => VSBinOp r
+divideOp :: (Monad r) => VSOp r
 divideOp = multPrec "/"
 
-moduloOp :: (RenderSym r) => VSBinOp r
+moduloOp :: (Monad r) => VSOp r
 moduloOp = multPrec "%"
 
-powerOp :: (RenderSym r) => VSBinOp r
+powerOp :: (Monad r) => VSOp r
 powerOp = powerPrec "pow"
 
-andOp :: (RenderSym r) => VSBinOp r
+andOp :: (Monad r) => VSOp r
 andOp = andPrec "&&"
 
-orOp :: (RenderSym r) => VSBinOp r
+orOp :: (Monad r) => VSOp r
 orOp = orPrec "||"
 
 addmathImport :: VS a -> VS a

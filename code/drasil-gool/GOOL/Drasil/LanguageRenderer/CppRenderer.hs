@@ -30,7 +30,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
   RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
@@ -51,8 +51,8 @@ import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body, param,
   stateVar, constVar, cast, castObj, static, dynamic, break, continue, 
   private, public, blockCmt, docCmt, addComments, commentedMod, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkVal, mkStateVar, mkVar, unOpPrec, unExpr, unExpr', typeUnExpr, 
-  binExpr, binExpr', typeBinExpr)
+  mkStateVal, mkVal, mkStateVar, mkVar, mkOp, unOpPrec, unExpr, unExpr', 
+  typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, float, double, char, string, listType, 
   listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, negateOp,
@@ -78,7 +78,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd, 
-  ModData(..), md, updateMod, OpData(..), od, ParamData(..), pd, ProgData(..), 
+  ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..), 
   progD, emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
   VarData(..), vard)
 import GOOL.Drasil.Classes (Pair(..))
@@ -325,10 +325,6 @@ instance (Pair p) => OpElim (p CppSrcCode CppHdrCode) where
   bOp o = RC.bOp $ pfst o
   uOpPrec o = uOpPrec $ pfst o
   bOpPrec o = bOpPrec $ pfst o
-  
-instance (Pair p) => RenderOp (p CppSrcCode CppHdrCode) where
-  uOpFromData p d = on2StateValues pair (uOpFromData p d) (uOpFromData p d)
-  bOpFromData p d = on2StateValues pair (bOpFromData p d) (bOpFromData p d)
 
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   type Variable (p CppSrcCode CppHdrCode) = VarData
@@ -1233,10 +1229,6 @@ instance OpElim CppSrcCode where
   bOp = opDoc . unCPPSC
   uOpPrec = opPrec . unCPPSC
   bOpPrec = opPrec . unCPPSC
-  
-instance RenderOp CppSrcCode where
-  uOpFromData p d = toState $ toCode $ od p d
-  bOpFromData p d = toState $ toCode $ od p d
 
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
@@ -1833,48 +1825,44 @@ instance ControlBlock CppHdrCode where
 
 instance UnaryOpSym CppHdrCode where
   type UnaryOp CppHdrCode = OpData
-  notOp = uOpFromData 0 empty
-  negateOp = uOpFromData 0 empty
-  sqrtOp = uOpFromData 0 empty
-  absOp = uOpFromData 0 empty
-  logOp = uOpFromData 0 empty
-  lnOp = uOpFromData 0 empty
-  expOp = uOpFromData 0 empty
-  sinOp = uOpFromData 0 empty
-  cosOp = uOpFromData 0 empty
-  tanOp = uOpFromData 0 empty
-  asinOp = uOpFromData 0 empty
-  acosOp = uOpFromData 0 empty
-  atanOp = uOpFromData 0 empty
-  floorOp = uOpFromData 0 empty
-  ceilOp = uOpFromData 0 empty
+  notOp = mkOp 0 empty
+  negateOp = mkOp 0 empty
+  sqrtOp = mkOp 0 empty
+  absOp = mkOp 0 empty
+  logOp = mkOp 0 empty
+  lnOp = mkOp 0 empty
+  expOp = mkOp 0 empty
+  sinOp = mkOp 0 empty
+  cosOp = mkOp 0 empty
+  tanOp = mkOp 0 empty
+  asinOp = mkOp 0 empty
+  acosOp = mkOp 0 empty
+  atanOp = mkOp 0 empty
+  floorOp = mkOp 0 empty
+  ceilOp = mkOp 0 empty
 
 instance BinaryOpSym CppHdrCode where
   type BinaryOp CppHdrCode = OpData
-  equalOp = bOpFromData 0 empty
-  notEqualOp = bOpFromData 0 empty
-  greaterOp = bOpFromData 0 empty
-  greaterEqualOp = bOpFromData 0 empty
-  lessOp = bOpFromData 0 empty
-  lessEqualOp = bOpFromData 0 empty
-  plusOp = bOpFromData 0 empty
-  minusOp = bOpFromData 0 empty
-  multOp = bOpFromData 0 empty
-  divideOp = bOpFromData 0 empty
-  powerOp = bOpFromData 0 empty
-  moduloOp = bOpFromData 0 empty
-  andOp = bOpFromData 0 empty
-  orOp = bOpFromData 0 empty
+  equalOp = mkOp 0 empty
+  notEqualOp = mkOp 0 empty
+  greaterOp = mkOp 0 empty
+  greaterEqualOp = mkOp 0 empty
+  lessOp = mkOp 0 empty
+  lessEqualOp = mkOp 0 empty
+  plusOp = mkOp 0 empty
+  minusOp = mkOp 0 empty
+  multOp = mkOp 0 empty
+  divideOp = mkOp 0 empty
+  powerOp = mkOp 0 empty
+  moduloOp = mkOp 0 empty
+  andOp = mkOp 0 empty
+  orOp = mkOp 0 empty
 
 instance OpElim CppHdrCode where
   uOp = opDoc . unCPPHC
   bOp = opDoc . unCPPHC
   uOpPrec = opPrec . unCPPHC
   bOpPrec = opPrec . unCPPHC
-  
-instance RenderOp CppHdrCode where
-  uOpFromData p d = toState $ toCode $ od p d
-  bOpFromData p d = toState $ toCode $ od p d
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData

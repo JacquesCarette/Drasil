@@ -285,7 +285,6 @@ exists = notNull
 class (FunctionSym r) => RenderValueExp r where
   objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
     NamedArgs r -> SValue r
-  objMethodCallNoParams' :: Label -> VSType r -> SValue r -> SValue r
 
 objMethodCall :: (RenderValueExp r) => VSType r -> SValue r -> Label -> 
   [SValue r] -> SValue r
@@ -297,7 +296,7 @@ objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
 objMethodCallNoParams :: (RenderValueExp r) => VSType r -> SValue r -> Label 
   -> SValue r
-objMethodCallNoParams t o f = objMethodCallNoParams' f t o
+objMethodCallNoParams t o f = objMethodCall t o f []
 
 type VSFunction a = VS (a (Function a))
 

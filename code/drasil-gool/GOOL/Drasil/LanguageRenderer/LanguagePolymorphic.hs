@@ -17,7 +17,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   call, funcAppMixedArgs, namedArgError, selfFuncAppMixedArgs, 
   extFuncAppMixedArgs, libFuncAppMixedArgs, newObjMixedArgs, 
   extNewObjMixedArgs, libNewObjMixedArgs, lambda, notNull, objAccess, 
-  objMethodCall, objMethodCallNoParams, indexOf, func, get, set, listSize, 
+  objMethodCall, indexOf, func, get, set, listSize, 
   listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
   setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
   iterEndError, listAccessFunc, listAccessFunc', listSetFunc, printSt, stmt, 
@@ -47,7 +47,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   TypeElim(getType, getTypeString), VariableSym(Variable), 
   VariableElim(variableName, variableType), listOf, ValueSym(Value, valueType), 
   NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), Comparison(..), 
-  funcApp, newObj, extNewObj, ($.), at, StatementSym(multi), 
+  funcApp, newObj, extNewObj, objMethodCallNoParams, ($.), at, StatementSym(multi), 
   AssignStatement((&+=), (&++)), (&=), 
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ControlStatement(break), ifNoElse, observerListName, ScopeSym(..), 
@@ -59,7 +59,7 @@ import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block),
   Literal(litTrue, litFalse, litInt, litString, litList), 
   VariableValue(valueOf),
   ValueExpression(funcAppMixedArgs, newObjMixedArgs, notNull, lambda), 
-  objMethodCall, objMethodCallNoParams, FunctionSym(func, objAccess), 
+  FunctionSym(func, objAccess), 
   List(listSize, listAppend, listAccess), StatementSym(valStmt), 
   AssignStatement(assign),
   DeclStatement(varDec, varDecDef, listDec, objDecNew, extObjDecNew, 
@@ -585,10 +585,6 @@ objMethodCall :: (RenderSym r) => Label -> VSType r -> SValue r -> [SValue r]
 objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing f t 
   (Just $ valueDoc o <> dot) vs ns)
 
-objMethodCallNoParams :: (RenderSym r) => Label -> VSType r -> SValue r -> 
-  SValue r
-objMethodCallNoParams f t o = S.objMethodCall t o f []
-
 indexOf :: (RenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = S.objAccess l (S.func f S.int [v])
 
@@ -815,10 +811,10 @@ openFileA :: (RenderSym r) => (SValue r -> VSType r -> SValue r -> SValue r) ->
 openFileA f vr vl = vr &= f vl outfile S.litTrue
 
 closeFile :: (RenderSym r) => Label -> SValue r -> MSStatement r
-closeFile n f = S.valStmt $ S.objMethodCallNoParams S.void f n
+closeFile n f = S.valStmt $ objMethodCallNoParams S.void f n
 
 discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
-discardFileLine n f = S.valStmt $ S.objMethodCallNoParams S.string f n 
+discardFileLine n f = S.valStmt $ objMethodCallNoParams S.string f n 
 
 stringListVals :: (RenderSym r) => [SVariable r] -> SValue r -> MSStatement r
 stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList 

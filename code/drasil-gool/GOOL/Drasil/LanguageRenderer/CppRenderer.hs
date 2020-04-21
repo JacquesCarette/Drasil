@@ -56,7 +56,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, 
   staticVar, self, objVar, listVar, arrayElem, litTrue, litFalse, litChar, 
   litDouble, litFloat, litInt, litString, litArray, valueOf, arg, argsList, 
-  inlineIf, objAccess, objMethodCall, objMethodCallNoParams, call', 
+  inlineIf, objAccess, objMethodCall, call', 
   funcAppMixedArgs, selfFuncAppMixedArgs, libFuncAppMixedArgs, newObjMixedArgs, 
   libNewObjMixedArgs, lambda, func, get, set, listSize, listAdd, listAppend, 
   iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
@@ -481,9 +481,6 @@ instance (Pair p) => RenderValueExp (p CppSrcCode CppHdrCode) where
     (\tp ob pars ns nars -> objMethodCallMixedArgs' f tp ob pars (zip ns nars)) 
     (\tp ob pars ns nars -> objMethodCallMixedArgs' f tp ob pars (zip ns nars)) 
     t o pas (map fst nas) (map snd nas)
-  objMethodCallNoParams' f = pair2 
-    (objMethodCallNoParams' f) 
-    (objMethodCallNoParams' f)
 
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
@@ -1381,7 +1378,6 @@ instance ValueElim CppSrcCode where
 
 instance RenderValueExp CppSrcCode where
   objMethodCallMixedArgs' = G.objMethodCall
-  objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
@@ -2022,7 +2018,6 @@ instance ValueElim CppHdrCode where
   
 instance RenderValueExp CppHdrCode where
   objMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
-  objMethodCallNoParams' _ _ _ = mkStateVal void empty
 
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData

@@ -9,7 +9,8 @@ module GOOL.Drasil.LanguageRenderer.Constructors (
 import GOOL.Drasil.ClassInterface (VSType, SVariable, SValue, TypeSym(..), 
   TypeElim(..), VariableSym(..), ValueSym(..), StatementSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, VSUnOp, VSBinOp, UnaryOpSym(..),
-  BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..), RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
+  BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..), 
+  RenderValue(..), ValueElim(valuePrec), RenderStatement(..))
 import qualified GOOL.Drasil.RendererClasses as RC (uOp, bOp, value)
 import GOOL.Drasil.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
 import GOOL.Drasil.AST (Terminator(..), Binding(..), OpData, od)

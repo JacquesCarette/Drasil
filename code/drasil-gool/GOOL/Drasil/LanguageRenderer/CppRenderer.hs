@@ -463,9 +463,9 @@ instance (Pair p) => RenderValue (p CppSrcCode CppHdrCode) where
 
   cast = pair2 cast cast
 
-  call l n t o pas nas = pair1Val3Lists
-    (\tp pars ns nars -> call l n tp o pars (zip ns nars)) 
-    (\tp pars ns nars -> call l n tp o pars (zip ns nars)) 
+  call l o n t pas nas = pair1Val3Lists
+    (\tp pars ns nars -> call l o n tp pars (zip ns nars)) 
+    (\tp pars ns nars -> call l o n tp pars (zip ns nars)) 
     t pas (map fst nas) (map snd nas)
 
   valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)

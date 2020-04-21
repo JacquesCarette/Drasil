@@ -447,18 +447,15 @@ inlineIf = on3StateValues (\c v1 v2 -> valFromData (prec c) (valueType v1)
   (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2)) 
   where prec cd = valuePrec cd <|> Just 0
 
-call' :: (RenderSym r) => String -> Maybe Library -> Label -> VSType r -> 
-  Maybe Doc -> [SValue r] -> NamedArgs r -> SValue r
+-- | First parameter is language name, rest similar to call from ClassInterface
+call' :: (RenderSym r) => String -> Maybe Library -> Maybe Doc -> MixedCall r
 call' l _ _ _ _ _ (_:_) = error $ namedArgError l
-call' _ l n t o ps ns = call empty l n t o ps ns
+call' _ l o n t ps ns = call empty l o n t ps ns
 
--- | Parameters are: separator between name and value for named arguments, 
--- maybe name of external module, name of function, return type of function, 
--- maybe Doc for object variable (including separator between object and 
--- function) for method calls, arguments, named arguments
-call :: (RenderSym r) => Doc -> Maybe Library -> Label -> VSType r -> 
-  Maybe Doc -> [SValue r] -> NamedArgs r -> SValue r
-call sep lib n t o pas nas = do
+-- | First parameter is separator between name and value for named arguments, 
+-- rest similar to call from ClassInterface
+call :: (RenderSym r) => Doc -> Maybe Library -> Maybe Doc -> MixedCall r
+call sep lib o n t pas nas = do
   pargs <- sequence pas
   nms <- mapM fst nas
   nargs <- mapM snd nas
@@ -469,17 +466,17 @@ call sep lib n t o pas nas = do
     (zip nms nargs))
 
 funcAppMixedArgs :: (RenderSym r) => MixedCall r
-funcAppMixedArgs n t = S.call Nothing n t Nothing
+funcAppMixedArgs = S.call Nothing Nothing
 
 namedArgError :: String -> String
 namedArgError l = "Named arguments not supported in " ++ l 
 
 selfFuncAppMixedArgs :: (RenderSym r) => Doc -> SVariable r -> MixedCall r
-selfFuncAppMixedArgs d slf n t vs ns = slf >>= (\s -> S.call Nothing n t 
-  (Just $ RC.variable s <> d) vs ns)
+selfFuncAppMixedArgs d slf n t vs ns = slf >>= (\s -> S.call Nothing 
+  (Just $ RC.variable s <> d) n t vs ns)
 
 extFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
-extFuncAppMixedArgs l n t = S.call (Just l) n t Nothing
+extFuncAppMixedArgs l = S.call (Just l) Nothing
 
 libFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
 libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >> 
@@ -487,11 +484,11 @@ libFuncAppMixedArgs l n t vs ns = modify (addLibImportVS l) >>
 
 newObjMixedArgs :: (RenderSym r) => String -> MixedCtorCall r
 newObjMixedArgs s tp vs ns = tp >>= 
-  (\t -> S.call Nothing (s ++ getTypeString t) (return t) Nothing vs ns)
+  (\t -> S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns)
 
 extNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
-extNewObjMixedArgs l tp vs ns = tp >>= (\t -> S.call (Just l) (getTypeString t) 
-  (return t) Nothing vs ns)
+extNewObjMixedArgs l tp vs ns = tp >>= (\t -> S.call (Just l) Nothing 
+  (getTypeString t) (return t) vs ns)
 
 libNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
 libNewObjMixedArgs l tp vs ns = modify (addLibImportVS l) >> 
@@ -512,8 +509,8 @@ objAccess = on2StateValues (\v f -> mkVal (functionType f) (R.objAccess
 
 objMethodCall :: (RenderSym r) => Label -> VSType r -> SValue r -> [SValue r] 
   -> NamedArgs r -> SValue r
-objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing f t 
-  (Just $ RC.value o <> dot) vs ns)
+objMethodCall f t ob vs ns = ob >>= (\o -> S.call Nothing 
+  (Just $ RC.value o <> dot) f t vs ns)
 
 objMethodCallNoParams :: (RenderSym r) => Label -> VSType r -> SValue r -> 
   SValue r

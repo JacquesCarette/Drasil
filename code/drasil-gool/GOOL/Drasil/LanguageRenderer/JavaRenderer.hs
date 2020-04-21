@@ -79,7 +79,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
   destructorError, docFuncRepr)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
+import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
@@ -679,14 +679,12 @@ instance RenderMethod JavaCode where
           (Map.lookup (key mn n) mem) 
         key mnm nm = mnm ++ "." ++ nm
     modify ((if m then setCurrMain else id) . addExceptionImports excs) 
-    toState $ methodFromData Pub $ jMethod n (map exc excs) s p tp pms bd
+    toState $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
   destructor _ = error $ destructorError jName
-  
-  methodFromData _ = toCode . mthd
   
 instance MethodElim JavaCode where
   method = mthdDoc . unJC

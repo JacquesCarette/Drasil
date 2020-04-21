@@ -69,7 +69,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (addmathImport, 
   bindingError, destructorError, docFuncRepr)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
+import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
@@ -654,17 +654,14 @@ instance MethodSym PythonCode where
 
 instance RenderMethod PythonCode where
   intMethod m n _ _ _ ps b = modify (if m then setCurrMain else id) >> 
-    on3StateValues (\sl pms bd -> methodFromData Pub $ pyMethod n sl pms bd) 
+    on3StateValues (\sl pms bd -> toCode $ mthd $ pyMethod n sl pms bd) 
     (zoom lensMStoVS self) (sequence ps) b 
   intFunc m n _ _ _ ps b = modify (if m then setCurrMain else id) >>
-    on1StateValue1List (\bd pms -> methodFromData Pub $ pyFunction n pms bd) 
-    b ps
+    on1StateValue1List (\bd pms -> toCode $ mthd $ pyFunction n pms bd) b ps
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
   destructor _ = error $ destructorError pyName
-
-  methodFromData _ = toCode . mthd
   
 instance MethodElim PythonCode where
   method = mthdDoc . unPC

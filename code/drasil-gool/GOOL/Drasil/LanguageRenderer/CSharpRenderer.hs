@@ -78,7 +78,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
   destructorError)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
+import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
   updateParam, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
@@ -637,15 +637,13 @@ instance MethodSym CSharpCode where
 
 instance RenderMethod CSharpCode where
   intMethod m n s p t ps b = modify (if m then setCurrMain else id) >> 
-    on3StateValues (\tp pms bd -> methodFromData Pub $ R.method n s p tp pms 
-    bd) t (sequence ps) b
+    on3StateValues (\tp pms bd -> toCode $ mthd $ R.method n s p tp pms bd) t 
+    (sequence ps) b
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
   destructor _ = error $ destructorError csName
-  
-  methodFromData _ = toCode . mthd
   
 instance MethodElim CSharpCode where
   method = mthdDoc . unCSC

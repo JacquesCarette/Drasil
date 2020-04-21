@@ -797,8 +797,6 @@ instance (Pair p) => RenderMethod (p CppSrcCode CppHdrCode) where
   commentedFunc = pair2 commentedFunc commentedFunc
   
   destructor = pair1List destructor destructor . map (zoom lensMStoCS)
-    
-  methodFromData s d = pair (methodFromData s d) (methodFromData s d)
   
 instance (Pair p) => MethodElim (p CppSrcCode CppHdrCode) where
   method m = RC.method $ pfst m
@@ -1640,12 +1638,11 @@ instance MethodSym CppSrcCode where
 
 instance RenderMethod CppSrcCode where
   intMethod m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
-    setCurrMain else id) >> (\c tp pms bod -> methodFromData 
-    (snd $ unCPPSC s) $ cppsMethod [] n c tp pms bod) <$> getClassName <*> t 
-    <*> sequence ps <*> b
+    setCurrMain else id) >> (\c tp pms bod -> toCode $ mthd (snd $ unCPPSC s) $ 
+    cppsMethod [] n c tp pms bod) <$> getClassName <*> t <*> sequence ps <*> b
   intFunc m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
     setCurrMainFunc m . setCurrMain else id) >> on3StateValues (\tp pms bod -> 
-    methodFromData (snd $ unCPPSC s) $ cppsFunction n tp pms bod) t 
+    toCode $ mthd (snd $ unCPPSC s) $ cppsFunction n tp pms bod) t 
     (sequence ps) b
   commentedFunc = cppCommentedFunc Source
   
@@ -1658,8 +1655,6 @@ instance RenderMethod CppSrcCode where
           (onStateList (onCodeList (vcat . map fst)) deleteStatements) $
           bodyStatements $ loopIndexDec : deleteStatements
     in getClassName >>= (\n -> pubMethod ('~':n) void [] dbody)
- 
-  methodFromData s d = toCode $ mthd s d
   
 instance MethodElim CppSrcCode where
   method = mthdDoc . unCPPSC
@@ -2240,7 +2235,7 @@ instance MethodSym CppHdrCode where
 
 instance RenderMethod CppHdrCode where
   intMethod _ n s _ t ps _ = modify (setScope (snd $ unCPPHC s)) >> 
-    on1StateValue1List (\tp pms -> methodFromData (snd $ unCPPHC s) $ 
+    on1StateValue1List (\tp pms -> toCode $ mthd (snd $ unCPPHC s) $ 
     cpphMethod n tp pms) t ps
   intFunc = G.intFunc
   commentedFunc = cppCommentedFunc Header
@@ -2250,8 +2245,6 @@ instance RenderMethod CppHdrCode where
     (RC.method m))) (getClassName >>= (\n -> pubMethod ('~':n) void [] 
     (toState (toCode empty)) :: SMethod CppHdrCode)) 
     (map (zoom lensMStoCS) vars)
-
-  methodFromData s d = toCode $ mthd s d
   
 instance MethodElim CppHdrCode where
   method = mthdDoc . unCPPHC
@@ -2536,7 +2529,7 @@ cppConstructor :: [MSParameter CppSrcCode] -> NamedArgs CppSrcCode ->
   MSBody CppSrcCode -> SMethod CppSrcCode
 cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals 
   bod -> if null is then G.constructor n ps is b else modify (setScope Pub) >> 
-  toState (methodFromData Pub (cppsMethod (zipWith (\ivar ival -> RC.variable 
+  toState (toCode $ mthd Pub (cppsMethod (zipWith (\ivar ival -> RC.variable 
   ivar <> parens (RC.value ival)) ivars ivals) n n tp pms bod))) <$> construct 
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom 
   lensMStoVS . snd) is <*> b)
@@ -2552,15 +2545,15 @@ cpphMethod :: (RenderSym r) => Label -> r (Type r) -> [r (Parameter r)] -> Doc
 cpphMethod n t ps = (if isDtor n then empty else RC.type' t) <+> text n 
   <> parens (parameterList ps) <> endStatement
 
-cppCommentedFunc :: (RenderSym r) => FileType -> MS (r (BlockComment r)) -> 
-  SMethod r -> SMethod r
+cppCommentedFunc :: (RenderSym r, Monad r) => FileType -> 
+  MS (r (BlockComment r)) -> MS (r MethodData) -> MS (r MethodData)
 cppCommentedFunc ft cmt fn = do
   f <- fn
   mn <- getCurrMainFunc
   scp <- getScope
   cmnt <- cmt
-  let cf = toState (methodFromData scp $ R.commentedItem (RC.blockComment' cmnt)
-        $ RC.method f)
+  let cf = toState (onCodeValue (mthd scp . R.commentedItem 
+        (RC.blockComment' cmnt) . mthdDoc) f)
       ret Source = if mn then cf else toState f
       ret Header = if mn then toState f else cf
       ret Combined = error "Combined passed to cppCommentedFunc"

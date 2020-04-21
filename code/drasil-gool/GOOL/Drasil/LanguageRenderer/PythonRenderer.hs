@@ -691,8 +691,6 @@ instance RenderClass PythonCode where
   implements is = toCode $ parens (text $ intercalate ", " is)
 
   commentedClass = G.commentedClass
-
-  classFromData d = d
   
 instance ClassElim PythonCode where
   class' = unPC

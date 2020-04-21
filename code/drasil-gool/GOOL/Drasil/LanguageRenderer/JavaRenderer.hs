@@ -713,8 +713,6 @@ instance RenderClass JavaCode where
   implements is = toCode $ text "implements" <+> text (intercalate ", " is)
 
   commentedClass = G.commentedClass
-
-  classFromData d = d
   
 instance ClassElim JavaCode where
   class' = unJC

@@ -261,8 +261,6 @@ class (BlockCommentSym r) => RenderClass r where
   implements :: [Label] -> r ParentSpec
 
   commentedClass :: CS (r (BlockComment r)) -> SClass r -> SClass r
-
-  classFromData :: CS (r Doc) -> SClass r
   
 class ClassElim r where
   class' :: r (Class r) -> Doc

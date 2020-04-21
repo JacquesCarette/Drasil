@@ -672,8 +672,6 @@ instance RenderClass CSharpCode where
   implements is = toCode $ colon <+> text (intercalate ", " is)
 
   commentedClass = G.commentedClass
-
-  classFromData d = d
   
 instance ClassElim CSharpCode where
   class' = unCSC

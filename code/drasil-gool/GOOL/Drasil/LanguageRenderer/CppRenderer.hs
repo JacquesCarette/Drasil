@@ -837,8 +837,6 @@ instance (Pair p) => RenderClass (p CppSrcCode CppHdrCode) where
   implements is = pair (implements is) (implements is)
 
   commentedClass = pair2 commentedClass commentedClass
-
-  classFromData = pair1 classFromData classFromData
   
 instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
   class' c = RC.class' $ pfst c
@@ -1686,8 +1684,6 @@ instance RenderClass CppSrcCode where
     . fst) public
 
   commentedClass _ cs = cs
-
-  classFromData d = d
   
 instance ClassElim CppSrcCode where
   class' = unCPPSC
@@ -2274,8 +2270,6 @@ instance RenderClass CppHdrCode where
     . fst) public
 
   commentedClass = G.commentedClass
-
-  classFromData d = d
   
 instance ClassElim CppHdrCode where
   class' = unCPPHC

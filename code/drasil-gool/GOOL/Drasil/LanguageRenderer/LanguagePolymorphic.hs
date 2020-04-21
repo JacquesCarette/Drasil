@@ -78,7 +78,7 @@ import GOOL.Drasil.RendererClasses (VSUnOp, VSBinOp, MSMthdType, RenderSym,
   MethodTypeSym(mType), RenderParam(paramFromData), 
   RenderMethod(intMethod, commentedFunc), 
   ParentSpec, 
-  RenderClass(inherit, implements, classFromData),
+  RenderClass(inherit, implements),
   RenderMod(updateModuleDoc), BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData), 
   RenderBody(multiBody), RenderValue(call), 
@@ -970,17 +970,17 @@ docClass :: (RenderSym r) => String -> SClass r -> SClass r
 docClass d = S.commentedClass (docComment $ toState $ classDox d)
 
 commentedClass :: (RenderSym r, Monad r) => CS (r (BlockComment r)) -> SClass r 
-  -> SClass r
-commentedClass cmt cs = classFromData (on2StateValues (\cmt' cs' -> toCode $
-  R.commentedItem (RC.blockComment' cmt') (RC.class' cs')) cmt cs)
+  -> CS (r Doc)
+commentedClass = on2StateValues (\cmt cs -> toCode $ R.commentedItem 
+  (RC.blockComment' cmt) (RC.class' cs))
 
 intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> 
   Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] 
-  -> SClass r
-intClass f n s i svrs mths = modify (setClassName n) >> classFromData 
-  (on2StateValues (\svs ms -> onCodeValue (\p -> f n p (RC.scope s) svs ms) i) 
+  -> CS (r Doc)
+intClass f n s i svrs mths = modify (setClassName n) >> on2StateValues 
+  (\svs ms -> onCodeValue (\p -> f n p (RC.scope s) svs ms) i) 
   (onStateList (R.stateVarList . map RC.stateVar) svrs) 
-  (onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)))
+  (onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths))
 
 -- Modules --
 

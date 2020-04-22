@@ -13,7 +13,7 @@ module GOOL.Drasil.ClassInterface (
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
   extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
-  InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
+  RenderValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), ($.), selfAccess, GetSet(..), 
   List(..), InternalList(..), listSlice, listIndexExists, at, Iterator(..), 
   StatementSym(..), AssignStatement(..), (&=), assignToListIndex, 
@@ -44,7 +44,7 @@ class (ProgramSym r, ControlBlock r, AssignStatement r, DeclStatement r,
   IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, 
   ControlStatement r, InternalList r, Literal r, MathConstant r, 
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, 
-  Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, 
+  Comparison r, ValueExpression r, RenderValueExp r, GetSet r, List r, 
   Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, 
   VariableElim r) => OOProg r
 
@@ -52,10 +52,10 @@ class (FileSym r) => ProgramSym r where
   type Program r
   prog :: Label -> [SFile r] -> GSProgram r
 
-type SFile a = FS (a (RenderFile a))
+type SFile a = FS (a (File a))
 
 class (ModuleSym r) => FileSym r where 
-  type RenderFile r
+  type File r
   fileDoc :: FSModule r -> SFile r
 
   -- Module description, list of author names, date as a String, file to comment
@@ -282,20 +282,20 @@ libNewObj l t vs = libNewObjMixedArgs l t vs []
 exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
 
-class (FunctionSym r) => InternalValueExp r where
+class (FunctionSym r) => RenderValueExp r where
   objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
     NamedArgs r -> SValue r
   objMethodCallNoParams' :: Label -> VSType r -> SValue r -> SValue r
 
-objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
+objMethodCall :: (RenderValueExp r) => VSType r -> SValue r -> Label -> 
   [SValue r] -> SValue r
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
-objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+objMethodCallMixedArgs :: (RenderValueExp r) => VSType r -> SValue r -> Label 
   -> [SValue r] -> NamedArgs r -> SValue r
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
-objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+objMethodCallNoParams :: (RenderValueExp r) => VSType r -> SValue r -> Label 
   -> SValue r
 objMethodCallNoParams t o f = objMethodCallNoParams' f t o
 

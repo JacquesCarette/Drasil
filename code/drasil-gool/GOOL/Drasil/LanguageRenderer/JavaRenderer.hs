@@ -17,7 +17,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
-  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, 
+  selfFuncApp, extFuncApp, newObj, RenderValueExp(..), objMethodCall, 
   objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), 
   InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
@@ -26,18 +26,18 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   ParameterSym(..), MethodSym(..), pubMethod, initializer, StateVarSym(..), 
   privDVar, pubDVar, ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), InternalBody(..), BodyElim(..), 
-  InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), 
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(..), OpIntro(..), 
-  InternalVariable(..), InternalVarElim(..), InternalValue(..), ValueElim(..), 
+import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
+  ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
+  RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
+  RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
-  InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), 
-  InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), 
-  StatementElim(..), InternalScope(..), ScopeElim(..), MethodTypeSym(..), 
-  InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..), 
-  InternalStateVar(..), StateVarElim(..), InternalClass(..), ClassElim(..), 
-  InternalMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
+  RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
+  StatementElim(..), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
+  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
+  RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
+  RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import GOOL.Drasil.LanguageRenderer (mkSt, mkStateVal, mkVal, dot, new, 
   elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
   bodyEnd, endStatement, commentStart, variableList, parameterList, 
@@ -131,12 +131,12 @@ instance ProgramSym JavaCode where
 instance RenderSym JavaCode
 
 instance FileSym JavaCode where
-  type RenderFile JavaCode = FileData 
+  type File JavaCode = FileData 
   fileDoc m = modify (setFileType Combined) >> G.fileDoc jExt top bottom m
 
   docMod = G.docMod jExt
 
-instance InternalFile JavaCode where
+instance RenderFile JavaCode where
   top _ = toCode empty
   bottom = toCode empty
   
@@ -167,7 +167,7 @@ instance BodySym JavaCode where
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
-instance InternalBody JavaCode where
+instance RenderBody JavaCode where
   docBody = onStateValue toCode
   multiBody = G.multiBody 
 
@@ -178,7 +178,7 @@ instance BlockSym JavaCode where
   type Block JavaCode = Doc
   block = G.block
 
-instance InternalBlock JavaCode where
+instance RenderBlock JavaCode where
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
@@ -207,7 +207,7 @@ instance TypeElim JavaCode where
   getType = cType . unJC
   getTypeString = typeString . unJC
   
-instance InternalType JavaCode where
+instance RenderType JavaCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim JavaCode where
@@ -283,7 +283,7 @@ instance OpElim JavaCode where
   uOpPrec = opPrec . unJC
   bOpPrec = opPrec . unJC
   
-instance OpIntro JavaCode where
+instance RenderOp JavaCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 
@@ -312,7 +312,7 @@ instance InternalVarElim JavaCode where
   variableBind = varBind . unJC
   variableDoc = varDoc . unJC
 
-instance InternalVariable JavaCode where
+instance RenderVariable JavaCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JavaCode where
@@ -414,7 +414,7 @@ instance ValueExpression JavaCode where
 
   notNull = G.notNull
 
-instance InternalValue JavaCode where
+instance RenderValue JavaCode where
   inputFunc = modify (addLangImportVS "java.util.Scanner") >> mkStateVal 
     (obj "Scanner") (parens $ text "new Scanner(System.in)")
   printFunc = mkStateVal void (text "System.out.print")
@@ -434,7 +434,7 @@ instance ValueElim JavaCode where
   valuePrec = valPrec . unJC
   valueDoc = val . unJC
 
-instance InternalValueExp JavaCode where
+instance RenderValueExp JavaCode where
   objMethodCallMixedArgs' f t o ps ns = do
     ob <- o
     mem <- getMethodExcMap
@@ -483,7 +483,7 @@ instance InternalIterator JavaCode where
   iterBeginFunc _ = error $ G.iterBeginError jName
   iterEndFunc _ = error $ G.iterEndError jName
 
-instance InternalFunction JavaCode where
+instance RenderFunction JavaCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   
 instance FunctionElim JavaCode where
@@ -499,7 +499,7 @@ instance InternalIOStmt JavaCode where
 instance InternalControlStmt JavaCode where
   multiReturn _ = error $ G.multiReturnError jName
 
-instance InternalStatement JavaCode where
+instance RenderStatement JavaCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
 
@@ -618,7 +618,7 @@ instance ScopeSym JavaCode where
   private = toCode R.private
   public = toCode R.public
 
-instance InternalScope JavaCode where
+instance RenderScope JavaCode where
   scopeFromData _ = toCode
   
 instance ScopeElim JavaCode where
@@ -634,7 +634,7 @@ instance ParameterSym JavaCode where
   param = G.param R.param
   pointerParam = param
 
-instance InternalParam JavaCode where
+instance RenderParam JavaCode where
   paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance ParamElim JavaCode where
@@ -664,7 +664,7 @@ instance MethodSym JavaCode where
     
   docInOutFunc n = jDocInOut (inOutFunc n)
 
-instance InternalMethod JavaCode where
+instance RenderMethod JavaCode where
   intMethod m n s p t ps b = do
     tp <- t
     pms <- sequence ps
@@ -694,7 +694,7 @@ instance StateVarSym JavaCode where
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (permDoc (static :: JavaCode (Permanence JavaCode)))
 
-instance InternalStateVar JavaCode where
+instance RenderStateVar JavaCode where
   stateVarFromData = onStateValue toCode
   
 instance StateVarElim JavaCode where
@@ -708,7 +708,7 @@ instance ClassSym JavaCode where
 
   docClass = G.docClass
 
-instance InternalClass JavaCode where
+instance RenderClass JavaCode where
   intClass = G.intClass R.class'
   
   inherit n = toCode $ maybe empty ((text "extends" <+>) . text) n
@@ -725,7 +725,7 @@ instance ModuleSym JavaCode where
   type Module JavaCode = ModData
   buildModule n = G.buildModule' n langImport
   
-instance InternalMod JavaCode where
+instance RenderMod JavaCode where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
   

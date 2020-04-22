@@ -27,8 +27,8 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   VariableSym(Variable), VariableElim(..), ValueSym(..), 
   StatementSym(Statement), ScopeSym(Scope), ParameterSym(Parameter))
 import GOOL.Drasil.RendererClasses (RenderSym, BodyElim(..), PermElim(..), 
-  InternalTypeElim(..), InternalVariable(..), InternalVarElim(..), 
-  InternalValue(valFromData), ValueElim(..), InternalStatement(..),
+  InternalTypeElim(..), RenderVariable(..), InternalVarElim(..), 
+  RenderValue(valFromData), ValueElim(..), RenderStatement(..),
   StatementElim(..), ScopeElim(..), ParamElim(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))

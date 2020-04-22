@@ -16,7 +16,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VariableElim(..), listOf, ValueSym(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
-  selfFuncApp, extFuncApp, extNewObj, InternalValueExp(..), objMethodCall,
+  selfFuncApp, extFuncApp, extNewObj, RenderValueExp(..), objMethodCall,
   objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..),
   InternalList(..), at, Iterator(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
@@ -25,18 +25,18 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), InternalBody(..), BodyElim(..), 
-  InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), 
-  VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(..), OpIntro(..), 
-  InternalVariable(..), InternalVarElim(..), InternalValue(..), ValueElim(..), 
+import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
+  ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
+  RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
+  VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
+  RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
-  InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), 
-  InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), 
-  StatementElim(..), InternalScope(..), ScopeElim(..), MethodTypeSym(..), 
-  InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..), 
-  InternalStateVar(..), StateVarElim(..), InternalClass(..), ClassElim(..), 
-  InternalMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
+  RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
+  StatementElim(..), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
+  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
+  RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
+  RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -116,12 +116,12 @@ instance ProgramSym PythonCode where
 instance RenderSym PythonCode
 
 instance FileSym PythonCode where
-  type RenderFile PythonCode = FileData
+  type File PythonCode = FileData
   fileDoc m = modify (setFileType Combined) >> G.fileDoc pyExt top bottom m
 
   docMod = G.docMod pyExt
 
-instance InternalFile PythonCode where
+instance RenderFile PythonCode where
   top _ = toCode empty
   bottom = toCode empty
   
@@ -152,7 +152,7 @@ instance BodySym PythonCode where
 
   addComments s = onStateValue (onCodeValue (R.addComments s pyCommentStart))
 
-instance InternalBody PythonCode where
+instance RenderBody PythonCode where
   docBody = onStateValue toCode
   multiBody = G.multiBody 
 
@@ -163,7 +163,7 @@ instance BlockSym PythonCode where
   type Block PythonCode = Doc
   block = G.block
 
-instance InternalBlock PythonCode where
+instance RenderBlock PythonCode where
   docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
@@ -193,7 +193,7 @@ instance TypeElim PythonCode where
   getType = cType . unPC
   getTypeString = typeString . unPC
 
-instance InternalType PythonCode where
+instance RenderType PythonCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim PythonCode where
@@ -270,7 +270,7 @@ instance OpElim PythonCode where
   uOpPrec = opPrec . unPC
   bOpPrec = opPrec . unPC
   
-instance OpIntro PythonCode where
+instance RenderOp PythonCode where
   uOpFromData p d = toState $ toCode $ od p d
   bOpFromData p d = toState $ toCode $ od p d
 
@@ -299,7 +299,7 @@ instance InternalVarElim PythonCode where
   variableBind = varBind . unPC
   variableDoc = varDoc . unPC
 
-instance InternalVariable PythonCode where
+instance RenderVariable PythonCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym PythonCode where
@@ -390,7 +390,7 @@ instance ValueExpression PythonCode where
 
   notNull v = v ?!= valueOf (var "None" void)
 
-instance InternalValue PythonCode where
+instance RenderValue PythonCode where
   inputFunc = mkStateVal string (text "input()") -- raw_input() for < Python 3.0
   printFunc = mkStateVal void (text "print")
   printLnFunc = mkStateVal void empty
@@ -407,7 +407,7 @@ instance ValueElim PythonCode where
   valuePrec = valPrec . unPC
   valueDoc = val . unPC
 
-instance InternalValueExp PythonCode where
+instance RenderValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
   objMethodCallNoParams' = G.objMethodCallNoParams
 
@@ -453,7 +453,7 @@ instance InternalIterator PythonCode where
   iterBeginFunc _ = error $ G.iterBeginError pyName
   iterEndFunc _ = error $ G.iterEndError pyName
 
-instance InternalFunction PythonCode where
+instance RenderFunction PythonCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   
 instance FunctionElim PythonCode where
@@ -472,7 +472,7 @@ instance InternalControlStmt PythonCode where
   multiReturn [] = error "Attempt to write return statement with no return variables"
   multiReturn vs = zoom lensMStoVS $ onStateList (mkStNoEnd . R.return') vs
 
-instance InternalStatement PythonCode where
+instance RenderStatement PythonCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
   
@@ -600,7 +600,7 @@ instance ScopeSym PythonCode where
   private = toCode empty
   public = toCode empty
 
-instance InternalScope PythonCode where
+instance RenderScope PythonCode where
   scopeFromData _ = toCode
 
 instance ScopeElim PythonCode where
@@ -616,7 +616,7 @@ instance ParameterSym PythonCode where
   param = G.param variableDoc
   pointerParam = param
 
-instance InternalParam PythonCode where
+instance RenderParam PythonCode where
   paramFromData v d = on2CodeValues pd v (toCode d)
   
 instance ParamElim PythonCode where
@@ -650,7 +650,7 @@ instance MethodSym PythonCode where
 
   docInOutFunc n = pyDocInOut (inOutFunc n)
 
-instance InternalMethod PythonCode where
+instance RenderMethod PythonCode where
   intMethod m n _ _ _ ps b = modify (if m then setCurrMain else id) >> 
     on3StateValues (\sl pms bd -> methodFromData Pub $ pyMethod n sl pms bd) 
     (zoom lensMStoVS self) (sequence ps) b 
@@ -674,7 +674,7 @@ instance StateVarSym PythonCode where
   constVar _ = G.constVar (permDoc 
     (static :: PythonCode (Permanence PythonCode)))
 
-instance InternalStateVar PythonCode where
+instance RenderStateVar PythonCode where
   stateVarFromData = onStateValue toCode
   
 instance StateVarElim PythonCode where
@@ -688,7 +688,7 @@ instance ClassSym PythonCode where
 
   docClass = G.docClass
 
-instance InternalClass PythonCode where
+instance RenderClass PythonCode where
   intClass = G.intClass pyClass
 
   inherit n = toCode $ maybe empty (parens . text) n
@@ -713,7 +713,7 @@ instance ModuleSym PythonCode where
       (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
     getLangImports getLibImports getModuleImports) getMainDoc
 
-instance InternalMod PythonCode where
+instance RenderMod PythonCode where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
   

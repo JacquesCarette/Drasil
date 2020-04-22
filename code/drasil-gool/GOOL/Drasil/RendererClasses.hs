@@ -18,17 +18,17 @@ module GOOL.Drasil.RendererClasses (
 
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
-  CSStateVar, SClass, FSModule, NamedArgs, FileSym(..), PermanenceSym(..), 
-  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..),
-  VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), 
-  MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), Comparison(..), 
-  ValueExpression(..), RenderValueExp(..), FunctionSym(..), GetSet(..), 
-  List(..), InternalList(..), Iterator(..), StatementSym(..), 
-  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..), 
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  CSStateVar, SClass, FSModule, MixedCall, FileSym(..), PermanenceSym(..), 
+  BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
+  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
+  BooleanExpression(..), Comparison(..), ValueExpression(..), 
+  RenderValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..), 
+  Iterator(..), StatementSym(..), AssignStatement(..), DeclStatement(..), 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
+  CommentStatement(..), ControlStatement(..), StatePattern(..), 
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (FS, CS, MS, VS)
@@ -155,10 +155,12 @@ class RenderValue r where
 
   cast :: VSType r -> SValue r -> SValue r
 
-  -- Very generic internal function for generating calls, to reduce repeated code throughout generators
-  -- Maybe library, function name, return type, maybe object doc, regular arguments, named arguments
-  call :: Maybe Library -> Label -> VSType r -> Maybe Doc -> [SValue r] 
-    -> NamedArgs r -> SValue r
+  -- | Very generic internal function for generating calls, to reduce repeated 
+  -- code throughout generators.
+  -- Parameters are: maybe name of external module, maybe Doc for object 
+  -- variable (including separator between object and function) for method 
+  -- calls.
+  call :: Maybe Library -> Maybe Doc -> MixedCall r
 
   valFromData :: Maybe Int -> r (Type r) -> Doc -> r (Value r)
 

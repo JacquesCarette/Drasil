@@ -463,9 +463,9 @@ instance (Pair p) => RenderValue (p CppSrcCode CppHdrCode) where
 
   cast = pair2 cast cast
 
-  call l n t o pas nas = pair1Val3Lists
-    (\tp pars ns nars -> call l n tp o pars (zip ns nars)) 
-    (\tp pars ns nars -> call l n tp o pars (zip ns nars)) 
+  call l o n t pas nas = pair1Val3Lists
+    (\tp pars ns nars -> call l o n tp pars (zip ns nars)) 
+    (\tp pars ns nars -> call l o n tp pars (zip ns nars)) 
     t pas (map fst nas) (map snd nas)
 
   valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)
@@ -1093,7 +1093,7 @@ instance RenderFile CppSrcCode where
   commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then on2CodeValues 
     R.commentedMod m cmt else m) mod cmnt getCurrMain
   
-  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
+  fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CppSrcCode where
   type Import CppSrcCode = Doc
@@ -1739,7 +1739,7 @@ instance RenderFile CppHdrCode where
     onCodeValue fileMod m) then m else on2CodeValues R.commentedMod m cmt) 
     mod cmnt
 
-  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
+  fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CppHdrCode where
   type Import CppHdrCode = Doc

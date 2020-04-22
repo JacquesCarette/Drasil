@@ -138,7 +138,7 @@ instance RenderFile CSharpCode where
 
   commentedMod cmt m = on2StateValues (on2CodeValues R.commentedMod) m cmt
 
-  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
+  fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CSharpCode where
   type Import CSharpCode = Doc

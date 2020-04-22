@@ -15,8 +15,8 @@ module GOOL.Drasil.LanguageRenderer (
   constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, castObj, 
   break, continue, static, dynamic, private, public, blockCmt, docCmt, 
   commentedItem, addComments, functionDox, classDox, moduleDox, commentedMod, 
-  valueList, variableList, parameterList, prependToBody, appendToBody, 
-  surroundBody, getterName, setterName, intValue
+  valueList, variableList, parameterList, namedArgList, prependToBody, 
+  appendToBody, surroundBody, getterName, setterName, intValue
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -351,6 +351,10 @@ variableList = hicat (text ", ") . map RC.variable
 
 parameterList :: (RenderSym r) => [r (Parameter r)] -> Doc
 parameterList = hicat (text ", ") . map RC.parameter
+
+namedArgList :: (RenderSym r) => Doc -> [(r (Variable r), r (Value r))] -> Doc
+namedArgList sep = hicat (text ", ") . map (\(vr,vl) -> RC.variable vr <> sep 
+  <> RC.value vl)
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 prependToBody s b = vcat [fst $ statement s, maybeBlank, b]

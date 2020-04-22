@@ -70,10 +70,10 @@ class ImportSym r where
   modImport :: Label -> r (Import r)
 
 class ImportElim r where
-  importDoc :: r (Import r) -> Doc
+  import' :: r (Import r) -> Doc
 
 class PermElim r where
-  permDoc :: r (Permanence r) -> Doc
+  perm :: r (Permanence r) -> Doc
   binding :: r (Permanence r) -> Binding
 
 class RenderBody r where
@@ -81,20 +81,20 @@ class RenderBody r where
   multiBody :: [MSBody r] -> MSBody r
 
 class BodyElim r where
-  bodyDoc :: r (Body r) -> Doc
+  body :: r (Body r) -> Doc
 
 class RenderBlock r where
   docBlock :: MS Doc -> MSBlock r
   multiBlock :: [MSBlock r] -> MSBlock r
 
 class BlockElim r where
-  blockDoc :: r (Block r) -> Doc
+  block :: r (Block r) -> Doc
 
 class RenderType r where
   typeFromData :: CodeType -> String -> Doc -> r (Type r)
 
 class InternalTypeElim r where
-  getTypeDoc :: r (Type r) -> Doc
+  type' :: r (Type r) -> Doc
 
 type VSUnOp a = VS (a (UnaryOp a))
 
@@ -136,8 +136,8 @@ class BinaryOpSym r where
   orOp           :: VSBinOp r
 
 class OpElim r where
-  uOpDoc :: r (UnaryOp r) -> Doc
-  bOpDoc :: r (BinaryOp r) -> Doc
+  uOp :: r (UnaryOp r) -> Doc
+  bOp :: r (BinaryOp r) -> Doc
   uOpPrec :: r (UnaryOp r) -> Int
   bOpPrec :: r (BinaryOp r) -> Int
 
@@ -150,7 +150,7 @@ class RenderVariable r where
     
 class InternalVarElim r where
   variableBind :: r (Variable r) -> Binding
-  variableDoc  :: r (Variable r) -> Doc
+  variable  :: r (Variable r) -> Doc
 
 class RenderValue r where
   inputFunc       :: SValue r
@@ -170,7 +170,7 @@ class RenderValue r where
 
 class ValueElim r where
   valuePrec :: r (Value r) -> Maybe Int
-  valueDoc :: r (Value r) -> Doc
+  value :: r (Value r) -> Doc
 
 class InternalGetSet r where
   getFunc :: SVariable r -> VSFunction r
@@ -192,7 +192,7 @@ class RenderFunction r where
   
 class FunctionElim r where
   functionType :: r (Function r) -> r (Type r)
-  functionDoc :: r (Function r) -> Doc
+  function :: r (Function r) -> Doc
 
 class InternalAssignStmt r where
   multiAssign       :: [SVariable r] -> [SValue r] -> MSStatement r 
@@ -213,14 +213,14 @@ class RenderStatement r where
   stmtFromData :: Doc -> Terminator -> r (Statement r)
 
 class StatementElim r where
-  statementDoc :: r (Statement r) -> Doc
+  statement :: r (Statement r) -> Doc
   statementTerm :: r (Statement r) -> Terminator
 
 class RenderScope r where
   scopeFromData :: ScopeTag -> Doc -> r (Scope r)
   
 class ScopeElim r where
-  scopeDoc :: r (Scope r) -> Doc
+  scope :: r (Scope r) -> Doc
 
 type MSMthdType a = MS (a (MethodType a))
 
@@ -235,7 +235,7 @@ class RenderParam r where
 class ParamElim r where
   parameterName :: r (Parameter r) -> Label
   parameterType :: r (Parameter r) -> r (Type r)
-  parameterDoc  :: r (Parameter r) -> Doc
+  parameter     :: r (Parameter r) -> Doc
 
 class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) => 
   RenderMethod r where
@@ -250,13 +250,13 @@ class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) =>
   methodFromData :: ScopeTag -> Doc -> r (Method r)
 
 class MethodElim r where
-  methodDoc :: r (Method r) -> Doc
+  method :: r (Method r) -> Doc
 
 class RenderStateVar r where
   stateVarFromData :: CS Doc -> CSStateVar r
 
 class StateVarElim r where  
-  stateVarDoc :: r (StateVar r) -> Doc
+  stateVar :: r (StateVar r) -> Doc
 
 type ParentSpec = Doc
 
@@ -272,14 +272,14 @@ class (BlockCommentSym r) => RenderClass r where
   classFromData :: CS (r Doc) -> SClass r
   
 class ClassElim r where
-  classDoc :: r (Class r) -> Doc
+  class' :: r (Class r) -> Doc
 
 class RenderMod r where
   modFromData :: String -> FS Doc -> FSModule r
   updateModuleDoc :: (Doc -> Doc) -> r (Module r) -> r (Module r)
   
 class ModuleElim r where
-  moduleDoc :: r (Module r) -> Doc
+  module' :: r (Module r) -> Doc
 
 class BlockCommentSym r where
   type BlockComment r
@@ -287,4 +287,4 @@ class BlockCommentSym r where
   docComment :: State a [String] -> State a (r (BlockComment r))
 
 class BlockCommentElim r where
-  blockCommentDoc :: r (BlockComment r) -> Doc
+  blockComment' :: r (BlockComment r) -> Doc

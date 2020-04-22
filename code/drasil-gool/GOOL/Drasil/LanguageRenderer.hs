@@ -26,10 +26,12 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   BodySym(Body), PermanenceSym(Permanence), TypeSym(Type), TypeElim(..), 
   VariableSym(Variable), VariableElim(..), ValueSym(..), 
   StatementSym(Statement), ScopeSym(Scope), ParameterSym(Parameter))
-import GOOL.Drasil.RendererClasses (RenderSym, BodyElim(..), PermElim(..), 
-  InternalTypeElim(..), RenderVariable(..), InternalVarElim(..), 
-  RenderValue(valFromData), ValueElim(..), RenderStatement(..),
-  StatementElim(..), ScopeElim(..), ParamElim(..))
+import GOOL.Drasil.RendererClasses (RenderSym,
+  RenderVariable(..),
+  RenderValue(valFromData), RenderStatement(..))
+import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
+  InternalTypeElim(..), InternalVarElim(..), ValueElim(..), StatementElim(..),
+  ScopeElim(..), ParamElim(..))
 import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod, 
   updateMod, TypeData(..), Binding(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull,
@@ -124,7 +126,7 @@ body bs = vibcat $ filter (not . isEmpty) bs
 -- IO --
 
 print :: (RenderSym r) => r (Value r) -> r (Value r) -> Doc
-print printFn v = valueDoc printFn <> parens (valueDoc v)
+print printFn v = RC.value printFn <> parens (RC.value v)
 
 printFile :: Label -> Doc -> Doc
 printFile fn f = f <> dot <> text fn
@@ -132,16 +134,16 @@ printFile fn f = f <> dot <> text fn
 -- Parameters --
 
 param :: (RenderSym r) => r (Variable r) -> Doc
-param v = getTypeDoc (variableType v) <+> variableDoc v
+param v = RC.type' (variableType v) <+> RC.variable v
 
 -- Method --
 
 method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> 
   r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 method n s p t ps b = vcat [
-  scopeDoc s <+> permDoc p <+> getTypeDoc t <+> text n <> 
+  RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <> 
     parens (parameterList ps) <+> lbrace,
-  indent (bodyDoc b),
+  indent (RC.body b),
   rbrace]
 
 -- StateVar --
@@ -162,17 +164,17 @@ switch :: (RenderSym r) => r (Statement r) -> r (Value r) -> r (Body r) ->
   [(r (Value r), r (Body r))] -> Doc
 switch breakState v defBody cs = 
   let caseDoc (l, result) = vcat [
-        text "case" <+> valueDoc l <> colon,
+        text "case" <+> RC.value l <> colon,
         indentList [
-          bodyDoc result,
-          statementDoc breakState]]
+          RC.body result,
+          RC.statement breakState]]
       defaultSection = vcat [
         text "default" <> colon,
         indentList [
-          bodyDoc defBody,
-          statementDoc breakState]]
+          RC.body defBody,
+          RC.statement breakState]]
   in vcat [
-      text "switch" <> parens (valueDoc v) <+> lbrace,
+      text "switch" <> parens (RC.value v) <+> lbrace,
       indentList [
         vmap caseDoc cs,
         defaultSection],
@@ -181,24 +183,24 @@ switch breakState v defBody cs =
 -- Statements --
 
 assign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-assign vr vl = variableDoc vr <+> equals <+> valueDoc vl
+assign vr vl = RC.variable vr <+> equals <+> RC.value vl
 
 multiAssign :: (RenderSym r) => [r (Variable r)] -> [r (Value r)] -> Doc
 multiAssign vrs vls = variableList vrs <+> equals <+> valueList vls
 
 addAssign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-addAssign vr vl = variableDoc vr <+> text "+=" <+> valueDoc vl
+addAssign vr vl = RC.variable vr <+> text "+=" <+> RC.value vl
 
 increment :: (RenderSym r) => r (Variable r) -> Doc
-increment v = variableDoc v <> text "++"
+increment v = RC.variable v <> text "++"
 
 listDec :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-listDec v n = space <> equals <+> new <+> getTypeDoc (variableType v) 
-  <> parens (valueDoc n)
+listDec v n = space <> equals <+> new <+> RC.type' (variableType v) 
+  <> parens (RC.value n)
 
 constDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-constDecDef v def = text "const" <+> getTypeDoc (variableType v) <+> 
-  variableDoc v <+> equals <+> valueDoc def
+constDecDef v def = text "const" <+> RC.type' (variableType v) <+> 
+  RC.variable v <+> equals <+> RC.value def
 
 return' :: (RenderSym r) => [r (Value r)] -> Doc
 return' vs = text "return" <+> valueList vs
@@ -246,7 +248,7 @@ self :: Doc
 self = text "this"
 
 arg :: (RenderSym r) => r (Value r) -> r (Value r) -> Doc
-arg n args = valueDoc args <> brackets (valueDoc n)
+arg n args = RC.value args <> brackets (RC.value n)
 
 classVar :: Doc -> Doc -> Doc
 classVar c v = c <> dot <> v
@@ -263,7 +265,7 @@ cast :: Doc -> Doc
 cast = parens
 
 listAccessFunc :: (RenderSym r) => r (Value r) -> Doc
-listAccessFunc v = brackets $ valueDoc v
+listAccessFunc v = brackets $ RC.value v
 
 listSetFunc :: Doc -> Doc -> Doc
 listSetFunc i v = brackets i <+> equals <+> v
@@ -353,13 +355,13 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem cmt) (fileMod m)) m
 -- Helper Functions --
 
 valueList :: (RenderSym r) => [r (Value r)] -> Doc
-valueList = hicat (text ", ") . map valueDoc
+valueList = hicat (text ", ") . map RC.value
 
 variableList :: (RenderSym r) => [r (Variable r)] -> Doc
-variableList = hicat (text ", ") . map variableDoc
+variableList = hicat (text ", ") . map RC.variable
 
 parameterList :: (RenderSym r) => [r (Parameter r)] -> Doc
-parameterList = hicat (text ", ") . map parameterDoc
+parameterList = hicat (text ", ") . map RC.parameter
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 prependToBody s b = vcat [fst $ statement s, maybeBlank, b]

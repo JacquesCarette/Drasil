@@ -26,17 +26,20 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
   ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), RenderBody(..), BodyElim(..), 
-  RenderBlock(..), BlockElim(..), RenderType(..), InternalTypeElim(..), 
-  VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(..), RenderOp(..), 
-  RenderVariable(..), InternalVarElim(..), RenderValue(..), ValueElim(..), 
-  InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
-  RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
+  ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
+  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
+  VSUnOp, UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), 
+  RenderOp(..), RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), 
+  ValueElim(valuePrec), InternalGetSet(..), InternalListFunc(..), InternalIterator(..),
+  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
-  StatementElim(..), RenderScope(..), ScopeElim(..), MethodTypeSym(..), 
-  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
-  RenderStateVar(..), StateVarElim(..), RenderClass(..), ClassElim(..), 
-  RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
+  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
+  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
+  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim, 
+  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
+import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
+  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (mkStNoEnd, mkStateVal, mkVal, mkStateVar, 
   classDec, dot, forLabel, inLabel, valueList, variableList, parameterList, 
   surroundBody)
@@ -135,7 +138,7 @@ instance ImportSym PythonCode where
   modImport = langImport
 
 instance ImportElim PythonCode where
-  importDoc = unPC
+  import' = unPC
 
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
@@ -143,7 +146,7 @@ instance PermanenceSym PythonCode where
   dynamic = toCode R.dynamic
 
 instance PermElim PythonCode where
-  permDoc = unPC
+  perm = unPC
   binding = error $ bindingError pyName
 
 instance BodySym PythonCode where
@@ -157,7 +160,7 @@ instance RenderBody PythonCode where
   multiBody = G.multiBody 
 
 instance BodyElim PythonCode where
-  bodyDoc = unPC
+  body = unPC
 
 instance BlockSym PythonCode where
   type Block PythonCode = Doc
@@ -168,7 +171,7 @@ instance RenderBlock PythonCode where
   multiBlock = G.multiBlock
 
 instance BlockElim PythonCode where
-  blockDoc = unPC
+  block = unPC
 
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData
@@ -197,7 +200,7 @@ instance RenderType PythonCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim PythonCode where
-  getTypeDoc = typeDoc . unPC
+  type' = typeDoc . unPC
 
 instance ControlBlock PythonCode where
   solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
@@ -205,8 +208,8 @@ instance ControlBlock PythonCode where
       r &= objMethodCall odeT (extNewObj odeLib odeT 
       [lambda [iv, dv] (ode info)]) 
         "set_integrator" (pyODEMethod (solveMethod opts) ++
-          [absTol opts >>= (mkStateVal double . (text "atol=" <>) . valueDoc),
-          relTol opts >>= (mkStateVal double . (text "rtol=" <>) . valueDoc)]),
+          [absTol opts >>= (mkStateVal double . (text "atol=" <>) . RC.value),
+          relTol opts >>= (mkStateVal double . (text "rtol=" <>) . RC.value)]),
       valStmt $ objMethodCall odeT rVal "set_initial_value" [initVal info]],
     block [
       listDecDef iv [tInit info],
@@ -265,8 +268,8 @@ instance BinaryOpSym PythonCode where
   orOp = orPrec "or"
 
 instance OpElim PythonCode where
-  uOpDoc = opDoc . unPC
-  bOpDoc = opDoc . unPC
+  uOp = opDoc . unPC
+  bOp = opDoc . unPC
   uOpPrec = opPrec . unPC
   bOpPrec = opPrec . unPC
   
@@ -297,7 +300,7 @@ instance VariableElim PythonCode where
 
 instance InternalVarElim PythonCode where
   variableBind = varBind . unPC
-  variableDoc = varDoc . unPC
+  variable = varDoc . unPC
 
 instance RenderVariable PythonCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
@@ -397,7 +400,7 @@ instance RenderValue PythonCode where
   printFileFunc _ = mkStateVal void empty
   printFileLnFunc _ = mkStateVal void empty
   
-  cast = on2StateValues (\t -> mkVal t . R.castObj (getTypeDoc t) . valueDoc)
+  cast = on2StateValues (\t -> mkVal t . R.castObj (RC.type' t) . RC.value)
 
   call = G.call equals
 
@@ -405,7 +408,7 @@ instance RenderValue PythonCode where
 
 instance ValueElim PythonCode where
   valuePrec = valPrec . unPC
-  valueDoc = val . unPC
+  value = val . unPC
 
 instance RenderValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
@@ -422,7 +425,7 @@ instance GetSet PythonCode where
 
 instance List PythonCode where
   listSize = on2StateValues (\f v -> mkVal (functionType f) 
-    (pyListSize (valueDoc v) (functionDoc f))) listSizeFunc
+    (pyListSize (RC.value v) (RC.function f))) listSizeFunc
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess
@@ -458,7 +461,7 @@ instance RenderFunction PythonCode where
   
 instance FunctionElim PythonCode where
   functionType = onCodeValue fType
-  functionDoc = funcDoc . unPC
+  function = funcDoc . unPC
 
 instance InternalAssignStmt PythonCode where
   multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
@@ -481,7 +484,7 @@ instance RenderStatement PythonCode where
   stmtFromData d t = toCode (d, t)
 
 instance StatementElim PythonCode where
-  statementDoc = fst . unPC
+  statement = fst . unPC
   statementTerm = snd . unPC
 
 instance StatementSym PythonCode where
@@ -512,7 +515,7 @@ instance DeclStatement PythonCode where
   extObjDecNewNoParams lib v = modify (addModuleImport lib) >> varDecDef v 
     (extNewObj lib (onStateValue variableType v) [])
   constDecDef = varDecDef
-  funcDecDef v ps r = onStateValue (mkStNoEnd . methodDoc) (zoom lensMStoVS v 
+  funcDecDef v ps r = onStateValue (mkStNoEnd . RC.method) (zoom lensMStoVS v 
     >>= (\vr -> function (variableName vr) private dynamic 
     (toState $ variableType vr) (map param ps) (oneLiner $ returnStmt r)))
 
@@ -604,7 +607,7 @@ instance RenderScope PythonCode where
   scopeFromData _ = toCode
 
 instance ScopeElim PythonCode where
-  scopeDoc = unPC
+  scope = unPC
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
@@ -613,7 +616,7 @@ instance MethodTypeSym PythonCode where
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
-  param = G.param variableDoc
+  param = G.param RC.variable
   pointerParam = param
 
 instance RenderParam PythonCode where
@@ -622,7 +625,7 @@ instance RenderParam PythonCode where
 instance ParamElim PythonCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
-  parameterDoc = paramDoc . unPC
+  parameter = paramDoc . unPC
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
@@ -637,7 +640,7 @@ instance MethodSym PythonCode where
   mainFunction b = do
     modify setCurrMain
     bod <- b
-    modify (setMainDoc $ bodyDoc bod)
+    modify (setMainDoc $ RC.body bod)
     toState $ toCode $ mthd empty
 
   docFunc = G.docFunc
@@ -665,20 +668,20 @@ instance RenderMethod PythonCode where
   methodFromData _ = toCode . mthd
   
 instance MethodElim PythonCode where
-  methodDoc = mthdDoc . unPC
+  method = mthdDoc . unPC
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ = toState (toCode empty)
   stateVarDef _ = G.stateVarDef
-  constVar _ = G.constVar (permDoc 
+  constVar _ = G.constVar (RC.perm 
     (static :: PythonCode (Permanence PythonCode)))
 
 instance RenderStateVar PythonCode where
   stateVarFromData = onStateValue toCode
   
 instance StateVarElim PythonCode where
-  stateVarDoc = unPC
+  stateVar = unPC
 
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
@@ -699,17 +702,17 @@ instance RenderClass PythonCode where
   classFromData d = d
   
 instance ClassElim PythonCode where
-  classDoc = unPC
+  class' = unPC
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
   buildModule n is = G.buildModule n (on3StateValues (\lis libis mis -> vibcat [
-    vcat (map (importDoc . 
+    vcat (map (RC.import' . 
       (langImport :: Label -> PythonCode (Import PythonCode))) lis),
-    vcat (map (importDoc . 
+    vcat (map (RC.import' . 
       (langImport :: Label -> PythonCode (Import PythonCode))) (sort $ is ++ 
       libis)),
-    vcat (map (importDoc . 
+    vcat (map (RC.import' . 
       (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
     getLangImports getLibImports getModuleImports) getMainDoc
 
@@ -718,7 +721,7 @@ instance RenderMod PythonCode where
   updateModuleDoc f = onCodeValue (updateMod f)
   
 instance ModuleElim PythonCode where
-  moduleDoc = modDoc . unPC
+  module' = modDoc . unPC
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
@@ -727,7 +730,7 @@ instance BlockCommentSym PythonCode where
     pyCommentStart)
 
 instance BlockCommentElim PythonCode where
-  blockCommentDoc = unPC
+  blockComment' = unPC
 
 -- convenience
 initName :: Label
@@ -745,10 +748,10 @@ pyODEMethod :: ODEMethod -> [SValue PythonCode]
 pyODEMethod RK45 = [litString "dopri5"]
 pyODEMethod BDF = [litString "vode", 
   (litString "bdf" :: SValue PythonCode) >>= 
-  (mkStateVal string . (text "method=" <>) . valueDoc)]
+  (mkStateVal string . (text "method=" <>) . RC.value)]
 pyODEMethod Adams = [litString "vode", 
   (litString "adams" :: SValue PythonCode) >>= 
-  (mkStateVal string . (text "method=" <>) . valueDoc)]
+  (mkStateVal string . (text "method=" <>) . RC.value)]
 
 pyLogOp :: (RenderSym r) => VSUnOp r
 pyLogOp = addmathImport $ unOpPrec "math.log10"
@@ -761,11 +764,11 @@ pyClassVar c v = c <> dot <> c <> dot <> v
 
 pyInlineIf :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
 pyInlineIf = on3StateValues (\c v1 v2 -> valFromData (valuePrec c) 
-  (valueType v1) (valueDoc v1 <+> text "if" <+> valueDoc c <+> text "else" <+> 
-  valueDoc v2))
+  (valueType v1) (RC.value v1 <+> text "if" <+> RC.value c <+> text "else" <+> 
+  RC.value v2))
 
 pyLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-pyLambda ps ex = text "lambda" <+> variableList ps <> colon <+> valueDoc ex
+pyLambda ps ex = text "lambda" <+> variableList ps <> colon <+> RC.value ex
 
 pyListSize :: Doc -> Doc -> Doc
 pyListSize v f = f <> parens v
@@ -774,13 +777,13 @@ pyStringType :: (RenderSym r) => VSType r
 pyStringType = toState $ typeFromData String "str" (text "str")
 
 pyListDec :: (RenderSym r) => r (Variable r) -> Doc
-pyListDec v = variableDoc v <+> equals <+> getTypeDoc (variableType v)
+pyListDec v = RC.variable v <+> equals <+> RC.type' (variableType v)
 
 pyPrint :: (RenderSym r) => Bool -> r (Value r) -> r (Value r) -> r (Value r) 
   -> Doc
-pyPrint newLn prf v f = valueDoc prf <> parens (valueDoc v <> nl <> fl)
+pyPrint newLn prf v f = RC.value prf <> parens (RC.value v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
-        fl = emptyIfEmpty (valueDoc f) $ text ", file=" <> valueDoc f
+        fl = emptyIfEmpty (RC.value f) $ text ", file=" <> RC.value f
 
 pyOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
   MSStatement r
@@ -799,47 +802,47 @@ pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
         pyInput' _ = error "Attempt to read a value of unreadable type"
 
 pyThrow :: (RenderSym r) => r (Value r) -> Doc
-pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valueDoc errMsg)
+pyThrow errMsg = text "raise" <+> text "Exception" <> parens (RC.value errMsg)
 
 pyForEach :: (RenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
 pyForEach i lstVar b = vcat [
-  forLabel <+> variableDoc i <+> inLabel <+> valueDoc lstVar <> colon,
-  indent $ bodyDoc b]
+  forLabel <+> RC.variable i <+> inLabel <+> RC.value lstVar <> colon,
+  indent $ RC.body b]
 
 pyWhile :: (RenderSym r) => r (Value r) -> r (Body r) -> Doc
 pyWhile v b = vcat [
-  text "while" <+> valueDoc v <> colon,
-  indent $ bodyDoc b]
+  text "while" <+> RC.value v <> colon,
+  indent $ RC.body b]
 
 pyTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 pyTryCatch tryB catchB = vcat [
   text "try" <+> colon,
-  indent $ bodyDoc tryB,
+  indent $ RC.body tryB,
   text "except" <+> text "Exception" <+> colon,
-  indent $ bodyDoc catchB]
+  indent $ RC.body catchB]
 
 pyListSlice :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r 
   -> SValue r -> VS Doc
-pyListSlice vn vo beg end step = (\vnew vold b e s -> variableDoc vnew <+> 
-  equals <+> valueDoc vold <> brackets (valueDoc b <> colon <> valueDoc e <> 
-  colon <> valueDoc s)) <$> vn <*> vo <*> beg <*> end <*> step
+pyListSlice vn vo beg end step = (\vnew vold b e s -> RC.variable vnew <+> 
+  equals <+> RC.value vold <> brackets (RC.value b <> colon <> RC.value e <> 
+  colon <> RC.value s)) <$> vn <*> vo <*> beg <*> end <*> step
 
 pyMethod :: (RenderSym r) => Label -> r (Variable r) -> [r (Parameter r)] ->
   r (Body r) -> Doc
 pyMethod n slf ps b = vcat [
-  text "def" <+> text n <> parens (variableDoc slf <> oneParam <> pms) <> colon,
+  text "def" <+> text n <> parens (RC.variable slf <> oneParam <> pms) <> colon,
   indent bodyD]
       where pms = parameterList ps
             oneParam = emptyIfEmpty pms $ text ", "
-            bodyD | isEmpty (bodyDoc b) = text "None"
-                  | otherwise = bodyDoc b
+            bodyD | isEmpty (RC.body b) = text "None"
+                  | otherwise = RC.body b
 
 pyFunction :: (RenderSym r) => Label -> [r (Parameter r)] -> r (Body r) -> Doc
 pyFunction n ps b = vcat [
   text "def" <+> text n <> parens (parameterList ps) <> colon,
   indent bodyD]
-  where bodyD | isEmpty (bodyDoc b) = text "None"
-              | otherwise = bodyDoc b
+  where bodyD | isEmpty (RC.body b) = text "None"
+              | otherwise = RC.body b
 
 pyClass :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 pyClass n pn s vs fs = vcat [

@@ -14,6 +14,7 @@ import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.CodeSpec (CodeSpec(..))
+import Language.Drasil.Mod (Name)
 
 import GOOL.Drasil (VSType, SValue, MSStatement, OOProg, TypeSym(..), 
   VariableValue(..), StatementSym(..), DeclStatement(..), convType)
@@ -57,7 +58,7 @@ getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
   return $ fmap valStmt val
 
-getFuncCall :: (OOProg r, HasUID c, HasSpace c, CodeIdea c) => String -> 
+getFuncCall :: (OOProg r, HasUID c, HasSpace c, CodeIdea c) => Name -> 
   VSType r -> Reader DrasilState [c] -> Reader DrasilState (Maybe (SValue r))
 getFuncCall n t funcPs = do
   mm <- getCall n
@@ -69,7 +70,7 @@ getFuncCall n t funcPs = do
         return $ Just val
   getFuncCall' mm
 
-getInOutCall :: (OOProg r, HasSpace c, CodeIdea c, Eq c) => String -> 
+getInOutCall :: (OOProg r, HasSpace c, CodeIdea c, Eq c) => Name -> 
   Reader DrasilState [c] -> Reader DrasilState [c] ->
   Reader DrasilState (Maybe (MSStatement r))
 getInOutCall n inFunc outFunc = do
@@ -91,7 +92,7 @@ getInOutCall n inFunc outFunc = do
 -- If the function is not in module export map but is in class definition map, 
 -- that means it is a private function, so return Nothing unless it is in the 
 -- current class
-getCall :: String -> Reader DrasilState (Maybe String)
+getCall :: Name -> Reader DrasilState (Maybe Name)
 getCall n = do
   g <- ask
   let currc = currentClass g

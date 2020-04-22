@@ -16,12 +16,11 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
 import Language.Drasil
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName, 
   ccObjVar)
-import Language.Drasil.Mod (FuncStmt(..))
+import Language.Drasil.Mod (FuncStmt(..), Description)
 
 import Control.Lens ((^.))
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
-type Description = String
 type Condition = Expr
 type Requires = String
 

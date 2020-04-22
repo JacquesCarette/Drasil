@@ -24,7 +24,7 @@ import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), FuncStmt(..), 
-  Mod(..), Name, fstdecl)
+  Mod(..), Name, Description, fstdecl)
 import qualified Language.Drasil.Mod as M (Class(..))
 
 import GOOL.Drasil (Label, SFile, MSBody, MSBlock, VSType, SVariable, SValue, 
@@ -53,8 +53,7 @@ codeType c = do
   g <- ask
   return $ spaceMatches g (c ^. typ)
 
-value :: (OOProg r) => UID -> String -> VSType r -> 
-  Reader DrasilState (SValue r)
+value :: (OOProg r) => UID -> Name -> VSType r -> Reader DrasilState (SValue r)
 value u s t = do
   g <- ask
   let cs = codeSpec g
@@ -66,8 +65,7 @@ value u s t = do
     (convExpr . codeEquat) (Map.lookup u mm >>= maybeInline (conStruct g))) 
     (return . conceptToGOOL) (Map.lookup u cm)
 
-variable :: (OOProg r) => String -> VSType r -> 
-  Reader DrasilState (SVariable r)
+variable :: (OOProg r) => Name -> VSType r -> Reader DrasilState (SVariable r)
 variable s t = do
   g <- ask
   let cs = csi $ codeSpec g
@@ -126,33 +124,36 @@ mkVar v = do
   variable (codeName v) (convType t)
 
 publicFunc :: (OOProg r, HasSpace c, CodeIdea c) => Label -> VSType r -> 
-  String -> [c] -> Maybe String -> [MSBlock r] -> Reader DrasilState (SMethod r)
+  Description -> [c] -> Maybe Description -> [MSBlock r] ->
+  Reader DrasilState (SMethod r)
 publicFunc n t = genMethod (function n public static t) n
 
 privateMethod :: (OOProg r, HasSpace c, CodeIdea c) => Label -> VSType r -> 
-  String -> [c] -> Maybe String -> [MSBlock r] -> Reader DrasilState (SMethod r)
+  Description -> [c] -> Maybe Description -> [MSBlock r] -> 
+  Reader DrasilState (SMethod r)
 privateMethod n t = genMethod (method n private dynamic t) n
 
 publicInOutFunc :: (OOProg r, HasSpace c, CodeIdea c, Eq c) => Label -> 
-  String -> [c] -> [c] -> [MSBlock r] -> Reader DrasilState (SMethod r)
+  Description -> [c] -> [c] -> [MSBlock r] -> Reader DrasilState (SMethod r)
 publicInOutFunc n = genInOutFunc (inOutFunc n) (docInOutFunc n) public static n
 
 privateInOutMethod :: (OOProg r, HasSpace c, CodeIdea c, Eq c) => Label -> 
-  String -> [c] -> [c] -> [MSBlock r] -> Reader DrasilState (SMethod r)
+  Description -> [c] -> [c] -> [MSBlock r] -> Reader DrasilState (SMethod r)
 privateInOutMethod n = genInOutFunc (inOutMethod n) (docInOutMethod n) 
   private dynamic n
 
-genConstructor :: (OOProg r, HasSpace c, CodeIdea c) => Label -> String -> 
+genConstructor :: (OOProg r, HasSpace c, CodeIdea c) => Label -> Description -> 
   [c] -> [MSBlock r] -> Reader DrasilState (SMethod r)
 genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
 
-genInitConstructor :: (OOProg r, HasSpace c, CodeIdea c) => Label -> String 
-  -> [c] -> Initializers r -> [MSBlock r] -> Reader DrasilState (SMethod r)
+genInitConstructor :: (OOProg r, HasSpace c, CodeIdea c) => Label -> 
+  Description -> [c] -> Initializers r -> [MSBlock r] -> 
+  Reader DrasilState (SMethod r)
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p 
   Nothing
 
 genMethod :: (OOProg r, HasSpace c, CodeIdea c) => ([MSParameter r] -> 
-  MSBody r -> SMethod r) -> Label -> String -> [c] -> Maybe String -> 
+  MSBody r -> SMethod r) -> Label -> Description -> [c] -> Maybe Description -> 
   [MSBlock r] -> Reader DrasilState (SMethod r)
 genMethod f n desc p r b = do
   g <- ask
@@ -169,7 +170,7 @@ genInOutFunc :: (OOProg r, HasSpace c, CodeIdea c, Eq c) => (r (Scope r) ->
     MSBody r -> SMethod r) -> 
   (r (Scope r) -> r (Permanence r) -> String -> [(String, SVariable r)] -> 
     [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r)
-  -> r (Scope r) -> r (Permanence r) -> Label -> String -> [c] -> [c] -> 
+  -> r (Scope r) -> r (Permanence r) -> Label -> Description -> [c] -> [c] -> 
   [MSBlock r] -> Reader DrasilState (SMethod r)
 genInOutFunc f docf s pr n desc ins' outs' b = do
   g <- ask
@@ -246,9 +247,9 @@ convExpr (RealI c ri)  = do
   g <- ask
   convExpr $ renderRealInt (lookupC g c) ri
 
-convCall :: (OOProg r) => UID -> [Expr] -> [(UID, Expr)] -> (String -> 
-  String -> VSType r -> [SValue r] -> NamedArgs r -> 
-  Reader DrasilState (SValue r)) -> Reader DrasilState (SValue r)
+convCall :: (OOProg r) => UID -> [Expr] -> [(UID, Expr)] -> (Name -> Name -> 
+  VSType r -> [SValue r] -> NamedArgs r -> Reader DrasilState (SValue r)) -> 
+  Reader DrasilState (SValue r)
 convCall c x ns f = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
@@ -327,13 +328,13 @@ genModFuncs (Mod _ _ _ _ fs) = map genFunc fs
 genModClasses :: (OOProg r) => Mod -> [Reader DrasilState (SClass r)]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
-genClass :: (OOProg r) => (String -> Label -> Maybe Label -> [CSStateVar r] 
+genClass :: (OOProg r) => (Name -> Maybe Name -> Description -> [CSStateVar r] 
   -> Reader DrasilState [SMethod r] -> Reader DrasilState (SClass r)) -> 
   M.Class -> Reader DrasilState (SClass r)
 genClass f (M.ClassDef n i desc svs ms) = do
   svrs <- mapM (\v -> fmap (pubDVar . var (codeName v) . convType) (codeType v))
     svs
-  f n desc i svrs (mapM genFunc ms) 
+  f n i desc svrs (mapM genFunc ms) 
 
 genFunc :: (OOProg r) => Func -> Reader DrasilState (SMethod r)
 genFunc (FDef (FuncDef n desc parms o rd s)) = do
@@ -446,7 +447,7 @@ convStmt (FAppend a b) = do
   b' <- convExpr b
   return $ valStmt $ listAppend a' b'
 
-genDataFunc :: (OOProg r) => Name -> String -> DataDesc -> 
+genDataFunc :: (OOProg r) => Name -> Description -> DataDesc -> 
   Reader DrasilState (SMethod r)
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef

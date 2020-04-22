@@ -29,26 +29,29 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
   RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
-  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim, 
+  StateVarElim, RenderClass(..), ClassElim, 
   RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (mkSt, mkStateVal, mkVal, dot, new, 
-  elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
-  bodyEnd, endStatement, commentStart, variableList, parameterList, 
-  appendToBody, surroundBody, intValue)
+import GOOL.Drasil.LanguageRenderer (dot, new, elseIfLabel, forLabel, 
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
+  commentStart, variableList, parameterList, appendToBody, surroundBody, 
+  intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (package, class', multiStmt, 
   body, printFile, param, listDec, classVar, cast, castObj, static, dynamic, 
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
+  unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, 
+  binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, listType, 
   arrayType, listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, 
@@ -74,12 +77,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, buildClass, 
   extraClass, implementingClass, docClass, commentedClass, intClass, 
   buildModule', modFromData, fileDoc, docMod, fileFromData)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
-  unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
-  typeBinExpr, bindingError, destructorError, docFuncRepr)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
+  destructorError, docFuncRepr)
+import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
-  MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
+  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
   stdExc, HasException(..))
@@ -171,7 +173,6 @@ instance BodySym JavaCode where
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
 instance RenderBody JavaCode where
-  docBody = onStateValue toCode
   multiBody = G.multiBody 
 
 instance BodyElim JavaCode where
@@ -182,7 +183,6 @@ instance BlockSym JavaCode where
   block = G.block
 
 instance RenderBlock JavaCode where
-  docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
 instance BlockElim JavaCode where
@@ -285,10 +285,6 @@ instance OpElim JavaCode where
   bOp = opDoc . unJC
   uOpPrec = opPrec . unJC
   bOpPrec = opPrec . unJC
-  
-instance RenderOp JavaCode where
-  uOpFromData p d = toState $ toCode $ od p d
-  bOpFromData p d = toState $ toCode $ od p d
 
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
@@ -540,7 +536,7 @@ instance DeclStatement JavaCode where
   extObjDecNew = G.extObjDecNew
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams = G.extObjDecNewNoParams
-  constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkSt $ 
+  constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkStmt $ 
     jConstDecDef vr vl) vr' vl'
   funcDecDef = G.funcDecDef
 
@@ -572,7 +568,7 @@ instance IOStatement JavaCode where
 
 instance StringStatement JavaCode where
   stringSplit d vnew s = modify (addLangImport "java.util.Arrays") >> 
-    onStateValue mkSt (zoom lensMStoVS $ jStringSplit vnew (funcApp 
+    onStateValue mkStmt (zoom lensMStoVS $ jStringSplit vnew (funcApp 
     "Arrays.asList" (listType string) 
     [s $. func "split" (listType string) [litString [d]]]))
 
@@ -588,8 +584,8 @@ instance CommentStatement JavaCode where
   comment = G.comment commentStart
 
 instance ControlStatement JavaCode where
-  break = toState $ mkSt R.break
-  continue = toState $ mkSt R.continue
+  break = toState $ mkStmt R.break
+  continue = toState $ mkStmt R.continue
 
   returnStmt = G.returnStmt Semi
   
@@ -679,14 +675,12 @@ instance RenderMethod JavaCode where
           (Map.lookup (key mn n) mem) 
         key mnm nm = mnm ++ "." ++ nm
     modify ((if m then setCurrMain else id) . addExceptionImports excs) 
-    toState $ methodFromData Pub $ jMethod n (map exc excs) s p tp pms bd
+    toState $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
   destructor _ = error $ destructorError jName
-  
-  methodFromData _ = toCode . mthd
   
 instance MethodElim JavaCode where
   method = mthdDoc . unJC
@@ -696,9 +690,6 @@ instance StateVarSym JavaCode where
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar (RC.perm (static :: JavaCode (Permanence JavaCode)))
-
-instance RenderStateVar JavaCode where
-  stateVarFromData = onStateValue toCode
   
 instance StateVarElim JavaCode where
   stateVar = unJC
@@ -718,8 +709,6 @@ instance RenderClass JavaCode where
   implements is = toCode $ text "implements" <+> text (intercalate ", " is)
 
   commentedClass = G.commentedClass
-
-  classFromData d = d
   
 instance ClassElim JavaCode where
   class' = unJC

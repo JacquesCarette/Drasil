@@ -4,14 +4,14 @@ module GOOL.Drasil.RendererClasses (
   RenderSym, RenderFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), 
   RenderType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, 
-  BinaryOpSym(..), OpElim(..), RenderOp(..), RenderVariable(..), 
+  BinaryOpSym(..), OpElim(..), RenderVariable(..), 
   InternalVarElim(..), RenderValue(..), ValueElim(..), InternalGetSet(..), 
   InternalListFunc(..), InternalIterator(..), RenderFunction(..), 
   FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
   InternalControlStmt(..), RenderStatement(..), StatementElim(..), 
   RenderScope(..), ScopeElim(..), MSMthdType, MethodTypeSym(..), 
   RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
-  RenderStateVar(..), StateVarElim(..), ParentSpec, RenderClass(..), 
+  StateVarElim(..), ParentSpec, RenderClass(..), 
   ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
   BlockCommentElim(..)
 ) where
@@ -46,9 +46,9 @@ class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r,
   RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, 
   InternalListFunc r, InternalIterator r, RenderFunction r, FunctionElim r, 
   RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, 
-  RenderOp r, RenderParam r, ParamElim r, PermElim r, RenderScope r, 
+  RenderParam r, ParamElim r, PermElim r, RenderScope r, 
   ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, 
-  RenderStatement r, StatementElim r, RenderStateVar r, StateVarElim r, 
+  RenderStatement r, StatementElim r, StateVarElim r, 
   RenderType r, InternalTypeElim r, RenderValue r, ValueElim r, 
   RenderVariable r, InternalVarElim r, ImportSym r, ImportElim r, 
   UnaryOpSym r, BinaryOpSym r, BlockCommentElim r) => RenderSym r
@@ -77,14 +77,12 @@ class PermElim r where
   binding :: r (Permanence r) -> Binding
 
 class RenderBody r where
-  docBody :: MS Doc -> MSBody r
   multiBody :: [MSBody r] -> MSBody r
 
 class BodyElim r where
   body :: r (Body r) -> Doc
 
 class RenderBlock r where
-  docBlock :: MS Doc -> MSBlock r
   multiBlock :: [MSBlock r] -> MSBlock r
 
 class BlockElim r where
@@ -140,10 +138,6 @@ class OpElim r where
   bOp :: r (BinaryOp r) -> Doc
   uOpPrec :: r (UnaryOp r) -> Int
   bOpPrec :: r (BinaryOp r) -> Int
-
-class RenderOp r where
-  uOpFromData :: Int -> Doc -> VSUnOp r
-  bOpFromData :: Int -> Doc -> VSBinOp r
   
 class RenderVariable r where
   varFromData :: Binding -> String -> r (Type r) -> Doc -> r (Variable r)
@@ -247,13 +241,8 @@ class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) =>
     
   destructor :: [CSStateVar r] -> SMethod r
 
-  methodFromData :: ScopeTag -> Doc -> r (Method r)
-
 class MethodElim r where
   method :: r (Method r) -> Doc
-
-class RenderStateVar r where
-  stateVarFromData :: CS Doc -> CSStateVar r
 
 class StateVarElim r where  
   stateVar :: r (StateVar r) -> Doc
@@ -268,8 +257,6 @@ class (BlockCommentSym r) => RenderClass r where
   implements :: [Label] -> r ParentSpec
 
   commentedClass :: CS (r (BlockComment r)) -> SClass r -> SClass r
-
-  classFromData :: CS (r Doc) -> SClass r
   
 class ClassElim r where
   class' :: r (Class r) -> Doc

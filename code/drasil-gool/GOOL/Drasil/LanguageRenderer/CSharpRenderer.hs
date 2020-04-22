@@ -28,26 +28,28 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderOp(..), 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
   RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
   RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
   RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
-  RenderStateVar(..), StateVarElim, RenderClass(..), ClassElim, 
+  StateVarElim, RenderClass(..), ClassElim, 
   RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (mkSt, mkStNoEnd, mkStateVal, mkVal, mkVar, 
-  dot, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
-  endStatement, commentStart, elseIfLabel, inLabel, variableList, appendToBody, 
-  surroundBody)
+import GOOL.Drasil.LanguageRenderer (dot, blockCmtStart, blockCmtEnd, 
+  docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
+  inLabel, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body, 
   printFile, param, method, listDec, classVar, objVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
   addComments, commentedMod, commentedItem)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
+  mkStateVal, mkVal, mkVar, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, 
+  typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
   listType, arrayType, listInnerType, obj, funcType, void, runStrategy, 
@@ -74,12 +76,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   stateVarDef, constVar, buildClass, implementingClass, docClass, 
   commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
   fileFromData)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
-  unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
-  typeBinExpr, bindingError, destructorError)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
+  destructorError)
+import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
-  MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
+  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, 
   updateParam, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
   updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
@@ -163,7 +164,6 @@ instance BodySym CSharpCode where
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
 instance RenderBody CSharpCode where
-  docBody = onStateValue toCode
   multiBody = G.multiBody 
 
 instance BodyElim CSharpCode where
@@ -174,7 +174,6 @@ instance BlockSym CSharpCode where
   block = G.block
 
 instance RenderBlock CSharpCode where
-  docBlock = onStateValue toCode
   multiBlock = G.multiBlock
 
 instance BlockElim CSharpCode where
@@ -283,10 +282,6 @@ instance OpElim CSharpCode where
   bOp = opDoc . unCSC
   uOpPrec = opPrec . unCSC
   bOpPrec = opPrec . unCSC
-  
-instance RenderOp CSharpCode where
-  uOpFromData p d = toState $ toCode $ od p d
-  bOpFromData p d = toState $ toCode $ od p d
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
@@ -557,8 +552,8 @@ instance CommentStatement CSharpCode where
   comment = G.comment commentStart
 
 instance ControlStatement CSharpCode where
-  break = toState $ mkSt R.break
-  continue = toState $ mkSt R.continue
+  break = toState $ mkStmt R.break
+  continue = toState $ mkStmt R.continue
 
   returnStmt = G.returnStmt Semi
   
@@ -638,15 +633,13 @@ instance MethodSym CSharpCode where
 
 instance RenderMethod CSharpCode where
   intMethod m n s p t ps b = modify (if m then setCurrMain else id) >> 
-    on3StateValues (\tp pms bd -> methodFromData Pub $ R.method n s p tp pms 
-    bd) t (sequence ps) b
+    on3StateValues (\tp pms bd -> toCode $ mthd $ R.method n s p tp pms bd) t 
+    (sequence ps) b
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
   destructor _ = error $ destructorError csName
-  
-  methodFromData _ = toCode . mthd
   
 instance MethodElim CSharpCode where
   method = mthdDoc . unCSC
@@ -656,9 +649,6 @@ instance StateVarSym CSharpCode where
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar empty
-
-instance RenderStateVar CSharpCode where
-  stateVarFromData = onStateValue toCode
   
 instance StateVarElim CSharpCode where
   stateVar = unCSC
@@ -678,8 +668,6 @@ instance RenderClass CSharpCode where
   implements is = toCode $ colon <+> text (intercalate ", " is)
 
   commentedClass = G.commentedClass
-
-  classFromData d = d
   
 instance ClassElim CSharpCode where
   class' = unCSC
@@ -739,7 +727,7 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
 
 csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
   MSStatement r
-csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
+csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStmtNoEnd $ 
   RC.type' (variableType vr) <+> text (variableName vr) <> parens 
   (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd) 
   (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnStmt r)

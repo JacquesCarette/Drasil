@@ -55,7 +55,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
   moduloOp, var, staticVar, extVar, classVar, objVar, objVarSelf, listVar, 
   arrayElem, iterVar, litChar, litDouble, litInt, litString, valueOf, arg, 
-  argsList, objAccess, objMethodCall, objMethodCallNoParams, indexOf, call, 
+  argsList, objAccess, objMethodCall, indexOf, call, 
   funcAppMixedArgs, selfFuncAppMixedArgs, extFuncAppMixedArgs, newObjMixedArgs, 
   extNewObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
   iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
@@ -407,7 +407,6 @@ instance ValueElim PythonCode where
 
 instance RenderValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
-  objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData

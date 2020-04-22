@@ -58,7 +58,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   moduloOp, andOp, orOp, var, staticVar, extVar, self, classVar, objVarSelf, 
   listVar, arrayElem, iterVar, pi, litTrue, litFalse, litChar, litDouble, 
   litFloat, litInt, litString, litList, valueOf, arg, argsList, inlineIf, 
-  objAccess, objMethodCall, objMethodCallNoParams, indexOf, call, 
+  objAccess, objMethodCall, indexOf, call, 
   funcAppMixedArgs, selfFuncAppMixedArgs, extFuncAppMixedArgs, 
   libFuncAppMixedArgs, newObjMixedArgs, libNewObjMixedArgs, lambda, notNull, 
   func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
@@ -411,8 +411,7 @@ instance ValueElim CSharpCode where
   value = val . unCSC
   
 instance RenderValueExp CSharpCode where
-  objMethodCallMixedArgs' = G.objMethodCall 
-  objMethodCallNoParams' = G.objMethodCallNoParams
+  objMethodCallMixedArgs' = G.objMethodCall
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData

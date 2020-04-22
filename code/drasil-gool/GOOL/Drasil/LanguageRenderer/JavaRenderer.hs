@@ -60,7 +60,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   orOp, var, staticVar, extVar, self, classVar, objVar, objVarSelf, listVar, 
   arrayElem, iterVar, litTrue, litFalse, litChar, litDouble, litFloat, litInt, 
   litString, litArray, pi, valueOf, arg, argsList, inlineIf, objAccess, 
-  objMethodCall, objMethodCallNoParams, indexOf, call', funcAppMixedArgs, 
+  objMethodCall, indexOf, call', funcAppMixedArgs, 
   selfFuncAppMixedArgs, extFuncAppMixedArgs, libFuncAppMixedArgs, 
   newObjMixedArgs, libNewObjMixedArgs, lambda, notNull, func, get, set, 
   listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
@@ -440,7 +440,6 @@ instance RenderValueExp JavaCode where
     let tp = getTypeString (valueType ob)
     modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ f) mem))
     G.objMethodCall f t o ps ns
-  objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData

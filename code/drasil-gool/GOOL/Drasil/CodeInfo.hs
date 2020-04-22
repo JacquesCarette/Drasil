@@ -211,7 +211,6 @@ instance ValueExpression CodeInfo where
   
 instance RenderValueExp CodeInfo where
   objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
-  objMethodCallNoParams' n _ v = v >> addCurrModCall n
 
 instance FunctionSym CodeInfo where
   type Function CodeInfo = ()

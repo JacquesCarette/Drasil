@@ -1,8 +1,9 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..), 
-  FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name, ($:=), 
-  pubStateVar, privStateVar, classDef, classImplements, ctorDef, ffor, fDecDef, 
-  fname, fstdecl, funcData, funcDef, funcDefParams, packmod, packmodRequires
+  FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name, 
+  Description, Import, ($:=), pubStateVar, privStateVar, classDef, 
+  classImplements, ctorDef, ffor, fDecDef, fname, fstdecl, funcData, funcDef, 
+  funcDefParams, packmod, packmodRequires
 ) where
 
 import Language.Drasil
@@ -17,20 +18,21 @@ import Language.Drasil.Printers (toPlainName)
 import Data.List ((\\), nub)
 
 type Name = String
+type Description = String
+type Import = String
 
--- Name, description, imports, classes, functions
-data Mod = Mod Name String [String] [Class] [Func]
+data Mod = Mod Name Description [Import] [Class] [Func]
 
-packmod :: Name -> String -> [Class] -> [Func] -> Mod
+packmod :: Name -> Description -> [Class] -> [Func] -> Mod
 packmod n d = packmodRequires n d []
 
-packmodRequires :: Name -> String -> [String] -> [Class] -> [Func] -> Mod
+packmodRequires :: Name -> Description -> [Import] -> [Class] -> [Func] -> Mod
 packmodRequires n = Mod (toPlainName n)
 
 data Class = ClassDef {
   className :: Name, 
   implements :: Maybe Name,
-  classDesc :: String,
+  classDesc :: Description,
   stateVars :: [StateVariable],
   methods :: [Func]}
 
@@ -44,20 +46,21 @@ pubStateVar = SV Pub
 privStateVar :: CodeVarChunk -> StateVariable
 privStateVar = SV Priv
 
-classDef :: Name -> String -> [StateVariable] -> [Func] -> Class
+classDef :: Name -> Description -> [StateVariable] -> [Func] -> Class
 classDef n = ClassDef n Nothing
 
-classImplements :: Name -> Name -> String -> [StateVariable] -> [Func] -> Class
+classImplements :: Name -> Name -> Description -> [StateVariable] -> [Func] -> 
+  Class
 classImplements n i = ClassDef n (Just i)
      
 data Func = FDef FuncDef
           | FData FuncData
 
-funcData :: Name -> String -> DataDesc -> Func
+funcData :: Name -> Description -> DataDesc -> Func
 funcData n desc d = FData $ FuncData (toPlainName n) desc d
 
-funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> 
-  Space -> Maybe String -> [FuncStmt] -> Func
+funcDef :: (Quantity c, MayHaveUnit c) => Name -> Description -> [c] -> 
+  Space -> Maybe Description -> [FuncStmt] -> Func
 funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc 
   (map (pcAuto . quantvar) i) t returnDesc fs 
 
@@ -66,19 +69,19 @@ funcDefParams :: Name -> String -> [ParameterChunk] -> Space -> Maybe String ->
 funcDefParams s desc ps t returnDesc fs = FDef $ FuncDef (toPlainName s) desc 
   ps t returnDesc fs
 
-ctorDef :: Name -> String -> [ParameterChunk] -> [Initializer] -> 
+ctorDef :: Name -> Description -> [ParameterChunk] -> [Initializer] -> 
   [FuncStmt] -> Func
 ctorDef n desc ps is fs = FDef $ CtorDef n desc ps is fs
 
 data FuncData where
-  FuncData :: Name -> String -> DataDesc -> FuncData
+  FuncData :: Name -> Description -> DataDesc -> FuncData
   
 data FuncDef where
   -- Name, description, parameters, return type, return description, statements
-  FuncDef :: Name -> String -> [ParameterChunk] -> Space -> Maybe String -> 
+  FuncDef :: Name -> Description -> [ParameterChunk] -> Space -> 
+    Maybe Description -> [FuncStmt] -> FuncDef
+  CtorDef :: Name -> Description -> [ParameterChunk] -> [Initializer] -> 
     [FuncStmt] -> FuncDef
-  CtorDef :: Name -> String -> [ParameterChunk] -> [Initializer] -> [FuncStmt] 
-    -> FuncDef
 
 type Initializer = (CodeVarChunk, Expr)
  

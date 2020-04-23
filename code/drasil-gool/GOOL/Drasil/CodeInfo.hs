@@ -56,7 +56,7 @@ instance ProgramSym CodeInfo where
     toState $ toCode s
 
 instance FileSym CodeInfo where
-  type RenderFile CodeInfo = ()
+  type File CodeInfo = ()
   fileDoc = execute1
   
   docMod _ _ _ = execute1
@@ -207,7 +207,6 @@ instance ValueExpression CodeInfo where
   
 instance InternalValueExp CodeInfo where
   objMethodCallMixedArgs' n _ v vs ns = v >> currModCall n vs ns
-  objMethodCallNoParams' n _ v = v >> addCurrModCall n
 
 instance FunctionSym CodeInfo where
   type Function CodeInfo = ()

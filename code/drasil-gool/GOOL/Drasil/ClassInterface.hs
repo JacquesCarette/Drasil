@@ -50,10 +50,10 @@ class (FileSym r) => ProgramSym r where
   type Program r
   prog :: Label -> [SFile r] -> GSProgram r
 
-type SFile a = FS (a (RenderFile a))
+type SFile a = FS (a (File a))
 
 class (ModuleSym r) => FileSym r where 
-  type RenderFile r
+  type File r
   fileDoc :: FSModule r -> SFile r
 
   -- Module description, list of author names, date as a String, file to comment
@@ -280,7 +280,6 @@ exists = notNull
 class (FunctionSym r) => InternalValueExp r where
   objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
     NamedArgs r -> SValue r
-  objMethodCallNoParams' :: Label -> VSType r -> SValue r -> SValue r
 
 objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
   [SValue r] -> SValue r
@@ -292,7 +291,7 @@ objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
 objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label 
   -> SValue r
-objMethodCallNoParams t o f = objMethodCallNoParams' f t o
+objMethodCallNoParams t o f = objMethodCall t o f []
 
 type VSFunction a = VS (a (Function a))
 

@@ -17,12 +17,11 @@ import Language.Drasil
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.CodeExpr (field)
-import Language.Drasil.Mod (FuncStmt(..))
+import Language.Drasil.Mod (FuncStmt(..), Description)
 
 import Control.Lens ((^.))
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
-type Description = String
 type Condition = Expr
 type Requires = String
 

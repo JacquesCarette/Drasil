@@ -23,26 +23,32 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), InternalBody(..), BodyElim(..), 
-  InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), 
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(..), OpIntro(..), 
-  InternalVariable(..), InternalVarElim(..), InternalValue(..), ValueElim(..), 
+import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
+  ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
+  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
+  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec),  
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
-  InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), 
-  InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), 
-  StatementElim(..), InternalScope(..), ScopeElim(..), MethodTypeSym(..), 
-  InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..), 
-  InternalStateVar(..), StateVarElim(..), InternalClass(..), ClassElim(..), 
-  InternalMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
-import GOOL.Drasil.LanguageRenderer (mkSt, mkStateVal, mkVal, dot, new, 
-  elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
-  bodyEnd, endStatement, commentStart, variableList, parameterList, 
-  appendToBody, surroundBody, intValue)
+  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
+  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
+  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
+  StateVarElim, RenderClass(..), ClassElim, 
+  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
+import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
+  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  method, stateVar, class', module', blockComment')
+import GOOL.Drasil.LanguageRenderer (dot, new, elseIfLabel, forLabel, 
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
+  commentStart, variableList, parameterList, appendToBody, surroundBody, 
+  intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (package, class', multiStmt, 
   body, printFile, param, listDec, classVar, cast, castObj, static, dynamic, 
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
+  unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, 
+  binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool', int, float, double, char, listType,
   arrayType, listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, 
@@ -51,7 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   orOp, var, staticVar, extVar, self, classVar, objVar, objVarSelf, listVar, 
   arrayElem, iterVar, litTrue, litFalse, litChar, litDouble, litFloat, litInt, 
   litString, litArray, pi, valueOf, arg, argsList, inlineIf, objAccess, 
-  objMethodCall, objMethodCallNoParams, indexOf, call', funcAppMixedArgs, 
+  objMethodCall, indexOf, call', funcAppMixedArgs, 
   selfFuncAppMixedArgs, extFuncAppMixedArgs, libFuncAppMixedArgs, 
   newObjMixedArgs, libNewObjMixedArgs, lambda, notNull, func, get, set, 
   listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
@@ -68,12 +74,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, buildClass, 
   extraClass, implementingClass, docClass, commentedClass, intClass, 
   buildModule', modFromData, fileDoc, docMod, fileFromData)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
-  unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
-  typeBinExpr, bindingError, destructorError, docFuncRepr)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
+  destructorError, docFuncRepr)
+import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
-  MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
+  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
   stdExc, HasException(..))
@@ -123,18 +128,18 @@ instance ProgramSym JavaCode where
 instance RenderSym JavaCode
 
 instance FileSym JavaCode where
-  type RenderFile JavaCode = FileData 
+  type File JavaCode = FileData 
   fileDoc m = modify (setFileType Combined) >> G.fileDoc jExt top bottom m
 
   docMod = G.docMod jExt
 
-instance InternalFile JavaCode where
+instance RenderFile JavaCode where
   top _ = toCode empty
   bottom = toCode empty
   
   commentedMod cmt m = on2StateValues (on2CodeValues R.commentedMod) m cmt
   
-  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
+  fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym JavaCode where
   type Import JavaCode = Doc
@@ -142,7 +147,7 @@ instance ImportSym JavaCode where
   modImport = langImport
 
 instance ImportElim JavaCode where
-  importDoc = unJC
+  import' = unJC
 
 instance PermanenceSym JavaCode where
   type Permanence JavaCode = Doc
@@ -150,7 +155,7 @@ instance PermanenceSym JavaCode where
   dynamic = toCode R.dynamic
 
 instance PermElim JavaCode where
-  permDoc = unJC
+  perm = unJC
   binding = error $ bindingError jName
 
 instance BodySym JavaCode where
@@ -159,23 +164,21 @@ instance BodySym JavaCode where
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
-instance InternalBody JavaCode where
-  docBody = onStateValue toCode
+instance RenderBody JavaCode where
   multiBody = G.multiBody 
 
 instance BodyElim JavaCode where
-  bodyDoc = unJC
+  body = unJC
 
 instance BlockSym JavaCode where
   type Block JavaCode = Doc
   block = G.block
 
-instance InternalBlock JavaCode where
-  docBlock = onStateValue toCode
+instance RenderBlock JavaCode where
   multiBlock = G.multiBlock
 
 instance BlockElim JavaCode where
-  blockDoc = unJC
+  block = unJC
 
 instance TypeSym JavaCode where
   type Type JavaCode = TypeData
@@ -199,11 +202,11 @@ instance TypeElim JavaCode where
   getType = cType . unJC
   getTypeString = typeString . unJC
   
-instance InternalType JavaCode where
+instance RenderType JavaCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim JavaCode where
-  getTypeDoc = typeDoc . unJC
+  type' = typeDoc . unJC
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
@@ -241,14 +244,10 @@ instance BinaryOpSym JavaCode where
   orOp = G.orOp
 
 instance OpElim JavaCode where
-  uOpDoc = opDoc . unJC
-  bOpDoc = opDoc . unJC
+  uOp = opDoc . unJC
+  bOp = opDoc . unJC
   uOpPrec = opPrec . unJC
   bOpPrec = opPrec . unJC
-  
-instance OpIntro JavaCode where
-  uOpFromData p d = toState $ toCode $ od p d
-  bOpFromData p d = toState $ toCode $ od p d
 
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
@@ -271,9 +270,9 @@ instance VariableElim JavaCode where
   
 instance InternalVarElim JavaCode where
   variableBind = varBind . unJC
-  variableDoc = varDoc . unJC
+  variable = varDoc . unJC
 
-instance InternalVariable JavaCode where
+instance RenderVariable JavaCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JavaCode where
@@ -373,15 +372,15 @@ instance ValueExpression JavaCode where
 
   notNull = G.notNull
 
-instance InternalValue JavaCode where
+instance RenderValue JavaCode where
   inputFunc = modify (addLangImportVS "java.util.Scanner") >> mkStateVal 
     (obj "Scanner") (parens $ text "new Scanner(System.in)")
   printFunc = mkStateVal void (text "System.out.print")
   printLnFunc = mkStateVal void (text "System.out.println")
   printFileFunc = on2StateValues (\v -> mkVal v . R.printFile "print" . 
-    valueDoc) void
+    RC.value) void
   printFileLnFunc = on2StateValues (\v -> mkVal v . R.printFile "println" . 
-    valueDoc) void
+    RC.value) void
   
   cast = jCast
 
@@ -391,7 +390,7 @@ instance InternalValue JavaCode where
 
 instance ValueElim JavaCode where
   valuePrec = valPrec . unJC
-  valueDoc = val . unJC
+  value = val . unJC
 
 instance InternalValueExp JavaCode where
   objMethodCallMixedArgs' f t o ps ns = do
@@ -400,7 +399,6 @@ instance InternalValueExp JavaCode where
     let tp = getTypeString (valueType ob)
     modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ f) mem))
     G.objMethodCall f t o ps ns
-  objMethodCallNoParams' = G.objMethodCallNoParams
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
@@ -442,12 +440,12 @@ instance InternalIterator JavaCode where
   iterBeginFunc _ = error $ G.iterBeginError jName
   iterEndFunc _ = error $ G.iterEndError jName
 
-instance InternalFunction JavaCode where
+instance RenderFunction JavaCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   
 instance FunctionElim JavaCode where
   functionType = onCodeValue fType
-  functionDoc = funcDoc . unJC
+  function = funcDoc . unJC
 
 instance InternalAssignStmt JavaCode where
   multiAssign _ _ = error $ G.multiAssignError jName
@@ -458,7 +456,7 @@ instance InternalIOStmt JavaCode where
 instance InternalControlStmt JavaCode where
   multiReturn _ = error $ G.multiReturnError jName
 
-instance InternalStatement JavaCode where
+instance RenderStatement JavaCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
 
@@ -467,7 +465,7 @@ instance InternalStatement JavaCode where
   stmtFromData d t = toCode (d, t)
 
 instance StatementElim JavaCode where
-  statementDoc = fst . unJC
+  statement = fst . unJC
   statementTerm = snd . unJC
 
 instance StatementSym JavaCode where
@@ -496,7 +494,7 @@ instance DeclStatement JavaCode where
   extObjDecNew = G.extObjDecNew
   objDecNewNoParams = G.objDecNewNoParams
   extObjDecNewNoParams = G.extObjDecNewNoParams
-  constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkSt $ 
+  constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkStmt $ 
     jConstDecDef vr vl) vr' vl'
   funcDecDef = G.funcDecDef
 
@@ -528,7 +526,7 @@ instance IOStatement JavaCode where
 
 instance StringStatement JavaCode where
   stringSplit d vnew s = modify (addLangImport "java.util.Arrays") >> 
-    onStateValue mkSt (zoom lensMStoVS $ jStringSplit vnew (funcApp 
+    onStateValue mkStmt (zoom lensMStoVS $ jStringSplit vnew (funcApp 
     "Arrays.asList" (listType string) 
     [s $. func "split" (listType string) [litString [d]]]))
 
@@ -544,8 +542,8 @@ instance CommentStatement JavaCode where
   comment = G.comment commentStart
 
 instance ControlStatement JavaCode where
-  break = toState $ mkSt R.break
-  continue = toState $ mkSt R.continue
+  break = toState $ mkStmt R.break
+  continue = toState $ mkStmt R.continue
 
   returnStmt = G.returnStmt Semi
   
@@ -577,11 +575,11 @@ instance ScopeSym JavaCode where
   private = toCode R.private
   public = toCode R.public
 
-instance InternalScope JavaCode where
+instance RenderScope JavaCode where
   scopeFromData _ = toCode
   
 instance ScopeElim JavaCode where
-  scopeDoc = unJC
+  scope = unJC
 
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
@@ -593,13 +591,13 @@ instance ParameterSym JavaCode where
   param = G.param R.param
   pointerParam = param
 
-instance InternalParam JavaCode where
+instance RenderParam JavaCode where
   paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance ParamElim JavaCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
-  parameterDoc = paramDoc . unJC
+  parameter = paramDoc . unJC
 
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData
@@ -623,7 +621,7 @@ instance MethodSym JavaCode where
     
   docInOutFunc n = jDocInOut (inOutFunc n)
 
-instance InternalMethod JavaCode where
+instance RenderMethod JavaCode where
   intMethod m n s p t ps b = do
     tp <- t
     pms <- sequence ps
@@ -635,29 +633,24 @@ instance InternalMethod JavaCode where
           (Map.lookup (key mn n) mem) 
         key mnm nm = mnm ++ "." ++ nm
     modify ((if m then setCurrMain else id) . addExceptionImports excs) 
-    toState $ methodFromData Pub $ jMethod n (map exc excs) s p tp pms bd
+    toState $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
   destructor _ = error $ destructorError jName
   
-  methodFromData _ = toCode . mthd
-  
 instance MethodElim JavaCode where
-  methodDoc = mthdDoc . unJC
+  method = mthdDoc . unJC
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
-  constVar _ = G.constVar (permDoc (static :: JavaCode (Permanence JavaCode)))
-
-instance InternalStateVar JavaCode where
-  stateVarFromData = onStateValue toCode
+  constVar _ = G.constVar (RC.perm (static :: JavaCode (Permanence JavaCode)))
   
 instance StateVarElim JavaCode where
-  stateVarDoc = unJC
+  stateVar = unJC
 
 instance ClassSym JavaCode where
   type Class JavaCode = Doc
@@ -667,29 +660,27 @@ instance ClassSym JavaCode where
 
   docClass = G.docClass
 
-instance InternalClass JavaCode where
+instance RenderClass JavaCode where
   intClass = G.intClass R.class'
   
   inherit n = toCode $ maybe empty ((text "extends" <+>) . text) n
   implements is = toCode $ text "implements" <+> text (intercalate ", " is)
 
   commentedClass = G.commentedClass
-
-  classFromData d = d
   
 instance ClassElim JavaCode where
-  classDoc = unJC
+  class' = unJC
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
   buildModule n = G.buildModule' n langImport
   
-instance InternalMod JavaCode where
+instance RenderMod JavaCode where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
   
 instance ModuleElim JavaCode where
-  moduleDoc = modDoc . unJC
+  module' = modDoc . unJC
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc
@@ -698,7 +689,7 @@ instance BlockCommentSym JavaCode where
     blockCmtEnd)
 
 instance BlockCommentElim JavaCode where
-  blockCommentDoc = unJC
+  blockComment' = unJC
 
 instance HasException JavaCode where
   toConcreteExc Standard = toCode $ stdExc "Exception"
@@ -752,31 +743,31 @@ jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
 jLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-jLambda ps ex = parens (variableList ps) <+> text "->" <+> valueDoc ex
+jLambda ps ex = parens (variableList ps) <+> text "->" <+> RC.value ex
 
 jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
 jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
   where jCast' Double String _ _ = funcApp "Double.parseDouble" double [v]
         jCast' Float String _ _ = funcApp "Float.parseFloat" float [v]
-        jCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (getTypeDoc 
-          tp)) (valueDoc vl))
+        jCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' 
+          tp)) (RC.value vl))
 
 jConstDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-jConstDecDef v def = text "final" <+> getTypeDoc (variableType v) <+> 
-  variableDoc v <+> equals <+> valueDoc def
+jConstDecDef v def = text "final" <+> RC.type' (variableType v) <+> 
+  RC.variable v <+> equals <+> RC.value def
 
 jThrowDoc :: (RenderSym r) => r (Value r) -> Doc
-jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (valueDoc 
+jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (RC.value 
   errMsg)
 
 jTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 jTryCatch tb cb = vcat [
   text "try" <+> lbrace,
-  indent $ bodyDoc tb,
+  indent $ RC.body tb,
   rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> 
     lbrace,
-  indent $ bodyDoc cb,
+  indent $ RC.body cb,
   rbrace]
 
 jOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
@@ -787,19 +778,19 @@ jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getType . valueType
         jOut' _ = G.print newLn f printFn v
 
 jDiscardInput :: (RenderSym r) => r (Value r) -> Doc
-jDiscardInput inFn = valueDoc inFn <> dot <> text "next()"
+jDiscardInput inFn = RC.value inFn <> dot <> text "next()"
 
 jInput :: (RenderSym r) => VSType r -> SValue r -> SValue r
 jInput = on2StateValues (\t -> mkVal t . jInput' (getType t))
-  where jInput' Integer inFn = text "Integer.parseInt" <> parens (valueDoc inFn 
+  where jInput' Integer inFn = text "Integer.parseInt" <> parens (RC.value inFn 
           <> dot <> text "nextLine()")
-        jInput' Float inFn = text "Float.parseFloat" <> parens (valueDoc inFn 
+        jInput' Float inFn = text "Float.parseFloat" <> parens (RC.value inFn 
           <> dot <> text "nextLine()")
-        jInput' Double inFn = text "Double.parseDouble" <> parens (valueDoc 
+        jInput' Double inFn = text "Double.parseDouble" <> parens (RC.value 
           inFn <> dot <> text "nextLine()")
-        jInput' Boolean inFn = valueDoc inFn <> dot <> text "nextBoolean()"
-        jInput' String inFn = valueDoc inFn <> dot <> text "nextLine()"
-        jInput' Char inFn = valueDoc inFn <> dot <> text "next().charAt(0)"
+        jInput' Boolean inFn = RC.value inFn <> dot <> text "nextBoolean()"
+        jInput' String inFn = RC.value inFn <> dot <> text "nextLine()"
+        jInput' Char inFn = RC.value inFn <> dot <> text "next().charAt(0)"
         jInput' _ _ = error "Attempt to read value of unreadable type"
 
 jOpenFileR :: (RenderSym r) => SValue r -> VSType r -> SValue r
@@ -810,16 +801,16 @@ jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n],
   wa]]
 
 jStringSplit :: (RenderSym r) => SVariable r -> SValue r -> VS Doc
-jStringSplit = on2StateValues (\vnew s -> variableDoc vnew <+> equals <+> new 
-  <+> getTypeDoc (variableType vnew) <> parens (valueDoc s))
+jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+> new 
+  <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
 jMethod :: (RenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
-  scopeDoc s <+> permDoc p <+> getTypeDoc t <+> text n <> 
+  RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <> 
     parens (parameterList ps) <+> emptyIfNull es (text "throws" <+> 
     text (intercalate ", " (sort es))) <+> lbrace,
-  indent $ bodyDoc b,
+  indent $ RC.body b,
   rbrace]
 
 jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MSStatement JavaCode]

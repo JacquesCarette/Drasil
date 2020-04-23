@@ -23,26 +23,31 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   CommentStatement(..), ControlStatement(..), StatePattern(..), 
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import GOOL.Drasil.RendererClasses (RenderSym, InternalFile(..), ImportSym(..), 
-  ImportElim(..), PermElim(..), InternalBody(..), BodyElim(..), 
-  InternalBlock(..), BlockElim(..), InternalType(..), InternalTypeElim(..), 
-  UnaryOpSym(..), BinaryOpSym(..), OpElim(..), OpIntro(..), 
-  InternalVariable(..), InternalVarElim(..), InternalValue(..), ValueElim(..), 
+import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
+  ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
+  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec),
+  RenderVariable(..), InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec), 
   InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
-  InternalFunction(..), FunctionElim(..), InternalAssignStmt(..), 
-  InternalIOStmt(..), InternalControlStmt(..), InternalStatement(..), 
-  StatementElim(..), InternalScope(..), ScopeElim(..), MethodTypeSym(..), 
-  InternalParam(..), ParamElim(..), InternalMethod(..), MethodElim(..), 
-  InternalStateVar(..), StateVarElim(..), InternalClass(..), ClassElim(..), 
-  InternalMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..))
-import GOOL.Drasil.LanguageRenderer (mkSt, mkStNoEnd, mkStateVal, mkVal, mkVar, 
-  dot, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
-  endStatement, commentStart, elseIfLabel, inLabel, variableList, appendToBody, 
-  surroundBody)
+  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
+  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
+  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
+  StateVarElim, RenderClass(..), ClassElim, 
+  RenderMod(..), ModuleElim, BlockCommentSym(..), BlockCommentElim)
+import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
+  type', uOp, bOp, variable, value, function, statement, scope, parameter,
+  method, stateVar, class', module', blockComment')
+import GOOL.Drasil.LanguageRenderer (dot, blockCmtStart, blockCmtEnd, 
+  docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
+  inLabel, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body, 
   printFile, param, method, listDec, classVar, objVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
   addComments, commentedMod, commentedItem)
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
+  mkStateVal, mkVal, mkVar, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, 
+  typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
   listType, arrayType, listInnerType, obj, funcType, void, runStrategy, 
@@ -51,7 +56,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   moduloOp, andOp, orOp, var, staticVar, extVar, self, classVar, objVarSelf, 
   listVar, arrayElem, iterVar, pi, litTrue, litFalse, litChar, litDouble, 
   litFloat, litInt, litString, litList, valueOf, arg, argsList, inlineIf, 
-  objAccess, objMethodCall, objMethodCallNoParams, indexOf, call, 
+  objAccess, objMethodCall, indexOf, call, 
   funcAppMixedArgs, selfFuncAppMixedArgs, extFuncAppMixedArgs, 
   libFuncAppMixedArgs, newObjMixedArgs, libNewObjMixedArgs, lambda, notNull, 
   func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
@@ -69,12 +74,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   stateVarDef, constVar, buildClass, implementingClass, docClass, 
   commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
   fileFromData)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (unOpPrec, unExpr, 
-  unExpr', unExprNumDbl, typeUnExpr, powerPrec, binExpr, binExprNumDbl', 
-  typeBinExpr, bindingError, destructorError)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
+import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
+  destructorError)
+import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
-  MethodData(..), mthd, updateMthd, OpData(..), od, ParamData(..), pd, 
+  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, 
   updateParam, ProgData(..), progD, TypeData(..), td, ValData(..), vd, 
   updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
@@ -120,18 +124,18 @@ instance ProgramSym CSharpCode where
 instance RenderSym CSharpCode
 
 instance FileSym CSharpCode where
-  type RenderFile CSharpCode = FileData
+  type File CSharpCode = FileData
   fileDoc m = modify (setFileType Combined) >> G.fileDoc csExt top bottom m
 
   docMod = G.docMod csExt
 
-instance InternalFile CSharpCode where
+instance RenderFile CSharpCode where
   top _ = toCode empty
   bottom = toCode empty
 
   commentedMod cmt m = on2StateValues (on2CodeValues R.commentedMod) m cmt
 
-  fileFromData = G.fileFromData (\m fp -> onCodeValue (fileD fp) m)
+  fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CSharpCode where
   type Import CSharpCode = Doc
@@ -139,7 +143,7 @@ instance ImportSym CSharpCode where
   modImport = langImport
 
 instance ImportElim CSharpCode where
-  importDoc = unCSC
+  import' = unCSC
 
 instance PermanenceSym CSharpCode where
   type Permanence CSharpCode = Doc
@@ -147,7 +151,7 @@ instance PermanenceSym CSharpCode where
   dynamic = toCode R.dynamic
 
 instance PermElim CSharpCode where
-  permDoc = unCSC
+  perm = unCSC
   binding = error $ bindingError csName
 
 instance BodySym CSharpCode where
@@ -156,23 +160,21 @@ instance BodySym CSharpCode where
 
   addComments s = onStateValue (onCodeValue (R.addComments s commentStart))
 
-instance InternalBody CSharpCode where
-  docBody = onStateValue toCode
+instance RenderBody CSharpCode where
   multiBody = G.multiBody 
 
 instance BodyElim CSharpCode where
-  bodyDoc = unCSC
+  body = unCSC
 
 instance BlockSym CSharpCode where
   type Block CSharpCode = Doc
   block = G.block
 
-instance InternalBlock CSharpCode where
-  docBlock = onStateValue toCode
+instance RenderBlock CSharpCode where
   multiBlock = G.multiBlock
 
 instance BlockElim CSharpCode where
-  blockDoc = unCSC
+  block = unCSC
 
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData
@@ -197,11 +199,11 @@ instance TypeElim CSharpCode where
   getType = cType . unCSC
   getTypeString = typeString . unCSC
   
-instance InternalType CSharpCode where
+instance RenderType CSharpCode where
   typeFromData t s d = toCode $ td t s d
 
 instance InternalTypeElim CSharpCode where
-  getTypeDoc = typeDoc . unCSC
+  type' = typeDoc . unCSC
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
@@ -239,14 +241,10 @@ instance BinaryOpSym CSharpCode where
   orOp = G.orOp
 
 instance OpElim CSharpCode where
-  uOpDoc = opDoc . unCSC
-  bOpDoc = opDoc . unCSC
+  uOp = opDoc . unCSC
+  bOp = opDoc . unCSC
   uOpPrec = opPrec . unCSC
   bOpPrec = opPrec . unCSC
-  
-instance OpIntro CSharpCode where
-  uOpFromData p d = toState $ toCode $ od p d
-  bOpFromData p d = toState $ toCode $ od p d
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
@@ -269,9 +267,9 @@ instance VariableElim CSharpCode where
 
 instance InternalVarElim CSharpCode where
   variableBind = varBind . unCSC
-  variableDoc = varDoc . unCSC
+  variable = varDoc . unCSC
 
-instance InternalVariable CSharpCode where
+instance RenderVariable CSharpCode where
   varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CSharpCode where
@@ -354,14 +352,14 @@ instance ValueExpression CSharpCode where
 
   notNull = G.notNull
 
-instance InternalValue CSharpCode where
+instance RenderValue CSharpCode where
   inputFunc = addSystemImport $ mkStateVal string (text "Console.ReadLine()")
   printFunc = addSystemImport $ mkStateVal void (text "Console.Write")
   printLnFunc = addSystemImport $ mkStateVal void (text "Console.WriteLine")
   printFileFunc = on2StateValues (\v -> mkVal v . R.printFile "Write" . 
-    valueDoc) void
+    RC.value) void
   printFileLnFunc = on2StateValues (\v -> mkVal v . R.printFile "WriteLine" . 
-    valueDoc) void
+    RC.value) void
   
   cast = csCast
 
@@ -371,11 +369,10 @@ instance InternalValue CSharpCode where
   
 instance ValueElim CSharpCode where
   valuePrec = valPrec . unCSC
-  valueDoc = val . unCSC
+  value = val . unCSC
   
 instance InternalValueExp CSharpCode where
-  objMethodCallMixedArgs' = G.objMethodCall 
-  objMethodCallNoParams' = G.objMethodCallNoParams
+  objMethodCallMixedArgs' = G.objMethodCall
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
@@ -416,12 +413,12 @@ instance InternalIterator CSharpCode where
   iterBeginFunc _ = error $ G.iterBeginError csName
   iterEndFunc _ = error $ G.iterEndError csName
     
-instance InternalFunction CSharpCode where
+instance RenderFunction CSharpCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
   
 instance FunctionElim CSharpCode where
   functionType = onCodeValue fType
-  functionDoc = funcDoc . unCSC
+  function = funcDoc . unCSC
 
 instance InternalAssignStmt CSharpCode where
   multiAssign _ _ = error $ G.multiAssignError csName
@@ -432,7 +429,7 @@ instance InternalIOStmt CSharpCode where
 instance InternalControlStmt CSharpCode where
   multiReturn _ = error $ G.multiReturnError csName 
 
-instance InternalStatement CSharpCode where
+instance RenderStatement CSharpCode where
   stmt = G.stmt
   loopStmt = G.loopStmt
 
@@ -441,7 +438,7 @@ instance InternalStatement CSharpCode where
   stmtFromData d t = toCode (d, t)
 
 instance StatementElim CSharpCode where
-  statementDoc = fst . unCSC
+  statement = fst . unCSC
   statementTerm = snd . unCSC
 
 instance StatementSym CSharpCode where
@@ -515,8 +512,8 @@ instance CommentStatement CSharpCode where
   comment = G.comment commentStart
 
 instance ControlStatement CSharpCode where
-  break = toState $ mkSt R.break
-  continue = toState $ mkSt R.continue
+  break = toState $ mkStmt R.break
+  continue = toState $ mkStmt R.continue
 
   returnStmt = G.returnStmt Semi
   
@@ -548,11 +545,11 @@ instance ScopeSym CSharpCode where
   private = toCode R.private
   public = toCode R.public
 
-instance InternalScope CSharpCode where
+instance RenderScope CSharpCode where
   scopeFromData _ = toCode
   
 instance ScopeElim CSharpCode where
-  scopeDoc = unCSC
+  scope = unCSC
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
@@ -564,13 +561,13 @@ instance ParameterSym CSharpCode where
   param = G.param R.param
   pointerParam = param
 
-instance InternalParam CSharpCode where
+instance RenderParam CSharpCode where
   paramFromData v d = on2CodeValues pd v (toCode d)
 
 instance ParamElim CSharpCode where
   parameterName = variableName . onCodeValue paramVar
   parameterType = variableType . onCodeValue paramVar
-  parameterDoc = paramDoc . unCSC
+  parameter = paramDoc . unCSC
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
@@ -594,32 +591,27 @@ instance MethodSym CSharpCode where
 
   docInOutFunc n = G.docInOutFunc (inOutFunc n)
 
-instance InternalMethod CSharpCode where
+instance RenderMethod CSharpCode where
   intMethod m n s p t ps b = modify (if m then setCurrMain else id) >> 
-    on3StateValues (\tp pms bd -> methodFromData Pub $ R.method n s p tp pms 
-    bd) t (sequence ps) b
+    on3StateValues (\tp pms bd -> toCode $ mthd $ R.method n s p tp pms bd) t 
+    (sequence ps) b
   intFunc = G.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
   destructor _ = error $ destructorError csName
   
-  methodFromData _ = toCode . mthd
-  
 instance MethodElim CSharpCode where
-  methodDoc = mthdDoc . unCSC
+  method = mthdDoc . unCSC
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
   stateVar = G.stateVar
   stateVarDef _ = G.stateVarDef
   constVar _ = G.constVar empty
-
-instance InternalStateVar CSharpCode where
-  stateVarFromData = onStateValue toCode
   
 instance StateVarElim CSharpCode where
-  stateVarDoc = unCSC
+  stateVar = unCSC
 
 instance ClassSym CSharpCode where
   type Class CSharpCode = Doc
@@ -629,29 +621,27 @@ instance ClassSym CSharpCode where
 
   docClass = G.docClass
 
-instance InternalClass CSharpCode where
+instance RenderClass CSharpCode where
   intClass = G.intClass R.class'
 
   inherit n = toCode $ maybe empty ((colon <+>) . text) n
   implements is = toCode $ colon <+> text (intercalate ", " is)
 
   commentedClass = G.commentedClass
-
-  classFromData d = d
   
 instance ClassElim CSharpCode where
-  classDoc = unCSC
+  class' = unCSC
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
   buildModule n = G.buildModule' n langImport
   
-instance InternalMod CSharpCode where
+instance RenderMod CSharpCode where
   modFromData n = G.modFromData n (toCode . md n)
   updateModuleDoc f = onCodeValue (updateMod f)
   
 instance ModuleElim CSharpCode where
-  moduleDoc = modDoc . unCSC
+  module' = modDoc . unCSC
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
@@ -660,7 +650,7 @@ instance BlockCommentSym CSharpCode where
     blockCmtEnd)
 
 instance BlockCommentElim CSharpCode where
-  blockCommentDoc = unCSC
+  blockComment' = unCSC
 
 addSystemImport :: VS a -> VS a
 addSystemImport = (>>) $ modify (addLangImportVS "System")
@@ -680,46 +670,46 @@ csOutfileType = modifyReturn (addLangImportVS "System.IO") $
   typeFromData File "StreamWriter" (text "StreamWriter")
 
 csLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-csLambda ps ex = parens (variableList ps) <+> text "=>" <+> valueDoc ex
+csLambda ps ex = parens (variableList ps) <+> text "=>" <+> RC.value ex
 
 csCast :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
 csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
   where csCast' Double String _ _ = funcApp "Double.Parse" double [v]
         csCast' Float String _ _ = funcApp "Single.Parse" float [v]
-        csCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (getTypeDoc tp)) 
-          (valueDoc vl))
+        csCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' tp)) 
+          (RC.value vl))
 
 csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
   MSStatement r
-csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStNoEnd $ 
-  getTypeDoc (variableType vr) <+> text (variableName vr) <> parens 
-  (variableList pms) <+> bodyStart $$ indent (bodyDoc b) $$ bodyEnd) 
+csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStmtNoEnd $ 
+  RC.type' (variableType vr) <+> text (variableName vr) <> parens 
+  (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd) 
   (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnStmt r)
 
 csThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
-  parens (valueDoc errMsg)
+  parens (RC.value errMsg)
 
 csTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 csTryCatch tb cb = vcat [
   text "try" <+> lbrace,
-  indent $ bodyDoc tb,
+  indent $ RC.body tb,
   rbrace <+> text "catch" <+> 
     lbrace,
-  indent $ bodyDoc cb,
+  indent $ RC.body cb,
   rbrace]
 
 csDiscardInput :: (RenderSym r) => r (Value r) -> Doc
-csDiscardInput = valueDoc
+csDiscardInput = RC.value
 
 csFileInput :: (RenderSym r) => SValue r -> SValue r
-csFileInput = onStateValue (\f -> mkVal (valueType f) (valueDoc f <> dot <> 
+csFileInput = onStateValue (\f -> mkVal (valueType f) (RC.value f <> dot <> 
   text "ReadLine()"))
 
 csInput :: (RenderSym r) => VSType r -> SValue r -> SValue r
 csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn 
-  -> mkVal t $ text (csInput' (getType t)) <> parens (valueDoc inFn)) inF)
+  -> mkVal t $ text (csInput' (getType t)) <> parens (RC.value inFn)) inF)
   where csInput' Integer = "Int32.Parse"
         csInput' Float = "Single.Parse"
         csInput' Double = "Double.Parse"
@@ -762,7 +752,7 @@ csObjVar o v = csObjVar' (variableBind v)
   where csObjVar' Static = error 
           "Cannot use objVar to access static variables through an object in C#"
         csObjVar' Dynamic = mkVar (variableName o ++ "." ++ variableName v) 
-          (variableType v) (R.objVar (variableDoc o) (variableDoc v))
+          (variableType v) (R.objVar (RC.variable o) (RC.variable v))
 
 csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
     -> VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode -> 

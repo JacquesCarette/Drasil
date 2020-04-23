@@ -1,25 +1,31 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module GOOL.Drasil.State (
-  GS, GOOLState(..), FS, CS, MS, VS, lensFStoGS, lensGStoFS, lensFStoCS, 
-  lensFStoMS, lensFStoVS, lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, 
-  lensMStoVS, lensVStoFS, lensVStoMS, headers, sources, mainMod, currMain, 
-  currFileType, initialState, initialFS, modifyReturn, modifyReturnFunc, 
-  modifyReturnFunc2, modifyReturnList, revFiles, addFile, 
-  addCombinedHeaderSource, addHeader, addSource, addProgNameToPaths, 
-  setMainMod, addLangImport, addLangImportVS, addExceptionImports, 
-  getLangImports, addLibImport, addLibImportVS, addLibImports, getLibImports, 
-  addModuleImport, addModuleImportVS, getModuleImports, addHeaderLangImport, 
-  getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, 
-  addHeaderModImport, getHeaderModImports, addDefine, getDefines, 
-  addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
-  getHeaderUsing, setFileType, setModuleName, getModuleName, setClassName, 
-  getClassName, setCurrMain, getCurrMain, addClass, getClasses, updateClassMap, 
-  getClassMap, updateMethodExcMap, getMethodExcMap, updateCallMap, 
-  callMapTransClosure, updateMEMWithCalls, addParameter, getParameters, 
-  setOutputsDeclared, isOutputsDeclared, addException, addExceptions, 
-  getExceptions, addCall, setMainDoc, getMainDoc, setScope, getScope, 
-  setCurrMainFunc, getCurrMainFunc
+  -- Types
+  GS, GOOLState(..), FS, CS, MS, VS, 
+  -- Lenses
+  lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS, lensCStoMS, 
+  lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, lensVStoMS, 
+  headers, sources, mainMod, currMain, currFileType, 
+  -- Initial states
+  initialState, initialFS, 
+  -- State helpers
+  modifyReturn, modifyReturnFunc, modifyReturnList, 
+  -- State modifiers
+  revFiles, addFile, addCombinedHeaderSource, addHeader, addSource, 
+  addProgNameToPaths, setMainMod, addLangImport, addLangImportVS, 
+  addExceptionImports, getLangImports, addLibImport, addLibImportVS, 
+  addLibImports, getLibImports, addModuleImport, addModuleImportVS, 
+  getModuleImports, addHeaderLangImport, getHeaderLangImports, 
+  addHeaderLibImport, getHeaderLibImports, addHeaderModImport, 
+  getHeaderModImports, addDefine, getDefines, addHeaderDefine, 
+  getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing, 
+  setFileType, setModuleName, getModuleName, setClassName, getClassName, 
+  setCurrMain, getCurrMain, addClass, getClasses, updateClassMap, getClassMap, 
+  updateMethodExcMap, getMethodExcMap, updateCallMap, callMapTransClosure, 
+  updateMEMWithCalls, addParameter, getParameters, setOutputsDeclared, 
+  isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
+  setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..))
@@ -247,14 +253,6 @@ modifyReturnFunc sf vf st = do
   v <- st
   modify $ sf v
   return $ vf v
-
-modifyReturnFunc2 :: (c -> b -> s -> s) -> (c -> b -> a) -> State s c -> 
-  State s b -> State s a
-modifyReturnFunc2 sf vf st1 st2 = do
-  v1 <- st1
-  v2 <- st2
-  modify $ sf v1 v2
-  return $ vf v1 v2
 
 modifyReturnList :: [State s b] -> (s -> s) -> 
   ([b] -> a) -> State s a

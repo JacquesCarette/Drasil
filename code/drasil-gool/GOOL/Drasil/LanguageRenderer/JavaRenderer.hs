@@ -17,7 +17,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
-  selfFuncApp, extFuncApp, newObj, RenderValueExp(..), objMethodCall, 
+  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, 
   objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), 
   InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
@@ -433,7 +433,7 @@ instance ValueElim JavaCode where
   valuePrec = valPrec . unJC
   value = val . unJC
 
-instance RenderValueExp JavaCode where
+instance InternalValueExp JavaCode where
   objMethodCallMixedArgs' f t o ps ns = do
     ob <- o
     mem <- getMethodExcMap

@@ -18,7 +18,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
-  selfFuncApp, extFuncApp, newObj, RenderValueExp(..), objMethodCall, 
+  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, 
   FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), 
   StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
   IOStatement(..), StringStatement(..), FuncAppStatement(..), 
@@ -474,7 +474,7 @@ instance (Pair p) => ValueElim (p CppSrcCode CppHdrCode) where
   valuePrec v = valuePrec $ pfst v
   value v = RC.value $ pfst v
 
-instance (Pair p) => RenderValueExp (p CppSrcCode CppHdrCode) where
+instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
   objMethodCallMixedArgs' f t o pas nas = pair2Vals3Lists
     (\tp ob pars ns nars -> objMethodCallMixedArgs' f tp ob pars (zip ns nars)) 
     (\tp ob pars ns nars -> objMethodCallMixedArgs' f tp ob pars (zip ns nars)) 
@@ -1360,7 +1360,7 @@ instance ValueElim CppSrcCode where
   valuePrec = valPrec . unCPPSC
   value = val . unCPPSC
 
-instance RenderValueExp CppSrcCode where
+instance InternalValueExp CppSrcCode where
   objMethodCallMixedArgs' = G.objMethodCall
 
 instance FunctionSym CppSrcCode where
@@ -1986,7 +1986,7 @@ instance ValueElim CppHdrCode where
   valuePrec = valPrec . unCPPHC
   value = val . unCPPHC
   
-instance RenderValueExp CppHdrCode where
+instance InternalValueExp CppHdrCode where
   objMethodCallMixedArgs' _ _ _ _ _ = mkStateVal void empty
 
 instance FunctionSym CppHdrCode where

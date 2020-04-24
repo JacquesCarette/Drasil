@@ -55,7 +55,7 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, float, double, char, string, listType, 
-  listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, negateOp,
+  listInnerType, obj, funcType, void, notOp, negateOp,
   sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
   plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, 
@@ -66,16 +66,18 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   libNewObjMixedArgs, lambda, func, get, set, listSize, listAdd, listAppend, 
   iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
   listAppendFunc, listAccessFunc', listSetFunc, stmt, loopStmt, emptyStmt, 
-  assign, multiAssignError, decrement, increment, decrement1, increment1, 
+  assign, multiAssignError, increment, increment1, 
   varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
   extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, print, 
-  discardInput, discardFileInput, closeFile, stringListVals, stringListLists, 
+  discardInput, discardFileInput, closeFile, 
   returnStmt, multiReturnError, valStmt, comment, throw, ifCond, switch, for, 
   forRange, while, tryCatch, notifyObservers, construct, param, method, 
   getMethod, setMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
   buildClass, implementingClass, docClass, commentedClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (decrement, 
+  decrement1, runStrategy, listSlice, stringListVals, stringListLists)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd, 
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..), 
@@ -1382,7 +1384,7 @@ instance List CppSrcCode where
     [iterBegin l, iterEnd l, v] #- iterBegin l
     
 instance InternalList CppSrcCode where
-  listSlice' = G.listSlice
+  listSlice' = M.listSlice
 
 instance Iterator CppSrcCode where
   iterBegin = G.iterBegin
@@ -1439,10 +1441,10 @@ instance StatementSym CppSrcCode where
 
 instance AssignStatement CppSrcCode where
   assign = G.assign Semi
-  (&-=) = G.decrement
+  (&-=) = M.decrement
   (&+=) = G.increment
   (&++) = G.increment1
-  (&--) = G.decrement1
+  (&--) = M.decrement1
 
 instance DeclStatement CppSrcCode where
   varDec = G.varDec static dynamic
@@ -1517,8 +1519,8 @@ instance StringStatement CppSrcCode where
         (oneLiner $ valStmt $ listAppend (valueOf vnew) v_word)
     ]
 
-  stringListVals = G.stringListVals
-  stringListLists = G.stringListLists
+  stringListVals = M.stringListVals
+  stringListLists = M.stringListLists
 
 instance FuncAppStatement CppSrcCode where
   inOutCall = cppInOutCall funcApp
@@ -1557,7 +1559,7 @@ instance ObserverPattern CppSrcCode where
   notifyObservers = G.notifyObservers
 
 instance StrategyPattern CppSrcCode where
-  runStrategy = G.runStrategy
+  runStrategy = M.runStrategy
 
 instance ScopeSym CppSrcCode where
   type Scope CppSrcCode = (Doc, ScopeTag)

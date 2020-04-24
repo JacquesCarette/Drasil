@@ -52,8 +52,8 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
-  listType, arrayType, listInnerType, obj, funcType, void, runStrategy, 
-  listSlice, notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, greaterOp, 
+  listType, arrayType, listInnerType, obj, funcType, void, 
+  notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, greaterOp, 
   greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, divideOp, 
   moduloOp, andOp, orOp, var, staticVar, extVar, self, classVar, objVarSelf, 
   listVar, arrayElem, iterVar, pi, litTrue, litFalse, litChar, litDouble, 
@@ -64,11 +64,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
   listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
   iterBeginError, iterEndError, listAccessFunc, listSetFunc, printSt, stmt, 
-  loopStmt, emptyStmt, assign, multiAssignError, decrement, increment, 
-  decrement1, increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, 
+  loopStmt, emptyStmt, assign, multiAssignError, increment, 
+  increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, 
   arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
   extObjDecNewNoParams, constDecDef, print, discardInput, openFileR, openFileW, 
-  openFileA, closeFile, discardFileLine, stringListVals, stringListLists, 
+  openFileA, closeFile, discardFileLine,
   returnStmt, multiReturnError, valStmt, comment, throw, ifCond, switch, 
   ifExists, for, forRange, forEach, while, tryCatch, checkState, 
   notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
@@ -78,6 +78,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
   destructorError)
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (decrement, 
+  decrement1, runStrategy, listSlice, stringListVals, stringListLists)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, 
@@ -431,7 +433,7 @@ instance List CSharpCode where
   indexOf = G.indexOf "IndexOf"
   
 instance InternalList CSharpCode where
-  listSlice' = G.listSlice
+  listSlice' = M.listSlice
 
 instance Iterator CSharpCode where
   iterBegin = G.iterBegin
@@ -487,10 +489,10 @@ instance StatementSym CSharpCode where
 
 instance AssignStatement CSharpCode where
   assign = G.assign Semi
-  (&-=) = G.decrement
+  (&-=) = M.decrement
   (&+=) = G.increment
   (&++) = G.increment1
-  (&--) = G.decrement1
+  (&--) = M.decrement1
 
 instance DeclStatement CSharpCode where
   varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
@@ -539,8 +541,8 @@ instance StringStatement CSharpCode where
   stringSplit d vnew s = assign vnew $ newObj (listType string) 
     [s $. func "Split" (listType string) [litChar d]]
 
-  stringListVals = G.stringListVals
-  stringListLists = G.stringListLists
+  stringListVals = M.stringListVals
+  stringListLists = M.stringListLists
 
 instance FuncAppStatement CSharpCode where
   inOutCall = csInOutCall funcApp
@@ -577,7 +579,7 @@ instance ObserverPattern CSharpCode where
   notifyObservers = G.notifyObservers
 
 instance StrategyPattern CSharpCode where
-  runStrategy = G.runStrategy
+  runStrategy = M.runStrategy
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc

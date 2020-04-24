@@ -54,7 +54,7 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, listType, 
-  arrayType, listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, 
+  arrayType, listInnerType, obj, funcType, void, notOp, 
   csc, sec, cot, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
   lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, andOp, 
   orOp, var, staticVar, extVar, self, classVar, objVar, objVarSelf, listVar, 
@@ -66,11 +66,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
   getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
   iterEndError, listAccessFunc', printSt, stmt, loopStmt, emptyStmt, assign, 
-  multiAssignError, decrement, increment, decrement1, increment1, varDec, 
+  multiAssignError, increment, increment1, varDec, 
   varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, objDecNew, 
   objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, print,
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnStmt, 
+  discardFileLine, returnStmt, 
   multiReturnError, valStmt, comment, throw, ifCond, switch, ifExists, for, 
   forRange, forEach, while, tryCatch, checkState, notifyObservers, construct, 
   param, method, getMethod, setMethod, constructor, docMain, function, 
@@ -79,6 +79,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
   destructorError, docFuncRepr)
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (decrement, 
+  decrement1, runStrategy, listSlice, stringListVals, stringListLists)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, 
@@ -459,7 +461,7 @@ instance List JavaCode where
   indexOf = G.indexOf "indexOf"
 
 instance InternalList JavaCode where
-  listSlice' = G.listSlice
+  listSlice' = M.listSlice
 
 instance Iterator JavaCode where
   iterBegin = G.iterBegin
@@ -517,10 +519,10 @@ instance StatementSym JavaCode where
 
 instance AssignStatement JavaCode where
   assign = G.assign Semi
-  (&-=) = G.decrement
+  (&-=) = M.decrement
   (&+=) = G.increment
   (&++) = G.increment1
-  (&--) = G.decrement1
+  (&--) = M.decrement1
 
 instance DeclStatement JavaCode where
   varDec = G.varDec static dynamic
@@ -571,8 +573,8 @@ instance StringStatement JavaCode where
     "Arrays.asList" (listType string) 
     [s $. func "split" (listType string) [litString [d]]]))
 
-  stringListVals = G.stringListVals
-  stringListLists = G.stringListLists
+  stringListVals = M.stringListVals
+  stringListLists = M.stringListLists
 
 instance FuncAppStatement JavaCode where
   inOutCall = jInOutCall funcApp
@@ -609,7 +611,7 @@ instance ObserverPattern JavaCode where
   notifyObservers = G.notifyObservers
 
 instance StrategyPattern JavaCode where
-  runStrategy = G.runStrategy
+  runStrategy = M.runStrategy
 
 instance ScopeSym JavaCode where
   type Scope JavaCode = Doc

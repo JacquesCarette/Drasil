@@ -57,7 +57,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   arrayType, listInnerType, obj, funcType, void, notOp, 
   csc, sec, cot, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
   lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, andOp, 
-  orOp, var, staticVar, extVar, self, classVar, objVar, objVarSelf, listVar, 
+  orOp, var, staticVar, extVar, self, classVar, objVar, objVarSelf, 
   arrayElem, iterVar, litTrue, litFalse, litChar, litDouble, litFloat, litInt, 
   litString, litArray, pi, valueOf, arg, argsList, inlineIf, objAccess, 
   objMethodCall, indexOf, call', funcAppMixedArgs, 
@@ -68,7 +68,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterEndError, listAccessFunc', printSt, stmt, loopStmt, emptyStmt, assign, 
   multiAssignError, increment, increment1, varDec, 
   varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, objDecNew, 
-  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, print,
+  extObjDecNew, funcDecDef, print,
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, returnStmt, 
   multiReturnError, valStmt, comment, throw, ifCond, switch, ifExists, for, 
@@ -301,7 +301,6 @@ instance VariableSym JavaCode where
     ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
   objVarSelf = G.objVarSelf
-  listVar = G.listVar
   arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
 
@@ -535,8 +534,6 @@ instance DeclStatement JavaCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = G.extObjDecNew
-  objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkStmt $ 
     jConstDecDef vr vl) vr' vl'
   funcDecDef = G.funcDecDef

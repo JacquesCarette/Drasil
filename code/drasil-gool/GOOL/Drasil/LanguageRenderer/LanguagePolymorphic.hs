@@ -9,7 +9,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   asinOp, asinOp', acosOp, acosOp', atanOp, atanOp', csc, sec, cot, 
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
   minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, addmathImport, bindingError, var, staticVar, 
-  extVar, self, classVarCheckStatic, classVar, objVar, objVarSelf, listVar, 
+  extVar, self, classVarCheckStatic, classVar, objVar, objVarSelf, 
   arrayElem, iterVar, litTrue, litFalse, litChar, litDouble, litFloat, litInt, 
   litString, litArray, litList, pi, valueOf, arg, argsList, inlineIf, call', 
   call, funcAppMixedArgs, namedArgError, selfFuncAppMixedArgs, 
@@ -21,8 +21,8 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   iterEndError, listAccessFunc, listAccessFunc', listSetFunc, printSt, stmt, 
   loopStmt, emptyStmt, assign, multiAssignError, increment, 
   increment1, varDec, varDecDef, listDec, 
-  listDecDef, listDecDef', arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, 
-  extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, print, 
+  listDecDef, listDecDef', arrayDec, arrayDecDef, objDecNew, 
+  extObjDecNew, constDecDef, funcDecDef, print, 
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, returnStmt, 
   multiReturnError, valStmt, comment, throw, ifCond, switch, ifExists, for, 
@@ -59,8 +59,7 @@ import qualified GOOL.Drasil.ClassInterface as S (
   ValueExpression(funcAppMixedArgs, newObjMixedArgs, notNull, lambda), 
   FunctionSym(func, objAccess), 
   List(listSize, listAccess), StatementSym(valStmt),
-  DeclStatement(varDec, varDecDef, objDecNew, extObjDecNew, 
-    constDecDef), 
+  DeclStatement(varDec, varDecDef, constDecDef), 
   IOStatement(print),
   ControlStatement(returnStmt, ifCond, for, switch), 
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
@@ -348,9 +347,6 @@ objVar = on2StateValues (\o v -> mkVar (variableName o ++ "." ++ variableName
 objVarSelf :: (RenderSym r) => SVariable r -> SVariable r
 objVarSelf = S.objVar S.self
 
-listVar :: (RenderSym r) => Label -> VSType r -> SVariable r
-listVar n t = S.var n (S.listType t)
-
 arrayElem :: (RenderSym r) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = do
   i <- i'
@@ -629,16 +625,10 @@ arrayDecDef v vals = on2StateValues (\vd vs -> mkStmt (RC.statement vd <+>
 objDecNew :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 objDecNew v vs = S.varDecDef v (newObj (onStateValue variableType v) vs)
 
-objDecNewNoParams :: (RenderSym r) => SVariable r -> MSStatement r
-objDecNewNoParams v = S.objDecNew v []
-
 extObjDecNew :: (RenderSym r) => Library -> SVariable r -> [SValue r] -> 
   MSStatement r
 extObjDecNew l v vs = S.varDecDef v (extNewObj l (onStateValue variableType v)
   vs)
-
-extObjDecNewNoParams :: (RenderSym r) => Library -> SVariable r -> MSStatement r
-extObjDecNewNoParams l v = S.extObjDecNew l v []
 
 constDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 constDecDef vr vl = zoom lensMStoVS $ on2StateValues (\v -> mkStmt . 

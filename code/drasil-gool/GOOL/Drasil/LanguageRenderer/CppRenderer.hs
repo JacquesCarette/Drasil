@@ -59,7 +59,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
   plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, 
-  staticVar, self, objVar, listVar, arrayElem, litTrue, litFalse, litChar, 
+  staticVar, self, objVar, arrayElem, litTrue, litFalse, litChar, 
   litDouble, litFloat, litInt, litString, litArray, valueOf, arg, argsList, 
   inlineIf, objAccess, objMethodCall, call', 
   funcAppMixedArgs, selfFuncAppMixedArgs, libFuncAppMixedArgs, newObjMixedArgs, 
@@ -67,8 +67,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
   listAppendFunc, listAccessFunc', listSetFunc, stmt, loopStmt, emptyStmt, 
   assign, multiAssignError, increment, increment1, 
-  varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
-  extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, print, 
+  varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  extObjDecNew, constDecDef, funcDecDef, print, 
   discardInput, discardFileInput, closeFile, 
   returnStmt, multiReturnError, valStmt, comment, throw, ifCond, switch, for, 
   forRange, while, tryCatch, notifyObservers, construct, param, method, 
@@ -339,7 +339,6 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   extClassVar = pair2 extClassVar extClassVar
   objVar = pair2 objVar objVar
   objVarSelf = pair1 objVarSelf objVarSelf
-  listVar n = pair1 (listVar n) (listVar n)
   arrayElem i = pair1 (arrayElem i) (arrayElem i)
   iterVar l = pair1 (iterVar l) (iterVar l)
 
@@ -587,11 +586,6 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
     (map (zoom lensMStoVS) vs)
   extObjDecNew lib vr vs = pair1Val1List (extObjDecNew lib) (extObjDecNew lib) 
     (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
-  objDecNewNoParams = pair1 objDecNewNoParams objDecNewNoParams . 
-    zoom lensMStoVS
-  extObjDecNewNoParams lib = pair1 
-    (extObjDecNewNoParams lib) 
-    (extObjDecNewNoParams lib) . zoom lensMStoVS
   constDecDef vr vl = pair2 constDecDef constDecDef (zoom lensMStoVS vr) 
     (zoom lensMStoVS vl)
   funcDecDef v ps r = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
@@ -1247,7 +1241,6 @@ instance VariableSym CppSrcCode where
     (toState vr)) getODEOthVars o v
   objVarSelf = onStateValue (\v -> mkVar ("this->"++variableName v) 
     (variableType v) (text "this->" <> RC.variable v))
-  listVar = G.listVar
   arrayElem i = G.arrayElem (litInt i)
   iterVar l t = mkStateVar l (iterator t) (text $ "(*" ++ l ++ ")")
 
@@ -1460,8 +1453,6 @@ instance DeclStatement CppSrcCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = G.extObjDecNew
-  objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef = G.constDecDef
   funcDecDef = G.funcDecDef
 
@@ -1875,7 +1866,6 @@ instance VariableSym CppHdrCode where
     ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
   objVarSelf _ = mkStateVar "" void empty
-  listVar _ _ = mkStateVar "" void empty
   arrayElem _ _ = mkStateVar "" void empty
   iterVar _ _ = mkStateVar "" void empty
   
@@ -2080,8 +2070,6 @@ instance DeclStatement CppHdrCode where
   objDecDef _ _ = emptyStmt
   objDecNew _ _ = emptyStmt
   extObjDecNew _ _ _ = emptyStmt
-  objDecNewNoParams _ = emptyStmt
-  extObjDecNewNoParams _ _ = emptyStmt
   constDecDef = G.constDecDef
   funcDecDef _ _ _ = emptyStmt
 

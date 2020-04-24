@@ -53,7 +53,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   notOp', negateOp, sqrtOp', absOp', expOp', sinOp', cosOp', tanOp', asinOp', 
   acosOp', atanOp', csc, sec, cot, equalOp, notEqualOp, greaterOp, 
   greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
-  moduloOp, var, staticVar, extVar, classVar, objVar, objVarSelf, listVar, 
+  moduloOp, var, staticVar, extVar, classVar, objVar, objVarSelf, 
   arrayElem, iterVar, litChar, litDouble, litInt, litString, valueOf, arg, 
   argsList, objAccess, objMethodCall, indexOf, call, 
   funcAppMixedArgs, selfFuncAppMixedArgs, extFuncAppMixedArgs, newObjMixedArgs, 
@@ -61,7 +61,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
   iterBeginError, iterEndError, listAccessFunc, listSetFunc, stmt, loopStmt, 
   emptyStmt, assign, increment, 
-  listDecDef', objDecNew, objDecNewNoParams, print, closeFile, discardFileLine, 
+  listDecDef', objDecNew, print, closeFile, discardFileLine, 
   returnStmt, valStmt, comment, throw, 
   ifCond, ifExists, tryCatch, checkState, construct, param, method, getMethod, 
   setMethod, constructor, function, docFunc, stateVarDef, constVar, buildClass, 
@@ -287,7 +287,6 @@ instance VariableSym PythonCode where
     G.classVar pyClassVar (toState t) v) c getClassMap
   objVar = G.objVar
   objVarSelf = G.objVarSelf
-  listVar = G.listVar
   arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
 
@@ -507,9 +506,6 @@ instance DeclStatement PythonCode where
   objDecNew = G.objDecNew
   extObjDecNew lib v vs = modify (addModuleImport lib) >> varDecDef v 
     (extNewObj lib (onStateValue variableType v) vs)
-  objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams lib v = modify (addModuleImport lib) >> varDecDef v 
-    (extNewObj lib (onStateValue variableType v) [])
   constDecDef = varDecDef
   funcDecDef v ps r = onStateValue (mkStmtNoEnd . RC.method) (zoom lensMStoVS v 
     >>= (\vr -> function (variableName vr) private dynamic 

@@ -19,7 +19,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, 
   newObj, RenderValueExp(..), objMethodCall, objMethodCallNoParams, 
   FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), 
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), objDecNewNoParams,
   IOStatement(..), StringStatement(..), FuncAppStatement(..), 
   CommentStatement(..), ControlStatement(..), StatePattern(..), 
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
@@ -56,7 +56,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, greaterOp, 
   greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, divideOp, 
   moduloOp, andOp, orOp, var, staticVar, extVar, self, classVar, objVarSelf, 
-  listVar, arrayElem, iterVar, pi, litTrue, litFalse, litChar, litDouble, 
+  arrayElem, iterVar, pi, litTrue, litFalse, litChar, litDouble, 
   litFloat, litInt, litString, litList, valueOf, arg, argsList, inlineIf, 
   objAccess, objMethodCall, indexOf, call, 
   funcAppMixedArgs, selfFuncAppMixedArgs, extFuncAppMixedArgs, 
@@ -66,8 +66,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterBeginError, iterEndError, listAccessFunc, listSetFunc, printSt, stmt, 
   loopStmt, emptyStmt, assign, multiAssignError, increment, 
   increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, 
-  arrayDecDef, objDecNew, objDecNewNoParams, extObjDecNew, 
-  extObjDecNewNoParams, constDecDef, print, discardInput, openFileR, openFileW, 
+  arrayDecDef, objDecNew, extObjDecNew, 
+  constDecDef, print, discardInput, openFileR, openFileW, 
   openFileA, closeFile, discardFileLine,
   returnStmt, multiReturnError, valStmt, comment, throw, ifCond, switch, 
   ifExists, for, forRange, forEach, while, tryCatch, checkState, 
@@ -296,7 +296,6 @@ instance VariableSym CSharpCode where
   extClassVar = classVar
   objVar = on2StateValues csObjVar
   objVarSelf = G.objVarSelf
-  listVar  = G.listVar
   arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
 
@@ -506,8 +505,6 @@ instance DeclStatement CSharpCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = G.extObjDecNew
-  objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef = G.constDecDef
   funcDecDef = csFuncDecDef
 

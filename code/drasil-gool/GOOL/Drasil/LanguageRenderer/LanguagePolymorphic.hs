@@ -2,32 +2,18 @@
 
 -- | Implementations defined here are valid for any language renderer.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
-  multiBody, block, multiBlock, int, 
-  listInnerType, obj, funcType, 
-  negateOp, csc, sec, cot, 
-  equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
-  minusOp, multOp, divideOp, moduloOp, var, staticVar, 
-  classVarCheckStatic, 
-  arrayElem, litChar, litDouble, litInt, 
-  litString, valueOf, arg, argsList, 
-  call, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, 
-  lambda, objAccess, 
-  objMethodCall, func, get, set, 
-  listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
-  setFunc, listAppendFunc, 
-  stmt, 
-  loopStmt, emptyStmt, assign, increment, 
-  objDecNew, print, 
-  closeFile, 
-  returnStmt, 
-  valStmt, comment, throw, ifCond, 
-  tryCatch, construct, 
-  param, method, getMethod, setMethod, constructor, 
-  function, docFuncRepr, docFunc,
-  buildClass, implementingClass, docClass, 
-  commentedClass, modFromData, fileDoc, 
-  docMod
+  multiBody, block, multiBlock, int, listInnerType, obj, funcType, negateOp, 
+  csc, sec, cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
+  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
+  classVarCheckStatic, arrayElem, litChar, litDouble, litInt, litString, 
+  valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
+  newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
+  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, increment, objDecNew, 
+  print, closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, 
+  construct, param, method, getMethod, setMethod, constructor, function, 
+  docFuncRepr, docFunc, buildClass, implementingClass, docClass, 
+  commentedClass, modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -40,64 +26,48 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   BlockSym(Block), PermanenceSym(..), TypeSym(Type), 
   TypeElim(getType, getTypeString), VariableSym(Variable), 
   VariableElim(variableName, variableType), ValueSym(Value, valueType), 
-  NumericExpression((#-), (#/), sin, cos, tan), Comparison(..), 
-  funcApp, newObj, objMethodCallNoParams, ($.), StatementSym(multi), 
+  NumericExpression((#-), (#/), sin, cos, tan), Comparison(..), funcApp, 
+  newObj, objMethodCallNoParams, ($.), StatementSym(multi), 
   AssignStatement((&++)), (&=), 
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
-  ifNoElse, ScopeSym(..), 
-  ModuleSym(Module), convType)
+  ifNoElse, ScopeSym(..), ModuleSym(Module), convType)
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, char, string, listType, arrayType, listInnerType, void), 
-  VariableSym(var, objVarSelf),
-  Literal(litInt, litFloat, litDouble, litString), 
-  VariableValue(valueOf),
-  FunctionSym(func), 
-  List(listSize, listAccess), StatementSym(valStmt),
-  DeclStatement(varDecDef), 
-  IOStatement(print),
-  ControlStatement(returnStmt, for), 
-  ParameterSym(param), MethodSym(method))
-import GOOL.Drasil.RendererClasses (RenderSym, 
-  RenderFile(commentedMod),  
-  RenderType(..),
-  InternalVarElim(variableBind), 
-  RenderValue(valFromData),
+  VariableSym(var, objVarSelf), Literal(litInt, litFloat, litDouble, litString),
+  VariableValue(valueOf), FunctionSym(func), List(listSize, listAccess), 
+  StatementSym(valStmt), DeclStatement(varDecDef), IOStatement(print),
+  ControlStatement(returnStmt, for), ParameterSym(param), MethodSym(method))
+import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
+  RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
   InternalIterator(iterBeginFunc, iterEndFunc), RenderFunction(funcFromData), 
   FunctionElim(functionType), RenderStatement(stmtFromData), 
-  StatementElim(statementTerm),
-  MethodTypeSym(mType), RenderParam(paramFromData), 
-  RenderMethod(intMethod, commentedFunc), 
-  RenderClass(inherit, implements),
-  RenderMod(updateModuleDoc), BlockCommentSym(..))
+  StatementElim(statementTerm), MethodTypeSym(mType), 
+  RenderParam(paramFromData), RenderMethod(intMethod, commentedFunc), 
+  RenderClass(inherit, implements), RenderMod(updateModuleDoc), 
+  BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData), 
-  RenderBody(multiBody), RenderValue(call), 
-  InternalGetSet(getFunc, setFunc),
+  RenderBody(multiBody), RenderValue(call), InternalGetSet(getFunc, setFunc),
   InternalListFunc(listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
-  RenderStatement(stmt), InternalIOStmt(..), 
-  MethodTypeSym(construct), RenderMethod(intFunc), 
-  RenderClass(intClass, commentedClass))
-import qualified GOOL.Drasil.RendererClasses as RC (
-  BodyElim(..), BlockElim(..),
-  InternalVarElim(variable), ValueElim(value), 
-  FunctionElim(function), StatementElim(statement),
-  ClassElim(..), ModuleElim(..), 
-  BlockCommentElim(..))
+  RenderStatement(stmt), InternalIOStmt(..), MethodTypeSym(construct), 
+  RenderMethod(intFunc), RenderClass(intClass, commentedClass))
+import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..), BlockElim(..),
+  InternalVarElim(variable), ValueElim(value), FunctionElim(function), 
+  StatementElim(statement), ClassElim(..), ModuleElim(..), BlockCommentElim(..))
 import GOOL.Drasil.AST (Binding(..), Terminator(..), isSource)
-import GOOL.Drasil.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, 
-  toCode, toState, onStateValue, on2StateValues, on3StateValues, 
-  onStateList, getInnerType, getNestDegree)
-import GOOL.Drasil.LanguageRenderer (dot, addExt, functionDox, 
-  classDox, moduleDox, getterName, setterName, valueList, namedArgList)
+import GOOL.Drasil.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
+  toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
+  getInnerType, getNestDegree)
+import GOOL.Drasil.LanguageRenderer (dot, addExt, functionDox, classDox, 
+  moduleDox, getterName, setterName, valueList, namedArgList)
 import qualified GOOL.Drasil.LanguageRenderer as R (file, block, assign, 
   addAssign, return', comment, getTerm, var, arg, func, objAccess, 
   commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkVal, mkStateVar, mkStaticVar, VSOp, unOpPrec, 
-  compEqualPrec, compPrec, addPrec, multPrec)
-import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, 
-  lensMStoVS, currMain, currFileType, modifyReturnFunc, 
-  addFile, setMainMod, setModuleName, getModuleName, 
-  getClassName, addParameter, getParameters)
+  mkStateVal, mkVal, mkStateVar, mkStaticVar, VSOp, unOpPrec, compEqualPrec, 
+  compPrec, addPrec, multPrec)
+import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, currMain, 
+  currFileType, modifyReturnFunc, addFile, setMainMod, setModuleName, 
+  getModuleName, getClassName, addParameter, getParameters)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
 import Data.Maybe (fromMaybe, maybeToList)

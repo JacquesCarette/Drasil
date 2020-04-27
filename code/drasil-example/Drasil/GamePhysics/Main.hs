@@ -3,7 +3,7 @@ module Main where
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
---   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
+--   Modularity(..), Structure(..), ConstantStructure(..), 
 --   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
 import Language.Drasil.Generate (gen)
@@ -20,7 +20,7 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
 --   modularity       = Modular Combined,
 --   impType          = Library,
 --   logFile          = "log.txt",
---   logging          = LogNone,
+--   logging          = [],
 --   comments         = CommentNone,
 --   doxVerbosity     = Quiet,
 --   dates            = Hide,

@@ -22,11 +22,10 @@ maybeLog v = do
   l <- chooseLogging (logKind g) v
   return $ maybeToList l
 
-chooseLogging :: (OOProg r) => Logging -> (SVariable r -> 
+chooseLogging :: (OOProg r) => [Logging] -> (SVariable r -> 
   Reader DrasilState (Maybe (MSStatement r)))
-chooseLogging LogVar v = Just <$> loggedVar v
-chooseLogging LogAll v = Just <$> loggedVar v
-chooseLogging _      _ = return Nothing
+chooseLogging l v = if LogVar `elem` l then Just <$> loggedVar v 
+  else return Nothing
 
 loggedVar :: (OOProg r) => SVariable r -> Reader DrasilState (MSStatement r)
 loggedVar v = do
@@ -43,9 +42,8 @@ logBody :: (OOProg r) => Label -> [SVariable r] -> [MSBlock r] ->
   Reader DrasilState (MSBody r)
 logBody n vars b = do
   g <- ask
-  let loggedBody LogFunc = loggedMethod (logName g) n vars b
-      loggedBody LogAll  = loggedMethod (logName g) n vars b
-      loggedBody _       = b
+  let loggedBody l = if LogFunc `elem` l then loggedMethod (logName g) n vars b
+        else b
   return $ body $ loggedBody $ logKind g
 
 loggedMethod :: (OOProg r) => Label -> Label -> [SVariable r] -> 

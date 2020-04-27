@@ -60,8 +60,8 @@ codedImpTp :: ImplementationType -> String
 codedImpTp Program = "P"
 codedImpTp Library = "L"
 
-codedLog :: Logging -> String
-codedLog LogNone = "NoL"
+codedLog :: [Logging] -> String
+codedLog [] = "NoL"
 codedLog _ = "L"
 
 codedStruct :: Structure -> String
@@ -95,12 +95,12 @@ choiceCombos = [baseChoices,
     constStructure = Store Unbundled,
     spaceMatch = matchToFloats},
   baseChoices {
-    logging = LogAll,
+    logging = [LogVar, LogFunc],
     inputStructure = Bundled,
     constStructure = Store Bundled,
     constRepr = Const},
   baseChoices {
-    logging = LogAll,
+    logging = [LogVar, LogFunc],
     inputStructure = Bundled,
     spaceMatch = matchToFloats}]
 
@@ -114,7 +114,7 @@ baseChoices = defaultChoices {
   modularity = Unmodular,
   impType = Program,
   logFile = "log.txt",
-  logging = LogNone,
+  logging = [],
   comments = [CommentFunc, CommentClass, CommentMod],
   doxVerbosity = Quiet,
   dates = Hide,

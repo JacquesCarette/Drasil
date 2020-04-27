@@ -51,33 +51,41 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkVar, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, 
   typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, bool, int, float, double, char, string, 
-  listType, arrayType, listInnerType, obj, funcType, void, 
-  notOp, csc, sec, cot, negateOp, equalOp, notEqualOp, greaterOp, 
-  greaterEqualOp, lessOp, lessEqualOp,plusOp, minusOp, multOp, divideOp, 
-  moduloOp, andOp, orOp, var, staticVar, extVar, self, classVar, objVarSelf, 
-  arrayElem, iterVar, pi, litTrue, litFalse, litChar, litDouble, 
-  litFloat, litInt, litString, litList, valueOf, arg, argsList, inlineIf, 
-  objAccess, objMethodCall, indexOf, call, 
-  funcAppMixedArgs, selfFuncAppMixedArgs, extFuncAppMixedArgs, 
-  libFuncAppMixedArgs, newObjMixedArgs, libNewObjMixedArgs, lambda, notNull, 
-  func, get, set, listSize, listAdd, listAppend, iterBegin, iterEnd, 
-  listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
-  iterBeginError, iterEndError, listAccessFunc, listSetFunc, printSt, stmt, 
-  loopStmt, emptyStmt, assign, multiAssignError, increment, 
-  increment1, varDec, varDecDef, listDec, listDecDef', arrayDec, 
-  arrayDecDef, objDecNew, extObjDecNew, 
-  constDecDef, print, discardInput, openFileR, openFileW, 
-  openFileA, closeFile, discardFileLine,
-  returnStmt, multiReturnError, valStmt, comment, throw, ifCond, switch, 
-  for, forRange, forEach, while, tryCatch, checkState, 
-  notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
-  docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
-  stateVarDef, constVar, buildClass, implementingClass, docClass, 
-  commentedClass, intClass, buildModule', modFromData, fileDoc, docMod, 
+  multiBody, block, multiBlock, int, 
+  listInnerType, obj, funcType, 
+  csc, sec, cot, negateOp, equalOp, notEqualOp, greaterOp, 
+  greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
+  moduloOp, var, staticVar, 
+  arrayElem, litChar, litDouble, 
+  litInt, litString, valueOf, arg, argsList, 
+  objAccess, objMethodCall, call, 
+  funcAppMixedArgs, selfFuncAppMixedArgs, 
+  newObjMixedArgs, lambda, 
+  func, get, set, listAdd, listAppend, iterBegin, iterEnd, 
+  listAccess, listSet, getFunc, setFunc, listAppendFunc, 
+  stmt, 
+  loopStmt, emptyStmt, assign, increment, objDecNew, 
+  print, closeFile,
+  returnStmt, valStmt, comment, throw, ifCond, 
+  tryCatch, 
+  construct, param, method, getMethod, setMethod, constructor, 
+  function, docFunc,
+  buildClass, implementingClass, docClass, 
+  commentedClass, modFromData, fileDoc, docMod, 
   fileFromData)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
-  destructorError)
+import qualified GOOL.Drasil.LanguageRenderer.SemiPolymorphic as SP (
+  bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
+  indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef', 
+  discardFileLine, checkState, destructorError, stateVarDef, constVar, 
+  intClass, listSetFunc, listAccessFunc, bool, arrayType, pi, notNull, printSt, 
+  arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, 
+  mainFunction, stateVar, buildModule', string, constDecDef, docInOutFunc, 
+  litList)
+import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
+  listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
+  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for, forRange,
+  while, notifyObservers, intFunc, multiAssignError, multiReturnError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
   decrement1, runStrategy, listSlice, stringListVals, stringListLists)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), 
@@ -157,7 +165,7 @@ instance PermanenceSym CSharpCode where
 
 instance PermElim CSharpCode where
   perm = unCSC
-  binding = error $ bindingError csName
+  binding = error $ SP.bindingError csName
 
 instance BodySym CSharpCode where
   type Body CSharpCode = Doc
@@ -183,22 +191,22 @@ instance BlockElim CSharpCode where
 
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData
-  bool = addSystemImport G.bool
+  bool = addSystemImport SP.bool
   int = G.int
-  float = G.float
-  double = G.double
-  char = G.char
-  string = G.string
+  float = C.float
+  double = C.double
+  char = C.char
+  string = SP.string
   infile = csInfileType
   outfile = csOutfileType
   listType t = modify (addLangImportVS "System.Collections.Generic") >> 
-    G.listType "List" t
-  arrayType = G.arrayType
+    C.listType "List" t
+  arrayType = SP.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = G.funcType
   iterator t = t
-  void = G.void
+  void = C.void
 
 instance TypeElim CSharpCode where
   getType = cType . unCSC
@@ -246,7 +254,7 @@ instance ControlBlock CSharpCode where
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
-  notOp = G.notOp
+  notOp = C.notOp
   negateOp = G.negateOp
   sqrtOp = addSystemImport $ unOpPrec "Math.Sqrt"
   absOp = addSystemImport $ unOpPrec "Math.Abs"
@@ -276,8 +284,8 @@ instance BinaryOpSym CSharpCode where
   divideOp = G.divideOp
   powerOp = addSystemImport $ powerPrec "Math.Pow"
   moduloOp = G.moduloOp
-  andOp = G.andOp
-  orOp = G.orOp
+  andOp = C.andOp
+  orOp = C.orOp
 
 instance OpElim CSharpCode where
   uOp = opDoc . unCSC
@@ -290,14 +298,14 @@ instance VariableSym CSharpCode where
   var = G.var
   staticVar = G.staticVar
   const = var
-  extVar = G.extVar
-  self = G.self
-  classVar = G.classVar R.classVar
+  extVar = SP.extVar
+  self = C.self
+  classVar = SP.classVar R.classVar
   extClassVar = classVar
   objVar = on2StateValues csObjVar
-  objVarSelf = G.objVarSelf
+  objVarSelf = SP.objVarSelf
   arrayElem i = G.arrayElem (litInt i)
-  iterVar = G.iterVar
+  iterVar = SP.iterVar
 
 instance VariableElim CSharpCode where
   variableName = varName . unCSC
@@ -315,18 +323,18 @@ instance ValueSym CSharpCode where
   valueType = onCodeValue valType
 
 instance Literal CSharpCode where
-  litTrue = G.litTrue
-  litFalse = G.litFalse
+  litTrue = C.litTrue
+  litFalse = C.litFalse
   litChar = G.litChar
   litDouble = G.litDouble
-  litFloat = G.litFloat
+  litFloat = C.litFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = G.litList arrayType
-  litList = G.litList listType
+  litArray = SP.litList arrayType
+  litList = SP.litList listType
 
 instance MathConstant CSharpCode where
-  pi = G.pi
+  pi = SP.pi
 
 instance VariableValue CSharpCode where
   valueOf v = join $ on2StateValues (\dvs vr -> maybe (G.valueOf v) (listAccess 
@@ -378,19 +386,19 @@ instance Comparison CSharpCode where
   (?!=) = typeBinExpr notEqualOp bool
   
 instance ValueExpression CSharpCode where
-  inlineIf = G.inlineIf
+  inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
-  extFuncAppMixedArgs = G.extFuncAppMixedArgs
-  libFuncAppMixedArgs = G.libFuncAppMixedArgs
+  extFuncAppMixedArgs = SP.extFuncAppMixedArgs
+  libFuncAppMixedArgs = C.libFuncAppMixedArgs
   newObjMixedArgs = G.newObjMixedArgs "new "
   extNewObjMixedArgs _ = newObjMixedArgs
-  libNewObjMixedArgs = G.libNewObjMixedArgs
+  libNewObjMixedArgs = C.libNewObjMixedArgs
 
   lambda = G.lambda csLambda
 
-  notNull = G.notNull
+  notNull = SP.notNull
 
 instance RenderValue CSharpCode where
   inputFunc = addSystemImport $ mkStateVal string (text "Console.ReadLine()")
@@ -424,12 +432,12 @@ instance GetSet CSharpCode where
   set = G.set
 
 instance List CSharpCode where
-  listSize = G.listSize
+  listSize = C.listSize
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess
   listSet = G.listSet
-  indexOf = G.indexOf "IndexOf"
+  indexOf = SP.indexOf "IndexOf"
   
 instance InternalList CSharpCode where
   listSlice' = M.listSlice
@@ -444,14 +452,14 @@ instance InternalGetSet CSharpCode where
 
 instance InternalListFunc CSharpCode where
   listSizeFunc = funcFromData (R.func (text "Count")) int
-  listAddFunc _ = G.listAddFunc "Insert"
+  listAddFunc _ = SP.listAddFunc "Insert"
   listAppendFunc = G.listAppendFunc "Add"
-  listAccessFunc = G.listAccessFunc
-  listSetFunc = G.listSetFunc R.listSetFunc
+  listAccessFunc = SP.listAccessFunc
+  listSetFunc = SP.listSetFunc R.listSetFunc
 
 instance InternalIterator CSharpCode where
-  iterBeginFunc _ = error $ G.iterBeginError csName
-  iterEndFunc _ = error $ G.iterEndError csName
+  iterBeginFunc _ = error $ SP.iterBeginError csName
+  iterEndFunc _ = error $ SP.iterEndError csName
     
 instance RenderFunction CSharpCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -461,13 +469,13 @@ instance FunctionElim CSharpCode where
   function = funcDoc . unCSC
 
 instance InternalAssignStmt CSharpCode where
-  multiAssign _ _ = error $ G.multiAssignError csName
+  multiAssign _ _ = error $ C.multiAssignError csName
 
 instance InternalIOStmt CSharpCode where
-  printSt _ _ = G.printSt
+  printSt _ _ = SP.printSt
   
 instance InternalControlStmt CSharpCode where
-  multiReturn _ = error $ G.multiReturnError csName 
+  multiReturn _ = error $ C.multiReturnError csName 
 
 instance RenderStatement CSharpCode where
   stmt = G.stmt
@@ -490,22 +498,22 @@ instance AssignStatement CSharpCode where
   assign = G.assign Semi
   (&-=) = M.decrement
   (&+=) = G.increment
-  (&++) = G.increment1
+  (&++) = C.increment1
   (&--) = M.decrement1
 
 instance DeclStatement CSharpCode where
   varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
-    G.varDec static dynamic v)
-  varDecDef = G.varDecDef
-  listDec n v = zoom lensMStoVS v >>= (\v' -> G.listDec (R.listDec v') 
+    C.varDec static dynamic v)
+  varDecDef = C.varDecDef
+  listDec n v = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
     (litInt n) v)
-  listDecDef = G.listDecDef'
-  arrayDec n = G.arrayDec (litInt n)
-  arrayDecDef = G.arrayDecDef
+  listDecDef = SP.listDecDef'
+  arrayDec n = SP.arrayDec (litInt n)
+  arrayDecDef = SP.arrayDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew = G.extObjDecNew
-  constDecDef = G.constDecDef
+  extObjDecNew = C.extObjDecNew
+  constDecDef = SP.constDecDef
   funcDecDef = csFuncDecDef
 
 instance IOStatement CSharpCode where
@@ -520,17 +528,17 @@ instance IOStatement CSharpCode where
   printFileStrLn f = G.print True (Just f) (printFileLnFunc f) . litString
 
   getInput v = v &= csInput (onStateValue variableType v) inputFunc
-  discardInput = G.discardInput csDiscardInput
+  discardInput = C.discardInput csDiscardInput
   getFileInput f v = v &= csInput (onStateValue variableType v) (csFileInput f)
   discardFileInput f = valStmt $ csFileInput f
 
-  openFileR = G.openFileR csOpenFileR
-  openFileW = G.openFileW csOpenFileWorA
-  openFileA = G.openFileA csOpenFileWorA
+  openFileR = SP.openFileR csOpenFileR
+  openFileW = SP.openFileW csOpenFileWorA
+  openFileA = SP.openFileA csOpenFileWorA
   closeFile = G.closeFile "Close"
 
   getFileInputLine = getFileInput
-  discardFileLine = G.discardFileLine "ReadLine"
+  discardFileLine = SP.discardFileLine "ReadLine"
   getFileInputAll f v = while ((f $. funcFromData (text ".EndOfStream") bool) 
     ?!) (oneLiner $ valStmt $ listAppend (valueOf v) (csFileInput f))
 
@@ -558,22 +566,22 @@ instance ControlStatement CSharpCode where
   throw msg = modify (addLangImport "System") >> G.throw csThrowDoc Semi msg
 
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
-  switch = G.switch
+  switch = C.switch
 
   ifExists = M.ifExists
 
-  for = G.for bodyStart bodyEnd
-  forRange = G.forRange
-  forEach = G.forEach bodyStart bodyEnd (text "foreach") inLabel 
-  while = G.while bodyStart bodyEnd
+  for = C.for bodyStart bodyEnd
+  forRange = C.forRange
+  forEach = SP.forEach bodyStart bodyEnd (text "foreach") inLabel 
+  while = C.while bodyStart bodyEnd
 
   tryCatch = G.tryCatch csTryCatch
 
 instance StatePattern CSharpCode where 
-  checkState = G.checkState
+  checkState = SP.checkState
 
 instance ObserverPattern CSharpCode where
-  notifyObservers = G.notifyObservers
+  notifyObservers = C.notifyObservers
 
 instance StrategyPattern CSharpCode where
   runStrategy = M.runStrategy
@@ -614,39 +622,39 @@ instance MethodSym CSharpCode where
   setMethod = G.setMethod
   constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
 
-  docMain = G.docMain
+  docMain = SP.docMain
  
   function = G.function
-  mainFunction = G.mainFunction string "Main"
+  mainFunction = SP.mainFunction string "Main"
 
   docFunc = G.docFunc
 
   inOutMethod n = csInOut (method n)
 
-  docInOutMethod n = G.docInOutFunc (inOutMethod n)
+  docInOutMethod n = SP.docInOutFunc (inOutMethod n)
 
   inOutFunc n = csInOut (function n)
 
-  docInOutFunc n = G.docInOutFunc (inOutFunc n)
+  docInOutFunc n = SP.docInOutFunc (inOutFunc n)
 
 instance RenderMethod CSharpCode where
   intMethod m n s p t ps b = modify (if m then setCurrMain else id) >> 
     on3StateValues (\tp pms bd -> toCode $ mthd $ R.method n s p tp pms bd) t 
     (sequence ps) b
-  intFunc = G.intFunc
+  intFunc = C.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
-  destructor _ = error $ destructorError csName
+  destructor _ = error $ SP.destructorError csName
   
 instance MethodElim CSharpCode where
   method = mthdDoc . unCSC
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
-  stateVar = G.stateVar
-  stateVarDef _ = G.stateVarDef
-  constVar _ = G.constVar empty
+  stateVar = SP.stateVar
+  stateVarDef _ = SP.stateVarDef
+  constVar _ = SP.constVar empty
   
 instance StateVarElim CSharpCode where
   stateVar = unCSC
@@ -660,7 +668,7 @@ instance ClassSym CSharpCode where
   docClass = G.docClass
 
 instance RenderClass CSharpCode where
-  intClass = G.intClass R.class'
+  intClass = SP.intClass R.class'
 
   inherit n = toCode $ maybe empty ((colon <+>) . text) n
   implements is = toCode $ colon <+> text (intercalate ", " is)
@@ -672,7 +680,7 @@ instance ClassElim CSharpCode where
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n = G.buildModule' n langImport
+  buildModule n = SP.buildModule' n langImport
   
 instance RenderMod CSharpCode where
   modFromData n = G.modFromData n (toCode . md n)

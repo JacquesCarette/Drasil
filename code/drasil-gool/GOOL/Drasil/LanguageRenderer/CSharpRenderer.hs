@@ -70,7 +70,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   constDecDef, print, discardInput, openFileR, openFileW, 
   openFileA, closeFile, discardFileLine,
   returnStmt, multiReturnError, valStmt, comment, throw, ifCond, switch, 
-  ifExists, for, forRange, forEach, while, tryCatch, checkState, 
+  for, forRange, forEach, while, tryCatch, checkState, 
   notifyObservers, construct, param, method, getMethod, setMethod, constructor, 
   docMain, function, mainFunction, docFunc, docInOutFunc, intFunc, stateVar, 
   stateVarDef, constVar, buildClass, implementingClass, docClass, 
@@ -78,7 +78,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
   destructorError)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (decrement, 
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
   decrement1, runStrategy, listSlice, stringListVals, stringListLists)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
@@ -560,7 +560,7 @@ instance ControlStatement CSharpCode where
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch = G.switch
 
-  ifExists = G.ifExists
+  ifExists = M.ifExists
 
   for = G.for bodyStart bodyEnd
   forRange = G.forRange

@@ -2,8 +2,8 @@
 
 -- | Language-polymorphic functions that are defined by GOOL code
 module GOOL.Drasil.LanguageRenderer.Macros (
-  decrement, decrement1, increment, increment1,
-  runStrategy, listSlice, stringListVals, stringListLists
+  ifExists, decrement, decrement1, increment, increment1, runStrategy, 
+  listSlice, stringListVals, stringListLists
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..))
@@ -14,9 +14,10 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, SVariable, SValue,
   StatementSym(multi), AssignStatement((&+=), (&++)), (&=))
 import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block), 
   TypeSym(int, listInnerType), VariableSym(var), Literal(litInt), 
-  VariableValue(valueOf), List(listSize, listAppend, listAccess), 
-  StatementSym(valStmt), AssignStatement(assign), 
-  DeclStatement(varDecDef, listDec), ControlStatement(for, forRange))
+  VariableValue(valueOf), ValueExpression(notNull), 
+  List(listSize, listAppend, listAccess), StatementSym(valStmt), 
+  AssignStatement(assign), DeclStatement(varDecDef, listDec), 
+  ControlStatement(ifCond, for, forRange))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderValue(cast))
 import qualified GOOL.Drasil.RendererClasses as S (
   RenderStatement(stmt, emptyStmt))
@@ -29,6 +30,9 @@ import Data.Map as Map (lookup, fromList)
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)
+
+ifExists :: (RenderSym r) => SValue r -> MSBody r -> MSBody r -> MSStatement r
+ifExists v ifBody = S.ifCond [(S.notNull v, ifBody)]
 
 decrement :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 decrement vr vl = vr &= (S.valueOf vr #- vl)

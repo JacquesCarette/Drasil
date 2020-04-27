@@ -71,7 +71,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   extObjDecNew, funcDecDef, print,
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, returnStmt, 
-  multiReturnError, valStmt, comment, throw, ifCond, switch, ifExists, for, 
+  multiReturnError, valStmt, comment, throw, ifCond, switch, for, 
   forRange, forEach, while, tryCatch, checkState, notifyObservers, construct, 
   param, method, getMethod, setMethod, constructor, docMain, function, 
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, buildClass, 
@@ -79,7 +79,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
   destructorError, docFuncRepr)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (decrement, 
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
   decrement1, runStrategy, listSlice, stringListVals, stringListLists)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
@@ -592,7 +592,7 @@ instance ControlStatement JavaCode where
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch  = G.switch
 
-  ifExists = G.ifExists
+  ifExists = M.ifExists
 
   for = G.for bodyStart bodyEnd
   forRange = G.forRange 

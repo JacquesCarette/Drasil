@@ -63,13 +63,13 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   emptyStmt, assign, increment, 
   listDecDef', objDecNew, print, closeFile, discardFileLine, 
   returnStmt, valStmt, comment, throw, 
-  ifCond, ifExists, tryCatch, checkState, construct, param, method, getMethod, 
+  ifCond, tryCatch, checkState, construct, param, method, getMethod, 
   setMethod, constructor, function, docFunc, stateVarDef, constVar, buildClass, 
   implementingClass, docClass, commentedClass, intClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (addmathImport, 
   bindingError, destructorError, docFuncRepr)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (decrement, 
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
@@ -563,7 +563,7 @@ instance ControlStatement PythonCode where
   ifCond = G.ifCond pyBodyStart (text "elif") pyBodyEnd
   switch = switchAsIf
 
-  ifExists = G.ifExists
+  ifExists = M.ifExists
 
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"

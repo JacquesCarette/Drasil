@@ -25,7 +25,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   extObjDecNew, constDecDef, funcDecDef, print, 
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
   discardFileLine, returnStmt, 
-  multiReturnError, valStmt, comment, throw, ifCond, switch, ifExists, for, 
+  multiReturnError, valStmt, comment, throw, ifCond, switch, for, 
   forRange, forEach, while, tryCatch, checkState, notifyObservers, construct, 
   param, method, getMethod, setMethod, constructor, destructorError, docMain, 
   function, mainFunction, docFuncRepr, docFunc, docInOutFunc, intFunc, stateVar,
@@ -56,12 +56,12 @@ import qualified GOOL.Drasil.ClassInterface as S (
   VariableSym(var, self, objVar, objVarSelf),
   Literal(litTrue, litFalse, litInt, litString, litList), 
   VariableValue(valueOf),
-  ValueExpression(funcAppMixedArgs, newObjMixedArgs, notNull, lambda), 
+  ValueExpression(funcAppMixedArgs, newObjMixedArgs, lambda), 
   FunctionSym(func, objAccess), 
   List(listSize, listAccess), StatementSym(valStmt),
   DeclStatement(varDec, varDecDef, constDecDef), 
   IOStatement(print),
-  ControlStatement(returnStmt, ifCond, for, switch), 
+  ControlStatement(returnStmt, for, switch), 
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, 
   RenderFile(commentedMod),
@@ -739,9 +739,6 @@ switch v cs bod = do
   bods <- mapM snd cs
   dflt <- bod
   toState $ mkStmt $ R.switch brk val dflt (zip vals bods)
-
-ifExists :: (RenderSym r) => SValue r -> MSBody r -> MSBody r -> MSStatement r
-ifExists v ifBody = S.ifCond [(S.notNull v, ifBody)]
 
 for :: (RenderSym r) => Doc -> Doc -> MSStatement r -> SValue r -> 
   MSStatement r -> MSBody r -> MSStatement r

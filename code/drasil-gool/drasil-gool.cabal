@@ -17,6 +17,8 @@ library
     , GOOL.Drasil.CodeInfo
     , GOOL.Drasil.LanguageRenderer.Constructors
     , GOOL.Drasil.LanguageRenderer.LanguagePolymorphic
+    , GOOL.Drasil.LanguageRenderer.SemiPolymorphic
+    , GOOL.Drasil.LanguageRenderer.CLike
     , GOOL.Drasil.LanguageRenderer.Macros
     , GOOL.Drasil.LanguageRenderer
     , GOOL.Drasil.LanguageRenderer.JavaRenderer
@@ -60,6 +62,8 @@ executable codegenTest
     , GOOL.Drasil.CodeInfo
     , GOOL.Drasil.LanguageRenderer.Constructors
     , GOOL.Drasil.LanguageRenderer.LanguagePolymorphic
+    , GOOL.Drasil.LanguageRenderer.SemiPolymorphic
+    , GOOL.Drasil.LanguageRenderer.CLike
     , GOOL.Drasil.LanguageRenderer.Macros
     , GOOL.Drasil.LanguageRenderer
     , GOOL.Drasil.LanguageRenderer.JavaRenderer

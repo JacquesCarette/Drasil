@@ -40,9 +40,9 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (dot, blockCmtStart, blockCmtEnd, 
+import GOOL.Drasil.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
-  inLabel, variableList, appendToBody, surroundBody)
+  inLabel, valueList, variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body, 
   printFile, param, method, listDec, classVar, objVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
@@ -65,12 +65,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
-  indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef', 
+  indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, checkState, destructorError, stateVarDef, constVar, 
   intClass, listSetFunc, listAccessFunc, bool, arrayType, pi, notNull, printSt, 
   arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, 
-  mainFunction, stateVar, buildModule', string, constDecDef, docInOutFunc, 
-  litList)
+  mainFunction, stateVar, buildModule', string, constDecDef, docInOutFunc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -85,7 +84,7 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   vard)
 import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
   on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
-  onStateList)
+  onStateList, on1StateValue1List)
 import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
   addLangImport, addLangImportVS, addLibImport, setFileType, getClassName, 
   setCurrMain, setODEDepVars, getODEDepVars)
@@ -97,7 +96,7 @@ import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (elemIndex, intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  vcat, lbrace, rbrace, colon, space)
+  vcat, lbrace, rbrace, braces, colon, space)
 
 csExt :: String
 csExt = "cs"
@@ -320,8 +319,8 @@ instance Literal CSharpCode where
   litFloat = C.litFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = CP.litList arrayType
-  litList = CP.litList listType
+  litArray = csLitList arrayType
+  litList = csLitList listType
 
 instance MathConstant CSharpCode where
   pi = CP.pi
@@ -497,7 +496,7 @@ instance DeclStatement CSharpCode where
   varDecDef = C.varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
     (litInt n) v)
-  listDecDef = CP.listDecDef'
+  listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
   objDecDef = varDecDef
@@ -709,6 +708,11 @@ csInfileType = modifyReturn (addLangImportVS "System.IO") $
 csOutfileType :: (RenderSym r) => VSType r
 csOutfileType = modifyReturn (addLangImportVS "System.IO") $ 
   typeFromData File "StreamWriter" (text "StreamWriter")
+
+csLitList :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
+  -> SValue r
+csLitList f t = on1StateValue1List (\lt es -> mkVal lt (new <+> RC.type' lt <+> 
+  braces (valueList es))) (f t)
 
 csLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 csLambda ps ex = parens (variableList ps) <+> text "=>" <+> RC.value ex

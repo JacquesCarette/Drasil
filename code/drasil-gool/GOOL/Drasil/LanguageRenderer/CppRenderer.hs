@@ -50,8 +50,8 @@ import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body, param,
   stateVar, constVar, cast, castObj, static, dynamic, break, continue, 
   private, public, blockCmt, docCmt, addComments, commentedMod, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkVal, mkStateVar, mkVar, mkOp, unOpPrec, unExpr, unExpr', 
-  typeUnExpr, binExpr, binExpr', typeBinExpr)
+  mkStateVal, mkVal, mkStateVar, mkVar, VSOp, mkOp, unOpPrec, powerPrec, 
+  unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, listInnerType, obj, funcType, negateOp,
   csc, sec, cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
@@ -68,9 +68,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (objVar, 
   listSetFunc, buildModule, litArray, call', listSizeFunc, listAccessFunc', 
-  funcDecDef, discardFileInput, string, constDecDef, docInOutFunc, sqrtOp, 
-  absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, powerOp, 
-  listDecDef)
+  funcDecDef, discardFileInput, string, constDecDef, docInOutFunc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -1186,17 +1184,17 @@ instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
-  sqrtOp = addMathHImport CP.sqrtOp
-  absOp = addMathHImport CP.absOp
+  sqrtOp = addMathHImport cppSqrtOp
+  absOp = addMathHImport cppAbsOp
   logOp = addMathHImport $ unOpPrec "log10"
   lnOp = addMathHImport $ unOpPrec "log"
-  expOp = addMathHImport CP.expOp
-  sinOp = addMathHImport CP.sinOp
-  cosOp = addMathHImport CP.cosOp
-  tanOp = addMathHImport CP.tanOp
-  asinOp = addMathHImport CP.asinOp
-  acosOp = addMathHImport CP.acosOp
-  atanOp = addMathHImport CP.atanOp
+  expOp = addMathHImport cppExpOp
+  sinOp = addMathHImport cppSinOp
+  cosOp = addMathHImport cppCosOp
+  tanOp = addMathHImport cppTanOp
+  asinOp = addMathHImport cppAsinOp
+  acosOp = addMathHImport cppAcosOp
+  atanOp = addMathHImport cppAtanOp
   floorOp = addMathHImport $ unOpPrec "floor"
   ceilOp = addMathHImport $ unOpPrec "ceil"
 
@@ -1212,7 +1210,7 @@ instance BinaryOpSym CppSrcCode where
   minusOp = G.minusOp
   multOp = G.multOp
   divideOp = G.divideOp
-  powerOp = addMathHImport CP.powerOp
+  powerOp = addMathHImport cppPowerOp
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
@@ -1443,7 +1441,7 @@ instance DeclStatement CppSrcCode where
   varDec = C.varDec static dynamic
   varDecDef = C.varDecDef 
   listDec n = C.listDec cppListDecDoc (litInt n)
-  listDecDef = CP.listDecDef cppListDecDefDoc
+  listDecDef = cppListDecDef cppListDecDefDoc
   arrayDec n vr = zoom lensMStoVS $ on2StateValues (\sz v -> mkStmt $ RC.type' 
     (variableType v) <+> RC.variable v <> brackets (RC.value sz)) 
     (litInt n :: SValue CppSrcCode) vr
@@ -2326,6 +2324,41 @@ inc = text "#include"
 
 odeNameSpace :: String
 odeNameSpace = "boost::numeric::odeint::"
+
+cppSqrtOp :: (Monad r) => VSOp r
+cppSqrtOp = unOpPrec "sqrt"
+
+cppAbsOp :: (Monad r) => VSOp r
+cppAbsOp = unOpPrec "fabs"
+
+cppExpOp :: (Monad r) => VSOp r
+cppExpOp = unOpPrec "exp"
+
+cppSinOp :: (Monad r) => VSOp r
+cppSinOp = unOpPrec "sin"
+
+cppCosOp :: (Monad r) => VSOp r
+cppCosOp = unOpPrec "cos"
+
+cppTanOp :: (Monad r) => VSOp r
+cppTanOp = unOpPrec "tan"
+
+cppAsinOp :: (Monad r) => VSOp r
+cppAsinOp = unOpPrec "asin"
+
+cppAcosOp :: (Monad r) => VSOp r
+cppAcosOp = unOpPrec "acos"
+
+cppAtanOp :: (Monad r) => VSOp r
+cppAtanOp = unOpPrec "atan"
+
+cppPowerOp :: (Monad r) => VSOp r
+cppPowerOp = powerPrec "pow"
+
+cppListDecDef :: (RenderSym r) => ([r (Value r)] -> Doc) -> SVariable r -> 
+  [SValue r] -> MSStatement r
+cppListDecDef f v vls = on1StateValue1List (\vdc vs -> mkStmt (RC.statement vdc 
+  <> f vs)) (varDec v) (map (zoom lensMStoVS) vls)
 
 cppODEMethod :: ODEInfo CppSrcCode -> ODEOptions CppSrcCode -> 
   SValue CppSrcCode

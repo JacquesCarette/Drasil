@@ -11,9 +11,9 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), 
+  MSStatement, MSParameter, SMethod, CSStateVar, SClass, OOProg, ProgramSym(..),
+  FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, 
+  BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), 
   VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
@@ -68,12 +68,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (  
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
-  indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef', 
+  indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, checkState, destructorError, stateVarDef, constVar, 
   intClass, objVar, bool, arrayType, pi, notNull, printSt, arrayDec, 
   arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, mainFunction, 
   stateVar, buildModule', litArray, call', listSizeFunc, listAccessFunc', 
-  funcDecDef, discardFileInput, extraClass)
+  funcDecDef, discardFileInput)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -81,10 +81,10 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char,
   while, notifyObservers, intFunc, multiAssignError, multiReturnError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
   decrement1, runStrategy, listSlice, stringListVals, stringListLists)
-import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
-  FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
-  updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), 
-  td, ValData(..), vd, VarData(..), vard)
+import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
+  FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
+  MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
+  progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
   stdExc, HasException(..))
 import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
@@ -528,7 +528,7 @@ instance DeclStatement JavaCode where
   varDecDef = C.varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
     (litInt n) v)
-  listDecDef = CP.listDecDef'
+  listDecDef = CP.listDecDef
   arrayDec n = CP.arrayDec (litInt n)
   arrayDecDef = CP.arrayDecDef
   objDecDef = varDecDef
@@ -695,7 +695,7 @@ instance StateVarElim JavaCode where
 instance ClassSym JavaCode where
   type Class JavaCode = Doc
   buildClass = G.buildClass
-  extraClass = CP.extraClass
+  extraClass = jExtraClass
   implementingClass = G.implementingClass
 
   docClass = G.docClass
@@ -987,6 +987,10 @@ jDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
   rets (f s p (map snd is) (map snd os) (map snd bs) b)
   where rets = "array containing the following values:" : map fst bs ++ 
           map fst os
+
+jExtraClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
+  [SMethod r] -> SClass r
+jExtraClass n = intClass n (scopeFromData Priv empty) . inherit
 
 addCallExcsCurrMod :: String -> VS ()
 addCallExcsCurrMod n = do

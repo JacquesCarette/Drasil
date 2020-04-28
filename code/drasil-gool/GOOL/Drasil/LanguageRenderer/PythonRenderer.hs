@@ -9,22 +9,22 @@ module GOOL.Drasil.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, BlockSym(..), 
-  TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), 
-  VariableElim(..), listOf, ValueSym(..), Literal(..), MathConstant(..), 
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..),
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
-  selfFuncApp, extFuncApp, extNewObj, InternalValueExp(..), objMethodCall,
-  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..),
-  InternalList(..), at, Iterator(..), StatementSym(..), AssignStatement(..), 
-  (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
-  FuncAppStatement(..), CommentStatement(..), observerListName, 
-  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), 
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), ODEOptions(..), 
-  ODEMethod(..))
+import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable, 
+  SValue, MSStatement, MSParameter, SMethod, MixedCtorCall, OOProg, 
+  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), 
+  VariableSym(..), VariableElim(..), listOf, ValueSym(..), Literal(..), 
+  MathConstant(..), VariableValue(..), CommandLineArgs(..), 
+  NumericExpression(..), BooleanExpression(..), Comparison(..), 
+  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
+  InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
+  ($.), GetSet(..), List(..), InternalList(..), at, Iterator(..), 
+  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
+  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
+  CommentStatement(..), observerListName, ControlStatement(..), switchAsIf, 
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
+  ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -64,11 +64,9 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
-  indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef', 
+  indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef, 
   discardFileLine, checkState, destructorError, stateVarDef, constVar, 
-  intClass, objVar, listSetFunc, listAccessFunc, buildModule, notOp, sqrtOp', 
-  absOp', expOp', sinOp', cosOp', tanOp', asinOp', acosOp', atanOp', 
-  addmathImport, extNewObjMixedArgs)
+  intClass, objVar, listSetFunc, listAccessFunc, buildModule)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
@@ -235,21 +233,21 @@ instance ControlBlock PythonCode where
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData
-  notOp = CP.notOp
+  notOp = pyNotOp
   negateOp = G.negateOp
-  sqrtOp = CP.sqrtOp'
-  absOp = CP.absOp'
+  sqrtOp = pySqrtOp
+  absOp = pyAbsOp
   logOp = pyLogOp
   lnOp = pyLnOp
-  expOp = CP.expOp'
-  sinOp = CP.sinOp'
-  cosOp = CP.cosOp'
-  tanOp = CP.tanOp'
-  asinOp = CP.asinOp'
-  acosOp = CP.acosOp'
-  atanOp = CP.atanOp'
-  floorOp = CP.addmathImport $ unOpPrec "math.floor"
-  ceilOp = CP.addmathImport $ unOpPrec "math.ceil"
+  expOp = pyExpOp
+  sinOp = pySinOp
+  cosOp = pyCosOp
+  tanOp = pyTanOp
+  asinOp = pyAsinOp
+  acosOp = pyAcosOp
+  atanOp = pyAtanOp
+  floorOp = addmathImport $ unOpPrec "math.floor"
+  ceilOp = addmathImport $ unOpPrec "math.ceil"
 
 instance BinaryOpSym PythonCode where
   type BinaryOp PythonCode = OpData
@@ -318,7 +316,7 @@ instance Literal PythonCode where
   litList = litArray
 
 instance MathConstant PythonCode where
-  pi = CP.addmathImport $ mkStateVal double (text "math.pi")
+  pi = addmathImport $ mkStateVal double (text "math.pi")
 
 instance VariableValue PythonCode where
   valueOf = G.valueOf
@@ -381,9 +379,9 @@ instance ValueExpression PythonCode where
     CP.extFuncAppMixedArgs l n t ps ns
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l tp ps ns = modify (addModuleImportVS l) >> 
-    CP.extNewObjMixedArgs l tp ps ns
+    pyExtNewObjMixedArgs l tp ps ns
   libNewObjMixedArgs l tp ps ns = modify (addLibImportVS l) >> 
-    CP.extNewObjMixedArgs l tp ps ns
+    pyExtNewObjMixedArgs l tp ps ns
 
   lambda = G.lambda pyLambda
 
@@ -499,7 +497,7 @@ instance DeclStatement PythonCode where
   varDec _ = toState $ mkStmtNoEnd empty
   varDecDef = assign
   listDec _ v = zoom lensMStoVS $ onStateValue (mkStmtNoEnd . pyListDec) v
-  listDecDef = CP.listDecDef'
+  listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
   objDecDef = varDecDef
@@ -737,11 +735,44 @@ pyODEMethod Adams = [litString "vode",
   (litString "adams" :: SValue PythonCode) >>= 
   (mkStateVal string . (text "method=" <>) . RC.value)]
 
+pyNotOp :: (Monad r) => VSOp r
+pyNotOp = unOpPrec "not"
+
+pySqrtOp :: (Monad r) => VSOp r
+pySqrtOp = addmathImport $ unOpPrec "math.sqrt"
+
+pyAbsOp :: (Monad r) => VSOp r
+pyAbsOp = addmathImport $ unOpPrec "math.fabs"
+
 pyLogOp :: (Monad r) => VSOp r
-pyLogOp = CP.addmathImport $ unOpPrec "math.log10"
+pyLogOp = addmathImport $ unOpPrec "math.log10"
 
 pyLnOp :: (Monad r) => VSOp r
-pyLnOp = CP.addmathImport $ unOpPrec "math.log"
+pyLnOp = addmathImport $ unOpPrec "math.log"
+
+pyExpOp :: (Monad r) => VSOp r
+pyExpOp = addmathImport $ unOpPrec "math.exp"
+
+pySinOp :: (Monad r) => VSOp r
+pySinOp = addmathImport $ unOpPrec "math.sin"
+
+pyCosOp :: (Monad r) => VSOp r
+pyCosOp = addmathImport $ unOpPrec "math.cos"
+
+pyTanOp :: (Monad r) => VSOp r
+pyTanOp = addmathImport $ unOpPrec "math.tan"
+
+pyAsinOp :: (Monad r) => VSOp r
+pyAsinOp = addmathImport $ unOpPrec "math.asin"
+
+pyAcosOp :: (Monad r) => VSOp r
+pyAcosOp = addmathImport $ unOpPrec "math.acos"
+
+pyAtanOp :: (Monad r) => VSOp r
+pyAtanOp = addmathImport $ unOpPrec "math.atan"
+
+addmathImport :: VS a -> VS a
+addmathImport = (>>) $ modify (addLangImportVS "math")
 
 pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v
@@ -759,6 +790,10 @@ pyListSize v f = f <> parens v
 
 pyStringType :: (RenderSym r) => VSType r
 pyStringType = toState $ typeFromData String "str" (text "str")
+
+pyExtNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
+pyExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing 
+  (getTypeString t) (return t) vs ns)
 
 pyListDec :: (RenderSym r) => r (Variable r) -> Doc
 pyListDec v = RC.variable v <+> equals <+> RC.type' (variableType v)

@@ -123,6 +123,6 @@ baseChoices = defaultChoices {
   inputStructure = Unbundled,
   constStructure = WithInputs,
   constRepr = Var,
-  conceptMatch = matchConcepts [piConst] [[Pi]],
+  conceptMatch = matchConcepts [(piConst, [Pi])],
   auxFiles = [SampleInput]
 }

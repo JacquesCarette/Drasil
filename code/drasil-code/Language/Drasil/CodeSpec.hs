@@ -168,8 +168,8 @@ type MatchedSpaces = Space -> CodeType
 
 data CodeConcept = Pi
 
-matchConcepts :: (HasUID c) => [c] -> [[CodeConcept]] -> ConceptMatchMap
-matchConcepts cncs cdcs = Map.fromList (zip (map (^. uid) cncs) cdcs)
+matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
+matchConcepts = Map.fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
 
 matchSpace :: Space -> [CodeType] -> SpaceMatch -> SpaceMatch
 matchSpace _ [] _ = error "Must match each Space to at least one CodeType"
@@ -207,7 +207,7 @@ defaultChoices = Choices {
   inputStructure = Bundled,
   constStructure = Inline,
   constRepr = Const,
-  conceptMatch = matchConcepts ([] :: [QDefinition]) [],
+  conceptMatch = matchConcepts ([] :: [(QDefinition, [CodeConcept])]),
   spaceMatch = spaceToCodeType, 
   auxFiles = [SampleInput],
   odeMethod = [RK45]

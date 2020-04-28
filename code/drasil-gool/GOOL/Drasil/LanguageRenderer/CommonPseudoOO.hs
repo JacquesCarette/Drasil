@@ -1,16 +1,13 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
-module GOOL.Drasil.LanguageRenderer.SemiPolymorphic (
+module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
-  indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef', 
+  indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, checkState, destructorError, stateVarDef, constVar, 
   intClass, objVar, listSetFunc, listAccessFunc, buildModule, bool, arrayType, 
   pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, openFileW, openFileA, 
   forEach, docMain, mainFunction, stateVar, buildModule', litArray, call', 
   listSizeFunc, listAccessFunc', funcDecDef, discardFileInput, string, 
-  constDecDef, docInOutFunc, notOp, sqrtOp', absOp', expOp', sinOp', cosOp', 
-  tanOp', asinOp', acosOp', atanOp', addmathImport, extNewObjMixedArgs,
-  extraClass, litList, sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, 
-  acosOp, atanOp, powerOp, listDecDef
+  constDecDef, docInOutFunc
 ) where
 
 import Utils.Drasil (indent)
@@ -18,7 +15,7 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable, 
   SValue, VSFunction, MSStatement, SMethod, CSStateVar, SClass, FSModule, 
-  MixedCall, MixedCtorCall, PermanenceSym(..), 
+  MixedCall, PermanenceSym(..), 
   TypeSym(infile, outfile, listInnerType, iterator), 
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType), 
   ValueSym(Value, valueType), Comparison(..), objMethodCallNoParams, (&=), 
@@ -32,29 +29,25 @@ import qualified GOOL.Drasil.ClassInterface as S (
   ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..),  RenderType(..),
   RenderVariable(varFromData), InternalVarElim(variableBind), 
-  RenderFunction(funcFromData), RenderScope(..), MethodTypeSym(mType),
-  RenderMethod(commentedFunc), ParentSpec, RenderClass(inherit),
-  BlockCommentSym(..))
+  RenderFunction(funcFromData), MethodTypeSym(mType),
+  RenderMethod(commentedFunc), ParentSpec, BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (RenderValue(call), 
-  RenderStatement(stmt), RenderMethod(intFunc), RenderClass(intClass), 
-  RenderMod(modFromData))
+  RenderStatement(stmt), RenderMethod(intFunc), RenderMod(modFromData))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
   PermElim(..), BodyElim(..), InternalTypeElim(..), InternalVarElim(variable), 
   ValueElim(value), StatementElim(statement), ScopeElim(..), MethodElim(..), 
   StateVarElim(..), ClassElim(..))
-import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, 
-  on2StateValues, onStateList, on1StateValue1List)
+  on2StateValues, onStateList)
 import GOOL.Drasil.LanguageRenderer (new, functionDox, valueList, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (module', print, stateVar, 
   stateVarList, constDecDef, extVar, objVar, listAccessFunc)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkVal, mkStateVar, mkVar, VSOp, unOpPrec, powerPrec)
+  mkStateVal, mkStateVar, mkVar)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, docFuncRepr)
-import GOOL.Drasil.State (FS, CS, VS, lensFStoCS, lensFStoMS, lensCStoMS, 
-  lensMStoVS, addLangImportVS, getLangImports, getLibImports, getModuleImports, 
-  setClassName)
+import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS, 
+  lensMStoVS, getLangImports, getLibImports, getModuleImports, setClassName)
 
 import Prelude hiding (print,pi,(<>))
 import Data.List (sort)
@@ -102,8 +95,8 @@ iterEndError :: String -> String
 iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++ 
   " has no iterators"
   
-listDecDef' :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-listDecDef' v vals = zoom lensMStoVS v >>= (\vr -> S.varDecDef (return vr) 
+listDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
+listDecDef v vals = zoom lensMStoVS v >>= (\vr -> S.varDecDef (return vr) 
   (S.litList (listInnerType $ return $ variableType vr) vals))
   
 discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
@@ -296,92 +289,3 @@ docInOutFunc f s p desc is [] [both] b = docFuncRepr desc (map fst $ both : is)
   [fst both] (f s p (map snd is) [] [snd both] b)
 docInOutFunc f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ os)
   [] (f s p (map snd is) (map snd os) (map snd bs) b)
-
--- Python --
-
-notOp :: (Monad r) => VSOp r
-notOp = unOpPrec "not"
-
-sqrtOp' :: (Monad r) => VSOp r
-sqrtOp' = addmathImport $ unOpPrec "math.sqrt"
-
-absOp' :: (Monad r) => VSOp r
-absOp' = addmathImport $ unOpPrec "math.fabs"
-
-expOp' :: (Monad r) => VSOp r
-expOp' = addmathImport $ unOpPrec "math.exp"
-
-sinOp' :: (Monad r) => VSOp r
-sinOp' = addmathImport $ unOpPrec "math.sin"
-
-cosOp' :: (Monad r) => VSOp r
-cosOp' = addmathImport $ unOpPrec "math.cos"
-
-tanOp' :: (Monad r) => VSOp r
-tanOp' = addmathImport $ unOpPrec "math.tan"
-
-asinOp' :: (Monad r) => VSOp r
-asinOp' = addmathImport $ unOpPrec "math.asin"
-
-acosOp' :: (Monad r) => VSOp r
-acosOp' = addmathImport $ unOpPrec "math.acos"
-
-atanOp' :: (Monad r) => VSOp r
-atanOp' = addmathImport $ unOpPrec "math.atan"
-
-addmathImport :: VS a -> VS a
-addmathImport = (>>) $ modify (addLangImportVS "math")
-
-extNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
-extNewObjMixedArgs l tp vs ns = tp >>= (\t -> S.call (Just l) Nothing 
-  (getTypeString t) (return t) vs ns)
-
--- Java -- 
-
-extraClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
-  [SMethod r] -> SClass r
-extraClass n = S.intClass n (scopeFromData Priv empty) . inherit
-
--- C# --
-
-litList :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] -> 
-  SValue r
-litList f t = on1StateValue1List (\lt es -> mkVal lt (new <+> RC.type' lt <+> 
-  braces (valueList es))) (f t)
-
--- C++ -- 
-
-sqrtOp :: (Monad r) => VSOp r
-sqrtOp = unOpPrec "sqrt"
-
-absOp :: (Monad r) => VSOp r
-absOp = unOpPrec "fabs"
-
-expOp :: (Monad r) => VSOp r
-expOp = unOpPrec "exp"
-
-sinOp :: (Monad r) => VSOp r
-sinOp = unOpPrec "sin"
-
-cosOp :: (Monad r) => VSOp r
-cosOp = unOpPrec "cos"
-
-tanOp :: (Monad r) => VSOp r
-tanOp = unOpPrec "tan"
-
-asinOp :: (Monad r) => VSOp r
-asinOp = unOpPrec "asin"
-
-acosOp :: (Monad r) => VSOp r
-acosOp = unOpPrec "acos"
-
-atanOp :: (Monad r) => VSOp r
-atanOp = unOpPrec "atan"
-
-powerOp :: (Monad r) => VSOp r
-powerOp = powerPrec "pow"
-
-listDecDef :: (RenderSym r) => ([r (Value r)] -> Doc) -> SVariable r -> 
-  [SValue r] -> MSStatement r
-listDecDef f v vls = on1StateValue1List (\vd vs -> mkStmt (RC.statement vd <> 
-  f vs)) (S.varDec v) (map (zoom lensMStoVS) vls)

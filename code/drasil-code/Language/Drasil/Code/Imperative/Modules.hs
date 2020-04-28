@@ -126,10 +126,8 @@ initConsts = do
   getDecl (partition (flip member (eMap $ codeSpec g) . codeName) 
     (constants $ csi $ codeSpec g)) (conStruct g)
 
-initLogFileVar :: (OOProg r) => Logging -> [MSStatement r]
-initLogFileVar LogVar = [varDec varLogFile]
-initLogFileVar LogAll = [varDec varLogFile]
-initLogFileVar _ = []
+initLogFileVar :: (OOProg r) => [Logging] -> [MSStatement r]
+initLogFileVar l = [varDec varLogFile | LogVar `elem` l]
 
 ------- INPUT ----------
 

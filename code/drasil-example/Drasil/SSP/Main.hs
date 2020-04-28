@@ -3,7 +3,7 @@ module Main (main) where
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
---   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
+--   Modularity(..), Structure(..), ConstantStructure(..), 
 --   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
 import Language.Drasil.Generate (gen)
@@ -20,7 +20,7 @@ import Drasil.SSP.Body (srs, printSetting) -- si
 --   modularity = Modular Combined,
 --   impType = Program,
 --   logFile = "log.txt",
---   logging = LogNone,         -- LogNone, LogFunc
+--   logging = [],         -- LogVar, LogFunc
 --   comments = [],    -- CommentFunc, CommentClass, CommentMod
 --   doxVerbosity = Quiet, -- Verbose, Quiet
 --   dates = Hide,      -- Show, Hide

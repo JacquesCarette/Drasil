@@ -117,7 +117,7 @@ data Choices = Choices {
   modularity :: Modularity,
   impType :: ImplementationType,
   logFile :: String,
-  logging :: Logging,
+  logging :: [Logging],
   comments :: [Comments],
   doxVerbosity :: Verbosity,
   dates :: Visibility,
@@ -137,10 +137,10 @@ data Modularity = Modular InputModule | Unmodular
 data ImplementationType = Library
                         | Program
 
-data Logging = LogNone
-             | LogFunc
-             | LogVar
-             | LogAll
+-- Eq instances required for Logging and Comments because generator needs to 
+-- check membership of these elements in lists
+data Logging = LogFunc
+             | LogVar deriving Eq
              
 data Comments = CommentFunc
               | CommentClass
@@ -198,7 +198,7 @@ defaultChoices = Choices {
   modularity = Modular Combined,
   impType = Program,
   logFile = "log.txt",
-  logging = LogNone,
+  logging = [],
   comments = [],
   doxVerbosity = Verbose,
   dates = Hide,

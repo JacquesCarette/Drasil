@@ -1,5 +1,3 @@
-{-# LANGUAGE PostfixOperators #-}
-
 -- | Implementations defined here are valid in some, but not all, language renderers
 module GOOL.Drasil.LanguageRenderer.SemiPolymorphic (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 

@@ -13,7 +13,7 @@ module GOOL.Drasil.ClassInterface (
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
   extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
-  RenderValueExp(..), objMethodCall, objMethodCallMixedArgs, 
+  InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
   objMethodCallNoParams, FunctionSym(..), ($.), selfAccess, GetSet(..), 
   List(..), InternalList(..), listSlice, listIndexExists, at, Iterator(..), 
   StatementSym(..), AssignStatement(..), (&=), assignToListIndex, 
@@ -44,7 +44,7 @@ class (ProgramSym r, ControlBlock r, AssignStatement r, DeclStatement r,
   IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, 
   ControlStatement r, InternalList r, Literal r, MathConstant r, 
   VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, 
-  Comparison r, ValueExpression r, RenderValueExp r, GetSet r, List r, 
+  Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, 
   Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, 
   VariableElim r) => OOProg r
 
@@ -282,19 +282,19 @@ libNewObj l t vs = libNewObjMixedArgs l t vs []
 exists :: (ValueExpression r) => SValue r -> SValue r
 exists = notNull
 
-class (FunctionSym r) => RenderValueExp r where
+class (FunctionSym r) => InternalValueExp r where
   objMethodCallMixedArgs' :: Label -> VSType r -> SValue r -> [SValue r] -> 
     NamedArgs r -> SValue r
 
-objMethodCall :: (RenderValueExp r) => VSType r -> SValue r -> Label -> 
+objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
   [SValue r] -> SValue r
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
-objMethodCallMixedArgs :: (RenderValueExp r) => VSType r -> SValue r -> Label 
+objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
   -> [SValue r] -> NamedArgs r -> SValue r
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
 
-objMethodCallNoParams :: (RenderValueExp r) => VSType r -> SValue r -> Label 
+objMethodCallNoParams :: (InternalValueExp r) => VSType r -> SValue r -> Label 
   -> SValue r
 objMethodCallNoParams t o f = objMethodCall t o f []
 

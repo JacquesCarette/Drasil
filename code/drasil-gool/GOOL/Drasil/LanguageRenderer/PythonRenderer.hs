@@ -16,7 +16,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VariableElim(..), listOf, ValueSym(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..),
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
-  selfFuncApp, extFuncApp, extNewObj, RenderValueExp(..), objMethodCall,
+  selfFuncApp, extFuncApp, extNewObj, InternalValueExp(..), objMethodCall,
   objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..),
   InternalList(..), at, Iterator(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
@@ -405,7 +405,7 @@ instance ValueElim PythonCode where
   valuePrec = valPrec . unPC
   value = val . unPC
 
-instance RenderValueExp PythonCode where
+instance InternalValueExp PythonCode where
   objMethodCallMixedArgs' = G.objMethodCall
 
 instance FunctionSym PythonCode where

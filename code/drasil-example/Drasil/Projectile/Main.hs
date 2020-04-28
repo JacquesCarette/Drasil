@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 module Main (main) where
 
 import Language.Drasil (Space(..), getAccStr)
@@ -105,8 +107,8 @@ choiceCombos = [baseChoices,
     spaceMatch = matchToFloats}]
 
 matchToFloats :: SpaceMatch
-matchToFloats = matchSpaces [Real, Radians, Rational] 
-      (replicate 3 [Float, Double]) spaceToCodeType
+matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Radians, Rational]) 
+  spaceToCodeType
 
 baseChoices :: Choices
 baseChoices = defaultChoices {
@@ -123,6 +125,6 @@ baseChoices = defaultChoices {
   inputStructure = Unbundled,
   constStructure = WithInputs,
   constRepr = Var,
-  conceptMatch = matchConcepts [piConst] [[Pi]],
+  conceptMatch = matchConcepts [(piConst, [Pi])],
   auxFiles = [SampleInput]
 }

@@ -168,17 +168,16 @@ type MatchedSpaces = Space -> CodeType
 
 data CodeConcept = Pi
 
-matchConcepts :: (HasUID c) => [c] -> [[CodeConcept]] -> ConceptMatchMap
-matchConcepts cncs cdcs = Map.fromList (zip (map (^. uid) cncs) cdcs)
+matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
+matchConcepts = Map.fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
 
 matchSpace :: Space -> [CodeType] -> SpaceMatch -> SpaceMatch
 matchSpace _ [] _ = error "Must match each Space to at least one CodeType"
 matchSpace s ts sm = \sp -> if sp == s then ts else sm sp
 
-matchSpaces :: [Space] -> [[CodeType]] -> SpaceMatch -> SpaceMatch
-matchSpaces (s:ss) (ct:cts) sm = matchSpaces ss cts $ matchSpace s ct sm
-matchSpaces [] [] sm = sm
-matchSpaces _ _ _ = error "Lists passed to matchSpaces must have equal size"
+matchSpaces :: [(Space, [CodeType])] -> SpaceMatch -> SpaceMatch
+matchSpaces ((s,ct):sms) sm = matchSpaces sms $ matchSpace s ct sm
+matchSpaces [] sm = sm
 
 data AuxFile = SampleInput deriving Eq
              
@@ -207,7 +206,7 @@ defaultChoices = Choices {
   inputStructure = Bundled,
   constStructure = Inline,
   constRepr = Const,
-  conceptMatch = matchConcepts ([] :: [QDefinition]) [],
+  conceptMatch = matchConcepts ([] :: [(QDefinition, [CodeConcept])]),
   spaceMatch = spaceToCodeType, 
   auxFiles = [SampleInput],
   odeMethod = [RK45]

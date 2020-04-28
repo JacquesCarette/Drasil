@@ -1,10 +1,9 @@
 module Main (main) where
 
-import Language.Drasil (QDefinition)
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
-  InputModule(..), matchConcepts, AuxFile(..), Visibility(..), defaultChoices)
+  InputModule(..), AuxFile(..), Visibility(..), defaultChoices)
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -29,7 +28,6 @@ choices = defaultChoices {
   inputStructure = Unbundled,
   constStructure = Store Bundled,
   constRepr = Const,
-  conceptMatch = matchConcepts ([] :: [QDefinition]) [],
   auxFiles = [SampleInput]
 }       
        

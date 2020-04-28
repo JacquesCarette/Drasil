@@ -66,7 +66,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, 
   fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
-import qualified GOOL.Drasil.LanguageRenderer.SemiPolymorphic as SP (objVar, 
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (objVar, 
   listSetFunc, buildModule, litArray, call', listSizeFunc, listAccessFunc', 
   funcDecDef, discardFileInput, string, constDecDef, docInOutFunc, sqrtOp, 
   absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, powerOp, 
@@ -1138,7 +1138,7 @@ instance TypeSym CppSrcCode where
   float = C.float
   double = C.double
   char = C.char
-  string = modify (addUsing "string" . addLangImportVS "string") >> SP.string
+  string = modify (addUsing "string" . addLangImportVS "string") >> CP.string
   infile = modify (addUsing "ifstream") >> cppInfileType
   outfile = modify (addUsing "ofstream") >> cppOutfileType
   listType t = modify (addUsing vec . addLangImportVS vec) >> C.listType vec t
@@ -1186,17 +1186,17 @@ instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
-  sqrtOp = addMathHImport SP.sqrtOp
-  absOp = addMathHImport SP.absOp
+  sqrtOp = addMathHImport CP.sqrtOp
+  absOp = addMathHImport CP.absOp
   logOp = addMathHImport $ unOpPrec "log10"
   lnOp = addMathHImport $ unOpPrec "log"
-  expOp = addMathHImport SP.expOp
-  sinOp = addMathHImport SP.sinOp
-  cosOp = addMathHImport SP.cosOp
-  tanOp = addMathHImport SP.tanOp
-  asinOp = addMathHImport SP.asinOp
-  acosOp = addMathHImport SP.acosOp
-  atanOp = addMathHImport SP.atanOp
+  expOp = addMathHImport CP.expOp
+  sinOp = addMathHImport CP.sinOp
+  cosOp = addMathHImport CP.cosOp
+  tanOp = addMathHImport CP.tanOp
+  asinOp = addMathHImport CP.asinOp
+  acosOp = addMathHImport CP.acosOp
+  atanOp = addMathHImport CP.atanOp
   floorOp = addMathHImport $ unOpPrec "floor"
   ceilOp = addMathHImport $ unOpPrec "ceil"
 
@@ -1212,7 +1212,7 @@ instance BinaryOpSym CppSrcCode where
   minusOp = G.minusOp
   multOp = G.multOp
   divideOp = G.divideOp
-  powerOp = addMathHImport SP.powerOp
+  powerOp = addMathHImport CP.powerOp
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
@@ -1237,7 +1237,7 @@ instance VariableSym CppSrcCode where
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $ 
     classVar (toState t) v) c getClassMap
   objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
-    ++ variableName vr) `elem` ovs then toState vr else SP.objVar (toState ob) 
+    ++ variableName vr) `elem` ovs then toState vr else CP.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
   objVarSelf = onStateValue (\v -> mkVar ("this->"++variableName v) 
     (variableType v) (text "this->" <> RC.variable v))
@@ -1267,7 +1267,7 @@ instance Literal CppSrcCode where
   litFloat = C.litFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = SP.litArray
+  litArray = CP.litArray
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppSrcCode where
@@ -1347,7 +1347,7 @@ instance RenderValue CppSrcCode where
 
   cast = cppCast
 
-  call = SP.call' cppName
+  call = CP.call' cppName
 
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
   
@@ -1388,12 +1388,12 @@ instance InternalGetSet CppSrcCode where
   setFunc = G.setFunc
 
 instance InternalListFunc CppSrcCode where
-  listSizeFunc = SP.listSizeFunc
+  listSizeFunc = CP.listSizeFunc
   listAddFunc l i v = func "insert" (listType $ onStateValue valueType v) 
     [iterBegin l #+ i, v]
   listAppendFunc = G.listAppendFunc "push_back"
-  listAccessFunc = SP.listAccessFunc' "at"
-  listSetFunc = SP.listSetFunc cppListSetDoc
+  listAccessFunc = CP.listAccessFunc' "at"
+  listSetFunc = CP.listSetFunc cppListSetDoc
 
 instance InternalIterator CppSrcCode where
   iterBeginFunc t = func "begin" (iterator t) []
@@ -1443,7 +1443,7 @@ instance DeclStatement CppSrcCode where
   varDec = C.varDec static dynamic
   varDecDef = C.varDecDef 
   listDec n = C.listDec cppListDecDoc (litInt n)
-  listDecDef = SP.listDecDef cppListDecDefDoc
+  listDecDef = CP.listDecDef cppListDecDefDoc
   arrayDec n vr = zoom lensMStoVS $ on2StateValues (\sz v -> mkStmt $ RC.type' 
     (variableType v) <+> RC.variable v <> brackets (RC.value sz)) 
     (litInt n :: SValue CppSrcCode) vr
@@ -1453,8 +1453,8 @@ instance DeclStatement CppSrcCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
-  constDecDef = SP.constDecDef
-  funcDecDef = SP.funcDecDef
+  constDecDef = CP.constDecDef
+  funcDecDef = CP.funcDecDef
 
 instance IOStatement CppSrcCode where
   print = G.print False Nothing printFunc
@@ -1472,7 +1472,7 @@ instance IOStatement CppSrcCode where
     (cppDiscardInput "\\n")
   getFileInput f v = cppInput v f
   discardFileInput f = addAlgorithmImport $ addLimitsImport $ 
-    SP.discardFileInput (cppDiscardInput " ") f
+    CP.discardFileInput (cppDiscardInput " ") f
 
   openFileR f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkStmt $ 
     cppOpenFile "std::fstream::in" f v) f' v'
@@ -1605,11 +1605,11 @@ instance MethodSym CppSrcCode where
 
   inOutMethod n = cppsInOut (method n)
 
-  docInOutMethod n = SP.docInOutFunc (inOutMethod n)
+  docInOutMethod n = CP.docInOutFunc (inOutMethod n)
 
   inOutFunc n = cppsInOut (function n)
 
-  docInOutFunc n = SP.docInOutFunc (inOutFunc n)
+  docInOutFunc n = CP.docInOutFunc (inOutFunc n)
 
 instance RenderMethod CppSrcCode where
   intMethod m n s _ t ps b = modify (setScope (snd $ unCPPSC s) . if m then 
@@ -1671,7 +1671,7 @@ instance ClassElim CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n is ms cs = SP.buildModule n ((\ds lis libis mis us mn -> vibcat [
+  buildModule n is ms cs = CP.buildModule n ((\ds lis libis mis us mn -> vibcat [
     if mn && length ms + length cs == 1 then empty else RC.import' $ mi n,
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (RC.import' . li) lis),
@@ -1782,7 +1782,7 @@ instance TypeSym CppHdrCode where
   double = C.double
   char = C.char
   string = modify (addHeaderUsing "string" . addHeaderLangImport "string") >> 
-    SP.string
+    CP.string
   infile = modify (addHeaderUsing "ifstream") >> cppInfileType
   outfile = modify (addHeaderUsing "ofstream") >> cppOutfileType
   listType t = modify (addHeaderUsing vec . addHeaderLangImport vec) >> 
@@ -1863,7 +1863,7 @@ instance VariableSym CppHdrCode where
   classVar _ _ = mkStateVar "" void empty
   extClassVar _ _ = mkStateVar "" void empty
   objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
-    ++ variableName vr) `elem` ovs then toState vr else SP.objVar (toState ob) 
+    ++ variableName vr) `elem` ovs then toState vr else CP.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
   objVarSelf _ = mkStateVar "" void empty
   arrayElem _ _ = mkStateVar "" void empty
@@ -1892,7 +1892,7 @@ instance Literal CppHdrCode where
   litFloat = C.litFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = SP.litArray
+  litArray = CP.litArray
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppHdrCode where
@@ -2070,7 +2070,7 @@ instance DeclStatement CppHdrCode where
   objDecDef _ _ = emptyStmt
   objDecNew _ _ = emptyStmt
   extObjDecNew _ _ _ = emptyStmt
-  constDecDef = SP.constDecDef
+  constDecDef = CP.constDecDef
   funcDecDef _ _ _ = emptyStmt
 
 instance IOStatement CppHdrCode where
@@ -2189,11 +2189,11 @@ instance MethodSym CppHdrCode where
 
   inOutMethod n = cpphInOut (method n)
 
-  docInOutMethod n = SP.docInOutFunc (inOutMethod n)
+  docInOutMethod n = CP.docInOutFunc (inOutMethod n)
 
   inOutFunc n = cpphInOut (function n)
 
-  docInOutFunc n = SP.docInOutFunc (inOutFunc n)
+  docInOutFunc n = CP.docInOutFunc (inOutFunc n)
 
 instance RenderMethod CppHdrCode where
   intMethod _ n s _ t ps _ = modify (setScope (snd $ unCPPHC s)) >> 
@@ -2249,7 +2249,7 @@ instance ClassElim CppHdrCode where
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
-  buildModule n is = SP.buildModule n ((\ds lis libis mis us -> vibcat [
+  buildModule n is = CP.buildModule n ((\ds lis libis mis us -> vibcat [
     vcat (map ((text "#define" <+>) . text) ds),
     vcat (map (RC.import' . li) lis),
     vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),

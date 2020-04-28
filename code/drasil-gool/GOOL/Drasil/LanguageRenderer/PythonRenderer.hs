@@ -62,7 +62,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, 
   fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
-import qualified GOOL.Drasil.LanguageRenderer.SemiPolymorphic as SP (
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef', 
   discardFileLine, checkState, destructorError, stateVarDef, constVar, 
@@ -150,7 +150,7 @@ instance PermanenceSym PythonCode where
 
 instance PermElim PythonCode where
   perm = unPC
-  binding = error $ SP.bindingError pyName
+  binding = error $ CP.bindingError pyName
 
 instance BodySym PythonCode where
   type Body PythonCode = Doc
@@ -235,21 +235,21 @@ instance ControlBlock PythonCode where
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData
-  notOp = SP.notOp
+  notOp = CP.notOp
   negateOp = G.negateOp
-  sqrtOp = SP.sqrtOp'
-  absOp = SP.absOp'
+  sqrtOp = CP.sqrtOp'
+  absOp = CP.absOp'
   logOp = pyLogOp
   lnOp = pyLnOp
-  expOp = SP.expOp'
-  sinOp = SP.sinOp'
-  cosOp = SP.cosOp'
-  tanOp = SP.tanOp'
-  asinOp = SP.asinOp'
-  acosOp = SP.acosOp'
-  atanOp = SP.atanOp'
-  floorOp = SP.addmathImport $ unOpPrec "math.floor"
-  ceilOp = SP.addmathImport $ unOpPrec "math.ceil"
+  expOp = CP.expOp'
+  sinOp = CP.sinOp'
+  cosOp = CP.cosOp'
+  tanOp = CP.tanOp'
+  asinOp = CP.asinOp'
+  acosOp = CP.acosOp'
+  atanOp = CP.atanOp'
+  floorOp = CP.addmathImport $ unOpPrec "math.floor"
+  ceilOp = CP.addmathImport $ unOpPrec "math.ceil"
 
 instance BinaryOpSym PythonCode where
   type BinaryOp PythonCode = OpData
@@ -279,16 +279,16 @@ instance VariableSym PythonCode where
   var = G.var
   staticVar = G.staticVar
   const = var
-  extVar l n t = modify (addModuleImportVS l) >> SP.extVar l n t
+  extVar l n t = modify (addModuleImportVS l) >> CP.extVar l n t
   self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar "self" (obj l) (text "self"))
-  classVar = SP.classVar R.classVar
+  classVar = CP.classVar R.classVar
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $ 
-    SP.classVar pyClassVar (toState t) v) c getClassMap
-  objVar = SP.objVar
-  objVarSelf = SP.objVarSelf
+    CP.classVar pyClassVar (toState t) v) c getClassMap
+  objVar = CP.objVar
+  objVarSelf = CP.objVarSelf
   arrayElem i = G.arrayElem (litInt i)
-  iterVar = SP.iterVar
+  iterVar = CP.iterVar
 
 instance VariableElim PythonCode where
   variableName = varName . unPC
@@ -318,7 +318,7 @@ instance Literal PythonCode where
   litList = litArray
 
 instance MathConstant PythonCode where
-  pi = SP.addmathImport $ mkStateVal double (text "math.pi")
+  pi = CP.addmathImport $ mkStateVal double (text "math.pi")
 
 instance VariableValue PythonCode where
   valueOf = G.valueOf
@@ -376,14 +376,14 @@ instance ValueExpression PythonCode where
   funcAppMixedArgs = G.funcAppMixedArgs
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   extFuncAppMixedArgs l n t ps ns = modify (addModuleImportVS l) >> 
-    SP.extFuncAppMixedArgs l n t ps ns
+    CP.extFuncAppMixedArgs l n t ps ns
   libFuncAppMixedArgs l n t ps ns = modify (addLibImportVS l) >> 
-    SP.extFuncAppMixedArgs l n t ps ns
+    CP.extFuncAppMixedArgs l n t ps ns
   newObjMixedArgs = G.newObjMixedArgs ""
   extNewObjMixedArgs l tp ps ns = modify (addModuleImportVS l) >> 
-    SP.extNewObjMixedArgs l tp ps ns
+    CP.extNewObjMixedArgs l tp ps ns
   libNewObjMixedArgs l tp ps ns = modify (addLibImportVS l) >> 
-    SP.extNewObjMixedArgs l tp ps ns
+    CP.extNewObjMixedArgs l tp ps ns
 
   lambda = G.lambda pyLambda
 
@@ -425,7 +425,7 @@ instance List PythonCode where
   listAppend = G.listAppend
   listAccess = G.listAccess
   listSet = G.listSet
-  indexOf = SP.indexOf "index"
+  indexOf = CP.indexOf "index"
 
 instance InternalList PythonCode where
   listSlice' b e s vnew vold = onStateValue toCode $ zoom lensMStoVS $ 
@@ -442,14 +442,14 @@ instance InternalGetSet PythonCode where
 
 instance InternalListFunc PythonCode where
   listSizeFunc = funcFromData (text "len") int
-  listAddFunc _ = SP.listAddFunc "insert"
+  listAddFunc _ = CP.listAddFunc "insert"
   listAppendFunc = G.listAppendFunc "append"
-  listAccessFunc = SP.listAccessFunc
-  listSetFunc = SP.listSetFunc R.listSetFunc
+  listAccessFunc = CP.listAccessFunc
+  listSetFunc = CP.listSetFunc R.listSetFunc
 
 instance InternalIterator PythonCode where
-  iterBeginFunc _ = error $ SP.iterBeginError pyName
-  iterEndFunc _ = error $ SP.iterEndError pyName
+  iterBeginFunc _ = error $ CP.iterBeginError pyName
+  iterEndFunc _ = error $ CP.iterEndError pyName
 
 instance RenderFunction PythonCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -499,7 +499,7 @@ instance DeclStatement PythonCode where
   varDec _ = toState $ mkStmtNoEnd empty
   varDecDef = assign
   listDec _ v = zoom lensMStoVS $ onStateValue (mkStmtNoEnd . pyListDec) v
-  listDecDef = SP.listDecDef'
+  listDecDef = CP.listDecDef'
   arrayDec = listDec
   arrayDecDef = listDecDef
   objDecDef = varDecDef
@@ -533,7 +533,7 @@ instance IOStatement PythonCode where
   closeFile = G.closeFile "close"
 
   getFileInputLine = getFileInput
-  discardFileLine = SP.discardFileLine "readline"
+  discardFileLine = CP.discardFileLine "readline"
   getFileInputAll f v = v &= objMethodCall (listType string) f
     "readlines" []
   
@@ -577,7 +577,7 @@ instance ControlStatement PythonCode where
   tryCatch = G.tryCatch pyTryCatch
 
 instance StatePattern PythonCode where 
-  checkState = SP.checkState
+  checkState = CP.checkState
 
 instance ObserverPattern PythonCode where
   notifyObservers f t = forRange index initv (listSize obsList) 
@@ -654,7 +654,7 @@ instance RenderMethod PythonCode where
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
-  destructor _ = error $ SP.destructorError pyName
+  destructor _ = error $ CP.destructorError pyName
   
 instance MethodElim PythonCode where
   method = mthdDoc . unPC
@@ -662,8 +662,8 @@ instance MethodElim PythonCode where
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ = toState (toCode empty)
-  stateVarDef _ = SP.stateVarDef
-  constVar _ = SP.constVar (RC.perm 
+  stateVarDef _ = CP.stateVarDef
+  constVar _ = CP.constVar (RC.perm 
     (static :: PythonCode (Permanence PythonCode)))
   
 instance StateVarElim PythonCode where
@@ -678,7 +678,7 @@ instance ClassSym PythonCode where
   docClass = G.docClass
 
 instance RenderClass PythonCode where
-  intClass = SP.intClass pyClass
+  intClass = CP.intClass pyClass
 
   inherit n = toCode $ maybe empty (parens . text) n
   implements is = toCode $ parens (text $ intercalate ", " is)
@@ -690,7 +690,7 @@ instance ClassElim PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n is = SP.buildModule n (on3StateValues (\lis libis mis -> vibcat [
+  buildModule n is = CP.buildModule n (on3StateValues (\lis libis mis -> vibcat [
     vcat (map (RC.import' . 
       (langImport :: Label -> PythonCode (Import PythonCode))) lis),
     vcat (map (RC.import' . 
@@ -738,10 +738,10 @@ pyODEMethod Adams = [litString "vode",
   (mkStateVal string . (text "method=" <>) . RC.value)]
 
 pyLogOp :: (Monad r) => VSOp r
-pyLogOp = SP.addmathImport $ unOpPrec "math.log10"
+pyLogOp = CP.addmathImport $ unOpPrec "math.log10"
 
 pyLnOp :: (Monad r) => VSOp r
-pyLnOp = SP.addmathImport $ unOpPrec "math.log"
+pyLnOp = CP.addmathImport $ unOpPrec "math.log"
 
 pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v

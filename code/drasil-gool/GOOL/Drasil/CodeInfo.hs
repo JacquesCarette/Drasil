@@ -109,7 +109,6 @@ instance VariableSym CodeInfo where
   extClassVar _ _   = noInfo
   objVar      _ _   = noInfo
   objVarSelf  _     = noInfo
-  listVar     _ _   = noInfo
   arrayElem   _ _   = noInfo
   iterVar     _ _   = noInfo
   
@@ -257,8 +256,6 @@ instance DeclStatement CodeInfo where
   objDecDef              _ = zoom lensMStoVS . execute1
   objDecNew              _ = zoom lensMStoVS . executeList
   extObjDecNew         _ _ = zoom lensMStoVS . executeList
-  objDecNewNoParams      _ = noInfo
-  extObjDecNewNoParams _ _ = noInfo
   constDecDef            _ = zoom lensMStoVS . execute1
   funcDecDef           _ _ = zoom lensMStoVS . execute1
 

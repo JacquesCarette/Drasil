@@ -8,22 +8,22 @@ module GOOL.Drasil.ClassInterface (
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
-  VariableSym(..), VariableElim(..), ($->), listOf, ValueSym(..), Literal(..), 
-  MathConstant(..), VariableValue(..), CommandLineArgs(..), 
+  VariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..), 
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
   NumericExpression(..), BooleanExpression(..), Comparison(..), 
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
   libFuncApp, newObj, extNewObj, libNewObj, exists, InternalValueExp(..), 
   objMethodCall, objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
   ($.), selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
   listIndexExists, at, Iterator(..), StatementSym(..), AssignStatement(..), 
-  (&=), assignToListIndex, DeclStatement(..), IOStatement(..), 
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), initState, changeState, 
-  ObserverPattern(..), observerListName, initObserverList, addObserver, 
-  StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
-  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
-  convType
+  (&=), assignToListIndex, DeclStatement(..), objDecNewNoParams, 
+  extObjDecNewNoParams, IOStatement(..), StringStatement(..), 
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
+  StatePattern(..), initState, changeState, ObserverPattern(..), 
+  observerListName, initObserverList, addObserver, StrategyPattern(..), 
+  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
+  privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
@@ -122,7 +122,6 @@ class (TypeSym r) => VariableSym r where
   extClassVar  :: VSType r -> SVariable r -> SVariable r
   objVar       :: SVariable r -> SVariable r -> SVariable r
   objVarSelf   :: SVariable r -> SVariable r
-  listVar      :: Label -> VSType r -> SVariable r
   arrayElem    :: Integer -> SVariable r -> SVariable r
   -- Use for iterator variables, i.e. in a forEach loop.
   iterVar      :: Label -> VSType r -> SVariable r
@@ -134,6 +133,9 @@ class (VariableSym r) => VariableElim r where
 ($->) :: (VariableSym r) => SVariable r -> SVariable r -> SVariable r
 infixl 9 $->
 ($->) = objVar
+
+listVar :: (VariableSym r) => Label -> VSType r -> SVariable r
+listVar n t = var n (listType t)
 
 listOf :: (VariableSym r) => Label -> VSType r -> SVariable r
 listOf = listVar
@@ -375,11 +377,16 @@ class (VariableSym r, StatementSym r) => DeclStatement r where
   objDecDef            :: SVariable r -> SValue r -> MSStatement r
   objDecNew            :: SVariable r -> [SValue r] -> MSStatement r
   extObjDecNew         :: Library -> SVariable r -> [SValue r] -> MSStatement r
-  objDecNewNoParams    :: SVariable r -> MSStatement r
-  extObjDecNewNoParams :: Library -> SVariable r -> MSStatement r
   constDecDef          :: SVariable r -> SValue r -> MSStatement r
   funcDecDef           :: SVariable r -> [SVariable r] -> SValue r -> 
     MSStatement r
+  
+objDecNewNoParams :: (DeclStatement r) => SVariable r -> MSStatement r
+objDecNewNoParams v = objDecNew v []
+
+extObjDecNewNoParams :: (DeclStatement r) => Library -> SVariable r -> 
+  MSStatement r
+extObjDecNewNoParams l v = extObjDecNew l v []
 
 class (VariableSym r, StatementSym r) => IOStatement r where
   print      :: SValue r -> MSStatement r

@@ -42,9 +42,9 @@ import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   SMethod, CSStateVar, SClass, OOProg, BodySym(..), bodyStatements, oneLiner, 
   BlockSym(..), PermanenceSym(..), TypeSym(..), VariableSym(..), Literal(..), 
   VariableValue(..), CommandLineArgs(..), BooleanExpression(..), 
-  StatementSym(..), AssignStatement(..), DeclStatement(..), IOStatement(..), 
-  ControlStatement(..), ifNoElse, ScopeSym(..), MethodSym(..), StateVarSym(..), 
-  pubDVar, convType)
+  StatementSym(..), AssignStatement(..), DeclStatement(..), objDecNewNoParams, 
+  extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse, 
+  ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType)
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
@@ -128,10 +128,8 @@ initConsts = do
   getDecl (partition (flip member (eMap g) . codeName) 
     (constants $ codeSpec g)) (conStruct g)
 
-initLogFileVar :: (OOProg r) => Logging -> [MSStatement r]
-initLogFileVar LogVar = [varDec varLogFile]
-initLogFileVar LogAll = [varDec varLogFile]
-initLogFileVar _ = []
+initLogFileVar :: (OOProg r) => [Logging] -> [MSStatement r]
+initLogFileVar l = [varDec varLogFile | LogVar `elem` l]
 
 ------- INPUT ----------
 

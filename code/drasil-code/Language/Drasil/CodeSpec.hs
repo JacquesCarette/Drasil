@@ -98,7 +98,7 @@ data Choices = Choices {
   modularity :: Modularity,
   impType :: ImplementationType,
   logFile :: String,
-  logging :: Logging,
+  logging :: [Logging],
   comments :: [Comments],
   doxVerbosity :: Verbosity,
   dates :: Visibility,
@@ -122,10 +122,10 @@ data Modularity = Modular InputModule | Unmodular
 data ImplementationType = Library
                         | Program
 
-data Logging = LogNone
-             | LogFunc
-             | LogVar
-             | LogAll
+-- Eq instances required for Logging and Comments because generator needs to 
+-- check membership of these elements in lists
+data Logging = LogFunc
+             | LogVar deriving Eq
              
 data Comments = CommentFunc
               | CommentClass
@@ -153,17 +153,16 @@ type MatchedSpaces = Space -> CodeType
 
 data CodeConcept = Pi
 
-matchConcepts :: (HasUID c) => [c] -> [[CodeConcept]] -> ConceptMatchMap
-matchConcepts cncs cdcs = Map.fromList (zip (map (^. uid) cncs) cdcs)
+matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
+matchConcepts = Map.fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
 
 matchSpace :: Space -> [CodeType] -> SpaceMatch -> SpaceMatch
 matchSpace _ [] _ = error "Must match each Space to at least one CodeType"
 matchSpace s ts sm = \sp -> if sp == s then ts else sm sp
 
-matchSpaces :: [Space] -> [[CodeType]] -> SpaceMatch -> SpaceMatch
-matchSpaces (s:ss) (ct:cts) sm = matchSpaces ss cts $ matchSpace s ct sm
-matchSpaces [] [] sm = sm
-matchSpaces _ _ _ = error "Lists passed to matchSpaces must have equal size"
+matchSpaces :: [(Space, [CodeType])] -> SpaceMatch -> SpaceMatch
+matchSpaces ((s,ct):sms) sm = matchSpaces sms $ matchSpace s ct sm
+matchSpaces [] sm = sm
 
 data AuxFile = SampleInput deriving Eq
              
@@ -181,7 +180,7 @@ defaultChoices = Choices {
   modularity = Modular Combined,
   impType = Program,
   logFile = "log.txt",
-  logging = LogNone,
+  logging = [],
   comments = [],
   doxVerbosity = Verbose,
   dates = Hide,
@@ -190,7 +189,7 @@ defaultChoices = Choices {
   inputStructure = Bundled,
   constStructure = Inline,
   constRepr = Const,
-  conceptMatch = matchConcepts ([] :: [QDefinition]) [],
+  conceptMatch = matchConcepts ([] :: [(QDefinition, [CodeConcept])]),
   spaceMatch = spaceToCodeType, 
   auxFiles = [SampleInput],
   odeLib = [],

@@ -5,7 +5,7 @@ module Language.Drasil.Code (
   generator, generateCode,
   readWithDataDesc, sampleInputDD,
   Choices(..), CodeSpec(..), Comments(..), Verbosity(..), 
-  ConstraintBehaviour(..), ImplementationType(..), Logging(LogNone, LogAll), 
+  ConstraintBehaviour(..), ImplementationType(..), Logging(..), 
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
   InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, 
   AuxFile(..), Visibility(..), defaultChoices, funcUID, funcUID', asVC, asVC', 

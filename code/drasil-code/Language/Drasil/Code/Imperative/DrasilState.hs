@@ -37,7 +37,7 @@ data DrasilState = DrasilState {
   conStruct :: ConstantStructure,
   conRepr :: ConstantRepr,
   logName :: String,
-  logKind :: Logging,
+  logKind :: [Logging],
   commented :: [Comments],
   doxOutput :: Verbosity,
   concMatches :: MatchedConceptMap,

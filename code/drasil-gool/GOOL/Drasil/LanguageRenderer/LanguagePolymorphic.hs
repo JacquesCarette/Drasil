@@ -4,12 +4,12 @@
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, bool, int, float, double, char, string, 
   fileType, listType, arrayType, listInnerType, obj, funcType, void, 
-  runStrategy, listSlice, notOp, notOp', negateOp, sqrtOp, sqrtOp', 
+  notOp, notOp', negateOp, sqrtOp, sqrtOp', 
   absOp, absOp', expOp, expOp', sinOp, sinOp', cosOp, cosOp', tanOp, tanOp', 
   asinOp, asinOp', acosOp, acosOp', atanOp, atanOp', csc, sec, cot, 
   equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, plusOp, 
   minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, addmathImport, bindingError, var, staticVar, 
-  extVar, self, classVarCheckStatic, classVar, objVar, objVarSelf, listVar, 
+  extVar, self, classVarCheckStatic, classVar, objVar, objVarSelf, 
   arrayElem, iterVar, litTrue, litFalse, litChar, litDouble, litFloat, litInt, 
   litString, litArray, litList, pi, valueOf, arg, argsList, inlineIf, call', 
   call, funcAppMixedArgs, namedArgError, selfFuncAppMixedArgs, 
@@ -19,13 +19,13 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, 
   setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
   iterEndError, listAccessFunc, listAccessFunc', listSetFunc, printSt, stmt, 
-  loopStmt, emptyStmt, assign, multiAssignError, decrement, increment, 
-  increment', increment1, increment1', decrement1, varDec, varDecDef, listDec, 
-  listDecDef, listDecDef', arrayDec, arrayDecDef, objDecNew, objDecNewNoParams, 
-  extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, print, 
+  loopStmt, emptyStmt, assign, multiAssignError, increment, 
+  increment1, varDec, varDecDef, listDec, 
+  listDecDef, listDecDef', arrayDec, arrayDecDef, objDecNew, 
+  extObjDecNew, constDecDef, funcDecDef, print, 
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnStmt, 
-  multiReturnError, valStmt, comment, throw, ifCond, switch, ifExists, for, 
+  discardFileLine, returnStmt, 
+  multiReturnError, valStmt, comment, throw, ifCond, switch, for, 
   forRange, forEach, while, tryCatch, checkState, notifyObservers, construct, 
   param, method, getMethod, setMethod, constructor, destructorError, docMain, 
   function, mainFunction, docFuncRepr, docFunc, docInOutFunc, intFunc, stateVar,
@@ -44,26 +44,24 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   BlockSym(Block), PermanenceSym(..), TypeSym(Type, infile, outfile, iterator), 
   TypeElim(getType, getTypeString), VariableSym(Variable), 
   VariableElim(variableName, variableType), listOf, ValueSym(Value, valueType), 
-  NumericExpression((#+), (#-), (#*), (#/), sin, cos, tan), Comparison(..), 
+  NumericExpression((#-), (#/), sin, cos, tan), Comparison(..), 
   funcApp, newObj, extNewObj, objMethodCallNoParams, ($.), at, StatementSym(multi), 
   AssignStatement((&+=), (&++)), (&=), 
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ControlStatement(break), ifNoElse, observerListName, ScopeSym(..), 
   ModuleSym(Module), convType)
-import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block), 
+import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(bool, int, float, double, char, string, listType, arrayType, 
     listInnerType, void), 
   VariableSym(var, self, objVar, objVarSelf),
   Literal(litTrue, litFalse, litInt, litString, litList), 
   VariableValue(valueOf),
-  ValueExpression(funcAppMixedArgs, newObjMixedArgs, notNull, lambda), 
+  ValueExpression(funcAppMixedArgs, newObjMixedArgs, lambda), 
   FunctionSym(func, objAccess), 
-  List(listSize, listAppend, listAccess), StatementSym(valStmt), 
-  AssignStatement(assign),
-  DeclStatement(varDec, varDecDef, listDec, objDecNew, extObjDecNew, 
-    constDecDef), 
+  List(listSize, listAccess), StatementSym(valStmt),
+  DeclStatement(varDec, varDecDef, constDecDef), 
   IOStatement(print),
-  ControlStatement(returnStmt, ifCond, for, forRange, switch), 
+  ControlStatement(returnStmt, for, switch), 
   ParameterSym(param), MethodSym(method, mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, 
   RenderFile(commentedMod),
@@ -71,7 +69,7 @@ import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym,
   RenderType(..),
   RenderVariable(varFromData),
   InternalVarElim(variableBind), 
-  RenderValue(inputFunc, cast, valFromData), ValueElim(valuePrec),
+  RenderValue(inputFunc, valFromData), ValueElim(valuePrec),
   InternalIterator(iterBeginFunc, iterEndFunc), RenderFunction(funcFromData), 
   FunctionElim(functionType), RenderStatement(stmtFromData), 
   StatementElim(statementTerm), RenderScope(..),
@@ -85,7 +83,7 @@ import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData),
   InternalGetSet(getFunc, setFunc),
   InternalListFunc(listSizeFunc, listAddFunc, listAppendFunc, listAccessFunc, 
     listSetFunc),
-  RenderStatement(stmt, loopStmt, emptyStmt), InternalIOStmt(..), 
+  RenderStatement(stmt, loopStmt), InternalIOStmt(..), 
   MethodTypeSym(construct), RenderMethod(intFunc), 
   RenderClass(intClass, commentedClass), RenderMod(modFromData))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
@@ -116,7 +114,6 @@ import GOOL.Drasil.State (FS, CS, MS, VS, lensFStoGS, lensFStoCS, lensFStoMS,
 
 import Prelude hiding (break,print,last,mod,pi,sin,cos,tan,(<>))
 import Data.List (sort)
-import Data.Map as Map (lookup, fromList)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative ((<|>))
 import Control.Monad (join)
@@ -183,39 +180,6 @@ funcType ps' = on2StateValues (\ps r -> typeFromData (Func (map getType ps)
 
 void :: (RenderSym r) => VSType r
 void = toState $ typeFromData Void "void" (text "void")
-
--- ControlBlock --
-
-strat :: (RenderSym r, Monad r) => MSStatement r -> MSBody r -> MS (r Doc)
-strat = on2StateValues (\result b -> toCode $ vcat [RC.body b, 
-  RC.statement result])
-
-runStrategy :: (RenderSym r, Monad r) => String -> [(Label, MSBody r)] -> 
-  Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
-runStrategy l strats rv av = maybe
-  (strError l "RunStrategy called on non-existent strategy") 
-  (strat (S.stmt resultState)) (Map.lookup l (Map.fromList strats))
-  where resultState = maybe S.emptyStmt asgState av
-        asgState v = maybe (strError l 
-          "Attempt to assign null return to a Value") (v &=) rv
-        strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
-
-listSlice :: (RenderSym r) => Maybe (SValue r) -> Maybe (SValue r) -> 
-  Maybe (SValue r) -> SVariable r -> SValue r -> MSBlock r
-listSlice b e s vnew vold = 
-  let l_temp = "temp"
-      var_temp = S.var l_temp (onStateValue variableType vnew)
-      v_temp = S.valueOf var_temp
-      l_i = "i_temp"
-      var_i = S.var l_i S.int
-      v_i = S.valueOf var_i
-  in
-    S.block [
-      S.listDec 0 var_temp,
-      S.for (S.varDecDef var_i (fromMaybe (S.litInt 0) b)) 
-        (v_i ?< fromMaybe (S.listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
-        (oneLiner $ S.valStmt $ S.listAppend v_temp (S.listAccess vold v_i)),
-      vnew &= v_temp]
 
 -- Unary Operators --
 
@@ -382,9 +346,6 @@ objVar = on2StateValues (\o v -> mkVar (variableName o ++ "." ++ variableName
 
 objVarSelf :: (RenderSym r) => SVariable r -> SVariable r
 objVarSelf = S.objVar S.self
-
-listVar :: (RenderSym r) => Label -> VSType r -> SVariable r
-listVar n t = S.var n (S.listType t)
 
 arrayElem :: (RenderSym r) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = do
@@ -616,24 +577,12 @@ assign t vr vl = zoom lensMStoVS $ on2StateValues (\vr' vl' -> stmtFromData
 multiAssignError :: String -> String
 multiAssignError l = "No multiple assignment statements in " ++ l
 
-decrement :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-decrement vr vl = vr &= (S.valueOf vr #- vl)
-
 increment :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 increment vr vl = zoom lensMStoVS $ on2StateValues (\vr' -> mkStmt . 
   R.addAssign vr') vr vl
 
 increment1 :: (RenderSym r) => SVariable r -> MSStatement r
 increment1 vr = zoom lensMStoVS $ onStateValue (mkStmt . R.increment) vr
-
-increment' :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-increment' vr vl = vr &= S.valueOf vr #+ vl
-
-increment1' :: (RenderSym r) => SVariable r -> MSStatement r
-increment1' vr = vr &= S.valueOf vr #+ S.litInt 1
-
-decrement1 :: (RenderSym r) => SVariable r -> MSStatement r
-decrement1 v = v &= (S.valueOf v #- S.litInt 1)
 
 varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> SVariable r 
   -> MSStatement r
@@ -676,16 +625,10 @@ arrayDecDef v vals = on2StateValues (\vd vs -> mkStmt (RC.statement vd <+>
 objDecNew :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 objDecNew v vs = S.varDecDef v (newObj (onStateValue variableType v) vs)
 
-objDecNewNoParams :: (RenderSym r) => SVariable r -> MSStatement r
-objDecNewNoParams v = S.objDecNew v []
-
 extObjDecNew :: (RenderSym r) => Library -> SVariable r -> [SValue r] -> 
   MSStatement r
 extObjDecNew l v vs = S.varDecDef v (extNewObj l (onStateValue variableType v)
   vs)
-
-extObjDecNewNoParams :: (RenderSym r) => Library -> SVariable r -> MSStatement r
-extObjDecNewNoParams l v = S.extObjDecNew l v []
 
 constDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 constDecDef vr vl = zoom lensMStoVS $ on2StateValues (\v -> mkStmt . 
@@ -747,38 +690,6 @@ closeFile n f = S.valStmt $ objMethodCallNoParams S.void f n
 discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
 discardFileLine n f = S.valStmt $ objMethodCallNoParams S.string f n 
 
-stringListVals :: (RenderSym r) => [SVariable r] -> SValue r -> MSStatement r
-stringListVals vars sl = zoom lensMStoVS sl >>= (\slst -> multi $ checkList 
-  (getType $ valueType slst))
-  where checkList (List String) = assignVals vars 0
-        checkList _ = error 
-          "Value passed to stringListVals must be a list of strings"
-        assignVals [] _ = []
-        assignVals (v:vs) n = S.assign v (cast (onStateValue variableType v) 
-          (S.listAccess sl (S.litInt n))) : assignVals vs (n+1)
-
-stringListLists :: (RenderSym r) => [SVariable r] -> SValue r -> MSStatement r
-stringListLists lsts sl = zoom lensMStoVS sl >>= (\slst -> checkList (getType $ 
-  valueType slst))
-  where checkList (List String) = mapM (zoom lensMStoVS) lsts >>= listVals . 
-          map (getType . variableType)
-        checkList _ = error 
-          "Value passed to stringListLists must be a list of strings"
-        listVals [] = loop
-        listVals (List _:vs) = listVals vs
-        listVals _ = error 
-          "All values passed to stringListLists must have list types"
-        loop = S.forRange var_i (S.litInt 0) (S.listSize sl #/ numLists) 
-          (S.litInt 1) (bodyStatements $ appendLists (map S.valueOf lsts) 0)
-        appendLists [] _ = []
-        appendLists (v:vs) n = S.valStmt (S.listAppend v (cast 
-          (S.listInnerType $ onStateValue valueType v)
-          (S.listAccess sl ((v_i #* numLists) #+ S.litInt n)))) 
-          : appendLists vs (n+1)
-        numLists = S.litInt (toInteger $ length lsts)
-        var_i = S.var "stringlist_i" S.int
-        v_i = S.valueOf var_i
-
 returnStmt :: (RenderSym r) => Terminator -> SValue r -> MSStatement r
 returnStmt t v' = zoom lensMStoVS $ onStateValue (\v -> stmtFromData 
   (R.return' [v]) t) v'
@@ -828,9 +739,6 @@ switch v cs bod = do
   bods <- mapM snd cs
   dflt <- bod
   toState $ mkStmt $ R.switch brk val dflt (zip vals bods)
-
-ifExists :: (RenderSym r) => SValue r -> MSBody r -> MSBody r -> MSStatement r
-ifExists v ifBody = S.ifCond [(S.notNull v, ifBody)]
 
 for :: (RenderSym r) => Doc -> Doc -> MSStatement r -> SValue r -> 
   MSStatement r -> MSBody r -> MSStatement r

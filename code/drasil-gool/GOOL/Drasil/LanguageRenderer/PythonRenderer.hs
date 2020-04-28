@@ -49,26 +49,28 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, funcType, runStrategy, 
+  multiBody, block, multiBlock, int, listInnerType, obj, funcType, 
   notOp', negateOp, sqrtOp', absOp', expOp', sinOp', cosOp', tanOp', asinOp', 
   acosOp', atanOp', csc, sec, cot, equalOp, notEqualOp, greaterOp, 
   greaterEqualOp, lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, 
-  moduloOp, var, staticVar, extVar, classVar, objVar, objVarSelf, listVar, 
+  moduloOp, var, staticVar, extVar, classVar, objVar, objVarSelf, 
   arrayElem, iterVar, litChar, litDouble, litInt, litString, valueOf, arg, 
   argsList, objAccess, objMethodCall, indexOf, call, 
   funcAppMixedArgs, selfFuncAppMixedArgs, extFuncAppMixedArgs, newObjMixedArgs, 
   extNewObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
   iterEnd, listAccess, listSet, getFunc, setFunc, listAddFunc, listAppendFunc, 
   iterBeginError, iterEndError, listAccessFunc, listSetFunc, stmt, loopStmt, 
-  emptyStmt, assign, decrement, increment', increment1', decrement1, 
-  listDecDef', objDecNew, objDecNewNoParams, print, closeFile, discardFileLine, 
-  stringListVals, stringListLists, returnStmt, valStmt, comment, throw, 
-  ifCond, ifExists, tryCatch, checkState, construct, param, method, getMethod, 
+  emptyStmt, assign, increment, 
+  listDecDef', objDecNew, print, closeFile, discardFileLine, 
+  returnStmt, valStmt, comment, throw, 
+  ifCond, tryCatch, checkState, construct, param, method, getMethod, 
   setMethod, constructor, function, docFunc, stateVarDef, constVar, buildClass, 
   implementingClass, docClass, commentedClass, intClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (addmathImport, 
   bindingError, destructorError, docFuncRepr)
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
+  decrement1, increment1, runStrategy, stringListVals, stringListLists)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, 
@@ -285,7 +287,6 @@ instance VariableSym PythonCode where
     G.classVar pyClassVar (toState t) v) c getClassMap
   objVar = G.objVar
   objVarSelf = G.objVarSelf
-  listVar = G.listVar
   arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
 
@@ -489,10 +490,10 @@ instance StatementSym PythonCode where
 
 instance AssignStatement PythonCode where
   assign = G.assign Empty
-  (&-=) = G.decrement
-  (&+=) = G.increment'
-  (&++) = G.increment1'
-  (&--) = G.decrement1
+  (&-=) = M.decrement
+  (&+=) = G.increment
+  (&++) = M.increment1
+  (&--) = M.decrement1
 
 instance DeclStatement PythonCode where
   varDec _ = toState $ mkStmtNoEnd empty
@@ -505,9 +506,6 @@ instance DeclStatement PythonCode where
   objDecNew = G.objDecNew
   extObjDecNew lib v vs = modify (addModuleImport lib) >> varDecDef v 
     (extNewObj lib (onStateValue variableType v) vs)
-  objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams lib v = modify (addModuleImport lib) >> varDecDef v 
-    (extNewObj lib (onStateValue variableType v) [])
   constDecDef = varDecDef
   funcDecDef v ps r = onStateValue (mkStmtNoEnd . RC.method) (zoom lensMStoVS v 
     >>= (\vr -> function (variableName vr) private dynamic 
@@ -543,8 +541,8 @@ instance StringStatement PythonCode where
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
     (listType string) [litString [d]]))  
 
-  stringListVals = G.stringListVals
-  stringListLists = G.stringListLists
+  stringListVals = M.stringListVals
+  stringListLists = M.stringListLists
 
 instance FuncAppStatement PythonCode where
   inOutCall = pyInOutCall funcApp
@@ -565,7 +563,7 @@ instance ControlStatement PythonCode where
   ifCond = G.ifCond pyBodyStart (text "elif") pyBodyEnd
   switch = switchAsIf
 
-  ifExists = G.ifExists
+  ifExists = M.ifExists
 
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"
@@ -590,7 +588,7 @@ instance ObserverPattern PythonCode where
           notify = oneLiner $ valStmt $ at obsList (valueOf index) $. f
 
 instance StrategyPattern PythonCode where
-  runStrategy = G.runStrategy
+  runStrategy = M.runStrategy
 
 instance ScopeSym PythonCode where
   type Scope PythonCode = Doc

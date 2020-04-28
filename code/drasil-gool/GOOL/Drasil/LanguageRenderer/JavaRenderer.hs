@@ -54,10 +54,10 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, bool, int, float, double, char, listType, 
-  arrayType, listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, 
+  arrayType, listInnerType, obj, funcType, void, notOp, 
   csc, sec, cot, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, 
   lessOp, lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, andOp, 
-  orOp, var, staticVar, extVar, self, classVar, objVar, objVarSelf, listVar, 
+  orOp, var, staticVar, extVar, self, classVar, objVar, objVarSelf, 
   arrayElem, iterVar, litTrue, litFalse, litChar, litDouble, litFloat, litInt, 
   litString, litArray, pi, valueOf, arg, argsList, inlineIf, objAccess, 
   objMethodCall, indexOf, call', funcAppMixedArgs, 
@@ -66,12 +66,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listSize, listAdd, listAppend, iterBegin, iterEnd, listAccess, listSet, 
   getFunc, setFunc, listSizeFunc, listAddFunc, listAppendFunc, iterBeginError, 
   iterEndError, listAccessFunc', printSt, stmt, loopStmt, emptyStmt, assign, 
-  multiAssignError, decrement, increment, decrement1, increment1, varDec, 
+  multiAssignError, increment, increment1, varDec, 
   varDecDef, listDec, listDecDef', arrayDec, arrayDecDef, objDecNew, 
-  objDecNewNoParams, extObjDecNew, extObjDecNewNoParams, funcDecDef, print,
+  extObjDecNew, funcDecDef, print,
   discardInput, discardFileInput, openFileR, openFileW, openFileA, closeFile, 
-  discardFileLine, stringListVals, stringListLists, returnStmt, 
-  multiReturnError, valStmt, comment, throw, ifCond, switch, ifExists, for, 
+  discardFileLine, returnStmt, 
+  multiReturnError, valStmt, comment, throw, ifCond, switch, for, 
   forRange, forEach, while, tryCatch, checkState, notifyObservers, construct, 
   param, method, getMethod, setMethod, constructor, docMain, function, 
   mainFunction, docFunc, intFunc, stateVar, stateVarDef, constVar, buildClass, 
@@ -79,6 +79,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   buildModule', modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (bindingError, 
   destructorError, docFuncRepr)
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
+  decrement1, runStrategy, listSlice, stringListVals, stringListLists)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, 
@@ -299,7 +301,6 @@ instance VariableSym JavaCode where
     ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
   objVarSelf = G.objVarSelf
-  listVar = G.listVar
   arrayElem i = G.arrayElem (litInt i)
   iterVar = G.iterVar
 
@@ -459,7 +460,7 @@ instance List JavaCode where
   indexOf = G.indexOf "indexOf"
 
 instance InternalList JavaCode where
-  listSlice' = G.listSlice
+  listSlice' = M.listSlice
 
 instance Iterator JavaCode where
   iterBegin = G.iterBegin
@@ -517,10 +518,10 @@ instance StatementSym JavaCode where
 
 instance AssignStatement JavaCode where
   assign = G.assign Semi
-  (&-=) = G.decrement
+  (&-=) = M.decrement
   (&+=) = G.increment
   (&++) = G.increment1
-  (&--) = G.decrement1
+  (&--) = M.decrement1
 
 instance DeclStatement JavaCode where
   varDec = G.varDec static dynamic
@@ -533,8 +534,6 @@ instance DeclStatement JavaCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = G.extObjDecNew
-  objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkStmt $ 
     jConstDecDef vr vl) vr' vl'
   funcDecDef = G.funcDecDef
@@ -571,8 +570,8 @@ instance StringStatement JavaCode where
     "Arrays.asList" (listType string) 
     [s $. func "split" (listType string) [litString [d]]]))
 
-  stringListVals = G.stringListVals
-  stringListLists = G.stringListLists
+  stringListVals = M.stringListVals
+  stringListLists = M.stringListLists
 
 instance FuncAppStatement JavaCode where
   inOutCall = jInOutCall funcApp
@@ -593,7 +592,7 @@ instance ControlStatement JavaCode where
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch  = G.switch
 
-  ifExists = G.ifExists
+  ifExists = M.ifExists
 
   for = G.for bodyStart bodyEnd
   forRange = G.forRange 
@@ -609,7 +608,7 @@ instance ObserverPattern JavaCode where
   notifyObservers = G.notifyObservers
 
 instance StrategyPattern JavaCode where
-  runStrategy = G.runStrategy
+  runStrategy = M.runStrategy
 
 instance ScopeSym JavaCode where
   type Scope JavaCode = Doc

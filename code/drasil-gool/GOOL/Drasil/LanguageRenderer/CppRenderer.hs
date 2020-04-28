@@ -55,27 +55,29 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, float, double, char, string, listType, 
-  listInnerType, obj, funcType, void, runStrategy, listSlice, notOp, negateOp,
+  listInnerType, obj, funcType, void, notOp, negateOp,
   sqrtOp, absOp, expOp, sinOp, cosOp, tanOp, asinOp, acosOp, atanOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
   plusOp, minusOp, multOp, divideOp, moduloOp, powerOp, andOp, orOp, var, 
-  staticVar, self, objVar, listVar, arrayElem, litTrue, litFalse, litChar, 
+  staticVar, self, objVar, arrayElem, litTrue, litFalse, litChar, 
   litDouble, litFloat, litInt, litString, litArray, valueOf, arg, argsList, 
   inlineIf, objAccess, objMethodCall, call', 
   funcAppMixedArgs, selfFuncAppMixedArgs, libFuncAppMixedArgs, newObjMixedArgs, 
   libNewObjMixedArgs, lambda, func, get, set, listSize, listAdd, listAppend, 
   iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, listSizeFunc, 
   listAppendFunc, listAccessFunc', listSetFunc, stmt, loopStmt, emptyStmt, 
-  assign, multiAssignError, decrement, increment, decrement1, increment1, 
-  varDec, varDecDef, listDec, listDecDef, objDecNew, objDecNewNoParams, 
-  extObjDecNew, extObjDecNewNoParams, constDecDef, funcDecDef, print, 
-  discardInput, discardFileInput, closeFile, stringListVals, stringListLists, 
+  assign, multiAssignError, increment, increment1, 
+  varDec, varDecDef, listDec, listDecDef, objDecNew, 
+  extObjDecNew, constDecDef, funcDecDef, print, 
+  discardInput, discardFileInput, closeFile, 
   returnStmt, multiReturnError, valStmt, comment, throw, ifCond, switch, for, 
   forRange, while, tryCatch, notifyObservers, construct, param, method, 
   getMethod, setMethod, constructor, function, docFunc, docInOutFunc, intFunc, 
   buildClass, implementingClass, docClass, commentedClass, buildModule, 
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (decrement, 
+  decrement1, runStrategy, listSlice, stringListVals, stringListLists)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd, 
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..), 
@@ -337,7 +339,6 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   extClassVar = pair2 extClassVar extClassVar
   objVar = pair2 objVar objVar
   objVarSelf = pair1 objVarSelf objVarSelf
-  listVar n = pair1 (listVar n) (listVar n)
   arrayElem i = pair1 (arrayElem i) (arrayElem i)
   iterVar l = pair1 (iterVar l) (iterVar l)
 
@@ -585,11 +586,6 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
     (map (zoom lensMStoVS) vs)
   extObjDecNew lib vr vs = pair1Val1List (extObjDecNew lib) (extObjDecNew lib) 
     (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
-  objDecNewNoParams = pair1 objDecNewNoParams objDecNewNoParams . 
-    zoom lensMStoVS
-  extObjDecNewNoParams lib = pair1 
-    (extObjDecNewNoParams lib) 
-    (extObjDecNewNoParams lib) . zoom lensMStoVS
   constDecDef vr vl = pair2 constDecDef constDecDef (zoom lensMStoVS vr) 
     (zoom lensMStoVS vl)
   funcDecDef v ps r = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
@@ -1245,7 +1241,6 @@ instance VariableSym CppSrcCode where
     (toState vr)) getODEOthVars o v
   objVarSelf = onStateValue (\v -> mkVar ("this->"++variableName v) 
     (variableType v) (text "this->" <> RC.variable v))
-  listVar = G.listVar
   arrayElem i = G.arrayElem (litInt i)
   iterVar l t = mkStateVar l (iterator t) (text $ "(*" ++ l ++ ")")
 
@@ -1382,7 +1377,7 @@ instance List CppSrcCode where
     [iterBegin l, iterEnd l, v] #- iterBegin l
     
 instance InternalList CppSrcCode where
-  listSlice' = G.listSlice
+  listSlice' = M.listSlice
 
 instance Iterator CppSrcCode where
   iterBegin = G.iterBegin
@@ -1439,10 +1434,10 @@ instance StatementSym CppSrcCode where
 
 instance AssignStatement CppSrcCode where
   assign = G.assign Semi
-  (&-=) = G.decrement
+  (&-=) = M.decrement
   (&+=) = G.increment
   (&++) = G.increment1
-  (&--) = G.decrement1
+  (&--) = M.decrement1
 
 instance DeclStatement CppSrcCode where
   varDec = G.varDec static dynamic
@@ -1458,8 +1453,6 @@ instance DeclStatement CppSrcCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = G.extObjDecNew
-  objDecNewNoParams = G.objDecNewNoParams
-  extObjDecNewNoParams = G.extObjDecNewNoParams
   constDecDef = G.constDecDef
   funcDecDef = G.funcDecDef
 
@@ -1517,8 +1510,8 @@ instance StringStatement CppSrcCode where
         (oneLiner $ valStmt $ listAppend (valueOf vnew) v_word)
     ]
 
-  stringListVals = G.stringListVals
-  stringListLists = G.stringListLists
+  stringListVals = M.stringListVals
+  stringListLists = M.stringListLists
 
 instance FuncAppStatement CppSrcCode where
   inOutCall = cppInOutCall funcApp
@@ -1557,7 +1550,7 @@ instance ObserverPattern CppSrcCode where
   notifyObservers = G.notifyObservers
 
 instance StrategyPattern CppSrcCode where
-  runStrategy = G.runStrategy
+  runStrategy = M.runStrategy
 
 instance ScopeSym CppSrcCode where
   type Scope CppSrcCode = (Doc, ScopeTag)
@@ -1873,7 +1866,6 @@ instance VariableSym CppHdrCode where
     ++ variableName vr) `elem` ovs then toState vr else G.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
   objVarSelf _ = mkStateVar "" void empty
-  listVar _ _ = mkStateVar "" void empty
   arrayElem _ _ = mkStateVar "" void empty
   iterVar _ _ = mkStateVar "" void empty
   
@@ -2078,8 +2070,6 @@ instance DeclStatement CppHdrCode where
   objDecDef _ _ = emptyStmt
   objDecNew _ _ = emptyStmt
   extObjDecNew _ _ _ = emptyStmt
-  objDecNewNoParams _ = emptyStmt
-  extObjDecNewNoParams _ _ = emptyStmt
   constDecDef = G.constDecDef
   funcDecDef _ _ _ = emptyStmt
 

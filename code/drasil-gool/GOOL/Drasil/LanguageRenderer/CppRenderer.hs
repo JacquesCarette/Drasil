@@ -910,7 +910,6 @@ pair5 srcf hdrf stv1 stv2 stv3 stv4 stv5 = do
       sv1 = toState $ psnd v1
   pair4 (srcf fv1) (hdrf sv1) stv2 stv3 stv4 stv5
   
-
 pair1List :: (Pair p) => ([State r (CppSrcCode a)] -> State s (CppSrcCode b)) 
   -> ([State r (CppHdrCode a)] -> State s (CppHdrCode b)) -> 
   [State s (p CppSrcCode CppHdrCode a)] -> State s (p CppSrcCode CppHdrCode b)
@@ -2297,11 +2296,15 @@ mthd = MthD
 algorithmImport :: String
 algorithmImport = "algorithm"
 
-addAlgorithmImport :: MS a -> MS a
-addAlgorithmImport = (>>) $ modify (addLangImport algorithmImport)
+addAlgorithmImport :: MS a -> MS a 
+addAlgorithmImport v = do
+  modify (addLangImport algorithmImport)
+  v
 
 addAlgorithmImportVS :: VS a -> VS a
-addAlgorithmImportVS = (>>) $ modify (addLangImportVS algorithmImport)
+addAlgorithmImportVS v = do
+  modify (addLangImportVS algorithmImport)
+  v
 
 addFStreamImport :: a -> VS a
 addFStreamImport = modifyReturn (addLangImportVS "fstream")

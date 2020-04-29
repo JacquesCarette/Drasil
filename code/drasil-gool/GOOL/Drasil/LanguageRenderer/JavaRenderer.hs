@@ -153,7 +153,7 @@ instance RenderFile JavaCode where
 
 instance ImportSym JavaCode where
   type Import JavaCode = Doc
-  langImport n = toCode $ jImport n
+  langImport = toCode . jImport
   modImport = langImport
 
 instance ImportElim JavaCode where
@@ -539,15 +539,15 @@ instance DeclStatement JavaCode where
   funcDecDef = CP.funcDecDef
 
 instance IOStatement JavaCode where
-  print = jOut False Nothing printFunc
-  printLn = jOut True Nothing printLnFunc
-  printStr = jOut False Nothing printFunc . litString
-  printStrLn = jOut True Nothing printLnFunc . litString
+  print      = jOut False Nothing printFunc
+  printLn    = jOut True  Nothing printLnFunc
+  printStr   = jOut False Nothing printFunc   . litString
+  printStrLn = jOut True  Nothing printLnFunc . litString
 
-  printFile f = jOut False (Just f) (printFileFunc f)
-  printFileLn f = jOut True (Just f) (printFileLnFunc f)
-  printFileStr f = jOut False (Just f) (printFileFunc f) . litString
-  printFileStrLn f = jOut True (Just f) (printFileLnFunc f) . litString
+  printFile f      = jOut False (Just f) (printFileFunc f)
+  printFileLn f    = jOut True  (Just f) (printFileLnFunc f)
+  printFileStr f   = jOut False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = jOut True  (Just f) (printFileLnFunc f) . litString
 
   getInput v = v &= jInput (onStateValue variableType v) inputFunc
   discardInput = C.discardInput jDiscardInput
@@ -565,10 +565,12 @@ instance IOStatement JavaCode where
     (oneLiner $ valStmt $ listAppend (valueOf v) (f $. func "nextLine" string []))
 
 instance StringStatement JavaCode where
-  stringSplit d vnew s = modify (addLangImport "java.util.Arrays") >> 
-    onStateValue mkStmt (zoom lensMStoVS $ jStringSplit vnew (funcApp 
-    "Arrays.asList" (listType string) 
-    [s $. func "split" (listType string) [litString [d]]]))
+  stringSplit d vnew s = do
+    modify (addLangImport "java.util.Arrays") 
+    ss <- zoom lensMStoVS $ 
+      jStringSplit vnew (funcApp "Arrays.asList" (listType string) 
+      [s $. func "split" (listType string) [litString [d]]])
+    toState $ mkStmt ss 
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists

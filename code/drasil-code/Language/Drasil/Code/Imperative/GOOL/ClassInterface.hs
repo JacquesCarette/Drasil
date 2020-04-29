@@ -16,8 +16,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 class (AuxiliarySym r) => PackageSym r where
   type Package r 
-  package :: ProgData -> [r (Auxiliary r)] -> 
-    r (Package r)
+  package :: ProgData -> [r (Auxiliary r)] -> r (Package r)
 
 class AuxiliarySym r where
   type Auxiliary r
@@ -28,7 +27,7 @@ class AuxiliarySym r where
   optimizeDox :: r (AuxHelper r)
 
   makefile :: ImplementationType -> [Comments] -> GOOLState -> ProgData -> 
-    r (Auxiliary r) 
+    r (Auxiliary r)
 
   auxHelperDoc :: r (AuxHelper r) -> Doc
   auxFromData :: FilePath -> Doc -> r (Auxiliary r)

@@ -15,7 +15,6 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.HelloWorld (helloWorld)
 import Test.PatternTest (patternTest)
 import Test.FileTests (fileTests)
-import Test.SimpleODE (simpleODE)
 
 main :: IO()
 main = do
@@ -50,8 +49,8 @@ classes unRepr unRepr' = zipWith
   (\p gs -> let (p',gs') = runState p gs 
                 pd = unRepr p'
   in unRepr' $ package pd [makefile Program [] gs' pd]) 
-  [helloWorld, patternTest, fileTests, simpleODE]
-  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests, simpleODE])
+  [helloWorld, patternTest, fileTests]
+  (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests])
 
 -- | Takes code
 makeCode :: [[FileData]] -> [[AuxData]] -> [(FilePath, Doc)]

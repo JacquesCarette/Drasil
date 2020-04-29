@@ -28,7 +28,7 @@ class AuxiliarySym r where
   optimizeDox :: r (AuxHelper r)
 
   makefile :: ImplementationType -> [Comments] -> GOOLState -> ProgData -> 
-    r (Auxiliary r)
+    r (Auxiliary r) 
 
   auxHelperDoc :: r (AuxHelper r) -> Doc
   auxFromData :: FilePath -> Doc -> r (Auxiliary r)

@@ -36,7 +36,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   InternalListFunc(..), InternalIterator(..), RenderFunction(..), 
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
-  RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..), 
+  RenderScope(..), ScopeElim, MSMthdType, MethodTypeSym(..), RenderParam(..), 
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
   StateVarElim, ParentSpec, RenderClass(..), ClassElim, RenderMod(..), 
   ModuleElim, BlockCommentSym(..), BlockCommentElim)
@@ -1631,19 +1631,12 @@ instance MethodSym CppSrcCode where
 
 instance RenderMethod CppSrcCode where
   intMethod m n s _ t ps b = do
-    modify (setScope (snd $ unCPPSC s) . if m then setCurrMain else id)
+    modify (if m then setCurrMain else id)
     c <- getClassName
-    tp <- t
-    pms <- sequence ps
-    bod <- b
-    toState $ toCode $ mthd (snd $ unCPPSC s) $ cppsMethod [] n c tp pms bod
+    cppsIntFunc (cppsMethod [] n c) s t ps b
   intFunc m n s _ t ps b = do
-    modify (setScope (snd $ unCPPSC s) . if m then setCurrMainFunc m . 
-      setCurrMain else id)
-    tp <- t
-    pms <- sequence ps
-    bod <- b
-    toState $ toCode $ mthd (snd $ unCPPSC s) $ cppsFunction n tp pms bod
+    modify (if m then setCurrMainFunc m . setCurrMain else id)
+    cppsIntFunc (cppsFunction n) s t ps b
   commentedFunc = cppCommentedFunc Source
   
   destructor vs = 
@@ -2588,12 +2581,22 @@ cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom 
   lensMStoVS . snd) is <*> b)
 
-cppsFunction :: (RenderSym r) => Label -> r (Type r) -> [r (Parameter r)] -> 
-  r (Body r) -> Doc
+cppsFunction :: Label -> CppSrcCode (Type CppSrcCode) -> 
+  [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc
 cppsFunction n t ps b = vcat [
   RC.type' t <+> text n <> parens (parameterList ps) <+> bodyStart,
   indent (RC.body b),
   bodyEnd]
+  
+cppsIntFunc :: (CppSrcCode (Type CppSrcCode) -> 
+  [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc) 
+  -> CppSrcCode (Scope CppSrcCode) -> MSMthdType CppSrcCode -> 
+  [MSParameter CppSrcCode] -> MSBody CppSrcCode -> SMethod CppSrcCode
+cppsIntFunc f s t ps b = do
+  modify (setScope (snd $ unCPPSC s))
+  tp <- t
+  pms <- sequence ps
+  toCode . mthd (snd $ unCPPSC s) . f tp pms <$> b
 
 cpphMethod :: (RenderSym r) => Label -> r (Type r) -> [r (Parameter r)] -> Doc
 cpphMethod n t ps = (if isDtor n then empty else RC.type' t) <+> text n 

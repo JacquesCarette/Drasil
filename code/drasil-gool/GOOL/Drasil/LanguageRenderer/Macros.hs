@@ -26,7 +26,7 @@ import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..),
 import GOOL.Drasil.Helpers (toCode, onStateValue, on2StateValues)
 import GOOL.Drasil.State (MS, lensMStoVS)
 
-import Data.Map as Map (lookup, fromList)
+import Data.List (lookup)
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)
@@ -54,7 +54,7 @@ runStrategy :: (RenderSym r, Monad r) => Label -> [(Label, MSBody r)] ->
   Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy") 
-  (strat (S.stmt resultState)) (Map.lookup l (Map.fromList strats))
+  (strat (S.stmt resultState)) (lookup l strats)
   where resultState = maybe S.emptyStmt asgState av
         asgState v = maybe (strError l 
           "Attempt to assign null return to a Value") (v &=) rv

@@ -96,8 +96,10 @@ iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++
   " has no iterators"
   
 listDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-listDecDef v vals = zoom lensMStoVS v >>= (\vr -> S.varDecDef (return vr) 
-  (S.litList (listInnerType $ return $ variableType vr) vals))
+listDecDef v vals = do
+  vr <- zoom lensMStoVS v 
+  let lst = S.litList (listInnerType $ toState $ variableType vr) vals
+  S.varDecDef (toState vr) lst
   
 discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
 discardFileLine n f = S.valStmt $ objMethodCallNoParams S.string f n 

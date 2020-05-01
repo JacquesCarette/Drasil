@@ -3,21 +3,22 @@
 -- | Language-polymorphic functions that are defined by GOOL code
 module GOOL.Drasil.LanguageRenderer.Macros (
   ifExists, decrement, decrement1, increment, increment1, runStrategy, 
-  listSlice, stringListVals, stringListLists
+  listSlice, stringListVals, stringListLists, forRange, notifyObservers,
+  checkState
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, SVariable, SValue, 
-  MSStatement, bodyStatements, oneLiner, TypeElim(getType),
-  VariableElim(variableType), ValueSym(valueType), 
-  NumericExpression((#+), (#-), (#*), (#/)), Comparison(..), 
-  StatementSym(multi), AssignStatement((&+=), (&++)), (&=))
+import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
+  SValue, VSFunction, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
+  VariableElim(variableType), listOf, ValueSym(valueType), 
+  NumericExpression((#+), (#-), (#*), (#/)), Comparison(..), at, ($.),
+  StatementSym(multi), AssignStatement((&+=), (&++)), (&=), observerListName)
 import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block), 
-  TypeSym(int, listInnerType), VariableSym(var), Literal(litInt), 
+  TypeSym(int, string, listInnerType), VariableSym(var), Literal(litInt), 
   VariableValue(valueOf), ValueExpression(notNull), 
   List(listSize, listAppend, listAccess), StatementSym(valStmt), 
   AssignStatement(assign), DeclStatement(varDecDef, listDec), 
-  ControlStatement(ifCond, for, forRange))
+  ControlStatement(ifCond, switch, for, forRange))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderValue(cast))
 import qualified GOOL.Drasil.RendererClasses as S (
   RenderStatement(stmt, emptyStmt))
@@ -26,7 +27,7 @@ import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..),
 import GOOL.Drasil.Helpers (toCode, onStateValue, on2StateValues)
 import GOOL.Drasil.State (MS, lensMStoVS)
 
-import Data.Map as Map (lookup, fromList)
+import Data.List (lookup)
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)
@@ -54,7 +55,7 @@ runStrategy :: (RenderSym r, Monad r) => Label -> [(Label, MSBody r)] ->
   Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy") 
-  (strat (S.stmt resultState)) (Map.lookup l (Map.fromList strats))
+  (strat (S.stmt resultState)) (lookup l strats)
   where resultState = maybe S.emptyStmt asgState av
         asgState v = maybe (strError l 
           "Attempt to assign null return to a Value") (v &=) rv
@@ -108,3 +109,21 @@ stringListLists lsts sl = zoom lensMStoVS sl >>= (\slst -> checkList (getType $
         numLists = S.litInt (toInteger $ length lsts)
         var_i = S.var "stringlist_i" S.int
         v_i = S.valueOf var_i
+
+forRange :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r -> 
+  MSBody r -> MSStatement r
+forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?< 
+  finalv) (i &+= stepv)
+
+notifyObservers :: (RenderSym r) => VSFunction r -> VSType r -> MSStatement r
+notifyObservers f t = S.for initv (v_index ?< S.listSize obsList) 
+  (var_index &++) notify
+  where obsList = S.valueOf $ observerListName `listOf` t 
+        var_index = S.var "observerIndex" S.int
+        v_index = S.valueOf var_index
+        initv = S.varDecDef var_index $ S.litInt 0
+        notify = oneLiner $ S.valStmt $ at obsList v_index $. f
+        
+checkState :: (RenderSym r) => Label -> [(SValue r, MSBody r)] -> MSBody r -> 
+  MSStatement r
+checkState l = S.switch (S.valueOf $ S.var l S.string)

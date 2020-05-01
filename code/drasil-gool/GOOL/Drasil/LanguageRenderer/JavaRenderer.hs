@@ -69,19 +69,19 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (  
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, checkState, destructorError, stateVarDef, constVar, 
-  intClass, objVar, bool, arrayType, pi, notNull, printSt, arrayDec, 
-  arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, mainFunction, 
-  stateVar, buildModule', litArray, call', listSizeFunc, listAccessFunc', 
-  funcDecDef, discardFileInput)
+  discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
+  bool, arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, 
+  openFileW, openFileA, forEach, docMain, mainFunction, stateVar, buildModule', 
+  litArray, call', listSizeFunc, listAccessFunc', funcDecDef, discardFileInput)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for, forRange,
-  while, notifyObservers, intFunc, multiAssignError, multiReturnError)
+  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for,
+  while, intFunc, multiAssignError, multiReturnError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
-  decrement1, runStrategy, listSlice, stringListVals, stringListLists)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
+  decrement1, runStrategy, listSlice, stringListVals, stringListLists,
+  forRange, notifyObservers, checkState)
+import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
@@ -149,7 +149,7 @@ instance RenderFile JavaCode where
   top _ = toCode empty
   bottom = toCode empty
   
-  commentedMod cmt m = on2StateValues (on2CodeValues R.commentedMod) m cmt
+  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
   
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
@@ -402,7 +402,7 @@ instance ValueExpression JavaCode where
     G.selfFuncAppMixedArgs dot self n t ps ns
   extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
-    modify (maybe id addExceptions (Map.lookup (l ++ "." ++ n) mem))
+    modify (maybe id addExceptions (Map.lookup (qualName l n) mem))
     CP.extFuncAppMixedArgs l n t vs ns
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
   newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t -> 
@@ -411,7 +411,7 @@ instance ValueExpression JavaCode where
     t <- ot
     mem <- getMethodExcMap
     let tp = getTypeString t
-    modify (maybe id addExceptions (Map.lookup (l ++ "." ++ tp) mem))
+    modify (maybe id addExceptions (Map.lookup (qualName l tp) mem))
     newObjMixedArgs (toState t) vs ns
   libNewObjMixedArgs = C.libNewObjMixedArgs
 
@@ -444,7 +444,7 @@ instance InternalValueExp JavaCode where
     ob <- o
     mem <- getMethodExcMap
     let tp = getTypeString (valueType ob)
-    modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ f) mem))
+    modify (maybe id addExceptions (Map.lookup (qualName tp f) mem))
     G.objMethodCall f t o ps ns
 
 instance FunctionSym JavaCode where
@@ -602,17 +602,17 @@ instance ControlStatement JavaCode where
   ifExists = M.ifExists
 
   for = C.for bodyStart bodyEnd
-  forRange = C.forRange 
+  forRange = M.forRange 
   forEach = CP.forEach bodyStart bodyEnd forLabel colon
   while = C.while bodyStart bodyEnd
 
   tryCatch = G.tryCatch jTryCatch
   
 instance StatePattern JavaCode where 
-  checkState = CP.checkState
+  checkState = M.checkState
 
 instance ObserverPattern JavaCode where
-  notifyObservers = C.notifyObservers
+  notifyObservers = M.notifyObservers
 
 instance StrategyPattern JavaCode where
   runStrategy = M.runStrategy
@@ -677,8 +677,7 @@ instance RenderMethod JavaCode where
     es <- getExceptions
     mn <- zoom lensMStoFS getModuleName
     let excs = map (unJC . toConcreteExc) $ maybe es (nub . (++ es)) 
-          (Map.lookup (key mn n) mem) 
-        key mnm nm = mnm ++ "." ++ nm
+          (Map.lookup (qualName mn n) mem)
     modify ((if m then setCurrMain else id) . addExceptionImports excs) 
     return $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
   intFunc = C.intFunc
@@ -1004,7 +1003,7 @@ addCallExcsCurrMod :: String -> VS ()
 addCallExcsCurrMod n = do
   cm <- zoom lensVStoFS getModuleName
   mem <- getMethodExcMap
-  modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ n) mem))
+  modify (maybe id addExceptions (Map.lookup (qualName cm n) mem))
 
 addConstructorCallExcsCurrMod :: (RenderSym r) => VSType r -> 
   (VSType r -> SValue r) -> SValue r
@@ -1013,5 +1012,5 @@ addConstructorCallExcsCurrMod ot f = do
   cm <- zoom lensVStoFS getModuleName
   mem <- getMethodExcMap
   let tp = getTypeString t
-  modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ tp) mem))
+  modify (maybe id addExceptions (Map.lookup (qualName cm tp) mem))
   f (return t)

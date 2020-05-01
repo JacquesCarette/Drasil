@@ -30,7 +30,8 @@ module GOOL.Drasil.State (
   setODEOthVars, getODEOthVars
 ) where
 
-import GOOL.Drasil.AST (FileType(..), ScopeTag(..), FileData)
+import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName, 
+  FileData)
 import GOOL.Drasil.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import GOOL.Drasil.CodeType (ClassName)
 
@@ -53,9 +54,8 @@ data GOOLState = GS {
   _odeFiles :: [FileData],
 
   -- Only used for Java, to generate correct "throws Exception" declarations
-  -- Key format in both maps is ModuleName.MethodName
-  _methodExceptionMap :: Map String [ExceptionType], -- Method to exceptions thrown
-  _callMap :: Map String [String] -- Method to other methods it calls
+  _methodExceptionMap :: Map QualifiedName [ExceptionType], -- Method to exceptions thrown
+  _callMap :: Map QualifiedName [QualifiedName] -- Method to other methods it calls
 } 
 makeLenses ''GOOLState
 
@@ -102,7 +102,7 @@ data MethodState = MS {
   -- Only used for Java
   _outputsDeclared :: Bool, -- So Java doesn't redeclare outputs variable when using inOutCall
   _exceptions :: [ExceptionType], -- Used to build methodExceptionMap
-  _calls :: [String], -- Used to build CallMap
+  _calls :: [QualifiedName], -- Used to build CallMap
   
   -- Only used for C++
   _currScope :: ScopeTag, -- Used to maintain correct scope when adding 
@@ -432,21 +432,22 @@ getClassMap = gets (^. (lensVStoFS . goolState . classMap))
 
 updateMethodExcMap :: String -> MethodState -> MethodState
 updateMethodExcMap n ms = over (lensMStoFS . goolState . methodExceptionMap) 
-  (insert (mn ++ "." ++ n) (ms ^. exceptions)) ms
+  (insert (qualName mn n) (ms ^. exceptions)) ms
   where mn = ms ^. (lensMStoFS . currModName)
 
-getMethodExcMap :: VS (Map String [ExceptionType])
+getMethodExcMap :: VS (Map QualifiedName [ExceptionType])
 getMethodExcMap = gets (^. (lensVStoFS . goolState . methodExceptionMap))
 
 updateCallMap :: String -> MethodState -> MethodState
 updateCallMap n ms = over (lensMStoFS . goolState . callMap) 
-  (insert (mn ++ "." ++ n) (ms ^. calls)) ms
+  (insert (qualName mn n) (ms ^. calls)) ms
   where mn = ms ^. (lensMStoFS . currModName)
 
 callMapTransClosure :: GOOLState -> GOOLState
 callMapTransClosure = over callMap tClosure
   where tClosure m = Map.map (traceCalls m) m
-        traceCalls :: Map String [String] -> [String] -> [String]
+        traceCalls :: Map QualifiedName [QualifiedName] -> [QualifiedName] -> 
+          [QualifiedName]
         traceCalls _ [] = []
         traceCalls cm (c:cs) = nub $ c : traceCalls cm (nub $ cs ++ 
           findWithDefault [] c cm)
@@ -454,8 +455,9 @@ callMapTransClosure = over callMap tClosure
 updateMEMWithCalls :: GOOLState -> GOOLState
 updateMEMWithCalls s = over methodExceptionMap (\mem -> mapWithKey 
   (addCallExcs mem (s ^. callMap)) mem) s
-  where addCallExcs :: Map String [ExceptionType] -> Map String [String] -> 
-          String -> [ExceptionType] -> [ExceptionType]
+  where addCallExcs :: Map QualifiedName [ExceptionType] -> 
+          Map QualifiedName [QualifiedName] -> QualifiedName -> [ExceptionType] 
+          -> [ExceptionType]
         addCallExcs mem cm f es = nub $ es ++ concatMap (\fn -> findWithDefault 
           [] fn mem) (findWithDefault [] f cm)
 
@@ -493,7 +495,7 @@ addExceptions es = over (methodState . exceptions) (\exs -> nub $ es ++ exs)
 getExceptions :: MS [ExceptionType]
 getExceptions = gets (^. exceptions)
 
-addCall :: String -> ValueState -> ValueState
+addCall :: QualifiedName -> ValueState -> ValueState
 addCall f = over (methodState . calls) (f:)
 
 setScope :: ScopeTag -> MethodState -> MethodState

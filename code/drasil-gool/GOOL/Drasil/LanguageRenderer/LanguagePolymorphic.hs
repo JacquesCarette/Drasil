@@ -421,8 +421,7 @@ constructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r ->
   MSBody r -> SMethod r
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName 
   public dynamic (S.construct c) ps (S.multiBody [ib, b]))
-  where ib = bodyStatements (zipWith (\vr vl -> S.objVarSelf vr &= vl) 
-          (map fst is) (map snd is))
+  where ib = bodyStatements (map (\(vr, vl) -> S.objVarSelf vr &= vl) is)
 
 function :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> 
   VSType r -> [MSParameter r] -> MSBody r -> SMethod r
@@ -474,15 +473,17 @@ fileDoc ext topb botb mdl = do
 
 docMod :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> 
   SFile r
-docMod e d a dt = commentedMod (docComment $ moduleDox d a dt . addExt e <$> 
-  getModuleName)
+docMod e d a dt fl = commentedMod fl (docComment $ moduleDox d a dt . addExt e 
+  <$> getModuleName)
 
 fileFromData :: (RenderSym r) => (FilePath -> r (Module r) -> r (File r)) 
   -> FilePath -> r (Module r) -> SFile r
 fileFromData f fpath mdl = do
+  -- Add this file to list of files as long as it is not empty
   modify (\s -> if isEmpty (RC.module' mdl) 
     then s
     else over lensFStoGS (addFile (s ^. currFileType) fpath) $ 
+      -- If this is the main source file, set it as the main module in the state
       if s ^. currMain && isSource (s ^. currFileType) 
         then over lensFStoGS (setMainMod fpath) s
         else s)

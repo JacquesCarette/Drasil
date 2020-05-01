@@ -2,12 +2,12 @@
 module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, checkState, destructorError, stateVarDef, constVar, 
-  intClass, objVar, listSetFunc, listAccessFunc, buildModule, bool, arrayType, 
-  pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, openFileW, openFileA, 
-  forEach, docMain, mainFunction, stateVar, buildModule', litArray, call', 
-  listSizeFunc, listAccessFunc', funcDecDef, discardFileInput, string, 
-  constDecDef, docInOutFunc
+  discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
+  listSetFunc, listAccessFunc, buildModule, bool, arrayType, pi, notNull, 
+  printSt, arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, 
+  docMain, mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
+  listAccessFunc', funcDecDef, discardFileInput, string, constDecDef, 
+  docInOutFunc
 ) where
 
 import Utils.Drasil (indent)
@@ -25,8 +25,7 @@ import qualified GOOL.Drasil.ClassInterface as S (
   VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList), 
   VariableValue(valueOf), ValueExpression(lambda), FunctionSym(func, objAccess),
   StatementSym(valStmt), DeclStatement(varDec, varDecDef, constDecDef), 
-  ControlStatement(switch), ParameterSym(param), MethodSym(mainFunction), 
-  ClassSym(buildClass))
+  ParameterSym(param), MethodSym(mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..),  RenderType(..),
   RenderVariable(varFromData), InternalVarElim(variableBind), 
   RenderFunction(funcFromData), MethodTypeSym(mType),
@@ -103,10 +102,6 @@ listDecDef v vals = do
   
 discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
 discardFileLine n f = S.valStmt $ objMethodCallNoParams S.string f n 
-
-checkState :: (RenderSym r) => Label -> [(SValue r, MSBody r)] -> MSBody r -> 
-  MSStatement r
-checkState l = S.switch (S.valueOf $ S.var l S.string)
 
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l

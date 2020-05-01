@@ -4,24 +4,21 @@
 module GOOL.Drasil.LanguageRenderer.CLike (float, double, char, listType, void, 
   notOp, andOp, orOp, self, litTrue, litFalse, litFloat, inlineIf, 
   libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, varDec, 
-  varDecDef, listDec, extObjDecNew, discardInput, switch, for, forRange, while, 
-  notifyObservers, intFunc, multiAssignError, multiReturnError
+  varDecDef, listDec, extObjDecNew, discardInput, switch, for, while, 
+  intFunc, multiAssignError, multiReturnError
 ) where
 
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable, 
-  SValue, VSFunction, MSStatement, MSParameter, SMethod, MixedCall, 
-  MixedCtorCall, oneLiner, PermanenceSym(..), TypeElim(getType, getTypeString), 
-  VariableElim(variableType), listOf, ValueSym(Value, valueType), 
-  Comparison(..), extNewObj, ($.), at, AssignStatement((&+=), (&++)), 
-  ControlStatement(break), observerListName, ScopeSym(..))
-import qualified GOOL.Drasil.ClassInterface as S (
-  TypeSym(bool, int, float, obj), VariableSym(var), Literal(litInt), 
-  VariableValue(valueOf), ValueExpression(funcAppMixedArgs, newObjMixedArgs), 
-  List(listSize), StatementSym(valStmt), DeclStatement(varDec, varDecDef), 
-  ControlStatement(for))
+  SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
+  PermanenceSym(..), TypeElim(getType, getTypeString), 
+  VariableElim(variableType), ValueSym(Value, valueType), extNewObj, ($.), 
+  ControlStatement(break), ScopeSym(..))
+import qualified GOOL.Drasil.ClassInterface as S (TypeSym(bool, float, obj),
+  ValueExpression(funcAppMixedArgs, newObjMixedArgs), 
+  DeclStatement(varDec, varDecDef))
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderType(..),
   InternalVarElim(variableBind), RenderValue(inputFunc, valFromData), 
   ValueElim(valuePrec), RenderMethod(intMethod))
@@ -164,25 +161,11 @@ for bStart bEnd sInit vGuard sUpdate b = do
     indent $ RC.body bod,
     bEnd]
   
-forRange :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r -> 
-  MSBody r -> MSStatement r
-forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?< 
-  finalv) (i &+= stepv)
-  
 while :: (RenderSym r) => Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
 while bStart bEnd v' = on2StateValues (\v b -> mkStmtNoEnd (vcat [
   text "while" <+> parens (RC.value v) <+> bStart,
   indent $ RC.body b,
   bEnd])) (zoom lensMStoVS v')
-  
-notifyObservers :: (RenderSym r) => VSFunction r -> VSType r -> MSStatement r
-notifyObservers f t = S.for initv (v_index ?< S.listSize obsList) 
-  (var_index &++) notify
-  where obsList = S.valueOf $ observerListName `listOf` t 
-        var_index = S.var "observerIndex" S.int
-        v_index = S.valueOf var_index
-        initv = S.varDecDef var_index $ S.litInt 0
-        notify = oneLiner $ S.valStmt $ at obsList v_index $. f
 
 -- Methods --
 

@@ -66,17 +66,18 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, checkState, destructorError, stateVarDef, constVar, 
+  discardFileLine, destructorError, stateVarDef, constVar, 
   intClass, listSetFunc, listAccessFunc, bool, arrayType, pi, notNull, printSt, 
   arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, 
   mainFunction, stateVar, buildModule', string, constDecDef, docInOutFunc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for, forRange,
-  while, notifyObservers, intFunc, multiAssignError, multiReturnError)
+  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for,
+  while, intFunc, multiAssignError, multiReturnError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
-  decrement1, runStrategy, listSlice, stringListVals, stringListLists)
+  decrement1, runStrategy, listSlice, stringListVals, stringListLists,
+  forRange, notifyObservers, checkState)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
@@ -137,7 +138,7 @@ instance RenderFile CSharpCode where
   top _ = toCode empty
   bottom = toCode empty
 
-  commentedMod cmt m = on2StateValues (on2CodeValues R.commentedMod) m cmt
+  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
@@ -565,17 +566,17 @@ instance ControlStatement CSharpCode where
   ifExists = M.ifExists
 
   for = C.for bodyStart bodyEnd
-  forRange = C.forRange
+  forRange = M.forRange
   forEach = CP.forEach bodyStart bodyEnd (text "foreach") inLabel 
   while = C.while bodyStart bodyEnd
 
   tryCatch = G.tryCatch csTryCatch
 
 instance StatePattern CSharpCode where 
-  checkState = CP.checkState
+  checkState = M.checkState
 
 instance ObserverPattern CSharpCode where
-  notifyObservers = C.notifyObservers
+  notifyObservers = M.notifyObservers
 
 instance StrategyPattern CSharpCode where
   runStrategy = M.runStrategy

@@ -60,7 +60,7 @@ class (BlockCommentSym r) => RenderFile r where
   top :: r (Module r) -> r (Block r) 
   bottom :: r (Block r)
 
-  commentedMod :: FS (r (BlockComment r)) -> SFile r -> SFile r
+  commentedMod :: SFile r -> FS (r (BlockComment r)) -> SFile r
 
   fileFromData :: FilePath -> r (Module r) -> SFile r
 

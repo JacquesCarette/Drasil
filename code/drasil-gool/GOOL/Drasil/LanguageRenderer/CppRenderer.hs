@@ -136,9 +136,9 @@ instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
     m <-  mapM (zoom lensGStoFS) mods
     let fm = map pfst m
         sm = map (hdrToSrc . psnd) m
-    p1 <- prog n $ map toState sm ++ map toState fm
+    p1 <- prog n $ map return sm ++ map return fm
     modify revFiles
-    toState $ pair p1 (toCode emptyProg)
+    return $ pair p1 (toCode emptyProg)
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode)
 
@@ -860,11 +860,11 @@ pair1 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b)) ->
   State s (p CppSrcCode CppHdrCode a) -> State s (p CppSrcCode CppHdrCode b)
 pair1 srcf hdrf stv = do
   v <- stv
-  let fp = toState $ pfst v
-      sp = toState $ psnd v
+  let fp = return $ pfst v
+      sp = return $ psnd v
   p1 <- srcf fp
   p2 <- hdrf sp
-  toState $ pair p1 p2
+  return $ pair p1 p2
 
 pair2 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) -> 
   State t (CppSrcCode c)) -> (State r (CppHdrCode a) -> State s (CppHdrCode b) 
@@ -872,8 +872,8 @@ pair2 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) ->
   State t (p CppSrcCode CppHdrCode b) -> State t (p CppSrcCode CppHdrCode c)
 pair2 srcf hdrf stv1 stv2 = do
   v1 <- stv1
-  let fv1 = toState $ pfst v1
-      sv1 = toState $ psnd v1
+  let fv1 = return $ pfst v1
+      sv1 = return $ psnd v1
   pair1 (srcf fv1) (hdrf sv1) stv2
 
 pair3 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) -> 
@@ -883,8 +883,8 @@ pair3 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) ->
   -> State u (p CppSrcCode CppHdrCode c) -> State u (p CppSrcCode CppHdrCode d)
 pair3 srcf hdrf stv1 stv2 stv3 = do
   v1 <- stv1
-  let fv1 = toState $ pfst v1
-      sv1 = toState $ psnd v1
+  let fv1 = return $ pfst v1
+      sv1 = return $ psnd v1
   pair2 (srcf fv1) (hdrf sv1) stv2 stv3
 
 pair4 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) -> 
@@ -896,8 +896,8 @@ pair4 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) ->
   State v (p CppSrcCode CppHdrCode e)
 pair4 srcf hdrf stv1 stv2 stv3 stv4 = do
   v1 <- stv1
-  let fv1 = toState $ pfst v1
-      sv1 = toState $ psnd v1
+  let fv1 = return $ pfst v1
+      sv1 = return $ psnd v1
   pair3 (srcf fv1) (hdrf sv1) stv2 stv3 stv4
 
 pair5 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) -> 
@@ -910,8 +910,8 @@ pair5 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) ->
   State w (p CppSrcCode CppHdrCode f)
 pair5 srcf hdrf stv1 stv2 stv3 stv4 stv5 = do
   v1 <- stv1
-  let fv1 = toState $ pfst v1
-      sv1 = toState $ psnd v1
+  let fv1 = return $ pfst v1
+      sv1 = return $ psnd v1
   pair4 (srcf fv1) (hdrf sv1) stv2 stv3 stv4 stv5
   
 pair1List :: (Pair p) => ([State r (CppSrcCode a)] -> State s (CppSrcCode b)) 
@@ -919,11 +919,11 @@ pair1List :: (Pair p) => ([State r (CppSrcCode a)] -> State s (CppSrcCode b))
   [State s (p CppSrcCode CppHdrCode a)] -> State s (p CppSrcCode CppHdrCode b)
 pair1List srcf hdrf stv = do
   v <- sequence stv
-  let fl = map (toState . pfst) v
-      sl = map (toState . psnd) v
+  let fl = map (return . pfst) v
+      sl = map (return . psnd) v
   p1 <- srcf fl
   p2 <- hdrf sl
-  toState $ pair p1 p2
+  return $ pair p1 p2
 
 pair2Lists :: (Pair p) => ([State r (CppSrcCode a)] -> [State s (CppSrcCode b)] 
   -> State t (CppSrcCode c)) -> ([State r (CppHdrCode a)] -> 
@@ -932,8 +932,8 @@ pair2Lists :: (Pair p) => ([State r (CppSrcCode a)] -> [State s (CppSrcCode b)]
   -> State t (p CppSrcCode CppHdrCode c)
 pair2Lists srcf hdrf stv1 stv2 = do
   v1 <- sequence stv1
-  let fl1 = map (toState . pfst) v1
-      sl1 = map (toState . psnd) v1
+  let fl1 = map (return . pfst) v1
+      sl1 = map (return . psnd) v1
   pair1List (srcf fl1) (hdrf sl1) stv2
 
 pair3Lists :: (Pair p) => ([State r (CppSrcCode a)] -> [State s (CppSrcCode b)] 
@@ -945,8 +945,8 @@ pair3Lists :: (Pair p) => ([State r (CppSrcCode a)] -> [State s (CppSrcCode b)]
   State u (p CppSrcCode CppHdrCode d)
 pair3Lists srcf hdrf stv1 stv2 stv3 = do
   v1 <- sequence stv1
-  let fl1 = map (toState . pfst) v1
-      sl1 = map (toState . psnd) v1
+  let fl1 = map (return . pfst) v1
+      sl1 = map (return . psnd) v1
   pair2Lists (srcf fl1) (hdrf sl1) stv2 stv3 
 
 pair1List1Val :: (Pair p) => ([State r (CppSrcCode a)] -> State s (CppSrcCode b)
@@ -956,8 +956,8 @@ pair1List1Val :: (Pair p) => ([State r (CppSrcCode a)] -> State s (CppSrcCode b)
   -> State t (p CppSrcCode CppHdrCode c)
 pair1List1Val srcf hdrf stv1 stv2 = do
   v1 <- sequence stv1
-  let fl1 = map (toState . pfst) v1
-      sl1 = map (toState . psnd) v1
+  let fl1 = map (return . pfst) v1
+      sl1 = map (return . psnd) v1
   pair1 (srcf fl1) (hdrf sl1) stv2
 
 pair1Val1List :: (Pair p) => (State r (CppSrcCode a) -> [State s (CppSrcCode b)]
@@ -967,8 +967,8 @@ pair1Val1List :: (Pair p) => (State r (CppSrcCode a) -> [State s (CppSrcCode b)]
   -> State t (p CppSrcCode CppHdrCode c)
 pair1Val1List srcf hdrf stv1 stv2 = do
   v1 <- stv1
-  let fv1 = toState $ pfst v1
-      sv1 = toState $ psnd v1
+  let fv1 = return $ pfst v1
+      sv1 = return $ psnd v1
   pair1List (srcf fv1) (hdrf sv1) stv2
 
 pair2Lists1Val :: (Pair p) => ([State r (CppSrcCode a)] -> 
@@ -979,8 +979,8 @@ pair2Lists1Val :: (Pair p) => ([State r (CppSrcCode a)] ->
   -> State u (p CppSrcCode CppHdrCode c) -> State u (p CppSrcCode CppHdrCode d)
 pair2Lists1Val srcf hdrf stv1 stv2 stv3 = do
   v1 <- sequence stv1
-  let fl1 = map (toState . pfst) v1
-      sl1 = map (toState . psnd) v1
+  let fl1 = map (return . pfst) v1
+      sl1 = map (return . psnd) v1
   pair1List1Val (srcf fl1) (hdrf sl1) stv2 stv3 
 
 pairValListVal :: (Pair p) => (State r (CppSrcCode a) -> 
@@ -991,8 +991,8 @@ pairValListVal :: (Pair p) => (State r (CppSrcCode a) ->
   -> State u (p CppSrcCode CppHdrCode c) -> State u (p CppSrcCode CppHdrCode d)
 pairValListVal srcf hdrf stv1 stv2 stv3 = do
   v1 <- stv1
-  let fv1 = toState $ pfst v1
-      sv1 = toState $ psnd v1
+  let fv1 = return $ pfst v1
+      sv1 = return $ psnd v1
   pair1List1Val (srcf fv1) (hdrf sv1) stv2 stv3 
 
 pair3Lists1Val :: (Pair p) => ([State r (CppSrcCode a)] -> 
@@ -1005,8 +1005,8 @@ pair3Lists1Val :: (Pair p) => ([State r (CppSrcCode a)] ->
   State v (p CppSrcCode CppHdrCode d) -> State v (p CppSrcCode CppHdrCode e)
 pair3Lists1Val srcf hdrf stv1 stv2 stv3 stv4 = do
   v1 <- sequence stv1
-  let fl1 = map (toState . pfst) v1
-      sl1 = map (toState . psnd) v1
+  let fl1 = map (return . pfst) v1
+      sl1 = map (return . psnd) v1
   pair2Lists1Val (srcf fl1) (hdrf sl1) stv2 stv3 stv4 
 
 pair1Val3Lists :: (Pair p) => (State r (CppSrcCode a) -> 
@@ -1019,8 +1019,8 @@ pair1Val3Lists :: (Pair p) => (State r (CppSrcCode a) ->
   [State v (p CppSrcCode CppHdrCode d)] -> State v (p CppSrcCode CppHdrCode e)
 pair1Val3Lists srcf hdrf stv1 stv2 stv3 stv4 = do
   v1 <- stv1
-  let fv1 = toState $ pfst v1
-      sv1 = toState $ psnd v1
+  let fv1 = return $ pfst v1
+      sv1 = return $ psnd v1
   pair3Lists (srcf fv1) (hdrf sv1) stv2 stv3 stv4
 
 pair2Vals3Lists :: (Pair p) => (State r (CppSrcCode a) -> 
@@ -1035,8 +1035,8 @@ pair2Vals3Lists :: (Pair p) => (State r (CppSrcCode a) ->
   State w (p CppSrcCode CppHdrCode f)
 pair2Vals3Lists srcf hdrf stv1 stv2 stv3 stv4 stv5 = do
   v1 <- stv1
-  let fv1 = toState $ pfst v1
-      sv1 = toState $ psnd v1
+  let fv1 = return $ pfst v1
+      sv1 = return $ psnd v1
   pair1Val3Lists (srcf fv1) (hdrf sv1) stv2 stv3 stv4 stv5
 
 pairVal2ListsVal :: (Pair p) => (State r (CppSrcCode a) -> 
@@ -1049,8 +1049,8 @@ pairVal2ListsVal :: (Pair p) => (State r (CppSrcCode a) ->
   State v (p CppSrcCode CppHdrCode d) -> State v (p CppSrcCode CppHdrCode e)
 pairVal2ListsVal srcf hdrf stv1 stv2 stv3 stv4 = do
   v1 <- stv1
-  let fv1 = toState $ pfst v1
-      sv1 = toState $ psnd v1
+  let fv1 = return $ pfst v1
+      sv1 = return $ psnd v1
   pair2Lists1Val (srcf fv1) (hdrf sv1) stv2 stv3 stv4
 
 -----------------
@@ -1250,7 +1250,7 @@ instance VariableSym CppSrcCode where
     t <- c
     cm <- getClassMap
     maybe id ((>>) . modify . addModuleImportVS) 
-      (Map.lookup (getTypeString t) cm) $ classVar (toState t) v
+      (Map.lookup (getTypeString t) cm) $ classVar (return t) v
   objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
     ++ variableName vr) `elem` ovs then toState vr else CP.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
@@ -1465,12 +1465,12 @@ instance DeclStatement CppSrcCode where
   arrayDec n vr = zoom lensMStoVS $ do
     sz <- litInt n :: SValue CppSrcCode
     v <- vr 
-    toState $ mkStmt $ RC.type' (variableType v) <+> RC.variable v <> 
+    return $ mkStmt $ RC.type' (variableType v) <+> RC.variable v <> 
       brackets (RC.value sz)
   arrayDecDef vr vals = do
     vdc <- arrayDec (toInteger $ length vals) vr
     vs <- mapM (zoom lensMStoVS) vals
-    toState $ mkStmt $ RC.statement vdc <+> equals <+> braces (valueList vs)
+    return $ mkStmt $ RC.statement vdc <+> equals <+> braces (valueList vs)
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -1696,13 +1696,13 @@ instance ModuleSym CppSrcCode where
     mis <- getModuleImports
     us <- getUsing
     mn <- getCurrMain
-    toState $ vibcat [
+    return $ vibcat [
       if mn && length ms + length cs == 1 then empty else RC.import' $ mi n,
       vcat (map ((text "#define" <+>) . text) ds),
       vcat (map (RC.import' . li) lis),
       vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
       vcat (map (usingNameSpace "std" . Just) us)]) 
-    (toState empty) ms cs
+    (return empty) ms cs
     where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
           mi = modImport
           li = langImport
@@ -2232,15 +2232,15 @@ instance RenderMethod CppHdrCode where
     modify (setScope (snd $ unCPPHC s)) 
     tp <- t
     pms <- sequence ps
-    toState $ toCode $ mthd (snd $ unCPPHC s) $ cpphMethod n tp pms
+    return $ toCode $ mthd (snd $ unCPPHC s) $ cpphMethod n tp pms
   intFunc = C.intFunc
   commentedFunc = cppCommentedFunc Header
 
   destructor vars = do
     n <- getClassName
-    m <- pubMethod ('~':n) void [] (toState (toCode empty)) :: SMethod CppHdrCode
+    m <- pubMethod ('~':n) void [] (return (toCode empty)) :: SMethod CppHdrCode
     vs <- mapM (zoom lensMStoCS) vars
-    toState $ toCode $ mthd Pub (emptyIfEmpty 
+    return $ toCode $ mthd Pub (emptyIfEmpty 
       (vcat (map (RC.statement . onCodeValue destructSts) vs)) (RC.method m))
   
 instance MethodElim CppHdrCode where
@@ -2251,7 +2251,7 @@ instance StateVarSym CppHdrCode where
   stateVar s p v = do
     dec <- zoom lensCStoMS $ stmt $ varDec v
     emptS <- zoom lensCStoMS emptyStmt
-    toState $ on3CodeValues svd (onCodeValue snd s)
+    return $ on3CodeValues svd (onCodeValue snd s)
       (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec)) emptS
   stateVarDef _ s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
     (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyStmt)
@@ -2275,7 +2275,7 @@ instance RenderClass CppHdrCode where
     modify (setClassName n)
     vars <- sequence vs
     funcs <- sequence fs
-    toState $ cpphClass n i vars funcs public private
+    return $ cpphClass n i vars funcs public private
     where fs = map (zoom lensCStoMS) $ mths ++ [destructor vs]
 
   inherit n = onCodeValue (cppInherit n . fst) public
@@ -2295,12 +2295,12 @@ instance ModuleSym CppHdrCode where
     libis <- getHeaderLibImports
     mis <- getHeaderModImports
     us <- getHeaderUsing
-    toState $ vibcat [
+    return $ vibcat [
       vcat (map ((text "#define" <+>) . text) ds),
       vcat (map (RC.import' . li) lis),
       vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
       vcat (map (usingNameSpace "std" . Just) us)]) 
-    (toState empty)
+    (return empty)
     where mi, li :: Label -> CppHdrCode (Import CppHdrCode)
           mi = modImport
           li = langImport
@@ -2530,10 +2530,10 @@ cppPrint newLn pf vl = zoom lensMStoVS $ do
   e <- end
   printFn <- pf
   v <- vl
-  toState $ mkStmt $ RC.value printFn <+> text "<<" <+> pars v (RC.value v) <+> e
+  return $ mkStmt $ RC.value printFn <+> text "<<" <+> pars v (RC.value v) <+> e
   where pars v = if maybe False (< 9) (valuePrec v) then parens else id
-        end = if newLn then addIOStreamImport (toState $ text "<<" <+> 
-          text "std::endl") else toState empty
+        end = if newLn then addIOStreamImport (return $ text "<<" <+> 
+          text "std::endl") else return empty
 
 cppThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 cppThrowDoc errMsg = text "throw" <> parens (RC.value errMsg)
@@ -2612,10 +2612,10 @@ cppCommentedFunc ft cmt fn = do
   mn <- getCurrMainFunc
   scp <- getScope
   cmnt <- cmt
-  let cf = toState (onCodeValue (mthd scp . R.commentedItem 
+  let cf = return (onCodeValue (mthd scp . R.commentedItem 
         (RC.blockComment' cmnt) . mthdDoc) f)
-      ret Source = if mn then cf else toState f
-      ret Header = if mn then toState f else cf
+      ret Source = if mn then cf else return f
+      ret Header = if mn then return f else cf
       ret Combined = error "Combined passed to cppCommentedFunc"
   ret ft
 
@@ -2626,7 +2626,7 @@ cppsStateVarDef cns n s p vr' vl' = do
   vr <- zoom lensCStoVS vr'
   vl <- zoom lensCStoVS vl'
   emptS <- zoom lensCStoMS emptyStmt
-  toState $ on3CodeValues svd (onCodeValue snd s) 
+  return $ on3CodeValues svd (onCodeValue snd s) 
     (toCode $ onBinding (binding p) (cns <+> RC.type' (variableType vr) <+> 
       text (n ++ "::") <> RC.variable vr <+> equals <+> RC.value vl <> 
       endStatement) empty) 

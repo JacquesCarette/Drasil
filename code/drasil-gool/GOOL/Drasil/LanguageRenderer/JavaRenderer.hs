@@ -575,7 +575,7 @@ instance StringStatement JavaCode where
     ss <- zoom lensMStoVS $ 
       jStringSplit vnew (funcApp "Arrays.asList" (listType string) 
       [s $. func "split" (listType string) [litString [d]]])
-    toState $ mkStmt ss 
+    return $ mkStmt ss 
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
@@ -680,7 +680,7 @@ instance RenderMethod JavaCode where
           (Map.lookup (key mn n) mem) 
         key mnm nm = mnm ++ "." ++ nm
     modify ((if m then setCurrMain else id) . addExceptionImports excs) 
-    toState $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
+    return $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
   intFunc = C.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
@@ -1014,4 +1014,4 @@ addConstructorCallExcsCurrMod ot f = do
   mem <- getMethodExcMap
   let tp = getTypeString t
   modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ tp) mem))
-  f (toState t)
+  f (return t)

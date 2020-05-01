@@ -181,7 +181,7 @@ arrayElem i' v' = do
   i <- i'
   v <- v'
   let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"
-      vType = listInnerType $ toState $ variableType v
+      vType = listInnerType $ return $ variableType v
       vRender = RC.variable v <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
@@ -232,15 +232,15 @@ selfFuncAppMixedArgs d slf n t vs ns = do
 newObjMixedArgs :: (RenderSym r) => String -> MixedCtorCall r
 newObjMixedArgs s tp vs ns = do
   t <- tp 
-  S.call Nothing Nothing (s ++ getTypeString t) (toState t) vs ns
+  S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns
 
 lambda :: (RenderSym r) => ([r (Variable r)] -> r (Value r) -> Doc) -> 
   [SVariable r] -> SValue r -> SValue r
 lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
-  ft <- funcType (map (toState . variableType) ps) (toState $ valueType ex)
-  toState $ valFromData (Just 0) ft (f ps ex)
+  ft <- funcType (map (return . variableType) ps) (return $ valueType ex)
+  return $ valFromData (Just 0) ft (f ps ex)
 
 objAccess :: (RenderSym r) => SValue r -> VSFunction r -> SValue r
 objAccess = on2StateValues (\v f -> mkVal (functionType f) (R.objAccess 
@@ -486,7 +486,7 @@ fileFromData f fpath mdl = do
       if s ^. currMain && isSource (s ^. currFileType) 
         then over lensFStoGS (setMainMod fpath) s
         else s)
-  toState $ f fpath mdl
+  return $ f fpath mdl
 
 -- Helper functions
 

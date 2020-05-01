@@ -637,7 +637,7 @@ instance RenderMethod CSharpCode where
     tp <- t
     pms <- sequence ps
     bd <- b
-    toState $ toCode $ mthd $ R.method n s p tp pms bd
+    return $ toCode $ mthd $ R.method n s p tp pms bd
   intFunc = C.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
@@ -739,7 +739,7 @@ csFuncDecDef v ps r = do
   vr <- zoom lensMStoVS v
   pms <- mapM (zoom lensMStoVS) ps
   b <- oneLiner $ returnStmt r
-  toState $ mkStmtNoEnd $ RC.type' (variableType vr) <+> text (variableName vr) 
+  return $ mkStmtNoEnd $ RC.type' (variableType vr) <+> text (variableName vr) 
     <> parens (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd 
 
 csThrowDoc :: (RenderSym r) => r (Value r) -> Doc
@@ -767,7 +767,7 @@ csInput tp inF = do
   t <- tp
   inFn <- inF
   let v = mkVal t $ text (csInput' (getType t)) <> parens (RC.value inFn)
-  csInputImport (getType t) (toState v)
+  csInputImport (getType t) (return v)
   where csInput' Integer = "Int32.Parse"
         csInput' Float = "Single.Parse"
         csInput' Double = "Double.Parse"

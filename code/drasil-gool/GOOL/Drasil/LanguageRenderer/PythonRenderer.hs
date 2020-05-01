@@ -342,8 +342,8 @@ instance NumericExpression PythonCode where
     v2 <- v2'
     let pyDivision Integer Integer = binExpr (multPrec "//")
         pyDivision _ _ = binExpr divideOp
-    pyDivision (getType $ valueType v1) (getType $ valueType v2) (toState v1) 
-      (toState v2)
+    pyDivision (getType $ valueType v1) (getType $ valueType v2) (return v1) 
+      (return v2)
   (#%) = binExpr moduloOp
   (#^) = binExpr powerOp
 
@@ -475,7 +475,7 @@ instance InternalIOStmt PythonCode where
     f' <- fromMaybe (mkStateVal void empty) f
     p' <- p
     v' <- v
-    toState $ mkStmtNoEnd $ pyPrint nl p' v' f'
+    return $ mkStmtNoEnd $ pyPrint nl p' v' f'
 
 instance InternalControlStmt PythonCode where
   multiReturn [] = error "Attempt to write return statement with no return variables"
@@ -521,9 +521,9 @@ instance DeclStatement PythonCode where
   constDecDef = varDecDef
   funcDecDef v ps r = do
     vr <- zoom lensMStoVS v
-    f <- function (variableName vr) private dynamic (toState $ variableType vr) 
+    f <- function (variableName vr) private dynamic (return $ variableType vr) 
       (map param ps) (oneLiner $ returnStmt r)
-    toState $ mkStmtNoEnd $ RC.method f
+    return $ mkStmtNoEnd $ RC.method f
 
 instance IOStatement PythonCode where
   print      = pyOut False Nothing printFunc
@@ -586,7 +586,7 @@ instance ControlStatement PythonCode where
     i <- zoom lensMStoVS i'
     v <- zoom lensMStoVS v'
     b <- b'
-    toState $ mkStmtNoEnd $ pyForEach i v b
+    return $ mkStmtNoEnd $ pyForEach i v b
   while v' = on2StateValues (\v b -> mkStmtNoEnd (pyWhile v b)) 
     (zoom lensMStoVS v')
 
@@ -649,7 +649,7 @@ instance MethodSym PythonCode where
     modify setCurrMain
     bod <- b
     modify (setMainDoc $ RC.body bod)
-    toState $ toCode $ mthd empty
+    return $ toCode $ mthd empty
 
   docFunc = G.docFunc
 
@@ -667,12 +667,12 @@ instance RenderMethod PythonCode where
     sl <- zoom lensMStoVS self
     pms <- sequence ps
     bd <- b
-    toState $ toCode $ mthd $ pyMethod n sl pms bd
+    return $ toCode $ mthd $ pyMethod n sl pms bd
   intFunc m n _ _ _ ps b = do
     modify (if m then setCurrMain else id)
     bd <- b
     pms <- sequence ps
-    toState $ toCode $ mthd $ pyFunction n pms bd
+    return $ toCode $ mthd $ pyFunction n pms bd
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
@@ -716,7 +716,7 @@ instance ModuleSym PythonCode where
     lis <- getLangImports
     libis <- getLibImports
     mis <- getModuleImports
-    toState $ vibcat [
+    return $ vibcat [
       vcat (map (RC.import' . 
         (langImport :: Label -> PythonCode (Import PythonCode))) lis),
       vcat (map (RC.import' . 
@@ -876,7 +876,7 @@ pyListSlice vn vo beg end step = zoom lensMStoVS $ do
   b <- beg
   e <- end
   s <- step
-  toState $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <> 
+  return $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <> 
     brackets (RC.value b <> colon <> RC.value e <> colon <> RC.value s)
 
 pyMethod :: (RenderSym r) => Label -> r (Variable r) -> [r (Parameter r)] ->

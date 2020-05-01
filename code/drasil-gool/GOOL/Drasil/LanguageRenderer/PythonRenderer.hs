@@ -132,7 +132,7 @@ instance RenderFile PythonCode where
   top _ = toCode empty
   bottom = toCode empty
   
-  commentedMod cmt m = on2StateValues (on2CodeValues R.commentedMod) m cmt
+  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
 

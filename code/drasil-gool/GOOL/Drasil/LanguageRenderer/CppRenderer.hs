@@ -1090,8 +1090,8 @@ instance RenderFile CppSrcCode where
   top _ = toCode empty
   bottom = toCode empty
 
-  commentedMod cmnt mod = on3StateValues (\m cmt mn -> if mn then on2CodeValues 
-    R.commentedMod m cmt else m) mod cmnt getCurrMain
+  commentedMod = on3StateValues (\mn m cmt -> if mn then on2CodeValues 
+    R.commentedMod m cmt else m) getCurrMain
   
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
@@ -1755,9 +1755,8 @@ instance RenderFile CppHdrCode where
   top = onCodeValue cpphtop
   bottom = toCode $ text "#endif"
   
-  commentedMod cmnt mod = on2StateValues (\m cmt -> if isEmpty (RC.module' $ 
-    onCodeValue fileMod m) then m else on2CodeValues R.commentedMod m cmt) 
-    mod cmnt
+  commentedMod = on2StateValues (\m cmt -> if isEmpty (RC.module' $ 
+    onCodeValue fileMod m) then m else on2CodeValues R.commentedMod m cmt)
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
 

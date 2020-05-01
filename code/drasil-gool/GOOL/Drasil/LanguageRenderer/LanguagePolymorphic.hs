@@ -473,8 +473,8 @@ fileDoc ext topb botb mdl = do
 
 docMod :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> 
   SFile r
-docMod e d a dt = commentedMod (docComment $ moduleDox d a dt . addExt e <$> 
-  getModuleName)
+docMod e d a dt fl = commentedMod fl (docComment $ moduleDox d a dt . addExt e 
+  <$> getModuleName)
 
 fileFromData :: (RenderSym r) => (FilePath -> r (Module r) -> r (File r)) 
   -> FilePath -> r (Module r) -> SFile r

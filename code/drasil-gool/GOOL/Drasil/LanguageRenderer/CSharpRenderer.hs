@@ -636,8 +636,7 @@ instance RenderMethod CSharpCode where
     modify (if m then setCurrMain else id)
     tp <- t
     pms <- sequence ps
-    bd <- b
-    return $ toCode $ mthd $ R.method n s p tp pms bd
+    toCode . mthd . R.method n s p tp pms <$> b
   intFunc = C.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)

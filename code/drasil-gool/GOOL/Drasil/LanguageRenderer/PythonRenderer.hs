@@ -585,8 +585,7 @@ instance ControlStatement PythonCode where
   forEach i' v' b' = do
     i <- zoom lensMStoVS i'
     v <- zoom lensMStoVS v'
-    b <- b'
-    return $ mkStmtNoEnd $ pyForEach i v b
+    mkStmtNoEnd . pyForEach i v <$> b'
   while v' = on2StateValues (\v b -> mkStmtNoEnd (pyWhile v b)) 
     (zoom lensMStoVS v')
 
@@ -666,8 +665,7 @@ instance RenderMethod PythonCode where
     modify (if m then setCurrMain else id)
     sl <- zoom lensMStoVS self
     pms <- sequence ps
-    bd <- b
-    return $ toCode $ mthd $ pyMethod n sl pms bd
+    toCode . mthd . pyMethod n sl pms <$> b
   intFunc m n _ _ _ ps b = do
     modify (if m then setCurrMain else id)
     bd <- b

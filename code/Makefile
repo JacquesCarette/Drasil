@@ -21,6 +21,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 # Current list of examples
 SRC_EXAMPLES = glassbr nopcm projectile
 EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template
+GOOLTEST = gooltest
 
 # where they live
 HGHC_DIR  = HGHC
@@ -31,6 +32,7 @@ SSP_DIR   = SSP
 GAMEPHYSICS_DIR  = GamePhysics
 PROJECTILE_DIR = Projectile
 TEMPLATE_DIR = Template
+GOOLTEST_DIR = GOOLTest
 
 MULTI_SRC_DIRS = $(PROJECTILE_DIR) # Directories for examples with multiple src versions
 
@@ -43,6 +45,7 @@ SSP_EXE   = ssp
 GAMEPHYSICS_EXE  = gamephysics
 PROJECTILE_EXE = projectile
 TEMPLATE_EXE = template
+GOOLTEST_EXE = codegenTest
 
 # and the associated per-example information generated
 GEN_E_SUFFIX = _gen
@@ -51,8 +54,8 @@ TEX_E_SUFFIX = _tex
 CODE_E_SUFFIX = _code
 DCP_E_SUFFIX = _deploy_code_path
 
-GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
-TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES))
+GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES) $(GOOLTEST))
+TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES) $(GOOLTEST))
 TEX_EXAMPLES = $(addsuffix $(TEX_E_SUFFIX), $(EXAMPLES))
 CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(SRC_EXAMPLES))
 DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
@@ -172,7 +175,11 @@ $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFI
 	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" TARGET=$(TARGET) \
 	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"code_build.sh
 
-code: $(CODE_EXAMPLES)
+$(GOOLTEST): $(GOOLTEST)$(GEN_E_SUFFIX)
+	@EDIR="$(GOOLTEST_DIR)" BUILD_FOLDER="$(BUILD_FOLDER)" TARGET=$(TARGET) \
+	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"gooltest_build.sh
+
+code: $(CODE_EXAMPLES) $(GOOLTEST)
 
 doxygen: TARGET=doc
 doxygen: $(CODE_EXAMPLES)
@@ -208,4 +215,4 @@ clean: $(CLEAN_FOLDERS)
 	- stack clean
 	- rm "$(CACHED_MSV_FILE)"
 
-.PHONY: clean code tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(ALL_EXPANDED_TARGETS)
+.PHONY: clean code tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

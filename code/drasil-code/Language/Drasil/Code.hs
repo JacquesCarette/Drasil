@@ -34,7 +34,8 @@ module Language.Drasil.Code (
   initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill, 
   returnExprListFill, fixedStatementFill,
   Lang(..),
-  PackageSym(..),
+  PackageSym(..), AuxiliarySym(..),
+  AuxData(..), PackData(..),
   CodeChunk, CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, ccObjVar, 
   listToArray,
   field,
@@ -91,7 +92,10 @@ import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), Comments(..),
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), 
   pubStateVar, privStateVar, fDecDef, ffor, funcData, funcDef, packmod)
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
+  AuxiliarySym(..))
+
+import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), PackData(..))
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeFuncChunk, 
   quantvar, quantfunc, ccObjVar, listToArray)

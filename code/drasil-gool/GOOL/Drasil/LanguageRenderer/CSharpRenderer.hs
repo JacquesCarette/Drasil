@@ -64,17 +64,18 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, checkState, destructorError, stateVarDef, constVar, 
-  intClass, listSetFunc, listAccessFunc, arrayType, pi, notNull, printSt, 
-  arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, 
-  mainFunction, stateVar, buildModule', string, constDecDef, docInOutFunc)
+  discardFileLine, destructorError, stateVarDef, constVar, intClass, 
+  listSetFunc, listAccessFunc, arrayType, pi, notNull, printSt, arrayDec, 
+  arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, mainFunction, 
+  stateVar, buildModule', string, constDecDef, docInOutFunc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for, forRange,
-  while, notifyObservers, intFunc, multiAssignError, multiReturnError)
+  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for,
+  while, intFunc, multiAssignError, multiReturnError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
-  decrement1, runStrategy, listSlice, stringListVals, stringListLists)
+  decrement1, runStrategy, listSlice, stringListVals, stringListLists,
+  forRange, notifyObservers, checkState)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
@@ -124,7 +125,9 @@ instance RenderSym CSharpCode
 
 instance FileSym CSharpCode where
   type File CSharpCode = FileData
-  fileDoc m = modify (setFileType Combined) >> G.fileDoc csExt top bottom m
+  fileDoc m = do
+    modify (setFileType Combined)
+    G.fileDoc csExt top bottom m
 
   docMod = G.docMod csExt
 
@@ -132,13 +135,13 @@ instance RenderFile CSharpCode where
   top _ = toCode empty
   bottom = toCode empty
 
-  commentedMod cmt m = on2StateValues (on2CodeValues R.commentedMod) m cmt
+  commentedMod = on2StateValues (on2CodeValues R.commentedMod)
 
   fileFromData = G.fileFromData (onCodeValue . fileD)
 
 instance ImportSym CSharpCode where
   type Import CSharpCode = Doc
-  langImport n = toCode $ csImport n
+  langImport = toCode . csImport
   modImport = langImport
 
 instance ImportElim CSharpCode where
@@ -185,7 +188,8 @@ instance TypeSym CSharpCode where
   string = CP.string
   infile = csInfileType
   outfile = csOutfileType
-  listType t = modify (addLangImportVS "System.Collections.Generic") >> 
+  listType t = do
+    modify (addLangImportVS "System.Collections.Generic") 
     C.listType "List" t
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
@@ -467,15 +471,15 @@ instance DeclStatement CSharpCode where
   funcDecDef = csFuncDecDef
 
 instance IOStatement CSharpCode where
-  print = G.print False Nothing printFunc
-  printLn = G.print True Nothing printLnFunc
-  printStr = G.print False Nothing printFunc . litString
-  printStrLn = G.print True Nothing printLnFunc . litString
+  print      = G.print False Nothing printFunc
+  printLn    = G.print True  Nothing printLnFunc
+  printStr   = G.print False Nothing printFunc   . litString
+  printStrLn = G.print True  Nothing printLnFunc . litString
 
-  printFile f = G.print False (Just f) (printFileFunc f)
-  printFileLn f = G.print True (Just f) (printFileLnFunc f)
-  printFileStr f = G.print False (Just f) (printFileFunc f) . litString
-  printFileStrLn f = G.print True (Just f) (printFileLnFunc f) . litString
+  printFile f      = G.print False (Just f) (printFileFunc f)
+  printFileLn f    = G.print True  (Just f) (printFileLnFunc f)
+  printFileStr f   = G.print False (Just f) (printFileFunc f)   . litString
+  printFileStrLn f = G.print True  (Just f) (printFileLnFunc f) . litString
 
   getInput v = v &= csInput (onStateValue variableType v) inputFunc
   discardInput = C.discardInput csDiscardInput
@@ -513,7 +517,9 @@ instance ControlStatement CSharpCode where
 
   returnStmt = G.returnStmt Semi
   
-  throw msg = modify (addLangImport "System") >> G.throw csThrowDoc Semi msg
+  throw msg = do
+    modify (addLangImport "System")
+    G.throw csThrowDoc Semi msg
 
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch = C.switch
@@ -521,17 +527,17 @@ instance ControlStatement CSharpCode where
   ifExists = M.ifExists
 
   for = C.for bodyStart bodyEnd
-  forRange = C.forRange
+  forRange = M.forRange
   forEach = CP.forEach bodyStart bodyEnd (text "foreach") inLabel 
   while = C.while bodyStart bodyEnd
 
   tryCatch = G.tryCatch csTryCatch
 
 instance StatePattern CSharpCode where 
-  checkState = CP.checkState
+  checkState = M.checkState
 
 instance ObserverPattern CSharpCode where
-  notifyObservers = C.notifyObservers
+  notifyObservers = M.notifyObservers
 
 instance StrategyPattern CSharpCode where
   runStrategy = M.runStrategy
@@ -588,9 +594,11 @@ instance MethodSym CSharpCode where
   docInOutFunc n = CP.docInOutFunc (inOutFunc n)
 
 instance RenderMethod CSharpCode where
-  intMethod m n s p t ps b = modify (if m then setCurrMain else id) >> 
-    on3StateValues (\tp pms bd -> toCode $ mthd $ R.method n s p tp pms bd) t 
-    (sequence ps) b
+  intMethod m n s p t ps b = do
+    modify (if m then setCurrMain else id)
+    tp <- t
+    pms <- sequence ps
+    toCode . mthd . R.method n s p tp pms <$> b
   intFunc = C.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
@@ -686,10 +694,12 @@ csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $
 
 csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
   MSStatement r
-csFuncDecDef v ps r = on3StateValues (\vr pms b -> mkStmtNoEnd $ 
-  RC.type' (variableType vr) <+> text (variableName vr) <> parens 
-  (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd) 
-  (zoom lensMStoVS v) (mapM (zoom lensMStoVS) ps) (oneLiner $ returnStmt r)
+csFuncDecDef v ps r = do
+  vr <- zoom lensMStoVS v
+  pms <- mapM (zoom lensMStoVS) ps
+  b <- oneLiner $ returnStmt r
+  return $ mkStmtNoEnd $ RC.type' (variableType vr) <+> text (variableName vr) 
+    <> parens (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd 
 
 csThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
@@ -712,8 +722,11 @@ csFileInput = onStateValue (\f -> mkVal (valueType f) (RC.value f <> dot <>
   text "ReadLine()"))
 
 csInput :: (RenderSym r) => VSType r -> SValue r -> SValue r
-csInput tp inF = tp >>= (\t -> csInputImport (getType t) $ onStateValue (\inFn 
-  -> mkVal t $ text (csInput' (getType t)) <> parens (RC.value inFn)) inF)
+csInput tp inF = do
+  t <- tp
+  inFn <- inF
+  let v = mkVal t $ text (csInput' (getType t)) <> parens (RC.value inFn)
+  csInputImport (getType t) (return v)
   where csInput' Integer = "Int32.Parse"
         csInput' Float = "Single.Parse"
         csInput' Double = "Double.Parse"

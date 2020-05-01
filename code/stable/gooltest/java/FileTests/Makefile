@@ -1,0 +1,9 @@
+build: FileTests/FileTests.class
+
+FileTests/FileTests.class: FileTests/FileTests.java
+	javac FileTests/FileTests.java
+
+run: build
+	java FileTests.FileTests $(RUNARGS)
+
+.PHONY: build run

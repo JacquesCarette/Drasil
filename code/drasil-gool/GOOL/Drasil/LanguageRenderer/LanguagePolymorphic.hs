@@ -181,7 +181,7 @@ arrayElem i' v' = do
   i <- i'
   v <- v'
   let vName = variableName v ++ "[" ++ render (RC.value i) ++ "]"
-      vType = listInnerType $ toState $ variableType v
+      vType = listInnerType $ return $ variableType v
       vRender = RC.variable v <> brackets (RC.value i)
   mkStateVar vName vType vRender
 
@@ -225,18 +225,22 @@ funcAppMixedArgs :: (RenderSym r) => MixedCall r
 funcAppMixedArgs = S.call Nothing Nothing
 
 selfFuncAppMixedArgs :: (RenderSym r) => Doc -> SVariable r -> MixedCall r
-selfFuncAppMixedArgs d slf n t vs ns = slf >>= (\s -> S.call Nothing 
-  (Just $ RC.variable s <> d) n t vs ns)
+selfFuncAppMixedArgs d slf n t vs ns = do
+  s <- slf 
+  S.call Nothing (Just $ RC.variable s <> d) n t vs ns
 
 newObjMixedArgs :: (RenderSym r) => String -> MixedCtorCall r
-newObjMixedArgs s tp vs ns = tp >>= 
-  (\t -> S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns)
+newObjMixedArgs s tp vs ns = do
+  t <- tp 
+  S.call Nothing Nothing (s ++ getTypeString t) (return t) vs ns
 
 lambda :: (RenderSym r) => ([r (Variable r)] -> r (Value r) -> Doc) -> 
   [SVariable r] -> SValue r -> SValue r
-lambda f ps' ex' = sequence ps' >>= (\ps -> ex' >>= (\ex -> funcType (map 
-  (toState . variableType) ps) (toState $ valueType ex) >>= (\ft -> 
-  toState $ valFromData (Just 0) ft (f ps ex))))
+lambda f ps' ex' = do
+  ps <- sequence ps'
+  ex <- ex'
+  ft <- funcType (map (return . variableType) ps) (return $ valueType ex)
+  return $ valFromData (Just 0) ft (f ps ex)
 
 objAccess :: (RenderSym r) => SValue r -> VSFunction r -> SValue r
 objAccess = on2StateValues (\v f -> mkVal (functionType f) (R.objAccess 
@@ -417,8 +421,7 @@ constructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r ->
   MSBody r -> SMethod r
 constructor fName ps is b = getClassName >>= (\c -> intMethod False fName 
   public dynamic (S.construct c) ps (S.multiBody [ib, b]))
-  where ib = bodyStatements (zipWith (\vr vl -> S.objVarSelf vr &= vl) 
-          (map fst is) (map snd is))
+  where ib = bodyStatements (map (\(vr, vl) -> S.objVarSelf vr &= vl) is)
 
 function :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> 
   VSType r -> [MSParameter r] -> MSBody r -> SMethod r
@@ -460,27 +463,31 @@ modFromData n f d = modify (setModuleName n) >> onStateValue f d
 
 fileDoc :: (RenderSym r) => String -> (r (Module r) -> r (Block r)) -> 
   r (Block r) -> FSModule r -> SFile r
-fileDoc ext topb botb = S.fileFromData (onStateValue (addExt ext) 
-  getModuleName) . onStateValue (\m -> updateModuleDoc (\d -> emptyIfEmpty d 
-  (R.file (RC.block $ topb m) d (RC.block botb))) m)
+fileDoc ext topb botb mdl = do
+  m <- mdl
+  nm <- getModuleName
+  let fp = addExt ext nm
+      updm = updateModuleDoc (\d -> emptyIfEmpty d 
+        (R.file (RC.block $ topb m) d (RC.block botb))) m
+  S.fileFromData fp updm
 
 docMod :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> 
   SFile r
-docMod e d a dt = commentedMod (docComment $ moduleDox d a dt . addExt e <$> 
-  getModuleName)
+docMod e d a dt fl = commentedMod fl (docComment $ moduleDox d a dt . addExt e 
+  <$> getModuleName)
 
 fileFromData :: (RenderSym r) => (FilePath -> r (Module r) -> r (File r)) 
-  -> FS FilePath -> FSModule r -> SFile r
-fileFromData f fp m = do
-  mdl <- m
-  fpath <- fp
+  -> FilePath -> r (Module r) -> SFile r
+fileFromData f fpath mdl = do
+  -- Add this file to list of files as long as it is not empty
   modify (\s -> if isEmpty (RC.module' mdl) 
     then s
     else over lensFStoGS (addFile (s ^. currFileType) fpath) $ 
+      -- If this is the main source file, set it as the main module in the state
       if s ^. currMain && isSource (s ^. currFileType) 
         then over lensFStoGS (setMainMod fpath) s
         else s)
-  toState $ f fpath mdl
+  return $ f fpath mdl
 
 -- Helper functions
 

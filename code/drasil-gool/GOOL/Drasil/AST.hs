@@ -1,5 +1,5 @@
-module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), isSource, 
-  Binding(..), onBinding, BindData(bind, bindDoc), bd, 
+module GOOL.Drasil.AST (Terminator(..), ScopeTag(..), QualifiedName, qualName, 
+  FileType(..), isSource, Binding(..), onBinding, BindData(bind, bindDoc), bd, 
   FileData(filePath, fileMod), fileD, updateFileMod, FuncData(fType, funcDoc), 
   fd, ModData(name, modDoc), md, updateMod, MethodData(mthdDoc), mthd, 
   updateMthd, OpData(opPrec, opDoc), od, ParamData(paramVar, paramDoc), pd, 
@@ -21,6 +21,14 @@ data Terminator = Semi | Empty
 -- Eq is needed for organizing methods and state variables into public and 
 -- private groups for C++ class rendering
 data ScopeTag = Pub | Priv deriving Eq
+
+-- Used in method exception map and call map. 
+-- Qualification first, name second
+-- Eq and Ord needed for map lookups
+data QualifiedName = QN String String deriving (Eq, Ord)
+
+qualName :: String -> String -> QualifiedName
+qualName = QN
 
 -- In C++ Source and Header files are separate, other languages have a single 
 -- (Combined) file

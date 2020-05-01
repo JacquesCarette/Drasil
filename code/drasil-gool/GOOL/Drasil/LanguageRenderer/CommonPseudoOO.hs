@@ -2,12 +2,12 @@
 module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, checkState, destructorError, stateVarDef, constVar, 
-  intClass, objVar, listSetFunc, listAccessFunc, buildModule, arrayType, 
-  pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, openFileW, openFileA, 
-  forEach, docMain, mainFunction, stateVar, buildModule', litArray, call', 
-  listSizeFunc, listAccessFunc', funcDecDef, discardFileInput, string, 
-  constDecDef, docInOutFunc
+  discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
+  listSetFunc, listAccessFunc, buildModule, arrayType, pi, notNull, printSt, 
+  arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, 
+  mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
+  listAccessFunc', funcDecDef, discardFileInput, string, constDecDef, 
+  docInOutFunc
 ) where
 
 import Utils.Drasil (indent)
@@ -25,8 +25,7 @@ import qualified GOOL.Drasil.ClassInterface as S (
   VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList), 
   VariableValue(valueOf), ValueExpression(lambda), FunctionSym(func, objAccess),
   StatementSym(valStmt), DeclStatement(varDec, varDecDef, constDecDef), 
-  ControlStatement(switch), ParameterSym(param), MethodSym(mainFunction), 
-  ClassSym(buildClass))
+  ParameterSym(param), MethodSym(mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..),  RenderType(..),
   RenderVariable(varFromData), InternalVarElim(variableBind), 
   RenderFunction(funcFromData), MethodTypeSym(mType),
@@ -96,15 +95,13 @@ iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++
   " has no iterators"
   
 listDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-listDecDef v vals = zoom lensMStoVS v >>= (\vr -> S.varDecDef (return vr) 
-  (S.litList (listInnerType $ return $ variableType vr) vals))
+listDecDef v vals = do
+  vr <- zoom lensMStoVS v 
+  let lst = S.litList (listInnerType $ return $ variableType vr) vals
+  S.varDecDef (return vr) lst
   
 discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
 discardFileLine n f = S.valStmt $ objMethodCallNoParams S.string f n 
-
-checkState :: (RenderSym r) => Label -> [(SValue r, MSBody r)] -> MSBody r -> 
-  MSStatement r
-checkState l = S.switch (S.valueOf $ S.var l S.string)
 
 destructorError :: String -> String
 destructorError l = "Destructors not allowed in " ++ l
@@ -126,7 +123,7 @@ intClass f n s i svrs mths = do
   modify (setClassName n) 
   svs <- onStateList (R.stateVarList . map RC.stateVar) svrs
   ms <- onStateList (vibcat . map RC.method) (map (zoom lensCStoMS) mths)
-  toState $ onCodeValue (\p -> f n p (RC.scope s) svs ms) i 
+  return $ onCodeValue (\p -> f n p (RC.scope s) svs ms) i 
 
 -- Python, Java, and C++ --
 
@@ -156,7 +153,7 @@ buildModule n imps bot fs cs = S.modFromData n (do
   fns <- mapM (zoom lensFStoMS) fs
   is <- imps
   bt <- bot
-  toState $ R.module' is (vibcat (map RC.class' cls)) 
+  return $ R.module' is (vibcat (map RC.class' cls)) 
     (vibcat (map RC.method fns ++ [bt])))
 
 -- Java and C# -- 
@@ -179,8 +176,8 @@ arrayDec n vr = zoom lensMStoVS $ do
   sz <- n 
   v <- vr 
   let tp = variableType v
-  innerTp <- listInnerType $ toState tp
-  toState $ mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new <+> 
+  innerTp <- listInnerType $ return tp
+  return $ mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new <+> 
     RC.type' innerTp <> brackets (RC.value sz)
 
 arrayDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
@@ -205,7 +202,7 @@ forEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
   b <- b'
-  toState $ mkStmtNoEnd $ vcat [
+  return $ mkStmtNoEnd $ vcat [
     forEachLabel <+> parens (RC.type' (variableType e) <+> RC.variable e <+> 
       inLbl <+> RC.value v) <+> bStart,
     indent $ RC.body b,
@@ -234,7 +231,7 @@ buildModule' n inc is ms cs = S.modFromData n (do
   lis <- getLangImports
   libis <- getLibImports
   mis <- getModuleImports
-  toState $ vibcat [
+  return $ vibcat [
     vcat (map (RC.import' . inc) (lis ++ sort (is ++ libis) ++ mis)),
     vibcat (map RC.class' cls)])
 

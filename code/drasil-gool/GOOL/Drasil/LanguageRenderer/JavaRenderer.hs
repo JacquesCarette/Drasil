@@ -139,7 +139,9 @@ instance RenderSym JavaCode
 
 instance FileSym JavaCode where
   type File JavaCode = FileData 
-  fileDoc m = modify (setFileType Combined) >> G.fileDoc jExt top bottom m
+  fileDoc m = do
+    modify (setFileType Combined)
+    G.fileDoc jExt top bottom m
 
   docMod = G.docMod jExt
 
@@ -328,9 +330,10 @@ instance Literal JavaCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray
-  litList t es = zoom lensVStoMS (modify (if null es then id else addLangImport 
-    "java.util.Arrays")) >> newObj (listType t) [funcApp "Arrays.asList" 
-    (listType t) es | not (null es)]
+  litList t es = do
+    zoom lensVStoMS $ modify (if null es then id else addLangImport 
+      "java.util.Arrays")
+    newObj (listType t) [funcApp "Arrays.asList" (listType t) es | not (null es)]
 
 instance MathConstant JavaCode where
   pi = CP.pi
@@ -391,9 +394,11 @@ instance ValueExpression JavaCode where
   -- map from the CodeInfo pass, but it's possible that one of the higher-level 
   -- functions implicitly calls these functions in the Java renderer, so we 
   -- also check here to add the exceptions from the called function to the map
-  funcAppMixedArgs n t vs ns = addCallExcsCurrMod n >> 
+  funcAppMixedArgs n t vs ns = do
+    addCallExcsCurrMod n 
     G.funcAppMixedArgs n t vs ns
-  selfFuncAppMixedArgs n t ps ns = addCallExcsCurrMod n >> 
+  selfFuncAppMixedArgs n t ps ns = do
+    addCallExcsCurrMod n
     G.selfFuncAppMixedArgs dot self n t ps ns
   extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
@@ -534,7 +539,7 @@ instance DeclStatement JavaCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
-  constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkStmt $ 
+  constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkStmt $
     jConstDecDef vr vl) vr' vl'
   funcDecDef = CP.funcDecDef
 
@@ -825,8 +830,9 @@ jOutfileType = modifyReturn (addLangImportVS "java.io.PrintWriter") $
   typeFromData File "PrintWriter" (text "PrintWriter")
 
 jListType :: (RenderSym r) => String -> VSType r -> VSType r
-jListType l t = modify (addLangImportVS $ "java.util." ++ l) >> 
-  (t >>= (jListType' . getType))
+jListType l t = do
+  modify (addLangImportVS $ "java.util." ++ l) 
+  t >>= (jListType' . getType)
   where jListType' Integer = toState $ typeFromData (List Integer) 
           (l ++ "<Integer>") (lst <> angles (text "Integer"))
         jListType' Float = toState $ typeFromData (List Float) 

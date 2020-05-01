@@ -75,8 +75,8 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  onCodeList, onStateList, on2StateLists, on1StateValue1List)
-import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
+  onCodeList, onStateList, on2StateLists)
+import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
   addLangImportVS, getLangImports, addLibImport, addLibImportVS, getLibImports, 
   addModuleImport, addModuleImportVS, getModuleImports, setFileType, 
   getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
@@ -121,7 +121,9 @@ instance RenderSym PythonCode
 
 instance FileSym PythonCode where
   type File PythonCode = FileData
-  fileDoc m = modify (setFileType Combined) >> G.fileDoc pyExt top bottom m
+  fileDoc m = do
+    modify (setFileType Combined)
+    G.fileDoc pyExt top bottom m
 
   docMod = G.docMod pyExt
 
@@ -323,7 +325,9 @@ instance VariableValue PythonCode where
 
 instance CommandLineArgs PythonCode where
   arg n = G.arg (litInt $ n+1) argsList
-  argsList = modify (addLangImportVS "sys") >> G.argsList "sys.argv"
+  argsList = do
+    modify (addLangImportVS "sys")
+    G.argsList "sys.argv"
   argExists i = listSize argsList ?> litInt (fromIntegral $ i+1)
 
 instance NumericExpression PythonCode where
@@ -333,10 +337,13 @@ instance NumericExpression PythonCode where
   (#+) = binExpr plusOp
   (#-) = binExpr minusOp
   (#*) = binExpr multOp
-  (#/) v1' v2' = join $ on2StateValues (\v1 v2 -> pyDivision (getType $ 
-    valueType v1) (getType $ valueType v2) v1' v2') v1' v2'
-    where pyDivision Integer Integer = binExpr (multPrec "//")
-          pyDivision _ _ = binExpr divideOp
+  (#/) v1' v2' = do
+    v1 <- v1'
+    v2 <- v2'
+    let pyDivision Integer Integer = binExpr (multPrec "//")
+        pyDivision _ _ = binExpr divideOp
+    pyDivision (getType $ valueType v1) (getType $ valueType v2) (toState v1) 
+      (toState v2)
   (#%) = binExpr moduloOp
   (#^) = binExpr powerOp
 
@@ -373,14 +380,18 @@ instance ValueExpression PythonCode where
 
   funcAppMixedArgs = G.funcAppMixedArgs
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
-  extFuncAppMixedArgs l n t ps ns = modify (addModuleImportVS l) >> 
+  extFuncAppMixedArgs l n t ps ns = do
+    modify (addModuleImportVS l)
     CP.extFuncAppMixedArgs l n t ps ns
-  libFuncAppMixedArgs l n t ps ns = modify (addLibImportVS l) >> 
+  libFuncAppMixedArgs l n t ps ns = do
+    modify (addLibImportVS l)
     CP.extFuncAppMixedArgs l n t ps ns
   newObjMixedArgs = G.newObjMixedArgs ""
-  extNewObjMixedArgs l tp ps ns = modify (addModuleImportVS l) >> 
+  extNewObjMixedArgs l tp ps ns = do
+    modify (addModuleImportVS l)
     pyExtNewObjMixedArgs l tp ps ns
-  libNewObjMixedArgs l tp ps ns = modify (addLibImportVS l) >> 
+  libNewObjMixedArgs l tp ps ns = do
+    modify (addLibImportVS l)
     pyExtNewObjMixedArgs l tp ps ns
 
   lambda = G.lambda pyLambda
@@ -426,8 +437,7 @@ instance List PythonCode where
   indexOf = CP.indexOf "index"
 
 instance InternalList PythonCode where
-  listSlice' b e s vnew vold = onStateValue toCode $ zoom lensMStoVS $ 
-    pyListSlice vnew vold (getVal b) (getVal e) (getVal s)
+  listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 
 instance Iterator PythonCode where
@@ -461,9 +471,12 @@ instance InternalAssignStmt PythonCode where
     mkStmtNoEnd (R.multiAssign vrs vls)) vars vals
 
 instance InternalIOStmt PythonCode where
-  printSt nl f p v = zoom lensMStoVS $ on3StateValues (\f' p' v' -> mkStmtNoEnd $ 
-    pyPrint nl p' v' f') (fromMaybe (mkStateVal void empty) f) p v
-  
+  printSt nl f p v = zoom lensMStoVS $ do
+    f' <- fromMaybe (mkStateVal void empty) f
+    p' <- p
+    v' <- v
+    toState $ mkStmtNoEnd $ pyPrint nl p' v' f'
+
 instance InternalControlStmt PythonCode where
   multiReturn [] = error "Attempt to write return statement with no return variables"
   multiReturn vs = zoom lensMStoVS $ onStateList (mkStmtNoEnd . R.return') vs
@@ -502,22 +515,25 @@ instance DeclStatement PythonCode where
   arrayDecDef = listDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew lib v vs = modify (addModuleImport lib) >> varDecDef v 
-    (extNewObj lib (onStateValue variableType v) vs)
+  extObjDecNew lib v vs = do
+    modify (addModuleImport lib)
+    varDecDef v (extNewObj lib (onStateValue variableType v) vs)
   constDecDef = varDecDef
-  funcDecDef v ps r = onStateValue (mkStmtNoEnd . RC.method) (zoom lensMStoVS v 
-    >>= (\vr -> function (variableName vr) private dynamic 
-    (toState $ variableType vr) (map param ps) (oneLiner $ returnStmt r)))
+  funcDecDef v ps r = do
+    vr <- zoom lensMStoVS v
+    f <- function (variableName vr) private dynamic (toState $ variableType vr) 
+      (map param ps) (oneLiner $ returnStmt r)
+    toState $ mkStmtNoEnd $ RC.method f
 
 instance IOStatement PythonCode where
-  print = pyOut False Nothing printFunc
-  printLn = pyOut True Nothing printFunc
-  printStr = print . litString
+  print      = pyOut False Nothing printFunc
+  printLn    = pyOut True  Nothing printFunc
+  printStr   = print   . litString
   printStrLn = printLn . litString
 
-  printFile f = pyOut False (Just f) printFunc
-  printFileLn f = pyOut True (Just f) printFunc
-  printFileStr f = printFile f . litString
+  printFile f      = pyOut False (Just f) printFunc
+  printFileLn f    = pyOut True  (Just f) printFunc
+  printFileStr f   = printFile f   . litString
   printFileStrLn f = printFileLn f . litString
 
   getInput = pyInput inputFunc
@@ -525,15 +541,14 @@ instance IOStatement PythonCode where
   getFileInput f = pyInput (objMethodCall string f "readline" [])
   discardFileInput f = valStmt (objMethodCall string f "readline" [])
 
-  openFileR f n = f &= funcApp "open" infile [n, litString "r"]
+  openFileR f n = f &= funcApp "open" infile  [n, litString "r"]
   openFileW f n = f &= funcApp "open" outfile [n, litString "w"]
   openFileA f n = f &= funcApp "open" outfile [n, litString "a"]
   closeFile = G.closeFile "close"
 
   getFileInputLine = getFileInput
   discardFileLine = CP.discardFileLine "readline"
-  getFileInputAll f v = v &= objMethodCall (listType string) f
-    "readlines" []
+  getFileInputAll f v = v &= objMethodCall (listType string) f "readlines" []
   
 instance StringStatement PythonCode where
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
@@ -567,8 +582,11 @@ instance ControlStatement PythonCode where
     "use forRange, forEach, or while instead"
   forRange i initv finalv stepv = forEach i
     (funcApp "range" (listType int) [initv, finalv, stepv])
-  forEach i' v' = on3StateValues (\i v b -> mkStmtNoEnd (pyForEach i v b)) 
-    (zoom lensMStoVS i') (zoom lensMStoVS v')
+  forEach i' v' b' = do
+    i <- zoom lensMStoVS i'
+    v <- zoom lensMStoVS v'
+    b <- b'
+    toState $ mkStmtNoEnd $ pyForEach i v b
   while v' = on2StateValues (\v b -> mkStmtNoEnd (pyWhile v b)) 
     (zoom lensMStoVS v')
 
@@ -644,11 +662,17 @@ instance MethodSym PythonCode where
   docInOutFunc n = pyDocInOut (inOutFunc n)
 
 instance RenderMethod PythonCode where
-  intMethod m n _ _ _ ps b = modify (if m then setCurrMain else id) >> 
-    on3StateValues (\sl pms bd -> toCode $ mthd $ pyMethod n sl pms bd) 
-    (zoom lensMStoVS self) (sequence ps) b 
-  intFunc m n _ _ _ ps b = modify (if m then setCurrMain else id) >>
-    on1StateValue1List (\bd pms -> toCode $ mthd $ pyFunction n pms bd) b ps
+  intMethod m n _ _ _ ps b = do
+    modify (if m then setCurrMain else id)
+    sl <- zoom lensMStoVS self
+    pms <- sequence ps
+    bd <- b
+    toState $ toCode $ mthd $ pyMethod n sl pms bd
+  intFunc m n _ _ _ ps b = do
+    modify (if m then setCurrMain else id)
+    bd <- b
+    pms <- sequence ps
+    toState $ toCode $ mthd $ pyFunction n pms bd
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
@@ -688,15 +712,19 @@ instance ClassElim PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n is = CP.buildModule n (on3StateValues (\lis libis mis -> vibcat [
-    vcat (map (RC.import' . 
-      (langImport :: Label -> PythonCode (Import PythonCode))) lis),
-    vcat (map (RC.import' . 
-      (langImport :: Label -> PythonCode (Import PythonCode))) (sort $ is ++ 
-      libis)),
-    vcat (map (RC.import' . 
-      (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
-    getLangImports getLibImports getModuleImports) getMainDoc
+  buildModule n is = CP.buildModule n (do
+    lis <- getLangImports
+    libis <- getLibImports
+    mis <- getModuleImports
+    toState $ vibcat [
+      vcat (map (RC.import' . 
+        (langImport :: Label -> PythonCode (Import PythonCode))) lis),
+      vcat (map (RC.import' . 
+        (langImport :: Label -> PythonCode (Import PythonCode))) (sort $ is ++ 
+        libis)),
+      vcat (map (RC.import' . 
+        (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
+    getMainDoc
 
 instance RenderMod PythonCode where
   modFromData n = G.modFromData n (toCode . md n)
@@ -840,11 +868,16 @@ pyTryCatch tryB catchB = vcat [
   text "except" <+> text "Exception" <+> colon,
   indent $ RC.body catchB]
 
-pyListSlice :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r 
-  -> SValue r -> VS Doc
-pyListSlice vn vo beg end step = (\vnew vold b e s -> RC.variable vnew <+> 
-  equals <+> RC.value vold <> brackets (RC.value b <> colon <> RC.value e <> 
-  colon <> RC.value s)) <$> vn <*> vo <*> beg <*> end <*> step
+pyListSlice :: (RenderSym r, Monad r) => SVariable r -> SValue r -> SValue r -> 
+  SValue r -> SValue r -> MS (r Doc)
+pyListSlice vn vo beg end step = zoom lensMStoVS $ do
+  vnew <- vn
+  vold <- vo
+  b <- beg
+  e <- end
+  s <- step
+  toState $ toCode $ RC.variable vnew <+> equals <+> RC.value vold <> 
+    brackets (RC.value b <> colon <> RC.value e <> colon <> RC.value s)
 
 pyMethod :: (RenderSym r) => Label -> r (Variable r) -> [r (Parameter r)] ->
   r (Body r) -> Doc

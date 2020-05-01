@@ -65,10 +65,11 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, checkState, destructorError, stateVarDef, constVar, 
-  intClass, objVar, listSetFunc, listAccessFunc, buildModule)
+  discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
+  listSetFunc, listAccessFunc, buildModule)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
-  decrement1, increment1, runStrategy, stringListVals, stringListLists)
+  decrement1, increment1, runStrategy, stringListVals, stringListLists,
+  checkState)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), 
@@ -592,7 +593,7 @@ instance ControlStatement PythonCode where
   tryCatch = G.tryCatch pyTryCatch
 
 instance StatePattern PythonCode where 
-  checkState = CP.checkState
+  checkState = M.checkState
 
 instance ObserverPattern PythonCode where
   notifyObservers f t = forRange index initv (listSize obsList) 

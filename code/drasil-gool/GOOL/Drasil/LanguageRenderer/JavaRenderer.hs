@@ -69,18 +69,18 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (  
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, checkState, destructorError, stateVarDef, constVar, 
-  intClass, objVar, bool, arrayType, pi, notNull, printSt, arrayDec, 
-  arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, mainFunction, 
-  stateVar, buildModule', litArray, call', listSizeFunc, listAccessFunc', 
-  funcDecDef, discardFileInput)
+  discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
+  bool, arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, 
+  openFileW, openFileA, forEach, docMain, mainFunction, stateVar, buildModule', 
+  litArray, call', listSizeFunc, listAccessFunc', funcDecDef, discardFileInput)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for, forRange,
-  while, notifyObservers, intFunc, multiAssignError, multiReturnError)
+  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for,
+  while, intFunc, multiAssignError, multiReturnError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
-  decrement1, runStrategy, listSlice, stringListVals, stringListLists)
+  decrement1, runStrategy, listSlice, stringListVals, stringListLists,
+  forRange, notifyObservers, checkState)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
@@ -602,17 +602,17 @@ instance ControlStatement JavaCode where
   ifExists = M.ifExists
 
   for = C.for bodyStart bodyEnd
-  forRange = C.forRange 
+  forRange = M.forRange 
   forEach = CP.forEach bodyStart bodyEnd forLabel colon
   while = C.while bodyStart bodyEnd
 
   tryCatch = G.tryCatch jTryCatch
   
 instance StatePattern JavaCode where 
-  checkState = CP.checkState
+  checkState = M.checkState
 
 instance ObserverPattern JavaCode where
-  notifyObservers = C.notifyObservers
+  notifyObservers = M.notifyObservers
 
 instance StrategyPattern JavaCode where
   runStrategy = M.runStrategy

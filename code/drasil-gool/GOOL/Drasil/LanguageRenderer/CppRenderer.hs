@@ -74,9 +74,10 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for, 
-  forRange, while, notifyObservers, intFunc, multiAssignError, multiReturnError)
+  while, intFunc, multiAssignError, multiReturnError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (decrement, 
-  decrement1, runStrategy, listSlice, stringListVals, stringListLists)
+  decrement1, runStrategy, listSlice, stringListVals, stringListLists, forRange,
+  notifyObservers)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd, 
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..), 
@@ -1556,7 +1557,7 @@ instance ControlStatement CppSrcCode where
   ifExists _ ifBody _ = onStateValue (mkStmtNoEnd . RC.body) ifBody -- All variables are initialized in C++
 
   for = C.for bodyStart bodyEnd 
-  forRange = C.forRange
+  forRange = M.forRange
   forEach i v = for (varDecDef e (iterBegin v)) (valueOf e ?!= iterEnd v) 
     (e &++)
     where e = toBasicVar i
@@ -1568,7 +1569,7 @@ instance StatePattern CppSrcCode where
   checkState l = switchAsIf (valueOf $ var l string) 
 
 instance ObserverPattern CppSrcCode where
-  notifyObservers = C.notifyObservers
+  notifyObservers = M.notifyObservers
 
 instance StrategyPattern CppSrcCode where
   runStrategy = M.runStrategy

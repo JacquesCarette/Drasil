@@ -50,7 +50,7 @@ strat :: (RenderSym r, Monad r) => MSStatement r -> MSBody r -> MS (r Doc)
 strat = on2StateValues (\result b -> toCode $ vcat [RC.body b, 
   RC.statement result])
 
-runStrategy :: (RenderSym r, Monad r) => String -> [(Label, MSBody r)] -> 
+runStrategy :: (RenderSym r, Monad r) => Label -> [(Label, MSBody r)] -> 
   Maybe (SValue r) -> Maybe (SVariable r) -> MS (r Doc)
 runStrategy l strats rv av = maybe
   (strError l "RunStrategy called on non-existent strategy") 

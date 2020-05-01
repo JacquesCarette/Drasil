@@ -81,7 +81,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char,
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
   decrement1, runStrategy, listSlice, stringListVals, stringListLists,
   forRange, notifyObservers, checkState)
-import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), FileType(..), 
+import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..), 
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
@@ -402,7 +402,7 @@ instance ValueExpression JavaCode where
     G.selfFuncAppMixedArgs dot self n t ps ns
   extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
-    modify (maybe id addExceptions (Map.lookup (l ++ "." ++ n) mem))
+    modify (maybe id addExceptions (Map.lookup (qualName l n) mem))
     CP.extFuncAppMixedArgs l n t vs ns
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
   newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t -> 
@@ -411,7 +411,7 @@ instance ValueExpression JavaCode where
     t <- ot
     mem <- getMethodExcMap
     let tp = getTypeString t
-    modify (maybe id addExceptions (Map.lookup (l ++ "." ++ tp) mem))
+    modify (maybe id addExceptions (Map.lookup (qualName l tp) mem))
     newObjMixedArgs (toState t) vs ns
   libNewObjMixedArgs = C.libNewObjMixedArgs
 
@@ -444,7 +444,7 @@ instance InternalValueExp JavaCode where
     ob <- o
     mem <- getMethodExcMap
     let tp = getTypeString (valueType ob)
-    modify (maybe id addExceptions (Map.lookup (tp ++ "." ++ f) mem))
+    modify (maybe id addExceptions (Map.lookup (qualName tp f) mem))
     G.objMethodCall f t o ps ns
 
 instance FunctionSym JavaCode where
@@ -677,8 +677,7 @@ instance RenderMethod JavaCode where
     es <- getExceptions
     mn <- zoom lensMStoFS getModuleName
     let excs = map (unJC . toConcreteExc) $ maybe es (nub . (++ es)) 
-          (Map.lookup (key mn n) mem) 
-        key mnm nm = mnm ++ "." ++ nm
+          (Map.lookup (qualName mn n) mem)
     modify ((if m then setCurrMain else id) . addExceptionImports excs) 
     return $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
   intFunc = C.intFunc
@@ -1004,7 +1003,7 @@ addCallExcsCurrMod :: String -> VS ()
 addCallExcsCurrMod n = do
   cm <- zoom lensVStoFS getModuleName
   mem <- getMethodExcMap
-  modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ n) mem))
+  modify (maybe id addExceptions (Map.lookup (qualName cm n) mem))
 
 addConstructorCallExcsCurrMod :: (RenderSym r) => VSType r -> 
   (VSType r -> SValue r) -> SValue r
@@ -1013,5 +1012,5 @@ addConstructorCallExcsCurrMod ot f = do
   cm <- zoom lensVStoFS getModuleName
   mem <- getMethodExcMap
   let tp = getTypeString t
-  modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ tp) mem))
+  modify (maybe id addExceptions (Map.lookup (qualName cm tp) mem))
   f (return t)

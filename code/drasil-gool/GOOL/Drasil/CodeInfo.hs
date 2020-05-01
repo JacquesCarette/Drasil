@@ -16,7 +16,7 @@ import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement,
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
-import GOOL.Drasil.AST (ScopeTag(..))
+import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
@@ -440,7 +440,7 @@ evalConds cs def = do
 addCurrModCall :: String -> SValue CodeInfo
 addCurrModCall n = do
   mn <- zoom lensVStoFS getModuleName 
-  modify (addCall (mn ++ "." ++ n)) 
+  modify (addCall (qualName mn n)) 
   noInfo
 
 addCurrModConstructorCall :: VSType CodeInfo -> SValue CodeInfo
@@ -450,7 +450,7 @@ addCurrModConstructorCall ot = do
   addCurrModCall tp
 
 addExternalCall :: String -> String -> SValue CodeInfo
-addExternalCall l n = modify (addCall (l ++ "." ++ n)) >> noInfo
+addExternalCall l n = modify (addCall (qualName l n)) >> noInfo
 
 addExternalConstructorCall :: String -> VSType CodeInfo -> SValue CodeInfo
 addExternalConstructorCall l ot = do

@@ -425,34 +425,23 @@ instance (Pair p) => Comparison (p CppSrcCode CppHdrCode) where
 instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   inlineIf = pair3 inlineIf inlineIf
 
-  funcAppMixedArgs n t pas nas = pair1Val3Lists
-    (\tp pars ns nars -> funcAppMixedArgs n tp pars (zip ns nars)) 
-    (\tp pars ns nars -> funcAppMixedArgs n tp pars (zip ns nars)) 
-    t pas (map fst nas) (map snd nas)
-  selfFuncAppMixedArgs n t pas nas = pair1Val3Lists
-    (\tp pars ns nars -> selfFuncAppMixedArgs n tp pars (zip ns nars)) 
-    (\tp pars ns nars -> selfFuncAppMixedArgs n tp pars (zip ns nars)) 
-    t pas (map fst nas) (map snd nas)
-  extFuncAppMixedArgs l n t pas nas = pair1Val3Lists
-    (\tp pars ns nars -> extFuncAppMixedArgs l n tp pars (zip ns nars)) 
-    (\tp pars ns nars -> extFuncAppMixedArgs l n tp pars (zip ns nars)) 
-    t pas (map fst nas) (map snd nas)
-  libFuncAppMixedArgs l n t pas nas = pair1Val3Lists
-    (\tp pars ns nars -> extFuncAppMixedArgs l n tp pars (zip ns nars)) 
-    (\tp pars ns nars -> extFuncAppMixedArgs l n tp pars (zip ns nars)) 
-    t pas (map fst nas) (map snd nas)
-  newObjMixedArgs t pas nas = pair1Val3Lists
-    (\tp pars ns nars -> newObjMixedArgs tp pars (zip ns nars)) 
-    (\tp pars ns nars -> newObjMixedArgs tp pars (zip ns nars)) 
-    t pas (map fst nas) (map snd nas)
-  extNewObjMixedArgs l t pas nas = pair1Val3Lists
-    (\tp pars ns nars -> extNewObjMixedArgs l tp pars (zip ns nars)) 
-    (\tp pars ns nars -> extNewObjMixedArgs l tp pars (zip ns nars)) 
-    t pas (map fst nas) (map snd nas)
-  libNewObjMixedArgs l t pas nas = pair1Val3Lists
-    (\tp pars ns nars -> extNewObjMixedArgs l tp pars (zip ns nars)) 
-    (\tp pars ns nars -> extNewObjMixedArgs l tp pars (zip ns nars)) 
-    t pas (map fst nas) (map snd nas)
+  funcAppMixedArgs n = pair1Val3Lists (funcAppMixedArgs n) (funcAppMixedArgs n)
+  selfFuncAppMixedArgs n = pair1Val3Lists
+    (selfFuncAppMixedArgs n) 
+    (selfFuncAppMixedArgs n) 
+  extFuncAppMixedArgs l n = pair1Val3Lists
+    (extFuncAppMixedArgs l n) 
+    (extFuncAppMixedArgs l n) 
+  libFuncAppMixedArgs l n = pair1Val3Lists
+    (extFuncAppMixedArgs l n) 
+    (extFuncAppMixedArgs l n)
+  newObjMixedArgs = pair1Val3Lists newObjMixedArgs newObjMixedArgs
+  extNewObjMixedArgs l = pair1Val3Lists
+    (extNewObjMixedArgs l) 
+    (extNewObjMixedArgs l)
+  libNewObjMixedArgs l = pair1Val3Lists 
+    (extNewObjMixedArgs l) 
+    (extNewObjMixedArgs l)
 
   lambda = pair1List1Val lambda lambda
 
@@ -467,10 +456,7 @@ instance (Pair p) => RenderValue (p CppSrcCode CppHdrCode) where
 
   cast = pair2 cast cast
 
-  call l o n t pas nas = pair1Val3Lists
-    (\tp pars ns nars -> call l o n tp pars (zip ns nars)) 
-    (\tp pars ns nars -> call l o n tp pars (zip ns nars)) 
-    t pas (map fst nas) (map snd nas)
+  call l o n = pair1Val3Lists (call l o n) (call l o n)
 
   valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)
 
@@ -479,10 +465,9 @@ instance (Pair p) => ValueElim (p CppSrcCode CppHdrCode) where
   value v = RC.value $ pfst v
 
 instance (Pair p) => InternalValueExp (p CppSrcCode CppHdrCode) where
-  objMethodCallMixedArgs' f t o pas nas = pair2Vals3Lists
-    (\tp ob pars ns nars -> objMethodCallMixedArgs' f tp ob pars (zip ns nars)) 
-    (\tp ob pars ns nars -> objMethodCallMixedArgs' f tp ob pars (zip ns nars)) 
-    t o pas (map fst nas) (map snd nas)
+  objMethodCallMixedArgs' f = pair2Vals3Lists
+    (objMethodCallMixedArgs' f)
+    (objMethodCallMixedArgs' f)
 
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
@@ -1011,34 +996,45 @@ pair3Lists1Val srcf hdrf stv1 stv2 stv3 stv4 = do
   pair2Lists1Val (srcf fl1) (hdrf sl1) stv2 stv3 stv4 
 
 pair1Val3Lists :: (Pair p) => (State r (CppSrcCode a) -> 
-  [State s (CppSrcCode b)] -> [State t (CppSrcCode c)] -> 
-  [State u (CppSrcCode d)] -> State v (CppSrcCode e)) -> (State r (CppHdrCode a)
-  -> [State s (CppHdrCode b)] -> [State t (CppHdrCode c)] -> 
-  [State u (CppHdrCode d)] -> State v (CppHdrCode e)) -> 
+  [State s (CppSrcCode b)] -> [(State t (CppSrcCode c),
+  State u (CppSrcCode d))] -> State v (CppSrcCode e)) -> (State r (CppHdrCode a)
+  -> [State s (CppHdrCode b)] -> [(State t (CppHdrCode c),
+  State u (CppHdrCode d))] -> State v (CppHdrCode e)) -> 
   State v (p CppSrcCode CppHdrCode a) -> [State v (p CppSrcCode CppHdrCode b)]
-  -> [State v (p CppSrcCode CppHdrCode c)] -> 
-  [State v (p CppSrcCode CppHdrCode d)] -> State v (p CppSrcCode CppHdrCode e)
-pair1Val3Lists srcf hdrf stv1 stv2 stv3 stv4 = do
+  -> [(State v (p CppSrcCode CppHdrCode c), 
+  State v (p CppSrcCode CppHdrCode d))] -> State v (p CppSrcCode CppHdrCode e)
+pair1Val3Lists srcf hdrf stv1 stv2 stv34 = do
   v1 <- stv1
+  v2 <- sequence stv2
+  v3 <- mapM fst stv34
+  v4 <- mapM snd stv34
   let fv1 = return $ pfst v1
       sv1 = return $ psnd v1
-  pair3Lists (srcf fv1) (hdrf sv1) stv2 stv3 stv4
+      fv2 = map (return . pfst) v2
+      sv2 = map (return . psnd) v2
+      fv3 = map (return . pfst) v3
+      sv3 = map (return . psnd) v3
+      fv4 = map (return . pfst) v4
+      sv4 = map (return . psnd) v4
+  p1 <- srcf fv1 fv2 (zip fv3 fv4)
+  p2 <- hdrf sv1 sv2 (zip sv3 sv4)
+  return $ pair p1 p2
 
 pair2Vals3Lists :: (Pair p) => (State r (CppSrcCode a) -> 
   State s (CppSrcCode b) -> [State t (CppSrcCode c)] -> 
-  [State u (CppSrcCode d)] -> [State v (CppSrcCode e)] -> 
+  [(State u (CppSrcCode d), State v (CppSrcCode e))] -> 
   State w (CppSrcCode f)) -> (State r (CppHdrCode a) -> State s (CppHdrCode b) 
-  -> [State t (CppHdrCode c)] -> [State u (CppHdrCode d)] -> 
-  [State v (CppHdrCode e)] -> State w (CppHdrCode f)) ->
+  -> [State t (CppHdrCode c)] -> [(State u (CppHdrCode d),
+  State v (CppHdrCode e))] -> State w (CppHdrCode f)) ->
   State w (p CppSrcCode CppHdrCode a) -> State w (p CppSrcCode CppHdrCode b) ->
-  [State w (p CppSrcCode CppHdrCode c)] -> [State w (p CppSrcCode CppHdrCode d)]
-  -> [State w (p CppSrcCode CppHdrCode e)] -> 
-  State w (p CppSrcCode CppHdrCode f)
-pair2Vals3Lists srcf hdrf stv1 stv2 stv3 stv4 stv5 = do
+  [State w (p CppSrcCode CppHdrCode c)] -> 
+  [(State w (p CppSrcCode CppHdrCode d), State w (p CppSrcCode CppHdrCode e))]
+  -> State w (p CppSrcCode CppHdrCode f)
+pair2Vals3Lists srcf hdrf stv1 stv2 stv3 stv45 = do
   v1 <- stv1
   let fv1 = return $ pfst v1
       sv1 = return $ psnd v1
-  pair1Val3Lists (srcf fv1) (hdrf sv1) stv2 stv3 stv4 stv5
+  pair1Val3Lists (srcf fv1) (hdrf sv1) stv2 stv3 stv45
 
 pairVal2ListsVal :: (Pair p) => (State r (CppSrcCode a) -> 
   [State s (CppSrcCode b)] -> [State t (CppSrcCode c)] -> State u (CppSrcCode d)

@@ -154,7 +154,10 @@ instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) where
   
   commentedMod = pair2 commentedMod commentedMod
 
-  fileFromData fp = pair1 (fileFromData fp) (fileFromData fp)
+  fileFromData fp m = do
+    p1 <- fileFromData fp (pfst m)
+    p2 <- fileFromData fp (psnd m)
+    return $ pair p1 p2
 
 instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
   type Import (p CppSrcCode CppHdrCode) = Doc

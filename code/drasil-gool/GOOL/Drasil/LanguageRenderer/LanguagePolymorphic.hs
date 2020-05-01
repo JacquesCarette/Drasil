@@ -467,8 +467,8 @@ fileDoc :: (RenderSym r) => String -> (r (Module r) -> r (Block r)) ->
 fileDoc ext topb botb mdl = do
   m <- mdl
   nm <- getModuleName
-  let fp = toState $ addExt ext nm
-      updm = toState $ updateModuleDoc (\d -> emptyIfEmpty d 
+  let fp = addExt ext nm
+      updm = updateModuleDoc (\d -> emptyIfEmpty d 
         (R.file (RC.block $ topb m) d (RC.block botb))) m
   S.fileFromData fp updm
 
@@ -478,10 +478,8 @@ docMod e d a dt = commentedMod (docComment $ moduleDox d a dt . addExt e <$>
   getModuleName)
 
 fileFromData :: (RenderSym r) => (FilePath -> r (Module r) -> r (File r)) 
-  -> FS FilePath -> FSModule r -> SFile r
-fileFromData f fp m = do
-  mdl <- m
-  fpath <- fp
+  -> FilePath -> r (Module r) -> SFile r
+fileFromData f fpath mdl = do
   modify (\s -> if isEmpty (RC.module' mdl) 
     then s
     else over lensFStoGS (addFile (s ^. currFileType) fpath) $ 

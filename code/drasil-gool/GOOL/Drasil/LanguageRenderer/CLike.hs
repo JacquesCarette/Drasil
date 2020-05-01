@@ -149,7 +149,7 @@ switch v cs bod = do
   vals <- mapM (zoom lensMStoVS . fst) cs
   bods <- mapM snd cs
   dflt <- bod
-  toState $ mkStmt $ R.switch brk val dflt (zip vals bods)
+  return $ mkStmt $ R.switch brk val dflt (zip vals bods)
 
 for :: (RenderSym r) => Doc -> Doc -> MSStatement r -> SValue r -> 
   MSStatement r -> MSBody r -> MSStatement r
@@ -158,7 +158,7 @@ for bStart bEnd sInit vGuard sUpdate b = do
   guard <- zoom lensMStoVS vGuard
   upd <- S.loopStmt sUpdate
   bod <- b
-  toState $ mkStmtNoEnd $ vcat [
+  return $ mkStmtNoEnd $ vcat [
     forLabel <+> parens (RC.statement initl <> semi <+> RC.value guard <> 
       semi <+> RC.statement upd) <+> bStart,
     indent $ RC.body bod,

@@ -62,7 +62,7 @@ class (BlockCommentSym r) => RenderFile r where
 
   commentedMod :: FS (r (BlockComment r)) -> SFile r -> SFile r
 
-  fileFromData :: FS FilePath -> FSModule r -> SFile r
+  fileFromData :: FilePath -> r (Module r) -> SFile r
 
 class ImportSym r where
   type Import r

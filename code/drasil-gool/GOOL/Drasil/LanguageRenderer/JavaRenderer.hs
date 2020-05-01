@@ -139,7 +139,9 @@ instance RenderSym JavaCode
 
 instance FileSym JavaCode where
   type File JavaCode = FileData 
-  fileDoc m = modify (setFileType Combined) >> G.fileDoc jExt top bottom m
+  fileDoc m = do
+    modify (setFileType Combined)
+    G.fileDoc jExt top bottom m
 
   docMod = G.docMod jExt
 
@@ -328,9 +330,10 @@ instance Literal JavaCode where
   litInt = G.litInt
   litString = G.litString
   litArray = CP.litArray
-  litList t es = zoom lensVStoMS (modify (if null es then id else addLangImport 
-    "java.util.Arrays")) >> newObj (listType t) [funcApp "Arrays.asList" 
-    (listType t) es | not (null es)]
+  litList t es = do
+    zoom lensVStoMS $ modify (if null es then id else addLangImport 
+      "java.util.Arrays")
+    newObj (listType t) [funcApp "Arrays.asList" (listType t) es | not (null es)]
 
 instance MathConstant JavaCode where
   pi = CP.pi
@@ -391,9 +394,11 @@ instance ValueExpression JavaCode where
   -- map from the CodeInfo pass, but it's possible that one of the higher-level 
   -- functions implicitly calls these functions in the Java renderer, so we 
   -- also check here to add the exceptions from the called function to the map
-  funcAppMixedArgs n t vs ns = addCallExcsCurrMod n >> 
+  funcAppMixedArgs n t vs ns = do
+    addCallExcsCurrMod n 
     G.funcAppMixedArgs n t vs ns
-  selfFuncAppMixedArgs n t ps ns = addCallExcsCurrMod n >> 
+  selfFuncAppMixedArgs n t ps ns = do
+    addCallExcsCurrMod n
     G.selfFuncAppMixedArgs dot self n t ps ns
   extFuncAppMixedArgs l n t vs ns = do
     mem <- getMethodExcMap
@@ -534,7 +539,7 @@ instance DeclStatement JavaCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
-  constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkStmt $ 
+  constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkStmt $
     jConstDecDef vr vl) vr' vl'
   funcDecDef = CP.funcDecDef
 
@@ -570,7 +575,7 @@ instance StringStatement JavaCode where
     ss <- zoom lensMStoVS $ 
       jStringSplit vnew (funcApp "Arrays.asList" (listType string) 
       [s $. func "split" (listType string) [litString [d]]])
-    toState $ mkStmt ss 
+    return $ mkStmt ss 
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
@@ -675,7 +680,7 @@ instance RenderMethod JavaCode where
           (Map.lookup (key mn n) mem) 
         key mnm nm = mnm ++ "." ++ nm
     modify ((if m then setCurrMain else id) . addExceptionImports excs) 
-    toState $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
+    return $ toCode $ mthd $ jMethod n (map exc excs) s p tp pms bd
   intFunc = C.intFunc
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
@@ -825,8 +830,9 @@ jOutfileType = modifyReturn (addLangImportVS "java.io.PrintWriter") $
   typeFromData File "PrintWriter" (text "PrintWriter")
 
 jListType :: (RenderSym r) => String -> VSType r -> VSType r
-jListType l t = modify (addLangImportVS $ "java.util." ++ l) >> 
-  (t >>= (jListType' . getType))
+jListType l t = do
+  modify (addLangImportVS $ "java.util." ++ l) 
+  t >>= (jListType' . getType)
   where jListType' Integer = toState $ typeFromData (List Integer) 
           (l ++ "<Integer>") (lst <> angles (text "Integer"))
         jListType' Float = toState $ typeFromData (List Float) 
@@ -1008,4 +1014,4 @@ addConstructorCallExcsCurrMod ot f = do
   mem <- getMethodExcMap
   let tp = getTypeString t
   modify (maybe id addExceptions (Map.lookup (cm ++ "." ++ tp) mem))
-  f (toState t)
+  f (return t)

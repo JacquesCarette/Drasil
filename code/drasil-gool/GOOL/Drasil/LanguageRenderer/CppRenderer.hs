@@ -841,9 +841,12 @@ instance (Pair p) => BlockCommentElim (p CppSrcCode CppHdrCode) where
 
 -- Helpers for pair instance
 
-pair1 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b)) -> 
-  (State r (CppHdrCode a) -> State s (CppHdrCode b)) -> 
-  State s (p CppSrcCode CppHdrCode a) -> State s (p CppSrcCode CppHdrCode b)
+type SrcState s a = State s (CppSrcCode a)
+type HdrState s a = State s (CppHdrCode a)
+type PairState s p a = State s (p CppSrcCode CppHdrCode a) 
+
+pair1 :: (Pair p) => (SrcState r a -> SrcState s b) -> (HdrState r a -> 
+  HdrState s b) -> PairState s p a -> PairState s p b
 pair1 srcf hdrf stv = do
   v <- stv
   let fp = return $ pfst v
@@ -852,57 +855,48 @@ pair1 srcf hdrf stv = do
   p2 <- hdrf sp
   return $ pair p1 p2
 
-pair2 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) -> 
-  State t (CppSrcCode c)) -> (State r (CppHdrCode a) -> State s (CppHdrCode b) 
-  -> State t (CppHdrCode c)) -> State t (p CppSrcCode CppHdrCode a) -> 
-  State t (p CppSrcCode CppHdrCode b) -> State t (p CppSrcCode CppHdrCode c)
+pair2 :: (Pair p) => (SrcState r a -> SrcState s b -> SrcState t c) -> 
+  (HdrState r a -> HdrState s b -> HdrState t c) -> PairState t p a -> 
+  PairState t p b -> PairState t p c
 pair2 srcf hdrf stv1 stv2 = do
   v1 <- stv1
   let fv1 = return $ pfst v1
       sv1 = return $ psnd v1
   pair1 (srcf fv1) (hdrf sv1) stv2
 
-pair3 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) -> 
-  State t (CppSrcCode c) -> State u (CppSrcCode d)) -> (State r (CppHdrCode a) 
-  -> State s (CppHdrCode b) -> State t (CppHdrCode c) -> State u (CppHdrCode d))
-  -> State u (p CppSrcCode CppHdrCode a) -> State u (p CppSrcCode CppHdrCode b) 
-  -> State u (p CppSrcCode CppHdrCode c) -> State u (p CppSrcCode CppHdrCode d)
+pair3 :: (Pair p) => (SrcState r a -> SrcState s b -> SrcState t c -> 
+  SrcState u d) -> (HdrState r a -> HdrState s b -> HdrState t c -> 
+  HdrState u d) -> PairState u p a -> PairState u p b -> PairState u p c -> 
+  PairState u p d
 pair3 srcf hdrf stv1 stv2 stv3 = do
   v1 <- stv1
   let fv1 = return $ pfst v1
       sv1 = return $ psnd v1
   pair2 (srcf fv1) (hdrf sv1) stv2 stv3
 
-pair4 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) -> 
-  State t (CppSrcCode c) -> State u (CppSrcCode d) -> State v (CppSrcCode e)) 
-  -> (State r (CppHdrCode a) -> State s (CppHdrCode b) -> State t (CppHdrCode c)
-  -> State u (CppHdrCode d) -> State v (CppHdrCode e)) -> 
-  State v (p CppSrcCode CppHdrCode a) -> State v (p CppSrcCode CppHdrCode b) -> 
-  State v (p CppSrcCode CppHdrCode c) -> State v (p CppSrcCode CppHdrCode d) -> 
-  State v (p CppSrcCode CppHdrCode e)
+pair4 :: (Pair p) => (SrcState r a -> SrcState s b -> SrcState t c -> 
+  SrcState u d -> SrcState v e) -> (HdrState r a -> HdrState s b -> HdrState t c
+  -> HdrState u d -> HdrState v e) -> PairState v p a -> PairState v p b -> 
+  PairState v p c -> PairState v p d -> PairState v p e
 pair4 srcf hdrf stv1 stv2 stv3 stv4 = do
   v1 <- stv1
   let fv1 = return $ pfst v1
       sv1 = return $ psnd v1
   pair3 (srcf fv1) (hdrf sv1) stv2 stv3 stv4
 
-pair5 :: (Pair p) => (State r (CppSrcCode a) -> State s (CppSrcCode b) -> 
-  State t (CppSrcCode c) -> State u (CppSrcCode d) -> State v (CppSrcCode e) -> 
-  State w (CppSrcCode f)) -> (State r (CppHdrCode a) -> State s (CppHdrCode b) 
-  -> State t (CppHdrCode c) -> State u (CppHdrCode d) -> State v (CppHdrCode e) 
-  -> State w (CppHdrCode f)) -> State w (p CppSrcCode CppHdrCode a) -> 
-  State w (p CppSrcCode CppHdrCode b) -> State w (p CppSrcCode CppHdrCode c) -> 
-  State w (p CppSrcCode CppHdrCode d) -> State w (p CppSrcCode CppHdrCode e) ->
-  State w (p CppSrcCode CppHdrCode f)
+pair5 :: (Pair p) => (SrcState r a -> SrcState s b -> SrcState t c -> 
+  SrcState u d -> SrcState v e -> SrcState w f) -> (HdrState r a -> HdrState s b
+  -> HdrState t c -> HdrState u d -> HdrState v e -> HdrState w f) -> 
+  PairState w p a -> PairState w p b -> PairState w p c -> PairState w p d -> 
+  PairState w p e -> PairState w p f
 pair5 srcf hdrf stv1 stv2 stv3 stv4 stv5 = do
   v1 <- stv1
   let fv1 = return $ pfst v1
       sv1 = return $ psnd v1
   pair4 (srcf fv1) (hdrf sv1) stv2 stv3 stv4 stv5
   
-pair1List :: (Pair p) => ([State r (CppSrcCode a)] -> State s (CppSrcCode b)) 
-  -> ([State r (CppHdrCode a)] -> State s (CppHdrCode b)) -> 
-  [State s (p CppSrcCode CppHdrCode a)] -> State s (p CppSrcCode CppHdrCode b)
+pair1List :: (Pair p) => ([SrcState r a] -> SrcState s b) -> ([HdrState r a] -> 
+  HdrState s b) -> [PairState s p a] -> PairState s p b
 pair1List srcf hdrf stv = do
   v <- sequence stv
   let fl = map (return . pfst) v
@@ -911,98 +905,79 @@ pair1List srcf hdrf stv = do
   p2 <- hdrf sl
   return $ pair p1 p2
 
-pair2Lists :: (Pair p) => ([State r (CppSrcCode a)] -> [State s (CppSrcCode b)] 
-  -> State t (CppSrcCode c)) -> ([State r (CppHdrCode a)] -> 
-  [State s (CppHdrCode b)] -> State t (CppHdrCode c)) -> 
-  [State t (p CppSrcCode CppHdrCode a)] -> [State t (p CppSrcCode CppHdrCode b)]
-  -> State t (p CppSrcCode CppHdrCode c)
+pair2Lists :: (Pair p) => ([SrcState r a] -> [SrcState s b] -> SrcState t c) -> 
+  ([HdrState r a] -> [HdrState s b] -> HdrState t c) -> [PairState t p a] -> 
+  [PairState t p b] -> PairState t p c
 pair2Lists srcf hdrf stv1 stv2 = do
   v1 <- sequence stv1
   let fl1 = map (return . pfst) v1
       sl1 = map (return . psnd) v1
   pair1List (srcf fl1) (hdrf sl1) stv2
 
-pair3Lists :: (Pair p) => ([State r (CppSrcCode a)] -> [State s (CppSrcCode b)] 
-  -> [State t (CppSrcCode c)] -> State u (CppSrcCode d)) -> 
-  ([State r (CppHdrCode a)] -> [State s (CppHdrCode b)] -> 
-  [State t (CppHdrCode c)] -> State u (CppHdrCode d)) -> 
-  [State u (p CppSrcCode CppHdrCode a)] -> [State u (p CppSrcCode CppHdrCode b)]
-  -> [State u (p CppSrcCode CppHdrCode c)] -> 
-  State u (p CppSrcCode CppHdrCode d)
+pair3Lists :: (Pair p) => ([SrcState r a] -> [SrcState s b] -> [SrcState t c] ->
+  SrcState u d) -> ([HdrState r a] -> [HdrState s b] -> [HdrState t c] -> 
+  HdrState u d) -> [PairState u p a] -> [PairState u p b] -> [PairState u p c] 
+  -> PairState u p d
 pair3Lists srcf hdrf stv1 stv2 stv3 = do
   v1 <- sequence stv1
   let fl1 = map (return . pfst) v1
       sl1 = map (return . psnd) v1
   pair2Lists (srcf fl1) (hdrf sl1) stv2 stv3 
 
-pair1List1Val :: (Pair p) => ([State r (CppSrcCode a)] -> State s (CppSrcCode b)
-  -> State t (CppSrcCode c)) -> ([State r (CppHdrCode a)] -> 
-  State s (CppHdrCode b) -> State t (CppHdrCode c)) -> 
-  [State t (p CppSrcCode CppHdrCode a)] -> State t (p CppSrcCode CppHdrCode b) 
-  -> State t (p CppSrcCode CppHdrCode c)
+pair1List1Val :: (Pair p) => ([SrcState r a] -> SrcState s b -> SrcState t c) ->
+  ([HdrState r a] -> HdrState s b -> HdrState t c) -> [PairState t p a] -> 
+  PairState t p b -> PairState t p c
 pair1List1Val srcf hdrf stv1 stv2 = do
   v1 <- sequence stv1
   let fl1 = map (return . pfst) v1
       sl1 = map (return . psnd) v1
   pair1 (srcf fl1) (hdrf sl1) stv2
 
-pair1Val1List :: (Pair p) => (State r (CppSrcCode a) -> [State s (CppSrcCode b)]
-  -> State t (CppSrcCode c)) -> (State r (CppHdrCode a) -> 
-  [State s (CppHdrCode b)] -> State t (CppHdrCode c)) -> 
-  State t (p CppSrcCode CppHdrCode a) -> [State t (p CppSrcCode CppHdrCode b)] 
-  -> State t (p CppSrcCode CppHdrCode c)
+pair1Val1List :: (Pair p) => (SrcState r a -> [SrcState s b] -> SrcState t c) ->
+  (HdrState r a -> [HdrState s b] -> HdrState t c) -> PairState t p a -> 
+  [PairState t p b] -> PairState t p c
 pair1Val1List srcf hdrf stv1 stv2 = do
   v1 <- stv1
   let fv1 = return $ pfst v1
       sv1 = return $ psnd v1
   pair1List (srcf fv1) (hdrf sv1) stv2
 
-pair2Lists1Val :: (Pair p) => ([State r (CppSrcCode a)] -> 
-  [State s (CppSrcCode b)] -> State t (CppSrcCode c) -> State u (CppSrcCode d)) 
-  -> ([State r (CppHdrCode a)] -> [State s (CppHdrCode b)] -> 
-  State t (CppHdrCode c) -> State u (CppHdrCode d)) -> 
-  [State u (p CppSrcCode CppHdrCode a)] -> [State u (p CppSrcCode CppHdrCode b)]
-  -> State u (p CppSrcCode CppHdrCode c) -> State u (p CppSrcCode CppHdrCode d)
+pair2Lists1Val :: (Pair p) => ([SrcState r a] -> [SrcState s b] -> SrcState t c 
+  -> SrcState u d) -> ([HdrState r a] -> [HdrState s b] -> HdrState t c -> 
+  HdrState u d) -> [PairState u p a] -> [PairState u p b] -> PairState u p c -> 
+  PairState u p d
 pair2Lists1Val srcf hdrf stv1 stv2 stv3 = do
   v1 <- sequence stv1
   let fl1 = map (return . pfst) v1
       sl1 = map (return . psnd) v1
   pair1List1Val (srcf fl1) (hdrf sl1) stv2 stv3 
 
-pairValListVal :: (Pair p) => (State r (CppSrcCode a) -> 
-  [State s (CppSrcCode b)] -> State t (CppSrcCode c) -> State u (CppSrcCode d)) 
-  -> (State r (CppHdrCode a) -> [State s (CppHdrCode b)] -> 
-  State t (CppHdrCode c) -> State u (CppHdrCode d)) -> 
-  State u (p CppSrcCode CppHdrCode a) -> [State u (p CppSrcCode CppHdrCode b)] 
-  -> State u (p CppSrcCode CppHdrCode c) -> State u (p CppSrcCode CppHdrCode d)
+pairValListVal :: (Pair p) => (SrcState r a -> [SrcState s b] -> SrcState t c ->
+  SrcState u d) -> (HdrState r a -> [HdrState s b] -> HdrState t c -> 
+  HdrState u d) -> PairState u p a -> [PairState u p b] -> PairState u p c -> 
+  PairState u p d
 pairValListVal srcf hdrf stv1 stv2 stv3 = do
   v1 <- stv1
   let fv1 = return $ pfst v1
       sv1 = return $ psnd v1
   pair1List1Val (srcf fv1) (hdrf sv1) stv2 stv3 
 
-pair3Lists1Val :: (Pair p) => ([State r (CppSrcCode a)] -> 
-  [State s (CppSrcCode b)] -> [State t (CppSrcCode c)] -> State u (CppSrcCode d)
-  -> State v (CppSrcCode e)) -> ([State r (CppHdrCode a)] 
-  -> [State s (CppHdrCode b)] -> [State t (CppHdrCode c)] -> 
-  State u (CppHdrCode d) -> State v (CppHdrCode e)) -> 
-  [State v (p CppSrcCode CppHdrCode a)] -> [State v (p CppSrcCode CppHdrCode b)]
-  -> [State v (p CppSrcCode CppHdrCode c)] -> 
-  State v (p CppSrcCode CppHdrCode d) -> State v (p CppSrcCode CppHdrCode e)
+pair3Lists1Val :: (Pair p) => ([SrcState r a] -> [SrcState s b] -> 
+  [SrcState t c] -> SrcState u d -> SrcState v e) -> ([HdrState r a] -> 
+  [HdrState s b] -> [HdrState t c] -> HdrState u d -> HdrState v e) -> 
+  [PairState v p a] -> [PairState v p b] -> [PairState v p c] -> PairState v p d
+  -> PairState v p e
 pair3Lists1Val srcf hdrf stv1 stv2 stv3 stv4 = do
   v1 <- sequence stv1
   let fl1 = map (return . pfst) v1
       sl1 = map (return . psnd) v1
   pair2Lists1Val (srcf fl1) (hdrf sl1) stv2 stv3 stv4 
 
-pair1Val3Lists :: (Pair p) => (State r (CppSrcCode a) -> 
-  [State s (CppSrcCode b)] -> [(State t (CppSrcCode c),
-  State u (CppSrcCode d))] -> State v (CppSrcCode e)) -> (State r (CppHdrCode a)
-  -> [State s (CppHdrCode b)] -> [(State t (CppHdrCode c),
-  State u (CppHdrCode d))] -> State v (CppHdrCode e)) -> 
-  State v (p CppSrcCode CppHdrCode a) -> [State v (p CppSrcCode CppHdrCode b)]
-  -> [(State v (p CppSrcCode CppHdrCode c), 
-  State v (p CppSrcCode CppHdrCode d))] -> State v (p CppSrcCode CppHdrCode e)
+pair1Val3Lists :: (Pair p) => (SrcState r a -> [SrcState s b] -> 
+  [(SrcState t c, SrcState u d)] -> SrcState v e) -> (HdrState r a -> 
+  [HdrState s b] -> [(HdrState t c, HdrState u d)] -> HdrState v e) -> 
+  PairState v p a -> [PairState v p b] -> [(PairState v p c, PairState v p d)] 
+  -> PairState v p e
 pair1Val3Lists srcf hdrf stv1 stv2 stv34 = do
   v1 <- stv1
   v2 <- sequence stv2
@@ -1020,30 +995,22 @@ pair1Val3Lists srcf hdrf stv1 stv2 stv34 = do
   p2 <- hdrf sv1 sv2 (zip sv3 sv4)
   return $ pair p1 p2
 
-pair2Vals3Lists :: (Pair p) => (State r (CppSrcCode a) -> 
-  State s (CppSrcCode b) -> [State t (CppSrcCode c)] -> 
-  [(State u (CppSrcCode d), State v (CppSrcCode e))] -> 
-  State w (CppSrcCode f)) -> (State r (CppHdrCode a) -> State s (CppHdrCode b) 
-  -> [State t (CppHdrCode c)] -> [(State u (CppHdrCode d),
-  State v (CppHdrCode e))] -> State w (CppHdrCode f)) ->
-  State w (p CppSrcCode CppHdrCode a) -> State w (p CppSrcCode CppHdrCode b) ->
-  [State w (p CppSrcCode CppHdrCode c)] -> 
-  [(State w (p CppSrcCode CppHdrCode d), State w (p CppSrcCode CppHdrCode e))]
-  -> State w (p CppSrcCode CppHdrCode f)
+pair2Vals3Lists :: (Pair p) => (SrcState r a -> SrcState s b -> [SrcState t c] 
+  -> [(SrcState u d, SrcState v e)] -> SrcState w f) -> (HdrState r a -> 
+  HdrState s b -> [HdrState t c] -> [(HdrState u d, HdrState v e)] -> 
+  HdrState w f) -> PairState w p a -> PairState w p b -> [PairState w p c] -> 
+  [(PairState w p d, PairState w p e)] -> PairState w p f
 pair2Vals3Lists srcf hdrf stv1 stv2 stv3 stv45 = do
   v1 <- stv1
   let fv1 = return $ pfst v1
       sv1 = return $ psnd v1
   pair1Val3Lists (srcf fv1) (hdrf sv1) stv2 stv3 stv45
 
-pairVal2ListsVal :: (Pair p) => (State r (CppSrcCode a) -> 
-  [State s (CppSrcCode b)] -> [State t (CppSrcCode c)] -> State u (CppSrcCode d)
-  -> State v (CppSrcCode e)) -> (State r (CppHdrCode a) 
-  -> [State s (CppHdrCode b)] -> [State t (CppHdrCode c)] -> 
-  State u (CppHdrCode d) -> State v (CppHdrCode e)) -> 
-  State v (p CppSrcCode CppHdrCode a) -> [State v (p CppSrcCode CppHdrCode b)] 
-  -> [State v (p CppSrcCode CppHdrCode c)] -> 
-  State v (p CppSrcCode CppHdrCode d) -> State v (p CppSrcCode CppHdrCode e)
+pairVal2ListsVal :: (Pair p) => (SrcState r a -> [SrcState s b] -> 
+  [SrcState t c] -> SrcState u d -> SrcState v e) -> (HdrState r a -> 
+  [HdrState s b] -> [HdrState t c] -> HdrState u d -> HdrState v e) -> 
+  PairState v p a -> [PairState v p b] -> [PairState v p c] -> PairState v p d 
+  -> PairState v p e
 pairVal2ListsVal srcf hdrf stv1 stv2 stv3 stv4 = do
   v1 <- stv1
   let fv1 = return $ pfst v1

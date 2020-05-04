@@ -400,7 +400,7 @@ construct n = toState $ typeFromData (Object n) n empty
 
 param :: (RenderSym r) => (r (Variable r) -> Doc) -> SVariable r -> 
   MSParameter r
-param f v' = modifyReturnFunc (\v s -> addParameter (variableName v) s) 
+param f v' = modifyReturnFunc (addParameter . variableName) 
   (\v -> paramFromData v (f v)) (zoom lensMStoVS v')
 
 method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> VSType r 

@@ -466,7 +466,7 @@ addParameter p = over currParameters (\ps -> ifElemError p ps $
   "Function has duplicate parameter: " ++ p)
 
 getParameters :: MS [String]
-getParameters = reverse <$> gets (^. currParameters)
+getParameters = gets (reverse . (^. currParameters))
 
 setODEDepVars :: [String] -> ValueState -> ValueState
 setODEDepVars = set currODEDepVars

@@ -719,7 +719,7 @@ csOutfileType = modifyReturn (addLangImportVS "System.IO") $
 
 csLitList :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
   -> SValue r
-csLitList f t = on1StateValue1List (\lt es -> mkVal lt (new <+> RC.type' lt <+> 
+csLitList f t = on1StateValue1List (\lt es -> mkVal lt (text new <+> RC.type' lt <+> 
   braces (valueList es))) (f t)
 
 csLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc

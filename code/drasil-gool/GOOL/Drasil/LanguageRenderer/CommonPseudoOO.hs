@@ -180,7 +180,7 @@ arrayDec n vr = zoom lensMStoVS $ do
   v <- vr 
   let tp = variableType v
   innerTp <- listInnerType $ return tp
-  return $ mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new <+> 
+  return $ mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> text new <+> 
     RC.type' innerTp <> brackets (RC.value sz)
 
 arrayDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r

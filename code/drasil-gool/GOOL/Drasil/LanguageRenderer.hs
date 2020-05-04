@@ -4,9 +4,9 @@
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, commentStart, ifLabel, elseLabel, elseIfLabel, forLabel, 
-  inLabel, whileLabel, tryLabel, new, blockCmtStart, blockCmtEnd, docCmtStart, 
-  bodyStart, bodyEnd, endStatement, argv, args, exceptionObj, listSep, access, 
-  mathFunc, addExt,
+  inLabel, whileLabel, tryLabel, catchLabel, throwLabel, blockCmtStart, 
+  blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, argv, args, 
+  exceptionObj, mainFunc, new, listSep, access, mathFunc, addExt,
   
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
@@ -46,8 +46,8 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 ----------------------------------------
 
 classDec, dot, commentStart, ifLabel, elseLabel, elseIfLabel, forLabel, 
-  inLabel, whileLabel, tryLabel, new, blockCmtStart, blockCmtEnd, 
-  docCmtStart, bodyStart, bodyEnd, endStatement :: Doc
+  inLabel, whileLabel, tryLabel, catchLabel, throwLabel, blockCmtStart, 
+  blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement :: Doc
 classDec = text "class"
 dot = text "."
 commentStart = text "//"
@@ -58,7 +58,8 @@ forLabel = text "for"
 inLabel = text "in"
 whileLabel = text "while"
 tryLabel = text "try"
-new = text "new"
+catchLabel = text "catch"
+throwLabel = text "throw"
 blockCmtStart = text "/*"
 blockCmtEnd = text "*/"
 docCmtStart = text "/**"
@@ -66,10 +67,12 @@ bodyStart = lbrace
 bodyEnd = rbrace
 endStatement = semi
 
-argv, args, exceptionObj, listSep :: String
+argv, args, exceptionObj, mainFunc, new, listSep :: String
 argv = "argv"
 args = "args"
 exceptionObj = "Exception"
+mainFunc = "main"
+new = "new"
 listSep = ", "
 
 access :: String -> String -> String
@@ -211,7 +214,7 @@ increment :: (RenderSym r) => r (Variable r) -> Doc
 increment v = RC.variable v <> text "++"
 
 listDec :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-listDec v n = space <> equals <+> new <+> RC.type' (variableType v) 
+listDec v n = space <> equals <+> text new <+> RC.type' (variableType v) 
   <> parens (RC.value n)
 
 constDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc

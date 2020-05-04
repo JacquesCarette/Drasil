@@ -3,9 +3,10 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
-  classDec, dot, commentStart, elseIfLabel, forLabel, inLabel, new,
-  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
-  addExt,
+  classDec, dot, commentStart, ifLabel, elseLabel, elseIfLabel, forLabel, 
+  inLabel, whileLabel, tryLabel, new, blockCmtStart, blockCmtEnd, docCmtStart, 
+  bodyStart, bodyEnd, endStatement, argv, args, exceptionObj, listSep, access, 
+  mathFunc, addExt,
   
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
@@ -44,14 +45,19 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec, dot, commentStart, elseIfLabel, forLabel, inLabel, new, blockCmtStart,
-  blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement :: Doc
+classDec, dot, commentStart, ifLabel, elseLabel, elseIfLabel, forLabel, 
+  inLabel, whileLabel, tryLabel, new, blockCmtStart, blockCmtEnd, 
+  docCmtStart, bodyStart, bodyEnd, endStatement :: Doc
 classDec = text "class"
 dot = text "."
 commentStart = text "//"
-elseIfLabel = text "else if"
+ifLabel = text "if"
+elseLabel = text "else"
+elseIfLabel = elseLabel <+> ifLabel
 forLabel = text "for"
 inLabel = text "in"
+whileLabel = text "while"
+tryLabel = text "try"
 new = text "new"
 blockCmtStart = text "/*"
 blockCmtEnd = text "*/"
@@ -59,6 +65,18 @@ docCmtStart = text "/**"
 bodyStart = lbrace
 bodyEnd = rbrace
 endStatement = semi
+
+argv, args, exceptionObj, listSep :: String
+argv = "argv"
+args = "args"
+exceptionObj = "Exception"
+listSep = ", "
+
+access :: String -> String -> String
+access q n = q ++ "." ++ n
+
+mathFunc :: String -> String
+mathFunc = access "Math"
 
 addExt :: String -> String -> String
 addExt ext nm = nm ++ "." ++ ext
@@ -225,7 +243,7 @@ self :: Doc
 self = text "this"
 
 arg :: (RenderSym r) => r (Value r) -> r (Value r) -> Doc
-arg n args = RC.value args <> brackets (RC.value n)
+arg n argsList = RC.value argsList <> brackets (RC.value n)
 
 classVar :: Doc -> Doc -> Doc
 classVar c v = c <> dot <> v
@@ -344,16 +362,16 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem cmt) (fileMod m)) m
 -- Helper Functions --
 
 valueList :: (RenderSym r) => [r (Value r)] -> Doc
-valueList = hicat (text ", ") . map RC.value
+valueList = hicat (text listSep) . map RC.value
 
 variableList :: (RenderSym r) => [r (Variable r)] -> Doc
-variableList = hicat (text ", ") . map RC.variable
+variableList = hicat (text listSep) . map RC.variable
 
 parameterList :: (RenderSym r) => [r (Parameter r)] -> Doc
-parameterList = hicat (text ", ") . map RC.parameter
+parameterList = hicat (text listSep) . map RC.parameter
 
 namedArgList :: (RenderSym r) => Doc -> [(r (Variable r), r (Value r))] -> Doc
-namedArgList sep = hicat (text ", ") . map (\(vr,vl) -> RC.variable vr <> sep 
+namedArgList sep = hicat (text listSep) . map (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc

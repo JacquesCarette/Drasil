@@ -43,9 +43,9 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
   catchLabel, throwLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
-  bodyEnd, endStatement, commentStart, args, exceptionObj, mainFunc, new, 
-  listSep, access, containing, mathFunc, variableList, parameterList, 
-  appendToBody, surroundBody, intValue)
+  bodyEnd, endStatement, commentStart, exceptionObj', new', args, exceptionObj, 
+  mainFunc, new, listSep, access, containing, mathFunc, variableList, 
+  parameterList, appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (package, class', multiStmt, 
   body, printFile, param, listDec, classVar, cast, castObj, static, dynamic, 
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
@@ -422,10 +422,9 @@ instance ValueExpression JavaCode where
 
 instance RenderValue JavaCode where
   inputFunc = modify (addLangImportVS $ utilImport jScanner) >> mkStateVal 
-    (obj jScanner) (parens $ text new <+> text jScanner <> parens (text $ 
-    jSystem jStdIn))
-  printFunc = mkStateVal void (text $ jSystem (jStdOut `access` jPrint))
-  printLnFunc = mkStateVal void (text $ jSystem (jStdOut `access` jPrintLn))
+    (obj jScanner) (parens $ new' <+> jScanner' <> parens (jSystem jStdIn))
+  printFunc = mkStateVal void (jSystem (jStdOut `access` jPrint))
+  printLnFunc = mkStateVal void (jSystem (jStdOut `access` jPrintLn))
   printFileFunc = on2StateValues (\v -> mkVal v . R.printFile jPrint . 
     RC.value) void
   printFileLnFunc = on2StateValues (\v -> mkVal v . R.printFile jPrintLn . 
@@ -821,16 +820,17 @@ jStringType = toState $ typeFromData String jString (text jString)
 
 jInfileType :: (RenderSym r) => VSType r
 jInfileType = modifyReturn (addLangImportVS $ utilImport jScanner) $ 
-  typeFromData File jScanner (text jScanner)
+  typeFromData File jScanner jScanner'
 
 jOutfileType :: (RenderSym r) => VSType r
 jOutfileType = modifyReturn (addLangImportVS $ ioImport jPrintWriter) $ 
   typeFromData File jPrintWriter (text jPrintWriter)
 
-jExtends, jImplements, jFinal, jThrows, jLambdaSep :: Doc
+jExtends, jImplements, jFinal, jScanner', jThrows, jLambdaSep :: Doc
 jExtends = text "extends"
 jImplements = text "implements"
 jFinal = text "final"
+jScanner' = text jScanner
 jThrows = text "throws"
 jLambdaSep = text "->"
 
@@ -875,11 +875,13 @@ jSplit = "split"
 io = "io"
 util = "util"
 
-javaImport, ioImport, utilImport, jSystem :: String -> String
+javaImport, ioImport, utilImport :: String -> String
 javaImport = access "java"
 ioImport = javaImport . access io
 utilImport = javaImport . access util
-jSystem = access "System"
+
+jSystem :: String -> Doc
+jSystem = text . access "System"
 
 jUnaryMath :: (Monad r) => String -> VSOp r
 jUnaryMath = unOpPrec . mathFunc
@@ -968,14 +970,14 @@ jConstDecDef v def = jFinal <+> RC.type' (variableType v) <+>
   RC.variable v <+> equals <+> RC.value def
 
 jThrowDoc :: (RenderSym r) => r (Value r) -> Doc
-jThrowDoc errMsg = throwLabel <+> text new <+> text exceptionObj <> 
+jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <> 
   parens (RC.value errMsg)
 
 jTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 jTryCatch tb cb = vcat [
   tryLabel <+> lbrace,
   indent $ RC.body tb,
-  rbrace <+> catchLabel <+> parens (text exceptionObj <+> text "exc") <+> 
+  rbrace <+> catchLabel <+> parens (exceptionObj' <+> text "exc") <+> 
     lbrace,
   indent $ RC.body cb,
   rbrace]
@@ -1011,7 +1013,7 @@ jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n],
 
 jStringSplit :: (RenderSym r) => SVariable r -> SValue r -> VS Doc
 jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+> 
-  text new <+> RC.type' (variableType vnew) <> parens (RC.value s))
+  new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
 jMethod :: (RenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc

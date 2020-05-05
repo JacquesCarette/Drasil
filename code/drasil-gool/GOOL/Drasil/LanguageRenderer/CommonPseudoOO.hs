@@ -37,8 +37,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
   StateVarElim(..), ClassElim(..))
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, 
   on2StateValues, onStateList)
-import GOOL.Drasil.LanguageRenderer (args, new, array, access, mathFunc, 
-  functionDox, valueList, intValue)
+import GOOL.Drasil.LanguageRenderer (array', new', args, array, access, 
+  mathFunc, functionDox, valueList, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (module', print, stateVar, 
   stateVarList, constDecDef, extVar, objVar, listAccessFunc)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
@@ -183,7 +183,7 @@ arrayDec n vr = zoom lensMStoVS $ do
   v <- vr 
   let tp = variableType v
   innerTp <- listInnerType $ return tp
-  return $ mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> text new <+> 
+  return $ mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new' <+> 
     RC.type' innerTp <> brackets (RC.value sz)
 
 arrayDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
@@ -225,7 +225,7 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
 mainFunction :: (RenderSym r) => VSType r -> Label -> MSBody r -> SMethod r
 mainFunction s n = S.intFunc True n public static (mType S.void)
   [S.param (S.var args (onStateValue (\argT -> typeFromData (List String) 
-  (render (RC.type' argT) ++ array) (RC.type' argT <> text array)) s))]
+  (render (RC.type' argT) ++ array) (RC.type' argT <> array')) s))]
 
 stateVar :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) -> 
   SVariable r -> CS (r Doc)

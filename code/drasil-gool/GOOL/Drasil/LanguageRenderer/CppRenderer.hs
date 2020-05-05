@@ -45,10 +45,10 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (addExt, classDec, dot, blockCmtStart, 
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, 
-  returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, argc, argv, 
-  constDec, mainFunc, array, listSep, containing, functionDox, valueList, 
+  returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
+  listSep', argc, argv, constDec, mainFunc, containing, functionDox, valueList, 
   parameterList, appendToBody, surroundBody, getterName, setterName)
-import qualified GOOL.Drasil.LanguageRenderer as R (self, multiStmt, 
+import qualified GOOL.Drasil.LanguageRenderer as R (self', self, multiStmt, 
   body, param, stateVar, constVar, cast, castObj, static, dynamic, break, 
   continue, private, public, blockCmt, docCmt, addComments, commentedMod, 
   commentedItem)
@@ -1208,7 +1208,7 @@ instance VariableSym CppSrcCode where
   extVar l n t = modify (addModuleImportVS l) >> var n t
   self = C.self
   classVar = on2StateValues (\c v -> classVarCheckStatic (varFromData 
-    (variableBind v) (getTypeString c ++ nmSpcAccess ++ variableName v) 
+    (variableBind v) (getTypeString c `nmSpcAccess` variableName v) 
     (variableType v) (cppClassVar (RC.type' c) (RC.variable v))))
   extClassVar c v = do
     t <- c
@@ -1218,8 +1218,8 @@ instance VariableSym CppSrcCode where
   objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
     ++ variableName vr) `elem` ovs then toState vr else CP.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
-  objVarSelf = onStateValue (\v -> mkVar (R.self ++ ptrAccess ++variableName v) 
-    (variableType v) (text R.self <> text ptrAccess <> RC.variable v))
+  objVarSelf = onStateValue (\v -> mkVar (R.self ++ ptrAccess ++ variableName v)
+    (variableType v) (R.self' <> ptrAccess' <> RC.variable v))
   arrayElem i = G.arrayElem (litInt i)
   iterVar l t = mkStateVar l (iterator t) (parens $ cppDeref <> text l)
 
@@ -1305,7 +1305,7 @@ instance ValueExpression CppSrcCode where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs (text ptrAccess) self
+  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs ptrAccess' self
   extFuncAppMixedArgs l n t vs ns = do
     modify (addModuleImportVS l)
     funcAppMixedArgs n t vs ns
@@ -1576,8 +1576,8 @@ instance MethodSym CppSrcCode where
     (on2StateValues (on2CodeValues appendToBody) b (returnStmt $ litInt 0))
     where argcVar = var argc int
           argvVar = toState $ mkVar argv (typeFromData (List String) 
-            (constDec ++ " " ++ C.charRender) (text constDec <+> text 
-            C.charRender)) (cppDeref <> text argv <> text array)
+            (constDec ++ " " ++ C.charRender) (constDec' <+> text 
+            C.charRender)) (cppDeref <> text argv <> array')
 
   docFunc = G.docFunc
 
@@ -1617,7 +1617,7 @@ instance StateVarSym CppSrcCode where
   stateVar s _ _ = onStateValue (on3CodeValues svd (onCodeValue snd s) (toCode 
     empty)) $ zoom lensCStoMS emptyStmt
   stateVarDef = cppsStateVarDef empty
-  constVar n s = cppsStateVarDef (text constDec) n s static
+  constVar n s = cppsStateVarDef (constDec') n s static
   
 instance StateVarElim CppSrcCode where
   stateVar = stVar . unCPPSC
@@ -2330,7 +2330,8 @@ cppName :: String
 cppName = "C++" 
 
 guard, inc, ifndef, define, defineSuffix, endif, using, namespace, cppPtr, 
-  cppDeref, streamL, streamR, cppLambdaDec, cppLambdaSep, catchAll, cppPi :: Doc
+  cppDeref, streamL, streamR, cppLambdaDec, cppLambdaSep, catchAll, cppPi,
+  ptrAccess' :: Doc
 guard = text "#"
 inc = guard <> text "include"
 ifndef = guard <> text "ifndef"
@@ -2347,14 +2348,15 @@ cppLambdaDec = text "[]"
 cppLambdaSep = text "->"
 catchAll = text "..."
 cppPi = text "M_PI"
+ptrAccess' = text ptrAccess
 
-nmSpcAccess, ptrAccess, std, algorithm, cppString, vector, sstream, 
-  stringstream, fstream, iostream, limits, mathh, cppBool, cppInfile, 
-  cppOutfile, cppIterator, cppOpen, stod, stof, cppIgnore, numLimits, 
-  streamsize, max, endl, cin, cout, cppIndex, cppListAccess, cppListAdd, 
-  cppListAppend, cppIterBegin, cppIterEnd, cppR, cppW, cppA, cppGetLine, 
-  cppClose, cppClear, cppStr, mathDefines :: String
-nmSpcAccess = "::"
+nmSpc, ptrAccess, std, algorithm, cppString, vector, sstream, stringstream, 
+  fstream, iostream, limits, mathh, cppBool, cppInfile, cppOutfile, 
+  cppIterator, cppOpen, stod, stof, cppIgnore, numLimits, streamsize, max, 
+  endl, cin, cout, cppIndex, cppListAccess, cppListAdd, cppListAppend, 
+  cppIterBegin, cppIterEnd, cppR, cppW, cppA, cppGetLine, cppClose, cppClear, 
+  cppStr, mathDefines :: String
+nmSpc = "::"
 ptrAccess = "->"
 std = "std"
 algorithm = "algorithm"
@@ -2386,17 +2388,26 @@ cppListAdd = "insert"
 cppListAppend = "push_back"
 cppIterBegin = "begin"
 cppIterEnd = "end"
-cppR = stdAccess (fstream ++ nmSpcAccess ++ "in")
-cppW = stdAccess (fstream ++ nmSpcAccess ++ "out")
-cppA = stdAccess (fstream ++ nmSpcAccess ++ "app")
+cppR = stdAccess (fstream `nmSpcAccess` "in")
+cppW = stdAccess (fstream `nmSpcAccess` "out")
+cppA = stdAccess (fstream `nmSpcAccess` "app")
 cppGetLine = stdAccess "getline"
 cppClose = "close"
 cppClear = "clear"
 cppStr = "str"
 mathDefines = "_USE_MATH_DEFINES"
 
+nmSpcAccess :: String -> String -> String
+nmSpcAccess ns e = ns ++ nmSpc ++ e 
+
+nmSpcAccess' :: Doc -> Doc -> Doc
+nmSpcAccess' ns e = ns <> text nmSpc <> e
+
 stdAccess :: String -> String
-stdAccess s = std ++ nmSpcAccess ++ s
+stdAccess = nmSpcAccess std
+
+stdAccess' :: Doc -> Doc
+stdAccess' = nmSpcAccess' (text std)
 
 mainDesc, argcDesc, argvDesc, mainReturnDesc :: String
 mainDesc = "Controls the flow of the program" 
@@ -2563,14 +2574,14 @@ cppArrayType = onStateValue (\t -> typeFromData (Array (getType t))
 
 cppIterType :: (RenderSym r) => VSType r -> VSType r
 cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t)) 
-  (getTypeString t ++ nmSpcAccess ++ cppIterator) (text std <> text nmSpcAccess 
-  <> RC.type' t <> text nmSpcAccess <> text cppIterator))
+  (getTypeString t `nmSpcAccess` cppIterator) (stdAccess' (RC.type' t) 
+  `nmSpcAccess'` text cppIterator))
 
 cppClassVar :: Doc -> Doc -> Doc
-cppClassVar c v = c <> text nmSpcAccess <> v
+cppClassVar c v = c `nmSpcAccess'` v
 
 cppLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-cppLambda ps ex = cppLambdaDec <+> parens (hicat (text listSep) $ zipWith (<+>) 
+cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>) 
   (map (RC.type' . variableType) ps) (map RC.variable ps)) <+> cppLambdaSep <+> 
   bodyStart <> returnLabel <+> RC.value ex <> endStatement <> bodyEnd
 
@@ -2584,8 +2595,7 @@ ignoreFunc :: Char -> SValue CppSrcCode -> SValue CppSrcCode
 ignoreFunc sep inFn = objMethodCall void inFn cppIgnore [maxFunc, litChar sep]
 
 maxFunc :: SValue CppSrcCode
-maxFunc = funcApp ((numLimits `containing` streamsize) ++ nmSpcAccess ++ max) 
-  int []
+maxFunc = funcApp ((numLimits `containing` streamsize) `nmSpcAccess` max) int []
 
 cppCast :: VSType CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
 cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $ 
@@ -2645,13 +2655,13 @@ cppPointerParamDoc v = RC.type' (variableType v) <+> cppPtr <> RC.variable v
 cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode) 
   -> [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc
 cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $ 
-  vcat [ttype <+> text c <> text nmSpcAccess <> text n <> parens (parameterList 
+  vcat [ttype <+> text (c `nmSpcAccess` n) <> parens (parameterList 
     ps) <+> emptyIfEmpty initList (colon <+> initList) <+> bodyStart,
   indent (RC.body b),
   bodyEnd]
   where ttype | isDtor n = empty
               | otherwise = RC.type' t
-        initList = hicat (text listSep) is
+        initList = hicat listSep' is
 
 cppConstructor :: [MSParameter CppSrcCode] -> NamedArgs CppSrcCode -> 
   MSBody CppSrcCode -> SMethod CppSrcCode
@@ -2706,7 +2716,7 @@ cppsStateVarDef cns n s p vr' vl' = do
   emptS <- zoom lensCStoMS emptyStmt
   return $ on3CodeValues svd (onCodeValue snd s) 
     (toCode $ onBinding (binding p) (cns <+> RC.type' (variableType vr) <+> 
-      text (n ++ nmSpcAccess) <> RC.variable vr <+> equals <+> RC.value vl <> 
+      text n `nmSpcAccess'` RC.variable vr <+> equals <+> RC.value vl <> 
       endStatement) empty) 
     emptS
 

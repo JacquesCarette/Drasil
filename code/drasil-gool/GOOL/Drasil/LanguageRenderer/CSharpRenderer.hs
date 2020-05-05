@@ -42,8 +42,9 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
-  inLabel, tryLabel, catchLabel, throwLabel, args, exceptionObj, listSep, 
-  access, mathFunc, valueList, variableList, appendToBody, surroundBody)
+  inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', args, 
+  listSep, access, mathFunc, valueList, variableList, appendToBody, 
+  surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body, 
   printFile, param, method, listDec, classVar, objVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
@@ -761,7 +762,7 @@ csOutfileType = modifyReturn (addLangImportVS csIO) $
 
 csLitList :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
   -> SValue r
-csLitList f t = on1StateValue1List (\lt es -> mkVal lt (text new <+> RC.type' lt
+csLitList f t = on1StateValue1List (\lt es -> mkVal lt (new' <+> RC.type' lt
   <+> braces (valueList es))) (f t)
 
 csLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
@@ -806,7 +807,7 @@ csFuncDecDef v ps r = do
     <> parens (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd 
 
 csThrowDoc :: (RenderSym r) => r (Value r) -> Doc
-csThrowDoc errMsg = throwLabel <+> text new <+> text exceptionObj <> 
+csThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <> 
   parens (RC.value errMsg)
 
 csTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc

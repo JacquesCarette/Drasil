@@ -41,8 +41,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
-  forLabel, inLabel, whileLabel, tryLabel, argv, exceptionObj, listSep, access, 
-  valueList, variableList, parameterList, surroundBody)
+  forLabel, inLabel, whileLabel, tryLabel, exceptionObj', listSep', argv, 
+  listSep, access, valueList, variableList, parameterList, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body, 
   multiAssign, return', classVar, listSetFunc, castObj, dynamic, break, 
   continue, addComments, commentedMod, commentedItem)
@@ -763,6 +763,9 @@ pySelf, pyNull :: String
 pySelf = "self"
 pyNull = "None"
 
+pyNull' :: Doc
+pyNull' = text pyNull
+
 pyTrue, pyFalse :: Doc
 pyTrue = text "True"
 pyFalse = text "False"
@@ -914,9 +917,9 @@ pyPrint newLn f' p' v' = zoom lensMStoVS $ do
     prf <- p'
     v <- v'
     s <- litString "" :: SValue PythonCode
-    let nl = if newLn then empty else text listSep <> text "end" <> equals <> 
+    let nl = if newLn then empty else listSep' <> text "end" <> equals <> 
                RC.value s
-        fl = emptyIfEmpty (RC.value f) $ text listSep <> text "file" <> equals 
+        fl = emptyIfEmpty (RC.value f) $ listSep' <> text "file" <> equals 
                <> RC.value f
     return $ mkStmtNoEnd $ RC.value prf <> parens (RC.value v <> nl <> fl)
 
@@ -937,7 +940,7 @@ pyInput inSrc v = v &= (v >>= pyInput' . getType . variableType)
         pyInput' _ = error "Attempt to read a value of unreadable type"
 
 pyThrow :: (RenderSym r) => r (Value r) -> Doc
-pyThrow errMsg = pyRaise <+> text exceptionObj <> parens (RC.value errMsg)
+pyThrow errMsg = pyRaise <+> exceptionObj' <> parens (RC.value errMsg)
 
 pyForEach :: (RenderSym r) => r (Variable r) -> r (Value r) -> r (Body r) -> Doc
 pyForEach i lstVar b = vcat [
@@ -953,7 +956,7 @@ pyTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 pyTryCatch tryB catchB = vcat [
   tryLabel <+> colon,
   indent $ RC.body tryB,
-  pyExcept <+> text exceptionObj <+> colon,
+  pyExcept <+> exceptionObj' <+> colon,
   indent $ RC.body catchB]
 
 pyListSlice :: (RenderSym r, Monad r) => SVariable r -> SValue r -> SValue r -> 
@@ -973,22 +976,22 @@ pyMethod n slf ps b = vcat [
   pyDef <+> text n <> parens (RC.variable slf <> oneParam <> pms) <> colon,
   indent bodyD]
       where pms = parameterList ps
-            oneParam = emptyIfEmpty pms $ text listSep
-            bodyD | isEmpty (RC.body b) = text pyNull
+            oneParam = emptyIfEmpty pms listSep'
+            bodyD | isEmpty (RC.body b) = pyNull'
                   | otherwise = RC.body b
 
 pyFunction :: (RenderSym r) => Label -> [r (Parameter r)] -> r (Body r) -> Doc
 pyFunction n ps b = vcat [
   pyDef <+> text n <> parens (parameterList ps) <> colon,
   indent bodyD]
-  where bodyD | isEmpty (RC.body b) = text pyNull
+  where bodyD | isEmpty (RC.body b) = pyNull'
               | otherwise = RC.body b
 
 pyClass :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 pyClass n pn s vs fs = vcat [
   s <+> classDec <+> text n <> pn <> colon,
   indent funcSec]
-  where funcSec | isEmpty (vs <> fs) = text pyNull
+  where funcSec | isEmpty (vs <> fs) = pyNull'
                 | isEmpty vs = fs
                 | isEmpty fs = vs
                 | otherwise = vcat [vs, blank, fs]

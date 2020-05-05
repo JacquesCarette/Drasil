@@ -6,8 +6,9 @@ module GOOL.Drasil.LanguageRenderer (
   classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
   forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, 
   blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
-  argc, argv, args, constDec, exceptionObj, mainFunc, new, self, array, 
-  listSep, access, containing, mathFunc, addExt,
+  constDec', exceptionObj', new', self', array', listSep', argc, argv, args, 
+  constDec, exceptionObj, mainFunc, new, self, array, listSep, access, 
+  containing, mathFunc, addExt,
   
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
@@ -49,7 +50,7 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
   forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, 
   blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
-  endStatement :: Doc
+  endStatement, constDec', exceptionObj', new', self', array', listSep' :: Doc
 classDec = text "class"
 dot = text "."
 commentStart = text "//"
@@ -69,6 +70,12 @@ docCmtStart = text "/**"
 bodyStart = lbrace
 bodyEnd = rbrace
 endStatement = semi
+constDec' = text constDec
+exceptionObj' = text exceptionObj
+new' = text new
+self' = text self
+array' = text array
+listSep' = text listSep
 
 argc, argv, args, constDec, exceptionObj, mainFunc, new, self, array, 
   listSep :: String
@@ -182,7 +189,7 @@ stateVar :: Doc -> Doc -> Doc -> Doc
 stateVar s p dec = s <+> p <+> dec
 
 constVar :: Doc -> Doc -> Doc -> VarData -> Doc
-constVar s end p v = s <+> p <+> text constDec <+> typeDoc (varType v) <+>
+constVar s end p v = s <+> p <+> constDec' <+> typeDoc (varType v) <+>
   varDoc v <> end
 
 stateVarList :: [Doc] -> Doc
@@ -225,11 +232,11 @@ increment :: (RenderSym r) => r (Variable r) -> Doc
 increment v = RC.variable v <> text "++"
 
 listDec :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-listDec v n = space <> equals <+> text new <+> RC.type' (variableType v) 
+listDec v n = space <> equals <+> new' <+> RC.type' (variableType v) 
   <> parens (RC.value n)
 
 constDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-constDecDef v def = text constDec <+> RC.type' (variableType v) <+> 
+constDecDef v def = constDec' <+> RC.type' (variableType v) <+> 
   RC.variable v <+> equals <+> RC.value def
 
 return' :: (RenderSym r) => [r (Value r)] -> Doc
@@ -373,16 +380,16 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem cmt) (fileMod m)) m
 -- Helper Functions --
 
 valueList :: (RenderSym r) => [r (Value r)] -> Doc
-valueList = hicat (text listSep) . map RC.value
+valueList = hicat (listSep') . map RC.value
 
 variableList :: (RenderSym r) => [r (Variable r)] -> Doc
-variableList = hicat (text listSep) . map RC.variable
+variableList = hicat (listSep') . map RC.variable
 
 parameterList :: (RenderSym r) => [r (Parameter r)] -> Doc
-parameterList = hicat (text listSep) . map RC.parameter
+parameterList = hicat (listSep') . map RC.parameter
 
 namedArgList :: (RenderSym r) => Doc -> [(r (Variable r), r (Value r))] -> Doc
-namedArgList sep = hicat (text listSep) . map (\(vr,vl) -> RC.variable vr <> sep
+namedArgList sep = hicat (listSep') . map (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc

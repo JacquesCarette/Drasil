@@ -31,7 +31,8 @@ import GOOL.Drasil.AST (Binding(..))
 import GOOL.Drasil.Helpers (angles, toState, onStateValue, on2StateValues, 
   on3StateValues)
 import GOOL.Drasil.LanguageRenderer (forLabel, whileLabel, containing)
-import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, self)
+import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, self', 
+  self)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import GOOL.Drasil.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName)
@@ -85,7 +86,7 @@ orOp = orPrec "||"
 
 self :: (RenderSym r) => SVariable r
 self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (S.obj l) 
-  (text R.self))
+  (R.self'))
 
 -- Values --
 

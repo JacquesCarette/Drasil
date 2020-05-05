@@ -93,7 +93,7 @@ public class ReadTable {
         List<string> linetokens = new List<string>(0);
         List<string> lines = new List<string>(0);
         infile = new StreamReader(filename);
-        line = (infile.ReadLine());
+        line = infile.ReadLine();
         linetokens = new List<string>(line.Split(','));
         for (int stringlist_i = 0; stringlist_i < linetokens.Count / 1; stringlist_i += 1) {
             z_vector.Add(Double.Parse(linetokens[stringlist_i * 1 + 0]));

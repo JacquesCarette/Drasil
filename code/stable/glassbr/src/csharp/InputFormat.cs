@@ -61,7 +61,7 @@ public class InputFormat {
         outfile.WriteLine(" in module InputFormat");
         outfile.Close();
         infile.ReadLine();
-        inParams.g = (infile.ReadLine());
+        inParams.g = infile.ReadLine();
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'inParams.g' assigned to ");
         outfile.Write(inParams.g);

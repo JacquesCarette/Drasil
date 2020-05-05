@@ -108,6 +108,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (State, modify, runState)
+import Data.Composition ((.:))
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), hcat, brackets, 
@@ -2598,12 +2599,12 @@ maxFunc :: SValue CppSrcCode
 maxFunc = funcApp ((numLimits `containing` streamsize) `nmSpcAccess` max) int []
 
 cppCast :: VSType CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
-cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $ 
-  valueType vl) tp vl) t v
-  where cppCast' Double String _ _ = stodFunc v
-        cppCast' Float String _ _ = stofFunc v
-        cppCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' tp)) 
-          (RC.value vl))
+cppCast = join .: on2StateValues (\t v -> cppCast' (getType t) (getType $ 
+  valueType v) t v)
+  where cppCast' Double String _ v = stodFunc (toState v)
+        cppCast' Float String _ v = stofFunc (toState v)
+        cppCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast (RC.type' 
+          t)) (RC.value v))
 
 cppListSetDoc :: Doc -> Doc -> Doc
 cppListSetDoc i v = dot <> text cppListAccess <> parens i <+> equals <+> v

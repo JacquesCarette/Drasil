@@ -71,6 +71,7 @@ import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, currMain,
   getModuleName, getClassName, addParameter, getParameters)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
+import Data.Composition ((.:))
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
@@ -316,12 +317,10 @@ emptyStmt = toState $ mkStmtNoEnd empty
 
 assign :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
   MSStatement r
-assign t vr vl = zoom lensMStoVS $ on2StateValues (\vr' vl' -> stmtFromData 
-  (R.assign vr' vl') t) vr vl
+assign t = zoom lensMStoVS .: on2StateValues (flip stmtFromData t .: R.assign)
 
 increment :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-increment vr vl = zoom lensMStoVS $ on2StateValues (\vr' -> mkStmt . 
-  R.addAssign vr') vr vl
+increment = zoom lensMStoVS .: on2StateValues (mkStmt .: R.addAssign)
 
 objDecNew :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 objDecNew v vs = S.varDecDef v (newObj (onStateValue variableType v) vs)

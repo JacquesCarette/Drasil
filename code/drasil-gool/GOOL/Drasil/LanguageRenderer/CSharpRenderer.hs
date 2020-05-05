@@ -97,6 +97,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
+import Data.Composition ((.:))
 import Data.List (elemIndex, intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
   vcat, lbrace, rbrace, braces, colon, space)
@@ -790,12 +791,12 @@ csSplitFunc :: Char -> VSFunction CSharpCode
 csSplitFunc d = func csSplit (listType string) [litChar d]
 
 csCast :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
-csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $ 
-  valueType vl) tp vl) t v
-  where csCast' Double String _ _ = csDblParse v
-        csCast' Float String _ _ = csFloatParse v
-        csCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' tp)) 
-          (RC.value vl))
+csCast = join .: on2StateValues (\t v -> csCast' (getType t) (getType $ 
+  valueType v) t v)
+  where csCast' Double String _ v = csDblParse (toState v)
+        csCast' Float String _ v = csFloatParse (toState v)
+        csCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast 
+          (RC.type' t)) (RC.value v))
 
 csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
   MSStatement r

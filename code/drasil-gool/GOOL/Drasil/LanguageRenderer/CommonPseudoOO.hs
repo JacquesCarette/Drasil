@@ -49,6 +49,7 @@ import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   lensMStoVS, getLangImports, getLibImports, getModuleImports, setClassName)
 
 import Prelude hiding (print,pi,(<>))
+import Data.Composition ((.:))
 import Data.List (sort)
 import Control.Monad (join)
 import Control.Monad.State (modify)
@@ -175,7 +176,7 @@ notNull :: (RenderSym r) => SValue r -> SValue r
 notNull v = v ?!= S.valueOf (S.var "null" $ onStateValue valueType v)
 
 printSt :: (RenderSym r) => SValue r -> SValue r -> MSStatement r
-printSt p v = zoom lensMStoVS $ on2StateValues (\p' -> mkStmt . R.print p') p v
+printSt = zoom lensMStoVS .: on2StateValues (mkStmt .: R.print)
 
 arrayDec :: (RenderSym r) => SValue r -> SVariable r -> MSStatement r
 arrayDec n vr = zoom lensMStoVS $ do
@@ -278,8 +279,7 @@ string :: (RenderSym r) => VSType r
 string = toState $ typeFromData String stringRender (text stringRender)
 
 constDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-constDecDef vr vl = zoom lensMStoVS $ on2StateValues (\v -> mkStmt . 
-  R.constDecDef v) vr vl
+constDecDef = zoom lensMStoVS .: on2StateValues (mkStmt .: R.constDecDef)
   
 docInOutFunc :: (RenderSym r) => (r (Scope r) -> r (Permanence r) -> 
     [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r)

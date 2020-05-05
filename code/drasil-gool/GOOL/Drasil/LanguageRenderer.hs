@@ -380,16 +380,16 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem cmt) (fileMod m)) m
 -- Helper Functions --
 
 valueList :: (RenderSym r) => [r (Value r)] -> Doc
-valueList = hicat (listSep') . map RC.value
+valueList = hicat listSep' . map RC.value
 
 variableList :: (RenderSym r) => [r (Variable r)] -> Doc
-variableList = hicat (listSep') . map RC.variable
+variableList = hicat listSep' . map RC.variable
 
 parameterList :: (RenderSym r) => [r (Parameter r)] -> Doc
-parameterList = hicat (listSep') . map RC.parameter
+parameterList = hicat listSep' . map RC.parameter
 
 namedArgList :: (RenderSym r) => Doc -> [(r (Variable r), r (Value r))] -> Doc
-namedArgList sep = hicat (listSep') . map (\(vr,vl) -> RC.variable vr <> sep
+namedArgList sep = hicat listSep' . map (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc

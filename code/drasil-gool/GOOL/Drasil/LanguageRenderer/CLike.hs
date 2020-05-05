@@ -86,7 +86,7 @@ orOp = orPrec "||"
 
 self :: (RenderSym r) => SVariable r
 self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (S.obj l) 
-  (R.self'))
+  R.self')
 
 -- Values --
 

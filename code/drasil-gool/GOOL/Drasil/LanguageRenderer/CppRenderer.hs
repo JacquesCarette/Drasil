@@ -1617,7 +1617,7 @@ instance StateVarSym CppSrcCode where
   stateVar s _ _ = onStateValue (on3CodeValues svd (onCodeValue snd s) (toCode 
     empty)) $ zoom lensCStoMS emptyStmt
   stateVarDef = cppsStateVarDef empty
-  constVar n s = cppsStateVarDef (constDec') n s static
+  constVar n s = cppsStateVarDef constDec' n s static
   
 instance StateVarElim CppSrcCode where
   stateVar = stVar . unCPPSC

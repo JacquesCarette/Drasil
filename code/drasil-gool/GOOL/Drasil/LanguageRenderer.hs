@@ -3,15 +3,16 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
-  classDec, dot, commentStart, ifLabel, elseLabel, elseIfLabel, forLabel, 
-  inLabel, whileLabel, tryLabel, catchLabel, throwLabel, blockCmtStart, 
-  blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, argv, args, 
-  exceptionObj, mainFunc, new, listSep, access, mathFunc, addExt,
+  classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
+  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, 
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
+  argc, argv, args, char, constDec, exceptionObj, mainFunc, new, self, listSep, 
+  access, containing, mathFunc, addExt,
   
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
   param, method, stateVar, constVar, stateVarList, switch, assign, multiAssign, 
-  addAssign, increment, listDec, getTerm, return', comment, var, extVar, self, 
+  addAssign, increment, listDec, getTerm, return', comment, var, extVar,
   arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, binOpDocD', 
   constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, castObj, 
   break, continue, static, dynamic, private, public, blockCmt, docCmt, 
@@ -45,12 +46,14 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec, dot, commentStart, ifLabel, elseLabel, elseIfLabel, forLabel, 
-  inLabel, whileLabel, tryLabel, catchLabel, throwLabel, blockCmtStart, 
-  blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement :: Doc
+classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
+  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, 
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
+  endStatement :: Doc
 classDec = text "class"
 dot = text "."
 commentStart = text "//"
+returnLabel = text "return"
 ifLabel = text "if"
 elseLabel = text "else"
 elseIfLabel = elseLabel <+> ifLabel
@@ -67,16 +70,23 @@ bodyStart = lbrace
 bodyEnd = rbrace
 endStatement = semi
 
-argv, args, exceptionObj, mainFunc, new, listSep :: String
+argc, argv, args, char, constDec, exceptionObj, mainFunc, new, self, listSep :: String
+argc = "argc"
 argv = "argv"
 args = "args"
+char = "char"
+constDec = "const"
 exceptionObj = "Exception"
 mainFunc = "main"
 new = "new"
+self = "this"
 listSep = ", "
 
 access :: String -> String -> String
 access q n = q ++ "." ++ n
+
+containing :: String -> String -> String
+containing l e = l ++ "<" ++ e ++ ">"
 
 mathFunc :: String -> String
 mathFunc = access "Math"
@@ -171,7 +181,7 @@ stateVar :: Doc -> Doc -> Doc -> Doc
 stateVar s p dec = s <+> p <+> dec
 
 constVar :: Doc -> Doc -> Doc -> VarData -> Doc
-constVar s end p v = s <+> p <+> text "const" <+> typeDoc (varType v) <+>
+constVar s end p v = s <+> p <+> text constDec <+> typeDoc (varType v) <+>
   varDoc v <> end
 
 stateVarList :: [Doc] -> Doc
@@ -218,11 +228,11 @@ listDec v n = space <> equals <+> text new <+> RC.type' (variableType v)
   <> parens (RC.value n)
 
 constDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-constDecDef v def = text "const" <+> RC.type' (variableType v) <+> 
+constDecDef v def = text constDec <+> RC.type' (variableType v) <+> 
   RC.variable v <+> equals <+> RC.value def
 
 return' :: (RenderSym r) => [r (Value r)] -> Doc
-return' vs = text "return" <+> valueList vs
+return' vs = returnLabel <+> valueList vs
 
 comment :: Label -> Doc -> Doc
 comment cmt cStart = cStart <+> text cmt
@@ -241,9 +251,6 @@ var = text
 
 extVar :: Library -> Label -> Doc
 extVar l n = text l <> dot <> text n
-
-self :: Doc
-self = text "this"
 
 arg :: (RenderSym r) => r (Value r) -> r (Value r) -> Doc
 arg n argsList = RC.value argsList <> brackets (RC.value n)

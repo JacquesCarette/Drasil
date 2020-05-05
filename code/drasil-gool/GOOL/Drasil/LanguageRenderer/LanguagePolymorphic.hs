@@ -188,7 +188,7 @@ arrayElem i' v' = do
 -- Values --
 
 litChar :: (RenderSym r) => Char -> SValue r
-litChar c = mkStateVal S.char (quotes $ D.char c)
+litChar c = mkStateVal S.char (quotes $ if c == '\n' then text "\\n" else D.char c)
 
 litDouble :: (RenderSym r) => Double -> SValue r
 litDouble d = mkStateVal S.double (D.double d)

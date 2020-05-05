@@ -44,8 +44,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
 import GOOL.Drasil.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
   catchLabel, throwLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
   bodyEnd, endStatement, commentStart, args, exceptionObj, mainFunc, new, 
-  listSep, access, mathFunc, variableList, parameterList, appendToBody, 
-  surroundBody, intValue)
+  listSep, access, containing, mathFunc, variableList, parameterList, 
+  appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (package, class', multiStmt, 
   body, printFile, param, listDec, classVar, cast, castObj, static, dynamic, 
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
@@ -883,9 +883,6 @@ jSystem = access "System"
 
 jUnaryMath :: (Monad r) => String -> VSOp r
 jUnaryMath = unOpPrec . mathFunc
-
-containing :: String -> String -> String
-containing l e = l ++ "<" ++ e ++ ">"
 
 jListType :: (RenderSym r) => VSType r -> VSType r
 jListType t = do

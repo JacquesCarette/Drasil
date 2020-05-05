@@ -74,8 +74,8 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for,
-  while, intFunc, multiAssignError, multiReturnError)
+  varDec, varDecDef, listDec, extObjDecNew, switch, for, while, intFunc, 
+  multiAssignError, multiReturnError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
   decrement1, runStrategy, listSlice, stringListVals, stringListLists,
   forRange, notifyObservers, checkState)
@@ -524,7 +524,7 @@ instance IOStatement CSharpCode where
   printFileStrLn f = G.print True  (Just f) (printFileLnFunc f) . litString
 
   getInput v = v &= csInput (onStateValue variableType v) inputFunc
-  discardInput = C.discardInput csDiscardInput
+  discardInput = csDiscardInput inputFunc
   getFileInput f v = v &= csInput (onStateValue variableType v) (csFileInput f)
   discardFileInput f = valStmt $ csFileInput f
 
@@ -738,7 +738,7 @@ csReadLine = "ReadLine"
 csWrite = "Write"
 csWriteLine = "WriteLine"
 csIndex = "IndexOf"
-csListAdd = "Append"
+csListAdd = "Insert"
 csListAppend = "Add"
 csClose = "Close"
 csEOS = "EndOfStream"
@@ -818,8 +818,8 @@ csTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-csDiscardInput :: (RenderSym r) => r (Value r) -> Doc
-csDiscardInput = RC.value
+csDiscardInput :: SValue CSharpCode -> MSStatement CSharpCode
+csDiscardInput = valStmt
 
 csFileInput :: (RenderSym r) => SValue r -> SValue r
 csFileInput f = objMethodCallNoParams string f csReadLine 

@@ -4,8 +4,8 @@
 module GOOL.Drasil.LanguageRenderer.CLike (float, double, char, listType, void, 
   notOp, andOp, orOp, self, litTrue, litFalse, litFloat, inlineIf, 
   libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, varDec, 
-  varDecDef, listDec, extObjDecNew, discardInput, switch, for, while, 
-  intFunc, multiAssignError, multiReturnError
+  varDecDef, listDec, extObjDecNew, switch, for, while, intFunc, 
+  multiAssignError, multiReturnError
 ) where
 
 import Utils.Drasil (indent)
@@ -20,7 +20,7 @@ import qualified GOOL.Drasil.ClassInterface as S (TypeSym(bool, float, obj),
   ValueExpression(funcAppMixedArgs, newObjMixedArgs), 
   DeclStatement(varDec, varDecDef))
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderType(..),
-  InternalVarElim(variableBind), RenderValue(inputFunc, valFromData), 
+  InternalVarElim(variableBind), RenderValue(valFromData), 
   ValueElim(valuePrec), RenderMethod(intMethod))
 import qualified GOOL.Drasil.RendererClasses as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
@@ -78,7 +78,8 @@ orOp = orPrec "||"
 -- Variables --
 
 self :: (RenderSym r) => SVariable r
-self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar "this" (S.obj l) R.self)
+self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (S.obj l) 
+  (text R.self))
 
 -- Values --
 
@@ -134,9 +135,6 @@ extObjDecNew :: (RenderSym r) => Library -> SVariable r -> [SValue r] ->
   MSStatement r
 extObjDecNew l v vs = S.varDecDef v (extNewObj l (onStateValue variableType v)
   vs)
-  
-discardInput :: (RenderSym r) => (r (Value r) -> Doc) -> MSStatement r
-discardInput f = zoom lensMStoVS $ onStateValue (mkStmt . f) inputFunc
 
 switch :: (RenderSym r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> 
   MSStatement r

@@ -6,8 +6,7 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (
   listSetFunc, listAccessFunc, buildModule, bool, arrayType, pi, notNull, 
   printSt, arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, 
   docMain, mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
-  listAccessFunc', funcDecDef, discardFileInput, string, constDecDef, 
-  docInOutFunc
+  listAccessFunc', funcDecDef, string, constDecDef, docInOutFunc
 ) where
 
 import Utils.Drasil (indent)
@@ -18,7 +17,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable,
   MixedCall, PermanenceSym(..), 
   TypeSym(infile, outfile, listInnerType, iterator), 
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType), 
-  ValueSym(Value, valueType), Comparison(..), objMethodCallNoParams, (&=), 
+  ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=), 
   ScopeSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
@@ -262,10 +261,6 @@ listAccessFunc' f t i = S.func f t [intValue i]
 funcDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
   MSStatement r
 funcDecDef v ps r = S.varDecDef v (S.lambda ps r)
-
-discardFileInput :: (RenderSym r) => (r (Value r) -> Doc) -> SValue r -> 
-  MSStatement r
-discardFileInput f v = zoom lensMStoVS $ onStateValue (mkStmt . f) v
 
 -- C# and C++ --
 

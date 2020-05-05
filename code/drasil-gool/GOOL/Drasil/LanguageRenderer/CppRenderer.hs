@@ -46,9 +46,9 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
 import GOOL.Drasil.LanguageRenderer (addExt, classDec, dot, blockCmtStart, 
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, 
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, argc, argv, 
-  constDec, mainFunc, listSep, containing, functionDox, valueList, 
+  constDec, mainFunc, array, listSep, containing, functionDox, valueList, 
   parameterList, appendToBody, surroundBody, getterName, setterName)
-import qualified GOOL.Drasil.LanguageRenderer as R (char, self, multiStmt, 
+import qualified GOOL.Drasil.LanguageRenderer as R (self, multiStmt, 
   body, param, stateVar, constVar, cast, castObj, static, dynamic, break, 
   continue, private, public, blockCmt, docCmt, addComments, commentedMod, 
   commentedItem)
@@ -72,11 +72,11 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (objVar, 
   listSetFunc, buildModule, litArray, call', listSizeFunc, listAccessFunc', 
   funcDecDef, string, constDecDef, docInOutFunc)
-import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
-  listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  varDec, varDecDef, listDec, extObjDecNew, switch, for, while, intFunc, 
-  multiAssignError, multiReturnError)
+import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
+  double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
+  litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
+  increment1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
+  intFunc, multiAssignError, multiReturnError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (decrement, 
   decrement1, runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -1576,7 +1576,8 @@ instance MethodSym CppSrcCode where
     (on2StateValues (on2CodeValues appendToBody) b (returnStmt $ litInt 0))
     where argcVar = var argc int
           argvVar = toState $ mkVar argv (typeFromData (List String) 
-            (constDec ++ " " ++ R.char) (text constDec <+> text R.char)) (cppDeref <> text argv <> cppArray)
+            (constDec ++ " " ++ C.charRender) (text constDec <+> text 
+            C.charRender)) (cppDeref <> text argv <> text array)
 
   docFunc = G.docFunc
 
@@ -2329,8 +2330,7 @@ cppName :: String
 cppName = "C++" 
 
 guard, inc, ifndef, define, defineSuffix, endif, using, namespace, cppPtr, 
-  cppDeref, cppArray, streamL, streamR, cppLambdaDec, cppLambdaSep, catchAll, 
-  cppPi :: Doc
+  cppDeref, streamL, streamR, cppLambdaDec, cppLambdaSep, catchAll, cppPi :: Doc
 guard = text "#"
 inc = guard <> text "include"
 ifndef = guard <> text "ifndef"
@@ -2341,7 +2341,6 @@ using = text "using"
 namespace = text "namespace"
 cppPtr = text "&"
 cppDeref = text "*"
-cppArray = brackets empty
 streamL = text "<<"
 streamR = text ">>"
 cppLambdaDec = text "[]"

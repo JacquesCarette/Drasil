@@ -6,8 +6,8 @@ module GOOL.Drasil.LanguageRenderer (
   classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
   forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, 
   blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
-  argc, argv, args, char, constDec, exceptionObj, mainFunc, new, self, listSep, 
-  access, containing, mathFunc, addExt,
+  argc, argv, args, constDec, exceptionObj, mainFunc, new, self, array, 
+  listSep, access, containing, mathFunc, addExt,
   
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
@@ -70,16 +70,17 @@ bodyStart = lbrace
 bodyEnd = rbrace
 endStatement = semi
 
-argc, argv, args, char, constDec, exceptionObj, mainFunc, new, self, listSep :: String
+argc, argv, args, constDec, exceptionObj, mainFunc, new, self, array, 
+  listSep :: String
 argc = "argc"
 argv = "argv"
 args = "args"
-char = "char"
 constDec = "const"
 exceptionObj = "Exception"
 mainFunc = "main"
 new = "new"
 self = "this"
+array = "[]"
 listSep = ", "
 
 access :: String -> String -> String

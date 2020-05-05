@@ -37,7 +37,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
   StateVarElim(..), ClassElim(..))
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, 
   on2StateValues, onStateList)
-import GOOL.Drasil.LanguageRenderer (new, functionDox, valueList, intValue)
+import GOOL.Drasil.LanguageRenderer (args, new, array, access, mathFunc, 
+  functionDox, valueList, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (module', print, stateVar, 
   stateVarList, constDecDef, extVar, objVar, listAccessFunc)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
@@ -61,12 +62,12 @@ bindingError :: String -> String
 bindingError l = "Binding unimplemented in " ++ l
 
 extVar :: (RenderSym r) => Label -> Label -> VSType r -> SVariable r
-extVar l n t = mkStateVar (l ++ "." ++ n) t (R.extVar l n)
+extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
 classVar :: (RenderSym r) => (Doc -> Doc -> Doc) -> VSType r -> SVariable r -> 
   SVariable r
 classVar f = on2StateValues (\c v -> classVarCheckStatic $ varFromData 
-  (variableBind v) (getTypeString c ++ "." ++ variableName v) 
+  (variableBind v) (getTypeString c `access` variableName v) 
   (variableType v) (f (RC.type' c) (RC.variable v)))
   
 objVarSelf :: (RenderSym r) => SVariable r -> SVariable r
@@ -127,8 +128,8 @@ intClass f n s i svrs mths = do
 -- Python, Java, and C++ --
 
 objVar :: (RenderSym r) => SVariable r -> SVariable r -> SVariable r
-objVar = on2StateValues (\o v -> mkVar (variableName o ++ "." ++ variableName 
-  v) (variableType v) (R.objVar (RC.variable o) (RC.variable v)))
+objVar = on2StateValues (\o v -> mkVar (variableName o `access` variableName v) 
+  (variableType v) (R.objVar (RC.variable o) (RC.variable v)))
 
 -- Python, C#, and C++ --
 
@@ -157,15 +158,18 @@ buildModule n imps bot fs cs = S.modFromData n (do
 
 -- Java and C# -- 
 
+boolean :: String
+boolean = "Boolean"
+
 bool :: (RenderSym r) => VSType r
-bool = toState $ typeFromData Boolean "Boolean" (text "Boolean")
+bool = toState $ typeFromData Boolean boolean (text boolean)
 
 arrayType :: (RenderSym r) => VSType r -> VSType r
 arrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
-  (getTypeString t ++ "[]") (RC.type' t <> brackets empty)) 
+  (getTypeString t ++ array) (RC.type' t <> brackets empty)) 
   
 pi :: (RenderSym r) => SValue r
-pi = mkStateVal S.double (text "Math.PI")
+pi = mkStateVal S.double (text $ mathFunc "PI")
 
 notNull :: (RenderSym r) => SValue r -> SValue r
 notNull v = v ?!= S.valueOf (S.var "null" $ onStateValue valueType v)
@@ -210,15 +214,18 @@ forEach bStart bEnd forEachLabel inLbl e' v' b' = do
     indent $ RC.body b,
     bEnd] 
 
+mainDesc, argsDesc :: String
+mainDesc = "Controls the flow of the program" 
+argsDesc = "List of command-line arguments"
+
 docMain :: (RenderSym r) => MSBody r -> SMethod r
 docMain b = commentedFunc (docComment $ toState $ functionDox 
-  "Controls the flow of the program" 
-  [("args", "List of command-line arguments")] []) (S.mainFunction b)
+  mainDesc [(args, argsDesc)] []) (S.mainFunction b)
 
 mainFunction :: (RenderSym r) => VSType r -> Label -> MSBody r -> SMethod r
 mainFunction s n = S.intFunc True n public static (mType S.void)
-  [S.param (S.var "args" (onStateValue (\argT -> typeFromData (List String) 
-  (render (RC.type' argT) ++ "[]") (RC.type' argT <> text "[]")) s))]
+  [S.param (S.var args (onStateValue (\argT -> typeFromData (List String) 
+  (render (RC.type' argT) ++ array) (RC.type' argT <> text array)) s))]
 
 stateVar :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) -> 
   SVariable r -> CS (r Doc)
@@ -264,8 +271,11 @@ funcDecDef v ps r = S.varDecDef v (S.lambda ps r)
 
 -- C# and C++ --
 
+stringRender :: String
+stringRender = "string"
+
 string :: (RenderSym r) => VSType r
-string = toState $ typeFromData String "string" (text "string")
+string = toState $ typeFromData String stringRender (text stringRender)
 
 constDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 constDecDef vr vl = zoom lensMStoVS $ on2StateValues (\v -> mkStmt . 

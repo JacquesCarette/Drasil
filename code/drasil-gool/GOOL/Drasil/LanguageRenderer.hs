@@ -3,14 +3,17 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
-  classDec, dot, commentStart, elseIfLabel, forLabel, inLabel, new,
+  classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
+  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, 
   blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
-  addExt,
+  constDec', exceptionObj', new', self', array', listSep', argc, argv, args, 
+  constDec, exceptionObj, mainFunc, new, self, array, listSep, access, 
+  containing, mathFunc, addExt,
   
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
   param, method, stateVar, constVar, stateVarList, switch, assign, multiAssign, 
-  addAssign, increment, listDec, getTerm, return', comment, var, extVar, self, 
+  addAssign, increment, listDec, getTerm, return', comment, var, extVar,
   arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, binOpDocD', 
   constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, castObj, 
   break, continue, static, dynamic, private, public, blockCmt, docCmt, 
@@ -44,21 +47,57 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec, dot, commentStart, elseIfLabel, forLabel, inLabel, new, blockCmtStart,
-  blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement :: Doc
+classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
+  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, 
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
+  endStatement, constDec', exceptionObj', new', self', array', listSep' :: Doc
 classDec = text "class"
 dot = text "."
 commentStart = text "//"
-elseIfLabel = text "else if"
+returnLabel = text "return"
+ifLabel = text "if"
+elseLabel = text "else"
+elseIfLabel = elseLabel <+> ifLabel
 forLabel = text "for"
 inLabel = text "in"
-new = text "new"
+whileLabel = text "while"
+tryLabel = text "try"
+catchLabel = text "catch"
+throwLabel = text "throw"
 blockCmtStart = text "/*"
 blockCmtEnd = text "*/"
 docCmtStart = text "/**"
 bodyStart = lbrace
 bodyEnd = rbrace
 endStatement = semi
+constDec' = text constDec
+exceptionObj' = text exceptionObj
+new' = text new
+self' = text self
+array' = text array
+listSep' = text listSep
+
+argc, argv, args, constDec, exceptionObj, mainFunc, new, self, array, 
+  listSep :: String
+argc = "argc"
+argv = "argv"
+args = "args"
+constDec = "const"
+exceptionObj = "Exception"
+mainFunc = "main"
+new = "new"
+self = "this"
+array = "[]"
+listSep = ", "
+
+access :: String -> String -> String
+access q n = q ++ "." ++ n
+
+containing :: String -> String -> String
+containing l e = l ++ "<" ++ e ++ ">"
+
+mathFunc :: String -> String
+mathFunc = access "Math"
 
 addExt :: String -> String -> String
 addExt ext nm = nm ++ "." ++ ext
@@ -150,7 +189,7 @@ stateVar :: Doc -> Doc -> Doc -> Doc
 stateVar s p dec = s <+> p <+> dec
 
 constVar :: Doc -> Doc -> Doc -> VarData -> Doc
-constVar s end p v = s <+> p <+> text "const" <+> typeDoc (varType v) <+>
+constVar s end p v = s <+> p <+> constDec' <+> typeDoc (varType v) <+>
   varDoc v <> end
 
 stateVarList :: [Doc] -> Doc
@@ -193,15 +232,15 @@ increment :: (RenderSym r) => r (Variable r) -> Doc
 increment v = RC.variable v <> text "++"
 
 listDec :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-listDec v n = space <> equals <+> new <+> RC.type' (variableType v) 
+listDec v n = space <> equals <+> new' <+> RC.type' (variableType v) 
   <> parens (RC.value n)
 
 constDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-constDecDef v def = text "const" <+> RC.type' (variableType v) <+> 
+constDecDef v def = constDec' <+> RC.type' (variableType v) <+> 
   RC.variable v <+> equals <+> RC.value def
 
 return' :: (RenderSym r) => [r (Value r)] -> Doc
-return' vs = text "return" <+> valueList vs
+return' vs = returnLabel <+> valueList vs
 
 comment :: Label -> Doc -> Doc
 comment cmt cStart = cStart <+> text cmt
@@ -221,11 +260,8 @@ var = text
 extVar :: Library -> Label -> Doc
 extVar l n = text l <> dot <> text n
 
-self :: Doc
-self = text "this"
-
 arg :: (RenderSym r) => r (Value r) -> r (Value r) -> Doc
-arg n args = RC.value args <> brackets (RC.value n)
+arg n argsList = RC.value argsList <> brackets (RC.value n)
 
 classVar :: Doc -> Doc -> Doc
 classVar c v = c <> dot <> v
@@ -344,16 +380,16 @@ commentedMod m cmt = updateFileMod (updateMod (commentedItem cmt) (fileMod m)) m
 -- Helper Functions --
 
 valueList :: (RenderSym r) => [r (Value r)] -> Doc
-valueList = hicat (text ", ") . map RC.value
+valueList = hicat listSep' . map RC.value
 
 variableList :: (RenderSym r) => [r (Variable r)] -> Doc
-variableList = hicat (text ", ") . map RC.variable
+variableList = hicat listSep' . map RC.variable
 
 parameterList :: (RenderSym r) => [r (Parameter r)] -> Doc
-parameterList = hicat (text ", ") . map RC.parameter
+parameterList = hicat listSep' . map RC.parameter
 
 namedArgList :: (RenderSym r) => Doc -> [(r (Variable r), r (Value r))] -> Doc
-namedArgList sep = hicat (text ", ") . map (\(vr,vl) -> RC.variable vr <> sep 
+namedArgList sep = hicat listSep' . map (\(vr,vl) -> RC.variable vr <> sep
   <> RC.value vl)
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc

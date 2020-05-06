@@ -12,11 +12,11 @@ import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
-  SValue, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs, OOProg, 
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), 
-  VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), 
-  MathConstant(..), VariableValue(..), CommandLineArgs(..), 
+  SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs, 
+  OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
+  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
+  ControlBlock(..), VariableSym(..), VariableElim(..), ValueSym(..), 
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
   NumericExpression(..), BooleanExpression(..), Comparison(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, 
   InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), GetSet(..), 
@@ -45,11 +45,13 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (addExt, classDec, dot, blockCmtStart, 
   blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, 
-  elseIfLabel, functionDox, valueList, parameterList, appendToBody, 
-  surroundBody, getterName, setterName)
-import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body, param, 
-  stateVar, constVar, cast, castObj, static, dynamic, break, continue, 
-  private, public, blockCmt, docCmt, addComments, commentedMod, commentedItem)
+  returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
+  listSep', argc, argv, constDec, mainFunc, containing, functionDox, valueList, 
+  parameterList, appendToBody, surroundBody, getterName, setterName)
+import qualified GOOL.Drasil.LanguageRenderer as R (self', self, multiStmt, 
+  body, param, stateVar, constVar, cast, castObj, static, dynamic, break, 
+  continue, private, public, blockCmt, docCmt, addComments, commentedMod, 
+  commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkVal, mkStateVar, mkVar, VSOp, mkOp, unOpPrec, powerPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
@@ -69,12 +71,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (objVar, 
   listSetFunc, buildModule, litArray, call', listSizeFunc, listAccessFunc', 
-  funcDecDef, discardFileInput, string, constDecDef, docInOutFunc)
-import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
-  listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
-  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for, 
-  while, intFunc, multiAssignError, multiReturnError)
+  funcDecDef, string, constDecDef, docInOutFunc)
+import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
+  double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
+  litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
+  increment1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
+  intFunc, multiAssignError, multiReturnError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (decrement, 
   decrement1, runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
@@ -100,7 +102,7 @@ import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS,
   setCurrMain, getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
   getCurrMainFunc, setODEOthVars, getODEOthVars)
 
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod)
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod,max)
 import Control.Lens ((^.))
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
@@ -109,8 +111,7 @@ import Control.Monad.State (State, modify, runState)
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), hcat, brackets, 
-  braces, parens, comma, empty, equals, vcat, lbrace, rbrace, quotes, colon, 
-  isEmpty)
+  braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -1106,18 +1107,17 @@ instance TypeSym CppSrcCode where
   double = C.double
   char = C.char
   string = do 
-    modify (addUsing "string" . addLangImportVS "string")
+    modify (addUsing cppString . addLangImportVS cppString)
     CP.string
   infile = do
-    modify (addUsing "ifstream")
+    modify (addUsing cppInfile)
     cppInfileType
   outfile = do
-    modify (addUsing "ofstream") 
+    modify (addUsing cppOutfile) 
     cppOutfileType
   listType t = do
-    modify (addUsing vec . addLangImportVS vec)
-    C.listType vec t
-    where vec = "vector"
+    modify (addUsing vector . addLangImportVS vector)
+    C.listType vector t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
   obj n = zoom lensVStoMS getClassName >>= (\cn -> if cn == n then G.obj n else 
@@ -1125,7 +1125,7 @@ instance TypeSym CppSrcCode where
     (Map.lookup n cm) (G.obj n)))
   funcType = G.funcType
   iterator t = do 
-    modify (addLangImportVS "iterator")
+    modify (addLangImportVS cppIterator)
     cppIterType $ listType t
   void = C.void
 
@@ -1163,19 +1163,19 @@ instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
-  sqrtOp = addMathHImport cppSqrtOp
-  absOp = addMathHImport cppAbsOp
-  logOp = addMathHImport $ unOpPrec "log10"
-  lnOp = addMathHImport $ unOpPrec "log"
-  expOp = addMathHImport cppExpOp
-  sinOp = addMathHImport cppSinOp
-  cosOp = addMathHImport cppCosOp
-  tanOp = addMathHImport cppTanOp
-  asinOp = addMathHImport cppAsinOp
-  acosOp = addMathHImport cppAcosOp
-  atanOp = addMathHImport cppAtanOp
-  floorOp = addMathHImport $ unOpPrec "floor"
-  ceilOp = addMathHImport $ unOpPrec "ceil"
+  sqrtOp = cppSqrtOp
+  absOp = cppAbsOp
+  logOp = cppLogOp
+  lnOp = cppLnOp
+  expOp = cppExpOp
+  sinOp = cppSinOp
+  cosOp = cppCosOp
+  tanOp = cppTanOp
+  asinOp = cppAsinOp
+  acosOp = cppAcosOp
+  atanOp = cppAtanOp
+  floorOp = cppFloorOp
+  ceilOp = cppCeilOp
 
 instance BinaryOpSym CppSrcCode where
   type BinaryOp CppSrcCode = OpData
@@ -1208,7 +1208,7 @@ instance VariableSym CppSrcCode where
   extVar l n t = modify (addModuleImportVS l) >> var n t
   self = C.self
   classVar = on2StateValues (\c v -> classVarCheckStatic (varFromData 
-    (variableBind v) (getTypeString c ++ "::" ++ variableName v) 
+    (variableBind v) (getTypeString c `nmSpcAccess` variableName v) 
     (variableType v) (cppClassVar (RC.type' c) (RC.variable v))))
   extClassVar c v = do
     t <- c
@@ -1218,10 +1218,10 @@ instance VariableSym CppSrcCode where
   objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
     ++ variableName vr) `elem` ovs then toState vr else CP.objVar (toState ob) 
     (toState vr)) getODEOthVars o v
-  objVarSelf = onStateValue (\v -> mkVar ("this->"++variableName v) 
-    (variableType v) (text "this->" <> RC.variable v))
+  objVarSelf = onStateValue (\v -> mkVar (R.self ++ ptrAccess ++ variableName v)
+    (variableType v) (R.self' <> ptrAccess' <> RC.variable v))
   arrayElem i = G.arrayElem (litInt i)
-  iterVar l t = mkStateVar l (iterator t) (text $ "(*" ++ l ++ ")")
+  iterVar l t = mkStateVar l (iterator t) (parens $ cppDeref <> text l)
 
 instance VariableElim CppSrcCode where
   variableName = varName . unCPPSC
@@ -1251,15 +1251,15 @@ instance Literal CppSrcCode where
 
 instance MathConstant CppSrcCode where
   pi = do
-    modify (addDefine "_USE_MATH_DEFINES")
-    addMathHImport (mkStateVal double (text "M_PI"))
+    modify (addDefine mathDefines)
+    addMathHImport (mkStateVal double cppPi)
 
 instance VariableValue CppSrcCode where
   valueOf = G.valueOf
 
 instance CommandLineArgs CppSrcCode where
   arg n = G.arg (litInt $ n+1) argsList
-  argsList = G.argsList "argv"
+  argsList = G.argsList argv
   argExists i = listSize argsList ?> litInt (fromIntegral $ i+1)
 
 instance NumericExpression CppSrcCode where
@@ -1305,7 +1305,7 @@ instance ValueExpression CppSrcCode where
   inlineIf = C.inlineIf
 
   funcAppMixedArgs = G.funcAppMixedArgs
-  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs (text "->") self
+  selfFuncAppMixedArgs = G.selfFuncAppMixedArgs ptrAccess' self
   extFuncAppMixedArgs l n t vs ns = do
     modify (addModuleImportVS l)
     funcAppMixedArgs n t vs ns
@@ -1321,9 +1321,9 @@ instance ValueExpression CppSrcCode where
   notNull v = v
 
 instance RenderValue CppSrcCode where
-  inputFunc = addIOStreamImport $ mkStateVal string (text "std::cin")
-  printFunc = addIOStreamImport $ mkStateVal void (text "std::cout")
-  printLnFunc = addIOStreamImport $ mkStateVal void (text "std::cout")
+  inputFunc = addIOStreamImport $ mkStateVal string (text cin)
+  printFunc = addIOStreamImport $ mkStateVal void (text cout)
+  printLnFunc = addIOStreamImport $ mkStateVal void (text cout)
   printFileFunc = on2StateValues (\v -> mkVal v . RC.value) void
   printFileLnFunc = on2StateValues (\v -> mkVal v . RC.value) void
 
@@ -1355,8 +1355,7 @@ instance List CppSrcCode where
   listAppend = G.listAppend 
   listAccess = G.listAccess
   listSet = G.listSet
-  indexOf l v = addAlgorithmImportVS $ funcApp "find" int 
-    [iterBegin l, iterEnd l, v] #- iterBegin l
+  indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
     
 instance InternalList CppSrcCode where
   listSlice' = M.listSlice
@@ -1371,15 +1370,14 @@ instance InternalGetSet CppSrcCode where
 
 instance InternalListFunc CppSrcCode where
   listSizeFunc = CP.listSizeFunc
-  listAddFunc l i v = func "insert" (listType $ onStateValue valueType v) 
-    [iterBegin l #+ i, v]
-  listAppendFunc = G.listAppendFunc "push_back"
-  listAccessFunc = CP.listAccessFunc' "at"
+  listAddFunc = cppListAddFunc
+  listAppendFunc = G.listAppendFunc cppListAppend
+  listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CP.listSetFunc cppListSetDoc
 
 instance InternalIterator CppSrcCode where
-  iterBeginFunc t = func "begin" (iterator t) []
-  iterEndFunc t = func "end" (iterator t) []
+  iterBeginFunc = cppIterBeginFunc
+  iterEndFunc = cppIterEndFunc
 
 instance RenderFunction CppSrcCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -1453,45 +1451,41 @@ instance IOStatement CppSrcCode where
   printFileStrLn f = G.print True  (Just f) (printFileLnFunc f) . litString
 
   getInput v = cppInput v inputFunc
-  discardInput = addAlgorithmImport $ addLimitsImport $ C.discardInput 
-    (cppDiscardInput "\\n")
+  discardInput = addAlgorithmImport $ addLimitsImport $ cppDiscardInput '\n' 
+    inputFunc
   getFileInput f v = cppInput v f
   discardFileInput f = addAlgorithmImport $ addLimitsImport $ 
-    CP.discardFileInput (cppDiscardInput " ") f
+    cppDiscardInput ' ' f
 
-  openFileR f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkStmt $ 
-    cppOpenFile "std::fstream::in" f v) f' v'
-  openFileW f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkStmt $ 
-    cppOpenFile "std::fstream::out" f v) f' v' 
-  openFileA f' v' = zoom lensMStoVS $ on2StateValues (\f v -> mkStmt $ 
-    cppOpenFile "std::fstream::app" f v) f' v'
-  closeFile = G.closeFile "close" 
+  openFileR = cppOpenFile cppR
+  openFileW = cppOpenFile cppW
+  openFileA = cppOpenFile cppA
+  closeFile = G.closeFile cppClose
 
-  getFileInputLine f v = valStmt $ funcApp "std::getline" string [f, valueOf v]
-  discardFileLine f = addLimitsImport $ zoom lensMStoVS $ onStateValue (mkStmt .
-    cppDiscardInput "\\n") f
+  getFileInputLine f v = valStmt $ getLineFunc f (valueOf v)
+  discardFileLine f = addLimitsImport $ cppDiscardInput '\n' f
   getFileInputAll f v = let l_line = "nextLine"
                             var_line = var l_line string
                             v_line = valueOf var_line
                         in
     multi [varDec var_line,
-      while (funcApp "std::getline" string [f, v_line])
-      (oneLiner $ valStmt $ listAppend (valueOf v) v_line)]
+      while (getLineFunc f v_line)
+        (oneLiner $ valStmt $ listAppend (valueOf v) v_line)]
 
 instance StringStatement CppSrcCode where
   stringSplit d vnew s = let l_ss = "ss"
-                             var_ss = var l_ss (obj "std::stringstream")
+                             var_ss = var l_ss (obj stringstream)
                              v_ss = valueOf var_ss
                              l_word = "word"
                              var_word = var l_word string
                              v_word = valueOf var_word
                          in
-    modify (addLangImport "sstream") >> multi [
-      valStmt $ valueOf vnew $. func "clear" void [],
+    modify (addLangImport sstream) >> multi [
+      valStmt $ valueOf vnew $. clearFunc,
       varDec var_ss,
-      valStmt $ objMethodCall string v_ss "str" [s],
+      valStmt $ strFunc v_ss s,
       varDec var_word,
-      while (funcApp "std::getline" string [v_ss, v_word, litChar d]) 
+      while (getLine3ArgFunc v_ss v_word d) 
         (oneLiner $ valStmt $ listAppend (valueOf vnew) v_word)
     ]
 
@@ -1573,18 +1567,17 @@ instance MethodSym CppSrcCode where
   setMethod = G.setMethod
   constructor = cppConstructor
 
-  docMain b = commentedFunc (docComment $ toState $ functionDox 
-    "Controls the flow of the program" 
-    [("argc", "Number of command-line arguments"),
-    ("argv", "List of command-line arguments")] ["exit code"]) (mainFunction b)
+  docMain b = commentedFunc (docComment $ toState $ functionDox mainDesc 
+    [(argc, argcDesc), (argv, argvDesc)] [mainReturnDesc]) (mainFunction b)
 
   function = G.function
-  mainFunction b = intFunc True "main" public static (mType int) 
-    [param argc, param argv]
+  mainFunction b = intFunc True mainFunc public static (mType int) 
+    [param argcVar, param argvVar]
     (on2StateValues (on2CodeValues appendToBody) b (returnStmt $ litInt 0))
-    where argc = var "argc" int
-          argv = toState $ mkVar "argv" (typeFromData (List String) 
-            "const char" (text "const char")) (text "*argv[]")
+    where argcVar = var argc int
+          argvVar = toState $ mkVar argv (typeFromData (List String) 
+            (constDec ++ " " ++ C.charRender) (constDec' <+> text 
+            C.charRender)) (cppDeref <> text argv <> array')
 
   docFunc = G.docFunc
 
@@ -1624,7 +1617,7 @@ instance StateVarSym CppSrcCode where
   stateVar s _ _ = onStateValue (on3CodeValues svd (onCodeValue snd s) (toCode 
     empty)) $ zoom lensCStoMS emptyStmt
   stateVarDef = cppsStateVarDef empty
-  constVar n s = cppsStateVarDef (text "const") n s static
+  constVar n s = cppsStateVarDef constDec' n s static
   
 instance StateVarElim CppSrcCode where
   stateVar = stVar . unCPPSC
@@ -1662,10 +1655,10 @@ instance ModuleSym CppSrcCode where
     mn <- getCurrMain
     return $ vibcat [
       if mn && length ms + length cs == 1 then empty else RC.import' $ mi n,
-      vcat (map ((text "#define" <+>) . text) ds),
+      vcat (map ((define <+>) . text) ds),
       vcat (map (RC.import' . li) lis),
       vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
-      vcat (map (usingNameSpace "std" . Just) us)]) 
+      vcat (map (usingNameSpace std . Just) us)]) 
     (return empty) ms cs
     where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
           mi = modImport
@@ -1716,7 +1709,7 @@ instance FileSym CppHdrCode where
 
 instance RenderFile CppHdrCode where
   top = onCodeValue cpphtop
-  bottom = toCode $ text "#endif"
+  bottom = toCode endif
   
   commentedMod = on2StateValues (\m cmt -> if isEmpty (RC.module' $ 
     onCodeValue fileMod m) then m else on2CodeValues R.commentedMod m cmt)
@@ -1770,25 +1763,24 @@ instance TypeSym CppHdrCode where
   double = C.double
   char = C.char
   string = do
-    modify (addHeaderUsing "string" . addHeaderLangImport "string") 
+    modify (addHeaderUsing cppString . addHeaderLangImport cppString) 
     CP.string
   infile = do
-    modify (addHeaderUsing "ifstream")
+    modify (addHeaderUsing cppInfile)
     cppInfileType
   outfile = do
-    modify (addHeaderUsing "ofstream")
+    modify (addHeaderUsing cppOutfile)
     cppOutfileType
   listType t = do
-    modify (addHeaderUsing vec . addHeaderLangImport vec)
-    C.listType vec t
-    where vec = "vector"
+    modify (addHeaderUsing vector . addHeaderLangImport vector)
+    C.listType vector t
   arrayType = cppArrayType
   listInnerType = G.listInnerType
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
     (Map.lookup n cm) $ G.obj n)
   funcType = G.funcType
   iterator t = do
-    modify (addHeaderLangImport "iterator")
+    modify (addHeaderLangImport cppIterator)
     (cppIterType . listType) t
   void = C.void
 
@@ -1891,15 +1883,16 @@ instance Literal CppHdrCode where
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppHdrCode where
-  pi = modify (addHeaderDefine "_USE_MATH_DEFINES" . addHeaderLangImport 
-    "math.h") >> mkStateVal double (text "M_PI")
+  pi = do
+    modify (addHeaderDefine mathDefines . addHeaderLangImport mathh) 
+    mkStateVal double cppPi
 
 instance VariableValue CppHdrCode where
   valueOf = G.valueOf
 
 instance CommandLineArgs CppHdrCode where
   arg n = G.arg (litInt $ n+1) argsList
-  argsList = G.argsList "argv"
+  argsList = G.argsList argv
   argExists _ = mkStateVal void empty
 
 instance NumericExpression CppHdrCode where
@@ -2259,10 +2252,10 @@ instance ModuleSym CppHdrCode where
     mis <- getHeaderModImports
     us <- getHeaderUsing
     return $ vibcat [
-      vcat (map ((text "#define" <+>) . text) ds),
+      vcat (map ((define <+>) . text) ds),
       vcat (map (RC.import' . li) lis),
       vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
-      vcat (map (usingNameSpace "std" . Just) us)]) 
+      vcat (map (usingNameSpace std . Just) us)]) 
     (return empty)
     where mi, li :: Label -> CppHdrCode (Import CppHdrCode)
           mi = modImport
@@ -2304,76 +2297,198 @@ data MethodData = MthD {getMthdScp :: ScopeTag, mthdDoc :: Doc}
 mthd :: ScopeTag -> Doc -> MethodData
 mthd = MthD 
 
-algorithmImport :: String
-algorithmImport = "algorithm"
-
 addAlgorithmImport :: MS a -> MS a 
 addAlgorithmImport v = do
-  modify (addLangImport algorithmImport)
+  modify (addLangImport algorithm)
   v
 
 addAlgorithmImportVS :: VS a -> VS a
 addAlgorithmImportVS v = do
-  modify (addLangImportVS algorithmImport)
+  modify (addLangImportVS algorithm)
   v
 
 addFStreamImport :: a -> VS a
-addFStreamImport = modifyReturn (addLangImportVS "fstream")
+addFStreamImport = modifyReturn (addLangImportVS fstream)
 
 addIOStreamImport :: VS a -> VS a
 addIOStreamImport v = do
-  modify (addLangImportVS "iostream")
+  modify (addLangImportVS iostream)
   v
 
 addMathHImport :: VS a -> VS a
 addMathHImport v = do
-  modify (addLangImportVS "math.h")
+  modify (addLangImportVS mathh)
   v
 
 addLimitsImport :: MS a -> MS a
 addLimitsImport v = do
-  modify (addLangImport "limits")
+  modify (addLangImport limits)
   v
 
 -- convenience
 cppName :: String
 cppName = "C++" 
 
-inc :: Doc
-inc = text "#include"
+guard, inc, ifndef, define, defineSuffix, endif, using, namespace, cppPtr, 
+  cppDeref, streamL, streamR, cppLambdaDec, cppLambdaSep, catchAll, cppPi,
+  ptrAccess' :: Doc
+guard = text "#"
+inc = guard <> text "include"
+ifndef = guard <> text "ifndef"
+define = guard <> text "define"
+defineSuffix = text "_h"
+endif = guard <> text "endif"
+using = text "using"
+namespace = text "namespace"
+cppPtr = text "&"
+cppDeref = text "*"
+streamL = text "<<"
+streamR = text ">>"
+cppLambdaDec = text "[]"
+cppLambdaSep = text "->"
+catchAll = text "..."
+cppPi = text "M_PI"
+ptrAccess' = text ptrAccess
+
+nmSpc, ptrAccess, std, algorithm, cppString, vector, sstream, stringstream, 
+  fstream, iostream, limits, mathh, cppBool, cppInfile, cppOutfile, 
+  cppIterator, cppOpen, stod, stof, cppIgnore, numLimits, streamsize, max, 
+  endl, cin, cout, cppIndex, cppListAccess, cppListAdd, cppListAppend, 
+  cppIterBegin, cppIterEnd, cppR, cppW, cppA, cppGetLine, cppClose, cppClear, 
+  cppStr, mathDefines :: String
+nmSpc = "::"
+ptrAccess = "->"
+std = "std"
+algorithm = "algorithm"
+cppString = "string"
+vector = "vector"
+fstream = "fstream"
+iostream = "iostream"
+sstream = "sstream"
+stringstream = stdAccess "stringstream"
+limits = "limits"
+mathh = "math.h"
+cppBool = "bool"
+cppInfile = "ifstream"
+cppOutfile = "ofstream"
+cppIterator = "iterator"
+cppOpen = "open"
+stod = stdAccess "stod"
+stof = stdAccess "stof"
+cppIgnore = "ignore"
+numLimits = stdAccess "numeric_limits"
+streamsize = stdAccess "streamsize"
+max = "max"
+endl = stdAccess "endl"
+cin = stdAccess "cin"
+cout = stdAccess "cout"
+cppIndex= "find"
+cppListAccess = "at"
+cppListAdd = "insert"
+cppListAppend = "push_back"
+cppIterBegin = "begin"
+cppIterEnd = "end"
+cppR = stdAccess (fstream `nmSpcAccess` "in")
+cppW = stdAccess (fstream `nmSpcAccess` "out")
+cppA = stdAccess (fstream `nmSpcAccess` "app")
+cppGetLine = stdAccess "getline"
+cppClose = "close"
+cppClear = "clear"
+cppStr = "str"
+mathDefines = "_USE_MATH_DEFINES"
+
+nmSpcAccess :: String -> String -> String
+nmSpcAccess ns e = ns ++ nmSpc ++ e 
+
+nmSpcAccess' :: Doc -> Doc -> Doc
+nmSpcAccess' ns e = ns <> text nmSpc <> e
+
+stdAccess :: String -> String
+stdAccess = nmSpcAccess std
+
+stdAccess' :: Doc -> Doc
+stdAccess' = nmSpcAccess' (text std)
+
+mainDesc, argcDesc, argvDesc, mainReturnDesc :: String
+mainDesc = "Controls the flow of the program" 
+argcDesc = "Number of command-line arguments"
+argvDesc = "List of command-line arguments"
+mainReturnDesc = "exit code"
 
 odeNameSpace :: String
 odeNameSpace = "boost::numeric::odeint::"
 
 cppSqrtOp :: (Monad r) => VSOp r
-cppSqrtOp = unOpPrec "sqrt"
+cppSqrtOp = cppUnaryMath "sqrt"
 
 cppAbsOp :: (Monad r) => VSOp r
-cppAbsOp = unOpPrec "fabs"
+cppAbsOp = cppUnaryMath "fabs"
+
+cppLogOp :: (Monad r) => VSOp r
+cppLogOp = cppUnaryMath "log10"
+
+cppLnOp :: (Monad r) => VSOp r
+cppLnOp = cppUnaryMath "log"
 
 cppExpOp :: (Monad r) => VSOp r
-cppExpOp = unOpPrec "exp"
+cppExpOp = cppUnaryMath "exp"
 
 cppSinOp :: (Monad r) => VSOp r
-cppSinOp = unOpPrec "sin"
+cppSinOp = cppUnaryMath "sin"
 
 cppCosOp :: (Monad r) => VSOp r
-cppCosOp = unOpPrec "cos"
+cppCosOp = cppUnaryMath "cos"
 
 cppTanOp :: (Monad r) => VSOp r
-cppTanOp = unOpPrec "tan"
+cppTanOp = cppUnaryMath "tan"
 
 cppAsinOp :: (Monad r) => VSOp r
-cppAsinOp = unOpPrec "asin"
+cppAsinOp = cppUnaryMath "asin"
 
 cppAcosOp :: (Monad r) => VSOp r
-cppAcosOp = unOpPrec "acos"
+cppAcosOp = cppUnaryMath "acos"
 
 cppAtanOp :: (Monad r) => VSOp r
-cppAtanOp = unOpPrec "atan"
+cppAtanOp = cppUnaryMath "atan"
+
+cppFloorOp :: (Monad r) => VSOp r
+cppFloorOp = cppUnaryMath "floor"
+
+cppCeilOp :: (Monad r) => VSOp r
+cppCeilOp = cppUnaryMath "ceil"
+
+cppUnaryMath :: (Monad r) => String -> VSOp r
+cppUnaryMath = addMathHImport . unOpPrec 
 
 cppPowerOp :: (Monad r) => VSOp r
 cppPowerOp = powerPrec "pow"
+
+getLineFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
+getLineFunc f v = funcApp cppGetLine string [f, v]
+
+getLine3ArgFunc :: SValue CppSrcCode -> SValue CppSrcCode -> Char -> 
+  SValue CppSrcCode
+getLine3ArgFunc s v d = funcApp cppGetLine string [s, v, litChar d]
+
+clearFunc :: VSFunction CppSrcCode
+clearFunc = func cppClear void []
+
+strFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
+strFunc v s = objMethodCall string v cppStr [s]
+
+cppIndexFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
+cppIndexFunc l v = funcApp cppIndex int [iterBegin l, iterEnd l, v]
+
+cppListAddFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode 
+  -> VSFunction CppSrcCode
+cppListAddFunc l i v = func cppListAdd (onStateValue valueType l) 
+    [iterBegin l #+ i, v]
+
+cppIterBeginFunc :: VSType CppSrcCode -> VSFunction CppSrcCode
+cppIterBeginFunc t = func cppIterBegin (iterator t) []
+
+cppIterEndFunc :: VSType CppSrcCode -> VSFunction CppSrcCode
+cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef :: (RenderSym r) => ([r (Value r)] -> Doc) -> SVariable r -> 
   [SValue r] -> MSStatement r
@@ -2431,28 +2546,27 @@ cppODEFile info = (fl, s ^. goolState)
 
 cpphtop :: ModData -> Doc
 cpphtop m = vcat [
-  text "#ifndef" <+> text n <> text "_h",
-  text "#define" <+> text n <> text "_h"]
+  ifndef <+> text n <> defineSuffix,
+  define <+> text n <> defineSuffix]
   where n = name m
 
 usingNameSpace :: Label -> Maybe Label -> Doc
-usingNameSpace n (Just m) = text "using" <+> text n <> colon <> colon <>
+usingNameSpace n (Just m) = using <+> text n <> colon <> colon <>
   text m <> endStatement
-usingNameSpace n Nothing = text "using namespace" <+> text n <> endStatement
+usingNameSpace n Nothing = using <+> namespace <+> text n <> endStatement
 
 cppInherit :: Maybe Label -> Doc -> Doc
 cppInherit n pub = maybe empty ((colon <+> pub <+>) . text) n
 
 cppBoolType :: (RenderSym r) => VSType r
-cppBoolType = toState $ typeFromData Boolean "bool" (text "bool")
+cppBoolType = toState $ typeFromData Boolean cppBool (text cppBool)
 
 cppInfileType :: (RenderSym r) => VSType r
-cppInfileType = addFStreamImport $ typeFromData File "ifstream" 
-  (text "ifstream")
+cppInfileType = addFStreamImport $ typeFromData File cppInfile (text cppInfile)
 
 cppOutfileType :: (RenderSym r) => VSType r
-cppOutfileType = addFStreamImport $ typeFromData File "ofstream" 
-  (text "ofstream")
+cppOutfileType = addFStreamImport $ typeFromData File cppOutfile 
+  (text cppOutfile)
 
 cppArrayType :: (RenderSym r) => VSType r -> VSType r
 cppArrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
@@ -2460,27 +2574,39 @@ cppArrayType = onStateValue (\t -> typeFromData (Array (getType t))
 
 cppIterType :: (RenderSym r) => VSType r -> VSType r
 cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t)) 
-  (getTypeString t ++ "::iterator") (text "std::" <> RC.type' t <> text 
-  "::iterator"))
+  (getTypeString t `nmSpcAccess` cppIterator) (stdAccess' (RC.type' t) 
+  `nmSpcAccess'` text cppIterator))
 
 cppClassVar :: Doc -> Doc -> Doc
-cppClassVar c v = c <> text "::" <> v
+cppClassVar c v = c `nmSpcAccess'` v
 
 cppLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-cppLambda ps ex = text "[]" <+> parens (hicat (text ",") $ zipWith (<+>) 
-  (map (RC.type' . variableType) ps) (map RC.variable ps)) <+> text "->" <+> 
-  bodyStart <> text "return" <+> RC.value ex <> endStatement <> bodyEnd
+cppLambda ps ex = cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>) 
+  (map (RC.type' . variableType) ps) (map RC.variable ps)) <+> cppLambdaSep <+> 
+  bodyStart <> returnLabel <+> RC.value ex <> endStatement <> bodyEnd
+
+stodFunc :: SValue CppSrcCode -> SValue CppSrcCode
+stodFunc v = funcApp stod double [v]
+
+stofFunc :: SValue CppSrcCode -> SValue CppSrcCode
+stofFunc v = funcApp stof float [v]
+
+ignoreFunc :: Char -> SValue CppSrcCode -> SValue CppSrcCode
+ignoreFunc sep inFn = objMethodCall void inFn cppIgnore [maxFunc, litChar sep]
+
+maxFunc :: SValue CppSrcCode
+maxFunc = funcApp ((numLimits `containing` streamsize) `nmSpcAccess` max) int []
 
 cppCast :: VSType CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
 cppCast t v = join $ on2StateValues (\tp vl -> cppCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
-  where cppCast' Double String _ _ = funcApp "std::stod" double [v]
-        cppCast' Float String _ _ = funcApp "std::stof" float [v]
+  where cppCast' Double String _ _ = stodFunc v
+        cppCast' Float String _ _ = stofFunc v
         cppCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' tp)) 
           (RC.value vl))
 
 cppListSetDoc :: Doc -> Doc -> Doc
-cppListSetDoc i v = dot <> text "at" <> parens i <+> equals <+> v
+cppListSetDoc i v = dot <> text cppListAccess <> parens i <+> equals <+> v
 
 cppListDecDoc :: (RenderSym r) => r (Value r) -> Doc
 cppListDecDoc n = parens (RC.value n)
@@ -2493,50 +2619,49 @@ cppPrint newLn pf vl = zoom lensMStoVS $ do
   e <- end
   printFn <- pf
   v <- vl
-  return $ mkStmt $ RC.value printFn <+> text "<<" <+> pars v (RC.value v) <+> e
+  return $ mkStmt $ RC.value printFn <+> streamL <+> pars v (RC.value v) <+> e
   where pars v = if maybe False (< 9) (valuePrec v) then parens else id
-        end = if newLn then addIOStreamImport (return $ text "<<" <+> 
-          text "std::endl") else return empty
+        end = if newLn then addIOStreamImport (return $ streamL <+> text endl) 
+          else return empty
 
 cppThrowDoc :: (RenderSym r) => r (Value r) -> Doc
-cppThrowDoc errMsg = text "throw" <> parens (RC.value errMsg)
+cppThrowDoc errMsg = throwLabel <> parens (RC.value errMsg)
 
 cppTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 cppTryCatch tb cb = vcat [
-  text "try" <+> lbrace,
+  tryLabel <+> lbrace,
   indent $ RC.body tb,
-  rbrace <+> text "catch" <+> parens (text "...") <+> lbrace,
+  rbrace <+> catchLabel <+> parens catchAll <+> lbrace,
   indent $ RC.body cb,
   rbrace]
 
-cppDiscardInput :: (RenderSym r) => Label -> r (Value r) -> Doc
-cppDiscardInput sep inFn = RC.value inFn <> dot <> text "ignore" <> parens 
-  (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
-  quotes (text sep))
+cppDiscardInput :: Char -> SValue CppSrcCode -> MSStatement CppSrcCode
+cppDiscardInput sep inFn = valStmt $ ignoreFunc sep inFn
 
-cppInput :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-cppInput vr i = addAlgorithmImport $ addLimitsImport $ zoom lensMStoVS $ 
-  on2StateValues (\v inFn -> mkStmt $ vcat [RC.value inFn <+> text ">>" <+> 
-  RC.variable v <> endStatement, RC.value inFn <> dot <> 
-    text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]) vr i
+cppInput :: SVariable CppSrcCode -> SValue CppSrcCode -> MSStatement CppSrcCode
+cppInput vr i = addAlgorithmImport $ addLimitsImport $ do
+  v <- zoom lensMStoVS vr
+  inFn <- zoom lensMStoVS i
+  multi [return $ mkStmt (RC.value inFn <+> streamR <+> RC.variable v), 
+    valStmt $ ignoreFunc '\n' i]
 
-cppOpenFile :: (RenderSym r) => Label -> r (Variable r) -> r (Value r) -> Doc
-cppOpenFile mode f n = RC.variable f <> dot <> text "open" <> 
-  parens (RC.value n <> comma <+> text mode)
+cppOpenFile :: (RenderSym r) => Label -> SVariable r -> SValue r -> MSStatement r
+cppOpenFile mode f n = valStmt $ objMethodCall void (valueOf f) cppOpen [n, 
+  mkStateVal void $ text mode]
 
 cppPointerParamDoc :: (RenderSym r) => r (Variable r) -> Doc
-cppPointerParamDoc v = RC.type' (variableType v) <+> text "&" <> RC.variable v
+cppPointerParamDoc v = RC.type' (variableType v) <+> cppPtr <> RC.variable v
 
 cppsMethod :: [Doc] -> Label -> Label -> CppSrcCode (MethodType CppSrcCode) 
   -> [CppSrcCode (Parameter CppSrcCode)] -> CppSrcCode (Body CppSrcCode) -> Doc
 cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $ 
-  vcat [ttype <+> text c <> text "::" <> text n <> parens (parameterList ps) 
-  <+> emptyIfEmpty initList (colon <+> initList) <+> bodyStart,
+  vcat [ttype <+> text (c `nmSpcAccess` n) <> parens (parameterList 
+    ps) <+> emptyIfEmpty initList (colon <+> initList) <+> bodyStart,
   indent (RC.body b),
   bodyEnd]
   where ttype | isDtor n = empty
               | otherwise = RC.type' t
-        initList = hicat (text ", ") is
+        initList = hicat listSep' is
 
 cppConstructor :: [MSParameter CppSrcCode] -> NamedArgs CppSrcCode -> 
   MSBody CppSrcCode -> SMethod CppSrcCode
@@ -2591,7 +2716,7 @@ cppsStateVarDef cns n s p vr' vl' = do
   emptS <- zoom lensCStoMS emptyStmt
   return $ on3CodeValues svd (onCodeValue snd s) 
     (toCode $ onBinding (binding p) (cns <+> RC.type' (variableType vr) <+> 
-      text (n ++ "::") <> RC.variable vr <+> equals <+> RC.value vl <> 
+      text n `nmSpcAccess'` RC.variable vr <+> equals <+> RC.value vl <> 
       endStatement) empty) 
     emptS
 

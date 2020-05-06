@@ -11,20 +11,20 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), TypeSym(..), 
-  TypeElim(..), ControlBlock(..), VariableSym(..), VariableElim(..), 
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..),
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, 
-  newObj, InternalValueExp(..), objMethodCall, objMethodCallNoParams, 
-  FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), 
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  objDecNewNoParams, IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), StatePattern(..), 
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..),
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), ODEInfo(..), 
-  ODEOptions(..), ODEMethod(..))
+  VSFunction, MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), 
+  FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), 
+  TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), 
+  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
+  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, 
+  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), 
+  InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), 
+  DeclStatement(..), objDecNewNoParams, IOStatement(..), StringStatement(..), 
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
+  ODEInfo(..), ODEOptions(..), ODEMethod(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -42,14 +42,16 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
-  inLabel, valueList, variableList, appendToBody, surroundBody)
+  inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', args, 
+  listSep, access, mathFunc, valueList, variableList, appendToBody, 
+  surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body, 
   printFile, param, method, listDec, classVar, objVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
   addComments, commentedMod, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkVal, mkVar, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, 
-  typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
+  mkStateVal, mkVal, mkVar, VSOp, unOpPrec, powerPrec, unExpr, unExpr', 
+  unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, listInnerType, obj, funcType, csc, sec, 
   cot, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
@@ -73,8 +75,8 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for,
-  while, intFunc, multiAssignError, multiReturnError)
+  varDec, varDecDef, listDec, extObjDecNew, switch, for, while, intFunc, 
+  multiAssignError, multiReturnError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
   decrement1, runStrategy, listSlice, stringListVals, stringListLists,
   forRange, notifyObservers, checkState)
@@ -192,8 +194,8 @@ instance TypeSym CSharpCode where
   infile = csInfileType
   outfile = csOutfileType
   listType t = do
-    modify (addLangImportVS "System.Collections.Generic") 
-    C.listType "List" t
+    modify (addLangImportVS csGeneric) 
+    C.listType csList t
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
@@ -249,19 +251,19 @@ instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
-  sqrtOp = addSystemImport $ unOpPrec "Math.Sqrt"
-  absOp = addSystemImport $ unOpPrec "Math.Abs"
-  logOp = addSystemImport $ unOpPrec "Math.Log10"
-  lnOp = addSystemImport $ unOpPrec "Math.Log"
-  expOp = addSystemImport $ unOpPrec "Math.Exp"
-  sinOp = addSystemImport $ unOpPrec "Math.Sin"
-  cosOp = addSystemImport $ unOpPrec "Math.Cos"
-  tanOp = addSystemImport $ unOpPrec "Math.Tan"
-  asinOp = addSystemImport $ unOpPrec "Math.Asin"
-  acosOp = addSystemImport $ unOpPrec "Math.Acos"
-  atanOp = addSystemImport $ unOpPrec "Math.Atan"
-  floorOp = addSystemImport $ unOpPrec "Math.Floor"
-  ceilOp = addSystemImport $ unOpPrec "Math.Ceiling"
+  sqrtOp = csUnaryMath "Sqrt"
+  absOp = csUnaryMath "Abs"
+  logOp = csUnaryMath "Log10"
+  lnOp = csUnaryMath "Log"
+  expOp = csUnaryMath "Exp"
+  sinOp = csUnaryMath "Sin"
+  cosOp = csUnaryMath "Cos"
+  tanOp = csUnaryMath "Tan"
+  asinOp = csUnaryMath "Asin"
+  acosOp = csUnaryMath "Acos"
+  atanOp = csUnaryMath "Atan"
+  floorOp = csUnaryMath "Floor"
+  ceilOp = csUnaryMath "Ceiling"
 
 instance BinaryOpSym CSharpCode where
   type BinaryOp CSharpCode = OpData
@@ -275,7 +277,7 @@ instance BinaryOpSym CSharpCode where
   minusOp = G.minusOp
   multOp = G.multOp
   divideOp = G.divideOp
-  powerOp = addSystemImport $ powerPrec "Math.Pow"
+  powerOp = addSystemImport $ powerPrec $ mathFunc "Pow"
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
@@ -336,7 +338,7 @@ instance VariableValue CSharpCode where
 
 instance CommandLineArgs CSharpCode where
   arg n = G.arg (litInt n) argsList
-  argsList = G.argsList "args"
+  argsList = G.argsList args
   argExists i = listSize argsList ?> litInt (fromIntegral i)
 
 instance NumericExpression CSharpCode where
@@ -385,7 +387,7 @@ instance ValueExpression CSharpCode where
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
   extFuncAppMixedArgs = CP.extFuncAppMixedArgs
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
-  newObjMixedArgs = G.newObjMixedArgs "new "
+  newObjMixedArgs = G.newObjMixedArgs (new ++ " ")
   extNewObjMixedArgs _ = newObjMixedArgs
   libNewObjMixedArgs = C.libNewObjMixedArgs
 
@@ -394,17 +396,19 @@ instance ValueExpression CSharpCode where
   notNull = CP.notNull
 
 instance RenderValue CSharpCode where
-  inputFunc = addSystemImport $ mkStateVal string (text "Console.ReadLine()")
-  printFunc = addSystemImport $ mkStateVal void (text "Console.Write")
-  printLnFunc = addSystemImport $ mkStateVal void (text "Console.WriteLine")
-  printFileFunc = on2StateValues (\v -> mkVal v . R.printFile "Write" . 
+  inputFunc = addSystemImport csReadLineFunc
+  printFunc = addSystemImport $ mkStateVal void (text $ csConsole `access` 
+    csWrite)
+  printLnFunc = addSystemImport $ mkStateVal void (text $ csConsole `access` 
+    csWriteLine)
+  printFileFunc = on2StateValues (\v -> mkVal v . R.printFile csWrite . 
     RC.value) void
-  printFileLnFunc = on2StateValues (\v -> mkVal v . R.printFile "WriteLine" . 
+  printFileLnFunc = on2StateValues (\v -> mkVal v . R.printFile csWriteLine . 
     RC.value) void
   
   cast = csCast
 
-  call = G.call (colon <> space)
+  call = G.call csNamedArgSep
   
   valFromData p t d = on2CodeValues (vd p) t (toCode d)
   
@@ -430,7 +434,7 @@ instance List CSharpCode where
   listAppend = G.listAppend
   listAccess = G.listAccess
   listSet = G.listSet
-  indexOf = CP.indexOf "IndexOf"
+  indexOf = CP.indexOf csIndex
   
 instance InternalList CSharpCode where
   listSlice' = M.listSlice
@@ -444,9 +448,9 @@ instance InternalGetSet CSharpCode where
   setFunc = G.setFunc
 
 instance InternalListFunc CSharpCode where
-  listSizeFunc = funcFromData (R.func (text "Count")) int
-  listAddFunc _ = CP.listAddFunc "Insert"
-  listAppendFunc = G.listAppendFunc "Add"
+  listSizeFunc = funcFromData (R.func csListSize) int
+  listAddFunc _ = CP.listAddFunc csListAdd
+  listAppendFunc = G.listAppendFunc csListAppend
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
 
@@ -521,23 +525,23 @@ instance IOStatement CSharpCode where
   printFileStrLn f = G.print True  (Just f) (printFileLnFunc f) . litString
 
   getInput v = v &= csInput (onStateValue variableType v) inputFunc
-  discardInput = C.discardInput csDiscardInput
+  discardInput = csDiscardInput inputFunc
   getFileInput f v = v &= csInput (onStateValue variableType v) (csFileInput f)
   discardFileInput f = valStmt $ csFileInput f
 
   openFileR = CP.openFileR csOpenFileR
   openFileW = CP.openFileW csOpenFileWorA
   openFileA = CP.openFileA csOpenFileWorA
-  closeFile = G.closeFile "Close"
+  closeFile = G.closeFile csClose
 
   getFileInputLine = getFileInput
-  discardFileLine = CP.discardFileLine "ReadLine"
-  getFileInputAll f v = while ((f $. funcFromData (text ".EndOfStream") bool) 
-    ?!) (oneLiner $ valStmt $ listAppend (valueOf v) (csFileInput f))
+  discardFileLine = CP.discardFileLine csReadLine
+  getFileInputAll f v = while ((f $. funcFromData (dot <> text csEOS) bool) ?!)
+    (oneLiner $ valStmt $ listAppend (valueOf v) (csFileInput f))
 
 instance StringStatement CSharpCode where
   stringSplit d vnew s = assign vnew $ newObj (listType string) 
-    [s $. func "Split" (listType string) [litChar d]]
+    [s $. csSplitFunc d]
 
   stringListVals = M.stringListVals
   stringListLists = M.stringListLists
@@ -557,7 +561,7 @@ instance ControlStatement CSharpCode where
   returnStmt = G.returnStmt Semi
   
   throw msg = do
-    modify (addLangImport "System")
+    modify (addLangImport csSystem)
     G.throw csThrowDoc Semi msg
 
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
@@ -567,7 +571,7 @@ instance ControlStatement CSharpCode where
 
   for = C.for bodyStart bodyEnd
   forRange = M.forRange
-  forEach = CP.forEach bodyStart bodyEnd (text "foreach") inLabel 
+  forEach = CP.forEach bodyStart bodyEnd csForEach inLabel 
   while = C.while bodyStart bodyEnd
 
   tryCatch = G.tryCatch csTryCatch
@@ -620,7 +624,7 @@ instance MethodSym CSharpCode where
   docMain = CP.docMain
  
   function = G.function
-  mainFunction = CP.mainFunction string "Main"
+  mainFunction = CP.mainFunction string csMain
 
   docFunc = G.docFunc
 
@@ -668,7 +672,7 @@ instance RenderClass CSharpCode where
   intClass = CP.intClass R.class'
 
   inherit n = toCode $ maybe empty ((colon <+>) . text) n
-  implements is = toCode $ colon <+> text (intercalate ", " is)
+  implements is = toCode $ colon <+> text (intercalate listSep is)
 
   commentedClass = G.commentedClass
   
@@ -696,7 +700,7 @@ instance BlockCommentElim CSharpCode where
   blockComment' = unCSC
 
 addSystemImport :: VS a -> VS a
-addSystemImport = (>>) $ modify (addLangImportVS "System")
+addSystemImport = (>>) $ modify (addLangImportVS csSystem)
 
 csName :: String
 csName = "C#"
@@ -709,27 +713,87 @@ csODEMethod _ = error "Chosen ODE method unavailable in C#"
 csImport :: Label -> Doc
 csImport n = text ("using " ++ n) <> endStatement
 
+csListSize, csForEach, csNamedArgSep, csLambdaSep :: Doc
+csListSize = text "Count"
+csForEach = text "foreach"
+csNamedArgSep = colon <> space
+csLambdaSep = text "=>"
+
+csSystem, csConsole, csGeneric, csIO, csList, csInt, csFloat, csDouble, csBool, 
+  csChar, csParse, csReader, csWriter, csReadLine, csWrite, csWriteLine, 
+  csIndex, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain :: String
+csSystem = "System"
+csConsole = "Console"
+csGeneric = csSysAccess $ "Collections" `access` "Generic"
+csIO = csSysAccess "IO"
+csList = "List"
+csInt = "Int32"
+csFloat = "Single"
+csDouble = "Double"
+csBool = "Boolean"
+csChar = "Char"
+csParse = "Parse"
+csReader = "StreamReader"
+csWriter = "StreamWriter"
+csReadLine = "ReadLine"
+csWrite = "Write"
+csWriteLine = "WriteLine"
+csIndex = "IndexOf"
+csListAdd = "Insert"
+csListAppend = "Add"
+csClose = "Close"
+csEOS = "EndOfStream"
+csSplit = "Split"
+csMain = "Main"
+
+csSysAccess :: String -> String
+csSysAccess = access csSystem
+
+csUnaryMath :: (Monad r) => String -> VSOp r
+csUnaryMath = addSystemImport . unOpPrec . mathFunc
+
 csInfileType :: (RenderSym r) => VSType r
-csInfileType = modifyReturn (addLangImportVS "System.IO") $ 
-  typeFromData File "StreamReader" (text "StreamReader")
+csInfileType = modifyReturn (addLangImportVS csIO) $ 
+  typeFromData File csReader (text csReader)
 
 csOutfileType :: (RenderSym r) => VSType r
-csOutfileType = modifyReturn (addLangImportVS "System.IO") $ 
-  typeFromData File "StreamWriter" (text "StreamWriter")
+csOutfileType = modifyReturn (addLangImportVS csIO) $ 
+  typeFromData File csWriter (text csWriter)
 
 csLitList :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
   -> SValue r
-csLitList f t = on1StateValue1List (\lt es -> mkVal lt (new <+> RC.type' lt <+> 
-  braces (valueList es))) (f t)
+csLitList f t = on1StateValue1List (\lt es -> mkVal lt (new' <+> RC.type' lt
+  <+> braces (valueList es))) (f t)
 
 csLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-csLambda ps ex = parens (variableList ps) <+> text "=>" <+> RC.value ex
+csLambda ps ex = parens (variableList ps) <+> csLambdaSep <+> RC.value ex
+
+csReadLineFunc :: SValue CSharpCode
+csReadLineFunc = extFuncApp csConsole csReadLine string []
+
+csIntParse :: SValue CSharpCode -> SValue CSharpCode
+csIntParse v = extFuncApp csInt csParse int [v] 
+
+csFloatParse :: SValue CSharpCode -> SValue CSharpCode
+csFloatParse v = extFuncApp csFloat csParse float [v] 
+
+csDblParse :: SValue CSharpCode -> SValue CSharpCode
+csDblParse v = extFuncApp csDouble csParse double [v] 
+
+csBoolParse :: SValue CSharpCode -> SValue CSharpCode
+csBoolParse v = extFuncApp csBool csParse bool [v] 
+
+csCharParse :: SValue CSharpCode -> SValue CSharpCode
+csCharParse v = extFuncApp csChar csParse char [v] 
+
+csSplitFunc :: Char -> VSFunction CSharpCode
+csSplitFunc d = func csSplit (listType string) [litChar d]
 
 csCast :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
 csCast t v = join $ on2StateValues (\tp vl -> csCast' (getType tp) (getType $ 
   valueType vl) tp vl) t v
-  where csCast' Double String _ _ = funcApp "Double.Parse" double [v]
-        csCast' Float String _ _ = funcApp "Single.Parse" float [v]
+  where csCast' Double String _ _ = csDblParse v
+        csCast' Float String _ _ = csFloatParse v
         csCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' tp)) 
           (RC.value vl))
 
@@ -743,37 +807,34 @@ csFuncDecDef v ps r = do
     <> parens (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd 
 
 csThrowDoc :: (RenderSym r) => r (Value r) -> Doc
-csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
+csThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <> 
   parens (RC.value errMsg)
 
 csTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 csTryCatch tb cb = vcat [
-  text "try" <+> lbrace,
+  tryLabel <+> lbrace,
   indent $ RC.body tb,
-  rbrace <+> text "catch" <+> 
+  rbrace <+> catchLabel <+> 
     lbrace,
   indent $ RC.body cb,
   rbrace]
 
-csDiscardInput :: (RenderSym r) => r (Value r) -> Doc
-csDiscardInput = RC.value
+csDiscardInput :: SValue CSharpCode -> MSStatement CSharpCode
+csDiscardInput = valStmt
 
 csFileInput :: (RenderSym r) => SValue r -> SValue r
-csFileInput = onStateValue (\f -> mkVal (valueType f) (RC.value f <> dot <> 
-  text "ReadLine()"))
+csFileInput f = objMethodCallNoParams string f csReadLine 
 
-csInput :: (RenderSym r) => VSType r -> SValue r -> SValue r
-csInput tp inF = do
+csInput :: VSType CSharpCode -> SValue CSharpCode -> SValue CSharpCode
+csInput tp inFn = do
   t <- tp
-  inFn <- inF
-  let v = mkVal t $ text (csInput' (getType t)) <> parens (RC.value inFn)
-  csInputImport (getType t) (return v)
-  where csInput' Integer = "Int32.Parse"
-        csInput' Float = "Single.Parse"
-        csInput' Double = "Double.Parse"
-        csInput' Boolean = "Boolean.Parse"
-        csInput' String = ""
-        csInput' Char = "Char.Parse"
+  csInputImport (getType t) (csInput' (getType t) inFn)
+  where csInput' Integer = csIntParse
+        csInput' Float = csFloatParse
+        csInput' Double = csDblParse
+        csInput' Boolean = csBoolParse
+        csInput' String = id
+        csInput' Char = csCharParse
         csInput' _ = error "Attempt to read value of unreadable type"
         csInputImport t = if t `elem` [Integer, Float, Double, Boolean, Char] 
           then addSystemImport else id

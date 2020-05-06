@@ -21,4 +21,4 @@ for observerIndex in range(0, len(observerList), 1):
     observerList[observerIndex].printNum()
 
 obs1.setX(10)
-print(obs1.getX(), end='')
+print(obs1.getX(), end="")

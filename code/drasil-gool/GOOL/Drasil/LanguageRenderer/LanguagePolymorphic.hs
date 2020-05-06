@@ -57,8 +57,9 @@ import GOOL.Drasil.AST (Binding(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
   toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
   getInnerType, getNestDegree)
-import GOOL.Drasil.LanguageRenderer (dot, addExt, functionDox, classDox, 
-  moduleDox, getterName, setterName, valueList, namedArgList)
+import GOOL.Drasil.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt, 
+  functionDox, classDox, moduleDox, getterName, setterName, valueList, 
+  namedArgList)
 import qualified GOOL.Drasil.LanguageRenderer as R (file, block, assign, 
   addAssign, return', comment, getTerm, var, arg, func, objAccess, 
   commentedItem)
@@ -93,8 +94,11 @@ multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
 
+intRender :: String
+intRender = "int"
+
 int :: (RenderSym r) => VSType r
-int = toState $ typeFromData Integer "int" (text "int")
+int = toState $ typeFromData Integer intRender (text intRender)
 
 listInnerType :: (RenderSym r) => VSType r -> VSType r
 listInnerType t = t >>= (convType . getInnerType . getType)
@@ -188,7 +192,7 @@ arrayElem i' v' = do
 -- Values --
 
 litChar :: (RenderSym r) => Char -> SValue r
-litChar c = mkStateVal S.char (quotes $ D.char c)
+litChar c = mkStateVal S.char (quotes $ if c == '\n' then text "\\n" else D.char c)
 
 litDouble :: (RenderSym r) => Double -> SValue r
 litDouble d = mkStateVal S.double (D.double d)
@@ -215,9 +219,9 @@ call sep lib o n t pas nas = do
   pargs <- sequence pas
   nms <- mapM fst nas
   nargs <- mapM snd nas
-  let libDoc = maybe empty (text . (++ ".")) lib
+  let libDoc = maybe (text n) (text . (`access` n)) lib
       obDoc = fromMaybe empty o
-  mkStateVal t $ obDoc <> libDoc <> text n <> parens (valueList pargs <+> 
+  mkStateVal t $ obDoc <> libDoc <> parens (valueList pargs <+> 
     (if null pas || null nas then empty else comma) <+> namedArgList sep 
     (zip nms nargs))
 
@@ -375,7 +379,7 @@ ifCond :: (RenderSym r) => Doc -> Doc -> Doc -> [(SValue r, MSBody r)] ->
 ifCond _ _ _ [] _ = error "if condition created with no cases"
 ifCond ifStart elif bEnd (c:cs) eBody =
     let ifSect (v, b) = on2StateValues (\val bd -> vcat [
-          text "if" <+> parens (RC.value val) <+> ifStart,
+          ifLabel <+> parens (RC.value val) <+> ifStart,
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
@@ -383,7 +387,7 @@ ifCond ifStart elif bEnd (c:cs) eBody =
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) $ vcat [
-          text "else" <+> ifStart,
+          elseLabel <+> ifStart,
           indent $ RC.body bd,
           bEnd]) eBody
     in onStateList (mkStmtNoEnd . vcat)

@@ -1,11 +1,11 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | Implementations for C-like renderers are defined here.
-module GOOL.Drasil.LanguageRenderer.CLike (float, double, char, listType, void, 
-  notOp, andOp, orOp, self, litTrue, litFalse, litFloat, inlineIf, 
-  libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, varDec, 
-  varDecDef, listDec, extObjDecNew, discardInput, switch, for, while, 
-  intFunc, multiAssignError, multiReturnError
+module GOOL.Drasil.LanguageRenderer.CLike (charRender, float, double, char, 
+  listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
+  inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
+  varDec, varDecDef, listDec, extObjDecNew, switch, for, while, intFunc, 
+  multiAssignError, multiReturnError
 ) where
 
 import Utils.Drasil (indent)
@@ -20,7 +20,7 @@ import qualified GOOL.Drasil.ClassInterface as S (TypeSym(bool, float, obj),
   ValueExpression(funcAppMixedArgs, newObjMixedArgs), 
   DeclStatement(varDec, varDecDef))
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderType(..),
-  InternalVarElim(variableBind), RenderValue(inputFunc, valFromData), 
+  InternalVarElim(variableBind), RenderValue(valFromData), 
   ValueElim(valuePrec), RenderMethod(intMethod))
 import qualified GOOL.Drasil.RendererClasses as S (
   InternalListFunc(listSizeFunc), RenderStatement(stmt, loopStmt))
@@ -30,8 +30,9 @@ import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
 import GOOL.Drasil.AST (Binding(..))
 import GOOL.Drasil.Helpers (angles, toState, onStateValue, on2StateValues, 
   on3StateValues)
-import GOOL.Drasil.LanguageRenderer (forLabel)
-import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, self)
+import GOOL.Drasil.LanguageRenderer (forLabel, whileLabel, containing)
+import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, self', 
+  self)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import GOOL.Drasil.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName)
@@ -46,21 +47,27 @@ import qualified Text.PrettyPrint.HughesPJ as D (float)
 
 -- Types --
 
+floatRender, doubleRender, charRender, voidRender :: String
+floatRender = "float"
+doubleRender = "double"
+charRender = "char"
+voidRender = "void"
+
 float :: (RenderSym r) => VSType r
-float = toState $ typeFromData Float "float" (text "float")
+float = toState $ typeFromData Float floatRender (text floatRender)
 
 double :: (RenderSym r) => VSType r
-double = toState $ typeFromData Double "double" (text "double")
+double = toState $ typeFromData Double doubleRender (text doubleRender)
 
 char :: (RenderSym r) => VSType r
-char = toState $ typeFromData Char "char" (text "char")
+char = toState $ typeFromData Char charRender (text charRender)
 
 listType :: (RenderSym r) => String -> VSType r -> VSType r
-listType lst = onStateValue (\t -> typeFromData (List (getType t)) (lst ++ "<" 
-  ++ getTypeString t ++ ">") (text lst <> angles (RC.type' t)))
+listType lst = onStateValue (\t -> typeFromData (List (getType t)) (lst 
+  `containing` getTypeString t) (text lst <> angles (RC.type' t)))
   
 void :: (RenderSym r) => VSType r
-void = toState $ typeFromData Void "void" (text "void")
+void = toState $ typeFromData Void voidRender (text voidRender)
 
 -- Unary Operators --
 
@@ -78,7 +85,8 @@ orOp = orPrec "||"
 -- Variables --
 
 self :: (RenderSym r) => SVariable r
-self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar "this" (S.obj l) R.self)
+self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (S.obj l) 
+  R.self')
 
 -- Values --
 
@@ -134,9 +142,6 @@ extObjDecNew :: (RenderSym r) => Library -> SVariable r -> [SValue r] ->
   MSStatement r
 extObjDecNew l v vs = S.varDecDef v (extNewObj l (onStateValue variableType v)
   vs)
-  
-discardInput :: (RenderSym r) => (r (Value r) -> Doc) -> MSStatement r
-discardInput f = zoom lensMStoVS $ onStateValue (mkStmt . f) inputFunc
 
 switch :: (RenderSym r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> 
   MSStatement r
@@ -163,7 +168,7 @@ for bStart bEnd sInit vGuard sUpdate b = do
   
 while :: (RenderSym r) => Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
 while bStart bEnd v' = on2StateValues (\v b -> mkStmtNoEnd (vcat [
-  text "while" <+> parens (RC.value v) <+> bStart,
+  whileLabel <+> parens (RC.value v) <+> bStart,
   indent $ RC.body b,
   bEnd])) (zoom lensMStoVS v')
 

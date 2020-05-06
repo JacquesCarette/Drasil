@@ -67,11 +67,11 @@ generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
+  let pckg = runReader (genPackage unReprProg) g 
+      code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
+          unReprPack pckg)
   createCodeFiles code
   setCurrentDirectory workingDir
-  where pckg = runReader (genPackage unReprProg) g 
-        code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
-          unReprPack pckg)
 
 genPackage :: (OOProg progRepr, PackageSym packRepr) => 
   (progRepr (Program progRepr) -> ProgData) -> 

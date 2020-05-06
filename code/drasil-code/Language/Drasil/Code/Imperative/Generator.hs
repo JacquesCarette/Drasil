@@ -112,12 +112,13 @@ genUnmodular = do
       mainIfExe Library = []
       mainIfExe Program = [genMainFunc]
   genModule n ("Contains the entire " ++ n ++ " " ++ getDesc (implType g))
-    (map (fmap Just) (mainIfExe (implType g) ++ map genCalcFunc (execOrder $ 
-    csi $ codeSpec g) ++ concatMap genModFuncs (mods s)) ++ ((if cls then [] 
-      else [genInputFormat Primary, genInputDerived Primary, 
+    (map (fmap Just) (mainIfExe (implType g) 
+        ++ map genCalcFunc (execOrder $ csi $ codeSpec g) 
+        ++ concatMap genModFuncs (mods s)) 
+      ++ ((if cls then [] else [genInputFormat Primary, genInputDerived Primary, 
         genInputConstraints Primary]) ++ [genOutputFormat])) 
     ([genInputClass Auxiliary, genConstClass Auxiliary] 
-    ++ map (fmap Just) (concatMap genModClasses $ mods s))
+      ++ map (fmap Just) (concatMap genModClasses $ mods s))
           
 genModules :: (OOProg r) => Reader DrasilState [SFile r]
 genModules = do

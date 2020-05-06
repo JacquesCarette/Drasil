@@ -18,7 +18,7 @@ public class Control {
         outfile.Write(filename);
         outfile.WriteLine(" in module Control");
         outfile.Close();
-        InputParameters inParams = new InputParameters();
+        InputParameters inParams = new InputParameters(filename);
         InputFormat.get_input(filename, inParams);
         DerivedValues.derived_values(inParams);
         InputConstraints.input_constraints(inParams);

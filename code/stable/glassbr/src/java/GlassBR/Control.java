@@ -23,7 +23,7 @@ public class Control {
         outfile.print(filename);
         outfile.println(" in module Control");
         outfile.close();
-        InputParameters inParams = new InputParameters();
+        InputParameters inParams = new InputParameters(filename);
         InputFormat.get_input(filename, inParams);
         DerivedValues.derived_values(inParams);
         InputConstraints.input_constraints(inParams);

@@ -22,8 +22,8 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Modularity(..), ImplementationType(..), Visibility(..))
 
-import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ProgData(..), 
-  initialState, unCI)
+import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..), 
+  ProgData(..), initialState, unCI)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
   getCurrentDirectory)
@@ -115,8 +115,8 @@ genUnmodular = do
     (map (fmap Just) (mainIfExe (implType g) 
         ++ map genCalcFunc (execOrder $ csi $ codeSpec g) 
         ++ concatMap genModFuncs (mods s)) 
-      ++ ((if cls then [] else [genInputFormat Primary, genInputDerived Primary, 
-        genInputConstraints Primary]) ++ [genOutputFormat])) 
+      ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub, 
+        genInputConstraints Pub]) ++ [genOutputFormat])) 
     ([genInputClass Auxiliary, genConstClass Auxiliary] 
       ++ map (fmap Just) (concatMap genModClasses $ mods s))
           

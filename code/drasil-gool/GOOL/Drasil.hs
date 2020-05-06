@@ -19,7 +19,7 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
   StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), convType,
-  ProgData(..), FileData(..), ModData(..), 
+  ScopeTag(..), ProgData(..), FileData(..), ModData(..), 
   CodeType(..),
   GOOLState(..), lensMStoVS, headers, sources, mainMod, 
   initialState,
@@ -48,7 +48,7 @@ import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock,
   StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), convType)
 
-import GOOL.Drasil.AST (FileData(..), ModData(..), ProgData(..))
+import GOOL.Drasil.AST (ScopeTag(..), FileData(..), ModData(..), ProgData(..))
 
 import GOOL.Drasil.CodeType (CodeType(..))
 

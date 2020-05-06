@@ -125,7 +125,7 @@ bulletFlat = Bullet . noRefs . map Flat
 -- t - Headers of the Nested lists.
 -- l - Lists of ListType.
 bulletNested :: [Sentence] -> [ListType] -> ListType
-bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
+bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]

@@ -450,7 +450,7 @@ addParameter p = over currParameters (\ps -> ifElemError p ps $
   "Function has duplicate parameter: " ++ p)
 
 getParameters :: MS [String]
-getParameters = reverse <$> gets (^. currParameters)
+getParameters = gets (reverse . (^. currParameters))
 
 setOutputsDeclared :: MethodState -> MethodState
 setOutputsDeclared = set outputsDeclared True

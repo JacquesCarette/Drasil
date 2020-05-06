@@ -57,8 +57,9 @@ import GOOL.Drasil.AST (Binding(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
   toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
   getInnerType, getNestDegree)
-import GOOL.Drasil.LanguageRenderer (dot, addExt, functionDox, classDox, 
-  moduleDox, getterName, setterName, valueList, namedArgList)
+import GOOL.Drasil.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt, 
+  functionDox, classDox, moduleDox, getterName, setterName, valueList, 
+  namedArgList)
 import qualified GOOL.Drasil.LanguageRenderer as R (file, block, assign, 
   addAssign, return', comment, getTerm, var, arg, func, objAccess, 
   commentedItem)
@@ -70,6 +71,7 @@ import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, currMain,
   getModuleName, getClassName, addParameter, getParameters)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
+import Data.Composition ((.:))
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
@@ -93,8 +95,11 @@ multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
 
+intRender :: String
+intRender = "int"
+
 int :: (RenderSym r) => VSType r
-int = toState $ typeFromData Integer "int" (text "int")
+int = toState $ typeFromData Integer intRender (text intRender)
 
 listInnerType :: (RenderSym r) => VSType r -> VSType r
 listInnerType t = t >>= (convType . getInnerType . getType)
@@ -188,7 +193,7 @@ arrayElem i' v' = do
 -- Values --
 
 litChar :: (RenderSym r) => Char -> SValue r
-litChar c = mkStateVal S.char (quotes $ D.char c)
+litChar c = mkStateVal S.char (quotes $ if c == '\n' then text "\\n" else D.char c)
 
 litDouble :: (RenderSym r) => Double -> SValue r
 litDouble d = mkStateVal S.double (D.double d)
@@ -215,9 +220,9 @@ call sep lib o n t pas nas = do
   pargs <- sequence pas
   nms <- mapM fst nas
   nargs <- mapM snd nas
-  let libDoc = maybe empty (text . (++ ".")) lib
+  let libDoc = maybe (text n) (text . (`access` n)) lib
       obDoc = fromMaybe empty o
-  mkStateVal t $ obDoc <> libDoc <> text n <> parens (valueList pargs <> 
+  mkStateVal t $ obDoc <> libDoc <> parens (valueList pargs <> 
     (if null pas || null nas then empty else comma) <+> namedArgList sep 
     (zip nms nargs))
 
@@ -312,12 +317,10 @@ emptyStmt = toState $ mkStmtNoEnd empty
 
 assign :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
   MSStatement r
-assign t vr vl = zoom lensMStoVS $ on2StateValues (\vr' vl' -> stmtFromData 
-  (R.assign vr' vl') t) vr vl
+assign t = zoom lensMStoVS .: on2StateValues (flip stmtFromData t .: R.assign)
 
 increment :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-increment vr vl = zoom lensMStoVS $ on2StateValues (\vr' -> mkStmt . 
-  R.addAssign vr') vr vl
+increment = zoom lensMStoVS .: on2StateValues (mkStmt .: R.addAssign)
 
 objDecNew :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 objDecNew v vs = S.varDecDef v (newObj (onStateValue variableType v) vs)
@@ -375,7 +378,7 @@ ifCond :: (RenderSym r) => Doc -> Doc -> Doc -> [(SValue r, MSBody r)] ->
 ifCond _ _ _ [] _ = error "if condition created with no cases"
 ifCond ifStart elif bEnd (c:cs) eBody =
     let ifSect (v, b) = on2StateValues (\val bd -> vcat [
-          text "if" <+> parens (RC.value val) <+> ifStart,
+          ifLabel <+> parens (RC.value val) <+> ifStart,
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
@@ -383,7 +386,7 @@ ifCond ifStart elif bEnd (c:cs) eBody =
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) $ vcat [
-          text "else" <+> ifStart,
+          elseLabel <+> ifStart,
           indent $ RC.body bd,
           bEnd]) eBody
     in onStateList (mkStmtNoEnd . vcat)
@@ -400,7 +403,7 @@ construct n = toState $ typeFromData (Object n) n empty
 
 param :: (RenderSym r) => (r (Variable r) -> Doc) -> SVariable r -> 
   MSParameter r
-param f v' = modifyReturnFunc (\v s -> addParameter (variableName v) s) 
+param f v' = modifyReturnFunc (addParameter . variableName) 
   (\v -> paramFromData v (f v)) (zoom lensMStoVS v')
 
 method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> VSType r 

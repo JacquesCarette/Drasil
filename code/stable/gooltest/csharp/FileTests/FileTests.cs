@@ -16,7 +16,7 @@ public class FileTests {
         StreamReader fileToRead;
         fileToRead = new StreamReader("testText.txt");
         string fileLine;
-        fileLine = (fileToRead.ReadLine());
+        fileLine = fileToRead.ReadLine();
         fileToRead.ReadLine();
         List<string> fileContents = new List<string>(0);
         

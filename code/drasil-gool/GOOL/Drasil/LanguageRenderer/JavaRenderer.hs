@@ -11,12 +11,12 @@ import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
-  MSStatement, MSParameter, SMethod, CSStateVar, SClass, OOProg, ProgramSym(..),
-  FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), 
-  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), 
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), Comparison(..),
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj,
+  VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, OOProg, 
+  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, 
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj,
   InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), List(..), 
   InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
@@ -38,16 +38,17 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
-import GOOL.Drasil.LanguageRenderer (dot, new, elseIfLabel, forLabel, 
-  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
-  commentStart, variableList, parameterList, appendToBody, surroundBody, 
-  intValue)
+import GOOL.Drasil.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
+  catchLabel, throwLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
+  bodyEnd, endStatement, commentStart, exceptionObj', new', args, exceptionObj, 
+  mainFunc, new, listSep, access, containing, mathFunc, variableList, 
+  parameterList, appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (package, class', multiStmt, 
   body, printFile, param, listDec, classVar, cast, castObj, static, dynamic, 
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
-  unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr, 
+  VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, int, listInnerType, obj, funcType, csc, sec, 
@@ -69,12 +70,12 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
   arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, openFileW, 
   openFileA, forEach, docMain, mainFunction, stateVar, buildModule', litArray, 
-  call', listSizeFunc, listAccessFunc', funcDecDef, discardFileInput)
+  call', listSizeFunc, listAccessFunc', funcDecDef)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  varDec, varDecDef, listDec, extObjDecNew, discardInput, switch, for,
-  while, intFunc, multiAssignError, multiReturnError)
+  varDec, varDecDef, listDec, extObjDecNew, switch, for, while, intFunc, 
+  multiAssignError, multiReturnError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
   decrement1, runStrategy, listSlice, stringListVals, stringListLists,
   forRange, notifyObservers, checkState)
@@ -84,7 +85,7 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   progD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception, 
   stdExc, HasException(..))
-import GOOL.Drasil.Helpers (angles, emptyIfNull, toCode, toState, onCodeValue, 
+import GOOL.Drasil.Helpers (emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
   onCodeList, onStateList)
 import GOOL.Drasil.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS, 
@@ -98,6 +99,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
+import Data.Composition ((.:))
 import qualified Data.Map as Map (lookup)
 import Data.List (nub, intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
@@ -186,7 +188,7 @@ instance BlockElim JavaCode where
 
 instance TypeSym JavaCode where
   type Type JavaCode = TypeData
-  bool = jBool
+  bool = jBoolType
   int = G.int
   float = C.float
   double = C.double
@@ -194,7 +196,7 @@ instance TypeSym JavaCode where
   string = jStringType
   infile = jInfileType
   outfile = jOutfileType
-  listType = jListType "ArrayList"
+  listType = jListType
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
@@ -216,19 +218,19 @@ instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
-  sqrtOp = unOpPrec "Math.sqrt"
-  absOp = unOpPrec "Math.abs"
-  logOp = unOpPrec "Math.log10"
-  lnOp = unOpPrec "Math.log"
-  expOp = unOpPrec "Math.exp"
-  sinOp = unOpPrec "Math.sin"
-  cosOp = unOpPrec "Math.cos"
-  tanOp = unOpPrec "Math.tan"
-  asinOp = unOpPrec "Math.asin"
-  acosOp = unOpPrec "Math.acos"
-  atanOp = unOpPrec "Math.atan"
-  floorOp = unOpPrec "Math.floor"
-  ceilOp = unOpPrec "Math.ceil"
+  sqrtOp = jUnaryMath "sqrt"
+  absOp = jUnaryMath "abs"
+  logOp = jUnaryMath "log10"
+  lnOp = jUnaryMath "log"
+  expOp = jUnaryMath "exp"
+  sinOp = jUnaryMath "sin"
+  cosOp = jUnaryMath "cos"
+  tanOp = jUnaryMath "tan"
+  asinOp = jUnaryMath "asin"
+  acosOp = jUnaryMath "acos"
+  atanOp = jUnaryMath "atan"
+  floorOp = jUnaryMath "floor"
+  ceilOp = jUnaryMath "ceil"
 
 instance BinaryOpSym JavaCode where
   type BinaryOp JavaCode = OpData
@@ -242,7 +244,7 @@ instance BinaryOpSym JavaCode where
   minusOp = G.minusOp
   multOp = G.multOp
   divideOp = G.divideOp
-  powerOp = powerPrec "Math.pow"
+  powerOp = powerPrec $ mathFunc "pow"
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
@@ -292,9 +294,9 @@ instance Literal JavaCode where
   litString = G.litString
   litArray = CP.litArray
   litList t es = do
-    zoom lensVStoMS $ modify (if null es then id else addLangImport 
-      "java.util.Arrays")
-    newObj (listType t) [funcApp "Arrays.asList" (listType t) es | not (null es)]
+    zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport
+      jArrays)
+    newObj (listType t) [jAsListFunc t es | not (null es)]
 
 instance MathConstant JavaCode where
   pi = CP.pi
@@ -304,7 +306,7 @@ instance VariableValue JavaCode where
 
 instance CommandLineArgs JavaCode where
   arg n = G.arg (litInt n) argsList
-  argsList = G.argsList "args"
+  argsList = G.argsList args
   argExists i = listSize argsList ?> litInt (fromIntegral i)
 
 instance NumericExpression JavaCode where
@@ -365,7 +367,7 @@ instance ValueExpression JavaCode where
     CP.extFuncAppMixedArgs l n t vs ns
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
   newObjMixedArgs ot vs ns = addConstructorCallExcsCurrMod ot (\t -> 
-    G.newObjMixedArgs "new " t vs ns)
+    G.newObjMixedArgs (new ++ " ") t vs ns)
   extNewObjMixedArgs l ot vs ns = do
     t <- ot
     mem <- getMethodExcMap
@@ -379,13 +381,13 @@ instance ValueExpression JavaCode where
   notNull = CP.notNull
 
 instance RenderValue JavaCode where
-  inputFunc = modify (addLangImportVS "java.util.Scanner") >> mkStateVal 
-    (obj "Scanner") (parens $ text "new Scanner(System.in)")
-  printFunc = mkStateVal void (text "System.out.print")
-  printLnFunc = mkStateVal void (text "System.out.println")
-  printFileFunc = on2StateValues (\v -> mkVal v . R.printFile "print" . 
+  inputFunc = modify (addLangImportVS $ utilImport jScanner) >> mkStateVal 
+    (obj jScanner) (parens $ new' <+> jScanner' <> parens (jSystem jStdIn))
+  printFunc = mkStateVal void (jSystem (jStdOut `access` jPrint))
+  printLnFunc = mkStateVal void (jSystem (jStdOut `access` jPrintLn))
+  printFileFunc = on2StateValues (\v -> mkVal v . R.printFile jPrint . 
     RC.value) void
-  printFileLnFunc = on2StateValues (\v -> mkVal v . R.printFile "println" . 
+  printFileLnFunc = on2StateValues (\v -> mkVal v . R.printFile jPrintLn . 
     RC.value) void
   
   cast = jCast
@@ -421,7 +423,7 @@ instance List JavaCode where
   listAppend = G.listAppend
   listAccess = G.listAccess
   listSet = G.listSet
-  indexOf = CP.indexOf "indexOf"
+  indexOf = CP.indexOf jIndex
 
 instance InternalList JavaCode where
   listSlice' = M.listSlice
@@ -436,11 +438,10 @@ instance InternalGetSet JavaCode where
 
 instance InternalListFunc JavaCode where
   listSizeFunc = CP.listSizeFunc
-  listAddFunc _ = CP.listAddFunc "add"
-  listAppendFunc = G.listAppendFunc "add"
-  listAccessFunc = CP.listAccessFunc' "get"
-  listSetFunc v i toVal = func "set" (onStateValue valueType v) [intValue i, 
-    toVal]
+  listAddFunc _ = CP.listAddFunc jListAdd
+  listAppendFunc = G.listAppendFunc jListAdd
+  listAccessFunc = CP.listAccessFunc' jListAccess
+  listSetFunc = jListSetFunc
 
 instance InternalIterator JavaCode where
   iterBeginFunc _ = error $ CP.iterBeginError jName
@@ -498,8 +499,7 @@ instance DeclStatement JavaCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
-  constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkStmt $
-    jConstDecDef vr vl) vr' vl'
+  constDecDef = zoom lensMStoVS .: on2StateValues (mkStmt .: jConstDecDef)
   funcDecDef = CP.funcDecDef
 
 instance IOStatement JavaCode where
@@ -513,27 +513,26 @@ instance IOStatement JavaCode where
   printFileStr f   = jOut False (Just f) (printFileFunc f)   . litString
   printFileStrLn f = jOut True  (Just f) (printFileLnFunc f) . litString
 
-  getInput v = v &= jInput (onStateValue variableType v) inputFunc
-  discardInput = C.discardInput jDiscardInput
-  getFileInput f v = v &= jInput (onStateValue variableType v) f
-  discardFileInput = CP.discardFileInput jDiscardInput
+  getInput v = v &= jInput v inputFunc
+  discardInput = jDiscardInput inputFunc
+  getFileInput f v = v &= jInput v f
+  discardFileInput = jDiscardInput
 
   openFileR = CP.openFileR jOpenFileR
   openFileW = CP.openFileW jOpenFileWorA
   openFileA = CP.openFileA jOpenFileWorA
-  closeFile = G.closeFile "close"
+  closeFile = G.closeFile jClose
 
-  getFileInputLine f v = v &= f $. func "nextLine" string []
-  discardFileLine = CP.discardFileLine "nextLine"
-  getFileInputAll f v = while (f $. func "hasNextLine" bool [])
-    (oneLiner $ valStmt $ listAppend (valueOf v) (f $. func "nextLine" string []))
+  getFileInputLine f v = v &= f $. jNextLineFunc
+  discardFileLine = CP.discardFileLine jNextLine
+  getFileInputAll f v = while (f $. jHasNextLineFunc)
+    (oneLiner $ valStmt $ listAppend (valueOf v) (f $. jNextLineFunc))
 
 instance StringStatement JavaCode where
   stringSplit d vnew s = do
-    modify (addLangImport "java.util.Arrays") 
+    modify (addLangImport $ utilImport jArrays) 
     ss <- zoom lensMStoVS $ 
-      jStringSplit vnew (funcApp "Arrays.asList" (listType string) 
-      [s $. func "split" (listType string) [litString [d]]])
+      jStringSplit vnew (jAsListFunc string [s $. jSplitFunc d])
     return $ mkStmt ss 
 
   stringListVals = M.stringListVals
@@ -615,7 +614,7 @@ instance MethodSym JavaCode where
   docMain = CP.docMain
 
   function = G.function
-  mainFunction = CP.mainFunction string "main"
+  mainFunction = CP.mainFunction string mainFunc
 
   docFunc = G.docFunc
 
@@ -668,8 +667,8 @@ instance ClassSym JavaCode where
 instance RenderClass JavaCode where
   intClass = CP.intClass R.class'
   
-  inherit n = toCode $ maybe empty ((text "extends" <+>) . text) n
-  implements is = toCode $ text "implements" <+> text (intercalate ", " is)
+  inherit n = toCode $ maybe empty ((jExtends <+>) . text) n
+  implements is = toCode $ jImplements <+> text (intercalate listSep is)
 
   commentedClass = G.commentedClass
   
@@ -697,10 +696,9 @@ instance BlockCommentElim JavaCode where
   blockComment' = unJC
 
 instance HasException JavaCode where
-  toConcreteExc Standard = toCode $ stdExc "Exception"
-  toConcreteExc FileNotFound = toCode $ exception "java.io" 
-    "FileNotFoundException"
-  toConcreteExc IO = toCode $ exception "java.io" "IOException"
+  toConcreteExc Standard = toCode $ stdExc exceptionObj
+  toConcreteExc FileNotFound = toCode $ exception (javaImport io) jFNFExc
+  toConcreteExc IO = toCode $ exception (javaImport io) jIOExc
 
 jName :: String
 jName = "Java"
@@ -708,73 +706,173 @@ jName = "Java"
 jImport :: Label -> Doc
 jImport n = text ("import " ++ n) <> endStatement
 
-jBool :: (RenderSym r) => VSType r
-jBool = toState $ typeFromData Boolean "boolean" (text "boolean")
+jBoolType :: (RenderSym r) => VSType r
+jBoolType = toState $ typeFromData Boolean jBool (text jBool)
 
 jStringType :: (RenderSym r) => VSType r
-jStringType = toState $ typeFromData String "String" (text "String")
+jStringType = toState $ typeFromData String jString (text jString)
 
 jInfileType :: (RenderSym r) => VSType r
-jInfileType = modifyReturn (addLangImportVS "java.util.Scanner") $ 
-  typeFromData File "Scanner" (text "Scanner")
+jInfileType = modifyReturn (addLangImportVS $ utilImport jScanner) $ 
+  typeFromData File jScanner jScanner'
 
 jOutfileType :: (RenderSym r) => VSType r
-jOutfileType = modifyReturn (addLangImportVS "java.io.PrintWriter") $ 
-  typeFromData File "PrintWriter" (text "PrintWriter")
+jOutfileType = modifyReturn (addLangImportVS $ ioImport jPrintWriter) $ 
+  typeFromData File jPrintWriter (text jPrintWriter)
 
-jListType :: (RenderSym r) => String -> VSType r -> VSType r
-jListType l t = do
-  modify (addLangImportVS $ "java.util." ++ l) 
+jExtends, jImplements, jFinal, jScanner', jThrows, jLambdaSep :: Doc
+jExtends = text "extends"
+jImplements = text "implements"
+jFinal = text "final"
+jScanner' = text jScanner
+jThrows = text "throws"
+jLambdaSep = text "->"
+
+arrayList, jBool, jInteger, jFloat, jDouble, jString, jObject, jScanner, 
+  jPrintWriter, jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jAsList, jStdIn, 
+  jStdOut, jPrint, jPrintLn, jEquals, jParseInt, jParseDbl, jParseFloat, 
+  jIndex, jListAdd, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
+  jHasNextLine, jCharAt, jSplit, io, util :: String
+arrayList = "ArrayList"
+jBool = "boolean"
+jInteger = "Integer"
+jFloat = "Float"
+jDouble = "Double"
+jString = "String"
+jObject = "Object"
+jScanner = "Scanner"
+jPrintWriter = "PrintWriter"
+jFile = "File"
+jFileWriter = "FileWriter"
+jIOExc = "IOException"
+jFNFExc = "FileNotFoundException"
+jArrays = "Arrays"
+jAsList = jArrays `access` "asList"
+jStdIn = "in"
+jStdOut = "out"
+jPrint = "print"
+jPrintLn = "println"
+jEquals = "equals"
+jParseInt = jInteger `access` "parseInt"
+jParseDbl = jDouble `access` "parseDouble"
+jParseFloat = jFloat `access` "parseFloat"
+jIndex = "indexOf"
+jListAdd = "add"
+jListAccess = "get"
+jListSet = "set"
+jClose = "close"
+jNext = "next"
+jNextLine = "nextLine"
+jNextBool = "nextBoolean"
+jHasNextLine = "hasNextLine"
+jCharAt = "charAt"
+jSplit = "split"
+io = "io"
+util = "util"
+
+javaImport, ioImport, utilImport :: String -> String
+javaImport = access "java"
+ioImport = javaImport . access io
+utilImport = javaImport . access util
+
+jSystem :: String -> Doc
+jSystem = text . access "System"
+
+jUnaryMath :: (Monad r) => String -> VSOp r
+jUnaryMath = unOpPrec . mathFunc
+
+jListType :: (RenderSym r) => VSType r -> VSType r
+jListType t = do
+  modify (addLangImportVS $ utilImport arrayList) 
   t >>= (jListType' . getType)
   where jListType' Integer = toState $ typeFromData (List Integer) 
-          (l ++ "<Integer>") (lst <> angles (text "Integer"))
+          lstInt (text lstInt)
         jListType' Float = toState $ typeFromData (List Float) 
-          (l ++ "<Float>") (lst <> angles (text "Float"))
+          lstFloat (text lstFloat)
         jListType' Double = toState $ typeFromData (List Double) 
-          (l ++ "<Double>") (lst <> angles (text "Double"))
-        jListType' _ = C.listType l t
-        lst = text l
+          lstDouble (text lstDouble)
+        jListType' _ = C.listType arrayList t
+        lstInt = arrayList `containing` jInteger
+        lstFloat = arrayList `containing` jFloat
+        lstDouble = arrayList `containing` jDouble
 
 jArrayType :: VSType JavaCode
-jArrayType = arrayType (obj "Object")
+jArrayType = arrayType (obj jObject)
 
 jFileType :: (RenderSym r) => VSType r
-jFileType = modifyReturn (addLangImportVS "java.io.File") $ typeFromData File 
-  "File" (text "File")
+jFileType = modifyReturn (addLangImportVS $ ioImport jFile) $ typeFromData File 
+  jFile (text jFile)
 
 jFileWriterType :: (RenderSym r) => VSType r
-jFileWriterType = modifyReturn (addLangImportVS "java.io.FileWriter") $ 
-  typeFromData File "FileWriter" (text "FileWriter")
+jFileWriterType = modifyReturn (addLangImportVS $ ioImport jFileWriter) $ 
+  typeFromData File jFileWriter (text jFileWriter)
+
+jAsListFunc :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode
+jAsListFunc t = funcApp jAsList (listType t)
+
+jEqualsFunc :: SValue JavaCode -> VSFunction JavaCode
+jEqualsFunc v = func jEquals bool [v]
+
+jParseIntFunc :: SValue JavaCode -> SValue JavaCode
+jParseIntFunc v = funcApp jParseInt int [v]
+
+jParseDblFunc :: SValue JavaCode -> SValue JavaCode
+jParseDblFunc v = funcApp jParseDbl double [v]
+
+jParseFloatFunc :: SValue JavaCode -> SValue JavaCode
+jParseFloatFunc v = funcApp jParseFloat float [v]
+
+jListSetFunc :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode ->
+  VSFunction JavaCode
+jListSetFunc v i toVal = func jListSet (onStateValue valueType v) [intValue i, toVal]
+
+jNextFunc :: VSFunction JavaCode
+jNextFunc = func jNext string []
+
+jNextLineFunc :: VSFunction JavaCode
+jNextLineFunc = func jNextLine string []
+
+jNextBoolFunc :: VSFunction JavaCode
+jNextBoolFunc = func jNextBool bool []
+
+jHasNextLineFunc :: VSFunction JavaCode
+jHasNextLineFunc = func jHasNextLine bool []
+
+jCharAtFunc :: VSFunction JavaCode
+jCharAtFunc = func jCharAt char [litInt 0]
+
+jSplitFunc :: (RenderSym r) => Char -> VSFunction r
+jSplitFunc d = func jSplit (listType string) [litString [d]]
 
 jEquality :: SValue JavaCode -> SValue JavaCode -> SValue JavaCode
 jEquality v1 v2 = v2 >>= jEquality' . getType . valueType
-  where jEquality' String = objAccess v1 (func "equals" bool [v2])
+  where jEquality' String = objAccess v1 (jEqualsFunc v2)
         jEquality' _ = typeBinExpr equalOp bool v1 v2
 
 jLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
-jLambda ps ex = parens (variableList ps) <+> text "->" <+> RC.value ex
+jLambda ps ex = parens (variableList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
-jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $ 
-  valueType vl) tp vl) t v
-  where jCast' Double String _ _ = funcApp "Double.parseDouble" double [v]
-        jCast' Float String _ _ = funcApp "Float.parseFloat" float [v]
-        jCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' 
-          tp)) (RC.value vl))
+jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType 
+  v) t v)
+  where jCast' Double String _ v = jParseDblFunc (toState v)
+        jCast' Float String _ v = jParseFloatFunc (toState v)
+        jCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast (RC.type' t))
+          (RC.value v))
 
 jConstDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
-jConstDecDef v def = text "final" <+> RC.type' (variableType v) <+> 
+jConstDecDef v def = jFinal <+> RC.type' (variableType v) <+> 
   RC.variable v <+> equals <+> RC.value def
 
 jThrowDoc :: (RenderSym r) => r (Value r) -> Doc
-jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (RC.value 
-  errMsg)
+jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <> 
+  parens (RC.value errMsg)
 
 jTryCatch :: (RenderSym r) => r (Body r) -> r (Body r) -> Doc
 jTryCatch tb cb = vcat [
-  text "try" <+> lbrace,
+  tryLabel <+> lbrace,
   indent $ RC.body tb,
-  rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> 
+  rbrace <+> catchLabel <+> parens (exceptionObj' <+> text "exc") <+> 
     lbrace,
   indent $ RC.body cb,
   rbrace]
@@ -786,21 +884,20 @@ jOut newLn f printFn v = zoom lensMStoVS v >>= jOut' . getType . valueType
         jOut' (List _) = printSt newLn f printFn v
         jOut' _ = G.print newLn f printFn v
 
-jDiscardInput :: (RenderSym r) => r (Value r) -> Doc
-jDiscardInput inFn = RC.value inFn <> dot <> text "next()"
+jDiscardInput :: SValue JavaCode -> MSStatement JavaCode
+jDiscardInput inFn = valStmt $ inFn $. jNextFunc
 
-jInput :: (RenderSym r) => VSType r -> SValue r -> SValue r
-jInput = on2StateValues (\t -> mkVal t . jInput' (getType t))
-  where jInput' Integer inFn = text "Integer.parseInt" <> parens (RC.value inFn 
-          <> dot <> text "nextLine()")
-        jInput' Float inFn = text "Float.parseFloat" <> parens (RC.value inFn 
-          <> dot <> text "nextLine()")
-        jInput' Double inFn = text "Double.parseDouble" <> parens (RC.value 
-          inFn <> dot <> text "nextLine()")
-        jInput' Boolean inFn = RC.value inFn <> dot <> text "nextBoolean()"
-        jInput' String inFn = RC.value inFn <> dot <> text "nextLine()"
-        jInput' Char inFn = RC.value inFn <> dot <> text "next().charAt(0)"
-        jInput' _ _ = error "Attempt to read value of unreadable type"
+jInput :: SVariable JavaCode -> SValue JavaCode -> SValue JavaCode
+jInput vr inFn = do
+  v <- vr
+  let jInput' Integer = jParseIntFunc $ inFn $. jNextLineFunc
+      jInput' Float = jParseFloatFunc $ inFn $. jNextLineFunc
+      jInput' Double = jParseDblFunc $ inFn $. jNextLineFunc
+      jInput' Boolean = inFn $. jNextBoolFunc
+      jInput' String = inFn $. jNextLineFunc
+      jInput' Char = (inFn $. jNextFunc) $. jCharAtFunc
+      jInput' _ = error "Attempt to read value of unreadable type"
+  jInput' (getType $ variableType v)
 
 jOpenFileR :: (RenderSym r) => SValue r -> VSType r -> SValue r
 jOpenFileR n t = newObj t [newObj jFileType [n]]
@@ -810,23 +907,25 @@ jOpenFileWorA n t wa = newObj t [newObj jFileWriterType [newObj jFileType [n],
   wa]]
 
 jStringSplit :: (RenderSym r) => SVariable r -> SValue r -> VS Doc
-jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+> new 
-  <+> RC.type' (variableType vnew) <> parens (RC.value s))
+jStringSplit = on2StateValues (\vnew s -> RC.variable vnew <+> equals <+> 
+  new' <+> RC.type' (variableType vnew) <> parens (RC.value s))
 
 jMethod :: (RenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
   RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <> 
-    parens (parameterList ps) <+> emptyIfNull es (text "throws" <+> 
-    text (intercalate ", " (sort es))) <+> lbrace,
+    parens (parameterList ps) <+> emptyIfNull es (jThrows <+> 
+    text (intercalate listSep (sort es))) <+> lbrace,
   indent $ RC.body b,
   rbrace]
+
+outputs :: SVariable JavaCode
+outputs = var "outputs" jArrayType
 
 jAssignFromArray :: Integer -> [SVariable JavaCode] -> [MSStatement JavaCode]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (onStateValue variableType v)
   (valueOf $ arrayElem c outputs)) : jAssignFromArray (c+1) vs
-  where outputs = var "outputs" jArrayType
 
 jInOutCall :: (Label -> VSType JavaCode -> [SValue JavaCode] -> 
   SValue JavaCode) -> Label -> [SValue JavaCode] -> [SVariable JavaCode] -> 
@@ -841,9 +940,8 @@ jInOutCall f n ins outs both = fCall rets
         fCall [x] = assign x $ f n (onStateValue variableType x) 
           (map valueOf both ++ ins)
         fCall xs = isOutputsDeclared >>= (\odec -> modify setOutputsDeclared >>
-          multi ((if odec then assign else varDecDef) (var "outputs" 
-          jArrayType) (f n jArrayType (map valueOf both ++ ins)) : 
-          jAssignFromArray 0 xs))
+          multi ((if odec then assign else varDecDef) outputs 
+          (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs))
 
 jInOut :: (JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
     VSType JavaCode -> [MSParameter JavaCode] -> MSBody JavaCode -> 
@@ -872,7 +970,6 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
         assignArray c (v:vs) = (arrayElem c outputs &= v) : assignArray (c+1) vs
         decls = multi $ map varDec outs
         rets = both ++ outs
-        outputs = var "outputs" jArrayType
 
 jDocInOut :: (RenderSym r) => (r (Scope r) -> r (Permanence r) -> [SVariable r] 
     -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r)

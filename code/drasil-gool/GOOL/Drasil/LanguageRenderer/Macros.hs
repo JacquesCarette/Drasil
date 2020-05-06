@@ -4,7 +4,7 @@
 module GOOL.Drasil.LanguageRenderer.Macros (
   ifExists, decrement, decrement1, increment, increment1, runStrategy, 
   listSlice, stringListVals, stringListLists, forRange, notifyObservers,
-  checkState
+  observerIndex, checkState
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..))
@@ -115,13 +115,15 @@ forRange :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> SValue r ->
 forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?< 
   finalv) (i &+= stepv)
 
+observerIndex :: (RenderSym r) => SVariable r
+observerIndex = S.var "observerIndex" S.int
+
 notifyObservers :: (RenderSym r) => VSFunction r -> VSType r -> MSStatement r
 notifyObservers f t = S.for initv (v_index ?< S.listSize obsList) 
-  (var_index &++) notify
+  (observerIndex &++) notify
   where obsList = S.valueOf $ observerListName `listOf` t 
-        var_index = S.var "observerIndex" S.int
-        v_index = S.valueOf var_index
-        initv = S.varDecDef var_index $ S.litInt 0
+        v_index = S.valueOf observerIndex
+        initv = S.varDecDef observerIndex $ S.litInt 0
         notify = oneLiner $ S.valStmt $ at obsList v_index $. f
         
 checkState :: (RenderSym r) => Label -> [(SValue r, MSBody r)] -> MSBody r -> 

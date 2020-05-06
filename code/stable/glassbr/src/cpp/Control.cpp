@@ -29,7 +29,7 @@ int main(int argc, const char *argv[]) {
     outfile << filename;
     outfile << " in module Control" << std::endl;
     outfile.close();
-    InputParameters inParams = InputParameters(filename);
+    InputParameters inParams = InputParameters();
     get_input(filename, inParams);
     derived_values(inParams);
     input_constraints(inParams);

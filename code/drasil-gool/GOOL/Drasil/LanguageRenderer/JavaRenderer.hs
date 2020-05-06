@@ -106,6 +106,7 @@ import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify, runState)
+import Data.Composition ((.:))
 import qualified Data.Map as Map (lookup)
 import Data.List (elemIndex, nub, intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
@@ -539,8 +540,7 @@ instance DeclStatement JavaCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
-  constDecDef vr' vl' = zoom lensMStoVS $ on2StateValues (\vr vl -> mkStmt $
-    jConstDecDef vr vl) vr' vl'
+  constDecDef = zoom lensMStoVS .: on2StateValues (mkStmt .: jConstDecDef)
   funcDecDef = CP.funcDecDef
 
 instance IOStatement JavaCode where
@@ -958,12 +958,12 @@ jLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 jLambda ps ex = parens (variableList ps) <+> jLambdaSep <+> RC.value ex
 
 jCast :: VSType JavaCode -> SValue JavaCode -> SValue JavaCode
-jCast t v = join $ on2StateValues (\tp vl -> jCast' (getType tp) (getType $ 
-  valueType vl) tp vl) t v
-  where jCast' Double String _ _ = jParseDblFunc v
-        jCast' Float String _ _ = jParseFloatFunc v
-        jCast' _ _ tp vl = mkStateVal t (R.castObj (R.cast (RC.type' 
-          tp)) (RC.value vl))
+jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType 
+  v) t v)
+  where jCast' Double String _ v = jParseDblFunc (toState v)
+        jCast' Float String _ v = jParseFloatFunc (toState v)
+        jCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast (RC.type' t))
+          (RC.value v))
 
 jConstDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 jConstDecDef v def = jFinal <+> RC.type' (variableType v) <+> 

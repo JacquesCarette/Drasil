@@ -30,7 +30,7 @@ getInConstructorParams = do
   dvPs <- getDerivedIns
   icPs <- getConstraintParams
   ps <- getParams In $ ifPs ++ dvPs ++ icPs
-  return $ ps \\ (quantvar inParams : inputs (codeSpec g))
+  return $ ps \\ (quantvar inParams : inputs (csi $ codeSpec g))
 
 getInputFormatIns :: Reader DrasilState [CodeVarChunk]
 getInputFormatIns = do

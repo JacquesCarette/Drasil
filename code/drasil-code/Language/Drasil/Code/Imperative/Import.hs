@@ -100,16 +100,19 @@ constVariable (Store Bundled) Const v = do
 constVariable WithInputs cr v = do
   g <- ask
   inputVariable (inStruct g) cr v
-constVariable _ _ v = return v
+constVariable (Store Unbundled) _ v = return v
+constVariable Inline _ _ = error "mkVar called on a constant, but user to chose to Inline constants. Generator has bug."
 
 classVariable :: (OOProg r) => SVariable r -> SVariable r -> 
   Reader DrasilState (SVariable r)
 classVariable c v = do
   g <- ask
   let checkCurrent m = if currentModule g == m then classVar else extClassVar
-  return $ v >>= (\v' -> maybe (error $ "Variable " ++ variableName v' ++ 
-    " missing from export map") checkCurrent (Map.lookup (variableName v') 
-    (eMap $ codeSpec g)) (onStateValue variableType c) v)
+  return $ do
+    v' <- v
+    let nm = variableName v'
+    maybe (error $ "Variable " ++ nm ++ " missing from export map") 
+      checkCurrent (Map.lookup nm (eMap $ codeSpec g)) (onStateValue variableType c) v
 
 mkVal :: (OOProg r, HasUID c, HasSpace c, CodeIdea c) => c -> 
   Reader DrasilState (SValue r)

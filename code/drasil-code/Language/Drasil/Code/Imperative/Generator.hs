@@ -22,8 +22,8 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Modularity(..), ImplementationType(..), Visibility(..))
 
-import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ProgData(..), 
-  initialState, unCI)
+import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..), 
+  ProgData(..), initialState, unCI)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
   getCurrentDirectory)
@@ -67,11 +67,11 @@ generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
+  let pckg = runReader (genPackage unReprProg) g 
+      code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
+          unReprPack pckg)
   createCodeFiles code
   setCurrentDirectory workingDir
-  where pckg = runReader (genPackage unReprProg) g 
-        code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
-          unReprPack pckg)
 
 genPackage :: (OOProg progRepr, PackageSym packRepr) => 
   (progRepr (Program progRepr) -> ProgData) -> 
@@ -112,12 +112,13 @@ genUnmodular = do
       mainIfExe Library = []
       mainIfExe Program = [genMainFunc]
   genModule n ("Contains the entire " ++ n ++ " " ++ getDesc (implType g))
-    (map (fmap Just) (mainIfExe (implType g) ++ map genCalcFunc (execOrder $ 
-    csi $ codeSpec g) ++ concatMap genModFuncs (mods s)) ++ ((if cls then [] 
-      else [genInputFormat Primary, genInputDerived Primary, 
-        genInputConstraints Primary]) ++ [genOutputFormat])) 
+    (map (fmap Just) (mainIfExe (implType g) 
+        ++ map genCalcFunc (execOrder $ csi $ codeSpec g) 
+        ++ concatMap genModFuncs (mods s)) 
+      ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub, 
+        genInputConstraints Pub]) ++ [genOutputFormat])) 
     ([genInputClass Auxiliary, genConstClass Auxiliary] 
-    ++ map (fmap Just) (concatMap genModClasses $ mods s))
+      ++ map (fmap Just) (concatMap genModClasses $ mods s))
           
 genModules :: (OOProg r) => Reader DrasilState [SFile r]
 genModules = do

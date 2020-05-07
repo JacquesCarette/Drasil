@@ -23,7 +23,7 @@ import Language.Drasil.Code.Imperative.Logging (maybeLog, varLogFile)
 import Language.Drasil.Code.Imperative.Parameters (getConstraintParams, 
   getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns, 
   getInputFormatOuts, getCalcParams, getOutputParams)
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar, 
   physLookup, sfwrLookup)
@@ -165,6 +165,12 @@ constVarFunc :: (OOProg r) => ConstantRepr -> String ->
 constVarFunc Var n = stateVarDef n public dynamic
 constVarFunc Const n = constVar n public
 
+-- | Returns Nothing if no inputs or constants are mapped to InputParameters in 
+-- the class definition map.
+-- If any inputs or constants are defined in InputParameters, this generates 
+-- the InputParameters class containing the inputs and constants as state 
+-- variables. If the InputParameters constructor is also exported, then the
+-- generated class also contains the input-related functions as private methods
 genInputClass :: (OOProg r) => ClassType -> 
   Reader DrasilState (Maybe (SClass r))
 genInputClass scp = do
@@ -172,15 +178,12 @@ genInputClass scp = do
   let ins = inputs $ csi $ codeSpec g
       cs = constants $ csi $ codeSpec g
       filt :: (CodeIdea c) => [c] -> [c]
-      filt = filter (flip member (eMap $ codeSpec g) . codeName)
-      includedConstants :: (CodeIdea c) => ConstantStructure -> [c] -> [c]
-      includedConstants WithInputs cs' = filt cs'
-      includedConstants _ _ = []
-      methods :: (OOProg r) => InputModule -> Reader DrasilState [SMethod r]
-      methods Separated = return []
-      methods Combined = concat <$> mapM (fmap maybeToList) 
-        [genInputConstructor, genInputFormat Priv, 
-        genInputDerived Priv, genInputConstraints Priv]
+      filt = filter ((Just cname ==) . flip Map.lookup (clsMap $ codeSpec g) . codeName)
+      methods :: (OOProg r) => Reader DrasilState [SMethod r]
+      methods = if cname `elem` defList (codeSpec g) 
+        then concat <$> mapM (fmap maybeToList) [genInputConstructor, 
+        genInputFormat Priv, genInputDerived Priv, genInputConstraints Priv] 
+        else return []
       genClass :: (OOProg r) => [CodeVarChunk] -> [CodeDefinition] -> 
         Reader DrasilState (Maybe (SClass r))
       genClass [] [] = return Nothing
@@ -195,9 +198,9 @@ genInputClass scp = do
             getFunc Auxiliary = auxClass
             f = getFunc scp
         icDesc <- inputClassDesc
-        c <- f cname Nothing icDesc (inputVars ++ constVars) (methods $ inMod g)
+        c <- f cname Nothing icDesc (inputVars ++ constVars) methods
         return $ Just c
-  genClass (filt ins) (includedConstants (conStruct g) cs)
+  genClass (filt ins) (filt cs)
   where cname = "InputParameters"
 
 genInputConstructor :: (OOProg r) => Reader DrasilState (Maybe (SMethod r))

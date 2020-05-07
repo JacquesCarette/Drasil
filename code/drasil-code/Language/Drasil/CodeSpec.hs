@@ -317,6 +317,12 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
 type ModExp = (String, String)
 type ClassDef = (String, String)
 
+-- | If No inputs, no inputs variables are exported
+-- If Unbundled, no input variables are exported
+-- If Unmodular and Bundled, module is named after program
+-- If Modular and Bundled, inports are exported by InputParameters module
+-- In Unmodular Bundled and (Modular Combined) Bundled cases, an InputParameters
+--   constructor is generated, thus "InputParameters" is added to map
 getExpInput :: Name -> Choices -> [Input] -> [ModExp]
 getExpInput _ _ [] = []
 getExpInput prn chs ins = inExp (modularity chs) (inputStructure chs) 
@@ -327,6 +333,10 @@ getExpInput prn chs ins = inExp (modularity chs) (inputStructure chs)
         inVarDefs n = map codeName ins `zip` repeat n
         ipName = "InputParameters"
 
+-- | If no inputs, input variables not defined in any class
+-- If Unbundled, input variables not defined in any class
+-- If Bundled and input modules are Combined, input variables and input constructor are defined in InputParameters
+-- If Bundled and input modules are Separated, input variables are defined in InputParameters but no constructor is generated
 getInputCls :: Choices -> [Input] -> [ClassDef]
 getInputCls _ [] = []
 getInputCls chs ins = inCls (inputModule chs) (inputStructure chs) 
@@ -336,6 +346,11 @@ getInputCls chs ins = inCls (inputModule chs) (inputStructure chs)
         inVarDefs = map codeName ins `zip` repeat ipName
         ipName = "InputParameters"
 
+-- | If no constants, no constants are exported
+-- If Unmodular and Bundled, constants exported by module named after program
+-- If Modular and Store Bundled, constants exported by Constants module
+-- If Modular and WithInputs and inputs are Bundled, constants exported by InputParameters module
+-- If Unbundled, constants are not exported by any module
 getExpConstants :: Name -> Choices -> [Const] -> [ModExp]
 getExpConstants _ _ [] = []
 getExpConstants n chs cs = cExp (modularity chs) (constStructure chs) 
@@ -347,6 +362,10 @@ getExpConstants n chs cs = cExp (modularity chs) (constStructure chs)
         cExp _ _ _ = []
         zipCs = zip (map codeName cs)
 
+-- | If no constants, state variables for the constants are not defined in any class
+-- If constants are Bundled, state variables for the constants are in Constants
+-- If constants are Bundled WithInputs, state variables for the constants are in InputParameters
+-- If constants are Unbundled, state variables for the constants are not defined in any class
 getConstantsCls :: Choices -> [Const] -> [ClassDef]
 getConstantsCls _ [] = []
 getConstantsCls chs cs = cnCls (constStructure chs) (inputStructure chs)
@@ -355,19 +374,24 @@ getConstantsCls chs cs = cnCls (constStructure chs) (inputStructure chs)
         cnCls _ _ = []
         zipCs = zip (map codeName cs)
 
+-- | If no derived inputs, no derived inputs function is generated
+-- If input modules are separated, derived_values will always be exported.
+-- If input modules are combined and inputs are bundled, derived_values will be a private method, not exported
+-- If input modules are combined and inputs are unbundled, derived_values will be exported.
+-- Similar logic for input_constraints and get_input below
 getExpDerived :: Name -> Choices -> [Derived] -> [ModExp]
 getExpDerived _ _ [] = []
 getExpDerived n chs _ = dMod (modularity chs) (inputStructure chs)
-  -- If input modules are separated, derived_values will always be exported.
-  -- If input modules are combined and inputs are bundled, derived_values will be a private method, not exported
-  -- If input modules are combined and inputs are unbundled, derived_values will be exported.
-  -- Similar logic for input_constraints and get_input below
   where dMod (Modular Separated) _ = [(dvNm, "DerivedValues")]
         dMod _ Bundled = []
         dMod Unmodular _ = [(dvNm, n)]
         dMod (Modular Combined) _ = [(dvNm, "InputParameters")]
         dvNm = "derived_values"
 
+-- | If no derived inputs, derived_values is not defined in any class
+-- If input modules are Combined and inputs are Bundled, derived_values is defined in InputParameters class
+-- Otherwise, derived_values is not defined in any class
+-- Similar logic for input_constraints and get_input below.
 getDerivedCls :: Choices -> [Derived] -> [ClassDef]
 getDerivedCls _ [] = []
 getDerivedCls chs _ = dCls (inputModule chs) (inputStructure chs)
@@ -404,12 +428,17 @@ getInputFormatCls chs _ = ifCls (inputModule chs) (inputStructure chs)
   where ifCls Combined Bundled = [("get_input", "InputParameters")]
         ifCls _ _ = []
 
+-- | Functions are exported by module named after program if Unmodular
+-- Function is exported by Calculations module if Modular
 getExpCalcs :: Name -> Choices -> [Def] -> [ModExp]
 getExpCalcs n chs = map (\d -> (codeName d, calMod))
   where calMod = cMod $ modularity chs
         cMod Unmodular = n
         cMod _ = "Calculations"
 
+-- | No output function is exported if there are no outputs.
+-- Function is exported by module named after program if Unmodular
+-- Function is exported by OutputFormat module if Modular
 getExpOutput :: Name -> Choices -> [Output] -> [ModExp]
 getExpOutput _ _ [] = []
 getExpOutput n chs _ = [("write_output", oMod $ modularity chs)]

@@ -8,9 +8,9 @@ import InputParameters
 import OutputFormat
 
 filename = sys.argv[1]
-inParams = InputParameters.InputParameters(filename)
 g_vect = 9.8
 epsilon = 2.0e-2
+inParams = InputParameters.InputParameters(filename)
 t_flight = Calculations.func_t_flight(inParams, g_vect)
 p_land = Calculations.func_p_land(inParams, g_vect)
 d_offset = Calculations.func_d_offset(inParams, p_land)

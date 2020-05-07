@@ -12,11 +12,11 @@ public class Projectile {
     */
     public static void Main(string[] args) {
         string filename = args[0];
+        double g_vect = 9.8;
+        double epsilon = 2.0e-2;
         double v_launch;
         double theta;
         double p_target;
-        double g_vect = 9.8;
-        double epsilon = 2.0e-2;
         get_input(filename, out v_launch, out theta, out p_target);
         input_constraints(v_launch, theta, p_target);
         double t_flight = func_t_flight(v_launch, theta, g_vect);

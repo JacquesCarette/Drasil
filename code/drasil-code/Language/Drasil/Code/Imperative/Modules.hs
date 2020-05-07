@@ -65,8 +65,8 @@ genMainFunc = do
     g <- ask
     v_filename <- mkVar $ quantvar inFileName
     logInFile <- maybeLog v_filename
-    ip <- getInputDecl
     co <- initConsts
+    ip <- getInputDecl
     ics <- getAllInputCalls
     varDef <- mapM getCalcCall (execOrder $ csi $ codeSpec g)
     wo <- getOutputCall
@@ -74,7 +74,7 @@ genMainFunc = do
       $ bodyStatements $
       initLogFileVar (logKind g) ++
       varDecDef v_filename (arg 0) : logInFile ++
-      catMaybes [ip, co] ++ ics ++ catMaybes (varDef ++ [wo])
+      catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
 
 getInputDecl :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))
 getInputDecl = do

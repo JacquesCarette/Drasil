@@ -32,7 +32,7 @@ import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
   Comments(CommentFunc), ConstantStructure(..), ConstantRepr(..), 
-  ConstraintBehaviour(..), InputModule(..), Logging(..))
+  ConstraintBehaviour(..), InputModule(..), Logging(..), Structure(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 
@@ -76,6 +76,15 @@ genMainFunc = do
       varDecDef v_filename (arg 0) : logInFile ++
       catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
 
+-- | If there are no inputs, the inParams object still needs to be declared 
+-- if inputs are Bundled, constants are stored WithInputs, and constant 
+-- representation is Var.
+-- If there are inputs and they are not exported by any module, then they are 
+-- Unbundled and are declared individually using varDec.
+-- If there are inputs and they are exported by a module, they are Bundled in
+-- the InputParameters class, so inParams should be declared and constructed,
+-- using objDecNew if the inputs are exported by the current module, and 
+-- extObjDecNew if they are exported by a different module.
 getInputDecl :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))
 getInputDecl = do
   g <- ask
@@ -101,30 +110,40 @@ getInputDecl = do
   getDecl (partition (flip member (eMap $ codeSpec g) . codeName) 
     (inputs $ csi $ codeSpec g))
 
+-- | If constants are Unbundled, declare them individually using varDecDef if 
+-- representation is Var and constDecDef if representation is Const.
+-- If constants are Bundled independently, and representation is Var, declare 
+-- the consts object. If representation is Const, no object needs to be 
+-- declared because the constants will be accessed directly through the 
+-- Constants class.
+-- If constants are Bundled WithInputs, do Nothing; declaration of the inParams 
+-- object is handled by getInputDecl.
+-- If constants are Inlined, nothing needs to be declared.
 initConsts :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))
 initConsts = do
   g <- ask
   v_consts <- mkVar (quantvar consts)
   let cname = "Constants"
-      getDecl _ Inline = return Nothing
-      getDecl ([],[]) _ = return Nothing
-      getDecl (_,[]) WithInputs = return Nothing
-      getDecl (c:_,[]) _ = asks (constCont c . conRepr)
-      getDecl ([],cs) _ = do 
+      cs = constants $ csi $ codeSpec g 
+      getDecl (Store Unbundled) _ = declVars
+      getDecl (Store Bundled) _ = asks (declObj cs . conRepr)
+      getDecl WithInputs Unbundled = declVars
+      getDecl WithInputs Bundled = return Nothing
+      getDecl Inline _ = return Nothing
+      declVars = do 
         vars <- mapM mkVar cs
         vals <- mapM (convExpr . codeEquat) cs
         logs <- mapM maybeLog vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ 
           concat logs
-      getDecl _ _ = error "Only some constants present in export map"
-      constCont c Var = Just $ (if currentModule g == eMap (codeSpec g) ! 
-        codeName c then objDecNewNoParams else extObjDecNewNoParams cname) 
-        v_consts
-      constCont _ Const = Nothing
       defFunc Var = varDecDef
       defFunc Const = constDecDef
-  getDecl (partition (flip member (eMap $ codeSpec g) . codeName) 
-    (constants $ csi $ codeSpec g)) (conStruct g)
+      declObj [] _ = Nothing
+      declObj (c:_) Var = Just $ (if currentModule g == eMap (codeSpec g) ! 
+        codeName c then objDecNewNoParams else extObjDecNewNoParams cname) 
+        v_consts
+      declObj _ Const = Nothing
+  getDecl (conStruct g) (inStruct g)
 
 initLogFileVar :: (OOProg r) => [Logging] -> [MSStatement r]
 initLogFileVar l = [varDec varLogFile | LogVar `elem` l]

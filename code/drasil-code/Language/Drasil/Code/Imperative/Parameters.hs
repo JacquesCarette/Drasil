@@ -5,16 +5,18 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 
 import Language.Drasil 
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk), 
+import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk, codeName), 
   quantvar, codevars, codevars')
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Structure(..), 
   InputModule(..), ConstantStructure(..), ConstantRepr(..),
   constraintvarsandfuncs, getConstraints)
+import Language.Drasil.Mod (Name)
 
 import Data.List (nub, (\\))
 import Data.Map (member, notMember)
+import qualified Data.Map as Map (lookup)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
@@ -23,16 +25,23 @@ data ParamType = In | Out deriving Eq
 isIn :: ParamType -> Bool
 isIn = (In ==)
 
+-- | Since the input constructor calls the three input-related methods, the 
+-- parameters to the constructor are the parameters to the three methods, 
+-- except excluding any of variables that are state variables in the class, 
+-- since they are already in scope.
+-- If InputParameters is not in the definition list, then the default 
+-- constructor is used, which takes no parameters.
 getInConstructorParams :: Reader DrasilState [CodeVarChunk]
 getInConstructorParams = do
   g <- ask
   ifPs <- getInputFormatIns
   dvPs <- getDerivedIns
   icPs <- getConstraintParams
-  let getCParams False = []
+  let cname = "InputParameters"
+      getCParams False = []
       getCParams True = ifPs ++ dvPs ++ icPs
-  ps <- getParams In $ getCParams ("InputParameters" `elem` defList (codeSpec g)) 
-  return $ ps \\ (quantvar inParams : inputs (csi $ codeSpec g))
+  ps <- getParams cname In $ getCParams (cname `elem` defList (codeSpec g)) 
+  return $ filter ((Just cname /=) . flip Map.lookup (clsMap $ codeSpec g) . codeName) ps
 
 getInputFormatIns :: Reader DrasilState [CodeVarChunk]
 getInputFormatIns = do
@@ -40,12 +49,12 @@ getInputFormatIns = do
   let getIns :: Structure -> InputModule -> [CodeVarChunk]
       getIns Bundled Separated = [quantvar inParams]
       getIns _ _ = []
-  getParams In $ quantvar inFileName : getIns (inStruct g) (inMod g)
+  getParams "get_input" In $ quantvar inFileName : getIns (inStruct g) (inMod g)
 
 getInputFormatOuts :: Reader DrasilState [CodeVarChunk]
 getInputFormatOuts = do
   g <- ask
-  getParams Out $ extInputs $ csi $ codeSpec g
+  getParams "get_input" Out $ extInputs $ csi $ codeSpec g
 
 getDerivedIns :: Reader DrasilState [CodeVarChunk]
 getDerivedIns = do
@@ -53,12 +62,12 @@ getDerivedIns = do
   let s = csi $ codeSpec g
       dvals = derivedInputs s
       reqdVals = concatMap (flip codevars (sysinfodb s) . codeEquat) dvals
-  getParams In reqdVals
+  getParams "derived_values" In reqdVals
 
 getDerivedOuts :: Reader DrasilState [CodeVarChunk]
 getDerivedOuts = do
   g <- ask
-  getParams Out $ map codeChunk $ derivedInputs $ csi $ codeSpec g
+  getParams "derived_values" Out $ map codeChunk $ derivedInputs $ csi $ codeSpec g
 
 getConstraintParams :: Reader DrasilState [CodeVarChunk]
 getConstraintParams = do 
@@ -69,21 +78,26 @@ getConstraintParams = do
       varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ codeSpec g)
       reqdVals = nub $ varsList ++ map quantvar (concatMap (\v -> 
         constraintvarsandfuncs v db mem) (getConstraints cm varsList))
-  getParams In reqdVals
+  getParams "input_constraints" In reqdVals
 
 getCalcParams :: CodeDefinition -> Reader DrasilState [CodeVarChunk]
 getCalcParams c = do
   g <- ask
-  getParams In $ codevars' (codeEquat c) $ sysinfodb $ csi $ codeSpec g
+  getParams (codeName c) In $ codevars' (codeEquat c) $ sysinfodb $ csi $ 
+    codeSpec g
 
 getOutputParams :: Reader DrasilState [CodeVarChunk]
 getOutputParams = do
   g <- ask
-  getParams In $ outputs $ csi $ codeSpec g
+  getParams "write_output" In $ outputs $ csi $ codeSpec g
 
-getParams :: (Quantity c, MayHaveUnit c) => ParamType -> [c] -> 
+-- | Passes parameters that are inputs to getInputVars for further processing.
+-- Passes parameters that are constants to getConstVars for further processing.
+-- Other parameters are put into the returned parameter list as long as they 
+-- are not matched to a code concept.
+getParams :: (Quantity c, MayHaveUnit c) => Name -> ParamType -> [c] -> 
   Reader DrasilState [CodeVarChunk]
-getParams pt cs' = do
+getParams n pt cs' = do
   g <- ask
   let cs = map quantvar cs'
       ins = inputs $ csi $ codeSpec g
@@ -92,27 +106,56 @@ getParams pt cs' = do
       conVars = filter (`elem` cnsnts) cs
       csSubIns = filter ((`notMember` concMatches g) . (^. uid)) 
         (cs \\ (ins ++ cnsnts))
-  inVs <- getInputVars pt (inStruct g) Var inpVars
-  conVs <- getConstVars pt (conStruct g) (conRepr g) conVars
+  inVs <- getInputVars n pt (inStruct g) Var inpVars
+  conVs <- getConstVars n pt (conStruct g) (conRepr g) conVars
   return $ nub $ inVs ++ conVs ++ csSubIns
 
-getInputVars :: ParamType -> Structure -> ConstantRepr -> [CodeVarChunk] -> 
-  Reader DrasilState [CodeVarChunk]
-getInputVars _ _ _ [] = return []
-getInputVars _ Unbundled _ cs = return cs
-getInputVars pt Bundled Var _ = do
+-- | If the passed list of input variables is empty, then return empty list
+-- If the user has chosen Unbundled inputs, then the input variables are 
+-- returned as-is.
+-- If the user has chosen Bundled inputs, and the parameters are inputs to the 
+-- function (as opposed to outputs), then the inParams object is returned 
+-- instead of the individual input variables, unless the function being 
+-- parameterized is itself defined in the InputParameters class, in which case 
+-- the inputs are already in scope and thus no parameter is required.
+-- If the ParamType is Out, the inParams object is not an output parameter 
+-- because it undergoes state transitions, so is not actually an output.
+-- The final case only happens when getInputVars is called by getConstVars 
+-- because the user has chosen WithInputs as their constant structure. If they 
+-- have chosen Bundled inputs and a constant const representation, then the 
+-- constant variables are static and can be accessed through the class, without 
+-- an object, so no parameters are required.
+getInputVars :: Name -> ParamType -> Structure -> ConstantRepr -> 
+  [CodeVarChunk] -> Reader DrasilState [CodeVarChunk]
+getInputVars _ _ _ _ [] = return []
+getInputVars _ _ Unbundled _ cs = return cs
+getInputVars n pt Bundled Var _ = do
   g <- ask
   let cname = "InputParameters"
-  return [quantvar inParams | currentClass g /= cname && isIn pt]
-getInputVars _ Bundled Const _ = return []
+  return [quantvar inParams | Map.lookup n (clsMap (codeSpec g)) /= Just cname 
+    && isIn pt]
+getInputVars _ _ Bundled Const _ = return []
 
-getConstVars :: ParamType -> ConstantStructure -> ConstantRepr -> 
+-- | If the passed list of constant variables is empty, then return empty list
+-- If the user has chosen Unbundled constants, then the constant variables are 
+-- returned as-is.
+-- If the user has chosen Bundled constants and Var representation, and the 
+-- parameters are inputs to the function (as opposed to outputs), then the 
+-- consts object is returned instead of the individual constant variables.
+-- If the ParamType is Out, the consts object is not an output parameter 
+-- because it undergoes state transitions, so is not actually an output.
+-- The final case only happens when getInputVars is called by getConstVars 
+-- because the user has chosen WithInputs as their constant structure. If they 
+-- have chosen Bundled inputs and a constant const representation, then the 
+-- constant variables are static and can be accessed through the class, without 
+-- an object, so no parameters are required.
+getConstVars :: Name -> ParamType -> ConstantStructure -> ConstantRepr -> 
   [CodeVarChunk] -> Reader DrasilState [CodeVarChunk]
-getConstVars _ _ _ [] = return []
-getConstVars _ (Store Unbundled) _ cs = return cs
-getConstVars pt (Store Bundled) Var _ = return [quantvar consts | isIn pt]
-getConstVars _ (Store Bundled) Const _ = return []
-getConstVars pt WithInputs cr cs = do
+getConstVars _ _ _ _ [] = return []
+getConstVars _ _ (Store Unbundled) _ cs = return cs
+getConstVars _ pt (Store Bundled) Var _ = return [quantvar consts | isIn pt]
+getConstVars _ _ (Store Bundled) Const _ = return []
+getConstVars n pt WithInputs cr cs = do
   g <- ask
-  getInputVars pt (inStruct g) cr cs
-getConstVars _ Inline _ _ = return []
+  getInputVars n pt (inStruct g) cr cs
+getConstVars _ _ Inline _ _ = return []

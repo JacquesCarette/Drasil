@@ -44,7 +44,7 @@ import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   VariableValue(..), CommandLineArgs(..), BooleanExpression(..), 
   StatementSym(..), AssignStatement(..), DeclStatement(..), objDecNewNoParams, 
   extObjDecNewNoParams, IOStatement(..), ControlStatement(..), ifNoElse, 
-  ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType)
+  ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType, ScopeTag(..))
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
@@ -68,8 +68,8 @@ genMainFunc = do
     g <- ask
     v_filename <- mkVar $ quantvar inFileName
     logInFile <- maybeLog v_filename
-    ip <- getInputDecl
     co <- initConsts
+    ip <- getInputDecl
     ics <- getAllInputCalls
     varDef <- mapM getCalcCall (execOrder $ codeSpec g)
     wo <- getOutputCall
@@ -77,7 +77,7 @@ genMainFunc = do
       $ bodyStatements $
       initLogFileVar (logKind g) ++
       varDecDef v_filename (arg 0) : logInFile ++
-      catMaybes [ip, co] ++ ics ++ catMaybes (varDef ++ [wo])
+      catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
 
 getInputDecl :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))
 getInputDecl = do
@@ -146,9 +146,9 @@ genInputModSeparated = do
   icDesc <- modDesc (liftS inputConstraintsDesc)
   sequence 
     [genModule "InputParameters" ipDesc [] [genInputClass Primary],
-    genModule "InputFormat" ifDesc [genInputFormat Primary] [],
-    genModule "DerivedValues" dvDesc [genInputDerived Primary] [],
-    genModule "InputConstraints" icDesc [genInputConstraints Primary] []]
+    genModule "InputFormat" ifDesc [genInputFormat Pub] [],
+    genModule "DerivedValues" dvDesc [genInputDerived Pub] [],
+    genModule "InputConstraints" icDesc [genInputConstraints Pub] []]
 
 genInputModCombined :: (OOProg r) => Reader DrasilState [SFile r]
 genInputModCombined = do
@@ -156,8 +156,8 @@ genInputModCombined = do
   let cname = "InputParameters"
       genMod :: (OOProg r) => Maybe (SClass r) ->
         Reader DrasilState (SFile r)
-      genMod Nothing = genModule cname ipDesc [genInputFormat Primary, 
-        genInputDerived Primary, genInputConstraints Primary] []
+      genMod Nothing = genModule cname ipDesc [genInputFormat Pub, 
+        genInputDerived Pub, genInputConstraints Pub] []
       genMod _ = genModule cname ipDesc [] [genInputClass Primary]
   ic <- genInputClass Primary
   liftS $ genMod ic
@@ -181,8 +181,8 @@ genInputClass scp = do
       methods :: (OOProg r) => InputModule -> Reader DrasilState [SMethod r]
       methods Separated = return []
       methods Combined = concat <$> mapM (fmap maybeToList) 
-        [genInputConstructor, genInputFormat Auxiliary, 
-        genInputDerived Auxiliary, genInputConstraints Auxiliary]
+        [genInputConstructor, genInputFormat Priv, 
+        genInputDerived Priv, genInputConstraints Priv]
       genClass :: (OOProg r) => [CodeVarChunk] -> [CodeDefinition] -> 
         Reader DrasilState (Maybe (SClass r))
       genClass [] [] = return Nothing
@@ -217,13 +217,13 @@ genInputConstructor = do
   genCtor $ any (`elem` dl) ["get_input", "derived_values", 
     "input_constraints"]
 
-genInputDerived :: (OOProg r) => ClassType ->
+genInputDerived :: (OOProg r) => ScopeTag ->
   Reader DrasilState (Maybe (SMethod r))
 genInputDerived s = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
-      getFunc Primary = publicInOutFunc
-      getFunc Auxiliary = privateInOutMethod
+      getFunc Pub = publicInOutFunc
+      getFunc Priv = privateInOutMethod
       genDerived :: (OOProg r) => Bool -> Reader DrasilState 
         (Maybe (SMethod r))
       genDerived False = return Nothing
@@ -236,13 +236,13 @@ genInputDerived s = do
         return $ Just mthd
   genDerived $ "derived_values" `elem` defList g
 
-genInputConstraints :: (OOProg r) => ClassType ->
+genInputConstraints :: (OOProg r) => ScopeTag ->
   Reader DrasilState (Maybe (SMethod r))
 genInputConstraints s = do
   g <- ask
   let cm = cMap $ codeSpec g
-      getFunc Primary = publicFunc
-      getFunc Auxiliary = privateMethod
+      getFunc Pub = publicFunc
+      getFunc Priv = privateMethod
       genConstraints :: (OOProg r) => Bool -> Reader DrasilState 
         (Maybe (SMethod r))
       genConstraints False = return Nothing
@@ -342,13 +342,13 @@ printExpr (Int _) _ = []
 printExpr e db = [printStr $ " (" ++ render (exprDoc db Implementation Linear e)
   ++ ")"]
 
-genInputFormat :: (OOProg r) => ClassType -> 
+genInputFormat :: (OOProg r) => ScopeTag -> 
   Reader DrasilState (Maybe (SMethod r))
 genInputFormat s = do
   g <- ask
   dd <- genDataDesc
-  let getFunc Primary = publicInOutFunc
-      getFunc Auxiliary = privateInOutMethod
+  let getFunc Pub = publicInOutFunc
+      getFunc Priv = privateInOutMethod
       genInFormat :: (OOProg r) => Bool -> Reader DrasilState 
         (Maybe (SMethod r))
       genInFormat False = return Nothing

@@ -24,11 +24,11 @@ using std::string;
 */
 int main(int argc, const char *argv[]) {
     string filename = argv[1];
+    double g_vect = 9.8;
+    double epsilon = 2.0e-2;
     double v_launch;
     double theta;
     double p_target;
-    double g_vect = 9.8;
-    double epsilon = 2.0e-2;
     get_input(filename, v_launch, theta, p_target);
     input_constraints(v_launch, theta, p_target);
     double t_flight = func_t_flight(v_launch, theta, g_vect);

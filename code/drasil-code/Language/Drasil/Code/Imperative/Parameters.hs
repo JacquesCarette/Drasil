@@ -26,10 +26,13 @@ isIn = (In ==)
 getInConstructorParams :: Reader DrasilState [CodeVarChunk]
 getInConstructorParams = do
   g <- ask
+  ifPs <- getInputFormatIns
+  dvPs <- getDerivedIns
+  icPs <- getConstraintParams
   let getCParams False = []
-      getCParams True = [quantvar inFileName]
-  getParams In $ getCParams $ member "InputParameters" (eMap g) && 
-    member "get_input" (clsMap g)
+      getCParams True = ifPs ++ dvPs ++ icPs
+  ps <- getParams In $ getCParams ("InputParameters" `elem` defList g) 
+  return $ ps \\ (quantvar inParams : inputs (codeSpec g))
 
 getInputFormatIns :: Reader DrasilState [CodeVarChunk]
 getInputFormatIns = do

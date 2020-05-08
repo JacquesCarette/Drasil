@@ -18,11 +18,11 @@ public class Projectile {
     */
     public static void main(String[] args) throws FileNotFoundException, IOException {
         String filename = args[0];
+        double g_vect = 9.8;
+        double epsilon = 2.0e-2;
         double v_launch;
         double theta;
         double p_target;
-        double g_vect = 9.8;
-        double epsilon = 2.0e-2;
         Object[] outputs = get_input(filename);
         v_launch = (double)(outputs[0]);
         theta = (double)(outputs[1]);

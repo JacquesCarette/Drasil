@@ -127,7 +127,7 @@ mkSRS = [RefSec $ RefProg intro [
     TAandA],
   IntroSec $
     IntroProg (introStart +:+ introStartSWHS) (introEnd (plural swhsPCM) progName)
-    [IPurpose $ purpDoc (phrase swhsPCM) progName,
+    [IPurpose $ purpDoc (S "Solar Water Heating System") progName,
      IScope scope,
      IChar [] charsOfReader [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
@@ -218,9 +218,9 @@ introEnd progSent pro = foldlSent_ [EmptyS +:+. progSent, S "The developed",
 -------------------------------
 
 purpDoc :: Sentence -> CI -> Sentence
-purpDoc spSent pro = foldlSent [S "The main", phrase purpose, S "of this",
-  phrase document, S "is to describe the modelling of" +:+.
-  spSent, S "The", plural goalStmt `sAnd` plural thModel,
+purpDoc spSent pro = foldlSent [S "The ", phrase purpose, S "of this",
+  phrase document, S "is to describe the",
+  spSent +:+. S "software", S "The", plural goalStmt `sAnd` plural thModel,
   S "used in the", short pro, S "code are provided, with an emphasis",
   S "on explicitly identifying", plural assumption `sAnd` S "unambiguous" +:+.
   plural definition, S "This", phrase document,

@@ -1,8 +1,8 @@
 module Language.Drasil.Code.Imperative.Descriptions (
-  modDesc, inputParametersDesc, inputConstructorDesc, inputFormatDesc, 
-  derivedValuesDesc, inputConstraintsDesc, constModDesc, outputFormatDesc, 
-  inputClassDesc, constClassDesc, inFmtFuncDesc, inConsFuncDesc, dvFuncDesc, 
-  calcModDesc, woFuncDesc
+  modDesc, unmodularDesc, inputParametersDesc, inputConstructorDesc, 
+  inputFormatDesc, derivedValuesDesc, inputConstraintsDesc, constModDesc, 
+  outputFormatDesc, inputClassDesc, constClassDesc, inFmtFuncDesc, 
+  inConsFuncDesc, dvFuncDesc, calcModDesc, woFuncDesc
 ) where
 
 import Utils.Drasil (stringList)
@@ -11,7 +11,7 @@ import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), 
-  InputModule(..), Structure(..))
+  ImplementationType(..), InputModule(..), Structure(..))
 import Language.Drasil.Mod (Description)
 
 import Data.Map (member)
@@ -20,6 +20,14 @@ import Control.Monad.Reader (Reader, ask)
 
 modDesc :: Reader DrasilState [Description] -> Reader DrasilState Description
 modDesc = fmap ((++) "Provides " . stringList)
+
+unmodularDesc :: Reader DrasilState Description
+unmodularDesc = do
+  g <- ask
+  let n = pName $ csi $ codeSpec g
+      getDesc Library = "library"
+      getDesc Program = "program"
+  return $ "Contains the entire " ++ n ++ " " ++ getDesc (implType g)
 
 inputParametersDesc :: Reader DrasilState [Description]
 inputParametersDesc = do

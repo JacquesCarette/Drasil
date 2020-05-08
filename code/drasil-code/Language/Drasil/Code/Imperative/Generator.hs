@@ -4,6 +4,7 @@ module Language.Drasil.Code.Imperative.Generator (
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
+import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
   genDoxConfig, genModule)
@@ -20,7 +21,7 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
-  Lang(..), Modularity(..), ImplementationType(..), Visibility(..))
+  Lang(..), Modularity(..), Visibility(..))
 
 import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..), 
   ProgData(..), initialState, unCI)
@@ -103,13 +104,12 @@ chooseModules (Modular _) = genModules
 genUnmodular :: (OOProg r) => Reader DrasilState (SFile r)
 genUnmodular = do
   g <- ask
+  umDesc <- unmodularDesc
   let s = csi $ codeSpec g
       n = pName $ csi $ codeSpec g
       cls = any (`member` clsMap (codeSpec g)) 
         ["get_input", "derived_values", "input_constraints"]
-      getDesc Library = "library"
-      getDesc Program = "program"
-  genModule n ("Contains the entire " ++ n ++ " " ++ getDesc (implType g))
+  genModule n umDesc
     (genMainFunc 
       : map (fmap Just) (map genCalcFunc (execOrder $ csi $ codeSpec g) 
         ++ concatMap genModFuncs (mods s)) 

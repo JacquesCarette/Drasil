@@ -109,11 +109,9 @@ genUnmodular = do
         ["get_input", "derived_values", "input_constraints"]
       getDesc Library = "library"
       getDesc Program = "program"
-      mainIfExe Library = []
-      mainIfExe Program = [genMainFunc]
   genModule n ("Contains the entire " ++ n ++ " " ++ getDesc (implType g))
-    (map (fmap Just) (mainIfExe (implType g) 
-        ++ map genCalcFunc (execOrder $ csi $ codeSpec g) 
+    (genMainFunc 
+      : map (fmap Just) (map genCalcFunc (execOrder $ csi $ codeSpec g) 
         ++ concatMap genModFuncs (mods s)) 
       ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub, 
         genInputConstraints Pub]) ++ [genOutputFormat])) 
@@ -124,15 +122,13 @@ genModules :: (OOProg r) => Reader DrasilState [SFile r]
 genModules = do
   g <- ask
   let s = csi $ codeSpec g
-      mainIfExe Library = return []
-      mainIfExe Program = sequence [genMain]
-  mn     <- mainIfExe $ implType g
+  mn     <- genMain
   inp    <- chooseInModule $ inMod g
   con    <- genConstMod 
   cal    <- genCalcMod
   out    <- genOutputMod
   moddef <- traverse genModDef (mods s) -- hack ?
-  return $ mn ++ inp ++ con ++ cal : out ++ moddef
+  return $ mn : inp ++ con ++ cal : out ++ moddef
 
 -- private utilities used in generateCode
 getDir :: Lang -> String

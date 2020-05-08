@@ -74,6 +74,8 @@ genMainFunc = do
       $ bodyStatements $
       initLogFileVar (logKind g) ++
       varDecDef v_filename (arg 0) : logInFile ++
+      -- Constants must be declared before inputs because some derived input 
+      -- definitions or input constraints may use the constants
       catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
 
 getInputDecl :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))

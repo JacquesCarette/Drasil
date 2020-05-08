@@ -23,7 +23,7 @@ import Language.Drasil.Code.Imperative.Logging (maybeLog, varLogFile)
 import Language.Drasil.Code.Imperative.Parameters (getConstraintParams, 
   getDerivedIns, getDerivedOuts, getInConstructorParams, getInputFormatIns, 
   getInputFormatOuts, getCalcParams, getOutputParams)
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar, 
   physLookup, sfwrLookup)
@@ -35,7 +35,7 @@ import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), 
   Comments(CommentFunc), ConstantStructure(..), ConstantRepr(..), 
-  ConstraintBehaviour(..), InputModule(..), Logging(..))
+  ConstraintBehaviour(..), InputModule(..), Logging(..), Structure(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 
@@ -77,8 +77,19 @@ genMainFunc = do
       $ bodyStatements $
       initLogFileVar (logKind g) ++
       varDecDef v_filename (arg 0) : logInFile ++
+      -- Constants must be declared before inputs because some derived input 
+      -- definitions or input constraints may use the constants
       catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
 
+-- | If there are no inputs, the inParams object still needs to be declared 
+-- if inputs are Bundled, constants are stored WithInputs, and constant 
+-- representation is Var.
+-- If there are inputs and they are not exported by any module, then they are 
+-- Unbundled and are declared individually using varDec.
+-- If there are inputs and they are exported by a module, they are Bundled in
+-- the InputParameters class, so inParams should be declared and constructed,
+-- using objDecNew if the inputs are exported by the current module, and 
+-- extObjDecNew if they are exported by a different module.
 getInputDecl :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))
 getInputDecl = do
   g <- ask
@@ -104,29 +115,39 @@ getInputDecl = do
   getDecl (partition (flip member (eMap g) . codeName) 
     (inputs $ codeSpec g))
 
+-- | If constants are Unbundled, declare them individually using varDecDef if 
+-- representation is Var and constDecDef if representation is Const.
+-- If constants are Bundled independently, and representation is Var, declare 
+-- the consts object. If representation is Const, no object needs to be 
+-- declared because the constants will be accessed directly through the 
+-- Constants class.
+-- If constants are Bundled WithInputs, do Nothing; declaration of the inParams 
+-- object is handled by getInputDecl.
+-- If constants are Inlined, nothing needs to be declared.
 initConsts :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))
 initConsts = do
   g <- ask
   v_consts <- mkVar (quantvar consts)
   let cname = "Constants"
-      getDecl _ Inline = return Nothing
-      getDecl ([],[]) _ = return Nothing
-      getDecl (_,[]) WithInputs = return Nothing
-      getDecl (c:_,[]) _ = asks (constCont c . conRepr)
-      getDecl ([],cs) _ = do 
+      cs = constants $ codeSpec g 
+      getDecl (Store Unbundled) _ = declVars
+      getDecl (Store Bundled) _ = asks (declObj cs . conRepr)
+      getDecl WithInputs Unbundled = declVars
+      getDecl WithInputs Bundled = return Nothing
+      getDecl Inline _ = return Nothing
+      declVars = do 
         vars <- mapM (mkVar . quantvar) cs
         vals <- mapM (convExpr . codeEquat) cs
         logs <- mapM maybeLog vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ 
           concat logs
-      getDecl _ _ = error "Only some constants present in export map"
-      constCont c Var = Just $ (if currentModule g == eMap g ! codeName c 
-        then objDecNewNoParams else extObjDecNewNoParams cname) v_consts
-      constCont _ Const = Nothing
       defFunc Var = varDecDef
       defFunc Const = constDecDef
-  getDecl (partition (flip member (eMap g) . codeName) 
-    (constants $ codeSpec g)) (conStruct g)
+      declObj [] _ = Nothing
+      declObj (c:_) Var = Just $ (if currentModule g == eMap g ! codeName c 
+        then objDecNewNoParams else extObjDecNewNoParams cname) v_consts
+      declObj _ Const = Nothing
+  getDecl (conStruct g) (inStruct g)
 
 initLogFileVar :: (OOProg r) => [Logging] -> [MSStatement r]
 initLogFileVar l = [varDec varLogFile | LogVar `elem` l]
@@ -167,6 +188,12 @@ constVarFunc :: (OOProg r) => ConstantRepr -> String ->
 constVarFunc Var n = stateVarDef n public dynamic
 constVarFunc Const n = constVar n public
 
+-- | Returns Nothing if no inputs or constants are mapped to InputParameters in 
+-- the class definition map.
+-- If any inputs or constants are defined in InputParameters, this generates 
+-- the InputParameters class containing the inputs and constants as state 
+-- variables. If the InputParameters constructor is also exported, then the
+-- generated class also contains the input-related functions as private methods
 genInputClass :: (OOProg r) => ClassType -> 
   Reader DrasilState (Maybe (SClass r))
 genInputClass scp = do
@@ -174,15 +201,12 @@ genInputClass scp = do
   let ins = inputs $ codeSpec g
       cs = constants $ codeSpec g
       filt :: (CodeIdea c) => [c] -> [c]
-      filt = filter (flip member (eMap g) . codeName)
-      includedConstants :: (CodeIdea c) => ConstantStructure -> [c] -> [c]
-      includedConstants WithInputs cs' = filt cs'
-      includedConstants _ _ = []
-      methods :: (OOProg r) => InputModule -> Reader DrasilState [SMethod r]
-      methods Separated = return []
-      methods Combined = concat <$> mapM (fmap maybeToList) 
-        [genInputConstructor, genInputFormat Priv, 
-        genInputDerived Priv, genInputConstraints Priv]
+      filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
+      methods :: (OOProg r) => Reader DrasilState [SMethod r]
+      methods = if cname `elem` defList g 
+        then concat <$> mapM (fmap maybeToList) [genInputConstructor, 
+        genInputFormat Priv, genInputDerived Priv, genInputConstraints Priv] 
+        else return []
       genClass :: (OOProg r) => [CodeVarChunk] -> [CodeDefinition] -> 
         Reader DrasilState (Maybe (SClass r))
       genClass [] [] = return Nothing
@@ -197,9 +221,9 @@ genInputClass scp = do
             getFunc Auxiliary = auxClass
             f = getFunc scp
         icDesc <- inputClassDesc
-        c <- f cname Nothing icDesc (inputVars ++ constVars) (methods $ inMod g)
+        c <- f cname Nothing icDesc (inputVars ++ constVars) methods
         return $ Just c
-  genClass (filt ins) (includedConstants (conStruct g) cs)
+  genClass (filt ins) (filt cs)
   where cname = "InputParameters"
 
 genInputConstructor :: (OOProg r) => Reader DrasilState (Maybe (SMethod r))

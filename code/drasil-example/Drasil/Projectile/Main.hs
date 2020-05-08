@@ -7,8 +7,7 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
-  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, 
-  spaceToCodeType)
+  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec)
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
@@ -107,8 +106,7 @@ choiceCombos = [baseChoices,
     spaceMatch = matchToFloats}]
 
 matchToFloats :: SpaceMatch
-matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Radians, Rational]) 
-  spaceToCodeType
+matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Radians, Rational])
 
 baseChoices :: Choices
 baseChoices = defaultChoices {

@@ -53,6 +53,12 @@ codeType c = do
   g <- ask
   return $ spaceMatches g (c ^. typ)
 
+-- | If UID for the variable is matched to a concept, call conceptToGOOL to get 
+-- the GOOL code for the concept, and return.
+-- If UID is for a constant and user has chosen Inline, convert the constant's 
+-- defining Expr to a value with convExpr.
+-- Otherwise, just a regular variable: construct it by calling variable, then 
+-- call valueOf to reference its value
 value :: (OOProg r) => UID -> Name -> VSType r -> Reader DrasilState (SValue r)
 value u s t = do
   g <- ask
@@ -65,6 +71,12 @@ value u s t = do
     (convExpr . codeEquat) (Map.lookup u mm >>= maybeInline (conStruct g))) 
     (return . conceptToGOOL) (Map.lookup u cm)
 
+-- | If variable is an input, construct it with var and pass to inputVariable
+-- If variable is a constant and Var constant representation is chosen,
+-- construct it with var and pass to constVariable.
+-- If variable is a constant and Const constant representation is chosen,
+-- construct it with staticVar and pass to constVariable
+-- If variable is neither, just construct it with var and return it
 variable :: (OOProg r) => Name -> VSType r -> Reader DrasilState (SVariable r)
 variable s t = do
   g <- ask
@@ -77,6 +89,13 @@ variable s t = do
       then constVariable (conStruct g) (conRepr g) ((defFunc $ conRepr g) s t)
       else return $ var s t
   
+-- | If Unbundled inputs, just return variable as-is
+-- If Bundled inputs, access variable through object, where the object is self 
+-- if current module is InputParameters, inParams otherwise
+-- Final case is for when constVariable calls inputVariable, when user chooses 
+-- WithInputs for constant structure, and inputs are Bundled, and constant
+-- representation is Const. Variable should be accessed through class, so 
+-- classVariable is called.
 inputVariable :: (OOProg r) => Structure -> ConstantRepr -> SVariable r -> 
   Reader DrasilState (SVariable r)
 inputVariable Unbundled _ v = return v
@@ -89,8 +108,17 @@ inputVariable Bundled Const v = do
   ip <- mkVar (quantvar inParams)
   classVariable ip v
 
+-- | If Unbundled constants, just return variable as-is
+-- If Bundled constants and Var constant representation, access variable 
+-- through consts object.
+-- If Bundled constants and Const constant representation, access variable 
+-- through class, so call classVariable.
+-- If constants stored WithInputs, call inputVariable
+-- If constants Inlined, the generator should not be attempting to make a 
+-- variable for one of the constants.
 constVariable :: (OOProg r) => ConstantStructure -> ConstantRepr -> 
   SVariable r -> Reader DrasilState (SVariable r)
+constVariable (Store Unbundled) _ v = return v
 constVariable (Store Bundled) Var v = do
   cs <- mkVar (quantvar consts)
   return $ cs $-> v
@@ -100,16 +128,24 @@ constVariable (Store Bundled) Const v = do
 constVariable WithInputs cr v = do
   g <- ask
   inputVariable (inStruct g) cr v
-constVariable _ _ v = return v
+constVariable Inline _ _ = error $ "mkVar called on a constant, but user " ++
+  "chose to Inline constants. Generator has bug."
 
+-- | For generating GOOL for a variable that is accessed through a class.
+-- If the variable is not in export map, then it is not a public class variable 
+-- and cannot be accessed, so throw error
+-- If the variable is exported by the current module, use classVar
+-- If the variable is exported by a different module, use extClassVar
 classVariable :: (OOProg r) => SVariable r -> SVariable r -> 
   Reader DrasilState (SVariable r)
 classVariable c v = do
   g <- ask
   let checkCurrent m = if currentModule g == m then classVar else extClassVar
-  return $ v >>= (\v' -> maybe (error $ "Variable " ++ variableName v' ++ 
-    " missing from export map") checkCurrent (Map.lookup (variableName v') 
-    (eMap $ codeSpec g)) (onStateValue variableType c) v)
+  return $ do
+    v' <- v
+    let nm = variableName v'
+    maybe (error $ "Variable " ++ nm ++ " missing from export map") 
+      checkCurrent (Map.lookup nm (eMap $ codeSpec g)) (onStateValue variableType c) v
 
 mkVal :: (OOProg r, HasUID c, HasSpace c, CodeIdea c) => c -> 
   Reader DrasilState (SValue r)

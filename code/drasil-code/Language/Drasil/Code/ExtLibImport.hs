@@ -30,9 +30,9 @@ data ExtLibState = ELS {
   _auxMods :: [Mod],
   _defs :: [FuncStmt],
   _defined :: [Name],
+  _steps :: [FuncStmt],
   _imports :: [String],
-  _modExports :: [(String, String)],
-  _steps :: [FuncStmt]
+  _modExports :: [(String, String)]
 }
 makeLenses ''ExtLibState
 
@@ -41,9 +41,9 @@ initELS = ELS {
   _auxMods = [],
   _defs = [],
   _defined = [],
+  _steps = [],
   _imports = [],
-  _modExports = [],
-  _steps = []
+  _modExports = []
 }
 
 -- State Modifiers

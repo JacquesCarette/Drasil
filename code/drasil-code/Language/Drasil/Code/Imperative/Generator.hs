@@ -7,6 +7,7 @@ import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
   genDoxConfig, genModule)
+import Language.Drasil.Code.Imperative.GenODE (chooseODELib)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs,
   genModClasses)
@@ -20,12 +21,8 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
-import Language.Drasil.Code.ExtLibImport (auxMods, modExports, 
-  genExternalLibraryCall)
+import Language.Drasil.Code.ExtLibImport (auxMods, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.Chunk.Code (codeName)
-import Language.Drasil.Chunk.CodeDefinition (odeDef)
-import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), Choices(..), Modularity(..), 
   ImplementationType(..), Visibility(..))
 
@@ -77,17 +74,11 @@ generator l dt sd chs spec = DrasilState {
 }
   where showDate Show = dt
         showDate Hide = ""
-        ols = odeLib chs
+        (pth, elmap) = chooseODELib l (odeLib chs) (odes chs)
         els = map snd elmap
-        (pth, elmap) = chooseODELib l ols
         mem = modExportMap spec chs modules' 
         lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap spec chs modules'
-        chooseODELib _ [] = (Nothing, [])
-        chooseODELib lng (o:os) = if lng `elem` compatibleLangs o then 
-          (libPath o, map (\ode -> (codeName $ odeDef ode, 
-          genExternalLibraryCall (libSpec o) $ libCall o ode)) (odes chs)) else 
-          chooseODELib lng os
         modules' = mods spec ++ concatMap (^. auxMods) els
 
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> 

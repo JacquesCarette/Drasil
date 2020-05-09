@@ -160,9 +160,10 @@ matchSpace :: Space -> [CodeType] -> SpaceMatch -> SpaceMatch
 matchSpace _ [] _ = error "Must match each Space to at least one CodeType"
 matchSpace s ts sm = \sp -> if sp == s then ts else sm sp
 
-matchSpaces :: [(Space, [CodeType])] -> SpaceMatch -> SpaceMatch
-matchSpaces ((s,ct):sms) sm = matchSpaces sms $ matchSpace s ct sm
-matchSpaces [] sm = sm
+matchSpaces :: [(Space, [CodeType])] -> SpaceMatch
+matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType 
+  where matchSpaces' ((s,ct):sms) sm = matchSpaces' sms $ matchSpace s ct sm
+        matchSpaces' [] sm = sm
 
 data AuxFile = SampleInput deriving Eq
              

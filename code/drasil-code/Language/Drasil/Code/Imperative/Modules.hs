@@ -35,7 +35,8 @@ import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
 import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), 
   Comments(CommentFunc), ConstantStructure(..), ConstantRepr(..), 
-  ConstraintBehaviour(..), InputModule(..), Logging(..), Structure(..))
+  ConstraintBehaviour(..), ImplementationType(..), InputModule(..), Logging(..),
+  Structure(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 
@@ -61,25 +62,28 @@ import Text.PrettyPrint.HughesPJ (render)
 
 genMain :: (OOProg r) => Reader DrasilState (SFile r)
 genMain = genModule "Control" "Controls the flow of the program" 
-  [fmap Just genMainFunc] []
+  [genMainFunc] []
 
-genMainFunc :: (OOProg r) => Reader DrasilState (SMethod r)
+genMainFunc :: (OOProg r) => Reader DrasilState (Maybe (SMethod r))
 genMainFunc = do
     g <- ask
-    v_filename <- mkVar $ quantvar inFileName
-    logInFile <- maybeLog v_filename
-    co <- initConsts
-    ip <- getInputDecl
-    ics <- getAllInputCalls
-    varDef <- mapM getCalcCall (execOrder $ codeSpec g)
-    wo <- getOutputCall
-    return $ (if CommentFunc `elem` commented g then docMain else mainFunction)
-      $ bodyStatements $
-      initLogFileVar (logKind g) ++
-      varDecDef v_filename (arg 0) : logInFile ++
-      -- Constants must be declared before inputs because some derived input 
-      -- definitions or input constraints may use the constants
-      catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
+    let mainFunc Library = return Nothing
+        mainFunc Program = do
+          v_filename <- mkVar $ quantvar inFileName
+          logInFile <- maybeLog v_filename
+          co <- initConsts
+          ip <- getInputDecl
+          ics <- getAllInputCalls
+          varDef <- mapM getCalcCall (execOrder $ codeSpec g)
+          wo <- getOutputCall
+          return $ Just $ (if CommentFunc `elem` commented g then docMain else 
+            mainFunction) $ bodyStatements $ initLogFileVar (logKind g) 
+            ++ varDecDef v_filename (arg 0) 
+            : logInFile 
+            -- Constants must be declared before inputs because some derived 
+            -- input definitions or input constraints may use the constants
+            ++ catMaybes [co, ip] ++ ics ++ catMaybes (varDef ++ [wo])
+    mainFunc $ implType g
 
 -- | If there are no inputs, the inParams object still needs to be declared 
 -- if inputs are Bundled, constants are stored WithInputs, and constant 

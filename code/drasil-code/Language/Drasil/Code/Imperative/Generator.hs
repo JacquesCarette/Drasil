@@ -4,6 +4,7 @@ module Language.Drasil.Code.Imperative.Generator (
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
+import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
   genDoxConfig, genModule)
@@ -24,7 +25,7 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), Choices(..), Modularity(..), 
-  ImplementationType(..), Visibility(..))
+  Visibility(..))
 
 import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..), 
   ProgData(..), initialState, unCI)
@@ -124,16 +125,13 @@ chooseModules (Modular _) = genModules
 genUnmodular :: (OOProg r) => Reader DrasilState (SFile r)
 genUnmodular = do
   g <- ask
+  umDesc <- unmodularDesc
   let n = pName $ codeSpec g
-      cls = any (`member` clsMap g)
+      cls = any (`member` clsMap g) 
         ["get_input", "derived_values", "input_constraints"]
-      getDesc Library = "library"
-      getDesc Program = "program"
-      mainIfExe Library = []
-      mainIfExe Program = [genMainFunc]
-  genModule n ("Contains the entire " ++ n ++ " " ++ getDesc (implType g))
-    (map (fmap Just) (mainIfExe (implType g) 
-        ++ map genCalcFunc (execOrder $ codeSpec g) 
+  genModule n umDesc
+    (genMainFunc 
+      : map (fmap Just) (map genCalcFunc (execOrder $ codeSpec g) 
         ++ concatMap genModFuncs (modules g)) 
       ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub, 
         genInputConstraints Pub]) ++ [genOutputFormat])) 
@@ -143,15 +141,13 @@ genUnmodular = do
 genModules :: (OOProg r) => Reader DrasilState [SFile r]
 genModules = do
   g <- ask
-  let mainIfExe Library = return []
-      mainIfExe Program = sequence [genMain]
-  mn     <- mainIfExe $ implType g
+  mn     <- genMain
   inp    <- chooseInModule $ inMod g
   con    <- genConstMod 
   cal    <- genCalcMod
   out    <- genOutputMod
   moddef <- traverse genModDef (modules g) -- hack ?
-  return $ mn ++ inp ++ con ++ cal : out ++ moddef
+  return $ mn : inp ++ con ++ cal : out ++ moddef
 
 -- private utilities used in generateCode
 getDir :: Lang -> String

@@ -50,6 +50,7 @@ public class Calculations {
         Options opts = new Options();
         opts.AbsoluteTolerance = A_tol;
         opts.RelativeTolerance = R_tol;
+        
         Vector initv = new Vector(T_init);
         IEnumerable<SolPoint> sol = Ode.RK547M(0.0, initv, f, opts);
         IEnumerable<SolPoint> points = sol.SolveFromToStep(0.0, t_final, t_step);
@@ -57,6 +58,7 @@ public class Calculations {
         foreach (SolPoint sp in points) {
             T_W.Add(sp.X[0]);
         }
+        
         return T_W;
     }
 }

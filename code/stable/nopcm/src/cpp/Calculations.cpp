@@ -27,8 +27,10 @@ vector<double> func_T_W(double T_C, double t_final, double T_init, double A_tol,
     ODE ode = ODE(tau_W, T_C);
     vector<double> currVals{T_init};
     Populate pop = Populate(T_W);
+    
     boost::numeric::odeint::runge_kutta_dopri5<vector<double>> rk = boost::numeric::odeint::runge_kutta_dopri5<vector<double>>();
     auto stepper = boost::numeric::odeint::make_controlled(A_tol, R_tol, rk);
     boost::numeric::odeint::integrate_const(stepper, ode, currVals, 0.0, t_final, t_step, pop);
+    
     return T_W;
 }

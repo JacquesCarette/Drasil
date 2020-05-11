@@ -53,10 +53,12 @@ public class Calculations {
         ODEStepHandler stepHandler = new ODEStepHandler();
         ODE ode = new ODE(tau_W, T_C);
         double[] curr_vals = {T_init};
+        
         FirstOrderIntegrator it = new DormandPrince54Integrator(t_step, t_step, A_tol, R_tol);
         it.addStepHandler(stepHandler);
         it.integrate(ode, 0.0, curr_vals, t_final, curr_vals);
         T_W = stepHandler.T_W;
+        
         return T_W;
     }
 }

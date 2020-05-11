@@ -7,7 +7,7 @@ import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
-  genDoxConfig, genModule, genModuleWithImports)
+  genDoxConfig, genModuleWithImports)
 import Language.Drasil.Code.Imperative.GenODE (chooseODELib)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs,

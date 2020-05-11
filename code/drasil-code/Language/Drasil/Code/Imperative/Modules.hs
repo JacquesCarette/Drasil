@@ -261,6 +261,7 @@ genInputDerived s = do
         return $ Just mthd
   genDerived $ "derived_values" `elem` defList (codeSpec g)
 
+-- Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r) => ScopeTag ->
   Reader DrasilState (Maybe (SMethod r))
 genInputConstraints s = do
@@ -285,6 +286,7 @@ genInputConstraints s = do
         return $ Just mthd
   genConstraints $ "input_constraints" `elem` defList (codeSpec g)
 
+-- | Generates input constraints code block for checking software constraints
 sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, OOProg r) 
   => [(q,[Constraint])] -> Reader DrasilState [MSStatement r]
 sfwrCBody cs = do
@@ -292,6 +294,7 @@ sfwrCBody cs = do
   let cb = onSfwrC g
   chooseConstr cb cs
 
+-- | Generates input constraints code block for checking physical constraints
 physCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, OOProg r) 
   => [(q,[Constraint])] -> Reader DrasilState [MSStatement r]
 physCBody cs = do
@@ -299,6 +302,8 @@ physCBody cs = do
   let cb = onPhysC g
   chooseConstr cb cs
 
+-- | Generates conditional statements for checking constraints, where the 
+-- bodies depend on user's choice of constraint violation behaviour
 chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, OOProg r) 
   => ConstraintBehaviour -> [(q,[Constraint])] -> 
   Reader DrasilState [MSStatement r]
@@ -310,6 +315,9 @@ chooseConstr cb cs = do
   where chooseCB Warning = constrWarn
         chooseCB Exception = constrExc 
 
+-- | Generates body defining constraint violation behaviour if Warning chosen,
+-- including printing a "Warning" message, followed by a message that says
+-- what value was "suggested".
 constrWarn :: (HasUID q, CodeIdea q, HasSpace q, OOProg r)
   => (q,[Constraint]) -> Reader DrasilState [MSBody r]
 constrWarn c = do
@@ -318,6 +326,9 @@ constrWarn c = do
   msgs <- mapM (constraintViolatedMsg q "suggested") cs
   return $ map (bodyStatements . (printStr "Warning: " :)) msgs
 
+-- | Generates body defining constraint violation behaviour if Exception chosen,
+-- including printing a message that says what value was "expected", 
+-- followed by throwing an exception.
 constrExc :: (HasUID q, CodeIdea q, HasSpace q, OOProg r) 
   => (q,[Constraint]) -> Reader DrasilState [MSBody r]
 constrExc c = do
@@ -326,6 +337,9 @@ constrExc c = do
   msgs <- mapM (constraintViolatedMsg q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
 
+-- | Generates statements that print a message for when a constraint is violated
+-- Message includes the name of the cosntraint quantity, its value, and a
+-- description of the constraint that is violated.
 constraintViolatedMsg :: (CodeIdea q, HasUID q, HasSpace q, OOProg r) 
   => q -> String -> Constraint -> Reader DrasilState [MSStatement r]
 constraintViolatedMsg q s c = do
@@ -335,6 +349,9 @@ constraintViolatedMsg q s c = do
     print v,
     printStr $ " but " ++ s ++ " to be "] ++ pc
 
+-- | Generates statements to print descriptions of constraints, using words and 
+-- the constrained values. Constrained values are followed by printing the 
+-- expression they originated from, using printExpr. 
 printConstraint :: (OOProg r) => Constraint ->
   Reader DrasilState [MSStatement r]
 printConstraint c = do
@@ -360,10 +377,13 @@ printConstraint c = do
         printStrLn $ "one of: " ++ intercalate ", " ss]
   printConstraint' c
 
+-- | Don't print expressions that are just literals, because that would be 
+-- redundant (the values are already printed by printConstraint)
+-- If expression is more than just a literal, print it in parentheses
 printExpr :: (OOProg r) => Expr -> ChunkDB -> [MSStatement r]
 printExpr (Dbl _) _ = []
 printExpr (Int _) _ = []
-printExpr (String _) _ = []
+printExpr (Str _) _ = []
 printExpr e db = [printStr $ " (" ++ render (exprDoc db Implementation Linear e)
   ++ ")"]
 

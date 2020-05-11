@@ -345,17 +345,15 @@ printConstraint c = do
       printConstraint' (Range _ (Bounded (_,e1) (_,e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
-        return $ [printStr "between ",
-          print lb] ++ printExpr e1 db ++
+        return $ [printStr "between ", print lb] ++ printExpr e1 db ++
           [printStr " and ", print ub] ++ printExpr e2 db ++ [printStrLn "."]
       printConstraint' (Range _ (UpTo (_,e))) = do
         ub <- convExpr e
-        return $ [printStr "below ",
-          print ub] ++ printExpr e db ++ [printStrLn "."]
+        return $ [printStr "below ", print ub] ++ printExpr e db ++ 
+          [printStrLn "."]
       printConstraint' (Range _ (UpFrom (_,e))) = do
         lb <- convExpr e
-        return $ [printStr "above ",
-          print lb] ++ printExpr e db ++ [printStrLn "."]
+        return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
       printConstraint' (EnumeratedReal _ ds) = return [
         printStrLn $ "one of: " ++ intercalate ", " (map show ds)]
       printConstraint' (EnumeratedStr _ ss) = return [
@@ -365,6 +363,7 @@ printConstraint c = do
 printExpr :: (OOProg r) => Expr -> ChunkDB -> [MSStatement r]
 printExpr (Dbl _) _ = []
 printExpr (Int _) _ = []
+printExpr (String _) _ = []
 printExpr e db = [printStr $ " (" ++ render (exprDoc db Implementation Linear e)
   ++ ")"]
 

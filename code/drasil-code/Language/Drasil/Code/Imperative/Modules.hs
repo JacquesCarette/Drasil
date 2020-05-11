@@ -30,10 +30,10 @@ import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar,
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
-import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
+import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..),
   Comments(CommentFunc), ConstantStructure(..), ConstantRepr(..), 
   ConstraintBehaviour(..), ImplementationType(..), InputModule(..), Logging(..),
-  Structure(..))
+  Structure(..), hasSampleInput)
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 
@@ -398,8 +398,8 @@ genSampleInput :: (AuxiliarySym r) => Reader DrasilState [r (Auxiliary r)]
 genSampleInput = do
   g <- ask
   dd <- genDataDesc
-  return [sampleInput (sysinfodb $ csi $ codeSpec g) dd (sampleData g) | SampleInput `elem` 
-    auxiliaries g]
+  return [sampleInput (sysinfodb $ csi $ codeSpec g) dd (sampleData g) | 
+    hasSampleInput (auxiliaries g)]
 
 ----- CONSTANTS -----
 

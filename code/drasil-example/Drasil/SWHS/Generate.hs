@@ -29,7 +29,7 @@ import Drasil.SWHS.Body (srs, printSetting) -- si
 --   constStructure = Inline,   -- Inline, WithInputs, Store Structure
 --   constRepr = Const,      -- Var, Const
 --   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
---   auxFiles = [SampleInput]
+--   auxFiles = [SampleInput "../../datafiles/SWHS/sampleInput.txt"]
 -- }
 
 generate :: IO ()

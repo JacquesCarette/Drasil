@@ -28,7 +28,7 @@ choices = defaultChoices {
   inputStructure = Unbundled,
   constStructure = Store Bundled,
   constRepr = Const,
-  auxFiles = [SampleInput]
+  auxFiles = [SampleInput "../../datafiles/NoPCM/sampleInput.txt"]
 }       
        
 main :: IO ()            

@@ -7,7 +7,7 @@ import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
-  genDoxConfig, genModule)
+  genDoxConfig, genModule, genModuleWithImports)
 import Language.Drasil.Code.Imperative.GenODE (chooseODELib)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs,
@@ -22,7 +22,7 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
-import Language.Drasil.Code.ExtLibImport (auxMods, modExports)
+import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), Choices(..), Modularity(..), 
   Visibility(..))
@@ -36,7 +36,7 @@ import Control.Lens ((^.))
 import Control.Monad.Reader (Reader, ask, runReader)
 import Control.Monad.State (evalState, runState)
 import Data.List (nub)
-import Data.Map (fromList, member, keys)
+import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList)
 
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
@@ -129,7 +129,7 @@ genUnmodular = do
   let n = pName $ codeSpec g
       cls = any (`member` clsMap g) 
         ["get_input", "derived_values", "input_constraints"]
-  genModule n umDesc
+  genModuleWithImports n umDesc (concatMap (^. imports) (elems $ extLibMap g))
     (genMainFunc 
       : map (fmap Just) (map genCalcFunc (execOrder $ codeSpec g) 
         ++ concatMap genModFuncs (modules g)) 

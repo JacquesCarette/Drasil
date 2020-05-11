@@ -272,17 +272,16 @@ genInputConstraints s = do
         (Maybe (SMethod r))
       genConstraints False = return Nothing
       genConstraints _ = do
-        h <- ask
         parms <- getConstraintParams
         let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ 
-              codeSpec h)
+              codeSpec g)
             sfwrCs   = map (sfwrLookup cm) varsList
             physCs   = map (physLookup cm) varsList
         sf <- sfwrCBody sfwrCs
-        hw <- physCBody physCs
+        ph <- physCBody physCs
         desc <- inConsFuncDesc
         mthd <- getFunc s "input_constraints" void desc parms 
-          Nothing [block sf, block hw]
+          Nothing [block sf, block ph]
         return $ Just mthd
   genConstraints $ "input_constraints" `elem` defList (codeSpec g)
 

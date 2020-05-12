@@ -261,6 +261,7 @@ genInputDerived s = do
         return $ Just mthd
   genDerived $ "derived_values" `elem` defList (codeSpec g)
 
+-- Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r) => ScopeTag ->
   Reader DrasilState (Maybe (SMethod r))
 genInputConstraints s = do
@@ -272,20 +273,20 @@ genInputConstraints s = do
         (Maybe (SMethod r))
       genConstraints False = return Nothing
       genConstraints _ = do
-        h <- ask
         parms <- getConstraintParams
         let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ 
-              codeSpec h)
+              codeSpec g)
             sfwrCs   = map (sfwrLookup cm) varsList
             physCs   = map (physLookup cm) varsList
         sf <- sfwrCBody sfwrCs
-        hw <- physCBody physCs
+        ph <- physCBody physCs
         desc <- inConsFuncDesc
         mthd <- getFunc s "input_constraints" void desc parms 
-          Nothing [block sf, block hw]
+          Nothing [block sf, block ph]
         return $ Just mthd
   genConstraints $ "input_constraints" `elem` defList (codeSpec g)
 
+-- | Generates input constraints code block for checking software constraints
 sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, OOProg r) 
   => [(q,[Constraint])] -> Reader DrasilState [MSStatement r]
 sfwrCBody cs = do
@@ -293,6 +294,7 @@ sfwrCBody cs = do
   let cb = onSfwrC g
   chooseConstr cb cs
 
+-- | Generates input constraints code block for checking physical constraints
 physCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, OOProg r) 
   => [(q,[Constraint])] -> Reader DrasilState [MSStatement r]
 physCBody cs = do
@@ -300,6 +302,8 @@ physCBody cs = do
   let cb = onPhysC g
   chooseConstr cb cs
 
+-- | Generates conditional statements for checking constraints, where the 
+-- bodies depend on user's choice of constraint violation behaviour
 chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, OOProg r) 
   => ConstraintBehaviour -> [(q,[Constraint])] -> 
   Reader DrasilState [MSStatement r]
@@ -311,6 +315,9 @@ chooseConstr cb cs = do
   where chooseCB Warning = constrWarn
         chooseCB Exception = constrExc 
 
+-- | Generates body defining constraint violation behaviour if Warning chosen,
+-- including printing a "Warning" message, followed by a message that says
+-- what value was "suggested".
 constrWarn :: (HasUID q, CodeIdea q, HasSpace q, OOProg r)
   => (q,[Constraint]) -> Reader DrasilState [MSBody r]
 constrWarn c = do
@@ -319,6 +326,9 @@ constrWarn c = do
   msgs <- mapM (constraintViolatedMsg q "suggested") cs
   return $ map (bodyStatements . (printStr "Warning: " :)) msgs
 
+-- | Generates body defining constraint violation behaviour if Exception chosen,
+-- including printing a message that says what value was "expected", 
+-- followed by throwing an exception.
 constrExc :: (HasUID q, CodeIdea q, HasSpace q, OOProg r) 
   => (q,[Constraint]) -> Reader DrasilState [MSBody r]
 constrExc c = do
@@ -327,6 +337,9 @@ constrExc c = do
   msgs <- mapM (constraintViolatedMsg q "expected") cs
   return $ map (bodyStatements . (++ [throw "InputError"])) msgs
 
+-- | Generates statements that print a message for when a constraint is violated
+-- Message includes the name of the cosntraint quantity, its value, and a
+-- description of the constraint that is violated.
 constraintViolatedMsg :: (CodeIdea q, HasUID q, HasSpace q, OOProg r) 
   => q -> String -> Constraint -> Reader DrasilState [MSStatement r]
 constraintViolatedMsg q s c = do
@@ -336,6 +349,9 @@ constraintViolatedMsg q s c = do
     print v,
     printStr $ " but " ++ s ++ " to be "] ++ pc
 
+-- | Generates statements to print descriptions of constraints, using words and 
+-- the constrained values. Constrained values are followed by printing the 
+-- expression they originated from, using printExpr. 
 printConstraint :: (OOProg r) => Constraint ->
   Reader DrasilState [MSStatement r]
 printConstraint c = do
@@ -346,26 +362,28 @@ printConstraint c = do
       printConstraint' (Range _ (Bounded (_,e1) (_,e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
-        return $ [printStr "between ",
-          print lb] ++ printExpr e1 db ++
+        return $ [printStr "between ", print lb] ++ printExpr e1 db ++
           [printStr " and ", print ub] ++ printExpr e2 db ++ [printStrLn "."]
       printConstraint' (Range _ (UpTo (_,e))) = do
         ub <- convExpr e
-        return $ [printStr "below ",
-          print ub] ++ printExpr e db ++ [printStrLn "."]
+        return $ [printStr "below ", print ub] ++ printExpr e db ++ 
+          [printStrLn "."]
       printConstraint' (Range _ (UpFrom (_,e))) = do
         lb <- convExpr e
-        return $ [printStr "above ",
-          print lb] ++ printExpr e db ++ [printStrLn "."]
+        return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
       printConstraint' (EnumeratedReal _ ds) = return [
         printStrLn $ "one of: " ++ intercalate ", " (map show ds)]
       printConstraint' (EnumeratedStr _ ss) = return [
         printStrLn $ "one of: " ++ intercalate ", " ss]
   printConstraint' c
 
+-- | Don't print expressions that are just literals, because that would be 
+-- redundant (the values are already printed by printConstraint)
+-- If expression is more than just a literal, print it in parentheses
 printExpr :: (OOProg r) => Expr -> ChunkDB -> [MSStatement r]
 printExpr (Dbl _) _ = []
 printExpr (Int _) _ = []
+printExpr (Str _) _ = []
 printExpr e db = [printStr $ " (" ++ render (exprDoc db Implementation Linear e)
   ++ ")"]
 

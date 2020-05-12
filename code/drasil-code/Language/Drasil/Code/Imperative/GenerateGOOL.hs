@@ -20,6 +20,11 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Monad.Reader (Reader, ask, withReader)
 
+-- | Defines a GOOL module. If the user chose CommentMod, the module will have
+-- Doxygen comments. If the user did not choose CommentMod but did choose 
+-- CommentFunc, a module-level Doxygen comment is still created, though it only 
+-- documents the file name, because without this Doxygen will not find the 
+-- function-level comments in the file.
 genModuleWithImports :: (OOProg r) => Name -> Description -> [Import] -> 
   [Reader DrasilState (Maybe (SMethod r))] -> 
   [Reader DrasilState (Maybe (SClass r))] -> Reader DrasilState (SFile r)
@@ -33,10 +38,11 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   let commMod | CommentMod `elem` commented g                   = docMod desc 
                   as (date g)
               | CommentFunc `elem` commented g && not (null ms) = docMod "" []  
-                  (date g)
+                  ""
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n is (catMaybes ms) (catMaybes cs)
 
+-- | Generates a module for when imports do not need to be explicitly stated
 genModule :: (OOProg r) => Name -> Description -> 
   [Reader DrasilState (Maybe (SMethod r))] -> 
   [Reader DrasilState (Maybe (SClass r))] -> Reader DrasilState (SFile r)

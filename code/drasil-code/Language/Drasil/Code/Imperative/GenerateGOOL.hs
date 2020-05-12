@@ -48,9 +48,9 @@ genModule :: (OOProg r) => Name -> Description ->
   [Reader DrasilState (Maybe (SClass r))] -> Reader DrasilState (SFile r)
 genModule n desc = genModuleWithImports n desc []
 
-genDoxConfig :: (AuxiliarySym r) => Name -> GOOLState ->
+genDoxConfig :: (AuxiliarySym r) => GOOLState ->
   Reader DrasilState [r (Auxiliary r)]
-genDoxConfig n s = do
+genDoxConfig s = do
   g <- ask
   let cms = commented g
       v = doxOutput g

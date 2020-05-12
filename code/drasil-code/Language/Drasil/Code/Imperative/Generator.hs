@@ -87,7 +87,7 @@ genPackage unRepr = do
       n = pName $ csi $ codeSpec g
       m = makefile (implType g) (commented g) s pd
   i <- genSampleInput
-  d <- genDoxConfig n s
+  d <- genDoxConfig s
   return $ package pd (m:i++d)
 
 genProgram :: (OOProg r) => Reader DrasilState (GSProgram r)

@@ -9,13 +9,15 @@ import Utils.Drasil (stringList)
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
-import Language.Drasil.Chunk.Code (CodeIdea(codeName))
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), quantvar)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), 
   ImplementationType(..), InputModule(..), Structure(..))
 import Language.Drasil.Mod (Description)
 
 import Data.Map (member)
-import qualified Data.Map as Map (filter, lookup, elems)
+import qualified Data.Map as Map (filter, lookup, null)
+import Data.Maybe (mapMaybe)
+import Control.Lens ((^.))
 import Control.Monad.Reader (Reader, ask)
 
 modDesc :: Reader DrasilState [Description] -> Reader DrasilState Description
@@ -62,66 +64,69 @@ inputConstructorDesc = do
 inputFormatDesc :: Reader DrasilState Description
 inputFormatDesc = do
   g <- ask
-  let ifDesc Nothing = ""
+  let ifDesc False = ""
       ifDesc _ = "the function for reading inputs"
-  return $ ifDesc $ Map.lookup "get_input" (eMap $ codeSpec g)
+  return $ ifDesc $ "get_input" `elem` defList (codeSpec g)
 
 derivedValuesDesc :: Reader DrasilState Description
 derivedValuesDesc = do
   g <- ask
-  let dvDesc Nothing = ""
+  let dvDesc False = ""
       dvDesc _ = "the function for calculating derived values"
-  return $ dvDesc $ Map.lookup "derived_values" (eMap $ codeSpec g)
+  return $ dvDesc $ "derived_values" `elem` defList (codeSpec g)
 
 inputConstraintsDesc :: Reader DrasilState Description
 inputConstraintsDesc = do
   g <- ask
   pAndS <- physAndSfwrCons
-  let icDesc Nothing = ""
+  let icDesc False = ""
       icDesc _ = "the function for checking the " ++ pAndS ++ 
         " on the input"
-  return $ icDesc $ Map.lookup "input_constraints" (eMap $ codeSpec g)
+  return $ icDesc $ "input_constraints" `elem` defList (codeSpec g)
 
 constModDesc :: Reader DrasilState Description
 constModDesc = do
   g <- ask
-  let cDesc [] = ""
+  let cname = "Constants"
+      cDesc [] = ""
       cDesc _ = "the structure for holding constant values"
-  return $ cDesc $ filter (flip member (eMap $ codeSpec g) . codeName) 
-    (constants $ csi $ codeSpec g)
+  return $ cDesc $ filter (flip member (Map.filter (cname ==) 
+    (clsMap $ codeSpec g)) . codeName) (constants $ csi $ codeSpec g)
 
 outputFormatDesc :: Reader DrasilState Description
 outputFormatDesc = do
   g <- ask
-  let ofDesc Nothing = ""
+  let ofDesc False = ""
       ofDesc _ = "the function for writing outputs"
-  return $ ofDesc $ Map.lookup "write_output" (eMap $ codeSpec g)
+  return $ ofDesc $ "write_output" `elem` defList (codeSpec g)
 
 inputClassDesc :: Reader DrasilState Description
 inputClassDesc = do
   g <- ask
   let cname = "InputParameters"
-      inClassD [] = ""
+      ipMap = Map.filter (cname ==) (clsMap $ codeSpec g)
+      inIPMap = filter ((`member` ipMap) . codeName)
+      inClassD True = ""
       inClassD _ = "Structure for holding the " ++ stringList [
-        inPs $ extInputs $ csi $ codeSpec g,
-        dVs $ "derived_values" `elem` defList (codeSpec g),
-        cVs $ filter (flip member (Map.filter (cname ==) 
-          (eMap $ codeSpec g)) . codeName) (constants $ csi $ codeSpec g)]
+        inPs $ inIPMap $ extInputs $ csi $ codeSpec g,
+        dVs $ inIPMap $ map quantvar $ derivedInputs $ csi $ codeSpec g,
+        cVs $ inIPMap $ map quantvar $ constants $ csi $ codeSpec g]
       inPs [] = ""
       inPs _ = "input values"
-      dVs False = ""
+      dVs [] = ""
       dVs _ = "derived values"
       cVs [] = ""
       cVs _ = "constant values"
-  return $ inClassD $ inputs $ csi $ codeSpec g
+  return $ inClassD $ Map.null ipMap
 
 constClassDesc :: Reader DrasilState Description
 constClassDesc = do
   g <- ask
-  let ccDesc [] = ""
+  let cname = "Constants"
+      ccDesc [] = ""
       ccDesc _ = "Structure for holding the constant values"
-  return $ ccDesc $ filter (flip member (eMap $ codeSpec g) . codeName) 
-    (constants $ csi $ codeSpec g)
+  return $ ccDesc $ filter (flip member (Map.filter (cname ==) 
+    (clsMap $ codeSpec g)) . codeName) (constants $ csi $ codeSpec g)
 
 inFmtFuncDesc :: Reader DrasilState Description
 inFmtFuncDesc = do
@@ -159,7 +164,8 @@ woFuncDesc = do
 physAndSfwrCons :: Reader DrasilState Description
 physAndSfwrCons = do
   g <- ask
-  let cns = concat $ Map.elems (cMap $ csi $ codeSpec g)
+  let cns = concat $ mapMaybe ((`Map.lookup` (cMap $ csi $ codeSpec g)) . 
+        (^. uid)) (inputs $ csi $ codeSpec g)
   return $ stringList [
-    if null (map isPhysC cns) then "" else "physical constraints",
-    if null (map isSfwrC cns) then "" else "software constraints"]
+    if not (any isPhysC cns) then "" else "physical constraints",
+    if not (any isSfwrC cns) then "" else "software constraints"]

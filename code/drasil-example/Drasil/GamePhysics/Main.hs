@@ -30,7 +30,7 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
 --   constStructure   = Inline,
 --   constRepr        = Const,
 --   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],
---   auxFiles         = [SampleInput]
+--   auxFiles         = [SampleInput "../../datafiles/GamePhysics/sampleInput.txt"]
 -- }       
        
 main :: IO ()

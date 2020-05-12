@@ -84,7 +84,6 @@ genPackage unRepr = do
   let info = unCI $ evalState ci initialState
       (reprPD, s) = runState p info
       pd = unRepr reprPD
-      n = pName $ csi $ codeSpec g
       m = makefile (implType g) (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig s

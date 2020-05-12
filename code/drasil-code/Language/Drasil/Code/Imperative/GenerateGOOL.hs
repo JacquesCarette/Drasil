@@ -52,7 +52,8 @@ genDoxConfig :: (AuxiliarySym r) => GOOLState ->
   Reader DrasilState [r (Auxiliary r)]
 genDoxConfig s = do
   g <- ask
-  let cms = commented g
+  let n = pName $ csi $ codeSpec g
+      cms = commented g
       v = doxOutput g
   return [doxConfig n s v | not (null cms)]
 
@@ -66,10 +67,10 @@ mkClass s n l desc vs mths = do
   ms <- withReader (\ds -> ds {currentClass = n}) mths
   let getFunc Primary = buildClass
       getFunc Auxiliary = extraClass
-      f = getFunc s
+      c = getFunc s n l vs ms
   return $ if CommentClass `elem` commented g 
-    then docClass desc (f n l vs ms) 
-    else f n l vs ms
+    then docClass desc c
+    else c
 
 primaryClass :: (OOProg r) => Name -> Maybe Name -> Description -> 
   [CSStateVar r] -> Reader DrasilState [SMethod r] -> 

@@ -1,11 +1,11 @@
 ## \file InputParameters.py
 # \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
-# \brief Provides the structure for holding input values
+# \brief Provides the structure for holding input values, the function for reading inputs, and the function for checking the physical constraints on the input
 import math
 
 ## \brief Structure for holding the input values
 class InputParameters:
-    ## \brief Initializes input object by reading inputs and checking physical constraints and software constraints on the input
+    ## \brief Initializes input object by reading inputs and checking physical constraints on the input
     # \param filename name of the input file
     def __init__(self, filename):
         self.get_input(filename)
@@ -23,7 +23,7 @@ class InputParameters:
         self.p_target = float(infile.readline())
         infile.close()
     
-    ## \brief Verifies that input values satisfy the physical constraints and software constraints
+    ## \brief Verifies that input values satisfy the physical constraints
     def input_constraints(self):
         if (not(self.v_launch > 0)) :
             print("Warning: ", end="")

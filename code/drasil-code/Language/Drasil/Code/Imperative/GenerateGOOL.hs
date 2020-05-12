@@ -20,6 +20,11 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Monad.Reader (Reader, ask, withReader)
 
+-- | Defines a GOOL module. If the user chose CommentMod, the module will have
+-- Doxygen comments. If the user did not choose CommentMod but did choose 
+-- CommentFunc, a module-level Doxygen comment is still created, though it only 
+-- documents the file name, because without this Doxygen will not find the 
+-- function-level comments in the file.
 genModuleWithImports :: (OOProg r) => Name -> Description -> [Import] -> 
   [Reader DrasilState (Maybe (SMethod r))] -> 
   [Reader DrasilState (Maybe (SClass r))] -> Reader DrasilState (SFile r)
@@ -33,20 +38,22 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   let commMod | CommentMod `elem` commented g                   = docMod desc 
                   as (date g)
               | CommentFunc `elem` commented g && not (null ms) = docMod "" []  
-                  (date g)
+                  ""
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n is (catMaybes ms) (catMaybes cs)
 
+-- | Generates a module for when imports do not need to be explicitly stated
 genModule :: (OOProg r) => Name -> Description -> 
   [Reader DrasilState (Maybe (SMethod r))] -> 
   [Reader DrasilState (Maybe (SClass r))] -> Reader DrasilState (SFile r)
 genModule n desc = genModuleWithImports n desc []
 
-genDoxConfig :: (AuxiliarySym r) => Name -> GOOLState ->
+genDoxConfig :: (AuxiliarySym r) => GOOLState ->
   Reader DrasilState [r (Auxiliary r)]
-genDoxConfig n s = do
+genDoxConfig s = do
   g <- ask
-  let cms = commented g
+  let n = pName $ csi $ codeSpec g
+      cms = commented g
       v = doxOutput g
   return [doxConfig n s v | not (null cms)]
 
@@ -60,10 +67,10 @@ mkClass s n l desc vs mths = do
   ms <- withReader (\ds -> ds {currentClass = n}) mths
   let getFunc Primary = buildClass
       getFunc Auxiliary = extraClass
-      f = getFunc s
+      c = getFunc s n l vs ms
   return $ if CommentClass `elem` commented g 
-    then docClass desc (f n l vs ms) 
-    else f n l vs ms
+    then docClass desc c
+    else c
 
 primaryClass :: (OOProg r) => Name -> Maybe Name -> Description -> 
   [CSStateVar r] -> Reader DrasilState [SMethod r] -> 

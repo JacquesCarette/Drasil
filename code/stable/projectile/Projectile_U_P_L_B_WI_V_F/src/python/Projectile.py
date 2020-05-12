@@ -4,12 +4,12 @@
 import math
 import sys
 
-## \brief Structure for holding the input values
+## \brief Structure for holding the input values and constant values
 class InputParameters:
     g_vect = 9.8
     epsilon = 2.0e-2
     
-    ## \brief Initializes input object by reading inputs and checking physical constraints and software constraints on the input
+    ## \brief Initializes input object by reading inputs and checking physical constraints on the input
     # \param filename name of the input file
     def __init__(self, filename):
         outfile = open("log.txt", "a")
@@ -56,7 +56,7 @@ class InputParameters:
         outfile.close()
         infile.close()
     
-    ## \brief Verifies that input values satisfy the physical constraints and software constraints
+    ## \brief Verifies that input values satisfy the physical constraints
     def input_constraints(self):
         outfile = open("log.txt", "a")
         print("function input_constraints called with inputs: {", file=outfile)

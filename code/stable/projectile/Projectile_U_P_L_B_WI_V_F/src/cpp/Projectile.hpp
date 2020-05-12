@@ -14,7 +14,7 @@ using std::ifstream;
 using std::ofstream;
 using std::string;
 
-/** \brief Structure for holding the input values
+/** \brief Structure for holding the input values and constant values
 */
 class InputParameters {
     public:
@@ -24,7 +24,7 @@ class InputParameters {
         float g_vect = 9.8f;
         float epsilon = 2.0e-2f;
         
-        /** \brief Initializes input object by reading inputs and checking physical constraints and software constraints on the input
+        /** \brief Initializes input object by reading inputs and checking physical constraints on the input
             \param filename name of the input file
         */
         InputParameters(string filename);
@@ -34,7 +34,7 @@ class InputParameters {
             \param filename name of the input file
         */
         void get_input(string filename);
-        /** \brief Verifies that input values satisfy the physical constraints and software constraints
+        /** \brief Verifies that input values satisfy the physical constraints
         */
         void input_constraints();
 };

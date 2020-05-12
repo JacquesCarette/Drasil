@@ -2,7 +2,7 @@ package Projectile;
 
 /** \file InputParameters.java
     \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
-    \brief Provides the structure for holding input values
+    \brief Provides the structure for holding input values, the function for reading inputs, and the function for checking the physical constraints on the input
 */
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +15,7 @@ public class InputParameters {
     public double theta;
     public double p_target;
     
-    /** \brief Initializes input object by reading inputs and checking physical constraints and software constraints on the input
+    /** \brief Initializes input object by reading inputs and checking physical constraints on the input
         \param filename name of the input file
     */
     public InputParameters(String filename) throws FileNotFoundException {
@@ -38,7 +38,7 @@ public class InputParameters {
         infile.close();
     }
     
-    /** \brief Verifies that input values satisfy the physical constraints and software constraints
+    /** \brief Verifies that input values satisfy the physical constraints
     */
     private void input_constraints() {
         if (!(this.v_launch > 0)) {

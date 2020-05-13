@@ -119,7 +119,7 @@ mkSRS = [RefSec $ RefProg intro
   TAandA],
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
-    [ IPurpose $ purpDoc (phrase progName) progName
+    [ IPurpose $ purpDoc progName
     , IScope scope
     , IChar [] charsOfReader []
     , IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd

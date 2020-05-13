@@ -31,7 +31,7 @@ thisChoices = defaultChoices {
   constStructure   = Inline,
   constRepr        = Const,
   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],
-  auxFiles         = [SampleInput] 
+  auxFiles         = [SampleInput "../../datafiles/HGHC/sampleInput.txt"] 
 } -}
   
 main :: IO ()            

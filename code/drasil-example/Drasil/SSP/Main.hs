@@ -30,7 +30,7 @@ import Drasil.SSP.Body (srs, printSetting) -- si
 --   constStructure = Inline,   -- Inline, WithInputs, Store Structure
 --   constRepr = Const,    -- Var, Const
 --   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
---   auxFiles = [SampleInput]
+--   auxFiles = [SampleInput "../../datafiles/SSP/sampleInput.txt"]
 -- }
        
 main :: IO ()            

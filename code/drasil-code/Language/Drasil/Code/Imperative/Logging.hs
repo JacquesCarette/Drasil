@@ -29,14 +29,14 @@ chooseLogging l v = if LogVar `elem` l then Just <$> loggedVar v
 
 loggedVar :: (OOProg r) => SVariable r -> Reader DrasilState (MSStatement r)
 loggedVar v = do
-    g <- ask
-    return $ multi [
-      openFileA varLogFile (litString $ logName g),
-      zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("var '" ++ 
-        variableName v' ++ "' assigned to ")),
-      printFile valLogFile (valueOf v),
-      printFileStrLn valLogFile (" in module " ++ currentModule g),
-      closeFile valLogFile ]
+  g <- ask
+  return $ multi [
+    openFileA varLogFile (litString $ logName g),
+    zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("var '" ++ 
+      variableName v' ++ "' assigned to ")),
+    printFile valLogFile (valueOf v),
+    printFileStrLn valLogFile (" in module " ++ currentModule g),
+    closeFile valLogFile ]
 
 logBody :: (OOProg r) => Label -> [SVariable r] -> [MSBlock r] -> 
   Reader DrasilState (MSBody r)

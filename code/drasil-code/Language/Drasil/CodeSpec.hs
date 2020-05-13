@@ -4,7 +4,7 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil
 import Database.Drasil (ChunkDB, SystemInformation(SI), symbResolve,
   _authors, _constants, _constraints, _datadefs, _definitions, _inputs,
-  _outputs, _sys, _sysinfodb, sampleData)
+  _outputs, _sys, _sysinfodb)
 import Language.Drasil.Development (namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
@@ -47,8 +47,7 @@ data CodeSpec where
   constants :: [Const],
   constMap :: ConstantMap,
   mods :: [Mod],  -- medium hack
-  sysinfodb :: ChunkDB,
-  smplData :: FilePath
+  sysinfodb :: ChunkDB
   } -> CodeSpec
 
 type ConstantMap = Map.Map String CodeDefinition
@@ -65,8 +64,7 @@ codeSpec SI {_sys = sys
               , _outputs = outs
               , _constraints = cs
               , _constants = cnsts
-              , _sysinfodb = db
-              , sampleData = sd} chs ms = 
+              , _sysinfodb = db} chs ms = 
   let n = programName sys
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch chs) . (^. uid)) 
@@ -89,8 +87,7 @@ codeSpec SI {_sys = sys
         constants = const',
         constMap = assocToMap const',
         mods = ms,
-        sysinfodb = db,
-        smplData = sd
+        sysinfodb = db
       }
 
 data Choices = Choices {
@@ -165,7 +162,16 @@ matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
   where matchSpaces' ((s,ct):sms) sm = matchSpaces' sms $ matchSpace s ct sm
         matchSpaces' [] sm = sm
 
-data AuxFile = SampleInput deriving Eq
+newtype AuxFile = SampleInput FilePath deriving Eq
+
+getSampleData :: Choices -> Maybe FilePath
+getSampleData chs = getSampleData' (auxFiles chs)
+  where getSampleData' [] = Nothing
+        getSampleData' (SampleInput fp:_) = Just fp
+
+hasSampleInput :: [AuxFile] -> Bool
+hasSampleInput [] = False
+hasSampleInput (SampleInput _:_) = True
              
 data Visibility = Show
                 | Hide
@@ -192,7 +198,7 @@ defaultChoices = Choices {
   constRepr = Const,
   conceptMatch = matchConcepts ([] :: [(QDefinition, [CodeConcept])]),
   spaceMatch = spaceToCodeType, 
-  auxFiles = [SampleInput],
+  auxFiles = [],
   odeLib = [],
   odes = []
 }

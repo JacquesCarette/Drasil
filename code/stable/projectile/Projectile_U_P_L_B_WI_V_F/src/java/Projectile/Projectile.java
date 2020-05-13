@@ -158,7 +158,7 @@ public class Projectile {
     }
 }
 
-/** \brief Structure for holding the input values
+/** \brief Structure for holding the input values and constant values
 */
 class InputParameters {
     public float v_launch;
@@ -167,7 +167,7 @@ class InputParameters {
     public float g_vect = 9.8f;
     public float epsilon = 2.0e-2f;
     
-    /** \brief Initializes input object by reading inputs and checking physical constraints and software constraints on the input
+    /** \brief Initializes input object by reading inputs and checking physical constraints on the input
         \param filename name of the input file
     */
     public InputParameters(String filename) throws FileNotFoundException, IOException {
@@ -221,7 +221,7 @@ class InputParameters {
         infile.close();
     }
     
-    /** \brief Verifies that input values satisfy the physical constraints and software constraints
+    /** \brief Verifies that input values satisfy the physical constraints
     */
     private void input_constraints() throws IOException {
         PrintWriter outfile;

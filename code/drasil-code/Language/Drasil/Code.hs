@@ -8,8 +8,8 @@ module Language.Drasil.Code (
   ConstraintBehaviour(..), ImplementationType(..), Logging(..), 
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
   InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, 
-  AuxFile(..), Visibility(..), defaultChoices, funcUID, funcUID', asVC, asVC', 
-  codeSpec, relToQD,
+  AuxFile(..), getSampleData, Visibility(..), defaultChoices, funcUID, 
+  funcUID', asVC, asVC', codeSpec, relToQD,
   ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar, 
   privStateVar, fDecDef, ffor, funcData, funcDef, packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
@@ -87,8 +87,8 @@ import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Logging(..), 
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
   InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, 
-  AuxFile(..), Visibility(..), defaultChoices, funcUID, funcUID', asVC, asVC', 
-  codeSpec, relToQD)
+  AuxFile(..), getSampleData, Visibility(..), defaultChoices, funcUID, 
+  funcUID', asVC, asVC', codeSpec, relToQD)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), 
   pubStateVar, privStateVar, fDecDef, ffor, funcData, funcDef, packmod)
 

@@ -5,7 +5,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb, sampleData)
+  _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
 
@@ -198,8 +198,7 @@ si = SI {
   _constants = piConst : specParamValList,
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
-   refdb = refDB,
-   sampleData = "../../datafiles/NoPCM/sampleInput.txt"
+   refdb = refDB
 }
 
 noPCMODEOpts :: ODEOptions

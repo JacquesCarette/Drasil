@@ -124,5 +124,5 @@ baseChoices = defaultChoices {
   constStructure = WithInputs,
   constRepr = Var,
   conceptMatch = matchConcepts [(piConst, [Pi])],
-  auxFiles = [SampleInput]
+  auxFiles = [SampleInput "../../../datafiles/Projectile/sampleInput.txt"]
 }

@@ -1,0 +1,118 @@
+digraph foo {
+	/* relationships between independent and depedent components */
+	a1 -> tm1;
+
+	a2 -> tm4;
+
+	a3 -> gd1;
+	a3 -> im1;
+	a3 -> im2;
+
+	a4 -> gd1;
+	a4 -> im1;
+	a4 -> im2;
+	a4 -> lc1;
+
+	a5 -> gd1;
+
+	a6 -> gd1;
+
+	a7 -> gd2;
+
+	a8 -> gd2;
+	a8 -> lc2;
+
+	a9 -> im1;
+	a9 -> lc3;
+
+	a10 -> gd3;
+
+	a11 -> im1;
+	a11 -> lc4;
+
+	a12 -> im1;
+	a12 -> im2;
+	a12 -> lc5;
+
+	a13 -> im2;
+	a13 -> im4;
+
+	a14 -> im1;
+	a14 -> im3;
+	a14 -> uc1;
+
+	a15 -> im1;
+	a15 -> lc6;
+
+	a16 -> im1;
+	a16 -> im2;
+	a16 -> uc2;
+
+	a17 -> im2;
+
+	a18 -> im2;
+	a18 -> im4;
+	a18 -> uc1;
+	a18 -> uc3;
+
+	a19 -> im1;
+	a19 -> im3;
+
+	a20 -> fr2
+
+	/* definitions for each assumption component */
+	a1 	[shape=polygon, sides=4, color=red, label="A: Thermal-Energy-Only"];
+	a2 	[shape=polygon, sides=4, color=red, label="A: Heat-Transfer-CoeffsConstant"];
+	a3 	[shape=polygon, sides=4, color=red, label="A: Constant-Water-Temp-Across-Tank"];
+	a4 	[shape=polygon, sides=4, color=red, label="A: Temp-PCM-Constant-Across-Volume"];
+	a5 	[shape=polygon, sides=4, color=red, label="A: Density-Water-PCM-Constant-over-Volume"];
+	a6 	[shape=polygon, sides=4, color=red, label="A: Specific-Heat-Energy-Costant-over-Volume"];
+	a7 	[shape=polygon, sides=4, color=red, label="A: Newton-Law-Convective-Cooling-Coil-Water"];
+	a8 	[shape=polygon, sides=4, color=red, label="A: Temp-Heating-Coil-Constant-over-Time"];
+	a9 	[shape=polygon, sides=4, color=red, label="A: Temp-Heating-Coil-Constant-over-Length"];
+	a10 [shape=polygon, sides=4, color=red, label="A: Law-Convective-Cooling-Water-PCM"];
+	a11 [shape=polygon, sides=4, color=red, label="A: Charging-Tank-No-Temp-Discharge"];
+	a12 [shape=polygon, sides=4, color=red, label="A: Same-Initial-Temp-Water-PCM"];
+	a13 [shape=polygon, sides=4, color=red, label="A: PCM-Initially-Solid"];
+	a14 [shape=polygon, sides=4, color=red, label="A: Water-Always-Liquid"];
+	a15 [shape=polygon, sides=4, color=red, label="A: Perfect-Insulation-Tank"];
+	a16 [shape=polygon, sides=4, color=red, label="A: No_internal-Heat-Generated-By-Water-PCM"];
+	a17 [shape=polygon, sides=4, color=red, label="A: Volume-Change-Melting-PCM-Negligible"];
+	a18 [shape=polygon, sides=4, color=red, label="A: No-Gaseous-State-PCM"];
+	a19 [shape=polygon, sides=4, color=red, label="A: Atmospheric-Pressure-Tank"];
+	a20 [shape=polygon, sides=4, color=red, label="A: Volume-Coil-Negligible"];
+
+	/* definitions for each theoretical model component */
+	tm1 [shape=polygon, sides=4, color=green, label="TM: consThermE"];
+	tm4 [shape=polygon, sides=4, color=green, label="TM: nwtnCooling"];
+
+	/* definitions for each general definition component */
+	gd1 [shape=polygon, sides=4, color=blue, label="GD: rocTempSimp"];
+	gd2 [shape=polygon, sides=4, color=blue, label="GD: htFluxWaterFromCoil"];
+	gd3 [shape=polygon, sides=4, color=blue, label="GD: htFluxPCMFromWater"];
+
+	/* definitions for each instance module component */
+	im1 [shape=polygon, sides=4, color=yellow, label="IM: eBalanceOnWtr"];
+	im2 [shape=polygon, sides=4, color=yellow, label="IM: eBalanceOnPCM"];
+	im3 [shape=polygon, sides=4, color=yellow, label="IM: heatEInWtr"];
+	im4 [shape=polygon, sides=4, color=yellow, label="IM: heatEInPCM"];
+
+	/* definitions for each functional requirement component */
+	fr2 [shape=polygon, sides=4, color=black, label="FR: Find-Mass"];
+
+	/* definitions for each likely change component */
+	lc1 [shape=polygon, sides=4, color=gray, label="LC: Uniform-Temperature-PCM"];
+	lc2 [shape=polygon, sides=4, color=gray, label="LC: Temperature-Coil-Variable-Over-Day"];
+	lc3 [shape=polygon, sides=4, color=gray, label="LC: Temperature-Coil-Variable-Over-Length"];
+	lc4 [shape=polygon, sides=4, color=gray, label="LC: Discharging-Tank"];
+	lc5 [shape=polygon, sides=4, color=gray, label="LC: Different-Initial-Temps-PCM-Water"];
+	lc6 [shape=polygon, sides=4, color=gray, label="LC: Tank-Lose-Heat"];
+
+	/* definitions for each unlikely change component */
+	uc1 [shape=polygon, sides=4, color=black, label="UC: Water-PCM-Fixed-States"];
+	uc2 [shape=polygon, sides=4, color=black, label="UC: No-Internal-Heat-Generation"];
+	uc3 [shape=polygon, sides=4, color=black, label="UC: No-Gaseous-State"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */

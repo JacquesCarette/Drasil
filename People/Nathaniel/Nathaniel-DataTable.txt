@@ -1,0 +1,1 @@
+Here is my table for the data, newtype, class declarations and instances. This is intended to address issue #2095.

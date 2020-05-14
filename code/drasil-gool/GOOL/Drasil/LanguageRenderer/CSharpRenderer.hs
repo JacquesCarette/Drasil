@@ -42,8 +42,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
 import GOOL.Drasil.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
   inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', args, 
-  listSep, access, mathFunc, valueList, variableList, appendToBody, 
-  surroundBody)
+  listSep, access, mathFunc, valueList, variableList, parameterList, 
+  appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body, 
   printFile, param, method, listDec, classVar, objVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
@@ -762,10 +762,11 @@ csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
   MSStatement r
 csFuncDecDef v ps bod = do
   vr <- zoom lensMStoVS v
-  pms <- mapM (zoom lensMStoVS) ps
+  pms <- mapM param ps
   b <- bod
   return $ mkStmtNoEnd $ RC.type' (variableType vr) <+> text (variableName vr) 
-    <> parens (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd 
+    <> parens (parameterList pms) <+> bodyStart $$ indent (RC.body b) $$ 
+    bodyEnd 
 
 csThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 csThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <> 

@@ -148,7 +148,7 @@ osloCall info = externalLibCall [
   mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ initVal info],
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $ 
     libCallFill [basicArgFill $ tInit info, 
-      functionArgFill (map unnamedParamFill [indepVar info, depVar info]) $ 
+      functionArgFill (map unnamedParamFill [indepVar info, vecDepVar info]) $ 
         callStepFill $ libCallFill $ map userDefinedArgFill (arrayODESyst info),
       recordArgFill [absTol $ odeOpts info, relTol $ odeOpts info]],
   mandatoryStepsFill (callStepFill (libCallFill $ map basicArgFill 
@@ -222,6 +222,11 @@ solveFromToStep = quantfunc $ implVar "SolveFromToStep_oslo" (nounPhrase
   "method for solving an ODE given a time range" 
   "methods for solving an ODE given a time range")
   solT (Label "SolveFromToStep")
+
+vecDepVar :: ODEInfo -> CodeVarChunk
+vecDepVar info = quantvar $ implVar (dv ^. uid) (dv ^. term) vecT 
+  (symbol dv Implementation)
+  where dv = depVar info
 
 -- Apache (Java) --
 

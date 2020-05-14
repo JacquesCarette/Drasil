@@ -510,6 +510,11 @@ convStmt (FDecDef v e) = do
         return $ varDecDef v' e'
   dd <- convDecDef e
   return $ multi $ dd : l
+convStmt (FFuncDef f ps sts) = do
+  f' <- mkVar $ quantvar f
+  pms <- mapM (mkVar . quantvar) ps
+  b <- mapM convStmt sts
+  return $ funcDecDef f' pms (bodyStatements b)
 convStmt (FVal e) = do
   e' <- convExpr e
   return $ valStmt e'

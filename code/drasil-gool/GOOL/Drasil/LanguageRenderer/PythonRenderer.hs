@@ -76,17 +76,20 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists)
-import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
-  addLangImportVS, getLangImports, addLibImportVS, getLibImports, 
-  addModuleImport, addModuleImportVS, getModuleImports, setFileType, 
-  getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
+import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
+  currParameters, revFiles, addLangImportVS, getLangImports, addLibImportVS, 
+  getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
+  setFileType, getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
+import Control.Lens ((^.))
+import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
+import qualified Control.Monad.State as S (get)
 import Data.List (intercalate, sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
@@ -486,8 +489,10 @@ instance DeclStatement PythonCode where
   constDecDef = varDecDef
   funcDecDef v ps b = do
     vr <- zoom lensMStoVS v
+    s <- S.get
     f <- function (variableName vr) private dynamic (return $ variableType vr) 
       (map param ps) b
+    modify (L.set currParameters (s ^. currParameters))
     return $ mkStmtNoEnd $ RC.method f
 
 instance IOStatement PythonCode where

@@ -6,7 +6,7 @@ module GOOL.Drasil.State (
   -- Lenses
   lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS, lensCStoMS, 
   lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, lensVStoMS, 
-  headers, sources, mainMod, currMain, currFileType, 
+  headers, sources, mainMod, currMain, currFileType, currParameters,
   -- Initial states
   initialState, initialFS, 
   -- State helpers

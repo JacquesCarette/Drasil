@@ -56,6 +56,12 @@ addDef e c s = if n `elem` (s ^. defined) then s else over defs (++ [FDecDef c
   e]) (addDefined n s)
   where n = codeName c
 
+addFuncDef :: CodeFuncChunk -> [ParameterChunk] -> [FuncStmt] -> ExtLibState -> 
+  ExtLibState
+addFuncDef c ps b s = if n `elem` (s ^. defined) then s else over defs 
+  (++ [FFuncDef c ps b]) (addDefined n s)
+  where n = codeName c
+
 addFieldAsgs :: CodeVarChunk -> [CodeVarChunk] -> [Expr] -> ExtLibState -> 
   ExtLibState
 addFieldAsgs o cs es = over defs (++ zipWith FAsg (map (ccObjVar o) cs) es)
@@ -131,12 +137,10 @@ genArguments (Arg n (Basic _ Nothing):as) (BasicF e:afs) = fmap ((n,e):)
 genArguments (Arg n (Basic _ (Just v)):as) (BasicF e:afs) = do
   modify (addDef e v)
   fmap ((n,sy v):) (genArguments as afs)
--- FIXME: funcexpr needs to be defined, a function-valued expression
--- Uncomment the below when funcexpr is added
-genArguments (Arg n (Fn c _ _{-ps s-}):as) (FnF _ _{-pfs sf-}:afs) = -- do
-  -- let prms = genParameters ps pfs
-  -- st <- genStep s sf
-  -- modify (addDef (funcexpr prms st) c)
+genArguments (Arg n (Fn c ps s):as) (FnF pfs sf:afs) = do
+  let prms = genParameters ps pfs
+  st <- genStep s sf
+  modify (addFuncDef c prms [st])
   fmap ((n, sy c):) (genArguments as afs)
 genArguments (Arg n (Class rs desc o ctor ci):as) (ClassF svs cif:afs) = do
   (c, is) <- genClassInfo o ctor an desc svs ci cif

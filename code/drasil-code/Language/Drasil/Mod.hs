@@ -10,7 +10,8 @@ import Language.Drasil
 import Database.Drasil (ChunkDB)
 import GOOL.Drasil (ScopeTag(..))
 
-import Language.Drasil.Chunk.Code (CodeVarChunk, codevars, codevars', quantvar)
+import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars, 
+  codevars', quantvar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Printers (toPlainName)
@@ -97,6 +98,7 @@ data FuncStmt where
   FTry :: [FuncStmt] -> [FuncStmt] -> FuncStmt
   FContinue :: FuncStmt
   FDecDef :: CodeVarChunk -> Expr -> FuncStmt
+  FFuncDef :: CodeFuncChunk -> [ParameterChunk] -> [FuncStmt] -> FuncStmt
   FVal :: Expr -> FuncStmt
   FMulti :: [FuncStmt] -> FuncStmt
   -- slight hack, for now
@@ -116,6 +118,8 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
   where
     fstvars :: ChunkDB -> FuncStmt -> [CodeVarChunk]
     fstvars sm (FDecDef cch e) = cch:codevars' e sm
+    fstvars sm (FFuncDef cch ps sts) = quantvar cch : map quantvar ps 
+      ++ concatMap (fstvars sm) sts
     fstvars sm (FAsg cch e) = cch:codevars' e sm
     fstvars sm (FAsgIndex cch _ e) = cch:codevars' e sm
     fstvars sm (FFor cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
@@ -132,6 +136,8 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
 
     declared :: ChunkDB -> FuncStmt -> [CodeVarChunk]
     declared _  (FDecDef cch _) = [cch]
+    declared sm (FFuncDef cch ps sts) = quantvar cch : map quantvar ps 
+      ++ concatMap (declared sm) sts
     declared _  (FAsg _ _) = []
     declared _  FAsgIndex {} = []
     declared sm (FFor cch _ fs) = cch : concatMap (declared sm) fs

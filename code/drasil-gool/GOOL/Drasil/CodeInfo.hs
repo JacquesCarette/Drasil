@@ -257,7 +257,7 @@ instance DeclStatement CodeInfo where
   objDecNew              _ = zoom lensMStoVS . executeList
   extObjDecNew         _ _ = zoom lensMStoVS . executeList
   constDecDef            _ = zoom lensMStoVS . execute1
-  funcDecDef           _ _ = zoom lensMStoVS . execute1
+  funcDecDef           _ _ = execute1
 
 instance IOStatement CodeInfo where
   print        = zoom lensMStoVS . execute1

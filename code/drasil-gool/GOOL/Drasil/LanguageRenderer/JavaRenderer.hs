@@ -70,7 +70,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
   arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, openFileW, 
   openFileA, forEach, docMain, mainFunction, stateVar, buildModule', litArray, 
-  call', listSizeFunc, listAccessFunc', funcDecDef)
+  call', listSizeFunc, listAccessFunc')
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -102,7 +102,7 @@ import Control.Monad.State (modify)
 import Data.Composition ((.:))
 import qualified Data.Map as Map (lookup)
 import Data.List (nub, intercalate, sort)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty, 
   equals, vcat, lbrace, rbrace, colon)
 
 jExt :: String
@@ -500,7 +500,7 @@ instance DeclStatement JavaCode where
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
   constDecDef = zoom lensMStoVS .: on2StateValues (mkStmt .: jConstDecDef)
-  funcDecDef = CP.funcDecDef
+  funcDecDef = jFuncDecDef
 
 instance IOStatement JavaCode where
   print      = jOut False Nothing printFunc
@@ -863,6 +863,16 @@ jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType
 jConstDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 jConstDecDef v def = jFinal <+> RC.type' (variableType v) <+> 
   RC.variable v <+> equals <+> RC.value def
+
+jFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
+  MSStatement r
+jFuncDecDef v ps bod = do
+  vr <- zoom lensMStoVS v
+  pms <- mapM (zoom lensMStoVS) ps
+  b <- bod
+  return $ mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
+    parens (variableList pms) <+> jLambdaSep <+> bodyStart $$ indent (RC.body b)
+    $$ bodyEnd
 
 jThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <> 

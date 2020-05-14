@@ -758,12 +758,12 @@ csCast = join .: on2StateValues (\t v -> csCast' (getType t) (getType $
         csCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast 
           (RC.type' t)) (RC.value v))
 
-csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
+csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r -> 
   MSStatement r
-csFuncDecDef v ps r = do
+csFuncDecDef v ps bod = do
   vr <- zoom lensMStoVS v
   pms <- mapM (zoom lensMStoVS) ps
-  b <- oneLiner $ returnStmt r
+  b <- bod
   return $ mkStmtNoEnd $ RC.type' (variableType vr) <+> text (variableName vr) 
     <> parens (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd 
 

@@ -6,7 +6,7 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (
   listSetFunc, listAccessFunc, buildModule, arrayType, pi, notNull, printSt, 
   arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, 
   mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
-  listAccessFunc', funcDecDef, string, constDecDef, docInOutFunc
+  listAccessFunc', string, constDecDef, docInOutFunc
 ) where
 
 import Utils.Drasil (indent)
@@ -22,9 +22,9 @@ import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable,
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
   VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList), 
-  VariableValue(valueOf), ValueExpression(lambda), FunctionSym(func, objAccess),
-  StatementSym(valStmt), DeclStatement(varDec, varDecDef, constDecDef), 
-  ParameterSym(param), MethodSym(mainFunction), ClassSym(buildClass))
+  VariableValue(valueOf), FunctionSym(func, objAccess), StatementSym(valStmt), 
+  DeclStatement(varDec, varDecDef, constDecDef), ParameterSym(param), 
+  MethodSym(mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..),  RenderType(..),
   RenderVariable(varFromData), InternalVarElim(variableBind), 
   RenderFunction(funcFromData), MethodTypeSym(mType),
@@ -259,10 +259,6 @@ listSizeFunc = S.func "size" S.int []
 listAccessFunc' :: (RenderSym r) => Label -> VSType r -> SValue r -> 
   VSFunction r
 listAccessFunc' f t i = S.func f t [intValue i]
-
-funcDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
-  MSStatement r
-funcDecDef v ps r = S.varDecDef v (S.lambda ps r)
 
 -- C# and C++ --
 

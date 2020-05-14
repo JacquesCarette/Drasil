@@ -484,10 +484,10 @@ instance DeclStatement PythonCode where
     modify (addModuleImport lib)
     varDecDef v (extNewObj lib (onStateValue variableType v) vs)
   constDecDef = varDecDef
-  funcDecDef v ps r = do
+  funcDecDef v ps b = do
     vr <- zoom lensMStoVS v
     f <- function (variableName vr) private dynamic (return $ variableType vr) 
-      (map param ps) (oneLiner $ returnStmt r)
+      (map param ps) b
     return $ mkStmtNoEnd $ RC.method f
 
 instance IOStatement PythonCode where

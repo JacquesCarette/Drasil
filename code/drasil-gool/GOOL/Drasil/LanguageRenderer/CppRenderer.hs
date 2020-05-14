@@ -68,7 +68,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (objVar, 
   listSetFunc, buildModule, litArray, call', listSizeFunc, listAccessFunc', 
-  funcDecDef, string, constDecDef, docInOutFunc)
+  string, constDecDef, docInOutFunc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
@@ -105,7 +105,7 @@ import Control.Monad.State (State, modify)
 import Data.Composition ((.:))
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), hcat, brackets, 
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, brackets, 
   braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty)
 
 cppHdrExt, cppSrcExt :: String
@@ -509,8 +509,8 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
     (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
   constDecDef vr vl = pair2 constDecDef constDecDef (zoom lensMStoVS vr) 
     (zoom lensMStoVS vl)
-  funcDecDef v ps r = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
-    (map (zoom lensMStoVS) ps) (zoom lensMStoVS r)
+  funcDecDef v ps b = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
+    (map (zoom lensMStoVS) ps) b
 
 instance (Pair p) => IOStatement (p CppSrcCode CppHdrCode) where
   print = pair1 print print . zoom lensMStoVS
@@ -1346,7 +1346,7 @@ instance DeclStatement CppSrcCode where
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
   constDecDef = CP.constDecDef
-  funcDecDef = CP.funcDecDef
+  funcDecDef = cppFuncDecDef
 
 instance IOStatement CppSrcCode where
   print      = G.print False Nothing printFunc
@@ -2463,6 +2463,17 @@ cppListDecDoc n = parens (RC.value n)
 
 cppListDecDefDoc :: (RenderSym r) => [r (Value r)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
+
+cppFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r -> 
+  MSStatement r
+cppFuncDecDef v ps bod = do
+  vr <- zoom lensMStoVS v
+  pms <- mapM (zoom lensMStoVS) ps
+  b <- bod
+  return $ mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
+    cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>) (map (RC.type' . 
+    variableType) pms) (map RC.variable pms)) <+> cppLambdaSep <+> bodyStart $$ 
+    indent (RC.body b) $$ bodyEnd
 
 cppPrint :: (RenderSym r) => Bool -> SValue r -> SValue r -> MSStatement r
 cppPrint newLn pf vl = zoom lensMStoVS $ do

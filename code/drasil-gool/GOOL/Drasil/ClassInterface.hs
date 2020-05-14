@@ -368,18 +368,17 @@ assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r
 assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
 class (VariableSym r, StatementSym r) => DeclStatement r where
-  varDec               :: SVariable r -> MSStatement r
-  varDecDef            :: SVariable r -> SValue r -> MSStatement r
-  listDec              :: Integer -> SVariable r -> MSStatement r
-  listDecDef           :: SVariable r -> [SValue r] -> MSStatement r
-  arrayDec             :: Integer -> SVariable r -> MSStatement r
-  arrayDecDef          :: SVariable r -> [SValue r] -> MSStatement r
-  objDecDef            :: SVariable r -> SValue r -> MSStatement r
-  objDecNew            :: SVariable r -> [SValue r] -> MSStatement r
-  extObjDecNew         :: Library -> SVariable r -> [SValue r] -> MSStatement r
-  constDecDef          :: SVariable r -> SValue r -> MSStatement r
-  funcDecDef           :: SVariable r -> [SVariable r] -> SValue r -> 
-    MSStatement r
+  varDec       :: SVariable r -> MSStatement r
+  varDecDef    :: SVariable r -> SValue r -> MSStatement r
+  listDec      :: Integer -> SVariable r -> MSStatement r
+  listDecDef   :: SVariable r -> [SValue r] -> MSStatement r
+  arrayDec     :: Integer -> SVariable r -> MSStatement r
+  arrayDecDef  :: SVariable r -> [SValue r] -> MSStatement r
+  objDecDef    :: SVariable r -> SValue r -> MSStatement r
+  objDecNew    :: SVariable r -> [SValue r] -> MSStatement r
+  extObjDecNew :: Library -> SVariable r -> [SValue r] -> MSStatement r
+  constDecDef  :: SVariable r -> SValue r -> MSStatement r
+  funcDecDef   :: SVariable r -> [SVariable r] -> MSBody r -> MSStatement r
   
 objDecNewNoParams :: (DeclStatement r) => SVariable r -> MSStatement r
 objDecNewNoParams v = objDecNew v []

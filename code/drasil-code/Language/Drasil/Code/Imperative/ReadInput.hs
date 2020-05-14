@@ -22,9 +22,6 @@ readWithDataDesc fp ddsc = do
       readData :: Data' -> String -> [Expr]
       readData Junk _ = []
       readData (Datum d) s = [readDataItem d s]
-      -- Not sure how to do the Data match generically. Would require a function
-      -- that could return a variably-nested list. Also complicated again by 
-      -- Expr's only list constructor being Matrix, which is 2D-based.
       readData (Data dis 0 d) s = zipWith readDataItem (toList dis) (splitOn d s) 
       readData (Data ((DI c [dlm1]):|_) 1 dlm2) s = map ((Matrix . (:[])) .
         map (strAsExpr (getInnerSpace $ c ^. typ))) $ transpose $

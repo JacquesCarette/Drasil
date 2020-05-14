@@ -3,9 +3,9 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
-  listSetFunc, listAccessFunc, buildModule, arrayType, pi, notNull, printSt, 
-  arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, 
-  mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
+  funcType, listSetFunc, listAccessFunc, buildModule, arrayType, pi, notNull, 
+  printSt, arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, 
+  docMain, mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
   listAccessFunc', string, constDecDef, docInOutFunc
 ) where
 
@@ -127,6 +127,10 @@ intClass f n s i svrs mths = do
   return $ onCodeValue (\p -> f n p (RC.scope s) svs ms) i 
 
 -- Python, Java, and C++ --
+
+funcType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
+funcType ps' = on2StateValues (\ps r -> typeFromData (Func (map getType ps) 
+  (getType r)) "" empty) (sequence ps')
 
 objVar :: (RenderSym r) => SVariable r -> SVariable r -> SVariable r
 objVar = on2StateValues (\o v -> mkVar (variableName o `access` variableName v) 

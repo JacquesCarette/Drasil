@@ -53,22 +53,21 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkStateVar, mkVar, VSOp, mkOp, unOpPrec, powerPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, funcType, negateOp,
-  csc, sec, cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
-  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
-  objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, increment, objDecNew, print, closeFile, 
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
-  method, getMethod, setMethod, constructor, function, docFunc, buildClass, 
-  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, 
-  fileFromData)
+  multiBody, block, multiBlock, int, listInnerType, obj, negateOp, csc, sec, 
+  cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
+  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, arrayElem, 
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess, 
+  objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
+  lambda, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
+  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
+  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
+  constructor, function, docFunc, buildClass, implementingClass, docClass, 
+  commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (objVar, 
-  listSetFunc, buildModule, litArray, call', listSizeFunc, listAccessFunc', 
-  string, constDecDef, docInOutFunc)
+  funcType, listSetFunc, buildModule, litArray, call', listSizeFunc, 
+  listAccessFunc', string, constDecDef, docInOutFunc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
@@ -1054,7 +1053,7 @@ instance TypeSym CppSrcCode where
   obj n = zoom lensVStoMS getClassName >>= (\cn -> if cn == n then G.obj n else 
     getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
     (Map.lookup n cm) (G.obj n)))
-  funcType = G.funcType
+  funcType = CP.funcType
   iterator t = do 
     modify (addLangImportVS cppIterator)
     cppIterType $ listType t
@@ -1687,7 +1686,7 @@ instance TypeSym CppHdrCode where
   listInnerType = G.listInnerType
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
     (Map.lookup n cm) $ G.obj n)
-  funcType = G.funcType
+  funcType = CP.funcType
   iterator t = do
     modify (addHeaderLangImport cppIterator)
     (cppIterType . listType) t

@@ -2,9 +2,9 @@
 
 -- | Implementations defined here are valid for any language renderer.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
-  multiBody, block, multiBlock, int, listInnerType, obj, funcType, negateOp, 
-  csc, sec, cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
+  multiBody, block, multiBlock, int, listInnerType, obj, negateOp, csc, sec, 
+  cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
+  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
   classVarCheckStatic, arrayElem, litChar, litDouble, litInt, litString, 
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
@@ -32,7 +32,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   IOStatement(printStr, printStrLn, printFile, printFileStr, printFileStrLn),
   ifNoElse, ScopeSym(..), ModuleSym(Module), convType)
 import qualified GOOL.Drasil.ClassInterface as S (
-  TypeSym(int, double, char, string, listType, arrayType, listInnerType, void), 
+  TypeSym(int, double, char, string, listType, arrayType, listInnerType, funcType, void), 
   VariableSym(var, objVarSelf), Literal(litInt, litFloat, litDouble, litString),
   VariableValue(valueOf), FunctionSym(func), List(listSize, listAccess), 
   StatementSym(valStmt), DeclStatement(varDecDef), IOStatement(print),
@@ -106,10 +106,6 @@ listInnerType t = t >>= (convType . getInnerType . getType)
 
 obj :: (RenderSym r) => ClassName -> VSType r
 obj n = toState $ typeFromData (Object n) n (text n)
-
-funcType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
-funcType ps' = on2StateValues (\ps r -> typeFromData (Func (map getType ps) 
-  (getType r)) "" empty) (sequence ps')
 
 -- Unary Operators --
 
@@ -244,7 +240,7 @@ lambda :: (RenderSym r) => ([r (Variable r)] -> r (Value r) -> Doc) ->
 lambda f ps' ex' = do
   ps <- sequence ps'
   ex <- ex'
-  ft <- funcType (map (return . variableType) ps) (return $ valueType ex)
+  ft <- S.funcType (map (return . variableType) ps) (return $ valueType ex)
   return $ valFromData (Just 0) ft (f ps ex)
 
 objAccess :: (RenderSym r) => SValue r -> VSFunction r -> SValue r

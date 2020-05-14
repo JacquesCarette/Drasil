@@ -48,24 +48,23 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, funcType, negateOp, 
-  csc, sec, cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar,
-  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
-  objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, increment, objDecNew, print, closeFile, 
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
-  method, getMethod, setMethod, constructor, function, docFunc, buildClass, 
-  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, 
-  fileFromData)
+  multiBody, block, multiBlock, int, listInnerType, obj, negateOp, csc, sec, 
+  cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
+  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, arrayElem, 
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess, 
+  objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
+  lambda, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
+  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
+  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
+  constructor, function, docFunc, buildClass, implementingClass, docClass, 
+  commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
-  listSetFunc, listAccessFunc, buildModule)
+  funcType, listSetFunc, listAccessFunc, buildModule)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
   observerIndex, checkState)
@@ -191,7 +190,7 @@ instance TypeSym PythonCode where
   arrayType = listType
   listInnerType = G.listInnerType
   obj = G.obj
-  funcType = G.funcType
+  funcType = CP.funcType
   iterator t = t
   void = toState $ typeFromData Void pyVoid (text pyVoid)
 

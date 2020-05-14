@@ -51,8 +51,8 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, funcType, csc, sec, 
-  cot, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
+  multiBody, block, multiBlock, int, listInnerType, obj, csc, sec, cot, 
+  negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
   objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
@@ -68,9 +68,9 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
-  arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, openFileW, 
-  openFileA, forEach, docMain, mainFunction, stateVar, buildModule', litArray, 
-  call', listSizeFunc, listAccessFunc')
+  funcType, arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, 
+  openFileW, openFileA, forEach, docMain, mainFunction, stateVar, buildModule', 
+  litArray, call', listSizeFunc, listAccessFunc')
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -200,7 +200,7 @@ instance TypeSym JavaCode where
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
-  funcType = G.funcType
+  funcType = CP.funcType
   iterator t = t
   void = C.void
 

@@ -1,6 +1,6 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
-  scipyODEPckg, scipyODESymbols, osloPckg, osloSymbols, apacheODEPckg, 
-  apacheODESymbols, odeintPckg, odeintSymbols
+  scipyODEPckg, scipyODESymbols, osloPckg, osloSymbols, arrayVecDepVar, 
+  apacheODEPckg, apacheODESymbols, odeintPckg, odeintSymbols
 ) where
 
 import Language.Drasil
@@ -149,7 +149,7 @@ osloCall info = externalLibCall [
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $ 
     libCallFill [basicArgFill $ tInit info, 
       functionArgFill (map unnamedParamFill [indepVar info, vecDepVar info]) $ 
-        callStepFill $ libCallFill $ map userDefinedArgFill (arrayODESyst info),
+        callStepFill $ libCallFill $ map userDefinedArgFill (modifiedODESyst "arrayvec" info),
       recordArgFill [absTol $ odeOpts info, relTol $ odeOpts info]],
   mandatoryStepsFill (callStepFill (libCallFill $ map basicArgFill 
       [tInit info, tFinal info, stepSize $ odeOpts info]) :
@@ -225,8 +225,16 @@ solveFromToStep = quantfunc $ implVar "SolveFromToStep_oslo" (nounPhrase
 
 vecDepVar :: ODEInfo -> CodeVarChunk
 vecDepVar info = quantvar $ implVar (dv ^. uid) (dv ^. term) vecT 
-  (symbol dv Implementation)
+  (sub (symbol dv Implementation) (Label "vec"))
   where dv = depVar info
+
+-- Hack required because Oslo's Vector type behaves like an array, so needs to
+-- be represented as one or else will hit type errors in GOOL.
+arrayVecDepVar :: ODEInfo -> CodeVarChunk
+arrayVecDepVar info = quantvar $ implVar (dv ^. uid ++ "vec") (dv ^. term) 
+  (dv ^. typ) (sub (symbol dv Implementation) (Label "vec")) 
+  where dv = listToArray $ depVar info
+
 
 -- Apache (Java) --
 
@@ -283,7 +291,7 @@ apacheODECall info = externalLibCall [
           (zip (otherVars info) (map sy $ otherVars info)) [], 
         methodInfoFill [] [fixedStatementFill], 
         methodInfoFill (map (unnamedParamFill . listToArray) [depVar info, ddep]) 
-          [assignArrayIndexFill (listToArray ddep) (arrayODESyst info)]]) 
+          [assignArrayIndexFill (listToArray ddep) (modifiedODESyst "array" info)]]) 
       : map basicArgFill [tInit info, Matrix [[initVal info]], tFinal info, 
         Matrix [[initVal info]]],
     assignSolFromObjFill $ depVar info]]
@@ -526,10 +534,10 @@ diffCodeChunk c = quantvar $ implVar' ("d" ++ c ^. uid)
 -- Some libraries use an array instead of a list to internally represent the ODE
 -- So we need a way to switch the dependent variable from list to array,
 -- and the array version must have a distinct UID so it can be stored in the DB
-arrayODESyst :: ODEInfo -> [Expr]
-arrayODESyst info = map replaceDepVar (odeSyst info)
-  where replaceDepVar (C c) = if c == depVar info ^. uid then C (c ++ "_array")
-          else C c
+modifiedODESyst :: String -> ODEInfo -> [Expr]
+modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
+  where replaceDepVar (C c) = if c == depVar info ^. uid 
+          then C (c ++ "_" ++ sufx) else C c
         replaceDepVar (AssocA a es) = AssocA a (map replaceDepVar es)
         replaceDepVar (AssocB b es) = AssocB b (map replaceDepVar es)
         replaceDepVar (Deriv dt e u) = Deriv dt (replaceDepVar e) u

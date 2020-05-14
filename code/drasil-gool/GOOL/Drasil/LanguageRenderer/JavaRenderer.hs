@@ -728,13 +728,14 @@ jScanner' = text jScanner
 jThrows = text "throws"
 jLambdaSep = text "->"
 
-arrayList, jBool, jInteger, jFloat, jDouble, jString, jObject, jScanner, 
+arrayList, jBool, jBool', jInteger, jFloat, jDouble, jString, jObject, jScanner,
   jPrintWriter, jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jAsList, jStdIn, 
   jStdOut, jPrint, jPrintLn, jEquals, jParseInt, jParseDbl, jParseFloat, 
   jIndex, jListAdd, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
   jHasNextLine, jCharAt, jSplit, io, util :: String
 arrayList = "ArrayList"
 jBool = "boolean"
+jBool' = "Boolean"
 jInteger = "Integer"
 jFloat = "Float"
 jDouble = "Double"
@@ -791,10 +792,13 @@ jListType t = do
           lstFloat (text lstFloat)
         jListType' Double = toState $ typeFromData (List Double) 
           lstDouble (text lstDouble)
+        jListType' Boolean = toState $ typeFromData (List Boolean)
+          lstBool (text lstBool)
         jListType' _ = C.listType arrayList t
         lstInt = arrayList `containing` jInteger
         lstFloat = arrayList `containing` jFloat
         lstDouble = arrayList `containing` jDouble
+        lstBool = arrayList `containing` jBool'
 
 jArrayType :: VSType JavaCode
 jArrayType = arrayType (obj jObject)

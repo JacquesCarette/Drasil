@@ -26,7 +26,7 @@ public class HelloWorld {
         ArrayList<String> myName = new ArrayList<String>(7);
         myName = new ArrayList<String>(Arrays.asList("Brooks Mac".split(" ")));
         System.out.println(myName);
-        ArrayList<boolean> boringList = new ArrayList<boolean>(Arrays.asList(false, false, false, false, false));
+        ArrayList<Boolean> boringList = new ArrayList<Boolean>(Arrays.asList(false, false, false, false, false));
         System.out.println(boringList);
         ArrayList<Double> mySlicedList = new ArrayList<Double>(2);
         

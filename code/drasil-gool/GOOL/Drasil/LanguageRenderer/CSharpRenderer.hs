@@ -48,7 +48,7 @@ import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body,
   printFile, param, method, listDec, classVar, objVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
   addComments, commentedMod, commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, 
   mkStateVal, mkVal, mkVar, VSOp, unOpPrec, powerPrec, unExpr, unExpr', 
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
@@ -783,7 +783,7 @@ csFuncDecDef v ps bod = do
     (return $ variableType vr)
   b <- bod
   modify (addLangImport csSystem)
-  return $ mkStmtNoEnd $ RC.type' t <+> text (variableName vr) <+> equals <+>
+  return $ mkStmt $ RC.type' t <+> text (variableName vr) <+> equals <+>
     parens (variableList pms) <+> csLambdaSep <+> bodyStart $$ 
     indent (RC.body b) $$ bodyEnd 
 

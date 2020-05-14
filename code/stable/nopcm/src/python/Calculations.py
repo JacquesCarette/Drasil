@@ -35,6 +35,9 @@ def func_tau_W(C_W, h_C, A_C, m_W):
 # \param tau_W ODE parameter for water related to decay time: derived parameter based on rate of change of temperature of water (s)
 # \return temperature of the water: the average kinetic energy of the particles within the water (degreeC)
 def func_T_W(T_C, t_final, T_init, A_tol, R_tol, t_step, tau_W):
+    def f(t, T_W):
+        return [1 / tau_W * (T_C - T_W[0])]
+    
     r = scipy.integrate.ode(f)
     r.set_integrator("dopri5", atol=A_tol, rtol=R_tol)
     r.set_initial_value(T_init, 0.0)

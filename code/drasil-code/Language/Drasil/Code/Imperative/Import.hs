@@ -305,7 +305,7 @@ convExpr (Case c l)      = doit l -- FIXME this is sub-optimal
       (convExpr (Case c xs))
 convExpr (Matrix [e:es]) = do
   (el:els) <- mapM convExpr (e:es)
-  return $ litArray (fmap valueType el) els
+  return $ litArray (fmap valueType el) (el:els)
 convExpr Matrix{}    = error "convExpr: Matrix"
 convExpr Operator{} = error "convExpr: Operator"
 convExpr IsIn{}    = error "convExpr: IsIn"

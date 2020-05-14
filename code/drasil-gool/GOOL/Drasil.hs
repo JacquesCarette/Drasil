@@ -1,39 +1,61 @@
 -- | re-export smart constructors for external code writing
-module GOOL.Drasil (Label, ProgramSym(..), FileSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(runStrategy, solveODE), listSlice, TypeSym(..), 
-  StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), objMethodCallMixedArgs, FunctionSym(..), SelectorFunction(..), 
-  ScopeSym(..), ParameterSym(..), MethodSym(..), initializer, 
-  nonInitConstructor, StateVarSym(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
-  ODEMethod(..), ProgData(..), FileData(..), ModData(..), 
+module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType, 
+  SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, 
+  SClass, FSModule, NamedArgs, Initializers, OOProg, ProgramSym(..), 
+  FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, 
+  BlockSym(..), ControlBlock(..), listSlice, TypeSym(..), TypeElim(..), 
+  StatementSym(..), AssignStatement(..), (&=), assignToListIndex, 
+  DeclStatement(..), objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), 
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..), initState, 
+  changeState, initObserverList, addObserver, ControlStatement(..), ifNoElse, 
+  switchAsIf, VariableSym(..), VariableElim(..), ($->), listOf, listVar, 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..),
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
+  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
+  objMethodCallMixedArgs, FunctionSym(..), ($.), selfAccess, GetSet(..), 
+  List(..), listIndexExists, at, Iterator(..), StatePattern(..), 
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
+  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
+  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), convType,
+  ScopeTag(..), ProgData(..), FileData(..), ModData(..), 
   CodeType(..),
-  GOOLState(..), GS, FS, CS, MS, VS, lensMStoVS, headers, sources, mainMod, 
+  GOOLState(..), lensMStoVS, headers, sources, mainMod, 
   initialState,
-  convType, onStateValue, onCodeList,
+  onStateValue, onCodeList,
   unCI, unPC, unJC, unCSC, unCPPC
 ) where
 
-import GOOL.Drasil.Symantics (Label, ProgramSym(..), FileSym(..),
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  listSlice, TypeSym(..), StatementSym(..), ControlStatementSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), objMethodCallMixedArgs, FunctionSym(..), 
-  SelectorFunction(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  initializer, nonInitConstructor, StateVarSym(..), ClassSym(..), ModuleSym(..),
-  BlockCommentSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
-  ODEMethod(..))
+import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock, 
+  VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
+  CSStateVar, SClass, FSModule, NamedArgs, Initializers, OOProg, ProgramSym(..),
+  FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, oneLiner, 
+  BlockSym(..), ControlBlock(..), listSlice, TypeSym(..), TypeElim(..), 
+  StatementSym(..), AssignStatement(..), (&=), assignToListIndex, 
+  DeclStatement(..), objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), 
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..), initState, 
+  changeState, initObserverList, addObserver, ControlStatement(..), switchAsIf, 
+  ifNoElse, VariableSym(..), VariableElim(..), ($->), listOf, listVar, 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
+  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
+  objMethodCallMixedArgs, FunctionSym(..), ($.), selfAccess, GetSet(..), 
+  List(..), listIndexExists, at, Iterator(..), StatePattern(..), 
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
+  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
+  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), convType)
 
-import GOOL.Drasil.Data (FileData(..), ModData(..), ProgData(..))
+import GOOL.Drasil.AST (ScopeTag(..), FileData(..), ModData(..), ProgData(..))
 
 import GOOL.Drasil.CodeType (CodeType(..))
 
-import GOOL.Drasil.State (GOOLState(..), GS, FS, CS, MS, VS, lensMStoVS, 
-  headers, sources, mainMod, initialState)
+import GOOL.Drasil.State (GOOLState(..), lensMStoVS, headers, sources, mainMod, 
+  initialState)
 
-import GOOL.Drasil.Helpers (convType, onStateValue, onCodeList)
+import GOOL.Drasil.Helpers (onStateValue, onCodeList)
 
 import GOOL.Drasil.CodeInfo (unCI)
 import GOOL.Drasil.LanguageRenderer.JavaRenderer (unJC)

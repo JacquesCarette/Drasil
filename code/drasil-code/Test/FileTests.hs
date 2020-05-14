@@ -1,18 +1,19 @@
 module Test.FileTests (fileTests) where
 
-import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
-  TypeSym(..), StatementSym(..), ControlStatementSym(..), VariableSym(..), 
-  ValueSym(..), MethodSym(..), ModuleSym(..), GS, MS)
+import GOOL.Drasil (GSProgram, MSBlock, MSStatement, SMethod, OOProg, 
+  ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
+  DeclStatement(..), IOStatement(..), VariableSym(..), Literal(..), 
+  VariableValue(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-fileTests :: (ProgramSym repr) => GS (repr (Program repr))
+fileTests :: (OOProg r) => GSProgram r
 fileTests = prog "FileTests" [fileDoc (buildModule "FileTests" [] 
   [fileTestMethod] [])]
 
-fileTestMethod :: (ProgramSym repr) => MS (repr (Method repr))
+fileTestMethod :: (OOProg r) => SMethod r
 fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 
-writeStory :: (ProgramSym repr) => MS (repr (Block repr))
+writeStory :: (OOProg r) => MSBlock r
 writeStory = block [
   varDec $ var "fileToWrite" outfile,
 
@@ -31,11 +32,11 @@ writeStory = block [
   discardFileLine (valueOf $ var "fileToRead" infile),
   listDec 0 (var "fileContents" (listType string))]
 
-readStory :: (ProgramSym repr) => MS (repr (Statement repr))
+readStory :: (OOProg r) => MSStatement r
 readStory = getFileInputAll (valueOf $ var "fileToRead" infile) 
   (var "fileContents" (listType string))
 
-goodBye :: (ProgramSym repr) => MS (repr (Block repr))
+goodBye :: (OOProg r) => MSBlock r
 goodBye = block [
   printLn (valueOf $ var "fileContents" (listType string)), 
   closeFile (valueOf $ var "fileToRead" infile)]

@@ -1,20 +1,19 @@
 module Language.Drasil.Code.CodeQuantityDicts where
 
 import Language.Drasil
-import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, implCQD)
 
-inFileName :: CodeQuantityDict
-inFileName = implCQD "inFileName" 
-  (nounPhrase "name of the input file" "names of the input files") 
-  Nothing String (Label "filename") Nothing
+inFileName :: QuantityDict
+inFileName = implVar "inFileName" 
+  (nounPhrase "name of the input file" "names of the input files") String
+  (Label "filename")
 
-inParams :: CodeQuantityDict
-inParams = implCQD "inParams" (nounPhrase 
+inParams :: QuantityDict
+inParams = implVar "inParams" (nounPhrase 
   "structure holding the input values" "structures holding the input values")
-  Nothing (Actor "InputParameters") (Label "inParams") Nothing
+  (Actor "InputParameters") (Label "inParams")
 
-consts :: CodeQuantityDict
-consts = implCQD "consts" (nounPhrase 
+consts :: QuantityDict
+consts = implVar "consts" (nounPhrase 
   "structure holding the constant values" 
   "structures holding the constant values") 
-  Nothing (Actor "Constants") (Label "consts") Nothing
+  (Actor "Constants") (Label "consts")

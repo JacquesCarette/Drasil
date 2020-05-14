@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 module Main (main) where
 
 import Language.Drasil (Space(..), getAccStr)
@@ -5,8 +7,7 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
-  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec, 
-  spaceToCodeType)
+  matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec)
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
@@ -60,8 +61,8 @@ codedImpTp :: ImplementationType -> String
 codedImpTp Program = "P"
 codedImpTp Library = "L"
 
-codedLog :: Logging -> String
-codedLog LogNone = "NoL"
+codedLog :: [Logging] -> String
+codedLog [] = "NoL"
 codedLog _ = "L"
 
 codedStruct :: Structure -> String
@@ -95,18 +96,17 @@ choiceCombos = [baseChoices,
     constStructure = Store Unbundled,
     spaceMatch = matchToFloats},
   baseChoices {
-    logging = LogAll,
+    logging = [LogVar, LogFunc],
     inputStructure = Bundled,
     constStructure = Store Bundled,
     constRepr = Const},
   baseChoices {
-    logging = LogAll,
+    logging = [LogVar, LogFunc],
     inputStructure = Bundled,
     spaceMatch = matchToFloats}]
 
 matchToFloats :: SpaceMatch
-matchToFloats = matchSpaces [Real, Radians, Rational] 
-      (replicate 3 [Float, Double]) spaceToCodeType
+matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Radians, Rational])
 
 baseChoices :: Choices
 baseChoices = defaultChoices {
@@ -114,7 +114,7 @@ baseChoices = defaultChoices {
   modularity = Unmodular,
   impType = Program,
   logFile = "log.txt",
-  logging = LogNone,
+  logging = [],
   comments = [CommentFunc, CommentClass, CommentMod],
   doxVerbosity = Quiet,
   dates = Hide,
@@ -123,6 +123,6 @@ baseChoices = defaultChoices {
   inputStructure = Unbundled,
   constStructure = WithInputs,
   constRepr = Var,
-  conceptMatch = matchConcepts [piConst] [[Pi]],
-  auxFiles = [SampleInput]
+  conceptMatch = matchConcepts [(piConst, [Pi])],
+  auxFiles = [SampleInput "../../../datafiles/Projectile/sampleInput.txt"]
 }

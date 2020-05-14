@@ -1,10 +1,9 @@
 module Test.Observer (observer, observerName, printNum, x) where
 
-import GOOL.Drasil (
-  ProgramSym, FileSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
-  StatementSym(..), VariableSym(..), ValueSym(..), ScopeSym(..), 
-  MethodSym(..), initializer, StateVarSym(..), ClassSym(..), ModuleSym(..), FS, 
-  CS, MS, VS)
+import GOOL.Drasil (SFile, SVariable, SMethod, SClass, OOProg, FileSym(..), 
+  PermanenceSym(..), oneLiner, TypeSym(..), IOStatement(..), VariableSym(..), 
+  Literal(..), VariableValue(..), ScopeSym(..), MethodSym(..), initializer, StateVarSym(..), 
+  ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observerName, observerDesc, printNum :: String
@@ -12,23 +11,23 @@ observerName = "Observer"
 observerDesc = "This is an arbitrary class acting as an Observer"
 printNum = "printNum"
 
-observer :: (ProgramSym repr) => FS (repr (RenderFile repr))
+observer :: (OOProg r) => SFile r
 observer = fileDoc (buildModule observerName [] [] [docClass observerDesc
   helperClass])
 
-x :: (VariableSym repr) => VS (repr (Variable repr))
+x :: (VariableSym r) => SVariable r
 x = var "x" int
 
-selfX :: (VariableSym repr) => VS (repr (Variable repr))
+selfX :: (VariableSym r) => SVariable r
 selfX = objVarSelf x
 
-helperClass :: (ClassSym repr) => CS (repr (Class repr))
+helperClass :: (ClassSym r, IOStatement r, Literal r, VariableValue r) => SClass r
 helperClass = buildClass observerName Nothing [stateVar public dynamic x]
   [observerConstructor, printNumMethod, getMethod x, setMethod x]
 
-observerConstructor :: (MethodSym repr) => MS (repr (Method repr))
+observerConstructor :: (MethodSym r, Literal r) => SMethod r
 observerConstructor = initializer [] [(x, litInt 5)]
 
-printNumMethod :: (MethodSym repr) => MS (repr (Method repr))
+printNumMethod :: (MethodSym r, IOStatement r, VariableValue r) => SMethod r
 printNumMethod = method printNum public dynamic void [] $
   oneLiner $ printLn $ valueOf selfX

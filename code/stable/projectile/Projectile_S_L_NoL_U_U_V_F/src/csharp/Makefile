@@ -15,10 +15,10 @@ endif
 
 build: Projectile$(LIB_EXTENSION)
 
-Projectile$(LIB_EXTENSION): InputFormat.cs InputConstraints.cs OutputFormat.cs Calculations.cs
-	$(CSC) -t:library -out:Projectile$(LIB_EXTENSION) InputFormat.cs InputConstraints.cs OutputFormat.cs Calculations.cs
+Projectile$(LIB_EXTENSION): InputFormat.cs InputConstraints.cs Calculations.cs OutputFormat.cs
+	$(CSC) -t:library -out:Projectile$(LIB_EXTENSION) InputFormat.cs InputConstraints.cs Calculations.cs OutputFormat.cs
 
-doc: doxConfig InputFormat.cs InputConstraints.cs OutputFormat.cs Calculations.cs
+doc: doxConfig InputFormat.cs InputConstraints.cs Calculations.cs OutputFormat.cs
 	doxygen doxConfig
 
 .PHONY: build doc

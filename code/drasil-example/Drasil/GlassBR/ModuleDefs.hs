@@ -7,7 +7,7 @@ module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
-  asVC, funcDef, fdec, ffor, funcData, quantvar, 
+  asVC, funcDef, fDecDef, ffor, funcData, quantvar, 
   multiLine, packmod, repeated, singleLine)
 
 allMods :: [Mod]
@@ -39,7 +39,7 @@ one = Integ 1
 two = Integ 2
 
 var :: String -> String -> Symbol -> Space -> QuantityDict
-var nam np = implVar nam (nounPhraseSP np)
+var nam np symb sp = implVar nam (nounPhraseSP np) sp symb
 
 y_2, y_1, x_2, x_1, x :: QuantityDict
 y_1  = var "y1" "lower y-coordinate"             (sub lY one) Real
@@ -149,7 +149,7 @@ extractColumnCT :: Func
 extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
   [mat, j] (Vect Real) (Just "column of the given matrix at the given index")
   [
-    fdec col,
+    fDecDef col (Matrix [[]]),
     --
     ffor i (sy i $< dim (sy mat))
       [ FAppend (sy col) (aLook mat i j) ],
@@ -162,9 +162,9 @@ interpY = funcDef "interpY"
   [filename, x, z] Real (Just "y value interpolated at given x and z values")
   [
   -- hack
-  fdec xMatrix,
-  fdec yMatrix,
-  fdec zVector,
+  fDecDef xMatrix (Matrix [[]]),
+  fDecDef yMatrix (Matrix [[]]),
+  fDecDef zVector (Matrix [[]]),
   --
   call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
@@ -188,9 +188,9 @@ interpZ = funcDef "interpZ"
   [filename, x, y] Real (Just "z value interpolated at given x and y values")
   [
     -- hack
-  fdec xMatrix,
-  fdec yMatrix,
-  fdec zVector,
+  fDecDef xMatrix (Matrix [[]]),
+  fDecDef yMatrix (Matrix [[]]),
+  fDecDef zVector (Matrix [[]]),
   --
   call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack

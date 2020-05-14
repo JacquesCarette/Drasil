@@ -3,7 +3,7 @@ module Main (main) where
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
---   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
+--   Modularity(..), Structure(..), ConstantStructure(..), 
 --   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
 import Language.Drasil.Generate (gen)
@@ -21,7 +21,7 @@ thisChoices = defaultChoices {
   modularity       = Modular Combined,
   impType          = Program,
   logFile          = "log.txt",
-  logging          = LogNone,
+  logging          = [],
   comments         = [], 
   doxVerbosity     = Quiet,
   dates            = Hide,
@@ -31,7 +31,7 @@ thisChoices = defaultChoices {
   constStructure   = Inline,
   constRepr        = Const,
   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],
-  auxFiles         = [SampleInput] 
+  auxFiles         = [SampleInput "../../datafiles/HGHC/sampleInput.txt"] 
 } -}
   
 main :: IO ()            

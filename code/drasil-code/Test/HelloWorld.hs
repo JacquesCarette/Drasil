@@ -2,15 +2,17 @@
 
 module Test.HelloWorld (helloWorld) where
 
-import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
-  listSlice, TypeSym(..), StatementSym(..), ControlStatementSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  MethodSym(..), ModuleSym(..), GS, MS)
+import GOOL.Drasil (GSProgram, MSBody, MSBlock, MSStatement, SMethod, OOProg,
+  ProgramSym(..), FileSym(..), BodySym(..), bodyStatements, oneLiner, 
+  BlockSym(..), listSlice, TypeSym(..), StatementSym(..), AssignStatement(..), (&=), 
+  DeclStatement(..), IOStatement(..), StringStatement(..), CommentStatement(..), ControlStatement(..), 
+  VariableSym(..), listVar, Literal(..), VariableValue(..), CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), Comparison(..),
+  ValueExpression(..), extFuncApp, List(..),
+  MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 
-helloWorld :: (ProgramSym repr) => GS (repr (Program repr))
+helloWorld :: (OOProg r) => GSProgram r
 helloWorld = prog "HelloWorld" [docMod description 
   ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" [] 
   [helloWorldMain] []), helper]
@@ -18,14 +20,14 @@ helloWorld = prog "HelloWorld" [docMod description
 description :: String
 description = "Tests various GOOL functions. It should run without errors."
 
-helloWorldMain :: (ProgramSym repr) => MS (repr (Method repr))
+helloWorldMain :: (OOProg r) => SMethod r
 helloWorldMain = mainFunction (body [ helloInitVariables, 
     helloListSlice,
     block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]])
 
-helloInitVariables :: (ProgramSym repr) => MS (repr (Block repr))
+helloInitVariables :: (OOProg r) => MSBlock r
 helloInitVariables = block [comment "Initializing variables",
   varDec $ var "a" int, 
   varDecDef (var "b" int) (litInt 5),
@@ -35,14 +37,14 @@ helloInitVariables = block [comment "Initializing variables",
     (listType double)) (litDouble 1.0)),
   printLn (valueOf $ var "oneIndex" int),
   var "a" int &= listSize (valueOf $ var "myOtherList" (listType double)),
-  valState (listAdd (valueOf $ var "myOtherList" (listType double))
+  valStmt (listAdd (valueOf $ var "myOtherList" (listType double))
     (litInt 2) (litDouble 2.0)),
-  valState (listAppend (valueOf $ var "myOtherList" (listType double)) 
+  valStmt (listAppend (valueOf $ var "myOtherList" (listType double)) 
     (litDouble 2.5)),
   varDec $ var "e" double,
   var "e" int &= listAccess (valueOf $ var "myOtherList"
     (listType double)) (litInt 1),
-  valState (listSet (valueOf $ var "myOtherList" (listType double)) 
+  valStmt (listSet (valueOf $ var "myOtherList" (listType double)) 
     (litInt 1) (litDouble 17.4)),
   listDec 7 (var "myName" (listType string)),
   stringSplit ' ' (var "myName" (listType string)) (litString "Brooks Mac"),
@@ -52,12 +54,12 @@ helloInitVariables = block [comment "Initializing variables",
   printLn (valueOf $ var "boringList" (listType bool)),
   listDec 2 $ var "mySlicedList" (listType double)]
 
-helloListSlice :: (ProgramSym repr) => MS (repr (Block repr))
+helloListSlice :: (OOProg r) => MSBlock r
 helloListSlice = listSlice (var "mySlicedList" (listType double)) 
   (valueOf $ var "myOtherList" (listType double)) (Just (litInt 1)) 
   (Just (litInt 3)) Nothing
 
-helloIfBody :: (ProgramSym repr) => MS (repr (Body repr))
+helloIfBody :: (OOProg r) => MSBody r
 helloIfBody = addComments "If body" (body [
   block [
     varDec $ var "c" int,
@@ -72,8 +74,8 @@ helloIfBody = addComments "If body" (body [
     var "c" int &+= litInt 17,
     (&++) (var "a" int),
     (&++) (var "d" int),
-    (&~-) (var "c" int),
-    (&~-) (var "b" int),
+    (&--) (var "c" int),
+    (&--) (var "b" int),
 
     listDec 5 (var "myList" (listType int)),
     objDecDef (var "myObj" char) (litChar 'o'),
@@ -125,33 +127,33 @@ helloIfBody = addComments "If body" (body [
     printLn (inlineIf litTrue (litInt 5) (litInt 0)),
     printLn (cot (litDouble 1.0))]])
 
-helloElseBody :: (ProgramSym repr) => MS (repr (Body repr))
+helloElseBody :: (OOProg r) => MSBody r
 helloElseBody = bodyStatements [printLn (arg 5)]
 
-helloIfExists :: (ProgramSym repr) => MS (repr (Statement repr))
+helloIfExists :: (OOProg r) => MSStatement r
 helloIfExists = ifExists (valueOf $ var "boringList" (listType bool)) 
   (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
-helloSwitch :: (ProgramSym repr) => MS (repr (Statement repr))
+helloSwitch :: (OOProg r) => MSStatement r
 helloSwitch = switch (valueOf $ var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)), 
   (litInt 0, oneLiner (var "b" int &= litInt 5))]
   (oneLiner (var "b" int &= litInt 0))
 
-helloForLoop :: (ProgramSym repr) => MS (repr (Statement repr))
+helloForLoop :: (OOProg r) => MSStatement r
 helloForLoop = forRange i (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn 
   (valueOf i)))
   where i = var "i" int
 
-helloWhileLoop :: (ProgramSym repr) => MS (repr (Statement repr))
+helloWhileLoop :: (OOProg r) => MSStatement r
 helloWhileLoop = while (valueOf (var "a" int) ?< litInt 13) (bodyStatements 
   [printStrLn "Hello", (&++) (var "a" int)]) 
 
-helloForEachLoop :: (ProgramSym repr) => MS (repr (Statement repr))
+helloForEachLoop :: (OOProg r) => MSStatement r
 helloForEachLoop = forEach i (valueOf $ listVar "myOtherList" double) 
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" double [valueOf i, 
   litDouble 1.0])))
   where i = iterVar "num" double
 
-helloTryCatch :: (ProgramSym repr) => MS (repr (Statement repr))
+helloTryCatch :: (OOProg r) => MSStatement r
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))

@@ -1,9 +1,11 @@
 module Test.PatternTest (patternTest) where
 
-import GOOL.Drasil (ProgramSym(..), FileSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), TypeSym(..), StatementSym(..), ControlStatementSym(..), 
-  VariableSym(..), ValueSym(..), ValueExpression(..), FunctionSym(..), 
-  MethodSym(..), ModuleSym(..), GS, MS, VS)
+import GOOL.Drasil (GSProgram, VSType, SVariable, SValue, SMethod, OOProg,
+  ProgramSym(..), FileSym(..), BodySym(..), oneLiner, BlockSym(..), 
+  TypeSym(..), StatementSym(..), AssignStatement, DeclStatement(..), 
+  IOStatement(..), initState, changeState, initObserverList, 
+  addObserver, VariableSym(..), Literal(..), VariableValue(..), 
+  ValueExpression(..), extNewObj, FunctionSym(..), GetSet(..), List, StatePattern(..), ObserverPattern(..), StrategyPattern(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer, observerName, printNum, x)
 
@@ -20,22 +22,24 @@ obs1Name = "obs1"
 obs2Name = "obs2"
 nName = "n"
 
-observerType :: (TypeSym repr) => VS (repr (Type repr))
+observerType :: (TypeSym r) => VSType r
 observerType = obj observerName
 
-n, obs1, obs2 :: (VariableSym repr) => VS (repr (Variable repr))
+n, obs1, obs2 :: (VariableSym r) => SVariable r
 n = var nName int
 obs1 = var obs1Name observerType
 obs2 = var obs2Name observerType
 
-newObserver :: (ValueExpression repr) => VS (repr (Value repr))
+newObserver :: (ValueExpression r) => SValue r
 newObserver = extNewObj observerName observerType []
 
-patternTest :: (ProgramSym repr) => GS (repr (Program repr))
+patternTest :: (OOProg r) => GSProgram r
 patternTest = prog progName [fileDoc (buildModule progName []
   [patternTestMainMethod] []), observer]
 
-patternTestMainMethod :: (MethodSym repr) => MS (repr (Method repr))
+patternTestMainMethod :: (MethodSym r, AssignStatement r, DeclStatement r, 
+  IOStatement r, Literal r, VariableValue r, ValueExpression r, GetSet r, 
+  List r, StatePattern r, ObserverPattern r, StrategyPattern r) => SMethod r
 patternTestMainMethod = mainFunction (body [block [
   varDec n,
   initState fsmName offState, 
@@ -62,5 +66,5 @@ patternTestMainMethod = mainFunction (body [block [
     notifyObservers (func printNum void []) observerType],
     
   block [
-    valState $ set (valueOf obs1) x (litInt 10),
+    valStmt $ set (valueOf obs1) x (litInt 10),
     print $ get (valueOf obs1) x]])

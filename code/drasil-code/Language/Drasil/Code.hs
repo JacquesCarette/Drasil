@@ -6,12 +6,12 @@ module Language.Drasil.Code (
   readWithDataDesc, sampleInputDD,
   Choices(..), CodeSpec(..), CodeSystInfo(..), Comments(..), Verbosity(..), 
   ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Logging(LogNone, LogAll), Modularity(..), Structure(..), 
-  ConstantStructure(..), ConstantRepr(..), InputModule(..), CodeConcept(..), 
-  matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), Visibility(..), 
+  Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
+  ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, 
+  SpaceMatch, matchSpaces, AuxFile(..), getSampleData, Visibility(..), 
   ODEMethod(..), defaultChoices, funcUID, funcUID', asVC, asVC', codeSpec, 
   relToQD,
-  ($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, funcData, funcDef, 
+  ($:=), Mod(Mod), Func, FuncStmt(..), fDecDef, ffor, funcData, funcDef, 
   packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
   ExternalLibrary, Step, FunctionInterface, Argument, externalLib, choiceSteps, 
@@ -33,9 +33,9 @@ module Language.Drasil.Code (
   appendCurrSolFill, populateSolListFill, assignArrayIndexFill, 
   assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill, 
   solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill,
-  PackageSym(..),
-  CodeChunk, CodeVarChunk, CodeFuncChunk, codevar, codefunc, quantvar, 
-  ccObjVar, CodeQuantityDict, implCQD,
+  PackageSym(..), AuxiliarySym(..),
+  AuxData(..), PackData(..),
+  CodeChunk, CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, ccObjVar, 
   unPP, unJP, unCSP, unCPPP
 ) where
 
@@ -78,16 +78,18 @@ import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), CodeSystInfo(..),
   Comments(..), Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), 
   Lang(..), Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
-  matchSpaces, AuxFile(..), Visibility(..), ODEMethod(..), defaultChoices, 
-  funcUID, funcUID', asVC, asVC', codeSpec, relToQD)
-import Language.Drasil.Mod (($:=), Mod(Mod), Func, FuncStmt(..), fdec, ffor, 
+  matchSpaces, AuxFile(..), getSampleData, Visibility(..), ODEMethod(..), 
+  defaultChoices, funcUID, funcUID', asVC, asVC', codeSpec, relToQD)
+import Language.Drasil.Mod (($:=), Mod(Mod), Func, FuncStmt(..), fDecDef, ffor, 
   funcData, funcDef, packmod)
 
-import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
+  AuxiliarySym(..))
+
+import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), PackData(..))
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeFuncChunk, 
-  codevar, codefunc, quantvar, ccObjVar)
-import Language.Drasil.Chunk.CodeQuantity (CodeQuantityDict, implCQD)
+  quantvar, quantfunc, ccObjVar)
 
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)

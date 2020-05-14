@@ -11,62 +11,55 @@ import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
-import Language.Drasil.Chunk.Code (CodeIdea(codeName))
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.CodeSpec (CodeSpec(..))
+import Language.Drasil.Mod (Name)
 
-import GOOL.Drasil (ProgramSym, TypeSym(..), ValueSym(..), StatementSym(..), 
-  MS, VS, convType)
+import GOOL.Drasil (VSType, SValue, MSStatement, OOProg, TypeSym(..), 
+  VariableValue(..), StatementSym(..), DeclStatement(..), convType)
 
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (maybe, catMaybes)
+import Data.Maybe (catMaybes)
 import Control.Applicative ((<|>))
 import Control.Monad.Reader (Reader, ask)
-import Control.Lens ((^.))
 
-getAllInputCalls :: (ProgramSym repr) => Reader DrasilState 
-  [MS (repr (Statement repr))]
+getAllInputCalls :: (OOProg r) => Reader DrasilState [MSStatement r]
 getAllInputCalls = do
   gi <- getInputCall
   dv <- getDerivedCall
   ic <- getConstraintCall
   return $ catMaybes [gi, dv, ic]
 
-getInputCall :: (ProgramSym repr) => Reader DrasilState 
-  (Maybe (MS (repr (Statement repr))))
+getInputCall :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))
 getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
 
-getDerivedCall :: (ProgramSym repr) => Reader DrasilState 
-  (Maybe (MS (repr (Statement repr))))
+getDerivedCall :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))
 getDerivedCall = getInOutCall "derived_values" getDerivedIns getDerivedOuts
 
-getConstraintCall :: (ProgramSym repr) => Reader DrasilState 
-  (Maybe (MS (repr (Statement repr))))
+getConstraintCall :: (OOProg r) => Reader DrasilState 
+  (Maybe (MSStatement r))
 getConstraintCall = do
   val <- getFuncCall "input_constraints" void getConstraintParams
-  return $ fmap valState val
+  return $ fmap valStmt val
 
-getCalcCall :: (ProgramSym repr) => CodeDefinition -> Reader DrasilState 
-  (Maybe (MS (repr (Statement repr))))
+getCalcCall :: (OOProg r) => CodeDefinition -> Reader DrasilState 
+  (Maybe (MSStatement r))
 getCalcCall c = do
-  g <- ask
   t <- codeType c
   val <- getFuncCall (codeName c) (convType t) (getCalcParams c)
-  v <- maybe (error $ (c ^. uid) ++ " missing from VarMap") mkVar 
-    (Map.lookup (c ^. uid) (vMap $ codeSpec g))
+  v <- mkVar $ quantvar c
   l <- maybeLog v
   return $ fmap (multi . (: l) . varDecDef v) val
 
-getOutputCall :: (ProgramSym repr) => Reader DrasilState 
-  (Maybe (MS (repr (Statement repr))))
+getOutputCall :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))
 getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
-  return $ fmap valState val
+  return $ fmap valStmt val
 
-getFuncCall :: (ProgramSym repr, HasUID c, HasSpace c, CodeIdea c) => String 
-  -> VS (repr (Type repr)) -> Reader DrasilState [c] -> 
-  Reader DrasilState (Maybe (VS (repr (Value repr))))
+getFuncCall :: (OOProg r, HasUID c, HasSpace c, CodeIdea c) => Name -> 
+  VSType r -> Reader DrasilState [c] -> Reader DrasilState (Maybe (SValue r))
 getFuncCall n t funcPs = do
   mm <- getCall n
   let getFuncCall' Nothing = return Nothing
@@ -77,9 +70,9 @@ getFuncCall n t funcPs = do
         return $ Just val
   getFuncCall' mm
 
-getInOutCall :: (ProgramSym repr, HasSpace c, CodeIdea c, Eq c) => String -> 
+getInOutCall :: (OOProg r, HasSpace c, CodeIdea c, Eq c) => Name -> 
   Reader DrasilState [c] -> Reader DrasilState [c] ->
-  Reader DrasilState (Maybe (MS (repr (Statement repr))))
+  Reader DrasilState (Maybe (MSStatement r))
 getInOutCall n inFunc outFunc = do
   mm <- getCall n
   let getInOutCall' Nothing = return Nothing
@@ -92,8 +85,14 @@ getInOutCall n inFunc outFunc = do
         stmt <- fAppInOut m n (map valueOf ins) outs both
         return $ Just stmt
   getInOutCall' mm
-
-getCall :: String -> Reader DrasilState (Maybe String)
+  
+-- Gets the name of the module containing the function being called
+-- If the function is not in either module export map or class definition map, 
+--   return Nothing
+-- If the function is not in module export map but is in class definition map, 
+-- that means it is a private function, so return Nothing unless it is in the 
+-- current class
+getCall :: Name -> Reader DrasilState (Maybe Name)
 getCall n = do
   g <- ask
   let currc = currentClass g

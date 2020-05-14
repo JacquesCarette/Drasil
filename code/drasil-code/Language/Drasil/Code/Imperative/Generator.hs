@@ -4,25 +4,27 @@ module Language.Drasil.Code.Imperative.Generator (
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
+import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
   genDoxConfig, genModule)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
-import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs)
+import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs,
+  genModClasses)
 import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass, 
   genConstMod, genInputClass, genInputConstraints, genInputDerived, 
-  genInputFormat, genMain, genMainFunc, genOutputFormat, genOutputMod, 
-  genSampleInput)
+  genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc, 
+  genOutputFormat, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
-import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
-  Lang(..), Modularity(..), ImplementationType(..), Visibility(..))
+  Lang(..), Modularity(..), Visibility(..))
 
-import GOOL.Drasil (ProgramSym(..), ProgramSym, FileSym(..), ProgData(..), GS, 
-  FS, initialState, unCI)
+import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..), 
+  ProgData(..), initialState, unCI)
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
   getCurrentDirectory)
@@ -59,20 +61,20 @@ generator l dt sd chs spec = DrasilState {
   where showDate Show = dt
         showDate Hide = ""
 
-generateCode :: (ProgramSym progRepr, PackageSym packRepr) => Lang -> 
+generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> 
   (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 
   PackData) -> DrasilState -> IO ()
 generateCode l unReprProg unReprPack g = do 
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
+  let pckg = runReader (genPackage unReprProg) g 
+      code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
+          unReprPack pckg)
   createCodeFiles code
   setCurrentDirectory workingDir
-  where pckg = runReader (genPackage unReprProg) g 
-        code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
-          unReprPack pckg)
 
-genPackage :: (ProgramSym progRepr, PackageSym packRepr) => 
+genPackage :: (OOProg progRepr, PackageSym packRepr) => 
   (progRepr (Program progRepr) -> ProgData) -> 
   Reader DrasilState (packRepr (Package packRepr))
 genPackage unRepr = do
@@ -82,55 +84,50 @@ genPackage unRepr = do
   let info = unCI $ evalState ci initialState
       (reprPD, s) = runState p info
       pd = unRepr reprPD
-      n = pName $ csi $ codeSpec g
       m = makefile (implType g) (commented g) s pd
   i <- genSampleInput
-  d <- genDoxConfig n s
+  d <- genDoxConfig s
   return $ package pd (m:i++d)
 
-genProgram :: (ProgramSym repr) => Reader DrasilState (GS (repr (Program repr)))
+genProgram :: (OOProg r) => Reader DrasilState (GSProgram r)
 genProgram = do
   g <- ask
   ms <- chooseModules $ modular g
   let n = pName $ csi $ codeSpec g
   return $ prog n ms
 
-chooseModules :: (ProgramSym repr) => Modularity -> 
-  Reader DrasilState [FS (repr (RenderFile repr))]
+chooseModules :: (OOProg r) => Modularity -> Reader DrasilState [SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules (Modular _) = genModules
 
-genUnmodular :: (ProgramSym repr) => 
-  Reader DrasilState (FS (repr (RenderFile repr)))
+genUnmodular :: (OOProg r) => Reader DrasilState (SFile r)
 genUnmodular = do
   g <- ask
+  umDesc <- unmodularDesc
   let s = csi $ codeSpec g
       n = pName $ csi $ codeSpec g
       cls = any (`member` clsMap (codeSpec g)) 
         ["get_input", "derived_values", "input_constraints"]
-      getDesc Library = "library"
-      getDesc Program = "program"
-      mainIfExe Library = []
-      mainIfExe Program = [genMainFunc]
-  genModule n ("Contains the entire " ++ n ++ " " ++ getDesc (implType g))
-    (map (fmap Just) (mainIfExe (implType g) ++ concatMap genModFuncs (mods s)) 
-    ++ ((if cls then [] else [genInputFormat Primary, genInputDerived Primary, 
-      genInputConstraints Primary]) ++ [genOutputFormat])) 
-    [genInputClass Auxiliary, genConstClass Auxiliary]
+  genModule n umDesc
+    (genMainFunc 
+      : map (fmap Just) (map genCalcFunc (execOrder $ csi $ codeSpec g) 
+        ++ concatMap genModFuncs (mods s)) 
+      ++ ((if cls then [] else [genInputFormat Pub, genInputDerived Pub, 
+        genInputConstraints Pub]) ++ [genOutputFormat])) 
+    ([genInputClass Auxiliary, genConstClass Auxiliary] 
+      ++ map (fmap Just) (concatMap genModClasses $ mods s))
           
-genModules :: (ProgramSym repr) => 
-  Reader DrasilState [FS (repr (RenderFile repr))]
+genModules :: (OOProg r) => Reader DrasilState [SFile r]
 genModules = do
   g <- ask
   let s = csi $ codeSpec g
-      mainIfExe Library = return []
-      mainIfExe Program = sequence [genMain]
-  mn     <- mainIfExe $ implType g
+  mn     <- genMain
   inp    <- chooseInModule $ inMod g
   con    <- genConstMod 
+  cal    <- genCalcMod
   out    <- genOutputMod
   moddef <- traverse genModDef (mods s) -- hack ?
-  return $ mn ++ inp ++ con ++ out ++ moddef
+  return $ mn : inp ++ con ++ cal : out ++ moddef
 
 -- private utilities used in generateCode
 getDir :: Lang -> String

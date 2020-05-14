@@ -18,11 +18,11 @@ public class Projectile {
     */
     public static void main(String[] args) throws FileNotFoundException, IOException {
         String filename = args[0];
+        double g_vect = 9.8;
+        double epsilon = 2.0e-2;
         double v_launch;
         double theta;
         double p_target;
-        double g_vect = 9.8;
-        double epsilon = 2.0e-2;
         Object[] outputs = get_input(filename);
         v_launch = (double)(outputs[0]);
         theta = (double)(outputs[1]);
@@ -111,7 +111,7 @@ public class Projectile {
         return outputs;
     }
     
-    /** \brief Verifies that input values satisfy the physical constraints and software constraints
+    /** \brief Verifies that input values satisfy the physical constraints
         \param v_launch launch speed: the initial speed of the projectile when launched (m/s)
         \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
         \param p_target target position: the distance from the launcher to the target (m)

@@ -5,16 +5,15 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), ControlBlock(..), TypeSym(..), TypeElim(..), VariableSym(..), 
-  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
-  BooleanExpression(..), Comparison(..), ValueExpression(..), 
-  InternalValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..),
-  Iterator(..), StatementSym(..), AssignStatement(..), DeclStatement(..), 
-  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
-  CommentStatement(..), ControlStatement(..), StatePattern(..), 
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
+  GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), 
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..), 
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType(Void))
 import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
@@ -98,9 +97,6 @@ instance TypeSym CodeInfo where
 instance TypeElim CodeInfo where
   getType _     = Void
   getTypeString = unCI
-
-instance ControlBlock CodeInfo where
-  solveODE _ _ = noInfo
 
 instance VariableSym CodeInfo where
   type Variable CodeInfo = ()
@@ -261,7 +257,7 @@ instance DeclStatement CodeInfo where
   objDecNew              _ = zoom lensMStoVS . executeList
   extObjDecNew         _ _ = zoom lensMStoVS . executeList
   constDecDef            _ = zoom lensMStoVS . execute1
-  funcDecDef           _ _ = zoom lensMStoVS . execute1
+  funcDecDef           _ _ = execute1
 
 instance IOStatement CodeInfo where
   print        = zoom lensMStoVS . execute1

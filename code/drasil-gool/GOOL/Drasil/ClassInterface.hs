@@ -8,23 +8,22 @@ module GOOL.Drasil.ClassInterface (
   -- Typeclasses
   OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
-  ControlBlock(..), VariableSym(..), VariableElim(..), ($->), listOf, listVar,
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
-  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
-  InternalValueExp(..), objMethodCall, objMethodCallMixedArgs, 
-  objMethodCallNoParams, FunctionSym(..), ($.), selfAccess, GetSet(..), 
-  List(..), InternalList(..), listSlice, listIndexExists, at, Iterator(..), 
-  StatementSym(..), AssignStatement(..), (&=), assignToListIndex, 
-  DeclStatement(..), objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), 
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), initState, changeState, 
-  ObserverPattern(..), observerListName, initObserverList, addObserver, 
-  StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
-  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
-  ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), convType
+  VariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..), 
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
+  NumericExpression(..), BooleanExpression(..), Comparison(..), 
+  ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
+  libFuncApp, newObj, extNewObj, libNewObj, exists, InternalValueExp(..), 
+  objMethodCall, objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
+  ($.), selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
+  listIndexExists, at, Iterator(..), StatementSym(..), AssignStatement(..), 
+  (&=), assignToListIndex, DeclStatement(..), objDecNewNoParams, 
+  extObjDecNewNoParams, IOStatement(..), StringStatement(..), 
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
+  StatePattern(..), initState, changeState, ObserverPattern(..), 
+  observerListName, initObserverList, addObserver, StrategyPattern(..), 
+  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
+  privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
@@ -40,13 +39,12 @@ type GSProgram a = GS (a (Program a))
 
 -- In relation to GOOL, the type variable r can be considered as short for "representation"
 
-class (ProgramSym r, ControlBlock r, AssignStatement r, DeclStatement r, 
-  IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, 
-  ControlStatement r, InternalList r, Literal r, MathConstant r, 
-  VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, 
-  Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, 
-  Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, 
-  VariableElim r) => OOProg r
+class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, 
+  StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
+  InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
+  NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, 
+  InternalValueExp r, GetSet r, List r, Iterator r, StatePattern r, 
+  ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 
 class (FileSym r) => ProgramSym r where
   type Program r
@@ -110,9 +108,6 @@ class TypeSym r where
 class (TypeSym r) => TypeElim r where
   getType :: r (Type r) -> CodeType
   getTypeString :: r (Type r) -> String
-
-class (BodySym r) => ControlBlock r where
-  solveODE :: ODEInfo r -> ODEOptions r -> MSBlock r
 
 type SVariable a = VS (a (Variable a))
 
@@ -373,18 +368,17 @@ assignToListIndex :: (StatementSym r, VariableValue r, List r) => SVariable r
 assignToListIndex lst index v = valStmt $ listSet (valueOf lst) index v
 
 class (VariableSym r, StatementSym r) => DeclStatement r where
-  varDec               :: SVariable r -> MSStatement r
-  varDecDef            :: SVariable r -> SValue r -> MSStatement r
-  listDec              :: Integer -> SVariable r -> MSStatement r
-  listDecDef           :: SVariable r -> [SValue r] -> MSStatement r
-  arrayDec             :: Integer -> SVariable r -> MSStatement r
-  arrayDecDef          :: SVariable r -> [SValue r] -> MSStatement r
-  objDecDef            :: SVariable r -> SValue r -> MSStatement r
-  objDecNew            :: SVariable r -> [SValue r] -> MSStatement r
-  extObjDecNew         :: Library -> SVariable r -> [SValue r] -> MSStatement r
-  constDecDef          :: SVariable r -> SValue r -> MSStatement r
-  funcDecDef           :: SVariable r -> [SVariable r] -> SValue r -> 
-    MSStatement r
+  varDec       :: SVariable r -> MSStatement r
+  varDecDef    :: SVariable r -> SValue r -> MSStatement r
+  listDec      :: Integer -> SVariable r -> MSStatement r
+  listDecDef   :: SVariable r -> [SValue r] -> MSStatement r
+  arrayDec     :: Integer -> SVariable r -> MSStatement r
+  arrayDecDef  :: SVariable r -> [SValue r] -> MSStatement r
+  objDecDef    :: SVariable r -> SValue r -> MSStatement r
+  objDecNew    :: SVariable r -> [SValue r] -> MSStatement r
+  extObjDecNew :: Library -> SVariable r -> [SValue r] -> MSStatement r
+  constDecDef  :: SVariable r -> SValue r -> MSStatement r
+  funcDecDef   :: SVariable r -> [SVariable r] -> MSBody r -> MSStatement r
   
 objDecNewNoParams :: (DeclStatement r) => SVariable r -> MSStatement r
 objDecNewNoParams v = objDecNew v []
@@ -596,37 +590,6 @@ type FSModule a = FS (a (Module a))
 class (ClassSym r) => ModuleSym r where
   type Module r
   buildModule :: Label -> [Label] -> [SMethod r] -> [SClass r] -> FSModule r
-
--- Data
-
-data ODEInfo r = ODEInfo {
-  indepVar :: SVariable r,
-  depVar :: SVariable r,
-  otherVars :: [SVariable r],
-  tInit :: SValue r,
-  tFinal :: SValue r,
-  initVal :: SValue r,
-  ode :: SValue r
-}
-
-odeInfo :: SVariable r -> SVariable r -> 
-  [SVariable r] -> SValue r -> 
-  SValue r -> SValue r -> SValue r -> 
-  ODEInfo r
-odeInfo = ODEInfo
-
-data ODEOptions r = ODEOptions {
-  solveMethod :: ODEMethod,
-  absTol :: SValue r,
-  relTol :: SValue r,
-  stepSize :: SValue r
-}
-
-odeOptions :: ODEMethod -> SValue r -> SValue r -> 
-  SValue r -> ODEOptions r
-odeOptions = ODEOptions
-
-data ODEMethod = RK45 | BDF | Adams
 
 -- Utility
 

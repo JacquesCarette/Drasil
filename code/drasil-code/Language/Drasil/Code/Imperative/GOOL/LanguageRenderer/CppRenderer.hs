@@ -49,16 +49,17 @@ instance AuxiliarySym CppProject where
 
   optimizeDox = return no
   
-  makefile it = G.makefile (cppBuildConfig it) (G.noRunIfLib it cppRunnable)
+  makefile fs it = G.makefile (cppBuildConfig fs it) (G.noRunIfLib it cppRunnable)
   
   auxHelperDoc = unCPPP
   auxFromData fp d = return $ ad fp d
 
 -- helpers
 
-cppBuildConfig :: ImplementationType -> Maybe BuildConfig
-cppBuildConfig it = buildAll (\i o -> [cppCompiler : i ++ map asFragment
-  ("--std=c++11" : target it ++ ["-o"]) ++ [o]]) (outName it)
+cppBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
+cppBuildConfig fs it = buildAll (\i o -> [cppCompiler : i ++ map asFragment
+  ("--std=c++11" : target it ++ ["-o"]) ++ [o] ++ concatMap (\f -> map 
+  asFragment ["-I", f]) fs]) (outName it)
   where target Library = ["-shared", "-fPIC"]
         target Program = []
         outName Library = sharedLibrary

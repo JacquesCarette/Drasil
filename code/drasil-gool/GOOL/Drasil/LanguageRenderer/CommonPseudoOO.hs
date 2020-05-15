@@ -3,10 +3,10 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
-  listSetFunc, listAccessFunc, buildModule, bool, arrayType, pi, notNull, 
+  funcType, listSetFunc, listAccessFunc, buildModule, arrayType, pi, notNull, 
   printSt, arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, 
   docMain, mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
-  listAccessFunc', funcDecDef, string, constDecDef, docInOutFunc
+  listAccessFunc', string, constDecDef, docInOutFunc
 ) where
 
 import Utils.Drasil (indent)
@@ -22,9 +22,9 @@ import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable,
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
   VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList), 
-  VariableValue(valueOf), ValueExpression(lambda), FunctionSym(func, objAccess),
-  StatementSym(valStmt), DeclStatement(varDec, varDecDef, constDecDef), 
-  ParameterSym(param), MethodSym(mainFunction), ClassSym(buildClass))
+  VariableValue(valueOf), FunctionSym(func, objAccess), StatementSym(valStmt), 
+  DeclStatement(varDec, varDecDef, constDecDef), ParameterSym(param), 
+  MethodSym(mainFunction), ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..),  RenderType(..),
   RenderVariable(varFromData), InternalVarElim(variableBind), 
   RenderFunction(funcFromData), MethodTypeSym(mType),
@@ -128,6 +128,10 @@ intClass f n s i svrs mths = do
 
 -- Python, Java, and C++ --
 
+funcType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
+funcType ps' = on2StateValues (\ps r -> typeFromData (Func (map getType ps) 
+  (getType r)) "" empty) (sequence ps')
+
 objVar :: (RenderSym r) => SVariable r -> SVariable r -> SVariable r
 objVar = on2StateValues (\o v -> mkVar (variableName o `access` variableName v) 
   (variableType v) (R.objVar (RC.variable o) (RC.variable v)))
@@ -158,12 +162,6 @@ buildModule n imps bot fs cs = S.modFromData n (do
     (vibcat (map RC.method fns ++ [bt])))
 
 -- Java and C# -- 
-
-boolean :: String
-boolean = "Boolean"
-
-bool :: (RenderSym r) => VSType r
-bool = toState $ typeFromData Boolean boolean (text boolean)
 
 arrayType :: (RenderSym r) => VSType r -> VSType r
 arrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
@@ -265,10 +263,6 @@ listSizeFunc = S.func "size" S.int []
 listAccessFunc' :: (RenderSym r) => Label -> VSType r -> SValue r -> 
   VSFunction r
 listAccessFunc' f t i = S.func f t [intValue i]
-
-funcDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
-  MSStatement r
-funcDecDef v ps r = S.varDecDef v (S.lambda ps r)
 
 -- C# and C++ --
 

@@ -1,15 +1,18 @@
 {-# LANGUAGE GADTs #-}
-module Language.Drasil.Mod (Class(..), Func(..), FuncData(..), FuncDef(..), 
-  FuncStmt(..), Initializer, Mod(..), Name, Description, Import, ($:=), 
-  classDef, classImplements, ctorDef, ffor, fDecDef, fname, fstdecl, funcData, 
-  funcDef, packmod, packmodRequires, prefixFunctions
+module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..), 
+  FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name, 
+  Description, Import, ($:=), pubStateVar, privStateVar, classDef, 
+  classImplements, ctorDef, ffor, fDecDef, fname, fstdecl, funcData, funcDef, 
+  funcDefParams, packmod, packmodRequires
 ) where
 
 import Language.Drasil
 import Database.Drasil (ChunkDB)
+import GOOL.Drasil (ScopeTag(..))
 
-import Language.Drasil.Chunk.Code (CodeVarChunk, codevars, codevars', 
-  funcPrefix, quantvar)
+import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars, 
+  codevars', quantvar)
+import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Printers (toPlainName)
 
@@ -31,13 +34,23 @@ data Class = ClassDef {
   className :: Name, 
   implements :: Maybe Name,
   classDesc :: Description,
-  stateVars :: [CodeVarChunk],
+  stateVars :: [StateVariable],
   methods :: [Func]}
 
-classDef :: Name -> Description -> [CodeVarChunk] -> [Func] -> Class
+data StateVariable = SV {
+  svScope :: ScopeTag,
+  stVar :: CodeVarChunk}
+
+pubStateVar :: CodeVarChunk -> StateVariable
+pubStateVar = SV Pub
+
+privStateVar :: CodeVarChunk -> StateVariable
+privStateVar = SV Priv
+
+classDef :: Name -> Description -> [StateVariable] -> [Func] -> Class
 classDef n = ClassDef n Nothing
 
-classImplements :: Name -> Name -> Description -> [CodeVarChunk] -> [Func] -> 
+classImplements :: Name -> Name -> Description -> [StateVariable] -> [Func] -> 
   Class
 classImplements n i = ClassDef n (Just i)
      
@@ -48,11 +61,16 @@ funcData :: Name -> Description -> DataDesc -> Func
 funcData n desc d = FData $ FuncData (toPlainName n) desc d
 
 funcDef :: (Quantity c, MayHaveUnit c) => Name -> Description -> [c] -> 
-  Space -> Maybe Description -> [FuncStmt] -> Func  
+  Space -> Maybe Description -> [FuncStmt] -> Func
 funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc 
-  (map quantvar i) t returnDesc fs 
+  (map (pcAuto . quantvar) i) t returnDesc fs 
 
-ctorDef :: Name -> Description -> [CodeVarChunk] -> [Initializer] -> 
+funcDefParams :: Name -> String -> [ParameterChunk] -> Space -> Maybe String -> 
+  [FuncStmt] -> Func
+funcDefParams s desc ps t returnDesc fs = FDef $ FuncDef (toPlainName s) desc 
+  ps t returnDesc fs
+
+ctorDef :: Name -> Description -> [ParameterChunk] -> [Initializer] -> 
   [FuncStmt] -> Func
 ctorDef n desc ps is fs = FDef $ CtorDef n desc ps is fs
 
@@ -61,9 +79,9 @@ data FuncData where
   
 data FuncDef where
   -- Name, description, parameters, return type, return description, statements
-  FuncDef :: Name -> Description -> [CodeVarChunk] -> Space -> 
+  FuncDef :: Name -> Description -> [ParameterChunk] -> Space -> 
     Maybe Description -> [FuncStmt] -> FuncDef
-  CtorDef :: Name -> Description -> [CodeVarChunk] -> [Initializer] -> 
+  CtorDef :: Name -> Description -> [ParameterChunk] -> [Initializer] -> 
     [FuncStmt] -> FuncDef
 
 type Initializer = (CodeVarChunk, Expr)
@@ -71,7 +89,6 @@ type Initializer = (CodeVarChunk, Expr)
 data FuncStmt where
   FAsg :: CodeVarChunk -> Expr -> FuncStmt
   FAsgIndex :: CodeVarChunk -> Integer -> Expr -> FuncStmt
-  FAsgObjVar :: CodeVarChunk -> CodeVarChunk -> Expr -> FuncStmt -- Object, field, value
   FFor :: CodeVarChunk -> Expr -> [FuncStmt] -> FuncStmt
   FForEach :: CodeVarChunk -> Expr -> [FuncStmt] -> FuncStmt
   FWhile :: Expr -> [FuncStmt] -> FuncStmt
@@ -81,6 +98,7 @@ data FuncStmt where
   FTry :: [FuncStmt] -> [FuncStmt] -> FuncStmt
   FContinue :: FuncStmt
   FDecDef :: CodeVarChunk -> Expr -> FuncStmt
+  FFuncDef :: CodeFuncChunk -> [ParameterChunk] -> [FuncStmt] -> FuncStmt
   FVal :: Expr -> FuncStmt
   FMulti :: [FuncStmt] -> FuncStmt
   -- slight hack, for now
@@ -100,9 +118,10 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
   where
     fstvars :: ChunkDB -> FuncStmt -> [CodeVarChunk]
     fstvars sm (FDecDef cch e) = cch:codevars' e sm
+    fstvars sm (FFuncDef cch ps sts) = quantvar cch : map quantvar ps 
+      ++ concatMap (fstvars sm) sts
     fstvars sm (FAsg cch e) = cch:codevars' e sm
     fstvars sm (FAsgIndex cch _ e) = cch:codevars' e sm
-    fstvars sm (FAsgObjVar cch _ e) = cch:codevars' e sm
     fstvars sm (FFor cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
     fstvars sm (FForEach cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
     fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
@@ -117,9 +136,10 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
 
     declared :: ChunkDB -> FuncStmt -> [CodeVarChunk]
     declared _  (FDecDef cch _) = [cch]
+    declared sm (FFuncDef cch ps sts) = quantvar cch : map quantvar ps 
+      ++ concatMap (declared sm) sts
     declared _  (FAsg _ _) = []
     declared _  FAsgIndex {} = []
-    declared _  FAsgObjVar {} = []
     declared sm (FFor cch _ fs) = cch : concatMap (declared sm) fs
     declared sm (FForEach cch _ fs) = cch : concatMap (declared sm) fs
     declared sm (FWhile _ fs) = concatMap (declared sm) fs
@@ -136,11 +156,3 @@ fname :: Func -> Name
 fname (FDef (FuncDef n _ _ _ _ _)) = n
 fname (FDef (CtorDef n _ _ _ _)) = n
 fname (FData (FuncData n _ _)) = n 
-
-prefixFunctions :: [Mod] -> [Mod]
-prefixFunctions = map (\(Mod nm desc rs cs fs) -> Mod nm desc rs cs $ map pfunc fs)
-  where pfunc (FData (FuncData n desc d)) = FData (FuncData (funcPrefix ++ n) 
-          desc d)
-        pfunc (FDef (FuncDef n desc a t rd f)) = FDef (FuncDef (funcPrefix ++ n)
-          desc a t rd f)
-        pfunc f = f

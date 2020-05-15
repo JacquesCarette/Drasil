@@ -29,7 +29,7 @@ def func_q(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return Interpolation.func_interpY("TSD.txt", inParams.SD, inParams.w_TNT)
+    return Interpolation.interpY("TSD.txt", inParams.SD, inParams.w_TNT)
 
 ## \brief Calculates dimensionless load
 # \param inParams structure holding the input values
@@ -63,7 +63,7 @@ def func_q_hat_tol(inParams, J_tol):
     print("  }", file=outfile)
     outfile.close()
     
-    return Interpolation.func_interpY("SDF.txt", inParams.AR, J_tol)
+    return Interpolation.interpY("SDF.txt", inParams.AR, J_tol)
 
 ## \brief Calculates stress distribution factor (Function)
 # \param inParams structure holding the input values
@@ -80,7 +80,7 @@ def func_J(inParams, q_hat):
     print("  }", file=outfile)
     outfile.close()
     
-    return Interpolation.func_interpZ("SDF.txt", inParams.AR, q_hat)
+    return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat)
 
 ## \brief Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
 # \param inParams structure holding the input values

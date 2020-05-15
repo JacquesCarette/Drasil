@@ -21,7 +21,7 @@ data BuildConfig = BuildConfig
   (Maybe BuildName) (Maybe BuildName) BuildDependencies
 
 data RunType = Standalone
-             | Interpreter CommandFragment
+             | Interpreter [CommandFragment]
 
 data Runnable = Runnable BuildName NameOpts RunType
 
@@ -38,6 +38,7 @@ nameOpts = NameOpts {
 
 type BuildCommand = [CommandFragment]
 type InterpreterCommand = String
+type InterpreterOption = String
 
 asFragment :: String -> CommandFragment
 asFragment = makeS
@@ -70,11 +71,12 @@ sharedLibrary :: BuildName
 sharedLibrary = BWithExt BPackName $ OtherExt $
   mkOSVar "LIB_EXTENSION" ".dll" ".dylib" ".so"
 
-interp :: BuildName -> NameOpts -> InterpreterCommand -> Maybe Runnable
-interp b n = Just . Runnable b n . Interpreter . makeS
+interp :: BuildName -> NameOpts -> InterpreterCommand -> [InterpreterOption]
+  -> Maybe Runnable
+interp b n c = Just . Runnable b n . Interpreter . map makeS . (c:)
 
 interpMM :: InterpreterCommand -> Maybe Runnable
-interpMM = Just . Runnable mainModuleFile nameOpts . Interpreter . makeS
+interpMM = Just . Runnable mainModuleFile nameOpts . Interpreter . (:[]) . makeS
 
 mainModule :: BuildName
 mainModule = BMain

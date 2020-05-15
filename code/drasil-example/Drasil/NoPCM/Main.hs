@@ -7,7 +7,10 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.NoPCM.Body (si, srs, printSetting)
+import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg, 
+  apacheODEPckg, odeintPckg)
+
+import Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo)
 
 code :: CodeSpec
 code = codeSpec si choices []
@@ -28,7 +31,9 @@ choices = defaultChoices {
   inputStructure = Unbundled,
   constStructure = Store Bundled,
   constRepr = Const,
-  auxFiles = [SampleInput "../../datafiles/NoPCM/sampleInput.txt"]
+  auxFiles = [SampleInput "../../datafiles/NoPCM/sampleInput.txt"],
+  odeLib = [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg],
+  odes = [noPCMODEInfo]
 }       
        
 main :: IO ()            

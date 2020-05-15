@@ -42,7 +42,7 @@ import Control.Applicative ((<|>))
 import Control.Monad.State (modify)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, vcat, semi, 
-  equals)
+  equals, empty)
 import qualified Text.PrettyPrint.HughesPJ as D (float)
 
 -- Types --
@@ -122,12 +122,15 @@ listSize v = v $. S.listSizeFunc
 increment1 :: (RenderSym r) => SVariable r -> MSStatement r
 increment1 vr = zoom lensMStoVS $ onStateValue (mkStmt . R.increment) vr
 
-varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> SVariable r 
-  -> MSStatement r
-varDec s d v' = onStateValue (\v -> mkStmt (RC.perm (bind $ variableBind v) 
-  <+> RC.type' (variableType v) <+> RC.variable v)) (zoom lensMStoVS v')
+varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc -> 
+  SVariable r -> MSStatement r
+varDec s d pdoc v' = onStateValue (\v -> mkStmt (RC.perm (bind $ variableBind v)
+  <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <> 
+  RC.variable v))) (zoom lensMStoVS v')
   where bind Static = s
         bind Dynamic = d
+        ptrdoc (List _) = pdoc
+        ptrdoc _ = empty
 
 varDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 varDecDef vr vl' = on2StateValues (\vd vl -> mkStmt (RC.statement vd <+> equals 

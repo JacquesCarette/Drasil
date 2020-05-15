@@ -1,49 +1,54 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
-  scipyODE, scipyCall, oslo, osloCall, apacheODE, apacheODECall, odeint, 
-  odeintCall, odeInfo, odeOptions
+  scipyODEPckg, scipyODESymbols, osloPckg, osloSymbols, arrayVecDepVar, 
+  apacheODEPckg, apacheODESymbols, odeintPckg, odeintSymbols
 ) where
 
 import Language.Drasil
 
-import Language.Drasil.Code (ODEMethod(..), ExternalLibrary, Step, Argument, 
+import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument, 
   externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep,
-  callStep, callRequiresJust, callRequires, libFunction, libMethod, 
-  libFunctionWithResult, libMethodWithResult, libConstructor, 
-  constructAndReturn, lockedArg, lockedNamedArg, inlineArg, inlineNamedArg, 
-  preDefinedArg, functionArg, customObjArg, recordArg, lockedParam, 
-  unnamedParam, customClass, implementation, constructorInfo, methodInfo, 
-  methodInfoNoReturn, appendCurrSol, populateSolList, assignArrayIndex, 
-  assignSolFromObj, initSolListFromArray, initSolListWithVal, 
-  solveAndPopulateWhile, returnExprList, fixedReturn,
+  callStep, libFunction, libMethod, libFunctionWithResult, libMethodWithResult, 
+  libConstructor, libConstructorMultiReqs, constructAndReturn, lockedArg, 
+  lockedNamedArg, inlineArg, inlineNamedArg, preDefinedArg, functionArg, 
+  customObjArg, recordArg, lockedParam, unnamedParam, customClass, 
+  implementation, constructorInfo, methodInfo, methodInfoNoReturn, 
+  appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
+  initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
+  returnExprList, fixedReturn,
   ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill, 
   mandatoryStepFill, mandatoryStepsFill, callStepFill, libCallFill, 
-  basicArgFill, functionArgFill, customObjArgFill, recordArgFill, 
-  unnamedParamFill, userDefinedParamFill, customClassFill, implementationFill, 
-  constructorInfoFill, methodInfoFill, appendCurrSolFill, populateSolListFill, 
-  assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
-  initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, 
-  fixedStatementFill, CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, 
-  ccObjVar)
+  userDefinedArgFill, basicArgFill, functionArgFill, customObjArgFill, 
+  recordArgFill, unnamedParamFill, unnamedParamPBVFill, userDefinedParamFill, 
+  customClassFill, implementationFill, constructorInfoFill, methodInfoFill, 
+  appendCurrSolFill, populateSolListFill, assignArrayIndexFill, 
+  assignSolFromObjFill, initSolListFromArrayFill, initSolListWithValFill, 
+  solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill, 
+  CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, listToArray, 
+  ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib, 
+  mkODELibNoPath, pubStateVar, privStateVar, field)
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), _1, _2, over)
 
 -- SciPy -- 
 
+scipyODEPckg :: ODELibPckg
+scipyODEPckg = mkODELibNoPath scipyODE scipyCall [Python]
+
 scipyODE :: ExternalLibrary
 scipyODE = externalLib [
-  mandatoryStep $ callRequiresJust scipyImport $ libFunctionWithResult 
+  mandatoryStep $ callStep $ libFunctionWithResult scipyImport
     odefunc [
       functionArg f (map unnamedParam [Real, Array Real]) 
       returnExprList] r,
   choiceStep [
     setIntegratorMethod [vode, methodArg "adams", atol, rtol],
     setIntegratorMethod [vode, methodArg "bdf", atol, rtol],
-    setIntegratorMethod [lockedArg (str "dopri45"), atol, rtol]],
-  mandatorySteps [callStep $ libMethod r setInitVal 
-      [inlineArg Real, inlineArg Real],
+    setIntegratorMethod [lockedArg (str "dopri5"), atol, rtol]],
+  mandatorySteps [callStep $ libMethod scipyImport r 
+      setInitVal [inlineArg Real, inlineArg Real],
     initSolListWithVal,
-    solveAndPopulateWhile (libMethod r successful []) rt 
-      (libMethod r integrateStep [inlineArg Real]) ry]]
+    solveAndPopulateWhile (libMethod scipyImport r successful []) r t 
+      (libMethod scipyImport r integrateStep [inlineArg Real]) y]]
 
 scipyCall :: ODEInfo -> ExternalLibraryCall
 scipyCall info = externalLibCall [
@@ -55,7 +60,7 @@ scipyCall info = externalLibCall [
       [initVal info, tInit info],
     initSolListWithValFill (depVar info) (initVal info),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info) 
-      (libCallFill [basicArgFill (sy rt + stepSize (odeOpts info))]) 
+      (libCallFill [basicArgFill (field r t + stepSize (odeOpts info))]) 
       (depVar info)]]
   where chooseMethod Adams = (0, solveMethodFill)
         chooseMethod BDF = (1, solveMethodFill)
@@ -75,10 +80,14 @@ methodArg :: String -> Argument
 methodArg = lockedNamedArg mthdArg . str
 
 setIntegratorMethod :: [Argument] -> Step
-setIntegratorMethod = callStep . libMethod r setIntegrator
+setIntegratorMethod = callStep . libMethod scipyImport r setIntegrator
 
 odeT :: Space
 odeT = Actor "ode"
+
+scipyODESymbols :: [QuantityDict]
+scipyODESymbols = map qw [mthdArg, atolArg, rtolArg] ++ map qw [r, t, y]
+  ++ map qw [f, odefunc, setIntegrator, setInitVal, successful, integrateStep]
 
 mthdArg, atolArg, rtolArg :: NamedArgument
 mthdArg = narg $ implVar "method_scipy" (nounPhrase 
@@ -91,11 +100,9 @@ rtolArg = narg $ implVar "rtol_scipy" (nounPhrase
   "relative tolerance for ODE solution" "relative tolerances for ODE solution") 
   Real (Label "rtol")
 
-r, rt, ry :: CodeVarChunk
+r :: CodeVarChunk
 r = quantvar $ implVar "r_scipy" (nounPhrase "ODE object" "ODE objects") 
   odeT (Label "r")
-rt = ccObjVar r t
-ry = ccObjVar r y
 
 f, odefunc, setIntegrator, setInitVal, successful, 
   integrateStep :: CodeFuncChunk
@@ -103,8 +110,7 @@ f = quantfunc $ implVar "f_scipy" (nounPhrase "function representing ODE system"
   "functions representing ODE system") (Array Real) (Label "f")
 odefunc = quantfunc $ implVar "ode_scipy" (nounPhrase 
   "function for defining an ODE for SciPy" 
-  "functions for defining an ODE for SciPy") 
-  odeT (Label (scipyImport ++ ".ode"))
+  "functions for defining an ODE for SciPy") odeT (Label "ode")
 setIntegrator = quantfunc $ implVar "set_integrator_scipy" (nounPhrase
   "method for setting SciPy integrator" "methods for setting SciPy integrator")
   Void (Label "set_integrator")
@@ -124,13 +130,16 @@ integrateStep = quantfunc $ implVar "integrate_scipy" (nounPhrase
 
 -- Oslo (C#) --
 
+osloPckg :: ODELibPckg
+osloPckg = mkODELib oslo osloCall "Microsoft.Research.Oslo.dll" [CSharp]
+
 oslo :: ExternalLibrary
 oslo = externalLib [
-  mandatoryStep $ callRequiresJust "Microsoft.Research.Oslo" $ libConstructor 
+  mandatoryStep $ callStep $ libConstructor osloImport 
     vector [inlineArg Real] initv,
-  choiceStep $ map (\s -> callStep $ libFunctionWithResult s odeArgs sol) 
-    [rk547m, gearBDF],
-  mandatorySteps (callRequiresJust "System.Linq" (libMethodWithResult sol 
+  choiceStep $ map (\s -> callStep $ libFunctionWithResult osloImport s odeArgs 
+    sol) [rk547m, gearBDF],
+  mandatorySteps (callStep (libMethodWithResult osloImport sol 
       solveFromToStep (map inlineArg [Real, Real, Real]) points) :
     populateSolList points sp x)]
 
@@ -139,12 +148,12 @@ osloCall info = externalLibCall [
   mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ initVal info],
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $ 
     libCallFill [basicArgFill $ tInit info, 
-      functionArgFill (map unnamedParamFill [indepVar info, depVar info]) $ 
-        returnExprListFill (odeSyst info), 
+      functionArgFill (map unnamedParamFill [indepVar info, vecDepVar info]) $ 
+        callStepFill $ libCallFill $ map userDefinedArgFill (modifiedODESyst "arrayvec" info),
       recordArgFill [absTol $ odeOpts info, relTol $ odeOpts info]],
-  mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill 
-      [tInit info, tFinal info, stepSize $ odeOpts info],
-    populateSolListFill $ depVar info]]
+  mandatoryStepsFill (callStepFill (libCallFill $ map basicArgFill 
+      [tInit info, tFinal info, stepSize $ odeOpts info]) :
+    populateSolListFill (depVar info))]
   where chooseMethod RK45 = 0
         chooseMethod BDF = 1
         chooseMethod _ = error odeMethodUnavailable
@@ -152,13 +161,20 @@ osloCall info = externalLibCall [
 odeArgs :: [Argument]
 odeArgs = [inlineArg Real, lockedArg (sy initv),
   functionArg fOslo (map unnamedParam [Real, vecT]) 
-    (callStep $ constructAndReturn vector [inlineArg Real]),
-  recordArg options opts [aTol, rTol]]
+    (callStep $ constructAndReturn osloImport vector []),
+  recordArg osloImport options opts [aTol, rTol]]
 
 solT, vecT, optT :: Space
 solT = Actor "IEnumerable<SolPoint>"
 vecT = Actor "Vector"
 optT = Actor "Options"
+
+osloImport :: String
+osloImport = "Microsoft.Research.Oslo"
+
+osloSymbols :: [QuantityDict]
+osloSymbols = map qw [initv, opts, aTol, rTol, sol, points, sp, x] ++ 
+  map qw [fOslo, options, vector, rk547m, gearBDF, solveFromToStep]
 
 initv, opts, aTol, rTol, sol, points, sp, x :: CodeVarChunk
 initv = quantvar $ implVar "initv_oslo" (nounPhrase 
@@ -207,17 +223,34 @@ solveFromToStep = quantfunc $ implVar "SolveFromToStep_oslo" (nounPhrase
   "methods for solving an ODE given a time range")
   solT (Label "SolveFromToStep")
 
+vecDepVar :: ODEInfo -> CodeVarChunk
+vecDepVar info = quantvar $ implVar (dv ^. uid) (dv ^. term) vecT 
+  (sub (symbol dv Implementation) (Label "vec"))
+  where dv = depVar info
+
+-- Hack required because Oslo's Vector type behaves like an array, so needs to
+-- be represented as one or else will hit type errors in GOOL.
+arrayVecDepVar :: ODEInfo -> CodeVarChunk
+arrayVecDepVar info = quantvar $ implVar (dv ^. uid ++ "vec") (dv ^. term) 
+  (dv ^. typ) (sub (symbol dv Implementation) (Label "vec")) 
+  where dv = listToArray $ depVar info
+
+
 -- Apache (Java) --
+
+apacheODEPckg :: ODELibPckg
+apacheODEPckg = mkODELib apacheODE apacheODECall "lib/commons-math3-3.6.1.jar" 
+  [Java]
 
 apacheODE :: ExternalLibrary
 apacheODE = externalLib [
   choiceStep [
-    callRequires [apacheImport ++ foi, apacheImport ++ "nonstiff." ++ adams]
-      $ libConstructor adamsC (lockedArg (int 3) : itArgs) it,
-    callRequires [apacheImport ++ foi, apacheImport ++ "nonstiff." ++ dp54]
-      $ libConstructor dp54C itArgs it],
-  mandatorySteps [callStep $ libMethod it addStepHandler [
-      customObjArg (map ((apacheImport ++ "sampling.") ++) [sh, si]) 
+    callStep $ libConstructorMultiReqs [apacheImport ++ "nonstiff." ++ adams,
+      foiImp] adamsC (lockedArg (int 3) : itArgs) it,
+    callStep $ libConstructorMultiReqs [apacheImport ++ "nonstiff." ++ dp54,
+      foiImp] dp54C itArgs it],
+  mandatorySteps [callStep $ libMethod foiImp it addStepHandler [
+      customObjArg [shImp, siImp]
         "Class defining additional behaviour for each step of an ODE solution"
         stepHandler stepHandlerCtor (implementation sh [
           methodInfoNoReturn initMethod 
@@ -226,11 +259,12 @@ apacheODE = externalLib [
           methodInfoNoReturn handleStep 
             "appends solution point at each ODE solution step"
             (map lockedParam [interpolator, isLast]) 
-            [callStep $ libMethodWithResult interpolator getInterpState [] curr,
-            appendCurrSol curr]])],
-    callStep $ libMethod it integrate (customObjArg [apacheImport ++ fode] 
-      "Class representing an ODE system" ode odeCtor (implementation fode [
-        constructorInfo odeCtor [] [],
+            [callStep $ libMethodWithResult siImp interpolator getInterpState 
+              [] curr,
+            appendCurrSol (sy curr)]])],
+    callStep $ libMethod foiImp it integrate (customObjArg [apacheImport ++ 
+      fode] "Class representing an ODE system" ode odeCtor (implementation fode 
+        [constructorInfo odeCtor [] [],
         methodInfo getDimension "returns the ODE system dimension" 
           [] "dimension of the ODE system" [fixedReturn (int 1)],
         methodInfoNoReturn computeDerivatives 
@@ -247,16 +281,17 @@ apacheODECall info = externalLibCall [
     libCallFill (map (basicArgFill . ($ odeOpts info)) 
       [stepSize, stepSize, absTol, relTol]),
   mandatoryStepsFill [callStepFill $ libCallFill [
-      customObjArgFill [depVar info] (implementationFill [
+      customObjArgFill [pubStateVar $ depVar info] (implementationFill [
         methodInfoFill [] [initSolListFromArrayFill $ depVar info], methodInfoFill [] 
           [callStepFill $ libCallFill [], appendCurrSolFill $ depVar info]])],
-    callStepFill $ libCallFill $ customObjArgFill (otherVars info) 
+    callStepFill $ libCallFill $ customObjArgFill 
+      (map privStateVar $ otherVars info) 
       (implementationFill [
         constructorInfoFill (map userDefinedParamFill $ otherVars info) 
           (zip (otherVars info) (map sy $ otherVars info)) [], 
         methodInfoFill [] [fixedStatementFill], 
-        methodInfoFill (map unnamedParamFill [depVar info, ddep]) 
-          [assignArrayIndexFill ddep (odeSyst info)]]) 
+        methodInfoFill (map (unnamedParamFill . listToArray) [depVar info, ddep]) 
+          [assignArrayIndexFill (listToArray ddep) (modifiedODESyst "array" info)]]) 
       : map basicArgFill [tInit info, Matrix [[initVal info]], tFinal info, 
         Matrix [[initVal info]]],
     assignSolFromObjFill $ depVar info]]
@@ -265,19 +300,27 @@ apacheODECall info = externalLibCall [
         chooseMethod _ = error odeMethodUnavailable
         ddep = diffCodeChunk $ depVar info
 
-apacheImport :: String
-apacheImport = "org.apache.commons.math3.ode."
-
 itArgs :: [Argument]
 itArgs = map inlineArg [Real, Real, Real, Real]
 
-adams, dp54, foi, sh, si, fode :: String
+apacheImport, adams, dp54, foi, foiImp, sampling, sh, shImp, si, siImp, fode :: String
+apacheImport = "org.apache.commons.math3.ode."
 adams = "AdamsBashforthIntegrator"
 dp54 = "DormandPrince54Integrator"
 foi = "FirstOrderIntegrator"
+foiImp = apacheImport ++ foi
+sampling = "sampling"
 sh = "StepHandler"
+shImp = apacheImport ++ sampling ++ "." ++ sh
 si = "StepInterpolator"
+siImp = apacheImport ++ sampling ++ "." ++ si
 fode = "FirstOrderDifferentialEquations"
+
+apacheODESymbols :: [QuantityDict]
+apacheODESymbols = map qw [it, currVals, stepHandler, t0, y0, t, interpolator, 
+  isLast, curr, ode] ++ map qw [adamsC, dp54C, stepHandlerCtor, addStepHandler, 
+  initMethod, handleStep, getInterpState, integrate, odeCtor, getDimension, 
+  computeDerivatives]
 
 it, currVals, stepHandler, t0, y0, interpolator, isLast, curr :: CodeVarChunk
 it = quantvar $ implVar "it_apache" (nounPhrase "integrator for solving ODEs"
@@ -287,7 +330,7 @@ currVals = quantvar $ implVar "curr_vals_apache" (nounPhrase
   "arrays holding ODE solution values for the current step") 
   (Array Real) (Label "curr_vals")
 stepHandler = quantvar $ implVar "stepHandler_apache" (nounPhrase 
-  "ODE step handler" "ODE step handlers") (Actor sh)
+  "ODE step handler" "ODE step handlers") (Actor $ "ODE" ++ sh)
   (Label "stepHandler")
 t0 = quantvar $ implVar "t0_apache" (nounPhrase "initial time for ODE solving"
   "intial times for ODE solving") Real (Label "t0")
@@ -316,7 +359,7 @@ dp54C = quantfunc $ implVar "dp54_ctor_apache" (nounPhrase
   (Actor dp54) (Label dp54)
 stepHandlerCtor = quantfunc $ implVar "StepHandler_ctor_apache" (nounPhrase
   "constructor for StepHandler" "constructors for StepHandler") 
-  (Actor sh) (Label "StepHandler")
+  (Actor $ "ODE" ++ sh) (Label $ "ODE" ++ sh)
 addStepHandler = quantfunc $ implVar "addStepHandler_apache" (nounPhrase
   "method for adding a step handler to an integrator"
   "methods for adding a step handler to an integrator")
@@ -344,14 +387,17 @@ computeDerivatives = quantfunc $ implVar "computeDerivatives_apache" (nounPhrase
 
 -- odeint (C++) --
 
+odeintPckg :: ODELibPckg
+odeintPckg = mkODELib odeint odeintCall "." [Cpp]
+
 odeint :: ExternalLibrary
 odeint = externalLib [
   choiceSteps [
-    [callStep $ libConstructor rkdp5C [] rk,
-    callStep $ libFunctionWithResult makeControlled 
+    [callStep $ libConstructor (odeintImport ++ "/stepper/runge_kutta_dopri5") rkdp5C [] rk,
+    callStep $ libFunctionWithResult (odeintImport ++ "/stepper/generation") makeControlled 
       [inlineArg Real, inlineArg Real, lockedArg (sy rk)] stepper],
-    [callStep $ libConstructor adamsBashC [] stepper]],
-  mandatoryStep $ callRequiresJust "boost/numeric/odeint.hpp" $ libFunction 
+    [callStep $ libConstructor (odeintImport ++ "/stepper/adams_bashforth") adamsBashC [] stepper]],
+  mandatoryStep $ callStep $ libFunction (odeintImport ++ "/integrate/integrate_const")
     integrateConst [
       lockedArg (sy stepper), 
       customObjArg [] "Class representing an ODE system" ode odeCtor 
@@ -368,21 +414,21 @@ odeint = externalLib [
           constructorInfo popCtor [unnamedParam (Vect Real)] [],
           methodInfoNoReturn popOp 
             "appends solution point for current ODE solution step"
-            [lockedParam y, lockedParam t] [appendCurrSol y]])]]
+            [lockedParam y, lockedParam t] [appendCurrSol (sy y)]])]]
 
 odeintCall :: ODEInfo -> ExternalLibraryCall
 odeintCall info = externalLibCall [
   uncurry choiceStepsFill (chooseMethod $ solveMethod $ odeOpts info),
   mandatoryStepFill $ callStepFill $ libCallFill $
-    customObjArgFill (otherVars info) (customClassFill [
+    customObjArgFill (map privStateVar $ otherVars info) (customClassFill [
       constructorInfoFill (map userDefinedParamFill $ otherVars info) 
         (zip (otherVars info) (map sy $ otherVars info)) [], 
-      methodInfoFill (map unnamedParamFill [depVar info, ddep]) 
+      methodInfoFill [unnamedParamPBVFill $ depVar info, unnamedParamFill ddep]
         [assignArrayIndexFill ddep (odeSyst info)]]) :
     map basicArgFill [Matrix [[initVal info]], tInit info, tFinal info, 
       stepSize $ odeOpts info] ++ [
-    customObjArgFill [depVar info] (customClassFill [
-      constructorInfoFill [userDefinedParamFill $ depVar info] 
+    customObjArgFill [privStateVar $ depVar info] (customClassFill [
+      constructorInfoFill [unnamedParamFill $ depVar info] 
         [(depVar info, sy $ depVar info)] [],
       methodInfoFill [] [appendCurrSolFill $ depVar info]])]]
   where chooseMethod RK45 = (0, map (callStepFill . libCallFill . map 
@@ -391,13 +437,19 @@ odeintCall info = externalLibCall [
         chooseMethod _ = error odeMethodUnavailable
         ddep = diffCodeChunk $ depVar info
 
-odeNameSpace, rkdp5, adamsBash :: String
+odeintImport, odeNameSpace, rkdp5, adamsBash :: String
+odeintImport = "boost/numeric/odeint"
 odeNameSpace = "boost::numeric::odeint::"
 rkdp5 = odeNameSpace ++ "runge_kutta_dopri5<vector<double>>"
 adamsBash = odeNameSpace ++ "adams_bashforth<3,vector<double>>"
 
 popT :: Space
 popT = Actor "Populate"
+
+odeintSymbols :: [QuantityDict]
+odeintSymbols = map qw [odeintCurrVals, rk, stepper, pop, t, y, ode] ++ map qw 
+  [rkdp5C, makeControlled, adamsBashC, integrateConst, odeCtor, odeOp, popCtor, 
+  popOp]
 
 odeintCurrVals, rk, stepper, pop :: CodeVarChunk
 odeintCurrVals = quantvar $ implVar "currVals_odeint" (nounPhrase 
@@ -473,37 +525,33 @@ odeMethodUnavailable :: String
 odeMethodUnavailable = "Chosen ODE solving method is not available" ++
           " in chosen ODE solving library"
 
--- Data 
-
--- This may be temporary, but need a structure to hold ODE info for now. 
--- Goal will be for this info to be populated by the instance model for the ODE and the Choices structure.
--- Probably doesn't belong here, but where?
-data ODEInfo = ODEInfo {
-  indepVar :: CodeVarChunk,
-  depVar :: CodeVarChunk,
-  otherVars :: [CodeVarChunk],
-  tInit :: Expr,
-  tFinal :: Expr,
-  initVal :: Expr,
-  odeSyst :: [Expr],
-  odeOpts :: ODEOptions
-}
-
-odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> Expr -> Expr -> 
-  Expr -> [Expr] -> ODEOptions -> ODEInfo
-odeInfo = ODEInfo
-
-data ODEOptions = ODEOpts {
-  solveMethod :: ODEMethod,
-  absTol :: Expr,
-  relTol :: Expr,
-  stepSize :: Expr
-}
-
-odeOptions :: ODEMethod -> Expr -> Expr -> Expr -> ODEOptions
-odeOptions = ODEOpts
-
 diffCodeChunk :: CodeVarChunk -> CodeVarChunk
 diffCodeChunk c = quantvar $ implVar' ("d" ++ c ^. uid) 
   (compoundPhrase (nounPhraseSP "change in") (c ^. term)) (getA c) (c ^. typ)
   (Concat [Label "d", symbol c Implementation]) (getUnit c) 
+
+-- FIXME: This is surely a hack, but I can't think of a better way right now.
+-- Some libraries use an array instead of a list to internally represent the ODE
+-- So we need a way to switch the dependent variable from list to array,
+-- and the array version must have a distinct UID so it can be stored in the DB
+modifiedODESyst :: String -> ODEInfo -> [Expr]
+modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
+  where replaceDepVar (C c) = if c == depVar info ^. uid 
+          then C (c ++ "_" ++ sufx) else C c
+        replaceDepVar (AssocA a es) = AssocA a (map replaceDepVar es)
+        replaceDepVar (AssocB b es) = AssocB b (map replaceDepVar es)
+        replaceDepVar (Deriv dt e u) = Deriv dt (replaceDepVar e) u
+        replaceDepVar (FCall u es nes) = FCall u (map replaceDepVar es) 
+          (map (over _2 replaceDepVar) nes)
+        replaceDepVar (New u es nes) = New u (map replaceDepVar es) 
+          (map (over _2 replaceDepVar) nes)
+        replaceDepVar (Message au mu es nes) = Message au mu 
+          (map replaceDepVar es) (map (over _2 replaceDepVar) nes)
+        replaceDepVar (Case c cs) = Case c (map (over _1 replaceDepVar) cs)
+        replaceDepVar (Matrix es) = Matrix $ map (map replaceDepVar) es
+        replaceDepVar (UnaryOp u e) = UnaryOp u $ replaceDepVar e
+        replaceDepVar (BinaryOp b e1 e2) = BinaryOp b (replaceDepVar e1) 
+          (replaceDepVar e2)
+        replaceDepVar (Operator ao dd e) = Operator ao dd $ replaceDepVar e 
+        replaceDepVar (IsIn e s) = IsIn (replaceDepVar e) s
+        replaceDepVar e = e

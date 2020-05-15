@@ -6,14 +6,13 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, input_, value)
 
-import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
-import Drasil.SWHS.DataDefs (balanceDecayRate)
+import Drasil.SWHS.DataDefs (waterMass, tankVolume, balanceDecayRate)
 import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
   checkWithPhysConsts, findMassConstruct, inReqDesc, oIDQConstruct)
-import Drasil.SWHS.Unitals (diam, tankLength, wDensity, wMass, wVol)
 
+import Drasil.NoPCM.DataDefs (waterVolume)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (inputs)
 
@@ -33,13 +32,9 @@ inputInitVals = cic "inputInitVals" ( foldlSent [
   "Input-Initial-Values" funcReqDom
 
 --
-findMassExpr :: Expr
-findMassExpr = sy wMass $= sy wVol * sy wDensity $=
-  (sy pi_ * ((sy diam / 2) $^ 2) * sy tankLength * sy wDensity)
-
 findMass :: ConceptInstance
 findMass = findMassConstruct inputInitVals (phrase mass) [eBalanceOnWtr]
-              (E findMassExpr) (ch wVol `isThe` phrase wVol)
+            [waterMass, waterVolume, tankVolume]
 
 --
 oIDQVals :: [Sentence]

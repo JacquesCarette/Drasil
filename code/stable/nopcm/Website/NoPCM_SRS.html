@@ -309,6 +309,11 @@
                   <td>m<sup>3</sup></td>
                 </tr>
                 <tr>
+                  <td><em>V<sub>tank</sub></em></td>
+                  <td>Volume of the cylindrical tank</td>
+                  <td>m<sup>3</sup></td>
+                </tr>
+                <tr>
                   <td><em>V<sub>W</sub></em></td>
                   <td>Volume of water</td>
                   <td>m<sup>3</sup></td>
@@ -694,6 +699,11 @@
                       Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0&deg;C and 100&deg;C, respectively (RefBy: <a href=#IM:heatEInWtr>IM: heatEInWtr</a>.)
                     </div>
                   </p>
+                  <p>
+                    <div id="assumpVCN">
+                      Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: <a href=#DD:waterVolume.nopcm>DD: waterVolume_nopcm</a>.)
+                    </div>
+                  </p>
                 </div>
               </div>
             </div>
@@ -1054,6 +1064,163 @@
                 <p class="paragraph">
                   This section collects and defines all the data needed to build the instance models.
                 </p>
+                <div id="DD:waterMass">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:waterMass</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Mass of water</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>m<sub>W</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">kg</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>m<sub>W</sub></em> is the mass of water (kg)</li>
+                          <li>
+                            <em>V<sub>W</sub></em> is the volume of water (m<sup>3</sup>)
+                          </li>
+                          <li>
+                            <em>ρ<sub>W</sub></em> is the density of water (kg/m<sup>3</sup>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#findMass>FR: Find-Mass</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:waterVolume.nopcm">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:waterVolume.nopcm</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Volume of water</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>V<sub>W</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">m<sup>3</sup></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{V_{\text{W}}}={V_{\text{tank}}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>V<sub>W</sub></em> is the volume of water (m<sup>3</sup>)
+                          </li>
+                          <li>
+                            <em>V<sub>tank</sub></em> is the volume of the cylindrical tank (m<sup>3</sup>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          Based on <a href=#assumpVCN>A: Volume-Coil-Negligible</a>. <em>V<sub>tank</sub></em> is defined in <a href=#DD:tankVolume>DD: tankVolume</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph"><a href=#findMass>FR: Find-Mass</a></p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:tankVolume">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:tankVolume</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Volume of the cylindrical tank</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>V<sub>tank</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">m<sup>3</sup></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[{V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>V<sub>tank</sub></em> is the volume of the cylindrical tank (m<sup>3</sup>)
+                          </li>
+                          <li>
+                            <em>π</em> is the ratio of circumference to diameter for any circle (Unitless)
+                          </li>
+                          <li><em>D</em> is the diameter of tank (m)</li>
+                          <li><em>L</em> is the length of tank (m)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#DD:waterVolume.nopcm>DD: waterVolume_nopcm</a> and <a href=#findMass>FR: Find-Mass</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
                 <div id="DD:balanceDecayRate">
                   <table class="ddefn">
                     <tr>
@@ -1490,7 +1657,7 @@
               </p>
               <p>
                 <div id="findMass">
-                  Find-Mass: Use the inputs in <a href=#inputInitVals>FR: Input-Initial-Values</a> to find the mass needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, using <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = π&#8239;(\(\frac{D}{2}\))<sup>2</sup>&#8239;L&#8239;ρ<sub>W</sub></em>, where <em>V<sub>W</sub></em> is the volume of water.
+                  Find-Mass: Use the inputs in <a href=#inputInitVals>FR: Input-Initial-Values</a> to find the mass needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, using <a href=#DD:waterMass>DD: waterMass</a>, <a href=#DD:waterVolume.nopcm>DD: waterVolume_nopcm</a>, and <a href=#DD:tankVolume>DD: tankVolume</a>.
                 </div>
               </p>
               <p>
@@ -1712,9 +1879,62 @@
                 <a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>
               </th>
               <th><a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a></th>
+              <th><a href=#assumpVCN>A: Volume-Coil-Negligible</a></th>
+            </tr>
+            <tr>
+              <td><a href=#DD:waterMass>DD: waterMass</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:waterVolume.nopcm>DD: waterVolume_nopcm</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+            </tr>
+            <tr>
+              <td><a href=#DD:tankVolume>DD: tankVolume</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1744,6 +1964,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:sensHtE>TM: sensHtE</a></td>
@@ -1760,11 +1981,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:nwtnCooling>TM: nwtnCooling</a></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1792,6 +2015,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
@@ -1804,6 +2028,7 @@
               <td></td>
               <td>X</td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1826,6 +2051,7 @@
               <td>X</td>
               <td>X</td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:heatEInWtr>IM: heatEInWtr</a></td>
@@ -1842,6 +2068,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#inputInitVals>FR: Input-Initial-Values</a></td>
@@ -1858,9 +2085,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#findMass>FR: Find-Mass</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1892,11 +2121,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#outputInputDerivVals>FR: Output-Input-Derived-Values</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1928,11 +2159,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#calcChgHeatEnergyWtrOverTime>FR: Calculate-Change-Heat_Energy-Water-Over-Time</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1962,9 +2195,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifiable>NFR: Verifiable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1994,6 +2229,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#reusable>NFR: Reusable</a></td>
@@ -2010,9 +2246,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR: Maintainable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2044,6 +2282,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
@@ -2057,6 +2296,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2078,6 +2318,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#likeChgTLH>LC: Tank-Lose-Heat</a></td>
@@ -2094,6 +2335,7 @@
               <td>X</td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#unlikeChgWFS>UC: Water-Fixed-States</a></td>
@@ -2107,6 +2349,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2126,6 +2369,7 @@
               <td></td>
               <td>X</td>
               <td></td>
+              <td></td>
             </tr>
           </table>
           <p class="caption">
@@ -2136,6 +2380,9 @@
           <table class="table">
             <tr>
               <th></th>
+              <th><a href=#DD:waterMass>DD: waterMass</a></th>
+              <th><a href=#DD:waterVolume.nopcm>DD: waterVolume_nopcm</a></th>
+              <th><a href=#DD:tankVolume>DD: tankVolume</a></th>
               <th><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></th>
               <th><a href=#TM:consThermE>TM: consThermE</a></th>
               <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
@@ -2148,7 +2395,52 @@
               <th><a href=#IM:heatEInWtr>IM: heatEInWtr</a></th>
             </tr>
             <tr>
+              <td><a href=#DD:waterMass>DD: waterMass</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:waterVolume.nopcm>DD: waterVolume_nopcm</a></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:tankVolume>DD: tankVolume</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2168,9 +2460,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:sensHtE>TM: sensHtE</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2190,9 +2488,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:rocTempSimp>GD: rocTempSimp</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td>X</td>
               <td></td>
@@ -2209,6 +2513,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -2217,6 +2524,9 @@
             </tr>
             <tr>
               <td><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -2228,6 +2538,9 @@
             </tr>
             <tr>
               <td><a href=#IM:heatEInWtr>IM: heatEInWtr</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -2246,6 +2559,9 @@
           <table class="table">
             <tr>
               <th></th>
+              <th><a href=#DD:waterMass>DD: waterMass</a></th>
+              <th><a href=#DD:waterVolume.nopcm>DD: waterVolume_nopcm</a></th>
+              <th><a href=#DD:tankVolume>DD: tankVolume</a></th>
               <th><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></th>
               <th><a href=#TM:consThermE>TM: consThermE</a></th>
               <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
@@ -2297,9 +2613,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#waterEnergyGS>GS: Predict-Water-Energy</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2341,9 +2663,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#findMass>FR: Find-Mass</a></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2387,11 +2715,17 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#outputInputDerivVals>FR: Output-Input-Derived-Values</a>
               </td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -2422,6 +2756,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -2440,6 +2777,9 @@
               <td>
                 <a href=#calcChgHeatEnergyWtrOverTime>FR: Calculate-Change-Heat_Energy-Water-Over-Time</a>
               </td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2481,9 +2821,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifiable>NFR: Verifiable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2525,6 +2871,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#reusable>NFR: Reusable</a></td>
@@ -2547,9 +2896,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR: Maintainable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

@@ -22,6 +22,7 @@ import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
 import GOOL.Drasil (onCodeList)
 
+import Data.List (intercalate)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -56,18 +57,25 @@ instance AuxiliarySym JavaProject where
 
   optimizeDox = return yes
 
-  makefile it = G.makefile (jBuildConfig it) (G.noRunIfLib it jRunnable)
+  makefile fs it = G.makefile (jBuildConfig fs it) 
+    (G.noRunIfLib it (jRunnable fs))
 
   auxHelperDoc = unJP
   auxFromData fp d = return $ ad fp d
 
-jBuildConfig :: ImplementationType -> Maybe BuildConfig
-jBuildConfig Program = buildSingle (\i _ -> [asFragment "javac" : i]) 
-  (withExt (inCodePackage mainModule) ".class") $ inCodePackage mainModuleFile
-jBuildConfig Library = buildAllAdditionalName (\i o a -> 
-  [asFragment "javac" : i, map asFragment ["jar", "-cvf"] ++ [o, a]]) 
+jBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
+jBuildConfig fs Program = buildSingle (\i _ -> [asFragment "javac" : map 
+  asFragment (classPath fs) ++ i]) (withExt (inCodePackage mainModule) 
+  ".class") $ inCodePackage mainModuleFile
+jBuildConfig fs Library = buildAllAdditionalName (\i o a -> 
+  [asFragment "javac" : map asFragment (classPath fs) ++ i,
+    map asFragment ["jar", "-cvf"] ++ [o, a]]) 
   (BWithExt BPackName $ OtherExt $ asFragment ".jar") BPackName
 
-jRunnable :: Maybe Runnable
-jRunnable = interp (flip withExt ".class" $ inCodePackage mainModule) 
-  jNameOpts "java"
+jRunnable :: [FilePath] -> Maybe Runnable
+jRunnable fs = interp (flip withExt ".class" $ inCodePackage mainModule) 
+  jNameOpts "java" (classPath fs)
+
+classPath :: [FilePath] -> [String]
+classPath fs = if null fs then [] else 
+  ["-cp", "\"" ++ intercalate ":" (fs ++ ["."]) ++ "\""]

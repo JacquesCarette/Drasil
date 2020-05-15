@@ -21,10 +21,10 @@ public class ReadTable {
         \param x_matrix lists of x values at different z values
         \param y_matrix lists of y values at different z values
     */
-    public static void func_read_table(String filename, ArrayList<Double> z_vector, ArrayList<ArrayList<Double>> x_matrix, ArrayList<ArrayList<Double>> y_matrix) throws FileNotFoundException, IOException {
+    public static void read_table(String filename, ArrayList<Double> z_vector, ArrayList<ArrayList<Double>> x_matrix, ArrayList<ArrayList<Double>> y_matrix) throws FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_read_table called with inputs: {");
+        outfile.println("function read_table called with inputs: {");
         outfile.print("  filename = ");
         outfile.print(filename);
         outfile.println(", ");

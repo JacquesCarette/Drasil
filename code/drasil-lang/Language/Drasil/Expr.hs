@@ -61,6 +61,10 @@ data Expr where
     -- Message an actor: 
       -- 1st UID is the actor, 
       -- 2nd UID is the method
+  Field :: UID -> UID -> Expr
+    -- Access a field of an actor:
+      -- 1st UID is the actor
+      -- 2nd UID is the field
   Case     :: Completeness -> [(Expr,Relation)] -> Expr 
     -- For multi-case expressions, each pair represents one case
   Matrix   :: [[Expr]] -> Expr

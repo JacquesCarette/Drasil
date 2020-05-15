@@ -6,7 +6,7 @@ import Language.Drasil
 import Database.Drasil (defTable)
 import Language.Drasil.Chunk.Code (CodeIdea(..))
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..))
+import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc, unitDoc)
 
 import qualified Data.Map as Map (lookup)
@@ -18,13 +18,13 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), colon, empty, parens, render)
 getTermDoc :: (CodeIdea c) => c -> Reader DrasilState Doc
 getTermDoc c = do
   g <- ask
-  let db = sysinfodb $ csi $ codeSpec g
+  let db = sysinfodb $ codeSpec g
   return $ sentenceDoc db Implementation Linear $ phraseNP $ codeChunk c ^. term
 
 getDefnDoc :: (CodeIdea c) => c -> Reader DrasilState Doc
 getDefnDoc c = do
   g <- ask
-  let db = sysinfodb $ csi $ codeSpec g
+  let db = sysinfodb $ codeSpec g
   return $ maybe empty ((<+>) colon . sentenceDoc db Implementation Linear . 
     (^. defn) . fst) (Map.lookup (codeChunk c ^. uid) $ defTable db)
 

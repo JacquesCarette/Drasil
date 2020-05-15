@@ -72,7 +72,7 @@ getCommentedFiles s = map makeS (doxConfigName : nub (s ^. headers ++
 
 buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn
-buildRunTarget fn (Interpreter i) = i +:+ fn
+buildRunTarget fn (Interpreter i) = foldr (+:+) mempty $ i ++ [fn]
 
 makeBuild :: [Comments] -> Maybe BuildConfig -> Maybe Runnable -> GOOLState -> 
   ProgData -> Doc

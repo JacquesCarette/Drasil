@@ -15,20 +15,18 @@ import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 import Data.Drasil.Concepts.Thermodynamics as CT (lawConsEnergy, melting)
 
-import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (energy, time)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
-import Drasil.SWHS.Assumptions (assumpVCN)
-import Drasil.SWHS.DataDefs (balanceDecayRate, balanceDecayTime,
-  balanceSolidPCM, balanceLiquidPCM)
+import Drasil.SWHS.DataDefs (waterMass, waterVolume, tankVolume, 
+  balanceDecayRate, balanceDecayTime, balanceSolidPCM, balanceLiquidPCM)
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
-import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
-import Drasil.SWHS.Unitals (consTol, diam, pcmE, pcmDensity, pcmMass, pcmVol,
-  tFinalMelt, tInitMelt, tankLength, tankVol, tempPCM, tempW, watE, wDensity,
-  wMass, wVol)
+import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, 
+  iMods)
+import Drasil.SWHS.Unitals (consTol, pcmE, tFinalMelt, tInitMelt, tempPCM, 
+  tempW, watE)
 
 ------------------------------
 -- Data Constraint: Table 1 --
@@ -55,25 +53,16 @@ findMass, checkWithPhysConsts, outputInputDerivVals, calcTempWtrOverTime,
   verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd :: ConceptInstance
 
 --
-findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods
-            (foldlList Comma List [E inputInitValsEqn, E findMassEqn, makeRef2S assumpVCN])
-            (ch wVol `isThe` phrase wVol `sAnd` ch tankVol `isThe` phrase tankVol)
+findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods 
+  [waterMass, waterVolume, tankVolume]
 
-findMassConstruct :: (Referable r, HasShortName r, Referable s, HasShortName s)
-  => r -> Sentence -> [s] -> Sentence -> Sentence -> ConceptInstance
-findMassConstruct fr m ims exprs defs = cic "findMass" (foldlSent [
+findMassConstruct :: (Referable r, HasShortName r, Referable s, HasShortName s,
+  Referable t, HasShortName t) => r -> Sentence -> [s] -> [t] -> ConceptInstance
+findMassConstruct fr m ims ddefs = cic "findMass" (foldlSent [
   S "Use the", plural input_ `sIn` makeRef2S fr, S "to find the", 
   m, S "needed for", foldlList Comma List (map makeRef2S ims) `sC`
-  S "using", exprs `sC` S "where", defs])
-  "Find-Mass" funcReqDom -- FIXME: Equations shouldn't be inline
-
-inputInitValsEqn, findMassEqn :: Expr --Fixme: rename labels
-
-inputInitValsEqn = sy wMass $= sy wVol * sy wDensity $=
-  (sy tankVol - sy pcmVol) * sy wDensity $=
-  (sy pi_ * ((sy diam / 2) $^ 2) * sy tankLength - sy pcmVol) * sy wDensity -- FIXME: Ref Hack
-
-findMassEqn = sy pcmMass $= sy pcmVol * sy pcmDensity -- FIXME: Ref Hack
+  S "using", foldlList Comma List (map makeRef2S ddefs)])
+  "Find-Mass" funcReqDom
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" (foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",

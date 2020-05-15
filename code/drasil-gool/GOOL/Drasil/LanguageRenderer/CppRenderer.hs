@@ -11,23 +11,20 @@ module GOOL.Drasil.LanguageRenderer.CppRenderer (
 import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
-  SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs, 
-  OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
-  bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
-  ControlBlock(..), VariableSym(..), VariableElim(..), ValueSym(..), 
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), Comparison(..), 
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, 
-  InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), GetSet(..), 
-  List(..), InternalList(..), Iterator(..), StatementSym(..), 
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), switchAsIf, StatePattern(..), ObserverPattern(..), 
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, ClassSym(..), 
-  ModuleSym(..), ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, 
-  ODEMethod(..))
+import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
+  VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs, OOProg, 
+  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
+  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
+  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
+  selfFuncApp, extFuncApp, InternalValueExp(..), objMethodCall, FunctionSym(..),
+  ($.), GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), 
+  AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..), 
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf, 
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
+  ParameterSym(..), MethodSym(..), pubMethod, StateVarSym(..), ClassSym(..), 
+  ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -56,22 +53,21 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkStateVar, mkVar, VSOp, mkOp, unOpPrec, powerPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, funcType, negateOp,
-  csc, sec, cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
-  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
-  objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, increment, objDecNew, print, closeFile, 
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
-  method, getMethod, setMethod, constructor, function, docFunc, buildClass, 
-  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, 
-  fileFromData)
+  multiBody, block, multiBlock, int, listInnerType, obj, negateOp, csc, sec, 
+  cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
+  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, arrayElem, 
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess, 
+  objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
+  lambda, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
+  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
+  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
+  constructor, function, docFunc, buildClass, implementingClass, docClass, 
+  commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (objVar, 
-  listSetFunc, buildModule, litArray, call', listSizeFunc, listAccessFunc', 
-  funcDecDef, string, constDecDef, docInOutFunc)
+  funcType, listSetFunc, buildModule, litArray, call', listSizeFunc, 
+  listAccessFunc', string, constDecDef, docInOutFunc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
@@ -90,28 +86,25 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat,
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList, 
   on2StateLists, on1StateValue1List)
-import GOOL.Drasil.State (GOOLState, CS, MS, VS, lensGStoFS, lensFStoCS, 
-  lensFStoMS, lensFStoVS, lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, 
-  lensVStoMS, initialFS, modifyReturn, goolState, revFiles, addODEFilePaths, 
-  addODEFiles, getODEFiles, addLangImport, addLangImportVS, getLangImports, 
-  addLibImport, getLibImports, addModuleImport, addModuleImportVS, 
-  getModuleImports, addHeaderLangImport, getHeaderLangImports, 
-  addHeaderModImport, getHeaderLibImports, getHeaderModImports, addDefine, 
-  getDefines, addHeaderDefine, getHeaderDefines, addUsing, getUsing, 
-  addHeaderUsing, getHeaderUsing, setFileType, setClassName, getClassName, 
-  setCurrMain, getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, 
-  getCurrMainFunc, setODEOthVars, getODEOthVars)
+import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
+  lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, lensVStoMS, modifyReturn, 
+  revFiles, addLangImport, addLangImportVS, getLangImports, getLibImports, 
+  addModuleImportVS, getModuleImports, addHeaderLangImport, 
+  getHeaderLangImports, addHeaderModImport, getHeaderLibImports, 
+  getHeaderModImports, addDefine, getDefines, addHeaderDefine, 
+  getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing, 
+  setFileType, setClassName, getClassName, setCurrMain, getCurrMain, 
+  getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod,max)
-import Control.Lens ((^.))
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
-import Control.Monad.State (State, modify, runState)
+import Control.Monad.State (State, modify)
 import Data.Composition ((.:))
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), hcat, brackets, 
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, brackets, 
   braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty)
 
 cppHdrExt, cppSrcExt :: String
@@ -228,69 +221,6 @@ instance (Pair p) => RenderType (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => InternalTypeElim (p CppSrcCode CppHdrCode) where
   type' s = RC.type' $ pfst s
-
-instance (Pair p) => ControlBlock (p CppSrcCode CppHdrCode) where
-  solveODE info opts = do
-    piv <- zoom lensMStoVS $ indepVar info
-    pdv <- zoom lensMStoVS $ depVar info
-    povs <- mapM (zoom lensMStoVS) $ otherVars info
-    pti <- zoom lensMStoVS $ tInit info
-    ptf <- zoom lensMStoVS $ tFinal info
-    pinitv <- zoom lensMStoVS $ initVal info
-    pode <- zoom lensMStoVS $ ode info
-    patol <- zoom lensMStoVS $ absTol opts
-    prtol <- zoom lensMStoVS $ relTol opts
-    pss <- zoom lensMStoVS $ stepSize opts
-    let m = solveMethod opts
-        iv1 = toState $ pfst piv
-        iv2 = toState $ psnd piv
-        dv1 = toState $ pfst pdv
-        dv2 = toState $ psnd pdv
-        ovs1 = map (toState . pfst) povs
-        ovs2 = map (toState . psnd) povs
-        ti1 = toState $ pfst pti
-        ti2 = toState $ psnd pti
-        tf1 = toState $ pfst ptf
-        tf2 = toState $ psnd ptf
-        initv1 = toState $ pfst pinitv
-        initv2 = toState $ psnd pinitv
-        ode1 = toState $ pfst pode
-        ode2 = toState $ psnd pode
-        atol1 = toState $ pfst patol
-        atol2 = toState $ psnd patol
-        rtol1 = toState $ pfst prtol
-        rtol2 = toState $ psnd prtol
-        ss1 = toState $ pfst pss
-        ss2 = toState $ psnd pss
-        solveODESrc :: ODEInfo CppSrcCode -> ODEOptions CppSrcCode -> 
-          MSBlock CppSrcCode
-        solveODESrc = solveODE
-        solveODEHdr :: ODEInfo CppHdrCode -> ODEOptions CppHdrCode -> 
-          MSBlock CppHdrCode
-        solveODEHdr = solveODE
-        odeInfoSrc :: SVariable CppSrcCode -> SVariable CppSrcCode -> 
-          [SVariable CppSrcCode] -> SValue CppSrcCode -> 
-          SValue CppSrcCode -> SValue CppSrcCode -> 
-          SValue CppSrcCode -> ODEInfo CppSrcCode
-        odeInfoSrc = odeInfo
-        odeOptionsSrc :: ODEMethod -> SValue CppSrcCode -> 
-          SValue CppSrcCode -> SValue CppSrcCode -> ODEOptions CppSrcCode
-        odeOptionsSrc = odeOptions
-        odeInfoHdr :: SVariable CppHdrCode -> SVariable CppHdrCode -> 
-          [SVariable CppHdrCode] -> SValue CppHdrCode -> 
-          SValue CppHdrCode -> SValue CppHdrCode -> 
-          SValue CppHdrCode -> ODEInfo CppHdrCode
-        odeInfoHdr = odeInfo
-        odeOptionsHdr :: ODEMethod -> SValue CppHdrCode -> 
-          SValue CppHdrCode -> SValue CppHdrCode -> ODEOptions CppHdrCode
-        odeOptionsHdr = odeOptions
-    p1 <- solveODESrc
-      (odeInfoSrc iv1 dv1 ovs1 ti1 tf1 initv1 ode1)
-      (odeOptionsSrc m atol1 rtol1 ss1)
-    p2 <- solveODEHdr 
-      (odeInfoHdr iv2 dv2 ovs2 ti2 tf2 initv2 ode2)
-      (odeOptionsHdr m atol2 rtol2 ss2)
-    toState $ pair p1 p2
 
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
   type UnaryOp (p CppSrcCode CppHdrCode) = OpData
@@ -578,8 +508,8 @@ instance (Pair p) => DeclStatement (p CppSrcCode CppHdrCode) where
     (zoom lensMStoVS vr) (map (zoom lensMStoVS) vs)
   constDecDef vr vl = pair2 constDecDef constDecDef (zoom lensMStoVS vr) 
     (zoom lensMStoVS vl)
-  funcDecDef v ps r = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
-    (map (zoom lensMStoVS) ps) (zoom lensMStoVS r)
+  funcDecDef v ps b = pairValListVal funcDecDef funcDecDef (zoom lensMStoVS v) 
+    (map (zoom lensMStoVS) ps) b
 
 instance (Pair p) => IOStatement (p CppSrcCode CppHdrCode) where
   print = pair1 print print . zoom lensMStoVS
@@ -1038,8 +968,7 @@ instance Monad CppSrcCode where
 
 instance ProgramSym CppSrcCode where
   type Program CppSrcCode = ProgData
-  prog n fs = onStateValue (onCodeList (progD n)) (on2StateValues (++) 
-    (mapM (zoom lensGStoFS) fs) (onStateValue (map toCode) getODEFiles))
+  prog n = onStateList (onCodeList (progD n)) . map (zoom lensGStoFS)
 
 instance RenderSym CppSrcCode
   
@@ -1124,7 +1053,7 @@ instance TypeSym CppSrcCode where
   obj n = zoom lensVStoMS getClassName >>= (\cn -> if cn == n then G.obj n else 
     getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
     (Map.lookup n cm) (G.obj n)))
-  funcType = G.funcType
+  funcType = CP.funcType
   iterator t = do 
     modify (addLangImportVS cppIterator)
     cppIterType $ listType t
@@ -1139,27 +1068,7 @@ instance RenderType CppSrcCode where
 
 instance InternalTypeElim CppSrcCode where
   type' = typeDoc . unCPPSC
-
-instance ControlBlock CppSrcCode where
-  solveODE info opts = let (fl, s) = cppODEFile info
-                           dv = depVar info
-    in modify (addODEFilePaths s . addODEFiles [unCPPSC fl] . addLibImport 
-    "boost/numeric/odeint") >> (zoom lensMStoVS dv >>= (\dpv -> 
-      let odeClassName = variableName dpv ++ "_ODE"
-          odeVar = var "ode" (obj odeClassName)
-          currVal = var "currVal" (listInnerType $ toState $ variableType dpv)
-      in modify (addModuleImport odeClassName) >> block [
-        objDecDef odeVar (newObj (obj odeClassName) 
-          (map valueOf $ otherVars info)),
-        listDec 0 dv,
-        -- The initial value MUST be assigned to a variable because odeint will 
-        -- update that variable at each step.
-        varDecDef currVal (initVal info),
-        valStmt $ funcApp (odeNameSpace ++ "integrate_const") void 
-          [cppODEMethod info opts, valueOf odeVar, valueOf currVal, 
-          tInit info, tFinal info, stepSize opts, 
-          newObj (obj $ "Populate_" ++ variableName dpv) [valueOf dv]]]))
-
+  
 instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
   notOp = C.notOp
@@ -1216,9 +1125,7 @@ instance VariableSym CppSrcCode where
     cm <- getClassMap
     maybe id ((>>) . modify . addModuleImportVS) 
       (Map.lookup (getTypeString t) cm) $ classVar (return t) v
-  objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
-    ++ variableName vr) `elem` ovs then toState vr else CP.objVar (toState ob) 
-    (toState vr)) getODEOthVars o v
+  objVar = CP.objVar
   objVarSelf = onStateValue (\v -> mkVar (R.self ++ ptrAccess ++ variableName v)
     (variableType v) (R.self' <> ptrAccess' <> RC.variable v))
   arrayElem i = G.arrayElem (litInt i)
@@ -1421,7 +1328,7 @@ instance AssignStatement CppSrcCode where
   (&--) = M.decrement1
 
 instance DeclStatement CppSrcCode where
-  varDec = C.varDec static dynamic
+  varDec = C.varDec static dynamic empty
   varDecDef = C.varDecDef 
   listDec n = C.listDec cppListDecDoc (litInt n)
   listDecDef = cppListDecDef cppListDecDefDoc
@@ -1438,7 +1345,7 @@ instance DeclStatement CppSrcCode where
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
   constDecDef = CP.constDecDef
-  funcDecDef = CP.funcDecDef
+  funcDecDef = cppFuncDecDef
 
 instance IOStatement CppSrcCode where
   print      = G.print False Nothing printFunc
@@ -1779,7 +1686,7 @@ instance TypeSym CppHdrCode where
   listInnerType = G.listInnerType
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
     (Map.lookup n cm) $ G.obj n)
-  funcType = G.funcType
+  funcType = CP.funcType
   iterator t = do
     modify (addHeaderLangImport cppIterator)
     (cppIterType . listType) t
@@ -1794,11 +1701,6 @@ instance RenderType CppHdrCode where
 
 instance InternalTypeElim CppHdrCode where
   type' = typeDoc . unCPPHC
-
-instance ControlBlock CppHdrCode where
-  solveODE info _ = let (fl, s) = cppODEFile info
-    in modify (addODEFilePaths s . addODEFiles [unCPPHC fl]) >> 
-    toState (toCode empty)
 
 instance UnaryOpSym CppHdrCode where
   type UnaryOp CppHdrCode = OpData
@@ -1850,9 +1752,7 @@ instance VariableSym CppHdrCode where
   self = mkStateVar "" void empty
   classVar _ _ = mkStateVar "" void empty
   extClassVar _ _ = mkStateVar "" void empty
-  objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
-    ++ variableName vr) `elem` ovs then toState vr else CP.objVar (toState ob) 
-    (toState vr)) getODEOthVars o v
+  objVar = CP.objVar
   objVarSelf _ = mkStateVar "" void empty
   arrayElem _ _ = mkStateVar "" void empty
   iterVar _ _ = mkStateVar "" void empty
@@ -2050,7 +1950,7 @@ instance AssignStatement CppHdrCode where
   (&--) _ = emptyStmt
 
 instance DeclStatement CppHdrCode where
-  varDec = C.varDec static dynamic
+  varDec = C.varDec static dynamic empty
   varDecDef = C.varDecDef
   listDec _ _ = emptyStmt
   listDecDef _ _ = emptyStmt
@@ -2206,7 +2106,7 @@ instance MethodElim CppHdrCode where
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar s p v = do
-    dec <- zoom lensCStoMS $ stmt $ varDec v
+    dec <- zoom lensCStoMS $ stmt $ C.varDec static dynamic (text "&") v
     emptS <- zoom lensCStoMS emptyStmt
     return $ on3CodeValues svd (onCodeValue snd s)
       (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec)) emptS
@@ -2416,9 +2316,6 @@ argcDesc = "Number of command-line arguments"
 argvDesc = "List of command-line arguments"
 mainReturnDesc = "exit code"
 
-odeNameSpace :: String
-odeNameSpace = "boost::numeric::odeint::"
-
 cppSqrtOp :: (Monad r) => VSOp r
 cppSqrtOp = cppUnaryMath "sqrt"
 
@@ -2496,55 +2393,6 @@ cppListDecDef :: (RenderSym r) => ([r (Value r)] -> Doc) -> SVariable r ->
 cppListDecDef f v vls = on1StateValue1List (\vdc vs -> mkStmt (RC.statement vdc 
   <> f vs)) (varDec v) (map (zoom lensMStoVS) vls)
 
-cppODEMethod :: ODEInfo CppSrcCode -> ODEOptions CppSrcCode -> 
-  SValue CppSrcCode
-cppODEMethod info opts = listInnerType (onStateValue variableType $ depVar info)
-  >>= (\dpt -> 
-  let rkdp5 = "runge_kutta_dopri5"  
-      adams = "adams_bashforth"
-      tp = getTypeString dpt
-      stepper RK45 = funcApp (odeNameSpace ++ "make_controlled") void 
-        [absTol opts, relTol opts, newObj (obj $ odeNameSpace ++ rkdp5 ++ "<" 
-        ++ tp ++ ">") []]
-      stepper Adams = newObj (obj $ odeNameSpace ++ adams ++ "<3," ++   
-        tp ++ ">") []
-      stepper _ = error "Chosen ODE method unavailable in C++"
-  in stepper (solveMethod opts))  
-
-cppODEFile :: (RenderSym r) => ODEInfo r ->
-  (r (File r), GOOLState)
-cppODEFile info = (fl, s ^. goolState)
-  where (fl, s) = runState odeFile initialFS
-        olddv = depVar info
-        oldiv = indepVar info
-        ovars = otherVars info
-        odeFile = join $ on3StateValues (\dpv idpv ovs ->
-          let n = variableName dpv
-              t = variableName idpv
-              -- dv below is a hack. Needed to "rebuild" it because its state has already been evaluated higher up (for building the file where the ode solver is called) (the evaluation happens in the pair instance). This hack won't be necessary when we do things right as this file won't be built so deep in GOOL.
-              dv = var (variableName dpv) (listType $ innerVarType dpv)
-              cn = n ++ "_ODE"
-              dn = "d" ++ n ++ "d" ++ t
-              innerVarType = (listInnerType . toState . variableType)
-              tElem = var t $ innerVarType idpv
-              dvptr = var ('&':n) (onStateValue variableType dv)
-              dvElem = var n (innerVarType dpv)
-              othVars = map (modify (setODEOthVars (map variableName 
-                ovs)) >>) ovars
-          in fileDoc (buildModule cn [] [] [buildClass cn Nothing 
-            (pubDVar dv : map privDVar othVars) 
-            [initializer (map param othVars) (zip othVars (map valueOf othVars)),
-            pubMethod "operator()" void [param dvElem, 
-              pointerParam $ var dn float, param tElem] 
-              (oneLiner $ var dn float &= (modify (setODEOthVars 
-              (map variableName ovs)) >> ode info))], 
-          buildClass ("Populate_" ++ n) Nothing [pubDVar dvptr] 
-            [initializer [pointerParam dv] [(dv, valueOf dv)],
-            pubMethod "operator()" void [pointerParam dvElem, param tElem] 
-              (oneLiner $ valStmt $ listAppend (valueOf $ objVarSelf dv) 
-              (valueOf dv))]]))
-          (zoom lensFStoVS olddv) (zoom lensFStoVS oldiv) (mapM (zoom lensFStoVS) ovars)
-
 cpphtop :: ModData -> Doc
 cpphtop m = vcat [
   ifndef <+> text n <> defineSuffix,
@@ -2614,6 +2462,17 @@ cppListDecDoc n = parens (RC.value n)
 
 cppListDecDefDoc :: (RenderSym r) => [r (Value r)] -> Doc
 cppListDecDefDoc vs = braces (valueList vs)
+
+cppFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r -> 
+  MSStatement r
+cppFuncDecDef v ps bod = do
+  vr <- zoom lensMStoVS v
+  pms <- mapM (zoom lensMStoVS) ps
+  b <- bod
+  return $ mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
+    cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>) (map (RC.type' . 
+    variableType) pms) (map RC.variable pms)) <+> cppLambdaSep <+> bodyStart $$ 
+    indent (RC.body b) $$ bodyEnd
 
 cppPrint :: (RenderSym r) => Bool -> SValue r -> SValue r -> MSStatement r
 cppPrint newLn pf vl = zoom lensMStoVS $ do

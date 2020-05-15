@@ -41,7 +41,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return Interpolation.func_interpY("TSD.txt", inParams.SD, inParams.w_TNT);
+        return Interpolation.interpY("TSD.txt", inParams.SD, inParams.w_TNT);
     }
     
     /** \brief Calculates dimensionless load
@@ -81,7 +81,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return Interpolation.func_interpY("SDF.txt", inParams.AR, J_tol);
+        return Interpolation.interpY("SDF.txt", inParams.AR, J_tol);
     }
     
     /** \brief Calculates stress distribution factor (Function)
@@ -101,7 +101,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return Interpolation.func_interpZ("SDF.txt", inParams.AR, q_hat);
+        return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat);
     }
     
     /** \brief Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
@@ -169,7 +169,7 @@ public class Calculations {
         \param q applied load (demand): 3 second duration equivalent pressure (Pa)
         \return 3 second load equivalent resistance safety requirement
     */
-    public static Boolean func_is_safeLR(double LR, double q) throws IOException {
+    public static boolean func_is_safeLR(double LR, double q) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_is_safeLR called with inputs: {");
@@ -205,7 +205,7 @@ public class Calculations {
         \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
         \return probability of glass breakage safety requirement
     */
-    public static Boolean func_is_safePb(InputParameters inParams, double P_b) throws IOException {
+    public static boolean func_is_safePb(InputParameters inParams, double P_b) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function func_is_safePb called with inputs: {");

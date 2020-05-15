@@ -1,10 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
-    CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), 
-    VarOrFunc(..), quantvar, quantfunc, ccObjVar, codevars, codevars', 
-    funcResolve, varResolve, ConstraintMap, constraintMap, physLookup, 
-    sfwrLookup, programName, funcPrefix
-  ) where
+  CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), 
+  VarOrFunc(..), obv, quantvar, quantfunc, ccObjVar, codevars, codevars', 
+  funcResolve, varResolve, listToArray, ConstraintMap, constraintMap, 
+  physLookup, sfwrLookup, programName, funcPrefix
+) where
 
 import Control.Lens ((^.),makeLenses,view)
 
@@ -42,13 +42,13 @@ instance HasSpace    CodeChunk where typ = qc . typ
 instance HasSymbol   CodeChunk where symbol = symbol . view qc
 instance Quantity    CodeChunk
 instance CodeIdea    CodeChunk where
-  codeName (CodeC c Var) = render $ symbolDoc (codeSymb c)
-  codeName (CodeC c Func) = funcPrefix ++ render (symbolDoc (codeSymb c))
+  codeName = render . symbolDoc . codeSymb . view qc
   codeChunk = id
 instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc
 
-newtype CodeVarChunk = CodeVC {_ccv :: CodeChunk}
+data CodeVarChunk = CodeVC {_ccv :: CodeChunk,
+                            _obv :: Maybe CodeChunk}
 makeLenses ''CodeVarChunk
 
 instance HasUID      CodeVarChunk where uid = ccv . uid
@@ -59,7 +59,7 @@ instance HasSymbol   CodeVarChunk where symbol = symbol . view ccv
 instance Quantity    CodeVarChunk
 instance CodeIdea    CodeVarChunk where 
   codeName = codeName . view ccv
-  codeChunk = codeChunk . view ccv
+  codeChunk c = CodeC (view qc $ view ccv c) Var
 instance Eq          CodeVarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeVarChunk where getUnit = getUnit . view ccv
 
@@ -75,12 +75,12 @@ instance Quantity    CodeFuncChunk
 instance Callable    CodeFuncChunk
 instance CodeIdea    CodeFuncChunk where 
   codeName = codeName . view ccf
-  codeChunk = codeChunk . view ccf
+  codeChunk c = CodeC (view qc $ view ccf c) Func
 instance Eq          CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
 
 quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
-quantvar c = CodeVC $ CodeC (qw c) Var
+quantvar c = CodeVC (CodeC (qw c) Var) Nothing
 
 quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
 quantfunc c = CodeFC $ CodeC (qw c) Func
@@ -89,10 +89,7 @@ quantfunc c = CodeFC $ CodeC (qw c) Func
 -- CodeChunk which represents a field of the first. ex. ccObjVar obj f = obj.f
 ccObjVar :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk
 ccObjVar c1 c2 = checkObj (c1 ^. typ)
-  where checkObj (Actor _) = quantvar $ implVar' (c1 ^. uid ++ "." ++ c2 ^. uid) 
-          (compoundPhrase (c1 ^. term) (c2 ^. term)) Nothing (c2 ^. typ)
-          (Concat [symbol c1 Implementation, Label ".", symbol c2 
-          Implementation]) (getUnit c2) 
+  where checkObj (Actor _) = CodeVC (codeChunk c2) (Just $ codeChunk c1)
         checkObj _ = error "First CodeChunk passed to ccObjVar must have Actor space"
 
 -- | Get a list of CodeChunks from an equation
@@ -108,6 +105,13 @@ varResolve  m x = quantvar $ symbResolve m x
 
 funcResolve :: ChunkDB -> UID -> CodeFuncChunk
 funcResolve m x = quantfunc $ symbResolve m x
+
+listToArray :: CodeVarChunk -> CodeVarChunk
+listToArray c = newSpc (c ^. typ) 
+  where newSpc (Vect t) = CodeVC (CodeC (implVar' (c ^. uid ++ "_array") 
+          (c ^. term) (getA c) (Array t) (symbol c Implementation) (getUnit c)) 
+          Var) (c ^. obv)
+        newSpc _ = c
 
 type ConstraintMap = Map.Map UID [Constraint]
 

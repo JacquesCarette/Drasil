@@ -3,18 +3,19 @@ module Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   StepGroupFill(..), StepFill(..), FunctionIntFill(..), ArgumentFill(..),
   ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..), externalLibCall, 
   choiceStepsFill, choiceStepFill, mandatoryStepFill, mandatoryStepsFill, 
-  callStepFill, libCallFill, basicArgFill, functionArgFill, customObjArgFill, 
-  recordArgFill, unnamedParamFill, userDefinedParamFill, customClassFill, 
-  implementationFill, constructorInfoFill, methodInfoFill, appendCurrSolFill, 
-  populateSolListFill, assignArrayIndexFill, assignSolFromObjFill, 
-  initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill, 
-  returnExprListFill, fixedStatementFill
+  callStepFill, libCallFill, userDefinedArgFill, basicArgFill, functionArgFill, 
+  customObjArgFill, recordArgFill, unnamedParamFill, unnamedParamPBVFill, 
+  userDefinedParamFill, customClassFill, implementationFill, 
+  constructorInfoFill, methodInfoFill, appendCurrSolFill, populateSolListFill, 
+  assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
+  initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill
 ) where
 
 import Language.Drasil
 
 import Language.Drasil.Chunk.Code (CodeVarChunk)
-import Language.Drasil.Mod (Initializer)
+import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto, pcVal)
+import Language.Drasil.Mod (Initializer, StateVariable)
 
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
@@ -33,12 +34,13 @@ data StepFill = CallF FunctionIntFill
 
 newtype FunctionIntFill = FIF [ArgumentFill]
 
-data ArgumentFill = BasicF Expr 
+data ArgumentFill = UserDefinedArgF (Maybe NamedArgument) Expr -- For arguments that are completely dependent on use case
+  | BasicF Expr 
   | FnF [ParameterFill] StepFill -- Fills in the names for the unnamed parameters
-  | ClassF [CodeVarChunk] ClassInfoFill -- List of CodeChunk for state variables
+  | ClassF [StateVariable] ClassInfoFill -- List of CodeChunk for state variables
   | RecordF [Expr] -- Fills in the field values
 
-data ParameterFill = NameableParamF CodeVarChunk | UserDefined CodeVarChunk
+data ParameterFill = NameableParamF ParameterChunk | UserDefined ParameterChunk
 
 data ClassInfoFill = RegularF [MethodInfoFill] | ImplementsF [MethodInfoFill]
 
@@ -71,23 +73,29 @@ loopStepFill fifs cdchs sfs = LoopF (fromList fifs) cdchs (fromList sfs)
 libCallFill :: [ArgumentFill] -> FunctionIntFill
 libCallFill = FIF
 
+userDefinedArgFill :: Expr -> ArgumentFill
+userDefinedArgFill = UserDefinedArgF Nothing
+
 basicArgFill :: Expr -> ArgumentFill
 basicArgFill = BasicF
 
 functionArgFill :: [ParameterFill] -> StepFill -> ArgumentFill
 functionArgFill = FnF
 
-customObjArgFill :: [CodeVarChunk] -> ClassInfoFill -> ArgumentFill
+customObjArgFill :: [StateVariable] -> ClassInfoFill -> ArgumentFill
 customObjArgFill = ClassF
 
 recordArgFill :: [Expr] -> ArgumentFill
 recordArgFill = RecordF
 
 unnamedParamFill :: CodeVarChunk -> ParameterFill
-unnamedParamFill = NameableParamF
+unnamedParamFill = NameableParamF . pcAuto
+
+unnamedParamPBVFill :: CodeVarChunk -> ParameterFill
+unnamedParamPBVFill = NameableParamF . pcVal
 
 userDefinedParamFill :: CodeVarChunk -> ParameterFill
-userDefinedParamFill = UserDefined
+userDefinedParamFill = UserDefined . pcAuto
 
 customClassFill :: [MethodInfoFill] -> ClassInfoFill
 customClassFill = RegularF
@@ -106,8 +114,8 @@ methodInfoFill pfs sfs = MIF pfs (fromList sfs)
 appendCurrSolFill :: CodeVarChunk -> StepFill
 appendCurrSolFill s = statementStepFill [s] []
 
-populateSolListFill :: CodeVarChunk -> StepFill
-populateSolListFill s = statementStepFill [s] []
+populateSolListFill :: CodeVarChunk -> [StepFill]
+populateSolListFill s = replicate 2 (statementStepFill [s] [])
 
 assignArrayIndexFill :: CodeVarChunk-> [Expr] -> StepFill
 assignArrayIndexFill a = statementStepFill [a]

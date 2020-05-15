@@ -12,8 +12,8 @@ import Utils.Drasil (stringList)
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), quantvar)
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), 
-  ImplementationType(..), InputModule(..), Structure(..))
+import Language.Drasil.CodeSpec (CodeSpec(..), ImplementationType(..), 
+  InputModule(..), Structure(..))
 import Language.Drasil.Mod (Description)
 
 import Data.Map (member)
@@ -33,7 +33,7 @@ modDesc = fmap ((++) "Provides " . stringList)
 unmodularDesc :: Reader DrasilState Description
 unmodularDesc = do
   g <- ask
-  let n = pName $ csi $ codeSpec g
+  let n = pName $ codeSpec g
       getDesc Library = "library"
       getDesc Program = "program"
   return $ "Contains the entire " ++ n ++ " " ++ getDesc (implType g)
@@ -70,7 +70,7 @@ inputConstructorDesc = do
       idDesc True = "calculating derived values"
       icDesc False = ""
       icDesc True = "checking " ++ pAndS ++ " on the input"
-      dl = defList $ codeSpec g
+      dl = defList g
   return $ "Initializes input object by " ++ stringList [ 
     ifDesc ("get_input" `elem` dl),
     idDesc ("derived_values" `elem` dl),
@@ -83,7 +83,7 @@ inputFormatDesc = do
   g <- ask
   let ifDesc False = ""
       ifDesc _ = "the function for reading inputs"
-  return $ ifDesc $ "get_input" `elem` defList (codeSpec g)
+  return $ ifDesc $ "get_input" `elem` defList g
 
 -- | Returns description of what is contained in the Derived Values module,
 -- if it exists.
@@ -92,7 +92,7 @@ derivedValuesDesc = do
   g <- ask
   let dvDesc False = ""
       dvDesc _ = "the function for calculating derived values"
-  return $ dvDesc $ "derived_values" `elem` defList (codeSpec g)
+  return $ dvDesc $ "derived_values" `elem` defList g
 
 -- | Returns description of what is contained in the Input Constraints module,
 -- if it exists.
@@ -103,7 +103,7 @@ inputConstraintsDesc = do
   let icDesc False = ""
       icDesc _ = "the function for checking the " ++ pAndS ++ 
         " on the input"
-  return $ icDesc $ "input_constraints" `elem` defList (codeSpec g)
+  return $ icDesc $ "input_constraints" `elem` defList g
 
 -- | Returns description of what is contained in the Constants module,
 -- if it exists.
@@ -114,7 +114,7 @@ constModDesc = do
       cDesc [] = ""
       cDesc _ = "the structure for holding constant values"
   return $ cDesc $ filter (flip member (Map.filter (cname ==) 
-    (clsMap $ codeSpec g)) . codeName) (constants $ csi $ codeSpec g)
+    (clsMap g)) . codeName) (constants $ codeSpec g)
 
 -- | Returns description of what is contained in the Output Format module, 
 -- if it exists.
@@ -123,7 +123,7 @@ outputFormatDesc = do
   g <- ask
   let ofDesc False = ""
       ofDesc _ = "the function for writing outputs"
-  return $ ofDesc $ "write_output" `elem` defList (codeSpec g)
+  return $ ofDesc $ "write_output" `elem` defList g
 
 -- | Returns description for generated function that stores inputs,
 -- if it exists. Checks whether explicit inputs, derived inputs, and constants 
@@ -133,13 +133,13 @@ inputClassDesc :: Reader DrasilState Description
 inputClassDesc = do
   g <- ask
   let cname = "InputParameters"
-      ipMap = Map.filter (cname ==) (clsMap $ codeSpec g)
+      ipMap = Map.filter (cname ==) (clsMap g)
       inIPMap = filter ((`member` ipMap) . codeName)
       inClassD True = ""
       inClassD _ = "Structure for holding the " ++ stringList [
-        inPs $ inIPMap $ extInputs $ csi $ codeSpec g,
-        dVs $ inIPMap $ map quantvar $ derivedInputs $ csi $ codeSpec g,
-        cVs $ inIPMap $ map quantvar $ constants $ csi $ codeSpec g]
+        inPs $ inIPMap $ extInputs $ codeSpec g,
+        dVs $ inIPMap $ map quantvar $ derivedInputs $ codeSpec g,
+        cVs $ inIPMap $ map quantvar $ constants $ codeSpec g]
       inPs [] = ""
       inPs _ = "input values"
       dVs [] = ""
@@ -158,7 +158,7 @@ constClassDesc = do
       ccDesc [] = ""
       ccDesc _ = "Structure for holding the constant values"
   return $ ccDesc $ filter (flip member (Map.filter (cname ==) 
-    (clsMap $ codeSpec g)) . codeName) (constants $ csi $ codeSpec g)
+    (clsMap g)) . codeName) (constants $ codeSpec g)
 
 -- | Returns description for generated function that reads input from a file,
 -- if it exists.
@@ -167,7 +167,7 @@ inFmtFuncDesc = do
   g <- ask
   let ifDesc False = ""
       ifDesc _ = "Reads input from a file with the given file name"
-  return $ ifDesc $ "get_input" `elem` defList (codeSpec g)
+  return $ ifDesc $ "get_input" `elem` defList g
 
 -- | Returns description for generated function that checks input constraints,
 -- if it exists.
@@ -177,7 +177,7 @@ inConsFuncDesc = do
   pAndS <- physAndSfwrCons
   let icDesc False = ""
       icDesc _ = "Verifies that input values satisfy the " ++ pAndS
-  return $ icDesc $ "input_constraints" `elem` defList (codeSpec g)
+  return $ icDesc $ "input_constraints" `elem` defList g
 
 -- | Returns description for generated function that calculates derived inputs,
 -- if it exists.
@@ -187,7 +187,7 @@ dvFuncDesc = do
   let dvDesc False = ""
       dvDesc _ = "Calculates values that can be immediately derived from the" ++
         " inputs"
-  return $ dvDesc $ "derived_values" `elem` defList (codeSpec g)
+  return $ dvDesc $ "derived_values" `elem` defList g
 
 -- | Description of the generated Calculations module
 calcModDesc :: Description
@@ -199,7 +199,7 @@ woFuncDesc = do
   g <- ask
   let woDesc False = ""
       woDesc _ = "Writes the output values to output.txt"
-  return $ woDesc $ "write_output" `elem` defList (codeSpec g)
+  return $ woDesc $ "write_output" `elem` defList g
 
 -- | Returns the phrase "physical constraints" if there are any physical 
 -- constraints on the input and "software constraints" if there are any 
@@ -208,8 +208,8 @@ woFuncDesc = do
 physAndSfwrCons :: Reader DrasilState Description
 physAndSfwrCons = do
   g <- ask
-  let cns = concat $ mapMaybe ((`Map.lookup` (cMap $ csi $ codeSpec g)) . 
-        (^. uid)) (inputs $ csi $ codeSpec g)
+  let cns = concat $ mapMaybe ((`Map.lookup` (cMap $ codeSpec g)) . (^. uid)) 
+        (inputs $ codeSpec g)
   return $ stringList [
     if not (any isPhysC cns) then "" else "physical constraints",
     if not (any isSfwrC cns) then "" else "software constraints"]

@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.Helpers (
 import Language.Drasil
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..))
+import Language.Drasil.CodeSpec (CodeSpec(..))
 
 import Control.Monad.Reader (Reader)
 
@@ -17,4 +17,4 @@ getUpperBound (BinaryOp Lt _ b) = b
 getUpperBound _ = error "Attempt to get upper bound of invalid expression"
 
 lookupC :: DrasilState -> UID -> QuantityDict
-lookupC g = symbResolve (sysinfodb $ csi $ codeSpec g)
+lookupC g = symbResolve (sysinfodb $ codeSpec g)

@@ -1,6 +1,6 @@
 ## \file InputParameters.py
 # \author Thulasi Jegatheesan
-# \brief Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input
+# \brief Provides the function for reading inputs, the function for calculating derived values, and the function for checking the physical constraints and software constraints on the input
 import Constants
 
 ## \brief Reads input from a file with the given file name
@@ -17,7 +17,6 @@ import Constants
 # \return diameter of tank: the diameter of the tank (m)
 # \return absolute tolerance
 # \return relative tolerance
-# \return temperature of the water: the average kinetic energy of the particles within the water (degreeC)
 # \return change in heat energy in the water: change in thermal energy within the water (J)
 def get_input(filename):
     infile = open(filename, "r")
@@ -46,12 +45,19 @@ def get_input(filename):
     infile.readline()
     R_tol = float(infile.readline())
     infile.readline()
-    T_W = float(infile.readline())
-    infile.readline()
     E_W = float(infile.readline())
     infile.close()
     
-    return A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, A_tol, R_tol, T_W, E_W
+    return A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, A_tol, R_tol, E_W
+
+## \brief Calculates values that can be immediately derived from the inputs
+# \param D diameter of tank: the diameter of the tank (m)
+# \param L length of tank: the length of the tank (m)
+# \return volume of the cylindrical tank: the amount of space encompassed by a tank (m^3)
+def derived_values(D, L):
+    V_tank = Constants.Constants.pi * (D / 2) ** 2 * L
+    
+    return V_tank
 
 ## \brief Verifies that input values satisfy the physical constraints and software constraints
 # \param A_C heating coil surface area: area covered by the outermost layer of the coil (m^2)
@@ -64,9 +70,8 @@ def get_input(filename):
 # \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
 # \param rho_W density of water: nass per unit volume of water (kg/m^3)
 # \param D diameter of tank: the diameter of the tank (m)
-# \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
 # \param E_W change in heat energy in the water: change in thermal energy within the water (J)
-def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W):
+def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, E_W):
     if (not(A_C <= Constants.Constants.A_C_max)) :
         print("Warning: ", end="")
         print("A_C has value ", end="")
@@ -232,18 +237,6 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(" but suggested to be ", end="")
         print("above ", end="")
         print(0, end="")
-        print(".")
-    if (not(T_init <= T_W and T_W <= T_C)) :
-        print("Warning: ", end="")
-        print("T_W has value ", end="")
-        print(T_W, end="")
-        print(" but suggested to be ", end="")
-        print("between ", end="")
-        print(T_init, end="")
-        print(" (T_init)", end="")
-        print(" and ", end="")
-        print(T_C, end="")
-        print(" (T_C)", end="")
         print(".")
     if (not(E_W >= 0)) :
         print("Warning: ", end="")

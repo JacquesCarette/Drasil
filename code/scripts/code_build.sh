@@ -13,6 +13,9 @@ build_code () {
     OLD_DIR=$(pwd)
     for dr in */; do
       cd "$dr"
+      if [ -d "$ROOT_DIR/$DF_DIR$EDIR/$dr" ]; then
+        cp -r "$ROOT_DIR/$DF_DIR$EDIR/$dr"* "."
+      fi
       "$MAKE" $TARGET
       RET=$(( $RET || $? ))
       cd "$OLD_DIR"
@@ -21,7 +24,7 @@ build_code () {
 }
 
 RET=0
-
+ROOT_DIR=$(pwd)
 cd "$BUILD_FOLDER$EDIR"
 if [[ "$MULTI_SRC_DIRS" == *"$EDIR"* ]]; then
   E_DIR=$(pwd)

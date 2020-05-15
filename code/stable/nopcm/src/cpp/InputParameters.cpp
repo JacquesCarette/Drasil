@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <math.h>
 #include <string>
 
 #include "Constants.hpp"
@@ -11,7 +12,7 @@
 using std::ifstream;
 using std::string;
 
-void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T_init, double &t_final, double &L, double &T_C, double &t_step, double &rho_W, double &D, double &A_tol, double &R_tol, double &T_W, double &E_W) {
+void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T_init, double &t_final, double &L, double &T_C, double &t_step, double &rho_W, double &D, double &A_tol, double &R_tol, double &E_W) {
     ifstream infile;
     infile.open(filename, std::fstream::in);
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -51,15 +52,20 @@ void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T
     infile >> R_tol;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile >> T_W;
-    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile >> E_W;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.close();
 }
 
-void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
+double derived_values(double D, double L) {
+    double V_tank;
+    
+    V_tank = Constants::pi * pow(D / 2, 2) * L;
+    
+    return V_tank;
+}
+
+void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double E_W) {
     if (!(A_C <= Constants::A_C_max)) {
         std::cout << "Warning: ";
         std::cout << "A_C has value ";
@@ -241,19 +247,6 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << " but suggested to be ";
         std::cout << "above ";
         std::cout << 0;
-        std::cout << "." << std::endl;
-    }
-    if (!(T_init <= T_W && T_W <= T_C)) {
-        std::cout << "Warning: ";
-        std::cout << "T_W has value ";
-        std::cout << T_W;
-        std::cout << " but suggested to be ";
-        std::cout << "between ";
-        std::cout << T_init;
-        std::cout << " (T_init)";
-        std::cout << " and ";
-        std::cout << T_C;
-        std::cout << " (T_C)";
         std::cout << "." << std::endl;
     }
     if (!(E_W >= 0)) {

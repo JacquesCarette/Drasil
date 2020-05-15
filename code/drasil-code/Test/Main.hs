@@ -48,7 +48,7 @@ classes :: (OOProg r, PackageSym r') => (r (Program r) -> ProgData) ->
 classes unRepr unRepr' = zipWith 
   (\p gs -> let (p',gs') = runState p gs 
                 pd = unRepr p'
-  in unRepr' $ package pd [makefile Program [] gs' pd]) 
+  in unRepr' $ package pd [makefile [] Program [] gs' pd]) 
   [helloWorld, patternTest, fileTests]
   (map (unCI . (`evalState` initialState)) [helloWorld, patternTest, fileTests])
 

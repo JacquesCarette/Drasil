@@ -14,9 +14,9 @@ import Language.Drasil.Code.Imperative.Descriptions (constClassDesc,
 import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
   getAllInputCalls, getOutputCall)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), genModule, 
-  primaryClass, auxClass)
+  genModuleWithImports, primaryClass, auxClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
-import Language.Drasil.Code.Imperative.Import (codeType, convExpr, 
+import Language.Drasil.Code.Imperative.Import (codeType, convExpr, convStmt,
   genConstructor, mkVal, mkVar, privateInOutMethod, privateMethod, publicFunc, 
   publicInOutFunc, readData, renderC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, varLogFile)
@@ -27,13 +27,16 @@ import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar, 
   physLookup, sfwrLookup)
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
+  defType, codeEquat)
+import Language.Drasil.Chunk.Parameter (pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..),
-  Comments(CommentFunc), ConstantStructure(..), ConstantRepr(..), 
-  ConstraintBehaviour(..), ImplementationType(..), InputModule(..), Logging(..),
-  Structure(..), hasSampleInput)
+import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
+import Language.Drasil.CodeSpec (CodeSpec(..), Comments(CommentFunc), 
+  ConstantStructure(..), ConstantRepr(..), ConstraintBehaviour(..), 
+  ImplementationType(..), InputModule(..), Logging(..), Structure(..), 
+  hasSampleInput)
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 
@@ -46,7 +49,7 @@ import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
-import Data.Map ((!), member)
+import Data.Map ((!), elems, member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
 import Control.Applicative ((<$>))
@@ -71,7 +74,7 @@ genMainFunc = do
           co <- initConsts
           ip <- getInputDecl
           ics <- getAllInputCalls
-          varDef <- mapM getCalcCall (execOrder $ csi $ codeSpec g)
+          varDef <- mapM getCalcCall (execOrder $ codeSpec g)
           wo <- getOutputCall
           return $ Just $ (if CommentFunc `elem` commented g then docMain else 
             mainFunction) $ bodyStatements $ initLogFileVar (logKind g) 
@@ -98,14 +101,14 @@ getInputDecl = do
   constrParams <- getInConstructorParams 
   cps <- mapM mkVal constrParams
   let cname = "InputParameters"
-      getDecl ([],[]) = constIns (partition (flip member (eMap $ codeSpec g) . 
-        codeName) (map quantvar $ constants $ csi $ codeSpec g)) (conRepr g) 
+      getDecl ([],[]) = constIns (partition (flip member (eMap g) . 
+        codeName) (map quantvar $ constants $ codeSpec g)) (conRepr g) 
         (conStruct g)
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
       getDecl (i:_,[]) = return $ Just $ (if currentModule g == 
-        eMap (codeSpec g) ! codeName i then objDecNew 
+        eMap g ! codeName i then objDecNew 
         else extObjDecNew cname) v_params cps
       getDecl _ = error ("Inputs or constants are only partially contained in " 
         ++ "a class")
@@ -113,8 +116,8 @@ getInputDecl = do
       -- If Const is chosen, don't declare an object because constants are static and accessed through class
       constIns cs Var WithInputs = getDecl cs
       constIns _ _ _ = return Nothing 
-  getDecl (partition (flip member (eMap $ codeSpec g) . codeName) 
-    (inputs $ csi $ codeSpec g))
+  getDecl (partition (flip member (eMap g) . codeName) 
+    (inputs $ codeSpec g))
 
 -- | If constants are Unbundled, declare them individually using varDecDef if 
 -- representation is Var and constDecDef if representation is Const.
@@ -130,14 +133,14 @@ initConsts = do
   g <- ask
   v_consts <- mkVar (quantvar consts)
   let cname = "Constants"
-      cs = constants $ csi $ codeSpec g 
+      cs = constants $ codeSpec g 
       getDecl (Store Unbundled) _ = declVars
       getDecl (Store Bundled) _ = asks (declObj cs . conRepr)
       getDecl WithInputs Unbundled = declVars
       getDecl WithInputs Bundled = return Nothing
       getDecl Inline _ = return Nothing
       declVars = do 
-        vars <- mapM mkVar cs
+        vars <- mapM (mkVar . quantvar) cs
         vals <- mapM (convExpr . codeEquat) cs
         logs <- mapM maybeLog vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ 
@@ -145,9 +148,8 @@ initConsts = do
       defFunc Var = varDecDef
       defFunc Const = constDecDef
       declObj [] _ = Nothing
-      declObj (c:_) Var = Just $ (if currentModule g == eMap (codeSpec g) ! 
-        codeName c then objDecNewNoParams else extObjDecNewNoParams cname) 
-        v_consts
+      declObj (c:_) Var = Just $ (if currentModule g == eMap g ! codeName c 
+        then objDecNewNoParams else extObjDecNewNoParams cname) v_consts
       declObj _ Const = Nothing
   getDecl (conStruct g) (inStruct g)
 
@@ -200,12 +202,12 @@ genInputClass :: (OOProg r) => ClassType ->
   Reader DrasilState (Maybe (SClass r))
 genInputClass scp = do
   g <- ask
-  let ins = inputs $ csi $ codeSpec g
-      cs = constants $ csi $ codeSpec g
+  let ins = inputs $ codeSpec g
+      cs = constants $ codeSpec g
       filt :: (CodeIdea c) => [c] -> [c]
-      filt = filter ((Just cname ==) . flip Map.lookup (clsMap $ codeSpec g) . codeName)
+      filt = filter ((Just cname ==) . flip Map.lookup (clsMap g) . codeName)
       methods :: (OOProg r) => Reader DrasilState [SMethod r]
-      methods = if cname `elem` defList (codeSpec g) 
+      methods = if cname `elem` defList g 
         then concat <$> mapM (fmap maybeToList) [genInputConstructor, 
         genInputFormat Priv, genInputDerived Priv, genInputConstraints Priv] 
         else return []
@@ -231,13 +233,14 @@ genInputClass scp = do
 genInputConstructor :: (OOProg r) => Reader DrasilState (Maybe (SMethod r))
 genInputConstructor = do
   g <- ask
-  let dl = defList $ codeSpec g
+  let dl = defList g
       genCtor False = return Nothing
       genCtor True = do 
         cdesc <- inputConstructorDesc
         cparams <- getInConstructorParams    
         ics <- getAllInputCalls
-        ctor <- genConstructor "InputParameters" cdesc cparams [block ics]
+        ctor <- genConstructor "InputParameters" cdesc (map pcAuto cparams)
+          [block ics]
         return $ Just ctor
   genCtor $ any (`elem` dl) ["get_input", "derived_values", 
     "input_constraints"]
@@ -246,7 +249,7 @@ genInputDerived :: (OOProg r) => ScopeTag ->
   Reader DrasilState (Maybe (SMethod r))
 genInputDerived s = do
   g <- ask
-  let dvals = derivedInputs $ csi $ codeSpec g
+  let dvals = derivedInputs $ codeSpec g
       getFunc Pub = publicInOutFunc
       getFunc Priv = privateInOutMethod
       genDerived :: (OOProg r) => Bool -> Reader DrasilState 
@@ -259,14 +262,14 @@ genInputDerived s = do
         desc <- dvFuncDesc
         mthd <- getFunc s "derived_values" desc ins outs bod
         return $ Just mthd
-  genDerived $ "derived_values" `elem` defList (codeSpec g)
+  genDerived $ "derived_values" `elem` defList g
 
 -- Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r) => ScopeTag ->
   Reader DrasilState (Maybe (SMethod r))
 genInputConstraints s = do
   g <- ask
-  let cm = cMap $ csi $ codeSpec g
+  let cm = cMap $ codeSpec g
       getFunc Pub = publicFunc
       getFunc Priv = privateMethod
       genConstraints :: (OOProg r) => Bool -> Reader DrasilState 
@@ -274,29 +277,28 @@ genInputConstraints s = do
       genConstraints False = return Nothing
       genConstraints _ = do
         parms <- getConstraintParams
-        let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ 
-              codeSpec g)
+        let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
             sfwrCs   = map (sfwrLookup cm) varsList
             physCs   = map (physLookup cm) varsList
         sf <- sfwrCBody sfwrCs
         ph <- physCBody physCs
         desc <- inConsFuncDesc
-        mthd <- getFunc s "input_constraints" void desc parms 
+        mthd <- getFunc s "input_constraints" void desc (map pcAuto parms) 
           Nothing [block sf, block ph]
         return $ Just mthd
-  genConstraints $ "input_constraints" `elem` defList (codeSpec g)
+  genConstraints $ "input_constraints" `elem` defList g
 
 -- | Generates input constraints code block for checking software constraints
-sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, OOProg r) 
-  => [(q,[Constraint])] -> Reader DrasilState [MSStatement r]
+sfwrCBody :: (OOProg r) => [(CodeVarChunk,[Constraint])] -> 
+  Reader DrasilState [MSStatement r]
 sfwrCBody cs = do
   g <- ask
   let cb = onSfwrC g
   chooseConstr cb cs
 
 -- | Generates input constraints code block for checking physical constraints
-physCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, OOProg r) 
-  => [(q,[Constraint])] -> Reader DrasilState [MSStatement r]
+physCBody :: (OOProg r) => [(CodeVarChunk,[Constraint])] -> 
+  Reader DrasilState [MSStatement r]
 physCBody cs = do
   g <- ask
   let cb = onPhysC g
@@ -304,9 +306,8 @@ physCBody cs = do
 
 -- | Generates conditional statements for checking constraints, where the 
 -- bodies depend on user's choice of constraint violation behaviour
-chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasSpace q, OOProg r) 
-  => ConstraintBehaviour -> [(q,[Constraint])] -> 
-  Reader DrasilState [MSStatement r]
+chooseConstr :: (OOProg r) => ConstraintBehaviour -> 
+  [(CodeVarChunk,[Constraint])] -> Reader DrasilState [MSStatement r]
 chooseConstr cb cs = do
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
@@ -318,8 +319,8 @@ chooseConstr cb cs = do
 -- | Generates body defining constraint violation behaviour if Warning chosen,
 -- including printing a "Warning" message, followed by a message that says
 -- what value was "suggested".
-constrWarn :: (HasUID q, CodeIdea q, HasSpace q, OOProg r)
-  => (q,[Constraint]) -> Reader DrasilState [MSBody r]
+constrWarn :: (OOProg r) => (CodeVarChunk,[Constraint]) -> 
+  Reader DrasilState [MSBody r]
 constrWarn c = do
   let q = fst c
       cs = snd c
@@ -329,8 +330,8 @@ constrWarn c = do
 -- | Generates body defining constraint violation behaviour if Exception chosen,
 -- including printing a message that says what value was "expected", 
 -- followed by throwing an exception.
-constrExc :: (HasUID q, CodeIdea q, HasSpace q, OOProg r) 
-  => (q,[Constraint]) -> Reader DrasilState [MSBody r]
+constrExc :: (OOProg r) => (CodeVarChunk,[Constraint]) -> 
+  Reader DrasilState [MSBody r]
 constrExc c = do
   let q = fst c
       cs = snd c
@@ -340,11 +341,11 @@ constrExc c = do
 -- | Generates statements that print a message for when a constraint is violated
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
-constraintViolatedMsg :: (CodeIdea q, HasUID q, HasSpace q, OOProg r) 
-  => q -> String -> Constraint -> Reader DrasilState [MSStatement r]
+constraintViolatedMsg :: (OOProg r) => CodeVarChunk -> String -> 
+  Constraint -> Reader DrasilState [MSStatement r]
 constraintViolatedMsg q s c = do
   pc <- printConstraint c 
-  v <- mkVal q
+  v <- mkVal (quantvar q)
   return $ [printStr $ codeName q ++ " has value ",
     print v,
     printStr $ " but " ++ s ++ " to be "] ++ pc
@@ -356,7 +357,7 @@ printConstraint :: (OOProg r) => Constraint ->
   Reader DrasilState [MSStatement r]
 printConstraint c = do
   g <- ask
-  let db = sysinfodb $ csi $ codeSpec g
+  let db = sysinfodb $ codeSpec g
       printConstraint' :: (OOProg r) => Constraint -> Reader DrasilState 
         [MSStatement r]
       printConstraint' (Range _ (Bounded (_,e1) (_,e2))) = do
@@ -404,19 +405,19 @@ genInputFormat s = do
         desc <- inFmtFuncDesc
         mthd <- getFunc s "get_input" desc ins outs bod
         return $ Just mthd
-  genInFormat $ "get_input" `elem` defList (codeSpec g)
+  genInFormat $ "get_input" `elem` defList g
 
 genDataDesc :: Reader DrasilState DataDesc
 genDataDesc = do
   g <- ask
   return $ junkLine : 
-    intersperse junkLine (map singleton (extInputs $ csi $ codeSpec g))
+    intersperse junkLine (map singleton (extInputs $ codeSpec g))
 
 genSampleInput :: (AuxiliarySym r) => Reader DrasilState [r (Auxiliary r)]
 genSampleInput = do
   g <- ask
   dd <- genDataDesc
-  return [sampleInput (sysinfodb $ csi $ codeSpec g) dd (sampleData g) | 
+  return [sampleInput (sysinfodb $ codeSpec g) dd (sampleData g) | 
     hasSampleInput (auxiliaries g)]
 
 ----- CONSTANTS -----
@@ -430,7 +431,7 @@ genConstClass :: (OOProg r) => ClassType ->
   Reader DrasilState (Maybe (SClass r))
 genConstClass scp = do
   g <- ask
-  let cs = constants $ csi $ codeSpec g
+  let cs = constants $ codeSpec g
       genClass :: (OOProg r) => [CodeDefinition] -> Reader DrasilState 
         (Maybe (SClass r))
       genClass [] = return Nothing 
@@ -444,7 +445,7 @@ genConstClass scp = do
         cDesc <- constClassDesc
         cls <- f cname Nothing cDesc constVars (return [])
         return $ Just cls
-  genClass $ filter (flip member (Map.filter (cname ==) (clsMap $ codeSpec g)) 
+  genClass $ filter (flip member (Map.filter (cname ==) (clsMap g)) 
     . codeName) cs
   where cname = "Constants"
 
@@ -453,24 +454,37 @@ genConstClass scp = do
 genCalcMod :: (OOProg r) => Reader DrasilState (SFile r)
 genCalcMod = do
   g <- ask
-  genModule "Calculations" calcModDesc (map (fmap Just . genCalcFunc) 
-    (execOrder $ csi $ codeSpec g)) []
+  let elmap = extLibMap g
+  genModuleWithImports "Calculations" calcModDesc (concatMap (^. imports) $ 
+    elems elmap) (map (fmap Just . genCalcFunc) (execOrder $ codeSpec g)) []
 
 genCalcFunc :: (OOProg r) => CodeDefinition -> 
   Reader DrasilState (SMethod r)
 genCalcFunc cdef = do
+  g <- ask
   parms <- getCalcParams cdef
   let nm = codeName cdef
   tp <- codeType cdef
-  blck <- genCalcBlock CalcReturn cdef (codeEquat cdef)
+  v <- mkVar (quantvar cdef)
+  blcks <- case cdef ^. defType 
+            of Definition -> liftS $ genCalcBlock CalcReturn cdef 
+                 (codeEquat cdef)
+               ODE -> maybe (error $ nm ++ " missing from ExtLibMap") 
+                 (\el -> do
+                   defStmts <- mapM convStmt (el ^. defs)
+                   stepStmts <- mapM convStmt (el ^. steps)
+                   return [block (varDec v : defStmts), 
+                     block stepStmts,
+                     block [returnStmt $ valueOf v]])
+                 (Map.lookup nm (extLibMap g))
   desc <- getComment cdef
   publicFunc
     nm
     (convType tp)
     ("Calculates " ++ desc)
-    parms
+    (map pcAuto parms)
     (Just desc)
-    [blck]
+    blcks
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
@@ -478,7 +492,7 @@ genCalcBlock :: (OOProg r) => CalcType -> CodeDefinition -> Expr ->
   Reader DrasilState (MSBlock r)
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
-  vv <- mkVar v
+  vv <- mkVar (quantvar v)
   ee <- convExpr e
   l <- maybeLog vv
   return $ block $ assign vv ee : l
@@ -521,12 +535,12 @@ genOutputFormat = do
           v <- mkVal x
           return [ printFileStr v_outfile (codeName x ++ " = "),
                    printFileLn v_outfile v
-                 ] ) (outputs $ csi $ codeSpec g)
+                 ] ) (outputs $ codeSpec g)
         desc <- woFuncDesc
-        mthd <- publicFunc "write_output" void desc parms Nothing 
+        mthd <- publicFunc "write_output" void desc (map pcAuto parms) Nothing 
           [block $ [
           varDec var_outfile,
           openFileW var_outfile (litString "output.txt") ] ++
           concat outp ++ [ closeFile v_outfile ]]
         return $ Just mthd
-  genOutput $ Map.lookup "write_output" (eMap $ codeSpec g)
+  genOutput $ Map.lookup "write_output" (eMap g)

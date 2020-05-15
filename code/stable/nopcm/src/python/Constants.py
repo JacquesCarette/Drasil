@@ -3,6 +3,7 @@
 # \brief Provides the structure for holding constant values
 ## \brief Structure for holding the constant values
 class Constants:
+    pi = 3.14159265
     L_min = 0.1
     L_max = 50
     rho_W_min = 950

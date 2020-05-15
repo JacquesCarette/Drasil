@@ -13,18 +13,17 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   VSFunction, MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), 
   FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), 
-  TypeSym(..), TypeElim(..), ControlBlock(..), VariableSym(..), 
-  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
-  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
-  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
-  selfFuncApp, extFuncApp, newObj, InternalValueExp(..), objMethodCall, 
-  objMethodCallNoParams, FunctionSym(..), ($.), GetSet(..), List(..), 
-  InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), 
-  DeclStatement(..), objDecNewNoParams, IOStatement(..), StringStatement(..), 
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), 
+  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
+  NumericExpression(..), BooleanExpression(..), Comparison(..), 
+  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, 
+  InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.), 
+  GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), 
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
+  ControlStatement(..), StatePattern(..), ObserverPattern(..), 
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -42,19 +41,19 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
-  inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', args, 
-  listSep, access, mathFunc, valueList, variableList, appendToBody, 
-  surroundBody)
+  inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', listSep',
+  args, listSep, access, containing, mathFunc, valueList, variableList, 
+  appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body, 
   printFile, param, method, listDec, classVar, objVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
   addComments, commentedMod, commentedItem)
-import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
+import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, 
   mkStateVal, mkVal, mkVar, VSOp, unOpPrec, powerPrec, unExpr, unExpr', 
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, funcType, csc, sec, 
-  cot, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
+  multiBody, block, multiBlock, int, listInnerType, obj, csc, sec, cot, 
+  negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
   objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
@@ -68,10 +67,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, destructorError, stateVarDef, constVar, 
-  intClass, listSetFunc, listAccessFunc, bool, arrayType, pi, notNull, printSt, 
-  arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, 
-  mainFunction, stateVar, buildModule', string, constDecDef, docInOutFunc)
+  discardFileLine, destructorError, stateVarDef, constVar, intClass, 
+  listSetFunc, listAccessFunc, arrayType, pi, notNull, printSt, arrayDec, 
+  arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, mainFunction, 
+  stateVar, buildModule', string, constDecDef, docInOutFunc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -85,12 +84,11 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
   vard)
-import GOOL.Drasil.Helpers (toCode, toState, onCodeValue, onStateValue, 
-  on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, onCodeList, 
-  onStateList, on1StateValue1List)
+import GOOL.Drasil.Helpers (angles, hicat, toCode, toState, onCodeValue, 
+  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
+  onCodeList, onStateList, on1StateValue1List)
 import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
-  addLangImport, addLangImportVS, addLibImport, setFileType, getClassName, 
-  setCurrMain, setODEDepVars, getODEDepVars)
+  addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -98,9 +96,9 @@ import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.Composition ((.:))
-import Data.List (elemIndex, intercalate)
+import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  vcat, lbrace, rbrace, braces, colon, space)
+  equals, vcat, lbrace, rbrace, braces, colon, space)
 
 csExt :: String
 csExt = "cs"
@@ -186,7 +184,7 @@ instance BlockElim CSharpCode where
 
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData
-  bool = addSystemImport CP.bool
+  bool = addSystemImport csBoolType
   int = G.int
   float = C.float
   double = C.double
@@ -200,7 +198,7 @@ instance TypeSym CSharpCode where
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
-  funcType = G.funcType
+  funcType = csFuncType
   iterator t = t
   void = C.void
 
@@ -213,40 +211,6 @@ instance RenderType CSharpCode where
 
 instance InternalTypeElim CSharpCode where
   type' = typeDoc . unCSC
-
-instance ControlBlock CSharpCode where
-  solveODE info opts = modify (addLibImport "Microsoft.Research.Oslo" . 
-    addLangImport "System.Linq") >> 
-    multiBlock [
-      block [
-        objDecNewNoParams optsVar,
-        objVar optsVar (var "AbsoluteTolerance" float) &= absTol opts,
-        objVar optsVar (var "AbsoluteTolerance" float) &= relTol opts],
-      block [
-        varDecDef sol (extFuncApp "Ode" (csODEMethod $ solveMethod opts) odeT 
-        [tInit info, 
-        newObj vec [initVal info], 
-        lambda [iv, dv] (newObj vec [dv >>= (\dpv -> modify (setODEDepVars 
-          [variableName dpv]) >> ode info)]),
-        valueOf optsVar])],
-      block [
-        varDecDef points (objMethodCallNoParams spArray 
-        (objMethodCall void (valueOf sol) "SolveFromToStep" 
-          [tInit info, tFinal info, stepSize opts]) "ToArray"),
-        listDecDef dv [],
-        forEach sp (valueOf points) 
-          (oneLiner $ valStmt $ listAppend (valueOf dv) (valueOf $ 
-          objVar sp (var "X" (listInnerType $ onStateValue variableType dv))))]
-    ]
-    where optsVar = var "opts" (obj "Options")
-          iv = indepVar info
-          dv = depVar info
-          odeT = obj "Idrasierable<SolPoint>"
-          vec = obj "Vector"
-          sol = var "sol" odeT
-          spArray = arrayType (obj "SolPoint")
-          points = var "points" spArray
-          sp = var "sp" (obj "SolPoint")
 
 instance UnaryOpSym CSharpCode where
   type UnaryOp CSharpCode = OpData
@@ -333,9 +297,7 @@ instance MathConstant CSharpCode where
   pi = CP.pi
 
 instance VariableValue CSharpCode where
-  valueOf v = join $ on2StateValues (\dvs vr -> maybe (G.valueOf v) (listAccess 
-    (G.valueOf v) . litInt . toInteger) (elemIndex (variableName vr) dvs)) 
-    getODEDepVars v
+  valueOf = G.valueOf
 
 instance CommandLineArgs CSharpCode where
   arg n = G.arg (litInt n) argsList
@@ -501,7 +463,7 @@ instance AssignStatement CSharpCode where
 
 instance DeclStatement CSharpCode where
   varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
-    C.varDec static dynamic v)
+    C.varDec static dynamic empty v)
   varDecDef = C.varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
     (litInt n) v)
@@ -706,13 +668,19 @@ addSystemImport = (>>) $ modify (addLangImportVS csSystem)
 csName :: String
 csName = "C#"
 
-csODEMethod :: ODEMethod -> String
-csODEMethod RK45 = "RK547M"
-csODEMethod BDF = "GearBDF"
-csODEMethod _ = error "Chosen ODE method unavailable in C#"
-
 csImport :: Label -> Doc
 csImport n = text ("using " ++ n) <> endStatement
+
+csBoolType :: (RenderSym r) => VSType r
+csBoolType = toState $ typeFromData Boolean csBool (text csBool)
+
+csFuncType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
+csFuncType ps r = do
+  pts <- sequence ps
+  rt <- r
+  return $ typeFromData (Func (map getType pts) (getType rt))
+    (csFunc `containing` intercalate listSep (map getTypeString $ pts ++ [rt]))
+    (text csFunc <> angles (hicat listSep' $ map RC.type' $ pts ++ [rt]))
 
 csListSize, csForEach, csNamedArgSep, csLambdaSep :: Doc
 csListSize = text "Count"
@@ -722,7 +690,8 @@ csLambdaSep = text "=>"
 
 csSystem, csConsole, csGeneric, csIO, csList, csInt, csFloat, csDouble, csBool, 
   csChar, csParse, csReader, csWriter, csReadLine, csWrite, csWriteLine, 
-  csIndex, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain :: String
+  csIndex, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain,
+  csFunc :: String
 csSystem = "System"
 csConsole = "Console"
 csGeneric = csSysAccess $ "Collections" `access` "Generic"
@@ -746,6 +715,7 @@ csClose = "Close"
 csEOS = "EndOfStream"
 csSplit = "Split"
 csMain = "Main"
+csFunc = "Func"
 
 csSysAccess :: String -> String
 csSysAccess = access csSystem
@@ -798,14 +768,24 @@ csCast = join .: on2StateValues (\t v -> csCast' (getType t) (getType $
         csCast' _ _ t v = mkStateVal (toState t) (R.castObj (R.cast 
           (RC.type' t)) (RC.value v))
 
-csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> SValue r -> 
+-- This implementation generates a statement lambda to define the function. 
+-- C# 7 supports local functions, which would be a cleaner way to implement
+-- this, but the mcs compiler used in our Travis builds does not yet support 
+-- all features of C# 7, so we cannot generate local functions.
+-- If support for local functions is added to mcs in the future, this
+-- should be re-written to generate a local function.
+csFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r -> 
   MSStatement r
-csFuncDecDef v ps r = do
+csFuncDecDef v ps bod = do
   vr <- zoom lensMStoVS v
   pms <- mapM (zoom lensMStoVS) ps
-  b <- oneLiner $ returnStmt r
-  return $ mkStmtNoEnd $ RC.type' (variableType vr) <+> text (variableName vr) 
-    <> parens (variableList pms) <+> bodyStart $$ indent (RC.body b) $$ bodyEnd 
+  t <- zoom lensMStoVS $ funcType (map (return . variableType) pms) 
+    (return $ variableType vr)
+  b <- bod
+  modify (addLangImport csSystem)
+  return $ mkStmt $ RC.type' t <+> text (variableName vr) <+> equals <+>
+    parens (variableList pms) <+> csLambdaSep <+> bodyStart $$ 
+    indent (RC.body b) $$ bodyEnd 
 
 csThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 csThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <> 

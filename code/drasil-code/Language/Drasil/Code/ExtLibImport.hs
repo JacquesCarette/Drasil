@@ -1,12 +1,16 @@
 {-# LANGUAGE TemplateHaskell, TupleSections #-}
-module Language.Drasil.Code.ExtLibImport (genExternalLibraryCall) where
+module Language.Drasil.Code.ExtLibImport (ExtLibState(..), auxMods, defs, 
+  imports, modExports, steps, genExternalLibraryCall) where
 
 import Language.Drasil
 
-import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
+import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName, 
+  ccObjVar)
+import Language.Drasil.Chunk.Parameter (ParameterChunk)
 import Language.Drasil.CodeExpr (new, newWithNamedArgs, msgWithNamedArgs)
-import Language.Drasil.Mod (Class, Func(..), Mod, Name, packmodRequires, 
-  classDef, classImplements, FuncStmt(..), funcDef, ctorDef)
+import Language.Drasil.Mod (Class, StateVariable, Func(..), Mod, Name, 
+  packmodRequires, classDef, classImplements, FuncStmt(..), funcDefParams, 
+  ctorDef)
 import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..), 
   FunctionInterface(..), Result(..), Argument(..), ArgumentInfo(..), 
   Parameter(..), ClassInfo(..), MethodInfo(..), FuncType(..))
@@ -18,45 +22,49 @@ import Control.Lens (makeLenses, (^.), over)
 import Control.Monad (zipWithM)
 import Control.Monad.State (State, execState, get, modify)
 import Data.List (nub, partition)
-import Data.List.NonEmpty ((!!), toList)
+import Data.List.NonEmpty (NonEmpty(..), (!!), toList)
 import Data.Maybe (isJust)
 import Prelude hiding ((!!))
 
 data ExtLibState = ELS {
-  _mods :: [Mod],
+  _auxMods :: [Mod],
   _defs :: [FuncStmt],
   _defined :: [Name],
+  _steps :: [FuncStmt],
   _imports :: [String],
-  _modExports :: [(String, String)],
-  _classDefs :: [(String, String)],
-  _steps :: [FuncStmt]
+  _modExports :: [(String, String)]
 }
 makeLenses ''ExtLibState
 
 initELS :: ExtLibState
 initELS = ELS {
-  _mods = [],
+  _auxMods = [],
   _defs = [],
   _defined = [],
+  _steps = [],
   _imports = [],
-  _modExports = [],
-  _classDefs = [],
-  _steps = []
+  _modExports = []
 }
 
 -- State Modifiers
 
 addMod :: Mod -> ExtLibState -> ExtLibState
-addMod m = over mods (m:)
+addMod m = over auxMods (m:)
 
 addDef :: Expr -> CodeVarChunk -> ExtLibState -> ExtLibState
 addDef e c s = if n `elem` (s ^. defined) then s else over defs (++ [FDecDef c 
   e]) (addDefined n s)
   where n = codeName c
 
+addFuncDef :: CodeFuncChunk -> [ParameterChunk] -> [FuncStmt] -> ExtLibState -> 
+  ExtLibState
+addFuncDef c ps b s = if n `elem` (s ^. defined) then s else over defs 
+  (++ [FFuncDef c ps b]) (addDefined n s)
+  where n = codeName c
+
 addFieldAsgs :: CodeVarChunk -> [CodeVarChunk] -> [Expr] -> ExtLibState -> 
   ExtLibState
-addFieldAsgs o cs es = over defs (++ zipWith (FAsgObjVar o) cs es)
+addFieldAsgs o cs es = over defs (++ zipWith FAsg (map (ccObjVar o) cs) es)
 
 addDefined :: String -> ExtLibState -> ExtLibState
 addDefined n = over defined (n:)
@@ -67,17 +75,8 @@ addImports is = over imports (\l -> nub $ l ++ is)
 addModExport :: (String, String) -> ExtLibState -> ExtLibState
 addModExport e = over modExports (e:)
 
-addModExports :: [(String, String)] -> ExtLibState -> ExtLibState
-addModExports es = over modExports (es++)
-
-addClassDef :: (String, String) -> ExtLibState -> ExtLibState
-addClassDef d = over classDefs (d:)
-
-addClassDefs :: [(String, String)] -> ExtLibState -> ExtLibState
-addClassDefs ds = over classDefs (ds++)
-
 addSteps :: [FuncStmt] -> ExtLibState -> ExtLibState
-addSteps fs = over steps (fs++)
+addSteps fs = over steps (++fs)
 
 refreshLocal :: ExtLibState -> ExtLibState
 refreshLocal s = s {_defs = [], _defined = [], _imports = []}
@@ -104,9 +103,7 @@ genExtLibCall (sg:el) (SGF n sgf:elc) = let s = sg!!n in
 genExtLibCall _ _ = error stepNumberMismatch
 
 genStep :: Step -> StepFill -> State ExtLibState FuncStmt
-genStep (Call rs fi) (CallF fif) = do
-  modify (addImports rs) 
-  genFI fi fif
+genStep (Call fi) (CallF fif) = genFI fi fif
 genStep (Loop fis f ss) (LoopF fifs ccList sfs) = do
   es <- zipWithM genFIVal (toList fis) (toList fifs)
   fs <- zipWithM genStep (toList ss) (toList sfs)
@@ -115,10 +112,11 @@ genStep (Statement f) (StatementF ccList exList) = return $ f ccList exList
 genStep _ _ = error stepTypeMismatch
 
 genFIVal :: FunctionInterface -> FunctionIntFill -> State ExtLibState Expr
-genFIVal (FI ft f as _) (FIF afs) = do
+genFIVal (FI (r:|rs) ft f as _) (FIF afs) = do
   args <- genArguments as afs
-  let isNamed = isJust . fst 
-      (ars, nas) = partition isNamed args
+  let isNamed = isJust . fst
+      (nas, ars) = partition isNamed args
+  modify (addImports rs . addModExport (codeName f, r))
   return $ getCallFunc ft f (map snd ars) (map (\(n, e) -> 
     maybe (error "defective isNamed") (,e) n) nas) 
   where getCallFunc Function = applyWithNamedArgs 
@@ -126,71 +124,66 @@ genFIVal (FI ft f as _) (FIF afs) = do
         getCallFunc Constructor = newWithNamedArgs
 
 genFI :: FunctionInterface -> FunctionIntFill -> State ExtLibState FuncStmt
-genFI fi@(FI _ _ _ r) fif = do
+genFI fi@(FI _ _ _ _ r) fif = do
   fiEx <- genFIVal fi fif
   return $ maybeGenAssg r fiEx 
 
 genArguments :: [Argument] -> [ArgumentFill] -> 
   State ExtLibState [(Maybe NamedArgument, Expr)]
-genArguments as afs = fmap (zip (map getName as)) (genArgumentInfos (map getAI as) afs)
-
-genArgumentInfos :: [ArgumentInfo] -> [ArgumentFill] -> State ExtLibState [Expr]
-genArgumentInfos (LockedArg e:as) afs = fmap (e:) (genArgumentInfos as afs)
-genArgumentInfos (Basic _ v:as) (BasicF e:afs) = do
-  modify (maybe id (addDef e) v)
-  fmap (e:) (genArgumentInfos as afs)
--- FIXME: funcexpr needs to be defined, a function-valued expression
--- Uncomment the below when funcexpr is added
-genArgumentInfos (Fn c _ _{-ps s-}:as) (FnF _ _{-pfs sf-}:afs) = -- do
-  -- let prms = genParameters ps pfs
-  -- st <- genStep s sf
-  -- modify (addDef (funcexpr prms st) c)
-  fmap (sy c:) (genArgumentInfos as afs)
-genArgumentInfos (Class rs desc o ctor ci:as) (ClassF svs cif:afs) = do
-  (c, is) <- genClassInfo o ctor n desc svs ci cif
-  modify (addMod (packmodRequires n desc (rs ++ is) [c] []))
-  fmap (sy o:) (genArgumentInfos as afs)
-  where n = getActorName (o ^. typ)
-genArgumentInfos (Record n r fs:as) (RecordF es:afs) = 
+genArguments (Arg n (LockedArg e):as) afs = fmap ((n,e):) (genArguments as afs)
+genArguments as (UserDefinedArgF n e:afs) = fmap ((n,e):) (genArguments as afs)
+genArguments (Arg n (Basic _ Nothing):as) (BasicF e:afs) = fmap ((n,e):) 
+  (genArguments as afs)
+genArguments (Arg n (Basic _ (Just v)):as) (BasicF e:afs) = do
+  modify (addDef e v)
+  fmap ((n,sy v):) (genArguments as afs)
+genArguments (Arg n (Fn c ps s):as) (FnF pfs sf:afs) = do
+  let prms = genParameters ps pfs
+  st <- genStep s sf
+  modify (addFuncDef c prms [st])
+  fmap ((n, sy c):) (genArguments as afs)
+genArguments (Arg n (Class rs desc o ctor ci):as) (ClassF svs cif:afs) = do
+  (c, is) <- genClassInfo o ctor an desc svs ci cif
+  modify (addMod (packmodRequires an desc (rs ++ is) [c] []))
+  fmap ((n, sy o):) (genArguments as afs)
+  where an = getActorName (o ^. typ)
+genArguments (Arg n (Record (rq:|rqs) rn r fs):as) (RecordF es:afs) = 
   if length fs /= length es then error recordFieldsMismatch else do
-    modify (addDef (new n []) r)
-    modify (addFieldAsgs r fs es)
-    fmap (sy r:) (genArgumentInfos as afs)
-genArgumentInfos [] [] = return []
-genArgumentInfos _ _ = error argumentMismatch
+    modify (addFieldAsgs r fs es . addDef (new rn []) r . 
+      addModExport (codeName rn, rq) . addImports rqs)
+    fmap ((n, sy r):) (genArguments as afs)
+genArguments [] [] = return []
+genArguments _ _ = error argumentMismatch
   
 genClassInfo :: CodeVarChunk -> CodeFuncChunk -> String -> String -> 
-  [CodeVarChunk] -> ClassInfo -> ClassInfoFill -> 
+  [StateVariable] -> ClassInfo -> ClassInfoFill -> 
   State ExtLibState (Class, [String])
 genClassInfo o c n desc svs ci cif = let (mis, mifs, f) = genCI ci cif in 
   if length mis /= length mifs then error methodInfoNumberMismatch else do
-    ms <- zipWithM (genMethodInfo o c n) mis mifs
-    modify (addModExports ((n,n) : zip (map codeName svs) (repeat n)) . 
-      addClassDefs ((n,n) : zip (map codeName svs) (repeat n)) . 
-      if any isConstructor mis then id else addDef (new c []) o)
+    ms <- zipWithM (genMethodInfo o c) mis mifs
+    modify (if any isConstructor mis then id else addDef (new c []) o)
     return (f desc svs (map fst ms), concatMap snd ms)
   where genCI (Regular mis') (RegularF mifs') = (mis', mifs', classDef n)
         genCI (Implements intn mis') (ImplementsF mifs') = (mis', mifs', 
           classImplements n intn)
         genCI _ _ = error classInfoMismatch
 
-genMethodInfo :: CodeVarChunk -> CodeFuncChunk -> String -> MethodInfo -> 
+genMethodInfo :: CodeVarChunk -> CodeFuncChunk -> MethodInfo -> 
   MethodInfoFill -> State ExtLibState (Func, [String])
-genMethodInfo o c _ (CI desc ps ss) (CIF pfs is sfs) = do
+genMethodInfo o c (CI desc ps ss) (CIF pfs is sfs) = do
   let prms = genParameters ps pfs
   (fs, newS) <- withLocalState $ zipWithM genStep ss sfs
   modify (addDef (new c (map sy prms)) o)
   return (ctorDef (codeName c) desc prms is (newS ^. defs ++ fs), 
     newS ^. imports)
-genMethodInfo _ _ n (MI m desc ps rDesc ss) (MIF pfs sfs) = do
+genMethodInfo _ _ (MI m desc ps rDesc ss) (MIF pfs sfs) = do
   let prms = genParameters ps pfs
   (fs, newS) <- withLocalState (zipWithM genStep (toList ss) (toList sfs))
-  modify (addModExport (codeName m, n) . addClassDef (codeName m, n))
-  return (funcDef (codeName m) desc prms (m ^. typ) rDesc (newS ^. defs ++ fs),
-    newS ^. imports)
-genMethodInfo _ _ _ _ _ = error methodInfoMismatch
+  return (funcDefParams (codeName m) desc prms (m ^. typ) rDesc (
+    newS ^. defs ++ fs), newS ^. imports)
+genMethodInfo _ _ _ _ = error methodInfoMismatch
 
-genParameters :: [Parameter] -> [ParameterFill] -> [CodeVarChunk]
+genParameters :: [Parameter] -> [ParameterFill] -> [ParameterChunk]
 genParameters (LockedParam c:ps) pfs = c : genParameters ps pfs
 genParameters ps (UserDefined c:pfs) = c : genParameters ps pfs
 genParameters (NameableParam _:ps) (NameableParamF c:pfs) = c : 
@@ -200,7 +193,7 @@ genParameters _ _ = error paramMismatch
 
 maybeGenAssg :: Maybe Result -> (Expr -> FuncStmt)
 maybeGenAssg Nothing = FVal
-maybeGenAssg (Just (Assign c)) = FAsg c
+maybeGenAssg (Just (Assign c)) = FDecDef c
 maybeGenAssg (Just Return)  = FRet
 
 -- Helpers
@@ -214,12 +207,6 @@ withLocalState st = do
   modify (returnLocal s)
   return (st', newS)
 
-getName :: Argument -> Maybe NamedArgument
-getName (Arg n _) = n
-
-getAI :: Argument -> ArgumentInfo
-getAI (Arg _ ai) = ai
-
 isConstructor :: MethodInfo -> Bool
 isConstructor CI {} = True
 isConstructor _ = False
@@ -227,7 +214,7 @@ isConstructor _ = False
 elAndElc, stepNumberMismatch, stepTypeMismatch, argumentMismatch, 
   paramMismatch, recordFieldsMismatch, ciAndCif, classInfoMismatch, 
   methodInfoNumberMismatch, methodInfoMismatch :: String
-elAndElc = "ExternalLibrary and ExternalLibraStepryCall have different "
+elAndElc = "ExternalLibrary and ExternalLibraryCall have different "
 stepNumberMismatch = elAndElc ++ "number of steps"
 stepTypeMismatch = elAndElc ++ "order of steps"
 argumentMismatch = "FunctionInterface and FunctionIntFill have different number or types of arguments"

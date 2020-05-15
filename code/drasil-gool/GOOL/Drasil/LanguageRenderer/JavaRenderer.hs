@@ -12,25 +12,22 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue, 
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, OOProg, 
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), 
-  VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), 
-  MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), Comparison(..), 
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, 
-  InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
-  ($.), GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), 
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), ObserverPattern(..), 
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  pubMethod, initializer, StateVarSym(..), privDVar, pubDVar, ClassSym(..), 
-  ModuleSym(..), ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, 
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
+  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj,
+  InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), List(..), 
+  InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
+  (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
+  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
+  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
-  RenderValue(..), ValueElim(valuePrec), InternalGetSet(..), 
+  RenderValue(..), ValueElim(valuePrec),  InternalGetSet(..), 
   InternalListFunc(..), InternalIterator(..), RenderFunction(..), 
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
@@ -54,8 +51,8 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, funcType, csc, sec, 
-  cot, negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
+  multiBody, block, multiBlock, int, listInnerType, obj, csc, sec, cot, 
+  negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
   objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
@@ -71,9 +68,9 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
-  bool, arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, 
+  funcType, arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, 
   openFileW, openFileA, forEach, docMain, mainFunction, stateVar, buildModule', 
-  litArray, call', listSizeFunc, listAccessFunc', funcDecDef)
+  litArray, call', listSizeFunc, listAccessFunc')
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -90,26 +87,22 @@ import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception,
   stdExc, HasException(..))
 import GOOL.Drasil.Helpers (emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
-  onCodeList, onStateList, on1StateValue1List)
-import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoVS, lensMStoFS,
-  lensMStoVS, lensVStoFS, lensVStoMS, initialFS, modifyReturn, goolState,
-  modifyReturnFunc, revFiles, addODEFilePaths, addProgNameToPaths, addODEFiles, 
-  getODEFiles, addLangImport, addLangImportVS, addExceptionImports, 
-  addLibImport, getModuleName, setFileType, getClassName, setCurrMain, 
-  setODEDepVars, getODEDepVars, setODEOthVars, getODEOthVars, 
-  setOutputsDeclared, isOutputsDeclared, getExceptions, getMethodExcMap, 
-  addExceptions)
+  onCodeList, onStateList)
+import GOOL.Drasil.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS, 
+  lensVStoMS, modifyReturn, modifyReturnList, revFiles, addProgNameToPaths, 
+  addLangImport, addLangImportVS, addExceptionImports, getModuleName, 
+  setFileType, getClassName, setCurrMain, setOutputsDeclared, 
+  isOutputsDeclared, getExceptions, getMethodExcMap, addExceptions)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Control.Lens ((^.))
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
-import Control.Monad.State (modify, runState)
+import Control.Monad.State (modify)
 import Data.Composition ((.:))
 import qualified Data.Map as Map (lookup)
-import Data.List (elemIndex, nub, intercalate, sort)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, 
+import Data.List (nub, intercalate, sort)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty, 
   equals, vcat, lbrace, rbrace, colon)
 
 jExt :: String
@@ -132,10 +125,9 @@ instance OOProg JavaCode where
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
-  prog n fs = modifyReturnFunc (\_ -> revFiles . addProgNameToPaths n)
-    (onCodeList (progD n . map (R.package n endStatement)))
-    (on2StateValues (++) (mapM (zoom lensGStoFS) fs) (onStateValue (map toCode) 
-    getODEFiles))
+  prog n fs = modifyReturnList (map (zoom lensGStoFS) fs) (revFiles . 
+    addProgNameToPaths n) (onCodeList (progD n . map (R.package n 
+    endStatement)))
 
 instance RenderSym JavaCode
 
@@ -196,7 +188,7 @@ instance BlockElim JavaCode where
 
 instance TypeSym JavaCode where
   type Type JavaCode = TypeData
-  bool = CP.bool
+  bool = jBoolType
   int = G.int
   float = C.float
   double = C.double
@@ -208,7 +200,7 @@ instance TypeSym JavaCode where
   arrayType = CP.arrayType
   listInnerType = G.listInnerType
   obj = G.obj
-  funcType = G.funcType
+  funcType = CP.funcType
   iterator t = t
   void = C.void
 
@@ -221,35 +213,6 @@ instance RenderType JavaCode where
 
 instance InternalTypeElim JavaCode where
   type' = typeDoc . unJC
-
-instance ControlBlock JavaCode where
-  solveODE info opts = let (fls, s) = jODEFiles info 
-    in modify (addODEFilePaths s . addODEFiles fls) >> (zoom lensMStoVS dv 
-    >>= (\dpv -> 
-      let odeVarType = obj (odeClassName dpv)
-          odeVar = var "ode" odeVarType
-          odeDepVar = var (odeVarName dpv) (arrayType float)
-          initval = initVal info
-          integVal = valueOf $ jODEIntVar (solveMethod opts)
-          shn = variableName dpv ++ "_" ++ stH
-          hndlr = var "stepHandler" (obj shn)
-          odeClassName = ((++ "_ODE") . variableName)
-          odeVarName = ((++ "_ode") . variableName)
-      in multiBlock [
-      block [
-        jODEMethod opts,
-        objDecDef odeVar (newObj odeVarType (map valueOf $ otherVars info)),
-        arrayDecDef odeDepVar [initval],
-        varDec dv],
-      block [
-        objDecDef hndlr (newObj (obj shn) []),
-        valStmt $ objMethodCall void integVal "addStepHandler" [valueOf hndlr],
-        valStmt $ objMethodCall void integVal "integrate"   
-          [valueOf odeVar, tInit info, valueOf odeDepVar, tFinal info, 
-          valueOf odeDepVar],
-        dv &= valueOf (objVar hndlr dv)]]))
-    where stH = "StepHandler"
-          dv = depVar info
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
@@ -301,9 +264,7 @@ instance VariableSym JavaCode where
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
-  objVar o v = join $ on3StateValues (\ovs ob vr -> if (variableName ob ++ "." 
-    ++ variableName vr) `elem` ovs then toState vr else CP.objVar (toState ob) 
-    (toState vr)) getODEOthVars o v
+  objVar = CP.objVar
   objVarSelf = CP.objVarSelf
   arrayElem i = G.arrayElem (litInt i)
   iterVar = CP.iterVar
@@ -341,9 +302,7 @@ instance MathConstant JavaCode where
   pi = CP.pi
 
 instance VariableValue JavaCode where
-  valueOf v = G.valueOf $ join $ on2StateValues (\dvs vr -> maybe v (\i -> 
-    arrayElem (toInteger i) v) (elemIndex (variableName vr) dvs)) 
-    getODEDepVars v
+  valueOf = G.valueOf
 
 instance CommandLineArgs JavaCode where
   arg n = G.arg (litInt n) argsList
@@ -530,7 +489,7 @@ instance AssignStatement JavaCode where
   (&--) = M.decrement1
 
 instance DeclStatement JavaCode where
-  varDec = C.varDec static dynamic
+  varDec = C.varDec static dynamic empty
   varDecDef = C.varDecDef
   listDec n v = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
     (litInt n) v)
@@ -541,7 +500,7 @@ instance DeclStatement JavaCode where
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
   constDecDef = zoom lensMStoVS .: on2StateValues (mkStmt .: jConstDecDef)
-  funcDecDef = CP.funcDecDef
+  funcDecDef = jFuncDecDef
 
 instance IOStatement JavaCode where
   print      = jOut False Nothing printFunc
@@ -741,79 +700,14 @@ instance HasException JavaCode where
   toConcreteExc FileNotFound = toCode $ exception (javaImport io) jFNFExc
   toConcreteExc IO = toCode $ exception (javaImport io) jIOExc
 
-odeImport :: String
-odeImport = "org.apache.commons.math3.ode."
-
-jODEMethod :: ODEOptions JavaCode -> MSStatement JavaCode
-jODEMethod opts = modify (addLibImport (odeImport ++ "nonstiff." ++ it)) >> 
-  varDecDef (jODEIntVar m) (newObj (obj it) (jODEParams m))
-  where m = solveMethod opts
-        it = jODEInt m
-        jODEParams RK45 = [stepSize opts, stepSize opts, absTol opts, 
-          relTol opts]
-        jODEParams Adams = [litInt 3, stepSize opts, stepSize opts, absTol opts,
-          relTol opts]
-        jODEParams _ = error "Chosen ODE method unavailable in Java"
-
-jODEIntVar :: ODEMethod -> SVariable JavaCode
-jODEIntVar m = var "it" (obj $ jODEInt m)
-
-jODEInt :: ODEMethod -> String
-jODEInt RK45 = "DormandPrince54Integrator"
-jODEInt Adams = "AdamsBashforthIntegrator"
-jODEInt _ = error "Chosen ODE method unavailable in Java"
-
-jODEFiles :: ODEInfo JavaCode -> ([FileData], GOOLState)
-jODEFiles info = (map unJC fls, s ^. goolState)
-  where (fls, s) = runState odeFiles initialFS
-        fode = "FirstOrderDifferentialEquations"
-        dv = depVar info
-        ovars = otherVars info 
-        odeFiles = join $ on1StateValue1List (\dpv ovs -> 
-          let n = variableName dpv
-              cn = n ++ "_ODE"
-              dn = "d" ++ n 
-              stH = "StepHandler"
-              stI = "StepInterpolator"
-              shn = n ++ "_" ++ stH
-              ddv = var dn (arrayType float)
-              y0 = var "y0" (arrayType float)
-              interp = var "interpolator" (obj stI)
-              othVars = map (modify (setODEOthVars (map variableName 
-                ovs)) >>) ovars
-              odeTempName = ((++ "_curr") . variableName)
-              odeTemp = var (odeTempName dpv) (arrayType float)
-          in sequence [fileDoc (buildModule cn [odeImport ++ fode] [] 
-            [implementingClass cn [fode] (map privDVar othVars) 
-              [initializer (map param othVars) (zip othVars 
-                (map valueOf othVars)),
-              pubMethod "getDimension" int [] (oneLiner $ returnStmt $ 
-                litInt 1),
-              pubMethod "computeDerivatives" void (map param [var "t" float, 
-                var n (arrayType float), ddv]) (oneLiner $ arrayElem 0 ddv &= 
-                (modify (setODEDepVars [variableName dpv, dn] . setODEOthVars 
-                (map variableName ovs)) >> ode info))]]),
-            fileDoc (buildModule shn (map ((odeImport ++ "sampling.") ++) 
-              [stH, stI]) [] [implementingClass shn [stH] [pubDVar dv] 
-                [pubMethod "init" void (map param [var "t0" float, y0, 
-                  var "t" float]) (modify (addLangImport "java.util.Arrays") >> 
-                    oneLiner (objVarSelf dv &= newObj (obj 
-                    (getTypeString $ variableType dpv)) [funcApp "Arrays.asList"
-                    (toState $ variableType dpv) [valueOf $ arrayElem 0 y0]])),
-                pubMethod "handleStep" void (map param [interp, var "isLast" 
-                  (toState $ typeFromData Boolean "boolean" (text "boolean"))]) 
-                  (bodyStatements [
-                    varDecDef odeTemp (objMethodCallNoParams (arrayType float) 
-                      (valueOf interp) "getInterpolatedState"),
-                    valStmt $ listAppend (valueOf $ objVarSelf dv) (valueOf 
-                      (arrayElem 0 odeTemp))])]])]) 
-          (zoom lensFStoVS dv) (map (zoom lensFStoVS) ovars)
-
 jName :: String
 jName = "Java"
 
 jImport :: Label -> Doc
 jImport n = text ("import " ++ n) <> endStatement
+
+jBoolType :: (RenderSym r) => VSType r
+jBoolType = toState $ typeFromData Boolean jBool (text jBool)
 
 jStringType :: (RenderSym r) => VSType r
 jStringType = toState $ typeFromData String jString (text jString)
@@ -834,12 +728,14 @@ jScanner' = text jScanner
 jThrows = text "throws"
 jLambdaSep = text "->"
 
-arrayList, jInteger, jFloat, jDouble, jString, jObject, jScanner, jPrintWriter, 
-  jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jAsList, jStdIn, jStdOut, 
-  jPrint, jPrintLn, jEquals, jParseInt, jParseDbl, jParseFloat, jIndex, 
-  jListAdd, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
+arrayList, jBool, jBool', jInteger, jFloat, jDouble, jString, jObject, jScanner,
+  jPrintWriter, jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jAsList, jStdIn, 
+  jStdOut, jPrint, jPrintLn, jEquals, jParseInt, jParseDbl, jParseFloat, 
+  jIndex, jListAdd, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
   jHasNextLine, jCharAt, jSplit, io, util :: String
 arrayList = "ArrayList"
+jBool = "boolean"
+jBool' = "Boolean"
 jInteger = "Integer"
 jFloat = "Float"
 jDouble = "Double"
@@ -896,10 +792,13 @@ jListType t = do
           lstFloat (text lstFloat)
         jListType' Double = toState $ typeFromData (List Double) 
           lstDouble (text lstDouble)
+        jListType' Boolean = toState $ typeFromData (List Boolean)
+          lstBool (text lstBool)
         jListType' _ = C.listType arrayList t
         lstInt = arrayList `containing` jInteger
         lstFloat = arrayList `containing` jFloat
         lstDouble = arrayList `containing` jDouble
+        lstBool = arrayList `containing` jBool'
 
 jArrayType :: VSType JavaCode
 jArrayType = arrayType (obj jObject)
@@ -968,6 +867,16 @@ jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType
 jConstDecDef :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 jConstDecDef v def = jFinal <+> RC.type' (variableType v) <+> 
   RC.variable v <+> equals <+> RC.value def
+
+jFuncDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r ->
+  MSStatement r
+jFuncDecDef v ps bod = do
+  vr <- zoom lensMStoVS v
+  pms <- mapM (zoom lensMStoVS) ps
+  b <- bod
+  return $ mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
+    parens (variableList pms) <+> jLambdaSep <+> bodyStart $$ indent (RC.body b)
+    $$ bodyEnd
 
 jThrowDoc :: (RenderSym r) => r (Value r) -> Doc
 jThrowDoc errMsg = throwLabel <+> new' <+> exceptionObj' <> 

@@ -6,32 +6,29 @@ module GOOL.Drasil.State (
   -- Lenses
   lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS, lensCStoMS, 
   lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, lensVStoMS, 
-  headers, sources, mainMod, goolState, currMain, currFileType, 
+  headers, sources, mainMod, currMain, currFileType, currParameters,
   -- Initial states
   initialState, initialFS, 
   -- State helpers
   modifyReturn, modifyReturnFunc, modifyReturnList, 
   -- State modifiers
-  revFiles, addODEFilePaths, addFile, addCombinedHeaderSource, addHeader, 
-  addSource, addProgNameToPaths, setMainMod, addODEFiles, getODEFiles, 
-  addLangImport, addLangImportVS, addExceptionImports, getLangImports, 
-  addLibImport, addLibImportVS, addLibImports, getLibImports, addModuleImport, 
-  addModuleImportVS, getModuleImports, addHeaderLangImport, 
-  getHeaderLangImports, addHeaderLibImport, getHeaderLibImports, 
-  addHeaderModImport, getHeaderModImports, addDefine, getDefines, 
-  addHeaderDefine, getHeaderDefines, addUsing, getUsing, addHeaderUsing, 
-  getHeaderUsing, setFileType, setModuleName, getModuleName, setClassName, 
-  getClassName, setCurrMain, getCurrMain, addClass, getClasses, updateClassMap, 
-  getClassMap, updateMethodExcMap, getMethodExcMap, updateCallMap, 
-  callMapTransClosure, updateMEMWithCalls, addParameter, getParameters, 
-  setOutputsDeclared, isOutputsDeclared, addException, addExceptions, 
-  getExceptions, addCall, setMainDoc, getMainDoc, setScope, getScope, 
-  setCurrMainFunc, getCurrMainFunc, setODEDepVars, getODEDepVars, 
-  setODEOthVars, getODEOthVars
+  revFiles, addFile, addCombinedHeaderSource, addHeader, addSource, 
+  addProgNameToPaths, setMainMod, addLangImport, addLangImportVS, 
+  addExceptionImports, getLangImports, addLibImport, addLibImportVS, 
+  addLibImports, getLibImports, addModuleImport, addModuleImportVS, 
+  getModuleImports, addHeaderLangImport, getHeaderLangImports, 
+  addHeaderLibImport, getHeaderLibImports, addHeaderModImport, 
+  getHeaderModImports, addDefine, getDefines, addHeaderDefine, 
+  getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing, 
+  setFileType, setModuleName, getModuleName, setClassName, getClassName, 
+  setCurrMain, getCurrMain, addClass, getClasses, updateClassMap, getClassMap, 
+  updateMethodExcMap, getMethodExcMap, updateCallMap, callMapTransClosure, 
+  updateMEMWithCalls, addParameter, getParameters, setOutputsDeclared, 
+  isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
+  setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc
 ) where
 
-import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName, 
-  FileData)
+import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
 import GOOL.Drasil.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import GOOL.Drasil.CodeType (ClassName)
 
@@ -51,7 +48,6 @@ data GOOLState = GS {
                               -- mod file path (needed in Makefile generation)
   _classMap :: Map String ClassName, -- Used to determine whether an import is 
                                      -- needed when using extClassVar and obj
-  _odeFiles :: [FileData],
 
   -- Only used for Java, to generate correct "throws Exception" declarations
   _methodExceptionMap :: Map QualifiedName [ExceptionType], -- Method to exceptions thrown
@@ -112,10 +108,11 @@ data MethodState = MS {
 }
 makeLenses ''MethodState
 
-data ValueState = VS {
-  _methodState :: MethodState,
-  _currODEDepVars :: [String],
-  _currODEOthVars :: [String]
+-- This was once used, but now is not. However it would be a pain to revert all 
+-- of the types back to MS from VS, and it is likely that this level of state 
+-- will be useful in the future, so I'm just putting in a placeholder.
+newtype ValueState = VS {
+  _methodState :: MethodState
 }
 makeLenses ''ValueState
 
@@ -190,7 +187,6 @@ initialState = GS {
   _sources = [],
   _mainMod = Nothing,
   _classMap = Map.empty,
-  _odeFiles = [],
 
   _methodExceptionMap = Map.empty,
   _callMap = Map.empty
@@ -239,9 +235,7 @@ initialMS = MS {
 
 initialVS :: ValueState
 initialVS = VS {
-  _methodState = initialMS,
-  _currODEDepVars = [],
-  _currODEOthVars = []
+  _methodState = initialMS
 }
 
 -------------------------------
@@ -273,10 +267,6 @@ modifyReturnList l sf vf = do
 revFiles :: GOOLState -> GOOLState
 revFiles = over headers reverse . over sources reverse
 
-addODEFilePaths :: GOOLState -> MethodState -> MethodState
-addODEFilePaths s = over (lensMStoFS . goolState . headers) (s ^. headers ++)
-  . over (lensMStoFS . goolState . sources) (s ^. sources ++)
-
 addFile :: FileType -> FilePath -> GOOLState -> GOOLState
 addFile Combined = addCombinedHeaderSource
 addFile Source = addSource
@@ -301,12 +291,6 @@ addProgNameToPaths n = over mainMod (fmap f) . over sources (map f) .
 setMainMod :: String -> GOOLState -> GOOLState
 setMainMod n = over mainMod (\m -> if isNothing m then Just n else error 
   "Multiple modules with main methods encountered")
-
-addODEFiles :: [FileData] -> MethodState -> MethodState
-addODEFiles f = over (lensMStoFS . goolState . odeFiles) (f++)
-
-getODEFiles :: GS [FileData]
-getODEFiles = gets (^. odeFiles)
 
 addLangImport :: String -> MethodState -> MethodState
 addLangImport i = over (lensMStoFS . langImports) (\is -> nubSort $ i:is)
@@ -467,18 +451,6 @@ addParameter p = over currParameters (\ps -> ifElemError p ps $
 
 getParameters :: MS [String]
 getParameters = gets (reverse . (^. currParameters))
-
-setODEDepVars :: [String] -> ValueState -> ValueState
-setODEDepVars = set currODEDepVars
-
-getODEDepVars :: VS [String]
-getODEDepVars = gets (^. currODEDepVars)
-
-setODEOthVars :: [String] -> ValueState -> ValueState
-setODEOthVars = set currODEOthVars
-
-getODEOthVars :: VS [String]
-getODEOthVars = gets (^. currODEOthVars)
 
 setOutputsDeclared :: MethodState -> MethodState
 setOutputsDeclared = set outputsDeclared True

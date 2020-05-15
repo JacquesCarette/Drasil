@@ -49,14 +49,15 @@ instance AuxiliarySym CSharpProject where
 
   optimizeDox = return no
 
-  makefile it = G.makefile (csBuildConfig it) (G.noRunIfLib it csRunnable)
+  makefile fs it = G.makefile (csBuildConfig fs it) (G.noRunIfLib it csRunnable)
 
   auxHelperDoc = unCSP
   auxFromData fp d = return $ ad fp d
 
-csBuildConfig :: ImplementationType -> Maybe BuildConfig
-csBuildConfig it = buildAll (\i o -> [osClassDefault "CSC" "csc" "mcs" 
-  : target it ++ [asFragment "-out:" P.<> o] ++ i]) (outName it)
+csBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
+csBuildConfig fs it = buildAll (\i o -> [osClassDefault "CSC" "csc" "mcs" 
+  : target it ++ [asFragment "-out:" P.<> o] ++ map (asFragment . ("-r:" ++)) fs
+  ++ i]) (outName it)
   where target Library = [asFragment "-t:library"]
         target Program = []
         outName Library = sharedLibrary

@@ -11,12 +11,14 @@ library
   other-modules:
       Language.Drasil.Chunk.Code
     , Language.Drasil.Chunk.CodeDefinition
+    , Language.Drasil.Chunk.Parameter
     , Language.Drasil.Code.Code
     , Language.Drasil.Code.CodeQuantityDicts
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.ExternalLibrary
     , Language.Drasil.Code.ExternalLibraryCall
     , Language.Drasil.Code.ExtLibImport
+    , Language.Drasil.Code.Lang
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
     , Language.Drasil.Code.Imperative.ConceptMatch
@@ -37,6 +39,7 @@ library
     , Language.Drasil.Code.Imperative.FunctionCalls
     , Language.Drasil.Code.Imperative.GenerateGOOL
     , Language.Drasil.Code.Imperative.Generator
+    , Language.Drasil.Code.Imperative.GenODE
     , Language.Drasil.Code.Imperative.Helpers
     , Language.Drasil.Code.Imperative.Import
     , Language.Drasil.Code.Imperative.Logging
@@ -44,6 +47,8 @@ library
     , Language.Drasil.Code.Imperative.Parameters
     , Language.Drasil.Code.Imperative.DrasilState
     , Language.Drasil.Code.CodeGeneration
+    , Language.Drasil.Data.ODEInfo
+    , Language.Drasil.Data.ODELibPckg
     , Language.Drasil.CodeExpr
     , Language.Drasil.CodeSpec
     , Language.Drasil.Mod
@@ -76,18 +81,19 @@ executable codegenTest
       Test.HelloWorld
     , Test.FileTests
     , Test.PatternTest
-    , Test.SimpleODE
     , Test.Observer
     , Test.Helper
     , Language.Drasil.Code
     , Language.Drasil.Chunk.Code
     , Language.Drasil.Chunk.CodeDefinition
+    , Language.Drasil.Chunk.Parameter
     , Language.Drasil.Code.Code
     , Language.Drasil.Code.CodeQuantityDicts
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.ExternalLibrary
     , Language.Drasil.Code.ExternalLibraryCall
     , Language.Drasil.Code.ExtLibImport
+    , Language.Drasil.Code.Lang
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
     , Language.Drasil.Code.Imperative.ConceptMatch
@@ -108,6 +114,7 @@ executable codegenTest
     , Language.Drasil.Code.Imperative.FunctionCalls
     , Language.Drasil.Code.Imperative.GenerateGOOL
     , Language.Drasil.Code.Imperative.Generator
+    , Language.Drasil.Code.Imperative.GenODE
     , Language.Drasil.Code.Imperative.Helpers
     , Language.Drasil.Code.Imperative.Import
     , Language.Drasil.Code.Imperative.Logging
@@ -115,6 +122,8 @@ executable codegenTest
     , Language.Drasil.Code.Imperative.Parameters
     , Language.Drasil.Code.Imperative.DrasilState
     , Language.Drasil.Code.CodeGeneration
+    , Language.Drasil.Data.ODEInfo
+    , Language.Drasil.Data.ODELibPckg
     , Language.Drasil.CodeExpr
     , Language.Drasil.CodeSpec
     , Language.Drasil.Mod

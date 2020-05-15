@@ -1,21 +1,18 @@
 module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
   genModuleWithImports, genModule, genDoxConfig, primaryClass, auxClass, fApp, 
-  ctorCall, fAppInOut, mkParam
+  ctorCall, fAppInOut
 ) where
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..))
+import Language.Drasil.CodeSpec (CodeSpec(..), Comments(..))
 import Language.Drasil.Mod (Name, Description, Import)
   
-import GOOL.Drasil (SFile, VSType, SVariable, SValue, MSStatement, 
-  MSParameter, SMethod, CSStateVar, SClass, NamedArgs, OOProg, FileSym(..), 
-  TypeElim(..), VariableElim(..), ValueExpression(..), FuncAppStatement(..), 
-  ParameterSym(..), ClassSym(..), ModuleSym(..), CodeType(..), GOOLState, 
-  lensMStoVS)
+import GOOL.Drasil (SFile, VSType, SVariable, SValue, MSStatement, SMethod, 
+  CSStateVar, SClass, NamedArgs, OOProg, FileSym(..), ValueExpression(..), 
+  FuncAppStatement(..), ClassSym(..), ModuleSym(..), GOOLState)
 
-import Control.Lens.Zoom (zoom)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Monad.Reader (Reader, ask, withReader)
@@ -32,7 +29,7 @@ genModuleWithImports n desc is maybeMs maybeCs = do
   g <- ask
   let updateState = withReader (\s -> s { currentModule = n })
       -- Below line of code cannot be simplified because authors has a generic type
-      as = case csi (codeSpec g) of CSI {authors = a} -> map name a
+      as = case codeSpec g of CodeSpec {authors = a} -> map name a
   cs <- mapM updateState maybeCs
   ms <- mapM updateState maybeMs
   let commMod | CommentMod `elem` commented g                   = docMod desc 
@@ -52,7 +49,7 @@ genDoxConfig :: (AuxiliarySym r) => GOOLState ->
   Reader DrasilState [r (Auxiliary r)]
 genDoxConfig s = do
   g <- ask
-  let n = pName $ csi $ codeSpec g
+  let n = pName $ codeSpec g
       cms = commented g
       v = doxOutput g
   return [doxConfig n s v | not (null cms)]
@@ -65,9 +62,11 @@ mkClass :: (OOProg r) => ClassType -> Name -> Maybe Name -> Description ->
 mkClass s n l desc vs mths = do
   g <- ask
   ms <- withReader (\ds -> ds {currentClass = n}) mths
-  let getFunc Primary = buildClass
-      getFunc Auxiliary = extraClass
-      c = getFunc s n l vs ms
+  let getFunc Primary = getFunc' l
+      getFunc Auxiliary = extraClass n Nothing
+      getFunc' Nothing = buildClass n Nothing
+      getFunc' (Just intfc) = implementingClass n [intfc]
+      c = getFunc s vs ms
   return $ if CommentClass `elem` commented g 
     then docClass desc c
     else c
@@ -96,7 +95,7 @@ fApp m s t vl ns = do
   g <- ask
   let cm = currentModule g
   return $ if m /= cm then extFuncAppMixedArgs m s t vl ns else if Map.lookup s 
-    (eMap $ codeSpec g) == Just cm then funcAppMixedArgs s t vl ns else 
+    (eMap g) == Just cm then funcAppMixedArgs s t vl ns else 
     selfFuncAppMixedArgs s t vl ns
 
 -- Logic similar to fApp above, but self case not required here 
@@ -116,12 +115,5 @@ fAppInOut m n ins outs both = do
   g <- ask
   let cm = currentModule g
   return $ if m /= cm then extInOutCall m n ins outs both else if Map.lookup n
-    (eMap $ codeSpec g) == Just cm then inOutCall n ins outs both else 
+    (eMap g) == Just cm then inOutCall n ins outs both else 
     selfInOutCall n ins outs both
-
-mkParam :: (OOProg r) => SVariable r -> MSParameter r
-mkParam v = zoom lensMStoVS v >>= (\v' -> paramFunc (getType $ variableType v') 
-  v)
-  where paramFunc (List _) = pointerParam
-        paramFunc (Object _) = pointerParam
-        paramFunc _ = param

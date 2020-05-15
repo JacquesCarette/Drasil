@@ -11,10 +11,10 @@ using std::ofstream;
 using std::string;
 using std::vector;
 
-void func_read_table(string filename, vector<double> &z_vector, vector<vector<double>> &x_matrix, vector<vector<double>> &y_matrix) {
+void read_table(string filename, vector<double> &z_vector, vector<vector<double>> &x_matrix, vector<vector<double>> &y_matrix) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
-    outfile << "function func_read_table called with inputs: {" << std::endl;
+    outfile << "function read_table called with inputs: {" << std::endl;
     outfile << "  filename = ";
     outfile << filename;
     outfile << ", " << std::endl;

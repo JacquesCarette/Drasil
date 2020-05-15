@@ -11,20 +11,18 @@ import Utils.Drasil (blank, indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable, 
   SValue, VSFunction, MSStatement, MSParameter, SMethod, MixedCtorCall, OOProg, 
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
-  oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), ControlBlock(..), 
-  VariableSym(..), VariableElim(..), listOf, ValueSym(..), Literal(..), 
-  MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), Comparison(..), 
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
-  InternalValueExp(..), objMethodCall, objMethodCallNoParams, FunctionSym(..), 
-  ($.), GetSet(..), List(..), InternalList(..), at, Iterator(..), 
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
-  CommentStatement(..), observerListName, ControlStatement(..), switchAsIf, 
-  StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  ODEInfo(..), ODEOptions(..), ODEMethod(..))
+  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, 
+  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
+  listOf, ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, 
+  extNewObj, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), 
+  GetSet(..), List(..), InternalList(..), at, Iterator(..), StatementSym(..), 
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
+  observerListName, ControlStatement(..), switchAsIf, StatePattern(..), 
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
   ImportElim, PermElim(binding), RenderBody(..), BodyElim, RenderBlock(..), 
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
@@ -50,24 +48,23 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, funcType, negateOp, 
-  csc, sec, cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
-  lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar,
-  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
-  objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, increment, objDecNew, print, closeFile, 
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
-  method, getMethod, setMethod, constructor, function, docFunc, buildClass, 
-  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, 
-  fileFromData)
+  multiBody, block, multiBlock, int, listInnerType, obj, negateOp, csc, sec, 
+  cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
+  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, arrayElem, 
+  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess, 
+  objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
+  lambda, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
+  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
+  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
+  ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
+  constructor, function, docFunc, buildClass, implementingClass, docClass, 
+  commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
-  listSetFunc, listAccessFunc, buildModule)
+  funcType, listSetFunc, listAccessFunc, buildModule)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
   observerIndex, checkState)
@@ -78,17 +75,20 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList, on2StateLists)
-import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, revFiles,
-  addLangImportVS, getLangImports, addLibImport, addLibImportVS, getLibImports, 
-  addModuleImport, addModuleImportVS, getModuleImports, setFileType, 
-  getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
+import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
+  currParameters, revFiles, addLangImportVS, getLangImports, addLibImportVS, 
+  getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
+  setFileType, getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
+import Control.Lens ((^.))
+import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
+import qualified Control.Monad.State as S (get)
 import Data.List (intercalate, sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
@@ -190,7 +190,7 @@ instance TypeSym PythonCode where
   arrayType = listType
   listInnerType = G.listInnerType
   obj = G.obj
-  funcType = G.funcType
+  funcType = CP.funcType
   iterator t = t
   void = toState $ typeFromData Void pyVoid (text pyVoid)
 
@@ -203,36 +203,6 @@ instance RenderType PythonCode where
 
 instance InternalTypeElim PythonCode where
   type' = typeDoc . unPC
-
-instance ControlBlock PythonCode where
-  solveODE info opts = modify (addLibImport odeLib) >> multiBlock [
-    block [
-      r &= objMethodCall odeT (extNewObj odeLib odeT 
-      [lambda [iv, dv] (ode info)]) 
-        "set_integrator" (pyODEMethod (solveMethod opts) ++
-          [absTol opts >>= (mkStateVal double . (text "atol=" <>) . RC.value),
-          relTol opts >>= (mkStateVal double . (text "rtol=" <>) . RC.value)]),
-      valStmt $ objMethodCall odeT rVal "set_initial_value" [initVal info]],
-    block [
-      listDecDef iv [tInit info],
-      listDecDef dv [initVal info],
-      while (objMethodCallNoParams bool rVal "successful" ?&& 
-        r_t ?< tFinal info) (bodyStatements [
-          valStmt $ objMethodCall odeT rVal "integrate" [r_t #+ stepSize opts],
-          valStmt $ listAppend (valueOf iv) r_t,
-          valStmt $ listAppend (valueOf dv) (listAccess r_y $ litInt 0)
-        ])
-     ]
-   ]
-   where odeLib = "scipy.integrate"
-         iv = indepVar info
-         dv = depVar info
-         odeT = obj "ode"
-         r = var "r" odeT
-         rVal = valueOf r
-         r_t = valueOf $ objVar r (var "t" $ listInnerType $ onStateValue 
-           variableType iv)
-         r_y = valueOf $ objVar r (var "y" $ onStateValue variableType dv)
 
 instance UnaryOpSym PythonCode where
   type UnaryOp PythonCode = OpData
@@ -516,10 +486,12 @@ instance DeclStatement PythonCode where
     modify (addModuleImport lib)
     varDecDef v (extNewObj lib (onStateValue variableType v) vs)
   constDecDef = varDecDef
-  funcDecDef v ps r = do
+  funcDecDef v ps b = do
     vr <- zoom lensMStoVS v
+    s <- S.get
     f <- function (variableName vr) private dynamic (return $ variableType vr) 
-      (map param ps) (oneLiner $ returnStmt r)
+      (map param ps) b
+    modify (L.set currParameters (s ^. currParameters))
     return $ mkStmtNoEnd $ RC.method f
 
 instance IOStatement PythonCode where
@@ -811,15 +783,6 @@ pyBodyEnd = empty
 pyCommentStart = text "#"
 pyDocCommentStart = pyCommentStart <> pyCommentStart
 pyNamedArgSep = equals
-
-pyODEMethod :: ODEMethod -> [SValue PythonCode]
-pyODEMethod RK45 = [litString "dopri5"]
-pyODEMethod BDF = [litString "vode", 
-  (litString "bdf" :: SValue PythonCode) >>= 
-  (mkStateVal string . (text "method=" <>) . RC.value)]
-pyODEMethod Adams = [litString "vode", 
-  (litString "adams" :: SValue PythonCode) >>= 
-  (mkStateVal string . (text "method=" <>) . RC.value)]
 
 pyNotOp :: (Monad r) => VSOp r
 pyNotOp = unOpPrec "not"

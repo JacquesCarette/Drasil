@@ -3,7 +3,6 @@ module Language.Drasil.Code.Imperative.FunctionCalls (
   getCalcCall, getOutputCall
 ) where
 
-import Language.Drasil
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppInOut)
 import Language.Drasil.Code.Imperative.Import (codeType, mkVal, mkVar)
 import Language.Drasil.Code.Imperative.Logging (maybeLog)
@@ -11,9 +10,8 @@ import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), quantvar)
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
-import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Name)
 
 import GOOL.Drasil (VSType, SValue, MSStatement, OOProg, TypeSym(..), 
@@ -58,8 +56,8 @@ getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
   return $ fmap valStmt val
 
-getFuncCall :: (OOProg r, HasUID c, HasSpace c, CodeIdea c) => Name -> 
-  VSType r -> Reader DrasilState [c] -> Reader DrasilState (Maybe (SValue r))
+getFuncCall :: (OOProg r) => Name -> VSType r -> 
+  Reader DrasilState [CodeVarChunk] -> Reader DrasilState (Maybe (SValue r))
 getFuncCall n t funcPs = do
   mm <- getCall n
   let getFuncCall' Nothing = return Nothing
@@ -70,8 +68,8 @@ getFuncCall n t funcPs = do
         return $ Just val
   getFuncCall' mm
 
-getInOutCall :: (OOProg r, HasSpace c, CodeIdea c, Eq c) => Name -> 
-  Reader DrasilState [c] -> Reader DrasilState [c] ->
+getInOutCall :: (OOProg r) => Name -> Reader DrasilState [CodeVarChunk] -> 
+  Reader DrasilState [CodeVarChunk] ->
   Reader DrasilState (Maybe (MSStatement r))
 getInOutCall n inFunc outFunc = do
   mm <- getCall n
@@ -96,11 +94,10 @@ getCall :: Name -> Reader DrasilState (Maybe Name)
 getCall n = do
   g <- ask
   let currc = currentClass g
-      getCallExported Nothing = getCallInClass (Map.lookup n $ clsMap $ 
-        codeSpec g)
+      getCallExported Nothing = getCallInClass (Map.lookup n $ clsMap g)
       getCallExported m = return m
       getCallInClass Nothing = return Nothing
       getCallInClass (Just c) = if c == currc then return $ Map.lookup c (eMap 
-        $ codeSpec g) <|> error (c ++ " class missing from export map")
+        g) <|> error (c ++ " class missing from export map")
         else return Nothing
-  getCallExported $ Map.lookup n (eMap $ codeSpec g)
+  getCallExported $ Map.lookup n (eMap g)

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['input_5fconstraints',['input_constraints',['../class_input_constraints.html#a2d451656c6a69c25c62413072d0c53db',1,'InputConstraints']]]
+  ['get_5finput',['get_input',['../class_input_format.html#a9de8be708452dee50d599b011cf110ca',1,'InputFormat']]]
 ];

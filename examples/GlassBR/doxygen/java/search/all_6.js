@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['outputformat',['OutputFormat',['../class_glass_b_r_1_1_output_format.html',1,'GlassBR']]],
-  ['outputformat_2ejava',['OutputFormat.java',['../_output_format_8java.html',1,'']]]
+  ['lin_5finterp',['lin_interp',['../class_glass_b_r_1_1_interpolation.html#ac860540247ae6356e4b6c23750d6385c',1,'GlassBR::Interpolation']]]
 ];

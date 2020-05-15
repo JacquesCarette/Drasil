@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['write_5foutput',['write_output',['../class_glass_b_r_1_1_output_format.html#a8e10225d301d74ff07d2be70c0b39605',1,'GlassBR::OutputFormat']]]
+  ['lin_5finterp',['lin_interp',['../class_glass_b_r_1_1_interpolation.html#ac860540247ae6356e4b6c23750d6385c',1,'GlassBR::Interpolation']]]
 ];

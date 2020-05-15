@@ -87,7 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input.  
+<p>Provides the function for reading inputs, the function for calculating derived values, and the function for checking the physical constraints and software constraints on the input.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;string&gt;</code><br />
 <code>#include &quot;<a class="el" href="_constants_8hpp_source.html">Constants.hpp</a>&quot;</code><br />
@@ -96,18 +96,57 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:acbc97eb53afea93fad77dbe30e4a25b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_input_parameters_8hpp.html#acbc97eb53afea93fad77dbe30e4a25b8">get_input</a> (string filename, double &amp;A_C, double &amp;C_W, double &amp;h_C, double &amp;T_init, double &amp;t_final, double &amp;L, double &amp;T_C, double &amp;t_step, double &amp;rho_W, double &amp;D, double &amp;A_tol, double &amp;R_tol, double &amp;T_W, double &amp;E_W)</td></tr>
-<tr class="memdesc:acbc97eb53afea93fad77dbe30e4a25b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads input from a file with the given file name.  <a href="#acbc97eb53afea93fad77dbe30e4a25b8">More...</a><br /></td></tr>
-<tr class="separator:acbc97eb53afea93fad77dbe30e4a25b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a471e2347dd9dd5396c7dafab482ca7de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_input_parameters_8hpp.html#a471e2347dd9dd5396c7dafab482ca7de">input_constraints</a> (double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W)</td></tr>
-<tr class="memdesc:a471e2347dd9dd5396c7dafab482ca7de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies that input values satisfy the physical constraints and software constraints.  <a href="#a471e2347dd9dd5396c7dafab482ca7de">More...</a><br /></td></tr>
-<tr class="separator:a471e2347dd9dd5396c7dafab482ca7de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45478a17da29798783453ff2143b03c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_input_parameters_8hpp.html#a45478a17da29798783453ff2143b03c6">get_input</a> (string filename, double &amp;A_C, double &amp;C_W, double &amp;h_C, double &amp;T_init, double &amp;t_final, double &amp;L, double &amp;T_C, double &amp;t_step, double &amp;rho_W, double &amp;D, double &amp;A_tol, double &amp;R_tol, double &amp;E_W)</td></tr>
+<tr class="memdesc:a45478a17da29798783453ff2143b03c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads input from a file with the given file name.  <a href="#a45478a17da29798783453ff2143b03c6">More...</a><br /></td></tr>
+<tr class="separator:a45478a17da29798783453ff2143b03c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8826dd68c08f8ce727d04b2e760b0978"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_input_parameters_8hpp.html#a8826dd68c08f8ce727d04b2e760b0978">derived_values</a> (double D, double L)</td></tr>
+<tr class="memdesc:a8826dd68c08f8ce727d04b2e760b0978"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates values that can be immediately derived from the inputs.  <a href="#a8826dd68c08f8ce727d04b2e760b0978">More...</a><br /></td></tr>
+<tr class="separator:a8826dd68c08f8ce727d04b2e760b0978"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa068bdec6372379dc98f951b54abe9d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_input_parameters_8hpp.html#aa068bdec6372379dc98f951b54abe9d5">input_constraints</a> (double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double E_W)</td></tr>
+<tr class="memdesc:aa068bdec6372379dc98f951b54abe9d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies that input values satisfy the physical constraints and software constraints.  <a href="#aa068bdec6372379dc98f951b54abe9d5">More...</a><br /></td></tr>
+<tr class="separator:aa068bdec6372379dc98f951b54abe9d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input. </p>
+<div class="textblock"><p>Provides the function for reading inputs, the function for calculating derived values, and the function for checking the physical constraints and software constraints on the input. </p>
 <dl class="section author"><dt>Author</dt><dd>Thulasi Jegatheesan </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="acbc97eb53afea93fad77dbe30e4a25b8"></a>
+<a class="anchor" id="a8826dd68c08f8ce727d04b2e760b0978"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double derived_values </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>D</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>L</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates values that can be immediately derived from the inputs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">D</td><td>diameter of tank: the diameter of the tank (m) </td></tr>
+    <tr><td class="paramname">L</td><td>length of tank: the length of the tank (m) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>volume of the cylindrical tank: the amount of space encompassed by a tank (m^3) </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a45478a17da29798783453ff2143b03c6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -193,12 +232,6 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double &amp;&#160;</td>
-          <td class="paramname"><em>T_W</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double &amp;&#160;</td>
           <td class="paramname"><em>E_W</em>&#160;</td>
         </tr>
         <tr>
@@ -225,7 +258,6 @@ Functions</h2></td></tr>
     <tr><td class="paramname">D</td><td>diameter of tank: the diameter of the tank (m) </td></tr>
     <tr><td class="paramname">A_tol</td><td>absolute tolerance </td></tr>
     <tr><td class="paramname">R_tol</td><td>relative tolerance </td></tr>
-    <tr><td class="paramname">T_W</td><td>temperature of the water: the average kinetic energy of the particles within the water (degreeC) </td></tr>
     <tr><td class="paramname">E_W</td><td>change in heat energy in the water: change in thermal energy within the water (J) </td></tr>
   </table>
   </dd>
@@ -233,7 +265,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a471e2347dd9dd5396c7dafab482ca7de"></a>
+<a class="anchor" id="aa068bdec6372379dc98f951b54abe9d5"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -301,12 +333,6 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>T_W</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>E_W</em>&#160;</td>
         </tr>
         <tr>
@@ -330,7 +356,6 @@ Functions</h2></td></tr>
     <tr><td class="paramname">t_step</td><td>time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s) </td></tr>
     <tr><td class="paramname">rho_W</td><td>density of water: nass per unit volume of water (kg/m^3) </td></tr>
     <tr><td class="paramname">D</td><td>diameter of tank: the diameter of the tank (m) </td></tr>
-    <tr><td class="paramname">T_W</td><td>temperature of the water: the average kinetic energy of the particles within the water (degreeC) </td></tr>
     <tr><td class="paramname">E_W</td><td>change in heat energy in the water: change in thermal energy within the water (J) </td></tr>
   </table>
   </dd>

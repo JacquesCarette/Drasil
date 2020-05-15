@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['input_5fconstraints',['input_constraints',['../class_glass_b_r_1_1_input_constraints.html#abc127d9d705ba8a5d9a0671c138d6a88',1,'GlassBR::InputConstraints']]]
+  ['get_5finput',['get_input',['../class_glass_b_r_1_1_input_format.html#ad14a55608a5594efaaa7412b0cbfd528',1,'GlassBR::InputFormat']]]
 ];

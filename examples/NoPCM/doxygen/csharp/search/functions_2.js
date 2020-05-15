@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['main',['Main',['../class_control.html#ae2c17e1d0b9ee9571d2e1996b4f507e7',1,'Control']]]
+  ['get_5finput',['get_input',['../class_input_parameters.html#ae9c9563a1b3f1c5d238133a4b33f88e6',1,'InputParameters']]]
 ];

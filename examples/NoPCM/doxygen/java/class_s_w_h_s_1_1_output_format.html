@@ -62,6 +62,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -95,12 +96,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a6c3ffa60bfea8628e19c5aa392761bfb"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_w_h_s_1_1_output_format.html#a6c3ffa60bfea8628e19c5aa392761bfb">write_output</a> (double T_W, double E_W)  throws IOException </td></tr>
-<tr class="memdesc:a6c3ffa60bfea8628e19c5aa392761bfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="#a6c3ffa60bfea8628e19c5aa392761bfb">More...</a><br /></td></tr>
-<tr class="separator:a6c3ffa60bfea8628e19c5aa392761bfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae636b336502f607fefb977bf0589114b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_w_h_s_1_1_output_format.html#ae636b336502f607fefb977bf0589114b">write_output</a> (double E_W, ArrayList&lt; Double &gt; T_W)  throws IOException </td></tr>
+<tr class="memdesc:ae636b336502f607fefb977bf0589114b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the output values to output.txt.  <a href="#ae636b336502f607fefb977bf0589114b">More...</a><br /></td></tr>
+<tr class="separator:ae636b336502f607fefb977bf0589114b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a6c3ffa60bfea8628e19c5aa392761bfb"></a>
+<a class="anchor" id="ae636b336502f607fefb977bf0589114b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -111,13 +112,13 @@ Static Public Member Functions</h2></td></tr>
           <td class="memname">static void SWHS.OutputFormat.write_output </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>T_W</em>, </td>
+          <td class="paramname"><em>E_W</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>E_W</em>&#160;</td>
+          <td class="paramtype">ArrayList&lt; Double &gt;&#160;</td>
+          <td class="paramname"><em>T_W</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -135,8 +136,8 @@ Static Public Member Functions</h2></td></tr>
 <p>Writes the output values to output.txt. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">T_W</td><td>temperature of the water: the average kinetic energy of the particles within the water (degreeC) </td></tr>
     <tr><td class="paramname">E_W</td><td>change in heat energy in the water: change in thermal energy within the water (J) </td></tr>
+    <tr><td class="paramname">T_W</td><td>temperature of the water: the average kinetic energy of the particles within the water (degreeC) </td></tr>
   </table>
   </dd>
 </dl>

@@ -62,6 +62,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
       <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -98,11 +99,58 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a3f781bed9f147a17a4b1be900997687e"><td class="memItemLeft" align="right" valign="top">static Object[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_w_h_s_1_1_input_parameters.html#a3f781bed9f147a17a4b1be900997687e">get_input</a> (String filename)  throws FileNotFoundException </td></tr>
 <tr class="memdesc:a3f781bed9f147a17a4b1be900997687e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads input from a file with the given file name.  <a href="#a3f781bed9f147a17a4b1be900997687e">More...</a><br /></td></tr>
 <tr class="separator:a3f781bed9f147a17a4b1be900997687e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6366a33b24f13b18cff8fb5fd01d7937"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_w_h_s_1_1_input_parameters.html#a6366a33b24f13b18cff8fb5fd01d7937">input_constraints</a> (double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W)</td></tr>
-<tr class="memdesc:a6366a33b24f13b18cff8fb5fd01d7937"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies that input values satisfy the physical constraints and software constraints.  <a href="#a6366a33b24f13b18cff8fb5fd01d7937">More...</a><br /></td></tr>
-<tr class="separator:a6366a33b24f13b18cff8fb5fd01d7937"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addbba6235739704e0ace5c04824a8120"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_w_h_s_1_1_input_parameters.html#addbba6235739704e0ace5c04824a8120">derived_values</a> (double D, double L)</td></tr>
+<tr class="memdesc:addbba6235739704e0ace5c04824a8120"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates values that can be immediately derived from the inputs.  <a href="#addbba6235739704e0ace5c04824a8120">More...</a><br /></td></tr>
+<tr class="separator:addbba6235739704e0ace5c04824a8120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac33c038fd51967194520df94e4b934be"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_s_w_h_s_1_1_input_parameters.html#ac33c038fd51967194520df94e4b934be">input_constraints</a> (double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double E_W)</td></tr>
+<tr class="memdesc:ac33c038fd51967194520df94e4b934be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies that input values satisfy the physical constraints and software constraints.  <a href="#ac33c038fd51967194520df94e4b934be">More...</a><br /></td></tr>
+<tr class="separator:ac33c038fd51967194520df94e4b934be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="addbba6235739704e0ace5c04824a8120"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double SWHS.InputParameters.derived_values </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>D</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>L</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculates values that can be immediately derived from the inputs. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">D</td><td>diameter of tank: the diameter of the tank (m) </td></tr>
+    <tr><td class="paramname">L</td><td>length of tank: the length of the tank (m) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>volume of the cylindrical tank: the amount of space encompassed by a tank (m^3) </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a3f781bed9f147a17a4b1be900997687e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -158,13 +206,11 @@ absolute tolerance </dd>
 <dd>
 relative tolerance </dd>
 <dd>
-temperature of the water: the average kinetic energy of the particles within the water (degreeC) </dd>
-<dd>
 change in heat energy in the water: change in thermal energy within the water (J) </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a6366a33b24f13b18cff8fb5fd01d7937"></a>
+<a class="anchor" id="ac33c038fd51967194520df94e4b934be"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -235,12 +281,6 @@ change in heat energy in the water: change in thermal energy within the water (J
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>T_W</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>E_W</em>&#160;</td>
         </tr>
         <tr>
@@ -269,7 +309,6 @@ change in heat energy in the water: change in thermal energy within the water (J
     <tr><td class="paramname">t_step</td><td>time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s) </td></tr>
     <tr><td class="paramname">rho_W</td><td>density of water: nass per unit volume of water (kg/m^3) </td></tr>
     <tr><td class="paramname">D</td><td>diameter of tank: the diameter of the tank (m) </td></tr>
-    <tr><td class="paramname">T_W</td><td>temperature of the water: the average kinetic energy of the particles within the water (degreeC) </td></tr>
     <tr><td class="paramname">E_W</td><td>change in heat energy in the water: change in thermal energy within the water (J) </td></tr>
   </table>
   </dd>

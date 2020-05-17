@@ -45,7 +45,7 @@ import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
-import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
+import Drasil.GamePhysics.References (citations, koothoor2013, smithLai2005)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
@@ -228,8 +228,8 @@ organizationOfDocumentsIntro :: Sentence
 organizationOfDocumentsIntro = foldlSent 
   [S "The", phrase organization, S "of this", phrase document, 
   S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
-  phrase sciCompS, S "proposed by", makeCiteS parnas1972 `sAnd` 
-  makeCiteS parnasClements1984]
+  phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `sAnd`
+  makeCiteS smithLai2005]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --

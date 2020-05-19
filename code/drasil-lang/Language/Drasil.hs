@@ -126,7 +126,7 @@ module Language.Drasil (
   , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI
   -- Space
   , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
-  , DomainDesc(AllDD, BoundedDD), getActorName
+  , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
   -- Symbol
   , Decoration(..), Symbol(..), autoStage, compsy, hat, prime, staged, sub, sup
   , unicodeConv, upperLeft, vec
@@ -260,7 +260,7 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
-  RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName)
+  RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
   (+:+.), (+:), capSent, ch, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?

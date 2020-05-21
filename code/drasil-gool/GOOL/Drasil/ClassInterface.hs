@@ -432,7 +432,7 @@ type Comment = String
 class (StatementSym r) => CommentStatement r where
   comment :: Comment -> MSStatement r
 
-class (BodySym r) => ControlStatement r where
+class (BodySym r, VariableSym r) => ControlStatement r where
   break :: MSStatement r
   continue :: MSStatement r
 

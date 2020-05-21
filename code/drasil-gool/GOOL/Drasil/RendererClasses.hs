@@ -2,18 +2,16 @@
 
 module GOOL.Drasil.RendererClasses (
   RenderSym, RenderFile(..), ImportSym(..), ImportElim(..), PermElim(..), 
-  RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), 
-  RenderType(..), InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, 
-  BinaryOpSym(..), OpElim(..), RenderVariable(..), 
-  InternalVarElim(..), RenderValue(..), ValueElim(..), InternalGetSet(..), 
-  InternalListFunc(..), InternalIterator(..), RenderFunction(..), 
-  FunctionElim(..), InternalAssignStmt(..), InternalIOStmt(..),
-  InternalControlStmt(..), RenderStatement(..), StatementElim(..), 
-  RenderScope(..), ScopeElim(..), MSMthdType, MethodTypeSym(..), 
-  RenderParam(..), ParamElim(..), RenderMethod(..), MethodElim(..), 
-  StateVarElim(..), ParentSpec, RenderClass(..), 
-  ClassElim(..), RenderMod(..), ModuleElim(..), BlockCommentSym(..), 
-  BlockCommentElim(..)
+  RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..), 
+  InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..), 
+  OpElim(..), RenderVariable(..), InternalVarElim(..), RenderValue(..), 
+  ValueElim(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..),
+  RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
+  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
+  StatementElim(..), RenderScope(..), ScopeElim(..), MSMthdType, 
+  MethodTypeSym(..), RenderParam(..), ParamElim(..), RenderMethod(..), 
+  MethodElim(..), StateVarElim(..), ParentSpec, RenderClass(..), ClassElim(..), 
+  RenderMod(..), ModuleElim(..), BlockCommentSym(..), BlockCommentElim(..)
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock, 
@@ -23,7 +21,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), 
-  InternalValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..), 
+  InternalValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..),
   Iterator(..), StatementSym(..), AssignStatement(..), DeclStatement(..), 
   IOStatement(..), StringStatement(..), FuncAppStatement(..), 
   CommentStatement(..), ControlStatement(..), StatePattern(..), 
@@ -233,7 +231,7 @@ class ParamElim r where
   parameterType :: r (Parameter r) -> r (Type r)
   parameter     :: r (Parameter r) -> Doc
 
-class (MethodTypeSym r, BlockCommentSym r, StateVarSym r) => 
+class (MethodTypeSym r, BlockCommentSym r) => 
   RenderMethod r where
   intMethod     :: Bool -> Label -> r (Scope r) -> r (Permanence r) -> 
     MSMthdType r -> [MSParameter r] -> MSBody r -> SMethod r

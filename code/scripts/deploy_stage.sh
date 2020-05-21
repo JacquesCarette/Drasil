@@ -18,6 +18,11 @@ if [ -z "$MULTI_SRC_DIRS" ]; then
   exit 1
 fi
 
+if [ -z "$EXAMPLE_DIRS" ]; then
+  echo "Missing EXAMPLE_DIRS."
+  exit 1
+fi
+
 if [ -z "$DEPLOY_CODE_PATH_KV_SEP" ]; then
   echo "Missing DEPLOY_CODE_PATH_KV_SEP."
   exit 1
@@ -67,34 +72,37 @@ copy_examples() {
   fi
   for example in "$CUR_DIR$BUILD_FOLDER"*; do
     example_name=$(basename "$example")
-    mkdir -p "$EXAMPLE_DEST$example_name/$SRS_DEST"
-    if [ -d "$example/"SRS ]; then
-      cp "$example/"SRS/*.pdf "$EXAMPLE_DEST$example_name/$SRS_DEST"
-    fi
-    if [ -d "$example/"Website/ ]; then
-      cp -r "$example/"Website/. "$EXAMPLE_DEST$example_name/$SRS_DEST"
-    fi
-    if [ -d "$example/"src ]; then
-      mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST"
-      for lang in "$example/"src/*; do
-        lang_name=$(basename "$lang")
-        mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name"
-        cp -r "$lang/"html/. "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name/"
-      done
-      src_stub
-    fi
-    # For examples with multiple versions, directory structure is different
-    if [[ "$MULTI_SRC_DIRS" == *"$example_name"* ]]; then
-      for v in "$example/$example_name"*/; do
-        v_name=$(basename "$v")
-        mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/"
-        for lang in "$v/"src/*; do
+    # Only copy actual examples
+    if [[ "$EXAMPLE_DIRS" == *"$example_name"* ]]; then
+      mkdir -p "$EXAMPLE_DEST$example_name/$SRS_DEST"
+      if [ -d "$example/"SRS ]; then
+        cp "$example/"SRS/*.pdf "$EXAMPLE_DEST$example_name/$SRS_DEST"
+      fi
+      if [ -d "$example/"Website/ ]; then
+        cp -r "$example/"Website/. "$EXAMPLE_DEST$example_name/$SRS_DEST"
+      fi
+      if [ -d "$example/"src ]; then
+        mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST"
+        for lang in "$example/"src/*; do
           lang_name=$(basename "$lang")
-          mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name"
-          cp -r "$lang/"html/. "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name/"
+          mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name"
+          cp -r "$lang/"html/. "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name/"
         done
-      done
-      src_stub
+        src_stub
+      fi
+      # For examples with multiple versions, directory structure is different
+      if [[ "$MULTI_SRC_DIRS" == *"$example_name"* ]]; then
+        for v in "$example/$example_name"*/; do
+          v_name=$(basename "$v")
+          mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/"
+          for lang in "$v/"src/*; do
+            lang_name=$(basename "$lang")
+            mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name"
+            cp -r "$lang/"html/. "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name/"
+          done
+        done
+        src_stub
+      fi
     fi
     src_stub() {
       # We don't expose code in deploy. It's more conveneient to link to GitHub's directory

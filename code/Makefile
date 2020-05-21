@@ -36,6 +36,9 @@ GOOLTEST_DIR = GOOLTest
 
 MULTI_SRC_DIRS = $(PROJECTILE_DIR) # Directories for examples with multiple src versions
 
+EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(NOPCM_DIR) \
+  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) # All example directories
+
 # and the name of their executables
 HGHC_EXE  = hghc
 GLASSBR_EXE = glassbr
@@ -196,7 +199,8 @@ deploy_code_path: $(DCP_EXAMPLES)
 deploy_lite:
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
-	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
+	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" \
+	DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
 
 # This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
 # dependencies exist. One of the downsides is we ensure all files are re-generated which means the TeX

@@ -26,7 +26,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   IOStatement(..), StringStatement(..), FuncAppStatement(..), 
   CommentStatement(..), ControlStatement(..), StatePattern(..), 
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), ClassSym(..), ModuleSym(..))
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.CodeType (CodeType)
 import GOOL.Drasil.AST (Binding, Terminator, ScopeTag)
 import GOOL.Drasil.State (FS, CS, MS, VS)

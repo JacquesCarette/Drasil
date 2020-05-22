@@ -2,7 +2,7 @@ module Language.Drasil.Code.Imperative.SpaceMatch (
   chooseSpace
 ) where
 
-import Language.Drasil.CodeSpec (Choices(..), MatchedSpaces)
+import Language.Drasil.Choices (Choices(..), MatchedSpaces)
 import Language.Drasil.Code.Lang (Lang(..))
 
 import GOOL.Drasil (CodeType(..))

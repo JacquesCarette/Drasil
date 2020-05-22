@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.Logging (
 ) where
 
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
-import Language.Drasil.CodeSpec hiding (codeSpec)
+import Language.Drasil.Choices (Logging(..))
 
 import GOOL.Drasil (Label, MSBody, MSBlock, SVariable, SValue, MSStatement, 
   OOProg, BodySym(..), BlockSym(..), TypeSym(..), VariableSym(..), 

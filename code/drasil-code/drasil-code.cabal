@@ -49,6 +49,7 @@ library
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.Data.ODEInfo
     , Language.Drasil.Data.ODELibPckg
+    , Language.Drasil.Choices
     , Language.Drasil.CodeExpr
     , Language.Drasil.CodeSpec
     , Language.Drasil.Mod
@@ -124,6 +125,7 @@ executable codegenTest
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.Data.ODEInfo
     , Language.Drasil.Data.ODELibPckg
+    , Language.Drasil.Choices
     , Language.Drasil.CodeExpr
     , Language.Drasil.CodeSpec
     , Language.Drasil.Mod

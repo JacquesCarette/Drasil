@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
   JavaProject(..)
 ) where
 
-import Language.Drasil.CodeSpec (ImplementationType(..))
+import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
   AuxiliarySym(..))
 import qualified 

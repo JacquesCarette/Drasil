@@ -2,7 +2,7 @@ module Language.Drasil.Code.Imperative.Build.Import (
   makeBuild
 ) where
 
-import Language.Drasil.CodeSpec (Comments)
+import Language.Drasil.Choices (Comments)
 import Language.Drasil.Code.Imperative.Build.AST (asFragment, 
   BuildConfig(BuildConfig), BuildDependencies(..), Ext(..), includeExt, 
   NameOpts, nameOpts, packSep, Runnable(Runnable), BuildName(..), RunType(..))

@@ -2,8 +2,7 @@ module Language.Drasil.Code.Imperative.ConceptMatch (
   chooseConcept, conceptToGOOL
 ) where
 
-import Language.Drasil.CodeSpec (Choices(..), CodeConcept(..), 
-  MatchedConceptMap)
+import Language.Drasil.Choices (Choices(..), CodeConcept(..), MatchedConceptMap)
 
 import GOOL.Drasil (SValue, OOProg, MathConstant(..))
 

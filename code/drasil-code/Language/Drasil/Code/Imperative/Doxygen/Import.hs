@@ -6,7 +6,7 @@ import Utils.Drasil (blank)
 
 import GOOL.Drasil (GOOLState, headers, mainMod)
 
-import Language.Drasil.CodeSpec (Verbosity(..))
+import Language.Drasil.Choices (Verbosity(..))
 
 import Data.List (intersperse, nub)
 import Data.Maybe (maybeToList)

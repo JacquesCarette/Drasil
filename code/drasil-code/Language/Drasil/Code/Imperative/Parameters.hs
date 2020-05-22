@@ -10,8 +10,9 @@ import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk, codeName),
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs, 
   codeEquat)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
-import Language.Drasil.CodeSpec (CodeSpec(..), Structure(..), InputModule(..), 
-  ConstantStructure(..), ConstantRepr(..), constraintvars, getConstraints)
+import Language.Drasil.Choices (Structure(..), InputModule(..), 
+  ConstantStructure(..), ConstantRepr(..))
+import Language.Drasil.CodeSpec (CodeSpec(..), constraintvars, getConstraints)
 import Language.Drasil.Mod (Name)
 
 import Data.List (nub, (\\), delete)

@@ -21,8 +21,9 @@ import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv,
 import Language.Drasil.Chunk.CodeDefinition (codeEquat)
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
-import Language.Drasil.CodeSpec (CodeSpec(..), Comments(..),
-  ConstantRepr(..), ConstantStructure(..), Structure(..))
+import Language.Drasil.Choices (Comments(..), ConstantRepr(..),
+  ConstantStructure(..), Structure(..))
+import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)

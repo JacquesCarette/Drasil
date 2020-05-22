@@ -13,13 +13,8 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
   varResolve, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs, codeEquat)
-import Language.Drasil.Code.Code (spaceToCodeType)
-import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.Data.ODEInfo (ODEInfo)
-import Language.Drasil.Data.ODELibPckg (ODELibPckg)
+import Language.Drasil.Choices (Choices(..))
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
-
-import GOOL.Drasil (CodeType)
 
 import Control.Lens ((^.))
 import Data.List (intercalate, nub, (\\))
@@ -89,119 +84,6 @@ codeSpec SI {_sys = sys
         mods = ms,
         sysinfodb = db
       }
-
-data Choices = Choices {
-  lang :: [Lang],
-  modularity :: Modularity,
-  impType :: ImplementationType,
-  logFile :: String,
-  logging :: [Logging],
-  comments :: [Comments],
-  doxVerbosity :: Verbosity,
-  dates :: Visibility,
-  onSfwrConstraint :: ConstraintBehaviour,
-  onPhysConstraint :: ConstraintBehaviour,
-  inputStructure :: Structure,
-  constStructure :: ConstantStructure,
-  constRepr :: ConstantRepr,
-  conceptMatch :: ConceptMatchMap,
-  spaceMatch :: SpaceMatch,
-  auxFiles :: [AuxFile],
-  odeLib :: [ODELibPckg],
-  -- FIXME: ODEInfos should be automatically built from Instance models when 
-  -- needed, but we can't do that yet so I'm passing it through Choices instead.
-  -- This choice should really just be for an ODEMethod
-  odes :: [ODEInfo]
-}
-
-data Modularity = Modular InputModule | Unmodular
-
-data ImplementationType = Library
-                        | Program
-
--- Eq instances required for Logging and Comments because generator needs to 
--- check membership of these elements in lists
-data Logging = LogFunc
-             | LogVar deriving Eq
-             
-data Comments = CommentFunc
-              | CommentClass
-              | CommentMod deriving Eq
-
-data Verbosity = Verbose | Quiet
-             
-data ConstraintBehaviour = Warning
-                         | Exception
-                         
-data Structure = Unbundled
-               | Bundled
-
-data ConstantStructure = Inline | WithInputs | Store Structure
-
-data ConstantRepr = Var | Const
-
-data InputModule = Combined
-                 | Separated
-
-type ConceptMatchMap = Map.Map UID [CodeConcept]
-type MatchedConceptMap = Map.Map UID CodeConcept
-type SpaceMatch = Space -> [CodeType]
-type MatchedSpaces = Space -> CodeType
-
-data CodeConcept = Pi
-
-matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
-matchConcepts = Map.fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
-
-matchSpace :: Space -> [CodeType] -> SpaceMatch -> SpaceMatch
-matchSpace _ [] _ = error "Must match each Space to at least one CodeType"
-matchSpace s ts sm = \sp -> if sp == s then ts else sm sp
-
-matchSpaces :: [(Space, [CodeType])] -> SpaceMatch
-matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType 
-  where matchSpaces' ((s,ct):sms) sm = matchSpaces' sms $ matchSpace s ct sm
-        matchSpaces' [] sm = sm
-
-newtype AuxFile = SampleInput FilePath deriving Eq
-
-getSampleData :: Choices -> Maybe FilePath
-getSampleData chs = getSampleData' (auxFiles chs)
-  where getSampleData' [] = Nothing
-        getSampleData' (SampleInput fp:_) = Just fp
-
-hasSampleInput :: [AuxFile] -> Bool
-hasSampleInput [] = False
-hasSampleInput (SampleInput _:_) = True
-             
-data Visibility = Show
-                | Hide
-
-inputModule :: Choices -> InputModule
-inputModule c = inputModule' $ modularity c
-  where inputModule' Unmodular = Combined
-        inputModule' (Modular im) = im
-
-defaultChoices :: Choices
-defaultChoices = Choices {
-  lang = [Python],
-  modularity = Modular Combined,
-  impType = Program,
-  logFile = "log.txt",
-  logging = [],
-  comments = [],
-  doxVerbosity = Verbose,
-  dates = Hide,
-  onSfwrConstraint = Exception,
-  onPhysConstraint = Warning,
-  inputStructure = Bundled,
-  constStructure = Inline,
-  constRepr = Const,
-  conceptMatch = matchConcepts ([] :: [(QDefinition, [CodeConcept])]),
-  spaceMatch = spaceToCodeType, 
-  auxFiles = [],
-  odeLib = [],
-  odes = []
-}
 
 -- medium hacks ---
 relToQD :: ExprRelat c => ChunkDB -> c -> QDefinition

@@ -9,7 +9,7 @@ import Database.Drasil (ChunkDB)
 
 import GOOL.Drasil (ProgData, GOOLState)
 
-import Language.Drasil.CodeSpec (Comments, ImplementationType(..), Verbosity)
+import Language.Drasil.Choices (Comments, ImplementationType(..), Verbosity)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable)

@@ -88,6 +88,6 @@ public class Control {
         outfile.Write(is_safePb);
         outfile.WriteLine(" in module Control");
         outfile.Close();
-        OutputFormat.write_output(is_safePb, is_safeLR, P_b);
+        OutputFormat.write_output(is_safePb, is_safeLR, P_b, J);
     }
 }

@@ -35,7 +35,7 @@ This section records information for easy reference.
 
 \subsection{Table of Units}
 \label{Sec:ToU}
-The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, \hyperref[Table:ToU]{Tab: ToU} lists the symbol, a description and the SI name.
+The unit system used throughout is SI (Systme International d'Units). In addition to the basic units, several derived units are also used. For each unit, \hyperref[Table:ToU]{Tab: ToU} lists the symbol, a description and the SI name.
 
 \begin{longtable}{l l l}
 \toprule
@@ -104,6 +104,10 @@ $is-safePb$ & Probability of glass breakage safety requirement & --
 $is-safeProb$ & Probability of failure safety requirement & --
 \\
 $J$ & Stress distribution factor (Function) & --
+\\
+${J_{\text{max}}}$ & Maximum value for the stress distribution factor & --
+\\
+${J_{\text{min}}}$ & Minimum value for the stress distribution factor & --
 \\
 ${J_{\text{tol}}}$ & Stress distribution factor (Function) based on Pbtol & --
 \\
@@ -1270,6 +1274,8 @@ $w$ & $w\gt{}0$ & ${w_{\text{min}}}\leq{}w\leq{}{w_{\text{max}}}$ & $42.0$ kg & 
 \endhead
 ${P_{\text{b}}}$ & $0\leq{}{P_{\text{b}}}\leq{}1$
 \\
+$J$ & ${J_{\text{min}}}\leq{}J\leq{}{J_{\text{max}}}$
+\\
 \bottomrule
 \caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
@@ -1604,6 +1610,10 @@ ${d_{\text{max}}}$ & maximum value for one of the dimensions of the glass plate 
 ${d_{\text{min}}}$ & minimum value for one of the dimensions of the glass plate & $0.1$ & m
 \\
 $E$ & modulus of elasticity of glass & $71.7\cdot{}10^{9}$ & Pa
+\\
+${J_{\text{max}}}$ & maximum value for the stress distribution factor & $32.0$ & --
+\\
+${J_{\text{min}}}$ & minimum value for the stress distribution factor & $1.0$ & --
 \\
 $k$ & surface flaw parameter & $28.6\cdot{}10^{-54}$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\

@@ -8,11 +8,12 @@ import GOOL.Drasil (ScopeTag(..))
 
 import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
+import Language.Drasil.Choices (Choices(..), AuxFile, Modularity(..), 
+  ImplementationType(..), Comments, Verbosity, MatchedConceptMap, 
+  MatchedSpaces, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, 
+  InputModule(..), Logging, Structure(..), inputModule)
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def, 
-  Choices(..), AuxFile, CodeSpec(..), Modularity(..), ImplementationType(..), 
-  Comments, Verbosity, MatchedConceptMap, MatchedSpaces, ConstantRepr, 
-  ConstantStructure(..), ConstraintBehaviour, InputModule(..), Logging, 
-  Structure(..), getConstraints, inputModule)
+  CodeSpec(..),  getConstraints)
 import Language.Drasil.Mod (Mod(..), Name, Class(..), StateVariable(..), fname)
 
 import Data.List (nub)

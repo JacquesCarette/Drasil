@@ -24,8 +24,8 @@ import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), Choices(..), Modularity(..), 
-  Visibility(..))
+import Language.Drasil.Choices (Choices(..), Modularity(..), Visibility(..))
+import Language.Drasil.CodeSpec (CodeSpec(..))
 
 import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..), 
   ProgData(..), initialState, unCI)

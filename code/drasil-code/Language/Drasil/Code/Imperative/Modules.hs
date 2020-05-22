@@ -33,10 +33,10 @@ import Language.Drasil.Chunk.Parameter (pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.Code.ExtLibImport (defs, imports, steps)
-import Language.Drasil.CodeSpec (CodeSpec(..), Comments(CommentFunc), 
-  ConstantStructure(..), ConstantRepr(..), ConstraintBehaviour(..), 
-  ImplementationType(..), InputModule(..), Logging(..), Structure(..), 
-  hasSampleInput)
+import Language.Drasil.Choices (Comments(..), ConstantStructure(..), 
+  ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
+  InputModule(..), Logging(..), Structure(..), hasSampleInput)
+import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 

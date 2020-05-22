@@ -12,8 +12,9 @@ import Utils.Drasil (stringList)
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), quantvar)
-import Language.Drasil.CodeSpec (CodeSpec(..), ImplementationType(..), 
-  InputModule(..), Structure(..))
+import Language.Drasil.Choices (ImplementationType(..), InputModule(..), 
+  Structure(..))
+import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Description)
 
 import Data.Map (member)

@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
 import Language.Drasil (Expr)
 import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.DataDesc (DataDesc)
-import Language.Drasil.CodeSpec (Comments, ImplementationType, Verbosity)
+import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 
 import GOOL.Drasil (ProgData, GOOLState)
 

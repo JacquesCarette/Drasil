@@ -6,7 +6,8 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), Comments(..))
+import Language.Drasil.Choices (Comments(..))
+import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
   
 import GOOL.Drasil (SFile, VSType, SVariable, SValue, MSStatement, SMethod, 

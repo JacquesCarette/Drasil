@@ -4,12 +4,12 @@ module Language.Drasil.Code (
   makeCode, createCodeFiles, 
   generator, generateCode,
   readWithDataDesc, sampleInputDD,
-  Choices(..), CodeSpec(..), Comments(..), Verbosity(..), 
-  ConstraintBehaviour(..), ImplementationType(..), Logging(..), 
-  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
-  InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, 
-  AuxFile(..), getSampleData, Visibility(..), defaultChoices, funcUID, 
-  funcUID', asVC, asVC', codeSpec, relToQD,
+  Choices(..), Comments(..), Verbosity(..), ConstraintBehaviour(..), 
+  ImplementationType(..), Logging(..), Modularity(..), Structure(..), 
+  ConstantStructure(..), ConstantRepr(..), InputModule(..), CodeConcept(..), 
+  matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), getSampleData, 
+  Visibility(..), defaultChoices, 
+  CodeSpec(..), funcUID, funcUID', asVC, asVC', codeSpec, relToQD,
   ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar, 
   privStateVar, fDecDef, ffor, funcData, funcDef, packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
@@ -83,12 +83,13 @@ import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
 
 import Language.Drasil.Code.Lang (Lang(..))
 
-import Language.Drasil.CodeSpec (Choices(..), CodeSpec(..), Comments(..), 
-  Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Logging(..), 
-  Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
-  InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, 
-  AuxFile(..), getSampleData, Visibility(..), defaultChoices, funcUID, 
-  funcUID', asVC, asVC', codeSpec, relToQD)
+import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..), 
+  ConstraintBehaviour(..), ImplementationType(..), Logging(..), Modularity(..), 
+  Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
+  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), 
+  getSampleData, Visibility(..), defaultChoices,)
+import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, funcUID', asVC, asVC', 
+  codeSpec, relToQD)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), 
   pubStateVar, privStateVar, fDecDef, ffor, funcData, funcDef, packmod)
 

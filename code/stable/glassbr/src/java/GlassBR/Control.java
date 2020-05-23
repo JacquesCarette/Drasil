@@ -93,6 +93,6 @@ public class Control {
         outfile.print(is_safePb);
         outfile.println(" in module Control");
         outfile.close();
-        OutputFormat.write_output(is_safePb, is_safeLR, P_b);
+        OutputFormat.write_output(is_safePb, is_safeLR, P_b, J);
     }
 }

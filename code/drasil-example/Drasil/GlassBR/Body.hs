@@ -62,7 +62,7 @@ import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
-  glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, probBreak,
+  glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
 srs :: Document
@@ -121,7 +121,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
         , Constraints auxSpecSent inputDataConstraints
-        , CorrSolnPpties [probBr] []
+        , CorrSolnPpties [probBr, stressDistFac] []
         ]
       ],
   ReqrmntSec $ ReqsProg [

@@ -171,6 +171,16 @@
                   <td>--</td>
                 </tr>
                 <tr>
+                  <td><em>J<sub>max</sub></em></td>
+                  <td>Maximum value for the stress distribution factor</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>J<sub>min</sub></em></td>
+                  <td>Minimum value for the stress distribution factor</td>
+                  <td>--</td>
+                </tr>
+                <tr>
                   <td><em>J<sub>tol</sub></em></td>
                   <td>Stress distribution factor (Function) based on Pbtol</td>
                   <td>--</td>
@@ -2108,6 +2118,12 @@
                         <em>0&thinsp;&le;&thinsp;P<sub>b</sub>&thinsp;&le;&thinsp;1</em>
                       </td>
                     </tr>
+                    <tr>
+                      <td><em>J</em></td>
+                      <td>
+                        <em>J<sub>min</sub>&thinsp;&le;&thinsp;J&thinsp;&le;&thinsp;J<sub>max</sub></em>
+                      </td>
+                    </tr>
                   </table>
                   <p class="caption">Output Data Constraints</p>
                 </div>
@@ -3913,6 +3929,18 @@
               <td>modulus of elasticity of glass</td>
               <td><em>71.7&sdot;10<sup>9</sup></em></td>
               <td>Pa</td>
+            </tr>
+            <tr>
+              <td><em>J<sub>max</sub></em></td>
+              <td>maximum value for the stress distribution factor</td>
+              <td><em>32.0</em></td>
+              <td>--</td>
+            </tr>
+            <tr>
+              <td><em>J<sub>min</sub></em></td>
+              <td>minimum value for the stress distribution factor</td>
+              <td><em>1.0</em></td>
+              <td>--</td>
             </tr>
             <tr>
               <td><em>k</em></td>

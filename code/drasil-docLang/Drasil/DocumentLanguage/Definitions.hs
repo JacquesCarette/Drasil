@@ -15,7 +15,7 @@ import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants),
-  TheoryModel, inCons, outCons, imOutput, imInputs)
+  TheoryModel, inCons, outCons, imInputs)
 import Utils.Drasil
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
@@ -171,7 +171,7 @@ mkIMField i m l@(Description v u) fs = (show l,
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
 mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getReferences) : fs
 mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
-  where x = P . eqSymb $ i ^. imOutput
+  where x = P $ eqSymb i
 mkIMField i _ l@Input fs = 
   case i ^. imInputs of
   [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?

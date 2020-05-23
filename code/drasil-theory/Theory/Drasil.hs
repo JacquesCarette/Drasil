@@ -7,7 +7,7 @@ module Theory.Drasil (
   -- InstanceModel
   , InstanceModel, Constraints
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
-  , inCons, outCons, imOutput, imInputs
+  , inCons, outCons, imInputs
   -- Theory
   , Theory(..), TheoryModel, tm, tmNoRefs
 ) where

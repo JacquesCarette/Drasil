@@ -2,7 +2,7 @@
 module Theory.Drasil.InstanceModel
   ( InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
-  , inCons, outCons, imOutput, imInputs -- FIXME, these should be done via lenses
+  , inCons, outCons, imInputs -- FIXME, these should be done via lenses
   , Constraints
   ) where
 

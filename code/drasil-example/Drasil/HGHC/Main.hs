@@ -3,8 +3,9 @@ module Main (main) where
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
---   Logging(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
---   InputModule(..), matchConcepts, AuxFile(..), Visibility(..))
+--   Modularity(..), Structure(..), ConstantStructure(..), 
+--   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
+--   Visibility(..), defaultChoices)
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -15,11 +16,12 @@ import Drasil.HGHC.Body (srs, printSetting) --thisSI
 
 {- When we want to actually generate code from this again, uncomment
 thisChoices :: Choices
-thisChoices = Choices {
+thisChoices = defaultChoices {
   lang             = [Python, Cpp, CSharp, Java],
+  modularity       = Modular Combined,
   impType          = Program,
   logFile          = "log.txt",
-  logging          = LogNone,
+  logging          = [],
   comments         = [], 
   doxVerbosity     = Quiet,
   dates            = Hide,
@@ -28,9 +30,8 @@ thisChoices = Choices {
   inputStructure   = Bundled,
   constStructure   = Inline,
   constRepr        = Const,
-  inputModule      = Combined,
   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],
-  auxFiles         = [SampleInput] 
+  auxFiles         = [SampleInput "../../datafiles/HGHC/sampleInput.txt"] 
 } -}
   
 main :: IO ()            

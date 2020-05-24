@@ -1,5 +1,5 @@
 module Language.Drasil.Code.Imperative.Build.AST where
-import Build.Drasil (makeS, MakeString, mkImplicitVar, mkWindowsVar)
+import Build.Drasil (makeS, MakeString, mkImplicitVar, mkWindowsVar, mkOSVar)
 
 type CommandFragment = MakeString
 
@@ -11,14 +11,17 @@ data BuildName = BMain
 data Ext = CodeExt
          | OtherExt MakeString
 
-
 data BuildDependencies = BcSource
                        | BcSingle BuildName
 
-data BuildConfig = BuildConfig ([CommandFragment] -> CommandFragment -> BuildCommand) BuildDependencies
+-- In the function parameter, first parameter is the list of inputs, 2nd parameter is the output file, 3rd parameter is additional name if needed. 
+-- The two Maybe BuildNames are the output file and the additional name.
+data BuildConfig = BuildConfig 
+  ([CommandFragment] -> CommandFragment -> CommandFragment -> [BuildCommand]) 
+  (Maybe BuildName) (Maybe BuildName) BuildDependencies
 
 data RunType = Standalone
-             | Interpreter CommandFragment
+             | Interpreter [CommandFragment]
 
 data Runnable = Runnable BuildName NameOpts RunType
 
@@ -35,6 +38,7 @@ nameOpts = NameOpts {
 
 type BuildCommand = [CommandFragment]
 type InterpreterCommand = String
+type InterpreterOption = String
 
 asFragment :: String -> CommandFragment
 asFragment = makeS
@@ -42,21 +46,37 @@ asFragment = makeS
 osClassDefault :: String -> String -> String -> CommandFragment
 osClassDefault = mkWindowsVar
 
-buildAll :: ([CommandFragment] -> CommandFragment -> BuildCommand) -> Maybe BuildConfig
-buildAll = Just . flip BuildConfig BcSource
+buildAll :: ([CommandFragment] -> CommandFragment -> [BuildCommand]) -> 
+  BuildName -> Maybe BuildConfig
+buildAll f n = Just $ BuildConfig (\i o _ -> f i o) (Just n) Nothing BcSource
 
-buildSingle :: ([CommandFragment] -> CommandFragment -> BuildCommand) -> BuildName -> Maybe BuildConfig
-buildSingle f = Just . BuildConfig f . BcSingle
+buildAllAdditionalName :: ([CommandFragment] -> CommandFragment -> 
+  CommandFragment -> [BuildCommand]) -> BuildName -> BuildName -> 
+  Maybe BuildConfig
+buildAllAdditionalName f n a = Just $ BuildConfig f (Just n) (Just a) BcSource
 
-nativeBinary :: Runnable
-nativeBinary = Runnable (BWithExt BPackName $ OtherExt $
-  osClassDefault "TARGET_EXTENSION" ".exe" "") nameOpts Standalone
+buildSingle :: ([CommandFragment] -> CommandFragment -> [BuildCommand]) -> 
+  BuildName -> BuildName -> Maybe BuildConfig
+buildSingle f n = Just . BuildConfig (\i o _ -> f i o) (Just n) Nothing . 
+  BcSingle
 
-interp :: BuildName -> NameOpts -> InterpreterCommand -> Runnable
-interp b n = Runnable b n . Interpreter . makeS
+nativeBinary :: Maybe Runnable
+nativeBinary = Just $ Runnable executable nameOpts Standalone
 
-interpMM :: InterpreterCommand -> Runnable
-interpMM = Runnable mainModuleFile nameOpts . Interpreter . makeS
+executable :: BuildName 
+executable = BWithExt BPackName $ OtherExt $ 
+  osClassDefault "TARGET_EXTENSION" ".exe" ""
+
+sharedLibrary :: BuildName
+sharedLibrary = BWithExt BPackName $ OtherExt $
+  mkOSVar "LIB_EXTENSION" ".dll" ".dylib" ".so"
+
+interp :: BuildName -> NameOpts -> InterpreterCommand -> [InterpreterOption]
+  -> Maybe Runnable
+interp b n c = Just . Runnable b n . Interpreter . map makeS . (c:)
+
+interpMM :: InterpreterCommand -> Maybe Runnable
+interpMM = Just . Runnable mainModuleFile nameOpts . Interpreter . (:[]) . makeS
 
 mainModule :: BuildName
 mainModule = BMain

@@ -59,7 +59,7 @@ balWtrDesc = map foldlSent [
   [ch tauW `sIs` S "calculated from", makeRef2S balanceDecayRate],
   [ch eta  `sIs` S "calculated from", makeRef2S balanceDecayTime],
   [S "The initial", plural condition, S "for the", getAcc ode `sAre` 
-   E (apply (sy tempW) [Int 0] $= apply (sy tempPCM) [Int 0] $= sy tempInit) `follows` assumpSITWP],
+   E (apply tempW [Int 0] $= apply tempPCM [Int 0] $= sy tempInit) `follows` assumpSITWP],
   [S "The", getAcc ode, S "applies as long as the", phrase water `sIs` EmptyS `sIn`
    phrase liquid, S "form" `sC` E (realInterval tempW (Bounded (Exc,0) (Exc,100))),
    sParen (unwrap $ getUnit tempW), S "where", E 0, sParen (unwrap $ getUnit tempW) `sAnd`
@@ -214,7 +214,7 @@ balPCMNotes = map foldlSent [
   [ch tauSP `sIs` S "calculated" `sIn` makeRef2S balanceSolidPCM],
   [ch tauLP `sIs` S "calculated" `sIn` makeRef2S balanceLiquidPCM],
   [S "The initial", plural condition, S "for the", getAcc ode `sAre` 
-   E (apply (sy tempW) [Int 0] $= apply (sy tempPCM) [Int 0] $= sy tempInit) `follows` assumpSITWP]]
+   E (apply tempW [Int 0] $= apply tempPCM [Int 0] $= sy tempInit) `follows` assumpSITWP]]
 
  ----------------------------------------------
 --    Derivation of eBalanceOnPCM          --

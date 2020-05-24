@@ -10,7 +10,6 @@ module Language.Drasil.Code.Imperative.Parsers.ConfigParser (
     readConfig
 ) where
 
-import Control.Monad (liftM)
 import Text.Parsec.Perm ((<|?>), (<$?>), (<$$>), (<||>), permute)
 import qualified Text.Parsec.Token as P
 import Text.ParserCombinators.Parsec (Parser, ParseError, parse, try, noneOf)
@@ -75,7 +74,7 @@ parseConfig :: Parser Configuration
 parseConfig = do
     whiteSpace
     config <- permute $ Config <$$> try parseLang
-                               <|?> (Nothing, Just `liftM` try (parseOption "ExampleImplementation"))
+                               <|?> (Nothing, Just `fmap` try (parseOption "ExampleImplementation"))
                                <||> try parseOptions
     -- parsing the options above always fails (puts Nothing in all Options fields, even if they have been specified), for some reason. Fix it by trying again:
     permute $ Config (genLang config) (exImp config) <$$> try parseOptions
@@ -88,10 +87,10 @@ parseLang = do
     identifier
 
 parseOptions :: Parser Options
-parseOptions = permute $ Options <$?> (Nothing, Just `liftM` try (parseOption "JavaListType"))
-                                 <|?> (Nothing, Just `liftM` try (parseOption "CppListType"))
-                                 <|?> (Nothing, Just `liftM` try (parseOption "ObjCStaticListType"))
-                                 <|?> (Nothing, Just `liftM` try (parseOption "GOOLHsModule"))
+parseOptions = permute $ Options <$?> (Nothing, Just `fmap` try (parseOption "JavaListType"))
+                                 <|?> (Nothing, Just `fmap` try (parseOption "CppListType"))
+                                 <|?> (Nothing, Just `fmap` try (parseOption "ObjCStaticListType"))
+                                 <|?> (Nothing, Just `fmap` try (parseOption "GOOLHsModule"))
 
 parseOption :: String -> Parser String
 parseOption opt = do

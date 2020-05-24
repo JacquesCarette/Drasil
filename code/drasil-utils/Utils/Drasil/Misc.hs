@@ -97,7 +97,7 @@ makeTMatrix rowName rows cols = zipSentList [] rowName [zipFTable' x cols | x <-
 -- | Helper for making a table from a columns
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
 mkTableFromColumns l = 
-  let l' = filter (any (not . isEmpty) . snd) l in 
+  let l' = filter (not . all isEmpty . snd) l in 
   (map fst l', transpose $ map (map replaceEmptyS . snd) l')
   where
     isEmpty       EmptyS = True
@@ -125,7 +125,7 @@ bulletFlat = Bullet . noRefs . map Flat
 -- t - Headers of the Nested lists.
 -- l - Lists of ListType.
 bulletNested :: [Sentence] -> [ListType] -> ListType
-bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
+bulletNested t l = Bullet (zipWith (\h c -> (Nested h c, Nothing)) t l)
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]

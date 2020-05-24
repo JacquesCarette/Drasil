@@ -14,7 +14,7 @@ module Language.Drasil (
   , realInterval
   , deriv, pderiv
   , sy -- old "Chunk" constructor C
-  , apply, apply1, apply2
+  , apply, apply1, apply2, applyWithNamedArgs
   , cross, m2x2, vec2D, dgnl2x2
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
@@ -46,12 +46,16 @@ module Language.Drasil (
   , DefiningExpr(defnExpr)
   , HasUncertainty(unc)
   , Quantity
+  , Callable
+  , IsArgumentName
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.Concept.Core
   , sDom
   -- Chunk.CommonIdea
   , commonIdea, CI, getAcc, getAccStr, commonIdeaWithDict, prependAbrv
+  -- Chunk.NamedArgument
+  , NamedArgument, narg
   -- Chunk.NamedIdea
   , NamedChunk, short, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)
@@ -65,15 +69,14 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', equat, ec
   -- Chunk.Quantity
-  , QuantityDict, qw, mkQuant, mkQuant'
-  , codeVC, implVar , dcc, dcc', dccWDS, dccWDS', vc, vc'', vcSt, vcUnit, ccs, 
-    cc, cc', cic
+  , QuantityDict, qw, mkQuant, mkQuant', codeVC, implVar, implVar', dcc, dcc', 
+    dccWDS, dccWDS', vc, vc'', vcSt, vcUnit, ccs, cc, cc', cic
   -- Chunk.UncertainQuantity
   , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
   , uncrtnw
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS
-  , uc, uc', ucs, ucs', ucsWS
+  , uc, uc', ucStaged, ucs, ucs', ucsWS
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary, unitary', mkUnitary, unit_symb
   -- Chunk.Relation
@@ -122,8 +125,8 @@ module Language.Drasil (
   , mkFig
   , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI
   -- Space
-  , Space(..)
-  , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD)
+  , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
+  , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
   -- Symbol
   , Decoration(..), Symbol(..), autoStage, compsy, hat, prime, staged, sub, sup
   , unicodeConv, upperLeft, vec
@@ -187,7 +190,7 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec,
           dim, idx, int, dbl, str, perc, isin, completeCase, incompleteCase,
           sumAll, defsum, prodAll, defprod,
           realInterval,
-          apply, apply1, apply2,
+          apply, apply1, apply2, applyWithNamedArgs,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
 import Language.Drasil.Document (section, fig, figWithWidth
@@ -207,7 +210,8 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ), Referable(refAdd, renderRef),
-  DefiningExpr(defnExpr), Quantity, HasUncertainty(unc))
+  DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
+  IsArgumentName)
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)
@@ -233,12 +237,13 @@ import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 
   fromEqnSt', equat, ec)
+import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc',
-  ucs, ucs', ucsWS)
+import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', 
+  ucStaged, ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- for Printing
@@ -254,8 +259,8 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
   , month)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
-import Language.Drasil.Space (Space(..)
-  , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD))
+import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
+  RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
   (+:+.), (+:), capSent, ch, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?

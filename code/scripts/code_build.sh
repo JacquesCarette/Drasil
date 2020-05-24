@@ -7,16 +7,33 @@ if [ -z "$MAKE" ]; then
   exit 1
 fi
 
-RET=0
+build_code () {
+  if [ -d "$EXAMPLE_CODE_SUBFOLDER" ]; then
+    cd "$EXAMPLE_CODE_SUBFOLDER"
+    OLD_DIR=$(pwd)
+    for dr in */; do
+      cd "$dr"
+      if [ -d "$ROOT_DIR/$DF_DIR$EDIR/$dr" ]; then
+        cp -r "$ROOT_DIR/$DF_DIR$EDIR/$dr"* "."
+      fi
+      "$MAKE" $TARGET
+      RET=$(( $RET || $? ))
+      cd "$OLD_DIR"
+    done
+  fi
+}
 
-if [ -d "$BUILD_FOLDER$EDIR/$EXAMPLE_CODE_SUBFOLDER" ]; then
-  cd "$BUILD_FOLDER$EDIR/$EXAMPLE_CODE_SUBFOLDER"
-  OLD_DIR=$(pwd)
+RET=0
+ROOT_DIR=$(pwd)
+cd "$BUILD_FOLDER$EDIR"
+if [[ "$MULTI_SRC_DIRS" == *"$EDIR"* ]]; then
+  E_DIR=$(pwd)
   for d in */; do
     cd "$d"
-    "$MAKE" $TARGET
-    RET=$(( $RET || $? ))
-    cd "$OLD_DIR"
+    build_code
+    cd "$E_DIR"
   done
 fi
+
+build_code
 exit $RET

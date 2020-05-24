@@ -5,7 +5,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
   _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys, _sysinfodb,
-  _usedinfodb, sampleData)
+  _usedinfodb)
 import Theory.Drasil (qdFromDD)
 import Utils.Drasil
 import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
@@ -45,7 +45,7 @@ import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iMods, instModIntro)
-import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
+import Drasil.GamePhysics.References (citations, koothoor2013, smithLai2005)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
@@ -107,21 +107,19 @@ si = SI {
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
-  -- because _quants are only used relative to #1658 and in code gen. And
-  -- Gamephysics is not in a place to be able to do codegen.
+  -- because _quants are only used relative to #1658.
   _quants =  [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
   _datadefs = dataDefs,
   _inputs = inputSymbols,
   _outputs = outputSymbols, 
-  _defSequence = map (\x -> Parallel x []) qDefs,
+  _defSequence = map (`Parallel` []) qDefs,
   _constraints = inputConstraints,
   _constants = [],
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
-   refdb = refDB,
-   sampleData = "../../datafiles/GamePhysics/sampleInput.txt"
+   refdb = refDB
 }
   where qDefs = map qdFromDD dataDefs
 
@@ -230,8 +228,8 @@ organizationOfDocumentsIntro :: Sentence
 organizationOfDocumentsIntro = foldlSent 
   [S "The", phrase organization, S "of this", phrase document, 
   S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
-  phrase sciCompS, S "proposed by", makeCiteS parnas1972 `sAnd` 
-  makeCiteS parnasClements1984]
+  phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `sAnd`
+  makeCiteS smithLai2005]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --

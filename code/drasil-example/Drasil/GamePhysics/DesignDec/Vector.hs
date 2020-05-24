@@ -27,47 +27,47 @@ vectEqual, vectAdd, vectSub, vectMult, vectNeg, vectDot, vectCross, vectPerp,
 
 vectEqual = funcDef "vectEqual" [vV1, vV2] Boolean
   [
-    FRet (FCond (FCall (asExpr getX) [vV1] := FCall (asExpr getX) [vV2]) :&&
-                (FCall (asExpr getY) [vV1] := FCall (asExpr getY) [vV2])
+    FRet (FCond (FCall (funcUID getX) [vV1] := FCall (funcUID getX) [vV2]) :&&
+                (FCall (funcUID getY) [vV1] := FCall (funcUID getY) [vV2])
          )
   ]
 
 vectAdd = funcDef "vectAdd" [vV1, vV2] (Vect Rational)
   [
-    FRet (FCall (asExpr vect) 
+    FRet (FCall (funcUID vect) 
       [
-        FCall (asExpr getX) [vV1] + FCall (asExpr getX) [vV2],
-        FCall (asExpr getY) [vV1] + FCall (asExpr getY) [vV2]
+        FCall (funcUID getX) [vV1] + FCall (funcUID getX) [vV2],
+        FCall (funcUID getY) [vV1] + FCall (funcUID getY) [vV2]
       ]
     )
   ]
   
 vectSub = funcDef "vectSub" [vV1, vV2] (Vect Rational)
   [
-    FRet (FCall (asExpr vect)
+    FRet (FCall (funcUID vect)
       [
-        FCall (asExpr getX) [vV1] - FCall (asExpr getX) [vV2],
-        FCall (asExpr getY) [vV1] - FCall (asExpr getY) [vV2]
+        FCall (funcUID getX) [vV1] - FCall (funcUID getX) [vV2],
+        FCall (funcUID getY) [vV1] - FCall (funcUID getY) [vV2]
       ]
     )
   ]
   
 vectMult = funcDef "vectMult" [vV1, vV2] (Vect Rational)
   [
-    FRet (FCall (asExpr vect)
+    FRet (FCall (funcUID vect)
       [
-        FCall (asExpr getX) [vV1] * FCall (asExpr getX) [vV2],
-        FCall (asExpr getY) [vV1] * FCall (asExpr getY) [vV2]
+        FCall (funcUID getX) [vV1] * FCall (funcUID getX) [vV2],
+        FCall (funcUID getY) [vV1] * FCall (funcUID getY) [vV2]
       ]
     )
   ]
 
 vectNeg = funcDef "vectNeg" [v_v] (Vect Rational)
   [
-    FRet (FCall (asExpr vect)
+    FRet (FCall (funcUID vect)
       $ map Neg [
-        FCall (asExpr getX) [v_v],
-        FCall (asExpr getY) [v_v]
+        FCall (funcUID getX) [v_v],
+        FCall (funcUID getY) [v_v]
       ]
     )
   ]
@@ -75,56 +75,56 @@ vectNeg = funcDef "vectNeg" [v_v] (Vect Rational)
 vectDot = funcDef "vectDot" [vV1, vV2] Rational
   [
     FRet (
-      FCall (asExpr getX) [vV1] *
-      FCall (asExpr getX) [vV2] +
-      FCall (asExpr getY) [vV1] *
-      FCall (asExpr getY) [vV2]
+      FCall (funcUID getX) [vV1] *
+      FCall (funcUID getX) [vV2] +
+      FCall (funcUID getY) [vV1] *
+      FCall (funcUID getY) [vV2]
     )
   ]
 
 vectCross = funcDef "vectCross" [vV1, vV2] Rational
   [
     FRet (
-      (FCall (asExpr getX) [vV1] *
-      FCall (asExpr getY) [vV2]) -
-      (FCall (asExpr getY) [vV1] *
-      FCall (asExpr getX) [vV2]) 
+      (FCall (funcUID getX) [vV1] *
+      FCall (funcUID getY) [vV2]) -
+      (FCall (funcUID getY) [vV1] *
+      FCall (funcUID getX) [vV2]) 
     )
   ]
   
 vectPerp = funcDef "vectPerp" [v_v] (Vect Rational)
   [
-    FRet (FCall (asExpr vect) 
+    FRet (FCall (funcUID vect) 
       [
-        Neg (FCall (asExpr getY) [v_v]),
-        FCall (asExpr getX) [v_v]
+        Neg (FCall (funcUID getY) [v_v]),
+        FCall (funcUID getX) [v_v]
       ]
     )
   ]
 
 vectRPerp = funcDef "vectRPerp" [v_v] (Vect Rational)
   [
-    FRet (FCall (asExpr vect)
+    FRet (FCall (funcUID vect)
       [
-        FCall (asExpr getY) [v_v],
-        Neg (FCall (asExpr getX) [v_v])
+        FCall (funcUID getY) [v_v],
+        Neg (FCall (funcUID getX) [v_v])
       ]
     )
   ]
    
 vectProject = funcDef "vectProject" [vV1, vV2] (Vect Rational)   
   [ 
-    FRet (FCall (asExpr vectMult) 
+    FRet (FCall (funcUID vectMult) 
       [
         vV2,
-        FCall (asExpr vectDot) [vV1, vV2] / FCall (asExpr vectDot) [vV2, vV2]
+        FCall (funcUID vectDot) [vV1, vV2] / FCall (funcUID vectDot) [vV2, vV2]
       ]
     )
   ]
 
 vectForAngle = funcDef "vectForAngle" [rad] (Vect Rational)
   [
-    FRet (FCall (asExpr vect)
+    FRet (FCall (funcUID vect)
       [
         Cos rad,
         Sin rad
@@ -134,90 +134,90 @@ vectForAngle = funcDef "vectForAngle" [rad] (Vect Rational)
 
 vectToAngle = funcDef "vectToAngle" [v_v] Radians
   [
-    FRet (FCall (asExpr atan2) 
+    FRet (FCall (funcUID atan2) 
       [
-        FCall (asExpr getY) [v_v],
-        FCall (asExpr getX) [v_v]
+        FCall (funcUID getY) [v_v],
+        FCall (funcUID getX) [v_v]
       ]
     )
   ]
 
 vectRotate = funcDef "vectRotate" [vV1, vV2] (Vect Rational)
   [
-    FRet (FCall (asExpr vect)
+    FRet (FCall (funcUID vect)
       [
-        FCall (asExpr getX) [vV1] * FCall (asExpr getX) [vV2] -
-        FCall (asExpr getY) [vV1] * FCall (asExpr getY) [vV2],
-        FCall (asExpr getX) [vV1] * FCall (asExpr getY) [vV2] +
-        FCall (asExpr getY) [vV1] * FCall (asExpr getX) [vV2]
+        FCall (funcUID getX) [vV1] * FCall (funcUID getX) [vV2] -
+        FCall (funcUID getY) [vV1] * FCall (funcUID getY) [vV2],
+        FCall (funcUID getX) [vV1] * FCall (funcUID getY) [vV2] +
+        FCall (funcUID getY) [vV1] * FCall (funcUID getX) [vV2]
       ]
     )
   ]
   
 vectUnrotate = funcDef "vectUnrotate" [vV1, vV2] (Vect Rational)
   [
-    FRet (FCall (asExpr vect)
+    FRet (FCall (funcUID vect)
       [
-        FCall (asExpr getX) [vV1] * FCall (asExpr getX) [vV2] +
-        FCall (asExpr getY) [vV1] * FCall (asExpr getY) [vV2],
-        FCall (asExpr getY) [vV1] * FCall (asExpr getX) [vV2] -
-        FCall (asExpr getX) [vV1] * FCall (asExpr getY) [vV2]
+        FCall (funcUID getX) [vV1] * FCall (funcUID getX) [vV2] +
+        FCall (funcUID getY) [vV1] * FCall (funcUID getY) [vV2],
+        FCall (funcUID getY) [vV1] * FCall (funcUID getX) [vV2] -
+        FCall (funcUID getX) [vV1] * FCall (funcUID getY) [vV2]
       ]
     )
   ]
   
 vectLengthSq = funcDef "vectLengthSq" [v_v] Rational
   [
-    FRet (FCall (asExpr vectDot) [v_v, v_v])
+    FRet (FCall (funcUID vectDot) [v_v, v_v])
   ]
   
 vectLength = funcDef "vectLength" [v_v] Rational
   [
-    FRet (Sqrt (FCall (asExpr vectLengthSq) [v_v]))
+    FRet (Sqrt (FCall (funcUID vectLengthSq) [v_v]))
   ]
   
 vectClamp = funcDef "vectClamp" [v_v, length] (Vect Rational)
   [
-    (FCond (FCall (asExpr vectLength) [v_v]) :< length) 
+    (FCond (FCall (funcUID vectLength) [v_v]) :< length) 
       [FRet v_v]
-      [FRet (FCall (asExpr vectMult) 
-        [FCall (asExpr vectNormalize) [v_v], length])
+      [FRet (FCall (funcUID vectMult) 
+        [FCall (funcUID vectNormalize) [v_v], length])
       ]
   ]
 
 vectLerp = funcDef "vectLerp" [vV1, vV2, t] (Vect Rational)
   [
-    FRet (FCall (asExpr vectAdd)
+    FRet (FCall (funcUID vectAdd)
       [
-        FCall (asExpr vectMult) [vV1, 1.0 - t],
-        FCall (asExpr vectMult) [vV2, t]
+        FCall (funcUID vectMult) [vV1, 1.0 - t],
+        FCall (funcUID vectMult) [vV2, t]
       ])
   ]
 
 vectNormalize = funcDef "vectNormalize" [v_v] (Vect Rational)
   [
-    FRet (FCall (asExpr vectMult) 
-      [v_v, 1.0 / FCall (asExpr vectLength) [v_v] + DBL_MIN]
+    FRet (FCall (funcUID vectMult) 
+      [v_v, 1.0 / FCall (funcUID vectLength) [v_v] + DBL_MIN]
     )
   ]
 
 vectDistSq = funcDef "vectDistSq" [vV1, vV2] Rational
   [
-    FRet (FCall (asExpr vectLengthSq) [FCall (asExpr vectSub) [vV1, vV2]])
+    FRet (FCall (funcUID vectLengthSq) [FCall (funcUID vectSub) [vV1, vV2]])
   ]
 
 vectDist = funcDef "vectDist" [vV1, vV2] Rational
   [
-    FRet (Sqrt (FCall (asExpr vectDistSq) [vV1, vV2]))
+    FRet (Sqrt (FCall (funcUID vectDistSq) [vV1, vV2]))
   ]
 
 
 vectNear = funcDef "vectNear" [vV1, vV2, dist] Boolean
   [
-    FRet (FCall (asExpr vectDist) [vV1, vV2] :< dist) 
+    FRet (FCall (funcUID vectDist) [vV1, vV2] :< dist) 
   ]
 
 DBL_MIN = fasg v_DBL_MIN 2.2250738585072014e-308
 
-asExpr :: FuncDef -> Expr
-asExpr (FuncDef n _ _ _) = C $ makeVC n (nounPhraseSP n) (Atomic n)
+funcUID :: FuncDef -> Expr
+funcUID (FuncDef n _ _ _) = C $ makeVC n (nounPhraseSP n) (Atomic n)

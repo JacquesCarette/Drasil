@@ -33,7 +33,7 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 
 constrained :: [ConstrainedChunk]
 constrained = map cnstrw inputDataConstraints ++ 
-  [cnstrw probBr, cnstrw probFail] 
+  [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac] 
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
 pbTol, tNT :: UncertainChunk
@@ -116,15 +116,18 @@ glassTypeCon  = constrainedNRV' (dqdNoUnit glassTy lG String)
 {--}
 
 outputs :: [QuantityDict]
-outputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr]
+outputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr] ++ map qw [stressDistFac]
 
 tmSymbols :: [QuantityDict]
-tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad] 
+tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad]
 
-probBr, probFail, pbTolfail :: ConstrainedChunk
+probBr, probFail, pbTolfail, stressDistFac :: ConstrainedChunk
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   (sub cP lBreak) Rational
   [probConstr] (Just $ dbl 0.4)
+
+stressDistFac = cvc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)") 
+  cJ Real [physc $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just 15.0)
 
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
   (sub cP lFail) Rational
@@ -141,9 +144,9 @@ pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure")
 
 specParamVals :: [QDefinition]
 specParamVals = [dimMax, dimMin, arMax, cWeightMax, cWeightMin,
-  sdMax, sdMin]
+  sdMax, sdMin, stressDistFacMin, stressDistFacMax]
 
-dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax,
+dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax, stressDistFacMin, stressDistFacMax,
   sdMin :: QDefinition
 
 dimMax     = mkQuantDef (unitary "dimMax"
@@ -174,7 +177,11 @@ sdMin     = mkQuantDef (unitary "sdMin"
   (nounPhraseSP "minimum stand off distance permissible for input") 
   (subMin (eqSymb standOffDist)) metre Real) (dbl 6)
 
+stressDistFacMin = mkQuantDef (vc "stressDistFacMin" (nounPhraseSP "minimum value for the stress distribution factor") 
+  (subMin (eqSymb stressDistFac)) Real) (dbl 1.0)
 
+stressDistFacMax = mkQuantDef (vc "stressDistFacMax" (nounPhraseSP "maximum value for the stress distribution factor") 
+  (subMax (eqSymb stressDistFac)) Real) (dbl 32.0)
 {--}
 
 symbols :: [UnitaryChunk]
@@ -222,10 +229,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 unitless :: [QuantityDict]
-unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, 
+unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad,  
   sdfTol, dimlessLoad, tolLoad, lDurFac] ++ map qw [gTF, loadSF]
 
-riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, sdfTol,
+riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, sdfTol,
   dimlessLoad, tolLoad, lDurFac :: QuantityDict
 
 gTF, loadSF :: DefinedQuantityDict
@@ -250,8 +257,6 @@ riskFun = vc "riskFun" (nounPhraseSP "risk of failure") cB Real
 
 sdfTol = vc "sdfTol" (nounPhraseSP "stress distribution factor (Function) based on Pbtol") 
   (sub (eqSymb stressDistFac) lTol) Real
-
-stressDistFac = vc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)") cJ Real
 
 tolLoad = vc "tolLoad" (nounPhraseSP "tolerable load")
   (sub (eqSymb dimlessLoad) lTol) Real

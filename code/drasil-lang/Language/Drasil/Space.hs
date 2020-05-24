@@ -1,6 +1,7 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.Space
-  (Space(..), DomainDesc(..), RealInterval(..), RTopology(..), Inclusive(..)) where
+  (Space(..), DomainDesc(..), RealInterval(..), RTopology(..), Inclusive(..),
+  getActorName, getInnerSpace) where
 
 import Language.Drasil.Symbol (Symbol)
 
@@ -17,10 +18,13 @@ data Space =
   | String
   | Radians
   | Vect Space
+  | Array Space
+  | Actor String
   | DiscreteI [Int]  --ex. let A = {1, 2, 4, 7}
   | DiscreteD [Double]
   | DiscreteS [String] --ex. let Meal = {"breakfast", "lunch", "dinner"}
-  deriving Eq
+  | Void
+  deriving (Eq, Show)
 
 -- The 'spaces' below are all good.
 
@@ -40,3 +44,11 @@ data RealInterval a b where
   Bounded :: (Inclusive, a) -> (Inclusive, b) -> RealInterval a b -- (x .. y)
   UpTo :: (Inclusive, a) -> RealInterval a b -- (-infinity .. x)
   UpFrom :: (Inclusive, b) -> RealInterval a b -- (x .. infinity)
+
+getActorName :: Space -> String
+getActorName (Actor n) = n
+getActorName _ = error "getActorName called on non-actor space"
+
+getInnerSpace :: Space -> Space
+getInnerSpace (Vect s) = s
+getInnerSpace _ = error "getInnerSpace called on non-vector space"

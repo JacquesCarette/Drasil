@@ -5,6 +5,7 @@
 /** \brief Structure for holding the constant values
 */
 public class Constants {
+    public const double pi = 3.14159265;
     public const double L_min = 0.1;
     public const double L_max = 50;
     public const double rho_W_min = 950;

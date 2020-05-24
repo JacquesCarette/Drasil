@@ -30,9 +30,12 @@ space _ Char = P.Ident "Char"
 space _ String = P.Ident "String"
 space _ Radians = error "Radians not translated"
 space _ (Vect _) = error "Vector space not translated"
+space _ (Array _) = error "Array space not translated"
+space _ (Actor s) = P.Ident s
 space _ (DiscreteI l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (P.Int . toInteger) l --ex. let A = {1, 2, 4, 7}
 space sm (DiscreteD l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm . dbl) l -- [Double]
 space _ (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Str l --ex. let Meal = {"breakfast", "lunch", "dinner"}
+space _ Void = error "Void not translated"
 
 {-
 p_space :: Space -> String
@@ -110,9 +113,14 @@ expr (Deriv Total a b)sm =
         (P.Row [P.Spc P.Thin, P.Ident "d", 
                 symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b]) 
 expr (C c)            sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
-expr (FCall f [x])    sm = P.Row [expr f sm, parens $ expr x sm]
-expr (FCall f l)      sm = P.Row [expr f sm,
-  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) l]
+expr (FCall f [x] []) sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, 
+  parens $ expr x sm]
+expr (FCall f l ns)   sm = call sm f l ns
+expr (New c l ns)     sm = call sm c l ns
+expr (Message a m l ns) sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) a,
+  P.MO P.Point, call sm m l ns]
+expr (Field o f)      sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) o,
+  P.MO P.Point, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f]
 expr (Case _ ps)      sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
@@ -210,6 +218,13 @@ indx sm (C c) i = f s
 --    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
     f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
+
+-- | For printing expressions that call something
+call :: PrintingInformation -> UID -> [Expr] -> [(UID,Expr)] -> P.Expr
+call sm f ps ns = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
+  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) ps ++ 
+  zipWith (\n a -> P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) n, 
+  P.MO P.Eq, expr a sm]) (map fst ns) (map snd ns)]
 
 -- | Helper function for translating 'EOperator's
 eop :: PrintingInformation -> ArithOper -> DomainDesc Expr Expr -> Expr -> P.Expr

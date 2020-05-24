@@ -1,10 +1,10 @@
 module Main (main) where
 
-import Language.Drasil (QDefinition)
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
-  Logging(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
-  InputModule(..), matchConcepts, AuxFile(..), Visibility(..))
+  Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
+  ConstantRepr(..), InputModule(..), AuxFile(..), Visibility(..),
+  defaultChoices)
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
@@ -15,11 +15,12 @@ code :: CodeSpec
 code = codeSpec si choices allMods
 
 choices :: Choices
-choices = Choices {
+choices = defaultChoices {
   lang = [Python, Cpp, CSharp, Java],
+  modularity = Modular Separated,
   impType = Program,
   logFile = "log.txt",
-  logging = LogAll,
+  logging = [LogVar, LogFunc],
   comments = [CommentFunc, CommentClass, CommentMod],
   doxVerbosity = Quiet,
   dates = Hide,
@@ -28,9 +29,7 @@ choices = Choices {
   inputStructure = Bundled,
   constStructure = Inline,
   constRepr = Const,
-  inputModule = Separated,
-  conceptMatch = matchConcepts ([] :: [QDefinition]) [],
-  auxFiles = [SampleInput] 
+  auxFiles = [SampleInput "../../datafiles/GlassBR/sampleInput.txt"] 
 }
   
 main :: IO()

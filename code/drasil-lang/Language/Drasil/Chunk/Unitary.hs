@@ -42,7 +42,7 @@ unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu -- Unit do
 
 -- Same as unitary but with a symbol that changes based on the stage
 unitary' :: (IsUnit u) => String -> NP -> (Stage -> Symbol) -> u -> Space -> UnitaryChunk
-unitary' i t s u space = UC (mkQuant' i t s space (Just uu) Nothing) uu -- Unit doesn't have a unitDefn, so [] is passed in
+unitary' i t s u space = UC (mkQuant' i t Nothing space s (Just uu)) uu -- Unit doesn't have a unitDefn, so [] is passed in
   where uu = unitWrapper u
 
 mkUnitary :: (Unitary u, MayHaveUnit u) => u -> UnitaryChunk

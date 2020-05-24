@@ -20,6 +20,8 @@ module Language.Drasil.Classes (
   , HasUncertainty(unc)
   , Concept
   , Referable(refAdd, renderRef)
+  , Callable
+  , IsArgumentName
 
   -- the unsorted rest
   , IsUnit(udefn, getUnits)
@@ -119,6 +121,9 @@ class HasUID s => Referable s where
                             -- Only visible in the source (tex/html).
   renderRef :: s -> LblType -- alternate
 
+-- | Some chunks can be called like functions
+class (HasSymbol c) => Callable c
+
 -----------------------------------------------------
 -- Below are for units only
 -- | Some chunks store a unit symbol
@@ -144,3 +149,4 @@ class ExprRelat c where
 class DefiningExpr c where
   defnExpr :: Lens' c Expr
 
+class (HasSymbol c) => IsArgumentName c where

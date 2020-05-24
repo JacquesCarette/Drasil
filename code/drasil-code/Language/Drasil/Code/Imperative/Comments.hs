@@ -1,55 +1,40 @@
 module Language.Drasil.Code.Imperative.Comments (
-  paramComment, returnComment
+  getComment
 ) where
 
 import Language.Drasil
 import Database.Drasil (defTable)
-import Language.Drasil.Code.Imperative.State (DrasilState(..))
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..))
+import Language.Drasil.Chunk.Code (CodeIdea(..))
+import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
+import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc, unitDoc)
 
-import Data.Map (Map)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
 import Control.Monad.Reader (Reader, ask)
-import Control.Lens (view)
-import Text.PrettyPrint.HughesPJ (Doc, (<+>), colon, empty, parens, render, 
-  text)
+import Control.Lens ((^.))
+import Text.PrettyPrint.HughesPJ (Doc, (<+>), colon, empty, parens, render)
 
-getTermDoc :: (NamedIdea c) => UID -> Map UID c -> Reader DrasilState Doc
-getTermDoc cname m = do
+getTermDoc :: (CodeIdea c) => c -> Reader DrasilState Doc
+getTermDoc c = do
   g <- ask
-  let db = sysinfodb $ csi $ codeSpec g
-  return $ (maybe (text "No description given") (sentenceDoc db 
-    Implementation Linear . phraseNP . view term) . Map.lookup cname) m
+  let db = sysinfodb $ codeSpec g
+  return $ sentenceDoc db Implementation Linear $ phraseNP $ codeChunk c ^. term
 
-getDefnDoc :: UID -> Reader DrasilState Doc
-getDefnDoc cname = do
+getDefnDoc :: (CodeIdea c) => c -> Reader DrasilState Doc
+getDefnDoc c = do
   g <- ask
-  let db = sysinfodb $ csi $ codeSpec g
+  let db = sysinfodb $ codeSpec g
   return $ maybe empty ((<+>) colon . sentenceDoc db Implementation Linear . 
-    view defn . fst) (Map.lookup cname $ defTable db)
+    (^. defn) . fst) (Map.lookup (codeChunk c ^. uid) $ defTable db)
 
-getUnitsDoc :: (MayHaveUnit c) => UID -> Map UID c -> Doc
-getUnitsDoc cname m = maybe empty (parens . unitDoc Linear . usymb) 
-  (Map.lookup cname m >>= getUnit)
+getUnitsDoc :: (CodeIdea c) => c -> Doc
+getUnitsDoc c = maybe empty (parens . unitDoc Linear . usymb) 
+  (getUnit $ codeChunk c)
 
-getComment :: (NamedIdea c, MayHaveUnit c) => UID -> Map UID c -> 
-  Reader DrasilState String
-getComment l m = do
-  t <- getTermDoc l m
+getComment :: (CodeIdea c) => c -> Reader DrasilState String
+getComment l = do
+  t <- getTermDoc l
   d <- getDefnDoc l
-  let u = getUnitsDoc l m
+  let u = getUnitsDoc l
   return $ render $ (t <> d) <+> u
-
-paramComment :: UID -> Reader DrasilState String
-paramComment l = do
-  g <- ask
-  let m = vMap $ codeSpec g
-  getComment l m
-
-returnComment :: UID -> Reader DrasilState String
-returnComment l = do
-  g <- ask
-  let m = fMap $ codeSpec g
-  getComment l m

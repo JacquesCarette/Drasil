@@ -22,7 +22,5 @@
 1e-10
 #RelTol	(1e-10)
 1e-10
-#T_W (FIXME: Outputs as inputs hack)
-40.0
 #E_W (FIXME: Outputs as inputs hack)
 0

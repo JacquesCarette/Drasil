@@ -3,8 +3,9 @@ module Main (main) where
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
---   Logging(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
---   InputModule(..), matchConcepts, AuxFile(..), Visibility(..))
+--   Modularity(..), Structure(..), ConstantStructure(..), 
+--   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
+--   Visibility(..), defaultChoices)
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -14,11 +15,12 @@ import Drasil.SSP.Body (srs, printSetting) -- si
 -- code = codeSpec si choices []
 
 -- choices :: Choices
--- choices = Choices {
+-- choices = defaultChoices {
 --   lang = [Python, Cpp, CSharp, Java],
+--   modularity = Modular Combined,
 --   impType = Program,
 --   logFile = "log.txt",
---   logging = LogNone,         -- LogNone, LogFunc
+--   logging = [],         -- LogVar, LogFunc
 --   comments = [],    -- CommentFunc, CommentClass, CommentMod
 --   doxVerbosity = Quiet, -- Verbose, Quiet
 --   dates = Hide,      -- Show, Hide
@@ -27,9 +29,8 @@ import Drasil.SSP.Body (srs, printSetting) -- si
 --   inputStructure = Unbundled,    -- Unbundled, Bundled
 --   constStructure = Inline,   -- Inline, WithInputs, Store Structure
 --   constRepr = Const,    -- Var, Const
---   inputModule = Combined,    -- Combined, Separated
 --   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
---   auxFiles = [SampleInput]
+--   auxFiles = [SampleInput "../../datafiles/SSP/sampleInput.txt"]
 -- }
        
 main :: IO ()            

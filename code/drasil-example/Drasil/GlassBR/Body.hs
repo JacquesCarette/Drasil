@@ -7,7 +7,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
   _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb, sampleData)
+  _sysinfodb, _usedinfodb)
 import Theory.Drasil (Theory(defined_fun, defined_quant))
 import Utils.Drasil
 
@@ -62,7 +62,7 @@ import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
-  glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, probBreak,
+  glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
 srs :: Document
@@ -89,8 +89,7 @@ si = SI {
   _constants   = constants,
   _sysinfodb   = symbMap,
   _usedinfodb = usedDB,
-   refdb       = refDB,
-   sampleData  = "../../datafiles/GlassBR/sampleInput.txt"
+   refdb       = refDB
 }
   --FIXME: All named ideas, not just acronyms.
 
@@ -122,7 +121,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
         , Constraints auxSpecSent inputDataConstraints
-        , CorrSolnPpties [probBr] []
+        , CorrSolnPpties [probBr, stressDistFac] []
         ]
       ],
   ReqrmntSec $ ReqsProg [

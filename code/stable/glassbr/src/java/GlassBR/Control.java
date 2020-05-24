@@ -5,7 +5,9 @@ package GlassBR;
     \brief Controls the flow of the program
 */
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Control {
@@ -13,7 +15,7 @@ public class Control {
     /** \brief Controls the flow of the program
         \param args List of command-line arguments
     */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
         String filename = args[0];
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
@@ -73,7 +75,7 @@ public class Control {
         outfile.print(LR);
         outfile.println(" in module Control");
         outfile.close();
-        Boolean is_safeLR = Calculations.func_is_safeLR(LR, q);
+        boolean is_safeLR = Calculations.func_is_safeLR(LR, q);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'is_safeLR' assigned to ");
         outfile.print(is_safeLR);
@@ -85,12 +87,12 @@ public class Control {
         outfile.print(P_b);
         outfile.println(" in module Control");
         outfile.close();
-        Boolean is_safePb = Calculations.func_is_safePb(inParams, P_b);
+        boolean is_safePb = Calculations.func_is_safePb(inParams, P_b);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'is_safePb' assigned to ");
         outfile.print(is_safePb);
         outfile.println(" in module Control");
         outfile.close();
-        OutputFormat.write_output(is_safePb, is_safeLR, P_b);
+        OutputFormat.write_output(is_safePb, is_safeLR, P_b, J);
     }
 }

@@ -5,7 +5,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb, sampleData)
+  _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Utils.Drasil
 
@@ -58,7 +58,7 @@ import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
-import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
+import Drasil.SWHS.References (citations, koothoor2013, smithLai2005)
 import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
@@ -98,8 +98,7 @@ si = SI {
   _constants = specParamValList,
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
-   refdb = refDB,
-   sampleData = "../../datafiles/SWHS/sampleInput.txt"
+   refdb = refDB
 }
 
 symbMap :: ChunkDB
@@ -276,8 +275,8 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short Doc.srs,
-  S "for", phrase sciCompS, S "proposed by", makeCiteS parnas1972 `sAnd` 
-  makeCiteS parnasClements1984]
+  S "for", phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `sAnd`
+  makeCiteS smithLai2005]
 
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [S "The", plural inModel, 

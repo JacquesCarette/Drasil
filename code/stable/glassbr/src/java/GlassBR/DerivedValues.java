@@ -6,6 +6,7 @@ package GlassBR;
 */
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class DerivedValues {
@@ -13,7 +14,7 @@ public class DerivedValues {
     /** \brief Calculates values that can be immediately derived from the inputs
         \param inParams structure holding the input values
     */
-    public static void derived_values(InputParameters inParams) throws Exception {
+    public static void derived_values(InputParameters inParams) throws Exception, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function derived_values called with inputs: {");

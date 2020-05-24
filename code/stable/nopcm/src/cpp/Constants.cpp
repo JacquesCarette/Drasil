@@ -1,5 +1,6 @@
 #include "Constants.hpp"
 
+const double Constants::pi = 3.14159265;
 const double Constants::L_min = 0.1;
 const double Constants::L_max = 50;
 const double Constants::rho_W_min = 950;
@@ -12,4 +13,3 @@ const double Constants::h_C_max = 10000;
 const double Constants::t_final_max = 86400;
 const double Constants::AR_min = 1.0e-2;
 const double Constants::AR_max = 100;
-

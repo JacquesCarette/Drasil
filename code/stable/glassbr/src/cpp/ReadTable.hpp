@@ -19,6 +19,6 @@ using std::vector;
     \param x_matrix lists of x values at different z values
     \param y_matrix lists of y values at different z values
 */
-void func_read_table(string filename, vector<double> &z_vector, vector<vector<double>> &x_matrix, vector<vector<double>> &y_matrix);
+void read_table(string filename, vector<double> &z_vector, vector<vector<double>> &x_matrix, vector<vector<double>> &y_matrix);
 
 #endif

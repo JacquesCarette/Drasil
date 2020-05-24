@@ -3,8 +3,9 @@ module Main where
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
---   Logging(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
---   InputModule(..), matchConcepts, AuxFile(..), Visibility(..))
+--   Modularity(..), Structure(..), ConstantStructure(..), 
+--   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
+--   Visibility(..), defaultChoices)
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -14,11 +15,12 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
 -- code = codeSpec sysInfo choices []
 
 -- choices :: Choices
--- choices = Choices {
+-- choices = defaultChoices {
 --   lang             = [Python, Cpp, CSharp, Java],
+--   modularity       = Modular Combined,
 --   impType          = Library,
 --   logFile          = "log.txt",
---   logging          = LogNone,
+--   logging          = [],
 --   comments         = CommentNone,
 --   doxVerbosity     = Quiet,
 --   dates            = Hide,
@@ -27,9 +29,8 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
 --   inputStructure   = Unbundled,
 --   constStructure   = Inline,
 --   constRepr        = Const,
---   inputModule      = Combined,
 --   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],
---   auxFiles         = [SampleInput]
+--   auxFiles         = [SampleInput "../../datafiles/GamePhysics/sampleInput.txt"]
 -- }       
        
 main :: IO ()

@@ -6,6 +6,7 @@ package GlassBR;
 */
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class OutputFormat {
@@ -14,8 +15,9 @@ public class OutputFormat {
         \param is_safePb probability of glass breakage safety requirement
         \param is_safeLR 3 second load equivalent resistance safety requirement
         \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
+        \param J stress distribution factor (Function)
     */
-    public static void write_output(Boolean is_safePb, Boolean is_safeLR, double P_b) throws Exception {
+    public static void write_output(boolean is_safePb, boolean is_safeLR, double P_b, double J) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.println("function write_output called with inputs: {");
@@ -26,7 +28,10 @@ public class OutputFormat {
         outfile.print(is_safeLR);
         outfile.println(", ");
         outfile.print("  P_b = ");
-        outfile.println(P_b);
+        outfile.print(P_b);
+        outfile.println(", ");
+        outfile.print("  J = ");
+        outfile.println(J);
         outfile.println("  }");
         outfile.close();
         
@@ -38,6 +43,8 @@ public class OutputFormat {
         outputfile.println(is_safeLR);
         outputfile.print("P_b = ");
         outputfile.println(P_b);
+        outputfile.print("J = ");
+        outputfile.println(J);
         outputfile.close();
     }
 }

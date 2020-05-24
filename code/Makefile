@@ -1,4 +1,7 @@
 # For documentation on how to add to this, see Issue #1371
+
+SHELL=/bin/bash
+
 # List of all known packages
 PACKAGES = lang utils build gool code theory database printers gen data docLang example
 
@@ -18,6 +21,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 # Current list of examples
 SRC_EXAMPLES = glassbr nopcm projectile
 EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template
+GOOLTEST = gooltest
 
 # where they live
 HGHC_DIR  = HGHC
@@ -28,6 +32,12 @@ SSP_DIR   = SSP
 GAMEPHYSICS_DIR  = GamePhysics
 PROJECTILE_DIR = Projectile
 TEMPLATE_DIR = Template
+GOOLTEST_DIR = GOOLTest
+
+MULTI_SRC_DIRS = $(PROJECTILE_DIR) # Directories for examples with multiple src versions
+
+EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(NOPCM_DIR) \
+  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) # All example directories
 
 # and the name of their executables
 HGHC_EXE  = hghc
@@ -38,6 +48,7 @@ SSP_EXE   = ssp
 GAMEPHYSICS_EXE  = gamephysics
 PROJECTILE_EXE = projectile
 TEMPLATE_EXE = template
+GOOLTEST_EXE = codegenTest
 
 # and the associated per-example information generated
 GEN_E_SUFFIX = _gen
@@ -46,8 +57,8 @@ TEX_E_SUFFIX = _tex
 CODE_E_SUFFIX = _code
 DCP_E_SUFFIX = _deploy_code_path
 
-GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
-TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES))
+GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES) $(GOOLTEST))
+TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES) $(GOOLTEST))
 TEX_EXAMPLES = $(addsuffix $(TEX_E_SUFFIX), $(EXAMPLES))
 CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(SRC_EXAMPLES))
 DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
@@ -63,10 +74,11 @@ ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(f
 #####
 
 # make variables/configuration
-DIFF = diff -r -X ../.gitignore -x '*.txt'
+DIFF = diff --strip-trailing-cr -r -X ../.gitignore -x '*.txt'
 LOG_SUFFIX = _log.log
 MIN_STACK_VER = 1.9.1  # Version which adds --interleaved-output flag
 CACHED_MSV_FILE = .drasil-min-stack-ver
+DF_DIR = datafiles/
 BUILD_FOLDER_NAME = build
 BUILD_FOLDER = $(BUILD_FOLDER_NAME)/
 EXAMPLE_CODE_SUBFOLDER = src/
@@ -161,10 +173,16 @@ tex: $(TEX_EXAMPLES)
 %$(CODE_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFIX)
-	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" \
-	TARGET=$(TARGET) MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"code_build.sh
+	@DF_DIR="$(DF_DIR)" EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" \
+	EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" \
+	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" TARGET=$(TARGET) \
+	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"code_build.sh
 
-code: $(CODE_EXAMPLES)
+$(GOOLTEST): $(GOOLTEST)$(GEN_E_SUFFIX)
+	@EDIR="$(GOOLTEST_DIR)" BUILD_FOLDER="$(BUILD_FOLDER)" TARGET=$(TARGET) \
+	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"gooltest_build.sh
+
+code: $(CODE_EXAMPLES) $(GOOLTEST)
 
 doxygen: TARGET=doc
 doxygen: $(CODE_EXAMPLES)
@@ -172,14 +190,16 @@ doxygen: $(CODE_EXAMPLES)
 %$(DCP_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(DCP_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
-# Print as formatted K/V for deploy to extract
-	@echo "$(EDIR)$(DEPLOY_CODE_PATH_KV_SEP)$(shell git rev-parse --show-prefix)stable/$*/src/"
+	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" EXAMPLE=$* \
+	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" \
+	"$(SHELL)" "$(SCRIPT_FOLDER)"code_path.sh
 
 deploy_code_path: $(DCP_EXAMPLES)
 
 deploy_lite:
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
+	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" \
 	DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
 
 # This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
@@ -199,4 +219,4 @@ clean: $(CLEAN_FOLDERS)
 	- stack clean
 	- rm "$(CACHED_MSV_FILE)"
 
-.PHONY: clean code tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(ALL_EXPANDED_TARGETS)
+.PHONY: clean code tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

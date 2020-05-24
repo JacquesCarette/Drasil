@@ -14,10 +14,10 @@ public class ReadTable {
         \param x_matrix lists of x values at different z values
         \param y_matrix lists of y values at different z values
     */
-    public static void func_read_table(string filename, List<double> z_vector, List<List<double>> x_matrix, List<List<double>> y_matrix) {
+    public static void read_table(string filename, List<double> z_vector, List<List<double>> x_matrix, List<List<double>> y_matrix) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
-        outfile.WriteLine("function func_read_table called with inputs: {");
+        outfile.WriteLine("function read_table called with inputs: {");
         outfile.Write("  filename = ");
         outfile.Write(filename);
         outfile.WriteLine(", ");
@@ -93,7 +93,7 @@ public class ReadTable {
         List<string> linetokens = new List<string>(0);
         List<string> lines = new List<string>(0);
         infile = new StreamReader(filename);
-        line = (infile.ReadLine());
+        line = infile.ReadLine();
         linetokens = new List<string>(line.Split(','));
         for (int stringlist_i = 0; stringlist_i < linetokens.Count / 1; stringlist_i += 1) {
             z_vector.Add(Double.Parse(linetokens[stringlist_i * 1 + 0]));

@@ -11,7 +11,7 @@ import Interpolation
 def func_J_tol(inParams):
     outfile = open("log.txt", "a")
     print("function func_J_tol called with inputs: {", file=outfile)
-    print("  inParams = ", end='', file=outfile)
+    print("  inParams = ", end="", file=outfile)
     print("Instance of InputParameters object", file=outfile)
     print("  }", file=outfile)
     outfile.close()
@@ -24,12 +24,12 @@ def func_J_tol(inParams):
 def func_q(inParams):
     outfile = open("log.txt", "a")
     print("function func_q called with inputs: {", file=outfile)
-    print("  inParams = ", end='', file=outfile)
+    print("  inParams = ", end="", file=outfile)
     print("Instance of InputParameters object", file=outfile)
     print("  }", file=outfile)
     outfile.close()
     
-    return Interpolation.func_interpY("TSD.txt", inParams.SD, inParams.w_TNT)
+    return Interpolation.interpY("TSD.txt", inParams.SD, inParams.w_TNT)
 
 ## \brief Calculates dimensionless load
 # \param inParams structure holding the input values
@@ -38,10 +38,10 @@ def func_q(inParams):
 def func_q_hat(inParams, q):
     outfile = open("log.txt", "a")
     print("function func_q_hat called with inputs: {", file=outfile)
-    print("  inParams = ", end='', file=outfile)
-    print("Instance of InputParameters object", end='', file=outfile)
+    print("  inParams = ", end="", file=outfile)
+    print("Instance of InputParameters object", end="", file=outfile)
     print(", ", file=outfile)
-    print("  q = ", end='', file=outfile)
+    print("  q = ", end="", file=outfile)
     print(q, file=outfile)
     print("  }", file=outfile)
     outfile.close()
@@ -55,15 +55,15 @@ def func_q_hat(inParams, q):
 def func_q_hat_tol(inParams, J_tol):
     outfile = open("log.txt", "a")
     print("function func_q_hat_tol called with inputs: {", file=outfile)
-    print("  inParams = ", end='', file=outfile)
-    print("Instance of InputParameters object", end='', file=outfile)
+    print("  inParams = ", end="", file=outfile)
+    print("Instance of InputParameters object", end="", file=outfile)
     print(", ", file=outfile)
-    print("  J_tol = ", end='', file=outfile)
+    print("  J_tol = ", end="", file=outfile)
     print(J_tol, file=outfile)
     print("  }", file=outfile)
     outfile.close()
     
-    return Interpolation.func_interpY("SDF.txt", inParams.AR, J_tol)
+    return Interpolation.interpY("SDF.txt", inParams.AR, J_tol)
 
 ## \brief Calculates stress distribution factor (Function)
 # \param inParams structure holding the input values
@@ -72,15 +72,15 @@ def func_q_hat_tol(inParams, J_tol):
 def func_J(inParams, q_hat):
     outfile = open("log.txt", "a")
     print("function func_J called with inputs: {", file=outfile)
-    print("  inParams = ", end='', file=outfile)
-    print("Instance of InputParameters object", end='', file=outfile)
+    print("  inParams = ", end="", file=outfile)
+    print("Instance of InputParameters object", end="", file=outfile)
     print(", ", file=outfile)
-    print("  q_hat = ", end='', file=outfile)
+    print("  q_hat = ", end="", file=outfile)
     print(q_hat, file=outfile)
     print("  }", file=outfile)
     outfile.close()
     
-    return Interpolation.func_interpZ("SDF.txt", inParams.AR, q_hat)
+    return Interpolation.interpZ("SDF.txt", inParams.AR, q_hat)
 
 ## \brief Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
 # \param inParams structure holding the input values
@@ -89,10 +89,10 @@ def func_J(inParams, q_hat):
 def func_NFL(inParams, q_hat_tol):
     outfile = open("log.txt", "a")
     print("function func_NFL called with inputs: {", file=outfile)
-    print("  inParams = ", end='', file=outfile)
-    print("Instance of InputParameters object", end='', file=outfile)
+    print("  inParams = ", end="", file=outfile)
+    print("Instance of InputParameters object", end="", file=outfile)
     print(", ", file=outfile)
-    print("  q_hat_tol = ", end='', file=outfile)
+    print("  q_hat_tol = ", end="", file=outfile)
     print(q_hat_tol, file=outfile)
     print("  }", file=outfile)
     outfile.close()
@@ -106,10 +106,10 @@ def func_NFL(inParams, q_hat_tol):
 def func_B(inParams, J):
     outfile = open("log.txt", "a")
     print("function func_B called with inputs: {", file=outfile)
-    print("  inParams = ", end='', file=outfile)
-    print("Instance of InputParameters object", end='', file=outfile)
+    print("  inParams = ", end="", file=outfile)
+    print("Instance of InputParameters object", end="", file=outfile)
     print(", ", file=outfile)
-    print("  J = ", end='', file=outfile)
+    print("  J = ", end="", file=outfile)
     print(J, file=outfile)
     print("  }", file=outfile)
     outfile.close()
@@ -123,10 +123,10 @@ def func_B(inParams, J):
 def func_LR(inParams, NFL):
     outfile = open("log.txt", "a")
     print("function func_LR called with inputs: {", file=outfile)
-    print("  inParams = ", end='', file=outfile)
-    print("Instance of InputParameters object", end='', file=outfile)
+    print("  inParams = ", end="", file=outfile)
+    print("Instance of InputParameters object", end="", file=outfile)
     print(", ", file=outfile)
-    print("  NFL = ", end='', file=outfile)
+    print("  NFL = ", end="", file=outfile)
     print(NFL, file=outfile)
     print("  }", file=outfile)
     outfile.close()
@@ -140,10 +140,10 @@ def func_LR(inParams, NFL):
 def func_is_safeLR(LR, q):
     outfile = open("log.txt", "a")
     print("function func_is_safeLR called with inputs: {", file=outfile)
-    print("  LR = ", end='', file=outfile)
-    print(LR, end='', file=outfile)
+    print("  LR = ", end="", file=outfile)
+    print(LR, end="", file=outfile)
     print(", ", file=outfile)
-    print("  q = ", end='', file=outfile)
+    print("  q = ", end="", file=outfile)
     print(q, file=outfile)
     print("  }", file=outfile)
     outfile.close()
@@ -156,7 +156,7 @@ def func_is_safeLR(LR, q):
 def func_P_b(B):
     outfile = open("log.txt", "a")
     print("function func_P_b called with inputs: {", file=outfile)
-    print("  B = ", end='', file=outfile)
+    print("  B = ", end="", file=outfile)
     print(B, file=outfile)
     print("  }", file=outfile)
     outfile.close()
@@ -170,10 +170,10 @@ def func_P_b(B):
 def func_is_safePb(inParams, P_b):
     outfile = open("log.txt", "a")
     print("function func_is_safePb called with inputs: {", file=outfile)
-    print("  inParams = ", end='', file=outfile)
-    print("Instance of InputParameters object", end='', file=outfile)
+    print("  inParams = ", end="", file=outfile)
+    print("Instance of InputParameters object", end="", file=outfile)
     print(", ", file=outfile)
-    print("  P_b = ", end='', file=outfile)
+    print("  P_b = ", end="", file=outfile)
     print(P_b, file=outfile)
     print("  }", file=outfile)
     outfile.close()

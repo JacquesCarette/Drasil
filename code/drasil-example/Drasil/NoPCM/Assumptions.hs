@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Thermodynamics as CT (heat)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp)
 
 import Drasil.SWHS.Assumptions (assumpTEO, assumpHTCC, assumpCWTAT,
-  assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpS14, assumpPIT)
+  assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpS14, assumpPIT, assumpVCN)
 import Drasil.SWHS.Concepts (tank, water)
 -- import Drasil.SWHS.References (swhsCitations)
 import Drasil.SWHS.Unitals (volHtGen, tempC, tempInit, tempW, htCapW, wDensity)
@@ -24,7 +24,7 @@ import Drasil.SWHS.Unitals (volHtGen, tempC, tempInit, tempW, htCapW, wDensity)
 assumptions :: [ConceptInstance]
 assumptions = [assumpTEO, assumpHTCC, assumpCWTAT, assumpDWCoW, assumpSHECoW,
   assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpCTNTD, assumpWAL, assumpPIT,
-  assumpNIHGBW, assumpAPT]
+  assumpNIHGBW, assumpAPT, assumpVCN]
   
 assumpS3, assumpS4, assumpS5, assumpS9_npcm, assumpS12, assumpS13 :: Sentence
 assumpDWCoW, assumpSHECoW, assumpCTNTD, assumpNIHGBW, assumpAPT,

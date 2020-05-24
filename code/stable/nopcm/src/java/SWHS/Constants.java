@@ -7,6 +7,7 @@ package SWHS;
 /** \brief Structure for holding the constant values
 */
 public class Constants {
+    public static final double pi = 3.14159265;
     public static final double L_min = 0.1;
     public static final double L_max = 50;
     public static final double rho_W_min = 950;

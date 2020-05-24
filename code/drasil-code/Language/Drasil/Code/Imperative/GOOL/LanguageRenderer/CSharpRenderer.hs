@@ -6,15 +6,16 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
   CSharpProject(..)
 ) where
 
-import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
+import Language.Drasil.Choices (ImplementationType(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
   AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, sampleInput, makefile)
+  G (doxConfig, sampleInput, makefile, noRunIfLib)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
-  asFragment, buildAll, nativeBinary, osClassDefault)
+  asFragment, buildAll, nativeBinary, osClassDefault, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
 import GOOL.Drasil (onCodeList)
@@ -48,14 +49,19 @@ instance AuxiliarySym CSharpProject where
 
   optimizeDox = return no
 
-  makefile = G.makefile csBuildConfig csRunnable
+  makefile fs it = G.makefile (csBuildConfig fs it) (G.noRunIfLib it csRunnable)
 
   auxHelperDoc = unCSP
   auxFromData fp d = return $ ad fp d
 
-csBuildConfig :: Maybe BuildConfig
-csBuildConfig = buildAll $ \i o -> [osClassDefault "CSC" "csc" "mcs", 
-  asFragment "-out:" P.<> o] ++ i
+csBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
+csBuildConfig fs it = buildAll (\i o -> [osClassDefault "CSC" "csc" "mcs" 
+  : target it ++ [asFragment "-out:" P.<> o] ++ map (asFragment . ("-r:" ++)) fs
+  ++ i]) (outName it)
+  where target Library = [asFragment "-t:library"]
+        target Program = []
+        outName Library = sharedLibrary
+        outName Program = executable
 
-csRunnable :: Runnable
+csRunnable :: Maybe Runnable
 csRunnable = nativeBinary

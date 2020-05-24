@@ -5,7 +5,9 @@ package GlassBR;
     \brief Provides functions for linear interpolation on three-dimensional data
 */
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -19,10 +21,10 @@ public class Interpolation {
         \param x x-coordinate to interpolate at
         \return y value interpolated at given x value
     */
-    public static double func_lin_interp(double x_1, double y_1, double x_2, double y_2, double x) throws Exception {
+    public static double lin_interp(double x_1, double y_1, double x_2, double y_2, double x) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_lin_interp called with inputs: {");
+        outfile.println("function lin_interp called with inputs: {");
         outfile.print("  x_1 = ");
         outfile.print(x_1);
         outfile.println(", ");
@@ -48,10 +50,10 @@ public class Interpolation {
         \param v value whose index will be found
         \return index of given value in given array
     */
-    public static int func_find(ArrayList<Double> arr, double v) throws Exception {
+    public static int find(ArrayList<Double> arr, double v) throws Exception, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_find called with inputs: {");
+        outfile.println("function find called with inputs: {");
         outfile.print("  arr = ");
         outfile.print(arr);
         outfile.println(", ");
@@ -73,10 +75,10 @@ public class Interpolation {
         \param j index
         \return column of the given matrix at the given index
     */
-    public static ArrayList<Double> func_extractColumn(ArrayList<ArrayList<Double>> mat, int j) throws Exception {
+    public static ArrayList<Double> extractColumn(ArrayList<ArrayList<Double>> mat, int j) throws IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_extractColumn called with inputs: {");
+        outfile.println("function extractColumn called with inputs: {");
         outfile.print("  mat = ");
         outfile.print(mat);
         outfile.println(", ");
@@ -98,10 +100,10 @@ public class Interpolation {
         \param z z-coordinate to interpolate at
         \return y value interpolated at given x and z values
     */
-    public static double func_interpY(String filename, double x, double z) throws Exception {
+    public static double interpY(String filename, double x, double z) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_interpY called with inputs: {");
+        outfile.println("function interpY called with inputs: {");
         outfile.print("  filename = ");
         outfile.print(filename);
         outfile.println(", ");
@@ -122,48 +124,49 @@ public class Interpolation {
         int k_2;
         double y_1;
         double y_2;
+        
         ArrayList<ArrayList<Double>> x_matrix = new ArrayList<ArrayList<Double>>(0);
         ArrayList<ArrayList<Double>> y_matrix = new ArrayList<ArrayList<Double>>(0);
         ArrayList<Double> z_vector = new ArrayList<Double>(0);
-        ReadTable.func_read_table(filename, z_vector, x_matrix, y_matrix);
-        i = func_find(z_vector, z);
+        ReadTable.read_table(filename, z_vector, x_matrix, y_matrix);
+        i = find(z_vector, z);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'i' assigned to ");
         outfile.print(i);
         outfile.println(" in module Interpolation");
         outfile.close();
-        x_z_1 = func_extractColumn(x_matrix, i);
+        x_z_1 = extractColumn(x_matrix, i);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'x_z_1' assigned to ");
         outfile.print(x_z_1);
         outfile.println(" in module Interpolation");
         outfile.close();
-        y_z_1 = func_extractColumn(y_matrix, i);
+        y_z_1 = extractColumn(y_matrix, i);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'y_z_1' assigned to ");
         outfile.print(y_z_1);
         outfile.println(" in module Interpolation");
         outfile.close();
-        x_z_2 = func_extractColumn(x_matrix, i + 1);
+        x_z_2 = extractColumn(x_matrix, i + 1);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'x_z_2' assigned to ");
         outfile.print(x_z_2);
         outfile.println(" in module Interpolation");
         outfile.close();
-        y_z_2 = func_extractColumn(y_matrix, i + 1);
+        y_z_2 = extractColumn(y_matrix, i + 1);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'y_z_2' assigned to ");
         outfile.print(y_z_2);
         outfile.println(" in module Interpolation");
         outfile.close();
         try {
-            j = func_find(x_z_1, x);
+            j = find(x_z_1, x);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'j' assigned to ");
             outfile.print(j);
             outfile.println(" in module Interpolation");
             outfile.close();
-            k_2 = func_find(x_z_2, x);
+            k_2 = find(x_z_2, x);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'k_2' assigned to ");
             outfile.print(k_2);
@@ -172,19 +175,19 @@ public class Interpolation {
         } catch (Exception exc) {
             throw new Exception("Interpolation of y failed");
         }
-        y_1 = func_lin_interp(x_z_1.get(j), y_z_1.get(j), x_z_1.get(j + 1), y_z_1.get(j + 1), x);
+        y_1 = lin_interp(x_z_1.get(j), y_z_1.get(j), x_z_1.get(j + 1), y_z_1.get(j + 1), x);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'y_1' assigned to ");
         outfile.print(y_1);
         outfile.println(" in module Interpolation");
         outfile.close();
-        y_2 = func_lin_interp(x_z_2.get(k_2), y_z_2.get(k_2), x_z_2.get(k_2 + 1), y_z_2.get(k_2 + 1), x);
+        y_2 = lin_interp(x_z_2.get(k_2), y_z_2.get(k_2), x_z_2.get(k_2 + 1), y_z_2.get(k_2 + 1), x);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'y_2' assigned to ");
         outfile.print(y_2);
         outfile.println(" in module Interpolation");
         outfile.close();
-        return func_lin_interp(z_vector.get(i), y_1, z_vector.get(i + 1), y_2, z);
+        return lin_interp(z_vector.get(i), y_1, z_vector.get(i + 1), y_2, z);
     }
     
     /** \brief Linearly interpolates a z value at given x and y values
@@ -193,10 +196,10 @@ public class Interpolation {
         \param y y-coordinate to interpolate at
         \return z value interpolated at given x and y values
     */
-    public static double func_interpZ(String filename, double x, double y) throws Exception {
+    public static double interpZ(String filename, double x, double y) throws Exception, FileNotFoundException, IOException {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.println("function func_interpZ called with inputs: {");
+        outfile.println("function interpZ called with inputs: {");
         outfile.print("  filename = ");
         outfile.print(filename);
         outfile.println(", ");
@@ -216,43 +219,44 @@ public class Interpolation {
         int k_2;
         double y_1;
         double y_2;
+        
         ArrayList<ArrayList<Double>> x_matrix = new ArrayList<ArrayList<Double>>(0);
         ArrayList<ArrayList<Double>> y_matrix = new ArrayList<ArrayList<Double>>(0);
         ArrayList<Double> z_vector = new ArrayList<Double>(0);
-        ReadTable.func_read_table(filename, z_vector, x_matrix, y_matrix);
+        ReadTable.read_table(filename, z_vector, x_matrix, y_matrix);
         for (int i = 0; i < z_vector.size() - 1; i += 1) {
-            x_z_1 = func_extractColumn(x_matrix, i);
+            x_z_1 = extractColumn(x_matrix, i);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'x_z_1' assigned to ");
             outfile.print(x_z_1);
             outfile.println(" in module Interpolation");
             outfile.close();
-            y_z_1 = func_extractColumn(y_matrix, i);
+            y_z_1 = extractColumn(y_matrix, i);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'y_z_1' assigned to ");
             outfile.print(y_z_1);
             outfile.println(" in module Interpolation");
             outfile.close();
-            x_z_2 = func_extractColumn(x_matrix, i + 1);
+            x_z_2 = extractColumn(x_matrix, i + 1);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'x_z_2' assigned to ");
             outfile.print(x_z_2);
             outfile.println(" in module Interpolation");
             outfile.close();
-            y_z_2 = func_extractColumn(y_matrix, i + 1);
+            y_z_2 = extractColumn(y_matrix, i + 1);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'y_z_2' assigned to ");
             outfile.print(y_z_2);
             outfile.println(" in module Interpolation");
             outfile.close();
             try {
-                j = func_find(x_z_1, x);
+                j = find(x_z_1, x);
                 outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
                 outfile.print("var 'j' assigned to ");
                 outfile.print(j);
                 outfile.println(" in module Interpolation");
                 outfile.close();
-                k_2 = func_find(x_z_2, x);
+                k_2 = find(x_z_2, x);
                 outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
                 outfile.print("var 'k_2' assigned to ");
                 outfile.print(k_2);
@@ -261,20 +265,20 @@ public class Interpolation {
             } catch (Exception exc) {
                 continue;
             }
-            y_1 = func_lin_interp(x_z_1.get(j), y_z_1.get(j), x_z_1.get(j + 1), y_z_1.get(j + 1), x);
+            y_1 = lin_interp(x_z_1.get(j), y_z_1.get(j), x_z_1.get(j + 1), y_z_1.get(j + 1), x);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'y_1' assigned to ");
             outfile.print(y_1);
             outfile.println(" in module Interpolation");
             outfile.close();
-            y_2 = func_lin_interp(x_z_2.get(k_2), y_z_2.get(k_2), x_z_2.get(k_2 + 1), y_z_2.get(k_2 + 1), x);
+            y_2 = lin_interp(x_z_2.get(k_2), y_z_2.get(k_2), x_z_2.get(k_2 + 1), y_z_2.get(k_2 + 1), x);
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'y_2' assigned to ");
             outfile.print(y_2);
             outfile.println(" in module Interpolation");
             outfile.close();
             if (y_1 <= y && y <= y_2) {
-                return func_lin_interp(y_1, z_vector.get(i), y_2, z_vector.get(i + 1), y);
+                return lin_interp(y_1, z_vector.get(i), y_2, z_vector.get(i + 1), y);
             }
         }
         throw new Exception("Interpolation of z failed");

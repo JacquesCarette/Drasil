@@ -7,7 +7,7 @@ module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
-  asExpr, funcDef, fdec, ffor, funcData, quantvar, 
+  asVC, funcDef, fDecDef, ffor, funcData, quantvar, 
   multiLine, packmod, repeated, singleLine)
 
 allMods :: [Mod]
@@ -23,7 +23,7 @@ implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
 
 readTableMod :: Mod
 readTableMod = packmod "ReadTable"
-  "Provides a function for reading glass ASTM data" [readTable]
+  "Provides a function for reading glass ASTM data" [] [readTable]
 
 readTable :: Func
 readTable = funcData "read_table"
@@ -39,7 +39,7 @@ one = Integ 1
 two = Integ 2
 
 var :: String -> String -> Symbol -> Space -> QuantityDict
-var nam np = implVar nam (nounPhraseSP np)
+var nam np symb sp = implVar nam (nounPhraseSP np) sp symb
 
 y_2, y_1, x_2, x_1, x :: QuantityDict
 y_1  = var "y1" "lower y-coordinate"             (sub lY one) Real
@@ -106,16 +106,16 @@ aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, HasUID a, HasUID i, HasUID j) =
 aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 
 getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Expr
-getCol a_ i_ p = apply (asExpr extractColumnCT) [sy a_, sy i_ + p]
+getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, sy i_ + p]
 
 call :: Func -> [QuantityDict] -> FuncStmt
-call f l = FProcCall f $ map sy l
+call f l = FVal $ apply (asVC f) $ map sy l
 
 find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> Expr
-find zv z_ = apply (asExpr findCT) [sy zv, sy z_]
+find zv z_ = apply (asVC findCT) [sy zv, sy z_]
 
 linInterp :: [Expr] -> Expr
-linInterp = apply (asExpr linInterpCT)
+linInterp = apply (asVC linInterpCT)
 
 interpOver :: (HasUID ptx, HasUID pty, HasUID ind, HasUID vv,
   HasSymbol ptx, HasSymbol pty, HasSymbol ind, HasSymbol vv) =>
@@ -149,7 +149,7 @@ extractColumnCT :: Func
 extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
   [mat, j] (Vect Real) (Just "column of the given matrix at the given index")
   [
-    fdec col,
+    fDecDef col (Matrix [[]]),
     --
     ffor i (sy i $< dim (sy mat))
       [ FAppend (sy col) (aLook mat i j) ],
@@ -162,9 +162,9 @@ interpY = funcDef "interpY"
   [filename, x, z] Real (Just "y value interpolated at given x and z values")
   [
   -- hack
-  fdec xMatrix,
-  fdec yMatrix,
-  fdec zVector,
+  fDecDef xMatrix (Matrix [[]]),
+  fDecDef yMatrix (Matrix [[]]),
+  fDecDef zVector (Matrix [[]]),
   --
   call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
@@ -188,9 +188,9 @@ interpZ = funcDef "interpZ"
   [filename, x, y] Real (Just "z value interpolated at given x and y values")
   [
     -- hack
-  fdec xMatrix,
-  fdec yMatrix,
-  fdec zVector,
+  fDecDef xMatrix (Matrix [[]]),
+  fDecDef yMatrix (Matrix [[]]),
+  fDecDef zVector (Matrix [[]]),
   --
   call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
@@ -215,5 +215,5 @@ interpZ = funcDef "interpZ"
 
 interpMod :: Mod
 interpMod = packmod "Interpolation" 
-  "Provides functions for linear interpolation on three-dimensional data" 
+  "Provides functions for linear interpolation on three-dimensional data" []
   [linInterpCT, findCT, extractColumnCT, interpY, interpZ]

@@ -1,5 +1,6 @@
-Title: Being redundant just got less tedious! 
-          The Drasil framework.
+Title: Being redundant just got less tedious! The Drasil framework.
+OR
+Repeating Yourself Without Repeating Yourself: The Drasil framework.
 
 ==Intro==
 
@@ -72,6 +73,15 @@ heard 'assume each body is a sphere' during a physics lecture?
 *TBD see 'OLD STUFF' for ideas
 
 == A look under the hood - Our process ==
+  **Section roadmap: 
+    - We break down our artifacts to see commonalities
+    - Summarize and extract patterns
+    - Patterns inform a fluid organization of knowledge
+    - Organizing the knowledge gives us structure (Templates + quasi-knowledge-base)
+    - Structure gives us a starting point (Seeds of the Drasil framework)
+                                            |-> HA
+    - Next section -> Growing Drasil. (Because it came into being organically!)
+
 The first step in removing unnecessary redundancy is identifying exactly what
 that redundancy is, and where it exists. To that end we need to understand what
 each of our software artifacts is attempting to communicate, who their audience
@@ -89,7 +99,8 @@ given artifact in an effort for standardization. Ironically, this has led to
 many different 'standardized' templates. However, through the examination of a 
 number of templates for different artifact types, we have concluded they convey 
 roughly the same overall information for a given artifact. Most differences are
-stylistic or related to content organization.
+stylistic or related to content organization. 
+--Or naming conventions
 
 Once we understand our artifacts, we take a practical, example-driven approach 
 to identifying redundancy through the use of existing software system case 
@@ -137,17 +148,84 @@ document. For each of those symbols, we see the symbol itself, ...
   finish the description to make sure it's accurate. Building took too long
   for me to actually see the results before I had to commit/push/exit
 
-
 - Practical approach to design
 - Let's use some case studies
 - Understanding what's really going on
 
 -- Summary --
 
-See Table [NUM] for a summary of each software artifact's 'what', 'who', and 'how'.
+See Table [NUM] for a summary of each software artifact's 'what', 'who', and 
+'how'.
 
 *TABLE*
 | Artifact | Who (Audience) | What (Problem) | How (Specific vs boilerplate) |
+
+-- Patterns and repetition and patterns and repetition --
+From the above sections, we see many emerging patterns in our software 
+artifacts. Ignoring, for now, the organizational patterns from the [SmithEtAl] 
+templates we can already see simple patterns emerging. For example, we see the 
+same concept being introduced in multiple areas within a single artifact and 
+across artifacts in a project. [Example from one of the figures in the previous 
+section. Preferably something like a DD or TM that shows up within a single doc 
+multiple times]. We also see patterns of commonality across software family 
+members (The SWHS and NoPCM case studies) as they have been developed to solve 
+similar, or in our case nearly identical, problems.
+
+- inter-project (repetition throughout different views + other patterns.) 
+  vs intra-project knowledge (repetition across projects/family memebers, 
+  minor modifications, but fundamentally the same + other patterns.)
+- Hint at chunkifying/parceling out the fundamental (system/view-agnostic) 
+knowledge vs the specific knowledge
+  
+-- Organizing knowledge - a fluid approach --
+  **Subsec roadmap:
+    - We see the patterns above, we can generalize a lot of that
+    - Direct repetition (copy-paste) vs indirect repetition (view-changes)
+    require us to pull together knowledge from all artifacts into one place
+    - Some can be derived automatically, the rest must be explicitly stated
+    - We need to create a categorization system (hint at chunks) that is both 
+    robust and extensible to cover a wide variety of use cases.
+    - Finally the templates give us structure
+
+  **NOTE: Under the hood section should explain the process of how we determined
+  what we needed to do. What we ended up doing should come in the following
+  section(s) - no 'real' implementation details, only conceptual stuff.
+
+== Welcome to Drasil == 
+== ??? ==
+== ??? ==
+
+== Results ==
+
+-- Usability --
+
+One of Drasil's biggest issues is that of usability. Unless one reads the source
+code or has a member of the Drasil team working with them, it can be incredibly
+difficult, or even impossible, to create a new piece of software in Drasil.
+
+As seen in the examples from [SECTION], while the recipe language is fairly 
+readable, the knowledge-capture mechanisms are arcane and determining which 
+knowledge has already been added to the database can be very difficult. As our
+living knowledge-base expands, this will become even more difficult, 
+particularly for those concepts with many possible names.
+
+== Future Work ==
+
+Development of Drasil is ongoing and the framework is still being iterated upon
+to date. In this section we present areas we believe have room for improvement 
+along with plans for additional features to be added in the long-term.
+
+-- Usability --
+As mentioned in the results section, usability remains a great area for 
+improvement for Drasil. Work to create a visual front-end for the framework
+has been planned and we hope to eventually get to the point of usability being
+as simple as drag-and-drop or similar mechanisms.
+
+Work on usability will address each of the core areas of development with 
+Drasil: knowledge-capture of system-agnostic information, 
+knowledge-capture of system-specific information, and recipe creation and 
+modification.
+
 
 
 

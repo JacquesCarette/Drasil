@@ -15,7 +15,7 @@ import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants),
-  TheoryModel, outCons, HasInputs(inputs, inp_constraints))
+  TheoryModel, HasInputs(inputs, inp_constraints), HasOutput(output, out_constraints))
 import Utils.Drasil
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
@@ -171,7 +171,7 @@ mkIMField i m l@(Description v u) fs = (show l,
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
 mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getReferences) : fs
 mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
-  where x = P $ eqSymb i
+  where x = P . eqSymb $ i ^. output
 mkIMField i _ l@Input fs = 
   case i ^. inputs of
   [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
@@ -180,7 +180,7 @@ mkIMField i _ l@Input fs =
 mkIMField i _ l@InConstraints fs  = 
   (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. inp_constraints)) : fs
 mkIMField i _ l@OutConstraints fs = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. outCons)) : fs
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. out_constraints)) : fs
 mkIMField i _ l@Notes fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++

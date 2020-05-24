@@ -7,6 +7,7 @@ module Theory.Drasil.InstanceModel
   ) where
 
 import Language.Drasil
+import Theory.Drasil.Classes (HasInputs(inputs,inp_constraints))
 import Data.Drasil.IdeaDicts (inModel)
 
 import Control.Lens ((^.), makeLenses, view)
@@ -54,6 +55,9 @@ instance CommonIdea         InstanceModel where abrv _ = abrv inModel
 instance Referable          InstanceModel where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
+instance HasInputs          InstanceModel where
+  inputs          = imInputs
+  inp_constraints = inCons
 
 -- | Smart constructor for instance models with everything defined
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 

@@ -15,7 +15,7 @@ import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants),
-  TheoryModel, inCons, outCons, imInputs)
+  TheoryModel, outCons, HasInputs(inputs, inp_constraints))
 import Utils.Drasil
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
@@ -173,12 +173,12 @@ mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getReferences) : fs
 mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
   where x = P $ eqSymb i
 mkIMField i _ l@Input fs = 
-  case i ^. imInputs of
+  case i ^. inputs of
   [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
   (_:_) -> (show l, [mkParagraph $ foldl sC x xs]) : fs
-  where (x:xs) = map (P . eqSymb) $ i ^. imInputs
+  where (x:xs) = map (P . eqSymb) $ i ^. inputs
 mkIMField i _ l@InConstraints fs  = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. inCons)) : fs
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. inp_constraints)) : fs
 mkIMField i _ l@OutConstraints fs = 
   (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. outCons)) : fs
 mkIMField i _ l@Notes fs = 

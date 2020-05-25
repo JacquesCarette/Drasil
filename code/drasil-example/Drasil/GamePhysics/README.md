@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 19, 2019
+Last updated: May 25, 2020
 --------------------------------------------------
 
 **DesignDec**

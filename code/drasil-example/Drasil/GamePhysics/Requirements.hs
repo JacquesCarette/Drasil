@@ -100,39 +100,37 @@ deterCollRespOverTime = cic "deterCollRespOverTime" deterCollRespOverTimeDesc "D
 --------------------------------------
 
 nonfuncReqs :: [ConceptInstance] 
-nonfuncReqs = [highPerformance, correct, understandable, portable, reliable, reusable, maintainable]
+nonfuncReqs = [highPerformance, correct, usable, understandable, maintainable]
 
 highPerformance :: ConceptInstance
 highPerformance = cic "highPerformance" (foldlSent [
-  S "The", phrase code, S "has a short reponse time when performing computation"
+  S "The execution time for collision detection and collision resolution shall be", 
+  S "comparable to an existing 2D physics library on the market (e.g. Pymunk)."
   ]) "High-Performance" nonFuncReqDom
 
 correct :: ConceptInstance
-correct = cic "correct" (foldlSent [plural output_ `ofThe'` phrase code,
-  S "have the", plural property, S "described" `sIn` makeRef2S (SRS.propCorSol [] [])
+correct = cic "correct" (foldlSent [S "The", phrase output_ `sOf` S "simulation", 
+  S "results shall be compared to an existing implemenation like Pymunk."
   ]) "Correct" nonFuncReqDom
  
+usable :: ConceptInstance
+usable = cic "usable" (foldlSent [S "Software shall be easy to learn" `sAnd` S "use.",
+  S "Usability shall be measured by how long it takes a user to learn how to use", 
+  S "the library to create a small program to simulate the movement" `sOf` S "2 bodies", 
+  S "over time in space. Creating a program should take no less than 30 to 60 minutes", 
+  S "for an intermediate to experienced programmer. Please refer Usability NFR test" `sIn` makeRef2S (SRS.propCorSol [] []) -- wrong reference; placeholder
+  S "of System VnV Plan located at", 
+  S "https://github.com/smiths/caseStudies/blob/gamephy_finaldoc/CaseStudies/gamephys/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf" 
+  ]) "Usable" nonFuncReqDom
+
 understandable :: ConceptInstance
-understandable = cic "understandable" (foldlSent [
-  S "The", phrase code, S "is modularized with complete",
-  phrase mg `sAnd` phrase mis]) "Understandable" nonFuncReqDom
-
-portable :: ConceptInstance
-portable = cic "portable" (foldlSent [
-  S "The", phrase code, S "is able to be run in different", plural environment])
-  "Portable" nonFuncReqDom
-
-reliable :: ConceptInstance
-reliable = cic "reliable" (foldlSent [
-  S "The", phrase code, S "gives consistent", plural output_]) "Reliable" nonFuncReqDom
-
-reusable :: ConceptInstance
-reusable = cic "reusable" (foldlSent [
-  S "The", phrase code, S "is modularized"]) "Reusable" nonFuncReqDom
+understandable = cic "understandable" (foldlSent [S "Users" `sOf` S "Tamias2D shall be", 
+  S "able to learn the software with ease. Users shall be able to easily create", 
+  S "a small program using the library. Creating a small program to simulate", 
+  S "the movement of 2 bodies" `sIn` S "space should take no less that 60 minutes." 
+  ]) "Understandable" nonFuncReqDom
 
 maintainable :: ConceptInstance
 maintainable = cic "maintainable" (foldlSent [
-  S "The traceability between", foldlList Comma List [plural requirement,
-  plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
-  plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `sAnd` phrase mg]) "Maintainable" nonFuncReqDom
+  S "The development time for any " `ofThe` S "likely changes should not exceed", 
+  S "10% percent" `ofThe` S "original development time"]) "Maintainable" nonFuncReqDom

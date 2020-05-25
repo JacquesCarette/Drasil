@@ -79,7 +79,7 @@ void InputParameters::input_constraints() {
         std::cout << "Warning: ";
         std::cout << "v_launch has value ";
         std::cout << this->v_launch;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -88,7 +88,7 @@ void InputParameters::input_constraints() {
         std::cout << "Warning: ";
         std::cout << "theta has value ";
         std::cout << this->theta;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << 0;
         std::cout << " and ";
@@ -100,7 +100,7 @@ void InputParameters::input_constraints() {
         std::cout << "Warning: ";
         std::cout << "p_target has value ";
         std::cout << this->p_target;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;

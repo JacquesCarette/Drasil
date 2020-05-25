@@ -26,7 +26,7 @@ public class InputConstraints {
         if (!(0.1 <= inParams.a && inParams.a <= 5.0)) {
             System.out.print("a has value ");
             System.out.print(inParams.a);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("between ");
             System.out.print(0.1);
             System.out.print(" (d_min)");
@@ -39,7 +39,7 @@ public class InputConstraints {
         if (!(0.1 <= inParams.b && inParams.b <= 5.0)) {
             System.out.print("b has value ");
             System.out.print(inParams.b);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("between ");
             System.out.print(0.1);
             System.out.print(" (d_min)");
@@ -52,7 +52,7 @@ public class InputConstraints {
         if (!(4.5 <= inParams.w && inParams.w <= 910.0)) {
             System.out.print("w has value ");
             System.out.print(inParams.w);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("between ");
             System.out.print(4.5);
             System.out.print(" (w_min)");
@@ -65,7 +65,7 @@ public class InputConstraints {
         if (!(6.0 <= inParams.SD && inParams.SD <= 130.0)) {
             System.out.print("SD has value ");
             System.out.print(inParams.SD);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("between ");
             System.out.print(6.0);
             System.out.print(" (SD_min)");
@@ -78,7 +78,7 @@ public class InputConstraints {
         if (!(inParams.AR <= 5.0)) {
             System.out.print("AR has value ");
             System.out.print(inParams.AR);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("below ");
             System.out.print(5.0);
             System.out.print(" (AR_max)");
@@ -89,7 +89,7 @@ public class InputConstraints {
         if (!(inParams.a > 0)) {
             System.out.print("a has value ");
             System.out.print(inParams.a);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("above ");
             System.out.print(0);
             System.out.println(".");
@@ -98,7 +98,7 @@ public class InputConstraints {
         if (!(inParams.a >= inParams.b)) {
             System.out.print("a has value ");
             System.out.print(inParams.a);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("above ");
             System.out.print(inParams.b);
             System.out.print(" (b)");
@@ -108,7 +108,7 @@ public class InputConstraints {
         if (!(0 < inParams.b && inParams.b <= inParams.a)) {
             System.out.print("b has value ");
             System.out.print(inParams.b);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("between ");
             System.out.print(0);
             System.out.print(" and ");
@@ -120,7 +120,7 @@ public class InputConstraints {
         if (!(inParams.w > 0)) {
             System.out.print("w has value ");
             System.out.print(inParams.w);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("above ");
             System.out.print(0);
             System.out.println(".");
@@ -129,7 +129,7 @@ public class InputConstraints {
         if (!(0 <= inParams.P_btol && inParams.P_btol <= 1)) {
             System.out.print("P_btol has value ");
             System.out.print(inParams.P_btol);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("between ");
             System.out.print(0);
             System.out.print(" and ");
@@ -140,7 +140,7 @@ public class InputConstraints {
         if (!(inParams.TNT > 0)) {
             System.out.print("TNT has value ");
             System.out.print(inParams.TNT);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("above ");
             System.out.print(0);
             System.out.println(".");
@@ -149,7 +149,7 @@ public class InputConstraints {
         if (!(inParams.SD > 0)) {
             System.out.print("SD has value ");
             System.out.print(inParams.SD);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("above ");
             System.out.print(0);
             System.out.println(".");
@@ -158,7 +158,7 @@ public class InputConstraints {
         if (!(inParams.AR >= 1)) {
             System.out.print("AR has value ");
             System.out.print(inParams.AR);
-            System.out.print(" but expected to be ");
+            System.out.print(", but is expected to be ");
             System.out.print("above ");
             System.out.print(1);
             System.out.println(".");

@@ -14,7 +14,7 @@ def input_constraints(inParams):
     if (not(0.1 <= inParams.a and inParams.a <= 5.0)) :
         print("a has value ", end="")
         print(inParams.a, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("between ", end="")
         print(0.1, end="")
         print(" (d_min)", end="")
@@ -26,7 +26,7 @@ def input_constraints(inParams):
     if (not(0.1 <= inParams.b and inParams.b <= 5.0)) :
         print("b has value ", end="")
         print(inParams.b, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("between ", end="")
         print(0.1, end="")
         print(" (d_min)", end="")
@@ -38,7 +38,7 @@ def input_constraints(inParams):
     if (not(4.5 <= inParams.w and inParams.w <= 910.0)) :
         print("w has value ", end="")
         print(inParams.w, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("between ", end="")
         print(4.5, end="")
         print(" (w_min)", end="")
@@ -50,7 +50,7 @@ def input_constraints(inParams):
     if (not(6.0 <= inParams.SD and inParams.SD <= 130.0)) :
         print("SD has value ", end="")
         print(inParams.SD, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("between ", end="")
         print(6.0, end="")
         print(" (SD_min)", end="")
@@ -62,7 +62,7 @@ def input_constraints(inParams):
     if (not(inParams.AR <= 5.0)) :
         print("AR has value ", end="")
         print(inParams.AR, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("below ", end="")
         print(5.0, end="")
         print(" (AR_max)", end="")
@@ -72,7 +72,7 @@ def input_constraints(inParams):
     if (not(inParams.a > 0)) :
         print("a has value ", end="")
         print(inParams.a, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("above ", end="")
         print(0, end="")
         print(".")
@@ -80,7 +80,7 @@ def input_constraints(inParams):
     if (not(inParams.a >= inParams.b)) :
         print("a has value ", end="")
         print(inParams.a, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("above ", end="")
         print(inParams.b, end="")
         print(" (b)", end="")
@@ -89,7 +89,7 @@ def input_constraints(inParams):
     if (not(0 < inParams.b and inParams.b <= inParams.a)) :
         print("b has value ", end="")
         print(inParams.b, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("between ", end="")
         print(0, end="")
         print(" and ", end="")
@@ -100,7 +100,7 @@ def input_constraints(inParams):
     if (not(inParams.w > 0)) :
         print("w has value ", end="")
         print(inParams.w, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("above ", end="")
         print(0, end="")
         print(".")
@@ -108,7 +108,7 @@ def input_constraints(inParams):
     if (not(0 <= inParams.P_btol and inParams.P_btol <= 1)) :
         print("P_btol has value ", end="")
         print(inParams.P_btol, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("between ", end="")
         print(0, end="")
         print(" and ", end="")
@@ -118,7 +118,7 @@ def input_constraints(inParams):
     if (not(inParams.TNT > 0)) :
         print("TNT has value ", end="")
         print(inParams.TNT, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("above ", end="")
         print(0, end="")
         print(".")
@@ -126,7 +126,7 @@ def input_constraints(inParams):
     if (not(inParams.SD > 0)) :
         print("SD has value ", end="")
         print(inParams.SD, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("above ", end="")
         print(0, end="")
         print(".")
@@ -134,7 +134,7 @@ def input_constraints(inParams):
     if (not(inParams.AR >= 1)) :
         print("AR has value ", end="")
         print(inParams.AR, end="")
-        print(" but expected to be ", end="")
+        print(", but is expected to be ", end="")
         print("above ", end="")
         print(1, end="")
         print(".")

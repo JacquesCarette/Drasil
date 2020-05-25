@@ -121,7 +121,7 @@ public class Projectile {
             System.out.print("Warning: ");
             System.out.print("v_launch has value ");
             System.out.print(v_launch);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
             System.out.print(0);
             System.out.println(".");
@@ -130,7 +130,7 @@ public class Projectile {
             System.out.print("Warning: ");
             System.out.print("theta has value ");
             System.out.print(theta);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("between ");
             System.out.print(0);
             System.out.print(" and ");
@@ -142,7 +142,7 @@ public class Projectile {
             System.out.print("Warning: ");
             System.out.print("p_target has value ");
             System.out.print(p_target);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
             System.out.print(0);
             System.out.println(".");

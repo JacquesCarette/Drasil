@@ -21,7 +21,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(0.1 <= inParams.a && inParams.a <= 5.0)) {
         std::cout << "a has value ";
         std::cout << inParams.a;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "between ";
         std::cout << 0.1;
         std::cout << " (d_min)";
@@ -34,7 +34,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(0.1 <= inParams.b && inParams.b <= 5.0)) {
         std::cout << "b has value ";
         std::cout << inParams.b;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "between ";
         std::cout << 0.1;
         std::cout << " (d_min)";
@@ -47,7 +47,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(4.5 <= inParams.w && inParams.w <= 910.0)) {
         std::cout << "w has value ";
         std::cout << inParams.w;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "between ";
         std::cout << 4.5;
         std::cout << " (w_min)";
@@ -60,7 +60,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(6.0 <= inParams.SD && inParams.SD <= 130.0)) {
         std::cout << "SD has value ";
         std::cout << inParams.SD;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "between ";
         std::cout << 6.0;
         std::cout << " (SD_min)";
@@ -73,7 +73,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(inParams.AR <= 5.0)) {
         std::cout << "AR has value ";
         std::cout << inParams.AR;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "below ";
         std::cout << 5.0;
         std::cout << " (AR_max)";
@@ -84,7 +84,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(inParams.a > 0)) {
         std::cout << "a has value ";
         std::cout << inParams.a;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -93,7 +93,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(inParams.a >= inParams.b)) {
         std::cout << "a has value ";
         std::cout << inParams.a;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "above ";
         std::cout << inParams.b;
         std::cout << " (b)";
@@ -103,7 +103,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(0 < inParams.b && inParams.b <= inParams.a)) {
         std::cout << "b has value ";
         std::cout << inParams.b;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "between ";
         std::cout << 0;
         std::cout << " and ";
@@ -115,7 +115,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(inParams.w > 0)) {
         std::cout << "w has value ";
         std::cout << inParams.w;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -124,7 +124,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(0 <= inParams.P_btol && inParams.P_btol <= 1)) {
         std::cout << "P_btol has value ";
         std::cout << inParams.P_btol;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "between ";
         std::cout << 0;
         std::cout << " and ";
@@ -135,7 +135,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(inParams.TNT > 0)) {
         std::cout << "TNT has value ";
         std::cout << inParams.TNT;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -144,7 +144,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(inParams.SD > 0)) {
         std::cout << "SD has value ";
         std::cout << inParams.SD;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -153,7 +153,7 @@ void input_constraints(InputParameters &inParams) {
     if (!(inParams.AR >= 1)) {
         std::cout << "AR has value ";
         std::cout << inParams.AR;
-        std::cout << " but expected to be ";
+        std::cout << ", but is expected to be ";
         std::cout << "above ";
         std::cout << 1;
         std::cout << "." << std::endl;

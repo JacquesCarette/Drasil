@@ -32,7 +32,11 @@ README.md
   
 References.hs
   - References for the Game Physics example
-  
+
+Requirements.hs
+  - Requirements for the Game Physics example
+  - currently a work in progress (improvements/changes are being made to the NFRs)
+
 TMods.hs
   - Theoretical models for the Game Physics example
   

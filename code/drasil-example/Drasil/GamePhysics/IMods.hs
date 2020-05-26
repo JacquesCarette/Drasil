@@ -65,7 +65,7 @@ transMotOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
 rotMot :: InstanceModel
 rotMot = imNoDerivNoRefs rotMotRC [qw angularVelocity, qw time, qw torqueI, qw momentOfInertia]
   [sy angularVelocity $> 0, sy time $> 0, sy torqueI $> 0, sy momentOfInertia $> 0] 
-    (qw angularAccel) [sy angularAccel $> 0] "rotMot"
+    (qw angularAccel) [UpFrom (Exc, 0)] "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
 rotMotRC :: RelationConcept
@@ -91,7 +91,9 @@ rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
 col2D :: InstanceModel
 col2D = imNoDerivNoRefs col2DRC [qw time, qw impulseS, qw massA, qw normalVect] 
   [sy time $> 0, sy impulseS $> 0, sy massA $> 0, sy normalVect $> 0]
-  (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"
+  -- why a constraint on velA if velA is not an output?
+  -- (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"
+  (qw timeC) [UpFrom (Exc, 0)] "col2D"
   [col2DOutputs, rigidTwoDAssump, rightHandAssump, collisionAssump,
     noDampConsAssumps, impulseNote]
 

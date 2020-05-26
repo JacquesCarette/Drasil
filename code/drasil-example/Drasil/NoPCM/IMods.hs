@@ -33,7 +33,7 @@ iMods = [eBalanceOnWtr, heatEInWtr]
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC [qw tempC, qw tempInit, qw timeFinal, 
   qw coilSA, qw coilHTC, qw htCapW, qw wMass] 
-  [sy tempInit $<= sy tempC] (qw tempW) [0 $< sy time $< sy timeFinal]
+  [sy tempInit $<= sy tempC] (qw tempW) []
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
   [makeCiteInfo koothoor2013 $ RefNote "with PCM removed"] 
   (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrNotes

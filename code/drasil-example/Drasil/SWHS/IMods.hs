@@ -38,7 +38,8 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC [qw wMass, qw htCapW, qw coilHTC, qw pcmSA,
   qw pcmHTC, qw coilSA, qw tempPCM, qw timeFinal, qw tempC, qw tempInit]
-  [sy tempInit $< sy tempC] (qw tempW) [0 $<= sy time $<= sy timeFinal]
+  [sy tempInit $< sy tempC] (qw tempW) []
+  -- [0 $<= sy time $<= sy timeFinal]
   [makeCite koothoor2013] (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrDesc
 
 eBalanceOnWtrRC :: RelationConcept
@@ -183,7 +184,7 @@ eBalanceOnWtrDerivEqnsIM1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
 eBalanceOnPCM :: InstanceModel
 eBalanceOnPCM = im eBalanceOnPCMRC [qw tempMeltP, qw timeFinal, qw tempInit, qw pcmSA,
   qw pcmHTC, qw pcmMass, qw htCapSP, qw htCapLP]
-  [sy tempInit $< sy tempMeltP] (qw tempPCM) [0 $<= sy time $<= sy timeFinal]
+  [sy tempInit $< sy tempMeltP] (qw tempPCM) []
   [makeCite koothoor2013] (Just eBalanceOnPCMDeriv) "eBalanceOnPCM" balPCMNotes
 
 eBalanceOnPCMRC :: RelationConcept
@@ -309,7 +310,7 @@ eBalanceOnPCMDerivEqnsIM2 = [eBalanceOnPCMEqn1, eBalanceOnPCMEqn2,
 ---------
 heatEInWtr :: InstanceModel
 heatEInWtr = im heatEInWtrRC [qw tempInit, qw wMass, qw htCapW, qw wMass] 
-  [] (qw watE) [0 $<= sy time $<= sy timeFinal] [makeCite koothoor2013]
+  [] (qw watE) [] [makeCite koothoor2013]
   Nothing "heatEInWtr" htWtrNotes
 
 heatEInWtrRC :: RelationConcept
@@ -337,7 +338,7 @@ heatEInPCM :: InstanceModel
 heatEInPCM = imNoDeriv heatEInPCMRC [qw tempMeltP, qw timeFinal, qw tempInit, qw pcmSA,
   qw pcmHTC, qw pcmMass, qw htCapSP, qw htCapLP, qw tempPCM, qw htFusion, qw tInitMelt]
   [sy tempInit $< sy tempMeltP] (qw pcmE)
-  [0 $<= sy time $<= sy timeFinal] [makeCite koothoor2013]
+  [] [makeCite koothoor2013]
   "heatEInPCM" htPCMNotes
 
 heatEInPCMRC :: RelationConcept

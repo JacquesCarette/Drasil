@@ -16,4 +16,4 @@ class HasInputs c where
 
 class HasOutput c where
   output :: Lens' c QuantityDict
-  out_constraints :: Lens' c [Relation]
+  out_constraints :: Lens' c [RealInterval Expr Expr]

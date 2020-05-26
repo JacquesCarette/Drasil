@@ -180,7 +180,8 @@ mkIMField i _ l@Input fs =
 mkIMField i _ l@InConstraints fs  = 
   (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. inp_constraints)) : fs
 mkIMField i _ l@OutConstraints fs = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. out_constraints)) : fs
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . realInterval (i ^. output)) [] 
+    (i ^. out_constraints)) : fs
 mkIMField i _ l@Notes fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++

@@ -9,7 +9,7 @@ import Language.Drasil
 import Theory.Drasil.Classes (HasInputs(inputs,inp_constraints), HasOutput(..))
 import Data.Drasil.IdeaDicts (inModel)
 
-import Control.Lens ((^.), makeLenses, view)
+import Control.Lens ((^.), makeLenses, view, _1, _2)
 
 type Inputs = [QuantityDict]
 type Output = QuantityDict
@@ -17,7 +17,7 @@ type Output = QuantityDict
 -- All constraints in an InstanceModel are always 'Assumed' !
 type Constraints = [Relation]
 
-type OutputConstraints = Constraints
+type OutputConstraints = [RealInterval Expr Expr]
 type InputConstraints  = Constraints
 
 -- | An Instance Model is a RelationConcept that may have specific input/output
@@ -25,8 +25,7 @@ type InputConstraints  = Constraints
 data InstanceModel = IM { _rc :: RelationConcept
                         , _imInputs :: Inputs
                         , _inCons :: InputConstraints
-                        , _imOutput :: Output
-                        , _outCons :: OutputConstraints
+                        , _imOutput :: (Output, OutputConstraints)
                         , _ref :: [Reference]
                         , _deri :: Maybe Derivation
                         ,  lb :: ShortName
@@ -46,10 +45,7 @@ instance HasReference       InstanceModel where getReferences = ref
 instance HasShortName       InstanceModel where shortname = lb
 instance HasRefAddress      InstanceModel where getRefAdd = ra
 instance HasAdditionalNotes InstanceModel where getNotes = notes
-instance HasSymbol          InstanceModel where symbol = symbol . view imOutput -- ???
-instance HasSpace           InstanceModel where typ = imOutput . typ
 instance Quantity           InstanceModel where
-instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
 instance CommonIdea         InstanceModel where abrv _ = abrv inModel
 instance Referable          InstanceModel where
   refAdd      = getRefAdd
@@ -58,32 +54,35 @@ instance HasInputs          InstanceModel where
   inputs          = imInputs
   inp_constraints = inCons
 instance HasOutput          InstanceModel where
-  output          = imOutput
-  out_constraints = outCons
+  output          = imOutput . _1
+  out_constraints = imOutput . _2
+instance HasSymbol          InstanceModel where symbol = symbol . view output -- ???
+instance HasSpace           InstanceModel where typ = output . typ
+instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 
 -- | Smart constructor for instance models with everything defined
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 im rcon _ _  _ _  [] _  _  = error $ "Source field of " ++ rcon ^. uid ++ " is empty"
 im rcon i ic o oc r der sn = 
-  IM rcon i ic o oc r der (shortname' sn) (prependAbrv inModel sn)
+  IM rcon i ic (o, oc) r der (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no derivation
 imNoDeriv :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
 imNoDeriv rcon _ _  _ _ [] _  = error $ "Source field of " ++ rcon ^. uid ++ " is empty"
 imNoDeriv rcon i ic o oc r sn =
-  IM rcon i ic o oc r Nothing (shortname' sn) (prependAbrv inModel sn)
+  IM rcon i ic (o, oc) r Nothing (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no references
 imNoRefs :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 imNoRefs rcon i ic o oc der sn = 
-  IM rcon i ic o oc [] der (shortname' sn) (prependAbrv inModel sn)
+  IM rcon i ic (o, oc) [] der (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no derivations or references
 imNoDerivNoRefs :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> String -> [Sentence] -> InstanceModel
 imNoDerivNoRefs rcon i ic o oc sn = 
-  IM rcon i ic o oc [] Nothing (shortname' sn) (prependAbrv inModel sn)
+  IM rcon i ic (o, oc) [] Nothing (shortname' sn) (prependAbrv inModel sn)
 

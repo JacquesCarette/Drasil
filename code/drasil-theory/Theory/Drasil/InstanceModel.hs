@@ -2,7 +2,7 @@
 module Theory.Drasil.InstanceModel
   ( InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
-  , qw_uc, qwc
+  , qwUC, qwC
   ) where
 
 import Language.Drasil
@@ -81,9 +81,9 @@ imNoDerivNoRefs rcon i o oc sn =
   IM rcon i (o, oc) [] Nothing (shortname' sn) (prependAbrv inModel sn)
 
 -- | For building a quantity with no constraint
-qw_uc :: (Quantity q, MayHaveUnit q) => q -> Input 
-qw_uc x = (qw x, Nothing)
+qwUC :: (Quantity q, MayHaveUnit q) => q -> Input 
+qwUC x = (qw x, Nothing)
 
 -- | For building a quantity with a constraint
-qwc :: (Quantity q, MayHaveUnit q) => q -> RealInterval Expr Expr -> Input 
-qwc x y = (qw x, Just y)
+qwC :: (Quantity q, MayHaveUnit q) => q -> RealInterval Expr Expr -> Input 
+qwC x y = (qw x, Just y)

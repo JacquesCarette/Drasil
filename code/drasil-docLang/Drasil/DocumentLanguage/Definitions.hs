@@ -6,7 +6,7 @@ module Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(..),
 
 import Data.Map (keys)
 import Data.List (elem, nub)
-import Data.Maybe (catMaybes)
+import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (Symbol(..))
@@ -179,7 +179,7 @@ mkIMField i _ l@Input fs =
   (_:_) -> (show l, [mkParagraph $ foldl sC x xs]) : fs
   where (x:xs) = map (P . eqSymb . fst) $ i ^. inputs
 mkIMField i _ l@InConstraints fs  = 
-  let ll = catMaybes $ map (\(x,y) -> maybe Nothing (\z -> Just (x, z)) y) (i^.inputs) in
+  let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i^.inputs) in
   (show l, foldr ((:) . UlC . ulcc . EqnBlock . uncurry realInterval) [] ll) : fs
 mkIMField i _ l@OutConstraints fs = 
   (show l, foldr ((:) . UlC . ulcc . EqnBlock . realInterval (i ^. output)) [] 

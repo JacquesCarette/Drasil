@@ -1,7 +1,7 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, qwc, qw_uc)
+import Theory.Drasil (InstanceModel, im, qwC, qwUC)
 import Utils.Drasil
 import Control.Lens ((^.))
 
@@ -32,8 +32,8 @@ iMods = [eBalanceOnWtr, heatEInWtr]
 -- FIXME: comment on reference?
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC 
-  [(qwc tempC $ UpFrom (Inc, sy tempInit))
-  , qw_uc tempInit, qw_uc timeFinal, qw_uc coilSA, qw_uc coilHTC, qw_uc htCapW, qw_uc wMass] 
+  [qwC tempC $ UpFrom (Inc, sy tempInit)
+  , qwUC tempInit, qwUC timeFinal, qwUC coilSA, qwUC coilHTC, qwUC htCapW, qwUC wMass] 
   (qw tempW) []
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
   [makeCiteInfo koothoor2013 $ RefNote "with PCM removed"] 

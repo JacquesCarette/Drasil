@@ -3,7 +3,7 @@ module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM) w
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwc)
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC)
 import Utils.Drasil
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
@@ -30,8 +30,8 @@ iMods = [timeIM, landPosIM, offsetIM, messageIM]
 ---
 timeIM :: InstanceModel
 timeIM = imNoRefs timeRC 
-  [(qwc launSpeed $ UpFrom (Exc, 0))
-  ,(qwc launAngle $ Bounded (Exc, 0) (Exc, sy pi_ / 2))]
+  [qwC launSpeed $ UpFrom (Exc, 0)
+  ,qwC launAngle $ Bounded (Exc, 0) (Exc, sy pi_ / 2)]
   (qw flightDur) [UpFrom (Exc, 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
@@ -77,8 +77,8 @@ timeDerivEqn5 = sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy gravi
 ---
 landPosIM :: InstanceModel
 landPosIM = imNoRefs landPosRC 
-  [(qwc launSpeed $ UpFrom (Exc, 0)), 
-   (qwc launAngle $ Bounded (Exc, 0) (Exc, sy pi_ / 2))]
+  [qwC launSpeed $ UpFrom (Exc, 0), 
+   qwC launAngle $ Bounded (Exc, 0) (Exc, sy pi_ / 2)]
   (qw landPos) [UpFrom (Exc, 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
 
@@ -122,7 +122,7 @@ landPosDerivEqn3 = sy landPos $= sy launSpeed * cos (sy launAngle) * 2 * sy laun
 ---
 offsetIM :: InstanceModel
 offsetIM = imNoDerivNoRefs offsetRC
-  [(qwc landPos $ UpFrom (Exc, 0)), (qwc targPos $ UpFrom (Exc, 0))]
+  [qwC landPos $ UpFrom (Exc, 0), qwC targPos $ UpFrom (Exc, 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
 offsetRC :: RelationConcept
@@ -132,8 +132,8 @@ offsetRC = makeRC "offsetRC" (nounPhraseSP "offset")
 ---
 messageIM :: InstanceModel
 messageIM = imNoDerivNoRefs messageRC 
-  [(qwc offset $ UpFrom (Exc, negate (sy landPos)))
-  ,(qwc targPos $ UpFrom (Exc, 0))]
+  [qwC offset $ UpFrom (Exc, negate (sy landPos))
+  ,qwC targPos $ UpFrom (Exc, 0)]
   (qw message)
   [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
 

@@ -2,7 +2,7 @@ module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
 import Language.Drasil
 import Language.Drasil.ShortHands (lI)
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, qwc)
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, qwC)
 import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
@@ -31,11 +31,11 @@ iMods = [transMot, rotMot, col2D]
 {-- Force on the translational motion  --}
 transMot :: InstanceModel
 transMot = imNoDerivNoRefs transMotRC 
-  [(qwc velI $ UpFrom (Exc, 0))
-  ,(qwc time $ UpFrom (Exc, 0))
-  ,(qwc gravitationalAccel $ UpFrom (Exc, 0))
-  ,(qwc forceI $ UpFrom (Exc, 0))
-  ,(qwc massI $ UpFrom (Exc, 0))
+  [qwC velI $ UpFrom (Exc, 0)
+  ,qwC time $ UpFrom (Exc, 0)
+  ,qwC gravitationalAccel $ UpFrom (Exc, 0)
+  ,qwC forceI $ UpFrom (Exc, 0)
+  ,qwC massI $ UpFrom (Exc, 0)
   ]
   (qw accI) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
@@ -69,10 +69,10 @@ transMotOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
 
 rotMot :: InstanceModel
 rotMot = imNoDerivNoRefs rotMotRC 
-  [(qwc angularVelocity $ UpFrom (Exc, 0))
-  ,(qwc time $ UpFrom (Exc, 0))
-  ,(qwc torqueI $ UpFrom (Exc, 0))
-  ,(qwc momentOfInertia $ UpFrom (Exc, 0))
+  [qwC angularVelocity $ UpFrom (Exc, 0)
+  ,qwC time $ UpFrom (Exc, 0)
+  ,qwC torqueI $ UpFrom (Exc, 0)
+  ,qwC momentOfInertia $ UpFrom (Exc, 0)
   ]
     (qw angularAccel) [UpFrom (Exc, 0)] "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
@@ -99,10 +99,10 @@ rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
 
 col2D :: InstanceModel
 col2D = imNoDerivNoRefs col2DRC
-  [(qwc time $ UpFrom (Exc, 0))
-  ,(qwc impulseS $ UpFrom (Exc, 0))
-  ,(qwc massA $ UpFrom (Exc, 0))
-  ,(qwc normalVect $ UpFrom (Exc, 0))
+  [qwC time $ UpFrom (Exc, 0)
+  ,qwC impulseS $ UpFrom (Exc, 0)
+  ,qwC massA $ UpFrom (Exc, 0)
+  ,qwC normalVect $ UpFrom (Exc, 0)
   ]
   -- why a constraint on velA if velA is not an output?
   -- (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"

@@ -19,6 +19,7 @@ module Drasil.DocLang (
   -- Sections.AuxiliaryConstants
   -- Sections.GeneralSystDesc
   -- Sections.Introduction
+  purpDoc,
   -- Sections.ReferenceMaterial
   intro,
   -- Sections.Requirements
@@ -55,7 +56,7 @@ import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
 --import Drasil.DocumentLanguage.TraceabilityMatrix
 --import Drasil.Sections.AuxiliaryConstants
 --import Drasil.Sections.GeneralSystDesc
---import Drasil.Sections.Introduction
+import Drasil.Sections.Introduction (purpDoc)
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.Requirements (inReq, inTable, mkInputPropsTable,
   mkQRTuple, mkQRTupleRef, mkValsSourceTable)

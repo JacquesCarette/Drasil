@@ -98,7 +98,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab glassBR)
       (short glassBR)
-    [IPurpose $ purpOfDocIntro document glassBR glaSlab,
+    [IPurpose $ [purpOfDocIntro document glassBR glaSlab],
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
      IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],

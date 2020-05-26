@@ -97,7 +97,7 @@ mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
-    [ IPurpose prpsOfDoc_p1
+    [ IPurpose [prpsOfDoc_p1]
     , IScope scope
     , IChar []
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,

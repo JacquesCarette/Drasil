@@ -64,7 +64,7 @@ resourcePath = "../../../datafiles/GamePhysics/"
 mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
   IntroSec $ IntroProg para1_introduction_intro (short gamePhysics)
-  [IPurpose para1_purpose_of_document_intro,
+  [IPurpose [para1_purpose_of_document_intro],
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
    IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],

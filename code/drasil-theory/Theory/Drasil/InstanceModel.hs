@@ -2,6 +2,7 @@
 module Theory.Drasil.InstanceModel
   ( InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
+  , qw_uc, qwc
   ) where
 
 import Language.Drasil
@@ -10,7 +11,7 @@ import Data.Drasil.IdeaDicts (inModel)
 
 import Control.Lens ((^.), makeLenses, view, _1, _2)
 
-type Inputs = [(QuantityDict, [Relation])]
+type Inputs = [(QuantityDict, Maybe Relation)]
 type Output = QuantityDict
 
 type OutputConstraints = [RealInterval Expr Expr]
@@ -79,3 +80,10 @@ imNoDerivNoRefs :: RelationConcept -> Inputs -> Output ->
 imNoDerivNoRefs rcon i o oc sn = 
   IM rcon i (o, oc) [] Nothing (shortname' sn) (prependAbrv inModel sn)
 
+-- | For building a quantity with no constraint
+qw_uc :: (Quantity q, MayHaveUnit q) => q -> (QuantityDict, Maybe Relation) 
+qw_uc x = (qw x, Nothing)
+
+-- | For building a quantity with a constraint
+qwc :: (Quantity q, MayHaveUnit q) => q -> Relation -> (QuantityDict, Maybe Relation) 
+qwc x y = (qw x, Just y)

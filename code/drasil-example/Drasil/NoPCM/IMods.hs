@@ -1,7 +1,7 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im)
+import Theory.Drasil (InstanceModel, im, qwc, qw_uc)
 import Utils.Drasil
 import Control.Lens ((^.))
 
@@ -26,18 +26,14 @@ import Drasil.NoPCM.Goals (waterTempGS, waterEnergyGS)
 iMods :: [InstanceModel]
 iMods = [eBalanceOnWtr, heatEInWtr]
 
--- helpers, will find a better home later
-qw0 :: (Quantity q, MayHaveUnit q) => q -> (QuantityDict, [a]) 
-qw0 x = (qw x, [])
-
 ---------
 -- IM1 --
 ---------
 -- FIXME: comment on reference?
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC 
-  [(qw tempC, [sy tempInit $<= sy tempC])
-  , qw0 tempInit, qw0 timeFinal, qw0 coilSA, qw0 coilHTC, qw0 htCapW, qw0 wMass] 
+  [(qwc tempC $ sy tempInit $<= sy tempC)
+  , qw_uc tempInit, qw_uc timeFinal, qw_uc coilSA, qw_uc coilHTC, qw_uc htCapW, qw_uc wMass] 
   (qw tempW) []
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
   [makeCiteInfo koothoor2013 $ RefNote "with PCM removed"] 

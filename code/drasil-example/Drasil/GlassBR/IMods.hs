@@ -2,7 +2,7 @@ module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) wher
 
 import Prelude hiding (exp)
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDeriv)
+import Theory.Drasil (InstanceModel, imNoDeriv, qwc)
 import Utils.Drasil
 
 import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand,
@@ -25,7 +25,7 @@ symb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++
 
 pbIsSafe :: InstanceModel
 pbIsSafe = imNoDeriv pbIsSafeRC
-  [(qw probBr, [sy probBr $>0]), (qw pbTol, [sy pbTol $>0 ])]
+  [(qwc probBr $ sy probBr $>0), (qwc pbTol $ sy pbTol $>0)]
   (qw isSafePb) []
   [makeCite astm2009] "isSafePb"
   [pbIsSafeDesc, probBRRef, pbTolUsr]
@@ -39,7 +39,7 @@ pbIsSafeRC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
 
 lrIsSafe :: InstanceModel
 lrIsSafe = imNoDeriv lrIsSafeRC 
-  [(qw lRe, [sy lRe $> 0]), (qw demand, [sy demand $> 0])]
+  [(qwc lRe $ sy lRe $> 0), (qwc demand $ sy demand $> 0)]
   (qw isSafeLR) []
   [makeCite astm2009] "isSafeLR"
   [lrIsSafeDesc, capRef, qRef] 

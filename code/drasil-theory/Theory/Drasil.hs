@@ -9,6 +9,7 @@ module Theory.Drasil (
   -- InstanceModel
   , InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
+  , qw_uc, qwc
   -- Theory
   , Theory(..), TheoryModel, tm, tmNoRefs
 ) where

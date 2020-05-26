@@ -2,7 +2,7 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
   eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, imNoDeriv)
+import Theory.Drasil (InstanceModel, im, imNoDeriv, qw_uc, qwc)
 import Utils.Drasil
 import Control.Lens((^.))
 
@@ -32,18 +32,14 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htFluxC, htFluxP, htCapLP,
 iMods :: [InstanceModel]
 iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
--- helpers, will find a better home later
-qw0 :: (Quantity q, MayHaveUnit q) => q -> (QuantityDict, [a]) 
-qw0 x = (qw x, [])
-
 ---------
 -- IM1 --
 ---------
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC 
-  [qw0 wMass ,qw0 htCapW, qw0 coilHTC, qw0 pcmSA, qw0 pcmHTC, qw0 coilSA
-  ,qw0 tempPCM, qw0 timeFinal, (qw tempC, [sy tempInit $< sy tempC])
-  ,qw0 tempInit]
+  [qw_uc wMass ,qw_uc htCapW, qw_uc coilHTC, qw_uc pcmSA, qw_uc pcmHTC, qw_uc coilSA
+  ,qw_uc tempPCM, qw_uc timeFinal, (qwc tempC $ sy tempInit $< sy tempC)
+  ,qw_uc tempInit]
   -- [sy tempInit $< sy tempC] 
   (qw tempW) []
   -- [0 $<= sy time $<= sy timeFinal]
@@ -189,9 +185,9 @@ eBalanceOnWtrDerivEqnsIM1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
 -- IM2 --
 ---------
 eBalanceOnPCM :: InstanceModel
-eBalanceOnPCM = im eBalanceOnPCMRC [(qw tempMeltP, [sy tempInit $< sy tempMeltP])
-  , qw0 timeFinal, qw0 tempInit, qw0 pcmSA
-  , qw0 pcmHTC, qw0 pcmMass, qw0 htCapSP, qw0 htCapLP]
+eBalanceOnPCM = im eBalanceOnPCMRC [(qwc tempMeltP $ sy tempInit $< sy tempMeltP)
+  , qw_uc timeFinal, qw_uc tempInit, qw_uc pcmSA
+  , qw_uc pcmHTC, qw_uc pcmMass, qw_uc htCapSP, qw_uc htCapLP]
   (qw tempPCM) []
   [makeCite koothoor2013] (Just eBalanceOnPCMDeriv) "eBalanceOnPCM" balPCMNotes
 
@@ -317,7 +313,7 @@ eBalanceOnPCMDerivEqnsIM2 = [eBalanceOnPCMEqn1, eBalanceOnPCMEqn2,
 -- IM3 --
 ---------
 heatEInWtr :: InstanceModel
-heatEInWtr = im heatEInWtrRC [qw0 tempInit, qw0 wMass, qw0 htCapW, qw0 wMass] 
+heatEInWtr = im heatEInWtrRC [qw_uc tempInit, qw_uc wMass, qw_uc htCapW, qw_uc wMass] 
   (qw watE) [] [makeCite koothoor2013]
   Nothing "heatEInWtr" htWtrNotes
 
@@ -343,9 +339,9 @@ htWtrNotes = map foldlSent [
 -- IM4 --
 ---------
 heatEInPCM :: InstanceModel
-heatEInPCM = imNoDeriv heatEInPCMRC [(qw tempMeltP, [sy tempInit $< sy tempMeltP])
-  , qw0 timeFinal, qw0 tempInit, qw0 pcmSA, qw0 pcmHTC
-  , qw0 pcmMass, qw0 htCapSP, qw0 htCapLP, qw0 tempPCM, qw0 htFusion, qw0 tInitMelt]
+heatEInPCM = imNoDeriv heatEInPCMRC [(qwc tempMeltP $ sy tempInit $< sy tempMeltP)
+  , qw_uc timeFinal, qw_uc tempInit, qw_uc pcmSA, qw_uc pcmHTC
+  , qw_uc pcmMass, qw_uc htCapSP, qw_uc htCapLP, qw_uc tempPCM, qw_uc htFusion, qw_uc tInitMelt]
   (qw pcmE)
   [] [makeCite koothoor2013]
   "heatEInPCM" htPCMNotes

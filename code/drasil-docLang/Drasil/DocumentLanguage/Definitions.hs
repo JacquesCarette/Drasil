@@ -6,6 +6,7 @@ module Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(..),
 
 import Data.Map (keys)
 import Data.List (elem, nub)
+import Data.Maybe (catMaybes)
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (Symbol(..))
@@ -178,7 +179,7 @@ mkIMField i _ l@Input fs =
   (_:_) -> (show l, [mkParagraph $ foldl sC x xs]) : fs
   where (x:xs) = map (P . eqSymb . fst) $ i ^. inputs
 mkIMField i _ l@InConstraints fs  = 
-  let ll = concatMap snd (i ^. inputs) in
+  let ll = catMaybes $ map snd (i ^. inputs) in
   (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] ll) : fs
 mkIMField i _ l@OutConstraints fs = 
   (show l, foldr ((:) . UlC . ulcc . EqnBlock . realInterval (i ^. output)) [] 

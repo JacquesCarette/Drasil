@@ -3,7 +3,7 @@ module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM) w
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs)
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwc)
 import Utils.Drasil
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
@@ -30,8 +30,8 @@ iMods = [timeIM, landPosIM, offsetIM, messageIM]
 ---
 timeIM :: InstanceModel
 timeIM = imNoRefs timeRC 
-  [(qw launSpeed, [sy launSpeed $> 0]), 
-   (qw launAngle, [0 $< sy launAngle $< (sy pi_ / 2)])]
+  [(qwc launSpeed $ sy launSpeed $> 0), 
+   (qwc launAngle $ 0 $< sy launAngle $< (sy pi_ / 2))]
   (qw flightDur) [UpFrom (Exc, 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
@@ -77,8 +77,8 @@ timeDerivEqn5 = sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy gravi
 ---
 landPosIM :: InstanceModel
 landPosIM = imNoRefs landPosRC 
-  [(qw launSpeed, [sy launSpeed $> 0]), 
-   (qw launAngle, [0 $< sy launAngle $< (sy pi_ / 2)])]
+  [(qwc launSpeed $ sy launSpeed $> 0), 
+   (qwc launAngle $ 0 $< sy launAngle $< (sy pi_ / 2))]
   (qw landPos) [UpFrom (Exc, 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
 
@@ -122,7 +122,7 @@ landPosDerivEqn3 = sy landPos $= sy launSpeed * cos (sy launAngle) * 2 * sy laun
 ---
 offsetIM :: InstanceModel
 offsetIM = imNoDerivNoRefs offsetRC
-  [(qw landPos, [sy landPos $> 0]), (qw targPos, [sy targPos $> 0])]
+  [(qwc landPos $ sy landPos $> 0), (qwc targPos $ sy targPos $> 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
 offsetRC :: RelationConcept
@@ -132,8 +132,8 @@ offsetRC = makeRC "offsetRC" (nounPhraseSP "offset")
 ---
 messageIM :: InstanceModel
 messageIM = imNoDerivNoRefs messageRC 
-  [(qw offset, [sy offset $> negate (sy landPos)])
-  ,(qw targPos, [sy targPos $> 0])]
+  [(qwc offset $ sy offset $> negate (sy landPos))
+  ,(qwc targPos $ sy targPos $> 0)]
   (qw message)
   [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
 

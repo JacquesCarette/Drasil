@@ -2,7 +2,7 @@ module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
 import Language.Drasil
 import Language.Drasil.ShortHands (lI)
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs)
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, qwc)
 import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
@@ -31,11 +31,11 @@ iMods = [transMot, rotMot, col2D]
 {-- Force on the translational motion  --}
 transMot :: InstanceModel
 transMot = imNoDerivNoRefs transMotRC 
-  [(qw velI, [sy velI $> 0])
-  ,(qw time, [sy time $> 0])
-  ,(qw gravitationalAccel, [sy gravitationalAccel $> 0])
-  ,(qw forceI, [sy forceI $> 0])
-  ,(qw massI, [sy massI $> 0])
+  [(qwc velI $ sy velI $> 0)
+  ,(qwc time $ sy time $> 0)
+  ,(qwc gravitationalAccel $ sy gravitationalAccel $> 0)
+  ,(qwc forceI $ sy forceI $> 0)
+  ,(qwc massI $ sy massI $> 0)
   ]
   (qw accI) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
@@ -69,10 +69,10 @@ transMotOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
 
 rotMot :: InstanceModel
 rotMot = imNoDerivNoRefs rotMotRC 
-  [(qw angularVelocity, [sy angularVelocity $> 0])
-  ,(qw time, [sy time $> 0])
-  ,(qw torqueI, [sy torqueI $> 0])
-  ,(qw momentOfInertia, [sy momentOfInertia $> 0])
+  [(qwc angularVelocity $ sy angularVelocity $> 0)
+  ,(qwc time $ sy time $> 0)
+  ,(qwc torqueI $ sy torqueI $> 0)
+  ,(qwc momentOfInertia $ sy momentOfInertia $> 0)
   ]
     (qw angularAccel) [UpFrom (Exc, 0)] "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
@@ -99,10 +99,10 @@ rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
 
 col2D :: InstanceModel
 col2D = imNoDerivNoRefs col2DRC
-  [(qw time, [sy time $> 0])
-  ,(qw impulseS, [sy impulseS $> 0])
-  ,(qw massA, [sy massA $> 0])
-  ,(qw normalVect, [sy normalVect $> 0])
+  [(qwc time $ sy time $> 0)
+  ,(qwc impulseS $ sy impulseS $> 0)
+  ,(qwc massA $ sy massA $> 0)
+  ,(qwc normalVect $ sy normalVect $> 0)
   ]
   -- why a constraint on velA if velA is not an output?
   -- (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"

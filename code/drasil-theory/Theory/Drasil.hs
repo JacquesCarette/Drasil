@@ -7,7 +7,7 @@ module Theory.Drasil (
   -- GenDefn
   , GenDefn, gd, gdNoRefs
   -- InstanceModel
-  , InstanceModel, Constraints
+  , InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
   -- Theory
   , Theory(..), TheoryModel, tm, tmNoRefs

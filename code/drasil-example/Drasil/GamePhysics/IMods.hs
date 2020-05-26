@@ -30,8 +30,13 @@ iMods = [transMot, rotMot, col2D]
 
 {-- Force on the translational motion  --}
 transMot :: InstanceModel
-transMot = imNoDerivNoRefs transMotRC [qw velI, qw time, qw gravitationalAccel, qw forceI, qw massI] 
-  [sy velI $> 0, sy time $> 0, sy gravitationalAccel $> 0, sy forceI $> 0, sy massI $> 0 ]
+transMot = imNoDerivNoRefs transMotRC 
+  [(qw velI, [sy velI $> 0])
+  ,(qw time, [sy time $> 0])
+  ,(qw gravitationalAccel, [sy gravitationalAccel $> 0])
+  ,(qw forceI, [sy forceI $> 0])
+  ,(qw massI, [sy massI $> 0])
+  ]
   (qw accI) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
 transMotRC :: RelationConcept
@@ -63,8 +68,12 @@ transMotOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
 {-- Rotational Motion --}
 
 rotMot :: InstanceModel
-rotMot = imNoDerivNoRefs rotMotRC [qw angularVelocity, qw time, qw torqueI, qw momentOfInertia]
-  [sy angularVelocity $> 0, sy time $> 0, sy torqueI $> 0, sy momentOfInertia $> 0] 
+rotMot = imNoDerivNoRefs rotMotRC 
+  [(qw angularVelocity, [sy angularVelocity $> 0])
+  ,(qw time, [sy time $> 0])
+  ,(qw torqueI, [sy torqueI $> 0])
+  ,(qw momentOfInertia, [sy momentOfInertia $> 0])
+  ]
     (qw angularAccel) [UpFrom (Exc, 0)] "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
@@ -89,8 +98,12 @@ rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
 {-- 2D Collision --}
 
 col2D :: InstanceModel
-col2D = imNoDerivNoRefs col2DRC [qw time, qw impulseS, qw massA, qw normalVect] 
-  [sy time $> 0, sy impulseS $> 0, sy massA $> 0, sy normalVect $> 0]
+col2D = imNoDerivNoRefs col2DRC
+  [(qw time, [sy time $> 0])
+  ,(qw impulseS, [sy impulseS $> 0])
+  ,(qw massA, [sy massA $> 0])
+  ,(qw normalVect, [sy normalVect $> 0])
+  ]
   -- why a constraint on velA if velA is not an output?
   -- (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"
   (qw timeC) [UpFrom (Exc, 0)] "col2D"

@@ -29,8 +29,10 @@ iMods = [timeIM, landPosIM, offsetIM, messageIM]
 
 ---
 timeIM :: InstanceModel
-timeIM = imNoRefs timeRC [qw launSpeed, qw launAngle]
-  [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw flightDur) [UpFrom (Exc, 0)]
+timeIM = imNoRefs timeRC 
+  [(qw launSpeed, [sy launSpeed $> 0]), 
+   (qw launAngle, [0 $< sy launAngle $< (sy pi_ / 2)])]
+  (qw flightDur) [UpFrom (Exc, 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
 timeRC :: RelationConcept
@@ -74,8 +76,10 @@ timeDerivEqn5 = sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy gravi
 
 ---
 landPosIM :: InstanceModel
-landPosIM = imNoRefs landPosRC [qw launSpeed, qw launAngle]
-  [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw landPos) [UpFrom (Exc, 0)]
+landPosIM = imNoRefs landPosRC 
+  [(qw launSpeed, [sy launSpeed $> 0]), 
+   (qw launAngle, [0 $< sy launAngle $< (sy pi_ / 2)])]
+  (qw landPos) [UpFrom (Exc, 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
 
 landPosExpr :: Expr
@@ -117,9 +121,9 @@ landPosDerivEqn3 = sy landPos $= sy launSpeed * cos (sy launAngle) * 2 * sy laun
 
 ---
 offsetIM :: InstanceModel
-offsetIM = imNoDerivNoRefs offsetRC [qw landPos, qw targPos]
-  [sy landPos $> 0, sy targPos $> 0] (qw offset)
-  [] "offsetIM" [landPosNote, landAndTargPosConsNote]
+offsetIM = imNoDerivNoRefs offsetRC
+  [(qw landPos, [sy landPos $> 0]), (qw targPos, [sy targPos $> 0])]
+  (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
 offsetRC :: RelationConcept
 offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") 
@@ -127,8 +131,10 @@ offsetRC = makeRC "offsetRC" (nounPhraseSP "offset")
 
 ---
 messageIM :: InstanceModel
-messageIM = imNoDerivNoRefs messageRC [qw offset, qw targPos]
-  [sy targPos $> 0, sy offset $> negate (sy landPos)] (qw message)
+messageIM = imNoDerivNoRefs messageRC 
+  [(qw offset, [sy offset $> negate (sy landPos)])
+  ,(qw targPos, [sy targPos $> 0])]
+  (qw message)
   [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
 
 messageRC :: RelationConcept

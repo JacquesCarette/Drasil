@@ -313,9 +313,10 @@ eBalanceOnPCMDerivEqnsIM2 = [eBalanceOnPCMEqn1, eBalanceOnPCMEqn2,
 -- IM3 --
 ---------
 heatEInWtr :: InstanceModel
-heatEInWtr = im heatEInWtrRC [qw_uc tempInit, qw_uc wMass, qw_uc htCapW, qw_uc wMass] 
+heatEInWtr = imNoDeriv heatEInWtrRC 
+  [qw_uc tempInit, qw_uc wMass, qw_uc htCapW, qw_uc wMass] 
   (qw watE) [] [makeCite koothoor2013]
-  Nothing "heatEInWtr" htWtrNotes
+  "heatEInWtr" htWtrNotes
 
 heatEInWtrRC :: RelationConcept
 heatEInWtrRC = makeRC "heatEInWtrRC" (nounPhraseSP "Heat energy in the water")

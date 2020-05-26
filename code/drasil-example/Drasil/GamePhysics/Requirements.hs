@@ -118,9 +118,7 @@ usable = cic "usable" (foldlSent [S "Software shall be easy to learn" `sAnd` S "
   S "Usability shall be measured by how long it takes a user to learn how to use", 
   S "the library to create a small program to simulate the movement" `sOf` S "2 bodies", 
   S "over time in space. Creating a program should take no less than 30 to 60 minutes", 
-  S "for an intermediate to experienced programmer. Please refer Usability NFR test" `sIn` makeRef2S (SRS.propCorSol [] []) -- wrong reference; placeholder
-  S "of System VnV Plan located at", 
-  S "https://github.com/smiths/caseStudies/blob/gamephy_finaldoc/CaseStudies/gamephys/docs/VnVPlan/SystVnVPlan/SystVnVPlan.pdf" 
+  S "for an intermediate to experienced programmer." 
   ]) "Usable" nonFuncReqDom
 
 understandable :: ConceptInstance

@@ -38,7 +38,7 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC 
   [qw_uc wMass ,qw_uc htCapW, qw_uc coilHTC, qw_uc pcmSA, qw_uc pcmHTC, qw_uc coilSA
-  ,qw_uc tempPCM, qw_uc timeFinal, (qwc tempC $ sy tempInit $< sy tempC)
+  ,qw_uc tempPCM, qw_uc timeFinal, (qwc tempC $ UpFrom (Exc, sy tempInit))
   ,qw_uc tempInit]
   -- [sy tempInit $< sy tempC] 
   (qw tempW) []
@@ -185,7 +185,7 @@ eBalanceOnWtrDerivEqnsIM1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
 -- IM2 --
 ---------
 eBalanceOnPCM :: InstanceModel
-eBalanceOnPCM = im eBalanceOnPCMRC [(qwc tempMeltP $ sy tempInit $< sy tempMeltP)
+eBalanceOnPCM = im eBalanceOnPCMRC [(qwc tempMeltP $ UpFrom (Exc, sy tempInit))
   , qw_uc timeFinal, qw_uc tempInit, qw_uc pcmSA
   , qw_uc pcmHTC, qw_uc pcmMass, qw_uc htCapSP, qw_uc htCapLP]
   (qw tempPCM) []
@@ -199,7 +199,7 @@ eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
 balPCMRel :: Relation
 balPCMRel = deriv (sy tempPCM) time $= completeCase [case1, case2, case3]
   where case1 = ((1 / sy tauSP) * (apply1 tempW time -
-          apply1 tempPCM time), realInterval tempPCM (UpTo (Exc,sy tempMeltP)))
+          apply1 tempPCM time), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))
         case2 = ((1 / sy tauLP) * (apply1 tempW time -
           apply1 tempPCM time), realInterval tempPCM (UpFrom (Exc,sy tempMeltP)))
         case3 = (0, sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc,0) (Exc,1)))
@@ -339,7 +339,7 @@ htWtrNotes = map foldlSent [
 -- IM4 --
 ---------
 heatEInPCM :: InstanceModel
-heatEInPCM = imNoDeriv heatEInPCMRC [(qwc tempMeltP $ sy tempInit $< sy tempMeltP)
+heatEInPCM = imNoDeriv heatEInPCMRC [(qwc tempMeltP $ UpFrom (Exc, sy tempInit))
   , qw_uc timeFinal, qw_uc tempInit, qw_uc pcmSA, qw_uc pcmHTC
   , qw_uc pcmMass, qw_uc htCapSP, qw_uc htCapLP, qw_uc tempPCM, qw_uc htFusion, qw_uc tInitMelt]
   (qw pcmE)

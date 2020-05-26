@@ -32,7 +32,7 @@ iMods = [eBalanceOnWtr, heatEInWtr]
 -- FIXME: comment on reference?
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC 
-  [(qwc tempC $ sy tempInit $<= sy tempC)
+  [(qwc tempC $ UpFrom (Inc, sy tempInit))
   , qw_uc tempInit, qw_uc timeFinal, qw_uc coilSA, qw_uc coilHTC, qw_uc htCapW, qw_uc wMass] 
   (qw tempW) []
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit

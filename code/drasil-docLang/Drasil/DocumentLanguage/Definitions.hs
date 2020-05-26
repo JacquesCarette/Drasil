@@ -179,8 +179,8 @@ mkIMField i _ l@Input fs =
   (_:_) -> (show l, [mkParagraph $ foldl sC x xs]) : fs
   where (x:xs) = map (P . eqSymb . fst) $ i ^. inputs
 mkIMField i _ l@InConstraints fs  = 
-  let ll = catMaybes $ map snd (i ^. inputs) in
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] ll) : fs
+  let ll = catMaybes $ map (\(x,y) -> maybe Nothing (\z -> Just (x, z)) y) (i^.inputs) in
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . uncurry realInterval) [] ll) : fs
 mkIMField i _ l@OutConstraints fs = 
   (show l, foldr ((:) . UlC . ulcc . EqnBlock . realInterval (i ^. output)) [] 
     (i ^. out_constraints)) : fs

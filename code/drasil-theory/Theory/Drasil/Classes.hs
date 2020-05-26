@@ -11,7 +11,7 @@ import Control.Lens (Lens')
 
 -- a class may have Inputs
 class HasInputs c where
-  inputs :: Lens' c [(QuantityDict, Maybe Relation)]
+  inputs :: Lens' c [(QuantityDict, Maybe (RealInterval Expr Expr))]
 
 class HasOutput c where
   output :: Lens' c QuantityDict

@@ -131,5 +131,5 @@ understandability = cic "understandability" (foldlSent [S "Users" `sOf` S "Tamia
 maintainability :: ConceptInstance
 maintainability = cic "maintainability" (foldlSent [
   S "development time for any " `ofThe'` S "likely changes should not exceed", 
-  S "10% percent of the original development time"
+  addPercent 10, S "percent of the original development time"
   ]) "Maintainability" nonFuncReqDom

@@ -43,11 +43,11 @@ The unit system used throughout is SI (Système International d'Unités). In add
 \\
 \midrule
 \endhead
-m & length & metre
+${\text{m}}$ & length & metre
 \\
-rad & angle & radian
+${\text{rad}}$ & angle & radian
 \\
-s & time & second
+${\text{s}}$ & time & second
 \\
 \bottomrule
 \caption{Table of Units}
@@ -79,33 +79,33 @@ $\mathbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 ${\mathbf{a}^{\text{c}}}$ & Constant acceleration vector & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${d_{\text{offset}}}$ & Distance between the target position and the landing position & m
+${d_{\text{offset}}}$ & Distance between the target position and the landing position & ${\text{m}}$
 \\
 $\mathbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-$p$ & Scalar position & m
+$p$ & Scalar position & ${\text{m}}$
 \\
-${p^{\text{i}}}$ & Initial position & m
+${p^{\text{i}}}$ & Initial position & ${\text{m}}$
 \\
-${p_{\text{land}}}$ & Landing position & m
+${p_{\text{land}}}$ & Landing position & ${\text{m}}$
 \\
-${p_{\text{target}}}$ & Target position & m
+${p_{\text{target}}}$ & Target position & ${\text{m}}$
 \\
-${p_{\text{x}}}$ & $x$-component of position & m
+${p_{\text{x}}}$ & $x$-component of position & ${\text{m}}$
 \\
-${{p_{\text{x}}}^{\text{i}}}$ & $x$-component of initial position & m
+${{p_{\text{x}}}^{\text{i}}}$ & $x$-component of initial position & ${\text{m}}$
 \\
-${p_{\text{y}}}$ & $y$-component of position & m
+${p_{\text{y}}}$ & $y$-component of position & ${\text{m}}$
 \\
-${{p_{\text{y}}}^{\text{i}}}$ & $y$-component of initial position & m
+${{p_{\text{y}}}^{\text{i}}}$ & $y$-component of initial position & ${\text{m}}$
 \\
-$\mathbf{p}$ & Position & m
+$\mathbf{p}$ & Position & ${\text{m}}$
 \\
 $s$ & Output message as a string & --
 \\
-$t$ & Time & s
+$t$ & Time & ${\text{s}}$
 \\
-${t_{\text{flight}}}$ & Flight duration & s
+${t_{\text{flight}}}$ & Flight duration & ${\text{s}}$
 \\
 $v$ & Speed & $\frac{\text{m}}{\text{s}}$
 \\
@@ -127,7 +127,7 @@ ${\mathbf{v}^{\text{i}}}$ & Initial velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $ε$ & Hit tolerance & --
 \\
-$θ$ & Launch angle & rad
+$θ$ & Launch angle & ${\text{rad}}$
 \\
 $π$ & Ratio of circumference to diameter for any circle & --
 \\
@@ -270,7 +270,7 @@ Equation & \begin{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$t$ is the time (s)}
+              \item{$t$ is the time (${\text{s}}$)}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -299,8 +299,8 @@ Equation & \begin{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$t$ is the time (s)}
-              \item{$\mathbf{p}$ is the position (m)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$\mathbf{p}$ is the position (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{velocityWiki} and \cite[(pg. 6)]{hibbeler2004}
@@ -337,7 +337,7 @@ Description & \begin{symbDescription}
               \item{$v$ is the speed ($\frac{\text{m}}{\text{s}}$)}
               \item{${v^{\text{i}}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$t$ is the time (s)}
+              \item{$t$ is the time (${\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite[(pg. 8)]{hibbeler2004}
@@ -376,7 +376,7 @@ v={v^{\text{i}}}+{a^{c}} t
 Label & Rectilinear (1D) position as a function of time for constant acceleration
         
 \\ \midrule \\
-Units & m
+Units & ${\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -384,10 +384,10 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$p$ is the scalar position (m)}
-              \item{${p^{\text{i}}}$ is the initial position (m)}
+              \item{$p$ is the scalar position (${\text{m}}$)}
+              \item{${p^{\text{i}}}$ is the initial position (${\text{m}}$)}
               \item{${v^{\text{i}}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
-              \item{$t$ is the time (s)}
+              \item{$t$ is the time (${\text{s}}$)}
               \item{${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -446,7 +446,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{${{v_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{${{a_{\text{x}}}^{\text{c}}}$ is the $x$-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$t$ is the time (s)}
+              \item{$t$ is the time (${\text{s}}$)}
               \item{${{v_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{${{a_{\text{y}}}^{\text{c}}}$ is the $y$-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
@@ -491,7 +491,7 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
 Label & Position vector as a function of time for 2D motion under constant acceleration
         
 \\ \midrule \\
-Units & m
+Units & ${\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -502,12 +502,12 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\mathbf{p}$ is the position (m)}
-              \item{${{p_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial position (m)}
+              \item{$\mathbf{p}$ is the position (${\text{m}}$)}
+              \item{${{p_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial position (${\text{m}}$)}
               \item{${{v_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$t$ is the time (s)}
+              \item{$t$ is the time (${\text{s}}$)}
               \item{${{a_{\text{x}}}^{\text{c}}}$ is the $x$-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{${{p_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial position (m)}
+              \item{${{p_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial position (${\text{m}}$)}
               \item{${{v_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{${{a_{\text{y}}}^{\text{c}}}$ is the $y$-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
@@ -611,7 +611,7 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{${{v_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{${v^{\text{i}}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
-              \item{$θ$ is the launch angle (rad)}
+              \item{$θ$ is the launch angle (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${v^{\text{i}}}$ is from \hyperref[DD:vecMag]{DD: vecMag}.
@@ -652,7 +652,7 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{${{v_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{${v^{\text{i}}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
-              \item{$θ$ is the launch angle (rad)}
+              \item{$θ$ is the launch angle (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${v^{\text{i}}}$ is from \hyperref[DD:vecMag]{DD: vecMag}.
@@ -706,9 +706,9 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${t_{\text{flight}}}$ is the flight duration (s)}
+              \item{${t_{\text{flight}}}$ is the flight duration (${\text{s}}$)}
               \item{${v_{\text{launch}}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
-              \item{$θ$ is the launch angle (rad)}
+              \item{$θ$ is the launch angle (${\text{rad}}$)}
               \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -787,9 +787,9 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${p_{\text{land}}}$ is the landing position (m)}
+              \item{${p_{\text{land}}}$ is the landing position (${\text{m}}$)}
               \item{${v_{\text{launch}}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
-              \item{$θ$ is the launch angle (rad)}
+              \item{$θ$ is the launch angle (${\text{rad}}$)}
               \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -861,9 +861,9 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${d_{\text{offset}}}$ is the distance between the target position and the landing position (m)}
-              \item{${p_{\text{land}}}$ is the landing position (m)}
-              \item{${p_{\text{target}}}$ is the target position (m)}
+              \item{${d_{\text{offset}}}$ is the distance between the target position and the landing position (${\text{m}}$)}
+              \item{${p_{\text{land}}}$ is the landing position (${\text{m}}$)}
+              \item{${p_{\text{target}}}$ is the target position (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${p_{\text{land}}}$ is from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
@@ -916,8 +916,8 @@ Equation & \begin{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$s$ is the output message as a string (Unitless)}
-              \item{${d_{\text{offset}}}$ is the distance between the target position and the landing position (m)}
-              \item{${p_{\text{target}}}$ is the target position (m)}
+              \item{${d_{\text{offset}}}$ is the distance between the target position and the landing position (${\text{m}}$)}
+              \item{${p_{\text{target}}}$ is the target position (${\text{m}}$)}
               \item{$ε$ is the hit tolerance (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
@@ -949,11 +949,11 @@ RefBy & \hyperref[outputValues]{FR: Output-Values} and \hyperref[calcValues]{FR:
 \\
 \midrule
 \endhead
-${p_{\text{target}}}$ & ${p_{\text{target}}}\gt{}0$ & $1000$ m & 10$\%$
+${p_{\text{target}}}$ & ${p_{\text{target}}}\gt{}0$ & $1000$ ${\text{m}}$ & 10$\%$
 \\
 ${v_{\text{launch}}}$ & ${v_{\text{launch}}}\gt{}0$ & $100$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
 \\
-$θ$ & $0\lt{}θ\lt{}\frac{π}{2}$ & $\frac{π}{4}$ rad & 10$\%$
+$θ$ & $0\lt{}θ\lt{}\frac{π}{2}$ & $\frac{π}{4}$ ${\text{rad}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -997,11 +997,11 @@ This section provides the functional requirements, the tasks and behaviours that
 \\
 \midrule
 \endhead
-${p_{\text{target}}}$ & Target position & m
+${p_{\text{target}}}$ & Target position & ${\text{m}}$
 \\
 ${v_{\text{launch}}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
 \\
-$θ$ & Launch angle & rad
+$θ$ & Launch angle & ${\text{rad}}$
 \\
 \bottomrule
 \caption{Required Inputs following \hyperref[inputValues]{FR: Input-Values}}

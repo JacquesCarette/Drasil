@@ -17,7 +17,7 @@ import Utils.Drasil (checkValidStr, foldNums)
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
-  Spec(Quote, EmptyS, Ref, S, Sy, Sp, HARDNL, E, (:+:)), 
+  Spec(Quote, EmptyS, Ref, S, Sp, HARDNL, E, (:+:)), 
   Fence(Norm, Abs, Curly, Paren), Expr, 
   Ops(Inte, Prod, Summ, Mul, Add, Or, And, Subt, Iff, LEq, GEq, 
   NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Arctan, Arccos, Arcsin,
@@ -219,7 +219,6 @@ specLength :: Spec -> Int
 specLength (E x)       = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
 specLength (S x)       = length x
 specLength (a :+: b)   = specLength a + specLength b
-specLength (Sy _)      = 1
 specLength (Sp _)      = 1
 specLength (Ref Internal r _) = length r
 specLength (Ref Cite2    r i) = length r + specLength i
@@ -246,7 +245,6 @@ needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
 needs (S _)     = Text
 needs (E _)     = Math
-needs (Sy _)    = Text
 needs (Sp _)    = Math
 needs HARDNL    = Text
 needs Ref{}     = Text
@@ -267,7 +265,6 @@ spec (S s)  = either error (pure . text . concatMap escapeChars) $ checkValidStr
     escapeChars '_' = "\\_"
     escapeChars '&' = "\\&"
     escapeChars c = [c]
-spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = command0 "newline"
 spec (Ref Internal r sn) = snref r (spec sn)
@@ -309,21 +306,6 @@ pUnit (L.US ls) = formatu t b
     p_symb (L.Concat s) = foldl (<>) empty $ map p_symb s
     p_symb n = let cn = symbolNeeds n in switch (const cn) $ symbol n
 
-{-
-pUnit :: L.USymb -> D
-pUnit (UName (Concat s)) = foldl (<>) empty $ map (pUnit . UName) s
-pUnit (UName n) =
-  let cn = symbolNeeds n in
-  switch (const cn) (pure $ text $ symbol n)
-pUnit (UProd l) = foldr (<>) empty (map pUnit l)
-pUnit (UPow n p) = toMath $ superscript (pUnit n) (pure $ text $ show p)
-pUnit (UDiv n d) = toMath $
-  case d of -- 4 possible cases, 2 need parentheses, 2 don't
-    UProd _  -> fraction (pUnit n) (parens $ pUnit d)
-    UDiv _ _ -> fraction (pUnit n) (parens $ pUnit d)
-    _        -> fraction (pUnit n) (pUnit d)
--}
-
 -----------------------------------------------------------------
 ------------------ DATA DEFINITION PRINTING-----------------
 -----------------------------------------------------------------
@@ -349,8 +331,6 @@ makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
 makeDRows sm ls    = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d) ls
   where dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
---makeDRows sm [(f,d)]    = dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d
---makeDRows sm ((f,d):ps) = dBoilerplate %% (pure (text (f ++ " & ")) <> print sm d %% makeDRows sm ps
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------
@@ -408,27 +388,6 @@ makeFigure r c f wp =
     caption c,
     label r
   ] ) )
-
------------------------------------------------------------------
------------------- EXPR OP PRINTING-------------------------
------------------------------------------------------------------
--- p_op :: Functional -> Expr -> String
--- p_op f@(Summation bs) x = oper f ++ makeBound bs ++ brace (sqbrac (pExpr x))
--- p_op f@(Product bs) x = oper f ++ makeBound bs ++ brace (pExpr x)
--- p_op f@(Integral bs wrtc) x = oper f ++ makeIBound bs ++ 
---   brace (pExpr x ++ "d" ++ symbol wrtc) -- HACK alert.
--- 
--- makeBound :: Maybe ((Symbol, Expr),Expr) -> String
--- makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ pExpr v)) ++
---                               "^" ++ brace (pExpr hi)
--- makeBound Nothing = ""
--- 
--- makeIBound :: (Maybe Expr, Maybe Expr) -> String
--- makeIBound (Just low, Just high) = "_" ++ brace (pExpr low) ++
---                                    "^" ++ brace (pExpr high)
--- makeIBound (Just low, Nothing)   = "_" ++ brace (pExpr low)
--- makeIBound (Nothing, Just high)  = "^" ++ brace (pExpr high)
--- makeIBound (Nothing, Nothing)    = ""
 
 -----------------------------------------------------------------
 ------------------ MODULE PRINTING----------------------------

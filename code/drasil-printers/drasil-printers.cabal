@@ -28,6 +28,8 @@ library
     , Language.Drasil.TeX.Print
     , Language.Drasil.TeX.Monad
     , Language.Drasil.TeX.Preamble
+    , Language.Drasil.DOT.TraceabilityGraphGenerator
+    , Language.Drasil.DOT.TraceabilityGraphGeneratorInfo
 
   Build-Depends:
     base >= 4.7,

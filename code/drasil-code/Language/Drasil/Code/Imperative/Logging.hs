@@ -33,7 +33,7 @@ loggedVar v = do
   return $ multi [
     openFileA varLogFile (litString $ logName g),
     zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("var '" ++ 
-      variableName v' ++ "' assigned to ")),
+      variableName v' ++ "' assigned ")),
     printFile valLogFile (valueOf v),
     printFileStrLn valLogFile (" in module " ++ currentModule g),
     closeFile valLogFile ]

@@ -133,9 +133,8 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_
 
 %$(TEST_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEST_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
-$(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): %$(GEN_E_SUFFIX)
+$(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX)
 	@mkdir -p "$(LOG_FOLDER)"
-	- rm "$(LOG_FOLDER)"*.log
 	- $(DIFF) "stable/$*/" "$(BUILD_FOLDER)$(EDIR)"/ > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)" 2>&1
 
 # actually run the tests

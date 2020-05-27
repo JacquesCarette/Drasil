@@ -100,35 +100,36 @@ deterCollRespOverTime = cic "deterCollRespOverTime" deterCollRespOverTimeDesc "D
 --------------------------------------
 
 nonfuncReqs :: [ConceptInstance] 
-nonfuncReqs = [highPerformance, correct, usable, understandable, maintainable]
+nonfuncReqs = [performance, correctness, usability, understandability, maintainability]
 
-highPerformance :: ConceptInstance
-highPerformance = cic "highPerformance" (foldlSent [
+performance :: ConceptInstance
+performance = cic "performance" (foldlSent [
   S "The execution time for collision detection and collision resolution shall be", 
-  S "comparable to an existing 2D physics library on the market (e.g. Pymunk)."
-  ]) "High-Performance" nonFuncReqDom
+  S "comparable to an existing 2D physics library on the market (e.g. Pymunk)"
+  ]) "Performance" nonFuncReqDom
 
-correct :: ConceptInstance
-correct = cic "correct" (foldlSent [S "The", phrase output_ `sOf` S "simulation", 
-  S "results shall be compared to an existing implemenation like Pymunk."
-  ]) "Correct" nonFuncReqDom
+correctness :: ConceptInstance
+correctness = cic "correctness" (foldlSent [S "The", phrase output_ `sOf` S "simulation", 
+  S "results shall be compared to an existing implementation like Pymunk"
+  ]) "Correctness" nonFuncReqDom
  
-usable :: ConceptInstance
-usable = cic "usable" (foldlSent [S "Software shall be easy to learn" `sAnd` S "use.",
+usability :: ConceptInstance
+usability = cic "usability" (foldlSent [S "Software shall be easy to learn" `sAnd` S "use.",
   S "Usability shall be measured by how long it takes a user to learn how to use", 
   S "the library to create a small program to simulate the movement" `sOf` S "2 bodies", 
   S "over time in space. Creating a program should take no less than 30 to 60 minutes", 
-  S "for an intermediate to experienced programmer." 
-  ]) "Usable" nonFuncReqDom
+  S "for an intermediate to experienced programmer" 
+  ]) "Usability" nonFuncReqDom
 
-understandable :: ConceptInstance
-understandable = cic "understandable" (foldlSent [S "Users" `sOf` S "Tamias2D shall be", 
+understandability :: ConceptInstance
+understandability = cic "understandability" (foldlSent [S "Users" `sOf` S "Tamias2D shall be", 
   S "able to learn the software with ease. Users shall be able to easily create", 
   S "a small program using the library. Creating a small program to simulate", 
-  S "the movement of 2 bodies" `sIn` S "space should take no less that 60 minutes." 
-  ]) "Understandable" nonFuncReqDom
+  S "the movement of 2 bodies" `sIn` S "space should take no less that 60 minutes" 
+  ]) "Understandability" nonFuncReqDom
 
-maintainable :: ConceptInstance
-maintainable = cic "maintainable" (foldlSent [
-  S "The development time for any " `ofThe` S "likely changes should not exceed", 
-  S "10% percent" `ofThe` S "original development time"]) "Maintainable" nonFuncReqDom
+maintainability :: ConceptInstance
+maintainability = cic "maintainability" (foldlSent [
+  S "development time for any " `ofThe'` S "likely changes should not exceed", 
+  S "10% percent of the original development time"
+  ]) "Maintainability" nonFuncReqDom

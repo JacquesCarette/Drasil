@@ -348,7 +348,7 @@ constraintViolatedMsg q s c = do
   v <- mkVal (quantvar q)
   return $ [printStr $ codeName q ++ " has value ",
     print v,
-    printStr $ " but " ++ s ++ " to be "] ++ pc
+    printStr $ ", but is " ++ s ++ " to be "] ++ pc
 
 -- | Generates statements to print descriptions of constraints, using words and 
 -- the constrained values. Constrained values are followed by printing the 

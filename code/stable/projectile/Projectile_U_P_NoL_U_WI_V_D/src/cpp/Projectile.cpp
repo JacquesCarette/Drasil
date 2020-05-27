@@ -84,7 +84,7 @@ void input_constraints(double v_launch, double theta, double p_target) {
         std::cout << "Warning: ";
         std::cout << "v_launch has value ";
         std::cout << v_launch;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -93,7 +93,7 @@ void input_constraints(double v_launch, double theta, double p_target) {
         std::cout << "Warning: ";
         std::cout << "theta has value ";
         std::cout << theta;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << 0;
         std::cout << " and ";
@@ -105,7 +105,7 @@ void input_constraints(double v_launch, double theta, double p_target) {
         std::cout << "Warning: ";
         std::cout << "p_target has value ";
         std::cout << p_target;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;

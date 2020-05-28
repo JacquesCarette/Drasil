@@ -109,23 +109,26 @@ performance = cic "performance" (foldlSent [
   ]) "Performance" nonFuncReqDom
 
 correctness :: ConceptInstance
-correctness = cic "correctness" (foldlSent [S "The", phrase output_ `sOf` S "simulation", 
-  S "results shall be compared to an existing implementation like Pymunk (please refer to: ", S "http://www.pymunk.org/en/latest/)"
+correctness = cic "correctness" (foldlSent [
+  S "The", phrase output_ `sOf` S "simulation results shall be compared to", 
+  S "an existing implementation like Pymunk (please refer to:", 
+  S "http://www.pymunk.org/en/latest/)"
   ]) "Correctness" nonFuncReqDom
  
 usability :: ConceptInstance
-usability = cic "usability" (foldlSent [S "Software shall be easy to learn" `sAnd` S "use.",
-  S "Usability shall be measured by how long it takes a user to learn how to use", 
-  S "the library to create a small program to simulate the movement" `sOf` S "2 bodies", 
-  S "over time in space. Creating a program should take no less than 30 to 60 minutes", 
-  S "for an intermediate to experienced programmer" 
+usability = cic "usability" (foldlSent [
+  S "Software shall be easy to learn" `sAnd` S "use. Usability shall be measured by", 
+  S "how long it takes a user to learn how to use the library to create a small program", 
+  S "to simulate the movement" `sOf` S "2 bodies over time in space. Creating a program", 
+  S "should take no less than 30 to 60 minutes for an intermediate to experienced programmer"
   ]) "Usability" nonFuncReqDom
 
 understandability :: ConceptInstance
-understandability = cic "understandability" (foldlSent [S "Users" `sOf` S "Tamias2D shall be", 
-  S "able to learn the software with ease. Users shall be able to easily create", 
-  S "a small program using the library. Creating a small program to simulate", 
-  S "the movement of 2 bodies" `sIn` S "space should take no less that 60 minutes" 
+understandability = cic "understandability" (foldlSent [
+  S "Users" `sOf` S "Tamias2D shall be able to learn the software with ease.", 
+  S "Users shall be able to easily create a small program using the library.", 
+  S "Creating a small program to simulate the movement of 2 bodies" `sIn` 
+  S "space should take no less that 60 minutes"
   ]) "Understandability" nonFuncReqDom
 
 maintainability :: ConceptInstance

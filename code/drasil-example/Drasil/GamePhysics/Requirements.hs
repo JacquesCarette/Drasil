@@ -111,7 +111,7 @@ performance = cic "performance" (foldlSent [
 correctness :: ConceptInstance
 correctness = cic "correctness" (foldlSent [
   S "The", phrase output_ `sOf` S "simulation results shall be compared to", 
-  S "an existing implementation like Pymunk (please refer to:", 
+  S "an existing implementation like Pymunk (refer to:", 
   S "http://www.pymunk.org/en/latest/)"
   ]) "Correctness" nonFuncReqDom
  

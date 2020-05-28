@@ -3,12 +3,10 @@ module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs) where
 import Language.Drasil hiding (Vector, organization)
 import Utils.Drasil
 
-import qualified Drasil.DocLang.SRS as SRS (propCorSol, solCharSpec)
-import Data.Drasil.Concepts.Documentation as Doc (assumption, body, code,
-  environment, funcReqDom, input_, likelyChg, mg, mis, module_, nonFuncReqDom,
-  output_, physicalConstraint, physicalSim, property, requirement, srs,
-  traceyMatrix, unlikelyChg)
-import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
+import qualified Drasil.DocLang.SRS as SRS (solCharSpec)
+import Data.Drasil.Concepts.Documentation as Doc (body, funcReqDom, input_, 
+  nonFuncReqDom, output_, physicalConstraint, physicalSim, property)
+import Data.Drasil.IdeaDicts()
 
 import qualified Data.Drasil.Concepts.Physics as CP (collision, elasticity, 
   friction, rigidBody, space)
@@ -111,7 +109,7 @@ performance = cic "performance" (foldlSent [
 correctness :: ConceptInstance
 correctness = cic "correctness" (foldlSent [
   S "The", phrase output_ `sOf` S "simulation results shall be compared to", 
-  S "an existing implementation like Pymunk (refer to:", 
+  S "an existing implementation like Pymunk (please refer to:", 
   S "http://www.pymunk.org/en/latest/)"
   ]) "Correctness" nonFuncReqDom
  
@@ -134,5 +132,5 @@ understandability = cic "understandability" (foldlSent [
 maintainability :: ConceptInstance
 maintainability = cic "maintainability" (foldlSent [
   S "development time for any " `ofThe'` S "likely changes should not exceed", 
-  addPercent 10, S "percent of the original development time"
+  addPercent (10 :: Integer), S "percent of the original development time"
   ]) "Maintainability" nonFuncReqDom

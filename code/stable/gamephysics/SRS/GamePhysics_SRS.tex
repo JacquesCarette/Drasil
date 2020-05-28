@@ -1509,13 +1509,11 @@ This section provides the functional requirements, the tasks and behaviours that
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
 \begin{itemize}
-\item[High-Performance:\phantomsection\label{highPerformance}]{The code has a short reponse time when performing computation.}
-\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.}
-\item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
-\item[Portable:\phantomsection\label{portable}]{The code is able to be run in different environments.}
-\item[Reliable:\phantomsection\label{reliable}]{The code gives consistent outputs.}
-\item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
-\item[Maintainable:\phantomsection\label{maintainable}]{The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.}
+\item[Performance:\phantomsection\label{performance}]{The execution time for collision detection and collision resolution shall be comparable to an existing 2D physics library on the market (e.g. Pymunk).}
+\item[Correctness:\phantomsection\label{correctness}]{The output of simulation results shall be compared to an existing implementation like Pymunk (please refer to:  http://www.pymunk.org/en/latest/).}
+\item[Usability:\phantomsection\label{usability}]{Software shall be easy to learn and use. Usability shall be measured by how long it takes a user to learn how to use the library to create a small program to simulate the movement of 2 bodies over time in space. Creating a program should take no less than 30 to 60 minutes for an intermediate to experienced programmer.}
+\item[Understandability:\phantomsection\label{understandability}]{Users of Tamias2D shall be able to learn the software with ease. Users shall be able to easily create a small program using the library. Creating a small program to simulate the movement of 2 bodies in space should take no less that 60 minutes.}
+\item[Maintainability:\phantomsection\label{maintainability}]{The development time for any  of the likely changes should not exceed 10$\%$ percent of the original development time.}
 \end{itemize}
 \section{Likely Changes}
 \label{Sec:LCs}
@@ -1626,19 +1624,15 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  & 
 \\
-\hyperref[highPerformance]{NFR: High-Performance} &  &  &  &  &  &  & 
+\hyperref[performance]{NFR: Performance} &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  & 
+\hyperref[correctness]{NFR: Correctness} &  &  &  &  &  &  & 
 \\
-\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  & 
+\hyperref[usability]{NFR: Usability} &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  & 
+\hyperref[understandability]{NFR: Understandability} &  &  &  &  &  &  & 
 \\
-\hyperref[reliable]{NFR: Reliable} &  &  &  &  &  &  & 
-\\
-\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  & 
-\\
-\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  & 
+\hyperref[maintainability]{NFR: Maintainability} &  &  &  &  &  &  & 
 \\
 \hyperref[lcVODES]{LC: Variable-ODE-Solver} &  &  &  &  &  &  & 
 \\
@@ -1718,45 +1712,41 @@ The purpose of the traceability matrices is to provide easy references on what h
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:chaslesThm]{DD: chaslesThm}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD: accelGravity}} & \textbf{\hyperref[GD:impulse]{GD: impulse}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}} & \textbf{\hyperref[simSpace]{FR: Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR: Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR: Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[highPerformance]{NFR: High-Performance}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[portable]{NFR: Portable}} & \textbf{\hyperref[reliable]{NFR: Reliable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
+\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:chaslesThm]{DD: chaslesThm}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD: accelGravity}} & \textbf{\hyperref[GD:impulse]{GD: impulse}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}} & \textbf{\hyperref[simSpace]{FR: Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR: Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR: Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[performance]{NFR: Performance}} & \textbf{\hyperref[correctness]{NFR: Correctness}} & \textbf{\hyperref[usability]{NFR: Usability}} & \textbf{\hyperref[understandability]{NFR: Understandability}} & \textbf{\hyperref[maintainability]{NFR: Maintainability}}
 \\
 \midrule
 \endhead
-\hyperref[linearGS]{GS: Determine-Linear-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[linearGS]{GS: Determine-Linear-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[angularGS]{GS: Determine-Angular-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[angularGS]{GS: Determine-Angular-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[simSpace]{FR: Simulation-Space} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[simSpace]{FR: Simulation-Space} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputInitialConds]{FR: Input-Initial-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputInitialConds]{FR: Input-Initial-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[deterColls]{FR: Determine-Collisions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[deterColls]{FR: Determine-Collisions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[highPerformance]{NFR: High-Performance} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[performance]{NFR: Performance} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correctness]{NFR: Correctness} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[usability]{NFR: Usability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[understandability]{NFR: Understandability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[reliable]{NFR: Reliable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[maintainability]{NFR: Maintainability} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}

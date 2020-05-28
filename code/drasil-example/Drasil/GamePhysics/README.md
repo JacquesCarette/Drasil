@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 25, 2020
+Last updated: May 28, 2020
 --------------------------------------------------
 
 **DesignDec**
@@ -35,7 +35,6 @@ References.hs
 
 Requirements.hs
   - Requirements for the Game Physics example
-  - currently a work in progress (improvements/changes are being made to the NFRs)
 
 TMods.hs
   - Theoretical models for the Game Physics example

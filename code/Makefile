@@ -76,7 +76,7 @@ ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(f
 # make variables/configuration
 DIFF = diff --strip-trailing-cr -r -X ../.gitignore -x '*.txt'
 LOG_SUFFIX = _log.log
-MIN_STACK_VER = 1.9.1  # Version which adds --interleaved-output flag
+MIN_STACK_VER = 2.3.1  # Match stack.yaml see PR #2142 for more info.
 CACHED_MSV_FILE = .drasil-min-stack-ver
 DF_DIR = datafiles/
 BUILD_FOLDER_NAME = build

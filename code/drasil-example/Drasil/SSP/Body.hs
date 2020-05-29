@@ -17,19 +17,19 @@ import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), intro, mkDoc, tsymb'', traceMatStandard)
+  PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc)
 
-import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt, sysCon,
+import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
-  constant, constraint, definition, document, effect, endUser, environment,
-  goal, information, input_, interest, loss, method_, model, organization,
-  physical, physics, problem, purpose, requirement, software,
-  softwareSys, srsDomains, symbol_, sysCont, system, systemConstraint,
+  constant, constraint, document, effect, endUser, environment,
+  input_, interest, loss, method_, organization,
+  physical, physics, problem, software,
+  softwareSys, srsDomains, symbol_, sysCont, system,
   template, type_, user, value, variable, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
+import Data.Drasil.IdeaDicts as Doc (inModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
   number)
@@ -97,7 +97,7 @@ mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
-    [ IPurpose [prpsOfDoc_p1]
+    [ IPurpose $ purpDoc ssp Verbose
     , IScope scope
     , IChar []
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
@@ -213,23 +213,7 @@ keySent probType pname = foldlSent_ [S "a", phrase probType +:+. phrase problem,
   
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in IPurpose
-prpsOfDoc_p1 :: Sentence
-prpsOfDoc_p1 = purposeDoc ssp
 
-purposeDoc :: (Idea a) => a -> Sentence
-purposeDoc pname =
-  foldlSent [S "The primary purpose of this", phrase document, S "is to",
-  S "record the", plural requirement `sOf` short pname `andThe` plural model,
-  S "that will be used to meet those" +:+. plural requirement, 
-  atStart' goal `sC` plural assumption `sC` plural thModel `sC` 
-  plural definition `sC` S "and other", phrase model, S "derivation",
-  phrase information, S "are specified" `sC` S "allowing the reader to fully",
-  S "understand" `sAnd` S "verify the", phrase purpose `sAnd` S "scientific",
-  S "basis of" +:+. short pname, S "With the exception of", 
-  plural systemConstraint, S "in", makeRef2S (SRS.sysCon [] []) `sC` S "this",
-  short Doc.srs, S "will remain abstract, describing what", phrase problem,
-  S "is being solved, but not how to solve it"] 
-  --FIXME: Last sentence is also present in GlassBR, SWHS and NoPCM... pull out?
 
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope

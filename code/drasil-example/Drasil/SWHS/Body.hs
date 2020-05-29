@@ -214,12 +214,7 @@ introEnd progSent pro = foldlSent_ [EmptyS +:+. progSent, S "The developed",
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------
-
-
-
-
--- Besides program name, these two paragraphs are general, mostly repeated
--- between examples, and can be abstracted out.
+-- Purpose of Document automatically generated in IPurpose
 
 --How to italicize words in sentence?
 --How to cite?

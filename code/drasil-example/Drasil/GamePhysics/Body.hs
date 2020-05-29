@@ -14,17 +14,17 @@ import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   SolChSpec(SCSProg), TConvention(..), TSIntro(..), Verbosity(Verbose),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel)
+  PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel, purpDoc)
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
-  condition, consumer, document, endUser, environment, game, goalStmt, guide,
-  information, input_, interface, model, object, organization, physical,
+  condition, consumer, document, endUser, environment, game, guide,
+  input_, interface, object, organization, physical,
   physicalSim, physics, problem, product_, project, quantity, realtime,
-  reference, section_, simulation, software, softwareSys, srsDomains, system,
+  section_, simulation, software, softwareSys, srsDomains, system,
   systemConstraint, sysCont, task, template, user, doccon, doccon', property)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
+import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
@@ -64,7 +64,7 @@ resourcePath = "../../../datafiles/GamePhysics/"
 mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
   IntroSec $ IntroProg para1_introduction_intro (short gamePhysics)
-  [IPurpose [para1_purpose_of_document_intro],
+  [IPurpose $ purpDoc gamePhysics Verbose,
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
    IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
@@ -181,28 +181,8 @@ para1_introduction_intro = foldlSent
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------
+-- Purpose of Document automatically generated in IPurpose
 
-detailsAndGoal :: [CI]
-detailsAndGoal = [thModel, goalStmt]
-
-para1_purpose_of_document_intro :: Sentence
-para1_purpose_of_document_intro = para1_purpose_of_document_param gamePhysics 
-  document programDescription (plural game) (map plural detailsAndGoal)
-
-programDescription :: Sentence
-programDescription = foldlSent_ [phrase openSource, getAcc twoD, 
-  phrase CP.rigidBody, phrase physLib]
-
-para1_purpose_of_document_param :: (Idea a, NamedIdea b) => a -> b -> Sentence -> Sentence ->
-  [Sentence] -> Sentence
-para1_purpose_of_document_param progName typeOf progDescrip appOf listOf = foldlSent 
-  [S "This", phrase typeOf, S "describes the modeling of an",
-  progDescrip, S "used for" +:+. appOf, S "The", 
-  foldlList Comma List listOf, S "used in", short progName, 
-  S "are provided. This", phrase typeOf, 
-  S "is intended to be used as a", phrase reference, 
-  S "to provide all necessary", phrase information, 
-  S "to understand and verify the", phrase model]
 
 ---------------------------------
 -- 2.2 : Scope of Requirements --

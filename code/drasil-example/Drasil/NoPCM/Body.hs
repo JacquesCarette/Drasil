@@ -236,6 +236,7 @@ introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. 
 -----------------------------------
 --Section 2.1 : PURPOSE OF DOCUMENT
 -----------------------------------
+-- Purpose of Document automatically generated in IPurpose
 
 -------------------------------------
 --Section 2.2 : SCOPE OF REQUIREMENTS

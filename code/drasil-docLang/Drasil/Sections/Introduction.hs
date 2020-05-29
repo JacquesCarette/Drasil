@@ -16,7 +16,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Citations (parnasClements1986)
 
-import Control.Lens ((^.))
+
 -----------------------
 --     Constants     --
 -----------------------
@@ -74,7 +74,7 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
 -- | verbosity controls if second paragraph is added or not
 purpDocPara1 :: CI -> Sentence 
 purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase document, S "is to",
-  S "record the", plural requirement, S "of the" +:+. titleizeNP (proName ^. term), 
+  S "record the", plural requirement, S "of the" +:+. titleize proName, 
   atStart' goal `sC` plural assumption `sC` plural thModel `sC` 
   plural definition `sC` S "and other", phrase model, S "derivation",
   phrase information, S "are specified" `sC` S "allowing the reader to fully",

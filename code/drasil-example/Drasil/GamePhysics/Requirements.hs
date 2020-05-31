@@ -3,12 +3,10 @@ module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs) where
 import Language.Drasil hiding (Vector, organization)
 import Utils.Drasil
 
-import qualified Drasil.DocLang.SRS as SRS (propCorSol, solCharSpec)
-import Data.Drasil.Concepts.Documentation as Doc (assumption, body, code,
-  environment, funcReqDom, input_, likelyChg, mg, mis, module_, nonFuncReqDom,
-  output_, physicalConstraint, physicalSim, property, requirement, srs,
-  traceyMatrix, unlikelyChg)
-import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
+import qualified Drasil.DocLang.SRS as SRS (solCharSpec)
+import Data.Drasil.Concepts.Documentation as Doc (body, funcReqDom, input_, 
+  nonFuncReqDom, output_, physicalConstraint, physicalSim, property)
+import Data.Drasil.IdeaDicts()
 
 import qualified Data.Drasil.Concepts.Physics as CP (collision, elasticity, 
   friction, rigidBody, space)
@@ -100,39 +98,39 @@ deterCollRespOverTime = cic "deterCollRespOverTime" deterCollRespOverTimeDesc "D
 --------------------------------------
 
 nonfuncReqs :: [ConceptInstance] 
-nonfuncReqs = [highPerformance, correct, understandable, portable, reliable, reusable, maintainable]
+nonfuncReqs = [performance, correctness, usability, understandability, maintainability]
 
-highPerformance :: ConceptInstance
-highPerformance = cic "highPerformance" (foldlSent [
-  S "The", phrase code, S "has a short reponse time when performing computation"
-  ]) "High-Performance" nonFuncReqDom
+performance :: ConceptInstance
+performance = cic "performance" (foldlSent [
+  S "The execution time for collision detection and collision resolution shall be", 
+  S "comparable to an existing 2D physics library on the market (e.g. Pymunk)"
+  ]) "Performance" nonFuncReqDom
 
-correct :: ConceptInstance
-correct = cic "correct" (foldlSent [plural output_ `ofThe'` phrase code,
-  S "have the", plural property, S "described" `sIn` makeRef2S (SRS.propCorSol [] [])
-  ]) "Correct" nonFuncReqDom
+correctness :: ConceptInstance
+correctness = cic "correctness" (foldlSent [
+  S "The", phrase output_ `sOf` S "simulation results shall be compared to", 
+  S "an existing implementation like Pymunk (please refer to:", 
+  S "http://www.pymunk.org/en/latest/)"
+  ]) "Correctness" nonFuncReqDom
  
-understandable :: ConceptInstance
-understandable = cic "understandable" (foldlSent [
-  S "The", phrase code, S "is modularized with complete",
-  phrase mg `sAnd` phrase mis]) "Understandable" nonFuncReqDom
+usability :: ConceptInstance
+usability = cic "usability" (foldlSent [
+  S "Software shall be easy to learn" `sAnd` S "use. Usability shall be measured by", 
+  S "how long it takes a user to learn how to use the library to create a small program", 
+  S "to simulate the movement" `sOf` S "2 bodies over time in space. Creating a program", 
+  S "should take no less than 30 to 60 minutes for an intermediate to experienced programmer"
+  ]) "Usability" nonFuncReqDom
 
-portable :: ConceptInstance
-portable = cic "portable" (foldlSent [
-  S "The", phrase code, S "is able to be run in different", plural environment])
-  "Portable" nonFuncReqDom
+understandability :: ConceptInstance
+understandability = cic "understandability" (foldlSent [
+  S "Users" `sOf` S "Tamias2D shall be able to learn the software with ease.", 
+  S "Users shall be able to easily create a small program using the library.", 
+  S "Creating a small program to simulate the movement of 2 bodies" `sIn` 
+  S "space should take no less that 60 minutes"
+  ]) "Understandability" nonFuncReqDom
 
-reliable :: ConceptInstance
-reliable = cic "reliable" (foldlSent [
-  S "The", phrase code, S "gives consistent", plural output_]) "Reliable" nonFuncReqDom
-
-reusable :: ConceptInstance
-reusable = cic "reusable" (foldlSent [
-  S "The", phrase code, S "is modularized"]) "Reusable" nonFuncReqDom
-
-maintainable :: ConceptInstance
-maintainable = cic "maintainable" (foldlSent [
-  S "The traceability between", foldlList Comma List [plural requirement,
-  plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
-  plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `sAnd` phrase mg]) "Maintainable" nonFuncReqDom
+maintainability :: ConceptInstance
+maintainability = cic "maintainability" (foldlSent [
+  S "development time for any " `ofThe'` S "likely changes should not exceed", 
+  addPercent (10 :: Integer), S "percent of the original development time"
+  ]) "Maintainability" nonFuncReqDom

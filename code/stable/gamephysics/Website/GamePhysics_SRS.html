@@ -2542,34 +2542,28 @@
             </p>
             <div class="list">
               <p>
-                <div id="highPerformance">
-                  High-Performance: The code has a short reponse time when performing computation.
+                <div id="performance">
+                  Performance: The execution time for collision detection and collision resolution shall be comparable to an existing 2D physics library on the market (e.g. Pymunk).
                 </div>
               </p>
               <p>
-                <div id="correct">
-                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
+                <div id="correctness">
+                  Correctness: The output of simulation results shall be compared to an existing implementation like Pymunk (please refer to: http://www.pymunk.org/en/latest/).
                 </div>
               </p>
               <p>
-                <div id="understandable">
-                  Understandable: The code is modularized with complete module guide and module interface specification.
+                <div id="usability">
+                  Usability: Software shall be easy to learn and use. Usability shall be measured by how long it takes a user to learn how to use the library to create a small program to simulate the movement of 2 bodies over time in space. Creating a program should take no less than 30 to 60 minutes for an intermediate to experienced programmer.
                 </div>
               </p>
               <p>
-                <div id="portable">
-                  Portable: The code is able to be run in different environments.
+                <div id="understandability">
+                  Understandability: Users of Tamias2D shall be able to learn the software with ease. Users shall be able to easily create a small program using the library. Creating a small program to simulate the movement of 2 bodies in space should take no less that 60 minutes.
                 </div>
               </p>
               <p>
-                <div id="reliable">
-                  Reliable: The code gives consistent outputs.
-                </div>
-              </p>
-              <p><div id="reusable">Reusable: The code is modularized.</div></p>
-              <p>
-                <div id="maintainable">
-                  Maintainable: The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+                <div id="maintainability">
+                  Maintainability: The development time for any  of the likely changes should not exceed 10<em>%</em> percent of the original development time.
                 </div>
               </p>
             </div>
@@ -3008,7 +3002,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#highPerformance>NFR: High-Performance</a></td>
+              <td><a href=#performance>NFR: Performance</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3018,7 +3012,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#correct>NFR: Correct</a></td>
+              <td><a href=#correctness>NFR: Correctness</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3028,7 +3022,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#understandable>NFR: Understandable</a></td>
+              <td><a href=#usability>NFR: Usability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3038,7 +3032,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#portable>NFR: Portable</a></td>
+              <td><a href=#understandability>NFR: Understandability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3048,27 +3042,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#reliable>NFR: Reliable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#reusable>NFR: Reusable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#maintainable>NFR: Maintainable</a></td>
+              <td><a href=#maintainability>NFR: Maintainability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3892,18 +3866,14 @@
               <th>
                 <a href=#deterCollRespOverTime>FR: Determine-Collision-Response-Over-Time</a>
               </th>
-              <th><a href=#highPerformance>NFR: High-Performance</a></th>
-              <th><a href=#correct>NFR: Correct</a></th>
-              <th><a href=#understandable>NFR: Understandable</a></th>
-              <th><a href=#portable>NFR: Portable</a></th>
-              <th><a href=#reliable>NFR: Reliable</a></th>
-              <th><a href=#reusable>NFR: Reusable</a></th>
-              <th><a href=#maintainable>NFR: Maintainable</a></th>
+              <th><a href=#performance>NFR: Performance</a></th>
+              <th><a href=#correctness>NFR: Correctness</a></th>
+              <th><a href=#usability>NFR: Usability</a></th>
+              <th><a href=#understandability>NFR: Understandability</a></th>
+              <th><a href=#maintainability>NFR: Maintainability</a></th>
             </tr>
             <tr>
               <td><a href=#linearGS>GS: Determine-Linear-Properties</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3981,13 +3951,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#simSpace>FR: Simulation-Space</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4067,15 +4033,11 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#inputSurfaceProps>FR: Input-Surface-Properties</a>
               </td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4155,15 +4117,11 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#calcTransOverTime>FR: Calculate-Translation-Over-Time</a>
               </td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4243,13 +4201,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#deterColls>FR: Determine-Collisions</a></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4329,13 +4283,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
-              <td><a href=#highPerformance>NFR: High-Performance</a></td>
-              <td></td>
-              <td></td>
+              <td><a href=#performance>NFR: Performance</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4375,51 +4325,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#correct>NFR: Correct</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#understandable>NFR: Understandable</a></td>
-              <td></td>
-              <td></td>
+              <td><a href=#correctness>NFR: Correctness</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4459,51 +4365,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#portable>NFR: Portable</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#reliable>NFR: Reliable</a></td>
-              <td></td>
-              <td></td>
+              <td><a href=#usability>NFR: Usability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4543,9 +4405,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#reusable>NFR: Reusable</a></td>
-              <td></td>
-              <td></td>
+              <td><a href=#understandability>NFR: Understandability</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4585,9 +4445,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#maintainable>NFR: Maintainable</a></td>
-              <td></td>
-              <td></td>
+              <td><a href=#maintainability>NFR: Maintainability</a></td>
               <td></td>
               <td></td>
               <td></td>

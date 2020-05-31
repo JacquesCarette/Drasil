@@ -12,13 +12,14 @@ module Drasil.DocLang (
   RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
   -- DocumentLanguage.Definitions
-  Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,
+  Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..), ddefn,
   -- DocumentLanguage.RefHelpers 
   ModelDB, ddRefDB, mdb,
   -- DocumentLanguage.TraceabilityMatrix
   -- Sections.AuxiliaryConstants
   -- Sections.GeneralSystDesc
   -- Sections.Introduction
+  purpDoc,
   -- Sections.ReferenceMaterial
   intro,
   -- Sections.Requirements
@@ -50,12 +51,12 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
   TSIntro(..), TUIntro(..))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
-  Verbosity(Verbose), ddefn)
+  Verbosity(..), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
 --import Drasil.DocumentLanguage.TraceabilityMatrix
 --import Drasil.Sections.AuxiliaryConstants
 --import Drasil.Sections.GeneralSystDesc
---import Drasil.Sections.Introduction
+import Drasil.Sections.Introduction (purpDoc)
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.Requirements (inReq, inTable, mkInputPropsTable,
   mkQRTuple, mkQRTupleRef, mkValsSourceTable)

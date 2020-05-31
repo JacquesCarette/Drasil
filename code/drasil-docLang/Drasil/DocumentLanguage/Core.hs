@@ -96,7 +96,7 @@ data IntroSec = IntroProg Sentence Sentence [IntroSub]
 
 -- | Introduction subsections
 data IntroSub where
-  IPurpose :: Sentence -> IntroSub
+  IPurpose :: [Sentence] -> IntroSub
   IScope   :: Sentence -> IntroSub
   IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
   IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub

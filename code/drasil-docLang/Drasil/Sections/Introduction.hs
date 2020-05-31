@@ -1,9 +1,10 @@
 module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, scopeOfRequirements, 
-  charIntRdrF) where
+  charIntRdrF, purpDoc) where
 
 import Language.Drasil
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
-  charOfIR, orgOfDoc, goalStmt, thModel, inModel)
+  charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
+import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -11,17 +12,18 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   decision, definition, desSpec, design, designDoc, document, documentation,
   environment, goal, goalStmt, implementation, intReader, model, organization,
   purpose, requirement, scope, section_, softwareDoc, softwareVAV, srs,
-  theory, user, vavPlan)
+  theory, user, vavPlan, problem, information, systemConstraint)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Citations (parnasClements1986)
+
 
 -----------------------
 --     Constants     --
 -----------------------
 
 -- | Contents explaining the development process of this program
-developmentProcessParagraph :: Contents
-developmentProcessParagraph = foldlSP [S "This", phrase document, 
+developmentProcessParagraph :: Sentence
+developmentProcessParagraph = foldlSent [S "This", phrase document, 
   S "will be used as a starting point for subsequent development", 
   S "phases, including writing the", phrase desSpec, S "and the", 
   phrase softwareVAV, S "plan. The", phrase designDoc, S "will show how the", 
@@ -67,13 +69,31 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
   programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
   S "of this", phrase document `sC` introductionSubsections]
 
+
+-- | Constructor for purpose of document function that each example controls
+-- | verbosity controls if second paragraph is added or not
+purpDocPara1 :: CI -> Sentence 
+purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase document, S "is to",
+  S "record the", plural requirement, S "of the" +:+. titleize proName, 
+  atStart' goal `sC` plural assumption `sC` plural thModel `sC` 
+  plural definition `sC` S "and other", phrase model, S "derivation",
+  phrase information, S "are specified" `sC` S "allowing the reader to fully",
+  S "understand" `sAnd` S "verify the", phrase purpose `sAnd` S "scientific",
+  S "basis of" +:+. short proName, S "With the exception of", 
+  plural systemConstraint, S "in", makeRef2S (SRS.sysCon [] []) `sC` S "this",
+  short Doc.srs, S "will remain abstract, describing what", phrase problem,
+  S "is being solved, but not how to solve it"] 
+purpDoc :: CI->Verbosity -> [Sentence]
+purpDoc proName Verbose = [purpDocPara1 proName, developmentProcessParagraph]
+purpDoc proName Succinct = [purpDocPara1 proName]
 -- | constructor for purpose of document subsection
 -- purposeOfProgramParagraph - a sentence explaining the purpose of the specific 
 -- example
-purposeOfDoc :: Sentence -> Section
-purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc 
-  [mkParagraph purposeOfProgramParagraph, developmentProcessParagraph] []
-
+purposeOfDoc :: [Sentence] -> Section
+purposeOfDoc [purposeOfProgram] = SRS.prpsOfDoc [mkParagraph purposeOfProgram] []
+purposeOfDoc [purposeOfProgram, developmentProcess] = SRS.prpsOfDoc 
+  [mkParagraph purposeOfProgram, mkParagraph developmentProcess] []
+purposeOfDoc _ = SRS.prpsOfDoc [mkParagraph developmentProcessParagraph] []
 
 -- | constructor for scope of requirements subsection
 -- req - the main requirement for the program

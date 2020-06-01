@@ -235,7 +235,7 @@ buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label]
   -> [SMethod r] -> [SClass r] -> FSModule r
 buildModule' n inc is ms cs = S.modFromData n (do
   cls <- mapM (zoom lensFStoCS) 
-          (if null ms then cs else S.buildClass n Nothing [] ms : cs) 
+          (if null ms then cs else S.buildClass Nothing [] ms : cs) 
   lis <- getLangImports
   libis <- getLibImports
   mis <- getModuleImports

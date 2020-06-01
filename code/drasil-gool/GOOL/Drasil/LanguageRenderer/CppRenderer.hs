@@ -62,8 +62,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
   increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
-  constructor, function, docFunc, buildClass, implementingClass, docClass, 
-  commentedClass, modFromData, fileDoc, docMod, fileFromData)
+  constructor, function, docFunc, buildClass, extraClass, 
+  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (objVar, 
   funcType, listSetFunc, buildModule, litArray, call', listSizeFunc, 
@@ -87,14 +87,14 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat,
   on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList, 
   on2StateLists, on1StateValue1List)
 import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
-  lensCStoMS, lensCStoVS, lensMStoCS, lensMStoVS, lensVStoMS, modifyReturn, 
-  revFiles, addLangImport, addLangImportVS, getLangImports, getLibImports, 
-  addModuleImportVS, getModuleImports, addHeaderLangImport, 
+  lensCStoMS, lensCStoVS, lensMStoCS, lensCStoFS, lensMStoVS, lensVStoMS, 
+  modifyReturn, revFiles, addLangImport, addLangImportVS, getLangImports, 
+  getLibImports, addModuleImportVS, getModuleImports, addHeaderLangImport, 
   getHeaderLangImports, addHeaderModImport, getHeaderLibImports, 
   getHeaderModImports, addDefine, getDefines, addHeaderDefine, 
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing, 
-  setFileType, setClassName, getClassName, setCurrMain, getCurrMain, 
-  getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+  setFileType, getModuleName, setClassName, getClassName, setCurrMain, 
+  getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
@@ -725,9 +725,11 @@ instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   type Class (p CppSrcCode CppHdrCode) = Doc
-  buildClass n p vs fs = modify (setClassName n) >> pair2Lists 
-    (buildClass n p) (buildClass n p)
-    vs (map (zoom lensCStoMS) fs)
+  buildClass p vs fs = do
+    n <- zoom lensCStoFS getModuleName
+    modify (setClassName n)
+    pair2Lists (buildClass n p) (buildClass n p)
+      vs (map (zoom lensCStoMS) fs)
   extraClass n p vs fs = modify (setClassName n) >> pair2Lists 
     (extraClass n p) (extraClass n p)
     vs (map (zoom lensCStoMS) fs)
@@ -1533,7 +1535,7 @@ instance StateVarElim CppSrcCode where
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
   buildClass = G.buildClass
-  extraClass = buildClass
+  extraClass = G.extraClass
   implementingClass = G.implementingClass
 
   docClass = G.docClass
@@ -2122,7 +2124,7 @@ instance StateVarElim CppHdrCode where
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
   buildClass = G.buildClass
-  extraClass = buildClass
+  extraClass = G.extraClass
   implementingClass = G.implementingClass
 
   docClass = G.docClass

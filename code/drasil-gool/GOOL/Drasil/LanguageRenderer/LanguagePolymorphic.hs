@@ -12,7 +12,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, increment, objDecNew, 
   print, closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, 
   construct, param, method, getMethod, setMethod, constructor, function, 
-  docFuncRepr, docFunc, buildClass, implementingClass, docClass, 
+  docFuncRepr, docFunc, buildClass, extraClass, implementingClass, docClass, 
   commentedClass, modFromData, fileDoc, docMod
 ) where
 
@@ -66,8 +66,8 @@ import qualified GOOL.Drasil.LanguageRenderer as R (file, block, assign,
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkVal, mkStateVar, mkStaticVar, VSOp, unOpPrec, compEqualPrec, 
   compPrec, addPrec, multPrec)
-import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, currMain, 
-  currFileType, modifyReturnFunc, addFile, setMainMod, setModuleName, 
+import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
+  currMain, currFileType, modifyReturnFunc, addFile, setMainMod, setModuleName, 
   getModuleName, getClassName, addParameter, getParameters)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
@@ -437,9 +437,15 @@ docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
 -- Classes --
 
-buildClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
+buildClass :: (RenderSym r) =>  Maybe Label -> [CSStateVar r] -> 
   [SMethod r] -> SClass r
-buildClass n = S.intClass n public . inherit
+buildClass p stVars methods = do 
+  n <- zoom lensCStoFS getModuleName
+  S.intClass n public (inherit p) stVars methods
+
+extraClass :: (RenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+  SClass r
+extraClass n = S.intClass n public . inherit
 
 implementingClass :: (RenderSym r) => Label -> [Label] -> [CSStateVar r] -> 
   [SMethod r] -> SClass r

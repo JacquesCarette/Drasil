@@ -6,7 +6,7 @@ module GOOL.Drasil.State (
   -- Lenses
   lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS, lensCStoMS, 
   lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, lensVStoMS, 
-  headers, sources, mainMod, currMain, currFileType, currParameters,
+  lensCStoFS, headers, sources, mainMod, currMain, currFileType, currParameters,
   -- Initial states
   initialState, initialFS, 
   -- State helpers
@@ -138,6 +138,9 @@ lensFStoGS = goolState
 
 lensFStoCS :: Lens' FileState ClassState
 lensFStoCS = lens (\fs -> set fileState fs initialCS) (const (^. fileState))
+
+lensCStoFS :: Lens' ClassState FileState
+lensCStoFS = fileState
 
 -- FS - MS --
 

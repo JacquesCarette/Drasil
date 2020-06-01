@@ -235,7 +235,7 @@ $σ'$ & Effective Stress: The stress in a soil mass that is effective in causing
 \\
 ${σ_{N}}'$ & Effective Normal Stress: The normal stress in a soil mass that is effective in causing volume changes; represents the average normal stress carried by the soil skeleton. & ${\text{Pa}}$
 \\
-$τ$ & Shear Strength: The strength of a material against shear failure. & ${\text{Pa}}$
+${τ^{\text{f}}}$ & Shear Strength: The strength of a material against shear failure. & ${\text{Pa}}$
 \\
 $\mathbf{τ}$ & Torque: A twisting force that tends to cause rotation. & $\text{N}\text{m}$
 \\
@@ -539,17 +539,17 @@ Label & Mohr-Coulumb shear strength
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           τ={σ_{N}}' \tan\left(φ'\right)+c'
+           {τ^{\text{f}}}={σ_{N}}' \tan\left(φ'\right)+c'
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$τ$ is the shear strength (${\text{Pa}}$)}
+              \item{${τ^{\text{f}}}$ is the shear strength (${\text{Pa}}$)}
               \item{${σ_{N}}'$ is the effective normal stress (${\text{Pa}}$)}
               \item{$φ'$ is the effective angle of friction (${{}^{\circ}}$)}
               \item{$c'$ is the effective cohesion (${\text{Pa}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & In this model the shear strength $τ$ is proportional to the product of the effective normal stress ${σ_{N}}'$ on the plane with its static friction in the angular form $\tan\left(φ'\right)$. The $τ$ versus ${σ_{N}}'$ relationship is not truly linear, but assuming the effective normal forces is strong enough, it can be approximated with a linear fit (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}) where the effective cohesion $c'$ represents the $τ$ intercept of the fitted line.
+Notes & In this model the shear strength ${τ^{\text{f}}}$ is proportional to the product of the effective normal stress ${σ_{N}}'$ on the plane with its static friction in the angular form $\tan\left(φ'\right)$. The ${τ^{\text{f}}}$ versus ${σ_{N}}'$ relationship is not truly linear, but assuming the effective normal forces is strong enough, it can be approximated with a linear fit (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}) where the effective cohesion $c'$ represents the ${τ^{\text{f}}}$ intercept of the fitted line.
         
 \\ \midrule \\
 Source & \cite{fredlund1977}

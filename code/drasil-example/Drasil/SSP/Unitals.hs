@@ -354,7 +354,7 @@ porePressure = uc' "u" (cn "pore pressure")
   "the pressure that comes from water within the soil" lU pascal
   
 shrStress = uc' "tau_i" (cn "shear strength")
-  "the strength of a material against shear failure" lTau pascal
+  "the strength of a material against shear failure" (sup lTau (Label"f")) pascal
 
 sliceHght = makeUCWDS "h_z,i" (cn "heights of interslice normal forces")
   ((plural height `inThe` phrase yDir) `ofThe` S "interslice normal forces on each slice")

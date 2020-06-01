@@ -274,7 +274,7 @@ IntroProg :: Sentence -> Sentence -> [IntroSub] -> IntroSec
 
 -- | Introduction subsections
 data IntroSub
-[IPurpose] :: Sentence -> IntroSub
+[IPurpose] :: [Sentence] -> IntroSub
 [IScope] :: Sentence -> IntroSub
 [IChar] :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
 [IOrgSec] :: Sentence -> CI -> Section -> Sentence -> IntroSub
@@ -383,6 +383,7 @@ data InclUnits
 IncludeUnits :: InclUnits
 data Verbosity
 Verbose :: Verbosity
+Succinct :: Verbosity
 
 -- | Create a data definition using a list of fields, a database of
 --   symbols, and a QDefinition (called automatically by <tt>SCSSub</tt>
@@ -391,6 +392,7 @@ ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
 data ModelDB
 ddRefDB :: ModelDB -> RefMap DataDefinition
 mdb :: [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> ModelDB
+purpDoc :: CI -> Verbosity -> [Sentence]
 
 -- | Default reference section introduction
 intro :: Contents

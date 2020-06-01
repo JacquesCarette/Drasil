@@ -65,7 +65,7 @@ mkClass s n l desc vs mths = do
   ms <- withReader (\ds -> ds {currentClass = n}) mths
   let getFunc Primary = getFunc' l
       getFunc Auxiliary = extraClass n Nothing
-      getFunc' Nothing = buildClass n Nothing
+      getFunc' Nothing = buildClass Nothing
       getFunc' (Just intfc) = implementingClass n [intfc]
       c = getFunc s vs ms
   return $ if CommentClass `elem` commented g 

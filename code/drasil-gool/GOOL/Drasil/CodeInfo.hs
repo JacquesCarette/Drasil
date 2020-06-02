@@ -389,12 +389,9 @@ instance StateVarSym CodeInfo where
 
 instance ClassSym CodeInfo where
   type Class CodeInfo = ()
-
   buildClass _ _ ms = do
     n <- zoom lensCStoFS getModuleName
-    modify (addClass n . setClassName n)
-    mapM_ (zoom lensCStoMS) ms
-    noInfo
+    implementingClass n [] [] ms
   extraClass n _ _ ms = do
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) ms

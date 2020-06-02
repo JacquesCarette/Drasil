@@ -18,7 +18,7 @@ import Drasil.SSP.References (fredlund1977)
 import Drasil.SSP.Unitals (effCohesion, effNormStress, effectiveStress, 
   fricAngle, fs, fx, fy, genericM, mobilizedShear, nrmFSubWat, porePressure, 
   resistiveShear, shrStress, totStress)
-import Drasil.SSP.DataDefs (stressDD)
+import Drasil.SSP.DataDefs (normStressDD)
 
 --------------------------
 --  Theoretical Models  --
@@ -109,4 +109,4 @@ effStressRel :: Relation
 effStressRel = sy effectiveStress $= sy totStress - sy porePressure
 
 effStressDesc :: Sentence
-effStressDesc = foldlSent [ch totStress, S "is defined in", makeRef2S stressDD]
+effStressDesc = foldlSent [ch totStress, S "is defined in", makeRef2S normStressDD]

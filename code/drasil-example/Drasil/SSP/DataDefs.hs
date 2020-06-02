@@ -1,5 +1,5 @@
 module Drasil.SSP.DataDefs (dataDefs, intersliceWtrF, angleA, angleB, lengthB,
-  lengthLb, lengthLs, slcHeight, stressDD, ratioVariation, convertFunc1, 
+  lengthLb, lengthLs, slcHeight, normStressDD, ratioVariation, convertFunc1, 
   convertFunc2, nrmForceSumDD, watForceSumDD) where 
 
 import Prelude hiding (cos, sin, tan)
@@ -27,7 +27,7 @@ import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle,
 
 dataDefs :: [DataDefinition]
 dataDefs = [intersliceWtrF, angleA, angleB, lengthB, lengthLb, lengthLs,
-  slcHeight, stressDD, torqueDD, ratioVariation, convertFunc1, 
+  slcHeight, normStressDD, torqueDD, ratioVariation, convertFunc1, 
   convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
 
 --DD4
@@ -158,14 +158,14 @@ slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+
 
 --DD10
 
-stressDD :: DataDefinition
-stressDD = dd stressQD [makeCite huston2008] Nothing "normStress" []
+normStressDD :: DataDefinition
+normStressDD = dd normStressQD [makeCite huston2008] Nothing "normStress" []
 
-stressQD :: QDefinition
-stressQD = mkQuantDef totStress stressEqn
+normStressQD :: QDefinition
+normStressQD = mkQuantDef totStress normStressEqn
 
-stressEqn :: Expr
-stressEqn = sy fn / sy genericA
+normStressEqn :: Expr
+normStressEqn = sy fn / sy genericA
 
 --DD11
 

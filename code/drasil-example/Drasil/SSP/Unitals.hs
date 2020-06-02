@@ -201,7 +201,7 @@ units = map ucw [accel, genericMass, genericF, genericA, genericM, genericV,
   shearRNoIntsl, slcWght, watrForce, intShrForce, baseHydroForce, 
   surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, 
-  porePressure, sliceHght, sliceHghtW, fx, fy, nrmForceSum, watForceSum, 
+  porePressure, sliceHght, sliceHghtW, fx, fy, fn, nrmForceSum, watForceSum, 
   sliceHghtRight, sliceHghtLeft, intNormForce, shrStress, totStress, 
   effectiveStress, effNormStress, dryVol, satVol, rotForce, momntArm, posVec]
 
@@ -211,7 +211,7 @@ accel, genericMass, genericF, genericA, genericM, genericV, genericW,
   mobilizedShear, mobShrI, sliceHght, sliceHghtW, shearFNoIntsl, shearRNoIntsl,
   slcWght, watrForce, resistiveShear, shrResI, intShrForce, baseHydroForce, 
   surfHydroForce, totNrmForce, nrmFSubWat, surfLoad, baseAngle, surfAngle, 
-  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, fx, fy, 
+  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, fx, fy, fn, 
   nrmForceSum, watForceSum, sliceHghtRight, sliceHghtLeft, porePressure, 
   intNormForce, shrStress, totStress, effectiveStress, effNormStress, dryVol, 
   satVol, rotForce, momntArm, posVec :: UnitalChunk
@@ -380,6 +380,9 @@ fx = makeUCWDS "fx" (nounPhraseSent $ phrase xCoord +:+ S "of the force")
 fy = makeUCWDS "fy" (nounPhraseSent $ phrase yCoord +:+ S "of the force")
   (S "the force acting" `inThe` phrase yDir) (subY cF) newton
 
+fn = uc' "F_n" (cn "total normal force") "component of a force in the normal direction"
+  (sub cF (Label "n")) newton
+
 nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces") 
   "the sums of the normal forces acting on each pair of adjacent interslice boundaries"
   (sup (subX (vec cF)) lNorm) newton
@@ -396,7 +399,7 @@ sliceHghtLeft = uc' "h^L" (cn "heights of the left side of slices")
   "the heights of the left side of each slice, assuming slice surfaces have negative slope"
   (sup (vec lH) lLeft) metre
 
-totStress = uc' "sigma" (cn' "total stress")
+totStress = uc' "sigma" (cn' "total normal stress")
   "the total force per area acting on the soil mass" lSigma pascal
 
 effectiveStress = uc' "sigma'" (cn' "effective stress")

@@ -85,6 +85,8 @@ $c'$ & Effective Cohesion: The internal pressure that sticks particles of soil t
 \\
 $const_f$ & Decision on F: A Boolean decision on which form of f the user desires: constant if true, or half-sine if false. & --
 \\
+${F_{\text{n}}}$ & Total Normal Force: Component of a force in the normal direction. & ${\text{N}}$
+\\
 ${F_{\text{rot}}}$ & Force Causing Rotation: A force in the direction of rotation. & ${\text{N}}$
 \\
 ${F_{\text{S}}}$ & Factor of Safety: The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force. & --
@@ -229,7 +231,7 @@ $π$ & Ratio of Circumference to Diameter for Any Circle: The ratio of a circle'
 \\
 $ρ$ & Density: The mass per unit volume. & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-$σ$ & Total Stress: The total force per area acting on the soil mass. & ${\text{Pa}}$
+$σ$ & Total Normal Stress: The total force per area acting on the soil mass. & ${\text{Pa}}$
 \\
 $σ'$ & Effective Stress: The stress in a soil mass that is effective in causing volume changes and mobilizes the shear strength arising from friction; represents the average stress carried by the soil skeleton. & ${\text{Pa}}$
 \\
@@ -577,11 +579,11 @@ Equation & \begin{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$σ'$ is the effective stress (${\text{Pa}}$)}
-              \item{$σ$ is the total stress (${\text{Pa}}$)}
+              \item{$σ$ is the total normal stress (${\text{Pa}}$)}
               \item{$u$ is the pore pressure (${\text{Pa}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $σ$ is defined in \hyperref[DD:stress]{DD: stress}.
+Notes & $σ$ is defined in \hyperref[DD:normStress]{DD: normStress}.
         
 \\ \midrule \\
 Source & \cite{fredlund1977}
@@ -764,7 +766,7 @@ RefBy & \hyperref[GD:mobShr]{GD: mobShr}
 \end{minipage}
 \paragraph{}
 \label{GD:resShrDeriv}
-Derived by substituting \hyperref[DD:stress]{DD: stress} into the Mohr-Coulomb shear strength, \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}, and multiplying both sides of the equation by the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction. The effective angle of friction $φ'$ and the effective cohesion $c'$ are not indexed by $i$ because they are assumed to be isotropic (\hyperref[assumpSLI]{A: Soil-Layers-Isotropic}) and the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}, \hyperref[assumpSP]{A: Soil-Properties}).
+Derived by substituting \hyperref[DD:normStress]{DD: normStress} into the Mohr-Coulomb shear strength, \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}, and multiplying both sides of the equation by the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction. The effective angle of friction $φ'$ and the effective cohesion $c'$ are not indexed by $i$ because they are assumed to be isotropic (\hyperref[assumpSLI]{A: Soil-Layers-Isotropic}) and the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}, \hyperref[assumpSP]{A: Soil-Properties}).
 
 \vspace{\baselineskip}
 \noindent
@@ -847,7 +849,7 @@ RefBy &
 \end{minipage}
 \paragraph{}
 \label{GD:effNormFDeriv}
-Derived by substituting \hyperref[DD:stress]{DD: stress} into \hyperref[TM:effStress]{TM: effStress} and multiplying both sides of the equation by the the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction.
+Derived by substituting \hyperref[DD:normStress]{DD: normStress} into \hyperref[TM:effStress]{TM: effStress} and multiplying both sides of the equation by the the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction.
 
 \vspace{\baselineskip}
 \noindent
@@ -1666,11 +1668,11 @@ RefBy & \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} and \hyperref[GD:momentEql]
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:stress}
+\toprule \textbf{Refname} & \textbf{DD:normStress}
 \phantomsection 
-\label{DD:stress}
+\label{DD:normStress}
 \\ \midrule \\
-Label & Total stress
+Label & Total normal stress
         
 \\ \midrule \\
 Symbol & $σ$
@@ -1680,12 +1682,12 @@ Units & ${\text{Pa}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           σ=\frac{\mathbf{F}}{A}
+           σ=\frac{{F_{\text{n}}}}{A}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$σ$ is the total stress (${\text{Pa}}$)}
-              \item{$\mathbf{F}$ is the force (${\text{N}}$)}
+              \item{$σ$ is the total normal stress (${\text{Pa}}$)}
+              \item{${F_{\text{n}}}$ is the total normal force (${\text{N}}$)}
               \item{$A$ is the area (${\text{m}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -2677,7 +2679,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:slcHeight]{DD: slcHeight} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[DD:stress]{DD: stress} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:normStress]{DD: normStress} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:torque]{DD: torque} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -2789,7 +2791,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}} & \textbf{\hyperref[DD:angleA]{DD: angleA}} & \textbf{\hyperref[DD:angleB]{DD: angleB}} & \textbf{\hyperref[DD:lengthB]{DD: lengthB}} & \textbf{\hyperref[DD:lengthLb]{DD: lengthLb}} & \textbf{\hyperref[DD:lengthLs]{DD: lengthLs}} & \textbf{\hyperref[DD:slcHeight]{DD: slcHeight}} & \textbf{\hyperref[DD:stress]{DD: stress}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:ratioVariation]{DD: ratioVariation}} & \textbf{\hyperref[DD:convertFunc1]{DD: convertFunc1}} & \textbf{\hyperref[DD:convertFunc2]{DD: convertFunc2}} & \textbf{\hyperref[DD:nrmForceSumDD]{DD: nrmForceSumDD}} & \textbf{\hyperref[DD:watForceSumDD]{DD: watForceSumDD}} & \textbf{\hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD}} & \textbf{\hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD}} & \textbf{\hyperref[TM:factOfSafety]{TM: factOfSafety}} & \textbf{\hyperref[TM:equilibrium]{TM: equilibrium}} & \textbf{\hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}} & \textbf{\hyperref[TM:effStress]{TM: effStress}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[GD:normForcEq]{GD: normForcEq}} & \textbf{\hyperref[GD:bsShrFEq]{GD: bsShrFEq}} & \textbf{\hyperref[GD:resShr]{GD: resShr}} & \textbf{\hyperref[GD:mobShr]{GD: mobShr}} & \textbf{\hyperref[GD:effNormF]{GD: effNormF}} & \textbf{\hyperref[GD:resShearWO]{GD: resShearWO}} & \textbf{\hyperref[GD:mobShearWO]{GD: mobShearWO}} & \textbf{\hyperref[GD:normShrR]{GD: normShrR}} & \textbf{\hyperref[GD:momentEql]{GD: momentEql}} & \textbf{\hyperref[GD:weight]{GD: weight}} & \textbf{\hyperref[GD:sliceWght]{GD: sliceWght}} & \textbf{\hyperref[GD:hsPressure]{GD: hsPressure}} & \textbf{\hyperref[GD:baseWtrF]{GD: baseWtrF}} & \textbf{\hyperref[GD:srfWtrF]{GD: srfWtrF}} & \textbf{\hyperref[IM:fctSfty]{IM: fctSfty}} & \textbf{\hyperref[IM:nrmShrFor]{IM: nrmShrFor}} & \textbf{\hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}} & \textbf{\hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}} & \textbf{\hyperref[IM:intsliceFs]{IM: intsliceFs}} & \textbf{\hyperref[IM:crtSlpId]{IM: crtSlpId}}
+\textbf{} & \textbf{\hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}} & \textbf{\hyperref[DD:angleA]{DD: angleA}} & \textbf{\hyperref[DD:angleB]{DD: angleB}} & \textbf{\hyperref[DD:lengthB]{DD: lengthB}} & \textbf{\hyperref[DD:lengthLb]{DD: lengthLb}} & \textbf{\hyperref[DD:lengthLs]{DD: lengthLs}} & \textbf{\hyperref[DD:slcHeight]{DD: slcHeight}} & \textbf{\hyperref[DD:normStress]{DD: normStress}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:ratioVariation]{DD: ratioVariation}} & \textbf{\hyperref[DD:convertFunc1]{DD: convertFunc1}} & \textbf{\hyperref[DD:convertFunc2]{DD: convertFunc2}} & \textbf{\hyperref[DD:nrmForceSumDD]{DD: nrmForceSumDD}} & \textbf{\hyperref[DD:watForceSumDD]{DD: watForceSumDD}} & \textbf{\hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD}} & \textbf{\hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD}} & \textbf{\hyperref[TM:factOfSafety]{TM: factOfSafety}} & \textbf{\hyperref[TM:equilibrium]{TM: equilibrium}} & \textbf{\hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}} & \textbf{\hyperref[TM:effStress]{TM: effStress}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[GD:normForcEq]{GD: normForcEq}} & \textbf{\hyperref[GD:bsShrFEq]{GD: bsShrFEq}} & \textbf{\hyperref[GD:resShr]{GD: resShr}} & \textbf{\hyperref[GD:mobShr]{GD: mobShr}} & \textbf{\hyperref[GD:effNormF]{GD: effNormF}} & \textbf{\hyperref[GD:resShearWO]{GD: resShearWO}} & \textbf{\hyperref[GD:mobShearWO]{GD: mobShearWO}} & \textbf{\hyperref[GD:normShrR]{GD: normShrR}} & \textbf{\hyperref[GD:momentEql]{GD: momentEql}} & \textbf{\hyperref[GD:weight]{GD: weight}} & \textbf{\hyperref[GD:sliceWght]{GD: sliceWght}} & \textbf{\hyperref[GD:hsPressure]{GD: hsPressure}} & \textbf{\hyperref[GD:baseWtrF]{GD: baseWtrF}} & \textbf{\hyperref[GD:srfWtrF]{GD: srfWtrF}} & \textbf{\hyperref[IM:fctSfty]{IM: fctSfty}} & \textbf{\hyperref[IM:nrmShrFor]{IM: nrmShrFor}} & \textbf{\hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}} & \textbf{\hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}} & \textbf{\hyperref[IM:intsliceFs]{IM: intsliceFs}} & \textbf{\hyperref[IM:crtSlpId]{IM: crtSlpId}}
 \\
 \midrule
 \endhead
@@ -2807,7 +2809,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:slcHeight]{DD: slcHeight} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:stress]{DD: stress} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:normStress]{DD: normStress} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:torque]{DD: torque} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -2881,7 +2883,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}} & \textbf{\hyperref[DD:angleA]{DD: angleA}} & \textbf{\hyperref[DD:angleB]{DD: angleB}} & \textbf{\hyperref[DD:lengthB]{DD: lengthB}} & \textbf{\hyperref[DD:lengthLb]{DD: lengthLb}} & \textbf{\hyperref[DD:lengthLs]{DD: lengthLs}} & \textbf{\hyperref[DD:slcHeight]{DD: slcHeight}} & \textbf{\hyperref[DD:stress]{DD: stress}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:ratioVariation]{DD: ratioVariation}} & \textbf{\hyperref[DD:convertFunc1]{DD: convertFunc1}} & \textbf{\hyperref[DD:convertFunc2]{DD: convertFunc2}} & \textbf{\hyperref[DD:nrmForceSumDD]{DD: nrmForceSumDD}} & \textbf{\hyperref[DD:watForceSumDD]{DD: watForceSumDD}} & \textbf{\hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD}} & \textbf{\hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD}} & \textbf{\hyperref[TM:factOfSafety]{TM: factOfSafety}} & \textbf{\hyperref[TM:equilibrium]{TM: equilibrium}} & \textbf{\hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}} & \textbf{\hyperref[TM:effStress]{TM: effStress}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[GD:normForcEq]{GD: normForcEq}} & \textbf{\hyperref[GD:bsShrFEq]{GD: bsShrFEq}} & \textbf{\hyperref[GD:resShr]{GD: resShr}} & \textbf{\hyperref[GD:mobShr]{GD: mobShr}} & \textbf{\hyperref[GD:effNormF]{GD: effNormF}} & \textbf{\hyperref[GD:resShearWO]{GD: resShearWO}} & \textbf{\hyperref[GD:mobShearWO]{GD: mobShearWO}} & \textbf{\hyperref[GD:normShrR]{GD: normShrR}} & \textbf{\hyperref[GD:momentEql]{GD: momentEql}} & \textbf{\hyperref[GD:weight]{GD: weight}} & \textbf{\hyperref[GD:sliceWght]{GD: sliceWght}} & \textbf{\hyperref[GD:hsPressure]{GD: hsPressure}} & \textbf{\hyperref[GD:baseWtrF]{GD: baseWtrF}} & \textbf{\hyperref[GD:srfWtrF]{GD: srfWtrF}} & \textbf{\hyperref[IM:fctSfty]{IM: fctSfty}} & \textbf{\hyperref[IM:nrmShrFor]{IM: nrmShrFor}} & \textbf{\hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}} & \textbf{\hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}} & \textbf{\hyperref[IM:intsliceFs]{IM: intsliceFs}} & \textbf{\hyperref[IM:crtSlpId]{IM: crtSlpId}} & \textbf{\hyperref[readAndStore]{FR: Read-and-Store}} & \textbf{\hyperref[verifyInput]{FR: Verify-Input}} & \textbf{\hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}} & \textbf{\hyperref[verifyOutput]{FR: Verify-Output}} & \textbf{\hyperref[displayInput]{FR: Display-Input}} & \textbf{\hyperref[displayGraph]{FR: Display-Graph}} & \textbf{\hyperref[displayFS]{FR: Display-Factor-of-Safety}} & \textbf{\hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces}} & \textbf{\hyperref[displayShear]{FR: Display-Interslice-Shear-Forces}} & \textbf{\hyperref[writeToFile]{FR: Write-Results-To-File}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
+\textbf{} & \textbf{\hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}} & \textbf{\hyperref[DD:angleA]{DD: angleA}} & \textbf{\hyperref[DD:angleB]{DD: angleB}} & \textbf{\hyperref[DD:lengthB]{DD: lengthB}} & \textbf{\hyperref[DD:lengthLb]{DD: lengthLb}} & \textbf{\hyperref[DD:lengthLs]{DD: lengthLs}} & \textbf{\hyperref[DD:slcHeight]{DD: slcHeight}} & \textbf{\hyperref[DD:normStress]{DD: normStress}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:ratioVariation]{DD: ratioVariation}} & \textbf{\hyperref[DD:convertFunc1]{DD: convertFunc1}} & \textbf{\hyperref[DD:convertFunc2]{DD: convertFunc2}} & \textbf{\hyperref[DD:nrmForceSumDD]{DD: nrmForceSumDD}} & \textbf{\hyperref[DD:watForceSumDD]{DD: watForceSumDD}} & \textbf{\hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD}} & \textbf{\hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD}} & \textbf{\hyperref[TM:factOfSafety]{TM: factOfSafety}} & \textbf{\hyperref[TM:equilibrium]{TM: equilibrium}} & \textbf{\hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}} & \textbf{\hyperref[TM:effStress]{TM: effStress}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[GD:normForcEq]{GD: normForcEq}} & \textbf{\hyperref[GD:bsShrFEq]{GD: bsShrFEq}} & \textbf{\hyperref[GD:resShr]{GD: resShr}} & \textbf{\hyperref[GD:mobShr]{GD: mobShr}} & \textbf{\hyperref[GD:effNormF]{GD: effNormF}} & \textbf{\hyperref[GD:resShearWO]{GD: resShearWO}} & \textbf{\hyperref[GD:mobShearWO]{GD: mobShearWO}} & \textbf{\hyperref[GD:normShrR]{GD: normShrR}} & \textbf{\hyperref[GD:momentEql]{GD: momentEql}} & \textbf{\hyperref[GD:weight]{GD: weight}} & \textbf{\hyperref[GD:sliceWght]{GD: sliceWght}} & \textbf{\hyperref[GD:hsPressure]{GD: hsPressure}} & \textbf{\hyperref[GD:baseWtrF]{GD: baseWtrF}} & \textbf{\hyperref[GD:srfWtrF]{GD: srfWtrF}} & \textbf{\hyperref[IM:fctSfty]{IM: fctSfty}} & \textbf{\hyperref[IM:nrmShrFor]{IM: nrmShrFor}} & \textbf{\hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}} & \textbf{\hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}} & \textbf{\hyperref[IM:intsliceFs]{IM: intsliceFs}} & \textbf{\hyperref[IM:crtSlpId]{IM: crtSlpId}} & \textbf{\hyperref[readAndStore]{FR: Read-and-Store}} & \textbf{\hyperref[verifyInput]{FR: Verify-Input}} & \textbf{\hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}} & \textbf{\hyperref[verifyOutput]{FR: Verify-Output}} & \textbf{\hyperref[displayInput]{FR: Display-Input}} & \textbf{\hyperref[displayGraph]{FR: Display-Graph}} & \textbf{\hyperref[displayFS]{FR: Display-Factor-of-Safety}} & \textbf{\hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces}} & \textbf{\hyperref[displayShear]{FR: Display-Interslice-Shear-Forces}} & \textbf{\hyperref[writeToFile]{FR: Write-Results-To-File}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
 \\
 \midrule
 \endhead

@@ -16,8 +16,8 @@ import Drasil.SSP.Assumptions (assumpSBSBISL)
 import Drasil.SSP.Defs (slice)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, huston2008)
 import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle, 
-  fs, genericF, genericA, intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
-  mobShrC, normToShear, scalFunc, shrResC, slipDist, slipHght, slopeDist, 
+  fs, genericA, intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
+  fn, mobShrC, normToShear, scalFunc, shrResC, slipDist, slipHght, slopeDist, 
   slopeHght, surfAngle, surfLngth, totStress, nrmForceSum, watForceSum, 
   sliceHghtRight, sliceHghtLeft, waterHght, waterWeight, watrForce)
 
@@ -159,13 +159,13 @@ slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+
 --DD10
 
 stressDD :: DataDefinition
-stressDD = dd stressQD [makeCite huston2008] Nothing "stress" []
+stressDD = dd stressQD [makeCite huston2008] Nothing "normStress" []
 
 stressQD :: QDefinition
 stressQD = mkQuantDef totStress stressEqn
 
 stressEqn :: Expr
-stressEqn = sy genericF / sy genericA
+stressEqn = sy fn / sy genericA
 
 --DD11
 

@@ -1,6 +1,6 @@
 module Drasil.SSP.DataDefs (dataDefs, intersliceWtrF, angleA, angleB, lengthB,
-  lengthLb, lengthLs, slcHeight, normStressDD, ratioVariation, convertFunc1, 
-  convertFunc2, nrmForceSumDD, watForceSumDD) where 
+  lengthLb, lengthLs, slcHeight, normStressDD, tangStressDD, ratioVariation, 
+  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
@@ -17,9 +17,9 @@ import Drasil.SSP.Defs (slice)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, huston2008)
 import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle, 
   fs, genericA, intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
-  fn, mobShrC, normToShear, scalFunc, shrResC, slipDist, slipHght, slopeDist, 
-  slopeHght, surfAngle, surfLngth, totStress, nrmForceSum, watForceSum, 
-  sliceHghtRight, sliceHghtLeft, waterHght, waterWeight, watrForce)
+  fn, ft, mobShrC, normToShear, scalFunc, shrResC, slipDist, slipHght, slopeDist, 
+  slopeHght, surfAngle, surfLngth, totNormStress, tangStress, nrmForceSum, 
+  watForceSum, sliceHghtRight, sliceHghtLeft, waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
@@ -27,7 +27,7 @@ import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle,
 
 dataDefs :: [DataDefinition]
 dataDefs = [intersliceWtrF, angleA, angleB, lengthB, lengthLb, lengthLs,
-  slcHeight, normStressDD, torqueDD, ratioVariation, convertFunc1, 
+  slcHeight, normStressDD, tangStressDD, torqueDD, ratioVariation, convertFunc1, 
   convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
 
 --DD4
@@ -162,12 +162,23 @@ normStressDD :: DataDefinition
 normStressDD = dd normStressQD [makeCite huston2008] Nothing "normStress" []
 
 normStressQD :: QDefinition
-normStressQD = mkQuantDef totStress normStressEqn
+normStressQD = mkQuantDef totNormStress normStressEqn
 
 normStressEqn :: Expr
 normStressEqn = sy fn / sy genericA
 
 --DD11
+
+tangStressDD :: DataDefinition
+tangStressDD = dd tangStressQD [makeCite huston2008] Nothing "tangStress" []
+
+tangStressQD :: QDefinition
+tangStressQD = mkQuantDef tangStress tangStressEqn
+
+tangStressEqn :: Expr
+tangStressEqn = sy ft / sy genericA
+
+--DD12
 
 ratioVariation :: DataDefinition
 ratioVariation = dd ratioVarQD [makeCite fredlund1977] Nothing 
@@ -183,7 +194,7 @@ ratioVarEqn = completeCase [case1, case2]
         case2 = (sin (sy QM.pi_ * ((inxi slipDist - idx (sy slipDist) 0) /
                 (indxn slipDist - idx (sy slipDist) 0))), UnaryOp Not (sy constF))
 
---DD12
+--DD13
 
 convertFunc1 :: DataDefinition
 convertFunc1 = dd convertFunc1QD (map makeCite [chen2005, karchewski2012]) Nothing
@@ -201,7 +212,7 @@ convertFunc1Eqn = (sy normToShear * inxi scalFunc *
 convertFunc1Notes :: Sentence
 convertFunc1Notes = foldlSent [ch scalFunc, S "is defined in", makeRef2S ratioVariation `sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
 
---DD13
+--DD14
 
 convertFunc2 :: DataDefinition
 convertFunc2 = dd convertFunc2QD (map makeCite [chen2005, karchewski2012]) Nothing

@@ -17,7 +17,7 @@ import Drasil.SSP.Defs (factorOfSafety)
 import Drasil.SSP.References (fredlund1977)
 import Drasil.SSP.Unitals (effCohesion, effNormStress, effectiveStress, 
   fricAngle, fs, fx, fy, genericM, mobilizedShear, nrmFSubWat, porePressure, 
-  resistiveShear, shrStress, totStress)
+  resistiveShear, shrStress, totNormStress)
 import Drasil.SSP.DataDefs (normStressDD)
 
 --------------------------
@@ -96,7 +96,7 @@ mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
 ------------- New Chunk -----------
 effStress :: TheoryModel
 effStress = tm (cw effStressRC)
-  [qw effectiveStress, qw totStress, qw porePressure] 
+  [qw effectiveStress, qw totNormStress, qw porePressure] 
   ([] :: [ConceptChunk])
   [] [effStressRel] [] [makeCite fredlund1977] "effStress" [effStressDesc]
 
@@ -106,7 +106,7 @@ effStressRC = makeRC "effStressRC"
   (nounPhraseSP "effective stress") effStressDesc effStressRel -- l4
 
 effStressRel :: Relation
-effStressRel = sy effectiveStress $= sy totStress - sy porePressure
+effStressRel = sy effectiveStress $= sy totNormStress - sy porePressure
 
 effStressDesc :: Sentence
-effStressDesc = foldlSent [ch totStress, S "is defined in", makeRef2S normStressDD]
+effStressDesc = foldlSent [ch totNormStress, S "is defined in", makeRef2S normStressDD]

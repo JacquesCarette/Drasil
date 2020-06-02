@@ -137,6 +137,13 @@
                   <td>--</td>
                 </tr>
                 <tr>
+                  <td><em>F<sub>n</sub></em></td>
+                  <td>
+                    Total Normal Force: Component of a force in the normal direction.
+                  </td>
+                  <td><em>N</em></td>
+                </tr>
+                <tr>
                   <td><em>F<sub>rot</sub></em></td>
                   <td>
                     Force Causing Rotation: A force in the direction of rotation.
@@ -629,7 +636,7 @@
                 <tr>
                   <td><em>σ</em></td>
                   <td>
-                    Total Stress: The total force per area acting on the soil mass.
+                    Total Normal Stress: The total force per area acting on the soil mass.
                   </td>
                   <td><em>Pa</em></td>
                 </tr>
@@ -1304,7 +1311,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li><em>σ&prime;</em> is the effective stress (<em>Pa</em>)</li>
-                          <li><em>σ</em> is the total stress (<em>Pa</em>)</li>
+                          <li><em>σ</em> is the total normal stress (<em>Pa</em>)</li>
                           <li><em>u</em> is the pore pressure (<em>Pa</em>)</li>
                         </ul>
                       </td>
@@ -1313,7 +1320,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>σ</em> is defined in <a href=#DD:stress>DD: stress</a>.
+                          <em>σ</em> is defined in <a href=#DD:normStress>DD: normStress</a>.
                         </p>
                       </td>
                     </tr>
@@ -1622,7 +1629,7 @@
                   <div class="subsubsubsection">
                     <h4></h4>
                     <p class="paragraph">
-                      Derived by substituting <a href=#DD:stress>DD: stress</a> into the Mohr-Coulomb shear strength, <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a>, and multiplying both sides of the equation by the area of the slice in the shear-<em>z</em> plane. Since the slope is assumed to extend infinitely in the <em>z</em>-direction (<a href=#assumpPSC>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the <em>z</em>-direction. The effective angle of friction <em>φ&prime;</em> and the effective cohesion <em>c&prime;</em> are not indexed by <em>i</em> because they are assumed to be isotropic (<a href=#assumpSLI>A: Soil-Layers-Isotropic</a>) and the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>, <a href=#assumpSP>A: Soil-Properties</a>).
+                      Derived by substituting <a href=#DD:normStress>DD: normStress</a> into the Mohr-Coulomb shear strength, <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a>, and multiplying both sides of the equation by the area of the slice in the shear-<em>z</em> plane. Since the slope is assumed to extend infinitely in the <em>z</em>-direction (<a href=#assumpPSC>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the <em>z</em>-direction. The effective angle of friction <em>φ&prime;</em> and the effective cohesion <em>c&prime;</em> are not indexed by <em>i</em> because they are assumed to be isotropic (<a href=#assumpSLI>A: Soil-Layers-Isotropic</a>) and the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>, <a href=#assumpSP>A: Soil-Properties</a>).
                     </p>
                   </div>
                 </div>
@@ -1762,7 +1769,7 @@
                   <div class="subsubsubsection">
                     <h4></h4>
                     <p class="paragraph">
-                      Derived by substituting <a href=#DD:stress>DD: stress</a> into <a href=#TM:effStress>TM: effStress</a> and multiplying both sides of the equation by the the area of the slice in the shear-<em>z</em> plane. Since the slope is assumed to extend infinitely in the <em>z</em>-direction (<a href=#assumpPSC>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the <em>z</em>-direction.
+                      Derived by substituting <a href=#DD:normStress>DD: normStress</a> into <a href=#TM:effStress>TM: effStress</a> and multiplying both sides of the equation by the the area of the slice in the shear-<em>z</em> plane. Since the slope is assumed to extend infinitely in the <em>z</em>-direction (<a href=#assumpPSC>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the <em>z</em>-direction.
                     </p>
                   </div>
                 </div>
@@ -3003,15 +3010,15 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
-                <div id="DD:stress">
+                <div id="DD:normStress">
                   <table class="ddefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>DD:stress</b></td>
+                      <td><b>DD:normStress</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Total stress</p></td>
+                      <td><p class="paragraph">Total normal stress</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
@@ -3023,14 +3030,16 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[σ=\frac{\mathbf{F}}{A}\]</td>
+                      <td>\[σ=\frac{{F_{\text{n}}}}{A}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em>σ</em> is the total stress (<em>Pa</em>)</li>
-                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
+                          <li><em>σ</em> is the total normal stress (<em>Pa</em>)</li>
+                          <li>
+                            <em>F<sub>n</sub></em> is the total normal force (<em>N</em>)
+                          </li>
                           <li><em>A</em> is the area (<em>m<sup>2</sup></em>)</li>
                         </ul>
                       </td>
@@ -4837,7 +4846,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:stress>DD: stress</a></td>
+              <td><a href=#DD:normStress>DD: normStress</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5869,7 +5878,7 @@
               <th><a href=#DD:lengthLb>DD: lengthLb</a></th>
               <th><a href=#DD:lengthLs>DD: lengthLs</a></th>
               <th><a href=#DD:slcHeight>DD: slcHeight</a></th>
-              <th><a href=#DD:stress>DD: stress</a></th>
+              <th><a href=#DD:normStress>DD: normStress</a></th>
               <th><a href=#DD:torque>DD: torque</a></th>
               <th><a href=#DD:ratioVariation>DD: ratioVariation</a></th>
               <th><a href=#DD:convertFunc1>DD: convertFunc1</a></th>
@@ -6213,7 +6222,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:stress>DD: stress</a></td>
+              <td><a href=#DD:normStress>DD: normStress</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -7724,7 +7733,7 @@
               <th><a href=#DD:lengthLb>DD: lengthLb</a></th>
               <th><a href=#DD:lengthLs>DD: lengthLs</a></th>
               <th><a href=#DD:slcHeight>DD: slcHeight</a></th>
-              <th><a href=#DD:stress>DD: stress</a></th>
+              <th><a href=#DD:normStress>DD: normStress</a></th>
               <th><a href=#DD:torque>DD: torque</a></th>
               <th><a href=#DD:ratioVariation>DD: ratioVariation</a></th>
               <th><a href=#DD:convertFunc1>DD: convertFunc1</a></th>

@@ -93,7 +93,7 @@ import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderLangImports, addHeaderModImport, getHeaderLibImports, 
   getHeaderModImports, addDefine, getDefines, addHeaderDefine, 
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing, 
-  setFileType, getModuleName, setClassName, getClassName, setCurrMain, 
+  setFileType, getModuleName, setModuleName, setClassName, getClassName, setCurrMain, 
   getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod,max)
@@ -728,8 +728,7 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   buildClass p vs fs = do
     n <- zoom lensCStoFS getModuleName
     modify (setClassName n)
-    pair2Lists (buildClass n p) (buildClass n p)
-      vs (map (zoom lensCStoMS) fs)
+    pair2Lists (buildClass p) (buildClass p) vs (map (zoom lensCStoMS) fs)
   extraClass n p vs fs = modify (setClassName n) >> pair2Lists 
     (extraClass n p) (extraClass n p)
     vs (map (zoom lensCStoMS) fs)
@@ -754,8 +753,10 @@ instance (Pair p) => ClassElim (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
-  buildModule n is ms = pair2Lists (buildModule n is) (buildModule n is) 
-    (map (zoom lensFStoMS) ms) . map (zoom lensFStoCS)
+  buildModule n is ms cs= do 
+    modify (setModuleName n)
+    pair2Lists (buildModule n is) (buildModule n is) 
+        (map (zoom lensFStoMS) ms) (map (zoom lensFStoCS)cs)
   
 instance (Pair p) => RenderMod (p CppSrcCode CppHdrCode) where
   modFromData n d = on2StateValues pair (modFromData n d) (modFromData n d)

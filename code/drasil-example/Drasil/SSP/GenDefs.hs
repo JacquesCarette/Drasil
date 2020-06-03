@@ -28,7 +28,7 @@ import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpHFSM)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (intersliceWtrF, angleA, angleB, lengthB, lengthLb, 
-  lengthLs, slcHeight, normStressDD, ratioVariation)
+  lengthLs, slcHeight, normStressDD, tangStressDD, ratioVariation)
 import Drasil.SSP.Defs (intrslce, slice, slope, slopeSrf, slpSrf, soil, 
   soilPrpty, waterTable)
 import Drasil.SSP.Figures (figForceActing)
@@ -139,7 +139,7 @@ resShrDesc = foldlSent [ch baseLngth, S "is defined in", makeRef2S lengthLb]
 
 resShrDeriv :: Derivation
 resShrDeriv = mkDerivNoHeader [foldlSent [S "Derived by substituting",
-  makeRef2S normStressDD, S "into the Mohr-Coulomb", phrase shrStress `sC`
+  makeRef2S normStressDD, S "and", makeRef2S tangStressDD, S "into the Mohr-Coulomb", phrase shrStress `sC`
   makeRef2S mcShrStrgth `sC` S "and multiplying both sides of the",
   phrase equation, S "by",  phrase genericA `ofThe` phrase slice `sIn`
   S "the shear-" :+: ch zcoord +:+. S "plane", S "Since the", phrase slope,

@@ -30,7 +30,7 @@ dataDefs = [intersliceWtrF, angleA, angleB, lengthB, lengthLb, lengthLs,
   slcHeight, normStressDD, tangStressDD, torqueDD, ratioVariation, convertFunc1, 
   convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
 
---DD4
+--DD intersliceWtrF: interslice normal water forces
 
 intersliceWtrF :: DataDefinition
 intersliceWtrF = dd intersliceWtrFQD [makeCite fredlund1977] Nothing "intersliceWtrF"
@@ -51,7 +51,7 @@ intersliceWtrFEqn = completeCase [case1,case2,case3]
 
         case3 = (0, inxi waterHght $<= inxi slipHght)
 
---DD5
+--DD angleA: base angles
 
 angleA :: DataDefinition
 angleA = dd angleAQD [makeCite fredlund1977] Nothing "angleA" 
@@ -70,7 +70,7 @@ angleANotes = foldlSent [S "This", phrase equation, S "is based on the",
   phrase assumption, S "that the base of a", phrase slice,
   S "is a straight line", sParen (makeRef2S assumpSBSBISL)]
 
---DD6
+--DD angleB: surface angles
 
 angleB :: DataDefinition
 angleB = dd angleBQD [makeCite fredlund1977] Nothing "angleB"
@@ -89,7 +89,7 @@ angleBNotes = foldlSent [S "This", phrase equation, S "is based on the",
   phrase assumption, S "that the surface of a", phrase slice,
   S "is a straight line", sParen (makeRef2S assumpSBSBISL)]
 
---DD7
+--DD lengthB: base width of slices
 
 lengthB :: DataDefinition
 lengthB = dd lengthBQD [makeCite fredlund1977] Nothing "lengthB" []--Notes
@@ -101,7 +101,7 @@ lengthBQD = mkQuantDef baseWthX lengthBEqn
 lengthBEqn :: Expr
 lengthBEqn = inxi slipDist - inx slipDist (-1)
 
---DD8
+--DD lengthLb: total base lengths of slices
 
 lengthLb :: DataDefinition
 lengthLb = dd lengthLbQD [makeCite fredlund1977] Nothing "lengthLb"
@@ -118,7 +118,7 @@ lengthLbNotes :: Sentence
 lengthLbNotes = foldlSent [ch baseWthX, S "is defined in", 
   makeRef2S lengthB `sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
 
---
+--DD lengthLs: surface lengths of slices
 
 lengthLs :: DataDefinition
 lengthLs = dd lengthLsQD [makeCite fredlund1977] Nothing "lengthLs"
@@ -136,7 +136,7 @@ lengthLsNotes = foldlSent [ch baseWthX, S "is defined in",
   makeRef2S lengthB `sAnd` ch surfAngle, S "is defined in", makeRef2S angleB]
   
 
---DD9
+--DD slcHeight: y-direction heights of slices
 
 slcHeight :: DataDefinition
 slcHeight = dd slcHeightQD [makeCite fredlund1977] Nothing "slcHeight"
@@ -156,7 +156,7 @@ slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+
   makeRef2S sliceHghtRightDD `sAnd` makeRef2S sliceHghtLeftDD `sC` 
   S "respectively."]
 
---DD10
+--DD normStress: total normal stress
 
 normStressDD :: DataDefinition
 normStressDD = dd normStressQD [makeCite huston2008] Nothing "normStress" []
@@ -167,7 +167,7 @@ normStressQD = mkQuantDef totNormStress normStressEqn
 normStressEqn :: Expr
 normStressEqn = sy fn / sy genericA
 
---DD11
+--DD tangStress: tangential stress
 
 tangStressDD :: DataDefinition
 tangStressDD = dd tangStressQD [makeCite huston2008] Nothing "tangStress" []
@@ -178,7 +178,7 @@ tangStressQD = mkQuantDef tangStress tangStressEqn
 tangStressEqn :: Expr
 tangStressEqn = sy ft / sy genericA
 
---DD12
+--DD ratioVariation: interslice normal to shear force ratio variation function
 
 ratioVariation :: DataDefinition
 ratioVariation = dd ratioVarQD [makeCite fredlund1977] Nothing 
@@ -194,7 +194,7 @@ ratioVarEqn = completeCase [case1, case2]
         case2 = (sin (sy QM.pi_ * ((inxi slipDist - idx (sy slipDist) 0) /
                 (indxn slipDist - idx (sy slipDist) 0))), UnaryOp Not (sy constF))
 
---DD13
+--DD convertFunc1: first function for incorporating interslice forces into shear force
 
 convertFunc1 :: DataDefinition
 convertFunc1 = dd convertFunc1QD (map makeCite [chen2005, karchewski2012]) Nothing
@@ -212,7 +212,7 @@ convertFunc1Eqn = (sy normToShear * inxi scalFunc *
 convertFunc1Notes :: Sentence
 convertFunc1Notes = foldlSent [ch scalFunc, S "is defined in", makeRef2S ratioVariation `sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
 
---DD14
+--DD convertFunc2: second function for incorporating interslice forces into shear force
 
 convertFunc2 :: DataDefinition
 convertFunc2 = dd convertFunc2QD (map makeCite [chen2005, karchewski2012]) Nothing

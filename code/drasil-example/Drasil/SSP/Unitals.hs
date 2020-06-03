@@ -406,7 +406,7 @@ totNormStress = uc' "sigma" (cn' "total normal stress")
   "the total force per area acting on the soil mass" lSigma pascal
 
 tangStress = uc' "tau" (cn' "tangential stress")
-  "the total force per area acting on the soil mass" lTau pascal
+  "the shear force per unit area" lTau pascal
 
 effectiveStress = uc' "sigma'" (cn' "effective stress")
   ("the stress in a soil mass that is effective in causing volume changes " ++

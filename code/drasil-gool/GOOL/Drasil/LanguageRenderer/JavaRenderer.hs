@@ -61,8 +61,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   loopStmt, emptyStmt, assign, increment, objDecNew, print, closeFile, 
   returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
   method, getMethod, setMethod, constructor, function, docFunc, buildClass, 
-  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, 
-  fileFromData)
+  implementingClass, docClass, commentedClass, modFromData, fileDoc, 
+  docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (  
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 

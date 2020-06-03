@@ -62,8 +62,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   loopStmt, emptyStmt, assign, increment, objDecNew, print, closeFile,
   returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
   method, getMethod, setMethod, constructor, function, docFunc, buildClass, 
-  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, 
-  fileFromData)
+  extraClass, implementingClass, docClass, commentedClass, modFromData, fileDoc, 
+  docMod, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
@@ -626,7 +626,7 @@ instance StateVarElim CSharpCode where
 instance ClassSym CSharpCode where
   type Class CSharpCode = Doc
   buildClass = G.buildClass
-  extraClass = buildClass
+  extraClass = G.extraClass 
   implementingClass = G.implementingClass
 
   docClass = G.docClass

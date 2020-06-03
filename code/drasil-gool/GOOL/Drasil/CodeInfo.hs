@@ -19,9 +19,9 @@ import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, modifyReturn, setClassName, 
-  setModuleName, getModuleName, addClass, updateClassMap, addException, 
-  updateMethodExcMap, updateCallMap, addCall, callMapTransClosure, 
+  lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, lensCStoFS, 
+  modifyReturn, setClassName, setModuleName, getModuleName, addClass, updateClassMap, 
+  addException, updateMethodExcMap, updateCallMap, addCall, callMapTransClosure, 
   updateMEMWithCalls)
 
 import Control.Monad.State (State, modify)
@@ -389,15 +389,18 @@ instance StateVarSym CodeInfo where
 
 instance ClassSym CodeInfo where
   type Class CodeInfo = ()
-  buildClass n _ _ ms = do
-    modify (addClass n . setClassName n)
-    mapM_ (zoom lensCStoMS) ms
-    noInfo
+  buildClass _ _ ms = do
+    n <- zoom lensCStoFS getModuleName
+    implementingClass n [] [] ms
   extraClass n _ _ ms = do
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
-  implementingClass n _ _ = buildClass n Nothing [] 
+  implementingClass n _ _ ms = do
+    modify (addClass n . setClassName n)
+    mapM_ (zoom lensCStoMS) ms
+    noInfo
+
 
   docClass _ c = do
     _ <- c

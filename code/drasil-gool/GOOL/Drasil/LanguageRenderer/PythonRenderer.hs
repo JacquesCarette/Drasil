@@ -55,7 +55,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
   lambda, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
+  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
   constructor, function, docFunc, buildClass, extraClass, implementingClass, docClass, 
   commentedClass, modFromData, fileDoc, docMod, fileFromData)
@@ -65,7 +65,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
   funcType, listSetFunc, listAccessFunc, buildModule)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists,
   observerIndex, checkState)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
@@ -468,7 +468,7 @@ instance StatementSym PythonCode where
 
 instance AssignStatement PythonCode where
   assign = G.assign Empty
-  (&-=) = M.decrement
+  (&-=) = G.subAssign Empty
   (&+=) = G.increment
   (&++) = M.increment1
   (&--) = M.decrement1

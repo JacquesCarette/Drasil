@@ -60,7 +60,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
   lambda, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
+  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
   constructor, function, docFunc, buildClass, extraClass, 
   implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, fileFromData)
@@ -73,7 +73,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float,
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
   increment1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
   intFunc, multiAssignError, multiReturnError)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (decrement, 
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M ( 
   decrement1, runStrategy, listSlice, stringListVals, stringListLists, forRange,
   notifyObservers)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
@@ -1325,7 +1325,7 @@ instance StatementSym CppSrcCode where
 
 instance AssignStatement CppSrcCode where
   assign = G.assign Semi
-  (&-=) = M.decrement
+  (&-=) = G.subAssign Semi
   (&+=) = G.increment
   (&++) = C.increment1
   (&--) = M.decrement1

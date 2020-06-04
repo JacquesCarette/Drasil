@@ -60,8 +60,8 @@ public class HelloWorld {
             b = a + 2;
             c = b + 3;
             d = b;
-            d = d - a;
-            c = c - d;
+            d -= a;
+            c -= d;
             b += 17;
             c += 17;
             a++;

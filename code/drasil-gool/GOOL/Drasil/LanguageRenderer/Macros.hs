@@ -2,7 +2,7 @@
 
 -- | Language-polymorphic functions that are defined by GOOL code
 module GOOL.Drasil.LanguageRenderer.Macros (
-  ifExists, decrement, decrement1, increment, increment1, runStrategy, 
+  ifExists, decrement1, increment, increment1, runStrategy, 
   listSlice, stringListVals, stringListLists, forRange, notifyObservers,
   observerIndex, checkState
 ) where
@@ -34,9 +34,6 @@ import Text.PrettyPrint.HughesPJ (Doc, vcat)
 
 ifExists :: (RenderSym r) => SValue r -> MSBody r -> MSBody r -> MSStatement r
 ifExists v ifBody = S.ifCond [(S.notNull v, ifBody)]
-
-decrement :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-decrement vr vl = vr &= (S.valueOf vr #- vl)
 
 decrement1 :: (RenderSym r) => SVariable r -> MSStatement r
 decrement1 v = v &= (S.valueOf v #- S.litInt 1)

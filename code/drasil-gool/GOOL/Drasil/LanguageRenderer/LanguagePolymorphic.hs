@@ -9,11 +9,11 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
   listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, increment, objDecNew, 
-  print, closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, 
-  construct, param, method, getMethod, setMethod, constructor, function, 
-  docFuncRepr, docFunc, buildClass, extraClass, implementingClass, docClass, 
-  commentedClass, modFromData, fileDoc, docMod
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond, 
+  tryCatch, construct, param, method, getMethod, setMethod, constructor, 
+  function, docFuncRepr, docFunc, buildClass, extraClass, implementingClass, 
+  docClass, commentedClass, modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -61,7 +61,7 @@ import GOOL.Drasil.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, 
   namedArgList)
 import qualified GOOL.Drasil.LanguageRenderer as R (file, block, assign, 
-  addAssign, return', comment, getTerm, var, arg, func, objAccess, 
+  addAssign, subAssign, return', comment, getTerm, var, arg, func, objAccess, 
   commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkVal, mkStateVar, mkStaticVar, VSOp, unOpPrec, compEqualPrec, 
@@ -314,6 +314,10 @@ emptyStmt = toState $ mkStmtNoEnd empty
 assign :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
   MSStatement r
 assign t = zoom lensMStoVS .: on2StateValues (flip stmtFromData t .: R.assign)
+
+subAssign :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
+  MSStatement r
+subAssign t = zoom lensMStoVS .: on2StateValues (flip stmtFromData t .: R.subAssign)
 
 increment :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 increment = zoom lensMStoVS .: on2StateValues (mkStmt .: R.addAssign)

@@ -165,6 +165,13 @@
                   <td>--</td>
                 </tr>
                 <tr>
+                  <td><em>F<sub>t</sub></em></td>
+                  <td>
+                    Tangential Force: Component of a force in the tangential direction.
+                  </td>
+                  <td><em>N</em></td>
+                </tr>
+                <tr>
                   <td><em>F<sub>x</sub></em></td>
                   <td>
                     <em>x</em>-coordinate of the Force: The force acting in the <em>x</em>-direction.
@@ -652,6 +659,11 @@
                   <td>
                     Effective Normal Stress: The normal stress in a soil mass that is effective in causing volume changes; represents the average normal stress carried by the soil skeleton.
                   </td>
+                  <td><em>Pa</em></td>
+                </tr>
+                <tr>
+                  <td><em>τ</em></td>
+                  <td>Tangential Stress: The shear force per unit area.</td>
                   <td><em>Pa</em></td>
                 </tr>
                 <tr>
@@ -3061,6 +3073,53 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
+                <div id="DD:tangStress">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:tangStress</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Tangential stress</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>τ</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>Pa</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[τ=\frac{{F_{\text{t}}}}{A}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>τ</em> is the tangential stress (<em>Pa</em>)</li>
+                          <li>
+                            <em>F<sub>t</sub></em> is the tangential force (<em>N</em>)
+                          </li>
+                          <li><em>A</em> is the area (<em>m<sup>2</sup></em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#huston2008>huston2008</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
                 <div id="DD:torque">
                   <table class="ddefn">
                     <tr>
@@ -4865,6 +4924,25 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#DD:tangStress>DD: tangStress</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#DD:torque>DD: torque</a></td>
               <td></td>
               <td></td>
@@ -5879,6 +5957,7 @@
               <th><a href=#DD:lengthLs>DD: lengthLs</a></th>
               <th><a href=#DD:slcHeight>DD: slcHeight</a></th>
               <th><a href=#DD:normStress>DD: normStress</a></th>
+              <th><a href=#DD:tangStress>DD: tangStress</a></th>
               <th><a href=#DD:torque>DD: torque</a></th>
               <th><a href=#DD:ratioVariation>DD: ratioVariation</a></th>
               <th><a href=#DD:convertFunc1>DD: convertFunc1</a></th>
@@ -5915,6 +5994,7 @@
             </tr>
             <tr>
               <td><a href=#DD:intersliceWtrF>DD: intersliceWtrF</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6000,9 +6080,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:angleB>DD: angleB</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6088,6 +6170,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:lengthLb>DD: lengthLb</a></td>
@@ -6095,6 +6178,7 @@
               <td>X</td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6176,9 +6260,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:slcHeight>DD: slcHeight</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6264,9 +6350,56 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:tangStress>DD: tangStress</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:torque>DD: torque</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6352,11 +6485,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:convertFunc1>DD: convertFunc1</a></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6408,6 +6543,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
               <td></td>
@@ -6443,6 +6579,7 @@
             </tr>
             <tr>
               <td><a href=#DD:nrmForceSumDD>DD: nrmForceSumDD</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6528,9 +6665,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:sliceHghtRightDD>DD: sliceHghtRightDD</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6616,9 +6755,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:factOfSafety>TM: factOfSafety</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6704,9 +6845,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:mcShrStrgth>TM: mcShrStrgth</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6792,9 +6935,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6856,6 +7001,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -6886,6 +7032,7 @@
               <td></td>
               <td>X</td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -6945,6 +7092,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -6976,6 +7124,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -7034,6 +7183,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -7064,6 +7214,7 @@
               <td>X</td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -7134,6 +7285,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -7147,6 +7299,7 @@
             </tr>
             <tr>
               <td><a href=#GD:normShrR>GD: normShrR</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -7198,6 +7351,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td>X</td>
               <td></td>
@@ -7255,6 +7409,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -7283,6 +7438,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -7364,6 +7520,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:baseWtrF>GD: baseWtrF</a></td>
@@ -7372,6 +7529,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -7443,6 +7601,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
@@ -7455,6 +7614,7 @@
             </tr>
             <tr>
               <td><a href=#IM:fctSfty>IM: fctSfty</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -7499,6 +7659,7 @@
             </tr>
             <tr>
               <td><a href=#IM:nrmShrFor>IM: nrmShrFor</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -7577,6 +7738,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
@@ -7591,6 +7753,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -7631,6 +7794,7 @@
             </tr>
             <tr>
               <td><a href=#IM:intsliceFs>IM: intsliceFs</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -7716,6 +7880,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
           </table>
           <p class="caption">
@@ -7734,6 +7899,7 @@
               <th><a href=#DD:lengthLs>DD: lengthLs</a></th>
               <th><a href=#DD:slcHeight>DD: slcHeight</a></th>
               <th><a href=#DD:normStress>DD: normStress</a></th>
+              <th><a href=#DD:tangStress>DD: tangStress</a></th>
               <th><a href=#DD:torque>DD: torque</a></th>
               <th><a href=#DD:ratioVariation>DD: ratioVariation</a></th>
               <th><a href=#DD:convertFunc1>DD: convertFunc1</a></th>
@@ -7790,6 +7956,7 @@
             </tr>
             <tr>
               <td><a href=#identifyCritAndFS>GS: Identify-Crit-and-FS</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -7903,9 +8070,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#determineShearF>GS: Determine-Shear-Forces</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8019,9 +8188,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifyInput>FR: Verify-Input</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8082,6 +8253,7 @@
               <td>
                 <a href=#determineCritSlip>FR: Determine-Critical-Slip-Surface</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8195,9 +8367,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#displayInput>FR: Display-Input</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8296,6 +8470,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -8314,6 +8489,7 @@
             </tr>
             <tr>
               <td><a href=#displayFS>FR: Display-Factor-of-Safety</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8409,6 +8585,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
               <td></td>
@@ -8469,6 +8646,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
               <td></td>
@@ -8492,6 +8670,7 @@
             </tr>
             <tr>
               <td><a href=#writeToFile>FR: Write-Results-To-File</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8605,9 +8784,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#understandable>NFR: Understandable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -8721,9 +8902,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR: Maintainable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

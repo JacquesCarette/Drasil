@@ -345,7 +345,7 @@ pubSVar :: StateVarSym r => SVariable r -> CSStateVar r
 class (MethodSym r, StateVarSym r) => ClassSym r where {
     type family Class r;
 }
-buildClass :: ClassSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
+buildClass :: ClassSym r => Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
 extraClass :: ClassSym r => Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> SClass r
 implementingClass :: ClassSym r => Label -> [Label] -> [CSStateVar r] -> [SMethod r] -> SClass r
 docClass :: ClassSym r => String -> SClass r -> SClass r

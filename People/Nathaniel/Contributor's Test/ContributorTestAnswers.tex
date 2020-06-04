@@ -1,0 +1,290 @@
+\documentclass[12pt,fleqn]{examtst}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{hhline}
+\usepackage{booktabs}
+
+\begin{document}
+
+\newcommand{\soln}{y} %y for yes and n for no
+
+\lstset{language=python, basicstyle=\ttfamily, breaklines=true,
+  showspaces=false, showstringspaces=false, breakatwhitespace=true, texcl=true,
+  escapeinside={\%*}{*)}}
+
+\newcommand{\codeit}[1]{\texttt{\textit{#1}}}
+
+\begin{center}
+  {\large \bf Drasil Future Contributors' Test}\\[1ex]
+  {\large \bf McMaster University}\\[1ex]
+  {\large Faculty of Engineering, Department of Computing and Software}\\[1ex]
+  \ifthenelse{\equal{\soln}{y}}{\large {\bf Answer Key:} Large arrow
+    ($\Longleftarrow$) for correct% , small ($\leftarrow$) for partially
+    % correct
+  }{}
+\end{center}
+
+\medskip
+
+\noindent
+Future Drasil Contributors, \textbf{Version 1}  \hfill Nathaniel Hu \\
+DURATION OF EXAMINATION: 2.5 hours \\
+MCMASTER UNIVERSITY TEST \hfill June 3rd, 2020
+
+\medskip
+
+\noindent
+\rule[3 mm]{\textwidth}{0.5mm}
+
+\begin{minipage}[t]{1.0\textwidth}
+\textbf{Please CLEARLY print}:\\[2mm]
+
+NAME:\\[1ex]
+
+\newsavebox{\bb}\newsavebox{\bbb}
+\sbox{\bb}{\framebox[1cm]{\rule{0mm}{7mm}}}
+\sbox{\bbb}{\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}}
+
+Student ID: \usebox{\bbb} \\[2mm]
+
+\rule[3 mm]{\textwidth}{0.5mm}
+
+This examination paper includes \noofpages pages and
+16 % VARIABILITY
+questions. You are responsible for ensuring that your copy of the examination
+paper is complete. Bring any discrepancy to the attention
+of your invigilator.\\
+
+\textbf{Special Instructions}:
+
+\begin{enumerate}
+
+\item It is your responsibility to ensure that the answer sheet is properly
+  completed. Your examination result depends upon proper attention to the
+  instructions on the next page.
+\item Calculators, computers, cell phones, and all other electronic devices are
+  \textbf{not} to be utilized.
+\item Read each question carefully.
+\item Try to allocate your time sensibly and divide it appropriately between the
+  questions.
+\item Select the \textbf{best} answer for each question.
+\item The set $\mathbb{N}$ is assumed to include $0$.
+\end{enumerate}
+\end{minipage}\\
+
+\hspace{14cm}
+\begin{minipage}[t]{0.2\textwidth}
+\newcommand{\markheight}{\rule[-2mm]{0 mm}{7 mm}}
+\begin{tabular}[t]{|c|p{1.5 cm}|r|}
+\hline
+1--12 & \markheight & 12\\
+\hline
+13--16 & \markheight & 8\\
+
+\hline
+Total & \markheight & 20 \\
+\hline
+
+\end{tabular}
+\end{minipage}
+
+\examheader{Drasil \ifthenelse{\equal{\soln}{y}} {\hfill SOLUTIONS} }
+
+\renewcommand{\labelenumi}{\Alph{enumi}.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+What command is used to create a local version of a remote repository?
+
+\begin{enumerate}
+    \item \lstinline{git copy} $<$link to repo$>$
+    \item \lstinline{git clone} $<$link to repo$>$ \marker
+    \item \lstinline{clone} $<$link to repo$>$
+    \item \lstinline{copy} $<$link to repo$>$
+\end{enumerate}
+
+\question{1 mark}
+The \lstinline{git status} command displays:
+
+\begin{enumerate}
+    \item verified status of all repo files
+    \item list of last 5 commits to the repo
+    \item paths with differences between current state of repo and last commit \marker
+    \item changes made to files after last commit
+\end{enumerate}
+
+\question{1 mark}
+The \lstinline{git pull} command is used to:
+
+\begin{enumerate}
+    \item sync your local version with remote version of the repo \marker
+    \item displays changes made to the remote version of the repo
+    \item sync remote version with your local version of the repo
+    \item updates the remote repo with other people's changes
+\end{enumerate}
+
+\question{1 mark}
+What is the correct order of the following \lstinline{git} commands?
+
+\begin{enumerate}
+    \item \lstinline{git push, git add, git clone, git commit}
+    \item \lstinline{git add, git clone, git push, git commit}
+    \item \lstinline{git clone, git add, git push, git commit}
+    \item \lstinline{git clone, git add, git commit, git push} \marker
+\end{enumerate}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+Which of the below phrases can you use to link a relevant issue to a pull request on GitHub, without closing the issue once the PR is merged? (\#HASH is the issue hash \#)
+
+\begin{enumerate}
+    \item closes \#HASH
+    \item contributes to \#HASH \marker
+\end{enumerate}
+
+\question{1 mark}
+The preferred coding style describes how lines should not be more than \_\_\_ characters wide.
+
+\begin{enumerate}
+    \item 60
+    \item 90
+    \item 80 \marker
+    \item 70
+\end{enumerate}
+
+\question{1 mark}
+When making pull requests involving changes to multiple files (e.g. Haskell scripts and stable folder files), remember to:
+
+\begin{enumerate}
+    \item use multiple \lstinline{git add} to stage multiple files before doing a single commit \marker
+    \item update the stable files first and push them, then repeat with the scripts using \lstinline{git add}
+    \item only update all scripts in one commit using multiple \lstinline{git add}
+    \item only update all changed 'stable' folder files in one commit using multiple \lstinline{git add}
+\end{enumerate}
+
+\question{1 mark}
+The \lstinline{git branch} command:
+
+\begin{enumerate}
+    \item shows the items under your current branch on your local repo
+    \item shows a list of all your current branches on your local repo \marker
+    \item shows branches dependent on your current branch on your local repo
+    \item shows a list of all current branches on the remote repo
+\end{enumerate}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+When closing an issue, please provide:
+
+\begin{enumerate}
+    \item Rationale
+    \item Relevant Links to other related issues
+    \item Linked Pull Requests
+    \item All of the above \marker
+\end{enumerate}
+
+\question{1 mark}
+To \textbf{only} build the 2D Rigid Body Physics Library example $($gamephysics\_diff$)$ using the Drasil framework, run the command:
+
+\begin{enumerate}
+    \item \lstinline{setup gamephysics_diff}
+    \item \lstinline{make gamephysics_diff} \marker
+    \item \lstinline{stack exec gamephysics_diff}
+    \item \lstinline{make}
+\end{enumerate}
+
+\question{1 mark}
+If you are a Windows OS user working with Git Bash App, always run the command each time you open an instance of git bash:
+
+\begin{enumerate}
+    \item \lstinline{chcp.com 65001} 
+    \item \lstinline{set encoding=utf-8}
+    \item \lstinline{chcp 65001}
+    \item \lstinline{A. or C.} \marker
+\end{enumerate}
+
+\question{1 mark}
+To run the Glass-BR example $($glassbr$)$ using the Drasil framework $($assume that the example has already been built$)$, run the command:
+
+\begin{enumerate}
+    \item \lstinline{make glassbr}
+    \item \lstinline{exec glassbr}
+    \item \lstinline{stack glassbr}
+    \item \lstinline{stack exec glassbr} \marker
+\end{enumerate}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{2 marks}
+When creating a new issue on GitHub, describe two tips to follow that help to ensure that the new issue includes enough information (context).
+
+\answer{Answer here.}{0cm}{0cm}
+
+Sample Answers (any two of the following work):
+\begin{itemize}
+    \item include (annotated) excerpts of PDF/HTML documentation when referring to output (desired or generated); highlighting specific portions of such relevant screenshots helps important info stand out to the reader
+    \item linking related issues, pull requests, comments and commit hashes; provides easy navigation through related content and discussion significant to the issue
+    \item creating permalinks (permanent links) to code sections/snippets relevant to the issue
+    \item directly inserting code into Issue comments (using markdown format); useful for recommending/proposing solutions of multi-line code (mentioning the language allows for syntax highlighting, which is helpful)
+\end{itemize}
+
+\question{2 marks}
+
+
+\answer{Answer here.}{0cm}{7cm}
+
+Sample Answer
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{2 marks}
+
+
+\answer{Answer here.}{0cm}{7cm}
+
+Sample Answer
+
+\question{2 marks}
+
+
+\answer{Answer here.}{0cm}{7cm}
+
+Sample Answer
+
+\end{minipage}
+
+\end{document}

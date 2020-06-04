@@ -13,7 +13,7 @@ module GOOL.Drasil.LanguageRenderer (
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
   param, method, stateVar, constVar, stateVarList, switch, assign, multiAssign, 
-  addAssign, increment, listDec, getTerm, return', comment, var, extVar,
+  addAssign, subAssign, increment, listDec, getTerm, return', comment, var, extVar,
   arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, binOpDocD', 
   constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, castObj, 
   break, continue, static, dynamic, private, public, blockCmt, docCmt, 
@@ -227,6 +227,9 @@ multiAssign vrs vls = variableList vrs <+> equals <+> valueList vls
 
 addAssign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 addAssign vr vl = RC.variable vr <+> text "+=" <+> RC.value vl
+
+subAssign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
+subAssign vr vl = RC.variable vr <+> text "-=" <+> RC.value vl
 
 increment :: (RenderSym r) => r (Variable r) -> Doc
 increment v = RC.variable v <> text "++"

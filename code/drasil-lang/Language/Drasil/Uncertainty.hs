@@ -10,7 +10,7 @@ defaultUncrt :: Uncertainty
 defaultUncrt = uncty 0.1 (Just 0)
 
 ignoreUncrt :: Uncertainty
-ignoreUncrt = uncty 0 (Nothing)
+ignoreUncrt = uncty 0 Nothing
 
 -- accessor for uncertainty value
 uncVal :: HasUncertainty x => x -> Double

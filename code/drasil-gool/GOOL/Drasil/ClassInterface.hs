@@ -559,9 +559,9 @@ type CSStateVar a = CS (a (StateVar a))
 class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where
   type StateVar r
   stateVar :: r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
-  stateVarDef :: Label -> r (Scope r) -> r (Permanence r) -> SVariable r -> 
+  stateVarDef :: r (Scope r) -> r (Permanence r) -> SVariable r -> 
     SValue r -> CSStateVar r
-  constVar :: Label -> r (Scope r) ->  SVariable r -> SValue r -> CSStateVar r
+  constVar :: r (Scope r) ->  SVariable r -> SValue r -> CSStateVar r
 
 privDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
 privDVar = stateVar private dynamic

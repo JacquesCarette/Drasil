@@ -617,8 +617,8 @@ instance MethodElim CSharpCode where
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
   stateVar = CP.stateVar
-  stateVarDef _ = CP.stateVarDef
-  constVar _ = CP.constVar empty
+  stateVarDef = CP.stateVarDef
+  constVar = CP.constVar empty
   
 instance StateVarElim CSharpCode where
   stateVar = unCSC

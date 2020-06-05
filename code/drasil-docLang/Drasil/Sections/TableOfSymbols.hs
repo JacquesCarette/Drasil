@@ -25,8 +25,8 @@ table st ls f
         symbolsCol     = map (`symbol` st) filteredChunks
         uidCol         = map (view uid)    filteredChunks
         symUidPair     = zip symbolsCol uidCol
-        symDuplicates  = symbolsCol \\ (nub symbolsCol)
-        noDuplicate   = symDuplicates == []
+        symDuplicates  = symbolsCol \\ nub symbolsCol
+        noDuplicate    = null symDuplicates
         symUidPairDuplicates = [(render . symbolDoc $ fst x, snd x) | x <- symUidPair, 
           fst x `elem` symDuplicates]
 

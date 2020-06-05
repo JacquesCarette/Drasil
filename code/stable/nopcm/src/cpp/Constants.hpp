@@ -23,6 +23,7 @@ class Constants {
         static const double AR_min;
         static const double AR_max;
         
+    
 };
 
 #endif

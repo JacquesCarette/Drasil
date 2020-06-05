@@ -32,8 +32,8 @@
 
 \noindent
 Future Drasil Contributors, \textbf{Version 1}  \hfill Nathaniel Hu \\
-DURATION OF EXAMINATION: 2.5 hours \\
-MCMASTER UNIVERSITY TEST \hfill June 3rd, 2020
+DURATION OF EXAMINATION: 1.5 hours \\
+MCMASTER UNIVERSITY TEST \hfill June 5th, 2020
 
 \medskip
 
@@ -72,7 +72,6 @@ of your invigilator.\\
 \item Try to allocate your time sensibly and divide it appropriately between the
   questions.
 \item Select the \textbf{best} answer for each question.
-\item The set $\mathbb{N}$ is assumed to include $0$.
 \end{enumerate}
 \end{minipage}\\
 
@@ -105,10 +104,10 @@ Total & \markheight & 20 \\
 What command is used to create a local version of a remote repository?
 
 \begin{enumerate}
-    \item \lstinline{git copy} $<$link to repo$>$
-    \item \lstinline{git clone} $<$link to repo$>$ \marker
-    \item \lstinline{clone} $<$link to repo$>$
-    \item \lstinline{copy} $<$link to repo$>$
+    \item \lstinline{git copy <link to repo>}
+    \item \lstinline{git clone <link to repo>} \marker
+    \item \lstinline{clone <link to repo>}
+    \item \lstinline{copy <link to repo>}
 \end{enumerate}
 
 \question{1 mark}
@@ -202,11 +201,11 @@ When closing an issue, please provide:
     \item Rationale
     \item Relevant Links to other related issues
     \item Linked Pull Requests
-    \item All of the above \marker
+    \item Any or all of the above \marker
 \end{enumerate}
 
 \question{1 mark}
-To \textbf{only} build the 2D Rigid Body Physics Library example $($gamephysics\_diff$)$ using the Drasil framework, run the command:
+To \textbf{only} build the 2D Rigid Body Physics Library example (gamephysics\_diff) using the Drasil framework, run the command:
 
 \begin{enumerate}
     \item \lstinline{setup gamephysics_diff}
@@ -226,7 +225,7 @@ If you are a Windows OS user working with Git Bash App, always run the command e
 \end{enumerate}
 
 \question{1 mark}
-To run the Glass-BR example $($glassbr$)$ using the Drasil framework $($assume that the example has already been built$)$, run the command:
+To run the Glass-BR example (glassbr) using the Drasil framework (assume that the example has already been built), run the command:
 
 \begin{enumerate}
     \item \lstinline{make glassbr}
@@ -256,12 +255,23 @@ Sample Answers (any two of the following work):
     \item directly inserting code into Issue comments (using markdown format); useful for recommending/proposing solutions of multi-line code (mentioning the language allows for syntax highlighting, which is helpful)
 \end{itemize}
 
-\question{2 marks}
+\rule{0cm}{1cm}
 
+\question{2 marks}
+Explain the concept of cherry-picking in GitHub. Be sure to include what command(s) and information you would use to accomplish it.
 
 \answer{Answer here.}{0cm}{7cm}
 
 Sample Answer
+\begin{itemize}
+    \item cherry-picking in GitHub is the concept/process of moving a specific commit from one branch onto another (new branch)
+    \item there are two commands you would likely need to use:
+    \begin{itemize}
+        \item \lstinline{git checkout} to ensure that you are on the branch you want to commit to
+        \item \lstinline{git cherry-pick <commit-hash>} to move a specific commit (referenced by commit-hash) to the new branch
+    \end{itemize}
+    \item the information you would need to accomplish cherry-picking is the \lstinline{commit-hash} of the specific commit you would like to move to the new branch
+\end{itemize}
 
 \end{minipage}
 
@@ -272,18 +282,34 @@ Sample Answer
 \begin{minipage}{\textwidth}
 
 \question{2 marks}
-
+Describe Drasil (what is it, what does it do), and discuss its main goals.
 
 \answer{Answer here.}{0cm}{7cm}
 
 Sample Answer
+\begin{itemize}
+    \item Drasil is a framework for generating \textbf{all} software artifacts (e.g. code, documentation) from a stable knowledge base
+    \item the main goals of Drasil are to:
+    \begin{itemize}
+        \item reduce knowledge duplication; concepts, ideas and algorithms should only have to be defined once (and be reused easily)
+        \item improve traceability; more easily display how various components of the program are linked/dependent upon each other
+        \item improve maintainability, verifiability, traceability and other software qualities (more as a side-effect of methods used rather than as a main goal)
+    \end{itemize}
+\end{itemize}
+
+\rule{0cm}{1cm}
 
 \question{2 marks}
-
+Imagine that you have made changes to some files in the Drasil code on your local repository. Describe the process that you would take to update the remote repository for Drasil with your changes. List any commands that you would use here as well.
 
 \answer{Answer here.}{0cm}{7cm}
 
 Sample Answer
+\begin{itemize}
+    \item \lstinline{git add <relative path to file>}: stage a file to a commit; be sure to repeat this multiple times for multiple changed files, or use \lstinline{git add *} cautiously (command stages all changed files)
+    \item \lstinline{git commit -m "commit message"}: commit your staged changes to your local repository; be sure to include a descriptive commit message
+    \item \lstinline{git push}: push changes from your local repository to the remote repository (thus updating it)
+\end{itemize}
 
 \end{minipage}
 

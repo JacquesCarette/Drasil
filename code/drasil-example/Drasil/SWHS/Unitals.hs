@@ -446,12 +446,12 @@ absTol, relTol :: UncertainChunk
 absTol = uvc "absTol" (nounPhraseSP "absolute tolerance") 
   (sub cA lTol) Real
   [physc $ Bounded (Exc,0) (Exc,1)] 
-   (dbl (10.0**(-10))) (uncty 0.01 Nothing)
+   (dbl (10.0**(-10))) (uncty (Just 0.01) Nothing)
 
 relTol = uvc "relTol" (nounPhraseSP "relative tolerance") 
   (sub cR lTol) Real
   [physc $ Bounded (Exc,0) (Exc,1)] 
-  (dbl (10.0**(-10))) (uncty 0.01 Nothing)
+  (dbl (10.0**(-10))) (uncty (Just 0.01) Nothing)
 
 -------------------------
 -- Max / Min Variables --

@@ -7,14 +7,18 @@ import Language.Drasil.Classes (HasUncertainty(unc))
 import Language.Drasil.Uncertainty.Core (Uncertainty, uncert, prec, uncty)
 
 defaultUncrt :: Uncertainty
-defaultUncrt = uncty 0.1 (Just 0)
+defaultUncrt = uncty (Just 0.1) (Just 0)
 
 ignoreUncrt :: Uncertainty
-ignoreUncrt = uncty 0 Nothing
+ignoreUncrt = uncty Nothing Nothing
 
 -- accessor for uncertainty value
 uncVal :: HasUncertainty x => x -> Double
-uncVal u = u ^. (unc . uncert)
+uncVal u = let 
+    extractUncValue :: Maybe Double -> Double
+    extractUncValue (Just x) = x
+    extractUncValue Nothing = 0.0
+    in extractUncValue $ u ^. (unc . uncert)
 
 -- accessor for precision value
 uncPrec :: HasUncertainty x => x -> Maybe Int

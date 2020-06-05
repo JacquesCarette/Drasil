@@ -11,5 +11,6 @@ uncty u = Uncert (isDecimal u)
 
 --make sure that it is between 0 and 1, and throw an error otherwise
 isDecimal :: (Num a, Ord a) => a -> a
-isDecimal u  =  if (0 <= u) && (u < 1) then u
-                else error "Uncertainty must be between 0 and 1."
+isDecimal 0  =  error "To ignore uncertainty please use ' ignoreUncertainty '' "
+isDecimal u  =  if (0 < u) && (u < 1) then u
+                else error "Uncertainty must be between 0 and 1"

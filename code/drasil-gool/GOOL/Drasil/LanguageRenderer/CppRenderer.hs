@@ -714,10 +714,10 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
   stateVar s p = pair1 (stateVar (pfst s) (pfst p)) (stateVar (psnd s) (psnd p))
     . zoom lensCStoVS
-  stateVarDef n s p vr vl = pair2
-    (stateVarDef n (pfst s) (pfst p)) 
-    (stateVarDef n (psnd s) (psnd p)) (zoom lensCStoVS vr) (zoom lensCStoVS vl)
-  constVar n s vr vl = pair2 (constVar n (pfst s)) (constVar n (psnd s))
+  stateVarDef s p vr vl = pair2
+    (stateVarDef (pfst s) (pfst p)) 
+    (stateVarDef (psnd s) (psnd p)) (zoom lensCStoVS vr) (zoom lensCStoVS vl)
+  constVar s vr vl = pair2 (constVar (pfst s)) (constVar (psnd s))
     (zoom lensCStoVS vr) (zoom lensCStoVS vl)
 
 instance (Pair p) => StateVarElim (p CppSrcCode CppHdrCode) where
@@ -1528,7 +1528,7 @@ instance StateVarSym CppSrcCode where
   stateVar s _ _ = onStateValue (on3CodeValues svd (onCodeValue snd s) (toCode 
     empty)) $ zoom lensCStoMS emptyStmt
   stateVarDef = cppsStateVarDef empty
-  constVar n s = cppsStateVarDef constDec' n s static
+  constVar s = cppsStateVarDef constDec' s static
   
 instance StateVarElim CppSrcCode where
   stateVar = stVar . unCPPSC
@@ -2113,9 +2113,9 @@ instance StateVarSym CppHdrCode where
     emptS <- zoom lensCStoMS emptyStmt
     return $ on3CodeValues svd (onCodeValue snd s)
       (toCode $ R.stateVar empty (RC.perm p) (RC.statement dec)) emptS
-  stateVarDef _ s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
+  stateVarDef s p vr vl = on2StateValues (onCodeValue . svd (snd $ unCPPHC s))
     (cpphStateVarDef empty p vr vl) (zoom lensCStoMS emptyStmt)
-  constVar _ s vr _ = on2StateValues (on3CodeValues svd (onCodeValue snd s) . 
+  constVar s vr _ = on2StateValues (on3CodeValues svd (onCodeValue snd s) . 
     on2CodeValues (R.constVar empty endStatement) (bindDoc <$> static))
     (zoom lensCStoVS vr) (zoom lensCStoMS emptyStmt)
   
@@ -2570,12 +2570,13 @@ cppCommentedFunc ft cmt fn = do
       ret Combined = error "Combined passed to cppCommentedFunc"
   ret ft
 
-cppsStateVarDef :: Doc -> Label -> CppSrcCode (Scope CppSrcCode) -> 
+cppsStateVarDef :: Doc -> CppSrcCode (Scope CppSrcCode) -> 
   CppSrcCode (Permanence CppSrcCode) -> SVariable CppSrcCode -> 
   SValue CppSrcCode -> CSStateVar CppSrcCode
-cppsStateVarDef cns n s p vr' vl' = do
+cppsStateVarDef cns s p vr' vl' = do
   vr <- zoom lensCStoVS vr'
   vl <- zoom lensCStoVS vl'
+  n <- zoom lensCStoMS getClassName
   emptS <- zoom lensCStoMS emptyStmt
   return $ on3CodeValues svd (onCodeValue snd s) 
     (toCode $ onBinding (binding p) (cns <+> RC.type' (variableType vr) <+> 

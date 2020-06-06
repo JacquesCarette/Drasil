@@ -187,10 +187,10 @@ genInputModCombined = do
   ic <- genInputClass Primary
   liftS $ genMod ic
 
-constVarFunc :: (OOProg r) => ConstantRepr -> String ->
+constVarFunc :: (OOProg r) => ConstantRepr ->
   (SVariable r -> SValue r -> CSStateVar r)
-constVarFunc Var n = stateVarDef n public dynamic
-constVarFunc Const n = constVar n public
+constVarFunc Var = stateVarDef public dynamic
+constVarFunc Const = constVar public
 
 -- | Returns Nothing if no inputs or constants are mapped to InputParameters in 
 -- the class definition map.
@@ -219,7 +219,7 @@ genInputClass scp = do
         inputVars <- mapM (\x -> fmap (pubDVar . var (codeName x) . convType) 
           (codeType x)) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g) 
-          cname (var (codeName c) (convType t)) vl) (codeType c)) 
+          (var (codeName c) (convType t)) vl) (codeType c)) 
           csts vals
         let getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
@@ -438,7 +438,7 @@ genConstClass scp = do
       genClass vs = do
         vals <- mapM (convExpr . codeEquat) vs 
         vars <- mapM (\x -> fmap (var (codeName x) . convType) (codeType x)) vs
-        let constVars = zipWith (constVarFunc (conRepr g) cname) vars vals
+        let constVars = zipWith (constVarFunc (conRepr g)) vars vals
             getFunc Primary = primaryClass
             getFunc Auxiliary = auxClass
             f = getFunc scp

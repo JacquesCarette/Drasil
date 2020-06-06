@@ -383,9 +383,9 @@ instance MethodSym CodeInfo where
 
 instance StateVarSym CodeInfo where
   type StateVar CodeInfo = ()
-  stateVar    _ _ _     = noInfo
-  stateVarDef _ _ _ _ _ = noInfo
-  constVar    _ _ _ _   = noInfo
+  stateVar    _ _ _   = noInfo
+  stateVarDef _ _ _ _ = noInfo
+  constVar    _ _ _   = noInfo
 
 instance ClassSym CodeInfo where
   type Class CodeInfo = ()

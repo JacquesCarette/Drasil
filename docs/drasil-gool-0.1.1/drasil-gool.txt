@@ -337,8 +337,8 @@ class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where {
     type family StateVar r;
 }
 stateVar :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
-stateVarDef :: StateVarSym r => Label -> r (Scope r) -> r (Permanence r) -> SVariable r -> SValue r -> CSStateVar r
-constVar :: StateVarSym r => Label -> r (Scope r) -> SVariable r -> SValue r -> CSStateVar r
+stateVarDef :: StateVarSym r => r (Scope r) -> r (Permanence r) -> SVariable r -> SValue r -> CSStateVar r
+constVar :: StateVarSym r => r (Scope r) -> SVariable r -> SValue r -> CSStateVar r
 privDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubDVar :: StateVarSym r => SVariable r -> CSStateVar r
 pubSVar :: StateVarSym r => SVariable r -> CSStateVar r

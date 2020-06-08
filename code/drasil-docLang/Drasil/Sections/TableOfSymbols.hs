@@ -20,7 +20,7 @@ table st ls f
       Table [atStart symbol_, atStart description, atStart' unit_]
       (mkTable [P . (`symbol` st), f, toSentence] filteredChunks)
       (titleize tOfSymb) True
-    | otherwise = error $ errorMessage 
+    | otherwise = error errorMessage 
     where 
         filteredChunks = filter (`hasStageSymbol`st) ls
         symbolsCol     = map (`symbol` st) filteredChunks

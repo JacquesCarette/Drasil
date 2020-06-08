@@ -35,20 +35,24 @@ type GenState = State DrasilState
 -- Private State, used to push these options around the generator
 data DrasilState = DrasilState {
   codeSpec :: CodeSpec,
-  date :: String,
+  -- Choices
   modular :: Modularity,
   implType :: ImplementationType,
   inStruct :: Structure,
   conStruct :: ConstantStructure,
   conRepr :: ConstantRepr,
-  logName :: String,
-  logKind :: [Logging],
-  commented :: [Comments],
-  doxOutput :: Verbosity,
   concMatches :: MatchedConceptMap,
   spaceMatches :: MatchedSpaces,
+  onSfwrC :: ConstraintBehaviour,
+  onPhysC :: ConstraintBehaviour,
+  commented :: [Comments],
+  doxOutput :: Verbosity,
+  date :: String,
+  logName :: String,
+  logKind :: [Logging],
   auxiliaries :: [AuxFile],
   sampleData :: [Expr],
+  -- Reference materials
   modules :: [Mod],
   extLibMap :: ExtLibMap,
   libPaths :: [FilePath],
@@ -56,11 +60,11 @@ data DrasilState = DrasilState {
   libEMap :: ModExportMap, 
   clsMap :: ClassDefinitionMap,
   defList :: [Name],
+  -- Stateful
   currentModule :: String,
   currentClass :: String,
-
-  onSfwrC :: ConstraintBehaviour,
-  onPhysC :: ConstraintBehaviour
+  designLog :: Doc,
+  loggedSpaces :: [Space]
 }
 
 inMod :: DrasilState -> InputModule

@@ -42,17 +42,20 @@ generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs spec = DrasilState {
   -- constants
   codeSpec = spec,
-  date = showDate $ dates chs,
   modular = modularity chs,
-  implType = impType chs,
   inStruct = inputStructure chs,
   conStruct = constStructure chs,
   conRepr = constRepr chs,
-  logKind  = logging chs,
-  commented = comments chs,
-  doxOutput = doxVerbosity chs,
   concMatches = chooseConcept chs,
   spaceMatches = chooseSpace l chs,
+  implType = impType chs,
+  onSfwrC = onSfwrConstraint chs,
+  onPhysC = onPhysConstraint chs,
+  commented = comments chs,
+  doxOutput = doxVerbosity chs,
+  date = showDate $ dates chs,
+  logKind  = logging chs,
+  logName = logFile chs,
   auxiliaries = auxFiles chs,
   sampleData = sd,
   modules = modules',
@@ -63,14 +66,11 @@ generator l dt sd chs spec = DrasilState {
   clsMap = cdm,
   defList = nub $ keys mem ++ keys cdm,
   
-  -- state
+  -- stateful
   currentModule = "",
   currentClass = "",
-
-  -- next depend on chs
-  logName = logFile chs,
-  onSfwrC = onSfwrConstraint chs,
-  onPhysC = onPhysConstraint chs
+  designLog = empty,
+  loggedSpaces = []
 }
   where showDate Show = dt
         showDate Hide = ""

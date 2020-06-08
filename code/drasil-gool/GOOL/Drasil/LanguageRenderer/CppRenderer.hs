@@ -2610,12 +2610,15 @@ cpphClass :: Label -> CppHdrCode ParentSpec ->
 cpphClass n ps vars funcs pub priv = let 
   pubs = cpphVarsFuncsList Pub vars funcs
   privs = cpphVarsFuncsList Priv vars funcs
-  indLi = [emptyIfEmpty pubs (RC.scope pub <> colon), indent pubs,
-          emptyIfEmpty (pubs <> privs) blank,
-          emptyIfEmpty privs (RC.scope priv <> colon), indent privs]
+  indLi :: Doc -> Doc -> [Doc]
+  indLi pb pr
+    | isEmpty pb = [RC.scope priv <> colon, indent pr]
+    | isEmpty pr = [RC.scope pub <> colon, indent pb]
+    | otherwise   = [RC.scope pub <> colon, indent pb, blank,
+      RC.scope priv <> colon, indent pr]
   in onCodeValue (\p -> vcat [
     classDec <+> text n <+> p <+> bodyStart,
-    indentList indLi,
+    indentList (indLi pubs privs),
     bodyEnd <> endStatement]) ps
 
 cppInOutCall :: (Label -> VSType CppSrcCode -> [SValue CppSrcCode] -> 

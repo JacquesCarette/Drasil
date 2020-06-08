@@ -11,7 +11,6 @@ class Observer {
         void printNum();
         int getX();
         void setX(int x);
-    
 };
 
 #endif

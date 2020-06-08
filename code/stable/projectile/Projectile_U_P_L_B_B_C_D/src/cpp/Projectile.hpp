@@ -44,7 +44,6 @@ class Constants {
         static const double g_vect;
         static const double epsilon;
         
-    
 };
 
 /** \brief Calculates flight duration: the time when the projectile lands (s)

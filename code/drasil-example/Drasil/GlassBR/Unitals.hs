@@ -88,7 +88,7 @@ aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (Variable "AR") Real)
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Concat [lBreak, lTol])) Real
-  [probConstr] (dbl 0.008) (uncty (Just 0.001) Nothing)
+  [probConstr] (dbl 0.008) (uncty 0.001 Nothing)
 
 charWeight = uqcND "charWeight" (nounPhraseSP "charge weight") 
   lW kilogram Real

@@ -1,24 +1,18 @@
 module Language.Drasil.Uncertainty (defaultUncrt, uncty,
-    uncVal, uncPrec, ignoreUncrt) where
+    uncVal, uncPrec, exact) where
 
 import Control.Lens ((^.))
 
 import Language.Drasil.Classes (HasUncertainty(unc))
-import Language.Drasil.Uncertainty.Core (Uncertainty, uncert, prec, uncty)
+import Language.Drasil.Uncertainty.Core (Uncertainty, uncert, prec, uncty, exact)
 
 defaultUncrt :: Uncertainty
-defaultUncrt = uncty (Just 0.1) (Just 0)
-
-ignoreUncrt :: Uncertainty
-ignoreUncrt = uncty Nothing Nothing
+defaultUncrt = uncty 0.1 (Just 0)
 
 -- accessor for uncertainty value
 uncVal :: HasUncertainty x => x -> Double
-uncVal u = let 
-    extractUncValue :: Maybe Double -> Double
-    extractUncValue (Just x) = x
-    extractUncValue Nothing = 0.0
-    in extractUncValue $ u ^. (unc . uncert)
+uncVal u = maybe 0.0 id $ u ^. (unc . uncert)
+
 
 -- accessor for precision value
 uncPrec :: HasUncertainty x => x -> Maybe Int

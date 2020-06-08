@@ -151,7 +151,7 @@ module Language.Drasil (
   -- Uncertainty.Core
   , Uncertainty, uncty
   -- Uncertainty
-  , defaultUncrt, uncVal, uncPrec, ignoreUncrt
+  , defaultUncrt, uncVal, uncPrec, exact
   -- UnitLang
   , USymb(US)
   -- Data.Date
@@ -278,7 +278,7 @@ import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(
 
 import Language.Drasil.UnitLang (USymb(US))
 import Language.Drasil.Uncertainty.Core(Uncertainty, uncty)
-import Language.Drasil.Uncertainty(defaultUncrt, uncVal, uncPrec, ignoreUncrt)
+import Language.Drasil.Uncertainty(defaultUncrt, uncVal, uncPrec, exact)
 
 import Language.Drasil.Development.Sentence -- are these really development?
 import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)

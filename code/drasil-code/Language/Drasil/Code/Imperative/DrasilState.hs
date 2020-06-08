@@ -1,6 +1,6 @@
 module Language.Drasil.Code.Imperative.DrasilState (
-  DrasilState(..), inMod, ModExportMap, ClassDefinitionMap, modExportMap, 
-  clsDefMap
+  GenState, DrasilState(..), inMod, ModExportMap, ClassDefinitionMap, 
+  modExportMap, clsDefMap
 ) where
 
 import Language.Drasil
@@ -16,6 +16,7 @@ import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def,
   CodeSpec(..),  getConstraints)
 import Language.Drasil.Mod (Mod(..), Name, Class(..), StateVariable(..), fname)
 
+import Control.Monad.State (State)
 import Data.List (nub)
 import Data.Map (Map, fromList)
 
@@ -27,6 +28,9 @@ type ModExportMap = Map String String
 
 -- name of variable/function maps to class name
 type ClassDefinitionMap = Map String String
+
+-- Abbreviation used throughout generator
+type GenState = State DrasilState
 
 -- Private State, used to push these options around the generator
 data DrasilState = DrasilState {

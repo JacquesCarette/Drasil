@@ -16,8 +16,8 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
   genConstMod, genInputClass, genInputConstraints, genInputDerived, 
   genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc, 
   genOutputFormat, genOutputMod, genSampleInput)
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod,
-  modExportMap, clsDefMap)
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+  inMod, modExportMap, clsDefMap)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
@@ -33,8 +33,7 @@ import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..),
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
   getCurrentDirectory)
 import Control.Lens ((^.))
-import Control.Monad.Reader (Reader, ask, runReader)
-import Control.Monad.State (evalState, runState)
+import Control.Monad.State (get, evalState, runState)
 import Data.List (nub)
 import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList)
@@ -89,7 +88,7 @@ generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
-  let pckg = runReader (genPackage unReprProg) g 
+  let pckg = evalState (genPackage unReprProg) g 
       code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
           unReprPack pckg)
   createCodeFiles code
@@ -97,9 +96,9 @@ generateCode l unReprProg unReprPack g = do
 
 genPackage :: (OOProg progRepr, PackageSym packRepr) => 
   (progRepr (Program progRepr) -> ProgData) -> 
-  Reader DrasilState (packRepr (Package packRepr))
+  GenState (packRepr (Package packRepr))
 genPackage unRepr = do
-  g <- ask
+  g <- get
   ci <- genProgram
   p <- genProgram
   let info = unCI $ evalState ci initialState
@@ -110,20 +109,20 @@ genPackage unRepr = do
   d <- genDoxConfig s
   return $ package pd (m:i++d)
 
-genProgram :: (OOProg r) => Reader DrasilState (GSProgram r)
+genProgram :: (OOProg r) => GenState (GSProgram r)
 genProgram = do
-  g <- ask
+  g <- get
   ms <- chooseModules $ modular g
   let n = pName $ codeSpec g
   return $ prog n ms
 
-chooseModules :: (OOProg r) => Modularity -> Reader DrasilState [SFile r]
+chooseModules :: (OOProg r) => Modularity -> GenState [SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules (Modular _) = genModules
 
-genUnmodular :: (OOProg r) => Reader DrasilState (SFile r)
+genUnmodular :: (OOProg r) => GenState (SFile r)
 genUnmodular = do
-  g <- ask
+  g <- get
   umDesc <- unmodularDesc
   let n = pName $ codeSpec g
       cls = any (`member` clsMap g) 
@@ -137,9 +136,9 @@ genUnmodular = do
     ([genInputClass Auxiliary, genConstClass Auxiliary] 
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
           
-genModules :: (OOProg r) => Reader DrasilState [SFile r]
+genModules :: (OOProg r) => GenState [SFile r]
 genModules = do
-  g <- ask
+  g <- get
   mn     <- genMain
   inp    <- chooseInModule $ inMod g
   con    <- genConstMod 

@@ -30,7 +30,7 @@ table st ls f
         noDuplicate    = null symDuplicates
         -- If there are duplicates then the following will extract the UID's of duplicates symbols
         extractPairs symb = filter (\x -> fst x == symb) symUidPair
-        extractUid  = map (\x -> snd x)
+        extractUid  = map snd
         extractUidFromPairs = text . show . extractUid . extractPairs
         errSymUidDuplicates = vcat $ map (\symb -> 
           extractUidFromPairs symb<+>text "all have symbol"<+>symbolDoc symb) symDuplicates

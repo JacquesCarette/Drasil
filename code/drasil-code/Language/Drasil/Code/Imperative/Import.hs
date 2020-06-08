@@ -1,9 +1,9 @@
 {-# LANGUAGE PostfixOperators #-}
 {-# LANGUAGE Rank2Types #-}
-module Language.Drasil.Code.Imperative.Import (codeType, publicFunc, 
-  privateMethod, publicInOutFunc, privateInOutMethod, genConstructor, mkVar, 
-  mkVal, convExpr, convStmt, genModDef, genModFuncs, genModClasses, readData, 
-  renderC
+module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType, 
+  publicFunc, privateMethod, publicInOutFunc, privateInOutMethod, 
+  genConstructor, mkVar, mkVal, convExpr, convStmt, genModDef, genModFuncs, 
+  genModClasses, readData, renderC
 ) where
 
 import Language.Drasil hiding (Ref, int, log, ln, exp,
@@ -53,9 +53,12 @@ import Control.Monad.State (get)
 import Control.Lens ((^.))
 
 codeType :: (HasSpace c) => c -> GenState CodeType
-codeType c = do
+codeType c = spaceCodeType (c ^. typ)
+
+spaceCodeType :: Space -> GenState CodeType
+spaceCodeType s = do
   g <- get
-  return $ spaceMatches g (c ^. typ)
+  spaceMatches g s
 
 -- | If UID for the variable is matched to a concept, call conceptToGOOL to get 
 -- the GOOL code for the concept, and return.
@@ -249,20 +252,20 @@ genInOutFunc f docf s pr n desc ins' outs' b = do
 convExpr :: (OOProg r) => Expr -> GenState (SValue r)
 convExpr (Dbl d) = do
   g <- get
-  let sm = spaceMatches g
-      getLiteral Double = litDouble d
+  sm <- spaceMatches g Real
+  let getLiteral Double = litDouble d
       getLiteral Float = litFloat (realToFrac d)
       getLiteral _ = error "convExpr: Real space matched to invalid CodeType; should be Double or Float"
-  return $ getLiteral (sm Real)
+  return $ getLiteral sm
 convExpr (Int i) = return $ litInt i
 convExpr (Str s) = return $ litString s
 convExpr (Perc a b) = do
   g <- get
-  let sm = spaceMatches g
-      getLiteral Double = litDouble
+  sm <- spaceMatches g Rational
+  let getLiteral Double = litDouble
       getLiteral Float = litFloat . realToFrac
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
-  return $ getLiteral (sm Rational) (fromIntegral a / (10 ** fromIntegral b))
+  return $ getLiteral sm (fromIntegral a / (10 ** fromIntegral b))
 convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
 convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
@@ -292,11 +295,11 @@ convExpr (Field o f) = do
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
   g <- get
-  let sm = spaceMatches g
-      getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
+  sm <- spaceMatches g Rational
+  let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
       getLiteral Float = litFloat (fromIntegral a) #/ litFloat (fromIntegral b)
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
-  return $ getLiteral (sm Rational)
+  return $ getLiteral sm
 convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr (Case c l)      = doit l -- FIXME this is sub-optimal
   where
@@ -419,8 +422,8 @@ genFunc f svs (FDef (FuncDef n desc parms o rd s)) = do
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ codeSpec g) s 
     \\ (map quantvar parms ++ map stVar svs))
-  f n (convType $ spaceMatches g o) desc parms rd 
-    [block $ map varDec vars, block stmts]
+  t <- spaceCodeType o
+  f n (convType t) desc parms rd [block $ map varDec vars, block stmts]
 genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
   g <- get
   inits <- mapM (convExpr . snd) i

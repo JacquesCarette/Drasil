@@ -17,10 +17,10 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
   genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc, 
   genOutputFormat, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
-  inMod, modExportMap, clsDefMap)
+  designLog, inMod, modExportMap, clsDefMap)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
   AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
+import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -37,6 +37,7 @@ import Control.Monad.State (get, evalState, runState)
 import Data.List (nub)
 import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList)
+import Text.PrettyPrint.HughesPJ (($$), empty)
 
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs spec = DrasilState {
@@ -46,7 +47,7 @@ generator l dt sd chs spec = DrasilState {
   inStruct = inputStructure chs,
   conStruct = constStructure chs,
   conRepr = constRepr chs,
-  concMatches = chooseConcept chs,
+  concMatches = mcm,
   spaceMatches = chooseSpace l chs,
   implType = impType chs,
   onSfwrC = onSfwrConstraint chs,
@@ -69,12 +70,14 @@ generator l dt sd chs spec = DrasilState {
   -- stateful
   currentModule = "",
   currentClass = "",
-  designLog = empty,
-  loggedSpaces = []
+  _designLog = concLog $$ libLog,
+  _loggedSpaces = []
 }
-  where showDate Show = dt
+  where (mcm, concLog) = runState (chooseConcept chs) empty
+        showDate Show = dt
         showDate Hide = ""
-        (pth, elmap) = chooseODELib l (odeLib chs) (odes chs)
+        ((pth, elmap), libLog) = runState (chooseODELib l (odeLib chs) 
+          (odes chs)) empty
         els = map snd elmap
         mem = modExportMap spec chs modules' 
         lem = fromList (concatMap (^. modExports) els)
@@ -88,9 +91,9 @@ generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
-  let pckg = evalState (genPackage unReprProg) g 
-      code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
-          unReprPack pckg)
+  let (pckg, ds) = runState (genPackage unReprProg) g 
+      code = makeCode (progMods $ packProg $ unReprPack pckg) 
+        (ad "designLog.txt" (ds ^. designLog) : packAux (unReprPack pckg))
   createCodeFiles code
   setCurrentDirectory workingDir
 

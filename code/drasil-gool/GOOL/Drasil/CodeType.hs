@@ -18,4 +18,4 @@ data CodeType = Boolean
               | Iterator CodeType
               | Object ClassName
               | Func [CodeType] CodeType
-              | Void deriving Eq
+              | Void deriving (Eq, Show)

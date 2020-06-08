@@ -1,24 +1,30 @@
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Code.Imperative.DrasilState (
-  GenState, DrasilState(..), inMod, ModExportMap, ClassDefinitionMap, 
-  modExportMap, clsDefMap
+  GenState, DrasilState(..), designLog, inMod, MatchedSpaces, ModExportMap, 
+  ClassDefinitionMap, modExportMap, clsDefMap, addToDesignLog, addLoggedSpace
 ) where
 
 import Language.Drasil
-import GOOL.Drasil (ScopeTag(..))
+import GOOL.Drasil (ScopeTag(..), CodeType)
 
 import Language.Drasil.Chunk.Code (codeName)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), AuxFile, Modularity(..), 
   ImplementationType(..), Comments, Verbosity, MatchedConceptMap, 
-  MatchedSpaces, ConstantRepr, ConstantStructure(..), ConstraintBehaviour, 
+  ConstantRepr, ConstantStructure(..), ConstraintBehaviour, 
   InputModule(..), Logging, Structure(..), inputModule)
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def, 
   CodeSpec(..),  getConstraints)
 import Language.Drasil.Mod (Mod(..), Name, Class(..), StateVariable(..), fname)
 
+import Control.Lens ((^.), makeLenses, over)
 import Control.Monad.State (State)
 import Data.List (nub)
 import Data.Map (Map, fromList)
+import Text.PrettyPrint.HughesPJ (Doc, ($$))
+
+-- Type for the mapping between Spaces and CodeTypes
+type MatchedSpaces = Space -> GenState CodeType
 
 -- Map from calculation function name to the ExtLibState containing the contents of the function
 type ExtLibMap = Map String ExtLibState
@@ -63,14 +69,22 @@ data DrasilState = DrasilState {
   -- Stateful
   currentModule :: String,
   currentClass :: String,
-  designLog :: Doc,
-  loggedSpaces :: [Space]
+  _designLog :: Doc,
+  _loggedSpaces :: [Space]
 }
+makeLenses ''DrasilState
 
 inMod :: DrasilState -> InputModule
 inMod ds = inMod' $ modular ds
   where inMod' Unmodular = Combined
         inMod' (Modular im) = im
+
+addToDesignLog :: Space -> Doc -> DrasilState -> DrasilState
+addToDesignLog s l ds = if s `elem` (ds ^. loggedSpaces) then ds 
+  else over designLog ($$ l) ds
+
+addLoggedSpace :: Space -> DrasilState -> DrasilState
+addLoggedSpace s = over loggedSpaces (s:) 
 
 modExportMap :: CodeSpec -> Choices -> [Mod] -> ModExportMap
 modExportMap cs@CodeSpec {

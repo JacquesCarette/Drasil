@@ -5,8 +5,7 @@ import Language.Drasil
 
 import Data.List (nub, (\\))
 import Control.Lens (view)
-import Data.Bifunctor (first)
-import Text.PrettyPrint.HughesPJ (render)
+import Text.PrettyPrint.HughesPJ (text, render, vcat, (<+>))
 
 import Drasil.DocumentLanguage.Units (toSentence)
 import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
@@ -21,16 +20,22 @@ table st ls f
       Table [atStart symbol_, atStart description, atStart' unit_]
       (mkTable [P . (`symbol` st), f, toSentence] filteredChunks)
       (titleize tOfSymb) True
-    | otherwise = error $ "Same symbols for different quantities found "  ++ show symUidPairDuplicates
+    | otherwise = error $ errorMessage 
     where 
         filteredChunks = filter (`hasStageSymbol`st) ls
         symbolsCol     = map (`symbol` st) filteredChunks
         uidCol         = map (view uid)    filteredChunks
         symUidPair     = zip symbolsCol uidCol
-        symDuplicates  = symbolsCol \\ nub symbolsCol
+        symDuplicates  = nub (symbolsCol \\ nub symbolsCol)
         noDuplicate    = null symDuplicates
-        symUidPairDuplicates = [(first (render . symbolDoc) x, snd x) | x <- symUidPair, 
-          fst x `elem` symDuplicates]
+        -- If there are duplicates then the following will extract the UID's of duplicates symbols
+        extractPairs symb = filter (\x -> fst x == symb) symUidPair
+        extractUid  = map (\x -> snd x)
+        extractUidFromPairs = text . show . extractUid . extractPairs
+        errSymUidDuplicates = vcat $ map (\symb -> 
+          extractUidFromPairs symb<+>text "all have symbol"<+>symbolDoc symb) symDuplicates
+        errorMessage = "Same symbols for different quantities found: " ++ render errSymUidDuplicates
+
 
 symbTableRef :: Reference
 symbTableRef = makeTabRef "ToS"

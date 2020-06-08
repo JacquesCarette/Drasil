@@ -12,7 +12,7 @@
 
 \newcommand{\soln}{y} %y for yes and n for no
 
-\lstset{language=python, basicstyle=\ttfamily, breaklines=true,
+\lstset{language=c, basicstyle=\ttfamily, breaklines=true,
   showspaces=false, showstringspaces=false, breakatwhitespace=true, texcl=true,
   escapeinside={\%*}{*)}}
 
@@ -31,9 +31,9 @@
 \medskip
 
 \noindent
-Future Drasil Contributors, \textbf{Version 1}  \hfill Nathaniel Hu \\
-DURATION OF EXAMINATION: 1.5 hours \\
-MCMASTER UNIVERSITY TEST \hfill June 5th, 2020
+Future Drasil Contributors, \textbf{Version 1}  \hfill Dr.~S.~Smith \\
+DURATION OF TEST: 1.5 hours \\
+MCMASTER UNIVERSITY TEST \hfill
 
 \medskip
 
@@ -49,30 +49,13 @@ NAME:\\[1ex]
 \sbox{\bb}{\framebox[1cm]{\rule{0mm}{7mm}}}
 \sbox{\bbb}{\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}}
 
-Student ID: \usebox{\bbb} \\[2mm]
-
 \rule[3 mm]{\textwidth}{0.5mm}
 
-This examination paper includes \noofpages pages and
-16 % VARIABILITY
-questions. You are responsible for ensuring that your copy of the examination
-paper is complete. Bring any discrepancy to the attention
-of your invigilator.\\
+This test paper includes \noofpages pages and 16 % VARIABILITY
+questions. You are responsible for ensuring that your copy of the 
+test paper is complete. Bring any discrepancy to the attention of 
+the person administering this test.\\
 
-\textbf{Special Instructions}:
-
-\begin{enumerate}
-
-\item It is your responsibility to ensure that the answer sheet is properly
-  completed. Your examination result depends upon proper attention to the
-  instructions on the next page.
-\item Calculators, computers, cell phones, and all other electronic devices are
-  \textbf{not} to be utilized.
-\item Read each question carefully.
-\item Try to allocate your time sensibly and divide it appropriately between the
-  questions.
-\item Select the \textbf{best} answer for each question.
-\end{enumerate}
 \end{minipage}\\
 
 \hspace{14cm}
@@ -109,6 +92,8 @@ What command is used to create a local version of a remote repository?
     \item \lstinline{clone <link to repo>}
     \item \lstinline{copy <link to repo>}
 \end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: \lstinline{git clone <link to repo>} clones the remote repo and stores it locally
 
 \question{1 mark}
 The \lstinline{git status} command displays:
@@ -119,100 +104,8 @@ The \lstinline{git status} command displays:
     \item paths with differences between current state of repo and last commit \marker
     \item changes made to files after last commit
 \end{enumerate}
-
-\question{1 mark}
-The \lstinline{git pull} command is used to:
-
-\begin{enumerate}
-    \item sync your local version with remote version of the repo \marker
-    \item displays changes made to the remote version of the repo
-    \item sync remote version with your local version of the repo
-    \item updates the remote repo with other people's changes
-\end{enumerate}
-
-\question{1 mark}
-What is the correct order of the following \lstinline{git} commands?
-
-\begin{enumerate}
-    \item \lstinline{git push, git add, git clone, git commit}
-    \item \lstinline{git add, git clone, git push, git commit}
-    \item \lstinline{git clone, git add, git push, git commit}
-    \item \lstinline{git clone, git add, git commit, git push} \marker
-\end{enumerate}
-
-\end{minipage}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\newpage
-\noindent
-\begin{minipage}{\textwidth}
-
-\question{1 mark}
-Which of the below phrases can you use to link a relevant issue to a pull request on GitHub, without closing the issue once the PR is merged? (\#HASH is the issue hash \#)
-
-\begin{enumerate}
-    \item closes \#HASH
-    \item contributes to \#HASH \marker
-\end{enumerate}
-
-\question{1 mark}
-The preferred coding style describes how lines should not be more than \_\_\_ characters wide.
-
-\begin{enumerate}
-    \item 60
-    \item 90
-    \item 80 \marker
-    \item 70
-\end{enumerate}
-
-\question{1 mark}
-When making pull requests involving changes to multiple files (e.g. Haskell scripts and stable folder files), remember to:
-
-\begin{enumerate}
-    \item use multiple \lstinline{git add} to stage multiple files before doing a single commit \marker
-    \item update the stable files first and push them, then repeat with the scripts using \lstinline{git add}
-    \item only update all scripts in one commit using multiple \lstinline{git add}
-    \item only update all changed 'stable' folder files in one commit using multiple \lstinline{git add}
-\end{enumerate}
-
-\question{1 mark}
-The \lstinline{git branch} command:
-
-\begin{enumerate}
-    \item shows the items under your current branch on your local repo
-    \item shows a list of all your current branches on your local repo \marker
-    \item shows branches dependent on your current branch on your local repo
-    \item shows a list of all current branches on the remote repo
-\end{enumerate}
-
-\end{minipage}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\newpage
-\noindent
-\begin{minipage}{\textwidth}
-
-\question{1 mark}
-When closing an issue, please provide:
-
-\begin{enumerate}
-    \item Rationale
-    \item Relevant Links to other related issues
-    \item Linked Pull Requests
-    \item Any or all of the above \marker
-\end{enumerate}
-
-\question{1 mark}
-To \textbf{only} build the 2D Rigid Body Physics Library example (gamephysics\_diff) using the Drasil framework, run the command:
-
-\begin{enumerate}
-    \item \lstinline{setup gamephysics_diff}
-    \item \lstinline{make gamephysics_diff} \marker
-    \item \lstinline{stack exec gamephysics_diff}
-    \item \lstinline{make}
-\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: \lstinline{git status} shows all files with changes made after previous commit/push
 
 \question{1 mark}
 If you are a Windows OS user working with Git Bash App, always run the command each time you open an instance of git bash:
@@ -223,6 +116,125 @@ If you are a Windows OS user working with Git Bash App, always run the command e
     \item \lstinline{chcp 65001}
     \item \lstinline{A. or C.} \marker
 \end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: \lstinline{chcp.com 65001} or \lstinline{chcp 65001} set terminal encoding to UTF-8 (this allows Drasil to handle Greek letters/unicode symbols)
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+What is the correct order of the following \lstinline{git} commands?
+
+\begin{enumerate}
+    \item \lstinline{git push, git add, git clone, git commit}
+    \item \lstinline{git add, git clone, git push, git commit}
+    \item \lstinline{git clone, git add, git push, git commit}
+    \item \lstinline{git clone, git add, git commit, git push} \marker
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: \lstinline{git clone} creates local copy of remote repo, \lstinline{git add} stages changed files, \lstinline{git commit} commits staged files, and \lstinline{git push} pushes committed files (changes) to remote repo
+
+\question{1 mark}
+Which of the below phrases can you use to link a relevant issue to a pull request on GitHub, without closing the issue once the PR is merged? (\#HASH is the issue hash \#)
+
+\begin{enumerate}
+    \item closes \#HASH
+    \item contributes to \#HASH \marker
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: using 'contributes to \#HASH' in the PR comment links the relevant issue by mentioning it; 'closes' is a keyword that tells GitHub to close this issue once this PR is merged
+
+\question{1 mark}
+The preferred coding style describes how lines should not be more than \_\_\_ characters wide.
+
+\begin{enumerate}
+    \item 60
+    \item 90
+    \item 80 \marker
+    \item 70
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: the preferred coding style (refer to Contributor's Guide) is to avoid making 'long lines' more than 80 characters wide
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+When making pull requests involving changes to multiple files (e.g. Haskell scripts and stable folder files), remember to:
+
+\begin{enumerate}
+    \item use multiple \lstinline{git add} to stage all changed files before doing a single commit \marker
+    \item update the stable files first and push them, then repeat with the scripts using \lstinline{git add}
+    \item only update all scripts in one commit using multiple \lstinline{git add}
+    \item only update all changed 'stable' folder files in one commit using multiple \lstinline{git add}
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: it is important to stage \textbf{all} changed files (stable and code) using multiple \lstinline{git add} before doing a single commit to avoid Travis build errors
+
+\question{1 mark}
+The \lstinline{git branch} command:
+
+\begin{enumerate}
+    \item shows the items under your current branch on your local repo
+    \item shows a list of all your current branches on your local repo \marker
+    \item shows branches dependent on your current branch on your local repo
+    \item shows a list of all current branches on the remote repo
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: \lstinline{git branch} is used to display all current branches on your local repo (as a list)
+
+\question{1 mark}
+When closing an issue, please provide:
+
+\begin{enumerate}
+    \item Rationale
+    \item Relevant Links to other related issues
+    \item Linked Pull Requests
+    \item Any or all of the above \marker
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: any or all of the above help other contributors understand why the issue is being closed/direct them to any changes made to address those issues (i.e. give further clarification)
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+To \textbf{only} build the 2D Rigid Body Physics Library example (gamephysics\_diff) using the Drasil framework, run the command:
+
+\begin{enumerate}
+    \item \lstinline{setup gamephysics_diff}
+    \item \lstinline{make gamephysics_diff} \marker
+    \item \lstinline{stack exec gamephysics_diff}
+    \item \lstinline{make}
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: \lstinline{make gamephysics_diff} directs Drasil to \textbf{only} make the 2D Rigid Body Physics Library example; in contrast,  \lstinline{make} directs Drasil to make \textbf{all} examples
+
+\question{1 mark}
+The \lstinline{git pull} command is used to:
+
+\begin{enumerate}
+    \item sync your local version with remote version of the repo \marker
+    \item displays changes made to the remote version of the repo
+    \item sync remote version with your local version of the repo
+    \item updates the remote repo with other people's changes
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: \lstinline{git pull} retrieves all changes made to the remote repo, and updates the local repo
 
 \question{1 mark}
 To run the Glass-BR example (glassbr) using the Drasil framework (assume that the example has already been built), run the command:
@@ -233,6 +245,8 @@ To run the Glass-BR example (glassbr) using the Drasil framework (assume that th
     \item \lstinline{stack glassbr}
     \item \lstinline{stack exec glassbr} \marker
 \end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: \lstinline{stack exec} is used to run a specific example that has already been built, using stack
 
 \end{minipage}
 
@@ -245,7 +259,7 @@ To run the Glass-BR example (glassbr) using the Drasil framework (assume that th
 \question{2 marks}
 When creating a new issue on GitHub, describe two tips to follow that help to ensure that the new issue includes enough information (context).
 
-\answer{Answer here.}{0cm}{0cm}
+\answer{Answer here.}{0cm}{7cm}
 
 Sample Answers (any two of the following work):
 \begin{itemize}
@@ -262,7 +276,7 @@ Explain the concept of cherry-picking in GitHub. Be sure to include what command
 
 \answer{Answer here.}{0cm}{7cm}
 
-Sample Answer
+Sample Answer:
 \begin{itemize}
     \item cherry-picking in GitHub is the concept/process of moving a specific commit from one branch onto another (new branch)
     \item there are two commands you would likely need to use:
@@ -272,6 +286,8 @@ Sample Answer
     \end{itemize}
     \item the information you would need to accomplish cherry-picking is the \lstinline{commit-hash} of the specific commit you would like to move to the new branch
 \end{itemize}
+
+\rule{0cm}{1cm}
 
 \end{minipage}
 
@@ -286,7 +302,7 @@ Describe Drasil (what is it, what does it do), and discuss its main goals.
 
 \answer{Answer here.}{0cm}{7cm}
 
-Sample Answer
+Sample Answer:
 \begin{itemize}
     \item Drasil is a framework for generating \textbf{all} software artifacts (e.g. code, documentation) from a stable knowledge base
     \item the main goals of Drasil are to:
@@ -304,12 +320,14 @@ Imagine that you have made changes to some files in the Drasil code on your loca
 
 \answer{Answer here.}{0cm}{7cm}
 
-Sample Answer
+Sample Answer:
 \begin{itemize}
     \item \lstinline{git add <relative path to file>}: stage a file to a commit; be sure to repeat this multiple times for multiple changed files, or use \lstinline{git add *} cautiously (command stages all changed files)
     \item \lstinline{git commit -m "commit message"}: commit your staged changes to your local repository; be sure to include a descriptive commit message
     \item \lstinline{git push}: push changes from your local repository to the remote repository (thus updating it)
 \end{itemize}
+
+\rule{0cm}{1cm}
 
 \end{minipage}
 

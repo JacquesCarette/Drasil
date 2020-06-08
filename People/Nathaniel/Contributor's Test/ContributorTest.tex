@@ -12,7 +12,7 @@
 
 \newcommand{\soln}{y} %y for yes and n for no
 
-\lstset{language=python, basicstyle=\ttfamily, breaklines=true,
+\lstset{language=c, basicstyle=\ttfamily, breaklines=true,
   showspaces=false, showstringspaces=false, breakatwhitespace=true, texcl=true,
   escapeinside={\%*}{*)}}
 
@@ -21,19 +21,15 @@
 \begin{center}
   {\large \bf Drasil Future Contributors' Test}\\[1ex]
   {\large \bf McMaster University}\\[1ex]
-  {\large Faculty of Engineering, Department of Computing and Software}\\[1ex]
-  \ifthenelse{\equal{\soln}{y}}{\large {\bf Answer Key:} Large arrow
-    ($\Longleftarrow$) for correct% , small ($\leftarrow$) for partially
-    % correct
-  }{}
+  {\large Faculty of Engineering, Department of Computing and Software}
 \end{center}
 
 \medskip
 
 \noindent
-Future Drasil Contributors, \textbf{Version 1}  \hfill Nathaniel Hu \\
-DURATION OF EXAMINATION: 1.5 hours \\
-MCMASTER UNIVERSITY TEST \hfill June 5th, 2020
+Future Drasil Contributors, \textbf{Version 1}  \hfill Dr.~S.~Smith \\
+DURATION OF TEST: 1.5 hours \\
+MCMASTER UNIVERSITY TEST \hfill
 
 \medskip
 
@@ -49,30 +45,13 @@ NAME:\\[1ex]
 \sbox{\bb}{\framebox[1cm]{\rule{0mm}{7mm}}}
 \sbox{\bbb}{\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}}
 
-Student ID: \usebox{\bbb} \\[2mm]
-
 \rule[3 mm]{\textwidth}{0.5mm}
 
-This examination paper includes \noofpages pages and
-16 % VARIABILITY
-questions. You are responsible for ensuring that your copy of the examination
-paper is complete. Bring any discrepancy to the attention
-of your invigilator.\\
+This test paper includes \noofpages pages and 16 % VARIABILITY
+questions. You are responsible for ensuring that your copy of the 
+test paper is complete. Bring any discrepancy to the attention of 
+the person administering this test.\\
 
-\textbf{Special Instructions}:
-
-\begin{enumerate}
-
-\item It is your responsibility to ensure that the answer sheet is properly
-  completed. Your examination result depends upon proper attention to the
-  instructions on the next page.
-\item Calculators, computers, cell phones, and all other electronic devices are
-  \textbf{not} to be utilized.
-\item Read each question carefully.
-\item Try to allocate your time sensibly and divide it appropriately between the
-  questions.
-\item Select the \textbf{best} answer for each question.
-\end{enumerate}
 \end{minipage}\\
 
 \hspace{14cm}
@@ -91,7 +70,7 @@ Total & \markheight & 20 \\
 \end{tabular}
 \end{minipage}
 
-\examheader{Drasil \ifthenelse{\equal{\soln}{y}} {\hfill SOLUTIONS} }
+\examheader{Drasil \ifthenelse{\equal{\soln}{y}} {\hfill QUESTIONS} }
 
 \renewcommand{\labelenumi}{\Alph{enumi}.}
 
@@ -109,6 +88,8 @@ What command is used to create a local version of a remote repository?
     \item \lstinline{clone <link to repo>}
     \item \lstinline{copy <link to repo>}
 \end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+\rule{0cm}{1cm}
 
 \question{1 mark}
 The \lstinline{git status} command displays:
@@ -119,100 +100,8 @@ The \lstinline{git status} command displays:
     \item paths with differences between current state of repo and last commit
     \item changes made to files after last commit
 \end{enumerate}
-
-\question{1 mark}
-The \lstinline{git pull} command is used to:
-
-\begin{enumerate}
-    \item sync your local version with remote version of the repo
-    \item displays changes made to the remote version of the repo
-    \item sync remote version with your local version of the repo
-    \item updates the remote repo with other people's changes
-\end{enumerate}
-
-\question{1 mark}
-What is the correct order of the following \lstinline{git} commands?
-
-\begin{enumerate}
-    \item \lstinline{git push, git add, git clone, git commit}
-    \item \lstinline{git add, git clone, git push, git commit}
-    \item \lstinline{git clone, git add, git push, git commit}
-    \item \lstinline{git clone, git add, git commit, git push}
-\end{enumerate}
-
-\end{minipage}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\newpage
-\noindent
-\begin{minipage}{\textwidth}
-
-\question{1 mark}
-Which of the below phrases can you use to link a relevant issue to a pull request on GitHub, without closing the issue once the PR is merged? (\#HASH is the issue hash \#)
-
-\begin{enumerate}
-    \item closes \#HASH
-    \item contributes to \#HASH
-\end{enumerate}
-
-\question{1 mark}
-The preferred coding style describes how lines should not be more than \_\_\_ characters wide.
-
-\begin{enumerate}
-    \item 60
-    \item 90
-    \item 80
-    \item 70
-\end{enumerate}
-
-\question{1 mark}
-When making pull requests involving changes to multiple files (e.g. Haskell scripts and stable folder files), remember to:
-
-\begin{enumerate}
-    \item use multiple \lstinline{git add} to stage multiple files before doing a single commit
-    \item update the stable files first and push them, then repeat with the scripts using \lstinline{git add}
-    \item only update all scripts in one commit using multiple \lstinline{git add}
-    \item only update all changed 'stable' folder files in one commit using multiple \lstinline{git add}
-\end{enumerate}
-
-\question{1 mark}
-The \lstinline{git branch} command:
-
-\begin{enumerate}
-    \item shows the items under your current branch on your local repo
-    \item shows a list of all your current branches on your local repo
-    \item shows branches dependent on your current branch on your local repo
-    \item shows a list of all current branches on the remote repo
-\end{enumerate}
-
-\end{minipage}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\newpage
-\noindent
-\begin{minipage}{\textwidth}
-
-\question{1 mark}
-When closing an issue, please provide:
-
-\begin{enumerate}
-    \item Rationale
-    \item Relevant Links to other related issues
-    \item Linked Pull Requests
-    \item Any or all of the above
-\end{enumerate}
-
-\question{1 mark}
-To \textbf{only} build the 2D Rigid Body Physics Library example (gamephysics\_diff) using the Drasil framework, run the command:
-
-\begin{enumerate}
-    \item \lstinline{setup gamephysics_diff}
-    \item \lstinline{make gamephysics_diff}
-    \item \lstinline{stack exec gamephysics_diff}
-    \item \lstinline{make}
-\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+\rule{0cm}{1cm}
 
 \question{1 mark}
 If you are a Windows OS user working with Git Bash App, always run the command each time you open an instance of git bash:
@@ -223,6 +112,125 @@ If you are a Windows OS user working with Git Bash App, always run the command e
     \item \lstinline{chcp 65001}
     \item \lstinline{A. or C.}
 \end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+\rule{0cm}{1cm}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+What is the correct order of the following \lstinline{git} commands?
+
+\begin{enumerate}
+    \item \lstinline{git push, git add, git clone, git commit}
+    \item \lstinline{git add, git clone, git push, git commit}
+    \item \lstinline{git clone, git add, git push, git commit}
+    \item \lstinline{git clone, git add, git commit, git push}
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+\rule{0cm}{1cm}
+
+\question{1 mark}
+Which of the below phrases can you use to link a relevant issue to a pull request on GitHub, without closing the issue once the PR is merged? (\#HASH is the issue hash \#)
+
+\begin{enumerate}
+    \item closes \#HASH
+    \item contributes to \#HASH
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+\rule{0cm}{1cm}
+
+\question{1 mark}
+The preferred coding style describes how lines should not be more than \_\_\_ characters wide.
+
+\begin{enumerate}
+    \item 60
+    \item 90
+    \item 80
+    \item 70
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+\rule{0cm}{1cm}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+When making pull requests involving changes to multiple files (e.g. Haskell scripts and stable folder files), remember to:
+
+\begin{enumerate}
+    \item use multiple \lstinline{git add} to stage multiple files before doing a single commit
+    \item update the stable files first and push them, then repeat with the scripts using \lstinline{git add}
+    \item only update all scripts in one commit using multiple \lstinline{git add}
+    \item only update all changed 'stable' folder files in one commit using multiple \lstinline{git add}
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+\rule{0cm}{1cm}
+
+\question{1 mark}
+The \lstinline{git branch} command:
+
+\begin{enumerate}
+    \item shows the items under your current branch on your local repo
+    \item shows a list of all your current branches on your local repo
+    \item shows branches dependent on your current branch on your local repo
+    \item shows a list of all current branches on the remote repo
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+\rule{0cm}{1cm}
+
+\question{1 mark}
+When closing an issue, please provide:
+
+\begin{enumerate}
+    \item Rationale
+    \item Relevant Links to other related issues
+    \item Linked Pull Requests
+    \item Any or all of the above
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+\rule{0cm}{1cm}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+To \textbf{only} build the 2D Rigid Body Physics Library example (gamephysics\_diff) using the Drasil framework, run the command:
+
+\begin{enumerate}
+    \item \lstinline{setup gamephysics_diff}
+    \item \lstinline{make gamephysics_diff}
+    \item \lstinline{stack exec gamephysics_diff}
+    \item \lstinline{make}
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+\rule{0cm}{1cm}
+
+\question{1 mark}
+The \lstinline{git pull} command is used to:
+
+\begin{enumerate}
+    \item sync your local version with remote version of the repo
+    \item displays changes made to the remote version of the repo
+    \item sync remote version with your local version of the repo
+    \item updates the remote repo with other people's changes
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+\rule{0cm}{1cm}
 
 \question{1 mark}
 To run the Glass-BR example (glassbr) using the Drasil framework (assume that the example has already been built), run the command:
@@ -233,6 +241,8 @@ To run the Glass-BR example (glassbr) using the Drasil framework (assume that th
     \item \lstinline{stack glassbr}
     \item \lstinline{stack exec glassbr}
 \end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+\rule{0cm}{1cm}
 
 \end{minipage}
 

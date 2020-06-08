@@ -2615,7 +2615,7 @@ cpphClass n ps vars funcs pub priv = let
     | isEmpty pb = [RC.scope priv <> colon, indent pr]
     | isEmpty pr = [RC.scope pub <> colon, indent pb]
     | otherwise   = [RC.scope pub <> colon, indent pb, blank,
-      RC.scope priv <> colon, indent pr]
+      RC.scope priv <> colon, indent privs]
   in onCodeValue (\p -> vcat [
     classDec <+> text n <+> p <+> bodyStart,
     indentList (indLi pubs privs),

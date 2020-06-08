@@ -1,3 +1,4 @@
+-- | Defines QuantityDicts needed in the code generation stage.
 module Language.Drasil.Code.CodeQuantityDicts where
 
 import Language.Drasil

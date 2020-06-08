@@ -23,6 +23,9 @@ import Data.Maybe (catMaybes)
 import Control.Applicative ((<|>))
 import Control.Monad.State (get)
 
+-- Generates calls to all of the input-related functions. First is the call to 
+-- the function for reading inputs, then the function for calculating derived 
+-- inputs, then the function for checking input constraints.
 getAllInputCalls :: (OOProg r) => GenState [MSStatement r]
 getAllInputCalls = do
   gi <- getInputCall
@@ -30,20 +33,23 @@ getAllInputCalls = do
   ic <- getConstraintCall
   return $ catMaybes [gi, dv, ic]
 
+-- Generates a call to the function for reading inputs from a file
 getInputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
 
+-- Generates a call to the function for calculating derived inputs
 getDerivedCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getDerivedCall = getInOutCall "derived_values" getDerivedIns getDerivedOuts
 
-getConstraintCall :: (OOProg r) => GenState 
-  (Maybe (MSStatement r))
+-- Generates a call to the function for checking constraints on the input
+getConstraintCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getConstraintCall = do
   val <- getFuncCall "input_constraints" void getConstraintParams
   return $ fmap valStmt val
 
-getCalcCall :: (OOProg r) => CodeDefinition -> GenState 
-  (Maybe (MSStatement r))
+-- Generates a call to a calculation function, given the CodeDefinition for the 
+-- value being calculated.
+getCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
 getCalcCall c = do
   t <- codeType c
   val <- getFuncCall (codeName c) (convType t) (getCalcParams c)
@@ -51,11 +57,14 @@ getCalcCall c = do
   l <- maybeLog v
   return $ fmap (multi . (: l) . varDecDef v) val
 
+-- Generates a call to the function for printing outputs.
 getOutputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
   return $ fmap valStmt val
 
+-- Generates a function call given the name, return type, and arguments to 
+-- the function.
 getFuncCall :: (OOProg r) => Name -> VSType r -> 
   GenState [CodeVarChunk] -> GenState (Maybe (SValue r))
 getFuncCall n t funcPs = do
@@ -68,9 +77,10 @@ getFuncCall n t funcPs = do
         return $ Just val
   getFuncCall' mm
 
+-- Generates a function call given the name, inputs, and outputs for the 
+-- function.
 getInOutCall :: (OOProg r) => Name -> GenState [CodeVarChunk] -> 
-  GenState [CodeVarChunk] ->
-  GenState (Maybe (MSStatement r))
+  GenState [CodeVarChunk] -> GenState (Maybe (MSStatement r))
 getInOutCall n inFunc outFunc = do
   mm <- getCall n
   let getInOutCall' Nothing = return Nothing

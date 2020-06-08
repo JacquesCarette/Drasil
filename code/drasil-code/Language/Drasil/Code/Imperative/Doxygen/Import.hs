@@ -16,14 +16,22 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
 type OptimizeChoice = Doc
 type ProjName = String
 
+-- Renderings of values commonly used in the configuration file.
 yes, no :: Doc
 yes = text "YES"
 no = text "NO"
 
+-- Converts a Verbosity to a rendered value that can be used in a Doxygen
+-- configuration file.
 verbosityToDoc :: Verbosity -> Doc
 verbosityToDoc Verbose = no
 verbosityToDoc Quiet = yes
 
+-- Renders a Doxygen configuration file. 
+-- Sets the PROJECT_NAME field according to the given name.
+-- Sets the INPUT field to the header files contained in the given GOOLState.
+-- Sets the OPTIMIZE_OUTPUT_JAVA field according to the OptimizeChoice parameter.
+-- Sets the QUIET field according to the given Verbosity.
 makeDoxConfig :: ProjName -> GOOLState -> OptimizeChoice -> Verbosity -> Doc
 makeDoxConfig prog s opt v = 
   let fs = nub (s ^. headers ++ maybeToList (s ^. mainMod))

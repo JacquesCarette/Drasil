@@ -26,10 +26,13 @@ class CodeIdea c where
 programName :: CommonIdea c => c -> String
 programName = toPlainName . abrv
 
+-- Used when a function name needs to be distinguishable from a variable name
 funcPrefix :: String
 funcPrefix = "func_"
  
 data VarOrFunc = Var | Func
+
+-- Basic chunk representation in the code generation context
 data CodeChunk = CodeC { _qc :: QuantityDict
                        , kind :: VarOrFunc
                        }
@@ -47,6 +50,8 @@ instance CodeIdea    CodeChunk where
 instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc
 
+-- Chunk representing a variable. obv field represents the object containing 
+-- this variable, if it is an object field.
 data CodeVarChunk = CodeVC {_ccv :: CodeChunk,
                             _obv :: Maybe CodeChunk}
 makeLenses ''CodeVarChunk
@@ -63,6 +68,7 @@ instance CodeIdea    CodeVarChunk where
 instance Eq          CodeVarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeVarChunk where getUnit = getUnit . view ccv
 
+-- Chunk representing a function.
 newtype CodeFuncChunk = CodeFC {_ccf :: CodeChunk}
 makeLenses ''CodeFuncChunk
 
@@ -79,9 +85,11 @@ instance CodeIdea    CodeFuncChunk where
 instance Eq          CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
 
+-- | Construct a CodeVarChunk from a Quantity
 quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
 quantvar c = CodeVC (CodeC (qw c) Var) Nothing
 
+-- | Construct a CodeFuncChunk from a Quantity
 quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
 quantfunc c = CodeFC $ CodeC (qw c) Func
 
@@ -100,12 +108,15 @@ codevars e m = map (varResolve m) $ dep e
 codevars' :: Expr -> ChunkDB -> [CodeVarChunk]
 codevars' e m = map (varResolve m) $ nub $ names' e
 
+-- Make a CodeVarChunk from a UID in the ChunkDB
 varResolve :: ChunkDB -> UID -> CodeVarChunk
 varResolve  m x = quantvar $ symbResolve m x
 
+-- Make a CodeFuncChunk from a UID in the ChunkDB
 funcResolve :: ChunkDB -> UID -> CodeFuncChunk
 funcResolve m x = quantfunc $ symbResolve m x
 
+-- Changes a CodeVarChunk's space from Vect to Array.
 listToArray :: CodeVarChunk -> CodeVarChunk
 listToArray c = newSpc (c ^. typ) 
   where newSpc (Vect t) = CodeVC (CodeC (implVar' (c ^. uid ++ "_array") 
@@ -115,15 +126,19 @@ listToArray c = newSpc (c ^. typ)
 
 type ConstraintMap = Map.Map UID [Constraint]
 
+-- Creates a map from UID to Constraints for constrained chunks
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
 constraintMap = Map.fromList . map (\x -> (x ^. uid, x ^. constraints))
 
+-- Returns a pair of a chunk and its physical constraints
 physLookup :: (HasUID q) => ConstraintMap -> q -> (q,[Constraint])
 physLookup m q = constraintLookup' q m (filter isPhysC)
 
+-- Returns a pair of a chunk and its software constraints
 sfwrLookup :: (HasUID q) => ConstraintMap -> q -> (q,[Constraint])
 sfwrLookup m q = constraintLookup' q m (filter isSfwrC)
 
+-- Returns a chunk and a filtered list of its constraints
 constraintLookup' :: (HasUID q) => q -> ConstraintMap
                       -> ([Constraint] -> [Constraint]) -> (q , [Constraint])
 constraintLookup' q m filt = (q, maybe [] filt (Map.lookup (q^.uid) m))

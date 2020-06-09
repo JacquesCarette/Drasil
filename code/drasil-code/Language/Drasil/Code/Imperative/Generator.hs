@@ -37,7 +37,7 @@ import Control.Monad.State (get, evalState, runState)
 import Data.List (nub)
 import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList)
-import Text.PrettyPrint.HughesPJ (($$), empty)
+import Text.PrettyPrint.HughesPJ (($$), empty, isEmpty)
 
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs spec = DrasilState {
@@ -71,7 +71,7 @@ generator l dt sd chs spec = DrasilState {
   currentModule = "",
   currentClass = "",
   _designLog = concLog $$ libLog,
-  _loggedSpaces = []
+  _loggedSpaces = [] -- Used to prevent duplicate logs added to design log
 }
   where (mcm, concLog) = runState (chooseConcept chs) empty
         showDate Show = dt
@@ -93,7 +93,8 @@ generateCode l unReprProg unReprPack g = do
   setCurrentDirectory (getDir l)
   let (pckg, ds) = runState (genPackage unReprProg) g 
       code = makeCode (progMods $ packProg $ unReprPack pckg) 
-        (ad "designLog.txt" (ds ^. designLog) : packAux (unReprPack pckg))
+        ([ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $ 
+          ds ^. designLog] ++ packAux (unReprPack pckg))
   createCodeFiles code
   setCurrentDirectory workingDir
 

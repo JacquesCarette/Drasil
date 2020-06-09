@@ -19,8 +19,8 @@ chooseSpace lng chs = \s -> selectType lng s (spaceMatch chs s)
         -- Floats unavailable in Python
   where selectType :: Lang -> Space -> [CodeType] -> GenState CodeType
         selectType Python s (Float:ts) = do
-          modify (addLoggedSpace s . 
-            addToDesignLog s (incompatibleType Python s Float))
+          modify (addLoggedSpace s Float . 
+            addToDesignLog s Float (incompatibleType Python s Float))
           selectType Python s ts
         -- In all other cases, just select first choice
         selectType _ _ (t:_) = return t

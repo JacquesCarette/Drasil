@@ -70,7 +70,7 @@ data DrasilState = DrasilState {
   currentModule :: String,
   currentClass :: String,
   _designLog :: Doc,
-  _loggedSpaces :: [Space]
+  _loggedSpaces :: [(Space, CodeType)]
 }
 makeLenses ''DrasilState
 
@@ -79,12 +79,12 @@ inMod ds = inMod' $ modular ds
   where inMod' Unmodular = Combined
         inMod' (Modular im) = im
 
-addToDesignLog :: Space -> Doc -> DrasilState -> DrasilState
-addToDesignLog s l ds = if s `elem` (ds ^. loggedSpaces) then ds 
+addToDesignLog :: Space -> CodeType -> Doc -> DrasilState -> DrasilState
+addToDesignLog s t l ds = if (s,t) `elem` (ds ^. loggedSpaces) then ds 
   else over designLog ($$ l) ds
 
-addLoggedSpace :: Space -> DrasilState -> DrasilState
-addLoggedSpace s = over loggedSpaces (s:) 
+addLoggedSpace :: Space -> CodeType -> DrasilState -> DrasilState
+addLoggedSpace s t = over loggedSpaces ((s,t):) 
 
 modExportMap :: CodeSpec -> Choices -> [Mod] -> ModExportMap
 modExportMap cs@CodeSpec {

@@ -591,13 +591,13 @@ instance MethodSym CSharpCode where
 
   docFunc = G.docFunc
 
-  inOutMethod n = csInOut (method n)
+  inOutMethod n s p = csInOut (method n s p)
 
-  docInOutMethod n = CP.docInOutFunc (inOutMethod n)
+  docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-  inOutFunc n = csInOut (function n)
+  inOutFunc n s = csInOut (function n s)
 
-  docInOutFunc n = CP.docInOutFunc (inOutFunc n)
+  docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
 instance RenderMethod CSharpCode where
   intMethod m n s p t ps b = do
@@ -854,18 +854,16 @@ csObjVar o v = csObjVar' (variableBind v)
         csObjVar' Dynamic = mkVar (variableName o ++ "." ++ variableName v) 
           (variableType v) (R.objVar (RC.variable o) (RC.variable v))
 
-csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
-    -> VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode -> 
-    SMethod CSharpCode)
-  -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
+csInOut :: (VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode -> 
+    SMethod CSharpCode) -> 
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] -> 
   MSBody CSharpCode -> SMethod CSharpCode
-csInOut f s p ins [v] [] b = f s p (onStateValue variableType v) (map param ins)
+csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnStmt $ 
   valueOf v))
-csInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
+csInOut f ins [] [v] b = f (onStateValue variableType v) 
   (map param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b 
   (returnStmt $ valueOf v))
-csInOut f s p ins outs both b = f s p void (map (onStateValue (onCodeValue 
+csInOut f ins outs both b = f void (map (onStateValue (onCodeValue 
   (updateParam csRef)) . param) both ++ map param ins ++ map (onStateValue 
   (onCodeValue (updateParam csOut)) . param) outs) b

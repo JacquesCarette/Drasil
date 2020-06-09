@@ -426,9 +426,9 @@ constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public dynamic (S.construct c) ps (S.multiBody [ib, b]))
   where ib = bodyStatements (map (\(vr, vl) -> S.objVarSelf vr &= vl) is)
 
-function :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> 
-  VSType r -> [MSParameter r] -> MSBody r -> SMethod r
-function n s p t = S.intFunc False n s p (mType t)
+function :: (RenderSym r) => Label -> r (Scope r) -> VSType r -> 
+  [MSParameter r] -> MSBody r -> SMethod r
+function n s t = S.intFunc False n s static (mType t)
   
 docFuncRepr :: (RenderSym r) => String -> [String] -> [String] -> SMethod r -> 
   SMethod r

@@ -366,7 +366,7 @@ instance MethodSym CodeInfo where
 
   docMain = updateMEMandCM "main"
 
-  function n _ _ _ _ = updateMEMandCM n
+  function n _ _ _ = updateMEMandCM n
   mainFunction = updateMEMandCM "main"
 
   docFunc _ _ _ f = do
@@ -377,9 +377,9 @@ instance MethodSym CodeInfo where
 
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
 
-  inOutFunc      n _ _ _ _ _   = updateMEMandCM n
+  inOutFunc      n _ _ _ _     = updateMEMandCM n
 
-  docInOutFunc   n _ _ _ _ _ _ = updateMEMandCM n
+  docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
 instance StateVarSym CodeInfo where
   type StateVar CodeInfo = ()

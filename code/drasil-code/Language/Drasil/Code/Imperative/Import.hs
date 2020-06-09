@@ -251,8 +251,7 @@ genInOutFunc f docf s pr n desc ins' outs' b = do
 
 convExpr :: (OOProg r) => Expr -> GenState (SValue r)
 convExpr (Dbl d) = do
-  g <- get
-  sm <- spaceMatches g Real
+  sm <- spaceCodeType Real
   let getLiteral Double = litDouble d
       getLiteral Float = litFloat (realToFrac d)
       getLiteral _ = error "convExpr: Real space matched to invalid CodeType; should be Double or Float"
@@ -260,8 +259,7 @@ convExpr (Dbl d) = do
 convExpr (Int i) = return $ litInt i
 convExpr (Str s) = return $ litString s
 convExpr (Perc a b) = do
-  g <- get
-  sm <- spaceMatches g Rational
+  sm <- spaceCodeType Rational
   let getLiteral Double = litDouble
       getLiteral Float = litFloat . realToFrac
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
@@ -294,8 +292,7 @@ convExpr (Field o f) = do
   return $ valueOf v
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
-  g <- get
-  sm <- spaceMatches g Rational
+  sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
       getLiteral Float = litFloat (fromIntegral a) #/ litFloat (fromIntegral b)
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"

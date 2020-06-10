@@ -60,7 +60,7 @@ class (BlockCommentSym r) => RenderFile r where
 
   commentedMod :: SFile r -> FS (r (BlockComment r)) -> SFile r
 
-  fileFromData :: FilePath -> r (Module r) -> SFile r
+  fileFromData :: FilePath -> FSModule r -> SFile r
 
 class ImportSym r where
   type Import r
@@ -87,7 +87,7 @@ class BlockElim r where
   block :: r (Block r) -> Doc
 
 class RenderType r where
-  typeFromData :: CodeType -> String -> Doc -> r (Type r)
+  typeFromData :: CodeType -> String -> Doc -> VSType r
 
 class InternalTypeElim r where
   type' :: r (Type r) -> Doc
@@ -138,7 +138,7 @@ class OpElim r where
   bOpPrec :: r (BinaryOp r) -> Int
   
 class RenderVariable r where
-  varFromData :: Binding -> String -> r (Type r) -> Doc -> r (Variable r)
+  varFromData :: Binding -> String -> VSType r -> Doc -> SVariable r
     
 class InternalVarElim r where
   variableBind :: r (Variable r) -> Binding
@@ -160,7 +160,7 @@ class RenderValue r where
   -- calls.
   call :: Maybe Library -> Maybe Doc -> MixedCall r
 
-  valFromData :: Maybe Int -> r (Type r) -> Doc -> r (Value r)
+  valFromData :: Maybe Int -> VSType r -> Doc -> SValue r
 
 class ValueElim r where
   valuePrec :: r (Value r) -> Maybe Int
@@ -204,7 +204,7 @@ class RenderStatement r where
 
   emptyStmt   :: MSStatement r
 
-  stmtFromData :: Doc -> Terminator -> r (Statement r)
+  stmtFromData :: Doc -> Terminator -> MSStatement r
 
 class StatementElim r where
   statement :: r (Statement r) -> Doc
@@ -224,7 +224,7 @@ class (TypeSym r) => MethodTypeSym r where
   construct :: Label -> MSMthdType r
 
 class RenderParam r where
-  paramFromData :: r (Variable r) -> Doc -> r (Parameter r)
+  paramFromData :: SVariable r -> Doc -> MSParameter r
   
 class ParamElim r where
   parameterName :: r (Parameter r) -> Label

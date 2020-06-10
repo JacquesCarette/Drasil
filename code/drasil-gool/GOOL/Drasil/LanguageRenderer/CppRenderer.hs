@@ -2393,8 +2393,10 @@ cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef :: (RenderSym r) => ([r (Value r)] -> Doc) -> SVariable r -> 
   [SValue r] -> MSStatement r
-cppListDecDef f v vls = on1StateValue1List (\vdc vs -> mkStmt (RC.statement vdc 
-  <> f vs)) (varDec v) (map (zoom lensMStoVS) vls)
+cppListDecDef f v vls = do 
+  vdc <- varDec v
+  vs <- zoom lensMStoVS $ sequence vls
+  mkStmt (RC.statement vdc <> f vs)
 
 cpphtop :: ModData -> Doc
 cpphtop m = vcat [
@@ -2411,21 +2413,24 @@ cppInherit :: Maybe Label -> Doc -> Doc
 cppInherit n pub = maybe empty ((colon <+> pub <+>) . text) n
 
 cppBoolType :: (RenderSym r) => VSType r
-cppBoolType = toState $ typeFromData Boolean cppBool (text cppBool)
+cppBoolType = typeFromData Boolean cppBool (text cppBool)
 
 cppInfileType :: (RenderSym r) => VSType r
-cppInfileType = addFStreamImport $ typeFromData File cppInfile (text cppInfile)
+cppInfileType = do 
+  t <- typeFromData File cppInfile (text cppInfile)
+  addFStreamImport t
 
 cppOutfileType :: (RenderSym r) => VSType r
-cppOutfileType = addFStreamImport $ typeFromData File cppOutfile 
-  (text cppOutfile)
+cppOutfileType = do 
+  t <- typeFromData File cppOutfile (text cppOutfile)
+  addFStreamImport t
 
 cppArrayType :: (RenderSym r) => VSType r -> VSType r
-cppArrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
+cppArrayType t' = t' >>= (\t -> typeFromData (Array (getType t)) 
   (getTypeString t) (RC.type' t))
 
 cppIterType :: (RenderSym r) => VSType r -> VSType r
-cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t)) 
+cppIterType t' = t' >>= (\t -> typeFromData (Iterator (getType t)) 
   (getTypeString t `nmSpcAccess` cppIterator) (stdAccess' (RC.type' t) 
   `nmSpcAccess'` text cppIterator))
 
@@ -2472,17 +2477,17 @@ cppFuncDecDef v ps bod = do
   vr <- zoom lensMStoVS v
   pms <- mapM (zoom lensMStoVS) ps
   b <- bod
-  return $ mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
+  mkStmt $ RC.type' (variableType vr) <+> RC.variable vr <+> equals <+>
     cppLambdaDec <+> parens (hicat listSep' $ zipWith (<+>) (map (RC.type' . 
     variableType) pms) (map RC.variable pms)) <+> cppLambdaSep <+> bodyStart $$ 
     indent (RC.body b) $$ bodyEnd
 
 cppPrint :: (RenderSym r) => Bool -> SValue r -> SValue r -> MSStatement r
-cppPrint newLn pf vl = zoom lensMStoVS $ do
-  e <- end
-  printFn <- pf
-  v <- vl
-  return $ mkStmt $ RC.value printFn <+> streamL <+> pars v (RC.value v) <+> e
+cppPrint newLn pf vl = do
+  e <- zoom lensMStoVS end
+  printFn <- zoom lensMStoVS pf
+  v <- zoom lensMStoVS vl
+  mkStmt $ RC.value printFn <+> streamL <+> pars v (RC.value v) <+> e
   where pars v = if maybe False (< 9) (valuePrec v) then parens else id
         end = if newLn then addIOStreamImport (return $ streamL <+> text endl) 
           else return empty
@@ -2505,7 +2510,7 @@ cppInput :: SVariable CppSrcCode -> SValue CppSrcCode -> MSStatement CppSrcCode
 cppInput vr i = addAlgorithmImport $ addLimitsImport $ do
   v <- zoom lensMStoVS vr
   inFn <- zoom lensMStoVS i
-  multi [return $ mkStmt (RC.value inFn <+> streamR <+> RC.variable v), 
+  multi [mkStmt (RC.value inFn <+> streamR <+> RC.variable v), 
     valStmt $ ignoreFunc '\n' i]
 
 cppOpenFile :: (RenderSym r) => Label -> SVariable r -> SValue r -> MSStatement r

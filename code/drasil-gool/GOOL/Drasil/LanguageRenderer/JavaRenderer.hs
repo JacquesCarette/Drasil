@@ -618,13 +618,13 @@ instance MethodSym JavaCode where
 
   docFunc = G.docFunc
 
-  inOutMethod n = jInOut (method n)
+  inOutMethod n s p = jInOut (method n s p)
 
-  docInOutMethod n = jDocInOut (inOutMethod n)
+  docInOutMethod n s p = jDocInOut (inOutMethod n s p)
 
-  inOutFunc n = jInOut (function n)
+  inOutFunc n s = jInOut (function n s)
     
-  docInOutFunc n = jDocInOut (inOutFunc n)
+  docInOutFunc n s = jDocInOut (inOutFunc n s)
 
 instance RenderMethod JavaCode where
   intMethod m n s p t ps b = do
@@ -957,20 +957,18 @@ jInOutCall f n ins outs both = fCall rets
           multi ((if odec then assign else varDecDef) outputs 
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs))
 
-jInOut :: (JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
-    VSType JavaCode -> [MSParameter JavaCode] -> MSBody JavaCode -> 
-    SMethod JavaCode) 
-  -> JavaCode (Scope JavaCode) -> JavaCode (Permanence JavaCode) -> 
+jInOut :: (VSType JavaCode -> [MSParameter JavaCode] -> MSBody JavaCode -> 
+    SMethod JavaCode) -> 
   [SVariable JavaCode] -> [SVariable JavaCode] -> [SVariable JavaCode] -> 
   MSBody JavaCode -> SMethod JavaCode
-jInOut f s p ins [] [] b = f s p void (map param ins) b
-jInOut f s p ins [v] [] b = f s p (onStateValue variableType v) (map param ins) 
+jInOut f ins [] [] b = f void (map param ins) b
+jInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins) 
   (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnStmt $ 
   valueOf v))
-jInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
+jInOut f ins [] [v] b = f (onStateValue variableType v) 
   (map param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b 
   (returnStmt $ valueOf v))
-jInOut f s p ins outs both b = f s p (returnTp rets)
+jInOut f ins outs both b = f (returnTp rets)
   (map param $ both ++ ins) (on3StateValues (on3CodeValues surroundBody) decls 
   b (returnSt rets))
   where returnTp [x] = onStateValue variableType x
@@ -985,18 +983,18 @@ jInOut f s p ins outs both b = f s p (returnTp rets)
         decls = multi $ map varDec outs
         rets = both ++ outs
 
-jDocInOut :: (RenderSym r) => (r (Scope r) -> r (Permanence r) -> [SVariable r] 
-    -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r)
-  -> r (Scope r) -> r (Permanence r) -> String -> [(String, SVariable r)] -> 
-  [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
-jDocInOut f s p desc is [] [] b = docFuncRepr desc (map fst is) [] 
-  (f s p (map snd is) [] [] b)
-jDocInOut f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
-  (f s p (map snd is) [snd o] [] b)
-jDocInOut f s p desc is [] [both] b = docFuncRepr desc (map fst (both : is)) 
-  [fst both] (f s p (map snd is) [] [snd both] b)
-jDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
-  rets (f s p (map snd is) (map snd os) (map snd bs) b)
+jDocInOut :: (RenderSym r) => ([SVariable r] -> [SVariable r] -> [SVariable r] -> 
+    MSBody r -> SMethod r) -> 
+  String -> [(String, SVariable r)] -> [(String, SVariable r)] -> 
+  [(String, SVariable r)] -> MSBody r -> SMethod r
+jDocInOut f desc is [] [] b = docFuncRepr desc (map fst is) [] 
+  (f (map snd is) [] [] b)
+jDocInOut f desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
+  (f (map snd is) [snd o] [] b)
+jDocInOut f desc is [] [both] b = docFuncRepr desc (map fst (both : is)) 
+  [fst both] (f (map snd is) [] [snd both] b)
+jDocInOut f desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
+  rets (f (map snd is) (map snd os) (map snd bs) b)
   where rets = "array containing the following values:" : map fst bs ++ 
           map fst os
 

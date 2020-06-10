@@ -184,7 +184,7 @@ mkParam p = do
 publicFunc :: (OOProg r) => Label -> VSType r -> Description -> 
   [ParameterChunk] -> Maybe Description -> [MSBlock r] -> 
   GenState (SMethod r)
-publicFunc n t = genMethod (function n public static t) n
+publicFunc n t = genMethod (function n public t) n
 
 publicMethod :: (OOProg r) => Label -> VSType r -> Description -> 
   [ParameterChunk] -> Maybe Description -> [MSBlock r] -> 
@@ -198,12 +198,11 @@ privateMethod n t = genMethod (method n private dynamic t) n
 
 publicInOutFunc :: (OOProg r) => Label -> Description -> [CodeVarChunk] -> 
   [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
-publicInOutFunc n = genInOutFunc (inOutFunc n) (docInOutFunc n) public static n
+publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 
 privateInOutMethod :: (OOProg r) => Label -> Description -> [CodeVarChunk] -> 
   [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
-privateInOutMethod n = genInOutFunc (inOutMethod n) (docInOutMethod n) 
-  private dynamic n
+privateInOutMethod n = genInOutFunc (inOutMethod n private dynamic) (docInOutMethod n private dynamic) n
 
 genConstructor :: (OOProg r) => Label -> Description -> [ParameterChunk] -> 
   [MSBlock r] -> GenState (SMethod r)
@@ -227,13 +226,13 @@ genMethod f n desc p r b = do
   return $ if CommentFunc `elem` commented g
     then docFunc desc pComms r fn else fn
 
-genInOutFunc :: (OOProg r) => (r (Scope r) -> r (Permanence r) -> 
-    [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) 
-  -> (r (Scope r) -> r (Permanence r) -> String -> [(String, SVariable r)] -> 
-    [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r)
-  -> r (Scope r) -> r (Permanence r) -> Label -> Description -> [CodeVarChunk] 
-  -> [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
-genInOutFunc f docf s pr n desc ins' outs' b = do
+genInOutFunc :: (OOProg r) => ([SVariable r] -> [SVariable r] -> 
+    [SVariable r] -> MSBody r -> SMethod r) -> 
+  (String -> [(String, SVariable r)] -> [(String, SVariable r)] -> 
+    [(String, SVariable r)] -> MSBody r -> SMethod r)
+  -> Label -> Description -> [CodeVarChunk] -> [CodeVarChunk] -> 
+  [MSBlock r] -> GenState (SMethod r)
+genInOutFunc f docf n desc ins' outs' b = do
   g <- get
   let ins = ins' \\ outs'
       outs = outs' \\ ins'
@@ -246,8 +245,8 @@ genInOutFunc f docf s pr n desc ins' outs' b = do
   oComms <- mapM getComment outs
   bComms <- mapM getComment both
   return $ if CommentFunc `elem` commented g 
-    then docf s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
-    bComms bothVs) bod else f s pr inVs outVs bothVs bod
+    then docf desc (zip pComms inVs) (zip oComms outVs) (zip 
+    bComms bothVs) bod else f inVs outVs bothVs bod
 
 convExpr :: (OOProg r) => Expr -> GenState (SValue r)
 convExpr (Dbl d) = do

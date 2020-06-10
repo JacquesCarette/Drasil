@@ -489,7 +489,7 @@ instance DeclStatement PythonCode where
   funcDecDef v ps b = do
     vr <- zoom lensMStoVS v
     s <- S.get
-    f <- function (variableName vr) private dynamic (return $ variableType vr) 
+    f <- function (variableName vr) private (return $ variableType vr) 
       (map param ps) b
     modify (L.set currParameters (s ^. currParameters))
     return $ mkStmtNoEnd $ RC.method f
@@ -618,13 +618,13 @@ instance MethodSym PythonCode where
 
   docFunc = G.docFunc
 
-  inOutMethod n = pyInOut (method n)
+  inOutMethod n s p = pyInOut (method n s p)
 
-  docInOutMethod n = pyDocInOut (inOutMethod n)
+  docInOutMethod n s p = pyDocInOut (inOutMethod n s p)
 
-  inOutFunc n = pyInOut (function n)
+  inOutFunc n s = pyInOut (function n s)
 
-  docInOutFunc n = pyDocInOut (inOutFunc n)
+  docInOutFunc n s = pyDocInOut (inOutFunc n s)
 
 instance RenderMethod PythonCode where
   intMethod m n _ _ _ ps b = do
@@ -975,21 +975,19 @@ pyDocComment [] _ _ = empty
 pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . 
   text) lns
 
-pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) 
-    -> VSType PythonCode -> [MSParameter PythonCode] -> MSBody PythonCode -> 
-    SMethod PythonCode)
-  -> PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) -> 
+pyInOut :: (VSType PythonCode -> [MSParameter PythonCode] -> MSBody PythonCode -> 
+    SMethod PythonCode) -> 
   [SVariable PythonCode] -> [SVariable PythonCode] -> [SVariable PythonCode] -> 
   MSBody PythonCode -> SMethod PythonCode
-pyInOut f s p ins [] [] b = f s p void (map param ins) b
-pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins) 
+pyInOut f ins [] [] b = f void (map param ins) b
+pyInOut f ins outs both b = f void (map param $ both ++ ins) 
   (on3StateValues (on3CodeValues surroundBody) (multi $ map varDec outs) b 
   (multiReturn $ map valueOf rets))
   where rets = both ++ outs
 
-pyDocInOut :: (RenderSym r) => (r (Scope r) -> r (Permanence r) 
-    -> [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r)
-  -> r (Scope r) -> r (Permanence r) -> String -> [(String, SVariable r)] -> 
-  [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
-pyDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
-  (map fst $ bs ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)
+pyDocInOut :: (RenderSym r) => ([SVariable r] -> [SVariable r] -> [SVariable r] -> 
+    MSBody r -> SMethod r) -> 
+  String -> [(String, SVariable r)] -> [(String, SVariable r)] -> 
+  [(String, SVariable r)] -> MSBody r -> SMethod r
+pyDocInOut f desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
+  (map fst $ bs ++ os) (f (map snd is) (map snd os) (map snd bs) b)

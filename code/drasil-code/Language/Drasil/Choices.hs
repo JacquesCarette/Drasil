@@ -1,7 +1,7 @@
 module Language.Drasil.Choices (
   Choices(..), Modularity(..), InputModule(..), inputModule, Structure(..), 
   ConstantStructure(..), ConstantRepr(..), MatchedConceptMap, CodeConcept(..), 
-  matchConcepts, SpaceMatch, MatchedSpaces, matchSpaces, ImplementationType(..),
+  matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices
 ) where
@@ -96,7 +96,6 @@ matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
 matchConcepts = fromList . map (\(cnc,cdc) -> (cnc ^. uid, cdc))
 
 type SpaceMatch = Space -> [CodeType]
-type MatchedSpaces = Space -> CodeType
 
 matchSpace :: Space -> [CodeType] -> SpaceMatch -> SpaceMatch
 matchSpace _ [] _ = error "Must match each Space to at least one CodeType"

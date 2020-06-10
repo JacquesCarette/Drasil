@@ -207,17 +207,17 @@ capTail (a :+: b) = capTail a :+: capTail b
 capTail x = x
 
 capString :: String -> (String -> String) -> (String -> String) -> Sentence 
-capString s f g = S . findHyph . unwords $ process (words s)
+capString s f g = S . findHyph g . unwords $ process (words s)
   where
     process (x:xs) = f x : map g xs
     process []     = []
 
-findHyph :: String -> String
-findHyph "" = ""
-findHyph [x] = [x]
-findHyph (x:y:xs) 
-  | x == '-'  = '-' : (toUpper y : xs)
-  | otherwise = x : findHyph (y:xs)
+findHyph :: (String -> String) -> String -> String
+findHyph _ "" = ""
+findHyph _ [x] = [x]
+findHyph f (x:xs)
+  | x == '-'  = '-' : (findHyph f $ f xs)
+  | otherwise = x : findHyph f xs
 
 capFirstWord :: String -> String
 capFirstWord "" = ""

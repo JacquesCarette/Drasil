@@ -6,8 +6,10 @@ import Language.Drasil.Code.ExternalLibrary (ExternalLibrary)
 import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall)
 import Language.Drasil.Code.Lang (Lang)
 import Language.Drasil.Data.ODEInfo (ODEInfo)
+import Language.Drasil.Mod (Name)
 
 data ODELibPckg = ODELib {
+  libName :: String,
   libSpec :: ExternalLibrary,
   libCall :: ODEInfo -> ExternalLibraryCall,
   libPath :: Maybe FilePath,
@@ -23,10 +25,10 @@ data ODELibPckg = ODELib {
   compatibleLangs :: [Lang]
 }
 
-mkODELib :: ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> 
+mkODELib :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> 
   [Lang] -> ODELibPckg
-mkODELib e c f = ODELib e c (Just f)
+mkODELib n e c f = ODELib n e c (Just f)
 
-mkODELibNoPath :: ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] 
+mkODELibNoPath :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] 
   -> ODELibPckg
-mkODELibNoPath e c = ODELib e c Nothing
+mkODELibNoPath n e c = ODELib n e c Nothing

@@ -71,12 +71,15 @@ value u s t = do
   g <- get
   let cs = codeSpec g
       mm = constMap cs
-      cm = concMatches g
+      constDef = do
+        cd <- Map.lookup u mm
+        maybeInline (conStruct g) cd
       maybeInline Inline m = Just m
       maybeInline _ _ = Nothing
-  maybe (maybe (do { v <- variable s t; return $ valueOf v }) 
-    (convExpr . codeEquat) (Map.lookup u mm >>= maybeInline (conStruct g))) 
-    (return . conceptToGOOL) (Map.lookup u cm)
+      cm = concMatches g
+      cdCncpt = Map.lookup u cm
+  val <- maybe (valueOf <$> variable s t) (convExpr . codeEquat) constDef
+  return $ maybe val conceptToGOOL cdCncpt
 
 -- | If variable is an input, construct it with var and pass to inputVariable
 -- If variable is a constant and Var constant representation is chosen,

@@ -216,7 +216,7 @@ findHyph :: (String -> String) -> String -> String
 findHyph _ "" = ""
 findHyph _ [x] = [x]
 findHyph f (x:xs)
-  | x == '-'  = '-' : (findHyph f $ f xs)
+  | x == '-'  = '-' : findHyph f (f xs)
   | otherwise = x : findHyph f xs
 
 capFirstWord :: String -> String

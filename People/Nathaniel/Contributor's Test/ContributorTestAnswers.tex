@@ -32,7 +32,7 @@
 
 \noindent
 Future Drasil Contributors, \textbf{Version 1}  \hfill Dr.~S.~Smith \\
-DURATION OF TEST: 1.5 hours \\
+DURATION OF TEST: 1.5 hours - 2.0 hours (recommended) \\
 MCMASTER UNIVERSITY TEST \hfill
 
 \medskip
@@ -51,7 +51,7 @@ NAME:\\[1ex]
 
 \rule[3 mm]{\textwidth}{0.5mm}
 
-This test paper includes \noofpages pages and 16 % VARIABILITY
+This test paper includes \noofpages pages and 22 % VARIABILITY
 questions. You are responsible for ensuring that your copy of the 
 test paper is complete. Bring any discrepancy to the attention of 
 the person administering this test.\\
@@ -63,12 +63,12 @@ the person administering this test.\\
 \newcommand{\markheight}{\rule[-2mm]{0 mm}{7 mm}}
 \begin{tabular}[t]{|c|p{1.5 cm}|r|}
 \hline
-1--12 & \markheight & 12\\
+1--17 & \markheight & 17\\
 \hline
-13--16 & \markheight & 8\\
+18--22 & \markheight & 10\\
 
 \hline
-Total & \markheight & 20 \\
+Total & \markheight & 27 \\
 \hline
 
 \end{tabular}
@@ -247,6 +247,125 @@ To run the Glass-BR example (glassbr) using the Drasil framework (assume that th
 \end{enumerate}
 \answer{Explain your answer here.}{0cm}{7cm}
 Sample Answer: \lstinline{stack exec} is used to run a specific example that has already been built, using stack
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+What is the difference between a remote branch and a local branch?
+
+\begin{enumerate}
+    \item a local branch is stored on a server; a remote branch is stored on your computer
+    \item a remote branch is stored on a server; a local branch is stored on your computer \marker
+    \item both remote and local branches are stored on a server
+    \item both remote and local branches are stored on your computer
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: A remote branch is stored on the (GitHub) server. A local branch is a copy of the remote branch stored on your computer. The local branch is where all editing takes place, and those changes are pushed to the remote branch.
+
+\question{1 mark}
+What is \lstinline{origin}?
+
+\begin{enumerate}
+    \item the latest branch created
+    \item a basic template branch
+    \item the master branch \marker
+    \item none of the above
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: \lstinline{origin} is the original or \lstinline{master} branch into which all changes made on all other branches are made into. It is the master copy of a remote repo.
+
+\question{1 mark}
+What is \lstinline{HEAD}?
+
+\begin{enumerate}
+    \item the latest commit in your current branch
+    \item the base/master branch of your remote repo
+    \item the active item referenced by your current repo
+    \item A. and C. \marker
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: \lstinline{HEAD} is the active commit that your repo is currently on (usually your latest commit).
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+Which branch are you pulling from when you execute the following commands:
+
+\begin{lstlisting}
+git branch
+git switch master
+git switch sample
+git pull
+\end{lstlisting}
+
+\begin{enumerate}
+    \item master
+    \item sample \marker
+    \item both master and sample
+    \item neither master nor sample
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: \lstinline{git branch} displays a list of all existing branches on the current repo. \lstinline{git switch master} and \lstinline{git switch sample} switch the active branch to master, and then to sample. \lstinline{git pull} pulls from and updates the active branch, which would be sample.
+
+\question{1 mark}
+When learning about Haskell, it is \textbf{highly recommended} that you learn the following concepts:
+
+\begin{enumerate}
+    \item Input/Output (IO)
+    \item Monads
+    \item Lensing
+    \item B. and C. \marker
+    \item none of the above
+\end{enumerate}
+\answer{Explain your answer here.}{0cm}{7cm}
+Sample Answer: learning about input/output is good to know for related applications in Drasil, but not highly recommended. Learning about monads and lensing is highly recommended, as knowing these concepts will help you to more easily read and understand the Drasil code and how it works.
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{2 marks} Pretend that you have made a commit on your local repo that you would like to undo. Describe the process that you would use to undo the commit if (choose one to answer):
+
+\begin{enumerate}
+    \item your commit is only on your local repo
+    \item your commit has also been pushed to the remote repo
+\end{enumerate}
+
+Be sure to include any commands that you use to accomplish this task.
+
+\answer{Answer here (please indicate which option you chose).}{0cm}{7cm}
+
+Sample Answer: (option A)
+\begin{itemize}
+    \item use \lstinline{git log <branchName> --oneline} to view a simplified log of all commits made and their accompanying commit hashes (prefixed alphanumeric string)
+    \item use \lstinline{git checkout <#commitHash>} to view the specific commit in more detail (this command matches your working directory to the exact state of the \#commitHash commit)
+    \item use \lstinline{git checkout <branchName>} to get back to the branch (to undo the commit \#commitHash)
+    \item use \lstinline{git reset --hard <#commitHash>} to reset the commit history, removing the commit \#commitHash from the \lstinline{git log} output completely
+\end{itemize}
+
+\rule{0cm}{1cm}
+
+Sample Answer: (option B)
+\begin{itemize}
+    \item repeat the same first three steps described in the sample answer for option A
+    \item use \lstinline{git revert <#commitHash>} to revert the specified commit on the repo, by creating a new (inverse) commit that undoes what commit \#commitHash did
+\end{itemize}
 
 \end{minipage}
 

@@ -8,7 +8,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 data AuxData = AD {auxFilePath :: FilePath, auxDoc :: Doc}
 
-ad :: String -> Doc -> AuxData
+ad :: FilePath -> Doc -> AuxData
 ad = AD
 
 data PackData = PackD {packProg :: ProgData, packAux :: [AuxData]}

@@ -7,9 +7,9 @@ import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 
-import Control.Monad.Reader (Reader)
+import Control.Monad.State (State)
 
-liftS :: Reader a b -> Reader a [b]
+liftS :: State a b -> State a [b]
 liftS = fmap (: [])
 
 getUpperBound :: Expr -> Expr

@@ -4,7 +4,8 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 ) where
 
 import Language.Drasil 
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+  inMod)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk, codeName), 
   quantvar, codevars, codevars')
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs, 
@@ -18,7 +19,7 @@ import Language.Drasil.Mod (Name)
 import Data.List (nub, (\\), delete)
 import Data.Map (member, notMember)
 import qualified Data.Map as Map (lookup)
-import Control.Monad.Reader (Reader, ask)
+import Control.Monad.State (get)
 import Control.Lens ((^.))
 
 data ParamType = In | Out deriving Eq
@@ -32,9 +33,9 @@ isIn = (In ==)
 -- since they are already in scope.
 -- If InputParameters is not in the definition list, then the default 
 -- constructor is used, which takes no parameters.
-getInConstructorParams :: Reader DrasilState [CodeVarChunk]
+getInConstructorParams :: GenState [CodeVarChunk]
 getInConstructorParams = do
-  g <- ask
+  g <- get
   ifPs <- getInputFormatIns
   dvPs <- getDerivedIns
   icPs <- getConstraintParams
@@ -44,35 +45,35 @@ getInConstructorParams = do
   ps <- getParams cname In $ getCParams (cname `elem` defList g)
   return $ filter ((Just cname /=) . flip Map.lookup (clsMap g) . codeName) ps
 
-getInputFormatIns :: Reader DrasilState [CodeVarChunk]
+getInputFormatIns :: GenState [CodeVarChunk]
 getInputFormatIns = do
-  g <- ask
+  g <- get
   let getIns :: Structure -> InputModule -> [CodeVarChunk]
       getIns Bundled Separated = [quantvar inParams]
       getIns _ _ = []
   getParams "get_input" In $ quantvar inFileName : getIns (inStruct g) (inMod g)
 
-getInputFormatOuts :: Reader DrasilState [CodeVarChunk]
+getInputFormatOuts :: GenState [CodeVarChunk]
 getInputFormatOuts = do
-  g <- ask
+  g <- get
   getParams "get_input" Out $ extInputs $ codeSpec g
 
-getDerivedIns :: Reader DrasilState [CodeVarChunk]
+getDerivedIns :: GenState [CodeVarChunk]
 getDerivedIns = do
-  g <- ask
+  g <- get
   let s = codeSpec g
       dvals = derivedInputs s
       reqdVals = concatMap (flip codevars (sysinfodb s) . codeEquat) dvals
   getParams "derived_values" In reqdVals
 
-getDerivedOuts :: Reader DrasilState [CodeVarChunk]
+getDerivedOuts :: GenState [CodeVarChunk]
 getDerivedOuts = do
-  g <- ask
+  g <- get
   getParams "derived_values" Out $ map codeChunk $ derivedInputs $ codeSpec g
 
-getConstraintParams :: Reader DrasilState [CodeVarChunk]
+getConstraintParams :: GenState [CodeVarChunk]
 getConstraintParams = do 
-  g <- ask
+  g <- get
   let cm = cMap $ codeSpec g
       db = sysinfodb $ codeSpec g
       varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
@@ -80,15 +81,15 @@ getConstraintParams = do
         (getConstraints cm varsList))
   getParams "input_constraints" In reqdVals
 
-getCalcParams :: CodeDefinition -> Reader DrasilState [CodeVarChunk]
+getCalcParams :: CodeDefinition -> GenState [CodeVarChunk]
 getCalcParams c = do
-  g <- ask
+  g <- get
   getParams (codeName c) In $ delete (quantvar c) $ concatMap (`codevars'` 
     (sysinfodb $ codeSpec g)) (codeEquat c : c ^. auxExprs)
 
-getOutputParams :: Reader DrasilState [CodeVarChunk]
+getOutputParams :: GenState [CodeVarChunk]
 getOutputParams = do
-  g <- ask
+  g <- get
   getParams "write_output" In $ outputs $ codeSpec g
 
 -- | Passes parameters that are inputs to getInputVars for further processing.
@@ -96,9 +97,9 @@ getOutputParams = do
 -- Other parameters are put into the returned parameter list as long as they 
 -- are not matched to a code concept.
 getParams :: (Quantity c, MayHaveUnit c) => Name -> ParamType -> [c] -> 
-  Reader DrasilState [CodeVarChunk]
+  GenState [CodeVarChunk]
 getParams n pt cs' = do
-  g <- ask
+  g <- get
   let cs = map quantvar cs'
       ins = inputs $ codeSpec g
       cnsnts = map quantvar $ constants $ codeSpec g
@@ -126,11 +127,11 @@ getParams n pt cs' = do
 -- constant variables are static and can be accessed through the class, without 
 -- an object, so no parameters are required.
 getInputVars :: Name -> ParamType -> Structure -> ConstantRepr -> 
-  [CodeVarChunk] -> Reader DrasilState [CodeVarChunk]
+  [CodeVarChunk] -> GenState [CodeVarChunk]
 getInputVars _ _ _ _ [] = return []
 getInputVars _ _ Unbundled _ cs = return cs
 getInputVars n pt Bundled Var _ = do
-  g <- ask
+  g <- get
   let cname = "InputParameters"
   return [quantvar inParams | Map.lookup n (clsMap g) /= Just cname && isIn pt]
 getInputVars _ _ Bundled Const _ = return []
@@ -149,12 +150,12 @@ getInputVars _ _ Bundled Const _ = return []
 -- constant variables are static and can be accessed through the class, without 
 -- an object, so no parameters are required.
 getConstVars :: Name -> ParamType -> ConstantStructure -> ConstantRepr -> 
-  [CodeVarChunk] -> Reader DrasilState [CodeVarChunk]
+  [CodeVarChunk] -> GenState [CodeVarChunk]
 getConstVars _ _ _ _ [] = return []
 getConstVars _ _ (Store Unbundled) _ cs = return cs
 getConstVars _ pt (Store Bundled) Var _ = return [quantvar consts | isIn pt]
 getConstVars _ _ (Store Bundled) Const _ = return []
 getConstVars n pt WithInputs cr cs = do
-  g <- ask
+  g <- get
   getInputVars n pt (inStruct g) cr cs
 getConstVars _ _ Inline _ _ = return []

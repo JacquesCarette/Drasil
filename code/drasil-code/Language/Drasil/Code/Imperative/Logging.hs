@@ -2,7 +2,7 @@ module Language.Drasil.Code.Imperative.Logging (
   maybeLog, logBody, loggedMethod, varLogFile
 ) where
 
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Choices (Logging(..))
 
 import GOOL.Drasil (Label, MSBody, MSBlock, SVariable, SValue, MSStatement, 
@@ -13,23 +13,22 @@ import GOOL.Drasil (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
 import Control.Lens.Zoom (zoom)
 import Data.Maybe (maybeToList)
 import Control.Applicative ((<$>))
-import Control.Monad.Reader (Reader, ask)
+import Control.Monad.State (get)
 
-maybeLog :: (OOProg r) => SVariable r ->
-  Reader DrasilState [MSStatement r]
+maybeLog :: (OOProg r) => SVariable r -> GenState [MSStatement r]
 maybeLog v = do
-  g <- ask
+  g <- get
   l <- chooseLogging (logKind g) v
   return $ maybeToList l
 
 chooseLogging :: (OOProg r) => [Logging] -> (SVariable r -> 
-  Reader DrasilState (Maybe (MSStatement r)))
+  GenState (Maybe (MSStatement r)))
 chooseLogging l v = if LogVar `elem` l then Just <$> loggedVar v 
   else return Nothing
 
-loggedVar :: (OOProg r) => SVariable r -> Reader DrasilState (MSStatement r)
+loggedVar :: (OOProg r) => SVariable r -> GenState (MSStatement r)
 loggedVar v = do
-  g <- ask
+  g <- get
   return $ multi [
     openFileA varLogFile (litString $ logName g),
     zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("var '" ++ 
@@ -39,9 +38,9 @@ loggedVar v = do
     closeFile valLogFile ]
 
 logBody :: (OOProg r) => Label -> [SVariable r] -> [MSBlock r] -> 
-  Reader DrasilState (MSBody r)
+  GenState (MSBody r)
 logBody n vars b = do
-  g <- ask
+  g <- get
   let loggedBody l = if LogFunc `elem` l then loggedMethod (logName g) n vars b
         else b
   return $ body $ loggedBody $ logKind g

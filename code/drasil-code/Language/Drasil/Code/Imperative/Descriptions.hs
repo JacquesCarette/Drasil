@@ -10,7 +10,8 @@ module Language.Drasil.Code.Imperative.Descriptions (
 import Utils.Drasil (stringList)
 
 import Language.Drasil
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod)
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+  inMod)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), quantvar)
 import Language.Drasil.Choices (ImplementationType(..), InputModule(..), 
   Structure(..))
@@ -21,19 +22,19 @@ import Data.Map (member)
 import qualified Data.Map as Map (filter, lookup, null)
 import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
-import Control.Monad.Reader (Reader, ask)
+import Control.Monad.State (get)
 
 -- | Returns a module description based on a list of descriptions of what is
 -- contained in the module.
-modDesc :: Reader DrasilState [Description] -> Reader DrasilState Description
+modDesc :: GenState [Description] -> GenState Description
 modDesc = fmap ((++) "Provides " . stringList)
 
 -- | Returns description of what is contained in the module that is generated
 -- when the user chooses an Unmodular design. Module is described as either
 -- program or library, depending on the user's choice of implementation type.
-unmodularDesc :: Reader DrasilState Description
+unmodularDesc :: GenState Description
 unmodularDesc = do
-  g <- ask
+  g <- get
   let n = pName $ codeSpec g
       getDesc Library = "library"
       getDesc Program = "program"
@@ -44,9 +45,9 @@ unmodularDesc = do
 -- input values, but not if they chose Unbundled.
 -- If the user chose Combined, this module includes the input-related functions,
 -- but not if they chose Separated.
-inputParametersDesc :: Reader DrasilState [Description]
+inputParametersDesc :: GenState [Description]
 inputParametersDesc = do
-  g <- ask
+  g <- get
   ifDesc <- inputFormatDesc
   dvDesc <- derivedValuesDesc
   icDesc <- inputConstraintsDesc
@@ -61,9 +62,9 @@ inputParametersDesc = do
 -- | Returns description of the input constructor, checking whether each 
 -- possible method that may be called by the constructor is defined, and 
 -- including it in the description if so
-inputConstructorDesc :: Reader DrasilState Description
+inputConstructorDesc :: GenState Description
 inputConstructorDesc = do
-  g <- ask
+  g <- get
   pAndS <- physAndSfwrCons
   let ifDesc False = ""
       ifDesc True = "reading inputs"
@@ -79,27 +80,27 @@ inputConstructorDesc = do
 
 -- | Returns description of what is contained in the Input Format module,
 -- if it exists.
-inputFormatDesc :: Reader DrasilState Description
+inputFormatDesc :: GenState Description
 inputFormatDesc = do
-  g <- ask
+  g <- get
   let ifDesc False = ""
       ifDesc _ = "the function for reading inputs"
   return $ ifDesc $ "get_input" `elem` defList g
 
 -- | Returns description of what is contained in the Derived Values module,
 -- if it exists.
-derivedValuesDesc :: Reader DrasilState Description
+derivedValuesDesc :: GenState Description
 derivedValuesDesc = do
-  g <- ask
+  g <- get
   let dvDesc False = ""
       dvDesc _ = "the function for calculating derived values"
   return $ dvDesc $ "derived_values" `elem` defList g
 
 -- | Returns description of what is contained in the Input Constraints module,
 -- if it exists.
-inputConstraintsDesc :: Reader DrasilState Description
+inputConstraintsDesc :: GenState Description
 inputConstraintsDesc = do
-  g <- ask
+  g <- get
   pAndS <- physAndSfwrCons
   let icDesc False = ""
       icDesc _ = "the function for checking the " ++ pAndS ++ 
@@ -108,9 +109,9 @@ inputConstraintsDesc = do
 
 -- | Returns description of what is contained in the Constants module,
 -- if it exists.
-constModDesc :: Reader DrasilState Description
+constModDesc :: GenState Description
 constModDesc = do
-  g <- ask
+  g <- get
   let cname = "Constants"
       cDesc [] = ""
       cDesc _ = "the structure for holding constant values"
@@ -119,9 +120,9 @@ constModDesc = do
 
 -- | Returns description of what is contained in the Output Format module, 
 -- if it exists.
-outputFormatDesc :: Reader DrasilState Description
+outputFormatDesc :: GenState Description
 outputFormatDesc = do
-  g <- ask
+  g <- get
   let ofDesc False = ""
       ofDesc _ = "the function for writing outputs"
   return $ ofDesc $ "write_output" `elem` defList g
@@ -130,9 +131,9 @@ outputFormatDesc = do
 -- if it exists. Checks whether explicit inputs, derived inputs, and constants 
 -- are defined in the InputParameters class and includes each in the 
 -- description if so.
-inputClassDesc :: Reader DrasilState Description
+inputClassDesc :: GenState Description
 inputClassDesc = do
-  g <- ask
+  g <- get
   let cname = "InputParameters"
       ipMap = Map.filter (cname ==) (clsMap g)
       inIPMap = filter ((`member` ipMap) . codeName)
@@ -152,9 +153,9 @@ inputClassDesc = do
 -- | Returns description for generated class that stores constants,
 -- if it exists. If no constants are defined in the Constants class, then it 
 -- does not exist and an empty description is returned.
-constClassDesc :: Reader DrasilState Description
+constClassDesc :: GenState Description
 constClassDesc = do
-  g <- ask
+  g <- get
   let cname = "Constants"
       ccDesc [] = ""
       ccDesc _ = "Structure for holding the constant values"
@@ -163,18 +164,18 @@ constClassDesc = do
 
 -- | Returns description for generated function that reads input from a file,
 -- if it exists.
-inFmtFuncDesc :: Reader DrasilState Description
+inFmtFuncDesc :: GenState Description
 inFmtFuncDesc = do
-  g <- ask
+  g <- get
   let ifDesc False = ""
       ifDesc _ = "Reads input from a file with the given file name"
   return $ ifDesc $ "get_input" `elem` defList g
 
 -- | Returns description for generated function that checks input constraints,
 -- if it exists.
-inConsFuncDesc :: Reader DrasilState Description
+inConsFuncDesc :: GenState Description
 inConsFuncDesc = do
-  g <- ask
+  g <- get
   pAndS <- physAndSfwrCons
   let icDesc False = ""
       icDesc _ = "Verifies that input values satisfy the " ++ pAndS
@@ -182,9 +183,9 @@ inConsFuncDesc = do
 
 -- | Returns description for generated function that calculates derived inputs,
 -- if it exists.
-dvFuncDesc :: Reader DrasilState Description
+dvFuncDesc :: GenState Description
 dvFuncDesc = do
-  g <- ask
+  g <- get
   let dvDesc False = ""
       dvDesc _ = "Calculates values that can be immediately derived from the" ++
         " inputs"
@@ -195,9 +196,9 @@ calcModDesc :: Description
 calcModDesc = "Provides functions for calculating the outputs"
 
 -- | Returns description for generated output-printing function, if it exists
-woFuncDesc :: Reader DrasilState Description
+woFuncDesc :: GenState Description
 woFuncDesc = do
-  g <- ask
+  g <- get
   let woDesc False = ""
       woDesc _ = "Writes the output values to output.txt"
   return $ woDesc $ "write_output" `elem` defList g
@@ -206,9 +207,9 @@ woFuncDesc = do
 -- constraints on the input and "software constraints" if there are any 
 -- software constraints on the input. If there are both, 
 -- "physical constraints and software constraints" is returned.
-physAndSfwrCons :: Reader DrasilState Description
+physAndSfwrCons :: GenState Description
 physAndSfwrCons = do
-  g <- ask
+  g <- get
   let cns = concat $ mapMaybe ((`Map.lookup` (cMap $ codeSpec g)) . (^. uid)) 
         (inputs $ codeSpec g)
   return $ stringList [

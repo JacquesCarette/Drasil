@@ -16,11 +16,11 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
   genConstMod, genInputClass, genInputConstraints, genInputDerived, 
   genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc, 
   genOutputFormat, genOutputMod, genSampleInput)
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod,
-  modExportMap, clsDefMap)
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+  designLog, inMod, modExportMap, clsDefMap)
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
   AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
+import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -33,27 +33,30 @@ import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..),
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
   getCurrentDirectory)
 import Control.Lens ((^.))
-import Control.Monad.Reader (Reader, ask, runReader)
-import Control.Monad.State (evalState, runState)
+import Control.Monad.State (get, evalState, runState)
 import Data.List (nub)
 import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList)
+import Text.PrettyPrint.HughesPJ (($$), empty, isEmpty)
 
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs spec = DrasilState {
   -- constants
   codeSpec = spec,
-  date = showDate $ dates chs,
   modular = modularity chs,
-  implType = impType chs,
   inStruct = inputStructure chs,
   conStruct = constStructure chs,
   conRepr = constRepr chs,
-  logKind  = logging chs,
+  concMatches = mcm,
+  spaceMatches = chooseSpace l chs,
+  implType = impType chs,
+  onSfwrC = onSfwrConstraint chs,
+  onPhysC = onPhysConstraint chs,
   commented = comments chs,
   doxOutput = doxVerbosity chs,
-  concMatches = chooseConcept chs,
-  spaceMatches = chooseSpace l chs,
+  date = showDate $ dates chs,
+  logKind  = logging chs,
+  logName = logFile chs,
   auxiliaries = auxFiles chs,
   sampleData = sd,
   modules = modules',
@@ -64,18 +67,17 @@ generator l dt sd chs spec = DrasilState {
   clsMap = cdm,
   defList = nub $ keys mem ++ keys cdm,
   
-  -- state
+  -- stateful
   currentModule = "",
   currentClass = "",
-
-  -- next depend on chs
-  logName = logFile chs,
-  onSfwrC = onSfwrConstraint chs,
-  onPhysC = onPhysConstraint chs
+  _designLog = concLog $$ libLog,
+  _loggedSpaces = [] -- Used to prevent duplicate logs added to design log
 }
-  where showDate Show = dt
+  where (mcm, concLog) = runState (chooseConcept chs) empty
+        showDate Show = dt
         showDate Hide = ""
-        (pth, elmap) = chooseODELib l (odeLib chs) (odes chs)
+        ((pth, elmap), libLog) = runState (chooseODELib l (odeLib chs) 
+          (odes chs)) empty
         els = map snd elmap
         mem = modExportMap spec chs modules' 
         lem = fromList (concatMap (^. modExports) els)
@@ -89,17 +91,18 @@ generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
-  let pckg = runReader (genPackage unReprProg) g 
-      code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
-          unReprPack pckg)
+  let (pckg, ds) = runState (genPackage unReprProg) g 
+      code = makeCode (progMods $ packProg $ unReprPack pckg) 
+        ([ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $ 
+          ds ^. designLog] ++ packAux (unReprPack pckg))
   createCodeFiles code
   setCurrentDirectory workingDir
 
 genPackage :: (OOProg progRepr, PackageSym packRepr) => 
   (progRepr (Program progRepr) -> ProgData) -> 
-  Reader DrasilState (packRepr (Package packRepr))
+  GenState (packRepr (Package packRepr))
 genPackage unRepr = do
-  g <- ask
+  g <- get
   ci <- genProgram
   p <- genProgram
   let info = unCI $ evalState ci initialState
@@ -110,20 +113,20 @@ genPackage unRepr = do
   d <- genDoxConfig s
   return $ package pd (m:i++d)
 
-genProgram :: (OOProg r) => Reader DrasilState (GSProgram r)
+genProgram :: (OOProg r) => GenState (GSProgram r)
 genProgram = do
-  g <- ask
+  g <- get
   ms <- chooseModules $ modular g
   let n = pName $ codeSpec g
   return $ prog n ms
 
-chooseModules :: (OOProg r) => Modularity -> Reader DrasilState [SFile r]
+chooseModules :: (OOProg r) => Modularity -> GenState [SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules (Modular _) = genModules
 
-genUnmodular :: (OOProg r) => Reader DrasilState (SFile r)
+genUnmodular :: (OOProg r) => GenState (SFile r)
 genUnmodular = do
-  g <- ask
+  g <- get
   umDesc <- unmodularDesc
   let n = pName $ codeSpec g
       cls = any (`member` clsMap g) 
@@ -137,9 +140,9 @@ genUnmodular = do
     ([genInputClass Auxiliary, genConstClass Auxiliary] 
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
           
-genModules :: (OOProg r) => Reader DrasilState [SFile r]
+genModules :: (OOProg r) => GenState [SFile r]
 genModules = do
-  g <- ask
+  g <- get
   mn     <- genMain
   inp    <- chooseInModule $ inMod g
   con    <- genConstMod 

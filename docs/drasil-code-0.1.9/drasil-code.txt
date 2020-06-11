@@ -280,13 +280,14 @@ RK45 :: ODEMethod
 BDF :: ODEMethod
 Adams :: ODEMethod
 data ODELibPckg
-ODELib :: ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
+ODELib :: String -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
+[libName] :: ODELibPckg -> String
 [libSpec] :: ODELibPckg -> ExternalLibrary
 [libCall] :: ODELibPckg -> ODEInfo -> ExternalLibraryCall
 [libPath] :: ODELibPckg -> Maybe FilePath
 [compatibleLangs] :: ODELibPckg -> [Lang]
-mkODELib :: ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
-mkODELibNoPath :: ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
+mkODELib :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
+mkODELibNoPath :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
 unPP :: PythonProject a -> a
 unJP :: JavaProject a -> a
 unCSP :: CSharpProject a -> a

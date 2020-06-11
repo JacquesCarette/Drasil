@@ -451,7 +451,7 @@ instance RenderStatement CSharpCode where
 
   emptyStmt = G.emptyStmt
   
-  stmtFromData d t =toState $ toCode (d, t)
+  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CSharpCode where
   statement = fst . unCSC

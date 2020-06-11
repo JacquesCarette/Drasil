@@ -150,7 +150,8 @@ instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) where
   
   commentedMod = pair2 commentedMod commentedMod
 
-  fileFromData fp m = do
+  fileFromData fp m' = do
+    m <- m'
     p1 <- fileFromData fp (pfst m)
     p2 <- fileFromData fp (psnd m)
     return $ pair p1 p2
@@ -217,7 +218,7 @@ instance (Pair p) => TypeElim (p CppSrcCode CppHdrCode) where
   getTypeString s = getTypeString $ pfst s
   
 instance (Pair p) => RenderType (p CppSrcCode CppHdrCode) where
-  typeFromData t s d = pair (typeFromData t s d) (typeFromData t s d)
+  typeFromData t s d = on2StateValues pair (typeFromData t s d) (typeFromData t s d)
 
 instance (Pair p) => InternalTypeElim (p CppSrcCode CppHdrCode) where
   type' s = RC.type' $ pfst s
@@ -286,8 +287,8 @@ instance (Pair p) => InternalVarElim (p CppSrcCode CppHdrCode) where
   variable v = RC.variable $ pfst v
 
 instance (Pair p) => RenderVariable (p CppSrcCode CppHdrCode) where
-  varFromData b n t d = pair (varFromData b n (pfst t) d) 
-    (varFromData b n (psnd t) d)
+  varFromData b n t' d = pair1 (\t ->varFromData b n t d) 
+    (\t -> varFromData b n t d) t'
 
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   type Value (p CppSrcCode CppHdrCode) = ValData
@@ -390,7 +391,8 @@ instance (Pair p) => RenderValue (p CppSrcCode CppHdrCode) where
 
   call l o n = pair1Val3Lists (call l o n) (call l o n)
 
-  valFromData p t d = pair (valFromData p (pfst t) d) (valFromData p (psnd t) d)
+  valFromData p t' d = pair1 (\t ->valFromData p t d) 
+    (\t -> valFromData p t d) t'
 
 instance (Pair p) => ValueElim (p CppSrcCode CppHdrCode) where
   valuePrec v = valuePrec $ pfst v
@@ -472,7 +474,7 @@ instance (Pair p) => RenderStatement (p CppSrcCode CppHdrCode) where
 
   emptyStmt = on2StateValues pair emptyStmt emptyStmt
   
-  stmtFromData d t = pair (stmtFromData d t) (stmtFromData d t)
+  stmtFromData d t = on2StateValues pair (stmtFromData d t) (stmtFromData d t)
 
 instance (Pair p) => StatementElim (p CppSrcCode CppHdrCode) where
   statement s = RC.statement $ pfst s
@@ -643,8 +645,9 @@ instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   pointerParam = pair1 pointerParam pointerParam . zoom lensMStoVS
 
 instance (Pair p) => RenderParam (p CppSrcCode CppHdrCode) where
-  paramFromData v d = pair (paramFromData (pfst v) d) (paramFromData (psnd v) d)
-  
+  paramFromData v' d = pair1 (\v -> paramFromData v d) 
+    (\v -> paramFromData v d) (zoom lensMStoVS v')
+
 instance (Pair p) => ParamElim (p CppSrcCode CppHdrCode) where
   parameterName p = parameterName $ pfst p
   parameterType p = pair (parameterType $ pfst p) (parameterType $ psnd p)
@@ -1067,7 +1070,7 @@ instance TypeElim CppSrcCode where
   getTypeString = typeString . unCPPSC
   
 instance RenderType CppSrcCode where
-  typeFromData t s d = toCode $ td t s d
+  typeFromData t s d = toState (toCode $ td t s d)
 
 instance InternalTypeElim CppSrcCode where
   type' = typeDoc . unCPPSC
@@ -1120,16 +1123,20 @@ instance VariableSym CppSrcCode where
   const = var
   extVar l n t = modify (addModuleImportVS l) >> var n t
   self = C.self
-  classVar = on2StateValues (\c v -> classVarCheckStatic (varFromData 
-    (variableBind v) (getTypeString c `nmSpcAccess` variableName v) 
-    (variableType v) (cppClassVar (RC.type' c) (RC.variable v))))
+  classVar c' v'= do 
+    c <- c'
+    v <- v'
+    vfd <- varFromData 
+      (variableBind v) (getTypeString c `nmSpcAccess` variableName v) 
+      (toState $ variableType v) (cppClassVar (RC.type' c) (RC.variable v))
+    toState $ classVarCheckStatic vfd
   extClassVar c v = do
     t <- c
     cm <- getClassMap
     maybe id ((>>) . modify . addModuleImportVS) 
       (Map.lookup (getTypeString t) cm) $ classVar (return t) v
   objVar = CP.objVar
-  objVarSelf = onStateValue (\v -> mkVar (R.self ++ ptrAccess ++ variableName v)
+  objVarSelf v' = v' >>= (\v -> mkVar (R.self ++ ptrAccess ++ variableName v)
     (variableType v) (R.self' <> ptrAccess' <> RC.variable v))
   arrayElem i = G.arrayElem (litInt i)
   iterVar l t = mkStateVar l (iterator t) (parens $ cppDeref <> text l)
@@ -1143,7 +1150,9 @@ instance InternalVarElim CppSrcCode where
   variable = varDoc . unCPPSC
 
 instance RenderVariable CppSrcCode where
-  varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
+  varFromData b n t' d = do 
+    t <- t'
+    toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
@@ -1235,14 +1244,22 @@ instance RenderValue CppSrcCode where
   inputFunc = addIOStreamImport $ mkStateVal string (text cin)
   printFunc = addIOStreamImport $ mkStateVal void (text cout)
   printLnFunc = addIOStreamImport $ mkStateVal void (text cout)
-  printFileFunc = on2StateValues (\v -> mkVal v . RC.value) void
-  printFileLnFunc = on2StateValues (\v -> mkVal v . RC.value) void
+  printFileFunc w' = do
+    w <- w'
+    vt <- void 
+    mkVal vt (RC.value w)
+  printFileLnFunc w' = do
+    w <- w'
+    vt <- void 
+    mkVal vt (RC.value w)
 
   cast = cppCast
 
   call = CP.call' cppName
 
-  valFromData p t d = on2CodeValues (vd p) t (toCode d)
+  valFromData p t' d = do 
+    t <- t'
+    toState $ on2CodeValues (vd p) t (toCode d)
   
 instance ValueElim CppSrcCode where
   valuePrec = valPrec . unCPPSC
@@ -1312,7 +1329,7 @@ instance RenderStatement CppSrcCode where
 
   emptyStmt = G.emptyStmt
 
-  stmtFromData d t = toCode (d, t)
+  stmtFromData d t = toState $ toCode (d, t)
   
 instance StatementElim CppSrcCode where
   statement = fst . unCPPSC
@@ -1335,15 +1352,16 @@ instance DeclStatement CppSrcCode where
   varDecDef = C.varDecDef 
   listDec n = C.listDec cppListDecDoc (litInt n)
   listDecDef = cppListDecDef cppListDecDefDoc
-  arrayDec n vr = zoom lensMStoVS $ do
-    sz <- litInt n :: SValue CppSrcCode
-    v <- vr 
-    return $ mkStmt $ RC.type' (variableType v) <+> RC.variable v <> 
+  arrayDec n vr = do
+    let sz' = litInt n :: SValue CppSrcCode
+    sz <- zoom lensMStoVS sz'
+    v <- zoom lensMStoVS vr 
+    mkStmt $ RC.type' (variableType v) <+> RC.variable v <> 
       brackets (RC.value sz)
   arrayDecDef vr vals = do
     vdc <- arrayDec (toInteger $ length vals) vr
     vs <- mapM (zoom lensMStoVS) vals
-    return $ mkStmt $ RC.statement vdc <+> equals <+> braces (valueList vs)
+    mkStmt $ RC.statement vdc <+> equals <+> braces (valueList vs)
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew = C.extObjDecNew
@@ -1412,8 +1430,8 @@ instance CommentStatement CppSrcCode where
   comment = G.comment commentStart
 
 instance ControlStatement CppSrcCode where
-  break = toState $ mkStmt R.break
-  continue = toState $ mkStmt R.continue
+  break = mkStmt R.break
+  continue = mkStmt R.continue
 
   returnStmt = G.returnStmt Semi
 
@@ -1422,7 +1440,9 @@ instance ControlStatement CppSrcCode where
   ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
   switch = C.switch
 
-  ifExists _ ifBody _ = onStateValue (mkStmtNoEnd . RC.body) ifBody -- All variables are initialized in C++
+  ifExists _ ifBody _ = do 
+    ifb <- ifBody 
+    mkStmtNoEnd (RC.body ifb) -- All variables are initialized in C++
 
   for = C.for bodyStart bodyEnd 
   forRange = M.forRange
@@ -1464,7 +1484,9 @@ instance ParameterSym CppSrcCode where
   pointerParam = G.param cppPointerParamDoc
 
 instance RenderParam CppSrcCode where
-  paramFromData v d = on2CodeValues pd v (toCode d)
+  paramFromData v' d = do 
+    v <- zoom lensMStoVS v' 
+    toState $ on2CodeValues pd v (toCode d)
   
 instance ParamElim CppSrcCode where
   parameterName = variableName . onCodeValue paramVar
@@ -1486,9 +1508,11 @@ instance MethodSym CppSrcCode where
     [param argcVar, param argvVar]
     (on2StateValues (on2CodeValues appendToBody) b (returnStmt $ litInt 0))
     where argcVar = var argc int
-          argvVar = toState $ mkVar argv (typeFromData (List String) 
-            (constDec ++ " " ++ C.charRender) (constDec' <+> text 
-            C.charRender)) (cppDeref <> text argv <> array')
+          argvVar = do 
+            t <- typeFromData (List String) 
+              (constDec ++ " " ++ C.charRender) (constDec' <+> text 
+              C.charRender)
+            mkVar argv t (cppDeref <> text argv <> array')
 
   docFunc = G.docFunc
 
@@ -1700,7 +1724,7 @@ instance TypeElim CppHdrCode where
   getTypeString = typeString . unCPPHC
   
 instance RenderType CppHdrCode where
-  typeFromData t s d = toCode $ td t s d
+  typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim CppHdrCode where
   type' = typeDoc . unCPPHC
@@ -1769,7 +1793,9 @@ instance InternalVarElim CppHdrCode where
   variable = varDoc . unCPPHC
 
 instance RenderVariable CppHdrCode where
-  varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
+  varFromData b n t' d = do 
+    t <- t' 
+    toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
@@ -1864,7 +1890,9 @@ instance RenderValue CppHdrCode where
   
   call _ _ _ _ _ _ = mkStateVal void empty
 
-  valFromData p t d = on2CodeValues (vd p) t (toCode d)
+  valFromData p t' d = do 
+    t <- t' 
+    toState $ on2CodeValues (vd p) t (toCode d)
   
 instance ValueElim CppHdrCode where
   valuePrec = valPrec . unCPPHC
@@ -1934,7 +1962,7 @@ instance RenderStatement CppHdrCode where
 
   emptyStmt = G.emptyStmt
   
-  stmtFromData d t = toCode (d, t)
+  stmtFromData d t = toState $ toCode (d, t)
   
 instance StatementElim CppHdrCode where
   statement = fst . unCPPHC
@@ -2051,12 +2079,17 @@ instance MethodTypeSym CppHdrCode where
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
-  param = onStateValue (\v -> paramFromData v (R.param v)) . zoom lensMStoVS
-  pointerParam = onStateValue (\v -> paramFromData v (cppPointerParamDoc v)) .
-    zoom lensMStoVS
+  param v' = do 
+    v <- zoom lensMStoVS v'
+    paramFromData v' (R.param v)
+  pointerParam v' = do 
+    v <- zoom lensMStoVS v' 
+    paramFromData v' (cppPointerParamDoc v)
 
 instance RenderParam CppHdrCode where
-  paramFromData v d = on2CodeValues pd v (toCode d)
+  paramFromData v' d = do 
+    v <- zoom lensMStoVS v' 
+    toState $ on2CodeValues pd v (toCode d)
   
 instance ParamElim CppHdrCode where
   parameterName = variableName . onCodeValue paramVar

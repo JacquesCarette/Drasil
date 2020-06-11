@@ -4,8 +4,8 @@
 module GOOL.Drasil.LanguageRenderer.CLike (charRender, float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  varDec, varDecDef, listDec, extObjDecNew, switch, for, while, intFunc, 
-  multiAssignError, multiReturnError
+  decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
+  intFunc, multiAssignError, multiReturnError
 ) where
 
 import Utils.Drasil (indent)
@@ -31,8 +31,8 @@ import GOOL.Drasil.AST (Binding(..))
 import GOOL.Drasil.Helpers (angles, toState, onStateValue, on2StateValues, 
   on3StateValues)
 import GOOL.Drasil.LanguageRenderer (forLabel, whileLabel, containing)
-import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, self', 
-  self)
+import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, decrement, 
+  self', self)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import GOOL.Drasil.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName)
@@ -121,6 +121,9 @@ listSize v = v $. S.listSizeFunc
 
 increment1 :: (RenderSym r) => SVariable r -> MSStatement r
 increment1 vr = zoom lensMStoVS $ onStateValue (mkStmt . R.increment) vr
+
+decrement1 :: (RenderSym r) => SVariable r -> MSStatement r
+decrement1 vr = zoom lensMStoVS $ onStateValue (mkStmt . R.decrement) vr
 
 varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc -> 
   SVariable r -> MSStatement r

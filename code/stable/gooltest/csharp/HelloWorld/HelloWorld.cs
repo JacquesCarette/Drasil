@@ -66,8 +66,8 @@ public class HelloWorld {
             c += 17;
             a++;
             d++;
-            c = c - 1;
-            b = b - 1;
+            c--;
+            b--;
             List<int> myList = new List<int>(5);
             char myObj = 'o';
             const string myConst = "Imconstant";

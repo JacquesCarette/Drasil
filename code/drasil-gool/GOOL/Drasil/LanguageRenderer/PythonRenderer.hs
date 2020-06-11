@@ -66,8 +66,8 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
   funcType, listSetFunc, listAccessFunc, buildModule)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
-  decrement1, increment1, runStrategy, stringListVals, stringListLists,
-  observerIndex, checkState)
+  increment1, runStrategy, stringListVals, stringListLists, observerIndex, 
+  checkState)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), 
@@ -471,7 +471,7 @@ instance AssignStatement PythonCode where
   (&-=) = G.subAssign Empty
   (&+=) = G.increment
   (&++) = M.increment1
-  (&--) = M.decrement1
+  (&--) vr = (&-=) vr (litInt 1)
 
 instance DeclStatement PythonCode where
   varDec _ = toState $ mkStmtNoEnd empty

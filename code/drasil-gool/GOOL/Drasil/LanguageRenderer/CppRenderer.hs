@@ -71,11 +71,10 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (objVar,
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
-  increment1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
-  intFunc, multiAssignError, multiReturnError)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M ( 
-  decrement1, runStrategy, listSlice, stringListVals, stringListLists, forRange,
-  notifyObservers)
+  increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, 
+  while, intFunc, multiAssignError, multiReturnError)
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (runStrategy, 
+  listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd, 
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..), 
@@ -1328,7 +1327,7 @@ instance AssignStatement CppSrcCode where
   (&-=) = G.subAssign Semi
   (&+=) = G.increment
   (&++) = C.increment1
-  (&--) = M.decrement1
+  (&--) = C.decrement1
 
 instance DeclStatement CppSrcCode where
   varDec = C.varDec static dynamic empty

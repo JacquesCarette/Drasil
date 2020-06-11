@@ -81,8 +81,8 @@ int main(int argc, const char *argv[]) {
         c += 17;
         a++;
         d++;
-        c = c - 1;
-        b = b - 1;
+        c--;
+        b--;
         vector<int> myList(5);
         char myObj = 'o';
         const string myConst = "Imconstant";

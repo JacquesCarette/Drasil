@@ -369,23 +369,18 @@ closeFile :: (RenderSym r) => Label -> SValue r -> MSStatement r
 closeFile n f = S.valStmt $ objMethodCallNoParams S.void f n
 
 returnStmt :: (RenderSym r) => Terminator -> SValue r -> MSStatement r
-returnStmt t v' = do 
-  v <- zoom lensMStoVS v'
-  stmtFromData (R.return' [v]) t
+returnStmt t v' = (zoom lensMStoVS v') >>= (\v -> stmtFromData (R.return' [v]) t)
 
 valStmt :: (RenderSym r) => Terminator -> SValue r -> MSStatement r
-valStmt t v' = do 
-  v <- zoom lensMStoVS v' 
-  stmtFromData (RC.value v) t
+valStmt t v' = (zoom lensMStoVS v') >>= (\v ->stmtFromData (RC.value v) t)
 
 comment :: (RenderSym r) => Doc -> Label -> MSStatement r
 comment cs c = mkStmtNoEnd (R.comment c cs)
 
 throw :: (RenderSym r) => (r (Value r) -> Doc) -> Terminator -> Label -> 
   MSStatement r
-throw f t l = do 
-  msg <- zoom lensMStoVS (S.litString l)
-  stmtFromData (f msg) t
+throw f t l = (zoom lensMStoVS (S.litString l)) >>=
+  (\msg -> stmtFromData (f msg) t)
 
 -- ControlStatements --
 

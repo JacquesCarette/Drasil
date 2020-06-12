@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
+-- Defines constructors for Exprs often used in relation to code generation.
 module Language.Drasil.CodeExpr (new, newWithNamedArgs, message,
   msgWithNamedArgs, field) where
 

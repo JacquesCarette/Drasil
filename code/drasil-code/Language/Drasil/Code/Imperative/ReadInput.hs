@@ -1,3 +1,4 @@
+-- | Defines functions for reading values from a file corresponding to a DataDesc
 module Language.Drasil.Code.Imperative.ReadInput (
   sampleInputDD, readWithDataDesc
 ) where

@@ -27,6 +27,8 @@ chooseSpace lng chs = \s -> selectType lng s (spaceMatch chs s)
         selectType l s [] = error $ "Chosen CodeType matches for Space " ++ 
           show s ++ " are not compatible with target language " ++ show l
 
+-- Defines a design log message based on an incompatibility between the given 
+-- Lang and attempted Space-CodeType match
 incompatibleType :: Lang -> Space -> CodeType -> Doc
 incompatibleType l s t = text $ "Language " ++ show l ++ " does not support "
   ++ "code type " ++ show t ++ ", chosen as the match for the " ++ show s ++ 

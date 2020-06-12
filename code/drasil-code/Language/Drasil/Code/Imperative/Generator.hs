@@ -1,3 +1,4 @@
+-- | Defines generation functions for SCS code packages.
 module Language.Drasil.Code.Imperative.Generator (
   generator, generateCode
 ) where

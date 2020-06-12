@@ -1,4 +1,5 @@
 {-# LANGUAGE GADTs #-}
+-- | Defines the CodeSpec structure and related functions.
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
@@ -31,25 +32,42 @@ type Def = CodeDefinition
 
 data CodeSpec where
   CodeSpec :: (HasName a) => {
+  -- Program name
   pName :: Name,
+  -- Authors
   authors :: [a], 
+  -- All inputs
   inputs :: [Input],
+  -- Explicit inputs (values to be supplied by a file)
   extInputs :: [Input],
+  -- Derived inputs (each calculated from explicit inputs in a single step)
   derivedInputs :: [Derived],
+  -- All outputs
   outputs :: [Output],
+  -- Mathematical definitions, ordered so that they form a path from inputs to 
+  -- outputs.
   execOrder :: [Def],
+  -- Map from UIDs to constraints for all constrained chunks used in the problem
   cMap :: ConstraintMap,
+  -- List of all constants used in the problem
   constants :: [Const],
+  -- Map containing all constants used in the problem.
   constMap :: ConstantMap,
+  -- Additional modules required in the generated code, which Drasil cannot yet 
+  -- automatically define.
   mods :: [Mod],  -- medium hack
+  -- The database of all chunks used in the problem.
   sysinfodb :: ChunkDB
   } -> CodeSpec
 
-type ConstantMap = Map.Map String CodeDefinition
+type ConstantMap = Map.Map UID CodeDefinition
 
+-- Converts a list of chunks that have UIDs to a Map from UID to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a
 assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
 
+-- | Defines a CodeSpec based on the SystemInformation, Choices, and Mods 
+-- defined by the user.
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys = sys
               , _authors = as
@@ -86,32 +104,38 @@ codeSpec SI {_sys = sys
       }
 
 -- medium hacks ---
+
+-- Converts a chunk with a defining relation to a QDefinition
 relToQD :: ExprRelat c => ChunkDB -> c -> QDefinition
 relToQD sm r = convertRel sm (r ^. relat)
 
+-- Converts an Expr representing a definition (i.e. an equality where the left 
+-- side is just a variable) to a QDefinition.
 convertRel :: ChunkDB -> Expr -> QDefinition
 convertRel sm (BinaryOp Eq (C x) r) = ec (symbResolve sm x) r
 convertRel _ _ = error "Conversion failed"
 
+-- | Convert a Func to an implementation-stage QuantityDict representing the 
+-- function.
 asVC :: Func -> QuantityDict
 asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
 asVC (FDef (CtorDef n _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
 asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
 
+-- | Get a UID of a chunk corresponding to a Func
 funcUID :: Func -> UID
 funcUID f = asVC f ^. uid
 
--- FIXME: hack. Use for implementation-stage functions that need to be displayed in the SRS.
+-- | FIXME: hack. Use for implementation-stage functions that need to be displayed in the SRS.
 funcUID' :: Func -> UID
 funcUID' f = asVC' f ^. uid
 
--- FIXME: Part of above hack
+-- | FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
 asVC' (FDef (FuncDef n _ _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FDef (CtorDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
         
-
 -- Determines the derived inputs, which can be immediately calculated from the 
 -- knowns (inputs and constants). If there are DDs, the derived inputs will 
 -- come from those. If there are none, then the QDefinitions are used instead.
@@ -125,6 +149,8 @@ getDerivedInputs ddefs defs' ins cnsts sm =
 type Known = CodeVarChunk
 type Need  = CodeVarChunk
 
+-- Orders a list of definitions such that they form a path between Known values 
+-- and values that Need to be calculated.
 getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
 getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
@@ -143,6 +169,8 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
                        ++ intercalate ", " (map (^. uid) k))
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
 
+-- Returns true if the first list contains only elements that are present in 
+-- the second list.
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs
 

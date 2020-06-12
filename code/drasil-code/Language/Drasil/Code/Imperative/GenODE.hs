@@ -31,6 +31,8 @@ chooseODELib l olps odes = chooseODELib' olps
             genExternalLibraryCall (libSpec o) $ libCall o ode)) odes) 
           else modify ($$ incompatibleLib l o) >> chooseODELib' os
 
+-- Defines a design log message based on an incompatibility between the given 
+-- Lang and chosen ODELibPckg.
 incompatibleLib :: Lang -> ODELibPckg -> Doc
 incompatibleLib lng lib = text $ "Language " ++ show lng ++ " is not " ++ 
   "compatible with chosen library " ++ libName lib ++ ", trying next choice." 

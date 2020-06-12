@@ -1,4 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
+-- | Defines chunk types for use in code generation.
 module Language.Drasil.Chunk.Code (
   CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), 
   VarOrFunc(..), obv, quantvar, quantfunc, ccObjVar, codevars, codevars', 

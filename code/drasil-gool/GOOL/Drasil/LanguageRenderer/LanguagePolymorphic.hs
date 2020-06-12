@@ -203,8 +203,7 @@ valueOf :: (RenderSym r) => SVariable r -> SValue r
 valueOf v' = v' >>= (\v -> mkVal (variableType v) (RC.variable v))
 
 arg :: (RenderSym r) => SValue r -> SValue r -> SValue r
-arg = on3StateWrapped (\s n args -> mkVal s (R.arg n args)) 
-  (S.string) 
+arg = on3StateWrapped (\s n args -> mkVal s (R.arg n args)) S.string 
 
 argsList :: (RenderSym r) => String -> SValue r
 argsList l = mkStateVal (S.arrayType S.string) (text l)

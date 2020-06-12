@@ -203,8 +203,8 @@ valueOf :: (RenderSym r) => SVariable r -> SValue r
 valueOf v' = v' >>= (\v -> mkVal (variableType v) (RC.variable v))
 
 arg :: (RenderSym r) => SValue r -> SValue r -> SValue r
-arg n' args' = on3StateWrapped (\s n args -> mkVal s (R.arg n args)) 
-  (S.string) n' args'
+arg = on3StateWrapped (\s n args -> mkVal s (R.arg n args)) 
+  (S.string) 
 
 argsList :: (RenderSym r) => String -> SValue r
 argsList l = mkStateVal (S.arrayType S.string) (text l)
@@ -244,8 +244,8 @@ lambda f ps' ex' = do
   valFromData (Just 0) ft (f ps ex)
 
 objAccess :: (RenderSym r) => SValue r -> VSFunction r -> SValue r
-objAccess v' f' = on2StateWrapped (\v f-> mkVal (functionType f) 
-  (R.objAccess (RC.value v) (RC.function f))) v' f'
+objAccess = on2StateWrapped (\v f-> mkVal (functionType f) 
+  (R.objAccess (RC.value v) (RC.function f)))
 
 objMethodCall :: (RenderSym r) => Label -> VSType r -> SValue r -> [SValue r] 
   -> NamedArgs r -> SValue r
@@ -395,8 +395,7 @@ ifCond ifStart elif bEnd (c:cs) eBody =
 
 tryCatch :: (RenderSym r) => (r (Body r) -> r (Body r) -> Doc) -> MSBody r -> 
   MSBody r -> MSStatement r
-tryCatch f tb1' tb2' = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2)) 
-  (tb1') $ tb2' 
+tryCatch f = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2))
 
 -- Methods --
 

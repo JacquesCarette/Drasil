@@ -132,12 +132,12 @@ intClass f n s i svrs mths = do
 -- Python, Java, and C++ --
 
 funcType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
-funcType ps' r'= on2StateWrapped (\ps r -> typeFromData (Func (map getType ps) 
-  (getType r)) "" empty) (sequence ps') r'
+funcType ps'= on2StateWrapped (\ps r -> typeFromData (Func (map getType ps) 
+  (getType r)) "" empty) $ sequence ps'
 
 objVar :: (RenderSym r) => SVariable r -> SVariable r -> SVariable r
-objVar o' v' = on2StateWrapped (\o v -> mkVar (variableName o `access` variableName v) 
-    (variableType v) (R.objVar (RC.variable o) (RC.variable v))) o' v'
+objVar = on2StateWrapped (\o v -> mkVar (variableName o `access` variableName v) 
+    (variableType v) (R.objVar (RC.variable o) (RC.variable v))) 
 
 -- Python, C#, and C++ --
 
@@ -167,8 +167,8 @@ buildModule n imps bot fs cs = S.modFromData n (do
 -- Java and C# -- 
 
 arrayType :: (RenderSym r) => VSType r -> VSType r
-arrayType t' = on1StateWrapped (\t -> typeFromData (Array (getType t)) 
-  (getTypeString t ++ array) (RC.type' t <> brackets empty)) t'
+arrayType = on1StateWrapped (\t -> typeFromData (Array (getType t)) 
+  (getTypeString t ++ array) (RC.type' t <> brackets empty))
   
 pi :: (RenderSym r) => SValue r
 pi = mkStateVal S.double (text $ mathFunc "PI")

@@ -115,9 +115,9 @@ mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 -- value passed to the operator is a float, this function preserves that type 
 -- by casting the result to a float.
 unExprNumDbl :: (RenderSym r) => VSUnOp r -> SValue r -> SValue r
-unExprNumDbl u' v' = on2StateWrapped (\u v-> do 
+unExprNumDbl = on2StateWrapped (\u v-> do 
   w <- mkUnExpr unOpDocD u v
-  unExprCastFloat (valueType v) w) u' v'
+  unExprCastFloat (valueType v) w)
 
 -- Only used by unExprNumDbl
 unExprCastFloat :: (RenderSym r) => r (Type r) -> r (Value r) -> SValue r
@@ -128,36 +128,36 @@ unExprCastFloat t = castType (getType t) . toState
 -- | To be used when the type of the value is different from the type of the
 -- resulting expression. The type of the result is passed as a parameter.
 typeUnExpr :: (RenderSym r) => VSUnOp r -> VSType r -> SValue r -> SValue r
-typeUnExpr u' t' s' = on3StateWrapped (\u t s -> mkExpr (uOpPrec u) t 
-  (unOpDocD (RC.uOp u) (RC.value s))) u' t' s'
+typeUnExpr = on3StateWrapped (\u t s -> mkExpr (uOpPrec u) t 
+  (unOpDocD (RC.uOp u) (RC.value s)))
 
 -- | Constructs binary expressions like v + w, for some operator + and values v 
 -- and w, parenthesizing v and w if needed.
 binExpr :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExpr b' v1' v2'= on3StateWrapped (\b v1 v2 ->
+binExpr = on3StateWrapped (\b v1 v2 ->
   let exprType = numType (valueType v1) (valueType v2)
       exprRender = binExprRender b v1 v2
-  in mkExpr (bOpPrec b) exprType exprRender) b' v1' v2'
+  in mkExpr (bOpPrec b) exprType exprRender) 
 
 -- | Constructs binary expressions like pow(v,w), for some operator pow and
 -- values v and w
 binExpr' :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExpr' b' v1' v2'= on3StateWrapped (\b v1 v2 ->
+binExpr' = on3StateWrapped (\b v1 v2 ->
   let exprType = numType (valueType v1) (valueType v2)
       exprRender = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
-  in mkExpr 9 exprType exprRender) b' v1' v2'
+  in mkExpr 9 exprType exprRender)
 
 -- | To be used in languages where the binary operator returns a double. If 
 -- either value passed to the operator is a float, this function preserves that 
 -- type by casting the result to a float.
 binExprNumDbl' :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExprNumDbl' b' v1' v2' = on3StateWrapped (\b v1 v2 -> do
+binExprNumDbl' = on3StateWrapped (\b v1 v2 -> do
   let t1 = valueType v1
       t2 = valueType v2
       exprType = numType t1 t2
       exprRender = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
   e <- mkExpr 9 exprType exprRender
-  binExprCastFloat t1 t2 e) b' v1' v2'
+  binExprCastFloat t1 t2 e)
 
 -- Only used by binExprCastFloat
 binExprCastFloat :: (RenderSym r) => r (Type r) -> r (Type r) -> r (Value r) -> 

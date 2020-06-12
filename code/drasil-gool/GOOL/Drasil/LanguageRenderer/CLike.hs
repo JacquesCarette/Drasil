@@ -63,8 +63,8 @@ char :: (RenderSym r) => VSType r
 char = typeFromData Char charRender (text charRender)
 
 listType :: (RenderSym r) => String -> VSType r -> VSType r
-listType lst t' = on1StateWrapped (\t -> typeFromData (List (getType t)) (lst 
-  `containing` getTypeString t) $ text lst <> angles (RC.type' t)) $ t'
+listType lst = on1StateWrapped (\t -> typeFromData (List (getType t)) (lst 
+  `containing` getTypeString t) $ text lst <> angles (RC.type' t)) 
 
 void :: (RenderSym r) => VSType r
 void = typeFromData Void voidRender (text voidRender)
@@ -100,10 +100,9 @@ litFloat :: (RenderSym r) => Float -> SValue r
 litFloat f = mkStateVal S.float (D.float f <> text "f")
 
 inlineIf :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-inlineIf c' v1' v2' = on3StateWrapped (\ c v1 v2 -> valFromData (prec c) 
+inlineIf = on3StateWrapped (\ c v1 v2 -> valFromData (prec c) 
   (toState $ valueType v1) 
-  (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2)) 
-  c' v1' v2'
+  (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2))
   where prec cd = valuePrec cd <|> Just 0
 
 libFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
@@ -122,7 +121,7 @@ listSize v = v $. S.listSizeFunc
 -- Statements --
 
 increment1 :: (RenderSym r) => SVariable r -> MSStatement r
-increment1 vr' = on1StateWrapped (\vr ->mkStmt (R.increment vr)) $ 
+increment1 vr' = on1StateWrapped (mkStmt . R.increment) $ 
   zoom lensMStoVS vr'
 
 varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc -> 
@@ -176,9 +175,9 @@ for bStart bEnd sInit vGuard sUpdate b = do
     bEnd]
   
 while :: (RenderSym r) => Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
-while bStart bEnd v' b'= on2StateWrapped (\v b-> mkStmtNoEnd 
-  (vcat [ whileLabel <+> parens (RC.value v) <+> bStart, indent $ RC.body b, bEnd])) 
-  (zoom lensMStoVS v') $ b'
+while bStart bEnd v'= on2StateWrapped (\v b-> mkStmtNoEnd 
+  (vcat [ whileLabel <+> parens (RC.value v) <+> bStart, indent $ RC.body b, bEnd]))$
+  zoom lensMStoVS v'
 
 -- Methods --
 

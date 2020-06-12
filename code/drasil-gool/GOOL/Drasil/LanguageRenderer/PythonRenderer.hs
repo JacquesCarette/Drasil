@@ -450,7 +450,7 @@ instance InternalIOStmt PythonCode where
 
 instance InternalControlStmt PythonCode where
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs' = on1StateWrapped (\vs -> (mkStmtNoEnd . R.return') vs) $
+  multiReturn vs' = on1StateWrapped (mkStmtNoEnd . R.return') $
     zoom lensMStoVS $ sequence vs'
 
 instance RenderStatement PythonCode where

@@ -2066,10 +2066,10 @@ instance MethodTypeSym CppHdrCode where
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
-  param v' = on1StateWrapped (\v -> paramFromData v' (R.param v)) $
+  param v' = on1StateWrapped (paramFromData v' . R.param) $
     zoom lensMStoVS v'
-  pointerParam v' = on1StateWrapped (\v -> paramFromData v' 
-    (cppPointerParamDoc v)) $ zoom lensMStoVS v' 
+  pointerParam v' = on1StateWrapped (paramFromData v' . 
+    cppPointerParamDoc) $ zoom lensMStoVS v' 
 
 instance RenderParam CppHdrCode where
   paramFromData v' d = on1StateWrapped (\v -> toState $ on2CodeValues 
@@ -2431,21 +2431,21 @@ cppBoolType :: (RenderSym r) => VSType r
 cppBoolType = typeFromData Boolean cppBool (text cppBool)
 
 cppInfileType :: (RenderSym r) => VSType r
-cppInfileType = on1StateWrapped (\t->  addFStreamImport t) $
+cppInfileType = on1StateWrapped addFStreamImport $
   typeFromData File cppInfile (text cppInfile)
 
 cppOutfileType :: (RenderSym r) => VSType r
-cppOutfileType =  on1StateWrapped (\t-> addFStreamImport t) $
+cppOutfileType =  on1StateWrapped addFStreamImport $
   typeFromData File cppOutfile (text cppOutfile)
 
 cppArrayType :: (RenderSym r) => VSType r -> VSType r
-cppArrayType t' = on1StateWrapped (\t -> typeFromData (Array (getType t)) 
-  (getTypeString t) (RC.type' t)) t'
+cppArrayType = on1StateWrapped (\t -> typeFromData (Array (getType t)) 
+  (getTypeString t) (RC.type' t))
 
 cppIterType :: (RenderSym r) => VSType r -> VSType r
-cppIterType t' = on1StateWrapped (\t -> typeFromData (Iterator (getType t)) 
+cppIterType = on1StateWrapped (\t -> typeFromData (Iterator (getType t)) 
   (getTypeString t `nmSpcAccess` cppIterator) (stdAccess' (RC.type' t) 
-  `nmSpcAccess'` text cppIterator)) t'
+  `nmSpcAccess'` text cppIterator))
 
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c `nmSpcAccess'` v

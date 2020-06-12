@@ -28,7 +28,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..),
   InternalTypeElim(..), InternalVarElim(variable), ValueElim(value), 
   StatementElim(statement))
 import GOOL.Drasil.AST (Binding(..))
-import GOOL.Drasil.Helpers (angles, toState, onStateValue)
+import GOOL.Drasil.Helpers (angles, toState, onStateValue, on1StateWrapped,
+  on2StateWrapped, on3StateWrapped)
 import GOOL.Drasil.LanguageRenderer (forLabel, whileLabel, containing)
 import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, self', 
   self)
@@ -62,9 +63,9 @@ char :: (RenderSym r) => VSType r
 char = typeFromData Char charRender (text charRender)
 
 listType :: (RenderSym r) => String -> VSType r -> VSType r
-listType lst t' = t' >>= (\t -> typeFromData (List (getType t)) (lst 
-  `containing` getTypeString t) (text lst <> angles (RC.type' t)))
-  
+listType lst t' = on1StateWrapped (\t -> typeFromData (List (getType t)) (lst 
+  `containing` getTypeString t) $ text lst <> angles (RC.type' t)) $ t'
+
 void :: (RenderSym r) => VSType r
 void = typeFromData Void voidRender (text voidRender)
 
@@ -99,12 +100,10 @@ litFloat :: (RenderSym r) => Float -> SValue r
 litFloat f = mkStateVal S.float (D.float f <> text "f")
 
 inlineIf :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-inlineIf c' v1' v2' = do
-  c <- c'
-  v1 <- v1'
-  v2 <- v2' 
-  valFromData (prec c) (toState $ valueType v1) 
-    (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2) 
+inlineIf c' v1' v2' = on3StateWrapped (\ c v1 v2 -> valFromData (prec c) 
+  (toState $ valueType v1) 
+  (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2)) 
+  c' v1' v2'
   where prec cd = valuePrec cd <|> Just 0
 
 libFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
@@ -123,9 +122,8 @@ listSize v = v $. S.listSizeFunc
 -- Statements --
 
 increment1 :: (RenderSym r) => SVariable r -> MSStatement r
-increment1 vr' = do
-  vr <- zoom lensMStoVS vr'
-  mkStmt (R.increment vr)
+increment1 vr' = on1StateWrapped (\vr ->mkStmt (R.increment vr)) $ 
+  zoom lensMStoVS vr'
 
 varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc -> 
   SVariable r -> MSStatement r
@@ -140,17 +138,14 @@ varDec s d pdoc v' = do
         ptrdoc _ = empty
 
 varDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-varDecDef vr vl' = do 
-  vd <- S.varDec vr
-  vl <- zoom lensMStoVS vl'
-  mkStmt (RC.statement vd <+> equals <+> RC.value vl)
+varDecDef vr vl' = on2StateWrapped (\vd vl -> mkStmt 
+  (RC.statement vd <+> equals <+> RC.value vl)) (S.varDec vr) $ 
+  zoom lensMStoVS vl'
 
 listDec :: (RenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> 
   MSStatement r
-listDec f vl v = do 
-  sz <- zoom lensMStoVS vl
-  vd <- S.varDec v
-  mkStmt (RC.statement vd <> f sz)
+listDec f vl v = on2StateWrapped (\sz vd -> mkStmt (RC.statement vd <> f sz))
+  (zoom lensMStoVS vl) $ S.varDec v
   
 extObjDecNew :: (RenderSym r) => Library -> SVariable r -> [SValue r] -> 
   MSStatement r
@@ -181,11 +176,9 @@ for bStart bEnd sInit vGuard sUpdate b = do
     bEnd]
   
 while :: (RenderSym r) => Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
-while bStart bEnd v' b'= do 
-  v <- zoom lensMStoVS v'
-  b <- b'
-  mkStmtNoEnd (vcat [ whileLabel <+> parens (RC.value v) 
-    <+> bStart, indent $ RC.body b, bEnd]) 
+while bStart bEnd v' b'= on2StateWrapped (\v b-> mkStmtNoEnd 
+  (vcat [ whileLabel <+> parens (RC.value v) <+> bStart, indent $ RC.body b, bEnd])) 
+  (zoom lensMStoVS v') $ b'
 
 -- Methods --
 

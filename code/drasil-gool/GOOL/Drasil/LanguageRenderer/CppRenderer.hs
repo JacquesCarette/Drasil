@@ -85,7 +85,7 @@ import GOOL.Drasil.Classes (Pair(..))
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, 
   emptyIfEmpty, toCode, toState, onCodeValue, onStateValue, on2CodeValues, 
   on2StateValues, on3CodeValues, on3StateValues, onCodeList, onStateList, 
-  on2StateLists, on1StateValue1List)
+  on2StateLists, on1StateWrapped, on2StateWrapped)
 import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
   lensCStoMS, lensCStoVS, lensMStoCS, lensCStoFS, lensMStoVS, lensVStoMS, 
   modifyReturn, revFiles, addLangImport, addLangImportVS, getLangImports, 
@@ -150,8 +150,8 @@ instance (Pair p) => RenderFile (p CppSrcCode CppHdrCode) where
   
   commentedMod = pair2 commentedMod commentedMod
 
-  fileFromData fp m' = pair1 (\m -> fileFromData fp m) 
-    (\m -> fileFromData fp m) m'
+  fileFromData fp m' = pair1 (fileFromData fp) 
+    (fileFromData fp) m'
 
 instance (Pair p) => ImportSym (p CppSrcCode CppHdrCode) where
   type Import (p CppSrcCode CppHdrCode) = Doc
@@ -642,8 +642,7 @@ instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   pointerParam = pair1 pointerParam pointerParam . zoom lensMStoVS
 
 instance (Pair p) => RenderParam (p CppSrcCode CppHdrCode) where
-  paramFromData v' d = pair1 (\v -> paramFromData v d) 
-    (\v -> paramFromData v d) (zoom lensMStoVS v')
+  paramFromData v' d = pair1 (`paramFromData` d) (`paramFromData` d) (zoom lensMStoVS v')
 
 instance (Pair p) => ParamElim (p CppSrcCode CppHdrCode) where
   parameterName p = parameterName $ pfst p
@@ -1147,9 +1146,8 @@ instance InternalVarElim CppSrcCode where
   variable = varDoc . unCPPSC
 
 instance RenderVariable CppSrcCode where
-  varFromData b n t' d = do 
-    t <- t'
-    toState $ on2CodeValues (vard b n) t (toCode d)
+  varFromData b n t' d = on1StateWrapped (\t ->toState $ 
+    on2CodeValues (vard b n) t (toCode d)) t'
 
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
@@ -1241,22 +1239,17 @@ instance RenderValue CppSrcCode where
   inputFunc = addIOStreamImport $ mkStateVal string (text cin)
   printFunc = addIOStreamImport $ mkStateVal void (text cout)
   printLnFunc = addIOStreamImport $ mkStateVal void (text cout)
-  printFileFunc w' = do
-    w <- w'
-    vt <- void 
-    mkVal vt (RC.value w)
-  printFileLnFunc w' = do
-    w <- w'
-    vt <- void 
-    mkVal vt (RC.value w)
+  printFileFunc w' = on2StateWrapped (\vt w -> mkVal vt (RC.value w))
+    void w'
+  printFileLnFunc w' = on2StateWrapped (\vt w -> mkVal vt (RC.value w))
+    void w'
 
   cast = cppCast
 
   call = CP.call' cppName
 
-  valFromData p t' d = do 
-    t <- t'
-    toState $ on2CodeValues (vd p) t (toCode d)
+  valFromData p t' d = on1StateWrapped (\t -> toState $ 
+    on2CodeValues (vd p) t (toCode d)) t'
   
 instance ValueElim CppSrcCode where
   valuePrec = valPrec . unCPPSC
@@ -1481,9 +1474,8 @@ instance ParameterSym CppSrcCode where
   pointerParam = G.param cppPointerParamDoc
 
 instance RenderParam CppSrcCode where
-  paramFromData v' d = do 
-    v <- zoom lensMStoVS v' 
-    toState $ on2CodeValues pd v (toCode d)
+  paramFromData v' d = on1StateWrapped (\v-> toState $ 
+    on2CodeValues pd v (toCode d)) $ zoom lensMStoVS v' 
   
 instance ParamElim CppSrcCode where
   parameterName = variableName . onCodeValue paramVar
@@ -1790,9 +1782,8 @@ instance InternalVarElim CppHdrCode where
   variable = varDoc . unCPPHC
 
 instance RenderVariable CppHdrCode where
-  varFromData b n t' d = do 
-    t <- t' 
-    toState $ on2CodeValues (vard b n) t (toCode d)
+  varFromData b n t' d = on1StateWrapped (\t ->toState $ 
+    on2CodeValues (vard b n) t (toCode d)) t'
 
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
@@ -1887,9 +1878,8 @@ instance RenderValue CppHdrCode where
   
   call _ _ _ _ _ _ = mkStateVal void empty
 
-  valFromData p t' d = do 
-    t <- t' 
-    toState $ on2CodeValues (vd p) t (toCode d)
+  valFromData p t' d = on1StateWrapped (\t -> toState $ 
+    on2CodeValues (vd p) t (toCode d)) t'
   
 instance ValueElim CppHdrCode where
   valuePrec = valPrec . unCPPHC
@@ -2076,17 +2066,14 @@ instance MethodTypeSym CppHdrCode where
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
-  param v' = do 
-    v <- zoom lensMStoVS v'
-    paramFromData v' (R.param v)
-  pointerParam v' = do 
-    v <- zoom lensMStoVS v' 
-    paramFromData v' (cppPointerParamDoc v)
+  param v' = on1StateWrapped (\v -> paramFromData v' (R.param v)) $
+    zoom lensMStoVS v'
+  pointerParam v' = on1StateWrapped (\v -> paramFromData v' 
+    (cppPointerParamDoc v)) $ zoom lensMStoVS v' 
 
 instance RenderParam CppHdrCode where
-  paramFromData v' d = do 
-    v <- zoom lensMStoVS v' 
-    toState $ on2CodeValues pd v (toCode d)
+  paramFromData v' d = on1StateWrapped (\v -> toState $ on2CodeValues 
+    pd v (toCode d)) $ zoom lensMStoVS v' 
   
 instance ParamElim CppHdrCode where
   parameterName = variableName . onCodeValue paramVar
@@ -2423,10 +2410,8 @@ cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef :: (RenderSym r) => ([r (Value r)] -> Doc) -> SVariable r -> 
   [SValue r] -> MSStatement r
-cppListDecDef f v vls = do 
-  vdc <- varDec v
-  vs <- zoom lensMStoVS $ sequence vls
-  mkStmt (RC.statement vdc <> f vs)
+cppListDecDef f v vls = on2StateWrapped (\vdc vs -> mkStmt 
+  (RC.statement vdc <> f vs)) (varDec v) $ zoom lensMStoVS $ sequence vls
 
 cpphtop :: ModData -> Doc
 cpphtop m = vcat [
@@ -2446,23 +2431,21 @@ cppBoolType :: (RenderSym r) => VSType r
 cppBoolType = typeFromData Boolean cppBool (text cppBool)
 
 cppInfileType :: (RenderSym r) => VSType r
-cppInfileType = do 
-  t <- typeFromData File cppInfile (text cppInfile)
-  addFStreamImport t
+cppInfileType = on1StateWrapped (\t->  addFStreamImport t) $
+  typeFromData File cppInfile (text cppInfile)
 
 cppOutfileType :: (RenderSym r) => VSType r
-cppOutfileType = do 
-  t <- typeFromData File cppOutfile (text cppOutfile)
-  addFStreamImport t
+cppOutfileType =  on1StateWrapped (\t-> addFStreamImport t) $
+  typeFromData File cppOutfile (text cppOutfile)
 
 cppArrayType :: (RenderSym r) => VSType r -> VSType r
-cppArrayType t' = t' >>= (\t -> typeFromData (Array (getType t)) 
-  (getTypeString t) (RC.type' t))
+cppArrayType t' = on1StateWrapped (\t -> typeFromData (Array (getType t)) 
+  (getTypeString t) (RC.type' t)) t'
 
 cppIterType :: (RenderSym r) => VSType r -> VSType r
-cppIterType t' = t' >>= (\t -> typeFromData (Iterator (getType t)) 
+cppIterType t' = on1StateWrapped (\t -> typeFromData (Iterator (getType t)) 
   (getTypeString t `nmSpcAccess` cppIterator) (stdAccess' (RC.type' t) 
-  `nmSpcAccess'` text cppIterator))
+  `nmSpcAccess'` text cppIterator)) t'
 
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c `nmSpcAccess'` v

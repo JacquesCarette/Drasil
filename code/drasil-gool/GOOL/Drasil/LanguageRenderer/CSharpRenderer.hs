@@ -85,8 +85,8 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
   vard)
 import GOOL.Drasil.Helpers (angles, hicat, toCode, toState, onCodeValue, 
-  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
-  onCodeList, onStateList)
+  onStateValue, on2CodeValues, on1StateWrapped, on2StateValues, 
+  on3CodeValues, on3StateValues, on2StateWrapped, onCodeList, onStateList)
 import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
   addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain)
 
@@ -276,9 +276,8 @@ instance InternalVarElim CSharpCode where
   variable = varDoc . unCSC
 
 instance RenderVariable CSharpCode where
-  varFromData b n t' d = do 
-    t <- t' 
-    toState $ on2CodeValues (vard b n) t (toCode d)
+  varFromData b n t' d = on1StateWrapped (\t ->toState $ 
+    on2CodeValues (vard b n) t (toCode d)) t'
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
@@ -366,22 +365,17 @@ instance RenderValue CSharpCode where
     csWrite)
   printLnFunc = addSystemImport $ mkStateVal void (text $ csConsole `access` 
     csWriteLine)
-  printFileFunc w' = do 
-    w <- w' 
-    vt <- void
-    mkVal vt . R.printFile csWrite . RC.value $ w
-  printFileLnFunc w' = do 
-    w <- w' 
-    vt <- void
-    mkVal vt . R.printFile csWriteLine . RC.value $ w
+  printFileFunc w' = on2StateWrapped (\w vt -> 
+    mkVal vt . R.printFile csWrite . RC.value $ w) w' void
+  printFileLnFunc w' = on2StateWrapped (\w vt -> 
+    mkVal vt . R.printFile csWriteLine . RC.value $ w) w' void
   
   cast = csCast
 
   call = G.call csNamedArgSep
   
-  valFromData p t' d = do 
-    t <- t' 
-    toState $ on2CodeValues (vd p) t (toCode d)
+  valFromData p t' d = on1StateWrapped (\t -> toState $ 
+    on2CodeValues (vd p) t (toCode d)) t'
   
 instance ValueElim CSharpCode where
   valuePrec = valPrec . unCSC
@@ -578,9 +572,8 @@ instance ParameterSym CSharpCode where
   pointerParam = param
 
 instance RenderParam CSharpCode where
-  paramFromData v' d = do 
-    v <- zoom lensMStoVS v' 
-    toState $ on2CodeValues pd v (toCode d)
+  paramFromData v' d = on1StateWrapped (\v -> toState $ on2CodeValues 
+    pd v (toCode d)) $ zoom lensMStoVS v'
 
 instance ParamElim CSharpCode where
   parameterName = variableName . onCodeValue paramVar
@@ -743,11 +736,8 @@ csOutfileType = join $ modifyReturn (addLangImportVS csIO) $
 
 csLitList :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
   -> SValue r
-csLitList f t' es' = do 
-  es <- sequence es' 
-  lt <- f t'
-  mkVal lt (new' <+> RC.type' lt
-    <+> braces (valueList es))
+csLitList f t' es' = on2StateWrapped (\es lt -> mkVal lt (new' <+> RC.type' lt
+    <+> braces (valueList es))) (sequence es') $ f t'
 
 csLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 csLambda ps ex = parens (variableList ps) <+> csLambdaSep <+> RC.value ex

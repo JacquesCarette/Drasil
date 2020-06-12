@@ -55,8 +55,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
   lambda, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
+  subAssign, increment, objDecNew, print, closeFile, returnStmt, 
+  valStmt, comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
   constructor, function, docFunc, buildClass, extraClass, implementingClass, docClass, 
   commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
@@ -74,7 +74,7 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  onCodeList, onStateList)
+  onCodeList, onStateList, on1StateWrapped, on2StateWrapped, on3StateWrapped)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   currParameters, revFiles, addLangImportVS, getLangImports, addLibImportVS, 
   getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
@@ -270,9 +270,8 @@ instance InternalVarElim PythonCode where
   variable = varDoc . unPC
 
 instance RenderVariable PythonCode where
-  varFromData b n t' d = do 
-    t <- t'
-    toState $ on2CodeValues (vard b n) t (toCode d)
+  varFromData b n t' d = on1StateWrapped (\t ->toState $ 
+    on2CodeValues (vard b n) t (toCode d)) t'
 
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
@@ -378,16 +377,13 @@ instance RenderValue PythonCode where
   printFileFunc _ = mkStateVal void empty
   printFileLnFunc _ = mkStateVal void empty
   
-  cast t' v' = do 
-    t <- t'
-    v <- v' 
-    mkVal t . R.castObj (RC.type' t) $ RC.value v
+  cast t' v' = on2StateWrapped (\t v-> mkVal t . R.castObj (RC.type' t) 
+    $ RC.value v) t' v' 
 
   call = G.call pyNamedArgSep
 
-  valFromData p t' d = do 
-    t <- t'
-    toState $ on2CodeValues (vd p) t (toCode d)
+  valFromData p t' d = on1StateWrapped (\t -> toState $ 
+    on2CodeValues (vd p) t (toCode d)) t'
 
 instance ValueElim PythonCode where
   valuePrec = valPrec . unPC
@@ -406,10 +402,8 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  listSize v' = do 
-    f <- listSizeFunc
-    v <- v'
-    mkVal (functionType f) (pyListSize (RC.value v) (RC.function f))
+  listSize v' = on2StateWrapped(\f v->mkVal (functionType f) 
+    (pyListSize (RC.value v) (RC.function f))) listSizeFunc  v'
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess
@@ -447,20 +441,17 @@ instance FunctionElim PythonCode where
   function = funcDoc . unPC
 
 instance InternalAssignStmt PythonCode where
-  multiAssign vars vals = do 
-    vrs <- zoom lensMStoVS $ sequence vars
-    vls <- zoom lensMStoVS $ sequence vals
-    mkStmtNoEnd (R.multiAssign vrs vls) 
+  multiAssign vars vals = on2StateWrapped (\vrs vls-> 
+    mkStmtNoEnd (R.multiAssign vrs vls)) (zoom lensMStoVS $ sequence vars) $
+    zoom lensMStoVS $ sequence vals
 
 instance InternalIOStmt PythonCode where
   printSt = pyPrint
 
 instance InternalControlStmt PythonCode where
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs' = do 
-    vs <- zoom lensMStoVS $ sequence vs'
-    (mkStmtNoEnd . R.return') vs
-    -- zoom lensMStoVS $ onStateList (mkStmtNoEnd . R.return') vs
+  multiReturn vs' = on1StateWrapped (\vs -> (mkStmtNoEnd . R.return') vs) $
+    zoom lensMStoVS $ sequence vs'
 
 instance RenderStatement PythonCode where
   stmt = G.stmt
@@ -563,15 +554,10 @@ instance ControlStatement PythonCode where
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"
   forRange i initv finalv stepv = forEach i (range initv finalv stepv)
-  forEach i' v' b' = do
-    i <- zoom lensMStoVS i'
-    v <- zoom lensMStoVS v'
-    b <- b'
-    mkStmtNoEnd (pyForEach i v b)
-  while v' b' = do 
-    v <- zoom lensMStoVS v'
-    b <- b'
-    mkStmtNoEnd (pyWhile v b)
+  forEach i' v' b' = on3StateWrapped (\i v b->mkStmtNoEnd (pyForEach i v b))
+    (zoom lensMStoVS i') (zoom lensMStoVS v') b'
+  while v' b' = on2StateWrapped (\v b -> mkStmtNoEnd (pyWhile v b))
+    (zoom lensMStoVS v') b'
 
   tryCatch = G.tryCatch pyTryCatch
 
@@ -610,9 +596,8 @@ instance ParameterSym PythonCode where
   pointerParam = param
 
 instance RenderParam PythonCode where
-  paramFromData v' d = do 
-    v <- zoom lensMStoVS v'
-    toState $ on2CodeValues pd v (toCode d)
+  paramFromData v' d = on1StateWrapped (\v -> toState $ on2CodeValues 
+    pd v (toCode d)) $ zoom lensMStoVS v'
   
 instance ParamElim PythonCode where
   parameterName = variableName . onCodeValue paramVar
@@ -875,12 +860,9 @@ pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v
 
 pyInlineIf :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-pyInlineIf c' v1' v2' = do 
-  c <- c'
-  v1 <- v1'
-  v2 <- v2'
+pyInlineIf = on3StateWrapped (\c v1 v2-> 
   valFromData (valuePrec c) (toState $ valueType v1) 
-    (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
+    (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)) 
 
 pyLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> variableList ps <> colon <+> RC.value ex

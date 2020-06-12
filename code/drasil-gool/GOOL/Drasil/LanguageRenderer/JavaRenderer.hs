@@ -87,7 +87,7 @@ import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception,
   stdExc, HasException(..))
 import GOOL.Drasil.Helpers (emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
-  onCodeList, onStateList)
+  onCodeList, onStateList, on1StateWrapped,on2StateWrapped)
 import GOOL.Drasil.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS, 
   lensVStoMS, modifyReturn, modifyReturnList, revFiles, addProgNameToPaths, 
   addLangImport, addLangImportVS, addExceptionImports, getModuleName, 
@@ -278,9 +278,8 @@ instance InternalVarElim JavaCode where
   variable = varDoc . unJC
 
 instance RenderVariable JavaCode where
-  varFromData b n t' d =  do 
-    t <- t'
-    toState $ on2CodeValues (vard b n) t (toCode d)
+  varFromData b n t' d =  on1StateWrapped (\t ->toState $ 
+    on2CodeValues (vard b n) t (toCode d)) t'
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
@@ -387,22 +386,17 @@ instance RenderValue JavaCode where
     (obj jScanner) (parens $ new' <+> jScanner' <> parens (jSystem jStdIn))
   printFunc = mkStateVal void (jSystem (jStdOut `access` jPrint))
   printLnFunc = mkStateVal void (jSystem (jStdOut `access` jPrintLn))
-  printFileFunc w' = do 
-    w <- w' 
-    vt <- void
-    mkVal vt . R.printFile jPrint $ RC.value w
-  printFileLnFunc w' = do 
-    w <- w' 
-    vt <- void
-    mkVal vt . R.printFile jPrintLn $ RC.value w
+  printFileFunc w' = on2StateWrapped (\vt w-> mkVal vt . R.printFile jPrint $ 
+    RC.value w) void w'
+  printFileLnFunc w' = on2StateWrapped (\vt w-> mkVal vt . R.printFile jPrintLn $ 
+    RC.value w) void w'
   
   cast = jCast
 
   call = CP.call' jName
   
-  valFromData p t' d = do 
-    t <- t'
-    toState $ on2CodeValues (vd p) t (toCode d)
+  valFromData p t' d = on1StateWrapped (\t -> toState $ 
+    on2CodeValues (vd p) t (toCode d)) t'
 
 instance ValueElim JavaCode where
   valuePrec = valPrec . unJC
@@ -605,9 +599,8 @@ instance ParameterSym JavaCode where
   pointerParam = param
 
 instance RenderParam JavaCode where
-  paramFromData v' d = do 
-    v <- zoom lensMStoVS v'
-    toState $ on2CodeValues pd v (toCode d)
+  paramFromData v' d = on1StateWrapped (\v -> toState $ on2CodeValues 
+    pd v (toCode d)) $ zoom lensMStoVS v'
 
 instance ParamElim JavaCode where
   parameterName = variableName . onCodeValue paramVar
@@ -725,12 +718,12 @@ jStringType = typeFromData String jString (text jString)
 jInfileType :: (RenderSym r) => VSType r
 jInfileType = do 
   tpf <- typeFromData File jScanner jScanner'
-  modifyReturn (addLangImportVS $ utilImport jScanner) $ tpf
+  modifyReturn (addLangImportVS $ utilImport jScanner) tpf
 
 jOutfileType :: (RenderSym r) => VSType r
 jOutfileType = do 
   tpf <- typeFromData File jPrintWriter (text jPrintWriter)
-  modifyReturn (addLangImportVS $ ioImport jPrintWriter) $ tpf
+  modifyReturn (addLangImportVS $ ioImport jPrintWriter) tpf
 
 jExtends, jImplements, jFinal, jScanner', jThrows, jLambdaSep :: Doc
 jExtends = text "extends"
@@ -818,7 +811,7 @@ jArrayType = arrayType (obj jObject)
 jFileType :: (RenderSym r) => VSType r
 jFileType = do 
   tpf <- typeFromData File jFile (text jFile)
-  modifyReturn (addLangImportVS $ ioImport jFile) $ tpf
+  modifyReturn (addLangImportVS $ ioImport jFile) tpf
 
 jFileWriterType :: (RenderSym r) => VSType r
 jFileWriterType = do 
@@ -879,7 +872,7 @@ jCast = join .: on2StateValues (\t v -> jCast' (getType t) (getType $ valueType
           (RC.value v))
 
 jConstDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-jConstDecDef v' def' = do 
+jConstDecDef v' def' = do
   v <- zoom lensMStoVS v'
   def <- zoom lensMStoVS def'
   mkStmt $ jFinal <+> RC.type' (variableType v) <+> 

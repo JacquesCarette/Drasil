@@ -15,7 +15,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (uOp, bOp, value)
 import GOOL.Drasil.LanguageRenderer (unOpDocD, unOpDocD', binOpDocD, binOpDocD')
 import GOOL.Drasil.AST (Terminator(..), Binding(..), OpData, od)
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.Helpers (toCode, toState, on2StateValues)
+import GOOL.Drasil.Helpers (toCode, toState, on2StateValues, on2StateWrapped,
+  on3StateWrapped)
 import GOOL.Drasil.State (VS)
 
 import Text.PrettyPrint.HughesPJ (Doc, parens, text)
@@ -36,7 +37,7 @@ mkStmtNoEnd = flip stmtFromData Empty
 
 -- | Constructs a value in a stateful context
 mkStateVal :: (RenderSym r) => VSType r -> Doc -> SValue r
-mkStateVal t d = valFromData Nothing t d
+mkStateVal = valFromData Nothing
 
 -- | Constructs a value in a non-stateful context
 mkVal :: (RenderSym r) => r (Type r) -> Doc -> SValue r
@@ -46,7 +47,7 @@ mkVal t = valFromData Nothing (toState t)
 
 -- | Constructs a dynamic variable in a stateful context
 mkStateVar :: (RenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStateVar n t d = varFromData Dynamic n t d
+mkStateVar = varFromData Dynamic
 
 -- | Constructs a dynamic variable in a non-stateful context
 mkVar :: (RenderSym r) => String -> r (Type r) -> Doc -> SVariable r
@@ -54,7 +55,7 @@ mkVar n t = varFromData Dynamic n (toState t)
 
 -- | Constructs a static variable in a stateful context
 mkStaticVar :: (RenderSym r) => String -> VSType r -> Doc -> SVariable r
-mkStaticVar n t d = varFromData Static n t d
+mkStaticVar = varFromData Static
 
 -- Operators --
 
@@ -114,11 +115,9 @@ mkUnExpr d u v = mkExpr (uOpPrec u) (valueType v) (d (RC.uOp u) (RC.value v))
 -- value passed to the operator is a float, this function preserves that type 
 -- by casting the result to a float.
 unExprNumDbl :: (RenderSym r) => VSUnOp r -> SValue r -> SValue r
-unExprNumDbl u' v' = do
-  u <- u'
-  v <- v'
+unExprNumDbl u' v' = on2StateWrapped (\u v-> do 
   w <- mkUnExpr unOpDocD u v
-  unExprCastFloat (valueType v) w
+  unExprCastFloat (valueType v) w) u' v'
 
 -- Only used by unExprNumDbl
 unExprCastFloat :: (RenderSym r) => r (Type r) -> r (Value r) -> SValue r
@@ -129,48 +128,36 @@ unExprCastFloat t = castType (getType t) . toState
 -- | To be used when the type of the value is different from the type of the
 -- resulting expression. The type of the result is passed as a parameter.
 typeUnExpr :: (RenderSym r) => VSUnOp r -> VSType r -> SValue r -> SValue r
-typeUnExpr u' t' s' = do 
-  u <- u'
-  t <- t'
-  s <- s'
-  mkExpr (uOpPrec u) t (unOpDocD (RC.uOp u) (RC.value s))
+typeUnExpr u' t' s' = on3StateWrapped (\u t s -> mkExpr (uOpPrec u) t 
+  (unOpDocD (RC.uOp u) (RC.value s))) u' t' s'
 
 -- | Constructs binary expressions like v + w, for some operator + and values v 
 -- and w, parenthesizing v and w if needed.
 binExpr :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExpr b' v1' v2'= do 
-  b <- b'
-  v1 <- v1'
-  v2 <- v2'
+binExpr b' v1' v2'= on3StateWrapped (\b v1 v2 ->
   let exprType = numType (valueType v1) (valueType v2)
       exprRender = binExprRender b v1 v2
-  mkExpr (bOpPrec b) exprType exprRender
+  in mkExpr (bOpPrec b) exprType exprRender) b' v1' v2'
 
 -- | Constructs binary expressions like pow(v,w), for some operator pow and
 -- values v and w
 binExpr' :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExpr' b' v1' v2'= do 
-  b <- b'
-  v1 <- v1'
-  v2 <- v2'
+binExpr' b' v1' v2'= on3StateWrapped (\b v1 v2 ->
   let exprType = numType (valueType v1) (valueType v2)
       exprRender = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
-  mkExpr 9 exprType exprRender
+  in mkExpr 9 exprType exprRender) b' v1' v2'
 
 -- | To be used in languages where the binary operator returns a double. If 
 -- either value passed to the operator is a float, this function preserves that 
 -- type by casting the result to a float.
 binExprNumDbl' :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExprNumDbl' b' v1' v2' = do
-  b <- b'
-  v1 <- v1'
-  v2 <- v2'
+binExprNumDbl' b' v1' v2' = on3StateWrapped (\b v1 v2 -> do
   let t1 = valueType v1
       t2 = valueType v2
       exprType = numType t1 t2
       exprRender = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
   e <- mkExpr 9 exprType exprRender
-  binExprCastFloat t1 t2 e
+  binExprCastFloat t1 t2 e) b' v1' v2'
 
 -- Only used by binExprCastFloat
 binExprCastFloat :: (RenderSym r) => r (Type r) -> r (Type r) -> r (Value r) -> 

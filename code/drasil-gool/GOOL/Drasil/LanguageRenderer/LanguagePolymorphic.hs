@@ -55,7 +55,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..), BlockElim(..),
   StatementElim(statement), ClassElim(..), ModuleElim(..), BlockCommentElim(..))
 import GOOL.Drasil.AST (Binding(..), Terminator(..), isSource)
 import GOOL.Drasil.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode, 
-  toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree)
+  toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
+  on2StateWrapped, on3StateWrapped)
 import GOOL.Drasil.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt, 
   functionDox, classDox, moduleDox, getterName, setterName, valueList, 
   namedArgList)
@@ -202,11 +203,8 @@ valueOf :: (RenderSym r) => SVariable r -> SValue r
 valueOf v' = v' >>= (\v -> mkVal (variableType v) (RC.variable v))
 
 arg :: (RenderSym r) => SValue r -> SValue r -> SValue r
-arg n' args' = do 
-  n <- n'
-  args <- args'
-  s <- S.string
-  mkVal s (R.arg n args)
+arg n' args' = on3StateWrapped (\s n args -> mkVal s (R.arg n args)) 
+  (S.string) n' args'
 
 argsList :: (RenderSym r) => String -> SValue r
 argsList l = mkStateVal (S.arrayType S.string) (text l)
@@ -246,10 +244,8 @@ lambda f ps' ex' = do
   valFromData (Just 0) ft (f ps ex)
 
 objAccess :: (RenderSym r) => SValue r -> VSFunction r -> SValue r
-objAccess v' f' = do 
-  v <- v'
-  f <- f' 
-  mkVal (functionType f) (R.objAccess (RC.value v) (RC.function f))
+objAccess v' f' = on2StateWrapped (\v f-> mkVal (functionType f) 
+  (R.objAccess (RC.value v) (RC.function f))) v' f'
 
 objMethodCall :: (RenderSym r) => Label -> VSType r -> SValue r -> [SValue r] 
   -> NamedArgs r -> SValue r
@@ -317,23 +313,17 @@ emptyStmt = mkStmtNoEnd empty
 
 assign :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
   MSStatement r
-assign t vr' v' = do 
-  vr <- zoom lensMStoVS vr'
-  v <- zoom lensMStoVS v'
-  stmtFromData (R.assign vr v) t
+assign t vr' v' = on2StateWrapped (\vr v-> stmtFromData (R.assign vr v) t)
+  (zoom lensMStoVS vr') $ zoom lensMStoVS v'
 
 subAssign :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
   MSStatement r
-subAssign t vr' v' = do 
-  vr <- zoom lensMStoVS vr'
-  v <- zoom lensMStoVS v'
-  stmtFromData (R.subAssign vr v) t
+subAssign t vr' v' = on2StateWrapped (\vr v-> stmtFromData 
+  (R.subAssign vr v) t) (zoom lensMStoVS vr') $ zoom lensMStoVS v'
 
 increment :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-increment vr' v'= do 
-  vr <- zoom lensMStoVS vr'
-  v <- zoom lensMStoVS v'
-  mkStmt $ R.addAssign vr v
+increment vr' v'= on2StateWrapped (\vr v-> mkStmt $ R.addAssign vr v) 
+  (zoom lensMStoVS vr') $ zoom lensMStoVS v'
 
 objDecNew :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 objDecNew v vs = S.varDecDef v (newObj (onStateValue variableType v) vs)
@@ -369,17 +359,17 @@ closeFile :: (RenderSym r) => Label -> SValue r -> MSStatement r
 closeFile n f = S.valStmt $ objMethodCallNoParams S.void f n
 
 returnStmt :: (RenderSym r) => Terminator -> SValue r -> MSStatement r
-returnStmt t v' = (zoom lensMStoVS v') >>= (\v -> stmtFromData (R.return' [v]) t)
+returnStmt t v' = zoom lensMStoVS v' >>= (\v -> stmtFromData (R.return' [v]) t)
 
 valStmt :: (RenderSym r) => Terminator -> SValue r -> MSStatement r
-valStmt t v' = (zoom lensMStoVS v') >>= (\v ->stmtFromData (RC.value v) t)
+valStmt t v' = zoom lensMStoVS v' >>= (\v ->stmtFromData (RC.value v) t)
 
 comment :: (RenderSym r) => Doc -> Label -> MSStatement r
 comment cs c = mkStmtNoEnd (R.comment c cs)
 
 throw :: (RenderSym r) => (r (Value r) -> Doc) -> Terminator -> Label -> 
   MSStatement r
-throw f t l = (zoom lensMStoVS (S.litString l)) >>=
+throw f t l = zoom lensMStoVS (S.litString l) >>=
   (\msg -> stmtFromData (f msg) t)
 
 -- ControlStatements --
@@ -405,10 +395,8 @@ ifCond ifStart elif bEnd (c:cs) eBody =
 
 tryCatch :: (RenderSym r) => (r (Body r) -> r (Body r) -> Doc) -> MSBody r -> 
   MSBody r -> MSStatement r
-tryCatch f tb1' tb2' = do 
-  tb1 <- tb1'
-  tb2 <- tb2' 
-  mkStmtNoEnd (f tb1 tb2)
+tryCatch f tb1' tb2' = on2StateWrapped (\tb1 tb2 -> mkStmtNoEnd (f tb1 tb2)) 
+  (tb1') $ tb2' 
 
 -- Methods --
 
@@ -418,7 +406,7 @@ construct n = zoom lensMStoVS $ typeFromData (Object n) n empty
 param :: (RenderSym r) => (r (Variable r) -> Doc) -> SVariable r -> 
   MSParameter r
 param f v' = join $ modifyReturnFunc (addParameter . variableName) 
-  (\v -> paramFromData v' (f v)) (zoom lensMStoVS v')
+  (paramFromData v' . f) (zoom lensMStoVS v')
 
 method :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> VSType r 
   -> [MSParameter r] -> MSBody r -> SMethod r
@@ -516,4 +504,4 @@ fileFromData f fpath mdl' = do
 -- Helper functions
 
 setEmpty :: (RenderSym r) => MSStatement r -> MSStatement r
-setEmpty s' = s' >>= (\s -> (mkStmtNoEnd . RC.statement) s) 
+setEmpty s' = s' >>= mkStmtNoEnd . RC.statement 

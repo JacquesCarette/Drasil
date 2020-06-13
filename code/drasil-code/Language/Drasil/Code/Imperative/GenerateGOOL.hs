@@ -46,6 +46,7 @@ genModule :: (OOProg r) => Name -> Description ->
   [GenState (Maybe (SClass r))] -> GenState (SFile r)
 genModule n desc = genModuleWithImports n desc []
 
+-- Generates a Doxygen configuration file, if the user has comments enabled
 genDoxConfig :: (AuxiliarySym r) => GOOLState ->
   GenState [r (Auxiliary r)]
 genDoxConfig s = do
@@ -57,6 +58,9 @@ genDoxConfig s = do
 
 data ClassType = Primary | Auxiliary
 
+-- Generates a primary or auxiliary class with the given name, description, 
+-- state variables, and methods. The Maybe Name parameter is the name of the 
+-- interface the class implements, if applicable.
 mkClass :: (OOProg r) => ClassType -> Name -> Maybe Name -> Description -> 
   [CSStateVar r] -> GenState [SMethod r] ->
   GenState (SClass r)
@@ -74,11 +78,13 @@ mkClass s n l desc vs mths = do
     then docClass desc c
     else c
 
+--  Generates a primary class
 primaryClass :: (OOProg r) => Name -> Maybe Name -> Description -> 
   [CSStateVar r] -> GenState [SMethod r] -> 
   GenState (SClass r)
 primaryClass = mkClass Primary
 
+-- Generates an auxiliary class (for when a module contains multiple classes)
 auxClass :: (OOProg r) => Name -> Maybe Name -> Description -> 
   [CSStateVar r] -> GenState [SMethod r] -> 
   GenState (SClass r)

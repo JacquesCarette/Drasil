@@ -8,8 +8,10 @@ import Language.Drasil.Chunk.Code (CodeIdea(..), CodeChunk)
 
 import Control.Lens ((^.), makeLenses, view)
 
+-- Determines whether a parameter is passed by value or by reference
 data PassBy = Val | Ref
 
+-- Chunk representing a parameter
 data ParameterChunk = PC {_pcc :: CodeChunk
                          , passBy :: PassBy}
 makeLenses ''ParameterChunk
@@ -34,5 +36,6 @@ pcAuto c = PC cdch (choosePB $ cdch ^. typ)
         choosePB (Actor _) = Ref
         choosePB _ = Val
 
+-- Constructs a pass-by-value parameter
 pcVal :: (CodeIdea c) => c -> ParameterChunk
 pcVal c = PC (codeChunk c) Val

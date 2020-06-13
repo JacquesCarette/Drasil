@@ -45,6 +45,9 @@ getInConstructorParams = do
   ps <- getParams cname In $ getCParams (cname `elem` defList g)
   return $ filter ((Just cname /=) . flip Map.lookup (clsMap g) . codeName) ps
 
+-- The inputs to the function for reading inputs are the input file name, and -- the inParams object if inputs are bundled and input components are separated.
+-- The latter is needed because we want to populate the object through state 
+-- transitions, not by returning it.
 getInputFormatIns :: GenState [CodeVarChunk]
 getInputFormatIns = do
   g <- get
@@ -53,11 +56,14 @@ getInputFormatIns = do
       getIns _ _ = []
   getParams "get_input" In $ quantvar inFileName : getIns (inStruct g) (inMod g)
 
+-- The outputs from the function for reading inputs are the inputs.
 getInputFormatOuts :: GenState [CodeVarChunk]
 getInputFormatOuts = do
   g <- get
   getParams "get_input" Out $ extInputs $ codeSpec g
 
+-- The inputs to the function for calculating derived inputs are any variables 
+-- used in the equations for the derived inputs.
 getDerivedIns :: GenState [CodeVarChunk]
 getDerivedIns = do
   g <- get
@@ -66,11 +72,15 @@ getDerivedIns = do
       reqdVals = concatMap (flip codevars (sysinfodb s) . codeEquat) dvals
   getParams "derived_values" In reqdVals
 
+-- The outputs from the function for calculating derived inputs are the derived inputs
 getDerivedOuts :: GenState [CodeVarChunk]
 getDerivedOuts = do
   g <- get
   getParams "derived_values" Out $ map codeChunk $ derivedInputs $ codeSpec g
 
+-- The parameters to the function for checking constraints on the inputs are 
+-- any inputs with constraints, and any variables used in the expressions of 
+-- the constraints.
 getConstraintParams :: GenState [CodeVarChunk]
 getConstraintParams = do 
   g <- get
@@ -81,12 +91,15 @@ getConstraintParams = do
         (getConstraints cm varsList))
   getParams "input_constraints" In reqdVals
 
+-- The parameters to a calculation function are any variables used in the 
+-- expression representing the calculation.
 getCalcParams :: CodeDefinition -> GenState [CodeVarChunk]
 getCalcParams c = do
   g <- get
   getParams (codeName c) In $ delete (quantvar c) $ concatMap (`codevars'` 
     (sysinfodb $ codeSpec g)) (codeEquat c : c ^. auxExprs)
 
+-- The parameters to the function for printing outputs are the outputs.
 getOutputParams :: GenState [CodeVarChunk]
 getOutputParams = do
   g <- get

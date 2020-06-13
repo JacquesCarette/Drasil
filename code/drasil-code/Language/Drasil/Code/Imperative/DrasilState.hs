@@ -74,18 +74,26 @@ data DrasilState = DrasilState {
 }
 makeLenses ''DrasilState
 
+-- | Determines whether input modules are Combined or Separated, based on the 
+-- Modularity stored in DrasilState
 inMod :: DrasilState -> InputModule
 inMod ds = inMod' $ modular ds
   where inMod' Unmodular = Combined
         inMod' (Modular im) = im
 
+-- Adds a message to the design log if the given Space-CodeType match has not 
+-- already been logged.
 addToDesignLog :: Space -> CodeType -> Doc -> DrasilState -> DrasilState
 addToDesignLog s t l ds = if (s,t) `elem` (ds ^. loggedSpaces) then ds 
   else over designLog ($$ l) ds
 
+-- Adds a Space-CodeType pair to the loggedSpaces list, to prevent a duplicate 
+-- log from being generated for that Space-CodeType pair.
 addLoggedSpace :: Space -> CodeType -> DrasilState -> DrasilState
 addLoggedSpace s t = over loggedSpaces ((s,t):) 
 
+-- Builds the module export map, mapping each function and state variable name 
+-- in the generated code to the name of the generated module that exports it
 modExportMap :: CodeSpec -> Choices -> [Mod] -> ModExportMap
 modExportMap cs@CodeSpec {
   pName = prn,
@@ -110,6 +118,8 @@ modExportMap cs@CodeSpec {
         defModName Unmodular _ = prn
         defModName _ nm = nm
 
+-- Builds the class definition map, mapping each generated method and state 
+-- variable name to the name of the generated class where it is defined
 clsDefMap :: CodeSpec -> Choices -> [Mod] -> ClassDefinitionMap
 clsDefMap cs@CodeSpec {
   inputs = ins,

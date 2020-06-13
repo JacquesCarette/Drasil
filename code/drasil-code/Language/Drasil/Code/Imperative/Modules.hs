@@ -60,10 +60,16 @@ import Text.PrettyPrint.HughesPJ (render)
 
 ---- MAIN ---
 
+-- Generates a controller module
 genMain :: (OOProg r) => GenState (SFile r)
 genMain = genModule "Control" "Controls the flow of the program" 
   [genMainFunc] []
 
+-- Generates a main function, to act as the controller for an SCS program.
+-- The controller declares input and constant variables, then calls the 
+-- functions for reading input values, calculating derived inputs, checking 
+-- constraints, calculating outputs, and printing outputs.
+-- Returns Nothing if the user chose to generate a library.
 genMainFunc :: (OOProg r) => GenState (Maybe (SMethod r))
 genMainFunc = do
     g <- get
@@ -153,16 +159,21 @@ initConsts = do
       declObj _ Const = Nothing
   getDecl (conStruct g) (inStruct g)
 
+-- Generates a statement to declare the variable representing the log file, 
+-- if the user chose to turn on logs for variable assignments
 initLogFileVar :: (OOProg r) => [Logging] -> [MSStatement r]
 initLogFileVar l = [varDec varLogFile | LogVar `elem` l]
 
 ------- INPUT ----------
 
-chooseInModule :: (OOProg r) => InputModule -> GenState 
-  [SFile r]
+-- Generates either a single module containing all input-related components, or 
+-- separate modules for each input-related component, depending on the user's 
+-- modularity choice
+chooseInModule :: (OOProg r) => InputModule -> GenState [SFile r]
 chooseInModule Combined = genInputModCombined
 chooseInModule Separated = genInputModSeparated
 
+-- Generates separate modules for each input-related component
 genInputModSeparated :: (OOProg r) => GenState [SFile r]
 genInputModSeparated = do
   ipDesc <- modDesc inputParametersDesc
@@ -175,6 +186,7 @@ genInputModSeparated = do
     genModule "DerivedValues" dvDesc [genInputDerived Pub] [],
     genModule "InputConstraints" icDesc [genInputConstraints Pub] []]
 
+-- Generates a single module containing all input-related components
 genInputModCombined :: (OOProg r) => GenState [SFile r]
 genInputModCombined = do
   ipDesc <- modDesc inputParametersDesc
@@ -187,6 +199,10 @@ genInputModCombined = do
   ic <- genInputClass Primary
   liftS $ genMod ic
 
+-- Returns a function for generating a state variable for a constant.
+-- Either generates a declare-define statement for a regular state variable
+-- (if user chose Var),
+-- or a declare-define statement for a constant variable (if user chose Const).
 constVarFunc :: (OOProg r) => ConstantRepr ->
   (SVariable r -> SValue r -> CSStateVar r)
 constVarFunc Var = stateVarDef public dynamic
@@ -230,6 +246,9 @@ genInputClass scp = do
   genClass (filt ins) (filt cs)
   where cname = "InputParameters"
 
+-- Generates a constructor for the input class, where the constructor calls the 
+-- input-related functions. Returns Nothing if no input-related functions are
+-- generated.
 genInputConstructor :: (OOProg r) => GenState (Maybe (SMethod r))
 genInputConstructor = do
   g <- get
@@ -245,6 +264,7 @@ genInputConstructor = do
   genCtor $ any (`elem` dl) ["get_input", "derived_values", 
     "input_constraints"]
 
+-- Generates a function for calculating derived inputs.
 genInputDerived :: (OOProg r) => ScopeTag ->
   GenState (Maybe (SMethod r))
 genInputDerived s = do
@@ -388,6 +408,7 @@ printExpr (Str _) _ = []
 printExpr e db = [printStr $ " (" ++ render (exprDoc db Implementation Linear e)
   ++ ")"]
 
+-- Generates a function for reading inputs from a file.
 genInputFormat :: (OOProg r) => ScopeTag -> 
   GenState (Maybe (SMethod r))
 genInputFormat s = do
@@ -407,12 +428,17 @@ genInputFormat s = do
         return $ Just mthd
   genInFormat $ "get_input" `elem` defList g
 
+-- Defines the DataDesc for the format we require for input files. When we make
+-- input format a design variability, this will read the user's design choices 
+-- instead of returning a fixed DataDesc.
 genDataDesc :: GenState DataDesc
 genDataDesc = do
   g <- get
   return $ junkLine : 
     intersperse junkLine (map singleton (extInputs $ codeSpec g))
 
+-- Generates a sample input file compatible with the generated program, 
+-- if the user chose to.
 genSampleInput :: (AuxiliarySym r) => GenState [r (Auxiliary r)]
 genSampleInput = do
   g <- get
@@ -422,11 +448,14 @@ genSampleInput = do
 
 ----- CONSTANTS -----
 
+-- Generates a module containing the class where constants are stored. 
 genConstMod :: (OOProg r) => GenState [SFile r]
 genConstMod = do
   cDesc <- modDesc $ liftS constModDesc
   liftS $ genModule "Constants" cDesc [] [genConstClass Primary]
 
+-- Generates a class to store constants, if constants are mapped to the 
+-- Constants class in the class definition map, otherwise returns Nothing.
 genConstClass :: (OOProg r) => ClassType ->
   GenState (Maybe (SClass r))
 genConstClass scp = do
@@ -451,6 +480,7 @@ genConstClass scp = do
 
 ------- CALC ----------
 
+-- Generates a module containing calculation functions
 genCalcMod :: (OOProg r) => GenState (SFile r)
 genCalcMod = do
   g <- get
@@ -458,6 +488,9 @@ genCalcMod = do
   genModuleWithImports "Calculations" calcModDesc (concatMap (^. imports) $ 
     elems elmap) (map (fmap Just . genCalcFunc) (execOrder $ codeSpec g)) []
 
+-- Generates a calculation function corresponding to the CodeDefinition.
+-- For solving ODEs, the ExtLibState containing the information needed to 
+-- generate code is found by looking it up in the external library map.
 genCalcFunc :: (OOProg r) => CodeDefinition -> 
   GenState (SMethod r)
 genCalcFunc cdef = do
@@ -488,6 +521,8 @@ genCalcFunc cdef = do
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
+-- Generates a calculation block for the given CodeDefinition, and assigns the 
+-- result to a variable (if CalcAssign) or returns the result (if CalcReturn)
 genCalcBlock :: (OOProg r) => CalcType -> CodeDefinition -> Expr ->
   GenState (MSBlock r)
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
@@ -498,6 +533,9 @@ genCalcBlock CalcAssign v e = do
   return $ block $ assign vv ee : l
 genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 
+-- Generates a calculation block for a value defined by cases. 
+-- If the function is defined for every case, the final case is captured by an 
+-- else clause, otherwise an error-throwing else-clause is generated.
 genCaseBlock :: (OOProg r) => CalcType -> CodeDefinition -> Completeness 
   -> [(Expr,Relation)] -> GenState (MSBlock r)
 genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
@@ -515,11 +553,13 @@ genCaseBlock t v c cs = do
 
 ----- OUTPUT -------
 
+-- Generates a module containing the function for printing outputs.
 genOutputMod :: (OOProg r) => GenState [SFile r]
 genOutputMod = do
   ofDesc <- modDesc $ liftS outputFormatDesc
   liftS $ genModule "OutputFormat" ofDesc [genOutputFormat] []
 
+-- Generates a function for printing output values.
 genOutputFormat :: (OOProg r) => GenState (Maybe (SMethod r))
 genOutputFormat = do
   g <- get

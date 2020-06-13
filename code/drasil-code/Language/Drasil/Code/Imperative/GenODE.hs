@@ -16,6 +16,10 @@ import Text.PrettyPrint.HughesPJ (Doc, ($$), text)
 
 type ODEGenInfo = (Maybe FilePath, [(Name, ExtLibState)])
 
+-- Chooses the first ODELibPckg from the list specified by the user that is 
+-- compatible with the current target Lang. 
+-- Interprets the ExternalLibrary and ExternalLibraryCall for the selected 
+-- ODELibPckg by concretizing the ExternalLibraryCall with each of the ODEInfos
 chooseODELib :: Lang -> [ODELibPckg] -> [ODEInfo] -> State Doc ODEGenInfo
 chooseODELib _ _ [] = return (Nothing, [])
 chooseODELib l olps odes = chooseODELib' olps
@@ -27,6 +31,8 @@ chooseODELib l olps odes = chooseODELib' olps
             genExternalLibraryCall (libSpec o) $ libCall o ode)) odes) 
           else modify ($$ incompatibleLib l o) >> chooseODELib' os
 
+-- Defines a design log message based on an incompatibility between the given 
+-- Lang and chosen ODELibPckg.
 incompatibleLib :: Lang -> ODELibPckg -> Doc
 incompatibleLib lng lib = text $ "Language " ++ show lng ++ " is not " ++ 
   "compatible with chosen library " ++ libName lib ++ ", trying next choice." 

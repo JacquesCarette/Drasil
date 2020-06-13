@@ -125,7 +125,7 @@ increment1 vr' = on1StateWrapped (mkStmt . R.increment) $
   zoom lensMStoVS vr'
 
 decrement1 :: (RenderSym r) => SVariable r -> MSStatement r
-decrement1 vr = zoom lensMStoVS $ onStateValue (mkStmt . R.decrement) vr
+decrement1 vr = on1StateWrapped (mkStmt . R.decrement) $ zoom lensMStoVS vr
 
 varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc -> 
   SVariable r -> MSStatement r

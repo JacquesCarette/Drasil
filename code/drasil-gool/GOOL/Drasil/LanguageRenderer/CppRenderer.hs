@@ -2606,17 +2606,18 @@ cpphClass :: Label -> CppHdrCode ParentSpec ->
   [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode (Method CppHdrCode)] -> 
   CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Scope CppHdrCode) -> 
   CppHdrCode (Class CppHdrCode)
-cpphClass n ps vars funcs pub priv = onCodeValue (\p -> vcat [
+cpphClass n ps vars funcs pub priv = let 
+  pubs  = cpphVarsFuncsList Pub vars funcs
+  privs = cpphVarsFuncsList Priv vars funcs
+  ifEmptyPubs  = emptyIfEmpty pubs
+  ifEmptyPrivs = emptyIfEmpty privs
+  indLi = [ifEmptyPubs (RC.scope pub <> colon), ifEmptyPubs (indent pubs),
+          ifEmptyPubs (ifEmptyPrivs blank),
+          ifEmptyPrivs (RC.scope priv <> colon), ifEmptyPrivs (indent privs)]
+  in onCodeValue (\p -> vcat [ 
     classDec <+> text n <+> p <+> bodyStart,
-    indentList [
-      RC.scope pub <> colon,
-      indent pubs,
-      blank,
-      RC.scope priv <> colon,
-      indent privs],
+    indentList indLi,
     bodyEnd <> endStatement]) ps
-  where pubs = cpphVarsFuncsList Pub vars funcs
-        privs = cpphVarsFuncsList Priv vars funcs
 
 cppInOutCall :: (Label -> VSType CppSrcCode -> [SValue CppSrcCode] -> 
   SValue CppSrcCode) -> Label -> [SValue CppSrcCode] -> [SVariable CppSrcCode] 

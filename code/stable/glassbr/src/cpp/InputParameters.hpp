@@ -30,8 +30,6 @@ class InputParameters {
         double AR;
         double w_TNT;
         
-    
-    private:
 };
 
 #endif

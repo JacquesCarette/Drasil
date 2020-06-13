@@ -507,15 +507,13 @@ type SMethod a = MS (a (Method a))
 type Initializers r = [(SVariable r, SValue r)]
 
 -- The three lists are inputs, outputs, and both, respectively
-type InOutFunc r = Label -> r (Scope r) -> r (Permanence r) -> [SVariable r] -> 
-  [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r
--- Parameters are: function name, scope, permanence, brief description, 
--- input descriptions and variables, output descriptions and variables, 
--- descriptions and variables for parameters that are both input and output, 
--- function body
-type DocInOutFunc r = Label -> r (Scope r) -> r (Permanence r) -> String -> 
-  [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] 
-  -> MSBody r -> SMethod r
+type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] -> 
+  MSBody r -> SMethod r
+-- Parameters are: brief description of function, input descriptions and 
+-- variables, output descriptions and variables, descriptions and variables 
+-- for parameters that are both input and output, function body
+type DocInOutFunc r = String -> [(String, SVariable r)] -> 
+  [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 
 class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r 
   where
@@ -528,17 +526,19 @@ class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r
 
   docMain :: MSBody r -> SMethod r
 
-  function :: Label -> r (Scope r) -> r (Permanence r) -> 
-    VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+  function :: Label -> r (Scope r) -> VSType r -> [MSParameter r] -> 
+    MSBody r -> SMethod r
   mainFunction  :: MSBody r -> SMethod r
   -- Parameters are: function description, parameter descriptions, 
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> SMethod r -> SMethod r
 
-  inOutMethod :: InOutFunc r
-  docInOutMethod :: DocInOutFunc r
-  inOutFunc :: InOutFunc r
-  docInOutFunc :: DocInOutFunc r
+  -- inOutMethod and docInOutMethod both need the Permanence parameter
+  inOutMethod :: Label -> r (Scope r) -> r (Permanence r) -> InOutFunc r
+  docInOutMethod :: Label -> r (Scope r) -> r (Permanence r) -> DocInOutFunc r
+  -- inOutFunc and docInOutFunc both do not need the Permanence parameter
+  inOutFunc :: Label -> r (Scope r) -> InOutFunc r
+  docInOutFunc :: Label -> r (Scope r) -> DocInOutFunc r
 
 privMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
   -> SMethod r

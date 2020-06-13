@@ -283,13 +283,13 @@ constDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 constDecDef vr' v'= on2StateWrapped (\vr v -> mkStmt (R.constDecDef vr v)) 
   (zoom lensMStoVS vr') $ zoom lensMStoVS v'
   
-docInOutFunc :: (RenderSym r) => (r (Scope r) -> r (Permanence r) -> 
-    [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r)
-  -> r (Scope r) -> r (Permanence r) -> String -> [(String, SVariable r)] -> 
-  [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
-docInOutFunc f s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
-  (f s p (map snd is) [snd o] [] b)
-docInOutFunc f s p desc is [] [both] b = docFuncRepr desc (map fst $ both : is) 
-  [fst both] (f s p (map snd is) [] [snd both] b)
-docInOutFunc f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ os)
-  [] (f s p (map snd is) (map snd os) (map snd bs) b)
+docInOutFunc :: (RenderSym r) => ([SVariable r] -> [SVariable r] -> 
+    [SVariable r] -> MSBody r -> SMethod r) -> 
+  String -> [(String, SVariable r)] -> [(String, SVariable r)] -> 
+  [(String, SVariable r)] -> MSBody r -> SMethod r
+docInOutFunc f desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
+  (f (map snd is) [snd o] [] b)
+docInOutFunc f desc is [] [both] b = docFuncRepr desc (map fst $ both : is) 
+  [fst both] (f (map snd is) [] [snd both] b)
+docInOutFunc f desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ os)
+  [] (f (map snd is) (map snd os) (map snd bs) b)

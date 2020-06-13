@@ -71,11 +71,10 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (objVar,
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
-  increment1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
-  intFunc, multiAssignError, multiReturnError)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M ( 
-  decrement1, runStrategy, listSlice, stringListVals, stringListLists, forRange,
-  notifyObservers)
+  increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, 
+  while, intFunc, multiAssignError, multiReturnError)
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (runStrategy, 
+  listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
   BindData(..), bd, FileType(..), FileData(..), fileD, FuncData(..), fd, 
   ModData(..), md, updateMod, OpData(..), ParamData(..), pd, ProgData(..), 
@@ -663,8 +662,8 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
 
   docMain = pair1 docMain docMain
 
-  function n s p t = pairValListVal 
-    (function n (pfst s) (pfst p)) (function n (psnd s) (psnd p)) 
+  function n s t = pairValListVal 
+    (function n (pfst s)) (function n (psnd s)) 
     (zoom lensMStoVS t)
   mainFunction = pair1 mainFunction mainFunction
 
@@ -684,15 +683,15 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     (map (zoom lensMStoVS . snd) is) (map (zoom lensMStoVS . snd) os) 
     (map (zoom lensMStoVS . snd) bs)
 
-  inOutFunc n s p is os bs = pair3Lists1Val
-    (inOutFunc n (pfst s) (pfst p)) (inOutFunc n (psnd s) (psnd p))
+  inOutFunc n s is os bs = pair3Lists1Val
+    (inOutFunc n (pfst s)) (inOutFunc n (psnd s))
     (map (zoom lensMStoVS) is) (map (zoom lensMStoVS) os) 
     (map (zoom lensMStoVS) bs)
 
-  docInOutFunc n s p desc is os bs = pair3Lists1Val 
-    (\ins outs both -> docInOutFunc n (pfst s) (pfst p) desc (zip (map fst 
+  docInOutFunc n s desc is os bs = pair3Lists1Val 
+    (\ins outs both -> docInOutFunc n (pfst s) desc (zip (map fst 
       is) ins) (zip (map fst os) outs) (zip (map fst bs) both))
-    (\ins outs both -> docInOutFunc n (psnd s) (psnd p) desc (zip (map fst 
+    (\ins outs both -> docInOutFunc n (psnd s) desc (zip (map fst 
       is) ins) (zip (map fst os) outs) (zip (map fst bs) both))
     (map (zoom lensMStoVS . snd) is) (map (zoom lensMStoVS . snd) os) 
     (map (zoom lensMStoVS . snd) bs)
@@ -1335,7 +1334,7 @@ instance AssignStatement CppSrcCode where
   (&-=) = G.subAssign Semi
   (&+=) = G.increment
   (&++) = C.increment1
-  (&--) = M.decrement1
+  (&--) = C.decrement1
 
 instance DeclStatement CppSrcCode where
   varDec = C.varDec static dynamic empty
@@ -1505,13 +1504,13 @@ instance MethodSym CppSrcCode where
 
   docFunc = G.docFunc
 
-  inOutMethod n = cppsInOut (method n)
+  inOutMethod n s p = cppsInOut (method n s p)
 
-  docInOutMethod n = CP.docInOutFunc (inOutMethod n)
+  docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-  inOutFunc n = cppsInOut (function n)
+  inOutFunc n s = cppsInOut (function n s)
 
-  docInOutFunc n = CP.docInOutFunc (inOutFunc n)
+  docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
 instance RenderMethod CppSrcCode where
   intMethod m n s _ t ps b = do
@@ -2096,13 +2095,13 @@ instance MethodSym CppHdrCode where
 
   docFunc = G.docFunc
 
-  inOutMethod n = cpphInOut (method n)
+  inOutMethod n s p = cpphInOut (method n s p)
 
-  docInOutMethod n = CP.docInOutFunc (inOutMethod n)
+  docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-  inOutFunc n = cpphInOut (function n)
+  inOutFunc n s = cpphInOut (function n s)
 
-  docInOutFunc n = CP.docInOutFunc (inOutFunc n)
+  docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
 instance RenderMethod CppHdrCode where
   intMethod _ n s _ t ps _ = do
@@ -2625,17 +2624,18 @@ cpphClass :: Label -> CppHdrCode ParentSpec ->
   [CppHdrCode (StateVar CppHdrCode)] -> [CppHdrCode (Method CppHdrCode)] -> 
   CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Scope CppHdrCode) -> 
   CppHdrCode (Class CppHdrCode)
-cpphClass n ps vars funcs pub priv = onCodeValue (\p -> vcat [
+cpphClass n ps vars funcs pub priv = let 
+  pubs  = cpphVarsFuncsList Pub vars funcs
+  privs = cpphVarsFuncsList Priv vars funcs
+  ifEmptyPubs  = emptyIfEmpty pubs
+  ifEmptyPrivs = emptyIfEmpty privs
+  indLi = [ifEmptyPubs (RC.scope pub <> colon), ifEmptyPubs (indent pubs),
+          ifEmptyPubs (ifEmptyPrivs blank),
+          ifEmptyPrivs (RC.scope priv <> colon), ifEmptyPrivs (indent privs)]
+  in onCodeValue (\p -> vcat [ 
     classDec <+> text n <+> p <+> bodyStart,
-    indentList [
-      RC.scope pub <> colon,
-      indent pubs,
-      blank,
-      RC.scope priv <> colon,
-      indent privs],
+    indentList indLi,
     bodyEnd <> endStatement]) ps
-  where pubs = cpphVarsFuncsList Pub vars funcs
-        privs = cpphVarsFuncsList Priv vars funcs
 
 cppInOutCall :: (Label -> VSType CppSrcCode -> [SValue CppSrcCode] -> 
   SValue CppSrcCode) -> Label -> [SValue CppSrcCode] -> [SVariable CppSrcCode] 
@@ -2647,31 +2647,27 @@ cppInOutCall f n ins [] [out] = assign out $ f n (onStateValue variableType out)
 cppInOutCall f n ins outs both = valStmt $ f n void (map valueOf both ++ ins 
   ++ map valueOf outs)
 
-cppsInOut :: (CppSrcCode (Scope CppSrcCode) -> 
-    CppSrcCode (Permanence CppSrcCode) -> VSType CppSrcCode -> 
-    [MSParameter CppSrcCode] -> MSBody CppSrcCode -> SMethod CppSrcCode)
-  -> CppSrcCode (Scope CppSrcCode) -> CppSrcCode (Permanence CppSrcCode) -> 
+cppsInOut :: (VSType CppSrcCode -> [MSParameter CppSrcCode] -> MSBody CppSrcCode -> 
+    SMethod CppSrcCode) -> 
   [SVariable CppSrcCode] -> [SVariable CppSrcCode] -> [SVariable CppSrcCode] -> 
   MSBody CppSrcCode -> SMethod CppSrcCode
-cppsInOut f s p ins [v] [] b = f s p (onStateValue variableType v) 
+cppsInOut f ins [v] [] b = f (onStateValue variableType v) 
   (cppInOutParams ins [v] []) (on3StateValues (on3CodeValues surroundBody) 
   (varDec v) b (returnStmt $ valueOf v))
-cppsInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
+cppsInOut f ins [] [v] b = f (onStateValue variableType v) 
   (cppInOutParams ins [] [v]) (on2StateValues (on2CodeValues appendToBody) b 
   (returnStmt $ valueOf v))
-cppsInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
+cppsInOut f ins outs both b = f void (cppInOutParams ins outs both) b
 
-cpphInOut :: (CppHdrCode (Scope CppHdrCode) -> 
-    CppHdrCode (Permanence CppHdrCode) -> VSType CppHdrCode -> 
-    [MSParameter CppHdrCode] -> MSBody CppHdrCode -> SMethod CppHdrCode) 
-  -> CppHdrCode (Scope CppHdrCode) -> CppHdrCode (Permanence CppHdrCode) -> 
+cpphInOut :: (VSType CppHdrCode -> [MSParameter CppHdrCode] -> MSBody CppHdrCode -> 
+    SMethod CppHdrCode) -> 
   [SVariable CppHdrCode] -> [SVariable CppHdrCode] -> [SVariable CppHdrCode] -> 
   MSBody CppHdrCode -> SMethod CppHdrCode
-cpphInOut f s p ins [v] [] b = f s p (onStateValue variableType v) 
+cpphInOut f ins [v] [] b = f (onStateValue variableType v) 
   (cppInOutParams ins [v] []) b
-cpphInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
+cpphInOut f ins [] [v] b = f (onStateValue variableType v) 
   (cppInOutParams ins [] [v]) b
-cpphInOut f s p ins outs both b = f s p void (cppInOutParams ins outs both) b
+cpphInOut f ins outs both b = f void (cppInOutParams ins outs both) b
 
 cppInOutParams :: (RenderSym r) => [SVariable r] -> [SVariable r] -> 
   [SVariable r] -> [MSParameter r]

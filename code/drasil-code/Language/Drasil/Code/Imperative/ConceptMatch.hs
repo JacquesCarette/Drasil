@@ -1,3 +1,4 @@
+-- | Contains functions related to the choice of concept matches
 module Language.Drasil.Code.Imperative.ConceptMatch (
   chooseConcept, conceptToGOOL
 ) where
@@ -8,14 +9,19 @@ import GOOL.Drasil (SValue, OOProg, MathConstant(..))
 
 import Prelude hiding (pi)
 import qualified Data.Map as Map (map)
+import Control.Monad.State (State)
+import Text.PrettyPrint.HughesPJ (Doc)
 
--- Currently we don't have any Choices that would prevent a CodeConcept from being mapped, so we just take the head of the list of CodeConcepts
-chooseConcept :: Choices -> MatchedConceptMap
-chooseConcept chs = Map.map (chooseConcept' chs) (conceptMatch chs)
+-- | Concretizes the ConceptMatchMap in Choices to a MatchedConceptMap.
+-- Currently we don't have any Choices that would prevent a CodeConcept from 
+-- being mapped, so we just take the head of the list of CodeConcepts
+chooseConcept :: Choices -> State Doc MatchedConceptMap
+chooseConcept chs = sequence $ Map.map (chooseConcept' chs) (conceptMatch chs)
   where chooseConcept' _ [] = error $ "Empty list of CodeConcepts in the " ++ 
           "ConceptMatchMap"
-        chooseConcept' _ cs = head cs
+        chooseConcept' _ cs = return $ head cs
 
+-- | Maps CodeConcepts to corresponding GOOL values
 conceptToGOOL :: (OOProg r) => CodeConcept -> SValue r
 conceptToGOOL Pi = pi
 

@@ -1,3 +1,4 @@
+-- | Defines a type for representing ODE-solving external libraries.
 module Language.Drasil.Data.ODELibPckg (
   ODELibPckg(..), mkODELib, mkODELibNoPath
 ) where
@@ -6,8 +7,10 @@ import Language.Drasil.Code.ExternalLibrary (ExternalLibrary)
 import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall)
 import Language.Drasil.Code.Lang (Lang)
 import Language.Drasil.Data.ODEInfo (ODEInfo)
+import Language.Drasil.Mod (Name)
 
 data ODELibPckg = ODELib {
+  libName :: Name,
   libSpec :: ExternalLibrary,
   libCall :: ODEInfo -> ExternalLibraryCall,
   libPath :: Maybe FilePath,
@@ -23,10 +26,16 @@ data ODELibPckg = ODELib {
   compatibleLangs :: [Lang]
 }
 
-mkODELib :: ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> 
-  [Lang] -> ODELibPckg
-mkODELib e c f = ODELib e c (Just f)
+-- | Makes an ODELibPckg with the given name, ExternalLibrary specification, 
+-- ExternalLibraryCall specification parameterized by an ODEInfo, local file 
+-- path to the library, and list of compatible languages.
+mkODELib :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> 
+  FilePath -> [Lang] -> ODELibPckg
+mkODELib n e c f = ODELib n e c (Just f)
 
-mkODELibNoPath :: ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] 
-  -> ODELibPckg
-mkODELibNoPath e c = ODELib e c Nothing
+-- | Makes an ODELibPckg with the given name, ExternalLibrary specification, 
+-- ExternalLibraryCall specification parameterized by an ODEInfo, and list of 
+-- compatible languages.
+mkODELibNoPath :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) 
+  -> [Lang] -> ODELibPckg
+mkODELibNoPath n e c = ODELib n e c Nothing

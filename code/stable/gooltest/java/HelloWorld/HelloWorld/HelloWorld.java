@@ -53,8 +53,8 @@ public class HelloWorld {
             c += 17;
             a++;
             d++;
-            c = c - 1;
-            b = b - 1;
+            c--;
+            b--;
             ArrayList<Integer> myList = new ArrayList<Integer>(5);
             char myObj = 'o';
             final String myConst = "Imconstant";

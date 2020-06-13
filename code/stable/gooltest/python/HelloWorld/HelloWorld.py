@@ -39,8 +39,8 @@ elif (b == 5) :
     c += 17;
     a = a + 1
     d = d + 1
-    c = c - 1
-    b = b - 1
+    c -= 1
+    b -= 1
     myList = []
     myObj = 'o'
     myConst = "Imconstant"

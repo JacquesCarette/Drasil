@@ -1651,6 +1651,7 @@ uncty :: Double -> Maybe Int -> Uncertainty
 defaultUncrt :: Uncertainty
 uncVal :: HasUncertainty x => x -> Double
 uncPrec :: HasUncertainty x => x -> Maybe Int
+exact :: Uncertainty
 
 -- | Language of units (how to build them up) UName for the base cases,
 --   otherwise build up. Probably a 7-vector would be better (less

@@ -12,16 +12,29 @@
 
 -- | re-export smart constructors for external code writing
 module Language.Drasil.Code
-spaceToCodeType :: Space -> [CodeType]
 
 -- | Takes code
 makeCode :: [FileData] -> [AuxData] -> Code
 
 -- | Creates the requested <a>Code</a> by producing files
 createCodeFiles :: Code -> IO ()
+
+-- | Initializes the generator's DrasilState. String parameter is a string
+--   representing the date. [Expr] parameter is the sample input values
+--   provided by the user
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
+
+-- | Generates a package with the given DrasilState. The passed
+--   un-representation functions determine which target language the
+--   package will be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
+
+-- | Reads data from a file and converts the values to Exprs. The file must
+--   be formatted according to the DataDesc passed as a parameter.
 readWithDataDesc :: FilePath -> DataDesc' -> IO [Expr]
+
+-- | Defines the DataDesc for the file containing a sample data set, which
+--   a user must supply if they want to generate a sample input file.
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
 data Choices
 Choices :: [Lang] -> Modularity -> Structure -> ConstantStructure -> ConstantRepr -> ConceptMatchMap -> SpaceMatch -> ImplementationType -> [ODELibPckg] -> [ODEInfo] -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> Verbosity -> Visibility -> [Logging] -> FilePath -> [AuxFile] -> Choices
@@ -77,8 +90,17 @@ Combined :: InputModule
 Separated :: InputModule
 data CodeConcept
 Pi :: CodeConcept
+
+-- | Builds a ConceptMatchMap from an association list of chunks and
+--   CodeConcepts
 matchConcepts :: HasUID c => [(c, [CodeConcept])] -> ConceptMatchMap
+
+-- | Specifies which CodeType should be used to represent each mathematical
+--   Space. [CodeType] is preferentially-ordered, first CodeType that does
+--   not conflict with other choices will be selected.
 type SpaceMatch = Space -> [CodeType]
+
+-- | Builds a SpaceMatch from an association list of Spaces and CodeTypes.
 matchSpaces :: [(Space, [CodeType])] -> SpaceMatch
 newtype AuxFile
 SampleInput :: FilePath -> AuxFile
@@ -86,15 +108,33 @@ getSampleData :: Choices -> Maybe FilePath
 data Visibility
 Show :: Visibility
 Hide :: Visibility
+
+-- | Default choices to be used as the base from which design
+--   specifications can be built.
 defaultChoices :: Choices
 data CodeSpec
 [CodeSpec] :: HasName a => {pName :: Name, authors :: [a], inputs :: [Input], extInputs :: [Input], derivedInputs :: [Derived], outputs :: [Output], execOrder :: [Def], cMap :: ConstraintMap, constants :: [Const], constMap :: ConstantMap, mods :: [Mod], sysinfodb :: ChunkDB} -> CodeSpec
+
+-- | Get a UID of a chunk corresponding to a Func
 funcUID :: Func -> UID
+
+-- | FIXME: hack. Use for implementation-stage functions that need to be
+--   displayed in the SRS.
 funcUID' :: Func -> UID
+
+-- | Convert a Func to an implementation-stage QuantityDict representing
+--   the function.
 asVC :: Func -> QuantityDict
+
+-- | FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
+
+-- | Defines a CodeSpec based on the SystemInformation, Choices, and Mods
+--   defined by the user.
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 relToQD :: ExprRelat c => ChunkDB -> c -> QDefinition
+
+-- | Define an assignment statement
 ($:=) :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt
 data Mod
 Mod :: Name -> Description -> [Import] -> [Class] -> [Func] -> Mod
@@ -116,12 +156,31 @@ data FuncStmt
 [FVal] :: Expr -> FuncStmt
 [FMulti] :: [FuncStmt] -> FuncStmt
 [FAppend] :: Expr -> Expr -> FuncStmt
+
+-- | Define a public state variable based on the given CodeVarChunk
 pubStateVar :: CodeVarChunk -> StateVariable
+
+-- | Define a private state variable based on the given CodeVarChunk
 privStateVar :: CodeVarChunk -> StateVariable
+
+-- | Define a declare-define statement.
 fDecDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt
+
+-- | Define a for-loop. Quantity is for the iteration variable, Expr is the
+--   upper bound at that variable (the variable will start with a value of
+--   0). [FuncStmt] is for the loop body.
 ffor :: (Quantity c, MayHaveUnit c) => c -> Expr -> [FuncStmt] -> FuncStmt
+
+-- | Define a function that reads data from a file, according to the given
+--   DataDesc.
 funcData :: Name -> Description -> DataDesc -> Func
+
+-- | Define a function by providing the FuncStmts for its body. Other
+--   parameters are function name, description, list of parameters, space
+--   of the returned value, and description of the returned value.
 funcDef :: (Quantity c, MayHaveUnit c) => Name -> Description -> [c] -> Space -> Maybe Description -> [FuncStmt] -> Func
+
+-- | Define a Mod with the given Name, Description, Classes, and Functions.
 packmod :: Name -> Description -> [Class] -> [Func] -> Mod
 junkLine :: Data
 multiLine :: LinePattern -> Delim -> Data
@@ -242,20 +301,20 @@ makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> 
 auxHelperDoc :: AuxiliarySym r => r (AuxHelper r) -> Doc
 auxFromData :: AuxiliarySym r => FilePath -> Doc -> r (Auxiliary r)
 data AuxData
-AD :: FilePath -> Doc -> AuxData
-[auxFilePath] :: AuxData -> FilePath
-[auxDoc] :: AuxData -> Doc
 data PackData
-PackD :: ProgData -> [AuxData] -> PackData
-[packProg] :: PackData -> ProgData
-[packAux] :: PackData -> [AuxData]
 data CodeChunk
 data CodeVarChunk
 data CodeFuncChunk
+
+-- | Construct a CodeVarChunk from a Quantity
 quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
+
+-- | Construct a CodeFuncChunk from a Quantity
 quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
 ccObjVar :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
+
+-- | Constructs an Expr representing the field of an actor
 field :: CodeVarChunk -> CodeVarChunk -> Expr
 data ODEInfo
 ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> Expr -> Expr -> Expr -> [Expr] -> ODEOptions -> ODEInfo
@@ -280,13 +339,22 @@ RK45 :: ODEMethod
 BDF :: ODEMethod
 Adams :: ODEMethod
 data ODELibPckg
-ODELib :: String -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
-[libName] :: ODELibPckg -> String
+ODELib :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
+[libName] :: ODELibPckg -> Name
 [libSpec] :: ODELibPckg -> ExternalLibrary
 [libCall] :: ODELibPckg -> ODEInfo -> ExternalLibraryCall
 [libPath] :: ODELibPckg -> Maybe FilePath
 [compatibleLangs] :: ODELibPckg -> [Lang]
+
+-- | Makes an ODELibPckg with the given name, ExternalLibrary
+--   specification, ExternalLibraryCall specification parameterized by an
+--   ODEInfo, local file path to the library, and list of compatible
+--   languages.
 mkODELib :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
+
+-- | Makes an ODELibPckg with the given name, ExternalLibrary
+--   specification, ExternalLibraryCall specification parameterized by an
+--   ODEInfo, and list of compatible languages.
 mkODELibNoPath :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
 unPP :: PythonProject a -> a
 unJP :: JavaProject a -> a

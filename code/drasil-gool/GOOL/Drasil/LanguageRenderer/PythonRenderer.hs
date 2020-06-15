@@ -39,16 +39,17 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment', intClass)
 import GOOL.Drasil.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
-  forLabel, inLabel, whileLabel, tryLabel, exceptionObj', listSep', argv, 
-  listSep, access, valueList, variableList, parameterList, surroundBody)
-import qualified GOOL.Drasil.LanguageRenderer as R (multiStmt, body, 
+  forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
+  argv, listSep, access, valueList, variableList, parameterList, surroundBody)
+import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, fabs, log10, log, 
+  exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, 
   multiAssign, return', classVar, listSetFunc, castObj, dynamic, break, 
   continue, addComments, commentedMod, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, negateOp, csc, sec, 
+  multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
   plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, arrayElem, 
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess, 
@@ -60,7 +61,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   constructor, function, docFunc, buildClass, extraClass, implementingClass, docClass, 
   commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
@@ -139,7 +140,7 @@ instance RenderFile PythonCode where
 
 instance ImportSym PythonCode where
   type Import PythonCode = Doc
-  langImport n = toCode $ pyImport <+> text n
+  langImport n = toCode $ importLabel <+> text n
   modImport = langImport
 
 instance ImportElim PythonCode where
@@ -179,7 +180,7 @@ instance BlockElim PythonCode where
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData
   bool = toState $ typeFromData Boolean "" empty
-  int = G.int
+  int = CP.int
   float = error pyFloatError
   double = toState $ typeFromData Double pyDouble (text pyDouble)
   char = toState $ typeFromData Char "" empty
@@ -713,9 +714,6 @@ initName = "__init__"
 pyName :: String
 pyName = "Python"
 
-pyImport :: Doc
-pyImport = text "import"
-
 pyInt, pyDouble, pyString, pyVoid :: String
 pyInt = "int"
 pyDouble = "float"
@@ -788,43 +786,43 @@ pyNotOp :: (Monad r) => VSOp r
 pyNotOp = unOpPrec "not"
 
 pySqrtOp :: (Monad r) => VSOp r
-pySqrtOp = mathFunc "sqrt"
+pySqrtOp = mathFunc R.sqrt
 
 pyAbsOp :: (Monad r) => VSOp r
-pyAbsOp = mathFunc "fabs"
+pyAbsOp = mathFunc R.fabs
 
 pyLogOp :: (Monad r) => VSOp r
-pyLogOp = mathFunc "log10"
+pyLogOp = mathFunc R.log10
 
 pyLnOp :: (Monad r) => VSOp r
-pyLnOp = mathFunc "log"
+pyLnOp = mathFunc R.log
 
 pyExpOp :: (Monad r) => VSOp r
-pyExpOp = mathFunc "exp"
+pyExpOp = mathFunc R.exp
 
 pySinOp :: (Monad r) => VSOp r
-pySinOp = mathFunc "sin"
+pySinOp = mathFunc R.sin
 
 pyCosOp :: (Monad r) => VSOp r
-pyCosOp = mathFunc "cos"
+pyCosOp = mathFunc R.cos
 
 pyTanOp :: (Monad r) => VSOp r
-pyTanOp = mathFunc "tan"
+pyTanOp = mathFunc R.tan
 
 pyAsinOp :: (Monad r) => VSOp r
-pyAsinOp = mathFunc "asin"
+pyAsinOp = mathFunc R.asin
 
 pyAcosOp :: (Monad r) => VSOp r
-pyAcosOp = mathFunc "acos"
+pyAcosOp = mathFunc R.acos
 
 pyAtanOp :: (Monad r) => VSOp r
-pyAtanOp = mathFunc "atan"
+pyAtanOp = mathFunc R.atan
 
 pyFloorOp :: (Monad r) => VSOp r
-pyFloorOp = mathFunc "floor"
+pyFloorOp = mathFunc R.floor
 
 pyCeilOp :: (Monad r) => VSOp r
-pyCeilOp = mathFunc "ceil"
+pyCeilOp = mathFunc R.ceil
 
 addmathImport :: VS a -> VS a
 addmathImport = (>>) $ modify (addLangImportVS pyMath)

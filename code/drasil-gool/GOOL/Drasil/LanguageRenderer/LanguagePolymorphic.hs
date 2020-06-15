@@ -2,7 +2,7 @@
 
 -- | Implementations defined here are valid for any language renderer.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
-  multiBody, block, multiBlock, int, listInnerType, obj, negateOp, csc, sec, 
+  multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
   plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
   classVarCheckStatic, arrayElem, litChar, litDouble, litInt, litString, 
@@ -94,12 +94,6 @@ multiBlock :: (RenderSym r, Monad r) => [MSBlock r] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
-
-intRender :: String
-intRender = "int"
-
-int :: (RenderSym r) => VSType r
-int = toState $ typeFromData Integer intRender (text intRender)
 
 listInnerType :: (RenderSym r) => VSType r -> VSType r
 listInnerType t = t >>= (convType . getInnerType . getType)

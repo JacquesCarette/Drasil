@@ -39,6 +39,9 @@ type GSProgram a = GS (a (Program a))
 
 -- In relation to GOOL, the type variable r can be considered as short for "representation"
 
+-- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
+-- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
+
 class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, 
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
   InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,

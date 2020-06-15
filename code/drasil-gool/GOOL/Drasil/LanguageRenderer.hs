@@ -4,11 +4,12 @@
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
-  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, 
+  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, importLabel,
   blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
-  constDec', exceptionObj', new', self', array', listSep', argc, argv, args, 
-  constDec, exceptionObj, mainFunc, new, self, array, listSep, access, 
-  containing, mathFunc, addExt,
+  constDec', exceptionObj', new', this', self', array', listSep', argc, argv, 
+  args, constDec, exceptionObj, mainFunc, new, this, self, array, listSep, 
+  sqrt, abs, fabs, log10, log, exp, sin, cos, tan, asin, acos, atan, floor, 
+  ceil, pow, access, containing, mathFunc, addExt,
   
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
@@ -38,7 +39,8 @@ import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod,
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 
 import Data.List (last)
-import Prelude hiding (break,print,last,mod,(<>))
+import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,
+  atan,floor,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, colon,
   comma)
@@ -48,9 +50,9 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 ----------------------------------------
 
 classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
-  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, 
-  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
-  endStatement, constDec', exceptionObj', new', self', array', listSep' :: Doc
+  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, importLabel,
+  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
+  constDec', exceptionObj', new', this', self', array', listSep' :: Doc
 classDec = text "class"
 dot = text "."
 commentStart = text "//"
@@ -64,6 +66,7 @@ whileLabel = text "while"
 tryLabel = text "try"
 catchLabel = text "catch"
 throwLabel = text "throw"
+importLabel = text "import"
 blockCmtStart = text "/*"
 blockCmtEnd = text "*/"
 docCmtStart = text "/**"
@@ -73,11 +76,12 @@ endStatement = semi
 constDec' = text constDec
 exceptionObj' = text exceptionObj
 new' = text new
+this' = text this
 self' = text self
 array' = text array
 listSep' = text listSep
 
-argc, argv, args, constDec, exceptionObj, mainFunc, new, self, array, 
+argc, argv, args, constDec, exceptionObj, mainFunc, new, this, self, array, 
   listSep :: String
 argc = "argc"
 argv = "argv"
@@ -86,9 +90,28 @@ constDec = "const"
 exceptionObj = "Exception"
 mainFunc = "main"
 new = "new"
-self = "this"
+this = "this"
+self = "self"
 array = "[]"
 listSep = ", "
+
+sqrt, abs, fabs, log10, log, exp, sin, cos, tan, asin, acos, atan, floor, 
+  ceil, pow :: String
+sqrt = "sqrt"
+abs = "abs"
+fabs = "fabs"
+log10 = "log10"
+log = "log"
+exp = "exp"
+sin = "sin"
+cos = "cos"
+tan = "tan"
+asin = "asin"
+acos = "acos"
+atan = "atan"
+floor = "floor"
+ceil = "ceil"
+pow = "pow"
 
 access :: String -> String -> String
 access q n = q ++ "." ++ n

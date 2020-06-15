@@ -39,11 +39,12 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
-  catchLabel, throwLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, 
-  bodyEnd, endStatement, commentStart, exceptionObj', new', args, exceptionObj, 
-  mainFunc, new, listSep, access, containing, mathFunc, variableList, 
-  parameterList, appendToBody, surroundBody, intValue)
-import qualified GOOL.Drasil.LanguageRenderer as R (package, class', multiStmt, 
+  catchLabel, throwLabel, importLabel, blockCmtStart, blockCmtEnd, docCmtStart, 
+  bodyStart, bodyEnd, endStatement, commentStart, exceptionObj', new', args, 
+  exceptionObj, mainFunc, new, listSep, access, containing, mathFunc, 
+  variableList, parameterList, appendToBody, surroundBody, intValue)
+import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, 
+  sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class', multiStmt,
   body, printFile, param, listDec, classVar, cast, castObj, static, dynamic, 
   break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
   commentedItem)
@@ -51,7 +52,7 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, csc, sec, cot, 
+  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, 
   negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
@@ -64,13 +65,14 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   implementingClass, docClass, commentedClass, modFromData, fileDoc, 
   docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (  
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
   funcType, arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, 
   openFileW, openFileA, forEach, docMain, mainFunction, stateVar, buildModule', 
-  litArray, call', listSizeFunc, listAccessFunc')
+  litArray, call', listSizeFunc, listAccessFunc', doubleRender, double,
+  floatRender, float, string')
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -189,11 +191,11 @@ instance BlockElim JavaCode where
 instance TypeSym JavaCode where
   type Type JavaCode = TypeData
   bool = jBoolType
-  int = G.int
+  int = CP.int
   float = C.float
   double = C.double
   char = C.char
-  string = jStringType
+  string = CP.string'
   infile = jInfileType
   outfile = jOutfileType
   listType = jListType
@@ -218,19 +220,19 @@ instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData
   notOp = C.notOp
   negateOp = G.negateOp
-  sqrtOp = jUnaryMath "sqrt"
-  absOp = jUnaryMath "abs"
-  logOp = jUnaryMath "log10"
-  lnOp = jUnaryMath "log"
-  expOp = jUnaryMath "exp"
-  sinOp = jUnaryMath "sin"
-  cosOp = jUnaryMath "cos"
-  tanOp = jUnaryMath "tan"
-  asinOp = jUnaryMath "asin"
-  acosOp = jUnaryMath "acos"
-  atanOp = jUnaryMath "atan"
-  floorOp = jUnaryMath "floor"
-  ceilOp = jUnaryMath "ceil"
+  sqrtOp = jUnaryMath R.sqrt
+  absOp = jUnaryMath R.abs
+  logOp = jUnaryMath R.log10
+  lnOp = jUnaryMath R.log
+  expOp = jUnaryMath R.exp
+  sinOp = jUnaryMath R.sin
+  cosOp = jUnaryMath R.cos
+  tanOp = jUnaryMath R.tan
+  asinOp = jUnaryMath R.asin
+  acosOp = jUnaryMath R.acos
+  atanOp = jUnaryMath R.atan
+  floorOp = jUnaryMath R.floor
+  ceilOp = jUnaryMath R.ceil
 
 instance BinaryOpSym JavaCode where
   type BinaryOp JavaCode = OpData
@@ -244,7 +246,7 @@ instance BinaryOpSym JavaCode where
   minusOp = G.minusOp
   multOp = G.multOp
   divideOp = G.divideOp
-  powerOp = powerPrec $ mathFunc "pow"
+  powerOp = powerPrec $ mathFunc R.pow
   moduloOp = G.moduloOp
   andOp = C.andOp
   orOp = C.orOp
@@ -704,13 +706,10 @@ jName :: String
 jName = "Java"
 
 jImport :: Label -> Doc
-jImport n = text ("import " ++ n) <> endStatement
+jImport n = importLabel <+> text n <> endStatement
 
 jBoolType :: (RenderSym r) => VSType r
 jBoolType = toState $ typeFromData Boolean jBool (text jBool)
-
-jStringType :: (RenderSym r) => VSType r
-jStringType = toState $ typeFromData String jString (text jString)
 
 jInfileType :: (RenderSym r) => VSType r
 jInfileType = modifyReturn (addLangImportVS $ utilImport jScanner) $ 
@@ -728,7 +727,7 @@ jScanner' = text jScanner
 jThrows = text "throws"
 jLambdaSep = text "->"
 
-arrayList, jBool, jBool', jInteger, jFloat, jDouble, jString, jObject, jScanner,
+arrayList, jBool, jBool', jInteger, jObject, jScanner,
   jPrintWriter, jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jAsList, jStdIn, 
   jStdOut, jPrint, jPrintLn, jEquals, jParseInt, jParseDbl, jParseFloat, 
   jIndex, jListAdd, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
@@ -737,9 +736,6 @@ arrayList = "ArrayList"
 jBool = "boolean"
 jBool' = "Boolean"
 jInteger = "Integer"
-jFloat = "Float"
-jDouble = "Double"
-jString = "String"
 jObject = "Object"
 jScanner = "Scanner"
 jPrintWriter = "PrintWriter"
@@ -755,8 +751,8 @@ jPrint = "print"
 jPrintLn = "println"
 jEquals = "equals"
 jParseInt = jInteger `access` "parseInt"
-jParseDbl = jDouble `access` "parseDouble"
-jParseFloat = jFloat `access` "parseFloat"
+jParseDbl = CP.doubleRender `access` "parseDouble"
+jParseFloat = CP.floatRender `access` "parseFloat"
 jIndex = "indexOf"
 jListAdd = "add"
 jListAccess = "get"
@@ -788,16 +784,12 @@ jListType t = do
   t >>= (jListType' . getType)
   where jListType' Integer = toState $ typeFromData (List Integer) 
           lstInt (text lstInt)
-        jListType' Float = toState $ typeFromData (List Float) 
-          lstFloat (text lstFloat)
-        jListType' Double = toState $ typeFromData (List Double) 
-          lstDouble (text lstDouble)
+        jListType' Float = C.listType arrayList CP.float
+        jListType' Double = C.listType arrayList CP.double
         jListType' Boolean = toState $ typeFromData (List Boolean)
           lstBool (text lstBool)
         jListType' _ = C.listType arrayList t
         lstInt = arrayList `containing` jInteger
-        lstFloat = arrayList `containing` jFloat
-        lstDouble = arrayList `containing` jDouble
         lstBool = arrayList `containing` jBool'
 
 jArrayType :: VSType JavaCode

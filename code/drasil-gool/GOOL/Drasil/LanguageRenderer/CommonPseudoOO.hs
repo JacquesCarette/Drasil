@@ -1,12 +1,13 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
-module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (
+module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
   funcType, listSetFunc, listAccessFunc, buildModule, arrayType, pi, notNull, 
   printSt, arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, 
   docMain, mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
-  listAccessFunc', string, constDecDef, docInOutFunc
+  listAccessFunc', string, constDecDef, docInOutFunc, doubleRender, double, 
+  self, floatRender, float, string'
 ) where
 
 import Utils.Drasil (indent)
@@ -15,7 +16,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable, 
   SValue, VSFunction, MSStatement, SMethod, CSStateVar, SClass, FSModule, 
   MixedCall, PermanenceSym(..), 
-  TypeSym(infile, outfile, listInnerType, iterator), 
+  TypeSym(infile, outfile, listInnerType, obj, iterator), 
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType), 
   ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=), 
   ScopeSym(..))
@@ -39,14 +40,15 @@ import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
   on2StateValues, onStateList)
 import GOOL.Drasil.LanguageRenderer (array', new', args, array, access, 
   mathFunc, functionDox, valueList, intValue)
-import qualified GOOL.Drasil.LanguageRenderer as R (module', print, stateVar, 
-  stateVarList, constDecDef, extVar, objVar, listAccessFunc)
+import qualified GOOL.Drasil.LanguageRenderer as R (self, self', module', 
+  print, stateVar, stateVarList, constDecDef, extVar, objVar, listAccessFunc)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar, mkVar)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, docFuncRepr)
 import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS, 
-  lensMStoVS, getLangImports, getLibImports, getModuleImports, setClassName)
+  lensMStoVS, lensVStoMS, getClassName, getLangImports, getLibImports, 
+  getModuleImports, setClassName)
 
 import Prelude hiding (print,pi,(<>))
 import Data.Composition ((.:))
@@ -57,7 +59,15 @@ import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   brackets, braces, vcat, equals)
 
--- Python, C#, and Java --
+-- Python, Java, C#, and C++ --
+
+intRender :: String
+intRender = "int"
+
+int :: (RenderSym r) => VSType r
+int = toState $ typeFromData Integer intRender (text intRender)
+
+-- Python, Java, and C# --
 
 bindingError :: String -> String
 bindingError l = "Binding unimplemented in " ++ l
@@ -285,3 +295,31 @@ docInOutFunc f desc is [] [both] b = docFuncRepr desc (map fst $ both : is)
   [fst both] (f (map snd is) [] [snd both] b)
 docInOutFunc f desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ os)
   [] (f (map snd is) (map snd os) (map snd bs) b)
+
+-- Java, C#, and Swift --
+
+doubleRender :: String
+doubleRender = "Double"
+
+double :: (RenderSym r) => VSType r
+double = toState $ typeFromData Double doubleRender (text doubleRender)
+
+-- Python and Swift --
+
+self :: (RenderSym r) => SVariable r
+self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (obj l) 
+  R.self')
+
+-- Java and Swift --
+
+floatRender :: String
+floatRender = "Float"
+
+float :: (RenderSym r) => VSType r
+float = toState $ typeFromData Float floatRender (text floatRender)
+
+stringRender' :: String
+stringRender' = "String"
+
+string' :: (RenderSym r) => VSType r
+string' = toState $ typeFromData String stringRender' (text stringRender')

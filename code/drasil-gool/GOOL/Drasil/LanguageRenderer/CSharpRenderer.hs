@@ -52,7 +52,7 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt,
   mkStateVal, mkVal, mkVar, VSOp, unOpPrec, powerPrec, unExpr, unExpr', 
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, csc, sec, cot, 
+  multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, 
   negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
@@ -64,13 +64,13 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   method, getMethod, setMethod, constructor, function, docFunc, buildClass, 
   extraClass, implementingClass, docClass, commentedClass, modFromData, fileDoc, 
   docMod, fileFromData)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, 
   listSetFunc, listAccessFunc, arrayType, pi, notNull, printSt, arrayDec, 
   arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, mainFunction, 
-  stateVar, buildModule', string, constDecDef, docInOutFunc)
+  stateVar, buildModule', string, constDecDef, docInOutFunc, doubleRender)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -185,7 +185,7 @@ instance BlockElim CSharpCode where
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData
   bool = addSystemImport csBoolType
-  int = G.int
+  int = CP.int
   float = C.float
   double = C.double
   char = C.char
@@ -688,7 +688,7 @@ csForEach = text "foreach"
 csNamedArgSep = colon <> space
 csLambdaSep = text "=>"
 
-csSystem, csConsole, csGeneric, csIO, csList, csInt, csFloat, csDouble, csBool, 
+csSystem, csConsole, csGeneric, csIO, csList, csInt, csFloat, csBool, 
   csChar, csParse, csReader, csWriter, csReadLine, csWrite, csWriteLine, 
   csIndex, csListAdd, csListAppend, csClose, csEOS, csSplit, csMain,
   csFunc :: String
@@ -699,7 +699,6 @@ csIO = csSysAccess "IO"
 csList = "List"
 csInt = "Int32"
 csFloat = "Single"
-csDouble = "Double"
 csBool = "Boolean"
 csChar = "Char"
 csParse = "Parse"
@@ -749,7 +748,7 @@ csFloatParse :: SValue CSharpCode -> SValue CSharpCode
 csFloatParse v = extFuncApp csFloat csParse float [v] 
 
 csDblParse :: SValue CSharpCode -> SValue CSharpCode
-csDblParse v = extFuncApp csDouble csParse double [v] 
+csDblParse v = extFuncApp CP.doubleRender csParse double [v] 
 
 csBoolParse :: SValue CSharpCode -> SValue CSharpCode
 csBoolParse v = extFuncApp csBool csParse bool [v] 

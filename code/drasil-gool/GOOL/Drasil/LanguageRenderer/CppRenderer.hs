@@ -45,7 +45,8 @@ import GOOL.Drasil.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
   listSep', argc, argv, constDec, mainFunc, containing, functionDox, valueList, 
   parameterList, appendToBody, surroundBody, getterName, setterName)
-import qualified GOOL.Drasil.LanguageRenderer as R (self', self, multiStmt, 
+import qualified GOOL.Drasil.LanguageRenderer as R (this', this, sqrt, fabs,
+  log10, log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, multiStmt,
   body, param, stateVar, constVar, cast, castObj, static, dynamic, break, 
   continue, private, public, blockCmt, docCmt, addComments, commentedMod, 
   commentedItem)
@@ -53,7 +54,7 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkStateVar, mkVar, VSOp, mkOp, unOpPrec, powerPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, negateOp, csc, sec, 
+  multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
   plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, arrayElem, 
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess, 
@@ -65,7 +66,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   constructor, function, docFunc, buildClass, extraClass, 
   implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (objVar, 
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int, objVar,
   funcType, listSetFunc, buildModule, litArray, call', listSizeFunc, 
   listAccessFunc', string, constDecDef, docInOutFunc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
@@ -1034,7 +1035,7 @@ instance BlockElim CppSrcCode where
 instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
   bool = cppBoolType
-  int = G.int
+  int = CP.int
   float = C.float
   double = C.double
   char = C.char
@@ -1128,8 +1129,8 @@ instance VariableSym CppSrcCode where
     maybe id ((>>) . modify . addModuleImportVS) 
       (Map.lookup (getTypeString t) cm) $ classVar (return t) v
   objVar = CP.objVar
-  objVarSelf = onStateValue (\v -> mkVar (R.self ++ ptrAccess ++ variableName v)
-    (variableType v) (R.self' <> ptrAccess' <> RC.variable v))
+  objVarSelf = onStateValue (\v -> mkVar (R.this ++ ptrAccess ++ variableName v)
+    (variableType v) (R.this' <> ptrAccess' <> RC.variable v))
   arrayElem i = G.arrayElem (litInt i)
   iterVar l t = mkStateVar l (iterator t) (parens $ cppDeref <> text l)
 
@@ -1668,7 +1669,7 @@ instance BlockElim CppHdrCode where
 instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData
   bool = cppBoolType
-  int = G.int
+  int = CP.int
   float = C.float
   double = C.double
   char = C.char
@@ -2319,49 +2320,49 @@ argvDesc = "List of command-line arguments"
 mainReturnDesc = "exit code"
 
 cppSqrtOp :: (Monad r) => VSOp r
-cppSqrtOp = cppUnaryMath "sqrt"
+cppSqrtOp = cppUnaryMath R.sqrt
 
 cppAbsOp :: (Monad r) => VSOp r
-cppAbsOp = cppUnaryMath "fabs"
+cppAbsOp = cppUnaryMath R.fabs
 
 cppLogOp :: (Monad r) => VSOp r
-cppLogOp = cppUnaryMath "log10"
+cppLogOp = cppUnaryMath R.log10
 
 cppLnOp :: (Monad r) => VSOp r
-cppLnOp = cppUnaryMath "log"
+cppLnOp = cppUnaryMath R.log
 
 cppExpOp :: (Monad r) => VSOp r
-cppExpOp = cppUnaryMath "exp"
+cppExpOp = cppUnaryMath R.exp
 
 cppSinOp :: (Monad r) => VSOp r
-cppSinOp = cppUnaryMath "sin"
+cppSinOp = cppUnaryMath R.sin
 
 cppCosOp :: (Monad r) => VSOp r
-cppCosOp = cppUnaryMath "cos"
+cppCosOp = cppUnaryMath R.cos
 
 cppTanOp :: (Monad r) => VSOp r
-cppTanOp = cppUnaryMath "tan"
+cppTanOp = cppUnaryMath R.tan
 
 cppAsinOp :: (Monad r) => VSOp r
-cppAsinOp = cppUnaryMath "asin"
+cppAsinOp = cppUnaryMath R.asin
 
 cppAcosOp :: (Monad r) => VSOp r
-cppAcosOp = cppUnaryMath "acos"
+cppAcosOp = cppUnaryMath R.acos
 
 cppAtanOp :: (Monad r) => VSOp r
-cppAtanOp = cppUnaryMath "atan"
+cppAtanOp = cppUnaryMath R.atan
 
 cppFloorOp :: (Monad r) => VSOp r
-cppFloorOp = cppUnaryMath "floor"
+cppFloorOp = cppUnaryMath R.floor
 
 cppCeilOp :: (Monad r) => VSOp r
-cppCeilOp = cppUnaryMath "ceil"
+cppCeilOp = cppUnaryMath R.ceil
 
 cppUnaryMath :: (Monad r) => String -> VSOp r
 cppUnaryMath = addMathHImport . unOpPrec 
 
 cppPowerOp :: (Monad r) => VSOp r
-cppPowerOp = powerPrec "pow"
+cppPowerOp = powerPrec R.pow
 
 getLineFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
 getLineFunc f v = funcApp cppGetLine string [f, v]

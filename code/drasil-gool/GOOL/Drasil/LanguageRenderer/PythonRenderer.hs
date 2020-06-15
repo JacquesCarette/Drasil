@@ -40,7 +40,7 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   method, stateVar, class', module', blockComment', intClass)
 import GOOL.Drasil.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
-  argv, listSep, access, valueList, variableList, parameterList, surroundBody)
+  argv, listSep, piLabel, access, variableList, parameterList, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, fabs, log10, log, 
   exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, 
   multiAssign, return', classVar, listSetFunc, castObj, dynamic, break, 
@@ -66,7 +66,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, 
-  funcType, listSetFunc, listAccessFunc, buildModule)
+  funcType, listSetFunc, listAccessFunc, buildModule, notNull, litArray)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   increment1, runStrategy, stringListVals, stringListLists, observerIndex, 
   checkState)
@@ -94,7 +94,7 @@ import qualified Control.Monad.State as S (get)
 import Data.List (intercalate, sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
-  vcat, colon, brackets, isEmpty)
+  vcat, colon, brackets, isEmpty, quotes)
 
 pyExt :: String
 pyExt = "py"
@@ -281,13 +281,12 @@ instance ValueSym PythonCode where
 instance Literal PythonCode where
   litTrue = mkStateVal bool pyTrue
   litFalse = mkStateVal bool pyFalse
-  litChar = G.litChar
+  litChar = G.litChar quotes
   litDouble = G.litDouble
   litFloat = error pyFloatError
   litInt = G.litInt
   litString = G.litString
-  litArray t es = sequence es >>= (\elems -> mkStateVal (arrayType t) 
-    (brackets $ valueList elems))
+  litArray = CP.litArray brackets
   litList = litArray
 
 instance MathConstant PythonCode where
@@ -369,7 +368,7 @@ instance ValueExpression PythonCode where
 
   lambda = G.lambda pyLambda
 
-  notNull v = v ?!= valueOf (var pyNull void)
+  notNull v = G.notNull pyNull
 
 instance RenderValue PythonCode where
   inputFunc = mkStateVal string pyInputFunc
@@ -742,7 +741,7 @@ pyTrue = text "True"
 pyFalse = text "False"
 
 pyPi :: Doc
-pyPi = text $ pyMath `access` "pi"
+pyPi = text $ pyMath `access` piLabel
 
 pySys :: String
 pySys = "sys"

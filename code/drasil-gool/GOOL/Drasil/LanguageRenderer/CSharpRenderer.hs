@@ -42,7 +42,7 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
 import GOOL.Drasil.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
   inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', listSep',
-  args, listSep, access, containing, mathFunc, valueList, variableList, 
+  args, null, listSep, access, containing, mathFunc, valueList, variableList, 
   appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body, 
   printFile, param, method, listDec, classVar, func, cast, listSetFunc, 
@@ -68,9 +68,9 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, 
-  listSetFunc, listAccessFunc, arrayType, pi, notNull, printSt, arrayDec, 
-  arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, mainFunction, 
-  stateVar, buildModule', string, constDecDef, docInOutFunc, doubleRender)
+  listSetFunc, listAccessFunc, arrayType, pi, printSt, arrayDec, arrayDecDef, 
+  openFileR, openFileW, openFileA, forEach, docMain, mainFunction, stateVar, 
+  buildModule', string, constDecDef, docInOutFunc, notNull, doubleRender)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -98,7 +98,7 @@ import Control.Monad.State (modify)
 import Data.Composition ((.:))
 import Data.List (intercalate)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty,
-  equals, vcat, lbrace, rbrace, braces, colon, space)
+  equals, vcat, lbrace, rbrace, braces, colon, space, quotes)
 
 csExt :: String
 csExt = "cs"
@@ -285,7 +285,7 @@ instance ValueSym CSharpCode where
 instance Literal CSharpCode where
   litTrue = C.litTrue
   litFalse = C.litFalse
-  litChar = G.litChar
+  litChar = G.litChar quotes
   litDouble = G.litDouble
   litFloat = C.litFloat
   litInt = G.litInt
@@ -356,7 +356,7 @@ instance ValueExpression CSharpCode where
 
   lambda = G.lambda csLambda
 
-  notNull = CP.notNull
+  notNull = CP.notNull null
 
 instance RenderValue CSharpCode where
   inputFunc = addSystemImport csReadLineFunc

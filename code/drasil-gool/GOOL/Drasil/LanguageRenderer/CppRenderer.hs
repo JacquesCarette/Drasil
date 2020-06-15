@@ -106,7 +106,7 @@ import Data.Composition ((.:))
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, brackets, 
-  braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty)
+  braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -1153,12 +1153,12 @@ instance ValueSym CppSrcCode where
 instance Literal CppSrcCode where
   litTrue = C.litTrue
   litFalse = C.litFalse
-  litChar = G.litChar
+  litChar = G.litChar quotes
   litDouble = G.litDouble
   litFloat = C.litFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = CP.litArray
+  litArray = CP.litArray braces
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppSrcCode where
@@ -1779,12 +1779,12 @@ instance ValueSym CppHdrCode where
 instance Literal CppHdrCode where
   litTrue = C.litTrue
   litFalse = C.litFalse
-  litChar = G.litChar
+  litChar = G.litChar quotes
   litDouble = G.litDouble
   litFloat = C.litFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = CP.litArray
+  litArray = CP.litArray braces
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppHdrCode where

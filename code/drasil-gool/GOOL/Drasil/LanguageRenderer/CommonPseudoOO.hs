@@ -3,11 +3,11 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, 
-  funcType, listSetFunc, listAccessFunc, buildModule, arrayType, pi, notNull, 
+  funcType, listSetFunc, listAccessFunc, buildModule, arrayType, pi, 
   printSt, arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, 
-  docMain, mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
-  listAccessFunc', string, constDecDef, docInOutFunc, doubleRender, double, 
-  self, floatRender, float, string'
+  docMain, mainFunction, stateVar, buildModule', call', listSizeFunc, 
+  listAccessFunc', string, constDecDef, docInOutFunc, notNull, litArray, 
+  doubleRender, double, self, floatRender, float, string'
 ) where
 
 import Utils.Drasil (indent)
@@ -176,9 +176,6 @@ arrayType = onStateValue (\t -> typeFromData (Array (getType t))
 pi :: (RenderSym r) => SValue r
 pi = mkStateVal S.double (text $ mathFunc "PI")
 
-notNull :: (RenderSym r) => SValue r -> SValue r
-notNull v = v ?!= S.valueOf (S.var "null" $ onStateValue valueType v)
-
 printSt :: (RenderSym r) => SValue r -> SValue r -> MSStatement r
 printSt = zoom lensMStoVS .: on2StateValues (mkStmt .: R.print)
 
@@ -251,10 +248,6 @@ buildModule' n inc is ms cs = S.modFromData n (do
 
 -- Java and C++ --
 
-litArray :: (RenderSym r) => VSType r -> [SValue r] -> SValue r
-litArray t es = sequence es >>= (\elems -> mkStateVal (S.arrayType t) 
-  (braces $ valueList elems))
-
 -- | First parameter is language name, rest similar to call from ClassInterface
 call' :: (RenderSym r) => String -> Maybe Library -> Maybe Doc -> MixedCall r
 call' l _ _ _ _ _ (_:_) = error $ namedArgError l
@@ -291,6 +284,17 @@ docInOutFunc f desc is [] [both] b = docFuncRepr desc (map fst $ both : is)
   [fst both] (f (map snd is) [] [snd both] b)
 docInOutFunc f desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ os)
   [] (f (map snd is) (map snd os) (map snd bs) b)
+
+-- Python, Java, C#, and Swift --
+
+notNull :: (RenderSym r) => String -> SValue r -> SValue r
+notNull nil v = v ?!= S.valueOf (S.var nil $ onStateValue valueType v)
+
+-- Python, Java, C++, and Swift --
+
+litArray :: (RenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
+litArray f t es = sequence es >>= (\elems -> mkStateVal (S.arrayType t) 
+  (f $ valueList elems))
 
 -- Java, C#, and Swift --
 

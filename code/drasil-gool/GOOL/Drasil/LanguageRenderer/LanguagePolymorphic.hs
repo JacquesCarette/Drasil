@@ -77,7 +77,7 @@ import Control.Monad.State (modify)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  brackets, quotes, integer, vcat, comma, isEmpty)
+  brackets, integer, vcat, comma, isEmpty)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
 -- Bodies --
@@ -192,8 +192,8 @@ arrayElem i' v' = do
 
 -- Values --
 
-litChar :: (RenderSym r) => Char -> SValue r
-litChar c = mkStateVal S.char (quotes $ if c == '\n' then text "\\n" else D.char c)
+litChar :: (RenderSym r) => (Doc -> Doc) -> Char -> SValue r
+litChar f c = mkStateVal S.char (f $ if c == '\n' then text "\\n" else D.char c)
 
 litDouble :: (RenderSym r) => Double -> SValue r
 litDouble d = mkStateVal S.double (D.double d)

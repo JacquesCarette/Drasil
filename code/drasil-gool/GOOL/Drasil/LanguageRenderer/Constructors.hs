@@ -160,7 +160,7 @@ binExprNumDbl' b' v1' v2' = do
       exprRender = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
   binExprCastFloat t1 t2 $ mkExpr 9 exprType exprRender
 
--- Only used by binExprCastFloat
+-- Only used by binExprNumDbl'
 binExprCastFloat :: (RenderSym r) => r (Type r) -> r (Type r) -> r (Value r) -> 
   SValue r
 binExprCastFloat t1 t2 = castType (getType t1) (getType t2) . toState

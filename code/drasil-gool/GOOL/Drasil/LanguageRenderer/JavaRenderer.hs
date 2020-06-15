@@ -41,7 +41,7 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
 import GOOL.Drasil.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
   catchLabel, throwLabel, importLabel, blockCmtStart, blockCmtEnd, docCmtStart, 
   bodyStart, bodyEnd, endStatement, commentStart, exceptionObj', new', args, 
-  exceptionObj, mainFunc, new, listSep, access, containing, mathFunc, 
+  exceptionObj, mainFunc, new, null, listSep, access, containing, mathFunc, 
   variableList, parameterList, appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, 
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class', multiStmt,
@@ -69,9 +69,9 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass,
-  funcType, arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, 
+  funcType, arrayType, pi, printSt, arrayDec, arrayDecDef, openFileR, 
   openFileW, openFileA, forEach, docMain, mainFunction, stateVar, buildModule', 
-  litArray, call', listSizeFunc, listAccessFunc', doubleRender, double,
+  litArray, call', listSizeFunc, listAccessFunc', notNull, doubleRender, double,
   floatRender, float, string')
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
@@ -105,7 +105,7 @@ import Data.Composition ((.:))
 import qualified Data.Map as Map (lookup)
 import Data.List (nub, intercalate, sort)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), parens, empty, 
-  equals, vcat, lbrace, rbrace, colon)
+  equals, vcat, lbrace, rbrace, braces, colon, quotes)
 
 jExt :: String
 jExt = "java"
@@ -289,12 +289,12 @@ instance ValueSym JavaCode where
 instance Literal JavaCode where
   litTrue = C.litTrue
   litFalse = C.litFalse
-  litChar = G.litChar
+  litChar = G.litChar quotes
   litDouble = G.litDouble
   litFloat = C.litFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = CP.litArray
+  litArray = CP.litArray braces
   litList t es = do
     zoom lensVStoMS $ modify (if null es then id else addLangImport $ utilImport
       jArrays)
@@ -380,7 +380,7 @@ instance ValueExpression JavaCode where
 
   lambda = G.lambda jLambda
 
-  notNull = CP.notNull
+  notNull = CP.notNull null
 
 instance RenderValue JavaCode where
   inputFunc = modify (addLangImportVS $ utilImport jScanner) >> mkStateVal 

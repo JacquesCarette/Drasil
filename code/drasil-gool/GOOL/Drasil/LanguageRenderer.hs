@@ -7,9 +7,9 @@ module GOOL.Drasil.LanguageRenderer (
   forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, importLabel,
   blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
   constDec', exceptionObj', new', this', self', array', listSep', argc, argv, 
-  args, constDec, exceptionObj, mainFunc, new, this, self, array, listSep, 
+  args, constDec, exceptionObj, mainFunc, new, this, self, null, array, listSep,
   sqrt, abs, fabs, log10, log, exp, sin, cos, tan, asin, acos, atan, floor, 
-  ceil, pow, access, containing, mathFunc, addExt,
+  ceil, pow, piLabel, access, containing, mathFunc, addExt,
   
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
@@ -81,8 +81,8 @@ self' = text self
 array' = text array
 listSep' = text listSep
 
-argc, argv, args, constDec, exceptionObj, mainFunc, new, this, self, array, 
-  listSep :: String
+argc, argv, args, constDec, exceptionObj, mainFunc, new, this, self, null, 
+  array, listSep :: String
 argc = "argc"
 argv = "argv"
 args = "args"
@@ -92,11 +92,12 @@ mainFunc = "main"
 new = "new"
 this = "this"
 self = "self"
+null = "null"
 array = "[]"
 listSep = ", "
 
 sqrt, abs, fabs, log10, log, exp, sin, cos, tan, asin, acos, atan, floor, 
-  ceil, pow :: String
+  ceil, pow, piLabel :: String
 sqrt = "sqrt"
 abs = "abs"
 fabs = "fabs"
@@ -112,6 +113,7 @@ atan = "atan"
 floor = "floor"
 ceil = "ceil"
 pow = "pow"
+piLabel = "pi"
 
 access :: String -> String -> String
 access q n = q ++ "." ++ n

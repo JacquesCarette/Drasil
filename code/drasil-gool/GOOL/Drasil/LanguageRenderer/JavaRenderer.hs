@@ -55,8 +55,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, 
   negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
-  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
-  objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
+  objVar, arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, 
+  argsList, objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
   iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
   loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, closeFile, 
@@ -68,7 +68,7 @@ import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
+  discardFileLine, destructorError, stateVarDef, constVar, intClass,
   funcType, arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, 
   openFileW, openFileA, forEach, docMain, mainFunction, stateVar, buildModule', 
   litArray, call', listSizeFunc, listAccessFunc', doubleRender, double,
@@ -266,7 +266,7 @@ instance VariableSym JavaCode where
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
-  objVar = CP.objVar
+  objVar = G.objVar
   objVarSelf = CP.objVarSelf
   arrayElem i = G.arrayElem (litInt i)
   iterVar = CP.iterVar

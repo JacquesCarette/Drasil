@@ -4,7 +4,7 @@
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
-  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
+  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
   classVarCheckStatic, arrayElem, litChar, litDouble, litInt, litString, 
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
@@ -61,11 +61,11 @@ import GOOL.Drasil.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, 
   namedArgList)
 import qualified GOOL.Drasil.LanguageRenderer as R (file, block, assign, 
-  addAssign, subAssign, return', comment, getTerm, var, arg, func, objAccess, 
-  commentedItem)
+  addAssign, subAssign, return', comment, getTerm, var, objVar, arg, func, 
+  objAccess, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkVal, mkStateVar, mkStaticVar, VSOp, unOpPrec, compEqualPrec, 
-  compPrec, addPrec, multPrec)
+  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, VSOp, unOpPrec, 
+  compEqualPrec, compPrec, addPrec, multPrec)
 import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
   currMain, currFileType, modifyReturnFunc, addFile, setMainMod, setModuleName, 
   getModuleName, getClassName, addParameter, getParameters)
@@ -170,6 +170,16 @@ classVarCheckStatic v = classVarCS (variableBind v)
   where classVarCS Dynamic = error
           "classVar can only be used to access static variables"
         classVarCS Static = v
+
+objVar :: (RenderSym r) => SVariable r -> SVariable r -> SVariable r
+objVar o' v' = do
+  o <- o'
+  v <- v'
+  let objVar' Static = error 
+        "Cannot access static variables through an object, use classVar instead"
+      objVar' Dynamic = mkVar (variableName o `access` variableName v) 
+        (variableType v) (R.objVar (RC.variable o) (RC.variable v))
+  return $ objVar' (variableBind v)
 
 arrayElem :: (RenderSym r) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = do

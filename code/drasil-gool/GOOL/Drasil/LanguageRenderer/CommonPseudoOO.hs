@@ -2,7 +2,7 @@
 module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
+  discardFileLine, destructorError, stateVarDef, constVar, intClass, 
   funcType, listSetFunc, listAccessFunc, buildModule, arrayType, pi, notNull, 
   printSt, arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, 
   docMain, mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
@@ -41,9 +41,9 @@ import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue,
 import GOOL.Drasil.LanguageRenderer (array', new', args, array, access, 
   mathFunc, functionDox, valueList, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (self, self', module', 
-  print, stateVar, stateVarList, constDecDef, extVar, objVar, listAccessFunc)
+  print, stateVar, stateVarList, constDecDef, extVar, listAccessFunc)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkStateVar, mkVar)
+  mkStateVal, mkStateVar)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, docFuncRepr)
 import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS, 
@@ -141,10 +141,6 @@ intClass f n s i svrs mths = do
 funcType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
 funcType ps' = on2StateValues (\ps r -> typeFromData (Func (map getType ps) 
   (getType r)) "" empty) (sequence ps')
-
-objVar :: (RenderSym r) => SVariable r -> SVariable r -> SVariable r
-objVar = on2StateValues (\o v -> mkVar (variableName o `access` variableName v) 
-  (variableType v) (R.objVar (RC.variable o) (RC.variable v)))
 
 -- Python, C#, and C++ --
 

@@ -45,25 +45,25 @@ import GOOL.Drasil.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd,
   args, listSep, access, containing, mathFunc, valueList, variableList, 
   appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body, 
-  printFile, param, method, listDec, classVar, objVar, func, cast, listSetFunc, 
+  printFile, param, method, listDec, classVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
   addComments, commentedMod, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, 
-  mkStateVal, mkVal, mkVar, VSOp, unOpPrec, powerPrec, unExpr, unExpr', 
+  mkStateVal, mkVal, VSOp, unOpPrec, powerPrec, unExpr, unExpr', 
   unExprNumDbl, typeUnExpr, binExpr, binExprNumDbl', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, csc, sec, cot, 
   negateOp, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, 
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
-  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
-  objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, closeFile,
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
-  method, getMethod, setMethod, constructor, function, docFunc, buildClass, 
-  extraClass, implementingClass, docClass, commentedClass, modFromData, fileDoc, 
-  docMod, fileFromData)
+  objVar, arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, 
+  argsList, objAccess, objMethodCall, call, funcAppMixedArgs, 
+  selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd, 
+  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond, 
+  tryCatch, construct, param, method, getMethod, setMethod, constructor, 
+  function, docFunc, buildClass, extraClass, implementingClass, docClass, 
+  commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
@@ -262,7 +262,7 @@ instance VariableSym CSharpCode where
   self = C.self
   classVar = CP.classVar R.classVar
   extClassVar = classVar
-  objVar = on2StateValues csObjVar
+  objVar = G.objVar
   objVarSelf = CP.objVarSelf
   arrayElem i = G.arrayElem (litInt i)
   iterVar = CP.iterVar
@@ -845,13 +845,6 @@ csInOutCall f n ins outs both = valStmt $ f n void (map (onStateValue
 csVarDec :: Binding -> MSStatement CSharpCode -> MSStatement CSharpCode
 csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
 csVarDec Dynamic d = d
-
-csObjVar :: (RenderSym r) => r (Variable r) -> r (Variable r) -> r (Variable r)
-csObjVar o v = csObjVar' (variableBind v)
-  where csObjVar' Static = error 
-          "Cannot use objVar to access static variables through an object in C#"
-        csObjVar' Dynamic = mkVar (variableName o ++ "." ++ variableName v) 
-          (variableType v) (R.objVar (RC.variable o) (RC.variable v))
 
 csInOut :: (VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode -> 
     SMethod CSharpCode) -> 

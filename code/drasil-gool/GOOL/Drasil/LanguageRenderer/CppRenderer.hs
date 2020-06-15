@@ -56,17 +56,18 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
-  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, arrayElem, 
-  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess, 
-  objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
-  lambda, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
-  constructor, function, docFunc, buildClass, extraClass, 
-  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, fileFromData)
+  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
+  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
+  objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
+  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
+  iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
+  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
+  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, 
+  param, method, getMethod, setMethod, constructor, function, docFunc, 
+  buildClass, extraClass, implementingClass, docClass, commentedClass, 
+  modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int, objVar,
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   funcType, listSetFunc, buildModule, litArray, call', listSizeFunc, 
   listAccessFunc', string, constDecDef, docInOutFunc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
@@ -1128,7 +1129,7 @@ instance VariableSym CppSrcCode where
     cm <- getClassMap
     maybe id ((>>) . modify . addModuleImportVS) 
       (Map.lookup (getTypeString t) cm) $ classVar (return t) v
-  objVar = CP.objVar
+  objVar = G.objVar
   objVarSelf = onStateValue (\v -> mkVar (R.this ++ ptrAccess ++ variableName v)
     (variableType v) (R.this' <> ptrAccess' <> RC.variable v))
   arrayElem i = G.arrayElem (litInt i)
@@ -1755,7 +1756,7 @@ instance VariableSym CppHdrCode where
   self = mkStateVar "" void empty
   classVar _ _ = mkStateVar "" void empty
   extClassVar _ _ = mkStateVar "" void empty
-  objVar = CP.objVar
+  objVar = G.objVar
   objVarSelf _ = mkStateVar "" void empty
   arrayElem _ _ = mkStateVar "" void empty
   iterVar _ _ = mkStateVar "" void empty

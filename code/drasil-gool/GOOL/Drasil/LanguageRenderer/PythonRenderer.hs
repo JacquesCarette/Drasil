@@ -51,20 +51,21 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal,
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
-  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, arrayElem, 
-  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess, 
-  objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
-  lambda, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
-  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
-  constructor, function, docFunc, buildClass, extraClass, implementingClass, docClass, 
-  commentedClass, modFromData, fileDoc, docMod, fileFromData)
+  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, 
+  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
+  objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
+  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
+  iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
+  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
+  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, 
+  param, method, getMethod, setMethod, constructor, function, docFunc, 
+  buildClass, extraClass, implementingClass, docClass, commentedClass, 
+  modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
+  discardFileLine, destructorError, stateVarDef, constVar, intClass, 
   funcType, listSetFunc, listAccessFunc, buildModule)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   increment1, runStrategy, stringListVals, stringListLists, observerIndex, 
@@ -257,7 +258,7 @@ instance VariableSym PythonCode where
   extClassVar c v = join $ on2StateValues (\t cm -> maybe id ((>>) . modify . 
     addModuleImportVS) (Map.lookup (getTypeString t) cm) $ 
     CP.classVar pyClassVar (toState t) v) c getClassMap
-  objVar = CP.objVar
+  objVar = G.objVar
   objVarSelf = CP.objVarSelf
   arrayElem i = G.arrayElem (litInt i)
   iterVar = CP.iterVar

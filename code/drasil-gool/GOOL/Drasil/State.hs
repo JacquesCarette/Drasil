@@ -25,7 +25,8 @@ module GOOL.Drasil.State (
   updateMethodExcMap, getMethodExcMap, updateCallMap, callMapTransClosure, 
   updateMEMWithCalls, addParameter, getParameters, setOutputsDeclared, 
   isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
-  setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc
+  setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc,
+  addIter, getIter
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
@@ -103,8 +104,9 @@ data MethodState = MS {
   -- Only used for C++
   _currScope :: ScopeTag, -- Used to maintain correct scope when adding 
                           -- documentation to function in C++
-  _currMainFunc :: Bool -- Used by C++ to put documentation for the main
+  _currMainFunc :: Bool, -- Used by C++ to put documentation for the main
                         -- function in source instead of header file
+  _iterators :: [String]
 }
 makeLenses ''MethodState
 
@@ -233,7 +235,8 @@ initialMS = MS {
   _calls = [],
 
   _currScope = Priv,
-  _currMainFunc = False
+  _currMainFunc = False,
+  _iterators = []
 }
 
 initialVS :: ValueState
@@ -485,6 +488,11 @@ setCurrMainFunc = set currMainFunc
 getCurrMainFunc :: MS Bool
 getCurrMainFunc = gets (^. currMainFunc)
 
+addIter :: String -> MethodState -> MethodState
+addIter st = over iterators ([st]++)
+
+getIter :: MS [String]
+getIter = gets (^. iterators)
 -- Helpers
 
 ifElemError :: (Eq a) => a -> [a] -> String -> [a]

@@ -93,7 +93,8 @@ import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderModImports, addDefine, getDefines, addHeaderDefine, 
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing, 
   setFileType, getModuleName, setModuleName, setClassName, getClassName, setCurrMain, 
-  getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+  getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc,
+  addIter, getIter)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
@@ -1165,7 +1166,14 @@ instance MathConstant CppSrcCode where
     addMathHImport (mkStateVal double cppPi)
 
 instance VariableValue CppSrcCode where
-  valueOf = G.valueOf
+  valueOf vr' = do 
+    vr <- vr'
+    its <- zoom lensVStoMS getIter
+    let nvr = variableName vr 
+    if (nvr `elem` its) then (do
+        itvr <- iterator $ toState $ variableType vr
+        toState $ mkVal itvr (RC.variable vr)) 
+      else G.valueOf vr'
 
 instance CommandLineArgs CppSrcCode where
   arg n = G.arg (litInt $ n+1) argsList
@@ -1425,9 +1433,14 @@ instance ControlStatement CppSrcCode where
 
   for = C.for bodyStart bodyEnd 
   forRange = M.forRange
-  forEach i v = for (varDecDef e (iterBegin v)) (valueOf e ?!= iterEnd v) 
-    (e &++)
-    where e = toBasicVar i
+  forEach i v b = do 
+    e <- zoom lensMStoVS i
+    let l = variableName e
+    let t = toState $ variableType e
+    let iterI = var l (iterator t) --FIXME what if user enters t as itereator, then you will have iterator of iterator
+    modify (addIter l)
+    for (varDecDef iterI (iterBegin v)) (valueOf iterI ?!= iterEnd v) 
+      (iterI &++) b
   while = C.while bodyStart bodyEnd
 
   tryCatch = G.tryCatch cppTryCatch
@@ -1791,7 +1804,14 @@ instance MathConstant CppHdrCode where
     mkStateVal double cppPi
 
 instance VariableValue CppHdrCode where
-  valueOf = G.valueOf
+  valueOf vr' = do 
+    vr <- vr'
+    its <- zoom lensVStoMS getIter
+    let nvr = variableName vr 
+    if (nvr `elem` its) then do
+        itvr <- iterator $ toState $ variableType vr
+        toState $ mkVal itvr (parens $ text "*" <>  RC.variable vr) 
+      else G.valueOf vr'
 
 instance CommandLineArgs CppHdrCode where
   arg n = G.arg (litInt $ n+1) argsList
@@ -2181,9 +2201,6 @@ instance BlockCommentElim CppHdrCode where
   blockComment' = unCPPHC
 
 -- helpers
-toBasicVar :: SVariable CppSrcCode -> SVariable CppSrcCode
-toBasicVar v = v >>= (\v' -> var (variableName v') (onStateValue variableType v))
-
 isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False

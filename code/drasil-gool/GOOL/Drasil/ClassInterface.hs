@@ -15,7 +15,7 @@ module GOOL.Drasil.ClassInterface (
   libFuncApp, newObj, extNewObj, libNewObj, exists, InternalValueExp(..), 
   objMethodCall, objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
   ($.), selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
-  listIndexExists, at, Iterator(..), StatementSym(..), AssignStatement(..), 
+  listIndexExists, at, StatementSym(..), AssignStatement(..), 
   (&=), assignToListIndex, DeclStatement(..), objDecNewNoParams, 
   extObjDecNewNoParams, IOStatement(..), StringStatement(..), 
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
@@ -43,7 +43,7 @@ class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r,
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
   InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
   NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, 
-  InternalValueExp r, GetSet r, List r, Iterator r, StatePattern r, 
+  InternalValueExp r, GetSet r, List r, StatePattern r, 
   ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 
 class (FileSym r) => ProgramSym r where
@@ -122,7 +122,6 @@ class (TypeSym r) => VariableSym r where
   objVar       :: SVariable r -> SVariable r -> SVariable r
   objVarSelf   :: SVariable r -> SVariable r
   arrayElem    :: Integer -> SVariable r -> SVariable r
-  -- Use for iterator variables, i.e. in a forEach loop.
   
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
@@ -333,10 +332,6 @@ listIndexExists lst index = listSize lst ?> index
 
 at :: (List r) => SValue r -> SValue r -> SValue r
 at = listAccess
-
-class (ValueSym r) => Iterator r where
-  iterBegin :: SValue r -> SValue r
-  iterEnd   :: SValue r -> SValue r
 
 type MSStatement a = MS (a (Statement a))
 

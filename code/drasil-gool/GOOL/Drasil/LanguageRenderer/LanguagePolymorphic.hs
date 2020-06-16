@@ -8,7 +8,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   classVarCheckStatic, arrayElem, litChar, litDouble, litInt, litString, 
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
-  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
+  listAppend, listAccess, listSet, getFunc, setFunc, 
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond, 
   tryCatch, construct, param, method, getMethod, setMethod, constructor, 
@@ -39,12 +39,11 @@ import qualified GOOL.Drasil.ClassInterface as S (
   ControlStatement(returnStmt, for), ParameterSym(param), MethodSym(method))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),  
   RenderType(..), InternalVarElim(variableBind), RenderValue(valFromData),
-  InternalIterator(iterBeginFunc, iterEndFunc), RenderFunction(funcFromData), 
-  FunctionElim(functionType), RenderStatement(stmtFromData), 
-  StatementElim(statementTerm), MethodTypeSym(mType), 
-  RenderParam(paramFromData), RenderMethod(intMethod, commentedFunc), 
-  RenderClass(inherit, implements), RenderMod(updateModuleDoc), 
-  BlockCommentSym(..))
+  RenderFunction(funcFromData), FunctionElim(functionType), 
+  RenderStatement(stmtFromData),  StatementElim(statementTerm), 
+  MethodTypeSym(mType), RenderParam(paramFromData), 
+  RenderMethod(intMethod, commentedFunc), RenderClass(inherit, implements), 
+  RenderMod(updateModuleDoc), BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData), 
   RenderBody(multiBody), RenderValue(call), InternalGetSet(getFunc, setFunc),
   InternalListFunc(listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
@@ -268,12 +267,6 @@ listAdd v i vToAdd = v $. S.listAddFunc v i vToAdd
 
 listAppend :: (RenderSym r) => SValue r -> SValue r -> SValue r
 listAppend v vToApp = v $. S.listAppendFunc vToApp
-
-iterBegin :: (RenderSym r) => SValue r -> SValue r
-iterBegin v = v $. iterBeginFunc (S.listInnerType $ onStateValue valueType v)
-
-iterEnd :: (RenderSym r) => SValue r -> SValue r
-iterEnd v = v $. iterEndFunc (S.listInnerType $ onStateValue valueType v)
 
 listAccess :: (RenderSym r) => SValue r -> SValue r -> SValue r
 listAccess v i = do

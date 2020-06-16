@@ -17,7 +17,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable,
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, 
   extNewObj, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), 
-  GetSet(..), List(..), InternalList(..), at, Iterator(..), StatementSym(..), 
+  GetSet(..), List(..), InternalList(..), at, StatementSym(..), 
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
   StringStatement(..), FuncAppStatement(..), CommentStatement(..),
   observerListName, ControlStatement(..), switchAsIf, StatePattern(..), 
@@ -28,7 +28,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
   RenderValue(..), ValueElim(valuePrec), InternalGetSet(..), 
-  InternalListFunc(..), InternalIterator(..), RenderFunction(..), 
+  InternalListFunc(..), RenderFunction(..), 
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
   RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..), 
@@ -53,7 +53,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, arrayElem, 
   litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess, 
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
-  lambda, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
+  lambda, func, get, set, listAdd, listAppend, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
   subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
@@ -62,9 +62,9 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, extFuncAppMixedArgs, 
-  indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
-  funcType, listSetFunc, listAccessFunc, buildModule)
+  indexOf, listAddFunc, listDecDef, discardFileLine, destructorError, 
+  stateVarDef, constVar, intClass, objVar, funcType, listSetFunc, 
+  listAccessFunc, buildModule)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   increment1, runStrategy, stringListVals, stringListLists, observerIndex, 
   checkState)
@@ -409,10 +409,6 @@ instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 
-instance Iterator PythonCode where
-  iterBegin = G.iterBegin
-  iterEnd = G.iterEnd
-
 instance InternalGetSet PythonCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
@@ -423,10 +419,6 @@ instance InternalListFunc PythonCode where
   listAppendFunc = G.listAppendFunc pyAppendFunc
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
-
-instance InternalIterator PythonCode where
-  iterBeginFunc _ = error $ CP.iterBeginError pyName
-  iterEndFunc _ = error $ CP.iterEndError pyName
 
 instance RenderFunction PythonCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

@@ -586,7 +586,7 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
     let le = variableName e 
     modify (addIter le) 
     loop <- pair3 forEach forEach (zoom lensMStoVS e') (zoom lensMStoVS v) b
-    modify resetIter
+    modify (resetIter le)
     toState loop
   while v = pair2 while while (zoom lensMStoVS v)
 

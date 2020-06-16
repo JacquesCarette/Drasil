@@ -26,7 +26,7 @@ module GOOL.Drasil.State (
   updateMEMWithCalls, addParameter, getParameters, setOutputsDeclared, 
   isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
   setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc,
-  addIter, getIter,resetIter
+  addIter, getIter, resetIter
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
@@ -35,7 +35,7 @@ import GOOL.Drasil.CodeType (ClassName)
 
 import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
 import Control.Monad.State (State, modify, gets)
-import Data.List (nub)
+import Data.List (nub, delete)
 import Data.List.Ordered (nubSort)
 import Data.Maybe (isNothing)
 import Data.Map (Map, fromList, insert, union, findWithDefault, mapWithKey)
@@ -494,8 +494,8 @@ addIter st = over iterators ([st]++)
 getIter :: MS [String]
 getIter = gets (^. iterators)
 
-resetIter :: MethodState -> MethodState
-resetIter = set iterators []
+resetIter :: String -> MethodState -> MethodState
+resetIter st = over iterators (delete st)
 
 -- Helpers
 

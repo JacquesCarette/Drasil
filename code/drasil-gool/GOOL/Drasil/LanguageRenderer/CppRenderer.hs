@@ -581,7 +581,7 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
   for i initv = pair4 for for i (zoom lensMStoVS initv)
   forRange i initv finalv stepv = pair5 forRange forRange (zoom lensMStoVS i) 
     (zoom lensMStoVS initv) (zoom lensMStoVS finalv) (zoom lensMStoVS stepv)
-  forEach e' v b= do 
+  forEach e' v b = do 
     e <- zoom lensMStoVS e'
     let le = variableName e 
     modify (addIter le) 
@@ -1160,10 +1160,10 @@ instance VariableValue CppSrcCode where
   valueOf vr' = do 
     vr <- vr'
     its <- zoom lensVStoMS getIter
-    let nvr = variableName vr 
-    if (nvr `elem` its) then (do
-        itvr <- iteratorSrc $ toState $ variableType vr
-        toState $ mkVal itvr (parens $ cppDeref <> RC.variable vr)) 
+    let namevr = variableName vr 
+    if namevr `elem` its then do
+        itvr <- iterator $ toState $ variableType vr
+        toState $ mkVal itvr (parens $ cppDeref <> RC.variable vr)
       else G.valueOf vr'
 
 instance CommandLineArgs CppSrcCode where
@@ -1264,7 +1264,7 @@ instance List CppSrcCode where
   listAppend = G.listAppend 
   listAccess = G.listAccess
   listSet = G.listSet
-  indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBeginSrc l
+  indexOf l v = addAlgorithmImportVS $ cppIndexFunc l v #- iterBegin l
     
 instance InternalList CppSrcCode where
   listSlice' = M.listSlice
@@ -1419,9 +1419,9 @@ instance ControlStatement CppSrcCode where
   forEach i v b = do 
     e <- zoom lensMStoVS i
     let l = variableName e
-    let t = toState $ variableType e
-    let iterI = var l (iteratorSrc t) 
-    for (varDecDef iterI (iterBeginSrc v)) (setIterVar iterI ?!= iterEndSrc v) 
+        t = toState $ variableType e
+        iterI = var l (iterator t) 
+    for (varDecDef iterI (iterBegin v)) (setIterVar iterI ?!= iterEnd v) 
       (iterI &++) b
   while = C.while bodyStart bodyEnd
 
@@ -1782,14 +1782,7 @@ instance MathConstant CppHdrCode where
     mkStateVal double cppPi
 
 instance VariableValue CppHdrCode where
-  valueOf vr' = do 
-    vr <- vr'
-    its <- zoom lensVStoMS getIter
-    let nvr = variableName vr 
-    if (nvr `elem` its) then do
-        itvr <- iteratorHdr $ toState $ variableType vr
-        toState $ mkVal itvr (parens $ cppDeref <>   RC.variable vr) 
-      else G.valueOf vr'
+  valueOf = G.valueOf
 
 instance CommandLineArgs CppHdrCode where
   arg n = G.arg (litInt $ n+1) argsList
@@ -2215,36 +2208,20 @@ addLimitsImport v = do
   modify (addLangImport limits)
   v
 
-iteratorSrc :: RenderSym r => VSType r -> VSType r
-iteratorSrc t = do 
-    modify (addLangImportVS cppIterator)
-    cppIterType $ listType t
-
-iteratorHdr :: RenderSym r => VSType r -> VSType r
-iteratorHdr t = do
-    modify (addHeaderLangImport cppIterator)
-    (cppIterType . listType) t
-
 setIterVar :: RenderSym r=> SVariable r -> SValue r
 setIterVar = G.valueOf
 
-iterBeginSrc :: SValue CppSrcCode -> SValue CppSrcCode
-iterBeginSrc v = v $. cppIterBeginFunc (G.listInnerType $ onStateValue valueType v)
+iterator :: RenderSym r => VSType r -> VSType r
+iterator t = do 
+    modify (addLangImportVS cppIterator)
+    cppIterType $ listType t
 
-iterEndSrc :: SValue CppSrcCode -> SValue CppSrcCode
-iterEndSrc v = v $. cppIterEndFunc (G.listInnerType $ onStateValue valueType v)
+iterBegin :: SValue CppSrcCode -> SValue CppSrcCode
+iterBegin v = v $. cppIterBeginFunc (G.listInnerType $ onStateValue valueType v)
 
-{-iterBeginHdr :: (RenderSym r) => SValue r -> SValue r
-iterBeginHdr _ = mkStateVal void empty
+iterEnd :: SValue CppSrcCode -> SValue CppSrcCode
+iterEnd v = v $. cppIterEndFunc (G.listInnerType $ onStateValue valueType v)
 
-iterEndHdr :: (RenderSym r) => SValue r -> SValue r
-iterEndHdr _ = mkStateVal void empty
-
-iterBeginFuncHdr :: VSType r -> VSFunction r
-iterBeginFuncHdr _ = funcFromData empty void
-
-iterEndFuncHdr   :: VSType r -> VSFunction r
-iterEndFuncHdr _ = funcFromData empty void-}
 -- convenience
 cppName :: String
 cppName = "C++" 
@@ -2394,18 +2371,18 @@ strFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
 strFunc v s = objMethodCall string v cppStr [s]
 
 cppIndexFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
-cppIndexFunc l v = funcApp cppIndex int [iterBeginSrc l, iterEndSrc l, v]
+cppIndexFunc l v = funcApp cppIndex int [iterBegin l, iterEnd l, v]
 
 cppListAddFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode 
   -> VSFunction CppSrcCode
 cppListAddFunc l i v = func cppListAdd (onStateValue valueType l) 
-    [iterBeginSrc l #+ i, v]
+    [iterBegin l #+ i, v]
 
 cppIterBeginFunc :: VSType CppSrcCode -> VSFunction CppSrcCode
-cppIterBeginFunc t = func cppIterBegin (iteratorSrc t) []
+cppIterBeginFunc t = func cppIterBegin (iterator t) []
 
 cppIterEndFunc :: VSType CppSrcCode -> VSFunction CppSrcCode
-cppIterEndFunc t = func cppIterEnd (iteratorSrc t) []
+cppIterEndFunc t = func cppIterEnd (iterator t) []
 
 cppListDecDef :: (RenderSym r) => ([r (Value r)] -> Doc) -> SVariable r -> 
   [SValue r] -> MSStatement r

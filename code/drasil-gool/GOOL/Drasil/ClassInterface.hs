@@ -595,6 +595,7 @@ convType Char = char
 convType String = string
 convType (List t) = listType (convType t)
 convType (Array t) = arrayType (convType t)
+convType (Iterator t) = iterator $ convType t
 convType (Object n) = obj n
 convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void

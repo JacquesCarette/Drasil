@@ -61,7 +61,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
-  bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
+  bindingError, extVar, classVar, objVarSelf, extFuncAppMixedArgs, 
   indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
   funcType, listSetFunc, listAccessFunc, buildModule)
@@ -191,7 +191,6 @@ instance TypeSym PythonCode where
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = CP.funcType
-  iterator t = t
   void = toState $ typeFromData Void pyVoid (text pyVoid)
 
 instance TypeElim PythonCode where
@@ -259,7 +258,6 @@ instance VariableSym PythonCode where
   objVar = CP.objVar
   objVarSelf = CP.objVarSelf
   arrayElem i = G.arrayElem (litInt i)
-  iterVar = CP.iterVar
 
 instance VariableElim PythonCode where
   variableName = varName . unPC

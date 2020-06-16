@@ -26,7 +26,7 @@ module GOOL.Drasil.State (
   updateMEMWithCalls, addParameter, getParameters, setOutputsDeclared, 
   isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
   setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc,
-  addIter, getIter
+  addIter, getIter,resetIter
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
@@ -493,6 +493,10 @@ addIter st = over iterators ([st]++)
 
 getIter :: MS [String]
 getIter = gets (^. iterators)
+
+resetIter :: MethodState -> MethodState
+resetIter = set iterators []
+
 -- Helpers
 
 ifElemError :: (Eq a) => a -> [a] -> String -> [a]

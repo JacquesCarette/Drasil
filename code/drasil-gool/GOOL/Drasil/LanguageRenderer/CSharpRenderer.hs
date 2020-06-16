@@ -65,7 +65,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   extraClass, implementingClass, docClass, commentedClass, modFromData, fileDoc, 
   docMod, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
-  bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
+  bindingError, extVar, classVar, objVarSelf, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, 
   listSetFunc, listAccessFunc, arrayType, pi, notNull, printSt, arrayDec, 
@@ -199,7 +199,6 @@ instance TypeSym CSharpCode where
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = csFuncType
-  iterator t = t
   void = C.void
 
 instance TypeElim CSharpCode where
@@ -265,7 +264,6 @@ instance VariableSym CSharpCode where
   objVar = on2StateValues csObjVar
   objVarSelf = CP.objVarSelf
   arrayElem i = G.arrayElem (litInt i)
-  iterVar = CP.iterVar
 
 instance VariableElim CSharpCode where
   variableName = varName . unCSC

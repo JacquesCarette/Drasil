@@ -65,7 +65,7 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (  
-  bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
+  bindingError, extVar, classVar, objVarSelf, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
   funcType, arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, 
@@ -201,7 +201,6 @@ instance TypeSym JavaCode where
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = CP.funcType
-  iterator t = t
   void = C.void
 
 instance TypeElim JavaCode where
@@ -267,7 +266,6 @@ instance VariableSym JavaCode where
   objVar = CP.objVar
   objVarSelf = CP.objVarSelf
   arrayElem i = G.arrayElem (litInt i)
-  iterVar = CP.iterVar
 
 instance VariableElim JavaCode where
   variableName = varName . unJC

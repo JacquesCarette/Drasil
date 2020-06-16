@@ -91,7 +91,6 @@ instance TypeSym CodeInfo where
   listInnerType _   = noInfoType
   obj               = toState . toCode
   funcType      _ _ = noInfoType
-  iterator      _   = noInfoType
   void              = noInfoType
 
 instance TypeElim CodeInfo where
@@ -110,7 +109,6 @@ instance VariableSym CodeInfo where
   objVar      _ _   = noInfo
   objVarSelf  _     = noInfo
   arrayElem   _ _   = noInfo
-  iterVar     _ _   = noInfo
   
 instance VariableElim CodeInfo where
   variableName _ = ""

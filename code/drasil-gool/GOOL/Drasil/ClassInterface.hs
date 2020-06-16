@@ -102,7 +102,6 @@ class TypeSym r where
   listInnerType :: VSType r -> VSType r
   obj           :: ClassName -> VSType r
   funcType      :: [VSType r] -> VSType r -> VSType r
-  iterator      :: VSType r -> VSType r
   void          :: VSType r
 
 class (TypeSym r) => TypeElim r where
@@ -124,7 +123,6 @@ class (TypeSym r) => VariableSym r where
   objVarSelf   :: SVariable r -> SVariable r
   arrayElem    :: Integer -> SVariable r -> SVariable r
   -- Use for iterator variables, i.e. in a forEach loop.
-  iterVar      :: Label -> VSType r -> SVariable r
   
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
@@ -602,7 +600,6 @@ convType Char = char
 convType String = string
 convType (List t) = listType (convType t)
 convType (Array t) = arrayType (convType t)
-convType (Iterator t) = iterator $ convType t
 convType (Object n) = obj n
 convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void

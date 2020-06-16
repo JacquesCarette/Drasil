@@ -7,13 +7,13 @@ module GOOL.Drasil.LanguageRenderer (
   forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, importLabel,
   blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
   constDec', exceptionObj', new', this', self', array', listSep', argc, argv, 
-  args, constDec, exceptionObj, mainFunc, new, this, self, null, array, listSep,
-  sqrt, abs, fabs, log10, log, exp, sin, cos, tan, asin, acos, atan, floor, 
-  ceil, pow, piLabel, access, containing, mathFunc, addExt,
+  args, printLabel, constDec, exceptionObj, mainFunc, new, this, self, 
+  nullLabel, array, listSep, sqrt, abs, fabs, log10, log, exp, sin, cos, tan, 
+  asin, acos, atan, floor, ceil, pow, piLabel, access, containing, mathFunc, addExt,
   
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
-  param, method, stateVar, constVar, stateVarList, switch, assign, multiAssign, 
+  param, method, stateVar, constVar, stateVarList, switch, assign, 
   addAssign, subAssign, increment, decrement, listDec, getTerm, return', comment, 
   var, extVar, arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, binOpDocD', 
   constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, castObj, 
@@ -81,18 +81,19 @@ self' = text self
 array' = text array
 listSep' = text listSep
 
-argc, argv, args, constDec, exceptionObj, mainFunc, new, this, self, null, 
-  array, listSep :: String
+argc, argv, args, printLabel, constDec, exceptionObj, mainFunc, new, this, 
+  self, nullLabel, array, listSep :: String
 argc = "argc"
 argv = "argv"
 args = "args"
+printLabel = "print"
 constDec = "const"
 exceptionObj = "Exception"
 mainFunc = "main"
 new = "new"
 this = "this"
 self = "self"
-null = "null"
+nullLabel = "null"
 array = "[]"
 listSep = ", "
 
@@ -246,9 +247,6 @@ switch breakState v defBody cs =
 
 assign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 assign vr vl = RC.variable vr <+> equals <+> RC.value vl
-
-multiAssign :: (RenderSym r) => [r (Variable r)] -> [r (Value r)] -> Doc
-multiAssign vrs vls = variableList vrs <+> equals <+> valueList vls
 
 addAssign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 addAssign vr vl = RC.variable vr <+> text "+=" <+> RC.value vl

@@ -11,8 +11,9 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
   SValue, VSFunction, MSStatement, bodyStatements, oneLiner, TypeElim(getType),
   VariableElim(variableType), listOf, ValueSym(valueType), 
-  NumericExpression((#+), (#-), (#*), (#/)), Comparison(..), at, ($.),
-  StatementSym(multi), AssignStatement((&+=), (&++)), (&=), observerListName)
+  NumericExpression((#+), (#*), (#/)), Comparison(..), at, ($.),
+  StatementSym(multi), AssignStatement((&+=), (&-=), (&++)), (&=), 
+  observerListName)
 import qualified GOOL.Drasil.ClassInterface as S (BlockSym(block), 
   TypeSym(int, string, listInnerType), VariableSym(var), Literal(litInt), 
   VariableValue(valueOf), ValueExpression(notNull), 
@@ -36,13 +37,13 @@ ifExists :: (RenderSym r) => SValue r -> MSBody r -> MSBody r -> MSStatement r
 ifExists v ifBody = S.ifCond [(S.notNull v, ifBody)]
 
 decrement1 :: (RenderSym r) => SVariable r -> MSStatement r
-decrement1 v = v &= (S.valueOf v #- S.litInt 1)
+decrement1 v = v &-= S.litInt 1
 
 increment :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 increment vr vl = vr &= S.valueOf vr #+ vl
 
 increment1 :: (RenderSym r) => SVariable r -> MSStatement r
-increment1 vr = vr &= S.valueOf vr #+ S.litInt 1
+increment1 vr = vr &+= S.litInt 1
 
 strat :: (RenderSym r, Monad r) => MSStatement r -> MSBody r -> MS (r Doc)
 strat = on2StateValues (\result b -> toCode $ vcat [RC.body b, 

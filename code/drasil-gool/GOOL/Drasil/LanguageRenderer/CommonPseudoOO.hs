@@ -1,13 +1,13 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
-  indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, destructorError, stateVarDef, constVar, intClass, 
-  funcType, listSetFunc, listAccessFunc, buildModule, arrayType, pi, 
-  printSt, arrayDec, arrayDecDef, openFileR, openFileW, openFileA, forEach, 
-  docMain, mainFunction, stateVar, buildModule', call', listSizeFunc, 
-  listAccessFunc', string, constDecDef, docInOutFunc, notNull, litArray, 
-  doubleRender, double, self, floatRender, float, string'
+  indexOf, listAddFunc, discardFileLine, destructorError, stateVarDef, 
+  constVar, intClass, funcType, buildModule, arrayType, pi, printSt, arrayDec, 
+  arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, mainFunction, 
+  stateVar, buildModule', call', listSizeFunc, listAccessFunc', string, 
+  constDecDef, docInOutFunc, notNull, iterBeginError, iterEndError, listDecDef, 
+  litArray, listSetFunc, listAccessFunc, doubleRender, double, self, 
+  multiAssign, multiReturn, listDec, floatRender, float, string'
 ) where
 
 import Utils.Drasil (indent)
@@ -19,7 +19,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable,
   TypeSym(infile, outfile, listInnerType, obj, iterator), 
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType), 
   ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=), 
-  ScopeSym(..))
+  ControlStatement(returnStmt), ScopeSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
   VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList), 
@@ -39,7 +39,7 @@ import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, 
   on2StateValues, onStateList)
 import GOOL.Drasil.LanguageRenderer (array', new', args, array, access, 
-  mathFunc, functionDox, valueList, intValue)
+  mathFunc, functionDox, variableList, valueList, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (self, self', module', 
   print, stateVar, stateVarList, constDecDef, extVar, listAccessFunc)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
@@ -97,20 +97,6 @@ listAddFunc :: (RenderSym r) => Label -> SValue r -> SValue r -> VSFunction r
 listAddFunc f i v = S.func f (S.listType $ onStateValue valueType v) 
   [i, v]
   
-iterBeginError :: String -> String
-iterBeginError l = "Attempt to use iterBeginFunc in " ++ l ++ ", but " ++ l ++ 
-  " has no iterators"
-
-iterEndError :: String -> String
-iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++ 
-  " has no iterators"
-  
-listDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-listDecDef v vals = do
-  vr <- zoom lensMStoVS v 
-  let lst = S.litList (listInnerType $ return $ variableType vr) vals
-  S.varDecDef (return vr) lst
-  
 discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
 discardFileLine n f = S.valStmt $ objMethodCallNoParams S.string f n 
 
@@ -141,19 +127,6 @@ intClass f n s i svrs mths = do
 funcType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
 funcType ps' = on2StateValues (\ps r -> typeFromData (Func (map getType ps) 
   (getType r)) "" empty) (sequence ps')
-
--- Python, C#, and C++ --
-
-listSetFunc :: (RenderSym r) => (Doc -> Doc -> Doc) -> SValue r -> SValue r -> 
-  SValue r -> VSFunction r
-listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData 
-  (f (RC.value i) (RC.value toVal)) (onStateValue valueType v)) (intValue idx) 
-  setVal
-
--- Python and C# --
-
-listAccessFunc :: (RenderSym r) => VSType r -> SValue r -> VSFunction r
-listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Python and C++ --
 
@@ -290,11 +263,38 @@ docInOutFunc f desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ os)
 notNull :: (RenderSym r) => String -> SValue r -> SValue r
 notNull nil v = v ?!= S.valueOf (S.var nil $ onStateValue valueType v)
 
+iterBeginError :: String -> String
+iterBeginError l = "Attempt to use iterBeginFunc in " ++ l ++ ", but " ++ l ++ 
+  " has no iterators"
+
+iterEndError :: String -> String
+iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++ 
+  " has no iterators"
+
+listDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
+listDecDef v vals = do
+  vr <- zoom lensMStoVS v 
+  let lst = S.litList (listInnerType $ return $ variableType vr) vals
+  S.varDecDef (return vr) lst
+
 -- Python, Java, C++, and Swift --
 
 litArray :: (RenderSym r) => (Doc -> Doc) -> VSType r -> [SValue r] -> SValue r
 litArray f t es = sequence es >>= (\elems -> mkStateVal (S.arrayType t) 
   (f $ valueList elems))
+
+-- Python, C#, C++, and Swift --
+
+listSetFunc :: (RenderSym r) => (Doc -> Doc -> Doc) -> SValue r -> SValue r -> 
+  SValue r -> VSFunction r
+listSetFunc f v idx setVal = join $ on2StateValues (\i toVal -> funcFromData 
+  (f (RC.value i) (RC.value toVal)) (onStateValue valueType v)) (intValue idx) 
+  setVal
+
+-- Python, C#, and Swift --
+
+listAccessFunc :: (RenderSym r) => VSType r -> SValue r -> VSFunction r
+listAccessFunc t v = intValue v >>= ((`funcFromData` t) . R.listAccessFunc)
 
 -- Java, C#, and Swift --
 
@@ -309,6 +309,31 @@ double = toState $ typeFromData Double doubleRender (text doubleRender)
 self :: (RenderSym r) => SVariable r
 self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (obj l) 
   R.self')
+
+multiAssign :: (RenderSym r) => (Doc -> Doc) -> [SVariable r] -> [SValue r] -> 
+  MSStatement r
+multiAssign _ [] _ = error "Attempt to write assign statement for no variables."
+multiAssign _ _ [] = error "Attempt to write assign statement with no values."
+multiAssign f vars vals = if length vals /= 1 && length vars /= length vals 
+  then error $ "Attempted multiple assign statement with different number " ++
+    "of variables than values"
+  else do
+  vrs <- mapM (zoom lensMStoVS) vars
+  vls <- mapM (zoom lensMStoVS) vals
+  let wrapIfMult :: [a] -> Doc -> Doc
+      wrapIfMult l = if length l > 1 then f else id
+  mkStateVar "" S.void (wrapIfMult vrs (variableList vrs)) &= 
+    mkStateVal S.void (wrapIfMult vls (valueList vls))
+
+multiReturn :: (RenderSym r) => (Doc -> Doc) -> [SValue r] -> MSStatement r
+multiReturn _ [] = error "Attempt to write return statement with no values."
+multiReturn _ [v] = returnStmt v
+multiReturn f vs = do
+  vs' <- mapM (zoom lensMStoVS) vs
+  returnStmt $ mkStateVal S.void $ f $ valueList vs'
+
+listDec :: (RenderSym r) => SVariable r -> MSStatement r
+listDec v = S.varDecDef v $ S.litList (onStateValue variableType v) []
 
 -- Java and Swift --
 

@@ -41,13 +41,14 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
 import GOOL.Drasil.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
   catchLabel, throwLabel, importLabel, blockCmtStart, blockCmtEnd, docCmtStart, 
   bodyStart, bodyEnd, endStatement, commentStart, exceptionObj', new', args, 
-  exceptionObj, mainFunc, new, null, listSep, access, containing, mathFunc, 
-  variableList, parameterList, appendToBody, surroundBody, intValue)
-import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, 
-  sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class', multiStmt,
-  body, printFile, param, listDec, classVar, cast, castObj, static, dynamic, 
-  break, continue, private, public, blockCmt, docCmt, addComments, commentedMod,
-  commentedItem)
+  printLabel, exceptionObj, mainFunc, new, nullLabel, listSep, access, 
+  containing, mathFunc, variableList, parameterList, appendToBody, 
+  surroundBody, intValue)
+import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, 
+  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class', 
+  multiStmt, body, printFile, param, listDec, classVar, cast, castObj, static, 
+  dynamic, break, continue, private, public, blockCmt, docCmt, addComments, 
+  commentedMod, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStateVal, mkVal,
   VSOp, unOpPrec, powerPrec, unExpr, unExpr', unExprNumDbl, typeUnExpr, binExpr,
   binExprNumDbl', typeBinExpr)
@@ -380,14 +381,14 @@ instance ValueExpression JavaCode where
 
   lambda = G.lambda jLambda
 
-  notNull = CP.notNull null
+  notNull = CP.notNull nullLabel
 
 instance RenderValue JavaCode where
   inputFunc = modify (addLangImportVS $ utilImport jScanner) >> mkStateVal 
     (obj jScanner) (parens $ new' <+> jScanner' <> parens (jSystem jStdIn))
-  printFunc = mkStateVal void (jSystem (jStdOut `access` jPrint))
+  printFunc = mkStateVal void (jSystem (jStdOut `access` printLabel))
   printLnFunc = mkStateVal void (jSystem (jStdOut `access` jPrintLn))
-  printFileFunc = on2StateValues (\v -> mkVal v . R.printFile jPrint . 
+  printFileFunc = on2StateValues (\v -> mkVal v . R.printFile printLabel . 
     RC.value) void
   printFileLnFunc = on2StateValues (\v -> mkVal v . R.printFile jPrintLn . 
     RC.value) void
@@ -729,8 +730,8 @@ jLambdaSep = text "->"
 
 arrayList, jBool, jBool', jInteger, jObject, jScanner,
   jPrintWriter, jFile, jFileWriter, jIOExc, jFNFExc, jArrays, jAsList, jStdIn, 
-  jStdOut, jPrint, jPrintLn, jEquals, jParseInt, jParseDbl, jParseFloat, 
-  jIndex, jListAdd, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
+  jStdOut, jPrintLn, jEquals, jParseInt, jParseDbl, jParseFloat, jIndex, 
+  jListAdd, jListAccess, jListSet, jClose, jNext, jNextLine, jNextBool, 
   jHasNextLine, jCharAt, jSplit, io, util :: String
 arrayList = "ArrayList"
 jBool = "boolean"
@@ -747,7 +748,6 @@ jArrays = "Arrays"
 jAsList = jArrays `access` "asList"
 jStdIn = "in"
 jStdOut = "out"
-jPrint = "print"
 jPrintLn = "println"
 jEquals = "equals"
 jParseInt = jInteger `access` "parseInt"

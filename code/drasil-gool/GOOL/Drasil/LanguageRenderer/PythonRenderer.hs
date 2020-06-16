@@ -40,11 +40,12 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   method, stateVar, class', module', blockComment', intClass)
 import GOOL.Drasil.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
-  argv, listSep, piLabel, access, variableList, parameterList, surroundBody)
-import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, fabs, log10, log, 
-  exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, 
-  multiAssign, return', classVar, listSetFunc, castObj, dynamic, break, 
-  continue, addComments, commentedMod, commentedItem)
+  argv, printLabel, listSep, piLabel, access, variableList, parameterList, 
+  surroundBody)
+import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, fabs, log10, 
+  log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, 
+  classVar, listSetFunc, castObj, dynamic, break, continue, addComments, 
+  commentedMod, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmtNoEnd, mkStateVal, 
   mkVal, mkStateVar, VSOp, unOpPrec, powerPrec, multPrec, andPrec, orPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, typeBinExpr)
@@ -64,19 +65,20 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
-  indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, destructorError, stateVarDef, constVar, intClass, 
-  funcType, listSetFunc, listAccessFunc, buildModule, notNull, litArray)
+  indexOf, listAddFunc, listDecDef, discardFileLine, destructorError, 
+  stateVarDef, constVar, intClass, funcType, buildModule, notNull, 
+  iterBeginError, iterEndError, litArray, listSetFunc, listAccessFunc, 
+  multiAssign, multiReturn, listDec)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
-  increment1, runStrategy, stringListVals, stringListLists, observerIndex, 
-  checkState)
+  decrement1, increment1, runStrategy, stringListVals, stringListLists, 
+  observerIndex, checkState)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  onCodeList, onStateList, on2StateLists)
+  onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   currParameters, revFiles, addLangImportVS, getLangImports, addLibImportVS, 
   getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
@@ -368,7 +370,7 @@ instance ValueExpression PythonCode where
 
   lambda = G.lambda pyLambda
 
-  notNull v = G.notNull pyNull
+  notNull = CP.notNull pyNull
 
 instance RenderValue PythonCode where
   inputFunc = mkStateVal string pyInputFunc
@@ -439,15 +441,13 @@ instance FunctionElim PythonCode where
   function = funcDoc . unPC
 
 instance InternalAssignStmt PythonCode where
-  multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
-    mkStmtNoEnd (R.multiAssign vrs vls)) vars vals
+  multiAssign = CP.multiAssign id
 
 instance InternalIOStmt PythonCode where
   printSt = pyPrint
 
 instance InternalControlStmt PythonCode where
-  multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs = zoom lensMStoVS $ onStateList (mkStmtNoEnd . R.return') vs
+  multiReturn = CP.multiReturn id
 
 instance RenderStatement PythonCode where
   stmt = G.stmt
@@ -472,12 +472,12 @@ instance AssignStatement PythonCode where
   (&-=) = G.subAssign Empty
   (&+=) = G.increment
   (&++) = M.increment1
-  (&--) vr = (&-=) vr (litInt 1)
+  (&--) = M.decrement1
 
 instance DeclStatement PythonCode where
   varDec _ = toState $ mkStmtNoEnd empty
   varDecDef = assign
-  listDec _ v = v &= litList (onStateValue variableType v) []
+  listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec
   arrayDecDef = listDecDef
@@ -748,7 +748,7 @@ pySys = "sys"
 
 pyInputFunc, pyPrintFunc, pyListSizeFunc :: Doc
 pyInputFunc = text "input()" -- raw_input() for < Python 3.0
-pyPrintFunc = text "print"
+pyPrintFunc = text printLabel
 pyListSizeFunc = text "len"
 
 pyIndex, pyInsert, pyAppendFunc, pyReadline, pyReadlines, pyOpen, pyClose, 

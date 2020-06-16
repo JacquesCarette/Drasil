@@ -68,8 +68,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  funcType, listSetFunc, buildModule, litArray, call', listSizeFunc, 
-  listAccessFunc', string, constDecDef, docInOutFunc)
+  funcType, buildModule, litArray, call', listSizeFunc, listAccessFunc', 
+  string, constDecDef, docInOutFunc, listSetFunc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 

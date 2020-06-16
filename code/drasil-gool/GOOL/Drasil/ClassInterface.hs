@@ -13,17 +13,18 @@ module GOOL.Drasil.ClassInterface (
   NumericExpression(..), BooleanExpression(..), Comparison(..), 
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
   libFuncApp, newObj, extNewObj, libNewObj, exists, InternalValueExp(..), 
-  objMethodCall, objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
-  ($.), selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
-  listIndexExists, at, Iterator(..), StatementSym(..), AssignStatement(..), 
-  (&=), assignToListIndex, DeclStatement(..), objDecNewNoParams, 
-  extObjDecNewNoParams, IOStatement(..), StringStatement(..), 
-  FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
-  StatePattern(..), initState, changeState, ObserverPattern(..), 
-  observerListName, initObserverList, addObserver, StrategyPattern(..), 
-  ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
-  privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType
+  objMethodCall, objMethodCallNamedArgs, objMethodCallMixedArgs, 
+  objMethodCallNoParams, FunctionSym(..), ($.), selfAccess, GetSet(..), 
+  List(..), InternalList(..), listSlice, listIndexExists, at, Iterator(..), 
+  StatementSym(..), AssignStatement(..), (&=), assignToListIndex, 
+  DeclStatement(..), objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), 
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
+  ControlStatement(..), StatePattern(..), initState, changeState, 
+  ObserverPattern(..), observerListName, initObserverList, addObserver, 
+  StrategyPattern(..), ifNoElse, switchAsIf, ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), privMethod, pubMethod, initializer, nonInitConstructor, 
+  StateVarSym(..), privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), 
+  convType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..), ClassName)
@@ -289,6 +290,10 @@ class (FunctionSym r) => InternalValueExp r where
 objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
   [SValue r] -> SValue r
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
+
+objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+  -> NamedArgs r -> SValue r
+objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
 
 objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
   -> [SValue r] -> NamedArgs r -> SValue r

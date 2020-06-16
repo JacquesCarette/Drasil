@@ -42,8 +42,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
 import GOOL.Drasil.LanguageRenderer (new, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, elseIfLabel, 
   inLabel, tryLabel, catchLabel, throwLabel, exceptionObj', new', listSep',
-  args, null, listSep, access, containing, mathFunc, valueList, variableList, 
-  appendToBody, surroundBody)
+  args, nullLabel, listSep, access, containing, mathFunc, valueList, 
+  variableList, appendToBody, surroundBody)
 import qualified GOOL.Drasil.LanguageRenderer as R (class', multiStmt, body, 
   printFile, param, method, listDec, classVar, func, cast, listSetFunc, 
   castObj, static, dynamic, break, continue, private, public, blockCmt, docCmt, 
@@ -66,11 +66,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
-  indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, destructorError, stateVarDef, constVar, intClass, 
-  listSetFunc, listAccessFunc, arrayType, pi, printSt, arrayDec, arrayDecDef, 
-  openFileR, openFileW, openFileA, forEach, docMain, mainFunction, stateVar, 
-  buildModule', string, constDecDef, docInOutFunc, notNull, doubleRender)
+  indexOf, listAddFunc, listDecDef, discardFileLine, destructorError, 
+  stateVarDef, constVar, intClass, arrayType, pi, printSt, arrayDec, 
+  arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, mainFunction, 
+  stateVar, buildModule', string, constDecDef, docInOutFunc, notNull, 
+  iterBeginError, iterEndError, listSetFunc, listAccessFunc, doubleRender)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -356,7 +356,7 @@ instance ValueExpression CSharpCode where
 
   lambda = G.lambda csLambda
 
-  notNull = CP.notNull null
+  notNull = CP.notNull nullLabel
 
 instance RenderValue CSharpCode where
   inputFunc = addSystemImport csReadLineFunc

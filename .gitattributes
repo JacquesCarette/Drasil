@@ -4,3 +4,6 @@ FamilyOfGamePhysicsEngines/* linguist-documentation
 notes/* linguist-documentation
 Presentations/* linguist-documentation
 code/stable/* linguist-generated=true
+code/datafiles/NoPCM/cpp/* linguist-vendored
+code/datafiles/NoPCM/csharp/* linguist-vendored
+code/datafiles/NoPCM/java/* linguist-vendored

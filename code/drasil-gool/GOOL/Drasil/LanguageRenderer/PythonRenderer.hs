@@ -68,10 +68,10 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   indexOf, listAddFunc, listDecDef, discardFileLine, destructorError, 
   stateVarDef, constVar, intClass, funcType, buildModule, notNull, 
   iterBeginError, iterEndError, litArray, listSetFunc, listAccessFunc, 
-  multiAssign, multiReturn, listDec)
+  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
-  observerIndex, checkState)
+  notifyObservers', checkState)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), 
@@ -80,19 +80,16 @@ import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
   onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
-  currParameters, revFiles, addLangImportVS, getLangImports, addLibImportVS, 
+  revFiles, addLangImportVS, getLangImports, addLibImportVS, 
   getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
   setFileType, getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
-import Control.Lens ((^.))
-import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
 import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
-import qualified Control.Monad.State as S (get)
 import Data.List (intercalate, sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
@@ -487,13 +484,7 @@ instance DeclStatement PythonCode where
     modify (addModuleImport lib)
     varDecDef v (extNewObj lib (onStateValue variableType v) vs)
   constDecDef = varDecDef
-  funcDecDef v ps b = do
-    vr <- zoom lensMStoVS v
-    s <- S.get
-    f <- function (variableName vr) private (return $ variableType vr) 
-      (map param ps) b
-    modify (L.set currParameters (s ^. currParameters))
-    return $ mkStmtNoEnd $ RC.method f
+  funcDecDef = CP.funcDecDef
 
 instance IOStatement PythonCode where
   print      = pyOut False Nothing printFunc
@@ -527,9 +518,9 @@ instance StringStatement PythonCode where
   stringListLists = M.stringListLists
 
 instance FuncAppStatement PythonCode where
-  inOutCall = pyInOutCall funcApp
-  selfInOutCall = pyInOutCall selfFuncApp
-  extInOutCall m = pyInOutCall (extFuncApp m)
+  inOutCall = CP.inOutCall funcApp
+  selfInOutCall = CP.inOutCall selfFuncApp
+  extInOutCall m = CP.inOutCall (extFuncApp m)
 
 instance CommentStatement PythonCode where
   comment = G.comment pyCommentStart
@@ -542,13 +533,12 @@ instance ControlStatement PythonCode where
 
   throw = G.throw pyThrow Empty
 
-  ifCond = G.ifCond pyBodyStart pyElseIf pyBodyEnd
+  ifCond = G.ifCond parens pyBodyStart pyElseIf pyBodyEnd
   switch = switchAsIf
 
   ifExists = M.ifExists
 
-  for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
-    "use forRange, forEach, or while instead"
+  for _ _ _ _ = error $ CP.forLoopError pyName
   forRange i initv finalv stepv = forEach i (range initv finalv stepv)
   forEach i' v' b' = do
     i <- zoom lensMStoVS i'
@@ -563,11 +553,7 @@ instance StatePattern PythonCode where
   checkState = M.checkState
 
 instance ObserverPattern PythonCode where
-  notifyObservers f t = forRange M.observerIndex initv (listSize obsList) 
-    (litInt 1) notify
-    where obsList = valueOf $ observerListName `listOf` t
-          initv = litInt 0
-          notify = oneLiner $ valStmt $ at obsList (valueOf M.observerIndex) $. f
+  notifyObservers = M.notifyObservers'
 
 instance StrategyPattern PythonCode where
   runStrategy = M.runStrategy
@@ -956,14 +942,6 @@ pyClass n pn s vs fs = vcat [
                 | isEmpty vs = fs
                 | isEmpty fs = vs
                 | otherwise = vcat [vs, blank, fs]
-
-pyInOutCall :: (Label -> VSType PythonCode -> [SValue PythonCode] -> 
-  SValue PythonCode) -> Label -> [SValue PythonCode] -> [SVariable PythonCode] 
-  -> [SVariable PythonCode] -> MSStatement PythonCode
-pyInOutCall f n ins [] [] = valStmt $ f n void ins
-pyInOutCall f n ins outs both = multiAssign rets [f n void (map valueOf both ++ 
-  ins)]
-  where rets = both ++ outs
 
 pyBlockComment :: [String] -> Doc -> Doc
 pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns

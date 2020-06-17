@@ -223,21 +223,21 @@ stateVarList = vcat
 
 -- Controls --
 
-switch :: (RenderSym r) => r (Statement r) -> r (Value r) -> r (Body r) -> 
+switch :: (RenderSym r) => (Doc -> Doc) -> r (Statement r) -> r (Value r) -> r (Body r) -> 
   [(r (Value r), r (Body r))] -> Doc
-switch breakState v defBody cs = 
+switch f st v defBody cs = 
   let caseDoc (l, result) = vcat [
         text "case" <+> RC.value l <> colon,
         indentList [
           RC.body result,
-          RC.statement breakState]]
+          RC.statement st]]
       defaultSection = vcat [
         text "default" <> colon,
         indentList [
           RC.body defBody,
-          RC.statement breakState]]
+          RC.statement st]]
   in vcat [
-      text "switch" <> parens (RC.value v) <+> lbrace,
+      text "switch" <> f (RC.value v) <+> lbrace,
       indentList [
         vmap caseDoc cs,
         defaultSection],

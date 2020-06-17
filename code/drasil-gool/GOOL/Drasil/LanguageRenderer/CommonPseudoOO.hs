@@ -3,11 +3,12 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, discardFileLine, destructorError, stateVarDef, 
   constVar, intClass, funcType, buildModule, arrayType, pi, printSt, arrayDec, 
-  arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, mainFunction, 
-  stateVar, buildModule', call', listSizeFunc, listAccessFunc', string, 
-  constDecDef, docInOutFunc, notNull, iterBeginError, iterEndError, listDecDef, 
-  litArray, listSetFunc, listAccessFunc, doubleRender, double, self, 
-  multiAssign, multiReturn, listDec, floatRender, float, string'
+  arrayDecDef, openFileA, forEach, docMain, mainFunction, stateVar, 
+  buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef, 
+  docInOutFunc, notNull, iterBeginError, iterEndError, listDecDef, litArray, 
+  listSetFunc, listAccessFunc, doubleRender, double, openFileR, openFileW, 
+  self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
+  floatRender, float, string'
 ) where
 
 import Utils.Drasil (indent)
@@ -19,7 +20,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable,
   TypeSym(infile, outfile, listInnerType, obj, iterator), 
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType), 
   ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=), 
-  ControlStatement(returnStmt), ScopeSym(..))
+  ControlStatement(returnStmt), ScopeSym(..), MethodSym(function))
 import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
   VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList), 
@@ -31,7 +32,8 @@ import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..),  RenderType(..),
   RenderFunction(funcFromData), MethodTypeSym(mType),
   RenderMethod(commentedFunc), ParentSpec, BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (RenderValue(call), 
-  RenderStatement(stmt), RenderMethod(intFunc), RenderMod(modFromData))
+  RenderStatement(stmt), InternalAssignStmt(multiAssign), RenderMethod(intFunc),
+  RenderMod(modFromData))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
   PermElim(..), BodyElim(..), InternalTypeElim(..), InternalVarElim(variable), 
   ValueElim(value), StatementElim(statement), ScopeElim(..), MethodElim(..), 
@@ -47,14 +49,16 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
   call, docFuncRepr)
 import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS, 
-  lensMStoVS, lensVStoMS, getClassName, getLangImports, getLibImports, 
-  getModuleImports, setClassName)
+  lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports, 
+  getLibImports, getModuleImports, setClassName)
 
 import Prelude hiding (print,pi,(<>))
 import Data.Composition ((.:))
 import Data.List (sort)
 import Control.Monad (join)
-import Control.Monad.State (modify)
+import Control.Monad.State (get, modify)
+import Control.Lens ((^.))
+import qualified Control.Lens as L (set)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
   brackets, braces, vcat, equals)
@@ -164,14 +168,6 @@ arrayDec n vr = zoom lensMStoVS $ do
 arrayDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 arrayDecDef v vals = on2StateValues (\vd vs -> mkStmt (RC.statement vd <+> 
   equals <+> braces (valueList vs))) (S.varDec v) (mapM (zoom lensMStoVS) vals)
-
-openFileR :: (RenderSym r) => (SValue r -> VSType r -> SValue r) -> SVariable r 
-  -> SValue r -> MSStatement r
-openFileR f vr vl = vr &= f vl infile
-
-openFileW :: (RenderSym r) => (SValue r -> VSType r -> SValue r -> SValue r) -> 
-  SVariable r -> SValue r -> MSStatement r
-openFileW f vr vl = vr &= f vl outfile S.litFalse
 
 openFileA :: (RenderSym r) => (SValue r -> VSType r -> SValue r -> SValue r) -> 
   SVariable r -> SValue r -> MSStatement r
@@ -304,6 +300,14 @@ doubleRender = "Double"
 double :: (RenderSym r) => VSType r
 double = toState $ typeFromData Double doubleRender (text doubleRender)
 
+openFileR :: (RenderSym r) => (SValue r -> VSType r -> SValue r) -> SVariable r 
+  -> SValue r -> MSStatement r
+openFileR f vr vl = vr &= f vl infile
+
+openFileW :: (RenderSym r) => (SValue r -> VSType r -> SValue r -> SValue r) -> 
+  SVariable r -> SValue r -> MSStatement r
+openFileW f vr vl = vr &= f vl outfile S.litFalse
+
 -- Python and Swift --
 
 self :: (RenderSym r) => SVariable r
@@ -334,6 +338,27 @@ multiReturn f vs = do
 
 listDec :: (RenderSym r) => SVariable r -> MSStatement r
 listDec v = S.varDecDef v $ S.litList (onStateValue variableType v) []
+
+funcDecDef :: (RenderSym r) => SVariable r -> [SVariable r] -> MSBody r -> 
+  MSStatement r
+funcDecDef v ps b = do
+  vr <- zoom lensMStoVS v
+  s <- get
+  f <- function (variableName vr) private (return $ variableType vr) 
+    (map S.param ps) b
+  modify (L.set currParameters (s ^. currParameters))
+  return $ mkStmtNoEnd $ RC.method f
+
+inOutCall :: (RenderSym r) => (Label -> VSType r -> [SValue r] -> SValue r) -> 
+  Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> MSStatement r
+inOutCall f n ins [] [] = S.valStmt $ f n S.void ins
+inOutCall f n ins outs both = S.multiAssign rets [f n S.void (map S.valueOf 
+  both ++ ins)]
+  where rets = both ++ outs
+
+forLoopError :: String -> String
+forLoopError l = "Classic for loops not available in " ++ l ++ ", use " ++
+  "forRange, forEach, or while instead"
 
 -- Java and Swift --
 

@@ -4,7 +4,7 @@
 module GOOL.Drasil.LanguageRenderer.Macros (
   ifExists, decrement1, increment, increment1, runStrategy, 
   listSlice, stringListVals, stringListLists, forRange, notifyObservers,
-  observerIndex, checkState
+  notifyObservers', checkState
 ) where
 
 import GOOL.Drasil.CodeType (CodeType(..))
@@ -116,13 +116,24 @@ forRange i initv finalv stepv = S.for (S.varDecDef i initv) (S.valueOf i ?<
 observerIndex :: (RenderSym r) => SVariable r
 observerIndex = S.var "observerIndex" S.int
 
+observerIdxVal :: (RenderSym r) => SValue r
+observerIdxVal = S.valueOf observerIndex
+
+obsList :: (RenderSym r) => VSType r -> SValue r
+obsList t = S.valueOf $ observerListName `listOf` t
+
+notify :: (RenderSym r) => VSType r -> VSFunction r -> MSBody r
+notify t f = oneLiner $ S.valStmt $ at (obsList t) observerIdxVal $. f
+
 notifyObservers :: (RenderSym r) => VSFunction r -> VSType r -> MSStatement r
-notifyObservers f t = S.for initv (v_index ?< S.listSize obsList) 
-  (observerIndex &++) notify
-  where obsList = S.valueOf $ observerListName `listOf` t 
-        v_index = S.valueOf observerIndex
-        initv = S.varDecDef observerIndex $ S.litInt 0
-        notify = oneLiner $ S.valStmt $ at obsList v_index $. f
+notifyObservers f t = S.for initv (observerIdxVal ?< S.listSize (obsList t)) 
+  (observerIndex &++) (notify t f)
+  where initv = S.varDecDef observerIndex $ S.litInt 0
+
+notifyObservers' :: (RenderSym r) => VSFunction r -> VSType r -> MSStatement r
+notifyObservers' f t = S.forRange observerIndex initv (listSize $ obsList t) 
+    (litInt 1) (notify t f)
+    where initv = litInt 0
         
 checkState :: (RenderSym r) => Label -> [(SValue r, MSBody r)] -> MSBody r -> 
   MSStatement r

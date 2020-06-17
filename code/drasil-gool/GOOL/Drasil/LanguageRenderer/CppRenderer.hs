@@ -1420,8 +1420,8 @@ instance ControlStatement CppSrcCode where
 
   throw = G.throw cppThrowDoc Semi
 
-  ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
-  switch = C.switch
+  ifCond = G.ifCond parens bodyStart elseIfLabel bodyEnd
+  switch = C.switch parens break
 
   ifExists _ ifBody _ = onStateValue (mkStmtNoEnd . RC.body) ifBody -- All variables are initialized in C++
 
@@ -1430,7 +1430,7 @@ instance ControlStatement CppSrcCode where
   forEach i v = for (varDecDef e (iterBegin v)) (valueOf e ?!= iterEnd v) 
     (e &++)
     where e = toBasicVar i
-  while = C.while bodyStart bodyEnd
+  while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch cppTryCatch
 

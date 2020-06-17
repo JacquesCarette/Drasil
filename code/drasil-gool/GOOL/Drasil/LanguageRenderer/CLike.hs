@@ -15,7 +15,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable,
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
   PermanenceSym(..), TypeElim(getType, getTypeString), 
   VariableElim(variableType), ValueSym(Value, valueType), extNewObj, ($.), 
-  ControlStatement(break), ScopeSym(..))
+  ScopeSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(bool, float, obj),
   ValueExpression(funcAppMixedArgs, newObjMixedArgs), 
   DeclStatement(varDec, varDecDef))
@@ -149,15 +149,17 @@ extObjDecNew :: (RenderSym r) => Library -> SVariable r -> [SValue r] ->
 extObjDecNew l v vs = S.varDecDef v (extNewObj l (onStateValue variableType v)
   vs)
 
-switch :: (RenderSym r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> 
-  MSStatement r
-switch v cs bod = do
-  brk <- S.stmt break
+-- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)
+-- 2nd parameter is a statement to end every case with
+switch :: (RenderSym r) => (Doc -> Doc) -> MSStatement r -> SValue r -> 
+  [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+switch f st v cs bod = do
+  s <- S.stmt st
   val <- zoom lensMStoVS v
   vals <- mapM (zoom lensMStoVS . fst) cs
   bods <- mapM snd cs
   dflt <- bod
-  return $ mkStmt $ R.switch brk val dflt (zip vals bods)
+  return $ mkStmt $ R.switch f s val dflt (zip vals bods)
 
 for :: (RenderSym r) => Doc -> Doc -> MSStatement r -> SValue r -> 
   MSStatement r -> MSBody r -> MSStatement r
@@ -172,9 +174,11 @@ for bStart bEnd sInit vGuard sUpdate b = do
     indent $ RC.body bod,
     bEnd]
   
-while :: (RenderSym r) => Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
-while bStart bEnd v' = on2StateValues (\v b -> mkStmtNoEnd (vcat [
-  whileLabel <+> parens (RC.value v) <+> bStart,
+-- Doc function parameter is applied to the render of the while-condition
+while :: (RenderSym r) => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MSBody r -> 
+  MSStatement r
+while f bStart bEnd v' = on2StateValues (\v b -> mkStmtNoEnd (vcat [
+  whileLabel <+> f (RC.value v) <+> bStart,
   indent $ RC.body b,
   bEnd])) (zoom lensMStoVS v')
 

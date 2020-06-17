@@ -68,9 +68,9 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, listDecDef, discardFileLine, destructorError, 
   stateVarDef, constVar, intClass, arrayType, pi, printSt, arrayDec, 
-  arrayDecDef, openFileR, openFileW, openFileA, forEach, docMain, mainFunction, 
-  stateVar, buildModule', string, constDecDef, docInOutFunc, notNull, 
-  iterBeginError, iterEndError, listSetFunc, listAccessFunc, doubleRender)
+  arrayDecDef, openFileA, forEach, docMain, mainFunction, stateVar, 
+  buildModule', string, constDecDef, docInOutFunc, notNull, iterBeginError, 
+  iterEndError, listSetFunc, listAccessFunc, doubleRender, openFileR, openFileW)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -527,15 +527,15 @@ instance ControlStatement CSharpCode where
     modify (addLangImport csSystem)
     G.throw csThrowDoc Semi msg
 
-  ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
-  switch = C.switch
+  ifCond = G.ifCond parens bodyStart elseIfLabel bodyEnd
+  switch = C.switch parens break
 
   ifExists = M.ifExists
 
   for = C.for bodyStart bodyEnd
   forRange = M.forRange
   forEach = CP.forEach bodyStart bodyEnd csForEach inLabel 
-  while = C.while bodyStart bodyEnd
+  while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch csTryCatch
 

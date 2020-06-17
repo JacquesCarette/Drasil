@@ -377,16 +377,20 @@ throw f t = onStateValue (\msg -> stmtFromData (f msg) t) . zoom lensMStoVS .
 
 -- ControlStatements --
 
-ifCond :: (RenderSym r) => Doc -> Doc -> Doc -> [(SValue r, MSBody r)] -> 
-  MSBody r -> MSStatement r
-ifCond _ _ _ [] _ = error "if condition created with no cases"
-ifCond ifStart elif bEnd (c:cs) eBody =
+-- 1st parameter is a Doc function to use on the render of each condition (i.e. parens)
+-- 2nd parameter is the syntax for starting a block in an if-condition
+-- 3rd parameter is the keyword for an else-if statement
+-- 4th parameter is the syntax for ending a block in an if-condition
+ifCond :: (RenderSym r) => (Doc -> Doc) -> Doc -> Doc -> Doc -> 
+  [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+ifCond _ _ _ _ [] _ = error "if condition created with no cases"
+ifCond f ifStart elif bEnd (c:cs) eBody =
     let ifSect (v, b) = on2StateValues (\val bd -> vcat [
-          ifLabel <+> parens (RC.value val) <+> ifStart,
+          ifLabel <+> f (RC.value val) <+> ifStart,
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
-          elif <+> parens (RC.value val) <+> ifStart,
+          elif <+> f (RC.value val) <+> ifStart,
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) $ vcat [

@@ -70,9 +70,9 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass,
-  funcType, arrayType, pi, printSt, arrayDec, arrayDecDef, openFileR, 
-  openFileW, openFileA, forEach, docMain, mainFunction, stateVar, buildModule', 
-  litArray, call', listSizeFunc, listAccessFunc', notNull, doubleRender, double,
+  funcType, arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
+  docMain, mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
+  listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
   floatRender, float, string')
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
@@ -557,15 +557,15 @@ instance ControlStatement JavaCode where
   
   throw = G.throw jThrowDoc Semi
 
-  ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
-  switch  = C.switch
+  ifCond = G.ifCond parens bodyStart elseIfLabel bodyEnd
+  switch  = C.switch parens break
 
   ifExists = M.ifExists
 
   for = C.for bodyStart bodyEnd
   forRange = M.forRange 
   forEach = CP.forEach bodyStart bodyEnd forLabel colon
-  while = C.while bodyStart bodyEnd
+  while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch jTryCatch
   

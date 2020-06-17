@@ -1162,9 +1162,9 @@ instance VariableValue CppSrcCode where
     vr <- vr'
     its <- zoom lensVStoMS getIter
     let namevr = variableName vr 
-    if namevr `elem` its then do
-        itvr <- iterator $ toState $ variableType vr
-        toState $ mkVal itvr (parens $ cppDeref <> RC.variable vr)
+    if namevr `elem` its then 
+      mkStateVal (iterator $ toState $ variableType vr) 
+        (parens $ cppDeref <> RC.variable vr)
       else G.valueOf vr'
 
 instance CommandLineArgs CppSrcCode where

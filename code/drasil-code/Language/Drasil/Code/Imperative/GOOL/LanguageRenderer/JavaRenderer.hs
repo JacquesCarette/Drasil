@@ -11,7 +11,7 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
   AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, sampleInput, makefile, noRunIfLib)
+  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..), 
@@ -53,6 +53,7 @@ instance AuxiliarySym JavaProject where
   type Auxiliary JavaProject = AuxData
   type AuxHelper JavaProject = Doc
   doxConfig = G.doxConfig optimizeDox
+  readMe = G.readMe
   sampleInput = G.sampleInput
 
   optimizeDox = return yes

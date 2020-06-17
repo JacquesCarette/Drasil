@@ -7,7 +7,7 @@ import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
-  genDoxConfig, genModuleWithImports)
+  genDoxConfig, genReadMe, genModuleWithImports)
 import Language.Drasil.Code.Imperative.GenODE (chooseODELib)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs,
@@ -108,7 +108,8 @@ genPackage unRepr = do
       m = makefile (libPaths g) (implType g) (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig s
-  return $ package pd (m:i++d)
+  rm <- genReadMe
+  return $ package pd (m:i++rm++d)
 
 genProgram :: (OOProg r) => Reader DrasilState (GSProgram r)
 genProgram = do

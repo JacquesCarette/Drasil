@@ -87,7 +87,7 @@ import GOOL.Drasil.CodeAnalysis (Exception(..), ExceptionType(..), exception,
   stdExc, HasException(..))
 import GOOL.Drasil.Helpers (emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
-  onCodeList, onStateList, on1StateWrapped,on2StateWrapped)
+  onCodeList, onStateList, on2StateWrapped)
 import GOOL.Drasil.State (VS, lensGStoFS, lensMStoFS, lensMStoVS, lensVStoFS, 
   lensVStoMS, modifyReturn, modifyReturnList, revFiles, addProgNameToPaths, 
   addLangImport, addLangImportVS, addExceptionImports, getModuleName, 
@@ -278,8 +278,9 @@ instance InternalVarElim JavaCode where
   variable = varDoc . unJC
 
 instance RenderVariable JavaCode where
-  varFromData b n t' d =  on1StateWrapped (\t ->toState $ 
-    on2CodeValues (vard b n) t (toCode d)) t'
+  varFromData b n t' d =  do 
+    t <- t'
+    toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
@@ -395,8 +396,9 @@ instance RenderValue JavaCode where
 
   call = CP.call' jName
   
-  valFromData p t' d = on1StateWrapped (\t -> toState $ 
-    on2CodeValues (vd p) t (toCode d)) t'
+  valFromData p t' d = do 
+    t <- t'
+    toState $ on2CodeValues (vd p) t (toCode d)
 
 instance ValueElim JavaCode where
   valuePrec = valPrec . unJC
@@ -599,8 +601,9 @@ instance ParameterSym JavaCode where
   pointerParam = param
 
 instance RenderParam JavaCode where
-  paramFromData v' d = on1StateWrapped (\v -> toState $ on2CodeValues 
-    pd v (toCode d)) $ zoom lensMStoVS v'
+  paramFromData v' d = do 
+    v <- zoom lensMStoVS v'
+    toState $ on2CodeValues pd v (toCode d)
 
 instance ParamElim JavaCode where
   parameterName = variableName . onCodeValue paramVar

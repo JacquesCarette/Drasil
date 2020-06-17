@@ -36,7 +36,7 @@ import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
   ValueElim(value), StatementElim(statement), ScopeElim(..), MethodElim(..), 
   StateVarElim(..), ClassElim(..))
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, 
-  on2StateValues, onStateList, on1StateWrapped, on2StateWrapped)
+  on2StateValues, onStateList, on2StateWrapped)
 import GOOL.Drasil.LanguageRenderer (array', new', args, array, access, 
   mathFunc, functionDox, valueList, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (module', print, stateVar, 
@@ -69,10 +69,10 @@ classVar :: (RenderSym r) => (Doc -> Doc -> Doc) -> VSType r -> SVariable r ->
 classVar f c' v'= do 
   c <- c'
   v <- v'
-  vv<- varFromData 
+  vr <- varFromData 
     (variableBind v) (getTypeString c `access` variableName v) 
     (toState $ variableType v) (f (RC.type' c) (RC.variable v))
-  toState $ classVarCheckStatic vv
+  toState $ classVarCheckStatic vr
   
 objVarSelf :: (RenderSym r) => SVariable r -> SVariable r
 objVarSelf = S.objVar S.self
@@ -132,8 +132,10 @@ intClass f n s i svrs mths = do
 -- Python, Java, and C++ --
 
 funcType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
-funcType ps'= on2StateWrapped (\ps r -> typeFromData (Func (map getType ps) 
-  (getType r)) "" empty) $ sequence ps'
+funcType ps' r' =  do 
+  ps <- sequence ps'
+  r <- r'
+  typeFromData (Func (map getType ps) (getType r)) "" empty
 
 objVar :: (RenderSym r) => SVariable r -> SVariable r -> SVariable r
 objVar = on2StateWrapped (\o v -> mkVar (variableName o `access` variableName v) 
@@ -167,8 +169,10 @@ buildModule n imps bot fs cs = S.modFromData n (do
 -- Java and C# -- 
 
 arrayType :: (RenderSym r) => VSType r -> VSType r
-arrayType = on1StateWrapped (\t -> typeFromData (Array (getType t)) 
-  (getTypeString t ++ array) (RC.type' t <> brackets empty))
+arrayType t' = do 
+  t <- t'
+  typeFromData (Array (getType t)) 
+    (getTypeString t ++ array) (RC.type' t <> brackets empty)
   
 pi :: (RenderSym r) => SValue r
 pi = mkStateVal S.double (text $ mathFunc "PI")
@@ -192,9 +196,10 @@ arrayDec n vr = do
     RC.type' innerTp <> brackets (RC.value sz)
 
 arrayDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-arrayDecDef v' vals' = on2StateWrapped (\vs vd -> mkStmt (RC.statement vd 
-  <+> equals <+> braces (valueList vs))) 
-  (mapM (zoom lensMStoVS) vals') $ S.varDec v'
+arrayDecDef v' vals' = do 
+  vs <- mapM (zoom lensMStoVS) vals'
+  vd <- S.varDec v'
+  mkStmt (RC.statement vd <+> equals <+> braces (valueList vs))
 
 openFileR :: (RenderSym r) => (SValue r -> VSType r -> SValue r) -> SVariable r 
   -> SValue r -> MSStatement r
@@ -230,8 +235,8 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
 
 mainFunction :: (RenderSym r) => VSType r -> Label -> MSBody r -> SMethod r
 mainFunction s n = S.intFunc True n public static (mType S.void)
-  [S.param (S.var args (on1StateWrapped (\argT -> typeFromData (List String) 
-  (render (RC.type' argT) ++ array) (RC.type' argT <> array')) s))]
+  [S.param (S.var args (s >>= (\argT -> typeFromData (List String) 
+  (render (RC.type' argT) ++ array) (RC.type' argT <> array'))))]
 
 stateVar :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) -> 
   SVariable r -> CS (r Doc)
@@ -280,8 +285,10 @@ string :: (RenderSym r) => VSType r
 string = typeFromData String stringRender (text stringRender)
 
 constDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-constDecDef vr' v'= on2StateWrapped (\vr v -> mkStmt (R.constDecDef vr v)) 
-  (zoom lensMStoVS vr') $ zoom lensMStoVS v'
+constDecDef vr' v'= do
+  vr <- zoom lensMStoVS vr'
+  v <- zoom lensMStoVS v'
+  mkStmt (R.constDecDef vr v)
   
 docInOutFunc :: (RenderSym r) => ([SVariable r] -> [SVariable r] -> 
     [SVariable r] -> MSBody r -> SMethod r) -> 

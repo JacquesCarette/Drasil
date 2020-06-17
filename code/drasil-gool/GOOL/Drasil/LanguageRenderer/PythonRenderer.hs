@@ -74,7 +74,7 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  onCodeList, onStateList, on1StateWrapped, on2StateWrapped, on3StateWrapped)
+  onCodeList, onStateList, on2StateWrapped)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   currParameters, revFiles, addLangImportVS, getLangImports, addLibImportVS, 
   getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
@@ -270,8 +270,9 @@ instance InternalVarElim PythonCode where
   variable = varDoc . unPC
 
 instance RenderVariable PythonCode where
-  varFromData b n t' d = on1StateWrapped (\t ->toState $ 
-    on2CodeValues (vard b n) t (toCode d)) t'
+  varFromData b n t' d = do 
+    t <- t'
+    toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
@@ -382,8 +383,9 @@ instance RenderValue PythonCode where
 
   call = G.call pyNamedArgSep
 
-  valFromData p t' d = on1StateWrapped (\t -> toState $ 
-    on2CodeValues (vd p) t (toCode d)) t'
+  valFromData p t' d = do 
+    t <- t'
+    toState $ on2CodeValues (vd p) t (toCode d)
 
 instance ValueElim PythonCode where
   valuePrec = valPrec . unPC
@@ -402,7 +404,7 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  listSize v' = on2StateWrapped(\f v->mkVal (functionType f) 
+  listSize v' = on2StateWrapped(\f v-> mkVal (functionType f) 
     (pyListSize (RC.value v) (RC.function f))) listSizeFunc  v'
   listAdd = G.listAdd
   listAppend = G.listAppend
@@ -441,17 +443,19 @@ instance FunctionElim PythonCode where
   function = funcDoc . unPC
 
 instance InternalAssignStmt PythonCode where
-  multiAssign vars vals = on2StateWrapped (\vrs vls-> 
-    mkStmtNoEnd (R.multiAssign vrs vls)) (zoom lensMStoVS $ sequence vars) $
-    zoom lensMStoVS $ sequence vals
+  multiAssign vars vals = do 
+    vrs <- zoom lensMStoVS $ sequence vars
+    vls <- zoom lensMStoVS $ sequence vals
+    mkStmtNoEnd (R.multiAssign vrs vls) 
 
 instance InternalIOStmt PythonCode where
   printSt = pyPrint
 
 instance InternalControlStmt PythonCode where
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs' = on1StateWrapped (mkStmtNoEnd . R.return') $
-    zoom lensMStoVS $ sequence vs'
+  multiReturn vs' = do 
+    vs <- zoom lensMStoVS $ sequence vs'
+    (mkStmtNoEnd . R.return') vs
 
 instance RenderStatement PythonCode where
   stmt = G.stmt
@@ -554,10 +558,15 @@ instance ControlStatement PythonCode where
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"
   forRange i initv finalv stepv = forEach i (range initv finalv stepv)
-  forEach i' v' b' = on3StateWrapped (\i v b->mkStmtNoEnd (pyForEach i v b))
-    (zoom lensMStoVS i') (zoom lensMStoVS v') b'
-  while v' b' = on2StateWrapped (\v b -> mkStmtNoEnd (pyWhile v b))
-    (zoom lensMStoVS v') b'
+  forEach i' v' b' = do
+    i <- zoom lensMStoVS i'
+    v <- zoom lensMStoVS v'
+    b <- b'
+    mkStmtNoEnd (pyForEach i v b)
+  while v' b' = do 
+    v <- zoom lensMStoVS v'
+    b <- b'
+    mkStmtNoEnd (pyWhile v b)
 
   tryCatch = G.tryCatch pyTryCatch
 
@@ -596,8 +605,9 @@ instance ParameterSym PythonCode where
   pointerParam = param
 
 instance RenderParam PythonCode where
-  paramFromData v' d = on1StateWrapped (\v -> toState $ on2CodeValues 
-    pd v (toCode d)) $ zoom lensMStoVS v'
+  paramFromData v' d = do 
+    v <- zoom lensMStoVS v'
+    toState $ on2CodeValues pd v (toCode d)
   
 instance ParamElim PythonCode where
   parameterName = variableName . onCodeValue paramVar
@@ -860,9 +870,12 @@ pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v
 
 pyInlineIf :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-pyInlineIf = on3StateWrapped (\c v1 v2-> 
+pyInlineIf c' v1' v2' = do 
+  c <- c'
+  v1 <- v1'
+  v2 <- v2'
   valFromData (valuePrec c) (toState $ valueType v1) 
-    (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)) 
+    (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
 pyLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> variableList ps <> colon <+> RC.value ex

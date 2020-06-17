@@ -1,6 +1,6 @@
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic (
   -- * Common Syntax
-  doxConfig, readMe, sampleInput, makefile, noRunIfLib
+  doxConfig, readMe,sampleInput, makefile, noRunIfLib
 ) where
 
 import Language.Drasil (Expr)

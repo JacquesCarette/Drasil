@@ -64,12 +64,13 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
   closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, 
   param, method, getMethod, setMethod, constructor, function, 
-  buildClass, extraClass, implementingClass, docClass, commentedClass, 
-  modFromData, fileDoc, docMod, fileFromData)
+  buildClass, implementingClass, commentedClass, modFromData, 
+  fileDoc, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  doxFunc, funcType, buildModule, litArray, call', listSizeFunc, 
-  listAccessFunc', string, constDecDef, docInOutFunc, listSetFunc)
+  doxFunc, doxClass, doxMod, funcType, buildModule, litArray, call', 
+  listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc, 
+  listSetFunc, extraClass)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
@@ -984,7 +985,7 @@ instance FileSym CppSrcCode where
     modify (setFileType Source)
     G.fileDoc cppSrcExt top bottom m
 
-  docMod = G.docMod cppSrcExt
+  docMod = CP.doxMod cppSrcExt
 
 instance RenderFile CppSrcCode where
   top _ = toCode empty
@@ -1541,10 +1542,10 @@ instance StateVarElim CppSrcCode where
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
   buildClass = G.buildClass
-  extraClass = G.extraClass
+  extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
-  docClass = G.docClass
+  docClass = CP.doxClass
 
 instance RenderClass CppSrcCode where
   intClass n _ _ vs fs = do
@@ -1575,7 +1576,7 @@ instance ModuleSym CppSrcCode where
       vcat (map (RC.import' . li) lis),
       vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
       vcat (map (usingNameSpace std . Just) us)]) 
-    (return empty) ms cs
+    (return empty) (return empty) ms cs
     where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
           mi = modImport
           li = langImport
@@ -1621,7 +1622,7 @@ instance FileSym CppHdrCode where
     modify (setFileType Header) 
     G.fileDoc cppHdrExt top bottom m
   
-  docMod = G.docMod cppHdrExt
+  docMod = CP.doxMod cppHdrExt
 
 instance RenderFile CppHdrCode where
   top = onCodeValue cpphtop
@@ -2132,10 +2133,10 @@ instance StateVarElim CppHdrCode where
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
   buildClass = G.buildClass
-  extraClass = G.extraClass
+  extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
-  docClass = G.docClass
+  docClass = CP.doxClass
 
 instance RenderClass CppHdrCode where
   intClass n _ i vs mths = do
@@ -2167,7 +2168,7 @@ instance ModuleSym CppHdrCode where
       vcat (map (RC.import' . li) lis),
       vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
       vcat (map (usingNameSpace std . Just) us)]) 
-    (return empty)
+    (return empty) (return empty)
     where mi, li :: Label -> CppHdrCode (Import CppHdrCode)
           mi = modImport
           li = langImport

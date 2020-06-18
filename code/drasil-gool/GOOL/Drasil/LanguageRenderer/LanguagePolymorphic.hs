@@ -12,7 +12,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond, 
   tryCatch, construct, param, method, getMethod, setMethod, constructor, 
-  function, docFuncRepr, docFunc, buildClass, extraClass, implementingClass, 
+  function, docFuncRepr, docFunc, buildClass, implementingClass, 
   docClass, commentedClass, modFromData, fileDoc, docMod
 ) where
 
@@ -58,8 +58,8 @@ import GOOL.Drasil.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
   getInnerType, getNestDegree)
 import GOOL.Drasil.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt, 
-  FuncDocRenderer, classDox, moduleDox, getterName, setterName, valueList, 
-  namedArgList)
+  FuncDocRenderer, ClassDocRenderer, ModuleDocRenderer, getterName, setterName, 
+  valueList, namedArgList)
 import qualified GOOL.Drasil.LanguageRenderer as R (file, block, assign, 
   addAssign, subAssign, return', comment, getTerm, var, objVar, arg, func, 
   objAccess, commentedItem)
@@ -455,16 +455,12 @@ buildClass p stVars methods = do
   n <- zoom lensCStoFS getModuleName
   S.intClass n public (inherit p) stVars methods
 
-extraClass :: (RenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
-  SClass r
-extraClass n = S.intClass n public . inherit
-
 implementingClass :: (RenderSym r) => Label -> [Label] -> [CSStateVar r] -> 
   [SMethod r] -> SClass r
 implementingClass n is = S.intClass n public (implements is)
 
-docClass :: (RenderSym r) => String -> SClass r -> SClass r
-docClass d = S.commentedClass (docComment $ toState $ classDox d)
+docClass :: (RenderSym r) => ClassDocRenderer -> String -> SClass r -> SClass r
+docClass cdr d = S.commentedClass (docComment $ toState $ cdr d)
 
 commentedClass :: (RenderSym r, Monad r) => CS (r (BlockComment r)) -> SClass r 
   -> CS (r Doc)
@@ -488,9 +484,9 @@ fileDoc ext topb botb mdl = do
         (R.file (RC.block $ topb m) d (RC.block botb))) m
   S.fileFromData fp updm
 
-docMod :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> 
-  SFile r
-docMod e d a dt fl = commentedMod fl (docComment $ moduleDox d a dt . addExt e 
+docMod :: (RenderSym r) => ModuleDocRenderer -> String -> String -> [String] -> 
+  String -> SFile r -> SFile r
+docMod mdr e d a dt fl = commentedMod fl (docComment $ mdr d a dt . addExt e 
   <$> getModuleName)
 
 fileFromData :: (RenderSym r) => (FilePath -> r (Module r) -> r (File r)) 

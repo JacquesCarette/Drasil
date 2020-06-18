@@ -63,17 +63,16 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, closeFile, 
   returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
   method, getMethod, setMethod, constructor, function, buildClass, 
-  implementingClass, docClass, commentedClass, modFromData, fileDoc, 
-  docMod, fileFromData)
+  implementingClass, commentedClass, modFromData, fileDoc, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int, 
-  doxFunc, bindingError, extVar, classVar, objVarSelf, iterVar, 
-  extFuncAppMixedArgs, indexOf, listAddFunc, iterBeginError, iterEndError, 
-  listDecDef, discardFileLine, destructorError, stateVarDef, constVar, intClass,
-  funcType, arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
-  docMain, mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
-  listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
-  floatRender, float, string')
+  doxFunc, doxClass, doxMod, bindingError, extVar, classVar, objVarSelf, 
+  iterVar, extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, 
+  destructorError, intClass, funcType, arrayType, pi, printSt, arrayDec, 
+  arrayDecDef, openFileA, forEach, docMain, mainFunction, buildModule', 
+  iterBeginError, iterEndError, listDecDef, stateVarDef, constVar, litArray, 
+  call', listSizeFunc, listAccessFunc', notNull, doubleRender, double, 
+  openFileR, openFileW, stateVar, floatRender, float, string')
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -140,7 +139,7 @@ instance FileSym JavaCode where
     modify (setFileType Combined)
     G.fileDoc jExt top bottom m
 
-  docMod = G.docMod jExt
+  docMod = CP.doxMod jExt
 
 instance RenderFile JavaCode where
   top _ = toCode empty
@@ -667,7 +666,7 @@ instance ClassSym JavaCode where
   extraClass = jExtraClass
   implementingClass = G.implementingClass
 
-  docClass = G.docClass
+  docClass = CP.doxClass
 
 instance RenderClass JavaCode where
   intClass = CP.intClass R.class'

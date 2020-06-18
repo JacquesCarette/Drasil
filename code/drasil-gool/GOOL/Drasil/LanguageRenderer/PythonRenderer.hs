@@ -58,16 +58,15 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
   loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
   closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, 
-  param, method, getMethod, setMethod, constructor, function, 
-  buildClass, extraClass, implementingClass, docClass, commentedClass, 
-  modFromData, fileDoc, docMod, fileFromData)
+  param, method, getMethod, setMethod, constructor, function, buildClass, 
+  implementingClass, commentedClass, modFromData, fileDoc, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  doxFunc, bindingError, extVar, classVar, objVarSelf, iterVar, 
-  extFuncAppMixedArgs, indexOf, listAddFunc, listDecDef, discardFileLine, 
-  destructorError, stateVarDef, constVar, intClass, funcType, buildModule, 
-  notNull, iterBeginError, iterEndError, litArray, listSetFunc, listAccessFunc, 
-  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc')
+  doxFunc, doxClass, doxMod, bindingError, extVar, classVar, objVarSelf, 
+  iterVar, extFuncAppMixedArgs, indexOf, listAddFunc, listDecDef, 
+  discardFileLine, destructorError, intClass, funcType, buildModule, notNull, 
+  iterBeginError, iterEndError, stateVarDef, constVar, litArray, listSetFunc, 
+  extraClass, listAccessFunc, multiAssign, multiReturn, listDec, funcDecDef, 
+  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc')
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers', checkState)
@@ -127,7 +126,7 @@ instance FileSym PythonCode where
     modify (setFileType Combined)
     G.fileDoc pyExt top bottom m
 
-  docMod = G.docMod pyExt
+  docMod = CP.doxMod pyExt
 
 instance RenderFile PythonCode where
   top _ = toCode empty
@@ -642,10 +641,10 @@ instance StateVarElim PythonCode where
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
   buildClass = G.buildClass
-  extraClass = G.extraClass  
+  extraClass = CP.extraClass  
   implementingClass = G.implementingClass
 
-  docClass = G.docClass
+  docClass = CP.doxClass
 
 instance RenderClass PythonCode where
   intClass = CP.intClass pyClass
@@ -672,7 +671,7 @@ instance ModuleSym PythonCode where
         libis)),
       vcat (map (RC.import' . 
         (modImport :: Label -> PythonCode (Import PythonCode))) mis)]) 
-    getMainDoc
+    (return empty) getMainDoc
 
 instance RenderMod PythonCode where
   modFromData n = G.modFromData n (toCode . md n)

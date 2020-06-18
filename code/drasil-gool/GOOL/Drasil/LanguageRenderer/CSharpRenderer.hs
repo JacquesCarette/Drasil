@@ -62,15 +62,16 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond, 
   tryCatch, construct, param, method, getMethod, setMethod, constructor, 
-  function, buildClass, extraClass, implementingClass, docClass, 
-  commentedClass, modFromData, fileDoc, docMod, fileFromData)
+  function, buildClass, implementingClass, commentedClass, modFromData, 
+  fileDoc, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  doxFunc, bindingError, extVar, classVar, objVarSelf, iterVar, 
-  extFuncAppMixedArgs, indexOf, listAddFunc, listDecDef, discardFileLine, 
-  destructorError, stateVarDef, constVar, intClass, arrayType, pi, printSt, 
-  arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, stateVar, 
-  buildModule', string, constDecDef, docInOutFunc, notNull, iterBeginError, 
-  iterEndError, listSetFunc, listAccessFunc, doubleRender, openFileR, openFileW)
+  doxFunc, doxClass, doxMod, bindingError, extVar, classVar, objVarSelf, 
+  iterVar, extFuncAppMixedArgs, indexOf, listAddFunc, listDecDef, 
+  discardFileLine, destructorError, intClass, arrayType, pi, printSt, arrayDec, 
+  arrayDecDef, openFileA, forEach, docMain, mainFunction, buildModule', string, 
+  constDecDef, docInOutFunc, notNull, iterBeginError, iterEndError, 
+  stateVarDef, constVar, listSetFunc, extraClass, listAccessFunc, doubleRender, 
+  openFileR, openFileW, stateVar, inherit, implements)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
@@ -133,7 +134,7 @@ instance FileSym CSharpCode where
     modify (setFileType Combined)
     G.fileDoc csExt top bottom m
 
-  docMod = G.docMod csExt
+  docMod = CP.doxMod csExt
 
 instance RenderFile CSharpCode where
   top _ = toCode empty
@@ -628,16 +629,16 @@ instance StateVarElim CSharpCode where
 instance ClassSym CSharpCode where
   type Class CSharpCode = Doc
   buildClass = G.buildClass
-  extraClass = G.extraClass 
+  extraClass = CP.extraClass 
   implementingClass = G.implementingClass
 
-  docClass = G.docClass
+  docClass = CP.doxClass
 
 instance RenderClass CSharpCode where
   intClass = CP.intClass R.class'
 
-  inherit n = toCode $ maybe empty ((colon <+>) . text) n
-  implements is = toCode $ colon <+> text (intercalate listSep is)
+  inherit = CP.inherit
+  implements = CP.implements
 
   commentedClass = G.commentedClass
   

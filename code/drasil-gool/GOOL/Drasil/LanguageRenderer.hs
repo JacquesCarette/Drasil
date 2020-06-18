@@ -19,10 +19,10 @@ module GOOL.Drasil.LanguageRenderer (
   comment, var, extVar, arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, 
   binOpDocD', constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, 
   castObj, break, continue, static, dynamic, private, public, blockCmt, docCmt, 
-  commentedItem, addComments, FuncDocRenderer, functionDox, classDox, 
-  moduleDox, commentedMod, valueList, variableList, parameterList, 
-  namedArgList, prependToBody, appendToBody, surroundBody, getterName, 
-  setterName, intValue
+  commentedItem, addComments, FuncDocRenderer, functionDox, ClassDocRenderer,
+  classDox, ModuleDocRenderer, moduleDox, commentedMod, valueList, 
+  variableList, parameterList, namedArgList, prependToBody, appendToBody, 
+  surroundBody, getterName, setterName, intValue
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -400,10 +400,14 @@ functionDox desc params returns = [doxBrief ++ desc | not (null desc)]
   ++ map (\(v, vDesc) -> doxParam ++ v ++ " " ++ vDesc) params
   ++ map (doxReturn ++) returns
 
-classDox :: String -> [String]
+type ClassDocRenderer = String -> [String]
+
+classDox :: ClassDocRenderer
 classDox desc = [doxBrief ++ desc | not (null desc)]
 
-moduleDox :: String -> [String] -> String -> String -> [String]
+type ModuleDocRenderer = String -> [String] -> String -> String -> [String]
+
+moduleDox :: ModuleDocRenderer
 moduleDox desc as date m = (doxFile ++ m) : 
   [doxAuthor ++ stringList as | not (null as)] ++
   [doxDate ++ date | not (null date)] ++ 

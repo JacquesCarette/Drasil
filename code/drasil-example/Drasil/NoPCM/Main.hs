@@ -31,7 +31,7 @@ choices = defaultChoices {
   inputStructure = Unbundled,
   constStructure = Store Bundled,
   constRepr = Const,
-  auxFiles = [SampleInput "../../datafiles/NoPCM/sampleInput.txt"],
+  auxFiles = [SampleInput "../../datafiles/NoPCM/sampleInput.txt", ReadME],
   odeLib = [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg],
   odes = [noPCMODEInfo]
 }       

@@ -108,7 +108,7 @@ genPackage unRepr = do
       m = makefile (libPaths g) (implType g) (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig s
-  rm <- genReadMe
+  rm <- genReadMe (implType g)
   return $ package pd (m:i++rm++d)
 
 genProgram :: (OOProg r) => Reader DrasilState (GSProgram r)

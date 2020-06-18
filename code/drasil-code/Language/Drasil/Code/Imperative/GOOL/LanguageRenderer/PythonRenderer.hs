@@ -41,8 +41,7 @@ instance AuxiliarySym PythonProject where
   type Auxiliary PythonProject = AuxData
   type AuxHelper PythonProject = Doc
   doxConfig = G.doxConfig optimizeDox
-  readMe n = G.readMe "Python" "3.8.0" "None" 
-    ("Drasil/code/stable/"++n++"/src/python/input.txt") n
+  readMe imp n = G.readMe "Python" "3.8.0" Nothing imp n
   sampleInput = G.sampleInput
 
   optimizeDox = return yes

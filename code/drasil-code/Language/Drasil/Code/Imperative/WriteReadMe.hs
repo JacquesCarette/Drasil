@@ -2,16 +2,19 @@ module Language.Drasil.Code.Imperative.WriteReadMe (
   makeReadMe
 ) where 
 
+import Language.Drasil.Choices (ImplementationType(..))
+
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, text)
 
-makeReadMe :: String -> String -> String -> String -> String -> Doc
-makeReadMe progLang progLangVers unsupportedOSs inputFilePath caseName = 
-    (vcat . map text) $ intersperse seperator [
+makeReadMe :: String -> String -> Maybe String -> ImplementationType -> 
+    String -> Doc
+makeReadMe progLang progLangVers unsupportedOSs imp caseName = 
+    (vcat . map text) $ intersperse seperator $ [
     introInformation caseName progLang progLangVers,
-    dependencies libraries,
-    operatingSystems unsupportedOSs,
-    buildInstructions inputFilePath]
+    dependencies libraries] ++
+    operatingSystems unsupportedOSs ++
+    buildInstructions imp
 
 --Information we still need to find
 libraries :: String
@@ -30,11 +33,13 @@ introInformation name pl plv =
 dependencies:: String -> String
 dependencies lib = "**Program Dependencies:**" ++ "\n - " ++ lib
 
-operatingSystems :: String -> String
-operatingSystems unsuppOS = "**Unsupported OSs:**" ++ "\n - " ++
-    unsuppOS
+operatingSystems :: Maybe String -> [String]
+operatingSystems Nothing = []
+operatingSystems (Just unsuppOS) = ["**Unsupported OSs:**" ++ "\n - " ++
+    unsuppOS]
 
-buildInstructions :: String -> String
-buildInstructions inpFP =  "**How to Run Program:**" ++ 
+buildInstructions :: ImplementationType -> [String]
+buildInstructions Library = []
+buildInstructions Program =  ["**How to Run Program:**" ++ 
     "\n - Enter in the following line into your terminal command line: "
-    ++ "\n`make run RUNARGS=" ++ inpFP ++ "`"
+    ++ "\n`make run RUNARGS=" ++ "input.txt" ++ "`"]

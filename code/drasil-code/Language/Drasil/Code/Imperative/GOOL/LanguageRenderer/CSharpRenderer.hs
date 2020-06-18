@@ -45,8 +45,7 @@ instance AuxiliarySym CSharpProject where
   type Auxiliary CSharpProject = AuxData
   type AuxHelper CSharpProject = Doc
   doxConfig = G.doxConfig optimizeDox
-  readMe n = G.readMe "CSharp" "8.0" "All OS's except Windows"
-    ("Drasil/code/stable/"++n++"/src/csharp/input.txt") n
+  readMe imp n = G.readMe "CSharp" "8.0" (Just "All OS's except Windows") imp n
   sampleInput = G.sampleInput
 
   optimizeDox = return no

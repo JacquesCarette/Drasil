@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
-import Language.Drasil.Choices (Comments(..))
+import Language.Drasil.Choices (Comments(..), ImplementationType, hasReadMe)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
   
@@ -55,11 +55,12 @@ genDoxConfig s = do
       v = doxOutput g
   return [doxConfig n s v | not (null cms)]
 
-genReadMe :: (AuxiliarySym r) => Reader DrasilState [r (Auxiliary r)]
-genReadMe = do 
+genReadMe :: (AuxiliarySym r) => ImplementationType ->
+  Reader DrasilState [r (Auxiliary r)]
+genReadMe imp = do 
   g <- ask
   let n = pName $ codeSpec g
-  return [readMe n]
+  return [readMe imp n | hasReadMe (auxiliaries g)]
 
 data ClassType = Primary | Auxiliary
 

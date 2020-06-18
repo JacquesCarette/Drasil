@@ -45,8 +45,7 @@ instance AuxiliarySym CppProject where
   type Auxiliary CppProject = AuxData
   type AuxHelper CppProject = Doc
   doxConfig = G.doxConfig optimizeDox
-  readMe n = G.readMe "C++" "gcc 8.3" "None" 
-    ("Drasil/code/stable/"++n++"/src/cpp/input.txt") n
+  readMe imp n = G.readMe "C++" "gcc 8.3" Nothing imp n
   sampleInput = G.sampleInput
 
   optimizeDox = return no

@@ -65,11 +65,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   function, buildClass, implementingClass, commentedClass, modFromData, 
   fileDoc, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  doxFunc, doxClass, doxMod, bindingError, extVar, classVar, objVarSelf, 
-  iterVar, extFuncAppMixedArgs, indexOf, listAddFunc, listDecDef, 
-  discardFileLine, destructorError, intClass, arrayType, pi, printSt, arrayDec, 
-  arrayDecDef, openFileA, forEach, docMain, mainFunction, buildModule', string, 
-  constDecDef, docInOutFunc, notNull, iterBeginError, iterEndError, 
+  doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf, iterVar, 
+  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
+  arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, 
+  mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
+  notNull, iterBeginError, iterEndError, listDecDef, destructorError, 
   stateVarDef, constVar, listSetFunc, extraClass, listAccessFunc, doubleRender, 
   openFileR, openFileW, stateVar, inherit, implements)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 

@@ -1,15 +1,15 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, doxFunc, doxClass, 
-  doxMod, bindingError, extVar, classVar, objVarSelf, iterVar, 
-  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, destructorError,
-  intClass, funcType, buildModule, arrayType, pi, printSt, arrayDec, 
-  arrayDecDef, openFileA, forEach, docMain, mainFunction, buildModule', call', 
-  listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc, notNull, 
-  iterBeginError, iterEndError, listDecDef, stateVarDef, constVar, litArray, 
-  listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR, 
-  openFileW, stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, 
-  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', floatRender,
-  float, string', inherit, implements
+  doxMod, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, indexOf, 
+  listAddFunc, discardFileLine, intClass, funcType, buildModule, arrayType, pi, 
+  printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, 
+  buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef, 
+  docInOutFunc, bindingError, notNull, iterBeginError, iterEndError, 
+  listDecDef, destructorError, stateVarDef, constVar, litArray, listSetFunc, 
+  extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW, 
+  stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall, 
+  forLoopError, mainBody, inOutFunc, docInOutFunc', floatRender, float, 
+  stringRender', string', inherit, implements
 ) where
 
 import Utils.Drasil (indent)
@@ -87,9 +87,6 @@ doxMod = docMod moduleDox
 
 -- Python, Java, and C# --
 
-bindingError :: String -> String
-bindingError l = "Binding unimplemented in " ++ l
-
 extVar :: (RenderSym r) => Label -> Label -> VSType r -> SVariable r
 extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
@@ -117,9 +114,6 @@ listAddFunc f i v = S.func f (S.listType $ onStateValue valueType v)
   
 discardFileLine :: (RenderSym r) => Label -> SValue r -> MSStatement r
 discardFileLine n f = S.valStmt $ objMethodCallNoParams S.string f n 
-
-destructorError :: String -> String
-destructorError l = "Destructors not allowed in " ++ l
 
 intClass :: (RenderSym r, Monad r) => (Label -> Doc -> Doc -> Doc -> Doc -> 
   Doc) -> Label -> r (Scope r) -> r ParentSpec -> [CSStateVar r] -> [SMethod r] 
@@ -258,6 +252,9 @@ docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (map fst $ bs ++
 
 -- Python, Java, C#, and Swift --
 
+bindingError :: String -> String
+bindingError l = "Binding unimplemented in " ++ l
+
 notNull :: (RenderSym r) => String -> SValue r -> SValue r
 notNull nil v = v ?!= S.valueOf (S.var nil $ onStateValue valueType v)
 
@@ -274,6 +271,9 @@ listDecDef v vals = do
   vr <- zoom lensMStoVS v 
   let lst = S.litList (listInnerType $ return $ variableType vr) vals
   S.varDecDef (return vr) lst
+
+destructorError :: String -> String
+destructorError l = "Destructors not allowed in " ++ l
 
 stateVarDef :: (RenderSym r, Monad r) => r (Scope r) -> r (Permanence r) -> 
   SVariable r -> SValue r -> CS (r Doc)

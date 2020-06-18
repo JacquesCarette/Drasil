@@ -61,10 +61,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   param, method, getMethod, setMethod, constructor, function, buildClass, 
   implementingClass, commentedClass, modFromData, fileDoc, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  doxFunc, doxClass, doxMod, bindingError, extVar, classVar, objVarSelf, 
-  iterVar, extFuncAppMixedArgs, indexOf, listAddFunc, listDecDef, 
-  discardFileLine, destructorError, intClass, funcType, buildModule, notNull, 
-  iterBeginError, iterEndError, stateVarDef, constVar, litArray, listSetFunc, 
+  doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf, iterVar, 
+  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
+  funcType, buildModule, bindingError, notNull, iterBeginError, iterEndError, 
+  listDecDef, destructorError, stateVarDef, constVar, litArray, listSetFunc, 
   extraClass, listAccessFunc, multiAssign, multiReturn, listDec, funcDecDef, 
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc')
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 

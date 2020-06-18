@@ -84,10 +84,10 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
-import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoMS, lensMStoFS, 
-  lensMStoVS, revFiles, addLangImportVS, getLangImports, getLibImports, 
-  setFileType, getModuleName, getMethodExcMap, getMainDoc, setThrowUsed, 
-  getThrowUsed, setErrorDefined, getErrorDefined)
+import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
+  lensMStoFS, lensMStoVS, revFiles, addLangImportVS, getLangImports, 
+  getLibImports, setFileType, getModuleName, getCurrMain, getMethodExcMap, 
+  getMainDoc, setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -646,13 +646,19 @@ instance ClassElim SwiftCode where
 
 instance ModuleSym SwiftCode where
   type Module SwiftCode = ModData
-  buildModule n is = CP.buildModule n (do
-    lis <- getLangImports
-    libis <- getLibImports
-    return $ vcat $ map (RC.import' . 
-        (langImport :: Label -> SwiftCode (Import SwiftCode))) 
-        (sort $ lis ++ is ++ libis)) 
-    (zoom lensFStoMS swiftStringError) getMainDoc
+  buildModule n is ms cs = do
+    mths <- mapM (zoom lensFStoMS) ms
+    cls <- mapM (zoom lensFStoCS) cs
+    mn <- getCurrMain
+    let modName = if mn then swiftMain else n
+    CP.buildModule modName (do
+      lis <- getLangImports
+      libis <- getLibImports
+      return $ vcat $ map (RC.import' . 
+          (langImport :: Label -> SwiftCode (Import SwiftCode))) 
+          (sort $ lis ++ is ++ libis)) 
+      (zoom lensFStoMS swiftStringError) getMainDoc (map return mths) 
+        (map return cls)
   
 instance RenderMod SwiftCode where
   modFromData n = G.modFromData n (toCode . md n)
@@ -738,13 +744,14 @@ swiftNoLabel = text "_"
 swiftRetType' = text swiftRetType
 swiftUnwrap' = text swiftUnwrap
 
-swiftFoundation, swiftMath, swiftNil, swiftBool, swiftInt, swiftChar, swiftURL, 
-  swiftRetType, swiftVoid, swiftCommLine, swiftSearchDir, swiftPathMask, 
-  swiftArgs, swiftCtorName, swiftWrite, swiftIndex, swiftStride, swiftMap, 
-  swiftListAdd, swiftListAppend, swiftReadLine, swiftAppendPath, swiftUrls, 
-  swiftSplit, swiftSubstring, swiftEncoding, swiftUTF8, swiftOf, swiftFrom, 
-  swiftTo, swiftBy, swiftAt, swiftTerm, swiftAtomic, swiftEnc, swiftFor, 
-  swiftIn, swiftContentsOf, swiftSep, swiftUnwrap :: String
+swiftMain, swiftFoundation, swiftMath, swiftNil, swiftBool, swiftInt, swiftChar,
+  swiftURL, swiftRetType, swiftVoid, swiftCommLine, swiftSearchDir, 
+  swiftPathMask, swiftArgs, swiftCtorName, swiftWrite, swiftIndex, swiftStride, 
+  swiftMap, swiftListAdd, swiftListAppend, swiftReadLine, swiftAppendPath, 
+  swiftUrls, swiftSplit, swiftSubstring, swiftEncoding, swiftUTF8, swiftOf, 
+  swiftFrom, swiftTo, swiftBy, swiftAt, swiftTerm, swiftAtomic, swiftEnc, 
+  swiftFor, swiftIn, swiftContentsOf, swiftSep, swiftUnwrap :: String
+swiftMain = "main"
 swiftFoundation = "Foundation"
 swiftMath = "Darwin"
 swiftNil = "nil"

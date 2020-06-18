@@ -9,18 +9,17 @@ module GOOL.Drasil.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
-import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable, 
-  SValue, VSFunction, MSStatement, MSParameter, SMethod, MixedCtorCall, OOProg, 
-  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, 
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
-  listOf, ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, 
-  extNewObj, InternalValueExp(..), objMethodCall, FunctionSym(..), ($.), 
-  GetSet(..), List(..), InternalList(..), at, Iterator(..), StatementSym(..), 
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..),
-  observerListName, ControlStatement(..), switchAsIf, StatePattern(..), 
+import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
+  VSFunction, MSStatement, MixedCtorCall, OOProg, ProgramSym(..), FileSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), 
+  VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), 
+  MathConstant(..), VariableValue(..), CommandLineArgs(..), 
+  NumericExpression(..), BooleanExpression(..), Comparison(..), 
+  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
+  InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..), 
+  InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), 
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), switchAsIf, StatePattern(..), 
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..), 
@@ -40,8 +39,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   method, stateVar, class', module', blockComment', intClass)
 import GOOL.Drasil.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
-  argv, printLabel, listSep, piLabel, access, variableList, parameterList, 
-  surroundBody)
+  argv, printLabel, listSep, piLabel, access, functionDox, variableList, 
+  parameterList)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, fabs, log10, 
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, multiStmt, body, 
   classVar, listSetFunc, castObj, dynamic, break, continue, addComments, 
@@ -59,16 +58,16 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
   loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
   closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, 
-  param, method, getMethod, setMethod, constructor, function, docFunc, 
+  param, method, getMethod, setMethod, constructor, function, 
   buildClass, extraClass, implementingClass, docClass, commentedClass, 
   modFromData, fileDoc, docMod, fileFromData)
-import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
-  indexOf, listAddFunc, listDecDef, discardFileLine, destructorError, 
-  stateVarDef, constVar, intClass, funcType, buildModule, notNull, 
-  iterBeginError, iterEndError, litArray, listSetFunc, listAccessFunc, 
-  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError)
+  doxFunc, bindingError, extVar, classVar, objVarSelf, iterVar, 
+  extFuncAppMixedArgs, indexOf, listAddFunc, listDecDef, discardFileLine, 
+  destructorError, stateVarDef, constVar, intClass, funcType, buildModule, 
+  notNull, iterBeginError, iterEndError, litArray, listSetFunc, listAccessFunc, 
+  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
+  mainBody, inOutFunc, docInOutFunc')
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers', checkState)
@@ -77,12 +76,12 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), 
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
-  onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
+  onStateValue, on2CodeValues, on2StateValues, on3StateValues,
   onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   revFiles, addLangImportVS, getLangImports, addLibImportVS, 
   getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
-  setFileType, getClassName, setCurrMain, getClassMap, setMainDoc, getMainDoc)
+  setFileType, getClassName, setCurrMain, getClassMap, getMainDoc)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
@@ -597,21 +596,17 @@ instance MethodSym PythonCode where
   docMain = mainFunction
 
   function = G.function
-  mainFunction b = do
-    modify setCurrMain
-    bod <- b
-    modify (setMainDoc $ RC.body bod)
-    return $ toCode $ mthd empty
+  mainFunction = CP.mainBody
 
-  docFunc = G.docFunc
+  docFunc = CP.doxFunc
 
-  inOutMethod n s p = pyInOut (method n s p)
+  inOutMethod n s p = CP.inOutFunc (method n s p)
 
-  docInOutMethod n s p = pyDocInOut (inOutMethod n s p)
+  docInOutMethod n s p = CP.docInOutFunc' functionDox (inOutMethod n s p)
 
-  inOutFunc n s = pyInOut (function n s)
+  inOutFunc n s = CP.inOutFunc (function n s)
 
-  docInOutFunc n s = pyDocInOut (inOutFunc n s)
+  docInOutFunc n s = CP.docInOutFunc' functionDox (inOutFunc n s)
 
 instance RenderMethod PythonCode where
   intMethod m n _ _ _ ps b = do
@@ -628,6 +623,8 @@ instance RenderMethod PythonCode where
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
   destructor _ = error $ CP.destructorError pyName
+  
+  mthdFromData _ d = toState $ toCode $ mthd d
   
 instance MethodElim PythonCode where
   method = mthdDoc . unPC
@@ -950,20 +947,3 @@ pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty
 pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . 
   text) lns
-
-pyInOut :: (VSType PythonCode -> [MSParameter PythonCode] -> MSBody PythonCode -> 
-    SMethod PythonCode) -> 
-  [SVariable PythonCode] -> [SVariable PythonCode] -> [SVariable PythonCode] -> 
-  MSBody PythonCode -> SMethod PythonCode
-pyInOut f ins [] [] b = f void (map param ins) b
-pyInOut f ins outs both b = f void (map param $ both ++ ins) 
-  (on3StateValues (on3CodeValues surroundBody) (multi $ map varDec outs) b 
-  (multiReturn $ map valueOf rets))
-  where rets = both ++ outs
-
-pyDocInOut :: (RenderSym r) => ([SVariable r] -> [SVariable r] -> [SVariable r] -> 
-    MSBody r -> SMethod r) -> 
-  String -> [(String, SVariable r)] -> [(String, SVariable r)] -> 
-  [(String, SVariable r)] -> MSBody r -> SMethod r
-pyDocInOut f desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
-  (map fst $ bs ++ os) (f (map snd is) (map snd os) (map snd bs) b)

@@ -241,6 +241,8 @@ class (MethodTypeSym r, BlockCommentSym r) =>
     
   destructor :: [CSStateVar r] -> SMethod r
 
+  mthdFromData :: ScopeTag -> Doc -> SMethod r
+
 class MethodElim r where
   method :: r (Method r) -> Doc
 

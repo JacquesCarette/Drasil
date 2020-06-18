@@ -62,13 +62,13 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond, 
   tryCatch, construct, param, method, getMethod, setMethod, constructor, 
-  function, docFunc, buildClass, extraClass, implementingClass, docClass, 
+  function, buildClass, extraClass, implementingClass, docClass, 
   commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
-  indexOf, listAddFunc, listDecDef, discardFileLine, destructorError, 
-  stateVarDef, constVar, intClass, arrayType, pi, printSt, arrayDec, 
-  arrayDecDef, openFileA, forEach, docMain, mainFunction, stateVar, 
+  doxFunc, bindingError, extVar, classVar, objVarSelf, iterVar, 
+  extFuncAppMixedArgs, indexOf, listAddFunc, listDecDef, discardFileLine, 
+  destructorError, stateVarDef, constVar, intClass, arrayType, pi, printSt, 
+  arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, stateVar, 
   buildModule', string, constDecDef, docInOutFunc, notNull, iterBeginError, 
   iterEndError, listSetFunc, listAccessFunc, doubleRender, openFileR, openFileW)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
@@ -589,7 +589,7 @@ instance MethodSym CSharpCode where
   function = G.function
   mainFunction = CP.mainFunction string csMain
 
-  docFunc = G.docFunc
+  docFunc = CP.doxFunc
 
   inOutMethod n s p = csInOut (method n s p)
 
@@ -610,6 +610,8 @@ instance RenderMethod CSharpCode where
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
   destructor _ = error $ CP.destructorError csName
+  
+  mthdFromData _ d = toState $ toCode $ mthd d
   
 instance MethodElim CSharpCode where
   method = mthdDoc . unCSC

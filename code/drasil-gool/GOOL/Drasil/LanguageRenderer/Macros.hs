@@ -131,9 +131,9 @@ notifyObservers f t = S.for initv (observerIdxVal ?< S.listSize (obsList t))
   where initv = S.varDecDef observerIndex $ S.litInt 0
 
 notifyObservers' :: (RenderSym r) => VSFunction r -> VSType r -> MSStatement r
-notifyObservers' f t = S.forRange observerIndex initv (listSize $ obsList t) 
-    (litInt 1) (notify t f)
-    where initv = litInt 0
+notifyObservers' f t = S.forRange observerIndex initv (S.listSize $ obsList t) 
+    (S.litInt 1) (notify t f)
+    where initv = S.litInt 0
         
 checkState :: (RenderSym r) => Label -> [(SValue r, MSBody r)] -> MSBody r -> 
   MSStatement r

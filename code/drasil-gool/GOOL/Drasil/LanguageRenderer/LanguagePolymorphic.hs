@@ -58,7 +58,7 @@ import GOOL.Drasil.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, on3StateValues, onStateList, 
   getInnerType, getNestDegree)
 import GOOL.Drasil.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt, 
-  functionDox, classDox, moduleDox, getterName, setterName, valueList, 
+  FuncDocRenderer, classDox, moduleDox, getterName, setterName, valueList, 
   namedArgList)
 import qualified GOOL.Drasil.LanguageRenderer as R (file, block, assign, 
   addAssign, subAssign, return', comment, getTerm, var, objVar, arg, func, 
@@ -438,14 +438,14 @@ function :: (RenderSym r) => Label -> r (Scope r) -> VSType r ->
   [MSParameter r] -> MSBody r -> SMethod r
 function n s t = S.intFunc False n s static (mType t)
   
-docFuncRepr :: (RenderSym r) => String -> [String] -> [String] -> SMethod r -> 
-  SMethod r
-docFuncRepr desc pComms rComms = commentedFunc (docComment $ onStateValue 
-  (\ps -> functionDox desc (zip ps pComms) rComms) getParameters)
+docFuncRepr :: (RenderSym r) => FuncDocRenderer -> String -> [String] -> 
+  [String] -> SMethod r -> SMethod r
+docFuncRepr f desc pComms rComms = commentedFunc (docComment $ onStateValue 
+  (\ps -> f desc (zip ps pComms) rComms) getParameters)
 
-docFunc :: (RenderSym r) => String -> [String] -> Maybe String -> SMethod r -> 
-  SMethod r
-docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
+docFunc :: (RenderSym r) => FuncDocRenderer -> String -> [String] -> 
+  Maybe String -> SMethod r -> SMethod r
+docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 -- Classes --
 

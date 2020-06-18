@@ -4,23 +4,25 @@
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
-  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, importLabel,
-  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
-  constDec', exceptionObj', new', this', self', array', listSep', argc, argv, 
-  args, printLabel, constDec, exceptionObj, mainFunc, new, this, self, 
-  nullLabel, array, listSep, sqrt, abs, fabs, log10, log, exp, sin, cos, tan, 
-  asin, acos, atan, floor, ceil, pow, piLabel, access, containing, mathFunc, addExt,
+  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, throwsLabel, 
+  importLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
+  endStatement, constDec', exceptionObj', new', this', self', array', listSep', 
+  argc, argv, args, printLabel, constDec, exceptionObj, mainFunc, new, this, 
+  self, nullLabel, array, listSep, sqrt, abs, fabs, log10, log, exp, sin, cos, 
+  tan, asin, acos, atan, floor, ceil, pow, piLabel, access, containing, 
+  mathFunc, addExt,
   
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
   param, method, stateVar, constVar, stateVarList, switch, assign, 
-  addAssign, subAssign, increment, decrement, listDec, getTerm, return', comment, 
-  var, extVar, arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, binOpDocD', 
-  constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, castObj, 
-  break, continue, static, dynamic, private, public, blockCmt, docCmt, 
-  commentedItem, addComments, functionDox, classDox, moduleDox, commentedMod, 
-  valueList, variableList, parameterList, namedArgList, prependToBody, 
-  appendToBody, surroundBody, getterName, setterName, intValue
+  addAssign, subAssign, increment, decrement, listDec, getTerm, return', 
+  comment, var, extVar, arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, 
+  binOpDocD', constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, 
+  castObj, break, continue, static, dynamic, private, public, blockCmt, docCmt, 
+  commentedItem, addComments, FuncDocRenderer, functionDox, classDox, 
+  moduleDox, commentedMod, valueList, variableList, parameterList, 
+  namedArgList, prependToBody, appendToBody, surroundBody, getterName, 
+  setterName, intValue
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -50,9 +52,10 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 ----------------------------------------
 
 classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
-  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, importLabel,
-  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
-  constDec', exceptionObj', new', this', self', array', listSep' :: Doc
+  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, throwsLabel,
+  importLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
+  endStatement, constDec', exceptionObj', new', this', self', array', 
+  listSep' :: Doc
 classDec = text "class"
 dot = text "."
 commentStart = text "//"
@@ -66,6 +69,7 @@ whileLabel = text "while"
 tryLabel = text "try"
 catchLabel = text "catch"
 throwLabel = text "throw"
+throwsLabel = text "throws"
 importLabel = text "import"
 blockCmtStart = text "/*"
 blockCmtEnd = text "*/"
@@ -389,7 +393,9 @@ endCommentDelimit c = commentDelimit (endCommentLabel ++ " " ++ c)
 dashes :: String -> Int -> String
 dashes s l = replicate (l - length s) '-'
 
-functionDox :: String -> [(String, String)] -> [String] -> [String]
+type FuncDocRenderer = String -> [(String, String)] -> [String] -> [String]
+
+functionDox :: FuncDocRenderer
 functionDox desc params returns = [doxBrief ++ desc | not (null desc)]
   ++ map (\(v, vDesc) -> doxParam ++ v ++ " " ++ vDesc) params
   ++ map (doxReturn ++) returns

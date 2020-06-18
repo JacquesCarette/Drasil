@@ -39,11 +39,11 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (dot, new, elseIfLabel, forLabel, tryLabel,
-  catchLabel, throwLabel, importLabel, blockCmtStart, blockCmtEnd, docCmtStart, 
-  bodyStart, bodyEnd, endStatement, commentStart, exceptionObj', new', args, 
-  printLabel, exceptionObj, mainFunc, new, nullLabel, listSep, access, 
-  containing, mathFunc, variableList, parameterList, appendToBody, 
-  surroundBody, intValue)
+  catchLabel, throwLabel, throwsLabel, importLabel, blockCmtStart, blockCmtEnd, 
+  docCmtStart, bodyStart, bodyEnd, endStatement, commentStart, exceptionObj', 
+  new', args, printLabel, exceptionObj, mainFunc, new, nullLabel, listSep, 
+  access, containing, mathFunc, functionDox, variableList, parameterList, 
+  appendToBody, surroundBody, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, 
   log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, package, class', 
   multiStmt, body, printFile, param, listDec, classVar, cast, castObj, static, 
@@ -62,14 +62,14 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
   loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, closeFile, 
   returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
-  method, getMethod, setMethod, constructor, function, docFunc, buildClass, 
+  method, getMethod, setMethod, constructor, function, buildClass, 
   implementingClass, docClass, commentedClass, modFromData, fileDoc, 
   docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
-  indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, destructorError, stateVarDef, constVar, intClass,
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int, 
+  doxFunc, bindingError, extVar, classVar, objVarSelf, iterVar, 
+  extFuncAppMixedArgs, indexOf, listAddFunc, iterBeginError, iterEndError, 
+  listDecDef, discardFileLine, destructorError, stateVarDef, constVar, intClass,
   funcType, arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
   docMain, mainFunction, stateVar, buildModule', litArray, call', listSizeFunc, 
   listAccessFunc', notNull, doubleRender, double, openFileR, openFileW, 
@@ -619,7 +619,7 @@ instance MethodSym JavaCode where
   function = G.function
   mainFunction = CP.mainFunction string mainFunc
 
-  docFunc = G.docFunc
+  docFunc = CP.doxFunc
 
   inOutMethod n s p = jInOut (method n s p)
 
@@ -646,6 +646,8 @@ instance RenderMethod JavaCode where
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
   destructor _ = error $ CP.destructorError jName
+  
+  mthdFromData _ d = toState $ toCode $ mthd d
   
 instance MethodElim JavaCode where
   method = mthdDoc . unJC
@@ -720,12 +722,11 @@ jOutfileType :: (RenderSym r) => VSType r
 jOutfileType = modifyReturn (addLangImportVS $ ioImport jPrintWriter) $ 
   typeFromData File jPrintWriter (text jPrintWriter)
 
-jExtends, jImplements, jFinal, jScanner', jThrows, jLambdaSep :: Doc
+jExtends, jImplements, jFinal, jScanner', jLambdaSep :: Doc
 jExtends = text "extends"
 jImplements = text "implements"
 jFinal = text "final"
 jScanner' = text jScanner
-jThrows = text "throws"
 jLambdaSep = text "->"
 
 arrayList, jBool, jBool', jInteger, jObject, jScanner,
@@ -920,7 +921,7 @@ jMethod :: (RenderSym r) => Label -> [String] -> r (Scope r) -> r (Permanence r)
   -> r (Type r) -> [r (Parameter r)] -> r (Body r) -> Doc
 jMethod n es s p t ps b = vcat [
   RC.scope s <+> RC.perm p <+> RC.type' t <+> text n <> 
-    parens (parameterList ps) <+> emptyIfNull es (jThrows <+> 
+    parens (parameterList ps) <+> emptyIfNull es (throwsLabel <+> 
     text (intercalate listSep (sort es))) <+> lbrace,
   indent $ RC.body b,
   rbrace]
@@ -979,13 +980,13 @@ jDocInOut :: (RenderSym r) => ([SVariable r] -> [SVariable r] -> [SVariable r] -
     MSBody r -> SMethod r) -> 
   String -> [(String, SVariable r)] -> [(String, SVariable r)] -> 
   [(String, SVariable r)] -> MSBody r -> SMethod r
-jDocInOut f desc is [] [] b = docFuncRepr desc (map fst is) [] 
+jDocInOut f desc is [] [] b = docFuncRepr functionDox desc (map fst is) [] 
   (f (map snd is) [] [] b)
-jDocInOut f desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
-  (f (map snd is) [snd o] [] b)
-jDocInOut f desc is [] [both] b = docFuncRepr desc (map fst (both : is)) 
-  [fst both] (f (map snd is) [] [snd both] b)
-jDocInOut f desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
+jDocInOut f desc is [o] [] b = docFuncRepr functionDox desc (map fst is) 
+  [fst o] (f (map snd is) [snd o] [] b)
+jDocInOut f desc is [] [both] b = docFuncRepr functionDox desc (map fst (both : 
+  is)) [fst both] (f (map snd is) [] [snd both] b)
+jDocInOut f desc is os bs b = docFuncRepr  functionDox desc (map fst $ bs ++ is)
   rets (f (map snd is) (map snd os) (map snd bs) b)
   where rets = "array containing the following values:" : map fst bs ++ 
           map fst os

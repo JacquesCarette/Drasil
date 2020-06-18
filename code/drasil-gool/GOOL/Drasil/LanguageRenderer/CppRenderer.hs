@@ -63,13 +63,13 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
   loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
   closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, 
-  param, method, getMethod, setMethod, constructor, function, docFunc, 
+  param, method, getMethod, setMethod, constructor, function, 
   buildClass, extraClass, implementingClass, docClass, commentedClass, 
   modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  funcType, buildModule, litArray, call', listSizeFunc, listAccessFunc', 
-  string, constDecDef, docInOutFunc, listSetFunc)
+  doxFunc, funcType, buildModule, litArray, call', listSizeFunc, 
+  listAccessFunc', string, constDecDef, docInOutFunc, listSetFunc)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
@@ -707,6 +707,8 @@ instance (Pair p) => RenderMethod (p CppSrcCode CppHdrCode) where
   commentedFunc = pair2 commentedFunc commentedFunc
   
   destructor = pair1List destructor destructor . map (zoom lensMStoCS)
+  
+  mthdFromData s d = on2StateValues pair (mthdFromData s d) (mthdFromData s d)
   
 instance (Pair p) => MethodElim (p CppSrcCode CppHdrCode) where
   method m = RC.method $ pfst m
@@ -1491,7 +1493,7 @@ instance MethodSym CppSrcCode where
             (constDec ++ " " ++ C.charRender) (constDec' <+> text 
             C.charRender)) (cppDeref <> text argv <> array')
 
-  docFunc = G.docFunc
+  docFunc = CP.doxFunc
 
   inOutMethod n s p = cppsInOut (method n s p)
 
@@ -1520,6 +1522,8 @@ instance RenderMethod CppSrcCode where
           (onStateList (onCodeList (vcat . map fst)) deleteStatements) $
           bodyStatements $ loopIndexDec : deleteStatements
     in getClassName >>= (\n -> pubMethod ('~':n) void [] dbody)
+    
+  mthdFromData s d = toState $ toCode $ mthd s d
   
 instance MethodElim CppSrcCode where
   method = mthdDoc . unCPPSC
@@ -2078,7 +2082,7 @@ instance MethodSym CppHdrCode where
   function = G.function
   mainFunction _ = modifyReturn (setScope Pub) $ toCode $ mthd Pub empty
 
-  docFunc = G.docFunc
+  docFunc = CP.doxFunc
 
   inOutMethod n s p = cpphInOut (method n s p)
 
@@ -2103,6 +2107,8 @@ instance RenderMethod CppHdrCode where
     vs <- mapM (zoom lensMStoCS) vars
     return $ toCode $ mthd Pub (emptyIfEmpty 
       (vcat (map (RC.statement . onCodeValue destructSts) vs)) (RC.method m))
+      
+  mthdFromData s d = toState $ toCode $ mthd s d
   
 instance MethodElim CppHdrCode where
   method = mthdDoc . unCPPHC

@@ -1,5 +1,5 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
-module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int,
+module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, doxFunc,
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, discardFileLine, destructorError, stateVarDef, 
   constVar, intClass, funcType, buildModule, arrayType, pi, printSt, arrayDec, 
@@ -8,15 +8,15 @@ module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int,
   docInOutFunc, notNull, iterBeginError, iterEndError, listDecDef, litArray, 
   listSetFunc, listAccessFunc, doubleRender, double, openFileR, openFileW, 
   self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError,
-  floatRender, float, string'
+  mainBody, inOutFunc, docInOutFunc', floatRender, float, string'
 ) where
 
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable, 
-  SValue, VSFunction, MSStatement, SMethod, CSStateVar, SClass, FSModule, 
-  MixedCall, PermanenceSym(..), 
+  SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, 
+  FSModule, MixedCall, PermanenceSym(..), bodyStatements, oneLiner,
   TypeSym(infile, outfile, listInnerType, obj, iterator), 
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType), 
   ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=), 
@@ -27,12 +27,13 @@ import qualified GOOL.Drasil.ClassInterface as S (
   VariableValue(valueOf), FunctionSym(func, objAccess), StatementSym(valStmt), 
   DeclStatement(varDec, varDecDef, constDecDef), ParameterSym(param), 
   MethodSym(mainFunction), ClassSym(buildClass))
-import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..),  RenderType(..),
-  RenderVariable(varFromData), InternalVarElim(variableBind), 
+import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..), RenderBody(..), 
+  RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind), 
   RenderFunction(funcFromData), MethodTypeSym(mType),
-  RenderMethod(commentedFunc), ParentSpec, BlockCommentSym(..))
+  RenderMethod(commentedFunc, mthdFromData), ParentSpec, BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (RenderValue(call), 
-  RenderStatement(stmt), InternalAssignStmt(multiAssign), RenderMethod(intFunc),
+  RenderStatement(stmt), InternalAssignStmt(multiAssign), 
+  InternalControlStmt(multiReturn), RenderMethod(intFunc),
   RenderMod(modFromData))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
   PermElim(..), BodyElim(..), InternalTypeElim(..), InternalVarElim(variable), 
@@ -41,16 +42,17 @@ import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..),
 import GOOL.Drasil.Helpers (vibcat, toCode, toState, onCodeValue, onStateValue, 
   on2StateValues, onStateList)
 import GOOL.Drasil.LanguageRenderer (array', new', args, array, access, 
-  mathFunc, functionDox, variableList, valueList, intValue)
+  mathFunc, FuncDocRenderer, functionDox, variableList, valueList, intValue)
 import qualified GOOL.Drasil.LanguageRenderer as R (self, self', module', 
   print, stateVar, stateVarList, constDecDef, extVar, listAccessFunc)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
-  call, docFuncRepr)
+  call, docFunc, docFuncRepr)
+import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS, 
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports, 
-  getLibImports, getModuleImports, setClassName)
+  getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc)
 
 import Prelude hiding (print,pi,(<>))
 import Data.Composition ((.:))
@@ -70,6 +72,10 @@ intRender = "int"
 
 int :: (RenderSym r) => VSType r
 int = toState $ typeFromData Integer intRender (text intRender)
+
+doxFunc :: (RenderSym r) => String -> [String] -> Maybe String -> SMethod r -> 
+  SMethod r
+doxFunc = docFunc functionDox
 
 -- Python, Java, and C# --
 
@@ -247,12 +253,12 @@ docInOutFunc :: (RenderSym r) => ([SVariable r] -> [SVariable r] ->
     [SVariable r] -> MSBody r -> SMethod r) -> 
   String -> [(String, SVariable r)] -> [(String, SVariable r)] -> 
   [(String, SVariable r)] -> MSBody r -> SMethod r
-docInOutFunc f desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
-  (f (map snd is) [snd o] [] b)
-docInOutFunc f desc is [] [both] b = docFuncRepr desc (map fst $ both : is) 
-  [fst both] (f (map snd is) [] [snd both] b)
-docInOutFunc f desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ os)
-  [] (f (map snd is) (map snd os) (map snd bs) b)
+docInOutFunc f desc is [o] [] b = docFuncRepr functionDox desc (map fst is) 
+  [fst o] (f (map snd is) [snd o] [] b)
+docInOutFunc f desc is [] [both] b = docFuncRepr functionDox desc (map fst $ 
+  both : is) [fst both] (f (map snd is) [] [snd both] b)
+docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (map fst $ bs ++ 
+  is ++ os) [] (f (map snd is) (map snd os) (map snd bs) b)
 
 -- Python, Java, C#, and Swift --
 
@@ -359,6 +365,29 @@ inOutCall f n ins outs both = S.multiAssign rets [f n S.void (map S.valueOf
 forLoopError :: String -> String
 forLoopError l = "Classic for loops not available in " ++ l ++ ", use " ++
   "forRange, forEach, or while instead"
+
+mainBody :: (RenderSym r) => MSBody r -> SMethod r
+mainBody b = do
+  modify setCurrMain
+  bod <- b
+  modify (setMainDoc $ RC.body bod)
+  mthdFromData Pub empty
+
+inOutFunc :: (RenderSym r) => (VSType r -> [MSParameter r] -> MSBody r -> 
+  SMethod r) -> [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> 
+  SMethod r
+inOutFunc f ins [] [] b = f S.void (map S.param ins) b
+inOutFunc f ins outs both b = f S.void (map S.param $ both ++ ins) 
+  (multiBody [bodyStatements $ map S.varDec outs, b, oneLiner $ S.multiReturn $ 
+  map S.valueOf rets])
+  where rets = both ++ outs
+
+docInOutFunc' :: (RenderSym r) => FuncDocRenderer -> ([SVariable r] -> 
+    [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r) -> 
+  String -> [(String, SVariable r)] -> [(String, SVariable r)] -> 
+  [(String, SVariable r)] -> MSBody r -> SMethod r
+docInOutFunc' dfr f desc is os bs b = docFuncRepr dfr desc (map fst $ bs ++ is)
+  (map fst $ bs ++ os) (f (map snd is) (map snd os) (map snd bs) b)
 
 -- Java and Swift --
 

@@ -4,7 +4,7 @@
 -- | The logic to render Swift code is contained in this module
 module GOOL.Drasil.LanguageRenderer.SwiftRenderer (
   -- * Swift Code Configuration -- defines syntax of all Swift code
-  SwiftCode(..)
+  SwiftCode(..), swiftName
 ) where
 
 import Utils.Drasil (indent, stringList)

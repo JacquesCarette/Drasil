@@ -23,7 +23,7 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   GOOLState(..), lensMStoVS, headers, sources, mainMod, 
   initialState,
   onStateValue, onCodeList,
-  unCI, unPC, unJC, unCSC, unCPPC
+  unCI, unPC, unJC, unCSC, unCPPC, unSC, swiftName
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock, 
@@ -60,3 +60,4 @@ import GOOL.Drasil.LanguageRenderer.JavaRenderer (unJC)
 import GOOL.Drasil.LanguageRenderer.PythonRenderer (unPC)
 import GOOL.Drasil.LanguageRenderer.CSharpRenderer (unCSC)
 import GOOL.Drasil.LanguageRenderer.CppRenderer (unCPPC)
+import GOOL.Drasil.LanguageRenderer.SwiftRenderer (unSC, swiftName)

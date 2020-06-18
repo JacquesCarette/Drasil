@@ -26,8 +26,9 @@ doxConfig :: (AuxiliarySym r) => r (AuxHelper r) -> String ->
 doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s 
   (auxHelperDoc opt) v)
 
-readMe :: (AuxiliarySym r) => String -> r (Auxiliary r)
-readMe n = auxFromData readMeName (makeReadMe n)
+readMe :: (AuxiliarySym r) => String -> String -> String -> String -> String -> 
+    r (Auxiliary r)
+readMe l v unsp fp n = auxFromData readMeName (makeReadMe l v unsp fp n)
 
 sampleInput :: (AuxiliarySym r) => ChunkDB -> DataDesc -> [Expr] -> 
   r (Auxiliary r)

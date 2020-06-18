@@ -53,7 +53,8 @@ instance AuxiliarySym JavaProject where
   type Auxiliary JavaProject = AuxData
   type AuxHelper JavaProject = Doc
   doxConfig = G.doxConfig optimizeDox
-  readMe = G.readMe
+  readMe n = G.readMe "Java" "14" "None"
+    ("Drasil/code/stable/"++n++"/src/java/input.txt") n
   sampleInput = G.sampleInput
 
   optimizeDox = return yes

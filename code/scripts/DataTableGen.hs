@@ -3,11 +3,12 @@ module DataTableGen (main) where
 import Data.List
 import System.IO
 import System.Directory
-import DirectoryController as DC (iterator, iterator2, finder)
+import DirectoryController as DC (iterator, iterator2, iterator3, finder, finder2)
 import SourceCodeReader as SCR (extractEntryData)
 
 type EntryData = String
 type FileName = FilePath
+type FolderName = FilePath
 
 type ClassInstance = String
 
@@ -28,44 +29,46 @@ main = do
   [packageNames,classInstanceGroups,classInstances] <- config
   -- prints all drasil- package subdirectories
   DC.iterator filtered
-
-  test1 <- DC.iterator2 "Language /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-lang"
-  print test1
-
+  
   test2 <- mapM DC.iterator2 ["Language /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-lang",
                               "GOOL /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-gool"]
   print test2
+  print (concat $ map (!! 0) test2)
+  print (concat $ map (!! 1) test2)
+
+  test3 <- DC.iterator2 "drasil-lang /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code"
+  print test3
+  print (test3 !! 0)
+  print (test3 !! 1)
+
+  test4 <- DC.finder2 "drasil-lang /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code"
+  print test4
+  -- mapM_ print test4
+  print (length test4)
 
   -- list of all files (names + filepaths)
   fpsCode <- DC.finder "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code" (head filtered) 
   mapM_ print fpsCode
 
-  let curDir1 = "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-lang/Language/Drasil"
-      curDir2 = "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-gool/GOOL/Drasil"
-      curDir3 = "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-lang/Language/Drasil/Document"
-      curDir4 = "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-lang/Language/Drasil/Data"
-
   -- easy + hard test for classes, medium test for data/newtypes, easy test for data types
-  entry1 <- createEntry classInstances "Classes.hs" curDir1
-  entry2 <- createEntry classInstances "RendererClasses.hs" curDir2
-  entry3 <- createEntry classInstances "Core.hs" curDir3
-  entry4 <- createEntry classInstances "Date.hs" curDir4
-
-  -- entryData contains joined string with each file entries' data (intercalate)
-  let entryData = intercalate "\n" [entry1,entry2,entry3,entry4]
-  -- mapM_ print (lines entryData)
-
   let rawFileData = ["Classes.hs /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-lang/Language/Drasil",
                      "RendererClasses.hs /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-gool/GOOL/Drasil",
                      "Core.hs /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-lang/Language/Drasil/Document",
                      "Date.hs /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-lang/Language/Drasil/Data"]
-  rawEntryData <- mapM (createEntry2 classInstances . words) rawFileData
+  rawEntryData <- mapM (createEntry classInstances . words) rawFileData
 
-  -- print [entry1,entry2,entry3,entry4]
-  -- print rawEntryData
+  let rawFileData2 = test4
+  rawEntryData2 <- mapM (createEntry classInstances . words) rawFileData2
+
+  -- entryData contains joined string with each file entries' data (intercalate)
+  let entryData = intercalate "\n" rawEntryData
+  -- mapM_ print (lines entryData)
+  
+  let entryData2 = intercalate "\n" rawEntryData2
+  -- mapM_ print (lines entryData2)
 
   -- creates and writes to output data file
-  output entryData classInstances
+  output entryData2 classInstances
 
 -- import configurations function (drasil- package ordering, class instance group ordering)
 config :: IO [[String]]
@@ -87,9 +90,9 @@ output entryData classInstances = do
   hPutStrLn dataTable entryData
   hClose dataTable
 
--- creates entries for each file (original input format)
-createEntry :: [ClassInstance] -> FileName -> FilePath -> IO String
-createEntry classInstances name path = do
+  -- creates an entry for each file (updated/optimized input format)
+createEntry :: [ClassInstance] -> [FilePath] -> IO String
+createEntry classInstances [name,path] = do
   [dataNames,newtypeNames,classNames,stripInstances] <- SCR.extractEntryData name path
 
   -- f data newtype class
@@ -98,12 +101,14 @@ createEntry classInstances name path = do
       filePath = (\\ "/") . dropWhile (/= '/') $ (\\ "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-") path
       fileName = name
 
+  -- guards determine how to handle first data entry
   let entry 
         | not (null dataNames) = f (head dataNames) "\t" "\t"
         | not (null newtypeNames) = f "\t" (head newtypeNames) "\t"
         | not (null classNames) = f "\t" "\t" (head classNames)
         | otherwise = f "\t" "\t" "\t"
   
+  -- creates heads of each data, newtype and class entry line
   let dataEntries = map (("\t,\t,\t,"++) . (++",\t,\t")) dataNames
       newtypeEntries = map (("\t,\t,\t,\t,"++) . (++",\t")) newtypeNames
       classEntries = map ("\t,\t,\t,\t,\t,"++) classNames
@@ -124,58 +129,10 @@ createEntry classInstances name path = do
       newtypeRefLines = map (intercalate ",") newtypeInstanceRefs
       newtypeEntries2 = zipWith (\a b -> a ++ "," ++ b) newtypeEntries newtypeRefLines
 
+  -- creates file entry data by combining data, newtype and class entries
   let entryData = dataEntries2 ++ newtypeEntries2 ++ classEntries
-      
-  let output 
-        | length entryData > 1 = entry ++ "\n" ++ subEntries
-        | length entryData == 1 && not (null dataRefLines) = f entry (head dataRefLines)
-        | length entryData == 1 && not (null newtypeRefLines) = f entry (head newtypeRefLines)
-        | otherwise = entry
-      subEntries = intercalate "\n" (drop 1 entryData)
-      f a b = a ++ "," ++ b
-
-  -- mapM_ print (lines output)
-  return output
-
-  -- creates entries for each file (different input format)
-createEntry2 :: [ClassInstance] -> [FilePath] -> IO String
-createEntry2 classInstances [name,path] = do
-  [dataNames,newtypeNames,classNames,stripInstances] <- SCR.extractEntryData name path
-
-  -- f data newtype class
-  let f d n c = intercalate "," [drasilPack,filePath,fileName,d,n,c] 
-      drasilPack = takeWhile (/= '/') . (\\ "-") $ dropWhile (/='-') path 
-      filePath = (\\ "/") . dropWhile (/= '/') $ (\\ "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-") path
-      fileName = name
-
-  let entry 
-        | not (null dataNames) = f (head dataNames) "\t" "\t"
-        | not (null newtypeNames) = f "\t" (head newtypeNames) "\t"
-        | not (null classNames) = f "\t" "\t" (head classNames)
-        | otherwise = f "\t" "\t" "\t"
   
-  let dataEntries = map (("\t,\t,\t,"++) . (++",\t,\t")) dataNames
-      newtypeEntries = map (("\t,\t,\t,\t,"++) . (++",\t")) newtypeNames
-      classEntries = map ("\t,\t,\t,\t,\t,"++) classNames
-
-  -- creating "Y" references to class instances for data types
-  let dataInstanceRefNames = map (f stripInstances) dataNames
-      f b a = map (\\ (a ++ " ")) $ filter (isPrefixOf a) b
-      dataInstanceRefs = zipWith (map . isInstanceOf) dataInstanceRefNames instanceSkeleton where 
-          instanceSkeleton = replicate (length dataInstanceRefNames) classInstances
-      dataRefLines = map (intercalate ",") dataInstanceRefs
-      dataEntries2 = zipWith (\a b -> a ++ "," ++ b) dataEntries dataRefLines
-
-  -- creating "Y" references to class instances for newtype types
-  let newtypeInstanceRefNames = map (f stripInstances) newtypeNames
-      f b a = map (\\ (a ++ " ")) $ filter (isPrefixOf a) b
-      newtypeInstanceRefs = zipWith (map . isInstanceOf) newtypeInstanceRefNames instanceSkeleton where 
-          instanceSkeleton = replicate (length newtypeInstanceRefNames) classInstances
-      newtypeRefLines = map (intercalate ",") newtypeInstanceRefs
-      newtypeEntries2 = zipWith (\a b -> a ++ "," ++ b) newtypeEntries newtypeRefLines
-
-  let entryData = dataEntries2 ++ newtypeEntries2 ++ classEntries
-      
+  -- guards determine how to handle overall file entry output (single vs. multiple entry data)
   let output 
         | length entryData > 1 = entry ++ "\n" ++ subEntries
         | length entryData == 1 && not (null dataRefLines) = f entry (head dataRefLines)

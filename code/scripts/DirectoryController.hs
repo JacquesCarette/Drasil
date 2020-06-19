@@ -1,4 +1,4 @@
-module DirectoryController (iterator, iterator2, finder) where
+module DirectoryController (iterator, iterator2, iterator3, finder, finder2) where
 
 import Data.List
 import System.IO
@@ -20,7 +20,7 @@ iterator (x:xs) = do
   wd <- getCurrentDirectory
   
   let l = filter (isInfixOf ".") some
-      d = map ((++ x) . (++"/") . (++ wd) . (++" ")) $ (some \\ l)
+      d = map ((++ x) . (++"/") . (++ wd) . (++" ")) (some \\ l)
       h = filter (isSuffixOf ".hs") some
   
   print x -- << drasil- package
@@ -32,13 +32,25 @@ iterator (x:xs) = do
 
 -- iterates through each drasil- package and outputs subdirectories and haskell files
 iterator2 :: FilePath -> IO [[FileName]]
-iterator2 filePath = do
-  let [fn,wd] = words filePath
+iterator2 nameFilePath = do
+  let [fn,wd] = words nameFilePath
   setCurrentDirectory wd
   fc <- listDirectory fn
 
   let fcs = [a,b]
-      a = map ((++fn) . (++"/") . (++wd) . (++" ")) $ fc \\ (filter (isInfixOf ".") fc)
+      a = map ((++fn) . (++"/") . (++wd) . (++" ")) $ fc \\ filter (isInfixOf ".") fc
+      b = map ((++fn) . (++"/") . (++wd) . (++" ")) $ filter (isSuffixOf ".hs") fc
+  return fcs
+
+-- iterates through each drasil- package and outputs subdirectories and haskell files
+iterator3 :: FilePath -> IO ([FolderName],[FileName])
+iterator3 nameFilePath = do
+  let [fn,wd] = words nameFilePath
+  setCurrentDirectory wd
+  fc <- listDirectory fn
+
+  let fcs = (a,b)
+      a = map ((++fn) . (++"/") . (++wd) . (++" ")) $ fc \\ filter (isInfixOf ".") fc
       b = map ((++fn) . (++"/") . (++wd) . (++" ")) $ filter (isSuffixOf ".hs") fc
   return fcs
 
@@ -48,7 +60,7 @@ finder filePath x = do
   all <- listDirectory x
 
   let l = filter (isInfixOf ".") all
-      d = map ((++ x) . (++"/") . (++ filePath) . (++" ")) $ (all \\ l)
+      d = map ((++ x) . (++"/") . (++ filePath) . (++" ")) (all \\ l)
       h = filter (isSuffixOf ".hs") all
 
   print x -- << drasil- package
@@ -56,3 +68,19 @@ finder filePath x = do
   print h -- << haskell files
 
   return h
+
+finder2 :: FolderName -> IO [FileName]
+finder2 folderName = do
+  rawData <- iterator3 folderName
+
+  let folders = fst rawData
+  rawFiles <- mapM (finder2) folders
+
+  let bakedFiles
+        | null rawFiles = []
+        | otherwise = concat rawFiles
+
+  let files
+        | not (null folders) = (snd rawData) ++ bakedFiles
+        | otherwise = snd rawData
+  return files

@@ -148,7 +148,6 @@ data Logging = LogFunc -- Log messages generated for function calls
 
 -- Currently we only support one kind of auxiliary file: sample input file
 -- To generate a sample input file compatible with the generated program
-<<<<<<< HEAD
 -- FilePath is the path to the user-provided file containing a sample set of input data
 data AuxFile = SampleInput FilePath 
                 | ReadME 

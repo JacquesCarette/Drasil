@@ -57,9 +57,9 @@ genDoxConfig s = do
   return [doxConfig n s v | not (null cms)]
 
 genReadMe :: (AuxiliarySym r) => ImplementationType -> [Name] ->
-  Reader DrasilState [r (Auxiliary r)]
+  GenState [r (Auxiliary r)]
 genReadMe imp libnms = do 
-  g <- ask
+  g <- get
   let n = pName $ codeSpec g
   return [readMe imp libnms n | hasReadMe (auxiliaries g)]
 

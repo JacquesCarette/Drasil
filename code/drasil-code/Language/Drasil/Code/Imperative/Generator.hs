@@ -23,6 +23,7 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Visibility(..))
@@ -81,9 +82,10 @@ generator l dt sd chs spec = DrasilState {
   where (mcm, concLog) = runState (chooseConcept chs) empty
         showDate Show = dt
         showDate Hide = ""
-        ((pth, elmap), libLog) = runState (chooseODELib l (odeLib chs) 
+        ((pth, elmap, lname), libLog) = runState (chooseODELib l (odeLib chs) 
           (odes chs)) empty
         els = map snd elmap
+        nms = [lname]
         mem = modExportMap spec chs modules' 
         lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap spec chs modules'

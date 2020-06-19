@@ -9,11 +9,11 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
   listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, increment, objDecNew, 
-  print, closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, 
-  construct, param, method, getMethod, setMethod, constructor, function, 
-  docFuncRepr, docFunc, buildClass, implementingClass, docClass, 
-  commentedClass, modFromData, fileDoc, docMod
+  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
+  objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond, 
+  tryCatch, construct, param, method, getMethod, setMethod, constructor, 
+  function, docFuncRepr, docFunc, buildClass, extraClass, implementingClass, 
+  docClass, commentedClass, modFromData, fileDoc, docMod
 ) where
 
 import Utils.Drasil (indent)
@@ -61,13 +61,13 @@ import GOOL.Drasil.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt,
   functionDox, classDox, moduleDox, getterName, setterName, valueList, 
   namedArgList)
 import qualified GOOL.Drasil.LanguageRenderer as R (file, block, assign, 
-  addAssign, return', comment, getTerm, var, arg, func, objAccess, 
+  addAssign, subAssign, return', comment, getTerm, var, arg, func, objAccess, 
   commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkVal, mkStateVar, mkStaticVar, VSOp, unOpPrec, compEqualPrec, 
   compPrec, addPrec, multPrec)
-import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, currMain, 
-  currFileType, modifyReturnFunc, addFile, setMainMod, setModuleName, 
+import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
+  currMain, currFileType, modifyReturnFunc, addFile, setMainMod, setModuleName, 
   getModuleName, getClassName, addParameter, getParameters)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
@@ -315,6 +315,10 @@ assign :: (RenderSym r) => Terminator -> SVariable r -> SValue r ->
   MSStatement r
 assign t = zoom lensMStoVS .: on2StateValues (flip stmtFromData t .: R.assign)
 
+subAssign :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
+  MSStatement r
+subAssign t = zoom lensMStoVS .: on2StateValues (flip stmtFromData t .: R.subAssign)
+
 increment :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 increment = zoom lensMStoVS .: on2StateValues (mkStmt .: R.addAssign)
 
@@ -422,9 +426,9 @@ constructor fName ps is b = getClassName >>= (\c -> intMethod False fName
   public dynamic (S.construct c) ps (S.multiBody [ib, b]))
   where ib = bodyStatements (map (\(vr, vl) -> S.objVarSelf vr &= vl) is)
 
-function :: (RenderSym r) => Label -> r (Scope r) -> r (Permanence r) -> 
-  VSType r -> [MSParameter r] -> MSBody r -> SMethod r
-function n s p t = S.intFunc False n s p (mType t)
+function :: (RenderSym r) => Label -> r (Scope r) -> VSType r -> 
+  [MSParameter r] -> MSBody r -> SMethod r
+function n s t = S.intFunc False n s static (mType t)
   
 docFuncRepr :: (RenderSym r) => String -> [String] -> [String] -> SMethod r -> 
   SMethod r
@@ -437,9 +441,15 @@ docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
 -- Classes --
 
-buildClass :: (RenderSym r) => Label -> Maybe Label -> [CSStateVar r] -> 
+buildClass :: (RenderSym r) =>  Maybe Label -> [CSStateVar r] -> 
   [SMethod r] -> SClass r
-buildClass n = S.intClass n public . inherit
+buildClass p stVars methods = do 
+  n <- zoom lensCStoFS getModuleName
+  S.intClass n public (inherit p) stVars methods
+
+extraClass :: (RenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+  SClass r
+extraClass n = S.intClass n public . inherit
 
 implementingClass :: (RenderSym r) => Label -> [Label] -> [CSStateVar r] -> 
   [SMethod r] -> SClass r

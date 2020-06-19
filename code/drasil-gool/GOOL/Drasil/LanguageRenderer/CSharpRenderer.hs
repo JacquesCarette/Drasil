@@ -59,11 +59,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
   iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, increment, objDecNew, print, closeFile,
+  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, closeFile,
   returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
   method, getMethod, setMethod, constructor, function, docFunc, buildClass, 
-  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, 
-  fileFromData)
+  extraClass, implementingClass, docClass, commentedClass, modFromData, fileDoc, 
+  docMod, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
@@ -74,11 +74,11 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  varDec, varDecDef, listDec, extObjDecNew, switch, for, while, intFunc, 
-  multiAssignError, multiReturnError)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
-  decrement1, runStrategy, listSlice, stringListVals, stringListLists,
-  forRange, notifyObservers, checkState)
+  decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
+  intFunc, multiAssignError, multiReturnError)
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
+  runStrategy, listSlice, stringListVals, stringListLists, forRange, 
+  notifyObservers, checkState)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, updateParam, ProgData(..), progD, 
@@ -456,10 +456,10 @@ instance StatementSym CSharpCode where
 
 instance AssignStatement CSharpCode where
   assign = G.assign Semi
-  (&-=) = M.decrement
+  (&-=) = G.subAssign Semi
   (&+=) = G.increment
   (&++) = C.increment1
-  (&--) = M.decrement1
+  (&--) = C.decrement1
 
 instance DeclStatement CSharpCode where
   varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
@@ -591,13 +591,13 @@ instance MethodSym CSharpCode where
 
   docFunc = G.docFunc
 
-  inOutMethod n = csInOut (method n)
+  inOutMethod n s p = csInOut (method n s p)
 
-  docInOutMethod n = CP.docInOutFunc (inOutMethod n)
+  docInOutMethod n s p = CP.docInOutFunc (inOutMethod n s p)
 
-  inOutFunc n = csInOut (function n)
+  inOutFunc n s = csInOut (function n s)
 
-  docInOutFunc n = CP.docInOutFunc (inOutFunc n)
+  docInOutFunc n s = CP.docInOutFunc (inOutFunc n s)
 
 instance RenderMethod CSharpCode where
   intMethod m n s p t ps b = do
@@ -617,8 +617,8 @@ instance MethodElim CSharpCode where
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
   stateVar = CP.stateVar
-  stateVarDef _ = CP.stateVarDef
-  constVar _ = CP.constVar empty
+  stateVarDef = CP.stateVarDef
+  constVar = CP.constVar empty
   
 instance StateVarElim CSharpCode where
   stateVar = unCSC
@@ -626,7 +626,7 @@ instance StateVarElim CSharpCode where
 instance ClassSym CSharpCode where
   type Class CSharpCode = Doc
   buildClass = G.buildClass
-  extraClass = buildClass
+  extraClass = G.extraClass 
   implementingClass = G.implementingClass
 
   docClass = G.docClass
@@ -854,18 +854,16 @@ csObjVar o v = csObjVar' (variableBind v)
         csObjVar' Dynamic = mkVar (variableName o ++ "." ++ variableName v) 
           (variableType v) (R.objVar (RC.variable o) (RC.variable v))
 
-csInOut :: (CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) 
-    -> VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode -> 
-    SMethod CSharpCode)
-  -> CSharpCode (Scope CSharpCode) -> CSharpCode (Permanence CSharpCode) -> 
+csInOut :: (VSType CSharpCode -> [MSParameter CSharpCode] -> MSBody CSharpCode -> 
+    SMethod CSharpCode) -> 
   [SVariable CSharpCode] -> [SVariable CSharpCode] -> [SVariable CSharpCode] -> 
   MSBody CSharpCode -> SMethod CSharpCode
-csInOut f s p ins [v] [] b = f s p (onStateValue variableType v) (map param ins)
+csInOut f ins [v] [] b = f (onStateValue variableType v) (map param ins)
   (on3StateValues (on3CodeValues surroundBody) (varDec v) b (returnStmt $ 
   valueOf v))
-csInOut f s p ins [] [v] b = f s p (onStateValue variableType v) 
+csInOut f ins [] [v] b = f (onStateValue variableType v) 
   (map param $ v : ins) (on2StateValues (on2CodeValues appendToBody) b 
   (returnStmt $ valueOf v))
-csInOut f s p ins outs both b = f s p void (map (onStateValue (onCodeValue 
+csInOut f ins outs both b = f void (map (onStateValue (onCodeValue 
   (updateParam csRef)) . param) both ++ map param ins ++ map (onStateValue 
   (onCodeValue (updateParam csOut)) . param) outs) b

@@ -1,0 +1,3 @@
+Language Cpp is not compatible with chosen library SciPy, trying next choice.
+Language Cpp is not compatible with chosen library OSLO, trying next choice.
+Language Cpp is not compatible with chosen library Apache, trying next choice.

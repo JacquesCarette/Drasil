@@ -6,15 +6,15 @@ import Language.Drasil.Development (precA, precB, eprec)
 import Database.Drasil
 import Utils.Drasil
 
-import Control.Lens ((^.))
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
   PrintingInformation, Notation(Scientific, Engineering), ckdb, stg)
 
+import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
-import Data.List (intersperse)
+import Data.List (intersperse, partition)
 import Data.Maybe (fromMaybe)
 import Data.Tuple (fst, snd)
 import Numeric (floatToDigits)
@@ -300,7 +300,7 @@ spec sm (a :+: EmptyS) = spec sm a
 spec sm (a :+: b)      = spec sm a P.:+: spec sm b
 spec _ (S s)           = either error P.S $ checkValidStr s invalidChars
   where invalidChars   = ['<', '>', '\"', '&', '#', '$', '%', '&', '~', '^', '\\', '{', '}'] 
-spec _ (Sy s)          = P.Sy s
+spec _ (Sy s)          = P.E $ pUnit s
 spec _ Percent         = P.E $ P.MO P.Perc
 spec _ (P s)           = P.E $ symbol s
 spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
@@ -316,6 +316,22 @@ spec sm (Ref (Reference _ (URI ra) sn _)) =
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
+
+pUnit :: USymb -> P.Expr
+pUnit (US ls) = formatu t b
+  where
+    (t,b) = partition ((> 0) . snd) ls
+    formatu :: [(Symbol,Integer)] -> [(Symbol,Integer)] -> P.Expr
+    formatu [] l = line l
+    formatu l [] = P.Row $ map powu l
+    formatu nu de = P.Div (line nu) $ line $ map (second negate) de
+    line :: [(Symbol,Integer)] -> P.Expr
+    line []  = P.Row [] -- should not happen ?
+    line [n] = powu n
+    line l   = P.Row $ map powu l
+    powu :: (Symbol,Integer) -> P.Expr
+    powu (n,1) = symbol n
+    powu (n,p) = P.Row [symbol n, P.Sup $ P.Int p]
 
 renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
 renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $

@@ -37,7 +37,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
-  method, stateVar, class', module', blockComment')
+  method, stateVar, class', module', blockComment', intClass)
 import GOOL.Drasil.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
   forLabel, inLabel, whileLabel, tryLabel, exceptionObj', listSep', argv, 
   listSep, access, valueList, variableList, parameterList, surroundBody)
@@ -55,9 +55,9 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
   lambda, func, get, set, listAdd, listAppend, iterBegin, iterEnd, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
+  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
   ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
-  constructor, function, docFunc, buildClass, implementingClass, docClass, 
+  constructor, function, docFunc, buildClass, extraClass, implementingClass, docClass, 
   commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
@@ -65,9 +65,9 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   indexOf, listAddFunc,  iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
   funcType, listSetFunc, listAccessFunc, buildModule)
-import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement, 
-  decrement1, increment1, runStrategy, stringListVals, stringListLists,
-  observerIndex, checkState)
+import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
+  increment1, runStrategy, stringListVals, stringListLists, observerIndex, 
+  checkState)
 import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD, 
   FuncData(..), fd, ModData(..), md, updateMod, MethodData(..), mthd, 
   updateMthd, OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), 
@@ -468,10 +468,10 @@ instance StatementSym PythonCode where
 
 instance AssignStatement PythonCode where
   assign = G.assign Empty
-  (&-=) = M.decrement
+  (&-=) = G.subAssign Empty
   (&+=) = G.increment
   (&++) = M.increment1
-  (&--) = M.decrement1
+  (&--) vr = (&-=) vr (litInt 1)
 
 instance DeclStatement PythonCode where
   varDec _ = toState $ mkStmtNoEnd empty
@@ -489,7 +489,7 @@ instance DeclStatement PythonCode where
   funcDecDef v ps b = do
     vr <- zoom lensMStoVS v
     s <- S.get
-    f <- function (variableName vr) private dynamic (return $ variableType vr) 
+    f <- function (variableName vr) private (return $ variableType vr) 
       (map param ps) b
     modify (L.set currParameters (s ^. currParameters))
     return $ mkStmtNoEnd $ RC.method f
@@ -618,13 +618,13 @@ instance MethodSym PythonCode where
 
   docFunc = G.docFunc
 
-  inOutMethod n = pyInOut (method n)
+  inOutMethod n s p = pyInOut (method n s p)
 
-  docInOutMethod n = pyDocInOut (inOutMethod n)
+  docInOutMethod n s p = pyDocInOut (inOutMethod n s p)
 
-  inOutFunc n = pyInOut (function n)
+  inOutFunc n s = pyInOut (function n s)
 
-  docInOutFunc n = pyDocInOut (inOutFunc n)
+  docInOutFunc n s = pyDocInOut (inOutFunc n s)
 
 instance RenderMethod PythonCode where
   intMethod m n _ _ _ ps b = do
@@ -648,8 +648,8 @@ instance MethodElim PythonCode where
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ = toState (toCode empty)
-  stateVarDef _ = CP.stateVarDef
-  constVar _ = CP.constVar (RC.perm 
+  stateVarDef = CP.stateVarDef
+  constVar = CP.constVar (RC.perm 
     (static :: PythonCode (Permanence PythonCode)))
   
 instance StateVarElim PythonCode where
@@ -658,7 +658,7 @@ instance StateVarElim PythonCode where
 instance ClassSym PythonCode where
   type Class PythonCode = Doc
   buildClass = G.buildClass
-  extraClass = buildClass
+  extraClass = G.extraClass  
   implementingClass = G.implementingClass
 
   docClass = G.docClass
@@ -975,21 +975,19 @@ pyDocComment [] _ _ = empty
 pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . 
   text) lns
 
-pyInOut :: (PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) 
-    -> VSType PythonCode -> [MSParameter PythonCode] -> MSBody PythonCode -> 
-    SMethod PythonCode)
-  -> PythonCode (Scope PythonCode) -> PythonCode (Permanence PythonCode) -> 
+pyInOut :: (VSType PythonCode -> [MSParameter PythonCode] -> MSBody PythonCode -> 
+    SMethod PythonCode) -> 
   [SVariable PythonCode] -> [SVariable PythonCode] -> [SVariable PythonCode] -> 
   MSBody PythonCode -> SMethod PythonCode
-pyInOut f s p ins [] [] b = f s p void (map param ins) b
-pyInOut f s p ins outs both b = f s p void (map param $ both ++ ins) 
+pyInOut f ins [] [] b = f void (map param ins) b
+pyInOut f ins outs both b = f void (map param $ both ++ ins) 
   (on3StateValues (on3CodeValues surroundBody) (multi $ map varDec outs) b 
   (multiReturn $ map valueOf rets))
   where rets = both ++ outs
 
-pyDocInOut :: (RenderSym r) => (r (Scope r) -> r (Permanence r) 
-    -> [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r)
-  -> r (Scope r) -> r (Permanence r) -> String -> [(String, SVariable r)] -> 
-  [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
-pyDocInOut f s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
-  (map fst $ bs ++ os) (f s p (map snd is) (map snd os) (map snd bs) b)
+pyDocInOut :: (RenderSym r) => ([SVariable r] -> [SVariable r] -> [SVariable r] -> 
+    MSBody r -> SMethod r) -> 
+  String -> [(String, SVariable r)] -> [(String, SVariable r)] -> 
+  [(String, SVariable r)] -> MSBody r -> SMethod r
+pyDocInOut f desc is os bs b = docFuncRepr desc (map fst $ bs ++ is)
+  (map fst $ bs ++ os) (f (map snd is) (map snd os) (map snd bs) b)

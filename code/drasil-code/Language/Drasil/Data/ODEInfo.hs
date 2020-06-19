@@ -1,3 +1,5 @@
+-- | Defines a structure to contain scientifically-relevant information about
+-- an ODE.
 module Language.Drasil.Data.ODEInfo (
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..)
 ) where
@@ -20,6 +22,7 @@ data ODEInfo = ODEInfo {
   odeOpts :: ODEOptions
 }
 
+-- Basic ODEInfo constructor
 odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> Expr -> Expr -> 
   Expr -> [Expr] -> ODEOptions -> ODEInfo
 odeInfo = ODEInfo
@@ -31,7 +34,9 @@ data ODEOptions = ODEOpts {
   stepSize :: Expr
 }
 
+-- Basic odeOptions constructor
 odeOptions :: ODEMethod -> Expr -> Expr -> Expr -> ODEOptions
 odeOptions = ODEOpts
 
+-- Runge-Kutta 4-5, Backwards Differentiation Formula, or Adams' method.
 data ODEMethod = RK45 | BDF | Adams

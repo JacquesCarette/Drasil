@@ -70,7 +70,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "A_C has value ";
         std::cout << A_C;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "below ";
         std::cout << Constants::A_C_max;
         std::cout << " (A_C_max)";
@@ -80,7 +80,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "C_W has value ";
         std::cout << C_W;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::C_W_min;
         std::cout << " (C_W_min)";
@@ -93,7 +93,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "h_C has value ";
         std::cout << h_C;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::h_C_min;
         std::cout << " (h_C_min)";
@@ -106,7 +106,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "t_final has value ";
         std::cout << t_final;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "below ";
         std::cout << Constants::t_final_max;
         std::cout << " (t_final_max)";
@@ -116,7 +116,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "L has value ";
         std::cout << L;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::L_min;
         std::cout << " (L_min)";
@@ -129,7 +129,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "rho_W has value ";
         std::cout << rho_W;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::rho_W_min;
         std::cout << " (rho_W_min)";
@@ -142,7 +142,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "D has value ";
         std::cout << D;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::AR_min;
         std::cout << " (AR_min)";
@@ -156,7 +156,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "A_C has value ";
         std::cout << A_C;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -165,7 +165,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "C_W has value ";
         std::cout << C_W;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -174,7 +174,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "h_C has value ";
         std::cout << h_C;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -183,7 +183,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "T_init has value ";
         std::cout << T_init;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << 0;
         std::cout << " and ";
@@ -194,7 +194,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "t_final has value ";
         std::cout << t_final;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -203,7 +203,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "L has value ";
         std::cout << L;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -212,7 +212,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "T_C has value ";
         std::cout << T_C;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << 0;
         std::cout << " and ";
@@ -223,7 +223,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "t_step has value ";
         std::cout << t_step;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << 0;
         std::cout << " and ";
@@ -235,7 +235,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "rho_W has value ";
         std::cout << rho_W;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -244,7 +244,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "D has value ";
         std::cout << D;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;
@@ -253,7 +253,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "E_W has value ";
         std::cout << E_W;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
         std::cout << 0;
         std::cout << "." << std::endl;

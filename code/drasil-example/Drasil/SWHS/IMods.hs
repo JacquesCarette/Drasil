@@ -2,7 +2,7 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
   eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, imNoDeriv)
+import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC, qwC)
 import Utils.Drasil
 import Control.Lens((^.))
 
@@ -36,9 +36,13 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 -- IM1 --
 ---------
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im eBalanceOnWtrRC [qw wMass, qw htCapW, qw coilHTC, qw pcmSA,
-  qw pcmHTC, qw coilSA, qw tempPCM, qw timeFinal, qw tempC, qw tempInit]
-  [sy tempInit $< sy tempC] (qw tempW) [0 $<= sy time $<= sy timeFinal]
+eBalanceOnWtr = im eBalanceOnWtrRC 
+  [qwUC wMass ,qwUC htCapW, qwUC coilHTC, qwUC pcmSA, qwUC pcmHTC, qwUC coilSA
+  ,qwUC tempPCM, qwUC timeFinal, qwC tempC $ UpFrom (Exc, sy tempInit)
+  ,qwUC tempInit]
+  -- [sy tempInit $< sy tempC] 
+  (qw tempW) []
+  -- [0 $<= sy time $<= sy timeFinal]
   [makeCite koothoor2013] (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrDesc
 
 eBalanceOnWtrRC :: RelationConcept
@@ -181,9 +185,10 @@ eBalanceOnWtrDerivEqnsIM1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
 -- IM2 --
 ---------
 eBalanceOnPCM :: InstanceModel
-eBalanceOnPCM = im eBalanceOnPCMRC [qw tempMeltP, qw timeFinal, qw tempInit, qw pcmSA,
-  qw pcmHTC, qw pcmMass, qw htCapSP, qw htCapLP]
-  [sy tempInit $< sy tempMeltP] (qw tempPCM) [0 $<= sy time $<= sy timeFinal]
+eBalanceOnPCM = im eBalanceOnPCMRC [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
+  , qwUC timeFinal, qwUC tempInit, qwUC pcmSA
+  , qwUC pcmHTC, qwUC pcmMass, qwUC htCapSP, qwUC htCapLP]
+  (qw tempPCM) []
   [makeCite koothoor2013] (Just eBalanceOnPCMDeriv) "eBalanceOnPCM" balPCMNotes
 
 eBalanceOnPCMRC :: RelationConcept
@@ -194,7 +199,7 @@ eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
 balPCMRel :: Relation
 balPCMRel = deriv (sy tempPCM) time $= completeCase [case1, case2, case3]
   where case1 = ((1 / sy tauSP) * (apply1 tempW time -
-          apply1 tempPCM time), realInterval tempPCM (UpTo (Exc,sy tempMeltP)))
+          apply1 tempPCM time), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))
         case2 = ((1 / sy tauLP) * (apply1 tempW time -
           apply1 tempPCM time), realInterval tempPCM (UpFrom (Exc,sy tempMeltP)))
         case3 = (0, sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc,0) (Exc,1)))
@@ -308,9 +313,10 @@ eBalanceOnPCMDerivEqnsIM2 = [eBalanceOnPCMEqn1, eBalanceOnPCMEqn2,
 -- IM3 --
 ---------
 heatEInWtr :: InstanceModel
-heatEInWtr = im heatEInWtrRC [qw tempInit, qw wMass, qw htCapW, qw wMass] 
-  [] (qw watE) [0 $<= sy time $<= sy timeFinal] [makeCite koothoor2013]
-  Nothing "heatEInWtr" htWtrNotes
+heatEInWtr = imNoDeriv heatEInWtrRC 
+  [qwUC tempInit, qwUC wMass, qwUC htCapW, qwUC wMass] 
+  (qw watE) [] [makeCite koothoor2013]
+  "heatEInWtr" htWtrNotes
 
 heatEInWtrRC :: RelationConcept
 heatEInWtrRC = makeRC "heatEInWtrRC" (nounPhraseSP "Heat energy in the water")
@@ -334,10 +340,11 @@ htWtrNotes = map foldlSent [
 -- IM4 --
 ---------
 heatEInPCM :: InstanceModel
-heatEInPCM = imNoDeriv heatEInPCMRC [qw tempMeltP, qw timeFinal, qw tempInit, qw pcmSA,
-  qw pcmHTC, qw pcmMass, qw htCapSP, qw htCapLP, qw tempPCM, qw htFusion, qw tInitMelt]
-  [sy tempInit $< sy tempMeltP] (qw pcmE)
-  [0 $<= sy time $<= sy timeFinal] [makeCite koothoor2013]
+heatEInPCM = imNoDeriv heatEInPCMRC [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
+  , qwUC timeFinal, qwUC tempInit, qwUC pcmSA, qwUC pcmHTC
+  , qwUC pcmMass, qwUC htCapSP, qwUC htCapLP, qwUC tempPCM, qwUC htFusion, qwUC tInitMelt]
+  (qw pcmE)
+  [] [makeCite koothoor2013]
   "heatEInPCM" htPCMNotes
 
 heatEInPCMRC :: RelationConcept

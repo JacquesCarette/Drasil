@@ -1,17 +1,15 @@
 module Language.Drasil.HTML.Print(genHTML) where
 
 import Prelude hiding (print, (<>))
-import Data.List (intercalate, partition, sortBy)
+import Data.List (sortBy)
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
-import Control.Arrow (second)
 import Utils.Drasil (checkValidStr, numList)
 
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
-  Symbol(..), DType(Data, Theory, Instance, General), MaxWidthPercent,
-  Decoration(Prime, Hat, Vector), Document,
-  nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
+  DType(Data, Theory, Instance, General), MaxWidthPercent,
+  Document, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special)
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
@@ -29,7 +27,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   Dot, Cross, Neg, Exp, Not, Dim, Arctan, Arccos, Arcsin, Cot, Csc, Sec, Tan, 
   Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
   Real, Rational, Natural, Integer, IsIn, Point, Perc), 
-  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
+  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
@@ -110,7 +108,6 @@ titleSpec s         = pSpec s
 pSpec :: Spec -> Doc
 -- Non-mathjax
 pSpec (E e)  = em $ pExpr e
-pSpec (Sy s) = text $ uSymb s
 -- Latex based math for expressions and units
 -- pSpec (E e)     = printMath $ toMath $ TeX.pExpr e
 -- pSpec (Sy s)    = printMath $ TeX.pUnit s
@@ -131,41 +128,6 @@ pSpec (Quote q) = doubleQuotes $ pSpec q
 --pSpec (Acc Grave c) = text $ '&' : c : "grave;" --Only works on vowels.
 --pSpec (Acc Acute c) = text $ '&' : c : "acute;" --Only works on vowels.
 
-
--- | Renders symbols for HTML document
-symbol :: L.Symbol -> String
-symbol (L.Variable s) = s
-symbol (L.Label    s) = s
-symbol (L.Integ    n) = show n
-symbol (L.Special  s) = unPH $ L.special s
-symbol (L.Concat  sl) = concatMap symbol sl
---symbol (Greek g)      = unPH $ greek g
--- handle the special cases first, then general case
-symbol (L.Corners [] [] [x] [] s) = symbol s ++ (render . sup . text) (symbol x)
-symbol (L.Corners [] [] [] [x] s) = symbol s ++ (render . sub . text) (symbol x)
-symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
-symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol L.Corners{}                = error "rendering of L.Corners (general)"
-symbol (L.Atop L.Vector s)        = "<b>" ++ symbol s ++ "</b>"
-symbol (L.Atop L.Hat s)           = symbol s ++ "&#770;"
-symbol (L.Atop L.Prime s)         = symbol s ++ "&prime;"
-symbol L.Empty                    = ""
-
-uSymb :: L.USymb -> String
-uSymb (L.US ls) = formatu t b
-  where
-    (t,b) = partition ((> 0) . snd) ls
-    formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> String
-    formatu [] l = line l
-    formatu l [] = intercalate "&sdot;" $ map pow l
-    formatu nu de = line nu ++ "/" ++ line (map (second negate) de)
-    line :: [(L.Symbol,Integer)] -> String
-    line []  = ""
-    line [x] = pow x
-    line l   = "(" ++ intercalate "&sdot;" (map pow l) ++ ")"
-    pow :: (L.Symbol,Integer) -> String
-    pow (x,1) = symbol x
-    pow (x,p) = symbol x ++ (render . sup . text) (show p)
 
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------

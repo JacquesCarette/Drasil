@@ -56,7 +56,6 @@ pExprDoc _ (Spc Thin) = space
 specDoc :: Linearity -> Spec -> Doc
 specDoc f (E e) = pExprDoc f e
 specDoc _ (S s) = text s
-specDoc f (Sy u) = unitDoc f u
 specDoc _ (Sp s) = specialDoc s
 specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r)
 specDoc f (s1 :+: s2) = specDoc f s1 <> specDoc f s2

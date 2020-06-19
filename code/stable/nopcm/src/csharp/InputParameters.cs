@@ -86,7 +86,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("A_C has value ");
             Console.Write(A_C);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("below ");
             Console.Write(Constants.A_C_max);
             Console.Write(" (A_C_max)");
@@ -96,7 +96,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("C_W has value ");
             Console.Write(C_W);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(Constants.C_W_min);
             Console.Write(" (C_W_min)");
@@ -109,7 +109,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("h_C has value ");
             Console.Write(h_C);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(Constants.h_C_min);
             Console.Write(" (h_C_min)");
@@ -122,7 +122,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("t_final has value ");
             Console.Write(t_final);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("below ");
             Console.Write(Constants.t_final_max);
             Console.Write(" (t_final_max)");
@@ -132,7 +132,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("L has value ");
             Console.Write(L);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(Constants.L_min);
             Console.Write(" (L_min)");
@@ -145,7 +145,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("rho_W has value ");
             Console.Write(rho_W);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(Constants.rho_W_min);
             Console.Write(" (rho_W_min)");
@@ -158,7 +158,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("D has value ");
             Console.Write(D);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(Constants.AR_min);
             Console.Write(" (AR_min)");
@@ -172,7 +172,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("A_C has value ");
             Console.Write(A_C);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
             Console.Write(0);
             Console.WriteLine(".");
@@ -181,7 +181,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("C_W has value ");
             Console.Write(C_W);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
             Console.Write(0);
             Console.WriteLine(".");
@@ -190,7 +190,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("h_C has value ");
             Console.Write(h_C);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
             Console.Write(0);
             Console.WriteLine(".");
@@ -199,7 +199,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("T_init has value ");
             Console.Write(T_init);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(0);
             Console.Write(" and ");
@@ -210,7 +210,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("t_final has value ");
             Console.Write(t_final);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
             Console.Write(0);
             Console.WriteLine(".");
@@ -219,7 +219,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("L has value ");
             Console.Write(L);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
             Console.Write(0);
             Console.WriteLine(".");
@@ -228,7 +228,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("T_C has value ");
             Console.Write(T_C);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(0);
             Console.Write(" and ");
@@ -239,7 +239,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("t_step has value ");
             Console.Write(t_step);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(0);
             Console.Write(" and ");
@@ -251,7 +251,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("rho_W has value ");
             Console.Write(rho_W);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
             Console.Write(0);
             Console.WriteLine(".");
@@ -260,7 +260,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("D has value ");
             Console.Write(D);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
             Console.Write(0);
             Console.WriteLine(".");
@@ -269,7 +269,7 @@ public class InputParameters {
             Console.Write("Warning: ");
             Console.Write("E_W has value ");
             Console.Write(E_W);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
             Console.Write(0);
             Console.WriteLine(".");

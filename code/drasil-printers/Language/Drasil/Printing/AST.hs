@@ -40,7 +40,6 @@ infixr 5 :+:
 data Spec = E Expr
           | S String
           | Spec :+: Spec -- concat
-          | Sy USymb
           | Sp Special
           | Ref LinkType String Spec
           | EmptyS

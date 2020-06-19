@@ -1,7 +1,7 @@
 module Test.Helper (helper) where
 
 import GOOL.Drasil (SFile, SMethod,
-  OOProg, FileSym(..), PermanenceSym(..), bodyStatements, TypeSym(..), 
+  OOProg, FileSym(..), bodyStatements, TypeSym(..), 
   DeclStatement(..), ControlStatement(..), (&=), VariableSym(..),
   Literal(..), VariableValue(..), NumericExpression(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   ModuleSym(..))
@@ -13,7 +13,7 @@ helper = fileDoc (buildModule "Helper" [] [doubleAndAdd] [])
 doubleAndAdd :: (OOProg r) => SMethod r
 doubleAndAdd = docFunc "This function adds two numbers" 
   ["First number to add", "Second number to add"] (Just "Sum") $ 
-  function "doubleAndAdd"  public static double
+  function "doubleAndAdd"  public double
   [param $ var "num1" double, param $ var "num2" double]
   (bodyStatements [
     varDec $ var "doubledSum" double, 

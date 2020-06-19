@@ -1,6 +1,5 @@
 -- | re-export smart constructors for external code writing
 module Language.Drasil.Code (
-  spaceToCodeType,
   makeCode, createCodeFiles, 
   generator, generateCode,
   readWithDataDesc, sampleInputDD,
@@ -50,8 +49,6 @@ import Language.Drasil.Code.Imperative.Generator (generator, generateCode)
 
 import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc, 
   sampleInputDD)
-
-import Language.Drasil.Code.Code (spaceToCodeType)
 
 import Language.Drasil.Code.CodeGeneration (makeCode, createCodeFiles)
 

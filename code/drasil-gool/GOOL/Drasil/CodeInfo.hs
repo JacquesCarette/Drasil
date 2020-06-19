@@ -19,9 +19,9 @@ import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, modifyReturn, setClassName, 
-  setModuleName, getModuleName, addClass, updateClassMap, addException, 
-  updateMethodExcMap, updateCallMap, addCall, callMapTransClosure, 
+  lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, lensCStoFS, 
+  modifyReturn, setClassName, setModuleName, getModuleName, addClass, updateClassMap, 
+  addException, updateMethodExcMap, updateCallMap, addCall, callMapTransClosure, 
   updateMEMWithCalls)
 
 import Control.Monad.State (State, modify)
@@ -366,7 +366,7 @@ instance MethodSym CodeInfo where
 
   docMain = updateMEMandCM "main"
 
-  function n _ _ _ _ = updateMEMandCM n
+  function n _ _ _ = updateMEMandCM n
   mainFunction = updateMEMandCM "main"
 
   docFunc _ _ _ f = do
@@ -377,27 +377,30 @@ instance MethodSym CodeInfo where
 
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
 
-  inOutFunc      n _ _ _ _ _   = updateMEMandCM n
+  inOutFunc      n _ _ _ _     = updateMEMandCM n
 
-  docInOutFunc   n _ _ _ _ _ _ = updateMEMandCM n
+  docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
 instance StateVarSym CodeInfo where
   type StateVar CodeInfo = ()
-  stateVar    _ _ _     = noInfo
-  stateVarDef _ _ _ _ _ = noInfo
-  constVar    _ _ _ _   = noInfo
+  stateVar    _ _ _   = noInfo
+  stateVarDef _ _ _ _ = noInfo
+  constVar    _ _ _   = noInfo
 
 instance ClassSym CodeInfo where
   type Class CodeInfo = ()
-  buildClass n _ _ ms = do
-    modify (addClass n . setClassName n)
-    mapM_ (zoom lensCStoMS) ms
-    noInfo
+  buildClass _ _ ms = do
+    n <- zoom lensCStoFS getModuleName
+    implementingClass n [] [] ms
   extraClass n _ _ ms = do
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
-  implementingClass n _ _ = buildClass n Nothing [] 
+  implementingClass n _ _ ms = do
+    modify (addClass n . setClassName n)
+    mapM_ (zoom lensCStoMS) ms
+    noInfo
+
 
   docClass _ c = do
     _ <- c

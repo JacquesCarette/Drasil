@@ -3,7 +3,7 @@ module Drasil.SSP.IMods where
 import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, imNoDeriv)
+import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC)
 import Utils.Drasil
 import Drasil.DocLang.SRS (propCorSol) 
 
@@ -48,9 +48,10 @@ iMods = [fctSfty, nrmShrFor, nrmShrForNum, nrmShrForDen, intsliceFs, crtSlpId]
 --
 
 fctSfty :: InstanceModel
-fctSfty = im fctSftyRC [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle,
-  qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
-  [] (qw fs) [] (map makeCite [chen2005, karchewski2012])
+fctSfty = im fctSftyRC 
+ [qwUC slopeDist, qwUC slopeHght, qwUC waterHght, qwUC effCohesion, qwUC fricAngle,
+  qwUC dryWeight, qwUC satWeight, qwUC waterWeight, qwUC slipDist, qwUC slipHght, qwUC constF]
+  (qw fs) [] (map makeCite [chen2005, karchewski2012])
   (Just fctSftyDeriv) "fctSfty" [fctSftyDesc]
 
 fctSftyRC :: RelationConcept
@@ -366,9 +367,9 @@ fctSftyDerivEqn18 = sy fs * (idx (sy mobShrC) (sy numbSlices - int 1) *
 ------------------------------------------------------------------------
 
 nrmShrFor :: InstanceModel
-nrmShrFor = im nrmShrForRC [qw slopeDist, qw slopeHght, qw waterHght, 
-  qw waterWeight, qw slipDist, qw slipHght, qw constF]
-  [] (qw normToShear) [] (map makeCite [chen2005, karchewski2012])
+nrmShrFor = im nrmShrForRC [qwUC slopeDist, qwUC slopeHght, qwUC waterHght, 
+  qwUC waterWeight, qwUC slipDist, qwUC slipHght, qwUC constF]
+  (qw normToShear) [] (map makeCite [chen2005, karchewski2012])
   (Just nrmShrDeriv) "nrmShrFor" [nrmShrFDesc]
 
 nrmShrForRC :: RelationConcept
@@ -451,9 +452,9 @@ nrmShrDerivEqn4 = sy normToShear $= sum1toN
 ---------------------------------------------------------------------
 
 nrmShrForNum :: InstanceModel
-nrmShrForNum = im nrmShrForNumRC [qw slopeDist, qw slopeHght, qw waterHght, 
-  qw waterWeight, qw slipDist, qw slipHght]
-  [] (qw nrmShearNum) [] (map makeCite [chen2005, karchewski2012])
+nrmShrForNum = im nrmShrForNumRC [qwUC slopeDist, qwUC slopeHght, qwUC waterHght, 
+  qwUC waterWeight, qwUC slipDist, qwUC slipHght]
+  (qw nrmShearNum) [] (map makeCite [chen2005, karchewski2012])
   (Just nrmShrFNumDeriv) "nrmShrForNum" [nrmShrFNumDesc]
 
 nrmShrForNumRC :: RelationConcept
@@ -490,8 +491,8 @@ nrmShrFNumDesc = foldlSent [ch baseWthX, S "is defined in",
 ---------------------------------------------------------------------------
 
 nrmShrForDen :: InstanceModel
-nrmShrForDen = im nrmShrForDenRC [qw slipDist, qw constF]
-  [] (qw nrmShearDen) [] (map makeCite [chen2005, karchewski2012])
+nrmShrForDen = im nrmShrForDenRC [qwUC slipDist, qwUC constF]
+  (qw nrmShearDen) [] (map makeCite [chen2005, karchewski2012])
   (Just nrmShrFDenDeriv) "nrmShrForDen" [nrmShrFDenDesc]
 
 nrmShrForDenRC :: RelationConcept
@@ -520,9 +521,10 @@ nrmShrFDenDesc = foldlSent [ch baseWthX, S "is defined in",
 --------------------------------------------------------------------------
 
 intsliceFs :: InstanceModel
-intsliceFs = im intsliceFsRC [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion,
-  qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
-  [] (qw intNormForce) [] [makeCite chen2005] (Just intrSlcDeriv) "intsliceFs" [sliceFsDesc]
+intsliceFs = im intsliceFsRC [qwUC slopeDist, qwUC slopeHght, qwUC waterHght
+  , qwUC effCohesion, qwUC fricAngle, qwUC dryWeight, qwUC satWeight, qwUC waterWeight
+  , qwUC slipDist, qwUC slipHght, qwUC constF]
+  (qw intNormForce) [] [makeCite chen2005] (Just intrSlcDeriv) "intsliceFs" [sliceFsDesc]
 
 intsliceFsRC :: RelationConcept
 intsliceFsRC = makeRC "intsliceFsRC" (nounPhraseSP "interslice normal forces")
@@ -580,9 +582,9 @@ intrSlcDerivEqn = inxi intNormForce $=
 
 --------------------------------------------------------------------------
 crtSlpId :: InstanceModel
-crtSlpId = imNoDeriv crtSlpIdRC [qw slopeDist, qw slopeHght, qw waterDist, 
-  qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight,
-  qw waterWeight, qw constF] [] (qw fsMin) [] [makeCite li2010] "crtSlpId" 
+crtSlpId = imNoDeriv crtSlpIdRC [qwUC slopeDist, qwUC slopeHght, qwUC waterDist, 
+  qwUC waterHght, qwUC effCohesion, qwUC fricAngle, qwUC dryWeight, qwUC satWeight,
+  qwUC waterWeight, qwUC constF] (qw fsMin) [] [makeCite li2010] "crtSlpId" 
   [crtSlpIdDesc]
 
 crtSlpIdRC :: RelationConcept

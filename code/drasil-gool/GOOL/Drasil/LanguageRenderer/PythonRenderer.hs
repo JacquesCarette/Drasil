@@ -17,7 +17,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue,
   NumericExpression(..), BooleanExpression(..), Comparison(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
   InternalValueExp(..), objMethodCall, FunctionSym(..), GetSet(..), List(..), 
-  InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), (&=), 
+  InternalList(..), StatementSym(..), AssignStatement(..), (&=), 
   DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
   CommentStatement(..), ControlStatement(..), switchAsIf, StatePattern(..), 
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
@@ -27,7 +27,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
   RenderValue(..), ValueElim(valuePrec), InternalGetSet(..), 
-  InternalListFunc(..), InternalIterator(..), RenderFunction(..), 
+  InternalListFunc(..), RenderFunction(..), 
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
   InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
   RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..), 
@@ -54,19 +54,19 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar, 
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
   objAccess, objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, 
-  param, method, getMethod, setMethod, function, buildClass, 
-  implementingClass, commentedClass, modFromData, fileDoc, fileFromData)
+  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
+  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
+  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, 
+  setMethod, function, buildClass, implementingClass, commentedClass, 
+  modFromData, fileDoc, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf, iterVar,
+  constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
-  funcType, buildModule, bindingError, notNull, iterBeginError, iterEndError, 
-  listDecDef, destructorError, stateVarDef, constVar, litArray, listSetFunc, 
-  extraClass, listAccessFunc, multiAssign, multiReturn, listDec, funcDecDef, 
-  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc')
+  funcType, buildModule, bindingError, notNull, listDecDef, destructorError, 
+  stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
+  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
+  mainBody, inOutFunc, docInOutFunc')
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   decrement1, increment1, runStrategy, stringListVals, stringListLists, 
   notifyObservers', checkState)
@@ -190,7 +190,6 @@ instance TypeSym PythonCode where
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = CP.funcType
-  iterator t = t
   void = toState $ typeFromData Void pyVoid (text pyVoid)
 
 instance TypeElim PythonCode where
@@ -258,7 +257,6 @@ instance VariableSym PythonCode where
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
   arrayElem i = G.arrayElem (litInt i)
-  iterVar = CP.iterVar
 
 instance VariableElim PythonCode where
   variableName = varName . unPC
@@ -409,10 +407,6 @@ instance InternalList PythonCode where
   listSlice' b e s vn vo = pyListSlice vn vo (getVal b) (getVal e) (getVal s)
     where getVal = fromMaybe (mkStateVal void empty)
 
-instance Iterator PythonCode where
-  iterBegin = G.iterBegin
-  iterEnd = G.iterEnd
-
 instance InternalGetSet PythonCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
@@ -423,10 +417,6 @@ instance InternalListFunc PythonCode where
   listAppendFunc = G.listAppendFunc pyAppendFunc
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
-
-instance InternalIterator PythonCode where
-  iterBeginFunc _ = error $ CP.iterBeginError pyName
-  iterEndFunc _ = error $ CP.iterEndError pyName
 
 instance RenderFunction PythonCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

@@ -19,7 +19,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
   selfFuncApp, extFuncApp, InternalValueExp(..), objMethodCall, FunctionSym(..),
-  ($.), GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), 
+  ($.), GetSet(..), List(..), InternalList(..), StatementSym(..), 
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..), 
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), switchAsIf, 
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
@@ -30,10 +30,10 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
   RenderValue(..), ValueElim(valuePrec), InternalGetSet(..), 
-  InternalListFunc(..), InternalIterator(..), RenderFunction(..), 
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
-  RenderScope(..), ScopeElim, MSMthdType, MethodTypeSym(..), RenderParam(..), 
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType), 
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), 
+  RenderStatement(..), StatementElim(statementTerm), RenderScope(..), ScopeElim, 
+  MSMthdType, MethodTypeSym(..), RenderParam(..), 
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
   StateVarElim, ParentSpec, RenderClass(..), ClassElim, RenderMod(..), 
   ModuleElim, BlockCommentSym(..), BlockCommentElim)
@@ -59,12 +59,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
   objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
-  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, 
-  param, method, getMethod, setMethod, function, buildClass, implementingClass, 
-  commentedClass, modFromData, fileDoc, fileFromData)
+  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
+  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
+  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, 
+  setMethod, function, buildClass, implementingClass, commentedClass, 
+  modFromData, fileDoc, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
   constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray, 
@@ -95,7 +95,8 @@ import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   getHeaderModImports, addDefine, getDefines, addHeaderDefine, 
   getHeaderDefines, addUsing, getUsing, addHeaderUsing, getHeaderUsing, 
   setFileType, getModuleName, setModuleName, setClassName, getClassName, setCurrMain, 
-  getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc)
+  getCurrMain, getClassMap, setScope, getScope, setCurrMainFunc, getCurrMainFunc,
+  addIter, getIter, resetIter)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
@@ -210,7 +211,6 @@ instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   listInnerType = pair1 listInnerType listInnerType
   obj t = on2StateValues pair (obj t) (obj t)
   funcType = pair1List1Val funcType funcType
-  iterator = pair1 iterator iterator
   void = on2StateValues pair void void
 
 instance (Pair p) => TypeElim (p CppSrcCode CppHdrCode) where
@@ -276,7 +276,6 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   objVar = pair2 objVar objVar
   objVarSelf = pair1 objVarSelf objVarSelf
   arrayElem i = pair1 (arrayElem i) (arrayElem i)
-  iterVar l = pair1 (iterVar l) (iterVar l)
 
 instance (Pair p) => VariableElim (p CppSrcCode CppHdrCode) where
   variableName v = variableName $ pfst v
@@ -427,10 +426,6 @@ instance (Pair p) => InternalList (p CppSrcCode CppHdrCode) where
       (fmap (onStateValue psnd) s)) 
     (zoom lensMStoVS vr) (zoom lensMStoVS vl)
 
-instance (Pair p) => Iterator (p CppSrcCode CppHdrCode) where
-  iterBegin = pair1 iterBegin iterBegin
-  iterEnd = pair1 iterEnd iterEnd
-
 instance (Pair p) => InternalGetSet (p CppSrcCode CppHdrCode) where  
   getFunc = pair1 getFunc getFunc
   setFunc = pair3 setFunc setFunc
@@ -441,10 +436,6 @@ instance (Pair p) => InternalListFunc (p CppSrcCode CppHdrCode) where
   listAppendFunc = pair1 listAppendFunc listAppendFunc
   listAccessFunc = pair2 listAccessFunc listAccessFunc
   listSetFunc = pair3 listSetFunc listSetFunc
-
-instance (Pair p) => InternalIterator (p CppSrcCode CppHdrCode) where  
-  iterBeginFunc = pair1 iterBeginFunc iterBeginFunc
-  iterEndFunc = pair1 iterEndFunc iterEndFunc
 
 instance (Pair p) => RenderFunction (p CppSrcCode CppHdrCode) where  
   funcFromData d = pair1 (funcFromData d) (funcFromData d)
@@ -592,7 +583,13 @@ instance (Pair p) => ControlStatement (p CppSrcCode CppHdrCode) where
   for i initv = pair4 for for i (zoom lensMStoVS initv)
   forRange i initv finalv stepv = pair5 forRange forRange (zoom lensMStoVS i) 
     (zoom lensMStoVS initv) (zoom lensMStoVS finalv) (zoom lensMStoVS stepv)
-  forEach e v = pair3 forEach forEach (zoom lensMStoVS e) (zoom lensMStoVS v)
+  forEach e' v b = do 
+    e <- zoom lensMStoVS e'
+    let le = variableName e 
+    modify (addIter le) 
+    loop <- pair3 forEach forEach (zoom lensMStoVS e') (zoom lensMStoVS v) b
+    modify (resetIter le)
+    toState loop
   while v = pair2 while while (zoom lensMStoVS v)
 
   tryCatch = pair2 tryCatch tryCatch
@@ -1060,9 +1057,6 @@ instance TypeSym CppSrcCode where
     getClassMap >>= (\cm -> maybe id ((>>) . modify . addModuleImportVS) 
     (Map.lookup n cm) (G.obj n)))
   funcType = CP.funcType
-  iterator t = do 
-    modify (addLangImportVS cppIterator)
-    cppIterType $ listType t
   void = C.void
 
 instance TypeElim CppSrcCode where
@@ -1135,7 +1129,6 @@ instance VariableSym CppSrcCode where
   objVarSelf = onStateValue (\v -> mkVar (R.this ++ ptrAccess ++ variableName v)
     (variableType v) (R.this' <> ptrAccess' <> RC.variable v))
   arrayElem i = G.arrayElem (litInt i)
-  iterVar l t = mkStateVar l (iterator t) (parens $ cppDeref <> text l)
 
 instance VariableElim CppSrcCode where
   variableName = varName . unCPPSC
@@ -1169,7 +1162,14 @@ instance MathConstant CppSrcCode where
     addMathHImport (mkStateVal double cppPi)
 
 instance VariableValue CppSrcCode where
-  valueOf = G.valueOf
+  valueOf vr' = do 
+    vr <- vr'
+    its <- zoom lensVStoMS getIter
+    let namevr = variableName vr 
+    if namevr `elem` its then 
+      mkStateVal (iterator $ toState $ variableType vr) 
+        (parens $ cppDeref <> RC.variable vr)
+      else G.valueOf vr'
 
 instance CommandLineArgs CppSrcCode where
   arg n = G.arg (litInt $ n+1) argsList
@@ -1274,10 +1274,6 @@ instance List CppSrcCode where
 instance InternalList CppSrcCode where
   listSlice' = M.listSlice
 
-instance Iterator CppSrcCode where
-  iterBegin = G.iterBegin
-  iterEnd = G.iterEnd
-
 instance InternalGetSet CppSrcCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
@@ -1288,10 +1284,6 @@ instance InternalListFunc CppSrcCode where
   listAppendFunc = G.listAppendFunc cppListAppend
   listAccessFunc = CP.listAccessFunc' cppListAccess
   listSetFunc = CP.listSetFunc cppListSetDoc
-
-instance InternalIterator CppSrcCode where
-  iterBeginFunc = cppIterBeginFunc
-  iterEndFunc = cppIterEndFunc
 
 instance RenderFunction CppSrcCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -1429,9 +1421,13 @@ instance ControlStatement CppSrcCode where
 
   for = C.for bodyStart bodyEnd 
   forRange = M.forRange
-  forEach i v = for (varDecDef e (iterBegin v)) (valueOf e ?!= iterEnd v) 
-    (e &++)
-    where e = toBasicVar i
+  forEach i v b = do 
+    e <- zoom lensMStoVS i
+    let l = variableName e
+        t = toState $ variableType e
+        iterI = var l (iterator t) 
+    for (varDecDef iterI (iterBegin v)) (setIterVar iterI ?!= iterEnd v) 
+      (iterI &++) b
   while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch cppTryCatch
@@ -1695,9 +1691,6 @@ instance TypeSym CppHdrCode where
   obj n = getClassMap >>= (\cm -> maybe id ((>>) . modify . addHeaderModImport) 
     (Map.lookup n cm) $ G.obj n)
   funcType = CP.funcType
-  iterator t = do
-    modify (addHeaderLangImport cppIterator)
-    (cppIterType . listType) t
   void = C.void
 
 instance TypeElim CppHdrCode where
@@ -1763,7 +1756,6 @@ instance VariableSym CppHdrCode where
   objVar = G.objVar
   objVarSelf _ = mkStateVar "" void empty
   arrayElem _ _ = mkStateVar "" void empty
-  iterVar _ _ = mkStateVar "" void empty
   
 instance VariableElim CppHdrCode where
   variableName = varName . unCPPHC
@@ -1898,10 +1890,6 @@ instance List CppHdrCode where
 instance InternalList CppHdrCode where
   listSlice' _ _ _ _ _ = toState $ toCode empty
 
-instance Iterator CppHdrCode where
-  iterBegin _ = mkStateVal void empty
-  iterEnd _ = mkStateVal void empty
-
 instance InternalGetSet CppHdrCode where
   getFunc _ = funcFromData empty void
   setFunc _ _ _ = funcFromData empty void
@@ -1912,10 +1900,6 @@ instance InternalListFunc CppHdrCode where
   listAppendFunc _ = funcFromData empty void
   listAccessFunc _ _ = funcFromData empty void
   listSetFunc _ _ _ = funcFromData empty void
-
-instance InternalIterator CppHdrCode where
-  iterBeginFunc _ = funcFromData empty void
-  iterEndFunc _ = funcFromData empty void
   
 instance RenderFunction CppHdrCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))
@@ -2189,9 +2173,6 @@ instance BlockCommentElim CppHdrCode where
   blockComment' = unCPPHC
 
 -- helpers
-toBasicVar :: SVariable CppSrcCode -> SVariable CppSrcCode
-toBasicVar v = v >>= (\v' -> var (variableName v') (onStateValue variableType v))
-
 isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
@@ -2235,6 +2216,20 @@ addLimitsImport :: MS a -> MS a
 addLimitsImport v = do
   modify (addLangImport limits)
   v
+
+setIterVar :: RenderSym r=> SVariable r -> SValue r
+setIterVar = G.valueOf
+
+iterator :: RenderSym r => VSType r -> VSType r
+iterator t = do 
+    modify (addLangImportVS cppIterator)
+    cppIterType $ listType t
+
+iterBegin :: SValue CppSrcCode -> SValue CppSrcCode
+iterBegin v = v $. cppIterBeginFunc (G.listInnerType $ onStateValue valueType v)
+
+iterEnd :: SValue CppSrcCode -> SValue CppSrcCode
+iterEnd v = v $. cppIterEndFunc (G.listInnerType $ onStateValue valueType v)
 
 -- convenience
 cppName :: String
@@ -2432,7 +2427,7 @@ cppArrayType = onStateValue (\t -> typeFromData (Array (getType t))
   (getTypeString t) (RC.type' t))
 
 cppIterType :: (RenderSym r) => VSType r -> VSType r
-cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t)) 
+cppIterType = onStateValue (\t -> typeFromData (getType t) 
   (getTypeString t `nmSpcAccess` cppIterator) (stdAccess' (RC.type' t) 
   `nmSpcAccess'` text cppIterator))
 

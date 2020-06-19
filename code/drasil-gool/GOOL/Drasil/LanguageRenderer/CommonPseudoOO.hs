@@ -1,15 +1,15 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
-module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, 
-  doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf, iterVar, 
-  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
-  funcType, buildModule, arrayType, pi, printSt, arrayDec, arrayDecDef, 
-  openFileA, forEach, docMain, mainFunction, buildModule', call', listSizeFunc, 
-  listAccessFunc', string, constDecDef, docInOutFunc, bindingError, notNull, 
-  iterBeginError, iterEndError, listDecDef, destructorError, stateVarDef, 
-  constVar, litArray, listSetFunc, extraClass, listAccessFunc, doubleRender, 
-  double, openFileR, openFileW, stateVar, self, multiAssign, multiReturn, 
-  listDec, funcDecDef, inOutCall, forLoopError, mainBody, inOutFunc, 
-  docInOutFunc', floatRender, float, stringRender', string', inherit, implements
+module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc, 
+  doxClass, doxMod, extVar, classVar, objVarSelf, extFuncAppMixedArgs, indexOf, 
+  listAddFunc, discardFileLine, intClass, funcType, buildModule, arrayType, pi, 
+  printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, 
+  buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef, 
+  docInOutFunc, bindingError, notNull, listDecDef, destructorError, 
+  stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
+  doubleRender, double, openFileR, openFileW, stateVar, self, multiAssign, 
+  multiReturn, listDec, funcDecDef, inOutCall, forLoopError, mainBody, 
+  inOutFunc, docInOutFunc', floatRender, float, stringRender', string', 
+  inherit, implements
 ) where
 
 import Utils.Drasil (indent)
@@ -18,7 +18,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, VSType, 
   SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, 
   SClass, FSModule, Initializers, MixedCall, PermanenceSym(..), bodyStatements, 
-  oneLiner, TypeSym(infile, outfile, listInnerType, obj, iterator), 
+  oneLiner, TypeSym(infile, outfile, listInnerType, obj), 
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType), 
   ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=), 
   ControlStatement(returnStmt), ScopeSym(..), MethodSym(function))
@@ -104,9 +104,6 @@ classVar f = on2StateValues (\c v -> classVarCheckStatic $ varFromData
   
 objVarSelf :: (RenderSym r) => SVariable r -> SVariable r
 objVarSelf = S.objVar S.self
-
-iterVar :: (RenderSym r) => Label -> VSType r -> SVariable r
-iterVar n t = S.var n (iterator t)
 
 extFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
 extFuncAppMixedArgs l = S.call (Just l) Nothing
@@ -263,14 +260,6 @@ bindingError l = "Binding unimplemented in " ++ l
 
 notNull :: (RenderSym r) => String -> SValue r -> SValue r
 notNull nil v = v ?!= S.valueOf (S.var nil $ onStateValue valueType v)
-
-iterBeginError :: String -> String
-iterBeginError l = "Attempt to use iterBeginFunc in " ++ l ++ ", but " ++ l ++ 
-  " has no iterators"
-
-iterEndError :: String -> String
-iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++ 
-  " has no iterators"
 
 listDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
 listDecDef v vals = do

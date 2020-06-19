@@ -19,24 +19,23 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
   funcAppNamedArgs, selfFuncApp, extFuncApp, InternalValueExp(..), 
   objMethodCall, objMethodCallNamedArgs, FunctionSym(..), ($.), GetSet(..), 
-  List(..), InternalList(..), Iterator(..), StatementSym(..), 
-  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
-  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
-  ControlStatement(..), StatePattern(..), ObserverPattern(..), 
-  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  List(..), InternalList(..), StatementSym(..), AssignStatement(..), (&=), 
+  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
+  CommentStatement(..), ControlStatement(..), StatePattern(..), 
+  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderFile(..), 
   ImportSym(..), ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), 
   BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..), 
   InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec), 
-  InternalGetSet(..), InternalListFunc(..), InternalIterator(..), 
-  RenderFunction(..), FunctionElim(functionType), InternalAssignStmt(..), 
-  InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
-  StatementElim(statementTerm), RenderScope(..), ScopeElim, MethodTypeSym(..), 
-  RenderParam(..), ParamElim(parameterName, parameterType), RenderMethod(..), 
-  MethodElim, StateVarElim, RenderClass(..), ClassElim, RenderMod(..), 
-  ModuleElim, BlockCommentSym(..), BlockCommentElim)
+  InternalGetSet(..), InternalListFunc(..), RenderFunction(..), 
+  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
+  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
+  RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..), 
+  ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
+  StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
+  BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
   method, stateVar, class', module', blockComment')
@@ -59,19 +58,19 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objVar, arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, 
   argsList, objAccess, objMethodCall, call, funcAppMixedArgs, 
   selfFuncAppMixedArgs, newObjMixedArgs, lambda, func, get, set, listAdd, 
-  listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
-  listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
-  objDecNew, print, returnStmt, valStmt, comment, throw, ifCond, tryCatch, 
-  construct, param, method, getMethod, setMethod, initStmts, function, docFunc, 
-  buildClass, implementingClass, docClass, commentedClass, modFromData, 
-  fileDoc, docMod, fileFromData)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
-  classVar, objVarSelf, iterVar, intClass, buildModule, bindingError, notNull, 
-  iterBeginError, iterEndError, listDecDef, destructorError, stateVarDef, 
-  constVar, litArray, listSetFunc, extraClass, listAccessFunc, doubleRender, 
-  double, openFileR, openFileW, stateVar, self, multiAssign, multiReturn, 
-  listDec, funcDecDef, inOutCall, forLoopError, mainBody, inOutFunc, 
-  docInOutFunc', float, stringRender', string', inherit, implements)
+  listAppend, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
+  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
+  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
+  method, getMethod, setMethod, initStmts, function, docFunc, buildClass, 
+  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, 
+  fileFromData)
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar, 
+  objVarSelf, intClass, buildModule, bindingError, notNull, listDecDef, 
+  destructorError, stateVarDef, constVar, litArray, listSetFunc, extraClass, 
+  listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self, 
+  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
+  mainBody, inOutFunc, docInOutFunc', float, stringRender', string', inherit, 
+  implements)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp, 
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
   listSize, varDecDef, switch, while)
@@ -200,7 +199,6 @@ instance TypeSym SwiftCode where
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = swiftFuncType
-  iterator t = t
   void = swiftVoidType
 
 instance TypeElim SwiftCode where
@@ -266,7 +264,6 @@ instance VariableSym SwiftCode where
   objVar = G.objVar
   objVarSelf = CP.objVarSelf
   arrayElem i = G.arrayElem (litInt i)
-  iterVar = CP.iterVar
 
 instance VariableElim SwiftCode where
   variableName = varName . unSC
@@ -407,10 +404,6 @@ instance InternalList SwiftCode where
   listSlice' b e s vn vo = swiftListSlice vn vo (fromMaybe (litInt 0) b) 
     (fromMaybe (listSize vo) e) (fromMaybe (litInt 1) s)
 
-instance Iterator SwiftCode where
-  iterBegin = G.iterBegin
-  iterEnd = G.iterEnd
-
 instance InternalGetSet SwiftCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
@@ -423,10 +416,6 @@ instance InternalListFunc SwiftCode where
   listAppendFunc = G.listAppendFunc swiftListAppend
   listAccessFunc = CP.listAccessFunc
   listSetFunc = CP.listSetFunc R.listSetFunc
-
-instance InternalIterator SwiftCode where
-  iterBeginFunc _ = error $ CP.iterBeginError swiftName
-  iterEndFunc _ = error $ CP.iterEndError swiftName
     
 instance RenderFunction SwiftCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

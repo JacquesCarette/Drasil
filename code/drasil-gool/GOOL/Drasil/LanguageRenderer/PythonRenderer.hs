@@ -58,10 +58,10 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
   loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
   closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, 
-  param, method, getMethod, setMethod, constructor, function, buildClass, 
+  param, method, getMethod, setMethod, function, buildClass, 
   implementingClass, commentedClass, modFromData, fileDoc, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf, iterVar, 
+  constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf, iterVar,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
   funcType, buildModule, bindingError, notNull, iterBeginError, iterEndError, 
   listDecDef, destructorError, stateVarDef, constVar, litArray, listSetFunc, 
@@ -590,7 +590,7 @@ instance MethodSym PythonCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  constructor = G.constructor initName
+  constructor = CP.constructor initName
 
   docMain = mainFunction
 

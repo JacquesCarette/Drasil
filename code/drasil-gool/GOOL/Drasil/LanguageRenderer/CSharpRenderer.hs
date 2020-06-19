@@ -61,11 +61,11 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond, 
-  tryCatch, construct, param, method, getMethod, setMethod, constructor, 
-  function, buildClass, implementingClass, commentedClass, modFromData, 
-  fileDoc, fileFromData)
+  tryCatch, construct, param, method, getMethod, setMethod, function, 
+  buildClass, implementingClass, commentedClass, modFromData, fileDoc, 
+  fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf, iterVar, 
+  constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf, iterVar,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
   arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, 
   mainFunction, buildModule', string, constDecDef, docInOutFunc, bindingError, 
@@ -465,7 +465,7 @@ instance AssignStatement CSharpCode where
 instance DeclStatement CSharpCode where
   varDec v = zoom lensMStoVS v >>= (\v' -> csVarDec (variableBind v') $ 
     C.varDec static dynamic empty v)
-  varDecDef = C.varDecDef
+  varDecDef = C.varDecDef Semi
   listDec n v = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
     (litInt n) v)
   listDecDef = CP.listDecDef
@@ -583,7 +583,7 @@ instance MethodSym CSharpCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
+  constructor ps is b = getClassName >>= (\n -> CP.constructor n ps is b)
 
   docMain = CP.docMain
  

@@ -1,15 +1,15 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
-module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, doxFunc, doxClass, 
-  doxMod, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, indexOf, 
-  listAddFunc, discardFileLine, intClass, funcType, buildModule, arrayType, pi, 
-  printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, 
-  buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef, 
-  docInOutFunc, bindingError, notNull, iterBeginError, iterEndError, 
-  listDecDef, destructorError, stateVarDef, constVar, litArray, listSetFunc, 
-  extraClass, listAccessFunc, doubleRender, double, openFileR, openFileW, 
-  stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, inOutCall, 
-  forLoopError, mainBody, inOutFunc, docInOutFunc', floatRender, float, 
-  stringRender', string', inherit, implements
+module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, 
+  doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf, iterVar, 
+  extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
+  funcType, buildModule, arrayType, pi, printSt, arrayDec, arrayDecDef, 
+  openFileA, forEach, docMain, mainFunction, buildModule', call', listSizeFunc, 
+  listAccessFunc', string, constDecDef, docInOutFunc, bindingError, notNull, 
+  iterBeginError, iterEndError, listDecDef, destructorError, stateVarDef, 
+  constVar, litArray, listSetFunc, extraClass, listAccessFunc, doubleRender, 
+  double, openFileR, openFileW, stateVar, self, multiAssign, multiReturn, 
+  listDec, funcDecDef, inOutCall, forLoopError, mainBody, inOutFunc, 
+  docInOutFunc', floatRender, float, stringRender', string', inherit, implements
 ) where
 
 import Utils.Drasil (indent)
@@ -17,8 +17,8 @@ import Utils.Drasil (indent)
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, VSType, 
   SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, 
-  SClass, FSModule, MixedCall, PermanenceSym(..), bodyStatements, oneLiner,
-  TypeSym(infile, outfile, listInnerType, obj, iterator), 
+  SClass, FSModule, Initializers, MixedCall, PermanenceSym(..), bodyStatements, 
+  oneLiner, TypeSym(infile, outfile, listInnerType, obj, iterator), 
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType), 
   ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=), 
   ControlStatement(returnStmt), ScopeSym(..), MethodSym(function))
@@ -31,11 +31,12 @@ import qualified GOOL.Drasil.ClassInterface as S (
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..), RenderBody(..), 
   RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind), 
   RenderFunction(funcFromData), MethodTypeSym(mType),
-  RenderMethod(commentedFunc, mthdFromData), ParentSpec, BlockCommentSym(..))
-import qualified GOOL.Drasil.RendererClasses as S (RenderValue(call), 
-  RenderStatement(stmt), InternalAssignStmt(multiAssign), 
-  InternalControlStmt(multiReturn), RenderMethod(intFunc), 
-  RenderClass(intClass, inherit), RenderMod(modFromData))
+  RenderMethod(intMethod, commentedFunc, mthdFromData), ParentSpec, 
+  BlockCommentSym(..))
+import qualified GOOL.Drasil.RendererClasses as S (RenderBody(multiBody), 
+  RenderValue(call), RenderStatement(stmt), InternalAssignStmt(multiAssign), 
+  InternalControlStmt(multiReturn), MethodTypeSym(construct), 
+  RenderMethod(intFunc), RenderClass(intClass, inherit), RenderMod(modFromData))
 import qualified GOOL.Drasil.RendererClasses as RC (ImportElim(..), 
   PermElim(..), BodyElim(..), InternalTypeElim(..), InternalVarElim(variable), 
   ValueElim(value), StatementElim(statement), ScopeElim(..), MethodElim(..), 
@@ -49,7 +50,7 @@ import qualified GOOL.Drasil.LanguageRenderer as R (self, self', module',
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic,
-  call, docFunc, docFuncRepr, docClass, docMod)
+  call, initStmts, docFunc, docFuncRepr, docClass, docMod)
 import GOOL.Drasil.AST (ScopeTag(..))
 import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS, 
   lensMStoVS, lensVStoMS, currParameters, getClassName, getLangImports, 
@@ -73,6 +74,11 @@ intRender = "int"
 
 int :: (RenderSym r) => VSType r
 int = toState $ typeFromData Integer intRender (text intRender)
+
+constructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r -> 
+  MSBody r -> SMethod r
+constructor fName ps is b = getClassName >>= (\c -> intMethod False fName 
+  public dynamic (S.construct c) ps (S.multiBody [initStmts is, b]))
 
 doxFunc :: (RenderSym r) => String -> [String] -> Maybe String -> SMethod r -> 
   SMethod r

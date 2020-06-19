@@ -60,13 +60,13 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   argsList, objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
   iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, closeFile, 
-  returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
-  method, getMethod, setMethod, constructor, function, buildClass, 
+  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
+  closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, 
+  param, method, getMethod, setMethod, function, buildClass, 
   implementingClass, commentedClass, modFromData, fileDoc, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int, 
-  doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf, iterVar, 
+  constructor, doxFunc, doxClass, doxMod, extVar, classVar, objVarSelf, iterVar,
   extFuncAppMixedArgs, indexOf, listAddFunc, discardFileLine, intClass, 
   funcType, arrayType, pi, printSt, arrayDec, arrayDecDef, openFileA, forEach, 
   docMain, mainFunction, buildModule', bindingError, iterBeginError, 
@@ -492,7 +492,7 @@ instance AssignStatement JavaCode where
 
 instance DeclStatement JavaCode where
   varDec = C.varDec static dynamic empty
-  varDecDef = C.varDecDef
+  varDecDef = C.varDecDef Semi
   listDec n v = zoom lensMStoVS v >>= (\v' -> C.listDec (R.listDec v') 
     (litInt n) v)
   listDecDef = CP.listDecDef
@@ -611,7 +611,7 @@ instance MethodSym JavaCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
+  constructor ps is b = getClassName >>= (\n -> CP.constructor n ps is b)
 
   docMain = CP.docMain
 

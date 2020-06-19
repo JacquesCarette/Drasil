@@ -40,7 +40,7 @@ module Language.Drasil.Code (
   field,
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), 
   ODELibPckg(..), mkODELib, mkODELibNoPath,
-  unPP, unJP, unCSP, unCPPP
+  unPP, unJP, unCSP, unCPPP, unSP
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -109,3 +109,4 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unP
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (unCSP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (unCPPP)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (unSP)

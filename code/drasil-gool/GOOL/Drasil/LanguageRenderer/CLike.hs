@@ -27,7 +27,7 @@ import qualified GOOL.Drasil.RendererClasses as S (
 import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..), 
   InternalTypeElim(..), InternalVarElim(variable), ValueElim(value), 
   StatementElim(statement))
-import GOOL.Drasil.AST (Binding(..))
+import GOOL.Drasil.AST (Binding(..), Terminator(..))
 import GOOL.Drasil.Helpers (angles, toState, onStateValue, on2StateValues, 
   on3StateValues)
 import GOOL.Drasil.LanguageRenderer (forLabel, whileLabel, containing)
@@ -135,9 +135,12 @@ varDec s d pdoc v' = onStateValue (\v -> mkStmt (RC.perm (bind $ variableBind v)
         ptrdoc (List _) = pdoc
         ptrdoc _ = empty
 
-varDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-varDecDef vr vl' = on2StateValues (\vd vl -> mkStmt (RC.statement vd <+> equals 
-  <+> RC.value vl)) (S.varDec vr) (zoom lensMStoVS vl')
+varDecDef :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
+  MSStatement r
+varDecDef t vr vl' = on2StateValues (\vd vl -> stmtCtor t $ RC.statement vd 
+  <+> equals <+> RC.value vl) (S.varDec vr) (zoom lensMStoVS vl')
+  where stmtCtor Empty = mkStmtNoEnd
+        stmtCtor Semi = mkStmt
 
 listDec :: (RenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> 
   MSStatement r

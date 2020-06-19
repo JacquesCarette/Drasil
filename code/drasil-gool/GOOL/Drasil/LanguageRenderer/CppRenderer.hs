@@ -63,13 +63,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
   loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, 
   closeFile, returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, 
-  param, method, getMethod, setMethod, constructor, function, 
-  buildClass, implementingClass, commentedClass, modFromData, 
-  fileDoc, fileFromData)
+  param, method, getMethod, setMethod, function, buildClass, implementingClass, 
+  commentedClass, modFromData, fileDoc, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
-  doxFunc, doxClass, doxMod, funcType, buildModule, litArray, call', 
-  listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc, 
+  constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray, 
+  call', listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc, 
   listSetFunc, extraClass)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
@@ -1336,7 +1335,7 @@ instance AssignStatement CppSrcCode where
 
 instance DeclStatement CppSrcCode where
   varDec = C.varDec static dynamic empty
-  varDecDef = C.varDecDef 
+  varDecDef = C.varDecDef Semi 
   listDec n = C.listDec cppListDecDoc (litInt n)
   listDecDef = cppListDecDef cppListDecDefDoc
   arrayDec n vr = zoom lensMStoVS $ do
@@ -1960,7 +1959,7 @@ instance AssignStatement CppHdrCode where
 
 instance DeclStatement CppHdrCode where
   varDec = C.varDec static dynamic empty
-  varDecDef = C.varDecDef
+  varDecDef = C.varDecDef Semi
   listDec _ _ = emptyStmt
   listDecDef _ _ = emptyStmt
   arrayDec _ _ = emptyStmt
@@ -2076,7 +2075,7 @@ instance MethodSym CppHdrCode where
     v') public dynamic (toState $ variableType v') [] (toState $ toCode empty))
   setMethod v = zoom lensMStoVS v >>= (\v' -> method (setterName $ variableName 
     v') public dynamic void [param v] (toState $ toCode empty))
-  constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
+  constructor ps is b = getClassName >>= (\n -> CP.constructor n ps is b)
 
   docMain = mainFunction
 
@@ -2537,7 +2536,7 @@ cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $
 cppConstructor :: [MSParameter CppSrcCode] -> NamedArgs CppSrcCode -> 
   MSBody CppSrcCode -> SMethod CppSrcCode
 cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals 
-  bod -> if null is then G.constructor n ps is b else modify (setScope Pub) >> 
+  bod -> if null is then CP.constructor n ps is b else modify (setScope Pub) >> 
   toState (toCode $ mthd Pub (cppsMethod (zipWith (\ivar ival -> RC.variable 
   ivar <> parens (RC.value ival)) ivars ivals) n n tp pms bod))) <$> construct 
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom 

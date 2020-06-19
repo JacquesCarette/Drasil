@@ -11,19 +11,20 @@ import Utils.Drasil (indent, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable, 
-  SValue, MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..),
-  FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, bodyStatements, 
-  BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..),
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
-  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
-  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
-  extFuncApp, InternalValueExp(..), objMethodCall, objMethodCallNamedArgs, 
-  FunctionSym(..), ($.), GetSet(..), List(..), InternalList(..), Iterator(..), 
-  StatementSym(..), AssignStatement(..), (&=), DeclStatement(..), 
-  IOStatement(..), StringStatement(..), FuncAppStatement(..), 
-  CommentStatement(..), ControlStatement(..), StatePattern(..), 
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  SValue, MSStatement, MSParameter, SMethod, OOProg, Initializers, 
+  ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, 
+  bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
+  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
+  VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
+  BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
+  funcAppNamedArgs, selfFuncApp, extFuncApp, InternalValueExp(..), 
+  objMethodCall, objMethodCallNamedArgs, FunctionSym(..), ($.), GetSet(..), 
+  List(..), InternalList(..), Iterator(..), StatementSym(..), 
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
+  ControlStatement(..), StatePattern(..), ObserverPattern(..), 
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderFile(..), 
   ImportSym(..), ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), 
@@ -61,9 +62,9 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
   objDecNew, print, returnStmt, valStmt, comment, throw, ifCond, tryCatch, 
-  construct, param, method, getMethod, setMethod, constructor, function, 
-  docFunc, buildClass, implementingClass, docClass, commentedClass, 
-  modFromData, fileDoc, docMod, fileFromData)
+  construct, param, method, getMethod, setMethod, initStmts, function, docFunc, 
+  buildClass, implementingClass, docClass, commentedClass, modFromData, 
+  fileDoc, docMod, fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   classVar, objVarSelf, iterVar, intClass, buildModule, bindingError, notNull, 
   iterBeginError, iterEndError, listDecDef, destructorError, stateVarDef, 
@@ -73,7 +74,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (
   docInOutFunc', float, stringRender', string', inherit, implements)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp, 
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
-  listSize, varDecDef, switch, while, intFunc)
+  listSize, varDecDef, switch, while)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers', 
   checkState)
@@ -86,8 +87,9 @@ import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
   lensMStoFS, lensMStoVS, revFiles, addLangImportVS, getLangImports, 
-  getLibImports, setFileType, getModuleName, getCurrMain, getMethodExcMap, 
-  getMainDoc, setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined)
+  getLibImports, setFileType, setModuleName, getModuleName, getCurrMain, 
+  getMethodExcMap, getMainDoc, setThrowUsed, getThrowUsed, setErrorDefined, 
+  getErrorDefined)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -312,7 +314,14 @@ instance NumericExpression SwiftCode where
   (#*) = binExpr multOp
   (#/) = binExpr divideOp
   (#%) = binExpr moduloOp
-  (#^) = binExpr' powerOp
+  (#^) v1' v2' = do
+    v1 <- v1'
+    v2 <- v2'
+    let swiftPower Integer Integer b e = cast int $ binExpr' powerOp 
+          (cast double b) (cast double e)
+        swiftPower _ _ b e = binExpr' powerOp b e
+    swiftPower (getType $ valueType v1) (getType $ valueType v2) (return v1) 
+      (return v2)
 
   log = unExpr logOp
   ln = unExpr lnOp
@@ -461,7 +470,7 @@ instance AssignStatement SwiftCode where
 
 instance DeclStatement SwiftCode where
   varDec = swiftVarDec swiftVar
-  varDecDef = C.varDecDef
+  varDecDef = C.varDecDef Empty
   listDec _ = CP.listDec
   listDecDef = CP.listDecDef
   arrayDec = listDec
@@ -586,7 +595,7 @@ instance MethodSym SwiftCode where
   method = G.method
   getMethod = G.getMethod
   setMethod = G.setMethod
-  constructor = G.constructor swiftCtorName
+  constructor = swiftConstructor
 
   docMain = mainFunction
  
@@ -605,7 +614,7 @@ instance MethodSym SwiftCode where
 
 instance RenderMethod SwiftCode where
   intMethod _ = swiftMethod
-  intFunc = C.intFunc
+  intFunc _ n s _ = swiftMethod n s dynamic
   commentedFunc cmt m = on2StateValues (on2CodeValues updateMthd) m 
     (onStateValue (onCodeValue R.commentedItem) cmt)
     
@@ -646,8 +655,11 @@ instance ClassElim SwiftCode where
 
 instance ModuleSym SwiftCode where
   type Module SwiftCode = ModData
-  buildModule n is ms cs = do
-    mths <- mapM (zoom lensFStoMS) ms
+  buildModule n is fs cs = do
+    modify (setModuleName n) -- This needs to be set before the functions/
+                             -- classes are evaluated. CP.buildModule will 
+                             -- reset it to the proper name.
+    fns <- mapM (zoom lensFStoMS) fs
     cls <- mapM (zoom lensFStoCS) cs
     mn <- getCurrMain
     let modName = if mn then swiftMain else n
@@ -657,7 +669,7 @@ instance ModuleSym SwiftCode where
       return $ vcat $ map (RC.import' . 
           (langImport :: Label -> SwiftCode (Import SwiftCode))) 
           (sort $ lis ++ is ++ libis)) 
-      (zoom lensFStoMS swiftStringError) getMainDoc (map return mths) 
+      (zoom lensFStoMS swiftStringError) getMainDoc (map return fns) 
         (map return cls)
   
 instance RenderMod SwiftCode where
@@ -722,8 +734,8 @@ swiftVoidType :: (RenderSym r) => VSType r
 swiftVoidType = toState $ typeFromData Void swiftVoid (text swiftVoid)
 
 swiftPi, swiftListSize, swiftFirst, swiftDesc, swiftVar, swiftConst, swiftDo,
-  swiftFunc, swiftExtension, swiftError, swiftDocDir, swiftUserMask, 
-  swiftNamedArgSep, swiftTypeSpec, swiftConforms, swiftNoLabel, 
+  swiftFunc, swiftCtorName, swiftExtension, swiftError, swiftDocDir, 
+  swiftUserMask, swiftNamedArgSep, swiftTypeSpec, swiftConforms, swiftNoLabel, 
   swiftRetType', swiftUnwrap' :: Doc
 swiftPi = text $ CP.doubleRender `access` piLabel
 swiftListSize = text "count"
@@ -733,6 +745,7 @@ swiftVar = text "var"
 swiftConst = text "let"
 swiftDo = text "do"
 swiftFunc = text "func"
+swiftCtorName = text "init"
 swiftExtension = text "extension"
 swiftError = text "Error"
 swiftDocDir = text $ "" `access` "documentDirectory"
@@ -746,11 +759,11 @@ swiftUnwrap' = text swiftUnwrap
 
 swiftMain, swiftFoundation, swiftMath, swiftNil, swiftBool, swiftInt, swiftChar,
   swiftURL, swiftRetType, swiftVoid, swiftCommLine, swiftSearchDir, 
-  swiftPathMask, swiftArgs, swiftCtorName, swiftWrite, swiftIndex, swiftStride, 
-  swiftMap, swiftListAdd, swiftListAppend, swiftReadLine, swiftAppendPath, 
-  swiftUrls, swiftSplit, swiftSubstring, swiftEncoding, swiftUTF8, swiftOf, 
-  swiftFrom, swiftTo, swiftBy, swiftAt, swiftTerm, swiftAtomic, swiftEnc, 
-  swiftFor, swiftIn, swiftContentsOf, swiftSep, swiftUnwrap :: String
+  swiftPathMask, swiftArgs, swiftWrite, swiftIndex, swiftStride, swiftMap, 
+  swiftListAdd, swiftListAppend, swiftReadLine, swiftAppendPath, swiftUrls, 
+  swiftSplit, swiftSubstring, swiftEncoding, swiftUTF8, swiftOf, swiftFrom, 
+  swiftTo, swiftBy, swiftAt, swiftTerm, swiftAtomic, swiftEnc, swiftFor, 
+  swiftIn, swiftContentsOf, swiftSep, swiftUnwrap :: String
 swiftMain = "main"
 swiftFoundation = "Foundation"
 swiftMath = "Darwin"
@@ -765,7 +778,6 @@ swiftCommLine = "CommandLine"
 swiftSearchDir = "SearchPathDirectory"
 swiftPathMask = "SearchPathDomainMask"
 swiftArgs = "arguments"
-swiftCtorName = "init"
 swiftWrite = "write"
 swiftIndex = "firstIndex"
 swiftStride = "stride"
@@ -867,9 +879,8 @@ swiftIndexOf = swiftUnwrapVal .: swiftIndexFunc
 swiftListSlice :: (RenderSym r) => SVariable r -> SValue r -> SValue r -> 
   SValue r -> SValue r -> MSBlock r
 swiftListSlice vn vo beg end step = let i = var "i" int 
-  in block [varDecDef vn $ 
-    swiftMapFunc (swiftStrideFunc beg end step) (lambda [i] 
-      (listAccess vo (valueOf i)))]
+  in block [vn &= swiftMapFunc (swiftStrideFunc beg end step) (lambda [i] 
+    (listAccess vo (valueOf i)))]
 
 swiftPrint :: Bool -> Maybe (SValue SwiftCode) -> SValue SwiftCode -> 
   SValue SwiftCode -> MSStatement SwiftCode
@@ -967,6 +978,16 @@ swiftMethod n s p t ps b = do
     RC.scope s <+> RC.perm p <+> swiftFunc <+> text n <> 
       parens (parameterList pms) <+> emptyIfNull excs throwsLabel <+> 
       swiftRetType' <+> RC.type' tp <+> bodyStart,
+    indent $ RC.body bod,
+    bodyEnd])
+  
+swiftConstructor :: (RenderSym r) => [MSParameter r] -> Initializers r -> 
+  MSBody r -> SMethod r
+swiftConstructor ps is b = do
+  pms <- sequence ps
+  bod <- multiBody [G.initStmts is, b]
+  mthdFromData Pub (vcat [
+    swiftCtorName <> parens (parameterList pms) <+> bodyStart,
     indent $ RC.body bod,
     bodyEnd])
 

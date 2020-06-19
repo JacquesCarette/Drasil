@@ -11,7 +11,7 @@ module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
   listAppend, iterBegin, iterEnd, listAccess, listSet, getFunc, setFunc, 
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond, 
-  tryCatch, construct, param, method, getMethod, setMethod, constructor, 
+  tryCatch, construct, param, method, getMethod, setMethod, initStmts, 
   function, docFuncRepr, docFunc, buildClass, implementingClass, 
   docClass, commentedClass, modFromData, fileDoc, docMod
 ) where
@@ -46,10 +46,10 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),
   RenderClass(inherit, implements), RenderMod(updateModuleDoc), 
   BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData), 
-  RenderBody(multiBody), RenderValue(call), InternalGetSet(getFunc, setFunc),
-  InternalListFunc(listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
-  RenderStatement(stmt), InternalIOStmt(..), MethodTypeSym(construct), 
-  RenderMethod(intFunc), RenderClass(intClass, commentedClass))
+  RenderValue(call), InternalGetSet(getFunc, setFunc),InternalListFunc
+  (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
+  RenderStatement(stmt), InternalIOStmt(..), RenderMethod(intFunc), 
+  RenderClass(intClass, commentedClass))
 import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..), BlockElim(..),
   InternalVarElim(variable), ValueElim(value), FunctionElim(function), 
   StatementElim(statement), ClassElim(..), ModuleElim(..), BlockCommentElim(..))
@@ -68,7 +68,7 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   compEqualPrec, compPrec, addPrec, multPrec)
 import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
   currMain, currFileType, modifyReturnFunc, addFile, setMainMod, setModuleName, 
-  getModuleName, getClassName, addParameter, getParameters)
+  getModuleName, addParameter, getParameters)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
 import Data.Composition ((.:))
@@ -428,11 +428,8 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> S.method (setterName $ variableName
   vr) public dynamic S.void [S.param v] setBody)
   where setBody = oneLiner $ S.objVarSelf v &= S.valueOf v
 
-constructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r -> 
-  MSBody r -> SMethod r
-constructor fName ps is b = getClassName >>= (\c -> intMethod False fName 
-  public dynamic (S.construct c) ps (S.multiBody [ib, b]))
-  where ib = bodyStatements (map (\(vr, vl) -> S.objVarSelf vr &= vl) is)
+initStmts :: (RenderSym r) => Initializers r -> MSBody r
+initStmts = bodyStatements . map (\(vr, vl) -> S.objVarSelf vr &= vl)
 
 function :: (RenderSym r) => Label -> r (Scope r) -> VSType r -> 
   [MSParameter r] -> MSBody r -> SMethod r

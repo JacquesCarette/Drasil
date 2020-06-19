@@ -4,7 +4,7 @@
 -- | The logic to render C# code is contained in this module
 module GOOL.Drasil.LanguageRenderer.CSharpRenderer (
   -- * C# Code Configuration -- defines syntax of all C# code
-  CSharpCode(..)
+  CSharpCode(..), csName
 ) where
 
 import Utils.Drasil (indent)

@@ -46,6 +46,7 @@ data DrasilState = DrasilState {
   auxiliaries :: [AuxFile],
   sampleData :: [Expr],
   modules :: [Mod],
+  extLibNames :: [Name],
   extLibMap :: ExtLibMap,
   libPaths :: [FilePath],
   eMap :: ModExportMap,

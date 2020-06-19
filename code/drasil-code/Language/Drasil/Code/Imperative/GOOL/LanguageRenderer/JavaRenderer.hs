@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..),
   mainModuleFile, packSep, withExt)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
-import GOOL.Drasil (onCodeList)
+import GOOL.Drasil (onCodeList, jName)
 
 import Data.List (intercalate)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -53,7 +53,7 @@ instance AuxiliarySym JavaProject where
   type Auxiliary JavaProject = AuxData
   type AuxHelper JavaProject = Doc
   doxConfig = G.doxConfig optimizeDox
-  readMe imp n = G.readMe "Java" "14" Nothing imp n
+  readMe imp libs n = G.readMe jName "14" Nothing imp libs n
   sampleInput = G.sampleInput
 
   optimizeDox = return yes

@@ -8,6 +8,7 @@ module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
 import Language.Drasil (Expr)
 import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.DataDesc (DataDesc)
+import Language.Drasil.Mod (Name)
 import Language.Drasil.Choices (Comments, ImplementationType, Verbosity)
 
 import GOOL.Drasil (ProgData, GOOLState)
@@ -22,7 +23,7 @@ class AuxiliarySym r where
   type Auxiliary r
   type AuxHelper r
   doxConfig :: String -> GOOLState -> Verbosity -> r (Auxiliary r)
-  readMe ::  ImplementationType -> String -> r (Auxiliary r)
+  readMe ::  ImplementationType -> [Name] -> String -> r (Auxiliary r)
   sampleInput :: ChunkDB -> DataDesc -> [Expr] -> r (Auxiliary r)
 
   optimizeDox :: r (AuxHelper r)

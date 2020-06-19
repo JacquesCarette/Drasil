@@ -10,6 +10,7 @@ import Database.Drasil (ChunkDB)
 import GOOL.Drasil (ProgData, GOOLState)
 
 import Language.Drasil.Choices (Comments, ImplementationType(..), Verbosity)
+import Language.Drasil.Mod (Name)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable)
@@ -18,6 +19,7 @@ import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 import Language.Drasil.Code.Imperative.WriteReadMe (makeReadMe)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName, 
   makefileName, sampleInputName, readMeName)
+
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
   AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
 
@@ -27,8 +29,8 @@ doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s
   (auxHelperDoc opt) v)
 
 readMe :: (AuxiliarySym r) => String -> String -> Maybe String -> 
-    ImplementationType -> String -> r (Auxiliary r)
-readMe l v unsp imp n = auxFromData readMeName (makeReadMe l v unsp imp n)
+    ImplementationType -> [Name] -> String -> r (Auxiliary r)
+readMe l v unsp imp libs n = auxFromData readMeName (makeReadMe l v unsp imp libs n)
 
 sampleInput :: (AuxiliarySym r) => ChunkDB -> DataDesc -> [Expr] -> 
   r (Auxiliary r)

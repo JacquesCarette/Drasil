@@ -57,6 +57,7 @@ generator l dt sd chs spec = DrasilState {
   auxiliaries = auxFiles chs,
   sampleData = sd,
   modules = modules',
+  extLibNames = nms,
   extLibMap = fromList elmap,
   libPaths = maybeToList pth,
   eMap = mem,
@@ -76,6 +77,7 @@ generator l dt sd chs spec = DrasilState {
   where showDate Show = dt
         showDate Hide = ""
         (pth, elmap) = chooseODELib l (odeLib chs) (odes chs)
+        nms = map fst elmap
         els = map snd elmap
         mem = modExportMap spec chs modules' 
         lem = fromList (concatMap (^. modExports) els)
@@ -108,7 +110,7 @@ genPackage unRepr = do
       m = makefile (libPaths g) (implType g) (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig s
-  rm <- genReadMe (implType g)
+  rm <- genReadMe (implType g) (extLibNames g)
   return $ package pd (m:i++rm++d)
 
 genProgram :: (OOProg r) => Reader DrasilState (GSProgram r)

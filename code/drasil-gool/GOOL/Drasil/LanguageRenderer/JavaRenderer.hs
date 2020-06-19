@@ -4,7 +4,7 @@
 -- | The logic to render Java code is contained in this module
 module GOOL.Drasil.LanguageRenderer.JavaRenderer (
   -- * Java Code Configuration -- defines syntax of all Java code
-  JavaCode(..)
+  JavaCode(..), jName
 ) where
 
 import Utils.Drasil (indent)

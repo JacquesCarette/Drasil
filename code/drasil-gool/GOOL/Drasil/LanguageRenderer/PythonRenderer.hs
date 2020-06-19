@@ -3,7 +3,7 @@
 -- | The logic to render Python code is contained in this module
 module GOOL.Drasil.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
-  PythonCode(..)
+  PythonCode(..), pyName
 ) where
 
 import Utils.Drasil (blank, indent)

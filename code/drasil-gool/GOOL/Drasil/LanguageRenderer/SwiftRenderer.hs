@@ -510,7 +510,7 @@ instance IOStatement SwiftCode where
   openFileR = CP.openFileR swiftOpenFile
   openFileW = CP.openFileW (\f v _ -> swiftOpenFile f v)
   openFileA = error $ "openFileA unimplemented in " ++ swiftName
-  closeFile = error $ "getFileInput unimplemented in " ++ swiftName
+  closeFile _ = emptyStmt
 
   getFileInputLine = error $ "getFileInputLine unimplemented in " ++ swiftName
   discardFileLine = error $ "discardFileLine unimplemented in " ++ swiftName

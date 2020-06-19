@@ -1,9 +1,10 @@
-module DirectoryController (iterator, iterator2, iterator3, finder, finder2) where
+module DirectoryController (finder, getDirectories) where
 
 import Data.List
 import System.IO
 import System.Directory
 
+type FilterPrefix = String
 type EntryData = String
 type FileName = FilePath
 type FolderName = FilePath
@@ -31,20 +32,8 @@ iterator (x:xs) = do
   else return []
 
 -- iterates through each drasil- package and outputs subdirectories and haskell files
-iterator2 :: FilePath -> IO [[FileName]]
+iterator2 :: FilePath -> IO ([FolderName],[FileName])
 iterator2 nameFilePath = do
-  let [fn,wd] = words nameFilePath
-  setCurrentDirectory wd
-  fc <- listDirectory fn
-
-  let fcs = [a,b]
-      a = map ((++fn) . (++"/") . (++wd) . (++" ")) $ fc \\ filter (isInfixOf ".") fc
-      b = map ((++fn) . (++"/") . (++wd) . (++" ")) $ filter (isSuffixOf ".hs") fc
-  return fcs
-
--- iterates through each drasil- package and outputs subdirectories and haskell files
-iterator3 :: FilePath -> IO ([FolderName],[FileName])
-iterator3 nameFilePath = do
   let [fn,wd] = words nameFilePath
   setCurrentDirectory wd
   fc <- listDirectory fn
@@ -54,33 +43,26 @@ iterator3 nameFilePath = do
       b = map ((++fn) . (++"/") . (++wd) . (++" ")) $ filter (isSuffixOf ".hs") fc
   return fcs
 
-finder :: FilePath -> FolderName -> IO [FileName]
-finder filePath x = do
-  setCurrentDirectory filePath
-  all <- listDirectory x
-
-  let l = filter (isInfixOf ".") all
-      d = map ((++ x) . (++"/") . (++ filePath) . (++" ")) (all \\ l)
-      h = filter (isSuffixOf ".hs") all
-
-  print x -- << drasil- package
-  print d -- << sub-folders
-  print h -- << haskell files
-
-  return h
-
-finder2 :: FolderName -> IO [FileName]
-finder2 folderName = do
-  rawData <- iterator3 folderName
+finder :: FolderName -> IO [FileName]
+finder folderName = do
+  rawData <- iterator2 folderName
 
   let folders = fst rawData
-  rawFiles <- mapM (finder2) folders
+  rawFiles <- mapM finder folders
 
   let bakedFiles
         | null rawFiles = []
         | otherwise = concat rawFiles
 
   let files
-        | not (null folders) = (snd rawData) ++ bakedFiles
+        | not (null folders) = snd rawData ++ bakedFiles
         | otherwise = snd rawData
   return files
+
+-- gets all drasil- packages + filepaths in a list
+getDirectories :: FilePath -> FilterPrefix -> IO [FilePath]
+getDirectories directoryPath filterPrefix = do
+  all <- listDirectory directoryPath
+  -- filters all drasil- packages
+  let filtered = map ((++ directoryPath) . (++" ")) $ filter (isPrefixOf filterPrefix) all
+  return filtered

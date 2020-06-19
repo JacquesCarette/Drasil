@@ -3,7 +3,7 @@ module DataTableGen (main) where
 import Data.List
 import System.IO
 import System.Directory
-import DirectoryController as DC (iterator, iterator2, iterator3, finder, finder2)
+import DirectoryController as DC (finder, getDirectories)
 import SourceCodeReader as SCR (extractEntryData)
 
 type EntryData = String
@@ -18,57 +18,34 @@ type IsInstanceOf = String
 -- main controller function
 main :: IO ()
 main = do
-  all <- getDirectoryContents "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code"
+  -- gets names + filepaths of all drasil- packages/directories
+  filtered <- DC.getDirectories "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code" "drasil-"
+  mapM_ print filtered
   
-  -- filters all drasil- packages
-  let filtered = filter (isPrefixOf "drasil-") all
+  -- for testing each drasil- package/directory; 5th element (index 4) is problematic
+  test1 <- DC.finder (filtered !! 3)
+  print test1
   
   setCurrentDirectory "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code"
 
   -- imports configuration settings
   [packageNames,classInstanceGroups,classInstances] <- config
   -- prints all drasil- package subdirectories
-  DC.iterator filtered
+  -- test2 <- mapM DC.finder filtered
+  -- print test2
   
-  test2 <- mapM DC.iterator2 ["Language /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-lang",
-                              "GOOL /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-gool"]
-  print test2
-  print (concat $ map (!! 0) test2)
-  print (concat $ map (!! 1) test2)
-
-  test3 <- DC.iterator2 "drasil-lang /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code"
-  print test3
-  print (test3 !! 0)
-  print (test3 !! 1)
-
-  test4 <- DC.finder2 "drasil-lang /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code"
-  print test4
-  -- mapM_ print test4
-  print (length test4)
-
-  -- list of all files (names + filepaths)
-  fpsCode <- DC.finder "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code" (head filtered) 
-  mapM_ print fpsCode
+  -- finds all files + filepaths in given folder in given directory
+  test4 <- DC.finder "drasil-lang /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code"
 
   -- easy + hard test for classes, medium test for data/newtypes, easy test for data types
-  let rawFileData = ["Classes.hs /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-lang/Language/Drasil",
-                     "RendererClasses.hs /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-gool/GOOL/Drasil",
-                     "Core.hs /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-lang/Language/Drasil/Document",
-                     "Date.hs /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-lang/Language/Drasil/Data"]
+  let rawFileData = test4
   rawEntryData <- mapM (createEntry classInstances . words) rawFileData
-
-  let rawFileData2 = test4
-  rawEntryData2 <- mapM (createEntry classInstances . words) rawFileData2
 
   -- entryData contains joined string with each file entries' data (intercalate)
   let entryData = intercalate "\n" rawEntryData
-  -- mapM_ print (lines entryData)
-  
-  let entryData2 = intercalate "\n" rawEntryData2
-  -- mapM_ print (lines entryData2)
 
   -- creates and writes to output data file
-  output entryData2 classInstances
+  output entryData classInstances
 
 -- import configurations function (drasil- package ordering, class instance group ordering)
 config :: IO [[String]]
@@ -95,13 +72,13 @@ createEntry :: [ClassInstance] -> [FilePath] -> IO String
 createEntry classInstances [name,path] = do
   [dataNames,newtypeNames,classNames,stripInstances] <- SCR.extractEntryData name path
 
-  -- f data newtype class
+  -- f data newtype class; joins data value/placeholders for data/newtype/class (in first data entry line)
   let f d n c = intercalate "," [drasilPack,filePath,fileName,d,n,c] 
       drasilPack = takeWhile (/= '/') . (\\ "-") $ dropWhile (/='-') path 
       filePath = (\\ "/") . dropWhile (/= '/') $ (\\ "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-") path
       fileName = name
 
-  -- guards determine how to handle first data entry
+  -- guards determine how to handle first data entry line
   let entry 
         | not (null dataNames) = f (head dataNames) "\t" "\t"
         | not (null newtypeNames) = f "\t" (head newtypeNames) "\t"
@@ -119,7 +96,7 @@ createEntry classInstances [name,path] = do
       dataInstanceRefs = zipWith (map . isInstanceOf) dataInstanceRefNames instanceSkeleton where 
           instanceSkeleton = replicate (length dataInstanceRefNames) classInstances
       dataRefLines = map (intercalate ",") dataInstanceRefs
-      dataEntries2 = zipWith (\a b -> a ++ "," ++ b) dataEntries dataRefLines
+      dataEntries2 = zipWith (join') dataEntries dataRefLines
 
   -- creating "Y" references to class instances for newtype types
   let newtypeInstanceRefNames = map (f stripInstances) newtypeNames
@@ -127,7 +104,7 @@ createEntry classInstances [name,path] = do
       newtypeInstanceRefs = zipWith (map . isInstanceOf) newtypeInstanceRefNames instanceSkeleton where 
           instanceSkeleton = replicate (length newtypeInstanceRefNames) classInstances
       newtypeRefLines = map (intercalate ",") newtypeInstanceRefs
-      newtypeEntries2 = zipWith (\a b -> a ++ "," ++ b) newtypeEntries newtypeRefLines
+      newtypeEntries2 = zipWith (join') newtypeEntries newtypeRefLines
 
   -- creates file entry data by combining data, newtype and class entries
   let entryData = dataEntries2 ++ newtypeEntries2 ++ classEntries
@@ -135,11 +112,10 @@ createEntry classInstances [name,path] = do
   -- guards determine how to handle overall file entry output (single vs. multiple entry data)
   let output 
         | length entryData > 1 = entry ++ "\n" ++ subEntries
-        | length entryData == 1 && not (null dataRefLines) = f entry (head dataRefLines)
-        | length entryData == 1 && not (null newtypeRefLines) = f entry (head newtypeRefLines)
+        | length entryData == 1 && not (null dataRefLines) = join' entry (head dataRefLines)
+        | length entryData == 1 && not (null newtypeRefLines) = join' entry (head newtypeRefLines)
         | otherwise = entry
       subEntries = intercalate "\n" (drop 1 entryData)
-      f a b = a ++ "," ++ b
 
   -- mapM_ print (lines output)
   return output
@@ -151,3 +127,7 @@ isInstanceOf fileInstances fileInstance = if isInstance then yes else no where
   isInstance = fileInstance `elem` fileInstances
   yes = "Y" :: IsInstanceOf
   no = "\t" :: IsInstanceOf
+
+-- joins two strings together with ","
+join' :: String -> String -> String
+join' a b = a ++ "," ++ b

@@ -2,44 +2,39 @@ module Language.Drasil.Code.Imperative.WriteReadMe (
   makeReadMe
 ) where 
 
-import Language.Drasil.Mod (Name)
+import Language.Drasil.Mod (Name, Version)
 import Language.Drasil.Choices (ImplementationType(..))
+import Language.Drasil.Printers (makeMd, sumInfo, invalidOS, contSep,
+    regularSec, filtEmp)
 
 import Data.List (intersperse)
-import Text.PrettyPrint.HughesPJ (Doc, vcat, text)
+import Prelude hiding ((<>))
+import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, vcat, text, doubleQuotes, 
+    (<+>))
 
 
-makeReadMe :: String -> String -> Maybe String -> ImplementationType -> [Name] ->
-    String -> Doc
+makeReadMe :: String -> String -> Maybe String -> ImplementationType -> 
+    [(Name,Version)] -> String -> Doc
 makeReadMe progLang progLangVers unsupportedOSs imp extLibs caseName = 
-    vcat $ intersperse seperator $ [
-    introInformation caseName progLang progLangVers,
-    dependencies extLibs] ++
-    operatingSystems unsupportedOSs ++
-    buildInstructions imp
+    makeMd [sumInfo caseName progLang progLangVers,
+    dependencies extLibs,
+    invalidOS unsupportedOSs,
+    makeInstr imp]
 
---Information we still need to find
+dependencies:: [(Name, Version)] -> Doc
+dependencies lib = 
+    let formattedLibs = (vcat . intersperse contSep . filtEmp . 
+            map libStatment) lib
+    in if isEmpty formattedLibs then empty else 
+            regularSec (text "Program Dependencies") formattedLibs
 
-seperator :: Doc
-seperator = text "\n------------------------------------------------------------"
+-- Helper for dependencies
+libStatment :: (Name, Version) -> Doc
+libStatment ("","") = empty
+libStatment (nam,vers) = (doubleQuotes . text) nam <+> text "version" <+> text vers
 
-introInformation :: String -> String -> String -> Doc
-introInformation name pl plv = text $
-    "### Summary of Key Information for Running " ++ 
-    name ++ " on " ++ pl ++ 
-    -- "\nLast Updated: " ++ getDateTime currentDateTime ++ 
-    "\n" ++ pl ++ " Version: " ++ plv
-
-dependencies:: [Name] -> Doc
-dependencies lib = text $ "**Program Dependencies:**" ++ "\n - " ++ (show lib)
-
-operatingSystems :: Maybe String -> [Doc]
-operatingSystems Nothing = []
-operatingSystems (Just unsuppOS) = [text $ "**Unsupported OSs:**" ++ "\n - " ++
-    unsuppOS]
-
-buildInstructions :: ImplementationType -> [Doc]
-buildInstructions Library = []
-buildInstructions Program =  [text $ "**How to Run Program:**" ++ 
-    "\n - Enter in the following line into your terminal command line: "
-    ++ "\n`make run RUNARGS=" ++ "input.txt" ++ "`"]
+makeInstr :: ImplementationType -> Doc
+makeInstr Library = empty
+makeInstr Program = regularSec (text "How to Run Program") 
+    (text $ "Enter in the following line into your terminal command line: "
+    ++ "\n`make run RUNARGS=" ++ "input.txt" ++ "`")

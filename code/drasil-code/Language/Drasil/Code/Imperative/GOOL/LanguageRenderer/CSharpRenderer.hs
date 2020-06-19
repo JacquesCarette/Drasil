@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   asFragment, buildAll, nativeBinary, osClassDefault, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
-import GOOL.Drasil (onCodeList, csName)
+import GOOL.Drasil (onCodeList, csName, csVersion)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
@@ -45,7 +45,8 @@ instance AuxiliarySym CSharpProject where
   type Auxiliary CSharpProject = AuxData
   type AuxHelper CSharpProject = Doc
   doxConfig = G.doxConfig optimizeDox
-  readMe imp libs n = G.readMe csName "8.0" (Just "All OS's except Windows") imp libs n
+  readMe imp libs n = G.readMe csName csVersion (Just "All OS's except Windows") 
+    imp libs n
   sampleInput = G.sampleInput
 
   optimizeDox = return no

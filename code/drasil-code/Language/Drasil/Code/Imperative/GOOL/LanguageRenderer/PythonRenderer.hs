@@ -15,7 +15,7 @@ import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
-import GOOL.Drasil (onCodeList, pyName)
+import GOOL.Drasil (onCodeList, pyName, pyVersion)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -41,7 +41,7 @@ instance AuxiliarySym PythonProject where
   type Auxiliary PythonProject = AuxData
   type AuxHelper PythonProject = Doc
   doxConfig = G.doxConfig optimizeDox
-  readMe imp libs n = G.readMe pyName "3.8.0" Nothing imp libs n
+  readMe imp libs n = G.readMe pyName pyVersion Nothing imp libs n
   sampleInput = G.sampleInput
 
   optimizeDox = return yes

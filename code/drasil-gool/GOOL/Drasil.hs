@@ -24,7 +24,7 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   initialState,
   onStateValue, onCodeList,
   unCI, unPC, unJC, unCSC, unCPPC,
-  pyName, jName, csName, cppName
+  pyName, pyVersion, jName, jVersion, csName, csVersion, cppName, cppVersion
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock, 
@@ -57,7 +57,7 @@ import GOOL.Drasil.State (GOOLState(..), lensMStoVS, headers, sources, mainMod,
 import GOOL.Drasil.Helpers (onStateValue, onCodeList)
 
 import GOOL.Drasil.CodeInfo (unCI)
-import GOOL.Drasil.LanguageRenderer.JavaRenderer (unJC, jName)
-import GOOL.Drasil.LanguageRenderer.PythonRenderer (unPC, pyName)
-import GOOL.Drasil.LanguageRenderer.CSharpRenderer (unCSC, csName)
-import GOOL.Drasil.LanguageRenderer.CppRenderer (unCPPC, cppName)
+import GOOL.Drasil.LanguageRenderer.JavaRenderer (unJC, jName, jVersion)
+import GOOL.Drasil.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
+import GOOL.Drasil.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
+import GOOL.Drasil.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)

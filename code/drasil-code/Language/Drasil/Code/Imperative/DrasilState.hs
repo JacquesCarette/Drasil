@@ -15,7 +15,8 @@ import Language.Drasil.Choices (Choices(..), AuxFile, Modularity(..),
   InputModule(..), Logging, Structure(..), inputModule)
 import Language.Drasil.CodeSpec (Input, Const, Derived, Output, Def, 
   CodeSpec(..),  getConstraints)
-import Language.Drasil.Mod (Mod(..), Name, Class(..), StateVariable(..), fname)
+import Language.Drasil.Mod (Mod(..), Name, Version, Class(..), 
+  StateVariable(..), fname)
 
 import Control.Lens ((^.), makeLenses, over)
 import Control.Monad.State (State)
@@ -60,7 +61,7 @@ data DrasilState = DrasilState {
   sampleData :: [Expr],
   -- Reference materials
   modules :: [Mod],
-  extLibNames :: [Name],
+  extLibNames :: [(Name,Version)],
   extLibMap :: ExtLibMap,
   libPaths :: [FilePath],
   eMap :: ModExportMap,

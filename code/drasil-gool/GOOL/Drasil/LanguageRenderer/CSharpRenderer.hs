@@ -4,7 +4,7 @@
 -- | The logic to render C# code is contained in this module
 module GOOL.Drasil.LanguageRenderer.CSharpRenderer (
   -- * C# Code Configuration -- defines syntax of all C# code
-  CSharpCode(..), csName
+  CSharpCode(..), csName, csVersion
 ) where
 
 import Utils.Drasil (indent)
@@ -665,8 +665,9 @@ instance BlockCommentElim CSharpCode where
 addSystemImport :: VS a -> VS a
 addSystemImport = (>>) $ modify (addLangImportVS csSystem)
 
-csName :: String
+csName, csVersion :: String
 csName = "C#"
+csVersion = "8.0"
 
 csImport :: Label -> Doc
 csImport n = text ("using " ++ n) <> endStatement

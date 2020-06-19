@@ -10,7 +10,7 @@ import Database.Drasil (ChunkDB)
 import GOOL.Drasil (ProgData, GOOLState)
 
 import Language.Drasil.Choices (Comments, ImplementationType(..), Verbosity)
-import Language.Drasil.Mod (Name)
+import Language.Drasil.Mod (Name, Version)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable)
@@ -31,7 +31,7 @@ doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s
 
 -- Defines a markedown file
 readMe :: (AuxiliarySym r) => String -> String -> Maybe String -> 
-    ImplementationType -> [Name] -> String -> r (Auxiliary r)
+    ImplementationType -> [(Name,Version)] -> String -> r (Auxiliary r)
 readMe l v unsp imp libs n = auxFromData readMeName (makeReadMe l v unsp imp libs n)
 
 -- Defines a sample input file

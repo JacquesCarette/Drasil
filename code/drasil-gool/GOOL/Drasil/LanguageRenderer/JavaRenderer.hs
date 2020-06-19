@@ -4,7 +4,7 @@
 -- | The logic to render Java code is contained in this module
 module GOOL.Drasil.LanguageRenderer.JavaRenderer (
   -- * Java Code Configuration -- defines syntax of all Java code
-  JavaCode(..), jName
+  JavaCode(..), jName, jVersion
 ) where
 
 import Utils.Drasil (indent)
@@ -700,8 +700,9 @@ instance HasException JavaCode where
   toConcreteExc FileNotFound = toCode $ exception (javaImport io) jFNFExc
   toConcreteExc IO = toCode $ exception (javaImport io) jIOExc
 
-jName :: String
+jName, jVersion :: String
 jName = "Java"
+jVersion = "14"
 
 jImport :: Label -> Doc
 jImport n = text ("import " ++ n) <> endStatement

@@ -149,28 +149,29 @@ binExpr b' v1' v2'= do
 -- | Constructs binary expressions like pow(v,w), for some operator pow and
 -- values v and w
 binExpr' :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExpr' b' v1' v2'= do 
-  b <- b'
-  v1 <- v1'
-  v2 <- v2'
-  let exprType = numType (valueType v1) (valueType v2)
-      exprRender = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
-  mkExpr 9 exprType exprRender
+binExpr' = exprTypeRender 
 
 -- | To be used in languages where the binary operator returns a double. If 
 -- either value passed to the operator is a float, this function preserves that 
 -- type by casting the result to a float.
 binExprNumDbl' :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
 binExprNumDbl' b' v1' v2' = do 
-  b <- b'
   v1 <- v1'
   v2 <- v2'
   let t1 = valueType v1
       t2 = valueType v2
-      exprType = numType t1 t2
-      exprRender = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
-  e <- mkExpr 9 exprType exprRender
+  e <- exprTypeRender b' v1' v2'
   binExprCastFloat t1 t2 e
+
+--Used only in binExpr' and binExprNumDbl
+exprTypeRender:: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
+exprTypeRender b' v1' v2' = do 
+  b <- b'
+  v1 <- v1'
+  v2 <- v2'
+  let exprType = numType (valueType v1) (valueType v2)
+      exprRender = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
+  mkExpr 9 exprType exprRender
 
 -- Only used by binExprCastFloat
 binExprCastFloat :: (RenderSym r) => r (Type r) -> r (Type r) -> r (Value r) -> 

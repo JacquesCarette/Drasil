@@ -15,7 +15,6 @@ data CodeType = Boolean
               | File
               | List CodeType
               | Array CodeType
-              | Iterator CodeType
               | Object ClassName
               | Func [CodeType] CodeType
               | Void deriving (Eq, Show)

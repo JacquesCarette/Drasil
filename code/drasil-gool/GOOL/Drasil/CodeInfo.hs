@@ -9,7 +9,7 @@ import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement,
   ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
-  GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), 
+  GetSet(..), List(..), InternalList(..), StatementSym(..), 
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..), 
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
@@ -91,7 +91,6 @@ instance TypeSym CodeInfo where
   listInnerType _   = noInfoType
   obj               = toState . toCode
   funcType      _ _ = noInfoType
-  iterator      _   = noInfoType
   void              = noInfoType
 
 instance TypeElim CodeInfo where
@@ -110,7 +109,6 @@ instance VariableSym CodeInfo where
   objVar      _ _   = noInfo
   objVarSelf  _     = noInfo
   arrayElem   _ _   = noInfo
-  iterVar     _ _   = noInfo
   
 instance VariableElim CodeInfo where
   variableName _ = ""
@@ -229,10 +227,6 @@ instance InternalList CodeInfo where
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl
     noInfo
-
-instance Iterator CodeInfo where
-  iterBegin = execute1
-  iterEnd   = execute1
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()

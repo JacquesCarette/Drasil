@@ -2419,7 +2419,7 @@ cppArrayType = onStateValue (\t -> typeFromData (Array (getType t))
   (getTypeString t) (RC.type' t))
 
 cppIterType :: (RenderSym r) => VSType r -> VSType r
-cppIterType = onStateValue (\t -> typeFromData (Iterator (getType t)) 
+cppIterType = onStateValue (\t -> typeFromData (getType t) 
   (getTypeString t `nmSpcAccess` cppIterator) (stdAccess' (RC.type' t) 
   `nmSpcAccess'` text cppIterator))
 

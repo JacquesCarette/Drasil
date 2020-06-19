@@ -594,7 +594,6 @@ convType Double = double
 convType Char = char
 convType String = string
 convType (List t) = listType (convType t)
-convType (Iterator _) = error "Iterators are only available within forEach loops in C++"
 convType (Array t) = arrayType (convType t)
 convType (Object n) = obj n
 convType (Func ps r) = funcType (map convType ps) (convType r)

@@ -29,7 +29,7 @@ type SClass a = CS (a (Class a))
 type FSModule a = FS (a (Module a))
 type NamedArgs r = [(SVariable r, SValue r)]
 type Initializers r = [(SVariable r, SValue r)]
-class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, Iterator r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
+class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r, InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 class (FileSym r) => ProgramSym r where {
     type family Program r;
 }
@@ -71,7 +71,6 @@ arrayType :: TypeSym r => VSType r -> VSType r
 listInnerType :: TypeSym r => VSType r -> VSType r
 obj :: TypeSym r => ClassName -> VSType r
 funcType :: TypeSym r => [VSType r] -> VSType r -> VSType r
-iterator :: TypeSym r => VSType r -> VSType r
 void :: TypeSym r => VSType r
 class (TypeSym r) => TypeElim r
 getType :: TypeElim r => r (Type r) -> CodeType
@@ -170,7 +169,6 @@ extClassVar :: VariableSym r => VSType r -> SVariable r -> SVariable r
 objVar :: VariableSym r => SVariable r -> SVariable r -> SVariable r
 objVarSelf :: VariableSym r => SVariable r -> SVariable r
 arrayElem :: VariableSym r => Integer -> SVariable r -> SVariable r
-iterVar :: VariableSym r => Label -> VSType r -> SVariable r
 class (VariableSym r) => VariableElim r
 variableName :: VariableElim r => r (Variable r) -> String
 variableType :: VariableElim r => r (Variable r) -> r (Type r)
@@ -295,9 +293,6 @@ indexOf :: List r => SValue r -> SValue r -> SValue r
 listSlice :: InternalList r => SVariable r -> SValue r -> Maybe (SValue r) -> Maybe (SValue r) -> Maybe (SValue r) -> MSBlock r
 listIndexExists :: (List r, Comparison r) => SValue r -> SValue r -> SValue r
 at :: List r => SValue r -> SValue r -> SValue r
-class (ValueSym r) => Iterator r
-iterBegin :: Iterator r => SValue r -> SValue r
-iterEnd :: Iterator r => SValue r -> SValue r
 class (BodySym r) => StatePattern r
 checkState :: StatePattern r => Label -> [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
 class (StatementSym r, FunctionSym r) => ObserverPattern r
@@ -370,7 +365,6 @@ String :: CodeType
 File :: CodeType
 List :: CodeType -> CodeType
 Array :: CodeType -> CodeType
-Iterator :: CodeType -> CodeType
 Object :: ClassName -> CodeType
 Func :: [CodeType] -> CodeType -> CodeType
 Void :: CodeType

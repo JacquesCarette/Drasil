@@ -2454,11 +2454,11 @@ cppArrayType t' = do
   typeFromData (Array (getType t)) (getTypeString t) (RC.type' t)
 
 cppIterType :: (RenderSym r) => VSType r -> VSType r
-cppIterType = do 
+cppIterType t' = do 
   t <- t' 
   typeFromData (getType t) 
     (getTypeString t `nmSpcAccess` cppIterator) (stdAccess' (RC.type' t) 
-    `nmSpcAccess'` text cppIterator))
+    `nmSpcAccess'` text cppIterator)
 
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c `nmSpcAccess'` v

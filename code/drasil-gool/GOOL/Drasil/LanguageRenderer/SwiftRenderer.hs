@@ -485,24 +485,27 @@ instance IOStatement SwiftCode where
 
   getInput v = v &= swiftInput (onStateValue variableType v)
   discardInput = valStmt swiftReadLineFunc
-  -- FIXME: Synchronous Swift file I/O is not straightforward. 
+  -- FIXME: Methods labelled FIXME below are related to synchronous file I/O,
+  -- but in Swift this is not straightforward. 
   -- I can find two potential ways to do it:
   --   1. FileHandle, but the methods for synchronous reading/writing are 
   --      deprecated.
   --   2. InputStream/OutputStream, but this requires using byte buffers and I 
   --      don't quite understand it, and can't try it out myself because I'm 
   --      not on Mac and the online swift tools I've found don't support file I/O.
-  -- Therefore, leaving many of these methods unimplemented for now.
-  getFileInput _ _ = error $ "getFileInput unimplemented in " ++ swiftName
-  discardFileInput _ = error $ "discardFileInput unimplemented in " ++ swiftName 
+  -- Therefore, leaving these methods unimplemented for now.
+  getFileInput _ _ = emptyStmt -- FIXME, see above
+  discardFileInput _ = emptyStmt -- FIXME, see above
 
   openFileR = CP.openFileR swiftOpenFile
   openFileW = CP.openFileW (\f v _ -> swiftOpenFile f v)
-  openFileA = error $ "openFileA unimplemented in " ++ swiftName
-  closeFile _ = emptyStmt
+  openFileA _ _ = emptyStmt -- FIXME, see above
+  closeFile _ = emptyStmt -- The way I've currently implemented files, they 
+                          -- don't need to be "closed", so this is 
+                          -- (correctly) just an empty stmt
 
-  getFileInputLine = error $ "getFileInputLine unimplemented in " ++ swiftName
-  discardFileLine = error $ "discardFileLine unimplemented in " ++ swiftName
+  getFileInputLine _ _ = emptyStmt -- FIXME, see above
+  discardFileLine _ = emptyStmt -- FIXME, see above
   getFileInputAll = swiftReadFile
 
 instance StringStatement SwiftCode where

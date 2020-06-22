@@ -85,7 +85,7 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   vard)
 import GOOL.Drasil.Helpers (angles, hicat, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues, 
-  onCodeList, onStateList, on1StateValue1List)
+  on2StateWrapped, onCodeList, onStateList)
 import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
   addLangImport, addLangImportVS, setFileType, getClassName, setCurrMain)
 
@@ -205,7 +205,7 @@ instance TypeElim CSharpCode where
   getTypeString = typeString . unCSC
   
 instance RenderType CSharpCode where
-  typeFromData t s d = toCode $ td t s d
+  typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim CSharpCode where
   type' = typeDoc . unCSC
@@ -273,7 +273,9 @@ instance InternalVarElim CSharpCode where
   variable = varDoc . unCSC
 
 instance RenderVariable CSharpCode where
-  varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
+  varFromData b n t' d = do 
+    t <- t'
+    toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
@@ -361,16 +363,18 @@ instance RenderValue CSharpCode where
     csWrite)
   printLnFunc = addSystemImport $ mkStateVal void (text $ csConsole `access` 
     csWriteLine)
-  printFileFunc = on2StateValues (\v -> mkVal v . R.printFile csWrite . 
-    RC.value) void
-  printFileLnFunc = on2StateValues (\v -> mkVal v . R.printFile csWriteLine . 
-    RC.value) void
+  printFileFunc w' = on2StateWrapped (\w vt -> 
+    mkVal vt . R.printFile csWrite . RC.value $ w) w' void
+  printFileLnFunc w' = on2StateWrapped (\w vt -> 
+    mkVal vt . R.printFile csWriteLine . RC.value $ w) w' void
   
   cast = csCast
 
   call = G.call csNamedArgSep
   
-  valFromData p t d = on2CodeValues (vd p) t (toCode d)
+  valFromData p t' d = do 
+    t <- t' 
+    toState $ on2CodeValues (vd p) t (toCode d)
   
 instance ValueElim CSharpCode where
   valuePrec = valPrec . unCSC
@@ -432,7 +436,7 @@ instance RenderStatement CSharpCode where
 
   emptyStmt = G.emptyStmt
   
-  stmtFromData d t = toCode (d, t)
+  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim CSharpCode where
   statement = fst . unCSC
@@ -507,8 +511,8 @@ instance CommentStatement CSharpCode where
   comment = G.comment commentStart
 
 instance ControlStatement CSharpCode where
-  break = toState $ mkStmt R.break
-  continue = toState $ mkStmt R.continue
+  break =  mkStmt R.break
+  continue =  mkStmt R.continue
 
   returnStmt = G.returnStmt Semi
   
@@ -559,7 +563,9 @@ instance ParameterSym CSharpCode where
   pointerParam = param
 
 instance RenderParam CSharpCode where
-  paramFromData v d = on2CodeValues pd v (toCode d)
+  paramFromData v' d = do 
+    v <- zoom lensMStoVS v' 
+    toState $ on2CodeValues pd v (toCode d)
 
 instance ParamElim CSharpCode where
   parameterName = variableName . onCodeValue paramVar
@@ -663,13 +669,13 @@ csImport :: Label -> Doc
 csImport n = text ("using " ++ n) <> endStatement
 
 csBoolType :: (RenderSym r) => VSType r
-csBoolType = toState $ typeFromData Boolean csBool (text csBool)
+csBoolType = typeFromData Boolean csBool (text csBool)
 
 csFuncType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
 csFuncType ps r = do
   pts <- sequence ps
   rt <- r
-  return $ typeFromData (Func (map getType pts) (getType rt))
+  typeFromData (Func (map getType pts) (getType rt))
     (csFunc `containing` intercalate listSep (map getTypeString $ pts ++ [rt]))
     (text csFunc <> angles (hicat listSep' $ map RC.type' $ pts ++ [rt]))
 
@@ -714,17 +720,20 @@ csUnaryMath :: (Monad r) => String -> VSOp r
 csUnaryMath = addSystemImport . unOpPrec . mathFunc
 
 csInfileType :: (RenderSym r) => VSType r
-csInfileType = modifyReturn (addLangImportVS csIO) $ 
+csInfileType = join $ modifyReturn (addLangImportVS csIO) $ 
   typeFromData File csReader (text csReader)
 
 csOutfileType :: (RenderSym r) => VSType r
-csOutfileType = modifyReturn (addLangImportVS csIO) $ 
+csOutfileType = join $ modifyReturn (addLangImportVS csIO) $ 
   typeFromData File csWriter (text csWriter)
 
 csLitList :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
   -> SValue r
-csLitList f t = on1StateValue1List (\lt es -> mkVal lt (new' <+> RC.type' lt
-  <+> braces (valueList es))) (f t)
+csLitList f t' es' = do 
+  es <- sequence es' 
+  lt <- f t'
+  mkVal lt (new' <+> RC.type' lt
+    <+> braces (valueList es))
 
 csLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 csLambda ps ex = parens (variableList ps) <+> csLambdaSep <+> RC.value ex
@@ -773,7 +782,7 @@ csFuncDecDef v ps bod = do
     (return $ variableType vr)
   b <- bod
   modify (addLangImport csSystem)
-  return $ mkStmt $ RC.type' t <+> text (variableName vr) <+> equals <+>
+  mkStmt $ RC.type' t <+> text (variableName vr) <+> equals <+>
     parens (variableList pms) <+> csLambdaSep <+> bodyStart $$ 
     indent (RC.body b) $$ bodyEnd 
 

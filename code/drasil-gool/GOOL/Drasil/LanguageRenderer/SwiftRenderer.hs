@@ -206,7 +206,7 @@ instance TypeElim SwiftCode where
   getTypeString = typeString . unSC
   
 instance RenderType SwiftCode where
-  typeFromData t s d = toCode $ td t s d
+  typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim SwiftCode where
   type' = typeDoc . unSC
@@ -274,7 +274,9 @@ instance InternalVarElim SwiftCode where
   variable = varDoc . unSC
 
 instance RenderVariable SwiftCode where
-  varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
+  varFromData b n t' d = do 
+    t <- t'
+    return $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym SwiftCode where
   type Value SwiftCode = ValData
@@ -374,7 +376,9 @@ instance RenderValue SwiftCode where
 
   call = G.call swiftNamedArgSep
   
-  valFromData p t d = on2CodeValues (vd p) t (toCode d)
+  valFromData p t' d = do 
+    t <- t'
+    return $ on2CodeValues (vd p) t (toCode d)
   
 instance ValueElim SwiftCode where
   valuePrec = valPrec . unSC
@@ -439,7 +443,7 @@ instance RenderStatement SwiftCode where
 
   emptyStmt = G.emptyStmt
   
-  stmtFromData d t = toCode (d, t)
+  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim SwiftCode where
   statement = fst . unSC
@@ -467,9 +471,10 @@ instance DeclStatement SwiftCode where
   objDecDef = varDecDef
   objDecNew = G.objDecNew
   extObjDecNew _ = objDecNew
-  constDecDef vr vl' = on2StateValues 
-    (\vdec vl -> mkStmtNoEnd $ RC.statement vdec <+> equals <+> RC.value vl) 
-    (swiftVarDec swiftConst vr) (zoom lensMStoVS vl')
+  constDecDef vr vl' = do
+    vdec <- swiftVarDec swiftConst vr
+    vl <- zoom lensMStoVS vl' 
+    mkStmtNoEnd $ RC.statement vdec <+> equals <+> RC.value vl
   funcDecDef = CP.funcDecDef
 
 instance IOStatement SwiftCode where
@@ -523,8 +528,8 @@ instance CommentStatement SwiftCode where
   comment = G.comment commentStart
 
 instance ControlStatement SwiftCode where
-  break = toState $ mkStmtNoEnd R.break
-  continue = toState $ mkStmtNoEnd R.continue
+  break = mkStmtNoEnd R.break
+  continue = mkStmtNoEnd R.continue
 
   returnStmt = G.returnStmt Empty
   
@@ -575,7 +580,9 @@ instance ParameterSym SwiftCode where
   pointerParam = param
 
 instance RenderParam SwiftCode where
-  paramFromData v d = on2CodeValues pd v (toCode d)
+  paramFromData v' d = do 
+    v <- zoom lensMStoVS v'
+    toState $ on2CodeValues pd v (toCode d)
 
 instance ParamElim SwiftCode where
   parameterName = variableName . onCodeValue paramVar
@@ -690,40 +697,45 @@ swiftName :: String
 swiftName = "Swift"
 
 swiftUnwrapVal :: (RenderSym r) => SValue r -> SValue r
-swiftUnwrapVal = onStateValue (\v -> mkVal (valueType v) (RC.value v <> swiftUnwrap'))
+swiftUnwrapVal v' = do
+  v <- v'
+  mkVal (valueType v) (RC.value v <> swiftUnwrap')
 
 swiftTryVal :: (RenderSym r) => SValue r -> SValue r
-swiftTryVal = onStateValue (\v -> mkVal (valueType v) (tryLabel <+> RC.value v))
+swiftTryVal v' = do
+  v <- v'
+  mkVal (valueType v) (tryLabel <+> RC.value v)
 
 swiftBoolType :: (RenderSym r) => VSType r
-swiftBoolType = toState $ typeFromData Boolean swiftBool (text swiftBool)
+swiftBoolType = typeFromData Boolean swiftBool (text swiftBool)
 
 swiftIntType :: (RenderSym r) => VSType r
-swiftIntType = toState $ typeFromData Integer swiftInt (text swiftInt)
+swiftIntType = typeFromData Integer swiftInt (text swiftInt)
 
 swiftCharType :: (RenderSym r) => VSType r
-swiftCharType = toState $ typeFromData Char swiftChar (text swiftChar)
+swiftCharType = typeFromData Char swiftChar (text swiftChar)
 
 swiftFileType :: (RenderSym r) => VSType r
-swiftFileType = addFoundationImport $ toState $ 
-  typeFromData File swiftURL (text swiftURL)
+swiftFileType = addFoundationImport $ typeFromData File swiftURL (text swiftURL)
 
 swiftListType :: (RenderSym r) => VSType r -> VSType r
-swiftListType = onStateValue (\t -> typeFromData (List $ getType t) 
-  ("[" ++ getTypeString t ++ "]") (brackets $ RC.type' t))
+swiftListType t' = do
+  t <- t' 
+  typeFromData (List $ getType t) ("[" ++ getTypeString t ++ "]")
+    (brackets $ RC.type' t)
 
 swiftFuncType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
 swiftFuncType ps r = do
   pts <- sequence ps
   rt <- r
-  return $ typeFromData (Func (map getType pts) (getType rt))
+  typeFromData (Func (map getType pts) (getType rt))
     ("(" ++ intercalate listSep (map getTypeString pts) ++ ")" ++ " " ++ 
       swiftRetType ++ " " ++ getTypeString rt)
     (parens (hicat listSep' $ map RC.type' pts) <+> swiftRetType' <+> 
       RC.type' rt)
 
 swiftVoidType :: (RenderSym r) => VSType r
-swiftVoidType = toState $ typeFromData Void swiftVoid (text swiftVoid)
+swiftVoidType = typeFromData Void swiftVoid (text swiftVoid)
 
 swiftPi, swiftListSize, swiftFirst, swiftDesc, swiftVar, swiftConst, swiftDo,
   swiftFunc, swiftCtorName, swiftExtension, swiftError, swiftDocDir, 
@@ -927,7 +939,7 @@ swiftVarDec dec v' = do
   let bind Static = static :: SwiftCode (Permanence SwiftCode)
       bind Dynamic = dynamic :: SwiftCode (Permanence SwiftCode)
       p = bind $ variableBind v
-  return $ mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec 
+  mkStmtNoEnd (RC.perm p <+> dec <+> RC.variable v <> swiftTypeSpec 
     <+> RC.type' (variableType v))
 
 swiftThrowDoc :: (RenderSym r) => r (Value r) -> Doc
@@ -939,7 +951,7 @@ swiftForEach i' lst' b' = do
   i <- zoom lensMStoVS i'
   lst <- zoom lensMStoVS lst'
   b <- b'
-  return $ mkStmtNoEnd $ vcat [
+  mkStmtNoEnd $ vcat [
     forLabel <+> RC.variable i <+> inLabel <+> RC.value lst <+> bodyStart,
     indent $ RC.body b,
     bodyEnd]

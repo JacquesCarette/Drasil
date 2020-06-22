@@ -57,7 +57,6 @@ import GOOL.Drasil.State (FS, CS, lensFStoCS, lensFStoMS, lensCStoMS,
   getLibImports, getModuleImports, setClassName, setCurrMain, setMainDoc)
 
 import Prelude hiding (print,pi,(<>))
-import Data.Composition ((.:))
 import Data.List (sort, intercalate)
 import Control.Monad (join)
 import Control.Monad.State (get, modify)
@@ -73,7 +72,7 @@ intRender :: String
 intRender = "int"
 
 int :: (RenderSym r) => VSType r
-int = toState $ typeFromData Integer intRender (text intRender)
+int = typeFromData Integer intRender (text intRender)
 
 constructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r -> 
   MSBody r -> SMethod r
@@ -98,9 +97,13 @@ extVar l n t = mkStateVar (l `access` n) t (R.extVar l n)
 
 classVar :: (RenderSym r) => (Doc -> Doc -> Doc) -> VSType r -> SVariable r -> 
   SVariable r
-classVar f = on2StateValues (\c v -> classVarCheckStatic $ varFromData 
-  (variableBind v) (getTypeString c `access` variableName v) 
-  (variableType v) (f (RC.type' c) (RC.variable v)))
+classVar f c' v'= do 
+  c <- c'
+  v <- v'
+  vr <- varFromData 
+    (variableBind v) (getTypeString c `access` variableName v) 
+    (toState $ variableType v) (f (RC.type' c) (RC.variable v))
+  toState $ classVarCheckStatic vr
   
 objVarSelf :: (RenderSym r) => SVariable r -> SVariable r
 objVarSelf = S.objVar S.self
@@ -130,8 +133,10 @@ intClass f n s i svrs mths = do
 -- Python, Java, and C++ --
 
 funcType :: (RenderSym r) => [VSType r] -> VSType r -> VSType r
-funcType ps' = on2StateValues (\ps r -> typeFromData (Func (map getType ps) 
-  (getType r)) "" empty) (sequence ps')
+funcType ps' r' =  do 
+  ps <- sequence ps'
+  r <- r'
+  typeFromData (Func (map getType ps) (getType r)) "" empty
 
 -- Python and C++ --
 
@@ -151,27 +156,34 @@ buildModule n imps top bot fs cs = S.modFromData n (do
 -- Java and C# -- 
 
 arrayType :: (RenderSym r) => VSType r -> VSType r
-arrayType = onStateValue (\t -> typeFromData (Array (getType t)) 
-  (getTypeString t ++ array) (RC.type' t <> brackets empty)) 
+arrayType t' = do 
+  t <- t'
+  typeFromData (Array (getType t)) 
+    (getTypeString t ++ array) (RC.type' t <> brackets empty)
   
 pi :: (RenderSym r) => SValue r
 pi = mkStateVal S.double (text $ mathFunc "PI")
 
 printSt :: (RenderSym r) => SValue r -> SValue r -> MSStatement r
-printSt = zoom lensMStoVS .: on2StateValues (mkStmt .: R.print)
+printSt va' vb' = do
+  va <- zoom lensMStoVS va'
+  vb <- zoom lensMStoVS vb' 
+  mkStmt (R.print va vb)
 
 arrayDec :: (RenderSym r) => SValue r -> SVariable r -> MSStatement r
-arrayDec n vr = zoom lensMStoVS $ do
-  sz <- n 
-  v <- vr 
+arrayDec n vr = do
+  sz <- zoom lensMStoVS n 
+  v <- zoom lensMStoVS vr 
   let tp = variableType v
-  innerTp <- listInnerType $ return tp
-  return $ mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new' <+> 
+  innerTp <- zoom lensMStoVS $ listInnerType $ return tp
+  mkStmt $ RC.type' tp <+> RC.variable v <+> equals <+> new' <+> 
     RC.type' innerTp <> brackets (RC.value sz)
 
 arrayDecDef :: (RenderSym r) => SVariable r -> [SValue r] -> MSStatement r
-arrayDecDef v vals = on2StateValues (\vd vs -> mkStmt (RC.statement vd <+> 
-  equals <+> braces (valueList vs))) (S.varDec v) (mapM (zoom lensMStoVS) vals)
+arrayDecDef v' vals' = do 
+  vs <- mapM (zoom lensMStoVS) vals'
+  vd <- S.varDec v'
+  mkStmt (RC.statement vd <+> equals <+> braces (valueList vs))
 
 openFileA :: (RenderSym r) => (SValue r -> VSType r -> SValue r -> SValue r) -> 
   SVariable r -> SValue r -> MSStatement r
@@ -183,7 +195,7 @@ forEach bStart bEnd forEachLabel inLbl e' v' b' = do
   e <- zoom lensMStoVS e'
   v <- zoom lensMStoVS v'
   b <- b'
-  return $ mkStmtNoEnd $ vcat [
+  mkStmtNoEnd $ vcat [
     forEachLabel <+> parens (RC.type' (variableType e) <+> RC.variable e <+> 
       inLbl <+> RC.value v) <+> bStart,
     indent $ RC.body b,
@@ -199,8 +211,8 @@ docMain b = commentedFunc (docComment $ toState $ functionDox
 
 mainFunction :: (RenderSym r) => VSType r -> Label -> MSBody r -> SMethod r
 mainFunction s n = S.intFunc True n public static (mType S.void)
-  [S.param (S.var args (onStateValue (\argT -> typeFromData (List String) 
-  (render (RC.type' argT) ++ array) (RC.type' argT <> array')) s))]
+  [S.param (S.var args (s >>= (\argT -> typeFromData (List String) 
+  (render (RC.type' argT) ++ array) (RC.type' argT <> array'))))]
 
 buildModule' :: (RenderSym r) => Label -> (String -> r (Import r)) -> [Label] 
   -> [SMethod r] -> [SClass r] -> FSModule r
@@ -237,10 +249,13 @@ stringRender :: String
 stringRender = "string"
 
 string :: (RenderSym r) => VSType r
-string = toState $ typeFromData String stringRender (text stringRender)
+string = typeFromData String stringRender (text stringRender)
 
 constDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-constDecDef = zoom lensMStoVS .: on2StateValues (mkStmt .: R.constDecDef)
+constDecDef vr' v'= do
+  vr <- zoom lensMStoVS vr'
+  v <- zoom lensMStoVS v'
+  mkStmt (R.constDecDef vr v)
   
 docInOutFunc :: (RenderSym r) => ([SVariable r] -> [SVariable r] -> 
     [SVariable r] -> MSBody r -> SMethod r) -> 
@@ -309,7 +324,7 @@ doubleRender :: String
 doubleRender = "Double"
 
 double :: (RenderSym r) => VSType r
-double = toState $ typeFromData Double doubleRender (text doubleRender)
+double = typeFromData Double doubleRender (text doubleRender)
 
 openFileR :: (RenderSym r) => (SValue r -> VSType r -> SValue r) -> SVariable r 
   -> SValue r -> MSStatement r
@@ -363,7 +378,7 @@ funcDecDef v ps b = do
   f <- function (variableName vr) private (return $ variableType vr) 
     (map S.param ps) b
   modify (L.set currParameters (s ^. currParameters))
-  return $ mkStmtNoEnd $ RC.method f
+  mkStmtNoEnd $ RC.method f
 
 inOutCall :: (RenderSym r) => (Label -> VSType r -> [SValue r] -> SValue r) -> 
   Label -> [SValue r] -> [SVariable r] -> [SVariable r] -> MSStatement r
@@ -405,13 +420,13 @@ floatRender :: String
 floatRender = "Float"
 
 float :: (RenderSym r) => VSType r
-float = toState $ typeFromData Float floatRender (text floatRender)
+float = typeFromData Float floatRender (text floatRender)
 
 stringRender' :: String
 stringRender' = "String"
 
 string' :: (RenderSym r) => VSType r
-string' = toState $ typeFromData String stringRender' (text stringRender')
+string' = typeFromData String stringRender' (text stringRender')
 
 -- C# and Swift --
 

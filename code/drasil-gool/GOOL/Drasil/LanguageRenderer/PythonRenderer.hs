@@ -55,8 +55,8 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   objMethodCall, call, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
   lambda, func, get, set, listAdd, listAppend, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
+  subAssign, increment, objDecNew, print, closeFile, returnStmt, 
+  valStmt, comment, throw, ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
   constructor, function, docFunc, buildClass, extraClass, implementingClass, docClass, 
   commentedClass, modFromData, fileDoc, docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
@@ -74,7 +74,7 @@ import GOOL.Drasil.AST (Terminator(..), FileType(..), FileData(..), fileD,
   td, ValData(..), vd, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, emptyIfEmpty, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, on3CodeValues, on3StateValues,
-  onCodeList, onStateList, on2StateLists)
+  onCodeList, onStateList, on2StateWrapped)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS, 
   currParameters, revFiles, addLangImportVS, getLangImports, addLibImportVS, 
   getLibImports, addModuleImport, addModuleImportVS, getModuleImports, 
@@ -178,27 +178,27 @@ instance BlockElim PythonCode where
 
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData
-  bool = toState $ typeFromData Boolean "" empty
+  bool = typeFromData Boolean "" empty
   int = G.int
   float = error pyFloatError
-  double = toState $ typeFromData Double pyDouble (text pyDouble)
-  char = toState $ typeFromData Char "" empty
+  double = typeFromData Double pyDouble (text pyDouble)
+  char = typeFromData Char "" empty
   string = pyStringType
-  infile = toState $ typeFromData File "" empty
-  outfile = toState $ typeFromData File "" empty
-  listType = onStateValue (\t -> typeFromData (List (getType t)) "" empty)
+  infile = typeFromData File "" empty
+  outfile = typeFromData File "" empty
+  listType t' = t' >>=(\t -> typeFromData (List (getType t)) "" empty)
   arrayType = listType
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = CP.funcType
-  void = toState $ typeFromData Void pyVoid (text pyVoid)
+  void = typeFromData Void pyVoid (text pyVoid)
 
 instance TypeElim PythonCode where
   getType = cType . unPC
   getTypeString = typeString . unPC
 
 instance RenderType PythonCode where
-  typeFromData t s d = toCode $ td t s d
+  typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim PythonCode where
   type' = typeDoc . unPC
@@ -268,7 +268,9 @@ instance InternalVarElim PythonCode where
   variable = varDoc . unPC
 
 instance RenderVariable PythonCode where
-  varFromData b n t d = on2CodeValues (vard b n) t (toCode d)
+  varFromData b n t' d = do 
+    t <- t'
+    toState $ on2CodeValues (vard b n) t (toCode d)
 
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
@@ -374,11 +376,14 @@ instance RenderValue PythonCode where
   printFileFunc _ = mkStateVal void empty
   printFileLnFunc _ = mkStateVal void empty
   
-  cast = on2StateValues (\t -> mkVal t . R.castObj (RC.type' t) . RC.value)
+  cast t' v' = on2StateWrapped (\t v-> mkVal t . R.castObj (RC.type' t) 
+    $ RC.value v) t' v' 
 
   call = G.call pyNamedArgSep
 
-  valFromData p t d = on2CodeValues (vd p) t (toCode d)
+  valFromData p t' d = do 
+    t <- t'
+    toState $ on2CodeValues (vd p) t (toCode d)
 
 instance ValueElim PythonCode where
   valuePrec = valPrec . unPC
@@ -397,8 +402,8 @@ instance GetSet PythonCode where
   set = G.set
 
 instance List PythonCode where
-  listSize = on2StateValues (\f v -> mkVal (functionType f) 
-    (pyListSize (RC.value v) (RC.function f))) listSizeFunc
+  listSize v' = on2StateWrapped(\f v-> mkVal (functionType f) 
+    (pyListSize (RC.value v) (RC.function f))) listSizeFunc  v'
   listAdd = G.listAdd
   listAppend = G.listAppend
   listAccess = G.listAccess
@@ -428,15 +433,19 @@ instance FunctionElim PythonCode where
   function = funcDoc . unPC
 
 instance InternalAssignStmt PythonCode where
-  multiAssign vars vals = zoom lensMStoVS $ on2StateLists (\vrs vls -> 
-    mkStmtNoEnd (R.multiAssign vrs vls)) vars vals
+  multiAssign vars vals = do 
+    vrs <- zoom lensMStoVS $ sequence vars
+    vls <- zoom lensMStoVS $ sequence vals
+    mkStmtNoEnd (R.multiAssign vrs vls) 
 
 instance InternalIOStmt PythonCode where
   printSt = pyPrint
 
 instance InternalControlStmt PythonCode where
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs = zoom lensMStoVS $ onStateList (mkStmtNoEnd . R.return') vs
+  multiReturn vs' = do 
+    vs <- zoom lensMStoVS $ sequence vs'
+    (mkStmtNoEnd . R.return') vs
 
 instance RenderStatement PythonCode where
   stmt = G.stmt
@@ -444,7 +453,7 @@ instance RenderStatement PythonCode where
   
   emptyStmt = G.emptyStmt
 
-  stmtFromData d t = toCode (d, t)
+  stmtFromData d t = toState $ toCode (d, t)
 
 instance StatementElim PythonCode where
   statement = fst . unPC
@@ -464,7 +473,7 @@ instance AssignStatement PythonCode where
   (&--) vr = (&-=) vr (litInt 1)
 
 instance DeclStatement PythonCode where
-  varDec _ = toState $ mkStmtNoEnd empty
+  varDec _ = mkStmtNoEnd empty
   varDecDef = assign
   listDec _ v = v &= litList (onStateValue variableType v) []
   listDecDef = CP.listDecDef
@@ -482,7 +491,7 @@ instance DeclStatement PythonCode where
     f <- function (variableName vr) private (return $ variableType vr) 
       (map param ps) b
     modify (L.set currParameters (s ^. currParameters))
-    return $ mkStmtNoEnd $ RC.method f
+    mkStmtNoEnd $ RC.method f
 
 instance IOStatement PythonCode where
   print      = pyOut False Nothing printFunc
@@ -524,8 +533,8 @@ instance CommentStatement PythonCode where
   comment = G.comment pyCommentStart
 
 instance ControlStatement PythonCode where
-  break = toState $ mkStmtNoEnd R.break
-  continue = toState $ mkStmtNoEnd R.continue
+  break = mkStmtNoEnd R.break
+  continue = mkStmtNoEnd R.continue
 
   returnStmt = G.returnStmt Empty
 
@@ -542,9 +551,12 @@ instance ControlStatement PythonCode where
   forEach i' v' b' = do
     i <- zoom lensMStoVS i'
     v <- zoom lensMStoVS v'
-    mkStmtNoEnd . pyForEach i v <$> b'
-  while v' = on2StateValues (\v b -> mkStmtNoEnd (pyWhile v b)) 
-    (zoom lensMStoVS v')
+    b <- b'
+    mkStmtNoEnd (pyForEach i v b)
+  while v' b' = do 
+    v <- zoom lensMStoVS v'
+    b <- b'
+    mkStmtNoEnd (pyWhile v b)
 
   tryCatch = G.tryCatch pyTryCatch
 
@@ -583,7 +595,9 @@ instance ParameterSym PythonCode where
   pointerParam = param
 
 instance RenderParam PythonCode where
-  paramFromData v d = on2CodeValues pd v (toCode d)
+  paramFromData v' d = do 
+    v <- zoom lensMStoVS v'
+    toState $ on2CodeValues pd v (toCode d)
   
 instance ParamElim PythonCode where
   parameterName = variableName . onCodeValue paramVar
@@ -846,9 +860,12 @@ pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v
 
 pyInlineIf :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-pyInlineIf = on3StateValues (\c v1 v2 -> valFromData (valuePrec c) 
-  (valueType v1) (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> 
-  RC.value v2))
+pyInlineIf c' v1' v2' = do 
+  c <- c'
+  v1 <- v1'
+  v2 <- v2'
+  valFromData (valuePrec c) (toState $ valueType v1) 
+    (RC.value v1 <+> ifLabel <+> RC.value c <+> elseLabel <+> RC.value v2)
 
 pyLambda :: (RenderSym r) => [r (Variable r)] -> r (Value r) -> Doc
 pyLambda ps ex = pyLambdaDec <+> variableList ps <> colon <+> RC.value ex
@@ -857,7 +874,7 @@ pyListSize :: Doc -> Doc -> Doc
 pyListSize v f = f <> parens v
 
 pyStringType :: (RenderSym r) => VSType r
-pyStringType = toState $ typeFromData String pyString (text pyString)
+pyStringType = typeFromData String pyString (text pyString)
 
 pyExtNewObjMixedArgs :: (RenderSym r) => Library -> MixedCtorCall r
 pyExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing 
@@ -865,16 +882,16 @@ pyExtNewObjMixedArgs l tp vs ns = tp >>= (\t -> call (Just l) Nothing
 
 pyPrint :: Bool -> Maybe (SValue PythonCode) -> SValue PythonCode -> 
   SValue PythonCode -> MSStatement PythonCode
-pyPrint newLn f' p' v' = zoom lensMStoVS $ do
-    f <- fromMaybe (mkStateVal void empty) f'
-    prf <- p'
-    v <- v'
-    s <- litString "" :: SValue PythonCode
+pyPrint newLn f' p' v' = do
+    f <- zoom lensMStoVS $ fromMaybe (mkStateVal void empty) f'
+    prf <- zoom lensMStoVS p'
+    v <- zoom lensMStoVS v'
+    s <- zoom lensMStoVS (litString "" :: SValue PythonCode)
     let nl = if newLn then empty else listSep' <> text "end" <> equals <> 
                RC.value s
         fl = emptyIfEmpty (RC.value f) $ listSep' <> text "file" <> equals 
                <> RC.value f
-    return $ mkStmtNoEnd $ RC.value prf <> parens (RC.value v <> nl <> fl)
+    mkStmtNoEnd $ RC.value prf <> parens (RC.value v <> nl <> fl)
 
 pyOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r -> 
   MSStatement r

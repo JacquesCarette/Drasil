@@ -499,18 +499,18 @@ instance IOStatement SwiftCode where
   --      don't quite understand it, and can't try it out myself because I'm 
   --      not on Mac and the online swift tools I've found don't support file I/O.
   -- Therefore, leaving these methods unimplemented for now.
-  getFileInput _ _ = emptyStmt -- FIXME, see above
-  discardFileInput _ = emptyStmt -- FIXME, see above
+  getFileInput _ _ = unimplementedStmt "read a value from a file" -- FIXME, see above
+  discardFileInput _ = unimplementedStmt "skip over a value from a file" -- FIXME, see above
 
   openFileR = CP.openFileR swiftOpenFile
   openFileW = CP.openFileW (\f v _ -> swiftOpenFile f v)
-  openFileA _ _ = emptyStmt -- FIXME, see above
+  openFileA _ _ = unimplementedStmt "open a file in append mode" -- FIXME, see above
   closeFile _ = emptyStmt -- The way I've currently implemented files, they 
                           -- don't need to be "closed", so this is 
                           -- (correctly) just an empty stmt
 
-  getFileInputLine _ _ = emptyStmt -- FIXME, see above
-  discardFileLine _ = emptyStmt -- FIXME, see above
+  getFileInputLine _ _ = unimplementedStmt "read a line from a file" -- FIXME, see above
+  discardFileLine _ = unimplementedStmt "skip over a line from a file" -- FIXME, see above
   getFileInputAll = swiftReadFile
 
 instance StringStatement SwiftCode where
@@ -686,6 +686,10 @@ instance BlockCommentSym SwiftCode where
 
 instance BlockCommentElim SwiftCode where
   blockComment' = unSC
+
+unimplementedStmt :: String -> MSStatement SwiftCode
+unimplementedStmt s = comment $ "A statement to " ++ s ++ " should be here," ++
+  " but this is not yet implemented."
 
 addMathImport :: VS a -> VS a
 addMathImport = (>>) $ modify (addLangImportVS swiftMath)

@@ -22,23 +22,15 @@ main = do
   filtered <- DC.getDirectories "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code" "drasil-"
   mapM_ print filtered
   
-  -- for testing each drasil- package/directory; 5th element (index 4) is problematic
-  test1 <- DC.finder (filtered !! 3)
-  print test1
-  
-  setCurrentDirectory "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code"
-
   -- imports configuration settings
   [packageNames,classInstanceGroups,classInstances] <- config
-  -- prints all drasil- package subdirectories
-  -- test2 <- mapM DC.finder filtered
-  -- print test2
-  
-  -- finds all files + filepaths in given folder in given directory
-  test4 <- DC.finder "drasil-lang /Users/Nathaniel_Hu/Documents/GitHub/Drasil/code"
 
-  -- easy + hard test for classes, medium test for data/newtypes, easy test for data types
-  let rawFileData = test4
+  -- all files + filepaths stored here; obtained from filtered list of drasil- packages using finder
+  allFiles <- mapM DC.finder filtered
+
+  -- converts list of rawFileData (filename + filepath) into list of rawEntryData (filename, 
+  -- truncated filepath, data, newtype and class names, class instances)
+  let rawFileData = concat allFiles
   rawEntryData <- mapM (createEntry classInstances . words) rawFileData
 
   -- entryData contains joined string with each file entries' data (intercalate)
@@ -96,7 +88,7 @@ createEntry classInstances [name,path] = do
       dataInstanceRefs = zipWith (map . isInstanceOf) dataInstanceRefNames instanceSkeleton where 
           instanceSkeleton = replicate (length dataInstanceRefNames) classInstances
       dataRefLines = map (intercalate ",") dataInstanceRefs
-      dataEntries2 = zipWith (join') dataEntries dataRefLines
+      dataEntries2 = zipWith join' dataEntries dataRefLines
 
   -- creating "Y" references to class instances for newtype types
   let newtypeInstanceRefNames = map (f stripInstances) newtypeNames
@@ -104,7 +96,7 @@ createEntry classInstances [name,path] = do
       newtypeInstanceRefs = zipWith (map . isInstanceOf) newtypeInstanceRefNames instanceSkeleton where 
           instanceSkeleton = replicate (length newtypeInstanceRefNames) classInstances
       newtypeRefLines = map (intercalate ",") newtypeInstanceRefs
-      newtypeEntries2 = zipWith (join') newtypeEntries newtypeRefLines
+      newtypeEntries2 = zipWith join' newtypeEntries newtypeRefLines
 
   -- creates file entry data by combining data, newtype and class entries
   let entryData = dataEntries2 ++ newtypeEntries2 ++ classEntries

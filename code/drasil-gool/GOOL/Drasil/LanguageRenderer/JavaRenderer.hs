@@ -18,7 +18,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj,
   InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), List(..), 
-  InternalList(..), Iterator(..), StatementSym(..), AssignStatement(..), 
+  InternalList(..), StatementSym(..), AssignStatement(..), 
   (&=), DeclStatement(..), IOStatement(..), StringStatement(..), 
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
@@ -28,10 +28,10 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), BinaryOpSym(..), 
   OpElim(uOpPrec, bOpPrec), RenderVariable(..), InternalVarElim(variableBind), 
   RenderValue(..), ValueElim(valuePrec),  InternalGetSet(..), 
-  InternalListFunc(..), InternalIterator(..), RenderFunction(..), 
-  FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
-  InternalControlStmt(..), RenderStatement(..), StatementElim(statementTerm), 
-  RenderScope(..), ScopeElim, MethodTypeSym(..), RenderParam(..), 
+  InternalListFunc(..), RenderFunction(..), FunctionElim(functionType), 
+  InternalAssignStmt(..), InternalIOStmt(..), InternalControlStmt(..), 
+  RenderStatement(..), StatementElim(statementTerm), RenderScope(..), 
+  ScopeElim, MethodTypeSym(..), RenderParam(..), 
   ParamElim(parameterName, parameterType), RenderMethod(..), MethodElim, 
   StateVarElim, RenderClass(..), ClassElim, RenderMod(..), ModuleElim, 
   BlockCommentSym(..), BlockCommentElim)
@@ -56,20 +56,20 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   lessEqualOp, plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
   arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
   objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
-  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, iterBegin, 
-  iterEnd, listAccess, listSet, getFunc, setFunc, listAppendFunc, stmt, 
-  loopStmt, emptyStmt, assign, subAssign, increment, objDecNew, print, closeFile, 
+  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
+  listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, 
+  assign, subAssign, increment, objDecNew, print, closeFile, 
   returnStmt, valStmt, comment, throw, ifCond, tryCatch, construct, param, 
   method, getMethod, setMethod, constructor, function, docFunc, buildClass, 
   implementingClass, docClass, commentedClass, modFromData, fileDoc, 
   docMod, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (docFuncRepr)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (  
-  bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
-  indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
-  discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
-  funcType, arrayType, pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, 
-  openFileW, openFileA, forEach, docMain, mainFunction, stateVar, buildModule', 
+  bindingError, extVar, classVar, objVarSelf, extFuncAppMixedArgs, 
+  indexOf, listAddFunc, listDecDef, discardFileLine, destructorError, 
+  stateVarDef, constVar, intClass, objVar, funcType, arrayType, 
+  pi, notNull, printSt, arrayDec, arrayDecDef, openFileR, openFileW, 
+  openFileA, forEach, docMain, mainFunction, stateVar, buildModule', 
   litArray, call', listSizeFunc, listAccessFunc')
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
@@ -201,7 +201,6 @@ instance TypeSym JavaCode where
   listInnerType = G.listInnerType
   obj = G.obj
   funcType = CP.funcType
-  iterator t = t
   void = C.void
 
 instance TypeElim JavaCode where
@@ -267,7 +266,6 @@ instance VariableSym JavaCode where
   objVar = CP.objVar
   objVarSelf = CP.objVarSelf
   arrayElem i = G.arrayElem (litInt i)
-  iterVar = CP.iterVar
 
 instance VariableElim JavaCode where
   variableName = varName . unJC
@@ -432,10 +430,6 @@ instance List JavaCode where
 instance InternalList JavaCode where
   listSlice' = M.listSlice
 
-instance Iterator JavaCode where
-  iterBegin = G.iterBegin
-  iterEnd = G.iterEnd
-
 instance InternalGetSet JavaCode where
   getFunc = G.getFunc
   setFunc = G.setFunc
@@ -446,10 +440,6 @@ instance InternalListFunc JavaCode where
   listAppendFunc = G.listAppendFunc jListAdd
   listAccessFunc = CP.listAccessFunc' jListAccess
   listSetFunc = jListSetFunc
-
-instance InternalIterator JavaCode where
-  iterBeginFunc _ = error $ CP.iterBeginError jName
-  iterEndFunc _ = error $ CP.iterEndError jName
 
 instance RenderFunction JavaCode where
   funcFromData d = onStateValue (onCodeValue (`fd` d))

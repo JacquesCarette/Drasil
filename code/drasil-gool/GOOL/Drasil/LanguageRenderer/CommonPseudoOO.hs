@@ -1,6 +1,6 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (
-  bindingError, extVar, classVar, objVarSelf, iterVar, extFuncAppMixedArgs, 
+  bindingError, extVar, classVar, objVarSelf, extFuncAppMixedArgs, 
   indexOf, listAddFunc, iterBeginError, iterEndError, listDecDef, 
   discardFileLine, destructorError, stateVarDef, constVar, intClass, objVar, 
   funcType, listSetFunc, listAccessFunc, buildModule, arrayType, pi, notNull, 
@@ -15,7 +15,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable, 
   SValue, VSFunction, MSStatement, SMethod, CSStateVar, SClass, FSModule, 
   MixedCall, PermanenceSym(..), 
-  TypeSym(infile, outfile, listInnerType, iterator), 
+  TypeSym(infile, outfile, listInnerType), 
   TypeElim(getType, getTypeString), VariableElim(variableName, variableType), 
   ValueSym(valueType), Comparison(..), objMethodCallNoParams, (&=), 
   ScopeSym(..))
@@ -76,9 +76,6 @@ classVar f c' v'= do
   
 objVarSelf :: (RenderSym r) => SVariable r -> SVariable r
 objVarSelf = S.objVar S.self
-
-iterVar :: (RenderSym r) => Label -> VSType r -> SVariable r
-iterVar n t = S.var n (iterator t)
 
 extFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
 extFuncAppMixedArgs l = S.call (Just l) Nothing

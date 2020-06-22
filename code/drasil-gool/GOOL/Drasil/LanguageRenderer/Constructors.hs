@@ -140,16 +140,17 @@ typeUnExpr u' t' s' = do
 binExpr :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
 binExpr b' v1' v2'= do 
   b <- b'
-  v1 <- v1'
-  v2 <- v2'
-  let exprType = numType (valueType v1) (valueType v2)
-      exprRender = binExprRender b v1 v2
+  exprType <- numType v1' v2'
+  exprRender <- exprRender' binExprRender b' v1' v2'
   mkExpr (bOpPrec b) exprType exprRender
 
 -- | Constructs binary expressions like pow(v,w), for some operator pow and
 -- values v and w
 binExpr' :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-binExpr' = exprTypeRender 
+binExpr' b' v1' v2' = do 
+  exprType <- numType v1' v2'
+  exprRender <- exprRender' binOpDocDRend b' v1' v2'
+  mkExpr 9 exprType exprRender 
 
 -- | To be used in languages where the binary operator returns a double. If 
 -- either value passed to the operator is a float, this function preserves that 
@@ -160,18 +161,8 @@ binExprNumDbl' b' v1' v2' = do
   v2 <- v2'
   let t1 = valueType v1
       t2 = valueType v2
-  e <- exprTypeRender b' v1' v2'
+  e <- binExpr' b' v1' v2'
   binExprCastFloat t1 t2 e
-
---Used only in binExpr' and binExprNumDbl
-exprTypeRender:: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-exprTypeRender b' v1' v2' = do 
-  b <- b'
-  v1 <- v1'
-  v2 <- v2'
-  let exprType = numType (valueType v1) (valueType v2)
-      exprRender = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
-  mkExpr 9 exprType exprRender
 
 -- Only used by binExprCastFloat
 binExprCastFloat :: (RenderSym r) => r (Type r) -> r (Type r) -> r (Value r) -> 
@@ -188,23 +179,39 @@ typeBinExpr :: (RenderSym r) => VSBinOp r -> VSType r -> SValue r -> SValue r
 typeBinExpr b' t' v1' v2' = do
   b <- b'
   t <- t'
-  v1 <- v1'
-  v2 <- v2'
-  mkExpr (bOpPrec b) t (binExprRender b v1 v2)
+  bnexr <- exprRender' binExprRender b' v1' v2'
+  mkExpr (bOpPrec b) t bnexr
 
 -- For numeric binary expressions, checks that both types are numeric and 
 -- returns result type. Selects the type with lowest precision.
-numType :: (RenderSym r) => r (Type r) -> r (Type r) -> r (Type r)
-numType t1 t2 = numericType (getType t1) (getType t2)
-  where numericType Integer Integer = t1
-        numericType Float _ = t1
-        numericType _ Float = t2
-        numericType Double _ = t1
-        numericType _ Double = t2
-        numericType _ _ = error "Numeric types required for numeric expression"
+numType :: (RenderSym r) => SValue r-> SValue r -> VSType r
+numType v1' v2' = do
+  v1 <- v1'
+  v2 <- v2'
+  let t1 = valueType v1
+      t2 = valueType v2
+      numericType Integer Integer = t1
+      numericType Float _ = t1
+      numericType _ Float = t2
+      numericType Double _ = t1
+      numericType _ Double = t2
+      numericType _ _ = error "Numeric types required for numeric expression"
+  toState $ numericType (getType t1) (getType t2)
+
+exprRender' :: (r (BinaryOp r) -> r (Value r) -> r (Value r) -> Doc) -> 
+  VSBinOp r -> SValue r -> SValue r -> VS Doc
+exprRender' f b' v1' v2' = do 
+  b <- b' 
+  v1 <- v1'
+  v2 <- v2'
+  toState $ f b v1 v2
 
 mkExpr :: (RenderSym r) => Int -> r (Type r) -> Doc -> SValue r
 mkExpr p t= valFromData (Just p) (toState t)
+
+binOpDocDRend :: (RenderSym r) => r (BinaryOp r) -> r (Value r) -> 
+  r (Value r) -> Doc
+binOpDocDRend b v1 v2 = binOpDocD' (RC.bOp b) (RC.value v1) (RC.value v2)
 
 -- Adds parentheses around an expression passed as the left argument to a 
 -- left-associative binary operator if the precedence of the expression is less 
@@ -221,7 +228,7 @@ exprParensR o v = (if maybe False (<= bOpPrec o) (valuePrec v) then parens else
   id) $ RC.value v
 
 -- Renders binary expression, adding parentheses if needed
-binExprRender :: (RenderSym r) => r (BinaryOp r) -> r (Value r) -> r (Value r) 
+binExprRender :: (RenderSym r) =>  r (BinaryOp r) -> r (Value r) -> r (Value r) 
   -> Doc
 binExprRender b v1 v2 = 
   let leftExpr = exprParensL b v1

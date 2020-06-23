@@ -10,13 +10,13 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
   AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (sampleInput, makefile, noRunIfLib)
+  G (sampleInput, readMe, makefile, noRunIfLib)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, nativeBinary, executable, sharedLibrary)
 
-import GOOL.Drasil (onCodeList, swiftName)
+import GOOL.Drasil (onCodeList, swiftName, swiftVersion)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -42,6 +42,7 @@ instance AuxiliarySym SwiftProject where
   type Auxiliary SwiftProject = AuxData
   type AuxHelper SwiftProject = Doc
   doxConfig = error doxError
+  readMe = G.readMe swiftName swiftVersion Nothing
   sampleInput = G.sampleInput
 
   optimizeDox = error doxError

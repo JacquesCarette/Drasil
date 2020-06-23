@@ -5,7 +5,7 @@
 -- | The logic to render C++ code is contained in this module
 module GOOL.Drasil.LanguageRenderer.CppRenderer (
   -- * C++ Code Configuration -- defines syntax of all C++ code
-  CppSrcCode(..), CppHdrCode(..), CppCode(..), unCPPC
+  CppSrcCode(..), CppHdrCode(..), CppCode(..), unCPPC, cppName, cppVersion
 ) where
 
 import Utils.Drasil (blank, indent, indentList)
@@ -2261,8 +2261,9 @@ iterEnd :: SValue CppSrcCode -> SValue CppSrcCode
 iterEnd v = v $. cppIterEndFunc (G.listInnerType $ onStateValue valueType v)
 
 -- convenience
-cppName :: String
-cppName = "C++" 
+cppName, cppVersion :: String
+cppName = "C++"
+cppVersion = "gcc 10.1"
 
 guard, inc, ifndef, define, defineSuffix, endif, using, namespace, cppPtr, 
   cppDeref, streamL, streamR, cppLambdaDec, cppLambdaSep, catchAll, cppPi,

@@ -23,7 +23,8 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   GOOLState(..), lensMStoVS, headers, sources, mainMod, 
   initialState,
   onStateValue, onCodeList,
-  unCI, unPC, unJC, unCSC, unCPPC, unSC, swiftName
+  unCI, unPC, unJC, unCSC, unCPPC, unSC, pyName, pyVersion, jName, jVersion, 
+  csName, csVersion, cppName, cppVersion, swiftName, swiftVersion
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock, 
@@ -56,8 +57,9 @@ import GOOL.Drasil.State (GOOLState(..), lensMStoVS, headers, sources, mainMod,
 import GOOL.Drasil.Helpers (onStateValue, onCodeList)
 
 import GOOL.Drasil.CodeInfo (unCI)
-import GOOL.Drasil.LanguageRenderer.JavaRenderer (unJC)
-import GOOL.Drasil.LanguageRenderer.PythonRenderer (unPC)
-import GOOL.Drasil.LanguageRenderer.CSharpRenderer (unCSC)
-import GOOL.Drasil.LanguageRenderer.CppRenderer (unCPPC)
-import GOOL.Drasil.LanguageRenderer.SwiftRenderer (unSC, swiftName)
+
+import GOOL.Drasil.LanguageRenderer.JavaRenderer (unJC, jName, jVersion)
+import GOOL.Drasil.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
+import GOOL.Drasil.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
+import GOOL.Drasil.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
+import GOOL.Drasil.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)

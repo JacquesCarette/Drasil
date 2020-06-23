@@ -16,6 +16,7 @@ library
     , Language.Drasil.HTML.Helpers
     , Language.Drasil.HTML.Print
     , Language.Drasil.HTML.Monad
+    , Language.Drasil.Markdown.CreateMd
     , Language.Drasil.Plain.Helpers
     , Language.Drasil.Plain.Print
     , Language.Drasil.Printing.Helpers

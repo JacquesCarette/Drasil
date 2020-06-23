@@ -3,7 +3,7 @@
 -- | The logic to render Python code is contained in this module
 module GOOL.Drasil.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
-  PythonCode(..)
+  PythonCode(..), pyName, pyVersion
 ) where
 
 import Utils.Drasil (blank, indent)
@@ -692,8 +692,9 @@ instance BlockCommentElim PythonCode where
 initName :: Label
 initName = "__init__"
 
-pyName :: String
+pyName, pyVersion :: String
 pyName = "Python"
+pyVersion = "3.5.1"
 
 pyInt, pyDouble, pyString, pyVoid :: String
 pyInt = "int"

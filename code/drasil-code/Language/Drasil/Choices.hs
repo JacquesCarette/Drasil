@@ -4,7 +4,7 @@ module Language.Drasil.Choices (
   ConstantStructure(..), ConstantRepr(..), MatchedConceptMap, CodeConcept(..), 
   matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
-  Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices
+  Logging(..), AuxFile(..), getSampleData, hasSampleInput, hasReadMe, defaultChoices
 ) where
 
 import Language.Drasil
@@ -148,9 +148,10 @@ data Logging = LogFunc -- Log messages generated for function calls
 
 -- Currently we only support one kind of auxiliary file: sample input file
 -- To generate a sample input file compatible with the generated program
--- FilePath is the path to the user-provided file containing a sample set of 
--- input data
-newtype AuxFile = SampleInput FilePath deriving Eq
+-- FilePath is the path to the user-provided file containing a sample set of input data
+data AuxFile = SampleInput FilePath 
+                | ReadME 
+                deriving Eq
 
 -- Gets the file path to a sample input data set from a Choices structure, if 
 -- the user chose to generate a sample input file.
@@ -158,11 +159,18 @@ getSampleData :: Choices -> Maybe FilePath
 getSampleData chs = getSampleData' (auxFiles chs)
   where getSampleData' [] = Nothing
         getSampleData' (SampleInput fp:_) = Just fp
+        getSampleData' (_:xs) = getSampleData' xs
 
 -- Predicate that returns true if the list of AuxFiles includes a SampleInput
 hasSampleInput :: [AuxFile] -> Bool
 hasSampleInput [] = False
 hasSampleInput (SampleInput _:_) = True
+hasSampleInput (_:xs) = hasSampleInput xs
+
+hasReadMe :: [AuxFile] -> Bool
+hasReadMe [] = False
+hasReadMe (ReadME:_) = True
+hasReadMe (_:xs) = hasReadMe xs
 
 -- | Default choices to be used as the base from which design specifications 
 -- can be built.
@@ -183,7 +191,7 @@ defaultChoices = Choices {
   constRepr = Const,
   conceptMatch = matchConcepts ([] :: [(QDefinition, [CodeConcept])]),
   spaceMatch = spaceToCodeType, 
-  auxFiles = [],
+  auxFiles = [ReadME],
   odeLib = [],
   odes = []
 }

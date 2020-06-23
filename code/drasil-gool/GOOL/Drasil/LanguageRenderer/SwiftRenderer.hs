@@ -4,7 +4,7 @@
 -- | The logic to render Swift code is contained in this module
 module GOOL.Drasil.LanguageRenderer.SwiftRenderer (
   -- * Swift Code Configuration -- defines syntax of all Swift code
-  SwiftCode(..), swiftName
+  SwiftCode(..), swiftName, swiftVersion
 ) where
 
 import Utils.Drasil (indent, stringList)
@@ -696,8 +696,9 @@ addMathImport = (>>) $ modify (addLangImportVS swiftMath)
 addFoundationImport :: VS a -> VS a
 addFoundationImport = (>>) $ modify (addLangImportVS swiftFoundation)
 
-swiftName :: String
+swiftName, swiftVersion :: String
 swiftName = "Swift"
+swiftVersion = "5.2.4"
 
 swiftUnwrapVal :: (RenderSym r) => SValue r -> SValue r
 swiftUnwrapVal v' = do

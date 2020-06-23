@@ -320,17 +320,17 @@ git pull
 Sample Answer: \lstinline{git branch} displays a list of all existing branches on the current repo. \lstinline{git switch master} and \lstinline{git switch sample} switch the active branch to master, and then to sample. \lstinline{git pull} pulls from and updates the active branch, which would be sample.
 
 \question{1 mark}
-When learning about Haskell, it is \textbf{highly recommended} that you learn the following concepts:
+Suppose that your have created a new branch on your local repo \textbf{only}. Which of the following commands would you use to push your new branch onto the remote repo?
 
 \begin{enumerate}
-    \item Input/Output (IO)
-    \item Monads
-    \item Lensing
-    \item B. and C. \marker
+    \item \lstinline{git push --set-upstream <new branch name>}
+    \item \lstinline{git push}
+    \item \lstinline{git push <new branch name>}
+    \item \lstinline{git push --set-upstream origin <new branch name>} \marker
     \item none of the above
 \end{enumerate}
 \answer{Explain your answer here.}{0cm}{7cm}
-Sample Answer: learning about input/output is good to know for related applications in Drasil, but not highly recommended. Learning about monads and lensing is highly recommended, as knowing these concepts will help you to more easily read and understand the Drasil code and how it works.
+Sample Answer: the command \lstinline{git push --set-upstream origin <new branch name>} is used to push your local branch if a corresponding branch \textbf{does not} already exist on the upstream repo. If a corresponding branch \textbf{already} exists on the remote repo, then use the command \lstinline{git push}.
 
 \end{minipage}
 

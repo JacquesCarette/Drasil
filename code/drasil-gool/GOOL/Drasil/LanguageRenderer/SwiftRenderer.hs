@@ -911,7 +911,7 @@ swiftPrint newLn (Just f) _ v' = do
         else emptyStmt
   tryCatch (bodyStatements
     [valStmt $ swiftWriteFunc (valToPrint $ getType $ valueType v) f, prNewLn]) 
-    (oneLiner $ printStrLn "Error printing to file.")
+    (oneLiner $ throw "Error printing to file.")
 
 -- swiftPrint can handle lists, so don't use G.print for lists.
 swiftOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r 
@@ -951,7 +951,9 @@ swiftOpenFileWA app f' n' = tryCatch
         then valStmt $ swiftTryVal $ objMethodCallNoParams void (valueOf f') 
           swiftSeekEnd 
         else emptyStmt])
-    (oneLiner $ printStrLn "Error opening file")
+    -- It's important for the catch case to throw, or else the swift compiler
+    -- will have no guarantees that the file variable has been initialized.
+    (oneLiner $ throw "Error opening file.")
 
 swiftCloseFile :: (RenderSym r) => SValue r -> MSStatement r
 swiftCloseFile f' = do
@@ -961,14 +963,14 @@ swiftCloseFile f' = do
                                  -- (correctly) just an empty stmt
       swClose OutFile = tryCatch (oneLiner $ valStmt $ swiftTryVal $
           objMethodCallNoParams void (return f) swiftClose)
-        (oneLiner $ printStrLn "Error closing file")
+        (oneLiner $ throw "Error closing file.")
       swClose _ = error "closeFile called on non-file-typed value"
   swClose (getType $ valueType f)
 
 swiftReadFile :: (RenderSym r) => SValue r -> SVariable r -> MSStatement r
 swiftReadFile f v = tryCatch 
   (oneLiner $ stringSplit '\n' v $ swiftReadFileFunc f)
-  (oneLiner $ print (litString "error reading from file"))
+  (oneLiner $ print (litString "Error reading from file."))
 
 swiftVarDec :: Doc -> SVariable SwiftCode -> MSStatement SwiftCode
 swiftVarDec dec v' = do

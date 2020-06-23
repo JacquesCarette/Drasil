@@ -9,13 +9,13 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
   AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib)
+  G (doxConfig, sampleInput, makefile, noRunIfLib)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
-import GOOL.Drasil (onCodeList, pyName, pyVersion)
+import GOOL.Drasil (onCodeList)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -41,7 +41,6 @@ instance AuxiliarySym PythonProject where
   type Auxiliary PythonProject = AuxData
   type AuxHelper PythonProject = Doc
   doxConfig = G.doxConfig optimizeDox
-  readMe imp libs n = G.readMe pyName pyVersion Nothing imp libs n
   sampleInput = G.sampleInput
 
   optimizeDox = return yes

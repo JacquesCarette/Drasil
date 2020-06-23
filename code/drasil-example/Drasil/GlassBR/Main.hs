@@ -29,7 +29,7 @@ choices = defaultChoices {
   inputStructure = Bundled,
   constStructure = Inline,
   constRepr = Const,
-  auxFiles = [SampleInput "../../datafiles/GlassBR/sampleInput.txt", ReadME] 
+  auxFiles = [SampleInput "../../datafiles/GlassBR/sampleInput.txt"] 
 }
   
 main :: IO()

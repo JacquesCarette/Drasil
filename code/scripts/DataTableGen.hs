@@ -4,26 +4,27 @@ import Data.List
 import System.IO
 import System.Directory
 import DirectoryController as DC (finder, getDirectories)
-import SourceCodeReader as SCR (extractEntryData)
-
-type EntryData = String
-type FileName = FilePath
-type FolderName = FilePath
+import SourceCodeReader as SCR (extractEntryData, EntryData)
 
 type ClassInstance = String
 
 type FileInstance = String
 type IsInstanceOf = String
 
--- main controller function
+-- main controller function; update later to contain parameter for starting filepath
 main :: IO ()
 main = do
+  -- directory variables; codeDirectory will be temporarily hardcoded
+  let codeDirectory = "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code"
+      scriptsDirectory = codeDirectory ++ "/scripts"
+      outputDirectory = codeDirectory ++ "/analysis"
+
   -- gets names + filepaths of all drasil- packages/directories
-  filtered <- DC.getDirectories "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code" "drasil-"
+  filtered <- DC.getDirectories codeDirectory "drasil-"
   mapM_ print filtered
   
   -- imports configuration settings
-  [packageNames,classInstanceGroups,classInstances] <- config
+  [packageNames,classInstanceGroups,classInstances] <- config scriptsDirectory
 
   -- all files + filepaths stored here; obtained from filtered list of drasil- packages using finder
   allFiles <- mapM DC.finder filtered
@@ -31,28 +32,28 @@ main = do
   -- converts list of rawFileData (filename + filepath) into list of rawEntryData (filename, 
   -- truncated filepath, data, newtype and class names, class instances)
   let rawFileData = concat allFiles
-  rawEntryData <- mapM (createEntry classInstances . words) rawFileData
+  rawEntryData <- mapM (createEntry codeDirectory classInstances . words) rawFileData
 
   -- entryData contains joined string with each file entries' data (intercalate)
   let entryData = intercalate "\n" rawEntryData
 
   -- creates and writes to output data file
-  output entryData classInstances
+  output outputDirectory entryData classInstances
 
 -- import configurations function (drasil- package ordering, class instance group ordering)
-config :: IO [[String]]
-config = do
-  setCurrentDirectory "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/scripts"
+config :: FilePath -> IO [[String]]
+config configFilePath = do
+  setCurrentDirectory configFilePath
   c <- readFile "DTG_Config.txt"
   let l = lines c
       [packageNames,_,classInstanceGroups,_,classInstances] = map words l
   return [packageNames,classInstanceGroups,classInstances]
 
--- function creates and writes output data file DataTable.csv
-output :: EntryData -> [String] -> IO ()
-output entryData classInstances = do
-  -- adjust this later to be "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/analysis"
-  setCurrentDirectory "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/scripts"
+-- function creates and writes output data file DataTable.csv to /code/analysis
+output :: FilePath -> SCR.EntryData -> [String] -> IO ()
+output outputFilePath entryData classInstances = do
+  createDirectoryIfMissing False outputFilePath
+  setCurrentDirectory outputFilePath
   dataTable <- openFile "DataTable.csv" WriteMode
   hPutStrLn dataTable "Package,\t,\t,\t,\t,\t,ClassInstances"
   hPutStrLn dataTable ("drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions," ++ intercalate "," classInstances)
@@ -60,14 +61,14 @@ output entryData classInstances = do
   hClose dataTable
 
   -- creates an entry for each file (updated/optimized input format)
-createEntry :: [ClassInstance] -> [FilePath] -> IO String
-createEntry classInstances [name,path] = do
+createEntry :: FilePath -> [ClassInstance] -> [FilePath] -> IO String
+createEntry homeDirectory classInstances [name,path] = do
   [dataNames,newtypeNames,classNames,stripInstances] <- SCR.extractEntryData name path
 
   -- f data newtype class; joins data value/placeholders for data/newtype/class (in first data entry line)
   let f d n c = intercalate "," [drasilPack,filePath,fileName,d,n,c] 
       drasilPack = takeWhile (/= '/') . (\\ "-") $ dropWhile (/='-') path 
-      filePath = (\\ "/") . dropWhile (/= '/') $ (\\ "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code/drasil-") path
+      filePath = (++ "/") . (\\ "/") . dropWhile (/= '/') $ (\\ homeDirectory ++ "/drasil-") path
       fileName = name
 
   -- guards determine how to handle first data entry line

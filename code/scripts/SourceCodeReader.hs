@@ -1,19 +1,15 @@
-module SourceCodeReader (extractEntryData) where
+module SourceCodeReader (extractEntryData, EntryData) where
 
 import Data.List
 import System.IO
 import System.Directory
 
+import DirectoryController as DC (FileName)
+
 type EntryData = String
-type FileName = FilePath
-
-type ClassInstance = String
-
-type FileInstance = String
-type IsInstanceOf = String
 
 -- extracts data, newtype and class names
-extractEntryData :: FileName -> FilePath -> IO [[String]]
+extractEntryData :: DC.FileName -> FilePath -> IO [[EntryData]]
 extractEntryData fileName filePath = do
   setCurrentDirectory filePath
   handle <- openFile fileName ReadMode

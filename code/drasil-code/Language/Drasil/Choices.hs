@@ -157,8 +157,9 @@ data AuxFile = SampleInput FilePath
 -- the user chose to generate a sample input file.
 getSampleData :: Choices -> Maybe FilePath
 getSampleData chs = getSampleData' (auxFiles chs)
-  where getSampleData' (SampleInput fp:_) = Just fp
-        getSampleData' _ = Nothing
+  where getSampleData' [] = Nothing
+        getSampleData' (SampleInput fp:_) = Just fp
+        getSampleData' (_:xs) = getSampleData' xs
 
 -- Predicate that returns true if the list of AuxFiles includes a SampleInput
 hasSampleInput :: [AuxFile] -> Bool

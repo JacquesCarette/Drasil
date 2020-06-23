@@ -667,7 +667,7 @@ addSystemImport = (>>) $ modify (addLangImportVS csSystem)
 
 csName, csVersion :: String
 csName = "C#"
-csVersion = "8.0"
+csVersion = "6.0"
 
 csImport :: Label -> Doc
 csImport n = text ("using " ++ n) <> endStatement

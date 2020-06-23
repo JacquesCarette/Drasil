@@ -712,7 +712,7 @@ initName = "__init__"
 
 pyName, pyVersion :: String
 pyName = "Python"
-pyVersion = "3.8.0"
+pyVersion = "3.5.1"
 
 pyImport :: Doc
 pyImport = text "import"

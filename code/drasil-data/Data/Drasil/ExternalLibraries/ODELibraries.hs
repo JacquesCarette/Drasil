@@ -32,7 +32,7 @@ import Control.Lens ((^.), _1, _2, over)
 -- SciPy -- 
 
 scipyODEPckg :: ODELibPckg
-scipyODEPckg = mkODELibNoPath "SciPy" "1.4.0" scipyODE scipyCall [Python]
+scipyODEPckg = mkODELibNoPath "SciPy" "1.4.1" scipyODE scipyCall [Python]
 
 scipyODE :: ExternalLibrary
 scipyODE = externalLib [

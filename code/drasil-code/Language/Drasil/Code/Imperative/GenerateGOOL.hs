@@ -56,12 +56,12 @@ genDoxConfig s = do
       v = doxOutput g
   return [doxConfig n s v | not (null cms)]
 
-genReadMe :: (AuxiliarySym r) => ImplementationType -> [(Name,Version)] ->
-  GenState [r (Auxiliary r)]
-genReadMe imp libnms = do 
+genReadMe :: (AuxiliarySym r) => ImplementationType -> [(Name,Version)] -> 
+  [FilePath] -> [String] -> GenState [r (Auxiliary r)]
+genReadMe imp libnms libpths auths = do 
   g <- get
   let n = pName $ codeSpec g
-  return [readMe imp libnms n | hasReadMe (auxiliaries g)]
+  return [readMe imp libnms libpths auths n | hasReadMe (auxiliaries g)]
 
 data ClassType = Primary | Auxiliary
 

@@ -4,8 +4,8 @@ import Language.Drasil hiding (Symbol(..), Vector)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
-  cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
-  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
+  cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
+  _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
   _sysinfodb, _usedinfodb)
 import Utils.Drasil
 
@@ -107,6 +107,7 @@ si = SI {
   _sys         = projectileTitle,
   _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
+  _purpose     = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = map (relToQD symbMap) iMods ++

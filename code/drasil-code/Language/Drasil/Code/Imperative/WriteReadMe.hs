@@ -7,25 +7,25 @@ import Language.Drasil.Choices (ImplementationType(..))
 import Language.Drasil.Printers (makeMd, introInfo, sumInfo, invalidOS, contSep,
     instDoc, regularSec, filtEmp)
 
-import Data.List (intersperse)
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, vcat, text, doubleQuotes, 
-    (<+>))
+    (<+>), punctuate)
 
 
 makeReadMe :: String -> String -> Maybe String -> ImplementationType -> 
-    [(Name,Version)] -> String -> Doc
-makeReadMe progLang progLangVers unsupportedOSs imp extLibs caseName = 
-    makeMd [introInfo caseName,
+    [(Name,Version)] -> [FilePath] -> [String] -> String -> Doc
+makeReadMe progLang progLangVers unsupportedOSs imp extLibns extLibfp auths caseName= 
+    makeMd [introInfo caseName auths,
     sumInfo caseName progLang progLangVers,
-    dependencies extLibs,
+    dependencies extLibns extLibfp,
     invalidOS unsupportedOSs,
     makeInstr imp]
 
-dependencies:: [(Name, Version)] -> Doc
-dependencies lib = 
-    let formattedLibs = (vcat . intersperse contSep . filtEmp . 
-            map libStatment) lib
+dependencies:: [(Name, Version)] -> [FilePath]-> Doc
+dependencies libns libfps = 
+    let libs = addListToTuple libns libfps
+        formattedLibs = (vcat . punctuate contSep . filtEmp . 
+            map libStatment) libs
     in if isEmpty formattedLibs then empty else 
             regularSec (text "Program Dependencies") formattedLibs
 
@@ -34,6 +34,14 @@ makeInstr Library = empty
 makeInstr Program = instDoc
 
 -- Helper for dependencies
-libStatment :: (Name, Version) -> Doc
-libStatment ("","") = empty
-libStatment (nam,vers) = (doubleQuotes . text) nam <+> text "version" <+> text vers
+libStatment :: (Name, Version, FilePath) -> Doc
+libStatment ("","", _) = empty
+libStatment (nam,vers, fp) = (doubleQuotes . text) nam <+> text "version" 
+    <+> text vers <+> if fp == "" then empty else
+    text ", local file path to the library" <+> text fp
+
+addListToTuple :: [(Name,Version)] -> [FilePath] -> [(Name, Version, FilePath)]
+addListToTuple [] [] = []
+addListToTuple ((n,v):_) [] = [(n,v,"")]
+addListToTuple ((n,v):xtup) (l:xlst) = [(n,v,l)] ++ addListToTuple xtup xlst
+addListToTuple _ _ = []

@@ -3,7 +3,7 @@ module Drasil.SWHS.Body where
 import Language.Drasil hiding (Symbol(..), organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
-  SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
+  SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (GenDefn, InstanceModel)
@@ -86,6 +86,7 @@ si = SI {
   _sys = swhsPCM,
   _kind = Doc.srs, 
   _authors = [thulasi, brooks, spencerSmith],
+  _purpose = purpDoc progName Verbose,
   _quants = symbols,
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,

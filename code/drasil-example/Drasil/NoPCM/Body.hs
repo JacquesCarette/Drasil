@@ -3,9 +3,9 @@ module Drasil.NoPCM.Body where
 import Language.Drasil hiding (Symbol(..), section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
-  SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
-  _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb)
+  SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, 
+  _constants, _constraints, _datadefs, _definitions, _defSequence, _inputs, 
+  _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
 
@@ -184,6 +184,7 @@ si = SI {
   _sys = srsSWHS,
   _kind = Doc.srs,
   _authors = [thulasi],
+  _purpose = purpDoc progName Verbose,
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.

@@ -9,7 +9,7 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
     SSDSec(SSDProg))
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
-  rdb, refdb, _authors, _concepts, _constants, _constraints,
+  rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
   _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
   _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
@@ -34,6 +34,7 @@ si = SI {
   _kind = Doc.srs,
   _authors = [spencerSmith],
   _quants = symbols,
+  _purpose = [],
   _concepts = [] :: [UnitaryConceptDict],
   _definitions = [] :: [QDefinition],
   _datadefs = dataDefs,

@@ -25,7 +25,8 @@ class AuxiliarySym r where
   type Auxiliary r
   type AuxHelper r
   doxConfig :: String -> GOOLState -> Verbosity -> r (Auxiliary r)
-  readMe ::  ImplementationType -> [(Name,Version)] -> String -> r (Auxiliary r)
+  readMe ::  ImplementationType -> [(Name,Version)] -> [FilePath] -> [String] -> 
+    String -> r (Auxiliary r)
   sampleInput :: ChunkDB -> DataDesc -> [Expr] -> r (Auxiliary r)
 
   optimizeDox :: r (AuxHelper r)

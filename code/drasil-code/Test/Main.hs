@@ -1,10 +1,10 @@
 module Test.Main (main) where
 
 import GOOL.Drasil (Label, OOProg, ProgramSym(..), unCI, unJC, unPC, unCSC, 
-  unCPPC, unSC, FileData(..), ModData(..), ProgData(..), initialState)
+  unCPPC, FileData(..), ModData(..), ProgData(..), initialState)
 
 import Language.Drasil.Code (PackageSym(..), AuxiliarySym(..), AuxData(..), 
-  PackData(..), unPP, unJP, unCSP, unCPPP, unSP, ImplementationType(..))
+  PackData(..), unPP, unJP, unCSP, unCPPP, ImplementationType(..))
 
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import Control.Monad.State (evalState, runState)
@@ -34,10 +34,6 @@ main = do
   createDirectoryIfMissing False "cpp"
   setCurrentDirectory "cpp"
   genCode (classes unCPPC unCPPP)
-  setCurrentDirectory workingDir
-  createDirectoryIfMissing False "swift"
-  setCurrentDirectory "swift"
-  genCode (classes unSC unSP)
   setCurrentDirectory workingDir
     
 genCode :: [PackData] -> IO()

@@ -781,7 +781,7 @@ swiftMain, swiftFoundation, swiftMath, swiftNil, swiftBool, swiftInt, swiftChar,
   swiftWriteTo, swiftSep, swiftUnwrap :: String
 swiftMain = "main"
 swiftFoundation = "Foundation"
-swiftMath = "Darwin"
+swiftMath = swiftFoundation
 swiftNil = "nil"
 swiftBool = "Bool"
 swiftInt = "Int"

@@ -2,7 +2,7 @@
     Tests various GOOL functions. It should run without errors.
     - Authors: Brooks MacLachlan
 */
-import Darwin
+import Foundation
 
 extension String: Error {}
 

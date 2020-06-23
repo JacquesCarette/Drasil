@@ -2448,12 +2448,12 @@ cppBoolType = typeFromData Boolean cppBool (text cppBool)
 
 cppInfileType :: (RenderSym r) => VSType r
 cppInfileType = do 
-  t <- typeFromData File cppInfile (text cppInfile)
+  t <- typeFromData InFile cppInfile (text cppInfile)
   addFStreamImport t
 
 cppOutfileType :: (RenderSym r) => VSType r
 cppOutfileType = do 
-  t <- typeFromData File cppOutfile (text cppOutfile)
+  t <- typeFromData OutFile cppOutfile (text cppOutfile)
   addFStreamImport t
 
 cppArrayType :: (RenderSym r) => VSType r -> VSType r

@@ -605,4 +605,5 @@ convType (Array t) = arrayType (convType t)
 convType (Object n) = obj n
 convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void
-convType File = error "convType: File ?"
+convType InFile = infile
+convType OutFile = outfile

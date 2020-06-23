@@ -711,12 +711,12 @@ jBoolType = typeFromData Boolean jBool (text jBool)
 
 jInfileType :: (RenderSym r) => VSType r
 jInfileType = do 
-  tpf <- typeFromData File jScanner jScanner'
+  tpf <- typeFromData InFile jScanner jScanner'
   modifyReturn (addLangImportVS $ utilImport jScanner) tpf
 
 jOutfileType :: (RenderSym r) => VSType r
 jOutfileType = do 
-  tpf <- typeFromData File jPrintWriter (text jPrintWriter)
+  tpf <- typeFromData OutFile jPrintWriter (text jPrintWriter)
   modifyReturn (addLangImportVS $ ioImport jPrintWriter) tpf
 
 jExtends, jImplements, jFinal, jScanner', jLambdaSep :: Doc
@@ -794,12 +794,12 @@ jArrayType = arrayType (obj jObject)
 
 jFileType :: (RenderSym r) => VSType r
 jFileType = do 
-  tpf <- typeFromData File jFile (text jFile)
+  tpf <- obj jFile
   modifyReturn (addLangImportVS $ ioImport jFile) tpf
 
 jFileWriterType :: (RenderSym r) => VSType r
 jFileWriterType = do 
-  tpf <- typeFromData File jFileWriter (text jFileWriter)
+  tpf <- obj jFileWriter
   modifyReturn (addLangImportVS $ ioImport jFileWriter) tpf
 
 jAsListFunc :: VSType JavaCode -> [SValue JavaCode] -> SValue JavaCode

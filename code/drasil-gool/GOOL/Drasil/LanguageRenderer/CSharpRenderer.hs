@@ -721,11 +721,11 @@ csUnaryMath = addSystemImport . unOpPrec . mathFunc
 
 csInfileType :: (RenderSym r) => VSType r
 csInfileType = join $ modifyReturn (addLangImportVS csIO) $ 
-  typeFromData File csReader (text csReader)
+  typeFromData InFile csReader (text csReader)
 
 csOutfileType :: (RenderSym r) => VSType r
 csOutfileType = join $ modifyReturn (addLangImportVS csIO) $ 
-  typeFromData File csWriter (text csWriter)
+  typeFromData OutFile csWriter (text csWriter)
 
 csLitList :: (RenderSym r) => (VSType r -> VSType r) -> VSType r -> [SValue r] 
   -> SValue r

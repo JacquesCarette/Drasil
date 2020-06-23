@@ -17,13 +17,14 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
-  funcAppNamedArgs, selfFuncApp, extFuncApp, InternalValueExp(..), 
-  objMethodCall, objMethodCallNamedArgs, FunctionSym(..), ($.), GetSet(..), 
-  List(..), InternalList(..), StatementSym(..), AssignStatement(..), (&=), 
-  DeclStatement(..), IOStatement(..), StringStatement(..), FuncAppStatement(..),
-  CommentStatement(..), ControlStatement(..), StatePattern(..), 
-  ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  funcAppNamedArgs, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), 
+  objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams, FunctionSym(..),
+  ($.), GetSet(..), List(..), InternalList(..), StatementSym(..), 
+  AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
+  StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
+  ControlStatement(..), StatePattern(..), ObserverPattern(..), 
+  StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderFile(..), 
   ImportSym(..), ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), 
@@ -193,7 +194,7 @@ instance TypeSym SwiftCode where
   char = swiftCharType
   string = CP.string'
   infile = swiftFileType 
-  outfile = swiftFileType
+  outfile = swiftFileHdlType
   listType = swiftListType
   arrayType = listType -- For now, treating arrays and lists the same, like we do for Python
   listInnerType = G.listInnerType
@@ -503,11 +504,9 @@ instance IOStatement SwiftCode where
   discardFileInput _ = unimplementedStmt "skip over a value from a file" -- FIXME, see above
 
   openFileR = CP.openFileR swiftOpenFile
-  openFileW = CP.openFileW (\f v _ -> swiftOpenFile f v)
-  openFileA _ _ = unimplementedStmt "open a file in append mode" -- FIXME, see above
-  closeFile _ = emptyStmt -- The way I've currently implemented files, they 
-                          -- don't need to be "closed", so this is 
-                          -- (correctly) just an empty stmt
+  openFileW = swiftOpenFileWA False
+  openFileA = swiftOpenFileWA True
+  closeFile = swiftCloseFile
 
   getFileInputLine _ _ = unimplementedStmt "read a line from a file" -- FIXME, see above
   discardFileLine _ = unimplementedStmt "skip over a line from a file" -- FIXME, see above
@@ -720,7 +719,12 @@ swiftCharType :: (RenderSym r) => VSType r
 swiftCharType = typeFromData Char swiftChar (text swiftChar)
 
 swiftFileType :: (RenderSym r) => VSType r
-swiftFileType = addFoundationImport $ typeFromData File swiftURL (text swiftURL)
+swiftFileType = addFoundationImport $ typeFromData InFile swiftURL 
+  (text swiftURL)
+
+swiftFileHdlType :: (RenderSym r) => VSType r
+swiftFileHdlType = addFoundationImport $ typeFromData OutFile swiftFileHdl 
+  (text swiftFileHdl)
 
 swiftListType :: (RenderSym r) => VSType r -> VSType r
 swiftListType t' = do
@@ -741,14 +745,15 @@ swiftFuncType ps r = do
 swiftVoidType :: (RenderSym r) => VSType r
 swiftVoidType = typeFromData Void swiftVoid (text swiftVoid)
 
-swiftPi, swiftListSize, swiftFirst, swiftDesc, swiftVar, swiftConst, swiftDo,
-  swiftFunc, swiftCtorName, swiftExtension, swiftError, swiftDocDir, 
+swiftPi, swiftListSize, swiftFirst, swiftDesc, swiftUTF8, swiftVar, swiftConst, 
+  swiftDo, swiftFunc, swiftCtorName, swiftExtension, swiftError, swiftDocDir, 
   swiftUserMask, swiftNamedArgSep, swiftTypeSpec, swiftConforms, swiftNoLabel, 
   swiftRetType', swiftUnwrap' :: Doc
 swiftPi = text $ CP.doubleRender `access` piLabel
 swiftListSize = text "count"
 swiftFirst = text "first"
 swiftDesc = text "description"
+swiftUTF8 = text "utf8"
 swiftVar = text "var"
 swiftConst = text "let"
 swiftDo = text "do"
@@ -766,12 +771,13 @@ swiftRetType' = text swiftRetType
 swiftUnwrap' = text swiftUnwrap
 
 swiftMain, swiftFoundation, swiftMath, swiftNil, swiftBool, swiftInt, swiftChar,
-  swiftURL, swiftRetType, swiftVoid, swiftCommLine, swiftSearchDir, 
-  swiftPathMask, swiftArgs, swiftWrite, swiftIndex, swiftStride, swiftMap, 
-  swiftListAdd, swiftListAppend, swiftReadLine, swiftAppendPath, swiftUrls, 
-  swiftSplit, swiftSubstring, swiftEncoding, swiftUTF8, swiftOf, swiftFrom, 
-  swiftTo, swiftBy, swiftAt, swiftTerm, swiftAtomic, swiftEnc, swiftFor, 
-  swiftIn, swiftContentsOf, swiftSep, swiftUnwrap :: String
+  swiftURL, swiftFileHdl, swiftRetType, swiftVoid, swiftCommLine, 
+  swiftSearchDir, swiftPathMask, swiftArgs, swiftWrite, swiftIndex, 
+  swiftStride, swiftMap, swiftListAdd, swiftListAppend, swiftReadLine, 
+  swiftSeekEnd, swiftClose, swiftAppendPath, swiftUrls, swiftSplit, 
+  swiftSubstring, swiftData, swiftEncoding, swiftOf, swiftFrom, swiftTo, 
+  swiftBy, swiftAt, swiftTerm, swiftFor, swiftIn, swiftContentsOf, 
+  swiftWriteTo, swiftSep, swiftUnwrap :: String
 swiftMain = "main"
 swiftFoundation = "Foundation"
 swiftMath = "Darwin"
@@ -780,6 +786,7 @@ swiftBool = "Bool"
 swiftInt = "Int"
 swiftChar = "Character"
 swiftURL = "URL"
+swiftFileHdl = "FileHandle"
 swiftRetType = "->"
 swiftVoid = "Void"
 swiftCommLine = "CommandLine"
@@ -793,23 +800,24 @@ swiftMap = "map"
 swiftListAdd = "insert"
 swiftListAppend = "append"
 swiftReadLine = "readLine"
+swiftSeekEnd = "seekToEnd"
+swiftClose = "close"
 swiftAppendPath = "appendingPathComponent"
 swiftUrls = "FileManager" `access` "default" `access` "urls"
 swiftSplit = "split"
 swiftSubstring = "Substring"
+swiftData = "Data"
 swiftEncoding = "Encoding"
-swiftUTF8 = "utf8"
 swiftOf = "of"
 swiftFrom = "from"
 swiftTo = "to"
 swiftBy = "by"
 swiftAt = "at"
 swiftTerm = "terminator"
-swiftAtomic = "atomically"
-swiftEnc = "encoding"
 swiftFor = "for"
 swiftIn = "in"
 swiftContentsOf = "contentsOf"
+swiftWriteTo = "forWritingTo"
 swiftSep = "separator"
 swiftUnwrap = "!"
 
@@ -861,12 +869,10 @@ swiftListAddFunc i v = let atArg = var swiftAt int
     [v] [(atArg, i)]
 
 swiftWriteFunc :: (RenderSym r) => SValue r -> SValue r -> SValue r
-swiftWriteFunc v f = let toArg = var swiftTo outfile
-                         atomArg = var swiftAtomic bool
-                         encArg = var swiftEnc (obj swiftEncoding) 
-  in swiftTryVal $ objMethodCallNamedArgs void v swiftWrite [(toArg, f), 
-    (atomArg, litTrue), (encArg, mkStateVal (obj swiftEncoding) 
-      (text $ CP.stringRender' `access` swiftEncoding `access` swiftUTF8))]
+swiftWriteFunc v f = let contentsArg = var swiftContentsOf (obj swiftData)
+  in swiftTryVal $ objMethodCallNamedArgs void f swiftWrite 
+    [(contentsArg, newObj (obj swiftData) [v $. funcFromData (R.func swiftUTF8) 
+    (obj swiftEncoding)])]
 
 swiftReadLineFunc :: (RenderSym r) => SValue r
 swiftReadLineFunc = swiftUnwrapVal $ funcApp swiftReadLine string []
@@ -905,7 +911,7 @@ swiftPrint newLn (Just f) _ v' = do
         else emptyStmt
   tryCatch (bodyStatements
     [valStmt $ swiftWriteFunc (valToPrint $ getType $ valueType v) f, prNewLn]) 
-    (oneLiner $ print (litString "Error printing to file."))
+    (oneLiner $ printStrLn "Error printing to file.")
 
 -- swiftPrint can handle lists, so don't use G.print for lists.
 swiftOut :: (RenderSym r) => Bool -> Maybe (SValue r) -> SValue r -> SValue r 
@@ -931,6 +937,33 @@ swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
   in objMethodCall t (swiftUnwrapVal $ 
     funcAppNamedArgs swiftUrls (listType t) [(forArg, dirVal), (inArg, maskVal)]
     $. funcFromData (R.func swiftFirst) t) swiftAppendPath [n]
+
+swiftOpenFileHdl :: (RenderSym r) => SValue r -> VSType r -> SValue r
+swiftOpenFileHdl n t = let forWritingArg = var swiftWriteTo swiftFileType
+  in swiftTryVal $ funcAppNamedArgs swiftFileHdl outfile 
+    [(forWritingArg, swiftOpenFile n t)]
+
+swiftOpenFileWA :: (RenderSym r) => Bool -> SVariable r -> SValue r -> 
+  MSStatement r
+swiftOpenFileWA app f' n' = tryCatch
+    (bodyStatements [CP.openFileW (\f n _ -> swiftOpenFileHdl f n) f' n',
+      if app 
+        then valStmt $ swiftTryVal $ objMethodCallNoParams void (valueOf f') 
+          swiftSeekEnd 
+        else emptyStmt])
+    (oneLiner $ printStrLn "Error opening file")
+
+swiftCloseFile :: (RenderSym r) => SValue r -> MSStatement r
+swiftCloseFile f' = do
+  f <- zoom lensMStoVS f'
+  let swClose InFile = emptyStmt -- How I've currently implemented file-reading,
+                                 -- files don't need to be "closed", so this is 
+                                 -- (correctly) just an empty stmt
+      swClose OutFile = tryCatch (oneLiner $ valStmt $ swiftTryVal $
+          objMethodCallNoParams void (return f) swiftClose)
+        (oneLiner $ printStrLn "Error closing file")
+      swClose _ = error "closeFile called on non-file-typed value"
+  swClose (getType $ valueType f)
 
 swiftReadFile :: (RenderSym r) => SValue r -> SVariable r -> MSStatement r
 swiftReadFile f v = tryCatch 

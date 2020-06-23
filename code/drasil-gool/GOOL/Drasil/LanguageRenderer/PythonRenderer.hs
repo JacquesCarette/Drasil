@@ -182,8 +182,8 @@ instance TypeSym PythonCode where
   double = typeFromData Double pyDouble (text pyDouble)
   char = typeFromData Char "" empty
   string = pyStringType
-  infile = typeFromData File "" empty
-  outfile = typeFromData File "" empty
+  infile = typeFromData InFile "" empty
+  outfile = typeFromData OutFile "" empty
   listType t' = t' >>=(\t -> typeFromData (List (getType t)) "" empty)
   arrayType = listType
   listInnerType = G.listInnerType

@@ -12,14 +12,14 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
   AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, sampleInput, makefile, noRunIfLib)
+  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, 
   PackData(..), packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, cppCompiler, nativeBinary, executable, sharedLibrary)
 import Language.Drasil.Code.Imperative.Doxygen.Import (no)
 
-import GOOL.Drasil (onCodeList)
+import GOOL.Drasil (onCodeList, cppName, cppVersion)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -45,6 +45,7 @@ instance AuxiliarySym CppProject where
   type Auxiliary CppProject = AuxData
   type AuxHelper CppProject = Doc
   doxConfig = G.doxConfig optimizeDox
+  readMe imp libs n = G.readMe cppName cppVersion Nothing imp libs n
   sampleInput = G.sampleInput
 
   optimizeDox = return no

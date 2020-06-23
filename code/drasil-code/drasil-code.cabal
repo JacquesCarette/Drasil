@@ -26,6 +26,7 @@ library
     , Language.Drasil.Code.Imperative.Doxygen.Import
     , Language.Drasil.Code.Imperative.ReadInput
     , Language.Drasil.Code.Imperative.WriteInput
+    , Language.Drasil.Code.Imperative.WriteReadMe
     , Language.Drasil.Code.Imperative.GOOL.Data
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer
@@ -102,6 +103,7 @@ executable codegenTest
     , Language.Drasil.Code.Imperative.Doxygen.Import
     , Language.Drasil.Code.Imperative.ReadInput
     , Language.Drasil.Code.Imperative.WriteInput
+    , Language.Drasil.Code.Imperative.WriteReadMe
     , Language.Drasil.Code.Imperative.GOOL.Data
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer

@@ -1,14 +1,14 @@
 module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
-  genModuleWithImports, genModule, genDoxConfig, primaryClass, auxClass, fApp, 
-  ctorCall, fAppInOut
+  genModuleWithImports, genModule, genDoxConfig, genReadMe, 
+  primaryClass, auxClass, fApp, ctorCall, fAppInOut
 ) where
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
-import Language.Drasil.Choices (Comments(..))
+import Language.Drasil.Choices (Comments(..), ImplementationType, hasReadMe)
 import Language.Drasil.CodeSpec (CodeSpec(..))
-import Language.Drasil.Mod (Name, Description, Import)
+import Language.Drasil.Mod (Name, Version, Description, Import)
   
 import GOOL.Drasil (SFile, VSType, SVariable, SValue, MSStatement, SMethod, 
   CSStateVar, SClass, NamedArgs, OOProg, FileSym(..), ValueExpression(..), 
@@ -55,6 +55,13 @@ genDoxConfig s = do
       cms = commented g
       v = doxOutput g
   return [doxConfig n s v | not (null cms)]
+
+genReadMe :: (AuxiliarySym r) => ImplementationType -> [(Name,Version)] ->
+  GenState [r (Auxiliary r)]
+genReadMe imp libnms = do 
+  g <- get
+  let n = pName $ codeSpec g
+  return [readMe imp libnms n | hasReadMe (auxiliaries g)]
 
 data ClassType = Primary | Auxiliary
 

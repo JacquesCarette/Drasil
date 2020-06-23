@@ -2,7 +2,7 @@
 -- | Defines an AST for defining Modules
 module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..), 
   FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name, 
-  Description, Import, ($:=), pubStateVar, privStateVar, classDef, 
+  Version, Description, Import, ($:=), pubStateVar, privStateVar, classDef, 
   classImplements, ctorDef, ffor, fDecDef, fname, fstdecl, funcData, funcDef, 
   funcDefParams, packmod, packmodRequires
 ) where
@@ -22,6 +22,8 @@ import Data.List ((\\), nub)
 type Name = String
 type Description = String
 type Import = String
+type Version = String
+
 
 data Mod = Mod Name Description [Import] [Class] [Func]
 

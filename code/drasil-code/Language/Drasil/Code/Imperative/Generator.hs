@@ -8,7 +8,7 @@ import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
-  genDoxConfig, genModuleWithImports)
+  genDoxConfig, genReadMe, genModuleWithImports)
 import Language.Drasil.Code.Imperative.GenODE (chooseODELib)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs,
@@ -64,6 +64,7 @@ generator l dt sd chs spec = DrasilState {
   auxiliaries = auxFiles chs,
   sampleData = sd,
   modules = modules',
+  extLibNames = nms,
   extLibMap = fromList elmap,
   libPaths = maybeToList pth,
   eMap = mem,
@@ -80,9 +81,10 @@ generator l dt sd chs spec = DrasilState {
   where (mcm, concLog) = runState (chooseConcept chs) empty
         showDate Show = dt
         showDate Hide = ""
-        ((pth, elmap), libLog) = runState (chooseODELib l (odeLib chs) 
+        ((pth, elmap, lname), libLog) = runState (chooseODELib l (odeLib chs) 
           (odes chs)) empty
         els = map snd elmap
+        nms = [lname]
         mem = modExportMap spec chs modules' 
         lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap spec chs modules'
@@ -124,7 +126,8 @@ genPackage unRepr = do
       m = makefile (libPaths g) (implType g) (commented g) s pd
   i <- genSampleInput
   d <- genDoxConfig s
-  return $ package pd (m:i++d)
+  rm <- genReadMe (implType g) (extLibNames g)
+  return $ package pd (m:i++rm++d)
 
 -- Generates an SCS program based on the problem and the user's design choices.
 genProgram :: (OOProg r) => GenState (GSProgram r)

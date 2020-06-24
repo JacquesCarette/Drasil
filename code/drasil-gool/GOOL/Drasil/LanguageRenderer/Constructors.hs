@@ -164,7 +164,7 @@ binExprNumDbl' b' v1' v2' = do
   e <- binExpr' b' v1' v2'
   binExprCastFloat t1 t2 e
 
--- Only used by binExprCastFloat
+-- Only used by binExprNumDbl'
 binExprCastFloat :: (RenderSym r) => r (Type r) -> r (Type r) -> r (Value r) -> 
   SValue r
 binExprCastFloat t1 t2 = castType (getType t1) (getType t2) . toState

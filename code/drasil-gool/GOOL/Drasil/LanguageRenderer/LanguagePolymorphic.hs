@@ -2,17 +2,17 @@
 
 -- | Implementations defined here are valid for any language renderer.
 module GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (fileFromData,
-  multiBody, block, multiBlock, int, listInnerType, obj, negateOp, csc, sec, 
+  multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
-  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, 
+  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
   classVarCheckStatic, arrayElem, litChar, litDouble, litInt, litString, 
   valueOf, arg, argsList, call, funcAppMixedArgs, selfFuncAppMixedArgs, 
   newObjMixedArgs, lambda, objAccess, objMethodCall, func, get, set, listAdd, 
   listAppend, listAccess, listSet, getFunc, setFunc, 
   listAppendFunc, stmt, loopStmt, emptyStmt, assign, subAssign, increment, 
   objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, ifCond, 
-  tryCatch, construct, param, method, getMethod, setMethod, constructor, 
-  function, docFuncRepr, docFunc, buildClass, extraClass, implementingClass, 
+  tryCatch, construct, param, method, getMethod, setMethod, initStmts, 
+  function, docFuncRepr, docFunc, buildClass, implementingClass, 
   docClass, commentedClass, modFromData, fileDoc, docMod
 ) where
 
@@ -45,10 +45,10 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(commentedMod),
   RenderMethod(intMethod, commentedFunc), RenderClass(inherit, implements), 
   RenderMod(updateModuleDoc), BlockCommentSym(..))
 import qualified GOOL.Drasil.RendererClasses as S (RenderFile(fileFromData), 
-  RenderBody(multiBody), RenderValue(call), InternalGetSet(getFunc, setFunc),
-  InternalListFunc(listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
-  RenderStatement(stmt), InternalIOStmt(..), MethodTypeSym(construct), 
-  RenderMethod(intFunc), RenderClass(intClass, commentedClass))
+  RenderValue(call), InternalGetSet(getFunc, setFunc),InternalListFunc
+  (listAddFunc, listAppendFunc, listAccessFunc, listSetFunc),
+  RenderStatement(stmt), InternalIOStmt(..), RenderMethod(intFunc), 
+  RenderClass(intClass, commentedClass))
 import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..), BlockElim(..),
   InternalVarElim(variable), ValueElim(value), FunctionElim(function), 
   StatementElim(statement), ClassElim(..), ModuleElim(..), BlockCommentElim(..))
@@ -57,17 +57,17 @@ import GOOL.Drasil.Helpers (doubleQuotedText, vibcat, emptyIfEmpty, toCode,
   toState, onStateValue, on2StateValues, onStateList, getInnerType, getNestDegree,
   on2StateWrapped)
 import GOOL.Drasil.LanguageRenderer (dot, ifLabel, elseLabel, access, addExt, 
-  functionDox, classDox, moduleDox, getterName, setterName, valueList, 
-  namedArgList)
+  FuncDocRenderer, ClassDocRenderer, ModuleDocRenderer, getterName, setterName, 
+  valueList, namedArgList)
 import qualified GOOL.Drasil.LanguageRenderer as R (file, block, assign, 
-  addAssign, subAssign, return', comment, getTerm, var, arg, func, objAccess, 
-  commentedItem)
+  addAssign, subAssign, return', comment, getTerm, var, objVar, arg, func, 
+  objAccess, commentedItem)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
-  mkStateVal, mkVal, mkStateVar, mkStaticVar, VSOp, unOpPrec, compEqualPrec, 
-  compPrec, addPrec, multPrec)
+  mkStateVal, mkVal, mkStateVar, mkVar, mkStaticVar, VSOp, unOpPrec, 
+  compEqualPrec, compPrec, addPrec, multPrec)
 import GOOL.Drasil.State (FS, CS, MS, lensFStoGS, lensMStoVS, lensCStoFS, 
   currMain, currFileType, modifyReturnFunc, addFile, setMainMod, setModuleName, 
-  getModuleName, getClassName, addParameter, getParameters)
+  getModuleName, addParameter, getParameters)
 
 import Prelude hiding (print,sin,cos,tan,(<>))
 import Data.Maybe (fromMaybe, maybeToList)
@@ -75,7 +75,7 @@ import Control.Monad.State (modify, join)
 import Control.Lens ((^.), over)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), parens,
-  brackets, quotes, integer, vcat, comma, isEmpty)
+  brackets, integer, vcat, comma, isEmpty)
 import qualified Text.PrettyPrint.HughesPJ as D (char, double)
 
 -- Bodies --
@@ -92,12 +92,6 @@ multiBlock :: (RenderSym r, Monad r) => [MSBlock r] -> MS (r Doc)
 multiBlock bs = onStateList (toCode . vibcat) $ map (onStateValue RC.block) bs
 
 -- Types --
-
-intRender :: String
-intRender = "int"
-
-int :: (RenderSym r) => VSType r
-int = typeFromData Integer intRender (text intRender)
 
 listInnerType :: (RenderSym r) => VSType r -> VSType r
 listInnerType t = t >>= (convType . getInnerType . getType)
@@ -175,6 +169,16 @@ classVarCheckStatic v = classVarCS (variableBind v)
           "classVar can only be used to access static variables"
         classVarCS Static = v
 
+objVar :: (RenderSym r) => SVariable r -> SVariable r -> SVariable r
+objVar o' v' = do
+  o <- o'
+  v <- v'
+  let objVar' Static = error 
+        "Cannot access static variables through an object, use classVar instead"
+      objVar' Dynamic = mkVar (variableName o `access` variableName v) 
+        (variableType v) (R.objVar (RC.variable o) (RC.variable v))
+  objVar' (variableBind v)
+
 arrayElem :: (RenderSym r) => SValue r -> SVariable r -> SVariable r
 arrayElem i' v' = do
   i <- i'
@@ -186,8 +190,8 @@ arrayElem i' v' = do
 
 -- Values --
 
-litChar :: (RenderSym r) => Char -> SValue r
-litChar c = mkStateVal S.char (quotes $ if c == '\n' then text "\\n" else D.char c)
+litChar :: (RenderSym r) => (Doc -> Doc) -> Char -> SValue r
+litChar f c = mkStateVal S.char (f $ if c == '\n' then text "\\n" else D.char c)
 
 litDouble :: (RenderSym r) => Double -> SValue r
 litDouble d = mkStateVal S.double (D.double d)
@@ -384,16 +388,20 @@ throw f t l = do
 
 -- ControlStatements --
 
-ifCond :: (RenderSym r) => Doc -> Doc -> Doc -> [(SValue r, MSBody r)] -> 
-  MSBody r -> MSStatement r
-ifCond _ _ _ [] _ = error "if condition created with no cases"
-ifCond ifStart elif bEnd (c:cs) eBody =
+-- 1st parameter is a Doc function to use on the render of each condition (i.e. parens)
+-- 2nd parameter is the syntax for starting a block in an if-condition
+-- 3rd parameter is the keyword for an else-if statement
+-- 4th parameter is the syntax for ending a block in an if-condition
+ifCond :: (RenderSym r) => (Doc -> Doc) -> Doc -> Doc -> Doc -> 
+  [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+ifCond _ _ _ _ [] _ = error "if condition created with no cases"
+ifCond f ifStart elif bEnd (c:cs) eBody =
     let ifSect (v, b) = on2StateValues (\val bd -> vcat [
-          ifLabel <+> parens (RC.value val) <+> ifStart,
+          ifLabel <+> f (RC.value val) <+> ifStart,
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseIfSect (v, b) = on2StateValues (\val bd -> vcat [
-          elif <+> parens (RC.value val) <+> ifStart,
+          elif <+> f (RC.value val) <+> ifStart,
           indent $ RC.body bd,
           bEnd]) (zoom lensMStoVS v) b
         elseSect = onStateValue (\bd -> emptyIfEmpty (RC.body bd) $ vcat [
@@ -431,24 +439,21 @@ setMethod v = zoom lensMStoVS v >>= (\vr -> S.method (setterName $ variableName
   vr) public dynamic S.void [S.param v] setBody)
   where setBody = oneLiner $ S.objVarSelf v &= S.valueOf v
 
-constructor :: (RenderSym r) => Label -> [MSParameter r] -> Initializers r -> 
-  MSBody r -> SMethod r
-constructor fName ps is b = getClassName >>= (\c -> intMethod False fName 
-  public dynamic (S.construct c) ps (S.multiBody [ib, b]))
-  where ib = bodyStatements (map (\(vr, vl) -> S.objVarSelf vr &= vl) is)
+initStmts :: (RenderSym r) => Initializers r -> MSBody r
+initStmts = bodyStatements . map (\(vr, vl) -> S.objVarSelf vr &= vl)
 
 function :: (RenderSym r) => Label -> r (Scope r) -> VSType r -> 
   [MSParameter r] -> MSBody r -> SMethod r
 function n s t = S.intFunc False n s static (mType t)
   
-docFuncRepr :: (RenderSym r) => String -> [String] -> [String] -> SMethod r -> 
-  SMethod r
-docFuncRepr desc pComms rComms = commentedFunc (docComment $ onStateValue 
-  (\ps -> functionDox desc (zip ps pComms) rComms) getParameters)
+docFuncRepr :: (RenderSym r) => FuncDocRenderer -> String -> [String] -> 
+  [String] -> SMethod r -> SMethod r
+docFuncRepr f desc pComms rComms = commentedFunc (docComment $ onStateValue 
+  (\ps -> f desc (zip ps pComms) rComms) getParameters)
 
-docFunc :: (RenderSym r) => String -> [String] -> Maybe String -> SMethod r -> 
-  SMethod r
-docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
+docFunc :: (RenderSym r) => FuncDocRenderer -> String -> [String] -> 
+  Maybe String -> SMethod r -> SMethod r
+docFunc f desc pComms rComm = docFuncRepr f desc pComms (maybeToList rComm)
 
 -- Classes --
 
@@ -458,16 +463,12 @@ buildClass p stVars methods = do
   n <- zoom lensCStoFS getModuleName
   S.intClass n public (inherit p) stVars methods
 
-extraClass :: (RenderSym r) =>  Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
-  SClass r
-extraClass n = S.intClass n public . inherit
-
 implementingClass :: (RenderSym r) => Label -> [Label] -> [CSStateVar r] -> 
   [SMethod r] -> SClass r
 implementingClass n is = S.intClass n public (implements is)
 
-docClass :: (RenderSym r) => String -> SClass r -> SClass r
-docClass d = S.commentedClass (docComment $ toState $ classDox d)
+docClass :: (RenderSym r) => ClassDocRenderer -> String -> SClass r -> SClass r
+docClass cdr d = S.commentedClass (docComment $ toState $ cdr d)
 
 commentedClass :: (RenderSym r, Monad r) => CS (r (BlockComment r)) -> SClass r 
   -> CS (r Doc)
@@ -491,9 +492,9 @@ fileDoc ext topb botb mdl = do
         (R.file (RC.block $ topb m) d (RC.block botb))) m
   S.fileFromData fp (toState updm)
 
-docMod :: (RenderSym r) => String -> String -> [String] -> String -> SFile r -> 
-  SFile r
-docMod e d a dt fl = commentedMod fl (docComment $ moduleDox d a dt . addExt e 
+docMod :: (RenderSym r) => ModuleDocRenderer -> String -> String -> [String] -> 
+  String -> SFile r -> SFile r
+docMod mdr e d a dt fl = commentedMod fl (docComment $ mdr d a dt . addExt e 
   <$> getModuleName)
 
 fileFromData :: (RenderSym r) => (FilePath -> r (Module r) -> r (File r)) 

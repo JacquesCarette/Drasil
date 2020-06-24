@@ -15,7 +15,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable,
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
   PermanenceSym(..), TypeElim(getType, getTypeString), 
   VariableElim(variableType), ValueSym(Value, valueType), extNewObj, ($.), 
-  ControlStatement(break), ScopeSym(..))
+  ScopeSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(bool, float, obj),
   ValueExpression(funcAppMixedArgs, newObjMixedArgs), 
   DeclStatement(varDec, varDecDef))
@@ -27,11 +27,11 @@ import qualified GOOL.Drasil.RendererClasses as S (
 import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..), 
   InternalTypeElim(..), InternalVarElim(variable), ValueElim(value), 
   StatementElim(statement))
-import GOOL.Drasil.AST (Binding(..))
+import GOOL.Drasil.AST (Binding(..), Terminator(..))
 import GOOL.Drasil.Helpers (angles, toState, onStateValue)
 import GOOL.Drasil.LanguageRenderer (forLabel, whileLabel, containing)
-import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, decrement, 
-  self', self)
+import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, 
+  decrement, this', this)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import GOOL.Drasil.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName)
@@ -88,7 +88,7 @@ orOp = orPrec "||"
 self :: (RenderSym r) => SVariable r
 self = do 
   l <- zoom lensVStoMS getClassName 
-  mkStateVar R.self (S.obj l) R.self'
+  mkStateVar R.this (S.obj l) R.this'
 
 -- Values --
 
@@ -147,11 +147,14 @@ varDec s d pdoc v' = do
         ptrdoc (List _) = pdoc
         ptrdoc _ = empty
 
-varDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-varDecDef vr vl' = do 
+varDecDef :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
+  MSStatement r
+varDecDef t vr vl' = do 
   vd <- S.varDec vr
   vl <- zoom lensMStoVS vl'
-  mkStmt (RC.statement vd <+> equals <+> RC.value vl)
+  let stmtCtor Empty = mkStmtNoEnd
+      stmtCtor Semi = mkStmt
+  stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 listDec :: (RenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> 
   MSStatement r
@@ -165,15 +168,17 @@ extObjDecNew :: (RenderSym r) => Library -> SVariable r -> [SValue r] ->
 extObjDecNew l v vs = S.varDecDef v (extNewObj l (onStateValue variableType v)
   vs)
 
-switch :: (RenderSym r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> 
-  MSStatement r
-switch v cs bod = do
-  brk <- S.stmt break
+-- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)
+-- 2nd parameter is a statement to end every case with
+switch :: (RenderSym r) => (Doc -> Doc) -> MSStatement r -> SValue r -> 
+  [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+switch f st v cs bod = do
+  s <- S.stmt st
   val <- zoom lensMStoVS v
   vals <- mapM (zoom lensMStoVS . fst) cs
   bods <- mapM snd cs
   dflt <- bod
-  mkStmt $ R.switch brk val dflt (zip vals bods)
+  mkStmt $ R.switch f s val dflt (zip vals bods)
 
 for :: (RenderSym r) => Doc -> Doc -> MSStatement r -> SValue r -> 
   MSStatement r -> MSBody r -> MSStatement r
@@ -188,12 +193,15 @@ for bStart bEnd sInit vGuard sUpdate b = do
     indent $ RC.body bod,
     bEnd]
   
-while :: (RenderSym r) => Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
-while bStart bEnd v' b'= do 
+-- Doc function parameter is applied to the render of the while-condition
+while :: (RenderSym r) => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MSBody r -> 
+  MSStatement r
+while f bStart bEnd v' b'= do 
   v <- zoom lensMStoVS v'
   b <- b'
-  mkStmtNoEnd (vcat [ whileLabel <+> parens (RC.value v) 
-    <+> bStart, indent $ RC.body b, bEnd]) 
+  mkStmtNoEnd (vcat [whileLabel <+> f (RC.value v) <+> bStart, 
+    indent $ RC.body b, 
+    bEnd]) 
 
 -- Methods --
 

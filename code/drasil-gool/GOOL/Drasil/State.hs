@@ -4,9 +4,9 @@ module GOOL.Drasil.State (
   -- Types
   GS, GOOLState(..), FS, CS, MS, VS, 
   -- Lenses
-  lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS, lensCStoMS, 
-  lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, lensVStoMS, 
-  lensCStoFS, headers, sources, mainMod, currMain, currFileType, currParameters,
+  lensFStoGS, lensGStoFS, lensMStoGS, lensFStoCS, lensFStoMS, lensFStoVS, 
+  lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, 
+  lensVStoMS, lensCStoFS, headers, sources, mainMod, currMain, currFileType, currParameters,
   -- Initial states
   initialState, initialFS, 
   -- State helpers
@@ -25,8 +25,9 @@ module GOOL.Drasil.State (
   updateMethodExcMap, getMethodExcMap, updateCallMap, callMapTransClosure, 
   updateMEMWithCalls, addParameter, getParameters, setOutputsDeclared, 
   isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
-  setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc,
-  addIter, getIter, resetIter
+  setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc, 
+  setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined, addIter, 
+  getIter, resetIter
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
@@ -50,9 +51,13 @@ data GOOLState = GS {
   _classMap :: Map String ClassName, -- Used to determine whether an import is 
                                      -- needed when using extClassVar and obj
 
-  -- Only used for Java, to generate correct "throws Exception" declarations
+  -- Only used in Java and Swift, to generate correct "throws Exception" declarations
   _methodExceptionMap :: Map QualifiedName [ExceptionType], -- Method to exceptions thrown
-  _callMap :: Map QualifiedName [QualifiedName] -- Method to other methods it calls
+  _callMap :: Map QualifiedName [QualifiedName], -- Method to other methods it calls
+
+  -- Only used for Swift, to add codes so Strings can be used as Errors
+  _throwUsed :: Bool,
+  _errorDefined :: Bool
 } 
 makeLenses ''GOOLState
 
@@ -70,8 +75,8 @@ data FileState = FS {
   _libImports :: [String],
   _moduleImports :: [String],
   
-  -- Only used for Python
-  _mainDoc :: Doc, -- To print Python's "main" last
+  -- Only used for Python and Swift
+  _mainDoc :: Doc, -- To print Python/Swift's "main" last
 
   -- C++ only
   _headerLangImports :: [String],
@@ -136,6 +141,11 @@ lensGStoFS = lens (\gs -> set goolState gs initialFS) (const (^. goolState))
 lensFStoGS :: Lens' FileState GOOLState
 lensFStoGS = goolState
 
+-- GS - MS --
+
+lensMStoGS :: Lens' MethodState GOOLState
+lensMStoGS = lensMStoFS . lensFStoGS
+
 -- FS - CS --
 
 lensFStoCS :: Lens' FileState ClassState
@@ -194,7 +204,10 @@ initialState = GS {
   _classMap = Map.empty,
 
   _methodExceptionMap = Map.empty,
-  _callMap = Map.empty
+  _callMap = Map.empty,
+
+  _throwUsed = False,
+  _errorDefined = False
 }
 
 initialFS :: FileState
@@ -487,6 +500,18 @@ setCurrMainFunc = set currMainFunc
 
 getCurrMainFunc :: MS Bool
 getCurrMainFunc = gets (^. currMainFunc)
+
+setThrowUsed :: MethodState -> MethodState
+setThrowUsed = set (lensMStoGS . throwUsed) True
+
+getThrowUsed :: MS Bool
+getThrowUsed = gets (^. (lensMStoGS . throwUsed))
+
+setErrorDefined :: MethodState -> MethodState
+setErrorDefined = set (lensMStoGS . errorDefined) True
+
+getErrorDefined :: MS Bool
+getErrorDefined = gets (^. (lensMStoGS . errorDefined))
 
 addIter :: String -> MethodState -> MethodState
 addIter st = over iterators ([st]++)

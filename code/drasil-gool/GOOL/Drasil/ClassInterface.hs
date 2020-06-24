@@ -13,11 +13,11 @@ module GOOL.Drasil.ClassInterface (
   NumericExpression(..), BooleanExpression(..), Comparison(..), 
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
   libFuncApp, newObj, extNewObj, libNewObj, exists, InternalValueExp(..), 
-  objMethodCall, objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
-  ($.), selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
-  listIndexExists, at, StatementSym(..), AssignStatement(..), 
-  (&=), assignToListIndex, DeclStatement(..), objDecNewNoParams, 
-  extObjDecNewNoParams, IOStatement(..), StringStatement(..), 
+  objMethodCall, objMethodCallNamedArgs, objMethodCallMixedArgs, 
+  objMethodCallNoParams, FunctionSym(..), ($.), selfAccess, GetSet(..), 
+  List(..), InternalList(..), listSlice, listIndexExists, at, StatementSym(..), 
+  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..), 
+  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
   StatePattern(..), initState, changeState, ObserverPattern(..), 
   observerListName, initObserverList, addObserver, StrategyPattern(..), 
@@ -38,6 +38,9 @@ type Library = String
 type GSProgram a = GS (a (Program a))
 
 -- In relation to GOOL, the type variable r can be considered as short for "representation"
+
+-- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
+-- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
 
 class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, 
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
@@ -283,6 +286,10 @@ class (FunctionSym r) => InternalValueExp r where
 objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label -> 
   [SValue r] -> SValue r
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
+
+objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+  -> NamedArgs r -> SValue r
+objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
 
 objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
   -> [SValue r] -> NamedArgs r -> SValue r
@@ -598,4 +605,5 @@ convType (Array t) = arrayType (convType t)
 convType (Object n) = obj n
 convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void
-convType File = error "convType: File ?"
+convType InFile = infile
+convType OutFile = outfile

@@ -12,7 +12,8 @@ data CodeType = Boolean
               | Double
               | Char
               | String
-              | File
+              | InFile
+              | OutFile
               | List CodeType
               | Array CodeType
               | Object ClassName

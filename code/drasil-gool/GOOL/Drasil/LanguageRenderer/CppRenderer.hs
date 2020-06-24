@@ -45,7 +45,8 @@ import GOOL.Drasil.LanguageRenderer (addExt, classDec, dot, blockCmtStart,
   returnLabel, elseIfLabel, tryLabel, catchLabel, throwLabel, array', constDec',
   listSep', argc, argv, constDec, mainFunc, containing, functionDox, valueList, 
   parameterList, appendToBody, surroundBody, getterName, setterName)
-import qualified GOOL.Drasil.LanguageRenderer as R (self', self, multiStmt, 
+import qualified GOOL.Drasil.LanguageRenderer as R (this', this, sqrt, fabs,
+  log10, log, exp, sin, cos, tan, asin, acos, atan, floor, ceil, pow, multiStmt,
   body, param, stateVar, constVar, cast, castObj, static, dynamic, break, 
   continue, private, public, blockCmt, docCmt, addComments, commentedMod, 
   commentedItem)
@@ -53,21 +54,22 @@ import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd,
   mkStateVal, mkVal, mkStateVar, mkVar, VSOp, mkOp, unOpPrec, powerPrec, 
   unExpr, unExpr', typeUnExpr, binExpr, binExpr', typeBinExpr)
 import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
-  multiBody, block, multiBlock, int, listInnerType, obj, negateOp, csc, sec, 
+  multiBody, block, multiBlock, listInnerType, obj, negateOp, csc, sec, 
   cot, equalOp, notEqualOp, greaterOp, greaterEqualOp, lessOp, lessEqualOp, 
-  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, arrayElem, 
-  litChar, litDouble, litInt, litString, valueOf, arg, argsList, objAccess, 
-  objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, newObjMixedArgs, 
-  lambda, func, get, set, listAdd, listAppend, listAccess, 
+  plusOp, minusOp, multOp, divideOp, moduloOp, var, staticVar, objVar,
+  arrayElem, litChar, litDouble, litInt, litString, valueOf, arg, argsList, 
+  objAccess, objMethodCall, funcAppMixedArgs, selfFuncAppMixedArgs, 
+  newObjMixedArgs, lambda, func, get, set, listAdd, listAppend, listAccess, 
   listSet, getFunc, setFunc, listAppendFunc, stmt, loopStmt, emptyStmt, assign, 
-  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, comment, throw, 
-  ifCond, tryCatch, construct, param, method, getMethod, setMethod, 
-  constructor, function, docFunc, buildClass, extraClass, 
-  implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, fileFromData)
+  subAssign, increment, objDecNew, print, closeFile, returnStmt, valStmt, 
+  comment, throw, ifCond, tryCatch, construct, param, method, getMethod, 
+  setMethod, function, buildClass, implementingClass, commentedClass, 
+  modFromData, fileDoc, fileFromData)
 import GOOL.Drasil.LanguageRenderer.LanguagePolymorphic (classVarCheckStatic)
-import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (objVar, 
-  funcType, listSetFunc, buildModule, litArray, call', listSizeFunc, 
-  listAccessFunc', string, constDecDef, docInOutFunc)
+import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
+  constructor, doxFunc, doxClass, doxMod, funcType, buildModule, litArray, 
+  call', listSizeFunc, listAccessFunc', string, constDecDef, docInOutFunc, 
+  listSetFunc, extraClass)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
@@ -105,7 +107,7 @@ import Data.Composition ((.:))
 import Data.List (sort)
 import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($$), hcat, brackets, 
-  braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty)
+  braces, parens, empty, equals, vcat, lbrace, rbrace, colon, isEmpty, quotes)
 
 cppHdrExt, cppSrcExt :: String
 cppHdrExt = "hpp"
@@ -702,6 +704,8 @@ instance (Pair p) => RenderMethod (p CppSrcCode CppHdrCode) where
   
   destructor = pair1List destructor destructor . map (zoom lensMStoCS)
   
+  mthdFromData s d = on2StateValues pair (mthdFromData s d) (mthdFromData s d)
+  
 instance (Pair p) => MethodElim (p CppSrcCode CppHdrCode) where
   method m = RC.method $ pfst m
 
@@ -976,7 +980,7 @@ instance FileSym CppSrcCode where
     modify (setFileType Source)
     G.fileDoc cppSrcExt top bottom m
 
-  docMod = G.docMod cppSrcExt
+  docMod = CP.doxMod cppSrcExt
 
 instance RenderFile CppSrcCode where
   top _ = toCode empty
@@ -1030,7 +1034,7 @@ instance BlockElim CppSrcCode where
 instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
   bool = cppBoolType
-  int = G.int
+  int = CP.int
   float = C.float
   double = C.double
   char = C.char
@@ -1126,11 +1130,11 @@ instance VariableSym CppSrcCode where
     cm <- getClassMap
     maybe id ((>>) . modify . addModuleImportVS) 
       (Map.lookup (getTypeString t) cm) $ classVar (return t) v
-  objVar = CP.objVar
+  objVar = G.objVar
   objVarSelf v' = do 
     v <- v' 
-    mkVar (R.self ++ ptrAccess ++ variableName v)
-      (variableType v) (R.self' <> ptrAccess' <> RC.variable v)
+    mkVar (R.this ++ ptrAccess ++ variableName v)
+      (variableType v) (R.this' <> ptrAccess' <> RC.variable v)
   arrayElem i = G.arrayElem (litInt i)
 
 instance VariableElim CppSrcCode where
@@ -1153,12 +1157,12 @@ instance ValueSym CppSrcCode where
 instance Literal CppSrcCode where
   litTrue = C.litTrue
   litFalse = C.litFalse
-  litChar = G.litChar
+  litChar = G.litChar quotes
   litDouble = G.litDouble
   litFloat = C.litFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = CP.litArray
+  litArray = CP.litArray braces
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppSrcCode where
@@ -1336,7 +1340,7 @@ instance AssignStatement CppSrcCode where
 
 instance DeclStatement CppSrcCode where
   varDec = C.varDec static dynamic empty
-  varDecDef = C.varDecDef 
+  varDecDef = C.varDecDef Semi 
   listDec n = C.listDec cppListDecDoc (litInt n)
   listDecDef = cppListDecDef cppListDecDefDoc
   arrayDec n vr = do
@@ -1424,8 +1428,8 @@ instance ControlStatement CppSrcCode where
 
   throw = G.throw cppThrowDoc Semi
 
-  ifCond = G.ifCond bodyStart elseIfLabel bodyEnd
-  switch = C.switch
+  ifCond = G.ifCond parens bodyStart elseIfLabel bodyEnd
+  switch = C.switch parens break
 
   ifExists _ ifBody _ = do 
     ifb <- ifBody 
@@ -1440,7 +1444,7 @@ instance ControlStatement CppSrcCode where
         iterI = var l (iterator t) 
     for (varDecDef iterI (iterBegin v)) (setIterVar iterI ?!= iterEnd v) 
       (iterI &++) b
-  while = C.while bodyStart bodyEnd
+  while = C.while parens bodyStart bodyEnd
 
   tryCatch = G.tryCatch cppTryCatch
 
@@ -1505,7 +1509,7 @@ instance MethodSym CppSrcCode where
               C.charRender)
             mkVar argv t (cppDeref <> text argv <> array')
 
-  docFunc = G.docFunc
+  docFunc = CP.doxFunc
 
   inOutMethod n s p = cppsInOut (method n s p)
 
@@ -1534,6 +1538,8 @@ instance RenderMethod CppSrcCode where
           (onStateList (onCodeList (vcat . map fst)) deleteStatements) $
           bodyStatements $ loopIndexDec : deleteStatements
     in getClassName >>= (\n -> pubMethod ('~':n) void [] dbody)
+    
+  mthdFromData s d = toState $ toCode $ mthd s d
   
 instance MethodElim CppSrcCode where
   method = mthdDoc . unCPPSC
@@ -1551,10 +1557,10 @@ instance StateVarElim CppSrcCode where
 instance ClassSym CppSrcCode where
   type Class CppSrcCode = Doc
   buildClass = G.buildClass
-  extraClass = G.extraClass
+  extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
-  docClass = G.docClass
+  docClass = CP.doxClass
 
 instance RenderClass CppSrcCode where
   intClass n _ _ vs fs = do
@@ -1585,7 +1591,7 @@ instance ModuleSym CppSrcCode where
       vcat (map (RC.import' . li) lis),
       vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
       vcat (map (usingNameSpace std . Just) us)]) 
-    (return empty) ms cs
+    (return empty) (return empty) ms cs
     where mi, li :: Label -> CppSrcCode (Import CppSrcCode)
           mi = modImport
           li = langImport
@@ -1631,7 +1637,7 @@ instance FileSym CppHdrCode where
     modify (setFileType Header) 
     G.fileDoc cppHdrExt top bottom m
   
-  docMod = G.docMod cppHdrExt
+  docMod = CP.doxMod cppHdrExt
 
 instance RenderFile CppHdrCode where
   top = onCodeValue cpphtop
@@ -1684,7 +1690,7 @@ instance BlockElim CppHdrCode where
 instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData
   bool = cppBoolType
-  int = G.int
+  int = CP.int
   float = C.float
   double = C.double
   char = C.char
@@ -1767,7 +1773,7 @@ instance VariableSym CppHdrCode where
   self = mkStateVar "" void empty
   classVar _ _ = mkStateVar "" void empty
   extClassVar _ _ = mkStateVar "" void empty
-  objVar = CP.objVar
+  objVar = G.objVar
   objVarSelf _ = mkStateVar "" void empty
   arrayElem _ _ = mkStateVar "" void empty
   
@@ -1791,12 +1797,12 @@ instance ValueSym CppHdrCode where
 instance Literal CppHdrCode where
   litTrue = C.litTrue
   litFalse = C.litFalse
-  litChar = G.litChar
+  litChar = G.litChar quotes
   litDouble = G.litDouble
   litFloat = C.litFloat
   litInt = G.litInt
   litString = G.litString
-  litArray = CP.litArray
+  litArray = CP.litArray braces
   litList _ _ = error $ "List literals not supported in " ++ cppName
 
 instance MathConstant CppHdrCode where
@@ -1961,7 +1967,7 @@ instance AssignStatement CppHdrCode where
 
 instance DeclStatement CppHdrCode where
   varDec = C.varDec static dynamic empty
-  varDecDef = C.varDecDef
+  varDecDef = C.varDecDef Semi
   listDec _ _ = emptyStmt
   listDecDef _ _ = emptyStmt
   arrayDec _ _ = emptyStmt
@@ -2082,14 +2088,14 @@ instance MethodSym CppHdrCode where
     v') public dynamic (toState $ variableType v') [] (toState $ toCode empty))
   setMethod v = zoom lensMStoVS v >>= (\v' -> method (setterName $ variableName 
     v') public dynamic void [param v] (toState $ toCode empty))
-  constructor ps is b = getClassName >>= (\n -> G.constructor n ps is b)
+  constructor ps is b = getClassName >>= (\n -> CP.constructor n ps is b)
 
   docMain = mainFunction
 
   function = G.function
   mainFunction _ = modifyReturn (setScope Pub) $ toCode $ mthd Pub empty
 
-  docFunc = G.docFunc
+  docFunc = CP.doxFunc
 
   inOutMethod n s p = cpphInOut (method n s p)
 
@@ -2114,6 +2120,8 @@ instance RenderMethod CppHdrCode where
     vs <- mapM (zoom lensMStoCS) vars
     return $ toCode $ mthd Pub (emptyIfEmpty 
       (vcat (map (RC.statement . onCodeValue destructSts) vs)) (RC.method m))
+      
+  mthdFromData s d = toState $ toCode $ mthd s d
   
 instance MethodElim CppHdrCode where
   method = mthdDoc . unCPPHC
@@ -2137,10 +2145,10 @@ instance StateVarElim CppHdrCode where
 instance ClassSym CppHdrCode where
   type Class CppHdrCode = Doc
   buildClass = G.buildClass
-  extraClass = G.extraClass
+  extraClass = CP.extraClass
   implementingClass = G.implementingClass
 
-  docClass = G.docClass
+  docClass = CP.doxClass
 
 instance RenderClass CppHdrCode where
   intClass n _ i vs mths = do
@@ -2172,7 +2180,7 @@ instance ModuleSym CppHdrCode where
       vcat (map (RC.import' . li) lis),
       vcat (map (RC.import' . mi) (sort (is ++ libis) ++ mis)),
       vcat (map (usingNameSpace std . Just) us)]) 
-    (return empty)
+    (return empty) (return empty)
     where mi, li :: Label -> CppHdrCode (Import CppHdrCode)
           mi = modImport
           li = langImport
@@ -2344,49 +2352,49 @@ argvDesc = "List of command-line arguments"
 mainReturnDesc = "exit code"
 
 cppSqrtOp :: (Monad r) => VSOp r
-cppSqrtOp = cppUnaryMath "sqrt"
+cppSqrtOp = cppUnaryMath R.sqrt
 
 cppAbsOp :: (Monad r) => VSOp r
-cppAbsOp = cppUnaryMath "fabs"
+cppAbsOp = cppUnaryMath R.fabs
 
 cppLogOp :: (Monad r) => VSOp r
-cppLogOp = cppUnaryMath "log10"
+cppLogOp = cppUnaryMath R.log10
 
 cppLnOp :: (Monad r) => VSOp r
-cppLnOp = cppUnaryMath "log"
+cppLnOp = cppUnaryMath R.log
 
 cppExpOp :: (Monad r) => VSOp r
-cppExpOp = cppUnaryMath "exp"
+cppExpOp = cppUnaryMath R.exp
 
 cppSinOp :: (Monad r) => VSOp r
-cppSinOp = cppUnaryMath "sin"
+cppSinOp = cppUnaryMath R.sin
 
 cppCosOp :: (Monad r) => VSOp r
-cppCosOp = cppUnaryMath "cos"
+cppCosOp = cppUnaryMath R.cos
 
 cppTanOp :: (Monad r) => VSOp r
-cppTanOp = cppUnaryMath "tan"
+cppTanOp = cppUnaryMath R.tan
 
 cppAsinOp :: (Monad r) => VSOp r
-cppAsinOp = cppUnaryMath "asin"
+cppAsinOp = cppUnaryMath R.asin
 
 cppAcosOp :: (Monad r) => VSOp r
-cppAcosOp = cppUnaryMath "acos"
+cppAcosOp = cppUnaryMath R.acos
 
 cppAtanOp :: (Monad r) => VSOp r
-cppAtanOp = cppUnaryMath "atan"
+cppAtanOp = cppUnaryMath R.atan
 
 cppFloorOp :: (Monad r) => VSOp r
-cppFloorOp = cppUnaryMath "floor"
+cppFloorOp = cppUnaryMath R.floor
 
 cppCeilOp :: (Monad r) => VSOp r
-cppCeilOp = cppUnaryMath "ceil"
+cppCeilOp = cppUnaryMath R.ceil
 
 cppUnaryMath :: (Monad r) => String -> VSOp r
 cppUnaryMath = addMathHImport . unOpPrec 
 
 cppPowerOp :: (Monad r) => VSOp r
-cppPowerOp = powerPrec "pow"
+cppPowerOp = powerPrec R.pow
 
 getLineFunc :: SValue CppSrcCode -> SValue CppSrcCode -> SValue CppSrcCode
 getLineFunc f v = funcApp cppGetLine string [f, v]
@@ -2441,12 +2449,12 @@ cppBoolType = typeFromData Boolean cppBool (text cppBool)
 
 cppInfileType :: (RenderSym r) => VSType r
 cppInfileType = do 
-  t <- typeFromData File cppInfile (text cppInfile)
+  t <- typeFromData InFile cppInfile (text cppInfile)
   addFStreamImport t
 
 cppOutfileType :: (RenderSym r) => VSType r
 cppOutfileType = do 
-  t <- typeFromData File cppOutfile (text cppOutfile)
+  t <- typeFromData OutFile cppOutfile (text cppOutfile)
   addFStreamImport t
 
 cppArrayType :: (RenderSym r) => VSType r -> VSType r
@@ -2561,7 +2569,7 @@ cppsMethod is n c t ps b = emptyIfEmpty (RC.body b <> initList) $
 cppConstructor :: [MSParameter CppSrcCode] -> NamedArgs CppSrcCode -> 
   MSBody CppSrcCode -> SMethod CppSrcCode
 cppConstructor ps is b = getClassName >>= (\n -> join $ (\tp pms ivars ivals 
-  bod -> if null is then G.constructor n ps is b else modify (setScope Pub) >> 
+  bod -> if null is then CP.constructor n ps is b else modify (setScope Pub) >> 
   toState (toCode $ mthd Pub (cppsMethod (zipWith (\ivar ival -> RC.variable 
   ivar <> parens (RC.value ival)) ivars ivals) n n tp pms bod))) <$> construct 
   n <*> sequence ps <*> mapM (zoom lensMStoVS . fst) is <*> mapM (zoom 

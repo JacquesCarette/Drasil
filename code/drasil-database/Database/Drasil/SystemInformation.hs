@@ -32,6 +32,7 @@ data SystemInformation where
   , _concepts :: [f]
   , _definitions :: [QDefinition] --FIXME: will be removed upon migration to use of [DataDefinition] below
   , _datadefs :: [DataDefinition]
+  , _configFiles :: [String]
   , _inputs :: [h]
   , _outputs :: [i]
   , _defSequence :: [Block QDefinition]

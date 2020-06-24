@@ -5,8 +5,8 @@ import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
-  _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb)
+  _datadefs, _configFiles, _definitions, _defSequence, _inputs, _kind, 
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
@@ -113,6 +113,7 @@ si = SI {
   _definitions = map (relToQD symbMap) iMods ++
                  map (relToQD symbMap) genDefns,
   _datadefs    = dataDefs,
+  _configFiles = [],
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = [] :: [Block QDefinition],

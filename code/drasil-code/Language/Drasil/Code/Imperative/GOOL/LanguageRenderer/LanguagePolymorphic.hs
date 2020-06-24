@@ -31,9 +31,9 @@ doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s
 
 -- Defines a markedown file
 readMe :: (AuxiliarySym r) => String -> String -> Maybe String -> ImplementationType -> 
-    [(Name,Version)] -> [FilePath] -> [String] -> String -> r (Auxiliary r)
-readMe l ver unsp imp libns libps auths n = auxFromData readMeName (
-    makeReadMe l ver unsp imp libns libps auths n)
+    [(Name,Version)] -> [FilePath] -> [String] -> [FilePath] -> String -> r (Auxiliary r)
+readMe l ver unsp imp libns libps auths cfp n = auxFromData readMeName (
+    makeReadMe l ver unsp imp libns libps auths cfp n)
 
 -- Defines a sample input file
 sampleInput :: (AuxiliarySym r) => ChunkDB -> DataDesc -> [Expr] -> 

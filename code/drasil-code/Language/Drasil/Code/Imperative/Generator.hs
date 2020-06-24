@@ -125,9 +125,10 @@ genPackage unRepr = do
       pd = unRepr reprPD
       m = makefile (libPaths g) (implType g) (commented g) s pd
       as = case codeSpec g of CodeSpec {authors = a} -> map name a
+      cfp = configFiles $ codeSpec g
   i <- genSampleInput
   d <- genDoxConfig s
-  rm <- genReadMe (implType g) (extLibNames g) (libPaths g) as
+  rm <- genReadMe (implType g) (extLibNames g) (libPaths g) as cfp
   return $ package pd (m:i++rm++d)
 
 -- Generates an SCS program based on the problem and the user's design choices.

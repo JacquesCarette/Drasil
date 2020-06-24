@@ -32,6 +32,12 @@ makeCSS :: Document -> Doc
 
 -- | Generate an HTML document from a Drasil <a>Document</a>
 genHTML :: PrintingInformation -> Filename -> Document -> Doc
+makeMd :: [Doc] -> Doc
+sumInfo :: String -> String -> String -> Doc
+invalidOS :: Maybe String -> Doc
+regularSec :: Doc -> Doc -> Doc
+contSep :: Seperator
+filtEmp :: [Doc] -> [Doc]
 toPlainName :: String -> String
 data Linearity
 Linear :: Linearity

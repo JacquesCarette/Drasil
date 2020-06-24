@@ -388,3 +388,11 @@ unPC :: PythonCode a -> a
 unJC :: JavaCode a -> a
 unCSC :: CSharpCode a -> a
 unCPPC :: CppCode CppSrcCode CppHdrCode a -> a
+pyName :: String
+pyVersion :: String
+jName :: String
+jVersion :: String
+csName :: String
+csVersion :: String
+cppName :: String
+cppVersion :: String

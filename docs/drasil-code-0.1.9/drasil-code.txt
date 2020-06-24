@@ -102,8 +102,9 @@ type SpaceMatch = Space -> [CodeType]
 
 -- | Builds a SpaceMatch from an association list of Spaces and CodeTypes.
 matchSpaces :: [(Space, [CodeType])] -> SpaceMatch
-newtype AuxFile
+data AuxFile
 SampleInput :: FilePath -> AuxFile
+ReadME :: AuxFile
 getSampleData :: Choices -> Maybe FilePath
 data Visibility
 Show :: Visibility
@@ -295,6 +296,7 @@ class AuxiliarySym r where {
     type family AuxHelper r;
 }
 doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r (Auxiliary r)
+readMe :: AuxiliarySym r => ImplementationType -> [(Name, Version)] -> String -> r (Auxiliary r)
 sampleInput :: AuxiliarySym r => ChunkDB -> DataDesc -> [Expr] -> r (Auxiliary r)
 optimizeDox :: AuxiliarySym r => r (AuxHelper r)
 makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r (Auxiliary r)
@@ -339,8 +341,9 @@ RK45 :: ODEMethod
 BDF :: ODEMethod
 Adams :: ODEMethod
 data ODELibPckg
-ODELib :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
+ODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
 [libName] :: ODELibPckg -> Name
+[libVers] :: ODELibPckg -> Version
 [libSpec] :: ODELibPckg -> ExternalLibrary
 [libCall] :: ODELibPckg -> ODEInfo -> ExternalLibraryCall
 [libPath] :: ODELibPckg -> Maybe FilePath
@@ -350,12 +353,12 @@ ODELib :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe F
 --   specification, ExternalLibraryCall specification parameterized by an
 --   ODEInfo, local file path to the library, and list of compatible
 --   languages.
-mkODELib :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
+mkODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
 
 -- | Makes an ODELibPckg with the given name, ExternalLibrary
 --   specification, ExternalLibraryCall specification parameterized by an
 --   ODEInfo, and list of compatible languages.
-mkODELibNoPath :: Name -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
+mkODELibNoPath :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
 unPP :: PythonProject a -> a
 unJP :: JavaProject a -> a
 unCSP :: CSharpProject a -> a

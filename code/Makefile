@@ -65,7 +65,7 @@ DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
-GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME) $(DEPLOY_FOLDER_NAME)
+GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME) $(DEPLOY_FOLDER_NAME) $(ANALYSIS_FOLDER)
 CLEAN_GF_PREFIX = clean_
 CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
 
@@ -87,6 +87,8 @@ LOG_FOLDER = $(LOG_FOLDER_NAME)/
 SCRIPT_FOLDER = scripts/
 GRAPH_FOLDER_NAME = graphs
 GRAPH_FOLDER = $(GRAPH_FOLDER_NAME)/
+ANALYSIS_FOLDER_NAME = analysis
+ANALYSIS_FOLDER = $(ANALYSIS_FOLDER_NAME)/
 DEPLOY_FOLDER_NAME = deploy
 DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 DEPLOY_CODE_PATH_KV_SEP = :
@@ -105,7 +107,7 @@ NOISY=no
 SUMMARIZE_TEX=no
 
 # actual targets
-all: test
+all: test analysis
 
 debug: stackArgs+=$(PROFALL) 
 debug: EXECARGS+=$(PROFEXEC) 
@@ -156,6 +158,10 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack
 
 graphs: $(GRAPH_PACKAGES)
 ###
+
+analysis:
+	@mkdir -p $(ANALYSIS_FOLDER)
+	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
 
 # use stack to build the documentation too
 $(filter %$(DOC_P_SUFFIX), $(DOC_PACKAGES)): %$(DOC_P_SUFFIX): check_stack
@@ -219,4 +225,4 @@ clean: $(CLEAN_FOLDERS)
 	- stack clean
 	- rm "$(CACHED_MSV_FILE)"
 
-.PHONY: clean code tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: clean code analysis tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

@@ -1,4 +1,4 @@
-module DirectoryController (finder, getDirectories, FileName, FolderName) where
+module DirectoryController (finder, getDirectories, stripPath, FileName, FolderName) where
 
 import Data.List
 import System.IO
@@ -61,3 +61,12 @@ fBool b s = if b then s else ""
 -- combines folder name with filepath (for testing if directory exists)
 joins :: [FilePath] -> FilePath
 joins (a:b:_) = b ++ "/" ++ a
+
+-- strips pathPrefix from filepath, returning stripped filepath (iff pathSuffix is suffix of filepath)
+stripPath :: FilePath -> FilePath -> IO FilePath
+stripPath filePath pathSuffix = do
+  let strippedPath
+        | pathSuffix `isSuffixOf` filePath = take (length filePath - length pathSuffix) filePath
+        | otherwise = filePath
+  return strippedPath
+

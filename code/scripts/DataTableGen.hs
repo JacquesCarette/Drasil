@@ -3,7 +3,7 @@ module DataTableGen (main) where
 import Data.List
 import System.IO
 import System.Directory
-import DirectoryController as DC (finder, getDirectories)
+import DirectoryController as DC (finder, getDirectories, stripPath)
 import SourceCodeReader as SCR (extractEntryData, EntryData)
 
 type ClassInstance = String
@@ -14,14 +14,14 @@ type IsInstanceOf = String
 -- main controller function; update later to contain parameter for starting filepath
 main :: IO ()
 main = do
-  -- directory variables; codeDirectory will be temporarily hardcoded
-  let codeDirectory = "/Users/Nathaniel_Hu/Documents/GitHub/Drasil/code"
-      scriptsDirectory = codeDirectory ++ "/scripts"
-      outputDirectory = codeDirectory ++ "/analysis"
+  -- directory variables (for scripts, code and output directories)
+  scriptsDirectory <- getCurrentDirectory
+  -- strips trailing "/scripts" subdirectory off code directory filepath
+  codeDirectory <- DC.stripPath scriptsDirectory "/scripts"
+  let outputDirectory = codeDirectory ++ "/analysis"
 
   -- gets names + filepaths of all drasil- packages/directories
   filtered <- DC.getDirectories codeDirectory "drasil-"
-  mapM_ print filtered
   
   -- imports configuration settings
   [packageNames,classInstanceGroups,classInstances] <- config scriptsDirectory

@@ -2,21 +2,29 @@ module Language.Drasil.Code.Imperative.WriteReadMe (
   makeReadMe
 ) where 
 
-import Language.Drasil.Mod (Name, Version)
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Printers (makeMd, introInfo, verInfo, invalidOS, 
+import Language.Drasil.Printers (makeMd, introInfo, verInfo, unsupOS, 
     extLibSec, instDoc)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..))
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 
-makeReadMe :: String -> String -> Maybe String -> ImplementationType -> 
-    [(Name,Version)] -> [FilePath] -> [String] -> [FilePath] -> String -> Doc
-makeReadMe progLang progLangVers unsupportedOSs imptype extLibns extLibfp auths configFP caseName= 
-    makeMd [introInfo caseName auths,
-    makeInstr imptype configFP,
+makeReadMe :: ReadMeInfo -> Doc 
+makeReadMe ReadMeInfo {
+        langName = progLang,
+        langVersion = progLangVers,
+        invalidOS = unsupportedOSs,
+        implementType = imptype,
+        extLibNV = extLibns,
+        extLibFP = extLibfp,
+        contributers = auths, 
+        configFP = configFPs,
+        caseName = name} = 
+    makeMd [introInfo name auths,
+    makeInstr imptype configFPs,
     verInfo progLang progLangVers,
-    invalidOS unsupportedOSs,
+    unsupOS unsupportedOSs,
     extLibSec extLibns extLibfp]
 
 makeInstr :: ImplementationType -> [FilePath]-> Doc

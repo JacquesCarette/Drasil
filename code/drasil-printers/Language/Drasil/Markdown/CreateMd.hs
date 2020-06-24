@@ -1,5 +1,5 @@
 module Language.Drasil.Markdown.CreateMd (
-    makeMd, introInfo, verInfo, invalidOS, extLibSec, regularSec, instDoc) 
+    makeMd, introInfo, verInfo, unsupOS, extLibSec, regularSec, instDoc) 
     where
 
 import Data.List (filter)
@@ -9,7 +9,7 @@ import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, vcat, text, (<+>),
 
 type Seperator = Doc
 
-
+-- Combines a list of sentences into a final Doc, also apeends end note
 makeMd :: [Doc] -> Doc
 makeMd lst = (vcat . punctuate secSep . filtEmp) lst <> contSep <>
     doubleSep <> endNote 
@@ -47,9 +47,9 @@ verInfo :: String -> String -> Doc
 verInfo pl plv = regularSec (text "Versioning") (text $ pl ++ " Version: " ++ plv)
 
 -- Invalid Operating Systems section, does not display unless atleast 1 invalid OS
-invalidOS :: Maybe String -> Doc
-invalidOS Nothing = empty
-invalidOS (Just unsuppOS) = regularSec (text "Unsupported Operating Systems")
+unsupOS :: Maybe String -> Doc
+unsupOS Nothing = empty
+unsupOS (Just unsuppOS) = regularSec (text "Unsupported Operating Systems")
     (text $ "- " ++ unsuppOS)
 
 -- External Libraries section. The inputs are a list of name and version pairs

@@ -6,8 +6,8 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (
 ) where
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
-  AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  PackageSym(..), AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
   G (sampleInput, readMe, makefile, noRunIfLib)
@@ -42,7 +42,23 @@ instance AuxiliarySym SwiftProject where
   type Auxiliary SwiftProject = AuxData
   type AuxHelper SwiftProject = Doc
   doxConfig = error doxError
-  readMe = G.readMe swiftName swiftVersion Nothing
+  readMe ReadMeInfo {
+        implementType = impl,
+        extLibNV = exlnv,
+        extLibFP = exlfp,
+        contributers = auths, 
+        configFP = cfp,
+        caseName = n} =
+    G.readMe ReadMeInfo {
+        langName = swiftName,
+        langVersion = swiftVersion,
+        invalidOS = Nothing,
+        implementType = impl,
+        extLibNV = exlnv,
+        extLibFP = exlfp,
+        contributers = auths, 
+        configFP = cfp,
+        caseName = n}
   sampleInput = G.sampleInput
 
   optimizeDox = error doxError

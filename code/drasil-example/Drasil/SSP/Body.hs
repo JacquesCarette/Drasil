@@ -4,8 +4,8 @@ import Language.Drasil hiding (Symbol(..), Verb, number, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
-  _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb)
+  _constraints, _datadefs, _configFiles, _definitions, _defSequence, _inputs, 
+  _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (qdFromDD)
 
 import Prelude hiding (sin, cos, tan)
@@ -84,6 +84,7 @@ si = SI {
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = [] :: [QDefinition],
   _datadefs = SSP.dataDefs,
+  _configFiles = [],
   _inputs = map qw inputs,
   _outputs = map qw outputs,
   _defSequence = [(\x -> Parallel (head x) (tail x)) $ map qdFromDD SSP.dataDefs],

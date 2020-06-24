@@ -4,8 +4,8 @@ import Language.Drasil hiding (Symbol(..), Vector, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, _datadefs,
-  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys, _sysinfodb,
-  _usedinfodb)
+  _configFiles, _definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
+  _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (qdFromDD)
 import Utils.Drasil
 import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
@@ -113,6 +113,7 @@ si = SI {
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
   _datadefs = dataDefs,
+  _configFiles = [],
   _inputs = inputSymbols,
   _outputs = outputSymbols, 
   _defSequence = map (`Parallel` []) qDefs,

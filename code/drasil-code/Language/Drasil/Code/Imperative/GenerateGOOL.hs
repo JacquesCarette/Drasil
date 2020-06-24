@@ -5,10 +5,11 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
-import Language.Drasil.Choices (Comments(..), ImplementationType, hasReadMe)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  AuxiliarySym(..))
+import Language.Drasil.Choices (Comments(..), hasReadMe)
 import Language.Drasil.CodeSpec (CodeSpec(..))
-import Language.Drasil.Mod (Name, Version, Description, Import)
+import Language.Drasil.Mod (Name, Description, Import)
   
 import GOOL.Drasil (SFile, VSType, SVariable, SValue, MSStatement, SMethod, 
   CSStateVar, SClass, NamedArgs, OOProg, FileSym(..), ValueExpression(..), 
@@ -56,12 +57,11 @@ genDoxConfig s = do
       v = doxOutput g
   return [doxConfig n s v | not (null cms)]
 
-genReadMe :: (AuxiliarySym r) => ImplementationType -> [(Name,Version)] -> 
-  [FilePath] -> [String] -> [FilePath]-> GenState [r (Auxiliary r)]
-genReadMe imp libnms libpths auths cfp = do 
+genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState [r (Auxiliary r)]
+genReadMe rmi = do 
   g <- get
   let n = pName $ codeSpec g
-  return [readMe imp libnms libpths auths cfp n | hasReadMe (auxiliaries g)]
+  return [readMe rmi {caseName = n} | hasReadMe (auxiliaries g)]
 
 data ClassType = Primary | Auxiliary
 

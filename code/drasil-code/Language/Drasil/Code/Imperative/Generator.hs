@@ -19,8 +19,8 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
   genOutputFormat, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
   designLog, inMod, modExportMap, clsDefMap)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
-  AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
@@ -128,7 +128,16 @@ genPackage unRepr = do
       cfp = configFiles $ codeSpec g
   i <- genSampleInput
   d <- genDoxConfig s
-  rm <- genReadMe (implType g) (extLibNames g) (libPaths g) as cfp
+  rm <- genReadMe ReadMeInfo {
+        langName = "",
+        langVersion = "",
+        invalidOS = Nothing,
+        implementType = implType g,
+        extLibNV = extLibNames g,
+        extLibFP = libPaths g,
+        contributers = as, 
+        configFP = cfp,
+        caseName = ""}
   return $ package pd (m:i++rm++d)
 
 -- Generates an SCS program based on the problem and the user's design choices.

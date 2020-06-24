@@ -10,8 +10,7 @@ module Language.Drasil.Printers (
   , genHTML
   -- Markdown
     --createMd
-  , makeMd, introInfo, verInfo, invalidOS, regularSec, instDoc, extLibSec
-  , contSep, filtEmp
+  , makeMd, introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec
   -- Plain
     -- Helpers
   , toPlainName
@@ -32,8 +31,8 @@ import Language.Drasil.Output.Formats (DocSpec(DocSpec), DocType(SRS, MG, MIS, W
   Filename)
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
-import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, invalidOS, extLibSec, 
-  instDoc, regularSec, contSep, filtEmp)
+import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS, extLibSec, 
+  instDoc, regularSec)
 import Language.Drasil.Plain.Helpers (toPlainName)
 import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc, 
   symbolDoc, unitDoc)

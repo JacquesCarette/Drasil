@@ -14,7 +14,7 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
   libFuncApp, newObj, extNewObj, libNewObj, exists, objMethodCallMixedArgs, 
   FunctionSym(..), ($.), selfAccess, GetSet(..), List(..),  listSlice, 
-  listIndexExists, at, Iterator(..), StatePattern(..), ObserverPattern(..), 
+  listIndexExists, at, StatePattern(..), ObserverPattern(..), 
   StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
   privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType,
@@ -23,8 +23,8 @@ module GOOL.Drasil (Label, GSProgram, SFile, MSBody, MSBlock, VSType,
   GOOLState(..), lensMStoVS, headers, sources, mainMod, 
   initialState,
   onStateValue, onCodeList,
-  unCI, unPC, unJC, unCSC, unCPPC,
-  pyName, pyVersion, jName, jVersion, csName, csVersion, cppName, cppVersion
+  unCI, unPC, unJC, unCSC, unCPPC, unSC, pyName, pyVersion, jName, jVersion, 
+  csName, csVersion, cppName, cppVersion, swiftName, swiftVersion
 ) where
 
 import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock, 
@@ -42,7 +42,7 @@ import GOOL.Drasil.ClassInterface (Label, GSProgram, SFile, MSBody, MSBlock,
   ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
   libFuncApp, newObj, extNewObj, libNewObj, exists, objMethodCallMixedArgs, 
   FunctionSym(..), ($.), selfAccess, GetSet(..), List(..), listSlice, 
-  listIndexExists, at, Iterator(..), StatePattern(..), ObserverPattern(..), 
+  listIndexExists, at, StatePattern(..), ObserverPattern(..), 
   StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   privMethod, pubMethod, initializer, nonInitConstructor, StateVarSym(..), 
   privDVar, pubDVar, pubSVar, ClassSym(..), ModuleSym(..), convType)
@@ -57,7 +57,9 @@ import GOOL.Drasil.State (GOOLState(..), lensMStoVS, headers, sources, mainMod,
 import GOOL.Drasil.Helpers (onStateValue, onCodeList)
 
 import GOOL.Drasil.CodeInfo (unCI)
+
 import GOOL.Drasil.LanguageRenderer.JavaRenderer (unJC, jName, jVersion)
 import GOOL.Drasil.LanguageRenderer.PythonRenderer (unPC, pyName, pyVersion)
 import GOOL.Drasil.LanguageRenderer.CSharpRenderer (unCSC, csName, csVersion)
 import GOOL.Drasil.LanguageRenderer.CppRenderer (unCPPC, cppName, cppVersion)
+import GOOL.Drasil.LanguageRenderer.SwiftRenderer (unSC, swiftName, swiftVersion)

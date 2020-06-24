@@ -31,7 +31,7 @@ main = do
 
   -- converts list of rawFileData (filename + filepath) into list of rawEntryData (filename, 
   -- truncated filepath, data, newtype and class names, class instances)
-  let rawFileData = concat allFiles
+  let rawFileData = intercalate ["new line"] allFiles
   rawEntryData <- mapM (createEntry codeDirectory classInstances . words) rawFileData
 
   -- entryData contains joined string with each file entries' data (intercalate)
@@ -62,6 +62,9 @@ output outputFilePath entryData classInstances = do
 
   -- creates an entry for each file (updated/optimized input format)
 createEntry :: FilePath -> [ClassInstance] -> [FilePath] -> IO String
+-- creates blank line to separate file entries by drasil- package
+createEntry homeDirectory classInstances ["new","line"] = return "\t"
+-- creates actual file entries
 createEntry homeDirectory classInstances [name,path] = do
   [dataNames,newtypeNames,classNames,stripInstances] <- SCR.extractEntryData name path
 

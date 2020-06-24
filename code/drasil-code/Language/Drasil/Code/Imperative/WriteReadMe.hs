@@ -4,13 +4,11 @@ module Language.Drasil.Code.Imperative.WriteReadMe (
 
 import Language.Drasil.Mod (Name, Version)
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Printers (makeMd, introInfo, verInfo, invalidOS, contSep,
-    extLibSec, instDoc, regularSec, filtEmp)
+import Language.Drasil.Printers (makeMd, introInfo, verInfo, invalidOS, 
+    extLibSec, instDoc)
 
 import Prelude hiding ((<>))
-import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, vcat, text, doubleQuotes, 
-    (<+>), punctuate)
-
+import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 makeReadMe :: String -> String -> Maybe String -> ImplementationType -> 
     [(Name,Version)] -> [FilePath] -> [String] -> [FilePath] -> String -> Doc

@@ -971,7 +971,7 @@ swiftCloseFile f' = do
 swiftReadFile :: (RenderSym r) => SValue r -> SVariable r -> MSStatement r
 swiftReadFile f v = tryCatch 
   (oneLiner $ stringSplit '\n' v $ swiftReadFileFunc f)
-  (oneLiner $ print (litString "Error reading from file."))
+  (oneLiner $ throw "Error reading from file.")
 
 swiftVarDec :: Doc -> SVariable SwiftCode -> MSStatement SwiftCode
 swiftVarDec dec v' = do

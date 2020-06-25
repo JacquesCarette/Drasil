@@ -51,7 +51,7 @@ var fileContents: [String] = []
 do {
     fileContents = try String(contentsOf: fileToRead).split(separator: "\n").map({(i: Substring) -> String in String(i)})
 } catch {
-    print("Error reading from file.", terminator: "")
+    throw "Error reading from file."
 }
 
 print(fileContents)

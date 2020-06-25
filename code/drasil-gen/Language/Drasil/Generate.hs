@@ -15,9 +15,9 @@ import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec),
   genTeX, PrintingInformation)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD, 
-  unPP, unJP, unCSP, unCPPP)
+  unPP, unJP, unCSP, unCPPP, unSP)
 
-import GOOL.Drasil (unJC, unPC, unCSC, unCPPC)
+import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -78,6 +78,7 @@ genCode chs spec = do
       genLangCode Python = genCall Python unPC unPP
       genLangCode CSharp = genCall CSharp unCSC unCSP
       genLangCode Cpp = genCall Cpp unCPPC unCPPP
+      genLangCode Swift = genCall Swift unSC unSP
       genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr 
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)

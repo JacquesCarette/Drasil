@@ -19,7 +19,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
 import GOOL.Drasil (onCodeList, swiftName, swiftVersion)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Text.PrettyPrint.HughesPJ (Doc)
+import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 newtype SwiftProject a = SP {unSP :: a}
 
@@ -41,13 +41,13 @@ instance PackageSym SwiftProject where
 instance AuxiliarySym SwiftProject where
   type Auxiliary SwiftProject = AuxData
   type AuxHelper SwiftProject = Doc
-  doxConfig = error doxError
+  doxConfig _ _ _ = auxFromData "config" empty
   readMe = G.readMe swiftName swiftVersion Nothing
   sampleInput = G.sampleInput
 
   optimizeDox = error doxError
 
-  makefile fs it = G.makefile (swiftBuildConfig fs it) (G.noRunIfLib it swiftRunnable)
+  makefile fs it _ = G.makefile (swiftBuildConfig fs it) (G.noRunIfLib it swiftRunnable) []
 
   auxHelperDoc = unSP
   auxFromData fp d = return $ ad fp d

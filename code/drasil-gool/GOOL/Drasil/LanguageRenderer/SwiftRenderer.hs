@@ -501,7 +501,7 @@ instance IOStatement SwiftCode where
   discardFileInput _ = modify incrementWord >> emptyStmt
 
   openFileR v pth = multi [CP.openFileR swiftOpenFile v pth, 
-    swiftReadFile swiftContentsVar (valueOf v)]
+    varDec swiftContentsVar, swiftReadFile swiftContentsVar (valueOf v)]
   openFileW = swiftOpenFileWA False
   openFileA = swiftOpenFileWA True
   closeFile = swiftCloseFile
@@ -512,7 +512,8 @@ instance IOStatement SwiftCode where
     modify incrementLine
     slc <- listSlice swiftLineVar (listAccess swiftContentsVal (litInt li)) 
       (Just $ litInt wi) Nothing Nothing
-    multi [mkStmtNoEnd $ RC.block slc, v &= swiftJoinedFunc ' ' swiftLineVal]
+    multi [varDec swiftLineVar, mkStmtNoEnd $ RC.block slc, 
+      v &= swiftJoinedFunc ' ' swiftLineVal]
   discardFileLine _ = modify incrementLine >> emptyStmt
   getFileInputAll _ v = do
     li <- getLineIndex
@@ -989,8 +990,8 @@ swiftCloseFile f' = do
 swiftReadFile :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
 swiftReadFile v f = let l = var "l" string
   in tryCatch 
-  (oneLiner $ varDecDef v $ swiftMapFunc (swiftSplitFunc '\n' $ 
-    swiftReadFileFunc f) (lambda [l] (swiftSplitFunc ' ' (valueOf l))))
+  (oneLiner $ v &= swiftMapFunc (swiftSplitFunc '\n' $ swiftReadFileFunc f) 
+    (lambda [l] (swiftSplitFunc ' ' (valueOf l))))
   (oneLiner $ throw "Error reading from file.")
 
 swiftVarDec :: Doc -> SVariable SwiftCode -> MSStatement SwiftCode

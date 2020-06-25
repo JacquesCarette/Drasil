@@ -19,7 +19,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
   funcAppNamedArgs, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), 
   objMethodCall, objMethodCallNamedArgs, objMethodCallNoParams, FunctionSym(..),
-  ($.), GetSet(..), List(..), InternalList(..), StatementSym(..), 
+  ($.), GetSet(..), List(..), listSlice, InternalList(..), StatementSym(..), 
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
   StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
   ControlStatement(..), StatePattern(..), ObserverPattern(..), 
@@ -89,7 +89,8 @@ import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensMStoFS, lensMStoVS, revFiles, addLangImportVS, getLangImports, 
   getLibImports, setFileType, setModuleName, getModuleName, getCurrMain, 
   getMethodExcMap, getMainDoc, setThrowUsed, getThrowUsed, setErrorDefined, 
-  getErrorDefined)
+  getErrorDefined, incrementLine, incrementWord, getLineIndex, getWordIndex,
+  resetIndices)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -489,28 +490,38 @@ instance IOStatement SwiftCode where
   printFileStr f   = swiftOut False (Just f) (printFileFunc f)   . litString
   printFileStrLn f = swiftOut True  (Just f) (printFileLnFunc f) . litString
 
-  getInput v = v &= swiftInput (onStateValue variableType v)
+  getInput v = v &= swiftInput v swiftReadLineFunc
   discardInput = valStmt swiftReadLineFunc
-  -- FIXME: Methods labelled FIXME below are related to synchronous file I/O,
-  -- but in Swift this is not straightforward. 
-  -- I can find two potential ways to do it:
-  --   1. FileHandle, but the methods for synchronous reading/writing are 
-  --      deprecated.
-  --   2. InputStream/OutputStream, but this requires using byte buffers and I 
-  --      don't quite understand it, and can't try it out myself because I'm 
-  --      not on Mac and the online swift tools I've found don't support file I/O.
-  -- Therefore, leaving these methods unimplemented for now.
-  getFileInput _ _ = unimplementedStmt "read a value from a file" -- FIXME, see above
-  discardFileInput _ = unimplementedStmt "skip over a value from a file" -- FIXME, see above
+  getFileInput _ v = do
+    wi <- getWordIndex
+    li <- getLineIndex
+    modify incrementWord
+    v &= swiftInput v
+      (listAccess (listAccess swiftContentsVal (litInt li)) (litInt wi))
+  discardFileInput _ = modify incrementWord >> emptyStmt
 
-  openFileR = CP.openFileR swiftOpenFile
+  openFileR v pth = multi [CP.openFileR swiftOpenFile v pth, 
+    swiftReadFile swiftContentsVar (valueOf v)]
   openFileW = swiftOpenFileWA False
   openFileA = swiftOpenFileWA True
   closeFile = swiftCloseFile
 
-  getFileInputLine _ _ = unimplementedStmt "read a line from a file" -- FIXME, see above
-  discardFileLine _ = unimplementedStmt "skip over a line from a file" -- FIXME, see above
-  getFileInputAll = swiftReadFile
+  getFileInputLine _ v = do
+    wi <- getWordIndex
+    li <- getLineIndex 
+    modify incrementLine
+    slc <- listSlice swiftLineVar (listAccess swiftContentsVal (litInt li)) 
+      (Just $ litInt wi) Nothing Nothing
+    multi [mkStmtNoEnd $ RC.block slc, v &= swiftJoinedFunc ' ' swiftLineVal]
+  discardFileLine _ = modify incrementLine >> emptyStmt
+  getFileInputAll _ v = do
+    li <- getLineIndex
+    let l = var "l" (listType string)
+    slc <- listSlice swiftContentsVar swiftContentsVal 
+      (Just $ litInt (li+1)) Nothing Nothing
+    multi [mkStmtNoEnd $ RC.block slc, 
+      v &= swiftMapFunc swiftContentsVal 
+        (lambda [l] (swiftJoinedFunc ' ' (valueOf l)))]
 
 instance StringStatement SwiftCode where
   stringSplit d vnew s = vnew &= swiftSplitFunc d s
@@ -686,10 +697,6 @@ instance BlockCommentSym SwiftCode where
 instance BlockCommentElim SwiftCode where
   blockComment' = unSC
 
-unimplementedStmt :: String -> MSStatement SwiftCode
-unimplementedStmt s = comment $ "A statement to " ++ s ++ " should be here," ++
-  " but this is not yet implemented."
-
 addMathImport :: VS a -> VS a
 addMathImport = (>>) $ modify (addLangImportVS swiftMath)
 
@@ -709,6 +716,14 @@ swiftTryVal :: (RenderSym r) => SValue r -> SValue r
 swiftTryVal v' = do
   v <- v'
   mkVal (valueType v) (tryLabel <+> RC.value v)
+
+swiftContentsVar, swiftLineVar :: SVariable SwiftCode
+swiftContentsVar = var "contents" (listType $ listType string)
+swiftLineVar = var "line" (listType string)
+
+swiftContentsVal, swiftLineVal :: SValue SwiftCode
+swiftContentsVal = valueOf swiftContentsVar
+swiftLineVal = valueOf swiftLineVar
 
 swiftBoolType :: (RenderSym r) => VSType r
 swiftBoolType = typeFromData Boolean swiftBool (text swiftBool)
@@ -775,10 +790,10 @@ swiftMain, swiftFoundation, swiftMath, swiftNil, swiftBool, swiftInt, swiftChar,
   swiftURL, swiftFileHdl, swiftRetType, swiftVoid, swiftCommLine, 
   swiftSearchDir, swiftPathMask, swiftArgs, swiftWrite, swiftIndex, 
   swiftStride, swiftMap, swiftListAdd, swiftListAppend, swiftReadLine, 
-  swiftSeekEnd, swiftClose, swiftAppendPath, swiftUrls, swiftSplit, 
-  swiftSubstring, swiftData, swiftEncoding, swiftOf, swiftFrom, swiftTo, 
-  swiftBy, swiftAt, swiftTerm, swiftFor, swiftIn, swiftContentsOf, 
-  swiftWriteTo, swiftSep, swiftUnwrap :: String
+  swiftSeekEnd, swiftClose, swiftJoined, swiftAppendPath, swiftUrls, swiftSplit,
+  swiftData, swiftEncoding, swiftOf, swiftFrom, swiftTo, swiftBy, swiftAt, 
+  swiftTerm, swiftFor, swiftIn, swiftContentsOf, swiftWriteTo, swiftSep, 
+  swiftSepBy, swiftUnwrap :: String
 swiftMain = "main"
 swiftFoundation = "Foundation"
 swiftMath = swiftFoundation
@@ -803,10 +818,10 @@ swiftListAppend = "append"
 swiftReadLine = "readLine"
 swiftSeekEnd = "seekToEnd"
 swiftClose = "close"
+swiftJoined = "joined"
 swiftAppendPath = "appendingPathComponent"
 swiftUrls = "FileManager" `access` "default" `access` "urls"
-swiftSplit = "split"
-swiftSubstring = "Substring"
+swiftSplit = "components"
 swiftData = "Data"
 swiftEncoding = "Encoding"
 swiftOf = "of"
@@ -820,6 +835,7 @@ swiftIn = "in"
 swiftContentsOf = "contentsOf"
 swiftWriteTo = "forWritingTo"
 swiftSep = "separator"
+swiftSepBy = "separatedBy"
 swiftUnwrap = "!"
 
 swiftUnaryMath :: (Monad r) => String -> VSOp r
@@ -883,10 +899,12 @@ swiftReadFileFunc v = let contentsArg = var swiftContentsOf infile
   in swiftTryVal $ funcAppNamedArgs CP.stringRender' string [(contentsArg, v)]
 
 swiftSplitFunc :: (RenderSym r) => Char -> SValue r -> SValue r
-swiftSplitFunc d s = let sepArg = var swiftSep char
-                         i = var "i" (obj swiftSubstring)
-  in swiftMapFunc (objMethodCallNamedArgs (listType string) s swiftSplit 
-    [(sepArg, litChar d)]) (lambda [i] (cast string (valueOf i)))
+swiftSplitFunc d s = let sepArg = var swiftSepBy char
+  in objMethodCallNamedArgs (listType string) s swiftSplit [(sepArg, litChar d)]
+
+swiftJoinedFunc :: (RenderSym r) => Char -> SValue r -> SValue r
+swiftJoinedFunc d s = let sepArg = var swiftSep char 
+  in objMethodCallNamedArgs string s swiftJoined [(sepArg, litChar d)]
 
 swiftIndexOf :: (RenderSym r) => SValue r -> SValue r -> SValue r
 swiftIndexOf = swiftUnwrapVal .: swiftIndexFunc
@@ -921,14 +939,14 @@ swiftOut newLn f printFn v = zoom lensMStoVS v >>= swOut . getType . valueType
   where swOut (List _) = printSt newLn f printFn v
         swOut _ = G.print newLn f printFn v
 
-swiftInput :: VSType SwiftCode -> SValue SwiftCode
-swiftInput tp = do
-  t <- tp
-  swiftInput' (getType t)
-  where swiftInput' String = swiftReadLineFunc
-        swiftInput' ct
-          | ct `elem` swiftReadableTypes = cast tp swiftReadLineFunc
-          | otherwise = error "Attempt to read value of unreadable type"
+swiftInput :: SVariable SwiftCode -> SValue SwiftCode -> SValue SwiftCode
+swiftInput vr vl = do
+  vr' <- vr
+  let swiftInput' String = vl
+      swiftInput' ct
+        | ct `elem` swiftReadableTypes = cast (return $ variableType vr') vl
+        | otherwise = error "Attempt to read value of unreadable type"
+  swiftInput' (getType $ variableType vr')
 
 swiftOpenFile :: (RenderSym r) => SValue r -> VSType r -> SValue r
 swiftOpenFile n t = let forArg = var swiftFor (obj swiftSearchDir)
@@ -959,18 +977,20 @@ swiftOpenFileWA app f' n' = tryCatch
 swiftCloseFile :: (RenderSym r) => SValue r -> MSStatement r
 swiftCloseFile f' = do
   f <- zoom lensMStoVS f'
-  let swClose InFile = emptyStmt -- How I've currently implemented file-reading,
-                                 -- files don't need to be "closed", so this is 
-                                 -- (correctly) just an empty stmt
+  -- How I've currently implemented file-reading, files don't need to be 
+  -- "closed", so InFile case is (correctly) just an empty stmt
+  let swClose InFile = modify resetIndices >> emptyStmt 
       swClose OutFile = tryCatch (oneLiner $ valStmt $ swiftTryVal $
           objMethodCallNoParams void (return f) swiftClose)
         (oneLiner $ throw "Error closing file.")
       swClose _ = error "closeFile called on non-file-typed value"
   swClose (getType $ valueType f)
 
-swiftReadFile :: (RenderSym r) => SValue r -> SVariable r -> MSStatement r
-swiftReadFile f v = tryCatch 
-  (oneLiner $ stringSplit '\n' v $ swiftReadFileFunc f)
+swiftReadFile :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
+swiftReadFile v f = let l = var "l" string
+  in tryCatch 
+  (oneLiner $ varDecDef v $ swiftMapFunc (swiftSplitFunc '\n' $ 
+    swiftReadFileFunc f) (lambda [l] (swiftSplitFunc ' ' (valueOf l))))
   (oneLiner $ throw "Error reading from file.")
 
 swiftVarDec :: Doc -> SVariable SwiftCode -> MSStatement SwiftCode

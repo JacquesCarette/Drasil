@@ -18,7 +18,7 @@ makeReadMe ReadMeInfo {
         implementType = imptype,
         extLibNV = extLibns,
         extLibFP = extLibfp,
-        contributers = auths, 
+        contributors = auths, 
         configFP = configFPs,
         caseName = name} = 
     makeMd [introInfo name auths,

@@ -46,7 +46,7 @@ instance AuxiliarySym SwiftProject where
         implementType = impl,
         extLibNV = exlnv,
         extLibFP = exlfp,
-        contributers = auths, 
+        contributors = auths, 
         configFP = cfp,
         caseName = n} =
     G.readMe ReadMeInfo {
@@ -56,7 +56,7 @@ instance AuxiliarySym SwiftProject where
         implementType = impl,
         extLibNV = exlnv,
         extLibFP = exlfp,
-        contributers = auths, 
+        contributors = auths, 
         configFP = cfp,
         caseName = n}
   sampleInput = G.sampleInput

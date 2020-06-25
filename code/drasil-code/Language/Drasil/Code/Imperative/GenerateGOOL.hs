@@ -48,20 +48,20 @@ genModule :: (OOProg r) => Name -> Description ->
 genModule n desc = genModuleWithImports n desc []
 
 -- Generates a Doxygen configuration file, if the user has comments enabled
-genDoxConfig :: (AuxiliarySym r) => GOOLState ->
-  GenState [r (Auxiliary r)]
+genDoxConfig :: (AuxiliarySym r) => GOOLState -> GenState (Maybe (r (Auxiliary r)))
 genDoxConfig s = do
   g <- get
   let n = pName $ codeSpec g
       cms = commented g
       v = doxOutput g
-  return [doxConfig n s v | not (null cms)]
+  if not (null cms) then (return . Just) $ doxConfig n s v else return Nothing
 
-genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState [r (Auxiliary r)]
+genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState (Maybe (r (Auxiliary r)))
 genReadMe rmi = do 
   g <- get
   let n = pName $ codeSpec g
-  return [readMe rmi {caseName = n} | hasReadMe (auxiliaries g)]
+  if hasReadMe (auxiliaries g) then (return . Just) $ readMe rmi {caseName = n} 
+    else return Nothing
 
 data ClassType = Primary | Auxiliary
 

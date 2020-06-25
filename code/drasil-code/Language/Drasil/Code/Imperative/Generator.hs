@@ -37,7 +37,7 @@ import Control.Lens ((^.))
 import Control.Monad.State (get, evalState, runState)
 import Data.List (nub)
 import Data.Map (fromList, member, keys, elems)
-import Data.Maybe (maybeToList)
+import Data.Maybe (maybeToList, catMaybes)
 import Text.PrettyPrint.HughesPJ (($$), empty, isEmpty)
 
 -- | Initializes the generator's DrasilState.
@@ -135,10 +135,10 @@ genPackage unRepr = do
         implementType = implType g,
         extLibNV = extLibNames g,
         extLibFP = libPaths g,
-        contributers = as, 
+        contributors = as, 
         configFP = cfp,
         caseName = ""}
-  return $ package pd (m:i++rm++d)
+  return $ package pd (m:catMaybes [i,rm,d])
 
 -- Generates an SCS program based on the problem and the user's design choices.
 genProgram :: (OOProg r) => GenState (GSProgram r)

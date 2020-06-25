@@ -48,7 +48,7 @@ data ReadMeInfo = ReadMeInfo {
   implementType :: ImplementationType,
   extLibNV :: [(Name,Version)],
   extLibFP :: [FilePath],
-  contributers :: [Contributer], 
+  contributors :: [Contributer], 
   configFP :: [FilePath],
   caseName :: CaseName
 }

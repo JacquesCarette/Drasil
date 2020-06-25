@@ -3,6 +3,7 @@ module Language.Drasil.Markdown.CreateMd (
     where
 
 import Data.List (filter)
+import Data.Maybe (maybe)
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, vcat, text, (<+>),
     (<>), comma, punctuate, doubleQuotes, hsep)
@@ -48,9 +49,8 @@ verInfo pl plv = regularSec (text "Versioning") (text $ pl ++ " Version: " ++ pl
 
 -- Invalid Operating Systems section, does not display unless atleast 1 invalid OS
 unsupOS :: Maybe String -> Doc
-unsupOS Nothing = empty
-unsupOS (Just unsuppOS) = regularSec (text "Unsupported Operating Systems")
-    (text $ "- " ++ unsuppOS)
+unsupOS = maybe empty (\uns-> regularSec (text "Unsupported Operating Systems")
+    (text $ "- " ++ uns))
 
 -- External Libraries section. The inputs are a list of name and version pairs
 -- and a list of the corresponding version numbers, these are first combined into a 

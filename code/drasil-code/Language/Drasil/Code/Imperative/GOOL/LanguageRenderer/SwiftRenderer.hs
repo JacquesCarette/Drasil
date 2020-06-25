@@ -41,7 +41,7 @@ instance PackageSym SwiftProject where
 instance AuxiliarySym SwiftProject where
   type Auxiliary SwiftProject = AuxData
   type AuxHelper SwiftProject = Doc
-  doxConfig _ _ _ = auxFromData "config" empty
+  doxConfig _ _ _ = auxFromData "" empty
   readMe = G.readMe swiftName swiftVersion Nothing
   sampleInput = G.sampleInput
 

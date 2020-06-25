@@ -363,3 +363,4 @@ unPP :: PythonProject a -> a
 unJP :: JavaProject a -> a
 unCSP :: CSharpProject a -> a
 unCPPP :: CppProject a -> a
+unSP :: SwiftProject a -> a

@@ -362,20 +362,23 @@ Float :: CodeType
 Double :: CodeType
 Char :: CodeType
 String :: CodeType
-File :: CodeType
+InFile :: CodeType
+OutFile :: CodeType
 List :: CodeType -> CodeType
 Array :: CodeType -> CodeType
 Object :: ClassName -> CodeType
 Func :: [CodeType] -> CodeType -> CodeType
 Void :: CodeType
 data GOOLState
-GS :: [FilePath] -> [FilePath] -> Maybe FilePath -> Map String ClassName -> Map QualifiedName [ExceptionType] -> Map QualifiedName [QualifiedName] -> GOOLState
+GS :: [FilePath] -> [FilePath] -> Maybe FilePath -> Map String ClassName -> Map QualifiedName [ExceptionType] -> Map QualifiedName [QualifiedName] -> Bool -> Bool -> GOOLState
 [_headers] :: GOOLState -> [FilePath]
 [_sources] :: GOOLState -> [FilePath]
 [_mainMod] :: GOOLState -> Maybe FilePath
 [_classMap] :: GOOLState -> Map String ClassName
 [_methodExceptionMap] :: GOOLState -> Map QualifiedName [ExceptionType]
 [_callMap] :: GOOLState -> Map QualifiedName [QualifiedName]
+[_throwUsed] :: GOOLState -> Bool
+[_errorDefined] :: GOOLState -> Bool
 lensMStoVS :: Lens' MethodState ValueState
 headers :: Lens' GOOLState [FilePath]
 sources :: Lens' GOOLState [FilePath]
@@ -388,6 +391,7 @@ unPC :: PythonCode a -> a
 unJC :: JavaCode a -> a
 unCSC :: CSharpCode a -> a
 unCPPC :: CppCode CppSrcCode CppHdrCode a -> a
+unSC :: SwiftCode a -> a
 pyName :: String
 pyVersion :: String
 jName :: String
@@ -396,3 +400,5 @@ csName :: String
 csVersion :: String
 cppName :: String
 cppVersion :: String
+swiftName :: String
+swiftVersion :: String

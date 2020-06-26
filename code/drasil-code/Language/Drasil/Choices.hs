@@ -1,10 +1,11 @@
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices (
   Choices(..), Modularity(..), InputModule(..), inputModule, Structure(..), 
-  ConstantStructure(..), ConstantRepr(..), MatchedConceptMap, CodeConcept(..), 
-  matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
+  ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap, 
+  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
-  Logging(..), AuxFile(..), getSampleData, hasSampleInput, hasReadMe, defaultChoices
+  Logging(..), AuxFile(..), getSampleData, hasSampleInput, hasReadMe, defaultChoices,
+  choicesDoc, showChs
 ) where
 
 import Language.Drasil
@@ -18,6 +19,7 @@ import GOOL.Drasil (CodeType)
 
 import Control.Lens ((^.))
 import Data.Map (Map, fromList)
+import Text.PrettyPrint.HughesPJ (Doc, text, vcat)
 
 data Choices = Choices {
 -- Global design choices (affect entire program)
@@ -67,9 +69,19 @@ data Choices = Choices {
   auxFiles :: [AuxFile]
 }
 
+class ChsShow a where
+    showChs :: a -> String
+    showChsList :: [a] -> String
+    showChsList lst = show $ map showChs lst
+
 data Modularity = Modular InputModule -- Different modules for: controller, 
                                       -- input, calculations, output.
                 | Unmodular -- All generated code is in one module/file.
+
+instance ChsShow Modularity where 
+  showChs Unmodular = "Unmodular"
+  showChs (Modular Combined) = "Modular Combined"
+  showChs (Modular Separated)= "Modular Separated"
 
 data InputModule = Combined -- Input-related functions combined in one module
                  | Separated -- Input-related functions each in own module  
@@ -85,13 +97,27 @@ inputModule c = inputModule' $ modularity c
 data Structure = Unbundled -- Individual variables
                | Bundled -- Variables bundled in a class
 
+instance ChsShow Structure where 
+  showChs Unbundled = "Unbundled"
+  showChs Bundled = "Bundled"
+
 data ConstantStructure = Inline -- Inline values for constants
                        | WithInputs -- Store constants with inputs
                        | Store Structure -- Store constants separately from 
                                          -- inputs, whether bundled or unbundled
 
+instance ChsShow ConstantStructure where 
+  showChs Inline = "Inline"
+  showChs WithInputs = "WithInputs"
+  showChs (Store Unbundled) = "Store Unbundled"
+  showChs (Store Bundled) = "Store Bundled"
+
 data ConstantRepr = Var -- Constants represented as regular variables
                   | Const -- Use target language's mechanism for defining constants.
+
+instance ChsShow ConstantRepr where 
+  showChs Var = "Var"
+  showChs Const = "Const"
 
 -- | Specifies matches between chunks and CodeConcepts, meaning the target 
 -- language's pre-existing definition of the concept should be used instead of 
@@ -103,6 +129,9 @@ type MatchedConceptMap = Map UID CodeConcept
 
 -- Currently we only support one code concept, more will be added later
 data CodeConcept = Pi
+
+instance ChsShow CodeConcept where
+  showChs Pi = "Pi"
 
 -- | Builds a ConceptMatchMap from an association list of chunks and CodeConcepts
 matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
@@ -127,18 +156,40 @@ matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
 data ImplementationType = Library -- Generated code does not include Controller 
                         | Program -- Generated code includes Controller
                         
+instance ChsShow ImplementationType where 
+  showChs Library = "Library"
+  showChs Program = "Program" 
+
+
 data ConstraintBehaviour = Warning -- Print warning when constraint violated
                          | Exception -- Throw exception when constraint violated
         
+instance ChsShow ConstraintBehaviour where 
+  showChs Warning = "Warning"
+  showChs Exception = "Exception" 
+
 data Comments = CommentFunc -- Function/method-level comments
               | CommentClass -- class-level comments
               | CommentMod -- File/Module-level comments
               deriving Eq
 
+instance ChsShow Comments where 
+  showChs CommentFunc = "CommentFunc"
+  showChs CommentClass = "CommentClass"
+  showChs CommentMod = "CommentMod"
+
 data Verbosity = Verbose | Quiet
+
+instance ChsShow Verbosity where 
+  showChs Verbose = "Verbose"
+  showChs Quiet = "Quiet" 
 
 data Visibility = Show
                 | Hide
+
+instance ChsShow Visibility where 
+  showChs Show = "Show"
+  showChs Hide = "Hide"
 
 -- Eq instances required for Logging and Comments because generator needs to 
 -- check membership of these elements in lists
@@ -146,12 +197,20 @@ data Logging = LogFunc -- Log messages generated for function calls
              | LogVar -- Log messages generated for variable assignments
              deriving Eq
 
+instance ChsShow Logging where 
+  showChs LogFunc = "LogFunc"
+  showChs LogVar = "LogVar"
+
 -- Currently we only support one kind of auxiliary file: sample input file
 -- To generate a sample input file compatible with the generated program
 -- FilePath is the path to the user-provided file containing a sample set of input data
 data AuxFile = SampleInput FilePath 
                 | ReadME 
                 deriving Eq
+
+instance ChsShow AuxFile where 
+  showChs (SampleInput fp) = "SampleInput"++fp
+  showChs ReadME = "ReadME"
 
 -- Gets the file path to a sample input data set from a Choices structure, if 
 -- the user chose to generate a sample input file.
@@ -195,3 +254,26 @@ defaultChoices = Choices {
   odeLib = [],
   odes = []
 }
+
+choicesDoc :: Choices -> Doc 
+choicesDoc chs = (vcat. map chsFieldDoc) [
+    ("Languages", show $ lang chs)
+  , ("Modularity", showChs $ modularity chs)
+  , ("Input Structure", showChs $ inputStructure chs)
+  , ("Constant Structure", showChs $ constStructure chs)
+  , ("Constant Representation", showChs $ constRepr chs)
+  , ("Implementation Type", showChs $ impType chs)
+  , ("Software Constraint Behaviour", showChs $ onSfwrConstraint chs)
+  , ("Physical Constraint Behavior", showChs $ onPhysConstraint chs)
+  , ("Comments", showChsList $ comments chs)
+  , ("Dox Verbosity", showChs $ doxVerbosity chs)
+  , ("Dates", showChs $ dates chs)
+  , ("Log File Name", logFile chs)
+  , ("Logging", showChsList $ logging chs)
+  , ("Auxiliary Files", showChsList $ auxFiles chs)
+--  , ("ODE Libraries", odeLib chs)
+--  , ("ODE's", odes chs) along with  conceptmatch and speace match
+  ] 
+
+chsFieldDoc :: (String, String) -> Doc
+chsFieldDoc (rec, chc) = text $ rec ++ " selected as " ++ chc

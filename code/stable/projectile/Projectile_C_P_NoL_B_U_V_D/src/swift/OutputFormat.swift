@@ -8,7 +8,7 @@ import Foundation
     - Parameter s: output message as a string
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
 */
-func write_output(_ s: String, _ d_offset: Double) -> Void {
+func write_output(_ s: String, _ d_offset: Double) throws -> Void {
     var outputfile: FileHandle
     do {
         outputfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("output.txt"))

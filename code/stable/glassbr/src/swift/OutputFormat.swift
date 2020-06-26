@@ -10,7 +10,7 @@ import Foundation
     - Parameter P_b: probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     - Parameter J: stress distribution factor (Function)
 */
-func write_output(_ is_safePb: Bool, _ is_safeLR: Bool, _ P_b: Double, _ J: Double) -> Void {
+func write_output(_ is_safePb: Bool, _ is_safeLR: Bool, _ P_b: Double, _ J: Double) throws -> Void {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

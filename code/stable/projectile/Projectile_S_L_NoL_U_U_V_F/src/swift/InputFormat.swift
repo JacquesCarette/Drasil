@@ -12,7 +12,7 @@ extension String: Error {}
     - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Returns: target position: the distance from the launcher to the target (m)
 */
-func get_input(_ filename: String) -> Void {
+func get_input(_ filename: String) throws -> Void {
     var v_launch: Float
     var theta: Float
     var p_target: Float

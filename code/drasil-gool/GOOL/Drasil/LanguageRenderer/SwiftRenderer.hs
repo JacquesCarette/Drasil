@@ -381,8 +381,8 @@ instance RenderValue SwiftCode where
   call l o n t ps b = do
     mn <- zoom lensVStoFS getModuleName
     mem <- getMethodExcMap
-    let f = if elem Standard $ findWithDefault [] (qualName (modNm l) n) mem 
-          then swiftTryVal else id
+    let f = if null $ findWithDefault [] (qualName (modNm l) n) mem 
+          then id else swiftTryVal
         modNm (Just extm) = extm
         modNm Nothing = mn
     f $ G.call swiftNamedArgSep Nothing o n t ps b
@@ -1049,7 +1049,7 @@ swiftMethod n s p t ps b = do
   bod <- b
   mem <- zoom lensMStoVS getMethodExcMap
   mn <- zoom lensMStoFS getModuleName
-  let excs = filter (== Standard) $ findWithDefault [] (qualName mn n) mem
+  let excs = findWithDefault [] (qualName mn n) mem
   mthdFromData Pub (vcat [
     RC.scope s <+> RC.perm p <+> swiftFunc <+> text n <> 
       parens (parameterList pms) <+> emptyIfNull excs throwsLabel <+> 

@@ -17,14 +17,14 @@ class InputParameters {
         - Parameter filename: name of the input file
     */
     init(_ filename: String) {
-        self.get_input(filename)
+        try self.get_input(filename)
         self.input_constraints()
     }
     
     /** Reads input from a file with the given file name
         - Parameter filename: name of the input file
     */
-    private func get_input(_ filename: String) -> Void {
+    private func get_input(_ filename: String) throws -> Void {
         var infile: URL
         infile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
         var contents: [[String]]

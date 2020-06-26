@@ -8,7 +8,7 @@ import Foundation
     - Parameter inParams: structure holding the input values
     - Returns: stress distribution factor (Function) based on Pbtol
 */
-func func_J_tol(_ inParams: InputParameters) -> Double {
+func func_J_tol(_ inParams: InputParameters) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -97,7 +97,7 @@ func func_q(_ inParams: InputParameters) throws -> Double {
     - Parameter q: applied load (demand): 3 second duration equivalent pressure (Pa)
     - Returns: dimensionless load
 */
-func func_q_hat(_ inParams: InputParameters, _ q: Double) -> Double {
+func func_q_hat(_ inParams: InputParameters, _ q: Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -280,7 +280,7 @@ func func_J(_ inParams: InputParameters, _ q_hat: Double) throws -> Double {
     - Parameter q_hat_tol: tolerable load
     - Returns: non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
 */
-func func_NFL(_ inParams: InputParameters, _ q_hat_tol: Double) -> Double {
+func func_NFL(_ inParams: InputParameters, _ q_hat_tol: Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -341,7 +341,7 @@ func func_NFL(_ inParams: InputParameters, _ q_hat_tol: Double) -> Double {
     - Parameter J: stress distribution factor (Function)
     - Returns: risk of failure
 */
-func func_B(_ inParams: InputParameters, _ J: Double) -> Double {
+func func_B(_ inParams: InputParameters, _ J: Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -402,7 +402,7 @@ func func_B(_ inParams: InputParameters, _ J: Double) -> Double {
     - Parameter NFL: non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
     - Returns: load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
 */
-func func_LR(_ inParams: InputParameters, _ NFL: Double) -> Double {
+func func_LR(_ inParams: InputParameters, _ NFL: Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -463,7 +463,7 @@ func func_LR(_ inParams: InputParameters, _ NFL: Double) -> Double {
     - Parameter q: applied load (demand): 3 second duration equivalent pressure (Pa)
     - Returns: 3 second load equivalent resistance safety requirement
 */
-func func_is_safeLR(_ LR: Double, _ q: Double) -> Bool {
+func func_is_safeLR(_ LR: Double, _ q: Double) throws -> Bool {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -523,7 +523,7 @@ func func_is_safeLR(_ LR: Double, _ q: Double) -> Bool {
     - Parameter B: risk of failure
     - Returns: probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
 */
-func func_P_b(_ B: Double) -> Double {
+func func_P_b(_ B: Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -568,7 +568,7 @@ func func_P_b(_ B: Double) -> Double {
     - Parameter P_b: probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     - Returns: probability of glass breakage safety requirement
 */
-func func_is_safePb(_ inParams: InputParameters, _ P_b: Double) -> Bool {
+func func_is_safePb(_ inParams: InputParameters, _ P_b: Double) throws -> Bool {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

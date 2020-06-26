@@ -59,7 +59,7 @@ func func_s(_ p_target: Double, _ epsilon: Double, _ d_offset: Double) -> String
     - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Returns: target position: the distance from the launcher to the target (m)
 */
-func get_input(_ filename: String) -> Void {
+func get_input(_ filename: String) throws -> Void {
     var v_launch: Double
     var theta: Double
     var p_target: Double
@@ -121,7 +121,7 @@ func input_constraints(_ v_launch: Double, _ theta: Double, _ p_target: Double) 
     - Parameter s: output message as a string
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
 */
-func write_output(_ s: String, _ d_offset: Double) -> Void {
+func write_output(_ s: String, _ d_offset: Double) throws -> Void {
     var outputfile: FileHandle
     do {
         outputfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("output.txt"))
@@ -163,10 +163,10 @@ var epsilon: Double = 2.0e-2
 var v_launch: Double
 var theta: Double
 var p_target: Double
-(v_launch, theta, p_target) = get_input(filename)
+(v_launch, theta, p_target) = try get_input(filename)
 input_constraints(v_launch, theta, p_target)
 var t_flight: Double = func_t_flight(v_launch, theta, g_vect)
 var p_land: Double = func_p_land(v_launch, theta, g_vect)
 var d_offset: Double = func_d_offset(p_target, p_land)
 var s: String = func_s(p_target, epsilon, d_offset)
-write_output(s, d_offset)
+try write_output(s, d_offset)

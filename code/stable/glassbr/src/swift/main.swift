@@ -36,10 +36,10 @@ do {
     throw "Error closing file."
 }
 var inParams: InputParameters = InputParameters()
-get_input(filename, inParams)
+try get_input(filename, inParams)
 try derived_values(inParams)
 try input_constraints(inParams)
-var J_tol: Double = func_J_tol(inParams)
+var J_tol: Double = try func_J_tol(inParams)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -95,7 +95,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var q_hat: Double = func_q_hat(inParams, q)
+var q_hat: Double = try func_q_hat(inParams, q)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -179,7 +179,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var NFL: Double = func_NFL(inParams, q_hat_tol)
+var NFL: Double = try func_NFL(inParams, q_hat_tol)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -207,7 +207,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var B: Double = func_B(inParams, J)
+var B: Double = try func_B(inParams, J)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -235,7 +235,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var LR: Double = func_LR(inParams, NFL)
+var LR: Double = try func_LR(inParams, NFL)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -263,7 +263,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var is_safeLR: Bool = func_is_safeLR(LR, q)
+var is_safeLR: Bool = try func_is_safeLR(LR, q)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -291,7 +291,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var P_b: Double = func_P_b(B)
+var P_b: Double = try func_P_b(B)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -319,7 +319,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var is_safePb: Bool = func_is_safePb(inParams, P_b)
+var is_safePb: Bool = try func_is_safePb(inParams, P_b)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
     try outfile.seekToEnd()
@@ -347,4 +347,4 @@ do {
 } catch {
     throw "Error closing file."
 }
-write_output(is_safePb, is_safeLR, P_b, J)
+try write_output(is_safePb, is_safeLR, P_b, J)

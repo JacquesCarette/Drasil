@@ -11,7 +11,7 @@ import Foundation
     - Returns: flight duration: the time when the projectile lands (s)
 */
 func func_t_flight(_ v_launch: Float, _ theta: Float, _ g_vect: Float) -> Float {
-    return 2 * v_launch * sin(theta) / g_vect
+    return Float(2) * v_launch * sin(theta) / g_vect
 }
 
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -21,7 +21,7 @@ func func_t_flight(_ v_launch: Float, _ theta: Float, _ g_vect: Float) -> Float 
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
 func func_p_land(_ v_launch: Float, _ theta: Float, _ g_vect: Float) -> Float {
-    return 2 * pow(v_launch, 2) * sin(theta) * cos(theta) / g_vect
+    return Float(2) * pow(v_launch, 2) * sin(theta) * cos(theta) / g_vect
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

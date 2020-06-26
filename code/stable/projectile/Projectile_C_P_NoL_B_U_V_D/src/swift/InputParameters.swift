@@ -50,7 +50,7 @@ class InputParameters {
             print(0, terminator: "")
             print(".")
         }
-        if !(0 < self.theta && self.theta < Double.pi / 2) {
+        if !(0 < self.theta && self.theta < Double.pi / Double(2)) {
             print("Warning: ", terminator: "")
             print("theta has value ", terminator: "")
             print(self.theta, terminator: "")
@@ -58,7 +58,7 @@ class InputParameters {
             print("between ", terminator: "")
             print(0, terminator: "")
             print(" and ", terminator: "")
-            print(Double.pi / 2, terminator: "")
+            print(Double.pi / Double(2), terminator: "")
             print(" ((pi)/(2))", terminator: "")
             print(".")
         }

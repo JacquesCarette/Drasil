@@ -13,7 +13,7 @@ extension String: Error {}
     - Returns: flight duration: the time when the projectile lands (s)
 */
 func func_t_flight(_ v_launch: Double, _ theta: Double, _ g_vect: Double) -> Double {
-    return 2 * v_launch * sin(theta) / g_vect
+    return Double(2) * v_launch * sin(theta) / g_vect
 }
 
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -23,7 +23,7 @@ func func_t_flight(_ v_launch: Double, _ theta: Double, _ g_vect: Double) -> Dou
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
 func func_p_land(_ v_launch: Double, _ theta: Double, _ g_vect: Double) -> Double {
-    return 2 * pow(v_launch, 2) * sin(theta) * cos(theta) / g_vect
+    return Double(2) * pow(v_launch, 2) * sin(theta) * cos(theta) / g_vect
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -94,7 +94,7 @@ func input_constraints(_ v_launch: Double, _ theta: Double, _ p_target: Double) 
         print(0, terminator: "")
         print(".")
     }
-    if !(0 < theta && theta < Double.pi / 2) {
+    if !(0 < theta && theta < Double.pi / Double(2)) {
         print("Warning: ", terminator: "")
         print("theta has value ", terminator: "")
         print(theta, terminator: "")
@@ -102,7 +102,7 @@ func input_constraints(_ v_launch: Double, _ theta: Double, _ p_target: Double) 
         print("between ", terminator: "")
         print(0, terminator: "")
         print(" and ", terminator: "")
-        print(Double.pi / 2, terminator: "")
+        print(Double.pi / Double(2), terminator: "")
         print(" ((pi)/(2))", terminator: "")
         print(".")
     }

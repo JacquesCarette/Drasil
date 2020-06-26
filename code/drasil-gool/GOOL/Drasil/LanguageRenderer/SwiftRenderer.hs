@@ -25,10 +25,10 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   ControlStatement(..), StatePattern(..), ObserverPattern(..), 
   StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), convType)
-import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderFile(..), 
-  ImportSym(..), ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
-  RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), 
-  BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..), 
+import GOOL.Drasil.RendererClasses (MSMthdType, VSBinOp, RenderSym, 
+  RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..), 
+  BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
+  UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
   InternalVarElim(variableBind), RenderValue(..), ValueElim(valuePrec), 
   InternalGetSet(..), InternalListFunc(..), RenderFunction(..), 
   FunctionElim(functionType), InternalAssignStmt(..), InternalIOStmt(..), 
@@ -309,10 +309,10 @@ instance NumericExpression SwiftCode where
   (#~) = unExpr' negateOp
   (#/^) = unExpr sqrtOp
   (#|) = unExpr absOp
-  (#+) = binExpr plusOp
-  (#-) = binExpr minusOp
-  (#*) = binExpr multOp
-  (#/) = binExpr divideOp
+  (#+) = swiftNumBinExpr plusOp
+  (#-) = swiftNumBinExpr minusOp
+  (#*) = swiftNumBinExpr multOp
+  (#/) = swiftNumBinExpr divideOp
   (#%) = binExpr moduloOp
   (#^) v1' v2' = do
     v1 <- v1'
@@ -851,6 +851,19 @@ swiftUnwrap = "!"
 
 swiftUnaryMath :: (Monad r) => String -> VSOp r
 swiftUnaryMath = addMathImport . unOpPrec
+
+swiftNumBinExpr :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
+swiftNumBinExpr o v1' v2' = do
+  v1 <- v1'
+  v2 <- v2'
+  let f = binExpr o
+      exprT t1 t2 = if t1 == t2 then f (return v1) (return v2) else exprT' t1 t2
+      exprT' Double _ = f (return v1) (cast double $ return v2)
+      exprT' _ Double = f (cast double $ return v1) (return v2)
+      exprT' Float _  = f (return v1) (cast float $ return v2)
+      exprT' _ Float  = f (cast float $ return v1) (return v2)
+      exprT' t1 t2    = f (return v1) (return v2)
+  exprT (getType $ valueType v1) (getType $ valueType v2)
 
 swiftLitFloat :: (RenderSym r) => Float -> SValue r
 swiftLitFloat = mkStateVal float . D.float

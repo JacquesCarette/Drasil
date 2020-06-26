@@ -230,7 +230,7 @@ class InputParameters {
             print(0, terminator: "")
             print(".")
         }
-        if !(0 < self.theta && self.theta < Double.pi / 2) {
+        if !(0 < self.theta && self.theta < Double.pi / Double(2)) {
             print("Warning: ", terminator: "")
             print("theta has value ", terminator: "")
             print(self.theta, terminator: "")
@@ -238,7 +238,7 @@ class InputParameters {
             print("between ", terminator: "")
             print(0, terminator: "")
             print(" and ", terminator: "")
-            print(Double.pi / 2, terminator: "")
+            print(Double.pi / Double(2), terminator: "")
             print(" ((pi)/(2))", terminator: "")
             print(".")
         }
@@ -295,7 +295,7 @@ func func_t_flight(_ inParams: InputParameters) throws -> Float {
         throw "Error closing file."
     }
     
-    return 2 * inParams.v_launch * sin(inParams.theta) / inParams.g_vect
+    return Float(2) * inParams.v_launch * sin(inParams.theta) / inParams.g_vect
 }
 
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -339,7 +339,7 @@ func func_p_land(_ inParams: InputParameters) throws -> Float {
         throw "Error closing file."
     }
     
-    return 2 * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / inParams.g_vect
+    return Float(2) * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / inParams.g_vect
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

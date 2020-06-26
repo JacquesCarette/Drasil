@@ -73,7 +73,7 @@ func derived_values(_ inParams: InputParameters) throws -> Void {
         throw "Error closing file."
     }
     
-    inParams.LDF = pow(3.0 / 60, 7.0 / 16)
+    inParams.LDF = pow(3.0 / Double(60), 7.0 / Double(16))
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()

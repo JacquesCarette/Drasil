@@ -45,7 +45,7 @@ func func_J_tol(_ inParams: InputParameters) throws -> Double {
         throw "Error closing file."
     }
     
-    return log(log(1 / (1 - inParams.P_btol)) * (pow(inParams.a * inParams.b, 7.0 - 1) / (2.86e-53 * pow(7.17e10 * pow(inParams.h, 2), 7.0) * inParams.LDF)))
+    return log(log(Double(1) / (Double(1) - inParams.P_btol)) * (pow(inParams.a * inParams.b, 7.0 - Double(1)) / (2.86e-53 * pow(7.17e10 * pow(inParams.h, 2), 7.0) * inParams.LDF)))
 }
 
 /** Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
@@ -150,7 +150,7 @@ func func_q_hat(_ inParams: InputParameters, _ q: Double) throws -> Double {
         throw "Error closing file."
     }
     
-    return q * pow(inParams.a * inParams.b, 2) / (7.17e10 * pow(inParams.h, 4) * inParams.GTF)
+    return q * pow(inParams.a * inParams.b, 2) / (7.17e10 * pow(inParams.h, 4) * Double(inParams.GTF))
 }
 
 /** Calculates tolerable load
@@ -394,7 +394,7 @@ func func_B(_ inParams: InputParameters, _ J: Double) throws -> Double {
         throw "Error closing file."
     }
     
-    return 2.86e-53 / pow(inParams.a * inParams.b, 7.0 - 1) * pow(7.17e10 * pow(inParams.h, 2), 7.0) * inParams.LDF * exp(J)
+    return 2.86e-53 / pow(inParams.a * inParams.b, 7.0 - Double(1)) * pow(7.17e10 * pow(inParams.h, 2), 7.0) * inParams.LDF * exp(J)
 }
 
 /** Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
@@ -455,7 +455,7 @@ func func_LR(_ inParams: InputParameters, _ NFL: Double) throws -> Double {
         throw "Error closing file."
     }
     
-    return NFL * inParams.GTF * 1
+    return NFL * Double(inParams.GTF) * Double(1)
 }
 
 /** Calculates 3 second load equivalent resistance safety requirement
@@ -560,7 +560,7 @@ func func_P_b(_ B: Double) throws -> Double {
         throw "Error closing file."
     }
     
-    return 1 - exp(-B)
+    return Double(1) - exp(-B)
 }
 
 /** Calculates probability of glass breakage safety requirement

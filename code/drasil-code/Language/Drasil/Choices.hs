@@ -1,10 +1,11 @@
 -- | Defines the design language for SCS.
 module Language.Drasil.Choices (
   Choices(..), Modularity(..), InputModule(..), inputModule, Structure(..), 
-  ConstantStructure(..), ConstantRepr(..), MatchedConceptMap, CodeConcept(..), 
-  matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
+  ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap, 
+  CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
-  Logging(..), AuxFile(..), getSampleData, hasSampleInput, hasReadMe, defaultChoices
+  Logging(..), AuxFile(..), getSampleData, hasSampleInput, hasReadMe, defaultChoices,
+  choicesDoc
 ) where
 
 import Language.Drasil
@@ -18,6 +19,8 @@ import GOOL.Drasil (CodeType)
 
 import Control.Lens ((^.))
 import Data.Map (Map, fromList)
+import Text.PrettyPrint.HughesPJ (Doc, text, punctuate, hcat)
+
 
 data Choices = Choices {
 -- Global design choices (affect entire program)
@@ -70,9 +73,11 @@ data Choices = Choices {
 data Modularity = Modular InputModule -- Different modules for: controller, 
                                       -- input, calculations, output.
                 | Unmodular -- All generated code is in one module/file.
+                deriving Show
 
 data InputModule = Combined -- Input-related functions combined in one module
                  | Separated -- Input-related functions each in own module  
+                 deriving Show
 
 -- Determines whether there is a Combined input module or many Separated input 
 -- modules, based on a Choices structure. An Unmodular design implicitly means 
@@ -84,14 +89,17 @@ inputModule c = inputModule' $ modularity c
                  
 data Structure = Unbundled -- Individual variables
                | Bundled -- Variables bundled in a class
+               deriving Show
 
 data ConstantStructure = Inline -- Inline values for constants
                        | WithInputs -- Store constants with inputs
                        | Store Structure -- Store constants separately from 
                                          -- inputs, whether bundled or unbundled
+                       deriving Show
 
 data ConstantRepr = Var -- Constants represented as regular variables
                   | Const -- Use target language's mechanism for defining constants.
+                  deriving Show
 
 -- | Specifies matches between chunks and CodeConcepts, meaning the target 
 -- language's pre-existing definition of the concept should be used instead of 
@@ -102,7 +110,7 @@ type ConceptMatchMap = Map UID [CodeConcept]
 type MatchedConceptMap = Map UID CodeConcept
 
 -- Currently we only support one code concept, more will be added later
-data CodeConcept = Pi
+data CodeConcept = Pi deriving Show
 
 -- | Builds a ConceptMatchMap from an association list of chunks and CodeConcepts
 matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
@@ -126,32 +134,36 @@ matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
 
 data ImplementationType = Library -- Generated code does not include Controller 
                         | Program -- Generated code includes Controller
+                        deriving Show
                         
 data ConstraintBehaviour = Warning -- Print warning when constraint violated
                          | Exception -- Throw exception when constraint violated
+                         deriving Show
         
 data Comments = CommentFunc -- Function/method-level comments
               | CommentClass -- class-level comments
               | CommentMod -- File/Module-level comments
-              deriving Eq
+              deriving (Eq, Show)
 
 data Verbosity = Verbose | Quiet
+                 deriving Show
 
 data Visibility = Show
-                | Hide
+                | Hide 
+                deriving Show
 
 -- Eq instances required for Logging and Comments because generator needs to 
 -- check membership of these elements in lists
 data Logging = LogFunc -- Log messages generated for function calls
              | LogVar -- Log messages generated for variable assignments
-             deriving Eq
+             deriving (Eq, Show)
 
 -- Currently we only support one kind of auxiliary file: sample input file
 -- To generate a sample input file compatible with the generated program
 -- FilePath is the path to the user-provided file containing a sample set of input data
 data AuxFile = SampleInput FilePath 
                 | ReadME 
-                deriving Eq
+                deriving (Eq, Show)
 
 -- Gets the file path to a sample input data set from a Choices structure, if 
 -- the user chose to generate a sample input file.
@@ -195,3 +207,26 @@ defaultChoices = Choices {
   odeLib = [],
   odes = []
 }
+
+choicesDoc :: Choices -> Doc 
+choicesDoc chs = (hcat . punctuate (text "\n") . map chsFieldDoc) 
+  [
+  ("Languages", show $ lang chs)
+  , ("Modularity", show $ modularity chs)
+  , ("Input Structure", show $ inputStructure chs)
+  , ("Constant Structure", show $ constStructure chs)
+  , ("Constant Representation", show $ constRepr chs)
+  , ("Implementation Type", show $ impType chs)
+  , ("Software Constraint Behaviour",show $ onSfwrConstraint chs)
+  , ("Physical Constrain Behavior",show $ onPhysConstraint chs)
+  , ("Comments",show $ comments chs)
+  , ("Dox Verbosity",show $ doxVerbosity chs)
+  , ("Dates", show $ dates chs)
+  , ("Log File Name",show $ logFile chs)
+  , ("Logging", show $ logging chs)
+  , ("Auxiliary Files",show $ auxFiles chs)
+--  , ("ODE Libraries", odeLib chs)
+--  , ("ODE's", odes chs) along with  conceptmatch and speace match
+  ] 
+chsFieldDoc :: (String, String) -> Doc
+chsFieldDoc (rec, chc) = text $ rec ++ " selected as " ++ chc

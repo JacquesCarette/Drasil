@@ -66,12 +66,12 @@ import qualified GOOL.Drasil.LanguageRenderer.LanguagePolymorphic as G (
   implementingClass, docClass, commentedClass, modFromData, fileDoc, docMod, 
   fileFromData)
 import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar, 
-  objVarSelf, intClass, buildModule, bindingError, notNull, listDecDef, 
-  destructorError, stateVarDef, constVar, litArray, listSetFunc, extraClass, 
-  listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self, 
-  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
-  mainBody, inOutFunc, docInOutFunc', float, stringRender', string', inherit, 
-  implements)
+  objVarSelf, intClass, buildModule, bindingError, extFuncAppMixedArgs, 
+  notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, 
+  listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR, 
+  openFileW, stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, 
+  inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', float, 
+  stringRender', string', inherit, implements)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp, 
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
   listSize, varDecDef, switch, while)
@@ -86,7 +86,7 @@ import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
-  lensMStoFS, lensMStoVS, revFiles, addLangImportVS, getLangImports, 
+  lensMStoFS, lensMStoVS, lensVStoFS, revFiles, addLangImportVS, getLangImports,
   getLibImports, setFileType, setModuleName, getModuleName, getCurrMain, 
   getMethodExcMap, getMainDoc, setThrowUsed, getThrowUsed, setErrorDefined, 
   getErrorDefined, incrementLine, incrementWord, getLineIndex, getWordIndex,
@@ -357,10 +357,12 @@ instance ValueExpression SwiftCode where
 
   funcAppMixedArgs = G.funcAppMixedArgs
   selfFuncAppMixedArgs = G.selfFuncAppMixedArgs dot self
-  extFuncAppMixedArgs _ = funcAppMixedArgs
+  extFuncAppMixedArgs = CP.extFuncAppMixedArgs
   libFuncAppMixedArgs = C.libFuncAppMixedArgs
   newObjMixedArgs = G.newObjMixedArgs ""
-  extNewObjMixedArgs _ = newObjMixedArgs
+  extNewObjMixedArgs m tp vs ns = do
+    t <- tp
+    call (Just m) Nothing (getTypeString t) (return t) vs ns
   libNewObjMixedArgs = C.libNewObjMixedArgs
 
   lambda = G.lambda swiftLambda
@@ -376,7 +378,14 @@ instance RenderValue SwiftCode where
   
   cast = swiftCast
 
-  call = G.call swiftNamedArgSep
+  call l o n t ps b = do
+    mn <- zoom lensVStoFS getModuleName
+    mem <- getMethodExcMap
+    let f = if elem Standard $ findWithDefault [] (qualName (modNm l) n) mem 
+          then swiftTryVal else id
+        modNm (Just extm) = extm
+        modNm Nothing = mn
+    f $ G.call swiftNamedArgSep Nothing o n t ps b
   
   valFromData p t' d = do 
     t <- t'

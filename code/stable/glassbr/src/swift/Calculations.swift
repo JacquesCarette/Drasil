@@ -89,7 +89,7 @@ func func_q(_ inParams: InputParameters) throws -> Double {
         throw "Error closing file."
     }
     
-    return interpY("TSD.txt", inParams.SD, inParams.w_TNT)
+    return try interpY("TSD.txt", inParams.SD, inParams.w_TNT)
 }
 
 /** Calculates dimensionless load
@@ -211,7 +211,7 @@ func func_q_hat_tol(_ inParams: InputParameters, _ J_tol: Double) throws -> Doub
         throw "Error closing file."
     }
     
-    return interpY("SDF.txt", inParams.AR, J_tol)
+    return try interpY("SDF.txt", inParams.AR, J_tol)
 }
 
 /** Calculates stress distribution factor (Function)
@@ -272,7 +272,7 @@ func func_J(_ inParams: InputParameters, _ q_hat: Double) throws -> Double {
         throw "Error closing file."
     }
     
-    return interpZ("SDF.txt", inParams.AR, q_hat)
+    return try interpZ("SDF.txt", inParams.AR, q_hat)
 }
 
 /** Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)

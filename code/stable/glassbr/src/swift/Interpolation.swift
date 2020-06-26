@@ -336,7 +336,7 @@ func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
     var y_matrix: [[Double]] = []
     var z_vector: [Double] = []
     read_table(filename, z_vector, x_matrix, y_matrix)
-    i = find(z_vector, z)
+    i = try find(z_vector, z)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -477,7 +477,7 @@ func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
         throw "Error closing file."
     }
     do {
-        j = find(x_z_1, x)
+        j = try find(x_z_1, x)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -505,7 +505,7 @@ func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
         } catch {
             throw "Error closing file."
         }
-        k_2 = find(x_z_2, x)
+        k_2 = try find(x_z_2, x)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -797,7 +797,7 @@ func interpZ(_ filename: String, _ x: Double, _ y: Double) throws -> Double {
             throw "Error closing file."
         }
         do {
-            j = find(x_z_1, x)
+            j = try find(x_z_1, x)
             do {
                 outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
                 try outfile.seekToEnd()
@@ -825,7 +825,7 @@ func interpZ(_ filename: String, _ x: Double, _ y: Double) throws -> Double {
             } catch {
                 throw "Error closing file."
             }
-            k_2 = find(x_z_2, x)
+            k_2 = try find(x_z_2, x)
             do {
                 outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
                 try outfile.seekToEnd()

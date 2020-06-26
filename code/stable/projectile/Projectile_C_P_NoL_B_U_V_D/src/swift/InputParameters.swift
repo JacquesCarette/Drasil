@@ -9,9 +9,9 @@ extension String: Error {}
 /** Structure for holding the input values
 */
 class InputParameters {
-    var v_launch: Double
-    var theta: Double
-    var p_target: Double
+    var v_launch: Double = 0.0
+    var theta: Double = 0.0
+    var p_target: Double = 0.0
     
     /** Initializes input object by reading inputs and checking physical constraints on the input
         - Parameter filename: name of the input file

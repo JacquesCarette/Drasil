@@ -9,9 +9,9 @@ extension String: Error {}
 /** Structure for holding the input values and constant values
 */
 class InputParameters {
-    var v_launch: Float
-    var theta: Float
-    var p_target: Float
+    var v_launch: Float = 0.0
+    var theta: Float = 0.0
+    var p_target: Float = 0.0
     var g_vect: Float = 9.8
     var epsilon: Float = 2.0e-2
     

@@ -5,21 +5,21 @@
 /** Structure for holding the input values and derived values
 */
 class InputParameters {
-    var a: Double
-    var b: Double
-    var w: Double
-    var P_btol: Double
-    var TNT: Double
-    var g: String
-    var t: Double
-    var SD_x: Double
-    var SD_y: Double
-    var SD_z: Double
-    var h: Double
-    var LDF: Double
-    var GTF: Int
-    var SD: Double
-    var AR: Double
-    var w_TNT: Double
+    var a: Double = 0.0
+    var b: Double = 0.0
+    var w: Double = 0.0
+    var P_btol: Double = 0.0
+    var TNT: Double = 0.0
+    var g: String = ""
+    var t: Double = 0.0
+    var SD_x: Double = 0.0
+    var SD_y: Double = 0.0
+    var SD_z: Double = 0.0
+    var h: Double = 0.0
+    var LDF: Double = 0.0
+    var GTF: Int = 0
+    var SD: Double = 0.0
+    var AR: Double = 0.0
+    var w_TNT: Double = 0.0
     
 }

@@ -24,7 +24,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
   ControlStatement(..), StatePattern(..), ObserverPattern(..), 
   StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  StateVarSym(..), ClassSym(..), ModuleSym(..), convType)
 import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, RenderFile(..), 
   ImportSym(..), ImportElim, PermElim(binding), RenderBody(..), BodyElim, 
   RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, UnaryOpSym(..), 
@@ -69,7 +69,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar,
   objVarSelf, intClass, buildModule, bindingError, extFuncAppMixedArgs, 
   notNull, listDecDef, destructorError, stateVarDef, constVar, litArray, 
   listSetFunc, extraClass, listAccessFunc, doubleRender, double, openFileR, 
-  openFileW, stateVar, self, multiAssign, multiReturn, listDec, funcDecDef, 
+  openFileW, self, multiAssign, multiReturn, listDec, funcDecDef, 
   inOutCall, forLoopError, mainBody, inOutFunc, docInOutFunc', float, 
   stringRender', string', inherit, implements)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp, 
@@ -86,11 +86,11 @@ import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
-  lensMStoFS, lensMStoVS, lensVStoFS, revFiles, addLangImportVS, getLangImports,
-  getLibImports, setFileType, setModuleName, getModuleName, getCurrMain, 
-  getMethodExcMap, getMainDoc, setThrowUsed, getThrowUsed, setErrorDefined, 
-  getErrorDefined, incrementLine, incrementWord, getLineIndex, getWordIndex,
-  resetIndices)
+  lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, revFiles, addLangImportVS, 
+  getLangImports, getLibImports, setFileType, setModuleName, getModuleName, 
+  getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed, getThrowUsed, 
+  setErrorDefined, getErrorDefined, incrementLine, incrementWord, getLineIndex, 
+  getWordIndex, resetIndices)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -646,7 +646,9 @@ instance MethodElim SwiftCode where
 
 instance StateVarSym SwiftCode where
   type StateVar SwiftCode = Doc
-  stateVar = CP.stateVar
+  stateVar s p vr = do
+    v <- zoom lensCStoVS vr
+    stateVarDef s p vr (typeDfltVal $ getType $ variableType v)
   stateVarDef = CP.stateVarDef
   constVar = CP.constVar (RC.perm (static :: SwiftCode (Permanence SwiftCode)))
   
@@ -1102,3 +1104,14 @@ swiftParamDoc = "Parameter"
 swiftRetDoc = "Returns"
 swiftAuthorDoc = "Authors"
 swiftDateDoc = "Date"
+
+typeDfltVal :: (RenderSym r) => CodeType -> SValue r
+typeDfltVal Boolean = litFalse
+typeDfltVal Integer = litInt 0
+typeDfltVal Float = litFloat 0.0
+typeDfltVal Double = litDouble 0.0
+typeDfltVal Char = litChar ' '
+typeDfltVal String = litString ""
+typeDfltVal (List t) = litList (convType t) []
+typeDfltVal (Array t) = litArray (convType t) []
+typeDfltVal _ = error "Attempt to get default value for type with none."

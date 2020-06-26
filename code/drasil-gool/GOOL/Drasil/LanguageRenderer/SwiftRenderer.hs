@@ -728,9 +728,10 @@ swiftTryVal v' = do
   v <- v'
   mkVal (valueType v) (tryLabel <+> RC.value v)
 
+-- Putting "gool" in these names to avoid name conflicts
 swiftContentsVar, swiftLineVar :: SVariable SwiftCode
-swiftContentsVar = var "contents" (listType $ listType string)
-swiftLineVar = var "line" (listType string)
+swiftContentsVar = var "goolContents" (listType $ listType string)
+swiftLineVar = var "goolLine" (listType string)
 
 swiftContentsVal, swiftLineVal :: SValue SwiftCode
 swiftContentsVal = valueOf swiftContentsVar
@@ -862,7 +863,7 @@ swiftNumBinExpr o v1' v2' = do
       exprT' _ Double = f (cast double $ return v1) (return v2)
       exprT' Float _  = f (return v1) (cast float $ return v2)
       exprT' _ Float  = f (cast float $ return v1) (return v2)
-      exprT' t1 t2    = f (return v1) (return v2)
+      exprT' _ _      = f (return v1) (return v2)
   exprT (getType $ valueType v1) (getType $ valueType v2)
 
 swiftLitFloat :: (RenderSym r) => Float -> SValue r

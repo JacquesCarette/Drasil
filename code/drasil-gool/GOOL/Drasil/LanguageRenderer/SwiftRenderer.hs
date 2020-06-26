@@ -82,7 +82,6 @@ import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), qualName, FileType(..),
   FileData(..), fileD, FuncData(..), fd, ModData(..), md, updateMod, 
   MethodData(..), mthd, updateMthd, OpData(..), ParamData(..), pd, ProgData(..),
   progD, TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard)
-import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue, 
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 

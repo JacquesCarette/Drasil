@@ -12,7 +12,7 @@ import Foundation
     - Parameter x: x-coordinate to interpolate at
     - Returns: y value interpolated at given x value
 */
-func lin_interp(_ x_1: Double, _ y_1: Double, _ x_2: Double, _ y_2: Double, _ x: Double) throws -> Double {
+func lin_interp(_ x_1: inout Double, _ y_1: inout Double, _ x_2: inout Double, _ y_2: inout Double, _ x: inout Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -121,7 +121,7 @@ func lin_interp(_ x_1: Double, _ y_1: Double, _ x_2: Double, _ y_2: Double, _ x:
     - Parameter v: value whose index will be found
     - Returns: index of given value in given array
 */
-func find(_ arr: [Double], _ v: Double) throws -> Int {
+func find(_ arr: inout [Double], _ v: inout Double) throws -> Int {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -187,7 +187,7 @@ func find(_ arr: [Double], _ v: Double) throws -> Int {
     - Parameter j: index
     - Returns: column of the given matrix at the given index
 */
-func extractColumn(_ mat: [[Double]], _ j: Int) throws -> [Double] {
+func extractColumn(_ mat: inout [[Double]], _ j: inout Int) throws -> [Double] {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -253,7 +253,7 @@ func extractColumn(_ mat: [[Double]], _ j: Int) throws -> [Double] {
     - Parameter z: z-coordinate to interpolate at
     - Returns: y value interpolated at given x and z values
 */
-func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
+func interpY(_ filename: inout String, _ x: inout Double, _ z: inout Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -601,7 +601,7 @@ func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
     - Parameter y: y-coordinate to interpolate at
     - Returns: z value interpolated at given x and y values
 */
-func interpZ(_ filename: String, _ x: Double, _ y: Double) throws -> Double {
+func interpZ(_ filename: inout String, _ x: inout Double, _ y: inout Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

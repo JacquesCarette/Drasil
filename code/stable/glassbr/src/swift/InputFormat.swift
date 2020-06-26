@@ -8,7 +8,7 @@ import Foundation
     - Parameter filename: name of the input file
     - Parameter inParams: structure holding the input values
 */
-func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
+func get_input(_ filename: inout String, _ inParams: inout InputParameters) throws -> Void {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -63,13 +63,13 @@ func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
     
     var infile: URL
     infile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
-    var contents: [[String]]
+    var goolContents: [[String]]
     do {
-        contents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
+        goolContents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
     } catch {
         throw "Error reading from file."
     }
-    inParams.a = Double(contents[1][0])!
+    inParams.a = Double(goolContents[1][0])!
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -97,7 +97,7 @@ func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
     } catch {
         throw "Error closing file."
     }
-    inParams.b = Double(contents[2][0])!
+    inParams.b = Double(goolContents[2][0])!
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -125,7 +125,7 @@ func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
     } catch {
         throw "Error closing file."
     }
-    inParams.w = Double(contents[3][0])!
+    inParams.w = Double(goolContents[3][0])!
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -153,7 +153,7 @@ func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
     } catch {
         throw "Error closing file."
     }
-    inParams.P_btol = Double(contents[4][0])!
+    inParams.P_btol = Double(goolContents[4][0])!
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -181,7 +181,7 @@ func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
     } catch {
         throw "Error closing file."
     }
-    inParams.TNT = Double(contents[5][0])!
+    inParams.TNT = Double(goolContents[5][0])!
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -209,7 +209,7 @@ func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
     } catch {
         throw "Error closing file."
     }
-    inParams.g = contents[6][0]
+    inParams.g = goolContents[6][0]
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -237,7 +237,7 @@ func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
     } catch {
         throw "Error closing file."
     }
-    inParams.t = Double(contents[7][0])!
+    inParams.t = Double(goolContents[7][0])!
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -265,7 +265,7 @@ func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
     } catch {
         throw "Error closing file."
     }
-    inParams.SD_x = Double(contents[8][0])!
+    inParams.SD_x = Double(goolContents[8][0])!
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -293,7 +293,7 @@ func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
     } catch {
         throw "Error closing file."
     }
-    inParams.SD_y = Double(contents[9][0])!
+    inParams.SD_y = Double(goolContents[9][0])!
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -321,7 +321,7 @@ func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
     } catch {
         throw "Error closing file."
     }
-    inParams.SD_z = Double(contents[10][0])!
+    inParams.SD_z = Double(goolContents[10][0])!
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()

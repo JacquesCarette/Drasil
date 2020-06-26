@@ -7,7 +7,7 @@ import Foundation
 /** Verifies that input values satisfy the physical constraints and software constraints
     - Parameter inParams: structure holding the input values
 */
-func input_constraints(_ inParams: InputParameters) throws -> Void {
+func input_constraints(_ inParams: inout InputParameters) throws -> Void {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

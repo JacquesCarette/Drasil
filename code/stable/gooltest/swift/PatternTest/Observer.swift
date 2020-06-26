@@ -15,7 +15,7 @@ class Observer {
         return self.x
     }
     
-    func setX(_ x: Int) -> Void {
+    func setX(_ x: inout Int) -> Void {
         self.x = x
     }
 }

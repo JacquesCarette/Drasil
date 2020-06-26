@@ -16,7 +16,7 @@ class InputParameters {
     /** Initializes input object by reading inputs and checking physical constraints on the input
         - Parameter filename: name of the input file
     */
-    init(_ filename: String) {
+    init(_ filename: inout String) {
         try self.get_input(filename)
         self.input_constraints()
     }
@@ -24,18 +24,18 @@ class InputParameters {
     /** Reads input from a file with the given file name
         - Parameter filename: name of the input file
     */
-    private func get_input(_ filename: String) throws -> Void {
+    private func get_input(_ filename: inout String) throws -> Void {
         var infile: URL
         infile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
-        var contents: [[String]]
+        var goolContents: [[String]]
         do {
-            contents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
+            goolContents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
         } catch {
             throw "Error reading from file."
         }
-        self.v_launch = Double(contents[1][0])!
-        self.theta = Double(contents[2][0])!
-        self.p_target = Double(contents[3][0])!
+        self.v_launch = Double(goolContents[1][0])!
+        self.theta = Double(goolContents[2][0])!
+        self.p_target = Double(goolContents[3][0])!
     }
     
     /** Verifies that input values satisfy the physical constraints

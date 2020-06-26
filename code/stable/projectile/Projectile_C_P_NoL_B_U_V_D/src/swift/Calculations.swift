@@ -9,7 +9,7 @@ import Foundation
     - Parameter g_vect: gravitational acceleration (m/s^2)
     - Returns: flight duration: the time when the projectile lands (s)
 */
-func func_t_flight(_ inParams: InputParameters, _ g_vect: Double) -> Double {
+func func_t_flight(_ inParams: inout InputParameters, _ g_vect: inout Double) -> Double {
     return Double(2) * inParams.v_launch * sin(inParams.theta) / g_vect
 }
 
@@ -18,7 +18,7 @@ func func_t_flight(_ inParams: InputParameters, _ g_vect: Double) -> Double {
     - Parameter g_vect: gravitational acceleration (m/s^2)
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
-func func_p_land(_ inParams: InputParameters, _ g_vect: Double) -> Double {
+func func_p_land(_ inParams: inout InputParameters, _ g_vect: inout Double) -> Double {
     return Double(2) * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / g_vect
 }
 
@@ -27,7 +27,7 @@ func func_p_land(_ inParams: InputParameters, _ g_vect: Double) -> Double {
     - Parameter p_land: landing position: the distance from the launcher to the final position of the projectile (m)
     - Returns: distance between the target position and the landing position: the offset between the target position and the landing position (m)
 */
-func func_d_offset(_ inParams: InputParameters, _ p_land: Double) -> Double {
+func func_d_offset(_ inParams: inout InputParameters, _ p_land: inout Double) -> Double {
     return p_land - inParams.p_target
 }
 
@@ -37,7 +37,7 @@ func func_d_offset(_ inParams: InputParameters, _ p_land: Double) -> Double {
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
     - Returns: output message as a string
 */
-func func_s(_ inParams: InputParameters, _ epsilon: Double, _ d_offset: Double) -> String {
+func func_s(_ inParams: inout InputParameters, _ epsilon: inout Double, _ d_offset: inout Double) -> String {
     if abs(d_offset / inParams.p_target) < epsilon {
         return "The target was hit."
     }

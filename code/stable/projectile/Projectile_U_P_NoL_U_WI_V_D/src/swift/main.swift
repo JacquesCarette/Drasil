@@ -12,7 +12,7 @@ extension String: Error {}
     - Parameter g_vect: gravitational acceleration (m/s^2)
     - Returns: flight duration: the time when the projectile lands (s)
 */
-func func_t_flight(_ v_launch: Double, _ theta: Double, _ g_vect: Double) -> Double {
+func func_t_flight(_ v_launch: inout Double, _ theta: inout Double, _ g_vect: inout Double) -> Double {
     return Double(2) * v_launch * sin(theta) / g_vect
 }
 
@@ -22,7 +22,7 @@ func func_t_flight(_ v_launch: Double, _ theta: Double, _ g_vect: Double) -> Dou
     - Parameter g_vect: gravitational acceleration (m/s^2)
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
-func func_p_land(_ v_launch: Double, _ theta: Double, _ g_vect: Double) -> Double {
+func func_p_land(_ v_launch: inout Double, _ theta: inout Double, _ g_vect: inout Double) -> Double {
     return Double(2) * pow(v_launch, 2) * sin(theta) * cos(theta) / g_vect
 }
 
@@ -31,7 +31,7 @@ func func_p_land(_ v_launch: Double, _ theta: Double, _ g_vect: Double) -> Doubl
     - Parameter p_land: landing position: the distance from the launcher to the final position of the projectile (m)
     - Returns: distance between the target position and the landing position: the offset between the target position and the landing position (m)
 */
-func func_d_offset(_ p_target: Double, _ p_land: Double) -> Double {
+func func_d_offset(_ p_target: inout Double, _ p_land: inout Double) -> Double {
     return p_land - p_target
 }
 
@@ -41,7 +41,7 @@ func func_d_offset(_ p_target: Double, _ p_land: Double) -> Double {
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
     - Returns: output message as a string
 */
-func func_s(_ p_target: Double, _ epsilon: Double, _ d_offset: Double) -> String {
+func func_s(_ p_target: inout Double, _ epsilon: inout Double, _ d_offset: inout Double) -> String {
     if abs(d_offset / p_target) < epsilon {
         return "The target was hit."
     }
@@ -59,22 +59,22 @@ func func_s(_ p_target: Double, _ epsilon: Double, _ d_offset: Double) -> String
     - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Returns: target position: the distance from the launcher to the target (m)
 */
-func get_input(_ filename: String) throws -> Void {
+func get_input(_ filename: inout String) throws -> Void {
     var v_launch: Double
     var theta: Double
     var p_target: Double
     
     var infile: URL
     infile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
-    var contents: [[String]]
+    var goolContents: [[String]]
     do {
-        contents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
+        goolContents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
     } catch {
         throw "Error reading from file."
     }
-    v_launch = Double(contents[1][0])!
-    theta = Double(contents[2][0])!
-    p_target = Double(contents[3][0])!
+    v_launch = Double(goolContents[1][0])!
+    theta = Double(goolContents[2][0])!
+    p_target = Double(goolContents[3][0])!
     
     return (v_launch, theta, p_target)
 }
@@ -84,7 +84,7 @@ func get_input(_ filename: String) throws -> Void {
     - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Parameter p_target: target position: the distance from the launcher to the target (m)
 */
-func input_constraints(_ v_launch: Double, _ theta: Double, _ p_target: Double) -> Void {
+func input_constraints(_ v_launch: inout Double, _ theta: inout Double, _ p_target: inout Double) -> Void {
     if !(v_launch > 0) {
         print("Warning: ", terminator: "")
         print("v_launch has value ", terminator: "")
@@ -121,7 +121,7 @@ func input_constraints(_ v_launch: Double, _ theta: Double, _ p_target: Double) 
     - Parameter s: output message as a string
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
 */
-func write_output(_ s: String, _ d_offset: Double) throws -> Void {
+func write_output(_ s: inout String, _ d_offset: inout Double) throws -> Void {
     var outputfile: FileHandle
     do {
         outputfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("output.txt"))

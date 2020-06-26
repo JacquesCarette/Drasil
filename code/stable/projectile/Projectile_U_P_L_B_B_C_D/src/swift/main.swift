@@ -16,7 +16,7 @@ class InputParameters {
     /** Initializes input object by reading inputs and checking physical constraints on the input
         - Parameter filename: name of the input file
     */
-    init(_ filename: String) {
+    init(_ filename: inout String) {
         var outfile: FileHandle
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -60,7 +60,7 @@ class InputParameters {
     /** Reads input from a file with the given file name
         - Parameter filename: name of the input file
     */
-    private func get_input(_ filename: String) throws -> Void {
+    private func get_input(_ filename: inout String) throws -> Void {
         var outfile: FileHandle
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -99,13 +99,13 @@ class InputParameters {
         
         var infile: URL
         infile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
-        var contents: [[String]]
+        var goolContents: [[String]]
         do {
-            contents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
+            goolContents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
         } catch {
             throw "Error reading from file."
         }
-        self.v_launch = Double(contents[1][0])!
+        self.v_launch = Double(goolContents[1][0])!
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -133,7 +133,7 @@ class InputParameters {
         } catch {
             throw "Error closing file."
         }
-        self.theta = Double(contents[2][0])!
+        self.theta = Double(goolContents[2][0])!
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -161,7 +161,7 @@ class InputParameters {
         } catch {
             throw "Error closing file."
         }
-        self.p_target = Double(contents[3][0])!
+        self.p_target = Double(goolContents[3][0])!
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -264,7 +264,7 @@ class Constants {
     - Parameter inParams: structure holding the input values
     - Returns: flight duration: the time when the projectile lands (s)
 */
-func func_t_flight(_ inParams: InputParameters) throws -> Double {
+func func_t_flight(_ inParams: inout InputParameters) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -308,7 +308,7 @@ func func_t_flight(_ inParams: InputParameters) throws -> Double {
     - Parameter inParams: structure holding the input values
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
-func func_p_land(_ inParams: InputParameters) throws -> Double {
+func func_p_land(_ inParams: inout InputParameters) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -353,7 +353,7 @@ func func_p_land(_ inParams: InputParameters) throws -> Double {
     - Parameter p_land: landing position: the distance from the launcher to the final position of the projectile (m)
     - Returns: distance between the target position and the landing position: the offset between the target position and the landing position (m)
 */
-func func_d_offset(_ inParams: InputParameters, _ p_land: Double) throws -> Double {
+func func_d_offset(_ inParams: inout InputParameters, _ p_land: inout Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -414,7 +414,7 @@ func func_d_offset(_ inParams: InputParameters, _ p_land: Double) throws -> Doub
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
     - Returns: output message as a string
 */
-func func_s(_ inParams: InputParameters, _ d_offset: Double) throws -> String {
+func func_s(_ inParams: inout InputParameters, _ d_offset: inout Double) throws -> String {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -482,7 +482,7 @@ func func_s(_ inParams: InputParameters, _ d_offset: Double) throws -> String {
     - Parameter s: output message as a string
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
 */
-func write_output(_ s: String, _ d_offset: Double) throws -> Void {
+func write_output(_ s: inout String, _ d_offset: inout Double) throws -> Void {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

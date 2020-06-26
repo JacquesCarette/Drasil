@@ -774,9 +774,9 @@ swiftVoidType :: (RenderSym r) => VSType r
 swiftVoidType = typeFromData Void swiftVoid (text swiftVoid)
 
 swiftPi, swiftListSize, swiftFirst, swiftDesc, swiftUTF8, swiftVar, swiftConst, 
-  swiftDo, swiftFunc, swiftCtorName, swiftExtension, swiftError, swiftDocDir, 
-  swiftUserMask, swiftNamedArgSep, swiftTypeSpec, swiftConforms, swiftNoLabel, 
-  swiftRetType', swiftUnwrap' :: Doc
+  swiftDo, swiftFunc, swiftCtorName, swiftExtension, swiftInOut, swiftError, 
+  swiftDocDir, swiftUserMask, swiftNamedArgSep, swiftTypeSpec, swiftConforms, 
+  swiftNoLabel, swiftRetType', swiftUnwrap' :: Doc
 swiftPi = text $ CP.doubleRender `access` piLabel
 swiftListSize = text "count"
 swiftFirst = text "first"
@@ -788,6 +788,7 @@ swiftDo = text "do"
 swiftFunc = text "func"
 swiftCtorName = text "init"
 swiftExtension = text "extension"
+swiftInOut = text "inout"
 swiftError = text "Error"
 swiftDocDir = text $ "" `access` "documentDirectory"
 swiftUserMask = text $ "" `access` "userDomainMask"
@@ -1050,8 +1051,8 @@ swiftTryCatch tb cb = vcat [
   rbrace]
 
 swiftParam :: (RenderSym r) => r (Variable r) -> Doc
-swiftParam v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> 
-  RC.type' (variableType v)
+swiftParam v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> swiftInOut
+  <+> RC.type' (variableType v)
 
 swiftMethod :: Label -> SwiftCode (Scope SwiftCode) -> 
   SwiftCode (Permanence SwiftCode) -> MSMthdType SwiftCode -> 

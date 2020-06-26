@@ -12,22 +12,22 @@ extension String: Error {}
     - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Returns: target position: the distance from the launcher to the target (m)
 */
-func get_input(_ filename: String) throws -> Void {
+func get_input(_ filename: inout String) throws -> Void {
     var v_launch: Float
     var theta: Float
     var p_target: Float
     
     var infile: URL
     infile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
-    var contents: [[String]]
+    var goolContents: [[String]]
     do {
-        contents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
+        goolContents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
     } catch {
         throw "Error reading from file."
     }
-    v_launch = Float(contents[1][0])!
-    theta = Float(contents[2][0])!
-    p_target = Float(contents[3][0])!
+    v_launch = Float(goolContents[1][0])!
+    theta = Float(goolContents[2][0])!
+    p_target = Float(goolContents[3][0])!
     
     return (v_launch, theta, p_target)
 }

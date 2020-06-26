@@ -7,7 +7,7 @@ import Foundation
 /** Calculates values that can be immediately derived from the inputs
     - Parameter inParams: structure holding the input values
 */
-func derived_values(_ inParams: InputParameters) throws -> Void {
+func derived_values(_ inParams: inout InputParameters) throws -> Void {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

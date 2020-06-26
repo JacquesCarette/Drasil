@@ -10,7 +10,7 @@ import Foundation
     - Parameter x_matrix: lists of x values at different z values
     - Parameter y_matrix: lists of y values at different z values
 */
-func read_table(_ filename: String, _ z_vector: [Double], _ x_matrix: [[Double]], _ y_matrix: [[Double]]) throws -> Void {
+func read_table(_ filename: inout String, _ z_vector: inout [Double], _ x_matrix: inout [[Double]], _ y_matrix: inout [[Double]]) throws -> Void {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -100,15 +100,15 @@ func read_table(_ filename: String, _ z_vector: [Double], _ x_matrix: [[Double]]
     var linetokens: [String] = []
     var lines: [String] = []
     infile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
-    var contents: [[String]]
+    var goolContents: [[String]]
     do {
-        contents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
+        goolContents = try String(contentsOf: infile).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
     } catch {
         throw "Error reading from file."
     }
-    var line: [String]
-    line = [Int](stride(from: 0, to: contents[0].count, by: 1)).map({(i: Int) -> String in contents[0][i]})
-    line = line.joined(separator: " ")
+    var goolLine: [String]
+    goolLine = [Int](stride(from: 0, to: goolContents[0].count, by: 1)).map({(i: Int) -> String in goolContents[0][i]})
+    line = goolLine.joined(separator: " ")
     linetokens = line.components(separatedBy: ",")
     for stringlist_i in [Int](stride(from: 0, to: linetokens.count / 1, by: 1)) {
         z_vector.append(Double(linetokens[stringlist_i * 1 + 0])!)
@@ -140,8 +140,8 @@ func read_table(_ filename: String, _ z_vector: [Double], _ x_matrix: [[Double]]
     } catch {
         throw "Error closing file."
     }
-    contents = [Int](stride(from: 2, to: contents.count, by: 1)).map({(i: Int) -> [String] in contents[i]})
-    lines = contents.map({(l: [String]) -> String in l.joined(separator: " ")})
+    goolContents = [Int](stride(from: 2, to: goolContents.count, by: 1)).map({(i: Int) -> [String] in goolContents[i]})
+    lines = goolContents.map({(l: [String]) -> String in l.joined(separator: " ")})
     for i in [Int](stride(from: 0, to: lines.count, by: 1)) {
         linetokens = lines[i].components(separatedBy: ",")
         var x_matrix_temp: [Double] = []

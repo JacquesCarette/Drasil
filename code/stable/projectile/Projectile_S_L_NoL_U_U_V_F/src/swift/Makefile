@@ -1,0 +1,18 @@
+ifeq "$(OS)" "Windows_NT"
+    LIB_EXTENSION=.dll
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S), Linux)
+        LIB_EXTENSION=.so
+    endif
+    ifeq ($(UNAME_S), Darwin)
+        LIB_EXTENSION=.dylib
+    endif
+endif
+
+build: Projectile$(LIB_EXTENSION)
+
+Projectile$(LIB_EXTENSION): InputFormat.swift InputConstraints.swift Calculations.swift OutputFormat.swift
+	swiftc InputFormat.swift InputConstraints.swift Calculations.swift OutputFormat.swift -o Projectile$(LIB_EXTENSION) -parse-as-library
+
+.PHONY: build

@@ -19,7 +19,7 @@ var e: Double
 e = myOtherList[1]
 myOtherList[1] = 17.4
 var myName: [String] = []
-myName = "Brooks Mac".split(separator: " ").map({(i: Substring) -> String in String(i)})
+myName = "Brooks Mac".components(separatedBy: " ")
 print(myName)
 var boringList: [Bool] = [false, false, false, false, false]
 print(boringList)

@@ -43,15 +43,19 @@ do {
 }
 var fileToRead: URL
 fileToRead = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("testText.txt")
-var fileLine: String
-// A statement to read a line from a file should be here, but this is not yet implemented.
-// A statement to skip over a line from a file should be here, but this is not yet implemented.
-var fileContents: [String] = []
-
+var contents: [[String]]
 do {
-    fileContents = try String(contentsOf: fileToRead).split(separator: "\n").map({(i: Substring) -> String in String(i)})
+    contents = try String(contentsOf: fileToRead).components(separatedBy: "\n").map({(l: String) -> [String] in l.components(separatedBy: " ")})
 } catch {
     throw "Error reading from file."
 }
+var fileLine: String
+var line: [String]
+line = [Int](stride(from: 0, to: contents[0].count, by: 1)).map({(i: Int) -> String in contents[0][i]})
+fileLine = line.joined(separator: " ")
+var fileContents: [String] = []
+
+contents = [Int](stride(from: 3, to: contents.count, by: 1)).map({(i: Int) -> [String] in contents[i]})
+fileContents = contents.map({(l: [String]) -> String in l.joined(separator: " ")})
 
 print(fileContents)

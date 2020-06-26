@@ -25,8 +25,7 @@ import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.Choices (Choices(..), Modularity(..), Visibility(..), 
-  choicesDoc)
+import Language.Drasil.Choices (Choices(..), Modularity(..), Visibility(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 
 import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..), 
@@ -76,7 +75,7 @@ generator l dt sd chs spec = DrasilState {
   -- stateful
   currentModule = "",
   currentClass = "",
-  _designLog = nonPrefChs $$ concLog $$ libLog,
+  _designLog = concLog $$ libLog,
   _loggedSpaces = [] -- Used to prevent duplicate logs added to design log
 }
   where (mcm, concLog) = runState (chooseConcept chs) empty
@@ -90,7 +89,6 @@ generator l dt sd chs spec = DrasilState {
         lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap spec chs modules'
         modules' = mods spec ++ concatMap (^. auxMods) els
-        nonPrefChs = choicesDoc chs
 
 -- | Generates a package with the given DrasilState. The passed
 -- un-representation functions determine which target language the package will 

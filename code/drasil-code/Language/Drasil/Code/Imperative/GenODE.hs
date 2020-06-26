@@ -12,7 +12,7 @@ import Language.Drasil.Data.ODEInfo (ODEInfo)
 import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 
 import Control.Monad.State (State, modify)
-import Text.PrettyPrint.HughesPJ (Doc, ($$), text, empty)
+import Text.PrettyPrint.HughesPJ (Doc, ($$), text)
 
 type ODEGenInfo = (Maybe FilePath, [(Name, ExtLibState)], (Name,Version))
 
@@ -22,25 +22,18 @@ type ODEGenInfo = (Maybe FilePath, [(Name, ExtLibState)], (Name,Version))
 -- ODELibPckg by concretizing the ExternalLibraryCall with each of the ODEInfos
 chooseODELib :: Lang -> [ODELibPckg] -> [ODEInfo] -> State Doc ODEGenInfo
 chooseODELib _ _ [] = return (Nothing, [], ("",""))
-chooseODELib l olps odes = chooseODELib' olps olps
-  where chooseODELib' :: [ODELibPckg] -> [ODELibPckg]->State Doc ODEGenInfo
-        chooseODELib' _ [] = error $ "None of the chosen ODE libraries are " ++ 
+chooseODELib l olps odes = chooseODELib' olps
+  where chooseODELib' :: [ODELibPckg] -> State Doc ODEGenInfo
+        chooseODELib' [] = error $ "None of the chosen ODE libraries are " ++ 
           "compatible with " ++ show l
-        chooseODELib' initLib (o:os) = if l `elem` compatibleLangs o 
-          then do 
-            modify ($$ firstChoiceODELib initLib o)
-            return (libPath o, map (\ode -> (codeName $ odeDef ode, 
-              genExternalLibraryCall (libSpec o) $ libCall o ode)) odes, 
+        chooseODELib' (o:os) = if l `elem` compatibleLangs o 
+          then return (libPath o, map (\ode -> (codeName $ odeDef ode, 
+            genExternalLibraryCall (libSpec o) $ libCall o ode)) odes, 
                 (libName o, libVers o)) 
-          else modify ($$ incompatibleLib l o) >> chooseODELib' initLib os
+          else modify ($$ incompatibleLib l o) >> chooseODELib' os
 
 -- Defines a design log message based on an incompatibility between the given 
 -- Lang and chosen ODELibPckg.
 incompatibleLib :: Lang -> ODELibPckg -> Doc
 incompatibleLib lng lib = text $ "Language " ++ show lng ++ " is not " ++ 
   "compatible with chosen library " ++ libName lib ++ ", trying next choice." 
-
-firstChoiceODELib :: [ODELibPckg] -> ODELibPckg -> Doc
-firstChoiceODELib prefer olp =  if libName (head prefer) == libName olp  then 
-  text $ "Successfully " ++"selected first choice ODELibPckg "++ 
-  libName olp  else empty

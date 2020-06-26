@@ -23,9 +23,7 @@ chooseSpace lng chs = \s -> selectType lng s (spaceMatch chs s)
             addToDesignLog s Float (incompatibleType Python s Float))
           selectType Python s ts
         -- In all other cases, just select first choice
-        selectType _ s (t:_) = do 
-          modify (addToDesignLog s t (successLog s t))
-          return t
+        selectType _ _ (t:_) = return t
         selectType l s [] = error $ "Chosen CodeType matches for Space " ++ 
           show s ++ " are not compatible with target language " ++ show l
 
@@ -35,6 +33,3 @@ incompatibleType :: Lang -> Space -> CodeType -> Doc
 incompatibleType l s t = text $ "Language " ++ show l ++ " does not support "
   ++ "code type " ++ show t ++ ", chosen as the match for the " ++ show s ++ 
   " space. Trying next choice." 
-
-successLog :: Space -> CodeType -> Doc
-successLog s t = text $ "Successfully matched "++show s ++ " with "++ show t

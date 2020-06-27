@@ -13,7 +13,7 @@ endif
 build: Projectile$(LIB_EXTENSION)
 
 Projectile$(LIB_EXTENSION): InputFormat.swift InputConstraints.swift Calculations.swift OutputFormat.swift
-	swiftc InputFormat.swift InputConstraints.swift Calculations.swift OutputFormat.swift -o Projectile$(LIB_EXTENSION) -parse-as-library
+	swiftc InputFormat.swift InputConstraints.swift Calculations.swift OutputFormat.swift -o Projectile$(LIB_EXTENSION) -emit-library
 
 doc: InputFormat.swift InputConstraints.swift Calculations.swift OutputFormat.swift
 

@@ -12,7 +12,7 @@ import Foundation
     - Parameter x: x-coordinate to interpolate at
     - Returns: y value interpolated at given x value
 */
-func lin_interp(_ x_1: inout Double, _ y_1: inout Double, _ x_2: inout Double, _ y_2: inout Double, _ x: inout Double) throws -> Double {
+func lin_interp(_ x_1: Double, _ y_1: Double, _ x_2: Double, _ y_2: Double, _ x: Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -121,7 +121,7 @@ func lin_interp(_ x_1: inout Double, _ y_1: inout Double, _ x_2: inout Double, _
     - Parameter v: value whose index will be found
     - Returns: index of given value in given array
 */
-func find(_ arr: inout [Double], _ v: inout Double) throws -> Int {
+func find(_ arr: inout [Double], _ v: Double) throws -> Int {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -187,7 +187,7 @@ func find(_ arr: inout [Double], _ v: inout Double) throws -> Int {
     - Parameter j: index
     - Returns: column of the given matrix at the given index
 */
-func extractColumn(_ mat: inout [[Double]], _ j: inout Int) throws -> [Double] {
+func extractColumn(_ mat: inout [[Double]], _ j: Int) throws -> [Double] {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -253,7 +253,7 @@ func extractColumn(_ mat: inout [[Double]], _ j: inout Int) throws -> [Double] {
     - Parameter z: z-coordinate to interpolate at
     - Returns: y value interpolated at given x and z values
 */
-func interpY(_ filename: inout String, _ x: inout Double, _ z: inout Double) throws -> Double {
+func interpY(_ filename: String, _ x: Double, _ z: Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -335,8 +335,8 @@ func interpY(_ filename: inout String, _ x: inout Double, _ z: inout Double) thr
     var x_matrix: [[Double]] = []
     var y_matrix: [[Double]] = []
     var z_vector: [Double] = []
-    try read_table(filename, z_vector, x_matrix, y_matrix)
-    i = try find(z_vector, z)
+    try read_table(filename, &z_vector, &x_matrix, &y_matrix)
+    i = try find(&z_vector, z)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -364,7 +364,7 @@ func interpY(_ filename: inout String, _ x: inout Double, _ z: inout Double) thr
     } catch {
         throw "Error closing file."
     }
-    x_z_1 = try extractColumn(x_matrix, i)
+    x_z_1 = try extractColumn(&x_matrix, i)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -392,7 +392,7 @@ func interpY(_ filename: inout String, _ x: inout Double, _ z: inout Double) thr
     } catch {
         throw "Error closing file."
     }
-    y_z_1 = try extractColumn(y_matrix, i)
+    y_z_1 = try extractColumn(&y_matrix, i)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -420,7 +420,7 @@ func interpY(_ filename: inout String, _ x: inout Double, _ z: inout Double) thr
     } catch {
         throw "Error closing file."
     }
-    x_z_2 = try extractColumn(x_matrix, i + 1)
+    x_z_2 = try extractColumn(&x_matrix, i + 1)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -448,7 +448,7 @@ func interpY(_ filename: inout String, _ x: inout Double, _ z: inout Double) thr
     } catch {
         throw "Error closing file."
     }
-    y_z_2 = try extractColumn(y_matrix, i + 1)
+    y_z_2 = try extractColumn(&y_matrix, i + 1)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -477,7 +477,7 @@ func interpY(_ filename: inout String, _ x: inout Double, _ z: inout Double) thr
         throw "Error closing file."
     }
     do {
-        j = try find(x_z_1, x)
+        j = try find(&x_z_1, x)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -505,7 +505,7 @@ func interpY(_ filename: inout String, _ x: inout Double, _ z: inout Double) thr
         } catch {
             throw "Error closing file."
         }
-        k_2 = try find(x_z_2, x)
+        k_2 = try find(&x_z_2, x)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -601,7 +601,7 @@ func interpY(_ filename: inout String, _ x: inout Double, _ z: inout Double) thr
     - Parameter y: y-coordinate to interpolate at
     - Returns: z value interpolated at given x and y values
 */
-func interpZ(_ filename: inout String, _ x: inout Double, _ y: inout Double) throws -> Double {
+func interpZ(_ filename: String, _ x: Double, _ y: Double) throws -> Double {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -682,9 +682,9 @@ func interpZ(_ filename: inout String, _ x: inout Double, _ y: inout Double) thr
     var x_matrix: [[Double]] = []
     var y_matrix: [[Double]] = []
     var z_vector: [Double] = []
-    try read_table(filename, z_vector, x_matrix, y_matrix)
+    try read_table(filename, &z_vector, &x_matrix, &y_matrix)
     for i in [Int](stride(from: 0, to: z_vector.count - 1, by: 1)) {
-        x_z_1 = try extractColumn(x_matrix, i)
+        x_z_1 = try extractColumn(&x_matrix, i)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -712,7 +712,7 @@ func interpZ(_ filename: inout String, _ x: inout Double, _ y: inout Double) thr
         } catch {
             throw "Error closing file."
         }
-        y_z_1 = try extractColumn(y_matrix, i)
+        y_z_1 = try extractColumn(&y_matrix, i)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -740,7 +740,7 @@ func interpZ(_ filename: inout String, _ x: inout Double, _ y: inout Double) thr
         } catch {
             throw "Error closing file."
         }
-        x_z_2 = try extractColumn(x_matrix, i + 1)
+        x_z_2 = try extractColumn(&x_matrix, i + 1)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -768,7 +768,7 @@ func interpZ(_ filename: inout String, _ x: inout Double, _ y: inout Double) thr
         } catch {
             throw "Error closing file."
         }
-        y_z_2 = try extractColumn(y_matrix, i + 1)
+        y_z_2 = try extractColumn(&y_matrix, i + 1)
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
             try outfile.seekToEnd()
@@ -797,7 +797,7 @@ func interpZ(_ filename: inout String, _ x: inout Double, _ y: inout Double) thr
             throw "Error closing file."
         }
         do {
-            j = try find(x_z_1, x)
+            j = try find(&x_z_1, x)
             do {
                 outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
                 try outfile.seekToEnd()
@@ -825,7 +825,7 @@ func interpZ(_ filename: inout String, _ x: inout Double, _ y: inout Double) thr
             } catch {
                 throw "Error closing file."
             }
-            k_2 = try find(x_z_2, x)
+            k_2 = try find(&x_z_2, x)
             do {
                 outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
                 try outfile.seekToEnd()

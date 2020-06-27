@@ -56,9 +56,9 @@ data GOOLState = GS {
   _methodExceptionMap :: Map QualifiedName [ExceptionType], -- Method to exceptions thrown
   _callMap :: Map QualifiedName [QualifiedName], -- Method to other methods it calls
 
-  -- Only used for Swift, to add codes so Strings can be used as Errors
-  _throwUsed :: Bool,
-  _errorDefined :: Bool
+  -- Only used for Swift
+  _throwUsed :: Bool, -- to add code so Strings can be used as Errors
+  _errorDefined :: Bool -- to avoid duplicating that code
 } 
 makeLenses ''GOOLState
 

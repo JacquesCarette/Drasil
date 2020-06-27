@@ -15,7 +15,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs, OOProg, 
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
-  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
   selfFuncApp, extFuncApp, InternalValueExp(..), objMethodCall, FunctionSym(..),
@@ -290,6 +290,9 @@ instance (Pair p) => RenderVariable (p CppSrcCode CppHdrCode) where
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   type Value (p CppSrcCode CppHdrCode) = ValData
   valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
+
+instance (Pair p) => Argument (p CppSrcCode CppHdrCode) where
+  pointerArg = pair1 pointerArg pointerArg
 
 instance (Pair p) => Literal (p CppSrcCode CppHdrCode) where
   litTrue = on2StateValues pair litTrue litTrue
@@ -1154,6 +1157,9 @@ instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
   valueType = onCodeValue valType
 
+instance Argument CppSrcCode where
+  pointerArg = id
+
 instance Literal CppSrcCode where
   litTrue = C.litTrue
   litFalse = C.litFalse
@@ -1793,6 +1799,9 @@ instance RenderVariable CppHdrCode where
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
   valueType = onCodeValue valType
+
+instance Argument CppHdrCode where
+  pointerArg = id
 
 instance Literal CppHdrCode where
   litTrue = C.litTrue

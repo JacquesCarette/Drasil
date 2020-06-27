@@ -10,7 +10,7 @@ import Foundation
     - Parameter g_vect: gravitational acceleration (m/s^2)
     - Returns: flight duration: the time when the projectile lands (s)
 */
-func func_t_flight(_ v_launch: inout Float, _ theta: inout Float, _ g_vect: inout Float) -> Float {
+func func_t_flight(_ v_launch: Float, _ theta: Float, _ g_vect: Float) -> Float {
     return Float(2) * v_launch * sin(theta) / g_vect
 }
 
@@ -20,7 +20,7 @@ func func_t_flight(_ v_launch: inout Float, _ theta: inout Float, _ g_vect: inou
     - Parameter g_vect: gravitational acceleration (m/s^2)
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
-func func_p_land(_ v_launch: inout Float, _ theta: inout Float, _ g_vect: inout Float) -> Float {
+func func_p_land(_ v_launch: Float, _ theta: Float, _ g_vect: Float) -> Float {
     return Float(2) * pow(v_launch, 2) * sin(theta) * cos(theta) / g_vect
 }
 
@@ -29,7 +29,7 @@ func func_p_land(_ v_launch: inout Float, _ theta: inout Float, _ g_vect: inout 
     - Parameter p_land: landing position: the distance from the launcher to the final position of the projectile (m)
     - Returns: distance between the target position and the landing position: the offset between the target position and the landing position (m)
 */
-func func_d_offset(_ p_target: inout Float, _ p_land: inout Float) -> Float {
+func func_d_offset(_ p_target: Float, _ p_land: Float) -> Float {
     return p_land - p_target
 }
 
@@ -39,7 +39,7 @@ func func_d_offset(_ p_target: inout Float, _ p_land: inout Float) -> Float {
     - Parameter d_offset: distance between the target position and the landing position: the offset between the target position and the landing position (m)
     - Returns: output message as a string
 */
-func func_s(_ p_target: inout Float, _ epsilon: inout Float, _ d_offset: inout Float) -> String {
+func func_s(_ p_target: Float, _ epsilon: Float, _ d_offset: Float) -> String {
     if abs(d_offset / p_target) < epsilon {
         return "The target was hit."
     }

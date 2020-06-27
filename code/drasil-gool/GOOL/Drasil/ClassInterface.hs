@@ -9,15 +9,16 @@ module GOOL.Drasil.ClassInterface (
   OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
   VariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..), 
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), Comparison(..), 
-  ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
-  libFuncApp, newObj, extNewObj, libNewObj, exists, InternalValueExp(..), 
-  objMethodCall, objMethodCallNamedArgs, objMethodCallMixedArgs, 
-  objMethodCallNoParams, FunctionSym(..), ($.), selfAccess, GetSet(..), 
-  List(..), InternalList(..), listSlice, listIndexExists, at, StatementSym(..), 
-  AssignStatement(..), (&=), assignToListIndex, DeclStatement(..), 
-  objDecNewNoParams, extObjDecNewNoParams, IOStatement(..), StringStatement(..),
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
+  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
+  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs, 
+  objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
+  selfAccess, GetSet(..), List(..), InternalList(..), listSlice, 
+  listIndexExists, at, StatementSym(..), AssignStatement(..), (&=), 
+  assignToListIndex, DeclStatement(..), objDecNewNoParams, 
+  extObjDecNewNoParams, IOStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
   StatePattern(..), initState, changeState, ObserverPattern(..), 
   observerListName, initObserverList, addObserver, StrategyPattern(..), 
@@ -44,9 +45,9 @@ type GSProgram a = GS (a (Program a))
 
 class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, 
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
-  InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
-  NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, 
-  InternalValueExp r, GetSet r, List r, StatePattern r, 
+  InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, 
+  CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, 
+  ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, 
   ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 
 class (FileSym r) => ProgramSym r where
@@ -145,6 +146,9 @@ type SValue a = VS (a (Value a))
 class (TypeSym r) => ValueSym r where
   type Value r
   valueType :: r (Value r) -> r (Type r)
+
+class (ValueSym r) => Argument r where
+  pointerArg :: SValue r -> SValue r
 
 class (ValueSym r) => Literal r where
   litTrue   :: SValue r

@@ -8,7 +8,7 @@ import Foundation
     - Parameter filename: name of the input file
     - Parameter inParams: structure holding the input values
 */
-func get_input(_ filename: inout String, _ inParams: inout InputParameters) throws -> Void {
+func get_input(_ filename: String, _ inParams: InputParameters) throws -> Void {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

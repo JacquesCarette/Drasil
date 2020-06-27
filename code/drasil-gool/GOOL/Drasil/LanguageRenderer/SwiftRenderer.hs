@@ -14,7 +14,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   SValue, MSStatement, MSParameter, SMethod, OOProg, Initializers, 
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, 
   bodyStatements, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
-  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
   funcAppNamedArgs, selfFuncApp, extFuncApp, newObj, InternalValueExp(..), 
@@ -283,6 +283,9 @@ instance ValueSym SwiftCode where
   type Value SwiftCode = ValData
   valueType = onCodeValue valType
 
+instance Argument SwiftCode where
+  pointerArg = swiftArgVal
+
 instance Literal SwiftCode where
   litTrue = C.litTrue
   litFalse = C.litFalse
@@ -377,14 +380,15 @@ instance RenderValue SwiftCode where
   
   cast = swiftCast
 
-  call l o n t ps b = do
+  call l o n t as ns = do
     mn <- zoom lensVStoFS getModuleName
     mem <- getMethodExcMap
+        -- If function being called throws exceptions, need to wrap call in try
     let f = if null $ findWithDefault [] (qualName (modNm l) n) mem 
-          then id else swiftTryVal
+          then id else swiftTryVal 
         modNm (Just extm) = extm
         modNm Nothing = mn
-    f $ G.call swiftNamedArgSep Nothing o n t ps b
+    f $ G.call swiftNamedArgSep Nothing o n t as ns
   
   valFromData p t' d = do 
     t <- t'
@@ -595,8 +599,8 @@ instance MethodTypeSym SwiftCode where
 
 instance ParameterSym SwiftCode where
   type Parameter SwiftCode = ParamData
-  param = G.param swiftParam
-  pointerParam = param
+  param = G.param (swiftParam empty)
+  pointerParam = G.param (swiftParam swiftInOut)
 
 instance RenderParam SwiftCode where
   paramFromData v' d = do 
@@ -728,6 +732,11 @@ swiftTryVal v' = do
   v <- v'
   mkVal (valueType v) (tryLabel <+> RC.value v)
 
+swiftArgVal :: (RenderSym r) => SValue r -> SValue r
+swiftArgVal v' = do
+  v <- v'
+  mkVal (valueType v) (swiftInOutArg <> RC.value v)
+
 -- Putting "gool" in these names to avoid name conflicts
 swiftContentsVar, swiftLineVar :: SVariable SwiftCode
 swiftContentsVar = var "goolContents" (listType $ listType string)
@@ -775,8 +784,8 @@ swiftVoidType = typeFromData Void swiftVoid (text swiftVoid)
 
 swiftPi, swiftListSize, swiftFirst, swiftDesc, swiftUTF8, swiftVar, swiftConst, 
   swiftDo, swiftFunc, swiftCtorName, swiftExtension, swiftInOut, swiftError, 
-  swiftDocDir, swiftUserMask, swiftNamedArgSep, swiftTypeSpec, swiftConforms, 
-  swiftNoLabel, swiftRetType', swiftUnwrap' :: Doc
+  swiftDocDir, swiftUserMask, swiftInOutArg, swiftNamedArgSep, swiftTypeSpec, 
+  swiftConforms, swiftNoLabel, swiftRetType', swiftUnwrap' :: Doc
 swiftPi = text $ CP.doubleRender `access` piLabel
 swiftListSize = text "count"
 swiftFirst = text "first"
@@ -793,6 +802,7 @@ swiftError = text "Error"
 swiftDocDir = text $ "" `access` "documentDirectory"
 swiftUserMask = text $ "" `access` "userDomainMask"
 swiftNamedArgSep = colon <> space
+swiftInOutArg = text "&"
 swiftTypeSpec = colon
 swiftConforms = colon
 swiftNoLabel = text "_"
@@ -1050,8 +1060,8 @@ swiftTryCatch tb cb = vcat [
   indent $ RC.body cb,
   rbrace]
 
-swiftParam :: (RenderSym r) => r (Variable r) -> Doc
-swiftParam v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> swiftInOut
+swiftParam :: (RenderSym r) => Doc -> r (Variable r) -> Doc
+swiftParam io v = swiftNoLabel <+> RC.variable v <> swiftTypeSpec <+> io
   <+> RC.type' (variableType v)
 
 swiftMethod :: Label -> SwiftCode (Scope SwiftCode) -> 

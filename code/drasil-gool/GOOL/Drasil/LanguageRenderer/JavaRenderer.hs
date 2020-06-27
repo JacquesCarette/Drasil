@@ -14,7 +14,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, SClass, OOProg, 
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, 
   BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj,
   InternalValueExp(..), FunctionSym(..), ($.), GetSet(..), List(..), 
@@ -285,6 +285,9 @@ instance RenderVariable JavaCode where
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
   valueType = onCodeValue valType
+
+instance Argument JavaCode where
+  pointerArg = id
 
 instance Literal JavaCode where
   litTrue = C.litTrue

@@ -7,7 +7,7 @@
     - Parameter theta: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Parameter p_target: target position: the distance from the launcher to the target (m)
 */
-func input_constraints(_ v_launch: inout Float, _ theta: inout Float, _ p_target: inout Float) -> Void {
+func input_constraints(_ v_launch: Float, _ theta: Float, _ p_target: Float) -> Void {
     if !(v_launch > 0) {
         print("Warning: ", terminator: "")
         print("v_launch has value ", terminator: "")

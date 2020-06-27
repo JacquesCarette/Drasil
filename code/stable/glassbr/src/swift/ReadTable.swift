@@ -10,7 +10,7 @@ import Foundation
     - Parameter x_matrix: lists of x values at different z values
     - Parameter y_matrix: lists of y values at different z values
 */
-func read_table(_ filename: inout String, _ z_vector: inout [Double], _ x_matrix: inout [[Double]], _ y_matrix: inout [[Double]]) throws -> Void {
+func read_table(_ filename: String, _ z_vector: inout [Double], _ x_matrix: inout [[Double]], _ y_matrix: inout [[Double]]) throws -> Void {
     var outfile: FileHandle
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

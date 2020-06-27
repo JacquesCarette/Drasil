@@ -26,8 +26,9 @@ import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
   VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList), 
   VariableValue(valueOf), FunctionSym(func, objAccess), StatementSym(valStmt), 
-  DeclStatement(varDec, varDecDef, constDecDef), ParameterSym(param), 
-  MethodSym(mainFunction), ClassSym(buildClass))
+  DeclStatement(varDec, varDecDef, constDecDef), 
+  ParameterSym(param, pointerParam), MethodSym(mainFunction), 
+  ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..), RenderBody(..), 
   RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind), 
   RenderFunction(funcFromData), MethodTypeSym(mType),
@@ -402,7 +403,8 @@ inOutFunc :: (RenderSym r) => (VSType r -> [MSParameter r] -> MSBody r ->
   SMethod r) -> [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> 
   SMethod r
 inOutFunc f ins [] [] b = f S.void (map S.param ins) b
-inOutFunc f ins outs both b = f S.void (map S.param $ both ++ ins) 
+inOutFunc f ins outs both b = f S.void 
+  (map S.pointerParam both ++ map S.param ins) 
   (multiBody [bodyStatements $ map S.varDec outs, b, oneLiner $ S.multiReturn $ 
   map S.valueOf rets])
   where rets = both ++ outs

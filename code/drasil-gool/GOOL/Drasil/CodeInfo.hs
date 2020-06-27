@@ -20,8 +20,8 @@ import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
   lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn, 
-  setClassName, setModuleName, getModuleName, addClass, updateClassMap, 
-  addException, updateMethodExcMap, updateCallMap, addCall, 
+  setClassName, getClassName, setModuleName, getModuleName, addClass, 
+  updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall, 
   callMapTransClosure, updateMEMWithCalls)
 
 import Control.Monad.State (State, modify)
@@ -357,8 +357,8 @@ instance MethodSym CodeInfo where
   constructor _ il b = do
     mapM_ (zoom lensMStoVS . snd) il
     _ <- b
-    mn <- zoom lensMStoFS getModuleName
-    modify (updateCallMap mn . updateMethodExcMap mn)
+    cn <- getClassName
+    modify (updateCallMap cn . updateMethodExcMap cn)
     noInfo
 
   docMain = updateMEMandCM "main"

@@ -86,10 +86,10 @@ import GOOL.Drasil.Helpers (hicat, emptyIfNull, toCode, toState, onCodeValue,
   onStateValue, on2CodeValues, on2StateValues, onCodeList, onStateList)
 import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS, 
   lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, revFiles, addLangImportVS, 
-  getLangImports, getLibImports, setFileType, setModuleName, getModuleName, 
-  getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed, getThrowUsed, 
-  setErrorDefined, getErrorDefined, incrementLine, incrementWord, getLineIndex, 
-  getWordIndex, resetIndices)
+  getLangImports, getLibImports, setFileType, getClassName, setModuleName, 
+  getModuleName, getCurrMain, getMethodExcMap, getMainDoc, setThrowUsed, 
+  getThrowUsed, setErrorDefined, getErrorDefined, incrementLine, incrementWord, 
+  getLineIndex, getWordIndex, resetIndices)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
@@ -1086,8 +1086,13 @@ swiftConstructor :: (RenderSym r) => [MSParameter r] -> Initializers r ->
 swiftConstructor ps is b = do
   pms <- sequence ps
   bod <- multiBody [G.initStmts is, b]
+  mem <- zoom lensMStoVS getMethodExcMap
+  mn <- zoom lensMStoFS getModuleName
+  cn <- getClassName
+  let excs = findWithDefault [] (qualName mn cn) mem
   mthdFromData Pub (vcat [
-    swiftCtorName <> parens (parameterList pms) <+> bodyStart,
+    swiftCtorName <> parens (parameterList pms) <+> 
+      emptyIfNull excs throwsLabel <+> bodyStart,
     indent $ RC.body bod,
     bodyEnd])
 

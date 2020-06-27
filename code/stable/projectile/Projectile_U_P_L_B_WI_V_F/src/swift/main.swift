@@ -18,7 +18,7 @@ class InputParameters {
     /** Initializes input object by reading inputs and checking physical constraints on the input
         - Parameter filename: name of the input file
     */
-    init(_ filename: String) {
+    init(_ filename: String) throws {
         var outfile: FileHandle
         do {
             outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
@@ -593,7 +593,7 @@ do {
 } catch {
     throw "Error closing file."
 }
-var inParams: InputParameters = InputParameters(filename)
+var inParams: InputParameters = try InputParameters(filename)
 var t_flight: Float = try func_t_flight(&inParams)
 do {
     outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))

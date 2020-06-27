@@ -16,7 +16,7 @@ class InputParameters {
     /** Initializes input object by reading inputs and checking physical constraints on the input
         - Parameter filename: name of the input file
     */
-    init(_ filename: String) {
+    init(_ filename: String) throws {
         try self.get_input(filename)
         self.input_constraints()
     }

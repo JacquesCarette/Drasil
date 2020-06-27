@@ -10,11 +10,11 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..),
   AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (sampleInput, readMe, makefile, noRunIfLib)
+  G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
-  asFragment, buildAll, nativeBinary, executable, sharedLibrary)
+  DocConfig(..), asFragment, buildAll, nativeBinary, executable, sharedLibrary)
 
 import GOOL.Drasil (onCodeList, swiftName, swiftVersion)
 
@@ -47,7 +47,7 @@ instance AuxiliarySym SwiftProject where
 
   optimizeDox = error doxError
 
-  makefile fs it _ = G.makefile (swiftBuildConfig fs it) (G.noRunIfLib it swiftRunnable) []
+  makefile fs it cms = G.makefile (swiftBuildConfig fs it) (G.noRunIfLib it swiftRunnable) (G.docIfEnabled cms (DocConfig []))
 
   auxHelperDoc = unSP
   auxFromData fp d = return $ ad fp d

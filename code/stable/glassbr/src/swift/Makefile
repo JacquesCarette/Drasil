@@ -18,4 +18,6 @@ GlassBR$(TARGET_EXTENSION): main.swift InputParameters.swift InputFormat.swift D
 run: build
 	./GlassBR$(TARGET_EXTENSION) $(RUNARGS)
 
-.PHONY: build run
+doc: doxConfig main.swift InputParameters.swift InputFormat.swift DerivedValues.swift InputConstraints.swift Calculations.swift OutputFormat.swift ReadTable.swift Interpolation.swift
+
+.PHONY: build run doc

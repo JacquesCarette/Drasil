@@ -1,5 +1,6 @@
 module Language.Drasil.Code.Imperative.Build.AST where
-import Build.Drasil (makeS, MakeString, mkImplicitVar, mkWindowsVar, mkOSVar)
+import Build.Drasil (makeS, MakeString, mkImplicitVar, mkWindowsVar, mkOSVar,
+  Command, mkCheckedCommand)
 
 type CommandFragment = MakeString
 
@@ -24,6 +25,8 @@ data RunType = Standalone
              | Interpreter [CommandFragment]
 
 data Runnable = Runnable BuildName NameOpts RunType
+
+newtype DocConfig = DocConfig [Command]
 
 data NameOpts = NameOpts {
   packSep :: String,
@@ -95,3 +98,6 @@ cCompiler = mkImplicitVar "CC"
 
 cppCompiler :: CommandFragment
 cppCompiler = mkImplicitVar "CXX"
+
+doxygenDocConfig :: FilePath -> DocConfig
+doxygenDocConfig fp = DocConfig [mkCheckedCommand $ makeS $ "doxygen " ++ fp]

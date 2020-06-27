@@ -18,4 +18,6 @@ Projectile$(TARGET_EXTENSION): main.swift InputParameters.swift Calculations.swi
 run: build
 	./Projectile$(TARGET_EXTENSION) $(RUNARGS)
 
-.PHONY: build run
+doc: doxConfig main.swift InputParameters.swift Calculations.swift OutputFormat.swift
+
+.PHONY: build run doc

@@ -2,8 +2,7 @@ module Language.Drasil.Code.Imperative.Build.Import (
   makeBuild
 ) where
 
-import Language.Drasil.Choices (Comments)
-import Language.Drasil.Code.Imperative.Build.AST (asFragment, 
+import Language.Drasil.Code.Imperative.Build.AST (asFragment, DocConfig(..),
   BuildConfig(BuildConfig), BuildDependencies(..), Ext(..), includeExt, 
   NameOpts, nameOpts, packSep, Runnable(Runnable), BuildName(..), RunType(..))
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName)
@@ -25,10 +24,10 @@ data CodeHarness = Ch {
   runnable :: Maybe Runnable, 
   goolState :: GOOLState,
   progData :: ProgData,
-  cmts :: [Comments]}
+  docConfig :: Maybe DocConfig}
 
 instance RuleTransformer CodeHarness where
-  makeRule (Ch b r s m cms) = maybe [mkRule buildTarget [] []] 
+  makeRule (Ch b r s m d) = maybe [mkRule buildTarget [] []] 
     (\(BuildConfig comp onm anm bt) -> 
     let outnm = maybe (asFragment "") (renderBuildName s m nameOpts) onm
         addnm = maybe (asFragment "") (renderBuildName s m nameOpts) anm
@@ -41,10 +40,9 @@ instance RuleTransformer CodeHarness where
     mkRule (makeS "run") [buildTarget] [
       mkCheckedCommand $ buildRunTarget (renderBuildName s m no nm) ty +:+ mkFreeVar "RUNARGS"
       ]
-    ]) r ++ [
-    mkRule (makeS "doc") (getCommentedFiles s)
-      [mkCheckedCommand $ makeS $ "doxygen " ++ doxConfigName] | not (null cms)
-    ] where
+    ]) r ++ maybe [] (\(DocConfig cmds) -> [
+      mkRule (makeS "doc") (getCommentedFiles s) cmds
+    ]) d where
       buildTarget = makeS "build"
 
 renderBuildName :: GOOLState -> ProgData -> NameOpts -> BuildName -> MakeString
@@ -74,11 +72,11 @@ buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn
 buildRunTarget fn (Interpreter i) = foldr (+:+) mempty $ i ++ [fn]
 
-makeBuild :: [Comments] -> Maybe BuildConfig -> Maybe Runnable -> GOOLState -> 
-  ProgData -> Doc
-makeBuild cms b r s p = genMake [Ch {
+makeBuild :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable -> 
+  GOOLState -> ProgData -> Doc
+makeBuild d b r s p = genMake [Ch {
   buildConfig = b,
   runnable = r,
   goolState = s,
   progData = p,
-  cmts = cms}]
+  docConfig = d}]

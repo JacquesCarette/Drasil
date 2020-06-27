@@ -43,7 +43,7 @@ func func_s(_ p_target: Float, _ epsilon: Float, _ d_offset: Float) -> String {
     if abs(d_offset / p_target) < epsilon {
         return "The target was hit."
     }
-    else if d_offset < 0 {
+    else if d_offset < Float(0) {
         return "The projectile fell short."
     }
     else {

@@ -221,7 +221,7 @@ class InputParameters {
             throw "Error closing file."
         }
         
-        if !(self.v_launch > 0) {
+        if !(self.v_launch > Float(0)) {
             print("Warning: ", terminator: "")
             print("v_launch has value ", terminator: "")
             print(self.v_launch, terminator: "")
@@ -230,7 +230,7 @@ class InputParameters {
             print(0, terminator: "")
             print(".")
         }
-        if !(0 < self.theta && self.theta < Double.pi / Double(2)) {
+        if !(Float(0) < self.theta && Double(self.theta) < Double.pi / Double(2)) {
             print("Warning: ", terminator: "")
             print("theta has value ", terminator: "")
             print(self.theta, terminator: "")
@@ -242,7 +242,7 @@ class InputParameters {
             print(" ((pi)/(2))", terminator: "")
             print(".")
         }
-        if !(self.p_target > 0) {
+        if !(self.p_target > Float(0)) {
             print("Warning: ", terminator: "")
             print("p_target has value ", terminator: "")
             print(self.p_target, terminator: "")
@@ -464,7 +464,7 @@ func func_s(_ inParams: inout InputParameters, _ d_offset: Float) throws -> Stri
     if abs(d_offset / inParams.p_target) < inParams.epsilon {
         return "The target was hit."
     }
-    else if d_offset < 0 {
+    else if d_offset < Float(0) {
         return "The projectile fell short."
     }
     else {

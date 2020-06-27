@@ -41,7 +41,7 @@ func func_s(_ inParams: inout InputParameters, _ epsilon: Double, _ d_offset: Do
     if abs(d_offset / inParams.p_target) < epsilon {
         return "The target was hit."
     }
-    else if d_offset < 0 {
+    else if d_offset < Double(0) {
         return "The projectile fell short."
     }
     else {

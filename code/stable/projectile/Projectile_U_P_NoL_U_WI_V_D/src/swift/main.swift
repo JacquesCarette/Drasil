@@ -45,7 +45,7 @@ func func_s(_ p_target: Double, _ epsilon: Double, _ d_offset: Double) -> String
     if abs(d_offset / p_target) < epsilon {
         return "The target was hit."
     }
-    else if d_offset < 0 {
+    else if d_offset < Double(0) {
         return "The projectile fell short."
     }
     else {
@@ -85,7 +85,7 @@ func get_input(_ filename: String) throws -> Void {
     - Parameter p_target: target position: the distance from the launcher to the target (m)
 */
 func input_constraints(_ v_launch: Double, _ theta: Double, _ p_target: Double) -> Void {
-    if !(v_launch > 0) {
+    if !(v_launch > Double(0)) {
         print("Warning: ", terminator: "")
         print("v_launch has value ", terminator: "")
         print(v_launch, terminator: "")
@@ -94,7 +94,7 @@ func input_constraints(_ v_launch: Double, _ theta: Double, _ p_target: Double) 
         print(0, terminator: "")
         print(".")
     }
-    if !(0 < theta && theta < Double.pi / Double(2)) {
+    if !(Double(0) < theta && theta < Double.pi / Double(2)) {
         print("Warning: ", terminator: "")
         print("theta has value ", terminator: "")
         print(theta, terminator: "")
@@ -106,7 +106,7 @@ func input_constraints(_ v_launch: Double, _ theta: Double, _ p_target: Double) 
         print(" ((pi)/(2))", terminator: "")
         print(".")
     }
-    if !(p_target > 0) {
+    if !(p_target > Double(0)) {
         print("Warning: ", terminator: "")
         print("p_target has value ", terminator: "")
         print(p_target, terminator: "")

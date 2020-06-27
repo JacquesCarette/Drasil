@@ -107,7 +107,7 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         throw "InputError"
     }
     
-    if !(inParams.a > 0) {
+    if !(inParams.a > Double(0)) {
         print("a has value ", terminator: "")
         print(inParams.a, terminator: "")
         print(", but is expected to be ", terminator: "")
@@ -126,7 +126,7 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         print(".")
         throw "InputError"
     }
-    if !(0 < inParams.b && inParams.b <= inParams.a) {
+    if !(Double(0) < inParams.b && inParams.b <= inParams.a) {
         print("b has value ", terminator: "")
         print(inParams.b, terminator: "")
         print(", but is expected to be ", terminator: "")
@@ -138,7 +138,7 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         print(".")
         throw "InputError"
     }
-    if !(inParams.w > 0) {
+    if !(inParams.w > Double(0)) {
         print("w has value ", terminator: "")
         print(inParams.w, terminator: "")
         print(", but is expected to be ", terminator: "")
@@ -147,7 +147,7 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         print(".")
         throw "InputError"
     }
-    if !(0 <= inParams.P_btol && inParams.P_btol <= 1) {
+    if !(Double(0) <= inParams.P_btol && inParams.P_btol <= Double(1)) {
         print("P_btol has value ", terminator: "")
         print(inParams.P_btol, terminator: "")
         print(", but is expected to be ", terminator: "")
@@ -158,7 +158,7 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         print(".")
         throw "InputError"
     }
-    if !(inParams.TNT > 0) {
+    if !(inParams.TNT > Double(0)) {
         print("TNT has value ", terminator: "")
         print(inParams.TNT, terminator: "")
         print(", but is expected to be ", terminator: "")
@@ -167,7 +167,7 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         print(".")
         throw "InputError"
     }
-    if !(inParams.SD > 0) {
+    if !(inParams.SD > Double(0)) {
         print("SD has value ", terminator: "")
         print(inParams.SD, terminator: "")
         print(", but is expected to be ", terminator: "")
@@ -176,7 +176,7 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         print(".")
         throw "InputError"
     }
-    if !(inParams.AR >= 1) {
+    if !(inParams.AR >= Double(1)) {
         print("AR has value ", terminator: "")
         print(inParams.AR, terminator: "")
         print(", but is expected to be ", terminator: "")

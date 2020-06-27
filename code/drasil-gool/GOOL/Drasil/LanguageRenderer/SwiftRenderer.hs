@@ -25,7 +25,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, MSBlock, VSType, SVariable,
   ControlStatement(..), StatePattern(..), ObserverPattern(..), 
   StrategyPattern(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), convType)
-import GOOL.Drasil.RendererClasses (MSMthdType, VSBinOp, RenderSym, 
+import GOOL.Drasil.RendererClasses (MSMthdType, RenderSym, 
   RenderFile(..), ImportSym(..), ImportElim, PermElim(binding), RenderBody(..), 
   BodyElim, RenderBlock(..), BlockElim, RenderType(..), InternalTypeElim, 
   UnaryOpSym(..), BinaryOpSym(..), OpElim(uOpPrec, bOpPrec), RenderVariable(..),
@@ -312,10 +312,10 @@ instance NumericExpression SwiftCode where
   (#~) = unExpr' negateOp
   (#/^) = unExpr sqrtOp
   (#|) = unExpr absOp
-  (#+) = swiftNumBinExpr plusOp
-  (#-) = swiftNumBinExpr minusOp
-  (#*) = swiftNumBinExpr multOp
-  (#/) = swiftNumBinExpr divideOp
+  (#+) = swiftNumBinExpr (binExpr plusOp)
+  (#-) = swiftNumBinExpr (binExpr minusOp)
+  (#*) = swiftNumBinExpr (binExpr multOp)
+  (#/) = swiftNumBinExpr (binExpr divideOp)
   (#%) = binExpr moduloOp
   (#^) v1' v2' = do
     v1 <- v1'
@@ -347,12 +347,12 @@ instance BooleanExpression SwiftCode where
   (?||) = typeBinExpr orOp bool
 
 instance Comparison SwiftCode where
-  (?<) = typeBinExpr lessOp bool
-  (?<=) = typeBinExpr lessEqualOp bool
-  (?>) = typeBinExpr greaterOp bool
-  (?>=) = typeBinExpr greaterEqualOp bool
-  (?==) = typeBinExpr equalOp bool
-  (?!=) = typeBinExpr notEqualOp bool
+  (?<) = swiftNumBinExpr (typeBinExpr lessOp bool)
+  (?<=) = swiftNumBinExpr (typeBinExpr lessEqualOp bool)
+  (?>) = swiftNumBinExpr (typeBinExpr greaterOp bool)
+  (?>=) = swiftNumBinExpr (typeBinExpr greaterEqualOp bool)
+  (?==) = swiftNumBinExpr (typeBinExpr equalOp bool)
+  (?!=) = swiftNumBinExpr (typeBinExpr notEqualOp bool)
   
 instance ValueExpression SwiftCode where
   inlineIf = C.inlineIf
@@ -864,12 +864,12 @@ swiftUnwrap = "!"
 swiftUnaryMath :: (Monad r) => String -> VSOp r
 swiftUnaryMath = addMathImport . unOpPrec
 
-swiftNumBinExpr :: (RenderSym r) => VSBinOp r -> SValue r -> SValue r -> SValue r
-swiftNumBinExpr o v1' v2' = do
+swiftNumBinExpr :: (RenderSym r) => (SValue r -> SValue r -> SValue r) -> 
+  SValue r -> SValue r -> SValue r
+swiftNumBinExpr f v1' v2' = do
   v1 <- v1'
   v2 <- v2'
-  let f = binExpr o
-      exprT t1 t2 = if t1 == t2 then f (return v1) (return v2) else exprT' t1 t2
+  let exprT t1 t2 = if t1 == t2 then f (return v1) (return v2) else exprT' t1 t2
       exprT' Double _ = f (return v1) (cast double $ return v2)
       exprT' _ Double = f (cast double $ return v1) (return v2)
       exprT' Float _  = f (return v1) (cast float $ return v2)

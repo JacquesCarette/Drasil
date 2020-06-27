@@ -388,10 +388,8 @@ instance RenderValue SwiftCode where
     mn <- zoom lensVStoFS getModuleName
     mem <- getMethodExcMap
         -- If function being called throws exceptions, need to wrap call in try
-    let f = if null $ findWithDefault [] (qualName (modNm l) n) mem 
-          then id else swiftTryVal 
-        modNm (Just extm) = extm
-        modNm Nothing = mn
+    let f = if null $ findWithDefault [] (maybe (qualName mn n) (`qualName` n) 
+          l) mem then id else swiftTryVal 
     f $ G.call swiftNamedArgSep Nothing o n t as ns
   
   valFromData p t' d = do 

@@ -56,7 +56,7 @@ swiftBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
 swiftBuildConfig fs it = buildAll (\i o -> [asFragment "swiftc" : i ++
   [asFragment "-o", o] ++ concatMap (\f -> map asFragment ["-I", f]) fs ++
   asLib it]) (outName it)
-  where asLib Library = [asFragment "-parse-as-library"]
+  where asLib Library = [asFragment "-emit-library"]
         asLib Program = []
         outName Library = sharedLibrary
         outName Program = executable

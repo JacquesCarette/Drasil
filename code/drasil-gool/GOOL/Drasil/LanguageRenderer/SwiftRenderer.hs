@@ -74,7 +74,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (classVar,
   stringRender', string', inherit, implements)
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (notOp, andOp, orOp, 
   litTrue, litFalse, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, 
-  listSize, varDecDef, switch, while)
+  listSize, varDecDef, extObjDecNew, switch, while)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, decrement1,
   increment1, runStrategy, stringListVals, stringListLists, notifyObservers', 
   checkState)
@@ -484,7 +484,7 @@ instance DeclStatement SwiftCode where
   arrayDecDef = listDecDef
   objDecDef = varDecDef
   objDecNew = G.objDecNew
-  extObjDecNew _ = objDecNew
+  extObjDecNew = C.extObjDecNew
   constDecDef vr vl' = do
     vdec <- swiftVarDec swiftConst vr
     vl <- zoom lensMStoVS vl' 

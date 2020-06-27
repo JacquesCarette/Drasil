@@ -19,7 +19,7 @@ import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn, 
+  lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn, 
   setClassName, getClassName, setModuleName, getModuleName, addClass, 
   updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall, 
   callMapTransClosure, updateMEMWithCalls)
@@ -397,7 +397,6 @@ instance ClassSym CodeInfo where
     modify (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
-
 
   docClass _ c = do
     _ <- c

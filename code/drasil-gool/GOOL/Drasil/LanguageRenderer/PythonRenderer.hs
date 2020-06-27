@@ -196,6 +196,7 @@ instance TypeElim PythonCode where
   getTypeString = typeString . unPC
 
 instance RenderType PythonCode where
+  multiType _ = typeFromData Void "" empty
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim PythonCode where

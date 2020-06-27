@@ -77,7 +77,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
-  intFunc, multiAssignError, multiReturnError)
+  intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
   notifyObservers, checkState)
@@ -210,6 +210,7 @@ instance TypeElim JavaCode where
   getTypeString = typeString . unJC
   
 instance RenderType JavaCode where
+  multiType _ = error $ C.multiTypeError jName
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim JavaCode where

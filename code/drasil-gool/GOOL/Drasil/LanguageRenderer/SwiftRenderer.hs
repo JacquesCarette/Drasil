@@ -43,8 +43,8 @@ import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block,
 import GOOL.Drasil.LanguageRenderer (dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, bodyStart, bodyEnd, commentStart, elseIfLabel, forLabel, 
   inLabel, tryLabel, catchLabel, throwLabel, throwsLabel, importLabel, listSep',
-  printLabel, listSep, piLabel, access, FuncDocRenderer, ClassDocRenderer, 
-  ModuleDocRenderer, parameterList)
+  printLabel, listSep, piLabel, access, tuple, FuncDocRenderer, 
+  ClassDocRenderer, ModuleDocRenderer, parameterList)
 import qualified GOOL.Drasil.LanguageRenderer as R (sqrt, abs, log10, log, exp, 
   sin, cos, tan, asin, acos, atan, floor, ceil, pow, class', multiStmt, body, 
   classVar, func, listSetFunc, castObj, static, dynamic, break, continue, 
@@ -207,6 +207,10 @@ instance TypeElim SwiftCode where
   getTypeString = typeString . unSC
   
 instance RenderType SwiftCode where
+  multiType ts = do
+    typs <- sequence ts
+    let mt = tuple $ map getTypeString typs
+    typeFromData Void mt (text mt)
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim SwiftCode where

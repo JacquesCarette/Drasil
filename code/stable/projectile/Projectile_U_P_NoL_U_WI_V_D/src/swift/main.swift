@@ -59,7 +59,7 @@ func func_s(_ p_target: Double, _ epsilon: Double, _ d_offset: Double) -> String
     - Returns: launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
     - Returns: target position: the distance from the launcher to the target (m)
 */
-func get_input(_ filename: String) throws -> Void {
+func get_input(_ filename: String) throws -> (Double, Double, Double) {
     var v_launch: Double
     var theta: Double
     var p_target: Double

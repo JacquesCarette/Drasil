@@ -87,6 +87,7 @@ class BlockElim r where
   block :: r (Block r) -> Doc
 
 class RenderType r where
+  multiType :: [VSType r] -> VSType r
   typeFromData :: CodeType -> String -> Doc -> VSType r
 
 class InternalTypeElim r where

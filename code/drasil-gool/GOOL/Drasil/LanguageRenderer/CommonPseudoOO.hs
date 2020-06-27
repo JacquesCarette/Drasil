@@ -403,7 +403,8 @@ inOutFunc :: (RenderSym r) => (VSType r -> [MSParameter r] -> MSBody r ->
   SMethod r) -> [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> 
   SMethod r
 inOutFunc f ins [] [] b = f S.void (map S.param ins) b
-inOutFunc f ins outs both b = f S.void 
+inOutFunc f ins outs both b = f 
+  (multiType $ map (onStateValue variableType) rets)  
   (map S.pointerParam both ++ map S.param ins) 
   (multiBody [bodyStatements $ map S.varDec outs, b, oneLiner $ S.multiReturn $ 
   map S.valueOf rets])

@@ -73,8 +73,8 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
-  increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, 
-  while, intFunc, multiAssignError, multiReturnError)
+  increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, 
+  for, while, intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (runStrategy, 
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
@@ -216,6 +216,7 @@ instance (Pair p) => TypeElim (p CppSrcCode CppHdrCode) where
   getTypeString s = getTypeString $ pfst s
   
 instance (Pair p) => RenderType (p CppSrcCode CppHdrCode) where
+  multiType = pair1List multiType multiType
   typeFromData t s d = on2StateValues pair (typeFromData t s d) (typeFromData t s d)
 
 instance (Pair p) => InternalTypeElim (p CppSrcCode CppHdrCode) where
@@ -1068,6 +1069,7 @@ instance TypeElim CppSrcCode where
   getTypeString = typeString . unCPPSC
   
 instance RenderType CppSrcCode where
+  multiType _ = error $ C.multiTypeError cppName
   typeFromData t s d = toState (toCode $ td t s d)
 
 instance InternalTypeElim CppSrcCode where
@@ -1724,6 +1726,7 @@ instance TypeElim CppHdrCode where
   getTypeString = typeString . unCPPHC
   
 instance RenderType CppHdrCode where
+  multiType _ = error $ C.multiTypeError cppName
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim CppHdrCode where

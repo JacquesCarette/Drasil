@@ -18,6 +18,6 @@ Projectile$(TARGET_EXTENSION): main.swift
 run: build
 	./Projectile$(TARGET_EXTENSION) $(RUNARGS)
 
-doc: doxConfig main.swift
+doc: main.swift
 
 .PHONY: build run doc

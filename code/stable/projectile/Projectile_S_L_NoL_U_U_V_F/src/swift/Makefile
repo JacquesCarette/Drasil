@@ -15,6 +15,6 @@ build: Projectile$(LIB_EXTENSION)
 Projectile$(LIB_EXTENSION): InputFormat.swift InputConstraints.swift Calculations.swift OutputFormat.swift
 	swiftc InputFormat.swift InputConstraints.swift Calculations.swift OutputFormat.swift -o Projectile$(LIB_EXTENSION) -parse-as-library
 
-doc: doxConfig InputFormat.swift InputConstraints.swift Calculations.swift OutputFormat.swift
+doc: InputFormat.swift InputConstraints.swift Calculations.swift OutputFormat.swift
 
 .PHONY: build doc

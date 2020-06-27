@@ -47,7 +47,7 @@ instance AuxiliarySym SwiftProject where
 
   optimizeDox = error doxError
 
-  makefile fs it cms = G.makefile (swiftBuildConfig fs it) (G.noRunIfLib it swiftRunnable) (G.docIfEnabled cms (DocConfig []))
+  makefile fs it cms = G.makefile (swiftBuildConfig fs it) (G.noRunIfLib it swiftRunnable) (G.docIfEnabled cms (DocConfig [] []))
 
   auxHelperDoc = unSP
   auxFromData fp d = return $ ad fp d

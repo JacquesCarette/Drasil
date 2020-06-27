@@ -5,7 +5,6 @@ module Language.Drasil.Code.Imperative.Build.Import (
 import Language.Drasil.Code.Imperative.Build.AST (asFragment, DocConfig(..),
   BuildConfig(BuildConfig), BuildDependencies(..), Ext(..), includeExt, 
   NameOpts, nameOpts, packSep, Runnable(Runnable), BuildName(..), RunType(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName)
 
 import GOOL.Drasil (FileData(..), ProgData(..), GOOLState(..), headers, sources,
   mainMod)
@@ -40,8 +39,8 @@ instance RuleTransformer CodeHarness where
     mkRule (makeS "run") [buildTarget] [
       mkCheckedCommand $ buildRunTarget (renderBuildName s m no nm) ty +:+ mkFreeVar "RUNARGS"
       ]
-    ]) r ++ maybe [] (\(DocConfig cmds) -> [
-      mkRule (makeS "doc") (getCommentedFiles s) cmds
+    ]) r ++ maybe [] (\(DocConfig dps cmds) -> [
+      mkRule (makeS "doc") (dps ++ getCommentedFiles s) cmds
     ]) d where
       buildTarget = makeS "build"
 
@@ -65,7 +64,7 @@ getCompilerInput BcSource s _ = map makeS $ s ^. sources
 getCompilerInput (BcSingle n) s p = [renderBuildName s p nameOpts n]
 
 getCommentedFiles :: GOOLState -> [MakeString]
-getCommentedFiles s = map makeS (doxConfigName : nub (s ^. headers ++ 
+getCommentedFiles s = map makeS (nub (s ^. headers ++ 
   maybeToList (s ^. mainMod)))
 
 buildRunTarget :: MakeString -> RunType -> MakeString

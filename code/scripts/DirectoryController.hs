@@ -1,6 +1,5 @@
-module DirectoryController (createFolder, createFile, finder, finder2, 
-  getDirectories, getDirectories2, stripPath, DrasilPack, FileName, FolderName, 
-  File(..), Folder(..)) where
+module DirectoryController (createFolder, createFile, finder, getDirectories, 
+  stripPath, DrasilPack, FileName, FolderName, File(..), Folder(..)) where
 
 import Data.List
 import System.IO
@@ -31,20 +30,8 @@ createFile :: FilePath -> DrasilPack -> FileName -> File
 createFile fp drpk fn = File {fileDrasilPack=drpk,fileName=fn,filePath=fp}
 
 -- iterates through each drasil- package and outputs subdirectories and haskell files
-iterator :: FilePath -> IO ([FolderName],[FileName])
-iterator nameFilePath = do
-  let [fn,wd] = words nameFilePath
-  setCurrentDirectory wd
-  fc <- listDirectory fn
-
-  let fcs = (a,b)
-      a = map ((++fn) . (++"/") . (++wd) . (++" ")) $ fc \\ filter (isInfixOf ".") fc
-      b = map ((++fn) . (++"/") . (++wd) . (++" ")) $ filter (isSuffixOf ".hs") fc
-  return fcs
-
--- iterates through each drasil- package and outputs subdirectories and haskell files
-iterator2 :: Folder -> IO ([Folder],[File])
-iterator2 folder = do
+iterator :: Folder -> IO ([Folder],[File])
+iterator folder = do
   setCurrentDirectory (folderPath folder)
   rawContents <- listDirectory (folderName folder)
 
@@ -60,31 +47,13 @@ iterator2 folder = do
   return bakedContents
 
 -- searches for all folders and files in a directory (recursive search utilizing iterator function)
-finder :: FolderName -> IO [FileName]
-finder folderName = do
-  rawData <- iterator folderName
+finder :: Folder -> IO [File]
+finder folder = do
+  rawData <- iterator folder
 
   let rawFolders = fst rawData
   folders <- verifyDirectories rawFolders
   rawFiles <- mapM finder folders
-
-  let bakedFiles
-        | null rawFiles = []
-        | otherwise = concat rawFiles
-
-  let files
-        | not (null folders) = snd rawData ++ bakedFiles
-        | otherwise = snd rawData
-  return files
-
--- searches for all folders and files in a directory (recursive search utilizing iterator function)
-finder2 :: Folder -> IO [File]
-finder2 folder = do
-  rawData <- iterator2 folder
-
-  let rawFolders = fst rawData
-  folders <- verifyDirectories2 rawFolders
-  rawFiles <- mapM finder2 folders
 
   let bakedFiles
         | null rawFiles = []
@@ -95,17 +64,9 @@ finder2 folder = do
         | otherwise = snd rawData ++ bakedFiles
   return files
 
--- gets all drasil- packages + filepaths in a list
-getDirectories :: FilePath -> FilterPrefix -> IO [FilePath]
-getDirectories directoryPath filterPrefix = do
-  all <- listDirectory directoryPath
-  -- filters all drasil- packages
-  let filtered = map ((++ directoryPath) . (++" ")) $ filter (isPrefixOf filterPrefix) all
-  return filtered
-
 -- gets all drasil- packages + filepaths in a list of folder data types
-getDirectories2 :: FilePath -> FilterPrefix -> IO [Folder]
-getDirectories2 directoryPath filterPrefix = do
+getDirectories :: FilePath -> FilterPrefix -> IO [Folder]
+getDirectories directoryPath filterPrefix = do
   -- all raw directory contents
   all <- listDirectory directoryPath
   -- raw drasil- package directories + package names
@@ -116,33 +77,21 @@ getDirectories2 directoryPath filterPrefix = do
   return directories
 
 -- verifies that each folder/directory exists
-verifyDirectories :: [FilePath] -> IO [FilePath]
+verifyDirectories :: [Folder] -> IO [Folder]
 verifyDirectories rawFolders = do
-  let rawDirectories = map (joins . words) rawFolders
-  boolFolders <- mapM doesDirectoryExist rawDirectories
-  let verifiedDirectories = snd $ partition null (zipWith fBool boolFolders rawFolders)
-  return verifiedDirectories
-
-verifyDirectories2 :: [Folder] -> IO [Folder]
-verifyDirectories2 rawFolders = do
   let rawDirectories = map getFolderPath rawFolders
   boolFolders <- mapM doesDirectoryExist rawDirectories
-  let verifiedDirectories = snd $ partition nullFolder (zipWith fBool2 boolFolders rawFolders)
+  let verifiedDirectories = snd $ partition nullFolder (zipWith fBool boolFolders rawFolders)
   return verifiedDirectories
 
--- combines lists of Booleans and FilePaths (if True, FilePath exists)
-fBool :: Bool -> FilePath -> FilePath
-fBool b s = if b then s else ""
-
 -- combines lists of Booleans and Folders (if True, Folder exists)
-fBool2 :: Bool -> Folder -> Folder
-fBool2 b f = if b then f else (createFolder "" "" "")
+fBool :: Bool -> Folder -> Folder
+fBool b f = if b then f else (createFolder "" "" "")
 
 -- checks if a folder is null (empty)
 nullFolder :: Folder -> Bool
-nullFolder folder
-  | folderName folder == "" && folderPath folder == "" && folderDrasilPack folder == "" = True
-  | otherwise = False
+nullFolder folder = if empty then True else False where
+  empty = all null [folderName folder,folderPath folder,folderDrasilPack folder]
 
 -- combines folder name with filepath (for testing if directory exists)
 joins :: [FilePath] -> FilePath

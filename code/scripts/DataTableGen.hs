@@ -4,9 +4,9 @@ import Data.List
 import System.IO
 import System.Directory
 import qualified DirectoryController as DC (createFolder, createFile, finder, 
-  finder2, getDirectories, getDirectories2, stripPath, DrasilPack, FileName, 
-  FolderName, File(..), Folder(..))
-import SourceCodeReader as SCR (extractEntryData, extractEntryData2, EntryData)
+  getDirectories, stripPath, DrasilPack, FileName, FolderName, File(..), 
+  Folder(..))
+import SourceCodeReader as SCR (extractEntryData)
 
 type ClassInstance = String
 
@@ -60,54 +60,36 @@ main = do
 
   -- gets names + filepaths of all drasil- packages/directories
   filtered <- DC.getDirectories codeDirectory "drasil-"
-  -- mapM_ print filtered
-  
-  filtered2 <- DC.getDirectories2 codeDirectory "drasil-"
-  -- mapM_ print filtered2
 
   -- imports configuration settings
   [packageNames,classInstanceGroups,classInstances] <- config scriptsDirectory
 
   -- all files + filepaths stored here; obtained from filtered list of drasil- packages using finder
   allFiles <- mapM DC.finder filtered
-  -- mapM_ print allFiles
 
-  allFiles2 <- mapM DC.finder2 filtered2
-  -- mapM_ print allFiles2
-
-  -- converts list of rawFileData (filename + filepath) into list of rawEntryData (filename, 
-  -- truncated filepath, data, newtype and class names, class instances)
-  let rawFileData = intercalate ["new line"] allFiles
-  -- mapM print rawFileData
-  rawEntryData <- mapM (createEntry codeDirectory classInstances . words) rawFileData
-  -- mapM print rawEntryData
-
-  -- entryData contains joined string with each file entries' data (intercalate)
-  let entryData = intercalate "\n" rawEntryData
-  
-  let rawFileData2 = intercalate [DC.createFile "" "" "newline"] allFiles2
-  -- mapM print rawFileData2
-  rawEntryData2 <- sequence (zipWith (createEntry2 codeDirectory classInstances) rawFileData2 (map DC.fileName rawFileData2))
-  -- mapM print rawEntryData2
-
-  bakedEntryData <- sequence (zipWith (compileEntryData classInstances) rawEntryData2 (map fileName rawEntryData2))
-  let entryData2 = intercalate "\n" bakedEntryData
-  -- print entryData2
+  -- converts list of rawFileData (File data type instances) into list of rawEntryData (Entry data type instances)
+  let rawFileData = intercalate [DC.createFile "" "" "newline"] allFiles
+  -- creates Entry instances containing file data
+  rawEntryData <- sequence (zipWith (createEntry codeDirectory classInstances) rawFileData (map DC.fileName rawFileData))
+  -- creates EntryString instances containing entry data
+  bakedEntryData <- sequence (zipWith (compileEntryData classInstances) rawEntryData (map fileName rawEntryData))
+  -- entryData contains joined string with each file EntryString instance (intercalate)
+  let entryData = intercalate "\n" bakedEntryData
 
   -- creates and writes to output data file
-  output outputDirectory entryData2 classInstances
+  output outputDirectory entryData classInstances
 
--- makes Entry data
+-- makes Entry data instance
 makeEntry :: DC.DrasilPack -> DC.FileName -> FilePath -> [DataType] -> 
   [Newtype] -> [Class] -> [ClassInstance2] -> Entry
 makeEntry drpk fn fp dtl ntl cls clsint = Entry {drasilPack=drpk,fileName=fn,
   filePath=fp,dataTypes=dtl,newtypes=ntl,classes=cls,classInstances=clsint}
 
--- makes Class data
+-- makes Class data instance
 makeClass :: ClassType -> ClassName -> Class
 makeClass clstp clsnm = Class {className=clsnm,classType=clstp}
 
--- makes ClassInstance2 data
+-- makes ClassInstance2 data instance
 makeClassInstance2 :: (DNType,ClassName) -> ClassInstance2
 makeClassInstance2 (dnt,cls) = ClassInstance2 {dnType=dnt,classInstName=cls}
 
@@ -121,7 +103,7 @@ config configFilePath = do
   return [packageNames,classInstanceGroups,classInstances]
 
 -- function creates and writes output data file DataTable.csv to /code/analysis
-output :: FilePath -> SCR.EntryData -> [String] -> IO ()
+output :: FilePath -> EntryString -> [String] -> IO ()
 output outputFilePath entryData classInstances = do
   createDirectoryIfMissing False outputFilePath
   setCurrentDirectory outputFilePath
@@ -131,70 +113,12 @@ output outputFilePath entryData classInstances = do
   hPutStrLn dataTable entryData
   hClose dataTable
 
-  -- creates an entry for each file (updated/optimized input format)
-createEntry :: FilePath -> [ClassInstance] -> [FilePath] -> IO String
+-- creates an entry for each file (new Entry data-oriented format)
+createEntry :: FilePath -> [ClassInstance] -> DC.File -> DC.FileName -> IO Entry
 -- creates blank line to separate file entries by drasil- package
-createEntry homeDirectory classInstances ["new","line"] = return "\t"
+createEntry homeDirectory classInstances file "newline" = return (makeEntry "" "newline" "" [] [] [] [])
 -- creates actual file entries
-createEntry homeDirectory classInstances [name,path] = do
-  [dataNames,newtypeNames,classNames,stripInstances] <- SCR.extractEntryData name path
-
-  -- f data newtype class; joins data value/placeholders for data/newtype/class (in first data entry line)
-  let f d n c = intercalate "," [drasilPack,filePath,fileName,d,n,c] 
-      drasilPack = takeWhile (/= '/') . (\\ "-") $ dropWhile (/='-') path 
-      filePath = (++ "/") . (\\ "/") . dropWhile (/= '/') $ (\\ homeDirectory ++ "/drasil-") path
-      fileName = name
-
-  -- guards determine how to handle first data entry line
-  let entry 
-        | not (null dataNames) = f (head dataNames) "\t" "\t"
-        | not (null newtypeNames) = f "\t" (head newtypeNames) "\t"
-        | not (null classNames) = f "\t" "\t" (head classNames)
-        | otherwise = f "\t" "\t" "\t"
-  
-  -- creates heads of each data, newtype and class entry line
-  let dataEntries = map (("\t,\t,\t,"++) . (++",\t,\t")) dataNames
-      newtypeEntries = map (("\t,\t,\t,\t,"++) . (++",\t")) newtypeNames
-      classEntries = map ("\t,\t,\t,\t,\t,"++) classNames
-
-  -- creating "Y" references to class instances for data types
-  let dataInstanceRefNames = map (f stripInstances) dataNames
-      f b a = map (\\ (a ++ " ")) $ filter (isPrefixOf a) b
-      dataInstanceRefs = zipWith (map . isInstanceOf) dataInstanceRefNames instanceSkeleton where 
-          instanceSkeleton = replicate (length dataInstanceRefNames) classInstances
-      dataRefLines = map (intercalate ",") dataInstanceRefs
-      dataEntries2 = zipWith join' dataEntries dataRefLines
-
-  -- creating "Y" references to class instances for newtype types
-  let newtypeInstanceRefNames = map (f stripInstances) newtypeNames
-      f b a = map (\\ (a ++ " ")) $ filter (isPrefixOf a) b
-      newtypeInstanceRefs = zipWith (map . isInstanceOf) newtypeInstanceRefNames instanceSkeleton where 
-          instanceSkeleton = replicate (length newtypeInstanceRefNames) classInstances
-      newtypeRefLines = map (intercalate ",") newtypeInstanceRefs
-      newtypeEntries2 = zipWith join' newtypeEntries newtypeRefLines
-
-  -- creates file entry data by combining data, newtype and class entries
-  let entryData = dataEntries2 ++ newtypeEntries2 ++ classEntries
-  
-  -- guards determine how to handle overall file entry output (single vs. multiple entry data)
-  let output 
-        | length entryData > 1 && not (null dataRefLines) = join' entry (head dataRefLines) ++ "\n" ++ subEntries
-        | length entryData > 1 && not (null newtypeRefLines) = join' entry (head newtypeRefLines) ++ "\n" ++ subEntries
-        | length entryData > 1 = entry ++ "\n" ++ subEntries
-        | length entryData == 1 && not (null dataRefLines) = join' entry (head dataRefLines)
-        | length entryData == 1 && not (null newtypeRefLines) = join' entry (head newtypeRefLines)
-        | otherwise = entry
-      subEntries = intercalate "\n" (drop 1 entryData)
-
-  -- mapM_ print (lines output)
-  return output
-
--- creates an entry for each file (updated/optimized Entry data format)
-createEntry2 :: FilePath -> [ClassInstance] -> DC.File -> DC.FileName -> IO Entry
--- creates blank line to separate file entries by drasil- package
-createEntry2 homeDirectory classInstances file "newline" = return (makeEntry "" "newline" "" [] [] [] [])
--- creates actual file entries
-createEntry2 homeDirectory classInstances file filename = do
+createEntry homeDirectory classInstances file filename = do
   let drpk = DC.fileDrasilPack file
       fn = filename
       fp = DC.filePath file
@@ -202,7 +126,7 @@ createEntry2 homeDirectory classInstances file filename = do
       efp = (++ "/") $ (\\ homeDirectory ++ "/drasil-" ++ drpk ++ "/") fp
 
   -- stripInstances = [(dataType,classInfo)]
-  (dtl,ntl,classNames,stripInstances) <- SCR.extractEntryData2 fn fp
+  (dtl,ntl,classNames,stripInstances) <- SCR.extractEntryData fn fp
   
   let clstp
         | drpk == "gool" = GOOL

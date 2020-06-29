@@ -86,11 +86,11 @@ verifyDirectories rawFolders = do
 
 -- combines lists of Booleans and Folders (if True, Folder exists)
 fBool :: Bool -> Folder -> Folder
-fBool b f = if b then f else (createFolder "" "" "")
+fBool b f = if b then f else createFolder "" "" ""
 
 -- checks if a folder is null (empty)
 nullFolder :: Folder -> Bool
-nullFolder folder = if empty then True else False where
+nullFolder folder = empty where
   empty = all null [folderName folder,folderPath folder,folderDrasilPack folder]
 
 -- combines folder name with filepath (for testing if directory exists)

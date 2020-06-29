@@ -3,6 +3,7 @@ module DataTableGen (main) where
 import Data.List
 import System.IO
 import System.Directory
+import Control.Monad
 import qualified DirectoryController as DC (createFolder, createFile, finder, 
   getDirectories, stripPath, DrasilPack, FileName, FolderName, File(..), 
   Folder(..))
@@ -70,9 +71,9 @@ main = do
   -- converts list of rawFileData (File data type instances) into list of rawEntryData (Entry data type instances)
   let rawFileData = intercalate [DC.createFile "" "" "newline"] allFiles
   -- creates Entry instances containing file data
-  rawEntryData <- sequence (zipWith (createEntry codeDirectory classInstances) rawFileData (map DC.fileName rawFileData))
+  rawEntryData <- zipWithM (createEntry codeDirectory classInstances) rawFileData (map DC.fileName rawFileData)
   -- creates EntryString instances containing entry data
-  bakedEntryData <- sequence (zipWith (compileEntryData classInstances) rawEntryData (map fileName rawEntryData))
+  bakedEntryData <- zipWithM (compileEntryData classInstances) rawEntryData (map fileName rawEntryData)
   -- entryData contains joined string with each file EntryString instance (intercalate)
   let entryData = intercalate "\n" bakedEntryData
 
@@ -169,12 +170,12 @@ compileEntryData classInstancesI entry filename = do
       classEntries = map ("\t,\t,\t,\t,\t,"++) classNames
 
   -- creating "Y" references to class instances for data types
-  let dataInstanceRefNames = map (getRefNames (entryClassInsts)) dataNames
+  let dataInstanceRefNames = map (getRefNames entryClassInsts) dataNames
       dataRefLines = createRefLines classInstancesI dataInstanceRefNames
       dataEntries2 = zipWith join' dataEntries dataRefLines
 
   -- creating "Y" references to class instances for newtype types
-  let newtypeInstanceRefNames = map (getRefNames (entryClassInsts)) newtypeNames
+  let newtypeInstanceRefNames = map (getRefNames entryClassInsts) newtypeNames
       newtypeRefLines = createRefLines classInstancesI newtypeInstanceRefNames
       newtypeEntries2 = zipWith join' newtypeEntries newtypeRefLines
 
@@ -206,8 +207,7 @@ isInstanceOf fileInstances fileInstance = if isInstance then yes else no where
 
 -- tests if ClassInstance2 is of the data/newtype typename (DNType)
 isTypeOf :: DNType -> ClassInstance2 -> Bool
-isTypeOf typeName classInstance = if isType then True else False where
-  isType = dnType classInstance == typeName
+isTypeOf typeName classInstance = dnType classInstance == typeName
 
 -- joins two strings together with ","
 join' :: String -> String -> String

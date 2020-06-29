@@ -7,17 +7,17 @@ Generate all the Things!
 
 ## Table of Contents
 
-1. [What is Drasil?](https://github.com/JacquesCarette/Drasil/tree/Issue%232136#what-is-drasil)
+1. [What is Drasil?](#what-is-drasil)
    - description of the Drasil framework
-2. [Quick Start](https://github.com/JacquesCarette/Drasil/tree/Issue%232136#quick-start)
+2. [Quick Start](#quick-start)
    - instructions for quick-starting the Drasil framework
-3. [Building Specific Examples](https://github.com/JacquesCarette/Drasil/tree/Issue%232136#building-specific-examples)
+3. [Building Specific Examples](#building-specific-examples)
    - instructions for how to build specific examples using Drasil
-4. [Running the Example(s)](https://github.com/JacquesCarette/Drasil/tree/Issue%232136#running-the-examples)
+4. [Running the Example(s)](#running-the-examples)
    - instructions for running specific examples
-5. [Finding / Building the Haddock Documentation](https://github.com/JacquesCarette/Drasil/tree/Issue%232136#finding--building-the-haddock-documentation)
+5. [Finding / Building the Haddock Documentation](#finding--building-the-haddock-documentation)
    - Haddock documentation instructions
-6. [Summary of Folder Structure and File Contents](https://github.com/JacquesCarette/Drasil/tree/Issue%232136#summary-of-folder-structure-and-file-contents)
+6. [Summary of Folder Structure and File Contents](#summary-of-folder-structure-and-file-contents)
 
 ## What is Drasil?
 

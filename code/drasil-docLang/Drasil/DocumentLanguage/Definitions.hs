@@ -6,6 +6,7 @@ module Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(..),
 
 import Data.Map (keys)
 import Data.List (elem, nub)
+import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (Symbol(..))
@@ -15,7 +16,7 @@ import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants),
-  TheoryModel, inCons, outCons, imOutput, imInputs)
+  TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints))
 import Utils.Drasil
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
@@ -171,16 +172,18 @@ mkIMField i m l@(Description v u) fs = (show l,
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
 mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getReferences) : fs
 mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
-  where x = P . eqSymb $ i ^. imOutput
+  where x = P . eqSymb $ i ^. output
 mkIMField i _ l@Input fs = 
-  case i ^. imInputs of
+  case map fst (i ^. inputs) of
   [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
   (_:_) -> (show l, [mkParagraph $ foldl sC x xs]) : fs
-  where (x:xs) = map (P . eqSymb) $ i ^. imInputs
+  where (x:xs) = map (P . eqSymb . fst) $ i ^. inputs
 mkIMField i _ l@InConstraints fs  = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. inCons)) : fs
+  let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i^.inputs) in
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . uncurry realInterval) [] ll) : fs
 mkIMField i _ l@OutConstraints fs = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. outCons)) : fs
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . realInterval (i ^. output)) [] 
+    (i ^. out_constraints)) : fs
 mkIMField i _ l@Notes fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++

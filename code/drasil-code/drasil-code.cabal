@@ -26,6 +26,7 @@ library
     , Language.Drasil.Code.Imperative.Doxygen.Import
     , Language.Drasil.Code.Imperative.ReadInput
     , Language.Drasil.Code.Imperative.WriteInput
+    , Language.Drasil.Code.Imperative.WriteReadMe
     , Language.Drasil.Code.Imperative.GOOL.Data
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer
@@ -33,6 +34,7 @@ library
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer
     , Language.Drasil.Code.Imperative.GOOL.ClassInterface
     , Language.Drasil.Code.Imperative.Comments
     , Language.Drasil.Code.Imperative.Descriptions
@@ -102,6 +104,7 @@ executable codegenTest
     , Language.Drasil.Code.Imperative.Doxygen.Import
     , Language.Drasil.Code.Imperative.ReadInput
     , Language.Drasil.Code.Imperative.WriteInput
+    , Language.Drasil.Code.Imperative.WriteReadMe
     , Language.Drasil.Code.Imperative.GOOL.Data
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer
@@ -109,6 +112,7 @@ executable codegenTest
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer
     , Language.Drasil.Code.Imperative.GOOL.ClassInterface
     , Language.Drasil.Code.Imperative.Comments
     , Language.Drasil.Code.Imperative.Descriptions

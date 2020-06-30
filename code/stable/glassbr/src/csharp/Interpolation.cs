@@ -158,13 +158,13 @@ public class Interpolation {
         ReadTable.read_table(filename, z_vector, x_matrix, y_matrix);
         i = find(z_vector, z);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'i' assigned to ");
+        outfile.Write("var 'i' assigned ");
         outfile.Write(i);
         outfile.WriteLine(" in module Interpolation");
         outfile.Close();
         x_z_1 = extractColumn(x_matrix, i);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'x_z_1' assigned to ");
+        outfile.Write("var 'x_z_1' assigned ");
         outfile.Write("[");
         for (int list_i1 = 0; list_i1 < x_z_1.Count - 1; list_i1++) {
             outfile.Write(x_z_1[list_i1]);
@@ -178,7 +178,7 @@ public class Interpolation {
         outfile.Close();
         y_z_1 = extractColumn(y_matrix, i);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'y_z_1' assigned to ");
+        outfile.Write("var 'y_z_1' assigned ");
         outfile.Write("[");
         for (int list_i1 = 0; list_i1 < y_z_1.Count - 1; list_i1++) {
             outfile.Write(y_z_1[list_i1]);
@@ -192,7 +192,7 @@ public class Interpolation {
         outfile.Close();
         x_z_2 = extractColumn(x_matrix, i + 1);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'x_z_2' assigned to ");
+        outfile.Write("var 'x_z_2' assigned ");
         outfile.Write("[");
         for (int list_i1 = 0; list_i1 < x_z_2.Count - 1; list_i1++) {
             outfile.Write(x_z_2[list_i1]);
@@ -206,7 +206,7 @@ public class Interpolation {
         outfile.Close();
         y_z_2 = extractColumn(y_matrix, i + 1);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'y_z_2' assigned to ");
+        outfile.Write("var 'y_z_2' assigned ");
         outfile.Write("[");
         for (int list_i1 = 0; list_i1 < y_z_2.Count - 1; list_i1++) {
             outfile.Write(y_z_2[list_i1]);
@@ -221,13 +221,13 @@ public class Interpolation {
         try {
             j = find(x_z_1, x);
             outfile = new StreamWriter("log.txt", true);
-            outfile.Write("var 'j' assigned to ");
+            outfile.Write("var 'j' assigned ");
             outfile.Write(j);
             outfile.WriteLine(" in module Interpolation");
             outfile.Close();
             k_2 = find(x_z_2, x);
             outfile = new StreamWriter("log.txt", true);
-            outfile.Write("var 'k_2' assigned to ");
+            outfile.Write("var 'k_2' assigned ");
             outfile.Write(k_2);
             outfile.WriteLine(" in module Interpolation");
             outfile.Close();
@@ -236,13 +236,13 @@ public class Interpolation {
         }
         y_1 = lin_interp(x_z_1[j], y_z_1[j], x_z_1[j + 1], y_z_1[j + 1], x);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'y_1' assigned to ");
+        outfile.Write("var 'y_1' assigned ");
         outfile.Write(y_1);
         outfile.WriteLine(" in module Interpolation");
         outfile.Close();
         y_2 = lin_interp(x_z_2[k_2], y_z_2[k_2], x_z_2[k_2 + 1], y_z_2[k_2 + 1], x);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'y_2' assigned to ");
+        outfile.Write("var 'y_2' assigned ");
         outfile.Write(y_2);
         outfile.WriteLine(" in module Interpolation");
         outfile.Close();
@@ -286,7 +286,7 @@ public class Interpolation {
         for (int i = 0; i < z_vector.Count - 1; i += 1) {
             x_z_1 = extractColumn(x_matrix, i);
             outfile = new StreamWriter("log.txt", true);
-            outfile.Write("var 'x_z_1' assigned to ");
+            outfile.Write("var 'x_z_1' assigned ");
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < x_z_1.Count - 1; list_i1++) {
                 outfile.Write(x_z_1[list_i1]);
@@ -300,7 +300,7 @@ public class Interpolation {
             outfile.Close();
             y_z_1 = extractColumn(y_matrix, i);
             outfile = new StreamWriter("log.txt", true);
-            outfile.Write("var 'y_z_1' assigned to ");
+            outfile.Write("var 'y_z_1' assigned ");
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < y_z_1.Count - 1; list_i1++) {
                 outfile.Write(y_z_1[list_i1]);
@@ -314,7 +314,7 @@ public class Interpolation {
             outfile.Close();
             x_z_2 = extractColumn(x_matrix, i + 1);
             outfile = new StreamWriter("log.txt", true);
-            outfile.Write("var 'x_z_2' assigned to ");
+            outfile.Write("var 'x_z_2' assigned ");
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < x_z_2.Count - 1; list_i1++) {
                 outfile.Write(x_z_2[list_i1]);
@@ -328,7 +328,7 @@ public class Interpolation {
             outfile.Close();
             y_z_2 = extractColumn(y_matrix, i + 1);
             outfile = new StreamWriter("log.txt", true);
-            outfile.Write("var 'y_z_2' assigned to ");
+            outfile.Write("var 'y_z_2' assigned ");
             outfile.Write("[");
             for (int list_i1 = 0; list_i1 < y_z_2.Count - 1; list_i1++) {
                 outfile.Write(y_z_2[list_i1]);
@@ -343,13 +343,13 @@ public class Interpolation {
             try {
                 j = find(x_z_1, x);
                 outfile = new StreamWriter("log.txt", true);
-                outfile.Write("var 'j' assigned to ");
+                outfile.Write("var 'j' assigned ");
                 outfile.Write(j);
                 outfile.WriteLine(" in module Interpolation");
                 outfile.Close();
                 k_2 = find(x_z_2, x);
                 outfile = new StreamWriter("log.txt", true);
-                outfile.Write("var 'k_2' assigned to ");
+                outfile.Write("var 'k_2' assigned ");
                 outfile.Write(k_2);
                 outfile.WriteLine(" in module Interpolation");
                 outfile.Close();
@@ -358,13 +358,13 @@ public class Interpolation {
             }
             y_1 = lin_interp(x_z_1[j], y_z_1[j], x_z_1[j + 1], y_z_1[j + 1], x);
             outfile = new StreamWriter("log.txt", true);
-            outfile.Write("var 'y_1' assigned to ");
+            outfile.Write("var 'y_1' assigned ");
             outfile.Write(y_1);
             outfile.WriteLine(" in module Interpolation");
             outfile.Close();
             y_2 = lin_interp(x_z_2[k_2], y_z_2[k_2], x_z_2[k_2 + 1], y_z_2[k_2 + 1], x);
             outfile = new StreamWriter("log.txt", true);
-            outfile.Write("var 'y_2' assigned to ");
+            outfile.Write("var 'y_2' assigned ");
             outfile.Write(y_2);
             outfile.WriteLine(" in module Interpolation");
             outfile.Close();

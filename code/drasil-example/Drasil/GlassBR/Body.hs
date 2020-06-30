@@ -19,18 +19,18 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   SolChSpec(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
   Verbosity(Verbose), auxSpecSent, characteristicsLabel, intro, mkDoc,
-  termDefnF', tsymb, traceMatStandard)
+  termDefnF', tsymb, traceMatStandard, purpDoc)
 
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, compcon, algorithm)
-import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
-  assumption, characteristic, company, condition, content, dataConst, datum,
-  definition, doccon, doccon', document, emphasis, environment, goal,
-  information, input_, interface, model, organization, physical, problem,
-  product_, purpose, reference, software, softwareConstraint, softwareSys,
+import Data.Drasil.Concepts.Documentation as Doc (appendix, aspect,
+  assumption, characteristic, company, condition, dataConst, datum,
+  definition, doccon, doccon', document, environment,
+  input_, interface, model, organization, physical, problem,
+  product_, software, softwareConstraint, softwareSys,
   srsDomains, standard, sysCont, system, template, term_, user, value, variable)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs, code)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
@@ -98,7 +98,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab glassBR)
       (short glassBR)
-    [IPurpose $ purpOfDocIntro document glassBR glaSlab,
+    [IPurpose $ purpDoc glassBR Verbose,
      IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
      IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
@@ -228,20 +228,8 @@ scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,
   sParen $ makeRef2S astm2009]
 
 {--Purpose of Document--}
+-- Purpose of Document automatically generated in IPurpose
 
-purpOfDocIntro :: NamedChunk -> CI -> NamedChunk -> Sentence
-purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
-  S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
-  S "is likely to resist a specified" +:+. phrase blast, S "The", plural Doc.goal
-  `sAnd` plural thModel, S "used in the", short progName, phrase Doc.code,
-  S "are provided" `sC` S "with an", phrase emphasis,
-  S "on explicitly identifying", plural assumption `sAnd` S "unambiguous" +:+.
-  plural definition, S "This", phrase typeOf, S "is intended to be used as a",
-  phrase reference, S "to provide all", phrase information,
-  S "necessary to understand" `sAnd` S "verify the" +:+. phrase analysis,
-  S "The", short Doc.srs, S "is abstract because the", plural content, S "say what",
-  phrase problem, S "is being solved" `sC` S "but not how to solve it"]
-  --FIXME: Last sentence is also present in SSP, SWHS and NoPCM... pull out?
 
 {--Scope of Requirements--}
 

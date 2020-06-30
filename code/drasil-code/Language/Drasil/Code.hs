@@ -1,6 +1,5 @@
 -- | re-export smart constructors for external code writing
 module Language.Drasil.Code (
-  spaceToCodeType,
   makeCode, createCodeFiles, 
   generator, generateCode,
   readWithDataDesc, sampleInputDD,
@@ -41,7 +40,7 @@ module Language.Drasil.Code (
   field,
   ODEInfo(..), odeInfo, ODEOptions(..), odeOptions, ODEMethod(..), 
   ODELibPckg(..), mkODELib, mkODELibNoPath,
-  unPP, unJP, unCSP, unCPPP
+  unPP, unJP, unCSP, unCPPP, unSP
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -50,8 +49,6 @@ import Language.Drasil.Code.Imperative.Generator (generator, generateCode)
 
 import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc, 
   sampleInputDD)
-
-import Language.Drasil.Code.Code (spaceToCodeType)
 
 import Language.Drasil.Code.CodeGeneration (makeCode, createCodeFiles)
 
@@ -112,3 +109,4 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unP
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (unCSP)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (unCPPP)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (unSP)

@@ -18,16 +18,15 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   ReqrmntSec(..), ReqsSub(..), SRSDecl, SSDSub(..), SolChSpec (SCSProg),
   SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
-  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, tsymb'', traceMatStandard)
+  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
+import Data.Drasil.IdeaDicts as Doc (inModel)
 import Data.Drasil.Concepts.Computation (algorithm, compcon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
-  constraint, content, corSol, datum, definition, document, environment, goalStmt,
-  information, input_, model, organization, output_, physical, physics, problem,
-  property, purpose, quantity, reference, software, softwareSys, solution,
+  constraint, corSol, datum, document, environment,input_, model, organization, 
+  output_, physical, physics, property, quantity, software, softwareSys, solution,
   srsDomains, sysCont, system, user, value, variable, doccon, doccon')
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon, mathcon')
@@ -126,7 +125,7 @@ mkSRS = [RefSec $ RefProg intro [
     TAandA],
   IntroSec $
     IntroProg (introStart +:+ introStartSWHS) (introEnd (plural swhsPCM) progName)
-    [IPurpose $ purpDoc (phrase swhsPCM) progName,
+    [IPurpose $ purpDoc progName Verbose,
      IScope scope,
      IChar [] charsOfReader [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
@@ -215,23 +214,7 @@ introEnd progSent pro = foldlSent_ [EmptyS +:+. progSent, S "The developed",
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------
-
-purpDoc :: Sentence -> CI -> Sentence
-purpDoc spSent pro = foldlSent [S "The main", phrase purpose, S "of this",
-  phrase document, S "is to describe the modelling of" +:+.
-  spSent, S "The", plural goalStmt `sAnd` plural thModel,
-  S "used in the", short pro, S "code are provided, with an emphasis",
-  S "on explicitly identifying", plural assumption `sAnd` S "unambiguous" +:+.
-  plural definition, S "This", phrase document,
-  S "is intended to be used as a", phrase reference,
-  S "to provide ad hoc access to all", phrase information,
-  S "necessary to understand and verify the" +:+. phrase model, S "The",
-  short Doc.srs, S "is abstract because the", plural content, S "say what",
-  phrase problem, S "is being solved, but do not say how to solve it"]
-
-
--- Besides program name, these two paragraphs are general, mostly repeated
--- between examples, and can be abstracted out.
+-- Purpose of Document automatically generated in IPurpose
 
 --How to italicize words in sentence?
 --How to cite?

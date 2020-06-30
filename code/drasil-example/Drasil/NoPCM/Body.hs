@@ -50,13 +50,13 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
   SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose), 
   TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
-  tsymb, traceMatStandard)
+  tsymb, traceMatStandard, purpDoc)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Body (charsOfReader, dataContMid, introEnd, introStart,
-  orgDocIntro, physSyst1, physSyst2, purpDoc, sysCntxtDesc, sysCntxtFig,
+  orgDocIntro, physSyst1, physSyst2, sysCntxtDesc, sysCntxtFig,
   systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
@@ -129,7 +129,7 @@ mkSRS = [RefSec $ RefProg intro
   TAandA],
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
-    [ IPurpose $ purpDoc (phrase progName) progName
+    [ IPurpose $ purpDoc progName Verbose
     , IScope scope
     , IChar [] charsOfReader []
     , IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
@@ -236,6 +236,7 @@ introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. 
 -----------------------------------
 --Section 2.1 : PURPOSE OF DOCUMENT
 -----------------------------------
+-- Purpose of Document automatically generated in IPurpose
 
 -------------------------------------
 --Section 2.2 : SCOPE OF REQUIREMENTS

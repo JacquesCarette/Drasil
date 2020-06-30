@@ -16,7 +16,7 @@ public class InputConstraints {
             Console.Write("Warning: ");
             Console.Write("v_launch has value ");
             Console.Write(v_launch);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
             Console.Write(0);
             Console.WriteLine(".");
@@ -25,7 +25,7 @@ public class InputConstraints {
             Console.Write("Warning: ");
             Console.Write("theta has value ");
             Console.Write(theta);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("between ");
             Console.Write(0);
             Console.Write(" and ");
@@ -37,7 +37,7 @@ public class InputConstraints {
             Console.Write("Warning: ");
             Console.Write("p_target has value ");
             Console.Write(p_target);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
             Console.Write(0);
             Console.WriteLine(".");

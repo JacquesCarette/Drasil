@@ -152,7 +152,7 @@ helloForEachLoop :: (OOProg r) => MSStatement r
 helloForEachLoop = forEach i (valueOf $ listVar "myOtherList" double) 
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" double [valueOf i, 
   litDouble 1.0])))
-  where i = iterVar "num" double
+  where i = var "num" double
 
 helloTryCatch :: (OOProg r) => MSStatement r
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))

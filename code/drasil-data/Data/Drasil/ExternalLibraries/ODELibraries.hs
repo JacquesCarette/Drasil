@@ -32,7 +32,7 @@ import Control.Lens ((^.), _1, _2, over)
 -- SciPy -- 
 
 scipyODEPckg :: ODELibPckg
-scipyODEPckg = mkODELibNoPath scipyODE scipyCall [Python]
+scipyODEPckg = mkODELibNoPath "SciPy" "1.4.1" scipyODE scipyCall [Python]
 
 scipyODE :: ExternalLibrary
 scipyODE = externalLib [
@@ -131,7 +131,7 @@ integrateStep = quantfunc $ implVar "integrate_scipy" (nounPhrase
 -- Oslo (C#) --
 
 osloPckg :: ODELibPckg
-osloPckg = mkODELib oslo osloCall "Microsoft.Research.Oslo.dll" [CSharp]
+osloPckg = mkODELib "OSLO" "1.2" oslo osloCall "Microsoft.Research.Oslo.dll" [CSharp]
 
 oslo :: ExternalLibrary
 oslo = externalLib [
@@ -239,8 +239,8 @@ arrayVecDepVar info = quantvar $ implVar (dv ^. uid ++ "vec") (dv ^. term)
 -- Apache (Java) --
 
 apacheODEPckg :: ODELibPckg
-apacheODEPckg = mkODELib apacheODE apacheODECall "lib/commons-math3-3.6.1.jar" 
-  [Java]
+apacheODEPckg = mkODELib "Apache" "3.6.1" apacheODE apacheODECall 
+  "lib/commons-math3-3.6.1.jar" [Java]
 
 apacheODE :: ExternalLibrary
 apacheODE = externalLib [
@@ -388,7 +388,7 @@ computeDerivatives = quantfunc $ implVar "computeDerivatives_apache" (nounPhrase
 -- odeint (C++) --
 
 odeintPckg :: ODELibPckg
-odeintPckg = mkODELib odeint odeintCall "." [Cpp]
+odeintPckg = mkODELib "odeint" "v2" odeint odeintCall "." [Cpp]
 
 odeint :: ExternalLibrary
 odeint = externalLib [

@@ -2,7 +2,7 @@ module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
 import Language.Drasil
 import Language.Drasil.ShortHands (lI)
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs)
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, qwC)
 import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
@@ -30,8 +30,13 @@ iMods = [transMot, rotMot, col2D]
 
 {-- Force on the translational motion  --}
 transMot :: InstanceModel
-transMot = imNoDerivNoRefs transMotRC [qw velI, qw time, qw gravitationalAccel, qw forceI, qw massI] 
-  [sy velI $> 0, sy time $> 0, sy gravitationalAccel $> 0, sy forceI $> 0, sy massI $> 0 ]
+transMot = imNoDerivNoRefs transMotRC 
+  [qwC velI $ UpFrom (Exc, 0)
+  ,qwC time $ UpFrom (Exc, 0)
+  ,qwC gravitationalAccel $ UpFrom (Exc, 0)
+  ,qwC forceI $ UpFrom (Exc, 0)
+  ,qwC massI $ UpFrom (Exc, 0)
+  ]
   (qw accI) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
 transMotRC :: RelationConcept
@@ -63,9 +68,13 @@ transMotOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
 {-- Rotational Motion --}
 
 rotMot :: InstanceModel
-rotMot = imNoDerivNoRefs rotMotRC [qw angularVelocity, qw time, qw torqueI, qw momentOfInertia]
-  [sy angularVelocity $> 0, sy time $> 0, sy torqueI $> 0, sy momentOfInertia $> 0] 
-    (qw angularAccel) [sy angularAccel $> 0] "rotMot"
+rotMot = imNoDerivNoRefs rotMotRC 
+  [qwC angularVelocity $ UpFrom (Exc, 0)
+  ,qwC time $ UpFrom (Exc, 0)
+  ,qwC torqueI $ UpFrom (Exc, 0)
+  ,qwC momentOfInertia $ UpFrom (Exc, 0)
+  ]
+    (qw angularAccel) [UpFrom (Exc, 0)] "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
 rotMotRC :: RelationConcept
@@ -89,9 +98,15 @@ rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
 {-- 2D Collision --}
 
 col2D :: InstanceModel
-col2D = imNoDerivNoRefs col2DRC [qw time, qw impulseS, qw massA, qw normalVect] 
-  [sy time $> 0, sy impulseS $> 0, sy massA $> 0, sy normalVect $> 0]
-  (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"
+col2D = imNoDerivNoRefs col2DRC
+  [qwC time $ UpFrom (Exc, 0)
+  ,qwC impulseS $ UpFrom (Exc, 0)
+  ,qwC massA $ UpFrom (Exc, 0)
+  ,qwC normalVect $ UpFrom (Exc, 0)
+  ]
+  -- why a constraint on velA if velA is not an output?
+  -- (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"
+  (qw timeC) [UpFrom (Exc, 0)] "col2D"
   [col2DOutputs, rigidTwoDAssump, rightHandAssump, collisionAssump,
     noDampConsAssumps, impulseNote]
 

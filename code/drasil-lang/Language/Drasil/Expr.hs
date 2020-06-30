@@ -45,38 +45,41 @@ data Expr where
   Perc     :: Integer -> Integer -> Expr
   AssocA   :: ArithOper -> [Expr] -> Expr
   AssocB   :: BoolOper  -> [Expr] -> Expr
+  -- | Derivative, syntax is:
+  --   Type (Partial or total) -> principal part of change -> with respect to
+  --   For example: Deriv Part y x1 would be (dy/dx1)
   Deriv    :: DerivType -> Expr -> UID -> Expr
-  -- Derivative, syntax is:
-  -- Type (Partial or total) -> principal part of change -> with respect to
-  -- For example: Deriv Part y x1 would be (dy/dx1)
-  C        :: UID -> Expr -- implicitly assumes has a symbol
-  FCall    :: UID -> [Expr] -> [(UID, Expr)] -> Expr 
-    -- F(x) is (FCall F [x] []) or similar
-    -- FCall accepts a list of params and a list of named params
-    -- F(x,y) would be (FCall F [x,y]) or sim.
-    -- F(x,n=y) would be (FCall F [x] [(n,y)])
+  -- | C stands for "Chunk", for referring to a chunk in an expression.
+  --   Implicitly assumes has a symbol.
+  C        :: UID -> Expr
+  -- | F(x) is (FCall F [x] []) or similar.
+  --   FCall accepts a list of params and a list of named params.
+  --   F(x,y) would be (FCall F [x,y]) or sim.
+  --   F(x,n=y) would be (FCall F [x] [(n,y)]).
+  FCall    :: UID -> [Expr] -> [(UID, Expr)] -> Expr
+  -- | Actor creation given UID and parameters 
   New      :: UID -> [Expr] -> [(UID, Expr)] -> Expr 
-    -- Actor creation given UID and parameters
-  Message  :: UID -> UID -> [Expr] -> [(UID, Expr)] -> Expr 
-    -- Message an actor: 
-      -- 1st UID is the actor, 
-      -- 2nd UID is the method
+  -- | Message an actor: 
+  --   1st UID is the actor, 
+  --   2nd UID is the method
+  Message  :: UID -> UID -> [Expr] -> [(UID, Expr)] -> Expr
+  -- | Access a field of an actor:
+  --   1st UID is the actor,
+  --   2nd UID is the field
   Field :: UID -> UID -> Expr
-    -- Access a field of an actor:
-      -- 1st UID is the actor
-      -- 2nd UID is the field
-  Case     :: Completeness -> [(Expr,Relation)] -> Expr 
-    -- For multi-case expressions, each pair represents one case
+  -- | For multi-case expressions, each pair represents one case
+  Case     :: Completeness -> [(Expr,Relation)] -> Expr
   Matrix   :: [[Expr]] -> Expr
   UnaryOp  :: UFunc -> Expr -> Expr
   BinaryOp :: BinOp -> Expr -> Expr -> Expr
-  -- Operators are generalized arithmetic operators over a |DomainDesc|
+  -- | Operators are generalized arithmetic operators over a |DomainDesc|
   --   of an |Expr|.  Could be called |BigOp|.
-  -- ex: Summation is represented via |Add| over a discrete domain
+  --   ex: Summation is represented via |Add| over a discrete domain
   Operator :: ArithOper -> DomainDesc Expr Expr -> Expr -> Expr
-
-  IsIn     :: Expr -> Space -> Expr --	element of
-  RealI    :: UID -> RealInterval Expr Expr -> Expr -- a different kind of 'element of'
+  -- | element of
+  IsIn     :: Expr -> Space -> Expr 
+  -- | a different kind of 'element of'
+  RealI    :: UID -> RealInterval Expr Expr -> Expr 
 
 ($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-),
   ($/), ($^) :: Expr -> Expr -> Expr

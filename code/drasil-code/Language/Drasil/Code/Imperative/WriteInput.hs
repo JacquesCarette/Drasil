@@ -18,6 +18,8 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, space,
 makeInputFile :: ChunkDB -> DataDesc -> [Expr] -> Doc
 makeInputFile db dd sampData = vcat (convDataDesc db dd sampData)
 
+-- Writes a data file formatted according to the given DataDesc, where the data 
+-- values come from the passed [Expr]. 
 convDataDesc :: ChunkDB -> DataDesc -> [Expr] -> [Doc]
 convDataDesc _ [] (_:_) = error $ "makeInputFile received more inputs" ++ 
           " than expected, should be impossible"

@@ -2697,8 +2697,50 @@ This section lists the unlikely changes to be made to the software.
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Table:TraceMatAvsA} shows the dependencies of assumptions on the assumptions. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
 
+\begin{longtable}{l l l l l l l l l l l l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[assumpSSC]{A: Slip-Surface-Concave}} & \textbf{\hyperref[assumpFOS]{A: Factor-of-Safety}} & \textbf{\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}} & \textbf{\hyperref[assumpSP]{A: Soil-Properties}} & \textbf{\hyperref[assumpSLI]{A: Soil-Layers-Isotropic}} & \textbf{\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear}} & \textbf{\hyperref[assumpPSC]{A: Plane-Strain-Conditions}} & \textbf{\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}} & \textbf{\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}} & \textbf{\hyperref[assumpES]{A: Edge-Slices}} & \textbf{\hyperref[assumpSF]{A: Seismic-Force}} & \textbf{\hyperref[assumpSL]{A: Surface-Load}} & \textbf{\hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge}} & \textbf{\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge}} & \textbf{\hyperref[assumpNESSS]{A: Negligible-Effect-Surface-Slope-Seismic}} & \textbf{\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}}
+\\
+\midrule
+\endhead
+\hyperref[assumpSSC]{A: Slip-Surface-Concave} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpFOS]{A: Factor-of-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSP]{A: Soil-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSLI]{A: Soil-Layers-Isotropic} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpPSC]{A: Plane-Strain-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpES]{A: Edge-Slices} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSF]{A: Seismic-Force} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSL]{A: Surface-Load} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpNESSS]{A: Negligible-Effect-Surface-Slope-Seismic} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Assumptions dependence of each other.}
+\label{Table:TraceMatAvsA}
+\end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l}
 \toprule
 \textbf{} & \textbf{\hyperref[assumpSSC]{A: Slip-Surface-Concave}} & \textbf{\hyperref[assumpFOS]{A: Factor-of-Safety}} & \textbf{\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}} & \textbf{\hyperref[assumpSP]{A: Soil-Properties}} & \textbf{\hyperref[assumpSLI]{A: Soil-Layers-Isotropic}} & \textbf{\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear}} & \textbf{\hyperref[assumpPSC]{A: Plane-Strain-Conditions}} & \textbf{\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}} & \textbf{\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}} & \textbf{\hyperref[assumpES]{A: Edge-Slices}} & \textbf{\hyperref[assumpSF]{A: Seismic-Force}} & \textbf{\hyperref[assumpSL]{A: Surface-Load}} & \textbf{\hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge}} & \textbf{\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge}} & \textbf{\hyperref[assumpNESSS]{A: Negligible-Effect-Surface-Slope-Seismic}} & \textbf{\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}}

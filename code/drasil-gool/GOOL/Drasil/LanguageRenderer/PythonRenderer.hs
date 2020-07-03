@@ -12,7 +12,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
   VSFunction, MSStatement, MixedCtorCall, OOProg, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), 
-  VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), 
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..), 
   MathConstant(..), VariableValue(..), CommandLineArgs(..), 
   NumericExpression(..), BooleanExpression(..), Comparison(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
@@ -196,6 +196,7 @@ instance TypeElim PythonCode where
   getTypeString = typeString . unPC
 
 instance RenderType PythonCode where
+  multiType _ = typeFromData Void "" empty
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim PythonCode where
@@ -273,6 +274,9 @@ instance RenderVariable PythonCode where
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
   valueType = onCodeValue valType
+
+instance Argument PythonCode where
+  pointerArg = id
 
 instance Literal PythonCode where
   litTrue = mkStateVal bool pyTrue

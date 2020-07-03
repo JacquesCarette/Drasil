@@ -1,15 +1,15 @@
 -- | Implementations defined here are valid in some, but not all, language renderers
 module GOOL.Drasil.LanguageRenderer.CommonPseudoOO (int, constructor, doxFunc, 
-  doxClass, doxMod, extVar, classVar, objVarSelf, extFuncAppMixedArgs, indexOf, 
-  listAddFunc, discardFileLine, intClass, funcType, buildModule, arrayType, pi, 
-  printSt, arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, 
+  doxClass, doxMod, extVar, classVar, objVarSelf, indexOf, listAddFunc, 
+  discardFileLine, intClass, funcType, buildModule, arrayType, pi, printSt, 
+  arrayDec, arrayDecDef, openFileA, forEach, docMain, mainFunction, 
   buildModule', call', listSizeFunc, listAccessFunc', string, constDecDef, 
-  docInOutFunc, bindingError, notNull, listDecDef, destructorError, 
-  stateVarDef, constVar, litArray, listSetFunc, extraClass, listAccessFunc, 
-  doubleRender, double, openFileR, openFileW, stateVar, self, multiAssign, 
-  multiReturn, listDec, funcDecDef, inOutCall, forLoopError, mainBody, 
-  inOutFunc, docInOutFunc', floatRender, float, stringRender', string', 
-  inherit, implements
+  docInOutFunc, bindingError, extFuncAppMixedArgs, notNull, listDecDef, 
+  destructorError, stateVarDef, constVar, litArray, listSetFunc, extraClass, 
+  listAccessFunc, doubleRender, double, openFileR, openFileW, stateVar, self, 
+  multiAssign, multiReturn, listDec, funcDecDef, inOutCall, forLoopError, 
+  mainBody, inOutFunc, docInOutFunc', floatRender, float, stringRender', 
+  string', inherit, implements
 ) where
 
 import Utils.Drasil (indent)
@@ -26,8 +26,9 @@ import qualified GOOL.Drasil.ClassInterface as S (
   TypeSym(int, double, string, listType, arrayType, void),
   VariableSym(var, self, objVar), Literal(litTrue, litFalse, litList), 
   VariableValue(valueOf), FunctionSym(func, objAccess), StatementSym(valStmt), 
-  DeclStatement(varDec, varDecDef, constDecDef), ParameterSym(param), 
-  MethodSym(mainFunction), ClassSym(buildClass))
+  DeclStatement(varDec, varDecDef, constDecDef), 
+  ParameterSym(param, pointerParam), MethodSym(mainFunction), 
+  ClassSym(buildClass))
 import GOOL.Drasil.RendererClasses (RenderSym, ImportSym(..), RenderBody(..), 
   RenderType(..), RenderVariable(varFromData), InternalVarElim(variableBind), 
   RenderFunction(funcFromData), MethodTypeSym(mType),
@@ -107,9 +108,6 @@ classVar f c' v'= do
   
 objVarSelf :: (RenderSym r) => SVariable r -> SVariable r
 objVarSelf = S.objVar S.self
-
-extFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
-extFuncAppMixedArgs l = S.call (Just l) Nothing
 
 indexOf :: (RenderSym r) => Label -> SValue r -> SValue r -> SValue r
 indexOf f l v = S.objAccess l (S.func f S.int [v])
@@ -273,6 +271,9 @@ docInOutFunc f desc is os bs b = docFuncRepr functionDox desc (map fst $ bs ++
 bindingError :: String -> String
 bindingError l = "Binding unimplemented in " ++ l
 
+extFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
+extFuncAppMixedArgs l = S.call (Just l) Nothing
+
 notNull :: (RenderSym r) => String -> SValue r -> SValue r
 notNull nil v = v ?!= S.valueOf (S.var nil $ onStateValue valueType v)
 
@@ -402,7 +403,9 @@ inOutFunc :: (RenderSym r) => (VSType r -> [MSParameter r] -> MSBody r ->
   SMethod r) -> [SVariable r] -> [SVariable r] -> [SVariable r] -> MSBody r -> 
   SMethod r
 inOutFunc f ins [] [] b = f S.void (map S.param ins) b
-inOutFunc f ins outs both b = f S.void (map S.param $ both ++ ins) 
+inOutFunc f ins outs both b = f 
+  (multiType $ map (onStateValue variableType) rets)  
+  (map S.pointerParam both ++ map S.param ins) 
   (multiBody [bodyStatements $ map S.varDec outs, b, oneLiner $ S.multiReturn $ 
   map S.valueOf rets])
   where rets = both ++ outs

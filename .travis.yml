@@ -56,9 +56,13 @@ addons:
 before_install:
 # Download and unpack the stack executable
 - mkdir -p ~/.local/bin
-- export PATH=$HOME/.local/bin:$PATH
+- mkdir -p ~/.swift
+- export PATH=$HOME/.local/bin:$HOME/.swift/usr/bin:$PATH
 - source code/scripts/ci_functions.bash
 - ci_retry "curl --max-time 60 -sSL https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'"
+# FIXME: Hardcoded version, not rolling
+- ci_retry "curl --max-time 60 -sSL https://swift.org/builds/swift-5.2.4-release/ubuntu1604/swift-5.2.4-RELEASE/swift-5.2.4-RELEASE-ubuntu16.04.tar.gz | tar xz --strip-components=1 -C ~/.swift"
+- echo "print(\"Hello World\")" > ~/test.swift
 
 install:
 # Build dependencies

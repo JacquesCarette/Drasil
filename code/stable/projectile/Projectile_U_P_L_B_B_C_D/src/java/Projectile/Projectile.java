@@ -16,7 +16,7 @@ public class Projectile {
     /** \brief Controls the flow of the program
         \param args List of command-line arguments
     */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         PrintWriter outfile;
         String filename = args[0];
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));

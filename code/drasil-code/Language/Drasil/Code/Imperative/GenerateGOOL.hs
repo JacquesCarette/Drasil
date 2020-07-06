@@ -56,7 +56,7 @@ genDoxConfig s = do
   let n = pName $ codeSpec g
       cms = commented g
       v = doxOutput g
-  if not (null cms) then (return . Just) $ doxConfig n s v else return Nothing
+  return $ if not (null cms) then Just (doxConfig n s v) else Nothing
 
 genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState (Maybe (r (Auxiliary r)))
 genReadMe rmi = do 

@@ -110,7 +110,7 @@ matchToFloats = matchSpaces (map (,[Float, Double]) [Real, Radians, Rational])
 
 baseChoices :: Choices
 baseChoices = defaultChoices {
-  lang = [Python, Cpp, CSharp, Java],
+  lang = [Python, Cpp, CSharp, Java, Swift],
   modularity = Unmodular,
   impType = Program,
   logFile = "log.txt",

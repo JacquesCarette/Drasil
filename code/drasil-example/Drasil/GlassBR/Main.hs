@@ -16,7 +16,7 @@ code = codeSpec si choices allMods
 
 choices :: Choices
 choices = defaultChoices {
-  lang = [Python, Cpp, CSharp, Java],
+  lang = [Python, Cpp, CSharp, Java, Swift],
   modularity = Modular Separated,
   impType = Program,
   logFile = "log.txt",

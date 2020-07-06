@@ -11,7 +11,8 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib)
+  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, 
+  docIfEnabled)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
@@ -54,7 +55,8 @@ instance AuxiliarySym CSharpProject where
 
   optimizeDox = return no
 
-  makefile fs it = G.makefile (csBuildConfig fs it) (G.noRunIfLib it csRunnable)
+  makefile fs it cms = G.makefile (csBuildConfig fs it) 
+    (G.noRunIfLib it csRunnable) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unCSP
   auxFromData fp d = return $ ad fp d

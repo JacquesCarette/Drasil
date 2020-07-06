@@ -9,7 +9,7 @@ module GOOL.Drasil.LanguageRenderer (
   endStatement, constDec', exceptionObj', new', this', self', array', listSep', 
   argc, argv, args, printLabel, constDec, exceptionObj, mainFunc, new, this, 
   self, nullLabel, array, listSep, sqrt, abs, fabs, log10, log, exp, sin, cos, 
-  tan, asin, acos, atan, floor, ceil, pow, piLabel, access, containing, 
+  tan, asin, acos, atan, floor, ceil, pow, piLabel, access, containing, tuple,
   mathFunc, addExt,
   
   -- * Default Functions available for use in renderers
@@ -40,7 +40,7 @@ import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod,
   updateMod, TypeData(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 
-import Data.List (last)
+import Data.List (last, intercalate)
 import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,
   atan,floor,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
@@ -125,6 +125,9 @@ access q n = q ++ "." ++ n
 
 containing :: String -> String -> String
 containing l e = l ++ "<" ++ e ++ ">"
+
+tuple :: [String] -> String
+tuple ts = "(" ++ intercalate listSep ts ++ ")"
 
 mathFunc :: String -> String
 mathFunc = access "Math"

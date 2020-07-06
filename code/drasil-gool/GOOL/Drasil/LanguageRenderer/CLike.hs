@@ -5,7 +5,7 @@ module GOOL.Drasil.LanguageRenderer.CLike (charRender, float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
-  intFunc, multiAssignError, multiReturnError
+  intFunc, multiAssignError, multiReturnError, multiTypeError
 ) where
 
 import Utils.Drasil (indent)
@@ -216,3 +216,6 @@ multiAssignError l = "No multiple assignment statements in " ++ l
 
 multiReturnError :: String -> String
 multiReturnError l = "Cannot return multiple values in " ++ l
+
+multiTypeError :: String -> String
+multiTypeError l = "Multi-types not supported in " ++ l

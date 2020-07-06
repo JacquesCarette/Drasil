@@ -9,7 +9,8 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),Packa
   AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib)
+  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, 
+  docIfEnabled)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
@@ -49,7 +50,8 @@ instance AuxiliarySym PythonProject where
 
   optimizeDox = return yes
 
-  makefile _ it = G.makefile Nothing (G.noRunIfLib it pyRunnable)
+  makefile _ it cms = G.makefile Nothing (G.noRunIfLib it pyRunnable)
+    (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unPP
   auxFromData fp d = return $ ad fp d

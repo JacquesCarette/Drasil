@@ -12,7 +12,8 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   PackageSym(..), AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib)
+  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, 
+  docIfEnabled)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, 
   PackData(..), packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
@@ -53,7 +54,7 @@ instance AuxiliarySym CppProject where
 
   optimizeDox = return no
   
-  makefile fs it = G.makefile (cppBuildConfig fs it) (G.noRunIfLib it cppRunnable)
+  makefile fs it cms = G.makefile (cppBuildConfig fs it) (G.noRunIfLib it cppRunnable) (G.docIfEnabled cms G.doxDocConfig)
   
   auxHelperDoc = unCPPP
   auxFromData fp d = return $ ad fp d

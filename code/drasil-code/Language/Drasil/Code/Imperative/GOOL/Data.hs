@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.GOOL.Data (AuxData(auxFilePath, auxDoc),
 
 import GOOL.Drasil (ProgData)
 
-import Text.PrettyPrint.HughesPJ (Doc)
+import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 
 -- The underlying data type for auxiliary files in all renderers
 data AuxData = AD {auxFilePath :: FilePath, auxDoc :: Doc}
@@ -17,4 +17,4 @@ ad = AD
 data PackData = PackD {packProg :: ProgData, packAux :: [AuxData]}
 
 packD :: ProgData -> [AuxData] -> PackData
-packD = PackD
+packD p as = PackD p (filter (not . isEmpty . auxDoc) as)

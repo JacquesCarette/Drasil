@@ -69,7 +69,7 @@ data Choices = Choices {
   auxFiles :: [AuxFile]
 }
 
-class ChsShow a where
+class RenderChoices a where
     showChs :: a -> String
     showChsList :: [a] -> String
     showChsList lst = show $ map showChs lst
@@ -78,7 +78,7 @@ data Modularity = Modular InputModule -- Different modules for: controller,
                                       -- input, calculations, output.
                 | Unmodular -- All generated code is in one module/file.
 
-instance ChsShow Modularity where 
+instance RenderChoices Modularity where 
   showChs Unmodular = "Unmodular"
   showChs (Modular Combined) = "Modular Combined"
   showChs (Modular Separated)= "Modular Separated"
@@ -97,7 +97,7 @@ inputModule c = inputModule' $ modularity c
 data Structure = Unbundled -- Individual variables
                | Bundled -- Variables bundled in a class
 
-instance ChsShow Structure where 
+instance RenderChoices Structure where 
   showChs Unbundled = "Unbundled"
   showChs Bundled = "Bundled"
 
@@ -106,7 +106,7 @@ data ConstantStructure = Inline -- Inline values for constants
                        | Store Structure -- Store constants separately from 
                                          -- inputs, whether bundled or unbundled
 
-instance ChsShow ConstantStructure where 
+instance RenderChoices ConstantStructure where 
   showChs Inline = "Inline"
   showChs WithInputs = "WithInputs"
   showChs (Store Unbundled) = "Store Unbundled"
@@ -115,7 +115,7 @@ instance ChsShow ConstantStructure where
 data ConstantRepr = Var -- Constants represented as regular variables
                   | Const -- Use target language's mechanism for defining constants.
 
-instance ChsShow ConstantRepr where 
+instance RenderChoices ConstantRepr where 
   showChs Var = "Var"
   showChs Const = "Const"
 
@@ -130,7 +130,7 @@ type MatchedConceptMap = Map UID CodeConcept
 -- Currently we only support one code concept, more will be added later
 data CodeConcept = Pi
 
-instance ChsShow CodeConcept where
+instance RenderChoices CodeConcept where
   showChs Pi = "Pi"
 
 -- | Builds a ConceptMatchMap from an association list of chunks and CodeConcepts
@@ -156,7 +156,7 @@ matchSpaces spMtchs = matchSpaces' spMtchs spaceToCodeType
 data ImplementationType = Library -- Generated code does not include Controller 
                         | Program -- Generated code includes Controller
                         
-instance ChsShow ImplementationType where 
+instance RenderChoices ImplementationType where 
   showChs Library = "Library"
   showChs Program = "Program" 
 
@@ -164,7 +164,7 @@ instance ChsShow ImplementationType where
 data ConstraintBehaviour = Warning -- Print warning when constraint violated
                          | Exception -- Throw exception when constraint violated
         
-instance ChsShow ConstraintBehaviour where 
+instance RenderChoices ConstraintBehaviour where 
   showChs Warning = "Warning"
   showChs Exception = "Exception" 
 
@@ -173,21 +173,21 @@ data Comments = CommentFunc -- Function/method-level comments
               | CommentMod -- File/Module-level comments
               deriving Eq
 
-instance ChsShow Comments where 
+instance RenderChoices Comments where 
   showChs CommentFunc = "CommentFunc"
   showChs CommentClass = "CommentClass"
   showChs CommentMod = "CommentMod"
 
 data Verbosity = Verbose | Quiet
 
-instance ChsShow Verbosity where 
+instance RenderChoices Verbosity where 
   showChs Verbose = "Verbose"
   showChs Quiet = "Quiet" 
 
 data Visibility = Show
                 | Hide
 
-instance ChsShow Visibility where 
+instance RenderChoices Visibility where 
   showChs Show = "Show"
   showChs Hide = "Hide"
 
@@ -197,7 +197,7 @@ data Logging = LogFunc -- Log messages generated for function calls
              | LogVar -- Log messages generated for variable assignments
              deriving Eq
 
-instance ChsShow Logging where 
+instance RenderChoices Logging where 
   showChs LogFunc = "LogFunc"
   showChs LogVar = "LogVar"
 
@@ -208,7 +208,7 @@ data AuxFile = SampleInput FilePath
                 | ReadME 
                 deriving Eq
 
-instance ChsShow AuxFile where 
+instance RenderChoices AuxFile where 
   showChs (SampleInput fp) = "SampleInput"++fp
   showChs ReadME = "ReadME"
 
@@ -264,7 +264,7 @@ choicesDoc chs = (vcat. map chsFieldDoc) [
   , ("Constant Representation", showChs $ constRepr chs)
   , ("Implementation Type", showChs $ impType chs)
   , ("Software Constraint Behaviour", showChs $ onSfwrConstraint chs)
-  , ("Physical Constraint Behavior", showChs $ onPhysConstraint chs)
+  , ("Physical Constraint Behaviour", showChs $ onPhysConstraint chs)
   , ("Comments", showChsList $ comments chs)
   , ("Dox Verbosity", showChs $ doxVerbosity chs)
   , ("Dates", showChs $ dates chs)

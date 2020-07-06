@@ -42,23 +42,9 @@ instance AuxiliarySym SwiftProject where
   type Auxiliary SwiftProject = AuxData
   type AuxHelper SwiftProject = Doc
   doxConfig _ _ _ = auxFromData "" empty
-  readMe ReadMeInfo {
-        implementType = impl,
-        extLibNV = exlnv,
-        extLibFP = exlfp,
-        contributors = auths, 
-        configFP = cfp,
-        caseName = n} =
-    G.readMe ReadMeInfo {
+  readMe rmi = G.readMe rmi {
         langName = swiftName,
-        langVersion = swiftVersion,
-        invalidOS = Nothing,
-        implementType = impl,
-        extLibNV = exlnv,
-        extLibFP = exlfp,
-        contributors = auths, 
-        configFP = cfp,
-        caseName = n}
+        langVersion = swiftVersion}
   sampleInput = G.sampleInput
 
   optimizeDox = error doxError

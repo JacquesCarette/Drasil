@@ -46,5 +46,5 @@ incompatibleLib lng lib = text $ "Language " ++ show lng ++ " is not " ++
 -- the preference list that the user selected, is compatible with the given Lang.
 firstChoiceODELib :: [ODELibPckg] -> ODELibPckg -> Doc
 firstChoiceODELib prefer olp =  if libName (head prefer) == libName olp  then 
-  text $ "Successfully " ++"selected first choice ODELibPckg "++ 
+  text $ "Successfully " ++"selected first choice ODE Library package "++ 
   libName olp  else empty

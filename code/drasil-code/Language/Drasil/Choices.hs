@@ -128,7 +128,7 @@ type ConceptMatchMap = Map UID [CodeConcept]
 type MatchedConceptMap = Map UID CodeConcept
 
 -- Currently we only support one code concept, more will be added later
-data CodeConcept = Pi
+data CodeConcept = Pi deriving Eq
 
 instance RenderChoices CodeConcept where
   showChs Pi = "Pi"

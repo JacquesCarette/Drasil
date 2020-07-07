@@ -30,9 +30,9 @@ extractEntryData fileName filePath = do
       allClasslines = zipWith gL (getIndexes 0 rAllClasslines rScriptFileLines) rAllClasslines
 
       gL num line
-        | (isInfixOf "=>" line) && not (isSuffixOf "=>" line || isSuffixOf "=> " line) = line
-        | not (isInfixOf "=>" line) && not (isInfixOf "(" line) && (isPrefixOf "class" line) = line
-        | (isSuffixOf "=>" line || isSuffixOf "=> " line) = "=> " ++ dropWhile (==' ') (rScriptFileLines !! (num + 1))
+        | "=>" `isInfixOf` line && not (isSuffixOf "=>" line || isSuffixOf "=> " line) = line
+        | not ("=>" `isInfixOf` line) && not ("(" `isInfixOf` line) && "class" `isPrefixOf` line = line
+        | isSuffixOf "=>" line || isSuffixOf "=> " line = "=> " ++ dropWhile (==' ') (rScriptFileLines !! (num + 1))
         | otherwise = gL (num + 1) (rScriptFileLines !! (num + 1))
 
   let dataNames = map (takeWhile (/=' ') . (\\ "data ")) dataTypes
@@ -52,13 +52,13 @@ getIndexes :: Int -> [String] -> [String] -> [Int]
 getIndexes _ _ [] = []
 getIndexes idx clsLines (x:xs) = if isClassLine then addIdx else nextIdx where
   isClassLine = x `elem` clsLines
-  addIdx = [idx] ++ nextIdx
+  addIdx = idx : nextIdx
   nextIdx = getIndexes (idx + 1) clsLines xs
 
 -- used to extract the class name from a raw script line
 getClassName :: String -> ClassName
 getClassName rsl = if derived then stripDv else stripDf where
-  derived = isInfixOf "=>" rsl
+  derived = "=>" `isInfixOf` rsl
   -- operates on derived classes
   stripDv = takeWhile (/=' ') . (\\ "> ") $ dropWhile (/='>') rsl
   -- operates on defined classes
@@ -67,15 +67,15 @@ getClassName rsl = if derived then stripDv else stripDf where
 -- used to extract data/newtype name + class instance name
 getStripInstance :: String -> (DtNtName,ClassName)
 getStripInstance rsl = if derived then stripDv else stripDf where
-  derived = isInfixOf "=>" rsl
+  derived = "=>" `isInfixOf` rsl
   -- operates on derived class instances
   stripDv
-    | isInfixOf "(" rsl = (stripDvLmdn,stripDvLmc)
-    | otherwise = (stripDvLs !! 1,stripDvLs !! 0)
+    | "(" `isInfixOf` rsl = (stripDvLmdn,stripDvLmc)
+    | otherwise = (stripDvLs !! 1,head stripDvLs)
   stripDvLs = words . (\\ "> ") $ dropWhile (/='>') rsl
   stripDvLm = (\\ "> ") $ dropWhile (/='>') rsl
   stripDvLmdn = takeWhile (/=')') . (\\ "(") $ dropWhile (/='(') stripDvLm
   stripDvLmc = takeWhile (/=' ') stripDvLm
   -- operates on defined class instances
-  stripDf = (stripDfL !! 1,stripDfL !! 0)
+  stripDf = (stripDfL !! 1,head stripDfL)
   stripDfL = words $ (\\ "instance ") rsl

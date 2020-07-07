@@ -113,7 +113,7 @@ config configFilePath = do
   setCurrentDirectory configFilePath
   c <- readFile "DTG_Config.txt"
   let l = map words $ filter isInfoLine (lines c)
-      (packageNames,classInstOrd) = (l !! 0, map toClassType (l !! 1))
+      (packageNames,classInstOrd) = (head l, map toClassType (l !! 1))
   return (packageNames,classInstOrd)
 
 -- function creates and writes output data file DataTable.csv to /code/analysis
@@ -215,7 +215,7 @@ compileEntryData ordClassInsts entry filename = do
 
 -- used to filter out info lines (i.e. removes comment and empty lines)
 isInfoLine :: String -> Bool
-isInfoLine line = (line /="") && not (isPrefixOf "#" line)
+isInfoLine line = (line /="") && not ("#" `isPrefixOf` line)
 
 -- converts string to classtype (for use by config function)
 toClassType :: String -> ClassType

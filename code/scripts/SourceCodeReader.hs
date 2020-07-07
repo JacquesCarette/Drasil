@@ -19,41 +19,63 @@ extractEntryData fileName filePath = do
   handle <- openFile fileName ReadMode
   scriptFile <- hGetContents handle
   forceRead scriptFile `seq` hClose handle
+  let rScriptFileLines = lines scriptFile
   -- removes comment lines
-  let scriptFileLines = lines scriptFile \\ filter (isInfixOf "-- ") (lines scriptFile)
+      scriptFileLines = rScriptFileLines \\ filter (isInfixOf "--") rScriptFileLines
       dataTypes = filter (isPrefixOf "data ") scriptFileLines
       newtypeTypes = filter (isPrefixOf "newtype ") scriptFileLines
-  -- derived classes (that use '=>') vs. defined classes
-      (derivClass,definClass) = partition (isInfixOf " => ") (filter (isPrefixOf "class ") scriptFileLines)
       definInstances = filter (isPrefixOf "instance ") scriptFileLines
+
+      rAllClasslines = filter (isPrefixOf "class ") scriptFileLines
+      allClasslines = zipWith gL (getIndexes 0 rAllClasslines rScriptFileLines) rAllClasslines
+
+      gL num line
+        | (isInfixOf "=>" line) && not (isSuffixOf "=>" line || isSuffixOf "=> " line) = line
+        | not (isInfixOf "=>" line) && not (isInfixOf "(" line) && (isPrefixOf "class" line) = line
+        | (isSuffixOf "=>" line || isSuffixOf "=> " line) = "=> " ++ dropWhile (==' ') (rScriptFileLines !! (num + 1))
+        | otherwise = gL (num + 1) (rScriptFileLines !! (num + 1))
 
   let dataNames = map (takeWhile (/=' ') . (\\ "data ")) dataTypes
       newtypeNames = map (takeWhile (/=' ') . (\\ "newtype ")) newtypeTypes
-      stripDeriv = map (takeWhile (/=' ') . (\\ "> ") . dropWhile (/='>')) derivClass
-      stripDefin = map (takeWhile (/=' ') . (\\ "class ")) $ filter (isInfixOf "where") definClass
-      classNames = stripDeriv ++ stripDefin
-      stripInstances = zipWith (\a b -> (b,a)) (map (!! 0) d) (map (!! 1) d) where
-                       d = map (words . (\\ "instance ")) definInstances
+      ordClassNames = map getClassName allClasslines
+      stripInstances = map getStripInstance definInstances
 
-  return (dataNames,newtypeNames,classNames,stripInstances)
+  return (dataNames,newtypeNames,ordClassNames,stripInstances)
 
--- used to enforce strict file reading (so files can be closed, to avoid running out of memory)
+-- enforces strict file reading; files can be closed to avoid memory exhaustion
 forceRead :: [a0] -> ()
 forceRead [] = ()
 forceRead (x:xs) = forceRead xs
 
-{- ; separate one for multi-line derived classes (ignore this block for now)
-      (derivClass,definClass) = partition (isInfixOf " => ") (filter (isPrefixOf "class ") scriptFileLines)
-      mLDerivClass = stripped3 \\ (filter (isInfixOf "(") stripped3)
-      stripped3 = stripped2 \\ (filter (tailIsNotElemOf letters) stripped2)
-      tailIsNotElemOf a b = if (last b) `notElem` a then True else False
-      letters = ['a'..'z'] ++ ['A'..'Z']
-      stripped2 = stripped \\ (filter (isInfixOf " -> ") stripped)
-      stripped = (\\ (derivClass ++ funcList ++ classInstanceList)) $ filter (isInfixOf " => ") scriptFileLines
-      funcList = union (filter (isInfixOf " -> ") funcListx) funcListx
-      funcListx = filter (isInfixOf "::") $ filter (isInfixOf " => ") scriptFileLines
-      classInstanceList = filter (isPrefixOf "instance ") $ filter (isInfixOf "=> ") scriptFileLines
-      definInstances = filter (isPrefixOf "instance ") scriptFileLines
-  -- print (fileName ++ filePath)
-  print mLDerivClass
--}
+-- index number, class + script lines, indexes list (for multi-line classes)
+getIndexes :: Int -> [String] -> [String] -> [Int]
+getIndexes _ _ [] = []
+getIndexes idx clsLines (x:xs) = if isClassLine then addIdx else nextIdx where
+  isClassLine = x `elem` clsLines
+  addIdx = [idx] ++ nextIdx
+  nextIdx = getIndexes (idx + 1) clsLines xs
+
+-- used to extract the class name from a raw script line
+getClassName :: String -> ClassName
+getClassName rsl = if derived then stripDv else stripDf where
+  derived = isInfixOf "=>" rsl
+  -- operates on derived classes
+  stripDv = takeWhile (/=' ') . (\\ "> ") $ dropWhile (/='>') rsl
+  -- operates on defined classes
+  stripDf = takeWhile (/=' ') $ (\\ "class ") rsl
+
+-- used to extract data/newtype name + class instance name
+getStripInstance :: String -> (DtNtName,ClassName)
+getStripInstance rsl = if derived then stripDv else stripDf where
+  derived = isInfixOf "=>" rsl
+  -- operates on derived class instances
+  stripDv
+    | isInfixOf "(" rsl = (stripDvLmdn,stripDvLmc)
+    | otherwise = (stripDvLs !! 1,stripDvLs !! 0)
+  stripDvLs = words . (\\ "> ") $ dropWhile (/='>') rsl
+  stripDvLm = (\\ "> ") $ dropWhile (/='>') rsl
+  stripDvLmdn = takeWhile (/=')') . (\\ "(") $ dropWhile (/='(') stripDvLm
+  stripDvLmc = takeWhile (/=' ') stripDvLm
+  -- operates on defined class instances
+  stripDf = (stripDfL !! 1,stripDfL !! 0)
+  stripDfL = words $ (\\ "instance ") rsl

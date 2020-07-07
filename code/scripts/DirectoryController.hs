@@ -10,7 +10,7 @@ type DrasilPack = String
 type FileName = FilePath
 type FolderName = FilePath
 
--- File and Folder data types for storing file drasil- package, name and filepath
+-- File and Folder data types for storing drasil- package, name and filepath
 data File = File { fileDrasilPack :: DrasilPack
                  , fileName :: FileName
                  , filePath :: FilePath
@@ -29,7 +29,7 @@ createFolder dp drpk fn = Folder {folderDrasilPack=drpk,folderName=fn,folderPath
 createFile :: FilePath -> DrasilPack -> FileName -> File
 createFile fp drpk fn = File {fileDrasilPack=drpk,fileName=fn,filePath=fp}
 
--- iterates through each drasil- package and outputs subdirectories and haskell files
+-- iterates through drasil- package; outputs subdirectories and haskell files
 iterator :: Folder -> IO ([Folder],[File])
 iterator folder = do
   setCurrentDirectory (folderPath folder)
@@ -39,14 +39,14 @@ iterator folder = do
       folders = map (createFolder workingDirectory currentDrasilPack) folderNames
       files = map (createFile workingDirectory currentDrasilPack) fileNames
 
-      folderNames = rawContents \\ filter (isInfixOf ".") rawContents
-      fileNames = filter (isSuffixOf ".hs") rawContents
+      folderNames = sort $ rawContents \\ filter (isInfixOf ".") rawContents
+      fileNames = sort $ filter (isSuffixOf ".hs") rawContents
 
       workingDirectory = getFolderPath folder
       currentDrasilPack = folderDrasilPack folder
   return bakedContents
 
--- searches for all folders and files in a directory (recursive search utilizing iterator function)
+-- recursively searches for all folders + files in a directory using iterator
 finder :: Folder -> IO [File]
 finder folder = do
   rawData <- iterator folder
@@ -61,7 +61,7 @@ finder folder = do
 
   let files 
         | null folders = snd rawData
-        | otherwise = snd rawData ++ bakedFiles
+        | otherwise = bakedFiles ++ snd rawData
   return files
 
 -- gets all drasil- packages + filepaths in a list of folder data types
@@ -70,7 +70,7 @@ getDirectories directoryPath filterPrefix = do
   -- all raw directory contents
   all <- listDirectory directoryPath
   -- raw drasil- package directories + package names
-  let rawPackages = filter (isPrefixOf filterPrefix) all
+  let rawPackages = sort $ filter (isPrefixOf filterPrefix) all
       packageNames = map (\\"drasil-") rawPackages
   -- convert list of directories into folder data types
       directories = zipWith (createFolder directoryPath) packageNames rawPackages
@@ -97,14 +97,16 @@ nullFolder folder = empty where
 joins :: [FilePath] -> FilePath
 joins (a:b:_) = b ++ "/" ++ a
 
+-- creates new folder path with folder name + path (to extract folder contents)
 getFolderPath :: Folder -> FilePath
 getFolderPath folder = folderPath folder ++ "/" ++ folderName folder
 
--- strips pathSuffix from filepath, returning stripped filepath (iff pathSuffix is suffix of filepath)
+-- strips pathSuffix from filepath, returning stripped filepath 
+-- strip occurs iff pathSuffix is suffix of filepath
 stripPath :: FilePath -> FilePath -> IO FilePath
 stripPath filePath pathSuffix = do
   let strippedPath
-        | pathSuffix `isSuffixOf` filePath = take (length filePath - length pathSuffix) filePath
+        | pathSuffix `isSuffixOf` filePath = take (lfP - lpS) filePath
         | otherwise = filePath
+      (lfP,lpS) = (length filePath,length pathSuffix)
   return strippedPath
-

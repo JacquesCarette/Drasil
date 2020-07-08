@@ -287,6 +287,7 @@ Cpp :: Lang
 CSharp :: Lang
 Java :: Lang
 Python :: Lang
+Swift :: Lang
 class (AuxiliarySym r) => PackageSym r where {
     type family Package r;
 }

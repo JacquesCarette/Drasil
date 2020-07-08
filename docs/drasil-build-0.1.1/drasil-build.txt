@@ -11,6 +11,7 @@
 
 module Build.Drasil
 data Command
+type Dependencies = [Target]
 
 -- | Creates a Command which fails the make process if it does not return
 --   zero

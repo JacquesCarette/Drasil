@@ -239,7 +239,7 @@ gTF, loadSF :: DefinedQuantityDict
 
 dimlessLoad = vc "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ) Real
 
-gTF           = dqdNoUnit glTyFac (Variable "GTF") Integer
+gTF           = dqdNoUnit glTyFac (Variable "GTF") Real
 
 isSafePb   = vc "isSafePb"   (nounPhraseSP "probability of glass breakage safety requirement")
   (Variable "is-safePb")   Boolean

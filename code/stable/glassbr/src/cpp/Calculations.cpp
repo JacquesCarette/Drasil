@@ -122,7 +122,7 @@ double func_LR(InputParameters &inParams, double NFL) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return NFL * inParams.GTF * 1;
+    return NFL * inParams.GTF * 1.0;
 }
 
 bool func_is_safeLR(double LR, double q) {

@@ -455,7 +455,7 @@ func func_LR(_ inParams: inout InputParameters, _ NFL: Double) throws -> Double 
         throw "Error closing file."
     }
     
-    return NFL * inParams.GTF * Double(1)
+    return NFL * inParams.GTF * 1.0
 }
 
 /** Calculates 3 second load equivalent resistance safety requirement

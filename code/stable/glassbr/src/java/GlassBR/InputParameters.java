@@ -19,7 +19,7 @@ public class InputParameters {
     public double SD_z;
     public double h;
     public double LDF;
-    public int GTF;
+    public double GTF;
     public double SD;
     public double AR;
     public double w_TNT;

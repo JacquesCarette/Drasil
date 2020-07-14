@@ -251,7 +251,7 @@ isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
   (Variable "is-safeLoad") Boolean
 
 lDurFac       = vc'' loadDurFactor (Variable "LDF") Real
-loadSF        = dqdNoUnit loadShareFac (Variable "LSF") Natural
+loadSF        = dqdNoUnit loadShareFac (Variable "LSF") Real
 
 riskFun = vc "riskFun" (nounPhraseSP "risk of failure") cB Real
 
@@ -387,7 +387,7 @@ constantK       = mkQuantDef sflawParamK $ dbl 2.86e-53
 constantM       = mkQuantDef sflawParamM $ dbl 7
 constantModElas = mkQuantDef modElas     $ dbl 7.17e10
 constantLoadDur = mkQuantDef loadDur     $ dbl 3
-constantLoadSF  = mkQuantDef loadSF      1
+constantLoadSF  = mkQuantDef loadSF      $ dbl 1.0
 --Equations--
 
 sdVectorSent :: Sentence

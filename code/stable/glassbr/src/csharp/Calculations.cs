@@ -156,7 +156,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return NFL * inParams.GTF * 1;
+        return NFL * inParams.GTF * 1.0;
     }
     
     /** \brief Calculates 3 second load equivalent resistance safety requirement

@@ -161,7 +161,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return NFL * inParams.GTF * 1;
+        return NFL * inParams.GTF * 1.0;
     }
     
     /** \brief Calculates 3 second load equivalent resistance safety requirement

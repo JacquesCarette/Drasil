@@ -131,7 +131,7 @@ def func_LR(inParams, NFL):
     print("  }", file=outfile)
     outfile.close()
     
-    return NFL * inParams.GTF * 1
+    return NFL * inParams.GTF * 1.0
 
 ## \brief Calculates 3 second load equivalent resistance safety requirement
 # \param LR load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)

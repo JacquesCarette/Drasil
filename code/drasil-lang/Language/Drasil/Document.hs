@@ -38,6 +38,19 @@ instance Referable Section where
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
 
+-- accessors for Document components (used in Tex Printer)
+getDTle :: Document -> Title
+getDTle (Document title _ _) = title
+
+getDAtr :: Document -> Author
+getDAtr (Document _ author _) = author
+
+getDSec :: Document -> [Section]
+getDSec (Document _ _ sections) = sections
+
+getDDoc :: Title -> Author -> [Section] -> Document
+getDDoc title author sections = Document title author sections
+
 -- | Smart constructor for labelled content chunks
 llcc :: Reference -> RawContent -> LabelledContent
 llcc = LblC
@@ -50,6 +63,25 @@ ulcc = UnlblC
 -- smart constructors needed for LabelledContent
 mkParagraph :: Sentence -> Contents
 mkParagraph x = UlC $ ulcc $ Paragraph x
+
+mkUnOrdList :: [Sentence] -> Contents
+mkUnOrdList l = UlC $ ulcc $ Enumeration $ mkUnOrdList_ l
+
+mkUnOrdList_ :: [Sentence] -> ListType
+mkUnOrdList_ l = Bullet tl where
+  tl = map (\a -> (Flat a,Nothing)) l
+
+mkUnOrdList2_ :: [ItemType] -> ListType
+mkUnOrdList2_ l = Bullet tl where
+  tl = map (\a -> (a,Nothing)) l
+
+mkTEList :: [(Sentence,[Sentence])] -> [(ItemType,Maybe String)]
+mkTEList l = tl where
+  tl = zipWith (\n a -> (Nested n a, Nothing)) (map fst l) (map mkUnOrdList_ $ map snd l)
+
+mkTE2List :: [(Sentence,[ItemType])] -> [(ItemType,Maybe String)]
+mkTE2List l = tl where
+  tl = zipWith (\n a -> (Nested n a, Nothing)) (map fst l) (map mkUnOrdList2_ $ map snd l)
 
 mkFig :: Reference -> RawContent -> Contents
 mkFig x y = LlC $ llcc x y

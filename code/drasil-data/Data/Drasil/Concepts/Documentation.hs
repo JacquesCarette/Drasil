@@ -29,9 +29,9 @@ doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characterist
   softwareSys, softwareVAV, softwareVerif, solution, solutionCharSpec,
   solutionCharacteristic, source, specific, specification, specificsystemdescription,
   stakeholder, standard, statement, symbol_, sysCont, system, systemConstraint,
-  systemdescription, tOfSymb, tOfUnit, table_, task, template, termAndDef, term_,
-  terminology, theory, traceyGraph, traceyMandG, traceyMatrix, type_, uncertCol,
-  uncertainty, useCase, useCaseTable, user, userCharacteristic, userInput,
+  systemdescription, tOfCont, tOfSymb, tOfUnit, table_, task, template, termAndDef, 
+  term_, terminology, theory, traceyGraph, traceyMandG, traceyMatrix, type_, 
+  uncertCol, uncertainty, useCase, useCaseTable, user, userCharacteristic, userInput,
   validation, value, variable, vav, vavPlan, verification, video, year]
 
 doccon' :: [CI]
@@ -211,7 +211,7 @@ scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- tempora
 
 
 charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refmat,
-  scpOfReq, tOfSymb, tOfUnit, termAndDef, traceyMandG, vav :: NamedChunk
+  scpOfReq, tOfCont, tOfSymb, tOfUnit, termAndDef, traceyMandG, vav :: NamedChunk
 
 consVals     = nc "consVals"     (cn "values of auxiliary constants")
 corSol       = nc "corSol"       (cn' "correct solution")
@@ -222,6 +222,7 @@ prpsOfDoc    = nc "prpsOfDoc"    (purpose `of_` document)
 refmat       = nc "refmat"       (cn' "reference material")
 scpOfReq     = nc "scpOfReq"     (scope `of_'` requirement)
 termAndDef   = nc "termAndDef"   (terminology `and_'` definition)
+tOfCont      = nc "tOfCont"      (cn "table of contents")
 tOfSymb      = nc "tOfSymb"      (table_ `of_'` symbol_)
 tOfUnit      = nc "tOfUnit"      (table_ `of_'` unit_)
 traceyMandG  = nc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)

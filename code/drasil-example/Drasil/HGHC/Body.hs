@@ -1,12 +1,12 @@
 module Drasil.HGHC.Body (srs, si, symbMap, printSetting) where
 
 import Language.Drasil hiding (Manual, Symbol(..)) -- Citation name conflict. FIXME: Move to different namespace
-import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
-    RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), SRSDecl, 
-    intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
-    Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
-    SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
-    SSDSec(SSDProg))
+import Drasil.DocLang (DocSection(TableOfContents, RefSec, SSDSec), 
+    Literature(Lit, Manual), RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, 
+    TSPurpose), SRSDecl, intro, mkDoc, tsymb, InclUnits(IncludeUnits), 
+    Verbosity(Verbose), Field(DefiningEquation, Description, Label, Symbol, Units), 
+    SolChSpec(SCSProg), SCSSub(DDs), DerivationDisplay(HideDerivation), 
+    SSDSub(SSDSolChSpec), SSDSec(SSDProg))
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints,
@@ -48,7 +48,8 @@ si = SI {
 }
   
 mkSRS :: SRSDecl
-mkSRS = [RefSec $
+mkSRS = [TableOfContents,
+    RefSec $
     RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
     SSDSec $ SSDProg [
       SSDSolChSpec $ SCSProg [

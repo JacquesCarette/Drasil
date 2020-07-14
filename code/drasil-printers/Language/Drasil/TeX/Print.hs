@@ -11,7 +11,8 @@ import Control.Arrow (second)
 
 import qualified Language.Drasil as L (CitationKind(..), Decoration(Prime, Hat, Vector),
   Document, MaxWidthPercent, Month(..), People, RenderSpecial(..), Sentence(S),
-  Symbol(..), USymb(US), (+:+), rendPersLFM, special)
+  Symbol(..), USymb(US), (+:+), rendPersLFM, special, Section(tle), getDTle,
+  getDAtr, getDSec, getDDoc, senToStr)
 import Utils.Drasil (checkValidStr, foldNums)
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
@@ -44,14 +45,26 @@ import Language.Drasil.TeX.Preamble (genPreamble)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
-genTeX doc sm = runPrint (buildStd sm $ I.makeDocument sm doc) Text
+genTeX doc sm = if hToC then wToC else woToC where
+  hToC = ("Table of Contents") `elem` (map (L.senToStr . L.tle) $ L.getDSec doc)
+  doc_ = L.getDDoc (L.getDTle doc) (L.getDAtr doc) (drop 1 $ L.getDSec doc)
+  wToC = runPrint (buildStd sm $ I.makeDocument sm doc_) Text
+  woToC = runPrint (buildStd_ sm $ I.makeDocument sm doc) Text
+  -- add new part here that only adds ToC iff section is in Document
 
-buildStd :: PrintingInformation -> Document -> D
+buildStd :: PrintingInformation -> Document -> D -- includes ToC generation
 buildStd sm (Document t a c) =
   genPreamble c %%
   title (spec t) %%
   author (spec a) %%
   document (maketitle %% maketoc %% newpage %% print sm c)
+
+buildStd_ :: PrintingInformation -> Document -> D -- omits ToC generation
+buildStd_ sm (Document t a c) =
+  genPreamble c %%
+  title (spec t) %%
+  author (spec a) %%
+  document (maketitle %% newpage %% print sm c)
 
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: LayoutObj -> PrintingInformation -> D

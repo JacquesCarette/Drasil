@@ -4,9 +4,10 @@ module Drasil.DocLang.SRS (appendix, assumpt, assumptLabel, charOfIR, datCon,
   indPRCaseLabel, intro, likeChg, likeChgLabel, nonfuncReq, offShelfSol, orgOfDoc,
   physSyst, physSystLabel, probDesc, prodUCTable, propCorSol, prpsOfDoc, reference,
   referenceLabel, require, scpOfReq, scpOfTheProj, solCharSpec, solCharSpecLabel,
-  specSysDes, stakeholder, sysCon, sysCont, tOfSymb, tOfSymbLabel, tOfUnit,
-  termAndDefn, termogy, thModel, thModelLabel, theClient, theCustomer, traceyMandG,
-  unlikeChg, unlikeChgLabel, userChar, valsOfAuxCons, valsOfAuxConsLabel) where
+  specSysDes, stakeholder, sysCon, sysCont, tOfCont, tOfContLabel, tOfSymb, 
+  tOfSymbLabel, tOfUnit, termAndDefn, termogy, thModel, thModelLabel, theClient, 
+  theCustomer, traceyMandG, unlikeChg, unlikeChgLabel, userChar, valsOfAuxCons, 
+  valsOfAuxConsLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -22,7 +23,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption
   prodUCTable, problemDescription, propOfCorSol, prpsOfDoc, reference, requirement,
   scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription, srs,
   stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
-  tOfSymb, tOfUnit, userCharacteristic)
+  tOfCont, tOfSymb, tOfUnit, userCharacteristic)
 import qualified Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 
 -- Local function to keep things looking clean, not exported.
@@ -44,8 +45,8 @@ intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theCli
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
   genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg,
-  unlikeChg, traceyMandG, valsOfAuxCons, appendix, reference, offShelfSol, tOfSymb,
-  tOfUnit :: [Contents] -> [Section] -> Section
+  unlikeChg, traceyMandG, valsOfAuxCons, appendix, reference, offShelfSol, tOfCont, 
+  tOfSymb, tOfUnit :: [Contents] -> [Section] -> Section
 
 intro     cs ss = section' (titleize Doc.introduction) cs ss "Intro"
 prpsOfDoc cs ss = section' (titleize Doc.prpsOfDoc)    cs ss "DocPurpose"
@@ -96,6 +97,7 @@ appendix      cs ss = section' (titleize Doc.appendix)     cs ss "Appendix"
 reference   cs ss = section  (titleize' Doc.reference)        cs ss referenceLabel
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "offShelfSolns"
 
+tOfCont cs ss = section (titleize Doc.tOfCont)  cs ss tOfContLabel
 tOfSymb cs ss = section  (titleize Doc.tOfSymb) cs ss tOfSymbLabel
 tOfUnit cs ss = section' (titleize Doc.tOfUnit) cs ss "ToU"
 
@@ -111,9 +113,9 @@ section' a b c d = section a b c (makeSecRef d (toString a))
 --Labels--
 --FIXME: create using section information somehow?
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
-  inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel, nonfuncReqLabel,
-  solCharSpecLabel :: Reference
+  inModelLabel, likeChgLabel, tOfContLabel, tOfSymbLabel, valsOfAuxConsLabel, 
+  referenceLabel, indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel, 
+  nonfuncReqLabel, solCharSpecLabel :: Reference
 physSystLabel      = makeSecRef "PhysSyst" "Physical System Description"
 datConLabel        = makeSecRef "DataConstraints" "Data Constraints"
 genDefnLabel       = makeSecRef "GDs" "General Definitions"
@@ -122,6 +124,7 @@ dataDefnLabel      = makeSecRef "DDs" "Data Definitions"
 inModelLabel       = makeSecRef "IMs" "Instance Models"
 likeChgLabel       = makeSecRef "LCs" "Likely Changes"
 unlikeChgLabel     = makeSecRef "UCs" "Unlikely Changes"
+tOfContLabel       = makeSecRef "ToC" "Table of Contents"
 tOfSymbLabel       = makeSecRef "ToS" "Table of Symbols"
 valsOfAuxConsLabel = makeSecRef "AuxConstants" "Values of Auxiliary Constants" --DO NOT CHANGE OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
 referenceLabel     = makeSecRef "References" "References" 

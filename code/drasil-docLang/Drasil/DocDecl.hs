@@ -22,7 +22,8 @@ import Control.Lens((^.), Getting)
 
 type SRSDecl = [DocSection]
 
-data DocSection = RefSec DL.RefSec
+data DocSection = TableOfContents
+                | RefSec DL.RefSec
                 | IntroSec DL.IntroSec
                 | StkhldrSec DL.StkhldrSec
                 | GSDSec DL.GSDSec
@@ -77,6 +78,7 @@ data ReqsSub where
 mkDocDesc :: SystemInformation -> SRSDecl -> DocDesc
 mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec :: DocSection -> DL.DocSection
+  sec TableOfContents = DL.TableOfContents
   sec (RefSec r) = DL.RefSec r
   sec (IntroSec i) = DL.IntroSec i
   sec (StkhldrSec s) = DL.StkhldrSec s

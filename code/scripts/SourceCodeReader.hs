@@ -19,9 +19,9 @@ extractEntryData fileName filePath = do
   handle <- openFile fileName ReadMode
   scriptFile <- hGetContents handle
   forceRead scriptFile `seq` hClose handle
-  let rScriptFileLines = lines scriptFile
+  let rScriptFileLines = map (dropWhile (==' ')) $ lines scriptFile
   -- removes comment lines
-      scriptFileLines = rScriptFileLines \\ filter (isInfixOf "--") rScriptFileLines
+      scriptFileLines = rScriptFileLines \\ filter (isPrefixOf "--") rScriptFileLines
       dataTypes = filter (isPrefixOf "data ") scriptFileLines
       newtypeTypes = filter (isPrefixOf "newtype ") scriptFileLines
       definInstances = filter (isPrefixOf "instance ") scriptFileLines

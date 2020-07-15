@@ -1,3 +1,4 @@
+-- FIXME: utilize real parser (Low Priority; see line 119)
 module DataTableGen (main) where
 
 import Data.List
@@ -113,6 +114,8 @@ config configFilePath = do
   setCurrentDirectory configFilePath
   c <- readFile "DTG_Config.txt"
   let l = map words $ filter isInfoLine (lines c)
+      -- FIXME: utilize real parser to extract settings from config file
+      -- will imporve error messages regarding config file settings
       (packageNames,classInstOrd) = (head l, map toClassType (l !! 1))
   return (packageNames,classInstOrd)
 
@@ -263,7 +266,7 @@ getClasses h d g GOOL = g
 isInstanceOf :: [FileInstance] -> FileInstance -> IsInstanceOf
 isInstanceOf fileInstances fileInstance = if isInstance then yes else no where
   isInstance = fileInstance `elem` fileInstances
-  yes = "Y" :: IsInstanceOf
+  yes = "YYYY" :: IsInstanceOf
   no = "\t" :: IsInstanceOf
 
 -- tests if class is of either the Haskell, Drasil or GOOL type (ClassType)

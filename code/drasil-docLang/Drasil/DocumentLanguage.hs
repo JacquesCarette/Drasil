@@ -150,8 +150,8 @@ mktIntroSec (IntroProg _ _ l) =
     mktSubIntro :: IntroSub -> Sentence
     mktSubIntro (IPurpose _) = S "Purpose of Document"
     mktSubIntro (IScope _) = S "Scope of Requirements"
-    mktSubIntro (IChar _ _ _) = S "Characteristics of Intended Reader"
-    mktSubIntro (IOrgSec _ _ _ _) = S "Organization of Document"
+    mktSubIntro (IChar {}) = S "Characteristics of Intended Reader"
+    mktSubIntro (IOrgSec {}) = S "Organization of Document"
 
 -- | Helper for creating the 'Stakeholders' section ToC entry
 mktStkhldrSec:: StkhldrSec -> [(ItemType,Maybe String)]
@@ -183,15 +183,15 @@ mktSSDSec (SSDProg l) =
 
     mktSubPD :: PDSub -> (ItemType,Maybe String)
     mktSubPD (TermsAndDefs _ _) = (Flat (S "Terminology and Definitions"),Nothing)
-    mktSubPD (PhySysDesc _ _ _ _) = (Flat (S "Physical System Descriptions"),Nothing)
+    mktSubPD (PhySysDesc {}) = (Flat (S "Physical System Descriptions"),Nothing)
     mktSubPD (Goals _ _) = (Flat (S "Goal Statements"),Nothing)
 
     mktSubSCS :: SCSSub -> (ItemType,Maybe String)
     mktSubSCS (Assumptions _) = (Flat (S "Assumptions"),Nothing)
-    mktSubSCS (TMs _ _ _) = (Flat (S "Theoretical Models"),Nothing)
-    mktSubSCS (GDs _ _ _ _) = (Flat (S "General Definitions"),Nothing)
-    mktSubSCS (DDs _ _ _ _) = (Flat (S "Data Definitions"),Nothing)
-    mktSubSCS (IMs _ _ _ _) = (Flat (S "Instance Models"),Nothing)
+    mktSubSCS (TMs {}) = (Flat (S "Theoretical Models"),Nothing)
+    mktSubSCS (GDs {}) = (Flat (S "General Definitions"),Nothing)
+    mktSubSCS (DDs {}) = (Flat (S "Data Definitions"),Nothing)
+    mktSubSCS (IMs {}) = (Flat (S "Instance Models"),Nothing)
     mktSubSCS (Constraints _ _) = (Flat (S "Data Constraints"),Nothing)
     mktSubSCS (CorrSolnPpties _ _) = (Flat (S "Properties of a Correct Solutions"),Nothing)
 

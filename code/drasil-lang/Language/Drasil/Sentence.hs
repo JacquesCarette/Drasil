@@ -44,7 +44,7 @@ data Sentence where
   (:+:) :: Sentence -> Sentence -> Sentence   
   EmptyS :: Sentence
 
-senToStr :: (Sentence) -> String
+senToStr :: Sentence -> String
 senToStr (S string) = string
 senToStr (Ch _ _) = "error; incompatible Sentence constructor"
 senToStr (Sy _) = "error; incompatible Sentence constructor"
@@ -52,9 +52,9 @@ senToStr (P _) = "error; incompatible Sentence constructor"
 senToStr (E _) = "error; incompatible Sentence constructor"
 senToStr (Ref _) = "error; incompatible Sentence constructor"
 senToStr (Quote _) = "\'\'"
-senToStr (Percent) = "%"
+senToStr Percent = "%"
 senToStr ((:+:) _ _) = "error; incompatible Sentence constructor"
-senToStr (EmptyS) = ""
+senToStr EmptyS = ""
 
 -- The HasSymbol is redundant, but on purpose
 ch :: (HasUID c, HasSymbol c) => c -> Sentence

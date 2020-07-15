@@ -46,7 +46,7 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
 genTeX doc sm = if hToC then wToC else woToC where
-  hToC = ("Table of Contents") `elem` (map (L.senToStr . L.tle) $ L.getDSec doc)
+  hToC = "Table of Contents" `elem` map (L.senToStr . L.tle) (L.getDSec doc)
   doc_ = L.getDDoc (L.getDTle doc) (L.getDAtr doc) (drop 1 $ L.getDSec doc)
   wToC = runPrint (buildStd sm $ I.makeDocument sm doc_) Text
   woToC = runPrint (buildStd_ sm $ I.makeDocument sm doc) Text

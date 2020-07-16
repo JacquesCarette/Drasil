@@ -131,6 +131,9 @@ makeSecRef :: String -> String -> Reference
 makeSecRef r s = Reference (r ++ "Label") (RP (prepend "Section") ("Sec:" ++ repUnd r))
   (shortname' s) None
 
+makeToCRef :: String -> String -> Reference
+makeToCRef r s = Reference (r ++ "Label") (RP name ("Sec:" ++ repUnd r)) (shortname' s) None
+
 makeLstRef :: String -> String -> Reference
 makeLstRef r s = Reference (r ++ "Label") (RP (prepend "Lst") ("Lst:" ++ repUnd r))
   (shortname' s) None

@@ -28,6 +28,7 @@ library
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Stakeholders
     , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfContents
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.TraceabilityMandGs

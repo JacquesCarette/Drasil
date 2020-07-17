@@ -5,10 +5,11 @@ module Language.Drasil.Choices (
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, hasReadMe, defaultChoices,
-  choicesDoc, showChs
+  choicesSent, showChs
 ) where
 
 import Language.Drasil
+import Utils.Drasil (foldlSent)
 
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -19,7 +20,6 @@ import GOOL.Drasil (CodeType)
 
 import Control.Lens ((^.))
 import Data.Map (Map, fromList)
-import Text.PrettyPrint.HughesPJ (Doc, text, vcat)
 
 data Choices = Choices {
 -- Global design choices (affect entire program)
@@ -70,18 +70,18 @@ data Choices = Choices {
 }
 
 class RenderChoices a where
-    showChs :: a -> String
-    showChsList :: [a] -> String
-    showChsList lst = show $ map showChs lst
+    showChs :: a -> Sentence
+    showChsList :: [a] -> Sentence
+    showChsList lst = foldlSent (map showChs lst)
 
 data Modularity = Modular InputModule -- Different modules for: controller, 
                                       -- input, calculations, output.
                 | Unmodular -- All generated code is in one module/file.
 
 instance RenderChoices Modularity where 
-  showChs Unmodular = "Unmodular"
-  showChs (Modular Combined) = "Modular Combined"
-  showChs (Modular Separated)= "Modular Separated"
+  showChs Unmodular = S "Unmodular"
+  showChs (Modular Combined) = S "Modular Combined"
+  showChs (Modular Separated)= S "Modular Separated"
 
 data InputModule = Combined -- Input-related functions combined in one module
                  | Separated -- Input-related functions each in own module  
@@ -98,8 +98,8 @@ data Structure = Unbundled -- Individual variables
                | Bundled -- Variables bundled in a class
 
 instance RenderChoices Structure where 
-  showChs Unbundled = "Unbundled"
-  showChs Bundled = "Bundled"
+  showChs Unbundled = S "Unbundled"
+  showChs Bundled = S "Bundled"
 
 data ConstantStructure = Inline -- Inline values for constants
                        | WithInputs -- Store constants with inputs
@@ -107,17 +107,17 @@ data ConstantStructure = Inline -- Inline values for constants
                                          -- inputs, whether bundled or unbundled
 
 instance RenderChoices ConstantStructure where 
-  showChs Inline = "Inline"
-  showChs WithInputs = "WithInputs"
-  showChs (Store Unbundled) = "Store Unbundled"
-  showChs (Store Bundled) = "Store Bundled"
+  showChs Inline = S "Inline"
+  showChs WithInputs = S "WithInputs"
+  showChs (Store Unbundled) = S "Store Unbundled"
+  showChs (Store Bundled) = S "Store Bundled"
 
 data ConstantRepr = Var -- Constants represented as regular variables
                   | Const -- Use target language's mechanism for defining constants.
 
 instance RenderChoices ConstantRepr where 
-  showChs Var = "Var"
-  showChs Const = "Const"
+  showChs Var = S "Var"
+  showChs Const = S "Const"
 
 -- | Specifies matches between chunks and CodeConcepts, meaning the target 
 -- language's pre-existing definition of the concept should be used instead of 
@@ -131,7 +131,7 @@ type MatchedConceptMap = Map UID CodeConcept
 data CodeConcept = Pi deriving Eq
 
 instance RenderChoices CodeConcept where
-  showChs Pi = "Pi"
+  showChs Pi = S "Pi"
 
 -- | Builds a ConceptMatchMap from an association list of chunks and CodeConcepts
 matchConcepts :: (HasUID c) => [(c, [CodeConcept])] -> ConceptMatchMap
@@ -157,16 +157,16 @@ data ImplementationType = Library -- Generated code does not include Controller
                         | Program -- Generated code includes Controller
                         
 instance RenderChoices ImplementationType where 
-  showChs Library = "Library"
-  showChs Program = "Program" 
+  showChs Library = S "Library"
+  showChs Program = S "Program" 
 
 
 data ConstraintBehaviour = Warning -- Print warning when constraint violated
                          | Exception -- Throw exception when constraint violated
         
 instance RenderChoices ConstraintBehaviour where 
-  showChs Warning = "Warning"
-  showChs Exception = "Exception" 
+  showChs Warning = S "Warning"
+  showChs Exception = S "Exception" 
 
 data Comments = CommentFunc -- Function/method-level comments
               | CommentClass -- class-level comments
@@ -174,22 +174,22 @@ data Comments = CommentFunc -- Function/method-level comments
               deriving Eq
 
 instance RenderChoices Comments where 
-  showChs CommentFunc = "CommentFunc"
-  showChs CommentClass = "CommentClass"
-  showChs CommentMod = "CommentMod"
+  showChs CommentFunc = S "CommentFunc"
+  showChs CommentClass = S "CommentClass"
+  showChs CommentMod = S "CommentMod"
 
 data Verbosity = Verbose | Quiet
 
 instance RenderChoices Verbosity where 
-  showChs Verbose = "Verbose"
-  showChs Quiet = "Quiet" 
+  showChs Verbose = S "Verbose"
+  showChs Quiet = S "Quiet" 
 
 data Visibility = Show
                 | Hide
 
 instance RenderChoices Visibility where 
-  showChs Show = "Show"
-  showChs Hide = "Hide"
+  showChs Show = S "Show"
+  showChs Hide = S "Hide"
 
 -- Eq instances required for Logging and Comments because generator needs to 
 -- check membership of these elements in lists
@@ -198,8 +198,8 @@ data Logging = LogFunc -- Log messages generated for function calls
              deriving Eq
 
 instance RenderChoices Logging where 
-  showChs LogFunc = "LogFunc"
-  showChs LogVar = "LogVar"
+  showChs LogFunc = S "LogFunc"
+  showChs LogVar = S "LogVar"
 
 -- Currently we only support one kind of auxiliary file: sample input file
 -- To generate a sample input file compatible with the generated program
@@ -209,8 +209,8 @@ data AuxFile = SampleInput FilePath
                 deriving Eq
 
 instance RenderChoices AuxFile where 
-  showChs (SampleInput fp) = "SampleInput"++fp
-  showChs ReadME = "ReadME"
+  showChs (SampleInput fp) = S "SampleInput" +:+ S fp
+  showChs ReadME = S "ReadME"
 
 -- Gets the file path to a sample input data set from a Choices structure, if 
 -- the user chose to generate a sample input file.
@@ -255,25 +255,23 @@ defaultChoices = Choices {
   odes = []
 }
 
-choicesDoc :: Choices -> Doc 
-choicesDoc chs = (vcat. map chsFieldDoc) [
-    ("Languages", show $ lang chs)
-  , ("Modularity", showChs $ modularity chs)
-  , ("Input Structure", showChs $ inputStructure chs)
-  , ("Constant Structure", showChs $ constStructure chs)
-  , ("Constant Representation", showChs $ constRepr chs)
-  , ("Implementation Type", showChs $ impType chs)
-  , ("Software Constraint Behaviour", showChs $ onSfwrConstraint chs)
-  , ("Physical Constraint Behaviour", showChs $ onPhysConstraint chs)
-  , ("Comments", showChsList $ comments chs)
-  , ("Dox Verbosity", showChs $ doxVerbosity chs)
-  , ("Dates", showChs $ dates chs)
-  , ("Log File Name", logFile chs)
-  , ("Logging", showChsList $ logging chs)
-  , ("Auxiliary Files", showChsList $ auxFiles chs)
---  , ("ODE Libraries", odeLib chs)
---  , ("ODE's", odes chs) along with  conceptmatch and speace match
+choicesSent :: Choices -> [Sentence] 
+choicesSent chs = map chsFieldSent [
+    (S "Languages", foldlSent $ map (S . show) $ lang chs)
+  , (S "Modularity", showChs $ modularity chs)
+  , (S "Input Structure", showChs $ inputStructure chs)
+  , (S "Constant Structure", showChs $ constStructure chs)
+  , (S "Constant Representation", showChs $ constRepr chs)
+  , (S "Implementation Type", showChs $ impType chs)
+  , (S "Software Constraint Behaviour", showChs $ onSfwrConstraint chs)
+  , (S "Physical Constraint Behaviour", showChs $ onPhysConstraint chs)
+  , (S "Comments", showChsList $ comments chs)
+  , (S "Dox Verbosity", showChs $ doxVerbosity chs)
+  , (S "Dates", showChs $ dates chs)
+  , (S "Log File Name", S $ logFile chs)
+  , (S "Logging", showChsList $ logging chs)
+  , (S "Auxiliary Files", showChsList $ auxFiles chs)
   ] 
 
-chsFieldDoc :: (String, String) -> Doc
-chsFieldDoc (rec, chc) = text $ rec ++ " selected as " ++ chc
+chsFieldSent :: (Sentence, Sentence) -> Sentence
+chsFieldSent (rec, chc) = rec +:+ S "selected as" +:+. chc

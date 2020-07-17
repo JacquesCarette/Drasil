@@ -26,8 +26,9 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
 import Language.Drasil.Choices (Choices(..), Modularity(..), Visibility(..),
-  choicesDoc)
+  choicesSent)
 import Language.Drasil.CodeSpec (CodeSpec(..))
+import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
 import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..), 
   ProgData(..), initialState, unCI)
@@ -39,7 +40,7 @@ import Control.Monad.State (get, evalState, runState)
 import Data.List (nub)
 import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList, catMaybes)
-import Text.PrettyPrint.HughesPJ (($$), empty, isEmpty)
+import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 
 -- | Initializes the generator's DrasilState.
 -- String parameter is a string representing the date.
@@ -76,21 +77,23 @@ generator l dt sd chs spec = DrasilState {
   -- stateful
   currentModule = "",
   currentClass = "",
-  _designLog = nonPrefChs $$ concLog $$ libLog,
+  _designLog = des,
   _loggedSpaces = [] -- Used to prevent duplicate logs added to design log
 }
-  where (mcm, concLog) = runState (chooseConcept chs) empty
+  where (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt
         showDate Hide = ""
         ((pth, elmap, lname), libLog) = runState (chooseODELib l (odeLib chs) 
-          (odes chs)) empty
+          (odes chs)) []
         els = map snd elmap
         nms = [lname]
         mem = modExportMap spec chs modules' 
         lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap spec chs modules'
         modules' = mods spec ++ concatMap (^. auxMods) els
-        nonPrefChs = choicesDoc chs
+        nonPrefChs = choicesSent chs
+        des = vcat . map (sentenceDoc (sysinfodb spec) Implementation Linear) $
+          (nonPrefChs ++ concLog ++ libLog)
 
 -- | Generates a package with the given DrasilState. The passed
 -- un-representation functions determine which target language the package will 

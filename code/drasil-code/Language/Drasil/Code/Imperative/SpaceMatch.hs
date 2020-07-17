@@ -38,4 +38,4 @@ incompatibleType l s t = text $ "Language " ++ show l ++ " does not support "
   " space. Trying next choice." 
 
 successLog :: Space -> CodeType -> Doc
-successLog s t = text $ "Successfully matched "++show s ++ " with "++ show t
+successLog s t = text ("Successfully matched "++show s ++ " with "++ show t ++".")

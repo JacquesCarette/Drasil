@@ -50,6 +50,7 @@ getSrc names repoRoot source = CS (repoRoot ++ source)
     lang "csharp" = "C#"
     lang "python" = "Python"
     lang "java"   = "Java"
+    lang "swift"  = "Swift"
     lang x        = error ("No given display name for language: " ++ x)
     eDir = takeBaseName $ takeDirectory $ takeDirectory source
     verName = if any (`isInfixOf` eDir) names then eDir else ""

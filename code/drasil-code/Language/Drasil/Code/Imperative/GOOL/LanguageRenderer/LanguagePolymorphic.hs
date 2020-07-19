@@ -11,7 +11,6 @@ import Database.Drasil (ChunkDB)
 import GOOL.Drasil (ProgData, GOOLState)
 
 import Language.Drasil.Choices (Comments, ImplementationType(..), Verbosity)
-import Language.Drasil.Mod (Name, Version)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
@@ -22,7 +21,7 @@ import Language.Drasil.Code.Imperative.WriteReadMe (makeReadMe)
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName, 
   makefileName, sampleInputName, readMeName)
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface ( ReadMeInfo(..),
   AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
 
 -- Defines a Doxygen configuration file
@@ -31,10 +30,9 @@ doxConfig :: (AuxiliarySym r) => r (AuxHelper r) -> String ->
 doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s 
   (auxHelperDoc opt) v)
 
--- Defines a markedown file
-readMe :: (AuxiliarySym r) => String -> String -> Maybe String -> 
-    ImplementationType -> [(Name,Version)] -> String -> r (Auxiliary r)
-readMe l v unsp imp libs n = auxFromData readMeName (makeReadMe l v unsp imp libs n)
+-- Defines a markdown file
+readMe :: (AuxiliarySym r) => ReadMeInfo -> r (Auxiliary r)
+readMe rmi= auxFromData readMeName (makeReadMe rmi)
 
 -- Defines a sample input file
 sampleInput :: (AuxiliarySym r) => ChunkDB -> DataDesc -> [Expr] -> 

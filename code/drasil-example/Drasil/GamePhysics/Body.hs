@@ -3,9 +3,9 @@ module Drasil.GamePhysics.Body where
 import Language.Drasil hiding (Symbol(..), Vector, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(SI),
-  cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
-  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys, _sysinfodb,
-  _usedinfodb)
+  cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, _datadefs,
+  _configFiles, _definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
+  _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (qdFromDD)
 import Utils.Drasil
 import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
@@ -104,6 +104,7 @@ si = SI {
   _sys = gamePhysics,
   _kind = Doc.srs,
   _authors = [alex, luthfi, olu],
+  _purpose = purpDoc gamePhysics Verbose,
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
@@ -112,6 +113,7 @@ si = SI {
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
   _datadefs = dataDefs,
+  _configFiles = [],
   _inputs = inputSymbols,
   _outputs = outputSymbols, 
   _defSequence = map (`Parallel` []) qDefs,

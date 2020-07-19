@@ -19,8 +19,8 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
   genOutputFormat, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
   designLog, inMod, modExportMap, clsDefMap)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
-  AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
@@ -37,7 +37,7 @@ import Control.Lens ((^.))
 import Control.Monad.State (get, evalState, runState)
 import Data.List (nub)
 import Data.Map (fromList, member, keys, elems)
-import Data.Maybe (maybeToList)
+import Data.Maybe (maybeToList, catMaybes)
 import Text.PrettyPrint.HughesPJ (($$), empty, isEmpty)
 
 -- | Initializes the generator's DrasilState.
@@ -124,10 +124,21 @@ genPackage unRepr = do
       (reprPD, s) = runState p info
       pd = unRepr reprPD
       m = makefile (libPaths g) (implType g) (commented g) s pd
+      as = case codeSpec g of CodeSpec {authors = a} -> map name a
+      cfp = configFiles $ codeSpec g
   i <- genSampleInput
   d <- genDoxConfig s
-  rm <- genReadMe (implType g) (extLibNames g)
-  return $ package pd (m:i++rm++d)
+  rm <- genReadMe ReadMeInfo {
+        langName = "",
+        langVersion = "",
+        invalidOS = Nothing,
+        implementType = implType g,
+        extLibNV = extLibNames g,
+        extLibFP = libPaths g,
+        contributors = as, 
+        configFP = cfp,
+        caseName = ""}
+  return $ package pd (m:catMaybes [i,rm,d])
 
 -- Generates an SCS program based on the problem and the user's design choices.
 genProgram :: (OOProg r) => GenState (GSProgram r)

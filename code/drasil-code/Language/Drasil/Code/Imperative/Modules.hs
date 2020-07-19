@@ -51,7 +51,7 @@ import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
 import Data.Map ((!), elems, member)
 import qualified Data.Map as Map (lookup, filter)
-import Data.Maybe (maybeToList, catMaybes)
+import Data.Maybe (maybeToList, catMaybes, maybe)
 import Control.Applicative ((<$>))
 import Control.Monad (liftM2, zipWithM)
 import Control.Monad.State (get, gets)
@@ -439,12 +439,12 @@ genDataDesc = do
 
 -- Generates a sample input file compatible with the generated program, 
 -- if the user chose to.
-genSampleInput :: (AuxiliarySym r) => GenState [r (Auxiliary r)]
+genSampleInput :: (AuxiliarySym r) => GenState (Maybe (r (Auxiliary r)))
 genSampleInput = do
   g <- get
   dd <- genDataDesc
-  return [sampleInput (sysinfodb $ codeSpec g) dd (sampleData g) | 
-    hasSampleInput (auxiliaries g)]
+  if hasSampleInput (auxiliaries g) then (return . Just) $ sampleInput 
+    (sysinfodb $ codeSpec g) dd (sampleData g) else return Nothing
 
 ----- CONSTANTS -----
 

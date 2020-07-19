@@ -5,9 +5,9 @@ import Language.Drasil hiding (Symbol(..), organization, section)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
-  cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
-  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb)
+  cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
+  _datadefs, _definitions, _configFiles, _defSequence, _inputs, _kind, 
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (Theory(defined_fun, defined_quant))
 import Utils.Drasil
 
@@ -51,7 +51,7 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, con, con')
-import Drasil.GlassBR.DataDefs (qDefns)
+import Drasil.GlassBR.DataDefs (qDefns, configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
@@ -76,12 +76,14 @@ si = SI {
   _sys         = glassBR,
   _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
+  _purpose     = purpDoc glassBR Verbose,
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = map (relToQD symbMap) iMods ++ 
                  concatMap (^. defined_quant) tMods ++
                  concatMap (^. defined_fun) tMods,
   _datadefs    = GB.dataDefs,
+  _configFiles = configFp,
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = qDefns,

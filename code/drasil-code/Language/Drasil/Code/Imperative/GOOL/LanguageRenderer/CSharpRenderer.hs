@@ -7,8 +7,8 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
 ) where
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
-  AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  PackageSym(..), AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
   G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, 
@@ -46,8 +46,11 @@ instance AuxiliarySym CSharpProject where
   type Auxiliary CSharpProject = AuxData
   type AuxHelper CSharpProject = Doc
   doxConfig = G.doxConfig optimizeDox
-  readMe imp libs n = G.readMe csName csVersion (Just "All OS's except Windows") 
-    imp libs n
+  readMe rmi =
+    G.readMe rmi {
+        langName = csName,
+        langVersion = csVersion,
+        invalidOS = Just "All OS's except Windows"}
   sampleInput = G.sampleInput
 
   optimizeDox = return no

@@ -1,6 +1,7 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefs, dimLL, qDefns, glaTyFac, 
   hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac, 
-  eqTNTWDD, probOfBreak, calofCapacity, calofDemand, pbTolUsr, qRef) where
+  eqTNTWDD, probOfBreak, calofCapacity, calofDemand, pbTolUsr, qRef,configFp) 
+  where
   
 import Control.Lens ((^.))
 import Language.Drasil
@@ -285,6 +286,10 @@ nonFLRef    = definedIn  nonFL
 qHtRef      = definedIn  dimLL
 qHtTlTolRef = definedIn  tolPre
 riskRef     = definedIn  risk
+
+-- List of Configuration Files necessary for DataDefs.hs
+configFp :: [String]
+configFp = ["SDF.txt", "TSD.txt"]
 
 --- Helpers
 interpolating :: (HasUID s, HasSymbol s, Referable f, HasShortName f) => s -> f -> Sentence

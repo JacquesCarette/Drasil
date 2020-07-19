@@ -5,10 +5,11 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
-import Language.Drasil.Choices (Comments(..), ImplementationType, hasReadMe)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  AuxiliarySym(..))
+import Language.Drasil.Choices (Comments(..), AuxFile(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
-import Language.Drasil.Mod (Name, Version, Description, Import)
+import Language.Drasil.Mod (Name, Description, Import)
   
 import GOOL.Drasil (SFile, VSType, SVariable, SValue, MSStatement, SMethod, 
   CSStateVar, SClass, NamedArgs, OOProg, FileSym(..), TypeElim(..), 
@@ -49,21 +50,22 @@ genModule :: (OOProg r) => Name -> Description ->
 genModule n desc = genModuleWithImports n desc []
 
 -- Generates a Doxygen configuration file, if the user has comments enabled
-genDoxConfig :: (AuxiliarySym r) => GOOLState ->
-  GenState [r (Auxiliary r)]
+genDoxConfig :: (AuxiliarySym r) => GOOLState -> GenState (Maybe (r (Auxiliary r)))
 genDoxConfig s = do
   g <- get
   let n = pName $ codeSpec g
       cms = commented g
       v = doxOutput g
-  return [doxConfig n s v | not (null cms)]
+  return $ if not (null cms) then Just (doxConfig n s v) else Nothing
 
-genReadMe :: (AuxiliarySym r) => ImplementationType -> [(Name,Version)] ->
-  GenState [r (Auxiliary r)]
-genReadMe imp libnms = do 
+genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState (Maybe (r (Auxiliary r)))
+genReadMe rmi = do 
   g <- get
   let n = pName $ codeSpec g
-  return [readMe imp libnms n | hasReadMe (auxiliaries g)]
+  return $ getReadMe (auxiliaries g) rmi {caseName = n}
+
+getReadMe :: (AuxiliarySym r) => [AuxFile] -> ReadMeInfo -> Maybe (r (Auxiliary r))
+getReadMe auxl rmi = if ReadME `elem` auxl then Just (readMe rmi) else Nothing
 
 data ClassType = Primary | Auxiliary
 

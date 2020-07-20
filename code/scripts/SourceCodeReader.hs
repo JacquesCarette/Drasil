@@ -3,6 +3,7 @@ module SourceCodeReader (extractEntryData) where
 import Data.List
 import System.IO
 import System.Directory
+import qualified Data.Text as T
 
 import DirectoryController as DC (FileName)
 
@@ -19,7 +20,7 @@ extractEntryData fileName filePath = do
   handle <- openFile fileName ReadMode
   scriptFile <- hGetContents handle
   forceRead scriptFile `seq` hClose handle
-  let rScriptFileLines = map (dropWhile (==' ')) $ lines scriptFile
+  let rScriptFileLines = map stripWS $ lines scriptFile
   -- removes comment lines
       scriptFileLines = rScriptFileLines \\ filter (isPrefixOf "--") rScriptFileLines
       dataTypes = filter (isPrefixOf "data ") scriptFileLines
@@ -30,9 +31,9 @@ extractEntryData fileName filePath = do
       allClasslines = zipWith gL (getIndexes 0 rAllClasslines rScriptFileLines) rAllClasslines
 
       gL num line
-        | "=>" `isInfixOf` line && not (isSuffixOf "=>" line || isSuffixOf "=> " line) = line
+        | "=>" `isInfixOf` line && not (isSuffixOf "=>" line) = line
         | not ("=>" `isInfixOf` line) && not ("(" `isInfixOf` line) && "class" `isPrefixOf` line = line
-        | isSuffixOf "=>" line || isSuffixOf "=> " line = "=> " ++ dropWhile (==' ') (rScriptFileLines !! (num + 1))
+        | isSuffixOf "=>" line = "=> " ++ rScriptFileLines !! (num + 1)
         | otherwise = gL (num + 1) (rScriptFileLines !! (num + 1))
 
   let dataNames = map (takeWhile (/=' ') . (\\ "data ")) dataTypes
@@ -41,6 +42,10 @@ extractEntryData fileName filePath = do
       stripInstances = map getStripInstance definInstances
 
   return (dataNames,newtypeNames,ordClassNames,stripInstances)
+
+-- strips leading and trailing whitespace from strings
+stripWS :: String -> String
+stripWS = T.unpack . T.strip . T.pack
 
 -- enforces strict file reading; files can be closed to avoid memory exhaustion
 forceRead :: [a0] -> ()

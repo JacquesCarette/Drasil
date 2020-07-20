@@ -1,4 +1,4 @@
--- FIXME: utilize real parser (Low Priority; see line 119)
+-- FIXME: use real parser (Low Priority; see line 119)
 module DataTableGen (main) where
 
 import Data.List
@@ -114,8 +114,8 @@ config configFilePath = do
   setCurrentDirectory configFilePath
   c <- readFile "DTG_Config.txt"
   let l = map words $ filter isInfoLine (lines c)
-      -- FIXME: utilize real parser to extract settings from config file
-      -- will imporve error messages regarding config file settings
+      -- FIXME: use real parser to extract settings from config file
+      -- will improve error messages regarding config file settings
       (packageNames,classInstOrd) = (head l, map toClassType (l !! 1))
   return (packageNames,classInstOrd)
 

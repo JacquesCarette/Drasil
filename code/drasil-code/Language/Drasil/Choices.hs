@@ -8,7 +8,7 @@ module Language.Drasil.Choices (
   choicesSent, showChs) where
 
 import Language.Drasil
-import Utils.Drasil (foldlSent)
+import Utils.Drasil (foldlSent_)
 
 import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.Lang (Lang(..))
@@ -71,7 +71,7 @@ data Choices = Choices {
 class RenderChoices a where
     showChs :: a -> Sentence
     showChsList :: [a] -> Sentence
-    showChsList lst = foldlSent (map showChs lst)
+    showChsList lst = foldlSent_ (map showChs lst)
 
 data Modularity = Modular InputModule -- Different modules for: controller, 
                                       -- input, calculations, output.
@@ -251,7 +251,7 @@ defaultChoices = Choices {
 
 choicesSent :: Choices -> [Sentence] 
 choicesSent chs = map chsFieldSent [
-    (S "Languages", foldlSent $ map (S . show) $ lang chs)
+    (S "Languages", foldlSent_ $ map (S . show) $ lang chs)
   , (S "Modularity", showChs $ modularity chs)
   , (S "Input Structure", showChs $ inputStructure chs)
   , (S "Constant Structure", showChs $ constStructure chs)

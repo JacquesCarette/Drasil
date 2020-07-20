@@ -31,9 +31,9 @@ extractEntryData fileName filePath = do
       allClasslines = zipWith gL (getIndexes 0 rAllClasslines rScriptFileLines) rAllClasslines
 
       gL num line
-        | "=>" `isInfixOf` line && not (isSuffixOf "=>" line) = line
+        | "=>" `isInfixOf` line && not ("=>" `isSuffixOf` line) = line
         | not ("=>" `isInfixOf` line) && not ("(" `isInfixOf` line) && "class" `isPrefixOf` line = line
-        | isSuffixOf "=>" line = "=> " ++ rScriptFileLines !! (num + 1)
+        | "=>" `isSuffixOf` line = "=> " ++ rScriptFileLines !! (num + 1)
         | otherwise = gL (num + 1) (rScriptFileLines !! (num + 1))
 
   let dataNames = map (takeWhile (/=' ') . (\\ "data ")) dataTypes

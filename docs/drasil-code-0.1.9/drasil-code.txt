@@ -114,7 +114,7 @@ Hide :: Visibility
 --   specifications can be built.
 defaultChoices :: Choices
 data CodeSpec
-[CodeSpec] :: HasName a => {pName :: Name, authors :: [a], inputs :: [Input], extInputs :: [Input], derivedInputs :: [Derived], outputs :: [Output], execOrder :: [Def], cMap :: ConstraintMap, constants :: [Const], constMap :: ConstantMap, mods :: [Mod], sysinfodb :: ChunkDB} -> CodeSpec
+[CodeSpec] :: HasName a => {pName :: Name, authors :: [a], inputs :: [Input], extInputs :: [Input], derivedInputs :: [Derived], outputs :: [Output], configFiles :: [FilePath], execOrder :: [Def], cMap :: ConstraintMap, constants :: [Const], constMap :: ConstantMap, mods :: [Mod], sysinfodb :: ChunkDB} -> CodeSpec
 
 -- | Get a UID of a chunk corresponding to a Func
 funcUID :: Func -> UID
@@ -297,7 +297,7 @@ class AuxiliarySym r where {
     type family AuxHelper r;
 }
 doxConfig :: AuxiliarySym r => String -> GOOLState -> Verbosity -> r (Auxiliary r)
-readMe :: AuxiliarySym r => ImplementationType -> [(Name, Version)] -> String -> r (Auxiliary r)
+readMe :: AuxiliarySym r => ReadMeInfo -> r (Auxiliary r)
 sampleInput :: AuxiliarySym r => ChunkDB -> DataDesc -> [Expr] -> r (Auxiliary r)
 optimizeDox :: AuxiliarySym r => r (AuxHelper r)
 makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r (Auxiliary r)

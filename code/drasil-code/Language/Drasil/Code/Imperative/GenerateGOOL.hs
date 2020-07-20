@@ -7,7 +7,7 @@ import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
   AuxiliarySym(..))
-import Language.Drasil.Choices (Comments(..), hasReadMe)
+import Language.Drasil.Choices (Comments(..), AuxFile(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Mod (Name, Description, Import)
   
@@ -56,14 +56,16 @@ genDoxConfig s = do
   let n = pName $ codeSpec g
       cms = commented g
       v = doxOutput g
-  if not (null cms) then (return . Just) $ doxConfig n s v else return Nothing
+  return $ if not (null cms) then Just (doxConfig n s v) else Nothing
 
 genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState (Maybe (r (Auxiliary r)))
 genReadMe rmi = do 
   g <- get
   let n = pName $ codeSpec g
-  if hasReadMe (auxiliaries g) then (return . Just) $ readMe rmi {caseName = n} 
-    else return Nothing
+  return $ getReadMe (auxiliaries g) rmi {caseName = n}
+
+getReadMe :: (AuxiliarySym r) => [AuxFile] -> ReadMeInfo -> Maybe (r (Auxiliary r))
+getReadMe auxl rmi = if ReadME `elem` auxl then Just (readMe rmi) else Nothing
 
 data ClassType = Primary | Auxiliary
 

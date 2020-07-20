@@ -41,10 +41,10 @@ instance PackageSym SwiftProject where
 instance AuxiliarySym SwiftProject where
   type Auxiliary SwiftProject = AuxData
   type AuxHelper SwiftProject = Doc
-  readMe rmi=
-    G.readMe rmi { langName = swiftName,
-        langVersion = swiftVersion}
   doxConfig _ _ _ = auxFromData "" empty
+  readMe rmi = G.readMe rmi {
+        langName = swiftName,
+        langVersion = swiftVersion}
   sampleInput = G.sampleInput
 
   optimizeDox = error doxError

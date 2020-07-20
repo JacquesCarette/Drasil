@@ -4,8 +4,12 @@ module Language.Drasil.Choices (
   ConstantStructure(..), ConstantRepr(..), ConceptMatchMap, MatchedConceptMap, 
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, ImplementationType(..),
   ConstraintBehaviour(..), Comments(..), Verbosity(..), Visibility(..), 
+<<<<<<< HEAD
   Logging(..), AuxFile(..), getSampleData, hasSampleInput, hasReadMe, defaultChoices,
   choicesSent, showChs
+=======
+  Logging(..), AuxFile(..), getSampleData, hasSampleInput, defaultChoices
+>>>>>>> 8bdb5e8b60d01625d4bcc4fc8a1e904c7fad8177
 ) where
 
 import Language.Drasil
@@ -225,11 +229,6 @@ hasSampleInput :: [AuxFile] -> Bool
 hasSampleInput [] = False
 hasSampleInput (SampleInput _:_) = True
 hasSampleInput (_:xs) = hasSampleInput xs
-
-hasReadMe :: [AuxFile] -> Bool
-hasReadMe [] = False
-hasReadMe (ReadME:_) = True
-hasReadMe (_:xs) = hasReadMe xs
 
 -- | Default choices to be used as the base from which design specifications 
 -- can be built.

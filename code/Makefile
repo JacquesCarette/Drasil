@@ -107,7 +107,7 @@ NOISY=no
 SUMMARIZE_TEX=no
 
 # actual targets
-all: test analysis
+all: test
 
 debug: stackArgs+=$(PROFALL) 
 debug: EXECARGS+=$(PROFEXEC) 
@@ -159,7 +159,7 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack
 graphs: $(GRAPH_PACKAGES)
 ###
 
-analysis:
+analysis: check_stack
 	@mkdir -p $(ANALYSIS_FOLDER)
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
 

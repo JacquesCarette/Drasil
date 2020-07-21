@@ -1,4 +1,4 @@
-module SourceCodeReader (extractEntryData) where
+module SourceCodeReader (extractEntryData, EntryData(..)) where
 
 import Data.List
 import System.IO
@@ -12,9 +12,14 @@ type NewtypeName = String
 type ClassName = String
 type DtNtName = String
 
+-- new EntryData data type with strict fields to enforce strict file reading
+data EntryData = EntryData { dNs :: ![DataName]
+                           , ntNs :: ![NewtypeName]
+                           , cNs :: ![ClassName]
+                           , cITs :: ![(DtNtName,ClassName)]} deriving (Show)
+
 -- extracts data, newtype and class names + instances (new data-oriented format)
-extractEntryData :: DC.FileName -> FilePath -> 
-  IO ([DataName],[NewtypeName],[ClassName],[(DtNtName,ClassName)])
+extractEntryData :: DC.FileName -> FilePath -> IO EntryData
 extractEntryData fileName filePath = do
   setCurrentDirectory filePath
   handle <- openFile fileName ReadMode
@@ -41,7 +46,7 @@ extractEntryData fileName filePath = do
       ordClassNames = map getClassName allClasslines
       stripInstances = map getStripInstance definInstances
 
-  return (dataNames,newtypeNames,ordClassNames,stripInstances)
+  return EntryData {dNs=dataNames,ntNs=newtypeNames,cNs=ordClassNames,cITs=stripInstances}
 
 -- strips leading and trailing whitespace from strings
 stripWS :: String -> String

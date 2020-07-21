@@ -4,6 +4,7 @@ module DirectoryController (createFolder, createFile, finder, getDirectories,
 import Data.List
 import System.IO
 import System.Directory
+import System.FilePath (joinPath)
 
 type FilterPrefix = String
 type DrasilPack = String
@@ -55,9 +56,7 @@ finder folder = do
   folders <- verifyDirectories rawFolders
   rawFiles <- mapM finder folders
 
-  let bakedFiles
-        | null rawFiles = []
-        | otherwise = concat rawFiles
+  let bakedFiles = concat rawFiles
 
   let files 
         | null folders = snd rawData
@@ -93,20 +92,15 @@ nullFolder :: Folder -> Bool
 nullFolder folder = empty where
   empty = all null [folderName folder,folderPath folder,folderDrasilPack folder]
 
--- combines folder name with filepath (for testing if directory exists)
-joins :: [FilePath] -> FilePath
-joins (a:b:_) = b ++ "/" ++ a
-
 -- creates new folder path with folder name + path (to extract folder contents)
 getFolderPath :: Folder -> FilePath
-getFolderPath folder = folderPath folder ++ "/" ++ folderName folder
+getFolderPath folder = joinPath [folderPath folder, folderName folder]
 
 -- strips pathSuffix from filepath, returning stripped filepath 
 -- strip occurs iff pathSuffix is suffix of filepath
-stripPath :: FilePath -> FilePath -> IO FilePath
-stripPath filePath pathSuffix = do
-  let strippedPath
-        | pathSuffix `isSuffixOf` filePath = take (lfP - lpS) filePath
-        | otherwise = filePath
-      (lfP,lpS) = (length filePath,length pathSuffix)
-  return strippedPath
+stripPath :: FilePath -> FilePath -> FilePath
+stripPath filePath pathSuffix = strippedPath where
+  strippedPath
+    | pathSuffix `isSuffixOf` filePath = take (lfP - lpS) filePath
+    | otherwise = filePath
+  (lfP,lpS) = (length filePath,length pathSuffix)

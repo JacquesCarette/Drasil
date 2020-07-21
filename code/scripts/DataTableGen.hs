@@ -5,12 +5,12 @@ import Data.List
 import Data.Maybe
 import System.IO
 import System.Directory
+import System.FilePath (takeDirectory)
 import Control.Monad
 import qualified Data.Map as Map
 import qualified DirectoryController as DC (createFolder, createFile, finder, 
-  getDirectories, stripPath, DrasilPack, FileName, FolderName, File(..), 
-  Folder(..))
-import SourceCodeReader as SCR (extractEntryData)
+  getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
+import SourceCodeReader as SCR (extractEntryData, EntryData(..))
 
 type FileInstance = String
 type IsInstanceOf = String
@@ -37,14 +37,8 @@ data ClassInstance = ClassInstance {dnType :: DNType, clsInstName :: ClassName}
 data Class = Class {className :: ClassName, classType :: ClassType} 
   deriving (Show)
 -- ClassType data type for specifying class type (Haskell, Drasil or GOOL)
-data ClassType = Haskell | Drasil | GOOL
+data ClassType = Haskell | Drasil | GOOL deriving (Eq)
 
--- Eq instance of ClassType to enable comparisons
-instance Eq ClassType where
-  Haskell == Haskell = True
-  Drasil == Drasil = True
-  GOOL == GOOL = True
-  _ == _ = False
 -- Show instance of ClassType to enable printing to console
 instance Show ClassType where
   show Haskell = "Haskell-defined"
@@ -56,9 +50,9 @@ main :: IO ()
 main = do
   -- directory variables (for scripts, code and output directories)
   scriptsDirectory <- getCurrentDirectory
-  -- strips trailing "/scripts" subdirectory off code directory filepath
-  codeDirectory <- DC.stripPath scriptsDirectory "/scripts"
-  let outputDirectory = codeDirectory ++ "/analysis"
+  -- obtains code directory and output directory filepaths
+  let codeDirectory = takeDirectory scriptsDirectory
+      outputDirectory = codeDirectory ++ "/analysis"
 
   -- gets names + filepaths of all drasil- packages/directories
   drctyList <- DC.getDirectories codeDirectory "drasil-"
@@ -134,7 +128,7 @@ output outputFilePath entryData ordClassInsts = do
 -- creates an entry for each file (new Entry data-oriented format)
 createEntry :: FilePath -> DC.File -> DC.FileName -> IO Entry
 -- creates blank line to separate file entries by drasil- package
-createEntry homeDirectory file "newline" = return nlEntry where 
+createEntry _ _ "newline" = return nlEntry where 
   nlEntry = makeEntry "" "newline" "" [] [] [] []
 -- creates actual file entries
 createEntry homeDirectory file filename = do
@@ -146,8 +140,13 @@ createEntry homeDirectory file filename = do
 
   -- extracts entry data from File data type
   -- stripInstances = [(dataType,classInfo)]
-  (dtl,ntl,classNames,stripInstances) <- SCR.extractEntryData fn fp
+  rEntryData <- SCR.extractEntryData fn fp
   
+  let dtl = SCR.dNs rEntryData
+      ntl = SCR.ntNs rEntryData
+      classNames = SCR.cNs rEntryData
+      stripInstances = SCR.cITs rEntryData
+
   let clstp
         | drpk == "gool" = GOOL
         | otherwise = Drasil
@@ -161,7 +160,7 @@ createEntry homeDirectory file filename = do
 -- creates entrystring for each entry (contains lines for each entry's data)
 compileEntryData :: [ClassName] -> Entry -> DC.FileName -> IO EntryString
 -- creates blank line entrystring to separate file entries by drasil- package
-compileEntryData ordClassInsts entry "newline" = return "\t"
+compileEntryData _ _ "newline" = return "\t"
 -- creates entrystrings for actual file entries
 compileEntryData ordClassInsts entry filename = do
 
@@ -176,11 +175,11 @@ compileEntryData ordClassInsts entry filename = do
       entryClassInsts = classInstances entry
 
   -- guards determine how to handle first data entry line
-  let entry 
-        | not (null dataNames) = f (head dataNames) "\t" "\t"
-        | not (null newtypeNames) = f "\t" (head newtypeNames) "\t"
-        | not (null classNames) = f "\t" "\t" (head classNames)
-        | otherwise = f "\t" "\t" "\t"
+  let entry = hEnt dataNames newtypeNames classNames
+      hEnt (x:_) _ _ = f x "\t" "\t"
+      hEnt _ (x:_) _ = f "\t" x "\t"
+      hEnt _ _ (x:_) = f "\t" "\t" x
+      hEnt _ _ _     = f "\t" "\t" "\t"
   
   -- creates heads of each data, newtype and class entry line
   let dtEntryHds = map (("\t,\t,\t,"++) . (++",\t,\t")) dataNames
@@ -202,16 +201,16 @@ compileEntryData ordClassInsts entry filename = do
   
   -- guards determine how to handle overall file entry output
   -- for single line entry data vs. multi-line entry data
-  let output 
-        | length entryData > 1 && not (null dtRefLines) = fdtl ++ "\n" ++ sbE
-        | length entryData > 1 && not (null ntRefLines) = fntl ++ "\n" ++ sbE
-        | length entryData > 1 = entry ++ "\n" ++ sbE
-        | length entryData == 1 && not (null dtRefLines) = fdtl
-        | length entryData == 1 && not (null ntRefLines) = fntl
-        | otherwise = entry
-      sbE = intercalate "\n" (drop 1 entryData)
-      fdtl = join' entry (head dtRefLines)
-      fntl = join' entry (head ntRefLines)
+  let output = tEnt (length entryData) dtRefLines ntRefLines entryData
+      tEnt 0 _ _ _          = entry
+      tEnt 1 (x:_) _ _      = fstl x
+      tEnt 1 _ (x:_) _      = fstl x
+      tEnt 1 _ _ _          = entry
+      tEnt _ (x:_) _ (_:xs) = fstl x ++ "\n" ++ sbE xs
+      tEnt _ _ (x:_) (_:xs) = fstl x ++ "\n" ++ sbE xs
+      tEnt _ _ _ (_:xs)     = entry ++ "\n" ++ sbE xs
+      fstl x = join' entry x
+      sbE xs = intercalate "\n" xs
 
   -- mapM_ print (lines output)
   return output
@@ -223,8 +222,8 @@ isInfoLine line = (line /="") && not ("#" `isPrefixOf` line)
 -- converts string to classtype (for use by config function)
 toClassType :: String -> ClassType
 toClassType "Haskell" = Haskell
-toClassType "Drasil" = Drasil
-toClassType "GOOL" = GOOL
+toClassType "Drasil"  = Drasil
+toClassType "GOOL"    = GOOL
 
 -- gets folder from dictionary using folder name (iff it exists in dictionary)
 getFolder :: Map.Map DC.FolderName DC.Folder -> DC.FolderName -> DC.Folder
@@ -257,9 +256,9 @@ sortClasses dCls iClsN = (haskellCls,drasilCls,goolCls) where
 -- outputs class instance group; used by ordClasses to order the class instances 
 -- by class type (as defined in config file settings)
 getClasses :: [Class] -> [Class] -> [Class] -> ClassType -> [Class]
-getClasses h d g Haskell = h
-getClasses h d g Drasil = d
-getClasses h d g GOOL = g
+getClasses h _ _ Haskell = h
+getClasses _ d _ Drasil  = d
+getClasses _ _ g GOOL    = g
 
 -- compares file instance in master list with file Instances List; replaces 
 -- instance if in list with "Y" else "\t"

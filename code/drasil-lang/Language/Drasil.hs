@@ -11,7 +11,7 @@ module Language.Drasil (
   , sqrt, square, euclidean
   , dim, idx, int, dbl, str, perc, isin, completeCase, incompleteCase
   , sumAll, defsum, prodAll, defprod, defint, intAll
-  , realInterval
+  , realInterval, equal
   , deriv, pderiv
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2, applyWithNamedArgs
@@ -125,7 +125,7 @@ module Language.Drasil (
   , mkFig
   , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI
   -- Space
-  , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
+  , Space(..) , RealInterval(..), Equal(..),Inclusive(..), RTopology(..)
   , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
   -- Symbol
   , Decoration(..), Symbol(..), autoStage, compsy, hat, prime, staged, sub, sup
@@ -189,7 +189,7 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec,
           csc, cot, arcsin, arccos, arctan, exp,
           dim, idx, int, dbl, str, perc, isin, completeCase, incompleteCase,
           sumAll, defsum, prodAll, defprod,
-          realInterval,
+          realInterval, equal,
           apply, apply1, apply2, applyWithNamedArgs,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
@@ -259,7 +259,7 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
   , month)
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
-import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
+import Language.Drasil.Space (Space(..), RealInterval(..), Equal(..), Inclusive(..), 
   RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
   (+:+.), (+:), capSent, ch, sC, sDash, sParen)

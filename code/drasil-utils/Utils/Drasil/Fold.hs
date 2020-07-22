@@ -30,6 +30,7 @@ foldConstraints c e  = E $ foldl1 ($&&) $ map constraintToExpr e
     constraintToExpr (Range _ ri)         = realInterval c ri
     constraintToExpr (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
     constraintToExpr (EnumeratedStr _ l)  = isin (sy c) (DiscreteS l)
+    constraintToExpr (Equality _ eq) = equal c eq
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically

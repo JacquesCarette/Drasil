@@ -62,3 +62,4 @@ eprec (Operator o _ _)  = precA o
 eprec (BinaryOp bo _ _) = prec2 bo
 eprec IsIn{}            = 170
 eprec RealI{}           = 170
+eprec Eql{}             = 170

@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.Space
-  (Space(..), DomainDesc(..), RealInterval(..), RTopology(..), Inclusive(..),
+  (Space(..), DomainDesc(..), RealInterval(..),Equal(..), RTopology(..), Inclusive(..),
   getActorName, getInnerSpace) where
 
 import Language.Drasil.Symbol (Symbol)
@@ -44,6 +44,9 @@ data RealInterval a b where
   Bounded :: (Inclusive, a) -> (Inclusive, b) -> RealInterval a b -- (x .. y)
   UpTo :: (Inclusive, a) -> RealInterval a b -- (-infinity .. x)
   UpFrom :: (Inclusive, b) -> RealInterval a b -- (x .. infinity)
+
+data Equal a where
+  ExactlyEqual :: a -> Equal a
 
 getActorName :: Space -> String
 getActorName (Actor n) = n

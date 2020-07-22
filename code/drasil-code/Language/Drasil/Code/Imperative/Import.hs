@@ -337,6 +337,11 @@ convExpr IsIn{}    = error "convExpr: IsIn"
 convExpr (RealI c ri)  = do
   g <- get
   convExpr $ renderRealInt (lookupC g c) ri
+convExpr (Eql u (ExactlyEqual b')) = do 
+  g <- get
+  b <- convExpr b'
+  a <- convExpr (sy $ lookupC g u)
+  return $ a ?== b
 
 -- Generates a function/method call, based on the UID of the chunk representing 
 -- the function, the list of argument Exprs, the list of named argument Exprs, 
@@ -368,6 +373,7 @@ renderC :: (HasUID c, HasSymbol c) => c -> Constraint -> Expr
 renderC s (Range _ rr)          = renderRealInt s rr
 renderC s (EnumeratedReal _ rr) = IsIn (sy s) (DiscreteD rr)
 renderC s (EnumeratedStr _ rr)  = IsIn (sy s) (DiscreteS rr)
+renderC s (Equality _  rr)          = equal s rr
 
 -- Converts an interval to an Expr
 renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval Expr Expr -> Expr

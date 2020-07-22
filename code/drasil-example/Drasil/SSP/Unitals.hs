@@ -97,12 +97,14 @@ slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip,
 slopeDist = uq (constrained' (makeUCWDS "x_slope,i"
   (nounPhraseSent $ plural xCoord `sOf` S "the slope")
   (plural xCoord `sOf` S "points on the soil slope")
-  (sub (vec lX) lSlope) metre) [] (dbl 0)) defaultUncrt
+  (sub (vec lX) lSlope) metre) [Equality Physical (ExactlyEqual $ sy slopeHght)] 
+  (dbl 0)) defaultUncrt
 
 slopeHght = uq (constrained' (makeUCWDS "y_slope,i"
   (nounPhraseSent $ plural yCoord `sOf` S "the slope")
   (plural yCoord `sOf` S "points on the soil slope")
-  (sub (vec lY) lSlope) metre) [] (dbl 0)) defaultUncrt
+  (sub (vec lY) lSlope) metre) [Equality Physical (ExactlyEqual $ sy slopeDist)] 
+  (dbl 0)) defaultUncrt
 
 waterDist = uqc "x_wt,i" (nounPhraseSent $ plural xCoord `sOf` S "the water table")
   "x-positions of the water table"

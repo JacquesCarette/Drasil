@@ -161,6 +161,8 @@ expr (Operator o d e)     sm = eop sm o d e
 expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
 expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. stg) 
   (sm ^. ckdb) c) ri
+expr (Eql u (ExactlyEqual b)) sm = P.Row 
+  [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) u, P.MO P.Eq, expr b sm]
 
 lookupC :: Stage -> ChunkDB -> UID -> Symbol
 lookupC Equational     sm c = eqSymb   $ symbResolve sm c

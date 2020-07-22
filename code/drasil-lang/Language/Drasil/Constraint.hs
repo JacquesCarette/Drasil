@@ -5,13 +5,14 @@ module Language.Drasil.Constraint (
   ) where
 
 import Language.Drasil.Expr (Expr(..))
-import Language.Drasil.Space (RealInterval(..))
+import Language.Drasil.Space (RealInterval(..), Equal(..))
 
 data ConstraintReason = Physical | Software
 data Constraint where
   Range          :: ConstraintReason -> RealInterval Expr Expr -> Constraint
   EnumeratedReal :: ConstraintReason -> [Double]               -> Constraint
   EnumeratedStr  :: ConstraintReason -> [String]               -> Constraint
+  Equality       :: ConstraintReason -> Equal Expr             -> Constraint  
 
 -- by default, physical and software constraints are ranges
 physc :: RealInterval Expr Expr -> Constraint
@@ -29,9 +30,11 @@ isPhysC, isSfwrC :: Constraint -> Bool
 isPhysC (Range Physical _) = True
 isPhysC (EnumeratedReal Physical _) = True
 isPhysC (EnumeratedStr Physical _) = True
+isPhysC (Equality Physical _) = True
 isPhysC _ = False
 
 isSfwrC (Range Software _) = True
 isSfwrC (EnumeratedReal Software _) = True
 isSfwrC (EnumeratedStr Software _) = True
+isSfwrC (Equality Software _) = True
 isSfwrC _ = False

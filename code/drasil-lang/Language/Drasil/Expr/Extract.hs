@@ -3,7 +3,7 @@ module Language.Drasil.Expr.Extract(dep, names, names', namesRI) where
 import Data.List (nub)
 
 import Language.Drasil.Expr (Expr(..))
-import Language.Drasil.Space (RealInterval(..))
+import Language.Drasil.Space (RealInterval(..), Equal(..))
 
 -- | Generic traverse of all positions that could lead to names
 names :: Expr -> [String]
@@ -29,12 +29,15 @@ names (Operator _ _ e)   = names e
 names (IsIn  a _)        = names a
 names (Matrix a)         = concatMap (concatMap names) a
 names (RealI c b)        = c : namesRI b
+names (Eql c d)          = c : namesEq d 
 
 namesRI :: RealInterval Expr Expr -> [String]
 namesRI (Bounded (_,il) (_,iu)) = names il ++ names iu
 namesRI (UpTo (_,iu))       = names iu
 namesRI (UpFrom (_,il))     = names il
 
+namesEq :: Equal Expr -> [String]
+namesEq (ExactlyEqual a) = names a
 -- | Generic traverse of all positions that could lead to names, without
 -- functions.  FIXME : this should really be done via post-facto filtering, but
 -- right now the information needed to do this is not available!
@@ -62,12 +65,15 @@ names' (Operator _ _ e)   = names' e
 names' (IsIn  a _)        = names' a
 names' (Matrix a)         = concatMap (concatMap names') a
 names' (RealI c b)        = c : namesRI' b
+names' (Eql c d)            = c : namesEq' d  
 
 namesRI' :: RealInterval Expr Expr -> [String]
 namesRI' (Bounded il iu) = names' (snd il) ++ names' (snd iu)
 namesRI' (UpTo iu)       = names' (snd iu)
 namesRI' (UpFrom il)     = names' (snd il)
 
+namesEq' :: Equal Expr -> [String]
+namesEq' (ExactlyEqual a) = names' a
 ---------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
 

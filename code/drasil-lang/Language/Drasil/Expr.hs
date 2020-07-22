@@ -5,7 +5,7 @@ module Language.Drasil.Expr where
 import Data.Ratio (denominator, numerator)
 import Prelude hiding (sqrt)
 
-import Language.Drasil.Space (Space(..), DomainDesc, RealInterval)
+import Language.Drasil.Space (Space(..), DomainDesc, RealInterval, Equal)
 import Language.Drasil.UID (UID)
 
 -- FIXME: Haddock open issue #43 seems to make it so GADT constructors cannot
@@ -80,6 +80,7 @@ data Expr where
   IsIn     :: Expr -> Space -> Expr 
   -- | a different kind of 'element of'
   RealI    :: UID -> RealInterval Expr Expr -> Expr 
+  Eql      :: UID -> Equal Expr -> Expr
 
 ($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-),
   ($/), ($^) :: Expr -> Expr -> Expr

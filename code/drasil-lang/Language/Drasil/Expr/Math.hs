@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), BinOp(..),
   ArithOper(..), UFunc(..), Completeness(..))
-import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
+import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval, Equal)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Classes (IsArgumentName)
 
@@ -105,6 +105,9 @@ prodAll v = Operator Mul (AllDD v Discrete)
 -- | Smart constructor for 'real interval' membership
 realInterval :: HasUID c => c -> RealInterval Expr Expr -> Expr
 realInterval c = RealI (c ^. uid)
+
+equal :: HasUID c => c -> Equal Expr -> Expr 
+equal c = Eql (c ^. uid)
 
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
 euclidean :: [Expr] -> Expr

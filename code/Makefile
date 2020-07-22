@@ -213,7 +213,7 @@ deploy_lite:
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
 # everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
 # what `deploy.bash` calls. 
-deploy: graphs docs tex doxygen
+deploy: analysis graphs docs tex doxygen
 	"$(MAKE)" deploy_lite
 
 

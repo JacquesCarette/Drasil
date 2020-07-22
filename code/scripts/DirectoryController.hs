@@ -1,5 +1,5 @@
-module DirectoryController (createFolder, createFile, finder, getDirectories, 
-  stripPath, DrasilPack, FileName, FolderName, File(..), Folder(..)) where
+module DirectoryController (createFolder, createFile, finder, getDirectories,
+  DrasilPack, FileName, FolderName, File(..), Folder(..)) where
 
 import Data.List
 import System.IO
@@ -95,12 +95,3 @@ nullFolder folder = empty where
 -- creates new folder path with folder name + path (to extract folder contents)
 getFolderPath :: Folder -> FilePath
 getFolderPath folder = joinPath [folderPath folder, folderName folder]
-
--- strips pathSuffix from filepath, returning stripped filepath 
--- strip occurs iff pathSuffix is suffix of filepath
-stripPath :: FilePath -> FilePath -> FilePath
-stripPath filePath pathSuffix = strippedPath where
-  strippedPath
-    | pathSuffix `isSuffixOf` filePath = take (lfP - lpS) filePath
-    | otherwise = filePath
-  (lfP,lpS) = (length filePath,length pathSuffix)

@@ -1,0 +1,72 @@
+\documentclass{minimal}
+
+\usepackage{verbatim}
+
+\usepackage[a3paper,margin=1cm,landscape]{geometry}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,shadows,arrows}
+
+\begin{document}
+
+\tikzstyle{class}=[rectangle, draw=black, rounded corners, fill=white!40, drop shadow,
+        text centered, anchor=north, text=black, text width=3cm]
+\tikzstyle{comment}=[rectangle, draw=black, rounded corners, fill=green, drop shadow,
+        text centered, anchor=north, text=white, text width=3cm]
+\tikzstyle{myarrow}=[->, >=triangle 90, thick]
+\tikzstyle{line}=[-, thick]
+\tikzstyle{mayHave}=[rectangle, fill=green, text=black, text width=0.65cm];
+\tikzstyle{greenArrow}=[->, >=triangle 90, thick]
+
+\begin{center}
+\begin{tikzpicture}[node distance=2cm]
+\node (CodeIdea) [class]
+		{
+			\textbf{CodeIdea}
+			
+  			codeName      :  String
+
+ 			codeChunk     :  CodeChunk
+		};
+
+\node (AuxiliarySym) [class, text width = 5cm , left=5cm  of CodeIdea]
+	{
+		\textbf{AuxiliarySym}
+		
+		type Auxiliary r
+  		
+		type AuxHelper r
+		
+		doxConfig :  r (Auxiliary r)
+		
+		sampleInput :r (Auxiliary r)
+		
+		optimizeDox : r (AuxHelper r)
+		
+		makefile : r (Auxiliary r)
+		
+		auxHelperDoc : Doc
+		
+		auxFromData : r (Auxiliary r)
+
+	};
+	\node (PackageSym) [class, text width = 5cm , below = of AuxiliarySym] 
+	{
+		\textbf{PackageSym}
+
+		type Package r 
+  		
+		package : r (Package r)
+
+	};
+
+
+
+//is-a relations
+
+\draw[myarrow] (PackageSym.north) -- ++(0,0.8) -| (AuxiliarySym.south);
+
+\end{tikzpicture}
+\end{center}
+
+\end{document}

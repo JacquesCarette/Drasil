@@ -396,6 +396,8 @@ printConstraint c = do
         printStrLn $ "one of: " ++ intercalate ", " (map show ds)]
       printConstraint' (EnumeratedStr _ ss) = return [
         printStrLn $ "one of: " ++ intercalate ", " ss]
+      printConstraint' (Equality _ (ExactlyEqual e)) = return $ [printStr "equal to "] 
+        ++ printExpr e db ++ [printStrLn "."]
   printConstraint' c
 
 -- | Don't print expressions that are just literals, because that would be 

@@ -1,0 +1,458 @@
+\documentclass[12pt,fleqn]{examtst}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{hhline}
+\usepackage{booktabs}
+
+\begin{document}
+
+\newcommand{\soln}{n} %y for yes and n for no
+
+\lstset{language=c, basicstyle=\ttfamily, breaklines=true,
+  showspaces=false, showstringspaces=false, breakatwhitespace=true, texcl=true,
+  escapeinside={\%*}{*)}}
+
+\newcommand{\codeit}[1]{\texttt{\textit{#1}}}
+
+\begin{center}
+  {\large \bf Drasil Future Contributors' Test}\\[1ex]
+  {\large \bf McMaster University}\\[1ex]
+  {\large Faculty of Engineering, Department of Computing and Software}\\[1ex]
+  \ifthenelse{\equal{\soln}{y}}{\large {\bf Answer Key:} Large arrow
+    ($\Longleftarrow$) for correct% , small ($\leftarrow$) for partially
+    % correct
+  }{}
+\end{center}
+
+\medskip
+
+\noindent
+Future Drasil Contributors, \textbf{Version 1}  \hfill Dr.~S.~Smith \\
+DURATION OF TEST: 1.5 hours - 2.0 hours (recommended) \\
+MCMASTER UNIVERSITY TEST \hfill
+
+\medskip
+
+\noindent
+\rule[3 mm]{\textwidth}{0.5mm}
+
+\begin{minipage}[t]{1.0\textwidth}
+\textbf{Please CLEARLY print}:\\[2mm]
+
+NAME:\\[1ex]
+
+\newsavebox{\bb}\newsavebox{\bbb}
+\sbox{\bb}{\framebox[1cm]{\rule{0mm}{7mm}}}
+\sbox{\bbb}{\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}\usebox{\bb}}
+
+\rule[3 mm]{\textwidth}{0.5mm}
+
+This test paper includes \noofpages pages and 22 % VARIABILITY
+questions. You are responsible for ensuring that your copy of the 
+test paper is complete. Bring any discrepancy to the attention of 
+the person administering this test.\\
+
+\end{minipage}\\
+
+\hspace{14cm}
+\begin{minipage}[t]{0.2\textwidth}
+\newcommand{\markheight}{\rule[-2mm]{0 mm}{7 mm}}
+\begin{tabular}[t]{|c|p{1.5 cm}|r|}
+\hline
+1--17 & \markheight & 17\\
+\hline
+18--22 & \markheight & 10\\
+
+\hline
+Total & \markheight & 27 \\
+\hline
+
+\end{tabular}
+\end{minipage}
+
+\examheader{Drasil \ifthenelse{\equal{\soln}{y}} {\hfill SOLUTIONS} }
+
+\renewcommand{\labelenumi}{\Alph{enumi}.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+What command is used to create a local version of a remote repository?
+
+\begin{enumerate}
+    \item \lstinline{git copy <link to repo>}
+    \item \lstinline{git clone <link to repo>} \marker
+    \item \lstinline{clone <link to repo>}
+    \item \lstinline{copy <link to repo>}
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: \lstinline{git clone <link to repo>} clones the remote repo and stores it locally}{0cm}{1.5cm}
+
+\question{1 mark}
+The \lstinline{git status} command displays:
+
+\begin{enumerate}
+    \item verified status of all repo files
+    \item list of last 5 commits to the repo
+    \item paths with differences between current state of repo and last commit \marker
+    \item changes made to files after last commit
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: \lstinline{git status} shows all files with changes made after previous commit/push}{0cm}{1.5cm}
+
+\question{1 mark}
+If you are a Windows OS user working with Git Bash App, always run the command each time you open an instance of git bash:
+
+\begin{enumerate}
+    \item \lstinline{chcp.com 65001} 
+    \item \lstinline{set encoding=utf-8}
+    \item \lstinline{chcp 65001}
+    \item \lstinline{A. or C.} \marker
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: \lstinline{chcp.com 65001} or \lstinline{chcp 65001} set terminal encoding to UTF-8 (this allows Drasil to handle Greek letters/unicode symbols)}{0cm}{1.5cm}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+What is the correct order of the following \lstinline{git} commands?
+
+\begin{enumerate}
+    \item \lstinline{git push, git add, git clone, git commit}
+    \item \lstinline{git add, git clone, git push, git commit}
+    \item \lstinline{git clone, git add, git push, git commit}
+    \item \lstinline{git clone, git add, git commit, git push} \marker
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: \lstinline{git clone} creates local copy of remote repo, \lstinline{git add} stages changed files, \lstinline{git commit} commits staged files, and \lstinline{git push} pushes committed files (changes) to remote repo}{0cm}{1.5cm}
+
+\question{1 mark}
+Which of the below phrases can you use to link a relevant issue to a pull request on GitHub, without closing the issue once the PR is merged? (\#HASH is the issue hash \#)
+
+\begin{enumerate}
+    \item closes \#HASH
+    \item contributes to \#HASH \marker
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: using 'contributes to \#HASH' in the PR comment links the relevant issue by mentioning it; 'closes' is a keyword that tells GitHub to close this issue once this PR is merged}{0cm}{1.5cm}
+
+\question{1 mark}
+The preferred coding style describes how lines should not be more than \_\_\_ characters wide.
+
+\begin{enumerate}
+    \item 60
+    \item 90
+    \item 80 \marker
+    \item 70
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: the preferred coding style (refer to Contributor's Guide) is to avoid making 'long lines' more than 80 characters wide}{0cm}{1.5cm}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+When making pull requests involving changes to multiple files (e.g. Haskell scripts and stable folder files), remember to:
+
+\begin{enumerate}
+    \item use multiple \lstinline{git add} to stage all changed files before doing a single commit \marker
+    \item update the stable files first and push them, then repeat with the scripts using \lstinline{git add}
+    \item only update all scripts in one commit using multiple \lstinline{git add}
+    \item only update all changed 'stable' folder files in one commit using multiple \lstinline{git add}
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: it is important to stage \textbf{all} changed files (stable and code) using multiple \lstinline{git add} before doing a single commit to avoid Travis build errors}{0cm}{1.5cm}
+
+\question{1 mark}
+The \lstinline{git branch} command:
+
+\begin{enumerate}
+    \item shows the items under your current branch on your local repo
+    \item shows a list of all your current branches on your local repo \marker
+    \item shows branches dependent on your current branch on your local repo
+    \item shows a list of all current branches on the remote repo
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: \lstinline{git branch} is used to display all current branches on your local repo (as a list)}{0cm}{1.5cm}
+
+\question{1 mark}
+When closing an issue, please provide:
+
+\begin{enumerate}
+    \item Rationale
+    \item Relevant Links to other related issues
+    \item Linked Pull Requests
+    \item Any or all of the above \marker
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: any or all of the above help other contributors understand why the issue is being closed/direct them to any changes made to address those issues (i.e. give further clarification)}{0cm}{1.5cm}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+To \textbf{only} build the 2D Rigid Body Physics Library example (gamephysics\_diff) using the Drasil framework, run the command:
+
+\begin{enumerate}
+    \item \lstinline{setup gamephysics_diff}
+    \item \lstinline{make gamephysics_diff} \marker
+    \item \lstinline{stack exec gamephysics_diff}
+    \item \lstinline{make}
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: \lstinline{make gamephysics_diff} directs Drasil to \textbf{only} make the 2D Rigid Body Physics Library example; in contrast,  \lstinline{make} directs Drasil to make \textbf{all} examples}{0cm}{1.5cm}
+
+\question{1 mark}
+The \lstinline{git pull} command is used to:
+
+\begin{enumerate}
+    \item sync your local version with remote version of the repo \marker
+    \item displays changes made to the remote version of the repo
+    \item sync remote version with your local version of the repo
+    \item updates the remote repo with other people's changes
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: \lstinline{git pull} retrieves all changes made to the remote repo, and updates the local repo}{0cm}{1.5cm}
+
+\question{1 mark}
+To run the Glass-BR example (glassbr) using the Drasil framework (assume that the example has already been built), run the command:
+
+\begin{enumerate}
+    \item \lstinline{make glassbr}
+    \item \lstinline{exec glassbr}
+    \item \lstinline{stack glassbr}
+    \item \lstinline{stack exec glassbr} \marker
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: \lstinline{stack exec} is used to run a specific example that has already been built, using stack}{0cm}{1.5cm}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+What is the difference between a remote branch and a local branch?
+
+\begin{enumerate}
+    \item a local branch is stored on a server; a remote branch is stored on your computer
+    \item a remote branch is stored on a server; a local branch is stored on your computer \marker
+    \item both remote and local branches are stored on a server
+    \item both remote and local branches are stored on your computer
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: A remote branch is stored on the (GitHub) server. A local branch is a copy of the remote branch stored on your computer. The local branch is where all editing takes place, and those changes are pushed to the remote branch.}{0cm}{1.5cm}
+
+\question{1 mark}
+What is \lstinline{origin}?
+
+\begin{enumerate}
+    \item the latest branch created
+    \item a basic template branch
+    \item the master branch \marker
+    \item none of the above
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: \lstinline{origin} is the original or \lstinline{master} branch into which all changes made on all other branches are made into. It is the master copy of a remote repo.}{0cm}{1.5cm}
+
+\question{1 mark}
+What is \lstinline{HEAD}?
+
+\begin{enumerate}
+    \item the latest commit in your current branch
+    \item the base/master branch of your remote repo
+    \item the active item referenced by your current repo
+    \item A. and C. \marker
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: \lstinline{HEAD} is the active commit that your repo is currently on (usually your latest commit).}{0cm}{1.5cm}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{1 mark}
+Which branch are you pulling from when you execute the following commands:
+
+\begin{lstlisting}
+git branch
+git switch master
+git switch sample
+git pull
+\end{lstlisting}
+
+\begin{enumerate}
+    \item master
+    \item sample \marker
+    \item both master and sample
+    \item neither master nor sample
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: \lstinline{git branch} displays a list of all existing branches on the current repo. \lstinline{git switch master} and \lstinline{git switch sample} switch the active branch to master, and then to sample. \lstinline{git pull} pulls from and updates the active branch, which would be sample.}{0cm}{3cm}
+
+\question{1 mark}
+Suppose that your have created a new branch on your local repo \textbf{only}. Which of the following commands would you use to push your new branch onto the remote repo?
+
+\begin{enumerate}
+    \item \lstinline{git push --set-upstream <new branch name>}
+    \item \lstinline{git push}
+    \item \lstinline{git push <new branch name>}
+    \item \lstinline{git push --set-upstream origin <new branch name>} \marker
+    \item none of the above
+\end{enumerate}
+Explain your answer here.
+\answer{Sample Answer: the command \lstinline{git push --set-upstream origin <new branch name>} is used to push your local branch if a corresponding branch \textbf{does not} already exist on the upstream repo. If a corresponding branch \textbf{already} exists on the remote repo, then use the command \lstinline{git push}.}{0cm}{3cm}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{2 marks} Pretend that you have made a commit on your local repo that you would like to undo. Describe the process that you would use to undo the commit if (choose one to answer):
+
+\begin{enumerate}
+    \item your commit is only on your local repo
+    \item your commit has also been pushed to the remote repo
+\end{enumerate}
+
+Be sure to include any commands that you use to accomplish this task.
+\newline \newline Answer here (please indicate which option you chose).
+
+\answer{
+Sample Answer: (option A)
+\begin{itemize}
+    \item use \lstinline{git log <branchName> --oneline} to view a simplified log of all commits made and their accompanying commit hashes (prefixed alphanumeric string)
+    \item use \lstinline{git checkout <#commitHash>} to view the specific commit in more detail (this command matches your working directory to the exact state of the \#commitHash commit)
+    \item use \lstinline{git checkout <branchName>} to get back to the branch (to undo the commit \#commitHash)
+    \item use \lstinline{git reset --hard <#commitHash>} to reset the commit history, removing the commit \#commitHash from the \lstinline{git log} output completely
+\end{itemize}
+
+\rule{0cm}{1cm}
+
+Sample Answer: (option B)
+\begin{itemize}
+    \item repeat the same first three steps described in the sample answer for option A
+    \item use \lstinline{git revert <#commitHash>} to revert the specified commit on the repo, by creating a new (inverse) commit that undoes what commit \#commitHash did
+\end{itemize}
+}{0cm}{7cm}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{2 marks}
+When creating a new issue on GitHub, describe two tips to follow that help to ensure that the new issue includes enough information (context).
+\newline \newline Answer here.
+
+\answer{
+Sample Answers (any two of the following work):
+\begin{itemize}
+    \item include (annotated) excerpts of PDF/HTML documentation when referring to output (desired or generated); highlighting specific portions of such relevant screenshots helps important info stand out to the reader
+    \item linking related issues, pull requests, comments and commit hashes; provides easy navigation through related content and discussion significant to the issue
+    \item creating permalinks (permanent links) to code sections/snippets relevant to the issue
+    \item directly inserting code into Issue comments (using markdown format); useful for recommending/proposing solutions of multi-line code (mentioning the language allows for syntax highlighting, which is helpful)
+\end{itemize}
+}{0cm}{7cm}
+
+\rule{0cm}{1cm}
+
+\question{2 marks}
+Explain the concept of cherry-picking in GitHub. Be sure to include what command(s) and information you would use to accomplish it.
+\newline \newline Answer here.
+
+\answer{
+Sample Answer:
+\begin{itemize}
+    \item cherry-picking in GitHub is the concept/process of moving a specific commit from one branch onto another (new branch)
+    \item there are two commands you would likely need to use:
+    \begin{itemize}
+        \item \lstinline{git checkout} to ensure that you are on the branch you want to commit to
+        \item \lstinline{git cherry-pick <commit-hash>} to move a specific commit (referenced by commit-hash) to the new branch
+    \end{itemize}
+    \item the information you would need to accomplish cherry-picking is the \lstinline{commit-hash} of the specific commit you would like to move to the new branch
+\end{itemize}
+}{0cm}{7cm}
+
+\rule{0cm}{1cm}
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\noindent
+\begin{minipage}{\textwidth}
+
+\question{2 marks}
+Describe Drasil (what is it, what does it do), and discuss its main goals.
+\newline \newline Answer here.
+
+\answer{
+Sample Answer:
+\begin{itemize}
+    \item Drasil is a framework for generating \textbf{all} software artifacts (e.g. code, documentation) from a stable knowledge base
+    \item the main goals of Drasil are to:
+    \begin{itemize}
+        \item reduce knowledge duplication; concepts, ideas and algorithms should only have to be defined once (and be reused easily)
+        \item improve traceability; more easily display how various components of the program are linked/dependent upon each other
+        \item improve maintainability, verifiability, traceability and other software qualities (more as a side-effect of methods used rather than as a main goal)
+    \end{itemize}
+\end{itemize}
+}{0cm}{7cm}
+
+\rule{0cm}{1cm}
+
+\question{2 marks}
+Imagine that you have made changes to some files in the Drasil code on your local repository. Describe the process that you would take to update the remote repository for Drasil with your changes. List any commands that you would use here as well.
+\newline \newline Answer here.
+
+\answer{
+Sample Answer:
+\begin{itemize}
+    \item \lstinline{git add <relative path to file>}: stage a file to a commit; be sure to repeat this multiple times for multiple changed files, or use \lstinline{git add *} cautiously (command stages all changed files)
+    \item \lstinline{git commit -m "commit message"}: commit your staged changes to your local repository; be sure to include a descriptive commit message
+    \item \lstinline{git push}: push changes from your local repository to the remote repository (thus updating it)
+\end{itemize}
+}{0cm}{7cm}
+
+\rule{0cm}{1cm}
+
+\end{minipage}
+
+\end{document}

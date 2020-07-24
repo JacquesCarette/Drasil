@@ -9,12 +9,9 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 import Data.Drasil.People (olu)
---import Drasil.DblPendulum.Concepts (dblpendulum)
-
 import Drasil.DocLang (SRSDecl, mkDoc)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.Concepts.Documentation (physics)
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
@@ -64,7 +61,7 @@ refDB = rdb [] []
 -- MOVE TO CONCEPTS
 
 dblpendulum :: CI
-dblpendulum = commonIdeaWithDict "dblpendulum" (pn' "Double Pendulum System") "Double Pendulum" []
+dblpendulum = commonIdeaWithDict "dblpendulum" (pn "Double Pendulum System") "Double Pendulum" []
 
 -- MOVE TO DATA.PEOPLE
 --authorName :: Person

@@ -1,6 +1,5 @@
 # SWHS 
-> Authors:  Thulasi Jegatheesan 
- >  __purpose__
+> Authors:  Thulasi Jegatheesan
 ------------------------------------------------------------
 **Making Examples:** 
  How to Run the Program:

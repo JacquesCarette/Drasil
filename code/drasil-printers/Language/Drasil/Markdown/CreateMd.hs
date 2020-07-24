@@ -17,8 +17,7 @@ makeMd lst = (vcat . punctuate secSep . filtEmp) lst <> contSep <>
 
 -- Example title and purpose section
 introInfo :: String -> [String] -> Doc
-introInfo name auths = introSec (text name) (listToDoc auths) 
-    (text "__purpose__")
+introInfo name auths = introSec (text name) (listToDoc auths)
 
 -- Instruction section, contains 3 paragraphs, Running, Building and Config Files.
 -- The Config file section is only displayed if there are configuration files.
@@ -88,9 +87,10 @@ contSep = text "\n"
 doubleSep = text "\n\n"
 
 -- Functions to construct section from header and message
-introSec ::  Doc -> Doc -> Doc -> Doc
-introSec hd ms1 ms2 = text "#" <+> hd <+> contSep <> text "> Authors: "<+> ms1 <+> 
-    contSep <+> text "> " <+> ms2
+-- FIXME as explained in #2224 we still need to add in the purpose section, 
+-- this could be done by adding a third parameter to introSec
+introSec ::  Doc -> Doc -> Doc
+introSec hd ms1 = text "#" <+> hd <+> contSep <> text "> Authors: " <+> ms1 
 
 regularSec :: Doc -> Doc -> Doc
 regularSec hd ms = text "**" <> hd <> text ":**" <+> contSep <+> ms

@@ -1,6 +1,5 @@
 # Projectile 
-> Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith 
- >  __purpose__
+> Authors:  Samuel J. Crawford, Brooks MacLachlan, W. Spencer Smith
 ------------------------------------------------------------
 **Versioning:** 
  Python Version: 3.5.1

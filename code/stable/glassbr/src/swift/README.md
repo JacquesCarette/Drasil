@@ -1,6 +1,5 @@
 # GlassBR 
-> Authors:  Nikitha Krithnan, W. Spencer Smith 
- >  __purpose__
+> Authors:  Nikitha Krithnan, W. Spencer Smith
 ------------------------------------------------------------
 **Making Examples:** 
  How to Run the Program:

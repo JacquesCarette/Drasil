@@ -94,7 +94,7 @@ See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#build
   - Subdirectory for papers related to Drasil framework, GOOL
   
 **People**
-  - contains contributions specific to some contributors (not necessarily to be implemented in Drasil)
+  - Contains contributions specific to some contributors (not necessarily to be implemented in Drasil)
   
 **Presentations**
   - Presentations on LSS/Drasil
@@ -105,6 +105,9 @@ See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#build
   
 **code**
   - The main folder for Drasil source code and example implementations
+  
+**doc**
+  - Documentation related to Drasil
   
 **notes**
   - Assorted general/administrative notes

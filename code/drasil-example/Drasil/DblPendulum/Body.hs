@@ -12,14 +12,10 @@ import Data.Drasil.People (olu)
 import Drasil.DocLang (SRSDecl, mkDoc)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
-  DerivationDisplay(ShowDerivation),
-  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
-  Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
-  IntroSec(IntroProg), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
-  RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
-  SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
-  TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
-  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
+  DocSection(AuxConstntSec, Bibliography, RefSec),
+  Emphasis(Bold), RefSec(..), RefTab(..),
+  TConvention(..), TSIntro(..), intro,tsymb)
+
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si

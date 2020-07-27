@@ -9,12 +9,12 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 import Data.Drasil.People (olu)
-import Drasil.DocLang (SRSDecl, mkDoc)
+
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DocSection(AuxConstntSec, Bibliography, RefSec),
   Emphasis(Bold), RefSec(..), RefTab(..),
-  TConvention(..), TSIntro(..), intro,tsymb)
+  TConvention(..), TSIntro(..), intro,tsymb, SRSDecl, mkDoc)
 
 
 srs :: Document

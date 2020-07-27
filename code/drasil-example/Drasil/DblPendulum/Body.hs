@@ -20,7 +20,8 @@ printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
 
 mkSRS :: SRSDecl
-mkSRS = []
+mkSRS = [ [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]
+]
 
 si :: SystemInformation
 si = SI {

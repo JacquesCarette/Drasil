@@ -1,6 +1,6 @@
 module Drasil.DblPendulum.Body where
 
-import Language.Drasil
+import Language.Drasil hiding (Symbol(..), Vector)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
@@ -10,8 +10,16 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 import Data.Drasil.People (olu)
 import Drasil.DocLang (SRSDecl, mkDoc)
-
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
+import Drasil.DocLang (AuxConstntSec(AuxConsProg),
+  DerivationDisplay(ShowDerivation),
+  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
+  Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
+  IntroSec(IntroProg), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
+  RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
+  SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
+  TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
@@ -20,8 +28,45 @@ printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
 
 mkSRS :: SRSDecl
-mkSRS = [ [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]
-]
+mkSRS = [RefSec $
+    RefProg intro
+      [ TUnits
+      , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
+      , TAandA
+      ],
+  -- IntroSec $
+  --   IntroProg justification (phrase dblpendulum)
+  --     [ IScope scope ],
+  --    SSDSec $ SSDProg
+  --        [ SSDProblem $ PDProg prob []
+  --          [ TermsAndDefs Nothing terms
+  -- --     --  , PhySysDesc dblpendulum physSystParts figLaunch []
+  -- --       , Goals goalsInputs]
+  --        SSDSolChSpec $ SCSProg
+  --        [ Assumptions
+  --          , TMs [] (Label : stdFields)
+  --       , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+  --       , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+  --     --  , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+  --     --  , Constraints EmptyS inConstraints
+  --     --  , CorrSolnPpties outConstraints []
+  --      ]
+  --    ],
+  --ReqrmntSec $
+  --  ReqsProg
+  --     [ FReqsSub EmptyS []
+  --     , NonFReqsSub
+  --     ],
+  -- TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+    AuxConstntSec $
+     AuxConsProg dblpendulum [],
+  Bibliography
+  ]
+
+-- justification, scope :: Sentence
+-- justification = foldlSent [S "dblpendulum" +:+. S "dblpendulum",
+--   phrase dblpendulum]
+-- scope = foldlSent_ [S "the", (`sOf` S "a"), phrase dblpendulum]
 
 si :: SystemInformation
 si = SI {
@@ -56,6 +101,9 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [Section]) ([] :: [LabelledContent])
 
+--stdFields :: Fields
+--stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
+
 refDB :: ReferenceDB
 refDB = rdb [] []
 
@@ -67,3 +115,35 @@ dblpendulum = commonIdeaWithDict "dblpendulum" (pn "Double Pendulum System") "Do
 -- MOVE TO DATA.PEOPLE
 --authorName :: Person
 --authorName = person "Author" "Name"
+
+------------------------------------
+--Problem Description
+------------------------------------
+
+-- prob :: Sentence
+-- prob = foldlSent_ [S "Problem Description" `sAnd` S "Problem Description"]
+
+-- ---------------------------------
+-- -- Terminology and Definitions --
+-- ---------------------------------
+
+-- terms :: [ConceptChunk]
+-- terms = [gravity]
+
+
+-- ---------------------------------
+-- -- Physical System Description --
+-- ---------------------------------
+
+-- physSystParts :: [Sentence]
+-- physSystParts = map foldlSent [
+--   [S "The", phrase dblpendulum],
+--   [S "The", phrase dblpendulum],
+--   [S "The", phrase gravity]]
+
+-- ------------------------------
+
+-- goalsInputs :: [Sentence]
+-- goalsInputs = [phrase dblpendulum `ofThe` dblpendulum ]-}
+ 
+

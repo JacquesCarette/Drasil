@@ -9,12 +9,13 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 import Data.Drasil.People (olu)
+import Data.Drasil.Concepts.Software (errMsg, program)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
-  DocSection(AuxConstntSec, Bibliography, RefSec),
+  DocSection(AuxConstntSec, Bibliography, RefSec, IntroSec),
   Emphasis(Bold), RefSec(..), RefTab(..),
-  TConvention(..), TSIntro(..), intro,tsymb, SRSDecl, mkDoc)
+  TConvention(..), TSIntro(..), intro,tsymb, SRSDecl, mkDoc, IntroSec(IntroProg), IntroSub(IScope))
 
 
 srs :: Document
@@ -31,9 +32,9 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
       --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
       , TAandA         -- Add table of abbreviation and acronym section
       ],
-  -- IntroSec $
-  --   IntroProg justification (phrase dblpendulum)
-  --     [ IScope scope ],
+  IntroSec $
+    IntroProg justification (phrase dblpendulum)
+      [ IScope scope ],
   --    SSDSec $ SSDProg
   --        [ SSDProblem $ PDProg prob []
   --          [ TermsAndDefs Nothing terms
@@ -60,10 +61,12 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   Bibliography                    -- Adds reference section
   ]
 
--- justification, scope :: Sentence
--- justification = foldlSent [S "dblpendulum" +:+. S "dblpendulum",
---   phrase dblpendulum]
--- scope = foldlSent_ [S "the", (`sOf` S "a"), phrase dblpendulum]
+justification :: Sentence
+justification = foldlSent [S "dblpendulum is the subject" +:+. S "dblpendulum is the focus",
+  phrase dblpendulum]
+
+scope :: Sentence
+scope = foldlSent [S "dblpendulum is the subject" +:+. S "dblpendulum is the focus", phrase dblpendulum]
 
 si :: SystemInformation
 si = SI {
@@ -87,7 +90,7 @@ si = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) [nw dblpendulum] ([] :: [ConceptChunk])
+symbMap = cdb ([] :: [QuantityDict]) (nw dblpendulum : [nw errMsg, nw program]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [Section]) ([] :: [LabelledContent])
@@ -97,7 +100,16 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [Section]) ([] :: [LabelledContent])
-
+{-symbMap :: ChunkDB
+symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
+  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw SSP.iMods
+  ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
+  ++ map nw physicsTMs
+  ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
+  ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
+  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
+  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
+  generalDefinitions tMods concIns section labCon-}
 --stdFields :: Fields
 --stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 

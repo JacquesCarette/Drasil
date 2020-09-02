@@ -12,11 +12,21 @@ import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Software (errMsg, program)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Drasil.DocLang (AuxConstntSec(AuxConsProg),
+{-import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DocSection(AuxConstntSec, Bibliography, RefSec, IntroSec),
   Emphasis(Bold), RefSec(..), RefTab(..),
-  TConvention(..), TSIntro(..), intro,tsymb, SRSDecl, mkDoc, IntroSec(IntroProg), IntroSub(IScope))
+  TConvention(..), TSIntro(..), intro, tsymb, SRSDecl, mkDoc, IntroSec(IntroProg), IntroSub(IScope))-}
 
+import Drasil.DocLang (AuxConstntSec(AuxConsProg),
+  DerivationDisplay(ShowDerivation),
+  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
+  Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
+  IntroSec(..), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
+  RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
+  SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
+  TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc)
+import Data.Drasil.Concepts.Physics (gravity)
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
@@ -34,10 +44,10 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
       ],
   IntroSec $
     IntroProg justification (phrase dblpendulum)
-      [ IScope scope ],
-  --    SSDSec $ SSDProg
-  --        [ SSDProblem $ PDProg prob []
-  --          [ TermsAndDefs Nothing terms
+      [IScope scope],
+  SSDSec $ SSDProg
+    [ SSDProblem $ PDProg prob []
+      [ TermsAndDefs Nothing terms
   -- --     --  , PhySysDesc dblpendulum physSystParts figLaunch []
   -- --       , Goals goalsInputs]
   --        SSDSolChSpec $ SCSProg
@@ -48,15 +58,15 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   --     --  , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
   --     --  , Constraints EmptyS inConstraints
   --     --  , CorrSolnPpties outConstraints []
-  --      ]
-  --    ],
+      ]
+    ],
   --ReqrmntSec $
   --  ReqsProg
   --     [ FReqsSub EmptyS []
   --     , NonFReqsSub
   --     ],
   -- TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-    AuxConstntSec $
+  AuxConstntSec $
      AuxConsProg dblpendulum [],  --Adds Auxilliary constraint section
   Bibliography                    -- Adds reference section
   ]
@@ -100,16 +110,8 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
   ([] :: [Section]) ([] :: [LabelledContent])
-{-symbMap :: ChunkDB
-symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
-  ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw SSP.iMods
-  ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
-  ++ map nw physicsTMs
-  ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
-  ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
-  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
-  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
-  generalDefinitions tMods concIns section labCon-}
+
+
 --stdFields :: Fields
 --stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
@@ -129,15 +131,15 @@ dblpendulum = commonIdeaWithDict "dblpendulum" (pn "Double Pendulum System") "Do
 --Problem Description
 ------------------------------------
 
--- prob :: Sentence
--- prob = foldlSent_ [S "Problem Description" `sAnd` S "Problem Description"]
+prob :: Sentence
+prob = foldlSent_ [S "Problem Description" `sAnd` S "Problem Description"]
 
--- ---------------------------------
--- -- Terminology and Definitions --
--- ---------------------------------
+---------------------------------
+-- Terminology and Definitions --
+---------------------------------
 
--- terms :: [ConceptChunk]
--- terms = [gravity]
+terms :: [ConceptChunk]
+terms = [gravity]
 
 
 -- ---------------------------------

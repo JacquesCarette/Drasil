@@ -296,6 +296,7 @@ executable dblpendulum
   main-is: Drasil/DblPendulum/Main.hs
   other-modules:
       Drasil.DblPendulum.Body
+    , Drasil.DblPendulum.Figures
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

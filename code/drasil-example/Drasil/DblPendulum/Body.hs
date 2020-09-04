@@ -10,13 +10,9 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Software (errMsg, program)
-
+import Data.Drasil.Concepts.Physics (gravity, physicCon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-{-import Drasil.DocLang (AuxConstntSec(AuxConsProg),
-  DocSection(AuxConstntSec, Bibliography, RefSec, IntroSec),
-  Emphasis(Bold), RefSec(..), RefTab(..),
-  TConvention(..), TSIntro(..), intro, tsymb, SRSDecl, mkDoc, IntroSec(IntroProg), IntroSub(IScope))-}
-
+import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
   DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
@@ -27,7 +23,8 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
   Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc)
 import Data.Drasil.Concepts.Physics (gravity)
-
+import Drasil.DblPendulum.Figures (figMotion)
+import Data.Drasil.Concepts.Math (cartesian)
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
 
@@ -48,9 +45,9 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   SSDSec $ SSDProg
     [ SSDProblem $ PDProg prob []
       [ TermsAndDefs Nothing terms
-  -- --     --  , PhySysDesc dblpendulum physSystParts figLaunch []
-  -- --       , Goals goalsInputs]
-  --        SSDSolChSpec $ SCSProg
+      , PhySysDesc dblpendulum physSystParts figMotion []
+      , Goals goalsInputs]
+  --SSDSolChSpec $ SCSProg
   --        [ Assumptions
   --          , TMs [] (Label : stdFields)
   --       , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
@@ -58,8 +55,8 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   --     --  , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
   --     --  , Constraints EmptyS inConstraints
   --     --  , CorrSolnPpties outConstraints []
-      ]
-    ],
+ --      ]
+     ],
   --ReqrmntSec $
   --  ReqsProg
   --     [ FReqsSub EmptyS []
@@ -100,17 +97,18 @@ si = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) (nw dblpendulum : [nw errMsg, nw program]) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent])
+symbMap = cdb ([] :: [QuantityDict]) 
+  (nw dblpendulum : [nw errMsg, nw program] ++
+   map nw doccon ++ map nw doccon' ++ map nw physicCon)
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) ([] :: [DataDefinition])
+  ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel]) [] [] []
+
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent])
-
+  ([] :: [GenDefn]) ([] :: [TheoryModel]) []
+  [] []
 
 --stdFields :: Fields
 --stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -118,14 +116,19 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
 refDB :: ReferenceDB
 refDB = rdb [] []
 
+{-concIns :: [ConceptInstance]
+concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs-}
+
 -- MOVE TO CONCEPTS
 
 dblpendulum :: CI
 dblpendulum = commonIdeaWithDict "dblpendulum" (pn "Double Pendulum System") "Double Pendulum" []
 
+
+
 -- MOVE TO DATA.PEOPLE
---authorName :: Person
---authorName = person "Author" "Name"
+authorName :: Person
+authorName = person "Author" "Name"
 
 ------------------------------------
 --Problem Description
@@ -146,15 +149,15 @@ terms = [gravity]
 -- -- Physical System Description --
 -- ---------------------------------
 
--- physSystParts :: [Sentence]
--- physSystParts = map foldlSent [
---   [S "The", phrase dblpendulum],
---   [S "The", phrase dblpendulum],
---   [S "The", phrase gravity]]
+physSystParts :: [Sentence]
+physSystParts = map foldlSent [
+  [S "The", phrase dblpendulum],
+  [S "The", phrase dblpendulum],
+  [S "The", phrase gravity]]
 
 -- ------------------------------
 
--- goalsInputs :: [Sentence]
--- goalsInputs = [phrase dblpendulum `ofThe` dblpendulum ]-}
+goalsInputs :: [Sentence]
+goalsInputs = [phrase dblpendulum `ofThe` phrase dblpendulum ]
  
 

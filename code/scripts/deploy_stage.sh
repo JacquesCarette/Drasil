@@ -23,6 +23,11 @@ if [ -z "$EXAMPLE_DIRS" ]; then
   exit 1
 fi
 
+if [ -z "$ANALYSIS_FOLDER" ]; then
+  echo "Missing ANALYSIS_FOLDER."
+  exit 1
+fi
+
 if [ -z "$DEPLOY_CODE_PATH_KV_SEP" ]; then
   echo "Missing DEPLOY_CODE_PATH_KV_SEP."
   exit 1
@@ -124,6 +129,11 @@ copy_images() {
   
 }
 
+copy_analysis() {
+  rm -r "$ANALYSIS_FOLDER" >/dev/null 2>&1  # Printing an error message that a directory doesn't exist isn't the most useful.
+  cp -r "$CUR_DIR$ANALYSIS_FOLDER". "$ANALYSIS_FOLDER"
+}
+
 build_website() {
   cd "$CUR_DIR"website
   make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER" DOCS_FOLDER="$DOC_DEST" DOX_FOLDER="$DOX_DEST" EXAMPLES_FOLDER="$EXAMPLE_DEST" \
@@ -147,5 +157,6 @@ copy_graphs
 copy_datafiles
 copy_examples
 copy_images
+copy_analysis
 build_website
 cd "$CUR_DIR"

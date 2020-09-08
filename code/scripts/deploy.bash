@@ -15,7 +15,7 @@ if [ "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" ]; then
   exit 0
 fi
 
-# This check is seemingly redundant, but we w2ant to be certain we're not deploying for the gh-pages branch as
+# This check is seemingly redundant, but we want to be certain we're not deploying for the gh-pages branch as
 # that could cause an infinite recursion.
 if [ "$TRAVIS_BRANCH" = "$DEPLOY_BRANCH" ]; then
   echo "Tried to deploy for the deploy target."
@@ -75,7 +75,7 @@ try_deploy() {
   git config user.email "$BOT_EMAIL"
   git config user.name "drasil-bot"
   git add -A .
-  # We overwrite history because the artifacts we keep in here are moderately large and woiuld pollute history otherwise.
+  # We overwrite history because the artifacts we keep in here are moderately large and would pollute history otherwise.
   git commit -q --allow-empty -m "drasil-bot deploy of $SOURCE_BRANCH@$TRAVIS_COMMIT"
   git push --quiet "https://$BOT_TOKEN@github.com/$TRAVIS_REPO_SLUG.git" "$DEPLOY_BRANCH"
   PUSH_RET=$?

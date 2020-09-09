@@ -9,7 +9,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 import Data.Drasil.People (olu)
-import Data.Drasil.Concepts.Software (errMsg, program)
+import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Physics (gravity, physicCon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
@@ -22,9 +22,9 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
   Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc)
-import Data.Drasil.Concepts.Physics (gravity)
 import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (cartesian)
+
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
 
@@ -98,7 +98,7 @@ si = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb ([] :: [QuantityDict]) 
-  (nw dblpendulum : [nw errMsg, nw program] ++
+  (nw dblpendulum : [nw program] ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon)
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) ([] :: [DataDefinition])
   ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel]) [] [] []
@@ -107,8 +107,7 @@ symbMap = cdb ([] :: [QuantityDict])
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) []
-  [] []
+  ([] :: [GenDefn]) ([] :: [TheoryModel]) [] [] []
 
 --stdFields :: Fields
 --stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -124,11 +123,6 @@ concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlik
 dblpendulum :: CI
 dblpendulum = commonIdeaWithDict "dblpendulum" (pn "Double Pendulum System") "Double Pendulum" []
 
-
-
--- MOVE TO DATA.PEOPLE
-authorName :: Person
-authorName = person "Author" "Name"
 
 ------------------------------------
 --Problem Description

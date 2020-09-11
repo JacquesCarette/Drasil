@@ -10,7 +10,8 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Concepts.Physics (gravity, physicCon)
+import Data.Drasil.Concepts.Physics (gravity, physicCon, twoD, physicCon')
+import Data.Drasil.Concepts.PhysicalProperties (mass, len)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
@@ -23,7 +24,10 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
   Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc)
 import Drasil.DblPendulum.Figures (figMotion)
-import Data.Drasil.Concepts.Math (cartesian)
+import Data.Drasil.Concepts.Math (mathcon)
+import Drasil.DblPendulum.Assumptions (assumptions)
+import Drasil.DblPendulum.Concepts (pendulumTitle)
+import Drasil.DblPendulum.Goals (goals, goalsInputs)
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
@@ -39,23 +43,25 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
       --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
       , TAandA         -- Add table of abbreviation and acronym section
       ],
-  IntroSec $
-    IntroProg justification (phrase dblpendulum)
-      [IScope scope],
-  SSDSec $ SSDProg
-    [ SSDProblem $ PDProg prob []
-      [ TermsAndDefs Nothing terms
-      , PhySysDesc dblpendulum physSystParts figMotion []
-      , Goals goalsInputs]
-  --SSDSolChSpec $ SCSProg
-  --        [ Assumptions
-  --          , TMs [] (Label : stdFields)
-  --       , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-  --       , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+  IntroSec $            -- This adds an introduction with an overview of the sub-sections
+    IntroProg justification (phrase pendulumTitle) -- This adds an introductory blob before the overview paragraph above.
+      [IScope scope],                            -- This section add a Scope section with the content of 'scope' constructor.
+  SSDSec $ 
+    SSDProg                               -- This adds a Specific system description section and an introductory blob.
+      [ SSDProblem $ PDProg prob []                --  This adds a is used to define the problem your system will solve
+        [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
+      , PhySysDesc pendulumTitle physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
+                                                          -- of the system using physSysParts, figMotion is a function in figures for the image
+      , Goals goalsInputs] -- This adds a goals section and goals input is defined for the preample of the goal.
+      , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
+        [ Assumptions -- This adds the assumption section
+       -- , TMs [] (Label : stdFields)
+       -- , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+       -- , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
   --     --  , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
   --     --  , Constraints EmptyS inConstraints
   --     --  , CorrSolnPpties outConstraints []
- --      ]
+       ]
      ],
   --ReqrmntSec $
   --  ReqsProg
@@ -64,20 +70,20 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   --     ],
   -- TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
-     AuxConsProg dblpendulum [],  --Adds Auxilliary constraint section
+     AuxConsProg pendulumTitle [],  --Adds Auxilliary constraint section
   Bibliography                    -- Adds reference section
   ]
 
 justification :: Sentence
-justification = foldlSent [S "dblpendulum is the subject" +:+. S "dblpendulum is the focus",
-  phrase dblpendulum]
+justification = foldlSent [S "pendulumTitle is the subject" +:+. S "pendulumTitle is the focus",
+  phrase pendulumTitle]
 
 scope :: Sentence
-scope = foldlSent [S "dblpendulum is the subject" +:+. S "dblpendulum is the focus", phrase dblpendulum]
+scope = foldlSent [S "pendulumTitle is the subject" +:+. S "pendulumTitle is the focus", phrase pendulumTitle]
 
 si :: SystemInformation
 si = SI {
-  _sys         = dblpendulum,
+  _sys         = pendulumTitle,
   _kind        = Doc.srs,
   _authors     = [olu],
   _purpose     = [],
@@ -98,10 +104,10 @@ si = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb ([] :: [QuantityDict]) 
-  (nw dblpendulum : [nw program] ++
-   map nw doccon ++ map nw doccon' ++ map nw physicCon)
+  (nw pendulumTitle : nw mass : nw len : [nw program] ++
+   map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw physicCon')
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) ([] :: [DataDefinition])
-  ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel]) [] [] []
+  ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel]) concIns [] []
 
 
 usedDB :: ChunkDB
@@ -109,20 +115,15 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) [] [] []
 
---stdFields :: Fields
---stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 refDB :: ReferenceDB
 refDB = rdb [] []
 
-{-concIns :: [ConceptInstance]
-concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs-}
-
--- MOVE TO CONCEPTS
-
-dblpendulum :: CI
-dblpendulum = commonIdeaWithDict "dblpendulum" (pn "Double Pendulum System") "Double Pendulum" []
-
+concIns :: [ConceptInstance]
+concIns = goals ++ assumptions 
+-- ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
 ------------------------------------
 --Problem Description
@@ -145,13 +146,13 @@ terms = [gravity]
 
 physSystParts :: [Sentence]
 physSystParts = map foldlSent [
-  [S "The", phrase dblpendulum],
-  [S "The", phrase dblpendulum],
+  [S "The", phrase pendulumTitle],
+  [S "The", phrase pendulumTitle],
   [S "The", phrase gravity]]
 
 -- ------------------------------
 
-goalsInputs :: [Sentence]
-goalsInputs = [phrase dblpendulum `ofThe` phrase dblpendulum ]
+--goalsInputs :: [Sentence]
+--goalsInputs = [phrase pendulumTitle `ofThe` phrase pendulumTitle ]
  
 

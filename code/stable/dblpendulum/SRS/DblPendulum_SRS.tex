@@ -11,6 +11,8 @@
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
+\usepackage{enumitem}
+\usepackage{graphics}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -19,7 +21,7 @@
 \newcommand{\lt}{\ensuremath <}
 \global\tabulinesep=1mm
 \bibliography{bibfile}
-\title{Software Requirements Specification for Double Pendulum System}
+\title{Software Requirements Specification for Pendulum}
 \author{Olu Owojaiye}
 \begin{document}
 \maketitle
@@ -69,6 +71,63 @@ The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: To
 \caption{Abbreviations and Acronyms}
 \label{Table:TAbbAcc}
 \end{longtable}
+\section{Introduction}
+\label{Sec:Intro}
+pendulumTitle is the subject pendulumTitle is the focus. Pendulum.
+
+The following section provides an overview of the Software Requirements Specification (SRS) for Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+
+\subsection{Scope of Requirements}
+\label{Sec:ReqsScope}
+The scope of the requirements includes pendulumTitle is the subject pendulumTitle is the focus. Pendulum..
+
+\section{Specific System Description}
+\label{Sec:SpecSystDesc}
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
+
+\subsection{Problem Description}
+\label{Sec:ProbDesc}
+A system is needed to Problem Description and Problem Description.
+
+\subsubsection{Terminology and Definitions}
+\label{Sec:TermDefs}
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
+
+\begin{itemize}
+\item{Gravity: The force that attracts one physical body with mass to another.}
+\end{itemize}
+\subsubsection{Physical System Description}
+\label{Sec:PhysSyst}
+The physical system of Pendulum, as shown in \hyperref[Figure:Motion]{Fig:Motion}, includes the following elements:
+
+\begin{itemize}
+\item[PS1:]{The Pendulum.}
+\item[PS2:]{The Pendulum.}
+\item[PS3:]{The gravity.}
+\end{itemize}
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{../../../datafiles/DblPendulum/dblpendulum.png}
+\caption{The physical system}
+\label{Figure:Motion}
+\end{center}
+\end{figure}
+\subsubsection{Goal Statements}
+\label{Sec:GoalStmt}
+Given the the mass length of the rod initial angle of the mass and the gravitational constant, the goal statements are:
+
+\begin{itemize}
+\end{itemize}
+\subsection{Solution Characteristics Specification}
+\label{Sec:SolCharSpec}
+The instance models that govern Pendulum are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+
+\subsubsection{Assumptions}
+\label{Sec:Assumps}
+This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
+
+\begin{itemize}
+\end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 There are no auxiliary constants.

@@ -297,6 +297,11 @@ executable dblpendulum
   other-modules:
       Drasil.DblPendulum.Body
     , Drasil.DblPendulum.Figures
+    , Drasil.DblPendulum.Concepts
+    , Drasil.DblPendulum.Assumptions
+    , Drasil.DblPendulum.Goals
+
+
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

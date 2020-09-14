@@ -19,7 +19,7 @@ assumptions = [pend2DMotion, cartCoord, cartCoordRight, yAxisDir, startOrigin]
 
 pend2DMotion, cartCoord, cartCoordRight, yAxisDir, startOrigin :: ConceptInstance 
 
-pend2DMotion    = cic "pend2DMotion"      pend2DMotionDesc    "pend2DMotion"      assumpDom
+pend2DMotion    = cic "pend2DMotion"      pend2DMotionDesc    "pend2DMotion"    assumpDom
 cartCoord       = cic "cartCoord"         cartCoordDesc       "cartCoord"       assumpDom
 cartCoordRight  = cic "cartCoordRight"    cartCoordRightDesc  "cartCoordRight"  assumpDom
 yAxisDir        = cic "yAxisDir"          yAxisDirDesc        "yAxisDir"        assumpDom

@@ -11,6 +11,7 @@ import Utils.Drasil
 import Data.Drasil.People (olu)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, twoD, physicCon')
+import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
@@ -28,6 +29,7 @@ import Data.Drasil.Concepts.Math (mathcon)
 import Drasil.DblPendulum.Assumptions (assumptions)
 import Drasil.DblPendulum.Concepts (pendulumTitle)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
+import Drasil.DblPendulum.DataDefs (dataDefs)
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
@@ -55,9 +57,9 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
       , Goals goalsInputs] -- This adds a goals section and goals input is defined for the preample of the goal.
       , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
         [ Assumptions -- This adds the assumption section
-       -- , TMs [] (Label : stdFields)
+        --TMs [] (Label : stdFields)
        -- , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-       -- , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
   --     --  , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
   --     --  , Constraints EmptyS inConstraints
   --     --  , CorrSolnPpties outConstraints []
@@ -87,10 +89,10 @@ si = SI {
   _kind        = Doc.srs,
   _authors     = [olu],
   _purpose     = [],
-  _quants      = [] :: [QuantityDict],
+  _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = [] :: [QDefinition],
-  _datadefs    = [] :: [DataDefinition],
+  _datadefs    = dataDefs,
   _configFiles  = [],
   _inputs      = [] :: [QuantityDict],
   _outputs     = [] :: [QuantityDict],
@@ -103,10 +105,11 @@ si = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) 
+symbMap = cdb (map qw physicscon ++ symbols) 
   (nw pendulumTitle : nw mass : nw len : [nw program] ++
-   map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw physicCon')
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) ([] :: [DataDefinition])
+   map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw physicCon' ++
+   map nw physicscon)
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) dataDefs
   ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel]) concIns [] []
 
 
@@ -122,7 +125,7 @@ refDB :: ReferenceDB
 refDB = rdb [] []
 
 concIns :: [ConceptInstance]
-concIns = goals ++ assumptions 
+concIns = assumptions ++ goals 
 -- ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
 ------------------------------------

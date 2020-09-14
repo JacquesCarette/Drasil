@@ -300,6 +300,7 @@ executable dblpendulum
     , Drasil.DblPendulum.Concepts
     , Drasil.DblPendulum.Assumptions
     , Drasil.DblPendulum.Goals
+    , Drasil.DblPendulum.DataDefs
 
 
   Build-Depends:

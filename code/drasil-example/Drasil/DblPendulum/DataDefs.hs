@@ -7,6 +7,7 @@ import Utils.Drasil
 import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 import Drasil.DblPendulum.Figures (figMotion)
 import qualified Data.Drasil.Quantities.Physics as QP (ixPos)
+import Drasil.DblPendulum.Unitals (lenRod, inputs)
 
 --import Drasil.DblPendulum.Unitals (lenRod)
 
@@ -31,7 +32,7 @@ positionIXQD :: QDefinition
 positionIXQD = mkQuantDef QP.ixPos positionIXEqn
 
 positionIXEqn :: Expr
-positionIXEqn = sy QP.ixPos * sin (sy QP.ixPos)
+positionIXEqn = sy lenRod * sin (sy QP.ixPos)
 
 ----------
 -- speedIY :: DataDefinition

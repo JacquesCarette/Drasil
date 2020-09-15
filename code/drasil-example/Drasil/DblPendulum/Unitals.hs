@@ -1,17 +1,18 @@
 module Drasil.DblPendulum.Unitals where
 
 import Language.Drasil
---import Language.Drasil.ShortHands
+import Language.Drasil.ShortHands
 --import Data.Drasil.IdeaDicts
 --import Theory.Drasil (mkQuantDef)
 import Utils.Drasil
 
 -- import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
 --   requirement, srs, typUnc)
--- import Data.Drasil.Concepts.Math (angle)
--- import Data.Drasil.Concepts.Physics (distance, oneD, twoD)
+import Data.Drasil.Concepts.PhysicalProperties (len)
+import Data.Drasil.SI_Units (metre)
+--(distance, oneD, twoD)
 
-import Data.Drasil.Quantities.Physics (ixPos)
+import Data.Drasil.Quantities.Physics (position)
 
   --acceleration, constAccel,
 --   gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
@@ -28,8 +29,9 @@ import Data.Drasil.Quantities.Physics (ixPos)
 -- import qualified Drasil.Projectile.Concepts as C (flightDur, offset)
 
 
-symbols :: [QuantityDict]
-symbols = [qw ixPos]
+symbols, inputs, outputs :: [QuantityDict]
+
+symbols = map qw unitalChunks
 
 -- -- FIXME: Move to Defs?
 -- acronyms :: [CI]
@@ -39,12 +41,10 @@ symbols = [qw ixPos]
 -- constants :: [QDefinition]
 -- constants = [gravitationalAccelConst, piConst, tol]
 
--- inputs :: [QuantityDict]
--- inputs = map qw [launSpeed, launAngle, targPos]
+inputs = map qw [lenRod]
+--mass, length, angle, g, t
 
--- outputs :: [QuantityDict]
--- outputs = [message, qw offset]
-
+outputs = map qw [position]
 -- unitalQuants :: [QuantityDict]
 -- unitalQuants = message : map qw constrained
 
@@ -79,11 +79,22 @@ symbols = [qw ixPos]
 -- unitHelper :: Symbol -> String -> Symbol
 -- unitHelper sym substr = sub sym $ Label substr
 
--- landPosConcept :: ConceptChunk
--- landPosConcept = cc' landingPos
---   (foldlSent_ [S "the", phrase distance, S "from the", phrase launcher, S "to",
---             (S "final" +:+ phrase position) `ofThe` phrase projectile])
+{-lenRodConcept :: ConceptChunk
+lenRodConcept = cc' lenRod
+     (foldlSent_ [S "the", phrase len `ofThe` (S "rod")])
+--            -}
 
+units :: [UnitaryConceptDict]
+units = map ucw [lenRod]
+
+unitalChunks :: [UnitalChunk]
+unitalChunks = [lenRod ]
+
+lenRod :: UnitalChunk
+
+lenRod = makeUCWDS "l_rod" (cn "rod length")
+        (S "the" +:+ phrase len `ofThe` S "rod")
+        (sub (lU) lRod) metre
 -- launAngleConcept :: ConceptChunk
 -- launAngleConcept = cc' launchAngle
 --   (foldlSent_ [S "the", phrase angle, S "between the", phrase launcher `sAnd` S "a straight line",
@@ -111,3 +122,12 @@ symbols = [qw ixPos]
 -- tol :: QDefinition
 -- tol = mkQuantDef (vcSt "tol" (nounPhraseSP "hit tolerance") (autoStage vEpsilon)
 --   Rational) (Perc 2 2)
+
+
+--Labels
+lRod :: Symbol
+
+lRod = Label "rod"
+
+
+

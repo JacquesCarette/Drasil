@@ -6,14 +6,14 @@ import Utils.Drasil
 import Data.Drasil.IdeaDicts (physics)
 
 --import Data.Drasil.Concepts.Math (angle)
---import Data.Drasil.Concepts.Physics (position, speed)
+import Data.Drasil.Concepts.Physics (gravity)
 
 {-concepts :: [IdeaDict]
 concepts = map nw [landingPos, launch, launchAngle, launchSpeed, offset, targetPos]
   ++ map nw defs
 -}
---defs :: [ConceptChunk]
---defs = [dblPendulum]
+-- defs :: [ConceptChunk]
+-- defs = [pendulum]
 
 pendulumTitle :: CI
 pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [physics]
@@ -29,9 +29,7 @@ pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [p
 -- launchSpeed = compoundNC launch speed
 -- targetPos   = compoundNC target position-}
 
--- A body suspended from a fixed support so that it swings freely back and forth under the influence of gravity
----
 
--- dblPendulum :: ConceptChunk
-
--- dblPendulum = dcc "double pendulum" (nounPhraseSP "double pendulum") "the object to be launched at the target"
+-- pendulum :: ConceptChunk
+-- pendulum = dcc "pendulum" (nounPhraseSP "pendulum")  "body suspended from a fixed support so that it swings
+--                 freely back and forth under the influence of gravity"

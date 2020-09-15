@@ -94,7 +94,7 @@ lenRod :: UnitalChunk
 
 lenRod = makeUCWDS "l_rod" (cn "rod length")
         (S "the" +:+ phrase len `ofThe` S "rod")
-        (sub (lU) lRod) metre
+        (sub (cL) lRod) metre
 -- launAngleConcept :: ConceptChunk
 -- launAngleConcept = cc' launchAngle
 --   (foldlSent_ [S "the", phrase angle, S "between the", phrase launcher `sAnd` S "a straight line",

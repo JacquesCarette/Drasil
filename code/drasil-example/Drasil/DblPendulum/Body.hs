@@ -9,9 +9,9 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 import Data.Drasil.People (olu)
-import Data.Drasil.SI_Units (metre)
+import Data.Drasil.SI_Units (metre, second)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Concepts.Physics (gravity, physicCon, twoD, physicCon')
+import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon')
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -31,6 +31,7 @@ import Drasil.DblPendulum.Assumptions (assumptions)
 import Drasil.DblPendulum.Concepts (pendulumTitle)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
+import Drasil.DblPendulum.TMods (tMods)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs)
 
 srs :: Document
@@ -59,7 +60,7 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
       , Goals goalsInputs] -- This adds a goals section and goals input is defined for the preample of the goal.
       , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
         [ Assumptions -- This adds the assumption section
-        --TMs [] (Label : stdFields)
+        , TMs [] (Label : stdFields)
        -- , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
   --     --  , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
@@ -111,8 +112,8 @@ symbMap = cdb (map qw physicscon ++ symbols)
   (nw pendulumTitle : nw mass : nw len : [nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw physicCon' ++
    map nw physicscon ++ map nw symbols ++ map nw [metre])
-  ([] :: [ConceptChunk]) (map unitWrapper [metre]) dataDefs
-  ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel]) concIns [] []
+  ([] :: [ConceptChunk]) (map unitWrapper [metre, second]) dataDefs
+  ([] :: [InstanceModel]) ([] :: [GenDefn]) tMods concIns [] []
 
 
 usedDB :: ChunkDB

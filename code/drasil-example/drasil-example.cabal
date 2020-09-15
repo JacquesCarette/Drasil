@@ -302,6 +302,8 @@ executable dblpendulum
     , Drasil.DblPendulum.Goals
     , Drasil.DblPendulum.DataDefs
     , Drasil.DblPendulum.Unitals
+    , Drasil.DblPendulum.TMods
+    , Drasil.Projectile.References
 
 
   Build-Depends:

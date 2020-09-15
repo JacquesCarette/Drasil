@@ -9,6 +9,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 import Data.Drasil.People (olu)
+import Data.Drasil.SI_Units (metre)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, twoD, physicCon')
 import Data.Drasil.Quantities.Physics (physicscon)
@@ -30,6 +31,7 @@ import Drasil.DblPendulum.Assumptions (assumptions)
 import Drasil.DblPendulum.Concepts (pendulumTitle)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
+import Drasil.DblPendulum.Unitals (symbols)
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
@@ -108,13 +110,13 @@ symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbols) 
   (nw pendulumTitle : nw mass : nw len : [nw program] ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw physicCon' ++
-   map nw physicscon)
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) dataDefs
+   map nw physicscon ++ map nw symbols ++ map nw [metre])
+  ([] :: [ConceptChunk]) (map unitWrapper [metre]) dataDefs
   ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel]) concIns [] []
 
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) [] [] []
 

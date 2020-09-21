@@ -304,7 +304,8 @@ executable dblpendulum
     , Drasil.DblPendulum.Unitals
     , Drasil.DblPendulum.TMods
     , Drasil.Projectile.References
-
+    , Drasil.DblPendulum.GenDefs
+  
 
   Build-Depends:
     base >= 4.7,

@@ -1,28 +1,18 @@
-module Drasil.DblPendulum.DataDefs (dataDefs, positionIX) where
+module Drasil.DblPendulum.DataDefs (dataDefs, positionIY, positionIX) where
 
-import Prelude hiding (sin)
+import Prelude hiding (sin, cos)
 import Language.Drasil
 import Utils.Drasil
 
 import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 import Drasil.DblPendulum.Figures (figMotion)
-import qualified Data.Drasil.Quantities.Physics as QP (ixPos)
-import Drasil.DblPendulum.Unitals (lenRod, inputs)
+import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos, position)
+import Drasil.DblPendulum.Unitals (lenRod, pendAngle)
 
---import Drasil.DblPendulum.Unitals (lenRod)
 
 dataDefs :: [DataDefinition]
-dataDefs = [positionIX]
+dataDefs = [positionIX, positionIY]
 
-----------
-{-vecMag :: DataDefinition
-vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
-
-vecMagQD :: QDefinition
-vecMagQD = mkQuantDef speed vecMagEqn
-
-vecMagEqn :: Expr
-vecMagEqn = UnaryOp Abs (sy velocity)-}
 
 ----------
 positionIX :: DataDefinition
@@ -32,29 +22,26 @@ positionIXQD :: QDefinition
 positionIXQD = mkQuantDef QP.ixPos positionIXEqn
 
 positionIXEqn :: Expr
-positionIXEqn = sy lenRod * sin (sy QP.ixPos)
-
-----------
--- speedIY :: DataDefinition
--- speedIY = ddNoRefs speedIYQD Nothing "speedIY" [speedRef, figRef]
-
--- speedIYQD :: QDefinition
--- speedIYQD = mkQuantDef iyVel speedIYEqn
-
--- speedIYEqn :: Expr
--- speedIYEqn = sy iSpeed * sin (sy launAngle)
-
--- ----------
--- magNote :: Sentence
--- magNote = foldlSent [S "For a given", phrase velocity, S "vector", ch velocity `sC`
---   S "the magnitude of the vector", sParen (E $ UnaryOp Abs (sy velocity)) `isThe`
---   S "scalar called", phrase speed]
-
--- speedRef :: Sentence
--- speedRef = ch iSpeed `sIs` S "from" +:+. makeRef2S vecMag
+positionIXEqn = sy lenRod * sin (sy pendAngle)
 
 figRef :: Sentence
 figRef = ch QP.ixPos `sIs` S "shown in" +:+. makeRef2S figMotion
 
 positionRef :: Sentence
-positionRef = ch QP.ixPos `sIs` S "from freezy"
+positionRef = ch QP.ixPos `isThe` S "horizontal" +:+ phrase QP.position
+
+--------------------------------------------
+positionIY :: DataDefinition
+positionIY = ddNoRefs positionIYQD Nothing "positionIY" [positionReff, figReff]
+
+positionIYQD :: QDefinition
+positionIYQD = mkQuantDef QP.iyPos positionIYEqn
+
+positionIYEqn :: Expr
+positionIYEqn = sy lenRod * cos (sy pendAngle)
+
+figReff :: Sentence
+figReff = ch QP.iyPos `sIs` S "shown in" +:+. makeRef2S figMotion
+
+positionReff :: Sentence
+positionReff = ch QP.iyPos `isThe` S "vertical" +:+ phrase QP.position

@@ -9,22 +9,25 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 import Data.Drasil.People (olu)
-import Data.Drasil.SI_Units (metre, second)
+import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon')
 import Data.Drasil.Quantities.Physics (physicscon)
-import Data.Drasil.Concepts.PhysicalProperties (mass, len)
+import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
-  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
+  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, SSDSec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
   IntroSec(..), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
-  RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
+  RefSec(..), RefTab(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
-  TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
-  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc)
+  TConvention(..), TSIntro(..),
+  Verbosity(Verbose), intro, mkDoc, tsymb)
+--ReqrmntSec, ReqrmntSec, ReqsSub, TraceabilityProg,
+--TraceabilitySec, TraceabilitySec, purpDoc, traceMatStandard'
+
 import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (mathcon)
 import Drasil.DblPendulum.Assumptions (assumptions)
@@ -32,6 +35,7 @@ import Drasil.DblPendulum.Concepts (pendulumTitle)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.TMods (tMods)
+import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs)
 
 srs :: Document
@@ -61,9 +65,9 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
       , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
         [ Assumptions -- This adds the assumption section
         , TMs [] (Label : stdFields)
-       -- , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-  --     --  , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+       -- , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
   --     --  , Constraints EmptyS inConstraints
   --     --  , CorrSolnPpties outConstraints []
        ]
@@ -88,7 +92,7 @@ scope = foldlSent [S "pendulumTitle is the subject" +:+. S "pendulumTitle is the
 
 si :: SystemInformation
 si = SI {
-  _sys         = pendulumTitle,
+  _sys         = pendulumTitle, 
   _kind        = Doc.srs,
   _authors     = [olu],
   _purpose     = [],
@@ -109,11 +113,11 @@ si = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbols) 
-  (nw pendulumTitle : nw mass : nw len : [nw program] ++ map nw symbols ++
+  (nw pendulumTitle : nw mass : nw len : nw kilogram : nw newton : nw degree : nw radian : [nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw physicCon' ++
-   map nw physicscon ++ map nw symbols ++ map nw [metre])
-  ([] :: [ConceptChunk]) (map unitWrapper [metre, second]) dataDefs
-  ([] :: [InstanceModel]) ([] :: [GenDefn]) tMods concIns [] []
+   map nw physicscon ++ map nw physicalcon ++ map nw symbols ++ map nw [metre])
+ ([] :: [ConceptChunk]) (map unitWrapper [metre, second, newton, kilogram, degree, radian]) dataDefs
+  ([] :: [InstanceModel]) genDefns tMods concIns [] []
 
 
 usedDB :: ChunkDB

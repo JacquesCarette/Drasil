@@ -8,12 +8,13 @@ import Utils.Drasil
 
 -- import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
 --   requirement, srs, typUnc)
-import Data.Drasil.Concepts.PhysicalProperties (len)
-import Data.Drasil.SI_Units (metre)
+import Data.Drasil.Quantities.PhysicalProperties (len, mass)
+import Data.Drasil.SI_Units (metre, degree)
 --(distance, oneD, twoD)
 
-import Data.Drasil.Quantities.Physics (position)
-
+import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, force)
+import Data.Drasil.Concepts.Physics (pendulum)
+import Data.Drasil.Concepts.Math (angle)
   --acceleration, constAccel,
 --   gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
 --   position, scalarPos, speed, time, velocity, xAccel, xConstAccel, xPos,
@@ -29,9 +30,10 @@ import Data.Drasil.Quantities.Physics (position)
 -- import qualified Drasil.Projectile.Concepts as C (flightDur, offset)
 
 
-symbols, inputs, outputs :: [QuantityDict]
-
+symbols:: [QuantityDict]
 symbols = map qw unitalChunks
+--symbols = map qw [mass, ixPos, position, lenRod, pendAngle]
+--symbols = map qw unitalChunks
 
 -- -- FIXME: Move to Defs?
 -- acronyms :: [CI]
@@ -40,11 +42,12 @@ symbols = map qw unitalChunks
 
 -- constants :: [QDefinition]
 -- constants = [gravitationalAccelConst, piConst, tol]
-
-inputs = map qw [lenRod]
+inputs :: [QuantityDict]
+inputs = map qw [lenRod, QP.force] 
 --mass, length, angle, g, t
 
-outputs = map qw [position]
+outputs :: [QuantityDict]
+outputs = map qw [QP.position]
 -- unitalQuants :: [QuantityDict]
 -- unitalQuants = message : map qw constrained
 
@@ -85,16 +88,20 @@ lenRodConcept = cc' lenRod
 --            -}
 
 units :: [UnitaryConceptDict]
-units = map ucw [lenRod]
+units = map ucw unitalChunks ++ map ucw [lenRod, pendAngle]
 
 unitalChunks :: [UnitalChunk]
-unitalChunks = [lenRod ]
+unitalChunks = [lenRod, mass, QP.force, QP.ixPos, pendAngle]
 
-lenRod :: UnitalChunk
+lenRod, pendAngle :: UnitalChunk
 
-lenRod = makeUCWDS "l_rod" (cn "rod length")
+lenRod = makeUCWDS "l_rod" (cn "length of rod")
         (S "the" +:+ phrase len `ofThe` S "rod")
         (sub (cL) lRod) metre
+
+pendAngle = makeUCWDS "pendAngle" (cn "angle of pendulum")
+        (S "the" +:+ phrase angle `ofThe` phrase pendulum)
+        (lTheta) degree     
 -- launAngleConcept :: ConceptChunk
 -- launAngleConcept = cc' launchAngle
 --   (foldlSent_ [S "the", phrase angle, S "between the", phrase launcher `sAnd` S "a straight line",

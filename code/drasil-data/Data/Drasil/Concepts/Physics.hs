@@ -21,7 +21,8 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
   rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
-  yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec]
+  yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec,
+  pendulum, body]
 
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
@@ -35,7 +36,7 @@ acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity, cohesion,
   pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos,
   space, speed, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum, moment, fOfGravity, positionVec :: ConceptChunk
+  yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
@@ -46,6 +47,8 @@ acceleration = dccWDS "acceleration" (cn' "acceleration")
   (S "the rate of change of a body's" +:+ phrase velocity)
 angular = dcc "angular" (cn' "angular")
   "denoting physical properties or quantities measured with reference to or by means of an angle"
+body = dccWDS "body" (cnIES "body")
+  (S "an object with" +:+ phrase QPP.mass)
 chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity")
   (S "the" +:+ phrase chgInVelocity `sOf` S "a" +:+ phrase rigidBody)
 collision = dcc "collision" (cn' "collision")
@@ -98,6 +101,10 @@ momentum = dccWDS "momentum" (cn "momentum")
    phrase velocity)
 moment = dccWDS "moment" (cn' "moment")
   (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `sOr` phrase axis)
+
+pendulum = dccWDS "pendulum" (cn "pendulum")
+ (S "a body suspended from a fixed support so that it swings freely back and forth under the influence" 
+       `sOf` phrase gravity)
 position = dcc "position" (cn' "position")
   "an object's location relative to a reference point"
 positionVec = dccWDS " positionVec" (cn' "position vector")
@@ -136,6 +143,7 @@ velocity = dccWDS "velocity" (cnIES "velocity")
   (S "the rate of change of a body's" +:+ phrase position)
 weight = dcc "weight" (cn' "weight")
   "the gravitational force acting on an object"
+
 
 -- Some variants of distance, speed, velocity, and scalar acceleration
 -- FIXME: Complete all variants?

@@ -20,6 +20,8 @@
 \newcommand{\gt}{\ensuremath >}
 \newcommand{\lt}{\ensuremath <}
 \global\tabulinesep=1mm
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Pendulum}
 \author{Olu Owojaiye}
@@ -41,6 +43,18 @@ The unit system used throughout is SI (Système International d'Unités). In add
 \\
 \midrule
 \endhead
+${{}^{\circ}}$ & angle & degree
+\\
+${\text{kg}}$ & mass & kilogram
+\\
+${\text{m}}$ & length & metre
+\\
+${\text{N}}$ & force & newton
+\\
+${\text{rad}}$ & angle & radian
+\\
+${\text{s}}$ & time & second
+\\
 \bottomrule
 \caption{Table of Units}
 \label{Table:ToU}
@@ -55,6 +69,38 @@ The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: To
 \\
 \midrule
 \endhead
+${a_{\text{x}}}$ & $x$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+${a_{\text{y}}}$ & $y$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+$\mathbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+$\mathbf{F}$ & Force & ${\text{N}}$
+\\
+${L_{\text{rod}}}$ & Length of rod & ${\text{m}}$
+\\
+$m$ & Mass & ${\text{kg}}$
+\\
+${{p_{\text{x}}}^{\text{i}}}$ & $x$-component of initial position & ${\text{m}}$
+\\
+${{p_{\text{y}}}^{\text{i}}}$ & $y$-component of initial position & ${\text{m}}$
+\\
+$\mathbf{p}$ & Position & ${\text{m}}$
+\\
+$t$ & Time & ${\text{s}}$
+\\
+${v_{\text{x}}}$ & $x$-component of velocity & $\frac{\text{m}}{\text{s}}$
+\\
+${v_{\text{y}}}$ & $y$-component of velocity & $\frac{\text{m}}{\text{s}}$
+\\
+$\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
+\\
+$α$ & Angular Acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
+\\
+$θ$ & Angle of pendulum & ${{}^{\circ}}$
+\\
+$ω$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
+\\
 \bottomrule
 \caption{Table of Symbols}
 \label{Table:ToS}
@@ -107,7 +153,7 @@ The physical system of Pendulum, as shown in \hyperref[Figure:Motion]{Fig:Motion
 \end{itemize}
 \begin{figure}
 \begin{center}
-\includegraphics[width=0.7\textwidth]{../../../datafiles/DblPendulum/dblpendulum.png}
+\includegraphics[width=0.7\textwidth]{../../../datafiles/DblPendulum/pendulum.png}
 \caption{The physical system}
 \label{Figure:Motion}
 \end{center}
@@ -134,6 +180,335 @@ This section simplifies the original problem and helps in developing the theoret
 \item[yAxisDir:\phantomsection\label{yAxisDir}]{The The direction of the $y$-axis is directed opposite to gravity.}
 \item[startOrigin:\phantomsection\label{startOrigin}]{The Pendulum is attached to the origin.}
 \end{itemize}
+\subsubsection{Theoretical Models}
+\label{Sec:TMs}
+This section focuses on the general equations and laws that Pendulum is based on.
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{TM:acceleration}
+\phantomsection 
+\label{TM:acceleration}
+\\ \midrule \\
+Label & Acceleration
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{a}=\frac{\,d\mathbf{v}}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & \cite{accelerationWiki} and \cite[(pg. 7)]{hibbeler2004}
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{TM:velocity}
+\phantomsection 
+\label{TM:velocity}
+\\ \midrule \\
+Label & Velocity
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{v}=\frac{\,d\mathbf{p}}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$\mathbf{p}$ is the position (${\text{m}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & \cite{velocityWiki} and \cite[(pg. 6)]{hibbeler2004}
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{TM:NewtonSecLawMot}
+\phantomsection 
+\label{TM:NewtonSecLawMot}
+\\ \midrule \\
+Label & Newton's second law of motion
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{F}=m \mathbf{a}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{F}$ is the force (${\text{N}}$)}
+              \item{$m$ is the mass (${\text{kg}}$)}
+              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The net force $\mathbf{F}$ on a body is proportional to the acceleration $\mathbf{a}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\subsubsection{General Definitions}
+\label{Sec:GDs}
+This section collects the laws and equations that will be used to build the instance models.
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:velocityIX}
+\phantomsection 
+\label{GD:velocityIX}
+\\ \midrule \\
+Label & $x$-component of the velocity
+        
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left(θ\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${v_{\text{x}}}$ is the $x$-component of velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
+              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of $x$-component velocity:}
+\label{GD:velocityIXDeriv}
+\begin{displaymath}
+{v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left(θ\right)
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:velocityIY}
+\phantomsection 
+\label{GD:velocityIY}
+\\ \midrule \\
+Label & $x$-component of the velocity
+        
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {v_{\text{y}}}=ω {L_{\text{rod}}} \cos\left(θ\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${v_{\text{y}}}$ is the $y$-component of velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
+              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of $y$-component velocity:}
+\label{GD:velocityIYDeriv}
+\begin{displaymath}
+{v_{\text{y}}}=ω {L_{\text{rod}}} \cos\left(θ\right)
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:accelerationIX}
+\phantomsection 
+\label{GD:accelerationIX}
+\\ \midrule \\
+Label & $x$-component of acceleration
+        
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {a_{\text{x}}}=-ω {L_{\text{rod}}} \sin\left(θ\right)+α {L_{\text{rod}}} \cos\left(θ\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${a_{\text{x}}}$ is the $x$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
+              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of $x$-component acceleration:}
+\label{GD:accelerationIXDeriv}
+\begin{displaymath}
+{a_{\text{x}}}=-ω {L_{\text{rod}}} \sin\left(θ\right)+α {L_{\text{rod}}} \cos\left(θ\right)
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:accelerationIY}
+\phantomsection 
+\label{GD:accelerationIY}
+\\ \midrule \\
+Label & $y$-component of acceleration
+        
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {a_{\text{y}}}=ω {L_{\text{rod}}} \cos\left(θ\right)+α {L_{\text{rod}}} \sin\left(θ\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${a_{\text{y}}}$ is the $y$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
+              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of $x$-component acceleration:}
+\label{GD:accelerationIYDeriv}
+\begin{displaymath}
+{a_{\text{y}}}=ω {L_{\text{rod}}} \cos\left(θ\right)+α {L_{\text{rod}}} \sin\left(θ\right)
+\end{displaymath}
+\subsubsection{Data Definitions}
+\label{Sec:DDs}
+This section collects and defines all the data needed to build the instance models.
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:positionIX}
+\phantomsection 
+\label{DD:positionIX}
+\\ \midrule \\
+Label & $x$-component of initial position
+        
+\\ \midrule \\
+Symbol & ${{p_{\text{x}}}^{\text{i}}}$
+         
+\\ \midrule \\
+Units & ${\text{m}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {{p_{\text{x}}}^{\text{i}}}={L_{\text{rod}}} \sin\left(θ\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${{p_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial position (${\text{m}}$)}
+              \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
+              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & ${{p_{\text{x}}}^{\text{i}}}$ is the horizontal position
+        
+        ${{p_{\text{x}}}^{\text{i}}}$ is shown in \hyperref[Figure:Motion]{Fig:Motion}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:positionIY}
+\phantomsection 
+\label{DD:positionIY}
+\\ \midrule \\
+Label & $y$-component of initial position
+        
+\\ \midrule \\
+Symbol & ${{p_{\text{y}}}^{\text{i}}}$
+         
+\\ \midrule \\
+Units & ${\text{m}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {{p_{\text{y}}}^{\text{i}}}={L_{\text{rod}}} \cos\left(θ\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${{p_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial position (${\text{m}}$)}
+              \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
+              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & ${{p_{\text{y}}}^{\text{i}}}$ is the vertical position
+        
+        ${{p_{\text{y}}}^{\text{i}}}$ is shown in \hyperref[Figure:Motion]{Fig:Motion}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 There are no auxiliary constants.

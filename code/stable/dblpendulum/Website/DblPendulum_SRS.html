@@ -99,6 +99,11 @@
                   <td><em>N</em></td>
                 </tr>
                 <tr>
+                  <td><em><b>g</b></em></td>
+                  <td>Gravitational acceleration</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
                   <td><em>L<sub>rod</sub></em></td>
                   <td>Length of rod</td>
                   <td><em>m</em></td>
@@ -122,6 +127,11 @@
                   <td><em><b>p</b></em></td>
                   <td>Position</td>
                   <td><em>m</em></td>
+                </tr>
+                <tr>
+                  <td><em><b>T</b></em></td>
+                  <td>Tension</td>
+                  <td><em>N</em></td>
                 </tr>
                 <tr>
                   <td><em>t</em></td>
@@ -208,7 +218,7 @@
           <div class="subsection">
             <h2>Problem Description</h2>
             <p class="paragraph">
-              A system is needed to Problem Description and Problem Description.
+              A system is needed to is needed to efficiently and correctly predict the motion pendulum.
             </p>
             <div id="Sec:TermDefs">
               <div class="subsubsection">
@@ -220,6 +230,9 @@
                   <li>
                     Gravity: The force that attracts one physical body with mass to another.
                   </li>
+                  <li>
+                    Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from <a href=#cartesianWiki>cartesianWiki</a>).
+                  </li>
                 </ul>
               </div>
             </div>
@@ -230,9 +243,8 @@
                   The physical system of Pendulum, as shown in <a href=#Figure:Motion>Fig:Motion</a>, includes the following elements:
                 </p>
                 <div class="list">
-                  <p>PS1: The Pendulum.</p>
-                  <p>PS2: The Pendulum.</p>
-                  <p>PS3: The gravity.</p>
+                  <p>PS1: The rod.</p>
+                  <p>PS2: The mass.</p>
                 </div>
                 <div id="Figure:Motion">
                   <figure>
@@ -449,7 +461,9 @@
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph"><em>x</em>-component of the velocity</p>
+                        <p class="paragraph">
+                          The <em>x</em>-component of velocity of the pendulum
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -502,7 +516,9 @@
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph"><em>x</em>-component of the velocity</p>
+                        <p class="paragraph">
+                          The <em>y</em>-component of velocity of the pendulum
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -555,7 +571,9 @@
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph"><em>x</em>-component of acceleration</p>
+                        <p class="paragraph">
+                          The <em>x</em>-component of acceleration of the pendulum
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -613,7 +631,9 @@
                     <tr>
                       <th>Label</th>
                       <td>
-                        <p class="paragraph"><em>y</em>-component of acceleration</p>
+                        <p class="paragraph">
+                          The <em>y</em>-component of acceleration of the pendulum
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -658,8 +678,111 @@
                 </div>
                 <div id="GD:accelerationIYDeriv">
                   <div class="subsubsubsection">
-                    <h4>Detailed derivation of <em>x</em>-component acceleration:</h4>
+                    <h4>Detailed derivation of <em>y</em>-component acceleration:</h4>
                     \[{a_{\text{y}}}=ω {L_{\text{rod}}} \cos\left(θ\right)+α {L_{\text{rod}}} \sin\left(θ\right)\]
+                  </div>
+                </div>
+                <div id="GD:hForceOnPendulum">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:hForceOnPendulum</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Horizontal force on the pendulum</p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>N</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\mathbf{F}=m {a_{\text{x}}}=-\mathbf{T} \sin\left(θ\right)\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
+                          <li><em>m</em> is the mass (<em>kg</em>)</li>
+                          <li>
+                            <em>a<sub>x</sub></em> is the <em>x</em>-component of acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li><em><b>T</b></em> is the tension (<em>N</em>)</li>
+                          <li><em>θ</em> is the angle of pendulum (<em>&deg;</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="GD:hForceOnPendulumDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of force pendulum:</h4>
+                    \[\mathbf{F}=m {a_{\text{x}}}=-\mathbf{T} \sin\left(θ\right)\]
+                  </div>
+                </div>
+                <div id="GD:vForceOnPendulum">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:vForceOnPendulum</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Vertical force on the pendulum</p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>N</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[\mathbf{F}=m {a_{\text{y}}}=\mathbf{T} \cos\left(θ\right)-m \mathbf{g}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em><b>F</b></em> is the force (<em>N</em>)</li>
+                          <li><em>m</em> is the mass (<em>kg</em>)</li>
+                          <li>
+                            <em>a<sub>y</sub></em> is the <em>y</em>-component of acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li><em><b>T</b></em> is the tension (<em>N</em>)</li>
+                          <li><em>θ</em> is the angle of pendulum (<em>&deg;</em>)</li>
+                          <li>
+                            <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="GD:vForceOnPendulumDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of force pendulum:</h4>
+                    \[\mathbf{F}=m {a_{\text{y}}}=\mathbf{T} \cos\left(θ\right)-m \mathbf{g}\]
                   </div>
                 </div>
               </div>

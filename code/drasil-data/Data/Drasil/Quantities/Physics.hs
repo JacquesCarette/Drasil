@@ -9,7 +9,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, potEnergy,
   pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel,
-  yDist,  yPos, yVel, momentum, moment, fOfGravity, positionVec)
+  yDist,  yPos, yVel, momentum, moment, fOfGravity, positionVec, tension)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
@@ -27,7 +27,7 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position,
   potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
   weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel,momentum, moment, moment2D, fOfGravity, positionVec]
+  yPos, yVel,momentum, moment, moment2D, fOfGravity, positionVec, tension]
 
 acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   constAccel, constAccelV, displacement, distance, energy, fSpeed, fVel, force,
@@ -36,7 +36,7 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   linearVelocity, momentOfInertia, position, potEnergy, pressure, scalarAccel,
   scalarPos, speed, time, torque, velocity, weight, xAccel, xConstAccel, xDist,
   xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, moment2D,
-  fOfGravity, positionVec :: UnitalChunk
+  fOfGravity, positionVec, tension :: UnitalChunk
 
 
 acceleration         = uc CP.acceleration (vec lA) accelU
@@ -70,6 +70,7 @@ pressure             = uc CP.pressure lP pascal
 speed                = uc CP.speed lV velU
 scalarAccel          = uc CP.scalarAccel lA accelU
 scalarPos            = uc CP.scalarPos lP metre
+tension              = uc CP.tension (vec cT) newton
 time                 = uc CP.time lT second
 torque               = uc CP.torque (vec lTau) torqueU
 velocity             = uc CP.velocity (vec lV) velU

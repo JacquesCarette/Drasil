@@ -77,6 +77,8 @@ $\mathbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\mathbf{F}$ & Force & ${\text{N}}$
 \\
+$\mathbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
 ${L_{\text{rod}}}$ & Length of rod & ${\text{m}}$
 \\
 $m$ & Mass & ${\text{kg}}$
@@ -86,6 +88,8 @@ ${{p_{\text{x}}}^{\text{i}}}$ & $x$-component of initial position & ${\text{m}}$
 ${{p_{\text{y}}}^{\text{i}}}$ & $y$-component of initial position & ${\text{m}}$
 \\
 $\mathbf{p}$ & Position & ${\text{m}}$
+\\
+$\mathbf{T}$ & Tension & ${\text{N}}$
 \\
 $t$ & Time & ${\text{s}}$
 \\
@@ -133,7 +137,7 @@ This section first presents the problem description, which gives a high-level vi
 
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-A system is needed to Problem Description and Problem Description.
+A system is needed to is needed to efficiently and correctly predict the motion pendulum.
 
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
@@ -141,15 +145,15 @@ This subsection provides a list of terms that are used in the subsequent section
 
 \begin{itemize}
 \item{Gravity: The force that attracts one physical body with mass to another.}
+\item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from \cite{cartesianWiki}).}
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
 The physical system of Pendulum, as shown in \hyperref[Figure:Motion]{Fig:Motion}, includes the following elements:
 
 \begin{itemize}
-\item[PS1:]{The Pendulum.}
-\item[PS2:]{The Pendulum.}
-\item[PS3:]{The gravity.}
+\item[PS1:]{The rod.}
+\item[PS2:]{The mass.}
 \end{itemize}
 \begin{figure}
 \begin{center}
@@ -283,7 +287,7 @@ This section collects the laws and equations that will be used to build the inst
 \phantomsection 
 \label{GD:velocityIX}
 \\ \midrule \\
-Label & $x$-component of the velocity
+Label & The $x$-component of velocity of the pendulum
         
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
@@ -320,7 +324,7 @@ RefBy &
 \phantomsection 
 \label{GD:velocityIY}
 \\ \midrule \\
-Label & $x$-component of the velocity
+Label & The $y$-component of velocity of the pendulum
         
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
@@ -357,7 +361,7 @@ RefBy &
 \phantomsection 
 \label{GD:accelerationIX}
 \\ \midrule \\
-Label & $x$-component of acceleration
+Label & The $x$-component of acceleration of the pendulum
         
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}^{2}}$
@@ -395,7 +399,7 @@ RefBy &
 \phantomsection 
 \label{GD:accelerationIY}
 \\ \midrule \\
-Label & $y$-component of acceleration
+Label & The $y$-component of acceleration of the pendulum
         
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}^{2}}$
@@ -420,10 +424,87 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\paragraph{Detailed derivation of $x$-component acceleration:}
+\paragraph{Detailed derivation of $y$-component acceleration:}
 \label{GD:accelerationIYDeriv}
 \begin{displaymath}
 {a_{\text{y}}}=ω {L_{\text{rod}}} \cos\left(θ\right)+α {L_{\text{rod}}} \sin\left(θ\right)
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:hForceOnPendulum}
+\phantomsection 
+\label{GD:hForceOnPendulum}
+\\ \midrule \\
+Label & Horizontal force on the pendulum
+        
+\\ \midrule \\
+Units & ${\text{N}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{F}=m {a_{\text{x}}}=-\mathbf{T} \sin\left(θ\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{F}$ is the force (${\text{N}}$)}
+              \item{$m$ is the mass (${\text{kg}}$)}
+              \item{${a_{\text{x}}}$ is the $x$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\mathbf{T}$ is the tension (${\text{N}}$)}
+              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of force pendulum:}
+\label{GD:hForceOnPendulumDeriv}
+\begin{displaymath}
+\mathbf{F}=m {a_{\text{x}}}=-\mathbf{T} \sin\left(θ\right)
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:vForceOnPendulum}
+\phantomsection 
+\label{GD:vForceOnPendulum}
+\\ \midrule \\
+Label & Vertical force on the pendulum
+        
+\\ \midrule \\
+Units & ${\text{N}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{F}=m {a_{\text{y}}}=\mathbf{T} \cos\left(θ\right)-m \mathbf{g}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{F}$ is the force (${\text{N}}$)}
+              \item{$m$ is the mass (${\text{kg}}$)}
+              \item{${a_{\text{y}}}$ is the $y$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\mathbf{T}$ is the tension (${\text{N}}$)}
+              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of force pendulum:}
+\label{GD:vForceOnPendulumDeriv}
+\begin{displaymath}
+\mathbf{F}=m {a_{\text{y}}}=\mathbf{T} \cos\left(θ\right)-m \mathbf{g}
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}

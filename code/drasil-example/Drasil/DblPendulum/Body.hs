@@ -11,7 +11,7 @@ import Utils.Drasil
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon')
+import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -29,7 +29,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
 --TraceabilitySec, TraceabilitySec, purpDoc, traceMatStandard'
 
 import Drasil.DblPendulum.Figures (figMotion)
-import Data.Drasil.Concepts.Math (mathcon)
+import Data.Drasil.Concepts.Math (mathcon, cartesian)
 import Drasil.DblPendulum.Assumptions (assumptions)
 import Drasil.DblPendulum.Concepts (pendulumTitle)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
@@ -140,14 +140,15 @@ concIns = assumptions ++ goals
 ------------------------------------
 
 prob :: Sentence
-prob = foldlSent_ [S "Problem Description" `sAnd` S "Problem Description"]
+prob = foldlSent_ [ S "is needed to efficiently and correctly predict the motion",  
+                   phrase pendulum]
 
 ---------------------------------
 -- Terminology and Definitions --
 ---------------------------------
 
 terms :: [ConceptChunk]
-terms = [gravity]
+terms = [gravity, cartesian]
 
 
 -- ---------------------------------
@@ -156,9 +157,9 @@ terms = [gravity]
 
 physSystParts :: [Sentence]
 physSystParts = map foldlSent [
-  [S "The", phrase pendulumTitle],
-  [S "The", phrase pendulumTitle],
-  [S "The", phrase gravity]]
+  [S "The rod"],
+  [S "The", phrase mass]]
+  
 
 -- ------------------------------
 

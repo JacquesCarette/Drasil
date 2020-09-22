@@ -47,7 +47,7 @@ lenRod = makeUCWDS "l_rod" (cn "length of rod")
 
 pendAngle = makeUCWDS "pendAngle" (cn "angle of pendulum")
         (S "the" +:+ phrase angle `ofThe` phrase pendulum)
-        (lTheta) degree
+        lTheta degree
 
 
 --Labels

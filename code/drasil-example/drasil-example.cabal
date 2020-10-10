@@ -305,6 +305,8 @@ executable dblpendulum
     , Drasil.DblPendulum.TMods
     , Drasil.Projectile.References
     , Drasil.DblPendulum.GenDefs
+    , Drasil.DblPendulum.References
+    , Drasil.DblPendulum.IMods
   
 
   Build-Depends:

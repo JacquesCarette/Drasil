@@ -10,6 +10,7 @@ import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir, point, axis, cartesi
 import Control.Lens((^.)) --need for parametrization hack
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.Citations (dampingSource)
+import Data.Drasil.Concepts.Education (mechanics)
 
 physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
@@ -22,7 +23,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
   rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
   yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec,
-  pendulum, body]
+  pendulum, body, kinematics]
 
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
@@ -36,7 +37,7 @@ acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity, cohesion,
   pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos,
   space, speed, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body :: ConceptChunk
+  yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body, kinematics :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
@@ -92,6 +93,9 @@ joint = dcc "joint" (cn' "joint")
   "a connection between two rigid bodies which allows movement with one or more degrees of freedom"
 kEnergy = dccWDS "kEnergy" (cn "kinetic energy")
   (S "measure" `ofThe` phrase energy +:+ S "a body possesses due to its motion")
+kinematics = dccWDS "kinematics" (cn "kinematics")
+  (S "branch" `sOf` phrase mechanics +:+ S "that describes the motion" `sOf` 
+    S "objects without reference to the causes of motion")
 linear = dcc "linear" (cn' "linear")
   "arranged in or extending along a straight or nearly straight line"
 mechEnergy = dcc "mechEnergy" (cn "mechanical energy")

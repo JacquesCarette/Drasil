@@ -104,6 +104,11 @@
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
+                  <td><em><b>i&#770;</b></em></td>
+                  <td>Unit Vector</td>
+                  <td>--</td>
+                </tr>
+                <tr>
                   <td><em>L<sub>rod</sub></em></td>
                   <td>Length of rod</td>
                   <td><em>m</em></td>
@@ -258,7 +263,7 @@
               <div class="subsubsection">
                 <h3>Goal Statements</h3>
                 <p class="paragraph">
-                  Given the the mass length of the rod initial angle of the mass and the gravitational constant, the goal statements are:
+                  Given the the mass length of the rod, initial angle of the mass and the gravitational constant, the goal statements are:
                 </p>
                 <div class="list">
                   <p>
@@ -356,7 +361,11 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:calOfAngularAcceleration>IM: calOfAngularAcceleration</a>
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -917,6 +926,111 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
+              </div>
+            </div>
+            <div id="Sec:IMs">
+              <div class="subsubsection">
+                <h3>Instance Models</h3>
+                <p class="paragraph">
+                  This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
+                </p>
+                <div id="IM:calOfAngularAcceleration">
+                  <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:calOfAngularAcceleration</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">Calculation of angular acceleration</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph"><em>L<sub>rod</sub></em>, <em>θ</em></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em><b>F</b></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        \[{L_{\text{rod}}}\gt{}0\]
+                        \[0\lt{}θ\lt{}\frac{m}{2}\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td>\[\mathbf{F}\gt{}0\]</td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        \[α=-\frac{\mathbf{g}}{{L_{\text{rod}}}} \sin\left(θ\right)\]
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>α</em> is the angular acceleration (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li>
+                            <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                          <li><em>L<sub>rod</sub></em> is the length of rod (<em>m</em>)</li>
+                          <li><em>θ</em> is the angle of pendulum (<em>&deg;</em>)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{{L_{\text{rod}}}}{2}\)</em> is from
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:calOfAngularAccelerationDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of angular acceleration:</h4>
+                    <p class="paragraph">
+                      Using the Newton's Law <em><b>F</b> = m&#8239;<b>a</b></em> and the pendulum acceleration in <a href=#TM:acceleration>TM: acceleration</a>, we have:
+                    </p>
+                    \[\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω ω \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω ω \cos\left(θ\right) \mathbf{\hat{j}}\right)\]
+                    <p class="paragraph">
+                      Writing the vector components of the above equation as separate equation This gives us two similtaneous equation, first for the <em><b>j&#770;</b></em> component and the second for the <em><b>j&#770;</b></em> component:
+                    </p>
+                    \[\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω ω \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω ω \cos\left(θ\right) \mathbf{\hat{j}}\right)\]
+                    <p class="paragraph">
+                      Doing some algebraic manipulations to eliminate the unknowwn tension Multiply the first equation by <em>cos(θ)</em> and the second by <em>sin(θ)</em>:
+                    </p>
+                    \[\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω ω \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω ω \cos\left(θ\right) \mathbf{\hat{j}}\right)\]
+                    <p class="paragraph">
+                      Use the first equation, to substitute for <em><b>T</b>&#8239;cos(θ)&#8239;sin(θ)</em> in the second equation:
+                    </p>
+                    \[\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω ω \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω ω \cos\left(θ\right) \mathbf{\hat{j}}\right)\]
+                    <p class="paragraph">
+                      With the trig identity <em>cos(θ)&plus;sin(θ) = 1</em>:
+                    </p>
+                    \[\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω ω \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω ω \cos\left(θ\right) \mathbf{\hat{j}}\right)\]
+                  </div>
+                </div>
               </div>
             </div>
           </div>

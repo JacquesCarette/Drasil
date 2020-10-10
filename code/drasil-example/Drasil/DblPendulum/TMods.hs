@@ -7,6 +7,7 @@ import Data.Drasil.Quantities.Physics (acceleration, position, time, velocity, a
 import Drasil.Projectile.References (accelerationWiki, velocityWiki, hibbeler2004)
 import Data.Drasil.Theories.Physics (newtonSL)
 
+
 -----------
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM, newtonSL]
@@ -35,14 +36,3 @@ velocityRC = makeRC "velocityRC" (cn' "velocity") EmptyS velocityRel
 velocityRel :: Relation
 velocityRel = sy velocity $= deriv (sy position) time
 
------------------
--- newtonsLMTM :: TheoryModel --Newton's law of motion
--- newtonsLMTM = tm (cw newtonsLMRC)
---  [qw force, qw mass, qw acceleration] ([] :: [ConceptChunk]) [] [newtonsLMRel] []
---  [makeCite accelerationWiki, makeCiteInfo hibbeler2004 $ Page [7]] "newton's law of motion" []
-
--- newtonsLMRC :: RelationConcept
--- newtonsLMRC = makeRC "newtonsLMRC" (nounPhraseSP "Newton's first law of motion") EmptyS newtonsLMRel
-
--- newtonsLMRel :: Relation
--- newtonsLMRel = sy acceleration $= sy acceleration * sy acceleration

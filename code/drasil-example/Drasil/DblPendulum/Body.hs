@@ -12,10 +12,11 @@ import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum)
+--import Data.Drasil.Concepts.Math (unitV)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.Concepts.Documentation (doccon, doccon')
+import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
   DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, SSDSec),
@@ -27,16 +28,18 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   Verbosity(Verbose), intro, mkDoc, tsymb)
 --ReqrmntSec, ReqrmntSec, ReqsSub, TraceabilityProg,
 --TraceabilitySec, TraceabilitySec, purpDoc, traceMatStandard'
-
 import Drasil.DblPendulum.Figures (figMotion)
-import Data.Drasil.Concepts.Math (mathcon, cartesian)
+import Data.Drasil.Concepts.Math (mathcon, cartesian, unitV)
+import Data.Drasil.Quantities.Math (pi_, unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions)
 import Drasil.DblPendulum.Concepts (pendulumTitle)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.TMods (tMods)
+import Drasil.DblPendulum.IMods (iMods)
 import Drasil.DblPendulum.GenDefs (genDefns)
-import Drasil.DblPendulum.Unitals (symbols, inputs, outputs)
+import Drasil.DblPendulum.Unitals (symbols, inputs, outputs, inputConstraints)
+
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
@@ -67,9 +70,9 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
         , TMs [] (Label : stdFields)
         , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-       -- , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-  --     --  , Constraints EmptyS inConstraints
-  --     --  , CorrSolnPpties outConstraints []
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+ --       , Constraints EmptyS inConstraints
+ --       , CorrSolnPpties outConstraints []
        ]
      ],
   --ReqrmntSec $
@@ -104,7 +107,7 @@ si = SI {
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = [] :: [Block QDefinition],
-  _constraints = [] :: [ConstrainedChunk],
+  _constraints = inputConstraints,
   _constants   = [] :: [QDefinition],
   _sysinfodb   = symbMap,
   _usedinfodb  = usedDB,
@@ -112,12 +115,12 @@ si = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon ++ symbols) 
-  (nw pendulumTitle : nw mass : nw len : nw kilogram : nw newton : nw degree : nw radian : [nw program] ++ map nw symbols ++
-   map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw physicCon' ++
+symbMap = cdb (map qw iMods ++ map qw symbols)
+  (nw pendulumTitle : nw mass : nw len : nw kilogram : nw newton : nw degree : nw radian : nw unitVect : nw unitVectj : [nw program] ++ map nw symbols ++
+   map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon  ++ map nw physicCon' ++
    map nw physicscon ++ map nw physicalcon ++ map nw symbols ++ map nw [metre])
- ([] :: [ConceptChunk]) (map unitWrapper [metre, second, newton, kilogram, degree, radian]) dataDefs
-  ([] :: [InstanceModel]) genDefns tMods concIns [] []
+  (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian]) dataDefs
+  iMods genDefns tMods concIns [] []
 
 
 usedDB :: ChunkDB

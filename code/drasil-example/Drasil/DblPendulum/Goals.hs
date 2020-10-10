@@ -11,12 +11,17 @@ import Data.Drasil.Concepts.Math (iAngle)
 goals :: [ConceptInstance]
 goals = [motionMass]
 
+-- motionMass :: ConceptInstance
+-- motionMass = cic "motionMass" 
+--   (S "Calculate the motion" `ofThe` phrase CPP.mass)
+--   "motionMass" goalStmtDom
+
+goalsInputs :: [Sentence]
+goalsInputs = [phrase CPP.mass +:+ phrase CPP.len  `ofThe` (S "rod" `sC` phrase iAngle ) `ofThe` phrase CPP.mass `andThe` phrase gravitationalConst ]
+
 motionMass :: ConceptInstance
 motionMass = cic "motionMass" 
   (S "Calculate the motion" `ofThe` phrase CPP.mass)
   "motionMass" goalStmtDom
-
-goalsInputs :: [Sentence]
-goalsInputs = [phrase CPP.mass +:+ phrase CPP.len  `ofThe` (S "rod" +:+ phrase iAngle ) `ofThe` phrase CPP.mass `andThe` phrase gravitationalConst ]
 
 

@@ -79,6 +79,8 @@ $\mathbf{F}$ & Force & ${\text{N}}$
 \\
 $\mathbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
+$\mathbf{\hat{i}}$ & Unit Vector & --
+\\
 ${L_{\text{rod}}}$ & Length of rod & ${\text{m}}$
 \\
 $m$ & Mass & ${\text{kg}}$
@@ -164,7 +166,7 @@ The physical system of Pendulum, as shown in \hyperref[Figure:Motion]{Fig:Motion
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the the mass length of the rod initial angle of the mass and the gravitational constant, the goal statements are:
+Given the the mass length of the rod, initial angle of the mass and the gravitational constant, the goal statements are:
 
 \begin{itemize}
 \item[motionMass:\phantomsection\label{motionMass}]{the Calculate the motion of the mass}
@@ -212,7 +214,8 @@ Description & \begin{symbDescription}
 Source & \cite{accelerationWiki} and \cite[(pg. 7)]{hibbeler2004}
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[IM:calOfAngularAcceleration]{IM: calOfAngularAcceleration}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -590,6 +593,86 @@ RefBy &
 \end{tabular}
 \end{minipage}
 
+\subsubsection{Instance Models}
+\label{Sec:IMs}
+This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:calOfAngularAcceleration}
+\phantomsection 
+\label{IM:calOfAngularAcceleration}
+\\ \midrule \\
+Label & Calculation of angular acceleration
+        
+\\ \midrule \\
+Input & ${L_{\text{rod}}}$, $θ$
+        
+\\ \midrule \\
+Output & $\mathbf{F}$
+         
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    {L_{\text{rod}}}\gt{}0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    0\lt{}θ\lt{}\frac{m}{2}
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & \begin{displaymath}
+                     \mathbf{F}\gt{}0
+                     \end{displaymath}
+\\ \midrule \\
+Equation & \begin{displaymath}
+           α=-\frac{\mathbf{g}}{{L_{\text{rod}}}} \sin\left(θ\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
+              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The constraint $0\lt{}θ\lt{}\frac{{L_{\text{rod}}}}{2}$ is from
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of angular acceleration:}
+\label{IM:calOfAngularAccelerationDeriv}
+Using the Newton's Law $\mathbf{F}=m \mathbf{a}$ and the pendulum acceleration in \hyperref[TM:acceleration]{TM: acceleration}, we have:
+
+\begin{displaymath}
+\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω ω \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω ω \cos\left(θ\right) \mathbf{\hat{j}}\right)
+\end{displaymath}
+Writing the vector components of the above equation as separate equation This gives us two similtaneous equation, first for the $\mathbf{\hat{j}}$ component and the second for the $\mathbf{\hat{j}}$ component:
+
+\begin{displaymath}
+\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω ω \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω ω \cos\left(θ\right) \mathbf{\hat{j}}\right)
+\end{displaymath}
+Doing some algebraic manipulations to eliminate the unknowwn tension Multiply the first equation by $\cos\left(θ\right)$ and the second by $\sin\left(θ\right)$:
+
+\begin{displaymath}
+\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω ω \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω ω \cos\left(θ\right) \mathbf{\hat{j}}\right)
+\end{displaymath}
+Use the first equation, to substitute for $\mathbf{T} \cos\left(θ\right) \sin\left(θ\right)$ in the second equation:
+
+\begin{displaymath}
+\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω ω \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω ω \cos\left(θ\right) \mathbf{\hat{j}}\right)
+\end{displaymath}
+With the trig identity $\cos\left(θ\right)+\sin\left(θ\right)=1$:
+
+\begin{displaymath}
+\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω ω \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω ω \cos\left(θ\right) \mathbf{\hat{j}}\right)
+\end{displaymath}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 There are no auxiliary constants.

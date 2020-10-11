@@ -80,5 +80,4 @@ outputConstraints = map (`uq` defaultUncrt)
 lenRodCons     = constrained' QPP.len        [gtZeroConstr] (dbl 44.2)
 massCons       = constrained' QP.velocity   [gtZeroConstr] (dbl 56.2)
 gravAccelCons  = constrained' QP.velocity    [gtZeroConstr] (dbl 74.5)
-posOutCons	   = constrained' QP.velocity    [gtZeroConstr] (dbl 74.5)
-veloOutCons    = constrained' QP.velocity    [gtZeroConstr] (dbl 74.5)
+

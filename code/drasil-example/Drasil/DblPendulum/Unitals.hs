@@ -6,7 +6,7 @@ import Language.Drasil.ShortHands
 --import Theory.Drasil (mkQuantDef)
 import Utils.Drasil
 import Data.Drasil.Constraints (gtZeroConstr)
-import Control.Lens((^.))
+--import Control.Lens((^.))
 
 -- import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
 --   requirement, srs, typUnc)

@@ -29,8 +29,8 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
 --ReqrmntSec, ReqrmntSec, ReqsSub, TraceabilityProg,
 --TraceabilitySec, TraceabilitySec, purpDoc, traceMatStandard'
 import Drasil.DblPendulum.Figures (figMotion)
-import Data.Drasil.Concepts.Math (mathcon, cartesian, unitV)
-import Data.Drasil.Quantities.Math (pi_, unitVect, unitVectj)
+import Data.Drasil.Concepts.Math (mathcon, cartesian)
+import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions)
 import Drasil.DblPendulum.Concepts (pendulumTitle)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)

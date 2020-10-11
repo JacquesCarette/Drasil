@@ -14,8 +14,8 @@ import Data.Drasil.Concepts.Math (constraint, equation)
 import Data.Drasil.Concepts.Physics (pendulum)
 -- equation, xAxis)
 import Data.Drasil.Concepts.Documentation (component)
-import Data.Drasil.Quantities.Math (unitVect, unitVectj, pi_)
-import Data.Drasil.Quantities.Physics (angularAccel, gravitationalAccel, torque, 
+import Data.Drasil.Quantities.Math (unitVect, unitVectj)
+import Data.Drasil.Quantities.Physics (angularAccel, gravitationalAccel,
          angularVelocity, tension, acceleration, force)
 --   ixVel, iyPos, iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -24,9 +24,8 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 --   launchOrigin, posXDirection, targetXAxis, timeStartZero, yAxisGravity)
 -- import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.DblPendulum.TMods (accelerationTM)
--- import Drasil.Projectile.GenDefs (posVecGD)
 import Drasil.DblPendulum.Unitals (lenRod, pendAngle)
---   message, offset, targPos, tol) -}
+
 
 iMods :: [InstanceModel]
 iMods = [angularAccelerationIM]
@@ -38,7 +37,7 @@ angularAccelerationIM = imNoRefs angularAccelerationRC
   ,qwC pendAngle $ Bounded (Exc, 0) (Exc, sy mass / 2)]
   (qw force) [UpFrom (Exc, 0)]
   (Just angularAccelerationDeriv) "calOfAngularAcceleration" [angleConstraintNote]
-  -- gravitationalAccelConstNote, timeConsNote]
+  
 
 angularAccelerationRC :: RelationConcept
 angularAccelerationRC = makeRC "angularAccelerationRC" (nounPhraseSP "calculation of angular acceleration")
@@ -78,24 +77,24 @@ angularAccelerationDerivEqn1, angularAccelerationDerivEqn2, angularAccelerationD
  angularAccelerationDerivEqn4, angularAccelerationDerivEqn5 :: Expr
 
 angularAccelerationDerivEqn1 = sy tension * cos (sy pendAngle) * sy unitVect - sy tension * sin (sy pendAngle) - sy mass * sy gravitationalAccel * sy unitVectj
-                             $= sy mass * sy lenRod * ( sy angularAccel * cos (sy pendAngle) * sy unitVect - sy angularVelocity ^ 2 * sin (sy pendAngle)
-                              + sy angularAccel * sin (sy pendAngle) * sy unitVectj + sy angularVelocity ^ 2 * cos (sy pendAngle) * sy unitVectj)
+                             $= sy mass * sy lenRod * ( sy angularAccel * cos (sy pendAngle) * sy unitVect - square (sy angularVelocity) * sin (sy pendAngle)
+                              + sy angularAccel * sin (sy pendAngle) * sy unitVectj + square (sy angularVelocity) * cos (sy pendAngle) * sy unitVectj)
 
 angularAccelerationDerivEqn2 = sy tension * cos (sy pendAngle) * sy unitVect - sy tension * sin (sy pendAngle) - sy mass * sy gravitationalAccel * sy unitVectj
-                             $= sy mass * sy lenRod * ( sy angularAccel * cos (sy pendAngle) * sy unitVect - sy angularVelocity ^ 2 * sin (sy pendAngle)
-                              + sy angularAccel * sin (sy pendAngle) * sy unitVectj + sy angularVelocity ^ 2 * cos (sy pendAngle) * sy unitVectj)
+                             $= sy mass * sy lenRod * ( sy angularAccel * cos (sy pendAngle) * sy unitVect - square (sy angularVelocity) * sin (sy pendAngle)
+                              + sy angularAccel * sin (sy pendAngle) * sy unitVectj + square (sy angularVelocity) * cos (sy pendAngle) * sy unitVectj)
 
 angularAccelerationDerivEqn3 = sy tension * cos (sy pendAngle) * sy unitVect - sy tension * sin ( sy pendAngle) - sy mass * sy gravitationalAccel * sy unitVectj
-                             $= sy mass * sy lenRod * ( sy angularAccel * cos (sy pendAngle) * sy unitVect - sy angularVelocity ^ 2 * sin (sy pendAngle)
-                              + sy angularAccel * sin (sy pendAngle) * sy unitVectj + sy angularVelocity ^ 2 * cos (sy pendAngle) * sy unitVectj)
+                             $= sy mass * sy lenRod * ( sy angularAccel * cos (sy pendAngle) * sy unitVect - square (sy angularVelocity) * sin (sy pendAngle)
+                              + sy angularAccel * sin (sy pendAngle) * sy unitVectj + square (sy angularVelocity) * cos (sy pendAngle) * sy unitVectj)
 
 angularAccelerationDerivEqn4 = sy tension * cos (sy pendAngle) * sy unitVect - sy tension * sin (sy pendAngle) - sy mass * sy gravitationalAccel * sy unitVectj
-                              $= sy mass * sy lenRod * ( sy angularAccel * cos (sy pendAngle) * sy unitVect - sy angularVelocity ^ 2 * sin (sy pendAngle)
-                                 + sy angularAccel * sin (sy pendAngle) * sy unitVectj + sy angularVelocity ^ 2 * cos (sy pendAngle) * sy unitVectj)
+                              $= sy mass * sy lenRod * ( sy angularAccel * cos (sy pendAngle) * sy unitVect - square (sy angularVelocity) * sin (sy pendAngle)
+                                 + sy angularAccel * sin (sy pendAngle) * sy unitVectj + square (sy angularVelocity) * cos (sy pendAngle) * sy unitVectj)
 
 angularAccelerationDerivEqn5 = sy tension * cos (sy pendAngle) * sy unitVect - sy tension * sin (sy pendAngle) - sy mass * sy gravitationalAccel * sy unitVectj
-                              $= sy mass * sy lenRod * ( sy angularAccel * cos (sy pendAngle) * sy unitVect - sy angularVelocity ^ 2 * sin (sy pendAngle)
-                               + sy angularAccel * sin (sy pendAngle) * sy unitVectj + sy angularVelocity ^ 2 * cos (sy pendAngle) * sy unitVectj)
+                              $= sy mass * sy lenRod * ( sy angularAccel * cos (sy pendAngle) * sy unitVect - square (sy angularVelocity) * sin (sy pendAngle)
+                               + sy angularAccel * sin (sy pendAngle) * sy unitVectj + square (sy angularVelocity) * cos (sy pendAngle) * sy unitVectj)
 
 -- landPosDerivSent1, landPosDerivSent2, landPosDerivSent3, landPosDerivSent4 :: Sentence
 -- landPosDerivSent1 = foldlSentCol [S "We know that" +:+.

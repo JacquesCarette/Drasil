@@ -2,7 +2,6 @@ module Drasil.DblPendulum.References where
 
 import Language.Drasil
 import Data.Drasil.Citations (cartesianWiki)
-import Data.Drasil.People (rcHibbeler)
 import Drasil.Projectile.References (accelerationWiki, velocityWiki, hibbeler2004)
 
 

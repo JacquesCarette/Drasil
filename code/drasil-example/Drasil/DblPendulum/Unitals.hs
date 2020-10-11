@@ -17,7 +17,7 @@ import Data.Drasil.SI_Units (metre, degree)
 import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, force, velocity,
  angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, yAccel, xAccel, yVel, xVel, iyPos, time, position)
 import Data.Drasil.Concepts.Physics (pendulum)
-import Data.Drasil.Concepts.Math as CM (angle, unitV)
+import Data.Drasil.Concepts.Math as CM (angle)
 import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj)
 
 symbols:: [QuantityDict]
@@ -74,7 +74,7 @@ inputConstraints = map (`uq` defaultUncrt)
 
 outputConstraints :: [UncertQ]
 outputConstraints = map (`uq` defaultUncrt) 
-  [posOutCons, veloOutCons]
+  [gravAccelCons]
 
 
 lenRodCons     = constrained' QPP.len        [gtZeroConstr] (dbl 44.2)

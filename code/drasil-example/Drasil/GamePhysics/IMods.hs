@@ -43,7 +43,7 @@ transMotRC :: RelationConcept
 transMotRC = makeRC "transMotRC" transMotNP EmptyS transMotRel
 
 transMotNP :: NP
-transMotNP = nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
+transMotNP = nounPhraseSP "Force on the translational motion of a set of 2D rigid bodies"
 
 transMotRel :: Relation -- FIXME: add proper equation
 transMotRel = sy accI $= deriv (apply1 velI time) time

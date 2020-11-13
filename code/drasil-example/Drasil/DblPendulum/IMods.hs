@@ -12,6 +12,7 @@ import Data.Drasil.Quantities.Physics (angularAccel, gravitationalAccel,
 import Data.Drasil.Theories.Physics (newtonSL)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Drasil.DblPendulum.Unitals (lenRod, pendAngle)
+import Data.Drasil.Concepts.Math (constraint)
 
 
 iMods :: [InstanceModel]

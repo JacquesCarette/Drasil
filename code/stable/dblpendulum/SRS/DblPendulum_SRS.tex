@@ -125,13 +125,13 @@ $ω$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \end{longtable}
 \section{Introduction}
 \label{Sec:Intro}
-pendulumTitle is the subject pendulumTitle is the focus. Pendulum.
+A pendulum consists of mass attached to the end of a rod, its moving curve is highly sensitive to initial conditions Therefore, it is useful to have a program the to simulate the motion of the pendulum to exhibit the chaotic characteristics of it The program documented here is called pendulum.
 
 The following section provides an overview of the Software Requirements Specification (SRS) for Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes pendulumTitle is the subject pendulumTitle is the focus. Pendulum..
+The scope of the requirements includes the analysis of a two-dimensional (2D) pendulum motion problem with various initial conditions..
 
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
@@ -169,7 +169,7 @@ The physical system of Pendulum, as shown in \hyperref[Figure:Motion]{Fig:Motion
 Given the the mass length of the rod, initial angle of the mass and the gravitational constant, the goal statements are:
 
 \begin{itemize}
-\item[motionMass:\phantomsection\label{motionMass}]{the Calculate the motion of the mass}
+\item[Motion-of-the-mass:\phantomsection\label{motionMass}]{the Calculate the motion of the mass}
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -214,8 +214,7 @@ Description & \begin{symbDescription}
 Source & \cite{accelerationWiki} and \cite[(pg. 7)]{hibbeler2004}
          
 \\ \midrule \\
-RefBy & \hyperref[IM:calOfAngularAcceleration]{IM: calOfAngularAcceleration}
-        
+RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -274,7 +273,8 @@ Notes & The net force $\mathbf{F}$ on a body is proportional to the acceleration
 Source & --
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[IM:calOfAngularAcceleration]{IM: calOfAngularAcceleration}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -611,19 +611,17 @@ Label & Calculation of angular acceleration
 Input & ${L_{\text{rod}}}$, $θ$
         
 \\ \midrule \\
-Output & $\mathbf{F}$
+Output & $α$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
                     {L_{\text{rod}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}θ\lt{}\frac{m}{2}
+                    θ\gt{}0
                     \end{displaymath}
 \\ \midrule \\
-Output Constraints & \begin{displaymath}
-                     \mathbf{F}\gt{}0
-                     \end{displaymath}
+Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
            α=-\frac{\mathbf{g}}{{L_{\text{rod}}}} \sin\left(θ\right)
@@ -636,34 +634,35 @@ Description & \begin{symbDescription}
               \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The constraint $0\lt{}θ\lt{}\frac{{L_{\text{rod}}}}{2}$ is from
+Notes & The constraint $θ\gt{}0$ is required
         
 \\ \midrule \\
 Source & --
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[outputValues]{FR: Output-Values} and \hyperref[calcAngPos]{FR: Calculate-Angular-Position-Of-Mass}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 \paragraph{Detailed derivation of angular acceleration:}
 \label{IM:calOfAngularAccelerationDeriv}
-Using the Newton's Law $\mathbf{F}=m \mathbf{a}$ and the pendulum acceleration in \hyperref[TM:acceleration]{TM: acceleration}, we have:
+Using the Newton's Law in \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}, we have:
 
 \begin{displaymath}
-\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω^{2} \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω^{2} \cos\left(θ\right) \mathbf{\hat{j}}\right)
+\mathbf{F}=m \mathbf{a}
 \end{displaymath}
-Writing the vector components of the above equation as separate equation This gives us two similtaneous equation, first for the $\mathbf{\hat{j}}$ component and the second for the $\mathbf{\hat{j}}$ component:
+Where $\mathbf{F}$ denotes the force, $m$ denotes the mass and $\mathbf{a}$ denotes the acceleration Therefore:
 
 \begin{displaymath}
-\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω^{2} \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω^{2} \cos\left(θ\right) \mathbf{\hat{j}}\right)
+-m \mathbf{g} \sin\left(θ\right)=m α
 \end{displaymath}
-Doing some algebraic manipulations to eliminate the unknowwn tension Multiply the first equation by $\cos\left(θ\right)$ and the second by $\sin\left(θ\right)$:
+Then we have:
 
 \begin{displaymath}
-\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω^{2} \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω^{2} \cos\left(θ\right) \mathbf{\hat{j}}\right)
+-\mathbf{g} \sin\left(θ\right)=α
 \end{displaymath}
-Use the first equation, to substitute for $\mathbf{T} \cos\left(θ\right) \sin\left(θ\right)$ in the second equation:
+the when the rod makes an $θ$ with the vertical, displacement of the mass is given by.
 
 \begin{displaymath}
 \mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω^{2} \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω^{2} \cos\left(θ\right) \mathbf{\hat{j}}\right)
@@ -673,6 +672,78 @@ With the trig identity $\cos\left(θ\right)+\sin\left(θ\right)=1$:
 \begin{displaymath}
 \mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω^{2} \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω^{2} \cos\left(θ\right) \mathbf{\hat{j}}\right)
 \end{displaymath}
+\subsubsection{Data Constraints}
+\label{Sec:DataConstraints}
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+
+\begin{longtable}{l l l l}
+\toprule
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
+\\
+\midrule
+\endhead
+$\mathbf{g}$ & $\mathbf{g}\gt{}0$ & $9.8$ $\frac{\text{m}}{\text{s}^{2}}$ & 10$\%$
+\\
+${L_{\text{rod}}}$ & ${L_{\text{rod}}}\gt{}0$ & $44.2$ ${\text{m}}$ & 10$\%$
+\\
+$m$ & $m\gt{}0$ & $56.2$ ${\text{kg}}$ & 10$\%$
+\\
+$θ$ & $θ\gt{}0$ & $2.1$ ${{}^{\circ}}$ & 10$\%$
+\\
+\bottomrule
+\caption{Input Data Constraints}
+\label{Table:InDataConstraints}
+\end{longtable}
+\subsubsection{Properties of a Correct Solution}
+\label{Sec:CorSolProps}
+\hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+
+\begin{longtable}{l l}
+\toprule
+\textbf{Var} & \textbf{Physical Constraints}
+\\
+\midrule
+\endhead
+$α$ & $α\gt{}0$
+\\
+\bottomrule
+\caption{Output Data Constraints}
+\label{Table:OutDataConstraints}
+\end{longtable}
+\section{Requirements}
+\label{Sec:Requirements}
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+
+\subsection{Functional Requirements}
+\label{Sec:FRs}
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
+
+\begin{itemize}
+\item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Table:ReqInputs}.}
+\item[Verify-Input-Values:\phantomsection\label{verifyInptVals}]{Check the entered input values to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
+\item[Calculate-Angular-Position-Of-Mass:\phantomsection\label{calcAngPos}]{Calculate the following values: $α$ (from \hyperref[IM:calOfAngularAcceleration]{IM: calOfAngularAcceleration}) and $θ$ (from \hyperref[IM:calOfAngularAcceleration]{IM: calOfAngularAcceleration}).}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output ${L_{\text{rod}}}$ (from \hyperref[IM:calOfAngularAcceleration]{IM: calOfAngularAcceleration}) and ${L_{\text{rod}}}$ (from \hyperref[IM:calOfAngularAcceleration]{IM: calOfAngularAcceleration}).}
+\end{itemize}
+\begin{longtable}{l l l}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
+\\
+\midrule
+\endhead
+$\mathbf{F}$ & Force & ${\text{N}}$
+\\
+${L_{\text{rod}}}$ & Length of rod & ${\text{m}}$
+\\
+\bottomrule
+\caption{Required Inputs following \hyperref[inputValues]{FR: Input-Values}}
+\label{Table:ReqInputs}
+\end{longtable}
+\subsection{Non-Functional Requirements}
+\label{Sec:NFRs}
+This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
+
+\begin{itemize}
+\end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 There are no auxiliary constants.

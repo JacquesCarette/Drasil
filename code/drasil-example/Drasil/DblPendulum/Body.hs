@@ -6,27 +6,27 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _configFiles, _definitions, _defSequence, _inputs, _kind, _outputs, 
   _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian)
-import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum)
---import Data.Drasil.Concepts.Math (unitV)
+import Data.Drasil.Concepts.Software (program, errMsg)
+import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
+import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains, problem, analysis)
+import Data.Drasil.Concepts.Computation (inValue)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
-  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, SSDSec),
+  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, SSDSec, RefSec, ReqrmntSec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
   IntroSec(..), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
   RefSec(..), RefTab(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..),
-  Verbosity(Verbose), intro, mkDoc, tsymb)
---ReqrmntSec, ReqrmntSec, ReqsSub, TraceabilityProg,
+  Verbosity(Verbose), intro, mkDoc, tsymb,
+  ReqrmntSec(..), ReqsSub(..))
+  -- TraceabilityProg,
 --TraceabilitySec, TraceabilitySec, purpDoc, traceMatStandard'
 import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (mathcon, cartesian)
@@ -38,7 +38,8 @@ import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.TMods (tMods)
 import Drasil.DblPendulum.IMods (iMods)
 import Drasil.DblPendulum.GenDefs (genDefns)
-import Drasil.DblPendulum.Unitals (symbols, inputs, outputs, inputConstraints)
+import Drasil.DblPendulum.Unitals (symbols, inputs, outputs, inConstraints, outConstraints)
+import Drasil.DblPendulum.Requirements (funcReqs)
 
 
 srs :: Document
@@ -71,15 +72,14 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
         , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
- --       , Constraints EmptyS inConstraints
- --       , CorrSolnPpties outConstraints []
+        , Constraints EmptyS inConstraints
+        , CorrSolnPpties outConstraints []
        ]
      ],
-  --ReqrmntSec $
-  --  ReqsProg
-  --     [ FReqsSub EmptyS []
-  --     , NonFReqsSub
-  --     ],
+  ReqrmntSec $ ReqsProg
+    [ FReqsSub EmptyS []
+    , NonFReqsSub
+    ],
   -- TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
      AuxConsProg pendulumTitle [],  --Adds Auxilliary constraint section
@@ -87,11 +87,16 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   ]
 
 justification :: Sentence
-justification = foldlSent [S "pendulumTitle is the subject" +:+. S "pendulumTitle is the focus",
-  phrase pendulumTitle]
-
+justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` S "mass", 
+                            S "attached to the end of a rod" `sC` S "its moving curve" `sIs`
+                            S "highly sensitive to initial conditions" +:+ S "Therefore" `sC`
+                            S "it is useful to have a", phrase program, S "to simulate the motion"
+                            `ofThe` phrase pendulum, S "to exhibit the chaotic characteristics" `sOf` S "it",
+                            S "The", phrase program, S "documented here is called", phrase pendulum]
 scope :: Sentence
-scope = foldlSent [S "pendulumTitle is the subject" +:+. S "pendulumTitle is the focus", phrase pendulumTitle]
+scope = foldlSent [S "the", phrase analysis `sOf` S "a", phrase twoD, 
+  sParen (getAcc twoD), phrase pendulum, S "motion", phrase problem,
+                   S "with various initial conditions"]
 
 si :: SystemInformation
 si = SI {
@@ -107,7 +112,7 @@ si = SI {
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = [] :: [Block QDefinition],
-  _constraints = inputConstraints,
+  _constraints = inConstraints,
   _constants   = [] :: [QDefinition],
   _sysinfodb   = symbMap,
   _usedinfodb  = usedDB,
@@ -116,7 +121,8 @@ si = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw iMods ++ map qw symbols)
-  (nw pendulumTitle : nw mass : nw len : nw kilogram : nw newton : nw degree : nw radian : nw unitVect : nw unitVectj : [nw program] ++ map nw symbols ++
+  (nw pendulumTitle : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
+    : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon  ++ map nw physicCon' ++
    map nw physicscon ++ map nw physicalcon ++ map nw symbols ++ map nw [metre])
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian]) dataDefs
@@ -125,8 +131,7 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) [] [] []
+  ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -135,8 +140,9 @@ refDB :: ReferenceDB
 refDB = rdb [] []
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ goals 
--- ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
+concIns = assumptions ++ goals ++ funcReqs
+-- ++ nonFuncReqs
+-- ++ likelyChgs ++ unlikelyChgs
 
 ------------------------------------
 --Problem Description
@@ -164,9 +170,6 @@ physSystParts = map foldlSent [
   [S "The", phrase mass]]
   
 
--- ------------------------------
 
---goalsInputs :: [Sentence]
---goalsInputs = [phrase pendulumTitle `ofThe` phrase pendulumTitle ]
  
 

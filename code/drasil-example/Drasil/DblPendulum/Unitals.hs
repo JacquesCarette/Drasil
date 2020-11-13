@@ -22,17 +22,9 @@ import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj)
 
 symbols:: [QuantityDict]
 symbols = map qw unitalChunks ++ map qw unitless
--- map qw [mass, ixPos, position, lenRod, pendAngle]
---symbols = map qw unitalChunks
-
--- -- FIXME: Move to Defs?
--- acronyms :: [CI]
--- acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
---   physSyst, requirement, srs, thModel, typUnc]
 
 inputs :: [QuantityDict]
 inputs = map qw [lenRod, QP.force] 
---mass, length, angle, g, t
 
 outputs :: [QuantityDict]
 outputs = map qw [QP.position]
@@ -68,16 +60,20 @@ lRod = Label "rod"
 
 lenRodCons, massCons, gravAccelCons :: ConstrConcept
 
-inputConstraints :: [UncertQ]
-inputConstraints = map (`uq` defaultUncrt)
-  [lenRodCons, massCons, gravAccelCons]
+inConstraints :: [UncertQ]
+inConstraints = map (`uq` defaultUncrt)
+  [lenRodCons, massCons, gravAccelCons, pendAngleCons]
 
-outputConstraints :: [UncertQ]
-outputConstraints = map (`uq` defaultUncrt) 
-  [gravAccelCons]
+outConstraints :: [UncertQ]
+outConstraints = map (`uq` defaultUncrt) 
+  [angAccelOutCons]
 
 
-lenRodCons     = constrained' QPP.len        [gtZeroConstr] (dbl 44.2)
-massCons       = constrained' QP.velocity   [gtZeroConstr] (dbl 56.2)
-gravAccelCons  = constrained' QP.velocity    [gtZeroConstr] (dbl 74.5)
+lenRodCons     = constrained' lenRod        [gtZeroConstr] (dbl 44.2)
+massCons       = constrained' QPP.mass   [gtZeroConstr] (dbl 56.2)
+gravAccelCons  = constrained' QP.gravitationalAccel    [gtZeroConstr] (dbl 9.8)
+pendAngleCons  = constrained' pendAngle    [gtZeroConstr] (dbl 2.1)
+
+angAccelOutCons    = constrained' QP.angularAccel    [gtZeroConstr] (dbl 0.0)
+
 

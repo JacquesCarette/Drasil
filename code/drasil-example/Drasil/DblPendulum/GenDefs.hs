@@ -1,4 +1,5 @@
-module Drasil.DblPendulum.GenDefs (genDefns, velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD) where
+module Drasil.DblPendulum.GenDefs (genDefns, velocityIXGD, velocityIYGD,
+         accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD) where
 
 import Prelude hiding (cos, sin)
 import Language.Drasil

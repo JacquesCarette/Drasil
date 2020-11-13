@@ -198,7 +198,7 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          pendulumTitle is the subject pendulumTitle is the focus. Pendulum.
+          A pendulum consists of mass attached to the end of a rod, its moving curve is highly sensitive to initial conditions Therefore, it is useful to have a program the to simulate the motion of the pendulum to exhibit the chaotic characteristics of it The program documented here is called pendulum.
         </p>
         <p class="paragraph">
           The following section provides an overview of the Software Requirements Specification (SRS) for Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
@@ -207,7 +207,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes pendulumTitle is the subject pendulumTitle is the focus. Pendulum..
+              The scope of the requirements includes the analysis of a two-dimensional (2D) pendulum motion problem with various initial conditions..
             </p>
           </div>
         </div>
@@ -268,7 +268,7 @@
                 <div class="list">
                   <p>
                     <div id="motionMass">
-                      motionMass: the Calculate the motion of the mass
+                      Motion-of-the-mass: the Calculate the motion of the mass
                     </div>
                   </p>
                 </div>
@@ -361,11 +361,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#IM:calOfAngularAcceleration>IM: calOfAngularAcceleration</a>
-                        </p>
-                      </td>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -449,7 +445,11 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#IM:calOfAngularAcceleration>IM: calOfAngularAcceleration</a>
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -954,18 +954,18 @@
                     </tr>
                     <tr>
                       <th>Output</th>
-                      <td><p class="paragraph"><em><b>F</b></em></p></td>
+                      <td><p class="paragraph"><em>α</em></p></td>
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
                       <td>
                         \[{L_{\text{rod}}}\gt{}0\]
-                        \[0\lt{}θ\lt{}\frac{m}{2}\]
+                        \[θ\gt{}0\]
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>\[\mathbf{F}\gt{}0\]</td>
+                      <td></td>
                     </tr>
                     <tr>
                       <th>Equation</th>
@@ -992,7 +992,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{{L_{\text{rod}}}}{2}\)</em> is from
+                          The constraint <em>θ&thinsp;&gt;&thinsp;0</em> is required
                         </p>
                       </td>
                     </tr>
@@ -1002,7 +1002,11 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#outputValues>FR: Output-Values</a> and <a href=#calcAngPos>FR: Calculate-Angular-Position-Of-Mass</a>
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -1010,19 +1014,17 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of angular acceleration:</h4>
                     <p class="paragraph">
-                      Using the Newton's Law <em><b>F</b> = m&#8239;<b>a</b></em> and the pendulum acceleration in <a href=#TM:acceleration>TM: acceleration</a>, we have:
+                      Using the Newton's Law in <a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a>, we have:
                     </p>
-                    \[\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω^{2} \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω^{2} \cos\left(θ\right) \mathbf{\hat{j}}\right)\]
+                    \[\mathbf{F}=m \mathbf{a}\]
                     <p class="paragraph">
-                      Writing the vector components of the above equation as separate equation This gives us two similtaneous equation, first for the <em><b>j&#770;</b></em> component and the second for the <em><b>j&#770;</b></em> component:
+                      Where <em><b>F</b></em> denotes the force, <em>m</em> denotes the mass and <em><b>a</b></em> denotes the acceleration Therefore:
                     </p>
-                    \[\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω^{2} \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω^{2} \cos\left(θ\right) \mathbf{\hat{j}}\right)\]
+                    \[-m \mathbf{g} \sin\left(θ\right)=m α\]
+                    <p class="paragraph">Then we have:</p>
+                    \[-\mathbf{g} \sin\left(θ\right)=α\]
                     <p class="paragraph">
-                      Doing some algebraic manipulations to eliminate the unknowwn tension Multiply the first equation by <em>cos(θ)</em> and the second by <em>sin(θ)</em>:
-                    </p>
-                    \[\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω^{2} \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω^{2} \cos\left(θ\right) \mathbf{\hat{j}}\right)\]
-                    <p class="paragraph">
-                      Use the first equation, to substitute for <em><b>T</b>&#8239;cos(θ)&#8239;sin(θ)</em> in the second equation:
+                      the when the rod makes an <em>θ</em> with the vertical, displacement of the mass is given by.
                     </p>
                     \[\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω^{2} \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω^{2} \cos\left(θ\right) \mathbf{\hat{j}}\right)\]
                     <p class="paragraph">
@@ -1033,6 +1035,139 @@
                 </div>
               </div>
             </div>
+            <div id="Sec:DataConstraints">
+              <div class="subsubsection">
+                <h3>Data Constraints</h3>
+                <p class="paragraph">
+                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+                </p>
+                <div id="Table:InDataConstraints">
+                  <table class="table">
+                    <tr>
+                      <th>Var</th>
+                      <th>Physical Constraints</th>
+                      <th>Typical Value</th>
+                      <th>Uncert.</th>
+                    </tr>
+                    <tr>
+                      <td><em><b>g</b></em></td>
+                      <td><em><b>g</b>&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>9.8</em> <em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>L<sub>rod</sub></em></td>
+                      <td><em>L<sub>rod</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>44.2</em> <em>m</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>m</em></td>
+                      <td><em>m&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>56.2</em> <em>kg</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>θ</em></td>
+                      <td><em>θ&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>2.1</em> <em>&deg;</em></td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                  </table>
+                  <p class="caption">Input Data Constraints</p>
+                </div>
+              </div>
+            </div>
+            <div id="Sec:CorSolProps">
+              <div class="subsubsection">
+                <h3>Properties of a Correct Solution</h3>
+                <p class="paragraph">
+                  <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+                </p>
+                <div id="Table:OutDataConstraints">
+                  <table class="table">
+                    <tr>
+                      <th>Var</th>
+                      <th>Physical Constraints</th>
+                    </tr>
+                    <tr>
+                      <td><em>α</em></td>
+                      <td><em>α&thinsp;&gt;&thinsp;0</em></td>
+                    </tr>
+                  </table>
+                  <p class="caption">Output Data Constraints</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:Requirements">
+      <div class="section">
+        <h1>Requirements</h1>
+        <p class="paragraph">
+          This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+        </p>
+        <div id="Sec:FRs">
+          <div class="subsection">
+            <h2>Functional Requirements</h2>
+            <p class="paragraph">
+              This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
+            </p>
+            <div class="list">
+              <p>
+                <div id="inputValues">
+                  Input-Values: Input the values from <a href=#Table:ReqInputs>Table:ReqInputs</a>.
+                </div>
+              </p>
+              <p>
+                <div id="verifyInptVals">
+                  Verify-Input-Values: Check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Section: Data Constraints</a>. If any of the input values are out of bounds, an error message is displayed and the calculations stop.
+                </div>
+              </p>
+              <p>
+                <div id="calcAngPos">
+                  Calculate-Angular-Position-Of-Mass: Calculate the following values: <em>α</em> (from <a href=#IM:calOfAngularAcceleration>IM: calOfAngularAcceleration</a>) and <em>θ</em> (from <a href=#IM:calOfAngularAcceleration>IM: calOfAngularAcceleration</a>).
+                </div>
+              </p>
+              <p>
+                <div id="outputValues">
+                  Output-Values: Output <em>L<sub>rod</sub></em> (from <a href=#IM:calOfAngularAcceleration>IM: calOfAngularAcceleration</a>) and <em>L<sub>rod</sub></em> (from <a href=#IM:calOfAngularAcceleration>IM: calOfAngularAcceleration</a>).
+                </div>
+              </p>
+            </div>
+            <div id="Table:ReqInputs">
+              <table class="table">
+                <tr>
+                  <th>Symbol</th>
+                  <th>Description</th>
+                  <th>Units</th>
+                </tr>
+                <tr>
+                  <td><em><b>F</b></em></td>
+                  <td>Force</td>
+                  <td><em>N</em></td>
+                </tr>
+                <tr>
+                  <td><em>L<sub>rod</sub></em></td>
+                  <td>Length of rod</td>
+                  <td><em>m</em></td>
+                </tr>
+              </table>
+              <p class="caption">
+                Required Inputs following <a href=#inputValues>FR: Input-Values</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="Sec:NFRs">
+          <div class="subsection">
+            <h2>Non-Functional Requirements</h2>
+            <p class="paragraph">
+              This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
+            </p>
+            <div class="list"></div>
           </div>
         </div>
       </div>

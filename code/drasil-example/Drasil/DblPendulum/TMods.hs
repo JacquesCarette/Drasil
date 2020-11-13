@@ -3,7 +3,6 @@ module Drasil.DblPendulum.TMods (tMods, accelerationTM, velocityTM, newtonSL) wh
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tm)
 import Data.Drasil.Quantities.Physics (acceleration, position, time, velocity, acceleration)
---import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Drasil.Projectile.References (accelerationWiki, velocityWiki, hibbeler2004)
 import Data.Drasil.Theories.Physics (newtonSL)
 

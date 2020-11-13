@@ -2,26 +2,29 @@ module Drasil.DblPendulum.Unitals where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
---import Data.Drasil.IdeaDicts
+import Data.Drasil.IdeaDicts
 --import Theory.Drasil (mkQuantDef)
 import Utils.Drasil
 import Data.Drasil.Constraints (gtZeroConstr)
 --import Control.Lens((^.))
 
--- import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
---   requirement, srs, typUnc)
+import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
+        requirement, srs, typUnc)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, degree)
---(distance, oneD, twoD)
-
 import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, force, velocity,
- angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, yAccel, xAccel, yVel, xVel, iyPos, time, position)
-import Data.Drasil.Concepts.Physics (pendulum)
+  angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, yAccel,
+  xAccel, yVel, xVel, iyPos, time, position)
+import Data.Drasil.Concepts.Physics (pendulum, twoD)
 import Data.Drasil.Concepts.Math as CM (angle)
 import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj)
 
 symbols:: [QuantityDict]
 symbols = map qw unitalChunks ++ map qw unitless
+
+acronyms :: [CI]
+acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
+  physSyst, requirement, srs, thModel, typUnc]
 
 inputs :: [QuantityDict]
 inputs = map qw [lenRod, QP.force] 
@@ -58,7 +61,7 @@ lRod = Label "rod"
 -- CONSTRAINT CHUNKS --
 -----------------------
 
-lenRodCons, massCons, gravAccelCons :: ConstrConcept
+lenRodCons, massCons, gravAccelCons, pendAngleCons :: ConstrConcept
 
 inConstraints :: [UncertQ]
 inConstraints = map (`uq` defaultUncrt)

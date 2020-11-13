@@ -38,7 +38,8 @@ import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.TMods (tMods)
 import Drasil.DblPendulum.IMods (iMods)
 import Drasil.DblPendulum.GenDefs (genDefns)
-import Drasil.DblPendulum.Unitals (symbols, inputs, outputs, inConstraints, outConstraints, acronyms)
+import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
+  inConstraints, outConstraints, acronyms)
 import Drasil.DblPendulum.Requirements (funcReqs)
 
 

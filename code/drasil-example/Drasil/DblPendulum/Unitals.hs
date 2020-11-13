@@ -61,7 +61,7 @@ lRod = Label "rod"
 -- CONSTRAINT CHUNKS --
 -----------------------
 
-lenRodCons, massCons, gravAccelCons, pendAngleCons :: ConstrConcept
+lenRodCons, massCons, gravAccelCons, pendAngleCons, angAccelOutCons :: ConstrConcept
 
 inConstraints :: [UncertQ]
 inConstraints = map (`uq` defaultUncrt)
@@ -76,7 +76,6 @@ lenRodCons     = constrained' lenRod        [gtZeroConstr] (dbl 44.2)
 massCons       = constrained' QPP.mass   [gtZeroConstr] (dbl 56.2)
 gravAccelCons  = constrained' QP.gravitationalAccel    [gtZeroConstr] (dbl 9.8)
 pendAngleCons  = constrained' pendAngle    [gtZeroConstr] (dbl 2.1)
-
 angAccelOutCons    = constrained' QP.angularAccel    [gtZeroConstr] (dbl 0.0)
 
 

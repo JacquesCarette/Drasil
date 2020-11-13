@@ -6,16 +6,11 @@ import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoRefs, qwC) 
   --imNoDerivNoRefs, )
 import Utils.Drasil
-import Data.Drasil.Concepts.Math (constraint, equation)
-import Data.Drasil.Concepts.Physics (pendulum)
--- equation, xAxis)
-import Data.Drasil.Concepts.Documentation (component)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Quantities.Physics (angularAccel, gravitationalAccel,
          angularVelocity, tension, acceleration, force, displacement)
 import Data.Drasil.Theories.Physics (newtonSL)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Drasil.DblPendulum.TMods (accelerationTM)
 import Drasil.DblPendulum.Unitals (lenRod, pendAngle)
 
 

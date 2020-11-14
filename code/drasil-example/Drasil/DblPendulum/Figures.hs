@@ -8,5 +8,6 @@ resourcePath :: String
 resourcePath = "../../../datafiles/DblPendulum/"
 
 figMotion :: LabelledContent
-figMotion = llcc (makeFigRef "Motion") $ figWithWidth (S "The" +:+ phrase physicalSystem)
+figMotion = llcc (makeFigRef "PendulumMotion") $ figWithWidth (S "The" +:+ phrase physicalSystem)
   (resourcePath ++ "pendulum.png") 70
+

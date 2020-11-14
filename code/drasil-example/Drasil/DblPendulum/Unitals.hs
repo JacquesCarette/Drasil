@@ -3,7 +3,7 @@ module Drasil.DblPendulum.Unitals where
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Data.Drasil.IdeaDicts
---import Theory.Drasil (mkQuantDef)
+import Theory.Drasil (mkQuantDef)
 import Utils.Drasil
 import Data.Drasil.Constraints (gtZeroConstr)
 --import Control.Lens((^.))

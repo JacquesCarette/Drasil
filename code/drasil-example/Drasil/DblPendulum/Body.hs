@@ -131,14 +131,11 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
 
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols) ([] :: [ConceptChunk])
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
---refDB :: ReferenceDB
---refDB = rdb [] []
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

@@ -41,7 +41,7 @@ import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
 import Drasil.DblPendulum.Requirements (funcReqs)
-
+import Drasil.DblPendulum.References (citations)
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
@@ -137,8 +137,11 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbols) ([] :: [ConceptChunk])
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
+--refDB :: ReferenceDB
+--refDB = rdb [] []
+
 refDB :: ReferenceDB
-refDB = rdb [] []
+refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ funcReqs

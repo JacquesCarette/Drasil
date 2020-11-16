@@ -42,6 +42,7 @@ import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
 import Drasil.DblPendulum.Requirements (funcReqs)
 import Drasil.DblPendulum.References (citations)
+import Drasil.Projectile.References
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si

@@ -26,7 +26,7 @@ acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, srs, thModel, typUnc]
 
 inputs :: [QuantityDict]
-inputs = map qw [lenRod, QP.force] 
+inputs = map qw [lenRod, QP.force, QP.angularAccel, pendAngle] 
 
 outputs :: [QuantityDict]
 outputs = map qw [QP.position]
@@ -60,11 +60,11 @@ lRod = Label "rod"
 -- CONSTRAINT CHUNKS --
 -----------------------
 
-lenRodCons, massCons, gravAccelCons, pendAngleCons, angAccelOutCons :: ConstrConcept
+lenRodCons, pendAngleCons, angAccelOutCons :: ConstrConcept
 
 inConstraints :: [UncertQ]
 inConstraints = map (`uq` defaultUncrt)
-  [lenRodCons, massCons, gravAccelCons, pendAngleCons]
+  [lenRodCons, pendAngleCons]
 
 outConstraints :: [UncertQ]
 outConstraints = map (`uq` defaultUncrt) 
@@ -72,8 +72,8 @@ outConstraints = map (`uq` defaultUncrt)
 
 
 lenRodCons     = constrained' lenRod        [gtZeroConstr] (dbl 44.2)
-massCons       = constrained' QPP.mass   [gtZeroConstr] (dbl 56.2)
-gravAccelCons  = constrained' QP.gravitationalAccel    [gtZeroConstr] (dbl 9.8)
+--massCons       = constrained' QPP.mass   [gtZeroConstr] (dbl 56.2)
+--gravAccelCons  = constrained' QP.gravitationalAccel    [gtZeroConstr] (dbl 9.8)
 pendAngleCons  = constrained' pendAngle    [gtZeroConstr] (dbl 2.1)
 angAccelOutCons    = constrained' QP.angularAccel    [gtZeroConstr] (dbl 0.0)
 

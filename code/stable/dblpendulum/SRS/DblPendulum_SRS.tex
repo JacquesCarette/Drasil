@@ -161,7 +161,7 @@ This section first presents the problem description, which gives a high-level vi
 
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-A system is needed to is needed to efficiently and correctly predict the motion pendulum.
+A system is needed to is needed to efficiently and correctly to predict the motion pendulum.
 
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
@@ -173,7 +173,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
-The physical system of Pendulum, as shown in \hyperref[Figure:PendulumMotion]{Fig:PendulumMotion}, includes the following elements:
+The physical system of Pendulum, as shown in \hyperref[Figure:pendulum]{Fig:pendulum}, includes the following elements:
 
 \begin{itemize}
 \item[PS1:]{The rod.}
@@ -183,7 +183,7 @@ The physical system of Pendulum, as shown in \hyperref[Figure:PendulumMotion]{Fi
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../../../datafiles/DblPendulum/pendulum.png}
 \caption{The physical system}
-\label{Figure:PendulumMotion}
+\label{Figure:pendulum}
 \end{center}
 \end{figure}
 \subsubsection{Goal Statements}
@@ -564,7 +564,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${{p_{\text{x}}}^{\text{i}}}$ is the horizontal position
         
-        ${{p_{\text{x}}}^{\text{i}}}$ is shown in \hyperref[Figure:PendulumMotion]{Fig:PendulumMotion}.
+        ${{p_{\text{x}}}^{\text{i}}}$ is shown in \hyperref[Figure:pendulum]{Fig:pendulum}.
         
 \\ \midrule \\
 Source & --
@@ -604,7 +604,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${{p_{\text{y}}}^{\text{i}}}$ is the vertical position
         
-        ${{p_{\text{y}}}^{\text{i}}}$ is shown in \hyperref[Figure:PendulumMotion]{Fig:PendulumMotion}.
+        ${{p_{\text{y}}}^{\text{i}}}$ is shown in \hyperref[Figure:pendulum]{Fig:pendulum}.
         
 \\ \midrule \\
 Source & --
@@ -643,7 +643,9 @@ Input Constraints & \begin{displaymath}
                     θ\gt{}0
                     \end{displaymath}
 \\ \midrule \\
-Output Constraints & 
+Output Constraints & \begin{displaymath}
+                     α\gt{}0
+                     \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
            α=-\frac{\mathbf{g}}{{L_{\text{rod}}}} \sin\left(θ\right)

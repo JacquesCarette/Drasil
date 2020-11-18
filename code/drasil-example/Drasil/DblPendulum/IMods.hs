@@ -23,7 +23,7 @@ angularAccelerationIM :: InstanceModel
 angularAccelerationIM = imNoRefs angularAccelerationRC 
   [qwC lenRod $ UpFrom (Exc, 0)
   ,qwC pendAngle $ UpFrom (Exc, 0)]
-  (qw angularAccel) []
+  (qw angularAccel) [UpFrom (Exc, 0)]
   (Just angularAccelerationDeriv) "calOfAngularAcceleration" [angleConstraintNote]
   
 
@@ -84,10 +84,11 @@ angularAccelerationDerivEqn5 = sy tension * cos (sy pendAngle) * sy unitVect - s
 -- Notes
 
 angleConstraintNote :: Sentence
---gravitationalAccelConstNote, landAndTargPosConsNote, landPosNote,
---   landPosConsNote, offsetNote, offsetConsNote, targPosConsNote,
---   timeConsNote, tolNote :: Sentence
+
 
 angleConstraintNote = S "The" +:+ phrase constraint +:+
      E ( sy pendAngle $> 0) `sIs` S "required"
 
+--gravitationalAccelConstNote, landAndTargPosConsNote, landPosNote,
+--   landPosConsNote, offsetNote, offsetConsNote, targPosConsNote,
+--   timeConsNote, tolNote :: Sentence

@@ -42,7 +42,7 @@ import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
 import Drasil.DblPendulum.Requirements (funcReqs)
 import Drasil.DblPendulum.References (citations)
-import Drasil.Projectile.References
+
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
@@ -151,7 +151,7 @@ concIns = assumptions ++ goals ++ funcReqs
 ------------------------------------
 
 prob :: Sentence
-prob = foldlSent_ [ S "is needed to efficiently and correctly predict the motion",  
+prob = foldlSent_ [ S "is needed to efficiently and correctly to predict the motion",  
                    phrase pendulum]
 
 ---------------------------------

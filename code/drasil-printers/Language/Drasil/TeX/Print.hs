@@ -208,7 +208,7 @@ makeTable lls@(h:tlines) r bool t = mkEnvArgBr ltab (unwords $ anyBig lls) $
   %% label r
   where
     --Only needed if "X[l]" is used
-    ltab = if (anyLong lls) then "longtabu" else "longtable"
+    ltab = if anyLong lls then "longtabu" else "longtable"
     descr True  = "X[l]"
     descr False = "l"
     --returns "X[l]" for columns with long fields

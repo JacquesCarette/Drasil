@@ -348,7 +348,15 @@ makeEquation contents = toEqn (spec contents)
 ------------------ LIST PRINTING----------------------------
 -----------------------------------------------------------------
 
+-- latex doesn't like empty lists, so don't put anything out for them.
+-- empty lists here isn't quite wrong (though there should probably be
+-- a warning higher up), so don't generate bad latex.
 makeList :: ListType -> D
+makeList (Simple []   )      = empty
+makeList (Desc []   )        = empty
+makeList (Unordered []   )   = empty
+makeList (Ordered []   )     = empty
+makeList (Definitions []   ) = empty
 makeList (Simple items)      = itemize     $ vcat $ simItem items
 makeList (Desc items)        = description $ vcat $ simItem items
 makeList (Unordered items)   = itemize     $ vcat $ map plItem items

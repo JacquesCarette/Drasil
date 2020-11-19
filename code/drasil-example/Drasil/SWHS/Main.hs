@@ -1,6 +1,11 @@
 module Main where
 
+import GHC.IO.Encoding
+
 import Drasil.SWHS.Generate (generate)
 
 main :: IO ()
-main = generate
+main = 
+  do
+    setLocaleEncoding utf8
+    generate

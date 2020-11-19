@@ -1,5 +1,7 @@
 module Main (main) where
 
+import GHC.IO.Encoding
+
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
@@ -34,6 +36,7 @@ choices = defaultChoices {
   
 main :: IO()
 main = do
+  setLocaleEncoding utf8
   gen (DocSpec SRS "GlassBR_SRS")     srs printSetting
   gen (DocSpec Website "GlassBR_SRS") srs printSetting
   genCode choices code

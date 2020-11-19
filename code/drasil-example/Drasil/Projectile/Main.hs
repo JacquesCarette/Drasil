@@ -2,6 +2,8 @@
 
 module Main (main) where
 
+import GHC.IO.Encoding
+
 import Language.Drasil (Space(..), getAccStr)
 import Language.Drasil.Code (Choices(..), Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
@@ -25,6 +27,7 @@ import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
 
 main :: IO()
 main = do
+  setLocaleEncoding utf8
   gen (DocSpec SRS     "Projectile_SRS") srs printSetting
   gen (DocSpec Website "Projectile_SRS") srs printSetting
   genCodeWithChoices choiceCombos

@@ -7,8 +7,8 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
         output_, value,  nonFuncReqDom, code, property)
---   environment, nonFuncReqDom, likelyChg, mg, mis, module_, nonFuncReqDom,
---   property, requirement, srs, traceyMatrix, unlikelyChg, value, vavPlan, property, code)
+--   environment, likelyChg, mg, mis, module_, nonFuncReqDom,
+--   requirement, srs, traceyMatrix, unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
 import Drasil.DblPendulum.IMods (angularAccelerationIM)

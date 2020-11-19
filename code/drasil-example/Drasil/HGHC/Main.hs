@@ -1,5 +1,7 @@
 module Main (main) where
 
+import GHC.IO.Encoding
+
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
@@ -36,6 +38,7 @@ thisChoices = defaultChoices {
   
 main :: IO ()            
 main = do
+  setLocaleEncoding utf8
   gen (DocSpec Website "HGHC_SRS") srs printSetting
   gen (DocSpec SRS "HGHC_SRS")     srs printSetting
   -- When ready to generate code, uncomment this file

@@ -1,13 +1,12 @@
 module Drasil.DblPendulum.Requirements where
 
 import Language.Drasil
-import Drasil.DocLang.SRS (datCon)
-  --propCorSol)
+import Drasil.DocLang.SRS (datCon, propCorSol)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
-        output_, value)
+        output_, value,  nonFuncReqDom, code, property)
 --   environment, nonFuncReqDom, likelyChg, mg, mis, module_, nonFuncReqDom,
 --   property, requirement, srs, traceyMatrix, unlikelyChg, value, vavPlan, property, code)
 import Data.Drasil.Concepts.Math (calculation)
@@ -47,13 +46,13 @@ outputValuesDesc = foldlSent [atStart output_, ch lenRod,
 
 {--Nonfunctional Requirements--}
 
--- nonFuncReqs :: [ConceptInstance]
--- nonFuncReqs = [correct]
+nonFuncReqs :: [ConceptInstance]
+nonFuncReqs = [correct]
 -- --, verifiable, understandable, reusable, maintainable, portable]
 
--- correct :: ConceptInstance
--- correct = cic "correct" (foldlSent [
---   plural output_ `ofThe'` phrase code, S "have the",
---   plural property, S "described in", makeRef2S (propCorSol [] [])
---   ]) "Correct" nonFuncReqDom
+correct :: ConceptInstance
+correct = cic "correct" (foldlSent [
+ plural output_ `ofThe'` phrase code, S "have the",
+ plural property, S "described in", makeRef2S (propCorSol [] [])
+ ]) "Correct" nonFuncReqDom
  

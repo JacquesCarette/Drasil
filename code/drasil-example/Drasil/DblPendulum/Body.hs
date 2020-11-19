@@ -40,7 +40,7 @@ import Drasil.DblPendulum.IMods (iMods)
 import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
-import Drasil.DblPendulum.Requirements (funcReqs)
+import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPendulum.References (citations)
 
 
@@ -142,8 +142,7 @@ refDB :: ReferenceDB
 refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ goals ++ funcReqs
--- ++ nonFuncReqs
+concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 -- ++ likelyChgs ++ unlikelyChgs
 
 ------------------------------------

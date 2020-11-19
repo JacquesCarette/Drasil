@@ -6,8 +6,8 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
-        output_, value,  nonFuncReqDom, code, property)
---   environment, likelyChg, mg, mis, module_, nonFuncReqDom,
+        output_, value,  nonFuncReqDom, code, property, environment)
+--  likelyChg, mg, mis, module_, nonFuncReqDom,
 --   requirement, srs, traceyMatrix, unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
@@ -47,12 +47,17 @@ outputValuesDesc = foldlSent [atStart output_, ch lenRod,
 {--Nonfunctional Requirements--}
 
 nonFuncReqs :: [ConceptInstance]
-nonFuncReqs = [correct]
--- --, verifiable, understandable, reusable, maintainable, portable]
+nonFuncReqs = [correct, portable]
+
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
  plural output_ `ofThe'` phrase code, S "have the",
  plural property, S "described in", makeRef2S (propCorSol [] [])
  ]) "Correct" nonFuncReqDom
+
+portable :: ConceptInstance
+portable = cic "portable" (foldlSent [
+  S "The", phrase code, S "is able to be run in different", plural environment])
+  "Portable" nonFuncReqDom
  

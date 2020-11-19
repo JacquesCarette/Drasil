@@ -14,7 +14,7 @@ mathcon = [angle, area, axis, calculation, cartesian, centre, change, constraint
   equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal,
   normalV, number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng,
   rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp,
-  xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir]
+  xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
 
 mathcon' :: [CI]
 mathcon' = [de, leftSide, ode, pde, rightSide]
@@ -23,7 +23,7 @@ angle, area, axis, calculation, cartesian, centre, change, constraint, diameter,
   euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal, normalV,
   number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng, rate,
   rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
-  yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir :: ConceptChunk
+  yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
 
 angle       = dcc "angle"        (cn' "angle")                   "the amount of rotation needed to bring one line or plane into coincidence with another"
@@ -82,6 +82,7 @@ zComp = dcc "zComp" (nounPhraseSent $ P lZ :+: S "-component") "the component of
 xDir = dcc "xDir" (nounPhraseSent $ P lX :+: S "-direction") "the direction aligned with the x-axis"
 yDir = dcc "yDir" (nounPhraseSent $ P lY :+: S "-direction") "the direction aligned with the y-axis"
 zDir = dcc "zDir" (nounPhraseSent $ P lZ :+: S "-direction") "the direction aligned with the z-axis"
+iAngle = dcc "iAngle" (cn "initial angle")                      "The initial angle where the body is being displaced"
 
 de, leftSide, ode, pde, rightSide :: CI
 --FIXME: use nounphrase instead of cn'

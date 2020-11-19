@@ -296,6 +296,20 @@ executable dblpendulum
   main-is: Drasil/DblPendulum/Main.hs
   other-modules:
       Drasil.DblPendulum.Body
+    , Drasil.DblPendulum.Figures
+    , Drasil.DblPendulum.Concepts
+    , Drasil.DblPendulum.Assumptions
+    , Drasil.DblPendulum.Goals
+    , Drasil.DblPendulum.DataDefs
+    , Drasil.DblPendulum.Unitals
+    , Drasil.DblPendulum.TMods
+    , Drasil.Projectile.References
+    , Drasil.DblPendulum.GenDefs
+    , Drasil.DblPendulum.References
+    , Drasil.DblPendulum.IMods
+    , Drasil.DblPendulum.Requirements
+  
+
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

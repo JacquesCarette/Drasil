@@ -1,5 +1,7 @@
 module Main (main) where
 
+import GHC.IO.Encoding
+
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
@@ -35,6 +37,7 @@ import Drasil.SSP.Body (srs, printSetting) -- si
        
 main :: IO ()            
 main = do
+  setLocaleEncoding utf8
   gen (DocSpec Website "SSP_SRS") srs printSetting
   gen (DocSpec SRS "SSP_SRS")     srs printSetting
   -- for when we can generate code again, uncomment this file

@@ -195,24 +195,26 @@ cases e  = vpunctuate dbs (map _case e)
 -----------------------------------------------------------------
 
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
-makeTable lls r bool t = mkEnvArgBr ltab (unwords $ anyBig lls) $
+makeTable [] _ _ _ = error "Completely empty table (not even header)"
+makeTable [_] _ _ _ = empty -- table with no actual contents... don't error
+makeTable lls@(h:tlines) r bool t = mkEnvArgBr ltab (unwords $ anyBig lls) $
   command0 "toprule"
-  %% makeHeaders (head lls)
+  %% makeHeaders h
   %% command0 "midrule"
   %% command0 "endhead"
-  %% makeRows (tail lls)
+  %% makeRows tlines
   %% command0 "bottomrule"
   %% (if bool then caption t else caption empty)
   %% label r
-  where ltab = tabType $ anyLong lls
-        tabType True  = "longtabu" --Only needed if "X[l]" is used
-        tabType False = "longtable"
-        descr True  = "X[l]"
-        descr False = "l"
-  --returns "X[l]" for columns with long fields
-        anyLong = any longColumn . transpose
-        anyBig = map (descr . longColumn) . transpose
-        longColumn = any (\x -> specLength x > 50)
+  where
+    --Only needed if "X[l]" is used
+    ltab = if anyLong lls then "longtabu" else "longtable"
+    descr True  = "X[l]"
+    descr False = "l"
+    --returns "X[l]" for columns with long fields
+    anyLong = any longColumn . transpose
+    anyBig = map (descr . longColumn) . transpose
+    longColumn = any (\x -> specLength x > 50)
 
 -- | determines the length of a Spec
 specLength :: Spec -> Int
@@ -346,7 +348,15 @@ makeEquation contents = toEqn (spec contents)
 ------------------ LIST PRINTING----------------------------
 -----------------------------------------------------------------
 
+-- latex doesn't like empty lists, so don't put anything out for them.
+-- empty lists here isn't quite wrong (though there should probably be
+-- a warning higher up), so don't generate bad latex.
 makeList :: ListType -> D
+makeList (Simple []   )      = empty
+makeList (Desc []   )        = empty
+makeList (Unordered []   )   = empty
+makeList (Ordered []   )     = empty
+makeList (Definitions []   ) = empty
 makeList (Simple items)      = itemize     $ vcat $ simItem items
 makeList (Desc items)        = description $ vcat $ simItem items
 makeList (Unordered items)   = itemize     $ vcat $ map plItem items

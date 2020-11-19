@@ -1,5 +1,7 @@
 module Main where
 
+import GHC.IO.Encoding
+
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
@@ -35,6 +37,7 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
        
 main :: IO ()
 main = do
+  setLocaleEncoding utf8
   gen (DocSpec SRS "GamePhysics_SRS") srs  printSetting
   gen (DocSpec Website "GamePhysics_SRS") srs printSetting
   -- When ready to generate code from GamePhysics, uncomment this file

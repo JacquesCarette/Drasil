@@ -155,6 +155,7 @@ zAxis :: ConceptChunk
 zCoord :: ConceptChunk
 zComp :: ConceptChunk
 zDir :: ConceptChunk
+iAngle :: ConceptChunk
 de :: CI
 leftSide :: CI
 ode :: CI
@@ -624,6 +625,9 @@ momentum :: ConceptChunk
 moment :: ConceptChunk
 fOfGravity :: ConceptChunk
 positionVec :: ConceptChunk
+pendulum :: ConceptChunk
+body :: ConceptChunk
+kinematics :: ConceptChunk
 oneD :: CI
 twoD :: CI
 threeD :: CI
@@ -734,6 +738,7 @@ moment :: UnitalChunk
 moment2D :: UnitalChunk
 fOfGravity :: UnitalChunk
 positionVec :: UnitalChunk
+tension :: UnitalChunk
 constant :: Symbol
 final :: Symbol
 initial :: Symbol

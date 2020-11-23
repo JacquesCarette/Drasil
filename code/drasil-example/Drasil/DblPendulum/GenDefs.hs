@@ -16,7 +16,7 @@ import Data.Drasil.Quantities.PhysicalProperties(mass)
 
 -- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 -- import Drasil.Projectile.References (hibbeler2004)
-import Drasil.DblPendulum.Unitals (lenRod, pendAngle)
+import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle)
 
 genDefns :: [GenDefn]
 genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD] 
@@ -33,7 +33,7 @@ velocityIXRC =  makeRC "velocityIXRC" (nounPhraseSent $ foldlSent_
             EmptyS velocityIXRel
 
 velocityIXRel :: Relation             
-velocityIXRel = sy xVel $= sy angularVelocity * sy lenRod * cos (sy pendAngle)
+velocityIXRel = sy xVel $= sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle)
 
 velocityIXDeriv :: Derivation
 velocityIXDeriv = mkDerivName (phrase xComp +:+ phrase velocity) [ E velocityIXRel]
@@ -50,7 +50,7 @@ velocityIYRC = makeRC "velocityIYRC" (nounPhraseSent $ foldlSent_
             [ phrase yComp `sOf` phrase velocity `ofThe` phrase pendulum]) EmptyS velocityIYRel
  
 velocityIYRel :: Relation             
-velocityIYRel = sy yVel $= sy angularVelocity * sy lenRod * cos (sy pendAngle)
+velocityIYRel = sy yVel $= sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle)
 
 velocityIYDeriv :: Derivation
 velocityIYDeriv = mkDerivName (phrase yComp +:+ phrase velocity) [ E velocityIYRel]
@@ -65,7 +65,8 @@ accelerationIXRC = makeRC "accelerationIXRC" (nounPhraseSent $ foldlSent_
             [ phrase xComp `sOf` phrase acceleration `ofThe` phrase pendulum]) EmptyS accelerationIXRel
  
 accelerationIXRel :: Relation             
-accelerationIXRel = sy xAccel $= negate (sy angularVelocity * sy lenRod * sin (sy pendAngle)) + sy angularAccel * sy lenRod * cos (sy pendAngle)
+accelerationIXRel = sy xAccel $= negate (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle))
+                    + sy angularAccel * sy lenRod * cos (sy pendDisplacementAngle)
 
 accelerationIXDeriv :: Derivation
 accelerationIXDeriv = mkDerivName (phrase xComp +:+ phrase acceleration) [ E accelerationIXRel]
@@ -80,7 +81,8 @@ accelerationIYRC = makeRC "accelerationIYRC" (nounPhraseSent $ foldlSent_
             [ phrase yComp `sOf` phrase acceleration `ofThe` phrase pendulum]) EmptyS accelerationIYRel
  
 accelerationIYRel :: Relation             
-accelerationIYRel = sy yAccel $= (sy angularVelocity * sy lenRod * cos (sy pendAngle)) + sy angularAccel * sy lenRod * sin (sy pendAngle)
+accelerationIYRel = sy yAccel $= (sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle))
+                    + sy angularAccel * sy lenRod * sin (sy pendDisplacementAngle)
 
 accelerationIYDeriv :: Derivation
 accelerationIYDeriv = mkDerivName (phrase yComp +:+ phrase acceleration) [ E accelerationIYRel]
@@ -95,7 +97,7 @@ hForceOnPendulumRC = makeRC "hForceOnPendulumRC" (nounPhraseSent $ foldlSent_
             [ S "horizontal", phrase force, S "on the", phrase pendulum]) EmptyS hForceOnPendulumRel
  
 hForceOnPendulumRel :: Relation             
-hForceOnPendulumRel = sy force $= sy mass * sy xAccel $= negate (sy tension * sin (sy pendAngle))
+hForceOnPendulumRel = sy force $= sy mass * sy xAccel $= negate (sy tension * sin (sy pendDisplacementAngle))
                      
 
 hForceOnPendulumDeriv :: Derivation
@@ -111,7 +113,7 @@ vForceOnPendulumRC = makeRC "vForceOnPendulumRC" (nounPhraseSent $ foldlSent_
             [ S "vertical", phrase force, S "on the", phrase pendulum]) EmptyS vForceOnPendulumRel
  
 vForceOnPendulumRel :: Relation             
-vForceOnPendulumRel = sy force $= sy mass * sy yAccel $= sy tension * cos (sy pendAngle) - sy mass * sy gravitationalAccel
+vForceOnPendulumRel = sy force $= sy mass * sy yAccel $= sy tension * cos (sy pendDisplacementAngle) - sy mass * sy gravitationalAccel
 
 vForceOnPendulumDeriv :: Derivation
 vForceOnPendulumDeriv = mkDerivName (phrase force +:+ phrase pendulum) [ E vForceOnPendulumRel]

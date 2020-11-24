@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.com/JacquesCarette/Drasil.svg?branch=master)](https://travis-ci.com/JacquesCarette/Drasil)
-
-The Drasil Framework
+Drasil [![Build Status](https://travis-ci.com/JacquesCarette/Drasil.svg?branch=master)](https://travis-ci.com/JacquesCarette/Drasil)
 ====================================================
 
 Generate all the Things! See the [currently generated artifacts](https://jacquescarette.github.io/Drasil/)
@@ -15,6 +13,8 @@ Generate all the Things! See the [currently generated artifacts](https://jacques
 6. [Repository Contents](#summary-of-folder-structure-and-file-contents)
 
 ## What is Drasil?
+
+For well understood domains, building software in that domain ought to be a matter of engineering, based on solid scientific foundations. The ultimate test of "well understood" is to teach it to a computer.  Drasil is a framework for generating all of the software artifacts for (well understood) research software, from the natural knowledge base of the domain.
 
 Drasil is a framework for generating all of the software artifacts from a stable knowledge base, focusing currently on scientific software. The main goals are to reduce knowledge duplication and improve traceability. We also are extreme in our drive to reuse everything.  We hope that maintainability, verifiability, traceability, and other software qualities will also be improved as a side-effect of our methods.
 

@@ -3,23 +3,16 @@
 The Drasil Framework
 ====================================================
 
-Generate all the Things!
-
-[Current Generated Artifacts](https://jacquescarette.github.io/Drasil/)
+Generate all the Things! See the [currently generated artifacts](https://jacquescarette.github.io/Drasil/)
 
 ## Table of Contents
 
 1. [What is Drasil?](#what-is-drasil)
-   - description of the Drasil framework
 2. [Quick Start](#quick-start)
-   - instructions for quick-starting the Drasil framework
 3. [Building Specific Examples](#building-specific-examples)
-   - instructions for how to build specific examples using Drasil
 4. [Running the Example(s)](#running-the-examples)
-   - instructions for running specific examples
 5. [Finding / Building the Haddock Documentation](#finding--building-the-haddock-documentation)
-   - Haddock documentation instructions
-6. [Summary of Folder Structure and File Contents](#summary-of-folder-structure-and-file-contents)
+6. [Repository Contents](#summary-of-folder-structure-and-file-contents)
 
 ## What is Drasil?
 

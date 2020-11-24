@@ -17,7 +17,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, force, v
   angularFrequency, frequency, period)
 import Data.Drasil.Concepts.Physics (pendulum, twoD)
 import Data.Drasil.Concepts.Math as CM (angle)
-import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj)
+import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj, pi_)
 
 
 symbols:: [QuantityDict]
@@ -28,13 +28,13 @@ acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, srs, thModel, typUnc]
 
 inputs :: [QuantityDict]
-inputs = map qw [lenRod, QP.force, QP.angularAccel, pendDisplacementAngle] 
+inputs = map qw [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle] 
 
 outputs :: [QuantityDict]
-outputs = map qw [QP.position]
+outputs = map qw [pendDisplacementAngle]
 
 units :: [UnitaryConceptDict]
-units = map ucw unitalChunks ++ map ucw [lenRod, pendDisplacementAngle]
+units = map ucw unitalChunks ++ map ucw [lenRod, pendDisplacementAngle, initialPendAngle]
 
 unitalChunks :: [UnitalChunk]
 unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos,
@@ -49,17 +49,17 @@ lenRod = makeUCWDS "l_rod" (cn "length of rod")
         (S "the" +:+ phrase len `ofThe` S "rod")
         (sub cL lRod) metre
 
-pendDisplacementAngle = makeUCWDS "pendAngle" (cn "displacement angle of pendulum")
+pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of pendulum")
         (S "the" +:+ phrase angle `ofThe` phrase pendulum)
         (sub lTheta lP) degree
 
-initialPendAngle = makeUCWDS "pendAngle" (cn "initial pendulum angle")
+initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
         (S "the initial angle of" +:+ phrase pendulum)
         (sub lTheta lI) radian
 
 
 unitless :: [DefinedQuantityDict]
-unitless = [QM.unitVect, QM.unitVectj]
+unitless = [QM.unitVect, QM.unitVectj, QM.pi_]
 -----------------------
 lRod :: Symbol
 
@@ -73,7 +73,7 @@ lenRodCons, pendDisplacementAngleOutCons, angAccelOutCons, initialPendAngleCons 
 
 inConstraints :: [UncertQ]
 inConstraints = map (`uq` defaultUncrt)
-  [lenRodCons, initialPendAngleCons, initialPendAngleCons]
+  [lenRodCons, initialPendAngleCons]
 
 outConstraints :: [UncertQ]
 outConstraints = map (`uq` defaultUncrt) 
@@ -81,7 +81,7 @@ outConstraints = map (`uq` defaultUncrt)
 
 
 lenRodCons     = constrained' lenRod        [gtZeroConstr] (dbl 44.2)
-initialPendAngleCons  = constrained' initialPendAngleCons    [gtZeroConstr] (dbl 2.1)
+initialPendAngleCons  = constrained' initialPendAngle    [gtZeroConstr] (dbl 2.1)
 --gravAccelCons  = constrained' QP.gravitationalAccel    [gtZeroConstr] (dbl 9.8)
 pendDisplacementAngleOutCons  = constrained' pendDisplacementAngle    [gtZeroConstr] (dbl 2.1)
 angAccelOutCons    = constrained' QP.angularAccel    [gtZeroConstr] (dbl 0.0)

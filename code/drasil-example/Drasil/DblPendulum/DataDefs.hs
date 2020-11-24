@@ -1,4 +1,5 @@
-module Drasil.DblPendulum.DataDefs (dataDefs, positionIY, positionIX) where
+module Drasil.DblPendulum.DataDefs (dataDefs, positionIY, positionIX, angFrequencyDD,
+         frequencyDD, periodSHMDD) where
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
@@ -9,11 +10,12 @@ import Drasil.DblPendulum.Figures (figMotion)
 import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos, position,
       frequency, period, angularFrequency, gravitationalAccel)
 import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle, initialPendAngle)
-import Data.Drasil.Concepts.Physics (pendulum)
+--import Data.Drasil.Concepts.Physics (pendulum)
+import qualified Data.Drasil.Quantities.Math as QM (pi_)
 
 
 dataDefs :: [DataDefinition]
-dataDefs = [positionIX, positionIY, frequencyDD, angFrequencyDD]
+dataDefs = [positionIX, positionIY, frequencyDD, angFrequencyDD, periodSHMDD]
 
 
 ----------
@@ -63,38 +65,33 @@ frequencyDDEqn = 1 / sy QP.period
 frequencyRef :: Sentence
 frequencyRef = ch QP.frequency `isThe` S "number of back and forth swings in one" +:+ phrase second
 
------------------------------------------------------
+
+------------------------------------------------------
 
 angFrequencyDD :: DataDefinition
-angFrequencyDD = ddNoRefs angFrequencyDDQD Nothing "angFrequencyDD" [angFrequencyRef, angFrequencyNote]
+angFrequencyDD = ddNoRefs angFrequencyDDQD Nothing "angFrequencyDD" [angFrequencyRef]
 
 angFrequencyDDQD :: QDefinition
 angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
 
 angFrequencyDDEqn :: Expr
-angFrequencyDDEqn = sqrt (sy QP.gravitationalAccel / sy lenRod)
+angFrequencyDDEqn = cross (2 * sy QM.pi_)  (1/sy QP.period) $= 2 * sy QM.pi_ /sy QP.period
 
 
 angFrequencyRef :: Sentence
-angFrequencyRef = ch QP.angularFrequency `isThe` S "natural" +:+
-     phrase QP.frequency +:+ S "of" +:+ phrase pendulum +:+ S "motion"
+angFrequencyRef = ch QP.period `sIs` S "from" +:+ makeRef2S periodSHMDD
+----------------------------------------------------------
 
-angFrequencyNote :: Sentence
-angFrequencyNote = S "The" +:+ phrase QP.angularFrequency `sIs`
-     S "connected with" +:+ makeRef2S frequencyDD
-------------------------------------------------------
+periodSHMDD :: DataDefinition
+periodSHMDD = ddNoRefs periodSHMDDQD Nothing "periodSHMDD" [periodSHMRef]
 
--- angFrequencyDD :: DataDefinition
--- angFrequencyDD = ddNoRefs angFrequencyDDQD Nothing "angFrequencyDD" [frequencyRef]
+periodSHMDDQD :: QDefinition
+periodSHMDDQD = mkQuantDef QP.period periodSHMDDEqn
 
--- angFrequencyDDQD :: QDefinition
--- angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
+periodSHMDDEqn :: Expr
+periodSHMDDEqn = 1 / sy QP.frequency
 
--- angFrequencyDDEqn :: Expr
--- angFrequencyDDEqn = sqrt sy gravitationalAccel / sy lenRod
-
-
--- angFrequencyRef :: Sentence
--- angFrequencyRef = ch QP.angularFrequency `isThe` S "natural" +:+ phrase frequency +:+ S "of" +:+ phrase pendulum +:+ phrase motion
+periodSHMRef :: Sentence
+periodSHMRef = ch QP.period `sIs` S "from" +:+ makeRef2S frequencyDD
 
 

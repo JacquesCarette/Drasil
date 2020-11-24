@@ -1,7 +1,7 @@
 module Drasil.DblPendulum.GenDefs (genDefns, velocityIXGD, velocityIYGD,
-         accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD) where
+         accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD, angFrequencyGD) where
 
-import Prelude hiding (cos, sin)
+import Prelude hiding (cos, sin, sqrt)
 import Language.Drasil
 import Theory.Drasil (GenDefn, gdNoRefs)
 import Utils.Drasil
@@ -9,7 +9,7 @@ import Utils.Drasil
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (xComp, yComp)
 import Data.Drasil.Quantities.Physics(velocity, angularVelocity, xVel, yVel,
-    angularAccel, xAccel, yAccel, acceleration, force, tension, gravitationalAccel)
+    angularAccel, xAccel, yAccel, acceleration, force, tension, gravitationalAccel, angularFrequency)
 import Data.Drasil.Concepts.Physics(pendulum)
 import Data.Drasil.Quantities.PhysicalProperties(mass)
 
@@ -19,7 +19,8 @@ import Data.Drasil.Quantities.PhysicalProperties(mass)
 import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle)
 
 genDefns :: [GenDefn]
-genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD] 
+genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD,
+       hForceOnPendulumGD, vForceOnPendulumGD, angFrequencyGD] 
 
 
 -- ----------
@@ -117,3 +118,19 @@ vForceOnPendulumRel = sy force $= sy mass * sy yAccel $= sy tension * cos (sy pe
 
 vForceOnPendulumDeriv :: Derivation
 vForceOnPendulumDeriv = mkDerivName (phrase force +:+ phrase pendulum) [ E vForceOnPendulumRel]
+
+--------------------------------------Angular Frequency Of Pendulum
+
+angFrequencyGD :: GenDefn
+angFrequencyGD = gdNoRefs angFrequencyRC (getUnit angularFrequency)
+           (Just angFrequencyDeriv) "angFrequencyGD" [{-Notes-}]
+
+angFrequencyRC :: RelationConcept
+angFrequencyRC = makeRC "angFrequencyRC" (nounPhraseSent $ foldlSent_ 
+            [ S "vertical", phrase force, S "on the", phrase pendulum]) EmptyS angFrequencyRel
+ 
+angFrequencyRel :: Relation             
+angFrequencyRel = sy angularFrequency $= sqrt (sy gravitationalAccel / sy lenRod )
+
+angFrequencyDeriv :: Derivation
+angFrequencyDeriv = mkDerivName (phrase force +:+ phrase pendulum) [ E angFrequencyRel]

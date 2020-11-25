@@ -8,7 +8,7 @@ import Theory.Drasil (GenDefn, gdNoRefs)
 import Utils.Drasil
 
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
-import Data.Drasil.Concepts.Math (xComp, yComp)
+import Data.Drasil.Concepts.Math (xComp, yComp, equation)
 import Data.Drasil.Quantities.Physics(velocity, angularVelocity, xVel, yVel,
     angularAccel, xAccel, yAccel, acceleration, force, tension, gravitationalAccel,
     angularFrequency, torque, momentOfInertia, angularDisplacement, time,
@@ -16,7 +16,6 @@ import Data.Drasil.Quantities.Physics(velocity, angularVelocity, xVel, yVel,
 import Data.Drasil.Concepts.Physics(pendulum, weight)
 import Data.Drasil.Quantities.PhysicalProperties(mass)
 import Drasil.DblPendulum.TMods(newtonSLR)
-import Data.Drasil.Concepts.Math (equation)
 import Drasil.DblPendulum.DataDefs(frequencyDD, periodSHMDD, angFrequencyDD)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
 

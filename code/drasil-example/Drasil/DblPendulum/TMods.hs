@@ -62,7 +62,7 @@ newtonSLRNotes = map foldlSent [
    S "proportional to its", getTandS angularAccel `sC` S "where",
    ch momentOfInertia, S "denotes", phrase momentOfInertia `ofThe`
    phrase pendulum, S "as the", phrase constant `sOf` S "proportionality",
-   S "We also assume that pendulum motion is two-dimensional" +:+ makeRef2S (pend2DMotion)]]
+   S "We also assume that pendulum motion is two-dimensional" +:+ makeRef2S pend2DMotion]]
 
    --------------------------
   

@@ -8,8 +8,8 @@ import Data.Drasil.SI_Units (second)
 import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 import Drasil.DblPendulum.Figures (figMotion)
 import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos, position,
-      frequency, period, angularFrequency, gravitationalAccel)
-import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle, initialPendAngle)
+      frequency, period, angularFrequency)
+import Drasil.DblPendulum.Unitals (lenRod, initialPendAngle)
 --import Data.Drasil.Concepts.Physics (pendulum)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
 

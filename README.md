@@ -14,9 +14,9 @@ Generate all the Things! See the [currently generated artifacts](https://jacques
 
 ## What is Drasil?
 
-For well understood domains, building software ought to be a matter of engineering, based on solid scientific foundations. The ultimate test of "well understood" is to teach it to a computer.  Drasil is a framework for generating all of the software artifacts for (well understood) research software, from the natural knowledge base of the domain.
+For well understood domains, building software ought to be a matter of engineering, based on solid scientific foundations. The ultimate test of "well understood" is being able to teach the domain language to a computer.  Drasil is a framework for generating all of the software artifacts for (well understood) research software, from the natural knowledge base of the domain.
 
-We take advantage of the inherent duplication of knowledge present in software artifacts (code, specification, tests, etc). More precisely, we capture the information present in software artifacts so that the particular *view* of that information in the artifacts can be reproduced by Drasil. For example, the equation **F = m a** will *look* different when rendered in documentation and in Java or Python, but means the same thing. In this way, we obtain *traceability*: we know the exact relationship between information in the specification document and in the code and, furthermore, we know that they are coherent by construction.
+We take advantage of the inherent duplication of knowledge present in software artifacts (code, specification, tests, etc). More precisely, we capture the information present in software artifacts so that the particular *view* of that information in the artifacts can be reproduced by Drasil. For example, the equation **F = m a** will *look* different when rendered in documentation and in Java or Python, although it will mean the same thing. In this way, we obtain *traceability*: we know the exact relationship between information in the specification document and in the code and, furthermore, we know that they are coherent by construction.
 
 Drasil is based on a combination of the following ideas:
 1. domain knowledge changes very slowly
@@ -27,7 +27,7 @@ Drasil is based on a combination of the following ideas:
 
 To better understand the requirements for Drasil, we follow an example-driven approach, based on a set of [case studies](https://github.com/smiths/caseStudies). This is akin to test-driven engineering, but at the system level.  The [currently generated examples](https://jacquescarette.github.io/Drasil/) serve as a good introduction to what we mean.
 
-We wrote a [our position paper](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf) detailing our origianl ideas - but this is getting somewhat obsolete now. You can also take a look at [a poster](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
+We wrote a [our position paper](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf) detailing our original ideas - but this is getting somewhat obsolete now. You can also take a look at [a poster](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
 
 ## Quick Start
 

@@ -1,5 +1,6 @@
 module Drasil.DblPendulum.GenDefs (genDefns, velocityIXGD, velocityIYGD,
-         accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD, angFrequencyGD) where
+         accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD,
+         angFrequencyGD, periodPend) where
 
 import Prelude hiding (cos, sin, sqrt)
 import Language.Drasil
@@ -10,18 +11,21 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Math (xComp, yComp)
 import Data.Drasil.Quantities.Physics(velocity, angularVelocity, xVel, yVel,
     angularAccel, xAccel, yAccel, acceleration, force, tension, gravitationalAccel,
-    angularFrequency, torque, momentOfInertia, angularDisplacement, time, momentOfInertia)
+    angularFrequency, torque, momentOfInertia, angularDisplacement, time,
+    momentOfInertia, period, frequency)
 import Data.Drasil.Concepts.Physics(pendulum, weight)
 import Data.Drasil.Quantities.PhysicalProperties(mass)
 import Drasil.DblPendulum.TMods(newtonSLR)
 import Data.Drasil.Concepts.Math (equation)
+import Drasil.DblPendulum.DataDefs(frequencyDD, periodSHMDD, angFrequencyDD)
+import qualified Data.Drasil.Quantities.Math as QM (pi_)
 
 -- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle)
 
 genDefns :: [GenDefn]
 genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD,
-       hForceOnPendulumGD, vForceOnPendulumGD, angFrequencyGD] 
+       hForceOnPendulumGD, vForceOnPendulumGD, angFrequencyGD, periodPend] 
 
 
 -- ----------
@@ -128,7 +132,7 @@ angFrequencyGD = gdNoRefs angFrequencyRC (getUnit angularFrequency)
 
 angFrequencyRC :: RelationConcept
 angFrequencyRC = makeRC "angFrequencyRC" (nounPhraseSent $ foldlSent_ 
-            [ S "vertical", phrase force, S "on the", phrase pendulum]) EmptyS angFrequencyRel
+            [ S "The" +:+ phrase angularFrequency `ofThe` phrase pendulum]) EmptyS angFrequencyRel
  
 angFrequencyRel :: Relation             
 angFrequencyRel = sy angularFrequency $= sqrt (sy gravitationalAccel / sy lenRod )
@@ -178,13 +182,44 @@ angFrequencyDerivSent7 = S "Because this" +:+ phrase equation `sC` S "has the sa
                   S "for simple harmonic motion the solution is easy to find." +:+ S " The" +:+ phrase angularFrequency
 angFrequencyDerivEqn7 = sy angularFrequency $= sqrt (sy gravitationalAccel / sy lenRod)
 angFrequencyGDNotes :: Sentence
-angFrequencyGDNotes = S "The" +:+ phrase torque `sIs` definedIn'' newtonSLR
+angFrequencyGDNotes = S "The" +:+ phrase torque `sIs` definedIn'' newtonSLR  `sAnd` phrase frequency `sIs` definedIn frequencyDD
  
 
                                        
--- But note that for small angles
---  (less than 15 degrees), sinθ and θ differ by less than 1%, so we 
---  can use the small angle approximation sinθ≈θ. The angle θ describes
---   the position of the pendulum. Using the small angle approximation 
---   gives an approximate solution for small angles,
---                                        
+ --------------------------------Period of Pendulum Motion 
+
+periodPend :: GenDefn
+periodPend = gdNoRefs periodPendRC (getUnit period)
+           (Just periodPendDeriv) "periodPend" [periodPendNotes]
+
+periodPendRC :: RelationConcept
+periodPendRC = makeRC "periodPendRC" (nounPhraseSent $ foldlSent_ 
+            [ S "The", phrase period, S "on the", phrase pendulum]) EmptyS periodPendRel
+ 
+periodPendRel :: Relation             
+periodPendRel = sy period $= 2 * sy QM.pi_ * sqrt (sy lenRod/ sy gravitationalAccel)
+
+periodPendDeriv :: Derivation
+periodPendDeriv = mkDerivName (phrase period +:+ phrase pendulum) (weave [periodPendDerivSents, map E periodPendDerivEqns])    
+
+periodPendDerivSents :: [Sentence]
+periodPendDerivSents = [periodPendDerivSent1, periodPendDerivSent2]
+
+periodPendDerivSent1, periodPendDerivSent2 :: Sentence    
+
+periodPendDerivEqns :: [Expr]
+periodPendDerivEqns = [periodPendDerivEqn1, periodPendDerivEqn2]
+
+periodPendDerivEqn1, periodPendDerivEqn2 :: Expr 
+
+periodPendDerivSent1 = S "The" +:+ phrase period `ofThe` phrase pendulum +:+ S "can be defined from" +:+
+                makeRef2S angFrequencyGD +:+ phrase equation
+periodPendDerivEqn1 = sy angularFrequency $= sqrt (sy gravitationalAccel / sy lenRod)
+periodPendDerivSent2 =  S "Therefore from the" +:+ phrase equation +:+ makeRef2S angFrequencyDD `sC` S "we have"
+
+periodPendDerivEqn2 = sy period $= 2 * sy QM.pi_ * sqrt (sy lenRod/ sy gravitationalAccel)
+
+periodPendNotes :: Sentence
+periodPendNotes = S "The" +:+ phrase frequency `sAnd` phrase period +:+ S "are defined in" +:+ makeRef2S frequencyDD +:+
+        makeRef2S periodSHMDD +:+ S "respectively"
+

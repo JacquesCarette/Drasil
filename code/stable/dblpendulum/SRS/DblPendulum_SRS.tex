@@ -588,7 +588,7 @@ RefBy &
 \phantomsection 
 \label{GD:angFrequencyGD}
 \\ \midrule \\
-Label & Vertical force on the pendulum
+Label & The The angular frequency of the pendulum
         
 \\ \midrule \\
 Units & ${\text{s}}$
@@ -604,13 +604,13 @@ Description & \begin{symbDescription}
               \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The torque is defined in \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}
+Notes & The torque is defined in \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} and frequency is $f$ is defined in \hyperref[DD:frequencyDD]{DD: frequencyDD}.
         
 \\ \midrule \\
 Source & --
          
 \\ \midrule \\
-RefBy & \hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}
+RefBy & \hyperref[GD:periodPend]{GD: periodPend} and \hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}
         
 \\ \bottomrule
 \end{tabular}
@@ -651,6 +651,53 @@ Because this equation, has the same form as the equation for simple harmonic mot
 
 \begin{displaymath}
 Ω=\sqrt{\frac{\mathbf{g}}{{L_{\text{rod}}}}}
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:periodPend}
+\phantomsection 
+\label{GD:periodPend}
+\\ \midrule \\
+Label & The period on the pendulum
+        
+\\ \midrule \\
+Units & ${\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\mathbf{g}}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$T$ is the period (${\text{s}}$)}
+              \item{$π$ is the ratio of circumference to diameter for any circle (Unitless)}
+              \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
+              \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The frequency and period are defined in \hyperref[DD:frequencyDD]{DD: frequencyDD} \hyperref[DD:periodSHMDD]{DD: periodSHMDD} respectively
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of period pendulum:}
+\label{GD:periodPendDeriv}
+the The period of the pendulum can be defined from \hyperref[GD:angFrequencyGD]{GD: angFrequencyGD} equation
+
+\begin{displaymath}
+Ω=\sqrt{\frac{\mathbf{g}}{{L_{\text{rod}}}}}
+\end{displaymath}
+Therefore from the equation \hyperref[DD:angFrequencyDD]{DD: angFrequencyDD}, we have
+
+\begin{displaymath}
+T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\mathbf{g}}}
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -768,7 +815,7 @@ Notes & $f$ is the number of back and forth swings in one second
 Source & --
          
 \\ \midrule \\
-RefBy & \hyperref[DD:periodSHMDD]{DD: periodSHMDD}
+RefBy & \hyperref[GD:periodPend]{GD: periodPend}, \hyperref[DD:periodSHMDD]{DD: periodSHMDD}, and \hyperref[GD:angFrequencyGD]{GD: angFrequencyGD}
         
 \\ \bottomrule
 \end{tabular}
@@ -807,7 +854,8 @@ Notes & $T$ is from \hyperref[DD:periodSHMDD]{DD: periodSHMDD}
 Source & --
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[GD:periodPend]{GD: periodPend}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -844,7 +892,7 @@ Notes & $T$ is from \hyperref[DD:frequencyDD]{DD: frequencyDD}
 Source & --
          
 \\ \midrule \\
-RefBy & \hyperref[DD:angFrequencyDD]{DD: angFrequencyDD}
+RefBy & \hyperref[GD:periodPend]{GD: periodPend} and \hyperref[DD:angFrequencyDD]{DD: angFrequencyDD}
         
 \\ \bottomrule
 \end{tabular}
@@ -1074,6 +1122,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[GD:angFrequencyGD]{GD: angFrequencyGD} &  &  &  &  & 
 \\
+\hyperref[GD:periodPend]{GD: periodPend} &  &  &  &  & 
+\\
 \hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement} &  &  &  &  & 
 \\
 \hyperref[inputValues]{FR: Input-Values} &  &  &  &  & 
@@ -1092,69 +1142,71 @@ The purpose of the traceability matrices is to provide easy references on what h
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:TraceMatAvsAll}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:positionIX]{DD: positionIX}} & \textbf{\hyperref[DD:positionIY]{DD: positionIY}} & \textbf{\hyperref[DD:frequencyDD]{DD: frequencyDD}} & \textbf{\hyperref[DD:angFrequencyDD]{DD: angFrequencyDD}} & \textbf{\hyperref[DD:periodSHMDD]{DD: periodSHMDD}} & \textbf{\hyperref[TM:acceleration]{TM: acceleration}} & \textbf{\hyperref[TM:velocity]{TM: velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD: velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD: velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD: accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD: accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD: hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD: vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD: angFrequencyGD}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}}
+\textbf{} & \textbf{\hyperref[DD:positionIX]{DD: positionIX}} & \textbf{\hyperref[DD:positionIY]{DD: positionIY}} & \textbf{\hyperref[DD:frequencyDD]{DD: frequencyDD}} & \textbf{\hyperref[DD:angFrequencyDD]{DD: angFrequencyDD}} & \textbf{\hyperref[DD:periodSHMDD]{DD: periodSHMDD}} & \textbf{\hyperref[TM:acceleration]{TM: acceleration}} & \textbf{\hyperref[TM:velocity]{TM: velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD: velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD: velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD: accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD: accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD: hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD: vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD: angFrequencyGD}} & \textbf{\hyperref[GD:periodPend]{GD: periodPend}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}}
 \\
 \midrule
 \endhead
-\hyperref[DD:positionIX]{DD: positionIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionIX]{DD: positionIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:positionIY]{DD: positionIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:positionIY]{DD: positionIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:frequencyDD]{DD: frequencyDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:frequencyDD]{DD: frequencyDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angFrequencyDD]{DD: angFrequencyDD} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:angFrequencyDD]{DD: angFrequencyDD} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:periodSHMDD]{DD: periodSHMDD} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:periodSHMDD]{DD: periodSHMDD} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:acceleration]{TM: acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:acceleration]{TM: acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:velocity]{TM: velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:velocity]{TM: velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityIX]{GD: velocityIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityIX]{GD: velocityIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:velocityIY]{GD: velocityIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:velocityIY]{GD: velocityIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationIX]{GD: accelerationIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationIX]{GD: accelerationIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelerationIY]{GD: accelerationIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:accelerationIY]{GD: accelerationIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:hForceOnPendulum]{GD: hForceOnPendulum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:hForceOnPendulum]{GD: hForceOnPendulum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:vForceOnPendulum]{GD: vForceOnPendulum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:vForceOnPendulum]{GD: vForceOnPendulum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:angFrequencyGD]{GD: angFrequencyGD} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[GD:angFrequencyGD]{GD: angFrequencyGD} &  &  & X &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X & 
+\hyperref[GD:periodPend]{GD: periodPend} &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  & X &  & 
+\\
+\hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:positionIX]{DD: positionIX}} & \textbf{\hyperref[DD:positionIY]{DD: positionIY}} & \textbf{\hyperref[DD:frequencyDD]{DD: frequencyDD}} & \textbf{\hyperref[DD:angFrequencyDD]{DD: angFrequencyDD}} & \textbf{\hyperref[DD:periodSHMDD]{DD: periodSHMDD}} & \textbf{\hyperref[TM:acceleration]{TM: acceleration}} & \textbf{\hyperref[TM:velocity]{TM: velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD: velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD: velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD: accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD: accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD: hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD: vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD: angFrequencyGD}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}} & \textbf{\hyperref[inputValues]{FR: Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR: Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR: Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR: Output-Values}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[portable]{NFR: Portable}}
+\textbf{} & \textbf{\hyperref[DD:positionIX]{DD: positionIX}} & \textbf{\hyperref[DD:positionIY]{DD: positionIY}} & \textbf{\hyperref[DD:frequencyDD]{DD: frequencyDD}} & \textbf{\hyperref[DD:angFrequencyDD]{DD: angFrequencyDD}} & \textbf{\hyperref[DD:periodSHMDD]{DD: periodSHMDD}} & \textbf{\hyperref[TM:acceleration]{TM: acceleration}} & \textbf{\hyperref[TM:velocity]{TM: velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD: velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD: velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD: accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD: accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD: hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD: vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD: angFrequencyGD}} & \textbf{\hyperref[GD:periodPend]{GD: periodPend}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}} & \textbf{\hyperref[inputValues]{FR: Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR: Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR: Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR: Output-Values}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[portable]{NFR: Portable}}
 \\
 \midrule
 \endhead
-\hyperref[motionMass]{GS: Motion-of-the-mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[motionMass]{GS: Motion-of-the-mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR: Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR: Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyInptVals]{FR: Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInptVals]{FR: Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcAngPos]{FR: Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\hyperref[calcAngPos]{FR: Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR: Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\hyperref[outputValues]{FR: Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}

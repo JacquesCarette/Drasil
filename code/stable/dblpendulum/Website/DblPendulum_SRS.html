@@ -955,7 +955,9 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Vertical force on the pendulum</p></td>
+                      <td>
+                        <p class="paragraph">The The angular frequency of the pendulum</p>
+                      </td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -981,7 +983,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The torque is defined in <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>
+                          The torque is defined in <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a> and frequency is <em>f</em> is defined in <a href=#DD:frequencyDD>DD: frequencyDD</a>.
                         </p>
                       </td>
                     </tr>
@@ -993,7 +995,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:calOfAngularDisplacement>IM: calOfAngularDisplacement</a>
+                          <a href=#GD:periodPend>GD: periodPend</a> and <a href=#IM:calOfAngularDisplacement>IM: calOfAngularDisplacement</a>
                         </p>
                       </td>
                     </tr>
@@ -1024,6 +1026,70 @@
                       Because this equation, has the same form as the equation for simple harmonic motion the solution is easy to find.  The angular frequency
                     </p>
                     \[Ω=\sqrt{\frac{\mathbf{g}}{{L_{\text{rod}}}}}\]
+                  </div>
+                </div>
+                <div id="GD:periodPend">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:periodPend</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">The period on the pendulum</p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph"><em>s</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>\[T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\mathbf{g}}}\]</td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>T</em> is the period (<em>s</em>)</li>
+                          <li>
+                            <em>π</em> is the ratio of circumference to diameter for any circle (Unitless)
+                          </li>
+                          <li><em>L<sub>rod</sub></em> is the length of rod (<em>m</em>)</li>
+                          <li>
+                            <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The frequency and period are defined in <a href=#DD:frequencyDD>DD: frequencyDD</a> <a href=#DD:periodSHMDD>DD: periodSHMDD</a> respectively
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="GD:periodPendDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of period pendulum:</h4>
+                    <p class="paragraph">
+                      the The period of the pendulum can be defined from <a href=#GD:angFrequencyGD>GD: angFrequencyGD</a> equation
+                    </p>
+                    \[Ω=\sqrt{\frac{\mathbf{g}}{{L_{\text{rod}}}}}\]
+                    <p class="paragraph">
+                      Therefore from the equation <a href=#DD:angFrequencyDD>DD: angFrequencyDD</a>, we have
+                    </p>
+                    \[T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\mathbf{g}}}\]
                   </div>
                 </div>
               </div>
@@ -1209,7 +1275,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:periodSHMDD>DD: periodSHMDD</a>
+                          <a href=#GD:periodPend>GD: periodPend</a>, <a href=#DD:periodSHMDD>DD: periodSHMDD</a>, and <a href=#GD:angFrequencyGD>GD: angFrequencyGD</a>
                         </p>
                       </td>
                     </tr>
@@ -1264,7 +1330,9 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph"><a href=#GD:periodPend>GD: periodPend</a></p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -1316,7 +1384,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:angFrequencyDD>DD: angFrequencyDD</a>
+                          <a href=#GD:periodPend>GD: periodPend</a> and <a href=#DD:angFrequencyDD>DD: angFrequencyDD</a>
                         </p>
                       </td>
                     </tr>
@@ -1786,6 +1854,14 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#GD:periodPend>GD: periodPend</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td>
                 <a href=#IM:calOfAngularDisplacement>IM: calOfAngularDisplacement</a>
               </td>
@@ -1870,12 +1946,14 @@
               <th><a href=#GD:hForceOnPendulum>GD: hForceOnPendulum</a></th>
               <th><a href=#GD:vForceOnPendulum>GD: vForceOnPendulum</a></th>
               <th><a href=#GD:angFrequencyGD>GD: angFrequencyGD</a></th>
+              <th><a href=#GD:periodPend>GD: periodPend</a></th>
               <th>
                 <a href=#IM:calOfAngularDisplacement>IM: calOfAngularDisplacement</a>
               </th>
             </tr>
             <tr>
               <td><a href=#DD:positionIX>DD: positionIX</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1913,9 +1991,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:frequencyDD>DD: frequencyDD</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1953,6 +2033,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:periodSHMDD>DD: periodSHMDD</a></td>
@@ -1973,9 +2054,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:acceleration>TM: acceleration</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2013,9 +2096,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2053,9 +2138,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:velocityIX>GD: velocityIX</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2093,9 +2180,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:accelerationIX>GD: accelerationIX</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2133,9 +2222,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:hForceOnPendulum>GD: hForceOnPendulum</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2173,12 +2264,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:angFrequencyGD>GD: angFrequencyGD</a></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2191,6 +2283,28 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:periodPend>GD: periodPend</a></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
             </tr>
@@ -2214,6 +2328,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
             </tr>
           </table>
@@ -2241,6 +2356,7 @@
               <th><a href=#GD:hForceOnPendulum>GD: hForceOnPendulum</a></th>
               <th><a href=#GD:vForceOnPendulum>GD: vForceOnPendulum</a></th>
               <th><a href=#GD:angFrequencyGD>GD: angFrequencyGD</a></th>
+              <th><a href=#GD:periodPend>GD: periodPend</a></th>
               <th>
                 <a href=#IM:calOfAngularDisplacement>IM: calOfAngularDisplacement</a>
               </th>
@@ -2255,6 +2371,7 @@
             </tr>
             <tr>
               <td><a href=#motionMass>GS: Motion-of-the-mass</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2304,9 +2421,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifyInptVals>FR: Verify-Input-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2351,6 +2470,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -2361,6 +2481,7 @@
             </tr>
             <tr>
               <td><a href=#outputValues>FR: Output-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2410,9 +2531,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#portable>NFR: Portable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

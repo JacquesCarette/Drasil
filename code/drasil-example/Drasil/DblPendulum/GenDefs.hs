@@ -9,13 +9,14 @@ import Utils.Drasil
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (xComp, yComp)
 import Data.Drasil.Quantities.Physics(velocity, angularVelocity, xVel, yVel,
-    angularAccel, xAccel, yAccel, acceleration, force, tension, gravitationalAccel, angularFrequency)
-import Data.Drasil.Concepts.Physics(pendulum)
+    angularAccel, xAccel, yAccel, acceleration, force, tension, gravitationalAccel,
+    angularFrequency, torque, momentOfInertia, angularDisplacement, time, momentOfInertia)
+import Data.Drasil.Concepts.Physics(pendulum, weight)
 import Data.Drasil.Quantities.PhysicalProperties(mass)
-
+import Drasil.DblPendulum.TMods(newtonSLR)
+import Data.Drasil.Concepts.Math (equation)
 
 -- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
--- import Drasil.Projectile.References (hibbeler2004)
 import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle)
 
 genDefns :: [GenDefn]
@@ -123,7 +124,7 @@ vForceOnPendulumDeriv = mkDerivName (phrase force +:+ phrase pendulum) [ E vForc
 
 angFrequencyGD :: GenDefn
 angFrequencyGD = gdNoRefs angFrequencyRC (getUnit angularFrequency)
-           (Just angFrequencyDeriv) "angFrequencyGD" [{-Notes-}]
+           (Just angFrequencyDeriv) "angFrequencyGD" [angFrequencyGDNotes]
 
 angFrequencyRC :: RelationConcept
 angFrequencyRC = makeRC "angFrequencyRC" (nounPhraseSent $ foldlSent_ 
@@ -133,4 +134,57 @@ angFrequencyRel :: Relation
 angFrequencyRel = sy angularFrequency $= sqrt (sy gravitationalAccel / sy lenRod )
 
 angFrequencyDeriv :: Derivation
-angFrequencyDeriv = mkDerivName (phrase force +:+ phrase pendulum) [ E angFrequencyRel]
+angFrequencyDeriv = mkDerivName (phrase angularFrequency +:+ phrase pendulum) (weave [angFrequencyDerivSents, map E angFrequencyDerivEqns])
+
+
+angFrequencyDerivSents :: [Sentence]
+angFrequencyDerivSents = [angFrequencyDerivSent1, angFrequencyDerivSent2, angFrequencyDerivSent3,
+                      angFrequencyDerivSent4, angFrequencyDerivSent5, angFrequencyDerivSent6, angFrequencyDerivSent7]
+
+angFrequencyDerivSent1, angFrequencyDerivSent2, angFrequencyDerivSent3,
+     angFrequencyDerivSent4, angFrequencyDerivSent5, angFrequencyDerivSent6, angFrequencyDerivSent7 :: Sentence
+
+angFrequencyDerivEqns :: [Expr]
+angFrequencyDerivEqns = [angFrequencyDerivEqn1, angFrequencyDerivEqn2, angFrequencyDerivEqn3,
+                     angFrequencyDerivEqn4, angFrequencyDerivEqn5, angFrequencyDerivEqn6, angFrequencyDerivEqn7]
+
+angFrequencyDerivEqn1, angFrequencyDerivEqn2, angFrequencyDerivEqn3, angFrequencyDerivEqn4,
+                   angFrequencyDerivEqn5, angFrequencyDerivEqn6, angFrequencyDerivEqn7 :: Expr
+
+                                 
+
+angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque `sC` S "on a", phrase pendulum, definedIn'' newtonSLR `sC`
+                  S "the", phrase force, S "providing the restoring" +:+ phrase torque `sIs` S "the component of the",
+                  phrase weight `ofThe` phrase pendulum, S "bob that acts along the arc length" +:+
+                  S "The", phrase torque `isThe` S "length" `ofThe` S "string", ch lenRod +:+ S "multiplied by the component"
+                  `ofThe` S "net", phrase force +:+ S "that is perpendicular to the radius" `ofThe` S "arc." +:+
+                  S "The minus sign indicates the" +:+ phrase torque +:+ S "acts in the opposite direction of the", phrase angularDisplacement]
+
+
+angFrequencyDerivEqn1 = sy torque $= negate (sy lenRod) * (sy mass * sy gravitationalAccel * sin (sy pendDisplacementAngle))
+angFrequencyDerivSent2 = S "So then"
+angFrequencyDerivEqn2 = sy momentOfInertia * sy angularAccel $= negate (sy lenRod) * (sy mass * sy gravitationalAccel * sin (sy pendDisplacementAngle))
+angFrequencyDerivSent3 = S "Therefore,"
+angFrequencyDerivEqn3 = sy momentOfInertia * deriv (deriv (sy pendDisplacementAngle) time) time $= negate (sy lenRod)
+             * sy mass * sy gravitationalAccel * sin (sy pendDisplacementAngle)
+angFrequencyDerivSent4 = S "Substituting for" +:+ ch momentOfInertia
+angFrequencyDerivEqn4 = sy mass * sy lenRod $^ 2 * deriv (deriv (sy pendDisplacementAngle) time) time $= negate (sy lenRod)
+             * sy mass * sy gravitationalAccel * sin (sy pendDisplacementAngle)
+angFrequencyDerivSent5 = S "Crossing out" +:+ ch mass `sAnd` ch lenRod +:+ S "we have"
+angFrequencyDerivEqn5 = deriv (deriv (sy pendDisplacementAngle) time) time $= negate(sy gravitationalAccel/ sy lenRod) * sin (sy pendDisplacementAngle)
+angFrequencyDerivSent6 = S "For small angles, we approximate" +:+ S "sin" +:+ ch pendDisplacementAngle +:+ S "to" +:+ ch pendDisplacementAngle
+angFrequencyDerivEqn6 = deriv (deriv (sy pendDisplacementAngle) time) time $= negate(sy gravitationalAccel/ sy lenRod) * sy pendDisplacementAngle
+angFrequencyDerivSent7 = S "Because this" +:+ phrase equation `sC` S "has the same form as the" +:+ phrase equation +:+
+                  S "for simple harmonic motion the solution is easy to find." +:+ S " The" +:+ phrase angularFrequency
+angFrequencyDerivEqn7 = sy angularFrequency $= sqrt (sy gravitationalAccel / sy lenRod)
+angFrequencyGDNotes :: Sentence
+angFrequencyGDNotes = S "The" +:+ phrase torque `sIs` definedIn'' newtonSLR
+ 
+
+                                       
+-- But note that for small angles
+--  (less than 15 degrees), sinθ and θ differ by less than 1%, so we 
+--  can use the small angle approximation sinθ≈θ. The angle θ describes
+--   the position of the pendulum. Using the small angle approximation 
+--   gives an approximate solution for small angles,
+--                                        

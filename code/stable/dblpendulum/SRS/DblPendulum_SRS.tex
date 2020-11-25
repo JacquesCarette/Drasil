@@ -45,6 +45,8 @@ The unit system used throughout is SI (Système International d'Unités). In add
 \endhead
 ${{}^{\circ}}$ & angle & degree
 \\
+${\text{Hz}}$ & frequency & hertz
+\\
 ${\text{kg}}$ & mass & kilogram
 \\
 ${\text{m}}$ & length & metre
@@ -77,7 +79,11 @@ $\mathbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\mathbf{F}$ & Force & ${\text{N}}$
 \\
+$f$ & Frequency & ${\text{Hz}}$
+\\
 $\mathbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+$\mathbf{I}$ & Moment of inertia & $\text{kg}\text{m}^{2}$
 \\
 $\mathbf{\hat{i}}$ & Unit Vector & --
 \\
@@ -91,6 +97,8 @@ ${{p_{\text{y}}}^{\text{i}}}$ & $y$-component of initial position & ${\text{m}}$
 \\
 $\mathbf{p}$ & Position & ${\text{m}}$
 \\
+$T$ & Period & ${\text{s}}$
+\\
 $\mathbf{T}$ & Tension & ${\text{N}}$
 \\
 $t$ & Time & ${\text{s}}$
@@ -103,7 +111,17 @@ $\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $α$ & Angular Acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
-$θ$ & Angle of pendulum & ${{}^{\circ}}$
+$θ$ & Angular Displacement & ${\text{rad}}$
+\\
+${θ_{i}}$ & Initial pendulum angle & ${\text{rad}}$
+\\
+${θ_{p}}$ & Displacement angle of pendulum & ${{}^{\circ}}$
+\\
+$π$ & Ratio of circumference to diameter for any circle & --
+\\
+$\mathbf{τ}$ & Torque & $\text{N}\text{m}$
+\\
+$Ω$ & Angular frequency & ${\text{s}}$
 \\
 $ω$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
@@ -202,7 +220,7 @@ The instance models that govern Pendulum are presented in \hyperref[Sec:IMs]{Sec
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{itemize}
-\item[pend2DMotion:\phantomsection\label{pend2DMotion}]{The Pendulum motion is two-dimensional (2D).}
+\item[pend2DMotion:\phantomsection\label{pend2DMotion}]{The Pendulum motion is two-dimensional (2D). (RefBy: \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}.)}
 \item[cartCoord:\phantomsection\label{cartCoord}]{A Cartesian coordinate system is used}
 \item[cartCoordRight:\phantomsection\label{cartCoordRight}]{The Cartesian coordinate system is right-handed where positive $x$-axis. and $y$-axis point right up}
 \item[yAxisDir:\phantomsection\label{yAxisDir}]{The The direction of the $y$-axis is directed opposite to gravity.}
@@ -295,7 +313,38 @@ Notes & The net force $\mathbf{F}$ on a body is proportional to the acceleration
 Source & --
          
 \\ \midrule \\
-RefBy & \hyperref[IM:calOfAngularAcceleration]{IM: calOfAngularAcceleration}
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{TM:NewtonSecLawRotMot}
+\phantomsection 
+\label{TM:NewtonSecLawRotMot}
+\\ \midrule \\
+Label & Newton's second law for rotational motion
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{τ}=\mathbf{I} α
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{τ}$ is the torque ($\text{N}\text{m}$)}
+              \item{$\mathbf{I}$ is the moment of inertia ($\text{kg}\text{m}^{2}$)}
+              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The net torque $\mathbf{τ}$ on a pendulum is proportional to its angular acceleration $α$, where $\mathbf{I}$ denotes the moment of inertia of the pendulum as the constant of proportionality We also assume that pendulum motion is two-dimensional \hyperref[pend2DMotion]{A: pend2DMotion}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement} and \hyperref[GD:angFrequencyGD]{GD: angFrequencyGD}
         
 \\ \bottomrule
 \end{tabular}
@@ -319,14 +368,14 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left(θ\right)
+           {v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${v_{\text{x}}}$ is the $x$-component of velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
-              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \item{${θ_{p}}$ is the displacement angle of pendulum (${{}^{\circ}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -339,7 +388,7 @@ RefBy &
 \paragraph{Detailed derivation of $x$-component velocity:}
 \label{GD:velocityIXDeriv}
 \begin{displaymath}
-{v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left(θ\right)
+{v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -356,14 +405,14 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {v_{\text{y}}}=ω {L_{\text{rod}}} \cos\left(θ\right)
+           {v_{\text{y}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${v_{\text{y}}}$ is the $y$-component of velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
-              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \item{${θ_{p}}$ is the displacement angle of pendulum (${{}^{\circ}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -376,7 +425,7 @@ RefBy &
 \paragraph{Detailed derivation of $y$-component velocity:}
 \label{GD:velocityIYDeriv}
 \begin{displaymath}
-{v_{\text{y}}}=ω {L_{\text{rod}}} \cos\left(θ\right)
+{v_{\text{y}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -393,14 +442,14 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {a_{\text{x}}}=-ω {L_{\text{rod}}} \sin\left(θ\right)+α {L_{\text{rod}}} \cos\left(θ\right)
+           {a_{\text{x}}}=-ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)+α {L_{\text{rod}}} \cos\left({θ_{p}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${a_{\text{x}}}$ is the $x$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
-              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \item{${θ_{p}}$ is the displacement angle of pendulum (${{}^{\circ}}$)}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -414,7 +463,7 @@ RefBy &
 \paragraph{Detailed derivation of $x$-component acceleration:}
 \label{GD:accelerationIXDeriv}
 \begin{displaymath}
-{a_{\text{x}}}=-ω {L_{\text{rod}}} \sin\left(θ\right)+α {L_{\text{rod}}} \cos\left(θ\right)
+{a_{\text{x}}}=-ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)+α {L_{\text{rod}}} \cos\left({θ_{p}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -431,14 +480,14 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {a_{\text{y}}}=ω {L_{\text{rod}}} \cos\left(θ\right)+α {L_{\text{rod}}} \sin\left(θ\right)
+           {a_{\text{y}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)+α {L_{\text{rod}}} \sin\left({θ_{p}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${a_{\text{y}}}$ is the $y$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
-              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \item{${θ_{p}}$ is the displacement angle of pendulum (${{}^{\circ}}$)}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -452,7 +501,7 @@ RefBy &
 \paragraph{Detailed derivation of $y$-component acceleration:}
 \label{GD:accelerationIYDeriv}
 \begin{displaymath}
-{a_{\text{y}}}=ω {L_{\text{rod}}} \cos\left(θ\right)+α {L_{\text{rod}}} \sin\left(θ\right)
+{a_{\text{y}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)+α {L_{\text{rod}}} \sin\left({θ_{p}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -469,7 +518,7 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{F}=m {a_{\text{x}}}=-\mathbf{T} \sin\left(θ\right)
+           \mathbf{F}=m {a_{\text{x}}}=-\mathbf{T} \sin\left({θ_{p}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -477,7 +526,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{${a_{\text{x}}}$ is the $x$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$\mathbf{T}$ is the tension (${\text{N}}$)}
-              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \item{${θ_{p}}$ is the displacement angle of pendulum (${{}^{\circ}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
@@ -490,7 +539,7 @@ RefBy &
 \paragraph{Detailed derivation of force pendulum:}
 \label{GD:hForceOnPendulumDeriv}
 \begin{displaymath}
-\mathbf{F}=m {a_{\text{x}}}=-\mathbf{T} \sin\left(θ\right)
+\mathbf{F}=m {a_{\text{x}}}=-\mathbf{T} \sin\left({θ_{p}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -507,7 +556,7 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{F}=m {a_{\text{y}}}=\mathbf{T} \cos\left(θ\right)-m \mathbf{g}
+           \mathbf{F}=m {a_{\text{y}}}=\mathbf{T} \cos\left({θ_{p}}\right)-m \mathbf{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -515,7 +564,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{${a_{\text{y}}}$ is the $y$-component of acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$\mathbf{T}$ is the tension (${\text{N}}$)}
-              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \item{${θ_{p}}$ is the displacement angle of pendulum (${{}^{\circ}}$)}
               \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -529,7 +578,79 @@ RefBy &
 \paragraph{Detailed derivation of force pendulum:}
 \label{GD:vForceOnPendulumDeriv}
 \begin{displaymath}
-\mathbf{F}=m {a_{\text{y}}}=\mathbf{T} \cos\left(θ\right)-m \mathbf{g}
+\mathbf{F}=m {a_{\text{y}}}=\mathbf{T} \cos\left({θ_{p}}\right)-m \mathbf{g}
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:angFrequencyGD}
+\phantomsection 
+\label{GD:angFrequencyGD}
+\\ \midrule \\
+Label & Vertical force on the pendulum
+        
+\\ \midrule \\
+Units & ${\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           Ω=\sqrt{\frac{\mathbf{g}}{{L_{\text{rod}}}}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$Ω$ is the angular frequency (${\text{s}}$)}
+              \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The torque is defined in \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of angular frequency pendulum:}
+\label{GD:angFrequencyGDDeriv}
+Consider the torque, on a pendulum defined in \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, the force providing the restoring torque is the component of the the weight of the pendulum bob that acts along the arc length The the torque is the length of the string the ${L_{\text{rod}}}$ multiplied by the component of the net the force that is perpendicular to the radius of the arc. The minus sign indicates the torque acts in the opposite direction of the angular displacement:
+
+\begin{displaymath}
+\mathbf{τ}=-{L_{\text{rod}}} m \mathbf{g} \sin\left({θ_{p}}\right)
+\end{displaymath}
+So then
+
+\begin{displaymath}
+\mathbf{I} α=-{L_{\text{rod}}} m \mathbf{g} \sin\left({θ_{p}}\right)
+\end{displaymath}
+Therefore,
+
+\begin{displaymath}
+\mathbf{I} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \mathbf{g} \sin\left({θ_{p}}\right)
+\end{displaymath}
+Substituting for $\mathbf{I}$
+
+\begin{displaymath}
+m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \mathbf{g} \sin\left({θ_{p}}\right)
+\end{displaymath}
+Crossing out $m$ and ${L_{\text{rod}}}$ we have
+
+\begin{displaymath}
+\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\mathbf{g}}{{L_{\text{rod}}}}\right) \sin\left({θ_{p}}\right)
+\end{displaymath}
+For small angles, we approximate sin ${θ_{p}}$ to ${θ_{p}}$
+
+\begin{displaymath}
+\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\mathbf{g}}{{L_{\text{rod}}}}\right) {θ_{p}}
+\end{displaymath}
+Because this equation, has the same form as the equation for simple harmonic motion the solution is easy to find.  The angular frequency
+
+\begin{displaymath}
+Ω=\sqrt{\frac{\mathbf{g}}{{L_{\text{rod}}}}}
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -553,13 +674,13 @@ Units & ${\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {{p_{\text{x}}}^{\text{i}}}={L_{\text{rod}}} \sin\left(θ\right)
+           {{p_{\text{x}}}^{\text{i}}}={L_{\text{rod}}} \sin\left({θ_{i}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${{p_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial position (${\text{m}}$)}
               \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
-              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \item{${θ_{i}}$ is the initial pendulum angle (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${{p_{\text{x}}}^{\text{i}}}$ is the horizontal position
@@ -593,13 +714,13 @@ Units & ${\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {{p_{\text{y}}}^{\text{i}}}={L_{\text{rod}}} \cos\left(θ\right)
+           {{p_{\text{y}}}^{\text{i}}}={L_{\text{rod}}} \cos\left({θ_{i}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${{p_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial position (${\text{m}}$)}
               \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
-              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \item{${θ_{i}}$ is the initial pendulum angle (${\text{rad}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${{p_{\text{y}}}^{\text{i}}}$ is the vertical position
@@ -615,6 +736,120 @@ RefBy &
 \end{tabular}
 \end{minipage}
 
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:frequencyDD}
+\phantomsection 
+\label{DD:frequencyDD}
+\\ \midrule \\
+Label & Frequency
+        
+\\ \midrule \\
+Symbol & $f$
+         
+\\ \midrule \\
+Units & ${\text{Hz}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           f=\frac{1}{T}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$f$ is the frequency (${\text{Hz}}$)}
+              \item{$T$ is the period (${\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & $f$ is the number of back and forth swings in one second
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[DD:periodSHMDD]{DD: periodSHMDD}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:angFrequencyDD}
+\phantomsection 
+\label{DD:angFrequencyDD}
+\\ \midrule \\
+Label & Angular frequency
+        
+\\ \midrule \\
+Symbol & $Ω$
+         
+\\ \midrule \\
+Units & ${\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           Ω=2 π\times\frac{1}{T}=\frac{2 π}{T}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$Ω$ is the angular frequency (${\text{s}}$)}
+              \item{$π$ is the ratio of circumference to diameter for any circle (Unitless)}
+              \item{$T$ is the period (${\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & $T$ is from \hyperref[DD:periodSHMDD]{DD: periodSHMDD}
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:periodSHMDD}
+\phantomsection 
+\label{DD:periodSHMDD}
+\\ \midrule \\
+Label & Period
+        
+\\ \midrule \\
+Symbol & $T$
+         
+\\ \midrule \\
+Units & ${\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           T=\frac{1}{f}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$T$ is the period (${\text{s}}$)}
+              \item{$f$ is the frequency (${\text{Hz}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & $T$ is from \hyperref[DD:frequencyDD]{DD: frequencyDD}
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[DD:angFrequencyDD]{DD: angFrequencyDD}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
@@ -623,42 +858,45 @@ This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: 
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:calOfAngularAcceleration}
+\toprule \textbf{Refname} & \textbf{IM:calOfAngularDisplacement}
 \phantomsection 
-\label{IM:calOfAngularAcceleration}
+\label{IM:calOfAngularDisplacement}
 \\ \midrule \\
-Label & Calculation of angular acceleration
+Label & Calculation of angular displacement
         
 \\ \midrule \\
-Input & ${L_{\text{rod}}}$, $θ$
+Input & ${L_{\text{rod}}}$, ${θ_{i}}$, $\mathbf{g}$
         
 \\ \midrule \\
-Output & $α$
+Output & ${θ_{p}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
                     {L_{\text{rod}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    θ\gt{}0
+                    {θ_{i}}\gt{}0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    \mathbf{g}\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     α\gt{}0
+                     {θ_{p}}\gt{}0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           α=-\frac{\mathbf{g}}{{L_{\text{rod}}}} \sin\left(θ\right)
+           {θ_{p}}\left(t\right)={θ_{i}} \cos\left(Ω t\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
-              \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{${L_{\text{rod}}}$ is the length of rod (${\text{m}}$)}
-              \item{$θ$ is the angle of pendulum (${{}^{\circ}}$)}
+              \item{${θ_{p}}$ is the displacement angle of pendulum (${{}^{\circ}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{${θ_{i}}$ is the initial pendulum angle (${\text{rad}}$)}
+              \item{$Ω$ is the angular frequency (${\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The constraint $θ\gt{}0$ is required
+Notes & The constraint ${θ_{i}}\gt{}0$ is required The. angular frequency is defined in \hyperref[GD:angFrequencyGD]{GD: angFrequencyGD}
         
 \\ \midrule \\
 Source & --
@@ -669,32 +907,32 @@ RefBy & \hyperref[outputValues]{FR: Output-Values} and \hyperref[calcAngPos]{FR:
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\paragraph{Detailed derivation of angular acceleration:}
-\label{IM:calOfAngularAccelerationDeriv}
-Using the Newton's Law in \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}, we have:
+\paragraph{Detailed derivation of angular displacement:}
+\label{IM:calOfAngularDisplacementDeriv}
+When the pendulum is displaced to an initial angle and released, the pendulum swings back and forth with periodic motion By applying Newton's Second Law for Rotation in \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, the equation of motion for the pendulum may be obtained:
 
 \begin{displaymath}
-\mathbf{F}=m \mathbf{a}
+\mathbf{τ}=\mathbf{I} α
 \end{displaymath}
-Where $\mathbf{F}$ denotes the force, $m$ denotes the mass and $\mathbf{a}$ denotes the acceleration Therefore:
+Where $\mathbf{τ}$ denotes the torque, $\mathbf{I}$ denotes the moment of inertia and $α$ denotes the angular acceleration This implies:
 
 \begin{displaymath}
--m \mathbf{g} \sin\left(θ\right)=m α
+-m \mathbf{g} \sin\left({θ_{p}}\right) {L_{\text{rod}}}=m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}
 \end{displaymath}
-Then we have:
+And rearranged as:
 
 \begin{displaymath}
--\mathbf{g} \sin\left(θ\right)=α
+\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\mathbf{g}}{{L_{\text{rod}}}} \sin\left({θ_{p}}\right)=0
 \end{displaymath}
-the when the rod makes an $θ$ with the vertical, displacement of the mass is given by.
+If the amplitude of angular displacement is small enough, we can approximate $\sin\left({θ_{p}}\right)={θ_{p}}$ for the purpose of a simple pendulum at very small angles. Then the equation of motion reduces to the equation of simple harmonic motion:
 
 \begin{displaymath}
-\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω^{2} \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω^{2} \cos\left(θ\right) \mathbf{\hat{j}}\right)
+\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\mathbf{g}}{{L_{\text{rod}}}} {θ_{p}}=0
 \end{displaymath}
-With the trig identity $\cos\left(θ\right)+\sin\left(θ\right)=1$:
+Thus the simple harmonic motion is:
 
 \begin{displaymath}
-\mathbf{T} \cos\left(θ\right) \mathbf{\hat{j}}-\mathbf{T} \sin\left(θ\right)-m \mathbf{g} \mathbf{\hat{j}}=m {L_{\text{rod}}} \left(α \cos\left(θ\right) \mathbf{\hat{j}}-ω^{2} \sin\left(θ\right)+α \sin\left(θ\right) \mathbf{\hat{j}}+ω^{2} \cos\left(θ\right) \mathbf{\hat{j}}\right)
+{θ_{p}}\left(t\right)={θ_{i}} \cos\left(Ω t\right)
 \end{displaymath}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
@@ -708,7 +946,7 @@ With the trig identity $\cos\left(θ\right)+\sin\left(θ\right)=1$:
 \endhead
 ${L_{\text{rod}}}$ & ${L_{\text{rod}}}\gt{}0$ & $44.2$ ${\text{m}}$ & 10$\%$
 \\
-$θ$ & $θ\gt{}0$ & $2.1$ ${{}^{\circ}}$ & 10$\%$
+${θ_{i}}$ & ${θ_{i}}\gt{}0$ & $2.1$ ${\text{rad}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -726,6 +964,8 @@ $θ$ & $θ\gt{}0$ & $2.1$ ${{}^{\circ}}$ & 10$\%$
 \endhead
 $α$ & $α\gt{}0$
 \\
+${θ_{p}}$ & ${θ_{p}}\gt{}0$
+\\
 \bottomrule
 \caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
@@ -741,8 +981,8 @@ This section provides the functional requirements, the tasks and behaviours that
 \begin{itemize}
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Table:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInptVals}]{Check the entered input values to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
-\item[Calculate-Angular-Position-Of-Mass:\phantomsection\label{calcAngPos}]{Calculate the following values: $α$ (from \hyperref[IM:calOfAngularAcceleration]{IM: calOfAngularAcceleration}) and $θ$ (from \hyperref[IM:calOfAngularAcceleration]{IM: calOfAngularAcceleration}).}
-\item[Output-Values:\phantomsection\label{outputValues}]{Output ${L_{\text{rod}}}$ (from \hyperref[IM:calOfAngularAcceleration]{IM: calOfAngularAcceleration}) and ${L_{\text{rod}}}$ (from \hyperref[IM:calOfAngularAcceleration]{IM: calOfAngularAcceleration}).}
+\item[Calculate-Angular-Position-Of-Mass:\phantomsection\label{calcAngPos}]{Calculate the following values: $θ$ (from \hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}) and ${θ_{p}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}).}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output ${L_{\text{rod}}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}) and ${L_{\text{rod}}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}).}
 \end{itemize}
 \begin{longtable}{l l l}
 \toprule
@@ -750,13 +990,15 @@ This section provides the functional requirements, the tasks and behaviours that
 \\
 \midrule
 \endhead
-$\mathbf{F}$ & Force & ${\text{N}}$
-\\
 ${L_{\text{rod}}}$ & Length of rod & ${\text{m}}$
+\\
+$m$ & Mass & ${\text{kg}}$
 \\
 $α$ & Angular Acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
-$θ$ & Angle of pendulum & ${{}^{\circ}}$
+${θ_{i}}$ & Initial pendulum angle & ${\text{rad}}$
+\\
+${θ_{p}}$ & Displacement angle of pendulum & ${{}^{\circ}}$
 \\
 \bottomrule
 \caption{Required Inputs following \hyperref[inputValues]{FR: Input-Values}}
@@ -770,6 +1012,154 @@ This section provides the non-functional requirements, the qualities that the so
 \item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.}
 \item[Portable:\phantomsection\label{portable}]{The code is able to be run in different environments.}
 \end{itemize}
+\section{Traceability Matrices and Graphs}
+\label{Sec:TraceMatrices}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Table:TraceMatAvsA} shows the dependencies of assumptions on the assumptions. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+
+\begin{longtable}{l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[pend2DMotion]{A: pend2DMotion}} & \textbf{\hyperref[cartCoord]{A: cartCoord}} & \textbf{\hyperref[cartCoordRight]{A: cartCoordRight}} & \textbf{\hyperref[yAxisDir]{A: yAxisDir}} & \textbf{\hyperref[startOrigin]{A: startOrigin}}
+\\
+\midrule
+\endhead
+\hyperref[pend2DMotion]{A: pend2DMotion} &  &  &  &  & 
+\\
+\hyperref[cartCoord]{A: cartCoord} &  &  &  &  & 
+\\
+\hyperref[cartCoordRight]{A: cartCoordRight} &  &  &  &  & 
+\\
+\hyperref[yAxisDir]{A: yAxisDir} &  &  &  &  & 
+\\
+\hyperref[startOrigin]{A: startOrigin} &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Assumptions dependence of each other.}
+\label{Table:TraceMatAvsA}
+\end{longtable}
+\begin{longtable}{l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[pend2DMotion]{A: pend2DMotion}} & \textbf{\hyperref[cartCoord]{A: cartCoord}} & \textbf{\hyperref[cartCoordRight]{A: cartCoordRight}} & \textbf{\hyperref[yAxisDir]{A: yAxisDir}} & \textbf{\hyperref[startOrigin]{A: startOrigin}}
+\\
+\midrule
+\endhead
+\hyperref[DD:positionIX]{DD: positionIX} &  &  &  &  & 
+\\
+\hyperref[DD:positionIY]{DD: positionIY} &  &  &  &  & 
+\\
+\hyperref[DD:frequencyDD]{DD: frequencyDD} &  &  &  &  & 
+\\
+\hyperref[DD:angFrequencyDD]{DD: angFrequencyDD} &  &  &  &  & 
+\\
+\hyperref[DD:periodSHMDD]{DD: periodSHMDD} &  &  &  &  & 
+\\
+\hyperref[TM:acceleration]{TM: acceleration} &  &  &  &  & 
+\\
+\hyperref[TM:velocity]{TM: velocity} &  &  &  &  & 
+\\
+\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  & 
+\\
+\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & X &  &  &  & 
+\\
+\hyperref[GD:velocityIX]{GD: velocityIX} &  &  &  &  & 
+\\
+\hyperref[GD:velocityIY]{GD: velocityIY} &  &  &  &  & 
+\\
+\hyperref[GD:accelerationIX]{GD: accelerationIX} &  &  &  &  & 
+\\
+\hyperref[GD:accelerationIY]{GD: accelerationIY} &  &  &  &  & 
+\\
+\hyperref[GD:hForceOnPendulum]{GD: hForceOnPendulum} &  &  &  &  & 
+\\
+\hyperref[GD:vForceOnPendulum]{GD: vForceOnPendulum} &  &  &  &  & 
+\\
+\hyperref[GD:angFrequencyGD]{GD: angFrequencyGD} &  &  &  &  & 
+\\
+\hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement} &  &  &  &  & 
+\\
+\hyperref[inputValues]{FR: Input-Values} &  &  &  &  & 
+\\
+\hyperref[verifyInptVals]{FR: Verify-Input-Values} &  &  &  &  & 
+\\
+\hyperref[calcAngPos]{FR: Calculate-Angular-Position-Of-Mass} &  &  &  &  & 
+\\
+\hyperref[outputValues]{FR: Output-Values} &  &  &  &  & 
+\\
+\hyperref[correct]{NFR: Correct} &  &  &  &  & 
+\\
+\hyperref[portable]{NFR: Portable} &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
+\label{Table:TraceMatAvsAll}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[DD:positionIX]{DD: positionIX}} & \textbf{\hyperref[DD:positionIY]{DD: positionIY}} & \textbf{\hyperref[DD:frequencyDD]{DD: frequencyDD}} & \textbf{\hyperref[DD:angFrequencyDD]{DD: angFrequencyDD}} & \textbf{\hyperref[DD:periodSHMDD]{DD: periodSHMDD}} & \textbf{\hyperref[TM:acceleration]{TM: acceleration}} & \textbf{\hyperref[TM:velocity]{TM: velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD: velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD: velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD: accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD: accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD: hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD: vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD: angFrequencyGD}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}}
+\\
+\midrule
+\endhead
+\hyperref[DD:positionIX]{DD: positionIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:positionIY]{DD: positionIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:frequencyDD]{DD: frequencyDD} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:angFrequencyDD]{DD: angFrequencyDD} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:periodSHMDD]{DD: periodSHMDD} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[TM:acceleration]{TM: acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[TM:velocity]{TM: velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:velocityIX]{GD: velocityIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:velocityIY]{GD: velocityIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:accelerationIX]{GD: accelerationIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:accelerationIY]{GD: accelerationIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:hForceOnPendulum]{GD: hForceOnPendulum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:vForceOnPendulum]{GD: vForceOnPendulum} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:angFrequencyGD]{GD: angFrequencyGD} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\\
+\hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
+\label{Table:TraceMatRefvsRef}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[DD:positionIX]{DD: positionIX}} & \textbf{\hyperref[DD:positionIY]{DD: positionIY}} & \textbf{\hyperref[DD:frequencyDD]{DD: frequencyDD}} & \textbf{\hyperref[DD:angFrequencyDD]{DD: angFrequencyDD}} & \textbf{\hyperref[DD:periodSHMDD]{DD: periodSHMDD}} & \textbf{\hyperref[TM:acceleration]{TM: acceleration}} & \textbf{\hyperref[TM:velocity]{TM: velocity}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[GD:velocityIX]{GD: velocityIX}} & \textbf{\hyperref[GD:velocityIY]{GD: velocityIY}} & \textbf{\hyperref[GD:accelerationIX]{GD: accelerationIX}} & \textbf{\hyperref[GD:accelerationIY]{GD: accelerationIY}} & \textbf{\hyperref[GD:hForceOnPendulum]{GD: hForceOnPendulum}} & \textbf{\hyperref[GD:vForceOnPendulum]{GD: vForceOnPendulum}} & \textbf{\hyperref[GD:angFrequencyGD]{GD: angFrequencyGD}} & \textbf{\hyperref[IM:calOfAngularDisplacement]{IM: calOfAngularDisplacement}} & \textbf{\hyperref[inputValues]{FR: Input-Values}} & \textbf{\hyperref[verifyInptVals]{FR: Verify-Input-Values}} & \textbf{\hyperref[calcAngPos]{FR: Calculate-Angular-Position-Of-Mass}} & \textbf{\hyperref[outputValues]{FR: Output-Values}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[portable]{NFR: Portable}}
+\\
+\midrule
+\endhead
+\hyperref[motionMass]{GS: Motion-of-the-mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[inputValues]{FR: Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifyInptVals]{FR: Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[calcAngPos]{FR: Calculate-Angular-Position-Of-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\\
+\hyperref[outputValues]{FR: Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}
+\label{Table:TraceMatAllvsR}
+\end{longtable}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 There are no auxiliary constants.

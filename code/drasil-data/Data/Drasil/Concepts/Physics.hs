@@ -13,7 +13,7 @@ import Data.Drasil.Citations (dampingSource)
 import Data.Drasil.Concepts.Education (mechanics)
 
 physicCon :: [ConceptChunk]
-physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
+physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity,
   cohesion, collision, compression, constAccel, constAccelV, damping,
   displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
   friction, gravity, gravitationalAccel, gravitationalConst, height, iPos,
@@ -23,12 +23,12 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
   rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
   yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec,
-  pendulum, body, kinematics]
+  pendulum, body, kinematics, frequency, period]
 
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
 
-acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity, cohesion,
+acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohesion,
   collision, compression, constAccel, constAccelV, damping, displacement,
   distance, elasticity, energy, fSpeed, fVel, fbd, force, friction, gravity,
   gravitationalAccel, gravitationalConst, height, iPos, iSpeed, iVel, impulseS,
@@ -37,7 +37,8 @@ acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity, cohesion,
   pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos,
   space, speed, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body, kinematics :: ConceptChunk
+  yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body,
+  kinematics, frequency, period :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
@@ -74,6 +75,8 @@ fbd = dcc "FBD" (cn' "free body diagram")
    "reactions on a body in a steady state condition")
 force = dcc "force" (cn' "force")
   "an interaction that tends to produce change in the motion of an object"
+frequency = dcc "frequency" (cn' "frequency")
+  "the number of occurrences of a repeating event per unit of time"
 friction = dcc "friction" (cn' "friction")
   "the force resisting the relative motion of two surfaces"
 fOfGravity = dcc "fOfGravity" (cn "force of gravity")
@@ -105,7 +108,8 @@ momentum = dccWDS "momentum" (cn "momentum")
    phrase velocity)
 moment = dccWDS "moment" (cn' "moment")
   (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `sOr` phrase axis)
-
+period = dccWDS "period" (cn' "period")
+   (S "the" +:+ phrase time +:+ S "required for one complete cycle of vibration to pass a given point.")
 pendulum = dccWDS "pendulum" (cn "pendulum")
  (S "a body suspended from a fixed support so that it swings freely back and forth under the influence" 
        `sOf` phrase gravity)
@@ -205,7 +209,8 @@ restitutionCoef = dcc "restitutionCoef" (cn "coefficient of restitution")
   "a measure of the restitution of a collision between two objects"
 momentOfInertia = dcc "momentOfInertia" (cn "moment of inertia")
   "a quantity expressing a body's tendency to resist angular acceleration"
-
+angFreq = dcc "angularFrequency" (cn "angular frequency")
+  "the frequency of a periodic process, wave system etc, per unit time."
 --FIXME: These two should be built off "impulse"
 impulseV = dcc "impulseV" (cn "impulse (vector)")
   "a force acting briefly on a body and producing a finite change of momentum in a given direction" 

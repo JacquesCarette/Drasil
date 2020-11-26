@@ -8,7 +8,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 import Data.Drasil.People (olu)
-import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian)
+import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD)
 import Data.Drasil.Quantities.Physics (physicscon)
@@ -18,16 +18,13 @@ import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains, problem,
 import Data.Drasil.Concepts.Computation (inValue)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
-  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, SSDSec, RefSec, ReqrmntSec),
+  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
   IntroSec(..), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
-  RefSec(..), RefTab(..), SCSSub(..), SRSDecl,
+  RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
-  TConvention(..), TSIntro(..),
-  Verbosity(Verbose), intro, mkDoc, tsymb,
-  ReqrmntSec(..), ReqsSub(..))
-  -- TraceabilityProg,
---TraceabilitySec, TraceabilitySec, purpDoc, traceMatStandard'
+  TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
 import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (mathcon, cartesian)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
@@ -82,7 +79,7 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
     [ FReqsSub EmptyS []
     , NonFReqsSub
     ],
-  -- TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
      AuxConsProg pendulumTitle [],  --Adds Auxilliary constraint section
   Bibliography                    -- Adds reference section
@@ -126,8 +123,8 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
   (nw pendulumTitle : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon  ++ map nw physicCon' ++
-   map nw physicscon ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre])
-  (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian]) dataDefs
+   map nw physicscon ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz])
+  (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
   iMods genDefns tMods concIns [] []
 
 

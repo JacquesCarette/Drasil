@@ -555,6 +555,7 @@ acceleration :: ConceptChunk
 angAccel :: ConceptChunk
 angDisp :: ConceptChunk
 angVelo :: ConceptChunk
+angFreq :: ConceptChunk
 angular :: ConceptChunk
 chgInVelocity :: ConceptChunk
 cohesion :: ConceptChunk
@@ -628,6 +629,8 @@ positionVec :: ConceptChunk
 pendulum :: ConceptChunk
 body :: ConceptChunk
 kinematics :: ConceptChunk
+frequency :: ConceptChunk
+period :: ConceptChunk
 oneD :: CI
 twoD :: CI
 threeD :: CI
@@ -739,6 +742,9 @@ moment2D :: UnitalChunk
 fOfGravity :: UnitalChunk
 positionVec :: UnitalChunk
 tension :: UnitalChunk
+angularFrequency :: UnitalChunk
+period :: UnitalChunk
+frequency :: UnitalChunk
 constant :: Symbol
 final :: Symbol
 initial :: Symbol

@@ -1,36 +1,33 @@
-[![Build Status](https://travis-ci.com/JacquesCarette/Drasil.svg?branch=master)](https://travis-ci.com/JacquesCarette/Drasil)
-
-The Drasil Framework
+Drasil [![Build Status](https://travis-ci.com/JacquesCarette/Drasil.svg?branch=master)](https://travis-ci.com/JacquesCarette/Drasil)
 ====================================================
 
-Generate all the Things!
-
-[Current Generated Artifacts](https://jacquescarette.github.io/Drasil/)
+Generate all the Things! See the [currently generated artifacts](https://jacquescarette.github.io/Drasil/)
 
 ## Table of Contents
 
 1. [What is Drasil?](#what-is-drasil)
-   - description of the Drasil framework
 2. [Quick Start](#quick-start)
-   - instructions for quick-starting the Drasil framework
 3. [Building Specific Examples](#building-specific-examples)
-   - instructions for how to build specific examples using Drasil
 4. [Running the Example(s)](#running-the-examples)
-   - instructions for running specific examples
 5. [Finding / Building the Haddock Documentation](#finding--building-the-haddock-documentation)
-   - Haddock documentation instructions
-6. [Summary of Folder Structure and File Contents](#summary-of-folder-structure-and-file-contents)
+6. [Repository Contents](#summary-of-folder-structure-and-file-contents)
 
 ## What is Drasil?
 
-Drasil is a framework for generating all of the software artifacts from a stable knowledge base, focusing currently on scientific software. The main goals are to reduce knowledge duplication and improve traceability. We also are extreme in our drive to reuse everything.  We hope that maintainability, verifiability, traceability, and other software qualities will also be improved as a side-effect of our methods.
+For well understood domains, building software ought to be a matter of engineering, based on solid scientific foundations. The ultimate test of "well understood" is being able to teach the domain language to a computer.  Drasil is a framework for generating all of the software artifacts for (well understood) research software, from the natural knowledge base of the domain.
 
-Drasil is used to generate *all* requisite software artifacts from a common *knowledge-base* using *recipes* written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of knowledge should be used in which artifacts, how to transform them, and more.
+We take advantage of the inherent duplication of knowledge present in software artifacts (code, specification, tests, etc). More precisely, we capture the information present in software artifacts so that the particular *view* of that information in the artifacts can be reproduced by Drasil. For example, the equation **F = m a** will *look* different when rendered in documentation and in Java or Python, although it will mean the same thing. In this way, we obtain *traceability*: we know the exact relationship between information in the specification document and in the code and, furthermore, we know that they are coherent by construction.
 
-Drasil is being designed and implemented using a grounded theory approach.  To determine what is needed and make the design general, we are concurrently implementing six examples (case studies) in Drasil.  (The specific examples are listed below under "Building specific examples.")  These examples were first
-written using a typical "manual" approach.  The full files for the case studies are available in [a separate case studies repo](https://github.com/smiths/caseStudies).
+Drasil is based on a combination of the following ideas:
+1. domain knowledge changes very slowly
+2. software in well-understood domains can be programmatically assembled from existing knowledge
+3. the various artifacts that make up software are different views on the same knowledge
+4. the most important information in crafting software are the design decisions and their rationale
+5. a lot of software lives for a very long time (10+ years, often as long as 40 years), which needs a different approach
 
-For more information on Drasil, please read [our position paper](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf) or take a look at [our poster](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
+To better understand the requirements for Drasil, we follow an example-driven approach, based on a set of [case studies](https://github.com/smiths/caseStudies). This is akin to test-driven engineering, but at the system level.  The [currently generated examples](https://jacquescarette.github.io/Drasil/) serve as a good introduction to what we mean.
+
+We wrote a [our position paper](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf) detailing our original ideas - but this is getting somewhat obsolete now. You can also take a look at [a poster](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
 
 ## Quick Start
 

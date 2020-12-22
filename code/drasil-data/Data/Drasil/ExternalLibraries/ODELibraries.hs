@@ -81,7 +81,7 @@ scipyLSodaODE = externalLib [
     odeintFunc [
       functionArg f (map unnamedParam [Array Real, Real]) 
       returnExprList, inlineArg (Array Real), inlineArg (Array Real)] ut,
-  mandatoryStep $ initSolWithVal
+  mandatoryStep initSolWithVal
     ]
 
 scipyLSodaCall :: ODEInfo -> ExternalLibraryCall
@@ -143,7 +143,7 @@ xAxis = quantvar $ implVar "x_numpy" (nounPhrase "Numpy value" "Numpy value")
   (Array Real) (Label "x_axis")
 ut = quantvar $ implVar "ut_scipy" 
   (nounPhrase "Scipy integrated value" "Scipy integrated value") 
-  (numpyArrayT) (Label "u_t")
+  numpyArrayT (Label "u_t")
 transpose = quantvar $ implVar "transpose_numpy" 
   (nounPhrase "Numpy Array Transpose" "Numpy Array Transpose") 
   (Array Real) (Label "u_t.T") -- (ccObjVar ut transpose) does not seem to work. 

@@ -100,7 +100,10 @@ PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
 
 #  GHC build options
-GHCTHREADS += 2
+ifndef GHCTHREADS
+override GHCTHREADS = 2
+endif
+
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
 override stackArgs += -j3 --ghc-options="$(GHCFLAGS)" --dump-logs --interleaved-output
 

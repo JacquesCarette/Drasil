@@ -4,14 +4,14 @@ import Language.Drasil
 import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   angDisp, angVelo, chgInVelocity, constAccel, constAccelV, displacement,
-  distance, energy, fSpeed, fVel, force, gravitationalAccel, gravitationalConst,
+  distance, energy, fSpeed, fVel, force, frequency, gravitationalAccel, gravitationalConst,
   height, iPos, iSpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, iyVel,
   kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, potEnergy,
   pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel,
-  yDist,  yPos, yVel, momentum, moment, fOfGravity, positionVec, tension)
+  yDist,  yPos, yVel, momentum, moment, fOfGravity, positionVec, tension, angFreq, period, frequency)
 
-import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
+import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second, hertz)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
 import Theory.Drasil (mkQuantDef)
@@ -21,13 +21,14 @@ restitutionCoef = dqdNoUnit CP.restitutionCoef (sub cC (Label "R")) Real
 
 physicscon :: [UnitalChunk]
 physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
-  chgInVelocity, constAccel, constAccelV, displacement, distance, energy,
+  chgInVelocity, constAccel, constAccelV, displacement, distance, energy, frequency,
   fSpeed, fVel, force, gravitationalAccel, gravitationalConst, height, iPos,
   iSpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, iyVel, kEnergy,
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position,
   potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
   weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel,momentum, moment, moment2D, fOfGravity, positionVec, tension]
+  yPos, yVel,momentum, moment, moment2D, fOfGravity, positionVec, tension,
+  angularFrequency, period, frequency]
 
 acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   constAccel, constAccelV, displacement, distance, energy, fSpeed, fVel, force,
@@ -36,12 +37,13 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   linearVelocity, momentOfInertia, position, potEnergy, pressure, scalarAccel,
   scalarPos, speed, time, torque, velocity, weight, xAccel, xConstAccel, xDist,
   xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, moment2D,
-  fOfGravity, positionVec, tension :: UnitalChunk
+  fOfGravity, positionVec, tension, angularFrequency, period, frequency :: UnitalChunk
 
 
 acceleration         = uc CP.acceleration (vec lA) accelU
 angularAccel         = uc CP.angAccel lAlpha angAccelU
 angularDisplacement  = uc CP.angDisp lTheta radian
+angularFrequency     = uc CP.angFreq cOmega second
 angularVelocity      = uc CP.angVelo lOmega angVelU
 chgInVelocity        = uc CP.chgInVelocity (Concat [cDelta, vec lV]) velU
 constAccel           = uc CP.constAccel (sup lA lC) accelU
@@ -49,6 +51,7 @@ displacement         = uc CP.displacement (vec lU) metre
 distance             = uc CP.distance lD metre
 energy               = uc CP.energy cE joule
 force                = uc CP.force (vec cF) newton
+frequency            = uc CP.frequency lF hertz
 gravitationalAccel   = uc CP.gravitationalAccel (vec lG) accelU
 gravitationalConst   = uc CP.gravitationalConst cG gravConstU
 height               = uc CP.height lH metre
@@ -63,6 +66,7 @@ momentum             = uc CP.momentum (vec cP) impulseU
 moment               = uc CP.moment   (vec cM) torqueU
 moment2D             = uc CP.moment   cM       torqueU
 -- FIXME: moment2D should eventually be a specialization of moment, not separately defined
+period               = uc CP.period cT second
 position             = uc CP.position (vec lP) metre
 positionVec          = uc CP.positionVec (vec lR) metre
 potEnergy            = uc CP.potEnergy (Concat [cP, cE]) joule

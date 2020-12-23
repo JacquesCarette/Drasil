@@ -10,13 +10,15 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
         requirement, srs, typUnc)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
-import Data.Drasil.SI_Units (metre, degree)
+import Data.Drasil.SI_Units (metre, degree, radian)
 import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, yAccel,
-  xAccel, yVel, xVel, iyPos, time, position)
+  xAccel, yVel, xVel, iyPos, time, position, torque, momentOfInertia, angularDisplacement,
+  angularFrequency, frequency, period)
 import Data.Drasil.Concepts.Physics (pendulum, twoD)
 import Data.Drasil.Concepts.Math as CM (angle)
-import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj)
+import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj, pi_)
+
 
 symbols:: [QuantityDict]
 symbols = map qw unitalChunks ++ map qw unitless
@@ -26,31 +28,38 @@ acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, srs, thModel, typUnc]
 
 inputs :: [QuantityDict]
-inputs = map qw [lenRod, QP.force, QP.angularAccel, pendAngle] 
+inputs = map qw [lenRod, QPP.mass, QP.angularAccel, pendDisplacementAngle, initialPendAngle] 
 
 outputs :: [QuantityDict]
-outputs = map qw [QP.position]
+outputs = map qw [pendDisplacementAngle]
 
 units :: [UnitaryConceptDict]
-units = map ucw unitalChunks ++ map ucw [lenRod, pendAngle]
+units = map ucw unitalChunks ++ map ucw [lenRod, pendDisplacementAngle, initialPendAngle]
 
 unitalChunks :: [UnitalChunk]
-unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos, pendAngle,
+unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos,
    QP.angularVelocity, QP.angularAccel, QP.gravitationalAccel, QP.tension, QP.acceleration,
-   QP.yAccel, QP.xAccel, QP.yVel, QP.xVel, QP.iyPos, QP.time, QP.velocity, QP.position]
+   QP.yAccel, QP.xAccel, QP.yVel, QP.xVel, QP.iyPos, QP.time, QP.velocity, QP.position, QP.torque,
+   QP.momentOfInertia, QP.angularDisplacement, QP.angularVelocity, initialPendAngle,
+   QP.angularFrequency, QP.frequency, QP.period, pendDisplacementAngle]
 
-lenRod, pendAngle :: UnitalChunk
+lenRod, pendDisplacementAngle, initialPendAngle :: UnitalChunk
 
 lenRod = makeUCWDS "l_rod" (cn "length of rod")
         (S "the" +:+ phrase len `ofThe` S "rod")
         (sub cL lRod) metre
 
-pendAngle = makeUCWDS "pendAngle" (cn "angle of pendulum")
+pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of pendulum")
         (S "the" +:+ phrase angle `ofThe` phrase pendulum)
-        lTheta degree
+        (sub lTheta lP) degree
+
+initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
+        (S "the initial angle of" +:+ phrase pendulum)
+        (sub lTheta lI) radian
+
 
 unitless :: [DefinedQuantityDict]
-unitless = [QM.unitVect, QM.unitVectj]
+unitless = [QM.unitVect, QM.unitVectj, QM.pi_]
 -----------------------
 lRod :: Symbol
 
@@ -60,21 +69,21 @@ lRod = Label "rod"
 -- CONSTRAINT CHUNKS --
 -----------------------
 
-lenRodCons, pendAngleCons, angAccelOutCons :: ConstrConcept
+lenRodCons, pendDisplacementAngleOutCons, angAccelOutCons, initialPendAngleCons :: ConstrConcept
 
 inConstraints :: [UncertQ]
 inConstraints = map (`uq` defaultUncrt)
-  [lenRodCons, pendAngleCons]
+  [lenRodCons, initialPendAngleCons]
 
 outConstraints :: [UncertQ]
 outConstraints = map (`uq` defaultUncrt) 
-  [angAccelOutCons]
+  [angAccelOutCons, pendDisplacementAngleOutCons]
 
 
 lenRodCons     = constrained' lenRod        [gtZeroConstr] (dbl 44.2)
---massCons       = constrained' QPP.mass   [gtZeroConstr] (dbl 56.2)
+initialPendAngleCons  = constrained' initialPendAngle    [gtZeroConstr] (dbl 2.1)
 --gravAccelCons  = constrained' QP.gravitationalAccel    [gtZeroConstr] (dbl 9.8)
-pendAngleCons  = constrained' pendAngle    [gtZeroConstr] (dbl 2.1)
+pendDisplacementAngleOutCons  = constrained' pendDisplacementAngle    [gtZeroConstr] (dbl 2.1)
 angAccelOutCons    = constrained' QP.angularAccel    [gtZeroConstr] (dbl 0.0)
 
 

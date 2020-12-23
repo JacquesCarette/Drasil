@@ -1,7 +1,7 @@
 module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD, linDispDD, linVelDD,
   linAccDD, angDispDD, angVelDD, angAccelDD, torqueDD, kEnergyDD,
   coeffRestitutionDD, reVelInCollDD, impulseVDD, momentOfInertiaDD,
-  collisionAssump, rightHandAssump, rigidTwoDAssump) where
+  collisionAssump, rightHandAssump, rigidTwoDAssump, potEnergyDD) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, dd, ddNoRefs, mkQuantDef, mkQuantDef')

@@ -120,16 +120,6 @@ col2DRel {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equat
 col2DRel = apply1 velA timeC $= apply1 velA time +
   (sy impulseS / sy massA) * sy normalVect
 
---im3Rel2 = (apply1 velB timeC) $= (apply1 velB time) -
---  ((sy impulseS) / (sy massB)) * (sy normalVect)
-
-
---fixme: these two need to use cross product and parametrized dispUnit symbol
---im3Rel3 = (apply1 angVelA timeC) $= (apply1 angVelA time) +
---  ((sy dispUnit) * ((sy impulseS) * (sy normalVect))) / (sy momentOfInertia)
-
---im3Rel4 = (apply1 angVelB timeC) $= (apply1 angVelB time) -
---  ((sy dispUnit) * ((sy impulseS) * (sy normalVect))) / (sy momentOfInertia)
 
 col2DOutputs, impulseNote :: Sentence
 col2DOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,

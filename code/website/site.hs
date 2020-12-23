@@ -190,7 +190,7 @@ main = do
   let repoCommitRoot = "https://github.com/" ++ travisRepoSlug ++ "/tree/" ++ travisCommit ++ "/"
   let docsPath = docsRoot ++ "index.html"
 
-  let travisBuildPath = "https://travis-ci.org/" ++ travisRepoSlug ++ maybe "" ("/builds/" ++) travisBuildId
+  let travisBuildPath = "https://travis-ci.com/" ++ travisRepoSlug ++ maybe "" ("/builds/" ++) travisBuildId
 
   doesDocsExist <- doesFileExist $ deployLocation ++ docsPath
   examples <- mkExamples repoCommitRoot (deployLocation ++ exampleRoot) srsDir

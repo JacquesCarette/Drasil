@@ -20,7 +20,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
 # Current list of examples
 SRC_EXAMPLES = glassbr nopcm projectile
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum pdController
 GOOLTEST = gooltest
 
 # where they live
@@ -34,11 +34,13 @@ PROJECTILE_DIR = Projectile
 TEMPLATE_DIR = Template
 GOOLTEST_DIR = GOOLTest
 DBLPENDULUM_DIR = DblPendulum
+PDCONTROLLER_DIR = PDController
 
 MULTI_SRC_DIRS = $(PROJECTILE_DIR) # Directories for examples with multiple src versions
 
 EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(NOPCM_DIR) \
-  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR)  $(DBLPENDULUM_DIR) # All example directories
+  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR)  $(DBLPENDULUM_DIR) \
+  $(PDCONTROLLER_DIR) # All example directories
 
 # and the name of their executables
 HGHC_EXE  = hghc
@@ -51,6 +53,7 @@ PROJECTILE_EXE = projectile
 TEMPLATE_EXE = template
 GOOLTEST_EXE = codegenTest
 DBLPENDULUM_EXE = dblpendulum
+PDCONTROLLER_EXE = pdController
 
 # and the associated per-example information generated
 GEN_E_SUFFIX = _gen

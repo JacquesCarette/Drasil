@@ -204,7 +204,7 @@ si = SI {
 }
 
 noPCMODEOpts :: ODEOptions
-noPCMODEOpts = odeOptions RK45 (sy absTol) (sy relTol) (sy timeStep)
+noPCMODEOpts = odeOptions RK45 (sy absTol) (sy relTol) (sy timeStep) (dbl 0)
 
 noPCMODEInfo :: ODEInfo
 noPCMODEInfo = odeInfo (quantvar time) (quantvar tempW)

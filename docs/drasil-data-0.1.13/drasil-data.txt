@@ -23,6 +23,7 @@ apacheODEPckg :: ODELibPckg
 apacheODESymbols :: [QuantityDict]
 odeintPckg :: ODELibPckg
 odeintSymbols :: [QuantityDict]
+scipyODELSodaPkg :: ODELibPckg
 
 module Data.Drasil.People
 spencerSmith :: Person

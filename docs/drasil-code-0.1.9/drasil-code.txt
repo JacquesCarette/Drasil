@@ -230,6 +230,7 @@ initSolListWithVal :: Step
 solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> CodeVarChunk -> FunctionInterface -> CodeVarChunk -> Step
 returnExprList :: Step
 fixedReturn :: Expr -> Step
+initSolWithVal :: Step
 type ExternalLibraryCall = [StepGroupFill]
 data StepGroupFill
 SGF :: Int -> [StepFill] -> StepGroupFill
@@ -282,6 +283,7 @@ initSolListWithValFill :: CodeVarChunk -> Expr -> StepFill
 solveAndPopulateWhileFill :: FunctionIntFill -> Expr -> FunctionIntFill -> CodeVarChunk -> StepFill
 returnExprListFill :: [Expr] -> StepFill
 fixedStatementFill :: StepFill
+initSolWithValFill :: CodeVarChunk -> Expr -> StepFill
 data Lang
 Cpp :: Lang
 CSharp :: Lang
@@ -331,12 +333,13 @@ ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> Expr -> Expr -> Exp
 [odeOpts] :: ODEInfo -> ODEOptions
 odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> Expr -> Expr -> Expr -> [Expr] -> ODEOptions -> ODEInfo
 data ODEOptions
-ODEOpts :: ODEMethod -> Expr -> Expr -> Expr -> ODEOptions
+ODEOpts :: ODEMethod -> Expr -> Expr -> Expr -> Expr -> ODEOptions
 [solveMethod] :: ODEOptions -> ODEMethod
 [absTol] :: ODEOptions -> Expr
 [relTol] :: ODEOptions -> Expr
 [stepSize] :: ODEOptions -> Expr
-odeOptions :: ODEMethod -> Expr -> Expr -> Expr -> ODEOptions
+[initValFstOrd] :: ODEOptions -> Expr
+odeOptions :: ODEMethod -> Expr -> Expr -> Expr -> Expr -> ODEOptions
 data ODEMethod
 RK45 :: ODEMethod
 BDF :: ODEMethod

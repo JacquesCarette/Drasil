@@ -1,4 +1,4 @@
-module DataDefs (aspRat, dataDefs, dimLL, qDefns, glaTyFac, 
+module Drasil.GlassBR.DataDefs (aspRat, dataDefs, dimLL, qDefns, glaTyFac, 
   hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac, 
   eqTNTWDD, probOfBreak, calofCapacity, calofDemand, pbTolUsr, qRef,configFp) 
   where
@@ -17,12 +17,12 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Data.Drasil.Citations (campidelli)
 
-import Assumptions (assumpSV, assumpLDFC)
-import Concepts (annealed, fullyT, glass, heatS)
-import Figures (demandVsSDFig, dimlessloadVsARFig)
-import ModuleDefs (interpY, interpZ)
-import References (astm2009, beasonEtAl1998)
-import Unitals (actualThicknesses, aspectRatio, charWeight,
+import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC)
+import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
+import Drasil.GlassBR.Figures (demandVsSDFig, dimlessloadVsARFig)
+import Drasil.GlassBR.ModuleDefs (interpY, interpZ)
+import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
+import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
   demand, demandq, dimlessLoad, eqTNTWeight, gTF, glassType, glassTypeCon,
   glassTypeFactors, lDurFac, lRe, loadDur, loadSF, minThick, modElas, nomThick,
   nominalThicknesses, nonFactorL, pbTol, plateLen, plateWidth, probBr, riskFun,

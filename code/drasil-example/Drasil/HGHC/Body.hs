@@ -1,4 +1,4 @@
-module Body (srs, si, symbMap, printSetting) where
+module Drasil.HGHC.Body (srs, si, symbMap, printSetting) where
 
 import Language.Drasil hiding (Manual, Symbol(..)) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
@@ -14,7 +14,7 @@ import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 
-import HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
+import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
     nuclearPhys, symbols)
 
 import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)

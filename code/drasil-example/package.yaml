@@ -19,7 +19,6 @@ description:         Please see the README on GitHub at <https://github.com/Jacq
 
 dependencies:
 - base >= 4.7 && < 5
-- base >= 4.7
 - lens >= 4.12
 - containers >= 0.5.5.1
 - pretty >= 1.1.1.1
@@ -32,6 +31,7 @@ dependencies:
 - drasil-database
 - drasil-printers
 - drasil-gen
+- drasil-gool
 - drasil-docLang
 - drasil-theory
 - drasil-utils
@@ -39,26 +39,157 @@ dependencies:
 ghc-options:
 - -Wall
 - -Wredundant-constraints
+- -threaded
+- -O2
 
 executables:
-  hghc:
-    main: Main.hs
-    source-dirs: Drasil/HGHC/
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    - -O2
-    - -Wall
-    - -Wredundant-constraints
+  dblpendulum:
+    main: Drasil.DblPendulum.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.DblPendulum.Body
+    - Drasil.DblPendulum.Figures
+    - Drasil.DblPendulum.Concepts
+    - Drasil.DblPendulum.Assumptions
+    - Drasil.DblPendulum.Goals
+    - Drasil.DblPendulum.DataDefs
+    - Drasil.DblPendulum.Unitals
+    - Drasil.DblPendulum.TMods
+    - Drasil.Projectile.References
+    - Drasil.DblPendulum.GenDefs
+    - Drasil.DblPendulum.References
+    - Drasil.DblPendulum.IMods
+    - Drasil.DblPendulum.Requirements
+
+  gamephysics:
+    main: Drasil.GamePhysics.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.GamePhysics.Assumptions
+    - Drasil.GamePhysics.Body
+    - Drasil.GamePhysics.Changes
+    - Drasil.GamePhysics.Concepts
+    - Drasil.GamePhysics.DataDefs
+    - Drasil.GamePhysics.GenDefs
+    - Drasil.GamePhysics.Goals
+    - Drasil.GamePhysics.TMods
+    - Drasil.GamePhysics.Unitals
+    - Drasil.GamePhysics.IMods
+    - Drasil.GamePhysics.References
+    - Drasil.GamePhysics.Requirements
   
   glassbr:
-    main: Main.hs
-    source-dirs: Drasil/GlassBR/
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    - -O2
-    - -Wall
-    - -Wredundant-constraints
+    main: Drasil.GlassBR.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.GlassBR.Assumptions
+    - Drasil.GlassBR.Body
+    - Drasil.GlassBR.Changes
+    - Drasil.GlassBR.Concepts
+    - Drasil.GlassBR.DataDefs
+    - Drasil.GlassBR.Figures
+    - Drasil.GlassBR.Goals
+    - Drasil.GlassBR.ModuleDefs
+    - Drasil.GlassBR.IMods
+    - Drasil.GlassBR.References
+    - Drasil.GlassBR.Requirements
+    - Drasil.GlassBR.Symbols
+    - Drasil.GlassBR.TMods
+    - Drasil.GlassBR.Unitals
+    - Drasil.GlassBR.Units
+
+  hghc:
+    main: Drasil.HGHC.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.HGHC.HeatTransfer
+    - Drasil.HGHC.Body
+
+  nopcm:
+    main: Drasil.NoPCM.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.NoPCM.Assumptions
+    - Drasil.NoPCM.Body
+    - Drasil.NoPCM.Changes
+    - Drasil.NoPCM.Unitals
+    - Drasil.NoPCM.DataDefs
+    - Drasil.NoPCM.Definitions
+    - Drasil.NoPCM.IMods
+    - Drasil.NoPCM.GenDefs
+    - Drasil.NoPCM.Goals
+    - Drasil.NoPCM.Requirements
+    - Drasil.NoPCM.References
+    - Drasil.SWHS.Assumptions
+    - Drasil.SWHS.Body
+    - Drasil.SWHS.Changes
+    - Drasil.SWHS.Concepts
+    - Drasil.SWHS.DataDefs
+    - Drasil.SWHS.GenDefs
+    - Drasil.SWHS.Goals
+    - Drasil.SWHS.Changes
+    - Drasil.SWHS.References
+    - Drasil.SWHS.Requirements
+    - Drasil.SWHS.TMods
+    - Drasil.SWHS.IMods
+    - Drasil.SWHS.Unitals
+
+  projectile:
+    main: Drasil.Projectile.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.Projectile.Assumptions
+    - Drasil.Projectile.Body
+    - Drasil.Projectile.Concepts
+    - Drasil.Projectile.DataDefs
+    - Drasil.Projectile.Figures
+    - Drasil.Projectile.GenDefs
+    - Drasil.Projectile.Goals
+    - Drasil.Projectile.IMods
+    - Drasil.Projectile.References
+    - Drasil.Projectile.Requirements
+    - Drasil.Projectile.TMods
+    - Drasil.Projectile.Unitals
+
+  ssp:
+    main: Drasil.SSP.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.SSP.Assumptions
+    - Drasil.SSP.BasicExprs
+    - Drasil.SSP.Body
+    - Drasil.SSP.Changes
+    - Drasil.SSP.DataDefs
+    - Drasil.SSP.Defs
+    - Drasil.SSP.Figures
+    - Drasil.SSP.GenDefs
+    - Drasil.SSP.Goals
+    - Drasil.SSP.IMods
+    - Drasil.SSP.References
+    - Drasil.SSP.Requirements
+    - Drasil.SSP.TMods
+    - Drasil.SSP.Unitals
+
+  swhs:
+    main: Drasil.SWHS.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.SWHS.Assumptions
+    - Drasil.SWHS.Body
+    - Drasil.SWHS.Changes
+    - Drasil.SWHS.Concepts
+    - Drasil.SWHS.DataDefs
+    - Drasil.SWHS.GenDefs
+    - Drasil.SWHS.Generate
+    - Drasil.SWHS.Goals
+    - Drasil.SWHS.IMods
+    - Drasil.SWHS.References
+    - Drasil.SWHS.Requirements
+    - Drasil.SWHS.TMods
+    - Drasil.SWHS.Unitals
+
+  template:
+    main: Drasil.Template.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.Template.Body

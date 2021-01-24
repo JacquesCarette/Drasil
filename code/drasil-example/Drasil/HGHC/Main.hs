@@ -1,4 +1,4 @@
-module Main (main) where
+module Drasil.HGHC.Main (main) where
 
 import GHC.IO.Encoding
 
@@ -11,7 +11,7 @@ import GHC.IO.Encoding
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Body (srs, printSetting) --thisSI
+import Drasil.HGHC.Body (srs, printSetting) --thisSI
 
 -- thisCode :: CodeSpec
 -- thisCode = codeSpec thisSI choices []

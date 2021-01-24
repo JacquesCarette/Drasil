@@ -1,4 +1,4 @@
-module References where
+module Drasil.GlassBR.References where
 
 import Language.Drasil
 

@@ -1,4 +1,4 @@
-module Main (main) where
+module Drasil.GlassBR.Main (main) where
 
 import GHC.IO.Encoding
 
@@ -10,8 +10,8 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
-import Body (si, srs, printSetting)
-import ModuleDefs (allMods)
+import Drasil.GlassBR.Body (si, srs, printSetting)
+import Drasil.GlassBR.ModuleDefs (allMods)
 
 code :: CodeSpec
 code = codeSpec si choices allMods

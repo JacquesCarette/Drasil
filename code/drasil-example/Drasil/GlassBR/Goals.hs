@@ -1,4 +1,4 @@
-module Goals (goals, willBreakGS) where
+module Drasil.GlassBR.Goals (goals, willBreakGS) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -6,8 +6,8 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (goalStmtDom, userInput)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
 
-import Concepts (glaSlab)
-import Unitals (explosion)
+import Drasil.GlassBR.Concepts (glaSlab)
+import Drasil.GlassBR.Unitals (explosion)
 
 goals :: [ConceptInstance]
 goals = [willBreakGS]

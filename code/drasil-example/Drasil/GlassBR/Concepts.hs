@@ -1,4 +1,4 @@
-module Concepts where --whole file is used
+module Drasil.GlassBR.Concepts where --whole file is used
 
 import Language.Drasil
 import Utils.Drasil

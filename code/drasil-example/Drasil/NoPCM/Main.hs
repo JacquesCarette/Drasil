@@ -1,4 +1,4 @@
-module Main (main) where
+module Drasil.NoPCM.Main (main) where
 
 import GHC.IO.Encoding
 

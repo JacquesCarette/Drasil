@@ -1,4 +1,4 @@
-module Figures where
+module Drasil.GlassBR.Figures where
 
 import Control.Lens((^.))
 
@@ -8,8 +8,8 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, item, physicalSystem,
   requirement, section_, sysCont, traceyMatrix)
 
-import Concepts (aR, stdOffDist)
-import Unitals (aspectRatio, charWeight, demand, demandq,
+import Drasil.GlassBR.Concepts (aR, stdOffDist)
+import Drasil.GlassBR.Unitals (aspectRatio, charWeight, demand, demandq,
   dimlessLoad, lateralLoad, sD, stressDistFac)
 
 resourcePath :: String

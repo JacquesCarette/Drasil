@@ -1,4 +1,4 @@
-module Main where
+module Drasil.GamePhysics.Main where
 
 import GHC.IO.Encoding
 

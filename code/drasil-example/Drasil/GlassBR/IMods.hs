@@ -1,15 +1,15 @@
-module IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) where
+module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) where
 
 import Prelude hiding (exp)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDeriv, qwC)
 import Utils.Drasil
 
-import DataDefs (probOfBreak, calofCapacity, calofDemand,
+import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand,
   pbTolUsr, qRef)
-import Goals (willBreakGS)
-import References (astm2009)
-import Unitals (charWeight, demand, demandq, isSafeLR, isSafePb,
+import Drasil.GlassBR.Goals (willBreakGS)
+import Drasil.GlassBR.References (astm2009)
+import Drasil.GlassBR.Unitals (charWeight, demand, demandq, isSafeLR, isSafePb,
   lRe, pbTol, plateLen, plateWidth, probBr, standOffDist)
 
 import Data.Drasil.Concepts.Documentation (goal)

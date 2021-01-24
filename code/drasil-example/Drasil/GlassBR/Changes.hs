@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs) where
+module Changes (likelyChgs, unlikelyChgs) where
 
 --A list of likely and unlikely changes for GlassBR
 
@@ -10,10 +10,10 @@ import Data.Drasil.Concepts.Documentation (condition, goal, input_, likeChgDom,
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (flexure)
 
-import Drasil.GlassBR.Assumptions (assumpGC, assumpES, assumpSV, assumpGL,
+import Assumptions (assumpGC, assumpES, assumpSV, assumpGL,
   assumpBC, assumpRT, assumpLDFC, assumptionConstants)
-import Drasil.GlassBR.Concepts (blastRisk, glaSlab, glass)
-import Drasil.GlassBR.Unitals (explosion, lite)
+import Concepts (blastRisk, glaSlab, glass)
+import Unitals (explosion, lite)
 
 {--LIKELY CHANGES--}
 

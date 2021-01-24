@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfuncReqs) where
+module Requirements (funcReqs, funcReqsTables, inReqDesc, nonfuncReqs) where
 
 import Control.Lens ((^.))
 
@@ -19,13 +19,13 @@ import Data.Drasil.Concepts.Software (errMsg)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
-import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
-import Drasil.GlassBR.Concepts (glass)
-import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL, 
+import Assumptions (assumpSV, assumpGL, assumptionConstants)
+import Concepts (glass)
+import DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL, 
   risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
-import Drasil.GlassBR.IMods (iMods)
-import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
-import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
+import IMods (iMods)
+import TMods (lrIsSafe, pbIsSafe)
+import Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
   pbTolfail, safeMessage)
 
 {--Functional Requirements--}

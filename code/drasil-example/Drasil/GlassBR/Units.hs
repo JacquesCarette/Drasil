@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Units (sFlawPU) where
+module Units (sFlawPU) where
 
 import Language.Drasil (UnitDefn, newUnit, (^$), (^:))
 import Data.Drasil.SI_Units (metre, newton)

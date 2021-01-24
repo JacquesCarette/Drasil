@@ -1,4 +1,4 @@
-module Drasil.HGHC.HeatTransfer where --whole file is used
+module HeatTransfer where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.ShortHands

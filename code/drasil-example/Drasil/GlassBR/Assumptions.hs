@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
+module Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
   assumpGL, assumpBC, assumpRT, assumpLDFC, assumptionConstants,
   assumptions) where
 
@@ -11,10 +11,10 @@ import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
-import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, glassBR, 
+import Concepts (beam, cantilever, edge, glaSlab, glass, glassBR, 
   lShareFac, plane, responseTy)
-import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (constantK, constantLoadDur, 
+import References (astm2009)
+import Unitals (constantK, constantLoadDur, 
   constantLoadSF, constantM, constantModElas, explosion, lateral, lDurFac,
   loadDur)
 

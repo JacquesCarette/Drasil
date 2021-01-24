@@ -1,15 +1,15 @@
-module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe) where
+module TMods (tMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
 import Database.Drasil (cdb)
 import Theory.Drasil (TheoryModel, tm)
 
-import Drasil.GlassBR.IMods (symb)
-import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (isSafeLoad, isSafeProb, pbTolfail, probFail,
+import IMods (symb)
+import References (astm2009)
+import Unitals (isSafeLoad, isSafeProb, pbTolfail, probFail,
   tmDemand, tmLRe)
-import Drasil.GlassBR.Symbols (thisSymbols)
+import Symbols (thisSymbols)
 
 {--}
 

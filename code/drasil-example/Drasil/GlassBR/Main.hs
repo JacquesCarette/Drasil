@@ -10,8 +10,8 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
-import Drasil.GlassBR.Body (si, srs, printSetting)
-import Drasil.GlassBR.ModuleDefs (allMods)
+import Body (si, srs, printSetting)
+import ModuleDefs (allMods)
 
 code :: CodeSpec
 code = codeSpec si choices allMods

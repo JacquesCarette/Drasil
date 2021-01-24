@@ -11,7 +11,7 @@ import GHC.IO.Encoding
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.HGHC.Body (srs, printSetting) --thisSI
+import Body (srs, printSetting) --thisSI
 
 -- thisCode :: CodeSpec
 -- thisCode = codeSpec thisSI choices []

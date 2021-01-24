@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Unitals where --whole file is used
+module Unitals where --whole file is used
 
 import Language.Drasil
 import Language.Drasil.ShortHands
@@ -12,11 +12,11 @@ import Data.Drasil.Constraints (gtZeroConstr, probConstr)
 import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
-import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac, 
+import Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac, 
   heatS, iGlass, lGlass, lResistance, lShareFac, loadDurFactor, nFL, responseTy, 
   stdOffDist)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
-import Drasil.GlassBR.Units (sFlawPU)
+import References (astm2009, astm2012, astm2016)
+import Units (sFlawPU)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 

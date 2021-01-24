@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Body where
+module Body where
 
 import Control.Lens ((^.))
 import Language.Drasil hiding (Symbol(..), organization, section)
@@ -47,20 +47,20 @@ import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
 
-import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
-import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
+import Assumptions (assumptionConstants, assumptions)
+import Changes (likelyChgs, unlikelyChgs)
+import Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, con, con')
-import Drasil.GlassBR.DataDefs (qDefns, configFp)
-import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
-import Drasil.GlassBR.Figures
-import Drasil.GlassBR.Goals (goals)
-import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
-import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
-import Drasil.GlassBR.TMods (tMods)
-import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
+import DataDefs (qDefns, configFp)
+import qualified DataDefs as GB (dataDefs)
+import Figures
+import Goals (goals)
+import IMods (symb, iMods, instModIntro)
+import References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
+import Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
+import Symbols (symbolsForTable, thisSymbols)
+import TMods (tMods)
+import Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, terms)

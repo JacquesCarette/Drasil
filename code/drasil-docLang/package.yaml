@@ -1,0 +1,49 @@
+name:                drasil-docLang
+version:             0.1.26.0
+license:             BSD3
+author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:          "Jacques Carette"
+synopsis:	           A framework for code and document generation for scientific software - Document Language SubPackage
+github:              JacquesCarette/Drasil
+homepage:            https://jacquescarette.github.io/Drasil/
+
+extra-source-files: []
+
+# Metadata used when publishing your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- lens >= 4.12
+- containers >= 0.5.5.1
+- pretty >= 1.1.1.1
+- mtl >= 2.2.1
+- directory >= 1.2.6.2
+- split >= 0.2.3.1
+- MissingH >= 1.4.0.1
+- parsec >= 3.1.9
+- transformers >= 0.4.2.0
+- multiplate >= 0.0.2
+- data-fix (>= 0.0.4 && <= 1.0)
+- drasil-lang
+- drasil-data
+- drasil-database
+- drasil-printers
+- drasil-theory
+- drasil-utils 
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
+library:
+  source-dirs: ./
+  exposed-modules:
+  - Drasil.DocLang
+  - Drasil.DocLang.SRS
+  - Drasil.DocumentLanguage.Units

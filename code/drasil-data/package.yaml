@@ -6,16 +6,9 @@ maintainer:          "Jacques Carette"
 synopsis:	           A framework for code and document generation for scientific software - Data System SubPackage
 github:              JacquesCarette/Drasil
 homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
 extra-source-files: []
-
-# Metadata used when publishing your package
-# category:            Web
-
-# To avoid duplicated efforts in documentation and dealing with the
-# complications of embedding Haddock markup inside cabal files, it is
-# common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
 dependencies:
 - base >= 4.7 && < 5

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 50c94568d0af4ca381a2b497c6b22bfcb03c5418f18e9acaaaf6900245b2b421
+-- hash: 1c55ec552fa17c6233d716907a257a0670ba17e84ce08e477f37c348237c44b1
 
 name:           drasil-printers
 version:        0.1.10.0
@@ -14,7 +14,6 @@ homepage:       https://jacquescarette.github.io/Drasil/
 bug-reports:    https://github.com/JacquesCarette/Drasil/issues
 author:         Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 maintainer:     Jacques Carette
-license:        BSD3
 build-type:     Simple
 
 source-repository head

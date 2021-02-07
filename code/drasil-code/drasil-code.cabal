@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 10266f7294e250c7dcd10deac1e95b00253d1c04352dd28f66e6437814d07dc1
+-- hash: 59b897ea93fe4b853352b0ed94a2d696335f24ceface63f99f8575219bafd04b
 
 name:           drasil-code
 version:        0.1.9.0
@@ -14,7 +14,6 @@ homepage:       https://jacquescarette.github.io/Drasil/
 bug-reports:    https://github.com/JacquesCarette/Drasil/issues
 author:         Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 maintainer:     Jacques Carette
-license:        BSD3
 build-type:     Simple
 
 source-repository head

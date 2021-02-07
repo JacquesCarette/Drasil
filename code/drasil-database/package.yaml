@@ -1,6 +1,5 @@
 name:                drasil-database
 version:             0.1.1.0
-license:             BSD3
 author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
 maintainer:          "Jacques Carette"
 synopsis:	           A framework for code and document generation for scientific software - Database SubPackage

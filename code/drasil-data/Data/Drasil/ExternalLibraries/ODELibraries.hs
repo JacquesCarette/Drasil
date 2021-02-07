@@ -1,6 +1,6 @@
 module Data.Drasil.ExternalLibraries.ODELibraries (
   scipyODEPckg, scipyODESymbols, osloPckg, osloSymbols, arrayVecDepVar, 
-  apacheODEPckg, apacheODESymbols, odeintPckg, odeintSymbols
+  apacheODEPckg, apacheODESymbols, odeintPckg, odeintSymbols, scipyODELSodaPkg
 ) where
 
 import Language.Drasil
@@ -14,7 +14,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   implementation, constructorInfo, methodInfo, methodInfoNoReturn, 
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
-  returnExprList, fixedReturn,
+  returnExprList, fixedReturn, initSolWithVal,
   ExternalLibraryCall, externalLibCall, choiceStepsFill, choiceStepFill, 
   mandatoryStepFill, mandatoryStepsFill, callStepFill, libCallFill, 
   userDefinedArgFill, basicArgFill, functionArgFill, customObjArgFill, 
@@ -25,7 +25,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill, 
   CodeVarChunk, CodeFuncChunk, quantvar, quantfunc, listToArray, 
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib, 
-  mkODELibNoPath, pubStateVar, privStateVar, field)
+  mkODELibNoPath, pubStateVar, privStateVar, field, initSolWithValFill)
 
 import Control.Lens ((^.), _1, _2, over)
 
@@ -68,8 +68,40 @@ scipyCall info = externalLibCall [
         solveMethodFill = callStepFill $ libCallFill $ map basicArgFill 
           [absTol $ odeOpts info, relTol $ odeOpts info]
 
+-- This package solves a system of ODE using the scipy odeint method.
+-- The odeint method solves the ode using the LSoda solver.
+scipyODELSodaPkg :: ODELibPckg
+scipyODELSodaPkg = mkODELibNoPath "SciPy" "1.4.1" scipyLSodaODE scipyLSodaCall [Python]
+
+scipyLSodaODE :: ExternalLibrary
+scipyLSodaODE = externalLib [
+  mandatoryStep $ callStep $ libFunctionWithResult numpyImport
+    arange [inlineArg Real, inlineArg Real, inlineArg Real] xAxis,
+  mandatoryStep $ callStep $ libFunctionWithResult scipyImport
+    odeintFunc [
+      functionArg f (map unnamedParam [Array Real, Real]) 
+      returnExprList, inlineArg (Array Real), inlineArg (Array Real)] ut,
+  mandatoryStep initSolWithVal
+    ]
+
+scipyLSodaCall :: ODEInfo -> ExternalLibraryCall
+scipyLSodaCall info = externalLibCall [
+  mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill 
+      [tInit info, tFinal info, stepSize $ odeOpts info]],
+  mandatoryStepFill $ callStepFill $ libCallFill [functionArgFill 
+      (map unnamedParamFill [depVar info, indepVar info]) 
+      (returnExprListFill $ odeSyst info), 
+      basicArgFill (Matrix [[initVal info, initValFstOrd $ odeOpts info]]),
+      basicArgFill (sy xAxis)],
+  mandatoryStepFill $ initSolWithValFill (depVar info) 
+      (idx (sy transpose) (Int 0))
+    ]
+
 scipyImport :: String
 scipyImport = "scipy.integrate"
+
+numpyImport :: String
+numpyImport = "numpy"
 
 atol, rtol, vode :: Argument
 vode = lockedArg (str "vode")
@@ -82,12 +114,15 @@ methodArg = lockedNamedArg mthdArg . str
 setIntegratorMethod :: [Argument] -> Step
 setIntegratorMethod = callStep . libMethod scipyImport r setIntegrator
 
-odeT :: Space
+odeT, numpyArrayT :: Space
 odeT = Actor "ode"
+numpyArrayT = Actor "numpyArray"
 
 scipyODESymbols :: [QuantityDict]
-scipyODESymbols = map qw [mthdArg, atolArg, rtolArg] ++ map qw [r, t, y]
-  ++ map qw [f, odefunc, setIntegrator, setInitVal, successful, integrateStep]
+scipyODESymbols = map qw [mthdArg, atolArg, rtolArg] 
+  ++ map qw [r, t, y, xAxis, ut, transpose]
+  ++ map qw [f, odefunc, setIntegrator, setInitVal, successful, integrateStep,
+  arange, odeintFunc]
 
 mthdArg, atolArg, rtolArg :: NamedArgument
 mthdArg = narg $ implVar "method_scipy" (nounPhrase 
@@ -100,12 +135,22 @@ rtolArg = narg $ implVar "rtol_scipy" (nounPhrase
   "relative tolerance for ODE solution" "relative tolerances for ODE solution") 
   Real (Label "rtol")
 
-r :: CodeVarChunk
+
+r, xAxis, ut, transpose :: CodeVarChunk
 r = quantvar $ implVar "r_scipy" (nounPhrase "ODE object" "ODE objects") 
   odeT (Label "r")
+xAxis = quantvar $ implVar "x_numpy" (nounPhrase "Numpy value" "Numpy value") 
+  (Array Real) (Label "x_axis")
+ut = quantvar $ implVar "ut_scipy" 
+  (nounPhrase "Scipy integrated value" "Scipy integrated value") 
+  numpyArrayT (Label "u_t")
+transpose = quantvar $ implVar "transpose_numpy" 
+  (nounPhrase "Numpy Array Transpose" "Numpy Array Transpose") 
+  (Array Real) (Label "u_t.T") -- (ccObjVar ut transpose) does not seem to work. 
+
 
 f, odefunc, setIntegrator, setInitVal, successful, 
-  integrateStep :: CodeFuncChunk
+  integrateStep, arange, odeintFunc :: CodeFuncChunk
 f = quantfunc $ implVar "f_scipy" (nounPhrase "function representing ODE system" 
   "functions representing ODE system") (Array Real) (Label "f")
 odefunc = quantfunc $ implVar "ode_scipy" (nounPhrase 
@@ -126,7 +171,14 @@ integrateStep = quantfunc $ implVar "integrate_scipy" (nounPhrase
   "method that performs one integration step on an ODE"
   "methods that perform one integration step on an ODE") 
   Void (Label "integrate")
-
+arange = quantfunc $ implVar "arrange_numpy" (nounPhrase
+  "method that returns evenly spaced numbers over a specified interval."
+  "method that returns evenly spaced numbers over a specified interval.")
+  (Array Real) (Label "arange")
+odeintFunc = quantfunc $ implVar "odeint_scipy" (nounPhrase
+  "method that solves a system of ODE using lsoda from the FORTRAN library odepack."
+  "method that solves a system of ODE using lsoda from the FORTRAN library odepack.")
+  (Array Real) (Label "odeint")
 
 -- Oslo (C#) --
 

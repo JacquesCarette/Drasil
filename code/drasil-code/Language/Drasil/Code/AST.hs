@@ -33,10 +33,7 @@ data Visibility = Public
                 | Private
 
 data Objective where
-  -- TODO: Double check that this is the correct correction -- Jason Balaci
-  -- Remember: Changed EqChunk to QDefinition
-  
-  Calculation :: QDefinition -> Objective
+  Calculation :: EqChunk -> Objective
   Call :: Function -> [Expr] -> Objective
   GetInput :: (Quantity c) => c -> Objective
   PrintOutput :: Output -> Objective

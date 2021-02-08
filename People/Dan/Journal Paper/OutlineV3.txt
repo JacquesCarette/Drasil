@@ -69,6 +69,8 @@ However, should they change, the current models will likely remain as good
 approximations under a specific set of assumptions. For instance, who hasn't
 heard 'assume each body is a sphere' during a physics lecture?
 
+-- Roadmap? --
+
 ==Background==
 *TBD see 'OLD STUFF' for ideas
 
@@ -110,6 +112,16 @@ and existing software artifacts to understand exactly what problem they are
 trying to solve. From there, we attempt to distill the system-specific knowledge
 and generalize the boilerplate.
 
+-- A (very) brief introduction to our case study systems --
+  [ Potentially canibalize the intro from the next section to specify the
+    templates in use, so it doesn't seem to come out of nowhere.
+    
+    Summarize the following:
+      -- Case study name
+      -- Problem being solved
+      -- Appendices containing artifacts? -- May come in handy for examples
+  ]
+
 --Breaking down artifacts--
 As noted earlier, for our approach to work we must understand exactly what each
 of our artifacts are trying to say and to whom. Since we are taking a practical,
@@ -128,32 +140,33 @@ strong recommendation of what to use as a starting point in their template.
 
 With the structure of the document in mind, let us look at several of our case
 studies' SRS documents to get a deeper understanding of what each section truly
-represents. [Figure] shows the first section of several of our case studies. The
-case studies themselves will be introduced in more detail in later sections, but
-keep in mind at this point, we don't care about the superficial differences. We
-are strictly looking for patterns! Patterns will give us insight
+represents. [Figure] shows the first section of [one/several of our case studies, rest in Appendices].
+[ The case studies themselves will be introduced in more detail in later sections, but
+keep in mind at this point, we don't care about the superficial differences. -- Not exactly true if we introduce them in previous section ]
+ We are strictly looking for patterns! Patterns will give us insight
 into the root of *what* is being said in each section.
 
 [Figure showing the Ref Section of at least 3 (preferably 4-6) case studies, may
 need to be split into multiple, or have them somehow cropped/overlayed/arranged
 to be not terrible to look at - TBD]
 
-Looking at the Table of Symbols, Table of Units, and [...] from [Previous
-Figure] we can see that, barring the table values themselves, they are almost
-identical. The Table of Symbols is simply a table of values, essentially akin to
-a glossary, specific to the symbols that appear throughout the rest of the
-document. For each of those symbols, we see the symbol itself, ...
-
-  **NOTE: ... above to be filled in next time, I hadn't actually built the
-  examples in a long while and I wanted to see the current versions before I
-  finish the description to make sure it's accurate. Building took too long
-  for me to actually see the results before I had to commit/push/exit
+Looking at the Table of Symbols, Table of Units, and Table of Abbreviations and 
+Acronyms from [Previous Figure] we can see that, barring the table values 
+themselves, they are almost identical. The Table of Symbols is simply a table 
+of values, essentially akin to a glossary, specific to the symbols that appear 
+throughout the rest of the document. For each of those symbols, we see the 
+symbol itself, a brief description of what that symbol represents, and the units
+it is measured in (if applicable). Similarly, the Table of Units lists the
+Système International d’Unités (SI) Units used throughout the document, their
+descriptions, and the SI name. Finally, the table of Abbreviations and Acronyms
+merely lists the abbreviations and their full forms, which are essentially the
+symbols and their descriptions.
 
 - Practical approach to design
 - Let's use some case studies
 - Understanding what's really going on
 
--- Summary --
+-- Artifact Summary --
 
 See Table [NUM] for a summary of each software artifact's 'what', 'who', and
 'how'.
@@ -161,7 +174,7 @@ See Table [NUM] for a summary of each software artifact's 'what', 'who', and
 *TABLE*
 | Artifact | Who (Audience) | What (Problem) | How (Specific vs boilerplate) |
 
--- Patterns and repetition and patterns and repetition --
+-- Patterns and repetition and patterns and repetition -- (OR -- Repeating patterns and patterns that repeat --)
 From the above sections, we see many emerging patterns in our software
 artifacts. Ignoring, for now, the organizational patterns from the [SmithEtAl]
 templates we can already see simple patterns emerging. For example, we see the
@@ -190,9 +203,26 @@ knowledge vs the specific knowledge
 
   **NOTE: Under the hood section should explain the process of how we determined
   what we needed to do. What we ended up doing should come in the following
-  section(s) - no 'real' implementation details, only conceptual stuff.
+  section(s) - no 'real' implementation details, only conceptual stuff here.
+  
+-- The seeds of Drasil --
+  **Subsec roadmap:
+    -- Summarize the above subsections and lead into next section
+    -- Add relevant information that doesn't quite fit above 
+      and isn't implementation related
+    -- 'Relevant buckshot section'
 
 == Welcome to Drasil ==
+  **Section Roadmap:
+    -- This is where the real meat of Drasil is discussed (implementation details)
+    -- Intro to our knowledge-capture mechanisms
+      - Chunks/hierarchy
+      - Break down each with examples from the case studies.
+      - Look for 'interesting' examples (synonyms, acronyms, complexity, etc.)
+    -- Intro to the DSL
+      - Captured knowledge is useless without the transformations/rendering engine
+      - DSL for each softifact
+      
 == ??? ==
 == ??? ==
 
@@ -228,8 +258,12 @@ knowledge-capture of system-specific information, and recipe creation and
 modification.
 
 
-
-
+%%%%%%%%%%%%%%%%%%%%%% END CURRENT DOC %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+============================== Notes ===========================================
+Things I want to touch on
+  - Synonyms can cause headaches, especially if they're not caught / curated into
+  the right part of the KB.
+  
 ===============OLD STUFF (Not part of current paper yet)========================
 JC: I will put my comments inline below, but with all lines prefixed with JC.
 DS: Responses to comments/questions will be prefixed with DS.
@@ -260,8 +294,10 @@ DS: Responses to comments/questions will be prefixed with DS.
     - For the humans
     - How do we test it?
   - Test results (?)
+    - For the humans
     - How did our tests go?
   - User guide
+    - For the humans
     - How do you use the software?
   - ... {Let's figure out all the ones we agree on}
 

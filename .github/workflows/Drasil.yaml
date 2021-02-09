@@ -10,4 +10,7 @@ jobs:
         with:
           enable-stack: true
           stack-version: 'latest'
-      - run: cd code && make prog stackArgs="--no-terminal"
+      - run: |
+          cd code
+          curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+          make prog stackArgs="--no-terminal" GHCFLAGS=-Werror

@@ -1,5 +1,9 @@
 on: [push, pull_request]
 name: Drasil
+defaults:
+  run:
+    shell: bash
+    working-directory: code
 jobs:
   build:
     name: "Build"
@@ -11,9 +15,6 @@ jobs:
           enable-stack: true
           stack-version: 'latest'
       - name: "Open directory"
-        run: |
-          cd code
-          curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+        run: curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
       - name: "Build"
-        run: |
-          make prog stackArgs="--no-terminal"
+        run: make prog stackArgs="--no-terminal"

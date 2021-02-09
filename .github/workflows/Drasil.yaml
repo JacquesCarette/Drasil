@@ -1,7 +1,7 @@
-on: [push]
+on: [push, pull_request]
 name: Drasil
 jobs:
-  test:
+  build:
     name: 
     runs-on: ubuntu-latest
     steps:

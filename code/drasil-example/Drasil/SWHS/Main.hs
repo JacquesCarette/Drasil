@@ -1,4 +1,4 @@
-module Main where
+module Drasil.SWHS.Main where
 
 import GHC.IO.Encoding
 

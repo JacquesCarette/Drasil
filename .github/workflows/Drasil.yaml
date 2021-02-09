@@ -10,4 +10,4 @@ jobs:
         with:
           enable-stack: true
           stack-version: 'latest'
-      - run: cd code && make prog stackArgs="--no-terminal" GHCFLAGS=-Werror
+      - run: cd code && make prog stackArgs="--no-terminal"

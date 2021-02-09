@@ -1,0 +1,13 @@
+on: [push]
+name: Drasil
+jobs:
+  test:
+    name: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: haskell/actions/setup@v1
+        with:
+          enable-stack: true
+          stack-version: 'latest'
+      - run: cd code && make prog stackArgs="--no-terminal" GHCFLAGS=-Werror

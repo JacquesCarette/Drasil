@@ -16,4 +16,4 @@ jobs:
           curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
       - name: "Build"
         run: |
-          make prog stackArgs="--no-terminal" GHCFLAGS=-Werror
+          make prog stackArgs="--no-terminal"

@@ -10,7 +10,7 @@ import Database.Drasil.ChunkDB (ChunkDB)
 
 import Control.Lens ((^.), makeLenses)
 import Data.Function (on)
-import Data.List (concatMap, find, groupBy, sortBy)
+import Data.List (find, groupBy, sortBy)
 import qualified Data.Map as Map
 
 -- | Data structure for holding all of the requisite information about a system

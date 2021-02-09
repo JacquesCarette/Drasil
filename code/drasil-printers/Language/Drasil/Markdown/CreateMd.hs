@@ -2,8 +2,6 @@ module Language.Drasil.Markdown.CreateMd (
     makeMd, introInfo, verInfo, unsupOS, extLibSec, regularSec, instDoc) 
     where
 
-import Data.List (filter)
-import Data.Maybe (maybe)
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty, vcat, text, (<+>),
     (<>), comma, punctuate, doubleQuotes, hsep)

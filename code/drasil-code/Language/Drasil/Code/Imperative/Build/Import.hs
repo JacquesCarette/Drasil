@@ -13,7 +13,7 @@ import Build.Drasil ((+:+), genMake, makeS, MakeString, mkFile, mkRule,
   mkCheckedCommand, mkFreeVar, RuleTransformer(makeRule))
 
 import Control.Lens ((^.))
-import Data.Maybe (maybe, maybeToList)
+import Data.Maybe (maybeToList)
 import Data.List (nub)
 import System.FilePath.Posix (takeExtension, takeBaseName)
 import Text.PrettyPrint.HughesPJ (Doc)

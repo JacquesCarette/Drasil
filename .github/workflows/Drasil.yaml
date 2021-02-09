@@ -2,7 +2,7 @@ on: [push, pull_request]
 name: Drasil
 jobs:
   build:
-    name: 
+    name: "Build"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -10,7 +10,10 @@ jobs:
         with:
           enable-stack: true
           stack-version: 'latest'
-      - run: |
+      - name: "Open directory"
+        run: |
           cd code
           curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+      - name: "Build"
+        run: |
           make prog stackArgs="--no-terminal" GHCFLAGS=-Werror

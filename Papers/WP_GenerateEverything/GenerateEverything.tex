@@ -155,7 +155,79 @@ adequate in context, for example.
 
 So what would be a reasonable process for building a piece of software
 assuming some kind of infrastructure exists for recording the kind of
-knowledge outline in~\autoref{ch:wellUnderstood}
+knowledge outlined in~\autoref{ch:wellUnderstood}? Let us outline a
+chronological ``story'' of such an idealized process.  It is important to
+note that we're \textbf{not} outlining the process to follow, but rather
+the \emph{idealized process} (influenced by Parnas'~\cite{RationalDesign}).
+
+\begin{enumerate}
+\item\label{it:problem} Have a problem to solve, or task to achieve, which
+falls into the realm where \emph{software} is likely to be the central part of
+the solution.
+\item\label{it:understood} Convince oneself that the underlying problem domain
+is \emph{well understood}, as defined in~\autoref{ch:wellUnderstood}.
+\item\label{it:probdesc} Describe the problem:
+  \begin{enumerate}
+  \item Find the base knowledge (theory) in the pre-existing library
+    or, failing that, write it if it does not yet exist,
+  \item Assemble the ingredients into a coherent narrative,
+  \item Describe the characteristics of a good solution,
+  \item Come up with basic examples (to test correctness, intuitions, etc).
+  \item Identify the naturally occuring known quantities associated to the
+    problem domain, as well as some desired quantities. For example,
+    some problems naturally involve lengths of lying in particular
+    ranges, while others will involve ingredient concentrations, again
+    in particular ranges.
+  \end{enumerate}
+\item\label{it:refine} Describe, by successive transformations, how the natural
+knowledge can be turned from a set of relations (and constraints) into a
+deterministic\footnote{For the moment, we explicitly restrict our domain to
+deterministic solutions, as a meta-design choice. This can be expanded later.}
+input-output process.
+  \begin{enumerate}
+  \item This set of relations might require \emph{specializing} the
+    theory (eg. from $n$-dimensional to $2$-dimensional, assuming no
+    friction, etc).  These \emph{choices} need to be documented, and are
+    a crucial aspect of the solution process. The \emph{rationale} for the
+    choices should also be documented. Lastly, whether these choices are
+    likely or unlikely to change in the future should be recorded.
+  \item This set of choices is likely dependent, and thus somewhat ordered.
+  In other words, some \emph{decisions} will enable other choices to be
+  made that would otherwise be unavailable. Eg: some data involved in the
+  solution process is orderable, so that sorting is now a possibility that
+  may be useful.
+  \end{enumerate}
+\item\label{it:tocode} Describe how the computation process from step
+\ref{it:refine} can be turned into code. Note that the same kinds of choice
+can occur here.
+\item\label{it:recipe} Turn the steps (i.e. from items~\ref{it:refine} and
+\ref{it:tocode}) into a \emph{recipe}, aka program, that weaves together
+all the information into a variety of artifacts (softifacts). These can
+be read, or execute, or \ldots\ as appropriate.
+\end{enumerate}
+
+While this last step might appear somewhat magical, it isn't. The whole
+point of defining \emph{well understood} is to enable that last step. A
+suitable knowledge encoding is needed to enable it, but this step is a
+reflection of what humans currently themselves do when assembling these very
+same softifacts. Where are merely being explicit about how to go
+mechanizing these steps.
+
+What is missing is an explicit \emph{information architecture} of each of
+the necessary softifacts. In other words, what information is necessary to
+enable the mechanized generation of each softifact? It turns out that many
+of them are quite straightforward.
+
+It is worthwhile to note that way too many research projects skip
+step~\ref{it:problem} and~\ref{it:probdesc}: in other words, they never really
+write down what problem they're trying to solve. This is part of the
+\textbf{tacit knowledge} of a lot of research software.  It is crucial to our
+whole process that this knowledge go from tacit to explicit. This is also one
+of the fundamental recognition of \emph{Knowledge
+Management}~\cite{KM-textbook}.
+
+TODO: insert graphical illustration of the funnel from information to
+softifacts.
 
 \chapter{Example}\label{ch:example}
 

@@ -1,7 +1,5 @@
 \documentclass[10pt,twoside,onecolumn,openany,letterpaper]{memoir}
-%\usepackage{createspace}
-%\usepackage[size=pocket,noicc]{createspace}
-\usepackage[paperwidth=7.50in, paperheight=10in]{geometry}
+\usepackage[paperwidth=8.50in, paperheight=11in]{geometry}
 \usepackage[T1]{fontenc}
 %\usepackage[latin1]{inputenc}
 \usepackage[english]{babel}
@@ -13,6 +11,13 @@
 
 % for inline lists
 \usepackage[inline]{enumitem}
+% for nice internal links
+\usepackage{hyperref}
+
+% set the margins
+\setlrmarginsandblock{1in}{1in}{*}
+\setulmarginsandblock{1in}{*}{1}
+\checkandfixthelayout
 
 \begin{document}
 
@@ -69,7 +74,7 @@ credit is due. More than just ideas, there are also technologies that back
 these ideas, some of which we're already using, others which lie in our
 future, and we outline some of these as well.
 
-\chapter{What is ``well understood'' Software?}
+\chapter{What is ``well understood'' Software?}\label{ch:wellUnderstood}
 
 \begin{defn}
 A software domain is \emph{well understood} if
@@ -146,13 +151,17 @@ part of solving $x = \ddot{a}$ to obtain a position as a function of time.
 And we also get choices of phrasing, which are equivalent but may be more
 adequate in context, for example.
 
-\chapter{How would you go building that?}
+\chapter{How would you go building that?}\label{ch:process}
 
-\chapter{Example}
+So what would be a reasonable process for building a piece of software
+assuming some kind of infrastructure exists for recording the kind of
+knowledge outline in~\autoref{ch:wellUnderstood}
 
-\chapter{Connected Ideas}
+\chapter{Example}\label{ch:example}
 
-\chapter{Some Useful Technologies}
+\chapter{Connected Ideas}\label{ch:ideas}
+
+\chapter{Some Useful Technologies}\label{ch:techniques}
 
 \end{document}
 

@@ -28,7 +28,7 @@ jobs:
       - name: "HLint"
         run: curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
       - name: "Install dependencies"
-        run: stack --no-terminal --install-ghc lts-16.31 test --bench --only-dependencies
+        run: stack --no-terminal test --bench --only-dependencies
       - name: "Build"
         run: make prog stackArgs="--no-terminal"
       - name: "Stable"

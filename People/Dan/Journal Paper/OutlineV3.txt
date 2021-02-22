@@ -102,7 +102,8 @@ given artifact in an effort for standardization. Ironically, this has led to
 many different 'standardized' templates. However, through the examination of a
 number of templates for different artifact types, we have concluded they convey
 roughly the same overall information for a given artifact. Most differences are
-stylistic or related to content organization.
+stylistic or related to content organization, as we will demonstrate in the 
+following sections.
 --Or naming conventions
 
 Once we understand our artifacts, we take a practical, example-driven approach
@@ -121,6 +122,49 @@ and generalize the boilerplate.
       -- Problem being solved
       -- Appendices containing artifacts? -- May come in handy for examples
   ]
+  
+To simplify the process of identifying redundancies and patterns, we have chosen
+case studies developed using common artifact templates, specifically those 
+used by [SmithEtAl] [source]. Also, as mentioned in [SCOPE], we have chosen
+software systems that follow the 'input' -> 'process' -> 'output' pattern.
+These systems cover a variety of use cases, to help avoid over-specializing into
+one particular system-type. 
+
+This section is meant to be used as a high-level reference to each case study, 
+providing the general details at a glance. For the specifics of each system, 
+all relevant case study artifacts can be found in the appendices.
+
+** Should this be a table / series of cards?
+ | Case Study Name: GlassBR
+ | 
+ | Problem being solved: We need to efficiently and correctly predict whether a 
+ | glass slab can withstand a blast under given conditions.
+ | 
+ | Relevant artifacts in Appendix [A_GLASSBR]
+
+ | Case Study Name: SWHS
+ | 
+ | Problem being solved: Solar water heating systems incorporating phase change 
+ | material (PCM) use a renewable energy source and provide a novel way of 
+ | storing energy. A system is needed to investigate the effect of employing PCM
+ | within a solar water heating tank. 
+ | 
+ | Relevant artifacts in Appendix [A_SWHS]
+ 
+ | Case Study Name: NoPCM
+ | 
+ | Problem being solved: Solar water heating systems provide a novel way of 
+ | heating water and storing renewable energy. A system is needed to investigate
+ | the heating of water within a solar water heating tank.
+ | 
+ | Relevant artifacts in Appendix [A_NoPCM]
+
+ | Case Study Name: 
+ | 
+ | Problem being solved: 
+ | 
+ | Relevant artifacts in Appendix [A_]
+
 
 --Breaking down artifacts--
 As noted earlier, for our approach to work we must understand exactly what each

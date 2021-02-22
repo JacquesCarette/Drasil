@@ -57,3 +57,5 @@ jobs:
         run: make docs haddockArgs="--no-haddock-deps --no-haddock-hyperlink-source"
       - name: "Graphs"
         run: make graphs
+      - name: "Test Deploy"
+        run: sh scripts/maybe_test_deploy.sh

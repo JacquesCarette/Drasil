@@ -14,14 +14,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: haskell/actions/setup@v1
+      - name: "Setup Haskell Stack"
+        uses: haskell/actions/setup@v1
         with:
           enable-stack: true
           stack-no-global: true
-          stack-setup-ghc: true
           stack-version: 'latest'
-      - name: "Open directory"
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.stack
+          key: ${{ runner.os }}-store-${{ hashFiles('generator/stack.yaml') }}
+      - name: "HLint"
         run: curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+      - name: "Install dependencies"
+        run: stack --no-terminal --install-ghc lts-16.31 test --bench --only-dependencies
       - name: "Build"
         run: make prog stackArgs="--no-terminal"
       - name: "Stable"

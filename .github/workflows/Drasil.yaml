@@ -30,6 +30,7 @@ jobs:
           path: |
             ~/.stack
             code/.stack-work/
+            ~/.local/bin/graphmod
           key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
       - name: "Update PATH"
         run: |

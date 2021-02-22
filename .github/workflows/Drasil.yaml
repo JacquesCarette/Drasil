@@ -24,7 +24,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.stack
-          key: ${{ runner.os }}-store-${{ hashFiles('stack.yaml') }}
+          key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
       - name: "HLint"
         run: curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
       - name: "Install dependencies"

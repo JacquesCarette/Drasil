@@ -43,3 +43,5 @@ jobs:
         run: make code
       - name: "Doxygen"
         run: make doxygen
+      - name: "Graphs"
+        run: make graphs

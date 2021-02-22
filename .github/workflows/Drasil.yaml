@@ -1,4 +1,8 @@
-on: [push, pull_request]
+on: 
+  push:
+    branches-ignore: master
+  pull_request:
+    branches-ignore: master
 name: Drasil
 defaults:
   run:
@@ -13,8 +17,12 @@ jobs:
       - uses: haskell/actions/setup@v1
         with:
           enable-stack: true
+          stack-no-global: true
+          stack-setup-ghc: true
           stack-version: 'latest'
       - name: "Open directory"
         run: curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
       - name: "Build"
         run: make prog stackArgs="--no-terminal"
+      - name: "Stable"
+        run: make stackArgs="--no-terminal" NOISY=yes

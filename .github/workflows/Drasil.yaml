@@ -29,6 +29,8 @@ jobs:
         with:
           path: |
             ~/.stack
+            ~/.cabal/packages
+            ~/.cabal/store
             code/.stack-work/
             ~/.local/bin/graphmod
           key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
@@ -51,5 +53,7 @@ jobs:
         run: make code
       - name: "Doxygen"
         run: make doxygen
+      - name: "Docs"
+        run: make docs haddockArgs="--no-haddock-deps --no-haddock-hyperlink-source"
       - name: "Graphs"
         run: make graphs

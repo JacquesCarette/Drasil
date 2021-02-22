@@ -32,12 +32,13 @@ jobs:
             code/.stack-work/
           key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
       - name: "Fix PATH"
-        run: export PATH=$PATH:~/.local/bin
+        run: export PATH=$HOME/.local/bin:$PATH
       - name: "HLint"
         run: curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
       - name: "Install dependencies"
         run: stack --no-terminal test --bench --only-dependencies
       - name: "Build"
+        # TODO: Add back -Werror flag to stackArgs
         run: make prog stackArgs="--no-terminal"
       - name: "Stable"
         run: make stackArgs="--no-terminal" NOISY=yes

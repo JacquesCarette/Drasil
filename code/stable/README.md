@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: August 21, 2019
+Last updated: Dec 20, 2020
 --------------------------------------------------
 
 **gamephysics**
@@ -14,6 +14,9 @@ Last updated: August 21, 2019
 
 **nopcm**
   - Contains the (currently) expected output for the NoPCM example
+  
+**pdController**
+  - Contains the (currently) expected output for the PD Controller example
 
 **projectile**
   - Contains the (currently) expected output for the Projectile example

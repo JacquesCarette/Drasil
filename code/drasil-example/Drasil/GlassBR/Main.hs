@@ -1,4 +1,4 @@
-module Main (main) where
+module Drasil.GlassBR.Main (main) where
 
 import GHC.IO.Encoding
 

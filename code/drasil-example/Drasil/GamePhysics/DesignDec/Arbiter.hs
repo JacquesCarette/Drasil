@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.DesignDec.Vector where
+module Drasil.GamePhysics.DesignDec.Arbiter where
 
 import Language.Drasil
 

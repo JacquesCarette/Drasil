@@ -108,7 +108,7 @@ override GHCTHREADS = 2
 endif
 
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
-override stackArgs += -j3 --ghc-options="$(GHCFLAGS)" --dump-logs --interleaved-output
+override stackArgs += --ghc-options="$(GHCFLAGS)" --dump-logs --interleaved-output
 
 #  Output amount control
 NOISY=no

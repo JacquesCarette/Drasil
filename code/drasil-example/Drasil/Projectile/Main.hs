@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module Main (main) where
+module Drasil.Projectile.Main (main) where
 
 import GHC.IO.Encoding
 

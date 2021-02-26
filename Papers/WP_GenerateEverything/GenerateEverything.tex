@@ -46,14 +46,14 @@
 % What if we're doing it all wrong?
 
 ``Software'' is not uniform. To use the exact same process for
-developping an embedded safety-critical piece of code (like that of
+developing an embedded safety-critical piece of code (like that of
 a pacemaker), the flight control software for an airplane, a one-off
 script for moving some files around, and some amusing animations on
 one's personal web site, is patently ridiculous.
 
 The same is true in say, civil engineering: you don't need architects,
 licensed engineers and a million permits to build a small shed in your
-backyard, but you do need them to build a $100$ story skyscrapper.
+backyard, but you do need them to build a $100$ story skyscraper.
 
 Which brings us to our central topic: there are some kinds of software
 where our current development methods \emph{are all wrong}. Our task
@@ -72,7 +72,7 @@ concrete example. Of course, our ideas do not exist in a vacuum: we were
 inspired by a number of connected ideas, and we then give credit where
 credit is due. More than just ideas, there are also technologies that back
 these ideas, some of which we're already using, others which lie in our
-future, and we outline some of these as well.
+future, and we outline some of these as well. %add references to the section numbers?
 
 \chapter{What is ``well understood'' Software?}\label{ch:wellUnderstood}
 
@@ -104,7 +104,7 @@ understood more holistically.
  transformation.
 \end{enumerate}
 Perhaps the most important aspect of this refinement is that the last two
-parts deeply involves \emph{choices}: What quantities are considered inputs,
+parts deeply involve \emph{choices}: What quantities are considered inputs,
 outputs and parameters to make the model functional? There are also a host
 of choices, including which programming language, but also software
 architecture, data-structures, algorithms, etc, which are also part of
@@ -123,7 +123,8 @@ direction, equally important.
 \item The meaning of the models is understood at a human-pedagogical
 level, i.e. it is explainable.
 \item Combining models is also explainable. Thus the \emph{transformers}
-we mentioned before simultaneously operate on mathematical representations
+  we mentioned before %this is actually the first time transformers are mentioned
+  simultaneously operate on mathematical representations
 and on explanations. This requires that English descriptions also be
 captured in the same manner as the formal-mathematical knowledge.
 \item Similarly, the \emph{transformers} the arise from making software
@@ -147,7 +148,7 @@ This also shows up as different transformers, for example turning
 $F - m\cdot a = 0$ into $F\left(m, a\right) = m\cdot a$, i.e. from a 
 conservation law into a computation. Note that, for motion computation, that
 same conservation law is often rewritten as $a\left(m,F\right) = F/m$ as
-part of solving $x = \ddot{a}$ to obtain a position as a function of time.
+part of solving $a = \ddot{x}$ to obtain a position ($x$) as a function of time ($t$).
 And we also get choices of phrasing, which are equivalent but may be more
 adequate in context, for example.
 
@@ -173,9 +174,9 @@ is \emph{well understood}, as defined in~\autoref{ch:wellUnderstood}.
   \item Assemble the ingredients into a coherent narrative,
   \item Describe the characteristics of a good solution,
   \item Come up with basic examples (to test correctness, intuitions, etc).
-  \item Identify the naturally occuring known quantities associated to the
+  \item Identify the naturally occurring known quantities associated to the
     problem domain, as well as some desired quantities. For example,
-    some problems naturally involve lengths of lying in particular
+    some problems naturally involve lengths lying in particular
     ranges, while others will involve ingredient concentrations, again
     in particular ranges.
   \end{enumerate}
@@ -200,7 +201,7 @@ input-output process.
 \item\label{it:tocode} Describe how the computation process from step
 \ref{it:refine} can be turned into code. Note that the same kinds of choice
 can occur here.
-\item\label{it:recipe} Turn the steps (i.e. from items~\ref{it:refine} and
+\item\label{it:recipe} Turn the steps (i.e.\ from items~\ref{it:refine} and
 \ref{it:tocode}) into a \emph{recipe}, aka program, that weaves together
 all the information into a variety of artifacts (softifacts). These can
 be read, or execute, or \ldots\ as appropriate.
@@ -210,7 +211,7 @@ While this last step might appear somewhat magical, it isn't. The whole
 point of defining \emph{well understood} is to enable that last step. A
 suitable knowledge encoding is needed to enable it, but this step is a
 reflection of what humans currently themselves do when assembling these very
-same softifacts. Where are merely being explicit about how to go
+same softifacts. We are merely being explicit about how to go about
 mechanizing these steps.
 
 What is missing is an explicit \emph{information architecture} of each of
@@ -223,7 +224,7 @@ step~\ref{it:problem} and~\ref{it:probdesc}: in other words, they never really
 write down what problem they're trying to solve. This is part of the
 \textbf{tacit knowledge} of a lot of research software.  It is crucial to our
 whole process that this knowledge go from tacit to explicit. This is also one
-of the fundamental recognition of \emph{Knowledge
+of the fundamental recognitions of \emph{Knowledge
 Management}~\cite{KM-textbook}.
 
 TODO: insert graphical illustration of the funnel from information to
@@ -274,4 +275,3 @@ Good quotes:
 \item metaprograms are just programs
 \item models outside an integrated toolchain are insufficiently useful
 \end{itemize}
-

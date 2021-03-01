@@ -104,7 +104,7 @@ number of templates for different artifact types, we have concluded they convey
 roughly the same overall information for a given artifact. Most differences are
 stylistic or related to content organization, as we will demonstrate in the 
 following sections.
---Or naming conventions
+  --Or naming conventions
 
 Once we understand our artifacts, we take a practical, example-driven approach
 to identifying redundancy through the use of existing software system case
@@ -114,6 +114,7 @@ trying to solve. From there, we attempt to distill the system-specific knowledge
 and generalize the boilerplate.
 
 -- A (very) brief introduction to our case study systems --
+  
   [ Potentially canibalize the intro from the next section to specify the
     templates in use, so it doesn't seem to come out of nowhere.
     
@@ -135,13 +136,17 @@ providing the general details at a glance. For the specifics of each system,
 all relevant case study artifacts can be found in the appendices.
 
 ** Should this be a table / series of cards?
+ 
+ %============================================================================%
  | Case Study Name: GlassBR
  | 
  | Problem being solved: We need to efficiently and correctly predict whether a 
  | glass slab can withstand a blast under given conditions.
  | 
  | Relevant artifacts in Appendix [A_GLASSBR]
+ %============================================================================%
 
+ %============================================================================%
  | Case Study Name: SWHS
  | 
  | Problem being solved: Solar water heating systems incorporating phase change 
@@ -150,7 +155,9 @@ all relevant case study artifacts can be found in the appendices.
  | within a solar water heating tank. 
  | 
  | Relevant artifacts in Appendix [A_SWHS]
+ %============================================================================%
  
+ %============================================================================%
  | Case Study Name: NoPCM
  | 
  | Problem being solved: Solar water heating systems provide a novel way of 
@@ -158,20 +165,69 @@ all relevant case study artifacts can be found in the appendices.
  | the heating of water within a solar water heating tank.
  | 
  | Relevant artifacts in Appendix [A_NoPCM]
+ %============================================================================%
 
- | Case Study Name: 
+ %============================================================================%
+ | Case Study Name: SSP
  | 
- | Problem being solved: 
+ | Problem being solved: A slope of geological mass, composed of soil and rock 
+ | and sometimes water, is subject to the influence of gravity on the mass. 
+ | This can cause instability in the form of soil or rock movement which can
+ | be hazardous. A system is needed to evaluate the factor of safety of 
+ | a slope's slip surface and identify the critical slip surface of the slope, 
+ | as well as the interslice normal force and shear force along the critical 
+ | slip surface. 
  | 
- | Relevant artifacts in Appendix [A_]
+ | Relevant artifacts in Appendix [A_SSP]
+ %============================================================================%
+ 
+ %============================================================================% 
+ | Case Study Name: Projectile
+ | 
+ | Problem being solved: A system is needed to efficiently and correctly predict
+ | the landing position of a projectile.
+ | 
+ | Relevant artifacts in Appendix [A_Projectile]
+ %============================================================================%
+ 
+ %============================================================================% 
+ | Case Study Name: GamePhys
+ | 
+ | Problem being solved: Many video games need physics libraries that simulate 
+ | objects acting under various physical conditions, while simultaneously being 
+ | fast and efficient enough to work in soft real-time during the game. 
+ | Developing a physics library from scratch takes a long period of time and is 
+ | very costly, presenting barriers of entry which make it difficult for game 
+ | developers to include physics in their products.
+ | 
+ | Relevant artifacts in Appendix [A_GamePhys]
+ %============================================================================%
 
+The majority of the aforementioned case studies were developed to solve real
+problems, though there are a couple of exceptions.
+  **NOTE: trying to find a good way to say 'these are not just things we cooked
+    up to make Drasil look good'
+    
+The NoPCM case study was created as a software family member for the SWHS case
+study. It was manually written, removing all references to PCM and thus 
+remodeling the system.
+
+The Projectile case study, however, was the first example of a system created
+solely in Drasil (there was no manually created version to compare and 
+contrast). As such, it will not be referenced often until [DRASIL_SECTION] since
+it did not inform Drasil's design or development process until much further in
+the development process. The Projectile case study was created so we'd have a 
+simple, understandable example for a general audience (it requires, at most, 
+a high-school level understanding of physics). 
+
+With our carefully selected case studies in hand we were able to begin our 
+practical approach to finding and removing redundancies.
 
 --Breaking down artifacts--
 As noted earlier, for our approach to work we must understand exactly what each
-of our artifacts are trying to say and to whom. Since we are taking a practical,
-example-driven approach to our process, we have specifically chosen our case
-studies from software systems that were developed using common artifact
-templates. Specifically the templates used by [SmithEtAl] [source].
+of our artifacts are trying to say and to whom. By selecting our case studies 
+from those developed using common artifact templates, we have given ourselves a
+head start on that process, however, there is still much work to be done.
 
 To start, we look at the Software Requirements Specification (SRS). The SRS
 (or some incarnation of it) is one of the most important artifacts for any
@@ -302,7 +358,7 @@ knowledge-capture of system-specific information, and recipe creation and
 modification.
 
 
-%%%%%%%%%%%%%%%%%%%%%% END CURRENT DOC %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% END CURRENT DOC %============================================================================%%%%%%%%%%%%%%
 ============================== Notes ===========================================
 Things I want to touch on
   - Synonyms can cause headaches, especially if they're not caught / curated into

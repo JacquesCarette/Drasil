@@ -1,4 +1,4 @@
-Drasil [![Build Status](https://github.com/balacij/Drasil/actions/workflows/Drasil.yml/badge.svg?branch=master)](https://travis-ci.com/JacquesCarette/Drasil)
+Drasil [![Build Status](https://github.com/balacij/Drasil/actions/workflows/Drasil.yaml/badge.svg?branch=master)](https://travis-ci.com/JacquesCarette/Drasil)
 [![DOI](https://zenodo.org/badge/23760783.svg)](https://zenodo.org/badge/latestdoi/23760783)
 ====================================================
 

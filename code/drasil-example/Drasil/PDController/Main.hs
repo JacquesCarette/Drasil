@@ -1,4 +1,4 @@
-module Main (main) where
+module Drasil.PDController.Main (main) where
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODELSodaPkg)
 

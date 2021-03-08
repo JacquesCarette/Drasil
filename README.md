@@ -1,9 +1,5 @@
-<<<<<<< Updated upstream
-Drasil [![Build Status](https://travis-ci.com/JacquesCarette/Drasil.svg?branch=master)](https://travis-ci.com/JacquesCarette/Drasil)
-=======
 Drasil [![Build Status](https://github.com/balacij/Drasil/actions/workflows/Drasil.yml/badge.svg?branch=master)](https://travis-ci.com/JacquesCarette/Drasil)
 [![DOI](https://zenodo.org/badge/23760783.svg)](https://zenodo.org/badge/latestdoi/23760783)
->>>>>>> Stashed changes
 ====================================================
 
 Generate all the Things! See the [currently generated artifacts](https://jacquescarette.github.io/Drasil/)

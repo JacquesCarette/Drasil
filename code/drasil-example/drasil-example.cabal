@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0b309f06021ba88a5f8dbe6e1ac5e159945c09c231ed024dd0d93abcd119c720
+-- hash: 0a07bf81d67f10f99132646c902235e6bbc53d415c903e0f4ac039e43add77ea
 
 name:           drasil-example
 version:        0.1.24.0
@@ -196,6 +196,45 @@ executable nopcm
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.NoPCM.Main
+  build-depends:
+      base >=4.7 && <5
+    , containers >=0.5.5.1
+    , directory >=1.2.6.2
+    , drasil-code
+    , drasil-data
+    , drasil-database
+    , drasil-docLang
+    , drasil-gen
+    , drasil-gool
+    , drasil-lang
+    , drasil-printers
+    , drasil-theory
+    , drasil-utils
+    , lens >=4.12
+    , mtl >=2.2.1
+    , pretty >=1.1.1.1
+    , split >=0.2.3.1
+  default-language: Haskell2010
+
+executable pdController
+  main-is: Drasil/PDController/Main.hs
+  other-modules:
+      Drasil.PDController.Assumptions
+      Drasil.PDController.Body
+      Drasil.PDController.Changes
+      Drasil.PDController.Concepts
+      Drasil.PDController.DataDefs
+      Drasil.PDController.GenDefs
+      Drasil.PDController.IModel
+      Drasil.PDController.IntroSection
+      Drasil.PDController.GenSysDesc
+      Drasil.PDController.References
+      Drasil.PDController.Requirements
+      Drasil.PDController.SpSysDesc
+      Drasil.PDController.TModel
+  hs-source-dirs:
+      ./
+  ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.PDController.Main
   build-depends:
       base >=4.7 && <5
     , containers >=0.5.5.1

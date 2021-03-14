@@ -78,7 +78,9 @@ projectile | Projectile motion analysis
 
 This runs the examples manually from the .stack-work folder after building, and the generated docs will
 appear in this folder (i.e. in the SRS and Website folders). Due to this placement, these generated
-versions will not be subject to automated tests.
+versions will not be subject to automated tests. The tex files are generated,
+but they are not automatically compiled.  To compile the tex files, use the
+generated Makefile (in the same folder as the tex file).
 
 ## Finding / Building the Haddock Documentation
 

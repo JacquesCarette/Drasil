@@ -126,6 +126,24 @@ executables:
     - Drasil.SWHS.IMods
     - Drasil.SWHS.Unitals
 
+  pdController:
+    main: Drasil.PDController.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.PDController.Assumptions
+    - Drasil.PDController.Body
+    - Drasil.PDController.Changes
+    - Drasil.PDController.Concepts
+    - Drasil.PDController.DataDefs
+    - Drasil.PDController.GenDefs
+    - Drasil.PDController.IModel
+    - Drasil.PDController.IntroSection
+    - Drasil.PDController.GenSysDesc
+    - Drasil.PDController.References
+    - Drasil.PDController.Requirements
+    - Drasil.PDController.SpSysDesc
+    - Drasil.PDController.TModel
+     
   projectile:
     main: Drasil.Projectile.Main
     source-dirs: ./

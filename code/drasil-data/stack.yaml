@@ -36,7 +36,6 @@ packages:
 - ../drasil-lang
 - ../drasil-theory
 - ../drasil-utils
-# depends for drasil-code.... TODO: check if I can remove these packages lists for sub-dependencies!
 - ../drasil-build
 - ../drasil-database
 - ../drasil-printers

@@ -2,7 +2,7 @@ This folder contains our working examples (implementations in Drasil of the prev
 
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 19, 2019
+Last updated: December 20, 2020
 --------------------------------------------------
 
 **GamePhysics**
@@ -16,6 +16,9 @@ Last updated: July 19, 2019
   
 **NoPCM**
   - Contains the current state of the solar water heating system case study implemented in Drasil
+
+**PDController**
+  - Contains the current state of the PD Controller example implemented in Drasil
 
 **Projectile**
   - Contains the current work on implementing the projectile example in Drasil

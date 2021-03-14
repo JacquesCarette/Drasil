@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: June 14, 2019
+Last updated: December 20, 2020
 --------------------------------------------------
 
 **GamePhysics**
@@ -11,6 +11,9 @@ Last updated: June 14, 2019
 
 **NoPCM**
   - Contains additional "helper" files for the NoPCM example
+
+**PDController**
+  - Contains additional "helper" files for the PDController example
 
 **Projectile**
   - Contains additional "helper" files for the Projectile example

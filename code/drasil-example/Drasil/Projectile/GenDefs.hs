@@ -2,7 +2,7 @@ module Drasil.Projectile.GenDefs (genDefns, posVecGD) where
 
 import Prelude hiding (cos, sin)
 import Language.Drasil
-import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs)
+import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, ModelKinds(OthModel))
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
@@ -23,7 +23,7 @@ genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
 ----------
 rectVelGD :: GenDefn
-rectVelGD = gd rectVelRC (getUnit speed) (Just rectVelDeriv)
+rectVelGD = gd (OthModel rectVelRC) (getUnit speed) (Just rectVelDeriv)
   [makeCiteInfo hibbeler2004 $ Page [8]] "rectVel" [{-Notes-}]
 
 rectVelRC :: RelationConcept
@@ -55,7 +55,7 @@ rectVelDerivEqn2 = defint (eqSymb speed) (sy iSpeed) (sy speed) 1 $=
 
 ----------
 rectPosGD :: GenDefn
-rectPosGD = gd rectPosRC (getUnit scalarPos) (Just rectPosDeriv)
+rectPosGD = gd (OthModel rectPosRC) (getUnit scalarPos) (Just rectPosDeriv)
   [makeCiteInfo hibbeler2004 $ Page [8]] "rectPos" [{-Notes-}]
 
 rectPosRC :: RelationConcept
@@ -89,7 +89,7 @@ rectPosDerivEqn3 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) 1 $=
 
 ----------
 velVecGD :: GenDefn
-velVecGD = gdNoRefs velVecRC (getUnit velocity)
+velVecGD = gdNoRefs (OthModel velVecRC) (getUnit velocity)
            (Just velVecDeriv) "velVec" [{-Notes-}]
 
 velVecRC :: RelationConcept
@@ -109,7 +109,7 @@ velVecDerivSent = vecDeriv [(velocity, velocityXY), (acceleration, accelerationX
 
 ----------
 posVecGD :: GenDefn
-posVecGD = gdNoRefs posVecRC (getUnit position) 
+posVecGD = gdNoRefs (OthModel posVecRC) (getUnit position) 
            (Just posVecDeriv) "posVec" [{-Notes-}]
 
 posVecRC :: RelationConcept

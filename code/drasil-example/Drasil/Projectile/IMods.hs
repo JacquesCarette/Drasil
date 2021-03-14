@@ -3,7 +3,7 @@ module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM) w
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC)
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, ModelKinds (OthModel))
 import Utils.Drasil
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
@@ -29,7 +29,7 @@ iMods = [timeIM, landPosIM, offsetIM, messageIM]
 
 ---
 timeIM :: InstanceModel
-timeIM = imNoRefs timeRC 
+timeIM = imNoRefs (OthModel timeRC) 
   [qwC launSpeed $ UpFrom (Exc, 0)
   ,qwC launAngle $ Bounded (Exc, 0) (Exc, sy pi_ / 2)]
   (qw flightDur) [UpFrom (Exc, 0)]
@@ -76,7 +76,7 @@ timeDerivEqn5 = sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy gravi
 
 ---
 landPosIM :: InstanceModel
-landPosIM = imNoRefs landPosRC 
+landPosIM = imNoRefs (OthModel landPosRC) 
   [qwC launSpeed $ UpFrom (Exc, 0), 
    qwC launAngle $ Bounded (Exc, 0) (Exc, sy pi_ / 2)]
   (qw landPos) [UpFrom (Exc, 0)]
@@ -121,7 +121,7 @@ landPosDerivEqn3 = sy landPos $= sy launSpeed * cos (sy launAngle) * 2 * sy laun
 
 ---
 offsetIM :: InstanceModel
-offsetIM = imNoDerivNoRefs offsetRC
+offsetIM = imNoDerivNoRefs (OthModel offsetRC)
   [qwC landPos $ UpFrom (Exc, 0), qwC targPos $ UpFrom (Exc, 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
@@ -131,7 +131,7 @@ offsetRC = makeRC "offsetRC" (nounPhraseSP "offset")
 
 ---
 messageIM :: InstanceModel
-messageIM = imNoDerivNoRefs messageRC 
+messageIM = imNoDerivNoRefs (OthModel messageRC) 
   [qwC offset $ UpFrom (Exc, negate (sy landPos))
   ,qwC targPos $ UpFrom (Exc, 0)]
   (qw message)

@@ -1,7 +1,7 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, qwC, qwUC)
+import Theory.Drasil (InstanceModel, im, qwC, qwUC, ModelKinds (OthModel))
 import Utils.Drasil
 import Control.Lens ((^.))
 
@@ -31,7 +31,7 @@ iMods = [eBalanceOnWtr, heatEInWtr]
 ---------
 -- FIXME: comment on reference?
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im eBalanceOnWtrRC 
+eBalanceOnWtr = im (OthModel eBalanceOnWtrRC) 
   [qwC tempC $ UpFrom (Inc, sy tempInit)
   , qwUC tempInit, qwUC timeFinal, qwUC coilSA, qwUC coilHTC, qwUC htCapW, qwUC wMass] 
   (qw tempW) []

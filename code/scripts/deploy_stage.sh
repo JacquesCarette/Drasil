@@ -99,7 +99,7 @@ copy_examples() {
         for v in "$example/$example_name"*/; do
           v_name=$(basename "$v")
           mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/"
-          for lang in "$v"src/*; do
+          for lang in "$v/"src/*; do
             lang_name=$(basename "$lang")
             mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name"
             cp -r "$lang/"html/. "$EXAMPLE_DEST$example_name/$DOX_DEST$v_name/$lang_name/"

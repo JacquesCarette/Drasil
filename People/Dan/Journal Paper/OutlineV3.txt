@@ -69,6 +69,8 @@ However, should they change, the current models will likely remain as good
 approximations under a specific set of assumptions. For instance, who hasn't
 heard 'assume each body is a sphere' during a physics lecture?
 
+*VALUE IN THE MUNDANE
+
 -- Roadmap? --
 
 ==Background==
@@ -215,10 +217,10 @@ remodeling the system.
 The Projectile case study, however, was the first example of a system created
 solely in Drasil (there was no manually created version to compare and 
 contrast). As such, it will not be referenced often until [DRASIL_SECTION] since
-it did not inform Drasil's design or development process until much further in
-the development process. The Projectile case study was created so we'd have a 
-simple, understandable example for a general audience (it requires, at most, 
-a high-school level understanding of physics). 
+it did not inform Drasil's design or development until much further in the 
+process. The Projectile case study was created so we'd have a simple, 
+understandable example for a general audience (it requires, at most, a 
+high-school level understanding of physics). 
 
 With our carefully selected case studies in hand we were able to begin our 
 practical approach to finding and removing redundancies.
@@ -261,6 +263,23 @@ Système International d’Unités (SI) Units used throughout the document, thei
 descriptions, and the SI name. Finally, the table of Abbreviations and Acronyms
 merely lists the abbreviations and their full forms, which are essentially the
 symbols and their descriptions.
+
+The reference section of the SRS provides a lot of knowledge, in a very 
+straightforward and organized manner. The basic units provided in the table of 
+units give a prime example of fundamental / global knowledge. Nearly any system
+involving physical quantities will use some of these units. On the other hand, 
+the table of symbols provides system/problem-domain specific knowledge that
+will not be useful across unrelated domains. For example, the stress 
+distribution factor (J) from GlassBR may appear in several related problems, but
+would be unlikely to be seen in something like SWHS/NoPCM or Projectile. 
+Finally, acronyms are very context-dependant. They are often specific to a
+given domain and, without a coinciding definition, it can be very difficult for
+even the target audience to understand what they refer to. Within one domain, 
+there may be several acronyms meaning different things (for example: PM can 
+refer to Product Manager, Project Manager, Program Manager, etc).
+
+From the Reference section alone, 
+
 
 - Practical approach to design
 - Let's use some case studies
